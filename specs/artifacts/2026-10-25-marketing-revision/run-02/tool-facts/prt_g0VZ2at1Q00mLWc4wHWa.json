@@ -1,0 +1,49 @@
+{
+  "id": "prt_g0VZ2at1Q00mLWc4wHWa",
+  "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+  "messageID": "msg_g0VZ2apsu00TZ9w5XLUE",
+  "type": "tool",
+  "callID": "call_TCpCtth7x79uffro5MhUA2F3",
+  "tool": "artifact_publish",
+  "state": {
+    "status": "completed",
+    "input": {
+      "artifact_type": "marketing-growth/landscape-review-candidates",
+      "schema_version": 1,
+      "label": "横向Word呈现修订：待独立复核业务文件",
+      "source_read_refs": [
+        "ar_lV2BBhFtnCQw0SC3",
+        "ar_opAxaIdjR0Lro5gO",
+        "ar_7DWw5hPnKSB9YcBX"
+      ],
+      "resource_set": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hxHOMBTalkvA4toZOhTn",
+          "task_id": "tsk_g00VZ2GE9C00jkeX1GgT",
+          "snapshot_id": "29a4bb0e-b15a-5c43-aa2d-21f53426253b",
+          "manifest_sha256": "cf92f99ee6f2d7707ba1b955fd959779a470e441585b24edf1faa5993bd87b82"
+        },
+        "tree": "resources"
+      },
+      "payload_json": "{\"status\":\"待独立复核，非新版正式campaign-plan\",\"as_of\":\"2026-10-25\",\"scope\":\"仅Word横向呈现修订；不改业务、不执行营销。原正式资源保留。\",\"changes\":[\"A4横向，垂直页边距14mm，左右18mm；调整段距、表格列宽及表格文字大小。\",\"四表重复表头；表头段落keepNext；22行cantSplit；黑色标题及无段落装饰线。\",\"两张相邻表间新增一个无文字布局分隔段，避免渲染器合并导致错误续页表头。原有全部段落及单元格文字逐字保持。\"],\"verification\":\"MD与首次不可变资源完整字节相同。原Word Git对象身份与首次不可变附件一致，再解析原新全部有序原有段落和所有单元格段落逐字比较；完整结果及真实六页图/PDF另发布内部验收资源。\",\"limitations\":[\"原正文中纵向Word及制作时待审措辞因冻结正文保留；实际文件已横向。\",\"新增无文字分隔段在核对中明确单列，未声称段落数量完全相同。\",\"须由原独立复核者核对本轮确切文件、全部正文及六页真实图；本轮不发布新版正式计划或最终阅读文档。\"],\"fact_check_items\":[]}"
+    },
+    "output": "{\"locator\":{\"source\":\"engine_artifact\",\"artifact_id\":\"art_hLArXmv50FyxAvdR9Fcu\",\"catalog_revision\":47,\"expected_sha256\":\"fb368c87d0ad9298fcc2411a1e45b4a4bf2f3a0fa2723e3d4ad78fcf5d770f0c\"},\"sha256\":\"fb368c87d0ad9298fcc2411a1e45b4a4bf2f3a0fa2723e3d4ad78fcf5d770f0c\"}",
+    "title": "Published marketing-growth/landscape-review-candidates",
+    "metadata": {
+      "artifactType": "marketing-growth/landscape-review-candidates",
+      "sha256": "fb368c87d0ad9298fcc2411a1e45b4a4bf2f3a0fa2723e3d4ad78fcf5d770f0c",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792910296212,
+      "end": 1792910307785
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_05857dad1e22a2fd016adda3d825c087d08dfe815f1c604141"
+    }
+  },
+  "orderKey": "v1:0001792910307237:0000000000000031:0000000000000000:part:prt_g0VZ2at1Q00mLWc4wHWa"
+}

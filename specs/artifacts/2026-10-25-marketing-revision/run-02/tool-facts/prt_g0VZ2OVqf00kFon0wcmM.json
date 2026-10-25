@@ -1,0 +1,58 @@
+{
+  "id": "prt_g0VZ2OVqf00kFon0wcmM",
+  "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+  "messageID": "msg_g0VZ2OTkw00IUuFDU6td",
+  "type": "tool",
+  "callID": "call_4a5143a213b1407388350a1b5a60bfdf",
+  "tool": "artifact_publish",
+  "state": {
+    "status": "completed",
+    "input": {
+      "artifact_type": "marketing-growth/campaign-plan-review-materials",
+      "schema_version": 1,
+      "label": "营销计划待审资源（非正式campaign-plan）",
+      "source_read_refs": [
+        "ar_WJxwUgBgyS4Wfr0Y",
+        "ar_fxJPw2VbSl3Y1WoC",
+        "ar_ztbqiljVgwvYnbTK",
+        "ar_opW6eO2-7tpKVI-j",
+        "ar_-gSEEL6t__c7bR7M",
+        "ar_CMnF7jUEC0p2KToU",
+        "ar_2NlRDVgGnxn_BWJT",
+        "ar_ZuS2g2pAEN6NNfyQ",
+        "ar_2AT7FClT2HBnkn39",
+        "ar_kdTfrL2kMTmcqoNf",
+        "ar_QMFaxXCyCRShj_Nt",
+        "ar_P_MGKbCuCUXZwiO4"
+      ],
+      "resource_set": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hxHOMBTalkvA4toZOhTn",
+          "task_id": "tsk_g00VZ2GE9C00jkeX1GgT",
+          "snapshot_id": "19df3dd4-7067-562d-ac01-42acf9bfc56d",
+          "manifest_sha256": "4ce8ebb684b325eaffb2412ccc21f52c55c6a03872e1e3f116700c20a933870c"
+        },
+        "tree": "resources"
+      },
+      "payload_json": "{\"purpose\":\"绑定原不可变输入、正式前阶段证据和实际完整正文，提交MD与Word候选资源供独立最终复核；本记录不是marketing-growth/campaign-plan@1正式发布。\",\"review_scope\":\"独立复核确切MD/Word完整正文及关联内部验收快照的全部五页真实PNG；PDF和PNG仅内部验收。\",\"next_decision\":\"独立复核如发现问题由原营销作者修正；通过后再继续正式campaign-plan及同正文阅读文档发布。\",\"fact_check_items\":[]}"
+    },
+    "output": "{\"locator\":{\"source\":\"engine_artifact\",\"artifact_id\":\"art_hO2vkYdsXDNYXvMg0Cdh\",\"catalog_revision\":30,\"expected_sha256\":\"efe172b371807018ddba4d78a0141305e12f099f26fa309297df7517423f25a4\"},\"sha256\":\"efe172b371807018ddba4d78a0141305e12f099f26fa309297df7517423f25a4\"}",
+    "title": "Published marketing-growth/campaign-plan-review-materials",
+    "metadata": {
+      "artifactType": "marketing-growth/campaign-plan-review-materials",
+      "sha256": "efe172b371807018ddba4d78a0141305e12f099f26fa309297df7517423f25a4",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792907347197,
+      "end": 1792907358691
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0d557ff7b4ed2c6e016add9853217c8191a63f3d27c7739b94"
+    }
+  },
+  "orderKey": "v1:0001792907353727:0000000000000031:0000000000000000:part:prt_g0VZ2OVqf00kFon0wcmM"
+}

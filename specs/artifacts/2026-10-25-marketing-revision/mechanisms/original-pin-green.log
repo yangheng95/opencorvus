@@ -1,0 +1,12 @@
+$ bun script/run-tests.ts ../../.tmp-product-iteration/marketing-revision/original-pin.test.ts
+[1/1] START ../../.tmp-product-iteration/marketing-revision/original-pin.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) original marketing project preserves the complete Word and original index during real Build pin [2550.77ms]
+
+ 1 pass
+ 0 fail
+ 8 expect() calls
+Ran 1 test across 1 file. [6.27s]
+[1/1] DONE ../../.tmp-product-iteration/marketing-revision/original-pin.test.ts exit=0 duration=6.87s

@@ -1,0 +1,142 @@
+{
+  "id": "prt_g0VZ2Iy5300stKUxlr9F",
+  "sessionID": "ses_hcoMooPAaeV3LIOyFLE7",
+  "messageID": "msg_g0VZ2IwdQ00yZ8aXOSEQ",
+  "type": "tool",
+  "callID": "call_ee1f2e7e6bd44176a2ff0fc72247dfbc",
+  "tool": "pkg_tool__marketing_growth_shared_publish_marketin__9d2b7cfbc799",
+  "state": {
+    "status": "completed",
+    "input": {
+      "artifact": {
+        "artifact_type": "marketing-growth/audience-analysis",
+        "payload": {
+          "stage": "独立受众与价值主张假设",
+          "scope": "虚构团队内部文档整理工具；仅已知受众小型团队。本阶段独立于渠道分析，不读取或等待其结论，不分配渠道和预算、不代做汇合策略；仅本地内部结构化交接，不生成额外业务文件。",
+          "as_of": "2026-10-25",
+          "evidence": [
+            {
+              "statement": "唯一已知受众为小型团队，产品为虚构团队内部文档整理工具。价格、购买周期、竞争者、真实市场规模、外部基准未提供；角色、痛点和购买动机也未得到验证。",
+              "source": "完整读取并选择原不可变snapshot b6c7a53e-2067-5f7e-a19c-1dbb90d0f6df resources/brief.md；正式evidence-dossier revision 9",
+              "source_url": null,
+              "as_of": "2026-10-24"
+            },
+            {
+              "statement": "原CSV仅三行合成记录：email曝光1000/点击100/线索20/成本400元；community为2000/120/12/600元；search为3000/150/15/900元。没有受众属性、访谈、任务行为、购买或收入数据；非随机且无可比人群、时段或增量归因证据。",
+              "source": "完整读取并选择原不可变campaign.csv及brief.md；正式evidence-dossier revision 9",
+              "source_url": null,
+              "as_of": "2026-10-24"
+            },
+            {
+              "statement": "当前方案上限1200元；brief.md的3000元是被取代旧草案；CSV成本合计1900元是合成历史成本，不是当前预算或需支出金额，禁止改写或缩放历史。",
+              "source": "当前原始请求及委派指令；完整读取并选择growth-brief revision 5、evidence-dossier revision 9及原brief.md/campaign.csv",
+              "source_url": null,
+              "as_of": "2026-10-25"
+            },
+            {
+              "statement": "现有材料已完整提供。最终仍须规范MD约3000汉字、同正文纵向Word和阅读文档；作者真实渲染逐页查看，再独立复核最终正文及真实页图后正式交付。本阶段无这些后续完成证据。",
+              "source": "当前原始请求；完整读取并选择growth-brief revision 5及evidence-dossier revision 9",
+              "source_url": null,
+              "as_of": "2026-10-25"
+            }
+          ],
+          "findings": [
+            {
+              "finding": "观察与边界：不能把三个渠道当作三类受众，不能由线索数推断团队数、真实需求或支付意愿。CPL=成本/线索，三渠道20、50、60元/条，合计1900/47≈40.43元/条；CPL不是CAC，描述性差异没有因果优势含义。",
+              "evidence_indexes": [
+                0,
+                1,
+                2
+              ],
+              "confidence": "high"
+            },
+            {
+              "finding": "待验证细分H1（非已发现客户群）：存在反复查找内部文档任务的小型团队。假设问题为查找路径或版本判断不清；任务是找到可用文档并确认适用版本。候选触发情境为重复询问、项目资料查找；潜在使用角色为文档使用者，推动角色为文档维护者，审批者未知。候选价值主张：围绕一个具体查找任务，展示内部资料整理思路；消息假设：“找团队资料时，先把查找路径理清。”不宣称产品已有搜索、版本识别功能或节省时间效果。",
+              "evidence_indexes": [
+                0,
+                1
+              ],
+              "confidence": "low"
+            },
+            {
+              "finding": "待验证细分H2（任务情境，可与H1重叠）：存在成员或项目交接任务的小型团队。假设问题为接手所需资料和维护责任不清；任务是明确交接所需文档及责任。候选购买考虑情境为准备交接或交接后反复补充资料；潜在推动角色为交接组织者，使用角色为接手者，决策权未知。候选价值主张：围绕一次交接说明内部文档整理方法；消息假设：“交接前，先明确要交哪些文档、由谁维护。”不宣称已有权限、自动化或特定集成功能。",
+              "evidence_indexes": [
+                0,
+                1
+              ],
+              "confidence": "low"
+            },
+            {
+              "finding": "待验证共通障碍：迁移和整理负担、信息权限顾虑、现有做法已够用、无人持续维护，都只是研究问题，不是已知市场事实。后续判断应比较替代做法和实际任务需求；不能以降低价格、虚构客户证言或竞品对比填补证据。",
+              "evidence_indexes": [
+                0,
+                1
+              ],
+              "confidence": "low"
+            },
+            {
+              "finding": "H1验证设计建议（未执行）：研究责任角色用同一中性问题卡核查最近一次查找任务，所需证据为授权且脱敏的任务描述、实际查找步骤、版本判断依据、现有办法及痛点频次；随后在同一任务背景单独展示H1消息。曝光单位为一次独立任务案例，不重复计数；领先指标为能否准确复述消息及是否有具体问题证据。探索性判据：至少两个独立案例同时出现可描述的查找阻碍且未误读为功能/效果承诺，才值得继续研究；这是建议门槛，不证明总体需求。反证条件：案例显示现有办法已满足查找、问题主要不在文档整理，或消息只能引出泛泛赞同，则削弱/改写H1；不足两个案例则保留未知。",
+              "evidence_indexes": [
+                0,
+                1
+              ],
+              "confidence": "low"
+            },
+            {
+              "finding": "H2验证设计建议（未执行）：研究责任角色用中性问题卡核查最近一次交接，所需证据为脱敏交接步骤、实际所需文档、遗漏或补充事实、维护责任和现有办法；单独展示H2消息，记录接手者与组织者各自理解。曝光单位为一次独立交接案例，同一案例多角色不算多个案例；领先指标为可举证的交接阻碍及消息理解。探索性判据：至少两个独立案例同时支持问题且消息无功能承诺误读，再决定是否继续；非市场验证。反证条件：资料交接已顺畅、阻碍主要来自培训或流程而非文档整理，或没有持续责任意愿，则削弱/改写H2；证据不足则保留未知。",
+              "evidence_indexes": [
+                0,
+                1
+              ],
+              "confidence": "low"
+            }
+          ],
+          "decisions": [
+            "唯一类型前驱为已完整读取并选择的正式evidence-dossier revision 9；growth-brief revision 5及原不可变brief.md/campaign.csv均作为普通来源真实选择绑定，不冒充额外类型前驱。",
+            "只保留两类任务情境假设，不添加行业、人数区间、实名人物或购买者画像；两类可重叠，不宣称优先级或市场占比。",
+            "所有验证建议仅供后续计划设计；本Task不联系任何人、不招募、不联网、不投放、不花费。内部虚构案例最多检查问题卡与消息表述，不能替代真实需求证据；获得未来单独授权及合规证据前不得宣称验证完成。",
+            "验证护栏：仅收集授权脱敏案例，不含内部文档机密；相同问题背景、避免诱导提问，记录负面与中性结果，不用消息偏好替代购买意愿。发现承诺误读先修改文案；有证据才保留假设，无证据保持未知，反证出现则收窄或放弃，不据此直接决定投放。",
+            "1200元仅当前设计上限而非支出授权；保留3000元旧草案和1900元合成历史成本，不改历史。本阶段无预算分配、价格、CAC、客户或效果预测。",
+            "后续规范MD、同正文纵向Word及阅读文档、真实解析渲染、作者逐页查看和独立正文/页图复核要求均保留；本阶段只完成受众结构化交接，不声称策略、复核或最终交付已完成。"
+          ],
+          "unknowns": [
+            "真实团队任务频率、行业、规模分层、角色与决策权均未知；H1/H2的存在、重要性及相互覆盖尚未验证。",
+            "产品功能、可兑现承诺、价格、支付意愿、采购流程、购买周期、隐私和迁移约束未知；消息发布前需另行核实能力，本Task不对外发布。",
+            "没有真实访谈、任务观测、购买或成交证据；三行合成数据不能补足这些缺口，也不能证明任一细分或消息有效。",
+            "探索性案例门槛为设计假设，不具统计代表性；未来招募、授权、时间、负责人实名及资源均未确定，本Task不执行。",
+            "最终文件与真实页图尚未由本阶段生成或检查；后续独立职责不能由本阶段记录替代。"
+          ],
+          "resource_roles": []
+        }
+      },
+      "resource_set": null,
+      "predecessor_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hyDNtTAAARFFrYy1KHzp",
+          "catalog_revision": 9,
+          "expected_sha256": "e9d0074be620527b4bf56590304cfeb2bf944bf45253a1b7c6f69b92bcc41b85"
+        }
+      ]
+    },
+    "output": "{\"artifact_type\":\"marketing-growth/audience-analysis\",\"schema_version\":1,\"locator\":{\"source\":\"engine_artifact\",\"artifact_id\":\"art_hzGk3BZDigSrM2xpfye2\",\"catalog_revision\":15,\"expected_sha256\":\"f08f5702fb465553a0090668b8c2ff9a77662ae76af53ed920ce06d7f91f1b72\"},\"artifact_sha256\":\"f08f5702fb465553a0090668b8c2ff9a77662ae76af53ed920ce06d7f91f1b72\"}",
+    "title": "",
+    "metadata": {
+      "package_tool_ref": "marketing-growth/shared/publish-marketing-growth-artifact",
+      "expert_squad_id": "marketing-growth",
+      "provider_tool_name": "pkg_tool__marketing_growth_shared_publish_marketin__9d2b7cfbc799",
+      "source_path": "tools/publish-marketing-growth-artifact.ts",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792906025753,
+      "end": 1792906076389
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_078bb283ae251c9f016add9329918c8191b6e4f975368ec367"
+    }
+  },
+  "orderKey": "v1:0001792906075256:0000000000000031:0000000000000000:part:prt_g0VZ2Iy5300stKUxlr9F"
+}

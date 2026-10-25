@@ -14,6 +14,54 @@ import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterAll(resetMemoryDatabase)
 
+test("tracked files under ignored directories retain their current contents in source staging and Build pins", async () => {
+  await using project = await memoryProject("stage-tracked-ignored")
+  await fs.mkdir(path.join(project.path, "qa"))
+  await fs.mkdir(path.join(project.path, "outputs"))
+  await fs.writeFile(path.join(project.path, ".gitignore"), "qa/\n")
+  await fs.writeFile(path.join(project.path, "qa/review.md"), "original review\n")
+  await git(project.path, ["add", ".gitignore"])
+  await git(project.path, ["add", "--force", "qa/review.md"])
+  await git(project.path, ["commit", "-m", "Track original review under ignored QA"])
+  await fs.writeFile(path.join(project.path, "qa/review.md"), "current review\n")
+  await fs.writeFile(path.join(project.path, "qa/render.png"), "ignored render\n")
+  await fs.writeFile(path.join(project.path, "outputs/plan.md"), "current delivery\n")
+  await stageGitSourceEntries({ cwd: project.path })
+  expect((await git(project.path, ["show", ":qa/review.md"])).text()).toBe("current review\n")
+  expect((await git(project.path, ["ls-files"])).text().trim().split("\n")).toEqual([
+    ".gitignore", ".opencorvus-test-project-identity", "outputs/plan.md", "qa/review.md",
+  ])
+  const index = await fs.readFile(path.join(project.path, ".git/index"))
+  const tree = await pinBuildObservationTree({
+    worktreeDir: project.path, refName: "refs/opencorvus/observations/tracked-ignored",
+  })
+  expect((await git(project.path, ["show", `${tree}:qa/review.md`])).text()).toBe("current review\n")
+  expect((await git(project.path, ["show", `${tree}:outputs/plan.md`])).text()).toBe("current delivery\n")
+  expect((await git(project.path, ["ls-tree", "-r", "--name-only", tree])).text().trim().split("\n")).toEqual([
+    ".gitignore", ".opencorvus-test-project-identity", "outputs/plan.md", "qa/review.md",
+  ])
+  expect(await fs.readFile(path.join(project.path, ".git/index"))).toEqual(index)
+}, 60_000)
+
+test("a tracked regular file becoming a nested repository retains the new gitlink identity", async () => {
+  await using project = await memoryProject("stage-tracked-gitlink")
+  const slot = path.join(project.path, "slot")
+  await fs.writeFile(slot, "old regular entry\n")
+  await git(project.path, ["add", "slot"])
+  await git(project.path, ["commit", "-m", "Regular slot"])
+  await fs.unlink(slot)
+  await fs.mkdir(slot)
+  await git(slot, ["init"])
+  await git(slot, ["config", "user.name", "Nested source"])
+  await git(slot, ["config", "user.email", "nested@example.invalid"])
+  await git(slot, ["commit", "--allow-empty", "-m", "Nested identity"])
+  const nestedHead = (await git(slot, ["rev-parse", "HEAD"])).text().trim()
+  await stageGitSourceEntries({ cwd: project.path })
+  expect((await git(project.path, ["ls-files", "--stage", "--", "slot"])).text().trim()).toBe(
+    `160000 ${nestedHead} 0\tslot`,
+  )
+}, 60_000)
+
 async function git(root: string, args: string[]) {
   const result = await hostGit(args, { cwd: root })
   expect(result.exitCode).toBe(0)

@@ -1,0 +1,17 @@
+import {expect,test} from 'bun:test'
+import fs from 'node:fs/promises'
+import {pinBuildObservationTree} from '../../packages/opencorvus/src/build/agent'
+import {hostGit} from '../../packages/opencorvus/src/util/git'
+const run='C:/Users/hengu/.codex/opencorvus-marketing-revision-20261025-01',project=run+'/project'
+test('original marketing project preserves the complete Word and original index during real Build pin',async()=>{
+ const index=await fs.readFile(project+'/.git/index'),word=await fs.readFile(project+'/outputs/growth-plan.docx')
+ const git=async(args:string[])=>{const r=await hostGit(args,{cwd:project});expect(r.exitCode).toBe(0);return r}
+ const head=(await git(['rev-parse','HEAD'])).text().trim()
+ const tree=await pinBuildObservationTree({worktreeDir:project,refName:'refs/opencorvus/observations/replayed-run01'})
+ expect((await git(['show',tree+':outputs/growth-plan.docx'])).stdout).toEqual(word)
+ const review=(await git(['show',tree+':qa/revised/author-review.md'])).text()
+ expect(review.length>0).toBe(true)
+ expect(await fs.readFile(project+'/.git/index')).toEqual(index)
+ expect((await git(['rev-parse','HEAD'])).text().trim()).toBe(head)
+ await fs.writeFile(run+'/evidence/replayed-build-pin.json',JSON.stringify({tree,head,wordBytes:word.length,wordFullByteEquality:true,reviewCharacters:review.length,indexFullByteEquality:true,headEquality:true,source:'Original failed marketing project; current production pinBuildObservationTree and real supervised Git'},null,2))
+},60000)

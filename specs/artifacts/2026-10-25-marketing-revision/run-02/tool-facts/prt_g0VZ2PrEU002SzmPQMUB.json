@@ -1,0 +1,85 @@
+{
+  "id": "prt_g0VZ2PrEU002SzmPQMUB",
+  "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+  "messageID": "msg_hvhvpCBXSltrto2RuwTK",
+  "type": "tool",
+  "callID": "call_5bec000c4aa9482c8ac7a0ee615213b6",
+  "tool": "dispatch_agents",
+  "state": {
+    "status": "completed",
+    "input": {
+      "team": [
+        {
+          "name": "独立最终正文与页图复核",
+          "target": "marketing-growth-fact-checker",
+          "responsibility": "延续原独立复核，验证实际完整正文、Word解析和所有5页渲染图",
+          "boundary": "只读不修改正文；独立推导原要求，不以作者自检或脚本通过替代判断",
+          "expected_result": "精确绑定待审资源的独立最终复核记录，列明逐页结果及任何阻塞项",
+          "depends_on": [
+            "营销正文与Word制作"
+          ]
+        }
+      ],
+      "dispatches": [
+        {
+          "dispatch": {
+            "target": "marketing-growth-fact-checker",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "continuation",
+              "authority": {
+                "kind": "prior_dispatch",
+                "continuation_dispatch_id": "art_hf0xJpj2KyKOEqSHL767"
+              },
+              "guidance": "继续同一独立责任，检查作者精确终报ses_hEwp3inYGnK5nYF8mpQW/msg_g0VZ2OYs800V8cvRHMuw（用read_agent_message），并自行目录发现正式campaign-plan-review-materials及其规范MD/DOCX资源、关联内部验收完整5页PNG/PDF/检查记录。完整读取选择原不可变材料、实际完整正文和页图，不只读manifest或作者声明。按已预检运行时python-docx与zipfile对发布的确切Word进行只读真实有序段落/全部表格单元格与MD正文比较、节纵向、标题黑色无装饰边框；可读Task自有scratch辅助，禁止编辑原证据/交付或安装库。若二进制资源需本地解析，使用现有Artifact/read能力及精确资源与本地文件一致性证据，不把文本read当解析。实际打开查看全部5页真实PNG，给每页简短判断，检查文字/表格不裁切、无丢段漏行、可读。独立重核原要求的预算三者关系、三渠道合计/CPL、观察假设未知与实验字段、退订率修正。正文2694汉字约3000，判断完整性而非无证据扩写。当前正文明确待审且最终阅读文档尚未发布：把已验证内容/版式与正式发布待办分开，评估该状态行正式交付应如何诚实处理，避免将待办当已完成。保留既有audit，不发布第二份并行同类型audit；以独立终检通用Artifact和平台复核记录追加确切证据，原audit仍作为正式campaign-plan类型前驱。指出真正阻塞项；没有则明确这些确切文件可进入作者正式交付。作者之后会按原包发布campaign-plan和逐字相同document@1，不能由你代替作者生产。仅本地、不联网外联投放花费对外发布，不创建Task/Goal，不重新做上游研究。",
+              "evidence_locators": [
+                {
+                  "source": "session_message",
+                  "session_id": "ses_hEwp3inYGnK5nYF8mpQW",
+                  "message_id": "msg_g0VZ2OYs800V8cvRHMuw"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "output": "{\"members\":[{\"member_index\":0,\"name\":\"独立最终正文与页图复核\",\"target\":\"marketing-growth-fact-checker\",\"status\":\"completed\",\"outcome\":{\"kind\":\"accepted\",\"session_id\":\"ses_hT6WN4CemvWvrDYg7sgb\",\"dispatch_lineage_id\":\"art_g0VZ2PvMo00AWflOED2a\"}}]}",
+    "title": "Settled frontier (1/1)",
+    "metadata": {
+      "frontier_size": 1,
+      "completed_count": 1,
+      "member_names": [
+        "独立最终正文与页图复核"
+      ],
+      "targets": [
+        "marketing-growth-fact-checker"
+      ],
+      "members": [
+        {
+          "member_index": 0,
+          "name": "独立最终正文与页图复核",
+          "target": "marketing-growth-fact-checker",
+          "status": "completed",
+          "outcome": {
+            "kind": "accepted",
+            "session_id": "ses_hT6WN4CemvWvrDYg7sgb",
+            "dispatch_lineage_id": "art_g0VZ2PvMo00AWflOED2a"
+          }
+        }
+      ]
+    },
+    "time": {
+      "start": 1792907667726,
+      "end": 1792907684144
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0c30e08966f3cb62016add9993a4e881919d3c5f74764218e4"
+    }
+  },
+  "orderKey": "v1:0001792907683244:0000000000000031:0000000000000000:part:prt_g0VZ2PrEU002SzmPQMUB"
+}

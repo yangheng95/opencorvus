@@ -1,0 +1,85 @@
+{
+  "id": "prt_g0VZ2H9lF003vBDhxqn2",
+  "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+  "messageID": "msg_hrkgiR2mBQugSbiIdD7V",
+  "type": "tool",
+  "callID": "call_1b878dfa94d94952a61795c1d25e11f0",
+  "tool": "dispatch_agents",
+  "state": {
+    "status": "completed",
+    "input": {
+      "team": [
+        {
+          "name": "本地证据整理",
+          "target": "marketing-growth-evidence-researcher",
+          "responsibility": "整理原始三行合成记录及证据限制",
+          "boundary": "仅本地证据档案，不写受众渠道结论或最终报告，不修改输入，不联网",
+          "expected_result": "正式evidence-dossier，完整来源绑定、逐渠道和合计复算、明确未知",
+          "depends_on": [
+            "范围与衡量口径"
+          ]
+        }
+      ],
+      "dispatches": [
+        {
+          "dispatch": {
+            "target": "marketing-growth-evidence-researcher",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "initial",
+              "workflow_subject": {
+                "kind": "virtual_workflow",
+                "workflow_id": "marketing-growth-campaign",
+                "node_id": "marketing-growth-evidence-researcher"
+              },
+              "use_worktree": false,
+              "input": {
+                "reason": "范围简报已完成并核实，现需为独立受众与渠道分析提供简明、可信的本地证据档案。",
+                "target_deliverable": "research_report",
+                "source_urls": [],
+                "focus": "自行从同Task目录发现并完整读取、选择正式growth-brief及原不可变brief.md、campaign.csv资源，按原包发布evidence-dossier，真实绑定来源与所需类型前驱。只整理现有材料，禁止联网、外联、投放、花费、对外发布或创建Task/Goal。用户确认材料完整，仅三行合成记录，不开展无新证据重复研究。逐渠道及合计精确复算曝光、点击、线索、人民币成本及CPL=成本/线索；合计用总成本/总线索，不平均渠道比率。可给明确分母的描述性漏斗率，不能作因果或效果承诺。1200元为当前方案上限，3000元为被取代旧草案，1900元为合成历史成本，保留关系，不改历史。区分原始观察、算术推导、待验证假设及未知；产品仅知虚构团队内部文档整理工具，受众仅知小型团队，未知价格/市场/竞品/成交等不得补事实。后续受众与渠道将独立并行，本阶段不要代写其结论。报告简明直接，正式结构化档案即交接，不额外生成业务文件。保留原范围中规范MD约3000汉字、同正文纵向Word和阅读文档、真实渲染及独立最终复核的后续要求。"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "output": "{\"members\":[{\"member_index\":0,\"name\":\"本地证据整理\",\"target\":\"marketing-growth-evidence-researcher\",\"status\":\"completed\",\"outcome\":{\"kind\":\"accepted\",\"session_id\":\"ses_hlWsp1ODDcJVHxYWj1gJ\",\"dispatch_lineage_id\":\"art_g0VZ2HCCJ002SWeu4cHZ\"}}]}",
+    "title": "Settled frontier (1/1)",
+    "metadata": {
+      "frontier_size": 1,
+      "completed_count": 1,
+      "member_names": [
+        "本地证据整理"
+      ],
+      "targets": [
+        "marketing-growth-evidence-researcher"
+      ],
+      "members": [
+        {
+          "member_index": 0,
+          "name": "本地证据整理",
+          "target": "marketing-growth-evidence-researcher",
+          "status": "completed",
+          "outcome": {
+            "kind": "accepted",
+            "session_id": "ses_hlWsp1ODDcJVHxYWj1gJ",
+            "dispatch_lineage_id": "art_g0VZ2HCCJ002SWeu4cHZ"
+          }
+        }
+      ]
+    },
+    "time": {
+      "start": 1792905593997,
+      "end": 1792905603887
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0399595eccfc777c016add9179eb1c8191bdbb054bb0859d51"
+    }
+  },
+  "orderKey": "v1:0001792905602962:0000000000000031:0000000000000000:part:prt_g0VZ2H9lF003vBDhxqn2"
+}

@@ -1,0 +1,25 @@
+$ bun script/run-tests.ts test/git-source-stage.test.ts
+[1/1] START test/git-source-stage.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) tracked files under ignored directories retain their current contents in source staging and Build pins [5339.99ms]
+(pass) a tracked regular file becoming a nested repository retains the new gitlink identity [3358.54ms]
+(pass) real VCS commit stages each cyclic link once and reports the committed source clean [12960.85ms]
+(pass) the real Snapshot private Git directory captures cyclic link identities [7136.61ms]
+(pass) real type transitions retain their file mode, content and clean commit [15164.09ms]
+physical-directory-replacement {"info":{"initialized":true,"branch":"master","commit":"cce90e9","clean":true,"dirty":false,"staged":0,"modified":0,"untracked":0,"conflicts":0,"ahead":0,"behind":0,"hasRemote":false},"status":" T aliases/root-back\u0000 T root-link/back\u0000","index":"100644 a6ff5b5cfe701950f37afb0441c49bd5b41ba143 0\t.opencorvus-test-project-identity\u0000120000 23f440e2379bff8c346f7abf33ad15d576354e84 0\taliases/root-back\u0000100644 c53119d056f076004784c4b4b78492deb333f5a5 0\tdata/note.txt\u0000120000 23f440e2379bff8c346f7abf33ad15d576354e84 0\troot-link/back\u0000100644 320d21e562f94e950d9a915916dd18f18efcd5b6 0\troot-link/note.txt\u0000","diff":[],"files":[]}
+(pass) same-byte file and directory replacements follow actual physical entry types [23138.98ms]
+(pass) staged link renames preserve the index rename and actual clean working entry [19096.72ms]
+(pass) a real unmerged link index is resolved to the actual current entry bytes [9337.10ms]
+(pass) native nested repositories and uninitialized gitlinks retain their parent commit identities [4865.66ms]
+(pass) link target edits and deletion produce actual link patches and a new clean commit [12386.78ms]
+(pass) native filters, literal path names, deletion and subdirectory index names stay correct [5230.43ms]
+(pass) an actual concurrent canonical index write returns the predecessor conflict and preserves that index [2246.68ms]
+(pass) parallel build observations preserve each cyclic project link and the user index [4655.96ms]
+
+ 13 pass
+ 0 fail
+ 103 expect() calls
+Ran 13 tests across 1 file. [128.44s]
+[1/1] DONE test/git-source-stage.test.ts exit=0 duration=128.93s

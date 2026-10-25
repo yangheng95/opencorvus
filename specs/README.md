@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [原营销完成后追加修订](records/2026-10/2026-10-25-marketing-completed-revision.md)：全新隔离项目、原营销专家团同Task两轮与完整交付验收。
+
 - [当前产品体验与操作障碍修复](records/2026-10/2026-10-25-current-product-walkthrough.md)：592全面走查、默认选择值和Mission体验修复。
 
 - [原Task成员续跑与渲染生命周期](records/2026-10/2026-10-25-task-member-rendering-lifecycle.md)：591真实来源、长文组件身份与物理收敛边界。

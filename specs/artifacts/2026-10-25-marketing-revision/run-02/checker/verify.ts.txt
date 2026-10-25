@@ -1,0 +1,48 @@
+import assert from 'node:assert/strict'
+import fs from 'node:fs'
+import path from 'node:path'
+import {marked} from '../../packages/overlay/node_modules/marked/lib/marked.esm.js'
+
+const phase=process.argv[2];assert(['initial','revised'].includes(phase))
+import {run,evidence as e,project,endpoint} from './config'
+const out=path.join(e,`${phase}-verification`)
+fs.mkdirSync(out,{recursive:true})
+const x=JSON.parse(fs.readFileSync(path.join(e,'current.json'),'utf8'))
+assert.equal(x.task.status,'completed');assert.equal(x.task.executionLifecycle.epoch,phase==='initial'?1:2);assert.equal(x.task.packageRevisionBinding.id,'marketing-growth')
+const request=async(route:string,body?:unknown)=>{const url=new URL(route,endpoint);url.searchParams.set('directory',project);const r=await fetch(url,{method:body===undefined?'GET':'POST',headers:{'content-type':'application/json'},...(body===undefined?{}:{body:JSON.stringify(body)}),signal:AbortSignal.timeout(180000)});assert(r.ok,`${r.status} ${route}`);return r}
+const read=async(locator:any)=>{const parts:Buffer[]=[],ranges:string[]=[];let at=0;for(;;){const r=await request(`/task/${x.task.id}/artifact-read`,{locator,byte_offset:at,max_bytes:4096});const range=r.headers.get('content-range')!;const b=Buffer.from(await r.arrayBuffer());ranges.push(range);parts.push(b);const total=Number(range.split('/')[1]);at+=b.length;if(at===total)break;assert(b.length>0&&at<total)}return {bytes:Buffer.concat(parts),ranges}}
+const artifacts:any[]=[],resources:any[]=[],documents:any[]=[]
+const saveResource=async(ref:any,owner:string)=>{const r=await read({source:'task_artifact_resource',ref});const base=path.resolve(out,'resources',owner),file=path.resolve(base,ref.path);assert(file.startsWith(base+path.sep));fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file,r.bytes);const entry={owner,path:ref.path,ref,bytes:r.bytes.length,file,ranges:r.ranges};resources.push(entry);return entry}
+for(const a of x.conversation.board.artifacts.filter((a:any)=>a.payload?.artifact_type)){
+ const r=await read(a.locator),v=JSON.parse(r.bytes.toString());assert.equal(v.artifact_type,a.payload.artifact_type);fs.writeFileSync(path.join(out,a.id+'.json'),r.bytes)
+ const entry={id:a.id,type:v.artifact_type,producer:v.producer,sourceLocators:v.source_artifact_locators,locator:a.locator,resources:[] as any[]};artifacts.push(entry)
+ for(const ref of v.resources)entry.resources.push(await saveResource(ref,a.id))
+}
+const decisions=x.conversation.board.artifacts.filter((a:any)=>a.kind==='task_completion_decision'&&a.time.created===x.task.executionLifecycle.terminalAt);assert.equal(decisions.length,1)
+const decision=JSON.parse((await read(decisions[0].locator)).bytes.toString());fs.writeFileSync(path.join(out,'completion-decision.json'),JSON.stringify(decision,null,2))
+const deliveryResources:any[]=[]
+for(const locator of decision.deliverable_artifact_locators){
+ const r=await read(locator),v=JSON.parse(r.bytes.toString());fs.writeFileSync(path.join(out,`delivery-${deliveryResources.length}.json`),r.bytes)
+ if(locator.source==='engine_artifact'){assert.equal(v.artifact_type,'marketing-growth/campaign-plan');for(const ref of v.resources)deliveryResources.push(await saveResource(ref,locator.artifact_id))}
+ else if(locator.source==='task_artifact_snapshot'){assert.equal(v.task_id,x.task.id);for(const [tree,value] of Object.entries(v.trees) as any)for(const file of value.files)deliveryResources.push(await saveResource({snapshot:locator.snapshot,tree,...file},v.snapshot_id))}
+ else throw new Error('Inspect actual authoritative delivery locator '+JSON.stringify(locator))
+}
+assert.deepEqual([...new Set(deliveryResources.map(r=>r.path))].sort(),['outputs/growth-plan.docx','outputs/growth-plan.md'])
+const selected=[]
+for(const name of ['growth-plan.md','growth-plan.docx']){const candidates=deliveryResources.filter(r=>r.path===`outputs/${name}`);assert(candidates.length>0);const r=candidates.at(-1)!;assert(fs.readFileSync(r.file).equals(fs.readFileSync(path.join(project,r.path))),`Full published ${name} equals actual project file`);selected.push(r)}
+const canonical=fs.readFileSync(selected[0].file)
+for(const m of x.conversation.transcript)for(const p of m.parts.filter((p:any)=>p.type==='interactive-artifact')){const r=await request(`/session/${m.info.sessionID}/interactive-artifact/${p.artifactID}`),record=await r.json();fs.writeFileSync(path.join(out,record.id+'.json'),JSON.stringify(record,null,2));documents.push({id:record.id,sessionID:record.sessionID,messageID:record.messageID,parentMessageCreatedAt:m.info.time.created,payload:record.payload})}
+const document=documents.filter(d=>d.payload.renderer==='document@1').at(-1);assert(document);assert.equal(document.payload.markdown,canonical.toString())
+// Preserve the full source AST as independent material, without guessing the writer's formatting implementation.
+fs.writeFileSync(path.join(out,'canonical-tokens.json'),JSON.stringify(marked.lexer(canonical.toString()),null,2))
+if(phase==='revised'){
+ const initial=JSON.parse(fs.readFileSync(path.join(e,'initial-verification/verification.json'),'utf8'));assert.equal(initial.task.id,x.task.id);assert.deepEqual(initial.task.packageRevisionBinding,x.task.packageRevisionBinding)
+ assert.equal(new Set([initial.document.id,document.id]).size,2,'The revision has its own actual reading publication')
+ assert(document.parentMessageCreatedAt>=x.task.executionLifecycle.openedAt,'The reading document belongs to this revision occurrence')
+ assert(canonical.equals(fs.readFileSync(initial.selected[0].file)),'Complete canonical Markdown equals first completed delivery')
+ for(const old of initial.selected){const actual=await read({source:'task_artifact_resource',ref:old.ref});assert(actual.bytes.equals(fs.readFileSync(old.file)),'Original immutable resource still returns its full original bytes')}
+ assert.equal(x.task.executionLifecycle.previousTerminal?.status,'completed')
+}
+fs.copyFileSync(path.join(e,'current.json'),path.join(out,'current.json'))
+const verification={task:x.task,completionDecision:{id:decisions[0].id,locator:decisions[0].locator,payload:decision},artifacts,resources,selected,document:{id:document.id,sessionID:document.sessionID,messageID:document.messageID,characters:canonical.toString().length},canonicalBytes:canonical.length,publishedFileEquality:true,readingDocumentEquality:true,oldResourcesEquality:phase==='revised',phase,source:'Complete official API artifact/resource and real interactive-artifact reads; full byte comparisons'}
+fs.writeFileSync(path.join(out,'verification.json'),JSON.stringify(verification,null,2));console.log(JSON.stringify({verified:phase,taskID:x.task.id,epoch:x.task.executionLifecycle.epoch,types:artifacts.map(a=>a.type),files:selected.map(r=>({path:r.path,bytes:r.bytes})),document:document.id}))

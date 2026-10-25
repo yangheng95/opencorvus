@@ -1,0 +1,38 @@
+{
+  "id": "prt_g0VZ1zLu1000CE1eTkZV",
+  "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+  "messageID": "msg_g0VZ1zKvd00guPScK4fU",
+  "type": "tool",
+  "callID": "call_30fe67b8ddfb47eca868147c25a63e2c",
+  "tool": "bash",
+  "state": {
+    "status": "completed",
+    "input": {
+      "command": "python -X utf8 -c \"rows=[('email',1000,100,20,400),('community',2000,120,12,600),('search',3000,150,15,900)]; total=('total',)+tuple(sum(r[i] for r in rows) for i in range(1,5)); print([(r[0],r[1:],'CPL %.2f CTR %.2f%% lead/click %.2f%%'%(r[4]/r[3],100*r[2]/r[1],100*r[3]/r[2])) for r in rows+[total]]); assert total[1:]==(6000,370,47,1900); assert 300+200+400+300==1200\"",
+      "description": "修正控制台编码后完成独立算术核验"
+    },
+    "output": "[('email', (1000, 100, 20, 400), 'CPL 20.00 CTR 10.00% lead/click 20.00%'), ('community', (2000, 120, 12, 600), 'CPL 50.00 CTR 6.00% lead/click 10.00%'), ('search', (3000, 150, 15, 900), 'CPL 60.00 CTR 5.00% lead/click 10.00%'), ('total', (6000, 370, 47, 1900), 'CPL 40.43 CTR 6.17% lead/click 12.70%')]\r\n",
+    "title": "修正控制台编码后完成独立算术核验",
+    "metadata": {
+      "refused": false,
+      "command": "python -X utf8 -c \"rows=[('email',1000,100,20,400),('community',2000,120,12,600),('search',3000,150,15,900)]; total=('total',)+tuple(sum(r[i] for r in rows) for i in range(1,5)); print([(r[0],r[1:],'CPL %.2f CTR %.2f%% lead/click %.2f%%'%(r[4]/r[3],100*r[2]/r[1],100*r[3]/r[2])) for r in rows+[total]]); assert total[1:]==(6000,370,47,1900); assert 300+200+400+300==1200\"",
+      "output": "[('email', (1000, 100, 20, 400), 'CPL 20.00 CTR 10.00% lead/click 20.00%'), ('community', (2000, 120, 12, 600), 'CPL 50.00 CTR 6.00% lead/click 10.00%'), ('search', (3000, 150, 15, 900), 'CPL 60.00 CTR 5.00% lead/click 10.00%'), ('total', (6000, 370, 47, 1900), 'CPL 40.43 CTR 6.17% lead/click 12.70%')]\r\n",
+      "output_bytes": 305,
+      "exit": 0,
+      "pid": null,
+      "background": false,
+      "description": "修正控制台编码后完成独立算术核验",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792901350765,
+      "end": 1792901352999
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0a6116d58479879f016add80e6a8b08191b5710752c33e14a0"
+    }
+  },
+  "orderKey": "v1:0001792901352491:0000000000000031:0000000000000000:part:prt_g0VZ1zLu1000CE1eTkZV"
+}

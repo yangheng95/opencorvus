@@ -1,0 +1,82 @@
+{
+  "id": "prt_g0VZ2GZKG00EPorrYEMH",
+  "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+  "messageID": "msg_hr7aXxlBYPTi4DQA4Zhx",
+  "type": "tool",
+  "callID": "call_899e1d80b491493893eed77a956fbf5d",
+  "tool": "dispatch_agents",
+  "state": {
+    "status": "completed",
+    "input": {
+      "team": [
+        {
+          "name": "范围与衡量口径",
+          "target": "marketing-growth-planner",
+          "responsibility": "界定本地营销计划范围及衡量合同",
+          "boundary": "只拥有范围简报，不代替证据、并行分析、策略、独立复核和作者交付；不修改输入",
+          "expected_result": "简明的正式growth-brief及真实不可变来源绑定",
+          "depends_on": []
+        }
+      ],
+      "dispatches": [
+        {
+          "dispatch": {
+            "target": "marketing-growth-planner",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "initial",
+              "workflow_subject": {
+                "kind": "virtual_workflow",
+                "workflow_id": "marketing-growth-campaign",
+                "node_id": "marketing-growth-planner"
+              },
+              "use_worktree": false,
+              "input": {
+                "goal_ids": [],
+                "instruction": "完成范围与衡量简报并按原包正式发布growth-brief。自行发现本Task目录已发布的brief.md、campaign.csv原不可变资源，完整读取并选择，勿用实时文件替代。当前用户1200元为预算上限；brief 3000元为被取代旧草案；CSV1900元为合成历史成本，三者保留，不改历史。材料已完整提供，仅三行合成数据；只本地内部，不联网/外联/投放/花费/对外发布，不创建Task或Goal。后续完整职责：证据→受众与渠道独立并行→策略→独立复核→原营销作者规范交付→独立最终正文与真实页图复核→作者正式交付。明确观察/假设/未知，不推断真实客户、市场、因果或收益。简明直接，避免重复研究。将最终约3000汉字规范outputs/growth-plan.md、同正文纵向outputs/growth-plan.docx、同正文阅读文档及标题黑色无装饰线/表格不截断/真实渲染逐页查看的验收要求记录为范围。正式业务文件只MD和Word，不生成HTML；包要求镜像只能本地同正文。运行时材料已固定，可供作者后续发现。保留来源完整绑定，真实Artifact交接；不要先撰写最终报告。",
+                "reason": "已完整固定项目输入，先确立预算优先级和可验证范围，供后续完整职责链使用。"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "output": "{\"members\":[{\"member_index\":0,\"name\":\"范围与衡量口径\",\"target\":\"marketing-growth-planner\",\"status\":\"completed\",\"outcome\":{\"kind\":\"accepted\",\"session_id\":\"ses_h1Ivk2pQX76lHzYnbEwI\",\"dispatch_lineage_id\":\"art_g0VZ2GcES00aXj4sHS4s\"}}]}",
+    "title": "Settled frontier (1/1)",
+    "metadata": {
+      "frontier_size": 1,
+      "completed_count": 1,
+      "member_names": [
+        "范围与衡量口径"
+      ],
+      "targets": [
+        "marketing-growth-planner"
+      ],
+      "members": [
+        {
+          "member_index": 0,
+          "name": "范围与衡量口径",
+          "target": "marketing-growth-planner",
+          "status": "completed",
+          "outcome": {
+            "kind": "accepted",
+            "session_id": "ses_h1Ivk2pQX76lHzYnbEwI",
+            "dispatch_lineage_id": "art_g0VZ2GcES00aXj4sHS4s"
+          }
+        }
+      ]
+    },
+    "time": {
+      "start": 1792905453940,
+      "end": 1792905465577
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0936b49a254433ce016add90eddbe0819193be64de1ec750e4"
+    }
+  },
+  "orderKey": "v1:0001792905464810:0000000000000031:0000000000000000:part:prt_g0VZ2GZKG00EPorrYEMH"
+}

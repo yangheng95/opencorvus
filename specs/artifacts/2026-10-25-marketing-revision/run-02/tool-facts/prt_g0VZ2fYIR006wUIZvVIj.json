@@ -1,0 +1,128 @@
+{
+  "id": "prt_g0VZ2fYIR006wUIZvVIj",
+  "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+  "messageID": "msg_g0VZ2fThB00XBaZFalzR",
+  "type": "tool",
+  "callID": "call_GQvOoU5AG8Hg7tvCdDaWay8Q",
+  "tool": "pkg_tool__marketing_growth_shared_publish_marketin__9d2b7cfbc799",
+  "state": {
+    "status": "completed",
+    "input": {
+      "artifact": {
+        "artifact_type": "marketing-growth/campaign-plan",
+        "payload": {
+          "stage": "横向屏幕阅读修订独立复核通过后的正式交付",
+          "scope": "沿首次规范campaign-plan交付同正文横向Word修订；正式业务资源仅outputs/growth-plan.md及outputs/growth-plan.docx。原正文历史纵向Word及待审措辞冻结保留，当前实际Word横向且本轮独立复核已通过。原首次资源完整保留。",
+          "as_of": "2026-10-25",
+          "evidence": [
+            {
+              "statement": "首次正式campaign-plan目录修订40及原MD、Word完整读取；本轮候选目录修订47、内部验收48、独立复核56完整读取选择。",
+              "source": "art_h28MoKiA1WMo4nQBkTLd@40；art_hLArXmv50FyxAvdR9Fcu@47；art_hZtUOLUOvVgdJGi7YGHv@48；art_h47BH1uVgLHYWoaZbo5R@56",
+              "source_url": null,
+              "as_of": "2026-10-25"
+            },
+            {
+              "statement": "独立角色通过本轮业务快照29a4bb0e-b15a-5c43-aa2d-21f53426253b：MD9991字节与首次相同，原Word所有文字和顺序及76单元格一致；仅新增空布局段，顶层段落30至31。",
+              "source": "marketing-growth/landscape-file-review@56及精确终报msg_g0VZ2df2L00M3v0mboqK",
+              "source_url": null,
+              "as_of": "2026-10-25"
+            },
+            {
+              "statement": "六页真实页图独立全部查看通过；横向、黑标题无装饰线、四表正确重复表头与首行衔接、22行不拆分通过。",
+              "source": "marketing-growth/landscape-file-review@56",
+              "source_url": null,
+              "as_of": "2026-10-25"
+            },
+            {
+              "statement": "本轮发布前只读复核MD对原不可变资源完整字节相同；Word对已审候选对应提交字节相同；原新全部原有段落和单元格逐序解析相同，空段单列；包镜像同正文。",
+              "source": "本Session只读python-docx解析及字节比较；原资源身份来自不可变目录",
+              "source_url": null,
+              "as_of": "2026-10-25"
+            },
+            {
+              "statement": "原brief.md及campaign.csv全文重新读取，原audit保留唯一类型前驱；1200当前上限、3000被取代旧草案、1900合成历史成本不变。",
+              "source": "原snapshot b6c7a53e-2067-5f7e-a19c-1dbb90d0f6df；audit@25；冻结全文",
+              "source_url": null,
+              "as_of": "2026-10-25"
+            }
+          ],
+          "findings": [
+            {
+              "finding": "横向修订仅改变呈现；原有文字无删除替换移动。新增一个无文字布局分隔段，不能声称段落数量未变。",
+              "evidence_indexes": [
+                1,
+                3
+              ],
+              "confidence": "high"
+            },
+            {
+              "finding": "本轮确切六页横向候选通过独立最终复核，不借用首次五页纵向审阅。",
+              "evidence_indexes": [
+                0,
+                1,
+                2
+              ],
+              "confidence": "high"
+            }
+          ],
+          "decisions": [
+            "本次正式资源沿已审候选原快照绑定，不改文件或生成器，不重渲染不同版本。",
+            "首次正式规范及其资源保留可读；本次只修呈现，不另造营销正文。",
+            "PDF及六页PNG仅内部验收，不交付HTML；阅读文档逐字采用全部冻结MD，历史纵向及待审措辞在正文外解释。",
+            "本Task仅本地内部，无联网外联投放花费或对外营销发布，不新建Task/Goal。"
+          ],
+          "unknowns": [
+            "真实需求、能力、价格、市场、许可、费率、样本与效果仍未验证，未来执行仍须另行授权。"
+          ],
+          "resource_roles": [
+            {
+              "role": "唯一规范冻结Markdown正文",
+              "path": "outputs/growth-plan.md"
+            },
+            {
+              "role": "同正文横向屏幕阅读Word正式修订",
+              "path": "outputs/growth-plan.docx"
+            }
+          ]
+        }
+      },
+      "resource_set": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hxHOMBTalkvA4toZOhTn",
+          "task_id": "tsk_g00VZ2GE9C00jkeX1GgT",
+          "snapshot_id": "29a4bb0e-b15a-5c43-aa2d-21f53426253b",
+          "manifest_sha256": "cf92f99ee6f2d7707ba1b955fd959779a470e441585b24edf1faa5993bd87b82"
+        },
+        "tree": "resources"
+      },
+      "predecessor_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h2vfYEL6JlrYYmHFBUdT",
+          "catalog_revision": 25,
+          "expected_sha256": "1f78fc392948eabc1e2bc38a3cb9dfeb9c30afe6a1251424462cdbf8715d2b9d"
+        }
+      ]
+    },
+    "output": "{\"artifact_type\":\"marketing-growth/campaign-plan\",\"schema_version\":1,\"locator\":{\"source\":\"engine_artifact\",\"artifact_id\":\"art_hLzPcOZ5dCyjY39YdgHW\",\"catalog_revision\":61,\"expected_sha256\":\"2dacd8acab0d23937652e4fef695a3d189a2093229b34a3874a81b4e575e0b77\"},\"artifact_sha256\":\"2dacd8acab0d23937652e4fef695a3d189a2093229b34a3874a81b4e575e0b77\"}",
+    "title": "",
+    "metadata": {
+      "package_tool_ref": "marketing-growth/shared/publish-marketing-growth-artifact",
+      "expert_squad_id": "marketing-growth",
+      "provider_tool_name": "pkg_tool__marketing_growth_shared_publish_marketin__9d2b7cfbc799",
+      "source_path": "tools/publish-marketing-growth-artifact.ts",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792911408183,
+      "end": 1792911431894
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0dca6eb05bf2657a016adda83008b487d08db2364f395c73f6"
+    }
+  },
+  "orderKey": "v1:0001792911431060:0000000000000031:0000000000000000:part:prt_g0VZ2fYIR006wUIZvVIj"
+}

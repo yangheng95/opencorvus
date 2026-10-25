@@ -1,0 +1,44 @@
+{
+  "id": "prt_g0VZ2dHlV00HuyW4ow43",
+  "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+  "messageID": "msg_g0VZ2dFXc007h5j4HJM9",
+  "type": "tool",
+  "callID": "call_yosfJY8BlKkWjjtB9h8X0kqh",
+  "tool": "artifact_read",
+  "state": {
+    "status": "completed",
+    "input": {
+      "reads": [
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_eJLOW4vPDGZKtjJp",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "materialized_file"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_5llio_4wOT410aS1",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "materialized_file"
+        }
+      ]
+    },
+    "output": "{\"results\":[{\"request_index\":0,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"19df3dd4-7067-562d-ac01-42acf9bfc56d\",\"manifest_sha256\":\"4ce8ebb684b325eaffb2412ccc21f52c55c6a03872e1e3f116700c20a933870c\"},\"tree\":\"resources\",\"path\":\"outputs/growth-plan.md\",\"media_type\":\"text/markdown\",\"bytes\":9991,\"sha256\":\"2a03896811a36347f08c9eba2916c1e7e07b2695aa042eecf21bf8e8b2ddbc61\"}},\"media_type\":\"text/markdown\",\"byte_start\":0,\"byte_end\":9991,\"next_offset\":null,\"total_bytes\":9991,\"complete\":true,\"sha256\":\"2a03896811a36347f08c9eba2916c1e7e07b2695aa042eecf21bf8e8b2ddbc61\",\"materialized_path\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-marketing-revision-20261025-02\\\\project\\\\.opencorvus\\\\.r\\\\tasks\\\\tsk_g00VZ2GE9C00jkeX1GgT\\\\artifacts\\\\materializations\\\\reads\\\\2a03896811a36347f08c9eba2916c1e7e07b2695aa042eecf21bf8e8b2ddbc61-growth-plan.md\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_eJLOW4vPDGZKtjJp\",\"artifact_read_ref\":\"ar_e_VUVDevysmPMlkt\"}},{\"request_index\":1,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"29a4bb0e-b15a-5c43-aa2d-21f53426253b\",\"manifest_sha256\":\"cf92f99ee6f2d7707ba1b955fd959779a470e441585b24edf1faa5993bd87b82\"},\"tree\":\"resources\",\"path\":\"outputs/growth-plan.md\",\"media_type\":\"text/markdown\",\"bytes\":9991,\"sha256\":\"2a03896811a36347f08c9eba2916c1e7e07b2695aa042eecf21bf8e8b2ddbc61\"}},\"media_type\":\"text/markdown\",\"byte_start\":0,\"byte_end\":9991,\"next_offset\":null,\"total_bytes\":9991,\"complete\":true,\"sha256\":\"2a03896811a36347f08c9eba2916c1e7e07b2695aa042eecf21bf8e8b2ddbc61\",\"materialized_path\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-marketing-revision-20261025-02\\\\project\\\\.opencorvus\\\\.r\\\\tasks\\\\tsk_g00VZ2GE9C00jkeX1GgT\\\\artifacts\\\\materializations\\\\reads\\\\2a03896811a36347f08c9eba2916c1e7e07b2695aa042eecf21bf8e8b2ddbc61-growth-plan.md\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_5llio_4wOT410aS1\",\"artifact_read_ref\":\"ar_gP1H9S6z7CHLC4Cf\"}}],\"complete\":true,\"next_reads\":[]}",
+    "title": "Artifacts (2)",
+    "metadata": {
+      "truncated": false
+    },
+    "time": {
+      "start": 1792910867981,
+      "end": 1792910870657
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_05ba42dbc6502746016adda613ea2487d08c040a8e419f7307"
+    }
+  },
+  "orderKey": "v1:0001792910869940:0000000000000031:0000000000000000:part:prt_g0VZ2dHlV00HuyW4ow43"
+}

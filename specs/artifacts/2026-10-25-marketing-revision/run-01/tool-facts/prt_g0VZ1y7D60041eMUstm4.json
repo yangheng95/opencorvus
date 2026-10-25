@@ -1,0 +1,84 @@
+{
+  "id": "prt_g0VZ1y7D60041eMUstm4",
+  "sessionID": "ses_-zUQy5vEEzzn2RBsqAWe",
+  "messageID": "msg_ho76uvpZ1ayvMWApjQhh",
+  "type": "tool",
+  "callID": "call_fe97e01d77a34bb9ba415b4f089639e4",
+  "tool": "dispatch_agents",
+  "state": {
+    "status": "completed",
+    "input": {
+      "team": [
+        {
+          "name": "原营销作者文档制作",
+          "target": "marketing-growth-campaign-writer",
+          "responsibility": "制作同正文规范Markdown、纵向Word与阅读文档，实际渲染并逐页自检，为独立最终复核提供不可变资源。",
+          "boundary": "拥有最终文件和排版修复；不代替独立复核，不修改输入或安装包，不在最终复核前声称正式交付完成。",
+          "expected_result": "约3000汉字完整正文及同正文文件、全部真实渲染页和作者逐页检查证据；供独立复核的不可变资源。",
+          "depends_on": [
+            "独立策略复核"
+          ]
+        }
+      ],
+      "dispatches": [
+        {
+          "dispatch": {
+            "target": "marketing-growth-campaign-writer",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "initial",
+              "workflow_subject": {
+                "kind": "virtual_workflow",
+                "workflow_id": "marketing-growth-campaign",
+                "node_id": "marketing-growth-campaign-writer"
+              },
+              "use_worktree": false,
+              "input": {
+                "goal_ids": [],
+                "request": "自行发现、完整读取并选择本Task原包audit与策略等精确所需前驱，以及原始不可变brief.md、campaign.csv、tools/runtime.md和tools/render_docx.py。按原作者规范拥有最终正文与文档。唯一规范正文outputs/growth-plan.md约3000汉字、完整论证与表格；生成完全同正文outputs/growth-plan.docx，全部页面纵向、标题清楚纯黑、中文字体清楚、表格可读不截断；原包artifacts/marketing-growth/campaign-plan.md只作同正文镜像。提供完全相同正文阅读文档，不能摘要或改写；可准备同正文HTML作为可复用阅读文件，正式交付时再从已绑定正文发布匹配交互阅读文档。保留三渠道及合计曝光/点击/线索/成本/CPL和必要公式、预算关系1200当前/3000旧稿/1900合成历史，历史不改；区分观察、计算、假设及未知，CPL非CAC，无因果/未来效果保证。策略预算受众300+测量200+单渠道400+预留300=1200，工时工具激励全包；避免机械堆叠实验。保留audit建议：未达总体筛查门槛而保留单情境时须有自身证据与判断理由，不能写总体通过。材料已完整，不重复研究、不补造事实。\n使用已预检python-docx和项目内renderer，不调查外部环境。执行python tools/render_docx.py outputs/growth-plan.docx --output_dir qa/initial --emit_pdf --verbose。实际打开每一张最终PNG逐页查看，不以脚本成功或提取文字代替看图；若修订则重新渲染并检查所有最终页。用正文语义序列直接检查MD与DOCX/阅读文档标题、段落、表格单元格及顺序相同，记录方法及结果，不只校验摘要或自生成hash。PDF/PNG只内部验收，不作为最终用户交付。\n本轮先完成真实文件、渲染、自检并通过artifact_snapshot与generic artifact_publish发布供独立复核的完整精确资源（正文/Word/阅读文件与内部QA证据分别标角色，必要时分开资源集）。完整读取选择实际正文不可变资源以绑定来源，保持原始来源绑定。返回全部页数、逐页检查结果、正文一致性检查、已发现限制及实际资源证据；不要提前发布最终canonical campaign-plan或宣称独立最终验收通过。下一轮独立角色会检查真实正文和全部页图；随后你继续这一责任完成修复或原包正式campaign-plan及交互阅读交付、所需提交和最终资源封存。在primary且无merge_back按技能直接重读snapshot，不需要编造source_commit参数。仅本地内部，不联网、不外联、不投放、不花费、不对外发布、不新建Task/Goal、不修改输入或安装包。",
+                "reason": "策略及独立审计已正式完成，现在由原营销作者制作真实交付文件并进行实际渲染自检；最终正文和页图仍须独立复核。"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "output": "{\"members\":[{\"member_index\":0,\"name\":\"原营销作者文档制作\",\"target\":\"marketing-growth-campaign-writer\",\"status\":\"completed\",\"outcome\":{\"kind\":\"accepted\",\"session_id\":\"ses_hyWiInyq6XpRz0zm2vDI\",\"dispatch_lineage_id\":\"art_g0VZ1yCBz00iEWr6trWa\"}}]}",
+    "title": "Settled frontier (1/1)",
+    "metadata": {
+      "frontier_size": 1,
+      "completed_count": 1,
+      "member_names": [
+        "原营销作者文档制作"
+      ],
+      "targets": [
+        "marketing-growth-campaign-writer"
+      ],
+      "members": [
+        {
+          "member_index": 0,
+          "name": "原营销作者文档制作",
+          "target": "marketing-growth-campaign-writer",
+          "status": "completed",
+          "outcome": {
+            "kind": "accepted",
+            "session_id": "ses_hyWiInyq6XpRz0zm2vDI",
+            "dispatch_lineage_id": "art_g0VZ1yCBz00iEWr6trWa"
+          }
+        }
+      ]
+    },
+    "time": {
+      "start": 1792901055960,
+      "end": 1792901077342
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_059c9167ed6a8fc5016add7fbfdde48191a24a9a86b68f6e87"
+    }
+  },
+  "orderKey": "v1:0001792901074679:0000000000000031:0000000000000000:part:prt_g0VZ1y7D60041eMUstm4"
+}

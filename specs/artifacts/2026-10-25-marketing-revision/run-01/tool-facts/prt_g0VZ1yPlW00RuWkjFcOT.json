@@ -1,0 +1,38 @@
+{
+  "id": "prt_g0VZ1yPlW00RuWkjFcOT",
+  "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+  "messageID": "msg_g0VZ1yOsw00us0s0BCAE",
+  "type": "tool",
+  "callID": "call_2f995e3cb8f34ae1ba2762dba9f61c88",
+  "tool": "bash",
+  "state": {
+    "status": "completed",
+    "input": {
+      "command": "git status --short",
+      "description": "检查工作目录已有修改"
+    },
+    "output": "",
+    "title": "检查工作目录已有修改",
+    "metadata": {
+      "refused": false,
+      "command": "git status --short",
+      "output": "",
+      "output_bytes": 0,
+      "exit": 0,
+      "pid": null,
+      "background": false,
+      "description": "检查工作目录已有修改",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792901127286,
+      "end": 1792901128023
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0205ce22b3139bbc016add80072c30819194ca7e9a95cdb888"
+    }
+  },
+  "orderKey": "v1:0001792901127578:0000000000000031:0000000000000000:part:prt_g0VZ1yPlW00RuWkjFcOT"
+}

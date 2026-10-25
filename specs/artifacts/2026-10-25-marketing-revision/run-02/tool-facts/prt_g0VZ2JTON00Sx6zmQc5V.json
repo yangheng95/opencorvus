@@ -1,0 +1,85 @@
+{
+  "id": "prt_g0VZ2JTON00Sx6zmQc5V",
+  "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+  "messageID": "msg_hUtLUTLUznd9ytgnZWz2",
+  "type": "tool",
+  "callID": "call_a4a04c91453c4a5b949f92bb366a55b1",
+  "tool": "dispatch_agents",
+  "state": {
+    "status": "completed",
+    "input": {
+      "team": [
+        {
+          "name": "汇合营销策略",
+          "target": "marketing-growth-strategist",
+          "responsibility": "汇合两项独立分析形成优先级明确的本地营销策略",
+          "boundary": "拥有策略不代替独立复核和最终作者；不执行营销、不修改原材料",
+          "expected_result": "正式growth-strategy，清楚预算、实验、未知与最终交付约束",
+          "depends_on": [
+            "受众与价值主张分析",
+            "渠道与实验分析"
+          ]
+        }
+      ],
+      "dispatches": [
+        {
+          "dispatch": {
+            "target": "marketing-growth-strategist",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "initial",
+              "workflow_subject": {
+                "kind": "virtual_workflow",
+                "workflow_id": "marketing-growth-campaign",
+                "node_id": "marketing-growth-strategist"
+              },
+              "use_worktree": false,
+              "input": {
+                "goal_ids": [],
+                "instruction": "汇合策略阶段：自行发现、完整读取并选择正式audience-analysis和channel-analysis两个所需类型前驱，以及必要的范围/证据档案和原不可变brief.md/campaign.csv语义来源；按原包发布growth-strategy。原用户要求完整职责链，两个独立分析均已完成。将受众任务情境与渠道建议连接为优先级明确、简明直接、可证伪的本地计划，不重复研究扩写。保留当前1200元上限、被取代3000元旧草案、1900元合成历史成本关系，全部三渠道与合计原值/CPL准确，不按预算改历史。区分观察、算术、假设、未知；虚构产品能力与市场事实不能补造，无真实客户/收益/因果承诺，不以CPL作CAC。预算可沿用或明确解释调整，含准备和预留总额不超过1200元，实际支出零。将实验统一为角色、假设、单位/分配、指标/分母、建议样本/周期/阈值、护栏/停止、下一决策；可简化不相关方案，避免小预算同时摊薄及用预留追样。缺许可名单、社区或样本时暂停并保留未知，不强行执行。所有建议需要未来另行授权，本Task不联网/外联/投放/花费/对外发布，不创建Task/Goal。为最终约3000汉字规范outputs/growth-plan.md提供紧凑论证与表格结构，不要代写或生成最终业务文件；最终作者还要同正文纵向outputs/growth-plan.docx、同正文阅读文档，标题黑色无装饰线、表格可读不截断、真实渲染逐页查看、再独立最终正文/真实页图复核后正式交付。正式业务文件只MD和Word，不HTML，包镜像仅本地同正文。最终报告不需机械复述所有阶段长文，保留决策所需事实即可。本阶段终报给出正式发布结果和仍待复核限制，不声称最终交付完成。",
+                "reason": "两个独立分析及其正式证据均已核实，现可汇合受众、渠道和有限预算形成可审核策略。"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "output": "{\"members\":[{\"member_index\":0,\"name\":\"汇合营销策略\",\"target\":\"marketing-growth-strategist\",\"status\":\"completed\",\"outcome\":{\"kind\":\"accepted\",\"session_id\":\"ses_hVtsNPrkcMSjQeZVsODu\",\"dispatch_lineage_id\":\"art_g0VZ2JXFp00SuZVyd7Oc\"}}]}",
+    "title": "Settled frontier (1/1)",
+    "metadata": {
+      "frontier_size": 1,
+      "completed_count": 1,
+      "member_names": [
+        "汇合营销策略"
+      ],
+      "targets": [
+        "marketing-growth-strategist"
+      ],
+      "members": [
+        {
+          "member_index": 0,
+          "name": "汇合营销策略",
+          "target": "marketing-growth-strategist",
+          "status": "completed",
+          "outcome": {
+            "kind": "accepted",
+            "session_id": "ses_hVtsNPrkcMSjQeZVsODu",
+            "dispatch_lineage_id": "art_g0VZ2JXFp00SuZVyd7Oc"
+          }
+        }
+      ]
+    },
+    "time": {
+      "start": 1792906146115,
+      "end": 1792906161690
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_00cecef62e365355016add93a20a348191bf0375dc7243dc2d"
+    }
+  },
+  "orderKey": "v1:0001792906160294:0000000000000031:0000000000000000:part:prt_g0VZ2JTON00Sx6zmQc5V"
+}

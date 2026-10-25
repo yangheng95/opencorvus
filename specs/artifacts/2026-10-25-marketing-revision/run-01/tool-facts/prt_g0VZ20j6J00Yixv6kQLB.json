@@ -1,0 +1,38 @@
+{
+  "id": "prt_g0VZ20j6J00Yixv6kQLB",
+  "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+  "messageID": "msg_g0VZ20gYW00fbjz5osnr",
+  "type": "tool",
+  "callID": "call_PzAWtrJWWHQu8MF6ReOuGVom",
+  "tool": "bash",
+  "state": {
+    "status": "completed",
+    "input": {
+      "command": "python -X utf8 -c 'from pathlib import Path; import re,json,zipfile,xml.etree.ElementTree as E; from html.parser import HTMLParser; from docx import Document; import fitz; base=Path(\".opencorvus/.r/tasks/tsk_g00VZ1u3kk00D81zMYvb/artifacts/snapshots\"); root=base/\"2d5e2090-241a-5c71-a861-c943e67d16ac/resources\"; text=(root/\"outputs/growth-plan.md\").read_text(encoding=\"utf-8\"); md=[]\nfor line in text.splitlines():\n if not line.strip(): continue\n if line.startswith(\"|\"):\n  cells=[s.strip() for s in line.strip().strip(\"|\").split(\"|\")]\n  if all(re.fullmatch(r\":?-+:?\",s) for s in cells): continue\n  if md and md[-1][0]==\"table\": md[-1][1].append(cells)\n  else: md.append((\"table\",[cells]))\n elif line.startswith(\"#\"):\n  m=re.match(r\"^(#+) (.*)\",line); md.append((\"h\"+str(len(m[1])),m[2]))\n else: md.append((\"p\",line))\nw=\"{http://schemas.openxmlformats.org/wordprocessingml/2006/main}\"; doc=Document(root/\"outputs/growth-plan.docx\"); wb=[]; styles=[]\nfor el in doc.element.body:\n if el.tag==w+\"p\":\n  from docx.text.paragraph import Paragraph\n  p=Paragraph(el,doc); name=p.style.name; kind=\"h1\" if name==\"Title\" else \"h2\" if name==\"Heading 1\" else \"p\"; wb.append((kind,p.text))\n  if kind!=\"p\": styles.append((name,kind,p.text))\n elif el.tag==w+\"tbl\":\n  from docx.table import Table\n  wb.append((\"table\",[[c.text for c in r.cells] for r in Table(el,doc).rows]))\nprint(\"Word title roles\",styles); print(\"Exact full ordered title paragraph table comparison\",md==wb,\"blocks\",len(md),len(wb)); print(\"All sections portrait\",all(s.page_width<s.page_height for s in doc.sections)); runs=[r for p in doc.paragraphs for r in p.runs]+[r for t in doc.tables for row in t.rows for c in row.cells for p in c.paragraphs for r in p.runs]; print(\"All\",len(runs),\"body and table runs explicit black\",all(str(r.font.color.rgb)==\"000000\" for r in runs)); pdf=fitz.open(base/\"8eea5db7-aa44-5cb3-a82e-b23e91ff3004/resources/qa/initial/growth-plan.pdf\"); norm=lambda s:re.sub(r\"\\s+\",\"\",s); flat=lambda bs:\"\".join(\"\".join(\"\".join(row) for row in v) if k==\"table\" else v for k,v in bs); actual=\"\".join(p.get_text(sort=True) for p in pdf); print(\"PDF\",len(pdf),\"portrait\",all(p.rect.width<p.rect.height for p in pdf)); print(\"PDF document text and DOCX body equal ignoring layout whitespace\",norm(actual)==norm(flat(wb))); print(\"PDF page dimensions\",[(round(p.rect.width,2),round(p.rect.height,2)) for p in pdf]); print(\"MD mirror line endings only\",text==(root/\"artifacts/marketing-growth/campaign-plan.md\").read_text(encoding=\"utf-8\")); assert md==wb; assert all(s.page_width<s.page_height for s in doc.sections); assert norm(actual)==norm(flat(wb))'",
+      "description": "核对标题语义映射及Word与封存PDF对应"
+    },
+    "output": "Traceback (most recent call last):\r\n  File \"<string>\", line 1, in <module>\r\nModuleNotFoundError: No module named 'fitz'\r\n",
+    "title": "核对标题语义映射及Word与封存PDF对应",
+    "metadata": {
+      "refused": false,
+      "command": "python -X utf8 -c 'from pathlib import Path; import re,json,zipfile,xml.etree.ElementTree as E; from html.parser import HTMLParser; from docx import Document; import fitz; base=Path(\".opencorvus/.r/tasks/tsk_g00VZ1u3kk00D81zMYvb/artifacts/snapshots\"); root=base/\"2d5e2090-241a-5c71-a861-c943e67d16ac/resources\"; text=(root/\"outputs/growth-plan.md\").read_text(encoding=\"utf-8\"); md=[]\nfor line in text.splitlines():\n if not line.strip(): continue\n if line.startswith(\"|\"):\n  cells=[s.strip() for s in line.strip().strip(\"|\").split(\"|\")]\n  if all(re.fullmatch(r\":?-+:?\",s) for s in cells): continue\n  if md and md[-1][0]==\"table\": md[-1][1].append(cells)\n  else: md.append((\"table\",[cells]))\n elif line.startswith(\"#\"):\n  m=re.match(r\"^(#+) (.*)\",line); md.append((\"h\"+str(len(m[1])),m[2]))\n else: md.append((\"p\",line))\nw=\"{http://schemas.openxmlformats.org/wordprocessingml/2006/main}\"; doc=Document(root/\"outputs/growth-plan.docx\"); wb=[]; styles=[]\nfor el in doc.element.body:\n if el.tag==w+\"p\":\n  from docx.text.paragraph import Paragraph\n  p=Paragraph(el,doc); name=p.style.name; kind=\"h1\" if name==\"Title\" else \"h2\" if name==\"Heading 1\" else \"p\"; wb.append((kind,p.text))\n  if kind!=\"p\": styles.append((name,kind,p.text))\n elif el.tag==w+\"tbl\":\n  from docx.table import Table\n  wb.append((\"table\",[[c.text for c in r.cells] for r in Table(el,doc).rows]))\nprint(\"Word title roles\",styles); print(\"Exact full ordered title paragraph table comparison\",md==wb,\"blocks\",len(md),len(wb)); print(\"All sections portrait\",all(s.page_width<s.page_height for s in doc.sections)); runs=[r for p in doc.paragraphs for r in p.runs]+[r for t in doc.tables for row in t.rows for c in row.cells for p in c.paragraphs for r in p.runs]; print(\"All\",len(runs),\"body and table runs explicit black\",all(str(r.font.color.rgb)==\"000000\" for r in runs)); pdf=fitz.open(base/\"8eea5db7-aa44-5cb3-a82e-b23e91ff3004/resources/qa/initial/growth-plan.pdf\"); norm=lambda s:re.sub(r\"\\s+\",\"\",s); flat=lambda bs:\"\".join(\"\".join(\"\".join(row) for row in v) if k==\"table\" else v for k,v in bs); actual=\"\".join(p.get_text(sort=True) for p in pdf); print(\"PDF\",len(pdf),\"portrait\",all(p.rect.width<p.rect.height for p in pdf)); print(\"PDF document text and DOCX body equal ignoring layout whitespace\",norm(actual)==norm(flat(wb))); print(\"PDF page dimensions\",[(round(p.rect.width,2),round(p.rect.height,2)) for p in pdf]); print(\"MD mirror line endings only\",text==(root/\"artifacts/marketing-growth/campaign-plan.md\").read_text(encoding=\"utf-8\")); assert md==wb; assert all(s.page_width<s.page_height for s in doc.sections); assert norm(actual)==norm(flat(wb))'",
+      "output": "Traceback (most recent call last):\r\n  File \"<string>\", line 1, in <module>\r\nModuleNotFoundError: No module named 'fitz'\r\n",
+      "output_bytes": 121,
+      "exit": 1,
+      "pid": null,
+      "background": false,
+      "description": "核对标题语义映射及Word与封存PDF对应",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792901678267,
+      "end": 1792901695958
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_04274e52fa22c9bd016add822e26cc87d0ac35463f7d4f7343"
+    }
+  },
+  "orderKey": "v1:0001792901695405:0000000000000031:0000000000000000:part:prt_g0VZ20j6J00Yixv6kQLB"
+}

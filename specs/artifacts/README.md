@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [原营销完成后追加修订](2026-10-25-marketing-revision/README.md)：全新marketing-growth两轮真实证据。
+
 - [当前产品体验修复验证](2026-10-25-current-product-walkthrough/README.md)：592默认选择值、Mission卡片和真实保存回读。
 
 - [原Task成员续跑与渲染生命周期](2026-10-25-task-member-rendering-lifecycle/README.md)：591真实原Task/B、Sources截图与安全标量。

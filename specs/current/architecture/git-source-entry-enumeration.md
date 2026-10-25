@@ -46,7 +46,11 @@ Snapshot, Build observation pins, primary Worktree recovery and GitHub CLI commi
 It seeds a temporary preparation index from the caller's actual index and retains
 the caller's Git directory, work-tree, excludes, file attributes and clean filters.
 Ordinary files, deletions and initialized nested repositories use literal NUL
-pathspecs. Real links use raw target blobs and mode120000 index-info records.
+pathspecs. Already tracked ordinary entries use Git's `add --update`; newly
+enumerated entries use `add --all`. A later ignore rule does not remove the
+authority of a tracked path, while new entries retain Git's current ignore
+admission. This distinction also applies to Build's private HEAD-seeded index.
+Real links use raw target blobs and mode120000 index-info records.
 Replaced tracked ordinary directories remove the former terminal from the
 prepared index and stage only the enumerated children. Uninitialized gitlinks
 retain their existing parent commit identities. Regular directories are never

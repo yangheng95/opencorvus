@@ -1,0 +1,33 @@
+{
+  "message_id": "msg_g0VZ2YrOZ001KpMzSGAv",
+  "session_id": "ses_hEwp3inYGnK5nYF8mpQW",
+  "id": "prt_h1CjeXxa7OYT8Si99RqB",
+  "time_created": 1792909820900,
+  "data": {
+    "outcome": "completed",
+    "output": "Image read successfully",
+    "title": "qa\\revised\\page-1.png",
+    "metadata": {
+      "preview": "Image read successfully",
+      "truncated": false,
+      "loaded": [],
+      "readType": "binary",
+      "lines": 0,
+      "totalLines": 0
+    },
+    "time": {
+      "end": 1792909820893
+    },
+    "attachments": [
+      {
+        "id": "prt_g0VZ2YtMm00AD6gBkzkY",
+        "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+        "messageID": "msg_g0VZ2YrOZ001KpMzSGAv",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-1.png",
+        "url": "/attachment/prj_hxHOMBTalkvA4toZOhTn/638657d5113076c20ce2a2a71ec6ffdabca81b3ee02b42705351439200757aac.png"
+      }
+    ]
+  }
+}

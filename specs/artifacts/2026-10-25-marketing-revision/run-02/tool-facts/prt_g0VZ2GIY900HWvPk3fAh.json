@@ -1,0 +1,48 @@
+{
+  "id": "prt_g0VZ2GIY900HWvPk3fAh",
+  "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+  "messageID": "msg_hr7aXxlBYPTi4DQA4Zhx",
+  "type": "tool",
+  "callID": "call_df42fa7b1cdc40899a3c2b126e0fbd03",
+  "tool": "artifact_snapshot",
+  "state": {
+    "status": "completed",
+    "input": {
+      "files": [
+        {
+          "path": "brief.md",
+          "media_type": "text/markdown"
+        },
+        {
+          "path": "campaign.csv",
+          "media_type": "text/csv"
+        },
+        {
+          "path": "tools/runtime.md",
+          "media_type": "text/markdown"
+        },
+        {
+          "path": "tools/render_docx.py",
+          "media_type": "text/x-python"
+        }
+      ]
+    },
+    "output": "{\"resource_set\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"b6c7a53e-2067-5f7e-a19c-1dbb90d0f6df\",\"manifest_sha256\":\"031c2839233e801970b414f438b8ac8dc57f362ec131ab251d0a3d18c94fce5b\"},\"tree\":\"resources\"},\"locators\":[{\"role\":\"snapshot\",\"locator\":{\"source\":\"task_artifact_snapshot\",\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"b6c7a53e-2067-5f7e-a19c-1dbb90d0f6df\",\"manifest_sha256\":\"031c2839233e801970b414f438b8ac8dc57f362ec131ab251d0a3d18c94fce5b\"}},\"artifact_locator_ref\":\"al_zfAGKdj3M5iXuA1O\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"b6c7a53e-2067-5f7e-a19c-1dbb90d0f6df\",\"manifest_sha256\":\"031c2839233e801970b414f438b8ac8dc57f362ec131ab251d0a3d18c94fce5b\"},\"tree\":\"resources\",\"path\":\"brief.md\",\"bytes\":1024,\"sha256\":\"4ddd30c51f7fb98d18208a76e19e1739bb3a5b752bba63183778755404505c7c\",\"media_type\":\"text/markdown\"}},\"artifact_locator_ref\":\"al_VtakBbgXHKTNvof8\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"b6c7a53e-2067-5f7e-a19c-1dbb90d0f6df\",\"manifest_sha256\":\"031c2839233e801970b414f438b8ac8dc57f362ec131ab251d0a3d18c94fce5b\"},\"tree\":\"resources\",\"path\":\"campaign.csv\",\"bytes\":113,\"sha256\":\"2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1\",\"media_type\":\"text/csv\"}},\"artifact_locator_ref\":\"al_qpo2elv-e27fqsY-\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"b6c7a53e-2067-5f7e-a19c-1dbb90d0f6df\",\"manifest_sha256\":\"031c2839233e801970b414f438b8ac8dc57f362ec131ab251d0a3d18c94fce5b\"},\"tree\":\"resources\",\"path\":\"tools/render_docx.py\",\"bytes\":20248,\"sha256\":\"8b48b8f05f30cc6c7b5a7bd8e18e7ea93a61aec1ea601026a3358b2105f0903a\",\"media_type\":\"text/x-python\"}},\"artifact_locator_ref\":\"al_vSMpBX1FfV7hYxAE\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"b6c7a53e-2067-5f7e-a19c-1dbb90d0f6df\",\"manifest_sha256\":\"031c2839233e801970b414f438b8ac8dc57f362ec131ab251d0a3d18c94fce5b\"},\"tree\":\"resources\",\"path\":\"tools/runtime.md\",\"bytes\":813,\"sha256\":\"6568935c69705e973ecb7aab785c8a6f477fdb4c93bb4fb86adbf7a1cbe38e27\",\"media_type\":\"text/markdown\"}},\"artifact_locator_ref\":\"al_AmlvV9kbMx9paAaG\"}],\"resource_count\":4}",
+    "title": "Published Artifact snapshot (4 files)",
+    "metadata": {
+      "truncated": false,
+      "snapshotID": "b6c7a53e-2067-5f7e-a19c-1dbb90d0f6df",
+      "resources": 4
+    },
+    "time": {
+      "start": 1792905389453,
+      "end": 1792905390976
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0824b42aadbb3e72016add90ad5b4c8191997cfeee6d8f91a0"
+    }
+  },
+  "orderKey": "v1:0001792905390530:0000000000000031:0000000000000000:part:prt_g0VZ2GIY900HWvPk3fAh"
+}

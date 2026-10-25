@@ -1,0 +1,27 @@
+import assert from 'node:assert/strict'
+import fs from 'node:fs'
+import path from 'node:path'
+import {execFileSync} from 'node:child_process'
+import {latestAuditSnapshotFiles} from '../../packages/opencorvus/script/audit-snapshot'
+import {evidence as e,project} from './config'
+const read=(name:string)=>JSON.parse(fs.readFileSync(path.join(e,name),'utf8'))
+assert.equal(read('native-host-settled.json').physicalCompletion,true)
+assert.equal(read('native-host-settled.json').outputDrainComplete,true)
+assert.equal(read('native-host-settled.json').requestCleanupComplete,true)
+assert.equal(read('launcher-child-exit.json').originalChildExit,0)
+assert.equal(read('shutdown.json').status,200)
+const files=await latestAuditSnapshotFiles(e,'provider');assert.equal(files.length,1)
+const original=fs.readFileSync(files[0]),prefix=JSON.parse(original.toString())
+assert(prefix.requests.every((r:any)=>r.model==='gpt-6.1-sol'&&r.streaming===true&&['settled','fetch_failed'].includes(r.response_reader.state)))
+const destination=path.join(e,'service-01');assert.equal(fs.existsSync(destination),false)
+fs.mkdirSync(destination)
+for(const name of fs.readdirSync(e).filter(n=>/^provider-\d+-/.test(n)||['native-host-ready.json','native-host-settled.json','launcher-child-exit.json','startup.json','shutdown.json','preflight-ready.json','authority-ready.json','recovery-shutdown-attempt.json'].includes(n))){
+ const from=path.resolve(e,name),to=path.resolve(destination,name)
+ assert.equal(path.dirname(from),path.resolve(e));assert.equal(path.dirname(to),path.resolve(destination));assert(fs.lstatSync(from).isFile())
+ fs.renameSync(from,to)
+}
+fs.writeFileSync(path.join(e,'prior-provider.json'),original)
+assert.deepEqual(JSON.parse(fs.readFileSync(path.join(e,'prior-provider.json'),'utf8')).requests,prefix.requests)
+fs.copyFileSync(path.join(e,'current.json'),path.join(destination,'before-recovery-current.json'))
+fs.writeFileSync(path.join(e,'recovery-preparation.json'),JSON.stringify({previousService:'service-01',originalRequests:prefix.requests.length,entireOriginalRequestsRetained:true,taskID:read('current.json').task.id,lifecycle:read('current.json').task.executionLifecycle,projectHead:execFileSync('git',['rev-parse','HEAD'],{cwd:project,encoding:'utf8'}).trim(),sourceHead:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),at:new Date().toISOString()},null,2))
+console.log(JSON.stringify({preparedRecovery:true,originalRequests:prefix.requests.length,taskID:read('current.json').task.id}))

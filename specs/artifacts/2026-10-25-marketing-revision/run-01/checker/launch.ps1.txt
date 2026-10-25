@@ -1,0 +1,31 @@
+$ErrorActionPreference='Stop'
+$caseRepo='D:/myhexin-local/opencorvus'
+$caseRoot='C:/Users/hengu/.codex/opencorvus-marketing-revision-20261025-01'
+$caseEvidence="$caseRoot/evidence"
+if(@(Get-NetTCPConnection -State Listen -LocalPort 19147 -ErrorAction SilentlyContinue).Count){throw 'Owned port occupied'}
+if(Test-Path -LiteralPath "$caseEvidence/native-host-ready.json"){throw 'Fresh physical occurrence required'}
+$caseBun=(Get-Command bun).Source
+$caseHelper=& $caseBun "$caseRepo/packages/opencorvus/script/prepare-test-process-supervisor.ts"
+if($LASTEXITCODE -ne 0){throw 'Native helper preparation failed'}
+$caseOriginal=@{};Get-ChildItem Env:|ForEach-Object {$caseOriginal[$_.Name]=$_.Value}
+$caseEnvironment=@{}
+foreach($caseName in @('PATH','SystemRoot','WINDIR','ComSpec','PATHEXT','LANG','LC_ALL','LC_CTYPE')){if($caseOriginal.ContainsKey($caseName)){$caseEnvironment[$caseName]=$caseOriginal[$caseName]}}
+$caseEnvironment.PATH='C:/Users/hengu/.cache/codex-runtimes/codex-primary-runtime/dependencies/python;D:/myhexin-local/opencorvus/.tmp-product-iteration/expert-steering-recovery/doc-tools/libreoffice/SourceDir/LibreOffice/program;C:/Users/hengu/.cache/codex-runtimes/codex-primary-runtime/dependencies/native/poppler/Library/bin;'+$caseEnvironment.PATH
+$caseEnvironment.OPENCORVUS_HOME="$caseRoot/runtime";$caseEnvironment.HOME="$caseRoot/home";$caseEnvironment.USERPROFILE="$caseRoot/home"
+$caseEnvironment.HOMEDRIVE='C:';$caseEnvironment.HOMEPATH=([IO.Path]::GetFullPath("$caseRoot/home")).Substring(2)
+$caseEnvironment.APPDATA="$caseRoot/appdata";$caseEnvironment.LOCALAPPDATA="$caseRoot/localappdata"
+$caseEnvironment.OPENCORVUS_DISABLE_EXTERNAL_SKILLS='1';$caseEnvironment.OPENCORVUS_DISABLE_AUTOUPDATE='1'
+$caseEnvironment.OPENCORVUS_TASK_PROCESS_MODE='native';$caseEnvironment.OPENCORVUS_PROCESS_SUPERVISOR=[string]$caseHelper
+$caseEnvironment.TEMP="$caseRoot/runtime/tmp";$caseEnvironment.TMP=$caseEnvironment.TEMP;$caseEnvironment.TMPDIR=$caseEnvironment.TEMP
+$caseOccurrence='marketing-revision-'+[Guid]::NewGuid().ToString();$caseDeadline=[DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()+5400000
+try{
+ Get-ChildItem Env:|ForEach-Object {[Environment]::SetEnvironmentVariable($_.Name,$null,'Process')}
+ foreach($caseName in $caseEnvironment.Keys){[Environment]::SetEnvironmentVariable($caseName,$caseEnvironment[$caseName],'Process')}
+ & $caseBun "$caseRepo/.tmp-product-iteration/live-sol-task-guidance-413.ts" --owned-host $caseEvidence $caseOccurrence ([string]$caseDeadline) $caseBun "$PSScriptRoot/run.ts" serve $caseOccurrence
+ $caseExit=$LASTEXITCODE
+}finally{
+ Get-ChildItem Env:|ForEach-Object {[Environment]::SetEnvironmentVariable($_.Name,$null,'Process')}
+ foreach($caseName in $caseOriginal.Keys){[Environment]::SetEnvironmentVariable($caseName,$caseOriginal[$caseName],'Process')}
+}
+@{originalChildExit=$caseExit;observedAtUtc=[DateTime]::UtcNow.ToString('o')}|ConvertTo-Json|Set-Content -LiteralPath "$caseEvidence/launcher-child-exit.json"
+exit $caseExit

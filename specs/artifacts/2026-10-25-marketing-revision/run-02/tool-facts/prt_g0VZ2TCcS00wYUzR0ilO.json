@@ -1,0 +1,38 @@
+{
+  "id": "prt_g0VZ2TCcS00wYUzR0ilO",
+  "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+  "messageID": "msg_g0VZ2T9IE00KV5SQWlM2",
+  "type": "tool",
+  "callID": "call_98Vc91EfwXJCIizjKOZQyaG9",
+  "tool": "bash",
+  "state": {
+    "status": "completed",
+    "input": {
+      "command": "python -c 'from pathlib import Path; import re, subprocess; from docx import Document; from docx.oxml.ns import qn; from docx.text.paragraph import Paragraph; from docx.table import Table; head=\"5747fb6f85829b2c72edbba3101ee922ee508da2\"; paths=[\"outputs/growth-plan.md\",\"outputs/growth-plan.docx\"]; assert all(Path(p).read_bytes()==subprocess.check_output([\"git\",\"show\",head+\":\"+p]) for p in paths); text=Path(paths[0]).read_text(encoding=\"utf-8\"); assert text==Path(\"artifacts/marketing-growth/campaign-plan.md\").read_text(encoding=\"utf-8\"); expected=[]; actual=[]; d=Document(paths[1]); [(expected.append([x.strip() for x in line.strip(\"|\").split(\"|\")]) if line.startswith(\"|\") else expected.append(re.sub(r\"^#+\\s+\",\"\",line))) for line in text.splitlines() if line.strip() and not (line.startswith(\"|\") and all(re.fullmatch(r\":?-+:?\",x.strip()) for x in line.strip(\"|\").split(\"|\")))]; [(actual.append(Paragraph(c,d).text) if c.tag==qn(\"w:p\") else actual.extend([[v.text for v in r.cells] for r in Table(c,d).rows])) for c in d.element.body if c.tag in [qn(\"w:p\"),qn(\"w:tbl\")]]; assert expected==actual; assert all(s.page_width<s.page_height for s in d.sections); print(\"Business files equal exact committed bytes; mirror Unicode body equal (Windows CRLF versus LF only); MD/DOCX ordered blocks:\",len(actual),\"; tables:\",len(d.tables),\"; all sections portrait\")'",
+      "description": "按业务字节及镜像正文合同完成只读比对"
+    },
+    "output": "Business files equal exact committed bytes; mirror Unicode body equal (Windows CRLF versus LF only); MD/DOCX ordered blocks: 52 ; tables: 4 ; all sections portrait\r\n",
+    "title": "按业务字节及镜像正文合同完成只读比对",
+    "metadata": {
+      "refused": false,
+      "command": "python -c 'from pathlib import Path; import re, subprocess; from docx import Document; from docx.oxml.ns import qn; from docx.text.paragraph import Paragraph; from docx.table import Table; head=\"5747fb6f85829b2c72edbba3101ee922ee508da2\"; paths=[\"outputs/growth-plan.md\",\"outputs/growth-plan.docx\"]; assert all(Path(p).read_bytes()==subprocess.check_output([\"git\",\"show\",head+\":\"+p]) for p in paths); text=Path(paths[0]).read_text(encoding=\"utf-8\"); assert text==Path(\"artifacts/marketing-growth/campaign-plan.md\").read_text(encoding=\"utf-8\"); expected=[]; actual=[]; d=Document(paths[1]); [(expected.append([x.strip() for x in line.strip(\"|\").split(\"|\")]) if line.startswith(\"|\") else expected.append(re.sub(r\"^#+\\s+\",\"\",line))) for line in text.splitlines() if line.strip() and not (line.startswith(\"|\") and all(re.fullmatch(r\":?-+:?\",x.strip()) for x in line.strip(\"|\").split(\"|\")))]; [(actual.append(Paragraph(c,d).text) if c.tag==qn(\"w:p\") else actual.extend([[v.text for v in r.cells] for r in Table(c,d).rows])) for c in d.element.body if c.tag in [qn(\"w:p\"),qn(\"w:tbl\")]]; assert expected==actual; assert all(s.page_width<s.page_height for s in d.sections); print(\"Business files equal exact committed bytes; mirror Unicode body equal (Windows CRLF versus LF only); MD/DOCX ordered blocks:\",len(actual),\"; tables:\",len(d.tables),\"; all sections portrait\")'",
+      "output": "Business files equal exact committed bytes; mirror Unicode body equal (Windows CRLF versus LF only); MD/DOCX ordered blocks: 52 ; tables: 4 ; all sections portrait\r\n",
+      "output_bytes": 165,
+      "exit": 0,
+      "pid": null,
+      "background": false,
+      "description": "按业务字节及镜像正文合同完成只读比对",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792908464920,
+      "end": 1792908477483
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_08a49088855695cb016add9cb0d59887d0b33f41678c3b8bc3"
+    }
+  },
+  "orderKey": "v1:0001792908472761:0000000000000031:0000000000000000:part:prt_g0VZ2TCcS00wYUzR0ilO"
+}

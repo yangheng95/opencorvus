@@ -1,0 +1,18 @@
+{
+  "status": 202,
+  "result": {
+    "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+    "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\project"
+  },
+  "body": {
+    "requestID": "faedd7a6-f6d6-4c29-9557-078d254bea91",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\project",
+    "productPillar": "work",
+    "promptProfile": "marketing-growth",
+    "title": "原营销专家团首次交付及完成后分页修订",
+    "request": "完整读取brief.md及campaign.csv，以原marketing-growth专家团的完整职责链完成本地营销计划：范围、证据、受众/渠道独立并行分析、汇合策略、独立复核、原营销作者规范交付。当前明确预算上限1200元，brief.md的3000元是被取代的旧草案，CSV合成历史成本1900元不是当前预算；保留三者关系，不以小预算篡改历史。准确复算三渠道及合计曝光/点击/线索/成本和线索成本，区别观察、假设及未知。只有三行合成记录，任务材料已完整提供；各阶段及最终报告简明直接，避免无新证据的重复研究和扩写，但完整履行全部职责及真实Artifact交接。最终规范正文outputs/growth-plan.md（约3000汉字，完整论证和表格），另交同正文outputs/growth-plan.docx，Word采用纵向页面；提供完全相同正文的阅读文档。文档标题清楚黑色、表格可读不截断。tools/runtime.md及项目内tools/render_docx.py提供已预检的离线生成/渲染依赖，成熟python-docx可用，无需调查外部环境。实际渲染最终Word，作者逐页查看，再由独立角色复核最终正文及真实页图后按原包合同正式交付；页图/PDF只内部验收。来源及实际正文使用原不可变资源完整绑定。仅本地内部，不联网、不外联、不投放、不花费、不发布、不创建其他Task或Goal。\n",
+    "model": "openai/gpt-6.1-sol",
+    "source": "marketing-completed-revision"
+  }
+}

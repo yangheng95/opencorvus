@@ -1,0 +1,138 @@
+diff --git a/packages/opencorvus/src/prompt/core/fact-check-core.txt b/packages/opencorvus/src/prompt/core/fact-check-core.txt
+index f13bfce4b..fdf9560ea 100644
+--- a/packages/opencorvus/src/prompt/core/fact-check-core.txt
++++ b/packages/opencorvus/src/prompt/core/fact-check-core.txt
+@@ -34,17 +34,14 @@ If all tool calls fail or you cannot reach external info, return `overall_verdic
+ - `corrected` has only minor entries OR `unresolved` has only minor entries → `"minor_corrections"`.
+ - Otherwise → `"clean"`.
+ 
+-## Tools You Have
++## Inspection Authority
+ 
+-- `read`, `glob`, `search_code`, `list` — codebase retrieval (read-only).
+-- `websearch`, `webfetch`, `external_code_search` — external information.
+-- `memory` — project semantic memory with read-only `search` and `get` actions; Session MEMORY.MD is a read-only compaction checkpoint already represented by its summary message in compacted history.
+-- `todo` — your own per-session tracking list for the items you have inspected.
++Your actual projected tool declarations define the tools available to this Turn. Use granted tools for independent evidence retrieval, inspection, and computation. This includes read-only shell commands when that tool is granted, such as parsing existing documents, recomputing values, and comparing complete original and delivered content. A read-only verification responsibility does not prohibit computation.
+ 
+-You do NOT have `edit`, `write`, `bash`, `merge_back`, or memory write/delete actions. You cannot modify code, mutate memory, or run shell commands. This is by design — fact-check is a verifier, not a fixer.
++Do not modify source evidence, business deliverables, code, configuration, Git history, project memory, or external state. Keep temporary verification material in Task-owned scratch and identify it as verification output. Session MEMORY.MD is a read-only compaction checkpoint already represented by its summary message in compacted history. Publish findings through the granted review and Artifact tools; leave repairs to the responsible producer. A missing grant or unavailable dependency is a precise evidence limitation, not permission to invent a result.
+ 
+ ## Output Contract
+ 
+-Publish your structured judgments with `record_fact_check_review`. This records the required Fact Check domain artifact and does not end the streamed session. Put the human-readable summary, limits, contradictions, and blockers in your final visible assistant message. If the Turn ends without a valid review, the real final message and tool results remain visible but the Fact Check delivery is incomplete and workflow successors stay closed.
++Publish your structured judgments with `record_fact_check_review`. This records the required Fact Check domain artifact and does not end the streamed session. Put the human-readable summary, limits, contradictions, and blockers in your final visible assistant message. If the Turn ends without a valid review, the real final message and tool results remain visible but the Fact Check delivery is incomplete.
+ 
+ Be honest about what you could not verify; do not pad the verified list to look thorough. An "inconclusive" verdict with clear `why_unresolved` reasons is more useful to the orchestrator than a falsely confident "clean".
+diff --git a/packages/opencorvus/src/util/git-source-stage.ts b/packages/opencorvus/src/util/git-source-stage.ts
+index f131a2404..0e882d986 100644
+--- a/packages/opencorvus/src/util/git-source-stage.ts
++++ b/packages/opencorvus/src/util/git-source-stage.ts
+@@ -111,12 +111,21 @@ export async function stageGitSourceEntries(options: GitSourceOptions) {
+         ["update-index", "--force-remove", "-z", "--stdin"],
+         gitSourceInput(Buffer.from(directoryReplacements.map((pathname) => pathname + "\0").join(""))),
+       )
+-    if (ordinary.length)
+-      await checkedSourceGit(
+-        run,
+-        gitSourceEntryArgs(["--literal-pathspecs", "add", "--all", "--pathspec-from-file=-", "--pathspec-file-nul"]),
+-        gitSourceInput(Buffer.from(ordinary.map((pathname) => pathname + "\0").join(""))),
+-      )
++    const tracked = new Set(source.tracked)
++    // Existing index entries retain their authority when a parent later becomes
++    // ignored. Git's update operation stages those entries without treating the
++    // literal pathspec as a request to add ignored new content.
++    for (const [mode, paths] of [
++      ["--update", ordinary.filter((pathname) => tracked.has(pathname))],
++      ["--all", ordinary.filter((pathname) => !tracked.has(pathname))],
++    ] as const) {
++      if (paths.length)
++        await checkedSourceGit(
++          run,
++          gitSourceEntryArgs(["--literal-pathspecs", "add", mode, "--pathspec-from-file=-", "--pathspec-file-nul"]),
++          gitSourceInput(Buffer.from(paths.map((pathname) => pathname + "\0").join(""))),
++        )
++    }
+     const records: string[] = []
+     for (const link of links) {
+       const object = (await checkedSourceGit(run, ["hash-object", "-w", "--stdin"], gitSourceInput(link.bytes)))
+diff --git a/packages/overlay/src/services/events.ts b/packages/overlay/src/services/events.ts
+index 8d5d56d65..01c204c06 100644
+--- a/packages/overlay/src/services/events.ts
++++ b/packages/overlay/src/services/events.ts
+@@ -52,7 +52,15 @@ function writeSelectedMessageToTree(event: any, sourceEvent: any = event): void
+   const sourceKey = selectedConversationAgentSourceKey(sourceEvent)
+   if (!sourceKey) return
+   publishSubagentConversationUpdate({ kind: "live", event })
+-  if (event?.type === "message.updated") {
++  if (event?.type === "message.moved") {
++    // A Move is the complete, original target bundle, including its user
++    // input. Feed those same facts to member projections after the tree move.
++    applyLiveConversationAgentMessageUpdated(sourceKey, event)
++    const properties = event.properties ?? event.payload
++    for (const part of properties.parts) {
++      applyLiveConversationAgentPartUpdated(sourceKey, { ...event, properties: { ...properties, part } })
++    }
++  } else if (event?.type === "message.updated") {
+     applyLiveConversationAgentMessageUpdated(sourceKey, event)
+   } else if (event?.type === "message.removed") {
+     applyLiveConversationAgentMessageRemoved(sourceKey, event)
+diff --git a/packages/overlay/src/services/subagent-conversation.ts b/packages/overlay/src/services/subagent-conversation.ts
+index 7daa94808..c2fbecd15 100644
+--- a/packages/overlay/src/services/subagent-conversation.ts
++++ b/packages/overlay/src/services/subagent-conversation.ts
+@@ -122,6 +122,28 @@ export function observeSubagentConversationLiveEvent(
+ ): SubagentConversationLiveProjection {
+   const type = liveEventType(event)
+   const identity = liveEventIdentity(event)
++  if (type === "message.moved" && current.sessionID) {
++    const { sourceSessionID, info, parts: incomingParts } = identity.properties
++    if (!sourceSessionID || !info?.id || !info.sessionID || !Array.isArray(incomingParts) || sourceSessionID === info.sessionID) {
++      throw new Error("member conversation Move requires original source and complete target bundle")
++    }
++    if (current.sessionID === sourceSessionID) {
++      return { ...current, removedMessages: { ...current.removedMessages, [info.id]: event } }
++    }
++    if (current.sessionID !== info.sessionID) return current
++    const parts = Object.fromEntries(Object.entries(current.parts).filter(([, part]) => part.messageID !== info.id))
++    for (const part of incomingParts) {
++      if (!part?.id || part.messageID !== info.id || part.sessionID !== info.sessionID) {
++        throw new Error("member conversation Move Part ownership mismatch")
++      }
++      parts[livePartKey(info.id, part.id)] = {
++        messageID: info.id, partID: part.id, snapshot: { ...part }, fields: {},
++      }
++    }
++    const removedMessages = { ...current.removedMessages }
++    delete removedMessages[info.id]
++    return { ...current, messageInfos: { ...current.messageInfos, [info.id]: { ...info } }, parts, removedMessages }
++  }
+   if (!current.sessionID || identity.sessionID !== current.sessionID || !identity.messageID) return current
+ 
+   if (type === "message.updated") {
+diff --git a/packages/overlay/src/services/tree-writer.ts b/packages/overlay/src/services/tree-writer.ts
+index 5a1b1e7c8..470abf2df 100644
+--- a/packages/overlay/src/services/tree-writer.ts
++++ b/packages/overlay/src/services/tree-writer.ts
+@@ -382,7 +382,11 @@ function validateIncomingFullMessage(info: any, parts: any[], admittedSourceSess
+   const existing = messages.get(id) ?? pendingPartFirstMessages.get(id)
+   if (!existing) return
+   if (existing.sessionID !== sessionID && existing.sessionID !== admittedSourceSessionID) throw new Error(`Full Message replay ${id} current Session owner mismatch`)
+-  if (existing.orderKey !== info.orderKey) throw new Error(`Full Message replay ${id} current orderKey mismatch`)
++  // A real Move retires its source owner and carries the target's new timeline
++  // position. Replaying an already-target-owned bundle still requires that key.
++  if (existing.sessionID !== admittedSourceSessionID && existing.orderKey !== info.orderKey) {
++    throw new Error(`Full Message replay ${id} current orderKey mismatch`)
++  }
+   const session = requireSessionProjection(existing.sessionID, "Full Message replay")
+   if (messages.has(id) && !session.messageIDs.has(id)) throw new Error(`Full Message replay ${id} current membership mismatch`)
+   const cardID = session.messageCardIDs.get(id)
+@@ -1741,7 +1745,7 @@ function handleMessageMoved(event: any): void {
+   }
+   validateIncomingFullMessage(info, parts, sourceSessionID)
+ 
+-  const existing = messages.get(messageID)
++  const existing = messages.get(messageID) ?? pendingPartFirstMessages.get(messageID)
+   if (existing?.sessionID === sourceSessionID) {
+     handleMessageRemoved({
+       type: "message.removed",

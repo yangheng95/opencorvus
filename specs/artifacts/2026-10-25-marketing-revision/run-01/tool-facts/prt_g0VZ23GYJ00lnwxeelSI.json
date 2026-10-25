@@ -1,0 +1,68 @@
+{
+  "id": "prt_g0VZ23GYJ00lnwxeelSI",
+  "sessionID": "ses_-zUQy5vEEzzn2RBsqAWe",
+  "messageID": "msg_hpEbinE0P31CyEbHZ2W5",
+  "type": "tool",
+  "callID": "call_7874c77210b147c39fae98598d6eaf97",
+  "tool": "manage_task",
+  "state": {
+    "status": "completed",
+    "input": {
+      "summary": "已由原营销专家团完整职责链完成本地营销计划，原营销作者正式交付规范Markdown、同正文纵向Word、HTML阅读文件及全文交互阅读。正式计划资源与独立复核的同一不可变资源集一致，无正文或版式后续改动。独立复核确认2791汉字、33个语义块、3表70格跨格式相等，并查看全部4页真实Word渲染：黑色标题、表格可读无裁切，作者逐页自检有实际调用证据。三渠道及合计核算准确，当前1200元、旧稿3000元与历史1900元区分保留；观察、假设、未知和非因果限制明确。原不可变brief、CSV及实际正文绑定于正式交付来源。历史Git采集qa忽略路径错误不作为文档缺失或未验收证据；实际封存资源和独立复核支持完成，未改ignore规则或篡改文件。PDF/PNG仅内部验收。HTML未作浏览器视觉保证、Word版式限本次渲染、真实需求及经济效果未知，均属保留限制而非本次未交付。无运行中工作，无联网外联投放花费公开发布，未创建其他Task或Goal。",
+      "evidence_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hVZF8AMim7elwBWzUpDo",
+          "catalog_revision": 41
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hBtvGwxw9z5Ml5ggGGoA",
+          "catalog_revision": 36
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_hyWiInyq6XpRz0zm2vDI",
+          "message_id": "msg_g0VZ2333l004uBHP2onN"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_hyWiInyq6XpRz0zm2vDI",
+          "message_id": "msg_g0VZ1zmQd00krPyhJG5X"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_hVeBqjMKP8pdekG4qxJL",
+          "message_id": "msg_g0VZ21clJ00QGBPS3fD0"
+        }
+      ],
+      "deliverable_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hVZF8AMim7elwBWzUpDo",
+          "catalog_revision": 41
+        }
+      ],
+      "accepted_delivery_slice_revision_ids": [],
+      "workflow_id": "marketing-growth-campaign",
+      "action": "complete_task"
+    },
+    "output": "Task tsk_g00VZ1u3kk00D81zMYvb completed: 已由原营销专家团完整职责链完成本地营销计划，原营销作者正式交付规范Markdown、同正文纵向Word、HTML阅读文件及全文交互阅读。正式计划资源与独立复核的同一不可变资源集一致，无正文或版式后续改动。独立复核确认2791汉字、33个语义块、3表70格跨格式相等，并查看全部4页真实Word渲染：黑色标题、表格可读无裁切，作者逐页自检有实际调用证据。三渠道及合计核算准确，当前1200元、旧稿3000元与历史1900元区分保留；观察、假设、未知和非因果限制明确。原不可变brief、CSV及实际正文绑定于正式交付来源。历史Git采集qa忽略路径错误不作为文档缺失或未验收证据；实际封存资源和独立复核支持完成，未改ignore规则或篡改文件。PDF/PNG仅内部验收。HTML未作浏览器视觉保证、Word版式限本次渲染、真实需求及经济效果未知，均属保留限制而非本次未交付。无运行中工作，无联网外联投放花费公开发布，未创建其他Task或Goal。.",
+    "title": "Task Completed",
+    "metadata": {
+      "opencorvusToolResultControl": {
+        "kind": "immediate_park"
+      }
+    },
+    "time": {
+      "start": 1792902283511,
+      "end": 1792902295054
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0817b566a180c3ec016add848b69c08191a7e53b1fc56845a4"
+    }
+  },
+  "orderKey": "v1:0001792902292485:0000000000000031:0000000000000000:part:prt_g0VZ23GYJ00lnwxeelSI"
+}

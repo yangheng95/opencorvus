@@ -1,0 +1,38 @@
+{
+  "id": "prt_g0VZ2M4gl00hMz2dkAxA",
+  "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+  "messageID": "msg_g0VZ2M3rb0091I3BttPC",
+  "type": "tool",
+  "callID": "call_9ff5853643274fecb53ef605b12bc171",
+  "tool": "bash",
+  "state": {
+    "status": "completed",
+    "input": {
+      "command": "git status --short",
+      "description": "检查制作前工作区是否存在改动"
+    },
+    "output": "",
+    "title": "检查制作前工作区是否存在改动",
+    "metadata": {
+      "refused": false,
+      "command": "git status --short",
+      "output": "",
+      "output_bytes": 0,
+      "exit": 0,
+      "pid": null,
+      "background": false,
+      "description": "检查制作前工作区是否存在改动",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792906766139,
+      "end": 1792906767152
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0498d7f3f8bb047b016add960e0aa08191902e31b845c54a19"
+    }
+  },
+  "orderKey": "v1:0001792906766683:0000000000000031:0000000000000000:part:prt_g0VZ2M4gl00hMz2dkAxA"
+}

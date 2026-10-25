@@ -1,0 +1,38 @@
+{
+  "id": "prt_g0VZ20q0o00iHDv7ygnG",
+  "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+  "messageID": "msg_g0VZ20njh00zm5DNNlyK",
+  "type": "tool",
+  "callID": "call_sKyHhEm4wTOh13sXsYjjzkqA",
+  "tool": "bash",
+  "state": {
+    "status": "completed",
+    "input": {
+      "command": "python -X utf8 -c 'from pathlib import Path; import re; from docx import Document; base=Path(\".opencorvus/.r/tasks/tsk_g00VZ1u3kk00D81zMYvb/artifacts/snapshots\"); root=base/\"2d5e2090-241a-5c71-a861-c943e67d16ac/resources\"; text=(root/\"outputs/growth-plan.md\").read_text(encoding=\"utf-8\"); md=[]\nfor line in text.splitlines():\n if not line.strip(): continue\n if line.startswith(\"|\"):\n  cells=[s.strip() for s in line.strip().strip(\"|\").split(\"|\")]\n  if all(re.fullmatch(r\":?-+:?\",s) for s in cells): continue\n  if md and md[-1][0]==\"table\": md[-1][1].append(cells)\n  else: md.append((\"table\",[cells]))\n elif line.startswith(\"#\"):\n  m=re.match(r\"^(#+) (.*)\",line); md.append((\"h\"+str(len(m[1])),m[2]))\n else: md.append((\"p\",line))\nw=\"{http://schemas.openxmlformats.org/wordprocessingml/2006/main}\"; doc=Document(root/\"outputs/growth-plan.docx\"); wb=[]; styles=[]\nfor el in doc.element.body:\n if el.tag==w+\"p\":\n  from docx.text.paragraph import Paragraph\n  p=Paragraph(el,doc); name=p.style.name; kind=\"h1\" if name==\"Title\" else \"h2\" if name==\"Heading 1\" else \"p\"; wb.append((kind,p.text))\n  if kind!=\"p\": styles.append((name,kind,p.text))\n elif el.tag==w+\"tbl\":\n  from docx.table import Table\n  wb.append((\"table\",[[c.text for c in r.cells] for r in Table(el,doc).rows]))\nprint(\"Word title roles\",styles); print(\"Exact full ordered title paragraph table comparison\",md==wb,\"blocks\",len(md),len(wb)); print(\"All sections portrait\",all(s.page_width<s.page_height for s in doc.sections)); runs=[r for p in doc.paragraphs for r in p.runs]+[r for t in doc.tables for row in t.rows for c in row.cells for p in c.paragraphs for r in p.runs]; print(\"All\",len(runs),\"body and table runs explicit black\",all(str(r.font.color.rgb)==\"000000\" for r in runs)); print(\"MD mirror line endings only\",text==(root/\"artifacts/marketing-growth/campaign-plan.md\").read_text(encoding=\"utf-8\")); assert md==wb; assert all(s.page_width<s.page_height for s in doc.sections); assert all(str(r.font.color.rgb)==\"000000\" for r in runs)'",
+      "description": "独立确认标题正文表格一致及纵向黑字"
+    },
+    "output": "Word title roles [('Title', 'h1', '小型团队文档整理工具：本地营销学习计划'), ('Heading 1', 'h2', '一、结论与边界'), ('Heading 1', 'h2', '二、证据与完整核算'), ('Heading 1', 'h2', '三、受众与内容假设'), ('Heading 1', 'h2', '四、预算闭合与渠道取舍'), ('Heading 1', 'h2', '五、最小学习路径与停止规则'), ('Heading 1', 'h2', '六、测量、未知与交付依据')]\r\nExact full ordered title paragraph table comparison True blocks 33 33\r\nAll sections portrait True\r\nAll 100 body and table runs explicit black True\r\nMD mirror line endings only True\r\n",
+    "title": "独立确认标题正文表格一致及纵向黑字",
+    "metadata": {
+      "refused": false,
+      "command": "python -X utf8 -c 'from pathlib import Path; import re; from docx import Document; base=Path(\".opencorvus/.r/tasks/tsk_g00VZ1u3kk00D81zMYvb/artifacts/snapshots\"); root=base/\"2d5e2090-241a-5c71-a861-c943e67d16ac/resources\"; text=(root/\"outputs/growth-plan.md\").read_text(encoding=\"utf-8\"); md=[]\nfor line in text.splitlines():\n if not line.strip(): continue\n if line.startswith(\"|\"):\n  cells=[s.strip() for s in line.strip().strip(\"|\").split(\"|\")]\n  if all(re.fullmatch(r\":?-+:?\",s) for s in cells): continue\n  if md and md[-1][0]==\"table\": md[-1][1].append(cells)\n  else: md.append((\"table\",[cells]))\n elif line.startswith(\"#\"):\n  m=re.match(r\"^(#+) (.*)\",line); md.append((\"h\"+str(len(m[1])),m[2]))\n else: md.append((\"p\",line))\nw=\"{http://schemas.openxmlformats.org/wordprocessingml/2006/main}\"; doc=Document(root/\"outputs/growth-plan.docx\"); wb=[]; styles=[]\nfor el in doc.element.body:\n if el.tag==w+\"p\":\n  from docx.text.paragraph import Paragraph\n  p=Paragraph(el,doc); name=p.style.name; kind=\"h1\" if name==\"Title\" else \"h2\" if name==\"Heading 1\" else \"p\"; wb.append((kind,p.text))\n  if kind!=\"p\": styles.append((name,kind,p.text))\n elif el.tag==w+\"tbl\":\n  from docx.table import Table\n  wb.append((\"table\",[[c.text for c in r.cells] for r in Table(el,doc).rows]))\nprint(\"Word title roles\",styles); print(\"Exact full ordered title paragraph table comparison\",md==wb,\"blocks\",len(md),len(wb)); print(\"All sections portrait\",all(s.page_width<s.page_height for s in doc.sections)); runs=[r for p in doc.paragraphs for r in p.runs]+[r for t in doc.tables for row in t.rows for c in row.cells for p in c.paragraphs for r in p.runs]; print(\"All\",len(runs),\"body and table runs explicit black\",all(str(r.font.color.rgb)==\"000000\" for r in runs)); print(\"MD mirror line endings only\",text==(root/\"artifacts/marketing-growth/campaign-plan.md\").read_text(encoding=\"utf-8\")); assert md==wb; assert all(s.page_width<s.page_height for s in doc.sections); assert all(str(r.font.color.rgb)==\"000000\" for r in runs)'",
+      "output": "Word title roles [('Title', 'h1', '小型团队文档整理工具：本地营销学习计划'), ('Heading 1', 'h2', '一、结论与边界'), ('Heading 1', 'h2', '二、证据与完整核算'), ('Heading 1', 'h2', '三、受众与内容假设'), ('Heading 1', 'h2', '四、预算闭合与渠道取舍'), ('Heading 1', 'h2', '五、最小学习路径与停止规则'), ('Heading 1', 'h2', '六、测量、未知与交付依据')]\r\nExact full ordered title paragraph table comparison True blocks 33 33\r\nAll sections portrait True\r\nAll 100 body and table runs explicit black True\r\nMD mirror line endings only True\r\n",
+      "output_bytes": 612,
+      "exit": 0,
+      "pid": null,
+      "background": false,
+      "description": "独立确认标题正文表格一致及纵向黑字",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792901704834,
+      "end": 1792901720076
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0bdff57222786cee016add8248a93487d08bdd77da793fd240"
+    }
+  },
+  "orderKey": "v1:0001792901718726:0000000000000031:0000000000000000:part:prt_g0VZ20q0o00iHDv7ygnG"
+}

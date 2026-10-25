@@ -1,0 +1,35 @@
+{
+  "id": "prt_g0VZ2edjo00yefiuogch",
+  "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+  "messageID": "msg_g0VZ2eb83004TlcHQqza",
+  "type": "tool",
+  "callID": "call_Q63hSik9gZwFQn6EPrZjKnSy",
+  "tool": "read",
+  "state": {
+    "status": "completed",
+    "input": {
+      "filePath": ".opencorvus/expert-squads/builtin/marketing-growth/tools/publish-marketing-growth-artifact.ts"
+    },
+    "output": "<path>C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-02\\project\\.opencorvus\\expert-squads\\builtin\\marketing-growth\\tools\\publish-marketing-growth-artifact.ts</path>\n<type>file</type>\n<content>1: import {\n2:   EngineArtifactLocatorSchema,\n3:   inspectEngineArtifactEnvelope,\n4:   readExactArtifactsSettled,\n5:   selectExactArtifactSources,\n6:   TaskArtifactResourceSetLocatorSchema,\n7:   tool,\n8: } from \"@opencorvus-ai/plugin\"\n9: import {\n10:   MarketingGrowthPublishableArtifactInputSchema,\n11:   MarketingGrowthArtifactTypeSchema,\n12:   marketingGrowthArtifactDependencies,\n13:   parseMarketingGrowthArtifact,\n14: } from \"../lib/marketing-growth/artifacts\"\n15: \n16: const producerByType = {\n17:   \"marketing-growth/growth-brief\": \"marketing-growth-planner\",\n18:   \"marketing-growth/evidence-dossier\": \"marketing-growth-evidence-researcher\",\n19:   \"marketing-growth/audience-analysis\": \"marketing-growth-audience-analyst\",\n20:   \"marketing-growth/channel-analysis\": \"marketing-growth-channel-analyst\",\n21:   \"marketing-growth/growth-strategy\": \"marketing-growth-strategist\",\n22:   \"marketing-growth/audit\": \"marketing-growth-fact-checker\",\n23:   \"marketing-growth/campaign-plan\": \"marketing-growth-campaign-writer\",\n24: } as const\n25: \n26: export default tool({\n27:   description: \"Validate and publish one strict marketing-growth Artifact ABI value with exact selected predecessors and immutable resources.\",\n28:   args: {\n29:     artifact: MarketingGrowthPublishableArtifactInputSchema,\n30:     resource_set: TaskArtifactResourceSetLocatorSchema.nullable(),\n31:     predecessor_artifact_locators: tool.schema.array(EngineArtifactLocatorSchema).describe(\"Exact typed Engine Artifact predecessors required by this stage; use [] for a root stage. Original file evidence is selected separately through real read/select and retained by the Host in output provenance.\"),\n32:   },\n33:   async execute(args, context) {\n34:     const parsed = parseMarketingGrowthArtifact(args.artifact.artifact_type, args.artifact.payload)\n35:     if (context.agent !== producerByType[parsed.artifactType])\n36:       throw new Error(\"Marketing & Growth Strategy \" + parsed.artifactType + \" must be published by \" + producerByType[parsed.artifactType])\n37:     const batch = await readExactArtifactsSettled(context.host.engineArtifacts, args.predecessor_artifact_locators)\n38:     if (batch.diagnostics.length) throw new AggregateError(batch.diagnostics.map(item => item.error), \"Marketing & Growth Strategy predecessor read failed\")\n39:     const sources = batch.reads.map(read => inspectEngineArtifactEnvelope(read, { schemaVersion: 1 }))\n40:     const expectedTypes = [...marketingGrowthArtifactDependencies[parsed.artifactType]].sort()\n41:     const actualTypes = sources.map((source) => source.artifact_type).sort()\n42:     if (JSON.stringify(actualTypes) !== JSON.stringify(expectedTypes))\n43:       throw new Error(\"Marketing & Growth Strategy \" + parsed.artifactType + \" requires exact predecessor types \" + expectedTypes.join(\", \"))\n44:     for (const source of sources) {\n45:       const sourceType = MarketingGrowthArtifactTypeSchema.parse(source.artifact_type)\n46:       if (\n47:         source.producer.owner_kind !== \"projected-worker\" ||\n48:         source.producer.expert_squad_id !== \"marketing-growth\" ||\n49:         source.producer.agent_id !== producerByType[sourceType]\n50:       ) throw new Error(\"Marketing & Growth Strategy source \" + sourceType + \" has the wrong projected worker producer\")\n51:       parseMarketingGrowthArtifact(sourceType, source.payload)\n52:     }\n53:     await selectExactArtifactSources(context.host.engineArtifacts, batch.reads, \"Typed predecessors for \" + parsed.artifactType)\n54:     const resources = args.resource_set ? await context.host.taskArtifacts.resources(args.resource_set) : []\n55:     if (parsed.artifactType === \"marketing-growth/campaign-plan\" && resources.length === 0)\n56:       throw new Error(\"Marketing & Growth Strategy terminal delivery requires its canonical immutable resource set\")\n57:     const publication = await context.host.engineArtifacts.publish({\n58:       artifact_type: parsed.artifactType,\n59:       schema_version: 1,\n60:       label: parsed.artifactType,\n61:       payload: parsed.payload,\n62:       resources,\n63:     })\n64:     return JSON.stringify({ artifact_type: parsed.artifactType, schema_version: 1, locator: publication.locator, artifact_sha256: publication.sha256 })\n65:   },\n66: })\n\n(End of file - total 66 lines)\n</content>",
+    "title": ".opencorvus\\expert-squads\\builtin\\marketing-growth\\tools\\publish-marketing-growth-artifact.ts",
+    "metadata": {
+      "preview": "import {\n  EngineArtifactLocatorSchema,\n  inspectEngineArtifactEnvelope,\n  readExactArtifactsSettled,\n  selectExactArtifactSources,\n  TaskArtifactResourceSetLocatorSchema,\n  tool,\n} from \"@opencorvus-ai/plugin\"\nimport {\n  MarketingGrowthPublishableArtifactInputSchema,\n  MarketingGrowthArtifactTypeSchema,\n  marketingGrowthArtifactDependencies,\n  parseMarketingGrowthArtifact,\n} from \"../lib/marketing-growth/artifacts\"\n\nconst producerByType = {\n  \"marketing-growth/growth-brief\": \"marketing-growth-planner\",\n  \"marketing-growth/evidence-dossier\": \"marketing-growth-evidence-researcher\",\n  \"marketing-growth/audience-analysis\": \"marketing-growth-audience-analyst\",\n  \"marketing-growth/channel-analysis\": \"marketing-growth-channel-analyst\",",
+      "truncated": false,
+      "loaded": [],
+      "readType": "text",
+      "offset": 1,
+      "lines": 66,
+      "totalLines": 66
+    },
+    "time": {
+      "start": 1792911190772,
+      "end": 1792911192564
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0619da639b38f73f016adda756ac2c87d08f326b8a27ded72e"
+    }
+  },
+  "orderKey": "v1:0001792911192331:0000000000000031:0000000000000000:part:prt_g0VZ2edjo00yefiuogch"
+}

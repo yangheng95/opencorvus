@@ -1,0 +1,52 @@
+{
+  "id": "prt_g0VZ27Qe600ziMgayBy3",
+  "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+  "messageID": "msg_g0VZ27NOc0030I1voCDr",
+  "type": "tool",
+  "callID": "call_5XVHINzZXlsh2wr9pOqDLqQG",
+  "tool": "artifact_publish",
+  "state": {
+    "status": "completed",
+    "input": {
+      "artifact_type": "marketing-growth/revision-review-documents",
+      "schema_version": 1,
+      "label": "横向修订完整文档（待独立复核）",
+      "source_read_refs": [
+        "ar_bFuLX34DBB_FaE-4",
+        "ar_RXdmkGa9-YzzkX3h",
+        "ar_wp9xJXA8jaOdl0g8",
+        "ar_R2KS5f-9FMGRaH-B",
+        "ar_ZDe4XJXcLeITwUgd",
+        "ar__irT9-C3veqAQid-"
+      ],
+      "resource_set": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "b0ee943a-6299-5d5f-a099-5426e7475580",
+          "manifest_sha256": "716b4ea0754df89850fc34487d3b7b888b1cf5d2dc1b1affd00eaf26f333efe5"
+        },
+        "tree": "resources"
+      },
+      "payload_json": "{\"status\":\"awaiting_independent_revision_review\",\"scope\":\"仅Word呈现修订；非新版正式campaign-plan\",\"resource_roles\":{\"outputs/growth-plan.md\":\"未修改规范正文；与首次正式不可变MD逐字节相等\",\"outputs/growth-plan.docx\":\"横向Word待复核版；与首次正式Word全部有序段落和表格单元格逐字相等\",\"outputs/growth-plan.html\":\"未修改同正文全文阅读文件\",\"artifacts/marketing-growth/campaign-plan.md\":\"未修改同正文镜像\"},\"preserved\":\"2791汉字、33语义块、3表70格；1200当前预算、3000旧草案、1900合成历史成本及全部业务正文不变\",\"corrections\":[\"A4横向与加宽表格网格/单元格\",\"保留重复表头和行不拆分，增加表头与首数据行连接\",\"移除Title样式实际蓝色底边框，保留黑色标题\"],\"review_boundary\":\"须独立角色重新读取完整正文及全部五张qa/revised页图；旧四页复核不可作为本次批准。\",\"original_sources\":\"沿首次正式Artifact完整不可变来源链；未更改原始brief.md或campaign.csv\",\"fact_check_items\":[]}"
+    },
+    "output": "{\"locator\":{\"source\":\"engine_artifact\",\"artifact_id\":\"art_hMjtuaAnJbGh6w71mpQ7\",\"catalog_revision\":48,\"expected_sha256\":\"332c6ea2ae3de2424dda2551754c781cf72f05ed9d3ddc5b0a7f2f1fcc9e7e37\"},\"sha256\":\"332c6ea2ae3de2424dda2551754c781cf72f05ed9d3ddc5b0a7f2f1fcc9e7e37\"}",
+    "title": "Published marketing-growth/revision-review-documents",
+    "metadata": {
+      "artifactType": "marketing-growth/revision-review-documents",
+      "sha256": "332c6ea2ae3de2424dda2551754c781cf72f05ed9d3ddc5b0a7f2f1fcc9e7e37",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792903275622,
+      "end": 1792903288035
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_01e423b6c0c29d9e016add886b709887d0bc170dcc86e7101b"
+    }
+  },
+  "orderKey": "v1:0001792903286681:0000000000000031:0000000000000000:part:prt_g0VZ27Qe600ziMgayBy3"
+}

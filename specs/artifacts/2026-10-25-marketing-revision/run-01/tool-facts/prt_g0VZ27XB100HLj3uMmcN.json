@@ -1,0 +1,53 @@
+{
+  "id": "prt_g0VZ27XB100HLj3uMmcN",
+  "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+  "messageID": "msg_g0VZ27Twc00sF6a7YL1O",
+  "type": "tool",
+  "callID": "call_3TygiPKKz6fQK8HTBsq5JZl6",
+  "tool": "artifact_publish",
+  "state": {
+    "status": "completed",
+    "input": {
+      "artifact_type": "marketing-growth/revision-review-qa",
+      "schema_version": 1,
+      "label": "横向修订五页图与作者核验（仅内部）",
+      "source_read_refs": [
+        "ar_vgZE0M_WIGxAtSJK",
+        "ar_Ro9whcUa3IJPFSt9",
+        "ar_HDkQSpFC0q30cvFE",
+        "ar_OZ-9piXCoHpV8zwX",
+        "ar_bFuLX34DBB_FaE-4",
+        "ar_R2KS5f-9FMGRaH-B",
+        "ar_ZDe4XJXcLeITwUgd"
+      ],
+      "resource_set": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "a1509548-d610-55a3-a90d-3d16a968a9d3",
+          "manifest_sha256": "d157757c5b9b7056afbdf1742676a160bec749950621ca79949584f865ec11b5"
+        },
+        "tree": "resources"
+      },
+      "payload_json": "{\"status\":\"author_checked_pending_independent_review\",\"visibility\":\"internal_acceptance_only\",\"page_count\":5,\"resource_roles\":{\"qa/revised/author-review.md\":\"完整基准、方法、实际命令、逐页观察和限制\",\"qa/revised/body-consistency.json\":\"首次Word及修订Word完整有序段落/表格单元格序列与跨格式比较结果\",\"qa/revised/growth-plan.pdf\":\"项目指定renderer实际输出，仅内部验收\",\"qa/revised/page-1.png\":\"第1页：黑色标题无蓝线，历史八列表完整\",\"qa/revised/page-2.png\":\"第2页：预算表表头与首条300元数据同页\",\"qa/revised/page-3.png\":\"第3页：预算续表重复表头，学习表表头与首数据行同页\",\"qa/revised/page-4.png\":\"第4页：学习续表重复表头，行完整未拆分\",\"qa/revised/page-5.png\":\"第5页：归因、未知、来源完整；留白较多\",\"tools/build_growth_documents.py\":\"仅Word呈现生成及直接基准比较的必要生成器\"},\"verification\":\"作者实际逐张打开全部五张新PNG；MD原不可变字节比较、Word首次正文逐字比较和MD/Word/HTML有序语义比较通过；直接检查tblHeader、cantSplit、keepNext及标题样式边框。\",\"limitations\":[\"非独立复核或正式交付\",\"末页留白较多，未删改正文压页\",\"渲染有platform independent libraries提示但实际转换完成；全部五页图已检查\",\"附件自动抽取显示四页分段，不作为指定renderer的实际分页证据；指定renderer的PDF及五张PNG才是本轮视觉审查面\"],\"fact_check_items\":[]}"
+    },
+    "output": "{\"locator\":{\"source\":\"engine_artifact\",\"artifact_id\":\"art_hajBueXONNkXHY48Bj3U\",\"catalog_revision\":49,\"expected_sha256\":\"7888579341afce717a38002b54e11801931d22aad89f4620559c0b974ad3ab92\"},\"sha256\":\"7888579341afce717a38002b54e11801931d22aad89f4620559c0b974ad3ab92\"}",
+    "title": "Published marketing-growth/revision-review-qa",
+    "metadata": {
+      "artifactType": "marketing-growth/revision-review-qa",
+      "sha256": "7888579341afce717a38002b54e11801931d22aad89f4620559c0b974ad3ab92",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792903300727,
+      "end": 1792903315017
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0fcdbd9fb5826df3016add8884a56c87d0b849d06c5579aff8"
+    }
+  },
+  "orderKey": "v1:0001792903314340:0000000000000031:0000000000000000:part:prt_g0VZ27XB100HLj3uMmcN"
+}

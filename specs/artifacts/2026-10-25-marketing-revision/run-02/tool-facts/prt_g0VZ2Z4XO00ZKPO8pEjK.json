@@ -1,0 +1,38 @@
+{
+  "id": "prt_g0VZ2Z4XO00ZKPO8pEjK",
+  "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+  "messageID": "msg_g0VZ2Z27300Ah0VVW5lS",
+  "type": "tool",
+  "callID": "call_rmsXGeRg1nmS54gg0JBqF2YR",
+  "tool": "bash",
+  "state": {
+    "status": "completed",
+    "input": {
+      "command": "python qa/scratch/revise_landscape.py",
+      "description": "调整相邻表宽度后复核冻结正文"
+    },
+    "output": "{\r\n  \"status\": \"author_content_and_ooxml_checks_passed_pending_page_review\",\r\n  \"baseline_artifact\": \"art_h28MoKiA1WMo4nQBkTLd revision 40\",\r\n  \"baseline_snapshot\": \"19df3dd4-7067-562d-ac01-42acf9bfc56d\",\r\n  \"baseline_git_blob_identity_verified_against_immutable_docx\": true,\r\n  \"md_complete_bytes_equal_immutable_resource\": true,\r\n  \"word_ordered_paragraphs_and_all_cell_paragraphs_equal\": true,\r\n  \"all_sections_landscape\": true,\r\n  \"table_widths_mm\": [\r\n    [\r\n      51,\r\n      42,\r\n      42,\r\n      42,\r\n      42,\r\n      42\r\n    ],\r\n    [\r\n      83,\r\n      83,\r\n      84\r\n    ],\r\n    [\r\n      80,\r\n      50,\r\n      131\r\n    ],\r\n    [\r\n      70,\r\n      191\r\n    ]\r\n  ],\r\n  \"repeat_headers\": 4,\r\n  \"header_keep_with_next\": true,\r\n  \"all_22_rows_cantSplit\": true,\r\n  \"heading_color\": \"000000\",\r\n  \"decorative_paragraph_borders\": 0,\r\n  \"content_note\": \"Original literal portrait/status wording is frozen; orientation change is presentation only.\",\r\n  \"fact_check_items\": []\r\n}\r\n",
+    "title": "调整相邻表宽度后复核冻结正文",
+    "metadata": {
+      "refused": false,
+      "command": "python qa/scratch/revise_landscape.py",
+      "output": "{\r\n  \"status\": \"author_content_and_ooxml_checks_passed_pending_page_review\",\r\n  \"baseline_artifact\": \"art_h28MoKiA1WMo4nQBkTLd revision 40\",\r\n  \"baseline_snapshot\": \"19df3dd4-7067-562d-ac01-42acf9bfc56d\",\r\n  \"baseline_git_blob_identity_verified_against_immutable_docx\": true,\r\n  \"md_complete_bytes_equal_immutable_resource\": true,\r\n  \"word_ordered_paragraphs_and_all_cell_paragraphs_equal\": true,\r\n  \"all_sections_landscape\": true,\r\n  \"table_widths_mm\": [\r\n    [\r\n      51,\r\n      42,\r\n      42,\r\n      42,\r\n      42,\r\n      42\r\n    ],\r\n    [\r\n      83,\r\n      83,\r\n      84\r\n    ],\r\n    [\r\n      80,\r\n      50,\r\n      131\r\n    ],\r\n    [\r\n      70,\r\n      191\r\n    ]\r\n  ],\r\n  \"repeat_headers\": 4,\r\n  \"header_keep_with_next\": true,\r\n  \"all_22_rows_cantSplit\": true,\r\n  \"heading_color\": \"000000\",\r\n  \"decorative_paragraph_borders\": 0,\r\n  \"content_note\": \"Original literal portrait/status wording is frozen; orientation change is presentation only.\",\r\n  \"fact_check_items\": []\r\n}\r\n",
+      "output_bytes": 978,
+      "exit": 0,
+      "pid": null,
+      "background": false,
+      "description": "调整相邻表宽度后复核冻结正文",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792909863822,
+      "end": 1792909867944
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_03b4073a4bc60091016adda227c0e087d09116cf638db0add5"
+    }
+  },
+  "orderKey": "v1:0001792909864861:0000000000000031:0000000000000000:part:prt_g0VZ2Z4XO00ZKPO8pEjK"
+}

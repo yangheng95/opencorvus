@@ -1,0 +1,77 @@
+{
+  "id": "prt_g0VZ2XOP200e1uuZpTff",
+  "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+  "messageID": "msg_hX4Tjse3pyVPw86C8myp",
+  "type": "tool",
+  "callID": "call_5cd2d895d4774cbba2becdafe9fa8bd4",
+  "tool": "dispatch_agents",
+  "state": {
+    "status": "completed",
+    "input": {
+      "team": [
+        {
+          "name": "原营销作者横向Word修订",
+          "target": "marketing-growth-campaign-writer",
+          "responsibility": "只修订Word横向屏幕阅读版式及必要生成器，保持首次交付全文与规范MD原字节",
+          "boundary": "仅outputs/growth-plan.docx和必要生成器；不改MD或业务，不正式发布未复核新版；新PDF和PNG仅内部验收，保留旧不可变资源可读",
+          "expected_result": "重新真实渲染的横向Word待审不可变资源、完整有序正文比较和逐页查看记录，供独立角色本轮复核",
+          "depends_on": []
+        }
+      ],
+      "dispatches": [
+        {
+          "dispatch": {
+            "target": "marketing-growth-campaign-writer",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "continuation",
+              "authority": {
+                "kind": "prior_dispatch",
+                "continuation_dispatch_id": "art_hisi62r6zgCYauYgJUnJ"
+              },
+              "guidance": "同一Task追加经用户授权的Word呈现修订，由你原交付负责人完成。用户原话要求：评审会议改为横向屏幕阅读，把outputs/growth-plan.docx从纵向改横向，调整列宽和段落让中文数字完整可读；跨页表格首部表头重复，表头与第一条数据同页，数据行不拆分；保留原已正确属性，黑色标题，若有蓝色装饰线移除。只改Word呈现及必要生成器。outputs/growth-plan.md完整字节和Word所有有序段落/单元格正文必须与刚才首次正式交付逐字一致；当前1200/旧草案3000/合成历史成本1900边界不变。自行发现首次正式campaign-plan及其原不可变MD/Word，完整读取选择作为独立比较基准，不能拿修改后的文件自己生成预期值；保留首次资源可读，不覆盖原不可变交付。直接使用已有tools/runtime.md和tools/render_docx.py，无需外部环境调查或安装。重新实际渲染到新内部验收目录，实际逐页打开所有新页图；用python-docx/zipfile对原与新Word全部段落及单元格有序内容作真实比较，MD应作原不可变资源的完整字节比较，并检查landscape、列宽、重复表头tblHeader、表头与首行同页所需keep_next、数据行cantSplit等实际OOXML及实际页图，不用属性声明代替渲染观察。只发布本轮待审修订材料及新内部页图/PDF、完整正文核对与逐页观察证据，暂不发布新版正式campaign-plan或最终阅读文档；待独立角色本轮复核通过后仍由你完成正式新版不可变交付及同正文document@1。不改业务、不联网、不外联、不花费、不创建Task/Goal；保留原资源、来源链与完整职责证据，不重复营销研究。报告实际变更、比较和渲染结果、新页数与各页观察、待审发布结果及未解决缺陷。",
+              "evidence_locators": []
+            }
+          }
+        }
+      ]
+    },
+    "output": "{\"members\":[{\"member_index\":0,\"name\":\"原营销作者横向Word修订\",\"target\":\"marketing-growth-campaign-writer\",\"status\":\"completed\",\"outcome\":{\"kind\":\"accepted\",\"session_id\":\"ses_hEwp3inYGnK5nYF8mpQW\",\"dispatch_lineage_id\":\"art_g0VZ2XSc000g3oupTr76\"}}]}",
+    "title": "Settled frontier (1/1)",
+    "metadata": {
+      "frontier_size": 1,
+      "completed_count": 1,
+      "member_names": [
+        "原营销作者横向Word修订"
+      ],
+      "targets": [
+        "marketing-growth-campaign-writer"
+      ],
+      "members": [
+        {
+          "member_index": 0,
+          "name": "原营销作者横向Word修订",
+          "target": "marketing-growth-campaign-writer",
+          "status": "completed",
+          "outcome": {
+            "kind": "accepted",
+            "session_id": "ses_hEwp3inYGnK5nYF8mpQW",
+            "dispatch_lineage_id": "art_g0VZ2XSc000g3oupTr76"
+          }
+        }
+      ]
+    },
+    "time": {
+      "start": 1792909463528,
+      "end": 1792909483552
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_03092ad451a1f0ca016adda09771cc81919601c034125976c8"
+    }
+  },
+  "orderKey": "v1:0001792909479377:0000000000000031:0000000000000000:part:prt_g0VZ2XOP200e1uuZpTff"
+}

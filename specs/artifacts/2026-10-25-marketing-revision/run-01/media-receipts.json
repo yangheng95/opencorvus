@@ -1,0 +1,709 @@
+[
+  {
+    "agent": "marketing-growth-campaign-writer",
+    "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+    "messageID": "msg_g0VZ1z4rq00fnZfkussC",
+    "requestPartID": "prt_g0VZ1z5TW00GxPHUVAep",
+    "outcomePartID": "prt_huvwckjIqNrq3xDmLbjE",
+    "tool": "read",
+    "input": {
+      "filePath": "qa/initial/page-1.png"
+    },
+    "resources": [],
+    "attachments": [
+      {
+        "id": "prt_g0VZ1z5b000lqmnrRJFT",
+        "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+        "messageID": "msg_g0VZ1z4rq00fnZfkussC",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-1.png",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/2f55464bf5a4428f7eae1339dc6c984f538c4d41b27b78fff41b80b9a9234085.png"
+      }
+    ],
+    "time": {
+      "end": 1792901288084
+    }
+  },
+  {
+    "agent": "marketing-growth-campaign-writer",
+    "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+    "messageID": "msg_g0VZ1z5f000Jfp0rzI0C",
+    "requestPartID": "prt_g0VZ1z6pl00cxQyW8mP4",
+    "outcomePartID": "prt_hkekHqEITXkm28CPipqe",
+    "tool": "read",
+    "input": {
+      "filePath": "qa/initial/page-2.png"
+    },
+    "resources": [],
+    "attachments": [
+      {
+        "id": "prt_g0VZ1z6xU00aWLhTwILS",
+        "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+        "messageID": "msg_g0VZ1z5f000Jfp0rzI0C",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-2.png",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/23157bfa8ca365262d68069a9ce093ac8842f1b48649aab4e97c574214f5c36e.png"
+      }
+    ],
+    "time": {
+      "end": 1792901293322
+    }
+  },
+  {
+    "agent": "marketing-growth-campaign-writer",
+    "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+    "messageID": "msg_g0VZ1z71400MvI1CsY73",
+    "requestPartID": "prt_g0VZ1z7qg00dzWSxCQsp",
+    "outcomePartID": "prt_hGMs2cA0FSNTFl0eHTun",
+    "tool": "read",
+    "input": {
+      "filePath": "qa/initial/page-3.png"
+    },
+    "resources": [],
+    "attachments": [
+      {
+        "id": "prt_g0VZ1z7xO00pudDXmeE1",
+        "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+        "messageID": "msg_g0VZ1z71400MvI1CsY73",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-3.png",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/96ebb595e042d277c5c6bcbf06755b804ca5094295a3b06f2f4907891826cc5a.png"
+      }
+    ],
+    "time": {
+      "end": 1792901297159
+    }
+  },
+  {
+    "agent": "marketing-growth-campaign-writer",
+    "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+    "messageID": "msg_g0VZ1z81200PNMKT6wjN",
+    "requestPartID": "prt_g0VZ1z8sq00hGHTPEkm2",
+    "outcomePartID": "prt_hGoatxsX9YZN92jd0Pul",
+    "tool": "read",
+    "input": {
+      "filePath": "qa/initial/page-4.png"
+    },
+    "resources": [],
+    "attachments": [
+      {
+        "id": "prt_g0VZ1z8zZ00TqvGwVbWN",
+        "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+        "messageID": "msg_g0VZ1z81200PNMKT6wjN",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-4.png",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/51795c0f56c8910cd324842d2a1cb9da572058456cf35136733e1e139b52df91.png"
+      }
+    ],
+    "time": {
+      "end": 1792901301138
+    }
+  },
+  {
+    "agent": "marketing-growth-fact-checker",
+    "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+    "messageID": "msg_g0VZ20Agf00dUtMXdCZx",
+    "requestPartID": "prt_g0VZ20CgD00mQi4pOJN6",
+    "outcomePartID": "prt_hWQEMLN8dukFe4HiAH5u",
+    "tool": "artifact_read",
+    "input": {
+      "reads": [
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_1EsmJOZ2NZZb0UMF",
+          "byte_offset": 8191,
+          "max_bytes": 20000,
+          "delivery": "inline"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_Z7S4ySpBYcXDzJ2B",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_RjiqcfsPO2oVVN-S",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_ljWHKxYNEoJR6HSX",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_ADZsCv8XLMJf04dL",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        }
+      ]
+    },
+    "resources": [
+      {
+        "locator": {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+              "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+            },
+            "tree": "resources",
+            "path": "qa/initial/page-1.png",
+            "media_type": "image/png",
+            "bytes": 498951,
+            "sha256": "2f55464bf5a4428f7eae1339dc6c984f538c4d41b27b78fff41b80b9a9234085"
+          }
+        },
+        "media_type": "image/png",
+        "byte_start": 0,
+        "byte_end": 498951,
+        "next_offset": null,
+        "total_bytes": 498951,
+        "complete": true,
+        "sha256": "2f55464bf5a4428f7eae1339dc6c984f538c4d41b27b78fff41b80b9a9234085",
+        "attachment": true,
+        "artifact_transport_version": 2,
+        "artifact_locator_ref": "al_Z7S4ySpBYcXDzJ2B",
+        "artifact_read_ref": "ar_evk8lXyH0oLavWfy"
+      },
+      {
+        "locator": {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+              "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+            },
+            "tree": "resources",
+            "path": "qa/initial/page-2.png",
+            "media_type": "image/png",
+            "bytes": 565536,
+            "sha256": "23157bfa8ca365262d68069a9ce093ac8842f1b48649aab4e97c574214f5c36e"
+          }
+        },
+        "media_type": "image/png",
+        "byte_start": 0,
+        "byte_end": 565536,
+        "next_offset": null,
+        "total_bytes": 565536,
+        "complete": true,
+        "sha256": "23157bfa8ca365262d68069a9ce093ac8842f1b48649aab4e97c574214f5c36e",
+        "attachment": true,
+        "artifact_transport_version": 2,
+        "artifact_locator_ref": "al_RjiqcfsPO2oVVN-S",
+        "artifact_read_ref": "ar_72aRZgo4qBkH8KDJ"
+      },
+      {
+        "locator": {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+              "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+            },
+            "tree": "resources",
+            "path": "qa/initial/page-3.png",
+            "media_type": "image/png",
+            "bytes": 602598,
+            "sha256": "96ebb595e042d277c5c6bcbf06755b804ca5094295a3b06f2f4907891826cc5a"
+          }
+        },
+        "media_type": "image/png",
+        "byte_start": 0,
+        "byte_end": 602598,
+        "next_offset": null,
+        "total_bytes": 602598,
+        "complete": true,
+        "sha256": "96ebb595e042d277c5c6bcbf06755b804ca5094295a3b06f2f4907891826cc5a",
+        "attachment": true,
+        "artifact_transport_version": 2,
+        "artifact_locator_ref": "al_ljWHKxYNEoJR6HSX",
+        "artifact_read_ref": "ar_kwzfTb_2XYnuShHF"
+      },
+      {
+        "locator": {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+              "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+            },
+            "tree": "resources",
+            "path": "qa/initial/page-4.png",
+            "media_type": "image/png",
+            "bytes": 323054,
+            "sha256": "51795c0f56c8910cd324842d2a1cb9da572058456cf35136733e1e139b52df91"
+          }
+        },
+        "media_type": "image/png",
+        "byte_start": 0,
+        "byte_end": 323054,
+        "next_offset": null,
+        "total_bytes": 323054,
+        "complete": true,
+        "sha256": "51795c0f56c8910cd324842d2a1cb9da572058456cf35136733e1e139b52df91",
+        "attachment": true,
+        "artifact_transport_version": 2,
+        "artifact_locator_ref": "al_ADZsCv8XLMJf04dL",
+        "artifact_read_ref": "ar_sR8Lv0_nKymu5kYn"
+      }
+    ],
+    "attachments": [
+      {
+        "id": "prt_g0VZ20DaD00MIRL6rbA7",
+        "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+        "messageID": "msg_g0VZ20Agf00dUtMXdCZx",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-1.png",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/2f55464bf5a4428f7eae1339dc6c984f538c4d41b27b78fff41b80b9a9234085.png"
+      },
+      {
+        "id": "prt_g0VZ20DaD01d9PQE4kiG",
+        "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+        "messageID": "msg_g0VZ20Agf00dUtMXdCZx",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-2.png",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/23157bfa8ca365262d68069a9ce093ac8842f1b48649aab4e97c574214f5c36e.png"
+      },
+      {
+        "id": "prt_g0VZ20DaD022sY45YbeF",
+        "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+        "messageID": "msg_g0VZ20Agf00dUtMXdCZx",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-3.png",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/96ebb595e042d277c5c6bcbf06755b804ca5094295a3b06f2f4907891826cc5a.png"
+      },
+      {
+        "id": "prt_g0VZ20DaD039GhkFAkx0",
+        "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+        "messageID": "msg_g0VZ20Agf00dUtMXdCZx",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-4.png",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/51795c0f56c8910cd324842d2a1cb9da572058456cf35136733e1e139b52df91.png"
+      }
+    ],
+    "time": {
+      "end": 1792901557114
+    }
+  },
+  {
+    "agent": "marketing-growth-campaign-writer",
+    "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+    "messageID": "msg_g0VZ25FSd00dCYPxITPe",
+    "requestPartID": "prt_g0VZ25GbT00uP0DPljHY",
+    "outcomePartID": "prt_hOW3AM7FBBVqmwpnRhWf",
+    "tool": "read",
+    "input": {
+      "filePath": "qa/revised/page-1.png"
+    },
+    "resources": [],
+    "attachments": [
+      {
+        "id": "prt_g0VZ25GiD00GQTTcpOF5",
+        "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+        "messageID": "msg_g0VZ25FSd00dCYPxITPe",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-1.png",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/2ac4ec304cec7f305bfc4ff3d91204ebd4241ab96f0a4ea657754b5735771a41.png"
+      }
+    ],
+    "time": {
+      "end": 1792902760783
+    }
+  },
+  {
+    "agent": "marketing-growth-campaign-writer",
+    "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+    "messageID": "msg_g0VZ25GmZ00brGCOOnpN",
+    "requestPartID": "prt_g0VZ25Hk800kS7HrxE4n",
+    "outcomePartID": "prt_hfUUHGIlYh6GOFVOdcnk",
+    "tool": "read",
+    "input": {
+      "filePath": "qa/revised/page-2.png"
+    },
+    "resources": [],
+    "attachments": [
+      {
+        "id": "prt_g0VZ25HrM00QSTRDa8uS",
+        "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+        "messageID": "msg_g0VZ25GmZ00brGCOOnpN",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-2.png",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/ca04bc9f8b88c9861fab3c07fcca03b2bd1c2cee465cf3ceba123a99d8a24845.png"
+      }
+    ],
+    "time": {
+      "end": 1792902765193
+    }
+  },
+  {
+    "agent": "marketing-growth-campaign-writer",
+    "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+    "messageID": "msg_g0VZ25Hvl00c5TbHD4c4",
+    "requestPartID": "prt_g0VZ25Iu500xjuAY8D9P",
+    "outcomePartID": "prt_hYYUs4tDc3O5flTCcmVO",
+    "tool": "read",
+    "input": {
+      "filePath": "qa/revised/page-3.png"
+    },
+    "resources": [],
+    "attachments": [
+      {
+        "id": "prt_g0VZ25JB500CzgE01nje",
+        "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+        "messageID": "msg_g0VZ25Hvl00c5TbHD4c4",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-3.png",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/e90e3e54bf0d2e1fd7e575edf3500d1938f0be622b2a402a50e51561eb59a7f0.png"
+      }
+    ],
+    "time": {
+      "end": 1792902770260
+    }
+  },
+  {
+    "agent": "marketing-growth-campaign-writer",
+    "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+    "messageID": "msg_g0VZ25JFU00Y0SuMJ5A5",
+    "requestPartID": "prt_g0VZ25Ktv00C1VKWn4BT",
+    "outcomePartID": "prt_hujhkvxGFTNHJJprm2j8",
+    "tool": "read",
+    "input": {
+      "filePath": "qa/revised/page-4.png"
+    },
+    "resources": [],
+    "attachments": [
+      {
+        "id": "prt_g0VZ25L1f00XKb9p6lTg",
+        "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+        "messageID": "msg_g0VZ25JFU00Y0SuMJ5A5",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-4.png",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/baf61ef671b5abebbe43bfc13b788a1f50744eeed381b55e51d24b80650fe8b1.png"
+      }
+    ],
+    "time": {
+      "end": 1792902777364
+    }
+  },
+  {
+    "agent": "marketing-growth-campaign-writer",
+    "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+    "messageID": "msg_g0VZ25L6Q006ndW4eg8L",
+    "requestPartID": "prt_g0VZ25MQe00bONP0AT4w",
+    "outcomePartID": "prt_hBq8El5Z7uPX3145raXE",
+    "tool": "read",
+    "input": {
+      "filePath": "qa/revised/page-5.png"
+    },
+    "resources": [],
+    "attachments": [
+      {
+        "id": "prt_g0VZ25MY500VXQG1U3DF",
+        "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+        "messageID": "msg_g0VZ25L6Q006ndW4eg8L",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-5.png",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/905416b8b45cf65bbb5cddd595a866e40bfe709d5ba1422ec9ae4cad212b4911.png"
+      }
+    ],
+    "time": {
+      "end": 1792902783218
+    }
+  },
+  {
+    "agent": "marketing-growth-fact-checker",
+    "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+    "messageID": "msg_g0VZ28aDp00AQp6YsDWU",
+    "requestPartID": "prt_g0VZ28fAG00y3jq10YCn",
+    "outcomePartID": "prt_hem1Y2i7QZYwZJnmmihD",
+    "tool": "artifact_read",
+    "input": {
+      "reads": [
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_GZgxprHz7cL86jrB",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_kf9EA-UK9ZkbKrcv",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_Xs_YCyfj1YI5mUQZ",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_zpEfHDwToeNzKKTr",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_iS1alhcuFMMWLKuj",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_F84mfNaU455Noxbd",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_nhnS-eOIbF0zN2Kf",
+          "byte_offset": 0,
+          "max_bytes": 5000,
+          "delivery": "inline"
+        }
+      ]
+    },
+    "resources": [
+      {
+        "locator": {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "a1509548-d610-55a3-a90d-3d16a968a9d3",
+              "manifest_sha256": "d157757c5b9b7056afbdf1742676a160bec749950621ca79949584f865ec11b5"
+            },
+            "tree": "resources",
+            "path": "qa/revised/page-1.png",
+            "media_type": "image/png",
+            "bytes": 283833,
+            "sha256": "2ac4ec304cec7f305bfc4ff3d91204ebd4241ab96f0a4ea657754b5735771a41"
+          }
+        },
+        "media_type": "image/png",
+        "byte_start": 0,
+        "byte_end": 283833,
+        "next_offset": null,
+        "total_bytes": 283833,
+        "complete": true,
+        "sha256": "2ac4ec304cec7f305bfc4ff3d91204ebd4241ab96f0a4ea657754b5735771a41",
+        "attachment": true,
+        "artifact_transport_version": 2,
+        "artifact_locator_ref": "al_kf9EA-UK9ZkbKrcv",
+        "artifact_read_ref": "ar_SrRBq-IHKLrLOHTs"
+      },
+      {
+        "locator": {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "a1509548-d610-55a3-a90d-3d16a968a9d3",
+              "manifest_sha256": "d157757c5b9b7056afbdf1742676a160bec749950621ca79949584f865ec11b5"
+            },
+            "tree": "resources",
+            "path": "qa/revised/page-2.png",
+            "media_type": "image/png",
+            "bytes": 389843,
+            "sha256": "ca04bc9f8b88c9861fab3c07fcca03b2bd1c2cee465cf3ceba123a99d8a24845"
+          }
+        },
+        "media_type": "image/png",
+        "byte_start": 0,
+        "byte_end": 389843,
+        "next_offset": null,
+        "total_bytes": 389843,
+        "complete": true,
+        "sha256": "ca04bc9f8b88c9861fab3c07fcca03b2bd1c2cee465cf3ceba123a99d8a24845",
+        "attachment": true,
+        "artifact_transport_version": 2,
+        "artifact_locator_ref": "al_Xs_YCyfj1YI5mUQZ",
+        "artifact_read_ref": "ar_T782UtegDPF6WG2F"
+      },
+      {
+        "locator": {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "a1509548-d610-55a3-a90d-3d16a968a9d3",
+              "manifest_sha256": "d157757c5b9b7056afbdf1742676a160bec749950621ca79949584f865ec11b5"
+            },
+            "tree": "resources",
+            "path": "qa/revised/page-3.png",
+            "media_type": "image/png",
+            "bytes": 326066,
+            "sha256": "e90e3e54bf0d2e1fd7e575edf3500d1938f0be622b2a402a50e51561eb59a7f0"
+          }
+        },
+        "media_type": "image/png",
+        "byte_start": 0,
+        "byte_end": 326066,
+        "next_offset": null,
+        "total_bytes": 326066,
+        "complete": true,
+        "sha256": "e90e3e54bf0d2e1fd7e575edf3500d1938f0be622b2a402a50e51561eb59a7f0",
+        "attachment": true,
+        "artifact_transport_version": 2,
+        "artifact_locator_ref": "al_zpEfHDwToeNzKKTr",
+        "artifact_read_ref": "ar_TGIFZfxK3oY-zAgc"
+      },
+      {
+        "locator": {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "a1509548-d610-55a3-a90d-3d16a968a9d3",
+              "manifest_sha256": "d157757c5b9b7056afbdf1742676a160bec749950621ca79949584f865ec11b5"
+            },
+            "tree": "resources",
+            "path": "qa/revised/page-4.png",
+            "media_type": "image/png",
+            "bytes": 404744,
+            "sha256": "baf61ef671b5abebbe43bfc13b788a1f50744eeed381b55e51d24b80650fe8b1"
+          }
+        },
+        "media_type": "image/png",
+        "byte_start": 0,
+        "byte_end": 404744,
+        "next_offset": null,
+        "total_bytes": 404744,
+        "complete": true,
+        "sha256": "baf61ef671b5abebbe43bfc13b788a1f50744eeed381b55e51d24b80650fe8b1",
+        "attachment": true,
+        "artifact_transport_version": 2,
+        "artifact_locator_ref": "al_iS1alhcuFMMWLKuj",
+        "artifact_read_ref": "ar_8f2KLihW7PToMEiy"
+      },
+      {
+        "locator": {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "a1509548-d610-55a3-a90d-3d16a968a9d3",
+              "manifest_sha256": "d157757c5b9b7056afbdf1742676a160bec749950621ca79949584f865ec11b5"
+            },
+            "tree": "resources",
+            "path": "qa/revised/page-5.png",
+            "media_type": "image/png",
+            "bytes": 178158,
+            "sha256": "905416b8b45cf65bbb5cddd595a866e40bfe709d5ba1422ec9ae4cad212b4911"
+          }
+        },
+        "media_type": "image/png",
+        "byte_start": 0,
+        "byte_end": 178158,
+        "next_offset": null,
+        "total_bytes": 178158,
+        "complete": true,
+        "sha256": "905416b8b45cf65bbb5cddd595a866e40bfe709d5ba1422ec9ae4cad212b4911",
+        "attachment": true,
+        "artifact_transport_version": 2,
+        "artifact_locator_ref": "al_F84mfNaU455Noxbd",
+        "artifact_read_ref": "ar_G5wtyLH3t9yAAHEG"
+      }
+    ],
+    "attachments": [
+      {
+        "id": "prt_g0VZ28h0k01GTJ0uU0nG",
+        "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+        "messageID": "msg_g0VZ28aDp00AQp6YsDWU",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-1.png",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/2ac4ec304cec7f305bfc4ff3d91204ebd4241ab96f0a4ea657754b5735771a41.png"
+      },
+      {
+        "id": "prt_g0VZ28h0k02CwPat6GIz",
+        "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+        "messageID": "msg_g0VZ28aDp00AQp6YsDWU",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-2.png",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/ca04bc9f8b88c9861fab3c07fcca03b2bd1c2cee465cf3ceba123a99d8a24845.png"
+      },
+      {
+        "id": "prt_g0VZ28h0k03ru6HHv4vF",
+        "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+        "messageID": "msg_g0VZ28aDp00AQp6YsDWU",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-3.png",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/e90e3e54bf0d2e1fd7e575edf3500d1938f0be622b2a402a50e51561eb59a7f0.png"
+      },
+      {
+        "id": "prt_g0VZ28h0k04H2fnu5r55",
+        "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+        "messageID": "msg_g0VZ28aDp00AQp6YsDWU",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-4.png",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/baf61ef671b5abebbe43bfc13b788a1f50744eeed381b55e51d24b80650fe8b1.png"
+      },
+      {
+        "id": "prt_g0VZ28h0k05rpBP15NNh",
+        "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+        "messageID": "msg_g0VZ28aDp00AQp6YsDWU",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-5.png",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/905416b8b45cf65bbb5cddd595a866e40bfe709d5ba1422ec9ae4cad212b4911.png"
+      }
+    ],
+    "time": {
+      "end": 1792903576859
+    }
+  }
+]

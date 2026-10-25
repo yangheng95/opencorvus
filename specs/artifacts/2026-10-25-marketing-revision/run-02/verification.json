@@ -1,0 +1,527 @@
+{
+  "taskID": "tsk_g00VZ2GE9C00jkeX1GgT",
+  "projectID": "prj_hxHOMBTalkvA4toZOhTn",
+  "packageRevision": {
+    "scope": "project",
+    "project_id": "prj_hxHOMBTalkvA4toZOhTn",
+    "namespace": "builtin",
+    "id": "marketing-growth",
+    "version": "2026.10.24.2",
+    "package_digest": "66bbf77da0945d7da12931b6599cd8f3211a70701de2051e0d3227017815fc5c"
+  },
+  "firstLifecycle": {
+    "taskID": "tsk_g00VZ2GE9C00jkeX1GgT",
+    "epoch": 1,
+    "openedEventID": "pev_g0VZ2GEII00Dudesod0o",
+    "openedAt": 1792905372530,
+    "status": "completed",
+    "terminalEventID": "pev_g0VZ2Uttm00Z4ozlciFk",
+    "terminalAt": 1792908866738
+  },
+  "finalLifecycle": {
+    "taskID": "tsk_g00VZ2GE9C00jkeX1GgT",
+    "epoch": 2,
+    "openedEventID": "pev_g0VZ2XKcq00CUGQtEBtO",
+    "openedAt": 1792909449007,
+    "previousTerminal": {
+      "epoch": 1,
+      "status": "completed",
+      "terminalEventID": "pev_g0VZ2Uttm00Z4ozlciFk",
+      "terminalAt": 1792908866738
+    },
+    "status": "completed",
+    "terminalEventID": "pev_g0VZ2guz600c46r4xZyq",
+    "terminalAt": 1792911731292
+  },
+  "initialRequests": 289,
+  "totalRequests": 418,
+  "maximumRequests": null,
+  "actualModel": "gpt-6.1-sol",
+  "allStreaming": true,
+  "allReadersSettled": true,
+  "readerStates": {
+    "settled": 418
+  },
+  "firstDecision": {
+    "id": "art_g0VZ2Ut9s00x0uZsjoPG",
+    "locator": {
+      "source": "engine_artifact",
+      "artifact_id": "art_g0VZ2Ut9s00x0uZsjoPG",
+      "catalog_revision": 43,
+      "expected_sha256": "c6ac042e377f3cdb0b6d0d6c0c6e4d0c219c288e6a8d7e504fc3d80222cc8936"
+    },
+    "payload": {
+      "orchestrator_session_id": "ses_-zUQxjkwvzzB1D7L3tcK",
+      "orchestrator_message_id": "msg_h13FwTwNO5cYoO18Rukk",
+      "tool_call_id": "call_de2ae8cec45d41f8837a9e6e1a1ba8e2",
+      "tool_part_id": "prt_g0VZ2UqYs00kTjoFVrQl",
+      "evidence_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h28MoKiA1WMo4nQBkTLd",
+          "catalog_revision": 40,
+          "expected_sha256": "5e2e5d832df50762ff8708f514043a51c5e4e389ba467bd0818ee4474c373ea0"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hIgpb6RZbrxuaF9xPJFH",
+          "catalog_revision": 35,
+          "expected_sha256": "4a8b4e600c6b350285db0907ab9fca15813c12afb8a71ee606500303c650f267"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h2vfYEL6JlrYYmHFBUdT",
+          "catalog_revision": 25,
+          "expected_sha256": "1f78fc392948eabc1e2bc38a3cb9dfeb9c30afe6a1251424462cdbf8715d2b9d"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_hEwp3inYGnK5nYF8mpQW",
+          "message_id": "msg_g0VZ2UXDt00JxCSgllPl"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_hT6WN4CemvWvrDYg7sgb",
+          "message_id": "msg_g0VZ2RJBe00z9DjyGDmT"
+        }
+      ],
+      "deliverable_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h28MoKiA1WMo4nQBkTLd",
+          "catalog_revision": 40,
+          "expected_sha256": "5e2e5d832df50762ff8708f514043a51c5e4e389ba467bd0818ee4474c373ea0"
+        }
+      ],
+      "worker_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h28MoKiA1WMo4nQBkTLd",
+          "catalog_revision": 40,
+          "expected_sha256": "5e2e5d832df50762ff8708f514043a51c5e4e389ba467bd0818ee4474c373ea0"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h2vfYEL6JlrYYmHFBUdT",
+          "catalog_revision": 25,
+          "expected_sha256": "1f78fc392948eabc1e2bc38a3cb9dfeb9c30afe6a1251424462cdbf8715d2b9d"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hAS96SC8hkNmMu7O8RoC",
+          "catalog_revision": 17,
+          "expected_sha256": "fcdf37d3be769d9241907ef4ac3772b2dac404e3d790fb0c008dab3c6cfb04c6"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hFvxacOMef87YvyiUYyy",
+          "catalog_revision": 5,
+          "expected_sha256": "346ec5c49e227f8f5bba9aa0d4eadd6e1a161c0ee79584a498b8b803602fb4cf"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hIgpb6RZbrxuaF9xPJFH",
+          "catalog_revision": 35,
+          "expected_sha256": "4a8b4e600c6b350285db0907ab9fca15813c12afb8a71ee606500303c650f267"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hO2vkYdsXDNYXvMg0Cdh",
+          "catalog_revision": 30,
+          "expected_sha256": "efe172b371807018ddba4d78a0141305e12f099f26fa309297df7517423f25a4"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hasAxlgEEPksG4LaOvfQ",
+          "catalog_revision": 21,
+          "expected_sha256": "dfbf701acde2157532ed6d054cbfea4bcb23ef07fa33faf456a16de5ac0d289b"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hyDNtTAAARFFrYy1KHzp",
+          "catalog_revision": 9,
+          "expected_sha256": "e9d0074be620527b4bf56590304cfeb2bf944bf45253a1b7c6f69b92bcc41b85"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hzGk3BZDigSrM2xpfye2",
+          "catalog_revision": 15,
+          "expected_sha256": "f08f5702fb465553a0090668b8c2ff9a77662ae76af53ed920ce06d7f91f1b72"
+        }
+      ],
+      "accepted_delivery_slice_revision_ids": [],
+      "workflow_binding": {
+        "kind": "virtual_workflow",
+        "workflow_id": "marketing-growth-campaign",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hxHOMBTalkvA4toZOhTn",
+          "namespace": "builtin",
+          "id": "marketing-growth",
+          "version": "2026.10.24.2",
+          "package_digest": "66bbf77da0945d7da12931b6599cd8f3211a70701de2051e0d3227017815fc5c"
+        },
+        "nodes": [
+          {
+            "node_id": "marketing-growth-audience-analyst",
+            "agent_id": "marketing-growth-audience-analyst",
+            "depends_on": [
+              "marketing-growth-evidence-researcher"
+            ]
+          },
+          {
+            "node_id": "marketing-growth-campaign-writer",
+            "agent_id": "marketing-growth-campaign-writer",
+            "depends_on": [
+              "marketing-growth-fact-checker"
+            ]
+          },
+          {
+            "node_id": "marketing-growth-channel-analyst",
+            "agent_id": "marketing-growth-channel-analyst",
+            "depends_on": [
+              "marketing-growth-evidence-researcher"
+            ]
+          },
+          {
+            "node_id": "marketing-growth-evidence-researcher",
+            "agent_id": "marketing-growth-evidence-researcher",
+            "depends_on": [
+              "marketing-growth-planner"
+            ]
+          },
+          {
+            "node_id": "marketing-growth-fact-checker",
+            "agent_id": "marketing-growth-fact-checker",
+            "depends_on": [
+              "marketing-growth-strategist"
+            ]
+          },
+          {
+            "node_id": "marketing-growth-planner",
+            "agent_id": "marketing-growth-planner",
+            "depends_on": []
+          },
+          {
+            "node_id": "marketing-growth-strategist",
+            "agent_id": "marketing-growth-strategist",
+            "depends_on": [
+              "marketing-growth-audience-analyst",
+              "marketing-growth-channel-analyst"
+            ]
+          }
+        ]
+      },
+      "time_recorded": 1792908866738
+    }
+  },
+  "finalDecision": {
+    "id": "art_g0VZ2guM900oYVmKqPlP",
+    "locator": {
+      "source": "engine_artifact",
+      "artifact_id": "art_g0VZ2guM900oYVmKqPlP",
+      "catalog_revision": 64,
+      "expected_sha256": "8900061375fac78c1e5e21ff2cb2e223aa3b9e12473c119cf0756d47aaab025b"
+    },
+    "payload": {
+      "orchestrator_session_id": "ses_-zUQxjkwvzzB1D7L3tcK",
+      "orchestrator_message_id": "msg_hKfJWyXn5y6ywgEx540s",
+      "tool_call_id": "call_102c98e239c8421db6a146fafa246ff4",
+      "tool_part_id": "prt_g0VZ2grft00MG0EsVERh",
+      "evidence_locators": [
+        {
+          "source": "session_message",
+          "session_id": "ses_hEwp3inYGnK5nYF8mpQW",
+          "message_id": "msg_g0VZ2gD9g00YCPLw7nQl"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_hT6WN4CemvWvrDYg7sgb",
+          "message_id": "msg_g0VZ2df2L00M3v0mboqK"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h47BH1uVgLHYWoaZbo5R",
+          "catalog_revision": 56,
+          "expected_sha256": "7eb646bd944468f2401ad8c31df80adeff39a714d8110e468e0ef00c2deda5ad"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hLzPcOZ5dCyjY39YdgHW",
+          "catalog_revision": 61,
+          "expected_sha256": "2dacd8acab0d23937652e4fef695a3d189a2093229b34a3874a81b4e575e0b77"
+        }
+      ],
+      "deliverable_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hLzPcOZ5dCyjY39YdgHW",
+          "catalog_revision": 61,
+          "expected_sha256": "2dacd8acab0d23937652e4fef695a3d189a2093229b34a3874a81b4e575e0b77"
+        }
+      ],
+      "worker_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h28MoKiA1WMo4nQBkTLd",
+          "catalog_revision": 40,
+          "expected_sha256": "5e2e5d832df50762ff8708f514043a51c5e4e389ba467bd0818ee4474c373ea0"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h2vfYEL6JlrYYmHFBUdT",
+          "catalog_revision": 25,
+          "expected_sha256": "1f78fc392948eabc1e2bc38a3cb9dfeb9c30afe6a1251424462cdbf8715d2b9d"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h47BH1uVgLHYWoaZbo5R",
+          "catalog_revision": 56,
+          "expected_sha256": "7eb646bd944468f2401ad8c31df80adeff39a714d8110e468e0ef00c2deda5ad"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hAS96SC8hkNmMu7O8RoC",
+          "catalog_revision": 17,
+          "expected_sha256": "fcdf37d3be769d9241907ef4ac3772b2dac404e3d790fb0c008dab3c6cfb04c6"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hFvxacOMef87YvyiUYyy",
+          "catalog_revision": 5,
+          "expected_sha256": "346ec5c49e227f8f5bba9aa0d4eadd6e1a161c0ee79584a498b8b803602fb4cf"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hIgpb6RZbrxuaF9xPJFH",
+          "catalog_revision": 35,
+          "expected_sha256": "4a8b4e600c6b350285db0907ab9fca15813c12afb8a71ee606500303c650f267"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hLArXmv50FyxAvdR9Fcu",
+          "catalog_revision": 47,
+          "expected_sha256": "fb368c87d0ad9298fcc2411a1e45b4a4bf2f3a0fa2723e3d4ad78fcf5d770f0c"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hLzPcOZ5dCyjY39YdgHW",
+          "catalog_revision": 61,
+          "expected_sha256": "2dacd8acab0d23937652e4fef695a3d189a2093229b34a3874a81b4e575e0b77"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hO2vkYdsXDNYXvMg0Cdh",
+          "catalog_revision": 30,
+          "expected_sha256": "efe172b371807018ddba4d78a0141305e12f099f26fa309297df7517423f25a4"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hZtUOLUOvVgdJGi7YGHv",
+          "catalog_revision": 48,
+          "expected_sha256": "a2eb0cf059c1053b304a4565c36aab7fbcfeb3f792bd047f37246402e637d5ef"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hasAxlgEEPksG4LaOvfQ",
+          "catalog_revision": 21,
+          "expected_sha256": "dfbf701acde2157532ed6d054cbfea4bcb23ef07fa33faf456a16de5ac0d289b"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hyDNtTAAARFFrYy1KHzp",
+          "catalog_revision": 9,
+          "expected_sha256": "e9d0074be620527b4bf56590304cfeb2bf944bf45253a1b7c6f69b92bcc41b85"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hzGk3BZDigSrM2xpfye2",
+          "catalog_revision": 15,
+          "expected_sha256": "f08f5702fb465553a0090668b8c2ff9a77662ae76af53ed920ce06d7f91f1b72"
+        }
+      ],
+      "accepted_delivery_slice_revision_ids": [],
+      "workflow_binding": {
+        "kind": "virtual_workflow",
+        "workflow_id": "marketing-growth-campaign",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hxHOMBTalkvA4toZOhTn",
+          "namespace": "builtin",
+          "id": "marketing-growth",
+          "version": "2026.10.24.2",
+          "package_digest": "66bbf77da0945d7da12931b6599cd8f3211a70701de2051e0d3227017815fc5c"
+        },
+        "nodes": [
+          {
+            "node_id": "marketing-growth-audience-analyst",
+            "agent_id": "marketing-growth-audience-analyst",
+            "depends_on": [
+              "marketing-growth-evidence-researcher"
+            ]
+          },
+          {
+            "node_id": "marketing-growth-campaign-writer",
+            "agent_id": "marketing-growth-campaign-writer",
+            "depends_on": [
+              "marketing-growth-fact-checker"
+            ]
+          },
+          {
+            "node_id": "marketing-growth-channel-analyst",
+            "agent_id": "marketing-growth-channel-analyst",
+            "depends_on": [
+              "marketing-growth-evidence-researcher"
+            ]
+          },
+          {
+            "node_id": "marketing-growth-evidence-researcher",
+            "agent_id": "marketing-growth-evidence-researcher",
+            "depends_on": [
+              "marketing-growth-planner"
+            ]
+          },
+          {
+            "node_id": "marketing-growth-fact-checker",
+            "agent_id": "marketing-growth-fact-checker",
+            "depends_on": [
+              "marketing-growth-strategist"
+            ]
+          },
+          {
+            "node_id": "marketing-growth-planner",
+            "agent_id": "marketing-growth-planner",
+            "depends_on": []
+          },
+          {
+            "node_id": "marketing-growth-strategist",
+            "agent_id": "marketing-growth-strategist",
+            "depends_on": [
+              "marketing-growth-audience-analyst",
+              "marketing-growth-channel-analyst"
+            ]
+          }
+        ]
+      },
+      "time_recorded": 1792911731292
+    }
+  },
+  "firstFiles": [
+    {
+      "owner": "art_h28MoKiA1WMo4nQBkTLd",
+      "path": "outputs/growth-plan.md",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hxHOMBTalkvA4toZOhTn",
+          "task_id": "tsk_g00VZ2GE9C00jkeX1GgT",
+          "snapshot_id": "19df3dd4-7067-562d-ac01-42acf9bfc56d",
+          "manifest_sha256": "4ce8ebb684b325eaffb2412ccc21f52c55c6a03872e1e3f116700c20a933870c"
+        },
+        "tree": "resources",
+        "path": "outputs/growth-plan.md",
+        "media_type": "text/markdown",
+        "bytes": 9991,
+        "sha256": "2a03896811a36347f08c9eba2916c1e7e07b2695aa042eecf21bf8e8b2ddbc61"
+      },
+      "bytes": 9991,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-02\\evidence\\initial-verification\\resources\\art_h28MoKiA1WMo4nQBkTLd\\outputs\\growth-plan.md",
+      "ranges": [
+        "bytes 0-4095/9991",
+        "bytes 4096-8191/9991",
+        "bytes 8192-9990/9991"
+      ]
+    },
+    {
+      "owner": "art_h28MoKiA1WMo4nQBkTLd",
+      "path": "outputs/growth-plan.docx",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hxHOMBTalkvA4toZOhTn",
+          "task_id": "tsk_g00VZ2GE9C00jkeX1GgT",
+          "snapshot_id": "19df3dd4-7067-562d-ac01-42acf9bfc56d",
+          "manifest_sha256": "4ce8ebb684b325eaffb2412ccc21f52c55c6a03872e1e3f116700c20a933870c"
+        },
+        "tree": "resources",
+        "path": "outputs/growth-plan.docx",
+        "media_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "bytes": 42433,
+        "sha256": "207561119225d920a84880620c7e05b60f443911195afa7fc4bc90610122060a"
+      },
+      "bytes": 42433,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-02\\evidence\\initial-verification\\resources\\art_h28MoKiA1WMo4nQBkTLd\\outputs\\growth-plan.docx",
+      "ranges": [
+        "bytes 0-42432/42433"
+      ]
+    }
+  ],
+  "finalFiles": [
+    {
+      "owner": "art_hLzPcOZ5dCyjY39YdgHW",
+      "path": "outputs/growth-plan.md",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hxHOMBTalkvA4toZOhTn",
+          "task_id": "tsk_g00VZ2GE9C00jkeX1GgT",
+          "snapshot_id": "29a4bb0e-b15a-5c43-aa2d-21f53426253b",
+          "manifest_sha256": "cf92f99ee6f2d7707ba1b955fd959779a470e441585b24edf1faa5993bd87b82"
+        },
+        "tree": "resources",
+        "path": "outputs/growth-plan.md",
+        "media_type": "text/markdown",
+        "bytes": 9991,
+        "sha256": "2a03896811a36347f08c9eba2916c1e7e07b2695aa042eecf21bf8e8b2ddbc61"
+      },
+      "bytes": 9991,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-02\\evidence\\revised-verification\\resources\\art_hLzPcOZ5dCyjY39YdgHW\\outputs\\growth-plan.md",
+      "ranges": [
+        "bytes 0-4095/9991",
+        "bytes 4096-8191/9991",
+        "bytes 8192-9990/9991"
+      ]
+    },
+    {
+      "owner": "art_hLzPcOZ5dCyjY39YdgHW",
+      "path": "outputs/growth-plan.docx",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hxHOMBTalkvA4toZOhTn",
+          "task_id": "tsk_g00VZ2GE9C00jkeX1GgT",
+          "snapshot_id": "29a4bb0e-b15a-5c43-aa2d-21f53426253b",
+          "manifest_sha256": "cf92f99ee6f2d7707ba1b955fd959779a470e441585b24edf1faa5993bd87b82"
+        },
+        "tree": "resources",
+        "path": "outputs/growth-plan.docx",
+        "media_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "bytes": 42669,
+        "sha256": "25c36ec59dc7d53ef5f913582b9a6e17a818da133d5c7aa1c563fa31ffc153af"
+      },
+      "bytes": 42669,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-02\\evidence\\revised-verification\\resources\\art_hLzPcOZ5dCyjY39YdgHW\\outputs\\growth-plan.docx",
+      "ranges": [
+        "bytes 0-42668/42669"
+      ]
+    }
+  ],
+  "firstReadingDocument": {
+    "id": "art_g0VZ2UNxI009oic7LLPC",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "messageID": "msg_g0VZ2U4dI00bd5S0hcjE",
+    "characters": 3981
+  },
+  "finalReadingDocument": {
+    "id": "art_g0VZ2fxPk00PFFLBZ42r",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "messageID": "msg_g0VZ2feXA00goWp102Kx",
+    "characters": 3981
+  },
+  "canonicalFullByteEquality": true,
+  "oldFullResourcesReadable": true,
+  "landscapeWord": true,
+  "projectHead": "3a435ca94cca489e4a606af023408fd83c6fc45a",
+  "projectStatus": "",
+  "source": "Full real API artifacts, original exact tool facts, independent full-body/byte comparisons, native process receipts and manual image/UI verification"
+}

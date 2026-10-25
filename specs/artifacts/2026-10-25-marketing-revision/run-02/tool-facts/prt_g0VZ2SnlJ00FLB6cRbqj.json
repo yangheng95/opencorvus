@@ -1,0 +1,48 @@
+{
+  "id": "prt_g0VZ2SnlJ00FLB6cRbqj",
+  "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+  "messageID": "msg_g0VZ2Skk600FzrCbILPs",
+  "type": "tool",
+  "callID": "call_1e4a85d671294de78ea7cf51e0b1cfe1",
+  "tool": "artifact_read",
+  "state": {
+    "status": "completed",
+    "input": {
+      "reads": [
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_zpzqoC4oXBnkMivk",
+          "byte_offset": 0,
+          "max_bytes": 65536,
+          "delivery": "inline"
+        }
+      ]
+    },
+    "output": "{\"results\":[{\"request_index\":0,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"19df3dd4-7067-562d-ac01-42acf9bfc56d\",\"manifest_sha256\":\"4ce8ebb684b325eaffb2412ccc21f52c55c6a03872e1e3f116700c20a933870c\"},\"tree\":\"resources\",\"path\":\"outputs/growth-plan.docx\",\"media_type\":\"application/vnd.openxmlformats-officedocument.wordprocessingml.document\",\"bytes\":42433,\"sha256\":\"207561119225d920a84880620c7e05b60f443911195afa7fc4bc90610122060a\"}},\"media_type\":\"application/vnd.openxmlformats-officedocument.wordprocessingml.document\",\"byte_start\":0,\"byte_end\":42433,\"next_offset\":null,\"total_bytes\":42433,\"complete\":true,\"sha256\":\"207561119225d920a84880620c7e05b60f443911195afa7fc4bc90610122060a\",\"attachment\":true,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_zpzqoC4oXBnkMivk\",\"artifact_read_ref\":\"ar_ve7cG7qlScZU-32R\"}}],\"complete\":true,\"next_reads\":[]}",
+    "title": "Artifacts (1)",
+    "metadata": {
+      "truncated": false
+    },
+    "time": {
+      "start": 1792908369369,
+      "end": 1792908370458
+    },
+    "attachments": [
+      {
+        "id": "prt_g0VZ2So2q00dzcerM7jB",
+        "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+        "messageID": "msg_g0VZ2Skk600FzrCbILPs",
+        "type": "file",
+        "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "filename": "growth-plan.docx",
+        "url": "/attachment/prj_hxHOMBTalkvA4toZOhTn/207561119225d920a84880620c7e05b60f443911195afa7fc4bc90610122060a.docx"
+      }
+    ]
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_00905612b13836ff016add9c514e70819189ab0c8c2db56d15"
+    }
+  },
+  "orderKey": "v1:0001792908370012:0000000000000031:0000000000000000:part:prt_g0VZ2SnlJ00FLB6cRbqj"
+}

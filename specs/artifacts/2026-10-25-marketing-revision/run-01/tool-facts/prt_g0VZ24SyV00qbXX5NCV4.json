@@ -1,0 +1,37 @@
+{
+  "id": "prt_g0VZ24SyV00qbXX5NCV4",
+  "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+  "messageID": "msg_g0VZ24RRe00X0e7BQYGo",
+  "type": "tool",
+  "callID": "call_fpJcBq6kpw5c0pyzRdtIiZtd",
+  "tool": "artifact_read",
+  "state": {
+    "status": "completed",
+    "input": {
+      "reads": [
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_RaN6iSRv3Qxmtky8",
+          "byte_offset": 18432,
+          "max_bytes": 30000,
+          "delivery": "inline"
+        }
+      ]
+    },
+    "output": "{\"results\":[{\"request_index\":0,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"3edf19f6-9adf-5717-af40-7412931d993e\",\"manifest_sha256\":\"6dba18753a8cf570107801c8655339c606963181a3790aff11648325f4d6f250\"},\"tree\":\"resources\",\"path\":\"tools/render_docx.py\",\"media_type\":\"text/x-python\",\"bytes\":20248,\"sha256\":\"8b48b8f05f30cc6c7b5a7bd8e18e7ea93a61aec1ea601026a3358b2105f0903a\"}},\"media_type\":\"text/x-python\",\"byte_start\":18432,\"byte_end\":20248,\"next_offset\":null,\"total_bytes\":20248,\"complete\":true,\"sha256\":\"8b48b8f05f30cc6c7b5a7bd8e18e7ea93a61aec1ea601026a3358b2105f0903a\",\"text\":\"\\n    )\\r\\n    parser.add_argument(\\r\\n        \\\"--dpi\\\",\\r\\n        type=int,\\r\\n        default=None,\\r\\n        help=\\\"Override computed DPI. If provided, skips DOCX/PDF-based DPI calculation.\\\",\\r\\n    )\\r\\n    parser.add_argument(\\r\\n        \\\"--emit_pdf\\\",\\r\\n        action=\\\"store_true\\\",\\r\\n        help=(\\r\\n            \\\"Also write an intermediate PDF to --output_dir as <input_stem>.pdf. \\\"\\r\\n            \\\"Default is PNG-only to avoid confusing intermediates with deliverables.\\\"\\r\\n        ),\\r\\n    )\\r\\n    parser.add_argument(\\r\\n        \\\"--verbose\\\",\\r\\n        action=\\\"store_true\\\",\\r\\n        help=\\\"Print LibreOffice commands and captured stdout/stderr (useful for debugging).\\\",\\r\\n    )\\r\\n\\r\\n    args = parser.parse_args()\\r\\n\\r\\n    input_path = abspath(expanduser(args.input_path))\\r\\n    out_dir = abspath(expanduser(args.output_dir)) if args.output_dir else splitext(input_path)[0]\\r\\n\\r\\n    render_input_path, repair_temp_dir = make_renderable_docx_copy(input_path, verbose=args.verbose)\\r\\n    try:\\r\\n        if args.dpi is not None:\\r\\n            dpi = int(args.dpi)\\r\\n        else:\\r\\n            try:\\r\\n                if render_input_path.lower().endswith((\\\".docx\\\", \\\".docm\\\", \\\".dotx\\\", \\\".dotm\\\")):\\r\\n                    dpi = calc_dpi_via_ooxml_docx(render_input_path, args.width, args.height)\\r\\n                else:\\r\\n                    raise RuntimeError(\\\"Skip OOXML DPI; not a DOCX container\\\")\\r\\n            except Exception:\\r\\n                dpi = calc_dpi_via_pdf(\\r\\n                    render_input_path, args.width, args.height, verbose=args.verbose\\r\\n                )\\r\\n\\r\\n        rasterize(render_input_path, out_dir, dpi, verbose=args.verbose, emit_pdf=args.emit_pdf)\\r\\n        print(\\\"Pages rendered to \\\" + out_dir)\\r\\n    finally:\\r\\n        if repair_temp_dir is not None:\\r\\n            repair_temp_dir.cleanup()\\r\\n\\r\\n\\r\\nif __name__ == \\\"__main__\\\":\\r\\n    main()\\r\\n\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_RaN6iSRv3Qxmtky8\",\"artifact_read_ref\":\"ar_HDkQSpFC0q30cvFE\"}}],\"complete\":true,\"next_reads\":[]}",
+    "title": "Artifacts (1)",
+    "metadata": {
+      "truncated": false
+    },
+    "time": {
+      "start": 1792902569591,
+      "end": 1792902571895
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0922832ba373c6ef016add85a9804c87d09038117b1e3a2412"
+    }
+  },
+  "orderKey": "v1:0001792902571012:0000000000000031:0000000000000000:part:prt_g0VZ24SyV00qbXX5NCV4"
+}

@@ -1,0 +1,64 @@
+import json, sys, re, os
+from pathlib import Path
+from docx import Document
+from docx.table import Table
+from docx.text.paragraph import Paragraph
+from docx.oxml.ns import qn
+
+phase = sys.argv[1]
+root = Path('C:/Users/hengu/.codex/opencorvus-marketing-revision-20261025-' + os.environ.get('OPENCORVUS_QA_CASE','02') + '/evidence')
+v = json.loads((root / f'{phase}-verification/verification.json').read_text(encoding='utf-8'))
+word = Path(next(r['file'] for r in v['selected'] if r['path'].endswith('.docx')))
+assert word.read_bytes() == (root / f'{phase}-render-source/growth-plan.docx').read_bytes()
+document = Document(word)
+actual = []
+for item in document.iter_inner_content():
+    if isinstance(item, Paragraph):
+        if item.text.strip(): actual.append(['p', item.text])
+    elif isinstance(item, Table):
+        for row in item.rows: actual.append(['row', [cell.text for cell in row.cells]])
+
+tokens = json.loads((root / f'{phase}-verification/canonical-tokens.json').read_text(encoding='utf-8'))
+def inline(tokens):
+    return ''.join(inline(t['tokens']) if 'tokens' in t else '\n' if t['type'] == 'br' else t.get('text', t.get('raw', '')) for t in tokens)
+expected = []
+def visit(tokens):
+    for t in tokens:
+        kind = t['type']
+        if kind in ('heading', 'paragraph', 'text'):
+            text = inline(t['tokens']) if 'tokens' in t else t['text']
+            if text.strip(): expected.append(['p', text])
+        elif kind == 'list':
+            for item in t['items']: visit(item['tokens'])
+        elif kind == 'blockquote': visit(t['tokens'])
+        elif kind == 'table':
+            for row in [t['header'], *t['rows']]: expected.append(['row', [inline(c['tokens']) for c in row]])
+        elif kind in ('space', 'hr'): pass
+        else: raise AssertionError(f'Inspect actual Markdown block type {kind}')
+visit(tokens)
+def normalize(blocks):
+    return [[kind, re.sub(r'\s+', ' ', text).strip() if kind == 'p' else [re.sub(r'\s+', ' ', c).strip() for c in text]] for kind, text in blocks]
+(root / f'{phase}-body-comparison.json').write_text(json.dumps({'actual':actual,'expected':expected}, ensure_ascii=False, indent=2),encoding='utf-8')
+assert normalize(actual) == normalize(expected), 'Full ordered Word body equals independently parsed full Markdown'
+result = {'phase':phase,'orderedBodyEquality':True,'wordBlocks':len(actual),'paragraphs':sum(k=='p' for k,_ in actual),'topLevelParagraphs':len(document.paragraphs),'emptyLayoutParagraphs':sum(p.text=='' for p in document.paragraphs),'tableRows':sum(k=='row' for k,_ in actual),'tables':len(document.tables),'renderSourceEquality':True,'sections':[{'width':s.page_width,'height':s.page_height,'orientation':int(s.orientation)} for s in document.sections]}
+if phase == 'revised':
+    initial=json.loads((root/'initial-body-comparison.json').read_text(encoding='utf-8'))
+    assert actual == initial['actual'], 'Revised and first completed Word retain all original ordered paragraph and cell text'
+    assert all(s.page_width > s.page_height for s in document.sections), 'Revised Word has actual landscape pages'
+    result['firstCompletedBodyEquality']=True
+    result['landscape']=True
+    layout=[]
+    for table in document.tables:
+        header=table.rows[0]
+        repeat=header._tr.get_or_add_trPr().find(qn('w:tblHeader'))
+        assert repeat is not None and repeat.get(qn('w:val'),'true') in ('true','1','on'), 'Each table has a repeating header'
+        assert all(p.paragraph_format.keep_with_next for c in header.cells for p in c.paragraphs), 'Header paragraphs stay with the first data row'
+        split=[]
+        for row in table.rows:
+            flag=row._tr.get_or_add_trPr().find(qn('w:cantSplit'))
+            assert flag is not None and flag.get(qn('w:val'),'true') in ('true','1','on'), 'Every table row stays intact'
+            split.append(True)
+        layout.append({'repeatingHeader':True,'headerKeepsFirstData':True,'intactRows':len(split)})
+    result['tableLayout']=layout
+(root / f'{phase}-word-verification.json').write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding='utf-8')
+print(json.dumps(result,ensure_ascii=False))

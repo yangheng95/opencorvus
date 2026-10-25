@@ -1,0 +1,49 @@
+{
+  "id": "prt_g0VZ2b31y00oXRBGxPQQ",
+  "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+  "messageID": "msg_g0VZ2b0Qd00ycyEkEs6W",
+  "type": "tool",
+  "callID": "call_k6JDqEhq3ka2xVZfyIblYpFG",
+  "tool": "artifact_publish",
+  "state": {
+    "status": "completed",
+    "input": {
+      "artifact_type": "marketing-growth/landscape-review-evidence",
+      "schema_version": 1,
+      "label": "横向Word修订：六页真实渲染与完整正文核对证据",
+      "source_read_refs": [
+        "ar_lV2BBhFtnCQw0SC3",
+        "ar_opAxaIdjR0Lro5gO",
+        "ar_7DWw5hPnKSB9YcBX"
+      ],
+      "resource_set": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hxHOMBTalkvA4toZOhTn",
+          "task_id": "tsk_g00VZ2GE9C00jkeX1GgT",
+          "snapshot_id": "a501edcd-9382-5ba3-aef1-f68e3a4cd321",
+          "manifest_sha256": "8ada2254d0337337190034ddfcbeac4192da6cdca77a48a57f6760f1606c42f0"
+        },
+        "tree": "resources"
+      },
+      "payload_json": "{\"status\":\"作者已自检并实际查看六页，等待独立最终复核\",\"business_candidates\":{\"artifact_id\":\"art_hLArXmv50FyxAvdR9Fcu\",\"catalog_revision\":47,\"snapshot_id\":\"29a4bb0e-b15a-5c43-aa2d-21f53426253b\"},\"internal_only\":true,\"page_count\":6,\"page_results\":[\"1：标题、预算边界及原值表完整，比率表表头与首行同页。\",\"2：正确重复三列表头、合计行及解释限制完整。\",\"3：受众供给、预算三列表完整可读。\",\"4：任务核查、邮件指标及护栏完整可读。\",\"5：社区搜索串行实验完整，页下留白。\",\"6：测量、未知、来源及最后段落完整可读。\"],\"comparison\":\"完整比较记录随资源发布。MD字节对首次不可变资源相同；原Word经独立附件身份核验的原始Git对象对新Word逐序比较全部原有段落及全部单元格段落。新增一个无文字分隔段明确披露并断言为空。\",\"repair\":\"首轮相邻表合并错误重复六列表头；宽度调整未解决；增加空分隔段后最终重渲染，页2正确三列表头已实际查看。\",\"limits\":[\"原正文含纵向Word和历史待审措辞，按文字冻结要求保留。\",\"内部PDF及PNG不作为业务交付。\",\"未发布新版正式campaign-plan及最终阅读文档。\"],\"fact_check_items\":[]}"
+    },
+    "output": "{\"locator\":{\"source\":\"engine_artifact\",\"artifact_id\":\"art_hZtUOLUOvVgdJGi7YGHv\",\"catalog_revision\":48,\"expected_sha256\":\"a2eb0cf059c1053b304a4565c36aab7fbcfeb3f792bd047f37246402e637d5ef\"},\"sha256\":\"a2eb0cf059c1053b304a4565c36aab7fbcfeb3f792bd047f37246402e637d5ef\"}",
+    "title": "Published marketing-growth/landscape-review-evidence",
+    "metadata": {
+      "artifactType": "marketing-growth/landscape-review-evidence",
+      "sha256": "a2eb0cf059c1053b304a4565c36aab7fbcfeb3f792bd047f37246402e637d5ef",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792910334686,
+      "end": 1792910359811
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0519df31035ed697016adda3fd449487d0b3a1c823321dede3"
+    }
+  },
+  "orderKey": "v1:0001792910345457:0000000000000031:0000000000000000:part:prt_g0VZ2b31y00oXRBGxPQQ"
+}

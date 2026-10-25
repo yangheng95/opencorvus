@@ -1,0 +1,83 @@
+{
+  "id": "prt_g0VZ2bijT00cbfMMd4iX",
+  "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+  "messageID": "msg_hRXqNjI0ysDK1woo6ha0",
+  "type": "tool",
+  "callID": "call_43f03326140c4f49beed9525b2aaea59",
+  "tool": "dispatch_agents",
+  "state": {
+    "status": "completed",
+    "input": {
+      "team": [
+        {
+          "name": "横向Word独立终检",
+          "target": "marketing-growth-fact-checker",
+          "responsibility": "独立复核本轮横向Word的冻结正文、分页属性及全部六页真实渲染",
+          "boundary": "只读核验，不编辑Word或正文，不以首次纵向审阅替代本轮，不正式发布业务计划",
+          "expected_result": "对原不可变首次资源与本轮候选独立比较，逐页查看全部新页图，发布确切版本终检证据与可交付判断",
+          "depends_on": []
+        }
+      ],
+      "dispatches": [
+        {
+          "dispatch": {
+            "target": "marketing-growth-fact-checker",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "continuation",
+              "authority": {
+                "kind": "prior_dispatch",
+                "continuation_dispatch_id": "art_hkJKT1CZIgCeLtM1YKHG"
+              },
+              "guidance": "本次是已交付同一营销Task追加Word横向屏幕阅读修订，用户要求只改Word呈现及必要生成器，规范MD完整字节和Word所有有序段落/单元格正文必须与首次交付逐字一致，业务1200/3000/1900关系冻结。请独立复核原作者最新精确终报ses_hEwp3inYGnK5nYF8mpQW / msg_g0VZ2bARZ00Xy0eZlDth；不是复审历史纵向版本。自行发现并完整读取选择本Task landscape-review-candidates、landscape-review-evidence、原首次正式campaign-plan及其确切原MD/Word。真实解析原与新DOCX，用原不可变资源作独立基准，对所有有序段落及全部单元格段落逐字比较，MD完整字节比较，不能从新文件自造预期。独立检查本轮横向节尺寸、列宽及中文数字可读、黑色标题无蓝色/其他装饰线、跨页首部表头正确重复、表头与首数据行同页、数据行不拆分；读取实际OOXML并实际打开全部六张新页图，以PDF完整提取辅助正文完整性，不能仅依属性或作者摘要判定。作者披露增加一个无文字布局分隔段以避免相邻表被渲染器合并；独立确认该增量为空且仅布局，所有原有文字和顺序逐字保留，不隐瞒数量差异或把删除非空段当排版处理。如该变化违反冻结文字要求或存在其他缺陷，列出具体差异及修复建议；不修改产品。正文历史“纵向Word”“待审”措辞保持冻结，外层解释本次横向修订，不能要求为更新状态改业务正文。检查作者实际使用tools/render_docx.py最终重新渲染与最终全部页图查看证据；旧审阅不作为本次已审。只读解析按已有python-docx/zipfile及预检运行时，无需联网或安装；摘要只可验证本地解析对象与独立不可变资源身份，不代替正文/视觉验收。发布追加本轮独立横向文件复核通用证据，不重发平行策略audit，不正式交付MD/Word；明确确切候选是否可由原作者发布新版，仍保留执行授权与业务未知，不外联、不花费、不创建Task/Goal。",
+              "evidence_locators": [
+                {
+                  "source": "session_message",
+                  "session_id": "ses_hEwp3inYGnK5nYF8mpQW",
+                  "message_id": "msg_g0VZ2bARZ00Xy0eZlDth"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "output": "{\"members\":[{\"member_index\":0,\"name\":\"横向Word独立终检\",\"target\":\"marketing-growth-fact-checker\",\"status\":\"completed\",\"outcome\":{\"kind\":\"accepted\",\"session_id\":\"ses_hT6WN4CemvWvrDYg7sgb\",\"dispatch_lineage_id\":\"art_g0VZ2boay00R2Q0BBYoF\"}}]}",
+    "title": "Settled frontier (1/1)",
+    "metadata": {
+      "frontier_size": 1,
+      "completed_count": 1,
+      "member_names": [
+        "横向Word独立终检"
+      ],
+      "targets": [
+        "marketing-growth-fact-checker"
+      ],
+      "members": [
+        {
+          "member_index": 0,
+          "name": "横向Word独立终检",
+          "target": "marketing-growth-fact-checker",
+          "status": "completed",
+          "outcome": {
+            "kind": "accepted",
+            "session_id": "ses_hT6WN4CemvWvrDYg7sgb",
+            "dispatch_lineage_id": "art_g0VZ2boay00R2Q0BBYoF"
+          }
+        }
+      ]
+    },
+    "time": {
+      "start": 1792910494987,
+      "end": 1792910519499
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0e3cb48913ad87ea016adda49ee2ec8191a616e25d36192e58"
+    }
+  },
+  "orderKey": "v1:0001792910517433:0000000000000031:0000000000000000:part:prt_g0VZ2bijT00cbfMMd4iX"
+}

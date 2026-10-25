@@ -1,0 +1,37 @@
+{
+  "id": "prt_g0VZ2HHne00lKRV9WTza",
+  "sessionID": "ses_hlWsp1ODDcJVHxYWj1gJ",
+  "messageID": "msg_g0VZ2HH8E00PsqGhVV7p",
+  "type": "tool",
+  "callID": "call_23c6d16337fc49b5be25f48273a8bb5c",
+  "tool": "artifact_read",
+  "state": {
+    "status": "completed",
+    "input": {
+      "reads": [
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_gmawDeA1FUmzn2vM",
+          "byte_offset": 8192,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        }
+      ]
+    },
+    "output": "{\"results\":[{\"request_index\":0,\"value\":{\"locator\":{\"source\":\"engine_artifact\",\"artifact_id\":\"art_hFvxacOMef87YvyiUYyy\",\"catalog_revision\":5,\"expected_sha256\":\"346ec5c49e227f8f5bba9aa0d4eadd6e1a161c0ee79584a498b8b803602fb4cf\"},\"media_type\":\"application/json\",\"byte_start\":8192,\"byte_end\":10497,\"next_offset\":null,\"total_bytes\":10497,\"complete\":true,\"sha256\":\"346ec5c49e227f8f5bba9aa0d4eadd6e1a161c0ee79584a498b8b803602fb4cf\",\"text\":\"性和线索定义细节未知。\\\",\\\"后续计划具体起止日期、实验负责人实名、资源产能与成功阈值未提供，应由后续策略明确列为建议假设；不阻塞本地计划编写。\\\",\\\"运行时材料由用户说明已固定可用，本阶段未读取或测试，最终作者须发现并实际解析、生成、渲染和逐页查看；最终文件质量、正文一致性及独立复核尚未发生。\\\"],\\\"resource_roles\\\":[]},\\\"resources\\\":[],\\\"observed_artifact_locators\\\":[{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hxHOMBTalkvA4toZOhTn\\\",\\\"task_id\\\":\\\"tsk_g00VZ2GE9C00jkeX1GgT\\\",\\\"snapshot_id\\\":\\\"b6c7a53e-2067-5f7e-a19c-1dbb90d0f6df\\\",\\\"manifest_sha256\\\":\\\"031c2839233e801970b414f438b8ac8dc57f362ec131ab251d0a3d18c94fce5b\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"brief.md\\\",\\\"media_type\\\":\\\"text/markdown\\\",\\\"bytes\\\":1024,\\\"sha256\\\":\\\"4ddd30c51f7fb98d18208a76e19e1739bb3a5b752bba63183778755404505c7c\\\"}},{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hxHOMBTalkvA4toZOhTn\\\",\\\"task_id\\\":\\\"tsk_g00VZ2GE9C00jkeX1GgT\\\",\\\"snapshot_id\\\":\\\"b6c7a53e-2067-5f7e-a19c-1dbb90d0f6df\\\",\\\"manifest_sha256\\\":\\\"031c2839233e801970b414f438b8ac8dc57f362ec131ab251d0a3d18c94fce5b\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"campaign.csv\\\",\\\"media_type\\\":\\\"text/csv\\\",\\\"bytes\\\":113,\\\"sha256\\\":\\\"2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1\\\"}}],\\\"source_artifact_locators\\\":[{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hxHOMBTalkvA4toZOhTn\\\",\\\"task_id\\\":\\\"tsk_g00VZ2GE9C00jkeX1GgT\\\",\\\"snapshot_id\\\":\\\"b6c7a53e-2067-5f7e-a19c-1dbb90d0f6df\\\",\\\"manifest_sha256\\\":\\\"031c2839233e801970b414f438b8ac8dc57f362ec131ab251d0a3d18c94fce5b\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"brief.md\\\",\\\"media_type\\\":\\\"text/markdown\\\",\\\"bytes\\\":1024,\\\"sha256\\\":\\\"4ddd30c51f7fb98d18208a76e19e1739bb3a5b752bba63183778755404505c7c\\\"}},{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hxHOMBTalkvA4toZOhTn\\\",\\\"task_id\\\":\\\"tsk_g00VZ2GE9C00jkeX1GgT\\\",\\\"snapshot_id\\\":\\\"b6c7a53e-2067-5f7e-a19c-1dbb90d0f6df\\\",\\\"manifest_sha256\\\":\\\"031c2839233e801970b414f438b8ac8dc57f362ec131ab251d0a3d18c94fce5b\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"campaign.csv\\\",\\\"media_type\\\":\\\"text/csv\\\",\\\"bytes\\\":113,\\\"sha256\\\":\\\"2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1\\\"}}]}\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_gmawDeA1FUmzn2vM\",\"artifact_read_ref\":\"ar_wgNTK1MUM1OJ7ksx\"}}],\"complete\":true,\"next_reads\":[]}",
+    "title": "Artifacts (1)",
+    "metadata": {
+      "truncated": false
+    },
+    "time": {
+      "start": 1792905624898,
+      "end": 1792905625448
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_05ab42f066a53a92016add9198cba0819188e1a5eee467ed18"
+    }
+  },
+  "orderKey": "v1:0001792905625225:0000000000000031:0000000000000000:part:prt_g0VZ2HHne00lKRV9WTza"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "prt_g0VZ1yMsD00BK1lRvn3B",
+  "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+  "messageID": "msg_g0VZ1yMDb00u6svCkqaP",
+  "type": "tool",
+  "callID": "call_d0a7cfa56fbd41beb6e1ff04e4b59b60",
+  "tool": "artifact_read",
+  "state": {
+    "status": "completed",
+    "input": {
+      "reads": [
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_qzb6sfx3HPb8tlnK",
+          "byte_offset": 12287,
+          "max_bytes": 65536,
+          "delivery": "inline"
+        }
+      ]
+    },
+    "output": "{\"results\":[{\"request_index\":0,\"value\":{\"locator\":{\"source\":\"engine_artifact\",\"artifact_id\":\"art_h4mnmKnCr0ADaYMbQaVO\",\"catalog_revision\":5,\"expected_sha256\":\"5ac719b0d45a54c4f316e625bfec5b8c14b14a2a0edf4b4fb38200bb88ff14c3\"},\"media_type\":\"application/json\",\"byte_start\":12287,\"byte_end\":13427,\"next_offset\":null,\"total_bytes\":13427,\"complete\":true,\"sha256\":\"5ac719b0d45a54c4f316e625bfec5b8c14b14a2a0edf4b4fb38200bb88ff14c3\",\"text\":\"56\\\":\\\"38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"campaign.csv\\\",\\\"media_type\\\":\\\"text/csv\\\",\\\"bytes\\\":113,\\\"sha256\\\":\\\"2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1\\\"}},{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hdfrY4uLsCH7DfgPkBMw\\\",\\\"task_id\\\":\\\"tsk_g00VZ1u3kk00D81zMYvb\\\",\\\"snapshot_id\\\":\\\"459ac5fe-a23f-5c58-af37-93d2dae6d0ca\\\",\\\"manifest_sha256\\\":\\\"38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"tools/render_docx.py\\\",\\\"media_type\\\":\\\"text/x-python\\\",\\\"bytes\\\":20248,\\\"sha256\\\":\\\"8b48b8f05f30cc6c7b5a7bd8e18e7ea93a61aec1ea601026a3358b2105f0903a\\\"}},{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hdfrY4uLsCH7DfgPkBMw\\\",\\\"task_id\\\":\\\"tsk_g00VZ1u3kk00D81zMYvb\\\",\\\"snapshot_id\\\":\\\"459ac5fe-a23f-5c58-af37-93d2dae6d0ca\\\",\\\"manifest_sha256\\\":\\\"38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"tools/runtime.md\\\",\\\"media_type\\\":\\\"text/markdown\\\",\\\"bytes\\\":580,\\\"sha256\\\":\\\"418c1dc648758ab1b5a1ed9dfc367b853f614a53336b1c061dc80dda7930b257\\\"}}]}\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_qzb6sfx3HPb8tlnK\",\"artifact_read_ref\":\"ar_hdZGr_MWlTHBW-Fa\"}}],\"complete\":true,\"next_reads\":[]}",
+    "title": "Artifacts (1)",
+    "metadata": {
+      "truncated": false
+    },
+    "time": {
+      "start": 1792901116169,
+      "end": 1792901117351
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0599ac587867fad4016add7ffc0f448191bb1cdab861c984b2"
+    }
+  },
+  "orderKey": "v1:0001792901116619:0000000000000031:0000000000000000:part:prt_g0VZ1yMsD00BK1lRvn3B"
+}

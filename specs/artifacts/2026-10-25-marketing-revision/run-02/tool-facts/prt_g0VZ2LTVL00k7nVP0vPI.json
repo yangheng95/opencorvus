@@ -1,0 +1,84 @@
+{
+  "id": "prt_g0VZ2LTVL00k7nVP0vPI",
+  "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+  "messageID": "msg_hV5nm1pwiWhofxAKO32I",
+  "type": "tool",
+  "callID": "call_b4ed381f1e4648af860e8dbb83b73cd5",
+  "tool": "dispatch_agents",
+  "state": {
+    "status": "completed",
+    "input": {
+      "team": [
+        {
+          "name": "营销正文与Word制作",
+          "target": "marketing-growth-campaign-writer",
+          "responsibility": "落实复核修正，制作规范正文、同正文Word并真实渲染逐页自检",
+          "boundary": "原营销作者独占正式正文和生成脚本；不能替代独立最终验收，本轮先提供不可变待审文件和内部页图",
+          "expected_result": "约3000汉字MD、同正文纵向DOCX、完整渲染页图及作者逐页观察和正文对照证据，供独立复核",
+          "depends_on": [
+            "独立策略复核"
+          ]
+        }
+      ],
+      "dispatches": [
+        {
+          "dispatch": {
+            "target": "marketing-growth-campaign-writer",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "initial",
+              "workflow_subject": {
+                "kind": "virtual_workflow",
+                "workflow_id": "marketing-growth-campaign",
+                "node_id": "marketing-growth-campaign-writer"
+              },
+              "use_worktree": false,
+              "input": {
+                "goal_ids": [],
+                "request": "你是本Task唯一原营销作者。自行发现完整读取并选择正式growth-strategy、audit及需要的前阶段证据、原不可变brief.md/campaign.csv、tools/runtime.md与tools/render_docx.py。来源及实际正文必须完整不可变绑定，不能用摘要或实时输入替代原资源。当前1200元上限，3000旧草案被取代、1900合成历史成本不改写；准确三渠道及合计原值/CPL，区分观察假设未知，不造产品功能/市场/效果。落实audit修正：邮件每组100名以成功送达唯一收件人数计；按版本14天累计去重退订人数/成功送达唯一人数，零分母不可计算，超过1%停，任一投诉/许可问题立即停。保留实验责任、分配单位、分母、样本周期、建议阈值、护栏、下一决策；社区搜索为串行备选，预算含预留总1200，实际支出零。仅本地，不联网外联投放花费对外发布，不创建Task/Goal。\n制作唯一规范outputs/growth-plan.md，约3000汉字完整论证和可读表格（不要机械拼上游长文）；从该正文生成完全同正文outputs/growth-plan.docx，纵向页面，黑色清楚标题、无装饰线，表格可读不截断，可拆窄表但正文保持同一内容。正式业务文件仅这两份，不生成HTML。原包必须artifacts/marketing-growth/campaign-plan.md时只保留本地逐字同正文镜像，不作为额外正式业务文件。使用已预检离线python-docx及zipfile真实按顺序解析Word段落/表格单元格/OOXML，对照MD去除展示标记后的有序正文与所有单元格，检查全部节纵向/标题颜色与边框；无需查外部环境或安装可选库。运行python tools/render_docx.py outputs/growth-plan.docx --output_dir qa/initial --emit_pdf --verbose，实际打开查看每一页PNG，不只目录或日志。可在qa/scratch制作验收记录，不改输入和包。\n重要交付顺序：本轮先完成制作、自检及作者逐页查看，把规范MD/DOCX和全部真实页图/PDF及对照/逐页观察记录分别通过现有快照或通用资源合同发布为不可变待审证据，内部PDF/PNG不能作为业务交付。暂不要把最终campaign-plan正式发布或宣布已交付，也不要发布会与后续修正冲突的最终阅读文档；终报说明页数、实际查看每页结果、正文比对方法/结果、待独立最终复核，并给可读的精确文件清单。随后我会继续同一独立复核者检查这些确切资源；审查通过后再继续你按原包完成commit/不可变资源/campaign-plan正式发布及完全相同正文的document@1阅读文档。若需修正仍由你负责。不要为等待审查阻塞本轮，先提供完整待审资源。",
+                "reason": "范围、证据、独立并行分析、策略及独立策略复核均已完成；现在由原营销作者制作实际正文和Word，供最终独立验收后正式交付。"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "output": "{\"members\":[{\"member_index\":0,\"name\":\"营销正文与Word制作\",\"target\":\"marketing-growth-campaign-writer\",\"status\":\"completed\",\"outcome\":{\"kind\":\"accepted\",\"session_id\":\"ses_hEwp3inYGnK5nYF8mpQW\",\"dispatch_lineage_id\":\"art_g0VZ2LYq100JqWNdgd2o\"}}]}",
+    "title": "Settled frontier (1/1)",
+    "metadata": {
+      "frontier_size": 1,
+      "completed_count": 1,
+      "member_names": [
+        "营销正文与Word制作"
+      ],
+      "targets": [
+        "marketing-growth-campaign-writer"
+      ],
+      "members": [
+        {
+          "member_index": 0,
+          "name": "营销正文与Word制作",
+          "target": "marketing-growth-campaign-writer",
+          "status": "completed",
+          "outcome": {
+            "kind": "accepted",
+            "session_id": "ses_hEwp3inYGnK5nYF8mpQW",
+            "dispatch_lineage_id": "art_g0VZ2LYq100JqWNdgd2o"
+          }
+        }
+      ]
+    },
+    "time": {
+      "start": 1792906623203,
+      "end": 1792906649760
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0fa8063c1dbb87ca016add957f1a4c819188cdd409ad1aaddb"
+    }
+  },
+  "orderKey": "v1:0001792906643301:0000000000000031:0000000000000000:part:prt_g0VZ2LTVL00k7nVP0vPI"
+}

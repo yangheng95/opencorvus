@@ -1,0 +1,22 @@
+{
+  "previousService": "service-01",
+  "originalRequests": 341,
+  "entireOriginalRequestsRetained": true,
+  "taskID": "tsk_g00VZ2GE9C00jkeX1GgT",
+  "lifecycle": {
+    "taskID": "tsk_g00VZ2GE9C00jkeX1GgT",
+    "epoch": 2,
+    "openedEventID": "pev_g0VZ2XKcq00CUGQtEBtO",
+    "openedAt": 1792909449007,
+    "previousTerminal": {
+      "epoch": 1,
+      "status": "completed",
+      "terminalEventID": "pev_g0VZ2Uttm00Z4ozlciFk",
+      "terminalAt": 1792908866738
+    },
+    "status": "active"
+  },
+  "projectHead": "716d568279c42ee5775495ba1eb9b86207364f00",
+  "sourceHead": "f8b6160ff816d57bbbd461759bf4952a7afd7b99",
+  "at": "2026-10-25T06:40:46.386Z"
+}

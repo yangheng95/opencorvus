@@ -1,0 +1,135 @@
+{
+  "id": "prt_g0VZ28fAG00y3jq10YCn",
+  "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+  "messageID": "msg_g0VZ28aDp00AQp6YsDWU",
+  "type": "tool",
+  "callID": "call_VcJQfSGxRIDWWa7UDfyqbja5",
+  "tool": "artifact_read",
+  "state": {
+    "status": "completed",
+    "input": {
+      "reads": [
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_GZgxprHz7cL86jrB",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_kf9EA-UK9ZkbKrcv",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_Xs_YCyfj1YI5mUQZ",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_zpEfHDwToeNzKKTr",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_iS1alhcuFMMWLKuj",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_F84mfNaU455Noxbd",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_nhnS-eOIbF0zN2Kf",
+          "byte_offset": 0,
+          "max_bytes": 5000,
+          "delivery": "inline"
+        }
+      ]
+    },
+    "output": "{\"results\":[{\"request_index\":0,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"a1509548-d610-55a3-a90d-3d16a968a9d3\",\"manifest_sha256\":\"d157757c5b9b7056afbdf1742676a160bec749950621ca79949584f865ec11b5\"},\"tree\":\"resources\",\"path\":\"qa/revised/growth-plan.pdf\",\"media_type\":\"application/pdf\",\"bytes\":465085,\"sha256\":\"0477537082bfaeef87127f4cd4e3e38e00787eb145cac94875c4f8fd457e907a\"}},\"media_type\":\"application/pdf\",\"byte_start\":0,\"byte_end\":465085,\"next_offset\":null,\"total_bytes\":465085,\"complete\":true,\"sha256\":\"0477537082bfaeef87127f4cd4e3e38e00787eb145cac94875c4f8fd457e907a\",\"attachment\":true,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_GZgxprHz7cL86jrB\",\"artifact_read_ref\":\"ar_v91VNSEZCe_ha9Ak\"}},{\"request_index\":1,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"a1509548-d610-55a3-a90d-3d16a968a9d3\",\"manifest_sha256\":\"d157757c5b9b7056afbdf1742676a160bec749950621ca79949584f865ec11b5\"},\"tree\":\"resources\",\"path\":\"qa/revised/page-1.png\",\"media_type\":\"image/png\",\"bytes\":283833,\"sha256\":\"2ac4ec304cec7f305bfc4ff3d91204ebd4241ab96f0a4ea657754b5735771a41\"}},\"media_type\":\"image/png\",\"byte_start\":0,\"byte_end\":283833,\"next_offset\":null,\"total_bytes\":283833,\"complete\":true,\"sha256\":\"2ac4ec304cec7f305bfc4ff3d91204ebd4241ab96f0a4ea657754b5735771a41\",\"attachment\":true,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_kf9EA-UK9ZkbKrcv\",\"artifact_read_ref\":\"ar_SrRBq-IHKLrLOHTs\"}},{\"request_index\":2,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"a1509548-d610-55a3-a90d-3d16a968a9d3\",\"manifest_sha256\":\"d157757c5b9b7056afbdf1742676a160bec749950621ca79949584f865ec11b5\"},\"tree\":\"resources\",\"path\":\"qa/revised/page-2.png\",\"media_type\":\"image/png\",\"bytes\":389843,\"sha256\":\"ca04bc9f8b88c9861fab3c07fcca03b2bd1c2cee465cf3ceba123a99d8a24845\"}},\"media_type\":\"image/png\",\"byte_start\":0,\"byte_end\":389843,\"next_offset\":null,\"total_bytes\":389843,\"complete\":true,\"sha256\":\"ca04bc9f8b88c9861fab3c07fcca03b2bd1c2cee465cf3ceba123a99d8a24845\",\"attachment\":true,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_Xs_YCyfj1YI5mUQZ\",\"artifact_read_ref\":\"ar_T782UtegDPF6WG2F\"}},{\"request_index\":3,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"a1509548-d610-55a3-a90d-3d16a968a9d3\",\"manifest_sha256\":\"d157757c5b9b7056afbdf1742676a160bec749950621ca79949584f865ec11b5\"},\"tree\":\"resources\",\"path\":\"qa/revised/page-3.png\",\"media_type\":\"image/png\",\"bytes\":326066,\"sha256\":\"e90e3e54bf0d2e1fd7e575edf3500d1938f0be622b2a402a50e51561eb59a7f0\"}},\"media_type\":\"image/png\",\"byte_start\":0,\"byte_end\":326066,\"next_offset\":null,\"total_bytes\":326066,\"complete\":true,\"sha256\":\"e90e3e54bf0d2e1fd7e575edf3500d1938f0be622b2a402a50e51561eb59a7f0\",\"attachment\":true,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_zpEfHDwToeNzKKTr\",\"artifact_read_ref\":\"ar_TGIFZfxK3oY-zAgc\"}},{\"request_index\":4,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"a1509548-d610-55a3-a90d-3d16a968a9d3\",\"manifest_sha256\":\"d157757c5b9b7056afbdf1742676a160bec749950621ca79949584f865ec11b5\"},\"tree\":\"resources\",\"path\":\"qa/revised/page-4.png\",\"media_type\":\"image/png\",\"bytes\":404744,\"sha256\":\"baf61ef671b5abebbe43bfc13b788a1f50744eeed381b55e51d24b80650fe8b1\"}},\"media_type\":\"image/png\",\"byte_start\":0,\"byte_end\":404744,\"next_offset\":null,\"total_bytes\":404744,\"complete\":true,\"sha256\":\"baf61ef671b5abebbe43bfc13b788a1f50744eeed381b55e51d24b80650fe8b1\",\"attachment\":true,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_iS1alhcuFMMWLKuj\",\"artifact_read_ref\":\"ar_8f2KLihW7PToMEiy\"}},{\"request_index\":5,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"a1509548-d610-55a3-a90d-3d16a968a9d3\",\"manifest_sha256\":\"d157757c5b9b7056afbdf1742676a160bec749950621ca79949584f865ec11b5\"},\"tree\":\"resources\",\"path\":\"qa/revised/page-5.png\",\"media_type\":\"image/png\",\"bytes\":178158,\"sha256\":\"905416b8b45cf65bbb5cddd595a866e40bfe709d5ba1422ec9ae4cad212b4911\"}},\"media_type\":\"image/png\",\"byte_start\":0,\"byte_end\":178158,\"next_offset\":null,\"total_bytes\":178158,\"complete\":true,\"sha256\":\"905416b8b45cf65bbb5cddd595a866e40bfe709d5ba1422ec9ae4cad212b4911\",\"attachment\":true,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_F84mfNaU455Noxbd\",\"artifact_read_ref\":\"ar_G5wtyLH3t9yAAHEG\"}},{\"request_index\":6,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"a1509548-d610-55a3-a90d-3d16a968a9d3\",\"manifest_sha256\":\"d157757c5b9b7056afbdf1742676a160bec749950621ca79949584f865ec11b5\"},\"tree\":\"resources\",\"path\":\"qa/revised/author-review.md\",\"media_type\":\"text/markdown\",\"bytes\":3363,\"sha256\":\"0fce6ec79752777966c3e5c81a85cbb1c05576e497087d12af2bd1ea9248fd94\"}},\"media_type\":\"text/markdown\",\"byte_start\":0,\"byte_end\":3363,\"next_offset\":null,\"total_bytes\":3363,\"complete\":true,\"sha256\":\"0fce6ec79752777966c3e5c81a85cbb1c05576e497087d12af2bd1ea9248fd94\",\"text\":\"# 横向Word修订：作者检查记录（待独立复核）\\n\\n本轮仅修订Word呈现及必要生成器；不代表独立复核通过或新版正式交付。\\n\\n## 基准及方法\\n\\n- 首次正式交付为本Task campaign-plan第41版；首次文件快照为2d5e2090-241a-5c71-a861-c943e67d16ac。规范MD使用完全读取后物化的原不可变资源直接进行字节比较，未重写MD、HTML或镜像。\\n- 首次Word从作者首次提交1c388fe的Git对象读取，并对照已独立封存的Word资源摘要验证该对象身份。该摘要仅用于身份认证；正文一致性另用直接有序文本比较，不以摘要代替。\\n- Word正文按文档顺序比较每个段落、每张表的各行各单元格及单元格内段落，逐字相等。完整双方序列保存在body-consistency.json。\\n- 另独立解析MD标题/段落/表格、Word XML及HTML文本：33个语义块、3表70格全部一致，2791汉字。原正文预算和业务判断不变。\\n\\n## 呈现修订与实际属性\\n\\n- A4横向29.7×21厘米，页边距保留；表格扩展到26.3厘米文字区，明确表格网格和单元格列宽，表格字号10磅。\\n- 原标题样式Title的pBdr/bottom带颜色4F81BD及accent1主题，系蓝线实际来源；移除此样式下边框，保留显式黑色标题文字。Normal继承链无边框。\\n- 保留每张表首行tblHeader与全部行cantSplit；表头各单元格段落增加keep-with-next，连接第一数据行。后续数据行不相互串联，便于自然分页。\\n\\n## 实际验证\\n\\n生成/检查：`python -X utf8 tools/build_growth_documents.py`；复查：`python -X utf8 tools/build_growth_documents.py --verify-only`。\\n\\n实际渲染：`python tools/render_docx.py outputs/growth-plan.docx --output_dir qa/revised --emit_pdf --verbose`。\\n\\n渲染成功生成5页PNG及内部PDF；标准输出含LibreOffice实际转换命令和“Pages rendered”结果。过程中出现“Could not find platform independent libraries <prefix>”提示，但转换完成并生成全部页图；不将该提示隐去，也不把命令成功当作图像验收。\\n\\n已实际逐张打开page-1.png至page-5.png：\\n\\n1. 第1页：黑色主标题，蓝线消失；结论、预算关系与历史八列表完整可读，全部四数据行及数字无裁切。\\n2. 第2页：证据解释和受众段落清晰；预算表起始位于页尾，表头与首条“受众筛查300”数据同行页，首数据行完整。\\n3. 第3页：预算表续页表头实际重复；余下200/400/300/合计1200各行完整。学习路径表起始在页尾，表头与首条“情境筛查”数据同页，首条数据行未拆分。\\n4. 第4页：学习路径表续页表头实际重复；测量就绪与单渠道数据行均完整、不拆分；规则和测量公式可读，无裁切。\\n5. 第5页：归因、未知与来源结尾完整；无表格，无裁切。末页留白较多，是横向自然分页后的结果，未为压页删减或改写正文。\\n\\n## 限制和后续\\n\\n本记录是作者自检；历史四页审查不适用于本次五页修订。必须由独立角色重新读取全部正文、比较基准并打开全部五张新页图后，再由原作者完成新版原包正式交付及同正文交互阅读。当前PDF/PNG仅内部验收，不是用户最终交付物。本轮未联网、外联、投放或花费，未新增Task或Goal。\\n\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_nhnS-eOIbF0zN2Kf\",\"artifact_read_ref\":\"ar_7VNWWAB2qEhysU-t\"}}],\"complete\":true,\"next_reads\":[]}",
+    "title": "Artifacts (7)",
+    "metadata": {
+      "truncated": false
+    },
+    "time": {
+      "start": 1792903569760,
+      "end": 1792903576859
+    },
+    "attachments": [
+      {
+        "id": "prt_g0VZ28h0k00aGijBVjcM",
+        "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+        "messageID": "msg_g0VZ28aDp00AQp6YsDWU",
+        "type": "file",
+        "mime": "application/pdf",
+        "filename": "growth-plan.pdf",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/0477537082bfaeef87127f4cd4e3e38e00787eb145cac94875c4f8fd457e907a.pdf"
+      },
+      {
+        "id": "prt_g0VZ28h0k01GTJ0uU0nG",
+        "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+        "messageID": "msg_g0VZ28aDp00AQp6YsDWU",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-1.png",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/2ac4ec304cec7f305bfc4ff3d91204ebd4241ab96f0a4ea657754b5735771a41.png"
+      },
+      {
+        "id": "prt_g0VZ28h0k02CwPat6GIz",
+        "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+        "messageID": "msg_g0VZ28aDp00AQp6YsDWU",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-2.png",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/ca04bc9f8b88c9861fab3c07fcca03b2bd1c2cee465cf3ceba123a99d8a24845.png"
+      },
+      {
+        "id": "prt_g0VZ28h0k03ru6HHv4vF",
+        "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+        "messageID": "msg_g0VZ28aDp00AQp6YsDWU",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-3.png",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/e90e3e54bf0d2e1fd7e575edf3500d1938f0be622b2a402a50e51561eb59a7f0.png"
+      },
+      {
+        "id": "prt_g0VZ28h0k04H2fnu5r55",
+        "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+        "messageID": "msg_g0VZ28aDp00AQp6YsDWU",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-4.png",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/baf61ef671b5abebbe43bfc13b788a1f50744eeed381b55e51d24b80650fe8b1.png"
+      },
+      {
+        "id": "prt_g0VZ28h0k05rpBP15NNh",
+        "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+        "messageID": "msg_g0VZ28aDp00AQp6YsDWU",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-5.png",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/905416b8b45cf65bbb5cddd595a866e40bfe709d5ba1422ec9ae4cad212b4911.png"
+      }
+    ]
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_01d32f105d771816016add898f4b5c87d08af33c2a7ad2e014"
+    }
+  },
+  "orderKey": "v1:0001792903572635:0000000000000031:0000000000000000:part:prt_g0VZ28fAG00y3jq10YCn"
+}

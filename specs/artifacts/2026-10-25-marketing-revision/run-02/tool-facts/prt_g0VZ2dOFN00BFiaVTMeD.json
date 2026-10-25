@@ -1,0 +1,99 @@
+{
+  "id": "prt_g0VZ2dOFN00BFiaVTMeD",
+  "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+  "messageID": "msg_g0VZ2dLbn00occ6OWbVG",
+  "type": "tool",
+  "callID": "call_ldYfpr6GD3NF5IY41m8Uy1jG",
+  "tool": "record_fact_check_review",
+  "state": {
+    "status": "completed",
+    "input": {
+      "scope": {
+        "target_session_id": "ses_hEwp3inYGnK5nYF8mpQW",
+        "target_agent": "marketing-growth-campaign-writer",
+        "target_message_id": "msg_g0VZ2bARZ00Xy0eZlDth",
+        "target_message_content_hash": "3e4170d2eb1dc846c62eabd71f05daa4039489b54d4c6f0c1e43ea4f73fabb9d",
+        "items_total": 6,
+        "items_inspected": 6
+      },
+      "verified": [
+        {
+          "claim": "规范MD与首次正式不可变资源完整字节相同。",
+          "evidence": [
+            {
+              "kind": "code",
+              "pointer": "Task snapshot 19df3dd4-7067-562d-ac01-42acf9bfc56d/outputs/growth-plan.md 与 29a4bb0e-b15a-5c43-aa2d-21f53426253b/outputs/growth-plan.md",
+              "excerpt": "两资源完整读取并物化为相同9991字节；独立Git原对象已核验对应原资源，原新完整bytes比较True。"
+            }
+          ]
+        },
+        {
+          "claim": "Word原有全部有序段落及单元格文字未改，仅新增一个空布局分隔段。",
+          "evidence": [
+            {
+              "kind": "code",
+              "pointer": "outputs/growth-plan.docx!word/document.xml；baseline git 5747fb6:outputs/growth-plan.docx，身份对应原正式snapshot 19df3dd4-7067-562d-ac01-42acf9bfc56d",
+              "excerpt": "独立python-docx解析：正文块34→35，顶层段落30→31，4表22行76单元格；SequenceMatcher唯一差异insert [8:9]=('p','')。该XML仅有pPr/spacing，无run/text；全部原块和嵌套单元格段落逐字逐序相同。"
+            }
+          ]
+        },
+        {
+          "claim": "A4横向、黑色标题无装饰线，列宽可读。",
+          "evidence": [
+            {
+              "kind": "code",
+              "pointer": "snapshot 29a4bb0e-b15a-5c43-aa2d-21f53426253b/outputs/growth-plan.docx!word/document.xml 与 word/styles.xml",
+              "excerpt": "pgSz=16838×11906 twip，orient=landscape；页边距top/bottom794,left/right1020；Title及Heading1 color=000000；document中pBdr=0。四表宽度约261/250/261/261mm，六页实际图未见截断或蓝色装饰线。"
+            }
+          ]
+        },
+        {
+          "claim": "四表重复表头、表头首数据行同页、行不拆分。",
+          "evidence": [
+            {
+              "kind": "code",
+              "pointer": "snapshot a501edcd-9382-5ba3-aef1-f68e3a4cd321/qa/revised/page-1.png 至 page-6.png；候选DOCX OOXML",
+              "excerpt": "独立打开全部六图：页1三列表头与email同页，页2正确重复渠道/点击率/点击至线索率并显示完整合计行；页3预算表、页4指标表完整。OOXML四个tblHeader、22个cantSplit、四表头所有段落keepNext=True；未见数据行拆分。"
+            }
+          ]
+        },
+        {
+          "claim": "最终实际重新渲染六页，作者逐页打开查看；全文完整。",
+          "evidence": [
+            {
+              "kind": "code",
+              "pointer": "session ses_hEwp3inYGnK5nYF8mpQW/message msg_g0VZ2ZblT00VtBRQsHxB/part prt_g0VZ2Ze5x00sBji8cFpP；qa/revised/growth-plan.pdf",
+              "excerpt": "最终命令python tools/render_docx.py outputs/growth-plan.docx --output_dir qa/revised --emit_pdf --verbose完成并输出Pages rendered；随后最终page1–6各read完成。独立UTF8 pdftotext全量提取6页，全部正文及单元格文字项目均存在；六图另行完整查看。"
+            }
+          ]
+        },
+        {
+          "claim": "已发布候选与内部验收资源，原正式资源保留；终报不冒称新版正式交付完成。",
+          "evidence": [
+            {
+              "kind": "code",
+              "pointer": "engine_artifact art_hLArXmv50FyxAvdR9Fcu revision47；art_hZtUOLUOvVgdJGi7YGHv revision48；art_h28MoKiA1WMo4nQBkTLd revision40",
+              "excerpt": "目录及完整读取证实候选2资源、内部证据11资源和原正式计划2资源仍可读。新Artifact明确待独立复核非新版正式campaign-plan；原正文历史纵向Word及待审文字确实保留，不视为当前版式说明。"
+            }
+          ]
+        }
+      ],
+      "corrected": [],
+      "unresolved": [],
+      "overall_verdict": "clean"
+    },
+    "output": "OK: fact-check review recorded (verified=6, corrected=0, unresolved=0, verdict=clean)",
+    "title": "",
+    "metadata": {},
+    "time": {
+      "start": 1792910892897,
+      "end": 1792910914186
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0d2a9ef06afab7e4016adda62ccd1c87d08c910a166676fda2"
+    }
+  },
+  "orderKey": "v1:0001792910913886:0000000000000031:0000000000000000:part:prt_g0VZ2dOFN00BFiaVTMeD"
+}

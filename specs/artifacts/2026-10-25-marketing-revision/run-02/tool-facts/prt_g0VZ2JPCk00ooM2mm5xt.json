@@ -1,0 +1,37 @@
+{
+  "id": "prt_g0VZ2JPCk00ooM2mm5xt",
+  "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+  "messageID": "msg_hUtLUTLUznd9ytgnZWz2",
+  "type": "tool",
+  "callID": "call_b1dfeb4d101a4c21a954e49cc364cac5",
+  "tool": "artifact_read",
+  "state": {
+    "status": "completed",
+    "input": {
+      "reads": [
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_kHO7p8o0P7halydZ",
+          "byte_offset": 12288,
+          "max_bytes": 16000,
+          "delivery": "inline"
+        }
+      ]
+    },
+    "output": "{\"results\":[{\"request_index\":0,\"value\":{\"locator\":{\"source\":\"engine_artifact\",\"artifact_id\":\"art_hAS96SC8hkNmMu7O8RoC\",\"catalog_revision\":17,\"expected_sha256\":\"fcdf37d3be769d9241907ef4ac3772b2dac404e3d790fb0c008dab3c6cfb04c6\"},\"media_type\":\"application/json\",\"byte_start\":12288,\"byte_end\":13646,\"next_offset\":null,\"total_bytes\":13646,\"complete\":true,\"sha256\":\"fcdf37d3be769d9241907ef4ac3772b2dac404e3d790fb0c008dab3c6cfb04c6\",\"text\":\"es\\\":113,\\\"sha256\\\":\\\"2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1\\\"}}],\\\"source_artifact_locators\\\":[{\\\"source\\\":\\\"engine_artifact\\\",\\\"artifact_id\\\":\\\"art_hFvxacOMef87YvyiUYyy\\\",\\\"catalog_revision\\\":5,\\\"expected_sha256\\\":\\\"346ec5c49e227f8f5bba9aa0d4eadd6e1a161c0ee79584a498b8b803602fb4cf\\\"},{\\\"source\\\":\\\"engine_artifact\\\",\\\"artifact_id\\\":\\\"art_hyDNtTAAARFFrYy1KHzp\\\",\\\"catalog_revision\\\":9,\\\"expected_sha256\\\":\\\"e9d0074be620527b4bf56590304cfeb2bf944bf45253a1b7c6f69b92bcc41b85\\\"},{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hxHOMBTalkvA4toZOhTn\\\",\\\"task_id\\\":\\\"tsk_g00VZ2GE9C00jkeX1GgT\\\",\\\"snapshot_id\\\":\\\"b6c7a53e-2067-5f7e-a19c-1dbb90d0f6df\\\",\\\"manifest_sha256\\\":\\\"031c2839233e801970b414f438b8ac8dc57f362ec131ab251d0a3d18c94fce5b\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"brief.md\\\",\\\"media_type\\\":\\\"text/markdown\\\",\\\"bytes\\\":1024,\\\"sha256\\\":\\\"4ddd30c51f7fb98d18208a76e19e1739bb3a5b752bba63183778755404505c7c\\\"}},{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hxHOMBTalkvA4toZOhTn\\\",\\\"task_id\\\":\\\"tsk_g00VZ2GE9C00jkeX1GgT\\\",\\\"snapshot_id\\\":\\\"b6c7a53e-2067-5f7e-a19c-1dbb90d0f6df\\\",\\\"manifest_sha256\\\":\\\"031c2839233e801970b414f438b8ac8dc57f362ec131ab251d0a3d18c94fce5b\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"campaign.csv\\\",\\\"media_type\\\":\\\"text/csv\\\",\\\"bytes\\\":113,\\\"sha256\\\":\\\"2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1\\\"}}]}\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_kHO7p8o0P7halydZ\",\"artifact_read_ref\":\"ar_0zkLqmuF8UPXRGKx\"}}],\"complete\":true,\"next_reads\":[]}",
+    "title": "Artifacts (1)",
+    "metadata": {
+      "truncated": false
+    },
+    "time": {
+      "start": 1792906130018,
+      "end": 1792906130626
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_014a744de4cd695b016add9391eeb88191b36281e219b2eb90"
+    }
+  },
+  "orderKey": "v1:0001792906130488:0000000000000031:0000000000000000:part:prt_g0VZ2JPCk00ooM2mm5xt"
+}

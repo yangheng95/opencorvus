@@ -1,0 +1,85 @@
+{
+  "id": "prt_g0VZ1xLqd00e38uT3AK3",
+  "sessionID": "ses_-zUQy5vEEzzn2RBsqAWe",
+  "messageID": "msg_hpMyJWjpE3Usn9qt9al6",
+  "type": "tool",
+  "callID": "call_2bdb7d4340b441dcaf1479cbc32100c2",
+  "tool": "dispatch_agents",
+  "state": {
+    "status": "completed",
+    "input": {
+      "team": [
+        {
+          "name": "独立策略复核",
+          "target": "marketing-growth-fact-checker",
+          "responsibility": "从原始要求和不可变来源独立审计策略计算、预算、主张及实验闭合。",
+          "boundary": "复核不修改策略或最终产品，不代替作者；本轮不声称尚未生成的Word已通过。",
+          "expected_result": "原包audit正式交接，指出必改项与建议项并明确待最终正文/真实页图复核的范围。",
+          "depends_on": [
+            "营销策略汇合"
+          ]
+        }
+      ],
+      "dispatches": [
+        {
+          "dispatch": {
+            "target": "marketing-growth-fact-checker",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "initial",
+              "workflow_subject": {
+                "kind": "virtual_workflow",
+                "workflow_id": "marketing-growth-campaign",
+                "node_id": "marketing-growth-fact-checker"
+              },
+              "use_worktree": false,
+              "input": {
+                "target_session_id": "ses_hFJ8vTxHnKEkoytVnJMJ",
+                "target_message_id": "msg_g0VZ1xBM600p1FOKezE5",
+                "target_agent": "marketing-growth-strategist",
+                "reason": "执行原营销职责链的独立策略复核，不只是确认生产者摘要。自行发现、完整读取并选择growth-strategy精确前驱、相关分析及原始不可变brief.md/campaign.csv，独立推导应有结果，按原包发布audit。原始任务要求完整本地职责链；当前预算1200元覆盖brief旧草案3000元，CSV三行合成历史成本1900元不改也非新预算；准确复算三渠道及合计曝光/点击/线索/成本/CPL，区别观察/计算/假设/未知。核实预算含受众验证、人力/工具/激励和预留不超上限，实验互斥、启动条件、负责人/暴露/指标/建议阈值/护栏/停止及下一决策充分，不误把CPL写CAC、不外推因果或保证。仅三行完整材料，不联网、不外联、不投放、不花费、不对外发布、不创建Task/Goal、不改输入，不做重复研究或扩写。最终规范outputs/growth-plan.md约3000汉字完整论证和表格、同正文纵向outputs/growth-plan.docx及完全相同正文阅读文档，清楚黑色标题、表格可读无截断；来源和实际正文须完整不可变绑定。此时文件尚未制作，本轮复核策略及作者必须履行的交付条件，不把尚未开展的Word渲染检查冒称通过，也不要把正常后续步骤误写成策略阻塞缺陷。原作者随后制作并实际渲染逐页查看，再继续你这一独立责任检查最终正文及全部真实页图，页图/PDF仅内部验收；最终作者正式交付在其后。具体问题请区分阻塞纠正项与建议项，若策略确有必改项给出来源和差异，不编辑产品。"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "output": "{\"members\":[{\"member_index\":0,\"name\":\"独立策略复核\",\"target\":\"marketing-growth-fact-checker\",\"status\":\"completed\",\"outcome\":{\"kind\":\"accepted\",\"session_id\":\"ses_hVeBqjMKP8pdekG4qxJL\",\"dispatch_lineage_id\":\"art_g0VZ1xPB800Qb94DX6hH\"}}]}",
+    "title": "Settled frontier (1/1)",
+    "metadata": {
+      "frontier_size": 1,
+      "completed_count": 1,
+      "member_names": [
+        "独立策略复核"
+      ],
+      "targets": [
+        "marketing-growth-fact-checker"
+      ],
+      "members": [
+        {
+          "member_index": 0,
+          "name": "独立策略复核",
+          "target": "marketing-growth-fact-checker",
+          "status": "completed",
+          "outcome": {
+            "kind": "accepted",
+            "session_id": "ses_hVeBqjMKP8pdekG4qxJL",
+            "dispatch_lineage_id": "art_g0VZ1xPB800Qb94DX6hH"
+          }
+        }
+      ]
+    },
+    "time": {
+      "start": 1792900873899,
+      "end": 1792900887218
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0d6f532beb3be330016add7f09ccc48191abcaee864f382665"
+    }
+  },
+  "orderKey": "v1:0001792900886262:0000000000000031:0000000000000000:part:prt_g0VZ1xLqd00e38uT3AK3"
+}

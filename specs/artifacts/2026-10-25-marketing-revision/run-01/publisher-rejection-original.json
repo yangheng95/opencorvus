@@ -1,0 +1,148 @@
+{
+  "id": "prt_g0VZ22iw700ptU06Mc5p",
+  "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+  "messageID": "msg_g0VZ22eOx00tetWPuTmV",
+  "type": "tool",
+  "callID": "call_63098b49252949b5a042ae1a1fb32b72",
+  "tool": "pkg_tool__marketing_growth_shared_publish_marketin__9d2b7cfbc799",
+  "state": {
+    "status": "error",
+    "input": {
+      "artifact": {
+        "artifact_type": "marketing-growth/campaign-plan",
+        "payload": {
+          "stage": "原作者正式交付；独立最终正文与4页真实渲染复核通过后封存",
+          "scope": "虚构团队内部文档整理工具、小型团队；仅本地内部计划及阅读交付，不执行营销行动。唯一规范正文outputs/growth-plan.md，同正文纵向Word、HTML及原包镜像均绑定完整不可变资源。",
+          "as_of": "2026-10-25；原始合成材料2026-10-24",
+          "evidence": [
+            {
+              "statement": "原始不可变brief全文确认产品虚构、目标仅小型团队，三行合成渠道记录不是随机实验；旧3000元允许操作方当前更正覆盖。原始CSV全文为email 1000/100/20/400、community 2000/120/12/600、search 3000/150/15/900（曝光/点击/线索/元）。",
+              "source": "原始快照459ac5fe-a23f-5c58-af37-93d2dae6d0ca/resources/brief.md及campaign.csv；本轮完整读取并选择",
+              "source_url": null,
+              "as_of": "来源2026-10-24；核对2026-10-25"
+            },
+            {
+              "statement": "规范正文完整保留三渠道与合计6000曝光、370点击、47线索、1900元，分渠道CPL20.00/50.00/60.00，合计40.43元/条；合计率用总分子除总分母。当前1200元、旧稿3000元、历史1900元分开，预算300+200+400+300=1200，工时工具可能激励全包。",
+              "source": "已完整读取并选择实际规范正文outputs/growth-plan.md；策略revision21及audit revision25",
+              "source_url": null,
+              "as_of": "2026-10-25"
+            },
+            {
+              "statement": "独立最终复核无必改项，直接比较MD/DOCX/HTML的33个语义块、3张表、70个单元格，正文2791汉字，包镜像同正文；Word全部纵向、标题文字黑色，独立实际查看全部4张最终PNG，表格完整无裁切，来源尾段完整。",
+              "source": "marketing-growth/final-document-review art_hBtvGwxw9z5Ml5ggGGoA revision36，完整读取并选择；独立于作者自检",
+              "source_url": null,
+              "as_of": "2026-10-25"
+            },
+            {
+              "statement": "当前主项目已有作者提交，工作目录干净，四个交付文件相对提交无差异，QA文件仍被跟踪；本轮只重读封存，快照复用与独立复核同一资源集2d5e2090-241a-5c71-a861-c943e67d16ac，没有实质正文或Word修改。",
+              "source": "本轮git status/log/diff/ls-files、完整镜像重读及artifact_snapshot实际回执；author-review-documents revision30",
+              "source_url": null,
+              "as_of": "2026-10-25"
+            }
+          ],
+          "findings": [
+            {
+              "finding": "报告满足约3000汉字、完整论证与表格、同正文文档及真实逐页验收要求；独立复核支持正式交付，不需要重写或重新研究。",
+              "evidence_indexes": [
+                1,
+                2,
+                3
+              ],
+              "confidence": "high"
+            },
+            {
+              "finding": "策略保持观察、计算、推断、假设及未知边界；CPL不冒称CAC，不用合成历史推算必得线索，不承诺渠道因果或未来效果。单情境保留须有自身证据和理由，不把部分通过写成总体通过。",
+              "evidence_indexes": [
+                0,
+                1,
+                2
+              ],
+              "confidence": "high"
+            },
+            {
+              "finding": "资源完整性与内容版式检查分别成立；最终资源仅含规范MD、Word、HTML及包镜像，内部PDF/PNG不列业务交付。",
+              "evidence_indexes": [
+                2,
+                3
+              ],
+              "confidence": "high"
+            }
+          ],
+          "decisions": [
+            "正式发布marketing-growth/campaign-plan@1，绑定已复核且未修改的完整资源集；保留唯一规范正文与镜像关系。",
+            "紧接发布document@1交互阅读，使用已完整读取的规范正文全文，不摘要、不改写。",
+            "保留独立最终复核及作者QA证据，不修改ignore规则，不覆盖原始输入或包文件。",
+            "所有未来实验仍需另行授权和条件确认；本次仅本地内部交付，不联网、不外联、不投放、不花费或公开发布。"
+          ],
+          "unknowns": [
+            "真实需求、许可名单、社群准入、人员工时、报价、价格、客户、收入与留存未知，不能据此确认经济可行或真实营销效果。",
+            "HTML正文一致已验证，但未做浏览器视觉保证；Word版式结论限于此次4页实际渲染，不保证所有客户端重新分页相同。"
+          ],
+          "resource_roles": [
+            {
+              "role": "唯一规范完整正文，2791汉字",
+              "path": "outputs/growth-plan.md"
+            },
+            {
+              "role": "完整同正文纵向Word，已实际渲染并独立逐页复核",
+              "path": "outputs/growth-plan.docx"
+            },
+            {
+              "role": "完整同正文可复用阅读文件",
+              "path": "outputs/growth-plan.html"
+            },
+            {
+              "role": "原包同正文镜像，不是竞争正文",
+              "path": "artifacts/marketing-growth/campaign-plan.md"
+            }
+          ]
+        }
+      },
+      "resource_set": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+          "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+        },
+        "tree": "resources"
+      },
+      "predecessor_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hMZQdRFI6lArQLmx7xFd",
+          "catalog_revision": 25,
+          "expected_sha256": "406fbd63400b618fb5ae4ef8823c491f94dff666faca4d996762af65a6cb9ffb"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hPLkHQXDY9raF2aQCQYq",
+          "catalog_revision": 21,
+          "expected_sha256": "180838aa721c7f54458aab068723621b48d2b15341c87c33d086fe4d72245337"
+        }
+      ]
+    },
+    "failure": {
+      "kind": "tool-execution",
+      "name": "Error",
+      "message": "Marketing & Growth Strategy marketing-growth/campaign-plan requires exact predecessor types marketing-growth/audit",
+      "originSite": "session.processor.tool-error",
+      "classification": "tool-execution",
+      "data": {
+        "toolCallId": "call_63098b49252949b5a042ae1a1fb32b72",
+        "toolName": "pkg_tool__marketing_growth_shared_publish_marketin__9d2b7cfbc799"
+      }
+    },
+    "time": {
+      "start": 1792902154291,
+      "end": 1792902175597
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_079125e66f81ec22016add840a28ac8191a3f9028796f37409"
+    }
+  },
+  "orderKey": "v1:0001792902174989:0000000000000031:0000000000000000:part:prt_g0VZ22iw700ptU06Mc5p"
+}

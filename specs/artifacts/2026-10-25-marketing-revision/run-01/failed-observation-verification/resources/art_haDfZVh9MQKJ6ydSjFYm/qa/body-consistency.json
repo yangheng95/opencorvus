@@ -1,0 +1,11 @@
+{
+  "method": "Parse MD headings/paragraphs/table rows; reopen DOCX body XML in document order and parse HTML independently. Exact ordered text and cell comparison; no digest shortcut.",
+  "semantic_blocks": 33,
+  "tables": 3,
+  "table_cells": 70,
+  "chinese_characters": 2791,
+  "md_docx_html_sequence_equal": true,
+  "mirror_equal": true,
+  "all_sections_portrait": true,
+  "all_paragraph_runs_black": true
+}

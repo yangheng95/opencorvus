@@ -1,0 +1,37 @@
+{
+  "id": "prt_g0VZ2RirR00Xnn4HL26Q",
+  "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+  "messageID": "msg_hlbrPS2sw9029eKRZ5Lm",
+  "type": "tool",
+  "callID": "call_81f15ec139f8401786fc712c34999a7d",
+  "tool": "artifact_read",
+  "state": {
+    "status": "completed",
+    "input": {
+      "reads": [
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_t3VmwC46OPENlIMf",
+          "byte_offset": 24576,
+          "max_bytes": 32000,
+          "delivery": "inline"
+        }
+      ]
+    },
+    "output": "{\"results\":[{\"request_index\":0,\"value\":{\"locator\":{\"source\":\"engine_artifact\",\"artifact_id\":\"art_hIgpb6RZbrxuaF9xPJFH\",\"catalog_revision\":35,\"expected_sha256\":\"4a8b4e600c6b350285db0907ab9fca15813c12afb8a71ee606500303c650f267\"},\"media_type\":\"application/json\",\"byte_start\":24576,\"byte_end\":24724,\"next_offset\":null,\"total_bytes\":24724,\"complete\":true,\"sha256\":\"4a8b4e600c6b350285db0907ab9fca15813c12afb8a71ee606500303c650f267\",\"text\":\"\\\":\\\"outputs/growth-plan.md\\\",\\\"media_type\\\":\\\"text/markdown\\\",\\\"bytes\\\":9991,\\\"sha256\\\":\\\"2a03896811a36347f08c9eba2916c1e7e07b2695aa042eecf21bf8e8b2ddbc61\\\"}}]}\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_t3VmwC46OPENlIMf\",\"artifact_read_ref\":\"ar_rnnY4a-ZKStrjqF-\"}}],\"complete\":true,\"next_reads\":[]}",
+    "title": "Artifacts (1)",
+    "metadata": {
+      "truncated": false
+    },
+    "time": {
+      "start": 1792908112200,
+      "end": 1792908113188
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0a79ea5ba76558fb016add9b501e408191850979a3b3b1606c"
+    }
+  },
+  "orderKey": "v1:0001792908112648:0000000000000031:0000000000000000:part:prt_g0VZ2RirR00Xnn4HL26Q"
+}

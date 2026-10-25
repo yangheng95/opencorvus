@@ -1,0 +1,195 @@
+{
+  "durableActivities": [
+    {
+      "id": "act_g0VZ2OnQQ00utyBav0xS",
+      "assistant_message_id": "msg_hvhvpCBXSltrto2RuwTK",
+      "time_created": 1792907414762,
+      "outcome_id": "prt_hyKasnjl8ek7HhSjQpkh",
+      "data": {
+        "outcome": "done",
+        "attempt_count": 1
+      },
+      "outcome_time": 1792907454298
+    },
+    {
+      "id": "act_g0VZ2Oxsv00AW52BeoYu",
+      "assistant_message_id": "msg_hvhvpCBXSltrto2RuwTK",
+      "time_created": 1792907454969,
+      "outcome_id": "prt_h20EFM3rbgzRBKU85fzc",
+      "data": {
+        "outcome": "done",
+        "attempt_count": 2
+      },
+      "outcome_time": 1792907640994
+    },
+    {
+      "id": "act_g0VZ2PkTF00uaRh1SLI8",
+      "assistant_message_id": "msg_hvhvpCBXSltrto2RuwTK",
+      "time_created": 1792907641733,
+      "outcome_id": "prt_heSzjSfvlOrlxBUORtPv",
+      "data": {
+        "outcome": "done",
+        "attempt_count": 1
+      },
+      "outcome_time": 1792907646153
+    },
+    {
+      "id": "act_g0VZ2Plx300jCU2hGuoT",
+      "assistant_message_id": "msg_hvhvpCBXSltrto2RuwTK",
+      "time_created": 1792907647425,
+      "outcome_id": "prt_hG1BJR7aGYxdSzONdlHr",
+      "data": {
+        "outcome": "done",
+        "attempt_count": 1
+      },
+      "outcome_time": 1792907653128
+    },
+    {
+      "id": "act_g0VZ2PnlN00eb9Y1X8Y4",
+      "assistant_message_id": "msg_hvhvpCBXSltrto2RuwTK",
+      "time_created": 1792907654389,
+      "outcome_id": "prt_hL6IyGvpvhk1irdnQoie",
+      "data": {
+        "outcome": "done",
+        "attempt_count": 1
+      },
+      "outcome_time": 1792907659537
+    },
+    {
+      "id": "act_g0VZ2PpHX00BJQVxmgSO",
+      "assistant_message_id": "msg_hvhvpCBXSltrto2RuwTK",
+      "time_created": 1792907660227,
+      "outcome_id": "prt_hNsITzJoIIhikx3U3tTD",
+      "data": {
+        "outcome": "done",
+        "attempt_count": 1
+      },
+      "outcome_time": 1792907684609
+    }
+  ],
+  "sourceRequests": [
+    {
+      "index": 216,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792907464282,
+        "boundAt": 1792907464300,
+        "chunkCount": 28,
+        "byteCount": 425958,
+        "firstByteReadAt": 1792907464318,
+        "lastByteReadAt": 1792907526588,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hJY9NMgo7us6eDzN69O6_art_hJY9NMgo7us6eDzN69O6",
+            "agentID": "orchestrator",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VZ2Oxsv00AW52BeoYu",
+            "attempt": 0,
+            "assistantMessageID": "msg_hvhvpCBXSltrto2RuwTK"
+          }
+        },
+        "terminal": {
+          "kind": "aborted",
+          "at": 1792907635011
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "read",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "cancel_subagent",
+        "create_continuous_goal",
+        "dispatch_agents",
+        "evolve_expert_squad_from_feedback",
+        "get_continuous_goal",
+        "manage_task",
+        "no_action",
+        "publish_interactive_artifact",
+        "question",
+        "read_agent_message",
+        "read_context",
+        "read_task_message",
+        "respond_agent_coordination",
+        "scheduler_message",
+        "update_continuous_goal",
+        "wait",
+        "skill"
+      ]
+    },
+    {
+      "index": 217,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792907638103,
+        "boundAt": 1792907638118,
+        "chunkCount": 82,
+        "byteCount": 1121835,
+        "firstByteReadAt": 1792907638131,
+        "lastByteReadAt": 1792907640650,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hJY9NMgo7us6eDzN69O6_art_hJY9NMgo7us6eDzN69O6",
+            "agentID": "orchestrator",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VZ2Oxsv00AW52BeoYu",
+            "attempt": 1,
+            "assistantMessageID": "msg_hvhvpCBXSltrto2RuwTK"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792907640813
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "read",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "cancel_subagent",
+        "create_continuous_goal",
+        "dispatch_agents",
+        "evolve_expert_squad_from_feedback",
+        "get_continuous_goal",
+        "manage_task",
+        "no_action",
+        "publish_interactive_artifact",
+        "question",
+        "read_agent_message",
+        "read_context",
+        "read_task_message",
+        "respond_agent_coordination",
+        "scheduler_message",
+        "update_continuous_goal",
+        "wait",
+        "skill"
+      ]
+    }
+  ],
+  "source": "Original reader receipts plus read-only persisted provider Activity request/outcome; initial abort reason unavailable"
+}

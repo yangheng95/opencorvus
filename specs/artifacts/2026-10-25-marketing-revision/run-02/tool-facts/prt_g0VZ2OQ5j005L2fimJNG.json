@@ -1,0 +1,72 @@
+{
+  "id": "prt_g0VZ2OQ5j005L2fimJNG",
+  "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+  "messageID": "msg_g0VZ2ONzp00NJwnxztyg",
+  "type": "tool",
+  "callID": "call_6b40fe0acdc8494db52ad51be365aae6",
+  "tool": "artifact_snapshot",
+  "state": {
+    "status": "completed",
+    "input": {
+      "files": [
+        {
+          "path": "qa/initial/growth-plan.pdf",
+          "media_type": "application/pdf"
+        },
+        {
+          "path": "qa/initial/page-1.png",
+          "media_type": "image/png"
+        },
+        {
+          "path": "qa/initial/page-2.png",
+          "media_type": "image/png"
+        },
+        {
+          "path": "qa/initial/page-3.png",
+          "media_type": "image/png"
+        },
+        {
+          "path": "qa/initial/page-4.png",
+          "media_type": "image/png"
+        },
+        {
+          "path": "qa/initial/page-5.png",
+          "media_type": "image/png"
+        },
+        {
+          "path": "qa/scratch/content-check.json",
+          "media_type": "application/json"
+        },
+        {
+          "path": "qa/scratch/ordered-body.json",
+          "media_type": "application/json"
+        },
+        {
+          "path": "qa/scratch/page-observations.json",
+          "media_type": "application/json"
+        },
+        {
+          "path": "qa/scratch/build_plan.py",
+          "media_type": "text/x-python"
+        }
+      ]
+    },
+    "output": "{\"resource_set\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"d320bb0d-d534-543d-afe2-4d328987bea1\",\"manifest_sha256\":\"75f1ef09536783a1a85ae20c2741ee684dae6d2747df3efef1124c377d427937\"},\"tree\":\"resources\"},\"locators\":[{\"role\":\"snapshot\",\"locator\":{\"source\":\"task_artifact_snapshot\",\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"d320bb0d-d534-543d-afe2-4d328987bea1\",\"manifest_sha256\":\"75f1ef09536783a1a85ae20c2741ee684dae6d2747df3efef1124c377d427937\"}},\"artifact_locator_ref\":\"al_S-Ix8UVImwIpEQII\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"d320bb0d-d534-543d-afe2-4d328987bea1\",\"manifest_sha256\":\"75f1ef09536783a1a85ae20c2741ee684dae6d2747df3efef1124c377d427937\"},\"tree\":\"resources\",\"path\":\"qa/initial/growth-plan.pdf\",\"bytes\":420263,\"sha256\":\"0862ac98d48d36bb9cd4e4bfbe021c4fbcdf81209f0cb997c3559174d8415ad6\",\"media_type\":\"application/pdf\"}},\"artifact_locator_ref\":\"al_-pzySy4qk5-4dJwq\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"d320bb0d-d534-543d-afe2-4d328987bea1\",\"manifest_sha256\":\"75f1ef09536783a1a85ae20c2741ee684dae6d2747df3efef1124c377d427937\"},\"tree\":\"resources\",\"path\":\"qa/initial/page-1.png\",\"bytes\":407507,\"sha256\":\"9e4d848cbd80546a612342774f9f9619ac8641d655fce742ee06a66bf2c47b90\",\"media_type\":\"image/png\"}},\"artifact_locator_ref\":\"al_thM9sOdqQBZZ6zjB\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"d320bb0d-d534-543d-afe2-4d328987bea1\",\"manifest_sha256\":\"75f1ef09536783a1a85ae20c2741ee684dae6d2747df3efef1124c377d427937\"},\"tree\":\"resources\",\"path\":\"qa/initial/page-2.png\",\"bytes\":330815,\"sha256\":\"7f210712666e1714197c8b5a686b920de143da955096ef32327a88017e39d481\",\"media_type\":\"image/png\"}},\"artifact_locator_ref\":\"al_ahg7xTrT3ApYrLhY\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"d320bb0d-d534-543d-afe2-4d328987bea1\",\"manifest_sha256\":\"75f1ef09536783a1a85ae20c2741ee684dae6d2747df3efef1124c377d427937\"},\"tree\":\"resources\",\"path\":\"qa/initial/page-3.png\",\"bytes\":391169,\"sha256\":\"2c0f1a71672982801aeeb71e813f4f376d552951e3fe0e628a550a5f311b26df\",\"media_type\":\"image/png\"}},\"artifact_locator_ref\":\"al_7b1Zlv4dcYTK3yyQ\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"d320bb0d-d534-543d-afe2-4d328987bea1\",\"manifest_sha256\":\"75f1ef09536783a1a85ae20c2741ee684dae6d2747df3efef1124c377d427937\"},\"tree\":\"resources\",\"path\":\"qa/initial/page-4.png\",\"bytes\":267649,\"sha256\":\"e5d0f476861872aed1ebbea50fb9ea01e5f3ac815eb762d0908acadcb1f2332e\",\"media_type\":\"image/png\"}},\"artifact_locator_ref\":\"al_ccMZ0UaJaXjrf1Za\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"d320bb0d-d534-543d-afe2-4d328987bea1\",\"manifest_sha256\":\"75f1ef09536783a1a85ae20c2741ee684dae6d2747df3efef1124c377d427937\"},\"tree\":\"resources\",\"path\":\"qa/initial/page-5.png\",\"bytes\":421974,\"sha256\":\"43510f8a99cde0115d0777882b11fe4b8c1db90f232726052666cd6a437b83d9\",\"media_type\":\"image/png\"}},\"artifact_locator_ref\":\"al_W7gc5ZO_PrDECyv5\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"d320bb0d-d534-543d-afe2-4d328987bea1\",\"manifest_sha256\":\"75f1ef09536783a1a85ae20c2741ee684dae6d2747df3efef1124c377d427937\"},\"tree\":\"resources\",\"path\":\"qa/scratch/build_plan.py\",\"bytes\":5187,\"sha256\":\"f0cf3736771f15f3540facebc5f4848098f5aafb1ae2ba813797fbd6e9966905\",\"media_type\":\"text/x-python\"}},\"artifact_locator_ref\":\"al_jDygUhvyUIp3tCPS\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"d320bb0d-d534-543d-afe2-4d328987bea1\",\"manifest_sha256\":\"75f1ef09536783a1a85ae20c2741ee684dae6d2747df3efef1124c377d427937\"},\"tree\":\"resources\",\"path\":\"qa/scratch/content-check.json\",\"bytes\":590,\"sha256\":\"6fab6c1f742143a24749d14a39dd347b142af96d3f73e9fcbc857a039dbb2049\",\"media_type\":\"application/json\"}},\"artifact_locator_ref\":\"al_VHo0lYBa676mqzPL\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"d320bb0d-d534-543d-afe2-4d328987bea1\",\"manifest_sha256\":\"75f1ef09536783a1a85ae20c2741ee684dae6d2747df3efef1124c377d427937\"},\"tree\":\"resources\",\"path\":\"qa/scratch/ordered-body.json\",\"bytes\":12151,\"sha256\":\"47802ee9d45faacba292d18f0ec7711236a760798ad394134163e69b74f06d93\",\"media_type\":\"application/json\"}},\"artifact_locator_ref\":\"al_fGET-VIZCgr-S4CH\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"d320bb0d-d534-543d-afe2-4d328987bea1\",\"manifest_sha256\":\"75f1ef09536783a1a85ae20c2741ee684dae6d2747df3efef1124c377d427937\"},\"tree\":\"resources\",\"path\":\"qa/scratch/page-observations.json\",\"bytes\":2546,\"sha256\":\"98934ef8b262a8456bf54bda59f0f6a8c96175d939b6e43d31d861d4aded165f\",\"media_type\":\"application/json\"}},\"artifact_locator_ref\":\"al_UAEcXB0ZCgv9lsmQ\"}],\"resource_count\":10}",
+    "title": "Published Artifact snapshot (10 files)",
+    "metadata": {
+      "truncated": false,
+      "snapshotID": "d320bb0d-d534-543d-afe2-4d328987bea1",
+      "resources": 10
+    },
+    "time": {
+      "start": 1792907325067,
+      "end": 1792907327074
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_05c715d78098420d016add983cfd208191b041a57caf689725"
+    }
+  },
+  "orderKey": "v1:0001792907326532:0000000000000031:0000000000000000:part:prt_g0VZ2OQ5j005L2fimJNG"
+}

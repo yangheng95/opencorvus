@@ -1,0 +1,14 @@
+param([ValidateSet('initial','revised')][string]$Phase)
+$ErrorActionPreference='Stop'
+$caseRoot='C:/Users/hengu/.codex/opencorvus-marketing-revision-20261025-01'
+$caseEvidence="$caseRoot/evidence"
+$caseVerification=Get-Content -Raw "$caseEvidence/$Phase-verification/verification.json" | ConvertFrom-Json
+$caseWord=@($caseVerification.selected | Where-Object {$_.path -eq 'outputs/growth-plan.docx'})[0]
+New-Item -ItemType Directory -Force "$caseEvidence/$Phase-render-source" | Out-Null
+Copy-Item -LiteralPath $caseWord.file -Destination "$caseEvidence/$Phase-render-source/growth-plan.docx"
+$env:PATH='C:/Users/hengu/.cache/codex-runtimes/codex-primary-runtime/dependencies/python;D:/myhexin-local/opencorvus/.tmp-product-iteration/expert-steering-recovery/doc-tools/libreoffice/SourceDir/LibreOffice/program;C:/Users/hengu/.cache/codex-runtimes/codex-primary-runtime/dependencies/native/poppler/Library/bin;'+$env:PATH
+& 'C:/Users/hengu/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' "$caseRoot/project/tools/render_docx.py" "$caseEvidence/$Phase-render-source/growth-plan.docx" --output_dir "$caseEvidence/$Phase-render" --emit_pdf --verbose *> "$caseEvidence/$Phase-render.log"
+$caseExit=$LASTEXITCODE
+@{exitCode=$caseExit;pages=@(Get-ChildItem -LiteralPath "$caseEvidence/$Phase-render" -Filter 'page-*.png').Count;source=$caseWord.ref;atUtc=[DateTime]::UtcNow.ToString('o')}|ConvertTo-Json -Depth 10|Set-Content -LiteralPath "$caseEvidence/$Phase-render.json"
+Get-Content "$caseEvidence/$Phase-render.json"
+exit $caseExit

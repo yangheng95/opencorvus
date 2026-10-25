@@ -111,12 +111,21 @@ export async function stageGitSourceEntries(options: GitSourceOptions) {
         ["update-index", "--force-remove", "-z", "--stdin"],
         gitSourceInput(Buffer.from(directoryReplacements.map((pathname) => pathname + "\0").join(""))),
       )
-    if (ordinary.length)
-      await checkedSourceGit(
-        run,
-        gitSourceEntryArgs(["--literal-pathspecs", "add", "--all", "--pathspec-from-file=-", "--pathspec-file-nul"]),
-        gitSourceInput(Buffer.from(ordinary.map((pathname) => pathname + "\0").join(""))),
-      )
+    const tracked = new Set(source.tracked)
+    // Existing index entries retain their authority when a parent later becomes
+    // ignored. Git's update operation stages those entries without treating the
+    // literal pathspec as a request to add ignored new content.
+    for (const [mode, paths] of [
+      ["--update", ordinary.filter((pathname) => tracked.has(pathname))],
+      ["--all", ordinary.filter((pathname) => !tracked.has(pathname))],
+    ] as const) {
+      if (paths.length)
+        await checkedSourceGit(
+          run,
+          gitSourceEntryArgs(["--literal-pathspecs", "add", mode, "--pathspec-from-file=-", "--pathspec-file-nul"]),
+          gitSourceInput(Buffer.from(paths.map((pathname) => pathname + "\0").join(""))),
+        )
+    }
     const records: string[] = []
     for (const link of links) {
       const object = (await checkedSourceGit(run, ["hash-object", "-w", "--stdin"], gitSourceInput(link.bytes)))

@@ -1,0 +1,33 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+import {Database} from 'bun:sqlite'
+import {run,evidence as e} from './config'
+const read=(file:string)=>JSON.parse(fs.readFileSync(path.join(e,file),'utf8'))
+assert.equal(read('native-host-settled.json').physicalCompletion,true)
+const current=read('current.json'),accepted=read('feedback-accepted.json').result
+const db=new Database(path.join(run,'runtime/data/opencorvus.db'),{readonly:true,strict:true})
+try{
+ const moves=db.query("SELECT * FROM bus_publication_outbox WHERE project_id=? AND event_type='message.moved' AND json_extract(properties,'$.info.id')=?").all(current.task.projectID,accepted.user_message.info.id) as any[]
+ assert.equal(moves.length,1)
+ const move=JSON.parse(moves[0].properties)
+ assert.equal(move.sourceSessionID,accepted.user_message.info.sessionID)
+ assert.equal(move.info.id,accepted.user_message.info.id)
+ assert(move.info.time.created>accepted.user_message.info.time.created)
+ assert.equal(move.parts.find((p:any)=>p.id===accepted.user_message.parts[0].id).text,accepted.user_message.parts[0].text)
+ fs.writeFileSync(path.join(e,'original-move-outbox.json'),JSON.stringify({rows:moves,originalAcceptedMessage:accepted.user_message,target:move.info,originalPartTextEquality:true,source:'Read-only original durable outbox after native physical settlement'},null,2))
+ const query=db.query('SELECT r.message_id,m.session_id,o.id,o.time_created,o.data FROM tool_part_request r JOIN message m ON m.id=r.message_id JOIN tool_part_outcome o ON o.request_part_id=r.id WHERE r.id=?')
+ const images:any[]=[]
+ for(const m of current.conversation.transcript)for(const p of m.parts.filter((p:any)=>p.type==='tool'&&['read','artifact_read'].includes(p.tool)&&p.state.status==='completed')){
+  const row=query.get(p.id) as any;if(!row)continue
+  assert.equal(row.message_id,m.info.id);assert.equal(row.session_id,m.info.sessionID)
+  const data=JSON.parse(row.data),attachments=(data.attachments??[]).filter((a:any)=>a.mime==='image/png');if(attachments.length===0)continue
+  let output:any;try{output=JSON.parse(data.output)}catch{output={}}
+  const resources=(output.results??[]).flatMap((r:any)=>r.value?.media_type==='image/png'?[r.value]:[])
+  for(const value of resources){assert.equal(value.complete,true);assert.equal(value.byte_start,0);assert.equal(value.byte_end,value.total_bytes)}
+  for(const a of attachments){assert.equal(a.messageID,m.info.id);assert.equal(a.sessionID,m.info.sessionID)}
+  images.push({agent:m.info.agent,sessionID:m.info.sessionID,messageID:m.info.id,requestPartID:p.id,outcomePartID:row.id,tool:p.tool,input:p.state.input,resources,attachments,time:data.time})
+  fs.writeFileSync(path.join(e,'tool-facts',`${p.id}-persisted-outcome.json`),JSON.stringify({...row,data},null,2))
+ }
+ fs.writeFileSync(path.join(e,'media-receipts.json'),JSON.stringify(images,null,2));console.log(JSON.stringify({originalMove:move.info.id,source:move.sourceSessionID,target:move.info.sessionID,imageOutcomes:images.length,imageAttachments:images.reduce((n,r)=>n+r.attachments.length,0)}))
+}finally{db.close()}

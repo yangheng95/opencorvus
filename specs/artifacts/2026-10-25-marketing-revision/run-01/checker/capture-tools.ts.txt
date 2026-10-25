@@ -1,0 +1,14 @@
+import fs from "node:fs"
+import path from "node:path"
+import assert from "node:assert/strict"
+
+const e="C:/Users/hengu/.codex/opencorvus-marketing-revision-20261025-01/evidence",project="C:/Users/hengu/.codex/opencorvus-marketing-revision-20261025-01/project"
+const x=JSON.parse(fs.readFileSync(path.join(e,"current.json"),"utf8"));fs.mkdirSync(path.join(e,"tool-facts"),{recursive:true})
+const entries=[]
+for(const message of x.conversation.transcript)for(const part of message.parts.filter((p:any)=>p.type==="tool"&&["completed","error"].includes(p.state.status)&&(["bash","apply_patch","dispatch_agents","artifact_publish","artifact_read","read","manage_task"].includes(p.tool)||p.state.status==="error"))){
+  const url=new URL(`/session/${message.info.sessionID}/message/${message.info.id}/part/${part.id}`,"http://127.0.0.1:19147");url.searchParams.set("directory",project)
+  const response=await fetch(url,{signal:AbortSignal.timeout(180_000)});assert(response.ok);const full=await response.json();assert.equal(full.id,part.id);assert.equal(full.sessionID,message.info.sessionID);assert.equal(full.messageID,message.info.id)
+  fs.writeFileSync(path.join(e,"tool-facts",part.id+".json"),JSON.stringify(full,null,2))
+  entries.push({messageID:message.info.id,sessionID:message.info.sessionID,agent:message.info.agent,partID:part.id,tool:full.tool,status:full.state.status,title:full.state.title,exit:full.state.metadata?.exit,failure:full.state.failure,time:full.state.time})
+}
+fs.writeFileSync(path.join(e,"tool-facts/index.json"),JSON.stringify(entries,null,2));console.log(JSON.stringify({exactCanonicalToolParts:entries.length,errors:entries.filter(e=>e.failure||typeof e.exit==="number"&&e.exit!==0)}))

@@ -1,0 +1,37 @@
+{
+  "id": "prt_g0VZ1xVWa00w2U8Oq5uh",
+  "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+  "messageID": "msg_g0VZ1xUlK00uzlV1Rc0V",
+  "type": "tool",
+  "callID": "call_a898097117fe45ed98ae6dadab8087a5",
+  "tool": "artifact_read",
+  "state": {
+    "status": "completed",
+    "input": {
+      "reads": [
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_KnKwGyl6cHrWD3bu",
+          "byte_offset": 13107,
+          "max_bytes": 20000,
+          "delivery": "inline"
+        }
+      ]
+    },
+    "output": "{\"results\":[{\"request_index\":0,\"value\":{\"locator\":{\"source\":\"engine_artifact\",\"artifact_id\":\"art_hPLkHQXDY9raF2aQCQYq\",\"catalog_revision\":21,\"expected_sha256\":\"180838aa721c7f54458aab068723621b48d2b15341c87c33d086fe4d72245337\"},\"media_type\":\"application/json\",\"byte_start\":13107,\"byte_end\":14156,\"next_offset\":null,\"total_bytes\":14156,\"complete\":true,\"sha256\":\"180838aa721c7f54458aab068723621b48d2b15341c87c33d086fe4d72245337\",\"text\":\"rtifact\\\",\\\"artifact_id\\\":\\\"art_h8kbN5NqjULir7OAgH1Z\\\",\\\"catalog_revision\\\":15,\\\"expected_sha256\\\":\\\"4ce69ee8669268fd047b697e6d903bd915e6ae07619abdebaac2c6eac77cd7ad\\\"},{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hdfrY4uLsCH7DfgPkBMw\\\",\\\"task_id\\\":\\\"tsk_g00VZ1u3kk00D81zMYvb\\\",\\\"snapshot_id\\\":\\\"459ac5fe-a23f-5c58-af37-93d2dae6d0ca\\\",\\\"manifest_sha256\\\":\\\"38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"brief.md\\\",\\\"media_type\\\":\\\"text/markdown\\\",\\\"bytes\\\":1024,\\\"sha256\\\":\\\"4ddd30c51f7fb98d18208a76e19e1739bb3a5b752bba63183778755404505c7c\\\"}},{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hdfrY4uLsCH7DfgPkBMw\\\",\\\"task_id\\\":\\\"tsk_g00VZ1u3kk00D81zMYvb\\\",\\\"snapshot_id\\\":\\\"459ac5fe-a23f-5c58-af37-93d2dae6d0ca\\\",\\\"manifest_sha256\\\":\\\"38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"campaign.csv\\\",\\\"media_type\\\":\\\"text/csv\\\",\\\"bytes\\\":113,\\\"sha256\\\":\\\"2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1\\\"}}]}\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_KnKwGyl6cHrWD3bu\",\"artifact_read_ref\":\"ar_P29GPYibCZCThyzI\"}}],\"complete\":true,\"next_reads\":[]}",
+    "title": "Artifacts (1)",
+    "metadata": {
+      "truncated": false
+    },
+    "time": {
+      "start": 1792900911096,
+      "end": 1792900911684
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_053f32f54006ab68016add7f2efda88191a5a101e00ec70616"
+    }
+  },
+  "orderKey": "v1:0001792900911529:0000000000000031:0000000000000000:part:prt_g0VZ1xVWa00w2U8Oq5uh"
+}

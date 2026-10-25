@@ -1,0 +1,17 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+import {latestAuditSnapshotFiles} from '../../packages/opencorvus/script/audit-snapshot'
+const run='C:/Users/hengu/.codex/opencorvus-marketing-revision-20261025-01',e=path.join(run,'evidence'),dest='D:/myhexin-local/opencorvus/specs/artifacts/2026-10-25-marketing-revision/run-01'
+const read=(p:string)=>JSON.parse(fs.readFileSync(p,'utf8'))
+assert.equal(read(e+'/current.json').task.status,'failed');assert.equal(read(e+'/retirement.json').retired.length,4)
+fs.mkdirSync(dest,{recursive:true})
+for(const dir of ['initial-verification','initial-render','failed-observation-verification','tool-facts'])fs.cpSync(path.join(e,dir),path.join(dest,dir),{recursive:true})
+for(const file of ['current.json','files-ready.json','preparation.json','authority-ready.json','preflight-ready.json','native-host-ready.json','native-host-settled.json','launcher-child-exit.json','shutdown.json','retirement.json','dependency-preflight.json','dependency-preflight.log','creation.json','submission-attempt.json','feedback-attempt.json','feedback-accepted.json','initial-project-head.json','initial-word-verification.json','initial-body-comparison.json','initial-render.json','initial-render.log','initial-visual.json','parallel-frontier.json','renderer-integrity.json','publisher-rejection-original.json','provider-fetch-failures.json','transport-log-evidence.json','observations.jsonl','full-tools-capture.log','independent-input-calculation.json'])fs.copyFileSync(path.join(e,file),path.join(dest,file))
+const audit=read((await latestAuditSnapshotFiles(e,'provider'))[0]);assert.equal(audit.requests.length,360)
+fs.writeFileSync(path.join(dest,'provider.json'),JSON.stringify(audit,null,2))
+fs.mkdirSync(path.join(dest,'checker'),{recursive:true});for(const f of fs.readdirSync(import.meta.dir).filter(f=>/\.(ts|py|ps1)$/.test(f)))fs.copyFileSync(path.join(import.meta.dir,f),path.join(dest,'checker',f+'.txt'))
+const auth=read('C:/Users/hengu/AppData/Local/opencorvus/data/auth.json'),secrets=[auth.openai.info.access,auth.openai.info.refresh].filter(Boolean),hits:string[]=[]
+const scan=(dir:string)=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const f=path.join(dir,entry.name);if(entry.isDirectory())scan(f);else if(secrets.some(s=>fs.readFileSync(f).includes(Buffer.from(s))))hits.push(f)}}
+scan(dest);assert.deepEqual(hits,[]);fs.writeFileSync(path.join(dest,'export-scan.json'),JSON.stringify({secretMatches:0,source:'Current source matches retired copied authority per original retirement; exact access/refresh values compared only in memory'}))
+console.log(JSON.stringify({preservedFailedRun:true,requests:360,secretMatches:0}))

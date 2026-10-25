@@ -1,0 +1,128 @@
+{
+  "id": "prt_g0VZ2L0uK00eK5Gy41rx",
+  "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+  "messageID": "msg_g0VZ2Kzy500q0EvvSUVu",
+  "type": "tool",
+  "callID": "call_62e6051f8043451c86c24ca6ae84c3bc",
+  "tool": "record_fact_check_review",
+  "state": {
+    "status": "completed",
+    "input": {
+      "scope": {
+        "target_session_id": "ses_hVtsNPrkcMSjQeZVsODu",
+        "target_agent": "marketing-growth-strategist",
+        "target_message_id": "msg_g0VZ2KH1N00atrGUQpTi",
+        "target_message_content_hash": "e76c2b6015c4cb1ba3c708a50cada3476abac2935496e2a8a78c59d178d09c08",
+        "items_total": 8,
+        "items_inspected": 8
+      },
+      "verified": [
+        {
+          "claim": "正式growth-strategy revision 21已发布，六项来源完整读取并选择。",
+          "evidence": [
+            {
+              "kind": "code",
+              "pointer": "engine_artifact:art_hasAxlgEEPksG4LaOvfQ@21/source_artifact_locators",
+              "excerpt": "来源包含audience-analysis revision15、channel-analysis revision17、growth-brief revision5、evidence-dossier revision9及原不可变brief.md/campaign.csv；目录与生产者匹配。"
+            }
+          ]
+        },
+        {
+          "claim": "1200元当前上限、3000元旧草案、1900元合成历史成本关系及原值/CPL正确。",
+          "evidence": [
+            {
+              "kind": "code",
+              "pointer": "snapshot:b6c7a53e-2067-5f7e-a19c-1dbb90d0f6df/resources/campaign.csv:1-4",
+              "excerpt": "email,1000,100,20,400；community,2000,120,12,600；search,3000,150,15,900。复算合计6000/370/47/1900；CPL20/50/60及1900/47≈40.43。"
+            },
+            {
+              "kind": "code",
+              "pointer": "snapshot:b6c7a53e-2067-5f7e-a19c-1dbb90d0f6df/resources/brief.md:7",
+              "excerpt": "初始试点预算上限3000元，若本Task内操作方追加更正，以追加原文的当前口径为准并保留更正关系。当前授权请求明确1200元。"
+            }
+          ]
+        },
+        {
+          "claim": "采用任务核查到条件邮件、社区搜索串行备选，预算准备及预留合计1200元。",
+          "evidence": [
+            {
+              "kind": "code",
+              "pointer": "engine_artifact:art_hasAxlgEEPksG4LaOvfQ@21/payload/decisions",
+              "excerpt": "准备与任务核查200、邮件250、社区备选250、搜索备选300、预留200，合计1200；每次只激活一个，预留冻结，缺样本不追样。"
+            }
+          ]
+        },
+        {
+          "claim": "提供约3000汉字报告的结构而未生成最终业务文件。",
+          "evidence": [
+            {
+              "kind": "code",
+              "pointer": "engine_artifact:art_hasAxlgEEPksG4LaOvfQ@21/payload/decisions/最终作者压缩结构建议",
+              "excerpt": "范围及预算关系、四行原值/CPL漏斗表、优先任务、预算表、实验表、未知及交付限制；resources为空，生产者完整工具清单仅技能与Artifact操作。"
+            }
+          ]
+        },
+        {
+          "claim": "需求、能力、名单、成本与样本未知，建议阈值非功效或效果保证。",
+          "evidence": [
+            {
+              "kind": "code",
+              "pointer": "engine_artifact:art_hasAxlgEEPksG4LaOvfQ@21/payload/unknowns",
+              "excerpt": "H1/H2真实存在及重要性未知；功能、价格、名单、社区、费率及资源未知；阈值缺方差、基准与功效设计，小样本仅探索。"
+            }
+          ]
+        },
+        {
+          "claim": "最终同正文MD/纵向Word/阅读文档、解析渲染及独立正文页图复核仍待执行。",
+          "evidence": [
+            {
+              "kind": "code",
+              "pointer": "engine_artifact:art_hasAxlgEEPksG4LaOvfQ@21/payload/unknowns/4",
+              "excerpt": "最终文件、同正文阅读文档、真实Word解析渲染、作者逐页检查与独立最终正文/页图复核均未由本阶段执行。"
+            }
+          ]
+        },
+        {
+          "claim": "本策略生产者未联网外联、投放花费、对外发布或创建Task/Goal，实际支出零。",
+          "evidence": [
+            {
+              "kind": "code",
+              "pointer": "session:ses_hVtsNPrkcMSjQeZVsODu/message:msg_g0VZ2KH1N00atrGUQpTi/causal_part_reference_index",
+              "excerpt": "已分页读取本次完整生产者工具清单：仅skill、capability_search、artifact_search/read/select及内部结构化发布，无网络、费用、文件生成或Task/Goal创建操作。核查限于本次可见生产者执行。"
+            }
+          ]
+        }
+      ],
+      "corrected": [
+        {
+          "claim": "实验的全部指标分母与停止护栏已统一明确。",
+          "correction": "主要指标、质量指标已给分母，但邮件“退订率超过1%”未给分子、分母及统计窗。最终作者应明确为建议规则，例如按版本统计观察期内去重退订人数/该版本成功送达唯一人数，分母为零不可计算；每组100名也应明确为成功送达唯一人数。保留任一投诉/许可问题立即停，不因补口径而弱化。",
+          "severity": "minor",
+          "evidence": [
+            {
+              "kind": "code",
+              "pointer": "engine_artifact:art_hasAxlgEEPksG4LaOvfQ@21/payload/decisions/E邮件消息验证",
+              "excerpt": "指标为去重点击人数/成功送达人数，质量为合格线索/去重落地会话；建议每组100名、固定14天……退订率超过1%……即停。该条未定义退订率。"
+            }
+          ],
+          "impact": "未来安全阈值及样本达标口径存在轻微歧义；不影响历史算术、预算或当前仅本地不执行边界，需在最终正文落实。"
+        }
+      ],
+      "unresolved": [],
+      "overall_verdict": "minor_corrections"
+    },
+    "output": "OK: fact-check review recorded (verified=7, corrected=1, unresolved=0, verdict=minor_corrections)",
+    "title": "",
+    "metadata": {},
+    "time": {
+      "start": 1792906513276,
+      "end": 1792906531793
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0b4afa2d9551686a016add95112b688191ba4ee5a891a0a045"
+    }
+  },
+  "orderKey": "v1:0001792906531271:0000000000000031:0000000000000000:part:prt_g0VZ2L0uK00eK5Gy41rx"
+}

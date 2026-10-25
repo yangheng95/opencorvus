@@ -1,0 +1,40 @@
+import assert from 'node:assert/strict'
+import fs from 'node:fs'
+import path from 'node:path'
+import {execFileSync} from 'node:child_process'
+import {latestAuditSnapshotFiles} from '../../packages/opencorvus/script/audit-snapshot'
+
+import {run,evidence as e,project,iteration} from './config'
+const repo=path.resolve(import.meta.dir,'../..'),dest=path.join(repo,'specs/artifacts/2026-10-25-marketing-revision',`run-${iteration}`)
+fs.mkdirSync(dest,{recursive:true})
+const read=(p:string)=>JSON.parse(fs.readFileSync(p,'utf8'))
+const budgetFile=path.join(e,'budget-authorization.json'),maximumRequests=fs.existsSync(budgetFile)?read(budgetFile).maximumRequests:360
+const first=read(path.join(e,'initial-verification/verification.json')),final=read(path.join(e,'revised-verification/verification.json'))
+assert.equal(first.task.id,final.task.id);assert.equal(first.task.executionLifecycle.epoch,1);assert.equal(final.task.executionLifecycle.epoch,2)
+assert.equal(final.task.status,'completed');assert.deepEqual(first.task.packageRevisionBinding,final.task.packageRevisionBinding)
+for(const phase of ['initial','revised']){
+ const word=read(path.join(e,`${phase}-word-verification.json`)),render=read(path.join(e,`${phase}-render.json`)),visual=read(path.join(e,`${phase}-visual.json`));assert.equal(word.orderedBodyEquality,true);assert.equal(render.exitCode,0);assert.equal(visual.pages.length,render.pages)
+ fs.cpSync(path.join(e,`${phase}-verification`),path.join(dest,`${phase}-verification`),{recursive:true})
+ fs.cpSync(path.join(e,`${phase}-render`),path.join(dest,`${phase}-word-pages`),{recursive:true})
+ for(const suffix of ['word-verification.json','render.json','render.log','visual.json','body-comparison.json'])fs.copyFileSync(path.join(e,`${phase}-${suffix}`),path.join(dest,`${phase}-${suffix}`))
+}
+for(const file of ['preparation.json','files-ready.json','authority-ready.json','preflight-ready.json','preflight-directories.json','dependency-preflight.json','dependency-preflight.log','submission-attempt.json','creation.json','initial-provider.json','feedback-attempt.json','feedback-accepted.json','parallel-frontier.json','source.patch','observations.jsonl','independent-input-calculation.json','independent-revision-review.json','renderer-integrity.json','initial-project-head.json','lineage-verification.json','original-move-outbox.json','media-receipts.json','shutdown.json','native-host-ready.json','native-host-settled.json','launcher-child-exit.json'])fs.copyFileSync(path.join(e,file),path.join(dest,file))
+fs.cpSync(path.join(e,'tool-facts'),path.join(dest,'tool-facts'),{recursive:true})
+fs.mkdirSync(path.join(dest,'inputs'),{recursive:true});for(const file of ['brief.md','campaign.csv','request.txt','tools/runtime.md']){const out=path.join(dest,'inputs',file);fs.mkdirSync(path.dirname(out),{recursive:true});fs.copyFileSync(path.join(project,file),out)}
+fs.mkdirSync(path.join(dest,'checker'),{recursive:true});for(const file of fs.readdirSync(import.meta.dir).filter(f=>/\.(ts|py|ps1)$/.test(f)))fs.copyFileSync(path.join(import.meta.dir,file),path.join(dest,'checker',file+'.txt'))
+fs.writeFileSync(path.join(dest,'project.patch'),execFileSync('git',['diff',read(path.join(e,'preparation.json')).projectHead,'HEAD','--','.'],{cwd:project}))
+const audit=read((await latestAuditSnapshotFiles(e,'provider'))[0]);assert(maximumRequests===null||audit.requests.length<=maximumRequests);assert(audit.requests.every((r:any)=>r.model==='gpt-6.1-sol'&&r.streaming===true&&['settled','fetch_failed'].includes(r.response_reader.state)))
+const requests=audit.requests.map((r:any,index:number)=>({index,model:r.model,streaming:r.streaming,status:r.status,response_reader:r.response_reader,declaredToolNames:r.tool_declarations.entries.flatMap((t:any)=>t.names.filter((n:any)=>n.state==='present').map((n:any)=>n.value))}))
+if(fs.existsSync(path.join(e,'prior-provider.json'))){
+ const prefix=read(path.join(e,'prior-provider.json'));assert.deepEqual(audit.requests.slice(0,prefix.requests.length),prefix.requests)
+ for(const file of ['budget-authorization.json','prior-provider.json','recovery-preparation.json','restored-request-prefix.json'])fs.copyFileSync(path.join(e,file),path.join(dest,file))
+ const service=path.join(dest,'service-01');fs.mkdirSync(service,{recursive:true})
+ for(const file of ['native-host-ready.json','native-host-settled.json','launcher-child-exit.json','startup.json','shutdown.json','preflight-ready.json','authority-ready.json','recovery-shutdown-attempt.json','before-recovery-current.json'])fs.copyFileSync(path.join(e,'service-01',file),path.join(service,file))
+}
+fs.writeFileSync(path.join(dest,'provider.json'),JSON.stringify({maximumRequests,requests},null,2))
+const facts={taskID:final.task.id,projectID:final.task.projectID,packageRevision:final.task.packageRevisionBinding,firstLifecycle:first.task.executionLifecycle,finalLifecycle:final.task.executionLifecycle,initialRequests:read(path.join(e,'initial-provider.json')).requests.length,totalRequests:requests.length,maximumRequests,actualModel:'gpt-6.1-sol',allStreaming:true,allReadersSettled:requests.every(r=>r.response_reader.state==='settled'),readerStates:requests.reduce((a:any,r:any)=>(a[r.response_reader.state]=(a[r.response_reader.state]??0)+1,a),{}),firstDecision:first.completionDecision,finalDecision:final.completionDecision,firstFiles:first.selected,finalFiles:final.selected,firstReadingDocument:first.document,finalReadingDocument:final.document,canonicalFullByteEquality:true,oldFullResourcesReadable:true,landscapeWord:true,projectHead:execFileSync('git',['rev-parse','HEAD'],{cwd:project,encoding:'utf8'}).trim(),projectStatus:execFileSync('git',['status','--short'],{cwd:project,encoding:'utf8'}).trim(),source:'Full real API artifacts, original exact tool facts, independent full-body/byte comparisons, native process receipts and manual image/UI verification'}
+fs.writeFileSync(path.join(dest,'verification.json'),JSON.stringify(facts,null,2))
+const auth=read(path.join(run,'authority/auth.json')),secrets=[auth.openai.info.access,auth.openai.info.refresh].filter(Boolean),hits:string[]=[]
+const scan=(dir:string)=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())scan(file);else if(secrets.some(s=>fs.readFileSync(file).includes(Buffer.from(s))))hits.push(file)}}
+scan(dest);assert.deepEqual(hits,[]);fs.writeFileSync(path.join(dest,'export-scan.json'),JSON.stringify({secretMatches:0,scope:'Every exported file; exact current copied access/refresh values checked only in memory'},null,2))
+console.log(JSON.stringify({archived:true,taskID:facts.taskID,totalRequests:requests.length,firstEpoch:1,finalEpoch:2,secretMatches:0}))

@@ -1,0 +1,38 @@
+{
+  "id": "prt_g0VZ2Qi4u00BNYiF5Jar",
+  "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+  "messageID": "msg_g0VZ2Qe1D00VjiDWtSAR",
+  "type": "tool",
+  "callID": "call_iFo0tmBoc9YYrq1jlawEtHqy",
+  "tool": "bash",
+  "state": {
+    "status": "completed",
+    "input": {
+      "command": "python -c 'from pathlib import Path; import hashlib,csv,io,json; from docx import Document; b=Path(\"campaign.csv\").read_bytes(); assert hashlib.sha256(b).hexdigest()==\"2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1\"; rows=list(csv.DictReader(io.StringIO(b.decode(\"utf-8\")))); nums=[[int(r[k]) for k in [\"impressions\",\"clicks\",\"leads\",\"cost_cny\"]] for r in rows]; total=[sum(r[i] for r in nums) for i in range(4)]; labels=[r[\"channel\"] for r in rows]+[\"合计\"]; allnums=nums+[total]; values=[[n,*map(str,r),format(r[3]/r[2],\".2f\")] for n,r in zip(labels,allnums)]; rates=[[n,format(r[1]/r[0],\".2%\"),format(r[2]/r[1],\".2%\")] for n,r in zip(labels,allnums)]; doc=Document(\"outputs/growth-plan.docx\"); actual=[[c.text for c in r.cells] for r in doc.tables[0].rows][1:]; actualrates=[[c.text for c in r.cells] for r in doc.tables[1].rows][1:]; budget=[int(r.cells[1].text) for r in doc.tables[2].rows][1:] if False else [int(r.cells[1].text) for r in list(doc.tables[2].rows)[1:]]; assert values==actual; assert rates==actualrates; assert sum(budget[:-1])==budget[-1]==1200; print(json.dumps({\"original_CSV_identity_confirmed\":True,\"recomputed_originals_and_CPL\":values,\"recomputed_funnel\":rates,\"exact_Word_table_comparison\":True,\"budget_allocations_including_reserve_and_total\":budget,\"active_plus_preparation\":sum(budget[:4]),\"reserve\":budget[4]},ensure_ascii=False,indent=2))'",
+      "description": "从原不可变CSV复算并逐格核对Word数表"
+    },
+    "output": "{\r\n  \"original_CSV_identity_confirmed\": true,\r\n  \"recomputed_originals_and_CPL\": [\r\n    [\r\n      \"email\",\r\n      \"1000\",\r\n      \"100\",\r\n      \"20\",\r\n      \"400\",\r\n      \"20.00\"\r\n    ],\r\n    [\r\n      \"community\",\r\n      \"2000\",\r\n      \"120\",\r\n      \"12\",\r\n      \"600\",\r\n      \"50.00\"\r\n    ],\r\n    [\r\n      \"search\",\r\n      \"3000\",\r\n      \"150\",\r\n      \"15\",\r\n      \"900\",\r\n      \"60.00\"\r\n    ],\r\n    [\r\n      \"合计\",\r\n      \"6000\",\r\n      \"370\",\r\n      \"47\",\r\n      \"1900\",\r\n      \"40.43\"\r\n    ]\r\n  ],\r\n  \"recomputed_funnel\": [\r\n    [\r\n      \"email\",\r\n      \"10.00%\",\r\n      \"20.00%\"\r\n    ],\r\n    [\r\n      \"community\",\r\n      \"6.00%\",\r\n      \"10.00%\"\r\n    ],\r\n    [\r\n      \"search\",\r\n      \"5.00%\",\r\n      \"10.00%\"\r\n    ],\r\n    [\r\n      \"合计\",\r\n      \"6.17%\",\r\n      \"12.70%\"\r\n    ]\r\n  ],\r\n  \"exact_Word_table_comparison\": true,\r\n  \"budget_allocations_including_reserve_and_total\": [\r\n    200,\r\n    250,\r\n    250,\r\n    300,\r\n    200,\r\n    1200\r\n  ],\r\n  \"active_plus_preparation\": 1000,\r\n  \"reserve\": 200\r\n}\r\n",
+    "title": "从原不可变CSV复算并逐格核对Word数表",
+    "metadata": {
+      "refused": false,
+      "command": "python -c 'from pathlib import Path; import hashlib,csv,io,json; from docx import Document; b=Path(\"campaign.csv\").read_bytes(); assert hashlib.sha256(b).hexdigest()==\"2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1\"; rows=list(csv.DictReader(io.StringIO(b.decode(\"utf-8\")))); nums=[[int(r[k]) for k in [\"impressions\",\"clicks\",\"leads\",\"cost_cny\"]] for r in rows]; total=[sum(r[i] for r in nums) for i in range(4)]; labels=[r[\"channel\"] for r in rows]+[\"合计\"]; allnums=nums+[total]; values=[[n,*map(str,r),format(r[3]/r[2],\".2f\")] for n,r in zip(labels,allnums)]; rates=[[n,format(r[1]/r[0],\".2%\"),format(r[2]/r[1],\".2%\")] for n,r in zip(labels,allnums)]; doc=Document(\"outputs/growth-plan.docx\"); actual=[[c.text for c in r.cells] for r in doc.tables[0].rows][1:]; actualrates=[[c.text for c in r.cells] for r in doc.tables[1].rows][1:]; budget=[int(r.cells[1].text) for r in doc.tables[2].rows][1:] if False else [int(r.cells[1].text) for r in list(doc.tables[2].rows)[1:]]; assert values==actual; assert rates==actualrates; assert sum(budget[:-1])==budget[-1]==1200; print(json.dumps({\"original_CSV_identity_confirmed\":True,\"recomputed_originals_and_CPL\":values,\"recomputed_funnel\":rates,\"exact_Word_table_comparison\":True,\"budget_allocations_including_reserve_and_total\":budget,\"active_plus_preparation\":sum(budget[:4]),\"reserve\":budget[4]},ensure_ascii=False,indent=2))'",
+      "output": "{\r\n  \"original_CSV_identity_confirmed\": true,\r\n  \"recomputed_originals_and_CPL\": [\r\n    [\r\n      \"email\",\r\n      \"1000\",\r\n      \"100\",\r\n      \"20\",\r\n      \"400\",\r\n      \"20.00\"\r\n    ],\r\n    [\r\n      \"community\",\r\n      \"2000\",\r\n      \"120\",\r\n      \"12\",\r\n      \"600\",\r\n      \"50.00\"\r\n    ],\r\n    [\r\n      \"search\",\r\n      \"3000\",\r\n      \"150\",\r\n      \"15\",\r\n      \"900\",\r\n      \"60.00\"\r\n    ],\r\n    [\r\n      \"合计\",\r\n      \"6000\",\r\n      \"370\",\r\n      \"47\",\r\n      \"1900\",\r\n      \"40.43\"\r\n    ]\r\n  ],\r\n  \"recomputed_funnel\": [\r\n    [\r\n      \"email\",\r\n      \"10.00%\",\r\n      \"20.00%\"\r\n    ],\r\n    [\r\n      \"community\",\r\n      \"6.00%\",\r\n      \"10.00%\"\r\n    ],\r\n    [\r\n      \"search\",\r\n      \"5.00%\",\r\n      \"10.00%\"\r\n    ],\r\n    [\r\n      \"合计\",\r\n      \"6.17%\",\r\n      \"12.70%\"\r\n    ]\r\n  ],\r\n  \"exact_Word_table_comparison\": true,\r\n  \"budget_allocations_including_reserve_and_total\": [\r\n    200,\r\n    250,\r\n    250,\r\n    300,\r\n    200,\r\n    1200\r\n  ],\r\n  \"active_plus_preparation\": 1000,\r\n  \"reserve\": 200\r\n}\r\n",
+      "output_bytes": 1012,
+      "exit": 0,
+      "pid": null,
+      "background": false,
+      "description": "从原不可变CSV复算并逐格核对Word数表",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792907870864,
+      "end": 1792907881939
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_026e804364f9cc61016add9a5ec4f887d0b7ef1a7a28cfd68c"
+    }
+  },
+  "orderKey": "v1:0001792907881131:0000000000000031:0000000000000000:part:prt_g0VZ2Qi4u00BNYiF5Jar"
+}

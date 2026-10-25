@@ -1,0 +1,83 @@
+{
+  "id": "prt_g0VZ2dszj00urFxe5VbP",
+  "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+  "messageID": "msg_hY6iX1QMgIftdM5Z5d03",
+  "type": "tool",
+  "callID": "call_90fea36dc129402482292eaa2faa6d22",
+  "tool": "dispatch_agents",
+  "state": {
+    "status": "completed",
+    "input": {
+      "team": [
+        {
+          "name": "原作者横向新版正式交付",
+          "target": "marketing-growth-campaign-writer",
+          "responsibility": "对本轮独立通过的横向Word完成新版不可变正式交付及同正文阅读文档",
+          "boundary": "不再改变已审Word或规范MD；仅MD和Word为正式资源，旧资源继续可读，内部PDF及PNG不交付",
+          "expected_result": "原合同正式新版资源与来源绑定、同正文document@1及真实发布回执",
+          "depends_on": []
+        }
+      ],
+      "dispatches": [
+        {
+          "dispatch": {
+            "target": "marketing-growth-campaign-writer",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "continuation",
+              "authority": {
+                "kind": "prior_dispatch",
+                "continuation_dispatch_id": "art_hIPAVekOKkJCB0r5mwNE"
+              },
+              "guidance": "本轮横向候选已由原独立复核者重新验收通过。读取精确终报ses_hT6WN4CemvWvrDYg7sgb / msg_g0VZ2df2L00M3v0mboqK；自行发现、完整读取选择本轮landscape-file-review、候选、内部验收证据及首次正式campaign-plan和原来源/原audit。现在只完成原包合同下新版不可变正式交付及逐字相同document@1，不再修改已审Word、MD或生成器，也不重渲染不同版本。独立复核确认MD9991字节与首次一致；原Word全部原有文字和顺序保留、76单元格一致；唯一新增空布局分隔段（30至31顶层段落）可接受，应如实披露为布局而非声称段落数不变。已审横向Word六页、四表正确重复表头、表头首行衔接与不拆行、黑标题无装饰线均通过。本次正式业务资源只outputs/growth-plan.md和横向outputs/growth-plan.docx，保留首次资源可读，PDF/六页PNG仅内部验收，不生成HTML。按现有包支持的更新/修订机制交付，不伪造类型或绕过只读/唯一约束；若已有规范campaign-plan不可重复创建，读取选择原规范并用实际受支持的资源更新或补充新版交付合同，明确关联旧规范与新资源，不重复造平行规范计划。阅读文档必须逐字采用首次冻结MD全部正文，保留历史“纵向Word”和待审字样，在外层说明现在实际交付横向、这两处属于冻结历史文字，本轮独立复核已通过；不要只改阅读文档文字。再次只读确认所发布确切资源就是本轮通过候选、原资源完整保留，使用真实解析/字节比较不以自己生成预期哈希代替。报告确切正式发布、阅读文档回执与一致性、旧资源可读性及任何未完成项。全程本地，不联网外联花费，不改业务，不创建Task/Goal。",
+              "evidence_locators": [
+                {
+                  "source": "session_message",
+                  "session_id": "ses_hT6WN4CemvWvrDYg7sgb",
+                  "message_id": "msg_g0VZ2df2L00M3v0mboqK"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "output": "{\"members\":[{\"member_index\":0,\"name\":\"原作者横向新版正式交付\",\"target\":\"marketing-growth-campaign-writer\",\"status\":\"completed\",\"outcome\":{\"kind\":\"accepted\",\"session_id\":\"ses_hEwp3inYGnK5nYF8mpQW\",\"dispatch_lineage_id\":\"art_g0VZ2dxRo00M20IFO8zE\"}}]}",
+    "title": "Settled frontier (1/1)",
+    "metadata": {
+      "frontier_size": 1,
+      "completed_count": 1,
+      "member_names": [
+        "原作者横向新版正式交付"
+      ],
+      "targets": [
+        "marketing-growth-campaign-writer"
+      ],
+      "members": [
+        {
+          "member_index": 0,
+          "name": "原作者横向新版正式交付",
+          "target": "marketing-growth-campaign-writer",
+          "status": "completed",
+          "outcome": {
+            "kind": "accepted",
+            "session_id": "ses_hEwp3inYGnK5nYF8mpQW",
+            "dispatch_lineage_id": "art_g0VZ2dxRo00M20IFO8zE"
+          }
+        }
+      ]
+    },
+    "time": {
+      "start": 1792911011091,
+      "end": 1792911032018
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0c5ae752ff6d24e1016adda6a30680819183c1a02ac284cd7f"
+    }
+  },
+  "orderKey": "v1:0001792911027883:0000000000000031:0000000000000000:part:prt_g0VZ2dszj00urFxe5VbP"
+}

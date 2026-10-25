@@ -1,0 +1,76 @@
+{
+  "id": "prt_g0VZ2aykQ00sRPRxJ2db",
+  "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+  "messageID": "msg_g0VZ2aw6c00XDNQ1vil9",
+  "type": "tool",
+  "callID": "call_mYKSeJKK4JbNAboLLSvMzlr3",
+  "tool": "artifact_snapshot",
+  "state": {
+    "status": "completed",
+    "input": {
+      "files": [
+        {
+          "path": "qa/revised/growth-plan.pdf",
+          "media_type": "application/pdf"
+        },
+        {
+          "path": "qa/revised/page-1.png",
+          "media_type": "image/png"
+        },
+        {
+          "path": "qa/revised/page-2.png",
+          "media_type": "image/png"
+        },
+        {
+          "path": "qa/revised/page-3.png",
+          "media_type": "image/png"
+        },
+        {
+          "path": "qa/revised/page-4.png",
+          "media_type": "image/png"
+        },
+        {
+          "path": "qa/revised/page-5.png",
+          "media_type": "image/png"
+        },
+        {
+          "path": "qa/revised/page-6.png",
+          "media_type": "image/png"
+        },
+        {
+          "path": "qa/revised/content-comparison.json",
+          "media_type": "application/json"
+        },
+        {
+          "path": "qa/revised/complete-ordered-comparison.json",
+          "media_type": "application/json"
+        },
+        {
+          "path": "qa/revised/page-observations.json",
+          "media_type": "application/json"
+        },
+        {
+          "path": "qa/scratch/revise_landscape.py",
+          "media_type": "text/x-python"
+        }
+      ]
+    },
+    "output": "{\"resource_set\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"a501edcd-9382-5ba3-aef1-f68e3a4cd321\",\"manifest_sha256\":\"8ada2254d0337337190034ddfcbeac4192da6cdca77a48a57f6760f1606c42f0\"},\"tree\":\"resources\"},\"locators\":[{\"role\":\"snapshot\",\"locator\":{\"source\":\"task_artifact_snapshot\",\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"a501edcd-9382-5ba3-aef1-f68e3a4cd321\",\"manifest_sha256\":\"8ada2254d0337337190034ddfcbeac4192da6cdca77a48a57f6760f1606c42f0\"}},\"artifact_locator_ref\":\"al_ncA3zhTZ1ts2xAXw\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"a501edcd-9382-5ba3-aef1-f68e3a4cd321\",\"manifest_sha256\":\"8ada2254d0337337190034ddfcbeac4192da6cdca77a48a57f6760f1606c42f0\"},\"tree\":\"resources\",\"path\":\"qa/revised/complete-ordered-comparison.json\",\"bytes\":29252,\"sha256\":\"b80a33bf8b2e7f44bdc1c1f72278407c78aed371a13c83a36478889695a0e416\",\"media_type\":\"application/json\"}},\"artifact_locator_ref\":\"al_AwlWzR44BTqgw-bA\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"a501edcd-9382-5ba3-aef1-f68e3a4cd321\",\"manifest_sha256\":\"8ada2254d0337337190034ddfcbeac4192da6cdca77a48a57f6760f1606c42f0\"},\"tree\":\"resources\",\"path\":\"qa/revised/content-comparison.json\",\"bytes\":1025,\"sha256\":\"0bf35cec7916ca1b62eef3730e985562aa0953af0b1adc90490d24a7ba75ae89\",\"media_type\":\"application/json\"}},\"artifact_locator_ref\":\"al_T5A8I2zoYGhSnFMS\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"a501edcd-9382-5ba3-aef1-f68e3a4cd321\",\"manifest_sha256\":\"8ada2254d0337337190034ddfcbeac4192da6cdca77a48a57f6760f1606c42f0\"},\"tree\":\"resources\",\"path\":\"qa/revised/growth-plan.pdf\",\"bytes\":365438,\"sha256\":\"d3ed082cdca5613f03776686bdad52262bc3d624e7ab2b31ba5208bfddb6d8e3\",\"media_type\":\"application/pdf\"}},\"artifact_locator_ref\":\"al_gCdiQaJGzz6nDJ2a\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"a501edcd-9382-5ba3-aef1-f68e3a4cd321\",\"manifest_sha256\":\"8ada2254d0337337190034ddfcbeac4192da6cdca77a48a57f6760f1606c42f0\"},\"tree\":\"resources\",\"path\":\"qa/revised/page-1.png\",\"bytes\":233127,\"sha256\":\"d93138bf3c61f6ec2e41439337b333023f26e2bb277d034558747d311d376aa8\",\"media_type\":\"image/png\"}},\"artifact_locator_ref\":\"al_rfKgUiMuBr0whM7m\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"a501edcd-9382-5ba3-aef1-f68e3a4cd321\",\"manifest_sha256\":\"8ada2254d0337337190034ddfcbeac4192da6cdca77a48a57f6760f1606c42f0\"},\"tree\":\"resources\",\"path\":\"qa/revised/page-2.png\",\"bytes\":112110,\"sha256\":\"0e7aa4d479713aa7d2eda428f1bba6f8fec676c1f5c63c7dd23c0c4394461f8d\",\"media_type\":\"image/png\"}},\"artifact_locator_ref\":\"al_2XJsdvuj1cJppZfp\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"a501edcd-9382-5ba3-aef1-f68e3a4cd321\",\"manifest_sha256\":\"8ada2254d0337337190034ddfcbeac4192da6cdca77a48a57f6760f1606c42f0\"},\"tree\":\"resources\",\"path\":\"qa/revised/page-3.png\",\"bytes\":266068,\"sha256\":\"a84980e2651706d4c5b47143ff33aadc0c6f70fd81213196df9a96016613d6e1\",\"media_type\":\"image/png\"}},\"artifact_locator_ref\":\"al_4lta7v9fOeXyohGw\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"a501edcd-9382-5ba3-aef1-f68e3a4cd321\",\"manifest_sha256\":\"8ada2254d0337337190034ddfcbeac4192da6cdca77a48a57f6760f1606c42f0\"},\"tree\":\"resources\",\"path\":\"qa/revised/page-4.png\",\"bytes\":311715,\"sha256\":\"471c784e1dc1963a8eedb2172d6241aebb1a3f1c4fbe11ae974ad0349814b91f\",\"media_type\":\"image/png\"}},\"artifact_locator_ref\":\"al_Pm0b5TIC0ZSGmTma\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"a501edcd-9382-5ba3-aef1-f68e3a4cd321\",\"manifest_sha256\":\"8ada2254d0337337190034ddfcbeac4192da6cdca77a48a57f6760f1606c42f0\"},\"tree\":\"resources\",\"path\":\"qa/revised/page-5.png\",\"bytes\":205508,\"sha256\":\"2ceb9f8f10bf93c9bdbe1786465bff646e1ff1eb745021663d4bfb35eadedbaf\",\"media_type\":\"image/png\"}},\"artifact_locator_ref\":\"al_sCUt7A8mPs4QtZZC\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"a501edcd-9382-5ba3-aef1-f68e3a4cd321\",\"manifest_sha256\":\"8ada2254d0337337190034ddfcbeac4192da6cdca77a48a57f6760f1606c42f0\"},\"tree\":\"resources\",\"path\":\"qa/revised/page-6.png\",\"bytes\":329793,\"sha256\":\"fee276e516ed91b8b1158dee3410fb95cea8df552a2d782789f97cdda1377761\",\"media_type\":\"image/png\"}},\"artifact_locator_ref\":\"al_8M3iSijmVLfdckJB\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"a501edcd-9382-5ba3-aef1-f68e3a4cd321\",\"manifest_sha256\":\"8ada2254d0337337190034ddfcbeac4192da6cdca77a48a57f6760f1606c42f0\"},\"tree\":\"resources\",\"path\":\"qa/revised/page-observations.json\",\"bytes\":2363,\"sha256\":\"e78a139f40ba49c98901edea3b88411dffdd153e7b9cdec3fdc3cfd5c15a6c18\",\"media_type\":\"application/json\"}},\"artifact_locator_ref\":\"al_7lukIJjYSdOodvNy\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"a501edcd-9382-5ba3-aef1-f68e3a4cd321\",\"manifest_sha256\":\"8ada2254d0337337190034ddfcbeac4192da6cdca77a48a57f6760f1606c42f0\"},\"tree\":\"resources\",\"path\":\"qa/scratch/revise_landscape.py\",\"bytes\":6298,\"sha256\":\"c86f1b345c8423da928d0d33db2a77ce706f35acbd73904f0447dbf8bd496bd1\",\"media_type\":\"text/x-python\"}},\"artifact_locator_ref\":\"al_cVPZgywh3LOCF3Yw\"}],\"resource_count\":11}",
+    "title": "Published Artifact snapshot (11 files)",
+    "metadata": {
+      "truncated": false,
+      "snapshotID": "a501edcd-9382-5ba3-aef1-f68e3a4cd321",
+      "resources": 11
+    },
+    "time": {
+      "start": 1792910318222,
+      "end": 1792910324412
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0f6acc12fd549126016adda3ee278c87d09de23045fe3a88b3"
+    }
+  },
+  "orderKey": "v1:0001792910323833:0000000000000031:0000000000000000:part:prt_g0VZ2aykQ00sRPRxJ2db"
+}

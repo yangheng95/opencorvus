@@ -52,7 +52,15 @@ function writeSelectedMessageToTree(event: any, sourceEvent: any = event): void 
   const sourceKey = selectedConversationAgentSourceKey(sourceEvent)
   if (!sourceKey) return
   publishSubagentConversationUpdate({ kind: "live", event })
-  if (event?.type === "message.updated") {
+  if (event?.type === "message.moved") {
+    // A Move is the complete, original target bundle, including its user
+    // input. Feed those same facts to member projections after the tree move.
+    applyLiveConversationAgentMessageUpdated(sourceKey, event)
+    const properties = event.properties ?? event.payload
+    for (const part of properties.parts) {
+      applyLiveConversationAgentPartUpdated(sourceKey, { ...event, properties: { ...properties, part } })
+    }
+  } else if (event?.type === "message.updated") {
     applyLiveConversationAgentMessageUpdated(sourceKey, event)
   } else if (event?.type === "message.removed") {
     applyLiveConversationAgentMessageRemoved(sourceKey, event)

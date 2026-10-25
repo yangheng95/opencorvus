@@ -1,0 +1,44 @@
+{
+  "id": "prt_g0VZ27Cqo006vLWbDU2u",
+  "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+  "messageID": "msg_g0VZ2784e00FtV1zd7AZ",
+  "type": "tool",
+  "callID": "call_tcQZtm26DnO8i8FPa74x6KFG",
+  "tool": "artifact_read",
+  "state": {
+    "status": "completed",
+    "input": {
+      "reads": [
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_P80af6x5Hs7mViJt",
+          "byte_offset": 8191,
+          "max_bytes": 16000,
+          "delivery": "inline"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_FbgMlftWOasIwT6j",
+          "byte_offset": 8190,
+          "max_bytes": 16000,
+          "delivery": "inline"
+        }
+      ]
+    },
+    "output": "{\"results\":[{\"request_index\":0,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"b0ee943a-6299-5d5f-a099-5426e7475580\",\"manifest_sha256\":\"716b4ea0754df89850fc34487d3b7b888b1cf5d2dc1b1affd00eaf26f333efe5\"},\"tree\":\"resources\",\"path\":\"outputs/growth-plan.md\",\"media_type\":\"text/markdown\",\"bytes\":10366,\"sha256\":\"fd9682e65a7fe3dd7369a536343d193d302138dc2e480604812025993e3ebb6b\"}},\"media_type\":\"text/markdown\",\"byte_start\":8191,\"byte_end\":10366,\"next_offset\":null,\"total_bytes\":10366,\"complete\":true,\"sha256\":\"fd9682e65a7fe3dd7369a536343d193d302138dc2e480604812025993e3ebb6b\",\"text\":\"止、修订或继续的理由。\\n\\n复盘应把三类失败分开：需求证据不足，返回情境判断；测量失败，先修复记录口径；渠道无有效回应，检查成功送达或真实访问与表单步骤。一次只修订一个主要问题，并说明新一轮需要什么授权和证据。不得因未达门槛而删除退出者、延长窗口直至出现正结果，或把原计划样本改写为已完成样本。即使达到学习门槛，也要保留负反馈与费用限制，下一轮需重新论证，而不是把小样本成功当成扩量许可。\\n\\n## 六、测量、未知与交付依据\\n\\n未来漏斗候选为去重团队线索→合格线索→激活→付费，后两级定义由产品负责人另行冻结。新CPL=同期可归属实际成本÷去重线索；合格线索成本用同口径成本÷去重合格线索，同时另报含人力全试点总成本÷合格线索，披露分摊。完整CAC须用同队列同期间全部获客成本÷新增付费客户；缺客户数据不计算。\\n\\n归因候选为7天点击后末次非直接触点，保留首次来源对照，未归因单列，不做浏览归因或增量宣称；7天不是已知购买周期。同团队试点只计一条线索，跨渠道重复标记，历史不回填去重。所有未来结果须报告实际暴露、退出和负反馈，不只呈现达标项。\\n\\n未知包括真实需求频率、行业地域、价格、功能可行性、购买周期、收入留存、可接受CPL、名单许可、社群准入、人员工时及报价。材料已完整，未知不以外查或补造填补；当前只能形成决策方案，不能认定真实市场适配或经济可行。\\n\\n来源：完整读取原始不可变快照459ac5fe-a23f-5c58-af37-93d2dae6d0ca中的brief.md、campaign.csv；日期均依材料为2026年10月24日。范围、证据、独立受众/渠道分析、汇合策略及独立策略审计依次交接，版本为5、9、15/16、21、25；读取日为2026年10月25日。已采纳审计的单情境保留条件。离线文档方法来自同快照tools/runtime.md及tools/render_docx.py；正文与真实页图仍须独立复核后，才按原包正式交付。\\n\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_P80af6x5Hs7mViJt\",\"artifact_read_ref\":\"ar_R2KS5f-9FMGRaH-B\"}},{\"request_index\":1,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"b0ee943a-6299-5d5f-a099-5426e7475580\",\"manifest_sha256\":\"716b4ea0754df89850fc34487d3b7b888b1cf5d2dc1b1affd00eaf26f333efe5\"},\"tree\":\"resources\",\"path\":\"outputs/growth-plan.html\",\"media_type\":\"text/html\",\"bytes\":11491,\"sha256\":\"a7198587829d04222b0f6c0be1f2e55707055a87d6a68aa6902faa37ca5aaee7\"}},\"media_type\":\"text/html\",\"byte_start\":8190,\"byte_end\":11491,\"next_offset\":null,\"total_bytes\":11491,\"complete\":true,\"sha256\":\"a7198587829d04222b0f6c0be1f2e55707055a87d6a68aa6902faa37ca5aaee7\",\"text\":\"美化分母；凑不满6份报实际数。总体通过只允许选择主情境，不证明付费意愿；两者均过时为减少工作量先选A，不宣称A胜出。未达总体门槛时，若只保留一个情境，该情境仍须有自身至少2/3的具体困难证据，并记录样本、反例及保留理由；不得写为总体通过。没有足够自身证据则停止渠道学习。</p><p>测量通过且存在可保留情境后，第2—3周才考虑单渠道；不因日历到期自动前进。合格线索候选定义为目标小型团队、有具体整理需求、明确自愿继续评估，事前冻结，不事后放宽。达标仅进入人工评议，不自动扩量；未达先诊断触达、价值与表单，不追凑数量。</p><p>community替代时，以固定标记链接最多20名去重落地访客作暴露，沿用2条线索且1条合格、14天或400元上限；社群成员总数不是样本，分母与email不同，不能直接判胜负。无许可、投诉、隐私暴露或误导承诺立即停。每周核成本和异常，每个关卡记录停止、修订或继续的理由。</p><p>复盘应把三类失败分开：需求证据不足，返回情境判断；测量失败，先修复记录口径；渠道无有效回应，检查成功送达或真实访问与表单步骤。一次只修订一个主要问题，并说明新一轮需要什么授权和证据。不得因未达门槛而删除退出者、延长窗口直至出现正结果，或把原计划样本改写为已完成样本。即使达到学习门槛，也要保留负反馈与费用限制，下一轮需重新论证，而不是把小样本成功当成扩量许可。</p><h2>六、测量、未知与交付依据</h2><p>未来漏斗候选为去重团队线索→合格线索→激活→付费，后两级定义由产品负责人另行冻结。新CPL=同期可归属实际成本÷去重线索；合格线索成本用同口径成本÷去重合格线索，同时另报含人力全试点总成本÷合格线索，披露分摊。完整CAC须用同队列同期间全部获客成本÷新增付费客户；缺客户数据不计算。</p><p>归因候选为7天点击后末次非直接触点，保留首次来源对照，未归因单列，不做浏览归因或增量宣称；7天不是已知购买周期。同团队试点只计一条线索，跨渠道重复标记，历史不回填去重。所有未来结果须报告实际暴露、退出和负反馈，不只呈现达标项。</p><p>未知包括真实需求频率、行业地域、价格、功能可行性、购买周期、收入留存、可接受CPL、名单许可、社群准入、人员工时及报价。材料已完整，未知不以外查或补造填补；当前只能形成决策方案，不能认定真实市场适配或经济可行。</p><p>来源：完整读取原始不可变快照459ac5fe-a23f-5c58-af37-93d2dae6d0ca中的brief.md、campaign.csv；日期均依材料为2026年10月24日。范围、证据、独立受众/渠道分析、汇合策略及独立策略审计依次交接，版本为5、9、15/16、21、25；读取日为2026年10月25日。已采纳审计的单情境保留条件。离线文档方法来自同快照tools/runtime.md及tools/render_docx.py；正文与真实页图仍须独立复核后，才按原包正式交付。</p></body></html>\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_FbgMlftWOasIwT6j\",\"artifact_read_ref\":\"ar__irT9-C3veqAQid-\"}}],\"complete\":true,\"next_reads\":[]}",
+    "title": "Artifacts (2)",
+    "metadata": {
+      "truncated": false
+    },
+    "time": {
+      "start": 1792903222594,
+      "end": 1792903227038
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0100246c8b7daa25016add883653c487d0a454d33ebe694285"
+    }
+  },
+  "orderKey": "v1:0001792903224561:0000000000000031:0000000000000000:part:prt_g0VZ27Cqo006vLWbDU2u"
+}

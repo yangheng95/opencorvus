@@ -1,0 +1,40 @@
+{
+  "id": "prt_g0VZ2ONle00wONvPVpLt",
+  "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+  "messageID": "msg_g0VZ2OLU900o5Wl6092y",
+  "type": "tool",
+  "callID": "call_36c68188a27c4ad7a66dfea6d169a27f",
+  "tool": "artifact_snapshot",
+  "state": {
+    "status": "completed",
+    "input": {
+      "files": [
+        {
+          "path": "outputs/growth-plan.md",
+          "media_type": "text/markdown"
+        },
+        {
+          "path": "outputs/growth-plan.docx",
+          "media_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        }
+      ]
+    },
+    "output": "{\"resource_set\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"19df3dd4-7067-562d-ac01-42acf9bfc56d\",\"manifest_sha256\":\"4ce8ebb684b325eaffb2412ccc21f52c55c6a03872e1e3f116700c20a933870c\"},\"tree\":\"resources\"},\"locators\":[{\"role\":\"snapshot\",\"locator\":{\"source\":\"task_artifact_snapshot\",\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"19df3dd4-7067-562d-ac01-42acf9bfc56d\",\"manifest_sha256\":\"4ce8ebb684b325eaffb2412ccc21f52c55c6a03872e1e3f116700c20a933870c\"}},\"artifact_locator_ref\":\"al_AVJnNcv-YxXV7wDQ\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"19df3dd4-7067-562d-ac01-42acf9bfc56d\",\"manifest_sha256\":\"4ce8ebb684b325eaffb2412ccc21f52c55c6a03872e1e3f116700c20a933870c\"},\"tree\":\"resources\",\"path\":\"outputs/growth-plan.docx\",\"bytes\":42433,\"sha256\":\"207561119225d920a84880620c7e05b60f443911195afa7fc4bc90610122060a\",\"media_type\":\"application/vnd.openxmlformats-officedocument.wordprocessingml.document\"}},\"artifact_locator_ref\":\"al_WNArCy8WmsRVq16w\"},{\"role\":\"resource\",\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"19df3dd4-7067-562d-ac01-42acf9bfc56d\",\"manifest_sha256\":\"4ce8ebb684b325eaffb2412ccc21f52c55c6a03872e1e3f116700c20a933870c\"},\"tree\":\"resources\",\"path\":\"outputs/growth-plan.md\",\"bytes\":9991,\"sha256\":\"2a03896811a36347f08c9eba2916c1e7e07b2695aa042eecf21bf8e8b2ddbc61\",\"media_type\":\"text/markdown\"}},\"artifact_locator_ref\":\"al_2QYVtgtxwh1e2Geh\"}],\"resource_count\":2}",
+    "title": "Published Artifact snapshot (2 files)",
+    "metadata": {
+      "truncated": false,
+      "snapshotID": "19df3dd4-7067-562d-ac01-42acf9bfc56d",
+      "resources": 2
+    },
+    "time": {
+      "start": 1792907316134,
+      "end": 1792907316900
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0e2e78a8c7c066de016add983410e08191ab58ea8ee24e8342"
+    }
+  },
+  "orderKey": "v1:0001792907316454:0000000000000031:0000000000000000:part:prt_g0VZ2ONle00wONvPVpLt"
+}

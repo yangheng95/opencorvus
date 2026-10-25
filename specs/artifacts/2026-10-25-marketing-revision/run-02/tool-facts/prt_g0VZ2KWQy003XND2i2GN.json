@@ -1,0 +1,85 @@
+{
+  "id": "prt_g0VZ2KWQy003XND2i2GN",
+  "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+  "messageID": "msg_h0aZo4DBFW3Uzyv7f0DE",
+  "type": "tool",
+  "callID": "call_889ec54dc3b746749ba47f8d9c0e8816",
+  "tool": "dispatch_agents",
+  "state": {
+    "status": "completed",
+    "input": {
+      "team": [
+        {
+          "name": "独立策略复核",
+          "target": "marketing-growth-fact-checker",
+          "responsibility": "依据原始请求和不可变输入独立复核策略",
+          "boundary": "只审查，不代写或改策略及最终正文；本轮不冒充尚不存在的Word页图验收",
+          "expected_result": "正式audit，逐项结论、必要修正及最终交付待验项",
+          "depends_on": [
+            "汇合营销策略"
+          ]
+        }
+      ],
+      "dispatches": [
+        {
+          "dispatch": {
+            "target": "marketing-growth-fact-checker",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "initial",
+              "workflow_subject": {
+                "kind": "virtual_workflow",
+                "workflow_id": "marketing-growth-campaign",
+                "node_id": "marketing-growth-fact-checker"
+              },
+              "use_worktree": false,
+              "input": {
+                "target_session_id": "ses_hVtsNPrkcMSjQeZVsODu",
+                "target_message_id": "msg_g0VZ2KH1N00atrGUQpTi",
+                "target_agent": "marketing-growth-strategist",
+                "reason": "请独立审查该策略终报及自行发现的正式growth-strategy，并按原包发布audit。由原始任务授权及原不可变brief.md/campaign.csv独立推导应有结果，完整读取选择所需策略类型前驱、全部语义证据，不仅确认生产者结论。复核三渠道及合计曝光/点击/线索/成本/CPL和分母、1200元当前上限/3000元旧草案/1900元合成历史成本关系、观察假设未知、无伪造市场产品能力或效果因果承诺、预算准备预留及实验角色/分配/指标/样本阈值/停止/下一决策的一致性。材料只有三行合成记录且已完整，不联网外联/投放花费/对外发布，不创建Task或Goal，不重复研究扩写。最终规范正文约3000汉字outputs/growth-plan.md、同正文纵向outputs/growth-plan.docx和同正文阅读文档，正式文件只MD和Word，不HTML；黑色标题无装饰线、表格不截断，真实渲染作者逐页查看后独立复核最终正文及真实页图再由原作者正式交付。当前尚无最终文件和页图，不将未发生的最终验收判作已经通过；明确本轮仅策略审查，后续还将继续你独立检查实际最终正文、真实解析Word和所有页图。把需要作者落实的修正与未发生的交付验收分开，简明报告，保持审查独立，不编辑生产物。"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "output": "{\"members\":[{\"member_index\":0,\"name\":\"独立策略复核\",\"target\":\"marketing-growth-fact-checker\",\"status\":\"completed\",\"outcome\":{\"kind\":\"accepted\",\"session_id\":\"ses_hT6WN4CemvWvrDYg7sgb\",\"dispatch_lineage_id\":\"art_g0VZ2KZ8I00mWDIazrQJ\"}}]}",
+    "title": "Settled frontier (1/1)",
+    "metadata": {
+      "frontier_size": 1,
+      "completed_count": 1,
+      "member_names": [
+        "独立策略复核"
+      ],
+      "targets": [
+        "marketing-growth-fact-checker"
+      ],
+      "members": [
+        {
+          "member_index": 0,
+          "name": "独立策略复核",
+          "target": "marketing-growth-fact-checker",
+          "status": "completed",
+          "outcome": {
+            "kind": "accepted",
+            "session_id": "ses_hT6WN4CemvWvrDYg7sgb",
+            "dispatch_lineage_id": "art_g0VZ2KZ8I00mWDIazrQJ"
+          }
+        }
+      ]
+    },
+    "time": {
+      "start": 1792906396136,
+      "end": 1792906407250
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_05b507e1e70dbbaf016add949c0d8c8191a95218a92844f168"
+    }
+  },
+  "orderKey": "v1:0001792906406070:0000000000000031:0000000000000000:part:prt_g0VZ2KWQy003XND2i2GN"
+}

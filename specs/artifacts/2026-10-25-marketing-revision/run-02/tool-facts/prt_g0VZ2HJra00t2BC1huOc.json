@@ -1,0 +1,44 @@
+{
+  "id": "prt_g0VZ2HJra00t2BC1huOc",
+  "sessionID": "ses_hlWsp1ODDcJVHxYWj1gJ",
+  "messageID": "msg_g0VZ2HIgl00w1vatEjwX",
+  "type": "tool",
+  "callID": "call_f5bff34c51854674b7da3930c4cd1214",
+  "tool": "capability_search",
+  "state": {
+    "status": "error",
+    "input": {
+      "exact_refs": [
+        {
+          "kind": "tool",
+          "source": "package",
+          "owner_ref": "marketing-growth",
+          "local_ref": "pkg_tool__marketing_growth_shared_publish_marketin__9d2b7cfbc799"
+        }
+      ],
+      "queries": [],
+      "limit": 1
+    },
+    "failure": {
+      "kind": "tool-input-invalid",
+      "name": "tool-input-invalid",
+      "message": "AI_InvalidToolInputError: Invalid input for tool capability_search: AI_TypeValidationError: Type validation failed: Value: {\"exact_refs\":[{\"kind\":\"tool\",\"source\":\"package\",\"owner_ref\":\"marketing-growth\",\"local_ref\":\"pkg_tool__marketing_growth_shared_publish_marketin__9d2b7cfbc799\"}],\"queries\":[],\"limit\":1}.\nError message: [\n  {\n    \"origin\": \"array\",\n    \"code\": \"too_small\",\n    \"minimum\": 1,\n    \"inclusive\": true,\n    \"path\": [\n      \"queries\"\n    ],\n    \"message\": \"Too small: expected array to have >=1 items\"\n  }\n]",
+      "originSite": "session.processor.tool-error",
+      "classification": "tool-input-invalid",
+      "data": {
+        "toolCallId": "call_f5bff34c51854674b7da3930c4cd1214",
+        "toolName": "capability_search"
+      }
+    },
+    "time": {
+      "start": 1792905632830,
+      "end": 1792905633309
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0d6dda776aa554e4016add91a0bd2081919c14c4ee6871ca47"
+    }
+  },
+  "orderKey": "v1:0001792905633300:0000000000000031:0000000000000000:part:prt_g0VZ2HJra00t2BC1huOc"
+}

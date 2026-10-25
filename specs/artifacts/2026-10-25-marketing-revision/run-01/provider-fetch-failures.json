@@ -1,0 +1,11 @@
+[
+  {
+    "index": 315,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "response_reader": {
+      "boundary": "provider-source-reader",
+      "state": "fetch_failed"
+    }
+  }
+]

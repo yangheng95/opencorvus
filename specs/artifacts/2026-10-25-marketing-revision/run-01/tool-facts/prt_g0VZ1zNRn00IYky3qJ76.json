@@ -1,0 +1,38 @@
+{
+  "id": "prt_g0VZ1zNRn00IYky3qJ76",
+  "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+  "messageID": "msg_g0VZ1zMVh00nz22dUbkq",
+  "type": "tool",
+  "callID": "call_6b58749505554f0c838925a92cb78af8",
+  "tool": "bash",
+  "state": {
+    "status": "completed",
+    "input": {
+      "command": "python tools/build_growth_documents.py --verify-only",
+      "description": "交付前重开Word和阅读文件复验正文"
+    },
+    "output": "{\"method\": \"Parse MD headings/paragraphs/table rows; reopen DOCX body XML in document order and parse HTML independently. Exact ordered text and cell comparison; no digest shortcut.\", \"semantic_blocks\": 33, \"tables\": 3, \"table_cells\": 70, \"chinese_characters\": 2791, \"md_docx_html_sequence_equal\": true, \"mirror_equal\": true, \"all_sections_portrait\": true, \"all_paragraph_runs_black\": true}\r\n",
+    "title": "交付前重开Word和阅读文件复验正文",
+    "metadata": {
+      "refused": false,
+      "command": "python tools/build_growth_documents.py --verify-only",
+      "output": "{\"method\": \"Parse MD headings/paragraphs/table rows; reopen DOCX body XML in document order and parse HTML independently. Exact ordered text and cell comparison; no digest shortcut.\", \"semantic_blocks\": 33, \"tables\": 3, \"table_cells\": 70, \"chinese_characters\": 2791, \"md_docx_html_sequence_equal\": true, \"mirror_equal\": true, \"all_sections_portrait\": true, \"all_paragraph_runs_black\": true}\r\n",
+      "output_bytes": 392,
+      "exit": 0,
+      "pid": null,
+      "background": false,
+      "description": "交付前重开Word和阅读文件复验正文",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792901356703,
+      "end": 1792901357896
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_00ce2268f82760b0016add80ec96ec81919f80fa7211b30411"
+    }
+  },
+  "orderKey": "v1:0001792901357225:0000000000000031:0000000000000000:part:prt_g0VZ1zNRn00IYky3qJ76"
+}

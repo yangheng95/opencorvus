@@ -1,0 +1,35 @@
+{
+  "id": "prt_g0VZ1z4k000payC446pd",
+  "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+  "messageID": "msg_g0VZ1z3wY002DVUGMiSo",
+  "type": "tool",
+  "callID": "call_8aa3ef4ac8704fa999d7c9eb883ca173",
+  "tool": "read",
+  "state": {
+    "status": "completed",
+    "input": {
+      "filePath": "qa/initial"
+    },
+    "output": "<path>C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\project\\qa\\initial</path>\n<type>directory</type>\n<entries>\ngrowth-plan.pdf\npage-1.png\npage-2.png\npage-3.png\npage-4.png\n\n(5 entries)\n</entries>",
+    "title": "qa\\initial",
+    "metadata": {
+      "preview": "growth-plan.pdf\npage-1.png\npage-2.png\npage-3.png\npage-4.png",
+      "truncated": false,
+      "loaded": [],
+      "readType": "directory",
+      "offset": 1,
+      "lines": 5,
+      "totalLines": 5
+    },
+    "time": {
+      "start": 1792901284796,
+      "end": 1792901285178
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0328644c38a72752016add80a4abc48191867b1dbf1c617f91"
+    }
+  },
+  "orderKey": "v1:0001792901284987:0000000000000031:0000000000000000:part:prt_g0VZ1z4k000payC446pd"
+}

@@ -1,0 +1,58 @@
+{
+  "status": 202,
+  "result": {
+    "message": "Operator message recorded and accepted for delivery.",
+    "wake_status": "accepted",
+    "ingress_id": "art_hoFqOx2OgPhLTH9fANRf",
+    "user_message": {
+      "info": {
+        "id": "msg_g0VZ23vOH00vkWbzxYDc",
+        "sessionID": "ses_-zUQy5w4xzzqZFG0QgP9",
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1792902440493
+        },
+        "agent": "orchestrator",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "extra": {
+          "task_root_message": {
+            "protocol": "task-root-message",
+            "taskID": "tsk_g00VZ1u3kk00D81zMYvb",
+            "kind": "operator",
+            "source": "marketing-completed-pagination-feedback"
+          },
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "task.marketing-completed-pagination-feedback",
+            "literalText": "在已经完成的同一营销Task追加Word版式修订：评审会议改为横向屏幕阅读，请把outputs/growth-plan.docx从原纵向改为横向页面，调整列宽和段落让中文数字完整可读。跨页表格首部表头重复，表头与第一条数据同页，数据行不拆分；原已正确属性保留。请同时移除首标题下现有蓝色装饰线，保留黑色标题文字。只修Word呈现及必要生成器，outputs/growth-plan.md的完整字节和Word所有有序段落/单元格正文必须与刚才首次交付逐字一致，保持当前1200/旧草案3000/合成历史成本1900的原边界。继续原营销专家团、原交付负责人，保留原资源可读，使用项目tools/render_docx.py重新实际渲染，逐页查看；请独立角色复核本次最终页图和完整正文后再发布新版不可变交付及同正文阅读文档。新页图/PDF仅内部验收。不要把原审阅当成本次已经复核，不要新建Task、改业务、联网或花费。完成本次正式修订与复核后结束原Task。"
+          }
+        },
+        "orderKey": "v1:0001792902440493:0000000000000030:0000000000000000:message:msg_g0VZ23vOH00vkWbzxYDc",
+        "resolvedRole": "user",
+        "channel": "main",
+        "agentID": "orchestrator",
+        "sessionAgentID": "orchestrator",
+        "originSource": ""
+      },
+      "parts": [
+        {
+          "id": "prt_g0VZ23vOH00kc9bhf1B3",
+          "sessionID": "ses_-zUQy5w4xzzqZFG0QgP9",
+          "messageID": "msg_g0VZ23vOH00vkWbzxYDc",
+          "orderKey": "v1:0001792902440495:0000000000000031:0000000000000000:part:prt_g0VZ23vOH00kc9bhf1B3",
+          "type": "text",
+          "text": "在已经完成的同一营销Task追加Word版式修订：评审会议改为横向屏幕阅读，请把outputs/growth-plan.docx从原纵向改为横向页面，调整列宽和段落让中文数字完整可读。跨页表格首部表头重复，表头与第一条数据同页，数据行不拆分；原已正确属性保留。请同时移除首标题下现有蓝色装饰线，保留黑色标题文字。只修Word呈现及必要生成器，outputs/growth-plan.md的完整字节和Word所有有序段落/单元格正文必须与刚才首次交付逐字一致，保持当前1200/旧草案3000/合成历史成本1900的原边界。继续原营销专家团、原交付负责人，保留原资源可读，使用项目tools/render_docx.py重新实际渲染，逐页查看；请独立角色复核本次最终页图和完整正文后再发布新版不可变交付及同正文阅读文档。新页图/PDF仅内部验收。不要把原审阅当成本次已经复核，不要新建Task、改业务、联网或花费。完成本次正式修订与复核后结束原Task。",
+          "kind": "user_content",
+          "source": "user",
+          "metadata": {
+            "caseID": "marketing-completed-revision-01"
+          }
+        }
+      ]
+    }
+  }
+}

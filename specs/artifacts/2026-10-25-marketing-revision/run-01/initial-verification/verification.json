@@ -1,0 +1,2367 @@
+{
+  "task": {
+    "id": "tsk_g00VZ1u3kk00D81zMYvb",
+    "orderKey": "v1:0001792900089358:0000000000000010:0000000000000000:task:tsk_g00VZ1u3kk00D81zMYvb",
+    "projectID": "prj_hdfrY4uLsCH7DfgPkBMw",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\project",
+    "sessionID": "ses_-zUQy5w4xzzqZFG0QgP9",
+    "requestID": "faedd7a6-f6d6-4c29-9557-078d254bea91",
+    "source": "marketing-completed-revision",
+    "productPillar": "work",
+    "title": "原营销专家团首次交付及完成后分页修订",
+    "request": "完整读取brief.md及campaign.csv，以原marketing-growth专家团的完整职责链完成本地营销计划：范围、证据、受众/渠道独立并行分析、汇合策略、独立复核、原营销作者规范交付。当前明确预算上限1200元，brief.md的3000元是被取代的旧草案，CSV合成历史成本1900元不是当前预算；保留三者关系，不以小预算篡改历史。准确复算三渠道及合计曝光/点击/线索/成本和线索成本，区别观察、假设及未知。只有三行合成记录，任务材料已完整提供；各阶段及最终报告简明直接，避免无新证据的重复研究和扩写，但完整履行全部职责及真实Artifact交接。最终规范正文outputs/growth-plan.md（约3000汉字，完整论证和表格），另交同正文outputs/growth-plan.docx，Word采用纵向页面；提供完全相同正文的阅读文档。文档标题清楚黑色、表格可读不截断。tools/runtime.md及项目内tools/render_docx.py提供已预检的离线生成/渲染依赖，成熟python-docx可用，无需调查外部环境。实际渲染最终Word，作者逐页查看，再由独立角色复核最终正文及真实页图后按原包合同正式交付；页图/PDF只内部验收。来源及实际正文使用原不可变资源完整绑定。仅本地内部，不联网、不外联、不投放、不花费、不发布、不创建其他Task或Goal。\n",
+    "status": "completed",
+    "executionLifecycle": {
+      "taskID": "tsk_g00VZ1u3kk00D81zMYvb",
+      "epoch": 1,
+      "openedEventID": "pev_g0VZ1u3va00hXhIEelYC",
+      "openedAt": 1792900089358,
+      "status": "completed",
+      "terminalEventID": "pev_g0VZ23JXL00HszLUXgYu",
+      "terminalAt": 1792902292789
+    },
+    "terminalReason": "completed",
+    "priority": "normal",
+    "packageRevisionBinding": {
+      "scope": "project",
+      "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+      "namespace": "builtin",
+      "id": "marketing-growth",
+      "version": "2026.10.24.2",
+      "package_digest": "66bbf77da0945d7da12931b6599cd8f3211a70701de2051e0d3227017815fc5c"
+    },
+    "completionDecision": {
+      "artifactLocator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_g0VZ23IyO00WobWW7UNb",
+        "catalog_revision": 44,
+        "expected_sha256": "2fe0e857f872b57054184d949d2345407dd0a0d9f24a08d29147f7be85e8b98a"
+      },
+      "orchestratorSessionID": "ses_-zUQy5vEEzzn2RBsqAWe",
+      "orchestratorMessageID": "msg_hpEbinE0P31CyEbHZ2W5",
+      "toolCallID": "call_7874c77210b147c39fae98598d6eaf97",
+      "toolPartID": "prt_g0VZ23GYJ00lnwxeelSI",
+      "evidenceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hVZF8AMim7elwBWzUpDo",
+          "catalog_revision": 41,
+          "expected_sha256": "740921fc0ee858374f13a3959bcac341dfc7d8eb46e1bee0b90611ea0e7d7844"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hBtvGwxw9z5Ml5ggGGoA",
+          "catalog_revision": 36,
+          "expected_sha256": "a53363c73482beb57ee6e11b1bf41db9c39e8de3f6ebad0ea7759d273dac27c0"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_hyWiInyq6XpRz0zm2vDI",
+          "message_id": "msg_g0VZ2333l004uBHP2onN"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_hyWiInyq6XpRz0zm2vDI",
+          "message_id": "msg_g0VZ1zmQd00krPyhJG5X"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_hVeBqjMKP8pdekG4qxJL",
+          "message_id": "msg_g0VZ21clJ00QGBPS3fD0"
+        }
+      ],
+      "deliverableArtifactLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hVZF8AMim7elwBWzUpDo",
+          "catalog_revision": 41,
+          "expected_sha256": "740921fc0ee858374f13a3959bcac341dfc7d8eb46e1bee0b90611ea0e7d7844"
+        }
+      ],
+      "acceptedDeliverySliceRevisionIDs": [],
+      "workflowBinding": {
+        "kind": "virtual_workflow",
+        "workflow_id": "marketing-growth-campaign",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "namespace": "builtin",
+          "id": "marketing-growth",
+          "version": "2026.10.24.2",
+          "package_digest": "66bbf77da0945d7da12931b6599cd8f3211a70701de2051e0d3227017815fc5c"
+        },
+        "nodes": [
+          {
+            "node_id": "marketing-growth-audience-analyst",
+            "agent_id": "marketing-growth-audience-analyst",
+            "depends_on": [
+              "marketing-growth-evidence-researcher"
+            ]
+          },
+          {
+            "node_id": "marketing-growth-campaign-writer",
+            "agent_id": "marketing-growth-campaign-writer",
+            "depends_on": [
+              "marketing-growth-fact-checker"
+            ]
+          },
+          {
+            "node_id": "marketing-growth-channel-analyst",
+            "agent_id": "marketing-growth-channel-analyst",
+            "depends_on": [
+              "marketing-growth-evidence-researcher"
+            ]
+          },
+          {
+            "node_id": "marketing-growth-evidence-researcher",
+            "agent_id": "marketing-growth-evidence-researcher",
+            "depends_on": [
+              "marketing-growth-planner"
+            ]
+          },
+          {
+            "node_id": "marketing-growth-fact-checker",
+            "agent_id": "marketing-growth-fact-checker",
+            "depends_on": [
+              "marketing-growth-strategist"
+            ]
+          },
+          {
+            "node_id": "marketing-growth-planner",
+            "agent_id": "marketing-growth-planner",
+            "depends_on": []
+          },
+          {
+            "node_id": "marketing-growth-strategist",
+            "agent_id": "marketing-growth-strategist",
+            "depends_on": [
+              "marketing-growth-audience-analyst",
+              "marketing-growth-channel-analyst"
+            ]
+          }
+        ]
+      },
+      "timeRecorded": 1792902292789
+    },
+    "metadata": {
+      "actor": "user",
+      "checks": {
+        "artifact": {
+          "require_changed_files": true,
+          "require_diff": true,
+          "mode": "strict"
+        },
+        "judge": {
+          "enabled": true,
+          "mode": "strict"
+        },
+        "spec_check": {
+          "enabled": true,
+          "mode": "strict"
+        }
+      }
+    },
+    "time": {
+      "created": 1792900089358,
+      "updated": 1792902292789,
+      "started": 1792900089358,
+      "completed": 1792902292789
+    }
+  },
+  "completionDecision": {
+    "id": "art_g0VZ23IyO00WobWW7UNb",
+    "locator": {
+      "source": "engine_artifact",
+      "artifact_id": "art_g0VZ23IyO00WobWW7UNb",
+      "catalog_revision": 44,
+      "expected_sha256": "2fe0e857f872b57054184d949d2345407dd0a0d9f24a08d29147f7be85e8b98a"
+    },
+    "payload": {
+      "orchestrator_session_id": "ses_-zUQy5vEEzzn2RBsqAWe",
+      "orchestrator_message_id": "msg_hpEbinE0P31CyEbHZ2W5",
+      "tool_call_id": "call_7874c77210b147c39fae98598d6eaf97",
+      "tool_part_id": "prt_g0VZ23GYJ00lnwxeelSI",
+      "evidence_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hVZF8AMim7elwBWzUpDo",
+          "catalog_revision": 41,
+          "expected_sha256": "740921fc0ee858374f13a3959bcac341dfc7d8eb46e1bee0b90611ea0e7d7844"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hBtvGwxw9z5Ml5ggGGoA",
+          "catalog_revision": 36,
+          "expected_sha256": "a53363c73482beb57ee6e11b1bf41db9c39e8de3f6ebad0ea7759d273dac27c0"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_hyWiInyq6XpRz0zm2vDI",
+          "message_id": "msg_g0VZ2333l004uBHP2onN"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_hyWiInyq6XpRz0zm2vDI",
+          "message_id": "msg_g0VZ1zmQd00krPyhJG5X"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_hVeBqjMKP8pdekG4qxJL",
+          "message_id": "msg_g0VZ21clJ00QGBPS3fD0"
+        }
+      ],
+      "deliverable_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hVZF8AMim7elwBWzUpDo",
+          "catalog_revision": 41,
+          "expected_sha256": "740921fc0ee858374f13a3959bcac341dfc7d8eb46e1bee0b90611ea0e7d7844"
+        }
+      ],
+      "worker_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h1dXK5iCxDee5sW77XT3",
+          "catalog_revision": 16,
+          "expected_sha256": "5983c9a6fd321c8fc2ddc4d499b0f5a26463d59de9aca88b974f50ef6b13f937"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h4mnmKnCr0ADaYMbQaVO",
+          "catalog_revision": 5,
+          "expected_sha256": "5ac719b0d45a54c4f316e625bfec5b8c14b14a2a0edf4b4fb38200bb88ff14c3"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h73pKL9SnPV3SOs4L4rb",
+          "catalog_revision": 30,
+          "expected_sha256": "58e950c7c5c9c6bc325d4bb12eee6757277f888b7a475bbaed5eb72d6fed32cf"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h8kbN5NqjULir7OAgH1Z",
+          "catalog_revision": 15,
+          "expected_sha256": "4ce69ee8669268fd047b697e6d903bd915e6ae07619abdebaac2c6eac77cd7ad"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hBtvGwxw9z5Ml5ggGGoA",
+          "catalog_revision": 36,
+          "expected_sha256": "a53363c73482beb57ee6e11b1bf41db9c39e8de3f6ebad0ea7759d273dac27c0"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hINGKxdy1DfGqUR9RymQ",
+          "catalog_revision": 9,
+          "expected_sha256": "710dc4ed78e4f03e20abfbce6829bf1e2248bd81e30ce11aeaa3cac59a89fdbe"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hMZQdRFI6lArQLmx7xFd",
+          "catalog_revision": 25,
+          "expected_sha256": "406fbd63400b618fb5ae4ef8823c491f94dff666faca4d996762af65a6cb9ffb"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hPLkHQXDY9raF2aQCQYq",
+          "catalog_revision": 21,
+          "expected_sha256": "180838aa721c7f54458aab068723621b48d2b15341c87c33d086fe4d72245337"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hVZF8AMim7elwBWzUpDo",
+          "catalog_revision": 41,
+          "expected_sha256": "740921fc0ee858374f13a3959bcac341dfc7d8eb46e1bee0b90611ea0e7d7844"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_haDfZVh9MQKJ6ydSjFYm",
+          "catalog_revision": 31,
+          "expected_sha256": "0249c327334c3f8436cd43bfdf050ba92c26931adefd142318678f7279777479"
+        }
+      ],
+      "accepted_delivery_slice_revision_ids": [],
+      "workflow_binding": {
+        "kind": "virtual_workflow",
+        "workflow_id": "marketing-growth-campaign",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "namespace": "builtin",
+          "id": "marketing-growth",
+          "version": "2026.10.24.2",
+          "package_digest": "66bbf77da0945d7da12931b6599cd8f3211a70701de2051e0d3227017815fc5c"
+        },
+        "nodes": [
+          {
+            "node_id": "marketing-growth-audience-analyst",
+            "agent_id": "marketing-growth-audience-analyst",
+            "depends_on": [
+              "marketing-growth-evidence-researcher"
+            ]
+          },
+          {
+            "node_id": "marketing-growth-campaign-writer",
+            "agent_id": "marketing-growth-campaign-writer",
+            "depends_on": [
+              "marketing-growth-fact-checker"
+            ]
+          },
+          {
+            "node_id": "marketing-growth-channel-analyst",
+            "agent_id": "marketing-growth-channel-analyst",
+            "depends_on": [
+              "marketing-growth-evidence-researcher"
+            ]
+          },
+          {
+            "node_id": "marketing-growth-evidence-researcher",
+            "agent_id": "marketing-growth-evidence-researcher",
+            "depends_on": [
+              "marketing-growth-planner"
+            ]
+          },
+          {
+            "node_id": "marketing-growth-fact-checker",
+            "agent_id": "marketing-growth-fact-checker",
+            "depends_on": [
+              "marketing-growth-strategist"
+            ]
+          },
+          {
+            "node_id": "marketing-growth-planner",
+            "agent_id": "marketing-growth-planner",
+            "depends_on": []
+          },
+          {
+            "node_id": "marketing-growth-strategist",
+            "agent_id": "marketing-growth-strategist",
+            "depends_on": [
+              "marketing-growth-audience-analyst",
+              "marketing-growth-channel-analyst"
+            ]
+          }
+        ]
+      },
+      "time_recorded": 1792902292789
+    }
+  },
+  "artifacts": [
+    {
+      "id": "art_h4mnmKnCr0ADaYMbQaVO",
+      "type": "marketing-growth/growth-brief",
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "marketing-growth",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "namespace": "builtin",
+          "id": "marketing-growth",
+          "version": "2026.10.24.2",
+          "package_digest": "66bbf77da0945d7da12931b6599cd8f3211a70701de2051e0d3227017815fc5c"
+        },
+        "agent_id": "marketing-growth-planner",
+        "projection_hash": "a94ae2811bdf421dd22ce4f3fe14af7a4a8be6c7be4d2539e07eac594c92be76",
+        "session_id": "ses_hZViJO4RpFfBH2OW7I7O",
+        "message_id": "msg_g0VZ1uWNq00Te49k5YWf",
+        "tool_call_id": "call_6c98321909e9433b830f5ce35b673b3b"
+      },
+      "sourceLocators": [
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "brief.md",
+            "media_type": "text/markdown",
+            "bytes": 1024,
+            "sha256": "4ddd30c51f7fb98d18208a76e19e1739bb3a5b752bba63183778755404505c7c"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "campaign.csv",
+            "media_type": "text/csv",
+            "bytes": 113,
+            "sha256": "2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "tools/render_docx.py",
+            "media_type": "text/x-python",
+            "bytes": 20248,
+            "sha256": "8b48b8f05f30cc6c7b5a7bd8e18e7ea93a61aec1ea601026a3358b2105f0903a"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "tools/runtime.md",
+            "media_type": "text/markdown",
+            "bytes": 580,
+            "sha256": "418c1dc648758ab1b5a1ed9dfc367b853f614a53336b1c061dc80dda7930b257"
+          }
+        }
+      ],
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_h4mnmKnCr0ADaYMbQaVO",
+        "catalog_revision": 5,
+        "expected_sha256": "5ac719b0d45a54c4f316e625bfec5b8c14b14a2a0edf4b4fb38200bb88ff14c3"
+      },
+      "resources": []
+    },
+    {
+      "id": "art_hINGKxdy1DfGqUR9RymQ",
+      "type": "marketing-growth/evidence-dossier",
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "marketing-growth",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "namespace": "builtin",
+          "id": "marketing-growth",
+          "version": "2026.10.24.2",
+          "package_digest": "66bbf77da0945d7da12931b6599cd8f3211a70701de2051e0d3227017815fc5c"
+        },
+        "agent_id": "marketing-growth-evidence-researcher",
+        "projection_hash": "0e5ca5b829cd0a78f6c9fdc7ddd5fe4111cc9ac063dc88150c49c1972e0aa269",
+        "session_id": "ses_h44dc5ci2FtFJ7TDJkaH",
+        "message_id": "msg_g0VZ1vbBo00RriJAgHlD",
+        "tool_call_id": "call_280f0af217b742ca8efe477ef08419f2"
+      },
+      "sourceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h4mnmKnCr0ADaYMbQaVO",
+          "catalog_revision": 5,
+          "expected_sha256": "5ac719b0d45a54c4f316e625bfec5b8c14b14a2a0edf4b4fb38200bb88ff14c3"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "brief.md",
+            "media_type": "text/markdown",
+            "bytes": 1024,
+            "sha256": "4ddd30c51f7fb98d18208a76e19e1739bb3a5b752bba63183778755404505c7c"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "campaign.csv",
+            "media_type": "text/csv",
+            "bytes": 113,
+            "sha256": "2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1"
+          }
+        }
+      ],
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hINGKxdy1DfGqUR9RymQ",
+        "catalog_revision": 9,
+        "expected_sha256": "710dc4ed78e4f03e20abfbce6829bf1e2248bd81e30ce11aeaa3cac59a89fdbe"
+      },
+      "resources": []
+    },
+    {
+      "id": "art_h8kbN5NqjULir7OAgH1Z",
+      "type": "marketing-growth/audience-analysis",
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "marketing-growth",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "namespace": "builtin",
+          "id": "marketing-growth",
+          "version": "2026.10.24.2",
+          "package_digest": "66bbf77da0945d7da12931b6599cd8f3211a70701de2051e0d3227017815fc5c"
+        },
+        "agent_id": "marketing-growth-audience-analyst",
+        "projection_hash": "6c42fa5ad5fde46e5ff7439f08f168f419b9341c1ac3861a28d28cfced82d21e",
+        "session_id": "ses_hIfKtwDxhIG3Md3Hn4jr",
+        "message_id": "msg_g0VZ1w4hN00L6hOGKKxU",
+        "tool_call_id": "call_c91b4d4f05b541ef93431aa27900ff97"
+      },
+      "sourceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hINGKxdy1DfGqUR9RymQ",
+          "catalog_revision": 9,
+          "expected_sha256": "710dc4ed78e4f03e20abfbce6829bf1e2248bd81e30ce11aeaa3cac59a89fdbe"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "brief.md",
+            "media_type": "text/markdown",
+            "bytes": 1024,
+            "sha256": "4ddd30c51f7fb98d18208a76e19e1739bb3a5b752bba63183778755404505c7c"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "campaign.csv",
+            "media_type": "text/csv",
+            "bytes": 113,
+            "sha256": "2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1"
+          }
+        }
+      ],
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_h8kbN5NqjULir7OAgH1Z",
+        "catalog_revision": 15,
+        "expected_sha256": "4ce69ee8669268fd047b697e6d903bd915e6ae07619abdebaac2c6eac77cd7ad"
+      },
+      "resources": []
+    },
+    {
+      "id": "art_h1dXK5iCxDee5sW77XT3",
+      "type": "marketing-growth/channel-analysis",
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "marketing-growth",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "namespace": "builtin",
+          "id": "marketing-growth",
+          "version": "2026.10.24.2",
+          "package_digest": "66bbf77da0945d7da12931b6599cd8f3211a70701de2051e0d3227017815fc5c"
+        },
+        "agent_id": "marketing-growth-channel-analyst",
+        "projection_hash": "c001fa560dbe67366bb995c92902d44dbc552723f2ddb018c9c320749d75ca36",
+        "session_id": "ses_hmPJdELD8twa0SSzcAf2",
+        "message_id": "msg_g0VZ1w3V2006Ppm1ObgZ",
+        "tool_call_id": "call_f451a755f9b647ed81030b3bd7b9ad02"
+      },
+      "sourceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hINGKxdy1DfGqUR9RymQ",
+          "catalog_revision": 9,
+          "expected_sha256": "710dc4ed78e4f03e20abfbce6829bf1e2248bd81e30ce11aeaa3cac59a89fdbe"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "brief.md",
+            "media_type": "text/markdown",
+            "bytes": 1024,
+            "sha256": "4ddd30c51f7fb98d18208a76e19e1739bb3a5b752bba63183778755404505c7c"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "campaign.csv",
+            "media_type": "text/csv",
+            "bytes": 113,
+            "sha256": "2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1"
+          }
+        }
+      ],
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_h1dXK5iCxDee5sW77XT3",
+        "catalog_revision": 16,
+        "expected_sha256": "5983c9a6fd321c8fc2ddc4d499b0f5a26463d59de9aca88b974f50ef6b13f937"
+      },
+      "resources": []
+    },
+    {
+      "id": "art_hPLkHQXDY9raF2aQCQYq",
+      "type": "marketing-growth/growth-strategy",
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "marketing-growth",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "namespace": "builtin",
+          "id": "marketing-growth",
+          "version": "2026.10.24.2",
+          "package_digest": "66bbf77da0945d7da12931b6599cd8f3211a70701de2051e0d3227017815fc5c"
+        },
+        "agent_id": "marketing-growth-strategist",
+        "projection_hash": "9cc82d854222c90a06394c793dbb3e2c29690c8ba34c49433c730b30130f3632",
+        "session_id": "ses_hFJ8vTxHnKEkoytVnJMJ",
+        "message_id": "msg_g0VZ1wqzY003PK0pqhxi",
+        "tool_call_id": "call_6fbee9a00188477a8f6cdc2b108261ce"
+      },
+      "sourceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h1dXK5iCxDee5sW77XT3",
+          "catalog_revision": 16,
+          "expected_sha256": "5983c9a6fd321c8fc2ddc4d499b0f5a26463d59de9aca88b974f50ef6b13f937"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h8kbN5NqjULir7OAgH1Z",
+          "catalog_revision": 15,
+          "expected_sha256": "4ce69ee8669268fd047b697e6d903bd915e6ae07619abdebaac2c6eac77cd7ad"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "brief.md",
+            "media_type": "text/markdown",
+            "bytes": 1024,
+            "sha256": "4ddd30c51f7fb98d18208a76e19e1739bb3a5b752bba63183778755404505c7c"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "campaign.csv",
+            "media_type": "text/csv",
+            "bytes": 113,
+            "sha256": "2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1"
+          }
+        }
+      ],
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hPLkHQXDY9raF2aQCQYq",
+        "catalog_revision": 21,
+        "expected_sha256": "180838aa721c7f54458aab068723621b48d2b15341c87c33d086fe4d72245337"
+      },
+      "resources": []
+    },
+    {
+      "id": "art_hMZQdRFI6lArQLmx7xFd",
+      "type": "marketing-growth/audit",
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "marketing-growth",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "namespace": "builtin",
+          "id": "marketing-growth",
+          "version": "2026.10.24.2",
+          "package_digest": "66bbf77da0945d7da12931b6599cd8f3211a70701de2051e0d3227017815fc5c"
+        },
+        "agent_id": "marketing-growth-fact-checker",
+        "projection_hash": "d7240edcb528ff0a7ab86be454a3b2c873b8ee973c9f432e4a4eb2897bbc62eb",
+        "session_id": "ses_hVeBqjMKP8pdekG4qxJL",
+        "message_id": "msg_g0VZ1xgNB00HUv69VyVH",
+        "tool_call_id": "call_11cd6ad68ce142d3bb0fb752f8c566b1"
+      },
+      "sourceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h1dXK5iCxDee5sW77XT3",
+          "catalog_revision": 16,
+          "expected_sha256": "5983c9a6fd321c8fc2ddc4d499b0f5a26463d59de9aca88b974f50ef6b13f937"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h8kbN5NqjULir7OAgH1Z",
+          "catalog_revision": 15,
+          "expected_sha256": "4ce69ee8669268fd047b697e6d903bd915e6ae07619abdebaac2c6eac77cd7ad"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hPLkHQXDY9raF2aQCQYq",
+          "catalog_revision": 21,
+          "expected_sha256": "180838aa721c7f54458aab068723621b48d2b15341c87c33d086fe4d72245337"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "brief.md",
+            "media_type": "text/markdown",
+            "bytes": 1024,
+            "sha256": "4ddd30c51f7fb98d18208a76e19e1739bb3a5b752bba63183778755404505c7c"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "campaign.csv",
+            "media_type": "text/csv",
+            "bytes": 113,
+            "sha256": "2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1"
+          }
+        }
+      ],
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hMZQdRFI6lArQLmx7xFd",
+        "catalog_revision": 25,
+        "expected_sha256": "406fbd63400b618fb5ae4ef8823c491f94dff666faca4d996762af65a6cb9ffb"
+      },
+      "resources": []
+    },
+    {
+      "id": "art_h73pKL9SnPV3SOs4L4rb",
+      "type": "marketing-growth/author-review-documents",
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "marketing-growth",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "namespace": "builtin",
+          "id": "marketing-growth",
+          "version": "2026.10.24.2",
+          "package_digest": "66bbf77da0945d7da12931b6599cd8f3211a70701de2051e0d3227017815fc5c"
+        },
+        "agent_id": "marketing-growth-campaign-writer",
+        "projection_hash": "4a8f6cd3129035463dff13ef1f8eab3ead4b07f69ad54bf2ac36cfde1088920d",
+        "session_id": "ses_hyWiInyq6XpRz0zm2vDI",
+        "message_id": "msg_g0VZ1zd3900EYyGwkZ4I",
+        "tool_call_id": "call_3d2fb8f5deee43ec8de8da1be190cf14"
+      },
+      "sourceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h1dXK5iCxDee5sW77XT3",
+          "catalog_revision": 16,
+          "expected_sha256": "5983c9a6fd321c8fc2ddc4d499b0f5a26463d59de9aca88b974f50ef6b13f937"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h4mnmKnCr0ADaYMbQaVO",
+          "catalog_revision": 5,
+          "expected_sha256": "5ac719b0d45a54c4f316e625bfec5b8c14b14a2a0edf4b4fb38200bb88ff14c3"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h8kbN5NqjULir7OAgH1Z",
+          "catalog_revision": 15,
+          "expected_sha256": "4ce69ee8669268fd047b697e6d903bd915e6ae07619abdebaac2c6eac77cd7ad"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hINGKxdy1DfGqUR9RymQ",
+          "catalog_revision": 9,
+          "expected_sha256": "710dc4ed78e4f03e20abfbce6829bf1e2248bd81e30ce11aeaa3cac59a89fdbe"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hMZQdRFI6lArQLmx7xFd",
+          "catalog_revision": 25,
+          "expected_sha256": "406fbd63400b618fb5ae4ef8823c491f94dff666faca4d996762af65a6cb9ffb"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hPLkHQXDY9raF2aQCQYq",
+          "catalog_revision": 21,
+          "expected_sha256": "180838aa721c7f54458aab068723621b48d2b15341c87c33d086fe4d72245337"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "brief.md",
+            "media_type": "text/markdown",
+            "bytes": 1024,
+            "sha256": "4ddd30c51f7fb98d18208a76e19e1739bb3a5b752bba63183778755404505c7c"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+              "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+            },
+            "tree": "resources",
+            "path": "outputs/growth-plan.md",
+            "media_type": "text/markdown",
+            "bytes": 10366,
+            "sha256": "fd9682e65a7fe3dd7369a536343d193d302138dc2e480604812025993e3ebb6b"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "campaign.csv",
+            "media_type": "text/csv",
+            "bytes": 113,
+            "sha256": "2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "tools/render_docx.py",
+            "media_type": "text/x-python",
+            "bytes": 20248,
+            "sha256": "8b48b8f05f30cc6c7b5a7bd8e18e7ea93a61aec1ea601026a3358b2105f0903a"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "tools/runtime.md",
+            "media_type": "text/markdown",
+            "bytes": 580,
+            "sha256": "418c1dc648758ab1b5a1ed9dfc367b853f614a53336b1c061dc80dda7930b257"
+          }
+        }
+      ],
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_h73pKL9SnPV3SOs4L4rb",
+        "catalog_revision": 30,
+        "expected_sha256": "58e950c7c5c9c6bc325d4bb12eee6757277f888b7a475bbaed5eb72d6fed32cf"
+      },
+      "resources": [
+        {
+          "owner": "art_h73pKL9SnPV3SOs4L4rb",
+          "path": "artifacts/marketing-growth/campaign-plan.md",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+              "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+            },
+            "tree": "resources",
+            "path": "artifacts/marketing-growth/campaign-plan.md",
+            "media_type": "text/markdown",
+            "bytes": 10446,
+            "sha256": "6fe31f3b5f17a9608fb4ea2ec00a05069b8dbfa27902d0ebee3c0833271d981e"
+          },
+          "bytes": 10446,
+          "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_h73pKL9SnPV3SOs4L4rb\\artifacts\\marketing-growth\\campaign-plan.md",
+          "ranges": [
+            "bytes 0-4095/10446",
+            "bytes 4096-8191/10446",
+            "bytes 8192-10445/10446"
+          ]
+        },
+        {
+          "owner": "art_h73pKL9SnPV3SOs4L4rb",
+          "path": "outputs/growth-plan.docx",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+              "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+            },
+            "tree": "resources",
+            "path": "outputs/growth-plan.docx",
+            "media_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "bytes": 43213,
+            "sha256": "0bda83e9e21f6db29cd827fe0ca1841dc5b12055265d3c25a461f4c0cf26b19a"
+          },
+          "bytes": 43213,
+          "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_h73pKL9SnPV3SOs4L4rb\\outputs\\growth-plan.docx",
+          "ranges": [
+            "bytes 0-43212/43213"
+          ]
+        },
+        {
+          "owner": "art_h73pKL9SnPV3SOs4L4rb",
+          "path": "outputs/growth-plan.html",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+              "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+            },
+            "tree": "resources",
+            "path": "outputs/growth-plan.html",
+            "media_type": "text/html",
+            "bytes": 11491,
+            "sha256": "a7198587829d04222b0f6c0be1f2e55707055a87d6a68aa6902faa37ca5aaee7"
+          },
+          "bytes": 11491,
+          "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_h73pKL9SnPV3SOs4L4rb\\outputs\\growth-plan.html",
+          "ranges": [
+            "bytes 0-4094/11491",
+            "bytes 4095-8189/11491",
+            "bytes 8190-11490/11491"
+          ]
+        },
+        {
+          "owner": "art_h73pKL9SnPV3SOs4L4rb",
+          "path": "outputs/growth-plan.md",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+              "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+            },
+            "tree": "resources",
+            "path": "outputs/growth-plan.md",
+            "media_type": "text/markdown",
+            "bytes": 10366,
+            "sha256": "fd9682e65a7fe3dd7369a536343d193d302138dc2e480604812025993e3ebb6b"
+          },
+          "bytes": 10366,
+          "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_h73pKL9SnPV3SOs4L4rb\\outputs\\growth-plan.md",
+          "ranges": [
+            "bytes 0-4093/10366",
+            "bytes 4094-8187/10366",
+            "bytes 8188-10365/10366"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "art_haDfZVh9MQKJ6ydSjFYm",
+      "type": "marketing-growth/author-review-qa",
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "marketing-growth",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "namespace": "builtin",
+          "id": "marketing-growth",
+          "version": "2026.10.24.2",
+          "package_digest": "66bbf77da0945d7da12931b6599cd8f3211a70701de2051e0d3227017815fc5c"
+        },
+        "agent_id": "marketing-growth-campaign-writer",
+        "projection_hash": "4a8f6cd3129035463dff13ef1f8eab3ead4b07f69ad54bf2ac36cfde1088920d",
+        "session_id": "ses_hyWiInyq6XpRz0zm2vDI",
+        "message_id": "msg_g0VZ1ziZ900qnWLPOLkr",
+        "tool_call_id": "call_5ec3979488684fb5b15cf6805f1f22fa"
+      },
+      "sourceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hMZQdRFI6lArQLmx7xFd",
+          "catalog_revision": 25,
+          "expected_sha256": "406fbd63400b618fb5ae4ef8823c491f94dff666faca4d996762af65a6cb9ffb"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+              "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+            },
+            "tree": "resources",
+            "path": "outputs/growth-plan.md",
+            "media_type": "text/markdown",
+            "bytes": 10366,
+            "sha256": "fd9682e65a7fe3dd7369a536343d193d302138dc2e480604812025993e3ebb6b"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "tools/render_docx.py",
+            "media_type": "text/x-python",
+            "bytes": 20248,
+            "sha256": "8b48b8f05f30cc6c7b5a7bd8e18e7ea93a61aec1ea601026a3358b2105f0903a"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "tools/runtime.md",
+            "media_type": "text/markdown",
+            "bytes": 580,
+            "sha256": "418c1dc648758ab1b5a1ed9dfc367b853f614a53336b1c061dc80dda7930b257"
+          }
+        }
+      ],
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_haDfZVh9MQKJ6ydSjFYm",
+        "catalog_revision": 31,
+        "expected_sha256": "0249c327334c3f8436cd43bfdf050ba92c26931adefd142318678f7279777479"
+      },
+      "resources": [
+        {
+          "owner": "art_haDfZVh9MQKJ6ydSjFYm",
+          "path": "qa/author-review.md",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+              "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+            },
+            "tree": "resources",
+            "path": "qa/author-review.md",
+            "media_type": "text/markdown",
+            "bytes": 3140,
+            "sha256": "925165dd7340fc2ae22902e153a9264fbb8543dad47afba7d1558580225c3ff6"
+          },
+          "bytes": 3140,
+          "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_haDfZVh9MQKJ6ydSjFYm\\qa\\author-review.md",
+          "ranges": [
+            "bytes 0-3139/3140"
+          ]
+        },
+        {
+          "owner": "art_haDfZVh9MQKJ6ydSjFYm",
+          "path": "qa/body-consistency.json",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+              "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+            },
+            "tree": "resources",
+            "path": "qa/body-consistency.json",
+            "media_type": "application/json",
+            "bytes": 420,
+            "sha256": "ca145874f9cf677944730406221fe3f39d6d996a92d0665d3e15a75682eee477"
+          },
+          "bytes": 420,
+          "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_haDfZVh9MQKJ6ydSjFYm\\qa\\body-consistency.json",
+          "ranges": [
+            "bytes 0-419/420"
+          ]
+        },
+        {
+          "owner": "art_haDfZVh9MQKJ6ydSjFYm",
+          "path": "qa/initial/growth-plan.pdf",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+              "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+            },
+            "tree": "resources",
+            "path": "qa/initial/growth-plan.pdf",
+            "media_type": "application/pdf",
+            "bytes": 476283,
+            "sha256": "ee0c84cb36238f0864729318e77398d4809012ae60958059b9be98f4694c0bb4"
+          },
+          "bytes": 476283,
+          "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_haDfZVh9MQKJ6ydSjFYm\\qa\\initial\\growth-plan.pdf",
+          "ranges": [
+            "bytes 0-476282/476283"
+          ]
+        },
+        {
+          "owner": "art_haDfZVh9MQKJ6ydSjFYm",
+          "path": "qa/initial/page-1.png",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+              "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+            },
+            "tree": "resources",
+            "path": "qa/initial/page-1.png",
+            "media_type": "image/png",
+            "bytes": 498951,
+            "sha256": "2f55464bf5a4428f7eae1339dc6c984f538c4d41b27b78fff41b80b9a9234085"
+          },
+          "bytes": 498951,
+          "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_haDfZVh9MQKJ6ydSjFYm\\qa\\initial\\page-1.png",
+          "ranges": [
+            "bytes 0-498950/498951"
+          ]
+        },
+        {
+          "owner": "art_haDfZVh9MQKJ6ydSjFYm",
+          "path": "qa/initial/page-2.png",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+              "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+            },
+            "tree": "resources",
+            "path": "qa/initial/page-2.png",
+            "media_type": "image/png",
+            "bytes": 565536,
+            "sha256": "23157bfa8ca365262d68069a9ce093ac8842f1b48649aab4e97c574214f5c36e"
+          },
+          "bytes": 565536,
+          "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_haDfZVh9MQKJ6ydSjFYm\\qa\\initial\\page-2.png",
+          "ranges": [
+            "bytes 0-565535/565536"
+          ]
+        },
+        {
+          "owner": "art_haDfZVh9MQKJ6ydSjFYm",
+          "path": "qa/initial/page-3.png",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+              "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+            },
+            "tree": "resources",
+            "path": "qa/initial/page-3.png",
+            "media_type": "image/png",
+            "bytes": 602598,
+            "sha256": "96ebb595e042d277c5c6bcbf06755b804ca5094295a3b06f2f4907891826cc5a"
+          },
+          "bytes": 602598,
+          "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_haDfZVh9MQKJ6ydSjFYm\\qa\\initial\\page-3.png",
+          "ranges": [
+            "bytes 0-602597/602598"
+          ]
+        },
+        {
+          "owner": "art_haDfZVh9MQKJ6ydSjFYm",
+          "path": "qa/initial/page-4.png",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+              "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+            },
+            "tree": "resources",
+            "path": "qa/initial/page-4.png",
+            "media_type": "image/png",
+            "bytes": 323054,
+            "sha256": "51795c0f56c8910cd324842d2a1cb9da572058456cf35136733e1e139b52df91"
+          },
+          "bytes": 323054,
+          "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_haDfZVh9MQKJ6ydSjFYm\\qa\\initial\\page-4.png",
+          "ranges": [
+            "bytes 0-323053/323054"
+          ]
+        },
+        {
+          "owner": "art_haDfZVh9MQKJ6ydSjFYm",
+          "path": "tools/build_growth_documents.py",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+              "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+            },
+            "tree": "resources",
+            "path": "tools/build_growth_documents.py",
+            "media_type": "text/x-python",
+            "bytes": 7789,
+            "sha256": "91758e3a0c9b637e981d58a0b6c14d496fb868f25951d9bdf26033fd301c730e"
+          },
+          "bytes": 7789,
+          "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_haDfZVh9MQKJ6ydSjFYm\\tools\\build_growth_documents.py",
+          "ranges": [
+            "bytes 0-4095/7789",
+            "bytes 4096-7788/7789"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "art_hBtvGwxw9z5Ml5ggGGoA",
+      "type": "marketing-growth/final-document-review",
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "marketing-growth",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "namespace": "builtin",
+          "id": "marketing-growth",
+          "version": "2026.10.24.2",
+          "package_digest": "66bbf77da0945d7da12931b6599cd8f3211a70701de2051e0d3227017815fc5c"
+        },
+        "agent_id": "marketing-growth-fact-checker",
+        "projection_hash": "d7240edcb528ff0a7ab86be454a3b2c873b8ee973c9f432e4a4eb2897bbc62eb",
+        "session_id": "ses_hVeBqjMKP8pdekG4qxJL",
+        "message_id": "msg_g0VZ21AQT00yR2YfziUY",
+        "tool_call_id": "call_SKqg1bfAh6LmhBQeF6YeVA0s"
+      },
+      "sourceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h73pKL9SnPV3SOs4L4rb",
+          "catalog_revision": 30,
+          "expected_sha256": "58e950c7c5c9c6bc325d4bb12eee6757277f888b7a475bbaed5eb72d6fed32cf"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_haDfZVh9MQKJ6ydSjFYm",
+          "catalog_revision": 31,
+          "expected_sha256": "0249c327334c3f8436cd43bfdf050ba92c26931adefd142318678f7279777479"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "brief.md",
+            "media_type": "text/markdown",
+            "bytes": 1024,
+            "sha256": "4ddd30c51f7fb98d18208a76e19e1739bb3a5b752bba63183778755404505c7c"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+              "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+            },
+            "tree": "resources",
+            "path": "outputs/growth-plan.md",
+            "media_type": "text/markdown",
+            "bytes": 10366,
+            "sha256": "fd9682e65a7fe3dd7369a536343d193d302138dc2e480604812025993e3ebb6b"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+              "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+            },
+            "tree": "resources",
+            "path": "artifacts/marketing-growth/campaign-plan.md",
+            "media_type": "text/markdown",
+            "bytes": 10446,
+            "sha256": "6fe31f3b5f17a9608fb4ea2ec00a05069b8dbfa27902d0ebee3c0833271d981e"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "campaign.csv",
+            "media_type": "text/csv",
+            "bytes": 113,
+            "sha256": "2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+              "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+            },
+            "tree": "resources",
+            "path": "outputs/growth-plan.html",
+            "media_type": "text/html",
+            "bytes": 11491,
+            "sha256": "a7198587829d04222b0f6c0be1f2e55707055a87d6a68aa6902faa37ca5aaee7"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+              "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+            },
+            "tree": "resources",
+            "path": "qa/author-review.md",
+            "media_type": "text/markdown",
+            "bytes": 3140,
+            "sha256": "925165dd7340fc2ae22902e153a9264fbb8543dad47afba7d1558580225c3ff6"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+              "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+            },
+            "tree": "resources",
+            "path": "qa/initial/page-4.png",
+            "media_type": "image/png",
+            "bytes": 323054,
+            "sha256": "51795c0f56c8910cd324842d2a1cb9da572058456cf35136733e1e139b52df91"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+              "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+            },
+            "tree": "resources",
+            "path": "qa/body-consistency.json",
+            "media_type": "application/json",
+            "bytes": 420,
+            "sha256": "ca145874f9cf677944730406221fe3f39d6d996a92d0665d3e15a75682eee477"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+              "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+            },
+            "tree": "resources",
+            "path": "outputs/growth-plan.docx",
+            "media_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "bytes": 43213,
+            "sha256": "0bda83e9e21f6db29cd827fe0ca1841dc5b12055265d3c25a461f4c0cf26b19a"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+              "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+            },
+            "tree": "resources",
+            "path": "qa/initial/growth-plan.pdf",
+            "media_type": "application/pdf",
+            "bytes": 476283,
+            "sha256": "ee0c84cb36238f0864729318e77398d4809012ae60958059b9be98f4694c0bb4"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+              "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+            },
+            "tree": "resources",
+            "path": "qa/initial/page-1.png",
+            "media_type": "image/png",
+            "bytes": 498951,
+            "sha256": "2f55464bf5a4428f7eae1339dc6c984f538c4d41b27b78fff41b80b9a9234085"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+              "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+            },
+            "tree": "resources",
+            "path": "qa/initial/page-2.png",
+            "media_type": "image/png",
+            "bytes": 565536,
+            "sha256": "23157bfa8ca365262d68069a9ce093ac8842f1b48649aab4e97c574214f5c36e"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+              "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+            },
+            "tree": "resources",
+            "path": "qa/initial/page-3.png",
+            "media_type": "image/png",
+            "bytes": 602598,
+            "sha256": "96ebb595e042d277c5c6bcbf06755b804ca5094295a3b06f2f4907891826cc5a"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+              "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+            },
+            "tree": "resources",
+            "path": "tools/build_growth_documents.py",
+            "media_type": "text/x-python",
+            "bytes": 7789,
+            "sha256": "91758e3a0c9b637e981d58a0b6c14d496fb868f25951d9bdf26033fd301c730e"
+          }
+        }
+      ],
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hBtvGwxw9z5Ml5ggGGoA",
+        "catalog_revision": 36,
+        "expected_sha256": "a53363c73482beb57ee6e11b1bf41db9c39e8de3f6ebad0ea7759d273dac27c0"
+      },
+      "resources": []
+    },
+    {
+      "id": "art_hVZF8AMim7elwBWzUpDo",
+      "type": "marketing-growth/campaign-plan",
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "marketing-growth",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "namespace": "builtin",
+          "id": "marketing-growth",
+          "version": "2026.10.24.2",
+          "package_digest": "66bbf77da0945d7da12931b6599cd8f3211a70701de2051e0d3227017815fc5c"
+        },
+        "agent_id": "marketing-growth-campaign-writer",
+        "projection_hash": "4a8f6cd3129035463dff13ef1f8eab3ead4b07f69ad54bf2ac36cfde1088920d",
+        "session_id": "ses_hyWiInyq6XpRz0zm2vDI",
+        "message_id": "msg_g0VZ22oWN00DDbrMM8d5",
+        "tool_call_id": "call_ddbf0497c0e143bf91c63a2ebdc0ac9a"
+      },
+      "sourceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h73pKL9SnPV3SOs4L4rb",
+          "catalog_revision": 30,
+          "expected_sha256": "58e950c7c5c9c6bc325d4bb12eee6757277f888b7a475bbaed5eb72d6fed32cf"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hBtvGwxw9z5Ml5ggGGoA",
+          "catalog_revision": 36,
+          "expected_sha256": "a53363c73482beb57ee6e11b1bf41db9c39e8de3f6ebad0ea7759d273dac27c0"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hMZQdRFI6lArQLmx7xFd",
+          "catalog_revision": 25,
+          "expected_sha256": "406fbd63400b618fb5ae4ef8823c491f94dff666faca4d996762af65a6cb9ffb"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hPLkHQXDY9raF2aQCQYq",
+          "catalog_revision": 21,
+          "expected_sha256": "180838aa721c7f54458aab068723621b48d2b15341c87c33d086fe4d72245337"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "brief.md",
+            "media_type": "text/markdown",
+            "bytes": 1024,
+            "sha256": "4ddd30c51f7fb98d18208a76e19e1739bb3a5b752bba63183778755404505c7c"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+              "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+            },
+            "tree": "resources",
+            "path": "outputs/growth-plan.md",
+            "media_type": "text/markdown",
+            "bytes": 10366,
+            "sha256": "fd9682e65a7fe3dd7369a536343d193d302138dc2e480604812025993e3ebb6b"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "459ac5fe-a23f-5c58-af37-93d2dae6d0ca",
+              "manifest_sha256": "38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180"
+            },
+            "tree": "resources",
+            "path": "campaign.csv",
+            "media_type": "text/csv",
+            "bytes": 113,
+            "sha256": "2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1"
+          }
+        }
+      ],
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hVZF8AMim7elwBWzUpDo",
+        "catalog_revision": 41,
+        "expected_sha256": "740921fc0ee858374f13a3959bcac341dfc7d8eb46e1bee0b90611ea0e7d7844"
+      },
+      "resources": [
+        {
+          "owner": "art_hVZF8AMim7elwBWzUpDo",
+          "path": "artifacts/marketing-growth/campaign-plan.md",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+              "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+            },
+            "tree": "resources",
+            "path": "artifacts/marketing-growth/campaign-plan.md",
+            "media_type": "text/markdown",
+            "bytes": 10446,
+            "sha256": "6fe31f3b5f17a9608fb4ea2ec00a05069b8dbfa27902d0ebee3c0833271d981e"
+          },
+          "bytes": 10446,
+          "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_hVZF8AMim7elwBWzUpDo\\artifacts\\marketing-growth\\campaign-plan.md",
+          "ranges": [
+            "bytes 0-4095/10446",
+            "bytes 4096-8191/10446",
+            "bytes 8192-10445/10446"
+          ]
+        },
+        {
+          "owner": "art_hVZF8AMim7elwBWzUpDo",
+          "path": "outputs/growth-plan.docx",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+              "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+            },
+            "tree": "resources",
+            "path": "outputs/growth-plan.docx",
+            "media_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "bytes": 43213,
+            "sha256": "0bda83e9e21f6db29cd827fe0ca1841dc5b12055265d3c25a461f4c0cf26b19a"
+          },
+          "bytes": 43213,
+          "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_hVZF8AMim7elwBWzUpDo\\outputs\\growth-plan.docx",
+          "ranges": [
+            "bytes 0-43212/43213"
+          ]
+        },
+        {
+          "owner": "art_hVZF8AMim7elwBWzUpDo",
+          "path": "outputs/growth-plan.html",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+              "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+            },
+            "tree": "resources",
+            "path": "outputs/growth-plan.html",
+            "media_type": "text/html",
+            "bytes": 11491,
+            "sha256": "a7198587829d04222b0f6c0be1f2e55707055a87d6a68aa6902faa37ca5aaee7"
+          },
+          "bytes": 11491,
+          "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_hVZF8AMim7elwBWzUpDo\\outputs\\growth-plan.html",
+          "ranges": [
+            "bytes 0-4094/11491",
+            "bytes 4095-8189/11491",
+            "bytes 8190-11490/11491"
+          ]
+        },
+        {
+          "owner": "art_hVZF8AMim7elwBWzUpDo",
+          "path": "outputs/growth-plan.md",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+              "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+              "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+              "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+            },
+            "tree": "resources",
+            "path": "outputs/growth-plan.md",
+            "media_type": "text/markdown",
+            "bytes": 10366,
+            "sha256": "fd9682e65a7fe3dd7369a536343d193d302138dc2e480604812025993e3ebb6b"
+          },
+          "bytes": 10366,
+          "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_hVZF8AMim7elwBWzUpDo\\outputs\\growth-plan.md",
+          "ranges": [
+            "bytes 0-4093/10366",
+            "bytes 4094-8187/10366",
+            "bytes 8188-10365/10366"
+          ]
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "owner": "art_h73pKL9SnPV3SOs4L4rb",
+      "path": "artifacts/marketing-growth/campaign-plan.md",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+          "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+        },
+        "tree": "resources",
+        "path": "artifacts/marketing-growth/campaign-plan.md",
+        "media_type": "text/markdown",
+        "bytes": 10446,
+        "sha256": "6fe31f3b5f17a9608fb4ea2ec00a05069b8dbfa27902d0ebee3c0833271d981e"
+      },
+      "bytes": 10446,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_h73pKL9SnPV3SOs4L4rb\\artifacts\\marketing-growth\\campaign-plan.md",
+      "ranges": [
+        "bytes 0-4095/10446",
+        "bytes 4096-8191/10446",
+        "bytes 8192-10445/10446"
+      ]
+    },
+    {
+      "owner": "art_h73pKL9SnPV3SOs4L4rb",
+      "path": "outputs/growth-plan.docx",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+          "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+        },
+        "tree": "resources",
+        "path": "outputs/growth-plan.docx",
+        "media_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "bytes": 43213,
+        "sha256": "0bda83e9e21f6db29cd827fe0ca1841dc5b12055265d3c25a461f4c0cf26b19a"
+      },
+      "bytes": 43213,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_h73pKL9SnPV3SOs4L4rb\\outputs\\growth-plan.docx",
+      "ranges": [
+        "bytes 0-43212/43213"
+      ]
+    },
+    {
+      "owner": "art_h73pKL9SnPV3SOs4L4rb",
+      "path": "outputs/growth-plan.html",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+          "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+        },
+        "tree": "resources",
+        "path": "outputs/growth-plan.html",
+        "media_type": "text/html",
+        "bytes": 11491,
+        "sha256": "a7198587829d04222b0f6c0be1f2e55707055a87d6a68aa6902faa37ca5aaee7"
+      },
+      "bytes": 11491,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_h73pKL9SnPV3SOs4L4rb\\outputs\\growth-plan.html",
+      "ranges": [
+        "bytes 0-4094/11491",
+        "bytes 4095-8189/11491",
+        "bytes 8190-11490/11491"
+      ]
+    },
+    {
+      "owner": "art_h73pKL9SnPV3SOs4L4rb",
+      "path": "outputs/growth-plan.md",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+          "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+        },
+        "tree": "resources",
+        "path": "outputs/growth-plan.md",
+        "media_type": "text/markdown",
+        "bytes": 10366,
+        "sha256": "fd9682e65a7fe3dd7369a536343d193d302138dc2e480604812025993e3ebb6b"
+      },
+      "bytes": 10366,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_h73pKL9SnPV3SOs4L4rb\\outputs\\growth-plan.md",
+      "ranges": [
+        "bytes 0-4093/10366",
+        "bytes 4094-8187/10366",
+        "bytes 8188-10365/10366"
+      ]
+    },
+    {
+      "owner": "art_haDfZVh9MQKJ6ydSjFYm",
+      "path": "qa/author-review.md",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+          "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+        },
+        "tree": "resources",
+        "path": "qa/author-review.md",
+        "media_type": "text/markdown",
+        "bytes": 3140,
+        "sha256": "925165dd7340fc2ae22902e153a9264fbb8543dad47afba7d1558580225c3ff6"
+      },
+      "bytes": 3140,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_haDfZVh9MQKJ6ydSjFYm\\qa\\author-review.md",
+      "ranges": [
+        "bytes 0-3139/3140"
+      ]
+    },
+    {
+      "owner": "art_haDfZVh9MQKJ6ydSjFYm",
+      "path": "qa/body-consistency.json",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+          "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+        },
+        "tree": "resources",
+        "path": "qa/body-consistency.json",
+        "media_type": "application/json",
+        "bytes": 420,
+        "sha256": "ca145874f9cf677944730406221fe3f39d6d996a92d0665d3e15a75682eee477"
+      },
+      "bytes": 420,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_haDfZVh9MQKJ6ydSjFYm\\qa\\body-consistency.json",
+      "ranges": [
+        "bytes 0-419/420"
+      ]
+    },
+    {
+      "owner": "art_haDfZVh9MQKJ6ydSjFYm",
+      "path": "qa/initial/growth-plan.pdf",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+          "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+        },
+        "tree": "resources",
+        "path": "qa/initial/growth-plan.pdf",
+        "media_type": "application/pdf",
+        "bytes": 476283,
+        "sha256": "ee0c84cb36238f0864729318e77398d4809012ae60958059b9be98f4694c0bb4"
+      },
+      "bytes": 476283,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_haDfZVh9MQKJ6ydSjFYm\\qa\\initial\\growth-plan.pdf",
+      "ranges": [
+        "bytes 0-476282/476283"
+      ]
+    },
+    {
+      "owner": "art_haDfZVh9MQKJ6ydSjFYm",
+      "path": "qa/initial/page-1.png",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+          "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+        },
+        "tree": "resources",
+        "path": "qa/initial/page-1.png",
+        "media_type": "image/png",
+        "bytes": 498951,
+        "sha256": "2f55464bf5a4428f7eae1339dc6c984f538c4d41b27b78fff41b80b9a9234085"
+      },
+      "bytes": 498951,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_haDfZVh9MQKJ6ydSjFYm\\qa\\initial\\page-1.png",
+      "ranges": [
+        "bytes 0-498950/498951"
+      ]
+    },
+    {
+      "owner": "art_haDfZVh9MQKJ6ydSjFYm",
+      "path": "qa/initial/page-2.png",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+          "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+        },
+        "tree": "resources",
+        "path": "qa/initial/page-2.png",
+        "media_type": "image/png",
+        "bytes": 565536,
+        "sha256": "23157bfa8ca365262d68069a9ce093ac8842f1b48649aab4e97c574214f5c36e"
+      },
+      "bytes": 565536,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_haDfZVh9MQKJ6ydSjFYm\\qa\\initial\\page-2.png",
+      "ranges": [
+        "bytes 0-565535/565536"
+      ]
+    },
+    {
+      "owner": "art_haDfZVh9MQKJ6ydSjFYm",
+      "path": "qa/initial/page-3.png",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+          "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+        },
+        "tree": "resources",
+        "path": "qa/initial/page-3.png",
+        "media_type": "image/png",
+        "bytes": 602598,
+        "sha256": "96ebb595e042d277c5c6bcbf06755b804ca5094295a3b06f2f4907891826cc5a"
+      },
+      "bytes": 602598,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_haDfZVh9MQKJ6ydSjFYm\\qa\\initial\\page-3.png",
+      "ranges": [
+        "bytes 0-602597/602598"
+      ]
+    },
+    {
+      "owner": "art_haDfZVh9MQKJ6ydSjFYm",
+      "path": "qa/initial/page-4.png",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+          "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+        },
+        "tree": "resources",
+        "path": "qa/initial/page-4.png",
+        "media_type": "image/png",
+        "bytes": 323054,
+        "sha256": "51795c0f56c8910cd324842d2a1cb9da572058456cf35136733e1e139b52df91"
+      },
+      "bytes": 323054,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_haDfZVh9MQKJ6ydSjFYm\\qa\\initial\\page-4.png",
+      "ranges": [
+        "bytes 0-323053/323054"
+      ]
+    },
+    {
+      "owner": "art_haDfZVh9MQKJ6ydSjFYm",
+      "path": "tools/build_growth_documents.py",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+          "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+        },
+        "tree": "resources",
+        "path": "tools/build_growth_documents.py",
+        "media_type": "text/x-python",
+        "bytes": 7789,
+        "sha256": "91758e3a0c9b637e981d58a0b6c14d496fb868f25951d9bdf26033fd301c730e"
+      },
+      "bytes": 7789,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_haDfZVh9MQKJ6ydSjFYm\\tools\\build_growth_documents.py",
+      "ranges": [
+        "bytes 0-4095/7789",
+        "bytes 4096-7788/7789"
+      ]
+    },
+    {
+      "owner": "art_hVZF8AMim7elwBWzUpDo",
+      "path": "artifacts/marketing-growth/campaign-plan.md",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+          "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+        },
+        "tree": "resources",
+        "path": "artifacts/marketing-growth/campaign-plan.md",
+        "media_type": "text/markdown",
+        "bytes": 10446,
+        "sha256": "6fe31f3b5f17a9608fb4ea2ec00a05069b8dbfa27902d0ebee3c0833271d981e"
+      },
+      "bytes": 10446,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_hVZF8AMim7elwBWzUpDo\\artifacts\\marketing-growth\\campaign-plan.md",
+      "ranges": [
+        "bytes 0-4095/10446",
+        "bytes 4096-8191/10446",
+        "bytes 8192-10445/10446"
+      ]
+    },
+    {
+      "owner": "art_hVZF8AMim7elwBWzUpDo",
+      "path": "outputs/growth-plan.docx",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+          "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+        },
+        "tree": "resources",
+        "path": "outputs/growth-plan.docx",
+        "media_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "bytes": 43213,
+        "sha256": "0bda83e9e21f6db29cd827fe0ca1841dc5b12055265d3c25a461f4c0cf26b19a"
+      },
+      "bytes": 43213,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_hVZF8AMim7elwBWzUpDo\\outputs\\growth-plan.docx",
+      "ranges": [
+        "bytes 0-43212/43213"
+      ]
+    },
+    {
+      "owner": "art_hVZF8AMim7elwBWzUpDo",
+      "path": "outputs/growth-plan.html",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+          "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+        },
+        "tree": "resources",
+        "path": "outputs/growth-plan.html",
+        "media_type": "text/html",
+        "bytes": 11491,
+        "sha256": "a7198587829d04222b0f6c0be1f2e55707055a87d6a68aa6902faa37ca5aaee7"
+      },
+      "bytes": 11491,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_hVZF8AMim7elwBWzUpDo\\outputs\\growth-plan.html",
+      "ranges": [
+        "bytes 0-4094/11491",
+        "bytes 4095-8189/11491",
+        "bytes 8190-11490/11491"
+      ]
+    },
+    {
+      "owner": "art_hVZF8AMim7elwBWzUpDo",
+      "path": "outputs/growth-plan.md",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+          "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+        },
+        "tree": "resources",
+        "path": "outputs/growth-plan.md",
+        "media_type": "text/markdown",
+        "bytes": 10366,
+        "sha256": "fd9682e65a7fe3dd7369a536343d193d302138dc2e480604812025993e3ebb6b"
+      },
+      "bytes": 10366,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_hVZF8AMim7elwBWzUpDo\\outputs\\growth-plan.md",
+      "ranges": [
+        "bytes 0-4093/10366",
+        "bytes 4094-8187/10366",
+        "bytes 8188-10365/10366"
+      ]
+    },
+    {
+      "owner": "art_hVZF8AMim7elwBWzUpDo",
+      "path": "artifacts/marketing-growth/campaign-plan.md",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+          "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+        },
+        "tree": "resources",
+        "path": "artifacts/marketing-growth/campaign-plan.md",
+        "media_type": "text/markdown",
+        "bytes": 10446,
+        "sha256": "6fe31f3b5f17a9608fb4ea2ec00a05069b8dbfa27902d0ebee3c0833271d981e"
+      },
+      "bytes": 10446,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_hVZF8AMim7elwBWzUpDo\\artifacts\\marketing-growth\\campaign-plan.md",
+      "ranges": [
+        "bytes 0-4095/10446",
+        "bytes 4096-8191/10446",
+        "bytes 8192-10445/10446"
+      ]
+    },
+    {
+      "owner": "art_hVZF8AMim7elwBWzUpDo",
+      "path": "outputs/growth-plan.docx",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+          "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+        },
+        "tree": "resources",
+        "path": "outputs/growth-plan.docx",
+        "media_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "bytes": 43213,
+        "sha256": "0bda83e9e21f6db29cd827fe0ca1841dc5b12055265d3c25a461f4c0cf26b19a"
+      },
+      "bytes": 43213,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_hVZF8AMim7elwBWzUpDo\\outputs\\growth-plan.docx",
+      "ranges": [
+        "bytes 0-43212/43213"
+      ]
+    },
+    {
+      "owner": "art_hVZF8AMim7elwBWzUpDo",
+      "path": "outputs/growth-plan.html",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+          "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+        },
+        "tree": "resources",
+        "path": "outputs/growth-plan.html",
+        "media_type": "text/html",
+        "bytes": 11491,
+        "sha256": "a7198587829d04222b0f6c0be1f2e55707055a87d6a68aa6902faa37ca5aaee7"
+      },
+      "bytes": 11491,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_hVZF8AMim7elwBWzUpDo\\outputs\\growth-plan.html",
+      "ranges": [
+        "bytes 0-4094/11491",
+        "bytes 4095-8189/11491",
+        "bytes 8190-11490/11491"
+      ]
+    },
+    {
+      "owner": "art_hVZF8AMim7elwBWzUpDo",
+      "path": "outputs/growth-plan.md",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+          "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+        },
+        "tree": "resources",
+        "path": "outputs/growth-plan.md",
+        "media_type": "text/markdown",
+        "bytes": 10366,
+        "sha256": "fd9682e65a7fe3dd7369a536343d193d302138dc2e480604812025993e3ebb6b"
+      },
+      "bytes": 10366,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_hVZF8AMim7elwBWzUpDo\\outputs\\growth-plan.md",
+      "ranges": [
+        "bytes 0-4093/10366",
+        "bytes 4094-8187/10366",
+        "bytes 8188-10365/10366"
+      ]
+    }
+  ],
+  "selected": [
+    {
+      "owner": "art_hVZF8AMim7elwBWzUpDo",
+      "path": "outputs/growth-plan.md",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+          "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+        },
+        "tree": "resources",
+        "path": "outputs/growth-plan.md",
+        "media_type": "text/markdown",
+        "bytes": 10366,
+        "sha256": "fd9682e65a7fe3dd7369a536343d193d302138dc2e480604812025993e3ebb6b"
+      },
+      "bytes": 10366,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_hVZF8AMim7elwBWzUpDo\\outputs\\growth-plan.md",
+      "ranges": [
+        "bytes 0-4093/10366",
+        "bytes 4094-8187/10366",
+        "bytes 8188-10365/10366"
+      ]
+    },
+    {
+      "owner": "art_hVZF8AMim7elwBWzUpDo",
+      "path": "outputs/growth-plan.docx",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+          "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+        },
+        "tree": "resources",
+        "path": "outputs/growth-plan.docx",
+        "media_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "bytes": 43213,
+        "sha256": "0bda83e9e21f6db29cd827fe0ca1841dc5b12055265d3c25a461f4c0cf26b19a"
+      },
+      "bytes": 43213,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\evidence\\initial-verification\\resources\\art_hVZF8AMim7elwBWzUpDo\\outputs\\growth-plan.docx",
+      "ranges": [
+        "bytes 0-43212/43213"
+      ]
+    }
+  ],
+  "document": {
+    "id": "art_g0VZ2331500quoDefp8Z",
+    "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+    "messageID": "msg_g0VZ22v3N00qZs3QOFrW",
+    "characters": 4083
+  },
+  "canonicalBytes": 10366,
+  "publishedFileEquality": true,
+  "readingDocumentEquality": true,
+  "oldResourcesEquality": false,
+  "phase": "initial",
+  "source": "Complete official API artifact/resource and real interactive-artifact reads; full byte comparisons"
+}

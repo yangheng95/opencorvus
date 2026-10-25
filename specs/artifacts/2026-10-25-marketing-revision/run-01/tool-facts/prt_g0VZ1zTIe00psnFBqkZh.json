@@ -1,0 +1,38 @@
+{
+  "id": "prt_g0VZ1zTIe00psnFBqkZh",
+  "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+  "messageID": "msg_g0VZ1zSN200Fh0NbbU3a",
+  "type": "tool",
+  "callID": "call_a1e8905bb7d04c6f96a76ea3783f4225",
+  "tool": "bash",
+  "state": {
+    "status": "completed",
+    "input": {
+      "command": "git add -f qa/author-review.md qa/body-consistency.json qa/initial/growth-plan.pdf qa/initial/page-1.png qa/initial/page-2.png qa/initial/page-3.png qa/initial/page-4.png",
+      "description": "暂存仅内部使用的逐页验收证据"
+    },
+    "output": "warning: in the working copy of 'qa/author-review.md', LF will be replaced by CRLF the next time Git touches it\n",
+    "title": "暂存仅内部使用的逐页验收证据",
+    "metadata": {
+      "refused": false,
+      "command": "git add -f qa/author-review.md qa/body-consistency.json qa/initial/growth-plan.pdf qa/initial/page-1.png qa/initial/page-2.png qa/initial/page-3.png qa/initial/page-4.png",
+      "output": "warning: in the working copy of 'qa/author-review.md', LF will be replaced by CRLF the next time Git touches it\n",
+      "output_bytes": 112,
+      "exit": 0,
+      "pid": null,
+      "background": false,
+      "description": "暂存仅内部使用的逐页验收证据",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792901379200,
+      "end": 1792901380641
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0457200e6cbce1b9016add81030d6881919734a0b560d8d15c"
+    }
+  },
+  "orderKey": "v1:0001792901379992:0000000000000031:0000000000000000:part:prt_g0VZ1zTIe00psnFBqkZh"
+}

@@ -1,0 +1,38 @@
+{
+  "id": "prt_g0VZ2T8Gh00QSN82nPmL",
+  "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+  "messageID": "msg_g0VZ2T4ZM006STPi53Sd",
+  "type": "tool",
+  "callID": "call_XQCYRJQAfgfVf1HPJZ7o8kOI",
+  "tool": "bash",
+  "state": {
+    "status": "completed",
+    "input": {
+      "command": "python -c 'from pathlib import Path; import subprocess; head=\"5747fb6f85829b2c72edbba3101ee922ee508da2\"; paths=[\"outputs/growth-plan.md\",\"outputs/growth-plan.docx\",\"artifacts/marketing-growth/campaign-plan.md\"]; [(print(p,\"worktree bytes\",len(Path(p).read_bytes()),\"commit bytes\",len(subprocess.check_output([\"git\",\"show\",head+\":\"+p])),\"equal\",Path(p).read_bytes()==subprocess.check_output([\"git\",\"show\",head+\":\"+p]),\"worktree CRLF\",Path(p).read_bytes().count(bytes([13,10])),\"commit CRLF\",subprocess.check_output([\"git\",\"show\",head+\":\"+p]).count(bytes([13,10])))) for p in paths]'",
+      "description": "定位只读核验差异属于文件还是表示"
+    },
+    "output": "outputs/growth-plan.md worktree bytes 9991 commit bytes 9991 equal True worktree CRLF 0 commit CRLF 0\r\noutputs/growth-plan.docx worktree bytes 42433 commit bytes 42433 equal True worktree CRLF 0 commit CRLF 0\r\nartifacts/marketing-growth/campaign-plan.md worktree bytes 10080 commit bytes 9991 equal False worktree CRLF 89 commit CRLF 0\r\n",
+    "title": "定位只读核验差异属于文件还是表示",
+    "metadata": {
+      "refused": false,
+      "command": "python -c 'from pathlib import Path; import subprocess; head=\"5747fb6f85829b2c72edbba3101ee922ee508da2\"; paths=[\"outputs/growth-plan.md\",\"outputs/growth-plan.docx\",\"artifacts/marketing-growth/campaign-plan.md\"]; [(print(p,\"worktree bytes\",len(Path(p).read_bytes()),\"commit bytes\",len(subprocess.check_output([\"git\",\"show\",head+\":\"+p])),\"equal\",Path(p).read_bytes()==subprocess.check_output([\"git\",\"show\",head+\":\"+p]),\"worktree CRLF\",Path(p).read_bytes().count(bytes([13,10])),\"commit CRLF\",subprocess.check_output([\"git\",\"show\",head+\":\"+p]).count(bytes([13,10])))) for p in paths]'",
+      "output": "outputs/growth-plan.md worktree bytes 9991 commit bytes 9991 equal True worktree CRLF 0 commit CRLF 0\r\noutputs/growth-plan.docx worktree bytes 42433 commit bytes 42433 equal True worktree CRLF 0 commit CRLF 0\r\nartifacts/marketing-growth/campaign-plan.md worktree bytes 10080 commit bytes 9991 equal False worktree CRLF 89 commit CRLF 0\r\n",
+      "output_bytes": 337,
+      "exit": 0,
+      "pid": null,
+      "background": false,
+      "description": "定位只读核验差异属于文件还是表示",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792908448195,
+      "end": 1792908451995
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_07dc6297e0312fa9016add9ca0075087d0902d64f08d557e93"
+    }
+  },
+  "orderKey": "v1:0001792908451234:0000000000000031:0000000000000000:part:prt_g0VZ2T8Gh00QSN82nPmL"
+}

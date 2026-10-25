@@ -6,6 +6,14 @@ Rebuilding an input directory does not switch a running page's module version;
 new server processes capture the new publication. Project and conversation data
 continue through their existing dynamic readers and subscriptions.
 
+A complete `message.moved` bundle transfers the original Message and Parts from
+its named source Session to their authoritative target positions. Source-side
+full or Part-first projections retire before the target bundle is applied; a
+new target order key is part of this transfer. Ordinary full replay and a Move
+already owned by the target still require the existing order key. The Task tree,
+member input/activity projection and open member transcript consume that same
+original bundle, preserving IDs and full content without a second Message.
+
 The shared workspace-location parser owns the current document's refresh input.
 Task locations use `taskID`; Session locations use `sessionID`, `sessionKind` and
 `directory`, with `experience` for Chat/Work. Mission restore reads the original

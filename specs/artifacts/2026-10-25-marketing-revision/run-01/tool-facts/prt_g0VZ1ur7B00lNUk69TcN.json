@@ -1,0 +1,85 @@
+{
+  "id": "prt_g0VZ1ur7B00lNUk69TcN",
+  "sessionID": "ses_-zUQy5vEEzzn2RBsqAWe",
+  "messageID": "msg_hk4Ez0Ih6bPT0WkzUIYM",
+  "type": "tool",
+  "callID": "call_98ae9a4a2434491abafff2cdc166834f",
+  "tool": "dispatch_agents",
+  "state": {
+    "status": "completed",
+    "input": {
+      "team": [
+        {
+          "name": "本地证据底稿",
+          "target": "marketing-growth-evidence-researcher",
+          "responsibility": "核对完整原始合成资料并发布简明证据底稿。",
+          "boundary": "仅使用本Task不可变来源与范围简报；不联网、不改输入、不代替两分支分析。",
+          "expected_result": "原包evidence-dossier，完整三渠道与合计计算、观察/假设/未知及来源绑定。",
+          "depends_on": [
+            "范围与衡量口径"
+          ]
+        }
+      ],
+      "dispatches": [
+        {
+          "dispatch": {
+            "target": "marketing-growth-evidence-researcher",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "initial",
+              "workflow_subject": {
+                "kind": "virtual_workflow",
+                "workflow_id": "marketing-growth-campaign",
+                "node_id": "marketing-growth-evidence-researcher"
+              },
+              "use_worktree": false,
+              "input": {
+                "reason": "范围简报已正式发布。请自行发现、完整读取并选择本Task growth-brief以及原始不可变brief.md和campaign.csv，依原包发布evidence-dossier并精确绑定所需typed前驱及原始资源。不联网、不外联、不投放、不花费、不对外发布、不创建其他Task/Goal。材料完整且仅三行合成记录，无需寻找更多来源、提问或重复研究。独立核算各渠道及合计曝光/点击/线索/成本/CPL，必要辅助CTR与点击到线索率，合计用总分子/总分母；保留原始历史数据。当前预算上限1200元覆盖brief旧草案3000元，CSV历史合成成本1900元不是当前预算。区分原始观察、计算结果、待验证假设和未知；不能从描述性排序推断增量、真实需求、市场基准、CAC或未来保证。受众仅知小型团队、产品虚构，价格/市场/竞争/线索质量等未知应登记而不是补造。给受众与渠道独立并行分析提供足够且简短的正式底稿；不撰写最终计划或扩写市场报告。",
+                "target_deliverable": "research_report",
+                "source_urls": [],
+                "focus": "仅本地材料的简明证据底稿；完整三渠道及合计计算、预算更正关系和证据局限。"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "output": "{\"members\":[{\"member_index\":0,\"name\":\"本地证据底稿\",\"target\":\"marketing-growth-evidence-researcher\",\"status\":\"completed\",\"outcome\":{\"kind\":\"accepted\",\"session_id\":\"ses_h44dc5ci2FtFJ7TDJkaH\",\"dispatch_lineage_id\":\"art_g0VZ1utcx005R30Xp53j\"}}]}",
+    "title": "Settled frontier (1/1)",
+    "metadata": {
+      "frontier_size": 1,
+      "completed_count": 1,
+      "member_names": [
+        "本地证据底稿"
+      ],
+      "targets": [
+        "marketing-growth-evidence-researcher"
+      ],
+      "members": [
+        {
+          "member_index": 0,
+          "name": "本地证据底稿",
+          "target": "marketing-growth-evidence-researcher",
+          "status": "completed",
+          "outcome": {
+            "kind": "accepted",
+            "session_id": "ses_h44dc5ci2FtFJ7TDJkaH",
+            "dispatch_lineage_id": "art_g0VZ1utcx005R30Xp53j"
+          }
+        }
+      ]
+    },
+    "time": {
+      "start": 1792900279105,
+      "end": 1792900290218
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_08974553128ff90c016add7cb703008191ac131585c596ed92"
+    }
+  },
+  "orderKey": "v1:0001792900288438:0000000000000031:0000000000000000:part:prt_g0VZ1ur7B00lNUk69TcN"
+}

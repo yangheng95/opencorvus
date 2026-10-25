@@ -1,0 +1,83 @@
+{
+  "id": "prt_g0VZ222ZG00mENAQiY5f",
+  "sessionID": "ses_-zUQy5vEEzzn2RBsqAWe",
+  "messageID": "msg_haG42G9XvzX2AgwAwA8A",
+  "type": "tool",
+  "callID": "call_f2fae07051fa4311b40631c4c910b34c",
+  "tool": "dispatch_agents",
+  "state": {
+    "status": "completed",
+    "input": {
+      "team": [
+        {
+          "name": "原营销作者正式交付",
+          "target": "marketing-growth-campaign-writer",
+          "responsibility": "保留独立复核通过的正文和文档，完成原包正式计划与同正文阅读交付。",
+          "boundary": "仅本地交付封装及必要只读核验；不重复研究、不改已验收正文版式，不联网或外联，不创建Task或Goal。",
+          "expected_result": "正式campaign-plan及实际MD、DOCX、HTML资源和完全同正文交互阅读文档；保留独立复核和来源绑定。",
+          "depends_on": []
+        }
+      ],
+      "dispatches": [
+        {
+          "dispatch": {
+            "target": "marketing-growth-campaign-writer",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "continuation",
+              "authority": {
+                "kind": "prior_dispatch",
+                "continuation_dispatch_id": "art_hLXkdJqQXNuMlyvjLkeK"
+              },
+              "guidance": "独立角色已完成最终正文及全部4页真实页图复核，结果无必改项。继续你原有正式交付职责：自行发现、完整读取并选择同Task的final-document-review、author-review-documents及必要原包前驱和原始不可变brief/CSV资源。保留已复核的outputs/growth-plan.md、docx、html及同正文包镜像，不扩写、不重做研究，不仅用摘要替代正文。依原Skill合同核对已有提交及当前实际文件，完成marketing-growth/campaign-plan@1正式发布，resource_set须含实际规范MD、纵向DOCX、HTML和原包镜像；完整绑定原不可变来源及实际正文。再通过publish_interactive_artifact发布完全相同正文的document@1阅读文档，非摘要，准确报告工具回执及资源身份。当前主项目中无merge_back时按Skill省略source_commit直接封存重读文件；如实际有merge_back则严格遵守其返回primary_head和不可变重读合同。不得因历史qa忽略路径的采集错误修改ignore规则或重写文档；核对真实状态并保留已有提交和QA证据。PDF与PNG仅内部验收，不放最终业务交付资源。任何正文或Word实质更改必须重新独立复核，不可沿用旧通过。只本地内部封存与阅读，不联网、不外联、不投放、不花费、不公开发布，不创建其他Task或Goal。最终说明正式交付完成情况及剩余真实限制。",
+              "evidence_locators": [
+                {
+                  "source": "session_message",
+                  "session_id": "ses_hVeBqjMKP8pdekG4qxJL",
+                  "message_id": "msg_g0VZ21clJ00QGBPS3fD0"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "output": "{\"members\":[{\"member_index\":0,\"name\":\"原营销作者正式交付\",\"target\":\"marketing-growth-campaign-writer\",\"status\":\"completed\",\"outcome\":{\"kind\":\"accepted\",\"session_id\":\"ses_hyWiInyq6XpRz0zm2vDI\",\"dispatch_lineage_id\":\"art_g0VZ225zs00pNEmpGnke\"}}]}",
+    "title": "Settled frontier (1/1)",
+    "metadata": {
+      "frontier_size": 1,
+      "completed_count": 1,
+      "member_names": [
+        "原营销作者正式交付"
+      ],
+      "targets": [
+        "marketing-growth-campaign-writer"
+      ],
+      "members": [
+        {
+          "member_index": 0,
+          "name": "原营销作者正式交付",
+          "target": "marketing-growth-campaign-writer",
+          "status": "completed",
+          "outcome": {
+            "kind": "accepted",
+            "session_id": "ses_hyWiInyq6XpRz0zm2vDI",
+            "dispatch_lineage_id": "art_g0VZ225zs00pNEmpGnke"
+          }
+        }
+      ]
+    },
+    "time": {
+      "start": 1792901991426,
+      "end": 1792902006788
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_032900e2f3cc3764016add83674e188191a86656a73df516c6"
+    }
+  },
+  "orderKey": "v1:0001792902004235:0000000000000031:0000000000000000:part:prt_g0VZ222ZG00mENAQiY5f"
+}

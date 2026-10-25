@@ -1,0 +1,38 @@
+{
+  "id": "prt_g0VZ1ynw200LZyPyIsGG",
+  "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+  "messageID": "msg_g0VZ1yme200qOBPbiceN",
+  "type": "tool",
+  "callID": "call_38fdfb777b30445e91ce72313554f28d",
+  "tool": "bash",
+  "state": {
+    "status": "completed",
+    "input": {
+      "command": "python tools/build_growth_documents.py",
+      "description": "生成同正文文档并逐项检查语义序列"
+    },
+    "output": "{\"method\": \"Parse MD headings/paragraphs/table rows; reopen DOCX body XML in document order and parse HTML independently. Exact ordered text and cell comparison; no digest shortcut.\", \"semantic_blocks\": 29, \"tables\": 3, \"table_cells\": 70, \"chinese_characters\": 2248, \"md_docx_html_sequence_equal\": true, \"mirror_equal\": true, \"all_sections_portrait\": true, \"all_paragraph_runs_black\": true}\r\n",
+    "title": "生成同正文文档并逐项检查语义序列",
+    "metadata": {
+      "refused": false,
+      "command": "python tools/build_growth_documents.py",
+      "output": "{\"method\": \"Parse MD headings/paragraphs/table rows; reopen DOCX body XML in document order and parse HTML independently. Exact ordered text and cell comparison; no digest shortcut.\", \"semantic_blocks\": 29, \"tables\": 3, \"table_cells\": 70, \"chinese_characters\": 2248, \"md_docx_html_sequence_equal\": true, \"mirror_equal\": true, \"all_sections_portrait\": true, \"all_paragraph_runs_black\": true}\r\n",
+      "output_bytes": 392,
+      "exit": 0,
+      "pid": null,
+      "background": false,
+      "description": "生成同正文文档并逐项检查语义序列",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792901220194,
+      "end": 1792901221790
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0f01a2a8158ca176016add80641528819194037061ea47f82a"
+    }
+  },
+  "orderKey": "v1:0001792901220646:0000000000000031:0000000000000000:part:prt_g0VZ1ynw200LZyPyIsGG"
+}

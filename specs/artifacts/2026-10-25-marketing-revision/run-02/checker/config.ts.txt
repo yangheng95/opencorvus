@@ -1,0 +1,6 @@
+import path from "node:path"
+export const iteration=process.env.OPENCORVUS_QA_CASE ?? "02"
+if(!/^\d{2}$/.test(iteration))throw new Error("Explicit two-digit isolated case occurrence required")
+export const run=`C:/Users/hengu/.codex/opencorvus-marketing-revision-20261025-${iteration}`
+export const evidence=path.join(run,"evidence"),project=path.join(run,"project"),runtime=path.join(run,"runtime")
+export const port=19146+Number(iteration),endpoint=`http://127.0.0.1:${port}`

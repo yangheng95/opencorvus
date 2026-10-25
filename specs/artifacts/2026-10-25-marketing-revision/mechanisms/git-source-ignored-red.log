@@ -1,0 +1,36 @@
+$ bun script/run-tests.ts test/git-source-stage.test.ts "--test-name-pattern=tracked files under ignored"
+[1/1] START test/git-source-stage.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+41 |   args: string[],
+42 |   input?: AsyncIterable<Uint8Array>,
+43 | ) {
+44 |   const result = await run(args, input)
+45 |   if (result.exitCode !== 0)
+46 |     throw new Error(`git ${args[0]} failed: ${result.stderr.toString().trim() || result.exitCode}`)
+                   ^
+error: git -c failed: warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'qa/review.md', LF will be replaced by CRLF the next time Git touches it
+The following paths are ignored by one of your .gitignore files:
+qa
+hint: Use -f if you really want to add them.
+hint: Disable this message with "git config advice.addIgnoredFile false"
+warning: in the working copy of 'outputs/plan.md', LF will be replaced by CRLF the next time Git touches it
+      at checkedSourceGit (D:\myhexin-local\opencorvus\packages\opencorvus\src\util\git-source-stage.ts:46:15)
+      at async stageGitSourceEntries (D:\myhexin-local\opencorvus\packages\opencorvus\src\util\git-source-stage.ts:115:13)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\git-source-stage.test.ts:29:9)
+(fail) tracked files under ignored directories retain their current contents in source staging and Build pins [2609.84ms]
+
+ 0 pass
+ 11 filtered out
+ 1 fail
+ 3 expect() calls
+Ran 1 test across 1 file. [7.05s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\git-source-stage.test.ts
+[1/1] DONE test/git-source-stage.test.ts exit=1 duration=8.16s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\git-source-stage.test.ts
+Test runtime retained after unsuccessful run: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-3MFnjq
+Physical/output settlement confirmed: true
+error: script "test" exited with code 1

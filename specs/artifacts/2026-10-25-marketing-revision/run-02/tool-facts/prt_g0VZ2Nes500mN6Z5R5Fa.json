@@ -1,0 +1,45 @@
+{
+  "id": "prt_g0VZ2Nes500mN6Z5R5Fa",
+  "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+  "messageID": "msg_g0VZ2NdSW0077QDHJyLt",
+  "type": "tool",
+  "callID": "call_9af9369e1def4c6ca3a49310354479d4",
+  "tool": "read",
+  "state": {
+    "status": "completed",
+    "input": {
+      "filePath": "qa/initial/page-1.png"
+    },
+    "output": "Image read successfully",
+    "title": "qa\\initial\\page-1.png",
+    "metadata": {
+      "preview": "Image read successfully",
+      "truncated": false,
+      "loaded": [],
+      "readType": "binary",
+      "lines": 0,
+      "totalLines": 0
+    },
+    "time": {
+      "start": 1792907143553,
+      "end": 1792907144126
+    },
+    "attachments": [
+      {
+        "id": "prt_g0VZ2Nf1C00bd1w8jrfQ",
+        "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+        "messageID": "msg_g0VZ2NdSW0077QDHJyLt",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-1.png",
+        "url": "/attachment/prj_hxHOMBTalkvA4toZOhTn/9e4d848cbd80546a612342774f9f9619ac8641d655fce742ee06a66bf2c47b90.png"
+      }
+    ]
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0675be143941d87d016add978767fc819185a30b4048d35fea"
+    }
+  },
+  "orderKey": "v1:0001792907143715:0000000000000031:0000000000000000:part:prt_g0VZ2Nes500mN6Z5R5Fa"
+}

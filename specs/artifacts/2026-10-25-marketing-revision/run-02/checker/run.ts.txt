@@ -1,0 +1,136 @@
+import assert from "node:assert/strict"
+import fs from "node:fs"
+import path from "node:path"
+import { execFileSync } from "node:child_process"
+import { pathToFileURL } from "node:url"
+
+const [mode,occurrence]=process.argv.slice(2)
+const repo=path.resolve(import.meta.dir,"../.."),pkg=path.join(repo,"packages/opencorvus")
+const source=(file:string)=>pathToFileURL(path.join(pkg,file)).href
+import {run,runtime,evidence,project,port,endpoint,iteration} from "./config"
+const old="C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-03/evidence/word-feedback-02"
+const skill="C:/Users/hengu/.codex/plugins/cache/openai-primary-runtime/documents/26.1017.31632/skills/documents"
+const deps="C:/Users/hengu/.cache/codex-runtimes/codex-primary-runtime/dependencies"
+const credentialSource="C:/Users/hengu/AppData/Local/opencorvus/data/auth.json"
+const model="openai/gpt-6.1-sol"
+const read=(file:string)=>JSON.parse(fs.readFileSync(file,"utf8"))
+const write=(file:string,value:unknown)=>fs.writeFileSync(path.join(evidence,file),JSON.stringify(value,null,2))
+const budgetFile=path.join(evidence,"budget-authorization.json")
+const maximumRequests=fs.existsSync(budgetFile)?read(budgetFile).maximumRequests:360
+assert(maximumRequests===null||(Number.isSafeInteger(maximumRequests)&&maximumRequests>=360))
+if(maximumRequests===null||maximumRequests>360)assert.equal(read(budgetFile).explicitUserAuthorization,true)
+const taskID=()=>read(path.join(evidence,"creation.json")).result.task_id
+const api=async(route:string,body?:unknown)=>{
+  const url=new URL(route,endpoint);url.searchParams.set("directory",project)
+  const response=await fetch(url,{method:body===undefined?"GET":"POST",headers:{"content-type":"application/json"},...(body===undefined?{}:{body:JSON.stringify(body)}),signal:AbortSignal.timeout(180_000)})
+  const result=await response.json();assert(response.ok,JSON.stringify({route,status:response.status,result}));return {status:response.status,result}
+}
+if(mode==="files"){
+  assert.equal(fs.existsSync(run),false,"Fresh marketing run required")
+  for(const part of ["runtime/data","runtime/config","runtime/tmp","authority","evidence","home","appdata","localappdata","project/tools"])
+    fs.mkdirSync(path.join(run,part),{recursive:true})
+  const input=path.join(repo,"specs/artifacts/2026-10-24-expert-steering-recovery-cases/inputs/marketing-growth")
+  for(const name of ["brief.md","campaign.csv"])fs.copyFileSync(path.join(input,name),path.join(project,name))
+  fs.copyFileSync(path.join(skill,"render_docx.py"),path.join(project,"tools/render_docx.py"))
+  fs.copyFileSync(path.join(old,"before/growth-plan.docx"),path.join(evidence,"dependency-probe.docx"))
+  fs.writeFileSync(path.join(project,"tools/runtime.md"),"离线文档运行时已经配置到本服务PATH：python为bundled Python（含python-docx），soffice为独立官方LibreOffice，pdftoppm/pdfinfo为bundled Poppler。项目内tools/render_docx.py是成熟原版完整副本。Python UTF-8输出已配置；python-docx与标准库zipfile可直接只读解析Word有序段落/单元格和OOXML，文本read不会解析DOCX。只读核验可在Task自有scratch保存临时材料，不能改原证据或交付。实际用法：python tools/render_docx.py outputs/growth-plan.docx --output_dir qa/initial --emit_pdf --verbose；修订使用qa/revised。renderer自动建立独立UserInstallation，不连接用户Office。最终所有页PNG需实际查看，派生PDF/PNG仅内部验收，非业务交付。一般文件工具仅能读取Task项目根内文件。\n")
+  const request="完整读取brief.md及campaign.csv，以原marketing-growth专家团的完整职责链完成本地营销计划：范围、证据、受众/渠道独立并行分析、汇合策略、独立复核、原营销作者规范交付。当前明确预算上限1200元，brief.md的3000元是被取代的旧草案，CSV合成历史成本1900元不是当前预算；保留三者关系，不以小预算篡改历史。准确复算三渠道及合计曝光/点击/线索/成本和线索成本，区别观察、假设及未知。只有三行合成记录，任务材料已完整提供；各阶段及最终报告简明直接，避免无新证据的重复研究和扩写，但完整履行全部职责及真实Artifact交接。最终规范正文outputs/growth-plan.md（约3000汉字，完整论证和表格），另交同正文outputs/growth-plan.docx，Word采用纵向页面；通过现有工具提供完全相同正文的阅读文档。正式业务文件仅规范MD和Word；不额外生成HTML，包若要求同正文镜像可保留在本地，不能成为另一规范正文或额外正式文件。文档标题清楚黑色且无装饰线、表格可读不截断。tools/runtime.md及项目内tools/render_docx.py提供已预检的离线生成/渲染依赖，成熟python-docx和标准库zipfile可直接做只读Word段落、单元格及OOXML解析，输出已设置UTF-8。文本read不解析DOCX，请按已有运行时使用真实解析和渲染，不需调查外部环境或安装可选库。实际渲染最终Word，作者逐页查看，再由独立角色复核最终正文及真实页图后按原包合同正式交付；页图/PDF只内部验收。来源及实际正文使用原不可变资源完整绑定。仅本地内部，不联网、不外联、不投放、不花费、不发布、不创建其他Task或Goal。"
+  fs.writeFileSync(path.join(project,"request.txt"),request+"\n")
+  fs.writeFileSync(path.join(project,".gitignore"),".opencorvus/\n__pycache__/\nqa/\n")
+  write("files-ready.json",{iteration,run,project,port,sourceCommit:execFileSync("git",["rev-parse","HEAD"],{cwd:repo,encoding:"utf8"}).trim(),inputs:["brief.md","campaign.csv"],rendererSource:path.join(skill,"render_docx.py"),rendererBytes:fs.statSync(path.join(project,"tools/render_docx.py")).size})
+  fs.writeFileSync(path.join(evidence,"source.patch"),execFileSync("git",["diff","--","packages/opencorvus/src/prompt/core/fact-check-core.txt","packages/opencorvus/src/util/git-source-stage.ts","packages/overlay/src/services/tree-writer.ts","packages/overlay/src/services/events.ts","packages/overlay/src/services/subagent-conversation.ts"],{cwd:repo}))
+  console.log(JSON.stringify({filesReady:true,run,project,port}))
+}else if(mode==="prepare"){
+  const prepared=read(path.join(evidence,"files-ready.json")),rendered=read(path.join(evidence,"dependency-preflight.json"))
+  assert.equal(rendered.exitCode,0);assert.equal(rendered.pages,5)
+  assert(fs.readFileSync(path.join(project,"tools/render_docx.py")).equals(fs.readFileSync(path.join(skill,"render_docx.py"))))
+  assert.equal(fs.existsSync(path.join(evidence,"preparation.json")),false)
+  const credential=read(credentialSource),models=fs.readFileSync(path.join(path.dirname(credentialSource),"models.json"))
+  assert.equal(credential.openai.info.type,"oauth");assert(credential.openai.info.expires>Date.now()+1_200_000);assert(JSON.parse(models.toString()).openai.models["gpt-6.1-sol"])
+  fs.writeFileSync(path.join(run,"authority/auth.json"),JSON.stringify({openai:credential.openai}),{mode:0o600,flag:"wx"})
+  fs.writeFileSync(path.join(run,"authority/models.json"),models,{mode:0o600,flag:"wx"})
+  fs.writeFileSync(path.join(runtime,"config/opencorvus.jsonc"),JSON.stringify({model,small_model:model,prompt_profile:{active:"base"},permission_mode:"full_access"}))
+  for(const args of [["init","--initial-branch=main"],["config","user.name","OpenCorvus isolated acceptance"],["config","user.email","acceptance@opencorvus.invalid"],["add","."],["commit","-m","test: initialize original marketing chain with staged rendering dependencies"]])execFileSync("git",args,{cwd:project,stdio:"pipe"})
+  write("preparation.json",{...prepared,model,maximumRequests:360,sourceMtime:fs.statSync(credentialSource).mtimeMs,modelsMtime:fs.statSync(path.join(path.dirname(credentialSource),"models.json")).mtimeMs,projectHead:execFileSync("git",["rev-parse","HEAD"],{cwd:project,encoding:"utf8"}).trim()})
+  console.log(JSON.stringify({prepared:true,maximumRequests:360,independentTask:true}))
+}else if(mode==="serve"){
+  const meta=read(path.join(evidence,"preparation.json"));assert.equal(meta.maximumRequests,360);assert.equal(path.resolve(process.env.OPENCORVUS_HOME!),path.resolve(runtime))
+  const {installProcessShims}=await import(source("src/runtime/shims.ts"));installProcessShims()
+  const {CredentialRedactor,RealProviderAudit,installProcessProviderAudit}=await import(source("script/real-provider-audit.ts"))
+  const {stageDiagnosticProvider}=await import(source("script/evolution-diagnostic-provider.ts"))
+  const {createAuditSnapshotPublisher}=await import(source("script/audit-snapshot.ts"))
+  const redactor=new CredentialRedactor(),access=await stageDiagnosticProvider({authSource:path.join(run,"authority/auth.json"),dataDirectory:path.join(runtime,"data"),modelID:"gpt-6.1-sol",redactor})
+  const publish=createAuditSnapshotPublisher(evidence,"provider");let audit:InstanceType<typeof RealProviderAudit>
+  const persist=()=>publish(JSON.parse(redactor.redact(JSON.stringify({at:Date.now(),maxRequests:maximumRequests,exhausted:audit.exhausted,requests:audit.requests}))))
+  audit=new RealProviderAudit("gpt-6.1-sol",maximumRequests,persist,{copiedOAuthExpiresAt:access.copiedOAuthExpiresAt},undefined,{redactor})
+  const prefixFile=path.join(evidence,"prior-provider.json")
+  if(fs.existsSync(prefixFile)){
+    const prefix=read(prefixFile)
+    assert(prefix.requests.every((r:any)=>r.model==='gpt-6.1-sol'&&r.streaming===true&&['settled','fetch_failed'].includes(r.response_reader.state)))
+    assert(maximumRequests===null||prefix.requests.length<maximumRequests)
+    audit.requests.push(...prefix.requests)
+    write('restored-request-prefix.json',{requests:prefix.requests.length,maximumRequests,source:'prior-provider.json',entireOriginalRequestsRetained:true})
+  }
+  installProcessProviderAudit(()=>({audit,persist}));audit.localOrigins.add(endpoint);persist();setInterval(persist,5000).unref()
+  const [{Instance},{Auth},{Provider},{SessionStatus},physical,shutdown,{ExpertSquadPackageManager}]=await Promise.all([import(source("src/project/instance.ts")),import(source("src/auth/index.ts")),import(source("src/provider/provider.ts")),import(source("src/session/status.ts")),import(source("src/runtime/process-occurrence.ts")),import(source("src/server/shutdown.ts")),import(source("src/expert-squad/manager.ts"))])
+  const parent=physical.observedProcessOccurrence(process.ppid);assert(parent)
+  await Instance.provide({directory:project,fn:async()=>{
+    assert.equal((await Auth.get("openai"))?.type,"oauth");assert.equal((await Provider.getModel("openai","gpt-6.1-sol")).api.id,"gpt-6.1-sol")
+    const installed=await ExpertSquadPackageManager.installPayloadPackage({projectDirectory:project,id:"marketing-growth",installationScope:"project"})
+    write("authority-ready.json",{credential:"registered OAuth",projectedModel:"gpt-6.1-sol",installed})
+  }})
+  const receipt=path.join(evidence,"startup.json")
+  const monitor=(async()=>{let previous="",last=Date.now();for(;;){let state:any;try{state=read(receipt)}catch(error){if((error as NodeJS.ErrnoException).code!=="ENOENT")throw error}const next=JSON.stringify(state);if(next!==previous){previous=next;last=Date.now()}if(state&&shutdown.hasServerShutdownHandler()){assert.equal(state.pid,process.pid);assert.equal(state.occurrenceID,occurrence);break}if(Date.now()-last>180_000)throw new Error("MARKETING_REVISION_STARTUP_INACTIVITY");await Bun.sleep(250)}write("preflight-ready.json",{preflight:await audit.preflight({serverURL:new URL(endpoint),model,inactivityMs:180_000,activity:SessionStatus.getActivity}),maximumRequests,occurrence})})()
+  process.argv=[process.execPath,path.join(pkg,"src/index.ts"),"serve","--hostname","127.0.0.1","--port",String(port),"--project-dir",project,"--startup-receipt",receipt,"--startup-occurrence",occurrence,"--parent-pid",String(parent.pid),"--parent-process-instance-id",parent.processInstanceID,"--log-level","INFO"]
+  try{await Promise.all([import(source("src/index.ts")),monitor])}catch(error){write("checker-error.json",{message:redactor.redact(String(error))});throw error}finally{persist()}
+}else if(mode==="start"){
+  assert.equal(read(path.join(evidence,"preflight-ready.json")).preflight.credential,"usable")
+  if(fs.existsSync(path.join(evidence,"submission-attempt.json")))throw new Error("Reconcile actual submission; do not repeat")
+  execFileSync(path.join(deps,"node/bin/node.exe"),[path.join(skill,"container_tools/mark_artifact_operation_started.mjs"),"--operation-kind","create","--expected-output-count","1","--output-format","docx"],{cwd:project,stdio:"pipe"})
+  const body={requestID:crypto.randomUUID(),directory:project,productPillar:"work",promptProfile:"marketing-growth",title:"原营销专家团首次交付及完成后分页修订",request:fs.readFileSync(path.join(project,"request.txt"),"utf8"),model,source:"marketing-completed-revision"}
+  write("submission-attempt.json",{body,authoringMarker:{operation:"create",expectedOutputCount:1,format:"docx",exitCode:0},at:Date.now()})
+  const accepted=await api("/task",body);write("creation.json",{...accepted,body});console.log(JSON.stringify(accepted))
+}else if(mode==="feedback"){
+  const t=(await api(`/task/${taskID()}`)).result
+  assert.equal(t.status,"completed");assert.equal(t.executionLifecycle.epoch,1);assert.equal(t.packageRevisionBinding.id,"marketing-growth")
+  assert.equal(fs.existsSync(path.join(evidence,"feedback-attempt.json")),false,"Reconcile accepted original message before any retry")
+  assert.equal(read(path.join(evidence,"initial-verification/verification.json")).task.id,taskID())
+  const text="在已经完成的同一营销Task追加Word版式修订：评审会议改为横向屏幕阅读，请把outputs/growth-plan.docx从原纵向改为横向页面，调整列宽和段落让中文数字完整可读。跨页表格首部表头重复，表头与第一条数据同页，数据行不拆分；原已正确属性保留。保持黑色标题；若仍有蓝色装饰线，请移除。只修Word呈现及必要生成器，outputs/growth-plan.md的完整字节和Word所有有序段落/单元格正文必须与刚才首次交付逐字一致，保持当前1200/旧草案3000/合成历史成本1900的原边界。继续原营销专家团、原交付负责人，保留原资源可读，使用项目tools/render_docx.py重新实际渲染，逐页查看；请独立角色复核本次最终页图和完整正文后再发布新版不可变交付及同正文阅读文档。新页图/PDF仅内部验收。不要把原审阅当成本次已经复核，不要新建Task、改业务、联网或花费。完成本次正式修订与复核后结束原Task。"
+  const body={text,source:"marketing-completed-pagination-feedback",metadata:{caseID:"marketing-completed-revision-01"}}
+  execFileSync(path.join(deps,"node/bin/node.exe"),[path.join(skill,"container_tools/mark_artifact_operation_started.mjs"),"--operation-kind","edit","--expected-output-count","1","--output-format","docx"],{cwd:project,stdio:"pipe"})
+  write("feedback-attempt.json",{body,before:t,at:Date.now(),authoringMarker:{operation:"edit",exitCode:0}})
+  const accepted=await api(`/task/${taskID()}/message`,body);write("feedback-accepted.json",accepted);console.log(JSON.stringify(accepted))
+}else if(mode==="observe"||mode==="capture"){
+  const [t,c]=await Promise.all([api(`/task/${taskID()}`),api(`/task/${taskID()}/conversation${mode==="capture"?"?tail_limit=2000":""}`)])
+  write("current.json",{task:t.result,conversation:c.result})
+  const {latestAuditSnapshotFiles}=await import(source("script/audit-snapshot.ts")),files=await latestAuditSnapshotFiles(evidence,"provider");assert.equal(files.length,1)
+  const audit=read(files[0]),messages=c.result.transcript
+  const tools=messages.flatMap((m:any)=>m.parts.filter((p:any)=>p.type==="tool").map((p:any)=>({agent:m.info.agent,tool:p.tool,status:p.state.status,failure:p.state.failure?.message})))
+  const summary={taskID:taskID(),status:t.result.status,lifecycle:t.result.executionLifecycle,requests:audit.requests.length,maximumRequests,exhausted:audit.exhausted,readers:audit.requests.reduce((acc:any,r:any)=>(acc[r.response_reader.state]=(acc[r.response_reader.state]||0)+1,acc),{}),tools:tools.slice(-5),artifactTypes:c.result.board.artifacts.map((a:any)=>a.payload?.artifact_type).filter(Boolean)}
+  const activityFile=path.join(evidence,"activity.json"),signature=JSON.stringify({lastSequence:c.result.lastSequence,lifecycle:t.result.executionLifecycle,readers:audit.requests.map((r:any)=>r.response_reader),lastMessages:messages.slice(-3).map((m:any)=>({id:m.info.id,time:m.info.time,parts:m.parts}))})
+  const previous=fs.existsSync(activityFile)?read(activityFile):undefined,lastActivityAt=previous?.signature===signature?previous.lastActivityAt:Date.now()
+  write("activity.json",{signature,lastActivityAt,observedAt:Date.now(),inactivityMs:180000})
+  if(t.result.status==="active"&&Date.now()-lastActivityAt>180000){write("observation-inactivity.json",{taskID:taskID(),lastActivityAt,observedAt:Date.now(),reconcileOriginalTask:true});throw new Error("REAL_TASK_ACTIVITY_INACTIVITY")}
+  write("observation.json",summary);fs.appendFileSync(path.join(evidence,"observations.jsonl"),JSON.stringify({at:Date.now(),...summary})+"\n");console.log(JSON.stringify(summary))
+}else if(mode==="shutdown-for-recovery"){
+  const t=(await api(`/task/${taskID()}`)).result
+  assert.equal(t.id,taskID());assert.equal(t.executionLifecycle.epoch,2);assert.equal(t.status,'active')
+  write('recovery-shutdown-attempt.json',{task:t,reason:'Owned harness native leak guard; preserve existing Task epoch and cumulative model budget'})
+  const result=await api('/shutdown',{});write('shutdown.json',result);console.log(result.status)
+}else if(mode==="shutdown"){
+  const {latestAuditSnapshotFiles}=await import(source("script/audit-snapshot.ts")),audit=read((await latestAuditSnapshotFiles(evidence,"provider"))[0]);assert(audit.requests.every((r:any)=>["settled","fetch_failed"].includes(r.response_reader.state)))
+  const result=await api("/shutdown",{});write("shutdown.json",result);console.log(result.status)
+}else if(mode==="cancel"){
+  const result=await api(`/task/${taskID()}/cancel`,{});write("cancellation.json",result);console.log(result.status)
+}else if(mode==="retire"){
+  const closed=read(path.join(evidence,"native-host-settled.json")),launcher=read(path.join(evidence,"launcher-child-exit.json")),meta=read(path.join(evidence,"preparation.json"))
+  assert.equal(closed.physicalCompletion,true);assert.equal(closed.outputDrainComplete,true);assert.equal(closed.requestCleanupComplete,true);assert(Number.isInteger(launcher.originalChildExit))
+  const copy=read(path.join(run,"authority/auth.json")),original=read(credentialSource);assert.deepEqual(copy.openai,original.openai);assert.equal(fs.statSync(credentialSource).mtimeMs,meta.sourceMtime)
+  const catalogSource=path.join(path.dirname(credentialSource),"models.json");assert(fs.readFileSync(catalogSource).equals(fs.readFileSync(path.join(run,"authority/models.json"))));assert.equal(fs.statSync(catalogSource).mtimeMs,meta.modelsMtime)
+  const secrets=[copy.openai.info.access,copy.openai.info.refresh].filter(Boolean),credentialCopies=new Set([path.resolve(run,"authority/auth.json"),path.resolve(runtime,"data/auth.json")]),hits:string[]=[]
+  const scan=(directory:string)=>{for(const entry of fs.readdirSync(directory,{withFileTypes:true})){const target=path.join(directory,entry.name);if(entry.isSymbolicLink())continue;if(entry.isDirectory())scan(target);else if(!credentialCopies.has(path.resolve(target))&&(/\.(json|log|md|txt|ts|mjs|ps1|py|db)$/.test(entry.name)||entry.name.endsWith("-wal"))&&secrets.some(value=>fs.readFileSync(target).includes(Buffer.from(value))))hits.push(target)}}
+  for(const directory of [evidence,path.join(runtime,"data"),path.join(runtime,"log"),project])scan(directory);assert.deepEqual(hits,[])
+  const retired=[path.join(run,"authority/auth.json"),path.join(run,"authority/models.json"),path.join(runtime,"data/auth.json"),path.join(runtime,"data/models.json")]
+  for(const file of retired){assert(path.resolve(file).startsWith(path.resolve(run)+path.sep));assert.equal(fs.lstatSync(file).isSymbolicLink(),false);fs.unlinkSync(file)}
+  write("retirement.json",{retired:retired.map(file=>path.relative(run,file)),source:"unchanged",originalChildExit:launcher.originalChildExit,secretMatches:0,physicalCompletion:true,outputDrainComplete:true,requestCleanupComplete:true});console.log(JSON.stringify({retired:4,source:"unchanged"}))
+}else throw new Error("Unknown marketing revision checker mode")

@@ -1,0 +1,77 @@
+{
+  "id": "prt_g0VZ29ld400iT2WI7BNM",
+  "sessionID": "ses_-zUQy5vEEzzn2RBsqAWe",
+  "messageID": "msg_hxZkms0jTSzPQQOwDiwf",
+  "type": "tool",
+  "callID": "call_aa630bd561264692b14da5407616ef52",
+  "tool": "dispatch_agents",
+  "state": {
+    "status": "completed",
+    "input": {
+      "team": [
+        {
+          "name": "独立文档保留与结构核验",
+          "target": "marketing-growth-strategist",
+          "responsibility": "只读补齐横向Word修订的新旧不可变文件直接比较与OOXML属性核验。",
+          "boundary": "未参与文档修改；不得编辑产品或生成器，不替代原复核者五页视觉结论及原作者正式交付，不重新研究策略。",
+          "expected_result": "直接解析与比较的独立不可变证据，明确各项通过或差异，供原复核者汇总。",
+          "depends_on": []
+        }
+      ],
+      "dispatches": [
+        {
+          "dispatch": {
+            "target": "marketing-growth-strategist",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "initial",
+              "use_worktree": false,
+              "input": {
+                "goal_ids": [],
+                "instruction": "仅承担独立只读文档技术核验，不重做策略，不修改产品/生成器/原始资源。用户本轮只授权Word横向呈现修订，要求MD与首次交付逐字节一致，Word所有有序段落、表格行单元格及内部段落正文逐字一致；横向、重复表头、表头与首数据行同页、数据行不拆分、保留原正确属性，首标题蓝线移除且黑色标题保留。自行发现、完整读取并选择首次正式campaign-plan历史交付及其原始MD/DOCX、最新revision-review-documents和revision-review-qa不可变资源，直接比较首次与新版实际资源，不能只信作者JSON或当前工作区；新旧快照身份分别为2d5e2090-241a-5c71-a861-c943e67d16ac及b0ee943a-6299-5d5f-a099-5426e7475580（身份须以目录发现结果确认为准，不能推造路径）。使用你已持有bash和Python标准zipfile/XML或python-docx作本地只读解析：直接字节比较两MD；解包两Word并提取完整有序段落/表格行/每格内部段落比较，保留空段与文字顺序，解释必要表示映射；比较新MD/Word/HTML完整语义序列。检查全部sectPr横向实际尺寸方向，全部表重复表头tblHeader及各行cantSplit，表头段落keepNext保证首数据行连接且不把整表连锁，Title本身和继承链无有效蓝色边框、标题文字黑色，保留原已正确属性。核对可见修改范围只Word及必要生成器与内部QA，预算1200/旧3000/合成历史1900不变。真正命令、输入不可变身份、结果和差异须记录，不能以hash替代直接正文比较，不能用作者比较结果冒充独立结果。已有复核者已实际查看全部五页并确认可读、预算表页2到3及学习表页3到4重复表头、无蓝线无裁切，不必重跑渲染；你负责剩余底层检查而非另作视觉保证。发布marketing-growth/revision-structure-review等独立证据，绑定直接读取的精确原新资源，给出每项结论和未解决项，供原fact-checker汇总。仅本地，不联网外联投放花费，不新建Task或Goal，不发布正式campaign-plan。",
+                "reason": "本次Word修订五页视觉复核已完成，原复核角色禁止shell，需由原团队未参与文档修改且具备bash的成员只读独立补齐文件保留和OOXML比较。"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "output": "{\"members\":[{\"member_index\":0,\"name\":\"独立文档保留与结构核验\",\"target\":\"marketing-growth-strategist\",\"status\":\"completed\",\"outcome\":{\"kind\":\"accepted\",\"session_id\":\"ses_hFGZ1H9ff6oJIi1QvY8e\",\"dispatch_lineage_id\":\"art_g0VZ29qN600jDf9psYhD\"}}]}",
+    "title": "Settled frontier (1/1)",
+    "metadata": {
+      "frontier_size": 1,
+      "completed_count": 1,
+      "member_names": [
+        "独立文档保留与结构核验"
+      ],
+      "targets": [
+        "marketing-growth-strategist"
+      ],
+      "members": [
+        {
+          "member_index": 0,
+          "name": "独立文档保留与结构核验",
+          "target": "marketing-growth-strategist",
+          "status": "completed",
+          "outcome": {
+            "kind": "accepted",
+            "session_id": "ses_hFGZ1H9ff6oJIi1QvY8e",
+            "dispatch_lineage_id": "art_g0VZ29qN600jDf9psYhD"
+          }
+        }
+      ]
+    },
+    "time": {
+      "start": 1792903832938,
+      "end": 1792903851727
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_046f36f58af8e6a5016add8a98d3548191af89a2b316fc06fe"
+    }
+  },
+  "orderKey": "v1:0001792903850758:0000000000000031:0000000000000000:part:prt_g0VZ29ld400iT2WI7BNM"
+}

@@ -1,0 +1,6 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+const root='specs/artifacts/2026-10-25-marketing-revision';
+const files=execFileSync('git',['ls-files','-z','--',root],{encoding:'utf8'}).split('\0').filter(Boolean);
+assert(files.length>0);const payload=execFileSync('git',['cat-file','--batch'],{input:files.map(f=>':'+f+'\n').join(''),maxBuffer:256*1024*1024});let offset=0;
+for(const file of files){const end=payload.indexOf(10,offset);assert(end>=offset);const header=payload.subarray(offset,end).toString('utf8').split(' ');assert.equal(header[1],'blob');const size=Number(header[2]);assert(Number.isSafeInteger(size));const start=end+1,blob=payload.subarray(start,start+size);assert(blob.equals(fs.readFileSync(file)),file+': exact original export equals staged Git blob');assert.equal(payload[start+size],10);offset=start+size+1;}
+assert.equal(offset,payload.length);console.log(JSON.stringify({exportedFiles:files.length,allStagedBlobsEqualOriginalFullBytes:true,purpose:'Immutable artifact evidence identity during Git delivery; functional and visual checks remain separate'}));

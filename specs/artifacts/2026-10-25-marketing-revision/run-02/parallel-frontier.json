@@ -1,0 +1,628 @@
+{
+  "taskID": "tsk_g00VZ2GE9C00jkeX1GgT",
+  "package": {
+    "scope": "project",
+    "project_id": "prj_hxHOMBTalkvA4toZOhTn",
+    "namespace": "builtin",
+    "id": "marketing-growth",
+    "version": "2026.10.24.2",
+    "package_digest": "66bbf77da0945d7da12931b6599cd8f3211a70701de2051e0d3227017815fc5c"
+  },
+  "occurrences": [
+    {
+      "inputMessageID": "msg_g0VZ2IiVb00p95gx5RyN",
+      "sessionID": "ses_hIv4tpYGj01O1mo4NY6G",
+      "agent": "marketing-growth-channel-analyst",
+      "kind": "delegated-worker",
+      "preparedAt": 1792905965904,
+      "events": [
+        {
+          "eventID": "pev_g0VZ2Iiex00kN6c5DYla",
+          "sequence": 182,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905966475
+        },
+        {
+          "eventID": "pev_g0VZ2IinA00cU2bpfkgy",
+          "sequence": 185,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905966984
+        },
+        {
+          "eventID": "pev_g0VZ2Ik0u006EpPS1YOM",
+          "sequence": 189,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905971680
+        },
+        {
+          "eventID": "pev_g0VZ2Ik2K00TMqoppGbv",
+          "sequence": 191,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905971768
+        },
+        {
+          "eventID": "pev_g0VZ2IkvI00hH6FxCiY3",
+          "sequence": 194,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905975176
+        },
+        {
+          "eventID": "pev_g0VZ2IkwM00Ngj5QhqsE",
+          "sequence": 195,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905975242
+        },
+        {
+          "eventID": "pev_g0VZ2IlvO00VOWmnaXu8",
+          "sequence": 196,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905979025
+        },
+        {
+          "eventID": "pev_g0VZ2IlwV00ygkBdJ8Cy",
+          "sequence": 197,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905979094
+        },
+        {
+          "eventID": "pev_g0VZ2Imse00GmX12eZcZ",
+          "sequence": 200,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905982700
+        },
+        {
+          "eventID": "pev_g0VZ2Imts00P5Y43pvMe",
+          "sequence": 201,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905982776
+        },
+        {
+          "eventID": "pev_g0VZ2Inko00QkQ7ofxem",
+          "sequence": 204,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905986058
+        },
+        {
+          "eventID": "pev_g0VZ2Inm600xR41xW64F",
+          "sequence": 205,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905986137
+        },
+        {
+          "eventID": "pev_g0VZ2Ion400yiIutWtxD",
+          "sequence": 208,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905990042
+        },
+        {
+          "eventID": "pev_g0VZ2IooA00p09OLpu11",
+          "sequence": 209,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905990110
+        },
+        {
+          "eventID": "pev_g0VZ2IqDw00cXdSyN1JJ",
+          "sequence": 212,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905995552
+        },
+        {
+          "eventID": "pev_g0VZ2IqEY0064PPpcTCx",
+          "sequence": 213,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905995589
+        },
+        {
+          "eventID": "pev_g0VZ2IriN00czVM6LEty",
+          "sequence": 216,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792906001283
+        },
+        {
+          "eventID": "pev_g0VZ2Iriu007hlmKkze6",
+          "sequence": 217,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792906001316
+        },
+        {
+          "eventID": "pev_g0VZ2ItdB000AEET9wFL",
+          "sequence": 220,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792906008649
+        },
+        {
+          "eventID": "pev_g0VZ2Ite000obBuVqO5Z",
+          "sequence": 221,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792906008700
+        },
+        {
+          "eventID": "pev_g0VZ2IutC002GpalzRbt",
+          "sequence": 224,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792906013486
+        },
+        {
+          "eventID": "pev_g0VZ2Iuth009Hu73qmog",
+          "sequence": 225,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792906013517
+        },
+        {
+          "eventID": "pev_g0VZ2IvyB00tkfyqV2BP",
+          "sequence": 228,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792906017639
+        },
+        {
+          "eventID": "pev_g0VZ2Ivyp00wpheZHJTE",
+          "sequence": 229,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792906017679
+        },
+        {
+          "eventID": "pev_g0VZ2JHUq00fGXKZ9HF8",
+          "sequence": 240,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792906100388
+        },
+        {
+          "eventID": "pev_g0VZ2JHVf00FnDJLCgX8",
+          "sequence": 241,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792906100439
+        },
+        {
+          "eventID": "pev_g0VZ2JK7100Noh6SZKt5",
+          "sequence": 242,
+          "status": {
+            "type": "idle"
+          },
+          "emittedAt": 1792906110443
+        },
+        {
+          "eventID": "pev_g0VZ2JK7Q00ECvFWGzEo",
+          "sequence": 243,
+          "status": {
+            "type": "idle"
+          },
+          "emittedAt": 1792906110468
+        },
+        {
+          "eventID": "pev_g0VZ2JK8900HRfzZSDGx",
+          "sequence": 244,
+          "status": {
+            "type": "terminal",
+            "reason": "completed"
+          },
+          "emittedAt": 1792906110513
+        }
+      ],
+      "latest": {
+        "eventID": "pev_g0VZ2JK8900HRfzZSDGx",
+        "sequence": 244,
+        "status": {
+          "type": "terminal",
+          "reason": "completed"
+        },
+        "emittedAt": 1792906110513
+      }
+    },
+    {
+      "inputMessageID": "msg_g0VZ2IihS003UOrJiMCr",
+      "sessionID": "ses_hcoMooPAaeV3LIOyFLE7",
+      "agent": "marketing-growth-audience-analyst",
+      "kind": "delegated-worker",
+      "preparedAt": 1792905966656,
+      "events": [
+        {
+          "eventID": "pev_g0VZ2IiwE00UMLRlrT5C",
+          "sequence": 186,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905967546
+        },
+        {
+          "eventID": "pev_g0VZ2Ij2500Lae62qHvU",
+          "sequence": 187,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905967908
+        },
+        {
+          "eventID": "pev_g0VZ2Ijzd00R2RMWNibU",
+          "sequence": 188,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905971601
+        },
+        {
+          "eventID": "pev_g0VZ2Ik2800jnjHczBHU",
+          "sequence": 190,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905971756
+        },
+        {
+          "eventID": "pev_g0VZ2Ikos00fUs2aoUBg",
+          "sequence": 192,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905974778
+        },
+        {
+          "eventID": "pev_g0VZ2Iks500cdQc2jWou",
+          "sequence": 193,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905974977
+        },
+        {
+          "eventID": "pev_g0VZ2ImHd00X8JkOsVDS",
+          "sequence": 198,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905980405
+        },
+        {
+          "eventID": "pev_g0VZ2ImIg00yUZhzlbtb",
+          "sequence": 199,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905980470
+        },
+        {
+          "eventID": "pev_g0VZ2In9D008kXGwBZIz",
+          "sequence": 202,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905983727
+        },
+        {
+          "eventID": "pev_g0VZ2InAg00ax6omj65o",
+          "sequence": 203,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905983818
+        },
+        {
+          "eventID": "pev_g0VZ2IoNs00pAVc0jer0",
+          "sequence": 206,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905988480
+        },
+        {
+          "eventID": "pev_g0VZ2IoOL00TqWhs1iAH",
+          "sequence": 207,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905988509
+        },
+        {
+          "eventID": "pev_g0VZ2Ipfs00FrpHTEcR4",
+          "sequence": 210,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905993440
+        },
+        {
+          "eventID": "pev_g0VZ2IpgO00yO3z056ij",
+          "sequence": 211,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905993471
+        },
+        {
+          "eventID": "pev_g0VZ2Iqhu00f7bVtoGtJ",
+          "sequence": 214,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905997410
+        },
+        {
+          "eventID": "pev_g0VZ2IqiU00yXwO0GbIL",
+          "sequence": 215,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792905997446
+        },
+        {
+          "eventID": "pev_g0VZ2IsUg000s5LVHdCO",
+          "sequence": 218,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792906004277
+        },
+        {
+          "eventID": "pev_g0VZ2IsVD00ix8KKJvMx",
+          "sequence": 219,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792906004311
+        },
+        {
+          "eventID": "pev_g0VZ2IuLw00zCqhHBNQZ",
+          "sequence": 222,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792906011424
+        },
+        {
+          "eventID": "pev_g0VZ2IuMR00s45T0iMXZ",
+          "sequence": 223,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792906011455
+        },
+        {
+          "eventID": "pev_g0VZ2IvfO00NuuyK474J",
+          "sequence": 226,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792906016474
+        },
+        {
+          "eventID": "pev_g0VZ2Ivfs00ORke4dWBO",
+          "sequence": 227,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792906016504
+        },
+        {
+          "eventID": "pev_g0VZ2Iwqd00pSp6aecsB",
+          "sequence": 230,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792906021014
+        },
+        {
+          "eventID": "pev_g0VZ2IwrG00Vk9N2psQt",
+          "sequence": 231,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792906021053
+        },
+        {
+          "eventID": "pev_g0VZ2JBVv00WNvgeK5D1",
+          "sequence": 233,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792906077391
+        },
+        {
+          "eventID": "pev_g0VZ2JBWY00Z6lDS5UfK",
+          "sequence": 234,
+          "status": {
+            "type": "streaming"
+          },
+          "emittedAt": 1792906077430
+        },
+        {
+          "eventID": "pev_g0VZ2JDPL00sSST5JdUC",
+          "sequence": 235,
+          "status": {
+            "type": "idle"
+          },
+          "emittedAt": 1792906084671
+        },
+        {
+          "eventID": "pev_g0VZ2JDPm00QgbfGAEvM",
+          "sequence": 236,
+          "status": {
+            "type": "idle"
+          },
+          "emittedAt": 1792906084698
+        },
+        {
+          "eventID": "pev_g0VZ2JDQb000Qs7LNTIA",
+          "sequence": 237,
+          "status": {
+            "type": "terminal",
+            "reason": "completed"
+          },
+          "emittedAt": 1792906084749
+        }
+      ],
+      "latest": {
+        "eventID": "pev_g0VZ2JDQb000Qs7LNTIA",
+        "sequence": 237,
+        "status": {
+          "type": "terminal",
+          "reason": "completed"
+        },
+        "emittedAt": 1792906084749
+      }
+    }
+  ],
+  "topology": {
+    "taskID": "tsk_g00VZ2GE9C00jkeX1GgT",
+    "rootSessionID": "ses_-zUQxjliIzzxRjMp2tkU",
+    "nodes": [
+      {
+        "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+        "orderKey": "v1:0001792905375994:0000000000000050:0000000000000000:session:ses_-zUQxjkwvzzB1D7L3tcK",
+        "agent": "orchestrator",
+        "kind": "orchestrator",
+        "title": "Agent: 原营销专家团首次交付及完成后分页修订",
+        "parentSessionID": "ses_-zUQxjliIzzxRjMp2tkU",
+        "time": {
+          "created": 1792905375994,
+          "updated": 1792906161716
+        }
+      },
+      {
+        "sessionID": "ses_h1Ivk2pQX76lHzYnbEwI",
+        "orderKey": "v1:0001792905465525:0000000000000050:0000000000000000:session:ses_h1Ivk2pQX76lHzYnbEwI",
+        "agent": "marketing-growth-planner",
+        "kind": "delegated-worker",
+        "title": "marketing-growth-planner (delegated-worker): marketing-growth-planner: 完成范围与衡量简报并按原包正式发布growth-brief。自行发现本Task目录已发布的brief.md、campaign.csv原不可变资源，完整读取并选择",
+        "parentSessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+        "time": {
+          "created": 1792905465525,
+          "updated": 1792905564280
+        },
+        "parentAgentSessionID": "ses_-zUQxjkwvzzB1D7L3tcK"
+      },
+      {
+        "sessionID": "ses_hlWsp1ODDcJVHxYWj1gJ",
+        "orderKey": "v1:0001792905603848:0000000000000050:0000000000000000:session:ses_hlWsp1ODDcJVHxYWj1gJ",
+        "agent": "marketing-growth-evidence-researcher",
+        "kind": "deep-research",
+        "title": "marketing-growth-evidence-researcher (Deep Research): 原营销专家团首次交付及完成后分页修订",
+        "parentSessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+        "time": {
+          "created": 1792905603848,
+          "updated": 1792905918856
+        },
+        "parentAgentSessionID": "ses_-zUQxjkwvzzB1D7L3tcK"
+      },
+      {
+        "sessionID": "ses_hIv4tpYGj01O1mo4NY6G",
+        "orderKey": "v1:0001792905965896:0000000000000050:0000000000000000:session:ses_hIv4tpYGj01O1mo4NY6G",
+        "agent": "marketing-growth-channel-analyst",
+        "kind": "delegated-worker",
+        "title": "marketing-growth-channel-analyst (delegated-worker): marketing-growth-channel-analyst: 自行发现并完整读取、选择同Task正式evidence-dossier、需要的growth-brief及原不可变brief.md/campaign.csv；按原",
+        "parentSessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+        "time": {
+          "created": 1792905965896,
+          "updated": 1792906110398
+        },
+        "parentAgentSessionID": "ses_-zUQxjkwvzzB1D7L3tcK"
+      },
+      {
+        "sessionID": "ses_hcoMooPAaeV3LIOyFLE7",
+        "orderKey": "v1:0001792905966631:0000000000000050:0000000000000000:session:ses_hcoMooPAaeV3LIOyFLE7",
+        "agent": "marketing-growth-audience-analyst",
+        "kind": "delegated-worker",
+        "title": "marketing-growth-audience-analyst (delegated-worker): marketing-growth-audience-analyst: 自行发现并完整读取、选择同Task正式evidence-dossier、需要的growth-brief及原不可变brief.md/campaign.csv；按原",
+        "parentSessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+        "time": {
+          "created": 1792905966631,
+          "updated": 1792906084634
+        },
+        "parentAgentSessionID": "ses_-zUQxjkwvzzB1D7L3tcK"
+      },
+      {
+        "sessionID": "ses_hVtsNPrkcMSjQeZVsODu",
+        "orderKey": "v1:0001792906161642:0000000000000050:0000000000000000:session:ses_hVtsNPrkcMSjQeZVsODu",
+        "agent": "marketing-growth-strategist",
+        "kind": "delegated-worker",
+        "title": "marketing-growth-strategist (delegated-worker): marketing-growth-strategist: 汇合策略阶段：自行发现、完整读取并选择正式audience-analysis和channel-analysis两个所需类型前驱，以及必要的范围/证据档案和原不可",
+        "parentSessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+        "time": {
+          "created": 1792906161642,
+          "updated": 1792906249841
+        },
+        "parentAgentSessionID": "ses_-zUQxjkwvzzB1D7L3tcK"
+      }
+    ],
+    "edges": [
+      {
+        "fromSessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+        "toSessionID": "ses_h1Ivk2pQX76lHzYnbEwI",
+        "relation": "agent_call"
+      },
+      {
+        "fromSessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+        "toSessionID": "ses_hlWsp1ODDcJVHxYWj1gJ",
+        "relation": "agent_call"
+      },
+      {
+        "fromSessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+        "toSessionID": "ses_hIv4tpYGj01O1mo4NY6G",
+        "relation": "agent_call"
+      },
+      {
+        "fromSessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+        "toSessionID": "ses_hcoMooPAaeV3LIOyFLE7",
+        "relation": "agent_call"
+      },
+      {
+        "fromSessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+        "toSessionID": "ses_hVtsNPrkcMSjQeZVsODu",
+        "relation": "agent_call"
+      }
+    ],
+    "topLevelSessionIDs": [
+      "ses_-zUQxjkwvzzB1D7L3tcK"
+    ]
+  }
+}

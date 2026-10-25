@@ -1,0 +1,35 @@
+{
+  "id": "prt_g0VZ20IfV00fSZFUpWnw",
+  "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+  "messageID": "msg_g0VZ20GYQ00oZlQng2SO",
+  "type": "tool",
+  "callID": "call_RAlIQGAsHjqnYBrp5ok1tUr0",
+  "tool": "read",
+  "state": {
+    "status": "completed",
+    "input": {
+      "filePath": ".opencorvus/.r/tasks/tsk_g00VZ1u3kk00D81zMYvb/artifacts"
+    },
+    "output": "<path>C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\project\\.opencorvus\\.r\\tasks\\tsk_g00VZ1u3kk00D81zMYvb\\artifacts</path>\n<type>directory</type>\n<entries>\n.stage/\nmaterializations/\npublication-sequence/\nsnapshots/\n\n(4 entries)\n</entries>",
+    "title": ".opencorvus\\.r\\tasks\\tsk_g00VZ1u3kk00D81zMYvb\\artifacts",
+    "metadata": {
+      "preview": ".stage/\nmaterializations/\npublication-sequence/\nsnapshots/",
+      "truncated": false,
+      "loaded": [],
+      "readType": "directory",
+      "offset": 1,
+      "lines": 4,
+      "totalLines": 4
+    },
+    "time": {
+      "start": 1792901576661,
+      "end": 1792901578759
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0ed69663c6c59e16016add81c88a1887d0a9d92dee801eccdc"
+    }
+  },
+  "orderKey": "v1:0001792901578479:0000000000000031:0000000000000000:part:prt_g0VZ20IfV00fSZFUpWnw"
+}

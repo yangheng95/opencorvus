@@ -1,0 +1,86 @@
+{
+  "id": "prt_g0VZ29xCA004MwgZSnzc",
+  "sessionID": "ses_hFGZ1H9ff6oJIi1QvY8e",
+  "messageID": "msg_g0VZ29wXN00B2Pxj3RR9",
+  "type": "tool",
+  "callID": "call_282ff4b531544c3a8c28896834d4ec39",
+  "tool": "artifact_read",
+  "state": {
+    "status": "completed",
+    "input": {
+      "reads": [
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_qkIXwAp1TbdVYIW-",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "materialized_file"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_H-sU7vCfNmJQLzt2",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "materialized_file"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_mGDEXHuuo5EgB--B",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "materialized_file"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_mShRlaXAPeTiGMr7",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "materialized_file"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_vOUZ5jCfp3J-90ph",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "materialized_file"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_7IHbnoTVyf2BV_en",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "materialized_file"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_r9bSToa0emdocQNL",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "materialized_file"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_DKdzZid1BenIcKZz",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "materialized_file"
+        }
+      ]
+    },
+    "output": "{\"results\":[{\"request_index\":0,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"2d5e2090-241a-5c71-a861-c943e67d16ac\",\"manifest_sha256\":\"a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773\"},\"tree\":\"resources\",\"path\":\"outputs/growth-plan.md\",\"media_type\":\"text/markdown\",\"bytes\":10366,\"sha256\":\"fd9682e65a7fe3dd7369a536343d193d302138dc2e480604812025993e3ebb6b\"}},\"media_type\":\"text/markdown\",\"byte_start\":0,\"byte_end\":10366,\"next_offset\":null,\"total_bytes\":10366,\"complete\":true,\"sha256\":\"fd9682e65a7fe3dd7369a536343d193d302138dc2e480604812025993e3ebb6b\",\"materialized_path\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-marketing-revision-20261025-01\\\\project\\\\.opencorvus\\\\.r\\\\tasks\\\\tsk_g00VZ1u3kk00D81zMYvb\\\\artifacts\\\\materializations\\\\reads\\\\fd9682e65a7fe3dd7369a536343d193d302138dc2e480604812025993e3ebb6b-growth-plan.md\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_qkIXwAp1TbdVYIW-\",\"artifact_read_ref\":\"ar_k2B_FecqaVZQJRnB\"}},{\"request_index\":1,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"b0ee943a-6299-5d5f-a099-5426e7475580\",\"manifest_sha256\":\"716b4ea0754df89850fc34487d3b7b888b1cf5d2dc1b1affd00eaf26f333efe5\"},\"tree\":\"resources\",\"path\":\"outputs/growth-plan.md\",\"media_type\":\"text/markdown\",\"bytes\":10366,\"sha256\":\"fd9682e65a7fe3dd7369a536343d193d302138dc2e480604812025993e3ebb6b\"}},\"media_type\":\"text/markdown\",\"byte_start\":0,\"byte_end\":10366,\"next_offset\":null,\"total_bytes\":10366,\"complete\":true,\"sha256\":\"fd9682e65a7fe3dd7369a536343d193d302138dc2e480604812025993e3ebb6b\",\"materialized_path\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-marketing-revision-20261025-01\\\\project\\\\.opencorvus\\\\.r\\\\tasks\\\\tsk_g00VZ1u3kk00D81zMYvb\\\\artifacts\\\\materializations\\\\reads\\\\fd9682e65a7fe3dd7369a536343d193d302138dc2e480604812025993e3ebb6b-growth-plan.md\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_H-sU7vCfNmJQLzt2\",\"artifact_read_ref\":\"ar_iCH_EYphqbxehFso\"}},{\"request_index\":2,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"2d5e2090-241a-5c71-a861-c943e67d16ac\",\"manifest_sha256\":\"a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773\"},\"tree\":\"resources\",\"path\":\"outputs/growth-plan.docx\",\"media_type\":\"application/vnd.openxmlformats-officedocument.wordprocessingml.document\",\"bytes\":43213,\"sha256\":\"0bda83e9e21f6db29cd827fe0ca1841dc5b12055265d3c25a461f4c0cf26b19a\"}},\"media_type\":\"application/vnd.openxmlformats-officedocument.wordprocessingml.document\",\"byte_start\":0,\"byte_end\":43213,\"next_offset\":null,\"total_bytes\":43213,\"complete\":true,\"sha256\":\"0bda83e9e21f6db29cd827fe0ca1841dc5b12055265d3c25a461f4c0cf26b19a\",\"materialized_path\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-marketing-revision-20261025-01\\\\project\\\\.opencorvus\\\\.r\\\\tasks\\\\tsk_g00VZ1u3kk00D81zMYvb\\\\artifacts\\\\materializations\\\\reads\\\\0bda83e9e21f6db29cd827fe0ca1841dc5b12055265d3c25a461f4c0cf26b19a-growth-plan.docx\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_mGDEXHuuo5EgB--B\",\"artifact_read_ref\":\"ar_QnASyuZjyFRlh78J\"}},{\"request_index\":3,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"b0ee943a-6299-5d5f-a099-5426e7475580\",\"manifest_sha256\":\"716b4ea0754df89850fc34487d3b7b888b1cf5d2dc1b1affd00eaf26f333efe5\"},\"tree\":\"resources\",\"path\":\"outputs/growth-plan.docx\",\"media_type\":\"application/vnd.openxmlformats-officedocument.wordprocessingml.document\",\"bytes\":43295,\"sha256\":\"e58014a11a0063f72149ce4e8ccb61797cae5b533f52091258b5adae66857a76\"}},\"media_type\":\"application/vnd.openxmlformats-officedocument.wordprocessingml.document\",\"byte_start\":0,\"byte_end\":43295,\"next_offset\":null,\"total_bytes\":43295,\"complete\":true,\"sha256\":\"e58014a11a0063f72149ce4e8ccb61797cae5b533f52091258b5adae66857a76\",\"materialized_path\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-marketing-revision-20261025-01\\\\project\\\\.opencorvus\\\\.r\\\\tasks\\\\tsk_g00VZ1u3kk00D81zMYvb\\\\artifacts\\\\materializations\\\\reads\\\\e58014a11a0063f72149ce4e8ccb61797cae5b533f52091258b5adae66857a76-growth-plan.docx\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_mShRlaXAPeTiGMr7\",\"artifact_read_ref\":\"ar_CU6NhyiQX2aL_z-w\"}},{\"request_index\":4,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"b0ee943a-6299-5d5f-a099-5426e7475580\",\"manifest_sha256\":\"716b4ea0754df89850fc34487d3b7b888b1cf5d2dc1b1affd00eaf26f333efe5\"},\"tree\":\"resources\",\"path\":\"outputs/growth-plan.html\",\"media_type\":\"text/html\",\"bytes\":11491,\"sha256\":\"a7198587829d04222b0f6c0be1f2e55707055a87d6a68aa6902faa37ca5aaee7\"}},\"media_type\":\"text/html\",\"byte_start\":0,\"byte_end\":11491,\"next_offset\":null,\"total_bytes\":11491,\"complete\":true,\"sha256\":\"a7198587829d04222b0f6c0be1f2e55707055a87d6a68aa6902faa37ca5aaee7\",\"materialized_path\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-marketing-revision-20261025-01\\\\project\\\\.opencorvus\\\\.r\\\\tasks\\\\tsk_g00VZ1u3kk00D81zMYvb\\\\artifacts\\\\materializations\\\\reads\\\\a7198587829d04222b0f6c0be1f2e55707055a87d6a68aa6902faa37ca5aaee7-growth-plan.html\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_vOUZ5jCfp3J-90ph\",\"artifact_read_ref\":\"ar_diUhn9w0jccsLz87\"}},{\"request_index\":5,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"a1509548-d610-55a3-a90d-3d16a968a9d3\",\"manifest_sha256\":\"d157757c5b9b7056afbdf1742676a160bec749950621ca79949584f865ec11b5\"},\"tree\":\"resources\",\"path\":\"tools/build_growth_documents.py\",\"media_type\":\"text/x-python\",\"bytes\":9527,\"sha256\":\"04af01c5f847cf49831fc2a517e8f613002d556beae144673d012051b4f5e2f9\"}},\"media_type\":\"text/x-python\",\"byte_start\":0,\"byte_end\":9527,\"next_offset\":null,\"total_bytes\":9527,\"complete\":true,\"sha256\":\"04af01c5f847cf49831fc2a517e8f613002d556beae144673d012051b4f5e2f9\",\"materialized_path\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-marketing-revision-20261025-01\\\\project\\\\.opencorvus\\\\.r\\\\tasks\\\\tsk_g00VZ1u3kk00D81zMYvb\\\\artifacts\\\\materializations\\\\reads\\\\04af01c5f847cf49831fc2a517e8f613002d556beae144673d012051b4f5e2f9-build_growth_documents.py\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_7IHbnoTVyf2BV_en\",\"artifact_read_ref\":\"ar_CImXTz1IHjre2uvD\"}},{\"request_index\":6,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"a1509548-d610-55a3-a90d-3d16a968a9d3\",\"manifest_sha256\":\"d157757c5b9b7056afbdf1742676a160bec749950621ca79949584f865ec11b5\"},\"tree\":\"resources\",\"path\":\"qa/revised/author-review.md\",\"media_type\":\"text/markdown\",\"bytes\":3363,\"sha256\":\"0fce6ec79752777966c3e5c81a85cbb1c05576e497087d12af2bd1ea9248fd94\"}},\"media_type\":\"text/markdown\",\"byte_start\":0,\"byte_end\":3363,\"next_offset\":null,\"total_bytes\":3363,\"complete\":true,\"sha256\":\"0fce6ec79752777966c3e5c81a85cbb1c05576e497087d12af2bd1ea9248fd94\",\"materialized_path\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-marketing-revision-20261025-01\\\\project\\\\.opencorvus\\\\.r\\\\tasks\\\\tsk_g00VZ1u3kk00D81zMYvb\\\\artifacts\\\\materializations\\\\reads\\\\0fce6ec79752777966c3e5c81a85cbb1c05576e497087d12af2bd1ea9248fd94-author-review.md\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_r9bSToa0emdocQNL\",\"artifact_read_ref\":\"ar_Su8ibT2I0F0dAETt\"}},{\"request_index\":7,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"a1509548-d610-55a3-a90d-3d16a968a9d3\",\"manifest_sha256\":\"d157757c5b9b7056afbdf1742676a160bec749950621ca79949584f865ec11b5\"},\"tree\":\"resources\",\"path\":\"qa/revised/body-consistency.json\",\"media_type\":\"application/json\",\"bytes\":29790,\"sha256\":\"a3bbde6647590965931a6c82188f233d5d12a015735d93c9664c6802c726c685\"}},\"media_type\":\"application/json\",\"byte_start\":0,\"byte_end\":29790,\"next_offset\":null,\"total_bytes\":29790,\"complete\":true,\"sha256\":\"a3bbde6647590965931a6c82188f233d5d12a015735d93c9664c6802c726c685\",\"materialized_path\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-marketing-revision-20261025-01\\\\project\\\\.opencorvus\\\\.r\\\\tasks\\\\tsk_g00VZ1u3kk00D81zMYvb\\\\artifacts\\\\materializations\\\\reads\\\\a3bbde6647590965931a6c82188f233d5d12a015735d93c9664c6802c726c685-body-consistency.json\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_DKdzZid1BenIcKZz\",\"artifact_read_ref\":\"ar_eE-flIcZCkj8M56A\"}}],\"complete\":true,\"next_reads\":[]}",
+    "title": "Artifacts (8)",
+    "metadata": {
+      "truncated": false
+    },
+    "time": {
+      "start": 1792903877398,
+      "end": 1792903880453
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0eec1b2dfe1762ae016add8ac540488191931c780c9ba5d6cc"
+    }
+  },
+  "orderKey": "v1:0001792903879515:0000000000000031:0000000000000000:part:prt_g0VZ29xCA004MwgZSnzc"
+}

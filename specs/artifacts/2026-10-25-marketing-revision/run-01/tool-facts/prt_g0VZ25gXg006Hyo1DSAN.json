@@ -1,0 +1,37 @@
+{
+  "id": "prt_g0VZ25gXg006Hyo1DSAN",
+  "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+  "messageID": "msg_g0VZ25dV500LI3wGxXVA",
+  "type": "tool",
+  "callID": "call_ab3e2d05c66c48868039bc75927df330",
+  "tool": "read",
+  "state": {
+    "status": "completed",
+    "input": {
+      "filePath": "tools/build_growth_documents.py",
+      "offset": 145,
+      "limit": 100
+    },
+    "output": "<path>C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\project\\tools\\build_growth_documents.py</path>\n<type>file</type>\n<content>145:     for element in doc.element.body:\n146:         if element.tag == qn(\"w:p\"):\n147:             from docx.text.paragraph import Paragraph\n148: \n149:             p = Paragraph(element, doc)\n150:             kind = (\n151:                 \"h1\"\n152:                 if p.style.name == \"Title\"\n153:                 else \"h2\"\n154:                 if p.style.name == \"Heading 1\"\n155:                 else \"p\"\n156:             )\n157:             actual.append((kind, p.text))\n158:         elif element.tag == qn(\"w:tbl\"):\n159:             from docx.table import Table\n160: \n161:             actual.append(\n162:                 (\"table\", [[c.text for c in r.cells] for r in Table(element, doc).rows])\n163:             )\n164:     reader = Reader()\n165:     reader.feed((ROOT / \"outputs/growth-plan.html\").read_text(encoding=\"utf-8\"))\n166:     assert actual == expected, \"Word semantic sequence differs\"\n167:     assert reader.blocks == expected, \"HTML semantic sequence differs\"\n168:     assert (ROOT / \"artifacts/marketing-growth/campaign-plan.md\").read_text(\n169:         encoding=\"utf-8\"\n170:     ) == text\n171:     assert all(s.page_width > s.page_height for s in doc.sections)\n172:     baseline_md = (\n173:         ROOT\n174:         / \".opencorvus/.r/tasks/tsk_g00VZ1u3kk00D81zMYvb/artifacts/materializations/reads/fd9682e65a7fe3dd7369a536343d193d302138dc2e480604812025993e3ebb6b-growth-plan.md\"\n175:     )\n176:     assert baseline_md.read_bytes() == (ROOT / \"outputs/growth-plan.md\").read_bytes()\n177:     baseline_bytes = subprocess.check_output(\n178:         [\"git\", \"show\", \"1c388fe:outputs/growth-plan.docx\"], cwd=ROOT\n179:     )\n180:     # Authenticate the Git object against the independently published first resource.\n181:     assert (\n182:         hashlib.sha256(baseline_bytes).hexdigest()\n183:         == \"0bda83e9e21f6db29cd827fe0ca1841dc5b12055265d3c25a461f4c0cf26b19a\"\n184:     )\n185:     baseline = Document(BytesIO(baseline_bytes))\n186: \n187:     def body_text(document):\n188:         return [\n189:             (element.tag, [node.text or \"\" for node in element.iter(qn(\"w:t\"))])\n190:             for element in document.element.body\n191:             if element.tag in (qn(\"w:p\"), qn(\"w:tbl\"))\n192:         ]\n193: \n194:     assert body_text(baseline) == body_text(doc), \"First-delivery Word text differs\"\n195:     for table in doc.tables:\n196:         assert table.rows[0]._tr.trPr.find(qn(\"w:tblHeader\")) is not None\n197:         for row in table.rows:\n198:             assert row._tr.trPr.find(qn(\"w:cantSplit\")) is not None\n199:         assert all(\n200:             p.paragraph_format.keep_with_next\n201:             for c in table.rows[0].cells\n202:             for p in c.paragraphs\n203:         )\n204:     assert not list(doc.styles[\"Title\"].element.iter(qn(\"w:pBdr\")))\n205:     assert not list(doc.paragraphs[0]._p.iter(qn(\"w:pBdr\")))\n206:     for p in doc.paragraphs:\n207:         for r in p.runs:\n208:             assert str(r.font.color.rgb) == \"000000\"\n209:     result = {\n210:         \"method\": \"Parse MD headings/paragraphs/table rows; reopen DOCX body XML in document order and parse HTML independently. Exact ordered text and cell comparison; no digest shortcut.\",\n211:         \"semantic_blocks\": len(expected),\n212:         \"tables\": sum(k == \"table\" for k, _ in expected),\n213:         \"table_cells\": sum(\n214:             sum(len(row) for row in b) for k, b in expected if k == \"table\"\n215:         ),\n216:         \"chinese_characters\": len(re.findall(r\"[\\u4e00-\\u9fff]\", text)),\n217:         \"md_docx_html_sequence_equal\": True,\n218:         \"mirror_equal\": True,\n219:         \"all_sections_landscape\": True,\n220:         \"first_delivery_md_bytes_equal\": True,\n221:         \"first_delivery_word_ordered_text_equal\": True,\n222:         \"repeat_headers_unsplit_rows_header_keep_next\": True,\n223:         \"title_style_blue_border_removed\": True,\n224:         \"baseline_word_ordered_text\": body_text(baseline),\n225:         \"revised_word_ordered_text\": body_text(doc),\n226:         \"all_paragraph_runs_black\": True,\n227:     }\n228:     (ROOT / \"qa\").mkdir(exist_ok=True)\n229:     (ROOT / \"qa/revised\").mkdir(exist_ok=True)\n230:     (ROOT / \"qa/revised/body-consistency.json\").write_text(\n231:         json.dumps(result, ensure_ascii=False, indent=2), encoding=\"utf-8\"\n232:     )\n233:     print(\n234:         json.dumps(\n235:             {k: v for k, v in result.items() if not k.endswith(\"ordered_text\")},\n236:             ensure_ascii=False,\n237:         )\n238:     )\n239: \n240: \n241: if __name__ == \"__main__\":\n242:     import sys\n243: \n244:     if \"--verify-only\" not in sys.argv:\n\n(Showing lines 145-244 of 246. Use offset=245 to continue.)\n</content>",
+    "title": "tools\\build_growth_documents.py",
+    "metadata": {
+      "preview": "    for element in doc.element.body:\n        if element.tag == qn(\"w:p\"):\n            from docx.text.paragraph import Paragraph\n\n            p = Paragraph(element, doc)\n            kind = (\n                \"h1\"\n                if p.style.name == \"Title\"\n                else \"h2\"\n                if p.style.name == \"Heading 1\"\n                else \"p\"\n            )\n            actual.append((kind, p.text))\n        elif element.tag == qn(\"w:tbl\"):\n            from docx.table import Table\n\n            actual.append(\n                (\"table\", [[c.text for c in r.cells] for r in Table(element, doc).rows])\n            )\n    reader = Reader()",
+      "truncated": true,
+      "loaded": [],
+      "readType": "text",
+      "offset": 145,
+      "lines": 100,
+      "totalLines": 246
+    },
+    "time": {
+      "start": 1792902860072,
+      "end": 1792902862284
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0adb2da994ca10b6016add86c9bfb48191b6d979796468ad0e"
+    }
+  },
+  "orderKey": "v1:0001792902860135:0000000000000031:0000000000000000:part:prt_g0VZ25gXg006Hyo1DSAN"
+}

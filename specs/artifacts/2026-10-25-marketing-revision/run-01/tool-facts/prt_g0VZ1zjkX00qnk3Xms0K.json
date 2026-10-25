@@ -1,0 +1,50 @@
+{
+  "id": "prt_g0VZ1zjkX00qnk3Xms0K",
+  "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+  "messageID": "msg_g0VZ1ziZ900qnWLPOLkr",
+  "type": "tool",
+  "callID": "call_5ec3979488684fb5b15cf6805f1f22fa",
+  "tool": "artifact_publish",
+  "state": {
+    "status": "completed",
+    "input": {
+      "artifact_type": "marketing-growth/author-review-qa",
+      "schema_version": 1,
+      "label": "作者逐页自检与内部真实页图｜4页，待独立复核",
+      "source_read_refs": [
+        "ar_uu5VLeGwEyNW6Hq5",
+        "ar_6Bn5PFocfEnIaSC5",
+        "ar_n4EeRP8e8GTIjzHg",
+        "ar_KNsuq6N-VT6DuXQl"
+      ],
+      "resource_set": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "8eea5db7-aa44-5cb3-a82e-b23e91ff3004",
+          "manifest_sha256": "63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633"
+        },
+        "tree": "resources"
+      },
+      "payload_json": "{\"stage\":\"作者自检完成；非独立最终验收\",\"as_of\":\"2026-10-25\",\"resource_roles\":[{\"path\":\"qa/author-review.md\",\"role\":\"内部作者自检方法、逐页记录与限制\"},{\"path\":\"qa/body-consistency.json\",\"role\":\"内部完整正文序列比较结果\"},{\"path\":\"qa/initial/growth-plan.pdf\",\"role\":\"内部Word实际渲染PDF，非用户交付\"},{\"path\":\"qa/initial/page-1.png\",\"role\":\"内部实际渲染第1页\"},{\"path\":\"qa/initial/page-2.png\",\"role\":\"内部实际渲染第2页\"},{\"path\":\"qa/initial/page-3.png\",\"role\":\"内部实际渲染第3页\"},{\"path\":\"qa/initial/page-4.png\",\"role\":\"内部实际渲染第4页\"},{\"path\":\"tools/build_growth_documents.py\",\"role\":\"本地生成与可重复正文一致性检查器，verify-only模式不重新生成文档\"}],\"page_count\":4,\"page_checks\":[{\"page\":1,\"opened\":true,\"result\":\"黑色清楚标题、完整8列核算表，无裁切；标题下有蓝色装饰线但文字纯黑\"},{\"page\":2,\"opened\":true,\"result\":\"受众与预算文字清楚，预算表完整、无截断\"},{\"page\":3,\"opened\":true,\"result\":\"实验表各行完整，单情境保留条件及复盘正文可读\"},{\"page\":4,\"opened\":true,\"result\":\"测量未知与来源完整，无缺字、空白页或截断\"}],\"body_verification\":\"MD/DOCX/HTML全部标题、段落与表格单元格按顺序相同：33语义块、3表、70单元格；镜像正文直接相等。不是hash验收。\",\"limitations\":[\"作者自检不是独立检查；必须独立读取规范全文并查看全部4张真实页图\",\"HTML未做浏览器视觉检查\",\"视觉结论限于此次Word渲染，非所有客户端保证\",\"PDF/PNG仅内部验收，不是最终用户交付\"],\"next_decision\":\"独立角色复核实际完整正文与所有页图；原作者随后修复或正式发布原包campaign-plan和匹配交互阅读文档\",\"fact_check_items\":[]}"
+    },
+    "output": "{\"locator\":{\"source\":\"engine_artifact\",\"artifact_id\":\"art_haDfZVh9MQKJ6ydSjFYm\",\"catalog_revision\":31,\"expected_sha256\":\"0249c327334c3f8436cd43bfdf050ba92c26931adefd142318678f7279777479\"},\"sha256\":\"0249c327334c3f8436cd43bfdf050ba92c26931adefd142318678f7279777479\"}",
+    "title": "Published marketing-growth/author-review-qa",
+    "metadata": {
+      "artifactType": "marketing-growth/author-review-qa",
+      "sha256": "0249c327334c3f8436cd43bfdf050ba92c26931adefd142318678f7279777479",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792901442433,
+      "end": 1792901452615
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_05a183df30c61e81016add81424e048191926de550ee240d0c"
+    }
+  },
+  "orderKey": "v1:0001792901452138:0000000000000031:0000000000000000:part:prt_g0VZ1zjkX00qnk3Xms0K"
+}

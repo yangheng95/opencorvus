@@ -1,0 +1,44 @@
+{
+  "id": "prt_g0VZ1wfJx00MQscBINH9",
+  "sessionID": "ses_hFJ8vTxHnKEkoytVnJMJ",
+  "messageID": "msg_g0VZ1we9J00z7tY38flp",
+  "type": "tool",
+  "callID": "call_cbdaead83bb64b9e9aba689ecc878452",
+  "tool": "artifact_read",
+  "state": {
+    "status": "completed",
+    "input": {
+      "reads": [
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_QnkCYpEci3jNhjuc",
+          "byte_offset": 8190,
+          "max_bytes": 20000,
+          "delivery": "inline"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_G9hxPxriMNF8r12j",
+          "byte_offset": 8192,
+          "max_bytes": 16000,
+          "delivery": "inline"
+        }
+      ]
+    },
+    "output": "{\"results\":[{\"request_index\":0,\"value\":{\"locator\":{\"source\":\"engine_artifact\",\"artifact_id\":\"art_h1dXK5iCxDee5sW77XT3\",\"catalog_revision\":16,\"expected_sha256\":\"5983c9a6fd321c8fc2ddc4d499b0f5a26463d59de9aca88b974f50ef6b13f937\"},\"media_type\":\"application/json\",\"byte_start\":8190,\"byte_end\":11782,\"next_offset\":null,\"total_bytes\":11782,\"complete\":true,\"sha256\":\"5983c9a6fd321c8fc2ddc4d499b0f5a26463d59de9aca88b974f50ef6b13f937\",\"text\":\"用户自愿同意、团队去重与内部审核必须兼顾；不为满足阈值事后放宽标准。候选经济公式：新CPL=同期实际可归属成本/同期去重线索；合格线索成本=同期可归属成本/同期去重合格线索；完整CAC=同队列获客全部成本/同期新增付费客户，须披露成本范围与周期；无付费客户不可算有意义CAC。\\\",\\\"交给策略角色的是渠道候选、顺序、预算护栏及未知，不替代受众分析或最终汇合。只发布本阶段channel-analysis一次，不写最终报告，不修改任何项目文件。\\\"],\\\"unknowns\\\":[\\\"价格、付费率、购买周期、收入、毛利、留存、客户数、LTV、CAC、ROI及可接受CPL未知；阈值仅为操作性学习门槛，非经济盈亏门槛。\\\",\\\"原始线索定义、质量、跨渠道重复、历史归因窗口、实际投放周期、可比人群与增量效果未知。无原始逐条事件，不能回溯重建去重或因果结果。\\\",\\\"合法许可email名单、社群访问许可、工具可用性、报价、负责人任命、人力工时与成本、未来执行授权均未知；不追问、不外查、不补造。\\\",\\\"20个团队/访客、20条本地路径、7天归因、14天复盘、2条线索及1条合格线索和预算拆分均为建议假设；真实可达样本、合适周期及统计功效未经验证。\\\"],\\\"resource_roles\\\":[]},\\\"resources\\\":[],\\\"observed_artifact_locators\\\":[{\\\"source\\\":\\\"engine_artifact\\\",\\\"artifact_id\\\":\\\"art_hINGKxdy1DfGqUR9RymQ\\\",\\\"catalog_revision\\\":9,\\\"expected_sha256\\\":\\\"710dc4ed78e4f03e20abfbce6829bf1e2248bd81e30ce11aeaa3cac59a89fdbe\\\"},{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hdfrY4uLsCH7DfgPkBMw\\\",\\\"task_id\\\":\\\"tsk_g00VZ1u3kk00D81zMYvb\\\",\\\"snapshot_id\\\":\\\"459ac5fe-a23f-5c58-af37-93d2dae6d0ca\\\",\\\"manifest_sha256\\\":\\\"38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"brief.md\\\",\\\"media_type\\\":\\\"text/markdown\\\",\\\"bytes\\\":1024,\\\"sha256\\\":\\\"4ddd30c51f7fb98d18208a76e19e1739bb3a5b752bba63183778755404505c7c\\\"}},{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hdfrY4uLsCH7DfgPkBMw\\\",\\\"task_id\\\":\\\"tsk_g00VZ1u3kk00D81zMYvb\\\",\\\"snapshot_id\\\":\\\"459ac5fe-a23f-5c58-af37-93d2dae6d0ca\\\",\\\"manifest_sha256\\\":\\\"38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"campaign.csv\\\",\\\"media_type\\\":\\\"text/csv\\\",\\\"bytes\\\":113,\\\"sha256\\\":\\\"2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1\\\"}}],\\\"source_artifact_locators\\\":[{\\\"source\\\":\\\"engine_artifact\\\",\\\"artifact_id\\\":\\\"art_hINGKxdy1DfGqUR9RymQ\\\",\\\"catalog_revision\\\":9,\\\"expected_sha256\\\":\\\"710dc4ed78e4f03e20abfbce6829bf1e2248bd81e30ce11aeaa3cac59a89fdbe\\\"},{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hdfrY4uLsCH7DfgPkBMw\\\",\\\"task_id\\\":\\\"tsk_g00VZ1u3kk00D81zMYvb\\\",\\\"snapshot_id\\\":\\\"459ac5fe-a23f-5c58-af37-93d2dae6d0ca\\\",\\\"manifest_sha256\\\":\\\"38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"brief.md\\\",\\\"media_type\\\":\\\"text/markdown\\\",\\\"bytes\\\":1024,\\\"sha256\\\":\\\"4ddd30c51f7fb98d18208a76e19e1739bb3a5b752bba63183778755404505c7c\\\"}},{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hdfrY4uLsCH7DfgPkBMw\\\",\\\"task_id\\\":\\\"tsk_g00VZ1u3kk00D81zMYvb\\\",\\\"snapshot_id\\\":\\\"459ac5fe-a23f-5c58-af37-93d2dae6d0ca\\\",\\\"manifest_sha256\\\":\\\"38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"campaign.csv\\\",\\\"media_type\\\":\\\"text/csv\\\",\\\"bytes\\\":113,\\\"sha256\\\":\\\"2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1\\\"}}]}\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_QnkCYpEci3jNhjuc\",\"artifact_read_ref\":\"ar_rgEQXGRv8Ssa0PSV\"}},{\"request_index\":1,\"value\":{\"locator\":{\"source\":\"engine_artifact\",\"artifact_id\":\"art_h8kbN5NqjULir7OAgH1Z\",\"catalog_revision\":15,\"expected_sha256\":\"4ce69ee8669268fd047b697e6d903bd915e6ae07619abdebaac2c6eac77cd7ad\"},\"media_type\":\"application/json\",\"byte_start\":8192,\"byte_end\":9907,\"next_offset\":null,\"total_bytes\":9907,\"complete\":true,\"sha256\":\"4ce69ee8669268fd047b697e6d903bd915e6ae07619abdebaac2c6eac77cd7ad\",\"text\":\"f303e3496b83180\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"brief.md\\\",\\\"media_type\\\":\\\"text/markdown\\\",\\\"bytes\\\":1024,\\\"sha256\\\":\\\"4ddd30c51f7fb98d18208a76e19e1739bb3a5b752bba63183778755404505c7c\\\"}},{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hdfrY4uLsCH7DfgPkBMw\\\",\\\"task_id\\\":\\\"tsk_g00VZ1u3kk00D81zMYvb\\\",\\\"snapshot_id\\\":\\\"459ac5fe-a23f-5c58-af37-93d2dae6d0ca\\\",\\\"manifest_sha256\\\":\\\"38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"campaign.csv\\\",\\\"media_type\\\":\\\"text/csv\\\",\\\"bytes\\\":113,\\\"sha256\\\":\\\"2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1\\\"}}],\\\"source_artifact_locators\\\":[{\\\"source\\\":\\\"engine_artifact\\\",\\\"artifact_id\\\":\\\"art_hINGKxdy1DfGqUR9RymQ\\\",\\\"catalog_revision\\\":9,\\\"expected_sha256\\\":\\\"710dc4ed78e4f03e20abfbce6829bf1e2248bd81e30ce11aeaa3cac59a89fdbe\\\"},{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hdfrY4uLsCH7DfgPkBMw\\\",\\\"task_id\\\":\\\"tsk_g00VZ1u3kk00D81zMYvb\\\",\\\"snapshot_id\\\":\\\"459ac5fe-a23f-5c58-af37-93d2dae6d0ca\\\",\\\"manifest_sha256\\\":\\\"38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"brief.md\\\",\\\"media_type\\\":\\\"text/markdown\\\",\\\"bytes\\\":1024,\\\"sha256\\\":\\\"4ddd30c51f7fb98d18208a76e19e1739bb3a5b752bba63183778755404505c7c\\\"}},{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hdfrY4uLsCH7DfgPkBMw\\\",\\\"task_id\\\":\\\"tsk_g00VZ1u3kk00D81zMYvb\\\",\\\"snapshot_id\\\":\\\"459ac5fe-a23f-5c58-af37-93d2dae6d0ca\\\",\\\"manifest_sha256\\\":\\\"38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"campaign.csv\\\",\\\"media_type\\\":\\\"text/csv\\\",\\\"bytes\\\":113,\\\"sha256\\\":\\\"2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1\\\"}}]}\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_G9hxPxriMNF8r12j\",\"artifact_read_ref\":\"ar_oW1MzHruQ49rB4Eg\"}}],\"complete\":true,\"next_reads\":[]}",
+    "title": "Artifacts (2)",
+    "metadata": {
+      "truncated": false
+    },
+    "time": {
+      "start": 1792900710425,
+      "end": 1792900711653
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0745b57c4a30af4d016add7e665470819199760c5c82c0cebc"
+    }
+  },
+  "orderKey": "v1:0001792900711121:0000000000000031:0000000000000000:part:prt_g0VZ1wfJx00MQscBINH9"
+}

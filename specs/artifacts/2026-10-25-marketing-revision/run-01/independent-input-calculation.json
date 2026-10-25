@@ -1,0 +1,39 @@
+{
+  "rows": [
+    {
+      "channel": "email",
+      "impressions": 1000,
+      "clicks": 100,
+      "leads": 20,
+      "cost_cny": 400,
+      "cost_per_lead": "20"
+    },
+    {
+      "channel": "community",
+      "impressions": 2000,
+      "clicks": 120,
+      "leads": 12,
+      "cost_cny": 600,
+      "cost_per_lead": "50"
+    },
+    {
+      "channel": "search",
+      "impressions": 3000,
+      "clicks": 150,
+      "leads": 15,
+      "cost_cny": 900,
+      "cost_per_lead": "60"
+    }
+  ],
+  "totals": {
+    "impressions": 6000,
+    "clicks": 370,
+    "leads": 47,
+    "cost_cny": 1900,
+    "cost_per_lead": "40.42553191489361702127659574"
+  },
+  "currentBudget": 1200,
+  "supersededDraft": 3000,
+  "historicalSyntheticCost": 1900,
+  "source": "Outer independent calculation of all actual CSV rows; validation only, not model output"
+}

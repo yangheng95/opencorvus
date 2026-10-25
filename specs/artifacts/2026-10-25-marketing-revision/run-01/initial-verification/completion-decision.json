@@ -1,0 +1,169 @@
+{
+  "orchestrator_session_id": "ses_-zUQy5vEEzzn2RBsqAWe",
+  "orchestrator_message_id": "msg_hpEbinE0P31CyEbHZ2W5",
+  "tool_call_id": "call_7874c77210b147c39fae98598d6eaf97",
+  "tool_part_id": "prt_g0VZ23GYJ00lnwxeelSI",
+  "evidence_locators": [
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_hVZF8AMim7elwBWzUpDo",
+      "catalog_revision": 41,
+      "expected_sha256": "740921fc0ee858374f13a3959bcac341dfc7d8eb46e1bee0b90611ea0e7d7844"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_hBtvGwxw9z5Ml5ggGGoA",
+      "catalog_revision": 36,
+      "expected_sha256": "a53363c73482beb57ee6e11b1bf41db9c39e8de3f6ebad0ea7759d273dac27c0"
+    },
+    {
+      "source": "session_message",
+      "session_id": "ses_hyWiInyq6XpRz0zm2vDI",
+      "message_id": "msg_g0VZ2333l004uBHP2onN"
+    },
+    {
+      "source": "session_message",
+      "session_id": "ses_hyWiInyq6XpRz0zm2vDI",
+      "message_id": "msg_g0VZ1zmQd00krPyhJG5X"
+    },
+    {
+      "source": "session_message",
+      "session_id": "ses_hVeBqjMKP8pdekG4qxJL",
+      "message_id": "msg_g0VZ21clJ00QGBPS3fD0"
+    }
+  ],
+  "deliverable_artifact_locators": [
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_hVZF8AMim7elwBWzUpDo",
+      "catalog_revision": 41,
+      "expected_sha256": "740921fc0ee858374f13a3959bcac341dfc7d8eb46e1bee0b90611ea0e7d7844"
+    }
+  ],
+  "worker_artifact_locators": [
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_h1dXK5iCxDee5sW77XT3",
+      "catalog_revision": 16,
+      "expected_sha256": "5983c9a6fd321c8fc2ddc4d499b0f5a26463d59de9aca88b974f50ef6b13f937"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_h4mnmKnCr0ADaYMbQaVO",
+      "catalog_revision": 5,
+      "expected_sha256": "5ac719b0d45a54c4f316e625bfec5b8c14b14a2a0edf4b4fb38200bb88ff14c3"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_h73pKL9SnPV3SOs4L4rb",
+      "catalog_revision": 30,
+      "expected_sha256": "58e950c7c5c9c6bc325d4bb12eee6757277f888b7a475bbaed5eb72d6fed32cf"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_h8kbN5NqjULir7OAgH1Z",
+      "catalog_revision": 15,
+      "expected_sha256": "4ce69ee8669268fd047b697e6d903bd915e6ae07619abdebaac2c6eac77cd7ad"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_hBtvGwxw9z5Ml5ggGGoA",
+      "catalog_revision": 36,
+      "expected_sha256": "a53363c73482beb57ee6e11b1bf41db9c39e8de3f6ebad0ea7759d273dac27c0"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_hINGKxdy1DfGqUR9RymQ",
+      "catalog_revision": 9,
+      "expected_sha256": "710dc4ed78e4f03e20abfbce6829bf1e2248bd81e30ce11aeaa3cac59a89fdbe"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_hMZQdRFI6lArQLmx7xFd",
+      "catalog_revision": 25,
+      "expected_sha256": "406fbd63400b618fb5ae4ef8823c491f94dff666faca4d996762af65a6cb9ffb"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_hPLkHQXDY9raF2aQCQYq",
+      "catalog_revision": 21,
+      "expected_sha256": "180838aa721c7f54458aab068723621b48d2b15341c87c33d086fe4d72245337"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_hVZF8AMim7elwBWzUpDo",
+      "catalog_revision": 41,
+      "expected_sha256": "740921fc0ee858374f13a3959bcac341dfc7d8eb46e1bee0b90611ea0e7d7844"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_haDfZVh9MQKJ6ydSjFYm",
+      "catalog_revision": 31,
+      "expected_sha256": "0249c327334c3f8436cd43bfdf050ba92c26931adefd142318678f7279777479"
+    }
+  ],
+  "accepted_delivery_slice_revision_ids": [],
+  "workflow_binding": {
+    "kind": "virtual_workflow",
+    "workflow_id": "marketing-growth-campaign",
+    "package_revision": {
+      "scope": "project",
+      "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+      "namespace": "builtin",
+      "id": "marketing-growth",
+      "version": "2026.10.24.2",
+      "package_digest": "66bbf77da0945d7da12931b6599cd8f3211a70701de2051e0d3227017815fc5c"
+    },
+    "nodes": [
+      {
+        "node_id": "marketing-growth-audience-analyst",
+        "agent_id": "marketing-growth-audience-analyst",
+        "depends_on": [
+          "marketing-growth-evidence-researcher"
+        ]
+      },
+      {
+        "node_id": "marketing-growth-campaign-writer",
+        "agent_id": "marketing-growth-campaign-writer",
+        "depends_on": [
+          "marketing-growth-fact-checker"
+        ]
+      },
+      {
+        "node_id": "marketing-growth-channel-analyst",
+        "agent_id": "marketing-growth-channel-analyst",
+        "depends_on": [
+          "marketing-growth-evidence-researcher"
+        ]
+      },
+      {
+        "node_id": "marketing-growth-evidence-researcher",
+        "agent_id": "marketing-growth-evidence-researcher",
+        "depends_on": [
+          "marketing-growth-planner"
+        ]
+      },
+      {
+        "node_id": "marketing-growth-fact-checker",
+        "agent_id": "marketing-growth-fact-checker",
+        "depends_on": [
+          "marketing-growth-strategist"
+        ]
+      },
+      {
+        "node_id": "marketing-growth-planner",
+        "agent_id": "marketing-growth-planner",
+        "depends_on": []
+      },
+      {
+        "node_id": "marketing-growth-strategist",
+        "agent_id": "marketing-growth-strategist",
+        "depends_on": [
+          "marketing-growth-audience-analyst",
+          "marketing-growth-channel-analyst"
+        ]
+      }
+    ]
+  },
+  "time_recorded": 1792902292789
+}

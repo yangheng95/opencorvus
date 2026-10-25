@@ -1,0 +1,57 @@
+{
+  "id": "prt_g0VZ1zeC800fCYRIcTM9",
+  "sessionID": "ses_hyWiInyq6XpRz0zm2vDI",
+  "messageID": "msg_g0VZ1zd3900EYyGwkZ4I",
+  "type": "tool",
+  "callID": "call_3d2fb8f5deee43ec8de8da1be190cf14",
+  "tool": "artifact_publish",
+  "state": {
+    "status": "completed",
+    "input": {
+      "artifact_type": "marketing-growth/author-review-documents",
+      "schema_version": 1,
+      "label": "作者完整正文与同正文文档｜供独立复核，非正式campaign-plan",
+      "source_read_refs": [
+        "ar_hdZGr_MWlTHBW-Fa",
+        "ar_njWUWnuDS1byU51K",
+        "ar_RQQN95n6fSWRBzdl",
+        "ar_OKAZcv0wiZExnsTQ",
+        "ar_6mN7czkyFvRyaLFr",
+        "ar_6Bn5PFocfEnIaSC5",
+        "ar_TdpcHxd00A3oHn8T",
+        "ar_NoSUgMh6afT5Z0Hw",
+        "ar_n4EeRP8e8GTIjzHg",
+        "ar_KNsuq6N-VT6DuXQl",
+        "ar_uu5VLeGwEyNW6Hq5"
+      ],
+      "resource_set": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hdfrY4uLsCH7DfgPkBMw",
+          "task_id": "tsk_g00VZ1u3kk00D81zMYvb",
+          "snapshot_id": "2d5e2090-241a-5c71-a861-c943e67d16ac",
+          "manifest_sha256": "a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773"
+        },
+        "tree": "resources"
+      },
+      "payload_json": "{\"stage\":\"作者制作与自检；等待独立最终正文及页图复核\",\"as_of\":\"2026-10-25\",\"resource_roles\":[{\"path\":\"outputs/growth-plan.md\",\"role\":\"唯一规范完整正文，2791汉字\"},{\"path\":\"outputs/growth-plan.docx\",\"role\":\"与规范正文相同的纵向Word文档\"},{\"path\":\"outputs/growth-plan.html\",\"role\":\"完整同正文可复用阅读文件，不是摘要\"},{\"path\":\"artifacts/marketing-growth/campaign-plan.md\",\"role\":\"同正文镜像，非竞争正文，非正式原包发布\"}],\"content_decisions\":[\"当前1200、旧稿3000、合成历史1900分别保留，历史不改\",\"预算受众300+测量200+单渠道400+预留300=1200，全成本包含工时工具可能激励\",\"吸收audit建议：总体不通过时单情境须有自身证据和理由，不可记总体通过\",\"所有实验和阈值为规划假设，CPL非CAC，无因果或未来结果保证\"],\"verification\":{\"semantic_comparison\":\"重新打开DOCX按XML正文顺序提取标题级别、段落全文与表格行单元格，HTMLParser独立解析HTML正文；逐项与MD语义序列直接相等，镜像全文直接相等；非摘要/hash检查\",\"semantic_blocks\":33,\"tables\":3,\"table_cells\":70,\"all_sections_portrait\":true,\"word_pages\":4,\"author_opened_each_png\":true},\"limitations\":[\"只完成作者自检，独立角色尚未审核此正文与全部真实页图，不是最终验收通过\",\"HTML完成正文一致性检查，未做浏览器视觉验收\",\"全部实验未执行；真实样本、许可、报价、工时、客户和收入未知\",\"PDF/PNG另作内部QA资源，不列入最终用户文档\"],\"formal_publication\":\"未调用正式campaign-plan发布器，未发布交互阅读；待独立复核后由原作者继续\",\"fact_check_items\":[]}"
+    },
+    "output": "{\"locator\":{\"source\":\"engine_artifact\",\"artifact_id\":\"art_h73pKL9SnPV3SOs4L4rb\",\"catalog_revision\":30,\"expected_sha256\":\"58e950c7c5c9c6bc325d4bb12eee6757277f888b7a475bbaed5eb72d6fed32cf\"},\"sha256\":\"58e950c7c5c9c6bc325d4bb12eee6757277f888b7a475bbaed5eb72d6fed32cf\"}",
+    "title": "Published marketing-growth/author-review-documents",
+    "metadata": {
+      "artifactType": "marketing-growth/author-review-documents",
+      "sha256": "58e950c7c5c9c6bc325d4bb12eee6757277f888b7a475bbaed5eb72d6fed32cf",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792901421080,
+      "end": 1792901432353
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_073b331dbb44e00d016add812cd29c81918c0e47d954cd5314"
+    }
+  },
+  "orderKey": "v1:0001792901432058:0000000000000031:0000000000000000:part:prt_g0VZ1zeC800fCYRIcTM9"
+}

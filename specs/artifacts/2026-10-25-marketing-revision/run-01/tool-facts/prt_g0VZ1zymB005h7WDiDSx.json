@@ -1,0 +1,91 @@
+{
+  "id": "prt_g0VZ1zymB005h7WDiDSx",
+  "sessionID": "ses_-zUQy5vEEzzn2RBsqAWe",
+  "messageID": "msg_hcwtmbIqLitYNOgSygeD",
+  "type": "tool",
+  "callID": "call_b4d055966047472f9b79dc232cb94ec1",
+  "tool": "dispatch_agents",
+  "state": {
+    "status": "completed",
+    "input": {
+      "team": [
+        {
+          "name": "独立最终正文与页图复核",
+          "target": "marketing-growth-fact-checker",
+          "responsibility": "延续独立复核责任，直接检查最终完整正文、同正文文档与全部真实渲染页。",
+          "boundary": "只读审查不得修正文档；不凭作者自检或旧策略通过替代直接检查；PDF页图仅内部。",
+          "expected_result": "不可变独立最终复核证据与明确通过或具体必改差异，供原作者正式交付。",
+          "depends_on": [
+            "原营销作者文档制作"
+          ]
+        }
+      ],
+      "dispatches": [
+        {
+          "dispatch": {
+            "target": "marketing-growth-fact-checker",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "continuation",
+              "authority": {
+                "kind": "prior_dispatch",
+                "continuation_dispatch_id": "art_hMvCG3ux9E4Zsd1S8Rda"
+              },
+              "guidance": "继续独立责任，现需最终正文与真实页图验收，而非重做策略研究。作者精确报告ses_hyWiInyq6XpRz0zm2vDI/msg_g0VZ1zmQd00krPyhJG5X可用read_agent_message读取。自行发现本Task author-review-documents与author-review-qa已发布资源，完整读取选择原始来源及实际规范正文outputs/growth-plan.md，不用可变路径/摘要替代。原始请求要求约3000汉字完整论证表格、同正文outputs/growth-plan.docx全部纵向、完全相同正文阅读文档、标题清楚黑色表格可读不截断、作者实际渲染逐页查看后独立检查。作者报告2791汉字、33语义块/3表/70格，必须自行审计实际正文及MD/DOCX/HTML标题段落和表格顺序一致性，不仅复述报告或运行自证hash。真实最终Word共4页，必须通过Artifact读取每张PNG实际查看全部4页，并核与Word对应，不以提取文字代替看图。可用bash只读分析不可变文件，若需要本地材料使用精确资源文件，保持来源权威；勿生成或修改产品。正文镜像bytes与规范正文bytes不同，请区分CRLF等表示差异和真实内容差异，直接按正文语义比较而非盲用hash或字节数判错。核预算1200当前/3000旧稿/1900合成历史关系、全量复算、假设未知、预算含工时、实验与筛查部分通过分支。无新增证据不扩写。审计原作者实际渲染和逐页打开事实，明确独立逐页观察。PDF/PNG仅内部不列业务交付。HTML未做浏览器视觉检查是已披露边界；阅读正文相同须直接证实，不新增不必要测试。\n前次audit为正式策略审计，本轮保留它，可发布一个generic独立最终文档复核（资源可选）并记录精确新目标的结构化核查，避免强行把campaign-plan当未存在typed前驱。需要纠正则列具体原始义务/页码/正文差异，不修改产品；通过也仅允许原作者下一轮履行原包campaign-plan正式发布及匹配交互阅读，不抢作者职责。当前没有工作在运行。已知作者收尾主机观察遇到git忽略qa路径错误，不是正文缺失证明，不要为此更改忽略规则或原始输入；以已封存真实资源及实际调用证据判断。本地内部，不联网、不外联、不投放、不花费、不对外发布、不创建Task/Goal。",
+              "evidence_locators": [
+                {
+                  "source": "session_message",
+                  "session_id": "ses_hyWiInyq6XpRz0zm2vDI",
+                  "message_id": "msg_g0VZ1zmQd00krPyhJG5X"
+                }
+              ],
+              "input": {
+                "target_session_id": "ses_hyWiInyq6XpRz0zm2vDI",
+                "target_message_id": "msg_g0VZ1zmQd00krPyhJG5X",
+                "target_agent": "marketing-growth-campaign-writer",
+                "reason": "独立复核最终完整正文、同正文Word与阅读文件及全部4页真实渲染页，满足用户明确要求后再由原作者正式交付。"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "output": "{\"members\":[{\"member_index\":0,\"name\":\"独立最终正文与页图复核\",\"target\":\"marketing-growth-fact-checker\",\"status\":\"completed\",\"outcome\":{\"kind\":\"accepted\",\"session_id\":\"ses_hVeBqjMKP8pdekG4qxJL\",\"dispatch_lineage_id\":\"art_g0VZ203hJ00UPi19BYS8\"}}]}",
+    "title": "Settled frontier (1/1)",
+    "metadata": {
+      "frontier_size": 1,
+      "completed_count": 1,
+      "member_names": [
+        "独立最终正文与页图复核"
+      ],
+      "targets": [
+        "marketing-growth-fact-checker"
+      ],
+      "members": [
+        {
+          "member_index": 0,
+          "name": "独立最终正文与页图复核",
+          "target": "marketing-growth-fact-checker",
+          "status": "completed",
+          "outcome": {
+            "kind": "accepted",
+            "session_id": "ses_hVeBqjMKP8pdekG4qxJL",
+            "dispatch_lineage_id": "art_g0VZ203hJ00UPi19BYS8"
+          }
+        }
+      ]
+    },
+    "time": {
+      "start": 1792901500195,
+      "end": 1792901519606
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_03b1985a269dd458016add817c15bc8191b835d62db74300ba"
+    }
+  },
+  "orderKey": "v1:0001792901518727:0000000000000031:0000000000000000:part:prt_g0VZ1zymB005h7WDiDSx"
+}

@@ -1,0 +1,77 @@
+{
+  "id": "prt_g0VZ246eJ000OkY11nlC",
+  "sessionID": "ses_-zUQy5vEEzzn2RBsqAWe",
+  "messageID": "msg_hTzIdY7eobZxbbjRtNlY",
+  "type": "tool",
+  "callID": "call_33c185aa2bac44fba9f4c3603a65e0c8",
+  "tool": "dispatch_agents",
+  "state": {
+    "status": "completed",
+    "input": {
+      "team": [
+        {
+          "name": "原营销作者横向Word修订",
+          "target": "marketing-growth-campaign-writer",
+          "responsibility": "仅修改Word呈现及必要生成器，重新渲染逐页自检，封存供独立复核的修订资源。",
+          "boundary": "原业务正文和Markdown不可改；保留首次不可变资源，不联网、不花费、不创建Task或Goal；独立复核前不正式宣告新版通过。",
+          "expected_result": "横向Word、完整正文保留比较、逐表分页属性检查、全部实际新页图及作者逐页观察的不可变交接。",
+          "depends_on": []
+        }
+      ],
+      "dispatches": [
+        {
+          "dispatch": {
+            "target": "marketing-growth-campaign-writer",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "continuation",
+              "authority": {
+                "kind": "prior_dispatch",
+                "continuation_dispatch_id": "art_htXGzlg9SaMafHuQA2ZS"
+              },
+              "guidance": "同一Task收到完成后Word版式修订，继续由你负责。用户新授权仅Word呈现及必要生成器：outputs/growth-plan.docx改横向页面，调整列宽段落使中文数字完整可读；跨页表头重复，表头与第一数据行同页，数据行不拆分，保留原已正确属性；移除首标题下蓝色装饰线，黑色标题文字保留。outputs/growth-plan.md必须与刚才首次交付不可变资源完整字节一致，Word全部有序段落及表格单元格正文须与首次交付逐字一致，不仅与当前工作区相互比较；保持1200/3000/1900边界。自行发现、完整读取选择首次正式campaign-plan及其原MD/DOCX资源，和本轮封存的tools/runtime.md、tools/render_docx.py、tools/build_growth_documents.py输入。现有生成器写MD镜像/HTML且verify有纵向断言，须避免不必要重写其他文件并把呈现检查明确改为本次横向；检查蓝线的实际OOXML来源（含样式继承）而非仅改文字颜色。用python tools/render_docx.py outputs/growth-plan.docx --output_dir qa/revised --emit_pdf --verbose实际渲染，逐张打开全部新页图，检查所有跨页表及首数据行、无裁切和蓝线去除；保留并直接核对重复表头/cantSplit/keep-with-next等实际属性，不用属性检查代替真实图像观察。本轮先发布修订完整文档及独立可读的内部QA不可变交接（正文基准比较、实际命令和逐页观察、全部新PDF/PNG）；只允许必要文档和生成器修改，不重做策略研究，不编辑原不可变资源。待独立角色复核本次完整正文和全部新页图后，你再履行原包新版正式交付和同正文全文阅读；本轮不要用原审阅冒充新复核或提前正式验收。PDF/PNG仅内部，离线依赖已预检无需外部调查。不得联网、外联、投放、花费、公开发布或新建Task/Goal。报告精确修订及保留事实、资源与可复核结果。",
+              "evidence_locators": []
+            }
+          }
+        }
+      ]
+    },
+    "output": "{\"members\":[{\"member_index\":0,\"name\":\"原营销作者横向Word修订\",\"target\":\"marketing-growth-campaign-writer\",\"status\":\"completed\",\"outcome\":{\"kind\":\"accepted\",\"session_id\":\"ses_hyWiInyq6XpRz0zm2vDI\",\"dispatch_lineage_id\":\"art_g0VZ24AXp00YqOi7LYHX\"}}]}",
+    "title": "Settled frontier (1/1)",
+    "metadata": {
+      "frontier_size": 1,
+      "completed_count": 1,
+      "member_names": [
+        "原营销作者横向Word修订"
+      ],
+      "targets": [
+        "marketing-growth-campaign-writer"
+      ],
+      "members": [
+        {
+          "member_index": 0,
+          "name": "原营销作者横向Word修订",
+          "target": "marketing-growth-campaign-writer",
+          "status": "completed",
+          "outcome": {
+            "kind": "accepted",
+            "session_id": "ses_hyWiInyq6XpRz0zm2vDI",
+            "dispatch_lineage_id": "art_g0VZ24AXp00YqOi7LYHX"
+          }
+        }
+      ]
+    },
+    "time": {
+      "start": 1792902483771,
+      "end": 1792902501174
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_09698c61b4b647ed016add8553a7f0819195f0cdb20409345d"
+    }
+  },
+  "orderKey": "v1:0001792902498381:0000000000000031:0000000000000000:part:prt_g0VZ246eJ000OkY11nlC"
+}

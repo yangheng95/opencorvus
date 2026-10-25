@@ -1,0 +1,68 @@
+{
+  "id": "prt_g0VZ2UqYs00kTjoFVrQl",
+  "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+  "messageID": "msg_h13FwTwNO5cYoO18Rukk",
+  "type": "tool",
+  "callID": "call_de2ae8cec45d41f8837a9e6e1a1ba8e2",
+  "tool": "manage_task",
+  "state": {
+    "status": "completed",
+    "input": {
+      "summary": "已完成本地营销计划及原专家团完整职责链：范围、证据、独立并行受众/渠道分析、策略汇合、独立审计、原作者制作和正式交付。正式计划绑定唯一规范outputs/growth-plan.md与同正文纵向Word，正文约3000汉字（2694汉字）含四表；同正文阅读文档已真实发布并读取其完整调用正文与回执。原输入不可变资源及各阶段来源完整绑定。三渠道与合计6000曝光/370点击/47线索/1900元、总CPL40.43正确，1200当前上限、3000旧草案、1900合成历史关系未被混同或缩放。作者实际渲染并逐页查看，独立终检对确切文件真实解析及五页页图复核通过，52有序内容块、4表22行76单元格一致，黑色标题无装饰边框、纵向、无裁切；审计退订率口径修正已落实。正式交付使用同一已审资源，未改正文；正文待审字样为制作时历史状态，外层与本次说明明确后续独立终检通过及正式交付完成。仅MD/Word为正式文件，内部PDF/PNG和本地镜像不交付，无HTML。观察/假设/未知已区分，不承诺市场效果；未联网外联投放花费或创建Task/Goal。当前无仍运行的工作或剩余文件交付阻塞。",
+      "evidence_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h28MoKiA1WMo4nQBkTLd",
+          "catalog_revision": 40
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hIgpb6RZbrxuaF9xPJFH",
+          "catalog_revision": 35
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h2vfYEL6JlrYYmHFBUdT",
+          "catalog_revision": 25
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_hEwp3inYGnK5nYF8mpQW",
+          "message_id": "msg_g0VZ2UXDt00JxCSgllPl"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_hT6WN4CemvWvrDYg7sgb",
+          "message_id": "msg_g0VZ2RJBe00z9DjyGDmT"
+        }
+      ],
+      "deliverable_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h28MoKiA1WMo4nQBkTLd",
+          "catalog_revision": 40
+        }
+      ],
+      "accepted_delivery_slice_revision_ids": [],
+      "workflow_id": "marketing-growth-campaign",
+      "action": "complete_task"
+    },
+    "output": "Task tsk_g00VZ2GE9C00jkeX1GgT completed: 已完成本地营销计划及原专家团完整职责链：范围、证据、独立并行受众/渠道分析、策略汇合、独立审计、原作者制作和正式交付。正式计划绑定唯一规范outputs/growth-plan.md与同正文纵向Word，正文约3000汉字（2694汉字）含四表；同正文阅读文档已真实发布并读取其完整调用正文与回执。原输入不可变资源及各阶段来源完整绑定。三渠道与合计6000曝光/370点击/47线索/1900元、总CPL40.43正确，1200当前上限、3000旧草案、1900合成历史关系未被混同或缩放。作者实际渲染并逐页查看，独立终检对确切文件真实解析及五页页图复核通过，52有序内容块、4表22行76单元格一致，黑色标题无装饰边框、纵向、无裁切；审计退订率口径修正已落实。正式交付使用同一已审资源，未改正文；正文待审字样为制作时历史状态，外层与本次说明明确后续独立终检通过及正式交付完成。仅MD/Word为正式文件，内部PDF/PNG和本地镜像不交付，无HTML。观察/假设/未知已区分，不承诺市场效果；未联网外联投放花费或创建Task/Goal。当前无仍运行的工作或剩余文件交付阻塞。.",
+    "title": "Task Completed",
+    "metadata": {
+      "opencorvusToolResultControl": {
+        "kind": "immediate_park"
+      }
+    },
+    "time": {
+      "start": 1792908856786,
+      "end": 1792908870564
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0e60243cc75bd1f5016add9e38b0f08191ba6786a2b7f9c2bb"
+    }
+  },
+  "orderKey": "v1:0001792908866281:0000000000000031:0000000000000000:part:prt_g0VZ2UqYs00kTjoFVrQl"
+}

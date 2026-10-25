@@ -1,0 +1,37 @@
+{
+  "id": "prt_g0VZ1uyd300z9pjQPX55",
+  "sessionID": "ses_h44dc5ci2FtFJ7TDJkaH",
+  "messageID": "msg_g0VZ1uy6S00BdGtYYQA3",
+  "type": "tool",
+  "callID": "call_d37b942c375942578c0bd58626467c9a",
+  "tool": "artifact_read",
+  "state": {
+    "status": "completed",
+    "input": {
+      "reads": [
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_02XMc4nkF6wiiHjX",
+          "byte_offset": 8190,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        }
+      ]
+    },
+    "output": "{\"results\":[{\"request_index\":0,\"value\":{\"locator\":{\"source\":\"engine_artifact\",\"artifact_id\":\"art_h4mnmKnCr0ADaYMbQaVO\",\"catalog_revision\":5,\"expected_sha256\":\"5ac719b0d45a54c4f316e625bfec5b8c14b14a2a0edf4b4fb38200bb88ff14c3\"},\"media_type\":\"application/json\",\"byte_start\":8190,\"byte_end\":13427,\"next_offset\":null,\"total_bytes\":13427,\"complete\":true,\"sha256\":\"5ac719b0d45a54c4f316e625bfec5b8c14b14a2a0edf4b4fb38200bb88ff14c3\",\"text\":\"图和派生PDF仅内部验收，不作为最终业务交付；正文修改使旧版检查失效。\\\",\\\"作者正式交付须遵守原包提交、不可变资源和匹配交互阅读合同；处于primary且无merge_back时按技能直接重读并snapshot。最终正文与附件应完整绑定发布的真实不可变资源，不能以可变路径、空资源清单、摘要或摘要校验代替直接正文与排版检查。\\\",\\\"安全护栏：仅本地内部，不联网、不外联、不投放、不花费、不对外发布、不创建其他Task/Goal、不修改安装包或原始输入。本阶段只发布结构化范围Artifact，不创建最终文件、不声称完成后续角色工作。\\\"],\\\"unknowns\\\":[\\\"价格、收费模式、购买周期、付费客户、收入、留存及毛利未知，CAC/LTV/ROI不可计算。\\\",\\\"小型团队的行业、地域、规模细分、决策人、真实需求强度和现有替代工具未知。\\\",\\\"真实市场规模、竞争者、外部基准均未提供且禁止外查；不得把缺少资料视为当前任务材料不全。\\\",\\\"三行数据的真实投放周期、人群可比性、重复触达、线索定义与质量、归因窗口均未知；数据为合成，不能外推真实效果。\\\",\\\"正式上线日、试点时长、业务目标线索量、可接受CPL、内部人员工时与机会成本未知；后续仅给标注的规划假设，不冒充确认事实。\\\",\\\"最终正文、Word、阅读文档及页图尚未产生，其一致性、排版与正式交付均待后续职责链验证。\\\"],\\\"resource_roles\\\":[]},\\\"resources\\\":[],\\\"observed_artifact_locators\\\":[{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hdfrY4uLsCH7DfgPkBMw\\\",\\\"task_id\\\":\\\"tsk_g00VZ1u3kk00D81zMYvb\\\",\\\"snapshot_id\\\":\\\"459ac5fe-a23f-5c58-af37-93d2dae6d0ca\\\",\\\"manifest_sha256\\\":\\\"38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"brief.md\\\",\\\"media_type\\\":\\\"text/markdown\\\",\\\"bytes\\\":1024,\\\"sha256\\\":\\\"4ddd30c51f7fb98d18208a76e19e1739bb3a5b752bba63183778755404505c7c\\\"}},{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hdfrY4uLsCH7DfgPkBMw\\\",\\\"task_id\\\":\\\"tsk_g00VZ1u3kk00D81zMYvb\\\",\\\"snapshot_id\\\":\\\"459ac5fe-a23f-5c58-af37-93d2dae6d0ca\\\",\\\"manifest_sha256\\\":\\\"38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"campaign.csv\\\",\\\"media_type\\\":\\\"text/csv\\\",\\\"bytes\\\":113,\\\"sha256\\\":\\\"2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1\\\"}},{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hdfrY4uLsCH7DfgPkBMw\\\",\\\"task_id\\\":\\\"tsk_g00VZ1u3kk00D81zMYvb\\\",\\\"snapshot_id\\\":\\\"459ac5fe-a23f-5c58-af37-93d2dae6d0ca\\\",\\\"manifest_sha256\\\":\\\"38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"tools/render_docx.py\\\",\\\"media_type\\\":\\\"text/x-python\\\",\\\"bytes\\\":20248,\\\"sha256\\\":\\\"8b48b8f05f30cc6c7b5a7bd8e18e7ea93a61aec1ea601026a3358b2105f0903a\\\"}},{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hdfrY4uLsCH7DfgPkBMw\\\",\\\"task_id\\\":\\\"tsk_g00VZ1u3kk00D81zMYvb\\\",\\\"snapshot_id\\\":\\\"459ac5fe-a23f-5c58-af37-93d2dae6d0ca\\\",\\\"manifest_sha256\\\":\\\"38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"tools/runtime.md\\\",\\\"media_type\\\":\\\"text/markdown\\\",\\\"bytes\\\":580,\\\"sha256\\\":\\\"418c1dc648758ab1b5a1ed9dfc367b853f614a53336b1c061dc80dda7930b257\\\"}}],\\\"source_artifact_locators\\\":[{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hdfrY4uLsCH7DfgPkBMw\\\",\\\"task_id\\\":\\\"tsk_g00VZ1u3kk00D81zMYvb\\\",\\\"snapshot_id\\\":\\\"459ac5fe-a23f-5c58-af37-93d2dae6d0ca\\\",\\\"manifest_sha256\\\":\\\"38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"brief.md\\\",\\\"media_type\\\":\\\"text/markdown\\\",\\\"bytes\\\":1024,\\\"sha256\\\":\\\"4ddd30c51f7fb98d18208a76e19e1739bb3a5b752bba63183778755404505c7c\\\"}},{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hdfrY4uLsCH7DfgPkBMw\\\",\\\"task_id\\\":\\\"tsk_g00VZ1u3kk00D81zMYvb\\\",\\\"snapshot_id\\\":\\\"459ac5fe-a23f-5c58-af37-93d2dae6d0ca\\\",\\\"manifest_sha256\\\":\\\"38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"campaign.csv\\\",\\\"media_type\\\":\\\"text/csv\\\",\\\"bytes\\\":113,\\\"sha256\\\":\\\"2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1\\\"}},{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hdfrY4uLsCH7DfgPkBMw\\\",\\\"task_id\\\":\\\"tsk_g00VZ1u3kk00D81zMYvb\\\",\\\"snapshot_id\\\":\\\"459ac5fe-a23f-5c58-af37-93d2dae6d0ca\\\",\\\"manifest_sha256\\\":\\\"38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"tools/render_docx.py\\\",\\\"media_type\\\":\\\"text/x-python\\\",\\\"bytes\\\":20248,\\\"sha256\\\":\\\"8b48b8f05f30cc6c7b5a7bd8e18e7ea93a61aec1ea601026a3358b2105f0903a\\\"}},{\\\"source\\\":\\\"task_artifact_resource\\\",\\\"ref\\\":{\\\"snapshot\\\":{\\\"schema_version\\\":2,\\\"project_id\\\":\\\"prj_hdfrY4uLsCH7DfgPkBMw\\\",\\\"task_id\\\":\\\"tsk_g00VZ1u3kk00D81zMYvb\\\",\\\"snapshot_id\\\":\\\"459ac5fe-a23f-5c58-af37-93d2dae6d0ca\\\",\\\"manifest_sha256\\\":\\\"38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180\\\"},\\\"tree\\\":\\\"resources\\\",\\\"path\\\":\\\"tools/runtime.md\\\",\\\"media_type\\\":\\\"text/markdown\\\",\\\"bytes\\\":580,\\\"sha256\\\":\\\"418c1dc648758ab1b5a1ed9dfc367b853f614a53336b1c061dc80dda7930b257\\\"}}]}\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_02XMc4nkF6wiiHjX\",\"artifact_read_ref\":\"ar_19yV4ROf8ixBrgD1\"}}],\"complete\":true,\"next_reads\":[]}",
+    "title": "Artifacts (1)",
+    "metadata": {
+      "truncated": false
+    },
+    "time": {
+      "start": 1792900307989,
+      "end": 1792900308593
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_002a322c165ed029016add7cd3e10081919b5676328de550a0"
+    }
+  },
+  "orderKey": "v1:0001792900308365:0000000000000031:0000000000000000:part:prt_g0VZ1uyd300z9pjQPX55"
+}

@@ -1,0 +1,53 @@
+{
+  "id": "prt_g0VZ21DbO00ppI4awEOi",
+  "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+  "messageID": "msg_g0VZ21AQT00yR2YfziUY",
+  "type": "tool",
+  "callID": "call_SKqg1bfAh6LmhBQeF6YeVA0s",
+  "tool": "artifact_publish",
+  "state": {
+    "status": "completed",
+    "input": {
+      "artifact_type": "marketing-growth/final-document-review",
+      "schema_version": 1,
+      "label": "独立最终正文与全部4页真实页图复核｜通过，待原作者正式交付",
+      "source_read_refs": [
+        "ar_TwPWhinSTKPz3nTQ",
+        "ar_9kIZ-sh01z3AcKzo",
+        "ar_GscboIYE-tvoClMF",
+        "ar_AGJaWiCnGAYd1Iew",
+        "ar_jxRxA_wNHFhxOBh9",
+        "ar_6LAMyVIStL1sFgrC",
+        "ar_5J64EtB697JO83He",
+        "ar_T4FZQYMpJRVtyYsT",
+        "ar_evk8lXyH0oLavWfy",
+        "ar_72aRZgo4qBkH8KDJ",
+        "ar_kwzfTb_2XYnuShHF",
+        "ar_sR8Lv0_nKymu5kYn",
+        "ar_XNi-NYGTHXNSEMQY",
+        "ar_3SZpeKuLUC6v1Xur",
+        "ar_Od9hhL8XUJhdXbUx",
+        "ar_Faq9tjE3EJCjkqsE"
+      ],
+      "resource_set": null,
+      "payload_json": "{\"stage\":\"独立最终文档与真实页图复核；保留前次正式策略audit，不替代原作者campaign-plan发布\",\"as_of\":\"2026-10-25\",\"target\":{\"session_id\":\"ses_hyWiInyq6XpRz0zm2vDI\",\"message_id\":\"msg_g0VZ1zmQd00krPyhJG5X\",\"message_content_hash\":\"11c2a243ffe89edd8460fdf2d97b9ccaf8880126e6313c4400ce3c0a96d6da83\"},\"verdict\":\"pass_for_author_formal_delivery\",\"blocking_corrections\":[],\"reviewed_author_artifacts\":[{\"artifact_id\":\"art_h73pKL9SnPV3SOs4L4rb\",\"catalog_revision\":30},{\"artifact_id\":\"art_haDfZVh9MQKJ6ydSjFYm\",\"catalog_revision\":31}],\"authority\":{\"original_source_snapshot\":\"459ac5fe-a23f-5c58-af37-93d2dae6d0ca\",\"original_sources\":[\"brief.md\",\"campaign.csv\"],\"documents_snapshot\":\"2d5e2090-241a-5c71-a861-c943e67d16ac\",\"canonical_body\":\"outputs/growth-plan.md\",\"same_body_documents\":[\"outputs/growth-plan.docx\",\"outputs/growth-plan.html\"],\"mirror\":\"artifacts/marketing-growth/campaign-plan.md\",\"qa_snapshot\":\"8eea5db7-aa44-5cb3-a82e-b23e91ff3004\",\"internal_qa_only\":[\"qa/initial/growth-plan.pdf\",\"qa/initial/page-1.png\",\"qa/initial/page-2.png\",\"qa/initial/page-3.png\",\"qa/initial/page-4.png\"]},\"methods\":[\"自行发现并完全读取两作者交接，完整读取并选择原始brief/CSV和实际规范正文；不用工作区正文或生产者摘要替代。\",\"通过Artifact逐张读取且实际查看4张PNG，并阅读封存PDF；图像观察不由文本提取代替。\",\"只读分析精确不可变documents快照中的MD、DOCX、HTML与镜像。独立解析MD块、DOCX XML正文顺序及HTML可见标题段落和表格；比较全文及每个表格单元格，不使用摘要或hash作内容正确性依据。\",\"读取作者实际renderer调用输入输出及4次读图成功事实，核对生成后至封存前没有修改正文或Word的工具操作。\"],\"content_results\":{\"han_characters\":2791,\"han_count_contract\":\"U+4E00—U+9FFF，含标题和表格；符合约3000汉字而非精确3000\",\"ordered_semantic_blocks\":33,\"tables\":3,\"table_cells\":70,\"md_html_ordered_sequence_equal\":true,\"md_docx_ordered_sequence_equal\":true,\"word_title_role_mapping\":\"Title对应MD h1文档总标题；Heading 1对应MD h2章标题，章序完整；不是要求跨格式样式编号逐字相同。\",\"mirror_semantic_text_equal\":true,\"mirror_representation_difference\":\"规范MD为LF；镜像有80个CRLF，字节10446与10366差80，不是正文缺失或增删；按相同文本换行合同逐项相等。\",\"word_sections_portrait\":true,\"word_page_size_twips\":{\"width\":11906,\"height\":16838},\"all_100_body_and_table_runs_explicit_black\":true},\"business_review\":{\"source_date\":\"2026-10-24合成材料；文档编制2026-10-25\",\"data_recomputed\":[{\"channel\":\"email\",\"impressions\":1000,\"clicks\":100,\"leads\":20,\"cost_cny\":400,\"cpl_cny\":20,\"ctr_percent\":10,\"leads_per_click_percent\":20},{\"channel\":\"community\",\"impressions\":2000,\"clicks\":120,\"leads\":12,\"cost_cny\":600,\"cpl_cny\":50,\"ctr_percent\":6,\"leads_per_click_percent\":10},{\"channel\":\"search\",\"impressions\":3000,\"clicks\":150,\"leads\":15,\"cost_cny\":900,\"cpl_cny\":60,\"ctr_percent\":5,\"leads_per_click_percent\":10},{\"channel\":\"合计\",\"impressions\":6000,\"clicks\":370,\"leads\":47,\"cost_cny\":1900,\"cpl_cny\":40.43,\"ctr_percent\":6.17,\"leads_per_click_percent\":12.7}],\"formulas\":\"逐列求和；CPL=成本/线索，CTR=点击/曝光，线索率=线索/点击；合计率用总量非分渠道均值；原数不改。\",\"budget_relation\":\"1200元当前上限取代3000元旧稿；1900元为合成历史成本，非新预算非本Task实际支出。\",\"candidate_budget_cny\":{\"audience\":300,\"measurement\":200,\"one_channel\":400,\"reserve\":300,\"total\":1200},\"full_cost_guardrail\":\"各桶含工时、工具、可能激励及费用，报价工时未知，不承诺可购买样本，不默认免费劳动；承诺及实际入台账，预留另批，装不进则缩减或停做。\",\"experimental_guardrails\":\"情境、测量、单渠道按关卡推进；email无许可先停，community只可替换同400元桶且准入另批，search为0。负责人建议角色、暴露、指标、假设门槛、时间和成本上限、隐私停止及下一决策完整。\",\"partial_screening_branch\":\"正文第5节及真实第3页明确未达总体门槛时，只保留自身至少2/3具体困难证据的情境，并记录样本、反例与保留理由，不得记总体通过；无足够自身证据则停渠道学习。\",\"fact_boundary\":\"观察、计算、推断、假设和未知明确；没有CPL冒称CAC、因果渠道排名、统计显著性、未来产量保证或真实市场适配保证。\"},\"render_provenance\":{\"author_command\":\"python tools/render_docx.py outputs/growth-plan.docx --output_dir qa/initial --emit_pdf --verbose\",\"tool_evidence\":\"msg_g0VZ1yvLd00aGwAMhSk6/prt_g0VZ1yw5E00gw034r8TT input/output：soffice将项目outputs/growth-plan.docx转换PDF，Pages rendered to项目qa/initial。\",\"author_opened_each_page_evidence\":[\"msg_g0VZ1z4rq00fnZfkussC/prt_g0VZ1z5TW00GxPHUVAep\",\"msg_g0VZ1z5f000Jfp0rzI0C/prt_g0VZ1z6pl00cxQyW8mP4\",\"msg_g0VZ1z71400MvI1CsY73/prt_g0VZ1z7qg00dzWSxCQsp\",\"msg_g0VZ1z81200PNMKT6wjN/prt_g0VZ1z8sq00hGHTPEkm2\"],\"observed_page_count\":4,\"page_image_dimensions\":\"每张1414×2000，纵向；视觉结论以已封存最终renderer产物为准，不以附件DOCX自动解析的再分页为准。\",\"correspondence\":\"renderer源为规范Word；其后仅QA记录、只读验证及提交封存等，无DOCX内容修改。4页PDF与4张PNG版面及正文分段一致；DOCX全文与规范MD直接比较一致。\"},\"independent_page_observations\":[{\"page\":1,\"viewed\":true,\"result\":\"总标题及第一二章标题黑色清楚；标题下蓝色为装饰线非标题文字。核算表8列、三渠道和合计全行可见，数值可读，无左右裁切。公式、非因果及决策含义段落完整。\"},{\"page\":2,\"viewed\":true,\"result\":\"第三四章标题与受众内容可读；预算表表头及5行完整，换行在单元格内，未截断；工时和台账段完整，无表格跨页拆行。\"},{\"page\":3,\"viewed\":true,\"result\":\"上接渠道互斥段，下为第五章；实验表三阶段与表头完整，无裁切；部分通过分支、合格线索定义、替代渠道分母、护栏及复盘正文可读，末尾许可一词正常换行而未缺失。\"},{\"page\":4,\"viewed\":true,\"result\":\"第六章测量和经济口径、未知及来源完整，来源尾句可见；黑色标题清楚，页面正常留白，无空白页或缺失尾段。\"}],\"verification_diagnostics\":[{\"observation\":\"首次独立XML解析把Word Title当普通段、把Heading1直接当MD h1，导致仅7处标题类型差异；段落及表格文字没有差异。\",\"resolution\":\"核对封存生成器映射及Word实际Title/Heading 1样式，按文档总标题/章标题语义重做独立比较，33块全等。此为检查器映射修正，未修改产品、未降低正文相等标准。\"},{\"observation\":\"一次可选PDF本地文本对应检查因默认Python无fitz而未运行。\",\"resolution\":\"未安装或联网，未记该命令通过；改用已完成的DOCX直接全文比较、实际renderer因果调用、封存PDF及全部PNG实际观察形成对应证据。PDF文本自动比较不作已完成声称。\"}],\"limits\":[\"HTML可见正文已独立验证完全相同；未做浏览器视觉检查，不作浏览器呈现保证。\",\"Word版式结论仅对应此次封存的4页真实渲染，不保证所有客户端重新分页相同。\",\"当前无真实营销执行、样本、报价、客户或收入证据；本文仍为内部候选方案。\",\"本轮不重发或覆盖前次正式audit，不调用campaign-plan正式发布器，不生成或修改文件，不抢原作者交付职责。\"],\"next_owner_action\":\"原作者可继续按原包正式发布campaign-plan及匹配交互阅读，绑定本次已复核的完整正文及对应DOCX/HTML不可变资源；PDF/PNG保留内部，不列业务交付。若正文或Word后续有实质变化，须就变化后的实际产物重新验证，不能沿用本结论冒称通过。\"}"
+    },
+    "output": "{\"locator\":{\"source\":\"engine_artifact\",\"artifact_id\":\"art_hBtvGwxw9z5Ml5ggGGoA\",\"catalog_revision\":36,\"expected_sha256\":\"a53363c73482beb57ee6e11b1bf41db9c39e8de3f6ebad0ea7759d273dac27c0\"},\"sha256\":\"a53363c73482beb57ee6e11b1bf41db9c39e8de3f6ebad0ea7759d273dac27c0\"}",
+    "title": "Published marketing-growth/final-document-review",
+    "metadata": {
+      "artifactType": "marketing-growth/final-document-review",
+      "sha256": "a53363c73482beb57ee6e11b1bf41db9c39e8de3f6ebad0ea7759d273dac27c0",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792901795514,
+      "end": 1792901849154
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_02110f628783b8ea016add82a35fa087d0b390136706319912"
+    }
+  },
+  "orderKey": "v1:0001792901848569:0000000000000031:0000000000000000:part:prt_g0VZ21DbO00ppI4awEOi"
+}

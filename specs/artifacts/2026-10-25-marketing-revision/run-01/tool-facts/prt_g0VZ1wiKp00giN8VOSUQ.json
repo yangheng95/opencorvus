@@ -1,0 +1,44 @@
+{
+  "id": "prt_g0VZ1wiKp00giN8VOSUQ",
+  "sessionID": "ses_hFJ8vTxHnKEkoytVnJMJ",
+  "messageID": "msg_g0VZ1wgqD0096XThYXPz",
+  "type": "tool",
+  "callID": "call_e8dc0f26e56d4ecb971db6359da02cd5",
+  "tool": "artifact_read",
+  "state": {
+    "status": "completed",
+    "input": {
+      "reads": [
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_Tc4qn99yaGmeSf7m",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_M5Y9UCgs2DR_QoXV",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        }
+      ]
+    },
+    "output": "{\"results\":[{\"request_index\":0,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"459ac5fe-a23f-5c58-af37-93d2dae6d0ca\",\"manifest_sha256\":\"38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180\"},\"tree\":\"resources\",\"path\":\"brief.md\",\"media_type\":\"text/markdown\",\"bytes\":1024,\"sha256\":\"4ddd30c51f7fb98d18208a76e19e1739bb3a5b752bba63183778755404505c7c\"}},\"media_type\":\"text/markdown\",\"byte_start\":0,\"byte_end\":1024,\"next_offset\":null,\"total_bytes\":1024,\"complete\":true,\"sha256\":\"4ddd30c51f7fb98d18208a76e19e1739bb3a5b752bba63183778755404505c7c\",\"text\":\"# 本地营销试点验收输入\\n\\n所有记录均为操作方提供的合成数据，日期2026-10-24，金额为人民币元。campaign.csv恰有三个渠道记录，量纲明确，可加总曝光、点击、线索和成本。线索成本=成本/线索。三个渠道不是随机实验，不提供不同渠道同人群、可比时段或增量归因证据。\\n\\n虚构产品是团队内部文档整理工具，目标受众仅知为小型团队；价格、购买周期、竞争者、真实市场规模和外部基准未提供。禁止把未知补为事实。\\n\\n初始试点预算上限3000元，若本Task内操作方追加更正，以追加原文的当前口径为准并保留更正关系。建议为待验证方案，不是真实广告投放或已测效果。\\n\\n请完成原营销增长专家团的完整职责链及独立复核。唯一规范交付路径为`outputs/growth-plan.md`；提供相同正文的可读文档产物。保留输入，禁止外部搜索、通信、投放、购买或发布，不创建其他Task/Goal。\\n\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_Tc4qn99yaGmeSf7m\",\"artifact_read_ref\":\"ar_wxHsvMAhEWzAH9OM\"}},{\"request_index\":1,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"459ac5fe-a23f-5c58-af37-93d2dae6d0ca\",\"manifest_sha256\":\"38531b7f946a4be471e6943f98082de25d3f128cd675e895af303e3496b83180\"},\"tree\":\"resources\",\"path\":\"campaign.csv\",\"media_type\":\"text/csv\",\"bytes\":113,\"sha256\":\"2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1\"}},\"media_type\":\"text/csv\",\"byte_start\":0,\"byte_end\":113,\"next_offset\":null,\"total_bytes\":113,\"complete\":true,\"sha256\":\"2406066692b5479ccc1724e134e92c928bac95d5667c25d3001398d46b3c53e1\",\"text\":\"channel,impressions,clicks,leads,cost_cny\\nemail,1000,100,20,400\\ncommunity,2000,120,12,600\\nsearch,3000,150,15,900\\n\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_M5Y9UCgs2DR_QoXV\",\"artifact_read_ref\":\"ar_Kne82VZNqvw8xKUq\"}}],\"complete\":true,\"next_reads\":[]}",
+    "title": "Artifacts (2)",
+    "metadata": {
+      "truncated": false
+    },
+    "time": {
+      "start": 1792900722011,
+      "end": 1792900722891
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_06fc1750c6de71ab016add7e71e75c8191bfe70690c39730c5"
+    }
+  },
+  "orderKey": "v1:0001792900722557:0000000000000031:0000000000000000:part:prt_g0VZ1wiKp00giN8VOSUQ"
+}

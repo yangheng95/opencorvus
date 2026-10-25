@@ -1,0 +1,78 @@
+{
+  "id": "prt_g0VZ2cEPi00i0MUnVgtS",
+  "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+  "messageID": "msg_g0VZ2cB5O00lgKJHlOlJ",
+  "type": "tool",
+  "callID": "call_sT61rCUgXDFkmuL7jSnpaT47",
+  "tool": "artifact_read",
+  "state": {
+    "status": "completed",
+    "input": {
+      "reads": [
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_wKnV0ldsOd629tzi",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_of1d1Vq-BWgQLXKy",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_sm_EccHm0WXhW10I",
+          "byte_offset": 0,
+          "max_bytes": 16000,
+          "delivery": "materialized_file"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_7RlqG9w2pqOEyemD",
+          "byte_offset": 0,
+          "max_bytes": 16000,
+          "delivery": "inline"
+        }
+      ]
+    },
+    "output": "{\"results\":[{\"request_index\":0,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"19df3dd4-7067-562d-ac01-42acf9bfc56d\",\"manifest_sha256\":\"4ce8ebb684b325eaffb2412ccc21f52c55c6a03872e1e3f116700c20a933870c\"},\"tree\":\"resources\",\"path\":\"outputs/growth-plan.docx\",\"media_type\":\"application/vnd.openxmlformats-officedocument.wordprocessingml.document\",\"bytes\":42433,\"sha256\":\"207561119225d920a84880620c7e05b60f443911195afa7fc4bc90610122060a\"}},\"media_type\":\"application/vnd.openxmlformats-officedocument.wordprocessingml.document\",\"byte_start\":0,\"byte_end\":42433,\"next_offset\":null,\"total_bytes\":42433,\"complete\":true,\"sha256\":\"207561119225d920a84880620c7e05b60f443911195afa7fc4bc90610122060a\",\"attachment\":true,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_wKnV0ldsOd629tzi\",\"artifact_read_ref\":\"ar_V5IC5nnIEWQysevT\"}},{\"request_index\":1,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"29a4bb0e-b15a-5c43-aa2d-21f53426253b\",\"manifest_sha256\":\"cf92f99ee6f2d7707ba1b955fd959779a470e441585b24edf1faa5993bd87b82\"},\"tree\":\"resources\",\"path\":\"outputs/growth-plan.docx\",\"media_type\":\"application/vnd.openxmlformats-officedocument.wordprocessingml.document\",\"bytes\":42669,\"sha256\":\"25c36ec59dc7d53ef5f913582b9a6e17a818da133d5c7aa1c563fa31ffc153af\"}},\"media_type\":\"application/vnd.openxmlformats-officedocument.wordprocessingml.document\",\"byte_start\":0,\"byte_end\":42669,\"next_offset\":null,\"total_bytes\":42669,\"complete\":true,\"sha256\":\"25c36ec59dc7d53ef5f913582b9a6e17a818da133d5c7aa1c563fa31ffc153af\",\"attachment\":true,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_of1d1Vq-BWgQLXKy\",\"artifact_read_ref\":\"ar_KuecOFV61cLFkoyy\"}},{\"request_index\":2,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"19df3dd4-7067-562d-ac01-42acf9bfc56d\",\"manifest_sha256\":\"4ce8ebb684b325eaffb2412ccc21f52c55c6a03872e1e3f116700c20a933870c\"},\"tree\":\"resources\",\"path\":\"outputs/growth-plan.md\",\"media_type\":\"text/markdown\",\"bytes\":9991,\"sha256\":\"2a03896811a36347f08c9eba2916c1e7e07b2695aa042eecf21bf8e8b2ddbc61\"}},\"media_type\":\"text/markdown\",\"byte_start\":0,\"byte_end\":9991,\"next_offset\":null,\"total_bytes\":9991,\"complete\":true,\"sha256\":\"2a03896811a36347f08c9eba2916c1e7e07b2695aa042eecf21bf8e8b2ddbc61\",\"materialized_path\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-marketing-revision-20261025-02\\\\project\\\\.opencorvus\\\\.r\\\\tasks\\\\tsk_g00VZ2GE9C00jkeX1GgT\\\\artifacts\\\\materializations\\\\reads\\\\2a03896811a36347f08c9eba2916c1e7e07b2695aa042eecf21bf8e8b2ddbc61-growth-plan.md\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_sm_EccHm0WXhW10I\",\"artifact_read_ref\":\"ar_BckWRmGSBkePv1Vk\"}},{\"request_index\":3,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"29a4bb0e-b15a-5c43-aa2d-21f53426253b\",\"manifest_sha256\":\"cf92f99ee6f2d7707ba1b955fd959779a470e441585b24edf1faa5993bd87b82\"},\"tree\":\"resources\",\"path\":\"outputs/growth-plan.md\",\"media_type\":\"text/markdown\",\"bytes\":9991,\"sha256\":\"2a03896811a36347f08c9eba2916c1e7e07b2695aa042eecf21bf8e8b2ddbc61\"}},\"media_type\":\"text/markdown\",\"byte_start\":0,\"byte_end\":6143,\"next_offset\":6143,\"total_bytes\":9991,\"complete\":false,\"sha256\":\"2a03896811a36347f08c9eba2916c1e7e07b2695aa042eecf21bf8e8b2ddbc61\",\"text\":\"# 小型团队文档整理工具：本地营销验证计划\\n\\n编制日期：2026-10-25。状态：待独立最终复核；仅为本地方案，不是已执行营销或已测效果。\\n\\n## 一、决策摘要与授权边界\\n\\n建议先核查具体任务，再考虑邮件消息实验；社区和搜索只作串行备选，不同时铺开。产品是虚构的团队内部文档整理工具，唯一已知受众为小型团队。当前目标不是承诺增长，而是在有限资源下判断“是否存在值得继续验证的问题、哪种表述值得复验”。本任务不联网、不外联、不招募、不投放、不购买、不花费、不对外发布，不创建其他任务或目标；实际支出为零。\\n\\n当前预算上限为1200元；brief.md的3000元是已被当前更正取代的旧草案；CSV的1900元是合成历史成本，既非新预算，也不代表本任务超支。三者必须并存说明，不能为适配小预算改写历史。未来执行需另行授权，预算表不构成支出许可。\\n\\n## 二、合成基线与解释限制\\n\\n输入日期为2026-10-24，金额人民币元。以下完整保留campaign.csv三行原值及加总；线索成本（CPL）=成本÷线索，单位元/条。\\n\\n| 渠道 | 曝光 | 点击 | 线索 | 成本（元） | CPL |\\n| --- | --- | --- | --- | --- | --- |\\n| email | 1000 | 100 | 20 | 400 | 20.00 |\\n| community | 2000 | 120 | 12 | 600 | 50.00 |\\n| search | 3000 | 150 | 15 | 900 | 60.00 |\\n| 合计 | 6000 | 370 | 47 | 1900 | 40.43 |\\n\\n| 渠道 | 点击率 | 点击至线索率 |\\n| --- | --- | --- |\\n| email | 10.00% | 20.00% |\\n| community | 6.00% | 10.00% |\\n| search | 5.00% | 10.00% |\\n| 合计 | 6.17% | 12.70% |\\n\\n点击率=点击÷曝光；点击至线索率=线索÷点击。总CPL按1900÷47=40.4255319…计算，不平均三个渠道CPL；所有近似值用原整数计算后末步四舍五入至两位。任何零分母标“不可计算”，不能填零。\\n\\n观察仅是email在表内CPL最低。三行均为合成非随机记录，缺同人群、可比时段及增量归因证据，不能证明渠道因果优势或预测1200元产出。可加总记录不等于跨渠道去重人数，点击至线索率不是购买率。缺成交、收入和队列周期，不计算客户获取成本、生命周期价值或投资回报，也不把历史CPL当经营可接受上限。\\n\\n## 三、受众、供给与内容假设\\n\\n假设H1是小型团队存在查找路径或版本判断不清的任务；H2是交接资料及维护责任不清，二者可能重叠，并非已证实客群。暂先H1，只因任务容易具体描述，不表示市场更大。使用者、维护者和交接组织者只是候选角色，购买审批权未知。整理负担、权限顾虑、现有办法已够用也只作研究问题。\\n\\n候选消息为“找团队资料时，先把查找路径理清”；H2备用为“交接前，先明确要交哪些文档、由谁维护”。供给先限一张任务整理示例或问题卡，按“问题—整理步骤—证据与未知—可选下一步”组织。作者可据此设计邮件短文、获准社区示例和任务词落地页，但不能宣称产品已有搜索、版本识别、权限、自动化或集成功能，不能承诺节时收益或虚构客户证言。未来核实能力且获得授权后，才可邀请自愿反馈具体任务。\\n\\n## 四、资源上限与启动顺序\\n\\n| 用途 | 上限（元） | 启动条件 |\\n| --- | --- | --- |\\n| 共用准备与任务核查 | 200 | 许可、测量和问题卡准备 |\\n| 邮件消息实验 | 250 | 任务证据及合法名单齐备 |\\n| 社区备选 | 250 | 前项决策完成且社区获准 |\\n| 搜索备选 | 300 | 需求、词页及费用可控 |\\n| 冻结预留 | 200 | 不自动动用或补样 |\\n| 合计 | 1200 | 不是报价或花费授权 |\\n\\n准备与实验最多1000元，预留200元冻结。每次只激活一个实验，未启用额度不挪用。实际费率、工时和产能未知，应登记内部投入；核价后总资源成本超上限就减范围或暂停，不隐匿成本。无许可名单不冷发、不买名单，也不自动转投社区或搜索。样本不足保留不确定，不加钱追样。\\n\\n## 五、任务核查与邮件实验\\n\\n以下责任均为建议角色，实名、日期和资源尚待确定；样本、周期和阈值均是探索性建议，不是统计功效设计或行业标准。只在未来另行授权后启动。\\n\\n任务核查R：研究角色负责、内容作者记录。分配单位为独立且授权脱敏的近期任务案例，同案例多角色只计一次。建议H1四例、七天，依序核查真实步骤、现有办法、阻碍及消息理解，不作随机总体推断。指标为有具体阻碍案例数÷合格案例数，以及准确复述且无承诺误读案例数÷展示消息案例数。至少两例同时具备问题证据和正确理解，才进入邮件可行性审查；泛泛赞同不算。若H1不支持而有H2案例，再以相同框架单独核查H2，不追加预算。无案例暂停；现有办法已满足、阻碍不在整理或仅有赞同时改写或放弃。任何泄密或承诺误读立即停，禁止收集内部机密。准备与R合计封顶200元。\\n\\n邮件E：营销运营负责，分析角色验数，业务角色盲于版本评质量。假设具体任务描述优于泛化介绍。合法许可唯一收件人按稳定随机标识一比一分A/B；重复者固定版本，仅改描述，落地页和时段保持一致。建议每组100名，以成功送达唯一收件人数计，固定观察14天。\\n\\n| 邮件指标 | 分子÷分母或判据 |\\n| --- | --- |\\n| 送达点击率 | 去重点击人数÷成功送达唯一人数 |\\n| 质量率 | 合格线索数÷去重落地会话数 |\\n| 候选门槛 | B点击率高至少3个百分点且质量不低于A |\\n| 退订护栏 | 按版本14天累计去重退订人数÷成功送达唯一人数 |\\n\\n退订记录同时保留绝对量；零分母不可计算，不得视为安全。任一版本退订率超过1%即停；任一投诉或许可问题立即停，不等比例越线。隐私、追踪异常或费用达250元也停。届期样本不足、任一质量分母为零\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_7RlqG9w2pqOEyemD\",\"artifact_read_ref\":\"ar_whC1inE7Ce52tEms\"}}],\"complete\":false,\"next_reads\":[{\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_7RlqG9w2pqOEyemD\",\"byte_offset\":6143,\"max_bytes\":16000,\"delivery\":\"inline\"}]}",
+    "title": "Artifacts (4)",
+    "metadata": {
+      "truncated": false
+    },
+    "time": {
+      "start": 1792910616770,
+      "end": 1792910620849
+    },
+    "attachments": [
+      {
+        "id": "prt_g0VZ2cFTT00eREpV4ssX",
+        "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+        "messageID": "msg_g0VZ2cB5O00lgKJHlOlJ",
+        "type": "file",
+        "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "filename": "growth-plan.docx",
+        "url": "/attachment/prj_hxHOMBTalkvA4toZOhTn/207561119225d920a84880620c7e05b60f443911195afa7fc4bc90610122060a.docx"
+      },
+      {
+        "id": "prt_g0VZ2cFTT01M474g8oPt",
+        "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+        "messageID": "msg_g0VZ2cB5O00lgKJHlOlJ",
+        "type": "file",
+        "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "filename": "growth-plan.docx",
+        "url": "/attachment/prj_hxHOMBTalkvA4toZOhTn/25c36ec59dc7d53ef5f913582b9a6e17a818da133d5c7aa1c563fa31ffc153af.docx"
+      }
+    ]
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_03e1d97b4e65267e016adda518abbc87d08b5767be0a11a1b7"
+    }
+  },
+  "orderKey": "v1:0001792910620428:0000000000000031:0000000000000000:part:prt_g0VZ2cEPi00i0MUnVgtS"
+}

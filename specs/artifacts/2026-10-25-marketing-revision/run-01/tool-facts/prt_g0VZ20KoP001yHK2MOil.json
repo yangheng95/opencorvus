@@ -1,0 +1,35 @@
+{
+  "id": "prt_g0VZ20KoP001yHK2MOil",
+  "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+  "messageID": "msg_g0VZ20JF300Gxl3yukTg",
+  "type": "tool",
+  "callID": "call_HQxZZAHCB9SXm8qMUQuOOFTY",
+  "tool": "read",
+  "state": {
+    "status": "completed",
+    "input": {
+      "filePath": ".opencorvus/.r/tasks/tsk_g00VZ1u3kk00D81zMYvb/artifacts/snapshots/2d5e2090-241a-5c71-a861-c943e67d16ac"
+    },
+    "output": "<path>C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\project\\.opencorvus\\.r\\tasks\\tsk_g00VZ1u3kk00D81zMYvb\\artifacts\\snapshots\\2d5e2090-241a-5c71-a861-c943e67d16ac</path>\n<type>directory</type>\n<entries>\nmanifest.json\nresources/\n\n(2 entries)\n</entries>",
+    "title": ".opencorvus\\.r\\tasks\\tsk_g00VZ1u3kk00D81zMYvb\\artifacts\\snapshots\\2d5e2090-241a-5c71-a861-c943e67d16ac",
+    "metadata": {
+      "preview": "manifest.json\nresources/",
+      "truncated": false,
+      "loaded": [],
+      "readType": "directory",
+      "offset": 1,
+      "lines": 2,
+      "totalLines": 2
+    },
+    "time": {
+      "start": 1792901584901,
+      "end": 1792901587081
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_03f2f6ebeda6e681016add81d0cd8087d08740f52364736f5a"
+    }
+  },
+  "orderKey": "v1:0001792901586778:0000000000000031:0000000000000000:part:prt_g0VZ20KoP001yHK2MOil"
+}

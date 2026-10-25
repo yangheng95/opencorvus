@@ -1,0 +1,38 @@
+{
+  "id": "prt_g0VZ1uVjn00sX374zK3P",
+  "sessionID": "ses_hZViJO4RpFfBH2OW7I7O",
+  "messageID": "msg_g0VZ1uV0000mbecwRHrb",
+  "type": "tool",
+  "callID": "call_dba98dde4dca48bf8ea676e34057a9d0",
+  "tool": "bash",
+  "state": {
+    "status": "completed",
+    "input": {
+      "command": "python -c \"rows=[('email',1000,100,20,400),('community',2000,120,12,600),('search',3000,150,15,900)]; total=tuple(sum(r[i] for r in rows) for i in range(1,5)); data=rows+[('total',*total)]; [print(n,'impressions=',im,'clicks=',cl,'leads=',le,'cost_cny=',co,'CPL=',format(co/le,'.6f'),'CTR=',format(cl/im*100,'.6f'),'click_to_lead=',format(le/cl*100,'.6f')) for n,im,cl,le,co in data]\"",
+      "description": "复算三渠道及合计基线指标"
+    },
+    "output": "email impressions= 1000 clicks= 100 leads= 20 cost_cny= 400 CPL= 20.000000 CTR= 10.000000 click_to_lead= 20.000000\r\ncommunity impressions= 2000 clicks= 120 leads= 12 cost_cny= 600 CPL= 50.000000 CTR= 6.000000 click_to_lead= 10.000000\r\nsearch impressions= 3000 clicks= 150 leads= 15 cost_cny= 900 CPL= 60.000000 CTR= 5.000000 click_to_lead= 10.000000\r\ntotal impressions= 6000 clicks= 370 leads= 47 cost_cny= 1900 CPL= 40.425532 CTR= 6.166667 click_to_lead= 12.702703\r\n",
+    "title": "复算三渠道及合计基线指标",
+    "metadata": {
+      "refused": false,
+      "command": "python -c \"rows=[('email',1000,100,20,400),('community',2000,120,12,600),('search',3000,150,15,900)]; total=tuple(sum(r[i] for r in rows) for i in range(1,5)); data=rows+[('total',*total)]; [print(n,'impressions=',im,'clicks=',cl,'leads=',le,'cost_cny=',co,'CPL=',format(co/le,'.6f'),'CTR=',format(cl/im*100,'.6f'),'click_to_lead=',format(le/cl*100,'.6f')) for n,im,cl,le,co in data]\"",
+      "output": "email impressions= 1000 clicks= 100 leads= 20 cost_cny= 400 CPL= 20.000000 CTR= 10.000000 click_to_lead= 20.000000\r\ncommunity impressions= 2000 clicks= 120 leads= 12 cost_cny= 600 CPL= 50.000000 CTR= 6.000000 click_to_lead= 10.000000\r\nsearch impressions= 3000 clicks= 150 leads= 15 cost_cny= 900 CPL= 60.000000 CTR= 5.000000 click_to_lead= 10.000000\r\ntotal impressions= 6000 clicks= 370 leads= 47 cost_cny= 1900 CPL= 40.425532 CTR= 6.166667 click_to_lead= 12.702703\r\n",
+      "output_bytes": 467,
+      "exit": 0,
+      "pid": null,
+      "background": false,
+      "description": "复算三渠道及合计基线指标",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792900196931,
+      "end": 1792900199321
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_006f1dd0760a154f016add7c64d2c08191986ca6d16f13e1df"
+    }
+  },
+  "orderKey": "v1:0001792900198830:0000000000000031:0000000000000000:part:prt_g0VZ1uVjn00sX374zK3P"
+}

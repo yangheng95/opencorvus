@@ -1,0 +1,89 @@
+{
+  "id": "prt_g0VZ27qfp002K0Vn0Cph",
+  "sessionID": "ses_-zUQy5vEEzzn2RBsqAWe",
+  "messageID": "msg_h1t7Ps6AGseUQuMv4AFU",
+  "type": "tool",
+  "callID": "call_8c6a9e7c3b60487d858c704f4c0397c5",
+  "tool": "dispatch_agents",
+  "state": {
+    "status": "completed",
+    "input": {
+      "team": [
+        {
+          "name": "横向修订独立正文与逐页复核",
+          "target": "marketing-growth-fact-checker",
+          "responsibility": "独立核验本次横向Word完整正文保留及五页实际渲染，给出新版正式交付前判断。",
+          "boundary": "只读复核，不改产品，不替代原作者正式交付；原四页审阅不作为本次通过依据。",
+          "expected_result": "新独立复核记录，逐项判断横向、蓝线删除、表格分页、全文及Markdown保留，发现阻塞则明确修复要求。",
+          "depends_on": []
+        }
+      ],
+      "dispatches": [
+        {
+          "dispatch": {
+            "target": "marketing-growth-fact-checker",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "continuation",
+              "authority": {
+                "kind": "prior_dispatch",
+                "continuation_dispatch_id": "art_hvCDEoD5GamqaH8vxzZP"
+              },
+              "guidance": "用户在已完成同Task追加仅Word呈现修订。独立复核原作者本次最终报告及其新发布revision-review-documents、revision-review-qa，不沿用旧四页审阅。自行发现、完整读选首次campaign-plan原始不可变MD/DOCX与本次文档和QA；从原用户授权独立导出预期：全部节横向；中文数字可读无裁切；跨页表头重复、表头与首数据行同页、数据行不拆分且保留原正确属性；首标题蓝线消失且黑色标题文字保留；MD完整字节与首次交付一致，Word全部有序段落、单元格及内部段落正文逐字不变，预算1200/旧3000/合成历史1900不变，只Word及必要生成器发生产品更改。要直接比较新旧不可变资源和实际OOXML，不能只读作者比较结论，也不要把新MD和新Word相互一致误当首次保留证据。实际查看新封存PDF及全部5张PNG，逐页报告，验证跨页预算表与学习路径表分页，并核对原作者实际tools/render_docx.py命令及逐页打开证据。附件自动文本抽取可能显示4页，真正视觉证据是指定渲染器输出5页，不以自动抽取的再分页替代。审阅完整正文及所有页面，区分留白等建议与真正阻塞，若通过发布本次新独立review并明确所审精确资源，若不通过列明确证据与修复义务。只读本地，不重做策略、不联网、不花费、不新建Task/Goal，不正式发布campaign-plan，不修改旧audit。",
+              "evidence_locators": [
+                {
+                  "source": "session_message",
+                  "session_id": "ses_hyWiInyq6XpRz0zm2vDI",
+                  "message_id": "msg_g0VZ27ax100EMNeCn5vr"
+                }
+              ],
+              "input": {
+                "target_session_id": "ses_hyWiInyq6XpRz0zm2vDI",
+                "target_message_id": "msg_g0VZ27ax100EMNeCn5vr",
+                "target_agent": "marketing-growth-campaign-writer",
+                "reason": "用户要求本次横向修订重新独立复核完整正文及全部真实页图，旧纵向审阅不可替代。"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "output": "{\"members\":[{\"member_index\":0,\"name\":\"横向修订独立正文与逐页复核\",\"target\":\"marketing-growth-fact-checker\",\"status\":\"completed\",\"outcome\":{\"kind\":\"accepted\",\"session_id\":\"ses_hVeBqjMKP8pdekG4qxJL\",\"dispatch_lineage_id\":\"art_g0VZ27uWr00o3GEsPC0N\"}}]}",
+    "title": "Settled frontier (1/1)",
+    "metadata": {
+      "frontier_size": 1,
+      "completed_count": 1,
+      "member_names": [
+        "横向修订独立正文与逐页复核"
+      ],
+      "targets": [
+        "marketing-growth-fact-checker"
+      ],
+      "members": [
+        {
+          "member_index": 0,
+          "name": "横向修订独立正文与逐页复核",
+          "target": "marketing-growth-fact-checker",
+          "status": "completed",
+          "outcome": {
+            "kind": "accepted",
+            "session_id": "ses_hVeBqjMKP8pdekG4qxJL",
+            "dispatch_lineage_id": "art_g0VZ27uWr00o3GEsPC0N"
+          }
+        }
+      ]
+    },
+    "time": {
+      "start": 1792903375673,
+      "end": 1792903391051
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_08b038550646f0c8016add88cf96788191ab9a001f14217115"
+    }
+  },
+  "orderKey": "v1:0001792903389538:0000000000000031:0000000000000000:part:prt_g0VZ27qfp002K0Vn0Cph"
+}

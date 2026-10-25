@@ -1,0 +1,35 @@
+{
+  "id": "prt_g0VZ2ZRCA00Fc862UFk6",
+  "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+  "messageID": "msg_g0VZ2ZIN500KfW9PsIQp",
+  "type": "tool",
+  "callID": "call_CJeZLQe3mhc0zj5CzPY9d256",
+  "tool": "apply_patch",
+  "state": {
+    "status": "error",
+    "input": {
+      "patchText": "*** Begin Patch\n*** Update File: qa/scratch/revise_landscape.py\n@@\n for p in doc.paragraphs:\n@@\n     p.paragraph_format.line_spacing = 1.1\n+# Adjacent tables otherwise merge on LibreOffice import, corrupting repeat headers.\n+# An empty layout-only separator has no paragraph or cell text.\n+separator = OxmlElement('w:p')\n+separator.set(qn('w:rsidR'), '00000001')\n+doc.tables[1]._tbl.addprevious(separator)\n+sp = Paragraph(separator, doc)\n+sp.paragraph_format.space_before = Pt(0)\n+sp.paragraph_format.space_after = Pt(0)\n+sp.paragraph_format.line_spacing = Pt(1)\n@@\n         if child.tag == qn('w:p'):\n+            if child.get(qn('w:rsidR')) == '00000001':\n+                assert Paragraph(child, document).text == ''\n+                continue\n@@\n     'word_ordered_paragraphs_and_all_cell_paragraphs_equal': True,\n+    'layout_only_empty_separator_paragraphs_added': 1,\n*** End Patch"
+    },
+    "failure": {
+      "kind": "tool-execution",
+      "name": "Error",
+      "message": "apply_patch verification failed: Error: Failed to find expected lines in C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-02\\project\\qa\\scratch\\revise_landscape.py:\n        if child.tag == qn('w:p'):",
+      "originSite": "session.processor.tool-error",
+      "classification": "tool-execution",
+      "data": {
+        "toolCallId": "call_CJeZLQe3mhc0zj5CzPY9d256",
+        "toolName": "apply_patch"
+      }
+    },
+    "time": {
+      "start": 1792909950918,
+      "end": 1792909954722
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_034a45581c2ed56a016adda27ec40487d0bfc48ca627b4e199"
+    }
+  },
+  "orderKey": "v1:0001792909954414:0000000000000031:0000000000000000:part:prt_g0VZ2ZRCA00Fc862UFk6"
+}

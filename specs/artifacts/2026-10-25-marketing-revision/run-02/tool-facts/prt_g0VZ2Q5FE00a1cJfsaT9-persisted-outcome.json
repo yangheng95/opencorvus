@@ -1,0 +1,46 @@
+{
+  "message_id": "msg_g0VZ2Q2bn00SpHDCJB0g",
+  "session_id": "ses_hT6WN4CemvWvrDYg7sgb",
+  "id": "prt_hGl2YiRcIvt9G7JT92zJ",
+  "time_created": 1792907725423,
+  "data": {
+    "outcome": "completed",
+    "output": "{\"results\":[{\"request_index\":0,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"d320bb0d-d534-543d-afe2-4d328987bea1\",\"manifest_sha256\":\"75f1ef09536783a1a85ae20c2741ee684dae6d2747df3efef1124c377d427937\"},\"tree\":\"resources\",\"path\":\"qa/initial/page-3.png\",\"media_type\":\"image/png\",\"bytes\":391169,\"sha256\":\"2c0f1a71672982801aeeb71e813f4f376d552951e3fe0e628a550a5f311b26df\"}},\"media_type\":\"image/png\",\"byte_start\":0,\"byte_end\":391169,\"next_offset\":null,\"total_bytes\":391169,\"complete\":true,\"sha256\":\"2c0f1a71672982801aeeb71e813f4f376d552951e3fe0e628a550a5f311b26df\",\"attachment\":true,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_ankskGi98RsTkvJ_\",\"artifact_read_ref\":\"ar_NHYF0CL41uiNdgFR\"}},{\"request_index\":1,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"d320bb0d-d534-543d-afe2-4d328987bea1\",\"manifest_sha256\":\"75f1ef09536783a1a85ae20c2741ee684dae6d2747df3efef1124c377d427937\"},\"tree\":\"resources\",\"path\":\"qa/initial/page-4.png\",\"media_type\":\"image/png\",\"bytes\":267649,\"sha256\":\"e5d0f476861872aed1ebbea50fb9ea01e5f3ac815eb762d0908acadcb1f2332e\"}},\"media_type\":\"image/png\",\"byte_start\":0,\"byte_end\":267649,\"next_offset\":null,\"total_bytes\":267649,\"complete\":true,\"sha256\":\"e5d0f476861872aed1ebbea50fb9ea01e5f3ac815eb762d0908acadcb1f2332e\",\"attachment\":true,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_viN0m2-hRpTPMlK0\",\"artifact_read_ref\":\"ar__0rXkNrx0oxjbto8\"}},{\"request_index\":2,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"d320bb0d-d534-543d-afe2-4d328987bea1\",\"manifest_sha256\":\"75f1ef09536783a1a85ae20c2741ee684dae6d2747df3efef1124c377d427937\"},\"tree\":\"resources\",\"path\":\"qa/initial/page-5.png\",\"media_type\":\"image/png\",\"bytes\":421974,\"sha256\":\"43510f8a99cde0115d0777882b11fe4b8c1db90f232726052666cd6a437b83d9\"}},\"media_type\":\"image/png\",\"byte_start\":0,\"byte_end\":421974,\"next_offset\":null,\"total_bytes\":421974,\"complete\":true,\"sha256\":\"43510f8a99cde0115d0777882b11fe4b8c1db90f232726052666cd6a437b83d9\",\"attachment\":true,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_n5ee82E0vkf0Wa6Y\",\"artifact_read_ref\":\"ar_7EUpKb8tIu4WxiKc\"}},{\"request_index\":3,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"d320bb0d-d534-543d-afe2-4d328987bea1\",\"manifest_sha256\":\"75f1ef09536783a1a85ae20c2741ee684dae6d2747df3efef1124c377d427937\"},\"tree\":\"resources\",\"path\":\"qa/scratch/content-check.json\",\"media_type\":\"application/json\",\"bytes\":590,\"sha256\":\"6fab6c1f742143a24749d14a39dd347b142af96d3f73e9fcbc857a039dbb2049\"}},\"media_type\":\"application/json\",\"byte_start\":0,\"byte_end\":590,\"next_offset\":null,\"total_bytes\":590,\"complete\":true,\"sha256\":\"6fab6c1f742143a24749d14a39dd347b142af96d3f73e9fcbc857a039dbb2049\",\"text\":\"{\\r\\n  \\\"status\\\": \\\"author_checks_passed_pending_independent_review\\\",\\r\\n  \\\"method\\\": \\\"python-docx saved-file body traversal in document order; compare paragraph text and every table-row cell with Markdown stripped only of heading/table display syntax; zipfile OOXML section/title color/border inspection\\\",\\r\\n  \\\"ordered_blocks\\\": 52,\\r\\n  \\\"table_rows\\\": 22,\\r\\n  \\\"chinese_characters\\\": 2694,\\r\\n  \\\"sections\\\": 1,\\r\\n  \\\"all_sections_portrait\\\": true,\\r\\n  \\\"title_heading_color\\\": \\\"000000\\\",\\r\\n  \\\"paragraph_decorative_borders\\\": 0,\\r\\n  \\\"ordered_content_equal\\\": true,\\r\\n  \\\"mirror_equal\\\": true,\\r\\n  \\\"fact_check_items\\\": []\\r\\n}\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_ALW7_-AieZGkHT3V\",\"artifact_read_ref\":\"ar_TPrK0xQXa7VhpPZh\"}},{\"request_index\":4,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hxHOMBTalkvA4toZOhTn\",\"task_id\":\"tsk_g00VZ2GE9C00jkeX1GgT\",\"snapshot_id\":\"d320bb0d-d534-543d-afe2-4d328987bea1\",\"manifest_sha256\":\"75f1ef09536783a1a85ae20c2741ee684dae6d2747df3efef1124c377d427937\"},\"tree\":\"resources\",\"path\":\"qa/scratch/page-observations.json\",\"media_type\":\"application/json\",\"bytes\":2546,\"sha256\":\"98934ef8b262a8456bf54bda59f0f6a8c96175d939b6e43d31d861d4aded165f\"}},\"media_type\":\"application/json\",\"byte_start\":0,\"byte_end\":2546,\"next_offset\":null,\"total_bytes\":2546,\"complete\":true,\"sha256\":\"98934ef8b262a8456bf54bda59f0f6a8c96175d939b6e43d31d861d4aded165f\",\"text\":\"{\\n  \\\"reviewer\\\": \\\"原营销作者\\\",\\n  \\\"date\\\": \\\"2026-10-25\\\",\\n  \\\"status\\\": \\\"作者逐页查看完成，待独立最终复核；不是正式交付\\\",\\n  \\\"business_candidates\\\": [\\\"outputs/growth-plan.md\\\", \\\"outputs/growth-plan.docx\\\"],\\n  \\\"internal_only\\\": [\\\"qa/initial/growth-plan.pdf\\\", \\\"qa/initial/page-1.png\\\", \\\"qa/initial/page-2.png\\\", \\\"qa/initial/page-3.png\\\", \\\"qa/initial/page-4.png\\\", \\\"qa/initial/page-5.png\\\"],\\n  \\\"page_count\\\": 5,\\n  \\\"inspection_method\\\": \\\"逐一实际打开原始PNG进行视觉检查，不以目录或渲染日志代替查看；页面裁边仅为阅读工具显示，不修改原图。\\\",\\n  \\\"pages\\\": [\\n    {\\\"page\\\": 1, \\\"file\\\": \\\"qa/initial/page-1.png\\\", \\\"opened\\\": true, \\\"observation\\\": \\\"标题、日期、授权边界和合成基线完整。两张数值表列宽足够，community及40.43显示完整；末段解释延至页底但最后一句完整，无裁切。标题黑色无装饰线。\\\"},\\n    {\\\"page\\\": 2, \\\"file\\\": \\\"qa/initial/page-2.png\\\", \\\"opened\\\": true, \\\"observation\\\": \\\"受众与内容假设、资源表及预算解释完整；三列表未拆页，1200合计与200冻结预留可读。下部留白，不构成缺失。\\\"},\\n    {\\\"page\\\": 3, \\\"file\\\": \\\"qa/initial/page-3.png\\\", \\\"opened\\\": true, \\\"observation\\\": \\\"任务核查、邮件分配与样本、两列指标表及停止条件完整；退订公式、1%阈值和任一投诉即停可读。表格未截断，文字无重叠。\\\"},\\n    {\\\"page\\\": 4, \\\"file\\\": \\\"qa/initial/page-4.png\\\", \\\"opened\\\": true, \\\"observation\\\": \\\"社区与搜索两项串行备选正文完整，责任、单位、样本周期、分母、阈值、护栏与下一决策均可读；主动分组分页导致下半页留白，无孤立续行。\\\"},\\n    {\\\"page\\\": 5, \\\"file\\\": \\\"qa/initial/page-5.png\\\", \\\"opened\\\": true, \\\"observation\\\": \\\"测量、复盘、未知、来源、审计修正与待审状态完整；来源快照标识和路径换行正常。末段完整，无裁切；标题黑色无装饰线。\\\"}\\n  ],\\n  \\\"content_check\\\": \\\"content-check.json记录52个有序正文块与22个表格行逐项相同；ordered-body.json保存实际Word解析正文，中文字符2694（约3000汉字）；1节全部纵向。\\\",\\n  \\\"repair\\\": \\\"初次OOXML检查识别模板标题样式含段落边框；在生成器中移除标题样式边框后重新生成，重新比对及实际渲染，以上五页均为修正后文件。\\\",\\n  \\\"limits\\\": \\\"仅作者自检及视觉观察，不能代替独立复核；没有实际营销执行或效果数据。PDF和PNG不作为业务交付，未正式发布campaign-plan或最终阅读文档。\\\",\\n  \\\"fact_check_items\\\": []\\n}\\n\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_O12rmqbOl7ZR98uH\",\"artifact_read_ref\":\"ar_GIG1rCuDU5bAbec9\"}}],\"complete\":true,\"next_reads\":[]}",
+    "title": "Artifacts (5)",
+    "metadata": {
+      "truncated": false
+    },
+    "time": {
+      "end": 1792907725423
+    },
+    "attachments": [
+      {
+        "id": "prt_g0VZ2Q6F400eXrU3CBE1",
+        "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+        "messageID": "msg_g0VZ2Q2bn00SpHDCJB0g",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-3.png",
+        "url": "/attachment/prj_hxHOMBTalkvA4toZOhTn/2c0f1a71672982801aeeb71e813f4f376d552951e3fe0e628a550a5f311b26df.png"
+      },
+      {
+        "id": "prt_g0VZ2Q6F401Ks6dSevBf",
+        "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+        "messageID": "msg_g0VZ2Q2bn00SpHDCJB0g",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-4.png",
+        "url": "/attachment/prj_hxHOMBTalkvA4toZOhTn/e5d0f476861872aed1ebbea50fb9ea01e5f3ac815eb762d0908acadcb1f2332e.png"
+      },
+      {
+        "id": "prt_g0VZ2Q6F402GJecSMNZB",
+        "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+        "messageID": "msg_g0VZ2Q2bn00SpHDCJB0g",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-5.png",
+        "url": "/attachment/prj_hxHOMBTalkvA4toZOhTn/43510f8a99cde0115d0777882b11fe4b8c1db90f232726052666cd6a437b83d9.png"
+      }
+    ]
+  }
+}

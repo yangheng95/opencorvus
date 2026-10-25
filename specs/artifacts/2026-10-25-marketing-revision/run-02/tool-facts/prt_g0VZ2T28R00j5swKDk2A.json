@@ -1,0 +1,38 @@
+{
+  "id": "prt_g0VZ2T28R00j5swKDk2A",
+  "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+  "messageID": "msg_g0VZ2Syod00b4h2K2cyE",
+  "type": "tool",
+  "callID": "call_ubRuG2Ihb5sU5x0SwYXPLiDj",
+  "tool": "bash",
+  "state": {
+    "status": "completed",
+    "input": {
+      "command": "python -c 'from pathlib import Path; import re, subprocess; from docx import Document; from docx.oxml.ns import qn; from docx.text.paragraph import Paragraph; from docx.table import Table; paths=[\"outputs/growth-plan.md\",\"outputs/growth-plan.docx\",\"artifacts/marketing-growth/campaign-plan.md\"]; head=\"5747fb6f85829b2c72edbba3101ee922ee508da2\"; assert all(Path(p).read_bytes()==subprocess.check_output([\"git\",\"show\",head+\":\"+p]) for p in paths); text=Path(paths[0]).read_text(encoding=\"utf-8\"); assert text==Path(paths[2]).read_text(encoding=\"utf-8\"); expected=[]; actual=[]; d=Document(paths[1]); [(expected.append([x.strip() for x in line.strip(\"|\").split(\"|\")]) if line.startswith(\"|\") else expected.append(re.sub(r\"^#+\\s+\",\"\",line))) for line in text.splitlines() if line.strip() and not (line.startswith(\"|\") and all(re.fullmatch(r\":?-+:?\",x.strip()) for x in line.strip(\"|\").split(\"|\")))]; [(actual.append(Paragraph(c,d).text) if c.tag==qn(\"w:p\") else actual.extend([[v.text for v in r.cells] for r in Table(c,d).rows])) for c in d.element.body if c.tag in [qn(\"w:p\"),qn(\"w:tbl\")]]; assert expected==actual; assert all(s.page_width<s.page_height for s in d.sections); print(\"Committed files unchanged; local mirror equal; ordered MD/DOCX blocks equal:\",len(actual),\"; tables:\",len(d.tables),\"; all sections portrait\")'",
+      "description": "只读核验已提交文件与正文镜像一致"
+    },
+    "output": "Traceback (most recent call last):\r\n  File \"<string>\", line 1, in <module>\r\nAssertionError\r\n",
+    "title": "只读核验已提交文件与正文镜像一致",
+    "metadata": {
+      "refused": false,
+      "command": "python -c 'from pathlib import Path; import re, subprocess; from docx import Document; from docx.oxml.ns import qn; from docx.text.paragraph import Paragraph; from docx.table import Table; paths=[\"outputs/growth-plan.md\",\"outputs/growth-plan.docx\",\"artifacts/marketing-growth/campaign-plan.md\"]; head=\"5747fb6f85829b2c72edbba3101ee922ee508da2\"; assert all(Path(p).read_bytes()==subprocess.check_output([\"git\",\"show\",head+\":\"+p]) for p in paths); text=Path(paths[0]).read_text(encoding=\"utf-8\"); assert text==Path(paths[2]).read_text(encoding=\"utf-8\"); expected=[]; actual=[]; d=Document(paths[1]); [(expected.append([x.strip() for x in line.strip(\"|\").split(\"|\")]) if line.startswith(\"|\") else expected.append(re.sub(r\"^#+\\s+\",\"\",line))) for line in text.splitlines() if line.strip() and not (line.startswith(\"|\") and all(re.fullmatch(r\":?-+:?\",x.strip()) for x in line.strip(\"|\").split(\"|\")))]; [(actual.append(Paragraph(c,d).text) if c.tag==qn(\"w:p\") else actual.extend([[v.text for v in r.cells] for r in Table(c,d).rows])) for c in d.element.body if c.tag in [qn(\"w:p\"),qn(\"w:tbl\")]]; assert expected==actual; assert all(s.page_width<s.page_height for s in d.sections); print(\"Committed files unchanged; local mirror equal; ordered MD/DOCX blocks equal:\",len(actual),\"; tables:\",len(d.tables),\"; all sections portrait\")'",
+      "output": "Traceback (most recent call last):\r\n  File \"<string>\", line 1, in <module>\r\nAssertionError\r\n",
+      "output_bytes": 92,
+      "exit": 1,
+      "pid": null,
+      "background": false,
+      "description": "只读核验已提交文件与正文镜像一致",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792908424619,
+      "end": 1792908433837
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_08582652d92d8937016add9c888a7887d08526c440b5aa1056"
+    }
+  },
+  "orderKey": "v1:0001792908433016:0000000000000031:0000000000000000:part:prt_g0VZ2T28R00j5swKDk2A"
+}

@@ -1,0 +1,24 @@
+import assert from 'node:assert/strict'
+import fs from 'node:fs'
+import path from 'node:path'
+import {marked} from '../../packages/overlay/node_modules/marked/lib/marked.esm.js'
+
+const phase='failed-observation'
+const run='C:/Users/hengu/.codex/opencorvus-marketing-revision-20261025-01',e=path.join(run,'evidence'),project=path.join(run,'project'),out=path.join(e,`${phase}-verification`)
+fs.mkdirSync(out,{recursive:true})
+const x=JSON.parse(fs.readFileSync(path.join(e,'current.json'),'utf8'))
+assert.equal(x.task.status,'failed');assert.equal(x.task.executionLifecycle.epoch,2);assert.equal(x.task.packageRevisionBinding.id,'marketing-growth')
+const request=async(route:string,body?:unknown)=>{const url=new URL(route,'http://127.0.0.1:19147');url.searchParams.set('directory',project);const r=await fetch(url,{method:body===undefined?'GET':'POST',headers:{'content-type':'application/json'},...(body===undefined?{}:{body:JSON.stringify(body)}),signal:AbortSignal.timeout(180000)});assert(r.ok,`${r.status} ${route}`);return r}
+const read=async(locator:any)=>{const parts:Buffer[]=[],ranges:string[]=[];let at=0;for(;;){const r=await request(`/task/${x.task.id}/artifact-read`,{locator,byte_offset:at,max_bytes:4096});const range=r.headers.get('content-range')!;const b=Buffer.from(await r.arrayBuffer());ranges.push(range);parts.push(b);const total=Number(range.split('/')[1]);at+=b.length;if(at===total)break;assert(b.length>0&&at<total)}return {bytes:Buffer.concat(parts),ranges}}
+const artifacts:any[]=[],resources:any[]=[],documents:any[]=[]
+const saveResource=async(ref:any,owner:string)=>{const r=await read({source:'task_artifact_resource',ref});const base=path.resolve(out,'resources',owner),file=path.resolve(base,ref.path);assert(file.startsWith(base+path.sep));fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file,r.bytes);const entry={owner,path:ref.path,ref,bytes:r.bytes.length,file,ranges:r.ranges};resources.push(entry);return entry}
+for(const a of x.conversation.board.artifacts.filter((a:any)=>a.payload?.artifact_type)){
+ const r=await read(a.locator),v=JSON.parse(r.bytes.toString());assert.equal(v.artifact_type,a.payload.artifact_type);fs.writeFileSync(path.join(out,a.id+'.json'),r.bytes)
+ const entry={id:a.id,type:v.artifact_type,producer:v.producer,sourceLocators:v.source_artifact_locators,locator:a.locator,resources:[] as any[]};artifacts.push(entry)
+ for(const ref of v.resources)entry.resources.push(await saveResource(ref,a.id))
+}
+fs.writeFileSync(path.join(out,'verification.json'),JSON.stringify({status:'failed',task:x.task,artifacts,resources,source:'Full official artifact reads preserve incomplete revision as candidate, not final delivery'},null,2))
+fs.copyFileSync(path.join(e,'current.json'),path.join(out,'current.json'))
+fs.mkdirSync(path.join(out,'actual-current-files'),{recursive:true})
+for(const name of ['outputs/growth-plan.md','outputs/growth-plan.docx','tools/build_growth_documents.py']){const target=path.join(out,'actual-current-files',name);fs.mkdirSync(path.dirname(target),{recursive:true});fs.copyFileSync(path.join(project,name),target)}
+console.log(JSON.stringify({preserved:true,status:x.task.status,artifacts:artifacts.length,resources:resources.length}))

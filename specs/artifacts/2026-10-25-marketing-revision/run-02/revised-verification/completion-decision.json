@@ -1,0 +1,182 @@
+{
+  "orchestrator_session_id": "ses_-zUQxjkwvzzB1D7L3tcK",
+  "orchestrator_message_id": "msg_hKfJWyXn5y6ywgEx540s",
+  "tool_call_id": "call_102c98e239c8421db6a146fafa246ff4",
+  "tool_part_id": "prt_g0VZ2grft00MG0EsVERh",
+  "evidence_locators": [
+    {
+      "source": "session_message",
+      "session_id": "ses_hEwp3inYGnK5nYF8mpQW",
+      "message_id": "msg_g0VZ2gD9g00YCPLw7nQl"
+    },
+    {
+      "source": "session_message",
+      "session_id": "ses_hT6WN4CemvWvrDYg7sgb",
+      "message_id": "msg_g0VZ2df2L00M3v0mboqK"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_h47BH1uVgLHYWoaZbo5R",
+      "catalog_revision": 56,
+      "expected_sha256": "7eb646bd944468f2401ad8c31df80adeff39a714d8110e468e0ef00c2deda5ad"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_hLzPcOZ5dCyjY39YdgHW",
+      "catalog_revision": 61,
+      "expected_sha256": "2dacd8acab0d23937652e4fef695a3d189a2093229b34a3874a81b4e575e0b77"
+    }
+  ],
+  "deliverable_artifact_locators": [
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_hLzPcOZ5dCyjY39YdgHW",
+      "catalog_revision": 61,
+      "expected_sha256": "2dacd8acab0d23937652e4fef695a3d189a2093229b34a3874a81b4e575e0b77"
+    }
+  ],
+  "worker_artifact_locators": [
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_h28MoKiA1WMo4nQBkTLd",
+      "catalog_revision": 40,
+      "expected_sha256": "5e2e5d832df50762ff8708f514043a51c5e4e389ba467bd0818ee4474c373ea0"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_h2vfYEL6JlrYYmHFBUdT",
+      "catalog_revision": 25,
+      "expected_sha256": "1f78fc392948eabc1e2bc38a3cb9dfeb9c30afe6a1251424462cdbf8715d2b9d"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_h47BH1uVgLHYWoaZbo5R",
+      "catalog_revision": 56,
+      "expected_sha256": "7eb646bd944468f2401ad8c31df80adeff39a714d8110e468e0ef00c2deda5ad"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_hAS96SC8hkNmMu7O8RoC",
+      "catalog_revision": 17,
+      "expected_sha256": "fcdf37d3be769d9241907ef4ac3772b2dac404e3d790fb0c008dab3c6cfb04c6"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_hFvxacOMef87YvyiUYyy",
+      "catalog_revision": 5,
+      "expected_sha256": "346ec5c49e227f8f5bba9aa0d4eadd6e1a161c0ee79584a498b8b803602fb4cf"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_hIgpb6RZbrxuaF9xPJFH",
+      "catalog_revision": 35,
+      "expected_sha256": "4a8b4e600c6b350285db0907ab9fca15813c12afb8a71ee606500303c650f267"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_hLArXmv50FyxAvdR9Fcu",
+      "catalog_revision": 47,
+      "expected_sha256": "fb368c87d0ad9298fcc2411a1e45b4a4bf2f3a0fa2723e3d4ad78fcf5d770f0c"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_hLzPcOZ5dCyjY39YdgHW",
+      "catalog_revision": 61,
+      "expected_sha256": "2dacd8acab0d23937652e4fef695a3d189a2093229b34a3874a81b4e575e0b77"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_hO2vkYdsXDNYXvMg0Cdh",
+      "catalog_revision": 30,
+      "expected_sha256": "efe172b371807018ddba4d78a0141305e12f099f26fa309297df7517423f25a4"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_hZtUOLUOvVgdJGi7YGHv",
+      "catalog_revision": 48,
+      "expected_sha256": "a2eb0cf059c1053b304a4565c36aab7fbcfeb3f792bd047f37246402e637d5ef"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_hasAxlgEEPksG4LaOvfQ",
+      "catalog_revision": 21,
+      "expected_sha256": "dfbf701acde2157532ed6d054cbfea4bcb23ef07fa33faf456a16de5ac0d289b"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_hyDNtTAAARFFrYy1KHzp",
+      "catalog_revision": 9,
+      "expected_sha256": "e9d0074be620527b4bf56590304cfeb2bf944bf45253a1b7c6f69b92bcc41b85"
+    },
+    {
+      "source": "engine_artifact",
+      "artifact_id": "art_hzGk3BZDigSrM2xpfye2",
+      "catalog_revision": 15,
+      "expected_sha256": "f08f5702fb465553a0090668b8c2ff9a77662ae76af53ed920ce06d7f91f1b72"
+    }
+  ],
+  "accepted_delivery_slice_revision_ids": [],
+  "workflow_binding": {
+    "kind": "virtual_workflow",
+    "workflow_id": "marketing-growth-campaign",
+    "package_revision": {
+      "scope": "project",
+      "project_id": "prj_hxHOMBTalkvA4toZOhTn",
+      "namespace": "builtin",
+      "id": "marketing-growth",
+      "version": "2026.10.24.2",
+      "package_digest": "66bbf77da0945d7da12931b6599cd8f3211a70701de2051e0d3227017815fc5c"
+    },
+    "nodes": [
+      {
+        "node_id": "marketing-growth-audience-analyst",
+        "agent_id": "marketing-growth-audience-analyst",
+        "depends_on": [
+          "marketing-growth-evidence-researcher"
+        ]
+      },
+      {
+        "node_id": "marketing-growth-campaign-writer",
+        "agent_id": "marketing-growth-campaign-writer",
+        "depends_on": [
+          "marketing-growth-fact-checker"
+        ]
+      },
+      {
+        "node_id": "marketing-growth-channel-analyst",
+        "agent_id": "marketing-growth-channel-analyst",
+        "depends_on": [
+          "marketing-growth-evidence-researcher"
+        ]
+      },
+      {
+        "node_id": "marketing-growth-evidence-researcher",
+        "agent_id": "marketing-growth-evidence-researcher",
+        "depends_on": [
+          "marketing-growth-planner"
+        ]
+      },
+      {
+        "node_id": "marketing-growth-fact-checker",
+        "agent_id": "marketing-growth-fact-checker",
+        "depends_on": [
+          "marketing-growth-strategist"
+        ]
+      },
+      {
+        "node_id": "marketing-growth-planner",
+        "agent_id": "marketing-growth-planner",
+        "depends_on": []
+      },
+      {
+        "node_id": "marketing-growth-strategist",
+        "agent_id": "marketing-growth-strategist",
+        "depends_on": [
+          "marketing-growth-audience-analyst",
+          "marketing-growth-channel-analyst"
+        ]
+      }
+    ]
+  },
+  "time_recorded": 1792911731292
+}

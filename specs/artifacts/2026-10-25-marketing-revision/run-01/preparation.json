@@ -1,0 +1,17 @@
+{
+  "run": "C:/Users/hengu/.codex/opencorvus-marketing-revision-20261025-01",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-01\\project",
+  "port": 19147,
+  "sourceCommit": "1443c84827bb6786f2721e77465bc3f010749973",
+  "inputs": [
+    "brief.md",
+    "campaign.csv"
+  ],
+  "rendererSource": "C:\\Users\\hengu\\.codex\\plugins\\cache\\openai-primary-runtime\\documents\\26.1017.31632\\skills\\documents\\render_docx.py",
+  "rendererBytes": 20248,
+  "model": "openai/gpt-6.1-sol",
+  "maximumRequests": 360,
+  "sourceMtime": 1792683516975.7468,
+  "modelsMtime": 1791128890137.9968,
+  "projectHead": "f0185e94ec21ce7e98516aa9c5b42a1ff276fcb7"
+}

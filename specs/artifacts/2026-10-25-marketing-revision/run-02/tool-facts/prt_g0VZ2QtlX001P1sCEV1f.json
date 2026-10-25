@@ -1,0 +1,124 @@
+{
+  "id": "prt_g0VZ2QtlX001P1sCEV1f",
+  "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+  "messageID": "msg_g0VZ2QqAc000Od8KifgK",
+  "type": "tool",
+  "callID": "call_bSLIpImTf1ll0xqDKe0NBiBx",
+  "tool": "record_fact_check_review",
+  "state": {
+    "status": "completed",
+    "input": {
+      "scope": {
+        "target_session_id": "ses_hEwp3inYGnK5nYF8mpQW",
+        "target_agent": "marketing-growth-campaign-writer",
+        "target_message_id": "msg_g0VZ2OYs800V8cvRHMuw",
+        "target_message_content_hash": "5edc39b917aa72786fdecb1cdc5783a4232bed6764e10c374a57ddf37347891d",
+        "items_total": 8,
+        "items_inspected": 8
+      },
+      "verified": [
+        {
+          "claim": "正文2694个汉字，四张表，保留1200元当前上限、3000元旧草案和1900元合成历史成本。",
+          "evidence": [
+            {
+              "kind": "code",
+              "pointer": "snapshot:19df3dd4-7067-562d-ac01-42acf9bfc56d/resources/outputs/growth-plan.md/一、二、四",
+              "excerpt": "完整正文已读；独立Python计数U+4E00至U+9FFF为2694，DOCX四表。预算明确三者关系，准备200+邮件250+社区250+搜索300+预留200=1200。"
+            }
+          ]
+        },
+        {
+          "claim": "已落实邮件样本及退订率审计修正。",
+          "evidence": [
+            {
+              "kind": "code",
+              "pointer": "snapshot:19df3dd4-7067-562d-ac01-42acf9bfc56d/resources/outputs/growth-plan.md/五",
+              "excerpt": "每组100名以成功送达唯一收件人数计；退订护栏按版本14天累计去重退订人数÷成功送达唯一人数；零分母不可计算，任一版本超过1%停，任一投诉或许可问题立即停。"
+            }
+          ]
+        },
+        {
+          "claim": "MD与保存后的Word的52个有序正文块、22个表格行全部一致。",
+          "evidence": [
+            {
+              "kind": "code",
+              "pointer": "snapshot:19df3dd4-7067-562d-ac01-42acf9bfc56d/resources/outputs/growth-plan.docx/word/document.xml",
+              "excerpt": "对本地字节与已完整读取的不可变DOCX/MD资源作身份确认后，用python-docx独立遍历body有序段落及全部单元格。仅移除MD标题/表格展示语法；52块、4表、22行、76格全部一致，不依赖作者JSON结论。"
+            }
+          ]
+        },
+        {
+          "claim": "Word全部节纵向，标题黑色、无段落装饰边框，包镜像与规范正文一致。",
+          "evidence": [
+            {
+              "kind": "code",
+              "pointer": "snapshot:19df3dd4-7067-562d-ac01-42acf9bfc56d/resources/outputs/growth-plan.docx/word/styles.xml;word/document.xml",
+              "excerpt": "独立zipfile及python-docx检查1节宽7560310<高10692130 EMU；标题及8节标题继承000000，无其他直接颜色；正文pBdr及相关样式pBdr均0；本地镜像读取文本与已确认身份的MD完全相同。"
+            }
+          ]
+        },
+        {
+          "claim": "作者实际渲染并逐页查看了全部5页。",
+          "evidence": [
+            {
+              "kind": "code",
+              "pointer": "session:ses_hEwp3inYGnK5nYF8mpQW/message:msg_g0VZ2NQmV002ChZ9Igl8/part:prt_g0VZ2NS2900z5cbQiZCq",
+              "excerpt": "实际调用python tools/render_docx.py outputs/growth-plan.docx --output_dir qa/initial --emit_pdf --verbose，输出Pages rendered；随后5个完成的read工具分别打开page-1.png至page-5.png。"
+            },
+            {
+              "kind": "code",
+              "pointer": "snapshot:d320bb0d-d534-543d-afe2-4d328987bea1/resources/qa/initial/growth-plan.pdf",
+              "excerpt": "独立pdfinfo确认5页A4、无旋转；pdftotext提取全部正文后仅去空白，与Word全部有序段落及表格文本一致。"
+            }
+          ]
+        },
+        {
+          "claim": "5页文字和表格完整可读，无裁切或丢段漏行。",
+          "evidence": [
+            {
+              "kind": "code",
+              "pointer": "snapshot:d320bb0d-d534-543d-afe2-4d328987bea1/resources/qa/initial/page-{1,2,3,4,5}.png",
+              "excerpt": "全部5个PNG已通过Artifact读取并实际视觉查看。第1页双表数值和页底完整；第2页预算表完整；第3页退订公式及停止条件完整；第4页备选正文完整、下部留白；第5页来源路径换行正常，末段完整。"
+            }
+          ]
+        },
+        {
+          "claim": "已保存待审检查点及两组不可变资源并绑定原来源，PDF/PNG仅内部验收。",
+          "evidence": [
+            {
+              "kind": "code",
+              "pointer": "engine_artifact:art_hO2vkYdsXDNYXvMg0Cdh@30",
+              "excerpt": "完整读取review-materials及其MD/DOCX资源、关联内部PDF/5PNG/检查JSON/生成脚本；source_artifact_locators绑定原brief/CSV、正式各阶段及audit@25。作者提交5747fb6记录与确切资源一致，提交本身不替代独立内容检查。"
+            }
+          ]
+        },
+        {
+          "claim": "当前尚未正式发布campaign-plan或最终阅读文档，提交的是待审材料而非最终交付。",
+          "evidence": [
+            {
+              "kind": "code",
+              "pointer": "engine_artifact:art_hO2vkYdsXDNYXvMg0Cdh@30/payload; current Task catalog query marketing-growth/campaign-plan",
+              "excerpt": "review-materials明确不是正式campaign-plan；当前目录该类型0匹配且查询完整无provider_errors。作者本次完整因果工具索引无正式campaign-plan及交互阅读文档发布；本轮不把后续待办算作已完成。"
+            }
+          ]
+        }
+      ],
+      "corrected": [],
+      "unresolved": [],
+      "overall_verdict": "clean"
+    },
+    "output": "OK: fact-check review recorded (verified=8, corrected=0, unresolved=0, verdict=clean)",
+    "title": "",
+    "metadata": {},
+    "time": {
+      "start": 1792907915791,
+      "end": 1792907941833
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0eacf555d2283434016add9a8bb39487d098cbc5768e73cbc3"
+    }
+  },
+  "orderKey": "v1:0001792907941401:0000000000000031:0000000000000000:part:prt_g0VZ2QtlX001P1sCEV1f"
+}

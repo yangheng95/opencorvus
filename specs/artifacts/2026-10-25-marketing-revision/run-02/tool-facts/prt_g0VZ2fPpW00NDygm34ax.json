@@ -1,0 +1,38 @@
+{
+  "id": "prt_g0VZ2fPpW00NDygm34ax",
+  "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+  "messageID": "msg_g0VZ2fN7Z00SYoNy4uIq",
+  "type": "tool",
+  "callID": "call_KquHucqvdxNH4lAL7fDge3TU",
+  "tool": "bash",
+  "state": {
+    "status": "completed",
+    "input": {
+      "command": "python -c 'import subprocess,io,hashlib; from pathlib import Path; from docx import Document; from docx.oxml.ns import qn; from docx.table import Table; from docx.text.paragraph import Paragraph; md=Path(\"outputs/growth-plan.md\").read_bytes(); ref=Path(\".opencorvus/.r/tasks/tsk_g00VZ2GE9C00jkeX1GgT/artifacts/materializations/reads/2a03896811a36347f08c9eba2916c1e7e07b2695aa042eecf21bf8e8b2ddbc61-growth-plan.md\").read_bytes(); assert md==ref; blob=subprocess.check_output([\"git\",\"show\",\"716d568:outputs/growth-plan.docx\"]); now=Path(\"outputs/growth-plan.docx\").read_bytes(); assert now==blob; assert hashlib.sha256(blob).hexdigest()==\"25c36ec59dc7d53ef5f913582b9a6e17a818da133d5c7aa1c563fa31ffc153af\"; old=subprocess.check_output([\"git\",\"show\",\"5747fb6:outputs/growth-plan.docx\"]); assert hashlib.sha256(old).hexdigest()==\"207561119225d920a84880620c7e05b60f443911195afa7fc4bc90610122060a\"; a=Document(io.BytesIO(old)); b=Document(io.BytesIO(now)); blocks=lambda d:[(\"p\",Paragraph(x,d).text) if x.tag==qn(\"w:p\") else (\"t\",[[[p.text for p in c.paragraphs] for c in r.cells] for r in Table(x,d).rows]) for x in d.element.body if x.tag in [qn(\"w:p\"),qn(\"w:tbl\")]]; x=blocks(a); y=blocks(b); assert y[8]==(\"p\",\"\"); assert x==y[:8]+y[9:]; assert len(a.paragraphs)==30 and len(b.paragraphs)==31; assert len([c for t in b.tables for r in t.rows for c in r.cells])==76; assert all(s.page_width>s.page_height for s in b.sections); assert Path(\"artifacts/marketing-growth/campaign-plan.md\").read_text(encoding=\"utf-8\")==md.decode(\"utf-8\"); print(\"PASS: frozen MD 9991 bytes; reviewed DOCX exact committed bytes; all original ordered text and 76 cells preserved; one empty layout paragraph; landscape; local mirror same text. No file writes.\")'",
+      "description": "只读验证已审确切版本及原有正文保留"
+    },
+    "output": "PASS: frozen MD 9991 bytes; reviewed DOCX exact committed bytes; all original ordered text and 76 cells preserved; one empty layout paragraph; landscape; local mirror same text. No file writes.\r\n",
+    "title": "只读验证已审确切版本及原有正文保留",
+    "metadata": {
+      "refused": false,
+      "command": "python -c 'import subprocess,io,hashlib; from pathlib import Path; from docx import Document; from docx.oxml.ns import qn; from docx.table import Table; from docx.text.paragraph import Paragraph; md=Path(\"outputs/growth-plan.md\").read_bytes(); ref=Path(\".opencorvus/.r/tasks/tsk_g00VZ2GE9C00jkeX1GgT/artifacts/materializations/reads/2a03896811a36347f08c9eba2916c1e7e07b2695aa042eecf21bf8e8b2ddbc61-growth-plan.md\").read_bytes(); assert md==ref; blob=subprocess.check_output([\"git\",\"show\",\"716d568:outputs/growth-plan.docx\"]); now=Path(\"outputs/growth-plan.docx\").read_bytes(); assert now==blob; assert hashlib.sha256(blob).hexdigest()==\"25c36ec59dc7d53ef5f913582b9a6e17a818da133d5c7aa1c563fa31ffc153af\"; old=subprocess.check_output([\"git\",\"show\",\"5747fb6:outputs/growth-plan.docx\"]); assert hashlib.sha256(old).hexdigest()==\"207561119225d920a84880620c7e05b60f443911195afa7fc4bc90610122060a\"; a=Document(io.BytesIO(old)); b=Document(io.BytesIO(now)); blocks=lambda d:[(\"p\",Paragraph(x,d).text) if x.tag==qn(\"w:p\") else (\"t\",[[[p.text for p in c.paragraphs] for c in r.cells] for r in Table(x,d).rows]) for x in d.element.body if x.tag in [qn(\"w:p\"),qn(\"w:tbl\")]]; x=blocks(a); y=blocks(b); assert y[8]==(\"p\",\"\"); assert x==y[:8]+y[9:]; assert len(a.paragraphs)==30 and len(b.paragraphs)==31; assert len([c for t in b.tables for r in t.rows for c in r.cells])==76; assert all(s.page_width>s.page_height for s in b.sections); assert Path(\"artifacts/marketing-growth/campaign-plan.md\").read_text(encoding=\"utf-8\")==md.decode(\"utf-8\"); print(\"PASS: frozen MD 9991 bytes; reviewed DOCX exact committed bytes; all original ordered text and 76 cells preserved; one empty layout paragraph; landscape; local mirror same text. No file writes.\")'",
+      "output": "PASS: frozen MD 9991 bytes; reviewed DOCX exact committed bytes; all original ordered text and 76 cells preserved; one empty layout paragraph; landscape; local mirror same text. No file writes.\r\n",
+      "output_bytes": 195,
+      "exit": 0,
+      "pid": null,
+      "background": false,
+      "description": "只读验证已审确切版本及原有正文保留",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792911375638,
+      "end": 1792911390294
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_06c27c8f7496249f016adda80ec19c87d08cf524064ee20483"
+    }
+  },
+  "orderKey": "v1:0001792911389085:0000000000000031:0000000000000000:part:prt_g0VZ2fPpW00NDygm34ax"
+}

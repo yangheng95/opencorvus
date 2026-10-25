@@ -1,0 +1,129 @@
+{
+  "id": "prt_g0VZ2IdHX00GIScHi5Av",
+  "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+  "messageID": "msg_hW7hdH49SRWskua06RnU",
+  "type": "tool",
+  "callID": "call_6f3806403b924227803549abd510e399",
+  "tool": "dispatch_agents",
+  "state": {
+    "status": "completed",
+    "input": {
+      "team": [
+        {
+          "name": "受众与价值主张分析",
+          "target": "marketing-growth-audience-analyst",
+          "responsibility": "独立提出受众问题、购买情境、定位与信息假设",
+          "boundary": "不读取并行渠道分析，不做渠道预算最终决策，不写最终正文，不改源材料",
+          "expected_result": "简明正式audience-analysis，事实与假设分开并真实绑定共同证据",
+          "depends_on": [
+            "本地证据整理"
+          ]
+        },
+        {
+          "name": "渠道与实验分析",
+          "target": "marketing-growth-channel-analyst",
+          "responsibility": "独立复算渠道漏斗、提出预算及可证伪实验建议",
+          "boundary": "不读取并行受众分析，不虚构市场或因果结论，不写最终正文，不执行实际投放",
+          "expected_result": "简明正式channel-analysis，1200元以内建议和完整测量决策条件",
+          "depends_on": [
+            "本地证据整理"
+          ]
+        }
+      ],
+      "dispatches": [
+        {
+          "dispatch": {
+            "target": "marketing-growth-audience-analyst",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "initial",
+              "workflow_subject": {
+                "kind": "virtual_workflow",
+                "workflow_id": "marketing-growth-campaign",
+                "node_id": "marketing-growth-audience-analyst"
+              },
+              "use_worktree": false,
+              "input": {
+                "goal_ids": [],
+                "instruction": "自行发现并完整读取、选择同Task正式evidence-dossier、需要的growth-brief及原不可变brief.md/campaign.csv；按原包发布audience-analysis，类型前驱仅用本阶段要求的正式证据档案，其他来源正常选择绑定。独立分析虚构团队内部文档整理工具；唯一已知受众是小型团队。提出精简受众细分、问题/购买情境、价值主张和消息假设，清楚标注为待验证，不造价格、真实客户、竞品、市场事实或已测效果。说明验证所需证据与反证条件，可设角色但不编实名。不要读取或等待并行渠道结论，不代做策略。保留预算1200当前上限、3000已被取代旧草案、1900合成历史成本三者关系，不能改历史；CPL非CAC，无因果优势。现有材料完整仅三行合成记录，简明直接，不重复研究、不额外业务文件。仅本地内部，不联网/外联/投放/花费/对外发布，不创建Task/Goal。后续规范MD约3000汉字、同正文纵向Word、阅读文档，作者真实渲染逐页查看再独立复核的要求保持不变；本阶段不要声称已完成后续交付。",
+                "reason": "共同本地证据已完成，需与渠道职责独立并行形成受众输入，供策略汇合。"
+              }
+            }
+          }
+        },
+        {
+          "dispatch": {
+            "target": "marketing-growth-channel-analyst",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "initial",
+              "workflow_subject": {
+                "kind": "virtual_workflow",
+                "workflow_id": "marketing-growth-campaign",
+                "node_id": "marketing-growth-channel-analyst"
+              },
+              "use_worktree": false,
+              "input": {
+                "goal_ids": [],
+                "instruction": "自行发现并完整读取、选择同Task正式evidence-dossier、需要的growth-brief及原不可变brief.md/campaign.csv；按原包发布channel-analysis，类型前驱仅用本阶段要求的证据档案，其他来源正常选择绑定。独立复算三渠道与合计曝光/点击/线索/成本/CPL，合计按总成本除总线索，说明漏斗分母及四舍五入。区别观察、假设、未知；三行均合成、非随机，email表内CPL低不能作因果或效果承诺。提出简明渠道适配、测量、预算和优先实验建议，当前总方案上限1200元（包含预留则清楚说明），3000是被取代旧草案，1900是合成历史成本，不缩放历史也不作为新预算。实验写明角色、假设、曝光单位/分配、领先指标、成功阈值、护栏、停止及下一决策；阈值均为建议，未知业务参数不要补事实，不用历史比例承诺未来线索，不计算无依据CAC/LTV/ROI。不要读取或等待并行受众结论，不代做汇合策略。现有材料已完整，只简明本地分析、不重复研究、不额外业务文件。仅本地内部，不联网/外联/投放/花费/对外发布，不创建Task/Goal；预算不是执行授权。本阶段不声称最终文件、渲染或复核完成。",
+                "reason": "共同本地证据已完成，需与受众职责独立并行形成渠道、预算和实验输入。"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "output": "{\"members\":[{\"member_index\":0,\"name\":\"受众与价值主张分析\",\"target\":\"marketing-growth-audience-analyst\",\"status\":\"completed\",\"outcome\":{\"kind\":\"accepted\",\"session_id\":\"ses_hcoMooPAaeV3LIOyFLE7\",\"dispatch_lineage_id\":\"art_g0VZ2IiNn00GX1YVPU89\"}},{\"member_index\":1,\"name\":\"渠道与实验分析\",\"target\":\"marketing-growth-channel-analyst\",\"status\":\"completed\",\"outcome\":{\"kind\":\"accepted\",\"session_id\":\"ses_hIv4tpYGj01O1mo4NY6G\",\"dispatch_lineage_id\":\"art_g0VZ2IiOC00QQybvNtAl\"}}]}",
+    "title": "Settled frontier (2/2)",
+    "metadata": {
+      "frontier_size": 2,
+      "completed_count": 2,
+      "member_names": [
+        "受众与价值主张分析",
+        "渠道与实验分析"
+      ],
+      "targets": [
+        "marketing-growth-audience-analyst",
+        "marketing-growth-channel-analyst"
+      ],
+      "members": [
+        {
+          "member_index": 0,
+          "name": "受众与价值主张分析",
+          "target": "marketing-growth-audience-analyst",
+          "status": "completed",
+          "outcome": {
+            "kind": "accepted",
+            "session_id": "ses_hcoMooPAaeV3LIOyFLE7",
+            "dispatch_lineage_id": "art_g0VZ2IiNn00GX1YVPU89"
+          }
+        },
+        {
+          "member_index": 1,
+          "name": "渠道与实验分析",
+          "target": "marketing-growth-channel-analyst",
+          "status": "completed",
+          "outcome": {
+            "kind": "accepted",
+            "session_id": "ses_hIv4tpYGj01O1mo4NY6G",
+            "dispatch_lineage_id": "art_g0VZ2IiOC00QQybvNtAl"
+          }
+        }
+      ]
+    },
+    "time": {
+      "start": 1792905945803,
+      "end": 1792905966692
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_047befb0e640b1e5016add92d9b6108191900e784674733a06"
+    }
+  },
+  "orderKey": "v1:0001792905964798:0000000000000031:0000000000000000:part:prt_g0VZ2IdHX00GIScHi5Av"
+}

@@ -1,0 +1,38 @@
+{
+  "id": "prt_g0VZ1w2yS000Wr0UTy0M",
+  "sessionID": "ses_hmPJdELD8twa0SSzcAf2",
+  "messageID": "msg_g0VZ1w1tF00u3eCqr3W3",
+  "type": "tool",
+  "callID": "call_24794a054a8841ee8c4f51e467a1f073",
+  "tool": "bash",
+  "state": {
+    "status": "completed",
+    "input": {
+      "command": "python -c \"rows=[('email',1000,100,20,400),('community',2000,120,12,600),('search',3000,150,15,900)]; totals=tuple(sum(r[i] for r in rows) for i in range(1,5)); [print(n,im,cl,le,co,'CPL',format(co/le,'.2f'),'CTR',format(cl/im*100,'.2f'),'click_to_lead',format(le/cl*100,'.2f')) for n,im,cl,le,co in rows+[('total',)+totals]]\"",
+      "description": "独立复算三渠道及合计成本与漏斗率"
+    },
+    "output": "email 1000 100 20 400 CPL 20.00 CTR 10.00 click_to_lead 20.00\r\ncommunity 2000 120 12 600 CPL 50.00 CTR 6.00 click_to_lead 10.00\r\nsearch 3000 150 15 900 CPL 60.00 CTR 5.00 click_to_lead 10.00\r\ntotal 6000 370 47 1900 CPL 40.43 CTR 6.17 click_to_lead 12.70\r\n",
+    "title": "独立复算三渠道及合计成本与漏斗率",
+    "metadata": {
+      "refused": false,
+      "command": "python -c \"rows=[('email',1000,100,20,400),('community',2000,120,12,600),('search',3000,150,15,900)]; totals=tuple(sum(r[i] for r in rows) for i in range(1,5)); [print(n,im,cl,le,co,'CPL',format(co/le,'.2f'),'CTR',format(cl/im*100,'.2f'),'click_to_lead',format(le/cl*100,'.2f')) for n,im,cl,le,co in rows+[('total',)+totals]]\"",
+      "output": "email 1000 100 20 400 CPL 20.00 CTR 10.00 click_to_lead 20.00\r\ncommunity 2000 120 12 600 CPL 50.00 CTR 6.00 click_to_lead 10.00\r\nsearch 3000 150 15 900 CPL 60.00 CTR 5.00 click_to_lead 10.00\r\ntotal 6000 370 47 1900 CPL 40.43 CTR 6.17 click_to_lead 12.70\r\n",
+      "output_bytes": 255,
+      "exit": 0,
+      "pid": null,
+      "background": false,
+      "description": "独立复算三渠道及合计成本与漏斗率",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792900563020,
+      "end": 1792900564887
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_036e50971bb9bd69016add7dd2b6f88191953114e1158c367e"
+    }
+  },
+  "orderKey": "v1:0001792900564381:0000000000000031:0000000000000000:part:prt_g0VZ1w2yS000Wr0UTy0M"
+}

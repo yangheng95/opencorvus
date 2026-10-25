@@ -1,0 +1,37 @@
+{
+  "id": "prt_g0VZ2KhZt0049PIhmQhb",
+  "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+  "messageID": "msg_g0VZ2KggE00lKBD8rBiL",
+  "type": "tool",
+  "callID": "call_3549bc626cff4ec686d78d386fe7ef50",
+  "tool": "artifact_read",
+  "state": {
+    "status": "completed",
+    "input": {
+      "reads": [
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_09FD_OWsyWw38rup",
+          "byte_offset": 15970,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        }
+      ]
+    },
+    "output": "{\"results\":[{\"request_index\":0,\"value\":{\"locator\":{\"source\":\"engine_artifact\",\"artifact_id\":\"art_hasAxlgEEPksG4LaOvfQ\",\"catalog_revision\":21,\"expected_sha256\":\"dfbf701acde2157532ed6d054cbfea4bcb23ef07fa33faf456a16de5ac0d289b\"},\"media_type\":\"application/json\",\"byte_start\":15970,\"byte_end\":16018,\"next_offset\":null,\"total_bytes\":16018,\"complete\":true,\"sha256\":\"dfbf701acde2157532ed6d054cbfea4bcb23ef07fa33faf456a16de5ac0d289b\",\"text\":\"4e134e92c928bac95d5667c25d3001398d46b3c53e1\\\"}}]}\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_09FD_OWsyWw38rup\",\"artifact_read_ref\":\"ar_xGrr5Dc6bCfv_fF7\"}}],\"complete\":true,\"next_reads\":[]}",
+    "title": "Artifacts (1)",
+    "metadata": {
+      "truncated": false
+    },
+    "time": {
+      "start": 1792906438973,
+      "end": 1792906439617
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_04fcfd742de5b58d016add94c6e424819180435830d8fbb46d"
+    }
+  },
+  "orderKey": "v1:0001792906439443:0000000000000031:0000000000000000:part:prt_g0VZ2KhZt0049PIhmQhb"
+}

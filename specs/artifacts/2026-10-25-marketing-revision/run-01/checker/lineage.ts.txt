@@ -1,0 +1,24 @@
+import assert from 'node:assert/strict'
+import fs from 'node:fs'
+import path from 'node:path'
+const e='C:/Users/hengu/.codex/opencorvus-marketing-revision-20261025-01/evidence'
+const read=(p:string)=>JSON.parse(fs.readFileSync(path.join(e,p),'utf8'))
+const first=read('initial-verification/current.json'),final=read('revised-verification/current.json'),accepted=read('feedback-accepted.json').result,attempt=read('feedback-attempt.json')
+assert.equal(first.task.id,final.task.id);assert.deepEqual(first.task.packageRevisionBinding,final.task.packageRevisionBinding)
+assert.equal(final.task.executionLifecycle.epoch,2);assert.equal(final.task.executionLifecycle.status,'completed');assert.equal(final.task.executionLifecycle.previousTerminal.terminalEventID,first.task.executionLifecycle.terminalEventID)
+const original=final.conversation.transcript.find((m:any)=>m.info.id===accepted.user_message.info.id);assert(original)
+const part=original.parts.find((p:any)=>p.id===accepted.user_message.parts[0].id);assert(part);assert.equal(part.text,attempt.body.text)
+const before=first.conversation.board.executionProjection.occurrences,after=final.conversation.board.executionProjection.occurrences
+const firstWriters=before.filter((o:any)=>o.agent==='marketing-growth-campaign-writer'),writers=after.filter((o:any)=>o.agent==='marketing-growth-campaign-writer'&&o.preparedAt>=final.task.executionLifecycle.openedAt)
+assert(firstWriters.length>0&&writers.length>0);const sessionID=firstWriters[0].sessionID
+for(const o of [...firstWriters,...writers]){assert.equal(o.sessionID,sessionID);assert.equal(o.latest.status.type,'terminal');assert.equal(o.latest.status.reason,'completed')}
+const reviewers=after.filter((o:any)=>o.agent==='marketing-growth-fact-checker'&&o.preparedAt>=final.task.executionLifecycle.openedAt)
+assert(reviewers.length>0);for(const o of reviewers){assert.equal(o.latest.status.type,'terminal');assert.equal(o.latest.status.reason,'completed');assert.notEqual(o.sessionID,sessionID)}
+const toolFacts=read('tool-facts/index.json'),continuations=[]
+for(const entry of toolFacts.filter((p:any)=>p.tool==='dispatch_agents')){const full=read(`tool-facts/${entry.partID}.json`);for(const d of full.state.input.dispatches){if(d.dispatch.target==='marketing-growth-campaign-writer'&&full.state.time.start>=final.task.executionLifecycle.openedAt){assert.equal(d.dispatch.turn.kind,'continuation');continuations.push({partID:full.id,messageID:full.messageID,sessionID:full.sessionID,time:full.state.time,dispatch:d.dispatch})}}}
+assert(continuations.length>0)
+const types=['growth-brief','evidence-dossier','audience-analysis','channel-analysis','growth-strategy','audit','campaign-plan'].map(s=>'marketing-growth/'+s)
+const firstArtifacts=read('initial-verification/verification.json').artifacts
+for(const type of types){const actual=firstArtifacts.find((a:any)=>a.type===type);assert(actual);assert.equal(actual.producer.expert_squad_id,'marketing-growth');assert.equal(actual.producer.owner_kind,'projected-worker')}
+const result={taskID:final.task.id,packageRevision:final.task.packageRevisionBinding,firstLifecycle:first.task.executionLifecycle,finalLifecycle:final.task.executionLifecycle,feedback:{messageID:original.info.id,partID:part.id,source:attempt.body.source,ingressID:accepted.ingress_id,literalTextEquality:true},writerSessionID:sessionID,firstWriterOccurrences:firstWriters,revisionWriterOccurrences:writers,revisionIndependentReviewOccurrences:reviewers,revisionContinuationCalls:continuations,initialAllSevenTypes:types,source:'Actual persisted public Task/conversation facts, first and final frozen responses, exact full canonical dispatch Tool parts'}
+fs.writeFileSync(path.join(e,'lineage-verification.json'),JSON.stringify(result,null,2));console.log(JSON.stringify({sameTask:true,samePackage:true,firstEpoch:1,finalEpoch:2,writerSessionID:sessionID,revisionWriterOccurrences:writers.length,independentReviewerOccurrences:reviewers.length,continuationCalls:continuations.length}))

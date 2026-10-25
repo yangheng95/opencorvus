@@ -122,6 +122,28 @@ export function observeSubagentConversationLiveEvent(
 ): SubagentConversationLiveProjection {
   const type = liveEventType(event)
   const identity = liveEventIdentity(event)
+  if (type === "message.moved" && current.sessionID) {
+    const { sourceSessionID, info, parts: incomingParts } = identity.properties
+    if (!sourceSessionID || !info?.id || !info.sessionID || !Array.isArray(incomingParts) || sourceSessionID === info.sessionID) {
+      throw new Error("member conversation Move requires original source and complete target bundle")
+    }
+    if (current.sessionID === sourceSessionID) {
+      return { ...current, removedMessages: { ...current.removedMessages, [info.id]: event } }
+    }
+    if (current.sessionID !== info.sessionID) return current
+    const parts = Object.fromEntries(Object.entries(current.parts).filter(([, part]) => part.messageID !== info.id))
+    for (const part of incomingParts) {
+      if (!part?.id || part.messageID !== info.id || part.sessionID !== info.sessionID) {
+        throw new Error("member conversation Move Part ownership mismatch")
+      }
+      parts[livePartKey(info.id, part.id)] = {
+        messageID: info.id, partID: part.id, snapshot: { ...part }, fields: {},
+      }
+    }
+    const removedMessages = { ...current.removedMessages }
+    delete removedMessages[info.id]
+    return { ...current, messageInfos: { ...current.messageInfos, [info.id]: { ...info } }, parts, removedMessages }
+  }
   if (!current.sessionID || identity.sessionID !== current.sessionID || !identity.messageID) return current
 
   if (type === "message.updated") {

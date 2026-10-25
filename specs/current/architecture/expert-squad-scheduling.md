@@ -2,6 +2,13 @@
 
 Expert Squads define identity and authorized capabilities. A Task freezes its selected package revision and projects exact Agent identities, runtime templates, tools and Skills from that revision. A label, generated expert name, workflow node or role description cannot replace the projected Agent identity or enlarge its grants.
 
+Fact-Check uses its actual projected tool declarations for independent inspection
+and computation, including read-only commands when already granted. Its core
+template does not maintain a second tool inventory. Source evidence, business
+deliverables, code, configuration, Git history, memory and external state remain
+outside its mutation responsibility. Temporary verification output belongs in
+Task-owned scratch; the real review and Artifact tools retain judgment authority.
+
 Without an explicit Squad selection, the native creator first searches installed canonical candidates through its occurrence-bound `capability_search` and reads promising candidates with the directly available `panel_expert_squad_inspect`. It prefers a Squad only when the complete outcome, actual capabilities, ownership and acceptance boundary are very well matched. If candidate search and inspection establish no very well matched Squad, it selects the embedded `dynamic` package to generate Task-local experts. This decision belongs to the real streamed creator conversation before Task package binding; the Host does not classify prose, choose a fuzzy winner or add a selection gate.
 
 The canonical configuration default is Dynamic, so the generation capability is available without an external payload install. That default does not instruct creators to skip search. Explicit operator selection wins; existing Tasks retain their immutable package bytes. Dynamic generates Task-local expert names, responsibilities, effect boundaries and expected results, then maps each expert to its real `dynamic-generalist` or `dynamic-builder` capability envelope and independent Session/dispatch. It does not generate a second runtime identity, silently install a package or change the Task's selected Squad. Persistent package authoring remains an explicitly selected Generate Expert Squads capability.

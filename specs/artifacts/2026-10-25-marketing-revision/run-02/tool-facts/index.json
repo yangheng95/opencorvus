@@ -1,0 +1,2683 @@
+[
+  {
+    "messageID": "msg_hr7aXxlBYPTi4DQA4Zhx",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2GIY900HWvPk3fAh",
+    "tool": "artifact_snapshot",
+    "status": "completed",
+    "title": "Published Artifact snapshot (4 files)",
+    "time": {
+      "start": 1792905389453,
+      "end": 1792905390976
+    }
+  },
+  {
+    "messageID": "msg_hr7aXxlBYPTi4DQA4Zhx",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2GNMx00wp1utOl4p",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (4)",
+    "time": {
+      "start": 1792905407979,
+      "end": 1792905411034
+    }
+  },
+  {
+    "messageID": "msg_hr7aXxlBYPTi4DQA4Zhx",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2GOy600g2AbBtPOE",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (1)",
+    "time": {
+      "start": 1792905414126,
+      "end": 1792905414748
+    }
+  },
+  {
+    "messageID": "msg_hr7aXxlBYPTi4DQA4Zhx",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2GZKG00EPorrYEMH",
+    "tool": "dispatch_agents",
+    "status": "completed",
+    "title": "Settled frontier (1/1)",
+    "time": {
+      "start": 1792905453940,
+      "end": 1792905465577
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2GhAn00JqrpSS0X7",
+    "sessionID": "ses_h1Ivk2pQX76lHzYnbEwI",
+    "agent": "marketing-growth-planner",
+    "partID": "prt_g0VZ2GiZp00zmv7oYcVC",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (2)",
+    "time": {
+      "start": 1792905489501,
+      "end": 1792905490339
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Gmq600tQQ3TuX0w",
+    "sessionID": "ses_h1Ivk2pQX76lHzYnbEwI",
+    "agent": "marketing-growth-planner",
+    "partID": "prt_g0VZ2GoDr00757xC0xU2",
+    "tool": "pkg_tool__marketing_growth_shared_publish_marketin__9d2b7cfbc799",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792905511203,
+      "end": 1792905552963
+    }
+  },
+  {
+    "messageID": "msg_hrkgiR2mBQugSbiIdD7V",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2H51900Y9K7NP6re",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792905575763,
+      "end": 1792905575945
+    }
+  },
+  {
+    "messageID": "msg_hrkgiR2mBQugSbiIdD7V",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2H7Ej00m74SR5JLw",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (1)",
+    "time": {
+      "start": 1792905584293,
+      "end": 1792905585354
+    }
+  },
+  {
+    "messageID": "msg_hrkgiR2mBQugSbiIdD7V",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2H9lF003vBDhxqn2",
+    "tool": "dispatch_agents",
+    "status": "completed",
+    "title": "Settled frontier (1/1)",
+    "time": {
+      "start": 1792905593997,
+      "end": 1792905603887
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2HFWM00ijsknJM79",
+    "sessionID": "ses_hlWsp1ODDcJVHxYWj1gJ",
+    "agent": "marketing-growth-evidence-researcher",
+    "partID": "prt_g0VZ2HGqw004doBflHPO",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (3)",
+    "time": {
+      "start": 1792905621258,
+      "end": 1792905622266
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2HH8E00PsqGhVV7p",
+    "sessionID": "ses_hlWsp1ODDcJVHxYWj1gJ",
+    "agent": "marketing-growth-evidence-researcher",
+    "partID": "prt_g0VZ2HHne00lKRV9WTza",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (1)",
+    "time": {
+      "start": 1792905624898,
+      "end": 1792905625448
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2HIgl00w1vatEjwX",
+    "sessionID": "ses_hlWsp1ODDcJVHxYWj1gJ",
+    "agent": "marketing-growth-evidence-researcher",
+    "partID": "prt_g0VZ2HJra00t2BC1huOc",
+    "tool": "capability_search",
+    "status": "error",
+    "failure": {
+      "kind": "tool-input-invalid",
+      "name": "tool-input-invalid",
+      "message": "AI_InvalidToolInputError: Invalid input for tool capability_search: AI_TypeValidationError: Type validation failed: Value: {\"exact_refs\":[{\"kind\":\"tool\",\"source\":\"package\",\"owner_ref\":\"marketing-growth\",\"local_ref\":\"pkg_tool__marketing_growth_shared_publish_marketin__9d2b7cfbc799\"}],\"queries\":[],\"limit\":1}.\nError message: [\n  {\n    \"origin\": \"array\",\n    \"code\": \"too_small\",\n    \"minimum\": 1,\n    \"inclusive\": true,\n    \"path\": [\n      \"queries\"\n    ],\n    \"message\": \"Too small: expected array to have >=1 items\"\n  }\n]",
+      "originSite": "session.processor.tool-error",
+      "classification": "tool-input-invalid",
+      "data": {
+        "toolCallId": "call_f5bff34c51854674b7da3930c4cd1214",
+        "toolName": "capability_search"
+      }
+    },
+    "time": {
+      "start": 1792905632830,
+      "end": 1792905633309
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2IMRe00vgkJdE4ea",
+    "sessionID": "ses_hlWsp1ODDcJVHxYWj1gJ",
+    "agent": "marketing-growth-evidence-researcher",
+    "partID": "prt_g0VZ2INEq007qHsD9Pvk",
+    "tool": "pkg_tool__marketing_growth_shared_publish_marketin__9d2b7cfbc799",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792905884132,
+      "end": 1792905908798
+    }
+  },
+  {
+    "messageID": "msg_hW7hdH49SRWskua06RnU",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2IYBr00dPYe6DBDL",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792905926231,
+      "end": 1792905926791
+    }
+  },
+  {
+    "messageID": "msg_hW7hdH49SRWskua06RnU",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2IaIL00bHNbiy9oi",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (1)",
+    "time": {
+      "start": 1792905934321,
+      "end": 1792905934979
+    }
+  },
+  {
+    "messageID": "msg_hW7hdH49SRWskua06RnU",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2IdHX00GIScHi5Av",
+    "tool": "dispatch_agents",
+    "status": "completed",
+    "title": "Settled frontier (2/2)",
+    "time": {
+      "start": 1792905945803,
+      "end": 1792905966692
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2IlsM00sAgZi5FqV",
+    "sessionID": "ses_hIv4tpYGj01O1mo4NY6G",
+    "agent": "marketing-growth-channel-analyst",
+    "partID": "prt_g0VZ2ImUJ00Q6HWHGDAV",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (4)",
+    "time": {
+      "start": 1792905981191,
+      "end": 1792905982463
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Impv00PCVbrDB3G",
+    "sessionID": "ses_hIv4tpYGj01O1mo4NY6G",
+    "agent": "marketing-growth-channel-analyst",
+    "partID": "prt_g0VZ2InLu00NISTgL1IQ",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (2)",
+    "time": {
+      "start": 1792905984514,
+      "end": 1792905985812
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Io6z00ASuXHzMec",
+    "sessionID": "ses_hcoMooPAaeV3LIOyFLE7",
+    "agent": "marketing-growth-audience-analyst",
+    "partID": "prt_g0VZ2Ip9O0099jhbgd1E",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (4)",
+    "time": {
+      "start": 1792905991426,
+      "end": 1792905992503
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2IpRu009Xmih9GPb",
+    "sessionID": "ses_hcoMooPAaeV3LIOyFLE7",
+    "agent": "marketing-growth-audience-analyst",
+    "partID": "prt_g0VZ2IqE500LD5j12Yrp",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (2)",
+    "time": {
+      "start": 1792905995561,
+      "end": 1792905996512
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Ivhg00y8EN7xxBF",
+    "sessionID": "ses_hIv4tpYGj01O1mo4NY6G",
+    "agent": "marketing-growth-channel-analyst",
+    "partID": "prt_g0VZ2IyMt003ufsKQ1Pv",
+    "tool": "pkg_tool__marketing_growth_shared_publish_marketin__9d2b7cfbc799",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792906026859,
+      "end": 1792906099466
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2IwdQ00yZ8aXOSEQ",
+    "sessionID": "ses_hcoMooPAaeV3LIOyFLE7",
+    "agent": "marketing-growth-audience-analyst",
+    "partID": "prt_g0VZ2Iy5300stKUxlr9F",
+    "tool": "pkg_tool__marketing_growth_shared_publish_marketin__9d2b7cfbc799",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792906025753,
+      "end": 1792906076389
+    }
+  },
+  {
+    "messageID": "msg_hUtLUTLUznd9ytgnZWz2",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2JLc900UMVKzyORo",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792906116217,
+      "end": 1792906117438
+    }
+  },
+  {
+    "messageID": "msg_hUtLUTLUznd9ytgnZWz2",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2JO9v00YS1kCtuVw",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (2)",
+    "time": {
+      "start": 1792906125999,
+      "end": 1792906126982
+    }
+  },
+  {
+    "messageID": "msg_hUtLUTLUznd9ytgnZWz2",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2JPCk00ooM2mm5xt",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (1)",
+    "time": {
+      "start": 1792906130018,
+      "end": 1792906130626
+    }
+  },
+  {
+    "messageID": "msg_hUtLUTLUznd9ytgnZWz2",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2JTON00Sx6zmQc5V",
+    "tool": "dispatch_agents",
+    "status": "completed",
+    "title": "Settled frontier (1/1)",
+    "time": {
+      "start": 1792906146115,
+      "end": 1792906161690
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Jd3K00CQQcfTCck",
+    "sessionID": "ses_hVtsNPrkcMSjQeZVsODu",
+    "agent": "marketing-growth-strategist",
+    "partID": "prt_g0VZ2Jdr400sb1B2KVkR",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (4)",
+    "time": {
+      "start": 1792906186334,
+      "end": 1792906187762
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2JeGy005mU4Ufelp",
+    "sessionID": "ses_hVtsNPrkcMSjQeZVsODu",
+    "agent": "marketing-growth-strategist",
+    "partID": "prt_g0VZ2Jezi007JhgSvfRd",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (4)",
+    "time": {
+      "start": 1792906190714,
+      "end": 1792906192708
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2JjBs006rAcdhETV",
+    "sessionID": "ses_hVtsNPrkcMSjQeZVsODu",
+    "agent": "marketing-growth-strategist",
+    "partID": "prt_g0VZ2JkPt00Z3FkXgpQx",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (3)",
+    "time": {
+      "start": 1792906211557,
+      "end": 1792906212878
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2JuQE00wXOqO07l3",
+    "sessionID": "ses_hVtsNPrkcMSjQeZVsODu",
+    "agent": "marketing-growth-strategist",
+    "partID": "prt_g0VZ2JxHk00Uf5U3nOWL",
+    "tool": "pkg_tool__marketing_growth_shared_publish_marketin__9d2b7cfbc799",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792906261024,
+      "end": 1792906336781
+    }
+  },
+  {
+    "messageID": "msg_h0aZo4DBFW3Uzyv7f0DE",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2KQRL00DFqvFsffg",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792906373095,
+      "end": 1792906373748
+    }
+  },
+  {
+    "messageID": "msg_h0aZo4DBFW3Uzyv7f0DE",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2KTZq00TcSPknVhD",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (1)",
+    "time": {
+      "start": 1792906385154,
+      "end": 1792906385930
+    }
+  },
+  {
+    "messageID": "msg_h0aZo4DBFW3Uzyv7f0DE",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2KWQy003XND2i2GN",
+    "tool": "dispatch_agents",
+    "status": "completed",
+    "title": "Settled frontier (1/1)",
+    "time": {
+      "start": 1792906396136,
+      "end": 1792906407250
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Kd28006a1upfTib",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2Kdg000077f3QFUD",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (5)",
+    "time": {
+      "start": 1792906423976,
+      "end": 1792906425392
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Ke4900gNn7yWu0t",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2KeqZ002fOhlXS25",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (5)",
+    "time": {
+      "start": 1792906428475,
+      "end": 1792906430708
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2KfSY00IxRuBSij8",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2Kg6k00qlcfLc0oj",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (4)",
+    "time": {
+      "start": 1792906433322,
+      "end": 1792906435430
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2KggE00lKBD8rBiL",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2KhZt0049PIhmQhb",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (1)",
+    "time": {
+      "start": 1792906438973,
+      "end": 1792906439617
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Kiot00ExwAPVukN",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2KjUc00SzkrSCv3Y",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (2)",
+    "time": {
+      "start": 1792906446334,
+      "end": 1792906447155
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2KjjP00Ayxc8Ic27",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2KkQ500d9dj32NDK",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "Task participant evidence",
+    "time": {
+      "start": 1792906449897,
+      "end": 1792906450829
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2KyIx00gNpRrYvyI",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2KzNY00RSjpKl4Dk",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "Task participant evidence",
+    "time": {
+      "start": 1792906507400,
+      "end": 1792906509552
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Kzy500q0EvvSUVu",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2L0uK00eK5Gy41rx",
+    "tool": "record_fact_check_review",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792906513276,
+      "end": 1792906531793
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2L5n600QeqUUk6Iv",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2L7J300XUV3DEe8j",
+    "tool": "pkg_tool__marketing_growth_shared_publish_marketin__9d2b7cfbc799",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792906537873,
+      "end": 1792906580693
+    }
+  },
+  {
+    "messageID": "msg_hV5nm1pwiWhofxAKO32I",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2LNgB00dWPlmXy1C",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792906600811,
+      "end": 1792906601461
+    }
+  },
+  {
+    "messageID": "msg_hV5nm1pwiWhofxAKO32I",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2LQ8T00Y49wf5uyN",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (1)",
+    "time": {
+      "start": 1792906610253,
+      "end": 1792906610914
+    }
+  },
+  {
+    "messageID": "msg_hV5nm1pwiWhofxAKO32I",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2LTVL00k7nVP0vPI",
+    "tool": "dispatch_agents",
+    "status": "completed",
+    "title": "Settled frontier (1/1)",
+    "time": {
+      "start": 1792906623203,
+      "end": 1792906649760
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Lf9d00UtnX19Wap",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2LgTK00w0hXVQKQQ",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (4)",
+    "time": {
+      "start": 1792906673050,
+      "end": 1792906674872
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Lh0m0023ZQcg2dZ",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2Li9A00g3dwRREUR",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (2)",
+    "time": {
+      "start": 1792906679488,
+      "end": 1792906680613
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2LiUD00JxSiA2UoT",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2Ljc700k2yCi3y36",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (4)",
+    "time": {
+      "start": 1792906685127,
+      "end": 1792906687184
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2LkCF00B6MtLaJrL",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2LlAW00R6WGHHV8G",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (4)",
+    "time": {
+      "start": 1792906691104,
+      "end": 1792906693271
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Llm900y5FYuhAHf",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2Lmcz00TpUYhqBnX",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (1)",
+    "time": {
+      "start": 1792906696713,
+      "end": 1792906697382
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2LohJ0019J1tWph0",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2Lplv00yLhKiZUaq",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (2)",
+    "time": {
+      "start": 1792906708799,
+      "end": 1792906709728
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Lq3A00julRPT2Bk",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2Lr0u00JxzOxgW6V",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (1)",
+    "time": {
+      "start": 1792906713572,
+      "end": 1792906714722
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2LrML00AaQV9xECJ",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2LsKA00Lga5L4Sby",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "Task participant evidence",
+    "time": {
+      "start": 1792906718610,
+      "end": 1792906719639
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2M2z300TK3zeeu2U",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2M3jh00K8kmpo57Z",
+    "tool": "read",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792906762477,
+      "end": 1792906762807
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2M3rb0091I3BttPC",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2M4gl00hMz2dkAxA",
+    "tool": "bash",
+    "status": "completed",
+    "title": "检查制作前工作区是否存在改动",
+    "exit": 0,
+    "time": {
+      "start": 1792906766139,
+      "end": 1792906767152
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2M4yo00Zjykw5vGo",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2M8Dq00ODztCTOZQ",
+    "tool": "apply_patch",
+    "status": "completed",
+    "title": "Success. Updated the following files:\nA outputs/growth-plan.md\nA qa/scratch/build_plan.py",
+    "time": {
+      "start": 1792906779722,
+      "end": 1792906905519
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2MfNM00kqrIrtl6U",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2MnPv00KBJvs44Xh",
+    "tool": "bash",
+    "status": "completed",
+    "title": "确认文档生成与验收记录父目录",
+    "exit": 0,
+    "time": {
+      "start": 1792906938075,
+      "end": 1792906949270
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Mqb70079fmbXomA",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2MyVV00OaY8XnXL4",
+    "tool": "bash",
+    "status": "completed",
+    "title": "生成纵向Word并真实解析比对正文",
+    "exit": 1,
+    "time": {
+      "start": 1792906980705,
+      "end": 1792906981529
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2MylR00P1T2JOXbP",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2N3N000FgeSV3WlO",
+    "tool": "apply_patch",
+    "status": "completed",
+    "title": "Success. Updated the following files:\nM qa/scratch/build_plan.py",
+    "time": {
+      "start": 1792906999398,
+      "end": 1792907063856
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2NKBR00ae0qTW8Vc",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2NQLz00WxioKSido",
+    "tool": "bash",
+    "status": "completed",
+    "title": "移除模板标题边框后重新生成比对",
+    "exit": 0,
+    "time": {
+      "start": 1792907087747,
+      "end": 1792907089118
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2NQmV002ChZ9Igl8",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2NS2900z5cbQiZCq",
+    "tool": "bash",
+    "status": "completed",
+    "title": "实际渲染待审Word为PDF及全部页图",
+    "exit": 0,
+    "time": {
+      "start": 1792907094205,
+      "end": 1792907128474
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2NcGK00ixy9f3UIn",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2NdG000E1ukB3p1s",
+    "tool": "read",
+    "status": "completed",
+    "title": "qa\\initial",
+    "time": {
+      "start": 1792907137348,
+      "end": 1792907137791
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2NdSW0077QDHJyLt",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2Nes500mN6Z5R5Fa",
+    "tool": "read",
+    "status": "completed",
+    "title": "qa\\initial\\page-1.png",
+    "time": {
+      "start": 1792907143553,
+      "end": 1792907144126
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2NfCY00F3ZjvysYG",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2NgSF00tlfAH68zb",
+    "tool": "read",
+    "status": "completed",
+    "title": "qa\\initial\\page-2.png",
+    "time": {
+      "start": 1792907149639,
+      "end": 1792907150167
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Ngl1009epOL4k4E",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2NiwD00pq545N6dF",
+    "tool": "read",
+    "status": "completed",
+    "title": "qa\\initial\\page-3.png",
+    "time": {
+      "start": 1792907159185,
+      "end": 1792907159834
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2NjG300bSytlXSCz",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2Nm0S00luukaBVCv",
+    "tool": "read",
+    "status": "completed",
+    "title": "qa\\initial\\page-4.png",
+    "time": {
+      "start": 1792907170980,
+      "end": 1792907171565
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2NmHq00BJnB7MmSN",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2NolF00c86ScxpP8",
+    "tool": "read",
+    "status": "completed",
+    "title": "qa\\initial\\page-5.png",
+    "time": {
+      "start": 1792907181569,
+      "end": 1792907182675
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2NpIy00pC9O8MYS5",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2NuqV002Mxq9D8st",
+    "tool": "read",
+    "status": "completed",
+    "title": "outputs\\growth-plan.md",
+    "time": {
+      "start": 1792907204959,
+      "end": 1792907205436
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Nv3y00rBf8Ufk3E",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2Ny5T003cV4gE9pK",
+    "tool": "apply_patch",
+    "status": "completed",
+    "title": "Success. Updated the following files:\nA qa/scratch/page-observations.json",
+    "time": {
+      "start": 1792907217419,
+      "end": 1792907234062
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2O2Sp00ig706JJV5",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2O4T700mtrhIAs5O",
+    "tool": "read",
+    "status": "completed",
+    "title": "qa\\scratch\\content-check.json",
+    "time": {
+      "start": 1792907241949,
+      "end": 1792907242447
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2O4dY005uj14GcSo",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2O6vL000nKqU8PmM",
+    "tool": "bash",
+    "status": "completed",
+    "title": "核查待审文件与内部验收资源范围",
+    "exit": 0,
+    "time": {
+      "start": 1792907251387,
+      "end": 1792907252908
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2O7OK000H0IyMwGr",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2O98f00jZqmyrYZa",
+    "tool": "bash",
+    "status": "completed",
+    "title": "核查已有差异及仓库提交信息风格",
+    "exit": 0,
+    "time": {
+      "start": 1792907259901,
+      "end": 1792907261174
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2O9Vh00RC8Y80F3L",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2OCTH00YBlB0H3Pg",
+    "tool": "bash",
+    "status": "completed",
+    "title": "暂存待审业务候选与本地同正文镜像",
+    "exit": 0,
+    "time": {
+      "start": 1792907272711,
+      "end": 1792907273701
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2OCkx00IU12Qc4JN",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2OEPg00nUHCtx1cG",
+    "tool": "bash",
+    "status": "completed",
+    "title": "暂存本次确切内部验收记录与真实页图",
+    "exit": 0,
+    "time": {
+      "start": 1792907280176,
+      "end": 1792907281804
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2OErr007RMdALZxr",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2OGun00PMBGNwTWM",
+    "tool": "bash",
+    "status": "completed",
+    "title": "确认暂存清单及文本格式无误",
+    "exit": 0,
+    "time": {
+      "start": 1792907289793,
+      "end": 1792907290792
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2OHCk00qP6SJVAia",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2OInn00bJmOMDI1R",
+    "tool": "bash",
+    "status": "completed",
+    "title": "保存待审检查点而非正式交付发布",
+    "exit": 0,
+    "time": {
+      "start": 1792907297047,
+      "end": 1792907298341
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2OJAQ00cWOqivG6h",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2OLHc00DRJYkhIFL",
+    "tool": "bash",
+    "status": "completed",
+    "title": "确认待审检查点提交后工作区干净",
+    "exit": 0,
+    "time": {
+      "start": 1792907306584,
+      "end": 1792907307242
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2OLU900o5Wl6092y",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2ONle00wONvPVpLt",
+    "tool": "artifact_snapshot",
+    "status": "completed",
+    "title": "Published Artifact snapshot (2 files)",
+    "time": {
+      "start": 1792907316134,
+      "end": 1792907316900
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2ONzp00NJwnxztyg",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2OQ5j005L2fimJNG",
+    "tool": "artifact_snapshot",
+    "status": "completed",
+    "title": "Published Artifact snapshot (10 files)",
+    "time": {
+      "start": 1792907325067,
+      "end": 1792907327074
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2OQfS00fYGsId60r",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2OTPW00uOAkzwbEo",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (2)",
+    "time": {
+      "start": 1792907337826,
+      "end": 1792907338983
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2OTkw00IUuFDU6td",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2OVqf00kFon0wcmM",
+    "tool": "artifact_publish",
+    "status": "completed",
+    "title": "Published marketing-growth/campaign-plan-review-materials",
+    "time": {
+      "start": 1792907347197,
+      "end": 1792907358691
+    }
+  },
+  {
+    "messageID": "msg_hvhvpCBXSltrto2RuwTK",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2Ovaj00CPg7hOEUR",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792907446153,
+      "end": 1792907454248
+    }
+  },
+  {
+    "messageID": "msg_hvhvpCBXSltrto2RuwTK",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2PlHJ002jaaHHVYO",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (2)",
+    "time": {
+      "start": 1792907644837,
+      "end": 1792907646079
+    }
+  },
+  {
+    "messageID": "msg_hvhvpCBXSltrto2RuwTK",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2PrEU002SzmPQMUB",
+    "tool": "dispatch_agents",
+    "status": "completed",
+    "title": "Settled frontier (1/1)",
+    "time": {
+      "start": 1792907667726,
+      "end": 1792907684144
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Pvb100mucK8yhp2",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2Px8700z7k2qSl8S",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "Task participant evidence",
+    "time": {
+      "start": 1792907690395,
+      "end": 1792907691888
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2PyVi00XDptHytgH",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2PzCj00XrjnKDNCP",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (5)",
+    "time": {
+      "start": 1792907698369,
+      "end": 1792907700101
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2PzgU004xfQ6wzAR",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2Q0hi00Mw2khYpA9",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (2)",
+    "time": {
+      "start": 1792907704134,
+      "end": 1792907705278
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Q11q00TCo44jzrq",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2Q1pR00yRdVV7O06",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (4)",
+    "time": {
+      "start": 1792907708457,
+      "end": 1792907711235
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Q2bn00SpHDCJB0g",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2Q5FE00a1cJfsaT9",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (5)",
+    "time": {
+      "start": 1792907721588,
+      "end": 1792907725423
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Q6JM00cd59krQ17",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2Q9eA00x1XDrDTx1",
+    "tool": "read",
+    "status": "completed",
+    "title": "outputs",
+    "time": {
+      "start": 1792907738510,
+      "end": 1792907739408
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Q9ua003BuHotBE2",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2QCU100cbj478LxA",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (2)",
+    "time": {
+      "start": 1792907749413,
+      "end": 1792907751953
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2QDBU00ISowWfeQl",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2QHWH00pJsDLxYfP",
+    "tool": "bash",
+    "status": "completed",
+    "title": "独立解析确切Word并比较完整有序正文及版式",
+    "exit": 0,
+    "time": {
+      "start": 1792907768773,
+      "end": 1792907799596
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2QPZE00QIoBfTMer",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2QV2900ueEZfYRAe",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "Task participant evidence",
+    "time": {
+      "start": 1792907820721,
+      "end": 1792907823024
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Qaes00QpfMac0AZ",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2QdWd00BiuGkr6ai",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (1)",
+    "time": {
+      "start": 1792907853363,
+      "end": 1792907855054
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Qe1D00VjiDWtSAR",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2Qi4u00BNYiF5Jar",
+    "tool": "bash",
+    "status": "completed",
+    "title": "从原不可变CSV复算并逐格核对Word数表",
+    "exit": 0,
+    "time": {
+      "start": 1792907870864,
+      "end": 1792907881939
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Qkzo0093TRi0mFW",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2QopF00auH4aD16z",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "Task participant evidence",
+    "time": {
+      "start": 1792907896801,
+      "end": 1792907901844
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2QqAc000Od8KifgK",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2QtlX001P1sCEV1f",
+    "tool": "record_fact_check_review",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792907915791,
+      "end": 1792907941833
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2R0a5003I7y37g6P",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2R3bK00n0SnU2JR0",
+    "tool": "artifact_publish",
+    "status": "completed",
+    "title": "Published marketing-growth/final-file-review",
+    "time": {
+      "start": 1792907953598,
+      "end": 1792908013384
+    }
+  },
+  {
+    "messageID": "msg_hlbrPS2sw9029eKRZ5Lm",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2RR1300NV1ZKe4Aq",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792908043605,
+      "end": 1792908044702
+    }
+  },
+  {
+    "messageID": "msg_hlbrPS2sw9029eKRZ5Lm",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2RhZd00m8brS8GNt",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (1)",
+    "time": {
+      "start": 1792908107253,
+      "end": 1792908108113
+    }
+  },
+  {
+    "messageID": "msg_hlbrPS2sw9029eKRZ5Lm",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2RirR00Xnn4HL26Q",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (1)",
+    "time": {
+      "start": 1792908112200,
+      "end": 1792908113188
+    }
+  },
+  {
+    "messageID": "msg_hlbrPS2sw9029eKRZ5Lm",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2Rll900ByTLlfT7O",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792908123343,
+      "end": 1792908123946
+    }
+  },
+  {
+    "messageID": "msg_hlbrPS2sw9029eKRZ5Lm",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2RmzD00n1BDagzPz",
+    "tool": "dispatch_agents",
+    "status": "completed",
+    "title": "Settled frontier (1/1)",
+    "time": {
+      "start": 1792908128059,
+      "end": 1792908144840
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2S3DV00hBHaxvQW8",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2S5Yu00pvU5F6Hop",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (4)",
+    "time": {
+      "start": 1792908199464,
+      "end": 1792908200993
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2S60100A0R9yekaW",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2S82p00Z8QFCUZus",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (4)",
+    "time": {
+      "start": 1792908209007,
+      "end": 1792908210843
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2S8Z9002Q6jrds2j",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2SAnw00b7uF7BiEo",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (2)",
+    "time": {
+      "start": 1792908219616,
+      "end": 1792908220551
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2SB5h00AGxyLFhd3",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2SDH900RLN8dmViR",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (4)",
+    "time": {
+      "start": 1792908229115,
+      "end": 1792908231542
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2SDwO00fSUg5Gckl",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2SGn300AMbsXJk6g",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (3)",
+    "time": {
+      "start": 1792908242625,
+      "end": 1792908244003
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2SHCg00KvmJ9TtuG",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2SJOR00ks8b55RpZ",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (1)",
+    "time": {
+      "start": 1792908252631,
+      "end": 1792908253473
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2SJfD00KU4CQBJd3",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2SMX800SV5R67B2P",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "Task participant evidence",
+    "time": {
+      "start": 1792908264702,
+      "end": 1792908266146
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Skk600FzrCbILPs",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2SnlJ00FLB6cRbqj",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (1)",
+    "time": {
+      "start": 1792908369369,
+      "end": 1792908370458
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2SrHh00hR0A4KNGO",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2Surc00DRNWe302b",
+    "tool": "bash",
+    "status": "completed",
+    "title": "确认主项目已审文件提交与当前无改动",
+    "exit": 0,
+    "time": {
+      "start": 1792908396668,
+      "end": 1792908398677
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2SvQE00ePbDBK9o9",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2SyX100vvdgmPTCH",
+    "tool": "read",
+    "status": "completed",
+    "title": "artifacts\\marketing-growth\\campaign-plan.md",
+    "time": {
+      "start": 1792908410767,
+      "end": 1792908411702
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Syod00b4h2K2cyE",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2T28R00j5swKDk2A",
+    "tool": "bash",
+    "status": "completed",
+    "title": "只读核验已提交文件与正文镜像一致",
+    "exit": 1,
+    "time": {
+      "start": 1792908424619,
+      "end": 1792908433837
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2T4ZM006STPi53Sd",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2T8Gh00QSN82nPmL",
+    "tool": "bash",
+    "status": "completed",
+    "title": "定位只读核验差异属于文件还是表示",
+    "exit": 0,
+    "time": {
+      "start": 1792908448195,
+      "end": 1792908451995
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2T9IE00KV5SQWlM2",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2TCcS00wYUzR0ilO",
+    "tool": "bash",
+    "status": "completed",
+    "title": "按业务字节及镜像正文合同完成只读比对",
+    "exit": 0,
+    "time": {
+      "start": 1792908464920,
+      "end": 1792908477483
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2TG3o00kFqxf2JFq",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2TR0I00lZrh4yr9R",
+    "tool": "artifact_snapshot",
+    "status": "completed",
+    "title": "Published Artifact snapshot (2 files)",
+    "time": {
+      "start": 1792908520214,
+      "end": 1792908539495
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2TWkQ00ZFUtyxspg",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2TvY200yGvBQLLN6",
+    "tool": "pkg_tool__marketing_growth_shared_publish_marketin__9d2b7cfbc799",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792908637626,
+      "end": 1792908671266
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2U4dI00bd5S0hcjE",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2U8gd0027NeFX884",
+    "tool": "publish_interactive_artifact",
+    "status": "completed",
+    "title": "小型团队文档整理工具：本地营销验证计划",
+    "time": {
+      "start": 1792908688131,
+      "end": 1792908746831
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2UT0o00Si7plYxFO",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2UWok0092qoAZCES",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (1)",
+    "time": {
+      "start": 1792908780890,
+      "end": 1792908782216
+    }
+  },
+  {
+    "messageID": "msg_h13FwTwNO5cYoO18Rukk",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2UgXW00IxcGfnWOK",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792908818262,
+      "end": 1792908819219
+    }
+  },
+  {
+    "messageID": "msg_h13FwTwNO5cYoO18Rukk",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2UjBA00GwvxTsFfM",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (1)",
+    "time": {
+      "start": 1792908828408,
+      "end": 1792908829295
+    }
+  },
+  {
+    "messageID": "msg_h13FwTwNO5cYoO18Rukk",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2UmPv00Li7lHTYY3",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792908840855,
+      "end": 1792908843022
+    }
+  },
+  {
+    "messageID": "msg_h13FwTwNO5cYoO18Rukk",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2UqYs00kTjoFVrQl",
+    "tool": "manage_task",
+    "status": "completed",
+    "title": "Task Completed",
+    "time": {
+      "start": 1792908856786,
+      "end": 1792908870564
+    }
+  },
+  {
+    "messageID": "msg_hX4Tjse3pyVPw86C8myp",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2XOP200e1uuZpTff",
+    "tool": "dispatch_agents",
+    "status": "completed",
+    "title": "Settled frontier (1/1)",
+    "time": {
+      "start": 1792909463528,
+      "end": 1792909483552
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2XcF900BiarlgdD5",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2XeqB00lQ0Qo4rvl",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (3)",
+    "time": {
+      "start": 1792909526715,
+      "end": 1792909530431
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Y3xW00WkP3c5WAZ",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2Y5Wz00mi5TZz0PE",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "Task participant evidence",
+    "time": {
+      "start": 1792909629313,
+      "end": 1792909630313
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Y5sF003zv4ExGuc",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2Y7SN00pqhWQp2Fj",
+    "tool": "read",
+    "status": "completed",
+    "title": "qa\\scratch\\build_plan.py",
+    "time": {
+      "start": 1792909636715,
+      "end": 1792909637776
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Y7ml00cuKVmEM6I",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2YBRU00LSW5T7qxg",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (1)",
+    "time": {
+      "start": 1792909652036,
+      "end": 1792909653092
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2YIXS00T4RBvJSvX",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2YKFh00fWZJwGzIX",
+    "tool": "read",
+    "status": "completed",
+    "title": "tools\\runtime.md",
+    "time": {
+      "start": 1792909685901,
+      "end": 1792909686352
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2YKRp00yjqYft3u7",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2YLkO0086lBA0NFu",
+    "tool": "read",
+    "status": "completed",
+    "title": "tools\\render_docx.py",
+    "time": {
+      "start": 1792909691648,
+      "end": 1792909692402
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2YM0D00vNhMoT1qy",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2YNcC003xH7tr3ND",
+    "tool": "bash",
+    "status": "completed",
+    "title": "检查本轮修订前工作区状态",
+    "exit": 0,
+    "time": {
+      "start": 1792909698828,
+      "end": 1792909700859
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2YOCc00KcsDcVIjc",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2YSk600M1RBPebQU",
+    "tool": "apply_patch",
+    "status": "completed",
+    "title": "Success. Updated the following files:\nA qa/scratch/revise_landscape.py",
+    "time": {
+      "start": 1792909718538,
+      "end": 1792909752563
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Ybfk00tOmRTGfVP",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2YdM200XSpJqckVr",
+    "tool": "bash",
+    "status": "completed",
+    "title": "生成横向Word并核对原始不可变正文",
+    "exit": 0,
+    "time": {
+      "start": 1792909759330,
+      "end": 1792909761627
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Ye3I00Dq5gAeymk",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2YfjN00zeiTHamwN",
+    "tool": "bash",
+    "status": "completed",
+    "title": "实际渲染本轮横向Word及全部页图",
+    "exit": 0,
+    "time": {
+      "start": 1792909768465,
+      "end": 1792909802984
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Yop200RJCrq35JV",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2Yr0I00HAnXHe4ZY",
+    "tool": "read",
+    "status": "completed",
+    "title": "qa\\revised",
+    "time": {
+      "start": 1792909811798,
+      "end": 1792909813039
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2YrOZ001KpMzSGAv",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2Yt6000f7FWJbpSZ",
+    "tool": "read",
+    "status": "completed",
+    "title": "qa\\revised\\page-1.png",
+    "time": {
+      "start": 1792909819840,
+      "end": 1792909820893
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2YtfV00Oloweh6pE",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2YvmO00gvjeeWDJO",
+    "tool": "read",
+    "status": "completed",
+    "title": "qa\\revised\\page-2.png",
+    "time": {
+      "start": 1792909830156,
+      "end": 1792909831125
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Yw9400NbHMdP3wM",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2Z0tU00OAS1kYaGN",
+    "tool": "apply_patch",
+    "status": "completed",
+    "title": "Success. Updated the following files:\nM qa/scratch/revise_landscape.py",
+    "time": {
+      "start": 1792909849816,
+      "end": 1792909853854
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Z27300Ah0VVW5lS",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2Z4XO00ZKPO8pEjK",
+    "tool": "bash",
+    "status": "completed",
+    "title": "调整相邻表宽度后复核冻结正文",
+    "exit": 0,
+    "time": {
+      "start": 1792909863822,
+      "end": 1792909867944
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Z5j700lXnGn7y2D",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2Z7nb00vQL17ihSo",
+    "tool": "bash",
+    "status": "completed",
+    "title": "重新渲染修复相邻表识别的Word",
+    "exit": 0,
+    "time": {
+      "start": 1792909876359,
+      "end": 1792909909870
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2ZGbo00Ey4C7tIT6",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2ZI3e00R4RiDCrh3",
+    "tool": "read",
+    "status": "completed",
+    "title": "qa\\revised\\page-2.png",
+    "time": {
+      "start": 1792909915794,
+      "end": 1792909916583
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2ZIN500KfW9PsIQp",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2ZRCA00Fc862UFk6",
+    "tool": "apply_patch",
+    "status": "error",
+    "failure": {
+      "kind": "tool-execution",
+      "name": "Error",
+      "message": "apply_patch verification failed: Error: Failed to find expected lines in C:\\Users\\hengu\\.codex\\opencorvus-marketing-revision-20261025-02\\project\\qa\\scratch\\revise_landscape.py:\n        if child.tag == qn('w:p'):",
+      "originSite": "session.processor.tool-error",
+      "classification": "tool-execution",
+      "data": {
+        "toolCallId": "call_CJeZLQe3mhc0zj5CzPY9d256",
+        "toolName": "apply_patch"
+      }
+    },
+    "time": {
+      "start": 1792909950918,
+      "end": 1792909954722
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2ZSHy008EKP78M57",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2ZTwx00SUT9CKVdQ",
+    "tool": "read",
+    "status": "completed",
+    "title": "qa\\scratch\\revise_landscape.py",
+    "time": {
+      "start": 1792909961507,
+      "end": 1792909962428
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2ZUHS00s1k9Gkytr",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2ZWWP005wk6yKDoD",
+    "tool": "apply_patch",
+    "status": "completed",
+    "title": "Success. Updated the following files:\nM qa/scratch/revise_landscape.py",
+    "time": {
+      "start": 1792909971393,
+      "end": 1792909979257
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2ZYh6008LjQi0T3d",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2Zb3L00iKQ1qa2SX",
+    "tool": "bash",
+    "status": "completed",
+    "title": "隔开相邻表格并比较全部原有文字",
+    "exit": 0,
+    "time": {
+      "start": 1792909988811,
+      "end": 1792909990950
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2ZblT00VtBRQsHxB",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2Ze5x00sBji8cFpP",
+    "tool": "bash",
+    "status": "completed",
+    "title": "渲染表格分隔后的最终待审横向Word",
+    "exit": 0,
+    "time": {
+      "start": 1792910000505,
+      "end": 1792910032207
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2ZmPq00LvdE430a9",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2ZnrO004clfgCw0L",
+    "tool": "read",
+    "status": "completed",
+    "title": "qa\\revised\\page-1.png",
+    "time": {
+      "start": 1792910038042,
+      "end": 1792910038825
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Zo9g00zZ3EMog2r",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2Zq9D00qv4ZnYAKX",
+    "tool": "read",
+    "status": "completed",
+    "title": "qa\\revised\\page-2.png",
+    "time": {
+      "start": 1792910046835,
+      "end": 1792910048216
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Zqao00A7dOoHBdp",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2Zsbr00m45RI1aq7",
+    "tool": "read",
+    "status": "completed",
+    "title": "qa\\revised\\page-3.png",
+    "time": {
+      "start": 1792910056299,
+      "end": 1792910057373
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2Zsye00aTuP6Jhhq",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2Zv0200nszGV2hhv",
+    "tool": "read",
+    "status": "completed",
+    "title": "qa\\revised\\page-4.png",
+    "time": {
+      "start": 1792910065486,
+      "end": 1792910067431
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2ZvaV00mNammUjZ9",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2a2hK007lqNJ0gpy",
+    "tool": "read",
+    "status": "completed",
+    "title": "qa\\revised\\page-5.png",
+    "time": {
+      "start": 1792910095078,
+      "end": 1792910105802
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2a5aN005iMp75i8d",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2aB6G004vqOFYoiT",
+    "tool": "read",
+    "status": "completed",
+    "title": "qa\\revised\\page-6.png",
+    "time": {
+      "start": 1792910127376,
+      "end": 1792910139622
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2aEOE00f73Q0WOvn",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2aLWP00gNcbtbnxb",
+    "tool": "apply_patch",
+    "status": "completed",
+    "title": "Success. Updated the following files:\nA qa/revised/page-observations.json",
+    "time": {
+      "start": 1792910167437,
+      "end": 1792910187776
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2aQtP00epMTk2vuE",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2aUcc00L45LmrotW",
+    "tool": "read",
+    "status": "completed",
+    "title": "qa\\revised\\content-comparison.json",
+    "time": {
+      "start": 1792910202418,
+      "end": 1792910204154
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2aV8000ujhqpn1sN",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2aXpW00DMClUR4Fq",
+    "tool": "bash",
+    "status": "completed",
+    "title": "检查版式修订涉及的已有文件",
+    "exit": 0,
+    "time": {
+      "start": 1792910214750,
+      "end": 1792910216391
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2aYJR00dpgpyP9Ee",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2aavB00v24ffxc7b",
+    "tool": "bash",
+    "status": "completed",
+    "title": "检查待提交修订与内部验收文件",
+    "exit": 0,
+    "time": {
+      "start": 1792910226633,
+      "end": 1792910227858
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2abMH00moFY7oKlg",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2aeD400Vabng3LQx",
+    "tool": "bash",
+    "status": "completed",
+    "title": "暂存横向Word与完整内部验收证据",
+    "exit": 0,
+    "time": {
+      "start": 1792910239274,
+      "end": 1792910243181
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2afKK00j7hxXkK3J",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2ahyf00GQQMExT8X",
+    "tool": "bash",
+    "status": "completed",
+    "title": "审阅本轮暂存的明确文件范围",
+    "exit": 0,
+    "time": {
+      "start": 1792910253757,
+      "end": 1792910255124
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2aiPk00H9V1D2OZO",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2akjf00bGI3OggyO",
+    "tool": "bash",
+    "status": "completed",
+    "title": "提交横向修订候选及本轮自检证据",
+    "exit": 0,
+    "time": {
+      "start": 1792910264359,
+      "end": 1792910266307
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2alMG00LYJFB0joa",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2apSB00c6mAkeL6v",
+    "tool": "artifact_snapshot",
+    "status": "completed",
+    "title": "Published Artifact snapshot (2 files)",
+    "time": {
+      "start": 1792910282495,
+      "end": 1792910283870
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2apsu00TZ9w5XLUE",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2at1Q00mLWc4wHWa",
+    "tool": "artifact_publish",
+    "status": "completed",
+    "title": "Published marketing-growth/landscape-review-candidates",
+    "time": {
+      "start": 1792910296212,
+      "end": 1792910307785
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2aw6c00XDNQ1vil9",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2aykQ00sRPRxJ2db",
+    "tool": "artifact_snapshot",
+    "status": "completed",
+    "title": "Published Artifact snapshot (11 files)",
+    "time": {
+      "start": 1792910318222,
+      "end": 1792910324412
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2b0Qd00ycyEkEs6W",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2b31y00oXRBGxPQQ",
+    "tool": "artifact_publish",
+    "status": "completed",
+    "title": "Published marketing-growth/landscape-review-evidence",
+    "time": {
+      "start": 1792910334686,
+      "end": 1792910359811
+    }
+  },
+  {
+    "messageID": "msg_hRXqNjI0ysDK1woo6ha0",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2bftL001cG1kT3u0",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792910484067,
+      "end": 1792910484979
+    }
+  },
+  {
+    "messageID": "msg_hRXqNjI0ysDK1woo6ha0",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2bijT00cbfMMd4iX",
+    "tool": "dispatch_agents",
+    "status": "completed",
+    "title": "Settled frontier (1/1)",
+    "time": {
+      "start": 1792910494987,
+      "end": 1792910519499
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2bp8R006y85ArMJh",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2bu7600t2gFWhufy",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "Task participant evidence",
+    "time": {
+      "start": 1792910538736,
+      "end": 1792910542008
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2bzY700at9qjaLiR",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2c2pK00EcNmc6wva",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (3)",
+    "time": {
+      "start": 1792910572230,
+      "end": 1792910575187
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2c3dy00LphFEwlLz",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2c6sp00jOqPndsP3",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (2)",
+    "time": {
+      "start": 1792910587823,
+      "end": 1792910590314
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2cB5O00lgKJHlOlJ",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2cEPi00i0MUnVgtS",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (4)",
+    "time": {
+      "start": 1792910616770,
+      "end": 1792910620849
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2cbYd00Diqw0h7f6",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2cdLE00KiU8LHbfd",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "Task participant evidence",
+    "time": {
+      "start": 1792910712592,
+      "end": 1792910713865
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2cfwV007K8xEqk2E",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2chaO00jcc7PeCKY",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (6)",
+    "time": {
+      "start": 1792910728908,
+      "end": 1792910730535
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2ci6400pFNdQ3ukA",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2cjmF000szKRQi65",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (3)",
+    "time": {
+      "start": 1792910737331,
+      "end": 1792910738989
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2cnkn00wcggqZxui",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2cpuM0004uZoQ5os",
+    "tool": "bash",
+    "status": "completed",
+    "title": "定位首次Word与本轮修订提交",
+    "exit": 0,
+    "time": {
+      "start": 1792910760898,
+      "end": 1792910762521
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2cqO800maXXLsp35",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2crk700UW5sCPEzX",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (5)",
+    "time": {
+      "start": 1792910767951,
+      "end": 1792910770451
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2csRE00VfilMtsSG",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2cvRH00bV1grWcYO",
+    "tool": "bash",
+    "status": "completed",
+    "title": "独立解析原新正文及横向属性和完整PDF",
+    "exit": 1,
+    "time": {
+      "start": 1792910782159,
+      "end": 1792910805459
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2d1X0008OSfE4K3h",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2d5rl00vyxdVOqZe",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "Task participant evidence",
+    "time": {
+      "start": 1792910822241,
+      "end": 1792910825029
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2d6dv00FUyhz9k2c",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2d9X700RokfdcRZ0",
+    "tool": "bash",
+    "status": "completed",
+    "title": "以UTF8完成全文提取及空段样式核查",
+    "exit": 0,
+    "time": {
+      "start": 1792910836337,
+      "end": 1792910844136
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2dFXc007h5j4HJM9",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2dHlV00HuyW4ow43",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (2)",
+    "time": {
+      "start": 1792910867981,
+      "end": 1792910870657
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2dIUa00gFjRkS9S8",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2dKsP00XqNiWWoOE",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "Task participant evidence",
+    "time": {
+      "start": 1792910879941,
+      "end": 1792910882634
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2dLbn00occ6OWbVG",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2dOFN00BFiaVTMeD",
+    "tool": "record_fact_check_review",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792910892897,
+      "end": 1792910914186
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2dTol00PoiWP9drZ",
+    "sessionID": "ses_hT6WN4CemvWvrDYg7sgb",
+    "agent": "marketing-growth-fact-checker",
+    "partID": "prt_g0VZ2dW8W00bMRD2KZLE",
+    "tool": "artifact_publish",
+    "status": "completed",
+    "title": "Published marketing-growth/landscape-file-review",
+    "time": {
+      "start": 1792910923224,
+      "end": 1792910957314
+    }
+  },
+  {
+    "messageID": "msg_hY6iX1QMgIftdM5Z5d03",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2dlzQ00PsLak7KTM",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792910984164,
+      "end": 1792910984848
+    }
+  },
+  {
+    "messageID": "msg_hY6iX1QMgIftdM5Z5d03",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2dp4c004dHSjtwWv",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (1)",
+    "time": {
+      "start": 1792910996018,
+      "end": 1792910996966
+    }
+  },
+  {
+    "messageID": "msg_hY6iX1QMgIftdM5Z5d03",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2dszj00urFxe5VbP",
+    "tool": "dispatch_agents",
+    "status": "completed",
+    "title": "Settled frontier (1/1)",
+    "time": {
+      "start": 1792911011091,
+      "end": 1792911032018
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2eIRu0019yGERWpg",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2eKzg00Zzybnheoh",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (5)",
+    "time": {
+      "start": 1792911118720,
+      "end": 1792911122060
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2eLvn00YFcofPb72",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2eOKH00QAjKqWAw1",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "Task participant evidence",
+    "time": {
+      "start": 1792911131529,
+      "end": 1792911135349
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2ePN9003Qn52hEPL",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2eRoS00ZBMfFu0Ol",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (5)",
+    "time": {
+      "start": 1792911144932,
+      "end": 1792911149800
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2eT8f00aoT8n7WFy",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2eW6B00Y30BK5NSy",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (3)",
+    "time": {
+      "start": 1792911161407,
+      "end": 1792911164733
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2eb83004TlcHQqza",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2edjo00yefiuogch",
+    "tool": "read",
+    "status": "completed",
+    "title": ".opencorvus\\expert-squads\\builtin\\marketing-growth\\tools\\publish-marketing-growth-artifact.ts",
+    "time": {
+      "start": 1792911190772,
+      "end": 1792911192564
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2eeGO00N0x8Ecm5D",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2ehTY00hysyavall",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (6)",
+    "time": {
+      "start": 1792911205140,
+      "end": 1792911210627
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2eiy300GitCjX9aA",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2elpR00jwNAH8MYy",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (1)",
+    "time": {
+      "start": 1792911221873,
+      "end": 1792911223114
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2fJQW003mtQIR9ss",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2fMdy00hXIVWRIgg",
+    "tool": "bash",
+    "status": "completed",
+    "title": "确认正式发布前没有未提交变动",
+    "exit": 0,
+    "time": {
+      "start": 1792911363390,
+      "end": 1792911364964
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2fN7Z00SYoNy4uIq",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2fPpW00NDygm34ax",
+    "tool": "bash",
+    "status": "completed",
+    "title": "只读验证已审确切版本及原有正文保留",
+    "exit": 0,
+    "time": {
+      "start": 1792911375638,
+      "end": 1792911390294
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2fThB00XBaZFalzR",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2fYIR006wUIZvVIj",
+    "tool": "pkg_tool__marketing_growth_shared_publish_marketin__9d2b7cfbc799",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792911408183,
+      "end": 1792911431894
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2feXA00goWp102Kx",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2fihS005FRmE3eUu",
+    "tool": "publish_interactive_artifact",
+    "status": "completed",
+    "title": "本地营销验证计划｜横向修订已独立复核通过（正文冻结）",
+    "time": {
+      "start": 1792911448174,
+      "end": 1792911504739
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2g0uV00JiosIcy7k",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2g4Nt00UtqIU0fqd",
+    "tool": "read",
+    "status": "completed",
+    "title": ".opencorvus\\.r\\tasks\\tsk_g00VZ2GE9C00jkeX1GgT\\sessions\\ses_hEwp3inYGnK5nYF8mpQW",
+    "time": {
+      "start": 1792911531529,
+      "end": 1792911532797
+    }
+  },
+  {
+    "messageID": "msg_g0VZ2g8r500lNe1S1pjf",
+    "sessionID": "ses_hEwp3inYGnK5nYF8mpQW",
+    "agent": "marketing-growth-campaign-writer",
+    "partID": "prt_g0VZ2gCfh0040R27mQa0",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (1)",
+    "time": {
+      "start": 1792911563385,
+      "end": 1792911565010
+    }
+  },
+  {
+    "messageID": "msg_hKfJWyXn5y6ywgEx540s",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2gN1I0067F4WOLNP",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792911603164,
+      "end": 1792911604171
+    }
+  },
+  {
+    "messageID": "msg_hKfJWyXn5y6ywgEx540s",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2gk3P0026qoSZbd0",
+    "tool": "artifact_read",
+    "status": "completed",
+    "title": "Artifacts (1)",
+    "time": {
+      "start": 1792911691707,
+      "end": 1792911692448
+    }
+  },
+  {
+    "messageID": "msg_hKfJWyXn5y6ywgEx540s",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2glTG007Wi0OJytN",
+    "tool": "read_agent_message",
+    "status": "completed",
+    "title": "",
+    "time": {
+      "start": 1792911697154,
+      "end": 1792911699729
+    }
+  },
+  {
+    "messageID": "msg_hKfJWyXn5y6ywgEx540s",
+    "sessionID": "ses_-zUQxjkwvzzB1D7L3tcK",
+    "agent": "orchestrator",
+    "partID": "prt_g0VZ2grft00MG0EsVERh",
+    "tool": "manage_task",
+    "status": "completed",
+    "title": "Task Completed",
+    "time": {
+      "start": 1792911721001,
+      "end": 1792911733779
+    }
+  }
+]

@@ -382,7 +382,11 @@ function validateIncomingFullMessage(info: any, parts: any[], admittedSourceSess
   const existing = messages.get(id) ?? pendingPartFirstMessages.get(id)
   if (!existing) return
   if (existing.sessionID !== sessionID && existing.sessionID !== admittedSourceSessionID) throw new Error(`Full Message replay ${id} current Session owner mismatch`)
-  if (existing.orderKey !== info.orderKey) throw new Error(`Full Message replay ${id} current orderKey mismatch`)
+  // A real Move retires its source owner and carries the target's new timeline
+  // position. Replaying an already-target-owned bundle still requires that key.
+  if (existing.sessionID !== admittedSourceSessionID && existing.orderKey !== info.orderKey) {
+    throw new Error(`Full Message replay ${id} current orderKey mismatch`)
+  }
   const session = requireSessionProjection(existing.sessionID, "Full Message replay")
   if (messages.has(id) && !session.messageIDs.has(id)) throw new Error(`Full Message replay ${id} current membership mismatch`)
   const cardID = session.messageCardIDs.get(id)
@@ -1741,7 +1745,7 @@ function handleMessageMoved(event: any): void {
   }
   validateIncomingFullMessage(info, parts, sourceSessionID)
 
-  const existing = messages.get(messageID)
+  const existing = messages.get(messageID) ?? pendingPartFirstMessages.get(messageID)
   if (existing?.sessionID === sourceSessionID) {
     handleMessageRemoved({
       type: "message.removed",

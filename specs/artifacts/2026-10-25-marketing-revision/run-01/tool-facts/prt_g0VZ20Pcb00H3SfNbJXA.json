@@ -1,0 +1,76 @@
+{
+  "id": "prt_g0VZ20Pcb00H3SfNbJXA",
+  "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+  "messageID": "msg_g0VZ20NsC00lYlizWQnj",
+  "type": "tool",
+  "callID": "call_QfnbcX2SZLLNqTExgLiJADon",
+  "tool": "artifact_read",
+  "state": {
+    "status": "completed",
+    "input": {
+      "reads": [
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_wCTEnrNgVetIq0fF",
+          "byte_offset": 0,
+          "max_bytes": 20000,
+          "delivery": "materialized_file"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_1EsmJOZ2NZZb0UMF",
+          "byte_offset": 0,
+          "max_bytes": 20000,
+          "delivery": "materialized_file"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_9VO8YOYOrFTdrn8q",
+          "byte_offset": 0,
+          "max_bytes": 5000,
+          "delivery": "inline"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_0qTJufNEzWNxy73U",
+          "byte_offset": 0,
+          "max_bytes": 1000,
+          "delivery": "inline"
+        },
+        {
+          "artifact_transport_version": 2,
+          "artifact_locator_ref": "al_jtz5YTFwG5k0JM2w",
+          "byte_offset": 0,
+          "max_bytes": 24576,
+          "delivery": "inline"
+        }
+      ]
+    },
+    "output": "{\"results\":[{\"request_index\":0,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"2d5e2090-241a-5c71-a861-c943e67d16ac\",\"manifest_sha256\":\"a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773\"},\"tree\":\"resources\",\"path\":\"artifacts/marketing-growth/campaign-plan.md\",\"media_type\":\"text/markdown\",\"bytes\":10446,\"sha256\":\"6fe31f3b5f17a9608fb4ea2ec00a05069b8dbfa27902d0ebee3c0833271d981e\"}},\"media_type\":\"text/markdown\",\"byte_start\":0,\"byte_end\":10446,\"next_offset\":null,\"total_bytes\":10446,\"complete\":true,\"sha256\":\"6fe31f3b5f17a9608fb4ea2ec00a05069b8dbfa27902d0ebee3c0833271d981e\",\"materialized_path\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-marketing-revision-20261025-01\\\\project\\\\.opencorvus\\\\.r\\\\tasks\\\\tsk_g00VZ1u3kk00D81zMYvb\\\\artifacts\\\\materializations\\\\reads\\\\6fe31f3b5f17a9608fb4ea2ec00a05069b8dbfa27902d0ebee3c0833271d981e-campaign-plan.md\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_wCTEnrNgVetIq0fF\",\"artifact_read_ref\":\"ar_T4FZQYMpJRVtyYsT\"}},{\"request_index\":1,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"2d5e2090-241a-5c71-a861-c943e67d16ac\",\"manifest_sha256\":\"a66250ba7288364ca8be3e4447492abc3df3812f807ea2db77074297db3f2773\"},\"tree\":\"resources\",\"path\":\"outputs/growth-plan.md\",\"media_type\":\"text/markdown\",\"bytes\":10366,\"sha256\":\"fd9682e65a7fe3dd7369a536343d193d302138dc2e480604812025993e3ebb6b\"}},\"media_type\":\"text/markdown\",\"byte_start\":0,\"byte_end\":10366,\"next_offset\":null,\"total_bytes\":10366,\"complete\":true,\"sha256\":\"fd9682e65a7fe3dd7369a536343d193d302138dc2e480604812025993e3ebb6b\",\"materialized_path\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-marketing-revision-20261025-01\\\\project\\\\.opencorvus\\\\.r\\\\tasks\\\\tsk_g00VZ1u3kk00D81zMYvb\\\\artifacts\\\\materializations\\\\reads\\\\fd9682e65a7fe3dd7369a536343d193d302138dc2e480604812025993e3ebb6b-growth-plan.md\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_1EsmJOZ2NZZb0UMF\",\"artifact_read_ref\":\"ar_jxRxA_wNHFhxOBh9\"}},{\"request_index\":2,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"8eea5db7-aa44-5cb3-a82e-b23e91ff3004\",\"manifest_sha256\":\"63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633\"},\"tree\":\"resources\",\"path\":\"qa/author-review.md\",\"media_type\":\"text/markdown\",\"bytes\":3140,\"sha256\":\"925165dd7340fc2ae22902e153a9264fbb8543dad47afba7d1558580225c3ff6\"}},\"media_type\":\"text/markdown\",\"byte_start\":0,\"byte_end\":3140,\"next_offset\":null,\"total_bytes\":3140,\"complete\":true,\"sha256\":\"925165dd7340fc2ae22902e153a9264fbb8543dad47afba7d1558580225c3ff6\",\"text\":\"# 作者自检记录（非独立最终验收）\\n\\n检查日期：2026-10-25。正文为outputs/growth-plan.md；Word和HTML由该正文生成，原包路径仅为同正文镜像。所有PDF和PNG只用于内部复核。\\n\\n## 正文一致性\\n\\n运行tools/build_growth_documents.py后，重新打开生成的DOCX，按正文XML中的段落/表格顺序读取；将标题级别、段落全文、表格各行各单元格与Markdown解析的完整序列直接比较。HTML由独立HTMLParser读取可见正文的标题、段落和表格，按同样顺序与Markdown比较；不比较网页元数据或样式。镜像全文另直接比较。未以摘要、hash或提取PDF文字替代正文或看图。\\n\\n结果：33个语义块、3张表、70个表格单元格逐项一致；Markdown包含2791个汉字（正则范围U+4E00至U+9FFF，包含标题和表格）。所有Word节为纵向，段落文字显式为纯黑。具体机读检查结果见body-consistency.json，验证脚本可用--verify-only重新检查且不重新生成文档。\\n\\n## 实际逐页检查\\n\\n使用原项目renderer实际生成qa/initial/growth-plan.pdf及page-1.png至page-4.png。作者已分别通过图片读取工具打开全部4张PNG，不以渲染命令成功作为视觉验收。\\n\\n| 页 | 实际内容 | 作者视觉检查 |\\n| --- | --- | --- |\\n| 1 | 总标题、边界、三渠道和合计、计算解释 | 黑色标题清楚，中文清晰，完整8列表格无裁切，数值可读；标题下有蓝色装饰线，标题文字为黑色 |\\n| 2 | 受众内容假设、预算表、成本台账 | 标题清楚，预算表全行全列可见，无截断，正文在正常页面边界内 |\\n| 3 | 渠道取舍、最小学习路径表、单情境条件和复盘 | 表格三阶段完整，单元格换行可读，无跨页拆行或裁切；正文连续 |\\n| 4 | 测量经济口径、未知及完整来源 | 标题及来源清楚，尾段完整，留白正常，无空白页或缺失内容 |\\n\\n最终图为4张1414×2000纵向PNG；无需版式修订。本轮仅作者自检，独立角色尚未审查正文和这些页图，正式campaign-plan和交互阅读发布均未进行。HTML已做完整语义一致性检查，未做浏览器视觉验收；Word视觉结论限于此次实际渲染页面，不泛化为所有客户端显示保证。\\n\\n## 内容核对与限制\\n\\n表中逐列合计6000/370/47/1900；CPL分别20.00/50.00/60.00，合计40.43。预算300+200+400+300=1200；保留旧稿3000和合成历史1900，不改输入。审计建议已落实：未达总体筛查门槛不能记为总体通过，单情境须有自身证据和判断理由。所有实验均为规划假设，不把CPL当CAC，不承诺因果或未来结果。\\n\\n原始依据为已完整读取的原始不可变brief.md、campaign.csv、tools/runtime.md、tools/render_docx.py，以及原包范围5、证据9、独立受众15、独立渠道16、策略21与审计25。真正的名单、样本、工时、报价、客户与收入未知；材料完整，不外查补造。本轮仅本地生成和渲染，没有营销行动。文档与页图封存供独立复核，最终交付仍须后续原作者履行。\\n\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_9VO8YOYOrFTdrn8q\",\"artifact_read_ref\":\"ar_3SZpeKuLUC6v1Xur\"}},{\"request_index\":3,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"8eea5db7-aa44-5cb3-a82e-b23e91ff3004\",\"manifest_sha256\":\"63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633\"},\"tree\":\"resources\",\"path\":\"qa/body-consistency.json\",\"media_type\":\"application/json\",\"bytes\":420,\"sha256\":\"ca145874f9cf677944730406221fe3f39d6d996a92d0665d3e15a75682eee477\"}},\"media_type\":\"application/json\",\"byte_start\":0,\"byte_end\":420,\"next_offset\":null,\"total_bytes\":420,\"complete\":true,\"sha256\":\"ca145874f9cf677944730406221fe3f39d6d996a92d0665d3e15a75682eee477\",\"text\":\"{\\r\\n  \\\"method\\\": \\\"Parse MD headings/paragraphs/table rows; reopen DOCX body XML in document order and parse HTML independently. Exact ordered text and cell comparison; no digest shortcut.\\\",\\r\\n  \\\"semantic_blocks\\\": 33,\\r\\n  \\\"tables\\\": 3,\\r\\n  \\\"table_cells\\\": 70,\\r\\n  \\\"chinese_characters\\\": 2791,\\r\\n  \\\"md_docx_html_sequence_equal\\\": true,\\r\\n  \\\"mirror_equal\\\": true,\\r\\n  \\\"all_sections_portrait\\\": true,\\r\\n  \\\"all_paragraph_runs_black\\\": true\\r\\n}\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_0qTJufNEzWNxy73U\",\"artifact_read_ref\":\"ar_Od9hhL8XUJhdXbUx\"}},{\"request_index\":4,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hdfrY4uLsCH7DfgPkBMw\",\"task_id\":\"tsk_g00VZ1u3kk00D81zMYvb\",\"snapshot_id\":\"8eea5db7-aa44-5cb3-a82e-b23e91ff3004\",\"manifest_sha256\":\"63d127e748ab6f9fe3be39c2e012b5cf4f38d6a625b6ff9f454f8345f9309633\"},\"tree\":\"resources\",\"path\":\"qa/initial/growth-plan.pdf\",\"media_type\":\"application/pdf\",\"bytes\":476283,\"sha256\":\"ee0c84cb36238f0864729318e77398d4809012ae60958059b9be98f4694c0bb4\"}},\"media_type\":\"application/pdf\",\"byte_start\":0,\"byte_end\":476283,\"next_offset\":null,\"total_bytes\":476283,\"complete\":true,\"sha256\":\"ee0c84cb36238f0864729318e77398d4809012ae60958059b9be98f4694c0bb4\",\"attachment\":true,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_jtz5YTFwG5k0JM2w\",\"artifact_read_ref\":\"ar_XNi-NYGTHXNSEMQY\"}}],\"complete\":true,\"next_reads\":[]}",
+    "title": "Artifacts (5)",
+    "metadata": {
+      "truncated": false
+    },
+    "time": {
+      "start": 1792901603389,
+      "end": 1792901608478
+    },
+    "attachments": [
+      {
+        "id": "prt_g0VZ20Qwf00A1ajsQM71",
+        "sessionID": "ses_hVeBqjMKP8pdekG4qxJL",
+        "messageID": "msg_g0VZ20NsC00lYlizWQnj",
+        "type": "file",
+        "mime": "application/pdf",
+        "filename": "growth-plan.pdf",
+        "url": "/attachment/prj_hdfrY4uLsCH7DfgPkBMw/ee0c84cb36238f0864729318e77398d4809012ae60958059b9be98f4694c0bb4.pdf"
+      }
+    ]
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0cb98032802d5d04016add81e32ca887d099db53fdbe14aea5"
+    }
+  },
+  "orderKey": "v1:0001792901607849:0000000000000031:0000000000000000:part:prt_g0VZ20Pcb00H3SfNbJXA"
+}
