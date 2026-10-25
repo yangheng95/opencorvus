@@ -333,22 +333,20 @@ test("a reset executes at its frozen physical directory after its final alias ob
     await fs.writeFile(path.join(physical, "tracked.txt"), "original physical operator bytes\n")
     await fs.writeFile(path.join(other.result.directory, "tracked.txt"), "late replacement operator bytes\n")
     const outcome = await p.output(p.spawn("reset-late-retarget", name))
-    const normalize = (value: string) =>
-      process.platform === "win32" ? path.resolve(value).toLowerCase() : path.resolve(value)
     expect({
       exit: outcome.exit,
       error: outcome.result.error,
       effects: outcome.result.effects,
       tracked: outcome.result.tracked,
       physicalTracked: await fs.readFile(path.join(physical, "tracked.txt"), "utf8"),
-      effectDirectory: normalize(outcome.result.effectDirectory),
+      effectDirectory: await fs.realpath(outcome.result.effectDirectory),
     }).toEqual({
       exit: 0,
       error: null,
       effects: 3,
       tracked: "late replacement operator bytes\n",
       physicalTracked: "original tracked bytes\n",
-      effectDirectory: normalize(physical),
+      effectDirectory: await fs.realpath(physical),
     })
   } finally {
     await removeManagedDirectoryTree(p.root)

@@ -49,11 +49,12 @@ import { projectIntentAnalysisInput } from "@/intent-analysis/input-projection"
 import { projectRequirementsInput } from "@/requirements/input-projection"
 import { projectArchitectInput } from "@/architect/input-projection"
 import { taskInputAttachmentRefs } from "@/agent/prompt-projection"
+import { EvolutionMutationReceiptIdentityConflictError } from "@/expert-squad/mutation-receipt-validation"
 
 const modelRef = { providerID: "test", modelID: "build-terminal-publication" }
 
 for (const family of ["build", "partial", "cleanup", "evolution"] as const) {
-  test(`startup reports the typed migration contract for legacy ${family} terminal identity`, async () => {
+  test(family === "evolution" ? "the current writer reports the typed error for an invalid legacy mutation receipt" : `startup reports the typed migration contract for legacy ${family} terminal identity`, async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -85,23 +86,30 @@ for (const family of ["build", "partial", "cleanup", "evolution"] as const) {
             context: { observation_id: id },
           })
         } else {
-          // Startup admission inspects durable family provenance, independently
-          // of package mutation execution covered by its production suite.
-          recordEngineArtifact({
-            id,
-            taskID: fixture.taskID,
-            kind: "expert_output",
-            label: "evolution-lab/promotion-receipt",
-            payload: {
-              artifact_type: "evolution-lab/promotion-receipt",
-              schema_version: 1,
-              producer: { owner_kind: "core", component_id: "expert-squad-package-manager", operation_id: "legacy" },
-              payload: {},
-              resources: [],
-              observed_artifact_locators: [],
-              source_artifact_locators: [],
-            },
-          })
+          const error = (() => {
+            try {
+              recordEngineArtifact({
+                id,
+                taskID: fixture.taskID,
+                kind: "expert_output",
+                label: "evolution-lab/promotion-receipt",
+                payload: {
+                  artifact_type: "evolution-lab/promotion-receipt",
+                  schema_version: 1,
+                  producer: { owner_kind: "core", component_id: "expert-squad-package-manager", operation_id: "legacy" },
+                  payload: {},
+                  resources: [],
+                  observed_artifact_locators: [],
+                  source_artifact_locators: [],
+                },
+              })
+            } catch (error) {
+              return error
+            }
+          })()
+          expect(error).toBeInstanceOf(EvolutionMutationReceiptIdentityConflictError)
+          expect(error).toMatchObject({ data: { artifactID: id } })
+          return
         }
         await Database.awaitEffectIdle(30_000)
         Database.close()
@@ -174,6 +182,14 @@ async function createProductionFixture(
   await Config.updateProjectPatch({
     prompt_profile: { active: "base" },
     model: `${modelRef.providerID}/${modelRef.modelID}`,
+    provider: {
+      [modelRef.providerID]: {
+        npm: providerModel().api.npm,
+        api: providerModel().api.url,
+        options: { apiKey: "owned-build-test-participant" },
+        models: { [modelRef.modelID]: { name: providerModel().name, limit: providerModel().limit } },
+      },
+    },
   })
   const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
     prompt_profile: { active: "base" },

@@ -25,7 +25,7 @@ import { PermissionLedgerTable, PermissionPolicyTable } from "@/permission/permi
 import { permissionDescriptor } from "@/permission/invocation"
 import { permissionRequestIdentity } from "@/permission/ledger-facts"
 import { DecisionLogTable } from "@/decision-log/schema"
-import { BusPublicationOutboxTable } from "@/bus/bus.sql"
+import { BusPublicationOutboxTable, BusPublicationOwnerTable } from "@/bus/bus.sql"
 import { EngineService } from "@/task-api"
 import { insertEngineInteractionRequest } from "@/engine/interaction-request"
 import { findInteraction } from "@/engine/store"
@@ -152,11 +152,7 @@ async function convergeExactDirectoryFromInstanceCache(target: string, retainedD
   throw new Error(`Instance convergence did not dispose the requested directory: ${target}`)
 }
 
-async function beginExactDirectoryConvergence(
-  target: string,
-  retainedDirectory: string,
-  selected: Promise<void>,
-) {
+async function beginExactDirectoryConvergence(target: string, retainedDirectory: string, selected: Promise<void>) {
   let retainedEntered!: () => void
   const retainedEnteredPromise = new Promise<void>((resolve) => (retainedEntered = resolve))
   let releaseRetained!: () => void
@@ -202,9 +198,17 @@ describe("Project directory integrity", () => {
     await using project = await memoryProject()
     const missing = path.join(project.path, "missing-runtime-root")
     const target = `${missing}.quarantine`
-    const error = await Filesystem.renameDurableNoReplace(missing, target).catch((cause) => cause as NodeJS.ErrnoException)
+    const error = await Filesystem.renameDurableNoReplace(missing, target).catch(
+      (cause) => cause as NodeJS.ErrnoException,
+    )
 
-    expect({ code: error.code, source: await fs.stat(missing).then(() => "present", () => "missing") }).toEqual({
+    expect({
+      code: error.code,
+      source: await fs.stat(missing).then(
+        () => "present",
+        () => "missing",
+      ),
+    }).toEqual({
       code: "ENOENT",
       source: "missing",
     })
@@ -405,6 +409,13 @@ describe("Project directory integrity", () => {
               time_created: now,
             })
             .run()
+          db.insert(BusPublicationOwnerTable)
+            .values({
+              occurrence_id: occurrenceID,
+              project_generation: registered.generation,
+              time_created: now,
+            })
+            .run()
           return insertEngineInteractionRequest(db, {
             taskID,
             sessionID: session.id,
@@ -497,8 +508,7 @@ describe("Project directory integrity", () => {
         directories.map(async (directory) => ({
           runtime: await fs.stat(ProjectRuntimePaths.projectRuntimeRoot(directory)).then(
             () => "present" as const,
-            (error: NodeJS.ErrnoException) =>
-              error.code === "ENOENT" ? ("missing" as const) : Promise.reject(error),
+            (error: NodeJS.ErrnoException) => (error.code === "ENOENT" ? ("missing" as const) : Promise.reject(error)),
           ),
           config: await fs.readFile(
             path.join(ProjectRuntimePaths.projectConfigRoot(directory), "user-config.json"),
@@ -775,11 +785,7 @@ describe("Project directory integrity", () => {
       directoryAdmission: Database.use((db) => db.select().from(ProjectDirectoryAdmissionTable).all().length),
     }
     Database.use((db) =>
-      db
-        .update(ProjectTable)
-        .set({ sandboxes: [] })
-        .where(eq(ProjectTable.id, registered.project.id))
-        .run(),
+      db.update(ProjectTable).set({ sandboxes: [] }).where(eq(ProjectTable.id, registered.project.id)).run(),
     )
     const recovery = await recoverProjectDeletionCleanup(() => "dead_or_reused")
     const fenceRecovery = recoverProjectMaintenanceFences(() => "dead_or_reused", {
@@ -1037,13 +1043,18 @@ describe("Project directory integrity", () => {
         policySessionID = root.id
         const now = Date.now()
         const permission = (await permissionDescriptor({
-          providerKind: "builtin", providerID: "builtin", toolName: "bash",
+          providerKind: "builtin",
+          providerID: "builtin",
+          toolName: "bash",
           args: { command: "echo permission-evidence" },
         }))!
         const permissionMessageID = Identifier.ascending("message")
         permissionRequestID = permissionRequestIdentity({
-          projectID, sessionID: root.id, messageID: permissionMessageID,
-          toolCallID: "tool-call-1", fingerprint: permission.fingerprint,
+          projectID,
+          sessionID: root.id,
+          messageID: permissionMessageID,
+          toolCallID: "tool-call-1",
+          fingerprint: permission.fingerprint,
         })
         const taskRequest = "Retain immutable permission evidence after deleting its Project."
         const userMessageID = Identifier.ascending("message")
@@ -1362,7 +1373,8 @@ describe("Project directory integrity", () => {
           .from(WorkerTurnDescriptorTable)
           .where(eq(WorkerTurnDescriptorTable.project_id, projectID))
           .all().length,
-        lineages: db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, lineageArtifactID)).all().length,
+        lineages: db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, lineageArtifactID)).all()
+          .length,
         policies: db.select().from(PermissionPolicyTable).where(eq(PermissionPolicyTable.project_id, projectID)).all()
           .length,
         ledger: db

@@ -96,13 +96,13 @@ for (const { collection, selectGoals, delegatedSelection = false } of [
   { collection: false, selectGoals: true, delegatedSelection: true },
   { collection: true, selectGoals: true, delegatedSelection: true },
 ]) {
-  test(`${collection ? "dispatch_agents" : "dispatch_agent"}: ${delegatedSelection ? "delegated selection and participant evidence" : selectGoals ? "workload selection and attachment" : "attachment"} continuation recovers the accepted Turn through streamed execution`, async () => {
+  test(`dispatch_agents (${selectGoals && !delegatedSelection ? "advanced" : collection ? "light" : "base"}): ${delegatedSelection ? "delegated selection and participant evidence" : selectGoals ? "workload selection and attachment" : "attachment"} continuation recovers the accepted Turn through streamed execution`, async () => {
     using _drain = Bus.TestHooks.suppressAutomaticDurableDrain()
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const dispatchToolName = collection ? "dispatch_agents" : "dispatch_agent"
+        const dispatchToolName = "dispatch_agents"
         const profile = selectGoals && !delegatedSelection ? "advanced" : collection ? "light" : "base"
         const target = selectGoals && !delegatedSelection ? "workload-reviewer" : collection ? "light-planner" : "base-planner"
         const adapterID = selectGoals && !delegatedSelection ? "workload_analysis" : "delegated_worker"
@@ -129,21 +129,19 @@ for (const { collection, selectGoals, delegatedSelection = false } of [
         })
         const encode = (turn: unknown) => {
           const request = { dispatch: { target, work_scope: { kind: "task" }, turn } }
-          return collection
-            ? {
-                team: [
-                  {
-                    name: "planner",
-                    target,
-                    responsibility: "Read the request",
-                    boundary: "Read-only",
-                    expected_result: "Requirement handoff",
-                    depends_on: [],
-                  },
-                ],
-                dispatches: [request],
-              }
-            : request
+          return {
+            team: [
+              {
+                name: "planner",
+                target,
+                responsibility: "Read the request",
+                boundary: "Read-only",
+                expected_result: "Requirement handoff",
+                depends_on: [],
+              },
+            ],
+            dispatches: [request],
+          }
         }
         let phase = 0
         let serial = 0
@@ -534,15 +532,15 @@ for (const { collection, selectGoals, delegatedSelection = false } of [
 for (const collection of [false, true]) {
 for (const scenario of ["base", "advanced", "advanced-preparation-failure", "advanced-preparation-recovery", "advanced-authority-recovery"] as const) {
 if (collection && scenario === "advanced") continue
-const dispatchToolName = collection ? "dispatch_agents" : "dispatch_agent"
-const encodeDispatch = (request: any) => JSON.stringify(collection ? { team: [{ name: "worker", target: request.dispatch.target, responsibility: "Interpret one exact request", boundary: "Read-only Task evidence", expected_result: "Durable worker output", depends_on: [] }], dispatches: [request] } : request)
+const dispatchToolName = "dispatch_agents"
+const encodeDispatch = (request: any) => JSON.stringify({ team: [{ name: "worker", target: request.dispatch.target, responsibility: "Interpret one exact request", boundary: "Read-only Task evidence", expected_result: "Durable worker output", depends_on: [] }], dispatches: [request] })
 const authorityFailure = scenario === "advanced-authority-recovery"
 const recoveryCase = scenario === "advanced-preparation-recovery" || authorityFailure
 const preparationFails = scenario === "advanced-preparation-failure" || recoveryCase
 const profile = collection ? "light" : scenario === "base" ? "base" : "advanced"
 const activeProfile = profile
 const targetID = collection ? "light-planner" : profile === "base" ? "base-planner" : "request-interpreter"
-test(`${dispatchToolName}: ` + (authorityFailure ? "streamed authority transaction rollback recovers the same reserved Session" : recoveryCase ? "streamed failed preparation continues the reserved worker and settles every dispatch" : preparationFails ? "streamed preparation failure permits the next model decision and durable re-read" : `${scenario} streamed dispatch commits a real child descriptor through the visible Tool boundary`), async () => {
+test(`${dispatchToolName} (${profile}): ` + (authorityFailure ? "streamed authority transaction rollback recovers the same reserved Session" : recoveryCase ? "streamed failed preparation continues the reserved worker and settles every dispatch" : preparationFails ? "streamed preparation failure permits the next model decision and durable re-read" : `${scenario} streamed dispatch commits a real child descriptor through the visible Tool boundary`), async () => {
   using _durableDrain = Bus.TestHooks.suppressAutomaticDurableDrain()
   await using project = await memoryProject()
   await Instance.provide({
@@ -771,7 +769,7 @@ test(`${dispatchToolName}: ` + (authorityFailure ? "streamed authority transacti
         const receipt = toolParts.filter((part) => part.tool === dispatchToolName).at(-1)!
         if (receipt.state.status !== "completed") throw new Error("Expected completed dispatch receipt")
         const value = JSON.parse(receipt.state.output)
-        const accepted = collection ? value.members[0].outcome : value
+        const accepted = value.members[0].outcome
         if (preparationFails && !recoveryCase) {
           expect(accepted).toMatchObject({ kind: "infrastructure_failure", operation: collection ? "delegated_worker_adapter" : "analyze_intent_adapter" })
           expect(orchestratorCommittedDecisionInParts(toolParts)).toBe("no_action")
@@ -851,12 +849,12 @@ test(`${dispatchToolName}: ` + (authorityFailure ? "streamed authority transacti
 // Fault injection stops only an exact production dispatch admission. Tool
 // declarations, streaming Tool execution, SessionLoop coordination, Tool Part
 // persistence and Task ingress reduction all remain the production path.
-for (const collection of [false, true]) {
+for (const profile of ["base", "light"] as const) {
 for (const secondFails of [false, true]) {
-  const dispatchToolName = collection ? "dispatch_agents" : "dispatch_agent"
-  const profile = collection ? "light" : "base"
+  const dispatchToolName = "dispatch_agents"
+  const target = profile === "light" ? "light-planner" : "base-planner"
   test(
-    `${dispatchToolName}: ` + (secondFails
+    `${dispatchToolName} (${profile}): ` + (secondFails
       ? "streamed failed dispatch siblings release their claims before an exclusive no_action receipt"
       : "streamed dispatch success survives a late sibling failure and persists the exclusive decision conflict"),
     async () => {
@@ -865,7 +863,7 @@ for (const secondFails of [false, true]) {
       await Instance.provide({
         directory: project.path,
         fn: async () => {
-          if (collection) await ExpertSquadPackageManager.importDirectory({ projectDirectory: project.path, sourceDirectory: path.resolve(import.meta.dir, "../../../expert-squads/builtin/light"), installationScope: "project" })
+          if (profile === "light") await ExpertSquadPackageManager.importDirectory({ projectDirectory: project.path, sourceDirectory: path.resolve(import.meta.dir, "../../../expert-squads/builtin/light"), installationScope: "project" })
           await Config.updateProjectPatch({ prompt_profile: { active: profile } })
           using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
             runner: async (input) => ({
@@ -912,7 +910,7 @@ for (const secondFails of [false, true]) {
           }
           using _dispatchAdmission = OrchestratorToolsTestHooks.replaceAfterDispatchLineageClaim(
             async ({ lineage }) => {
-              const callID = collection && lineage.payload.tool_call_id === "call_stagger_collection"
+              const callID = lineage.payload.tool_call_id === "call_stagger_collection"
                 ? lineage.payload.collection_member_index === 0 ? "call_stagger_a" : "call_stagger_b"
                 : lineage.payload.tool_call_id
               if (callID !== "call_stagger_a" && callID !== "call_stagger_b") return
@@ -941,7 +939,7 @@ for (const secondFails of [false, true]) {
           })
           const dispatchInput = (name: string) => ({
             dispatch: {
-              target: collection ? "light-planner" : "base-planner",
+              target,
               work_scope: { kind: "task" },
               turn: {
                 kind: "initial",
@@ -968,7 +966,7 @@ for (const secondFails of [false, true]) {
                 ? options.tools.map((tool) => tool.name)
                 : Object.keys(options.tools ?? {})
               if (toolNames.length === 1 && toolNames[0] === "capability_search" &&
-                (!collection || !dispatchStreamStarted || secondFails || workerFinished)) {
+                (!dispatchStreamStarted || secondFails || workerFinished)) {
                 const names = dispatchStreamStarted ? ["no_action"] : [dispatchToolName, "no_action"]
                 return {
                   stream: simulateReadableStream({
@@ -999,18 +997,13 @@ for (const secondFails of [false, true]) {
                   stream: simulateReadableStream({
                     chunks: [
                       { type: "stream-start", warnings: [] },
-                      ...(collection
-                        ? [toolCall("call_stagger_collection", dispatchToolName, {
+                      toolCall("call_stagger_collection", dispatchToolName, {
                             team: ["A", "B"].map((name) => ({
-                              name, target: "light-planner", responsibility: `Evidence partition ${name}`,
+                              name, target, responsibility: `Evidence partition ${name}`,
                               boundary: "Read-only Task evidence", expected_result: "Durable worker output", depends_on: [],
                             })),
                             dispatches: [dispatchInput("A"), dispatchInput("B")],
-                          })]
-                        : [
-                            toolCall("call_stagger_a", dispatchToolName, dispatchInput("A")),
-                            toolCall("call_stagger_b", dispatchToolName, dispatchInput("B")),
-                          ]),
+                          }),
                       ...(!secondFails ? [toolCall("call_stagger_c", "no_action", {
                         observed_task: observedTask(),
                         reason: "Reconcile the current lifecycle alongside the declared dispatches.",
@@ -1086,52 +1079,23 @@ for (const secondFails of [false, true]) {
             // its calls, so Tool execution can reach the real claim boundary.
             await Promise.all([firstClaimed.promise, secondClaimed.promise])
             if (!secondFails) {
-              if (collection) {
-                const deadline = Date.now() + 15_000
-                while (!WorkerTurnDescriptor.findForDispatch({ sessionID: secondDispatch!.childSessionID, dispatchID: secondDispatch!.dispatchID })) {
-                  if (Date.now() >= deadline) throw new Error("Collection survivor descriptor was not committed")
-                  await Bun.sleep(10)
-                }
-                order.push("call_stagger_b:descriptor_committed")
-              } else {
-                await waitForPart("call_stagger_b", "completed")
-                order.push("call_stagger_b:durable_completed")
+              const deadline = Date.now() + 15_000
+              while (!WorkerTurnDescriptor.findForDispatch({ sessionID: secondDispatch!.childSessionID, dispatchID: secondDispatch!.dispatchID })) {
+                if (Date.now() >= deadline) throw new Error("Collection survivor descriptor was not committed")
+                await Bun.sleep(10)
               }
+              order.push("call_stagger_b:descriptor_committed")
             }
             firstFailure.resolve()
-            if (collection) {
-              secondFailure.resolve()
-              await waitForPart("call_stagger_collection", "completed")
-              order.push("collection:durable_completed")
-            } else {
-              await waitForPart("call_stagger_a", "error")
-              order.push("call_stagger_a:durable_error")
-              if (secondFails) {
-                secondFailure.resolve()
-                await waitForPart("call_stagger_b", "error")
-                order.push("call_stagger_b:durable_error")
-              }
-            }
+            secondFailure.resolve()
+            await waitForPart("call_stagger_collection", "completed")
+            order.push("collection:durable_completed")
             await waitForIngressDeliveryHooksForTest()
             const finalPart = await waitForPart("call_stagger_c", secondFails ? "completed" : "error")
             const assistant = await MessageStore.get({ sessionID: rootSessionID, messageID: rootAssistantID })
             const expectedDecision = secondFails ? "no_action" : dispatchToolName
             expect(order).toEqual(
-              collection
-                ? ["call_stagger_a:claimed", "call_stagger_b:claimed", ...(!secondFails ? ["call_stagger_b:descriptor_committed"] : []), "collection:durable_completed"]
-                : secondFails
-                ? [
-                    "call_stagger_a:claimed",
-                    "call_stagger_b:claimed",
-                    "call_stagger_a:durable_error",
-                    "call_stagger_b:durable_error",
-                  ]
-                : [
-                    "call_stagger_a:claimed",
-                    "call_stagger_b:claimed",
-                    "call_stagger_b:durable_completed",
-                    "call_stagger_a:durable_error",
-                  ],
+              ["call_stagger_a:claimed", "call_stagger_b:claimed", ...(!secondFails ? ["call_stagger_b:descriptor_committed"] : []), "collection:durable_completed"],
             )
             expect(orchestratorCommittedDecisionInParts(assistant.parts)).toBe(expectedDecision)
             expect(
@@ -1143,15 +1107,11 @@ for (const secondFails of [false, true]) {
                     part.tool !== "capability_search",
                 )
                 .map((part) => (part.type === "tool" ? { callID: part.callID, status: part.state.status } : undefined)),
-            ).toEqual(collection ? [
+            ).toEqual([
               { callID: "call_stagger_collection", status: "completed" },
               { callID: "call_stagger_c", status: secondFails ? "completed" : "error" },
-            ] : [
-              { callID: "call_stagger_a", status: "error" },
-              { callID: "call_stagger_b", status: secondFails ? "error" : "completed" },
-              { callID: "call_stagger_c", status: secondFails ? "completed" : "error" },
             ])
-            if (collection) {
+            {
               const part = await waitForPart("call_stagger_collection", "completed")
               if (part.state.status !== "completed") throw new Error("Expected the completed collection receipt")
               const members = JSON.parse(part.state.output).members

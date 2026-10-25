@@ -257,12 +257,13 @@ test("concurrent real local HTTP audit entries report their exact reader bytes a
   } finally { await server.stop(true) }
 })
 
-test("real local HTTP204 empty reader, HTTP error and unbound consumers retain actual observation states", async () => {
+test("real local null-body HTTP, HTTP error and unbound consumers retain actual observation states", async () => {
   const accepted: string[] = []
   const server = Bun.serve({ hostname: "127.0.0.1", port: 0, fetch: async (request) => {
     const input = await request.json() as { mode: string }
     accepted.push(input.mode)
     if (input.mode === "absent") return new Response(null, { status: 204 })
+    if (input.mode === "reset") return new Response(null, { status: 205 })
     if (input.mode === "error") return new Response("actual HTTP error", { status: 503 })
     return new Response(input.mode)
   } })
@@ -270,17 +271,19 @@ test("real local HTTP204 empty reader, HTTP error and unbound consumers retain a
     using audit = new RealProviderAudit("authorized-model", 12)
     const request = (mode: string) => fetch(server.url, { method: "POST", body: JSON.stringify({ model: "authorized-model", stream: true, mode }) })
     const absent = await request("absent")
+    const reset = await request("reset")
     const error = await request("error")
     const direct = await request("direct")
     const original = await request("replacement")
     const replacement = new Response(original.body, { status: original.status, headers: original.headers })
-    expect({ emptyStatus: absent.status, emptyText: await absent.text(), error: await error.text(), direct: await direct.text(), replacement: await replacement.text() })
-      .toEqual({ emptyStatus: 204, emptyText: "", error: "actual HTTP error", direct: "direct", replacement: "replacement" })
+    expect({ emptyStatus: absent.status, emptyText: await absent.text(), resetStatus: reset.status, resetText: await reset.text(), error: await error.text(), direct: await direct.text(), replacement: await replacement.text() })
+      .toEqual({ emptyStatus: 204, emptyText: "", resetStatus: 205, resetText: "", error: "actual HTTP error", direct: "direct", replacement: "replacement" })
     expect(audit.requests[0]!.response_reader).toMatchObject({ boundary: "provider-source-reader", state: "body_absent" })
-    expect(accepted).toEqual(["absent", "error", "direct", "replacement"])
+    expect(accepted).toEqual(["absent", "reset", "error", "direct", "replacement"])
     expect(audit.requests.map((entry) => ({ status: entry.status, boundary: entry.response_reader.boundary, state: entry.response_reader.state })))
       .toEqual([
         { status: 204, boundary: "provider-source-reader", state: "body_absent" },
+        { status: 205, boundary: "provider-source-reader", state: "body_absent" },
         { status: 503, boundary: "provider-source-reader", state: "http_error" },
         { status: 200, boundary: "provider-source-reader", state: "awaiting_binding" },
         { status: 200, boundary: "provider-source-reader", state: "awaiting_binding" },

@@ -335,7 +335,10 @@ export class RealProviderAudit implements Disposable {
         entry.status = response.status
         const observed = entry.response_reader
         observed.receivedAt = Date.now()
-        observed.state = !response.body ? "body_absent" : !response.ok ? "http_error" : "awaiting_binding"
+        // Fetch null-body statuses have no source reader, even when a host
+        // exposes an empty ReadableStream for the response body.
+        const bodyAbsent = !response.body || [101, 103, 204, 205, 304].includes(response.status)
+        observed.state = bodyAbsent ? "body_absent" : !response.ok ? "http_error" : "awaiting_binding"
         if (observed.state === "awaiting_binding") {
           try {
             registerProviderResponseObserver(response, {

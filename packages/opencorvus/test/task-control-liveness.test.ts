@@ -117,7 +117,7 @@ async function commitDecision(input: {
       time: { start: request.state.time.start, end: Date.now() },
     },
   })
-  assistant = await Session.updateMessage({ ...assistant, time: { ...assistant.time, completed: Date.now() } })
+  assistant = await Session.updateMessage({ ...assistant, finish: "stop", time: { ...assistant.time, completed: Date.now() } })
   return { finalMessageID: assistant.id }
 }
 

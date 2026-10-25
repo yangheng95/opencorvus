@@ -456,6 +456,20 @@ test("streamed compaction retrieves full Message diagnostics across repeated che
         await Session.persistMessage({ info: failed, parts: [] })
         for (round = 1; round <= 3; round++) {
           if (round === 3) session = await Session.fork({ sessionID: session.id, purpose: "side-chat" })
+          const diagnostic = (await Session.messages({ sessionID: session.id })).find(
+            (message) =>
+              message.info.id === failed.id ||
+              message.info.copySources?.some(
+                (entry) =>
+                  "field" in entry &&
+                  entry.field === "diagnostics" &&
+                  entry.sources.some(
+                    (source) => source.sessionID === failed.sessionID && source.messageID === failed.id,
+                  ),
+              ),
+          )
+          if (diagnostic?.info.role !== "assistant")
+            throw new Error("Expected the current persisted diagnostic Message")
           const source = await user(`Retain the diagnostic evidence. Round ${round}.`)
           Database.close()
           const control = await SessionCompaction.create({ sessionID: session.id, source, auto: false, model: target })
@@ -472,8 +486,8 @@ test("streamed compaction retrieves full Message diagnostics across repeated che
           })
           const seen = observed.at(-1)!
           expect(seen.round).toBe(round)
-          expect(seen.messageID).toBe(failed.id)
-          expectExactFailure(seen.data, failed)
+          expect(seen.messageID).toBe(diagnostic.info.id)
+          expectExactFailure(seen.data, diagnostic.info)
           expect(seen.pages.length).toBeGreaterThan(2)
           const content = SessionMemory.continuationText(summary.parts)
           expect(await SessionMemory.read(session.id)).toMatchObject({ sourceMessageID: summary.info.id, content })
@@ -484,6 +498,7 @@ test("streamed compaction retrieves full Message diagnostics across repeated che
               round,
               sessionID: session.id,
               originalMessageID: failed.id,
+              diagnosticMessageID: diagnostic.info.id,
               summaryID: summary.info.id,
               cumulativeRequests: requests,
               pages: seen.pages.map(({ offset, end, nextOffset, requestedSource, messageID }: any) => ({

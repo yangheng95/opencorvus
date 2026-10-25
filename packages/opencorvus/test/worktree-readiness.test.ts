@@ -86,6 +86,44 @@ describe("worktree readiness receipts", () => {
     })
   }, 120_000)
 
+  test("an aliased registered tree recovers its exact branch and reports a later branch rename", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        await freezeMetadata(project.path)
+        const name = "alias-recovery"
+        const created = await Worktree.create({ name })
+        const alias = path.join(project.path, "registered-alias")
+        await fs.symlink(created.directory, alias, process.platform === "win32" ? "junction" : "dir")
+        try {
+          expect(await Worktree.recoverRecorded({ directory: alias, branch: created.branch })).toEqual({
+            status: "recovered",
+            directory: alias,
+            branch: created.branch,
+          })
+          await runGit(created.directory, ["branch", "-m", "operator-preserved-branch"])
+          await fs.writeFile(path.join(created.directory, "operator.txt"), "preserved operator bytes\n")
+          expect(await Worktree.recoverRecorded({ directory: alias, branch: created.branch })).toEqual({
+            status: "unrecoverable",
+            reason: `Worktree branch identity changed: expected ${created.branch}, found operator-preserved-branch; existing bytes are preserved`,
+          })
+          const reuse = await Worktree.create({ name, reuseIfValid: true }).catch((error) => error)
+          expect(reuse).toMatchObject({
+            name: "WorktreeCreateFailedError",
+            data: {
+              message: `Worktree branch identity changed: expected ${created.branch}, found operator-preserved-branch. The existing tree is preserved.`,
+            },
+          })
+          expect(await fs.readFile(path.join(alias, "operator.txt"), "utf8")).toBe("preserved operator bytes\n")
+        } finally {
+          if (process.platform === "win32") await fs.rmdir(alias)
+          else await fs.unlink(alias)
+        }
+      },
+    })
+  }, 120_000)
+
   test("a failed population converges: the retry creates a fresh ready tree", async () => {
     await using project = await memoryProject()
     await Instance.provide({

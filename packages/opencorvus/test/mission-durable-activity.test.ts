@@ -25,6 +25,7 @@ import { openMissionThroughRealWake } from "./fixture/mission-opened"
 import { PersistedProjectContext } from "../src/server/persisted-project-context"
 import { MissionRetentionTestHooks } from "../src/mission/retention"
 import { Bus } from "../src/bus"
+import { withTimeout } from "../src/util/await-with-timeout"
 import "../src/task-api"
 
 const packageRevision = {
@@ -65,8 +66,11 @@ describe("Mission durable activity", () => {
         expect(draft.archived).toBeUndefined()
 
         const archiveUpdates: number[] = []
+        const archiveUpdated = Promise.withResolvers<void>()
         const unsubscribe = Bus.subscribe(Session.Event.Updated, ({ properties }) => {
-          if (properties.info.id === draft.sessionID) archiveUpdates.push(properties.info.time.updated)
+          if (properties.info.id !== draft.sessionID) return
+          archiveUpdates.push(properties.info.time.updated)
+          archiveUpdated.resolve()
         })
         const archiveResponse = await app
           .fetch(
@@ -80,6 +84,10 @@ describe("Mission durable activity", () => {
               }),
             }),
           )
+          .then(async (response) => {
+            await withTimeout(archiveUpdated.promise, 5_000, "Mission archive Session update")
+            return response
+          })
           .finally(unsubscribe)
         const archived = (await archiveResponse.json()) as { archived?: number }
         const lifecycle = Database.use((db) =>
@@ -171,22 +179,22 @@ describe("Mission durable activity", () => {
             await releaseClosed
           })
           const retentionInput = new Request(
-              retention === "archive"
-                ? `http://opencorvus.test/mission/${missionID}/archive`
-                : `http://opencorvus.test/mission/${missionID}`,
-              {
-                method: retention === "archive" ? "PATCH" : "DELETE",
-                headers: {
-                  "content-type": "application/json",
-                  "x-opencorvus-request-id": `atomic-${retention}-gate:retention`,
-                },
-                body: JSON.stringify({
-                  ...(retention === "archive" ? { archived: true } : {}),
-                  surface: "api",
-                  reason: `Commit the ${retention} retention gate with Mission closed`,
-                }),
+            retention === "archive"
+              ? `http://opencorvus.test/mission/${missionID}/archive`
+              : `http://opencorvus.test/mission/${missionID}`,
+            {
+              method: retention === "archive" ? "PATCH" : "DELETE",
+              headers: {
+                "content-type": "application/json",
+                "x-opencorvus-request-id": `atomic-${retention}-gate:retention`,
               },
-            )
+              body: JSON.stringify({
+                ...(retention === "archive" ? { archived: true } : {}),
+                surface: "api",
+                reason: `Commit the ${retention} retention gate with Mission closed`,
+              }),
+            },
+          )
           const retentionRequest =
             retention === "delete"
               ? PersistedProjectContext.provide({ directory: project.path, fn: () => app.fetch(retentionInput) })
@@ -375,10 +383,7 @@ describe("Mission durable activity", () => {
             .select({ type: ProtocolEventTable.type })
             .from(ProtocolEventTable)
             .where(
-              and(
-                eq(ProtocolEventTable.aggregate_type, "session"),
-                eq(ProtocolEventTable.aggregate_id, mission.id),
-              ),
+              and(eq(ProtocolEventTable.aggregate_type, "session"), eq(ProtocolEventTable.aggregate_id, mission.id)),
             )
             .all(),
         )
@@ -525,10 +530,7 @@ describe("Mission durable activity", () => {
             .select({ type: ProtocolEventTable.type })
             .from(ProtocolEventTable)
             .where(
-              and(
-                eq(ProtocolEventTable.aggregate_type, "session"),
-                eq(ProtocolEventTable.aggregate_id, mission.id),
-              ),
+              and(eq(ProtocolEventTable.aggregate_type, "session"), eq(ProtocolEventTable.aggregate_id, mission.id)),
             )
             .all(),
         )
@@ -606,10 +608,7 @@ describe("Mission durable activity", () => {
             .select({ type: ProtocolEventTable.type })
             .from(ProtocolEventTable)
             .where(
-              and(
-                eq(ProtocolEventTable.aggregate_type, "session"),
-                eq(ProtocolEventTable.aggregate_id, mission.id),
-              ),
+              and(eq(ProtocolEventTable.aggregate_type, "session"), eq(ProtocolEventTable.aggregate_id, mission.id)),
             )
             .all(),
         )

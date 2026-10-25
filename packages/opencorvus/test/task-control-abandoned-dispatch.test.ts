@@ -32,6 +32,7 @@ import {
 import { recordTaskInfrastructureError } from "../src/engine/persist"
 import { resolveDispatchOccurrenceAuthority } from "../src/engine/dispatch-lineage"
 import { DispatchOutcome } from "../src/agent/dispatch-outcome"
+import { readTaskWorkerTerminalOccurrence } from "../src/engine/task-worker-terminal-facts"
 import { writeDispatchCollectionProgress } from "../src/engine/dispatch-collection-contract"
 import { exactEngineArtifactLocator } from "../src/artifact-catalog"
 import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolver"
@@ -219,7 +220,7 @@ describe("abandoned dispatch recovery", () => {
         // Session exists, no terminal lifecycle was ever recorded, and this
         // process owns neither a prompt generation nor a delivery pipeline.
         const task = requireTask(taskID)
-        const child = await Session.create({ kind: "delegated-worker", parentID: root.id, title: "Abandoned worker" })
+        const child = await Session.create({ kind: worker.identity.sessionKind, parentID: root.id, title: "Abandoned worker" })
         const dispatchID = Identifier.ascending("artifact")
         const remoteOwnerID = `runtime:test-live-then-expire:${Identifier.ascending("call")}`
         const lineage = (() => {
@@ -1306,7 +1307,7 @@ describe("abandoned dispatch recovery", () => {
           }),
         })
         const child = await Session.create({
-          kind: "delegated-worker",
+          kind: worker.identity.sessionKind,
           parentID: root.id,
           title: "Old-epoch worker",
         })
@@ -1578,7 +1579,7 @@ describe("abandoned dispatch recovery", () => {
           taskLocalDue: Database.use(
             (db) => unresolvedDispatchRecoveryPageInTransaction(db, { taskID, limit: 64 }).lineages.length,
           ),
-          projectDue: projectDispatchFrontier.taskIDs.includes(taskID),
+          dispatchFrontier: { scanned: projectDispatchFrontier.scannedCount, position: projectDispatchFrontier.checkpoint.dispatch?.state },
           indexed: [
             occurrencePlan.includes("protocol_event_task_epoch_open_idx"),
             occurrencePlan.includes("protocol_event_task_epoch_terminal_idx"),
@@ -1604,8 +1605,14 @@ describe("abandoned dispatch recovery", () => {
             { taskID, executionEpoch: 1, currentEpoch: 258, terminal: 1, boundaryRequested: 0, deleted: 0 },
           ],
           taskLocalDue: 0,
-          projectDue: false,
+          dispatchFrontier: { scanned: 1, position: "exhausted" },
           indexed: [true, true, true, true, true, true, true, true, true],
+        })
+        await TaskControlTestHooks.reconcileAbandonedDispatches(taskID)
+        expect(readTaskWorkerTerminalOccurrence({ taskID, sessionID: child.id, dispatchID })).toMatchObject({
+          kind: "terminal",
+          inputMessageID: WorkerTurnDescriptor.latestForSession(child.id)!.payload.messageAuthority.user_message_id,
+          status: { type: "terminal", reason: "error" },
         })
         Database.immediateTransaction((db) => db.delete(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).run())
         expect(
@@ -2083,7 +2090,7 @@ describe("abandoned dispatch recovery", () => {
         let lastFillerEvent: Parameters<typeof currentOrchestratorControlMessage>[0] | undefined
         for (let attempt = 0; attempt < TASK_EPOCH_INFRASTRUCTURE_INGRESS_BUDGET; attempt += 1) {
           const filler = await Session.create({
-            kind: "delegated-worker",
+            kind: worker.identity.sessionKind,
             parentID: root.id,
             title: `Filler ${attempt}`,
           })
@@ -2206,7 +2213,7 @@ describe("abandoned dispatch recovery", () => {
           state: { status: "running", input: collectionInput, time: { start: now + 1 } },
         })
         const child = await Session.create({
-          kind: "delegated-worker",
+          kind: worker.identity.sessionKind,
           parentID: orchestrator.id,
           title: "Silenced worker 0",
         })
@@ -2246,7 +2253,7 @@ describe("abandoned dispatch recovery", () => {
           workflowBinding: lineage.payload.workflow_binding,
         })
         const sibling = await Session.create({
-          kind: "delegated-worker",
+          kind: worker.identity.sessionKind,
           parentID: orchestrator.id,
           title: "Silenced worker 1",
         })

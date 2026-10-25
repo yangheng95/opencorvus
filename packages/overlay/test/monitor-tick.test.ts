@@ -37,8 +37,10 @@ describe("connection recovery receipts", () => {
       expect(receipt).toEqual({ owner: "loopback-peer", state: "ready" })
       expect(recovered).toBe(true)
     } finally {
-      server.closeAllConnections()
-      await new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve()))
+      await new Promise<void>((resolve, reject) => {
+        server.close(error => error ? reject(error) : resolve())
+        server.closeAllConnections()
+      })
     }
   })
 

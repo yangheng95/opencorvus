@@ -978,10 +978,11 @@ export namespace Worktree {
     return ProjectRuntimePaths.isManagedWorktreePath(await canonical(primaryDir), target)
   }
 
-  async function findWorktreeEntry(stdout: Uint8Array | Buffer | undefined, directory: string) {
-    for (const entry of parseWorktreeList(stdout)) {
+  async function findWorktreeEntry(entries: RegisteredWorktreeEntry[], directory: string) {
+    const target = await canonical(directory)
+    for (const entry of entries) {
       const key = await canonical(entry.path)
-      if (key === directory) return entry
+      if (key === target) return entry
     }
   }
 
@@ -2394,9 +2395,7 @@ export namespace Worktree {
           const reused = await withGitLock(async () => {
             const validity = await isValid(directory)
             if (!validity.valid) return { validity }
-            const registered = (await listRegisteredWorktrees(primaryDir)).find((entry) =>
-              Project.samePath(entry.path, directory),
-            )
+            const registered = await findWorktreeEntry(await listRegisteredWorktrees(primaryDir), directory)
             if (registered?.branch?.replace(/^refs\/heads\//, "") !== branch) {
               throw new CreateFailedError({
                 message: `Worktree branch identity changed: expected ${branch}, found ${registered?.branch ?? "detached"}. The existing tree is preserved.`,
@@ -2618,9 +2617,7 @@ export namespace Worktree {
   > {
     const validity = await isValid(input.directory)
     if (validity.valid) {
-      const registered = (await listRegisteredWorktrees(Instance.worktree)).find((entry) =>
-        Project.samePath(entry.path, input.directory),
-      )
+      const registered = await findWorktreeEntry(await listRegisteredWorktrees(Instance.worktree), input.directory)
       if (registered?.branch?.replace(/^refs\/heads\//, "") !== input.branch) {
         return {
           status: "unrecoverable",
