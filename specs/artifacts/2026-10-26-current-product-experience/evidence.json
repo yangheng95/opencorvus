@@ -1,0 +1,127 @@
+{
+  "batch": 604,
+  "date": "2026-10-26",
+  "baseCommit": "dfa4d966aee7c633697c2b49728099650ecc8acd",
+  "issue": "File editor offered text download but no PDF download despite having the complete preview payload.",
+  "implementation": "Same file-header download action exports original loaded base64 PDF/image bytes through shared transport decoder and Blob primitive; text exports current draft.",
+  "manual": {
+    "browser": "In-app browser",
+    "tabs": [
+      285,
+      286
+    ],
+    "closed": true,
+    "languages": [
+      "en-US",
+      "zh-CN"
+    ],
+    "downloadChecks": {
+      "results": [
+        {
+          "kind": "pdf",
+          "name": "delivery-preview.pdf",
+          "bytes": 86787,
+          "comparison": "Actual browser download equals original bytes"
+        },
+        {
+          "kind": "png",
+          "name": "delivery-preview.png",
+          "bytes": 42339,
+          "comparison": "Actual browser download equals original bytes"
+        },
+        {
+          "kind": "text",
+          "name": "review.txt",
+          "bytes": 113,
+          "comparison": "Actual browser download equals original bytes"
+        },
+        {
+          "kind": "draft",
+          "name": "review.txt",
+          "bytes": 149,
+          "comparison": "Actual browser download equals original text plus current unsaved editor input"
+        }
+      ],
+      "originalTextBytes": 113
+    },
+    "screenshots": [
+      "01-home-baseline.png",
+      "02-pdf-before.png",
+      "03-pdf-download.png",
+      "04-image-download-zh.png",
+      "05-text-draft-download-zh.png"
+    ],
+    "qualification": "Actual page interactions, real download events and original file byte comparison; each screenshot manually viewed. No UI automation tests."
+  },
+  "build": {
+    "at": "2026-10-25T16:42:49.860Z",
+    "entry": "main-B5i-B_G8.js",
+    "directory": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\current-product-experience-604\\ui-build",
+    "qualification": "Current source ordinary Node Vite production build, served by isolated development CLI; no UI instrumentation"
+  },
+  "services": [
+    {
+      "port": 54112,
+      "originalExec": 85176,
+      "uiEntry": "main-BViLm3am.js",
+      "clonedTables": 92,
+      "clonedRows": 1996,
+      "protectedOriginalRows": {
+        "session": 2,
+        "message": 8,
+        "part": 18,
+        "tool_part_request": 4,
+        "tool_part_progress": 0,
+        "tool_part_outcome": 4,
+        "provider_activity_request": 6,
+        "provider_activity_outcome": 6
+      },
+      "schema": 8,
+      "integrity": "ok",
+      "shutdownHTTP": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "originalProcessIdentityState": "dead_or_reused",
+      "reserveMs": 781469
+    },
+    {
+      "port": 54113,
+      "originalExec": 91661,
+      "uiEntry": "main-B5i-B_G8.js",
+      "clonedTables": 92,
+      "clonedRows": 1996,
+      "protectedOriginalRows": {
+        "session": 2,
+        "message": 8,
+        "part": 18,
+        "tool_part_request": 4,
+        "tool_part_progress": 0,
+        "tool_part_outcome": 4,
+        "provider_activity_request": 6,
+        "provider_activity_outcome": 6
+      },
+      "schema": 8,
+      "integrity": "ok",
+      "shutdownHTTP": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "originalProcessIdentityState": "dead_or_reused",
+      "reserveMs": 998899
+    }
+  ],
+  "credentialsCopied": false,
+  "newModelRequests": 0,
+  "cumulativeModelRequests": 119,
+  "limitations": [
+    "Unknown binary content without a loaded byte payload still needs a separately designed raw-file download contract.",
+    "Isolated model configuration feedback is expected without copied credentials.",
+    "This UI change does not qualify all product flows or current full native CI."
+  ],
+  "acceptedDesign": "Goal remains in /goal and Composer + menu, matching the recorded explicit user request; no standalone Goal homepage region was restored."
+}

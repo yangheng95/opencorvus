@@ -1,4 +1,5 @@
 import { batch, createEffect, createMemo, createSignal, lazy, Match, onCleanup, Show, Switch, untrack } from "solid-js"
+import { base64ToUint8 } from "@opencorvus-ai/transport-protocol"
 import { ApiError, apiJson, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import {
   closeFileEditor,
@@ -394,7 +395,7 @@ export function FileEditorPane() {
           >
             <Badge tone="neutral" size="sm">{t("file_editor.read_only")}</Badge>
           </Show>
-          <Show when={textContent()}>
+          <Show when={textContent() || content()?.encoding === "base64"}>
             <Button
               type="button"
               variant="ghost"
@@ -404,8 +405,12 @@ export function FileEditorPane() {
               title={t(dirty() ? "file_editor.download_draft" : "file.download")}
               aria-label={t(dirty() ? "file_editor.download_draft" : "file.download")}
               onClick={() => {
-                if (isBusy() || fileEditorReserved() || !textContent()) return
-                downloadBlob(new Blob([draft()], { type: "text/plain;charset=utf-8" }), fileTitle())
+                const file = content()
+                if (isBusy() || fileEditorReserved() || !file || (!textContent() && file.encoding !== "base64")) return
+                const blob = file.encoding === "base64"
+                  ? new Blob([Uint8Array.from(base64ToUint8(file.content))], { type: file.mimeType ?? "application/octet-stream" })
+                  : new Blob([draft()], { type: "text/plain;charset=utf-8" })
+                downloadBlob(blob, fileTitle())
               }}
             >
               <Icon name="download" />

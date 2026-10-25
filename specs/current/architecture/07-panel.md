@@ -537,6 +537,13 @@ nonshrinking horizontal metadata in the three existing shared consumers.
 
 ## File editor language support
 
+The File editor's existing download action exports the current text draft or the
+complete loaded base64 image/PDF bytes with their MIME type and canonical file
+title. Binary preview downloads use the shared transport decoder and Blob
+download primitive; they do not stringify base64 or refetch the file. Content
+without a byte payload has no download action. Loading and file navigation
+reservations retain the same disabled boundary as text downloads.
+
 Every accepted explicit file-open request advances the existing reveal revision,
 including a repeated range-free request for the current resource. The main
 workbench consumes that revision to reveal a hidden Dock. Repeated resource
