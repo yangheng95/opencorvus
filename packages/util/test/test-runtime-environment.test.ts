@@ -1,11 +1,56 @@
 import { expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
+import os from "node:os"
+import { pathToFileURL } from "node:url"
 import {
   bootstrapIsolatedTestRuntime,
   isolatedTestChildEnvironment,
   removeIsolatedTestRuntime,
 } from "../src/test-runtime-environment"
+
+test("an aliased native temp root publishes physical isolation paths that a real child can use", async () => {
+  const originalEnvironment = { ...process.env }
+  const fixture = await fs.mkdtemp(path.join(os.tmpdir(), "runtime-temp-alias-"))
+  const physicalTemp = path.join(fixture, "physical-temp")
+  const aliasTemp = path.join(fixture, "alias-temp")
+  await fs.mkdir(physicalTemp)
+  await fs.symlink(physicalTemp, aliasTemp, process.platform === "win32" ? "junction" : "dir")
+  let runtime: Awaited<ReturnType<typeof bootstrapIsolatedTestRuntime>> | undefined
+  try {
+    process.env.TEMP = aliasTemp
+    process.env.TMP = aliasTemp
+    process.env.TMPDIR = aliasTemp
+    runtime = await bootstrapIsolatedTestRuntime("runner")
+    expect(path.dirname(runtime.ownerRoot)).toBe(await fs.realpath(physicalTemp))
+    expect(runtime.processRoot).toBe(await fs.realpath(runtime.processRoot))
+    const childRoot = path.join(await fs.realpath(runtime.processRoot), "nested-runtime")
+    const moduleURL = pathToFileURL(path.resolve(import.meta.dir, "../src/runtime-paths.ts")).href
+    const script = `
+      import { resolveOpenCorvusRuntimePaths } from ${JSON.stringify(moduleURL)};
+      import fs from "node:fs/promises";
+      const paths = resolveOpenCorvusRuntimePaths({ env: process.env, platform: process.platform, home: process.env.HOME });
+      await fs.mkdir(paths.data, { recursive: true });
+      console.log(JSON.stringify({ root: paths.root, data: (await fs.stat(paths.data)).isDirectory() }));
+    `
+    const child = Bun.spawn([process.execPath, "-e", script], {
+      env: { ...isolatedTestChildEnvironment(runtime), OPENCORVUS_HOME: childRoot },
+      stdout: "pipe", stderr: "pipe",
+    })
+    const [exit, stdout, stderr] = await Promise.all([
+      child.exited, new Response(child.stdout).text(), new Response(child.stderr).text(),
+    ])
+    expect(exit, stderr).toBe(0)
+    expect(JSON.parse(stdout)).toEqual({ root: childRoot, data: true })
+  } finally {
+    if (runtime) await removeIsolatedTestRuntime(runtime)
+    for (const key of Object.keys(process.env)) if (!(key in originalEnvironment)) delete process.env[key]
+    Object.assign(process.env, originalEnvironment)
+    if (process.platform === "win32") await fs.rmdir(aliasTemp)
+    else await fs.unlink(aliasTemp)
+    await fs.rm(fixture, { recursive: true, force: true })
+  }
+}, 30_000)
 
 test("isolated child home exposes existing native Windows known folders", async () => {
   const originalEnvironment = { ...process.env }

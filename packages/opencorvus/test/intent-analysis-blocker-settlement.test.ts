@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test } from "bun:test"
+import { afterEach, beforeEach, describe, expect, test } from "bun:test"
 import z from "zod"
 import type { IntentAnalysisAgent } from "@/intent-analysis/agent"
 import { createDispatchLineageOrigin } from "@/engine/dispatch-lineage"
@@ -21,6 +21,7 @@ import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { Database, and, eq } from "@/storage/db"
 import type { persistIntentAnalysisArtifact } from "@/engine/persist"
+import { TestHooks as TaskControlTestHooks } from "@/engine/task-root-ingress-delivery"
 
 const packageRevision = {
   scope: "built_in" as const,
@@ -66,6 +67,10 @@ const workflowBinding: SelectedWorkflowBinding = {
   ],
 }
 
+let deliveryOwnerID: string
+beforeEach(() => {
+  deliveryOwnerID = `runtime:intent-blocker:${Identifier.ascending("call")}`
+})
 afterEach(async () => {
   await Instance.disposeAll()
   await resetMemoryDatabase()
@@ -140,23 +145,26 @@ async function createFixture(title: string) {
   })
   const dispatchID = Identifier.ascending("artifact")
   const childSessionID = Identifier.deterministic("session", `intent-analysis-dispatch\0${dispatchID}`)
-  recordTestDispatchLineage({
-    origin: createDispatchLineageOrigin({
-      dispatchID,
-      taskID,
-      orchestratorSessionID: root.id,
-      orchestratorMessageID,
-      toolPartID,
-      toolCallID: callID,
-      targetAgentID: projectedIntentAnalyst.identity.agentID,
-      projectedWorkerIdentity: projectedIntentAnalyst.identity,
-      workScope: { kind: "task" },
-      workflowBinding,
-      workflowNodeID: "intent",
-      adapterInput: { reason: "Resolve scope" },
-    }),
-    childSessionID: worker.id,
-  })
+  {
+    using _delivery = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime(deliveryOwnerID)
+    recordTestDispatchLineage({
+      origin: createDispatchLineageOrigin({
+        dispatchID,
+        taskID,
+        orchestratorSessionID: root.id,
+        orchestratorMessageID,
+        toolPartID,
+        toolCallID: callID,
+        targetAgentID: projectedIntentAnalyst.identity.agentID,
+        projectedWorkerIdentity: projectedIntentAnalyst.identity,
+        workScope: { kind: "task" },
+        workflowBinding,
+        workflowNodeID: "intent",
+        adapterInput: { reason: "Resolve scope" },
+      }),
+      childSessionID: worker.id,
+    })
+  }
   WorkerTurnDescriptor.create({
     sessionID: worker.id,
     payload: {

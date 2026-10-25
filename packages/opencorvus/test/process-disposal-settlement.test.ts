@@ -20,10 +20,14 @@ test("a real native process settles inside the existing cleanup deadline after a
   try {
     const code = await ProcessSupervisor.disposeAndWaitForExit(handle, "real legal disposal")
     await Promise.all([actual.exited, actual.outputSettled, actual.settled])
-    expect({ code, observations, terminal: await actual.terminalFact }).toMatchObject({
+    const terminal = await actual.terminalFact
+    expect(code).toBe(terminal.exitCode ?? 1)
+    expect({ code, observations, terminal }).toMatchObject({
       code: expect.any(Number),
       observations: ["dispose-started", "dispose-completed"],
-      terminal: { exitCode: expect.any(Number) },
+      terminal: process.platform === "win32"
+        ? { exitCode: expect.any(Number), signal: null }
+        : { exitCode: null, signal: "SIGTERM" },
     })
     console.info(
       "native-disposal-proof",

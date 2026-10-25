@@ -120,7 +120,7 @@ async function inheritedOwnerRoot(): Promise<string | undefined> {
 
 export async function bootstrapIsolatedTestRuntime(role: "runner" | "test"): Promise<IsolatedTestRuntime> {
   const inherited = role === "test" ? await inheritedOwnerRoot() : undefined
-  const osTempRoot = inherited ? path.resolve(process.env[OS_TEMP_ROOT]!) : path.resolve(os.tmpdir())
+  const osTempRoot = await fsPromises.realpath(inherited ? process.env[OS_TEMP_ROOT]! : os.tmpdir())
   const ownerRoot = inherited ?? (await fsPromises.mkdtemp(path.join(osTempRoot, "opencorvus-test-run-")))
   const ownsOwnerRoot = inherited === undefined
   const ownerNonce = inherited ? process.env[OWNER_NONCE]! : randomUUID()

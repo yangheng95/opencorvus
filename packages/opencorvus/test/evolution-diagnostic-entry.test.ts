@@ -122,13 +122,17 @@ test("registered diagnostic prepares the actual package and preserves one initia
     const accepted = contenders.find((entry) => entry.status === "fulfilled")!
     if (accepted.status !== "fulfilled") throw new Error("Expected one initialization claimant")
     expect(successor.receiptDirectory).toEqual(accepted.value.receiptDirectory)
-    const oldRoot = path.join(parent, "historical-registration")
-    const oldRegistration = path.resolve(import.meta.dir, "../../../specs/artifacts/2026-09-27-evolution-readiness/registration.json")
-    const old = await invoke(["--registration", oldRegistration, "--run-root", oldRoot])
-    expect(old.exit).toBe(1)
-    const oldReceipt = JSON.parse(await readFile(path.join(oldRoot, "result.json"), "utf8"))
-    expect(oldReceipt).toMatchObject({ outcome: "failed", error: expect.stringContaining("Installed target differs from the registered package"),
-      target: { id: receipt.target.id, version: receipt.target.version, packageDigest: receipt.target.packageDigest }, cleanup: receipt.cleanup })
+    const otherSource = payloadPackageSources.find(entry => entry.namespace === "builtin" && entry.id !== "data-analysis")
+    if (!otherSource) throw new Error("A distinct embedded package is required for the identity mismatch contract")
+    const otherTarget = ExpertSquadRegistry.loadEmbeddedPackage(otherSource)
+    const mismatchedRoot = path.join(parent, "mismatch")
+    const mismatchedRegistration = path.join(parent, "mismatched-registration.json")
+    await writeFile(mismatchedRegistration, JSON.stringify({ ...receipt.registration, packageDigest: otherTarget.packageDigest }))
+    const mismatch = await invoke(["--registration", mismatchedRegistration, "--run-root", mismatchedRoot])
+    expect(mismatch.exit).toBe(1)
+    const mismatchReceipt = JSON.parse(await readFile(path.join(mismatchedRoot, "result.json"), "utf8"))
+    expect(mismatchReceipt).toMatchObject({ outcome: "failed", error: expect.stringContaining("Installed target differs from the registered package"),
+      registration: { packageDigest: otherTarget.packageDigest }, cleanup: receipt.cleanup })
     console.log("REGISTERED_TEAM_PREPARED " + JSON.stringify({ sourceCommit: receipt.sourceCommit, initialTree: receipt.initialTree, cleanup: receipt.cleanup }))
   } finally { await rm(parent, { recursive: true, force: true }) }
 }, 90_000)

@@ -1508,6 +1508,7 @@ describe("scheduler Task-root Message protocol", () => {
         role: "assistant",
         author: "mission",
         time: { created: completedAt, completed: completedAt + 1 },
+        finish: "error",
         agent: "mission",
         providerID: "test",
         modelID: "test",

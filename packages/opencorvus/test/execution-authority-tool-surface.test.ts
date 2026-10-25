@@ -167,10 +167,10 @@ describe("execution authority Tool surfaces", () => {
         expect({ effectClass: descriptor?.effectClass, resource: descriptor?.scope.resource }).toEqual({
           effectClass: "write_local",
           resource: {
-            scope_type: "filesystem",
+            scope_type: "provider",
             operation: "work_artifact_validate",
-            working_directory: project.path,
-            payload_sha256: expect.any(String),
+            arguments: { profile: "office.presentation@1", source_url: "attachment://project/source.pptx" },
+            arguments_sha256: expect.any(String),
           },
         })
       },

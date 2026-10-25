@@ -2,6 +2,7 @@ import { afterAll, describe, expect, test } from "bun:test"
 import { EngineControlActivationLeaseTable } from "../src/engine/engine.sql"
 import { currentControlLeaseRowsSQL, releaseControlLeaseInTransaction } from "../src/engine/control-lease"
 import { Instance } from "../src/project/instance"
+import { ProjectTable } from "../src/project/project.sql"
 import {
   completedOneShotEventDefinitionIDsInTransaction,
   currentEventDefinitionPageInTransaction,
@@ -88,6 +89,9 @@ function insertFire(
   )
   if (!queuePosition) throw new Error(`Missing Event queue position for ${definition.definitionID}`)
   const occurrenceID = `${input.fireID}:occurrence`
+  const project = db.select({ generation: ProjectTable.generation }).from(ProjectTable)
+    .where(eq(ProjectTable.id, input.projectID)).get()
+  if (!project) throw new Error(`Missing Fire Project ${input.projectID}`)
   db.insert(EventOccurrenceTable)
     .values({
       id: occurrenceID,
@@ -105,6 +109,7 @@ function insertFire(
       queue_position: queuePosition,
       event_job_revision_id: input.definitionRevisionID,
       event_occurrence_id: occurrenceID,
+      project_generation: project.generation,
       causation_fire_id: input.causationFireID ?? null,
       causal_cycle: input.causalCycle ?? false,
       created_session_id: `${input.fireID}:session`,
