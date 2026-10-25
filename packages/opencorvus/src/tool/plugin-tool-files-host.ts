@@ -1,6 +1,7 @@
 import * as nativeFiles from "node:fs/promises"
 import type { ToolFiles } from "@opencorvus-ai/plugin"
 import { executeCapsuleFileOperation } from "@/execution-capsule/file-broker"
+import { PhysicalOperationScope } from "@/util/physical-operation-scope"
 import {
   readTaskProcessBinding,
   TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL,
@@ -8,19 +9,12 @@ import {
 
 type FileOperationTracker = <T>(operation: () => Promise<T>) => Promise<T>
 
-function tracked<T extends (...args: any[]) => Promise<any>>(operation: T, track: FileOperationTracker): T {
-  return ((...args: Parameters<T>) => track(() => operation(...args))) as T
-}
-
 /**
  * Native implementation of the package-tool filesystem capability.
  * The capability interface is the stable ToolHost boundary; the Capsule
  * executor can replace this implementation without changing package code.
  */
-export function createPluginToolFilesHost(
-  track: FileOperationTracker,
-  scope: { taskID: string },
-): ToolFiles {
+export function createPluginToolFilesHost(track: FileOperationTracker, scope: { taskID: string }): ToolFiles {
   const capsuleOperation = async (operation: keyof ToolFiles, args: unknown[]) => {
     const binding = readTaskProcessBinding(scope.taskID)
     if (binding.protocol !== TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL) {
@@ -52,11 +46,15 @@ export function createPluginToolFilesHost(
     operations.map((operation) => [
       operation,
       (...args: unknown[]) =>
-        track(() => {
+        track(async () => {
+          const physical = PhysicalOperationScope.current()
+          physical?.signal.throwIfAborted()
           const binding = readTaskProcessBinding(scope.taskID)
-          return binding.protocol === TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL
+          const result = await (binding.protocol === TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL
             ? capsuleOperation(operation, args)
-            : (nativeFiles[operation] as (...nativeArgs: unknown[]) => Promise<unknown>)(...args)
+            : (nativeFiles[operation] as (...nativeArgs: unknown[]) => Promise<unknown>)(...args))
+          physical?.activity()
+          return result
         }),
     ]),
   )

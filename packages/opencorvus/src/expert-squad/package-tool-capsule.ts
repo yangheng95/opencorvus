@@ -8,6 +8,7 @@ import { ExecutionCapsuleRuntimeUnavailableError, activeExecutionCapsuleRuntimeF
 import { ProcessSupervisor } from "@/shell/process-supervisor"
 import { which } from "@/util/which"
 import type { PackageToolBundle } from "./package-tool-bundle"
+import { PhysicalOperationScope } from "@/util/physical-operation-scope"
 
 // RPC means Remote Procedure Call. JSON means JavaScript Object Notation.
 const RPC_PREFIX = "\u001eopencorvus-package-tool-rpc-v1:"
@@ -50,6 +51,39 @@ function isFileMetadata(value: object): value is {
   return "isFile" in value && typeof value.isFile === "function"
 }
 
+async function responseBody(response: Response): Promise<string | null> {
+  if (!response.body) return null
+  const physical = PhysicalOperationScope.current()
+  const reader = response.body.getReader()
+  const chunks: Buffer[] = []
+  let cancellation: Promise<void> | undefined
+  const onAbort = () => {
+    cancellation = reader.cancel(physical!.signal.reason)
+    void cancellation.catch(() => undefined)
+  }
+  physical?.signal.addEventListener("abort", onAbort, { once: true })
+  try {
+    physical?.signal.throwIfAborted()
+    for (;;) {
+      const { done, value } = await reader.read()
+      if (done) break
+      if (value.byteLength) {
+        chunks.push(Buffer.from(value))
+        physical?.activity()
+      }
+    }
+    physical?.signal.throwIfAborted()
+    return Buffer.concat(chunks).toString("base64")
+  } finally {
+    physical?.signal.removeEventListener("abort", onAbort)
+    try {
+      if (cancellation) await cancellation
+    } finally {
+      reader.releaseLock()
+    }
+  }
+}
+
 async function encode(value: unknown): Promise<unknown> {
   if (value === undefined) return { __rpc_type: "undefined" }
   if (typeof value === "bigint") return { __rpc_type: "bigint", value: String(value) }
@@ -64,7 +98,7 @@ async function encode(value: unknown): Promise<unknown> {
       status: value.status,
       statusText: value.statusText,
       headers: [...value.headers.entries()],
-      body: value.body === null ? null : Buffer.from(await value.arrayBuffer()).toString("base64"),
+      body: await responseBody(value),
       url: value.url,
       redirected: value.redirected,
       responseType: value.type,
@@ -128,7 +162,9 @@ async function encode(value: unknown): Promise<unknown> {
         },
       }
     }
-    const entries = await Promise.all(Object.entries(value).map(async ([key, item]) => [key, await encode(item)] as const))
+    const entries = await Promise.all(
+      Object.entries(value).map(async ([key, item]) => [key, await encode(item)] as const),
+    )
     return Object.fromEntries(entries)
   }
   return value
@@ -159,14 +195,11 @@ function decode(value: unknown): unknown {
     } as RequestInit)
   }
   if (record.__rpc_type === "response") {
-    const response = new Response(
-      record.body === null ? undefined : Buffer.from(String(record.body), "base64"),
-      {
-        status: Number(record.status),
-        statusText: String(record.statusText),
-        headers: record.headers as [string, string][],
-      },
-    )
+    const response = new Response(record.body === null ? undefined : Buffer.from(String(record.body), "base64"), {
+      status: Number(record.status),
+      statusText: String(record.statusText),
+      headers: record.headers as [string, string][],
+    })
     Object.defineProperties(response, {
       url: { value: String(record.url), enumerable: true },
       redirected: { value: record.redirected === true, enumerable: true },
@@ -457,7 +490,9 @@ export function nativePackageToolEnvironment(): NodeJS.ProcessEnv {
   if (process.platform !== "win32") return {}
   const systemRoot = process.env.SystemRoot ?? process.env.SYSTEMROOT
   if (!systemRoot) {
-    throw new ExecutionCapsuleRuntimeUnavailableError("Native Windows package tools require the SystemRoot runtime fact")
+    throw new ExecutionCapsuleRuntimeUnavailableError(
+      "Native Windows package tools require the SystemRoot runtime fact",
+    )
   }
   return { SystemRoot: systemRoot }
 }
@@ -472,6 +507,7 @@ async function runCapsule(input: {
   args?: unknown
   abort?: AbortSignal
 }): Promise<unknown> {
+  input = { ...input, abort: PhysicalOperationScope.current()?.combine(input.abort) ?? input.abort }
   if (input.authority.kind === "package_validation" && input.operation !== "introspect") {
     throw new Error("Package validation authority permits introspection only")
   }
@@ -511,14 +547,48 @@ async function runCapsule(input: {
     env: execution?.kind === "task_capsule" ? {} : nativePackageToolEnvironment(),
     stdin: "pipe" as const,
     owner: `package-tool:${input.prepared.snapshot.ref}`,
+    signal: input.abort,
+  }
+  const start = {
+    protocol: "opencorvus.package-tool-capsule-rpc.v1",
+    operation: input.operation,
+    invocationID: randomUUID(),
+    bundle: bundle.toString("base64"),
+    bundleSHA256: input.prepared.snapshot.compiledBundleSHA256,
+    workerRuntimeDirectory,
+    managedRuntimeDirectory: input.host?.managedRuntimeDirectory,
+    context: await encode(input.context),
+    args: await encode(input.args),
   }
   const handle =
     input.authority.kind === "task"
       ? await ProcessSupervisor.spawnTaskCommand({ taskID: input.authority.taskID, cwd: input.cwd }, spawnOptions)
       : await ProcessSupervisor.spawnHostCommand({ ...spawnOptions, cwd: input.cwd })
+  return runPackageToolRpc({
+    handle,
+    ref: input.prepared.snapshot.ref,
+    inactivityMs,
+    host: input.host,
+    abort: input.abort,
+    start,
+  })
+}
+
+/** Physical RPC owner shared by Task execution and metadata introspection. */
+export async function runPackageToolRpc(input: {
+  handle: ProcessSupervisor.Handle
+  ref: string
+  inactivityMs: number
+  host?: ToolHost
+  abort?: AbortSignal
+  start: unknown
+}): Promise<unknown> {
+  const { handle, inactivityMs } = input
   let stderr = ""
   let outputBuffer = ""
-  let settled = false
+  let terminal = false
+  const calls = new Set<Promise<void>>()
+  const callIDs = new Set<string>()
   let inactivityTimer: ReturnType<typeof setTimeout> | undefined
   let resolveResult: (value: unknown) => void = () => {}
   let rejectResult: (error: unknown) => void = () => {}
@@ -527,14 +597,26 @@ async function runCapsule(input: {
     rejectResult = reject
   })
   const resetInactivity = () => {
+    if (terminal) return
     if (inactivityTimer) clearTimeout(inactivityTimer)
     inactivityTimer = setTimeout(() => {
-      rejectResult(
+      fail(
         new ExecutionCapsuleRuntimeUnavailableError(
-          `Package tool ${input.prepared.snapshot.ref} produced no process or RPC activity for ${inactivityMs}ms`,
+          `Package tool ${input.ref} produced no process or RPC activity for ${inactivityMs}ms`,
         ),
       )
     }, inactivityMs)
+  }
+  const physical = new PhysicalOperationScope(resetInactivity)
+  const close = (reason: unknown) => {
+    terminal = true
+    if (inactivityTimer) clearTimeout(inactivityTimer)
+    physical.revoke(reason)
+  }
+  const fail = (error: unknown) => {
+    if (terminal) return
+    close(error)
+    rejectResult(error)
   }
   handle.stderr?.setEncoding("utf8")
   handle.stderr?.on("data", (chunk) => {
@@ -542,37 +624,74 @@ async function runCapsule(input: {
     stderr += String(chunk)
   })
   const write = (message: unknown) => {
-    resetInactivity()
-    handle.stdin?.write(`${JSON.stringify(message)}\n`)
+    if (terminal) return
+    if (!handle.stdin) throw new Error("Package tool worker has no RPC input")
+    handle.stdin.write(`${JSON.stringify(message)}\n`, (error?: Error | null) => {
+      if (error) fail(error)
+      else resetInactivity()
+    })
   }
-  handle.stdin?.on("error", rejectResult)
-  const dispatch = async (message: RpcMessage) => {
-    if (message.kind === "result") {
-      settled = true
-      if (inactivityTimer) clearTimeout(inactivityTimer)
-      resolveResult(decode(message.value))
-      return
-    }
-    if (message.kind === "failure") {
-      settled = true
-      if (inactivityTimer) clearTimeout(inactivityTimer)
-      const error = Object.assign(new Error(String(message.error.message ?? "Package tool Capsule failed")), message.error)
-      rejectResult(error)
-      return
-    }
+  handle.stdin?.on("error", fail)
+  const dispatch = async (message: Extract<RpcMessage, { kind: "host_call" }>) => {
     if (!input.host) throw new Error("Package tool introspection cannot invoke ToolHost capabilities")
     try {
       const { owner, operation } = callableCapability(input.host, message.path)
       const args = decode(message.args) as unknown[]
       if (message.path.length === 1 && message.path[0] === "fetch") {
         const init = args[1] && typeof args[1] === "object" ? (args[1] as RequestInit) : {}
-        args[1] = { ...init, signal: input.abort }
+        args[1] = { ...init, signal: physical.signal }
       }
       const value = await Reflect.apply(operation, owner, args)
       write({ kind: "host_result", id: message.id, value: await encode(value) })
     } catch (error) {
       write({ kind: "host_failure", id: message.id, error: serializedError(error) })
     }
+  }
+  const admit = (message: RpcMessage) => {
+    if (terminal) return
+    if (!message || typeof message !== "object") throw new Error("Invalid package tool RPC packet")
+    if (message.kind === "result") {
+      if (!Object.hasOwn(message, "value")) throw new Error("Invalid package tool RPC result")
+      if (calls.size) {
+        fail(new Error(`Package tool ${input.ref} sent a terminal RPC response with ${calls.size} active Host call(s)`))
+        return
+      }
+      const value = decode(message.value)
+      close(new Error("Package tool invocation is closed"))
+      resolveResult(value)
+      return
+    }
+    if (message.kind === "failure") {
+      if (!message.error || typeof message.error !== "object") throw new Error("Invalid package tool RPC failure")
+      const error = Object.assign(
+        new Error(String(message.error.message ?? "Package tool Capsule failed")),
+        message.error,
+      )
+      fail(error)
+      return
+    }
+    if (
+      message.kind !== "host_call" ||
+      typeof message.id !== "string" ||
+      !message.id ||
+      callIDs.has(message.id) ||
+      !Array.isArray(message.path) ||
+      !message.path.length ||
+      message.path.some((part) => typeof part !== "string" || !part) ||
+      !Array.isArray(message.args)
+    ) {
+      throw new Error("Invalid package tool Host RPC call")
+    }
+    callIDs.add(message.id)
+    const pending = Promise.resolve().then(() => physical.run(() => dispatch(message)))
+    calls.add(pending)
+    void pending.then(
+      () => calls.delete(pending),
+      (error) => {
+        calls.delete(pending)
+        fail(error)
+      },
+    )
   }
   handle.stdout?.setEncoding("utf8")
   handle.stdout?.on("data", (chunk) => {
@@ -585,46 +704,63 @@ async function runCapsule(input: {
       outputBuffer = outputBuffer.slice(newline + 1)
       if (!line.startsWith(RPC_PREFIX)) continue
       try {
-        void dispatch(JSON.parse(line.slice(RPC_PREFIX.length)) as RpcMessage).catch(rejectResult)
+        admit(JSON.parse(line.slice(RPC_PREFIX.length)) as RpcMessage)
       } catch (error) {
-        rejectResult(error)
+        fail(error)
       }
     }
   })
-  const onAbort = () => {
-    void ProcessSupervisor.terminateAndWaitForExit(handle, `package tool ${input.prepared.snapshot.ref}`).catch(rejectResult)
-  }
+  handle.stdout?.on("error", fail)
+  handle.stderr?.on("error", fail)
+  const onAbort = () => fail(input.abort!.reason)
   input.abort?.addEventListener("abort", onAbort, { once: true })
-  resetInactivity()
-  write({
-    protocol: "opencorvus.package-tool-capsule-rpc.v1",
-    operation: input.operation,
-    invocationID: randomUUID(),
-    bundle: bundle.toString("base64"),
-    bundleSHA256: input.prepared.snapshot.compiledBundleSHA256,
-    workerRuntimeDirectory,
-    managedRuntimeDirectory: input.host?.managedRuntimeDirectory,
-    context: await encode(input.context),
-    args: await encode(input.args),
-  })
-  const exited = handle.exited.then(async (exitCode) => {
-    await handle.outputSettled
-    if (!settled) {
-      rejectResult(
-        new ExecutionCapsuleRuntimeUnavailableError(
-          `Package tool ${input.prepared.snapshot.ref} Capsule exited ${exitCode} without a terminal RPC response: ${stderr}`,
-        ),
-      )
-    }
-  })
+  if (input.abort?.aborted) onAbort()
+  const exited = handle.exited
+    .then(async (exitCode) => {
+      await handle.outputSettled
+      if (!terminal) {
+        fail(
+          new ExecutionCapsuleRuntimeUnavailableError(
+            `Package tool ${input.ref} Capsule exited ${exitCode} without a terminal RPC response: ${stderr}`,
+          ),
+        )
+      }
+    })
+    .catch(fail)
+  let primaryFailure: unknown
+  let failed = false
   try {
+    resetInactivity()
+    try {
+      write(input.start)
+    } catch (error) {
+      fail(error)
+    }
     return await result
+  } catch (error) {
+    failed = true
+    primaryFailure = error
+    throw error
   } finally {
-    if (inactivityTimer) clearTimeout(inactivityTimer)
+    close(primaryFailure ?? new Error("Package tool invocation is closed"))
     input.abort?.removeEventListener("abort", onAbort)
-    handle.stdin?.end()
-    await ProcessSupervisor.disposeAndWaitForExit(handle, `package tool ${input.prepared.snapshot.ref}`)
-    await exited
+    const cleanup = await Promise.allSettled([
+      (async () => {
+        handle.stdin?.end()
+        await ProcessSupervisor.disposeAndWaitForExit(handle, `package tool ${input.ref}`)
+        await exited
+      })(),
+      (async () => {
+        await Promise.allSettled([...calls])
+        await physical.join()
+      })(),
+    ])
+    const failures = cleanup.flatMap((outcome) => (outcome.status === "rejected" ? [outcome.reason] : []))
+    if (failures.length)
+      throw ProcessSupervisor.combineFailures("Package tool execution and cleanup failed", [
+        ...(failed ? [primaryFailure] : []),
+        ...failures,
+      ])
   }
 }
 

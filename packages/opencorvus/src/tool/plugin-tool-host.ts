@@ -23,6 +23,7 @@ import { createExpertSquadPackageHost } from "@/tool/expert-squad-package-host"
 import { createMetricEvaluationHost } from "@/tool/metric-evaluation-host"
 import { createPluginToolFilesHost } from "@/tool/plugin-tool-files-host"
 import { assertTaskNetworkCapability } from "@/engine/task-execution-capsule-binding"
+import { PhysicalOperationScope } from "@/util/physical-operation-scope"
 
 const OUTPUT_CLOSE_TIMEOUT_MS = 1_000
 
@@ -70,10 +71,7 @@ async function waitForOutputClose(
   )
 }
 
-async function runCommand(
-  input: ToolCommandRunInput,
-  taskID: string,
-): Promise<ToolCommandRunResult> {
+async function runCommand(input: ToolCommandRunInput, taskID: string): Promise<ToolCommandRunResult> {
   if (!input.executable.trim()) throw new Error("Tool host command executable must be nonempty.")
   if (!Array.isArray(input.args)) throw new Error("Tool host command args must be an array.")
   if (!input.cwd.trim()) throw new Error("Tool host command cwd must be nonempty.")
@@ -83,7 +81,8 @@ async function runCommand(
 
   const startedAt = new Date()
   const startedMs = Date.now()
-  const abort = input.abort ?? new AbortController().signal
+  const physical = PhysicalOperationScope.current()
+  const abort = physical?.combine(input.abort) ?? input.abort ?? new AbortController().signal
   let stdout = ""
   let stderr = ""
   let timedOut = false
@@ -149,12 +148,16 @@ async function runCommand(
   }
 
   try {
-    handle = await ProcessSupervisor.spawnTaskCommand({ taskID, cwd: input.cwd }, {
-      executable: input.executable,
-      args: input.args,
-      env: input.env as NodeJS.ProcessEnv | undefined,
-      stdin: "ignore",
-    })
+    handle = await ProcessSupervisor.spawnTaskCommand(
+      { taskID, cwd: input.cwd },
+      {
+        executable: input.executable,
+        args: input.args,
+        env: input.env as NodeJS.ProcessEnv | undefined,
+        stdin: "ignore",
+        signal: abort,
+      },
+    )
   } catch (error) {
     return finish({
       exitCode: null,
@@ -163,19 +166,26 @@ async function runCommand(
     })
   }
 
+  physical?.own(handle.settled, () =>
+    ProcessSupervisor.disposeAndWaitForExit(handle!, `plugin tool command ${handle!.pid}`),
+  )
+  const onActivity = () => {
+    resetInactivityTimer()
+    physical?.activity()
+  }
   const stdoutClosed = collectOutput(
     handle.stdout,
     (chunk) => {
       stdout += chunk
     },
-    resetInactivityTimer,
+    onActivity,
   )
   const stderrClosed = collectOutput(
     handle.stderr,
     (chunk) => {
       stderr += chunk
     },
-    resetInactivityTimer,
+    onActivity,
   )
 
   let completion: Pick<ToolCommandRunResult, "exitCode" | "signal" | "error">
@@ -270,7 +280,11 @@ export async function withTaskScopedPluginToolHost<T>(
     if (!active) return Promise.reject(new Error("Package tool host invocation is closed"))
     const pending = Promise.resolve().then(() => {
       assertTaskNetworkCapability({ taskID: scope.taskID, capability: "package-tool HTTP request" })
-      return globalThis.fetch(input, init)
+      const physical = PhysicalOperationScope.current()
+      const requestSignal = init?.signal ?? (input instanceof Request ? input.signal : undefined)
+      const signal = physical?.combine(requestSignal) ?? requestSignal
+      signal?.throwIfAborted()
+      return globalThis.fetch(input, { ...init, signal })
     })
     networkOperations.add(pending)
     void pending.then(

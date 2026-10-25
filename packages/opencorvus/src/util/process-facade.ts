@@ -9,6 +9,7 @@ import {
 } from "@opencorvus-ai/util/process"
 import { nodeProcessByteSink, nodeProcessByteSource, spawnNodeProcess } from "@opencorvus-ai/util/process-node"
 import type { ProcessSupervisor as ProcessSupervisorContract } from "@/shell/process-supervisor"
+import { PhysicalOperationScope } from "./physical-operation-scope"
 
 function terminalReceipt(
   occurrenceID: string,
@@ -33,6 +34,8 @@ function supervisedProcessFacade(input: {
   terminateChildrenOnRootExit: boolean
 }): ProcessFacade {
   const spawner: ProcessSpawner = async (request): Promise<ProcessSpawnedHandle> => {
+    const physical = PhysicalOperationScope.current()
+    physical?.signal.throwIfAborted()
     if (request.windowsVerbatimArguments) {
       throw new Error("The supervised process facade does not accept verbatim Windows command-line strings")
     }
@@ -45,7 +48,10 @@ function supervisedProcessFacade(input: {
     if (input.task && request.ownership === "detached") {
       throw new Error("Task process execution cannot detach from Task settlement")
     }
-    if (request.ownership === "detached") return spawnNodeProcess(request)
+    if (request.ownership === "detached") {
+      if (physical) throw new Error("Invocation-owned Host work cannot detach from physical settlement")
+      return spawnNodeProcess(request)
+    }
     // Plugin initialization participates in Config/Provider discovery. Loading
     // the concrete supervisor at module evaluation would create an application
     // cycle through that discovery graph. The injected capability stays an
@@ -62,16 +68,17 @@ function supervisedProcessFacade(input: {
       stdin: request.stdin,
       owner: input.owner,
       gracefulTerminationMs: request.gracefulTerminationMs,
-      signal: request.controlSignal,
+      signal: physical?.combine(request.controlSignal) ?? request.controlSignal,
       terminateChildrenOnRootExit: input.terminateChildrenOnRootExit,
     }
     const handle = input.task
       ? await ProcessSupervisor.spawnTaskCommand(input.task, command)
       : await ProcessSupervisor.spawnHostCommand({ ...command, cwd: request.cwd })
+    physical?.own(handle.settled, () => ProcessSupervisor.disposeAndWaitForExit(handle, "Host RPC process"))
     const terminal = terminalReceipt(request.occurrenceID, handle.pid, handle)
     const outputSettled = handle.outputSettled
     const settled = Promise.allSettled([terminal, outputSettled, handle.settled]).then((outcomes) => {
-      const failures = outcomes.flatMap((outcome) => outcome.status === "rejected" ? [outcome.reason] : [])
+      const failures = outcomes.flatMap((outcome) => (outcome.status === "rejected" ? [outcome.reason] : []))
       if (failures.length) throw ProcessSupervisor.combineFailures("Process facade settlement failed", failures)
       const receipt = outcomes[0]
       if (receipt.status !== "fulfilled") throw receipt.reason
@@ -85,14 +92,23 @@ function supervisedProcessFacade(input: {
     ): ProcessByteSource | null => {
       if (!stream) return null
       if (mode === "inherit") {
+        if (physical) stream.on("data", physical.activity)
         stream.pipe(inherited)
         return null
       }
       if (mode === "ignore") {
+        if (physical) stream.on("data", physical.activity)
         stream.resume()
         return null
       }
-      return nodeProcessByteSource(stream)
+      const source = nodeProcessByteSource(stream)
+      if (!physical || !source) return source
+      return (async function* () {
+        for await (const chunk of source) {
+          if (chunk.byteLength) physical.activity()
+          yield chunk
+        }
+      })()
     }
     return {
       occurrenceID: request.occurrenceID,

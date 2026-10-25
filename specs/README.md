@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Package Tool RPC 物理寿命](records/2026-10/2026-10-25-package-tool-rpc-lifetime.md)：issue 51 活动传播、取消与 Host 效果结算。
+
 - [成员分组与真实事件中的身份变化](records/2026-10/2026-10-25-member-group-identity.md)：589真实事件与正文分组身份调查。
 
 - [既有成员的真实流与 Rendering 生命周期](records/2026-10/2026-10-25-member-live-lifecycle.md)：588原成员自身流式路径和真实渲染所有权。

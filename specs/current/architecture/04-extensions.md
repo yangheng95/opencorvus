@@ -210,6 +210,21 @@ file/folder/ZIP import 和 MCP（Model Context Protocol，模型上下文协议�
 
 ## Expert Squad Package —— Agent 能力包
 
+Package Tool RPC（Remote Procedure Call，远程过程调用）的单次调用由
+`runPackageToolRpc` 拥有。它与现有 Task/Session occurrence 共用原执行入口，
+只在当前调用的异步上下文内传播 `PhysicalOperationScope`，不持久化另一份状态。
+Host 调用从接纳到结果编码均受追踪；嵌套 Task/Host 进程仍由原
+`ProcessSupervisor` 回收。command、file broker 和 ProcessFacade 的真实输出、
+已完成的 Host 文件操作及 HTTP 响应体真实字节向该调用报告活动，不发送计时心跳。
+文件 broker 保持原 workspace 映射与符号链接安全检查。
+
+外部取消、真实闲置、worker/协议/管道错误及 terminal 同步关闭 Host 接纳，
+撤销嵌套进程与请求；新的文件/进程操作检查同一 signal。返回前必须等待已接纳
+Host Promise、响应体读取/取消和物理资源结算。有限且不可中断的原生操作必须 join。
+仍有 Host 调用时收到成功 terminal 是明确协议错误，不能发布成功后继续产生效果。
+正常 Host 错误仍经原 RPC failure 回传；主失败与回收失败共同保留。
+Task/validation introspection 复用同一 owner，metadata authority 不获得 Host 能力。
+
 专家团的通用工具由显式 `capability_refs` 和平台能力集展开产生。`base_role`
 定义能力上限，不等于自动获得全部基础工具；只有已声明的 `build-base` 等平台集
 才跟随 `PlatformCapabilitySetRegistry` / `AgentToolPool` 的当前成员。例如本轮

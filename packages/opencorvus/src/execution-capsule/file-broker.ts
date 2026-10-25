@@ -6,6 +6,7 @@ import { activeTaskExecutionCapsule } from "@/engine/task-execution-capsule-bind
 import { activeExecutionCapsuleRuntimeFact, ExecutionCapsuleRuntimeUnavailableError } from "./runtime"
 import { EXECUTION_CAPSULE_FILE_WORKER_SOURCE } from "./file-worker-source"
 import { Filesystem } from "@/util/filesystem"
+import { PhysicalOperationScope } from "@/util/physical-operation-scope"
 
 type Operation = keyof ToolFiles
 const operationPathIndexes: Partial<Record<Operation, readonly number[]>> = {
@@ -53,12 +54,18 @@ function decode(value: unknown): unknown {
   if (!value || typeof value !== "object") return value
   const record = value as Record<string, unknown>
   if (typeof record.__bytes === "string") return Buffer.from(record.__bytes, "base64")
-  if (record.__dirent === true) return Object.freeze({ name: record.name, parentPath: record.parentPath, ...fileType(record) })
+  if (record.__dirent === true)
+    return Object.freeze({ name: record.name, parentPath: record.parentPath, ...fileType(record) })
   if (record.__stats === true) {
     const fields = Object.fromEntries(
       Object.entries(record)
         .filter(([key]) => key !== "__stats" && !key.startsWith("is"))
-        .map(([key, item]) => [key, item && typeof item === "object" && "__bigint" in item ? BigInt(String((item as { __bigint: unknown }).__bigint)) : item]),
+        .map(([key, item]) => [
+          key,
+          item && typeof item === "object" && "__bigint" in item
+            ? BigInt(String((item as { __bigint: unknown }).__bigint))
+            : item,
+        ]),
     )
     return Object.freeze({ ...fields, ...fileType(record) })
   }
@@ -77,7 +84,11 @@ function operationError(payload: Record<string, unknown>) {
 async function collect(stream: NodeJS.ReadableStream | null) {
   if (!stream) return ""
   let output = ""
-  for await (const chunk of stream) output += chunk.toString()
+  const physical = PhysicalOperationScope.current()
+  for await (const chunk of stream) {
+    output += chunk.toString()
+    if (chunk.length) physical?.activity()
+  }
   return output
 }
 
@@ -87,6 +98,8 @@ export async function executeCapsuleFileOperation(input: {
   operation: Operation
   args: unknown[]
 }): Promise<unknown> {
+  const physical = PhysicalOperationScope.current()
+  physical?.signal.throwIfAborted()
   const runtime = await activeExecutionCapsuleRuntimeFact()
   if (!runtime) throw new ExecutionCapsuleRuntimeUnavailableError("Capsule file broker requires an active runtime")
   const capsule = await activeTaskExecutionCapsule({ taskID: input.taskID, cwd: input.cwd })
@@ -101,19 +114,55 @@ export async function executeCapsuleFileOperation(input: {
       ? path.posix.join("/workspace", path.relative(capsule.root, absolute).split(path.sep).join("/"))
       : path.posix.join("/opencorvus-outside-root", Buffer.from(absolute).toString("hex"))
   }
-  const handle = await ProcessSupervisor.spawnTaskCommand({ taskID: input.taskID, cwd: input.cwd }, {
-    executable: runtime.nodePath,
-    args: ["-e", EXECUTION_CAPSULE_FILE_WORKER_SOURCE, "/workspace"],
-    env: {},
-    stdin: "pipe",
-    owner: "task-file-broker",
-  })
+  const handle = await ProcessSupervisor.spawnTaskCommand(
+    { taskID: input.taskID, cwd: input.cwd },
+    {
+      executable: runtime.nodePath,
+      args: ["-e", EXECUTION_CAPSULE_FILE_WORKER_SOURCE, "/workspace"],
+      env: {},
+      stdin: "pipe",
+      owner: "task-file-broker",
+      signal: physical?.signal,
+    },
+  )
+  physical?.own(handle.settled, () => ProcessSupervisor.disposeAndWaitForExit(handle, "task file broker"))
   const stdout = collect(handle.stdout)
   const stderr = collect(handle.stderr)
-  handle.stdin?.end(JSON.stringify({ operation: input.operation, args: encode(mappedArgs) }))
-  const exitCode = await handle.exited
-  const [output, errorOutput] = await Promise.all([stdout, stderr])
-  await handle.dispose()
+  const streams = Promise.all([stdout, stderr])
+  void streams.catch(() => undefined)
+  let exitCode: number
+  let output: string, errorOutput: string
+  let primaryFailure: unknown
+  let failed = false
+  let inputFailure: Error | undefined
+  const onInputError = (error: Error) => {
+    inputFailure = error
+  }
+  handle.stdin?.on("error", onInputError)
+  try {
+    physical?.signal.throwIfAborted()
+    handle.stdin?.end(JSON.stringify({ operation: input.operation, args: encode(mappedArgs) }))
+    exitCode = await handle.exited
+    ;[output, errorOutput] = await streams
+    if (inputFailure) throw inputFailure
+    physical?.signal.throwIfAborted()
+  } catch (error) {
+    failed = true
+    primaryFailure = error
+    throw error
+  } finally {
+    const outcomes = await Promise.allSettled([
+      ProcessSupervisor.disposeAndWaitForExit(handle, "task file broker"),
+      streams,
+    ])
+    handle.stdin?.removeListener("error", onInputError)
+    const failures = outcomes.flatMap((outcome) => (outcome.status === "rejected" ? [outcome.reason] : []))
+    if (failures.length)
+      throw ProcessSupervisor.combineFailures("File broker execution and cleanup failed", [
+        ...(failed ? [primaryFailure] : []),
+        ...failures,
+      ])
+  }
   let response: { ok: boolean; value?: unknown; error?: Record<string, unknown> }
   try {
     response = JSON.parse(output)
