@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Office请求失败与反馈体验](2026-10-25-office-file-delivery/README.md)：594真实失败页面、原诊断及修复后复核。
+
 - [Chat附件与真实文件交付体验](2026-10-25-chat-file-delivery/README.md)：593单Chat上传、交付、阅读与下载实际验收。
 
 - [原营销完成后追加修订](2026-10-25-marketing-revision/README.md)：全新marketing-growth两轮真实证据。

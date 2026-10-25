@@ -504,7 +504,10 @@ aborted terminal reason. Message-level cancellation uses a neutral stopped
 notice with its original reason and complete cancellation details; member
 history carries that same classification with the original Message identity.
 Copy controls and headings follow the current language. Other assistant errors
-retain their error presentation, and the underlying Message/Tool facts stay intact.
+use a localized unfinished-response heading and follow-up guidance. Their complete
+original reason and additional details remain in one expandable error diagnostic,
+including failures that have no additional details; copy controls keep the original
+reason/details text. The underlying Message/Tool facts stay intact.
 
 Review selection is exact group/path. Material request identity includes endpoints,
 objects, evidence and receipts in memory; ambiguous shorthand is a precise error.

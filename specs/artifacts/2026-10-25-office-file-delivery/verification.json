@@ -1,0 +1,224 @@
+{
+  "at": "2026-10-25T08:22:58.852Z",
+  "request": {
+    "sessionID": "ses_-zUQxA1lPzzUZFA4CCxZ",
+    "model": "gpt-6.1-sol",
+    "maximumRequests": 24,
+    "attempts": 22,
+    "before": {
+      "requests": 21,
+      "fetchFailed": 19,
+      "streaming200EOF": 2
+    },
+    "after": {
+      "requests": 1,
+      "purpose": "Existing project memory inbox organization, not an Office business request",
+      "streaming200EOF": 1
+    },
+    "officeDelivery": "Not achieved; original business failed before HTTP response; cause remains unknown",
+    "officeOutputs": 0
+  },
+  "originalFailure": [
+    {
+      "id": "msg_g0VZ2wpXK000NgH71sc6",
+      "sessionID": "ses_-zUQxA1lPzzUZFA4CCxZ",
+      "error": {
+        "name": "APIError",
+        "data": {
+          "message": "Cannot connect to API: The socket connection was closed unexpectedly. For more information, pass `verbose: true` in the second argument to fetch()",
+          "isRetryable": true,
+          "metadata": {
+            "url": "https://api.openai.com/v1/responses"
+          }
+        }
+      }
+    }
+  ],
+  "ui": {
+    "qualification": "Five presented screenshots and actual click/keyboard disclosure review; no UI automation",
+    "en": "Response did not finish and current-language follow-up guidance",
+    "zh": "响应未完成与后续消息提示",
+    "diagnostic": "Original persisted reason shown completely on expand",
+    "copy": "Production button displayed Copied; CUA virtual clipboard readback unavailable, not verified end-to-end",
+    "cancellation": "Original branch preserved; no new cancellation run"
+  },
+  "runtime": {
+    "before": {
+      "at": "2026-10-25T08:12:13.018Z",
+      "authRetired": 1,
+      "catalogRetired": 1,
+      "authCopied": true,
+      "modelRequests": 21,
+      "model": "gpt-6.1-sol",
+      "streaming200OriginalReaderEOF": 2,
+      "fetchFailed": 19,
+      "sourceCatalog": {
+        "bytes": 9155406,
+        "modifiedAtMs": 1791128890137.9968,
+        "content": "Exact original"
+      },
+      "publicShutdown": 200,
+      "reserveMs": 605564,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "exactProcessChain": "dead_or_reused"
+    },
+    "after": {
+      "at": "2026-10-25T08:18:38.386Z",
+      "authRetired": 1,
+      "catalogRetired": 1,
+      "authCopied": true,
+      "modelRequests": 1,
+      "model": "gpt-6.1-sol",
+      "streaming200OriginalReaderEOF": 1,
+      "sourceCatalog": {
+        "bytes": 9155406,
+        "modifiedAtMs": 1791128890137.9968,
+        "content": "Exact original"
+      },
+      "publicShutdown": 200,
+      "reserveMs": 951683,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "exactProcessChain": "dead_or_reused"
+    }
+  },
+  "preservation": {
+    "at": "2026-10-25T08:18:38.552Z",
+    "sourceSchema": 8,
+    "targetSchema": 8,
+    "originalTables": 92,
+    "originalRows": 4993,
+    "sourceRowsAndFields": "Exact original",
+    "sourceBytes": 4128768,
+    "sourceModifiedAtMs": 1792915883622.488,
+    "canonicalConfiguration": "Exact original",
+    "integrity": "ok",
+    "targetDifferences": [
+      {
+        "table": "bus_publication_delivery",
+        "changed": 0,
+        "missing": 0,
+        "added": 6,
+        "fields": []
+      },
+      {
+        "table": "bus_publication_delivery_receipt",
+        "changed": 0,
+        "missing": 0,
+        "added": 6,
+        "fields": []
+      },
+      {
+        "table": "bus_publication_outbox",
+        "changed": 0,
+        "missing": 0,
+        "added": 1,
+        "fields": []
+      },
+      {
+        "table": "bus_publication_owner",
+        "changed": 0,
+        "missing": 0,
+        "added": 1,
+        "fields": []
+      },
+      {
+        "table": "bus_publication_phase_receipt",
+        "changed": 0,
+        "missing": 0,
+        "added": 3,
+        "fields": []
+      },
+      {
+        "table": "engine_control_activation_lease",
+        "changed": 0,
+        "missing": 0,
+        "added": 7,
+        "fields": []
+      },
+      {
+        "table": "engine_control_activation_lease_grant",
+        "changed": 0,
+        "missing": 0,
+        "added": 7,
+        "fields": []
+      },
+      {
+        "table": "event_occurrence",
+        "changed": 0,
+        "missing": 0,
+        "added": 1,
+        "fields": []
+      },
+      {
+        "table": "memory_chunk",
+        "changed": 1,
+        "missing": 1,
+        "added": 0,
+        "fields": [
+          "content",
+          "token_count",
+          "time_updated"
+        ]
+      },
+      {
+        "table": "memory_file",
+        "changed": 1,
+        "missing": 1,
+        "added": 0,
+        "fields": [
+          "time_updated"
+        ]
+      },
+      {
+        "table": "provider_usage_event",
+        "changed": 0,
+        "missing": 0,
+        "added": 1,
+        "fields": []
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "changed": 1,
+        "missing": 0,
+        "added": 0,
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      }
+    ],
+    "qualification": "Target replays the original persisted APIError and UI disclosures; original rows and fields remain authoritative."
+  },
+  "checks": {
+    "beforeBuild": {
+      "label": "build",
+      "startedAt": 1792915163283,
+      "closedAt": 1792915212961,
+      "code": 0,
+      "signal": null,
+      "childPID": 96844
+    },
+    "afterBuild": {
+      "label": "build",
+      "startedAt": 1792915968604,
+      "closedAt": 1792916028484,
+      "code": 0,
+      "signal": null,
+      "childPID": 30612
+    },
+    "typecheck": 0,
+    "i18n": 0,
+    "docs": 0,
+    "renderer": 0
+  }
+}

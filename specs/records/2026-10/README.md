@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Office请求失败与反馈体验](2026-10-25-office-file-delivery.md)：594原请求失败保留与中英文响应反馈修复。
+
 - [Chat附件与真实文件交付体验](2026-10-25-chat-file-delivery.md)：593单Chat上传、交付、阅读与下载实际验收。
 
 - [原营销完成后追加修订](2026-10-25-marketing-completed-revision.md)：依赖预检、原专家接续与新旧资源核验。
