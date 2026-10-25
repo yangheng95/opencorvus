@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Chat附件与真实文件交付体验](2026-10-25-chat-file-delivery.md)：593单Chat上传、交付、阅读与下载实际验收。
+
 - [原营销完成后追加修订](2026-10-25-marketing-completed-revision.md)：依赖预检、原专家接续与新旧资源核验。
 
 - [当前产品体验与操作障碍修复](2026-10-25-current-product-walkthrough.md)：592实际创建/保存/编辑与中英文体验修复。

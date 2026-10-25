@@ -1,0 +1,146 @@
+{
+  "at": "2026-10-25T07:48:47.594Z",
+  "model": {
+    "actual": "gpt-6.1-sol",
+    "maximumRequests": 16,
+    "beforeRequests": 11,
+    "afterRequests": 0,
+    "allStreaming": true,
+    "status": 200,
+    "originalReaders": "EOF"
+  },
+  "downloads": {
+    "at": "2026-10-25T07:46:27.282Z",
+    "downloads": [
+      {
+        "kind": "report",
+        "filename": "周报.md",
+        "bytes": 1581,
+        "content": "Exact original UTF-8 bytes",
+        "lineEnding": "LF"
+      },
+      {
+        "kind": "csv",
+        "filename": "工时汇总.csv",
+        "bytes": 196,
+        "content": "Exact original UTF-8 bytes",
+        "lineEnding": "LF"
+      },
+      {
+        "kind": "input",
+        "filename": "工时输入.csv",
+        "bytes": 159,
+        "content": "Exact original UTF-8 bytes",
+        "lineEnding": "CRLF"
+      }
+    ],
+    "draft": {
+      "bytes": 82,
+      "content": "Exact visible editor draft, original LF editor separator retained",
+      "projectFile": "Original actual model output retained"
+    },
+    "emptyDraft": {
+      "bytes": 0
+    },
+    "qualification": "Manual real browser downloads, compared actual downloaded bytes with original completed Chat outputs and original upload; no UI automation test"
+  },
+  "preservation": {
+    "at": "2026-10-25T07:47:46.994Z",
+    "sourceSchema": 8,
+    "targetSchema": 8,
+    "originalTables": 92,
+    "originalRows": 2866,
+    "sourceRowsAndFields": "Exact original",
+    "sourceBytes": 3244032,
+    "sourceModifiedAtMs": 1792913996497.5557,
+    "canonicalConfiguration": "Exact original",
+    "integrity": "ok",
+    "targetDifferences": [
+      {
+        "table": "engine_control_activation_lease",
+        "changed": 0,
+        "missing": 0,
+        "added": 1,
+        "fields": []
+      },
+      {
+        "table": "engine_control_activation_lease_grant",
+        "changed": 0,
+        "missing": 0,
+        "added": 1,
+        "fields": []
+      }
+    ],
+    "qualification": "Target read-only completed Chat and manual local draft downloads; inspect original fields before claiming preservation."
+  },
+  "runtime": {
+    "before": {
+      "at": "2026-10-25T07:40:37.268Z",
+      "authRetired": 1,
+      "catalogRetired": 1,
+      "authCopied": true,
+      "modelRequests": 11,
+      "model": "gpt-6.1-sol",
+      "streaming200OriginalReaderEOF": 11,
+      "sourceCatalog": {
+        "bytes": 9155406,
+        "modifiedAtMs": 1791128890137.9968,
+        "content": "Exact original"
+      },
+      "publicShutdown": 200,
+      "reserveMs": 1046053,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "exactProcessChain": "dead_or_reused"
+    },
+    "after": {
+      "at": "2026-10-25T07:47:46.830Z",
+      "authRetired": 1,
+      "catalogRetired": 1,
+      "authCopied": true,
+      "modelRequests": 0,
+      "model": "gpt-6.1-sol",
+      "streaming200OriginalReaderEOF": 0,
+      "sourceCatalog": {
+        "bytes": 9155406,
+        "modifiedAtMs": 1791128890137.9968,
+        "content": "Exact original"
+      },
+      "publicShutdown": 200,
+      "reserveMs": 983997,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "exactProcessChain": "dead_or_reused"
+    }
+  },
+  "checks": {
+    "beforeBuild": {
+      "label": "build",
+      "startedAt": 1792913617756,
+      "closedAt": 1792913826944,
+      "code": 0,
+      "signal": null,
+      "childPID": 82256
+    },
+    "afterBuild": {
+      "label": "build",
+      "startedAt": 1792914121108,
+      "closedAt": 1792914216956,
+      "code": 0,
+      "signal": null,
+      "childPID": 82072
+    },
+    "typecheck": 0,
+    "i18n": 0,
+    "docs": 0,
+    "renderer": 0
+  },
+  "ui": "Manual actual interaction and 9 presented screenshots, no UI automation",
+  "scope": "Loaded plain-text file download and current unsaved draft; original project bytes retained"
+}

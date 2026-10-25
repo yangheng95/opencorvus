@@ -10,6 +10,7 @@ import {
   type FileEditorTarget,
 } from "../services/file-workbench"
 import { projectScopedPath } from "../services/project-directory"
+import { downloadBlob } from "../services/file-download"
 import { t } from "../utils/i18n"
 import { formatErrorDetails } from "../utils/error-details"
 import { restoreRightDockFocus } from "../utils/right-dock-focus"
@@ -392,6 +393,23 @@ export function FileEditorPane() {
             }
           >
             <Badge tone="neutral" size="sm">{t("file_editor.read_only")}</Badge>
+          </Show>
+          <Show when={textContent()}>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              tone="neutral"
+              disabled={isBusy() || fileEditorReserved()}
+              title={t(dirty() ? "file_editor.download_draft" : "file.download")}
+              aria-label={t(dirty() ? "file_editor.download_draft" : "file.download")}
+              onClick={() => {
+                if (isBusy() || fileEditorReserved() || !textContent()) return
+                downloadBlob(new Blob([draft()], { type: "text/plain;charset=utf-8" }), fileTitle())
+              }}
+            >
+              <Icon name="download" />
+            </Button>
           </Show>
           <Button
             type="button"

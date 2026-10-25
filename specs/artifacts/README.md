@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Chat附件与真实文件交付体验](2026-10-25-chat-file-delivery/README.md)：593单Chat上传、交付、阅读与下载实际验收。
+
 - [原营销完成后追加修订](2026-10-25-marketing-revision/README.md)：全新marketing-growth两轮真实证据。
 
 - [当前产品体验修复验证](2026-10-25-current-product-walkthrough/README.md)：592默认选择值、Mission卡片和真实保存回读。
