@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto"
 import z from "zod"
+import { WORK_ARTIFACT_PROFILE_IDS } from "../profile-registry"
 
 const Sha256 = z.string().regex(/^[a-f0-9]{64}$/)
 export const WORK_ARTIFACT_RUNTIME_LOCK_PACKAGE_PATH = "licenses/WORK-ARTIFACT-RUNTIMES-LOCK.json" as const
@@ -41,7 +42,13 @@ const OfficeCliRuntimeSchema = z
   .object({
     id: z.literal("officecli"),
     version: z.string().regex(/^\d+\.\d+\.\d+$/),
-    profiles: z.tuple([z.literal("office.presentation@1")]),
+    profiles: z
+      .array(z.enum(WORK_ARTIFACT_PROFILE_IDS))
+      .length(WORK_ARTIFACT_PROFILE_IDS.length)
+      .refine(
+        (profiles) => new Set(profiles).size === WORK_ARTIFACT_PROFILE_IDS.length,
+        "profiles must cover the qualified registry",
+      ),
     source: z
       .object({
         repository: z.literal("https://github.com/iOfficeAI/OfficeCLI"),
@@ -75,19 +82,23 @@ const OfficeCliRuntimeSchema = z
     if (runtime.source.tag !== `v${runtime.version}`) {
       ctx.addIssue({ code: "custom", path: ["source", "tag"], message: "source tag must match runtime version" })
     }
-    const targets = runtime.assets.map(
-      (asset) => `${asset.os}-${asset.arch}${asset.abi ? `-${asset.abi}` : ""}`,
-    )
+    const targets = runtime.assets.map((asset) => `${asset.os}-${asset.arch}${asset.abi ? `-${asset.abi}` : ""}`)
     if (new Set(targets).size !== targets.length || targets.some((target) => !OFFICECLI_RUNTIME_TARGETS.has(target))) {
       ctx.addIssue({ code: "custom", path: ["assets"], message: "assets must cover the exact supported target matrix" })
     }
     const dataFiles = runtime.source.data_assets.map((asset) => asset.source_file)
     if (
       new Set(dataFiles).size !== 3 ||
-      !["LICENSE", "NOTICE", "THIRD-PARTY-NOTICES.txt"].every((name) => dataFiles.includes(name as typeof dataFiles[number])) ||
+      !["LICENSE", "NOTICE", "THIRD-PARTY-NOTICES.txt"].every((name) =>
+        dataFiles.includes(name as (typeof dataFiles)[number]),
+      ) ||
       new Set(runtime.source.data_assets.map((asset) => asset.package_path)).size !== 3
     ) {
-      ctx.addIssue({ code: "custom", path: ["source", "data_assets"], message: "source data assets must cover the exact license and notice closure" })
+      ctx.addIssue({
+        code: "custom",
+        path: ["source", "data_assets"],
+        message: "source data assets must cover the exact license and notice closure",
+      })
     }
   })
 

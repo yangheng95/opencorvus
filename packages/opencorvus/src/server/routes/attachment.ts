@@ -8,6 +8,7 @@ import { Instance } from "@/project/instance"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { lazy } from "../../util/lazy"
 import { DIRECTORY_REFERENCE_MIME } from "@opencorvus-ai/transport-protocol"
+import { WorkArtifactProfileRegistry } from "@/work-artifact/profile-registry"
 
 const AttachmentReference = z.object({
   sha: z.string().length(64),
@@ -51,6 +52,9 @@ const MIME_FROM_EXT: Record<string, string> = {
   webm: "video/webm",
   mov: "video/quicktime",
   bin: "application/octet-stream",
+  docx: WorkArtifactProfileRegistry.require("office.document@1").mimeTypes[0]!,
+  xlsx: WorkArtifactProfileRegistry.require("office.spreadsheet@1").mimeTypes[0]!,
+  pptx: WorkArtifactProfileRegistry.require("office.presentation@1").mimeTypes[0]!,
 }
 
 function mimeFromName(name: string): string {
@@ -58,17 +62,18 @@ function mimeFromName(name: string): string {
   return MIME_FROM_EXT[ext] ?? "application/octet-stream"
 }
 
-function attachmentHeaders(name: string, size: number) {
+function attachmentHeaders(name: string, reference: AttachmentStore.Reference) {
   const mime = mimeFromName(name)
   const headers: Record<string, string> = {
     "content-type": mime,
-    "content-length": String(size),
+    "content-length": String(reference.size),
     "cache-control": "public, max-age=31536000, immutable",
     "x-content-type-options": "nosniff",
+    "content-disposition": `inline; filename*=UTF-8''${encodeURIComponent(reference.filename ?? name).replace(/[!'()*]/g, (character) => `%${character.charCodeAt(0).toString(16).toUpperCase()}`)}`,
   }
   if (mime === "image/svg+xml") {
     headers["content-type"] = "application/octet-stream"
-    headers["content-disposition"] = `attachment; filename="${name}"`
+    headers["content-disposition"] = headers["content-disposition"]!.replace(/^inline;/, "attachment;")
   }
   return headers
 }
@@ -209,10 +214,13 @@ export const AttachmentRoutes = lazy(() =>
         if (!abs) return c.text("Not found", 404)
         const info = await statFileOrMissing(abs)
         if (!info || !info.isFile()) return c.text("Not found", 404)
-        const body = await fs.readFile(abs)
-        return new Response(body as unknown as BodyInit, {
+        const snapshot = await AttachmentStore.readVerifiedReference({
+          projectID,
+          url: `/attachment/${projectID}/${name}`,
+        })
+        return new Response(snapshot.bytes as unknown as BodyInit, {
           status: 200,
-          headers: attachmentHeaders(name, info.size),
+          headers: attachmentHeaders(name, snapshot.reference),
         })
       },
     ),

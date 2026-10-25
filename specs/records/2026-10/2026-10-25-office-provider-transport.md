@@ -1,0 +1,75 @@
+# Office 原请求的真实传输与交付继续验收
+
+## Recall
+
+用户要求单agent持续自主迭代当前UI/UX（界面与体验）和功能，根因及影响面分析后实施、真实页面验证、提交推送，仅实际冲突无法安全取舍时等待。旧Rendering排查已关闭；不使用子agent。上一轮为progress：94460677a修复真实失败页面的说明及原诊断展开，中英/键盘截图通过并已正常推送0/0；Office生成未完成，不能以该UI改进替代实际Word/Excel交付。原请求ses_-zUQxA1lPzzUZFA4CCxZ、失败Message msg_g0VZ2wpXK000NgH71sc6和原数据保留。594共22次（19个fetch_failed、3个200/EOF），源服务均物理关闭及凭据退休，不能重启原句柄或抹掉失败计数。
+
+当前开始HEAD94460677a。CI正继续修改后端Message/Task root等文件，既有脏改动、索引排序与历史产物删除保持。用户18571、用户窗口及用户数据库不操作。已读594 Recall/结果、现行06-provider、07-panel的消息/文件交付合同、原始审计、Provider getSDK fetch/inactivity、OpenAI Codex OAuth endpoint重写及Response observer。原594只有模型/工具/response-reader摘要，fetch失败前没有实际URL、请求大小或原始传输错误码，证据不能区分本地构造、TLS（Transport Layer Security，传输层安全）、代理或远端关闭；上轮Git也有一次TLS握手失败后原配置重试成功，不能据此推定同一根因。
+
+## 实施前调查与验收方案
+
+1. 从已关闭594-after的完整自有数据创建新隔离runtime，复制全部原附件namespace；仍使用原私有项目/Chat。此前21+1请求事实保留；本轮595新传输调查scope最多32请求，预检和后台均计入，累计调查上限54。此为已完成594后新的有证据调查，不因观察超时重启、重置或扩额。OAuth（Open Authorization，开放授权）凭据和完整models成对准备，先验证凭据可用、Sol投影与实际流式gpt-6.1-sol请求。
+2. 只在原native fetch边界添加私有被动观察：原请求对象/URL/init原样转交，响应对象和body不读取或替换。只记录时间、实际origin/path、body UTF-8字节数、input条目类型/角色/长度、工具数量/大小、reasoning字段及原错误name/code/errno/cause；不存认证头、秘密或完整模型prompt。使用既有CredentialRedactor保护输出，不创造第二请求计数或改变SDK、HTTP/重试/代理/TLS配置。原RealProviderAudit仍是唯一模型及流式/预算/reader事实。
+3. 当前无新的前端改动时复用上一轮普通Node构建的不可变main-iCwpdYAN.js，经当前开发CLI的54102/ui实际进入原Chat；不单独启动Vite。若需要UI修复，再生成正常publication并截图复核。手工继续原Office要求，比较预检/后台与实际Work请求的真实传输证据。原业务成功后继续Word/Excel链接、下载、实际Office内容及页面资格；模型工具必须真实生成，不用脚本伪造替代成果或消息，不创建Task/Mission/其他成员。
+4. 如发现本地根因，先补全现象/触发/控制数据流/旧修复遗漏、全仓定义与调用/公共合同/数据/测试/文档/交付/风险，再修改唯一实现；非UI有聚焦正向真实合同，UI只人工交互和实际截图，不运行任何UI自动化测试。发现调度/队列/恢复/并发/终态异常立即按共享机制横查，不凭socket错误或单场景归因。
+5. 自有native20分钟物理边界，至少提前五分钟公开关闭；原caller/native/launcher/输出/请求结清后退休成对副本。保留真实失败、后台Memory变化与所有未完成资格，不改用户配置/schema/真实库。文档三索引及产物README同步，按实际变更运行对应checker，精确提交、fetch/merge上游、完整待推审查和正常hook推送；整体Goal active。
+
+## 当前状态
+
+54102/ui已在同一原Chat实际发送继续Office交付的新用户消息。native trace证明实际地址为chatgpt.com/backend-api/codex/responses；预检约172KB/37工具，实际Work约205KB/41工具，均200流式。595共10请求全部200且原reader EOF，未改变Provider配置、协议或重试，故没有证据支持按请求大小/工具数量修改传输。本轮没有重现594断开，594具体连接根因仍未知；不能因本轮成功归为偶发或声称已修复。trace同时记录到预检的本地/global/chat/start，其auditIndex=-1，公开Provider统计按原审计和实际origin排除该本地请求，不把它算模型调用。
+
+本轮真实模型读取原CSV/Markdown并查询capability后没有生成DOCX/XLSX。该结论现有工具定义、WorkArtifactProfileRegistry、RuntimeLock及work-artifacts Skill共同证实：当前只声明office.presentation@1，安全/生命周期合同要求其它格式在同一Harness完成资格后再扩展，不允许绕Bash另建Office写入路径。现行04-extensions明确这一约束。Word/Excel authoring因此仍未达成，不能将原Markdown/CSV当替代成果。
+
+before已公开shutdown200，原exec39077/native/launcher退出0，物理/输出/请求完整结算，保留856652ms余量；10/32请求，累计594+595为32，成对auth/models退休，原源身份保持。已有页278为自有页，后续继续使用或关闭，不触碰用户18571。
+
+## Harness 扩展的根因与依赖分析
+
+已读当前tool四操作、PPTX Author/Inspect/Validate/Deliver schema、验证receipt与completed tool事实授权、profile/qualification注册、runtime lock/package manifest、workspace/Process权属、PPTX SVG renderer和packaged checker。固定OfficeCLI1.0.143源码fd4adab4dbe3283b62e3edcfad124dd648fa74bc的[官方说明](https://github.com/iOfficeAI/OfficeCLI/tree/fd4adab4dbe3283b62e3edcfad124dd648fa74bc)包含Word/Excel写入；其[view协议](https://github.com/iOfficeAI/OfficeCLI/wiki/command-view)说明PPTX SVG和其它格式HTML/截图不同。项目已交付BrowserRuntime、Node sidecar和Playwright依赖，后续派生Office预览应复用这些primitive，不安装新的renderer或操作用户Office窗口。需先用固定二进制取得实际结构/HTML/渲染事实，再定义typed profile和receipt，不能只改Skill声明。默认Bun下载固定OfficeCLI在120秒无响应后真实TimeoutError；原85248已退出1保留，正在通过当前acquirePinnedRuntimeDownload的fetcher入口用Windows CURL重取同一官方固定资源，TLS校验和原不可变资产完整性校验保持，不伪造native资格。
+
+同时发现当前任务路径的违规则检查：check-work-artifact-profile.ts对每个当前Tool schema计算SHA，再与generate-work-artifact-qualification-matrix.ts根据同一可变schema生成的schema_sha256比较；修改schema并重生成期望即可通过，不能证明任何实际行为或独立资源完整性。它只因源码/序列化变化阻塞资格，并不是协议签名或发布二进制校验。用户AGENTS第三节明确禁止保留或运行这种检查；在继续格式扩展前必须删除。
+
+该删除已全仓搜索schema_sha256、toolSchemas、两个脚本及GENERATED_WORK_ARTIFACT_QUALIFICATION_MATRIX消费者。只删除Tool schema摘要字段、生成逻辑、相等门槛及失去用途的schema初始化；现有实际Tool定义与registry身份、profile discriminator、deliver receipt字段、Skill工具/资源、runtime target/package与compiled author/inspect/validate/deliver生命周期继续验收。runtime lock、真实下载/包内文件、签名和source/render/receipt的完整性身份保持。工具schema本身和数据格式不变，无API/schema迁移、调度、权限或UI变更，也不新建替代摘要。纯删除无需新增镜像测试；执行更新后的真实catalog checker和现有运行契约。随后再推进DOCX/XLSX的共同Harness功能与真实业务验收，不把此删除当Office功能已完成。
+
+## Office 接入实施方案（固定二进制探针后）
+
+原生1.0.143实际create/add/view/get/validate探针已成功创建DOCX与XLSX；两种validate均返回count=0。Word的issues另报告正文首行缩进缺失，必须由typed样式处理并实测，不能忽略issue checker。HTML含分页脚本及远端字体请求；渲染必须由自有Node sidecar启动无用户资料的headless浏览器，拦截所有网络请求，仅使用本地字体，不能访问用户浏览器或Office窗口。
+
+直接触发是模型只能看到PPTX discriminator。根因是profile、typed author schema、包检查、render receipt、completed validate授权、deliver发布和资格脚本全部只覆盖PPTX，旧文件下载改进没有增加生成格式。实施保持四个Tool与一个Skill：扩展office.document@1（有序标题/正文段落）和office.spreadsheet@1（有界工作表、显式字符串/数字/布尔单元格）。不增加原始命令、XML、公式或既有文件编辑入口。复用现有OfficeCLI/workspace/Process/AttachmentStore/验证事实授权；共享包检查按格式白名单和限额在子进程运行。Word/Excel从固定OfficeCLI输出HTML，经既有BrowserRuntime/Node sidecar产生每页或每表PNG及派生PDF，原DOCX/XLSX为主交付，PDF以现有file-preview展示。receipt对新profile使用明确页序号、source/runtime和派生预览身份；PPTX既有receipt格式保持。交付仍检查同Session完成的validate事实，再对源重新校验与渲染。
+
+定义与调用搜索覆盖profile registry、runtime lock、qualification matrix/registry/generator/checker、Tool、Skill及四个references、packaged acceptance/debug入口与测试、binary launcher/inspector、BrowserRuntime sidecar、interactive-artifact schema、CI调用和当前04-extensions。资格脚本必须按选择profile进入真实工具生命周期，不能只更新声明；Windows本地证据与其它平台发布资格明确区分。新profile未通过实际生命周期前不宣称交付完成。现有数据库schema8和用户数据无需改动；新profile是新增格式契约，无旧receipt重写、双读写或迁移。无调度/队列/恢复策略变化。风险集中于包解析边界、HTML资源阻断、输出/页数/总deadline、取消清理、预览完整性和格式能力过度声明。正向测试验证typed值到实际Office内容、验证receipt到实际发布附件、明确错误合同；人工真实UI查看并下载原文件、查看派生预览与截图。所有预览只声明固定OfficeCLI加本地浏览器效果，不承诺Microsoft Office像素一致。
+
+## 原生资格中间失败与工具链调查
+
+资格测试首次使用很深的隔离TEMP时，Windows CreateProcessW以267拒绝Office工作目录；改用本仓库独立短TEMP后可执行，长目录约束仍需明确，不声称修复进程通用路径能力。HTML直接放入Node sidecar的base64 argv又触发Windows206；代码和输出证明实际HTML约51KB，超过命令行容量，已改为同一个受权属管理的私有workspace输入文件，Node读取该文件，未改变共享sidecar协议或增加后备路径。
+
+标题和章节最初只有显式字体，没有样式身份，原生issue checker将其当正文要求缩进。已由同一typed adapter建立真实Title/Heading1样式并引用，原生DOCX全生命周期4/6/7均有通过。新author增加从实际文件读回完整段落或逐格值的完整性校验；这属于输出数据完整性，不是host指导LLM流程。batch也校验完整的results及summary，不能只凭顶层success。
+
+native-2/4/7曾出现XLSX只读回默认Sheet1；native-5曾出现Word完整读回不匹配。native-6则两格式全部通过。当前不能把这些现象直接归因于batch内失败：native-7保留了37项全部成功的实际输出，而失败文件副本确为3861字节的默认工作表。独立Node调用同一固定OfficeCLI将同一失败副本重新按原计划写入，默认atomic与direct控制均得到两张正确表；尚未证明共享进程生命周期或OfficeCLI保存环节哪一个有误，不能增加等待、重试或best-effort后备来掩盖。正在用当前Rust源码构建的supervisor和真实compiled checker交叉定位，原446 helper证据不替代当前运行包资格。调度、队列或应用occurrence异常尚未被证明；若证据指向共享生命周期，立即进行Task/Mission/Session和正常/取消/终态/恢复的横向审计。
+
+compiled DOCX checker已进入真实生成/读回/验证，随后Chrome报默认资料目录安全限制。检查器只创建home、git和managed-config，却向child声明未创建的APPDATA/LOCALAPPDATA；source测试preload则创建这些目录且浏览器成功。先补全检查器实际声明的隔离运行目录，再重跑同一个compiled检查，以验证该环境差异。新Office renderer使用独立页面并阻断资源请求，不操作用户浏览器。资格过程的完整原始输出留在私有595目录，公开记录不抄录本机代理细节或凭据。
+
+该目录修复后的compiled DOCX与XLSX均通过。native-8使用当前Rust构建仍捕获Word缺段：第三、四次add都报告同一个paraId=00100004，实际文件只有三段，因此旧helper不是充分根因；不能把它报告成helper修复。固定源码的CommandBuilder.Batch明确：独立batch可在一个handler生命周期内执行所有项并在Dispose时统一保存，默认atomic又引入同目录临时副本及File.Replace。当前author创建的是未公开的临时新文件，无既有用户文件需要保护，应用已在全部命令成功、逐项读回和包检查之后才原子发布canonical attachment。下一实现据此统一为单次直接batch写私有新文件（固定选择--best-effort，且检查全部项均成功；不存在失败后切换或重试），删除Word跨进程逐段写入路径。这样只有一个Office对象生命周期和一次保存，应用的完整结果发布边界保持；不会对既有用户文件使用best-effort，也不放宽deliver authority。当前固定CLI的跨进程保存/文件替换具体内部失效仍未定位，明确保留为已观察风险，不宣称已修复上游；必须由同一完整资格和真实请求证明当前单次保存适配是否满足交付。若该路径仍失败继续定位，不增加等待、重试、备用writer或隐藏半成品。共享PPTX batch也采用同样私有文件写入边界和完整结果检查，避免双重语义。
+
+检索发现inspectPptxPackageUnsafe薄包装在通用inspector接入后已失去所有调用者，删除仅该已替换导出，不保留旧协议包装。其余PPTX公开inspect函数仍被当前工具与checkers实际使用。
+
+## 根因确认与最终运行包方案
+
+已从固定1.0.143源码核对WordHandler.Dispose、ExcelHandler.Dispose及AtomicPackageWriter：两个handler在Dispose时将保存/回写异常吞掉，Add先输出成功，后Dispose；原子替换失败会留下旧文件却返回成功。实际Word重复paraId、XLSX37项成功但保留Sheet1的文件证据与该控制流一致。直接batch native-9虽全部通过，也不能根治Dispose吞错，故不作为最终修复。
+
+[官方1.0.158版本](https://github.com/iOfficeAI/OfficeCLI/releases/tag/v1.0.158)固定源码2900a4a20f49d6a94384d6ea7fb8cc0120999825已增加DeferredStdout保存后才输出成功、Dispose传播writeError，并在AtomicPackageWriter修复Windows受限token下ReplaceFile被拒的已知问题#493。采用官方固定运行包修复底层，项目不新增后备writer、重试或等待。删除上一步私有文件--best-effort参数；Word/XLSX统一单次默认atomic batch，PPTX也恢复默认atomic，完整结果与文件实际读回保持为数据完整性合同。这个决定替代上段临时direct batch实施方案，不保留双路径。
+
+8平台asset身份取自[官方该版本资产与摘要](https://github.com/iOfficeAI/OfficeCLI/releases/expanded_assets/v1.0.158)，三个license/notice从该固定版本原文核对，字节及SHA与前版一致。只更新统一runtime lock与生成资格目录，不改用户库或应用版本；旧源附件保留，旧runtime receipt须重新validate后交付，这是既有runtime绑定合同。先完成新运行包真实Windows三profile生命周期与源文件内容契约，再进行原Chat真实Sol请求及下载、派生PDF/PNG人工视觉复核，最后提交推送；其它平台仍由发布CI分别资格，不以Windows本地通过冒充已验证。
+
+运行包更新时还发现checker将catalog校验与package校验分别执行，后者只根据包内自带lock验证自身，可能把旧143包的通过算到当前158目录。补上实际包内immutable runtime lock与当前资格声明的身份绑定，先用保留的旧编译包验证明确的运行包不匹配错误，再验证新包通过；这是对真实运行包身份的检查，不恢复已删除的可变Tool schema摘要门槛。新profile receipt还记录真实浏览器、Playwright与Node版本，交付前复验需要同一renderer身份。
+
+## 最终资格与真实业务结果
+
+固定158的Windows原生DOCX/XLSX全生命周期通过，四模块/36、25、−11及字面文本/布尔/空值正确；最终编译包PPTX、DOCX、XLSX三个profile分别通过真实工具调用、canonical receipt与交付前复验。聚焦后台合同21项及附件HTTP合同2项通过，类型检查通过。后续人工截图发现XLSX窄列和空白画布，已经由同一author原生autofit及内容宽度修复；新增真实原生列属性验证后2项/11断言通过，重新编译XLSX资格再次通过。
+
+595-after原Chat实际Sol生成两份源文件并读回正确内容，但Chrome Known Folder验收环境缺目录，预览失败，原失败截图保留。该实例18次实际请求均200/EOF，public shutdown后原31270/native/launcher退出0，物理/输出/请求结清，334067ms余量、成对凭据/目录副本退休。595-before10次加after18次=28/32，未用4次退休；原594的22次含19次连接失败完整保留。
+
+后续596/597在同一原Chat保留全部真实文件和消息继续，实际预览、下载及最终两份正式附件交付见[真实预览与下载记录](2026-10-25-office-preview-download.md)及[截图证据](../../artifacts/2026-10-25-office-preview-download/README.md)。两份源文件现在可真实下载，PDF/PNG已人工查看；指定项目目录另存仍没有二进制工具接口，不能宣称原路径要求全达成。594传输失败的原始连接根因仍未知，没有改Provider网络/重试配置或声称修复。
+
+## 发布资格环境补全（实施前影响核对）
+
+最终复核发现CLI发布job仅安装ripgrep；新增DOCX/XLSX派生预览需要浏览器，不能依赖各runner是否预装Chrome，尤其Linux ARM。BrowserRuntime已经有唯一OPENCORVUS_BROWSER_EXECUTABLE入口，compiled checker继承该值。依据[Playwright官方浏览器安装](https://playwright.dev/docs/browsers)及[官方CI说明](https://playwright.dev/docs/ci)，在同一CLI job以已锁定的Playwright安装匹配Chromium及系统依赖，再将实际绝对executablePath交给现有入口。通过Node执行官方CLI，不运行任何UI自动化测试、不增加产品下载或浏览器后备路径；安装步骤有10分钟边界且在既有剩余发布预算检查之前。源码API、数据及用户浏览器无变化。Windows本地真实资格已通过；其它平台需实际发布CI执行，不伪称已经远端通过。

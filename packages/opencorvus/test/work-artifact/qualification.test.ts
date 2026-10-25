@@ -10,7 +10,10 @@ import { Instance } from "../../src/project/instance"
 import { Identifier } from "../../src/id/id"
 import { Session } from "../../src/session"
 import { AttachmentStore } from "../../src/storage/attachment-store"
-import { secureWorkArtifactPrivateDirectory, type WorkArtifactPresentationDependencies } from "../../src/work-artifact/presentation"
+import {
+  secureWorkArtifactPrivateDirectory,
+  type WorkArtifactPresentationDependencies,
+} from "../../src/work-artifact/presentation"
 import { inspectPptxPackage } from "../../src/work-artifact/presentation"
 import {
   WorkArtifactTargetPackageManifestSchema,
@@ -91,6 +94,30 @@ test("canonical validation receipt authorizes a fresh delivery revalidation", as
           if (input.args[0] === "create") {
             await fs.writeFile(input.args[1]!, await minimalPresentationBytes(), { mode: 0o600 })
           }
+          if (input.args[0] === "batch") {
+            const commands = JSON.parse(
+              await fs.readFile(input.args[input.args.indexOf("--input") + 1]!, "utf8"),
+            ) as unknown[]
+            return {
+              code: 0,
+              stdout: Buffer.from(
+                JSON.stringify({
+                  success: true,
+                  data: {
+                    results: commands.map((_, index) => ({ index, success: true })),
+                    summary: {
+                      total: commands.length,
+                      executed: commands.length,
+                      succeeded: commands.length,
+                      failed: 0,
+                      skipped: 0,
+                    },
+                  },
+                }),
+              ),
+              stderr: Buffer.alloc(0),
+            }
+          }
           if (input.args[0] === "view" && input.args[2] === "svg") {
             return { code: 0, stdout: renderSvg, stderr: Buffer.alloc(0) }
           }
@@ -129,7 +156,10 @@ test("canonical validation receipt authorizes a fresh delivery revalidation", as
         abort: new AbortController().signal,
         messages: [],
         executionAuthority: authority,
-        executionSurface: Tool.executionSurface(Object.values(tools).map((tool) => tool.id), []),
+        executionSurface: Tool.executionSurface(
+          Object.values(tools).map((tool) => tool.id),
+          [],
+        ),
         extra: { projectID: Instance.project.id },
         metadata() {},
       }
@@ -146,12 +176,12 @@ test("canonical validation receipt authorizes a fresh delivery revalidation", as
         ),
       )
       const source = JSON.parse(authored.output).source as { url: string; sha: string }
-      const inspected = await tools.inspect.init().then((tool) =>
-        tool.execute({ profile: "office.presentation@1", source_url: source.url }, context),
-      )
-      const validation = await tools.validate.init().then((tool) =>
-        tool.execute({ profile: "office.presentation@1", source_url: source.url }, context),
-      )
+      const inspected = await tools.inspect
+        .init()
+        .then((tool) => tool.execute({ profile: "office.presentation@1", source_url: source.url }, context))
+      const validation = await tools.validate
+        .init()
+        .then((tool) => tool.execute({ profile: "office.presentation@1", source_url: source.url }, context))
       const validated = JSON.parse(validation.output) as {
         validation_receipt: { url: string; sha: string }
         validation_receipt_payload: Record<string, unknown>
@@ -194,14 +224,17 @@ test("canonical validation receipt authorizes a fresh delivery revalidation", as
       ).toEqual(validated.validation_receipt_payload)
 
       const delivered = await tools.deliver.init().then((tool) =>
-        tool.execute({
-          profile: "office.presentation@1",
-          title: "Qualified presentation",
-          source_url: source.url,
-          validation_receipt_url: validated.validation_receipt.url,
-          validation_receipt_sha: validated.validation_receipt.sha,
-          slides: [{ slide: 1, title: "Qualified", markdown: "Freshly revalidated." }],
-        }, context),
+        tool.execute(
+          {
+            profile: "office.presentation@1",
+            title: "Qualified presentation",
+            source_url: source.url,
+            validation_receipt_url: validated.validation_receipt.url,
+            validation_receipt_sha: validated.validation_receipt.sha,
+            slides: [{ slide: 1, title: "Qualified", markdown: "Freshly revalidated." }],
+          },
+          context,
+        ),
       )
       const deliveredOutput = JSON.parse(delivered.output)
       expect({
@@ -248,7 +281,7 @@ test("canonical validation receipt authorizes a fresh delivery revalidation", as
 
 test("PPTX parser supervision maps its wall-clock budget to a bounded error", async () => {
   await expect(inspectPptxPackage(await minimalPresentationBytes(), { timeoutMs: 1 })).rejects.toThrow(
-    "Work Artifact PPTX inspection exceeded 1ms",
+    "Work Artifact Office package inspection exceeded 1ms",
   )
 })
 
@@ -274,7 +307,7 @@ test("PPTX inspection maps corrupt, macro, and external relationship inputs to e
         '<Relationship TargetMode="External" Target="https://example.invalid"/>',
       ),
     ),
-  ).rejects.toThrow("PPTX contains an external package relationship")
+  ).rejects.toThrow("Office package contains an external package relationship")
 })
 
 test("PPTX inspection bounds actual highly-compressed output instead of trusting directory sizes", async () => {
@@ -300,7 +333,7 @@ test("PPTX inspection bounds actual highly-compressed output instead of trusting
     offset += 45 + nameLength + extraLength + commentLength
   }
   await expect(inspectPptxPackage(forged)).rejects.toThrow(
-    "PPTX/ppt/slides/slide1.xml exceeds 8388608 actual bytes",
+    "Office package/ppt/slides/slide1.xml exceeds 8388608 actual bytes",
   )
 }, 30_000)
 
@@ -328,17 +361,25 @@ test("PPTX inspection recursively rejects executable content in a chart workbook
 test("pinned runtime download bounds a chunked body before buffering the overrun", async () => {
   const cacheDir = await fs.mkdtemp(path.join(os.tmpdir(), "work-artifact-download-"))
   try {
-    const response = new Response(new ReadableStream({
-      start(controller) {
-        controller.enqueue(new Uint8Array([1, 2, 3]))
-        controller.enqueue(new Uint8Array([4, 5, 6]))
-        controller.close()
-      },
-    }))
-    await expect(acquirePinnedRuntimeDownload({
-      cacheDir, filename: "bounded.bin", maxBytes: 4, sha256: "0".repeat(64),
-      url: "https://example.invalid/bounded.bin", fetcher: async () => response,
-    })).rejects.toThrow("bounded.bin contains more than 4 bytes")
+    const response = new Response(
+      new ReadableStream({
+        start(controller) {
+          controller.enqueue(new Uint8Array([1, 2, 3]))
+          controller.enqueue(new Uint8Array([4, 5, 6]))
+          controller.close()
+        },
+      }),
+    )
+    await expect(
+      acquirePinnedRuntimeDownload({
+        cacheDir,
+        filename: "bounded.bin",
+        maxBytes: 4,
+        sha256: "0".repeat(64),
+        url: "https://example.invalid/bounded.bin",
+        fetcher: async () => response,
+      }),
+    ).rejects.toThrow("bounded.bin contains more than 4 bytes")
   } finally {
     await fs.rm(cacheDir, { recursive: true, force: true })
   }
@@ -349,15 +390,22 @@ test("canonical attachment reads reject same-size digest tampering before Work A
   await Instance.provide({
     directory: project.path,
     fn: async () => {
-      const reference = await AttachmentStore.write(Instance.project.id, Buffer.from("AAAA"), "image/png", "integrity.png")
+      const reference = await AttachmentStore.write(
+        Instance.project.id,
+        Buffer.from("AAAA"),
+        "image/png",
+        "integrity.png",
+      )
       const located = AttachmentStore.nameFromUrl(reference.url)!
       const absolute = AttachmentStore.resolveAbsolute(located.projectID, located.name)!
       await fs.writeFile(absolute, Buffer.from("BBBB"))
-      await expect(AttachmentStore.requireReference({
-        projectID: Instance.project.id,
-        url: reference.url,
-        mime: "image/png",
-      })).rejects.toThrow("attachment blob digest does not match canonical metadata")
+      await expect(
+        AttachmentStore.requireReference({
+          projectID: Instance.project.id,
+          url: reference.url,
+          mime: "image/png",
+        }),
+      ).rejects.toThrow("attachment blob digest does not match canonical metadata")
     },
   })
 })
@@ -367,13 +415,20 @@ test("canonical attachment reads reject metadata-sized over-limit input before a
   await Instance.provide({
     directory: project.path,
     fn: async () => {
-      const reference = await AttachmentStore.write(Instance.project.id, Buffer.from("12345"), "image/png", "bounded.png")
-      await expect(AttachmentStore.readVerifiedReference({
-        projectID: Instance.project.id,
-        url: reference.url,
-        mime: "image/png",
-        maxBytes: 4,
-      })).rejects.toThrow("attachment blob exceeds 4 bytes")
+      const reference = await AttachmentStore.write(
+        Instance.project.id,
+        Buffer.from("12345"),
+        "image/png",
+        "bounded.png",
+      )
+      await expect(
+        AttachmentStore.readVerifiedReference({
+          projectID: Instance.project.id,
+          url: reference.url,
+          mime: "image/png",
+          maxBytes: 4,
+        }),
+      ).rejects.toThrow("attachment blob exceeds 4 bytes")
     },
   })
 })
@@ -409,7 +464,9 @@ test("target package manifest binds binary architecture, digests, and determinis
         lock: WORK_ARTIFACT_RUNTIME_LOCK,
       }),
     ).resolves.toEqual(manifest)
-    expect(manifest.files.map((file) => ({ path: file.path, kind: file.kind, mode: file.mode, target: file.binary_target }))).toEqual([
+    expect(
+      manifest.files.map((file) => ({ path: file.path, kind: file.kind, mode: file.mode, target: file.binary_target })),
+    ).toEqual([
       { path: "bin/officecli.exe", kind: "executable", mode: null, target: { os: "win32", arch: "x64" } },
       { path: "licenses/OfficeCLI-LICENSE", kind: "data", mode: null, target: undefined },
       { path: "licenses/OfficeCLI-NOTICE", kind: "data", mode: null, target: undefined },
@@ -428,7 +485,8 @@ test("container package smoke checks the unified Work Artifact lock and complete
     "OfficeCLI-LICENSE",
     "OfficeCLI-NOTICE",
     "OfficeCLI-THIRD-PARTY-NOTICES.txt",
-  ]) expect(dockerfile).toContain(`test -f /opt/opencorvus/licenses/${filename}`)
+  ])
+    expect(dockerfile).toContain(`test -f /opt/opencorvus/licenses/${filename}`)
 })
 
 test("POSIX manifest and archive contracts preserve executable 0755 and data 0644", () => {
@@ -438,7 +496,15 @@ test("POSIX manifest and archive contracts preserve executable 0755 and data 064
     target: { os: "linux", arch: "x64" },
     runtime_lock_revision: "a".repeat(64),
     files: [
-      { path: "bin/officecli", kind: "executable", sha256: "b".repeat(64), size: 1, mode: "0755", binary_target: { os: "linux", arch: "x64" }, signature: { status: "not_applicable", identity: null } },
+      {
+        path: "bin/officecli",
+        kind: "executable",
+        sha256: "b".repeat(64),
+        size: 1,
+        mode: "0755",
+        binary_target: { os: "linux", arch: "x64" },
+        signature: { status: "not_applicable", identity: null },
+      },
       { path: "licenses/OfficeCLI-LICENSE", kind: "data", sha256: "c".repeat(64), size: 1, mode: "0644" },
     ],
   })
@@ -448,9 +514,27 @@ test("POSIX manifest and archive contracts preserve executable 0755 and data 064
     "-rw-r--r-- user/group 1 2026-08-12 00:00 ./licenses/OfficeCLI-LICENSE",
     "-rw-r--r-- user/group 1 2026-08-12 00:00 ./work-artifact-target-package-manifest.json",
   ].join("\n")
-  assertNativeArchiveEntry({ archive: "fixture.tar.gz", listing, path: "bin/officecli", kind: "executable", platform: "linux" })
-  assertNativeArchiveEntry({ archive: "fixture.tar.gz", listing, path: "licenses/OfficeCLI-LICENSE", kind: "data", platform: "linux" })
-  assertNativeArchiveEntry({ archive: "fixture.tar.gz", listing, path: "work-artifact-target-package-manifest.json", kind: "data", platform: "linux" })
+  assertNativeArchiveEntry({
+    archive: "fixture.tar.gz",
+    listing,
+    path: "bin/officecli",
+    kind: "executable",
+    platform: "linux",
+  })
+  assertNativeArchiveEntry({
+    archive: "fixture.tar.gz",
+    listing,
+    path: "licenses/OfficeCLI-LICENSE",
+    kind: "data",
+    platform: "linux",
+  })
+  assertNativeArchiveEntry({
+    archive: "fixture.tar.gz",
+    listing,
+    path: "work-artifact-target-package-manifest.json",
+    kind: "data",
+    platform: "linux",
+  })
   assertNativeArchiveClosure({
     archive: "fixture.tar.gz",
     listing: `drwxr-xr-x user/group 0 2026-08-12 00:00 ./\n${listing}`,

@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+- [Office真实预览与下载](records/2026-10/2026-10-25-office-preview-download.md)：596原文件继续预览、Windows目录合同与真实下载文件名。
+
+- [Office原请求传输与交付](records/2026-10/2026-10-25-office-provider-transport.md)：595原请求的安全传输事实及实际交付继续验收。
+
 - [Office请求失败与反馈体验](records/2026-10/2026-10-25-office-file-delivery.md)：594原Chat真实请求、连接失败及响应反馈修复。
 
 - [Chat附件与真实文件交付体验](records/2026-10/2026-10-25-chat-file-delivery.md)：593单Chat上传、交付、阅读与下载实际验收。

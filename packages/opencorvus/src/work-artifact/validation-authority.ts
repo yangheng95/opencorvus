@@ -3,11 +3,11 @@ import type { Message } from "@/session/message"
 import { WORK_ARTIFACT_VALIDATE_TOOL_ID } from "./profile-registry"
 import z from "zod"
 import { WORK_ARTIFACT_VALIDATION_RECEIPT_MIME, WorkArtifactValidationReceiptPayload } from "./presentation"
-import {
-  prepareWorkArtifactPresentationDeliverable,
-  type WorkArtifactPresentationDependencies,
-} from "./presentation"
+import { prepareWorkArtifactPresentationDeliverable, type WorkArtifactPresentationDependencies } from "./presentation"
 import type { SessionExecutionAuthority } from "@/engine/task-session-lineage"
+import { OfficeValidationReceiptPayload, prepareOfficeDeliverable } from "./office-document"
+
+const ReceiptPayload = z.union([WorkArtifactValidationReceiptPayload, OfficeValidationReceiptPayload])
 
 const AuthorityOutput = z.object({
   validation_receipt: z.object({
@@ -15,7 +15,7 @@ const AuthorityOutput = z.object({
     sha: z.string().regex(/^[a-f0-9]{64}$/),
     mime: z.literal(WORK_ARTIFACT_VALIDATION_RECEIPT_MIME),
   }),
-  validation_receipt_payload: WorkArtifactValidationReceiptPayload,
+  validation_receipt_payload: ReceiptPayload,
 })
 
 /**
@@ -33,7 +33,7 @@ export function requireWorkArtifactValidationAuthorityFromFacts(input: {
   messages: readonly Message.WithParts[]
   receiptUrl: string
   receiptSha: string
-}): WorkArtifactValidationReceiptPayload {
+}): z.output<typeof ReceiptPayload> {
   for (const message of input.messages) {
     for (const part of message.parts) {
       if (part.type !== "tool" || part.tool !== WORK_ARTIFACT_VALIDATE_TOOL_ID) continue
@@ -65,7 +65,7 @@ export async function requireWorkArtifactValidationAuthority(input: {
   sessionID: string
   receiptUrl: string
   receiptSha: string
-}): Promise<WorkArtifactValidationReceiptPayload> {
+}): Promise<z.output<typeof ReceiptPayload>> {
   return requireWorkArtifactValidationAuthorityFromFacts({
     messages: await Session.messages({ sessionID: input.sessionID }),
     receiptUrl: input.receiptUrl,
@@ -98,5 +98,23 @@ export async function prepareAuthorizedWorkArtifactPresentationDeliverable(input
   if (JSON.stringify(authority) !== JSON.stringify(checked.priorReceiptPayload)) {
     throw new Error("validation receipt authority payload does not match the canonical receipt")
   }
+  return checked
+}
+
+export async function prepareAuthorizedOfficeDeliverable(
+  input: Parameters<typeof prepareOfficeDeliverable>[0] & { sessionID: string },
+) {
+  const raw = z
+    .object({ validation_receipt_url: z.string().min(1), validation_receipt_sha: z.string().regex(/^[a-f0-9]{64}$/) })
+    .passthrough()
+    .parse(input.raw)
+  const authority = await requireWorkArtifactValidationAuthority({
+    sessionID: input.sessionID,
+    receiptUrl: raw.validation_receipt_url,
+    receiptSha: raw.validation_receipt_sha,
+  })
+  const checked = await prepareOfficeDeliverable(input)
+  if (JSON.stringify(authority) !== JSON.stringify(checked.priorReceiptPayload))
+    throw new Error("validation receipt authority payload does not match the canonical receipt")
   return checked
 }

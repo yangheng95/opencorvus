@@ -1,9 +1,8 @@
 import { publishInteractiveArtifact } from "@/interactive-artifact/persist"
 import {
-  AuthorWorkArtifactInput,
-  DeliverWorkArtifactInput,
-  InspectWorkArtifactInput,
-  ValidateWorkArtifactInput,
+  AuthorWorkArtifactInput as AuthorPresentationInput,
+  DeliverWorkArtifactInput as DeliverPresentationInput,
+  InspectWorkArtifactInput as InspectPresentationInput,
   authorWorkArtifactPresentation,
   defaultWorkArtifactPresentationDependencies,
   inspectWorkArtifactPresentation,
@@ -11,17 +10,52 @@ import {
   type WorkArtifactPresentationDependencies,
 } from "@/work-artifact/presentation"
 import { Tool } from "./tool"
-import { prepareAuthorizedWorkArtifactPresentationDeliverable } from "@/work-artifact/validation-authority"
+import {
+  prepareAuthorizedOfficeDeliverable,
+  prepareAuthorizedWorkArtifactPresentationDeliverable,
+} from "@/work-artifact/validation-authority"
 import { WorkArtifactProfileRegistry } from "@/work-artifact/profile-registry"
+import {
+  AuthorOfficeInput,
+  DeliverOfficeInput,
+  InspectOfficeInput,
+  authorOfficeArtifact,
+  inspectOfficeArtifact,
+  validateOfficeArtifact,
+} from "@/work-artifact/office-document"
+import z from "zod"
+
+const AuthorWorkArtifactInput = z.union([AuthorPresentationInput, AuthorOfficeInput])
+const InspectWorkArtifactInput = z.union([InspectPresentationInput, InspectOfficeInput])
+const DeliverWorkArtifactInput = z.union([DeliverPresentationInput, DeliverOfficeInput])
+const ValidateWorkArtifactInput = InspectWorkArtifactInput
 
 export function createWorkArtifactTools(
   dependencies: WorkArtifactPresentationDependencies = defaultWorkArtifactPresentationDependencies,
 ) {
-  const inspect = Tool.define("work_artifact_inspect", {
+  const inspect = Tool.define<typeof InspectWorkArtifactInput, Record<string, unknown>>("work_artifact_inspect", {
     description:
-      "Inspect one canonical Work Artifact without mutation. The qualified office.presentation@1 profile accepts a canonical PPTX attachment URL and returns package structure and safety facts. Raw commands, XML, shell text, filesystem paths, and remote URLs are not accepted.",
+      "Inspect one canonical Work Artifact without mutation. Qualified profiles accept PPTX, DOCX or XLSX canonical attachments and return package structure and safety facts. Raw commands, XML, shell text, filesystem paths, and remote URLs are not accepted.",
     parameters: InspectWorkArtifactInput,
     async execute(args, ctx) {
+      if (args.profile !== "office.presentation@1") {
+        const inspected = await inspectOfficeArtifact({
+          raw: args,
+          executionAuthority: Tool.requireExecutionAuthority(ctx),
+          abort: ctx.abort,
+          extra: ctx.extra,
+          dependencies,
+        })
+        return {
+          title: `Inspected ${inspected.source.filename}`,
+          metadata: { profile: args.profile, sourceSha: inspected.source.sha, ...inspected.inspection },
+          output: JSON.stringify({
+            ...inspected,
+            profile: args.profile,
+            next: "Validate this exact source URL before delivery.",
+          }),
+        }
+      }
       const inspected = await inspectWorkArtifactPresentation({ raw: args, abort: ctx.abort, extra: ctx.extra })
       return {
         title: `Inspected ${inspected.source.filename ?? "presentation.pptx"}`,
@@ -42,11 +76,29 @@ export function createWorkArtifactTools(
     },
   })
 
-  const author = Tool.define("work_artifact_author", {
+  const author = Tool.define<typeof AuthorWorkArtifactInput, Record<string, unknown>>("work_artifact_author", {
     description:
-      "Author one Work Artifact from a bounded profile-discriminated plan. The qualified office.presentation@1 profile creates a new PPTX from typed slides and canonical image attachments. It does not edit existing files or accept raw OfficeCLI commands, XML, shell text, filesystem paths, or remote URLs.",
+      "Author one Work Artifact from a bounded profile-discriminated plan: office.presentation@1 creates PPTX slides; office.document@1 creates DOCX paragraphs; office.spreadsheet@1 creates XLSX literal cells. Does not edit existing files or accept raw commands, formulas, XML, shell text, filesystem paths, or remote URLs. The editable file is the primary deliverable.",
     parameters: AuthorWorkArtifactInput,
     async execute(args, ctx) {
+      if (args.profile !== "office.presentation@1") {
+        const authored = await authorOfficeArtifact({
+          raw: args,
+          executionAuthority: Tool.requireExecutionAuthority(ctx),
+          abort: ctx.abort,
+          extra: ctx.extra,
+          dependencies,
+        })
+        return {
+          title: `Authored ${authored.reference.filename}`,
+          metadata: { profile: args.profile, sourceSha: authored.reference.sha },
+          output: JSON.stringify({
+            profile: args.profile,
+            source: authored.reference,
+            next: "Inspect and validate this exact source URL. Review every returned render before delivery.",
+          }),
+        }
+      }
       const authored = await authorWorkArtifactPresentation({
         raw: args,
         executionAuthority: Tool.requireExecutionAuthority(ctx),
@@ -75,11 +127,47 @@ export function createWorkArtifactTools(
     },
   })
 
-  const validate = Tool.define("work_artifact_validate", {
+  const validate = Tool.define<typeof ValidateWorkArtifactInput, Record<string, unknown>>("work_artifact_validate", {
     description:
-      "Validate one canonical Work Artifact and return a digest-bound receipt. For office.presentation@1 this inspects the PPTX package, runs OfficeCLI validation and issue inspection, and freshly renders every slide to PNG. Inspect every returned render; command success is not visual acceptance.",
+      "Validate one canonical Work Artifact and return a digest-bound receipt. Inspects the Office package, runs OfficeCLI validation and issue inspection, and freshly renders every slide, document page or worksheet to PNG. DOCX/XLSX also return a derived PDF preview. Inspect every render; command success is not visual acceptance.",
     parameters: ValidateWorkArtifactInput,
     async execute(args, ctx) {
+      if (args.profile !== "office.presentation@1") {
+        const validated = await validateOfficeArtifact({
+          raw: args,
+          executionAuthority: Tool.requireExecutionAuthority(ctx),
+          abort: ctx.abort,
+          extra: ctx.extra,
+          dependencies,
+        })
+        return {
+          title: `Validated ${validated.source.filename}`,
+          metadata: {
+            profile: args.profile,
+            sourceSha: validated.source.sha,
+            pageCount: validated.renders.length,
+            receiptSha: validated.receipt.reference.sha,
+          },
+          output: JSON.stringify({
+            source: validated.source,
+            inspection: validated.inspection,
+            validation: validated.validation,
+            issues: validated.issues,
+            renders: validated.renders,
+            preview: validated.preview,
+            resource_usage: validated.resourceUsage,
+            validation_receipt: validated.receipt.reference,
+            validation_receipt_payload: validated.receipt.payload,
+            next: "Inspect every render, then deliver this exact source and receipt.",
+          }),
+          attachments: [validated.receipt.reference, ...validated.renders].map((reference) => ({
+            type: "file" as const,
+            url: reference.url,
+            mime: reference.mime,
+            filename: reference.filename,
+          })),
+        }
+      }
       const validated = await validateWorkArtifactPresentation({
         raw: args,
         executionAuthority: Tool.requireExecutionAuthority(ctx),
@@ -128,13 +216,67 @@ export function createWorkArtifactTools(
     },
   })
 
-  const deliver = Tool.define("work_artifact_deliver", {
+  const deliver = Tool.define<typeof DeliverWorkArtifactInput, Record<string, unknown>>("work_artifact_deliver", {
     description:
-      "Consume the exact validation receipt, revalidate and freshly render the final Work Artifact, then publish authoritative results on the current authorized Work or Task message. For office.presentation@1 this returns the PPTX attachment and presentation review Interactive Artifact.",
+      "Consume the exact validation receipt from this Session, revalidate and freshly render the final Work Artifact, then publish the actual editable PPTX/DOCX/XLSX attachment on the current authorized Work or Task message. PPTX has a presentation review; DOCX/XLSX have a derived PDF preview. The preview does not replace the source file.",
     parameters: DeliverWorkArtifactInput,
     async execute(args, ctx) {
       const limits = WorkArtifactProfileRegistry.require(args.profile).limits
       const deadline = performance.now() + limits.wallClockMs
+      if (args.profile !== "office.presentation@1") {
+        const checked = await prepareAuthorizedOfficeDeliverable({
+          raw: args,
+          sessionID: ctx.sessionID,
+          executionAuthority: Tool.requireExecutionAuthority(ctx),
+          abort: ctx.abort,
+          extra: ctx.extra,
+          dependencies,
+          deadline,
+        })
+        const artifact = await publishInteractiveArtifact({
+          sessionID: ctx.sessionID,
+          messageID: ctx.messageID,
+          payload: {
+            schemaVersion: "1",
+            renderer: "file-preview@1",
+            kind: "pdf",
+            title: checked.parsed.title,
+            source: checked.preview,
+          },
+        })
+        if (ctx.abort.aborted || performance.now() > deadline)
+          throw new Error(`Work Artifact operation exceeded ${limits.wallClockMs}ms`)
+        return {
+          title: checked.parsed.title,
+          metadata: {
+            artifactID: artifact.id,
+            renderer: artifact.payload.renderer,
+            profile: args.profile,
+            sourceSha: checked.source.sha,
+            pageCount: checked.renders.length,
+            validationReceiptSha: checked.receipt.reference.sha,
+          },
+          output: JSON.stringify({
+            artifactID: artifact.id,
+            source: checked.source,
+            preview: checked.preview,
+            renders: checked.renders,
+            final_validation_receipt: checked.receipt.reference,
+            final_validation_receipt_payload: checked.receipt.payload,
+            fidelity:
+              "OfficeCLI package validation and local browser-derived review; Microsoft Office pixel fidelity is not claimed.",
+          }),
+          attachments: [checked.source, checked.preview, checked.receipt.reference, ...checked.renders].map(
+            (reference) => ({
+              type: "file" as const,
+              url: reference.url,
+              mime: reference.mime,
+              filename: reference.filename,
+            }),
+          ),
+          display: [{ type: "interactive-artifact" as const, artifactID: artifact.id }],
+        }
+      }
       const checked = await prepareAuthorizedWorkArtifactPresentationDeliverable({
         raw: args,
         sessionID: ctx.sessionID,

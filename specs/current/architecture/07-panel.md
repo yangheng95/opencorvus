@@ -228,6 +228,10 @@ attachments. Missing canonical metadata is a FileNotFoundError with a metadata
 diagnostic; it is not replaced by a storage-name label. Ordinary copies and
 metadata sidecars retain their file-path labels. Absolute source-content remains
 an independent read-only byte reader.
+Canonical attachment HTTP responses read the same verified reference and bytes,
+and retain its filename through RFC 5987 UTF-8 Content-Disposition. Office source
+types come from the qualified profile registry; PDF and other safe preview types
+remain inline, while active SVG remains download-only octet-stream with nosniff.
 Explicit Markdown image-file links and path-like image codespans use the shared
 project-file recognition list and the existing workbench admission. The image
 extensions accepted by that list follow the File reader's image formats, while

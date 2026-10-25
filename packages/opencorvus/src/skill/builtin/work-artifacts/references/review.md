@@ -1,6 +1,8 @@
 # Presentation review
 
-Inspect the fresh PNG rendered from every final PPTX slide.
+Inspect every fresh PNG: each PPTX slide, DOCX page, or XLSX worksheet.
+For DOCX/XLSX also open the derived PDF preview. Verify complete paragraphs,
+rows, columns, numeric totals and page boundaries against the requested source.
 
 For every slide, verify required content, clipping, readability, hierarchy,
 alignment, spacing, contrast, chart categories/series/units/scale, image aspect

@@ -1,12 +1,12 @@
 # Work Artifact security boundary
 
-- The qualified profile creates a new PPTX. Reject editing an uploaded PPTX,
-  POTX, macro-enabled file, or existing template.
+- Qualified profiles create new PPTX, DOCX and XLSX files. Reject editing an
+  uploaded file, a macro-enabled file, or an existing template.
 - Never request a local filesystem path or run an underlying runtime through
   Bash. The typed Harness accepts canonical project attachments only.
-- Do not install or invoke LibreOffice, Chrome, Playwright, or another external
-  renderer. The qualified Harness owns its pinned Office runtime and fresh PNG
-  rendering path on every supported release target.
+- Do not install or invoke an underlying runtime or renderer through Bash.
+  The Harness owns OfficeCLI and the existing Browser Runtime for DOCX/XLSX
+  HTML-derived previews, with fresh isolated pages and blocked network requests.
 - Do not embed OLE, ActiveX, macros, executables, external package
   relationships, remote images, scripts, video, audio, or arbitrary XML.
 - Treat links and citations as displayed text unless a qualified typed schema

@@ -628,12 +628,25 @@ Advanced `source-investigator` 只有在 manifest 显式使用对应 runtime 且
 - `work-artifacts` 是平台唯一结构化工作产物 Skill，只指导同一个 Work Artifact Harness 的
   `work_artifact_inspect | work_artifact_author | work_artifact_validate |
 work_artifact_deliver` typed tools，不拥有第二套 serializer。profile registry 是格式、操作、Skill
-  resource、runtime、限制和 qualification 的唯一公开目录；当前资格矩阵只声明
-  `office.presentation@1` 的新 PPTX authoring，不声明 transform。DOCX/XLSX/PDF、existing-file
+  resource、runtime、限制和 qualification 的唯一公开目录；当前声明 `office.presentation@1`
+  的新 PPTX、`office.document@1` 的新 DOCX 段落文档和 `office.spreadsheet@1` 的新 XLSX
+  字面值工作表 authoring，不声明 transform。DOCX 通过有序 title/heading/paragraph 计划写入；
+  XLSX 通过有界工作表、列标题和显式字符串/数字/布尔/空单元格计划写入，不接受公式、宏或原始命令；
+  同一 batch 在全部单元格完成后按实际内容 autofit 原生列宽。逐表 PNG 按内容宽度包含工作表名称，
+  保持真实列宽与渲染限额，不把省略号或空白画布视为可读性通过。
+  所有格式在私有 workspace 单次 batch 完成写入并检查完整原生结果；DOCX/XLSX 在发布源附件前
+  还必须从实际文件完整读回段落/单元格，与 typed plan 对应。PDF 源文件生产、existing-file
   editing 与其他格式必须在同一 harness 完成 profile qualification 后扩展 discriminated schema，
   禁止增加平行格式 Skill、库或兼容 tool identity。`validate` 生成由 canonical Attachment Store
   持久化、与 source SHA、profile、runtime lock revision、最终 package SHA 和 fresh render SHA
   绑定的 receipt；`deliver` 只消费该精确 receipt，并在发布前重新执行完整校验和逐页渲染。
+  DOCX/XLSX 复用既有 Browser Runtime 的 Node sidecar，在独立 headless 页面阻断外部资源，
+  从固定 OfficeCLI HTML 输出派生逐页/逐表 PNG 与 PDF 预览，禁止直接启动用户 Office 或连接
+  用户浏览器。HTML 以私有输入文件传给 sidecar，避免 Windows 命令行容量限制。原始 DOCX/XLSX
+  附件为主交付，派生 PDF 使用既有 `file-preview@1`；receipt 同时绑定预览与 renderer 身份。
+  该渲染要求现有 Browser Runtime 可用的 Chrome/Edge 与随包 Node/Playwright，不承诺
+  Microsoft Office 像素一致性。所有 profile 复用同 Session 完成的 validate Tool 事实授权，
+  不允许构造 receipt 替代真实工具结果；每个发布目标分别进入实际编译包资格检查。
   OfficeCLI 只作为该 profile 的固定 adapter/runtime；统一 runtime lock 声明来源、下载上限、包内
   路径、file kind、执行策略与 smoke argv，target package manifest 在权限归一与平台签名后生成并
   校验 SHA、大小、目标 OS/架构和 mode。类 Unix 的 executable 固定为 `0755`，shared library/data

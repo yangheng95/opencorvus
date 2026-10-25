@@ -250,6 +250,14 @@ jobs:
         with:
           workspaces: packages/opencorvus/native/process-supervisor -> target
 
+      - name: Install Office preview renderer browser
+        working-directory: packages/opencorvus
+        timeout-minutes: 10
+        run: |
+          playwright_cli="$(node -p "require('node:path').join(require('node:path').dirname(require.resolve('playwright/package.json')), 'cli.js')")"
+          node "$playwright_cli" install --with-deps chromium
+          echo "OPENCORVUS_BROWSER_EXECUTABLE=$(node -p "require('playwright').chromium.executablePath()")" >> "$GITHUB_ENV"
+
       - name: Verify remaining release budget
         env:
           GH_TOKEN: ${{ github.token }}
@@ -273,10 +281,12 @@ jobs:
               continue
             fi
             name="$(basename "$bundle")"
-            evidence="packages/opencorvus/dist/work-artifact-qualification-${name}.json"
-            bun packages/opencorvus/script/check-work-artifact-profile.ts \
-              --profile office.presentation@1 \
-              --package-root "$bundle" | tee "$evidence"
+            for profile in office.presentation@1 office.document@1 office.spreadsheet@1; do
+              evidence="packages/opencorvus/dist/work-artifact-qualification-${name}-${profile}.json"
+              bun packages/opencorvus/script/check-work-artifact-profile.ts \
+                --profile "$profile" \
+                --package-root "$bundle" | tee "$evidence"
+            done
             verified=$((verified + 1))
           done
           test "$verified" -gt 0

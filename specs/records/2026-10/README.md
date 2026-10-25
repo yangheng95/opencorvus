@@ -1,5 +1,9 @@
 # 2026-10 Records
 
+- [Office真实预览与下载](2026-10-25-office-preview-download.md)：596原Chat继续检查、预览与正式交付。
+
+- [Office原请求传输与交付](2026-10-25-office-provider-transport.md)：595请求构造/连接与原业务交付调查。
+
 - [Office请求失败与反馈体验](2026-10-25-office-file-delivery.md)：594原请求失败保留与中英文响应反馈修复。
 
 - [Chat附件与真实文件交付体验](2026-10-25-chat-file-delivery.md)：593单Chat上传、交付、阅读与下载实际验收。

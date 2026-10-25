@@ -1,5 +1,9 @@
 # Artifact entry points
 
+- [Office真实预览与下载](2026-10-25-office-preview-download/README.md)：596预览、下载及实际Office内容证据。
+
+- [Office原请求传输与交付](2026-10-25-office-provider-transport/README.md)：595真实传输摘要、页面及交付证据。
+
 - [Office请求失败与反馈体验](2026-10-25-office-file-delivery/README.md)：594真实失败页面、原诊断及修复后复核。
 
 - [Chat附件与真实文件交付体验](2026-10-25-chat-file-delivery/README.md)：593单Chat上传、交付、阅读与下载实际验收。

@@ -1,10 +1,12 @@
-import { inspectPptxPackageUnsafe } from "./presentation"
+import { inspectOfficePackageUnsafe } from "./presentation"
 
 if (process.env.OPENCORVUS_INTERNAL_WORK_ARTIFACT_INSPECTOR !== "1") {
   throw new Error("Work Artifact inspector process requires internal authority")
 }
 
 const chunks: Buffer[] = []
+const format = process.env.OPENCORVUS_INTERNAL_WORK_ARTIFACT_FORMAT
+if (format !== "pptx" && format !== "docx" && format !== "xlsx") throw new Error("Unsupported Office package format")
 let bytes = 0
 for await (const chunk of process.stdin) {
   const value = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk)
@@ -13,7 +15,11 @@ for await (const chunk of process.stdin) {
   chunks.push(value)
 }
 try {
-  process.stdout.write(`${JSON.stringify({ ok: true, value: await inspectPptxPackageUnsafe(Buffer.concat(chunks, bytes)) })}\n`)
+  process.stdout.write(
+    `${JSON.stringify({ ok: true, value: await inspectOfficePackageUnsafe(Buffer.concat(chunks, bytes), format) })}\n`,
+  )
 } catch (error) {
-  process.stdout.write(`${JSON.stringify({ ok: false, error: error instanceof Error ? error.message : String(error) })}\n`)
+  process.stdout.write(
+    `${JSON.stringify({ ok: false, error: error instanceof Error ? error.message : String(error) })}\n`,
+  )
 }

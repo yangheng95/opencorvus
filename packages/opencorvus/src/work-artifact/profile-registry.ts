@@ -1,4 +1,4 @@
-export const WORK_ARTIFACT_PROFILE_IDS = ["office.presentation@1"] as const
+export const WORK_ARTIFACT_PROFILE_IDS = ["office.presentation@1", "office.document@1", "office.spreadsheet@1"] as const
 export type WorkArtifactProfileID = (typeof WORK_ARTIFACT_PROFILE_IDS)[number]
 
 export const WORK_ARTIFACT_OPERATION_IDS = ["inspect", "author", "validate", "deliver"] as const
@@ -24,7 +24,7 @@ export const WORK_ARTIFACT_INSPECT_TOOL_ID = "work_artifact_inspect" as const
 export const WORK_ARTIFACT_DELIVER_TOOL_ID = "work_artifact_deliver" as const
 
 export const WORK_ARTIFACT_PARENT_ONLY_TOOL_IDS = ["work_artifact_deliver"] as const
-export const WORK_ARTIFACT_PRESENTATION_TOOL_SCHEMA_REVISION = "work-artifact-presentation@1" as const
+export const WORK_ARTIFACT_TOOL_SCHEMA_REVISION = "work-artifact-office@1" as const
 export const OFFICE_PRESENTATION_PROFILE_LIMITS = Object.freeze({
   inputBytes: 80 * 1024 * 1024,
   outputBytes: 80 * 1024 * 1024,
@@ -41,7 +41,10 @@ export type WorkArtifactProfile = Readonly<{
   skillResources: readonly string[]
   runtimes: readonly string[]
   releaseTargets: readonly Readonly<{ os: "darwin" | "linux" | "win32"; arch: "arm64" | "x64" }>[]
-  qualification: "office-presentation-packaged-lifecycle@1"
+  qualification:
+    | "office-presentation-packaged-lifecycle@1"
+    | "office-document-packaged-lifecycle@1"
+    | "office-spreadsheet-packaged-lifecycle@1"
   networkIsolation: "adapter_inputs_only"
   limits: Readonly<{
     inputBytes: number
@@ -54,11 +57,9 @@ export type WorkArtifactProfile = Readonly<{
 
 const officePresentationProfile: WorkArtifactProfile = Object.freeze({
   id: "office.presentation@1",
-  mimeTypes: Object.freeze([
-    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-  ]),
+  mimeTypes: Object.freeze(["application/vnd.openxmlformats-officedocument.presentationml.presentation"]),
   operations: WORK_ARTIFACT_OPERATION_IDS,
-  toolSchemaRevision: WORK_ARTIFACT_PRESENTATION_TOOL_SCHEMA_REVISION,
+  toolSchemaRevision: WORK_ARTIFACT_TOOL_SCHEMA_REVISION,
   skillName: "work-artifacts",
   skillResources: Object.freeze([
     "references/common-lifecycle.md",
@@ -80,17 +81,41 @@ const officePresentationProfile: WorkArtifactProfile = Object.freeze({
 })
 
 const profiles = new Map<WorkArtifactProfileID, WorkArtifactProfile>([
-  [
-    "office.presentation@1",
-    officePresentationProfile,
-  ],
+  ["office.presentation@1", officePresentationProfile],
 ])
 
-/**
- * Only `require` had a caller. `all()` and `supports()` were registry-shaped
- * API for a map with one entry: nothing outside this file ever asked for the
- * whole set or for operation support.
- */
+for (const [id, mime, reference, qualification] of [
+  [
+    "office.document@1",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "references/office-document.md",
+    "office-document-packaged-lifecycle@1",
+  ],
+  [
+    "office.spreadsheet@1",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "references/office-spreadsheet.md",
+    "office-spreadsheet-packaged-lifecycle@1",
+  ],
+] as const) {
+  profiles.set(
+    id,
+    Object.freeze({
+      ...officePresentationProfile,
+      id,
+      mimeTypes: Object.freeze([mime]),
+      toolSchemaRevision: WORK_ARTIFACT_TOOL_SCHEMA_REVISION,
+      skillResources: Object.freeze([
+        "references/common-lifecycle.md",
+        reference,
+        "references/review.md",
+        "references/security.md",
+      ]),
+      qualification,
+    }),
+  )
+}
+
 export const WorkArtifactProfileRegistry = Object.freeze({
   require(id: WorkArtifactProfileID): WorkArtifactProfile {
     const profile = profiles.get(id)

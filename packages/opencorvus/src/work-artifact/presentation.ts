@@ -22,9 +22,7 @@ import {
   WORK_ARTIFACT_RUNTIME_LOCK_PACKAGE_PATH,
   type WorkArtifactRuntimeLock,
 } from "./runtime/runtime-lock"
-import {
-  verifyWorkArtifactTargetPackageManifest,
-} from "./runtime/package-manifest"
+import { verifyWorkArtifactTargetPackageManifest } from "./runtime/package-manifest"
 
 // PPTX means PowerPoint Open XML Presentation.
 export const PPTX_MIME = "application/vnd.openxmlformats-officedocument.presentationml.presentation"
@@ -36,18 +34,17 @@ const MAX_ZIP_ENTRIES = 2_000
 const MAX_UNCOMPRESSED_BYTES = 120 * 1024 * 1024
 const MAX_XML_PART_BYTES = 8 * 1024 * 1024
 const OFFICECLI_INACTIVITY_TIMEOUT_MS = 45_000
-export const WORK_ARTIFACT_VALIDATION_RECEIPT_MIME =
-  "application/vnd.opencorvus.work-artifact-validation-receipt+json"
+export const WORK_ARTIFACT_VALIDATION_RECEIPT_MIME = "application/vnd.opencorvus.work-artifact-validation-receipt+json"
 const SLIDE_WIDTH_CM = 33.867
 
-function requireOperationBudget(deadline: number, wallClockMs: number, abort?: AbortSignal): number {
+export function requireOperationBudget(deadline: number, wallClockMs: number, abort?: AbortSignal): number {
   if (abort?.aborted) throw new Error("Work Artifact operation was cancelled")
   const remaining = Math.floor(deadline - performance.now())
   if (remaining <= 0) throw new Error(`Work Artifact operation exceeded ${wallClockMs}ms`)
   return remaining
 }
 
-async function readBoundedFile(filename: string, maxBytes: number, label: string): Promise<Buffer> {
+export async function readBoundedFile(filename: string, maxBytes: number, label: string): Promise<Buffer> {
   const info = await fs.stat(filename)
   if (!info.isFile()) throw new Error(`${label} is not a regular file`)
   if (info.size > maxBytes) throw new Error(`${label} exceeds ${maxBytes} bytes`)
@@ -259,7 +256,7 @@ export const RenderReference = z
   })
   .strict()
 
-const RuntimeReceiptIdentity = z
+export const RuntimeReceiptIdentity = z
   .object({
     id: z.literal("officecli"),
     version: z.string().regex(/^\d+\.\d+\.\d+$/),
@@ -435,7 +432,9 @@ async function verifyPackagedOfficeCliRuntime(): Promise<{
       arch: process.arch as "arm64" | "x64",
       ...(runtimeTargetABI() ? { abi: runtimeTargetABI() } : {}),
     }
-    const lock = parseWorkArtifactRuntimeLock(JSON.parse(await fs.readFile(packagedWorkArtifactRuntimeLockPath(), "utf8")))
+    const lock = parseWorkArtifactRuntimeLock(
+      JSON.parse(await fs.readFile(packagedWorkArtifactRuntimeLockPath(), "utf8")),
+    )
     const manifest = await verifyWorkArtifactTargetPackageManifest({ root, target, lock })
     const runtime = officeCliRuntime(lock)
     const asset = runtime.assets.find(
@@ -444,8 +443,11 @@ async function verifyPackagedOfficeCliRuntime(): Promise<{
     if (!asset) {
       throw new Error(`Packaged OfficeCLI runtime lock has no asset for ${process.platform}-${process.arch}`)
     }
-    const packaged = manifest.files.find((file) => file.path === `bin/${process.platform === "win32" ? "officecli.exe" : "officecli"}`)
-    if (!packaged || packaged.kind !== "executable") throw new Error("Work Artifact target package manifest omits OfficeCLI")
+    const packaged = manifest.files.find(
+      (file) => file.path === `bin/${process.platform === "win32" ? "officecli.exe" : "officecli"}`,
+    )
+    if (!packaged || packaged.kind !== "executable")
+      throw new Error("Work Artifact target package manifest omits OfficeCLI")
     const identity = officeCliRuntimeIdentity(lock)
     return {
       executable,
@@ -484,7 +486,7 @@ export const defaultWorkArtifactPresentationDependencies: WorkArtifactPresentati
   },
 }
 
-function projectID(ctxExtra?: Record<string, unknown>): string {
+export function projectID(ctxExtra?: Record<string, unknown>): string {
   return typeof ctxExtra?.projectID === "string" ? ctxExtra.projectID : Instance.project.id
 }
 
@@ -497,7 +499,7 @@ export function workArtifactWorkspaceRoot(input: {
     : ProjectRuntimePaths.rootSessionWorkArtifactRuntimeRoot(input.projectRoot, input.executionAuthority.sessionID)
 }
 
-async function withOfficeWorkspace<T>(
+export async function withOfficeWorkspace<T>(
   input: { executionAuthority: SessionExecutionAuthority; projectID: string },
   fn: (directory: string) => Promise<T>,
 ): Promise<T> {
@@ -514,7 +516,10 @@ async function withOfficeWorkspace<T>(
     projectRoot = taskPrimaryProjectRoot(authority.taskID, { activeProjectID: input.projectID })
   } else {
     const session = await Session.get(authority.sessionID)
-    if (session.projectID !== input.projectID || path.resolve(session.directory) !== path.resolve(authority.directory)) {
+    if (
+      session.projectID !== input.projectID ||
+      path.resolve(session.directory) !== path.resolve(authority.directory)
+    ) {
       throw new Error(`Work Artifact conversation ${authority.sessionID} execution identity is inconsistent`)
     }
   }
@@ -730,12 +735,49 @@ function parseJsonResult(result: Process.Result, label: string): Record<string, 
   return parseWorkArtifactRuntimeJson(result.stdout, label)
 }
 
+export class WorkArtifactBatchError extends Error {
+  constructor(evidence: unknown) {
+    const detail = JSON.stringify(evidence)
+    super(
+      `OfficeCLI batch did not complete the entire authoring plan: ${detail.length > 4096 ? `${detail.slice(0, 4096)}…` : detail}`,
+    )
+    this.name = "WorkArtifactBatchError"
+  }
+}
+
+export function assertCompleteWorkArtifactBatch(result: Record<string, unknown>, expectedCommands: number): void {
+  const parsed = z
+    .object({
+      results: z.array(z.object({ index: z.number().int(), success: z.boolean() })),
+      summary: z.object({
+        total: z.number().int(),
+        executed: z.number().int(),
+        succeeded: z.number().int(),
+        failed: z.number().int(),
+        skipped: z.number().int(),
+      }),
+    })
+    .safeParse(result.data)
+  if (!parsed.success) throw new WorkArtifactBatchError(result.data)
+  const { results, summary } = parsed.data
+  if (
+    summary.total !== expectedCommands ||
+    summary.executed !== expectedCommands ||
+    summary.succeeded !== expectedCommands ||
+    summary.failed !== 0 ||
+    summary.skipped !== 0 ||
+    results.length !== expectedCommands ||
+    results.some((result, index) => result.index !== index || result.success !== true)
+  )
+    throw new WorkArtifactBatchError(result.data)
+}
+
 export function assertZeroWorkArtifactRuntimeIssueCount(result: Record<string, unknown>, label: string): void {
   const data = result.data
   if (!data || typeof data !== "object" || Array.isArray(data) || (data as Record<string, unknown>).count !== 0) {
     const evidence = JSON.stringify(data ?? null)
     throw new Error(
-      `${label} reported presentation issues: ${evidence.length > 4096 ? `${evidence.slice(0, 4096)}…` : evidence}`,
+      `${label} reported Office issues: ${evidence.length > 4096 ? `${evidence.slice(0, 4096)}…` : evidence}`,
     )
   }
 }
@@ -753,54 +795,58 @@ export async function authorWorkArtifactPresentation(input: {
   const limits = WorkArtifactProfileRegistry.require(parsed.profile).limits
   const currentProjectID = projectID(input.extra)
   const deadline = operationStartedAt + limits.wallClockMs
-  return withOfficeWorkspace({ executionAuthority: input.executionAuthority, projectID: currentProjectID }, async (directory) => {
-    requireOperationBudget(deadline, limits.wallClockMs, input.abort)
-    let outputBytes = 0
-    const run = async (args: string[]) => {
-      const timeoutMs = Math.floor(deadline - performance.now())
-      const maxOutputBytes = limits.outputBytes - outputBytes
-      if (timeoutMs <= 0) throw new Error(`Work Artifact operation exceeded ${limits.wallClockMs}ms`)
-      if (maxOutputBytes <= 0) throw new Error(`Work Artifact operation output exceeded ${limits.outputBytes} bytes`)
-      const result = await dependencies.runOfficeCli({
-        executionAuthority: input.executionAuthority,
-        args,
-        cwd: directory,
-        abort: input.abort,
-        timeoutMs,
-        maxOutputBytes,
-      })
-      outputBytes += result.stdout.byteLength + result.stderr.byteLength
-      if (outputBytes > limits.outputBytes) {
-        throw new Error(`Work Artifact operation output exceeded ${limits.outputBytes} bytes`)
+  return withOfficeWorkspace(
+    { executionAuthority: input.executionAuthority, projectID: currentProjectID },
+    async (directory) => {
+      requireOperationBudget(deadline, limits.wallClockMs, input.abort)
+      let outputBytes = 0
+      const run = async (args: string[]) => {
+        const timeoutMs = Math.floor(deadline - performance.now())
+        const maxOutputBytes = limits.outputBytes - outputBytes
+        if (timeoutMs <= 0) throw new Error(`Work Artifact operation exceeded ${limits.wallClockMs}ms`)
+        if (maxOutputBytes <= 0) throw new Error(`Work Artifact operation output exceeded ${limits.outputBytes} bytes`)
+        const result = await dependencies.runOfficeCli({
+          executionAuthority: input.executionAuthority,
+          args,
+          cwd: directory,
+          abort: input.abort,
+          timeoutMs,
+          maxOutputBytes,
+        })
+        outputBytes += result.stdout.byteLength + result.stderr.byteLength
+        if (outputBytes > limits.outputBytes) {
+          throw new Error(`Work Artifact operation output exceeded ${limits.outputBytes} bytes`)
+        }
+        return result
       }
-      return result
-    }
-    await dependencies.officeCliPath()
-    const outputPath = path.join(directory, parsed.filename)
-    const created = await run(["create", outputPath, "--type", "pptx", "--locale", parsed.locale, "--json"])
-    parseJsonResult(created, "OfficeCLI create")
-    const batchPath = path.join(directory, "authoring.json")
-    await fs.writeFile(batchPath, JSON.stringify(await authorCommands(parsed, directory, currentProjectID)), {
-      flag: "wx",
-      mode: 0o600,
-    })
-    const batched = await run(["batch", outputPath, "--input", batchPath, "--stop-on-error", "--json"])
-    parseJsonResult(batched, "OfficeCLI batch")
-    const bytes = await readBoundedFile(outputPath, MAX_PRESENTATION_BYTES, "authored presentation")
-    requireOperationBudget(deadline, limits.wallClockMs, input.abort)
-    if (bytes.byteLength > MAX_PRESENTATION_BYTES) {
-      throw new Error(`authored presentation exceeds ${MAX_PRESENTATION_BYTES} bytes`)
-    }
-    const remainingMs = requireOperationBudget(deadline, limits.wallClockMs, input.abort)
-    await inspectPptxPackage(bytes, { abort: input.abort, timeoutMs: remainingMs })
-    requireOperationBudget(deadline, limits.wallClockMs, input.abort)
-    const reference = await AttachmentStore.write(currentProjectID, bytes, PPTX_MIME, parsed.filename)
-    requireOperationBudget(deadline, limits.wallClockMs, input.abort)
-    return {
-      reference,
-      slideTitles: parsed.slides.map((slide) => slide.title),
-    }
-  })
+      await dependencies.officeCliPath()
+      const outputPath = path.join(directory, parsed.filename)
+      const created = await run(["create", outputPath, "--type", "pptx", "--locale", parsed.locale, "--json"])
+      parseJsonResult(created, "OfficeCLI create")
+      const batchPath = path.join(directory, "authoring.json")
+      const commands = await authorCommands(parsed, directory, currentProjectID)
+      await fs.writeFile(batchPath, JSON.stringify(commands), {
+        flag: "wx",
+        mode: 0o600,
+      })
+      const batched = await run(["batch", outputPath, "--input", batchPath, "--stop-on-error", "--json"])
+      assertCompleteWorkArtifactBatch(parseJsonResult(batched, "OfficeCLI batch"), commands.length)
+      const bytes = await readBoundedFile(outputPath, MAX_PRESENTATION_BYTES, "authored presentation")
+      requireOperationBudget(deadline, limits.wallClockMs, input.abort)
+      if (bytes.byteLength > MAX_PRESENTATION_BYTES) {
+        throw new Error(`authored presentation exceeds ${MAX_PRESENTATION_BYTES} bytes`)
+      }
+      const remainingMs = requireOperationBudget(deadline, limits.wallClockMs, input.abort)
+      await inspectPptxPackage(bytes, { abort: input.abort, timeoutMs: remainingMs })
+      requireOperationBudget(deadline, limits.wallClockMs, input.abort)
+      const reference = await AttachmentStore.write(currentProjectID, bytes, PPTX_MIME, parsed.filename)
+      requireOperationBudget(deadline, limits.wallClockMs, input.abort)
+      return {
+        reference,
+        slideTitles: parsed.slides.map((slide) => slide.title),
+      }
+    },
+  )
 }
 
 export type PptxInspection = {
@@ -865,7 +911,8 @@ async function readZipEntryBounded(input: {
     writable: new WritableStream<Uint8Array>({
       write(chunk) {
         entryBytes += chunk.byteLength
-        if (entryBytes > input.entryLimit) throw new Error(`part ${input.name} exceeds ${input.entryLimit} actual bytes`)
+        if (entryBytes > input.entryLimit)
+          throw new Error(`part ${input.name} exceeds ${input.entryLimit} actual bytes`)
         input.addExpandedBytes(chunk.byteLength)
         chunks.push(Buffer.from(chunk))
       },
@@ -885,14 +932,21 @@ async function inspectEmbeddedWorkbook(bytes: Buffer, addExpandedBytes: (bytes: 
     const normalized = new Set<string>()
     for (const entry of entries) {
       const name = entry.filename
-      if (!name || name.includes("\\") || name.startsWith("/") || name.split("/").some((part) => part === "." || part === "..")) {
+      if (
+        !name ||
+        name.includes("\\") ||
+        name.startsWith("/") ||
+        name.split("/").some((part) => part === "." || part === "..")
+      ) {
         throw new Error(`embedded workbook contains an unsafe ZIP entry: ${JSON.stringify(name)}`)
       }
-      if (names.has(name) || normalized.has(name.toLowerCase())) throw new Error(`embedded workbook contains a duplicate ZIP entry: ${name}`)
+      if (names.has(name) || normalized.has(name.toLowerCase()))
+        throw new Error(`embedded workbook contains a duplicate ZIP entry: ${name}`)
       names.add(name)
       normalized.add(name.toLowerCase())
       if (entry.encrypted) throw new Error(`embedded workbook contains an encrypted ZIP entry: ${name}`)
-      if (!isSupportedCreatedWorkbookPart(name)) throw new Error(`embedded workbook contains an unsupported create-only OOXML part: ${name}`)
+      if (!isSupportedCreatedWorkbookPart(name))
+        throw new Error(`embedded workbook contains an unsupported create-only OOXML part: ${name}`)
       const data = await readZipEntryBounded({
         entry,
         name: `embedded workbook/${name}`,
@@ -900,7 +954,8 @@ async function inspectEmbeddedWorkbook(bytes: Buffer, addExpandedBytes: (bytes: 
         addExpandedBytes,
       })
       const text = new TextDecoder("utf-8", { fatal: true }).decode(data)
-      if (/<!DOCTYPE|<!ENTITY/i.test(text)) throw new Error(`embedded workbook contains a document type or entity declaration: ${name}`)
+      if (/<!DOCTYPE|<!ENTITY/i.test(text))
+        throw new Error(`embedded workbook contains a document type or entity declaration: ${name}`)
       if (/\.rels$/i.test(name) && /TargetMode\s*=\s*["']External["']/i.test(text)) {
         throw new Error(`embedded workbook contains an external package relationship: ${name}`)
       }
@@ -916,15 +971,21 @@ async function inspectEmbeddedWorkbook(bytes: Buffer, addExpandedBytes: (bytes: 
   }
 }
 
-export async function inspectPptxPackageUnsafe(bytes: Buffer): Promise<PptxInspection> {
-  if (bytes.byteLength > MAX_PRESENTATION_BYTES) throw new Error(`PPTX exceeds ${MAX_PRESENTATION_BYTES} bytes`)
+export type OfficePackageInspection = { unitCount: number; entryCount: number; uncompressedBytes: number }
+
+export async function inspectOfficePackageUnsafe(
+  bytes: Buffer,
+  format: "pptx" | "docx" | "xlsx",
+): Promise<OfficePackageInspection> {
+  if (bytes.byteLength > MAX_PRESENTATION_BYTES)
+    throw new Error(`Office package exceeds ${MAX_PRESENTATION_BYTES} bytes`)
   // Copy into a zero-offset Uint8Array because Buffer instances may expose a
   // pooled backing ArrayBuffer that contains unrelated bytes outside the view.
   const reader = new ZipReader(new Uint8ArrayReader(Uint8Array.from(bytes)))
   try {
     const entries = await reader.getEntries()
     if (entries.length === 0 || entries.length > MAX_ZIP_ENTRIES) {
-      throw new Error(`PPTX entry count ${entries.length} is outside the supported range`)
+      throw new Error(`Office package entry count ${entries.length} is outside the supported range`)
     }
     const names = new Set<string>()
     const normalizedNames = new Set<string>()
@@ -937,21 +998,32 @@ export async function inspectPptxPackageUnsafe(bytes: Buffer): Promise<PptxInspe
         name.startsWith("/") ||
         name.split("/").some((segment) => segment === "." || segment === "..")
       ) {
-        throw new Error(`PPTX contains an unsafe ZIP entry: ${JSON.stringify(name)}`)
+        throw new Error(`Office package contains an unsafe ZIP entry: ${JSON.stringify(name)}`)
       }
-      if (names.has(name)) throw new Error(`PPTX contains a duplicate ZIP entry: ${name}`)
+      if (names.has(name)) throw new Error(`Office package contains a duplicate ZIP entry: ${name}`)
       names.add(name)
       const normalizedName = name.toLowerCase()
       if (normalizedNames.has(normalizedName)) {
-        throw new Error(`PPTX contains a case-insensitive duplicate ZIP entry: ${name}`)
+        throw new Error(`Office package contains a case-insensitive duplicate ZIP entry: ${name}`)
       }
       normalizedNames.add(normalizedName)
-      if (entry.encrypted) throw new Error(`PPTX contains an encrypted ZIP entry: ${name}`)
-      if (!isSupportedCreatedPptxPart(name)) {
-        throw new Error(`PPTX contains an unsupported create-only OOXML part: ${name}`)
+      if (entry.encrypted) throw new Error(`Office package contains an encrypted ZIP entry: ${name}`)
+      const supportedPart =
+        format === "pptx"
+          ? isSupportedCreatedPptxPart(name)
+          : format === "xlsx"
+            ? isSupportedCreatedWorkbookPart(name)
+            : name === "[Content_Types].xml" ||
+              name === "_rels/.rels" ||
+              /^docProps\/(?:app|core|custom)\.xml$/.test(name) ||
+              /^word\/(?:document|styles|settings|fontTable|webSettings|numbering)\.xml$/.test(name) ||
+              /^word\/theme\/theme[1-9][0-9]*\.xml$/.test(name) ||
+              name === "word/_rels/document.xml.rels"
+      if (!supportedPart) {
+        throw new Error(`Office package contains an unsupported create-only OOXML part: ${name}`)
       }
       if (entry.uncompressedSize > MAX_UNCOMPRESSED_BYTES - uncompressedBytes) {
-        throw new Error(`PPTX uncompressed content exceeds ${MAX_UNCOMPRESSED_BYTES} bytes`)
+        throw new Error(`Office package uncompressed content exceeds ${MAX_UNCOMPRESSED_BYTES} bytes`)
       }
       const entryLimit = /\.(xml|rels)$/i.test(name)
         ? MAX_XML_PART_BYTES
@@ -961,40 +1033,52 @@ export async function inspectPptxPackageUnsafe(bytes: Buffer): Promise<PptxInspe
       const addExpandedBytes = (count: number) => {
         uncompressedBytes += count
         if (uncompressedBytes > MAX_UNCOMPRESSED_BYTES) {
-          throw new Error(`PPTX actual uncompressed content exceeds ${MAX_UNCOMPRESSED_BYTES} bytes`)
+          throw new Error(`Office package actual uncompressed content exceeds ${MAX_UNCOMPRESSED_BYTES} bytes`)
         }
       }
-      const data = await readZipEntryBounded({ entry, name: `PPTX/${name}`, entryLimit, addExpandedBytes })
+      const data = await readZipEntryBounded({ entry, name: `Office package/${name}`, entryLimit, addExpandedBytes })
       if (/\.(xml|rels)$/i.test(name)) {
         const text = new TextDecoder("utf-8", { fatal: true }).decode(data)
         if (/<!DOCTYPE|<!ENTITY/i.test(text)) {
-          throw new Error(`PPTX contains a document type or entity declaration: ${name}`)
+          throw new Error(`Office package contains a document type or entity declaration: ${name}`)
         }
         if (/\.rels$/i.test(name) && /TargetMode\s*=\s*["']External["']/i.test(text)) {
-          throw new Error(`PPTX contains an external package relationship: ${name}`)
+          throw new Error(`Office package contains an external package relationship: ${name}`)
         }
         if (
           (name === "[Content_Types].xml" || /\.rels$/i.test(name)) &&
           /macroEnabled|vbaProject|activeX|oleObject/i.test(text)
         ) {
-          throw new Error(`PPTX declares unsupported executable, macro, OLE, or ActiveX content: ${name}`)
+          throw new Error(`Office package declares unsupported executable, macro, OLE, or ActiveX content: ${name}`)
         }
       }
       if (/^ppt\/media\//.test(name)) {
-        await assertSafeImageBytes(data, `PPTX media part ${name}`)
+        await assertSafeImageBytes(data, `Office package media part ${name}`)
       }
       if (/^ppt\/embeddings\/.+\.xlsx$/i.test(name)) {
         await inspectEmbeddedWorkbook(data, addExpandedBytes)
       }
     }
-    for (const required of ["[Content_Types].xml", "_rels/.rels", "ppt/presentation.xml"]) {
-      if (!names.has(required)) throw new Error(`PPTX is missing required package entry: ${required}`)
+    for (const required of [
+      "[Content_Types].xml",
+      "_rels/.rels",
+      format === "pptx" ? "ppt/presentation.xml" : format === "docx" ? "word/document.xml" : "xl/workbook.xml",
+    ]) {
+      if (!names.has(required)) throw new Error(`Office package is missing required package entry: ${required}`)
     }
-    const slideCount = [...names].filter((name) => /^ppt\/slides\/slide[1-9][0-9]*\.xml$/.test(name)).length
-    if (slideCount === 0 || slideCount > OFFICE_PRESENTATION_PROFILE_LIMITS.pagesOrFrames) {
-      throw new Error(`PPTX slide count ${slideCount} is unsupported`)
+    const unitCount =
+      format === "docx"
+        ? 1
+        : [...names].filter((name) =>
+            (format === "pptx"
+              ? /^ppt\/slides\/slide[1-9][0-9]*\.xml$/
+              : /^xl\/worksheets\/sheet[1-9][0-9]*\.xml$/
+            ).test(name),
+          ).length
+    if (unitCount === 0 || unitCount > OFFICE_PRESENTATION_PROFILE_LIMITS.pagesOrFrames) {
+      throw new Error(`Office package unit count ${unitCount} is unsupported`)
     }
-    return { slideCount, entryCount: entries.length, uncompressedBytes }
+    return { unitCount, entryCount: entries.length, uncompressedBytes }
   } finally {
     await reader.close()
   }
@@ -1004,32 +1088,45 @@ export async function inspectPptxPackage(
   bytes: Buffer,
   options: { abort?: AbortSignal; timeoutMs?: number } = {},
 ): Promise<PptxInspection> {
+  const { unitCount, ...inspection } = await inspectOfficePackage(bytes, "pptx", options)
+  return { ...inspection, slideCount: unitCount }
+}
+
+export async function inspectOfficePackage(
+  bytes: Buffer,
+  format: "pptx" | "docx" | "xlsx",
+  options: { abort?: AbortSignal; timeoutMs?: number } = {},
+): Promise<OfficePackageInspection> {
   const timeoutMs = Math.min(
     options.timeoutMs ?? OFFICE_PRESENTATION_PROFILE_LIMITS.parserWallClockMs,
     OFFICE_PRESENTATION_PROFILE_LIMITS.parserWallClockMs,
   )
-  if (options.abort?.aborted) throw new Error("Work Artifact PPTX inspection was cancelled")
+  if (options.abort?.aborted) throw new Error("Work Artifact Office package inspection was cancelled")
   const command = isCompiledBinaryRuntime()
     ? [process.execPath]
     : [process.execPath, fileURLToPath(new URL("./presentation-inspector-process.ts", import.meta.url))]
   const result = await Process.runHost(command, {
     abort: options.abort,
-    env: { OPENCORVUS_INTERNAL_WORK_ARTIFACT_INSPECTOR: "1" },
+    env: { OPENCORVUS_INTERNAL_WORK_ARTIFACT_INSPECTOR: "1", OPENCORVUS_INTERNAL_WORK_ARTIFACT_FORMAT: format },
     timeoutMs,
     maxOutputBytes: 1024 * 1024,
-    input: (async function* () { yield bytes })(),
+    input: (async function* () {
+      yield bytes
+    })(),
   }).catch((error) => {
     if (error instanceof Error && error.message.includes(`timed out after ${timeoutMs}ms`)) {
-      throw new Error(`Work Artifact PPTX inspection exceeded ${timeoutMs}ms`, { cause: error })
+      throw new Error(`Work Artifact Office package inspection exceeded ${timeoutMs}ms`, { cause: error })
     }
     throw error
   })
-  const response = z.object({
-    ok: z.boolean(),
-    value: z.object({ slideCount: z.number(), entryCount: z.number(), uncompressedBytes: z.number() }).optional(),
-    error: z.string().optional(),
-  }).parse(JSON.parse(result.stdout.toString("utf8")))
-  if (!response.ok || !response.value) throw new Error(response.error ?? "PPTX inspection failed")
+  const response = z
+    .object({
+      ok: z.boolean(),
+      value: z.object({ unitCount: z.number(), entryCount: z.number(), uncompressedBytes: z.number() }).optional(),
+      error: z.string().optional(),
+    })
+    .parse(JSON.parse(result.stdout.toString("utf8")))
+  if (!response.ok || !response.value) throw new Error(response.error ?? "Office package inspection failed")
   return response.value
 }
 
@@ -1158,96 +1255,91 @@ export async function validateWorkArtifactPresentation(input: {
     abort: input.abort,
     timeoutMs: inspectionBudgetMs,
   })
-  return withOfficeWorkspace({ executionAuthority: input.executionAuthority, projectID: currentProjectID }, async (directory) => {
-    const startedAt = operationStartedAt
-    const limits = operationLimits
-    const deadline = operationDeadline
-    let runtimeOutputBytes = 0
-    let renderBytes = 0
-    await dependencies.officeCliPath()
-    const sourcePath = path.join(directory, source.filename ?? "presentation.pptx")
-    await fs.writeFile(sourcePath, sourceBytes, { flag: "wx", mode: 0o600 })
-    const run = async (args: string[]) => {
-      const timeoutMs = Math.floor(deadline - performance.now())
-      const maxOutputBytes = limits.outputBytes - runtimeOutputBytes - renderBytes
-      if (timeoutMs <= 0) throw new Error(`Work Artifact operation exceeded ${limits.wallClockMs}ms`)
-      if (maxOutputBytes <= 0) throw new Error(`Work Artifact operation output exceeded ${limits.outputBytes} bytes`)
-      const result = await dependencies.runOfficeCli({
-        executionAuthority: input.executionAuthority,
-        args,
-        cwd: directory,
-        abort: input.abort,
-        timeoutMs,
-        maxOutputBytes,
-      })
-      runtimeOutputBytes += result.stdout.byteLength + result.stderr.byteLength
-      if (runtimeOutputBytes + renderBytes > limits.outputBytes) {
-        throw new Error(`Work Artifact operation output exceeded ${limits.outputBytes} bytes`)
+  return withOfficeWorkspace(
+    { executionAuthority: input.executionAuthority, projectID: currentProjectID },
+    async (directory) => {
+      const startedAt = operationStartedAt
+      const limits = operationLimits
+      const deadline = operationDeadline
+      let runtimeOutputBytes = 0
+      let renderBytes = 0
+      await dependencies.officeCliPath()
+      const sourcePath = path.join(directory, source.filename ?? "presentation.pptx")
+      await fs.writeFile(sourcePath, sourceBytes, { flag: "wx", mode: 0o600 })
+      const run = async (args: string[]) => {
+        const timeoutMs = Math.floor(deadline - performance.now())
+        const maxOutputBytes = limits.outputBytes - runtimeOutputBytes - renderBytes
+        if (timeoutMs <= 0) throw new Error(`Work Artifact operation exceeded ${limits.wallClockMs}ms`)
+        if (maxOutputBytes <= 0) throw new Error(`Work Artifact operation output exceeded ${limits.outputBytes} bytes`)
+        const result = await dependencies.runOfficeCli({
+          executionAuthority: input.executionAuthority,
+          args,
+          cwd: directory,
+          abort: input.abort,
+          timeoutMs,
+          maxOutputBytes,
+        })
+        runtimeOutputBytes += result.stdout.byteLength + result.stderr.byteLength
+        if (runtimeOutputBytes + renderBytes > limits.outputBytes) {
+          throw new Error(`Work Artifact operation output exceeded ${limits.outputBytes} bytes`)
+        }
+        return result
       }
-      return result
-    }
-    const validation = parseJsonResult(await run(["validate", sourcePath, "--json"]), "OfficeCLI validate")
-    assertZeroWorkArtifactRuntimeIssueCount(validation, "OfficeCLI validation")
-    const issues = parseJsonResult(await run(["view", sourcePath, "issues", "--json"]), "OfficeCLI issues")
-    assertZeroWorkArtifactRuntimeIssueCount(issues, "OfficeCLI issue inspection")
-    const renders: z.output<typeof RenderReference>[] = []
-    for (let slide = 1; slide <= inspection.slideCount; slide++) {
-      const rendered = await run([
-        "view",
-        sourcePath,
-        "svg",
-        "--start",
-        String(slide),
-        "--end",
-        String(slide),
-      ])
-      if (rendered.stdout.byteLength < 1 || rendered.stdout.byteLength > MAX_RENDER_SVG_BYTES) {
-        throw new Error(
-          `OfficeCLI rendered slide ${slide} SVG must be between 1 and ${MAX_RENDER_SVG_BYTES} bytes, received ${rendered.stdout.byteLength}`,
-        )
+      const validation = parseJsonResult(await run(["validate", sourcePath, "--json"]), "OfficeCLI validate")
+      assertZeroWorkArtifactRuntimeIssueCount(validation, "OfficeCLI validation")
+      const issues = parseJsonResult(await run(["view", sourcePath, "issues", "--json"]), "OfficeCLI issues")
+      assertZeroWorkArtifactRuntimeIssueCount(issues, "OfficeCLI issue inspection")
+      const renders: z.output<typeof RenderReference>[] = []
+      for (let slide = 1; slide <= inspection.slideCount; slide++) {
+        const rendered = await run(["view", sourcePath, "svg", "--start", String(slide), "--end", String(slide)])
+        if (rendered.stdout.byteLength < 1 || rendered.stdout.byteLength > MAX_RENDER_SVG_BYTES) {
+          throw new Error(
+            `OfficeCLI rendered slide ${slide} SVG must be between 1 and ${MAX_RENDER_SVG_BYTES} bytes, received ${rendered.stdout.byteLength}`,
+          )
+        }
+        const bytes = await renderWorkArtifactSvgToPng({
+          svg: rendered.stdout,
+          abort: input.abort,
+          timeoutMs: requireOperationBudget(deadline, limits.wallClockMs, input.abort),
+        })
+        requireOperationBudget(deadline, limits.wallClockMs, input.abort)
+        renderBytes += bytes.byteLength
+        if (runtimeOutputBytes + renderBytes > limits.outputBytes) {
+          throw new Error(`Work Artifact operation output exceeded ${limits.outputBytes} bytes`)
+        }
+        await assertWorkArtifactRenderPng(bytes, `OfficeCLI rendered slide ${slide}`)
+        const reference = await AttachmentStore.write(currentProjectID, bytes, "image/png", `slide-${slide}.png`)
+        requireOperationBudget(deadline, limits.wallClockMs, input.abort)
+        renders.push(RenderReference.parse({ slide, ...reference }))
       }
-      const bytes = await renderWorkArtifactSvgToPng({
-        svg: rendered.stdout,
-        abort: input.abort,
-        timeoutMs: requireOperationBudget(deadline, limits.wallClockMs, input.abort),
+      const runtime = await dependencies.runtimeIdentity()
+      requireOperationBudget(deadline, limits.wallClockMs, input.abort)
+      const resourceUsage = {
+        input_bytes: sourceBytes.byteLength,
+        runtime_output_bytes: runtimeOutputBytes,
+        render_bytes: renderBytes,
+        wall_clock_ms: Math.max(1, Math.ceil(performance.now() - startedAt)),
+      }
+      const receipt = await createValidationReceipt({
+        projectID: currentProjectID,
+        sourceUrl: source.url,
+        sourceSha: source.sha,
+        runtime,
+        renders,
+        resourceUsage,
       })
       requireOperationBudget(deadline, limits.wallClockMs, input.abort)
-      renderBytes += bytes.byteLength
-      if (runtimeOutputBytes + renderBytes > limits.outputBytes) {
-        throw new Error(`Work Artifact operation output exceeded ${limits.outputBytes} bytes`)
+      return {
+        source,
+        inspection,
+        validation,
+        issues,
+        renders,
+        resourceUsage,
+        receipt,
       }
-      await assertWorkArtifactRenderPng(bytes, `OfficeCLI rendered slide ${slide}`)
-      const reference = await AttachmentStore.write(currentProjectID, bytes, "image/png", `slide-${slide}.png`)
-      requireOperationBudget(deadline, limits.wallClockMs, input.abort)
-      renders.push(RenderReference.parse({ slide, ...reference }))
-    }
-    const runtime = await dependencies.runtimeIdentity()
-    requireOperationBudget(deadline, limits.wallClockMs, input.abort)
-    const resourceUsage = {
-      input_bytes: sourceBytes.byteLength,
-      runtime_output_bytes: runtimeOutputBytes,
-      render_bytes: renderBytes,
-      wall_clock_ms: Math.max(1, Math.ceil(performance.now() - startedAt)),
-    }
-    const receipt = await createValidationReceipt({
-      projectID: currentProjectID,
-      sourceUrl: source.url,
-      sourceSha: source.sha,
-      runtime,
-      renders,
-      resourceUsage,
-    })
-    requireOperationBudget(deadline, limits.wallClockMs, input.abort)
-    return {
-      source,
-      inspection,
-      validation,
-      issues,
-      renders,
-      resourceUsage,
-      receipt,
-    }
-  })
+    },
+  )
 }
 
 async function requireValidationReceipt(input: {
@@ -1301,7 +1393,11 @@ export async function prepareWorkArtifactPresentationDeliverable(input: {
   const { reference: source, bytes } = snapshot
   requireOperationBudget(deadline, limits.wallClockMs, input.abort)
   const digest = createHash("sha256").update(bytes).digest("hex")
-  if (source.url !== receipt.payload.source_url || source.sha !== receipt.payload.source_sha || digest !== receipt.payload.source_sha) {
+  if (
+    source.url !== receipt.payload.source_url ||
+    source.sha !== receipt.payload.source_sha ||
+    digest !== receipt.payload.source_sha
+  ) {
     throw new Error("PPTX digest does not match the validation receipt candidate")
   }
   const inspection = await inspectPptxPackage(bytes, {
@@ -1357,7 +1453,8 @@ export async function prepareWorkArtifactPresentationDeliverable(input: {
       url: priorRender.url,
       mime: "image/png",
     })
-    if (reference.sha !== priorRender.sha) throw new Error(`validation receipt render digest mismatch for slide ${priorRender.slide}`)
+    if (reference.sha !== priorRender.sha)
+      throw new Error(`validation receipt render digest mismatch for slide ${priorRender.slide}`)
     requireOperationBudget(deadline, limits.wallClockMs, input.abort)
   }
   return { parsed, source, renders, receipt: validated.receipt, priorReceiptPayload: receipt.payload }

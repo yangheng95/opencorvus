@@ -4,12 +4,16 @@
   "runtimes": [
     {
       "id": "officecli",
-      "version": "1.0.143",
-      "profiles": ["office.presentation@1"],
+      "version": "1.0.158",
+      "profiles": [
+        "office.presentation@1",
+        "office.document@1",
+        "office.spreadsheet@1"
+      ],
       "source": {
         "repository": "https://github.com/iOfficeAI/OfficeCLI",
-        "tag": "v1.0.143",
-        "commit": "fd4adab4dbe3283b62e3edcfad124dd648fa74bc",
+        "tag": "v1.0.158",
+        "commit": "2900a4a20f49d6a94384d6ea7fb8cc0120999825",
         "license": "Apache-2.0",
         "data_assets": [
           {
@@ -47,13 +51,15 @@
           "OFFICECLI_SKIP_UPDATE": "1"
         }
       },
-      "smoke_argv": ["--version"],
+      "smoke_argv": [
+        "--version"
+      ],
       "assets": [
         {
           "os": "darwin",
           "arch": "arm64",
           "name": "officecli-mac-arm64",
-          "sha256": "2f158d46f9b6c5eb0dfe4eb02038114001e17acc47b67347417c56dcf9659096",
+          "sha256": "67cf08d95fab556cad9d1e9d0d3b76a7962b5658c716aeaef2e83cbc19af7ff7",
           "max_download_bytes": 67108864,
           "package_path": "bin/officecli",
           "kind": "executable"
@@ -62,7 +68,7 @@
           "os": "darwin",
           "arch": "x64",
           "name": "officecli-mac-x64",
-          "sha256": "693d243db616c74705fec9d92fdfc8a3db36acfcea378edb7264c2a30d339d9c",
+          "sha256": "038716417adb626d5e94bc71dfecea2d2be9838f3d9b2eb49c2f0b3d634cf4f2",
           "max_download_bytes": 67108864,
           "package_path": "bin/officecli",
           "kind": "executable"
@@ -71,7 +77,7 @@
           "os": "linux",
           "arch": "arm64",
           "name": "officecli-linux-arm64",
-          "sha256": "c50298e4698fcd1b15fe1a0f096405ad260b5c84d4440882582d0bba1e57bd49",
+          "sha256": "b1d5e74d93a8471a47b037cc7774ac29c559940e226f99b9fdf788966cc395b8",
           "max_download_bytes": 67108864,
           "package_path": "bin/officecli",
           "kind": "executable"
@@ -80,7 +86,7 @@
           "os": "linux",
           "arch": "x64",
           "name": "officecli-linux-x64",
-          "sha256": "6a29c598a789b57c92c03e560907d3f131a4bd0a068785b1d338a86fc31a58a7",
+          "sha256": "9ee41d5558caea7bcd5aab1b3e76b2bd70f0535f09cf65dda3668130510cc719",
           "max_download_bytes": 67108864,
           "package_path": "bin/officecli",
           "kind": "executable"
@@ -90,7 +96,7 @@
           "arch": "arm64",
           "abi": "musl",
           "name": "officecli-linux-alpine-arm64",
-          "sha256": "3445c0992d4c746ed55606b30d366fc936ed87eed0cddbc18f0c0dfa40cf8cee",
+          "sha256": "cd5557728a5b418399d1535f8bc26de2b25e874a9a581b4d3a9f22e2680b3491",
           "max_download_bytes": 67108864,
           "package_path": "bin/officecli",
           "kind": "executable"
@@ -100,7 +106,7 @@
           "arch": "x64",
           "abi": "musl",
           "name": "officecli-linux-alpine-x64",
-          "sha256": "6bdae606e4fd1b31da1b75f5e6e0280ee4cf203059c8844c15ec7a5cc200e6bb",
+          "sha256": "18edd05e76825c4b28137e028bfe7992a68e8627d6258131121d096a440c056e",
           "max_download_bytes": 67108864,
           "package_path": "bin/officecli",
           "kind": "executable"
@@ -109,7 +115,7 @@
           "os": "win32",
           "arch": "arm64",
           "name": "officecli-win-arm64.exe",
-          "sha256": "51baf511fe136ee216fcc13cf0da9d18078da42212b22805c3a81f4163a4d7b9",
+          "sha256": "48567b4bc5a124fb0a709bac29a1e13b6760f094741d0e2bb755680ec9e51295",
           "max_download_bytes": 67108864,
           "package_path": "bin/officecli.exe",
           "kind": "executable"
@@ -118,7 +124,7 @@
           "os": "win32",
           "arch": "x64",
           "name": "officecli-win-x64.exe",
-          "sha256": "d4d4c10fced307e209744cf98a56b003a6e613424fd651b08469274704afd2c6",
+          "sha256": "117545f3bc817d7c6d2e78a62e4f73f75b918ccd61558e404c60949a8cb9fd1f",
           "max_download_bytes": 67108864,
           "package_path": "bin/officecli.exe",
           "kind": "executable"

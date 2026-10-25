@@ -118,7 +118,7 @@ test("Work Artifact issue failures preserve bounded OfficeCLI repair evidence", 
       "OfficeCLI issue inspection",
     ),
   ).toThrow(
-    'OfficeCLI issue inspection reported presentation issues: {"count":1,"issues":[{"slide":1,"code":"content-overflow","message":"Chart exceeds slide bounds"}]}',
+    'OfficeCLI issue inspection reported Office issues: {"count":1,"issues":[{"slide":1,"code":"content-overflow","message":"Chart exceeds slide bounds"}]}',
   )
 })
 

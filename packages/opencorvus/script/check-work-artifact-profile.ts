@@ -11,6 +11,7 @@ import { parseFrontmatter } from "../src/util/frontmatter"
 import { Skill } from "../src/skill/skill"
 import {
   WORK_ARTIFACT_TOOL_IDS,
+  WORK_ARTIFACT_PROFILE_IDS,
   WorkArtifactProfileRegistry,
   type WorkArtifactProfileID,
 } from "../src/work-artifact/profile-registry"
@@ -33,6 +34,7 @@ import {
 } from "../src/work-artifact/runtime/package-manifest"
 import {
   officeCliRuntime,
+  officeCliRuntimeIdentity,
   parseWorkArtifactRuntimeLock,
   WORK_ARTIFACT_RUNTIME_LOCK_PACKAGE_PATH,
   type WorkArtifactRuntimeLock,
@@ -54,7 +56,7 @@ async function checkCatalog(profileID: WorkArtifactProfileID): Promise<{
   runtime: string
   tools: readonly string[]
   toolSchemaRevision: string
-  toolSchemas: readonly Readonly<{ id: string; sha256: string }>[]
+  toolSchemas: readonly Readonly<{ id: string }>[]
   skill: string
 }> {
   const profile = WorkArtifactProfileRegistry.require(profileID)
@@ -88,36 +90,34 @@ async function checkCatalog(profileID: WorkArtifactProfileID): Promise<{
   const toolSchemas = await Promise.all(
     actualTools.map(async (tool) => {
       const initialized = await tool.init()
-      const schema = z.toJSONSchema(initialized.parameters) as {
+      type Schema = {
         properties?: Record<string, { const?: unknown; enum?: unknown[] }>
+        anyOf?: Schema[]
+        oneOf?: Schema[]
       }
-      const profileSchema = schema.properties?.profile
-      if (profileSchema?.const !== profile.id && !profileSchema?.enum?.includes(profile.id)) {
-        throw new Error(`${tool.id} does not expose the qualified profile discriminator`)
-      }
+      const schema = z.toJSONSchema(initialized.parameters) as Schema
+      const branches = (node: Schema): Schema[] =>
+        node.properties ? [node] : [...(node.anyOf ?? []), ...(node.oneOf ?? [])].flatMap(branches)
+      const branch = branches(schema).find(
+        (node) =>
+          node.properties?.profile?.const === profile.id || node.properties?.profile?.enum?.includes(profile.id),
+      )
+      if (!branch) throw new Error(`${tool.id} does not expose the qualified profile discriminator`)
       if (tool.id === "work_artifact_deliver") {
         for (const field of ["validation_receipt_url", "validation_receipt_sha"]) {
-          if (!schema.properties?.[field]) throw new Error(`${tool.id} omits ${field}`)
+          if (!branch.properties?.[field]) throw new Error(`${tool.id} omits ${field}`)
         }
       }
       return {
         id: tool.id,
-        sha256: createHash("sha256").update(JSON.stringify(schema)).digest("hex"),
       }
     }),
   )
-  for (const schema of toolSchemas) {
-    const generated = GENERATED_WORK_ARTIFACT_QUALIFICATION_MATRIX.tools.find((tool) => tool.id === schema.id)
-    if (!generated || schema.sha256 !== generated.schema_sha256) {
-      throw new Error(`${schema.id} schema SHA does not match ${profile.toolSchemaRevision}`)
-    }
-  }
+  const matrix = GENERATED_WORK_ARTIFACT_QUALIFICATION_MATRIX.find((entry) => entry.profile === profile.id)
   if (
-    GENERATED_WORK_ARTIFACT_QUALIFICATION_MATRIX.runtime.lock_revision !==
+    matrix?.runtime.lock_revision !==
       createHash("sha256").update(JSON.stringify(WORK_ARTIFACT_RUNTIME_LOCK)).digest("hex") ||
-    JSON.stringify(
-      GENERATED_WORK_ARTIFACT_QUALIFICATION_MATRIX.targets.map(({ os, arch }) => ({ os, arch })),
-    ) !== JSON.stringify(profile.releaseTargets)
+    JSON.stringify(matrix?.targets.map(({ os, arch }) => ({ os, arch }))) !== JSON.stringify(profile.releaseTargets)
   ) {
     throw new Error("Generated Work Artifact qualification matrix does not match the runtime lock")
   }
@@ -154,12 +154,17 @@ async function runRuntime(executable: string, args: string[], cwd: string, lock:
   return { stdout: result.stdout.trim(), stderr: result.stderr.trim() }
 }
 
-async function checkPackagedLifecycle(packageRoot: string, pptx?: string) {
+async function checkPackagedLifecycle(packageRoot: string, profile: WorkArtifactProfileID, pptx?: string) {
   const manifest = WorkArtifactTargetPackageManifestSchema.parse(
     JSON.parse(await fs.readFile(path.join(packageRoot, WORK_ARTIFACT_TARGET_PACKAGE_MANIFEST), "utf8")),
   )
   const lockPath = path.join(packageRoot, ...WORK_ARTIFACT_RUNTIME_LOCK_PACKAGE_PATH.split("/"))
   const lock = parseWorkArtifactRuntimeLock(JSON.parse(await fs.readFile(lockPath, "utf8")))
+  if (
+    officeCliRuntimeIdentity(lock).lockRevision !== officeCliRuntimeIdentity(WORK_ARTIFACT_RUNTIME_LOCK).lockRevision
+  ) {
+    throw new Error("Packaged Work Artifact runtime does not match the current qualified lock")
+  }
   await verifyWorkArtifactTargetPackageManifest({ root: packageRoot, target: manifest.target, lock })
   const runtime = officeCliRuntime(lock)
   const executableEntry = manifest.files.find((file) => file.kind === "executable")
@@ -170,6 +175,7 @@ async function checkPackagedLifecycle(packageRoot: string, pptx?: string) {
   try {
     const smoke = await runRuntime(executable, runtime.smoke_argv, workspace, lock)
     if (!smoke.stdout && !smoke.stderr) throw new Error(`${runtime.id} smoke command returned no version output`)
+    if (profile !== "office.presentation@1") return { target: manifest.target, runtime: runtime.id, profile }
     const source = path.join(workspace, "candidate.pptx")
     if (pptx) {
       await fs.writeFile(source, await fs.readFile(pptx), { flag: "wx", mode: 0o600 })
@@ -229,7 +235,7 @@ async function checkPackagedLifecycle(packageRoot: string, pptx?: string) {
   }
 }
 
-async function checkPackagedTypedLifecycle(packageRoot: string) {
+async function checkPackagedTypedLifecycle(packageRoot: string, profile: WorkArtifactProfileID) {
   const executable = path.join(packageRoot, process.platform === "win32" ? "opencorvus.exe" : "opencorvus")
   const workspace = await fs.mkdtemp(path.join(os.tmpdir(), "work-artifact-compiled-check-"))
   const home = path.join(workspace, "home")
@@ -239,6 +245,13 @@ async function checkPackagedTypedLifecycle(packageRoot: string) {
   const managedConfig = path.join(home, "managed-config")
   await fs.mkdir(gitTemplate, { recursive: true, mode: 0o700 })
   await fs.mkdir(managedConfig, { recursive: true, mode: 0o700 })
+  await Promise.all([
+    fs.mkdir(path.join(home, "AppData", "Roaming"), { recursive: true, mode: 0o700 }),
+    fs.mkdir(path.join(home, "AppData", "Local"), { recursive: true, mode: 0o700 }),
+    fs.mkdir(path.join(home, ".config"), { recursive: true, mode: 0o700 }),
+    fs.mkdir(path.join(home, ".cache"), { recursive: true, mode: 0o700 }),
+    fs.mkdir(path.join(home, ".local", "share"), { recursive: true, mode: 0o700 }),
+  ])
   await fs.writeFile(gitGlobalConfig, "", { flag: "wx", mode: 0o600 })
   const gitEnv: NodeJS.ProcessEnv = {
     PATH: process.env.PATH,
@@ -270,7 +283,8 @@ async function checkPackagedTypedLifecycle(packageRoot: string) {
       "OPENCORVUS_CONFIG_CONTENT",
       "OPENCORVUS_DISABLE_PROJECT_CONFIG",
       "OPENCORVUS_TEST_MANAGED_CONFIG_DIR",
-    ]) delete acceptanceEnv[key]
+    ])
+      delete acceptanceEnv[key]
     Object.assign(acceptanceEnv, {
       OPENCORVUS_HOME: path.join(home, "opencorvus"),
       HOME: home,
@@ -283,14 +297,16 @@ async function checkPackagedTypedLifecycle(packageRoot: string) {
       OPENCORVUS_TEST_MANAGED_CONFIG_DIR: managedConfig,
       OPENCORVUS_INTERNAL_WORK_ARTIFACT_ACCEPTANCE: "1",
     })
-    const result = await execFileAsync(executable, ["debug", "work-artifact-lifecycle"], {
+    const result = await execFileAsync(executable, ["debug", "work-artifact-lifecycle", "--profile", profile], {
       cwd: workspace,
       env: acceptanceEnv,
       timeout: 300_000,
       maxBuffer: 16 * 1024 * 1024,
       windowsHide: true,
     })
-    const line = result.stdout.split(/\r?\n/).find((candidate) => candidate.startsWith("OPENCORVUS_WORK_ARTIFACT_ACCEPTANCE="))
+    const line = result.stdout
+      .split(/\r?\n/)
+      .find((candidate) => candidate.startsWith("OPENCORVUS_WORK_ARTIFACT_ACCEPTANCE="))
     if (!line) throw new Error(`Packaged OpenCorvus omitted Work Artifact acceptance evidence: ${result.stdout}`)
     const evidence = JSON.parse(line.slice("OPENCORVUS_WORK_ARTIFACT_ACCEPTANCE=".length)) as Record<string, unknown>
     if (evidence.source_sha !== evidence.delivered_sha || evidence.display !== "interactive-artifact") {
@@ -302,13 +318,24 @@ async function checkPackagedTypedLifecycle(packageRoot: string) {
   return ["compiled_opencorvus_typed_lifecycle", "canonical_validation_receipt", "fresh_delivery_revalidation"] as const
 }
 
-async function checkSourceTypedLifecycle(packageRoot: string) {
+async function checkSourceTypedLifecycle(packageRoot: string, profile: WorkArtifactProfileID) {
   await execFileAsync(
     process.execPath,
-    ["test", "test/work-artifact/packaged-lifecycle.test.ts", "--timeout", "180000"],
+    [
+      "test",
+      profile === "office.presentation@1"
+        ? "test/work-artifact/packaged-lifecycle.test.ts"
+        : "test/work-artifact/office-native-lifecycle.test.ts",
+      "--timeout",
+      "180000",
+    ],
     {
       cwd: path.resolve(import.meta.dir, ".."),
-      env: { ...process.env, OPENCORVUS_WORK_ARTIFACT_PACKAGE_ROOT: packageRoot },
+      env: {
+        ...process.env,
+        OPENCORVUS_WORK_ARTIFACT_PACKAGE_ROOT: packageRoot,
+        OPENCORVUS_WORK_ARTIFACT_PROFILE: profile,
+      },
       timeout: 180_000,
       maxBuffer: 16 * 1024 * 1024,
       windowsHide: true,
@@ -318,12 +345,15 @@ async function checkSourceTypedLifecycle(packageRoot: string) {
 }
 
 const rawProfile = flag("--profile")
-if (rawProfile !== "office.presentation@1") {
-  throw new Error("Usage: check-work-artifact-profile.ts --profile office.presentation@1 [--package-root DIR | --host-runtime-smoke] [--pptx FILE]")
+if (!WORK_ARTIFACT_PROFILE_IDS.includes(rawProfile as WorkArtifactProfileID)) {
+  throw new Error(
+    `Usage: check-work-artifact-profile.ts --profile ${WORK_ARTIFACT_PROFILE_IDS.join("|")} [--package-root DIR | --host-runtime-smoke] [--pptx FILE]`,
+  )
 }
 const packageRoot = flag("--package-root")
 const pptx = flag("--pptx")
 if (!packageRoot && pptx) throw new Error("--pptx requires --package-root")
+if (pptx && rawProfile !== "office.presentation@1") throw new Error("--pptx requires the presentation profile")
 const hostRuntimeSmoke = process.argv.includes("--host-runtime-smoke")
 if (hostRuntimeSmoke && packageRoot) throw new Error("--host-runtime-smoke cannot be combined with --package-root")
 if (process.platform === "win32" && (packageRoot || hostRuntimeSmoke)) {
@@ -337,7 +367,7 @@ if (process.platform === "win32" && (packageRoot || hostRuntimeSmoke)) {
   if (!info.isFile() || info.size === 0) throw new Error(`Invalid qualification process supervisor: ${supervisor}`)
   process.env.OPENCORVUS_PROCESS_SUPERVISOR = supervisor
 }
-const catalog = await checkCatalog(rawProfile)
+const catalog = await checkCatalog(rawProfile as WorkArtifactProfileID)
 let packaged
 if (hostRuntimeSmoke) {
   const target = { os: process.platform as "darwin" | "linux" | "win32", arch: process.arch as "arm64" | "x64" }
@@ -345,14 +375,25 @@ if (hostRuntimeSmoke) {
   try {
     await copyOfficeCliRuntime({ target, outdir: root })
     await writeWorkArtifactTargetPackageManifest({ root, target, lock: WORK_ARTIFACT_RUNTIME_LOCK, phase: "final" })
-    const lifecycle = await checkPackagedLifecycle(root, pptx ? path.resolve(pptx) : undefined)
-    packaged = { ...lifecycle, evidence: await checkSourceTypedLifecycle(root) }
+    const lifecycle = await checkPackagedLifecycle(
+      root,
+      rawProfile as WorkArtifactProfileID,
+      pptx ? path.resolve(pptx) : undefined,
+    )
+    packaged = { ...lifecycle, evidence: await checkSourceTypedLifecycle(root, rawProfile as WorkArtifactProfileID) }
   } finally {
     await fs.rm(root, { recursive: true, force: true })
   }
 } else if (packageRoot) {
-  packaged = await checkPackagedLifecycle(path.resolve(packageRoot), pptx ? path.resolve(pptx) : undefined)
-  const typedEvidence = await checkPackagedTypedLifecycle(path.resolve(packageRoot))
+  packaged = await checkPackagedLifecycle(
+    path.resolve(packageRoot),
+    rawProfile as WorkArtifactProfileID,
+    pptx ? path.resolve(pptx) : undefined,
+  )
+  const typedEvidence = await checkPackagedTypedLifecycle(
+    path.resolve(packageRoot),
+    rawProfile as WorkArtifactProfileID,
+  )
   packaged = { ...packaged, evidence: typedEvidence }
 }
 console.log(JSON.stringify({ catalog, packaged }, undefined, 2))
