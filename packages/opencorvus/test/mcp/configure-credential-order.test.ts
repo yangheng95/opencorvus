@@ -6,6 +6,7 @@ import { ProjectTable } from "@/project/project.sql"
 import { Database, eq } from "@/storage/db"
 import { MCP } from "@/mcp"
 import { McpAuth } from "@/mcp/auth"
+import { GlobalBus } from "@/bus/global"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
 afterEach(async () => {
@@ -349,6 +350,67 @@ describe("MCP configure commits the credential before the definition", () => {
           McpAuth.set(orphanKey, { staticCredential: { secret: "stale-write" } }, URL, orphanLease),
         ).rejects.toThrow(`MCP auth lease was revoked: ${orphanKey}`)
         expect((await MCP.projectStatus())[SERVER]).toEqual({ status: "disabled" })
+      },
+    })
+  }, 60_000)
+
+  test("a failed cleanup and the next configure settle the new credential and ordered definitions", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        await MCP.configure(SERVER, remoteConfig(), "AUDIT_SYNTHETIC_A")
+        const authKey = `${Instance.project.id}:${SERVER}`
+        const orphanKey = `${Instance.project.id}:interrupted-orphan`
+        await McpAuth.set(orphanKey, { staticCredential: { secret: "AUDIT_SYNTHETIC_ORPHAN" } }, URL)
+        const orphanLease = await McpAuth.ensureRevision(orphanKey)
+        const interrupted = { ...remoteConfig(), credential: { type: "header" as const, name: "X-Interrupted" } }
+        const replacement = { ...remoteConfig(), credential: { type: "header" as const, name: "X-Recovered" } }
+        let stagedReplacement = false
+        const remove = McpAuth.removeMany
+        const stage = McpAuth.stageStaticCredential
+        const removeSpy = spyOn(McpAuth, "removeMany").mockImplementation(async (...args) => {
+          if (args[0].includes(orphanKey) && !stagedReplacement)
+            throw new Error("controlled credential cleanup failure")
+          return remove(...args)
+        })
+        const stageSpy = spyOn(McpAuth, "stageStaticCredential").mockImplementation(async (...args) => {
+          const result = await stage(...args)
+          if (args[0] === authKey && args[1] === "AUDIT_SYNTHETIC_C") stagedReplacement = true
+          return result
+        })
+        const definitions: string[] = []
+        const listener = (event: { directory?: string; payload: { type?: string; properties?: Config.Info } }) => {
+          if (event.directory !== project.path || event.payload.type !== "config.changed") return
+          const definition = event.payload.properties?.mcp?.[SERVER]
+          if (definition && "credential" in definition && definition.credential?.type === "header") {
+            definitions.push(definition.credential.name)
+          }
+        }
+        GlobalBus.on("event", listener)
+        try {
+          const failed = await MCP.configure(SERVER, interrupted, "AUDIT_SYNTHETIC_B").catch((error) => error)
+          expect(failed).toBeInstanceOf(Config.ProjectConfigCommittedReconcileError)
+          const recovered = await MCP.configure(SERVER, replacement, "AUDIT_SYNTHETIC_C")
+          expect({
+            secret: (await McpAuth.get(authKey))?.staticCredential?.secret,
+            definition: (await Config.getProject()).mcp?.[SERVER],
+            status: recovered.status[SERVER],
+            definitions,
+          }).toEqual({
+            secret: "AUDIT_SYNTHETIC_C",
+            definition: replacement,
+            status: { status: "disabled" },
+            definitions: ["X-Interrupted", "X-Recovered"],
+          })
+          await expect(
+            McpAuth.set(orphanKey, { staticCredential: { secret: "stale-write" } }, URL, orphanLease),
+          ).rejects.toThrow(`MCP auth lease was revoked: ${orphanKey}`)
+        } finally {
+          GlobalBus.off("event", listener)
+          removeSpy.mockRestore()
+          stageSpy.mockRestore()
+        }
       },
     })
   }, 60_000)

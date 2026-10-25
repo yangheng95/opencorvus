@@ -7,6 +7,10 @@ const initializerPreflights = new WeakMap<InstanceInit, () => Promise<unknown>>(
 const conversationCapabilityTransactionContext = Context.create<boolean>("conversation-capability-transaction")
 const conversationCapabilityReferenceReadContext = Context.create<boolean>("conversation-capability-reference-read")
 
+export function runOutsideConversationCapabilityReferences<T>(run: () => T): T {
+  return conversationCapabilityTransactionContext.without(() => conversationCapabilityReferenceReadContext.without(run))
+}
+
 export function withConversationCapabilityReferenceMutation<T>(run: () => Promise<T>): Promise<T> {
   if (conversationCapabilityTransactionContext.tryUse()) return run()
   if (conversationCapabilityReferenceReadContext.tryUse()) {

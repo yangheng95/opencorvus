@@ -328,6 +328,14 @@ Runtime application only projects connections and status, and rechecks the exact
 pending head before projection and event settlement, preserving ordered retries and
 queued targets.
 
+Independently scheduled peer projections and the convergence monitor enter outside
+the scheduling caller's Config generation/file, durable subject and Skill/Conversation
+reference contexts. They retain the data root and reacquire their original Instance
+admission and catalog owner. A pre-persist read inside configure therefore queues a
+new peer actor behind that live configure instead of lending it authority to settle
+an uncommitted credential stage. Ordinary accepted child callbacks keep their original
+owner and generation semantics.
+
 OAuth connection revision admission and authorization lease admission use the same
 catalog/generation callback before entering the credential fact lock. Their canonical
 identity checks remain inside that fact lock, reusing the admitted generation; a

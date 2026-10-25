@@ -6,6 +6,10 @@ const SKILL_CATALOG_REFERENCE_LOCK = "skill-catalog-reference"
 const skillCatalogMutationContext = Context.create<boolean>("skill-catalog-mutation")
 const skillCatalogReadContext = Context.create<boolean>("skill-catalog-read")
 
+export function runOutsideSkillCatalogReferences<T>(run: () => T): T {
+  return skillCatalogMutationContext.without(() => skillCatalogReadContext.without(run))
+}
+
 // Recovery under the durable catalog owner may itself write Config. Acquire
 // that owner before either reference lock so recovery and ordinary writers
 // use the same order, including when a reader discovers an unfinished journal.

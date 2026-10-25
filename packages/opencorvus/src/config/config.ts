@@ -12,6 +12,7 @@ import { Global } from "../global"
 import fs from "fs/promises"
 import { lazy } from "../util/lazy"
 import { NamedError } from "@opencorvus-ai/util/error"
+import { DurablePublicationStore } from "@opencorvus-ai/util/durable-publication"
 import { Flag } from "../flag/flag"
 import { Auth } from "../auth"
 import { parseEnvJson } from "./parse-env-json"
@@ -254,7 +255,7 @@ export namespace Config {
     pending: Set<Promise<unknown>>
   }
 
-  const configGenerationOwner = new AsyncLocalStorage<ConfigGenerationToken>()
+  const configGenerationOwner = new AsyncLocalStorage<ConfigGenerationToken | undefined>()
 
   export class ConfigGenerationReentrantMutationError extends Error {
     constructor() {
@@ -2160,6 +2161,22 @@ export namespace Config {
     advancePendingPeerTransition(transition.directory, transition)
   }
 
+  async function runOutsideConfigOwners<T>(run: () => Promise<T>): Promise<T> {
+    // A peer is an independent actor. Borrowing a live writer's owners would
+    // let it settle that writer's credential stage before canonical commit.
+    const [{ runOutsideSkillCatalogReferences }, { runOutsideConversationCapabilityReferences }] = await Promise.all([
+      import("@/skill/reference-lock"),
+      import("@/conversation/capability-transaction"),
+    ])
+    return configGenerationOwner.run(undefined, () =>
+      configFileOwner.run(undefined, () =>
+        DurablePublicationStore.runOutsideSubjectOwners(() =>
+          runOutsideSkillCatalogReferences(() => runOutsideConversationCapabilityReferences(run)),
+        ),
+      ),
+    )
+  }
+
   function schedulePendingPeerTransition(directory: string): void {
     const pending = pendingPeerTransitions.get(directory)
     if (!pending) return
@@ -2180,11 +2197,13 @@ export namespace Config {
           reschedulePending = advancePendingPeerTransition(directory, pending)
           return true
         }
-        return Database.runOutsideContext(() =>
-          runOutsideInstanceContext(async () =>
-            writerRetryDirectories.has(directory)
-              ? await Instance.provideProjectIdentity({ directory, fn: settle })
-              : await Instance.tryProvideActive({ directory, fn: settle }),
+        return runOutsideConfigOwners(() =>
+          Database.runOutsideContext(() =>
+            runOutsideInstanceContext(async () =>
+              writerRetryDirectories.has(directory)
+                ? await Instance.provideProjectIdentity({ directory, fn: settle })
+                : await Instance.tryProvideActive({ directory, fn: settle }),
+            ),
           ),
         )
       })
@@ -2317,7 +2336,9 @@ export namespace Config {
       }
       void Promise.all([import("@/project/instance"), import("@/storage/db")])
         .then(([{ runOutsideInstanceContext }, { Database }]) =>
-          Database.runOutsideContext(() => runOutsideInstanceContext(() => convergeLoadedPeerStates())),
+          runOutsideConfigOwners(() =>
+            Database.runOutsideContext(() => runOutsideInstanceContext(() => convergeLoadedPeerStates())),
+          ),
         )
         .catch((error) => {
           log.warn("peer configuration monitor failed", {
@@ -2707,7 +2728,7 @@ export namespace Config {
   // project file and the global file get independent locks.
   const writeConfigLocks = new Map<string, Promise<unknown>>()
   type ConfigFileOwner = { key: string; active: boolean; parent?: ConfigFileOwner }
-  const configFileOwner = new AsyncLocalStorage<ConfigFileOwner>()
+  const configFileOwner = new AsyncLocalStorage<ConfigFileOwner | undefined>()
 
   async function ensurePermissionMigration(filepath: string) {
     const key = Filesystem.normalizeForCompare(filepath)

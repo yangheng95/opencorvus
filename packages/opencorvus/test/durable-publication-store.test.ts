@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test"
-import { mkdir, mkdtemp, readFile, rm, symlink } from "node:fs/promises"
+import { mkdir, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
 import { AsyncLocalStorage } from "node:async_hooks"
@@ -17,6 +17,45 @@ afterEach(async () => {
 })
 
 describe("durable publication fact store", () => {
+  test("an independent subject callback queues and reads its predecessor's committed value", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-publication-independent-"))
+    roots.push(root)
+    const store = new DurablePublicationStore(root)
+    const file = path.join(root, "current-value.txt")
+    const events: string[] = []
+    const queued = Promise.withResolvers<void>()
+    let detached!: Promise<{ value: string; current: boolean }>
+    const timeout = setTimeout(() => queued.reject(new Error("Independent subject admission did not queue")), 15000)
+    try {
+      const parent = await store.withSubjectLock("independent-publication", "owner:current", async () => {
+        events.push("parent-owned")
+        await writeFile(file, "parent-committed")
+        setDurablePublicationTestCutHook((point, kind) => {
+          if (point !== "subject-queued" || kind !== "independent-publication") return
+          events.push("independent-queued")
+          queued.resolve()
+        })
+        detached = DurablePublicationStore.runOutsideSubjectOwners(() =>
+          store.withSubjectLock("independent-publication", "owner:current", async (owner) => {
+            events.push("independent-owned")
+            return { value: await readFile(file, "utf8"), current: owner.isCurrent() }
+          }),
+        )
+        await queued.promise
+        events.push("parent-completed")
+        return "parent-committed"
+      })
+      expect({ parent, detached: await detached, events }).toEqual({
+        parent: "parent-committed",
+        detached: { value: "parent-committed", current: true },
+        events: ["parent-owned", "independent-queued", "parent-completed", "independent-owned"],
+      })
+    } finally {
+      clearTimeout(timeout)
+      if (detached) await Promise.allSettled([detached])
+    }
+  })
+
   test("physical subject callbacks enter in their accepted admission order", async () => {
     const parent = await mkdtemp(path.join(os.tmpdir(), "opencorvus-publication-admission-"))
     roots.push(parent)

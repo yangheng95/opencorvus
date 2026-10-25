@@ -199,9 +199,14 @@ async function readOptional(file: string): Promise<unknown | undefined> {
  * Physical existence is never interpreted as completion by this layer.
  */
 export class DurablePublicationStore {
-  private static readonly heldSubjects = new AsyncLocalStorage<Map<string, SubjectCallbackScope>>()
+  private static readonly heldSubjects = new AsyncLocalStorage<Map<string, SubjectCallbackScope> | undefined>()
   private static readonly activeSubjectLeases = new Map<string, string>()
   private static readonly subjectAdmissions = new Map<string, Promise<void>>()
+
+  /** Independently scheduled actors acquire their own subject admissions. */
+  static runOutsideSubjectOwners<T>(run: () => T): T {
+    return DurablePublicationStore.heldSubjects.run(undefined, run)
+  }
 
   constructor(readonly root: string) {
     if (!path.isAbsolute(root)) throw new Error(`Durable publication root must be absolute: ${root}`)
