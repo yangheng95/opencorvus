@@ -1,0 +1,41 @@
+# 工具读取事实与文件覆写前置条件
+
+## Recall
+
+用户要求持续自主体验与修复，单agent、只在实际冲突时等待、真实验证后精确提交并正常推送；Rendering闪烁已关闭。601的b6e88b604已在远端：5项实际Prettier红例修复，唯一计51个相关后端case通过，实际页面连续两次保存正确采用格式化正文与revision；核心类型、文档、普通push hooks及精确commit的module/release topology通过。自有54109公开关闭200、原始exec97947/native/launcher0、物理/输出/请求结清，预留835136ms，自有标签282关闭，未复制凭据或请求模型。53项Config/MCP相关后端合同也由本agent完整跑过79断言全部成功；另一个用户会话已推dbdd并在b6启动完整CI，尚不能宣称完整三平台通过。外国旧文件删除和索引排序保留。
+
+本轮602从b6e88b604继续共享文件变更审计。已读FileTime全部定义/调用点、WriteTool、EditTool、ReadTool、codebase read factory两个生产调用者、SessionPrompt file part、Task ToolFiles/Capsule broker、GUI内容revision、现有实际HTTP跨进程保存测试、600/601规格和04/07当前契约。严格搜索FileTime及FILETIME_CHECK到src/test/script/.env/current docs；此前宽泛file.time匹配还命中了日期和领域资产，不将它们当调用者。未触及UI自动化测试，不新增/运行它们，不使用子agent、分支或工作树。get_goal实际返回旧Goal blocked且包含过期Astra措辞，工具不支持本agent恢复active；这不作为停止普通任务工作的理由，不再声称Goal当前active。
+
+## 修改前分析
+
+可观察风险是模型读取A后，其他参与者实际写入B；工具write/edit只比较read wall-clock与host stat.mtime+50ms，快速写或保留/回调时间戳的B仍可被覆盖。直接触发点是FileTime.assert；read记录并非实际内容版本，Task路径还调用host stat而没有消费已有Task文件读取事实。仅修Windows锁键不能关闭这个数据流缺口。具体红例输出尚待下述原checker，证据前不改生产实现。
+
+共享横审：普通Chat/Work/Task/Mission的write/edit来自相同内建Tool；ReadTool和Task codebase read均已取得完整Buffer再分页。后者在offset验证之前标记read，失败也会建立覆写前置条件。SessionPrompt的文本file part通过ReadTool，目录不建立读事实；二进制本地file part却在AttachmentStore实际捕获前标记read，捕获失败可留下无效前置条件。write/edit在成功格式化后应登记该次真实提交字节，不能在事件后重新读取别人的字节并当作自己看过。附件write已有verified原始快照可直接登记。FileTime.get仅assert使用，无SDK或外部公共调用；state只在该模块使用。GUI已按实际完整字节和物理身份提供revision，现有schema8、HTTP字段和迁移均不必改变。
+
+本轮先使读取前置条件绑定实际观察的字节。复用现行GUI contentRevision算法，提取无IO的文件内容revision primitive作为唯一实现；FileTime用既有规范路径键与实际Buffer形成Session读事实，assert接收通过当前executionFiles读取的当前Buffer并比较，不再用host mtime或时间容差。保留既有禁用FILETIME_CHECK配置，保留原缺少读取错误合同；内容冲突复用File.WriteConflictError，清楚要求重新读取。完整字节版本是实际文件身份/完整性合同，不能当成源码摘要测试门槛；所有验收必须通过实际输入/输出、保存状态和错误，禁止以自算摘要相等替代行为。
+
+所有调用同步替换，不留只给路径就重新读、旧时间分支、可选兼容参数或平行状态。ReadTool登记其原Buffer；Task codebase仅成功范围读取登记原buf。write/edit先通过原Task/host文件能力取当前字节、校验读事实，再写入并格式化，读回的同一Buffer同时用于diff与下一次读事实。SessionPrompt二进制沿原本已授权的host file来源一次捕获Buffer，用已有AttachmentStore.write发布后再登记这个同一快照，不改变为Task source边界或第二次host读回。真实文件part及既有消息生产规则不变。
+
+尚未完成的共享并发问题明确保留：现有FileTime锁按Instance且只覆盖write/edit，GUI单独用跨进程锁，patch按上下文应用仍不要求先用Read工具；不为patch增加流程gate。跨进程/外部文件在“取当前Buffer→实际write”之间的竞态、符号/硬链接别名和多文件事务仍需继续统一所有权审计，本批不能声称文件变更已整体原子化。重启清除内存读事实后仍须实际重新读取，无新增持久格式或恢复状态。非调度算法改动，但全部Session/Task执行入口、取消/失败/正常返回、Instance销毁和多项目隔离均须验收。
+
+## 计划与验收
+
+原生红例已验证：original-corrected-probe五项0 pass/5 fail，原执行退出1且物理/输出结清。保留mtime的write实际把B覆盖为rewritten，Task native同样覆盖；edit在未读过B时继续修改；未来mtime但字节未变时误报旧时间冲突；Task codebase确切offset错误后write仍成功。首次probe的codebase测试参数误放在experimental_context，已按照真实SessionLoop注入的顶层opencorvus修正，不能把首次该项错误当作产品证据。其余四项在首次也已进入真实路径。现在按本方案实施，保持共享原子所有权尚未关闭的边界。
+
+1. 用真实ReadTool→外部fs.writeFile+原mtime→WriteTool/EditTool构造红例，检查准确冲突与实际磁盘B；加入同内容仅触mtime可成功、重新读B后正常写、Session/Project隔离与Task native入口。测试是后端正向合同，不是UI自动化，不用sleep或伪mtime时钟代替真实文件。
+2. 按上述单一实现替换全部生产调用点与被触及测试；覆盖格式化后的下一次写、codebase offset错误及实际本地binary file part。重跑602聚焦合同、6017项实际格式化、600附件/并发与相关附件Session入口及核心类型检查。
+3. 条件允许时做真实Sol streaming调用：只用自有项目、全新运行数据，凭据与完整模型目录一起按既有诊断流程复制/绑定；验证OAuth可用、gpt-6.1-sol投影和实际请求一致，最多12次，累计从111计。实际模型read完成后，独立外部文件写入器保留mtime写B，观察自然write冲突、重新读取及最终保留B的交付。通过公开Session API建立空Chat不是合成消息；只允许用户/模型/工具在原链路产生消息，不注入伪tool/assistant。若做模型验收必须记录实际请求失败和次数，不能以单元测试代替。
+4. 真实开发CLI /ui实际查看原错误与恢复后的交付，截图人工复核。自有20分钟物理边界至少提前5分钟公开关闭，原调用和物理/输出/请求结清，退役auth/models副本，用户18571/用户库不操作。非UI修复若无新页面证据须明示未做，不复用601截图冒充602。
+5. 更新当前架构与三索引、docs:check、精确提交、fetch/merge/完整待推集合复核和正常push。只在实际冲突等无法安全本地判断时等待。
+
+## 实施、真实验收与剩余边界
+
+已按方案替换全部FileTime生产调用，旧时间算法删除；新增content-revision primitive承接既有GUI字节/身份算法及同一个FileWriteConflictError定义，公开GUI响应与schema8不变。write/edit取同一before Buffer校验再解码，格式化后同一个after Buffer用于diff及下一次读取事实；附件直接使用verified快照。ReadTool在完成正文处理后记录，codebase只成功范围记录，二进制本地file part一次host捕获并成功发布后才记录。没有用第二次文件读取伪称原本已观察。原模块名和禁用开关保留，只有一个字节算法，无旧时间fallback。
+
+revision-focused三文件25项/65断言成功；expanded-contracts三文件23项/179断言成功（其中前五项与首组重叠，独立计43项）。覆盖8个新文件事实场景、7个真实Prettier、13个附件/并发合同、14个公开Session附件/资源合同、1个真实HTTP跨进程/重启/符号链接合同；core typecheck退出0。首次codebase探针参数错误已单独记录，修正后原五项均真实失败，修复后全部通过。私有contracts helper从601复制时的TMP名已改为602；真实preload日志及原数据均属于隔离602，不涉及用户库。
+
+实际Sol验收使用既有诊断provider同时复制auth及完整models目录，分别证实凭据usable、gpt-6.1-sol projected和实际请求模型/stream一致。公开Session创建空Work Chat，用户请求通过实际页面输入。真实read完成后，独立Node写入器只对自有review.txt添加“外部更新：必须保留”，恢复与原读相同的mtime（2026-10-25T15:42:33.986Z）。第一write实际报FileWriteConflictError，模型自然再次read4行，再write保留外部行并添加“本轮校验：完成”；最终113字节、assistant finish=stop，+1/-0来自真实B→最终提交。所有工具/消息来自原生产链，无合成消息、拦截工具或host流程gate。
+
+实际页面283的原错误、展开详情、最终Review三张原图逐张人工复核。8次模型调用均为gpt-6.1-sol streaming200/原reader EOF，含预检与后台调用，累计119次，未用4次额度退休。自有服务54110公开shutdown200、原exec44181退出0、native/launcher0，原物理/输出/请求全部结清；提前988346ms结清，超过5分钟预留。标签283关闭，auth/models副本两份退休；源auth元数据与完整模型目录字节/元数据一致。用户18571及用户数据库未操作，自有新库schema8/integrity ok。
+
+真实截图额外发现折叠错误摘要被长绝对路径占满，原因须展开才看清；后续按真实ToolFailureCause.name/data改进呈现，不用消息关键词猜测或改写旧消息。跨入口原子提交仍未全部收敛，不能据字节前置条件验收关闭该共享审计。旧native batch/594连接/598关闭预留未知项仍保留。交付结果以本轮精确Git提交、fetch/merge、待推集合复核与正常push输出为证据，不提前宣称完整CI已成功。

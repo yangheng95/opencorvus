@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [工具读取事实与覆写前置条件](records/2026-10/2026-10-25-observed-file-revision.md)：602真实内容版本与Sol外部修改恢复验收。
+
 - [文件格式化与最终保存事实](records/2026-10/2026-10-25-file-formatting.md)：601修复连续保存冲突及附件/复制字节变异。
 
 - [通用文本写入差异](records/2026-10/2026-10-25-text-write-comparison.md)：600真实文本端点、差异状态及Windows路径身份。

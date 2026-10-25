@@ -3,21 +3,22 @@ import { createInstanceState } from "../project/instance-state"
 import { Log } from "../util/log"
 import { Flag } from "../flag/flag"
 import { Filesystem } from "../util/filesystem"
+import { contentRevision, FileWriteConflictError } from "./content-revision"
 
 export namespace FileTime {
   const log = Log.create({ service: "file.time" })
   function fileKey(file: string) {
     return Filesystem.normalizeForCompare(Filesystem.normalizePath(file))
   }
-  // Per-session read times plus per-file write locks.
+  // Per-session observed byte revisions plus per-file write locks.
   // All tools that overwrite existing files should run their
-  // assert/read/write/update sequence inside withLock(filepath, ...)
+  // read/assert/write/update sequence inside withLock(filepath, ...)
   // so concurrent writes to the same file are serialized.
   export const state = createInstanceState(
     () => {
       const read: {
         [sessionID: string]: {
-          [path: string]: Date | undefined
+          [path: string]: string | undefined
         }
       } = {}
       const locks = new Map<string, Promise<void>>()
@@ -30,11 +31,12 @@ export namespace FileTime {
     "file-time",
   )
 
-  export function read(sessionID: string, file: string) {
+  export function read(sessionID: string, file: string, bytes: Uint8Array) {
     log.info("read", { sessionID, file })
     const { read } = state()
     read[sessionID] = read[sessionID] || {}
-    read[sessionID][fileKey(file)] = new Date()
+    const key = fileKey(file)
+    read[sessionID][key] = contentRevision(key, bytes)
   }
 
   export function get(sessionID: string, file: string) {
@@ -62,20 +64,19 @@ export namespace FileTime {
     }
   }
 
-  export async function assert(sessionID: string, filepath: string) {
+  export function assert(sessionID: string, filepath: string, bytes: Uint8Array) {
     if (Flag.OPENCORVUS_DISABLE_FILETIME_CHECK === true) {
       return
     }
 
     filepath = Filesystem.normalizePath(filepath)
-    const time = get(sessionID, filepath)
-    if (!time) throw new Error(`You must read file ${filepath} before overwriting it. Use the Read tool first`)
-    const mtime = Filesystem.stat(filepath)?.mtime
-    // Allow a 50ms tolerance for Windows NTFS timestamp fuzziness / async flushing
-    if (mtime && mtime.getTime() > time.getTime() + 50) {
-      throw new Error(
-        `File ${filepath} has been modified since it was last read.\nLast modification: ${mtime.toISOString()}\nLast read: ${time.toISOString()}\n\nPlease read the file again before modifying it.`,
-      )
+    const observed = get(sessionID, filepath)
+    if (!observed) throw new Error(`You must read file ${filepath} before overwriting it. Use the Read tool first`)
+    if (observed !== contentRevision(fileKey(filepath), bytes)) {
+      throw new FileWriteConflictError({
+        path: filepath,
+        message: `File ${filepath} has been modified since it was last read. Please read the file again before modifying it.`,
+      })
     }
   }
 }

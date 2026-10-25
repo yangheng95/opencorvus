@@ -49,6 +49,7 @@ export const WriteTool = Tool.define("write", {
       const exists = Boolean(stat)
       let attachment: AttachmentStore.Reference | undefined
       let textChange: { diff: string; filediff: FileDiff } | undefined
+      let committedBytes: Uint8Array
       if ("attachmentUrl" in params) {
         const conflict = () => new File.ConflictError({ path: filepath, message: `File already exists: ${filepath}` })
         if (exists) throw conflict()
@@ -65,14 +66,18 @@ export const WriteTool = Tool.define("write", {
           throw error
         }
         attachment = snapshot.reference
+        committedBytes = snapshot.bytes
       } else {
-        const contentOld = exists ? await files.readFile(filepath, "utf8") : ""
-        if (exists) await FileTime.assert(ctx.sessionID, filepath)
+        const beforeBytes = exists ? await files.readFile(filepath) : Buffer.alloc(0)
+        if (exists) FileTime.assert(ctx.sessionID, filepath, beforeBytes)
+        const contentOld = beforeBytes.toString("utf8")
 
         await files.mkdir(path.dirname(filepath), { recursive: true })
         await files.writeFile(filepath, params.content)
         await Format.file(filepath, processAuthority)
-        const contentNew = await files.readFile(filepath, "utf8")
+        const afterBytes = await files.readFile(filepath)
+        committedBytes = afterBytes
+        const contentNew = afterBytes.toString("utf8")
         const filediff: FileDiff = {
           file: filepath,
           before: contentOld,
@@ -95,7 +100,7 @@ export const WriteTool = Tool.define("write", {
         file: filepath,
         event: exists ? "change" : "add",
       })
-      FileTime.read(ctx.sessionID, filepath)
+      FileTime.read(ctx.sessionID, filepath, committedBytes)
 
       return {
         title: path.relative(Instance.worktree, filepath),

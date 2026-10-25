@@ -124,7 +124,6 @@ export function createCodebaseToolFactory(projectDir?: string, onMaterialize?: (
             return `Error: ${filePath} is ${kind}. read returns text only; use a vision/multimodal channel or a dedicated binary tool.`
           }
           const content = buf.toString("utf-8")
-          FileTime.read(scope.sessionID, abs)
           const lines = content.split("\n")
           const lineLimit = limit ?? 300
           const startIndex = Math.max(0, (offset ?? 1) - 1)
@@ -143,6 +142,7 @@ export function createCodebaseToolFactory(projectDir?: string, onMaterialize?: (
             })
             .join("\n")
           const remaining = lines.length - (startIndex + slice.length)
+          FileTime.read(scope.sessionID, abs, buf)
           if (remaining > 0) {
             return (
               numbered +

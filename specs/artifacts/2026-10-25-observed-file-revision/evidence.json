@@ -1,0 +1,344 @@
+{
+  "batch": 602,
+  "date": "2026-10-25",
+  "baseline": "b6e88b60440c64143c418df81a280b9f6c57814e",
+  "rootCause": "Wall-clock read timestamps and host mtime+50ms cannot identify observed bytes; range errors and pre-capture binary paths also created false read receipts.",
+  "before": {
+    "result": {
+      "label": "original-corrected-probe",
+      "startedAt": 1792942555880,
+      "closedAt": 1792942569474,
+      "code": 1,
+      "signal": null,
+      "childPID": 62608
+    },
+    "summary": "0 pass, 5 fail; real content overwrites, future-mtime false rejection and range-error write admission",
+    "facts": [
+      "OBSERVED_CONTENT_CONFLICT {\"operation\":\"write\",\"outcome\":\"success\",\"actual\":\"rewritten\\n\"}",
+      "OBSERVED_CONTENT_CONFLICT {\"operation\":\"edit\",\"outcome\":\"success\",\"actual\":\"rewritten\\n外部修改\\n\"}"
+    ]
+  },
+  "checks": [
+    {
+      "label": "revision-focused",
+      "startedAt": 1792942663268,
+      "closedAt": 1792942721377,
+      "code": 0,
+      "signal": null,
+      "childPID": 89260,
+      "summary": "25 pass\n 0 fail\n 65 expect() calls\nRan 25 tests across 3 files. [56.15s]"
+    },
+    {
+      "label": "expanded-contracts",
+      "startedAt": 1792942753916,
+      "closedAt": 1792942847912,
+      "code": 0,
+      "signal": null,
+      "childPID": 9232,
+      "summary": "23 pass\n 0 fail\n 179 expect() calls\nRan 23 tests across 3 files. [92.04s]"
+    }
+  ],
+  "typecheck": {
+    "label": "core-typecheck",
+    "startedAt": 1792942764393,
+    "closedAt": 1792942832136,
+    "code": 0,
+    "signal": null,
+    "childPID": 75416
+  },
+  "business": {
+    "at": "2026-10-25T15:47:21.173Z",
+    "sessionID": "ses_-zUQvBXYLzzQQsEND7Gw",
+    "tools": [
+      {
+        "id": "prt_g0VZ4ocee008J7TVwZh2",
+        "tool": "read",
+        "status": "completed",
+        "input": {
+          "filePath": "review.txt"
+        },
+        "time": {
+          "start": 1792943122560,
+          "end": 1792943122952
+        }
+      },
+      {
+        "id": "prt_g0VZ4oe1X009ixK4v0Bt",
+        "tool": "write",
+        "status": "error",
+        "input": {
+          "content": "项目交付记录\n负责人：产品体验\n状态：待补充\n本轮校验：完成\n",
+          "filePath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-25\\observed-file-revision-602\\project\\review.txt"
+        },
+        "failure": {
+          "kind": "tool-execution",
+          "name": "FileWriteConflictError",
+          "message": "FileWriteConflictError: File C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-25\\observed-file-revision-602\\project\\review.txt has been modified since it was last read. Please read the file again before modifying it.",
+          "originSite": "session.processor.tool-error",
+          "classification": "tool-execution",
+          "data": {
+            "toolCallId": "call_5b90c63e94d241ebb99c18a6aceb723e",
+            "toolName": "write",
+            "canonical_error_metadata": {
+              "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-25\\observed-file-revision-602\\project\\review.txt"
+            }
+          }
+        },
+        "time": {
+          "start": 1792943127823,
+          "end": 1792943130001
+        }
+      },
+      {
+        "id": "prt_g0VZ4ofvT004rcCh52Pz",
+        "tool": "read",
+        "status": "completed",
+        "input": {
+          "filePath": "review.txt"
+        },
+        "time": {
+          "start": 1792943135135,
+          "end": 1792943135749
+        }
+      },
+      {
+        "id": "prt_g0VZ4ogzn00Ap7c9s3DT",
+        "tool": "write",
+        "status": "completed",
+        "input": {
+          "content": "项目交付记录\n负责人：产品体验\n状态：待补充\n外部更新：必须保留\n本轮校验：完成\n",
+          "filePath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-25\\observed-file-revision-602\\project\\review.txt"
+        },
+        "filediff": {
+          "file": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-25\\observed-file-revision-602\\project\\review.txt",
+          "before": "项目交付记录\n负责人：产品体验\n状态：待补充\n外部更新：必须保留\n",
+          "after": "项目交付记录\n负责人：产品体验\n状态：待补充\n外部更新：必须保留\n本轮校验：完成\n",
+          "status": "modified",
+          "additions": 1,
+          "deletions": 0
+        },
+        "time": {
+          "start": 1792943139247,
+          "end": 1792943140850
+        }
+      }
+    ],
+    "externalUpdate": {
+      "at": "2026-10-25T15:45:23.207Z",
+      "sessionID": "ses_-zUQvBXYLzzQQsEND7Gw",
+      "readPartID": "prt_g0VZ4ocee008J7TVwZh2",
+      "readCallID": "call_0e4a42b556e046f4b352cb8d47e3e3c8",
+      "readInput": {
+        "filePath": "review.txt"
+      },
+      "readFinishedAt": 1792943122952,
+      "actualBefore": "项目交付记录\n负责人：产品体验\n状态：待补充\n",
+      "actualAfter": "项目交付记录\n负责人：产品体验\n状态：待补充\n外部更新：必须保留\n",
+      "priorMtime": "2026-10-25T15:42:33.986Z",
+      "actualMtime": "2026-10-25T15:42:33.986Z",
+      "qualification": "Real external fs.writeFile after the actual persisted read Tool completion; original guard clock preserved; no synthetic Tool or assistant message"
+    },
+    "finalContent": "项目交付记录\n负责人：产品体验\n状态：待补充\n外部更新：必须保留\n本轮校验：完成\n",
+    "finalBytes": 113,
+    "assistant": {
+      "id": "msg_g0VZ4ohQw002VegLu2Vl",
+      "finish": "stop",
+      "text": "已成功保存 `review.txt`。首次保存遇到文件冲突后，已重新读取最新内容，完整保留所有原有行（包括“外部更新：必须保留”），并在末尾追加“本轮校验：完成”。"
+    }
+  },
+  "database": {
+    "scope": "fresh owned runtime only",
+    "schema": 8,
+    "integrity": "ok"
+  },
+  "provider": {
+    "admission": {
+      "credential": "registered OAuth",
+      "projectedModel": "gpt-6.1-sol",
+      "model": "openai/gpt-6.1-sol",
+      "authority": "602 observed file revision investigation"
+    },
+    "preflight": {
+      "sessionID": "ses_hnchm0sWxiHRo3och6E8",
+      "credential": "usable",
+      "catalog": "projected",
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true
+    },
+    "maximumRequests": 12,
+    "requests": 8,
+    "cumulativeRequests": 119,
+    "unusedAllowanceRetired": 4,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "outcomes": [
+      {
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      }
+    ]
+  },
+  "retirement": {
+    "at": "2026-10-25T15:50:10.048Z",
+    "credentialCopyRetired": true,
+    "modelCatalogCopyRetired": true,
+    "requests": 8,
+    "previousRequests": 111,
+    "cumulativeRequests": 119,
+    "maximumRequests": 12,
+    "unusedAllowanceRetired": 4,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "requestOutcomes": [
+      {
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      }
+    ],
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "publicShutdown": 200,
+    "reserveMs": 988346,
+    "physical": {
+      "observedAtUtc": "2026-10-25T15:47:38.7850087Z",
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 99040,
+            "processInstanceID": "win32:639285398326309238",
+            "occurrenceID": "88982b16-72fe-4216-b323-062d95a0ec05"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 26072,
+            "processInstanceID": "win32:639285398334165038",
+            "occurrenceID": "5ba86715-bd98-4f02-83a8-f0bfd0537908"
+          }
+        }
+      ],
+      "launcher": {
+        "originalChildExit": 0,
+        "observedAtUtc": "2026-10-25T15:47:24.2914859Z"
+      },
+      "native": {
+        "occurrence": "observed-file-revision-602-e0badf69-8655-460d-a76f-4ec672f95c83",
+        "outcome": "settled",
+        "host": {
+          "pid": 99040,
+          "processInstanceID": "win32:639285398326309238",
+          "occurrenceID": "88982b16-72fe-4216-b323-062d95a0ec05"
+        },
+        "target": {
+          "pid": 26072,
+          "processInstanceID": "win32:639285398334165038",
+          "occurrenceID": "5ba86715-bd98-4f02-83a8-f0bfd0537908"
+        },
+        "observedAtUtc": "2026-10-25T15:47:24.248Z",
+        "deadlineAt": 1792944232594,
+        "terminal": {
+          "occurrenceID": "observed-file-revision-602-e0badf69-8655-460d-a76f-4ec672f95c83",
+          "pid": 26072,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      }
+    }
+  },
+  "manual": {
+    "url": "http://localhost:54110/ui/",
+    "screenshots": [
+      "01-real-conflict.png",
+      "02-conflict-details.png",
+      "03-recovered-review.png"
+    ],
+    "review": "Each full screenshot manually reviewed; original conflict expanded and final actual 5-line content shown; no UI automation tests"
+  },
+  "limits": [
+    "Tool FileTime locks remain Instance-scoped; atomicity across patch, GUI, other processes, symlink/hardlink aliases and external writers remains under audit.",
+    "Collapsed Tool error summaries still place long native paths ahead of the reason; expanded original details remain readable.",
+    "No schema/data-format evolution or user database access; no full three-platform CI completion claimed."
+  ]
+}

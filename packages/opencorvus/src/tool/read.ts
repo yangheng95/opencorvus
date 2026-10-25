@@ -204,12 +204,11 @@ export const ReadTool = Tool.define("read", {
     output += renderTextFilePage(page)
     output += "\n</content>"
 
-    FileTime.read(ctx.sessionID, filepath)
-
     if (instructions.length > 0) {
       output += `\n\n<system-reminder>\n${instructions.map((i) => i.content).join("\n\n")}\n</system-reminder>`
     }
     output = redactInlinePayloads(output)
+    FileTime.read(ctx.sessionID, filepath, bytes)
 
     return {
       title,

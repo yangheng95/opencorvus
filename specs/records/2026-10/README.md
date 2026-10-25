@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [工具读取事实与覆写前置条件](2026-10-25-observed-file-revision.md)：602关闭mtime漏检与无效read事实。
+
 - [文件格式化与最终保存事实](2026-10-25-file-formatting.md)：601真实格式化回执、原始字节与连续编辑保存。
 
 - [通用文本写入差异](2026-10-25-text-write-comparison.md)：600真实write新建/覆写端点及别名锁复核。

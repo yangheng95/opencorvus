@@ -17,7 +17,7 @@ import { Ripgrep } from "./ripgrep"
 import fuzzysort from "fuzzysort"
 import { Global } from "../global"
 import { NamedError } from "@opencorvus-ai/util/error"
-import { createHash, randomUUID } from "node:crypto"
+import { randomUUID } from "node:crypto"
 import { isUtf8 } from "node:buffer"
 import { withKeyedLock } from "../util/lock"
 import { CROSS_PROCESS_LOCK_RETRY, SHARED_JSON_FACT_QUEUE_TIMEOUT_MS, withProcessLock } from "../util/process-lock"
@@ -27,6 +27,7 @@ import { gitSourceLinkDiffs } from "../util/git-source-links"
 import { checkedSourceGit, gitSourceRunner, gitSourceEntryArgs } from "../util/git-source-stage"
 import { AttachmentStore } from "../storage/attachment-store"
 import { Format } from "../format"
+import { contentRevision, FileWriteConflictError } from "./content-revision"
 
 export namespace File {
   const log = Log.create({ service: "file" })
@@ -243,10 +244,7 @@ export namespace File {
     }),
   )
 
-  export const WriteConflictError = NamedError.create(
-    "FileWriteConflictError",
-    z.object({ path: z.string(), message: z.string() }),
-  )
+  export const WriteConflictError = FileWriteConflictError
 
   const binaryExtensions = new Set([
     "exe",
@@ -910,10 +908,6 @@ export namespace File {
           path: path.relative(Instance.directory, full),
         }
       })
-  }
-
-  function contentRevision(identity: string, bytes: Uint8Array): string {
-    return createHash("sha256").update(identity).update("\0").update(bytes).digest("hex")
   }
 
   function isUtf8Text(bytes: Uint8Array): boolean {

@@ -168,6 +168,11 @@ the file. FileEditorPane adopts the returned formatted body only while its submi
 draft still owns the editor; a newer draft remains intact. File creation formats
 text explicitly. Attachment saves, upload, copy, move and removal retain their
 original byte-transfer semantics; edit notifications do not mutate these files.
+The opaque content revision and FileWriteConflictError definition are shared with
+the Tool observed-byte precondition. This extraction preserves the GUI's existing
+resource-identity/byte algorithm and response shape. Tool read receipts remain
+Session-scoped runtime facts; they do not create another persisted editor baseline
+or change the GUI's cross-process save ownership.
 Valid replacement characters, BOM, empty content and line separators retain
 their original text. Dedicated image/PDF previews and existing extension/MIME
 classifications keep their contracts; no alternate encoding is guessed.

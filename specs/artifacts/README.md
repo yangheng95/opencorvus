@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [工具读取事实与覆写前置条件](2026-10-25-observed-file-revision/README.md)：602真实write冲突、重新读取和最终Review。
+
 - [文件格式化与最终保存事实](2026-10-25-file-formatting/README.md)：601实际编辑器连续保存与后端进程证据。
 
 - [通用文本写入差异](2026-10-25-text-write-comparison/README.md)：600实际Sol文本保存、摘要和Review证据。

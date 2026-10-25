@@ -68,7 +68,8 @@ export const EditTool = Tool.define("edit", {
         await files.mkdir(path.dirname(filePath), { recursive: true })
         await files.writeFile(filePath, params.newString, { encoding: "utf-8", flag: "wx" })
         await Format.file(filePath, processAuthority)
-        contentNew = await files.readFile(filePath, "utf8")
+        const afterBytes = await files.readFile(filePath)
+        contentNew = afterBytes.toString("utf8")
         diff = trimDiff(createTwoFilesPatch(filePath, filePath, contentOld, contentNew))
         await Bus.publish(File.Event.Edited, {
           file: filePath,
@@ -78,15 +79,16 @@ export const EditTool = Tool.define("edit", {
           file: filePath,
           event: "add",
         })
-        FileTime.read(ctx.sessionID, filePath)
+        FileTime.read(ctx.sessionID, filePath, afterBytes)
         return
       }
 
       const stats = await files.stat(filePath).catch(() => undefined)
       if (!stats) throw new Error(`File ${filePath} not found`)
       if (stats.isDirectory()) throw new Error(`Path is a directory, not a file: ${filePath}`)
-      await FileTime.assert(ctx.sessionID, filePath)
-      contentOld = await files.readFile(filePath, "utf8")
+      const beforeBytes = await files.readFile(filePath)
+      FileTime.assert(ctx.sessionID, filePath, beforeBytes)
+      contentOld = beforeBytes.toString("utf8")
       const ending = detectLineEnding(contentOld)
       const old = convertToLineEnding(normalizeLineEndings(params.oldString), ending)
       const next = convertToLineEnding(normalizeLineEndings(params.newString), ending)
@@ -94,7 +96,8 @@ export const EditTool = Tool.define("edit", {
 
       await files.writeFile(filePath, contentNew)
       await Format.file(filePath, processAuthority)
-      contentNew = await files.readFile(filePath, "utf8")
+      const afterBytes = await files.readFile(filePath)
+      contentNew = afterBytes.toString("utf8")
       diff = trimDiff(
         createTwoFilesPatch(filePath, filePath, normalizeLineEndings(contentOld), normalizeLineEndings(contentNew)),
       )
@@ -106,7 +109,7 @@ export const EditTool = Tool.define("edit", {
         file: filePath,
         event: "change",
       })
-      FileTime.read(ctx.sessionID, filePath)
+      FileTime.read(ctx.sessionID, filePath, afterBytes)
     })
 
     const filediff: Snapshot.FileDiff = {

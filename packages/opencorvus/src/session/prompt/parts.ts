@@ -665,7 +665,6 @@ export async function materializeUserMessage(
                   ]
                 }
 
-                FileTime.read(input.sessionID, filepath)
                 // Read tool binary content used to land in part.url as a
                 // raw `data:<mime>;base64,...` string, which trips the
                 // Session.updatePart inline-base64 guard
@@ -673,12 +672,14 @@ export async function materializeUserMessage(
                 // Route through AttachmentStore so the persisted url is a
                 // canonical ref and the bytes round-trip via toModelOutput's
                 // ref → base64 reader at LLM call time.
-                const fileRef = await AttachmentStore.writeFromPath(
+                const bytes = await fs.readFile(filepath)
+                const fileRef = await AttachmentStore.write(
                   requireByteMaterializationProjectID(input, `binary file part ${part.filename ?? filepath}`),
-                  filepath,
+                  bytes,
                   part.mime,
                   part.filename!,
                 )
+                FileTime.read(input.sessionID, filepath, bytes)
                 return [
                   {
                     messageID: info.id,

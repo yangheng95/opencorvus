@@ -16,6 +16,8 @@ import { Session } from "../../src/session"
 import { Message } from "../../src/session/message"
 import { MessageStore } from "../../src/session/message-store"
 import { AttachmentStore } from "../../src/storage/attachment-store"
+import { WriteTool } from "../../src/tool/write"
+import { Tool } from "../../src/tool/tool"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 import { startControlledStreamingProvider } from "../fixture/controlled-streaming-provider"
 
@@ -248,6 +250,30 @@ for (const representation of ["canonical", "data", "file"] as const) {
         bytes,
         mime,
       })
+      if (representation === "file") {
+        const target = path.join(directory, "public.wav"),
+          before = await fs.stat(target)
+        const changed = Buffer.concat([bytes, Buffer.from("external update")])
+        await fs.writeFile(target, changed)
+        await fs.utimes(target, before.atime, before.mtime)
+        const outcome = await (await WriteTool.init())
+          .execute(
+            { filePath: target, content: "replacement" },
+            {
+              sessionID: session.id,
+              messageID: Identifier.ascending("message"),
+              agent: "coding",
+              messages: [],
+              abort: new AbortController().signal,
+              metadata() {},
+              executionSurface: Tool.executionSurface(["write"], []),
+              executionAuthority: { kind: "conversation", sessionID: session.id, projectID: session.projectID, directory },
+            },
+          )
+          .catch(error => error)
+        expect(outcome).toMatchObject({ name: "FileWriteConflictError", data: { path: target } })
+        expect(await fs.readFile(target)).toEqual(changed)
+      }
     })
   }, 60_000)
 }

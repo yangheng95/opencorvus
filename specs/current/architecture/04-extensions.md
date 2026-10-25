@@ -653,6 +653,13 @@ work_artifact_deliver` typed tools，不拥有第二套 serializer。profile reg
   并返回同一filediff比较合同；等待锁后取消的调用先返回真实AbortError。FileTime读取记录与
   锁键复用Filesystem.normalizeForCompare及normalizePath，Windows大小写别名共享同一身份，
   不修改用户实际文件名。该锁仍按当前Project Instance隔离，不声明约束外部文件写入器。
+  FileTime只保存各Session实际读取/提交的完整字节revision，不再记录wall-clock读时间或
+  采用mtime容差。ReadTool、Task codebase成功读取与本地二进制上下文捕获登记它们实际
+  返回/发布的同一个Buffer；范围错误和捕获失败不登记。write/edit通过当前Task/host
+  文件能力读取当前Buffer，在原锁内校验已观察revision，再执行写入。已变化内容返回
+  既有FileWriteConflictError；重新读取后可继续。原OPENCORVUS_DISABLE_FILETIME_CHECK
+  仍为该唯一完整性校验的现有开关，不存在旧时间算法。GUI与Tools复用同一无IO
+  contentRevision计算和冲突错误定义，GUI既有opaque revision算法与响应格式不变。
   文本write、edit（含新建）和apply_patch的新增/更新/移动在同一执行权属内显式await
   唯一Format.file，再实际读回正文并生成after、diff及行数。格式化沿用当前配置和
   Process执行器的host/Task身份、失败与超时策略，不再由file.edited通知执行。

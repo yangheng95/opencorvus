@@ -410,7 +410,7 @@ test("write and edit share the same actual file interval while parallel Tool cal
       const initial = "Anchor Initial\n"
       await fs.writeFile(filePath, initial)
       expect(await fs.readFile(filePath, "utf8")).toBe(initial)
-      FileTime.read(ctx.sessionID, filePath)
+      FileTime.read(ctx.sessionID, filePath, Buffer.from(initial))
       const [written, edited] = await Promise.all([
         writer.execute({ filePath, content: "Anchor Written\n" }, ctx),
         editor.execute({ filePath, oldString: "Anchor", newString: "Checked" }, ctx),
