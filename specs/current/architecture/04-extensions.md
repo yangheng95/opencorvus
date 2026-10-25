@@ -634,6 +634,8 @@ work_artifact_deliver` typed tools，不拥有第二套 serializer。profile reg
   XLSX 通过有界工作表、列标题和显式字符串/数字/布尔/空单元格计划写入，不接受公式、宏或原始命令；
   同一 batch 在全部单元格完成后按实际内容 autofit 原生列宽。逐表 PNG 按内容宽度包含工作表名称，
   保持真实列宽与渲染限额，不把省略号或空白画布视为可读性通过。
+  XLSX 的每张 PDF 页面由对应工作表真实内容边界加固定页边生成，保留不同工作表的独立宽高；
+  DOCX 继续使用 A4。预览尺寸不修改原生源文件。
   所有格式在私有 workspace 单次 batch 完成写入并检查完整原生结果；DOCX/XLSX 在发布源附件前
   还必须从实际文件完整读回段落/单元格，与 typed plan 对应。PDF 源文件生产、existing-file
   editing 与其他格式必须在同一 harness 完成 profile qualification 后扩展 discriminated schema，
@@ -644,6 +646,11 @@ work_artifact_deliver` typed tools，不拥有第二套 serializer。profile reg
   从固定 OfficeCLI HTML 输出派生逐页/逐表 PNG 与 PDF 预览，禁止直接启动用户 Office 或连接
   用户浏览器。HTML 以私有输入文件传给 sidecar，避免 Windows 命令行容量限制。原始 DOCX/XLSX
   附件为主交付，派生 PDF 使用既有 `file-preview@1`；receipt 同时绑定预览与 renderer 身份。
+  需要保存到项目目录时，现有通用 `write` 接受与文本 `content` 互斥的 `attachmentUrl`，
+  通过当前执行 Project 的 verified AttachmentStore 快照取得精确字节，沿用相同路径授权、
+  Task 文件绑定和编辑事件。附件保存只创建新目标；既有或并发创建的目标返回 `FileConflictError`。
+  Office runtime 边界以有界 `WorkArtifactRuntimeError` 保留真实退出码、标准输出、标准错误和
+  原始 cause；JSON 明确失败也进入同一错误合同，不丢弃原生诊断。
   该渲染要求现有 Browser Runtime 可用的 Chrome/Edge 与随包 Node/Playwright，不承诺
   Microsoft Office 像素一致性。所有 profile 复用同 Session 完成的 validate Tool 事实授权，
   不允许构造 receipt 替代真实工具结果；每个发布目标分别进入实际编译包资格检查。

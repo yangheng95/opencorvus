@@ -32,6 +32,7 @@ const input = JSON.parse(Buffer.from(process.argv[2], 'base64').toString('utf8')
     const count = await units.count();
     if (count < 1 || count > input.maxUnits) throw new Error('Office render unit count exceeds profile limits: ' + count);
     const renders = [];
+    const printPages = [];
     let outputBytes = 0;
     for (let i = 0; i < count; i++) {
       const unit = units.nth(i);
@@ -44,10 +45,17 @@ const input = JSON.parse(Buffer.from(process.argv[2], 'base64').toString('utf8')
       if (outputBytes > input.maxBytes) throw new Error('Office render output exceeds profile limits');
       await fs.writeFile(path.join(input.directory, name), bytes, { flag:'wx', mode:0o600 });
       renders.push({ name, width: Math.ceil(box.width), height: Math.ceil(box.height) });
+      if (input.format === 'xlsx') {
+        const pageName = 'office-sheet-' + (i + 1);
+        await unit.evaluate((element, name) => { element.style.page = name; }, pageName);
+        printPages.push('@page ' + pageName + ' { size:' + (Math.ceil(box.width) + 32) + 'px ' +
+          (Math.ceil(box.height) + 32) + 'px; margin:16px; }');
+      }
     }
-    await page.addStyleTag({content:'@media print { .sheet-content { break-after:page; } .sheet-content:last-child { break-after:auto; } }'});
-    const pdf = await page.pdf({ format: input.format === 'docx' ? 'A4' : 'A3',
-      landscape:input.format === 'xlsx', printBackground:true, preferCSSPageSize:true });
+    if (input.format === 'xlsx') await page.addStyleTag({content:
+      printPages.join('\n') + '\n@media print { html, body, .sheet-slider { height:auto !important; min-height:0 !important; overflow:visible !important; } .sheet-slider { display:block !important; } .sheet-content { margin:0 !important; break-after:page; } .sheet-content:last-child { break-after:auto; } }'});
+    const pdf = await page.pdf({ ...(input.format === 'docx' ? { format:'A4' } : {}),
+      printBackground:true, preferCSSPageSize:true });
     outputBytes += pdf.length;
     if (outputBytes > input.maxBytes) throw new Error('Office preview output exceeds profile limits');
     await fs.writeFile(path.join(input.directory, 'office-preview.pdf'), pdf, { flag:'wx', mode:0o600 });

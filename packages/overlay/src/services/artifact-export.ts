@@ -1,5 +1,5 @@
 import { createTwoFilesPatch } from "diff"
-import type { InteractiveArtifactPayload } from "./interactive-artifact"
+import type { InteractiveArtifact, InteractiveArtifactPayload } from "./interactive-artifact"
 
 export type ArtifactExport = { filename: string; mime: string } & ({ text: string } | { url: string })
 
@@ -38,7 +38,23 @@ export const CODE_EXTENSIONS = {
 } as const
 
 /** Export actual content in a named, reusable format, never an internal envelope. */
-export function artifactExports(payload: InteractiveArtifactPayload): ArtifactExport[] {
+export function artifactExports(
+  payload: InteractiveArtifactPayload,
+  downloads: NonNullable<InteractiveArtifact["downloads"]> = [],
+): ArtifactExport[] {
+  const seen = new Set<string>()
+  return [
+    ...downloads.map((file) => ({ ...file, filename: artifactFilename(file.filename || file.url) })),
+    ...rendererExports(payload),
+  ].filter((file) => {
+    if (!("url" in file)) return true
+    if (seen.has(file.url)) return false
+    seen.add(file.url)
+    return true
+  })
+}
+
+function rendererExports(payload: InteractiveArtifactPayload): ArtifactExport[] {
   const name = artifactFilename(payload.title)
   const text = (extension: string, content: string, mime = "text/plain"): ArtifactExport[] => [
     { filename: `${name}.${extension}`, mime, text: content },

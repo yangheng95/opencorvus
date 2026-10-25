@@ -11187,6 +11187,34 @@
       "InteractiveArtifactRecord": {
         "additionalProperties": false,
         "properties": {
+          "downloads": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "filename": {
+                  "maxLength": 255,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "mime": {
+                  "maxLength": 160,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "url": {
+                  "pattern": "^\\/attachment\\/[^/\\\\?#]+\\/[^/\\\\?#]+$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "url",
+                "mime"
+              ],
+              "type": "object"
+            },
+            "maxItems": 8,
+            "type": "array"
+          },
           "id": {
             "minLength": 1,
             "type": "string"

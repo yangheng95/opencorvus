@@ -1,7 +1,9 @@
-Writes a file to the local filesystem.
+Writes text or saves the exact bytes of a canonical project attachment to the local filesystem.
 
 Usage:
-- This tool will overwrite the existing file if there is one at the provided path.
+- Supply filePath and exactly one of content (text) or attachmentUrl (an existing canonical /attachment/... URL).
+- attachmentUrl saves binary or text attachments directly, including editable Office files, without base64 conversion or an external runtime. Its destination must be a new file; an existing entry returns FileConflictError.
+- With content, this tool will overwrite the existing file if there is one at the provided path.
 - If this is an existing file, you MUST use the Read tool first to read the file's contents. This tool will fail if you did not read the file first.
 - ALWAYS prefer editing existing files in the codebase. NEVER write new files unless explicitly required.
 - NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.

@@ -158,7 +158,7 @@ export function InteractiveArtifactPart(props: { part: unknown }) {
                 <MediaArtifact payload={record().payload as MediaPayload} />
               </Match>
               <Match when={record().payload.renderer === "file-preview@1"}>
-                <FilePreviewArtifact payload={record().payload as FilePreviewPayload} />
+                <FilePreviewArtifact payload={record().payload as FilePreviewPayload} downloads={record().downloads} />
               </Match>
               <Match when={record().payload.renderer === "map@1"}>
                 <MapArtifact payload={record().payload as MapPayload} />
@@ -167,7 +167,10 @@ export function InteractiveArtifactPart(props: { part: unknown }) {
                 <NotebookArtifact payload={record().payload as NotebookPayload} />
               </Match>
               <Match when={record().payload.renderer === "presentation@1"}>
-                <PresentationArtifact payload={record().payload as PresentationPayload} />
+                <PresentationArtifact
+                  payload={record().payload as PresentationPayload}
+                  downloads={record().downloads}
+                />
               </Match>
               <Match when={record().payload.renderer === "spreadsheet@1"}>
                 <SpreadsheetArtifact payload={record().payload as SpreadsheetPayload} />

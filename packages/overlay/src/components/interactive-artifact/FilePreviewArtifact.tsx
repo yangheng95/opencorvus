@@ -1,5 +1,6 @@
 import { Match, Show, Switch, createResource } from "solid-js"
-import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
+import type { InteractiveArtifact, InteractiveArtifactPayload } from "../../services/interactive-artifact"
+import { artifactExports } from "../../services/artifact-export"
 import {
   assertApiAuthorityCurrent,
   captureApiAuthority,
@@ -48,9 +49,17 @@ function TextPreview(props: { payload: FilePreviewPayload }) {
     </Show>
   )
 }
-export function FilePreviewArtifact(props: { payload: FilePreviewPayload }) {
+export function FilePreviewArtifact(props: {
+  payload: FilePreviewPayload
+  downloads?: InteractiveArtifact["downloads"]
+}) {
   return (
-    <ArtifactFrame payload={props.payload} title={props.payload.title} kind="File">
+    <ArtifactFrame
+      payload={props.payload}
+      title={props.payload.title}
+      kind="File"
+      exportFiles={() => artifactExports(props.payload, props.downloads)}
+    >
       <Switch>
         <Match when={props.payload.kind === "pdf"}>
           <PdfPreview url={props.payload.source.url} label={props.payload.title} />

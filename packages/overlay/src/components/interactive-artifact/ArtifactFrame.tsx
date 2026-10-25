@@ -23,6 +23,13 @@ export function ArtifactFrame(props: {
   let frame: HTMLElement | undefined
   const [immersive, setImmersive] = createSignal(false)
   const expandable = () => props.expandable !== false
+  const files = () => (props.exportFiles ? props.exportFiles() : artifactExports(props.payload!))
+  const copiesFilename = () => {
+    const first = files()[0]
+    return (
+      !props.copyText && first && "url" in first && !first.mime.startsWith("text/") && first.mime !== "application/json"
+    )
+  }
 
   const syncFullscreen = () => setImmersive(document.fullscreenElement === frame)
   const immersiveLabel = () =>
@@ -66,22 +73,20 @@ export function ArtifactFrame(props: {
     >
       <header class="msg-artifact__header">
         <div class="msg-artifact__identity">
-          <span class="msg-artifact__kind">{props.payload ? t(`artifact.kind.${props.payload.renderer}`) : props.kind}</span>
+          <span class="msg-artifact__kind">
+            {props.payload ? t(`artifact.kind.${props.payload.renderer}`) : props.kind}
+          </span>
           <h3 class="msg-artifact__title oc-section-heading">{props.title}</h3>
         </div>
         <div class="msg-artifact__header-trailing">
           <Show when={props.payload || props.exportFiles}>
             <ArtifactActions
-              files={() => (props.exportFiles ? props.exportFiles() : artifactExports(props.payload!))}
+              files={files}
               copyText={props.copyText}
               copyLabel={
                 props.payload?.renderer === "mcp-app@1"
                   ? t("artifact.actions.copy_result")
-                  : props.payload &&
-                      "source" in props.payload &&
-                      typeof props.payload.source === "object" &&
-                      !props.payload.source.mime.startsWith("text/") &&
-                      props.payload.source.mime !== "application/json"
+                  : copiesFilename()
                     ? t("artifact.actions.copy_name")
                     : undefined
               }

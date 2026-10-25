@@ -43,6 +43,10 @@ collection, or semantic Interactive Artifact for the requested source file.
    revalidates and rerenders the candidate; only the current authorized Work
    conversation or Expert Squad delivery owner publishes it.
 
+When the user requests a project file path, save the exact delivered source with
+the ordinary `write` tool using `attachmentUrl` and `filePath`. This preserves the
+binary bytes; it does not invoke an Office runtime or replace the canonical source.
+
 Read `references/security.md` before using user-supplied images or handling a
 request involving external links, macros, embedded objects, media, templates,
 or an existing file.

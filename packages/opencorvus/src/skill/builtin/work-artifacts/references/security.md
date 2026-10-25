@@ -2,8 +2,10 @@
 
 - Qualified profiles create new PPTX, DOCX and XLSX files. Reject editing an
   uploaded file, a macro-enabled file, or an existing template.
-- Never request a local filesystem path or run an underlying runtime through
-  Bash. The typed Harness accepts canonical project attachments only.
+- The typed Harness accepts canonical project attachments, not local filesystem
+  paths. Do not run an underlying runtime through Bash. For a requested local
+  copy, use ordinary `write` with the exact delivered `attachmentUrl`; its normal
+  filesystem authority and create-only attachment contract apply.
 - Do not install or invoke an underlying runtime or renderer through Bash.
   The Harness owns OfficeCLI and the existing Browser Runtime for DOCX/XLSX
   HTML-derived previews, with fresh isolated pages and blocked network requests.

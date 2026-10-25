@@ -1,0 +1,31 @@
+{
+  "input": "Actual saved Office files and browser-downloaded compact PDF from real Sol turn",
+  "docx": {
+    "textRuns": 13,
+    "characters": 562,
+    "requiredModulesAndTotals": "complete"
+  },
+  "xlsx": {
+    "verifiedCells": {
+      "A2": "登录与注册",
+      "A3": "任务看板",
+      "A4": "报表导出",
+      "A5": "移动端适配",
+      "D2": "完成",
+      "D3": "进行中",
+      "D4": "待验收",
+      "D5": "未开始",
+      "B6": "36",
+      "C6": "25",
+      "E6": "-11"
+    },
+    "populatedCells": 29
+  },
+  "pdf": {
+    "pages": 1,
+    "widthPt": 318.0,
+    "heightPt": 175.92,
+    "requiredModulesAndTotals": "complete",
+    "textCharacters": 131
+  }
+}

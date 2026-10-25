@@ -3013,6 +3013,11 @@ export type InteractiveArtifactPayload =
     }
 
 export type InteractiveArtifactRecord = {
+  downloads?: Array<{
+    filename?: string
+    mime: string
+    url: string
+  }>
   id: string
   messageID: string
   payload: InteractiveArtifactPayload

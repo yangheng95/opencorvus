@@ -1,0 +1,27 @@
+{
+  "qualification": "Real native PDF page count, geometry and text contracts",
+  "pages": [
+    {
+      "page": 1,
+      "widthPt": 245.03999,
+      "heightPt": 175.92,
+      "expectedFromActualContentPt": [
+        244.5,
+        175.5
+      ],
+      "textCharacters": 95
+    },
+    {
+      "page": 2,
+      "widthPt": 234.0,
+      "heightPt": 121.919998,
+      "expectedFromActualContentPt": [
+        234.0,
+        121.5
+      ],
+      "textCharacters": 60
+    }
+  ],
+  "sourceSha": "0aa41b95c1f5fe98aeaa58f643e93c27cebb8c7e28d92ba95eb5cbae93355181",
+  "previewSha": "480b853077bddf5e795992109416d383a302d8ca99acbe92b62d76af7bf4acb5"
+}

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Office保存与源文件交付](records/2026-10/2026-10-25-office-save-export.md)：598通用附件保存、真实源下载与紧凑PDF。
+
 - [Office真实预览与下载](records/2026-10/2026-10-25-office-preview-download.md)：596原文件继续预览、Windows目录合同与真实下载文件名。
 
 - [Office原请求传输与交付](records/2026-10/2026-10-25-office-provider-transport.md)：595原请求的安全传输事实及实际交付继续验收。

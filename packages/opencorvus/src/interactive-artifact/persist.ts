@@ -2,9 +2,16 @@ import { Identifier } from "@/id/id"
 import { BusEvent } from "@/bus/bus-event"
 import { GlobalBus } from "@/bus/global"
 import { Instance } from "@/project/instance"
-import { InteractiveArtifactTable, MessageTable, SessionTable } from "@/session/session.sql"
+import {
+  InteractiveArtifactTable,
+  MessageTable,
+  SessionTable,
+  PartTable,
+  ToolPartOutcomeTable,
+} from "@/session/session.sql"
+import { attachmentNameFromUrl } from "@/storage/attachment-reference"
 import { AttachmentStore } from "@/storage/attachment-store"
-import { Database, and, eq } from "@/storage/db"
+import { Database, and, eq, sql } from "@/storage/db"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { createHash } from "node:crypto"
 import z from "zod"
@@ -195,11 +202,51 @@ export function findInteractiveArtifact(input: {
       artifactID: row.artifact.id,
     })
   }
+  const completed = Database.use((db) =>
+    db
+      .select({ data: ToolPartOutcomeTable.data })
+      .from(PartTable)
+      .innerJoin(
+        ToolPartOutcomeTable,
+        eq(ToolPartOutcomeTable.request_part_id, sql<string>`json_extract(${PartTable.data}, '$.toolPartID')`),
+      )
+      .where(
+        and(
+          eq(PartTable.message_id, row.artifact.message_id),
+          sql`json_extract(${PartTable.data}, '$.type') = 'interactive-artifact'`,
+          sql`json_extract(${PartTable.data}, '$.artifactID') = ${row.artifact.id}`,
+        ),
+      )
+      .all(),
+  )
+  const downloads = new Map<string, NonNullable<InteractiveArtifactRecord["downloads"]>[number]>()
+  for (const { data } of completed) {
+    if (data.outcome !== "completed" || data.metadata.sourceSha === undefined) continue
+    const sha = data.metadata.sourceSha
+    const attachment =
+      typeof sha === "string" && /^[a-f0-9]{64}$/.test(sha)
+        ? data.attachments?.find((file) => {
+            const located = attachmentNameFromUrl(file.url)
+            return located?.projectID === input.projectID && located.name.startsWith(`${sha}.`)
+          })
+        : undefined
+    if (!attachment)
+      throw new InteractiveArtifactCorruptionError({
+        message: "Interactive artifact producing Tool has no attachment matching its declared source identity",
+        artifactID: row.artifact.id,
+      })
+    downloads.set(attachment.url, {
+      url: attachment.url,
+      mime: attachment.mime,
+      ...(attachment.filename ? { filename: attachment.filename } : {}),
+    })
+  }
   return {
     id: row.artifact.id,
     sessionID: row.sessionID,
     messageID: row.artifact.message_id,
     payload: parsed.data,
+    ...(downloads.size ? { downloads: [...downloads.values()] } : {}),
     timeCreated: row.artifact.time_created,
     timeUpdated: row.artifact.time_updated,
   }

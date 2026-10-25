@@ -3,7 +3,8 @@ import "reveal.js/reveal.css"
 import "reveal.js/theme/serif.css"
 import "./PresentationArtifact.css"
 import { For, Show, onCleanup, onMount } from "solid-js"
-import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
+import type { InteractiveArtifact, InteractiveArtifactPayload } from "../../services/interactive-artifact"
+import { artifactExports } from "../../services/artifact-export"
 import { FilePart } from "../FilePart"
 import { StaticTextPart } from "../TextPart"
 import { ArtifactFrame } from "./ArtifactFrame"
@@ -16,7 +17,10 @@ const PRESENTATION_DIMENSIONS: Record<PresentationPayload["aspectRatio"], { widt
   "1:1": { width: 720, height: 720 },
 }
 
-export function PresentationArtifact(props: { payload: PresentationPayload }) {
+export function PresentationArtifact(props: {
+  payload: PresentationPayload
+  downloads?: InteractiveArtifact["downloads"]
+}) {
   let host: HTMLDivElement | undefined
   let deck: RevealApi | undefined
   let observer: ResizeObserver | undefined
@@ -73,7 +77,12 @@ export function PresentationArtifact(props: { payload: PresentationPayload }) {
   })
 
   return (
-    <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Presentation">
+    <ArtifactFrame
+      payload={props.payload}
+      title={props.payload.title}
+      kind="Presentation"
+      exportFiles={() => artifactExports(props.payload, props.downloads)}
+    >
       <div
         class="reveal msg-artifact-presentation"
         data-aspect-ratio={props.payload.aspectRatio}

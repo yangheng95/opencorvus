@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Office保存与源文件交付](2026-10-25-office-save-export/README.md)：598真实项目保存、原文件下载及PDF复核。
+
 - [Office真实预览与下载](2026-10-25-office-preview-download/README.md)：596预览、下载及实际Office内容证据。
 
 - [Office原请求传输与交付](2026-10-25-office-provider-transport/README.md)：595真实传输摘要、页面及交付证据。

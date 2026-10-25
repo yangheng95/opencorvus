@@ -1,0 +1,178 @@
+{
+  "scope": 598,
+  "model": "gpt-6.1-sol",
+  "uiBundle": "main-tOX5snnD.js",
+  "session": "ses_-zUQxA1lPzzUZFA4CCxZ",
+  "files": [
+    {
+      "path": "交付/周报.docx",
+      "bytes": 6414,
+      "canonicalSha": "fc6e92183d798d35d59134b8ddc38e7dd8a54d1e145c7decf35a21be82b30999",
+      "actualWrite": {
+        "tool": "write",
+        "input": {
+          "filePath": "<owned-project>/交付/周报.docx",
+          "attachmentUrl": "/attachment/prj_h0uzhiaEmwlLsR0h2Mr7/fc6e92183d798d35d59134b8ddc38e7dd8a54d1e145c7decf35a21be82b30999.docx"
+        },
+        "outcome": "completed"
+      },
+      "savedExactCanonicalBytes": true,
+      "browserDownloadExactCanonicalBytes": true,
+      "browserDownload": "周报 (1).docx"
+    },
+    {
+      "path": "交付/工时汇总.xlsx",
+      "bytes": 4853,
+      "canonicalSha": "4102141fdaf47468b751e09241c0b9288e091a769f6e9bb33055aee849c941fa",
+      "actualWrite": {
+        "tool": "write",
+        "input": {
+          "filePath": "<owned-project>/交付/工时汇总.xlsx",
+          "attachmentUrl": "/attachment/prj_h0uzhiaEmwlLsR0h2Mr7/4102141fdaf47468b751e09241c0b9288e091a769f6e9bb33055aee849c941fa.xlsx"
+        },
+        "outcome": "completed"
+      },
+      "savedExactCanonicalBytes": true,
+      "browserDownloadExactCanonicalBytes": true,
+      "browserDownload": "工时汇总 (2).xlsx"
+    }
+  ],
+  "preservedOriginalFiles": [
+    {
+      "path": "交付/周报.md",
+      "bytes": 1581,
+      "exactOriginalText": true
+    },
+    {
+      "path": "交付/工时汇总.csv",
+      "bytes": 196,
+      "exactOriginalText": true
+    }
+  ],
+  "newDelivery": {
+    "tool": "work_artifact_deliver",
+    "outcome": "completed",
+    "profile": "office.spreadsheet@1",
+    "title": "工时汇总与紧凑PDF预览",
+    "sourceSha": "4102141fdaf47468b751e09241c0b9288e091a769f6e9bb33055aee849c941fa",
+    "previewSha": "04be9f30953df32cebae364e8bcf4a6b6774b567c7989014a22039413d41d420",
+    "previewBytes": 128365,
+    "browserDownloadExactPreviewBytes": true
+  },
+  "retainedHistoricalArtifacts": 2,
+  "existingArtifactRecordsExact": true,
+  "data": {
+    "schema": 8,
+    "integrity": "ok",
+    "unchangedTables": {
+      "engine_task": {
+        "before": 0,
+        "after": 0,
+        "exactFacts": true
+      },
+      "engine_task_root_ingress": {
+        "before": 0,
+        "after": 0,
+        "exactFacts": true
+      },
+      "task_plan": {
+        "before": 0,
+        "after": 0,
+        "exactFacts": true
+      }
+    },
+    "userDatabase": "Not accessed; own closed 597 clone only"
+  },
+  "toolObservations": [
+    {
+      "tool": "skill",
+      "outcome": "completed"
+    },
+    {
+      "tool": "skill",
+      "outcome": "completed"
+    },
+    {
+      "tool": "skill",
+      "outcome": "completed"
+    },
+    {
+      "tool": "read",
+      "outcome": "completed"
+    },
+    {
+      "tool": "write",
+      "outcome": "completed"
+    },
+    {
+      "tool": "write",
+      "outcome": "completed"
+    },
+    {
+      "tool": "work_artifact_inspect",
+      "outcome": "completed"
+    },
+    {
+      "tool": "work_artifact_validate",
+      "outcome": "completed"
+    },
+    {
+      "tool": "read",
+      "outcome": "failed"
+    },
+    {
+      "tool": "read",
+      "outcome": "completed"
+    },
+    {
+      "tool": "read",
+      "outcome": "completed"
+    },
+    {
+      "tool": "bash",
+      "outcome": "completed",
+      "exit": 1
+    },
+    {
+      "tool": "bash",
+      "outcome": "completed",
+      "exit": 0
+    },
+    {
+      "tool": "work_artifact_deliver",
+      "outcome": "completed"
+    },
+    {
+      "tool": "memory",
+      "outcome": "completed"
+    }
+  ],
+  "lifecycle": {
+    "timingAcceptance": {
+      "passed": false,
+      "requiredReserveMs": 300000,
+      "actualReserveMs": 131146,
+      "reason": "Public shutdown occurred late; original retirement assertion failed and is retained"
+    },
+    "at": "2026-10-25T12:13:28.803Z",
+    "authRetired": 1,
+    "catalogRetired": 1,
+    "authCopied": true,
+    "modelRequests": 19,
+    "model": "gpt-6.1-sol",
+    "streaming200OriginalReaderEOF": 19,
+    "sourceCatalog": {
+      "bytes": 9155406,
+      "modifiedAtMs": 1791128890137.9968,
+      "content": "Exact original"
+    },
+    "publicShutdown": 200,
+    "reserveMs": 131146,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "exactProcessChain": "dead_or_reused"
+  }
+}

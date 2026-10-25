@@ -1,0 +1,8 @@
+{
+  "input": "Actual OfficeCLI 158 read of a missing file through the default production runtime boundary",
+  "name": "WorkArtifactRuntimeError",
+  "cause": "ProcessRunFailedError",
+  "exit_code": 1,
+  "stdout": "{\r\n  \"success\": false,\r\n  \"error\": {\r\n    \"error\": \"File not found: D:\\\\myhexin-local\\\\opencorvus\\\\.tmp-office598\\\\native-diagnostic-contract\\\\actual-missing-source.xlsx\",\r\n    \"code\": \"file_not_found\",\r\n    \"suggestion\": \"Check the file path. Use an absolute path or a path relative to the current directory.\",\r\n    \"help\": \"officecli create <path> --type docx|xlsx|pptx\"\r\n  }\r\n}\r\n",
+  "stderr": ""
+}

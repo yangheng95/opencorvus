@@ -480,9 +480,19 @@ export const defaultWorkArtifactPresentationDependencies: WorkArtifactPresentati
       maxOutputBytes:
         input.maxOutputBytes ?? WorkArtifactProfileRegistry.require("office.presentation@1").limits.outputBytes,
     }
-    return input.executionAuthority.kind === "task"
-      ? Process.runTask({ taskID: input.executionAuthority.taskID, cwd: input.cwd }, command, options)
-      : Process.runHost(command, { ...options, cwd: input.cwd })
+    try {
+      return await (input.executionAuthority.kind === "task"
+        ? Process.runTask({ taskID: input.executionAuthority.taskID, cwd: input.cwd }, command, options)
+        : Process.runHost(command, { ...options, cwd: input.cwd }))
+    } catch (error) {
+      if (error instanceof Process.RunFailedError)
+        throw new WorkArtifactRuntimeError(
+          `OfficeCLI ${input.args[0]} failed`,
+          { exit_code: error.code, stdout: error.stdout.toString("utf8"), stderr: error.stderr.toString("utf8") },
+          error,
+        )
+      throw error
+    }
   },
 }
 
@@ -717,6 +727,14 @@ async function authorCommands(
   return commands
 }
 
+export class WorkArtifactRuntimeError extends Error {
+  constructor(label: string, evidence: Readonly<Record<string, unknown>>, cause?: unknown) {
+    const detail = JSON.stringify(evidence)
+    super(`${label}: ${detail.length > 4096 ? `${detail.slice(0, 4096)}…` : detail}`, { cause })
+    this.name = "WorkArtifactRuntimeError"
+  }
+}
+
 export function parseWorkArtifactRuntimeJson(stdout: Uint8Array, label: string): Record<string, unknown> {
   if (stdout.length > 2 * 1024 * 1024) throw new Error(`${label} returned excessive JSON output`)
   let value: unknown
@@ -727,7 +745,7 @@ export function parseWorkArtifactRuntimeJson(stdout: Uint8Array, label: string):
   }
   if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error(`${label} returned a non-object`)
   const record = value as Record<string, unknown>
-  if (record.success !== true) throw new Error(`${label} did not report success`)
+  if (record.success !== true) throw new WorkArtifactRuntimeError(`${label} did not report success`, record)
   return record
 }
 

@@ -860,6 +860,10 @@ export const InteractiveArtifactRecord = z
     sessionID: z.string().min(1),
     messageID: z.string().min(1),
     payload: InteractiveArtifactPayload,
+    downloads: z
+      .array(InteractiveArtifactAttachment.omit({ sha: true, size: true }))
+      .max(8)
+      .optional(),
     timeCreated: z.number(),
     timeUpdated: z.number(),
   })

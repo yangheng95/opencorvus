@@ -1541,6 +1541,15 @@ read the mounted editor state. MCP App actions read the current real Tool
 result; returned resources use the existing Host download protocol and App
 requests retain confirmation. Opening keeps the same mounted renderer and MCP
 authority. A source/data export does not replace a requested PDF or Word file.
+For native Office delivery cards, `InteractiveArtifactRecord.downloads` is a
+read projection of the exact producing display Part's completed Tool outcome.
+The declared source identity selects its canonical attachment within the same
+Project; a declared source without a matching attachment is a corruption error.
+Original DOCX, XLSX or PPTX downloads precede renderer exports and derived PDF
+previews in the shared actions menu, with URL deduplication and the actual first
+binary filename used by copy-name. Historical completed deliveries use the
+same projection. Persisted artifact payloads, messages and schema remain intact;
+there is no second download registry or persisted source field.
 
 Conversation artifact text and each immutable diff side use one fatal streaming
 UTF-8 decoder for the complete logical read, including its final flush. Literal

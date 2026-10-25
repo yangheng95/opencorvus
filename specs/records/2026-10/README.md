@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Office保存与源文件交付](2026-10-25-office-save-export.md)：598二进制保存、下载投影和PDF页边界。
+
 - [Office真实预览与下载](2026-10-25-office-preview-download.md)：596原Chat继续检查、预览与正式交付。
 
 - [Office原请求传输与交付](2026-10-25-office-provider-transport.md)：595请求构造/连接与原业务交付调查。
