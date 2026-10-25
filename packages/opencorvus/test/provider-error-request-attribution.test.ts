@@ -1,4 +1,4 @@
-import { afterEach, expect, test } from "bun:test"
+import { afterEach, expect, spyOn, test } from "bun:test"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
 import type { Provider } from "@/provider/provider"
@@ -9,6 +9,7 @@ import {
 import { ProtocolStore } from "@/protocol/store"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { rejectLocalStream } from "./fixture/rejected-local-stream"
+import { Bus } from "@/bus"
 
 afterEach(async () => {
   await Instance.disposeAll()
@@ -44,7 +45,18 @@ for (const agentID of ["memory", "title", "coding"])
           release_date: "2026-09-09",
         } as Provider.Model
         const requestID = `${agentID}-source-occurrence`
+        const publications: Bus.Publication[] = []
+        const publish = Bus.publishOwned
+        using observed = spyOn(Bus, "publishOwned").mockImplementation((definition, properties) => {
+          const publication = publish(definition, properties)
+          if (definition.type === Session.Event.Error.type && properties.sessionID === session.id) {
+            publications.push(publication)
+          }
+          return publication
+        })
         await rejectLocalStream({ sessionID: session.id, agentID, requestID, model })
+        expect(publications).toHaveLength(1)
+        await Promise.all(publications.map((publication) => publication.retry()))
         await awaitTaskMessageProtocolBridgeIdle()
         const first = ProtocolStore.latestSessionEvent(session.id, "session.error")
         expect(first?.payload).toMatchObject({

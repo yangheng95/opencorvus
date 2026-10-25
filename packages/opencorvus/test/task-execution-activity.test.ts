@@ -20,6 +20,7 @@ import { WorkLedgerEvent } from "@opencorvus-ai/transport-protocol"
 import { Database } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { persistEstablishedTask } from "./fixture/engine-task"
+import { persistedSessionAgentID } from "@/agent/persisted-session-identity"
 
 afterEach(async () => {
   Server.resetProjectRoutesAppForTest()
@@ -64,12 +65,13 @@ async function createTask(mission?: MissionSession) {
 }
 
 async function begin(sessionID: string) {
+  const session = await Session.get(sessionID)
   const input = await Session.updateMessage({
     id: Identifier.ascending("message"),
     sessionID,
     role: "user",
     author: "user",
-    agent: "chat",
+    agent: persistedSessionAgentID({ sessionID, sessionKind: session.kind, metadata: session.metadata }),
     model: { providerID: "test", modelID: "test" },
     time: { created: Date.now() },
   })

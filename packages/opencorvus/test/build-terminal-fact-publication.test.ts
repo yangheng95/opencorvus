@@ -1,4 +1,6 @@
-import { afterEach, describe, expect, spyOn, test } from "bun:test"
+import { afterEach, beforeEach, describe, expect, spyOn, test } from "bun:test"
+import { MockLanguageModelV3, simulateReadableStream } from "ai/test"
+import type { LanguageModelV3StreamResult } from "@ai-sdk/provider"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { hostGit as git } from "@/util/git"
@@ -52,6 +54,37 @@ import { taskInputAttachmentRefs } from "@/agent/prompt-projection"
 import { EvolutionMutationReceiptIdentityConflictError } from "@/expert-squad/mutation-receipt-validation"
 
 const modelRef = { providerID: "test", modelID: "build-terminal-publication" }
+let restoreHelperLanguage: (() => void) | undefined
+
+beforeEach(() => {
+  const language = spyOn(Provider, "getLanguage").mockResolvedValue(
+    new MockLanguageModelV3({
+      provider: modelRef.providerID,
+      modelId: modelRef.modelID,
+      async doStream(): Promise<LanguageModelV3StreamResult> {
+        return {
+          stream: simulateReadableStream({
+            chunks: [
+              { type: "stream-start", warnings: [] },
+              { type: "text-start", id: "helper" },
+              { type: "text-delta", id: "helper", delta: "Local helper completed." },
+              { type: "text-end", id: "helper" },
+              {
+                type: "finish",
+                finishReason: { unified: "stop", raw: "stop" },
+                usage: {
+                  inputTokens: { total: 1, noCache: 1, cacheRead: 0, cacheWrite: 0 },
+                  outputTokens: { total: 1, text: 1, reasoning: 0 },
+                },
+              },
+            ],
+          }),
+        }
+      },
+    }),
+  )
+  restoreHelperLanguage = () => language.mockRestore()
+})
 
 for (const family of ["build", "partial", "cleanup", "evolution"] as const) {
   test(family === "evolution" ? "the current writer reports the typed error for an invalid legacy mutation receipt" : `startup reports the typed migration contract for legacy ${family} terminal identity`, async () => {
@@ -156,8 +189,13 @@ function providerModel(): ProviderType.Model {
 }
 
 afterEach(async () => {
-  await Instance.disposeAll()
-  await resetMemoryDatabase()
+  try {
+    await Instance.disposeAll()
+    await resetMemoryDatabase()
+  } finally {
+    restoreHelperLanguage?.()
+    restoreHelperLanguage = undefined
+  }
 })
 
 async function gitRef(directory: string, ref: string) {

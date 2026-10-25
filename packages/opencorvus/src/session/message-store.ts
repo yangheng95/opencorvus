@@ -4,6 +4,7 @@ import { Database, NotFoundError, and, desc, eq, inArray, lt, lte, or, sql } fro
 import { MessageTable, PartTable, ToolPartRequestTable } from "./session.sql"
 import { fn } from "@/util/fn"
 import { compareTimelineOrderKeys, timelineOrderKey } from "@/timeline/order"
+import { compareCanonicalStrings } from "@/util/canonical-digest"
 import { Message } from "./message"
 import { VISIBLE_PART_TYPE } from "./part-types"
 import { projectToolPartInTransaction } from "./tool-part-facts"
@@ -110,9 +111,9 @@ function loadPartRows(db: Database.TxOrDb, messageIDs: readonly string[]): Loade
     .where(inArray(ToolPartRequestTable.message_id, [...messageIDs])).all()
     .map((row) => ({ kind: "tool" as const, row }))
   return [...parts, ...tools].sort((left, right) =>
-    left.row.message_id.localeCompare(right.row.message_id) ||
+    compareCanonicalStrings(left.row.message_id, right.row.message_id) ||
     left.row.time_created - right.row.time_created ||
-    left.row.id.localeCompare(right.row.id),
+    compareCanonicalStrings(left.row.id, right.row.id),
   )
 }
 
@@ -259,7 +260,7 @@ function conversationActivityRowsPage(input: {
     else rowsByExecution.set(row.executionID, [row])
   }
   return [...rowsByExecution.values()].flatMap((group) => group
-    .sort((left, right) => right.time_created - left.time_created || right.id.localeCompare(left.id))
+    .sort((left, right) => right.time_created - left.time_created || compareCanonicalStrings(right.id, left.id))
     .slice(0, CONVERSATION_AGENT_ACTIVITY_LIMIT))
 }
 

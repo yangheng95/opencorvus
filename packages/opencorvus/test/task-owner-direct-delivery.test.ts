@@ -91,7 +91,7 @@ for (const usePatch of [false, true])
             if (sequence > 30) throw new Error(`Unexpected owner loop ${rootStep}/${reviewerStep}`)
             const lineages = listDispatchLineage(taskID)
             const latest = lineages.at(-1)
-            if (names.includes("dispatch_agent")) {
+            if (names.includes("dispatch_agents")) {
               if (taskLifecycleProjection(taskID).status !== "active")
                 return call("no_action", {
                   observed_task: noActionTaskObservation(taskLifecycleProjection(taskID)),
@@ -99,9 +99,12 @@ for (const usePatch of [false, true])
                 })
               const step = rootStep++
               if (step === 0) {
-                expect(names.filter((name) => ["read", "write", "edit", "apply_patch"].includes(name)).sort()).toEqual(
-                  ["apply_patch", "edit", "read", "write"],
-                )
+                expect(names.filter((name) => ["read", "write", "edit", "apply_patch"].includes(name)).sort()).toEqual([
+                  "apply_patch",
+                  "edit",
+                  "read",
+                  "write",
+                ])
                 return usePatch
                   ? call("apply_patch", {
                       patchText: `*** Begin Patch\n*** Add File: ${filePath.replaceAll("\\", "/")}\n+value=1\n*** End Patch`,
@@ -110,38 +113,53 @@ for (const usePatch of [false, true])
               }
               if (step === 1 || step === 5) return call("read", { filePath })
               if (step === 2 || step === 6)
-                return call("dispatch_agent", {
-                  dispatch: {
-                    target: "base-tester",
-                    work_scope: { kind: "task" },
-                    turn:
-                      step === 2
-                        ? {
-                            kind: "initial",
-                            workflow_subject: {
-                              kind: "virtual_workflow",
-                              workflow_id: "execution-verification",
-                              node_id: "base-tester",
-                            },
-                            use_worktree: false,
-                            input: {
-                              goal_ids: [],
-                              instruction:
-                                "Independently verify delivery.txt contains value=2. Read the root's original Tool facts and the current file.",
-                              reason: "Independent verification of original outcome.",
-                            },
-                          }
-                        : {
-                            kind: "continuation",
-                            authority: { kind: "prior_dispatch", continuation_dispatch_id: latest!.dispatchID },
-                            guidance:
-                              "The owner repaired the value. Verify that original obligation and preservation of this single file; inspect this dispatch's root evidence.",
-                            evidence_locators: [],
-                          },
-                  },
+                return call("dispatch_agents", {
+                  team: [
+                    {
+                      name: "reviewer",
+                      target: "base-tester",
+                      responsibility: "Independently verify the owner's delivery",
+                      boundary: "Read the original Tool facts and current file",
+                      expected_result: "A durable independent verification result",
+                      depends_on: [],
+                    },
+                  ],
+                  dispatches: [
+                    {
+                      dispatch: {
+                        target: "base-tester",
+                        work_scope: { kind: "task" },
+                        turn:
+                          step === 2
+                            ? {
+                                kind: "initial",
+                                workflow_subject: {
+                                  kind: "virtual_workflow",
+                                  workflow_id: "execution-verification",
+                                  node_id: "base-tester",
+                                },
+                                use_worktree: false,
+                                input: {
+                                  goal_ids: [],
+                                  instruction:
+                                    "Independently verify delivery.txt contains value=2. Read the root's original Tool facts and the current file.",
+                                  reason: "Independent verification of original outcome.",
+                                },
+                              }
+                            : {
+                                kind: "continuation",
+                                authority: { kind: "prior_dispatch", continuation_dispatch_id: latest!.dispatchID },
+                                guidance:
+                                  "The owner repaired the value. Verify that original obligation and preservation of this single file; inspect this dispatch's root evidence.",
+                                evidence_locators: [],
+                              },
+                      },
+                    },
+                  ],
                 })
               if (step === 3 || step === 7) {
-                const outcome = findDispatchSettlementByDispatchID({ taskID, dispatchID: latest!.dispatchID })!.payload.outcome
+                const outcome = findDispatchSettlementByDispatchID({ taskID, dispatchID: latest!.dispatchID })!.payload
+                  .outcome
                 if (!("final_message_id" in outcome)) throw new Error(`Expected reviewer message: ${outcome.kind}`)
                 const finalID = outcome.final_message_id
                 return call("read_agent_message", { sources: [{ kind: "dispatch_result", message_id: finalID }] })
@@ -153,7 +171,8 @@ for (const usePatch of [false, true])
                     })
                   : call("edit", { filePath, oldString: "value=1", newString: "value=2" })
               if (step === 8) {
-                const outcome = findDispatchSettlementByDispatchID({ taskID, dispatchID: latest!.dispatchID })!.payload.outcome
+                const outcome = findDispatchSettlementByDispatchID({ taskID, dispatchID: latest!.dispatchID })!.payload
+                  .outcome
                 if (!("final_message_id" in outcome)) throw new Error(`Expected reviewer message: ${outcome.kind}`)
                 const finalID = outcome.final_message_id
                 return call("manage_task", {

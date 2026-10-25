@@ -37,6 +37,26 @@ afterEach(async () => {
  * 09:49:02, taking the orchestrator loop down with it.
  */
 describe("accepted Task-root Message delivery", () => {
+  test("same-time Parts read in canonical binary identity order through both message readers", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const session = await Session.create({ kind: "assistant", title: "Canonical Part order" })
+      const messageID = Identifier.ascending("message")
+      await Session.persistMessage({
+        info: {
+          id: messageID, sessionID: session.id, role: "user", author: "user", agent: "chat",
+          model: { providerID: "test", modelID: "canonical-order" }, time: { created: Date.now() + 60_000 },
+        },
+        parts: ["prt_a", "prt_Z"].map(id => ({ id, messageID, sessionID: session.id, type: "text" as const, text: id })),
+      })
+      const direct = await MessageStore.get({ sessionID: session.id, messageID })
+      const messages = await Session.messages({ sessionID: session.id })
+      expect(direct.parts.map(part => ({ id: part.id, text: part.type === "text" ? part.text : "" })))
+        .toEqual([{ id: "prt_Z", text: "prt_Z" }, { id: "prt_a", text: "prt_a" }])
+      expect(messages[0]!.parts.map(part => part.id)).toEqual(["prt_Z", "prt_a"])
+    } })
+  })
+
   async function acceptedRootMessage(title: string, author = "mission", reviseDraft = false) {
     const taskID = Identifier.ascending("task")
     const root = await Session.create({ kind: "root", title })

@@ -5,7 +5,7 @@ import { MessageStore } from "@/session/message-store"
 import { MessageTable, PartTable } from "@/session/session.sql"
 import { Session } from "@/session"
 import { Database, and, desc, eq } from "@/storage/db"
-import { timelineMessageOrderKey, timelinePartOrderKey } from "@/timeline/order"
+import { compareTimelineOrderKeys, timelineMessageOrderKey, timelinePartOrderKey } from "@/timeline/order"
 
 export async function getTaskRootMessage(task: Pick<TaskRow, "id" | "session_id" | "project_id">, messageID: string) {
   if (!task.session_id) throw new Error(`Task ${task.id} has no root Session.`)
@@ -91,7 +91,7 @@ export async function prepareTaskRootMessageDelivery(input: TaskRootMessageDeliv
           sessionID: input.orchestratorSessionID,
           orderKey: timelinePartOrderKey({ id: row.id, timeCreated: visibleAt }),
         }),
-      )
+      ).sort((left, right) => compareTimelineOrderKeys(left.orderKey, right.orderKey))
       db.update(MessageTable)
         .set({
           session_id: input.orchestratorSessionID,

@@ -1572,7 +1572,22 @@ describe("scheduler immutable definition and fire identity", () => {
         carryingProjectID = canonicalSession.projectID
 
         expect(creatorInputs).toEqual([
-          { experience: "chat", model: undefined, sessionID: canonicalSession.id },
+          {
+            experience: "chat",
+            model: undefined,
+            sessionID: canonicalSession.id,
+            creationAllocation: expect.objectContaining({
+              kind: "automation_run",
+              request_id: runs[0]!.id,
+              directory: canonicalSession.directory,
+              request_contract: {
+                protocol: "automation-run-project-v1",
+                fireID: runs[0]!.fireId,
+                runID: runs[0]!.id,
+                revisionID: AutomationService.list().find((row) => row.id === automation.id)!.revisionId,
+              },
+            }),
+          },
         ])
         expect({
           projectChanged: canonicalSession.projectID !== outerProjectID,
@@ -1589,7 +1604,7 @@ describe("scheduler immutable definition and fire identity", () => {
           {
             automationId: automation.id,
             targetScope: "global",
-            targetProjectId: null,
+            targetProjectId: canonicalSession.projectID,
             outcome: "succeeded",
             session: { id: canonicalSession.id, directory: canonicalSession.directory, kind: "assistant" },
           },

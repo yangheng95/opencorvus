@@ -15,6 +15,7 @@ import {
 import {
   ProcessLivenessOwnerUnavailableError,
   joinProcessLiveness,
+  observeProcessLiveness,
 } from "../src/engine/process-liveness"
 import { requireTask } from "../src/engine/store"
 import { selectedWorkflowBinding } from "../src/engine/workflow-binding"
@@ -388,15 +389,20 @@ describe("cross-process dispatch abandonment", () => {
     })
   }, 30_000)
 
-  test("delivers an exact terminal result with a pre-upgrade opaque owner identity", async () => {
+  test("resolves an opaque owner identity error before delivering its exact terminal result", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
         const fixture = await seedPeerOwnedDispatch(project.path)
         const historicalOwner = recordTestProcessIdentity(PEER, "dead")
-        Database.use((db) => db.update(EngineControlActivationLeaseTable)
-          .set({ owner_occurrence_id: PEER }).where(eq(EngineControlActivationLeaseTable.id, historicalOwner.id)).run())
+        Database.use((db) =>
+          db
+            .update(EngineControlActivationLeaseTable)
+            .set({ owner_occurrence_id: PEER })
+            .where(eq(EngineControlActivationLeaseTable.id, historicalOwner.id))
+            .run(),
+        )
         using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:this-backend")
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
         const inputMessageID = fixture.descriptor.payload.messageAuthority.user_message_id
@@ -454,6 +460,30 @@ describe("cross-process dispatch abandonment", () => {
 
         await reconcileTaskControlPlane(fixture.taskID)
         await reconcileTaskControlPlane(fixture.taskID)
+
+        expect(() => observeProcessLiveness(PEER)).toThrow(ProcessLivenessOwnerUnavailableError)
+        Database.use((db) =>
+          db
+            .update(EngineControlActivationLeaseTable)
+            .set({ owner_occurrence_id: historicalOwner.owner_occurrence_id })
+            .where(eq(EngineControlActivationLeaseTable.id, historicalOwner.id))
+            .run(),
+        )
+        expect(observeProcessLiveness(PEER)).toBe("dead_or_reused")
+        await reconcileTaskControlPlane(fixture.taskID)
+        await reconcileTaskControlPlane(fixture.taskID)
+
+        const recoveryDeadline = Date.now() + 10_000
+        while (true) {
+          const recovered = findDispatchSettlementByDispatchID({ taskID: fixture.taskID, dispatchID: fixture.dispatchID })
+          const sourceID = recovered?.payload.outcome.kind === "infrastructure_failure"
+            ? recovered.payload.outcome.infrastructure_error?.artifact_id : undefined
+          const delivered = sourceID && Database.use(db => db.select().from(EngineTaskRootIngressTable)
+            .where(eq(EngineTaskRootIngressTable.task_id, fixture.taskID)).all().some(row => row.source_id === sourceID))
+          if (delivered) break
+          if (Date.now() > recoveryDeadline) throw new Error("The recovered exact terminal result and ingress must settle")
+          await Bun.sleep(25)
+        }
 
         const settlement = findDispatchSettlementByDispatchID({
           taskID: fixture.taskID,

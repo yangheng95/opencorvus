@@ -8,14 +8,54 @@ import { Truncate } from "@/tool/truncation"
 import { Session } from "@/session"
 import { MessageStore } from "@/session/message-store"
 import { Database } from "@/storage/db"
-import { PermissionExecutionResultTable } from "@/permission/permission.sql"
-import { durableExecutionResult } from "@/permission/execution-result"
+import { PermissionAuthority } from "@/permission/authority"
+import { Config } from "@/config/config"
 import { CompactionEvidenceReader } from "@/session/compaction-evidence-reader"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterAll(async () => {
   await resetMemoryDatabase()
 })
+
+async function publishRecoveryReceipt(sessionID: string, outputPath: string, beforeResult?: () => Promise<void>) {
+  await Config.updateProjectPatch({ permission_mode: "full_access" })
+  const source = await Session.updateMessage({
+    id: Identifier.ascending("message"),
+    sessionID,
+    role: "user",
+    author: "user",
+    agent: "chat",
+    model: { providerID: "test", modelID: "retention" },
+    time: { created: Date.now() },
+  })
+  const bytes = await fs.readFile(outputPath)
+  const server = Bun.serve({ hostname: "127.0.0.1", port: 0, fetch: () => new Response(bytes) })
+  try {
+    return await PermissionAuthority.authorizeAndExecute(
+      {
+        projectID: Instance.project.id,
+        sessionID,
+        messageID: source.id,
+        toolCallID: Identifier.ascending("call"),
+        providerKind: "builtin",
+        providerID: "builtin",
+        toolName: "webfetch",
+        args: { url: server.url.href },
+      },
+      async () => {
+        const output = await (await fetch(server.url)).text()
+        await beforeResult?.()
+        return {
+          output: output.slice(0, 8),
+          title: "Recoverable local source",
+          metadata: { truncated: true, outputPath },
+        }
+      },
+    )
+  } finally {
+    await server.stop(true)
+  }
+}
 
 test("retention settles expired outputs in both current runtime ownership roots", async () => {
   await using project = await memoryProject()
@@ -147,20 +187,7 @@ test("retains recovery-receipt and live-progress evidence before a terminal Tool
         await fs.writeFile(file, `Exact recoverable output for ${path.basename(file)}`)
         await fs.utimes(file, expired, expired)
       }
-      Database.immediateTransaction((db) =>
-        db
-          .insert(PermissionExecutionResultTable)
-          .values({
-            attempt_id: Identifier.ascending("permission"),
-            result: durableExecutionResult({
-              output: "Preview",
-              title: "Recovered result",
-              metadata: { truncated: true, outputPath: receiptPath },
-            }).payload,
-            time_created: Date.now(),
-          })
-          .run(),
-      )
+      await publishRecoveryReceipt(session.id, receiptPath)
       const source = await Session.updateMessage({
         id: Identifier.ascending("message"),
         sessionID: session.id,
@@ -233,23 +260,19 @@ test("observes references committed after cleanup starts while reclaiming aged o
         await fs.utimes(file, expired, expired)
       }
       const started = performance.now()
+      const ready = Promise.withResolvers<void>()
+      const release = Promise.withResolvers<void>()
+      const publication = publishRecoveryReceipt(session.id, referencedPath, async () => {
+        ready.resolve()
+        await release.promise
+      })
+      void publication.catch((error) => ready.reject(error))
+      await ready.promise
       const cleaning = Truncate.cleanup()
       // cleanup has read its initial retain-only snapshot and yielded to its
       // real filesystem scan. This commit must be seen by the deletion check.
-      Database.immediateTransaction((db) =>
-        db
-          .insert(PermissionExecutionResultTable)
-          .values({
-            attempt_id: Identifier.ascending("permission"),
-            result: durableExecutionResult({
-              output: "Preview",
-              title: "Late recovery source",
-              metadata: { truncated: true, outputPath: referencedPath },
-            }).payload,
-            time_created: Date.now(),
-          })
-          .run(),
-      )
+      release.resolve()
+      await publication
       const receipt = await cleaning
       expect(receipt.removed).toEqual(expect.arrayContaining(orphanPaths))
       expect(receipt.removed).toHaveLength(orphanPaths.length)
