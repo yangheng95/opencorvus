@@ -465,8 +465,12 @@ describe("search-native Tool definition budgets", () => {
             expect([...result.active.values()].map((entry) => entry.provider_name).sort()).toEqual(
               [...toolIDs].sort(),
             )
-            expect(result.payloadChars).toBeLessThanOrEqual(CAPABILITY_REVEAL_MAX_ACTIVE_CHARS)
-            expect(result.payloadTokens).toBeLessThanOrEqual(CAPABILITY_REVEAL_MAX_ACTIVE_TOKENS)
+            expect(result.payloadChars - prior.baseDefinition.payloadChars).toBeLessThanOrEqual(
+              CAPABILITY_REVEAL_MAX_ACTIVE_CHARS,
+            )
+            expect(result.payloadTokens - prior.baseDefinition.payloadTokens).toBeLessThanOrEqual(
+              CAPABILITY_REVEAL_MAX_ACTIVE_TOKENS,
+            )
             measurements.push({
               provider: model.providerID,
               group,

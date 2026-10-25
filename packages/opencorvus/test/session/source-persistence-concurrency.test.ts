@@ -1,4 +1,4 @@
-import { afterAll, describe, expect, test } from "bun:test"
+import { afterAll, describe, expect, spyOn, test } from "bun:test"
 import { Identifier } from "../../src/id/id"
 import { Bus } from "../../src/bus"
 import { Instance } from "../../src/project/instance"
@@ -107,6 +107,15 @@ describe("source commit identity", () => {
     await Instance.provide({ directory: project.path, fn: async () => {
       const scope = await assistant(project.path)
       const observed: { id: string; titles: (string | undefined)[] }[] = []
+      const publications: Bus.Publication[] = []
+      const publish = Bus.publishOwnedInTransaction
+      using publicationObserver = spyOn(Bus, "publishOwnedInTransaction").mockImplementation((definition, properties) => {
+        const publication = publish(definition, properties)
+        if (definition.type === Message.Event.PartUpdated.type && properties.part.messageID === scope.messageID) {
+          publications.push(publication)
+        }
+        return publication
+      })
       const stop = Bus.subscribe(Message.Event.PartUpdated, ({ properties }) => {
         if (properties.part.messageID !== scope.messageID) return
         observed.push({
@@ -116,7 +125,8 @@ describe("source commit identity", () => {
       })
       try {
         const committed = await persistMessageSources({ ...scope, sources: [source("one"), source("two")] })
-        await Database.awaitEffectIdle(10_000)
+        expect(publications).toHaveLength(2)
+        await Promise.all(publications.map((publication) => publication.retry()))
         expect(observed).toEqual(committed.map((part) => ({ id: part.id, titles: ["one", "two"] })))
       } finally { stop() }
     } })

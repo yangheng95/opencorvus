@@ -27,9 +27,11 @@ function store(value: ReturnType<typeof project>) {
 }
 
 function mainFileRows() {
-  const snapshot = path.join(process.env.OPENCORVUS_TEST_PROCESS_ROOT!, `checkpoint-${crypto.randomUUID()}.db`)
-  fs.copyFileSync(Database.Path(), snapshot, fs.constants.COPYFILE_EXCL)
-  const reader = new SQLite(snapshot, { readonly: true })
+  // Read only the main file, so this still proves the checkpoint copied its WAL pages.
+  const snapshot = fs.readFileSync(Database.Path())
+  snapshot[18] = 1
+  snapshot[19] = 1
+  const reader = SQLite.deserialize(snapshot, { readonly: true })
   try {
     const statement = reader.prepare("SELECT id, worktree, generation, sandboxes FROM project ORDER BY id")
     try {
@@ -38,7 +40,6 @@ function mainFileRows() {
     } finally { statement.finalize() }
   } finally {
     reader.close(true)
-    fs.unlinkSync(snapshot)
   }
 }
 

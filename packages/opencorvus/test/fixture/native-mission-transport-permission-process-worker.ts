@@ -7,7 +7,6 @@ import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-bindi
 import { Identifier } from "@/id/id"
 import { ensureMissionSession } from "@/mission/session"
 import { PermissionAuthority } from "@/permission/authority"
-import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { Provider } from "@/provider/provider"
 import { Instance } from "@/project/instance"
 import { declareNativeTaskProcessDeployment } from "@/runtime/task-process-deployment"
@@ -26,6 +25,8 @@ import { installDefaultControlPlaneToolLoaders } from "@/tool/control-plane-tool
 import { persistEstablishedTask } from "./engine-task"
 import { resolveTestCapabilityTools } from "./capability-occurrence"
 import { canonicalJSONValue } from "@/util/canonical-digest"
+import { openMissionThroughRealWake } from "./mission-opened"
+import { SessionPromptState } from "@/session/prompt/state"
 
 type ProcessState = {
   requestID: string
@@ -93,13 +94,19 @@ async function prepare(scenario: ProcessState["scenario"]) {
     directory: projectPath,
     fn: async () => {
       await Config.updateProjectPatch({ permission_mode: "ask" })
-      const config = await Config.get()
       const mission = await ensureMissionSession({
         missionID: "mission-native-transport-permission-process",
         defaultCwd: projectPath,
         productPillar: "work",
         heldExpertSquadIDs: ["base"],
       })
+      await openMissionThroughRealWake({
+        missionID: mission.missionID,
+        sessionID: mission.id,
+        source: "mission.wake",
+        requestID: "native-mission-permission-open",
+      })
+      const config = await Config.get()
       const user = await Session.updateMessage({
         id: Identifier.ascending("message"),
         sessionID: mission.id,
@@ -247,6 +254,9 @@ async function prepare(scenario: ProcessState["scenario"]) {
       }
       const schedulerMessage = tools.scheduler_message
       if (!schedulerMessage?.execute) throw new Error("Native Mission scheduler_message was not materialized.")
+      const owner = SessionPromptState.start(mission.id, projectPath)
+      if (!owner) throw new Error("Native Mission permission fixture requires its real Prompt owner")
+      SessionPromptState.bindMessageOwner(mission.id, assistant.id, owner)
       let resolveAsked!: (request: PermissionAuthority.Request) => void
       const asked = new Promise<PermissionAuthority.Request>((resolve) => (resolveAsked = resolve))
       const stop = Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) => resolveAsked(properties))
@@ -259,7 +269,7 @@ async function prepare(scenario: ProcessState["scenario"]) {
             subject: "Native Mission recovered permission",
             message: "Execute only under the exact approved Provider authority.",
           },
-          { toolCallId: toolCallID, messages: [], abortSignal: new AbortController().signal },
+          { toolCallId: toolCallID, messages: [], abortSignal: owner },
         )
         .catch((error) => error)
       const request = await Promise.race([
@@ -290,6 +300,13 @@ async function resume() {
   LLM.stream = (async () => ({
     stream: (async function* () {
       yield { type: "start" }
+      yield { type: "text-start", id: "settled-reply" }
+      yield {
+        type: "text-delta",
+        id: "settled-reply",
+        text: "The permission continuation has reached its persisted conclusion.",
+      }
+      yield { type: "text-end", id: "settled-reply" }
       yield { type: "finish-step", finishReason: "stop", usage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 } }
       yield { type: "finish", finishReason: "stop", totalUsage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 } }
     })(),
@@ -325,22 +342,14 @@ async function resume() {
   await Instance.provide({
     directory: projectPath,
     fn: async () => {
-      let staleName: string | undefined
-      let staleMessage: string | undefined
-      try {
-        await PermissionAuthority.reply({
-          requestID: state.requestID,
-          decision: "allow_once",
-          actorID: "native-mission-transport-process-test",
-        })
-      } catch (error) {
-        if (!(error instanceof PermissionAuthority.StaleContinuationError)) throw error
-        staleName = error.name
-        staleMessage = error.message
-      }
-      const schedulerEvents = Database.use((db) =>
-        db.select().from(ProtocolEventTable).where(eq(ProtocolEventTable.type, "scheduler.message")).all(),
-      ).filter((event) => (event.payload as { subject?: string }).subject === "Native Mission recovered permission")
+      const continuation = await PermissionAuthority.reply({
+        requestID: state.requestID,
+        decision: "allow_once",
+        actorID: "native-mission-transport-process-test",
+      }).then(
+        () => ({ kind: "completed" as const }),
+        (error: unknown) => ({ kind: "error" as const, error }),
+      )
       const assistant = await MessageStore.get({
         sessionID: state.missionSessionID,
         messageID: state.assistantMessageID,
@@ -349,12 +358,26 @@ async function resume() {
       const staleEvents = (await PermissionAuthority.history()).filter(
         (event) => event.request_id === state.requestID && event.event_type === "stale",
       )
+      const recoveryWakes = (await Session.messages({ sessionID: state.missionSessionID })).filter(
+        (message) =>
+          message.info.role === "user" && message.info.extra?.wake_reason?.source === "mission.process_recovery",
+      )
+      let recovery: { kind: "completed" } | { kind: "error"; error: unknown } = { kind: "completed" }
+      if (continuation.kind === "error") {
+        const recoveryMessageIDs = new Set(recoveryWakes.map((message) => message.info.id))
+        const failed = (await Session.messages({ sessionID: state.missionSessionID })).findLast(
+          (message) =>
+            message.info.role === "assistant" && recoveryMessageIDs.has(message.info.parentID) && message.info.error,
+        )
+        if (failed?.info.role !== "assistant" || !failed.info.error) throw continuation.error
+        recovery = { kind: "error", error: failed.info.error }
+      }
       process.stdout.write(
         `NATIVE_MISSION_PERMISSION_RESULT=${JSON.stringify({
           mode,
-          staleName: staleName ?? null,
-          staleMessage: staleMessage ?? null,
-          schedulerEventCount: schedulerEvents.length,
+          originalError: assistant.info.role === "assistant" ? assistant.info.error?.name : null,
+          recoveryWakeCount: recoveryWakes.length,
+          recovery,
           toolPartStatus: toolPart?.type === "tool" ? toolPart.state.status : null,
           staleEventCount: staleEvents.length,
           staleReasons: staleEvents.map((event) => event.reason),
@@ -368,4 +391,10 @@ if (mode === "prepare") await prepare("plain")
 else if (mode === "prepare-structured-reveal") await prepare("structured-reveal")
 else if (mode === "prepare-old-base") await prepare("old-base")
 else if (mode === "prepare-catalog-v2") await prepare("catalog-v2")
-else await resume()
+else {
+  try {
+    await resume()
+  } finally {
+    await Instance.disposeAll()
+  }
+}

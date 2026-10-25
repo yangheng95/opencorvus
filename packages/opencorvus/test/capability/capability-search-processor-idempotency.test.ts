@@ -165,6 +165,15 @@ describe("capability_search Processor completion ownership", () => {
         const firstParams = { queries: ["webfetch"], exact_refs: [extensionRef], deactivate_refs: [], limit: 5 }
         const callID = "call_processor_reveal_revision_one"
         const states: string[] = []
+        const publications: Bus.Publication[] = []
+        const publish = Bus.publishOwnedInTransaction
+        using publicationObserver = spyOn(Bus, "publishOwnedInTransaction").mockImplementation((definition, properties) => {
+          const publication = publish(definition, properties)
+          if (definition.type === Message.Event.PartUpdated.type && properties.part.type === "tool" && properties.part.callID === callID) {
+            publications.push(publication)
+          }
+          return publication
+        })
         const stop = Bus.subscribe(Message.Event.PartUpdated, (event) => {
           const part = event.properties.part
           if (part.type === "tool" && part.callID === callID) states.push(part.state.status)
@@ -177,6 +186,7 @@ describe("capability_search Processor completion ownership", () => {
           tools: firstResolved.tools,
           calls: [{ callID, params: firstParams }],
         })
+        await Promise.all(publications.map((publication) => publication.retry()))
         expect(states).toEqual(["running", "completed"])
         await processSearch({
           processor: firstProcessor,
@@ -199,6 +209,7 @@ describe("capability_search Processor completion ownership", () => {
           tools: firstResolved.tools,
           calls: [{ callID, params: firstParams }],
         })
+        await Promise.all(publications.map((publication) => publication.retry()))
         expect(states).toEqual(["running", "completed"])
         stop()
         const parts = (await Session.messages({ sessionID: session.id })).flatMap((message) => message.parts)

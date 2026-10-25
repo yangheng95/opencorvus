@@ -32,8 +32,10 @@ const missionRoutineNames = [
   "apply_patch",
   "bash",
   "capability_search",
+  "create_continuous_goal",
   "edit",
   "external_code_search",
+  "get_continuous_goal",
   "glob",
   "memory",
   "mission_skill",
@@ -61,6 +63,7 @@ const missionRoutineNames = [
   "search_code",
   "skill_market",
   "todo",
+  "update_continuous_goal",
   "wait",
   "webfetch",
   "websearch",
@@ -184,7 +187,7 @@ async function runPermissionProcessWorker(
     new Response(child.stderr).text(),
   ])
   if (exitCode !== 0) {
-    throw new Error(`Native Mission permission worker ${mode} failed (${exitCode}): ${stderr || stdout}`)
+    throw new Error(`Native Mission permission worker ${mode} failed (${exitCode}): ${stderr}\n${stdout}`)
   }
   return stdout
 }
@@ -194,9 +197,9 @@ function processWorkerResult(output: string) {
   if (!line) throw new Error(`Native Mission permission worker returned no result: ${output}`)
   return JSON.parse(line.slice("NATIVE_MISSION_PERMISSION_RESULT=".length)) as {
     mode: string
-    staleName: string | null
-    staleMessage: string | null
-    schedulerEventCount: number
+    originalError: string | null
+    recoveryWakeCount: number
+    recovery: { kind: "completed" } | { kind: "error"; error: unknown }
     toolPartStatus: string | null
     staleEventCount: number
     staleReasons: Array<string | null>
@@ -825,83 +828,83 @@ describe("native Mission transport base", () => {
     expect(document.files).toEqual([{ file: "frontier.md", content: `complete ${winner} generation` }])
   }, 120_000)
 
-  test("recovers the exact approved scheduler transport authority after process death", async () => {
+  test("settles an approved scheduler invocation through Mission process recovery", async () => {
     await using project = await memoryProject()
     const statePath = path.join(project.path, "native-mission-permission-same.json")
     await runPermissionProcessWorker("prepare", project.path, statePath)
     const result = processWorkerResult(await runPermissionProcessWorker("resume-same", project.path, statePath))
     expect(result).toEqual({
       mode: "resume-same",
-      staleName: null,
-      staleMessage: null,
-      schedulerEventCount: 1,
-      toolPartStatus: "completed",
+      originalError: "ProcessExecutionInterruptedError",
+      recoveryWakeCount: 1,
+      recovery: { kind: "completed" },
+      toolPartStatus: "error",
       staleEventCount: 1,
-      staleReasons: [expect.any(String)],
+      staleReasons: ["The continuation reached its persisted conclusion"],
     })
   }, 120_000)
 
-  test("retires a drifted approved scheduler transport authority without an external effect", async () => {
+  test("settles an interrupted invocation after its scheduler definition changes", async () => {
     await using project = await memoryProject()
     const statePath = path.join(project.path, "native-mission-permission-drift.json")
     await runPermissionProcessWorker("prepare", project.path, statePath)
     const result = processWorkerResult(await runPermissionProcessWorker("resume-drift", project.path, statePath))
     expect(result).toEqual({
       mode: "resume-drift",
-      staleName: "StaleContinuationError",
-      staleMessage: expect.any(String),
-      schedulerEventCount: 0,
+      originalError: "ProcessExecutionInterruptedError",
+      recoveryWakeCount: 1,
+      recovery: { kind: "completed" },
       toolPartStatus: "error",
       staleEventCount: 1,
-      staleReasons: [expect.any(String)],
+      staleReasons: ["The continuation reached its persisted conclusion"],
     })
   }, 120_000)
 
-  test("recovers the exact StructuredOutput base after reveal and process death", async () => {
+  test("settles the interrupted StructuredOutput occurrence through Mission recovery", async () => {
     await using project = await memoryProject()
     const statePath = path.join(project.path, "native-mission-permission-structured-reveal.json")
     await runPermissionProcessWorker("prepare-structured-reveal", project.path, statePath)
     const result = processWorkerResult(await runPermissionProcessWorker("resume-same", project.path, statePath))
     expect(result).toEqual({
       mode: "resume-same",
-      staleName: null,
-      staleMessage: null,
-      schedulerEventCount: 1,
-      toolPartStatus: "completed",
+      originalError: "ProcessExecutionInterruptedError",
+      recoveryWakeCount: 1,
+      recovery: { kind: "completed" },
+      toolPartStatus: "error",
       staleEventCount: 1,
-      staleReasons: [expect.any(String)],
+      staleReasons: ["The continuation reached its persisted conclusion"],
     })
   }, 120_000)
 
-  test("retires an older input-bound routine base during permission continuation", async () => {
+  test("settles the interrupted occurrence retaining its older routine base", async () => {
     await using project = await memoryProject()
     const statePath = path.join(project.path, "native-mission-permission-old-base.json")
     await runPermissionProcessWorker("prepare-old-base", project.path, statePath)
     const result = processWorkerResult(await runPermissionProcessWorker("resume-same", project.path, statePath))
     expect(result).toEqual({
       mode: "resume-same",
-      staleName: "StaleContinuationError",
-      staleMessage: expect.any(String),
-      schedulerEventCount: 0,
+      originalError: "ProcessExecutionInterruptedError",
+      recoveryWakeCount: 1,
+      recovery: { kind: "completed" },
       toolPartStatus: "error",
       staleEventCount: 1,
-      staleReasons: [expect.any(String)],
+      staleReasons: ["The continuation reached its persisted conclusion"],
     })
   }, 120_000)
 
-  test("retires a version-two Catalog during permission continuation before the external effect", async () => {
+  test("settles the interrupted occurrence retaining its version-two Catalog", async () => {
     await using project = await memoryProject()
     const statePath = path.join(project.path, "native-mission-permission-catalog-v2.json")
     await runPermissionProcessWorker("prepare-catalog-v2", project.path, statePath)
     const result = processWorkerResult(await runPermissionProcessWorker("resume-same", project.path, statePath))
     expect(result).toEqual({
       mode: "resume-same",
-      staleName: "StaleContinuationError",
-      staleMessage: expect.any(String),
-      schedulerEventCount: 0,
+      originalError: "ProcessExecutionInterruptedError",
+      recoveryWakeCount: 1,
+      recovery: { kind: "completed" },
       toolPartStatus: "error",
       staleEventCount: 1,
-      staleReasons: [expect.any(String)],
+      staleReasons: ["The continuation reached its persisted conclusion"],
     })
   }, 120_000)
 
@@ -1028,19 +1031,31 @@ describe("native Mission transport base", () => {
   }, 120_000)
 
   for (const mode of ["resume-missing", "resume-harness-drift"] as const) {
-    test(`retires ${mode} scheduler transport authority without an external effect`, async () => {
+    test(`settles the interrupted ${mode} scheduler occurrence through Mission recovery`, async () => {
       await using project = await memoryProject()
       const statePath = path.join(project.path, `native-mission-permission-${mode}.json`)
       await runPermissionProcessWorker("prepare", project.path, statePath)
       const result = processWorkerResult(await runPermissionProcessWorker(mode, project.path, statePath))
       expect(result).toEqual({
         mode,
-        staleName: "StaleContinuationError",
-        staleMessage: expect.any(String),
-        schedulerEventCount: 0,
+        originalError: "ProcessExecutionInterruptedError",
+        recoveryWakeCount: 1,
+        recovery:
+          mode === "resume-missing"
+            ? {
+                kind: "error",
+                error: {
+                  name: "StaleCatalogOccurrenceError",
+                  data: {
+                    message: "Catalog occurrence materialization scope is stale: tool_registry.scheduler_message.",
+                    mismatches: ["tool_registry.scheduler_message"],
+                  },
+                },
+              }
+            : { kind: "completed" },
         toolPartStatus: "error",
         staleEventCount: 1,
-        staleReasons: [expect.any(String)],
+        staleReasons: ["The continuation reached its persisted conclusion"],
       })
     }, 120_000)
   }

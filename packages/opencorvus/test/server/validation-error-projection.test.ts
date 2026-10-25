@@ -239,7 +239,7 @@ describe("public validation error projection", () => {
             type: "object",
             properties: {
               code: { type: "string" },
-              path: { type: "array", items: { anyOf: [{ type: "string" }, { type: "number" }] } },
+              path: { type: "array", items: { type: ["string", "number"] } },
               message: { type: "string" },
             },
             required: ["message"],

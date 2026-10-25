@@ -18,7 +18,7 @@ import { agentCapabilityGrants, schedulerCapabilityGrants } from "./capability-g
 
 const packageRoot = path.resolve(import.meta.dir, "../../../..", "expert-squads", "builtin", "squad-sdk")
 const schedulerTools = [
-  "dispatch_agent",
+  "dispatch_agents",
   "manage_task",
   "read",
   "expert_squad_author",

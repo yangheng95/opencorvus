@@ -479,7 +479,7 @@ describe("Task-control reconciliation", () => {
               output,
               title: tool,
               metadata: {},
-              time: { start: request.state.time.start, end: Date.now() },
+              time: { start: request.state.time.start, end: Math.max(Date.now(), request.state.time.start + 1) },
             },
           })
           return request.id
@@ -755,7 +755,7 @@ describe("Task-control reconciliation", () => {
                 output: "accepted",
                 title: "Dispatch Agent",
                 metadata: {},
-                time: { end: Date.now() },
+                time: { end: Math.max(Date.now(), requestStartedAt + 1) },
               },
               time_created: Date.now(),
             })
@@ -832,7 +832,7 @@ describe("Task-control reconciliation", () => {
               output: "completed",
               title: tool,
               metadata: {},
-              time: { start: request.state.time.start, end: Date.now() },
+              time: { start: request.state.time.start, end: Math.max(Date.now(), request.state.time.start + 1) },
             },
           })
           return request.id
@@ -1099,7 +1099,7 @@ describe("Task-control reconciliation", () => {
                 output: "decision committed",
                 title: toolName === "no_action" ? "Current Ingress Reconciled" : "Manage Task",
                 metadata: {},
-                time: { start: request.state.time.start, end: Date.now() },
+                time: { start: request.state.time.start, end: Math.max(Date.now(), request.state.time.start + 1) },
               },
             })
             assistant = await Session.updateMessage({
@@ -1275,7 +1275,7 @@ describe("Task-control reconciliation", () => {
                 output: "decision committed",
                 title: "Manage Task",
                 metadata: {},
-                time: { start: request.state.time.start, end: Date.now() },
+                time: { start: request.state.time.start, end: Math.max(Date.now(), request.state.time.start + 1) },
               },
             })
             assistant = await Session.updateMessage({
@@ -1391,7 +1391,7 @@ describe("Task-control reconciliation", () => {
                 output: "recovered decision committed",
                 title: "Manage Task",
                 metadata: {},
-                time: { start: request.state.time.start, end: Date.now() },
+                time: { start: request.state.time.start, end: Math.max(Date.now(), request.state.time.start + 1) },
               },
             })
             assistant = await Session.updateMessage({

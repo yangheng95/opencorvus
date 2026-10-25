@@ -284,7 +284,7 @@ test("an original pending payload keeps its exact bytes when its physical owner 
   const original = await source(value, "orphan-pending", "pending")
   value.db.delete(EngineTaskTable).where(eq(EngineTaskTable.id, original.taskID)).run()
   const before = memory(value)
-  expect(run(value)).toMatchObject({ from: 4, to: 6 })
+  expect(run(value)).toMatchObject({ from: 4, to: current.version })
   expect(memory(value)).toEqual(before)
   expect(receipts(value)).toEqual([
     expect.objectContaining({ occurrence_id: original.occurrenceID, outcome: "succeeded" }),
@@ -328,8 +328,8 @@ for (const state of ["pending", "covered", "unknown", "fresh", "success", "early
     const result = run(value)
     expect({ from: result.from, to: result.to, version: schemaVersion(value.sqlite) }).toEqual({
       from: 4,
-      to: 6,
-      version: 6,
+      to: current.version,
+      version: current.version,
     })
     expect({
       source: value.db.select().from(BusPublicationOutboxTable).all(),
@@ -380,7 +380,7 @@ for (const state of ["pending", "covered", "unknown", "fresh", "success", "early
       })
     }
     const complete = snapshot(value)
-    expect(run(value)).toEqual({ from: 6, to: 6 })
+    expect(run(value)).toEqual({ from: current.version, to: current.version })
     expect(snapshot(value)).toEqual(complete)
     using backup = new SQLite(result.backupPath!, { readonly: true })
     expect(schemaVersion(backup)).toBe(4)
@@ -391,7 +391,7 @@ for (const version of [1, 2, 3, 5])
   test(`v${version} joins the same preserved v6 recovery chain`, async () => {
     using value = fixture(version)
     await source(value, `version-${version}`, "fresh")
-    expect(run(value)).toMatchObject({ from: version, to: 6 })
+    expect(run(value)).toMatchObject({ from: version, to: current.version })
     expect(receipts(value).map((r) => r.outcome)).toEqual(["succeeded"])
     expect(memory(value).map((c) => JSON.parse(c.content).recovery.schemaVersion)).toEqual([6])
   })
@@ -441,7 +441,7 @@ for (const cut of ["inbox", "receipt", "after-prepare"] as const)
     )
     expect({ version: schemaVersion(value.sqlite), data: snapshot(value) }).toEqual({ version: 4, data: before })
     if (cut !== "after-prepare") value.sqlite.exec("DROP TRIGGER recovery_fault")
-    expect(run(value)).toMatchObject({ from: 4, to: 6 })
+    expect(run(value)).toMatchObject({ from: 4, to: current.version })
     expect(receipts(value).map((r) => r.outcome)).toEqual(["succeeded"])
   })
 

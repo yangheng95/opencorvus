@@ -18,7 +18,14 @@ test("Git availability selects the explicit repository error and the ordinary di
   await using repository = await tmpdir({ git: true })
   await using directory = await tmpdir()
   const priorPath = process.env.PATH
-  process.env.PATH = path.join(directory.path, "missing-bin")
+  const bin = path.join(directory.path, "runtime-bin")
+  await fs.mkdir(bin)
+  if (process.platform !== "win32") {
+    const ps = Bun.which("ps")
+    if (!ps) throw new Error("The process identity fixture requires the real ps observer")
+    await fs.symlink(ps, path.join(bin, "ps"))
+  }
+  process.env.PATH = bin
   try {
     const error = await Project.fromDirectory(repository.path).then(
       () => undefined,

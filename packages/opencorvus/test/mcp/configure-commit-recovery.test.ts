@@ -61,36 +61,57 @@ async function processCase() {
   delete env.OPENCORVUS_TEST_HOME
   delete env.OPENCORVUS_TEST_PROCESS_ROOT
   const children: ReturnType<typeof Bun.spawn>[] = []
+  const logs = new Map<ReturnType<typeof Bun.spawn>, { action: string; stdout: string; stderr: string }>()
+  const deadlineMilliseconds = 60_000
   function spawn(action: string, directory = "-") {
+    const stdout = path.join(root, `${children.length}-${action}.stdout.log`)
+    const stderr = path.join(root, `${children.length}-${action}.stderr.log`)
     const child = Bun.spawn(
       [process.execPath, path.join(import.meta.dir, "../fixture/mcp-config-recovery-child.ts"), action, directory],
-      { cwd: path.join(import.meta.dir, "../.."), env, stdout: "pipe", stderr: "pipe" },
+      { cwd: path.join(import.meta.dir, "../.."), env, stdout: Bun.file(stdout), stderr: Bun.file(stderr) },
     )
     children.push(child)
+    logs.set(child, { action, stdout, stderr })
     return child
   }
+  async function diagnostics() {
+    return JSON.stringify(await Promise.all(children.map(async (child) => {
+      const files = logs.get(child)!
+      const tail = async (file: string) => fs.readFile(file, "utf8").then(
+        (text) => text.slice(-8192), (error) => String(error),
+      )
+      return { action: files.action, pid: child.pid, exit: child.exitCode,
+        stdout: await tail(files.stdout), stderr: await tail(files.stderr) }
+    })))
+  }
   async function output(child: ReturnType<typeof spawn>) {
-    const [exit, stdout, stderr] = await Promise.all([
-      child.exited,
-      new Response(child.stdout).text(),
-      new Response(child.stderr).text(),
-    ])
-    return { exit, stderr, result: stdout.trim() ? JSON.parse(stdout.trim().split(/\r?\n/).at(-1)!) : null }
+    const timeout = Promise.withResolvers<"timeout">()
+    const timer = setTimeout(() => timeout.resolve("timeout"), deadlineMilliseconds)
+    const exit = await Promise.race([child.exited, timeout.promise]).finally(() => clearTimeout(timer))
+    if (exit === "timeout") throw new Error(`MCP backend exit timed out: ${await diagnostics()}`)
+    const files = logs.get(child)!
+    const [stdout, stderr] = await Promise.all([fs.readFile(files.stdout, "utf8"), fs.readFile(files.stderr, "utf8")])
+    return { exit, stderr, result: exit === 0 && stdout.trim() ? JSON.parse(stdout.trim().split(/\r?\n/).at(-1)!) : null }
   }
   async function wait(name: string) {
-    for (let i = 0; i < 6000; i++) {
+    const deadline = Date.now() + deadlineMilliseconds
+    while (Date.now() < deadline) {
       try {
         await fs.stat(path.join(root, name))
         return
       } catch {}
+      const failed = children.find((child) => child.exitCode !== null && child.exitCode !== 0)
+      if (failed) {
+        throw new Error(`MCP barrier ${name} lost its backend: ${await diagnostics()}`)
+      }
       await Bun.sleep(10)
     }
-    throw new Error(`owned test barrier timed out: ${name}`)
+    throw new Error(`MCP barrier timed out at ${name}: ${await diagnostics()}`)
   }
-  async function close() {
+  async function close(passed: boolean) {
     for (const child of children) if (child.exitCode === null) child.kill()
     await Promise.all(children.map((child) => child.exited))
-    await removeManagedDirectoryTree(root)
+    if (passed) await removeManagedDirectoryTree(root)
   }
   const setup = await output(spawn("setup"))
   if (setup.exit !== 0) throw new Error(setup.stderr)
@@ -99,6 +120,7 @@ async function processCase() {
 
 test("a successor process promotes the actual stage left after a committed configure exits", async () => {
   const p = await processCase()
+  let passed = false
   try {
     expect((await p.output(p.spawn("exit", p.directory))).exit).toBe(23)
     const reopened = await p.output(p.spawn("inspect", p.directory))
@@ -108,13 +130,15 @@ test("a successor process promotes the actual stage left after a committed confi
       matchesA: reopened.result.matchesA,
       type: reopened.result.definition.credential.type,
     }).toEqual({ exit: 0, available: true, matchesA: true, type: "bearer" })
+    passed = true
   } finally {
-    await p.close()
+    await p.close(passed)
   }
 }, 120000)
 
 test("two warm backend processes preserve each configure's complete credential effect", async () => {
   const p = await processCase()
+  let passed = false
   try {
     const second = p.spawn("b", p.directory)
     await p.wait("b-ready")
@@ -134,7 +158,8 @@ test("two warm backend processes preserve each configure's complete credential e
       matchesB: successor.result.matchesB,
       credential: successor.result.definition.credential,
     }).toEqual({ available: true, matchesB: true, credential: { type: "header", name: "X-Audit-Only" } })
+    passed = true
   } finally {
-    await p.close()
+    await p.close(passed)
   }
 }, 120000)
