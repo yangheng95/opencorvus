@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
+import os from "node:os"
 import { RELEASE_BUDGET_MINUTES } from "./release-automation"
 
 type WorkflowStep = {
@@ -47,6 +48,59 @@ async function readWorkflow(file: string): Promise<Workflow> {
 }
 
 describe("GitHub Actions workflow contract", () => {
+  test("passes every packaged profile and bundle to the qualification checker", async () => {
+    const workflow = await readWorkflow("build.yml")
+    const run = workflow.jobs?.["package-cli"]?.steps?.find(
+      ({ name }) => name === "Verify packaged Work Artifact lifecycle",
+    )?.run
+    if (!run) throw new Error("Packaged Work Artifact qualification step is missing")
+    const temporary = path.resolve(os.tmpdir())
+    const root = await fs.mkdtemp(path.join(temporary, "opencorvus-workflow-profiles-"))
+    const bundles = ["opencorvus-linux-x64", "opencorvus-linux-x64-baseline"]
+    const profiles = ["office.presentation@1", "office.document@1", "office.spreadsheet@1"]
+    try {
+      for (const bundle of bundles) await fs.mkdir(path.join(root, "packages/opencorvus/dist", bundle), { recursive: true })
+      const capture = String.raw`bun() {
+        printf '%s\0' "$@" >> "$OPENCORVUS_WORKFLOW_CALLS"
+        printf '%s\n' '{"workflow_fixture":true}'
+      }`
+      const bash = process.platform === "win32" ? "C:/Program Files/Git/usr/bin/bash.exe" : "bash"
+      const result = Bun.spawnSync([bash, "-e", "-o", "pipefail", "-c",
+        `${capture}\n${run.replaceAll("${{ matrix.platform }}", "linux-x64")}`,
+      ], {
+        cwd: root,
+        env: {
+          ...process.env,
+          PATH: process.platform === "win32"
+            ? `${path.dirname(bash)}${path.delimiter}${process.env.PATH ?? ""}`
+            : process.env.PATH,
+          OPENCORVUS_WORKFLOW_CALLS: "calls.bin",
+          GITHUB_STEP_SUMMARY: "summary.md",
+        },
+        stdout: "pipe",
+        stderr: "pipe",
+      })
+      expect({ exit: result.exitCode, stderr: result.stderr.toString() }).toEqual({ exit: 0, stderr: "" })
+      const args = (await fs.readFile(path.join(root, "calls.bin"), "utf8")).split("\0").slice(0, -1)
+      expect(args).toHaveLength(bundles.length * profiles.length * 5)
+      const calls = Array.from({ length: args.length / 5 }, (_, index) => args.slice(index * 5, index * 5 + 5))
+      expect(calls).toEqual(bundles.flatMap((bundle) => profiles.map((profile) => [
+        "packages/opencorvus/script/check-work-artifact-profile.ts", "--profile", profile,
+        "--package-root", `packages/opencorvus/dist/${bundle}`,
+      ])))
+      const evidence = await Promise.all(bundles.flatMap((bundle) => profiles.map(async (profile) =>
+        JSON.parse(await fs.readFile(path.join(root, "packages/opencorvus/dist",
+          `work-artifact-qualification-${bundle}-${profile}.json`), "utf8")),
+      )))
+      expect(evidence).toEqual(Array.from({ length: 6 }, () => ({ workflow_fixture: true })))
+    } finally {
+      if (path.dirname(root) !== temporary || !path.basename(root).startsWith("opencorvus-workflow-profiles-")) {
+        throw new Error(`Unexpected workflow fixture root: ${root}`)
+      }
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
+
   for (const { name, input, files } of [
     { name: "an empty selection", input: "", files: [] },
     { name: "blank LF and CRLF lines", input: "\r\n\n\r\n", files: [] },
@@ -626,7 +680,10 @@ describe("GitHub Actions workflow contract", () => {
       ({ name }) => name === "Verify packaged Work Artifact lifecycle",
     )
     expect(workArtifactQualification?.run).toContain("bun packages/opencorvus/script/check-work-artifact-profile.ts \\")
-    expect(workArtifactQualification?.run).toContain("--profile office.presentation@1 \\")
+    expect(workArtifactQualification?.run).toContain(
+      "for profile in office.presentation@1 office.document@1 office.spreadsheet@1; do",
+    )
+    expect(workArtifactQualification?.run).toContain('--profile "$profile" \\')
     expect(workArtifactQualification?.run).toContain('--package-root "$bundle" | tee "$evidence"')
     expect(workArtifactQualification?.run).toContain('test "$verified" -gt 0')
     for (const job of ["package-cli"]) {
