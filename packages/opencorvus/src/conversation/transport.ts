@@ -67,12 +67,13 @@ function observedFileChanges(part: Message.ToolPart): ConversationToolFileChange
   const metadata = part.state.metadata
   if (part.tool === "write") {
     const change = conversationAttachmentWriteChange(metadata)
-    return change ? [change] : undefined
+    if (change) return [change]
   }
+  const comparisonTool = part.tool === "edit" || part.tool === "write"
   const rows =
     part.tool === "apply_patch" && Array.isArray(metadata.files)
       ? metadata.files
-      : part.tool === "edit" && metadata.filediff
+      : comparisonTool && metadata.filediff
         ? [metadata.filediff]
         : undefined
   if (!rows?.length) return undefined
@@ -80,7 +81,7 @@ function observedFileChanges(part: Message.ToolPart): ConversationToolFileChange
   for (const [fileIndex, raw] of rows.entries()) {
     if (!raw || typeof raw !== "object" || Array.isArray(raw)) return undefined
     const row = raw as Record<string, unknown>
-    const filePath = part.tool === "edit" ? row.file : row.filePath
+    const filePath = comparisonTool ? row.file : row.filePath
     if (
       typeof filePath !== "string" ||
       !filePath.trim() ||
@@ -90,16 +91,17 @@ function observedFileChanges(part: Message.ToolPart): ConversationToolFileChange
       (row.movePath !== undefined && (typeof row.movePath !== "string" || !row.movePath.trim()))
     )
       return undefined
-    const status =
-      part.tool === "edit"
-        ? undefined
-        : row.type === "add"
-          ? ("added" as const)
-          : row.type === "delete"
-            ? ("deleted" as const)
-            : row.type === "update" || row.type === "move"
-              ? ("modified" as const)
-              : undefined
+    const status = comparisonTool
+      ? row.status === "added" || row.status === "deleted" || row.status === "modified"
+        ? row.status
+        : undefined
+      : row.type === "add"
+        ? ("added" as const)
+        : row.type === "delete"
+          ? ("deleted" as const)
+          : row.type === "update" || row.type === "move"
+            ? ("modified" as const)
+            : undefined
     changes.push({
       fileIndex,
       filePath,

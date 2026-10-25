@@ -649,6 +649,10 @@ work_artifact_deliver` typed tools，不拥有第二套 serializer。profile reg
   需要保存到项目目录时，现有通用 `write` 接受与文本 `content` 互斥的 `attachmentUrl`，
   通过当前执行 Project 的 verified AttachmentStore 快照取得精确字节，沿用相同路径授权、
   Task 文件绑定和编辑事件。附件保存只创建新目标；既有或并发创建的目标返回 `FileConflictError`。
+  通用write的文本分支在现有FileTime文件锁内完成实际before/write/read-back after和事件，
+  并返回同一filediff比较合同；等待锁后取消的调用先返回真实AbortError。FileTime读取记录与
+  锁键复用Filesystem.normalizeForCompare及normalizePath，Windows大小写别名共享同一身份，
+  不修改用户实际文件名。该锁仍按当前Project Instance隔离，不声明约束外部文件写入器。
   Office runtime 边界以有界 `WorkArtifactRuntimeError` 保留真实退出码、标准输出、标准错误和
   原始 cause；JSON 明确失败也进入同一错误合同，不丢弃原生诊断。
   该渲染要求现有 Browser Runtime 可用的 Chrome/Edge 与随包 Node/Playwright，不承诺

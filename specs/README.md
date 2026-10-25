@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [通用文本写入差异](records/2026-10/2026-10-25-text-write-comparison.md)：600真实文本端点、差异状态及Windows路径身份。
+
 - [附件保存的文件变更投影](records/2026-10/2026-10-25-attachment-file-change-projection.md)：599摘要、完整及延迟Tool的原文件新建事实。
 
 - [Office保存与源文件交付](records/2026-10/2026-10-25-office-save-export.md)：598通用附件保存、真实源下载与紧凑PDF。

@@ -66,3 +66,57 @@ test("history, updated and moved transport projections retain the same created a
     )
   }
 })
+
+test("text write comparisons retain actual added and modified status through all bounded transport views", () => {
+  for (const status of ["added", "modified"] as const) {
+    const before = status === "added" ? "" : "Original text\n",
+      after = "Actual text\n".repeat(500)
+    const part = Message.VisiblePart.parse({
+      id: "prt_text_write_" + status,
+      sessionID: "ses_text_write",
+      messageID: "msg_text_write_" + status,
+      type: "tool",
+      orderKey: "text-write-" + status,
+      tool: "write",
+      callID: "call_text_write_" + status,
+      state: {
+        status: "completed",
+        input: { filePath: "C:/owned-project/实际正文.txt", content: after },
+        output: "Wrote file successfully.",
+        title: "实际正文.txt",
+        metadata: {
+          filepath: "C:/owned-project/实际正文.txt",
+          exists: status === "modified",
+          filediff: {
+            file: "C:/owned-project/实际正文.txt",
+            before,
+            after,
+            status,
+            additions: 500,
+            deletions: status === "added" ? 0 : 1,
+          },
+        },
+        time: { start: 10, end: 20 },
+      },
+    })
+    const projections = [
+      projectConversationTransportPart(part),
+      (projectConversationTransportEventPayload(Message.Event.PartUpdated.type, { part }) as any).part,
+      (projectConversationTransportEventPayload(Message.Event.Moved.type, { parts: [part] }) as any).parts[0],
+    ] as Message.ToolPart[]
+    for (const projected of projections) {
+      expect(conversationToolFileChanges(projected.state.metadata)).toEqual([
+        {
+          fileIndex: 0,
+          filePath: "C:/owned-project/实际正文.txt",
+          status,
+          additions: 500,
+          deletions: status === "added" ? 0 : 1,
+        },
+      ])
+      expect(Buffer.byteLength(JSON.stringify(projected.state))).toBeLessThanOrEqual(
+        CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES,
+      )
+    }
+  }
+})

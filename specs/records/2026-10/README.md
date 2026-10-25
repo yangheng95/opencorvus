@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [通用文本写入差异](2026-10-25-text-write-comparison.md)：600真实write新建/覆写端点及别名锁复核。
+
 - [附件保存的文件变更投影](2026-10-25-attachment-file-change-projection.md)：599真实保存文件在完整/延迟Tool摘要中的投影。
 
 - [Office保存与源文件交付](2026-10-25-office-save-export.md)：598二进制保存、下载投影和PDF页边界。

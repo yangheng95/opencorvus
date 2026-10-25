@@ -1,0 +1,161 @@
+{
+  "scope": 600,
+  "model": "gpt-6.1-sol",
+  "entry": "main-BXg7TeEn.js",
+  "session": "ses_-zUQxA1lPzzUZFA4CCxZ",
+  "saved": {
+    "file": "交付/验收说明.txt",
+    "bytes": 127,
+    "actualWriteTool": "write",
+    "before": "",
+    "after": "交付验收说明\n周报和工时汇总已保存为原始Office文件。\n计划36小时，实际25小时，偏差-11小时。\n",
+    "status": "added",
+    "additions": 3,
+    "deletions": 0,
+    "readBack": {
+      "tool": "read",
+      "outcome": "completed",
+      "totalLines": 3
+    }
+  },
+  "originalFiles": [
+    {
+      "file": "交付/周报.md",
+      "bytes": 1581,
+      "exactOriginalText": true
+    },
+    {
+      "file": "交付/工时汇总.csv",
+      "bytes": 196,
+      "exactOriginalText": true
+    },
+    {
+      "file": "交付/周报.docx",
+      "bytes": 6414,
+      "exactCanonicalBytes": true
+    },
+    {
+      "file": "交付/工时汇总.xlsx",
+      "bytes": 4853,
+      "exactCanonicalBytes": true
+    }
+  ],
+  "database": {
+    "schema": 8,
+    "integrity": "ok",
+    "retained": {
+      "message": {
+        "originalRows": 96,
+        "exactOriginalRows": true
+      },
+      "part": {
+        "originalRows": 230,
+        "exactOriginalRows": true
+      },
+      "tool_part_request": {
+        "originalRows": 68,
+        "exactOriginalRows": true
+      },
+      "tool_part_outcome": {
+        "originalRows": 68,
+        "exactOriginalRows": true
+      },
+      "interactive_artifact": {
+        "originalRows": 3,
+        "exactOriginalRows": true
+      },
+      "engine_task": {
+        "rows": 0,
+        "exactFacts": true
+      },
+      "engine_task_root_ingress": {
+        "rows": 0,
+        "exactFacts": true
+      },
+      "task_plan": {
+        "rows": 0,
+        "exactFacts": true
+      }
+    }
+  },
+  "originalUpstreamFailures": [
+    {
+      "messageID": "msg_g0VZ4EDr100GEM3M145w",
+      "name": "UnknownError",
+      "message": "AI_StreamProviderError: Our servers are currently overloaded. Please try again later."
+    }
+  ],
+  "actualFinal": {
+    "finish": "stop",
+    "completedAt": 1792934712994
+  },
+  "actualTools": [
+    {
+      "tool": "read",
+      "outcome": "completed"
+    },
+    {
+      "tool": "write",
+      "outcome": "completed"
+    },
+    {
+      "tool": "read",
+      "outcome": "completed"
+    }
+  ],
+  "contracts": {
+    "tests": 34,
+    "assertions": 110,
+    "result": {
+      "label": "contracts-text-current",
+      "startedAt": 1792934357108,
+      "closedAt": 1792934380797,
+      "code": 0,
+      "signal": null,
+      "childPID": 92000
+    },
+    "windowsBefore": {
+      "tests": 12,
+      "passed": 11,
+      "failed": 1,
+      "actualFailure": "Both casing aliases reported added, second read-back could observe first writer bytes",
+      "retainedOriginalRun": {
+        "label": "contracts-windows-alias-before",
+        "startedAt": 1792933843990,
+        "closedAt": 1792933866975,
+        "code": 1,
+        "signal": null,
+        "childPID": 66284
+      }
+    }
+  },
+  "manualUi": {
+    "summaryFiles": 5,
+    "newTextRow": "+3/-0",
+    "review": "Added and complete three-line actual body; existing binary and text rows retained"
+  },
+  "lifecycle": {
+    "at": "2026-10-25T13:28:07.474Z",
+    "authRetired": 1,
+    "catalogRetired": 1,
+    "authCopied": true,
+    "modelRequests": 9,
+    "model": "gpt-6.1-sol",
+    "streaming200OriginalReaderEOF": 9,
+    "sourceCatalog": {
+      "bytes": 9155406,
+      "modifiedAtMs": 1791128890137.9968,
+      "content": "Exact original"
+    },
+    "publicShutdown": 200,
+    "reserveMs": 533287,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "exactProcessChain": "dead_or_reused"
+  },
+  "cumulativeModelRequests": 111,
+  "unusedRequestsRetired": 3
+}

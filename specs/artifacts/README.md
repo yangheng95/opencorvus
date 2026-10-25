@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [通用文本写入差异](2026-10-25-text-write-comparison/README.md)：600实际Sol文本保存、摘要和Review证据。
+
 - [附件保存的文件变更投影](2026-10-25-attachment-file-change-projection/README.md)：599实际文件摘要与Review人工复核。
 
 - [Office保存与源文件交付](2026-10-25-office-save-export/README.md)：598真实项目保存、原文件下载及PDF复核。

@@ -6,38 +6,43 @@ import { Filesystem } from "../util/filesystem"
 
 export namespace FileTime {
   const log = Log.create({ service: "file.time" })
+  function fileKey(file: string) {
+    return Filesystem.normalizeForCompare(Filesystem.normalizePath(file))
+  }
   // Per-session read times plus per-file write locks.
   // All tools that overwrite existing files should run their
   // assert/read/write/update sequence inside withLock(filepath, ...)
   // so concurrent writes to the same file are serialized.
-  export const state = createInstanceState(() => {
-    const read: {
-      [sessionID: string]: {
-        [path: string]: Date | undefined
+  export const state = createInstanceState(
+    () => {
+      const read: {
+        [sessionID: string]: {
+          [path: string]: Date | undefined
+        }
+      } = {}
+      const locks = new Map<string, Promise<void>>()
+      return {
+        read,
+        locks,
       }
-    } = {}
-    const locks = new Map<string, Promise<void>>()
-    return {
-      read,
-      locks,
-    }
-  }, undefined, "file-time")
+    },
+    undefined,
+    "file-time",
+  )
 
   export function read(sessionID: string, file: string) {
-    file = Filesystem.normalizePath(file)
     log.info("read", { sessionID, file })
     const { read } = state()
     read[sessionID] = read[sessionID] || {}
-    read[sessionID][file] = new Date()
+    read[sessionID][fileKey(file)] = new Date()
   }
 
   export function get(sessionID: string, file: string) {
-    file = Filesystem.normalizePath(file)
-    return state().read[sessionID]?.[file]
+    return state().read[sessionID]?.[fileKey(file)]
   }
 
   export async function withLock<T>(filepath: string, fn: () => Promise<T>): Promise<T> {
-    filepath = Filesystem.normalizePath(filepath)
+    filepath = fileKey(filepath)
     const current = state()
     const currentLock = current.locks.get(filepath) ?? Promise.resolve()
     let release: () => void = () => {}

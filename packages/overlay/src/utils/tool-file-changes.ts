@@ -45,7 +45,9 @@ function comparison(
           : raw.type === "update" || raw.type === "move"
             ? "modified"
             : undefined
-      : undefined
+      : raw.status === "added" || raw.status === "deleted" || raw.status === "modified"
+        ? raw.status
+        : undefined
   const change: ToolFileChange = {
     ...identity(source, target, base),
     status,

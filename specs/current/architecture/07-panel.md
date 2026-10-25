@@ -1558,6 +1558,11 @@ canonical source identity and byte count; full and deferred Tool views consume
 that one projection. These opaque-byte observations retain Added status and
 explicit non-text comparisons with null line counts. They never synthesize text
 endpoints or zero-line diffs, and historical Tool facts need no rewriting.
+Text `write` returns the existing `filediff` contract from its actual before and
+read-back after content, with explicit Added or Modified status. Full and bounded
+Tool projections retain that same status and observation; ordinary `edit` keeps
+its own declared status semantics. Original results without recorded endpoints
+are not reconstructed from request text or current filesystem contents.
 
 Conversation artifact text and each immutable diff side use one fatal streaming
 UTF-8 decoder for the complete logical read, including its final flush. Literal
