@@ -130,7 +130,7 @@ function boundedToolMetadata(part: Message.ToolPart): Record<string, unknown> {
   )
   const retained = boundedRecord(source, {
     maxBytes: Object.keys(projected).length ? Math.max(0, remainingBytes + 1) : 1024,
-    keys: ["readType", "offset", "lines", "totalLines", "source", "title", "status", "browser", "computer"],
+    keys: ["exit", "readType", "offset", "lines", "totalLines", "source", "title", "status", "browser", "computer"],
   })
   return { ...retained, ...projected }
 }

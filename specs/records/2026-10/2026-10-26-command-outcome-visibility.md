@@ -1,0 +1,91 @@
+# 命令真实结果与执行收尾
+
+## Recall
+
+用户要求只由一个agent持续自主体验整个产品、修复真实UI（User Interface，用户界面）/UX（User Experience，用户体验）及功能问题并验证、提交、推送；Rendering闪烁已经关闭，不再作为主线。保留/goal与加号既定入口，不操作用户18571或用户数据库，不委托、不建额外branch/worktree。外部CI任务的Config/权限/持久发布八文件及视频/旧截图清理保留，只在真实冲突时等待。
+
+前批bd3f1bf944876986384ccf50be1400c1e3783457已提交并正常push退出0，随后fresh fetch/merge到已授权同行提交4ee5056730fdef631e058a9a90017a9838140a07，HEAD/upstream差异0/0。两份工具定义冲突修正、真实606/607ZIP上传到下载及7项后端合同已验证。607共12个实际gpt-6.1-sol流式200/EOF settled请求，累计142；54119原exec99689/native/launcher均0、提前1025426ms关闭、自有291标签关闭、auth/models副本退休。
+
+恢复工作先读本Recall并核对本文最终验收：608–614全部自有服务和292–296自建标签已关闭，全部配对凭据/目录副本退休。最终614有6个实际Sol流式请求，累计160；原exec35562/native/launcher均0，public shutdown 200、提前938718ms关闭。14项聚焦后端测试/64断言、后端类型检查通过；最终UI未变，沿用610普通Node构建main-aiwHubjd.js及实际双语截图。待交付仅整理证据、文档检查、精确提交和正常fetch/merge/push；不得重启已关闭验收或重新复制凭据。
+
+已读：当前07-panel真实工具结果/独立错误计数合同、CardParts的ExecutionEventRun/ExecutionToolIdentity、InlineToolPart结果正文、utils/tool的normalizeToolStatus/describeToolCall/describeToolPart/displayToolDetail、dialog的renderSessionToolChip、BashTool实际foreground/background元数据生产、read/write真实607消息及原始退出结果。全仓搜索statusLabel、describeToolPart、data-status、exit/exitCode与工具定义消费者；检索到的overlay组件/utils路径没有现存UI自动化测试。605/606后端验证及原页面证明非零退出和工具执行完成可以同时为真，不能将completed改写成error。
+
+## 修改前问题与影响分析
+
+可观察线索：606/607自然执行中Python真实UnicodeEncodeError、metadata.exit=1，同时Tool.state.status=completed；原命令和stdout/metadata完整保留，但当前describeToolCall只用state.status，CardParts单条与整个run均用completed勾；较早非零退出也不参与run摘要。直接触发是用户折叠查看或只看运行结果标记，得到工具完成标记却看不到命令退出结果。需在新隔离真实页面上展开此历史取得基线截图后再修改。
+
+控制/数据根因：Bash的completed表示工具已经返回执行结果，进程退出码在唯一真实metadata.exit字段。UI未投影这一字段，混淆了两层含义。旧603修复typed工具异常原因，607修复能力文案，均未触及completed命令的进程结果，因此不能声称此前修复已覆盖它。非零退出也可能是grep等程序的正常业务语义，不能合成工具异常、关键词分类、修改持久消息或擅自给Task/Session判失败。
+
+范围：只从当前Bash工具已完成结果的整数exit推导显示（0同样明确，null/未知不伪造），在共享ToolDisplayModel提供事实，身份/会话chip/当前活动说明/Inline正文与主/成员共用CardParts保持一致；run对每个真实非零Bash单独计数，后续read成功仍保留该事实。原输入/输出/metadata/失败诊断/取消/运行中/后台未退出状态沿用。具体样式只用现有caption/颜色primitive，不额外造状态仓库或另一套解析。接口、数据库、模型请求、调度队列/恢复/终态收敛均不变；本轮没有观察到这些共享机制异常，若出现须立即横向审计。
+
+公共契约/测试/交付：属于UI显示修改，无新SDK（Software Development Kit，软件开发工具包）或后端契约；禁止新增/运行任何UI自动化、快照、源码字符串断言。当前中英两语言全部新文案接入现有i18n（Internationalization，国际化），原模型/命令/错误保留事实原文。类型/Node普通构建/文档检查仅作辅助，必须在真实开发CLI的/ui对原历史零/非零退出、分组展开/折叠和语言切换截图人工复核。真实历史用自有已关闭607数据库的只读备份，核对所有持久业务行不被改写，不合成消息。无auth、无新增模型请求；累计仍142。
+
+## 方案与验收
+
+1. 新自有608运行目录/54120，使用实际607数据库只读备份，保留实际项目/原消息；冻结当前UI取得命令与组的基线图，明确真实exit=1/0对应的原Tool身份。
+2. 根据基线修正唯一共享投影及必要显示，精确展示退出码和非零run计数，保持status=completed；更新07-panel，聚焦typecheck、普通Node构建、双语检查。
+3. 关闭基线原进程；新609运行/54121加载新的冻结UI，同份真实历史手动展开/折叠、检查此前非零和后续零退出、切换中英并截图。不得通过重新执行模型命令或修改历史制造证据。
+4. 每次20分钟物理边界，启动后十分钟目标公开关闭，至少五分钟结算；原exec/native/launcher/physical/output/request均settled后才整理。无用户进程操作、无凭据副本。
+5. 验证备份原身份与受保护业务行，更新三索引、docs:check，范围清晰提交；fresh fetch/merge审查全部待推集合后正常push，正常hook失败则修根因。
+
+## 基线事实与具体实现决策
+
+608从已关闭607只读backup复制92表3093行，逐行相同；未复制auth。真实54120开发页面打开ses_-zUQuTYDTzzsIOouFKQL，展开apply_patch所在run后实际看到失败Python命令行仍为完成勾，正文保留完整UnicodeEncodeError，没有显式退出码；两张截图分别记录命令头与完整错误，已人工复核。模型未配置提示为无凭据隔离环境预期，未点击重试或发送。自建292标签关闭，公开shutdown200，原exec55189/native/launcher均0、物理/输出/请求已settled，先收尾再实现。
+
+实现只识别当前Bash生产者的completed+整数metadata.exit，不猜测其它工具的同名字段或扫描stdout。ToolDisplayModel增加可选commandExitCode；共享detail/状态文案优先呈现实际退出码且保留原命令，Inline正文的命令继续直接取原input，避免将显示标签当命令。CardParts为同run独立计数nonzero退出，存在该事实时展示警示而非全勾；展开每条退出码在固定状态区域可见。0亦显示明确退出码；运行中、后台exit=null及未知值保持原呈现。现有--warn与caption样式足够，不为非零退出创建失败原因或改变原status。共同消费者包含Main/member CardParts、Inline、session chip、当前活动说明；Main真实历史/双语视觉验证，共享member仅代码审查，不能伪称新子会话验收。
+
+609首次实际查看暴露验收复制遗漏：AttachmentStore.storageDir按真实数据库路径划分独立命名空间，只复制SQLite（关系数据库引擎）行而未复制原件/sidecar时，用户附件卡正确返回404。此为更换数据库位置的隔离夹具资源不完整，非用户服务丢数据，也非待修显示代码导致。按当前唯一storageDir合同将已关闭607自有命名空间的原件及metadata成对、逐字节复制到609独立命名空间，保留原文件与原数据库；再验证真实HTTP 200/259字节后，仅重新加载自建293页面清除原失败边界并重新截图。608目标命令基线仍是真实原状态，但不能把其未复制附件的整页宣称完整资格。
+
+609首轮实图确认折叠警示可读，展开行出现同一退出码左右重复，已按视觉结果精简为右侧固定状态区显示；共享view model额外提供从同一input派生的原命令，非新事实源。summary无障碍名称同时纳入全部现有run计数，避免aria-label遮蔽可见非零提示；英文计数改为Nonzero exits: n，避免单复数错误。原609已公开关闭、原exec36645/native/launcher均0、物理/输出/请求结清后再改。
+
+继续审查大结果路径发现需一并修复的实际影响：conversation/transport.ts的boundedToolMetadata在完整metadata超过1024字节时，仅按优先键保留小事实，其列表没有exit。Bash完整metadata同时含output，故长输出会丢失折叠首屏所需的真实退出码；Inline展开虽能读完整原Part，run汇总仍消费有界投影。全部历史Message、PartUpdated及Moved生产入口均经该唯一投影。将exit列为小事实的首优先键，保留0/非零/null原值，不改原Part或deferred大正文合同，不新增协议或SDK；这是传输投影而非调度/终态异常。
+
+该后端改动先增加独立正向合同测试：足够大的真实形状Bash状态分别带exit=0/1/7/null，经历史/更新/移动投影后输出明确metadata.exit、原status与有限字节；先复现旧代码失败再修复。测试仅证明后端投影局部合同，不冒充网页。最终新610运行54122加载修正冻结UI，并复用原606/607已验证Provider审计，成对复制auth/models、真实预检，累计起点142，最多12实际请求均gpt-6.1-sol流式。除核对原历史中英零/非零显示，再从真实UI要求一次长输出后以7退出的诊断并说明结果，检查实际持久Bash事实、真实有界HTTP及折叠/展开截图；不合成模型或工具消息。新请求按实计数，先关闭结清退休，再整理。610目标十分钟内公开关闭；超出原无新增调用计划的原因是验证此次发现的大结果传输根因。
+
+## 610真实结果与模型可见事实缺口
+
+4项退出码投影测试旧代码全部失败，修复exit优先保留后4项/28断言通过。最终UI入口main-aiwHubjd.js，overlay typecheck、普通Node构建及双语2545键检查通过；中英折叠/展开0/1实际截图已人工查看，非零计数无障碍名称与可见结果一致。新真实诊断由UI自然发起，Bash实际输出800行（从1到800运行诊断）、14292字节、metadata.exit=7，原状态32495字节；真实/session/:id/conversation输出575字节deferred状态仍保留exit=7，展开读取完整正文成功。
+
+但真实最终模型回答“工具返回结果未显式展示退出码字段，因此无法独立确认实际退出码”。这不是模型自述直接当根因：已核对BashTool前台正常路径只返回stdout正文，将exit放在UI用metadata；Session.message.toolResultToModelOutput对实时结果/回放均只发送output/text和附件，不发送metadata。实际正文确实只有800行，模型得不到已观测退出结果。手工SessionShell是另一个真实Bash生产入口，等待supervisor.exited时还丢弃了返回码，持久结果也未提供exit。注册工具与CLI/bash、browser_preview（复用Bash的后台分支）、SessionShell及默认tail截断路径均已全仓核对。
+
+610已先收尾：5个实际请求全部精确Sol/流式200/EOF settled，累计147，剩余7额度退休；54122公开关闭200，原exec73466/native/launcher均0、physical/output/request结清，提前837595ms，自有294标签关闭，auth/models副本退休。三个副本均验证原607数据库92表3093行保持，原8个受保护事实表79行保持，610只追加本轮真实预检与诊断历史，未修改原消息。最初私有数据比较因SQLite null-prototype行对象与JSON普通对象原型差异报错，已修正为比较相同列值并重跑全部原验收；不是数据变异。
+
+进一步修复：以实际工具结果的既有bash_metadata尾块提供真实exit code，0/非零/null均真实表达；Bash与SessionShell使用同一小型结果正文函数，stdout和既有生命周期/超时/取消说明保留。选择尾块因为现行Truncate.output默认保留tail，大输出仍能把退出结果发送给模型；不新增UI/模型双路消息，也不在Provider边界合成第二套输出。手工SessionShell只捕获既有await的真实返回码，控制租约、取消、恢复与终态选择不变；没有观察到这些共享机制异常。
+
+新增聚焦后端正向检查覆盖真实Bash进程0/7、真实SessionShell进程/持久结果、同一结果进入模型转换及大输出截断后退出信息/完整结果可读。Provider目录元数据可在局部测试用固定声明，实际进程不mock；该局部测试不能代替真实网络。新611隔离开发服务54123复用最终未变UI与完整原历史/原件，重新进行配对Provider预检，累计起点147、最多12次含辅助，全部gpt-6.1-sol流式。同一真实800行诊断应让模型根据工具实际返回码说明7；再从真实UI执行一次用户shell命令核对该入口，不能写假ToolPart。十分钟关闭目标、五分钟收尾和凭据退休合同不变。
+
+## 611新增实证与执行收尾横向审计
+
+9项后端正向检查/44断言通过，包括真实Bash 0/7、真实SessionShell、默认tail截断及原结果文件可读。611真实模型首个命令因自身引号转义错误返回1，原失败保留，自然修正后产生800行编号诊断和额外1行程序校验，实际父进程/子进程/工具均为7。原工具正文末尾包含真实exit code:7；模型最终明确说明工具报告7，不再只能推断命令设置。原字节15224、完整状态36957、真实有界HTTP状态1065字节仍保留exit=7，截图12/13已人工查看。程序将子进程CRLF再写入Windows文本stdout导致800处CRCRLF；人工行语义与LF编号核对通过，原字节保留，不以换行重写冒充完整性证明。
+
+现行Composer没有直接SessionShell入口；实际通过公开session.create/session.shell执行裸Session的exit7，200返回实际Tool完成和统一正文，这是后端验收，不冒充UI发起。裸Session没有Workbench元数据，两个已读体验链接均正确拒绝，截图14仅记录此范围限制，不宣称其为产品链接缺陷。随后对UI实际创建的Work Session调用shell得到409，而真实/session/status为idle；立即按共享机制审计并在关闭前保存一致只读数据库快照。
+
+关闭611时公开shutdown接受200，但SessionPrompt.terminate等待裸Session ses_-zUQuJUFGzz2IcJN7NFZ超时，原exec86387/native/launcher均退出1；这是真实产品缺陷，不能将HTTP200包装为成功收尾。物理/输出/请求全部结清、原身份dead_or_reused、提前695592ms，7个真实Sol请求全部流式200/EOF settled，累计154，未用5额度退休，auth/models副本已退休，源凭据元数据/完整目录字节保持。记录器先保存事实后仍按退出1报验收失败；不能标记本批完整通过。自建295标签关闭，用户服务/用户数据库未操作。
+
+共享审计证据：07-panel明确定义物理Prompt所有权包含合法standby且独立于可见idle；SessionLoop.shouldEnterStandby/beginStandby将已完成答复进入待命，持有owner并发布idle。611日志中预检和Work两个Session均真实进入standby，关闭时两者经Loop的finally/finish释放，关闭后数据库仅残留裸Session那一条owner。因此idle+shell409符合当前独占入口合同，先前只是线索，不能据它修改并发门或UI状态。真正根因是SessionShell独立取得SessionPromptState.start后，其无callback收尾只调用cancel；共享cancel合同明确要求实际执行者在物理执行栈结清后调用finish，cancel自身保留忙碌slot等待它。Shell没有Loop来完成这一步，故返回成功仍保留owner/取消receipt，后续命令忙碌及服务关闭超时。普通模型待命已用跨两个Project的实际退出事实排除此共享原语根因。
+
+生产入口横向审计：全仓只有SessionLoop权限恢复和SessionShell独立调用start，Loop.enterLoop则用同一admitStart；Loop正常、错误、取消与恢复均finally finish，权限恢复也finally finish。命令/摘要/重试/唤醒通过Loop，Bash/BrowserPreview由所属Loop管理而不另开Prompt。公开Mission Session由assertPublicSessionOperationAuthority拒绝，具有WorkerTurnDescriptor的投影Task工作者由projectedWorkerPublicPromptRejection在start前拒绝；不将此泛化为所有与Task相关的会话。内部投影身份经同一SessionShell及capsule gated process，受本调用点修复覆盖，不另造入口。所有权按Session及规范化目录、generation与实际进程身份隔离；finish已带精确AbortSignal，不能改为无条件全局清理。重启时既有dead-owner获取和公共messageID幂等合同沿用。
+
+修复决策：无callback的SessionShell已等待实际子进程及输出/进度收尾，应自然await finish(sessionID, exactAbort, directory)，删除误用cancel及仅为其服务的取消origin，不为正常完成合成取消。有callback时仍交给真实resume Loop，保留已有所有权/恢复路径。聚焦正向测试新增连续同会话命令、初始化错误后正确重试、两个Project并行实际命令；验证明确返回结果与原历史。新612无凭据隔离服务54124从已关闭611的实际失败数据库只读备份，真实重放原messageID返回原7，再接受新命令0并正常公开关闭，覆盖重启恢复而不伪造原历史。必要的真实callback接续验证单独限定Provider预算，先按实际结果决定，不改Task/Mission状态机或增加流程门。调度共性审计继续保留未知项，不以一次用例通过替代实际证据。
+
+12项后端正向测试/54断言已通过，包括同Session两次实际命令7→0、MissingModelConfigError后显式配置成功、两个不同Project各自并行7→0。612只读备份92表5168行、物理重启后，公开请求在进入Shell前返回明确ProviderModelNotFoundError：无凭据使openai未投影，虽然完整catalog存在。不能将其误报为数据恢复或Shell执行失败，也不能用缺少凭据的本地夹具冒充该公开入口验收。612没有实际模型请求或Shell执行，已公开关闭200、原exec43091/native/launcher0并结清；不是重启复用合同通过证据。
+
+改用新613/54125：成对Auth/catalog及真实独立预检，累计154、最多6请求含预检/辅助/接续，精确Sol且流式。仍从已关闭失败611只读复制，重放原7、连续新命令0/7、原UI Work会话的新0；再创建自有公开Session，实际Shell等待期间用真实用户Prompt接续，验证callback分支确由现有Loop接管并自然答复。公开请求/真实进程/持久事实分别核对，不注入假消息或伪Tool结果。20分钟物理边界，十分钟公开关闭目标，至少五分钟收尾、原exec与物理/请求结清后退休副本。
+
+## 最终614实证与验收范围
+
+613没有完成上述预检：隔离准备器重复创建copy-owned-attachments.mjs触发EEXIST，旧启动编排仍继续，随后CLI在54125报告EADDRINUSE。具体端口冲突来源未知；未杀死其它进程。原native/launcher以7结清，没有成功监听或公开shutdown；独立启动失败收尾器核对实际进程死亡、0次请求后退休auth/models副本并保存startup-retirement.json。修复自有验收编排为准备步骤顺序检查退出码、附件准备器仅创建一次；实际本机绑定探测确认38123可用并释放探测器后，使用新的614。此为工具链修复，未将613作为产品恢复通过证据。
+
+614从已物理关闭的失败611作只读备份：92表5168行。成对Provider凭据和完整模型目录独立验证可用、目标已投影，实际请求全部gpt-6.1-sol且stream=true。实际公开HTTP重放原裸Session的messageID，仍返回原ToolPart prt_g0VZ5gVm501d3dSZbwao和退出码7；随后同一Session真实执行0、7均200，再重放旧请求仍保持原Part与正文。完整历史恰好三个实际Tool occurrence，退出码为7/0/7。重启后的真实Work Session也接受公开Shell exit0，实际UI截图15显示退出码0。
+
+callback另用真实公开Session验证：Python实际输出SHELL_READY后睡眠，读取到真实running Part才发送新的用户Prompt；Shell和Prompt均200，Shell真实退出0及统一正文保留，现有resume Loop完成实际流式模型回复“接续已完成”，finish=stop。没有通过直接写Part或假模型构造接续。两项目各自连续7→0、初始化错误后正确重试由真实本地进程的聚焦后端测试覆盖；公共路由的重复请求共享一个实际owner/lease/effect及合法standby busy另以两个既有正向检查通过。
+
+614共6个实际请求，全部Sol/流式200/EOF settled，累计154→160，6额度全部使用，关闭后凭据与完整目录副本退休，源目录逐字节/元数据与源auth元数据保持。公开shutdown200，原exec35562/native/launcher均0，physical/output/request全部结清、原进程身份dead_or_reused，提前938718ms关闭，自建296标签关闭。保留失败611的退出1事实，最终614证明该失败来源已修复并正常收尾。
+
+源611所有92表5168行保持；目标备份的8类原持久业务事实保持，仅本次确实接受新命令的两个旧Session time_updated依法推进，异常不能被宽泛忽略，其余原列逐一相同；真实新会话、消息和工具记录自然追加。608–611从源607复制的92表3093行同样保持，原受保护79行保留；612关闭结果也保留123行原事实。用户18571、用户数据库及用户进程未操作。本批没有数据库schema、迁移、版本或发布改动，不根据未知历史补写退出码。
+
+最终精确源码检查：新增2个后端测试文件12项/54断言通过；既有公共shell路由2项/10断言通过；后端typecheck通过。UI源从610冻结后未变化，610 overlay typecheck、普通Node生产构建与2语言2545键检查均通过；12张真实截图逐张人工复核，覆盖基线、0/非零、折叠/展开、双语、大正文与最终模型所见事实。截图14/16等未证明目标的中间图只留私有调查，不作交付证据。UI自动化测试未新增或运行。
+
+本批共享审计覆盖所有生产所有权入口、正常/错误/取消/重试/重启、callback、串并行与项目隔离，但没有新建真实Task/Mission子agent的Provider运行，不能宣称这些角色全部端到端验收。合法standby仍按既有合同持有owner，idle不能代替物理所有权；裸Session没有Workbench元数据也不能按Work页面显示。模型仍可能自然写错命令引号或选择不合适的stdout编码，本批保证真实结果可见而不宣称此类模型行为已消除。
+
+交付证据集中于[真实页面与运行事实](../../artifacts/2026-10-26-command-outcome-visibility/README.md)。三索引已更新，当前声明的docs:check通过（351 ops / 26 groups）。精确提交后，push前fresh fetch/merge、审查全部待推集合并运行正常hooks；不混入同行CI与清理改动。

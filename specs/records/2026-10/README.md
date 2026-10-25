@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [命令真实结果与执行收尾](2026-10-26-command-outcome-visibility.md)：608–614真实双语页面、流式Sol、连续Shell与callback接续验收。
+
 - [压缩包输入到可下载成果](2026-10-26-zip-intake-delivery.md)：606/607真实附件语义、工具说明边界与完整运行收尾。
 
 - [不支持预览的项目文件原件下载](2026-10-26-binary-file-download.md)：605完整原件接口、22项正向合同和双语实际失败恢复。

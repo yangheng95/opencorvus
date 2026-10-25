@@ -2604,6 +2604,12 @@ button.msg-source-chip .msg-source-chip__filename {
   color: var(--bad);
 }
 
+.msg-work-details__status[data-command-exit="nonzero"],
+.msg-work-details__status [data-command-exit="nonzero"],
+.msg-tool-state[data-command-exit="nonzero"] {
+  color: var(--warn);
+}
+
 .msg-work-details__body {
   display: flex;
   flex-direction: column;

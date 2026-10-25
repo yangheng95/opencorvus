@@ -2,7 +2,7 @@
 // toolNameKey, toolInputCommand, shortRelativePath, relativePathFrom, shortPath
 
 import type { IconName } from "../components/ui/Icon"
-import { t, tc } from "./i18n"
+import { localeTag, t, tc } from "./i18n"
 import { isWindowsPath, normalizeServerPath } from "./server-path"
 import { ReadToolResultFacts, ToolFailureCause, renderToolFailureCause } from "@opencorvus-ai/transport-protocol"
 
@@ -266,7 +266,7 @@ export function normalizeToolPartRecord(part: unknown, previous?: unknown): unkn
   }
 }
 
-function toolInputCommand(input: any): string {
+export function toolInputCommand(input: any): string {
   if (!record(input)) return ""
   const value = (input as any).command ?? (input as any).argv ?? (input as any).cmd
   if (typeof value === "string") return value.trim()
@@ -380,6 +380,18 @@ export interface ToolDisplayModel {
   status?: ToolDisplayStatus
   cancelled: boolean
   statusLabel: string
+  commandExitCode?: number
+  command?: string
+}
+
+function completedCommandExitCode(name: string, state: any): number | undefined {
+  if (toolNameKey(name) !== "bash" || state?.status !== "completed") return undefined
+  const exit = state.metadata?.exit
+  return typeof exit === "number" && Number.isInteger(exit) ? exit : undefined
+}
+
+function commandExitLabel(code: number): string {
+  return t("tool.command_exit_code", { code: code.toLocaleString(localeTag()) })
 }
 
 export function normalizeToolStatus(status: unknown): ToolDisplayStatus | undefined {
@@ -474,7 +486,11 @@ export function displayToolDetail(name: string, input: any, state: any, base = "
     }
     return shortPath
   }
-  if (n === "bash" || n === "shellcommand" || n === "runcommand") return toolInputCommand(safeInput)
+  if (n === "bash" || n === "shellcommand" || n === "runcommand") {
+    const command = toolInputCommand(safeInput)
+    const exit = completedCommandExitCode(name, safeState)
+    return exit === undefined ? command : [commandExitLabel(exit), command].filter(Boolean).join(t("card.meta_separator"))
+  }
   if (n === "grep" || n === "searchcode")
     return (safeInput as any).pattern || (safeInput as any).query || (safeInput as any).q || ""
   if (n === "glob" || n === "findfiles") return (safeInput as any).pattern || (safeInput as any).glob || ""
@@ -505,13 +521,18 @@ export function describeToolCall(name: string, input: unknown, state: unknown, b
   const label = typeof name === "string" && name.trim() ? name.trim() : "tool"
   const status = normalizeToolStatus(record(state) ? (state as any).status : undefined)
   const cancelled = status === "error" && toolFailurePresentation(record(state) ? (state as any).failure : undefined).cancelled
+  const commandExitCode = completedCommandExitCode(label, state)
   return {
     icon: displayToolIconName(label),
     label,
     detail: displayToolDetail(label, input, state, base),
     status,
     cancelled,
-    statusLabel: cancelled ? t("task.status.cancelled") : status ? toolStatusLabel(status) : "",
+    statusLabel: commandExitCode !== undefined
+      ? commandExitLabel(commandExitCode)
+      : cancelled ? t("task.status.cancelled") : status ? toolStatusLabel(status) : "",
+    commandExitCode,
+    command: commandExitCode === undefined ? undefined : toolInputCommand(input),
   }
 }
 

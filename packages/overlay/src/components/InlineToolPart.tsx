@@ -5,6 +5,7 @@ import {
   describeToolCall,
   displayToolDetail,
   toolNameKey,
+  toolInputCommand,
   stripAnsi,
   toolFailurePresentation,
   toolPayloadText,
@@ -392,7 +393,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
   })
   const visibleShellCommand = createMemo(() => {
     if (status() === "pending" || !SHELL_TOOLS.has(key())) return ""
-    return detail()
+    return toolInputCommand(input())
   })
   const hasResultBody = createMemo(() =>
     Boolean(
@@ -474,6 +475,11 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
           <Show when={status() === "pending" || status() === "running"}>
             <div class="msg-tool-state" role="status">
               {t(status() === "pending" ? "tool.receiving_input" : "tool.awaiting_result")}
+            </div>
+          </Show>
+          <Show when={display().commandExitCode !== undefined}>
+            <div class="msg-tool-state" data-command-exit={display().commandExitCode !== 0 ? "nonzero" : undefined}>
+              {display().statusLabel}
             </div>
           </Show>
           <Show when={status() === "completed" && !hasResultBody()}>

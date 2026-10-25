@@ -2460,6 +2460,8 @@
   "tool.group_running": "{{count}} running",
   "tool.group_errors": "{{count}} failed",
   "tool.group_cancelled": "{{count}} cancelled",
+  "tool.group_nonzero_exit": "Nonzero exits: {{count}}",
+  "tool.command_exit_code": "Exit code {{code}}",
   "tool.items": "{{count}} items",
   "tool.fields": "{{count}} fields",
   "tool.more_items": "Show more ({{count}} remaining)",

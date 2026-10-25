@@ -1152,6 +1152,25 @@ diagnostic in neutral Feedback. Other failures keep error Feedback, and a group
 with a cancelled result does not present an all-completed marker. The shared
 Main and member renderers derive this directly from each Tool's failure, never
 from Task status, reason text or a second cancellation store.
+Completed Bash results additionally project their integer `metadata.exit` as the
+actual command exit code, including zero. Tool completion remains `completed`;
+a nonzero program exit does not create a synthetic failure or fail the Session.
+The shared identity, activity and session-chip detail and expanded result expose
+the localized code while preserving the literal command and original output.
+Each execution run independently counts every nonzero Bash exit, including an
+earlier command followed by a successful Tool, and retains that warning instead
+of an all-completed checkmark. Expanded event headers distinguish the command's
+code from Tool delivery status. Pending/running results, unknown exit values and
+background commands whose exit is still null retain their existing presentation.
+The bounded historical/live Tool transport prioritizes that canonical exit value
+within its existing small-metadata budget, even when command output requires a
+deferred full-state read. Large stdout does not erase the collapsed exit outcome.
+The Bash Tool and user Session shell also place the observed exit code in the
+same visible Tool result's `bash_metadata` tail, alongside existing lifecycle
+details. This body reaches both live model input and replay through the ordinary
+Tool-result conversion. The default tail truncation preserves it; structured
+`metadata.exit` continues to drive the UI. An unavailable exit remains explicit,
+and foreground stdout and streamed byte counts retain their original meaning.
 Trace data uses the code typography role;
 the disclosure identity uses caption. Sources keep their chronological position.
 The webfetch identity detail projects its structured request URL directly, before

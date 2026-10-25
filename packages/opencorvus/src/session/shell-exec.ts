@@ -9,6 +9,7 @@ import { Plugin } from "../plugin"
 import { defer } from "../util/defer"
 import { ulid } from "ulid"
 import { Shell } from "@/shell/shell"
+import { shellResultOutput } from "@/shell/result"
 import { PidGuard } from "@/shell/pid-guard"
 import { ProcessSupervisor } from "@/shell/process-supervisor"
 import { SessionPromptState } from "./prompt/state"
@@ -19,7 +20,6 @@ import { resolveAgentModelRef, resolveProjectedWorkerModelRef } from "@/agent/mo
 import { SessionRuntimeContractStore, isProjectedWorkerRuntimeContract } from "./runtime-contract"
 import { LocalEnvironment } from "@/config/local-environment"
 import { sanitizeShellEnvironment } from "@/shell/environment"
-import { createExecutionCancellationOrigin } from "./prompt/cancellation"
 import { resolveSessionExecutionAuthority } from "@/engine/task-session-lineage"
 import { ProjectMemory } from "@/memory/project-memory"
 import {
@@ -55,7 +55,7 @@ function requireSessionShellResume(): SessionShellResume {
 }
 
 export namespace SessionShell {
-  const { log, state, start, cancel } = SessionPromptState
+  const { log, state, start, finish } = SessionPromptState
   const PROCESS_OWNERSHIP_METADATA_KEY = "sessionShellProcessOwnership"
   const CHILD_PROCESS_OCCURRENCE_METADATA_KEY = "sessionShellChildProcessOccurrence"
   const SHELL_LEASE_MILLISECONDS = 30_000
@@ -314,15 +314,7 @@ export namespace SessionShell {
     await using _ = defer(async () => {
       const callbacks = state()[input.sessionID]?.callbacks ?? []
       if (callbacks.length === 0) {
-        cancel(input.sessionID, session.directory, {
-          origin: createExecutionCancellationOrigin({
-            actor: "runtime",
-            source: "runtime.prompt_owner",
-            surface: "session",
-            reason: "Session shell completed without an attached prompt callback",
-            targetSessionID: input.sessionID,
-          }),
-        })
+        await finish(input.sessionID, abort, session.directory)
       } else {
         const resume = requireSessionShellResume()
         SessionContext.provide(session, () => resume({ sessionID: input.sessionID, resume_existing: true })).catch(
@@ -638,12 +630,13 @@ export namespace SessionShell {
 
         executionAbort.addEventListener("abort", abortHandler, { once: true })
 
+        let exitCode: number | null = null
         let primaryError: unknown
         try {
           if (executionAbort.aborted) abortHandler()
-          await Promise.race([supervisor.exited, terminationRequested.then((cleanup) => cleanup)])
+          exitCode = await Promise.race([supervisor.exited, terminationRequested.then((cleanup) => cleanup)])
           if (terminationPromise) {
-            await terminationPromise
+            exitCode = await terminationPromise
           }
         } catch (error) {
           primaryError = error
@@ -663,9 +656,7 @@ export namespace SessionShell {
           }
         }
 
-        if (aborted) {
-          output += "\n\n" + ["<metadata>", "User aborted the command", "</metadata>"].join("\n")
-        }
+        output = shellResultOutput(output, exitCode, aborted ? ["User aborted the command"] : [])
         const completedPart: Message.ToolPart =
           part.state.status === "running"
             ? {
@@ -680,6 +671,7 @@ export namespace SessionShell {
                   title: "",
                   metadata: {
                     output,
+                    exit: exitCode,
                     description: "",
                   },
                   output,

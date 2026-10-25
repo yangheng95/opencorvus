@@ -131,6 +131,15 @@ original lifecycle. A typed fence rejection without a physical cancellation
 receipt retains its typed cancellation authority; current post-cleanup status
 does not reconstruct what was active when cancellation began.
 
+A standalone Session shell owns the same physical Prompt lifecycle. Once its
+process, output and progress have settled, an execution without attached Prompt
+callbacks awaits `SessionPromptState.finish` with its captured AbortSignal and
+directory. A cancellation request cannot substitute for this executor-owned
+completion. With attached callbacks, the existing resumed SessionLoop inherits
+the owner and completes it through its own finally; normal shell completion
+does not manufacture cancellation provenance. Public replay keeps its original
+Message and Tool outcome, while a subsequent command receives a new occurrence.
+
 Graceful shutdown distinguishes physical Prompt ownership from Task execution.
 The exact cancellation receipt captures the current input occurrence before
 requesting physical abort. A genuinely published idle or terminal input retains

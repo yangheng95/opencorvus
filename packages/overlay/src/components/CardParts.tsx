@@ -208,8 +208,10 @@ function toolIdentitySummary(tool: ToolDisplayModel): string {
   return [tool.label, toolIdentityDetail(tool)].filter(Boolean).join(t("card.meta_separator"))
 }
 
-function ExecutionToolIdentity(props: { tool: ToolDisplayModel }) {
-  const detail = () => toolIdentityDetail(props.tool)
+function ExecutionToolIdentity(props: { tool: ToolDisplayModel; commandCodeInStatus?: boolean }) {
+  const detail = () => props.commandCodeInStatus && props.tool.command !== undefined
+    ? props.tool.command
+    : toolIdentityDetail(props.tool)
   return (
     <>
       <span class="msg-work-details__tool-icon" aria-hidden="true">
@@ -239,12 +241,19 @@ function ExecutionEventRun(props: PartCollectionProps) {
   const activeCount = () => pendingCount() + runningCount()
   const errorCount = () => tools().filter((tool) => tool.status === "error" && !tool.cancelled).length
   const cancelledCount = () => tools().filter((tool) => tool.cancelled).length
+  const nonzeroExitCount = () => tools().filter((tool) => tool.commandExitCode !== undefined && tool.commandExitCode !== 0).length
   const number = (count: number) => count.toLocaleString(localeTag())
   const active = () => Boolean(props.streaming && activeCount() > 0)
-  const summary = () =>
+  const summary = () => [
     latest()
       ? toolIdentitySummary(latest()!)
-      : t("transcript.execution_patch", { count: props.parts.length })
+      : t("transcript.execution_patch", { count: props.parts.length }),
+    pendingCount() ? t("tool.group_receiving_input", { count: number(pendingCount()) }) : "",
+    runningCount() ? t("tool.group_running", { count: number(runningCount()) }) : "",
+    errorCount() ? t("tool.group_errors", { count: number(errorCount()) }) : "",
+    cancelledCount() ? t("tool.group_cancelled", { count: number(cancelledCount()) }) : "",
+    nonzeroExitCount() ? t("tool.group_nonzero_exit", { count: number(nonzeroExitCount()) }) : "",
+  ].filter(Boolean).join(t("card.meta_separator"))
   return (
     <section
       class="msg-work-details"
@@ -279,7 +288,10 @@ function ExecutionEventRun(props: PartCollectionProps) {
           <Show when={cancelledCount()}>
             <span>{t("tool.group_cancelled", { count: number(cancelledCount()) })}</span>
           </Show>
-          <Show when={!activeCount() && !errorCount() && !cancelledCount()}>
+          <Show when={nonzeroExitCount()}>
+            <span data-command-exit="nonzero">{t("tool.group_nonzero_exit", { count: number(nonzeroExitCount()) })}</span>
+          </Show>
+          <Show when={!activeCount() && !errorCount() && !cancelledCount() && !nonzeroExitCount()}>
             <Icon
               name="status-completed"
               class="msg-tool-complete"
@@ -318,9 +330,12 @@ function ExecutionEventRun(props: PartCollectionProps) {
                             class="msg-work-details__event-header"
                             title={toolIdentitySummary(display())}
                           >
-                            <ExecutionToolIdentity tool={display()} />
-                            <span class="msg-work-details__status">
-                              <Show when={display().status === "completed"} fallback={display().statusLabel}>
+                            <ExecutionToolIdentity tool={display()} commandCodeInStatus />
+                            <span
+                              class="msg-work-details__status"
+                              data-command-exit={display().commandExitCode !== undefined && display().commandExitCode !== 0 ? "nonzero" : undefined}
+                            >
+                              <Show when={display().status === "completed" && display().commandExitCode === undefined} fallback={display().statusLabel}>
                                 <Icon
                                   name="status-completed"
                                   class="msg-tool-complete"

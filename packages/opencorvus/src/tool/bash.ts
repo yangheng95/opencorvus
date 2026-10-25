@@ -12,6 +12,7 @@ import { Filesystem } from "@/util/filesystem"
 import { fileURLToPath } from "url"
 import { Flag } from "@/flag/flag.ts"
 import { Shell } from "@/shell/shell"
+import { shellResultOutput } from "@/shell/result"
 import {
   BASH_BACKGROUND_READINESS_MAX_MS,
   DEFAULT_BASH_BACKGROUND_LEASE_MS,
@@ -545,7 +546,7 @@ export const BashTool = Tool.define("bash", async () => {
         ]
         if (timedOut) resultMetadata.push(`background process exceeded lease before readiness window`)
         if (exited) resultMetadata.push(`background process exited before readiness window (exit=${exitCode})`)
-        output += "\n\n<bash_metadata>\n" + resultMetadata.join("\n") + "\n</bash_metadata>"
+        output = shellResultOutput(output, exited ? exitCode : null, resultMetadata)
         return {
           title: params.description,
           metadata: {
@@ -616,9 +617,7 @@ export const BashTool = Tool.define("bash", async () => {
         resultMetadata.push("User aborted the command")
       }
 
-      if (resultMetadata.length > 0) {
-        output += "\n\n<bash_metadata>\n" + resultMetadata.join("\n") + "\n</bash_metadata>"
-      }
+      output = shellResultOutput(output, exitCode, resultMetadata)
 
       return {
         title: params.description,

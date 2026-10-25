@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [命令真实结果与执行收尾](records/2026-10/2026-10-26-command-outcome-visibility.md)：真实退出码、长结果与模型可见事实、Shell所有权收尾及重启接续验证。
+
 - [压缩包输入到可下载成果](records/2026-10/2026-10-26-zip-intake-delivery.md)：606/607真实Sol闭环、工具格式说明冲突修正与实际下载。
 
 - [不支持预览的项目文件原件下载](records/2026-10/2026-10-26-binary-file-download.md)：605模型无关原件流、项目边界与真实ZIP恢复下载。

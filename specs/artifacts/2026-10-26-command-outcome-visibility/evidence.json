@@ -1,0 +1,846 @@
+{
+  "scope": "Actual command results in UI, bounded transport and the same real model-visible Tool body; standalone Shell natural ownership completion, restart replay and callback handoff",
+  "uiEntry": "main-aiwHubjd.js",
+  "screenshots": [
+    "01-baseline-expanded.png",
+    "02-baseline-command-output.png",
+    "05-final-english-collapsed.png",
+    "06-final-english-exit-one.png",
+    "07-final-english-exit-zero.png",
+    "08-final-chinese-exit-zero.png",
+    "09-final-chinese-collapsed.png",
+    "10-long-output-collapsed.png",
+    "11-long-output-expanded.png",
+    "12-final-model-confirms-exit.png",
+    "13-final-model-tool-result.png",
+    "15-restarted-user-shell-result.png"
+  ],
+  "manualVisualReview": true,
+  "finalPreflight": {
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "largeOutputBeforeVisibleExit": {
+    "sessionID": "ses_-zUQuMld7zzjvFBjA470",
+    "partID": "prt_g0VZ5dFR500sJpye8DBG",
+    "tool": "bash",
+    "status": "completed",
+    "exit": 7,
+    "stdoutLines": 800,
+    "first": "1 运行诊断",
+    "last": "800 运行诊断",
+    "outputBytes": 14292,
+    "rawStateBytes": 32495,
+    "boundedStateBytes": 575,
+    "assistant": "已运行一次诊断，实际观察到 **800 行输出**，编号从 `1` 连续到 `800`，每行均包含“运行诊断”。\n\n进程执行了 `sys.exit(7)`；但工具返回结果未显式展示退出码字段，因此**无法独立确认实际退出码**，只能确认命令设置的退出码为 **7**。\n\n未修改文件，也未创建子任务或子 Agent。",
+    "finish": "stop",
+    "boundedExit": 7,
+    "deferred": "deferred"
+  },
+  "largeOutputAfterVisibleExit": {
+    "sessionID": "ses_-zUQuJh45zz3zWgx8oGY",
+    "partID": "prt_g0VZ5gLxH00xoPCUgGga",
+    "tool": "bash",
+    "status": "completed",
+    "exit": 7,
+    "diagnosticLines": 800,
+    "extraProgramVerificationLines": 1,
+    "first": "1 运行诊断",
+    "lastDiagnostic": "800 运行诊断",
+    "programVerification": "实际捕获输出行数：800；子进程退出码：7；逐行内容核对：True",
+    "rawLineEndings": {
+      "crcrlf": 800,
+      "lf": 801,
+      "note": "Actual generated Python wrapper rewrote child CRLF as CRCRLF; semantic numbered lines compared after removing trailing carriage returns, original bytes retained"
+    },
+    "footer": "<bash_metadata>\nexit code: 7\n</bash_metadata>",
+    "toolOutcomes": [
+      {
+        "partID": "prt_g0VZ5gKIR00E7aYGlnup",
+        "status": "completed",
+        "exit": 1
+      },
+      {
+        "partID": "prt_g0VZ5gLxH00xoPCUgGga",
+        "status": "completed",
+        "exit": 7
+      }
+    ],
+    "outputBytes": 15224,
+    "rawStateBytes": 36957,
+    "boundedStateBytes": 1065,
+    "assistant": "诊断已完成，实际观察结果：\n\n- **诊断输出：800 行**，序号从 1 连续到 800，每行均包含“运行诊断”，逐行核对通过。\n- **诊断进程退出码：7**，工具报告的退出码也为 7。\n- 统计程序额外输出了 1 行核对结果，不计入上述 800 行诊断输出。\n- 未修改文件，未创建子任务或子 Agent。\n\n首次命令因引号转义错误未启动诊断进程；修正后完成了上述诊断。",
+    "finish": "stop",
+    "boundedExit": 7,
+    "deferred": "deferred"
+  },
+  "recoveredPublicShell": {
+    "originalReplay": {
+      "sessionID": "ses_-zUQuJUFGzz2IcJN7NFZ",
+      "messageID": "msg_a2ffdd43-7202-40b2-975e-c34ee1d76661",
+      "partID": "prt_g0VZ5gVm501d3dSZbwao",
+      "exit": 7,
+      "sameOriginalPart": true,
+      "sameReplayAfterNewerOccurrences": true
+    },
+    "newBareOccurrences": [
+      {
+        "sessionID": "ses_-zUQuJUFGzz2IcJN7NFZ",
+        "messageID": "msg_102d6dd9-c85d-4dad-adf8-7695b549fbe5",
+        "partID": "prt_g0VZ5nvYX01Sx676X7Dm",
+        "exit": 0,
+        "httpStatus": 200
+      },
+      {
+        "sessionID": "ses_-zUQuJUFGzz2IcJN7NFZ",
+        "messageID": "msg_04fc8076-1303-43aa-b579-e5ef1efdffa8",
+        "partID": "prt_g0VZ5nveE01xGk6bl1BY",
+        "exit": 7,
+        "httpStatus": 200
+      }
+    ],
+    "visibleWork": {
+      "sessionID": "ses_-zUQuJh45zz3zWgx8oGY",
+      "messageID": "msg_a58302d4-4dcb-4855-8620-663c3c70948d",
+      "partID": "prt_g0VZ5nvil01DvoxsK749",
+      "exit": 0,
+      "httpStatus": 200
+    },
+    "bareHistoryExits": [
+      7,
+      0,
+      7
+    ],
+    "bareToolOccurrences": 3,
+    "authority": "Real public HTTP, exact old caller identity on a readonly clone of failed611; new native shell executions and immutable replay"
+  },
+  "realCallbackHandoff": {
+    "sessionID": "ses_-zUQuBqArzzfzS7dBin4",
+    "observedRunningPartID": "prt_g0VZ5o9qB01mnj44CRKu",
+    "shellMessageID": "msg_1d67552d-0086-4536-a6e7-8dab916cc9eb",
+    "promptMessageID": "msg_c0020b95-090e-48b3-9e12-a4642ebd0c54",
+    "shellHttp": 200,
+    "promptHttp": 200,
+    "shellExit": 0,
+    "shellOutput": "SHELL_READY\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "assistant": "接续已完成",
+    "finish": "stop",
+    "authority": "Real public native shell was visibly running before real user Prompt admission; existing Loop completed the attached callback"
+  },
+  "finalSourceTargetedUpdateTimes": [
+    "ses_-zUQuJUFGzz2IcJN7NFZ",
+    "ses_-zUQuJh45zz3zWgx8oGY"
+  ],
+  "tests": [
+    {
+      "file": "packages/opencorvus/test/conversation-command-exit.test.ts",
+      "passed": 4
+    },
+    {
+      "file": "packages/opencorvus/test/shell-command-result.test.ts",
+      "passed": 8
+    },
+    {
+      "file": "packages/opencorvus/test/server/session-shell-idempotency.test.ts",
+      "passed": 2,
+      "selected": "two backend shell routes converge; a different Message race against an exact-live standby owner"
+    }
+  ],
+  "assertions": 64,
+  "backendTypes": 0,
+  "overlayTypes": 0,
+  "nodeUiBuild": 0,
+  "i18n": {
+    "locales": 2,
+    "keys": 2545,
+    "exit": 0
+  },
+  "runs": [
+    {
+      "id": 608,
+      "port": 54120,
+      "uiEntry": "main-DfWO50jq.js",
+      "successfulShutdown": true,
+      "publicShutdown": 200,
+      "reserveMs": 1119939,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "originalIdentities": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ],
+      "requests": 0,
+      "previousRequests": 142,
+      "cumulativeRequests": 142,
+      "maximumRequests": 0,
+      "unusedAllowanceRetired": 0,
+      "requestOutcomes": [],
+      "credentialCopyRetired": "No credential copy",
+      "modelCatalogCopyRetired": "No paired credential copy",
+      "source": null,
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 3093,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 2,
+            "current": 2,
+            "added": 0,
+            "originalRowsPreserved": true
+          },
+          "message": {
+            "original": 12,
+            "current": 12,
+            "added": 0,
+            "originalRowsPreserved": true
+          },
+          "part": {
+            "original": 27,
+            "current": 27,
+            "added": 0,
+            "originalRowsPreserved": true
+          },
+          "tool_part_request": {
+            "original": 8,
+            "current": 8,
+            "added": 0,
+            "originalRowsPreserved": true
+          },
+          "tool_part_progress": {
+            "original": 2,
+            "current": 2,
+            "added": 0,
+            "originalRowsPreserved": true
+          },
+          "tool_part_outcome": {
+            "original": 8,
+            "current": 8,
+            "added": 0,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_request": {
+            "original": 10,
+            "current": 10,
+            "added": 0,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_outcome": {
+            "original": 10,
+            "current": 10,
+            "added": 0,
+            "originalRowsPreserved": true
+          }
+        }
+      },
+      "qualification": "Command baseline only; attachment namespace not yet cloned"
+    },
+    {
+      "id": 609,
+      "port": 54121,
+      "uiEntry": "main-TIFKOiRT.js",
+      "successfulShutdown": true,
+      "publicShutdown": 200,
+      "reserveMs": 987938,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "originalIdentities": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ],
+      "requests": 0,
+      "previousRequests": 142,
+      "cumulativeRequests": 142,
+      "maximumRequests": 0,
+      "unusedAllowanceRetired": 0,
+      "requestOutcomes": [],
+      "credentialCopyRetired": "No credential copy",
+      "modelCatalogCopyRetired": "No paired credential copy",
+      "source": null,
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 3093,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 2,
+            "current": 2,
+            "added": 0,
+            "originalRowsPreserved": true
+          },
+          "message": {
+            "original": 12,
+            "current": 12,
+            "added": 0,
+            "originalRowsPreserved": true
+          },
+          "part": {
+            "original": 27,
+            "current": 27,
+            "added": 0,
+            "originalRowsPreserved": true
+          },
+          "tool_part_request": {
+            "original": 8,
+            "current": 8,
+            "added": 0,
+            "originalRowsPreserved": true
+          },
+          "tool_part_progress": {
+            "original": 2,
+            "current": 2,
+            "added": 0,
+            "originalRowsPreserved": true
+          },
+          "tool_part_outcome": {
+            "original": 8,
+            "current": 8,
+            "added": 0,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_request": {
+            "original": 10,
+            "current": 10,
+            "added": 0,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_outcome": {
+            "original": 10,
+            "current": 10,
+            "added": 0,
+            "originalRowsPreserved": true
+          }
+        }
+      },
+      "qualification": "Attachment namespace corrected by exact copy before final page review"
+    },
+    {
+      "id": 610,
+      "port": 54122,
+      "uiEntry": "main-aiwHubjd.js",
+      "successfulShutdown": true,
+      "publicShutdown": 200,
+      "reserveMs": 837595,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "originalIdentities": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ],
+      "requests": 5,
+      "previousRequests": 142,
+      "cumulativeRequests": 147,
+      "maximumRequests": 12,
+      "unusedAllowanceRetired": 7,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 3093,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 2,
+            "current": 4,
+            "added": 2,
+            "originalRowsPreserved": true
+          },
+          "message": {
+            "original": 12,
+            "current": 17,
+            "added": 5,
+            "originalRowsPreserved": true
+          },
+          "part": {
+            "original": 27,
+            "current": 38,
+            "added": 11,
+            "originalRowsPreserved": true
+          },
+          "tool_part_request": {
+            "original": 8,
+            "current": 9,
+            "added": 1,
+            "originalRowsPreserved": true
+          },
+          "tool_part_progress": {
+            "original": 2,
+            "current": 3,
+            "added": 1,
+            "originalRowsPreserved": true
+          },
+          "tool_part_outcome": {
+            "original": 8,
+            "current": 9,
+            "added": 1,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_request": {
+            "original": 10,
+            "current": 13,
+            "added": 3,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_outcome": {
+            "original": 10,
+            "current": 13,
+            "added": 3,
+            "originalRowsPreserved": true
+          }
+        }
+      },
+      "qualification": "Qualified for the explicitly recorded acceptance scope"
+    },
+    {
+      "id": 611,
+      "port": 54123,
+      "uiEntry": "main-aiwHubjd.js",
+      "successfulShutdown": false,
+      "publicShutdown": 200,
+      "reserveMs": 695592,
+      "nativeExit": 1,
+      "launcherExit": 1,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "originalIdentities": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ],
+      "requests": 7,
+      "previousRequests": 147,
+      "cumulativeRequests": 154,
+      "maximumRequests": 12,
+      "unusedAllowanceRetired": 5,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 3093,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 2,
+            "current": 5,
+            "added": 3,
+            "originalRowsPreserved": true
+          },
+          "message": {
+            "original": 12,
+            "current": 20,
+            "added": 8,
+            "originalRowsPreserved": true
+          },
+          "part": {
+            "original": 27,
+            "current": 43,
+            "added": 16,
+            "originalRowsPreserved": true
+          },
+          "tool_part_request": {
+            "original": 8,
+            "current": 11,
+            "added": 3,
+            "originalRowsPreserved": true
+          },
+          "tool_part_progress": {
+            "original": 2,
+            "current": 5,
+            "added": 3,
+            "originalRowsPreserved": true
+          },
+          "tool_part_outcome": {
+            "original": 8,
+            "current": 11,
+            "added": 3,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_request": {
+            "original": 10,
+            "current": 14,
+            "added": 4,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_outcome": {
+            "original": 10,
+            "current": 14,
+            "added": 4,
+            "originalRowsPreserved": true
+          }
+        }
+      },
+      "qualification": "Product shutdown failed; resolved and reverified in614"
+    },
+    {
+      "id": 612,
+      "port": 54124,
+      "uiEntry": "main-aiwHubjd.js",
+      "successfulShutdown": true,
+      "publicShutdown": 200,
+      "reserveMs": 964497,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "originalIdentities": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ],
+      "requests": 0,
+      "previousRequests": 154,
+      "cumulativeRequests": 154,
+      "maximumRequests": 0,
+      "unusedAllowanceRetired": 0,
+      "requestOutcomes": [],
+      "credentialCopyRetired": "No credential copy",
+      "modelCatalogCopyRetired": "No paired credential copy",
+      "source": null,
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 5168,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 5,
+            "current": 5,
+            "added": 0,
+            "originalRowsPreserved": true
+          },
+          "message": {
+            "original": 20,
+            "current": 20,
+            "added": 0,
+            "originalRowsPreserved": true
+          },
+          "part": {
+            "original": 43,
+            "current": 43,
+            "added": 0,
+            "originalRowsPreserved": true
+          },
+          "tool_part_request": {
+            "original": 11,
+            "current": 11,
+            "added": 0,
+            "originalRowsPreserved": true
+          },
+          "tool_part_progress": {
+            "original": 5,
+            "current": 5,
+            "added": 0,
+            "originalRowsPreserved": true
+          },
+          "tool_part_outcome": {
+            "original": 11,
+            "current": 11,
+            "added": 0,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_request": {
+            "original": 14,
+            "current": 14,
+            "added": 0,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_outcome": {
+            "original": 14,
+            "current": 14,
+            "added": 0,
+            "originalRowsPreserved": true
+          }
+        }
+      },
+      "qualification": "ProviderModelNotFoundError before Shell entry; recovery not qualified"
+    },
+    {
+      "id": 613,
+      "port": 54125,
+      "uiEntry": null,
+      "successfulShutdown": false,
+      "publicShutdown": null,
+      "reserveMs": null,
+      "nativeExit": 7,
+      "launcherExit": 7,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "originalIdentities": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ],
+      "requests": 0,
+      "previousRequests": 154,
+      "cumulativeRequests": 154,
+      "maximumRequests": 6,
+      "unusedAllowanceRetired": 6,
+      "requestOutcomes": [],
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "database": null,
+      "qualification": "Startup EEXIST preparation followed by EADDRINUSE; no public listener or model preflight"
+    },
+    {
+      "id": 614,
+      "port": 38123,
+      "uiEntry": "main-aiwHubjd.js",
+      "successfulShutdown": true,
+      "publicShutdown": 200,
+      "reserveMs": 938718,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "originalIdentities": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ],
+      "requests": 6,
+      "previousRequests": 154,
+      "cumulativeRequests": 160,
+      "maximumRequests": 6,
+      "unusedAllowanceRetired": 0,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 5168,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 5,
+            "current": 7,
+            "added": 2,
+            "originalRowsPreserved": true
+          },
+          "message": {
+            "original": 20,
+            "current": 32,
+            "added": 12,
+            "originalRowsPreserved": true
+          },
+          "part": {
+            "original": 43,
+            "current": 55,
+            "added": 12,
+            "originalRowsPreserved": true
+          },
+          "tool_part_request": {
+            "original": 11,
+            "current": 15,
+            "added": 4,
+            "originalRowsPreserved": true
+          },
+          "tool_part_progress": {
+            "original": 5,
+            "current": 10,
+            "added": 5,
+            "originalRowsPreserved": true
+          },
+          "tool_part_outcome": {
+            "original": 11,
+            "current": 15,
+            "added": 4,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_request": {
+            "original": 14,
+            "current": 16,
+            "added": 2,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_outcome": {
+            "original": 14,
+            "current": 16,
+            "added": 2,
+            "originalRowsPreserved": true
+          }
+        }
+      },
+      "qualification": "Qualified for the explicitly recorded acceptance scope"
+    }
+  ],
+  "limitations": [
+    "No new real Task/Mission child-agent Provider run; shared ownership callsites audited",
+    "Standalone bare Session has no Workbench metadata; final UI proof uses an actual Work Session",
+    "Model quoting or stdout encoding mistakes can still occur; their actual outcomes remain visible",
+    "No database schema or migration change; historical unknown exits remain unknown",
+    "User service18571 and user database were not operated"
+  ]
+}
