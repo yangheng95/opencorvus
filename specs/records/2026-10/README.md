@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [成员分组与真实事件中的身份变化](2026-10-25-member-group-identity.md)：589生产投影与成员正文归属。
+
 - [既有成员的真实流与 Rendering 生命周期](2026-10-25-member-live-lifecycle.md)：588已有Session直接输入、实页和生命周期。
 
 - [专家团完成后分页反馈与服务重启](2026-10-25-expert-word-feedback-recovery.md)：原轮失败保全、验收准备修正和Base五页实物验收。

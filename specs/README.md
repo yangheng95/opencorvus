@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [成员分组与真实事件中的身份变化](records/2026-10/2026-10-25-member-group-identity.md)：589真实事件与正文分组身份调查。
+
 - [既有成员的真实流与 Rendering 生命周期](records/2026-10/2026-10-25-member-live-lifecycle.md)：588原成员自身流式路径和真实渲染所有权。
 
 - [专家团完成后分页反馈与服务重启](records/2026-10/2026-10-25-expert-word-feedback-recovery.md)：原轮失败保全、验收依赖根因与Base五页修订实物复核。

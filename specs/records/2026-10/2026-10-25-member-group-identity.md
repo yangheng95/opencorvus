@@ -1,0 +1,37 @@
+# 成员分组与真实事件中的身份变化
+
+## Recall
+
+589继续用户授权的自主产品迭代，最新约束为单个编码agent、仅在无法安全判定的实际冲突时等待；旧Goal三Astra委派文字不采用。上轮progress：a892a50d7已正常hook推送，fresh0/0。588/588b真实既有普通成员长回复6470/6769字符，两次Source/Tool归属及持久receipt完整，后者原公开POST200/exec0；修复私有Node fetch约300s响应头超时，未重发旧消息。两个scope原exec/native/launcher0、原Provider合计6条精确Sol流200/reader EOF、物理/输出/请求与出生链闭合，页267/268关闭，配对auth/catalog副本清退；完整577源90表207330原行字段/时间、canonical、bytes/mtime保持。原Rendering高频闪烁未复现，复制字节未核验；不能把pending切换、静态历史或采样间未知包装为根因修复。
+
+当前HEAD a892a50d7，工作区171删除、3共享README修改和2缓存目录属于他人并保留。已读588 Recall、573真实压缩/排序修复与585规范化时序调查，当前CardParts全部分组、card-message-run/message-part、ConversationCard/ChatBubble、SubagentConversationPanel目标/resource/live、subagent-conversation projector、真实message bridge和conversation-live-buffer，以及所安装Solid当前Switch/Show原实现。Switch/Match默认按truthiness稳定，不因同一非空文本字符串变化直接重挂；588采样也支持该具体路径稳定。CardParts各层Index仍按位置；先证明真实分组变化，不按关键词改为Key。
+
+## 修改前分析与调查方案
+
+可观察原现象是密集Sources成员Dock反复Rendering。TextPart仅在pending且HTML为空显示该提示，已有HTML由实际空源或owner退休/分支更换才能丢失。588普通Session新增一Source后再进入下一Message正文，没有覆盖“较早消息/来源补齐时已有后继正文”的条件。585仅检查最终持久创建顺序，不能代表真实到达；573修复Part canonical排序，尚未检查排序后的分组位置是否使已经可见的正文换组。
+
+数据流候选：真实Bus outbox→当前bridge补全实际持久身份→生产原到达或replay/bootstrap压缩器→成员live projector canonical排序→aggregate card→message/body-execution/source分组→TextPart。tool-only Message boundary在narrative出现前透明，Source补齐或较早正文开始后可能新建分组，位置而非持久Message/Part身份会影响既有owner；当前没有实际发生证据，根因未知。普通Session与Task投影成员共享呈现，协议入口和authority不同，不能只测普通成员就宣称Task路径已覆盖。
+
+先只读已完整关闭的588b schema8副本作为原源，复制fresh隔离分析运行目录；所有原行字段/配置和源文件bytes/mtime记账。使用当前真实bridge、压缩器、完整成员projector和既有纯数据分组器逐事件观察已有text的祖先分组/位置变化，同时保留原事件身份、类型、源长度和具体触发点；这属于真实后端事实和投影调查，不是DOM/组件/UI自动化测试，也不以派生统计替代视觉验收。原源不迁移或写入；分析目标已经schema8，现有迁移不可改写。对缺失真实行或身份错误保留明确错误与覆盖边界，禁止猜造Part或角色以通过。
+
+若发现共享机制异常，再补齐真实触发、控制/数据根因、旧修复遗漏、全部调用/公开契约、数据/测试/文档/交付与风险，然后实施唯一修复。涉及调度、队列、恢复、并发或终态异常时立即横审Task/Mission/Session所有生产入口、轮次、正常/终态、重试重启、串并行和多项目；不以单个场景降级。若只是合法到达造成共享呈现身份错误，则横审所有CardParts调用和三层分组，不修改真实排序、来源事实或LLM流程。
+
+UI修改必须启动fresh独立native开发/ui，手工交互并人工查看目标截图，禁止新增/运行UI自动化测试。当前计划Provider预算0，不复制auth、不创建任何成员/Task/Goal；模型目录用于原公开目录与界面，关闭后清退。需要真实模型必须先补充有限输入、配对凭据/catalog、目标模型投影/实际请求一致、预算与原reader关闭责任，不能把只读scope扩为模型执行。native20分钟物理上限，至少5分钟提前publicshutdown；每个原exec/native/launcher/physical/output/request和精确出生链闭合后清理。用户18571、窗口与数据库不操作。
+
+所有新增spec/产物同步三索引和目录README，运行package声明文档检查；本批改动范围提交，fetch/merge上游、审查完整待推集合和必要验证后正常push，不绕hook、不创建分支或worktree。未达指标如实列明，整体Goal保持active。
+
+## 实际调查结果与边界
+
+本批源为完整关闭588b目标，已经是schema8，包含92表214319原行；与前批追溯577基线6时记录的90表207330行含义不同，不能复用旧计数。分析目标同为8，没有schema升级。原源95719424字节、mtime1792901425696.663及canonical配置逐项保持，目标全部原行字段差异0，两端integrity ok。
+
+2861条真实outbox快照涉及236个Session，当前bridge对234个可投影。两个缺失Message行的原错误按实际身份保留，未猜造或跳过错误后冒充完整覆盖。分别按原发布次序和当前生产压缩器后的重放次序，逐事件进入当前完整成员projector及message/body-execution分组。发布次序下没有记录到既有非空text的所检查祖先坐标变化；重放有21次，全部是同一user上下文内较早text补齐时body首Part/普通Part位置变化。没有本样本内assistant正文或Source触发的坐标变化。原Task B/X86d：125原事件/68压缩事件，最大9个text/9个Source；原发布变化0、重放1为329字符用户上下文，不能拿来解释原assistant截图。588b普通成员151原事件/81压缩事件、15text/12Source，所查坐标变化0。
+
+另使用当前生产lexMarkdown逐条读取758条真实非空text，全部有非space token，词法错误0。这排除了这些持久最终文本“非空但词法结果无可显示块”的样本条件，不覆盖未持久化每token前缀、实际worker回复或DOM生命周期。outbox也不包含每个即时token delta；单个完整replay buffer的次序不等同真实浏览器分帧。没有以统计冒充UI视觉验收，没有产品源码修改、UI测试或截图断言。
+
+首轮纯数据调用漏载语言目录，产生MissingI18nKeyError日志；已经归档原结果/日志，用真实en-US/zh-CN目录经当前setLocaleData初始化后重跑原checker，并加入生产RealProviderAudit预算0再跑原链路。另一个继承的中间receipt保留了577的14-reader文字，原数据实际已从正确588b复制；该中间件归档，按原588b3条EOF及原进程完整关闭事实重建准确receipt，没有把来源混同。最新有限Node caller及Bun child返回0，所有Instance owner dispose，实际Provider audit0/预算0/未耗尽，无auth副本。只准备了54085候选，没有启动native或浏览器，不伪称本批已做视觉验收。所有原数据与catalog原件核验后清退唯一自有模型目录副本。
+
+结论：目前没有足以修改Index分组或隐藏Rendering的真实根因证据，保留当前唯一实现。下一步检查Task成员activity/selection在实际snapshot/recovery中的完整性，核对target key是否短暂失去当前成员导致整栏退休，并遵守所有Task/Mission/Session共享合同；不注入消息、伪造角色或绕过投影worker的Task operator-steer权威。当前operator-steer实际会持久化协调请求并唤醒orchestrator，不能把它当直接向既有子Session写入的接口使用，也不能把预算0分析scope临时扩大为执行。
+
+## 检查与交付
+
+`bun run docs:check`通过（350 operations、26 groups），`bun run check:architecture-index`通过（20份当前架构文档、链接有效）。本批只运行真实持久事实/生产投影与词法调查、完整数据保全及目录清退checker，没有无目标全量测试、UI自动化或新Provider执行。范围提交后正常同步上游并执行push hook，完整待推集合需保持仅本批或其他已授权且验证的交付；他人171删除、共享README与缓存均保留。

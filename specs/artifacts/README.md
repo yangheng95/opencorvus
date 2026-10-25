@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [成员分组与真实事件中的身份变化](2026-10-25-member-group-identity/README.md)：589真实事件/分组与Markdown词法调查。
+
 - [既有成员实时生命周期](2026-10-25-member-live-lifecycle/README.md)：588真实正文流、Source与渲染观察。
 
 - [专家团Word分页反馈](2026-10-25-expert-word-feedback/README.md)：原Task追加失败保全、验收依赖修正和Base五页实物复核通过。
