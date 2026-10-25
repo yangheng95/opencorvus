@@ -2,6 +2,7 @@ import {
   CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY,
   CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES,
   CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY,
+  conversationAttachmentWriteChange,
   type ConversationToolFileChange,
 } from "@opencorvus-ai/transport-protocol"
 import { createHash } from "node:crypto"
@@ -64,6 +65,10 @@ function boundedToolInput(value: unknown): Record<string, unknown> {
 function observedFileChanges(part: Message.ToolPart): ConversationToolFileChange[] | undefined {
   if (part.state.status !== "completed") return undefined
   const metadata = part.state.metadata
+  if (part.tool === "write") {
+    const change = conversationAttachmentWriteChange(metadata)
+    return change ? [change] : undefined
+  }
   const rows =
     part.tool === "apply_patch" && Array.isArray(metadata.files)
       ? metadata.files

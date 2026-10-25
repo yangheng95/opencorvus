@@ -1,5 +1,9 @@
 import type { FileChange, FileChangeReceipt } from "../components/DiffView"
-import { conversationDeferredToolState, conversationToolFileChanges } from "@opencorvus-ai/transport-protocol"
+import {
+  conversationAttachmentWriteChange,
+  conversationDeferredToolState,
+  conversationToolFileChanges,
+} from "@opencorvus-ai/transport-protocol"
 import { relativePathFrom } from "./tool"
 import { textComparisonCounts } from "./text-comparison"
 
@@ -71,11 +75,23 @@ export function toolFileChangesFromState(state: unknown, base: string, context?:
     return observations.map((row) => ({
       ...identity(row.filePath, row.movePath ?? row.filePath, base),
       status: row.status,
-      isText: true,
+      isText: row.isText !== false,
       additions: row.additions,
       deletions: row.deletions,
       evidence: { kind: "complete", receipts: receipt(row.fileIndex) },
     }))
+  const createdAttachment = conversationAttachmentWriteChange(meta)
+  if (createdAttachment)
+    return [
+      {
+        ...identity(createdAttachment.filePath, createdAttachment.filePath, base),
+        status: createdAttachment.status,
+        isText: false,
+        additions: null,
+        deletions: null,
+        evidence: { kind: "complete", receipts: receipt(0) },
+      },
+    ]
   if (Array.isArray(meta.files))
     return meta.files.flatMap((raw, index) => {
       const change = record(raw) ? comparison(raw, base, "patch", receipt(index)) : null

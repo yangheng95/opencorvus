@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [附件保存的文件变更投影](2026-10-25-attachment-file-change-projection.md)：599真实保存文件在完整/延迟Tool摘要中的投影。
+
 - [Office保存与源文件交付](2026-10-25-office-save-export.md)：598二进制保存、下载投影和PDF页边界。
 
 - [Office真实预览与下载](2026-10-25-office-preview-download.md)：596原Chat继续检查、预览与正式交付。

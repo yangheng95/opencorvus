@@ -1,0 +1,95 @@
+{
+  "scope": 599,
+  "entry": "main-JKYdYGSX.js",
+  "database": {
+    "source": "Closed own 598 complete clone",
+    "schema": 8,
+    "integrity": "ok",
+    "tables": 92,
+    "cloneRows": 24573,
+    "attachments": 56,
+    "preserved": {
+      "message": {
+        "rows": 96,
+        "exactFacts": true
+      },
+      "part": {
+        "rows": 230,
+        "exactFacts": true
+      },
+      "tool_part_request": {
+        "rows": 68,
+        "exactFacts": true
+      },
+      "tool_part_outcome": {
+        "rows": 68,
+        "exactFacts": true
+      },
+      "interactive_artifact": {
+        "rows": 3,
+        "exactFacts": true
+      },
+      "engine_task": {
+        "rows": 0,
+        "exactFacts": true
+      },
+      "task_plan": {
+        "rows": 0,
+        "exactFacts": true
+      },
+      "provider_activity_request": {
+        "rows": 82,
+        "exactFacts": true
+      },
+      "provider_activity_outcome": {
+        "rows": 82,
+        "exactFacts": true
+      },
+      "provider_usage_event": {
+        "rows": 94,
+        "exactFacts": true
+      }
+    }
+  },
+  "credentialsCopied": false,
+  "providerRequests": 0,
+  "manualUi": {
+    "summaryFiles": 4,
+    "files": [
+      "交付/周报.docx",
+      "交付/周报.md",
+      "交付/工时汇总.csv",
+      "交付/工时汇总.xlsx"
+    ],
+    "attachmentRows": "Non-text",
+    "review": "Added, non-text; actual Excel row opened",
+    "modelConfiguration": "Unavailable as expected: own runtime contains no credentials; historical reading remains usable"
+  },
+  "httpReads": 96,
+  "lifecycle": {
+    "publicShutdown": 200,
+    "reserveMs": 1123957,
+    "requiredReserveMs": 300000,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "originalExecCollected": true
+  },
+  "contracts": {
+    "label": "contracts-attachment-observations",
+    "startedAt": 1792931656566,
+    "closedAt": 1792931661117,
+    "code": 0,
+    "signal": null,
+    "childPID": 73612,
+    "tests": 20,
+    "assertions": 61
+  },
+  "previousDelivery": {
+    "commit": "2850b9ea400ae5bcd165e8acd99a72af64142cb0",
+    "firstPush": "All normal checks passed; HTTPS handshake interrupted upload",
+    "secondPush": "Normal checks passed and remote acknowledged main update with TLS verification enabled using HTTP/2"
+  }
+}

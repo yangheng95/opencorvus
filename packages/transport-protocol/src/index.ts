@@ -640,13 +640,39 @@ export const CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES = 4 * 1024
 export const CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY = "opencorvus_tool_file_changes" as const
 
 /** Bounded observations of one immutable Tool comparison, not composed worktree totals. */
-export interface ConversationToolFileChange {
+export type ConversationToolFileChange = {
   fileIndex: number
   filePath: string
   movePath?: string
   status?: "added" | "deleted" | "modified"
-  additions: number
-  deletions: number
+} & ({ isText?: true; additions: number; deletions: number } | { isText: false; additions: null; deletions: null })
+
+/** A create-only attachment write observes exact file bytes, without text endpoints. */
+export function conversationAttachmentWriteChange(value: unknown): ConversationToolFileChange | undefined {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return undefined
+  const metadata = value as Record<string, unknown>
+  if (
+    metadata.exists !== false ||
+    typeof metadata.filepath !== "string" ||
+    !metadata.filepath.trim() ||
+    !Number.isSafeInteger(metadata.bytes) ||
+    Number(metadata.bytes) < 0 ||
+    !metadata.source ||
+    typeof metadata.source !== "object" ||
+    Array.isArray(metadata.source)
+  )
+    return undefined
+  const source = metadata.source as Record<string, unknown>
+  if (
+    source.size !== metadata.bytes ||
+    typeof source.sha !== "string" ||
+    !/^[a-f0-9]{64}$/.test(source.sha) ||
+    typeof source.url !== "string" ||
+    !/^\/attachment\/[^/\\?#]+\/[^/\\?#]+$/.test(source.url) ||
+    !source.url.slice(source.url.lastIndexOf("/") + 1).startsWith(`${source.sha}.`)
+  )
+    return undefined
+  return { fileIndex: 0, filePath: metadata.filepath, status: "added", isText: false, additions: null, deletions: null }
 }
 
 export function conversationToolFileChanges(value: unknown): ConversationToolFileChange[] | undefined {
@@ -665,7 +691,10 @@ export function conversationToolFileChanges(value: unknown): ConversationToolFil
       row.filePath.trim().length === 0 ||
       (row.movePath !== undefined && (typeof row.movePath !== "string" || row.movePath.trim().length === 0)) ||
       (row.status !== undefined && !["added", "deleted", "modified"].includes(String(row.status))) ||
-      ![row.additions, row.deletions].every((count) => Number.isSafeInteger(count) && Number(count) >= 0)
+      (row.isText === false
+        ? row.additions !== null || row.deletions !== null
+        : (row.isText !== undefined && row.isText !== true) ||
+          ![row.additions, row.deletions].every((count) => Number.isSafeInteger(count) && Number(count) >= 0))
     )
       return undefined
     indices.add(Number(row.fileIndex))

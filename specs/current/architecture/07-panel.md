@@ -1551,6 +1551,14 @@ binary filename used by copy-name. Historical completed deliveries use the
 same projection. Persisted artifact payloads, messages and schema remain intact;
 there is no second download registry or persisted source field.
 
+Create-only attachment writes contribute their actual saved path to the same
+conversation file summary and Review groups. The shared transport contract
+validates the original completed Tool's destination, exclusive-create result,
+canonical source identity and byte count; full and deferred Tool views consume
+that one projection. These opaque-byte observations retain Added status and
+explicit non-text comparisons with null line counts. They never synthesize text
+endpoints or zero-line diffs, and historical Tool facts need no rewriting.
+
 Conversation artifact text and each immutable diff side use one fatal streaming
 UTF-8 decoder for the complete logical read, including its final flush. Literal
 U+FEFF bytes are retained as content rather than removed as a decoding signature.
