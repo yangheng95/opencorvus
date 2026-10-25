@@ -2,6 +2,7 @@ import fs from "node:fs/promises"
 import type { BigIntStats } from "node:fs"
 import path from "node:path"
 import { requireRuntimePackage } from "@/runtime/package-require"
+import { Filesystem } from "./filesystem"
 
 export type FileEntry = {
   address: string
@@ -40,7 +41,7 @@ export async function readFileEntry(full: string, expected?: BigIntStats): Promi
     shortName = info.shortName
     if (Boolean(link) !== stat.isSymbolicLink()) throw changedEntry(full)
   } else {
-    address = path.join(await fs.realpath(path.dirname(full)), path.basename(full))
+    address = path.join(await Filesystem.realpath(path.dirname(full)), path.basename(full))
     link = stat.isSymbolicLink() ? "file" : undefined
   }
   const observations = await Promise.allSettled([fs.lstat(full, { bigint: true }), fs.lstat(address, { bigint: true })])

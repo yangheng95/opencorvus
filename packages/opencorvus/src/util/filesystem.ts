@@ -1,4 +1,16 @@
-import { access, chmod, link, mkdir, open, readFile, rename, rm, stat as statAsync, writeFile } from "fs/promises"
+import {
+  access,
+  chmod,
+  link,
+  mkdir,
+  open,
+  readFile,
+  realpath as runtimeRealpath,
+  rename,
+  rm,
+  stat as statAsync,
+  writeFile,
+} from "fs/promises"
 import { createWriteStream, existsSync, statSync } from "fs"
 import { lookup } from "mime-types"
 import { realpathSync } from "fs"
@@ -17,6 +29,21 @@ import {
   renameReplaceWriteThrough as nativeRenameReplaceWriteThrough,
 } from "./rename-no-replace"
 import { Flag } from "@/flag/flag"
+import { getSystemErrorName } from "node:util"
+import { requireRuntimePackage } from "@/runtime/package-require"
+
+let posixPathBindings: ReturnType<typeof loadPosixPathBindings> | undefined
+
+function loadPosixPathBindings() {
+  const koffi = requireRuntimePackage<typeof import("koffi")>("koffi")
+  const library = koffi.load(null)
+  return {
+    library,
+    koffi,
+    realpath: library.func("void *realpath(const char *path, void *resolved_path)"),
+    free: library.func("void free(void *pointer)"),
+  }
+}
 
 let temporaryFileSequence = 0
 
@@ -29,6 +56,28 @@ function temporaryPath(target: string, operation: string) {
 }
 
 export namespace Filesystem {
+  /** Resolve the OS pathname, preserving literal POSIX filename characters. */
+  export async function realpath(input: string): Promise<string> {
+    if (input.includes("\0")) {
+      throw Object.assign(new TypeError("Path must be a string without null bytes"), { code: "ERR_INVALID_ARG_VALUE" })
+    }
+    if (process.platform === "win32") return runtimeRealpath(input)
+    // Bun's node:fs realpath variants reinterpret literal backslashes on POSIX.
+    // Use the existing native runtime dependency and libc's pathname contract.
+    const api = (posixPathBindings ??= loadPosixPathBindings())
+    const pointer = api.realpath(input, null)
+    if (pointer === null) {
+      const errno = -api.koffi.errno()
+      const code = getSystemErrorName(errno)
+      throw Object.assign(new Error(`${code}: realpath '${input}'`), { code, errno, syscall: "realpath", path: input })
+    }
+    try {
+      return api.koffi.decode(pointer, "char", -1)
+    } finally {
+      api.free(pointer)
+    }
+  }
+
   export function durableDirectoryTemporaryTargetName(candidate: string): string | undefined {
     const match = /^\.(.+)\.\d+\.\d+\.\d+\.durable-directory\.tmp$/.exec(candidate)
     return match?.[1]

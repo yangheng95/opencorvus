@@ -38,7 +38,9 @@ export async function lookupFileAccess(parent: string, name: string): Promise<Fi
     const entry = await readFileEntry(position)
     return [
       {
-        position: filePosition(entry.stat.isDirectory() && !entry.link ? await fs.realpath(position) : entry.address),
+        position: filePosition(
+          entry.stat.isDirectory() && !entry.link ? await Filesystem.realpath(position) : entry.address,
+        ),
         entry,
         ...(entry.link ? { text: await fs.readlink(position) } : {}),
       },

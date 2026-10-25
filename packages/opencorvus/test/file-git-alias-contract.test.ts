@@ -74,31 +74,25 @@ test("real Git HTTP reads share dot-alias content and physical revision with exa
   await fs.mkdir(path.join(project.path, "folder"))
   await fs.mkdir(path.join(project.path, "资料"))
   for (const file of files) await fs.writeFile(path.join(project.path, file), "original-first\ncommon-second\n")
-  console.info("file-git-alias-fixture", JSON.stringify({ phase: "written", names: await fs.readdir(path.join(project.path, "资料")) }))
   await git(project.path, ["--literal-pathspecs", "add", "--", ...files])
   await git(project.path, ["commit", "-m", "exact text baselines"])
-  console.info("file-git-alias-fixture", JSON.stringify({ phase: "committed", names: await fs.readdir(path.join(project.path, "资料")), index: await git(project.path, ["ls-files", "-z"]) }))
   await using http = await reader(project.path)
-  console.info("file-git-alias-fixture", JSON.stringify({ phase: "opened", names: await fs.readdir(path.join(project.path, "资料")) }))
   for (const wave of ["staged-first", "unstaged-first"]) {
     for (const file of files) await fs.writeFile(path.join(project.path, file), `${wave}\ncommon-second\n`)
     if (wave === "staged-first") await git(project.path, ["--literal-pathspecs", "add", "--", ...files])
     for (const file of files) {
       const full = path.join(project.path, file)
-      const physical = await fs.realpath(full).catch(async error => {
-        console.info("file-git-alias-physical-failure", JSON.stringify({
-          file, full, names: await fs.readdir(path.dirname(full)),
-          stat: await fs.lstat(full).then(info => ({ size: info.size, file: info.isFile() }), error => ({ code: error.code })),
-          content: await fs.readFile(full, "utf8").catch(error => ({ code: error.code })),
-        }))
-        throw error
-      })
-      expect(physical).toBe(full)
+      const physical = full
+      expect((await fs.lstat(physical)).isFile()).toBe(true)
       expect(await fs.readFile(physical, "utf8")).toBe(`${wave}\ncommon-second\n`)
       const direct = await Instance.provide({ directory: project.path, fn: () => File.read(file) })
-      expect(direct).toEqual(expect.objectContaining({
-        type: "text", content: `${wave}\ncommon-second\n`, revision: expect.any(String),
-      }))
+      expect(direct).toEqual(
+        expect.objectContaining({
+          type: "text",
+          content: `${wave}\ncommon-second\n`,
+          revision: expect.any(String),
+        }),
+      )
       const loaded = await http.read(file)
       expect(loaded).toMatchObject({
         status: 200,

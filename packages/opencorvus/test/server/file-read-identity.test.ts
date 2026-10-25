@@ -42,7 +42,7 @@ test("cold file readers use exact Project file facts with unavailable execution 
     expect(absolute).toMatchObject({ status: 200, body: { type: "text", content } })
     const listing = await read(directory!, "/file?path=")
     expect(listing).toMatchObject({ status: 200, body: expect.arrayContaining([
-      { name: "README.md", path: "README.md", absolute: path.join(directory!, "README.md"), type: "file", ignored: false },
+      { name: "README.md", path: "README.md", absolute: path.join(directory!, "README.md"), type: "file", directoryTarget: false, ignored: false },
     ]) })
     const files = await read(directory!, "/find/file?query=README&dirs=false&type=file")
     expect(files).toEqual({ status: 200, body: ["README.md"] })

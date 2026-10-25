@@ -342,8 +342,10 @@ test("streaming local HTTP bytes refresh idle and a stalled body is cancelled an
         ).rejects.toThrow("produced no process or RPC activity for 1500ms")
       })
     } finally {
-      server.closeAllConnections()
-      await new Promise<void>((resolve, reject) => server.close((error) => (error ? reject(error) : resolve())))
+      await new Promise<void>((resolve, reject) => {
+        server.close((error) => (error ? reject(error) : resolve()))
+        server.closeAllConnections()
+      })
     }
     expect(closed.sort()).toEqual(["/active", "/headers", "/stall"])
   })

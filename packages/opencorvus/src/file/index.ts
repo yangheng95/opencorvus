@@ -518,7 +518,7 @@ export namespace File {
 
   async function realpathIfExists(input: string): Promise<string | undefined> {
     try {
-      return await fs.promises.realpath(input)
+      return await Filesystem.realpath(input)
     } catch (error) {
       if (isMissingPathError(error)) return undefined
       throw error
@@ -1369,11 +1369,11 @@ export namespace File {
     const parent = Filesystem.normalizeWindowsPath(parentPath)
     let root: { origin: string; offset: string } | null = { origin: worktree, offset: "" }
     if (!Filesystem.contains(worktree, parent)) {
-      const physicalWorktree = await fs.promises.realpath(worktree)
+      const physicalWorktree = await Filesystem.realpath(worktree)
       root = null
       let current = parent
       while (true) {
-        const physical = await fs.promises.realpath(current)
+        const physical = await Filesystem.realpath(current)
         if (!Filesystem.contains(physicalWorktree, physical)) break
         root = { origin: current, offset: path.relative(physicalWorktree, physical) }
         const ancestor = path.dirname(current)
