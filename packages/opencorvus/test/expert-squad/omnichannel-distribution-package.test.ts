@@ -289,13 +289,13 @@ describe("Omnichannel Distribution Expert Squad package", () => {
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
         })
         await Session.updatePart({
-          id: "step-omnichannel-publisher",
+          id: Identifier.ascending("part"),
           sessionID: session.id,
           messageID: assistantMessage.id,
           type: "step-start",
         })
-        await Session.updatePart({
-          id: "part-omnichannel-publisher",
+        const toolPart = await Session.updatePart({
+          id: Identifier.ascending("part"),
           sessionID: session.id,
           messageID: assistantMessage.id,
           type: "tool",
@@ -313,7 +313,7 @@ describe("Omnichannel Distribution Expert Squad package", () => {
           sessionID: session.id,
           messageID: "message-omnichannel-publisher",
           toolCallID: "call-omnichannel-publisher",
-          toolPartID: "part-omnichannel-publisher",
+          toolPartID: toolPart.id,
           executionSurface: {},
           owner: {
             kind: "projected-worker",

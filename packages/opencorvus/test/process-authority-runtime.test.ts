@@ -350,6 +350,19 @@ describe("explicit conversation and Task execution authority", () => {
               operation: input.args[0]!,
             })
             if (input.args[0] === "create") await fs.writeFile(input.args[1]!, await minimalPresentationBytes())
+            if (input.args[0] === "batch") {
+              return {
+                code: 0,
+                stdout: Buffer.from(JSON.stringify({
+                  success: true,
+                  data: {
+                    results: [{ index: 0, success: true }],
+                    summary: { total: 1, executed: 1, succeeded: 1, failed: 0, skipped: 0 },
+                  },
+                })),
+                stderr: Buffer.alloc(0),
+              }
+            }
             return { code: 0, stdout: Buffer.from('{"success":true,"data":{}}'), stderr: Buffer.alloc(0) }
           },
         }

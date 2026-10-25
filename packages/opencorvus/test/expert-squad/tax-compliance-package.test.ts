@@ -380,6 +380,7 @@ describe("Tax Compliance Expert Squad", () => {
           agent: "user",
           model: { providerID: "test", modelID: "test" },
         })
+        const toolPartIDs = new Map<string, string>()
         for (const [agentID, suffix] of [
           ["tax-compliance-engagement-planner", "charter"],
           ["tax-compliance-authority-researcher", "dossier"],
@@ -399,13 +400,13 @@ describe("Tax Compliance Expert Squad", () => {
             tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
           })
           await Session.updatePart({
-            id: `step-tax-compliance-${suffix}`,
+            id: Identifier.ascending("part"),
             sessionID: session.id,
             messageID: assistantMessage.id,
             type: "step-start",
           })
-          await Session.updatePart({
-            id: `part-tax-compliance-${suffix}`,
+          const toolPart = await Session.updatePart({
+            id: Identifier.ascending("part"),
             sessionID: session.id,
             messageID: assistantMessage.id,
             type: "tool",
@@ -413,6 +414,7 @@ describe("Tax Compliance Expert Squad", () => {
             tool: publisherRef,
             state: { status: "running", input: {}, time: { start: started + 1 } },
           })
+          toolPartIDs.set(suffix, toolPart.id)
         }
 
         const scope = (agentID: keyof typeof roles, suffix: string): TaskToolExecutionScope => ({
@@ -425,7 +427,7 @@ describe("Tax Compliance Expert Squad", () => {
           sessionID: session.id,
           messageID: `message-tax-compliance-${suffix}`,
           toolCallID: `call-tax-compliance-${suffix}`,
-          toolPartID: `part-tax-compliance-${suffix}`,
+          toolPartID: toolPartIDs.get(suffix)!,
           executionSurface: {},
           owner: {
             kind: "projected-worker",

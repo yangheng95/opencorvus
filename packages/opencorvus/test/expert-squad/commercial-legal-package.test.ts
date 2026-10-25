@@ -1,5 +1,5 @@
 import { sourcePackageVersion } from "./capability-grant-fixture"
-import { afterAll, describe, expect, test } from "bun:test"
+import { afterAll, describe, expect, spyOn, test } from "bun:test"
 import path from "node:path"
 import { EngineArtifactEnvelopeSchema, readExactArtifact, type EngineArtifactLocator } from "@opencorvus-ai/plugin"
 import { Config } from "../../src/config/config"
@@ -301,7 +301,7 @@ describe("Commercial Legal Expert Squad", () => {
     }
   })
 
-  test("publishes and consumes an exact typed predecessor in a real Task tool Host", async () => {
+  test("publishes and consumes an exact typed predecessor in a real Task Host with same-millisecond Parts", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -347,6 +347,7 @@ describe("Commercial Legal Expert Squad", () => {
           agent: "user",
           model: { providerID: "test", modelID: "test" },
         })
+        const toolPartIDs = new Map<string, string>()
         for (const [agentID, suffix] of [
           ["commercial-legal-matter-planner", "charter"],
           ["commercial-legal-authority-researcher", "dossier"],
@@ -365,14 +366,15 @@ describe("Commercial Legal Expert Squad", () => {
             cost: 0,
             tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
           })
+          using _sameMillisecond = spyOn(Date, "now").mockReturnValue(Date.now())
           await Session.updatePart({
-            id: `step-commercial-legal-${suffix}`,
+            id: Identifier.ascending("part"),
             sessionID: session.id,
             messageID: assistantMessage.id,
             type: "step-start",
           })
-          await Session.updatePart({
-            id: `part-commercial-legal-${suffix}`,
+          const toolPart = await Session.updatePart({
+            id: Identifier.ascending("part"),
             sessionID: session.id,
             messageID: assistantMessage.id,
             type: "tool",
@@ -380,6 +382,7 @@ describe("Commercial Legal Expert Squad", () => {
             tool: publisherRef,
             state: { status: "running", input: {}, time: { start: started + 1 } },
           })
+          toolPartIDs.set(suffix, toolPart.id)
         }
 
         const scope = (agentID: keyof typeof roles, suffix: string): TaskToolExecutionScope => ({
@@ -392,7 +395,7 @@ describe("Commercial Legal Expert Squad", () => {
           sessionID: session.id,
           messageID: `message-commercial-legal-${suffix}`,
           toolCallID: `call-commercial-legal-${suffix}`,
-          toolPartID: `part-commercial-legal-${suffix}`,
+          toolPartID: toolPartIDs.get(suffix)!,
           executionSurface: {},
           owner: {
             kind: "projected-worker",

@@ -252,13 +252,13 @@ describe("Sales Strategy expert squad package", () => {
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
         })
         await Session.updatePart({
-          id: "step-sales-strategy-chain",
+          id: Identifier.ascending("part"),
           sessionID: session.id,
           messageID: assistantMessage.id,
           type: "step-start",
         })
-        await Session.updatePart({
-          id: "part-sales-strategy-chain",
+        const toolPart = await Session.updatePart({
+          id: Identifier.ascending("part"),
           sessionID: session.id,
           messageID: assistantMessage.id,
           type: "tool",
@@ -276,7 +276,7 @@ describe("Sales Strategy expert squad package", () => {
           sessionID: session.id,
           messageID: assistantMessage.id,
           toolCallID: "call-sales-strategy-chain",
-          toolPartID: "part-sales-strategy-chain",
+          toolPartID: toolPart.id,
           executionSurface: {},
           owner: {
             kind: "projected-worker",

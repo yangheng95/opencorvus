@@ -252,13 +252,13 @@ describe("Human Resources Operations expert squad package", () => {
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
         })
         await Session.updatePart({
-          id: "step-hr-operations-chain",
+          id: Identifier.ascending("part"),
           sessionID: session.id,
           messageID: assistantMessage.id,
           type: "step-start",
         })
-        await Session.updatePart({
-          id: "part-hr-operations-chain",
+        const toolPart = await Session.updatePart({
+          id: Identifier.ascending("part"),
           sessionID: session.id,
           messageID: assistantMessage.id,
           type: "tool",
@@ -276,7 +276,7 @@ describe("Human Resources Operations expert squad package", () => {
           sessionID: session.id,
           messageID: assistantMessage.id,
           toolCallID: "call-hr-operations-chain",
-          toolPartID: "part-hr-operations-chain",
+          toolPartID: toolPart.id,
           executionSurface: {},
           owner: {
             kind: "projected-worker",
