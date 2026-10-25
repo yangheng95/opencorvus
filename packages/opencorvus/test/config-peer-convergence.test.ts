@@ -17,6 +17,72 @@ async function within<T>(label: string, operation: Promise<T>, timeoutMs = 20_00
 }
 
 describe.serial("cross-process Config convergence", () => {
+  for (const failFinalOnce of [false, true])
+    test(`a writer joins its pending target through ${failFinalOnce ? "event retry" : "successful settlement"} and then returns to an earlier value`, async () => {
+      await using project = await memoryProject()
+      const target = await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          await Config.updateProjectPatch({ username: "joined-before" })
+          return Config.projectConfigFile()
+        },
+      })
+      const preparation = Promise.withResolvers<void>()
+      const release = Promise.withResolvers<void>()
+      const acknowledged = Promise.withResolvers<void>()
+      let finalAttempts = 0
+      const observed: string[] = []
+      Config.TestHooks.beforePeerRuntimePreparation = async (input) => {
+        if (input.directory !== project.path || input.config.username !== "joined-middle") return
+        preparation.resolve()
+        await release.promise
+      }
+      const listener = (event: { directory?: string; payload: { type?: string; properties?: Config.Info } }) => {
+        if (event.directory !== project.path || event.payload.type !== "config.changed") return
+        const username = event.payload.properties?.username
+        if (username) observed.push(username)
+        if (username === "joined-final") {
+          finalAttempts++
+          if (failFinalOnce && finalAttempts === 1) throw new Error("controlled joined target event failure")
+          acknowledged.resolve()
+        }
+      }
+      GlobalBus.on("event", listener)
+      try {
+        await writeFile(target, JSON.stringify({ username: "joined-middle" }), "utf8")
+        await Instance.provide({ directory: project.path, fn: () => Config.get() })
+        await within("pending peer preparation", preparation.promise)
+        const committed = await Instance.provide({
+          directory: project.path,
+          fn: () => Config.updateProjectPatch({ username: "joined-final" }),
+        }).catch((error) => error)
+        release.resolve()
+        await within("joined target acknowledgment", acknowledged.promise)
+        const returned = await Instance.provide({
+          directory: project.path,
+          fn: () => Config.updateProjectPatch({ username: "joined-middle" }),
+        })
+        expect({
+          outcome: committed instanceof Config.ProjectConfigCommittedReconcileError ? committed.name : "settled",
+          username:
+            committed instanceof Config.ProjectConfigCommittedReconcileError
+              ? committed.config.username
+              : committed.username,
+          returned: returned.username,
+          observed,
+        }).toEqual({
+          outcome: failFinalOnce ? "ProjectConfigCommittedReconcileError" : "settled",
+          username: "joined-final",
+          returned: "joined-middle",
+          observed: ["joined-middle", "joined-final", ...(failFinalOnce ? ["joined-final"] : []), "joined-middle"],
+        })
+      } finally {
+        release.resolve()
+        Config.TestHooks.beforePeerRuntimePreparation = undefined
+        GlobalBus.off("event", listener)
+      }
+    }, 45_000)
+
   test("a stable generation parses the exact source snapshot that owns its revision", async () => {
     await using project = await memoryProject()
     await Instance.provide({

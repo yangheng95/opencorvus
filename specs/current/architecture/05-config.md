@@ -388,6 +388,12 @@ before/after transition 供重试；较新的 canonical generation 只更新 que
 成功后才构造 `previous.after → latest`。本地 direct settlement 完成后仅 rewarm 活跃 state；若 canonical
 source 已由另一生产 writer 推进，则显式结算 `direct.after → current`，不以 reset 丢失最新 generation。
 
+Direct writer 在自己的 runtime turn 内 drain 旧 pending 时，准备阶段的 canonical 读取可能已将该 writer
+的目标排入同一链。若最后成功投影的完整配置等于 direct.after，该目标已经结算，直接 join 该结果；
+若不同或没有成功 pending，仍应用 direct transition。成功 advance 时同样收敛等于当前 after 的 queued
+目标，失败事件保留原 pending 重试。判断只使用本轮成功结果和原队列，不保留跨轮去重状态；真正的
+A→B→A 以及失败后再次确认事件继续按序发生。
+
 未取得active上下文的投影候选，必须先取得该Project的runtime owner并复核exact pending，才能退休inactive peer状态。
 原writer失败后保留的transition继续由原writerRetry事实驱动；同一peer monitor也调度identity-only writer的重试，
 每次通过原pending settlement集合和runtime owner去重。连续投影失败保留同一目标，成功后按原advance规则结算。

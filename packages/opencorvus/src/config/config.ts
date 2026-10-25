@@ -92,6 +92,7 @@ export namespace Config {
       | ((input: { directory: string; config: Info }) => Promise<void>)
       | undefined
     export let beforePeerRuntimeSettlement: ((input: { directory: string; config: Info }) => Promise<void>) | undefined
+    export let beforePeerRuntimePreparation: ((input: { directory: string; config: Info }) => Promise<void>) | undefined
     export let beforeGlobalRuntimeSettlement:
       | ((input: { transitions: readonly RuntimeTransition[] }) => Promise<void>)
       | undefined
@@ -2101,12 +2102,12 @@ export namespace Config {
   function advancePendingPeerTransition(directory: string, pending: RuntimeTransition): boolean {
     if (pendingPeerTransitions.get(directory) !== pending) return false
     const target = queuedPeerTargets.get(directory)
-    if (!target) {
+    queuedPeerTargets.delete(directory)
+    if (!target || runtimeConfigsEqual(target, pending.after)) {
       pendingPeerTransitions.delete(directory)
       writerRetryDirectories.delete(directory)
       return false
     }
-    queuedPeerTargets.delete(directory)
     pendingPeerTransitions.set(directory, {
       directory,
       before: pending.after,
@@ -2126,12 +2127,14 @@ export namespace Config {
     options: { resetDerivedCaches?: boolean } = {},
   ): Promise<void> {
     await using _owner = await Lock.write(projectRuntimeSettlementKey(transition.directory))
+    let settled: Info | undefined
     while (true) {
       const pending = pendingPeerTransitions.get(transition.directory)
       if (!pending) break
       try {
         const apply = await prepareProjectRuntimeTransition(pending)
         await apply()
+        settled = pending.after
       } catch (error) {
         queuedPeerTargets.set(transition.directory, transition.after)
         writerRetryDirectories.add(transition.directory)
@@ -2141,6 +2144,9 @@ export namespace Config {
       }
       advancePendingPeerTransition(transition.directory, pending)
     }
+    // Canonical reads while preparing a pending transition may have queued
+    // this writer's target. Join its successful settlement in this same turn.
+    if (settled && runtimeConfigsEqual(settled, transition.after)) return
     pendingPeerTransitions.set(transition.directory, transition)
     try {
       const apply = await prepareProjectRuntimeTransition(transition, options)
@@ -2165,6 +2171,7 @@ export namespace Config {
           if (pendingPeerTransitions.get(directory) !== pending) return false
           // State admission may wait behind a Config writer's catalog owner.
           // Complete it before claiming the runtime turn that writer must join.
+          await TestHooks.beforePeerRuntimePreparation?.({ directory, config: pending.after })
           const apply = await prepareProjectRuntimeTransition(pending)
           await using _owner = await Lock.write(projectRuntimeSettlementKey(directory))
           if (pendingPeerTransitions.get(directory) !== pending) return false
