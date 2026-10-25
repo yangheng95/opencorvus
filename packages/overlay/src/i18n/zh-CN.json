@@ -982,6 +982,7 @@
   "tool.empty_result": "已完成 · 未返回输出",
   "tool.result_load_failed": "无法加载工具结果",
   "tool.result_load_retry": "关闭并重新展开此工具可重试。你仍可以继续阅读对话。",
+  "tool.file_write_conflict": "文件已更改，请重新读取",
   "tool.metadata": "详情",
   "markdown.rendering": "正在渲染…",
   "markdown.render_failed": "Markdown 渲染失败：{{message}}",

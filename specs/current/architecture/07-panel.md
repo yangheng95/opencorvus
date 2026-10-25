@@ -1116,6 +1116,13 @@ activity summaries and session chips use the same failure-message projection as
 the body, before selecting input or result descriptions. Arguments and full
 diagnostics remain available in the existing disclosures. Sources and tool inputs
 retain their own controls.
+For a canonical tool-execution/FileWriteConflictError, that same reader also
+derives a localized short headline. Compact rows put this reason before the
+input's relative resource path; expanded Feedback uses the headline as its title
+while retaining the complete literal original message and diagnostic. Recognition
+uses the structured kind/name contract, never message keywords or path parsing.
+Other failures keep their original message projection. Locale changes update the
+derived headline without changing the persisted failure, Tool status or counts.
 The same canonical failure presentation recognizes a `MessageAbortedError`
 kind/name pair as cancellation. Tool transport status stays `error`; only the
 localized presentation distinguishes its cancelled label and group count from

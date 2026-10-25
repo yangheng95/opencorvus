@@ -36,11 +36,19 @@ export function toolPayloadText(value: unknown): string {
 }
 
 /** The summary and expanded body read the same canonical failure. */
-export function toolFailurePresentation(value: unknown): { message: string; diagnostic?: string; cancelled: boolean } {
+export function toolFailurePresentation(value: unknown): {
+  message: string
+  headline?: string
+  diagnostic?: string
+  cancelled: boolean
+} {
   if (value === undefined) return { message: "", cancelled: false }
   const parsed = ToolFailureCause.safeParse(value)
   if (parsed.success) return {
     message: parsed.data.message,
+    ...(parsed.data.kind === "tool-execution" && parsed.data.name === "FileWriteConflictError"
+      ? { headline: t("tool.file_write_conflict") }
+      : {}),
     diagnostic: renderToolFailureCause(parsed.data),
     cancelled: parsed.data.kind === "MessageAbortedError" && parsed.data.name === "MessageAbortedError",
   }
@@ -394,8 +402,20 @@ export function normalizeToolStatus(status: unknown): ToolDisplayStatus | undefi
 export function displayToolDetail(name: string, input: any, state: any, base = ""): string {
   const safeInput = record(input) ? input : {}
   const safeState = record(state) ? state : {}
-  const failure = toolFailurePresentation((safeState as any).failure).message || shortValue((safeState as any).error)
-  if (failure) return singleLine(failure)
+  const path =
+    (safeInput as any).file_path ||
+    (safeInput as any).filePath ||
+    (safeInput as any).path ||
+    (safeInput as any).filename ||
+    ""
+  const failure = toolFailurePresentation((safeState as any).failure)
+  if (failure.headline) {
+    return typeof path === "string" && path.trim()
+      ? `${failure.headline} · ${shortRelativePath(path, base)}`
+      : failure.headline
+  }
+  const message = failure.message || shortValue((safeState as any).error)
+  if (message) return singleLine(message)
   const n = toolNameKey(name)
   // The request URL identifies this fetch. Response media/encoding belongs to
   // the result disclosure rather than the compact transcript identity.
@@ -409,12 +429,6 @@ export function displayToolDetail(name: string, input: any, state: any, base = "
     const action = firstNonEmptyString((safeInput as any).action)
     if (action) return `action=${action}`
   }
-  const path =
-    (safeInput as any).file_path ||
-    (safeInput as any).filePath ||
-    (safeInput as any).path ||
-    (safeInput as any).filename ||
-    ""
   if (path) {
     // A completed read owns its resolved resource name. Keep the exact request
     // path in the disclosure, and use it here until a result supplies a title.

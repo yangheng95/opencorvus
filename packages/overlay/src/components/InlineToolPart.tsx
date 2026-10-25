@@ -570,7 +570,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
           <Show when={status() === "error" && error()}>
             <Feedback
               tone={display().cancelled ? "neutral" : "error"}
-              title={display().cancelled ? display().statusLabel : undefined}
+              title={display().cancelled ? display().statusLabel : failure().headline}
               details={failure().diagnostic ? stripAnsi(failure().diagnostic!) : undefined}
             >
               <div class="msg-tool-failure-message">{error()}</div>

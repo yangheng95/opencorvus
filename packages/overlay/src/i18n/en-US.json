@@ -982,6 +982,7 @@
   "tool.empty_result": "Completed · no output returned",
   "tool.result_load_failed": "Could not load the tool result",
   "tool.result_load_retry": "Close and reopen this tool to try again. You can continue reading the conversation.",
+  "tool.file_write_conflict": "File changed; read it again",
   "tool.metadata": "Details",
   "markdown.rendering": "Rendering…",
   "markdown.render_failed": "Markdown rendering failed: {{message}}",

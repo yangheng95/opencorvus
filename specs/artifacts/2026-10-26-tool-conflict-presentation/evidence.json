@@ -1,0 +1,1042 @@
+{
+  "batch": 603,
+  "date": "2026-10-26",
+  "sourceCommit": "615beec6505c50f3331bc67c8e050210300f2001",
+  "rootCause": "Compact Tool detail selected the complete native error string before resource identity, placing the reason after a long absolute path.",
+  "implementation": "One canonical failure reader derives a localized headline from exact tool-execution/FileWriteConflictError kind/name; raw message and diagnostic remain literal.",
+  "build": {
+    "at": "2026-10-25T16:11:27.944Z",
+    "entry": "main-BViLm3am.js",
+    "directory": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\tool-conflict-presentation-603\\ui-build",
+    "qualification": "Current source ordinary Node Vite production build, served by isolated development CLI; no UI instrumentation"
+  },
+  "checks": {
+    "nodeUiBuild": {
+      "label": "node-ui-build",
+      "startedAt": 1792944612951,
+      "closedAt": 1792944688056,
+      "code": 0,
+      "signal": null,
+      "childPID": 65016
+    },
+    "overlayTypecheck": {
+      "label": "overlay-typecheck",
+      "startedAt": 1792944623166,
+      "closedAt": 1792944651929,
+      "code": 0,
+      "signal": null,
+      "childPID": 99908
+    }
+  },
+  "manual": {
+    "url": "http://localhost:54111/ui/",
+    "sessionID": "ses_-zUQvBXYLzzQQsEND7Gw",
+    "languages": [
+      "en-US",
+      "zh-CN"
+    ],
+    "screenshots": [
+      "01-english-summary.png",
+      "02-chinese-original-error.png",
+      "03-original-diagnostic.png",
+      "04-chinese-summary-and-review.png"
+    ],
+    "review": "Actual page interactions and each screenshot manually inspected; no UI automation tests",
+    "history": "Real original602 conflict and recovery; no new synthetic messages or Tool results",
+    "goalDiscovery": "Composer More actions -> Continuous goal /goal opens the existing creation dialog; observed and closed without submission"
+  },
+  "database": {
+    "source": "Closed owned602 database",
+    "schema": 8,
+    "integrity": "ok",
+    "clonedTables": 92,
+    "clonedRows": 1996,
+    "preservedTranscriptTables": {
+      "session": 2,
+      "message": 8,
+      "part": 18,
+      "tool_part_request": 4,
+      "tool_part_progress": 0,
+      "tool_part_outcome": 4,
+      "provider_activity_request": 6,
+      "provider_activity_outcome": 6
+    },
+    "comparison": "Exact original rows, including immutable original Tool outcome failure JSON"
+  },
+  "credentialsCopied": false,
+  "newModelRequests": 0,
+  "cumulativeModelRequests": 119,
+  "publicRequests": [
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/assets/main-BViLm3am.js"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/assets/CommandMenuSurface-CN3W_QEU.js"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/assets/CommandMenuSurface-9Ez69chO.css"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/assets/main-BgVeWrB2.css"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/i18n/zh-CN.json"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/i18n/en-US.json"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg"
+    },
+    {
+      "method": "GET",
+      "path": "/global/composer-references"
+    },
+    {
+      "method": "POST",
+      "path": "/global/transport/stream"
+    },
+    {
+      "method": "GET",
+      "path": "/mailbox"
+    },
+    {
+      "method": "GET",
+      "path": "/expert-squad/catalog"
+    },
+    {
+      "method": "GET",
+      "path": "/expert-squad/search"
+    },
+    {
+      "method": "GET",
+      "path": "/mission-skill/catalog"
+    },
+    {
+      "method": "GET",
+      "path": "/chat/capability"
+    },
+    {
+      "method": "GET",
+      "path": "/work-ledger/events"
+    },
+    {
+      "method": "GET",
+      "path": "/coding/work/session/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/work-ledger"
+    },
+    {
+      "method": "GET",
+      "path": "/mission"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/mailbox"
+    },
+    {
+      "method": "GET",
+      "path": "/work-ledger"
+    },
+    {
+      "method": "GET",
+      "path": "/mission"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/config"
+    },
+    {
+      "method": "GET",
+      "path": "/channel"
+    },
+    {
+      "method": "GET",
+      "path": "/skill/mounts"
+    },
+    {
+      "method": "GET",
+      "path": "/mcp"
+    },
+    {
+      "method": "GET",
+      "path": "/path"
+    },
+    {
+      "method": "GET",
+      "path": "/vcs"
+    },
+    {
+      "method": "GET",
+      "path": "/global/tasks"
+    },
+    {
+      "method": "GET",
+      "path": "/expert-squad/inspect"
+    },
+    {
+      "method": "GET",
+      "path": "/experimental/project-memory"
+    },
+    {
+      "method": "GET",
+      "path": "/mailbox"
+    },
+    {
+      "method": "GET",
+      "path": "/expert-squad/catalog"
+    },
+    {
+      "method": "GET",
+      "path": "/expert-squad/search"
+    },
+    {
+      "method": "GET",
+      "path": "/mission-skill/catalog"
+    },
+    {
+      "method": "GET",
+      "path": "/chat/capability"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_-zUQvBXYLzzQQsEND7Gw/conversation"
+    },
+    {
+      "method": "POST",
+      "path": "/global/transport/stream"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_-zUQvBXYLzzQQsEND7Gw/config"
+    },
+    {
+      "method": "GET",
+      "path": "/global/tasks"
+    },
+    {
+      "method": "GET",
+      "path": "/path"
+    },
+    {
+      "method": "GET",
+      "path": "/vcs"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/assets/jetbrains-mono-latin-wght-normal-B9CIFXIH.woff2"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/assets/markdown-render.worker-DXg_fqFo.js"
+    },
+    {
+      "method": "GET",
+      "path": "/expert-squad/inspect"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_-zUQvBXYLzzQQsEND7Gw/events"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_-zUQvBXYLzzQQsEND7Gw/config"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/assets/noto-sans-sc-118-wght-normal-BPEb0gM9.woff2"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/assets/noto-sans-sc-117-wght-normal-Dsz3vkzU.woff2"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/assets/noto-sans-sc-116-wght-normal-vdFVzbO2.woff2"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/assets/noto-sans-sc-119-wght-normal-BfzSEbFz.woff2"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/assets/noto-sans-sc-115-wght-normal-BN__2iBG.woff2"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/assets/noto-sans-sc-114-wght-normal-CRH9SDZu.woff2"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/assets/noto-sans-sc-113-wght-normal-OgQXOX6x.woff2"
+    },
+    {
+      "method": "POST",
+      "path": "/log"
+    },
+    {
+      "method": "GET",
+      "path": "/experimental/project-memory"
+    },
+    {
+      "method": "GET",
+      "path": "/skill/mounts"
+    },
+    {
+      "method": "GET",
+      "path": "/mcp"
+    },
+    {
+      "method": "GET",
+      "path": "/config"
+    },
+    {
+      "method": "GET",
+      "path": "/channel"
+    },
+    {
+      "method": "POST",
+      "path": "/log"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "POST",
+      "path": "/log"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/assets/noto-sans-sc-109-wght-normal-CnjNbNmw.woff2"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/assets/noto-sans-sc-112-wght-normal-CiZxJMyY.woff2"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/assets/noto-sans-sc-111-wght-normal-ClFr5QXM.woff2"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/assets/noto-sans-sc-110-wght-normal-D2JBr045.woff2"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "POST",
+      "path": "/log"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "POST",
+      "path": "/log"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/assets/noto-sans-sc-107-wght-normal-kFQzJDLH.woff2"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "POST",
+      "path": "/log"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/file"
+    },
+    {
+      "method": "GET",
+      "path": "/project/current/worktrees"
+    },
+    {
+      "method": "GET",
+      "path": "/path"
+    },
+    {
+      "method": "GET",
+      "path": "/vcs"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "GET",
+      "path": "/global/health"
+    },
+    {
+      "method": "GET",
+      "path": "/continuous-goal/chat/ses_-zUQvBXYLzzQQsEND7Gw"
+    },
+    {
+      "method": "POST",
+      "path": "/shutdown"
+    }
+  ],
+  "shutdown": {
+    "http": 200,
+    "reserveMs": 675932,
+    "native": {
+      "occurrence": "tool-conflict-presentation-603-bb5ac3b9-7cfd-4535-820a-a0d5f9104336",
+      "outcome": "settled",
+      "host": {
+        "pid": 77836,
+        "processInstanceID": "win32:639285416037485094",
+        "occurrenceID": "61d4647f-285e-42d2-808b-23445e0bd454"
+      },
+      "target": {
+        "pid": 97704,
+        "processInstanceID": "win32:639285416045703118",
+        "occurrenceID": "61aec965-6328-4f1b-9b06-2fb1f7444bd1"
+      },
+      "observedAtUtc": "2026-10-25T16:22:07.573Z",
+      "deadlineAt": 1792946003505,
+      "terminal": {
+        "occurrenceID": "tool-conflict-presentation-603-bb5ac3b9-7cfd-4535-820a-a0d5f9104336",
+        "pid": 97704,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "launcher": {
+      "observedAtUtc": "2026-10-25T16:22:07.6251428Z",
+      "originalChildExit": 0
+    },
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 77836,
+          "processInstanceID": "win32:639285416037485094",
+          "occurrenceID": "61d4647f-285e-42d2-808b-23445e0bd454"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 97704,
+          "processInstanceID": "win32:639285416045703118",
+          "occurrenceID": "61aec965-6328-4f1b-9b06-2fb1f7444bd1"
+        }
+      }
+    ],
+    "observedAtUtc": "2026-10-25T16:22:08.5747427Z"
+  },
+  "limits": [
+    "Main dialogue visually exercised; shared Side/Squad/Mission consumers verified by code, not synthetic child conversations.",
+    "No new model invocation; model configuration unavailable feedback is expected in the credential-free isolated runtime.",
+    "Goal discoverability and cross-entry atomic file commits remain separate follow-up work; full native CI status belongs to its actual commit and run."
+  ]
+}

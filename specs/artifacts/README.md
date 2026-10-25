@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [工具内容冲突的可读摘要](2026-10-26-tool-conflict-presentation/README.md)：603中英文摘要、原始诊断和Review人工复核。
+
 - [工具读取事实与覆写前置条件](2026-10-25-observed-file-revision/README.md)：602真实write冲突、重新读取和最终Review。
 
 - [文件格式化与最终保存事实](2026-10-25-file-formatting/README.md)：601实际编辑器连续保存与后端进程证据。
