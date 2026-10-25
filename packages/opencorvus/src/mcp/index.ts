@@ -2377,11 +2377,15 @@ export namespace MCP {
     "mcp",
   )
 
-  async function state() {
+  async function withConfigAdmission<T>(run: () => Promise<T>): Promise<T> {
     // A reader waiting behind a Config writer must not publish initialization
     // that the same writer will then join during runtime reconciliation.
     const { SkillManager } = await import("@/skill/manager")
-    return SkillManager.withCatalogMutationOwner(() => Config.withConfigGenerationRead(() => stateSource()))
+    return SkillManager.withCatalogMutationOwner(() => Config.withConfigGenerationRead(run))
+  }
+
+  async function state() {
+    return withConfigAdmission(() => stateSource())
   }
 
   function startConnection(
@@ -2997,8 +3001,7 @@ export namespace MCP {
     if (pending?.size === 0) state.connectionCleanupPending.delete(name)
   }
 
-  async function cleanupRemovedProjectNames(names: readonly string[]) {
-    const s = await state()
+  async function cleanupRemovedProjectNames(s: McpState, names: readonly string[]) {
     for (const name of names) s.cleanupPending.add(name)
     for (const name of names) {
       invalidatePendingConnection(s, name)
@@ -3007,20 +3010,10 @@ export namespace MCP {
       delete s.statusIdentity[name]
       delete s.runtimeConnectionOverrides[name]
       queueConnectionCleanup(s, name, s.connections[name])
-      McpOAuthCallback.cancelPending(mcpAuthKey(name))
-      pendingOAuthFlows.delete(oauthFlowKey(mcpAuthKey(name)))
     }
     const tasks = names.flatMap((name) =>
       [...(s.connectionCleanupPending.get(name) ?? [])].map((connection) =>
         settleConnectionCleanup(s, name, connection),
-      ),
-    )
-    tasks.push(
-      McpAuth.removeMany(
-        names.map((name) => mcpAuthKey(name)),
-        async () => {
-          await assertProjectOccurrenceCurrent("removed MCP definitions were settling")
-        },
       ),
     )
     const results = await Promise.allSettled(tasks)
@@ -3044,13 +3037,11 @@ export namespace MCP {
   async function settleStagedCredentials(input: {
     projectAuthPrefix: string
     definitions: NonNullable<Config.Info["mcp"]>
-    names?: ReadonlySet<string>
   }) {
     const entries = await McpAuth.all()
     for (const [authKey, entry] of Object.entries(entries)) {
       if (!authKey.startsWith(input.projectAuthPrefix) || !entry.stagedStaticCredential) continue
       const stagedName = authKey.slice(input.projectAuthPrefix.length)
-      if (input.names && !input.names.has(stagedName)) continue
       const definition = input.definitions[stagedName]
       const nextIdentity = configuredCredentialIdentity(definition)
       const nextUrl = definition && "type" in definition && definition.type === "remote" ? definition.url : undefined
@@ -3078,10 +3069,105 @@ export namespace MCP {
     }
   }
 
-  export async function reconcileProjectConfig(input: { before: Config.Info; after: Config.Info }) {
+  export class McpConfigReconciliationScopeError extends Error {
+    override readonly name = "McpConfigReconciliationScopeError"
+
+    constructor() {
+      super("Prepared MCP configuration reconciliation no longer owns the current Project runtime")
+    }
+  }
+
+  export async function prepareProjectConfigReconciliation(input: { before: Config.Info; after: Config.Info }) {
+    const s = await withConfigAdmission(async () => {
+      const s = await stateSource()
+      try {
+        await reconcileProjectCredentials(s, input)
+      } catch (error) {
+        throw new AggregateError([error], "MCP configuration committed, but runtime cleanup did not fully settle")
+      }
+      return s
+    })
+    const directory = Instance.directory
+    const generation = Instance.projectGeneration
+    const source = stateSource.inspectAll().find((entry) => entry.key === directory)?.state
+    return async () => {
+      const current = stateSource.inspectAll().find((entry) => entry.key === directory)
+      if (
+        Instance.directory !== directory ||
+        Instance.project.id !== s.projectID ||
+        Instance.projectGeneration !== generation ||
+        !current ||
+        current.state !== source
+      ) {
+        throw new McpConfigReconciliationScopeError()
+      }
+      await reconcileProjectConfig(s, input)
+    }
+  }
+
+  async function reconcileProjectCredentials(s: McpState, input: { before: Config.Info; after: Config.Info }) {
+    // Admission retains the catalog and Config generation owners. A live
+    // configure has therefore committed its definition before we can settle
+    // its stage. The pending runtime transition can be older than that file;
+    // only the current canonical definitions may retire credential facts.
+    const definitions = (await Config.get()).mcp ?? {}
+    const projectAuthPrefix = `${s.projectID}:`
+    for (const [key, flow] of pendingOAuthFlows) {
+      if (flow.root !== Global.Path.root || !flow.authKey.startsWith(projectAuthPrefix)) continue
+      const name = flow.authKey.slice(projectAuthPrefix.length)
+      const definition = definitions[name]
+      if (
+        configuredCredentialIdentity(definition) === flow.credentialIdentity &&
+        definition &&
+        "url" in definition &&
+        definition.url === flow.serverUrl
+      )
+        continue
+      McpOAuthCallback.cancelPending(flow.authKey)
+      pendingOAuthFlows.delete(key)
+    }
+    for (const [name, previous] of Object.entries(input.before.mcp ?? {})) {
+      const next = input.after.mcp?.[name]
+      const current = definitions[name]
+      if (
+        !next ||
+        !current ||
+        mcpConfigIdentity(previous) === mcpConfigIdentity(next) ||
+        mcpConfigIdentity(next) !== mcpConfigIdentity(current) ||
+        !authIdentity(previous) ||
+        authIdentity(previous) !== authIdentity(next)
+      )
+        continue
+      await McpAuth.invalidate(mcpAuthKey(name), async () => {
+        await assertProjectOccurrenceCurrent(`reconciling ${name} credentials`)
+      })
+      McpOAuthCallback.cancelPending(mcpAuthKey(name))
+      pendingOAuthFlows.delete(oauthFlowKey(mcpAuthKey(name)))
+    }
+    await settleStagedCredentials({ projectAuthPrefix, definitions })
+    const authEntries = await McpAuth.all()
+    const staleKeys = Object.entries(authEntries).flatMap(([authKey, entry]) => {
+      if (!authKey.startsWith(projectAuthPrefix) || !McpAuth.hasCredentialOrFlowMaterial(entry)) return []
+      const definition = definitions[authKey.slice(projectAuthPrefix.length)]
+      const identity = configuredCredentialIdentity(definition)
+      return identity &&
+        definition &&
+        "url" in definition &&
+        entry.serverUrl === definition.url &&
+        entry.credentialIdentity === identity
+        ? []
+        : [authKey]
+    })
+    if (staleKeys.length > 0) {
+      await McpAuth.removeMany(staleKeys, async () => {
+        await assertProjectOccurrenceCurrent("stale MCP credentials were retiring")
+      })
+    }
+  }
+
+  async function reconcileProjectConfig(s: McpState, input: { before: Config.Info; after: Config.Info }) {
     const before = (input.before.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
     const after = (input.after.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
-    const s = await state()
     const initialNames = [
       ...new Set([
         ...Object.keys(before),
@@ -3100,7 +3186,6 @@ export namespace MCP {
     const removedNames: string[] = []
     for (const name of changed) {
       s.reconcilePending.add(name)
-      const previous = before[name]
       const next = after[name]
       s.durableGeneration[name] = (s.durableGeneration[name] ?? 0) + 1
       if (next) {
@@ -3113,20 +3198,6 @@ export namespace MCP {
       const connection = s.connections[name]
       delete s.clients[name]
       queueConnectionCleanup(s, name, connection)
-      if (authIdentity(previous) !== authIdentity(next) && authIdentity(previous)) {
-        // Live flow state dies with the identity it was opened under. The
-        // stored credential's retirement is NOT decided here: the durable
-        // store's own identity, compared against the committed definition
-        // after staged settlement below, is the single authority — deciding
-        // it from the config diff instead deleted the very secret a
-        // completed identity-changing configure had just promoted.
-        McpOAuthCallback.cancelPending(mcpAuthKey(name))
-        pendingOAuthFlows.delete(oauthFlowKey(mcpAuthKey(name)))
-      } else if (authIdentity(previous)) {
-        await McpAuth.invalidate(mcpAuthKey(name), async () => {
-          await assertProjectOccurrenceCurrent(`reconciling ${name} credentials`)
-        })
-      }
       if (!next) {
         s.cleanupPending.add(name)
         removedNames.push(name)
@@ -3142,65 +3213,17 @@ export namespace MCP {
       s.status[name] = { status: "disconnected" }
       s.statusIdentity[name] = mcpConfigIdentity(next)
     }
-    const projectAuthPrefix = `${s.projectID}:`
-    // Settle staged configure secrets BEFORE computing orphans and stale
-    // credentials: a staged secret whose identity matches the committed
-    // definition is a crash-interrupted configure's missing promotion; any
-    // other staged secret belongs to no committed definition and is dropped.
-    // Running this first keeps the stale-credential sweep from removing an
-    // entry whose promotion would have made it current.
-    // A staged secret is settled only by the commit that changed its own
-    // definition — otherwise an unrelated project-config commit landing
-    // between a configure's stage and its definition commit would drop a
-    // secret that is still in flight. Whatever a crash leaves behind is
-    // settled by the startup owner.
-    await settleStagedCredentials({ projectAuthPrefix, definitions: after, names: new Set(changed) })
-    const authEntries = await McpAuth.all()
-    const projectAuthNames = Object.entries(authEntries)
-      .filter(([authKey, entry]) => authKey.startsWith(projectAuthPrefix) && McpAuth.hasCredentialOrFlowMaterial(entry))
-      .map(([authKey]) => authKey.slice(projectAuthPrefix.length))
-      .filter(Boolean)
-    const authOrphanNames = projectAuthNames.filter((name) => !!name && !after[name])
-    const staleCredentialNames = projectAuthNames.filter((name) => {
-      const nextIdentity = configuredCredentialIdentity(after[name])
-      if (!nextIdentity) return !!after[name]
-      const stored = authEntries[mcpAuthKey(name)]
-      if (!stored) return false
-      if (!McpAuth.hasCredentialOrFlowMaterial(stored)) return false
-      if (!stored.serverUrl) return true
-      if (stored.serverUrl !== (after[name] as Extract<McpEntry, { type: "remote" }>).url) return true
-      return stored.credentialIdentity !== nextIdentity
-    })
-    const names = [...new Set([...initialNames, ...authOrphanNames, ...staleCredentialNames])]
-    const authOrphans = new Set(authOrphanNames)
-    const staleCredentials = new Set(staleCredentialNames)
+    const names = initialNames
     const changedNames = new Set(changed)
-    const retryNames = names.filter(
-      (name) => !changedNames.has(name) && (s.cleanupPending.has(name) || authOrphans.has(name)) && !after[name],
-    )
-    // Every credential the durable store proves stale against the committed
-    // definition is retired here, whether or not this commit changed that
-    // definition — one authority, no config-diff second opinion.
-    const credentialRetryNames = names.filter((name) => staleCredentials.has(name))
+    const retryNames = names.filter((name) => !changedNames.has(name) && s.cleanupPending.has(name) && !after[name])
     if (
       changed.length === 0 &&
       retryNames.length === 0 &&
-      credentialRetryNames.length === 0 &&
       s.connectionCleanupPending.size === 0 &&
       s.reconcilePending.size === 0
     )
       return
     const cleanupTasks: Promise<void>[] = []
-    if (credentialRetryNames.length > 0) {
-      cleanupTasks.push(
-        McpAuth.removeMany(
-          credentialRetryNames.map((name) => mcpAuthKey(name)),
-          async () => {
-            await assertProjectOccurrenceCurrent("stale MCP credentials were retiring")
-          },
-        ),
-      )
-    }
     for (const [name, pending] of s.connectionCleanupPending) {
       for (const connection of pending) cleanupTasks.push(settleConnectionCleanup(s, name, connection))
     }
@@ -3215,7 +3238,7 @@ export namespace MCP {
     }
     for (const name of removedNames) s.cleanupPending.delete(name)
     for (const name of names) s.reconcilePending.delete(name)
-    if (retryNames.length > 0) await cleanupRemovedProjectNames(retryNames)
+    if (retryNames.length > 0) await cleanupRemovedProjectNames(s, retryNames)
   }
 
   export async function projectStatus() {
@@ -3313,9 +3336,11 @@ export namespace MCP {
           // Admission does not revoke a flow; it initializes only a missing
           // generation so every refresh/client write is fenced against a
           // later explicit removal, including upgrade-era token entries.
-          await McpAuth.ensureRevision(authKey, async () => {
-            await assertCredentialIdentity(key, mcp)
-          }),
+          await withConfigAdmission(() =>
+            McpAuth.ensureRevision(authKey, async () => {
+              await assertCredentialIdentity(key, mcp)
+            }),
+          ),
           async () => {
             await assertCredentialIdentity(key, mcp)
           },
@@ -4410,14 +4435,16 @@ export namespace MCP {
     // start: a bare entry with no serverUrl sits in credential
     // reconciliation's stale class, and any concurrent project-config commit
     // would collect it out from under the flow.
-    const authRevision = await McpAuth.beginCredentialLease(
-      authKey,
-      mcpConfig.url,
-      credentialIdentity,
-      async () => {
-        await assertCredentialIdentity(mcpName, mcpConfig)
-      },
-      pendingPolicy,
+    const authRevision = await withConfigAdmission(() =>
+      McpAuth.beginCredentialLease(
+        authKey,
+        mcpConfig.url,
+        credentialIdentity,
+        async () => {
+          await assertCredentialIdentity(mcpName, mcpConfig)
+        },
+        pendingPolicy,
+      ),
     )
     await McpAuth.updateOAuthState(
       authKey,

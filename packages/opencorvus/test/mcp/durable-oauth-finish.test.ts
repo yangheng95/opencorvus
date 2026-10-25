@@ -199,6 +199,68 @@ function startOAuthMcpServer(input?: {
 }
 
 describe("MCP OAuth finish from durable facts", () => {
+  for (const admission of ["connection", "authorization"] as const) {
+    test(`${admission} credential admission retains its canonical generation`, async () => {
+      await using project = await memoryProject()
+      const { server } = startOAuthMcpServer({ requireAuthentication: true })
+      try {
+        await Instance.provide({
+          directory: project.path,
+          fn: async () => {
+            const config = {
+              type: "remote" as const,
+              transport: "streamable-http" as const,
+              url: `http://127.0.0.1:${server.port}/mcp`,
+              oauth: { issuer: `http://127.0.0.1:${server.port}`, clientId: CLIENT_ID },
+            }
+            await Config.updateProjectPatch({ username: "credential-generation", mcp: { [SERVER]: config } })
+            let nestedMutation: unknown
+            let observedUsername: string | undefined
+            const check = async (assertAdmission?: () => Promise<void>) => {
+              await assertAdmission?.()
+              observedUsername = (await Config.get()).username
+              nestedMutation = await Config.updateProjectPatch({ username: "nested-credential-write" }).catch(
+                (error) => error,
+              )
+            }
+            const ensure = McpAuth.ensureRevision
+            const begin = McpAuth.beginCredentialLease
+            const spy =
+              admission === "connection"
+                ? spyOn(McpAuth, "ensureRevision").mockImplementation((key, assert) => ensure(key, () => check(assert)))
+                : spyOn(McpAuth, "beginCredentialLease").mockImplementation((key, url, identity, assert, policy) =>
+                    begin(key, url, identity, () => check(assert), policy),
+                  )
+            let status: string
+            try {
+              status =
+                admission === "connection"
+                  ? (await MCP.add(SERVER, config)).status[SERVER].status
+                  : new URL((await MCP.startAuth(SERVER)).authorizationUrl).pathname
+            } finally {
+              spy.mockRestore()
+            }
+            expect({
+              error: nestedMutation instanceof Error ? nestedMutation.name : nestedMutation,
+              observedUsername,
+              canonicalUsername: (await Config.getProject()).username,
+              status,
+              credential: await McpAuth.get(`${Instance.project.id}:${SERVER}`),
+            }).toMatchObject({
+              error: "ConfigGenerationReentrantMutationError",
+              observedUsername: "credential-generation",
+              canonicalUsername: "credential-generation",
+              status: admission === "connection" ? "needs_auth" : "/authorize",
+              credential: { revision: expect.any(String) },
+            })
+          },
+        })
+      } finally {
+        server.stop(true)
+      }
+    }, 60_000)
+  }
+
   test("ordinary admission without a pending authorization reports needs_auth", async () => {
     await using project = await memoryProject()
     const { server } = startOAuthMcpServer({ requireAuthentication: true })

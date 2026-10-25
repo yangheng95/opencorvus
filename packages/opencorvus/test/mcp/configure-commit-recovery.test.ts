@@ -163,3 +163,48 @@ test("two warm backend processes preserve each configure's complete credential e
     await p.close(passed)
   }
 }, 120000)
+
+test("a peer projection and a local writer settle their exact ordered configurations", async () => {
+  const p = await processCase()
+  let passed = false
+  try {
+    const result = await p.output(p.spawn("peer-runtime-race", p.directory))
+    expect({ exit: result.exit, result: result.result }).toEqual({
+      exit: 0,
+      result: {
+        username: "peer-owner-final",
+        canonical: "peer-owner-final",
+        observed: ["peer-owner-middle", "peer-owner-final"],
+      },
+    })
+    passed = true
+  } finally {
+    await p.close(passed)
+  }
+}, 120000)
+
+test("a pending peer projection preserves the local configure's committed credential", async () => {
+  const p = await processCase()
+  let passed = false
+  try {
+    const result = await p.output(p.spawn("peer-credential-race", p.directory))
+    expect({ exit: result.exit, result: result.result }).toEqual({
+      exit: 0,
+      result: {
+        available: true,
+        matchesB: true,
+        definition: {
+          type: "remote",
+          transport: "streamable-http",
+          url: "https://audit.invalid/unreachable",
+          enabled: false,
+          oauth: false,
+          credential: { type: "header", name: "X-Audit-Only" },
+        },
+      },
+    })
+    passed = true
+  } finally {
+    await p.close(passed)
+  }
+}, 120000)

@@ -130,10 +130,12 @@ describe("MCP configure commits the credential before the definition", () => {
           ...remoteConfig(),
           credential: { type: "header" as const, name: "X-Recreated-Key" },
         }
-        const result = await MCP.reconcileProjectConfig({
+        const result = await MCP.prepareProjectConfigReconciliation({
           before,
           after: { ...before, mcp: { [SERVER]: replacementDefinition } },
-        }).catch((error) => error)
+        })
+          .then((apply) => apply())
+          .catch((error) => error)
         expect({
           result: result instanceof Error ? result.message : result,
           causes:
@@ -154,29 +156,32 @@ describe("MCP configure commits the credential before the definition", () => {
     })
   }, 60_000)
 
-  test("a definition-commit failure hands the credential store back and leaves no half-configured server", async () => {
+  test("a definition-commit failure preserves the committed definition and its serving credential", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
+        await MCP.configure(SERVER, remoteConfig(), "previous-secret")
+        const replacement = { ...remoteConfig(), credential: { type: "header" as const, name: "X-Replacement" } }
         const patchSpy = spyOn(Config, "updateProjectPatchAtomic").mockRejectedValueOnce(
           new Error("injected definition commit failure"),
         )
         try {
-          await expect(MCP.configure(SERVER, remoteConfig(), "secret-value")).rejects.toThrow(
+          await expect(MCP.configure(SERVER, replacement, "secret-value")).rejects.toThrow(
             "injected definition commit failure",
           )
         } finally {
           patchSpy.mockRestore()
         }
-        // Neither half survived: no definition, no credential.
-        expect((await Config.getProject()).mcp?.[SERVER]).toBeUndefined()
-        expect(await McpAuth.get(`${Instance.project.id}:${SERVER}`)).toBeUndefined()
+        expect({
+          definition: (await Config.getProject()).mcp?.[SERVER],
+          secret: (await McpAuth.get(`${Instance.project.id}:${SERVER}`))?.staticCredential?.secret,
+        }).toEqual({ definition: remoteConfig(), secret: "previous-secret" })
       },
     })
   }, 60_000)
 
-  test("an interrupted configure's orphan credential is collected by credential reconciliation", async () => {
+  test("credential recovery revokes an orphan's lease and admits its successor", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -190,18 +195,18 @@ describe("MCP configure commits the credential before the definition", () => {
           serverUrl: URL,
           credentialIdentity: "identity-from-dead-configure",
         })
-        expect(await McpAuth.get(authKey)).toBeDefined()
+        const oldLease = await McpAuth.ensureRevision(authKey)
 
         // Any project-config commit runs credential reconciliation; the next
         // one after the crash is the recovery path.
         await Config.updateProjectPatch({ theme: undefined })
 
-        const deadline = Date.now() + 15_000
-        for (;;) {
-          if ((await McpAuth.get(authKey)) === undefined) break
-          if (Date.now() > deadline) throw new Error("orphan credential was never collected")
-          await new Promise((resolve) => setTimeout(resolve, 50))
-        }
+        const successor = await McpAuth.ensureRevision(authKey)
+        await expect(
+          McpAuth.set(authKey, { staticCredential: { secret: "stale-write" } }, URL, oldLease),
+        ).rejects.toThrow(`MCP auth lease was revoked: ${authKey}`)
+        await McpAuth.set(authKey, { staticCredential: { secret: "successor-secret" } }, URL, successor)
+        expect((await McpAuth.get(authKey))?.staticCredential?.secret).toBe("successor-secret")
       },
     })
   }, 60_000)
@@ -303,6 +308,77 @@ describe("MCP configure commits the credential before the definition", () => {
           secret: "staged-secret",
           staged: undefined,
         })
+      },
+    })
+  }, 60_000)
+
+  test("credential admission failure reports the committed definition and its promoted secret", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        await MCP.configure(SERVER, remoteConfig(), "previous-secret")
+        const authKey = `${Instance.project.id}:${SERVER}`
+        const orphanKey = `${Instance.project.id}:interrupted-orphan`
+        await McpAuth.set(orphanKey, { staticCredential: { secret: "orphan-secret" } }, URL)
+        const orphanLease = await McpAuth.ensureRevision(orphanKey)
+        const replacement = { ...remoteConfig(), credential: { type: "header" as const, name: "X-Committed-Key" } }
+        const remove = spyOn(McpAuth, "removeMany").mockRejectedValueOnce(
+          new Error("injected credential retirement failure"),
+        )
+        let result: unknown
+        try {
+          result = await MCP.configure(SERVER, replacement, "committed-secret").catch((error) => error)
+        } finally {
+          remove.mockRestore()
+        }
+        expect({
+          error: result instanceof Config.ProjectConfigCommittedReconcileError ? result.name : result,
+          committed:
+            result instanceof Config.ProjectConfigCommittedReconcileError ? result.config.mcp?.[SERVER] : result,
+          canonical: (await Config.getProject()).mcp?.[SERVER],
+          secret: (await McpAuth.get(authKey))?.staticCredential?.secret,
+        }).toEqual({
+          error: "ProjectConfigCommittedReconcileError",
+          committed: replacement,
+          canonical: replacement,
+          secret: "committed-secret",
+        })
+        await Config.updateProjectPatch({ theme: undefined })
+        await expect(
+          McpAuth.set(orphanKey, { staticCredential: { secret: "stale-write" } }, URL, orphanLease),
+        ).rejects.toThrow(`MCP auth lease was revoked: ${orphanKey}`)
+        expect((await MCP.projectStatus())[SERVER]).toEqual({ status: "disabled" })
+      },
+    })
+  }, 60_000)
+
+  test("a prepared reconciliation applies through its exact Project runtime", async () => {
+    await using source = await memoryProject()
+    await using other = await memoryProject()
+    let apply!: () => Promise<void>
+    await Instance.provide({
+      directory: source.path,
+      fn: async () => {
+        await MCP.configure(SERVER, remoteConfig(), "AUDIT_SYNTHETIC_PREPARED_SOURCE")
+        const config = await Config.get()
+        apply = await MCP.prepareProjectConfigReconciliation({ before: config, after: config })
+      },
+    })
+    await Instance.provide({
+      directory: other.path,
+      fn: async () => {
+        await expect(apply()).rejects.toBeInstanceOf(MCP.McpConfigReconciliationScopeError)
+      },
+    })
+    await Instance.provide({
+      directory: source.path,
+      fn: async () => {
+        await apply()
+        expect({
+          status: (await MCP.projectStatus())[SERVER],
+          credential: (await McpAuth.get(`${Instance.project.id}:${SERVER}`))?.staticCredential?.secret,
+        }).toEqual({ status: { status: "disabled" }, credential: "AUDIT_SYNTHETIC_PREPARED_SOURCE" })
       },
     })
   }, 60_000)

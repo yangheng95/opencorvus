@@ -841,9 +841,11 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
         expect(originalLease).toMatchObject({ availabilityGeneration: 0 })
 
         const { MCP } = await import("../../src/mcp")
-        const mcpSpy = spyOn(MCP, "reconcileProjectConfig")
-          .mockRejectedValueOnce(new Error("injected MCP config reconciliation failure"))
-          .mockResolvedValue(undefined)
+        const mcpSpy = spyOn(MCP, "prepareProjectConfigReconciliation")
+          .mockResolvedValueOnce(async () => {
+            throw new Error("injected MCP config reconciliation failure")
+          })
+          .mockResolvedValue(async () => undefined)
         try {
           let committedError: Config.ProjectConfigCommittedReconcileError | undefined
           try {

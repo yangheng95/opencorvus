@@ -91,6 +91,7 @@ export namespace Config {
     export let beforeProjectRuntimeSettlement:
       | ((input: { directory: string; config: Info }) => Promise<void>)
       | undefined
+    export let beforePeerRuntimeSettlement: ((input: { directory: string; config: Info }) => Promise<void>) | undefined
     export let beforeGlobalRuntimeSettlement:
       | ((input: { transitions: readonly RuntimeTransition[] }) => Promise<void>)
       | undefined
@@ -2051,43 +2052,49 @@ export namespace Config {
     return `config-runtime-settlement:${Filesystem.normalizePath(directory)}`
   }
 
-  async function applyProjectRuntimeTransition(
+  async function prepareProjectRuntimeTransition(
     transition: RuntimeTransition,
     options: { resetDerivedCaches?: boolean } = {},
-  ): Promise<void> {
+  ): Promise<() => Promise<void>> {
     const [{ MCP }, { Provider }, { NativeAgentRegistryLifecycle }, { ChannelSupervisor }] = await Promise.all([
       import("@/mcp"),
       import("@/provider/provider"),
       import("@/agent/native-agent-registry-lifecycle"),
       import("@/channel/supervisor"),
     ])
-    const resetDerivedCaches = options.resetDerivedCaches !== false
-    const settled = await Promise.allSettled([
-      MCP.reconcileProjectConfig({ before: transition.before, after: transition.after }),
-      ...(resetDerivedCaches ? [Provider.reset(), NativeAgentRegistryLifecycle.reset()] : []),
-      ChannelSupervisor.sync(transition.after),
-    ])
-    const failures = settled.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
-    if (failures.length > 0) throw new ProjectConfigCommittedReconcileError(failures, transition.after)
-    const { CapabilityCatalogCache } = await import("@/capability/catalog")
-    await CapabilityCatalogCache.invalidate([
-      "project-config",
-      "mcp-config",
-      "skill-manager",
-      "mission-skill-registry",
-      "expert-squad-registry",
-      "tool-registry",
-    ])
-    try {
-      await GlobalBus.emitAndWait("event", {
-        directory: transition.directory,
-        payload: {
-          type: "config.changed",
-          properties: transition.after,
-        },
-      })
-    } catch (error) {
-      throw new ProjectConfigCommittedReconcileError([error], transition.after)
+    const reconcileMcp = await MCP.prepareProjectConfigReconciliation({
+      before: transition.before,
+      after: transition.after,
+    })
+    return async () => {
+      const resetDerivedCaches = options.resetDerivedCaches !== false
+      const settled = await Promise.allSettled([
+        reconcileMcp(),
+        ...(resetDerivedCaches ? [Provider.reset(), NativeAgentRegistryLifecycle.reset()] : []),
+        ChannelSupervisor.sync(transition.after),
+      ])
+      const failures = settled.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
+      if (failures.length > 0) throw new ProjectConfigCommittedReconcileError(failures, transition.after)
+      const { CapabilityCatalogCache } = await import("@/capability/catalog")
+      await CapabilityCatalogCache.invalidate([
+        "project-config",
+        "mcp-config",
+        "skill-manager",
+        "mission-skill-registry",
+        "expert-squad-registry",
+        "tool-registry",
+      ])
+      try {
+        await GlobalBus.emitAndWait("event", {
+          directory: transition.directory,
+          payload: {
+            type: "config.changed",
+            properties: transition.after,
+          },
+        })
+      } catch (error) {
+        throw new ProjectConfigCommittedReconcileError([error], transition.after)
+      }
     }
   }
 
@@ -2123,7 +2130,8 @@ export namespace Config {
       const pending = pendingPeerTransitions.get(transition.directory)
       if (!pending) break
       try {
-        await applyProjectRuntimeTransition(pending)
+        const apply = await prepareProjectRuntimeTransition(pending)
+        await apply()
       } catch (error) {
         queuedPeerTargets.set(transition.directory, transition.after)
         writerRetryDirectories.add(transition.directory)
@@ -2135,7 +2143,8 @@ export namespace Config {
     }
     pendingPeerTransitions.set(transition.directory, transition)
     try {
-      await applyProjectRuntimeTransition(transition, options)
+      const apply = await prepareProjectRuntimeTransition(transition, options)
+      await apply()
     } catch (error) {
       writerRetryDirectories.add(transition.directory)
       ensurePeerConvergenceMonitor()
@@ -2150,13 +2159,17 @@ export namespace Config {
     if (!pending) return
     if (pendingPeerSettlements.has(directory)) return
     let reschedulePending = false
-    const runtimeOwner = Lock.reserveWrite(projectRuntimeSettlementKey(directory))
     const settlement = Promise.all([import("@/project/instance"), import("@/storage/db")])
       .then(([{ Instance, runOutsideInstanceContext }, { Database }]) => {
         const settle = async () => {
-          await using _owner = await runtimeOwner.acquired
           if (pendingPeerTransitions.get(directory) !== pending) return false
-          await applyProjectRuntimeTransition(pending)
+          // State admission may wait behind a Config writer's catalog owner.
+          // Complete it before claiming the runtime turn that writer must join.
+          const apply = await prepareProjectRuntimeTransition(pending)
+          await using _owner = await Lock.write(projectRuntimeSettlementKey(directory))
+          if (pendingPeerTransitions.get(directory) !== pending) return false
+          await TestHooks.beforePeerRuntimeSettlement?.({ directory, config: pending.after })
+          await apply()
           reschedulePending = advancePendingPeerTransition(directory, pending)
           return true
         }
@@ -2172,9 +2185,8 @@ export namespace Config {
         if (pendingPeerTransitions.get(directory) !== pending) return
         if (!settled) {
           // An identity-only writer can still be applying this transition.
-          // Its reserved runtime turn decides whether this is inactive peer
-          // work or the same writer's exact failed projection to retry.
-          await using _owner = await runtimeOwner.acquired
+          // Recheck under its runtime turn before retiring inactive peer work.
+          await using _owner = await Lock.write(projectRuntimeSettlementKey(directory))
           if (pendingPeerTransitions.get(directory) !== pending) return
           if (writerRetryDirectories.has(directory)) {
             reschedulePending = true
@@ -2192,7 +2204,6 @@ export namespace Config {
         })
       })
       .finally(() => {
-        runtimeOwner.cancel()
         if (pendingPeerSettlements.get(directory) === settlement) pendingPeerSettlements.delete(directory)
         if (reschedulePending) schedulePendingPeerTransition(directory)
       })

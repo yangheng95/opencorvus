@@ -314,6 +314,27 @@ the callback keeps its original pending-read drain and failure semantics. Pure
 state inspection keeps the original Instance state source and does not initialize
 MCP. This adds neither a second state cache nor a new configuration owner.
 
+MCP runtime reconciliation prepares that same Instance state before a peer projection
+claims its Project runtime settlement turn. Its prepared application retains the exact
+before/after transition and checks the Project occurrence and original cache initializer
+identity; it performs no second catalog/state admission while holding the runtime turn.
+Connection cleanup retries use that same prepared state. A writer may therefore retain
+its existing catalog/generation/canonical-file owners and join an earlier peer projection
+without creating a catalog/runtime wait cycle. Within that admission, credential
+stages, stale identities and OAuth leases are reconciled against the current canonical
+effective configuration. The catalog owner serializes this with live configure's
+stage/commit/promotion; an older queued transition cannot retire a newer credential.
+Runtime application only projects connections and status, and rechecks the exact
+pending head before projection and event settlement, preserving ordered retries and
+queued targets.
+
+OAuth connection revision admission and authorization lease admission use the same
+catalog/generation callback before entering the credential fact lock. Their canonical
+identity checks remain inside that fact lock, reusing the admitted generation; a
+concurrent Config writer cannot hold its generation write while the credential owner
+waits to read it. Remote connection and authorization requests run after this short
+admission has released its owners.
+
 Ordinary and inherited Instance capability preflights acquire their existing
 Skill catalog/reference and Conversation reference owners before reserving the
 Project lifecycle turn. A preflight waiting behind a Config writer therefore
@@ -367,7 +388,7 @@ before/after transition 供重试；较新的 canonical generation 只更新 que
 成功后才构造 `previous.after → latest`。本地 direct settlement 完成后仅 rewarm 活跃 state；若 canonical
 source 已由另一生产 writer 推进，则显式结算 `direct.after → current`，不以 reset 丢失最新 generation。
 
-未取得active上下文的投影候选，必须先取得原预留runtime owner并复核exact pending，才能退休inactive peer状态。
+未取得active上下文的投影候选，必须先取得该Project的runtime owner并复核exact pending，才能退休inactive peer状态。
 原writer失败后保留的transition继续由原writerRetry事实驱动；同一peer monitor也调度identity-only writer的重试，
 每次通过原pending settlement集合和runtime owner去重。连续投影失败保留同一目标，成功后按原advance规则结算。
 
