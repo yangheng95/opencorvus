@@ -1,5 +1,4 @@
 import { Plugin } from "../plugin"
-import { Format } from "../format"
 import { FileWatcher } from "../file/watcher"
 import { File } from "../file"
 import { Project } from "./project"
@@ -70,7 +69,6 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
     projectID: Instance.project.id,
   }
   await ProjectOpenLifecycle.stage("plugin.init", lifecycleContext, () => Plugin.init())
-  Format.init()
   await ProjectOpenLifecycle.stage("file-watcher.init", lifecycleContext, () => FileWatcher.init())
   await ProjectOpenLifecycle.stage("file.init", lifecycleContext, () => File.init())
   await ProjectOpenLifecycle.stage("vcs.init", lifecycleContext, () => Vcs.init())

@@ -13,6 +13,7 @@ import { assertBuildWriteDirectory, assertExternalDirectory } from "./external-d
 import { executionFiles, executionProcessAuthority } from "./execution-files"
 import { AttachmentStore } from "../storage/attachment-store"
 import type { FileDiff } from "../snapshot/types"
+import { Format } from "../format"
 
 export const WriteTool = Tool.define("write", {
   description: DESCRIPTION,
@@ -70,6 +71,7 @@ export const WriteTool = Tool.define("write", {
 
         await files.mkdir(path.dirname(filepath), { recursive: true })
         await files.writeFile(filepath, params.content)
+        await Format.file(filepath, processAuthority)
         const contentNew = await files.readFile(filepath, "utf8")
         const filediff: FileDiff = {
           file: filepath,

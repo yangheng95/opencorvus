@@ -1,5 +1,3 @@
-import { Bus } from "../bus"
-import { File } from "../file"
 import { Log } from "../util/log"
 import path from "path"
 import z from "zod"
@@ -26,51 +24,55 @@ export namespace Format {
     })
   export type Status = z.infer<typeof Status>
 
-  const state = createInstanceState(async () => {
-    const enabled: Record<string, Record<string, boolean>> = {}
-    const cfg = await Config.get()
+  const state = createInstanceState(
+    async () => {
+      const enabled: Record<string, Record<string, boolean>> = {}
+      const cfg = await Config.get()
 
-    const formatters: Record<string, Formatter.Info> = {}
-    if (cfg.formatter === false) {
-      log.info("all formatters are disabled")
+      const formatters: Record<string, Formatter.Info> = {}
+      if (cfg.formatter === false) {
+        log.info("all formatters are disabled")
+        return {
+          enabled,
+          formatters,
+        }
+      }
+
+      for (const item of objectValues(Formatter as Record<string, Formatter.Info>)) {
+        formatters[item.name] = item
+      }
+      for (const [name, item] of entries(
+        (cfg.formatter ?? {}) as Exclude<NonNullable<Config.Info["formatter"]>, false>,
+      )) {
+        if (item.disabled) {
+          delete formatters[name]
+          continue
+        }
+        const result = mergeDeep(
+          formatters[name] ?? {
+            name,
+            command: [],
+            extensions: [],
+            enabled: async () => true,
+          },
+          item,
+        ) as Formatter.Info
+
+        if (result.command.length === 0) continue
+
+        result.enabled = async () => true
+        result.name = name
+        formatters[name] = result
+      }
+
       return {
         enabled,
         formatters,
       }
-    }
-
-    for (const item of objectValues(Formatter as Record<string, Formatter.Info>)) {
-      formatters[item.name] = item
-    }
-    for (const [name, item] of entries(
-      (cfg.formatter ?? {}) as Exclude<NonNullable<Config.Info["formatter"]>, false>,
-    )) {
-      if (item.disabled) {
-        delete formatters[name]
-        continue
-      }
-      const result = mergeDeep(
-        formatters[name] ?? {
-          name,
-          command: [],
-          extensions: [],
-          enabled: async () => true,
-        },
-        item,
-      ) as Formatter.Info
-
-      if (result.command.length === 0) continue
-
-      result.enabled = async () => true
-      result.name = name
-      formatters[name] = result
-    }
-
-    return {
-      enabled,
-      formatters,
-    }
-  }, undefined, "format")
+    },
+    undefined,
+    "format",
+  )
 
   function authorityKey(authority: FormatterProcessAuthority) {
     return authority.kind === "task" ? `task:${authority.taskID}:${authority.cwd}` : `host:${authority.cwd}`
@@ -116,38 +118,31 @@ export namespace Format {
     return result
   }
 
-  export function init() {
-    log.info("init")
-    Bus.subscribe(File.Event.Edited, async (payload) => {
-      const file = payload.properties.file
-      log.info("formatting", { file })
-      const ext = path.extname(file)
+  export async function file(file: string, authority: FormatterProcessAuthority) {
+    log.info("formatting", { file })
+    const ext = path.extname(file)
 
-      const authority = payload.properties.processAuthority
-      for (const item of await getFormatter(ext, authority)) {
-        log.info("running", { command: item.command })
-        try {
-          const command = item.command.map((x) => x.replace("$FILE", file))
-          const options = {
-            command,
-            env: { ...process.env, ...item.environment },
-            timeoutMs: formatterTimeout(item.timeout),
-          }
-          const result = await runFormatterProcess(authority, options)
-          if (result.exitCode !== 0)
-            log.error("failed", {
-              command: item.command,
-              ...item.environment,
-            })
-        } catch (error) {
-          log.error("failed to format file", {
-            error,
-            command: item.command,
-            ...item.environment,
-            file,
-          })
+    for (const item of await getFormatter(ext, authority)) {
+      log.info("running", { command: item.command })
+      try {
+        const command = item.command.map((x) => x.replace("$FILE", file))
+        const options = {
+          command,
+          env: { ...process.env, ...item.environment },
+          timeoutMs: formatterTimeout(item.timeout),
         }
+        const result = await runFormatterProcess(authority, options)
+        if (result.exitCode !== 0)
+          log.error("failed", {
+            command: item.command,
+          })
+      } catch (error) {
+        log.error("failed to format file", {
+          error,
+          command: item.command,
+          file,
+        })
       }
-    })
+    }
   }
 }

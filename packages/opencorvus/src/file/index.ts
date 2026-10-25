@@ -26,6 +26,7 @@ import { gitSourcePaths } from "../util/git-source-paths"
 import { gitSourceLinkDiffs } from "../util/git-source-links"
 import { checkedSourceGit, gitSourceRunner, gitSourceEntryArgs } from "../util/git-source-stage"
 import { AttachmentStore } from "../storage/attachment-store"
+import { Format } from "../format"
 
 export namespace File {
   const log = Log.create({ service: "file" })
@@ -1139,9 +1140,11 @@ export namespace File {
             })
           }
           await Filesystem.writeAtomic(currentPhysical, bytes, existing.mode & 0o777)
+          await Format.file(currentPhysical, { kind: "host", cwd: Instance.directory })
+          const committed = await readResolvedContent(file, currentPhysical, identity)
           await notifyEdited([file])
           // Describe this commit even when an external writer changes the file during notification.
-          return { type: "text" as const, content, revision: contentRevision(identity, bytes) }
+          return committed
         }),
       SHARED_JSON_FACT_QUEUE_TIMEOUT_MS,
     )
@@ -1429,6 +1432,7 @@ export namespace File {
         }
         throw error
       }
+      await Format.file(full, { kind: "host", cwd: Instance.directory })
     }
 
     await notifyEdited([file])

@@ -17,6 +17,7 @@ import { Snapshot } from "@/snapshot"
 import { assertBuildWriteDirectory, assertExternalDirectory } from "./external-directory"
 import { Patch } from "../patch"
 import { executionFiles, executionProcessAuthority } from "./execution-files"
+import { Format } from "../format"
 
 function normalizeLineEndings(text: string): string {
   return text.replaceAll("\r\n", "\n")
@@ -64,10 +65,11 @@ export const EditTool = Tool.define("edit", {
           throw error
         })
         if (existing) throw new Error(`apply_patch verification failed: Add File target already exists: ${filePath}`)
-        contentNew = params.newString
-        diff = trimDiff(createTwoFilesPatch(filePath, filePath, contentOld, contentNew))
         await files.mkdir(path.dirname(filePath), { recursive: true })
         await files.writeFile(filePath, params.newString, { encoding: "utf-8", flag: "wx" })
+        await Format.file(filePath, processAuthority)
+        contentNew = await files.readFile(filePath, "utf8")
+        diff = trimDiff(createTwoFilesPatch(filePath, filePath, contentOld, contentNew))
         await Bus.publish(File.Event.Edited, {
           file: filePath,
           processAuthority,
@@ -90,11 +92,12 @@ export const EditTool = Tool.define("edit", {
       const next = convertToLineEnding(normalizeLineEndings(params.newString), ending)
       contentNew = replace(contentOld, old, next, params.replaceAll)
 
+      await files.writeFile(filePath, contentNew)
+      await Format.file(filePath, processAuthority)
+      contentNew = await files.readFile(filePath, "utf8")
       diff = trimDiff(
         createTwoFilesPatch(filePath, filePath, normalizeLineEndings(contentOld), normalizeLineEndings(contentNew)),
       )
-
-      await files.writeFile(filePath, contentNew)
       await Bus.publish(File.Event.Edited, {
         file: filePath,
         processAuthority,
@@ -103,10 +106,6 @@ export const EditTool = Tool.define("edit", {
         file: filePath,
         event: "change",
       })
-      contentNew = await files.readFile(filePath, "utf8")
-      diff = trimDiff(
-        createTwoFilesPatch(filePath, filePath, normalizeLineEndings(contentOld), normalizeLineEndings(contentNew)),
-      )
       FileTime.read(ctx.sessionID, filePath)
     })
 

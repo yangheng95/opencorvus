@@ -1,0 +1,128 @@
+{
+  "batch": 601,
+  "date": "2026-10-25",
+  "rootCause": "Implicit edited-event formatter mutated transferred bytes and outlived accepted durable save notification; receipts and comparison bodies were built from pre-formatter text.",
+  "before": {
+    "result": {
+      "label": "contracts-settled-before",
+      "startedAt": 1792940800411,
+      "closedAt": 1792940830881,
+      "code": 1,
+      "signal": null,
+      "childPID": 87596
+    },
+    "facts": [
+      "FORMAT_WRITE_FACT {\"actual\":\"const x = { a: 1 }\\n\",\"reportedAfter\":\"const x={a:1}\\n\"}",
+      "FORMAT_ATTACHMENT_FACT {\"original\":\"const x={a:1}\\n\",\"actual\":\"const x = { a: 1 }\\n\",\"declaredSourceBytes\":14}",
+      "FORMAT_HTTP_FACT {\"first\":200,\"returned\":\"const x={a:1}\\n\",\"actual\":\"const x = { a: 1 }\\n\",\"returnedRevision\":\"5eb9ba6f663c4f1a30980b650b1707cb98b523e40e58ebd141ed23b50462f35a\",\"actualRevision\":\"73e5b89f90bda5d154a7a2476d2d28e61160d096873227a5605405d34340e164\",\"second\":409}"
+    ],
+    "outcome": "0 pass, 5 fail; copy source and target both reformatted after durable publication settlement"
+  },
+  "tests": [
+    {
+      "label": "contracts-after",
+      "code": 0,
+      "summary": "48 pass\n 0 fail\n 204 expect() calls\nRan 48 tests across 4 files. [136.43s]",
+      "qualification": "Focused real native formatter/filesystem and backend HTTP integration; no UI automation tests"
+    },
+    {
+      "label": "formatting-extended",
+      "code": 0,
+      "summary": "8 pass\n 0 fail\n 46 expect() calls\nRan 8 tests across 2 files. [62.60s]",
+      "qualification": "Focused real native formatter/filesystem and backend HTTP integration; no UI automation tests"
+    }
+  ],
+  "typecheck": {
+    "label": "core-typecheck",
+    "startedAt": 1792941027356,
+    "closedAt": 1792941108939,
+    "code": 0,
+    "signal": null,
+    "childPID": 92864
+  },
+  "manual": {
+    "url": "http://localhost:54109/ui/",
+    "visibleSession": "ses_-zUQvIkLRzzhAxSLk6x8",
+    "procedure": "Real Files panel -> sample.js -> unformatted draft -> Save -> visible formatted result -> next draft -> Save -> visible second formatted result",
+    "screenshots": [
+      "01-draft.png",
+      "02-first-save.png",
+      "03-second-save.png"
+    ],
+    "publicFile": {
+      "statusCode": 200,
+      "content": "const next = { b: 2 }\n",
+      "observedAtUtc": "2026-10-25T15:17:33.6211445Z",
+      "revision": "c735067c6482bd3760c5607a574f5ba714f54474565f50e180a7bbbafa9ae9c3"
+    },
+    "fileContentSaves": 2,
+    "qualification": "Actual page interaction and manual full screenshot review; empty Work Chat created through public API, no model messages or model E2E claim"
+  },
+  "database": {
+    "scope": "fresh owned diagnostic runtime",
+    "schema": 8,
+    "integrity": "ok",
+    "messages": 0
+  },
+  "credentialsCopied": false,
+  "modelRequests": 0,
+  "shutdown": {
+    "http": 200,
+    "reserveMs": 835136,
+    "native": {
+      "occurrence": "file-formatting-601-67ef7745-47da-4855-ac14-1a7fe275b416",
+      "outcome": "settled",
+      "host": {
+        "pid": 95600,
+        "processInstanceID": "win32:639285379330610584",
+        "occurrenceID": "bed91933-9978-445f-89bc-fea8cd6f30cc"
+      },
+      "target": {
+        "pid": 91656,
+        "processInstanceID": "win32:639285379343417326",
+        "occurrenceID": "c311eb80-f5f4-43d8-abe6-87bd6d9342ef"
+      },
+      "observedAtUtc": "2026-10-25T15:18:17.814Z",
+      "deadlineAt": 1792942332950,
+      "terminal": {
+        "occurrenceID": "file-formatting-601-67ef7745-47da-4855-ac14-1a7fe275b416",
+        "pid": 91656,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "observedAtUtc": "2026-10-25T15:18:20.0640464Z",
+    "launcher": {
+      "originalChildExit": 0,
+      "observedAtUtc": "2026-10-25T15:18:17.8557168Z"
+    },
+    "chain": [
+      {
+        "identity": {
+          "pid": 95600,
+          "processInstanceID": "win32:639285379330610584",
+          "occurrenceID": "bed91933-9978-445f-89bc-fea8cd6f30cc"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "identity": {
+          "pid": 91656,
+          "processInstanceID": "win32:639285379343417326",
+          "occurrenceID": "c311eb80-f5f4-43d8-abe6-87bd6d9342ef"
+        },
+        "state": "dead_or_reused"
+      }
+    ]
+  },
+  "limits": [
+    "Shared cross-tool/cross-process mutation locking remains under audit; existing FileTime is instance-scoped.",
+    "No new schema or data-format migration; only fresh owned runtime database was initialized.",
+    "Earlier native batch/594 connection and598 closing-reserve unknowns are not resolved by this batch."
+  ]
+}

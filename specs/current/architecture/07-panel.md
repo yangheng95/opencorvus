@@ -160,6 +160,14 @@ publication. The same byte predicate guards text saves after the existing path,
 read-only and revision checks. Submitted strings must also round-trip through
 UTF-8 exactly; NUL and isolated UTF-16 surrogates produce FileInvalidPathError.
 Successful atomic writes and revision receipts share the same validated bytes.
+Configured text formatting belongs to the save itself. File.writeText awaits the
+single Format.file operation while holding its existing file locks, captures the
+actual final content/revision, then publishes its edit notification. The response
+describes that captured commit even if an external writer subsequently changes
+the file. FileEditorPane adopts the returned formatted body only while its submitted
+draft still owns the editor; a newer draft remains intact. File creation formats
+text explicitly. Attachment saves, upload, copy, move and removal retain their
+original byte-transfer semantics; edit notifications do not mutate these files.
 Valid replacement characters, BOM, empty content and line separators retain
 their original text. Dedicated image/PDF previews and existing extension/MIME
 classifications keep their contracts; no alternate encoding is guessed.

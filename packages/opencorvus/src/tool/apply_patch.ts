@@ -11,6 +11,7 @@ import { trimDiff } from "./edit"
 import DESCRIPTION from "./apply_patch.txt"
 import { File } from "../file"
 import { executionFiles, executionProcessAuthority } from "./execution-files"
+import { Format } from "../format"
 
 const PatchParams = z.object({
   patchText: z.string().describe("The full patch text that describes all changes to be made"),
@@ -49,12 +50,8 @@ export const ApplyPatchTool = Tool.define("apply_patch", {
       newContent: string
       type: "add" | "update" | "delete" | "move"
       movePath?: string
-      diff: string
-      additions: number
-      deletions: number
     }> = []
 
-    let totalDiff = ""
     const taskFileHost = executionFiles(ctx)
 
     for (const hunk of hunks) {
@@ -73,26 +70,12 @@ export const ApplyPatchTool = Tool.define("apply_patch", {
           const oldContent = ""
           const newContent =
             hunk.contents.length === 0 || hunk.contents.endsWith("\n") ? hunk.contents : `${hunk.contents}\n`
-          const diff = trimDiff(createTwoFilesPatch(filePath, filePath, oldContent, newContent))
-
-          let additions = 0
-          let deletions = 0
-          for (const change of diffLines(oldContent, newContent)) {
-            if (change.added) additions += change.count || 0
-            if (change.removed) deletions += change.count || 0
-          }
-
           fileChanges.push({
             filePath,
             oldContent,
             newContent,
             type: "add",
-            diff,
-            additions,
-            deletions,
           })
-
-          totalDiff += diff + "\n"
           break
         }
 
@@ -114,15 +97,6 @@ export const ApplyPatchTool = Tool.define("apply_patch", {
             throw new Error(`apply_patch verification failed: ${error}`)
           }
 
-          const diff = trimDiff(createTwoFilesPatch(filePath, filePath, oldContent, newContent))
-
-          let additions = 0
-          let deletions = 0
-          for (const change of diffLines(oldContent, newContent)) {
-            if (change.added) additions += change.count || 0
-            if (change.removed) deletions += change.count || 0
-          }
-
           const movePath = hunk.move_path ? path.resolve(Instance.directory, hunk.move_path) : undefined
           await assertBuildWriteDirectory(ctx, movePath)
           await assertExternalDirectory(ctx, movePath)
@@ -133,12 +107,7 @@ export const ApplyPatchTool = Tool.define("apply_patch", {
             newContent,
             type: hunk.move_path ? "move" : "update",
             movePath,
-            diff,
-            additions,
-            deletions,
           })
-
-          totalDiff += diff + "\n"
           break
         }
 
@@ -146,41 +115,16 @@ export const ApplyPatchTool = Tool.define("apply_patch", {
           const contentToDelete = await taskFileHost.readFile(filePath, "utf-8").catch((error) => {
             throw new Error(`apply_patch verification failed: ${error}`)
           })
-          const deleteDiff = trimDiff(createTwoFilesPatch(filePath, filePath, contentToDelete, ""))
-
-          let deletions = 0
-          for (const change of diffLines(contentToDelete, "")) {
-            if (change.removed) deletions += change.count || 0
-          }
-
           fileChanges.push({
             filePath,
             oldContent: contentToDelete,
             newContent: "",
             type: "delete",
-            diff: deleteDiff,
-            additions: 0,
-            deletions,
           })
-
-          totalDiff += deleteDiff + "\n"
           break
         }
       }
     }
-
-    // Build per-file metadata for UI rendering (used for both permission and result)
-    const files = fileChanges.map((change) => ({
-      filePath: change.filePath,
-      relativePath: path.relative(Instance.worktree, change.movePath ?? change.filePath).replaceAll("\\", "/"),
-      type: change.type,
-      diff: change.diff,
-      before: change.oldContent,
-      after: change.newContent,
-      additions: change.additions,
-      deletions: change.deletions,
-      movePath: change.movePath,
-    }))
 
     // Apply the changes
     const updates: Array<{ file: string; event: "add" | "change" | "unlink" }> = []
@@ -218,12 +162,35 @@ export const ApplyPatchTool = Tool.define("apply_patch", {
       }
 
       if (edited) {
+        await Format.file(edited, processAuthority)
+        change.newContent = await taskFileHost.readFile(edited, "utf-8")
         await Bus.publish(File.Event.Edited, {
           file: edited,
           processAuthority,
         })
       }
     }
+
+    const files = fileChanges.map((change) => {
+      let additions = 0
+      let deletions = 0
+      for (const part of diffLines(change.oldContent, change.newContent)) {
+        if (part.added) additions += part.count || 0
+        if (part.removed) deletions += part.count || 0
+      }
+      return {
+        filePath: change.filePath,
+        relativePath: path.relative(Instance.worktree, change.movePath ?? change.filePath).replaceAll("\\", "/"),
+        type: change.type,
+        diff: trimDiff(createTwoFilesPatch(change.filePath, change.filePath, change.oldContent, change.newContent)),
+        before: change.oldContent,
+        after: change.newContent,
+        additions,
+        deletions,
+        movePath: change.movePath,
+      }
+    })
+    const totalDiff = files.map((file) => file.diff + "\n").join("")
 
     // Publish file change events
     for (const update of updates) {

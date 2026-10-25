@@ -653,6 +653,10 @@ work_artifact_deliver` typed tools，不拥有第二套 serializer。profile reg
   并返回同一filediff比较合同；等待锁后取消的调用先返回真实AbortError。FileTime读取记录与
   锁键复用Filesystem.normalizeForCompare及normalizePath，Windows大小写别名共享同一身份，
   不修改用户实际文件名。该锁仍按当前Project Instance隔离，不声明约束外部文件写入器。
+  文本write、edit（含新建）和apply_patch的新增/更新/移动在同一执行权属内显式await
+  唯一Format.file，再实际读回正文并生成after、diff及行数。格式化沿用当前配置和
+  Process执行器的host/Task身份、失败与超时策略，不再由file.edited通知执行。
+  原始附件write只传输verified快照字节；编辑事件描述已完成的实际变更。
   Office runtime 边界以有界 `WorkArtifactRuntimeError` 保留真实退出码、标准输出、标准错误和
   原始 cause；JSON 明确失败也进入同一错误合同，不丢弃原生诊断。
   该渲染要求现有 Browser Runtime 可用的 Chrome/Edge 与随包 Node/Playwright，不承诺
