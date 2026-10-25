@@ -516,6 +516,11 @@ test("the pre-upgrade backup includes committed records still resident in the wr
     { version: 1, name: "baseline", ddl: first },
     { version: 2, name: "priority", ddl: second },
   ])
+  using snapshot = SQLite.deserialize(fs.readFileSync(result.backupPath!), { readonly: true })
+  expect({ version: schemaVersion(snapshot), rows: read(snapshot, 'SELECT id,body FROM "note"') }).toEqual({
+    version: 1,
+    rows: [{ id: "wal", body: "durable input" }],
+  })
   const backup = new SQLite(result.backupPath!, { readonly: true })
   try {
     expect(read(backup, 'SELECT id,body FROM "note"')).toEqual([{ id: "wal", body: "durable input" }])

@@ -139,7 +139,13 @@ function saveBackup(sqlite: SQLite, databasePath: string, from: number, to: numb
   let descriptor: number | undefined
   try {
     descriptor = fs.openSync(pending, "wx", 0o600)
-    fs.writeFileSync(descriptor, sqlite.serialize())
+    const snapshot = sqlite.serialize()
+    // serialize includes the complete WAL snapshot. Its standalone copy must
+    // use rollback format so readers do not require companion WAL/SHM files.
+    // https://www.sqlite.org/c3ref/deserialize.html
+    snapshot[18] = 1
+    snapshot[19] = 1
+    fs.writeFileSync(descriptor, snapshot)
     fs.fsyncSync(descriptor)
     fs.closeSync(descriptor)
     descriptor = undefined

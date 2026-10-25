@@ -945,7 +945,6 @@ describe("Mission terminal Task authority", () => {
             tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
           })
           const leaf = await panelLeaf("complete_mission")
-          const partID = Identifier.ascending("part")
           const callID = "bounded-completion"
           const args = { summary: "Bounded coordination accepted", task_acceptances: [] }
           await Session.updatePart({
@@ -954,6 +953,7 @@ describe("Mission terminal Task authority", () => {
             messageID: assistant.id,
             type: "step-start",
           })
+          const partID = Identifier.ascending("part")
           await Session.updatePart({
             id: partID,
             sessionID: mission.id,
@@ -1314,13 +1314,13 @@ describe("Mission terminal Task authority", () => {
         expect((await observeSettlement()).status).toBe("pending")
         await expect(observeMissionSettlement({ directory: project.path, missionID: mission.missionID, sessionID: "another-session" }))
           .rejects.toThrow(`Mission settlement Session identity mismatch: ${mission.missionID}`)
-        const completionPartID = Identifier.ascending("part")
         await Session.updatePart({
           id: Identifier.ascending("part"),
           sessionID: mission.id,
           messageID: mutationMessage.id,
           type: "step-start",
         })
+        const completionPartID = Identifier.ascending("part")
         await Session.updatePart({
           id: completionPartID,
           sessionID: mission.id,
