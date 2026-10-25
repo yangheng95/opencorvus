@@ -1,0 +1,15 @@
+bun test v1.4.0 (34cbb9a40)
+
+packages\opencorvus\test\dependency-response-security.test.ts:
+(pass) an excessive encoding response returns its rejection and the same proxy owner delivers the next stream [1020.47ms]
+(pass) backend collection schemas return one upper-bound issue and preserve valid parsed values [10.00ms]
+(pass) website collection schemas return one upper-bound issue and preserve valid parsed values [2.12ms]
+
+packages\opencorvus\test\dependency-patch-contract.test.ts:
+(pass) the real Node proxy owner delivers exact streamed HTTP data and disposes its dispatcher [508.02ms]
+
+ 4 pass
+ 6 filtered out
+ 0 fail
+ 26 expect() calls
+Ran 4 tests across 2 files. [7.05s]

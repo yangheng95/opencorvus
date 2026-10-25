@@ -10,6 +10,7 @@ const { locale, records, publication } = Astro.props as {
   publication: WebsitePublicationSummary
 }
 const distributionPointer = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/expert-squads/catalog.json`
+const numberFormat = new Intl.NumberFormat(locale === "zh-cn" ? "zh-CN" : "en-US")
 const copy =
   locale === "zh-cn"
     ? {
@@ -45,8 +46,11 @@ const copy =
         identityBody: "名称帮助人理解，namespace / id / version / digest 帮助系统确认拿到的是哪一份内容。点击条目可查看完整角色与工作流。",
         snapshot: "全部条目 · 精确事实",
         suffix: "个团队",
+        singularSuffix: "个团队",
         agents: "个 Agent",
+        singularAgent: "个 Agent",
         workflows: "条工作流",
+        singularWorkflow: "条工作流",
         skills: "项 Skill",
         tools: "项工具",
         mcpRefs: "项 MCP 引用",
@@ -89,8 +93,11 @@ const copy =
           "Names help people understand. namespace / id / version / digest let the system prove which content it received. Open a record to inspect the complete roles and workflow.",
         snapshot: "All records · exact facts",
         suffix: "teams",
+        singularSuffix: "team",
         agents: "Agents",
+        singularAgent: "Agent",
         workflows: "workflows",
+        singularWorkflow: "workflow",
         skills: "Skills",
         tools: "tools",
         mcpRefs: "MCP refs",
@@ -203,7 +210,8 @@ const copy =
             aria-atomic="true"
             data-market-status
             data-count-suffix={copy.suffix}
-            data-empty-status={copy.emptyTitle}>{records.length} {copy.suffix}</span
+            data-count-singular={copy.singularSuffix}
+            data-empty-status={copy.emptyTitle}>{numberFormat.format(records.length)} {records.length === 1 ? copy.singularSuffix : copy.suffix}</span
           >
           <span class="oc-text-xs oc-text-description">{copy.snapshot}</span>
         </div>
@@ -241,7 +249,7 @@ const copy =
 
                 <div class="oc-record-foot">
                   <span class="oc-record-counts">
-                    {record.agents.length} {copy.agents} · {record.workflows.length} {copy.workflows}
+                    {numberFormat.format(record.agents.length)} {record.agents.length === 1 ? copy.singularAgent : copy.agents} · {numberFormat.format(record.workflows.length)} {record.workflows.length === 1 ? copy.singularWorkflow : copy.workflows}
                   </span>
                   <code class="oc-record-identity">{record.identity.id}</code>
                 </div>
@@ -269,6 +277,7 @@ const copy =
     const records = Array.from(marketRoot.querySelectorAll<HTMLElement>("[data-market-record]"))
     const status = marketRoot.querySelector<HTMLElement>("[data-market-status]")!
     const empty = marketRoot.querySelector<HTMLElement>("[data-market-empty]")!
+    const numberFormat = new Intl.NumberFormat(document.documentElement.lang)
     let activeFilter = "all"
 
     const refresh = () => {
@@ -281,7 +290,9 @@ const copy =
         record.hidden = !(pillarMatch && searchMatch)
         if (!record.hidden) visible += 1
       }
-      status.textContent = visible > 0 ? `${visible} ${status.dataset.countSuffix}` : status.dataset.emptyStatus ?? ""
+      status.textContent = visible > 0
+        ? `${numberFormat.format(visible)} ${visible === 1 ? status.dataset.countSingular : status.dataset.countSuffix}`
+        : status.dataset.emptyStatus ?? ""
       empty.hidden = visible > 0
     }
 

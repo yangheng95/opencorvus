@@ -5,7 +5,7 @@ import { McpConfigSchema } from "@/config/mcp-schema"
 import { Filesystem } from "@/util/filesystem"
 import { SkillReadDiagnostics } from "@/skill/read-diagnostics"
 import { assertSkillProjectionExecutable } from "@/skill/eligibility"
-import { introspectPackageToolForValidation, type PackageToolIntrospection } from "@/expert-squad/package-tool-capsule"
+import type { PackageToolIntrospection } from "@/expert-squad/package-tool-capsule"
 import { assertCapabilityToolDefinitionBudget, NormalizedProviderToolDefinition } from "@/capability/reveal-receipt"
 import { Flag } from "@/flag/flag"
 import { parseFrontmatter } from "@/util/frontmatter"
@@ -1619,6 +1619,7 @@ export namespace ExpertSquadRegistry {
     )
     const validated = new Map<string, ValidatedPackageTool>()
     for (const bundle of prepared) {
+      const { introspectPackageToolForValidation } = await import("@/expert-squad/package-tool-capsule")
       const definition = await introspectPackageToolForValidation({ prepared: bundle, cwd: input.metadata.root })
       assertCapabilityToolDefinitionBudget(
         bundle.snapshot.ref,

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [运行依赖的内容编码、集合校验与网站补丁](2026-10-25-runtime-dependency-security.md)：590 Undici/Zod/Astro修复与真实验证。
+
 - [Package Tool RPC 物理寿命](2026-10-25-package-tool-rpc-lifetime.md)：issue 51 真实 worker 与物理结算。
 
 - [成员分组与真实事件中的身份变化](2026-10-25-member-group-identity.md)：589生产投影与成员正文归属。

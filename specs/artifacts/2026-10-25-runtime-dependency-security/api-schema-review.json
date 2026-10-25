@@ -1,0 +1,12 @@
+{
+  "generation": "Canonical isolated SDK transaction, compiled before publication",
+  "changes": [
+    "Primitive type unions compacted by Zod",
+    "starts_with format annotation with existing pattern",
+    "Exact two-item tuple constraints",
+    "Explicit minute/second/fractional-second schema in all owned datetime declaration sites; UTC and offset scopes preserved"
+  ],
+  "typescript": "Generated string | string unions remain assignable string, not a new value type",
+  "verification": "Full route inventory and current generated/tracked schema check required; see verification.json",
+  "limits": "Third-party MCP datetime declarations keep their upstream defaults"
+}

@@ -1,4 +1,5 @@
 import z from "zod"
+import { isoDateTimeSchema } from "@opencorvus-ai/util/iso-date-time"
 
 export const INTERACTIVE_ARTIFACT_SCHEMA_VERSION = "1" as const
 export const INTERACTIVE_ARTIFACT_MIN_HEIGHT = 180
@@ -9,7 +10,7 @@ const JsonObject = z.record(z.string(), z.unknown())
 const Sha256Digest = z.string().regex(/^[a-f0-9]{64}$/)
 const StableID = z.string().trim().min(1).max(80)
 const HexColor = z.string().regex(/^#[0-9a-fA-F]{6}$/)
-const IsoDateTime = z.iso.datetime({ offset: true })
+const IsoDateTime = isoDateTimeSchema({ offset: true })
 
 // MIME means Multipurpose Internet Mail Extensions; it declares the stored attachment media type.
 export const InteractiveArtifactAttachment = z

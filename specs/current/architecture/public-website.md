@@ -34,6 +34,7 @@ This document is the current authority for the `opencorvus.com` runtime, Expert 
 - Pre-activation state is retained for the four newest activations. A hardened daily systemd timer creates consistent snapshots and retains seven daily plus four weekly local copies; each snapshot has a checksum and a SHA-256 inventory of every immutable blob needed to restore it. Off-host replication must copy the snapshot and every inventory-bound blob, verify both at the destination, and pass a real restore drill before production is declared complete. A database-only copy is not a Registry backup.
 - Activation, rollback, and scheduled backup serialize through one state-root file lock. The signed activator update remains inside the recoverable transaction; inbox/release/backup pruning occurs after the commit point and is non-fatal cleanup.
 - The baseline registry-control executable is built as `bun-linux-x64-baseline` in CI. The Astro module runs under the pinned server Bun runtime.
+- Registry import reconstructs canonical package declarations from archive bytes through the shared declaration loader. That path is independent of Task execution and native rendering packages. Executable package-tool introspection is loaded at its actual asynchronous validation call, preserving the same runtime and validation authority.
 
 ## Public product contract
 

@@ -130,6 +130,9 @@ try {
   }
   console.log(JSON.stringify({ status: "ok", records: seed.resources.total, archiveSha256: exact.archive.sha256 }))
 } finally {
-  server?.kill()
+  if (server) {
+    server.kill()
+    await server.exited
+  }
   await rm(databaseRoot, { recursive: true, force: true })
 }

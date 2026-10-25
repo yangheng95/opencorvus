@@ -1,0 +1,4 @@
+$ bun run ./test/website-runtime-smoke.ts
+{"publicationID":1,"publication":{"id":1,"catalogSha256":"3682251fd91453da08a4a341e98e511312bae901ccd3ea5c87a2e035b26b5a08","total":122,"embeddedAlreadyAvailable":5,"bundledMarketImportable":117,"activatedAt":"2026-10-25T05:47:39.392Z"}}
+13:47:44 [@astrojs/node] Server listening on https://127.0.0.1:46667
+{"status":"ok","records":122,"archiveSha256":"cc64bea2d22940b90daee345d010ecd598daf2c22b59865db961b8b075111aff"}

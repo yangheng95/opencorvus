@@ -1,0 +1,35 @@
+$ bun run ./test/website-runtime-smoke.ts
+50568 |     return createRequire(packagedPackageJson);
+50569 |   }
+50570 |   if (isBunExecutable(execPath)) {
+50571 |     return sourceRequire;
+50572 |   }
+50573 |   throw new Error(`Packaged runtime is incomplete: missing ${packagedPackageJson}. ` + "Run the packaged runtime bundle directory or extract the release archive before starting opencorvus. " + "Refusing to resolve native runtime packages from parent node_modules.");
+                         ^
+error: Packaged runtime is incomplete: missing D:\myhexin-local\opencorvus\packages\web\dist\server\package.json. Run the packaged runtime bundle directory or extract the release archive before starting opencorvus. Refusing to resolve native runtime packages from parent node_modules.
+      at runtimePackageRequireForExecPath (B:/~BUN/root/opencorvus-registry-control.exe:50573:18)
+      at requireRuntimePackage (B:/~BUN/root/opencorvus-registry-control.exe:50579:31)
+      at B:/~BUN/root/opencorvus-registry-control.exe:245628:32
+      at B:/~BUN/root/opencorvus-registry-control.exe:66:48
+      at B:/~BUN/root/opencorvus-registry-control.exe:255409:25
+      at B:/~BUN/root/opencorvus-registry-control.exe:66:48
+      at B:/~BUN/root/opencorvus-registry-control.exe:797008:15
+      at B:/~BUN/root/opencorvus-registry-control.exe:66:48
+      at B:/~BUN/root/opencorvus-registry-control.exe:797784:28
+      at B:/~BUN/root/opencorvus-registry-control.exe:66:48
+
+Bun v1.4.0 (Windows x64)
+21 | }
+22 |
+23 | async function run(args: string[]) {
+24 |   const child = Bun.spawn(args, { cwd: webRoot, stdout: "inherit", stderr: "inherit" })
+25 |   const exitCode = await child.exited
+26 |   if (exitCode !== 0) throw new Error(`${args.join(" ")} failed with exit code ${exitCode}`)
+                                     ^
+error: D:\myhexin-local\opencorvus\packages\web\dist\server\opencorvus-registry-control.exe import --database D:\myhexin-local\opencorvus\.tmp-product-iteration\runtime-dependency-security-590\website-runtime-environment\tmp\opencorvus-test-run-suRcDs\runner-93384-vBTotG\runtime-root\tmp\opencorvus-website-runtime-0VLVpm\registry.sqlite3 --data D:\myhexin-local\opencorvus\.tmp-product-iteration\runtime-dependency-security-590\website-runtime-environment\tmp\opencorvus-test-run-suRcDs\runner-93384-vBTotG\runtime-root\tmp\opencorvus-website-runtime-0VLVpm\data --seed D:\myhexin-local\opencorvus\packages\web\dist\server\website-registry-seed.json --source D:\myhexin-local\opencorvus\packages\web\dist\client failed with exit code 1
+      at run (D:\myhexin-local\opencorvus\packages\web\test\website-runtime-smoke.ts:26:33)
+
+Bun v1.4.0 (Windows x64)
+error: script "runtime:smoke" exited with code 1
+Test runtime retained after unsuccessful run: D:\myhexin-local\opencorvus\.tmp-product-iteration\runtime-dependency-security-590\website-runtime-environment\tmp\opencorvus-test-run-suRcDs
+Physical/output settlement confirmed: true

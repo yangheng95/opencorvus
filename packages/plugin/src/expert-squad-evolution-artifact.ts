@@ -1,5 +1,6 @@
 // ABI means Application Binary Interface. ID means Identifier.
 import { z } from "zod"
+import { isoDateTimeSchema } from "@opencorvus-ai/util/iso-date-time"
 import { ArtifactReadLocatorSchema, EngineArtifactLocatorSchema } from "./artifact-catalog.js"
 import { EvolutionCampaignBudgetSchema, EvolutionCostCeilingSchema, EvolutionExactRevisionSchema, EvolutionPromotionReceiptSchema } from "./expert-squad-evolution.js"
 import { MetricScorerSpecSchema } from "./metric-evaluation.js"
@@ -285,7 +286,7 @@ export const EvolutionArtifactSchemas = {
       observable_symptom: z.string().min(1),
       impact_scope: z.string().min(1),
       frequency: z.string().min(1),
-      data_window: z.object({ started_at: z.string().datetime(), ended_at: z.string().datetime() }).strict(),
+      data_window: z.object({ started_at: isoDateTimeSchema(), ended_at: isoDateTimeSchema() }).strict(),
       owner_hypothesis: z.string().min(1),
       unknowns,
       sensitivity: z.string().min(1),
@@ -487,7 +488,7 @@ export const EvolutionArtifactSchemas = {
       environment_digest: sha256,
       token_usage: z.number().nonnegative(),
       cost: z.number().nonnegative().nullable(),
-      last_activity_at: z.string().datetime(),
+      last_activity_at: isoDateTimeSchema(),
       outcome: z.enum(["success", "failure", "unavailable"]),
       activity_duration_ms: z.number().int().nonnegative().nullable(),
       revision_equality: z

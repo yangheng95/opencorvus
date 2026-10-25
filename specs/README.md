@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [运行依赖的内容编码、集合校验与网站补丁](records/2026-10/2026-10-25-runtime-dependency-security.md)：590实际依赖告警、上游修复与正向合同。
+
 - [Package Tool RPC 物理寿命](records/2026-10/2026-10-25-package-tool-rpc-lifetime.md)：issue 51 活动传播、取消与 Host 效果结算。
 
 - [成员分组与真实事件中的身份变化](records/2026-10/2026-10-25-member-group-identity.md)：589真实事件与正文分组身份调查。

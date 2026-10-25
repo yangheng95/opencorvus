@@ -1,0 +1,88 @@
+bun test v1.4.0 (34cbb9a40)
+
+packages\opencorvus\test\dependency-date-time-contract.test.ts:
+78 |       { cause: error },
+79 |     )
+80 |   }
+81 |   const parsed = ExpertSquadInstallationMetadataSchema.safeParse(value)
+82 |   if (!parsed.success) {
+83 |     throw new Error(`Expert Squad installation metadata does not match schema at ${file}: ${parsed.error.message}`)
+                   ^
+error: Expert Squad installation metadata does not match schema at D:\myhexin-local\opencorvus\.tmp-product-iteration\runtime-dependency-security-590\datetime-before-environment\tmp\opencorvus-test-run-nddJTL\test-16028-y2gLnB\runtime-root\tmp\generation-timestamp-contract-J3o2nL\.opencorvus-meta.json: [
+  {
+    "origin": "string",
+    "code": "invalid_format",
+    "format": "datetime",
+    "pattern": "/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/",
+    "path": [
+      "generation",
+      "generated_at"
+    ],
+    "message": "Invalid ISO datetime"
+  }
+]
+      at readExpertSquadInstallationMetadata (D:\myhexin-local\opencorvus\packages\opencorvus\src\expert-squad\installation-metadata.ts:83:15)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\dependency-date-time-contract.test.ts:19:20)
+(fail) stored generation metadata retains its minute, second, and fractional-second timestamp values [80.10ms]
+13 |             throw new core.$ZodAsyncError();
+14 |         }
+15 |         if (result.issues.length) {
+16 |             const e = new (_params?.Err ?? _Err)(result.issues.map((iss) => util.finalizeIssue(iss, ctx, core.config())));
+17 |             util.captureStackTrace(e, _params?.callee ?? fn);
+18 |             throw e;
+                       ^
+ZodError: [
+  {
+    "origin": "string",
+    "code": "invalid_format",
+    "format": "datetime",
+    "pattern": "/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/",
+    "path": [
+      "items",
+      0,
+      "start"
+    ],
+    "message": "Invalid ISO datetime"
+  }
+]
+      at fn (D:\myhexin-local\opencorvus\node_modules\.bun\zod@4.6.6\node_modules\zod\v4\core\parse.js:18:19)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\dependency-date-time-contract.test.ts:27:40)
+(fail) timeline point timestamps preserve every declared precision and timezone offset [11.85ms]
+13 |             throw new core.$ZodAsyncError();
+14 |         }
+15 |         if (result.issues.length) {
+16 |             const e = new (_params?.Err ?? _Err)(result.issues.map((iss) => util.finalizeIssue(iss, ctx, core.config())));
+17 |             util.captureStackTrace(e, _params?.callee ?? fn);
+18 |             throw e;
+                       ^
+ZodError: [
+  {
+    "origin": "string",
+    "code": "invalid_format",
+    "format": "datetime",
+    "pattern": "/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$/",
+    "path": [
+      "started_at"
+    ],
+    "message": "Invalid ISO datetime"
+  },
+  {
+    "origin": "string",
+    "code": "invalid_format",
+    "format": "datetime",
+    "pattern": "/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$/",
+    "path": [
+      "ended_at"
+    ],
+    "message": "Invalid ISO datetime"
+  }
+]
+      at fn (D:\myhexin-local\opencorvus\node_modules\.bun\zod@4.6.6\node_modules\zod\v4\core\parse.js:18:19)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\dependency-date-time-contract.test.ts:34:84)
+(fail) evolution evidence timestamps preserve UTC minute, second, and fractional-second precision [2.60ms]
+
+ 0 pass
+ 3 fail
+Ran 3 tests across 1 file. [7.15s]
+Test runtime retained after unsuccessful run: D:\myhexin-local\opencorvus\.tmp-product-iteration\runtime-dependency-security-590\datetime-before-environment\tmp\opencorvus-test-run-nddJTL
+Physical/output settlement confirmed: true

@@ -1,0 +1,12 @@
+bun test v1.4.0 (34cbb9a40)
+
+packages\opencorvus\test\dependency-date-time-contract.test.ts:
+(pass) stored generation metadata retains its minute, second, and fractional-second timestamp values [48.06ms]
+(pass) timeline point timestamps preserve every declared precision and timezone offset [2.34ms]
+(pass) evolution evidence timestamps preserve UTC minute, second, and fractional-second precision [1.02ms]
+(pass) timestamp schemas return their qualified-time error contract for invalid dates and timezone boundaries [1.87ms]
+
+ 4 pass
+ 0 fail
+ 19 expect() calls
+Ran 4 tests across 1 file. [3.22s]

@@ -2090,14 +2090,14 @@ export type ExpertSquadCatalogSummary = {
     | {
         generation?:
           | {
-              generated_at: string
+              generated_at: string | string
               generator_expert_squad_id: "squad-sdk"
               method: "sdk_authoring"
               session_id: string
               task_id: string
             }
           | {
-              generated_at: string
+              generated_at: string | string
               generator_expert_squad_id: "squad-sdk"
               mapping_digest: string
               method: "heterogeneous_import"
@@ -2787,25 +2787,25 @@ export type InteractiveArtifactPayload =
             group?: string
             id: string
             kind: "point"
-            start: string
+            start: string | string
           }
         | {
             color?: string
             content: string
-            end: string
+            end: string | string
             group?: string
             id: string
             kind: "range"
-            start: string
+            start: string | string
           }
         | {
             color?: string
             content: string
-            end: string
+            end: string | string
             group?: string
             id: string
             kind: "background"
-            start: string
+            start: string | string
           }
       >
       presentation?: {
@@ -2815,8 +2815,8 @@ export type InteractiveArtifactPayload =
       schemaVersion: "1"
       title: string
       viewport?: {
-        end: string
-        start: string
+        end: string | string
+        start: string | string
       }
     }
   | {

@@ -1,0 +1,602 @@
+{
+  "at": "2026-10-25T05:49:33.896Z",
+  "environment": {
+    "bun": "1.4.0",
+    "providerRequests": 0,
+    "userDatabase": "No read/write/migration of the active user database",
+    "scope": "Finite isolated checks plus owned Astro dev process; no UI automation"
+  },
+  "audit": {
+    "before": {
+      "packages": [
+        "@azure/msal-node",
+        "astro",
+        "body-parser",
+        "dompurify",
+        "fast-uri",
+        "ip-address",
+        "toml",
+        "undici",
+        "zod"
+      ],
+      "advisories": 18,
+      "severity": {
+        "high": 8,
+        "moderate": 5,
+        "low": 4,
+        "critical": 1
+      }
+    },
+    "after": {
+      "packages": [
+        "@azure/msal-node",
+        "body-parser",
+        "fast-uri",
+        "ip-address",
+        "toml",
+        "zod"
+      ],
+      "advisories": 11,
+      "severity": {
+        "high": 6,
+        "moderate": 3,
+        "low": 2
+      }
+    }
+  },
+  "runs": {
+    "datetime-before": {
+      "label": "datetime-before",
+      "startedAt": "2026-10-25T05:42:35.414Z",
+      "closedAt": "2026-10-25T05:42:50.623Z",
+      "originalCallerPID": 68684,
+      "childPID": 76868,
+      "exitCode": 1,
+      "signal": null,
+      "bytes": 4698,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "test",
+        "./packages/opencorvus/test/dependency-date-time-contract.test.ts"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained",
+      "acceptance": "FAILED: retained as investigation evidence"
+    },
+    "datetime-fixed": {
+      "label": "datetime-fixed",
+      "startedAt": "2026-10-25T05:43:45.582Z",
+      "closedAt": "2026-10-25T05:43:50.780Z",
+      "originalCallerPID": 90292,
+      "childPID": 96132,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 597,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "test",
+        "./packages/opencorvus/test/dependency-date-time-contract.test.ts"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained",
+      "acceptance": "Executed command closed successfully"
+    },
+    "docs": {
+      "label": "docs",
+      "startedAt": "2026-10-25T05:18:40.275Z",
+      "closedAt": "2026-10-25T05:18:52.111Z",
+      "originalCallerPID": 55304,
+      "childPID": 80548,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 104,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "run",
+        "docs:check"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained",
+      "acceptance": "Executed command closed successfully"
+    },
+    "final-contract": {
+      "label": "final-contract",
+      "startedAt": "2026-10-25T05:35:24.840Z",
+      "closedAt": "2026-10-25T05:35:33.851Z",
+      "originalCallerPID": 54232,
+      "childPID": 52956,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 680,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "test",
+        "./packages/opencorvus/test/dependency-response-security.test.ts",
+        "./packages/opencorvus/test/dependency-patch-contract.test.ts",
+        "--test-name-pattern",
+        "excessive encoding|collection schemas|real Node proxy owner"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained",
+      "acceptance": "Executed command closed successfully"
+    },
+    "final-docs": {
+      "label": "final-docs",
+      "startedAt": "2026-10-25T05:46:55.927Z",
+      "closedAt": "2026-10-25T05:47:07.289Z",
+      "originalCallerPID": 77184,
+      "childPID": 95616,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 104,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "run",
+        "docs:check"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained",
+      "acceptance": "Executed command closed successfully"
+    },
+    "final-routes": {
+      "label": "final-routes",
+      "startedAt": "2026-10-25T05:45:35.866Z",
+      "closedAt": "2026-10-25T05:45:50.024Z",
+      "originalCallerPID": 95904,
+      "childPID": 46872,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 129,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "run",
+        "api:routes-check"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained",
+      "acceptance": "Executed command closed successfully"
+    },
+    "final-typecheck": {
+      "label": "final-typecheck",
+      "startedAt": "2026-10-25T05:45:25.323Z",
+      "closedAt": "2026-10-25T05:47:21.222Z",
+      "originalCallerPID": 70344,
+      "childPID": 67460,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 2405,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "run",
+        "typecheck"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained",
+      "acceptance": "Executed command closed successfully"
+    },
+    "format": {
+      "label": "format",
+      "startedAt": "2026-10-25T05:35:12.390Z",
+      "closedAt": "2026-10-25T05:35:14.638Z",
+      "originalCallerPID": 71892,
+      "childPID": 97704,
+      "exitCode": 1,
+      "signal": null,
+      "bytes": 255,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "exec",
+        "prettier",
+        "--write",
+        "packages/opencorvus/test/dependency-response-security.test.ts",
+        "packages/opencorvus/test/fixture/dependency-encoding-contract.mjs",
+        "packages/web/src/components/MarketplacePage.astro"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained",
+      "acceptance": "FAILED: retained as investigation evidence"
+    },
+    "overlay-build": {
+      "label": "overlay-build",
+      "startedAt": "2026-10-25T05:31:19.884Z",
+      "closedAt": "2026-10-25T05:32:36.138Z",
+      "originalCallerPID": 69116,
+      "childPID": 66712,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 73540,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "run",
+        "--cwd",
+        "packages/overlay",
+        "build:vite"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained",
+      "acceptance": "Executed command closed successfully"
+    },
+    "registry-actual": {
+      "label": "registry-actual",
+      "startedAt": "2026-10-25T05:15:25.082Z",
+      "closedAt": "2026-10-25T05:16:03.057Z",
+      "originalCallerPID": 96844,
+      "childPID": 87960,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 1135,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "run",
+        "--cwd",
+        "packages/web",
+        "test:registry"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained",
+      "acceptance": "Executed command closed successfully"
+    },
+    "registry": {
+      "label": "registry",
+      "startedAt": "2026-10-25T05:14:21.152Z",
+      "closedAt": "2026-10-25T05:14:23.482Z",
+      "originalCallerPID": 79528,
+      "childPID": 94456,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 11599,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "--cwd",
+        "packages/web",
+        "run",
+        "test:registry"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained",
+      "acceptance": "INVALID: command only printed help; actual checker is registry-actual"
+    },
+    "routes-fixed": {
+      "label": "routes-fixed",
+      "startedAt": "2026-10-25T05:31:09.426Z",
+      "closedAt": "2026-10-25T05:31:21.013Z",
+      "originalCallerPID": 87932,
+      "childPID": 83160,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 129,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "run",
+        "api:routes-check"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained",
+      "acceptance": "Executed command closed successfully"
+    },
+    "routes": {
+      "label": "routes",
+      "startedAt": "2026-10-25T05:18:40.277Z",
+      "closedAt": "2026-10-25T05:18:52.136Z",
+      "originalCallerPID": 93372,
+      "childPID": 88628,
+      "exitCode": 1,
+      "signal": null,
+      "bytes": 2837,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "run",
+        "api:routes-check"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained",
+      "acceptance": "FAILED: retained as investigation evidence"
+    },
+    "sdk-final": {
+      "label": "sdk-final",
+      "startedAt": "2026-10-25T05:43:51.654Z",
+      "closedAt": "2026-10-25T05:44:18.408Z",
+      "originalCallerPID": 99028,
+      "childPID": 79388,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 1869,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "run",
+        "--cwd",
+        "packages/sdk/js",
+        "build"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained",
+      "acceptance": "Executed command closed successfully"
+    },
+    "sdk-regenerate": {
+      "label": "sdk-regenerate",
+      "startedAt": "2026-10-25T05:29:23.798Z",
+      "closedAt": "2026-10-25T05:29:53.025Z",
+      "originalCallerPID": 86032,
+      "childPID": 41516,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 1869,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "run",
+        "--cwd",
+        "packages/sdk/js",
+        "build"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained",
+      "acceptance": "Executed command closed successfully"
+    },
+    "typecheck": {
+      "label": "typecheck",
+      "startedAt": "2026-10-25T05:14:21.139Z",
+      "closedAt": "2026-10-25T05:15:17.401Z",
+      "originalCallerPID": 70172,
+      "childPID": 90692,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 2403,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "run",
+        "typecheck"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained",
+      "acceptance": "Executed command closed successfully"
+    },
+    "website-build": {
+      "label": "website-build",
+      "startedAt": "2026-10-25T05:23:24.670Z",
+      "closedAt": "2026-10-25T05:25:43.630Z",
+      "originalCallerPID": 80388,
+      "childPID": 92612,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 312263,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "run",
+        "--cwd",
+        "packages/web",
+        "build"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained",
+      "acceptance": "Executed command closed successfully"
+    },
+    "website-complete-build": {
+      "label": "website-complete-build",
+      "startedAt": "2026-10-25T05:44:42.656Z",
+      "closedAt": "2026-10-25T05:46:50.044Z",
+      "originalCallerPID": 48392,
+      "childPID": 84680,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 311953,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "run",
+        "--cwd",
+        "packages/web",
+        "build"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained",
+      "acceptance": "Executed command closed successfully"
+    },
+    "website-control-build": {
+      "label": "website-control-build",
+      "startedAt": "2026-10-25T05:30:26.045Z",
+      "closedAt": "2026-10-25T05:30:30.820Z",
+      "originalCallerPID": 26136,
+      "childPID": 95248,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 106,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "build",
+        "packages/web/script/website-registry-control.ts",
+        "--compile",
+        "--outfile",
+        "packages/web/dist/server/opencorvus-registry-control.exe"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained",
+      "acceptance": "Executed command closed successfully"
+    },
+    "website-final-build": {
+      "label": "website-final-build",
+      "startedAt": "2026-10-25T05:36:27.017Z",
+      "closedAt": "2026-10-25T05:38:19.058Z",
+      "originalCallerPID": 81576,
+      "childPID": 71232,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 311933,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "run",
+        "--cwd",
+        "packages/web",
+        "build"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained",
+      "acceptance": "Executed command closed successfully"
+    },
+    "website-runtime-final": {
+      "label": "website-runtime-final",
+      "startedAt": "2026-10-25T05:47:32.208Z",
+      "closedAt": "2026-10-25T05:47:44.892Z",
+      "originalCallerPID": 89628,
+      "childPID": 37748,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 481,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "run",
+        "--cwd",
+        "packages/web",
+        "runtime:smoke"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained",
+      "acceptance": "Executed command closed successfully"
+    },
+    "website-runtime-fixed": {
+      "label": "website-runtime-fixed",
+      "startedAt": "2026-10-25T05:30:36.658Z",
+      "closedAt": "2026-10-25T05:30:52.914Z",
+      "originalCallerPID": 85368,
+      "childPID": 95184,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 481,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "run",
+        "--cwd",
+        "packages/web",
+        "runtime:smoke"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained",
+      "acceptance": "Executed command closed successfully"
+    },
+    "website-runtime": {
+      "label": "website-runtime",
+      "startedAt": "2026-10-25T05:28:31.819Z",
+      "closedAt": "2026-10-25T05:28:35.233Z",
+      "originalCallerPID": 47052,
+      "childPID": 93384,
+      "exitCode": 1,
+      "signal": null,
+      "bytes": 2956,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/member-live-lifecycle-588b-bundle/bin/bun.exe",
+        "run",
+        "--cwd",
+        "packages/web",
+        "runtime:smoke"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained",
+      "acceptance": "FAILED: retained as investigation evidence"
+    }
+  },
+  "visual": {
+    "kind": "Manual IAB interaction and reviewed screenshots",
+    "origin": "http://127.0.0.1:54086",
+    "ownedTab": "269, closed",
+    "completed": [
+      "Chinese and English landing",
+      "English 1 team, 12 teams, 1 workflow and empty result",
+      "Chinese 1个团队 and real research-studio detail"
+    ],
+    "limits": [
+      "Local unsigned publication keeps the signed download disabled",
+      "Not a DOMPurify exploit-mode verification",
+      "High-frequency member Rendering root cause remains unresolved"
+    ]
+  }
+}

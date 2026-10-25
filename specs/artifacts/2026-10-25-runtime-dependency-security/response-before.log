@@ -1,0 +1,2402 @@
+bun test v1.4.3 (c6da4a4d3)
+
+packages\opencorvus\test\dependency-response-security.test.ts:
+1093 |   if (!isURLInstance(fileURLOrPath))
+1094 |     return fileURLOrPath;
+1095 |   return Bun.fileURLToPath(fileURLOrPath);
+1096 | }
+1097 | var { Error, TypeError } = globalThis;
+1098 |   let err = new Error(message);
+                   ^
+error: Command failed: node --experimental-transform-types D:\myhexin-local\opencorvus\packages\opencorvus\test\fixture\dependency-encoding-contract.mjs
+(node:73672) ExperimentalWarning: Transform Types is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+proxy-connect
+GET /encoded HTTP/1.1
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+ResponseContentLengthMismatchError: Response body length does not match content-length header
+    at Parser.createError (D:\myhexin-local\opencorvus\node_modules\.bun\undici@6.28.1\node_modules\undici\lib\dispatcher\client-h1.js:335:14)
+    at Parser.finish (D:\myhexin-local\opencorvus\node_modules\.bun\undici@6.28.1\node_modules\undici\lib\dispatcher\client-h1.js:328:17)
+    at Socket.<anonymous> (D:\myhexin-local\opencorvus\node_modules\.bun\undici@6.28.1\node_modules\undici\lib\dispatcher\client-h1.js:759:32)
+    at Socket.emit (node:events:520:22)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+Emitted 'error' event on Readable instance at:
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  code: 'UND_ERR_RES_CONTENT_LENGTH_MISMATCH',
+  Symbol(undici.error.UND_ERR): true,
+  Symbol(undici.error.UND_ERR_RES_CONTENT_LENGTH_MISMATCH): true
+}
+
+Node.js v25.7.0
+
+   code: 1,
+ killed: false,
+ signal: null,
+    cmd: "node --experimental-transform-types D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\test\\fixture\\dependency-encoding-contract.mjs",
+
+      at genericNodeError (node:child_process:1098:13)
+      at exitHandler (node:child_process:115:28)
+      at emit (node:events:103:22)
+      at #maybeClose (node:child_process:842:16)
+      at #handleOnExit (node:child_process:584:72)
+(fail) an excessive encoding response returns its rejection and the same proxy owner delivers the next stream [2168.97ms]
+52 |     ]
+53 |     for (const { schema, oversized, valid, origin } of cases) {
+54 |       expect(schema.parse(valid)).toEqual(valid)
+55 |       const result = schema.safeParse(oversized)
+56 |       expect(result.success).toBe(false)
+57 |       expect(result.error.issues.map((issue: any) => ({ code: issue.code, path: issue.path, maximum: issue.maximum, inclusive: issue.inclusive, origin: issue.origin ?? issue.type }))).toEqual([
+                                                                                                                                                                                             ^
+error: expect(received).toEqual(expected)
+
+@@ -1,7 +1,1159 @@
+  [
+    {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       0,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       1,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       2,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       3,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       4,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       5,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       6,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       7,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       8,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       9,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       10,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       11,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       12,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       13,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       14,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       15,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       16,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       17,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       18,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       19,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       20,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       21,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       22,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       23,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       24,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       25,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       26,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       27,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       28,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       29,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       30,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       31,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       32,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       33,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       34,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       35,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       36,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       37,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       38,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       39,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       40,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       41,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       42,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       43,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       44,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       45,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       46,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       47,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       48,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       49,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       50,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       51,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       52,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       53,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       54,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       55,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       56,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       57,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       58,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       59,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       60,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       61,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       62,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       63,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       64,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       65,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       66,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       67,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       68,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       69,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       70,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       71,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       72,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       73,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       74,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       75,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       76,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       77,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       78,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       79,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       80,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       81,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       82,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       83,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       84,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       85,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       86,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       87,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       88,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       89,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       90,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       91,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       92,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       93,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       94,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       95,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       96,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       97,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       98,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       99,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       100,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       101,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       102,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       103,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       104,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       105,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       106,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       107,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       108,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       109,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       110,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       111,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       112,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       113,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       114,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       115,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       116,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       117,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       118,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       119,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       120,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       121,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       122,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       123,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       124,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       125,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       126,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       127,
++     ],
++   },
++   {
+      "code": "too_big",
+      "inclusive": true,
+      "maximum": 2,
+      "origin": "array",
+      "path": [],
+
+- Expected  - 0
++ Received  + 1152
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\dependency-response-security.test.ts:57:185)
+(fail) backend collection schemas return one upper-bound issue and preserve valid parsed values [15.87ms]
+52 |     ]
+53 |     for (const { schema, oversized, valid, origin } of cases) {
+54 |       expect(schema.parse(valid)).toEqual(valid)
+55 |       const result = schema.safeParse(oversized)
+56 |       expect(result.success).toBe(false)
+57 |       expect(result.error.issues.map((issue: any) => ({ code: issue.code, path: issue.path, maximum: issue.maximum, inclusive: issue.inclusive, origin: issue.origin ?? issue.type }))).toEqual([
+                                                                                                                                                                                             ^
+error: expect(received).toEqual(expected)
+
+@@ -4,6 +4,1158 @@
+      "inclusive": true,
+      "maximum": 2,
+      "origin": "array",
+      "path": [],
+    },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       0,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       1,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       2,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       3,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       4,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       5,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       6,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       7,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       8,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       9,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       10,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       11,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       12,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       13,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       14,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       15,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       16,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       17,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       18,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       19,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       20,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       21,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       22,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       23,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       24,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       25,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       26,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       27,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       28,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       29,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       30,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       31,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       32,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       33,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       34,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       35,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       36,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       37,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       38,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       39,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       40,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       41,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       42,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       43,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       44,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       45,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       46,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       47,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       48,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       49,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       50,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       51,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       52,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       53,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       54,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       55,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       56,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       57,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       58,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       59,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       60,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       61,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       62,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       63,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       64,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       65,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       66,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       67,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       68,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       69,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       70,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       71,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       72,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       73,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       74,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       75,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       76,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       77,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       78,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       79,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       80,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       81,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       82,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       83,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       84,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       85,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       86,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       87,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       88,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       89,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       90,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       91,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       92,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       93,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       94,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       95,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       96,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       97,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       98,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       99,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       100,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       101,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       102,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       103,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       104,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       105,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       106,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       107,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       108,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       109,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       110,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       111,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       112,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       113,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       114,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       115,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       116,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       117,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       118,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       119,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       120,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       121,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       122,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       123,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       124,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       125,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       126,
++     ],
++   },
++   {
++     "code": "invalid_type",
++     "inclusive": undefined,
++     "maximum": undefined,
++     "origin": undefined,
++     "path": [
++       127,
++     ],
++   },
+  ]
+
+- Expected  - 0
++ Received  + 1152
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\dependency-response-security.test.ts:57:185)
+(fail) website collection schemas return one upper-bound issue and preserve valid parsed values [4.92ms]
+
+ 0 pass
+ 3 fail
+ 6 expect() calls
+Ran 3 tests across 1 file. [5.17s]

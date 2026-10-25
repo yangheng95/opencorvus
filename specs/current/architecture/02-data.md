@@ -4,6 +4,15 @@
 > `src/bus/` · `src/decision-log/` · `src/storage/` · `src/workspace/workspace.sql.ts` ·
 > `src/control/control.sql.ts`
 
+## 时间字符串的持久合同
+
+安装生成元数据、交互时间线与演进证据的日期时间由util包的`isoDateTimeSchema`
+统一声明。ISO（International Organization for Standardization，国际标准化组织）8601
+分钟、秒和分数秒精度均保留输入字符串；安装元数据和时间线允许带冒号时区偏移，
+演进证据保持UTC（Coordinated Universal Time，协调世界时）边界。
+这些精度由Zod公开schema显式组成，避免依赖默认精度变化收紧已持久化值的读取。
+读取不会补秒、改写元数据或升级数据库；OpenAPI与SDK由同一声明生成。
+
 ## Tool 完整结果与 Source 提交
 
 `persistMessageSources` 在同一 SQLite immediate transaction 内验证真实 Session/Message

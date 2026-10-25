@@ -1,5 +1,6 @@
 import path from "node:path"
 import z from "zod"
+import { isoDateTimeSchema } from "@opencorvus-ai/util/iso-date-time"
 import { Filesystem } from "@/util/filesystem"
 import { SQUAD_SDK_EXPERT_SQUAD_ID } from "./builtin/ids"
 
@@ -11,7 +12,7 @@ const GenerationAuthoritySchema = z
     generator_expert_squad_id: z.literal(SQUAD_SDK_EXPERT_SQUAD_ID),
     task_id: z.string().trim().min(1),
     session_id: z.string().trim().min(1),
-    generated_at: z.iso.datetime({ offset: true }),
+    generated_at: isoDateTimeSchema({ offset: true }),
   })
   .strict()
 
