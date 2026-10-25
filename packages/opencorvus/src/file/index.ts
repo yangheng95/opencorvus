@@ -705,6 +705,40 @@ export namespace File {
     }
   }
 
+  async function attachmentFileDisplayName(file: string, full: string): Promise<string | undefined> {
+    const attachment = AttachmentStore.nameFromAbsolutePath(Instance.project.id, full)
+    if (!attachment) return undefined
+    const reference = await AttachmentStore.readReference(attachment.projectID, attachment.name).catch((error) => {
+      if (isMissingPathError(error)) {
+        throw fileNotFound({ path: file, message: `Attachment metadata not found for file: ${file}` })
+      }
+      throw error
+    })
+    return reference.filename ?? AttachmentStore.displayFilename(reference)
+  }
+
+  /** An explicit original-file read, independent of preview encoding and models. */
+  export async function openDownload(file: string, signal?: AbortSignal) {
+    const full = path.resolve(Instance.directory, file)
+    await assertAllowedFilePath({ file, fullPath: full })
+    const physical = await realpathIfExists(full)
+    if (!physical) throw fileNotFound({ path: file })
+    await assertAllowedFilePath({ file, fullPath: physical })
+    await statReadableFile(file, physical)
+    const filename = await attachmentFileDisplayName(file, physical) ?? path.basename(file)
+    const handle = await fs.promises.open(physical, "r").catch((error) => {
+      if (isMissingPathError(error)) throw fileNotFound({ path: file })
+      throw error
+    })
+    try {
+      if (!(await handle.stat()).isFile()) throw fileNotFound({ path: file, message: `File entry is not a file: ${file}` })
+      return { filename, stream: handle.createReadStream({ signal }) }
+    } catch (error) {
+      await handle.close()
+      throw error
+    }
+  }
+
   const state = createInstanceState(
     async () => {
       type Entry = { files: string[]; dirs: string[] }
@@ -1066,16 +1100,8 @@ export namespace File {
     if (!physical) throw fileNotFound({ path: file })
     if (!(await isPathAllowed(physical))) throw new Error(`Access denied: path escapes project directory`)
     const result = await readResolvedContent(file, physical, normalizeCanonicalPath(physical))
-    const attachment = AttachmentStore.nameFromAbsolutePath(Instance.project.id, physical)
-    if (attachment) {
-      const reference = await AttachmentStore.readReference(attachment.projectID, attachment.name).catch((error) => {
-        if (isMissingPathError(error)) {
-          throw fileNotFound({ path: file, message: `Attachment metadata not found for file: ${file}` })
-        }
-        throw error
-      })
-      return { ...result, displayName: reference.filename ?? AttachmentStore.displayFilename(reference) }
-    }
+    const displayName = await attachmentFileDisplayName(file, physical)
+    if (displayName !== undefined) return { ...result, displayName }
     if (result.type !== "text" || result.encoding) return result
     const content = result.content
 

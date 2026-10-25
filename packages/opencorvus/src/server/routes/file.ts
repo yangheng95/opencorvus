@@ -1,4 +1,5 @@
 import { Hono } from "hono"
+import { Readable } from "node:stream"
 import { describeRoute, resolver } from "hono-openapi"
 import { validator } from "@/server/validator"
 import z from "zod"
@@ -144,6 +145,43 @@ export const FileRoutes = lazy(() =>
         const path = c.req.valid("query").path
         const content = await File.read(path)
         return c.json(content)
+      },
+    )
+    .get(
+      "/file/download",
+      describeRoute({
+        summary: "Download an original project file",
+        description: "Stream the original bytes of a project-relative file as application/octet-stream, with its canonical filename in Content-Disposition, without preview conversion or execution model initialization.",
+        operationId: "file.download",
+        responses: {
+          200: {
+            description: "Original file bytes with the canonical filename in Content-Disposition",
+            content: { "application/octet-stream": { schema: { type: "string", format: "binary" } } },
+          },
+          400: badRequestOrNamedErrorResponse("Invalid project file path", "FileInvalidPathError"),
+          404: namedErrorResponse("File not found", "FileNotFoundError"),
+          500: namedErrorResponse("File download failed", "UnknownError"),
+        },
+      }),
+      validator("query", z.object({ path: z.string() })),
+      async (c) => {
+        const download = await File.openDownload(c.req.valid("query").path, c.req.raw.signal)
+        try {
+          const filename = encodeURIComponent(download.filename).replace(/[!'()*]/g, (character) =>
+            `%${character.charCodeAt(0).toString(16).toUpperCase()}`,
+          )
+          // Node and Bun declare separate ambient types for the same Web stream.
+          const body = Readable.toWeb(download.stream) as unknown as ReadableStream<Uint8Array>
+          return c.body(body, 200, {
+            "Content-Type": "application/octet-stream",
+            "Content-Disposition": `attachment; filename*=UTF-8''${filename}`,
+            "Cache-Control": "no-store",
+            "X-Content-Type-Options": "nosniff",
+          })
+        } catch (error) {
+          download.stream.destroy()
+          throw error
+        }
       },
     )
     .get(

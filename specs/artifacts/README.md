@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [项目文件原件下载](2026-10-26-binary-file-download/README.md)：605七张实图、实际ZIP及完整关闭/字节证据。
+
 - [当前产品完整操作体验](2026-10-26-current-product-experience/README.md)：604首页、PDF/PNG下载及文本草稿实页复核。
 
 - [工具内容冲突的可读摘要](2026-10-26-tool-conflict-presentation/README.md)：603中英文摘要、原始诊断和Review人工复核。

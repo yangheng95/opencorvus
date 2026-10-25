@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [不支持预览的项目文件原件下载](2026-10-26-binary-file-download.md)：605完整原件接口、22项正向合同和双语实际失败恢复。
+
 - [当前产品完整操作体验](2026-10-26-current-product-experience.md)：604保留既定Goal入口，修复PDF下载缺口。
 
 - [工具内容冲突的可读摘要](2026-10-26-tool-conflict-presentation.md)：603真实历史错误的可扫描标题与双语言视觉复核。

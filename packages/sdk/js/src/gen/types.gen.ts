@@ -19075,6 +19075,62 @@ export type FileWriteResponses = {
 
 export type FileWriteResponse = FileWriteResponses[keyof FileWriteResponses]
 
+export type FileDownloadData = {
+  body?: never
+  path?: never
+  query: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+    path: string
+  }
+  url: "/file/download"
+}
+
+export type FileDownloadErrors = {
+  /**
+   * Invalid project file path
+   */
+  400:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "FileInvalidPathError"
+      }
+  /**
+   * File not found
+   */
+  404: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "FileNotFoundError"
+  }
+  /**
+   * File download failed
+   */
+  500: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "UnknownError"
+  }
+}
+
+export type FileDownloadError = FileDownloadErrors[keyof FileDownloadErrors]
+
+export type FileDownloadResponses = {
+  /**
+   * Original file bytes with the canonical filename in Content-Disposition
+   */
+  200: Blob | File
+}
+
+export type FileDownloadResponse = FileDownloadResponses[keyof FileDownloadResponses]
+
 export type FileDeleteData = {
   body?: never
   path?: never

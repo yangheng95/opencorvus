@@ -541,8 +541,22 @@ The File editor's existing download action exports the current text draft or the
 complete loaded base64 image/PDF bytes with their MIME type and canonical file
 title. Binary preview downloads use the shared transport decoder and Blob
 download primitive; they do not stringify base64 or refetch the file. Content
-without a byte payload has no download action. Loading and file navigation
-reservations retain the same disabled boundary as text downloads.
+without a byte payload uses the explicit original-file action only for a Project
+file. `GET /file/download` reads that exact relative path under the existing
+Project identity context, independently of execution model readiness. It checks
+the canonical path, streams an opened ordinary file and preserves AttachmentStore
+filenames through the same name reader as previews. Unknown absolute source files
+retain their existing preview contract. Original downloads represent the current
+file read, rather than an immutable historical Artifact snapshot.
+The original-byte route always returns `application/octet-stream`, matching its
+OpenAPI binary schema and default SDK Blob parsing even for TXT or JSON originals.
+The filename remains in Content-Disposition; preview MIME types remain separate.
+The same action is available in the non-previewable file empty state. Its binary
+request captures the current API authority and file owner; file/authority changes
+and pane cleanup cancel that request. Only its retained owner may show a download
+error, through localized Feedback with complete diagnostics. Other editing and
+navigation controls remain usable. Loading and file navigation reservations
+retain the same disabled boundary as text downloads.
 
 Every accepted explicit file-open request advances the existing reveal revision,
 including a repeated range-free request for the current resource. The main

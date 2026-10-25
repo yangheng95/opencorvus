@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [不支持预览的项目文件原件下载](records/2026-10/2026-10-26-binary-file-download.md)：605模型无关原件流、项目边界与真实ZIP恢复下载。
+
 - [当前产品完整操作体验](records/2026-10/2026-10-26-current-product-experience.md)：604文件预览直接下载与真实字节验收。
 
 - [工具内容冲突的可读摘要](records/2026-10/2026-10-26-tool-conflict-presentation.md)：603中英文原因优先、完整原文与诊断保留。

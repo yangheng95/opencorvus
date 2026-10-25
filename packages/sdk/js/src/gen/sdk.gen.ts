@@ -192,6 +192,8 @@ import type {
   FileCreateResponses,
   FileDeleteErrors,
   FileDeleteResponses,
+  FileDownloadErrors,
+  FileDownloadResponses,
   FileListErrors,
   FileListResponses,
   FileMoveErrors,
@@ -4473,6 +4475,36 @@ export class File_ extends HeyApiClient {
         ...options?.headers,
         ...params.headers,
       },
+    })
+  }
+
+  /**
+   * Download an original project file
+   *
+   * Stream the original bytes of a project-relative file as application/octet-stream, with its canonical filename in Content-Disposition, without preview conversion or execution model initialization.
+   */
+  public download<ThrowOnError extends boolean = false>(
+    parameters: {
+      directory?: string
+      path: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "query", key: "path" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<FileDownloadResponses, FileDownloadErrors, ThrowOnError>({
+      url: "/file/download",
+      ...options,
+      ...params,
     })
   }
 

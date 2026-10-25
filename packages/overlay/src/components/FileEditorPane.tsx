@@ -1,6 +1,6 @@
 import { batch, createEffect, createMemo, createSignal, lazy, Match, onCleanup, Show, Switch, untrack } from "solid-js"
 import { base64ToUint8 } from "@opencorvus-ai/transport-protocol"
-import { ApiError, apiJson, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
+import { ApiError, apiJson, apiRequest, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import {
   closeFileEditor,
   fileEditorRevealRevision,
@@ -16,6 +16,7 @@ import { t } from "../utils/i18n"
 import { formatErrorDetails } from "../utils/error-details"
 import { restoreRightDockFocus } from "../utils/right-dock-focus"
 import { pathWithForwardSeparators } from "../utils/server-path"
+import { bytesToArrayBuffer } from "../utils/binary"
 import { Icon } from "./ui/Icon"
 // CodeMirror and its Lezer grammars are only needed once a file is actually
 // open. This pane stays mounted to keep its state, so the editor itself is what
@@ -89,12 +90,15 @@ function sameFileResourceTarget(left: FileEditorTarget | null, right: FileEditor
   )
 }
 
+type FileEditorFailure = { cause?: unknown } & ({ message: string } | { messageKey: string })
+
 export function FileEditorPane() {
   const [draft, setDraft] = createSignal("")
   const [savedBaseline, setSavedBaseline] = createSignal<Pick<FileContent, "content" | "revision"> | null>(null)
   const [saving, setSaving] = createSignal(false)
   const [reloading, setReloading] = createSignal(false)
-  const [error, setError] = createSignal<{ message: string; cause?: unknown } | null>(null)
+  const [downloading, setDownloading] = createSignal(false)
+  const [error, setError] = createSignal<FileEditorFailure | null>(null)
   const [loadFailure, setLoadFailure] = createSignal<{ error: unknown } | null>(null)
   const [leaveDialogOpen, setLeaveDialogOpen] = createSignal(false)
   const [leaveSaving, setLeaveSaving] = createSignal(false)
@@ -112,6 +116,7 @@ export function FileEditorPane() {
   let saveGeneration = 0
   let reloadGeneration = 0
   let activeTargetIdentity = ""
+  let downloadController: AbortController | undefined
 
   const contentTarget = createMemo(
     () => {
@@ -155,9 +160,55 @@ export function FileEditorPane() {
   })
   const writable = createMemo(() => textContent() && content()?.revision !== undefined && !target()?.sourceAbsolutePath)
   const dirty = createMemo(() => writable() && draft() !== savedBaseline()?.content)
+  const projectBinary = createMemo(() => content()?.type === "binary" && !target()?.sourceAbsolutePath)
+  const downloadable = () => textContent() || content()?.encoding === "base64" || projectBinary()
   const identityOf = (file: FileEditorTarget | null) => file
     ? `${file.directory}\u0000${file.path}\u0000${file.sourceAbsolutePath ?? ""}` : ""
   const isBusy = () => loading() || saving() || reloading() || identityOf(target()) !== activeTargetIdentity
+  const currentErrorMessage = () => {
+    const failure = error()
+    return failure && ("messageKey" in failure ? t(failure.messageKey) : failure.message)
+  }
+
+  const retireDownload = () => {
+    downloadController?.abort()
+    downloadController = undefined
+    setDownloading(false)
+  }
+
+  const downloadCurrentFile = async () => {
+    const file = content()
+    const resource = target()
+    if (!file || !resource || !downloadable() || isBusy() || fileEditorReserved() || downloading()) return
+    const authority = captureApiAuthority()
+    const filename = fileTitle()
+    const controller = new AbortController()
+    downloadController = controller
+    setDownloading(true)
+    setError(null)
+    const current = () => downloadController === controller && ownsFileTarget(resource) && isApiAuthorityCurrent(authority)
+    try {
+      let blob: Blob
+      if (file.encoding === "base64") {
+        blob = new Blob([bytesToArrayBuffer(base64ToUint8(file.content))], { type: file.mimeType ?? "application/octet-stream" })
+      } else if (file.type === "text") {
+        blob = new Blob([draft()], { type: "text/plain;charset=utf-8" })
+      } else {
+        const requestPath = `file/download?${new URLSearchParams({ path: resource.path, directory: resource.directory })}`
+        const response = await apiRequest<Uint8Array>(requestPath, { authority, responseKind: "binary", signal: controller.signal })
+        if (!response.ok) throw new ApiError(response.status, requestPath, response.body, response.headers, "GET")
+        blob = new Blob([bytesToArrayBuffer(response.body)], { type: response.headers["content-type"] ?? "application/octet-stream" })
+      }
+      if (current()) downloadBlob(blob, filename)
+    } catch (cause) {
+      if (current() && !controller.signal.aborted) setError({ messageKey: "file.download_failed", cause })
+    } finally {
+      if (downloadController === controller) {
+        downloadController = undefined
+        setDownloading(false)
+      }
+    }
+  }
 
   const applyContent = (next: FileContent | null) => batch(() => {
     setContent(next)
@@ -171,6 +222,7 @@ export function FileEditorPane() {
     const file = contentTarget()
     const authority = captureApiAuthority()
     untrack(() => {
+      retireDownload()
       const identity = identityOf(file)
       const retainDraft = identity === activeTargetIdentity && dirty()
       activeTargetIdentity = identity
@@ -270,6 +322,7 @@ export function FileEditorPane() {
     isBusy,
   })
   onCleanup(() => {
+    retireDownload()
     loadGeneration += 1
     reloadGeneration += 1
     saveGeneration += 1
@@ -395,25 +448,18 @@ export function FileEditorPane() {
           >
             <Badge tone="neutral" size="sm">{t("file_editor.read_only")}</Badge>
           </Show>
-          <Show when={textContent() || content()?.encoding === "base64"}>
+          <Show when={downloadable()}>
             <Button
               type="button"
               variant="ghost"
               size="icon"
               tone="neutral"
-              disabled={isBusy() || fileEditorReserved()}
-              title={t(dirty() ? "file_editor.download_draft" : "file.download")}
-              aria-label={t(dirty() ? "file_editor.download_draft" : "file.download")}
-              onClick={() => {
-                const file = content()
-                if (isBusy() || fileEditorReserved() || !file || (!textContent() && file.encoding !== "base64")) return
-                const blob = file.encoding === "base64"
-                  ? new Blob([Uint8Array.from(base64ToUint8(file.content))], { type: file.mimeType ?? "application/octet-stream" })
-                  : new Blob([draft()], { type: "text/plain;charset=utf-8" })
-                downloadBlob(blob, fileTitle())
-              }}
+              disabled={isBusy() || fileEditorReserved() || downloading()}
+              title={t(downloading() ? "file.downloading" : dirty() ? "file_editor.download_draft" : "file.download")}
+              aria-label={t(downloading() ? "file.downloading" : dirty() ? "file_editor.download_draft" : "file.download")}
+              onClick={() => void downloadCurrentFile()}
             >
-              <Icon name="download" />
+              <Icon name={downloading() ? "loading" : "download"} />
             </Button>
           </Show>
           <Button
@@ -482,7 +528,19 @@ export function FileEditorPane() {
               <Switch fallback={
                 <div class="file-editor-empty">
                   <Icon name="file-document" size="medium" />
-                  <p>{t("file_editor.binary")}</p>
+                  <p>{t(projectBinary() ? "file_editor.binary_download_hint" : "file_editor.binary")}</p>
+                  <Show when={projectBinary()}>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      tone="neutral"
+                      disabled={isBusy() || fileEditorReserved() || downloading()}
+                      onClick={() => void downloadCurrentFile()}
+                    >
+                      {t(downloading() ? "file.downloading" : "file.download")}
+                    </Button>
+                  </Show>
                 </div>
               }>
                 <Match when={imageSource()}>
@@ -513,7 +571,7 @@ export function FileEditorPane() {
             tone="error"
             details={formatErrorDetails(failure().cause) || undefined}
           >
-            {failure().message}
+            {currentErrorMessage()}
           </Feedback>
         }
         </Show>
@@ -580,7 +638,7 @@ export function FileEditorPane() {
         </p>
         <Show when={error()}>{(failure) =>
           <Feedback tone="error" details={formatErrorDetails(failure().cause) || undefined}>
-            {failure().message}
+            {currentErrorMessage()}
           </Feedback>
         }
         </Show>

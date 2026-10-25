@@ -1,0 +1,420 @@
+{
+  "batch": 605,
+  "date": "2026-10-26",
+  "baseCommit": "cd4baaf305c67d4d522460e2a6b8f4e2daad787f",
+  "issue": "Opaque Project files had lightweight preview metadata but no explicit original-byte download path.",
+  "implementation": "One model-independent Project-relative GET /file/download streams the opened original and canonical attachment filename. One File editor action handles loaded drafts/previews or explicit opaque-file bytes, owns cancellation and localized failure feedback.",
+  "checks": {
+    "download-contract": {
+      "label": "download-contract",
+      "startedAt": 1792947820186,
+      "closedAt": 1792947876646,
+      "code": 0,
+      "signal": null,
+      "childPID": 82388
+    },
+    "download-signal-contract": {
+      "label": "download-signal-contract",
+      "startedAt": 1792948066906,
+      "closedAt": 1792948095207,
+      "code": 0,
+      "signal": null,
+      "childPID": 78928
+    },
+    "download-path-contract": {
+      "label": "download-path-contract",
+      "startedAt": 1792949127699,
+      "closedAt": 1792949159438,
+      "code": 0,
+      "signal": null,
+      "childPID": 98536
+    },
+    "download-route-final": {
+      "label": "download-route-final",
+      "startedAt": 1792949517851,
+      "closedAt": 1792949546334,
+      "code": 0,
+      "signal": null,
+      "childPID": 85016
+    },
+    "core-typecheck-fixed": {
+      "label": "core-typecheck-fixed",
+      "startedAt": 1792947927655,
+      "closedAt": 1792947976707,
+      "code": 0,
+      "signal": null,
+      "childPID": 72356
+    },
+    "overlay-typecheck-reviewed": {
+      "label": "overlay-typecheck-reviewed",
+      "startedAt": 1792948380976,
+      "closedAt": 1792948401772,
+      "code": 0,
+      "signal": null,
+      "childPID": 79268
+    },
+    "sdk-build": {
+      "label": "sdk-build",
+      "startedAt": 1792947937862,
+      "closedAt": 1792947960266,
+      "code": 0,
+      "signal": null,
+      "childPID": 30540
+    },
+    "docs-generate": {
+      "label": "docs-generate",
+      "startedAt": 1792948077407,
+      "closedAt": 1792948086209,
+      "code": 0,
+      "signal": null,
+      "childPID": 97708
+    },
+    "node-ui-build-reviewed": {
+      "label": "node-ui-build-reviewed",
+      "startedAt": 1792948391111,
+      "closedAt": 1792948453621,
+      "code": 0,
+      "signal": null,
+      "childPID": 98736
+    },
+    "i18n-check": {
+      "label": "i18n-check",
+      "startedAt": 1792948225743,
+      "closedAt": 1792948227709,
+      "code": 0,
+      "signal": null,
+      "childPID": 98956
+    },
+    "routes-check": {
+      "label": "routes-check",
+      "startedAt": 1792949138074,
+      "closedAt": 1792949146862,
+      "code": 0,
+      "signal": null,
+      "childPID": 95956
+    },
+    "download-protocol-final": {
+      "label": "download-protocol-final",
+      "startedAt": 1792949886224,
+      "closedAt": 1792949922839,
+      "code": 0,
+      "signal": null,
+      "childPID": 41152
+    },
+    "sdk-build-final": {
+      "label": "sdk-build-final",
+      "startedAt": 1792949896720,
+      "closedAt": 1792949920977,
+      "code": 0,
+      "signal": null,
+      "childPID": 86816
+    },
+    "core-typecheck-delivery": {
+      "label": "core-typecheck-delivery",
+      "startedAt": 1792949907055,
+      "closedAt": 1792949953838,
+      "code": 0,
+      "signal": null,
+      "childPID": 80544
+    },
+    "docs-generate-final": {
+      "label": "docs-generate-final",
+      "startedAt": 1792950066100,
+      "closedAt": 1792950073885,
+      "code": 0,
+      "signal": null,
+      "childPID": 94804
+    }
+  },
+  "backend": {
+    "uniqueTests": 22,
+    "uniqueAssertions": 87,
+    "qualification": "Production Server.App and actual filesystem/stream contracts in isolated test storage; distinct from manual HTTP/UI acceptance.",
+    "runs": [
+      {
+        "tests": 18,
+        "assertions": 75
+      },
+      {
+        "tests": 8,
+        "assertions": 33
+      },
+      {
+        "tests": 10,
+        "assertions": 36
+      },
+      {
+        "tests": 10,
+        "assertions": 36
+      },
+      {
+        "tests": 11,
+        "assertions": 42
+      }
+    ],
+    "overlap": "Later runs retain earlier download cases; unique count includes eleven unchanged file-reader/attachment cases and eleven final download cases."
+  },
+  "sdkLive": {
+    "sdk": "Built current SDK, ordinary createOpenCorvusClient with captured Project directory",
+    "status": 200,
+    "bytes": 259,
+    "filename": "交付资料 (版本1).zip",
+    "comparison": "Exact current original archive bytes",
+    "liveOpenapi": {
+      "status": 200,
+      "operationId": "file.download",
+      "binarySchema": {
+        "type": "string",
+        "format": "binary"
+      }
+    }
+  },
+  "sdkDefaultLive": {
+    "parseAsOverride": false,
+    "ordinaryClient": true,
+    "previewMimeDefaultParsing": {
+      "text": "text",
+      "json": "json"
+    },
+    "results": [
+      {
+        "filename": "交付资料 (版本1).zip",
+        "status": 200,
+        "dataType": "Blob",
+        "mediaType": "application/octet-stream",
+        "bytes": 259,
+        "comparison": "Default SDK Blob equals exact original bytes"
+      },
+      {
+        "filename": "review.txt",
+        "status": 200,
+        "dataType": "Blob",
+        "mediaType": "application/octet-stream",
+        "bytes": 113,
+        "comparison": "Default SDK Blob equals exact original bytes"
+      },
+      {
+        "filename": "sdk-original-605.json",
+        "status": 200,
+        "dataType": "Blob",
+        "mediaType": "application/octet-stream",
+        "bytes": 35,
+        "comparison": "Default SDK Blob equals exact original bytes"
+      },
+      {
+        "filename": "empty-original-605.bin",
+        "status": 200,
+        "dataType": "Blob",
+        "mediaType": "application/octet-stream",
+        "bytes": 0,
+        "comparison": "Default SDK Blob equals exact original bytes"
+      }
+    ],
+    "liveOpenapi": {
+      "status": 200,
+      "operationId": "file.download",
+      "description": "Stream the original bytes of a project-relative file as application/octet-stream, with its canonical filename in Content-Disposition, without preview conversion or execution model initialization.",
+      "binarySchema": {
+        "type": "string",
+        "format": "binary"
+      }
+    }
+  },
+  "finalProtocolBrowser": {
+    "port": 54117,
+    "bytes": 259,
+    "comparison": "Actual final-protocol browser download equals exact original and published downloaded artifact bytes"
+  },
+  "manual": {
+    "tabs": [
+      287,
+      288,
+      289
+    ],
+    "closed": true,
+    "languages": [
+      "en-US",
+      "zh-CN"
+    ],
+    "screenshots": [
+      "01-zip-before.png",
+      "02-zip-download-en.png",
+      "03-original-download-error.png",
+      "04-error-detail-bottom.png",
+      "05-download-error-zh.png",
+      "06-recovered-download-zh.png",
+      "07-text-draft-retained.png",
+      "08-final-protocol-download.png"
+    ],
+    "downloads": {
+      "results": [
+        {
+          "kind": "zip",
+          "bytes": 259,
+          "comparison": "Actual browser download equals original file bytes"
+        },
+        {
+          "kind": "recovered",
+          "bytes": 259,
+          "comparison": "Actual browser download equals original file bytes"
+        },
+        {
+          "kind": "pdf",
+          "bytes": 86787,
+          "comparison": "Actual browser download equals original file bytes"
+        },
+        {
+          "kind": "draft",
+          "bytes": 149,
+          "comparison": "Actual browser download equals original text plus current unsaved input"
+        }
+      ],
+      "sourceTextBytes": 113
+    },
+    "archive": {
+      "zipBytes": 259,
+      "entry": "交付记录.txt",
+      "entryBytes": 113,
+      "comparison": "Standard ZIP reader decoded the actual browser download to the original text bytes"
+    },
+    "failure": {
+      "status": 404,
+      "name": "FileNotFoundError",
+      "originalDiagnostics": "Actual HTTP method/path/request ID and FileNotFoundError packet retained; scrolled to its complete final JSON.",
+      "locale": "The same retained error immediately changed its product summary from English to Chinese.",
+      "recovery": "Restored the exact owned archive, then retried from the existing header without page reload."
+    },
+    "qualification": "Real development /ui interactions, real browser download events, each raw screenshot manually viewed, and actual downloaded bytes compared. No UI automation tests."
+  },
+  "build": {
+    "at": "2026-10-25T17:14:13.523Z",
+    "entry": "main-DfWO50jq.js",
+    "directory": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\binary-file-download-605\\ui-build-reviewed",
+    "qualification": "Current source ordinary Node Vite production build, served by isolated development CLI; no UI instrumentation"
+  },
+  "services": [
+    {
+      "port": 54114,
+      "originalExec": 28661,
+      "uiEntry": "main-B5i-B_G8.js",
+      "clonedTables": 92,
+      "clonedRows": 1996,
+      "protectedOriginalRows": {
+        "session": 2,
+        "message": 8,
+        "part": 18,
+        "tool_part_request": 4,
+        "tool_part_progress": 0,
+        "tool_part_outcome": 4,
+        "provider_activity_request": 6,
+        "provider_activity_outcome": 6
+      },
+      "schema": 8,
+      "integrity": "ok",
+      "shutdownHTTP": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "originalProcessIdentityState": "dead_or_reused",
+      "reserveMs": 1128122
+    },
+    {
+      "port": 54115,
+      "originalExec": 75238,
+      "uiEntry": "main-DfWO50jq.js",
+      "clonedTables": 92,
+      "clonedRows": 1996,
+      "protectedOriginalRows": {
+        "session": 2,
+        "message": 8,
+        "part": 18,
+        "tool_part_request": 4,
+        "tool_part_progress": 0,
+        "tool_part_outcome": 4,
+        "provider_activity_request": 6,
+        "provider_activity_outcome": 6
+      },
+      "schema": 8,
+      "integrity": "ok",
+      "shutdownHTTP": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "originalProcessIdentityState": "dead_or_reused",
+      "reserveMs": 733247
+    },
+    {
+      "port": 54116,
+      "originalExec": 45610,
+      "uiEntry": "main-DfWO50jq.js",
+      "clonedTables": 92,
+      "clonedRows": 1996,
+      "protectedOriginalRows": {
+        "session": 2,
+        "message": 8,
+        "part": 18,
+        "tool_part_request": 4,
+        "tool_part_progress": 0,
+        "tool_part_outcome": 4,
+        "provider_activity_request": 6,
+        "provider_activity_outcome": 6
+      },
+      "schema": 8,
+      "integrity": "ok",
+      "shutdownHTTP": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "originalProcessIdentityState": "dead_or_reused",
+      "reserveMs": 1154539
+    },
+    {
+      "port": 54117,
+      "originalExec": 34614,
+      "uiEntry": "main-DfWO50jq.js",
+      "clonedTables": 92,
+      "clonedRows": 1996,
+      "protectedOriginalRows": {
+        "session": 2,
+        "message": 8,
+        "part": 18,
+        "tool_part_request": 4,
+        "tool_part_progress": 0,
+        "tool_part_outcome": 4,
+        "provider_activity_request": 6,
+        "provider_activity_outcome": 6
+      },
+      "schema": 8,
+      "integrity": "ok",
+      "shutdownHTTP": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "originalProcessIdentityState": "dead_or_reused",
+      "reserveMs": 1113655
+    }
+  ],
+  "credentialsCopied": false,
+  "newModelRequests": 0,
+  "cumulativeModelRequests": 119,
+  "preliminaryCorrections": [
+    "Core typecheck initially detected distinct Node/Bun ambient Web-stream types; the runtime-compatible API boundary is now explicit and the original checker passed.",
+    "After adding locale-aware failure keys, the remaining unsaved-dialog message consumer was updated too; final overlay typecheck and actual locale change passed.",
+    "Earlier builds remain private investigation evidence; manual acceptance uses only main-DfWO50jq.js."
+  ],
+  "limits": [
+    "Unknown absolute source files retain their original preview scope.",
+    "Explicit client downloads use the existing transport byte buffer; only server delivery is file-streamed.",
+    "Original reads are current filesystem reads, not immutable historical snapshots during external writes.",
+    "Slow pending download cancellation is covered by real backend stream/signal contracts and UI ownership code, not a fabricated delayed browser response.",
+    "Current full native CI remains separate from focused Windows checks; no release or migration was performed."
+  ]
+}
