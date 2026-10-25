@@ -1,5 +1,7 @@
 # 既有Task成员的目标与正文生命周期
 
+> 后续用户已明确确认闪烁早已解决，并纠正重复排查偏离了完整产品迭代。该调查线已关闭；下文保留当时观察的历史边界，不再作为Rendering待办或后续验收门槛。当前工作见[完整产品体验](2026-10-25-current-product-walkthrough.md)。
+
 ## Recall
 
 591继续用户授权的自主产品迭代；当前只用一个编码agent，不委派，不创建分支/worktree，只在实际且无法安全取舍的冲突时等待。上一goal turn为progress：1a3917ae8修复Undici/Zod/DOMPurify/Astro安全依赖、控制程序静态声明初始化及时间精度合同，真实HTTP/SQLite、8类类型、OpenAPI/docs、网站构建和人工中英文页面复核完成，正常hook推送后fresh0/0；GitHub实际JavaScript五条告警关闭，剩余4条Rust（含两个历史before锁）。本轮回到原成员Dock反复Rendering与Sources体验，不把安全补丁代替原始目标。

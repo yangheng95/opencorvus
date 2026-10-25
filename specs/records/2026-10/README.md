@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [当前产品体验与操作障碍修复](2026-10-25-current-product-walkthrough.md)：592实际创建/保存/编辑与中英文体验修复。
+
 - [原Task成员续跑与渲染生命周期](2026-10-25-task-member-rendering-lifecycle.md)：591原Task/B真实追加、来源摘录及采样边界。
 
 - [CI 依赖与过期测试修复](2026-10-25-ci-repair.md)：audit、过期 UI 测试及真实 CI。

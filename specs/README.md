@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [当前产品体验与操作障碍修复](records/2026-10/2026-10-25-current-product-walkthrough.md)：592全面走查、默认选择值和Mission体验修复。
+
 - [原Task成员续跑与渲染生命周期](records/2026-10/2026-10-25-task-member-rendering-lifecycle.md)：591真实来源、长文组件身份与物理收敛边界。
 
 - [CI 依赖与过期测试修复](records/2026-10/2026-10-25-ci-repair.md)：真实 Actions 失败、依赖安全合同及检查闭环。

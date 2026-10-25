@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [当前产品体验修复验证](2026-10-25-current-product-walkthrough/README.md)：592默认选择值、Mission卡片和真实保存回读。
+
 - [原Task成员续跑与渲染生命周期](2026-10-25-task-member-rendering-lifecycle/README.md)：591真实原Task/B、Sources截图与安全标量。
 
 - [运行依赖安全与实际网站验收](2026-10-25-runtime-dependency-security/README.md)：590真实网络/日期/编译运行合同与人工页面截图。

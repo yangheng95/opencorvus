@@ -290,12 +290,6 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-.mission-board-card__identity > span {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
 .mission-board-card__identity > time {
   flex: none;
   white-space: nowrap;

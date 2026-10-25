@@ -1,0 +1,398 @@
+{
+  "builds": [
+    {
+      "label": "build",
+      "startedAt": 1792910961498,
+      "closedAt": 1792911020304,
+      "code": 0,
+      "signal": null,
+      "childPID": 93920
+    },
+    {
+      "label": "build",
+      "startedAt": 1792911603246,
+      "closedAt": 1792911685589,
+      "code": 0,
+      "signal": null,
+      "childPID": 68192
+    }
+  ],
+  "publications": [
+    {
+      "at": "2026-10-25T06:50:19.862Z",
+      "entry": "main-51aLtQve.js",
+      "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/current-product-walkthrough-592-bundle/bin/ui",
+      "qualification": "Current normal Node/Vite production UI; no diagnostic plugin or UI assertions"
+    },
+    {
+      "at": "2026-10-25T07:01:25.059Z",
+      "entry": "main-xnv1RDfj.js",
+      "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/current-product-walkthrough-592-after-bundle/bin/ui",
+      "qualification": "Current normal Node/Vite production UI; no diagnostic plugin or UI assertions"
+    }
+  ],
+  "checks": [
+    {
+      "label": "overlay-types",
+      "startedAt": "2026-10-25T07:00:42.347Z",
+      "closedAt": "2026-10-25T07:01:16.367Z",
+      "originalCallerPID": 16028,
+      "childPID": 93128,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 15,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/current-product-walkthrough-592-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/current-product-walkthrough-592-bundle/bin/bun.exe",
+        "run",
+        "--cwd",
+        "packages/overlay",
+        "typecheck"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained"
+    },
+    {
+      "label": "i18n",
+      "startedAt": "2026-10-25T07:00:42.378Z",
+      "closedAt": "2026-10-25T07:00:46.666Z",
+      "originalCallerPID": 82748,
+      "childPID": 97808,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 78,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/current-product-walkthrough-592-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/current-product-walkthrough-592-bundle/bin/bun.exe",
+        "run",
+        "--cwd",
+        "packages/overlay",
+        "check:i18n"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained"
+    },
+    {
+      "label": "css-tokens",
+      "startedAt": "2026-10-25T07:00:42.345Z",
+      "closedAt": "2026-10-25T07:00:51.423Z",
+      "originalCallerPID": 65584,
+      "childPID": 95484,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 396,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/current-product-walkthrough-592-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/current-product-walkthrough-592-bundle/bin/bun.exe",
+        "run",
+        "--cwd",
+        "packages/overlay",
+        "check:css-tokens"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained"
+    },
+    {
+      "label": "renderer-surface",
+      "startedAt": "2026-10-25T07:09:56.712Z",
+      "closedAt": "2026-10-25T07:10:00.116Z",
+      "originalCallerPID": 67944,
+      "childPID": 64220,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 121,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/current-product-walkthrough-592-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/current-product-walkthrough-592-bundle/bin/bun.exe",
+        "run",
+        "--cwd",
+        "packages/overlay",
+        "check:renderer-surface"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained"
+    },
+    {
+      "label": "docs-check",
+      "startedAt": "2026-10-25T07:09:56.717Z",
+      "closedAt": "2026-10-25T07:10:05.642Z",
+      "originalCallerPID": 97376,
+      "childPID": 84448,
+      "exitCode": 0,
+      "signal": null,
+      "bytes": 104,
+      "command": [
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/current-product-walkthrough-592-bundle/bin/bun.exe",
+        "packages/opencorvus/script/run-with-inactivity.ts",
+        "--inactivity-ms",
+        "180000",
+        "--",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-25/current-product-walkthrough-592-bundle/bin/bun.exe",
+        "run",
+        "docs:check"
+      ],
+      "qualification": "Exact Bun1.4.0, current production inactivity/isolated-runtime/ProcessFacade runner; original close after output drained"
+    }
+  ],
+  "sourceAndTarget": {
+    "at": "2026-10-25T07:08:12.630Z",
+    "sourceSchema": 8,
+    "targetSchema": 8,
+    "originalTables": 92,
+    "originalRows": 130,
+    "sourceRowsAndFields": "Exact original",
+    "sourceBytes": 2023424,
+    "sourceModifiedAtMs": 1792911155658.3123,
+    "canonicalConfiguration": "Exact original",
+    "integrity": "ok",
+    "targetDifferences": [
+      {
+        "table": "automation",
+        "changed": 0,
+        "missing": 0,
+        "added": 3,
+        "fields": []
+      },
+      {
+        "table": "automation_fire",
+        "changed": 0,
+        "missing": 0,
+        "added": 1,
+        "fields": []
+      },
+      {
+        "table": "bus_publication_delivery",
+        "changed": 0,
+        "missing": 0,
+        "added": 6,
+        "fields": []
+      },
+      {
+        "table": "bus_publication_delivery_receipt",
+        "changed": 0,
+        "missing": 0,
+        "added": 6,
+        "fields": []
+      },
+      {
+        "table": "bus_publication_outbox",
+        "changed": 0,
+        "missing": 0,
+        "added": 1,
+        "fields": []
+      },
+      {
+        "table": "bus_publication_owner",
+        "changed": 0,
+        "missing": 0,
+        "added": 1,
+        "fields": []
+      },
+      {
+        "table": "bus_publication_phase_receipt",
+        "changed": 0,
+        "missing": 0,
+        "added": 3,
+        "fields": []
+      },
+      {
+        "table": "engine_control_activation_lease",
+        "changed": 0,
+        "missing": 0,
+        "added": 7,
+        "fields": []
+      },
+      {
+        "table": "engine_control_activation_lease_grant",
+        "changed": 0,
+        "missing": 0,
+        "added": 7,
+        "fields": []
+      },
+      {
+        "table": "event_occurrence",
+        "changed": 0,
+        "missing": 0,
+        "added": 1,
+        "fields": []
+      },
+      {
+        "table": "session",
+        "changed": 1,
+        "missing": 0,
+        "added": 0,
+        "fields": [
+          "metadata",
+          "time_updated"
+        ]
+      }
+    ],
+    "qualification": "Target differences arise from the explicit Mission draft edit and scheduled-automation creation/pause/default save; inspect original fields before claiming preservation."
+  },
+  "retirements": [
+    {
+      "at": "2026-10-25T06:59:22.644Z",
+      "authRetired": 1,
+      "catalogRetired": 1,
+      "authCopied": true,
+      "modelRequests": 0,
+      "model": "gpt-6.1-sol",
+      "streaming200OriginalReaderEOF": 0,
+      "sourceCatalog": {
+        "bytes": 9155406,
+        "modifiedAtMs": 1791128890137.9968,
+        "content": "Exact original"
+      },
+      "publicShutdown": 200,
+      "reserveMs": 724143,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "exactProcessChain": "dead_or_reused"
+    },
+    {
+      "at": "2026-10-25T07:08:12.481Z",
+      "authRetired": 1,
+      "catalogRetired": 1,
+      "authCopied": true,
+      "modelRequests": 0,
+      "model": "gpt-6.1-sol",
+      "streaming200OriginalReaderEOF": 0,
+      "sourceCatalog": {
+        "bytes": 9155406,
+        "modifiedAtMs": 1791128890137.9968,
+        "content": "Exact original"
+      },
+      "publicShutdown": 200,
+      "reserveMs": 871100,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "exactProcessChain": "dead_or_reused"
+    }
+  ],
+  "physical": [
+    {
+      "observedAtUtc": "2026-10-25T06:59:22.5495185Z",
+      "launcher": {
+        "observedAtUtc": "2026-10-25T06:58:37.4772979Z",
+        "originalChildExit": 0
+      },
+      "native": {
+        "occurrence": "current-product-walkthrough-592-08830f06-aa34-470d-a2c2-560ce4aab0c0",
+        "outcome": "settled",
+        "host": {
+          "pid": 87424,
+          "processInstanceID": "win32:639285078415693291",
+          "occurrenceID": "00f62981-1fda-42f6-ab57-7965601a5f1b"
+        },
+        "target": {
+          "pid": 4580,
+          "processInstanceID": "win32:639285078425176639",
+          "occurrenceID": "6c4428db-3b78-4d61-81b5-e11bc51ec2bc"
+        },
+        "observedAtUtc": "2026-10-25T06:58:37.443Z",
+        "deadlineAt": 1792912241529,
+        "terminal": {
+          "occurrenceID": "current-product-walkthrough-592-08830f06-aa34-470d-a2c2-560ce4aab0c0",
+          "pid": 4580,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "identity": {
+            "pid": 87424,
+            "processInstanceID": "win32:639285078415693291",
+            "occurrenceID": "00f62981-1fda-42f6-ab57-7965601a5f1b"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "identity": {
+            "pid": 4580,
+            "processInstanceID": "win32:639285078425176639",
+            "occurrenceID": "6c4428db-3b78-4d61-81b5-e11bc51ec2bc"
+          },
+          "state": "dead_or_reused"
+        }
+      ]
+    },
+    {
+      "observedAtUtc": "2026-10-25T07:07:50.9154664Z",
+      "chain": [
+        {
+          "identity": {
+            "pid": 91132,
+            "processInstanceID": "win32:639285085065815207",
+            "occurrenceID": "7614caf2-9cad-46ea-b8b7-d206dd446a35"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "identity": {
+            "pid": 92112,
+            "processInstanceID": "win32:639285085079465447",
+            "occurrenceID": "a405d0e3-1a4b-43b6-82d5-3ca745aa753f"
+          },
+          "state": "dead_or_reused"
+        }
+      ],
+      "launcher": {
+        "originalChildExit": 0,
+        "observedAtUtc": "2026-10-25T07:07:15.5538517Z"
+      },
+      "native": {
+        "occurrence": "current-product-walkthrough-592-after-ae6dd3f1-1a7b-48bf-8678-e46a6be12a26",
+        "outcome": "settled",
+        "host": {
+          "pid": 91132,
+          "processInstanceID": "win32:639285085065815207",
+          "occurrenceID": "7614caf2-9cad-46ea-b8b7-d206dd446a35"
+        },
+        "target": {
+          "pid": 92112,
+          "processInstanceID": "win32:639285085079465447",
+          "occurrenceID": "a405d0e3-1a4b-43b6-82d5-3ca745aa753f"
+        },
+        "observedAtUtc": "2026-10-25T07:07:15.507Z",
+        "deadlineAt": 1792912906541,
+        "terminal": {
+          "occurrenceID": "current-product-walkthrough-592-after-ae6dd3f1-1a7b-48bf-8678-e46a6be12a26",
+          "pid": 92112,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      }
+    }
+  ],
+  "providerRequests": 0,
+  "manualReview": "Eleven selected real page screenshots inspected by the single coding agent. Real creation/edit/pause/default saves and both language views; Goal command/plus open-and-cancel only, no Goal execution claim."
+}

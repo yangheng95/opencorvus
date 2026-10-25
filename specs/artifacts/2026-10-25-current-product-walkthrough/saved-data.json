@@ -1,0 +1,43 @@
+{
+  "automationRevisions": [
+    {
+      "definition_id": "atm_g0VZ2h9N800k1UUh1iqx",
+      "revision": 1,
+      "status": "active",
+      "model_provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "reasoning_effort": "high",
+      "recurrence": "DTSTART;TZID=Asia/Shanghai:20261231T090000\nRRULE:FREQ=DAILY"
+    },
+    {
+      "definition_id": "atm_g0VZ2h9N800k1UUh1iqx",
+      "revision": 2,
+      "status": "paused",
+      "model_provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "reasoning_effort": "high",
+      "recurrence": "DTSTART;TZID=Asia/Shanghai:20261231T090000\nRRULE:FREQ=DAILY"
+    },
+    {
+      "definition_id": "atm_g0VZ2h9N800k1UUh1iqx",
+      "revision": 3,
+      "status": "paused",
+      "model_provider_id": null,
+      "model_id": null,
+      "reasoning_effort": null,
+      "recurrence": "DTSTART;TZID=Asia/Shanghai:20261231T090000\nRRULE:FREQ=DAILY"
+    }
+  ],
+  "plannedFire": {
+    "scheduledDueAt": 1798678800000,
+    "iso": "2026-12-31T01:00:00.000Z",
+    "qualification": "Future scheduled intent, not an executed run"
+  },
+  "mission": {
+    "id": "ae2a08563096bfa2",
+    "sessionID": "ses_-zUQxLVaezzn1HsDx6z0",
+    "before": "整理一份产品体验检查清单，覆盖首页、导航、输入与结果阅读；目前只保存草稿，稍后再决定是否执行。",
+    "after": "整理一份产品体验操作检查清单，覆盖首页、导航、输入与结果阅读；目前只保存草稿，稍后再决定是否执行。"
+  },
+  "qualification": "Read-only actual SQLite after native/public shutdown; UI option keys are presentation only; canonical model, reasoning, recurrence and original Mission identity are the persisted facts."
+}

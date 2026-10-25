@@ -73,10 +73,6 @@ function missionProjectLabel(mission: MissionRecord): string {
   return missionDirectoryLabel(mission.directory)
 }
 
-function missionIdentity(mission: MissionRecord): string {
-  return mission.missionID.length > 18 ? `${mission.missionID.slice(0, 15)}…` : mission.missionID
-}
-
 function MissionBoardCard(props: {
   mission: MissionRecord
   dispatching: boolean
@@ -124,7 +120,6 @@ function MissionBoardCard(props: {
             {(pendingPrompt) => <span class="mission-board-card__summary">{pendingPrompt()}</span>}
           </Show>
           <span class="mission-board-card__identity">
-            <span title={props.mission.missionID}>{missionIdentity(props.mission)}</span>
             <time datetime={new Date(props.mission.updated).toISOString()} title={detailStamp(props.mission.updated)}>
               {relativeTime(props.mission.updated)}
             </time>

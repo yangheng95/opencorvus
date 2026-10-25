@@ -1461,7 +1461,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                       options={modelOptions()}
                       value={selectedModelOption()}
                       onChange={selectModel}
-                      optionValue="value"
+                      optionValue={(option) => `model:${option.value}`}
                       optionTextValue="modelLabel"
                       disallowEmptySelection
                       triggerDataUI="automation-model"
@@ -1495,7 +1495,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         setError(null)
                         setReasoningEffort(option?.value ?? "")
                       }}
-                      optionValue="value"
+                      optionValue={(option) => `reasoning:${option.value}`}
                       optionTextValue="label"
                       disallowEmptySelection
                       disabled={selectedModelOption().defaultModel || reasoningOptions().length === 1}
