@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [CI 依赖与过期测试修复](records/2026-10/2026-10-25-ci-repair.md)：真实 Actions 失败、依赖安全合同及检查闭环。
+
 - [运行依赖的内容编码、集合校验与网站补丁](records/2026-10/2026-10-25-runtime-dependency-security.md)：590实际依赖告警、上游修复与正向合同。
 
 - [Package Tool RPC 物理寿命](records/2026-10/2026-10-25-package-tool-rpc-lifetime.md)：issue 51 活动传播、取消与 Host 效果结算。

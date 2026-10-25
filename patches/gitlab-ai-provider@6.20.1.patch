@@ -1,0 +1,63 @@
+diff --git a/node_modules/gitlab-ai-provider/.bun-tag-d1f6d5ed2e6311a8 b/.bun-tag-d1f6d5ed2e6311a8
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/dist/index.d.ts b/dist/index.d.ts
+index d03ef3f0b7d8a6761bbd4dbb53e635bc036e6d08..109520871ed292cb283d4cf726a2070178353ff0 100644
+--- a/dist/index.d.ts
++++ b/dist/index.d.ts
+@@ -1321,16 +1321,6 @@ declare const gitlabOAuthTokenResponseSchema: z.ZodObject<{
+     refresh_token: z.ZodOptional<z.ZodString>;
+     expires_in: z.ZodNumber;
+     created_at: z.ZodNumber;
+-}, "strip", z.ZodTypeAny, {
+-    created_at?: number;
+-    access_token?: string;
+-    refresh_token?: string;
+-    expires_in?: number;
+-}, {
+-    created_at?: number;
+-    access_token?: string;
+-    refresh_token?: string;
+-    expires_in?: number;
+ }>;
+ type GitLabOAuthTokenResponse = z.infer<typeof gitlabOAuthTokenResponseSchema>;
+ 
+@@ -1533,12 +1523,6 @@ declare class GitLabProjectDetector {
+ declare const directAccessTokenSchema: z.ZodObject<{
+     headers: z.ZodRecord<z.ZodString, z.ZodString>;
+     token: z.ZodString;
+-}, "strip", z.ZodTypeAny, {
+-    headers?: Record<string, string>;
+-    token?: string;
+-}, {
+-    headers?: Record<string, string>;
+-    token?: string;
+ }>;
+ type DirectAccessToken = z.infer<typeof directAccessTokenSchema>;
+ declare const DEFAULT_AI_GATEWAY_URL = "https://cloud.gitlab.com";
+diff --git a/dist/index.js b/dist/index.js
+index bfe75a5d22a1d2bf254ab8ba832dff5ff2191828..151df3ec950f2f7b771f4947923165204b1280a2 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -698,7 +698,7 @@ var GitLabWorkflowTokenClient = class {
+ 
+ // src/gitlab-direct-access.ts
+ var directAccessTokenSchema = import_zod.z.object({
+-  headers: import_zod.z.record(import_zod.z.string()),
++  headers: import_zod.z.record(import_zod.z.string(), import_zod.z.string()),
+   token: import_zod.z.string()
+ });
+ var DEFAULT_AI_GATEWAY_URL = "https://cloud.gitlab.com";
+diff --git a/dist/index.mjs b/dist/index.mjs
+index bd1c5e626ee44063be3630ac4dd49534a3a709b3..65a4f03dd8278fef06d8fbf5ff751e06427b5641 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -619,7 +619,7 @@ var GitLabWorkflowTokenClient = class {
+ 
+ // src/gitlab-direct-access.ts
+ var directAccessTokenSchema = z.object({
+-  headers: z.record(z.string()),
++  headers: z.record(z.string(), z.string()),
+   token: z.string()
+ });
+ var DEFAULT_AI_GATEWAY_URL = "https://cloud.gitlab.com";

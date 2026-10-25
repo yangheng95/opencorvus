@@ -1,0 +1,26 @@
+diff --git a/lib/cjs/protocol-parser/protocol-parser.js b/lib/cjs/protocol-parser/protocol-parser.js
+index 9b726b18ebf64eb8dc24dc587ecda59fd5b5afa3..693a2d39f5c7d8a6dae7fdb6c6d022355d4ba8cd 100644
+--- a/lib/cjs/protocol-parser/protocol-parser.js
++++ b/lib/cjs/protocol-parser/protocol-parser.js
+@@ -66,7 +66,7 @@ function parseObject(obj, schema) {
+     if (parseResult.success) {
+         return parseResult.data;
+     }
+-    const errorMessage = parseResult.error.errors
++    const errorMessage = parseResult.error.issues
+         .map((e) => `${e.message} in ` +
+         `${e.path.map((p) => JSON.stringify(p)).join('/')}.`)
+         .join(' ');
+diff --git a/lib/esm/protocol-parser/protocol-parser.js b/lib/esm/protocol-parser/protocol-parser.js
+index a4daaae1f2deab3aa1e9d4186b51247c8098696f..f8a95a1cdbe264591e0bc5d993f272d846e6a9ec 100644
+--- a/lib/esm/protocol-parser/protocol-parser.js
++++ b/lib/esm/protocol-parser/protocol-parser.js
+@@ -29,7 +29,7 @@ export function parseObject(obj, schema) {
+     if (parseResult.success) {
+         return parseResult.data;
+     }
+-    const errorMessage = parseResult.error.errors
++    const errorMessage = parseResult.error.issues
+         .map((e) => `${e.message} in ` +
+         `${e.path.map((p) => JSON.stringify(p)).join('/')}.`)
+         .join(' ');

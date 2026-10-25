@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [CI 依赖与过期测试修复](2026-10-25-ci-repair.md)：audit、过期 UI 测试及真实 CI。
+
 - [运行依赖的内容编码、集合校验与网站补丁](2026-10-25-runtime-dependency-security.md)：590 Undici/Zod/Astro修复与真实验证。
 
 - [Package Tool RPC 物理寿命](2026-10-25-package-tool-rpc-lifetime.md)：issue 51 真实 worker 与物理结算。
