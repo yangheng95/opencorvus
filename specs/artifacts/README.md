@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [原Task成员续跑与渲染生命周期](2026-10-25-task-member-rendering-lifecycle/README.md)：591真实原Task/B、Sources截图与安全标量。
+
 - [运行依赖安全与实际网站验收](2026-10-25-runtime-dependency-security/README.md)：590真实网络/日期/编译运行合同与人工页面截图。
 
 - [成员分组与真实事件中的身份变化](2026-10-25-member-group-identity/README.md)：589真实事件/分组与Markdown词法调查。

@@ -1,0 +1,74 @@
+{
+  "taskID": "tsk_g00VYlyopB00h7w27eIw",
+  "rootSessionID": "ses_-zURE1Aonzzko22HlxqB",
+  "memberSessionID": "ses_hHpC127wALpwIiSOX86d",
+  "publicEntry": "/task/:taskID/message",
+  "newUserMessageID": "msg_g0VZ2WmdR00VOSZ9Um99",
+  "ingressID": "art_h02HA45x94ZXV3QxHBZv",
+  "final": {
+    "messageID": "msg_g0VZ2XjG400zvKgj8s3r",
+    "partID": "prt_g0VZ2Xlrx00vqX4HSgM3",
+    "role": "assistant",
+    "characters": 3510,
+    "sections": [
+      "## 第一节",
+      "## 第二节",
+      "## 第三节",
+      "## 第四节",
+      "## 第五节",
+      "## 第六节",
+      "## 第七节",
+      "## 第八节"
+    ],
+    "tableDataRows": 6,
+    "boundaries": [
+      "LIVE591_BEGIN",
+      "LIVE591_END"
+    ],
+    "end": 1792909616326
+  },
+  "sources": [
+    {
+      "partID": "prt_g0VZ2XDeT007kJxldOVn",
+      "messageID": "msg_g0VZ2X37g00nTDqGaClG",
+      "sourceID": "e84bb5bfb116fa834ec62ae0d6af530f0c6586d8d2671c7834b97c6d857997ec",
+      "url": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
+      "title": "Tabs Pattern | APG | WAI | W3C",
+      "provider": "opencorvus-webfetch",
+      "toolPartID": "prt_g0VZ2X4Co00ksrc5yUDg",
+      "tool": "webfetch",
+      "outcome": "completed",
+      "snippetCharacters": 4095,
+      "start": 1792909385890,
+      "end": 1792909422196
+    },
+    {
+      "partID": "prt_g0VZ2XRgp00V2lu37OU7",
+      "messageID": "msg_g0VZ2XDvu00Ti3iI3nLI",
+      "sourceID": "4bf9be4b80027e063dabfb9354226580ff38049d91a4d6343f379c104d43e719",
+      "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/",
+      "title": "Disclosure (Show/Hide) Pattern | APG | WAI | W3C",
+      "provider": "opencorvus-webfetch",
+      "toolPartID": "prt_g0VZ2XFoy00beUK3eh96",
+      "tool": "webfetch",
+      "outcome": "completed",
+      "snippetCharacters": 1607,
+      "start": 1792909430540,
+      "end": 1792909476159
+    },
+    {
+      "partID": "prt_g0VZ2XicB00Edjvx7NCh",
+      "messageID": "msg_g0VZ2XS0j00TwTB4bMvf",
+      "sourceID": "83a68d506f994765fbe142e28b835a56a0d655e23dab70d9347fb16df84b2804",
+      "url": "https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/",
+      "title": "Dialog (Modal) Pattern | APG | WAI | W3C",
+      "provider": "opencorvus-webfetch",
+      "toolPartID": "prt_g0VZ2XTbr00aHLjdTzbl",
+      "tool": "webfetch",
+      "outcome": "completed",
+      "snippetCharacters": 4096,
+      "start": 1792909483543,
+      "end": 1792909541219
+    }
+  ]
+}

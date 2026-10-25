@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [原Task成员续跑与渲染生命周期](2026-10-25-task-member-rendering-lifecycle.md)：591原Task/B真实追加、来源摘录及采样边界。
+
 - [CI 依赖与过期测试修复](2026-10-25-ci-repair.md)：audit、过期 UI 测试及真实 CI。
 
 - [运行依赖的内容编码、集合校验与网站补丁](2026-10-25-runtime-dependency-security.md)：590 Undici/Zod/Astro修复与真实验证。

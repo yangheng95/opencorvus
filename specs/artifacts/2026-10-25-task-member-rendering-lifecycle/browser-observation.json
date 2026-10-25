@@ -1,0 +1,152 @@
+{
+  "entry": "main-C2S7-n7X.js",
+  "events": 584,
+  "kinds": {
+    "part-binding": 3,
+    "body-mount": 3,
+    "body-state": 578
+  },
+  "owners": [
+    {
+      "owner": 32,
+      "partID": "prt_g0VZ2X2UA00qgXE5zk2M",
+      "observedStates": 19,
+      "first": {
+        "kind": "body-state",
+        "owner": 32,
+        "sessionID": "ses_hHpC127wALpwIiSOX86d",
+        "messageID": "msg_g0VZ2Wzjt00EeumcAIgi",
+        "partID": "prt_g0VZ2X2UA00qgXE5zk2M",
+        "textLength": 1,
+        "streaming": true,
+        "htmlBlocks": 0,
+        "pending": true,
+        "visibleCharacters": 0,
+        "at": 438027.40000009537,
+        "timestamp": "2026-10-25T06:22:59.334Z"
+      },
+      "last": {
+        "kind": "body-state",
+        "owner": 32,
+        "sessionID": "ses_hHpC127wALpwIiSOX86d",
+        "messageID": "msg_g0VZ2Wzjt00EeumcAIgi",
+        "partID": "prt_g0VZ2X2UA00qgXE5zk2M",
+        "textLength": 94,
+        "streaming": false,
+        "htmlBlocks": 1,
+        "pending": false,
+        "visibleCharacters": 95,
+        "at": 439907.59999990463,
+        "timestamp": "2026-10-25T06:23:01.215Z"
+      },
+      "minimumBlocks": 0,
+      "maximumBlocks": 1
+    },
+    {
+      "owner": 34,
+      "partID": "prt_g0VZ2XEzZ00tksrr83gS",
+      "observedStates": 34,
+      "first": {
+        "kind": "body-state",
+        "owner": 34,
+        "sessionID": "ses_hHpC127wALpwIiSOX86d",
+        "messageID": "msg_g0VZ2XDvu00Ti3iI3nLI",
+        "partID": "prt_g0VZ2XEzZ00tksrr83gS",
+        "textLength": 2,
+        "streaming": true,
+        "htmlBlocks": 0,
+        "pending": true,
+        "visibleCharacters": 0,
+        "at": 486112.2000002861,
+        "timestamp": "2026-10-25T06:23:47.421Z"
+      },
+      "last": {
+        "kind": "body-state",
+        "owner": 34,
+        "sessionID": "ses_hHpC127wALpwIiSOX86d",
+        "messageID": "msg_g0VZ2XDvu00Ti3iI3nLI",
+        "partID": "prt_g0VZ2XEzZ00tksrr83gS",
+        "textLength": 155,
+        "streaming": false,
+        "htmlBlocks": 1,
+        "pending": false,
+        "visibleCharacters": 156,
+        "at": 489772.30000019073,
+        "timestamp": "2026-10-25T06:23:51.081Z"
+      },
+      "minimumBlocks": 0,
+      "maximumBlocks": 1
+    },
+    {
+      "owner": 35,
+      "partID": "prt_g0VZ2XT7p00VuZEIGzBN",
+      "observedStates": 25,
+      "first": {
+        "kind": "body-state",
+        "owner": 35,
+        "sessionID": "ses_hHpC127wALpwIiSOX86d",
+        "messageID": "msg_g0VZ2XS0j00TwTB4bMvf",
+        "partID": "prt_g0VZ2XT7p00VuZEIGzBN",
+        "textLength": 7,
+        "streaming": true,
+        "htmlBlocks": 0,
+        "pending": true,
+        "visibleCharacters": 0,
+        "at": 540440.4000000954,
+        "timestamp": "2026-10-25T06:24:41.749Z"
+      },
+      "last": {
+        "kind": "body-state",
+        "owner": 35,
+        "sessionID": "ses_hHpC127wALpwIiSOX86d",
+        "messageID": "msg_g0VZ2XS0j00TwTB4bMvf",
+        "partID": "prt_g0VZ2XT7p00VuZEIGzBN",
+        "textLength": 199,
+        "streaming": false,
+        "htmlBlocks": 1,
+        "pending": false,
+        "visibleCharacters": 196,
+        "at": 542759.0999999046,
+        "timestamp": "2026-10-25T06:24:44.069Z"
+      },
+      "minimumBlocks": 0,
+      "maximumBlocks": 1
+    },
+    {
+      "owner": 37,
+      "partID": "prt_g0VZ2Xlrx00vqX4HSgM3",
+      "observedStates": 500,
+      "first": {
+        "kind": "body-state",
+        "owner": 37,
+        "sessionID": "ses_hHpC127wALpwIiSOX86d",
+        "messageID": "msg_g0VZ2XjG400zvKgj8s3r",
+        "partID": "prt_g0VZ2Xlrx00vqX4HSgM3",
+        "textLength": 379,
+        "streaming": true,
+        "htmlBlocks": 5,
+        "pending": false,
+        "visibleCharacters": 371,
+        "at": 619132.4000000954,
+        "timestamp": "2026-10-25T06:26:00.444Z"
+      },
+      "last": {
+        "kind": "body-state",
+        "owner": 37,
+        "sessionID": "ses_hHpC127wALpwIiSOX86d",
+        "messageID": "msg_g0VZ2XjG400zvKgj8s3r",
+        "partID": "prt_g0VZ2Xlrx00vqX4HSgM3",
+        "textLength": 3510,
+        "streaming": false,
+        "htmlBlocks": 30,
+        "pending": false,
+        "visibleCharacters": 3366,
+        "at": 675444.2000002861,
+        "timestamp": "2026-10-25T06:26:56.757Z"
+      },
+      "minimumBlocks": 5,
+      "maximumBlocks": 30
+    }
+  ],
+  "qualification": "Seven manual browser-log captures, each capped at 500. The long final body is observed only from 379 characters onward. Initial/history mounts and owner36 streaming are not covered; counts are not flicker rates or complete lifetime coverage."
+}

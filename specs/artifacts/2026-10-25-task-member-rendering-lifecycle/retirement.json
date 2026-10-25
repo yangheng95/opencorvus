@@ -1,0 +1,161 @@
+{
+  "at": "2026-10-25T06:31:23.853Z",
+  "authRetired": 1,
+  "catalogRetired": 1,
+  "authCopied": true,
+  "modelRequests": 15,
+  "model": "gpt-6.1-sol",
+  "streaming200OriginalReaderEOF": 14,
+  "requestTerminals": [
+    {
+      "index": 0,
+      "agentID": "orchestrator",
+      "sessionID": "ses_-zURE19wozzlTmx3ixXd",
+      "terminal": {
+        "kind": "eof",
+        "at": 1792909067171
+      }
+    },
+    {
+      "index": 1,
+      "agentID": "memory",
+      "sessionID": "ses_-zURE19wozzlTmx3ixXd",
+      "terminal": {
+        "kind": "eof",
+        "at": 1792909251434
+      }
+    },
+    {
+      "index": 2,
+      "agentID": "memory",
+      "sessionID": "ses_-zURE1Aonzzko22HlxqB",
+      "terminal": {
+        "kind": "eof",
+        "at": 1792909431703
+      }
+    },
+    {
+      "index": 3,
+      "agentID": "orchestrator",
+      "sessionID": "ses_-zURE19wozzlTmx3ixXd",
+      "terminal": {
+        "kind": "eof",
+        "at": 1792909349628
+      }
+    },
+    {
+      "index": 4,
+      "agentID": "base-researcher",
+      "sessionID": "ses_hHpC127wALpwIiSOX86d",
+      "terminal": {
+        "kind": "eof",
+        "at": 1792909381533
+      }
+    },
+    {
+      "index": 5,
+      "agentID": "base-researcher",
+      "sessionID": "ses_hHpC127wALpwIiSOX86d",
+      "terminal": {
+        "kind": "eof",
+        "at": 1792909386975
+      }
+    },
+    {
+      "index": 6,
+      "agentID": "base-researcher",
+      "sessionID": "ses_hHpC127wALpwIiSOX86d",
+      "terminal": {
+        "kind": "eof",
+        "at": 1792909431476
+      }
+    },
+    {
+      "index": 7,
+      "agentID": "memory",
+      "sessionID": "ses_-zURE1Aonzzko22HlxqB",
+      "terminal": {
+        "kind": "eof",
+        "at": 1792909551393
+      }
+    },
+    {
+      "index": 8,
+      "agentID": "base-researcher",
+      "sessionID": "ses_hHpC127wALpwIiSOX86d",
+      "terminal": {
+        "kind": "eof",
+        "at": 1792909484061
+      }
+    },
+    {
+      "index": 9,
+      "agentID": "base-researcher",
+      "sessionID": "ses_hHpC127wALpwIiSOX86d",
+      "terminal": {
+        "kind": "eof",
+        "at": 1792909616568
+      }
+    },
+    {
+      "index": 10,
+      "agentID": "memory",
+      "sessionID": "ses_hHpC127wALpwIiSOX86d",
+      "terminal": {
+        "kind": "eof",
+        "at": 1792909673069
+      }
+    },
+    {
+      "index": 11,
+      "agentID": "orchestrator",
+      "sessionID": "ses_-zURE19wozzlTmx3ixXd",
+      "terminal": {
+        "kind": "eof",
+        "at": 1792909629938
+      }
+    },
+    {
+      "index": 12,
+      "agentID": "orchestrator",
+      "sessionID": "ses_-zURE19wozzlTmx3ixXd",
+      "terminal": {
+        "kind": "eof",
+        "at": 1792909639213
+      }
+    },
+    {
+      "index": 13,
+      "agentID": "orchestrator",
+      "sessionID": "ses_-zURE19wozzlTmx3ixXd",
+      "terminal": {
+        "kind": "eof",
+        "at": 1792909657072
+      }
+    },
+    {
+      "index": 14,
+      "agentID": "memory",
+      "sessionID": "ses_-zURE19wozzlTmx3ixXd",
+      "terminal": {
+        "kind": "aborted",
+        "at": 1792909784624
+      }
+    }
+  ],
+  "allReadersEOF": false,
+  "qualification": "Fourteen original readers EOF; the remaining memory reader settled aborted during the actual public shutdown. Original all-EOF acceptance remains unmet; physical closure permits retiring copied credentials.",
+  "sourceCatalog": {
+    "bytes": 9155406,
+    "modifiedAtMs": 1791128890137.9968,
+    "content": "Exact original"
+  },
+  "publicShutdown": 200,
+  "reserveMs": 326740,
+  "nativeExit": 0,
+  "launcherExit": 0,
+  "physicalCompletion": true,
+  "outputDrainComplete": true,
+  "requestCleanupComplete": true,
+  "exactProcessChain": "dead_or_reused"
+}

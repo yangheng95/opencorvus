@@ -1,0 +1,30 @@
+{
+  "total": 2818,
+  "types": {
+    "message.part.updated": 265,
+    "message.part.delta": 2549,
+    "message.part.removed": 4
+  },
+  "first": {
+    "sequence": 1,
+    "at": 1792909371841,
+    "type": "message.part.updated",
+    "sessionID": "ses_hHpC127wALpwIiSOX86d",
+    "messageID": "msg_g0VZ2Wzgi00jEOMkuS0y",
+    "partID": "prt_g0VZ2Wzgi00IaL5xaDkX",
+    "partType": "text",
+    "textLength": 3582,
+    "orderKey": "v1:0001792909368537:0000000000000031:0000000000000000:part:prt_g0VZ2Wzgi00IaL5xaDkX"
+  },
+  "last": {
+    "sequence": 2818,
+    "at": 1792909616580,
+    "type": "message.part.updated",
+    "sessionID": "ses_hHpC127wALpwIiSOX86d",
+    "messageID": "msg_g0VZ2XjG400zvKgj8s3r",
+    "partID": "prt_g0VZ2Y2DU00bbZbTJF4h",
+    "partType": "step-finish",
+    "orderKey": "v1:0001792909616575:0000000000000031:0000000000000000:part:prt_g0VZ2Y2DU00bbZbTJF4h"
+  },
+  "qualification": "Original passive production GlobalBus observations. Delta textLength describes an individual delta, not accumulated text; appendFromPrevious is not used as append-correctness evidence."
+}

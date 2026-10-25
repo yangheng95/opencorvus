@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [原Task成员续跑与渲染生命周期](records/2026-10/2026-10-25-task-member-rendering-lifecycle.md)：591真实来源、长文组件身份与物理收敛边界。
+
 - [CI 依赖与过期测试修复](records/2026-10/2026-10-25-ci-repair.md)：真实 Actions 失败、依赖安全合同及检查闭环。
 
 - [运行依赖的内容编码、集合校验与网站补丁](records/2026-10/2026-10-25-runtime-dependency-security.md)：590实际依赖告警、上游修复与正向合同。

@@ -1,0 +1,245 @@
+{
+  "at": "2026-10-25T06:31:30.049Z",
+  "sourceSchema": 8,
+  "targetSchema": 8,
+  "originalTables": 92,
+  "originalRows": 214319,
+  "sourceRowsAndFields": "Exact original",
+  "sourceBytes": 95719424,
+  "sourceModifiedAtMs": 1792901425696.663,
+  "canonicalConfiguration": "Exact original",
+  "integrity": "ok",
+  "targetDifferences": [
+    {
+      "table": "bus_publication_delivery",
+      "changed": 0,
+      "missing": 0,
+      "added": 852,
+      "fields": []
+    },
+    {
+      "table": "bus_publication_delivery_receipt",
+      "changed": 0,
+      "missing": 0,
+      "added": 852,
+      "fields": []
+    },
+    {
+      "table": "bus_publication_outbox",
+      "changed": 0,
+      "missing": 0,
+      "added": 109,
+      "fields": []
+    },
+    {
+      "table": "bus_publication_owner",
+      "changed": 0,
+      "missing": 0,
+      "added": 109,
+      "fields": []
+    },
+    {
+      "table": "bus_publication_phase_receipt",
+      "changed": 0,
+      "missing": 0,
+      "added": 327,
+      "fields": []
+    },
+    {
+      "table": "engine_artifact",
+      "changed": 0,
+      "missing": 0,
+      "added": 10,
+      "fields": []
+    },
+    {
+      "table": "engine_artifact_catalog_revision",
+      "changed": 0,
+      "missing": 0,
+      "added": 10,
+      "fields": []
+    },
+    {
+      "table": "engine_control_activation_lease",
+      "changed": 0,
+      "missing": 0,
+      "added": 864,
+      "fields": []
+    },
+    {
+      "table": "engine_control_activation_lease_grant",
+      "changed": 0,
+      "missing": 0,
+      "added": 870,
+      "fields": []
+    },
+    {
+      "table": "engine_git_checkpoint_outcome",
+      "changed": 0,
+      "missing": 0,
+      "added": 2,
+      "fields": []
+    },
+    {
+      "table": "engine_git_checkpoint_request",
+      "changed": 0,
+      "missing": 0,
+      "added": 2,
+      "fields": []
+    },
+    {
+      "table": "engine_interaction_request",
+      "changed": 0,
+      "missing": 0,
+      "added": 6,
+      "fields": []
+    },
+    {
+      "table": "engine_task_root_ingress",
+      "changed": 0,
+      "missing": 0,
+      "added": 3,
+      "fields": []
+    },
+    {
+      "table": "event_occurrence",
+      "changed": 0,
+      "missing": 0,
+      "added": 109,
+      "fields": []
+    },
+    {
+      "table": "memory_chunk",
+      "changed": 1,
+      "missing": 0,
+      "added": 1,
+      "fields": [
+        "content",
+        "token_count",
+        "time_updated"
+      ]
+    },
+    {
+      "table": "memory_file",
+      "changed": 1,
+      "missing": 0,
+      "added": 1,
+      "fields": [
+        "time_updated"
+      ]
+    },
+    {
+      "table": "message",
+      "changed": 0,
+      "missing": 0,
+      "added": 13,
+      "fields": []
+    },
+    {
+      "table": "part",
+      "changed": 0,
+      "missing": 0,
+      "added": 36,
+      "fields": []
+    },
+    {
+      "table": "permission_execution_result",
+      "changed": 0,
+      "missing": 0,
+      "added": 6,
+      "fields": []
+    },
+    {
+      "table": "permission_ledger",
+      "changed": 0,
+      "missing": 0,
+      "added": 30,
+      "fields": []
+    },
+    {
+      "table": "protocol_event",
+      "changed": 0,
+      "missing": 0,
+      "added": 51,
+      "fields": []
+    },
+    {
+      "table": "provider_activity_outcome",
+      "changed": 0,
+      "missing": 0,
+      "added": 10,
+      "fields": []
+    },
+    {
+      "table": "provider_activity_request",
+      "changed": 0,
+      "missing": 0,
+      "added": 10,
+      "fields": []
+    },
+    {
+      "table": "provider_usage_event",
+      "changed": 0,
+      "missing": 0,
+      "added": 14,
+      "fields": []
+    },
+    {
+      "table": "runtime_execution_capacity_lease",
+      "changed": 2,
+      "missing": 0,
+      "added": 0,
+      "fields": [
+        "lease_id",
+        "owner_id",
+        "time_acquired",
+        "expires_at"
+      ]
+    },
+    {
+      "table": "session",
+      "changed": 3,
+      "missing": 0,
+      "added": 0,
+      "fields": [
+        "time_updated"
+      ]
+    },
+    {
+      "table": "tool_part_outcome",
+      "changed": 0,
+      "missing": 0,
+      "added": 9,
+      "fields": []
+    },
+    {
+      "table": "tool_part_progress",
+      "changed": 0,
+      "missing": 0,
+      "added": 1,
+      "fields": []
+    },
+    {
+      "table": "tool_part_request",
+      "changed": 0,
+      "missing": 0,
+      "added": 9,
+      "fields": []
+    },
+    {
+      "table": "workbench_brief_snapshot",
+      "changed": 0,
+      "missing": 0,
+      "added": 2,
+      "fields": []
+    },
+    {
+      "table": "worker_turn_descriptor",
+      "changed": 0,
+      "missing": 0,
+      "added": 1,
+      "fields": []
+    }
+  ],
+  "qualification": "All 214319 original source rows and fields retained exactly; target retains all original rows. Seven original target rows changed only in the owned QA project memory, three Session update times and two physically released capacity slots."
+}
