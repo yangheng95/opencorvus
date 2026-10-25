@@ -1,0 +1,1370 @@
+{
+  "at": "2026-10-25T04:11:26.358Z",
+  "iteration": 588,
+  "base": "1443c8482",
+  "codingAgents": 1,
+  "createdMembers": 0,
+  "existingTarget": {
+    "kind": "assistant",
+    "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+    "parentID": "ses_-zUS0X33CzzWEKMgCk98",
+    "workerDescriptorRows": 0,
+    "admission": "Public ordinary Session prompt after actual Provider/model/Session/project validation"
+  },
+  "productionChanges": 0,
+  "frontend": {
+    "entry": "main-y7uKloOv.js",
+    "build": {
+      "before": {
+        "bytes": 95682560,
+        "modifiedAtMs": 1792900125031.7996
+      },
+      "after": {
+        "bytes": 95682560,
+        "modifiedAtMs": 1792900125031.7996
+      },
+      "schema": "No runtime database opened by Node build"
+    },
+    "recheck": "Exact completed publication copied to a new immutable native owner after frontend source diff was empty"
+  },
+  "scopes": [
+    {
+      "scope": "588",
+      "port": 54083,
+      "originalExec": 37311,
+      "originalExecExit": 0,
+      "tab": 267,
+      "tabClosed": true,
+      "publicCaller": {
+        "originalExec": 85377,
+        "exit": 1,
+        "error": "UND_ERR_HEADERS_TIMEOUT",
+        "qualification": "Caller timed out at about300s while actual backend progressed and completed; not an HTTP200 acceptance"
+      },
+      "provider": {
+        "at": "2026-10-25T04:03:54.660Z",
+        "authRetired": 1,
+        "catalogRetired": 1,
+        "authCopied": true,
+        "modelRequests": 3,
+        "model": "gpt-6.1-sol",
+        "streaming200OriginalReaderEOF": 3,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "modifiedAtMs": 1791128890137.9968,
+          "content": "Exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 647683,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      },
+      "native": {
+        "observedAtUtc": "2026-10-25T04:03:54.4896902Z",
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-25T04:03:48.9139605Z"
+        },
+        "native": {
+          "occurrence": "member-live-lifecycle-588-23b01734-78cd-42fe-854f-2f0960d4bc50",
+          "outcome": "settled",
+          "host": {
+            "pid": 89336,
+            "processInstanceID": "win32:639284972764121270",
+            "occurrenceID": "3adeeb11-7c06-4897-a84b-fc72731d7d63"
+          },
+          "target": {
+            "pid": 76940,
+            "processInstanceID": "win32:639284972776841641",
+            "occurrenceID": "ea8c6950-9e0d-463b-8619-f2df4c30a954"
+          },
+          "observedAtUtc": "2026-10-25T04:03:48.874Z",
+          "deadlineAt": 1792901676369,
+          "terminal": {
+            "occurrenceID": "member-live-lifecycle-588-23b01734-78cd-42fe-854f-2f0960d4bc50",
+            "pid": 76940,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 89336,
+              "processInstanceID": "win32:639284972764121270",
+              "occurrenceID": "3adeeb11-7c06-4897-a84b-fc72731d7d63"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 76940,
+              "processInstanceID": "win32:639284972776841641",
+              "occurrenceID": "ea8c6950-9e0d-463b-8619-f2df4c30a954"
+            }
+          }
+        ]
+      },
+      "preservation": {
+        "at": "2026-10-25T04:03:57.429Z",
+        "sourceSchema": 6,
+        "targetSchema": 8,
+        "originalTables": 90,
+        "originalRows": 207330,
+        "originalFieldDifferences": [
+          {
+            "table": "memory_chunk",
+            "id": "mck_h0TwOCuDIItgGfxTGf6k",
+            "fields": [
+              "content",
+              "token_count",
+              "time_updated"
+            ]
+          },
+          {
+            "table": "memory_file",
+            "id": "mem_hBhVOjG2IHNZ58LGhFBJ",
+            "fields": [
+              "time_updated"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "id": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "id": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "session",
+            "id": "ses_-zUS0WzzQzzDOGrIbYwN",
+            "fields": [
+              "time_updated"
+            ]
+          }
+        ],
+        "integrity": "ok",
+        "sourceBytes": 95682560,
+        "sourceModifiedAtMs": 1792828797672.7832,
+        "canonicalConfiguration": "Exact original",
+        "qualification": "Full original field/row verification after original native exit and physical/output/request closure"
+      },
+      "acceptedConversation": {
+        "at": "2026-10-25T04:07:55.559Z",
+        "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+        "messages": 42,
+        "parts": 117,
+        "inputMessageID": "msg_fef1af84-987a-4f36-8d57-65dd1eeaa805",
+        "source": {
+          "id": "prt_g0VZ1x1XR00bjQ765z7k",
+          "messageID": "msg_g0VZ1wAVj003biomIL1e",
+          "toolPartID": "prt_g0VZ1wBw300ICY2xZ0M5",
+          "sourceId": "e84bb5bfb116fa834ec62ae0d6af530f0c6586d8d2671c7834b97c6d857997ec",
+          "url": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
+          "title": "Tabs Pattern | APG | WAI | W3C",
+          "snippetCharacters": 4095,
+          "snippetBytes": 4095
+        },
+        "tool": {
+          "id": "prt_g0VZ1wBw300ICY2xZ0M5",
+          "callID": "call_a22afdcbc9f8482995b09682809d6cc8",
+          "status": "completed",
+          "input": {
+            "url": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
+            "format": "text"
+          },
+          "receipt": "per_hH2U8kCw2sf2dRthpGIk",
+          "outputBytes": 6523,
+          "outputCharacters": 6521
+        },
+        "final": {
+          "messageID": "msg_g0VZ1x1Zp00OLuC89f1C",
+          "partID": "prt_g0VZ1x2L800sLzbRfPXL",
+          "characters": 6470,
+          "completed": 1792900897656,
+          "markers": "LIVE588START/END",
+          "status": "idle"
+        },
+        "persistedSource": "Exact accepted API text, Message and Tool ownership",
+        "backendEvents": {
+          "all": 4559,
+          "finalTextSamples": 4478,
+          "first": {
+            "sequence": 81,
+            "at": 1792900798919,
+            "type": "message.part.updated",
+            "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+            "messageID": "msg_g0VZ1x1Zp00OLuC89f1C",
+            "partID": "prt_g0VZ1x2L800sLzbRfPXL",
+            "partType": "text",
+            "textLength": 0,
+            "orderKey": "v1:0001792900798910:0000000000000031:0000000000000000:part:prt_g0VZ1x2L800sLzbRfPXL"
+          },
+          "last": {
+            "sequence": 4558,
+            "at": 1792900897504,
+            "type": "message.part.updated",
+            "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+            "messageID": "msg_g0VZ1x1Zp00OLuC89f1C",
+            "partID": "prt_g0VZ1x2L800sLzbRfPXL",
+            "partType": "text",
+            "textLength": 6470,
+            "previousLength": 6470,
+            "appendFromPrevious": true,
+            "textEnded": 1792900897499,
+            "orderKey": "v1:0001792900798910:0000000000000031:0000000000000000:part:prt_g0VZ1x2L800sLzbRfPXL"
+          },
+          "nonAppend": [],
+          "zero": [
+            {
+              "sequence": 81,
+              "at": 1792900798919,
+              "type": "message.part.updated",
+              "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+              "messageID": "msg_g0VZ1x1Zp00OLuC89f1C",
+              "partID": "prt_g0VZ1x2L800sLzbRfPXL",
+              "partType": "text",
+              "textLength": 0,
+              "orderKey": "v1:0001792900798910:0000000000000031:0000000000000000:part:prt_g0VZ1x2L800sLzbRfPXL"
+            }
+          ]
+        }
+      },
+      "manualObservations": [
+        {
+          "label": "before",
+          "at": "2026-10-25T03:56:17.208Z",
+          "scroll": {
+            "height": 576,
+            "owner": "1",
+            "scrollHeight": 64593,
+            "top": 64017
+          },
+          "count": 35,
+          "recent": [
+            {
+              "characters": 993,
+              "messageID": "msg_g0VYkgkr700nwVCYXLhY",
+              "owner": "41",
+              "partID": "prt_g0VYkglYL00ZzNKT7UEB",
+              "pending": null
+            },
+            {
+              "characters": 341,
+              "messageID": "msg_g0VYlVhdH009nBNe7inj",
+              "owner": "42",
+              "partID": "prt_g0VYlVhde009qbGjI9xa",
+              "pending": null
+            },
+            {
+              "characters": 50,
+              "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+              "owner": "43",
+              "partID": "prt_g0VYlVik0003TVHLrtoL",
+              "pending": null
+            },
+            {
+              "characters": 1345,
+              "messageID": "msg_g0VYlVvNx00Uq6gDAjqh",
+              "owner": "44",
+              "partID": "prt_g0VYlVwN8002kOPK5Uhl",
+              "pending": null
+            }
+          ]
+        },
+        {
+          "label": "live-01",
+          "at": "2026-10-25T03:56:47.349Z",
+          "scroll": {
+            "height": 576,
+            "owner": "1",
+            "scrollHeight": 65016,
+            "top": 64440
+          },
+          "count": 37,
+          "recent": [
+            {
+              "characters": 50,
+              "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+              "owner": "43",
+              "partID": "prt_g0VYlVik0003TVHLrtoL",
+              "pending": null
+            },
+            {
+              "characters": 1345,
+              "messageID": "msg_g0VYlVvNx00Uq6gDAjqh",
+              "owner": "44",
+              "partID": "prt_g0VYlVwN8002kOPK5Uhl",
+              "pending": null
+            },
+            {
+              "characters": 331,
+              "messageID": "msg_fef1af84-987a-4f36-8d57-65dd1eeaa805",
+              "owner": "45",
+              "partID": "prt_g0VZ1wARq00mgQi3S6AL",
+              "pending": null
+            },
+            {
+              "characters": 93,
+              "messageID": "msg_g0VZ1wAVj003biomIL1e",
+              "owner": "46",
+              "partID": "prt_g0VZ1wBcC00b4P7671YV",
+              "pending": null
+            }
+          ]
+        },
+        {
+          "label": "live-03",
+          "at": "2026-10-25T03:59:45.211Z",
+          "scroll": {
+            "height": 576,
+            "owner": "1",
+            "scrollHeight": 65016,
+            "top": 64440
+          },
+          "count": 37,
+          "recent": [
+            {
+              "characters": 50,
+              "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+              "owner": "43",
+              "partID": "prt_g0VYlVik0003TVHLrtoL",
+              "pending": null
+            },
+            {
+              "characters": 1345,
+              "messageID": "msg_g0VYlVvNx00Uq6gDAjqh",
+              "owner": "44",
+              "partID": "prt_g0VYlVwN8002kOPK5Uhl",
+              "pending": null
+            },
+            {
+              "characters": 331,
+              "messageID": "msg_fef1af84-987a-4f36-8d57-65dd1eeaa805",
+              "owner": "45",
+              "partID": "prt_g0VZ1wARq00mgQi3S6AL",
+              "pending": null
+            },
+            {
+              "characters": 93,
+              "messageID": "msg_g0VZ1wAVj003biomIL1e",
+              "owner": "46",
+              "partID": "prt_g0VZ1wBcC00b4P7671YV",
+              "pending": null
+            }
+          ]
+        },
+        {
+          "label": "live-04",
+          "at": "2026-10-25T03:59:56.967Z",
+          "scroll": {
+            "height": 576,
+            "owner": "1",
+            "scrollHeight": 65093,
+            "top": 64517
+          },
+          "count": 37,
+          "recent": [
+            {
+              "characters": 50,
+              "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+              "owner": "43",
+              "partID": "prt_g0VYlVik0003TVHLrtoL",
+              "pending": null
+            },
+            {
+              "characters": 1345,
+              "messageID": "msg_g0VYlVvNx00Uq6gDAjqh",
+              "owner": "44",
+              "partID": "prt_g0VYlVwN8002kOPK5Uhl",
+              "pending": null
+            },
+            {
+              "characters": 331,
+              "messageID": "msg_fef1af84-987a-4f36-8d57-65dd1eeaa805",
+              "owner": "45",
+              "partID": "prt_g0VZ1wARq00mgQi3S6AL",
+              "pending": null
+            },
+            {
+              "characters": 93,
+              "messageID": "msg_g0VZ1wAVj003biomIL1e",
+              "owner": "46",
+              "partID": "prt_g0VZ1wBcC00b4P7671YV",
+              "pending": null
+            }
+          ]
+        },
+        {
+          "label": "live-05",
+          "at": "2026-10-25T04:00:09.048Z",
+          "scroll": {
+            "height": 576,
+            "owner": "1",
+            "scrollHeight": 65878,
+            "top": 65302
+          },
+          "count": 38,
+          "recent": [
+            {
+              "characters": 1345,
+              "messageID": "msg_g0VYlVvNx00Uq6gDAjqh",
+              "owner": "44",
+              "partID": "prt_g0VYlVwN8002kOPK5Uhl",
+              "pending": null
+            },
+            {
+              "characters": 331,
+              "messageID": "msg_fef1af84-987a-4f36-8d57-65dd1eeaa805",
+              "owner": "45",
+              "partID": "prt_g0VZ1wARq00mgQi3S6AL",
+              "pending": null
+            },
+            {
+              "characters": 93,
+              "messageID": "msg_g0VZ1wAVj003biomIL1e",
+              "owner": "46",
+              "partID": "prt_g0VZ1wBcC00b4P7671YV",
+              "pending": null
+            },
+            {
+              "characters": 641,
+              "messageID": "msg_g0VZ1x1Zp00OLuC89f1C",
+              "owner": "47",
+              "partID": "prt_g0VZ1x2L800sLzbRfPXL",
+              "pending": null
+            }
+          ]
+        },
+        {
+          "label": "live-history",
+          "at": "2026-10-25T04:00:28.567Z",
+          "scroll": {
+            "height": 576,
+            "owner": "1",
+            "scrollHeight": 67136,
+            "top": 64300
+          },
+          "count": 38,
+          "recent": [
+            {
+              "characters": 1345,
+              "messageID": "msg_g0VYlVvNx00Uq6gDAjqh",
+              "owner": "44",
+              "partID": "prt_g0VYlVwN8002kOPK5Uhl",
+              "pending": null
+            },
+            {
+              "characters": 331,
+              "messageID": "msg_fef1af84-987a-4f36-8d57-65dd1eeaa805",
+              "owner": "45",
+              "partID": "prt_g0VZ1wARq00mgQi3S6AL",
+              "pending": null
+            },
+            {
+              "characters": 93,
+              "messageID": "msg_g0VZ1wAVj003biomIL1e",
+              "owner": "46",
+              "partID": "prt_g0VZ1wBcC00b4P7671YV",
+              "pending": null
+            },
+            {
+              "characters": 1756,
+              "messageID": "msg_g0VZ1x1Zp00OLuC89f1C",
+              "owner": "47",
+              "partID": "prt_g0VZ1x2L800sLzbRfPXL",
+              "pending": "true"
+            }
+          ]
+        },
+        {
+          "label": "live-source",
+          "at": "2026-10-25T04:00:42.714Z",
+          "scroll": {
+            "height": 576,
+            "owner": "1",
+            "scrollHeight": 68473,
+            "top": 64775
+          },
+          "count": 38,
+          "recent": [
+            {
+              "characters": 1345,
+              "messageID": "msg_g0VYlVvNx00Uq6gDAjqh",
+              "owner": "44",
+              "partID": "prt_g0VYlVwN8002kOPK5Uhl",
+              "pending": null
+            },
+            {
+              "characters": 331,
+              "messageID": "msg_fef1af84-987a-4f36-8d57-65dd1eeaa805",
+              "owner": "45",
+              "partID": "prt_g0VZ1wARq00mgQi3S6AL",
+              "pending": null
+            },
+            {
+              "characters": 93,
+              "messageID": "msg_g0VZ1wAVj003biomIL1e",
+              "owner": "46",
+              "partID": "prt_g0VZ1wBcC00b4P7671YV",
+              "pending": null
+            },
+            {
+              "characters": 2617,
+              "messageID": "msg_g0VZ1x1Zp00OLuC89f1C",
+              "owner": "47",
+              "partID": "prt_g0VZ1x2L800sLzbRfPXL",
+              "pending": null
+            }
+          ]
+        },
+        {
+          "label": "source-reading-held",
+          "at": "2026-10-25T04:01:09.684Z",
+          "scroll": {
+            "height": 576,
+            "owner": "1",
+            "scrollHeight": 70475,
+            "top": 64775
+          },
+          "count": 38,
+          "recent": [
+            {
+              "characters": 1345,
+              "messageID": "msg_g0VYlVvNx00Uq6gDAjqh",
+              "owner": "44",
+              "partID": "prt_g0VYlVwN8002kOPK5Uhl",
+              "pending": null
+            },
+            {
+              "characters": 331,
+              "messageID": "msg_fef1af84-987a-4f36-8d57-65dd1eeaa805",
+              "owner": "45",
+              "partID": "prt_g0VZ1wARq00mgQi3S6AL",
+              "pending": null
+            },
+            {
+              "characters": 93,
+              "messageID": "msg_g0VZ1wAVj003biomIL1e",
+              "owner": "46",
+              "partID": "prt_g0VZ1wBcC00b4P7671YV",
+              "pending": null
+            },
+            {
+              "characters": 4329,
+              "messageID": "msg_g0VZ1x1Zp00OLuC89f1C",
+              "owner": "47",
+              "partID": "prt_g0VZ1x2L800sLzbRfPXL",
+              "pending": "true"
+            }
+          ]
+        },
+        {
+          "label": "live-follow",
+          "at": "2026-10-25T04:01:11.732Z",
+          "scroll": {
+            "height": 576,
+            "owner": "1",
+            "scrollHeight": 70575,
+            "top": 64775
+          },
+          "count": 38,
+          "recent": [
+            {
+              "characters": 1345,
+              "messageID": "msg_g0VYlVvNx00Uq6gDAjqh",
+              "owner": "44",
+              "partID": "prt_g0VYlVwN8002kOPK5Uhl",
+              "pending": null
+            },
+            {
+              "characters": 331,
+              "messageID": "msg_fef1af84-987a-4f36-8d57-65dd1eeaa805",
+              "owner": "45",
+              "partID": "prt_g0VZ1wARq00mgQi3S6AL",
+              "pending": null
+            },
+            {
+              "characters": 93,
+              "messageID": "msg_g0VZ1wAVj003biomIL1e",
+              "owner": "46",
+              "partID": "prt_g0VZ1wBcC00b4P7671YV",
+              "pending": null
+            },
+            {
+              "characters": 4432,
+              "messageID": "msg_g0VZ1x1Zp00OLuC89f1C",
+              "owner": "47",
+              "partID": "prt_g0VZ1x2L800sLzbRfPXL",
+              "pending": "true"
+            }
+          ]
+        },
+        {
+          "label": "live-follow-outer",
+          "at": "2026-10-25T04:01:22.952Z",
+          "scroll": {
+            "height": 576,
+            "owner": "1",
+            "scrollHeight": 71447,
+            "top": 70848
+          },
+          "count": 38,
+          "recent": [
+            {
+              "characters": 1345,
+              "messageID": "msg_g0VYlVvNx00Uq6gDAjqh",
+              "owner": "44",
+              "partID": "prt_g0VYlVwN8002kOPK5Uhl",
+              "pending": null
+            },
+            {
+              "characters": 331,
+              "messageID": "msg_fef1af84-987a-4f36-8d57-65dd1eeaa805",
+              "owner": "45",
+              "partID": "prt_g0VZ1wARq00mgQi3S6AL",
+              "pending": null
+            },
+            {
+              "characters": 93,
+              "messageID": "msg_g0VZ1wAVj003biomIL1e",
+              "owner": "46",
+              "partID": "prt_g0VZ1wBcC00b4P7671YV",
+              "pending": null
+            },
+            {
+              "characters": 5185,
+              "messageID": "msg_g0VZ1x1Zp00OLuC89f1C",
+              "owner": "47",
+              "partID": "prt_g0VZ1x2L800sLzbRfPXL",
+              "pending": null
+            }
+          ]
+        },
+        {
+          "label": "live-end-check",
+          "at": "2026-10-25T04:01:51.719Z",
+          "scroll": {
+            "height": 576,
+            "owner": "1",
+            "scrollHeight": 72429,
+            "top": 71853
+          },
+          "count": 38,
+          "recent": [
+            {
+              "characters": 1345,
+              "messageID": "msg_g0VYlVvNx00Uq6gDAjqh",
+              "owner": "44",
+              "partID": "prt_g0VYlVwN8002kOPK5Uhl",
+              "pending": null
+            },
+            {
+              "characters": 331,
+              "messageID": "msg_fef1af84-987a-4f36-8d57-65dd1eeaa805",
+              "owner": "45",
+              "partID": "prt_g0VZ1wARq00mgQi3S6AL",
+              "pending": null
+            },
+            {
+              "characters": 93,
+              "messageID": "msg_g0VZ1wAVj003biomIL1e",
+              "owner": "46",
+              "partID": "prt_g0VZ1wBcC00b4P7671YV",
+              "pending": null
+            },
+            {
+              "characters": 5998,
+              "messageID": "msg_g0VZ1x1Zp00OLuC89f1C",
+              "owner": "47",
+              "partID": "prt_g0VZ1x2L800sLzbRfPXL",
+              "pending": null
+            }
+          ]
+        },
+        {
+          "label": "completed-source-reopen",
+          "at": "2026-10-25T04:03:02.974Z",
+          "scroll": {
+            "height": 576,
+            "owner": "1",
+            "scrollHeight": 72429,
+            "top": 64775
+          },
+          "count": 38,
+          "recent": [
+            {
+              "characters": 1345,
+              "messageID": "msg_g0VYlVvNx00Uq6gDAjqh",
+              "owner": "44",
+              "partID": "prt_g0VYlVwN8002kOPK5Uhl",
+              "pending": null
+            },
+            {
+              "characters": 331,
+              "messageID": "msg_fef1af84-987a-4f36-8d57-65dd1eeaa805",
+              "owner": "45",
+              "partID": "prt_g0VZ1wARq00mgQi3S6AL",
+              "pending": null
+            },
+            {
+              "characters": 93,
+              "messageID": "msg_g0VZ1wAVj003biomIL1e",
+              "owner": "46",
+              "partID": "prt_g0VZ1wBcC00b4P7671YV",
+              "pending": null
+            },
+            {
+              "characters": 5998,
+              "messageID": "msg_g0VZ1x1Zp00OLuC89f1C",
+              "owner": "47",
+              "partID": "prt_g0VZ1x2L800sLzbRfPXL",
+              "pending": null
+            }
+          ]
+        }
+      ],
+      "passiveLogs": {
+        "recorded": 0,
+        "finalBodyStates": 0,
+        "distinctOwners": [],
+        "zeroHtmlStates": [],
+        "limitations": [
+          "Earlier private console snapshot was overwritten by an empty read; use explicit manual samples and actual events"
+        ]
+      }
+    },
+    {
+      "scope": "588b",
+      "port": 54084,
+      "originalExec": 75390,
+      "originalExecExit": 0,
+      "tab": 268,
+      "tabClosed": true,
+      "publicCaller": {
+        "originalExec": 77273,
+        "exit": 0,
+        "reader": "eof",
+        "at": "2026-10-25T04:09:18.012Z",
+        "status": 200,
+        "inputMessageID": "msg_aa72910a-79d6-4717-8a0e-a2c67e14b2ed",
+        "assistantMessageID": "msg_g0VZ1ytrM00ZT2hMn1jD",
+        "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+        "finish": "stop",
+        "parts": [
+          {
+            "id": "prt_g0VZ1ytyg00xTlErvdAS",
+            "type": "step-start"
+          },
+          {
+            "id": "prt_g0VZ1yuew00SsaXaMSzd",
+            "type": "text",
+            "characters": 6769
+          },
+          {
+            "id": "prt_g0VZ1zNjb00J49F4uZL1",
+            "type": "step-finish"
+          }
+        ]
+      },
+      "provider": {
+        "at": "2026-10-25T04:10:27.622Z",
+        "authRetired": 1,
+        "catalogRetired": 1,
+        "authCopied": true,
+        "modelRequests": 3,
+        "model": "gpt-6.1-sol",
+        "streaming200OriginalReaderEOF": 3,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "modifiedAtMs": 1791128890137.9968,
+          "content": "Exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 941382,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      },
+      "native": {
+        "native": {
+          "occurrence": "member-live-lifecycle-588b-44436feb-c757-4558-b9d1-7358a27ceb95",
+          "outcome": "settled",
+          "host": {
+            "pid": 97384,
+            "processInstanceID": "win32:639284979673592052",
+            "occurrenceID": "f1c6f012-8174-4d17-9012-970378432f25"
+          },
+          "target": {
+            "pid": 80820,
+            "processInstanceID": "win32:639284979682176532",
+            "occurrenceID": "798db3e3-412b-456e-b933-8eeda93026c0"
+          },
+          "observedAtUtc": "2026-10-25T04:10:25.814Z",
+          "deadlineAt": 1792902366997,
+          "terminal": {
+            "occurrenceID": "member-live-lifecycle-588b-44436feb-c757-4558-b9d1-7358a27ceb95",
+            "pid": 80820,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-25T04:10:27.4403696Z",
+        "launcher": {
+          "observedAtUtc": "2026-10-25T04:10:25.8546414Z",
+          "originalChildExit": 0
+        },
+        "chain": [
+          {
+            "identity": {
+              "pid": 97384,
+              "processInstanceID": "win32:639284979673592052",
+              "occurrenceID": "f1c6f012-8174-4d17-9012-970378432f25"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 80820,
+              "processInstanceID": "win32:639284979682176532",
+              "occurrenceID": "798db3e3-412b-456e-b933-8eeda93026c0"
+            },
+            "state": "dead_or_reused"
+          }
+        ]
+      },
+      "preservation": {
+        "at": "2026-10-25T04:10:30.359Z",
+        "sourceSchema": 6,
+        "targetSchema": 8,
+        "originalTables": 90,
+        "originalRows": 207330,
+        "originalFieldDifferences": [
+          {
+            "table": "memory_chunk",
+            "id": "mck_h0TwOCuDIItgGfxTGf6k",
+            "fields": [
+              "content",
+              "token_count",
+              "time_updated"
+            ]
+          },
+          {
+            "table": "memory_file",
+            "id": "mem_hBhVOjG2IHNZ58LGhFBJ",
+            "fields": [
+              "time_updated"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "id": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "id": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "session",
+            "id": "ses_-zUS0WzzQzzDOGrIbYwN",
+            "fields": [
+              "time_updated"
+            ]
+          }
+        ],
+        "integrity": "ok",
+        "sourceBytes": 95682560,
+        "sourceModifiedAtMs": 1792828797672.7832,
+        "canonicalConfiguration": "Exact original",
+        "qualification": "Full original field/row verification after original native exit and physical/output/request closure"
+      },
+      "acceptedConversation": {
+        "at": "2026-10-25T04:10:30.573Z",
+        "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+        "messages": 42,
+        "parts": 117,
+        "inputMessageID": "msg_aa72910a-79d6-4717-8a0e-a2c67e14b2ed",
+        "source": {
+          "id": "prt_g0VZ1ytp900Xduqm54NT",
+          "messageID": "msg_g0VZ1yoc1000oXZyHbnZ",
+          "toolPartID": "prt_g0VZ1ypxS00Nq2txBoNw",
+          "sourceId": "e84bb5bfb116fa834ec62ae0d6af530f0c6586d8d2671c7834b97c6d857997ec",
+          "url": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
+          "title": "Tabs Pattern | APG | WAI | W3C",
+          "snippetCharacters": 4095,
+          "snippetBytes": 4095
+        },
+        "tool": {
+          "id": "prt_g0VZ1ypxS00Nq2txBoNw",
+          "callID": "call_22e148f334de4483a516891cbbf15e37",
+          "status": "completed",
+          "input": {
+            "url": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
+            "format": "text"
+          },
+          "receipt": "per_hrXpbRWENGkhnlzdScYX",
+          "outputBytes": 6523,
+          "outputCharacters": 6521
+        },
+        "final": {
+          "messageID": "msg_g0VZ1ytrM00ZT2hMn1jD",
+          "partID": "prt_g0VZ1yuew00SsaXaMSzd",
+          "characters": 6769,
+          "completed": 1792901357861,
+          "markers": "LIVE588BSTART/END",
+          "status": "idle"
+        },
+        "persistedSource": "Exact accepted API text, Message and Tool ownership",
+        "backendEvents": {
+          "all": 4793,
+          "finalTextSamples": 4711,
+          "first": {
+            "sequence": 82,
+            "at": 1792901246052,
+            "type": "message.part.updated",
+            "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+            "messageID": "msg_g0VZ1ytrM00ZT2hMn1jD",
+            "partID": "prt_g0VZ1yuew00SsaXaMSzd",
+            "partType": "text",
+            "textLength": 0,
+            "orderKey": "v1:0001792901246042:0000000000000031:0000000000000000:part:prt_g0VZ1yuew00SsaXaMSzd"
+          },
+          "last": {
+            "sequence": 4792,
+            "at": 1792901357535,
+            "type": "message.part.updated",
+            "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+            "messageID": "msg_g0VZ1ytrM00ZT2hMn1jD",
+            "partID": "prt_g0VZ1yuew00SsaXaMSzd",
+            "partType": "text",
+            "textLength": 6769,
+            "previousLength": 6769,
+            "appendFromPrevious": true,
+            "textEnded": 1792901357529,
+            "orderKey": "v1:0001792901246042:0000000000000031:0000000000000000:part:prt_g0VZ1yuew00SsaXaMSzd"
+          },
+          "nonAppend": [],
+          "zero": [
+            {
+              "sequence": 82,
+              "at": 1792901246052,
+              "type": "message.part.updated",
+              "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+              "messageID": "msg_g0VZ1ytrM00ZT2hMn1jD",
+              "partID": "prt_g0VZ1yuew00SsaXaMSzd",
+              "partType": "text",
+              "textLength": 0,
+              "orderKey": "v1:0001792901246042:0000000000000031:0000000000000000:part:prt_g0VZ1yuew00SsaXaMSzd"
+            }
+          ]
+        }
+      },
+      "manualObservations": [
+        {
+          "label": "before",
+          "at": "2026-10-25T04:06:58.199Z",
+          "scroll": {
+            "height": 576,
+            "owner": "1",
+            "scrollHeight": 64593,
+            "top": 64017
+          },
+          "count": 35,
+          "recent": [
+            {
+              "characters": 993,
+              "messageID": "msg_g0VYkgkr700nwVCYXLhY",
+              "owner": "41",
+              "partID": "prt_g0VYkglYL00ZzNKT7UEB",
+              "pending": null
+            },
+            {
+              "characters": 341,
+              "messageID": "msg_g0VYlVhdH009nBNe7inj",
+              "owner": "42",
+              "partID": "prt_g0VYlVhde009qbGjI9xa",
+              "pending": null
+            },
+            {
+              "characters": 50,
+              "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+              "owner": "43",
+              "partID": "prt_g0VYlVik0003TVHLrtoL",
+              "pending": null
+            },
+            {
+              "characters": 1345,
+              "messageID": "msg_g0VYlVvNx00Uq6gDAjqh",
+              "owner": "44",
+              "partID": "prt_g0VYlVwN8002kOPK5Uhl",
+              "pending": null
+            }
+          ]
+        },
+        {
+          "label": "allowed",
+          "at": "2026-10-25T04:07:23.876Z",
+          "scroll": {
+            "height": 576,
+            "owner": "1",
+            "scrollHeight": 65093,
+            "top": 64517
+          },
+          "count": 37,
+          "recent": [
+            {
+              "characters": 50,
+              "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+              "owner": "43",
+              "partID": "prt_g0VYlVik0003TVHLrtoL",
+              "pending": null
+            },
+            {
+              "characters": 1345,
+              "messageID": "msg_g0VYlVvNx00Uq6gDAjqh",
+              "owner": "44",
+              "partID": "prt_g0VYlVwN8002kOPK5Uhl",
+              "pending": null
+            },
+            {
+              "characters": 335,
+              "messageID": "msg_aa72910a-79d6-4717-8a0e-a2c67e14b2ed",
+              "owner": "45",
+              "partID": "prt_g0VZ1yoXV00eb7ZHn31x",
+              "pending": null
+            },
+            {
+              "characters": 94,
+              "messageID": "msg_g0VZ1yoc1000oXZyHbnZ",
+              "owner": "46",
+              "partID": "prt_g0VZ1ypes00hvp7gQZLf",
+              "pending": null
+            }
+          ]
+        },
+        {
+          "label": "stream-01",
+          "at": "2026-10-25T04:08:02.950Z",
+          "scroll": {
+            "height": 576,
+            "owner": "1",
+            "scrollHeight": 67564,
+            "top": 66988
+          },
+          "count": 38,
+          "recent": [
+            {
+              "characters": 1345,
+              "messageID": "msg_g0VYlVvNx00Uq6gDAjqh",
+              "owner": "44",
+              "partID": "prt_g0VYlVwN8002kOPK5Uhl",
+              "pending": null
+            },
+            {
+              "characters": 335,
+              "messageID": "msg_aa72910a-79d6-4717-8a0e-a2c67e14b2ed",
+              "owner": "45",
+              "partID": "prt_g0VZ1yoXV00eb7ZHn31x",
+              "pending": null
+            },
+            {
+              "characters": 94,
+              "messageID": "msg_g0VZ1yoc1000oXZyHbnZ",
+              "owner": "46",
+              "partID": "prt_g0VZ1ypes00hvp7gQZLf",
+              "pending": null
+            },
+            {
+              "characters": 2062,
+              "messageID": "msg_g0VZ1ytrM00ZT2hMn1jD",
+              "owner": "47",
+              "partID": "prt_g0VZ1yuew00SsaXaMSzd",
+              "pending": null
+            }
+          ]
+        },
+        {
+          "label": "stream-02",
+          "at": "2026-10-25T04:08:54.256Z",
+          "scroll": {
+            "height": 576,
+            "owner": "1",
+            "scrollHeight": 70927,
+            "top": 70351
+          },
+          "count": 38,
+          "recent": [
+            {
+              "characters": 1345,
+              "messageID": "msg_g0VYlVvNx00Uq6gDAjqh",
+              "owner": "44",
+              "partID": "prt_g0VYlVwN8002kOPK5Uhl",
+              "pending": null
+            },
+            {
+              "characters": 335,
+              "messageID": "msg_aa72910a-79d6-4717-8a0e-a2c67e14b2ed",
+              "owner": "45",
+              "partID": "prt_g0VZ1yoXV00eb7ZHn31x",
+              "pending": null
+            },
+            {
+              "characters": 94,
+              "messageID": "msg_g0VZ1yoc1000oXZyHbnZ",
+              "owner": "46",
+              "partID": "prt_g0VZ1ypes00hvp7gQZLf",
+              "pending": null
+            },
+            {
+              "characters": 4946,
+              "messageID": "msg_g0VZ1ytrM00ZT2hMn1jD",
+              "owner": "47",
+              "partID": "prt_g0VZ1yuew00SsaXaMSzd",
+              "pending": "true"
+            }
+          ]
+        },
+        {
+          "label": "end-check",
+          "at": "2026-10-25T04:09:41.989Z",
+          "scroll": {
+            "height": 576,
+            "owner": "1",
+            "scrollHeight": 72491,
+            "top": 71915
+          },
+          "count": 38,
+          "recent": [
+            {
+              "characters": 1345,
+              "messageID": "msg_g0VYlVvNx00Uq6gDAjqh",
+              "owner": "44",
+              "partID": "prt_g0VYlVwN8002kOPK5Uhl",
+              "pending": null
+            },
+            {
+              "characters": 335,
+              "messageID": "msg_aa72910a-79d6-4717-8a0e-a2c67e14b2ed",
+              "owner": "45",
+              "partID": "prt_g0VZ1yoXV00eb7ZHn31x",
+              "pending": null
+            },
+            {
+              "characters": 94,
+              "messageID": "msg_g0VZ1yoc1000oXZyHbnZ",
+              "owner": "46",
+              "partID": "prt_g0VZ1ypes00hvp7gQZLf",
+              "pending": null
+            },
+            {
+              "characters": 6287,
+              "messageID": "msg_g0VZ1ytrM00ZT2hMn1jD",
+              "owner": "47",
+              "partID": "prt_g0VZ1yuew00SsaXaMSzd",
+              "pending": null
+            }
+          ]
+        },
+        {
+          "label": "completed-source",
+          "at": "2026-10-25T04:10:14.785Z",
+          "scroll": {
+            "height": 576,
+            "owner": "1",
+            "scrollHeight": 72779,
+            "top": 64775
+          },
+          "count": 38,
+          "recent": [
+            {
+              "characters": 1345,
+              "messageID": "msg_g0VYlVvNx00Uq6gDAjqh",
+              "owner": "44",
+              "partID": "prt_g0VYlVwN8002kOPK5Uhl",
+              "pending": null
+            },
+            {
+              "characters": 335,
+              "messageID": "msg_aa72910a-79d6-4717-8a0e-a2c67e14b2ed",
+              "owner": "45",
+              "partID": "prt_g0VZ1yoXV00eb7ZHn31x",
+              "pending": null
+            },
+            {
+              "characters": 94,
+              "messageID": "msg_g0VZ1yoc1000oXZyHbnZ",
+              "owner": "46",
+              "partID": "prt_g0VZ1ypes00hvp7gQZLf",
+              "pending": null
+            },
+            {
+              "characters": 6287,
+              "messageID": "msg_g0VZ1ytrM00ZT2hMn1jD",
+              "owner": "47",
+              "partID": "prt_g0VZ1yuew00SsaXaMSzd",
+              "pending": null
+            }
+          ]
+        }
+      ],
+      "passiveLogs": {
+        "recorded": 1294,
+        "finalBodyStates": 1088,
+        "first": {
+          "kind": "body-state",
+          "owner": 47,
+          "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+          "messageID": "msg_g0VZ1ytrM00ZT2hMn1jD",
+          "partID": "prt_g0VZ1yuew00SsaXaMSzd",
+          "textLength": 13,
+          "streaming": true,
+          "htmlBlocks": 0,
+          "pending": true,
+          "visibleCharacters": 0,
+          "at": 47498
+        },
+        "last": {
+          "kind": "body-state",
+          "owner": 47,
+          "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+          "messageID": "msg_g0VZ1ytrM00ZT2hMn1jD",
+          "partID": "prt_g0VZ1yuew00SsaXaMSzd",
+          "textLength": 6769,
+          "streaming": false,
+          "htmlBlocks": 84,
+          "pending": false,
+          "visibleCharacters": 6287,
+          "at": 159390
+        },
+        "distinctOwners": [
+          47
+        ],
+        "zeroHtmlStates": [
+          {
+            "at": 47498,
+            "textLength": 13,
+            "pending": true
+          }
+        ],
+        "limitations": [
+          "Captured console windows have a500-record limit and may overlap or leave gaps; they are not full-stream proof"
+        ]
+      }
+    }
+  ],
+  "diagnosticRepair": {
+    "problem": "Node fetch response-header timer terminated the original caller at about300s despite accepted backend progress",
+    "implementation": "One native Node HTTP request; activity controller supplies cancellation, response reader consumes original EOF; no resend or fallback",
+    "contracts": {
+      "at": "2026-10-25T04:05:56.411Z",
+      "contracts": [
+        {
+          "contract": "Progress exceeds inactivity threshold and completes original response",
+          "status": 200,
+          "payload": {
+            "phase": "complete"
+          },
+          "reader": "eof",
+          "elapsedMs": 675,
+          "activityCount": 21
+        },
+        {
+          "contract": "Stalled response terminates original request",
+          "error": "AbortError",
+          "reason": "PUBLIC_PROMPT_INACTIVITY"
+        }
+      ],
+      "actualRequests": [
+        {
+          "method": "POST",
+          "url": "/progress",
+          "body": {
+            "id": "one-original-progress"
+          }
+        },
+        {
+          "method": "POST",
+          "url": "/stalled",
+          "body": {
+            "id": "one-original-stalled"
+          }
+        }
+      ],
+      "server": "Closed"
+    },
+    "actualRecheck": "Fresh scoped public POST returned200, original caller exited0; provider streams and original service closed normally",
+    "limit": "Fresh real reply lasted about135s; a second real greater-than300s wait was not performed"
+  },
+  "manualUI": {
+    "screenshots": [
+      "01-original-member.png",
+      "02-live-member.png",
+      "04-current-member.png",
+      "05-permission-resolved.png",
+      "06-streaming-member.png",
+      "07-history-during-stream.png",
+      "08-source-during-stream.png",
+      "09-stream-following.png",
+      "10-live-long-body.png",
+      "11-end-member.png",
+      "12-completed-source-reopen.png",
+      "13-source-copy.png",
+      "14-recheck-before.png",
+      "15-recheck-stream.png",
+      "16-recheck-late-stream.png",
+      "17-recheck-complete.png",
+      "18-recheck-source.png"
+    ],
+    "method": "Real IAB pages, manual actions, saved screenshots and visual review; passive metadata only",
+    "uiAutomationTests": 0,
+    "clipboard": "Copied feedback was visible; connector virtual clipboard was empty and real byte result remains unverified"
+  },
+  "remaining": {
+    "rendering": "Original repeated member Rendering flicker was not reproduced or root-caused; no delay, hidden state or speculative UI patch added",
+    "next": "Investigate actual multi-Source Task-member update occurrences and stable identities through the canonical current path, without creating agents or synthetic messages"
+  },
+  "isolation": "User service18571 and its windows were not operated; original577 complete data/config preserved; only isolated copies migrated6 to8"
+}

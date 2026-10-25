@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [既有成员实时生命周期](2026-10-25-member-live-lifecycle/README.md)：588真实正文流、Source与渲染观察。
+
 - [专家团Word分页反馈](2026-10-25-expert-word-feedback/README.md)：原Task追加失败保全、验收依赖修正和Base五页实物复核通过。
 
 - [专家团追加交付与更正案例](2026-10-24-expert-steering-recovery-cases/README.md)：三个合成业务输入、共享输入交接红绿合同与真实页面阶段证据。

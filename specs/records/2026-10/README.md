@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [既有成员的真实流与 Rendering 生命周期](2026-10-25-member-live-lifecycle.md)：588已有Session直接输入、实页和生命周期。
+
 - [专家团完成后分页反馈与服务重启](2026-10-25-expert-word-feedback-recovery.md)：原轮失败保全、验收准备修正和Base五页实物验收。
 
 - [专家团未知保全后的恢复与接续](2026-10-24-expert-recovery-continuation-audit.md)：真实备份、重复升级、重试和发布并发。

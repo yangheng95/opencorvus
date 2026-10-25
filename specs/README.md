@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [既有成员的真实流与 Rendering 生命周期](records/2026-10/2026-10-25-member-live-lifecycle.md)：588原成员自身流式路径和真实渲染所有权。
+
 - [专家团完成后分页反馈与服务重启](records/2026-10/2026-10-25-expert-word-feedback-recovery.md)：原轮失败保全、验收依赖根因与Base五页修订实物复核。
 
 - [专家团未知保全后的恢复与接续](records/2026-10/2026-10-24-expert-recovery-continuation-audit.md)：备份恢复、重复升级及旧恢复与新操作的真实并发抽检。
