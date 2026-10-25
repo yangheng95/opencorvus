@@ -1,0 +1,420 @@
+{
+  "uiEntry": "main-DfWO50jq.js",
+  "runs": [
+    {
+      "id": "zip-intake-delivery-606",
+      "bytesAndOutcomes": {
+        "input": {
+          "bytes": 259,
+          "uploadedSameBytes": true
+        },
+        "output": {
+          "bytes": 168,
+          "downloadSameBytes": true,
+          "content": "- 负责人：产品体验。\n- 交付状态：待补充；本轮校验状态：完成。两种状态分别记录，不混同。\n- 外部更新要求：必须保留。\n"
+        },
+        "terminal": "stop",
+        "toolOutcomes": [
+          {
+            "tool": "read",
+            "status": "error"
+          },
+          {
+            "tool": "capability_search",
+            "status": "completed"
+          },
+          {
+            "tool": "read",
+            "status": "completed"
+          },
+          {
+            "tool": "bash",
+            "status": "completed",
+            "exit": 1
+          },
+          {
+            "tool": "bash",
+            "status": "completed",
+            "exit": 0
+          },
+          {
+            "tool": "apply_patch",
+            "status": "completed"
+          },
+          {
+            "tool": "read",
+            "status": "completed"
+          }
+        ]
+      },
+      "requests": 11,
+      "previousRequests": 119,
+      "cumulativeRequests": 130,
+      "maximumRequests": 12,
+      "unusedAllowanceRetired": 1,
+      "exhausted": false,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "publicShutdown": 200,
+      "reserveMs": 280621,
+      "fiveMinuteReserveMet": false,
+      "physical": {
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-25T18:32:53.9873388Z"
+        },
+        "observedAtUtc": "2026-10-25T18:32:55.9842031Z",
+        "native": {
+          "occurrence": "zip-intake-delivery-606-63bfc7cc-2c98-4cac-9b6e-27a1b005ce8c",
+          "outcome": "settled",
+          "host": {
+            "pid": 94804,
+            "processInstanceID": "win32:639285490545893854",
+            "occurrenceID": "23c9b4e0-f2e4-469a-bcce-f717272c42d3"
+          },
+          "target": {
+            "pid": 71504,
+            "processInstanceID": "win32:639285490556245592",
+            "occurrenceID": "07a2c67e-2e21-4675-a2a9-408d0e9a71d5"
+          },
+          "observedAtUtc": "2026-10-25T18:32:53.923Z",
+          "deadlineAt": 1792953454544,
+          "terminal": {
+            "occurrenceID": "zip-intake-delivery-606-63bfc7cc-2c98-4cac-9b6e-27a1b005ce8c",
+            "pid": 71504,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "chain": [
+          {
+            "identity": {
+              "pid": 94804,
+              "processInstanceID": "win32:639285490545893854",
+              "occurrenceID": "23c9b4e0-f2e4-469a-bcce-f717272c42d3"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 71504,
+              "processInstanceID": "win32:639285490556245592",
+              "occurrenceID": "07a2c67e-2e21-4675-a2a9-408d0e9a71d5"
+            },
+            "state": "dead_or_reused"
+          }
+        ]
+      }
+    },
+    {
+      "id": "archive-tool-guidance-607",
+      "bytesAndOutcomes": {
+        "session": "ses_-zUQuTYDTzzsIOouFKQL",
+        "input": {
+          "bytes": 259,
+          "uploadedSameBytes": true
+        },
+        "output": {
+          "bytes": 201,
+          "downloadSameBytes": true,
+          "content": "1. 负责人：产品体验。\n2. 交付状态：待补充；本轮校验状态：完成。两种状态分别记录，本轮校验完成不代表交付完成。\n3. 外部更新要求：必须保留。\n"
+        },
+        "terminal": "stop",
+        "tools": [
+          {
+            "tool": "read",
+            "status": "completed"
+          },
+          {
+            "tool": "glob",
+            "status": "completed"
+          },
+          {
+            "tool": "glob",
+            "status": "completed"
+          },
+          {
+            "tool": "write",
+            "status": "completed"
+          },
+          {
+            "tool": "bash",
+            "status": "completed",
+            "exit": 1
+          },
+          {
+            "tool": "bash",
+            "status": "completed",
+            "exit": 0
+          },
+          {
+            "tool": "apply_patch",
+            "status": "completed"
+          },
+          {
+            "tool": "read",
+            "status": "completed"
+          }
+        ]
+      },
+      "requests": 12,
+      "previousRequests": 130,
+      "cumulativeRequests": 142,
+      "maximumRequests": 12,
+      "unusedAllowanceRetired": 0,
+      "exhausted": false,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "publicShutdown": 200,
+      "reserveMs": 1025426,
+      "fiveMinuteReserveMet": true,
+      "physical": {
+        "observedAtUtc": "2026-10-25T18:41:20.7832393Z",
+        "native": {
+          "occurrence": "archive-tool-guidance-607-83b371ab-ffef-49f8-a9db-ee6902f3eab0",
+          "outcome": "settled",
+          "host": {
+            "pid": 20512,
+            "processInstanceID": "win32:639285503053308336",
+            "occurrenceID": "b8e51758-e35c-479f-9dab-f2f4783f393c"
+          },
+          "target": {
+            "pid": 75860,
+            "processInstanceID": "win32:639285503065623527",
+            "occurrenceID": "ee5a34f2-389c-4391-85e9-9177e2b63c87"
+          },
+          "observedAtUtc": "2026-10-25T18:41:19.851Z",
+          "deadlineAt": 1792954705277,
+          "terminal": {
+            "occurrenceID": "archive-tool-guidance-607-83b371ab-ffef-49f8-a9db-ee6902f3eab0",
+            "pid": 75860,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "chain": [
+          {
+            "identity": {
+              "pid": 20512,
+              "processInstanceID": "win32:639285503053308336",
+              "occurrenceID": "b8e51758-e35c-479f-9dab-f2f4783f393c"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 75860,
+              "processInstanceID": "win32:639285503065623527",
+              "occurrenceID": "ee5a34f2-389c-4391-85e9-9177e2b63c87"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-25T18:41:19.8842918Z"
+        }
+      }
+    }
+  ],
+  "backend": {
+    "files": [
+      "read-tool-error-contract.test.ts",
+      "read-attachment-source.test.ts"
+    ],
+    "passed": 7,
+    "assertions": 49,
+    "exitCode": 0
+  },
+  "screenshots": "Four actual browser screenshots manually reviewed; no UI automation",
+  "limits": [
+    "Python default output encoding failed once in each run; model naturally recovered with UTF-8",
+    "606 five-minute reserve target missed by 19379ms; process settled and credential copies retired",
+    "No user database or user service modified"
+  ]
+}

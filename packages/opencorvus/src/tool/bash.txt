@@ -2,7 +2,9 @@ Executes a terminal command with optional timeout, ensuring proper handling and 
 
 All commands run in ${directory} by default. Use the `workdir` parameter if you need to run a command in a different directory. AVOID using `cd <directory> && <command>` patterns - use `workdir` instead.
 
-IMPORTANT: This tool is for terminal operations like git, npm, docker, etc. DO NOT use it for file operations (reading, writing, editing, searching, finding files) - use the specialized tools for this instead.
+IMPORTANT: Use the specialized file tools for file operations they support, and this tool for terminal operations like git, npm, and docker. When the file tools cannot handle a required format or operation, such as inspecting an archive or processing a binary document, use an appropriate installed program through this tool. Keep the same path, permission, and task ownership boundaries.
+
+Command output is decoded as UTF-8. Configure the invoked program to emit UTF-8 when output may contain non-ASCII text; changing the shell's code page alone may not control a child program's redirected output encoding.
 
 Missing tools: if a command fails with "command not found" / "not recognized" / similar, the required CLI is not installed. You are allowed to install it using the platform's package manager (e.g. `brew install`, `apt-get install`, `winget install`, `scoop install`, `npm i -g`, `pipx install`, `cargo install`) before retrying. Prefer the manager already used in the project/environment, pick the canonical package name, and proceed without asking — only pause if the install itself needs privileged access you do not have (e.g. `sudo` prompt) or touches system state the user should approve.
 
@@ -38,7 +40,7 @@ Usage notes:
   - Avoid using this terminal tool with the `find`, `grep`, `cat`, `head`, `tail`, `sed`, `awk`, or `echo` commands, unless explicitly instructed or when these commands are truly necessary for the task. Instead, always prefer using the dedicated tools for these commands:
     - File search: Use Glob (NOT find or ls)
     - Content search: Use `search_code` (NOT grep or rg)
-    - Read files: Use Read (NOT cat/head/tail)
+    - Read supported text, image, and PDF files: Use Read. For other binary formats, use an appropriate format-specific tool or installed terminal program.
     - Edit files: Use Edit (NOT sed/awk)
     - Write files: Use Write (NOT echo >/cat <<EOF)
     - Communication: Output text directly (NOT echo/printf)

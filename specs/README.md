@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [压缩包输入到可下载成果](records/2026-10/2026-10-26-zip-intake-delivery.md)：606/607真实Sol闭环、工具格式说明冲突修正与实际下载。
+
 - [不支持预览的项目文件原件下载](records/2026-10/2026-10-26-binary-file-download.md)：605模型无关原件流、项目边界与真实ZIP恢复下载。
 
 - [当前产品完整操作体验](records/2026-10/2026-10-26-current-product-experience.md)：604文件预览直接下载与真实字节验收。
