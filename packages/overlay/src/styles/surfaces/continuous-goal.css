@@ -75,6 +75,19 @@
     order: 2;
   }
 }
+.continuous-goal--complete {
+  padding-block: var(--ui-gap-xs);
+}
+.continuous-goal--complete .continuous-goal__row {
+  flex-wrap: nowrap;
+}
+.continuous-goal--complete .continuous-goal__objective {
+  order: 0;
+  flex: 1 1 auto;
+}
+.continuous-goal--complete .continuous-goal__row > .oc-button {
+  order: 0;
+}
 .continuous-goal__form,
 .continuous-goal__intro {
   display: flex;

@@ -486,7 +486,11 @@ export function ContinuousGoalControl(props: {
     <section
       ref={root}
       class="continuous-goal"
-      classList={{ "continuous-goal--compact": props.compact, "continuous-goal--idle": !goal() && (!error() || !!mode()) }}
+      classList={{
+        "continuous-goal--compact": props.compact,
+        "continuous-goal--complete": goal()?.status === "complete",
+        "continuous-goal--idle": !goal() && (!error() || !!mode()),
+      }}
       aria-label={t("continuous_goal.title")}
       data-ui="continuous-goal-control"
     >
@@ -503,14 +507,14 @@ export function ContinuousGoalControl(props: {
                 <span class="continuous-goal__objective" title={current().objective}>
                   {current().objective}
                 </span>
-                <span class="continuous-goal__usage" title={t("continuous_goal.usage_hint")}>
-                  {number(current().tokensUsed)}
-                  {current().tokenBudget === undefined ? "" : ` / ${number(current().tokenBudget!)}`}{" "}
-                  {t("continuous_goal.tokens_short")} · {number(current().turnsAccepted)}
-                  {current().turnBudget === undefined ? "" : ` / ${number(current().turnBudget!)}`}{" "}
-                  {t("continuous_goal.turns_short")}
-                </span>
                 <Show when={current().status !== "complete"}>
+                  <span class="continuous-goal__usage" title={t("continuous_goal.usage_hint")}>
+                    {number(current().tokensUsed)}
+                    {current().tokenBudget === undefined ? "" : ` / ${number(current().tokenBudget!)}`}{" "}
+                    {t("continuous_goal.tokens_short")} · {number(current().turnsAccepted)}
+                    {current().turnBudget === undefined ? "" : ` / ${number(current().turnBudget!)}`}{" "}
+                    {t("continuous_goal.turns_short")}
+                  </span>
                   <Button
                     type="button"
                     variant="ghost"
@@ -544,7 +548,7 @@ export function ContinuousGoalControl(props: {
           </Button>
         </div>
       </Show>
-      <Show when={goal() && goal()!.status !== "active" && currentReason()}>
+      <Show when={goal() && goal()!.status !== "active" && goal()!.status !== "complete" && currentReason()}>
         <p class="continuous-goal__reason">{currentReason()}</p>
       </Show>
       <Show when={notice()}>

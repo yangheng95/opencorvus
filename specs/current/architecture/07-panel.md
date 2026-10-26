@@ -3467,6 +3467,12 @@ and optional budgets remain within the original form and guide. Opening
 the home form preserves the composer draft and creates no owner, Message, or
 goal; confirmation invokes the existing new-conversation/goal launch flow.
 Selected conversations keep the owner-bound strip above their transcript.
+Completed goals use one summary row with their status, truncated original
+objective and existing Details action, including narrow desktop and compact
+SideChat surfaces. Details retains the complete objective, completion evidence,
+usage and budgets. Other statuses retain their usage, reason and current controls.
+The existing mutation confirmation notice keeps its original lifetime below the
+summary; this density change introduces no persisted collapse preference.
 Creation remains an explicit action, with automatic-continuation and budget
 semantics shown before confirmation. The home composition scrolls as one region
 so the input and starters remain reachable with a desktop dock open.

@@ -1,0 +1,703 @@
+{
+  "date": "2026-10-26",
+  "scope": "One completed Goal summary row on shared main and compact SideChat surfaces, with full canonical information in existing Details",
+  "checks": {
+    "build": {
+      "label": "goal-density-build",
+      "startedAt": 1793023832707,
+      "closedAt": 1793023911458,
+      "code": 0,
+      "signal": null,
+      "childPID": 96576
+    },
+    "types": {
+      "label": "goal-density-types",
+      "startedAt": 1793023832713,
+      "closedAt": 1793023922273,
+      "code": 0,
+      "signal": null,
+      "childPID": 95896
+    },
+    "language": {
+      "label": "goal-density-language",
+      "startedAt": 1793023832826,
+      "closedAt": 1793023835956,
+      "code": 0,
+      "signal": null,
+      "childPID": 10268
+    },
+    "tokens": {
+      "label": "goal-density-tokens",
+      "startedAt": 1793023832716,
+      "closedAt": 1793023840302,
+      "code": 0,
+      "signal": null,
+      "childPID": 77508
+    }
+  },
+  "runs": {
+    "636": {
+      "port": 38141,
+      "uiEntry": "main-DqXsnf2O.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 25085,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 21,
+            "current": 21,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "message": {
+            "original": 92,
+            "current": 92,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "part": {
+            "original": 157,
+            "current": 157,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 27,
+            "current": 27,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 98,
+            "current": 98,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 27,
+            "current": 27,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 43,
+            "current": 43,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 43,
+            "current": 43,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 196,
+            "current": 196,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          }
+        }
+      },
+      "attachments": {
+        "pairs": 12,
+        "originalSourceBytesPreserved": true
+      },
+      "closure": {
+        "originalExec": 25653,
+        "originalExecExit": 0,
+        "tabClosed": true,
+        "publicShutdown": 200,
+        "reserveMs": 974464,
+        "physical": {
+          "observedAtUtc": "2026-10-26T14:08:39.0610769Z",
+          "launcher": {
+            "originalChildExit": 0,
+            "observedAtUtc": "2026-10-26T14:08:38.0658501Z"
+          },
+          "native": {
+            "occurrence": "goal-density-636-090ac091-4713-493b-b990-872c9ab28b59",
+            "outcome": "settled",
+            "host": {
+              "pid": 91592,
+              "processInstanceID": "win32:639286202933173424",
+              "occurrenceID": "8cce8b08-7b57-4b43-9dc1-021200552070"
+            },
+            "target": {
+              "pid": 94364,
+              "processInstanceID": "win32:639286202943060566",
+              "occurrenceID": "57704339-66d9-4db9-a244-f68f1d818ea6"
+            },
+            "observedAtUtc": "2026-10-26T14:08:38.033Z",
+            "deadlineAt": 1793024692497,
+            "terminal": {
+              "occurrenceID": "goal-density-636-090ac091-4713-493b-b990-872c9ab28b59",
+              "pid": 94364,
+              "reason": "exited",
+              "exitCode": 0,
+              "signal": null
+            },
+            "physicalCompletion": true,
+            "outputDrainComplete": true,
+            "requestCleanupComplete": true,
+            "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+          },
+          "chain": [
+            {
+              "state": "dead_or_reused",
+              "identity": {
+                "pid": 91592,
+                "processInstanceID": "win32:639286202933173424",
+                "occurrenceID": "8cce8b08-7b57-4b43-9dc1-021200552070"
+              }
+            },
+            {
+              "state": "dead_or_reused",
+              "identity": {
+                "pid": 94364,
+                "processInstanceID": "win32:639286202943060566",
+                "occurrenceID": "57704339-66d9-4db9-a244-f68f1d818ea6"
+              }
+            }
+          ]
+        }
+      },
+      "qualification": "No copied credentials; no new Provider calls; model unavailable is an expected isolated registry condition"
+    },
+    "637": {
+      "port": 38142,
+      "uiEntry": "main-tVtk65-S.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 25085,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 21,
+            "current": 21,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "message": {
+            "original": 92,
+            "current": 92,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "part": {
+            "original": 157,
+            "current": 157,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 27,
+            "current": 27,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 98,
+            "current": 98,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 27,
+            "current": 27,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 43,
+            "current": 43,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 43,
+            "current": 43,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 196,
+            "current": 196,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          }
+        }
+      },
+      "attachments": {
+        "pairs": 12,
+        "originalSourceBytesPreserved": true
+      },
+      "closure": {
+        "originalExec": 26666,
+        "originalExecExit": 0,
+        "tabClosed": true,
+        "publicShutdown": 200,
+        "reserveMs": 651581,
+        "physical": {
+          "observedAtUtc": "2026-10-26T14:24:13.9159213Z",
+          "native": {
+            "occurrence": "goal-density-637-1460dec2-fc32-4f52-807a-5996c1df570a",
+            "outcome": "settled",
+            "host": {
+              "pid": 76432,
+              "processInstanceID": "win32:639286209046680923",
+              "occurrenceID": "c5d3f618-4ceb-40ea-93cf-d264b999d01f"
+            },
+            "target": {
+              "pid": 65912,
+              "processInstanceID": "win32:639286209055834700",
+              "occurrenceID": "7ae44bc5-c01d-42f5-ac04-b9061cba9ab0"
+            },
+            "observedAtUtc": "2026-10-26T14:24:12.426Z",
+            "deadlineAt": 1793025304007,
+            "terminal": {
+              "occurrenceID": "goal-density-637-1460dec2-fc32-4f52-807a-5996c1df570a",
+              "pid": 65912,
+              "reason": "exited",
+              "exitCode": 0,
+              "signal": null
+            },
+            "physicalCompletion": true,
+            "outputDrainComplete": true,
+            "requestCleanupComplete": true,
+            "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+          },
+          "launcher": {
+            "observedAtUtc": "2026-10-26T14:24:12.4638035Z",
+            "originalChildExit": 0
+          },
+          "chain": [
+            {
+              "identity": {
+                "pid": 76432,
+                "processInstanceID": "win32:639286209046680923",
+                "occurrenceID": "c5d3f618-4ceb-40ea-93cf-d264b999d01f"
+              },
+              "state": "dead_or_reused"
+            },
+            {
+              "identity": {
+                "pid": 65912,
+                "processInstanceID": "win32:639286209055834700",
+                "occurrenceID": "7ae44bc5-c01d-42f5-ac04-b9061cba9ab0"
+              },
+              "state": "dead_or_reused"
+            }
+          ]
+        }
+      },
+      "qualification": "No copied credentials; no new Provider calls; model unavailable is an expected isolated registry condition"
+    },
+    "638": {
+      "port": 38143,
+      "uiEntry": "main-tVtk65-S.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 25085,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 21,
+            "current": 23,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "message": {
+            "original": 92,
+            "current": 125,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "part": {
+            "original": 157,
+            "current": 198,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 27,
+            "current": 37,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 98,
+            "current": 98,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 27,
+            "current": 37,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 43,
+            "current": 45,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 43,
+            "current": 45,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 196,
+            "current": 208,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          }
+        }
+      },
+      "attachments": {
+        "pairs": 12,
+        "originalSourceBytesPreserved": true
+      },
+      "closure": {
+        "originalExec": 60857,
+        "originalExecExit": 0,
+        "tabClosed": true,
+        "publicShutdown": 200,
+        "reserveMs": 439416,
+        "physical": {
+          "observedAtUtc": "2026-10-26T14:39:09.6607945Z",
+          "native": {
+            "occurrence": "goal-density-638-5832ec9c-0e2e-483f-9b7a-33b65a3ea0df",
+            "outcome": "settled",
+            "host": {
+              "pid": 97136,
+              "processInstanceID": "win32:639286215887947215",
+              "occurrenceID": "9d2fa3d5-fbd6-4213-8b18-0113cf3ab918"
+            },
+            "target": {
+              "pid": 25752,
+              "processInstanceID": "win32:639286215896671325",
+              "occurrenceID": "f0940551-ae1f-4bf7-8d00-8e1fdef6a9e1"
+            },
+            "observedAtUtc": "2026-10-26T14:39:08.7Z",
+            "deadlineAt": 1793025988116,
+            "terminal": {
+              "occurrenceID": "goal-density-638-5832ec9c-0e2e-483f-9b7a-33b65a3ea0df",
+              "pid": 25752,
+              "reason": "exited",
+              "exitCode": 0,
+              "signal": null
+            },
+            "physicalCompletion": true,
+            "outputDrainComplete": true,
+            "requestCleanupComplete": true,
+            "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+          },
+          "chain": [
+            {
+              "identity": {
+                "pid": 97136,
+                "processInstanceID": "win32:639286215887947215",
+                "occurrenceID": "9d2fa3d5-fbd6-4213-8b18-0113cf3ab918"
+              },
+              "state": "dead_or_reused"
+            },
+            {
+              "identity": {
+                "pid": 25752,
+                "processInstanceID": "win32:639286215896671325",
+                "occurrenceID": "f0940551-ae1f-4bf7-8d00-8e1fdef6a9e1"
+              },
+              "state": "dead_or_reused"
+            }
+          ],
+          "launcher": {
+            "observedAtUtc": "2026-10-26T14:39:08.7335928Z",
+            "originalChildExit": 0
+          }
+        }
+      },
+      "qualification": "Actual paired credential/catalog, finite streaming SideChat Goal; ten-minute close target exceeded, twenty-minute physical boundary and five-minute reserve met"
+    }
+  },
+  "provider": {
+    "at": "2026-10-26T14:39:10.319Z",
+    "credentialCopyRetired": true,
+    "modelCatalogCopyRetired": true,
+    "requests": 3,
+    "previousRequests": 215,
+    "cumulativeRequests": 218,
+    "maximumRequests": 8,
+    "unusedAllowanceRetired": 5,
+    "exhausted": false,
+    "model": "gpt-6.1-sol",
+    "requestOutcomes": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      }
+    ],
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "publicShutdown": 200,
+    "reserveMs": 439416,
+    "physical": {
+      "observedAtUtc": "2026-10-26T14:39:09.6607945Z",
+      "native": {
+        "occurrence": "goal-density-638-5832ec9c-0e2e-483f-9b7a-33b65a3ea0df",
+        "outcome": "settled",
+        "host": {
+          "pid": 97136,
+          "processInstanceID": "win32:639286215887947215",
+          "occurrenceID": "9d2fa3d5-fbd6-4213-8b18-0113cf3ab918"
+        },
+        "target": {
+          "pid": 25752,
+          "processInstanceID": "win32:639286215896671325",
+          "occurrenceID": "f0940551-ae1f-4bf7-8d00-8e1fdef6a9e1"
+        },
+        "observedAtUtc": "2026-10-26T14:39:08.7Z",
+        "deadlineAt": 1793025988116,
+        "terminal": {
+          "occurrenceID": "goal-density-638-5832ec9c-0e2e-483f-9b7a-33b65a3ea0df",
+          "pid": 25752,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "identity": {
+            "pid": 97136,
+            "processInstanceID": "win32:639286215887947215",
+            "occurrenceID": "9d2fa3d5-fbd6-4213-8b18-0113cf3ab918"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "identity": {
+            "pid": 25752,
+            "processInstanceID": "win32:639286215896671325",
+            "occurrenceID": "f0940551-ae1f-4bf7-8d00-8e1fdef6a9e1"
+          },
+          "state": "dead_or_reused"
+        }
+      ],
+      "launcher": {
+        "observedAtUtc": "2026-10-26T14:39:08.7335928Z",
+        "originalChildExit": 0
+      }
+    }
+  },
+  "canonicalColdRead": {
+    "readOnly": true,
+    "sideChat": {
+      "sourceSessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+      "inheritedMessageIDs": [
+        "msg_g0VZALc6h00SyKz202eB",
+        "msg_g0VZALc6h01X7dwn8Thj",
+        "msg_g0VZALc6h02JWUHV0Aau",
+        "msg_g0VZALc6h03LPAnoq86I",
+        "msg_g0VZALc6h04DHBc2yzCq",
+        "msg_g0VZALc6h05hwlo96SNe",
+        "msg_g0VZALc6h064zr7wuNBi",
+        "msg_g0VZALc6h07nMKRkqEYr",
+        "msg_g0VZALc6h08iTDd7kbWP",
+        "msg_g0VZALc6h09FbeAMn1lt",
+        "msg_g0VZALc6h0Afnzht8C54",
+        "msg_g0VZALc6h0BoddMiVtgq",
+        "msg_g0VZALc6h0CLBcqjzmvs",
+        "msg_g0VZALc6h0DVEn65oapK",
+        "msg_g0VZALc6h0E8qHzzQxjS",
+        "msg_g0VZALc6h0Flz9CH0Yv9",
+        "msg_g0VZALc6h0GoSxA43JR2",
+        "msg_g0VZALc6h0Hvp2W0DBbv",
+        "msg_g0VZALc6h0I4DM5Jsh5x",
+        "msg_g0VZALc6h0JUDLzPGdh4",
+        "msg_g0VZALc6h0KCXVL6oMIR",
+        "msg_g0VZALc6h0LcJv5vF5i7",
+        "msg_g0VZALc6h0M2LxTijzU5",
+        "msg_g0VZALc6h0N5kOsCaORR",
+        "msg_g0VZALc6h0OZA3qvwWjd",
+        "msg_g0VZALc6h0PUPiHc7LIu",
+        "msg_g0VZALc6h0QHy6wAulVr",
+        "msg_g0VZALc6h0RCH5L7xQPi",
+        "msg_g0VZALc6h0SuaLVSGcHJ"
+      ]
+    },
+    "side": {
+      "sessionID": "ses_-zUQpeNtPzzJRxo7qlCw",
+      "id": "pev_g0VZAMS1x00CnfrDLm1G",
+      "objective": "本轮只回复“侧聊布局验证就绪。”这一句话，不调用工具、不创建子任务或子 Agent。目标是由我手动核对侧聊已完成目标的单行摘要和完整详情，等待我明确记录完成。",
+      "status": "complete",
+      "reason": "已核对侧聊真实回复“侧聊布局验证就绪。”、独立归属、65000/1限制和45129/1累计用量，由操作者明确完成本次有限验证。",
+      "tokenBudget": 65000,
+      "turnBudget": 1,
+      "tokensUsed": 45129,
+      "continuations": [
+        {
+          "id": "pev_hSn8t9d4AovetPWowXaA",
+          "type": "continuous_goal.continuation_requested",
+          "payload": {
+            "goal_id": "pev_g0VZAMS1x00CnfrDLm1G",
+            "revision": "pev_g0VZAMS1x00CnfrDLm1G",
+            "frontier": "msg_g0VZALc6h0SuaLVSGcHJ",
+            "number": 1
+          },
+          "emitted_at": 1793025067154
+        }
+      ],
+      "updates": [
+        {
+          "id": "pev_g0VZANNZa00eK9R47Vwh",
+          "type": "continuous_goal.updated",
+          "payload": {
+            "goal_id": "pev_g0VZAMS1x00CnfrDLm1G",
+            "request_id": "bfd581a0-cef6-4f8f-8d49-6557dc39eaca",
+            "input": {
+              "requestID": "bfd581a0-cef6-4f8f-8d49-6557dc39eaca",
+              "goalID": "pev_g0VZAMS1x00CnfrDLm1G",
+              "expectedRevision": "pev_g0VZAMS1x00CnfrDLm1G",
+              "status": "complete",
+              "reason": "已核对侧聊真实回复“侧聊布局验证就绪。”、独立归属、65000/1限制和45129/1累计用量，由操作者明确完成本次有限验证。"
+            },
+            "author": "user"
+          },
+          "emitted_at": 1793025287746
+        }
+      ]
+    },
+    "main": {
+      "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+      "id": "pev_g0VZ8Gnco00JXTkNJldK",
+      "objective": "持续验证 Goal 的正常执行与手动完成流程。当前轮仅回复“Goal 恢复执行验证通过”。不要调用工具，不创建文件、子任务或子 Agent；等待用户在目标表单中手动完成。",
+      "status": "complete",
+      "reason": "最终源码已使用真实 gpt-6.1-sol 流式回复“Goal 恢复执行验证通过”，累计 36950 tokens、1/1 自动轮次后按预算收敛；说明返回后依据原文保留，由用户明确记录完成。",
+      "turnBudget": 1,
+      "tokensUsed": 36950,
+      "continuations": [
+        {
+          "id": "pev_hlXKTkG7NcHLYJh3QJZK",
+          "type": "continuous_goal.continuation_requested",
+          "payload": {
+            "goal_id": "pev_g0VZ8Gnco00JXTkNJldK",
+            "revision": "pev_g0VZ8Gnco00JXTkNJldK",
+            "frontier": "msg_g0VZ81FFM00FQc24TioW",
+            "number": 1
+          },
+          "emitted_at": 1792994167576
+        }
+      ],
+      "updates": [
+        {
+          "id": "pev_g0VZ8Gyav005MeXh6mYe",
+          "type": "continuous_goal.updated",
+          "payload": {
+            "goal_id": "pev_g0VZ8Gnco00JXTkNJldK",
+            "request_id": "9a1812cd-50f5-4a8e-8ea1-24121a48f2e1",
+            "input": {
+              "requestID": "9a1812cd-50f5-4a8e-8ea1-24121a48f2e1",
+              "goalID": "pev_g0VZ8Gnco00JXTkNJldK",
+              "expectedRevision": "pev_g0VZ8Gnco00JXTkNJldK",
+              "status": "complete",
+              "reason": "最终源码已使用真实 gpt-6.1-sol 流式回复“Goal 恢复执行验证通过”，累计 36950 tokens、1/1 自动轮次后按预算收敛；说明返回后依据原文保留，由用户明确记录完成。"
+            },
+            "author": "user"
+          },
+          "emitted_at": 1792994209089
+        }
+      ]
+    },
+    "reply": [
+      {
+        "id": "prt_g0VZAMUd300Mydlfv7xE",
+        "message_id": "msg_g0VZAMSCy00oYyQQEO2D",
+        "data": {
+          "type": "text",
+          "text": "侧聊布局验证就绪。",
+          "time": {
+            "start": 1793025076541,
+            "end": 1793025076743
+          },
+          "metadata": {
+            "openai": {
+              "itemId": "msg_0b495410278e6684016adf64346f848191ae98426cbd08786f",
+              "phase": "final_answer"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visual": {
+    "method": "Manual actual development /ui interactions and viewed original screenshots; no UI automated tests",
+    "desktop": {
+      "width": 1280,
+      "height": 720
+    },
+    "screenshots": [
+      "01-before-complete.jpg",
+      "02-before-docked.jpg",
+      "03-before-details.jpg",
+      "04-home-before.jpg",
+      "05-after-complete-en.jpg",
+      "06-after-docked-en.jpg",
+      "07-after-details-en.jpg",
+      "08-after-docked-zh.jpg",
+      "09-home-zh.jpg",
+      "10-home-goal-form-zh.jpg",
+      "11-home-draft-retained-zh.jpg",
+      "12-side-budget-and-reply.jpg",
+      "13-side-complete.jpg",
+      "14-side-complete-details.jpg",
+      "15-side-reopened-complete.jpg"
+    ],
+    "qualifications": [
+      "637 SideChat create returned actual ProviderModelNotFoundError, so only 638 accepts compact SideChat behavior",
+      "13 retains the existing completion confirmation beneath the single summary row",
+      "15 reopens the same SideChat tool tab; it does not test browser refresh or backend restart",
+      "Task/Mission share the component but were not separately manually exercised",
+      "New chat automatically closes the conversation dock; Home screenshots are not narrow docked Home evidence"
+    ]
+  },
+  "userEnvironment": {
+    "port18571Operated": false,
+    "sourceUserDatabaseOpened": false,
+    "sourceCredentialContentsPublished": false
+  }
+}

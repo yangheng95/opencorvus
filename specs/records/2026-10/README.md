@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [已完成目标摘要与首页体验](2026-10-26-goal-summary-density.md)：中英主会话、首页草稿和真实Sol侧聊的人工验收。
+
 - [用户命令原文与停止结果](2026-10-26-user-shell-message-and-stop.md)：49项162断言、原文补强与635实际UI停止验收。
 
 - [直接用户命令执行状态](2026-10-26-shell-execution-lifecycle.md)：原输入执行事实、共享恢复边界与633真实页面验证。

@@ -159,8 +159,13 @@ composer's existing draft; quotation and attachment context retains its original
 authority. The ordinary-message path and `/side` context restrictions remain
 unchanged. Opening a command performs no goal mutation or Message submission.
 No goal creation section or empty
-goal strip occupies the conversation surface. Existing goals retain their status,
-usage, pause and details controls. The introduction names the same localized
+goal strip occupies the conversation surface. Existing goals retain their status
+and details controls. Noncomplete goals also retain inline usage, applicable
+pause/resume actions and reasons. Completed goals keep a single summary row;
+their full objective, completion evidence, usage and budgets remain in Details.
+The existing mutation confirmation notice retains its original lifetime. This
+presentation does not change Goal projection or control semantics.
+The introduction names the same localized
 menu action. The creation guide and form footer resolve the same localized start
 action for Home and existing conversation owners. Task scope tools, tabs and Environment progress use Deliverables for
 Delivery Slice contracts; their panel explains where to find continuous execution
