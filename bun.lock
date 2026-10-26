@@ -237,6 +237,8 @@
         "@xterm/xterm": "6.0.0",
         "codemirror": "^6.0.2",
         "cytoscape": "3.34.0",
+        "d3-dsv": "3.0.1",
+        "decimal.js": "10.5.0",
         "diff": "catalog:",
         "fuzzysort": "catalog:",
         "highlight.js": "^11.11.1",
@@ -258,6 +260,7 @@
       "devDependencies": {
         "@opencorvus-ai/util": "workspace:*",
         "@tauri-apps/cli": "^2",
+        "@types/d3-dsv": "3.0.7",
         "jsonc-parser": "3.3.1",
         "vite": "6.4.4",
         "vite-plugin-solid": "^2",

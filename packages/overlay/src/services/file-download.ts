@@ -1,5 +1,11 @@
 import { artifactFilename, type ArtifactExport } from "./artifact-export"
-import { ApiAuthorityChangedError, assertApiAuthorityCurrent, captureResourceAuthority, fetchResourceAsObjectUrl, type ApiAuthority } from "./api"
+import {
+  ApiAuthorityChangedError,
+  assertApiAuthorityCurrent,
+  captureResourceAuthority,
+  fetchResourceAsObjectUrl,
+  type ApiAuthority,
+} from "./api"
 
 export function downloadBlob(blob: Blob, filename: string): void {
   const url = URL.createObjectURL(blob)
@@ -16,8 +22,7 @@ export async function artifactExportBlob(
   options: { authority?: ApiAuthority; signal?: AbortSignal } = {},
 ): Promise<Blob> {
   options.signal?.throwIfAborted()
-  if ("text" in file)
-    return new Blob([file.mime.startsWith("text/csv") ? "\uFEFF" : "", file.text], { type: file.mime })
+  if ("text" in file) return new Blob([file.text], { type: file.mime })
   const authority = captureResourceAuthority(file.url, options.authority)
   try {
     const url = await fetchResourceAsObjectUrl(file.url, { authority, signal: options.signal })

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [真实执行与CSV交付体验](2026-10-27-task-delivery-journey/README.md)：15张原图、真实CSV/报告、下载字节及执行结清事实。
+
 - [专家团理解与明确选择](2026-10-27-expert-squad-selection-journey/README.md)：16张真实原图、单项快照与四次隔离运行结清事实。
 
 - [Mission 草稿完整体验](2026-10-27-mission-authoring-journey/README.md)：17张手工原图、三个隔离实例与规范数据/进程结清事实。

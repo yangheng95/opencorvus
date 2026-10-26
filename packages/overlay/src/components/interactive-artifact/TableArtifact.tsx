@@ -10,6 +10,7 @@ import {
 } from "@tanstack/solid-table"
 import { For, createMemo, createSignal } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
+import type { ArtifactExport } from "../../services/artifact-export"
 import { t } from "../../utils/i18n"
 import { Button } from "../ui/Button"
 import { SearchField } from "../ui/SearchField"
@@ -29,7 +30,11 @@ function displayCell(value: TableRow[string], dataType: TablePayload["columns"][
   return String(value)
 }
 
-export function TableArtifact(props: { payload: TablePayload }) {
+export function TableArtifact(props: {
+  payload: TablePayload
+  exportFiles?: () => ArtifactExport[]
+  compareCells?: (left: TableRow[string], right: TableRow[string]) => number
+}) {
   const [sorting, setSorting] = createSignal<SortingState>([])
   const [filter, setFilter] = createSignal("")
   const columns = createMemo<ColumnDef<TableRow>[]>(() =>
@@ -39,6 +44,12 @@ export function TableArtifact(props: { payload: TablePayload }) {
       header: column.label,
       cell: (context) => displayCell(context.getValue() as TableRow[string], column.dataType),
       sortDescFirst: false,
+      ...(props.compareCells
+        ? ({
+            sortingFn: (left, right, columnID) =>
+              props.compareCells!(left.getValue(columnID), right.getValue(columnID)),
+          } satisfies Partial<ColumnDef<TableRow>>)
+        : {}),
     })),
   )
   const table = createSolidTable({
@@ -66,7 +77,7 @@ export function TableArtifact(props: { payload: TablePayload }) {
   })
 
   return (
-    <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Table">
+    <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Table" exportFiles={props.exportFiles}>
       <div class="msg-artifact-table__toolbar">
         <SearchField
           clearable
@@ -125,7 +136,14 @@ export function TableArtifact(props: { payload: TablePayload }) {
             </For>
           </thead>
           <tbody>
-            <For each={table.getRowModel().rows} fallback={<tr><td colspan={props.payload.columns.length}>{t("artifact.table.empty")}</td></tr>}>
+            <For
+              each={table.getRowModel().rows}
+              fallback={
+                <tr>
+                  <td colspan={props.payload.columns.length}>{t("artifact.table.empty")}</td>
+                </tr>
+              }
+            >
               {(row) => (
                 <tr>
                   <For each={row.getVisibleCells()}>

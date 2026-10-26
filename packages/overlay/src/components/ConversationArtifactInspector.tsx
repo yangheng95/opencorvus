@@ -27,7 +27,7 @@ import {
   type ArtifactReadLocator,
   type ConversationArtifactContent,
 } from "../services/conversation-artifact"
-import { t } from "../utils/i18n"
+import { localeTag, t } from "../utils/i18n"
 import { ArtifactFrame } from "./interactive-artifact/ArtifactFrame"
 import type { ArtifactCodeLanguage } from "./interactive-artifact/CodeArtifact"
 import { Button } from "./ui/Button"
@@ -35,6 +35,7 @@ import { Icon } from "./ui/Icon"
 import { SearchField } from "./ui/SearchField"
 import { captureApiAuthority } from "../services/api"
 import { activeProjectDirectory } from "../services/project-directory"
+import { csvArtifactTable, csvCellComparator } from "../services/csv-artifact"
 
 // Loaded with the artifact the inspector is actually opening; keeping these
 // static held CodeMirror and its grammars in the startup bundle.
@@ -52,6 +53,9 @@ const FilePreviewArtifact = lazy(async () => ({
 }))
 const TreeArtifact = lazy(async () => ({
   default: (await import("./interactive-artifact/TreeArtifact")).TreeArtifact,
+}))
+const TableArtifact = lazy(async () => ({
+  default: (await import("./interactive-artifact/TableArtifact")).TableArtifact,
 }))
 
 type TreePayload = Extract<InteractiveArtifactPayload, { renderer: "tree@1" }>
@@ -180,6 +184,12 @@ function useObjectURL(content: () => ConversationArtifactContent): () => string 
 }
 
 function ArtifactContentView(props: { title: string; content: ConversationArtifactContent }) {
+  const csvCompareCells = createMemo(() => csvCellComparator(localeTag()))
+  const csvTable = createMemo(() =>
+    props.content.mediaType === "text/csv" && props.content.text !== undefined
+      ? csvArtifactTable(props.title, props.content.text, (position) => t("artifact.table.column", { position }))
+      : undefined,
+  )
   const parsedJSON = createMemo(() => {
     if (props.content.mediaType !== "application/json" || props.content.text === undefined) return undefined
     return JSON.parse(props.content.text) as unknown
@@ -204,6 +214,11 @@ function ArtifactContentView(props: { title: string; content: ConversationArtifa
         <code title={props.content.sha256}>sha256:{props.content.sha256.slice(0, 12)}</code>
       </div>
       <Switch>
+        <Match when={csvTable()}>
+          {(payload) => (
+            <TableArtifact payload={payload()} exportFiles={originalTextExport} compareCells={csvCompareCells()} />
+          )}
+        </Match>
         <Match when={parsedJSON() !== undefined}>
           <TreeArtifact payload={jsonTreePayload(props.title, parsedJSON())} exportFiles={originalTextExport} />
         </Match>

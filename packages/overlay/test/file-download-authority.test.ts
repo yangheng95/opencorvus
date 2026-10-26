@@ -16,10 +16,13 @@ function observeFetch(implementation: (...args: Parameters<typeof fetch>) => Pro
 function setup() {
   configure({ serverUrl: "http://download-a.invalid", username: "dummy", password: "", directory: "" })
   const requests: TransportRequest[] = []
-  __setHostTransportForTest({ ...createTauriTransport("browser"), request: async (input: TransportRequest) => {
-    requests.push(input)
-    return { ok: true, status: 200, headers: { "content-type": remote.mime }, body: data }
-  }} as HostTransport)
+  __setHostTransportForTest({
+    ...createTauriTransport("browser"),
+    request: async (input: TransportRequest) => {
+      requests.push(input)
+      return { ok: true, status: 200, headers: { "content-type": remote.mime }, body: data }
+    },
+  } as HostTransport)
   return { authority: captureApiAuthority(), requests }
 }
 afterEach(() => {
@@ -28,13 +31,21 @@ afterEach(() => {
   configure({ serverUrl: "http://127.0.0.1:7878", username: "opencorvus", password: "", directory: "" })
 })
 
-test("authored CSV returns its exact BOM and UTF-8 bytes across unrelated API renewal", async () => {
+test("canonical CSV returns its exact original UTF-8 bytes across unrelated API renewal", async () => {
   setup()
-  const pending = artifactExportBlob({ filename: "data.csv", mime: "text/csv;charset=utf-8", text: '"你好"' })
+  const text = "region,paid_count,paid_amount\n华东,2,150.00\n华北,2,50.00\n华南,2,100.00\n"
+  const pending = artifactExportBlob({ filename: "summary.csv", mime: "text/csv;charset=utf-8", text })
   renewApiAuthority()
   const blob = await pending
-  expect(new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(await blob.arrayBuffer())).toBe('\uFEFF"你好"')
+  expect(new Uint8Array(await blob.arrayBuffer())).toEqual(new TextEncoder().encode(text))
+  expect(blob.size).toBe(77)
   expect(blob.type).toBe("text/csv;charset=utf-8")
+})
+
+test("an authored CSV signature is preserved as part of its exact source bytes", async () => {
+  const text = '\uFEFF"你好"'
+  const blob = await artifactExportBlob({ filename: "signed.csv", mime: "text/csv;charset=utf-8", text })
+  expect(new Uint8Array(await blob.arrayBuffer())).toEqual(new TextEncoder().encode(text))
 })
 
 test("API resource uses the supplied original authority and returns exact native Blob bytes", async () => {
@@ -51,14 +62,18 @@ test("API retirement during the second native blob-body await retains its exact 
   observeFetch(async (...args) => {
     const response = await originalFetch(...args)
     const body = await response.blob()
-    Object.defineProperty(response, "blob", { value: async () => {
-      renewApiAuthority()
-      return body
-    }})
+    Object.defineProperty(response, "blob", {
+      value: async () => {
+        renewApiAuthority()
+        return body
+      },
+    })
     return response
   })
   await expect(artifactExportBlob(remote, { authority })).rejects.toMatchObject({
-    name: "ApiAuthorityChangedError", expectedRevision: authority.revision, currentRevision: authority.revision + 1,
+    name: "ApiAuthorityChangedError",
+    expectedRevision: authority.revision,
+    currentRevision: authority.revision + 1,
     phase: "before_dispatch",
   })
 })

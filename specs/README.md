@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [真实执行与CSV交付体验](records/2026-10/2026-10-27-task-delivery-journey.md)：实际Mission到Task文件交付、CSV表格搜索和精确金额排序。
+
 - [0.1.33 统一资产选择与发布](records/2026-10/2026-10-27-release-0.1.33.md)：生产者与发布器共用完整安装器合同，五平台和配对官网真实验收。
 
 - [专家团理解与明确选择](records/2026-10/2026-10-27-expert-squad-selection-journey.md)：查询保留用户选择、准确空状态、完整说明及固定快照实测。

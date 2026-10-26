@@ -1705,8 +1705,21 @@ its own declared status semantics. Original results without recorded endpoints
 are not reconstructed from request text or current filesystem contents.
 
 Conversation artifact text and each immutable diff side use one fatal streaming
-UTF-8 decoder for the complete logical read, including its final flush. Literal
+UTF-8 decoder for the complete logical read, including its final flush. Explicit
+`text/csv` resources use the existing Table renderer for local search, sorting
+and pagination. The first record supplies column labels; positional identities
+preserve duplicate labels and fields beyond the header. The D3 row parser keeps
+cell values as strings, with current-language labels for unnamed columns.
+Decimal-aware sorting is presentation-only; the decimal comparator keeps
+large integers and fractional amounts precise without converting displayed cells
+to JavaScript numbers. Other text sorts through the current-language collator.
+Copy and download use the original decoded CSV and filename rather than regenerating
+data from the table. This is a view of canonical resource bytes, not a new
+interactive-artifact publication or an extension-based renderer inference. Literal
 U+FEFF bytes are retained as content rather than removed as a decoding signature.
+The shared artifact download Blob encodes its given text exactly; MIME type does
+not add a BOM or any other content. An explicitly authored signature remains part
+of the source, including for generated CSV exports.
 Range, byte integrity and original connection/directory receipts remain the same
 reader contract. Direct Task resource download passes its original authority and
 cancellation signal through that reader before the current action accepts bytes.
