@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [已接受停止的持续收敛](2026-10-26-stop-retry-ownership/README.md)：四张实图、两轮原取消及三条原生重复回复证据。
+
 - [停止控制与模型独立性](2026-10-26-stop-control-model-independence/README.md)：五张实图、原编码/预算失败、停止与同一会话恢复证据。
 
 - [设置与归档完整体验](2026-10-26-settings-archive-experience/README.md)：七张实际页面、原400与修后搜索/恢复/重新打开证据。

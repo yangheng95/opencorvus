@@ -157,19 +157,20 @@ describe("cancellation convergence from the control-plane scan", () => {
           attempts += 1
           settleCancellation(taskID, root.id)
         })
+        const scanPasses: number[] = []
         const productionDriver = new TaskControlDriver({
-          scan: (requestedTaskID, context) =>
-            TaskControlTestHooks.scanTaskControlPlane(requestedTaskID, context),
+          scan: (requestedTaskID, context) => {
+            scanPasses.push(context.pass)
+            return TaskControlTestHooks.scanTaskControlPlane(requestedTaskID, context)
+          },
         })
         using _driver = { [Symbol.dispose]: () => productionDriver.dispose() }
-        const sourcePasses: number[] = []
         const coalescedRequests: number[] = []
         let lateCancellationProjectDiscovery = false
         let appended = false
         using _interleaving = TaskControlTestHooks.replaceAfterSourceReconciliation(
           async ({ taskID: scannedTaskID, pass }) => {
             if (scannedTaskID !== taskID) return
-            sourcePasses.push(pass)
             if (pass !== 0 || appended) return
             appended = true
             Database.immediateTransaction((db) => {
@@ -196,7 +197,7 @@ describe("cancellation convergence from the control-plane scan", () => {
         expect({
           attempts,
           coalescedRequests,
-          freshPassObserved: sourcePasses.includes(1),
+          freshPassObserved: scanPasses.includes(1),
           lateCancellationProjectDiscovery,
         }).toEqual({
           attempts: 1,

@@ -361,6 +361,15 @@ Task cancellation retains its independent cleanup lease after the request return
 unavailable execution models do not replace these controls with model bootstrap.
 New input and actual execution retain full runtime initialization.
 
+Accepted Task and Mission stops retain the existing cleanup drivers even under
+cached identity admission. Original cancelling/closing intents survive request
+failure and converge through the same durable request and physical owner.
+Normal execution scans retain initialized runtime admission. A cancelled Task's
+current panel message submission can reopen its execution epoch; that submission
+is not proof that terminal conversation history remains terminal. Repeated native
+assistant text Parts must be investigated through their actual model/decision
+facts and must not be hidden by display deduplication.
+
 Task Build observation content GET uses the same Project identity admission
 independently of executable model bootstrap. The handler retains actual Task
 membership, Task-owned observation/file/side identity and bounded ranges, then

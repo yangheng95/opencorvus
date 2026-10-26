@@ -1,0 +1,404 @@
+{
+  "scope": "Continuous ownership of accepted Task cancellations and Mission closing intents under cached Project identity",
+  "schema": {
+    "version": 8,
+    "changed": false,
+    "userDatabaseOpened": false
+  },
+  "before": {
+    "label": "retry-before",
+    "exit": 1,
+    "durationMs": 58805,
+    "physicalAndOutputSettled": true,
+    "passed": 13,
+    "failed": 2,
+    "assertions": 46,
+    "actual": "Original physical Prompt settlement timeout and interrupted Mission close remain cancelling/closing after five seconds of observation"
+  },
+  "after": {
+    "contracts": {
+      "label": "retry-final-contracts",
+      "exit": 0,
+      "durationMs": 68442,
+      "physicalAndOutputSettled": true
+    },
+    "finalRevision": {
+      "label": "retry-final-revision",
+      "exit": 0,
+      "durationMs": 13168,
+      "physicalAndOutputSettled": true
+    },
+    "types": {
+      "label": "retry-final-types",
+      "exit": 0,
+      "durationMs": 54829,
+      "physicalAndOutputSettled": true
+    },
+    "regressions": [
+      {
+        "file": "server/stop-control-identity.test.ts",
+        "originalLog": "retry-final-contracts",
+        "tests": 16,
+        "assertions": 50,
+        "exit": 0
+      },
+      {
+        "file": "task-control-cancellation-convergence.test.ts",
+        "originalLog": "retry-final-revision",
+        "tests": 3,
+        "assertions": 4,
+        "exit": 0
+      },
+      {
+        "file": "project-route-context.test.ts",
+        "originalLog": "retry-final-contracts",
+        "tests": 10,
+        "assertions": 10,
+        "exit": 0
+      },
+      {
+        "file": "task-control-liveness.test.ts",
+        "originalLog": "retry-regressions",
+        "tests": 38,
+        "assertions": 48,
+        "exit": 0
+      },
+      {
+        "file": "task-control-sweep-scope.test.ts",
+        "originalLog": "retry-regressions",
+        "tests": 3,
+        "assertions": 3,
+        "exit": 0
+      },
+      {
+        "file": "instance-background-shutdown.test.ts",
+        "originalLog": "retry-regressions",
+        "tests": 4,
+        "assertions": 23,
+        "exit": 0
+      },
+      {
+        "file": "project-instance-capability-refresh.test.ts",
+        "originalLog": "retry-regressions",
+        "tests": 1,
+        "assertions": 1,
+        "exit": 0
+      }
+    ],
+    "tests": 75,
+    "assertions": 139
+  },
+  "qualification": {
+    "checker": "Canonical backend positive state/error/receipt contracts; fixtures are not Provider or browser E2E",
+    "oldCheckerCorrection": "Fresh cancellation scan pass is observed at the original driver, rather than requiring source execution reconciliation after cancellation. Original attempts/state assertions remain.",
+    "coldFixture": "Original process-owned drivers settle before seeding a different cold Project, preserving genuine startup recovery scope",
+    "ui": "Actual manual interactions and unmodified screenshots; no UI automation tests",
+    "capture": "1119x720 left-side capture of the actual 1280x720 viewport; rightmost controls are outside the capture"
+  },
+  "runtime": {
+    "id": 626,
+    "port": 38133,
+    "uiEntry": "main-Dm1PjLZY.js",
+    "database": {
+      "schema": 8,
+      "integrity": "ok",
+      "clonedTables": 92,
+      "clonedRows": 12926,
+      "originalSourceAllRowsPreserved": true,
+      "protectedTables": {
+        "session": {
+          "original": 12,
+          "current": 15,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "message": {
+          "original": 53,
+          "current": 61,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "part": {
+          "original": 93,
+          "current": 117,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "tool_part_request": {
+          "original": 17,
+          "current": 18,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "tool_part_progress": {
+          "original": 18,
+          "current": 18,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "tool_part_outcome": {
+          "original": 17,
+          "current": 18,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "provider_activity_request": {
+          "original": 27,
+          "current": 33,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "provider_activity_outcome": {
+          "original": 27,
+          "current": 33,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "protocol_event": {
+          "original": 106,
+          "current": 137,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        }
+      }
+    },
+    "requests": 10,
+    "cumulativeRequests": 189,
+    "unusedAllowanceRetired": 2,
+    "requestOutcomes": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      }
+    ],
+    "credentialSource": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "copiesRetired": true,
+    "publicShutdown": 200,
+    "reserveMs": 999599,
+    "physical": {
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true
+    }
+  },
+  "actualTask": {
+    "id": "tsk_g00VZ9I3ro00dzgkqHTO",
+    "rootSessionID": "ses_-zUQqhvvfzzytpNzSJCo",
+    "participantSessionIDs": [
+      "ses_-zUQqhvvfzzytpNzSJCo",
+      "ses_-zUQqhupqzz9YKIfu3M4"
+    ],
+    "creation": {
+      "at": "2026-10-26T10:07:24.981Z",
+      "status": 202,
+      "body": {
+        "task_id": "tsk_g00VZ9I3ro00dzgkqHTO",
+        "project_id": "prj_hQdBBeB7Yfrhpa1iPDlY",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-26\\archive-tool-guidance-607\\project"
+      }
+    },
+    "observedToolNames": [
+      "no_action"
+    ],
+    "processObservation": {
+      "at": "2026-10-26T10:07:04.741Z",
+      "authority": "Original production ProcessSupervisor handle promises; observation only",
+      "records": []
+    },
+    "lifecycleEvents": [
+      {
+        "type": "task.execution.opened",
+        "seq": 3,
+        "payload": {
+          "execution_epoch": 1
+        },
+        "correlation_id": null
+      },
+      {
+        "type": "task.cancellation.requested",
+        "seq": 11,
+        "payload": {
+          "execution_epoch": 1,
+          "actor": "user",
+          "surface": "overlay.composer_stop",
+          "reason": "Operator stopped the active task from the composer",
+          "summary": "Cancellation requested: Operator stopped the active task from the composer"
+        },
+        "correlation_id": "a6b222be-3b67-4ff9-882d-637afb873590"
+      },
+      {
+        "type": "task.cancelled",
+        "seq": 12,
+        "payload": {
+          "execution_epoch": 1,
+          "summary": "Task cancelled",
+          "error": "task cancelled"
+        },
+        "correlation_id": "a6b222be-3b67-4ff9-882d-637afb873590"
+      },
+      {
+        "type": "task.execution.reopened",
+        "seq": 13,
+        "payload": {
+          "execution_epoch": 2
+        },
+        "correlation_id": null
+      },
+      {
+        "type": "task.infrastructure.failed",
+        "seq": 23,
+        "payload": {
+          "component": "task-control",
+          "operation": "surface-operator-gated-ingress",
+          "summary": "task-control infrastructure failure",
+          "details": "Task-root ingress art_hfk7mcZm2qlCOI81DY9E rests in exhausted (semantic_limit); automatic scheduling cannot resume it. Exit: later ingresses continue past it; send a new operator message to redo the abandoned work, or retry the Task for a fresh budget.",
+          "evidenceLocators": [
+            {
+              "source": "engine_artifact",
+              "artifact_id": "art_hJAvqE0VHkrL6sHV9TXl",
+              "catalog_revision": 4,
+              "expected_sha256": "a336e84c1a6cf01aa1cdaead99816f6ee8224e15ea83f75ac411b824f717442a"
+            }
+          ]
+        },
+        "correlation_id": "art_hJAvqE0VHkrL6sHV9TXl"
+      },
+      {
+        "type": "task.cancellation.requested",
+        "seq": 25,
+        "payload": {
+          "execution_epoch": 2,
+          "actor": "user",
+          "surface": "overlay.composer_stop",
+          "reason": "Operator stopped the active task from the composer",
+          "summary": "Cancellation requested: Operator stopped the active task from the composer"
+        },
+        "correlation_id": "f91670d9-3a7e-4c9e-8ba6-586bb199b69e"
+      },
+      {
+        "type": "task.cancelled",
+        "seq": 27,
+        "payload": {
+          "execution_epoch": 2,
+          "summary": "Task cancelled",
+          "error": "task cancelled"
+        },
+        "correlation_id": "f91670d9-3a7e-4c9e-8ba6-586bb199b69e"
+      }
+    ],
+    "qualification": "Public Task creation and two manual Composer Stop actions completed. Model reported no direct bash capability; actual no_action is retained. No shell process ran, so this is not a long-command stop pass."
+  },
+  "newFailure": {
+    "status": "unresolved",
+    "phenomenon": "Following user input reopened Task epoch 2 and produced three identical persisted text Parts under the same real assistant before exhausted(semantic_limit)",
+    "assistantMessageID": "msg_hgQa9zVDY0R2nZNVzgj6",
+    "textParts": [
+      {
+        "id": "prt_g0VZ9IQwB00iCvKNi4TO",
+        "messageID": "msg_hgQa9zVDY0R2nZNVzgj6",
+        "time": 1793009332703,
+        "type": "text",
+        "text": "任务已停止，历史保留"
+      },
+      {
+        "id": "prt_g0VZ9ITqn00fbMTW5jB2",
+        "messageID": "msg_hgQa9zVDY0R2nZNVzgj6",
+        "time": 1793009343901,
+        "type": "text",
+        "text": "任务已停止，历史保留"
+      },
+      {
+        "id": "prt_g0VZ9IXsJ00mINY9LnIc",
+        "messageID": "msg_hgQa9zVDY0R2nZNVzgj6",
+        "time": 1793009359371,
+        "type": "text",
+        "text": "任务已停止，历史保留"
+      }
+    ],
+    "userMessageID": "msg_g0VZ9IOwO00wDNg1s9aU",
+    "qualification": "Observed through actual paid streamed Sol, persisted protocol facts and screenshots. Not a rendering duplicate. Root cause in message admission, prompt/decision or continuation remains to be investigated; do not hide original messages or claim terminal follow-up passed."
+  },
+  "remaining": [
+    "Actual projected-child physical Stop E2E",
+    "Python Chinese stdout environment qualification",
+    "Cancelled Task follow-up/reopen and repeated response root cause"
+  ],
+  "screenshots": [
+    "01-real-task-before-stop.jpg",
+    "02-real-task-cancelled.jpg",
+    "03-cancelled-task-real-followup.jpg",
+    "04-repeated-reply-stopped.jpg"
+  ]
+}

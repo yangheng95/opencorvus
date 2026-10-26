@@ -99,9 +99,13 @@ Task 的异步取消通过独立 identity lease 持有原操作，沿原 Runtime
 Host 启动恢复在执行初始化前，按原 Task/Mission 发现与 Project scope（范围）调用
 现有取消、Mission closing 和 retention（保留策略）清理。清理后重新发现待执行事实，
 实际唤醒仍走完整模型/能力初始化；清理计数不计入 woken（已唤醒）。未结清物理工作
-保留原 cancelling/closing 意图与请求身份，不提前写终态。已初始化控制平面的周期重试
-仍使用原 driver；冷 identity 取消遇到物理收尾失败后的在线周期接管尚未完成资格验收，
-不能把一次启动清理当作持续重试保证。
+保留原 cancelling/closing 意图与请求身份，不提前写终态。唯一清理初始化供完整
+Bootstrap、原Task取消、Mission关闭及启动清理共用，绑定原稳定取消回调和原Task/Mission
+driver。周期回入显式持有已缓存的identity租约，仍受Project删除、全局结算、rollback
+及释放边界约束，不重新发现或复活缓存。扫描先收束原取消/关闭/retention；实际执行
+扫描再进入原默认runtime准入，Task意图文件投影也归此执行阶段。冷identity清理失败
+由原driver按已有backoff（退避）重试，同一request/operation继续收敛；物理owner真正
+finish后才写终态。完整能力初始化、普通会话Prompt所有权和执行准入合同不变。
 
 Cancellation provenance follows the real caller boundary. A Mission-issued
 `panel.cancel_task` or Mission-issued `session.delete` records the canonical

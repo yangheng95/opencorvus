@@ -56,6 +56,17 @@ async function validateInstanceConversationCapabilities() {
   })
 }
 
+async function reconcileRequestedTaskCancellation(taskID: string): Promise<void> {
+  await EngineService.reconcilePendingTaskCancellation(taskID)
+}
+
+/** Existing cleanup drivers retain accepted stop intents without admitting model work. */
+export async function initializeProjectCleanupControl(): Promise<void> {
+  configureTaskCancellationReconciler(reconcileRequestedTaskCancellation)
+  initializeMissionProjectReconciliation()
+  await reconcileTaskControlPlane()
+}
+
 export const InstanceBootstrap = markConversationCapabilityTransactionalInit(async function InstanceBootstrap() {
   Log.Default.info("bootstrapping", { directory: Instance.directory })
   installDefaultControlPlaneToolLoaders()
@@ -108,12 +119,6 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
   // Interaction subscribers own the Question/Permission → Interaction
   // locator materialization and therefore must be registered before replay.
   EngineService.init()
-  // The control-plane scan re-attempts a stalled cancellation on every pass
-  // over a `cancelling` Task, so convergence no longer depends on reaching the
-  // bootstrap stage below.
-  configureTaskCancellationReconciler(async (taskID) => {
-    await EngineService.reconcilePendingTaskCancellation(taskID)
-  })
   Bus.resumeDurablePublications()
   await ProjectOpenLifecycle.stage("build-observation.reconcile-cleanup", lifecycleContext, () =>
     reconcileBuildObservationCleanups({ projectID: Instance.project.id }),
@@ -135,7 +140,7 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
   // separate serving lease for its full duration; a recovered Turn therefore
   // cannot delay initialization or outlive the Project context it reads.
   await ProjectOpenLifecycle.stage("task-control.reconcile", lifecycleContext, () =>
-    reconcileTaskControlPlane().then(() => undefined),
+    initializeProjectCleanupControl(),
   )
   // The terminal profile and the managed channel runtime are optional
   // subsystems: each protects a real invariant by refusing to start on bad
@@ -172,7 +177,4 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
       await Project.setInitialized(Instance.project.id)
     }
   })
-  // Projects opened after scoped host startup need the same Mission discovery.
-  // Its heartbeat reenters the serving Instance; open never waits for model work.
-  initializeMissionProjectReconciliation()
 }, validateInstanceConversationCapabilities)

@@ -124,6 +124,8 @@ type InstanceApi = {
   tryProvideActive<R>(input: {
     directory: string
     signal?: AbortSignal
+    /** Cached cleanup identity or the default initialized runtime authority. */
+    admission?: "identity" | "runtime"
     fn: () => R
     projectDeletionAdmission?: ProjectDeletionAdmission
   }): Promise<Awaited<R> | undefined>
@@ -1361,6 +1363,7 @@ function startLeaseActivity<R>(lease: Lease, fn: () => Promise<R>): Promise<R> {
 export function reenterActiveInstance<R>(input: {
   directory: string
   signal?: AbortSignal
+  admission?: "identity" | "runtime"
   fn: () => R
 }): Promise<Awaited<R> | undefined> {
   return runOutsideInstanceContext(() => Instance.tryProvideActive(input))
@@ -1635,6 +1638,7 @@ export const Instance: InstanceApi = {
   async tryProvideActive<R>(input: {
     directory: string
     signal?: AbortSignal
+    admission?: "identity" | "runtime"
     fn: () => R
     projectDeletionAdmission?: ProjectDeletionAdmission
   }): Promise<Awaited<R> | undefined> {
@@ -1663,21 +1667,21 @@ export const Instance: InstanceApi = {
     if (inheritedLease?.key === key) {
       if (inheritedLease.entry !== entry) return undefined
       if (entry.rollback) throw rollbackError(entry.rollback)
-      // Deletion-owned identities intentionally skip capability bootstrap;
-      // they exist only to settle durable lifecycle facts under the closed gate.
-      if (!entry.initialized && !deletionAdmission) return undefined
+      // Cleanup can retain an existing identity without executable capabilities.
+      // Deletion additionally supplies its exact closed-admission authority.
+      if (!entry.initialized && !deletionAdmission && input.admission !== "identity") return undefined
       const ctx = await entry.context
       if (deletionAdmission && ctx.project.id !== deletionAdmission.projectID) {
         throw new Error(`Project deletion admission does not own active entry ${ctx.project.id}`)
       }
-      if (entry.initialized) assertContextHealthy(entry)
+      if (entry.initialized && input.admission !== "identity") assertContextHealthy(entry)
       return await input.fn()
     }
     if (!deletionAdmission) assertEntryProjectAdmissionOpen(entry)
     const admitted = await waitForIdentityAdmission(entry, input.signal)
     if (cache.get(key) !== entry) return undefined
     if (entry.rollback) throw rollbackError(entry.rollback)
-    if (!entry.initialized && !deletionAdmission) return undefined
+    if (!entry.initialized && !deletionAdmission && input.admission !== "identity") return undefined
     const ctx = await awaitWithAbort(entry.context, input.signal)
     if (deletionAdmission && ctx.project.id !== deletionAdmission.projectID) {
       throw new Error(`Project deletion admission does not own active entry ${ctx.project.id}`)
@@ -1689,7 +1693,7 @@ export const Instance: InstanceApi = {
       assertNotDisposing(directory)
       assertProjectAdmissionOpen(key, entry, ctx)
     }
-    if (entry.initialized) assertContextHealthy(entry)
+    if (entry.initialized && input.admission !== "identity") assertContextHealthy(entry)
     input.signal?.throwIfAborted()
     const lease = createLease(key, entry, true)
     try {

@@ -3037,6 +3037,8 @@ export namespace EngineService {
       )
     }
     const cancellationOrigin = parsedCancellation.request.origin
+    const { initializeProjectCleanupControl } = await import("@/project/bootstrap")
+    await initializeProjectCleanupControl()
     const executionCancellationOrigin = createExecutionCancellationOrigin({
       actor: cancellationOrigin.actor,
       source: cancellationOrigin.source,

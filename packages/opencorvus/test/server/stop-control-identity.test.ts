@@ -9,8 +9,8 @@ import { appendTaskOpenedInTransaction, taskLifecycleProjection } from "@/engine
 import { Identifier } from "@/id/id"
 import { closeMissionExecutionOperation, currentMissionExecutionClosure } from "@/mission/execution-closure"
 import { ensureMissionSession } from "@/mission/session"
-import { Instance, runOutsideInstanceContext } from "@/project/instance"
-import { runWithIndependentProjectIdentity } from "@/project/independent-project-owner"
+import { Instance, reenterActiveInstance, runOutsideInstanceContext } from "@/project/instance"
+import { provideInitializedProjectExecution, runWithIndependentProjectIdentity } from "@/project/independent-project-owner"
 import { ProtocolStore } from "@/protocol/store"
 import { Server } from "@/server/server"
 import { Session } from "@/session"
@@ -301,6 +301,9 @@ test("scoped cold Stop recovery preserves each Project's original cancellation o
     } })
     await unavailableModel(project.path)
     fixtures.push({ directory: project.path, task, requestEventID: task.request.id })
+    // A cold-start fixture must settle its original process-owned driver before
+    // creating another Project; online cleanup now legitimately resumes it.
+    await Instance.disposeAll()
   }
   await Instance.disposeAll()
   await runOutsideInstanceContext(() => recoverStartedTaskExecutions({ scopeProjectWorktree: first.path }))
@@ -332,4 +335,84 @@ test("unavailable-model child Stop retains the projected worker runtime authorit
     success: false,
     data: { message: `Session ${fixture.child.id} has no projected worker runtime identity for agent session control` },
   })
+}, 60_000)
+
+test("a cold Task Stop automatically retries its original failed physical settlement", async () => {
+  await using project = await memoryProject("stop-online-task")
+  const task = await Instance.provideProjectIdentity({ directory: project.path, fn: () => openedTask() })
+  await unavailableModel(project.path)
+  await Instance.disposeAll()
+  const request = await runWithIndependentProjectIdentity({ directory: project.path, fn: async () => {
+    const owner = SessionPromptState.start(task.root.id, task.root.directory)
+    if (!owner) throw new Error("Expected original interrupted Prompt owner")
+    try {
+      const result = await EngineService.cancelTask(task.id, { origin: origin(task.id), promptSettleInactivityMs: 25 })
+        .then(value => ({ value }), error => ({ error }))
+      expect(result).toMatchObject({ error: { name: "TaskCancellationIncompleteError" } })
+      expect(taskLifecycleProjection(task.id).status).toBe("cancelling")
+      return ProtocolStore.latestTaskEvent(task.id, "task.cancellation.requested")!
+    } finally {
+      await SessionPromptState.finish(task.root.id, owner, task.root.directory, owner.reason)
+    }
+  } })
+  let status = "cancelling"
+  const deadline = Date.now() + 5_000
+  while (Date.now() < deadline && status === "cancelling") {
+    status = await runWithIndependentProjectIdentity({ directory: project.path, fn: () => taskLifecycleProjection(task.id).status })
+    if (status === "cancelling") await new Promise(resolve => setTimeout(resolve, 25))
+  }
+  expect(status).toBe("cancelled")
+  const receipt = await runWithIndependentProjectIdentity({ directory: project.path, fn: () =>
+    EngineService.requestTaskCancellation(task.id, { origin: origin(task.id) }),
+  })
+  expect(receipt).toMatchObject({ status: "cancelled", requestEventID: request.id, requestID: origin(task.id).requestID })
+}, 60_000)
+
+test("a cold Mission Stop automatically resumes its original interrupted close occurrence", async () => {
+  await using project = await memoryProject("stop-online-mission")
+  const fixture = await Instance.provideProjectIdentity({ directory: project.path, fn: async () => {
+    const mission = await ensureMissionSession({ missionID: "stop-online-mission", defaultCwd: project.path, productPillar: "work", heldExpertSquadIDs: ["base"] })
+    return { mission, task: await openedTask(mission) }
+  } })
+  await unavailableModel(project.path)
+  await Instance.disposeAll()
+  const original = await runWithIndependentProjectIdentity({ directory: project.path, fn: async () => {
+    const interrupted = new Error("Original Mission Stop connection closed")
+    const result = await closeMissionExecutionOperation({
+      missionID: fixture.mission.missionID, sessionID: fixture.mission.id, source: "mission.abort", requestID: "online-original-mission-stop",
+      provenance: { kind: "request", ...provenance }, signal: AbortSignal.abort(interrupted),
+    }).then(value => ({ value }), error => ({ error }))
+    expect(result).toEqual({ error: interrupted })
+    const closure = currentMissionExecutionClosure(fixture.mission.id)!
+    expect(closure).toMatchObject({ state: "closing", requestID: "online-original-mission-stop" })
+    return closure
+  } })
+  const deadline = Date.now() + 5_000
+  let state = original.state
+  while (Date.now() < deadline && state === "closing") {
+    state = await runWithIndependentProjectIdentity({ directory: project.path, fn: () => currentMissionExecutionClosure(fixture.mission.id)!.state })
+    if (state === "closing") await new Promise(resolve => setTimeout(resolve, 25))
+  }
+  expect(await runWithIndependentProjectIdentity({ directory: project.path, fn: () => ({
+    closure: currentMissionExecutionClosure(fixture.mission.id), child: taskLifecycleProjection(fixture.task.id).status,
+  }) })).toMatchObject({ closure: { state: "closed", operationID: original.operationID, requestID: original.requestID }, child: "cancelled" })
+}, 60_000)
+
+test("cached cleanup identity retains its Project while executable admission reports the original model error", async () => {
+  await using project = await memoryProject("stop-cached-identity")
+  const session = await Instance.provideProjectIdentity({ directory: project.path, fn: () => Session.create({ kind: "assistant", title: "Retained cleanup identity" }) })
+  await unavailableModel(project.path)
+  await Instance.disposeAll()
+  const observe = () => runWithIndependentProjectIdentity({ directory: project.path, fn: () =>
+    reenterActiveInstance({ directory: project.path, admission: "identity", fn: async () => ({
+      projectID: Instance.project.id, directory: Instance.directory, sessionID: (await Session.get(session.id)).id,
+    }) }),
+  })
+  const before = await observe()
+  expect(before).toEqual({ projectID: session.projectID, directory: project.path, sessionID: session.id })
+  const result = await runOutsideInstanceContext(() => provideInitializedProjectExecution({ directory: project.path, fn: () => "runtime admitted" }))
+    .then(value => ({ value }), error => ({ error }))
+  expect(result).toMatchObject({ error: { name: "ProviderModelNotFoundError" } })
+  const after = await observe()
+  expect(after).toEqual({ projectID: session.projectID, directory: project.path, sessionID: session.id })
 }, 60_000)

@@ -122,7 +122,11 @@ async function reconcileMissionRetention(sessionID: string): Promise<boolean> {
 async function scanMissionExecution(sessionID: string): Promise<TaskControlScanResult> {
   if (await reconcileMissionRetention(sessionID)) return { activated: 0 }
 
-  const recovered = await recoverMissionProcessSession(sessionID)
+  const recovered = await Database.runOutsideContext(() => reenterActiveInstance({
+    directory: Instance.directory,
+    fn: () => recoverMissionProcessSession(sessionID),
+  }))
+  if (!recovered) return { activated: 0 }
   if (recovered.status === "woken") {
     return { activated: 1 }
   }
@@ -180,7 +184,7 @@ const missionProjectReconciliationState = createInstanceState(
       minimumWakeDelayMilliseconds: 25,
       maximumWakeDelayMilliseconds: MISSION_LIVENESS_RECHECK_MS,
       reenter: async (fn) => {
-        await Database.runOutsideContext(() => reenterActiveInstance({ directory, fn }))
+        await Database.runOutsideContext(() => reenterActiveInstance({ directory, admission: "identity", fn }))
       },
     })
   },
@@ -402,6 +406,8 @@ async function settleInterruptedExecutionStops(input?: { scopeProjectWorktree?: 
   await Promise.all(directories.map(async directory => {
     try {
       await runWithIndependentProjectIdentity({ directory, fn: async () => {
+        const { initializeProjectCleanupControl } = await import("@/project/bootstrap")
+        await initializeProjectCleanupControl()
         await EngineService.reconcilePendingTaskCancellations()
         const projectID = Instance.project.id
         let cursor: string | undefined

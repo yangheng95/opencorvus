@@ -1806,7 +1806,6 @@ async function scanTaskControlPlane(
     runtimeState().dispatchRecoveryCursors.delete(taskID)
     return { activated: 0 }
   }
-  await IntentBundle.ensure(taskID)
   let lifecycle = Database.use((db) => taskLifecycleProjectionInTransaction(db, taskID))
   if (lifecycle.status === "cancelling") {
     // A boundary request that failed midway leaves a status no fact append can
@@ -1827,7 +1826,20 @@ async function scanTaskControlPlane(
       }
       return { activated: 0, wakeAt: Date.now() + CANCELLATION_RECONCILE_WAKE_MS }
     }
+    return { activated: 0 }
   }
+  const directory = Instance.directory
+  return await Database.runOutsideContext(() => reenterActiveInstance({
+    directory,
+    fn: () => scanTaskRuntimeControlPlane(taskID, context),
+  })) ?? { activated: 0 }
+}
+
+async function scanTaskRuntimeControlPlane(taskID: string, context: TaskControlScanContext): Promise<TaskControlScanResult> {
+  if (!currentProjectOwnsTask(taskID)) return { activated: 0 }
+  let lifecycle = Database.use((db) => taskLifecycleProjectionInTransaction(db, taskID))
+  if (lifecycle.status === "cancelling") return { activated: 0, wakeAt: Date.now() + CANCELLATION_RECONCILE_WAKE_MS }
+  await IntentBundle.ensure(taskID)
   if (lifecycle.status === "active") {
     Database.immediateTransaction((db) => {
       const current = taskLifecycleProjectionInTransaction(db, taskID)
@@ -2070,7 +2082,7 @@ const driverState = createInstanceState(
         maximumPendingScans: PROJECT_MAXIMUM_PENDING_SCANS,
         retireSettledEntries: true,
         reenter: async (fn) => {
-          await Database.runOutsideContext(() => reenterActiveInstance({ directory, fn }))
+          await Database.runOutsideContext(() => reenterActiveInstance({ directory, admission: "identity", fn }))
         },
       }),
       liveness,

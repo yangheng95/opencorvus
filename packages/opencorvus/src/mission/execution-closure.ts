@@ -1067,6 +1067,8 @@ export async function closeMissionExecutionOperation(input: {
     return closure
   })
   if (closing.state === "closed") return closing
+  const { initializeProjectCleanupControl } = await import("@/project/bootstrap")
+  await initializeProjectCleanupControl()
   const ownerOccurrenceID = Identifier.ascending("call")
   const targetID = `mission:${closing.sessionID}`
   const leaseMilliseconds = 120_000
