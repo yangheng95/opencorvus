@@ -90,6 +90,19 @@ Session status、Goal activity/acceptance projection 或其他持久化投影伪
 settle 后才允许写入 Task cancellation；该 scope 只保护不可逆操作边界，不是
 持久化 workflow state。
 
+停止既有工作只需要原 Project 身份：Chat/Work/普通 Session abort、Mission abort、
+Task cancel 与 Task child Session cancel 的精确公开入口使用 identity admission，
+仍检查原领域权限、Session lineage（血缘）和 projected worker runtime identity。
+Task 的异步取消通过独立 identity lease 持有原操作，沿原 RuntimeExecutionSettlement
+结算；HTTP 请求结束不释放物理取消所有权，当前模型不可用不阻止停止。
+
+Host 启动恢复在执行初始化前，按原 Task/Mission 发现与 Project scope（范围）调用
+现有取消、Mission closing 和 retention（保留策略）清理。清理后重新发现待执行事实，
+实际唤醒仍走完整模型/能力初始化；清理计数不计入 woken（已唤醒）。未结清物理工作
+保留原 cancelling/closing 意图与请求身份，不提前写终态。已初始化控制平面的周期重试
+仍使用原 driver；冷 identity 取消遇到物理收尾失败后的在线周期接管尚未完成资格验收，
+不能把一次启动清理当作持续重试保证。
+
 Cancellation provenance follows the real caller boundary. A Mission-issued
 `panel.cancel_task` or Mission-issued `session.delete` records the canonical
 `metadata.mission.id` together with the caller Session, assistant message,

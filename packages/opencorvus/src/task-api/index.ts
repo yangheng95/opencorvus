@@ -56,7 +56,7 @@ import { Instance } from "@/project/instance"
 import type { ProjectDeletionAdmission } from "@/project/instance"
 import type { InstanceInit } from "@/project/instance-context"
 import {
-  runWithInitializedIndependentProject,
+  runWithIndependentProjectIdentity,
   runWithProjectDeletionIdentity,
 } from "@/project/independent-project-owner"
 import { Project } from "@/project/project"
@@ -2950,7 +2950,7 @@ export namespace EngineService {
 
   function cancelTaskWithIndependentProjectOwner(taskID: string, options: CancelTaskOptions): Promise<boolean> {
     return joinTaskCancellation(taskID, options, (operationOptions) =>
-      runWithInitializedIndependentProject({
+      runWithIndependentProjectIdentity({
         directory: taskCwd(taskID),
         fn: () => cancelTaskOnce(taskID, operationOptions),
       }),

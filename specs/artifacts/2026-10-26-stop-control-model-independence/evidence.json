@@ -1,0 +1,399 @@
+{
+  "scope": "Existing-execution Stop admission, independent Task cleanup ownership and cold pending-stop recovery",
+  "schema": {
+    "version": 8,
+    "changed": false,
+    "userDatabaseOpened": false
+  },
+  "changes": [
+    "Six exact public Stop route families use existing Project identity admission",
+    "Detached Task cancellation retains the independent identity lease and original settlement authority",
+    "Cold Task cancellation and Mission closing/retention precede execution initialization; actual executable work is freshly discovered and fully initialized"
+  ],
+  "checks": {
+    "before": {
+      "label": "stop-cold-before",
+      "exit": 1,
+      "durationMs": 101886,
+      "physicalAndOutputSettled": true,
+      "tests": 8,
+      "failed": 8,
+      "assertions": 11,
+      "qualification": "Full Server middleware and canonical domain fixtures; Task recovery assertion refined afterward to observe lifecycle before an explicit second request"
+    },
+    "after": {
+      "label": "stop-final-contracts",
+      "exit": 0,
+      "durationMs": 48581,
+      "physicalAndOutputSettled": true,
+      "stopTests": 13,
+      "routeTests": 10,
+      "assertions": 50
+    },
+    "backendTypes": {
+      "label": "stop-backend-types",
+      "exit": 0,
+      "durationMs": 57981,
+      "physicalAndOutputSettled": true
+    },
+    "expandedTypes": {
+      "label": "stop-final-types",
+      "exit": 0,
+      "durationMs": 34049,
+      "physicalAndOutputSettled": true
+    },
+    "uiBuild": {
+      "label": "current-ui-build",
+      "exit": 0,
+      "durationMs": 88837,
+      "physicalAndOutputSettled": true,
+      "tool": "ordinary Node Vite build served by the production development CLI /ui"
+    }
+  },
+  "runs": [
+    {
+      "id": 623,
+      "port": 38131,
+      "uiEntry": "main-Dm1PjLZY.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 9567,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 10,
+            "current": 11,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": [
+              {
+                "id": "ses_-zUQryl9CzzNEb5MNLb0",
+                "column": "time_updated",
+                "before": 1792995987928,
+                "after": 1793006794318,
+                "reason": "Actual streamed Sol command, manual Stop and subsequent reply in the original conversation"
+              }
+            ]
+          },
+          "message": {
+            "original": 40,
+            "current": 49,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "part": {
+            "original": 71,
+            "current": 85,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 15,
+            "current": 17,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 10,
+            "current": 18,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 15,
+            "current": 17,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 20,
+            "current": 25,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 20,
+            "current": 25,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 77,
+            "current": 98,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          }
+        }
+      },
+      "requests": 8,
+      "cumulativeRequests": 175,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "credentialSource": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "copiesRetired": true,
+      "publicShutdown": 200,
+      "reserveMs": 669903,
+      "physical": {
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true
+      }
+    },
+    {
+      "id": 624,
+      "port": 38132,
+      "uiEntry": "main-Dm1PjLZY.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 11975,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 11,
+            "current": 12,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": [
+              {
+                "id": "ses_-zUQryl9CzzNEb5MNLb0",
+                "column": "time_updated",
+                "before": 1793006794318,
+                "after": 1793007142705,
+                "reason": "Actual new Goal input and settled reply in this existing conversation"
+              }
+            ]
+          },
+          "message": {
+            "original": 49,
+            "current": 53,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "part": {
+            "original": 85,
+            "current": 93,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 17,
+            "current": 17,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 18,
+            "current": 18,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 17,
+            "current": 17,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 25,
+            "current": 27,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 25,
+            "current": 27,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 98,
+            "current": 106,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          }
+        }
+      },
+      "requests": 4,
+      "cumulativeRequests": 179,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "credentialSource": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "copiesRetired": true,
+      "publicShutdown": 200,
+      "reserveMs": 1092742,
+      "physical": {
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true
+      }
+    }
+  ],
+  "actualCommand": {
+    "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+    "requestPartID": "prt_g0VZ96dfa00sPdvcJBY9",
+    "command": "python -X utf8 -u -c \"import time; [(print('stop-check', flush=True), time.sleep(1)) for _ in range(180)]\"",
+    "lastProgress": {
+      "output": "stop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\nstop-check\r\n",
+      "output_bytes": 372,
+      "description": "执行停止验收命令并等待用户停止"
+    },
+    "outcome": {
+      "outcome": "failed",
+      "failure": {
+        "kind": "MessageAbortedError",
+        "name": "MessageAbortedError",
+        "message": "session aborted",
+        "originSite": "session.processor.catch",
+        "classification": "llm-activity",
+        "data": {
+          "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+          "canonical_error_metadata": {
+            "cancellation": {
+              "actor": "user",
+              "source": "session.abort",
+              "surface": "session",
+              "requestID": "23f69e12-57c6-4f0c-8834-16e2b7b64433",
+              "reason": "session aborted",
+              "targetSessionID": "ses_-zUQryl9CzzNEb5MNLb0"
+            }
+          },
+          "failure_occurrence": {
+            "session_id": "ses_-zUQryl9CzzNEb5MNLb0",
+            "assistant_message_id": "msg_g0VZ96cqC007w3MZ7bAF",
+            "error_name": "MessageAbortedError"
+          }
+        }
+      },
+      "time": {
+        "end": 1793006557461
+      }
+    },
+    "observedEndToEnd": "Actual streamed Sol tool call, manual page Stop, persisted original cancellation and restored Composer; original conversation successfully replied after cold restart",
+    "physicalQualification": "Foreground Bash awaits the production disposeAndWaitForExit barrier and Session abort awaits original Prompt finish. Service native physical/output/request settlement was independently observed. The individual command process occurrence was not separately retained by this harness."
+  },
+  "firstCommand": {
+    "exit": 1,
+    "codec": "cp1252",
+    "error": "UnicodeEncodeError",
+    "qualification": "Original failure retained. Shell/host locale versus isolated environment causation remains unqualified; not counted as a Stop pass."
+  },
+  "followup": {
+    "first": "Original E2E_REQUEST_BUDGET_EXHAUSTED preserved at the 8-request boundary",
+    "second": "停止后会话可继续",
+    "sameOriginalSession": true,
+    "afterColdRestart": true
+  },
+  "screenshots": [
+    "01-natural-command-encoding-failure.jpg",
+    "02-live-command-before-stop.jpg",
+    "03-actual-command-stopped.jpg",
+    "04-followup-budget-boundary.jpg",
+    "05-original-stopped-conversation-resumed.jpg"
+  ],
+  "qualification": {
+    "browser": "Actual manual interaction and visual review; no UI automation tests",
+    "capture": "Unmodified 1119x720 left-side capture of the actual 1280x720 viewport; rightmost controls are outside the image",
+    "unavailableModel": "Full Server positive backend contracts; paid UI Stop used an available Sol model",
+    "projectedChild": "Canonical runtime-authority error contract only; full projected-child physical Stop E2E remains unqualified",
+    "onlineColdRetry": "Periodic online takeover after an identity-only cancellation physical-cleanup failure remains unqualified; initialized driver retries and startup cleanup are distinct",
+    "fixtureCorrections": "Invalid child Session kind and BadRequest envelope assertion corrected. Expanded checker typing fixed to declared literal surface and explicit fixture element types; these were test qualification errors, not product defects."
+  }
+}

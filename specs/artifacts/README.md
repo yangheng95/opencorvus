@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [停止控制与模型独立性](2026-10-26-stop-control-model-independence/README.md)：五张实图、原编码/预算失败、停止与同一会话恢复证据。
+
 - [设置与归档完整体验](2026-10-26-settings-archive-experience/README.md)：七张实际页面、原400与修后搜索/恢复/重新打开证据。
 
 - [Goal 表单与执行控制](2026-10-26-goal-guide-form-lifetime/README.md)：23张人工复核实图、模型阻塞/控制恢复及真实Sol闭环证据。

@@ -105,18 +105,22 @@ export function listStartedTaskExecutionDirectories(input?: { scopeProjectWorktr
   return discovery.directories
 }
 
-async function scanMissionExecution(sessionID: string): Promise<TaskControlScanResult> {
+async function reconcileMissionRetention(sessionID: string): Promise<boolean> {
   const deleteIntent = currentMissionDeleteRetentionIntent(sessionID)
   if (deleteIntent) {
     await resumeMissionDeleteRetention({ sessionID, projectID: Instance.project.id })
-    return { activated: 0 }
+    return true
   }
   const closure = currentMissionExecutionClosure(sessionID)
   if (closure?.state === "closing") {
     await resumeMissionExecutionClosure({ sessionID })
-    return { activated: 0 }
+    return true
   }
-  if (closure?.state === "closed") return { activated: 0 }
+  return closure?.state === "closed"
+}
+
+async function scanMissionExecution(sessionID: string): Promise<TaskControlScanResult> {
+  if (await reconcileMissionRetention(sessionID)) return { activated: 0 }
 
   const recovered = await recoverMissionProcessSession(sessionID)
   if (recovered.status === "woken") {
@@ -299,6 +303,9 @@ export async function recoverStartedTaskExecutions(input?: {
       })
     }
   }
+  // Accepted stops and retention are cleanup, even when execution-model
+  // admission is unavailable. Re-discover execution from their settled facts.
+  const stopRecovery = await settleInterruptedExecutionStops(input)
   const discovery = discoverStartedTaskExecutionDirectories(input)
   const directories = [...discovery.directories]
   let schedulerProjectCursor: string | undefined
@@ -336,8 +343,8 @@ export async function recoverStartedTaskExecutions(input?: {
   }
   directories.sort((left, right) => left.localeCompare(right))
   let missionWoken = 0
-  let missionCompleted = 0
-  let missionAttempted = 0
+  let missionCompleted = stopRecovery.missionCompleted
+  let missionAttempted = stopRecovery.missionAttempted
   const missionFailures: StartedTaskProjectRecoveryFailure[] = []
   const result = await recoverStartedTaskProjects({
     directories,
@@ -366,9 +373,58 @@ export async function recoverStartedTaskExecutions(input?: {
     cancelledPermissionTasksRecovered,
     failures: [
       ...cancellationFailures,
+      ...stopRecovery.failures,
       ...discovery.failures.map(({ directory, error }) => ({ directory, error })),
       ...missionFailures,
       ...result.failures,
     ],
   }
+}
+
+async function settleInterruptedExecutionStops(input?: { scopeProjectWorktree?: string }): Promise<{
+  failures: StartedTaskProjectRecoveryFailure[]
+  missionAttempted: number
+  missionCompleted: number
+}> {
+  const directories = [...discoverStartedTaskExecutionDirectories(input).directories]
+  let afterSessionID: string | undefined
+  while (true) {
+    const page = listGlobalMissionProcessRecoveryCandidates({ afterSessionID, limit: MISSION_RECOVERY_DISCOVERY_PAGE_SIZE })
+    if (page.length === 0) break
+    for (const candidate of page) {
+      if (input?.scopeProjectWorktree && !Project.samePath(candidate.directory, input.scopeProjectWorktree)) continue
+      if (!directories.some(directory => Project.samePath(directory, candidate.directory))) directories.push(candidate.directory)
+    }
+    afterSessionID = page.at(-1)!.sessionID
+  }
+  const result = { failures: [] as StartedTaskProjectRecoveryFailure[], missionAttempted: 0, missionCompleted: 0 }
+  const { EngineService } = await import("@/task-api")
+  await Promise.all(directories.map(async directory => {
+    try {
+      await runWithIndependentProjectIdentity({ directory, fn: async () => {
+        await EngineService.reconcilePendingTaskCancellations()
+        const projectID = Instance.project.id
+        let cursor: string | undefined
+        while (true) {
+          const page = listGlobalMissionProcessRecoveryCandidates({ scopeProjectID: projectID, afterSessionID: cursor, limit: MISSION_RECOVERY_PAGE_SIZE })
+          if (page.length === 0) break
+          cursor = page.at(-1)!.sessionID
+          await settledWork({ concurrency: MISSION_RECOVERY_CONCURRENCY, items: page, run: async candidate => {
+            try {
+              if (!await reconcileMissionRetention(candidate.sessionID)) return
+              result.missionAttempted += 1
+              if (listGlobalMissionProcessRecoveryCandidates({ scopeProjectID: projectID, sessionID: candidate.sessionID, limit: 1 }).length === 0)
+                result.missionCompleted += 1
+            } catch (error) {
+              result.missionAttempted += 1
+              result.failures.push({ directory, error: `Mission Session ${candidate.sessionID}: ${error instanceof Error ? error.message : String(error)}` })
+            }
+          } })
+        }
+      } })
+    } catch (error) {
+      result.failures.push({ directory, error: error instanceof Error ? error.message : String(error) })
+    }
+  }))
+  return result
 }

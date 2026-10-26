@@ -72,7 +72,7 @@ describe("Project route context authority", () => {
       workTitle: "identity",
       archive: "identity",
       selection: "runtime",
-      abort: "runtime",
+      abort: "identity",
       sessionConfig: "runtime",
     })
   })
@@ -84,6 +84,18 @@ describe("Project route context authority", () => {
       "/mission/mission_1/archive",
     ].map(path => projectRouteContextKind(path, "PATCH"))).toEqual([
       "identity", "identity", "identity", "identity",
+    ])
+  })
+  test("assigns existing-execution Stop controls to Project identity", () => {
+    expect([
+      "/coding/chat/session/ses_1/abort",
+      "/coding/work/session/ses_2/abort",
+      "/session/ses_3/abort",
+      "/mission/mission_1/abort",
+      "/task/tsk_1/cancel",
+      "/task/tsk_1/session/ses_4/cancel",
+    ].map(path => projectRouteContextKind(path, "POST"))).toEqual([
+      "identity", "identity", "identity", "identity", "identity", "identity",
     ])
   })
   test("uses Project identity for persisted Session pages and event subscriptions", () => {

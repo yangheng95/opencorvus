@@ -5,8 +5,9 @@ import { Instance, runOutsideInstanceContext, type ProjectDeletionAdmission } fr
 /**
  * Run asynchronous project work under a fresh project lease without
  * inheriting the caller's request, transaction, or post-commit ownership.
- * The caller is responsible for completing project initialization first;
- * this establishes execution identity and lifetime, not another startup.
+ * Persistence, publication and cleanup use identity without initializing new
+ * capabilities. Executable work uses runWithInitializedIndependentProject;
+ * this primitive establishes identity and lifetime, not execution admission.
  */
 export async function runWithIndependentProjectIdentity<R>(input: {
   directory: string

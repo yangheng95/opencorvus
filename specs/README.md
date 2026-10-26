@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [停止控制与模型独立性](records/2026-10/2026-10-26-stop-control-model-independence.md)：停止准入、独立取消所有权、冷恢复和真实Sol停止/续聊验收。
+
 - [0.1.29 原生预检与发布](records/2026-10/2026-10-26-release-0.1.29.md)：机器版本接口、两Mac预检及精确联合交付。
 
 - [设置与归档完整体验](records/2026-10/2026-10-26-settings-archive-experience.md)：修复模型不可用时归档/恢复失败，保留真实取消、终态与原历史。

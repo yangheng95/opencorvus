@@ -353,6 +353,14 @@ Snapshot/live ordering, durable terminal/error recovery and abort cleanup retain
 their existing owners. Session config and execution routes keep their runtime
 validation contract.
 
+The exact existing-execution Stop endpoints for Chat, Work, ordinary Sessions,
+Tasks, Mission and Task child Sessions also use Project identity admission.
+The original domain authority, projected worker identity, physical cancellation,
+captured input terminal publication and canonical Task receipt remain authoritative.
+Task cancellation retains its independent cleanup lease after the request returns;
+unavailable execution models do not replace these controls with model bootstrap.
+New input and actual execution retain full runtime initialization.
+
 Task Build observation content GET uses the same Project identity admission
 independently of executable model bootstrap. The handler retains actual Task
 membership, Task-owned observation/file/side identity and bounded ranges, then
