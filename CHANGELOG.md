@@ -24,7 +24,7 @@
 
 #### 修复
 
-- 更正 macOS 打包工具的机器版本预检；正式候选前通过两种原生 Mac 的完整生产验证。
+- 更正 macOS 打包工具的机器版本预检，并按 Tauri 配置目录读取磁盘映像图标；正式候选前通过两种原生 Mac 的完整生产验证。
 - 模型不可用时仍可归档和恢复 Chat、Work、Task 与 Mission；归档保留原取消与物理结算，恢复保留停止轮次、暂停目标及原始历史。
 - macOS 磁盘映像改由 create-dmg 1.3.0 生成，采用上游对系统忙状态的有限重试；Tauri 继续生成和签名应用及更新档案。打包后实际验证映像、只读挂载的应用签名和版本，并释放挂载，保留原安装窗口布局。
 - 官网跨平台归档验证复用原隔离后端测试 runner，在功能测试开始前准备 Windows 进程监督器。发布重试使用同一运行的完整失败集合，重启截止观察者并复用成功资源，原40分钟时钟保持。
@@ -46,6 +46,7 @@
 #### 用户影响与已知限制
 
 - 本版本包含0.1.27和0.1.28未公开候选的全部产品改动。前两次候选分别因macOS Intel磁盘映像和工具版本预检失败未完成发布，原标签、草稿和失败记录保留；可安装版本从0.1.26升级到本版本。
+- macOS 安装包沿用现有临时签名（ad hoc），未包含 Apple 公证；更新档案继续使用项目原有更新密钥签名。
 - 受支持基线内的数据库自动升级到当前声明的版本8，保留用户数据并在迁移前生成可独立读取的数据库备份；升级失败保留原库、版本和备份路径。非空且尚无受支持基线的旧库仍需明确授权维护。数据库备份不包含项目文件、附件及配置，这些文件仍需一起备份。
 - 已绑定 Task 保持冻结的专家团包修订；新安装与明确授权更新才采用上述新合同。已有模型、项目和历史消息保持原始身份。
 - 0.1.26 披露的长对话压缩语义限制尚无本版本全面解除的验收证据，仍保留该边界。二进制终端处理依赖已安装工具，模型生成的编码或命令参数仍可能需要纠正。
@@ -69,7 +70,7 @@
 
 #### Fixed
 
-- Correct machine-version preflight for the macOS packaging tool, with complete native qualification on both Mac architectures before the formal candidate.
+- Correct machine-version preflight and resolve disk-image icons from the Tauri configuration directory, with complete native qualification on both Mac architectures before the formal candidate.
 - Archive and restore Chat, Work, Task and Mission when their configured model is unavailable. Archiving retains cancellation and physical settlement; restore preserves stopped occurrences, paused goals and original history.
 - Produce macOS disk images with create-dmg 1.3.0 and its bounded upstream retries for system-busy failures. Tauri still produces and signs the app and updater archive. Packaging verifies the image, mounts it read-only to check the app signature and version, and detaches its mount while retaining the installer layout.
 - Run website archive qualification through the existing isolated backend runner, preparing the Windows process supervisor before functional tests start. Retry the complete failed-job set in the same release run to restart deadline observation and reuse successful assets without resetting the original 40-minute clock.
@@ -91,6 +92,7 @@
 #### Upgrade impact and known limitations
 
 - This version includes all product changes from the unpublished 0.1.27 and 0.1.28 candidates. Their macOS Intel disk-image and tool-version preflight failures prevented complete releases; original tags, drafts and failure records remain. Installations upgrade from 0.1.26 to this version.
+- macOS packages retain the existing ad hoc code signing and are not Apple-notarized. Updater archives continue to use the project's existing update-signing key.
 - Supported baseline databases automatically migrate to the currently declared version 8, preserving user data and producing an independently readable database backup before migration. Failures retain the original database, version and backup path. Nonempty legacy databases without a supported baseline still require explicitly authorized maintenance. Project files, attachments and configuration require their own accompanying backups.
 - Bound Tasks retain their frozen Expert Squad revisions. New installations and explicitly authorized updates adopt the new contracts. Existing model, project and historical-message identities remain intact.
 - The long-conversation compaction semantics limitation disclosed in 0.1.26 has not received evidence of complete resolution in this version. Binary terminal processing depends on installed tools; model-generated encoding choices or command arguments can still require correction.
