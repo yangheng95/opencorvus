@@ -15,7 +15,12 @@ Ubuntu build prerequisites use the single `script/install-ubuntu-packages.sh`
 entry point. It retains the runner's signed Deb822 suites and components while
 selecting Canonical's official HTTPS archive for the actual architecture in an
 owned temporary source file. The runner's source configuration and the original
-step and whole-release deadlines remain intact.
+step and whole-release deadlines remain intact. The same entry accepts
+`--command COMMAND...` for dependency installers that launch their own `apt-get`.
+It exports the scoped `APT_CONFIG` to the command and its descendants, preserving
+the machine's current APT directory values and configuration fragments. Linux
+Playwright system dependencies run in this root context; browser downloads still
+run as the original runner user so their executable and cache ownership agree.
 
 macOS app bundles, signatures and updater archives are produced by Tauri. DMG
 images use create-dmg 1.3.0, installed with the native macOS prerequisites, with

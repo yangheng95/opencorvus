@@ -6,7 +6,9 @@
 
 - [文件操作与模型可用性边界](records/2026-10/2026-10-26-file-operation-model-independence.md)：普通文件写入独立模型、共享插件初始化与真实前后验收。
 
-- [0.1.30 Ubuntu依赖与发布](records/2026-10/2026-10-27-release-0.1.30.md)：官方签名HTTPS归档、Linux原生预检与完整联合交付。
+- [0.1.31 子进程APT与发布](records/2026-10/2026-10-27-release-0.1.31.md)：统一继承来源、真实Playwright安装与完整联合交付。
+
+- [0.1.30 失败候选](records/2026-10/2026-10-27-release-0.1.30.md)：官方签名HTTPS归档、Linux原生预检与完整联合交付。
 
 - [文件浏览器工具名称统一](records/2026-10/2026-10-26-explorer-tool-identity.md)：资源管理器与文件页的明确区分及全入口同源。
 

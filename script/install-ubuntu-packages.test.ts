@@ -96,14 +96,68 @@ test("maps a source without a repository URI to the declared configuration error
   })
 })
 
-test("maps an empty package request to the existing usage contract", () => {
-  const result = spawnSync("bash", ["--noprofile", "--norc", shellPath(script)], {
-    encoding: "utf8",
-    windowsHide: true,
+test.each([{ args: [] }, { args: ["--command"] }])(
+  "maps an empty installer request %j to the usage contract",
+  ({ args }) => {
+    const result = spawnSync("bash", ["--noprofile", "--norc", shellPath(script), ...args], {
+      encoding: "utf8",
+      windowsHide: true,
+    })
+    if (result.error) throw result.error
+    expect({ status: result.status, error: result.stderr.trim() }).toEqual({
+      status: 2,
+      error: "Usage: sudo bash script/install-ubuntu-packages.sh PACKAGE... | --command COMMAND...",
+    })
+  },
+)
+
+test("writes the inherited apt-get policy with binary-specific precedence", () => {
+  const result = spawnSync(
+    "bash",
+    [
+      "--noprofile",
+      "--norc",
+      "-c",
+      'source "$1"; write_ubuntu_apt_configuration "/tmp/signed sources/ubuntu.sources" "/" "etc/apt"',
+      "config-contract",
+      shellPath(script),
+    ],
+    { encoding: "utf8", windowsHide: true },
+  )
+  if (result.error) throw result.error
+  expect({ status: result.status, error: result.stderr.trim(), configuration: result.stdout }).toEqual({
+    status: 0,
+    error: "",
+    configuration: `Binary::apt-get {
+  Dir "/";
+  Dir::Etc "etc/apt";
+  Dir::Etc::sourcelist "/tmp/signed sources/ubuntu.sources";
+  Dir::Etc::sourceparts "-";
+  DPkg::Lock::Timeout "300";
+  Acquire::Retries "5";
+  Acquire::http::Timeout "20";
+  APT::Update::Error-Mode "any";
+};
+`,
   })
+})
+
+test.each(['"', "\\", "\n", "\r"])("maps an unrepresentable source path %j to the configuration error", (value) => {
+  const result = spawnSync(
+    "bash",
+    [
+      "--noprofile",
+      "--norc",
+      "-c",
+      'source "$1"; value=$(cat); write_ubuntu_apt_configuration "$value" "/" "etc/apt"',
+      "config-contract",
+      shellPath(script),
+    ],
+    { encoding: "utf8", windowsHide: true, input: `/tmp/${value}/ubuntu.sources` },
+  )
   if (result.error) throw result.error
   expect({ status: result.status, error: result.stderr.trim() }).toEqual({
     status: 2,
-    error: "Usage: sudo bash script/install-ubuntu-packages.sh PACKAGE...",
+    error: "Ubuntu source path cannot be represented in APT configuration",
   })
 })

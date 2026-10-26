@@ -17,33 +17,68 @@ write_ubuntu_sources() {
   ' "$input" > "$output"
 }
 
-install_ubuntu_packages() (
-  if (( $# == 0 )); then
-    echo "Usage: sudo bash script/install-ubuntu-packages.sh PACKAGE..." >&2
-    exit 2
+write_ubuntu_apt_configuration() {
+  local sources=$1 apt_directory=$2 apt_etc_directory=$3
+  if [[ "$sources" == *'"'* || "$sources" == *'\'* || "$sources" == *$'\n'* || "$sources" == *$'\r'* ]]; then
+    echo "Ubuntu source path cannot be represented in APT configuration" >&2
+    return 2
   fi
+  cat <<EOF
+Binary::apt-get {
+  Dir "$apt_directory";
+  Dir::Etc "$apt_etc_directory";
+  Dir::Etc::sourcelist "$sources";
+  Dir::Etc::sourceparts "-";
+  DPkg::Lock::Timeout "300";
+  Acquire::Retries "5";
+  Acquire::http::Timeout "20";
+  APT::Update::Error-Mode "any";
+};
+EOF
+}
+
+with_ubuntu_apt() (
   original_sources=/etc/apt/sources.list.d/ubuntu.sources
   if [[ ! -r "$original_sources" ]]; then
     echo "Required Ubuntu source configuration is unreadable: $original_sources" >&2
     exit 2
   fi
-  sources=$(mktemp --suffix=.sources "${TMPDIR:-/tmp}/opencorvus-ubuntu-sources.XXXXXX")
-  trap 'rm -f -- "$sources"' EXIT
+  directory=$(mktemp -d "${TMPDIR:-/tmp}/opencorvus-ubuntu-apt.XXXXXX")
+  sources=$directory/ubuntu.sources
+  configuration=$directory/apt.conf
+  trap 'rm -f -- "$sources" "$configuration"; rmdir -- "$directory"' EXIT
   architecture=$(dpkg --print-architecture)
   write_ubuntu_sources "$original_sources" "$sources" "$architecture"
-  chmod 644 "$sources"
+  eval "$(apt-config shell apt_directory Dir apt_etc_directory Dir::Etc)"
+  write_ubuntu_apt_configuration "$sources" "$apt_directory" "$apt_etc_directory" > "$configuration"
+  chmod 755 "$directory"
+  chmod 644 "$sources" "$configuration"
   export DEBIAN_FRONTEND=noninteractive
-  options=(
-    -o "Dir::Etc::sourcelist=$sources"
-    -o "Dir::Etc::sourceparts=-"
-    -o "DPkg::Lock::Timeout=300"
-    -o "Acquire::Retries=5"
-    -o "Acquire::http::Timeout=20"
-    -o "APT::Update::Error-Mode=any"
-  )
-  apt-get "${options[@]}" update
-  apt-get "${options[@]}" install -y -- "$@"
+  export APT_CONFIG=$configuration
+  "$@"
 )
+
+install_requested_packages() {
+  apt-get update
+  apt-get install -y -- "$@"
+}
+
+install_ubuntu_packages() {
+  if (( $# == 0 )); then
+    echo "Usage: sudo bash script/install-ubuntu-packages.sh PACKAGE... | --command COMMAND..." >&2
+    return 2
+  fi
+  if [[ "$1" == --command ]]; then
+    shift
+    if (( $# == 0 )); then
+      echo "Usage: sudo bash script/install-ubuntu-packages.sh PACKAGE... | --command COMMAND..." >&2
+      return 2
+    fi
+    with_ubuntu_apt "$@"
+  else
+    with_ubuntu_apt install_requested_packages "$@"
+  fi
+}
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
   install_ubuntu_packages "$@"

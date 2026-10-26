@@ -255,7 +255,13 @@ jobs:
         timeout-minutes: 10
         run: |
           playwright_cli="$(node -p "require('node:path').join(require('node:path').dirname(require.resolve('playwright/package.json')), 'cli.js')")"
-          node "$playwright_cli" install --with-deps chromium
+          if [[ "$RUNNER_OS" == Linux ]]; then
+            sudo bash "$GITHUB_WORKSPACE/script/install-ubuntu-packages.sh" --command \
+              "$(command -v node)" "$playwright_cli" install-deps chromium
+            node "$playwright_cli" install chromium
+          else
+            node "$playwright_cli" install --with-deps chromium
+          fi
           echo "OPENCORVUS_BROWSER_EXECUTABLE=$(node -p "require('playwright').chromium.executablePath()")" >> "$GITHUB_ENV"
 
       - name: Verify remaining release budget
