@@ -1,0 +1,24 @@
+{
+  "actual_null": null,
+  "text_null": "null",
+  "actual_false": false,
+  "text_false": "false",
+  "actual_zero": 0,
+  "text_zero": "0",
+  "empty_text": "",
+  "empty_object": {},
+  "empty_array": [],
+  "nested": {
+    "items": [
+      false,
+      "false",
+      0,
+      "0",
+      null,
+      "",
+      {},
+      []
+    ]
+  },
+  "escaped_text": "第一行\n第二行 \"quoted\" 与中文"
+}

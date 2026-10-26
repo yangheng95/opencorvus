@@ -3112,6 +3112,20 @@ selection and search along with the renderer. The same helper owns outer and
 selected-resource loading, without another cache, reader or directory resolver.
 The local error boundary contains the request-owning body and child renderers.
 
+JSON Inspector content is projected once from its original text into the shared
+Tree. Scalar descriptions retain value kinds, with JSON string literals preserving
+quotes, escapes and the empty string. Booleans/null keep their literals; numbers
+retain the existing JavaScript parse and number representation, including overflow,
+rather than serializing a parsed numeric value as null. Empty objects/arrays display `{}`/`[]`;
+nonempty containers display `{…}`/`[…]` with their original ordered children.
+Tree search consumes those same descriptions, so quoted strings and empty values
+remain distinguishable and searchable. These technical literals retain their
+identity across product languages. Downloads continue to export the original
+filename and text, rather than the presentation tree.
+Shared Tree branch descriptions accompany their existing disclosure title, so a
+collapsed branch retains its kind/description. The same native disclosure owns
+expansion; leaf values and original node labels remain unchanged.
+
 `ArtifactFrame` is the only native artifact work surface. It presents the same
 mounted renderer in compact Conversation form and, when supported, through the
 browser Fullscreen API; it never creates a second renderer tree or copies the

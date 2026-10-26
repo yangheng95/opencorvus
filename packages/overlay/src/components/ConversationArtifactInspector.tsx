@@ -36,6 +36,7 @@ import { SearchField } from "./ui/SearchField"
 import { captureApiAuthority } from "../services/api"
 import { activeProjectDirectory } from "../services/project-directory"
 import { csvArtifactTable, csvCellComparator } from "../services/csv-artifact"
+import { jsonArtifactTree } from "../services/json-artifact"
 
 // Loaded with the artifact the inspector is actually opening; keeping these
 // static held CodeMirror and its grammars in the startup bundle.
@@ -58,7 +59,6 @@ const TableArtifact = lazy(async () => ({
   default: (await import("./interactive-artifact/TableArtifact")).TableArtifact,
 }))
 
-type TreePayload = Extract<InteractiveArtifactPayload, { renderer: "tree@1" }>
 type CodePayload = Extract<InteractiveArtifactPayload, { renderer: "code@1" }>
 type DocumentPayload = Extract<InteractiveArtifactPayload, { renderer: "document@1" }>
 type MediaPayload = Extract<InteractiveArtifactPayload, { renderer: "media@1" }>
@@ -74,40 +74,6 @@ type ArtifactContentRequest = {
   taskID: string
   title: string
   locator: ArtifactReadLocator
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return !!value && typeof value === "object" && !Array.isArray(value)
-}
-
-function jsonDescription(value: unknown): string | undefined {
-  if (value === null) return "null"
-  if (typeof value === "string") return value
-  if (typeof value === "number" || typeof value === "boolean") return String(value)
-  return undefined
-}
-
-function jsonTreePayload(title: string, value: unknown): TreePayload {
-  const nodes: TreePayload["nodes"] = []
-  let sequence = 0
-  const visit = (label: string, current: unknown, parentID?: string): void => {
-    const id = `json-${sequence++}`
-    nodes.push({
-      id,
-      label,
-      ...(parentID ? { parentID } : {}),
-      ...(jsonDescription(current) ? { description: jsonDescription(current) } : {}),
-    })
-    if (Array.isArray(current)) {
-      current.forEach((item, index) => visit(`[${index}]`, item, id))
-      return
-    }
-    if (isRecord(current)) {
-      for (const [key, item] of Object.entries(current)) visit(key, item, id)
-    }
-  }
-  visit(title, value)
-  return { schemaVersion: "1", renderer: "tree@1", title, nodes, defaultExpandedDepth: 2 }
 }
 
 function codeLanguage(mediaType: string): ArtifactCodeLanguage | undefined {
@@ -190,9 +156,9 @@ function ArtifactContentView(props: { title: string; content: ConversationArtifa
       ? csvArtifactTable(props.title, props.content.text, (position) => t("artifact.table.column", { position }))
       : undefined,
   )
-  const parsedJSON = createMemo(() => {
+  const jsonTree = createMemo(() => {
     if (props.content.mediaType !== "application/json" || props.content.text === undefined) return undefined
-    return JSON.parse(props.content.text) as unknown
+    return jsonArtifactTree(props.title, props.content.text)
   })
   const language = createMemo(() => codeLanguage(props.content.mediaType))
   const objectURL = useObjectURL(() => props.content)
@@ -219,8 +185,8 @@ function ArtifactContentView(props: { title: string; content: ConversationArtifa
             <TableArtifact payload={payload()} exportFiles={originalTextExport} compareCells={csvCompareCells()} />
           )}
         </Match>
-        <Match when={parsedJSON() !== undefined}>
-          <TreeArtifact payload={jsonTreePayload(props.title, parsedJSON())} exportFiles={originalTextExport} />
+        <Match when={jsonTree()}>
+          {(payload) => <TreeArtifact payload={payload()} exportFiles={originalTextExport} />}
         </Match>
         <Match when={props.content.mediaType === "text/markdown" && props.content.text !== undefined}>
           <DocumentArtifact

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [结构化交付数据的阅读体验](records/2026-10/2026-10-27-json-reading-journey.md)：真实JSON交付、类型与空值的可辨性调查和当前页面验收。
+
 - [文件阅读与编辑交付体验](records/2026-10/2026-10-27-file-reading-editing-journey.md)：全屏文件导航、草稿与文件操作复核，修复只读交付记录的模型误依赖。
 
 - [时间线计划的选择、导航与语言](records/2026-10/2026-10-27-timeline-plan-journey.md)：显式初始视口空白修复、当前语言及同实例导航复核。

@@ -1,0 +1,744 @@
+{
+  "qualification": "Actual public Task creation and streaming gpt-6.1-sol publication; original manual /ui interactions, original screenshots and visual review; actual HTTP, clipboard and browser download byte checks; no UI automated tests",
+  "taskCreated": {
+    "at": "2026-10-26T23:27:37.397Z",
+    "status": 202,
+    "requestID": "cbafb0bd-9d06-4c45-a666-afa650c30af7",
+    "body": {
+      "task_id": "tsk_g00VZCXW9Q00V0HGAp4Q",
+      "project_id": "prj_hZJ83kgKX6eshCcwFA7H",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-27\\task-delivery-659\\project"
+    }
+  },
+  "authority": {
+    "sessionID": "ses_hUI0SR7GJ5z0VOxDVKaz",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "retirement": {
+    "requests": 23,
+    "cumulativeRequests": 315,
+    "credentialCopyRetired": true,
+    "modelCatalogCopyRetired": true,
+    "requestOutcomes": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      }
+    ],
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    }
+  },
+  "baseline": {
+    "at": "2026-10-26T23:31:33.917Z",
+    "taskID": "tsk_g00VZCXW9Q00V0HGAp4Q",
+    "taskStatus": "completed",
+    "requestID": "20a512cd-b96a-43dd-9c06-9c8640b42ccb",
+    "route": "/task/tsk_g00VZCXW9Q00V0HGAp4Q/artifact-read?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-27%2Ftask-delivery-659%2Fproject",
+    "status": 200,
+    "resource": {
+      "snapshot": {
+        "schema_version": 2,
+        "project_id": "prj_hZJ83kgKX6eshCcwFA7H",
+        "task_id": "tsk_g00VZCXW9Q00V0HGAp4Q",
+        "snapshot_id": "ac3dbbdb-eb4c-5ea7-a12a-5138074ad5a9",
+        "manifest_sha256": "6891e6fac0243f439978151b6eb2509fb3f1082c4a4fc269e7aab3e4d0c3a5e7"
+      },
+      "tree": "resources",
+      "path": "outputs/json-readability-671.json",
+      "media_type": "application/json",
+      "bytes": 394,
+      "sha256": "ae13b52724e6aa9329ab7550cee1f7585988698e6556832479ef6e0a16b5be6f"
+    },
+    "bytes": 394,
+    "exactInput": true,
+    "exactPhysicalOutput": true,
+    "exactBrowserDownload": true,
+    "typedValues": {
+      "actual_null": null,
+      "text_null": "null",
+      "actual_false": false,
+      "text_false": "false",
+      "actual_zero": 0,
+      "text_zero": "0",
+      "empty_text": "",
+      "empty_object": {},
+      "empty_array": [],
+      "nested": {
+        "items": [
+          false,
+          "false",
+          0,
+          "0",
+          null,
+          "",
+          {},
+          []
+        ]
+      },
+      "escaped_text": "第一行\n第二行 \"quoted\" 与中文"
+    },
+    "requests": 23
+  },
+  "final": {
+    "at": "2026-10-26T23:55:57.766Z",
+    "taskID": "tsk_g00VZCXW9Q00V0HGAp4Q",
+    "taskStatus": "completed",
+    "catalogStatus": 200,
+    "exactOriginalPublication": true,
+    "status": 200,
+    "requestID": "aebb9a65-eee7-4f6e-993c-4f9376adba04",
+    "bytes": 394,
+    "exactOriginalFile": true,
+    "modelRequests": 0,
+    "catalog": [
+      {
+        "messageID": "msg_hhrcRq50qogQBOiRYn15",
+        "userMessageID": "msg_task-root-control_art_hTO0PHweLmRQPsZMSWOl_art_hTO0PHweLmRQPsZMSWOl",
+        "task": {
+          "id": "tsk_g00VZCXW9Q00V0HGAp4Q",
+          "title": "结构化数据阅读671",
+          "status": "completed"
+        },
+        "declaredOutputs": [
+          {
+            "declarationLocator": {
+              "source": "task_artifact_resource",
+              "ref": {
+                "snapshot": {
+                  "schema_version": 2,
+                  "project_id": "prj_hZJ83kgKX6eshCcwFA7H",
+                  "task_id": "tsk_g00VZCXW9Q00V0HGAp4Q",
+                  "snapshot_id": "ac3dbbdb-eb4c-5ea7-a12a-5138074ad5a9",
+                  "manifest_sha256": "6891e6fac0243f439978151b6eb2509fb3f1082c4a4fc269e7aab3e4d0c3a5e7"
+                },
+                "tree": "resources",
+                "path": "outputs/json-readability-671.json",
+                "media_type": "application/json",
+                "bytes": 394,
+                "sha256": "ae13b52724e6aa9329ab7550cee1f7585988698e6556832479ef6e0a16b5be6f"
+              }
+            },
+            "producer": {
+              "owner_kind": "projected-scheduler",
+              "expert_squad_id": "base",
+              "package_revision": {
+                "scope": "built_in",
+                "project_id": null,
+                "namespace": "builtin",
+                "id": "base",
+                "version": "2026.10.14.1",
+                "package_digest": "83ea97ae6b85c404ff6ff75b43ab0d72fe907d3013a3dcd651b322c5a5579f4f"
+              },
+              "agent_id": "orchestrator",
+              "projection_hash": "776bdea69effd166524e6d6c8ceb292116dd8a1824ab67ead36aa148bf6a8a95",
+              "session_id": "ses_-zUQnSSsczzyhSuDhQNY",
+              "message_id": "msg_h9qrM64AGPMIXRWp5RjC",
+              "tool_call_id": "call_0b59040650174608b45015ce844b7068"
+            },
+            "label": "outputs/json-readability-671.json",
+            "resources": [
+              {
+                "snapshot": {
+                  "schema_version": 2,
+                  "project_id": "prj_hZJ83kgKX6eshCcwFA7H",
+                  "task_id": "tsk_g00VZCXW9Q00V0HGAp4Q",
+                  "snapshot_id": "ac3dbbdb-eb4c-5ea7-a12a-5138074ad5a9",
+                  "manifest_sha256": "6891e6fac0243f439978151b6eb2509fb3f1082c4a4fc269e7aab3e4d0c3a5e7"
+                },
+                "tree": "resources",
+                "path": "outputs/json-readability-671.json",
+                "media_type": "application/json",
+                "bytes": 394,
+                "sha256": "ae13b52724e6aa9329ab7550cee1f7585988698e6556832479ef6e0a16b5be6f"
+              }
+            ]
+          }
+        ],
+        "entries": [
+          {
+            "source": "task_artifact",
+            "locator": {
+              "source": "task_artifact_resource",
+              "ref": {
+                "snapshot": {
+                  "schema_version": 2,
+                  "project_id": "prj_hZJ83kgKX6eshCcwFA7H",
+                  "task_id": "tsk_g00VZCXW9Q00V0HGAp4Q",
+                  "snapshot_id": "ac3dbbdb-eb4c-5ea7-a12a-5138074ad5a9",
+                  "manifest_sha256": "6891e6fac0243f439978151b6eb2509fb3f1082c4a4fc269e7aab3e4d0c3a5e7"
+                },
+                "tree": "resources",
+                "path": "outputs/json-readability-671.json",
+                "media_type": "application/json",
+                "bytes": 394,
+                "sha256": "ae13b52724e6aa9329ab7550cee1f7585988698e6556832479ef6e0a16b5be6f"
+              }
+            },
+            "kind": "task_artifact_resource",
+            "schema_diagnostic_truncated": false,
+            "label": "outputs/json-readability-671.json",
+            "label_truncated": false,
+            "goal_id": null,
+            "import_source_task_id": null,
+            "producer": {
+              "owner_kind": "projected-scheduler",
+              "expert_squad_id": "base",
+              "package_revision": {
+                "scope": "built_in",
+                "project_id": null,
+                "namespace": "builtin",
+                "id": "base",
+                "version": "2026.10.14.1",
+                "package_digest": "83ea97ae6b85c404ff6ff75b43ab0d72fe907d3013a3dcd651b322c5a5579f4f"
+              },
+              "agent_id": "orchestrator",
+              "projection_hash": "776bdea69effd166524e6d6c8ceb292116dd8a1824ab67ead36aa148bf6a8a95",
+              "session_id": "ses_-zUQnSSsczzyhSuDhQNY",
+              "message_id": "msg_h9qrM64AGPMIXRWp5RjC",
+              "tool_call_id": "call_0b59040650174608b45015ce844b7068"
+            },
+            "created_at_ms": 1793057291162,
+            "bytes": 394,
+            "sha256": "ae13b52724e6aa9329ab7550cee1f7585988698e6556832479ef6e0a16b5be6f",
+            "resource_count": 1,
+            "resource_media_types": [
+              "application/json"
+            ],
+            "resource_media_types_truncated": false,
+            "version": {
+              "state": "immutable",
+              "publication_sequence": 1
+            }
+          }
+        ],
+        "catalogComplete": true,
+        "providerErrors": []
+      }
+    ]
+  },
+  "copy": {
+    "bytes": 394,
+    "exactOriginal": true
+  },
+  "download": {
+    "path": "C:\\Users\\hengu\\Downloads\\json-readability-671 (1).json",
+    "bytes": 394,
+    "exactOriginal": true
+  },
+  "protectedFiles": {
+    "originalFivePreserved": true,
+    "inputOriginalPreserved": true,
+    "outputOriginalPreserved": true,
+    "bytes": 394
+  },
+  "runs": [
+    {
+      "name": "671",
+      "port": 38176,
+      "entry": "main-CcytgXEH.js",
+      "requests": 23,
+      "cumulativeRequests": 315,
+      "reserveMs": 912089,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "publicShutdown": 200,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "processChain": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ],
+      "sourceTables": 92,
+      "sourceRows": 18764,
+      "originalSourceAllRowsPreserved": true,
+      "originalProtectedRows": 665
+    },
+    {
+      "name": "672",
+      "port": 38177,
+      "entry": "main-FdQMYh0K.js",
+      "requests": 0,
+      "cumulativeRequests": 315,
+      "reserveMs": 1096527,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "publicShutdown": 200,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "processChain": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ],
+      "sourceTables": 92,
+      "sourceRows": 24614,
+      "originalSourceAllRowsPreserved": true,
+      "originalProtectedRows": 888
+    },
+    {
+      "name": "673",
+      "port": 38178,
+      "entry": "main-k0Eiv8i3.js",
+      "requests": 0,
+      "cumulativeRequests": 315,
+      "reserveMs": 905039,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "publicShutdown": 200,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "processChain": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ],
+      "sourceTables": 92,
+      "sourceRows": 24614,
+      "originalSourceAllRowsPreserved": true,
+      "originalProtectedRows": 888
+    },
+    {
+      "name": "674",
+      "port": 38179,
+      "entry": "main-CrDl7ktw.js",
+      "requests": 0,
+      "cumulativeRequests": 315,
+      "reserveMs": 1140183,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "publicShutdown": 200,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "processChain": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ],
+      "sourceTables": 92,
+      "sourceRows": 24614,
+      "originalSourceAllRowsPreserved": true,
+      "originalProtectedRows": 888
+    }
+  ],
+  "checks": {
+    "dataTests": {
+      "label": "json-reading-674-tests",
+      "startedAt": 1793058812310,
+      "closedAt": 1793058816823,
+      "code": 0,
+      "signal": null,
+      "childPID": 97600
+    },
+    "language": {
+      "label": "json-reading-672-language",
+      "startedAt": 1793057686029,
+      "closedAt": 1793057688644,
+      "code": 0,
+      "signal": null,
+      "childPID": 98476
+    },
+    "types": {
+      "label": "json-reading-674-types",
+      "startedAt": 1793058812301,
+      "closedAt": 1793058839958,
+      "code": 0,
+      "signal": null,
+      "childPID": 12724
+    },
+    "build": {
+      "label": "json-reading-674-build",
+      "startedAt": 1793058812310,
+      "closedAt": 1793058876485,
+      "code": 0,
+      "signal": null,
+      "childPID": 23268
+    },
+    "docs": {
+      "label": "json-reading-674-docs",
+      "startedAt": 1793059047453,
+      "closedAt": 1793059055484,
+      "code": 0,
+      "signal": null,
+      "childPID": 96640
+    }
+  },
+  "screenshots": [
+    "01-ambiguous-json-before-en.jpg",
+    "02-empty-string-search-before-en.jpg",
+    "03-typed-values-branch-kind-hidden-en.jpg",
+    "04-final-json-types-en.jpg",
+    "05-empty-string-found-en.jpg",
+    "06-string-false-found-en.jpg",
+    "07-expanded-original-array-en.jpg",
+    "08-empty-string-retained-zh.jpg",
+    "09-empty-array-found-zh.jpg",
+    "10-final-json-types-zh.jpg",
+    "11-task-after-workspace-close-zh.jpg",
+    "12-task-json-visible-zh.jpg",
+    "13-task-json-header-values-zh.jpg",
+    "14-final-reviewed-json-types-en.jpg"
+  ],
+  "limits": [
+    "23 model calls are one Task execution plus actual preflight and internal turns, not23 separate user scenarios",
+    "Actual Codex work used one agent; normal application Task participants remained naturally visible",
+    "Screenshot03 is intermediate and retains the collapsed branch problem; final Tree UI is04-10/12-13 with final numeric-source code in14",
+    "Screenshot11 shows the prior conversation position after leaving fullscreen, not a visible JSON preview;12-13 manually reveal the normal preview",
+    "Current Task has no auth in672/673/674; its missing-model banner correctly permits historical reading",
+    "Generic Playwright button lookup did not match the native summary; actual focused Return key successfully collapsed it",
+    "UI exercised a real JSON Inspector through the shared Tree; a separate model-authored generic tree with long descriptions was not published",
+    "UI qualification did not include very deep/large JSON, numbers beyond JavaScript precision, native IDE, other languages or scheduling restart; number overflow received pure data contract coverage",
+    "All14 screenshots are original,11 fullscreen2560x1440 and3 ordinary1280x720; no cropping, edits or pixel comparisons",
+    "No public API, SDK, database schema or release-version changes; this commit is outside the frozen0.1.33 installer"
+  ],
+  "previousFinal": {
+    "at": "2026-10-26T23:42:23.180Z",
+    "taskID": "tsk_g00VZCXW9Q00V0HGAp4Q",
+    "taskStatus": "completed",
+    "catalogStatus": 200,
+    "exactOriginalPublication": true,
+    "status": 200,
+    "requestID": "ae0f34ae-eae4-40f1-8b36-d57f48330d7c",
+    "bytes": 394,
+    "exactOriginalFile": true,
+    "modelRequests": 0,
+    "catalog": [
+      {
+        "messageID": "msg_hhrcRq50qogQBOiRYn15",
+        "userMessageID": "msg_task-root-control_art_hTO0PHweLmRQPsZMSWOl_art_hTO0PHweLmRQPsZMSWOl",
+        "task": {
+          "id": "tsk_g00VZCXW9Q00V0HGAp4Q",
+          "title": "结构化数据阅读671",
+          "status": "completed"
+        },
+        "declaredOutputs": [
+          {
+            "declarationLocator": {
+              "source": "task_artifact_resource",
+              "ref": {
+                "snapshot": {
+                  "schema_version": 2,
+                  "project_id": "prj_hZJ83kgKX6eshCcwFA7H",
+                  "task_id": "tsk_g00VZCXW9Q00V0HGAp4Q",
+                  "snapshot_id": "ac3dbbdb-eb4c-5ea7-a12a-5138074ad5a9",
+                  "manifest_sha256": "6891e6fac0243f439978151b6eb2509fb3f1082c4a4fc269e7aab3e4d0c3a5e7"
+                },
+                "tree": "resources",
+                "path": "outputs/json-readability-671.json",
+                "media_type": "application/json",
+                "bytes": 394,
+                "sha256": "ae13b52724e6aa9329ab7550cee1f7585988698e6556832479ef6e0a16b5be6f"
+              }
+            },
+            "producer": {
+              "owner_kind": "projected-scheduler",
+              "expert_squad_id": "base",
+              "package_revision": {
+                "scope": "built_in",
+                "project_id": null,
+                "namespace": "builtin",
+                "id": "base",
+                "version": "2026.10.14.1",
+                "package_digest": "83ea97ae6b85c404ff6ff75b43ab0d72fe907d3013a3dcd651b322c5a5579f4f"
+              },
+              "agent_id": "orchestrator",
+              "projection_hash": "776bdea69effd166524e6d6c8ceb292116dd8a1824ab67ead36aa148bf6a8a95",
+              "session_id": "ses_-zUQnSSsczzyhSuDhQNY",
+              "message_id": "msg_h9qrM64AGPMIXRWp5RjC",
+              "tool_call_id": "call_0b59040650174608b45015ce844b7068"
+            },
+            "label": "outputs/json-readability-671.json",
+            "resources": [
+              {
+                "snapshot": {
+                  "schema_version": 2,
+                  "project_id": "prj_hZJ83kgKX6eshCcwFA7H",
+                  "task_id": "tsk_g00VZCXW9Q00V0HGAp4Q",
+                  "snapshot_id": "ac3dbbdb-eb4c-5ea7-a12a-5138074ad5a9",
+                  "manifest_sha256": "6891e6fac0243f439978151b6eb2509fb3f1082c4a4fc269e7aab3e4d0c3a5e7"
+                },
+                "tree": "resources",
+                "path": "outputs/json-readability-671.json",
+                "media_type": "application/json",
+                "bytes": 394,
+                "sha256": "ae13b52724e6aa9329ab7550cee1f7585988698e6556832479ef6e0a16b5be6f"
+              }
+            ]
+          }
+        ],
+        "entries": [
+          {
+            "source": "task_artifact",
+            "locator": {
+              "source": "task_artifact_resource",
+              "ref": {
+                "snapshot": {
+                  "schema_version": 2,
+                  "project_id": "prj_hZJ83kgKX6eshCcwFA7H",
+                  "task_id": "tsk_g00VZCXW9Q00V0HGAp4Q",
+                  "snapshot_id": "ac3dbbdb-eb4c-5ea7-a12a-5138074ad5a9",
+                  "manifest_sha256": "6891e6fac0243f439978151b6eb2509fb3f1082c4a4fc269e7aab3e4d0c3a5e7"
+                },
+                "tree": "resources",
+                "path": "outputs/json-readability-671.json",
+                "media_type": "application/json",
+                "bytes": 394,
+                "sha256": "ae13b52724e6aa9329ab7550cee1f7585988698e6556832479ef6e0a16b5be6f"
+              }
+            },
+            "kind": "task_artifact_resource",
+            "schema_diagnostic_truncated": false,
+            "label": "outputs/json-readability-671.json",
+            "label_truncated": false,
+            "goal_id": null,
+            "import_source_task_id": null,
+            "producer": {
+              "owner_kind": "projected-scheduler",
+              "expert_squad_id": "base",
+              "package_revision": {
+                "scope": "built_in",
+                "project_id": null,
+                "namespace": "builtin",
+                "id": "base",
+                "version": "2026.10.14.1",
+                "package_digest": "83ea97ae6b85c404ff6ff75b43ab0d72fe907d3013a3dcd651b322c5a5579f4f"
+              },
+              "agent_id": "orchestrator",
+              "projection_hash": "776bdea69effd166524e6d6c8ceb292116dd8a1824ab67ead36aa148bf6a8a95",
+              "session_id": "ses_-zUQnSSsczzyhSuDhQNY",
+              "message_id": "msg_h9qrM64AGPMIXRWp5RjC",
+              "tool_call_id": "call_0b59040650174608b45015ce844b7068"
+            },
+            "created_at_ms": 1793057291162,
+            "bytes": 394,
+            "sha256": "ae13b52724e6aa9329ab7550cee1f7585988698e6556832479ef6e0a16b5be6f",
+            "resource_count": 1,
+            "resource_media_types": [
+              "application/json"
+            ],
+            "resource_media_types_truncated": false,
+            "version": {
+              "state": "immutable",
+              "publication_sequence": 1
+            }
+          }
+        ],
+        "catalogComplete": true,
+        "providerErrors": []
+      }
+    ]
+  },
+  "previousChecks": {
+    "dataTests": {
+      "label": "json-reading-672-tests",
+      "startedAt": 1793057685949,
+      "closedAt": 1793057691021,
+      "code": 0,
+      "signal": null,
+      "childPID": 21420
+    },
+    "language": {
+      "label": "json-reading-672-language",
+      "startedAt": 1793057686029,
+      "closedAt": 1793057688644,
+      "code": 0,
+      "signal": null,
+      "childPID": 98476
+    },
+    "types": {
+      "label": "json-reading-673-types-final",
+      "startedAt": 1793058030972,
+      "closedAt": 1793058055589,
+      "code": 0,
+      "signal": null,
+      "childPID": 38028
+    },
+    "build": {
+      "label": "json-reading-673-build-final",
+      "startedAt": 1793058030992,
+      "closedAt": 1793058093129,
+      "code": 0,
+      "signal": null,
+      "childPID": 66300
+    },
+    "docs": {
+      "label": "json-reading-673-docs",
+      "startedAt": 1793058542245,
+      "closedAt": 1793058550929,
+      "code": 0,
+      "signal": null,
+      "childPID": 97464
+    }
+  },
+  "numericBoundary": {
+    "input": "1e400",
+    "existingParsedKind": "number",
+    "existingParsedText": "Infinity",
+    "jsonSerializationText": "null",
+    "finalDescription": "Infinity",
+    "qualification": "Pure data contract verified; original394-byte published UI sample has finite numbers only"
+  }
+}

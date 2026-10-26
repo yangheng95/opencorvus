@@ -30,9 +30,11 @@ function TreeBranch(props: {
         }
       >
         <Disclosure.Root open={props.forceOpen ? true : undefined} defaultOpen={props.depth < props.defaultExpandedDepth}>
-          <Disclosure.Trigger class="msg-artifact-tree__branch">{props.node.label}</Disclosure.Trigger>
-          <Disclosure.Content>
+          <Disclosure.Trigger class="msg-artifact-tree__branch">
+            <span>{props.node.label}</span>
             <Show when={props.node.description}>{(description) => <small>{description()}</small>}</Show>
+          </Disclosure.Trigger>
+          <Disclosure.Content>
             <ul role="group">
               <For each={children()}>
                 {(child) => (

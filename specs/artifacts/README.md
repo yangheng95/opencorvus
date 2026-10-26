@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [JSON交付物阅读体验证据](2026-10-27-json-reading-journey/README.md)：14张原图、真实JSON/Task交付、23次模型请求及复制下载原字节。
+
 - [文件阅读与编辑体验证据](2026-10-27-file-reading-editing-journey/README.md)：17张原图、新建文件原文、真实目录/字节/项目隔离回执和运行结清。
 
 - [时间线计划体验证据](2026-10-27-timeline-plan-journey/README.md)：14张原图、真实计划、实际CSV导出和三个运行实例结清。
