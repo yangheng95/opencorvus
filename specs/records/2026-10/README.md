@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [文件浏览器工具名称统一](2026-10-26-explorer-tool-identity.md)：中英菜单、并列标签、环境入口与关闭焦点实测。
+
 - [文件阅读操作与关闭反馈](2026-10-26-file-explorer-reading-experience.md)：中英实页、查找焦点及原草稿保护验收。
 
 - [已完成目标摘要与首页体验](2026-10-26-goal-summary-density.md)：中英主会话、首页草稿和真实Sol侧聊的人工验收。

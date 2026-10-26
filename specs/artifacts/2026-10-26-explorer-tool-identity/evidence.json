@@ -1,0 +1,183 @@
+{
+  "date": "2026-10-26",
+  "scope": "One canonical localized Explorer identity for chooser, add menu, tabs, panel and applicable Environment shortcut",
+  "checks": {
+    "build": {
+      "label": "explorer-identity-build",
+      "startedAt": 1793028083928,
+      "closedAt": 1793028160627,
+      "code": 0,
+      "signal": null,
+      "childPID": 92384
+    },
+    "types": {
+      "label": "explorer-identity-types",
+      "startedAt": 1793028083937,
+      "closedAt": 1793028113845,
+      "code": 0,
+      "signal": null,
+      "childPID": 50212
+    },
+    "language": {
+      "label": "explorer-identity-language",
+      "startedAt": 1793028083984,
+      "closedAt": 1793028086645,
+      "code": 0,
+      "signal": null,
+      "childPID": 84640
+    }
+  },
+  "run": {
+    "port": 38146,
+    "uiEntry": "main-BGrTrwC8.js",
+    "source": "closed file-reading-640 owned runtime",
+    "database": {
+      "schema": 8,
+      "integrity": "ok",
+      "clonedTables": 92,
+      "clonedRows": 29842,
+      "originalSourceAllRowsPreserved": true,
+      "protected": {
+        "session": {
+          "original": 23,
+          "current": 23,
+          "originalRowsPreserved": true
+        },
+        "message": {
+          "original": 125,
+          "current": 125,
+          "originalRowsPreserved": true
+        },
+        "part": {
+          "original": 198,
+          "current": 198,
+          "originalRowsPreserved": true
+        },
+        "tool_part_request": {
+          "original": 37,
+          "current": 37,
+          "originalRowsPreserved": true
+        },
+        "tool_part_progress": {
+          "original": 98,
+          "current": 98,
+          "originalRowsPreserved": true
+        },
+        "tool_part_outcome": {
+          "original": 37,
+          "current": 37,
+          "originalRowsPreserved": true
+        },
+        "provider_activity_request": {
+          "original": 45,
+          "current": 45,
+          "originalRowsPreserved": true
+        },
+        "provider_activity_outcome": {
+          "original": 45,
+          "current": 45,
+          "originalRowsPreserved": true
+        },
+        "protocol_event": {
+          "original": 208,
+          "current": 208,
+          "originalRowsPreserved": true
+        }
+      }
+    },
+    "attachments": {
+      "pairs": 13,
+      "originalSourceBytesPreserved": true
+    },
+    "closure": {
+      "originalExec": 69105,
+      "originalExecExit": 0,
+      "tab": 24,
+      "tabClosed": true,
+      "publicShutdown": 200,
+      "reserveMs": 830732,
+      "occurrence": "explorer-identity-641-f7e98236-dbd3-4659-ab1d-ca221595b95d",
+      "nativeOutcome": "settled",
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "chain": [
+        {
+          "identity": {
+            "pid": 66600,
+            "processInstanceID": "win32:639286249808502726",
+            "occurrenceID": "bec673d4-f71c-4bb5-b2bf-5d4fbdefe651"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "identity": {
+            "pid": 31424,
+            "processInstanceID": "win32:639286249816067717",
+            "occurrenceID": "d5d94394-6a7c-4253-be64-414455d936f7"
+          },
+          "state": "dead_or_reused"
+        }
+      ]
+    }
+  },
+  "originalFile": {
+    "path": "summary.md",
+    "bytes": 201,
+    "completeBytesPreserved": true
+  },
+  "provider": {
+    "credentialsCopied": false,
+    "maximumRequests": 0,
+    "newRequests": 0,
+    "cumulativeRequests": 218
+  },
+  "visual": {
+    "method": "Manual actual development /ui interaction and original screenshot review; no UI automated tests",
+    "desktop": {
+      "width": 1280,
+      "height": 720,
+      "dockWidth": 380
+    },
+    "screenshots": [
+      "01-chooser-en.jpg",
+      "02-add-menu-en.jpg",
+      "03-distinct-tabs-en.jpg",
+      "04-environment-en.jpg",
+      "05-distinct-tabs-zh.jpg",
+      "06-environment-zh.jpg",
+      "07-close-explorer-file-retained-zh.jpg",
+      "08-add-menu-zh.jpg",
+      "09-close-file-explorer-retained-zh.jpg",
+      "10-chooser-zh.jpg"
+    ],
+    "before": "../2026-10-26-file-explorer-reading-experience/05-find-close-focused-zh.jpg",
+    "observedNames": {
+      "en": {
+        "explorer": "Explorer",
+        "file": "File"
+      },
+      "zh": {
+        "explorer": "资源管理器",
+        "file": "文件"
+      }
+    },
+    "actions": [
+      "English chooser and add menu",
+      "Actual tree opens original summary.md",
+      "Environment Explorer opens directory; Chinese File opens same original file",
+      "Switch application language through actual Settings",
+      "Delete Explorer preserves File and document; Delete File preserves Explorer",
+      "Last-tab close returns Add tool focus and Chinese chooser"
+    ],
+    "qualifications": [
+      "380px two-tab header may ellipsize Explorer title under the existing sizing; visible names remain distinct, menu/accessibility name is complete",
+      "Overflow menu was not actually triggered",
+      "Final chooser reopen reached the directory-tab loading state before planned shutdown; no completed final-read claim",
+      "Dark desktop only; no model execution, file save or user environment mutation",
+      "NoAuth model unavailable feedback is expected isolation"
+    ]
+  }
+}

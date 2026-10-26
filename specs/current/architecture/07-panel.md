@@ -2815,6 +2815,11 @@ tab remains the only panel title; owner-group headers separate agent, date and
 image count. Each card keeps its title and short time, with the full timestamp
 available on hover.
 
+The Explorer tool's empty chooser, add menu, tab and overflow titles, and
+applicable Environment shortcut resolve the same `explorer.title` as the panel
+body. The File viewing/editing tool retains its separate `file.title`, so both
+tools have distinct localized names while their canonical IDs remain unchanged.
+
 Right Dock tabs and their embedded close actions use the shared `32px`
 header-control geometry. The Dock-global add and close actions use the same
 icon-button density and standard `14px` Icon tier, matching

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件浏览器工具名称统一](2026-10-26-explorer-tool-identity/README.md)：十张真实原图、原数据与独立运行结清事实。
+
 - [文件阅读操作与关闭反馈](2026-10-26-file-explorer-reading-experience/README.md)：九张真实原图和原文件/运行结清事实。
 
 - [已完成目标摘要与首页体验](2026-10-26-goal-summary-density/README.md)：15张实页原图、规范Goal及运行结清事实。

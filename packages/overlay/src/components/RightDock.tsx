@@ -36,7 +36,7 @@ export interface RightDockTab {
 export const RIGHT_DOCK_CATALOG: readonly RightDockPanelMeta[] = [
   { id: "browser", icon: "web-search", labelKey: "right_dock.tool.browser", tabLabelKey: "right_dock.tab.new" },
   { id: "diff", icon: "files", labelKey: "right_dock.tool.review", tabLabelKey: "right_dock.tool.review" },
-  { id: "explorer", icon: "folder", labelKey: "right_dock.tool.files", tabLabelKey: "right_dock.tool.files" },
+  { id: "explorer", icon: "folder", labelKey: "explorer.title", tabLabelKey: "explorer.title" },
   { id: "screenshots", icon: "screenshots", labelKey: "screenshots.title", tabLabelKey: "screenshots.title" },
   {
     id: "requirements",
