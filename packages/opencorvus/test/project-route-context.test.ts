@@ -70,11 +70,21 @@ describe("Project route context authority", () => {
     }).toEqual({
       chatTitle: "identity",
       workTitle: "identity",
-      archive: "runtime",
+      archive: "identity",
       selection: "runtime",
       abort: "runtime",
       sessionConfig: "runtime",
     })
+  })
+  test("assigns archive and restore controls to Project identity for every public owner", () => {
+    expect([
+      "/coding/chat/session/ses_1/archive",
+      "/coding/work/session/ses_2/archive",
+      "/task/tsk_1/archive",
+      "/mission/mission_1/archive",
+    ].map(path => projectRouteContextKind(path, "PATCH"))).toEqual([
+      "identity", "identity", "identity", "identity",
+    ])
   })
   test("uses Project identity for persisted Session pages and event subscriptions", () => {
     expect({

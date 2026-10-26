@@ -1,0 +1,261 @@
+{
+  "date": "2026-10-26",
+  "scope": "Model-independent archive and restoration through the full production Project middleware",
+  "baseline": {
+    "run": 620,
+    "requestID": "003b68b1-750c-46fb-8678-b3e708d3a579",
+    "method": "PATCH",
+    "path": "/coding/work/session/ses_-zUQryl9CzzNEb5MNLb0/archive",
+    "http": 400,
+    "error": "ProviderModelNotFoundError",
+    "stage": "config.validate.models before route handler",
+    "observed": "Original Work remained active in sidebar and Archive stayed empty"
+  },
+  "source": {
+    "changed": "Two exact Project identity archive-route patterns; original domain handlers unchanged",
+    "owners": [
+      "chat",
+      "work",
+      "task",
+      "mission"
+    ],
+    "ui": "Unchanged archive UI frozen from ordinary Node build main-BgjVdyol.js",
+    "schema": 8,
+    "schemaChanged": false,
+    "releasePerformed": false
+  },
+  "actualPage": {
+    "run": 621,
+    "archived": {
+      "http": 200,
+      "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+      "archivedAt": 1792995831977,
+      "matchingRows": [
+        {
+          "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+          "experience": "work",
+          "title": "持续陪同本轮表单体验。当前轮只回复“Goal 表单验证就绪”这一句话，不调用工具，不创建文件、子任务或子 Agent；等待用户在 Goal 表单中手动完成。"
+        }
+      ]
+    },
+    "restored": {
+      "http": 200,
+      "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+      "title": "持续陪同本轮表单体验。当前轮只回复“Goal 表单验证就绪”这一句话，不调用工具，不创建文件、子任务或子 Agent；等待用户在 Goal 表单中手动完成。",
+      "goal": {
+        "id": "pev_g0VZ8Gnco00JXTkNJldK",
+        "status": "complete",
+        "tokensUsed": 36950,
+        "turnsAccepted": 1,
+        "reason": "最终源码已使用真实 gpt-6.1-sol 流式回复“Goal 恢复执行验证通过”，累计 36950 tokens、1/1 自动轮次后按预算收敛；说明返回后依据原文保留，由用户明确记录完成。"
+      }
+    },
+    "manual": "English archive and Work type search; Chinese restore retained query and moved focus to heading; returning to app reopened original Work with original response and complete Goal"
+  },
+  "checks": {
+    "tests": 13,
+    "assertions": 29,
+    "fullServerArchiveTests": 4,
+    "fullServerArchiveAssertions": 20,
+    "routeClassificationTests": 9,
+    "routeClassificationAssertions": 9,
+    "backendTypes": 0,
+    "expandedCurrentTestTypes": 0,
+    "uiAutomation": "None created or run",
+    "docs": {
+      "exit": 0,
+      "operations": 351,
+      "groups": 26
+    }
+  },
+  "originalFailures": {
+    "toolchain": "First isolated runner lacked installed Rust toolchain identity. Preserved rustup show home only in owned environment, compiled current canonical supervisor and reran original checker; no user Rust settings changed.",
+    "fixture": "First Chat/Work Prompt owner lacked Project context; repaired with existing Project identity primitive. First fixed Mission response expectation used id instead of the actual public sessionID; corrected checker. Invalid fixture/expectation failures remain private and are not product failures.",
+    "qualifiedRed": "All four full Server archive cases then failed with real ProviderModelNotFoundError 400 under the original classification.",
+    "shutdownHarness": "620 copied shutdown initially retained the closed 619 target and was rejected by exact process identity; corrected exact 620 target, reran public shutdown and physical/data checker."
+  },
+  "qualification": {
+    "capture": "Original unmodified JPEG captures cover x=0..1119 of a 1280x720 document; row identity, query and history are visible. Rightmost action icons are outside that capture. Their actual activation/result was verified through real UI and public Session projection, not pixel assertions.",
+    "taskMission": "Real full Server middleware with domain Task occurrence, Mission close and actual child Task cancellation; no claim of native Provider E2E for these roles.",
+    "runtime": "621 startup logged two reg.exe timeout warnings while detecting system proxy; the original process then reached ready and completed all operations. It was not restarted or masked.",
+    "pending": "Independent Stop/abort/cancel model admission, including the Task detached cancellation owner, remains a separate explicit next audit. Archive success is not presented as all controls passing."
+  },
+  "runs": [
+    {
+      "run": 620,
+      "port": 38129,
+      "uiEntry": "main-BgjVdyol.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 9541,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 10,
+            "current": 10,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "message": {
+            "original": 40,
+            "current": 40,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "part": {
+            "original": 71,
+            "current": 71,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 15,
+            "current": 15,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 10,
+            "current": 10,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 15,
+            "current": 15,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 20,
+            "current": 20,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 20,
+            "current": 20,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 77,
+            "current": 77,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          }
+        }
+      },
+      "shutdown": {
+        "http": 200,
+        "native": 0,
+        "launcher": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "reserveMs": 975014
+      },
+      "modelRequests": 0,
+      "credentialCopies": false
+    },
+    {
+      "run": 621,
+      "port": 38130,
+      "uiEntry": "main-BgjVdyol.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 9541,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 10,
+            "current": 10,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": [
+              {
+                "id": "ses_-zUQryl9CzzNEb5MNLb0",
+                "column": "time_updated",
+                "before": 1792994172325,
+                "after": 1792995987928,
+                "reason": "Actual new Goal input and settled reply in this existing conversation"
+              }
+            ]
+          },
+          "message": {
+            "original": 40,
+            "current": 40,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "part": {
+            "original": 71,
+            "current": 71,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 15,
+            "current": 15,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 10,
+            "current": 10,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 15,
+            "current": 15,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 20,
+            "current": 20,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 20,
+            "current": 20,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 77,
+            "current": 77,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          }
+        }
+      },
+      "shutdown": {
+        "http": 200,
+        "native": 0,
+        "launcher": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "reserveMs": 892512
+      },
+      "modelRequests": 0,
+      "credentialCopies": false
+    }
+  ],
+  "cumulativeModelRequests": 167,
+  "screenshots": [
+    "01-general-baseline.jpg",
+    "02-archive-mutation-failed.jpg",
+    "03-archived-work-visible.jpg",
+    "04-work-search-matches-original.jpg",
+    "05-chinese-archive-before-restore.jpg",
+    "06-restored-query-and-focus.jpg",
+    "07-restored-original-history.jpg"
+  ]
+}

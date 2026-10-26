@@ -3447,6 +3447,12 @@ Support ZIP exports exact retained raw files, canonical-time formatted records a
 
 ## Archive queries
 
+The Chat/Work, Task and Mission archive/restore endpoints use the existing
+Project identity context independently of execution-model initialization.
+Their original ownership, cancellation, physical settlement, closure and
+retention transactions remain authoritative. Restore retains the original
+stopped occurrence and paused Goal; it does not admit new execution.
+
 Settings Archive passes its current search to the existing archived Work Ledger
 reader. Search runs over the complete archive before cursor pagination; it does
 not filter only the loaded rows. Query replacement and API authority changes

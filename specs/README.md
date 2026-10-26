@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [设置与归档完整体验](records/2026-10/2026-10-26-settings-archive-experience.md)：修复模型不可用时归档/恢复失败，保留真实取消、终态与原历史。
+
 - [0.1.28 正式发布](records/2026-10/2026-10-26-release-0.1.28.md)：成熟DMG生产工具、失败集合重试与完整原生/官网交付。
 
 - [Goal 表单与执行控制](records/2026-10/2026-10-26-goal-guide-form-lifetime.md)：说明返回保持输入、无模型控制与共享阻塞收敛及真实Sol执行。
