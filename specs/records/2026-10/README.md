@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [用户命令原文与停止结果](2026-10-26-user-shell-message-and-stop.md)：49项162断言、原文补强与635实际UI停止验收。
+
 - [直接用户命令执行状态](2026-10-26-shell-execution-lifecycle.md)：原输入执行事实、共享恢复边界与633真实页面验证。
 
 - [Shell 文本输出与停止保留](2026-10-26-shell-text-encoding.md)：56项140断言、630–632真实Sol及中英实页验收。

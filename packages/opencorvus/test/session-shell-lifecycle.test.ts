@@ -39,7 +39,10 @@ test("successive real user commands publish completed occurrences with their act
     const completed: Array<{ inputMessageID: string; finalMessageID: string; exit: number }> = []
     for (const exit of [7, 0]) {
       const messageID = Identifier.ascending("message")
-      const result = await SessionShell.shell({ sessionID: session.id, messageID, agent: "chat", model, command: `exit ${exit}` })
+      const command = `\n  echo "原始输入🙂"\nexit ${exit}\n`
+      const result = await SessionShell.shell({ sessionID: session.id, messageID, agent: "chat", model, command })
+      const originalInput = (await Session.messages({ sessionID: session.id })).find(message => message.info.id === messageID)
+      expect(originalInput?.parts.filter(part => part.type === "text").map(part => part.text)).toEqual([command])
       completed.push({ inputMessageID: messageID, finalMessageID: result.info.id, exit })
       expect(await occurrenceView(session.id, messageID)).toMatchObject({ inputMessageID: messageID, status: "completed" })
       expect(lifecycle(session.id, messageID)).toEqual({ type: "terminal", reason: "completed", final_message_id: result.info.id })
@@ -78,6 +81,21 @@ test("a real running user command publishes its exact occurrence and retains its
     }
     expect(await occurrenceView(session.id, messageID)).toMatchObject({ inputMessageID: messageID, status: "skipped" })
     expect(lifecycle(session.id, messageID)).toMatchObject({ type: "terminal", reason: "aborted" })
+    const stopped = await execution
+    expect(stopped.info).toMatchObject({
+      role: "assistant", finish: "error", error: { name: "MessageAbortedError", data: {
+        cancellation: { actor: "user", source: "session.abort", requestID: "stop-owned-command" },
+      } },
+    })
+    expect(stopped.parts[0]).toMatchObject({ type: "tool", state: {
+      status: "error", failure: { kind: "MessageAbortedError", name: "MessageAbortedError", data: {
+        canonical_error_metadata: { cancellation: { actor: "user", source: "session.abort", requestID: "stop-owned-command" } },
+      } }, metadata: { output: expect.stringContaining("COMMAND_READY"), exit: expect.any(Number) },
+    } })
+    const next = await SessionShell.shell({ sessionID: session.id, agent: "chat", model, command: "exit 0" })
+    if (next.info.role !== "assistant") throw new Error("Next original shell assistant required")
+    expect(lifecycle(session.id, next.info.parentID)).toMatchObject({ type: "terminal", reason: "completed", final_message_id: next.info.id })
+    expect(lifecycle(session.id, messageID)).toMatchObject({ type: "terminal", reason: "aborted", final_message_id: stopped.info.id })
   } })
 }, 30_000)
 

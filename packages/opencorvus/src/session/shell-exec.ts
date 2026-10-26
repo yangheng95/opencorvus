@@ -32,7 +32,13 @@ import {
   type RuntimeProcessOccurrenceInfo,
 } from "@/runtime/process-occurrence"
 import { executionInterruptionFailure } from "@/engine/execution-interruption"
-import { renderToolFailureCause, toolFailureCauseFromUnknown, type ToolFailureCause } from "./tool-failure-cause"
+import {
+  failureOccurrenceAnchor,
+  renderToolFailureCause,
+  toolFailureCauseFromMessageError,
+  toolFailureCauseFromUnknown,
+  type ToolFailureCause,
+} from "./tool-failure-cause"
 import {
   ControlLeaseFenceLostError,
   acquireControlLease,
@@ -120,14 +126,14 @@ export namespace SessionShell {
     return child.success ? { ...parsed.data, child: child.data } : parsed.data
   }
 
-  async function publishTerminal(message: Message.Assistant, aborted = false, failure?: ToolFailureCause): Promise<void> {
+  async function publishTerminal(message: Message.Assistant, failure?: ToolFailureCause): Promise<void> {
     const error = message.error?.data.message ?? (failure ? renderToolFailureCause(failure) : undefined)
     await publishSettledSessionTerminalStatusInCurrentProject({
       session: await Session.get(message.sessionID),
       inputMessageID: message.parentID,
       status: {
         type: "terminal",
-        reason: aborted || Message.AbortedError.isInstance(message.error) || Message.AbortedError.isInstance(failure)
+        reason: Message.AbortedError.isInstance(message.error) || Message.AbortedError.isInstance(failure)
           ? "aborted"
           : message.error || failure ? "error" : "completed",
         ...(error ? { error } : {}),
@@ -140,7 +146,6 @@ export namespace SessionShell {
     message: Message.Assistant
     part: Message.ToolPart
     ownership: ProcessOwnership
-    aborted?: boolean
   }): Promise<Message.WithParts> {
     let fencedAt = 0
     const settled = Session.updateMessageAndPartWithCommit(
@@ -166,7 +171,7 @@ export namespace SessionShell {
         if (!released) throw new ControlLeaseFenceLostError(`Session shell ${input.part.id} lost its terminal lease`)
       },
     )
-    await publishTerminal(input.message, input.aborted, input.part.state.status === "error" ? input.part.state.failure : undefined)
+    await publishTerminal(input.message, input.part.state.status === "error" ? input.part.state.failure : undefined)
     return { info: settled.info, parts: [settled.part] }
   }
 
@@ -177,6 +182,17 @@ export namespace SessionShell {
     error: unknown
   }): Promise<Message.WithParts> {
     const now = Date.now()
+    const error = Message.fromError(input.error, { providerID: input.message.providerID })
+    const failureContext = {
+      originSite: "SessionShell.shell",
+      classification: "tool-execution" as const,
+      data: {
+        sessionID: input.message.sessionID,
+        messageID: input.message.id,
+        toolPartID: input.part.id,
+        callID: input.part.callID,
+      },
+    }
     let completedAt = now
     let failedPart = input.part
     if (input.part.state.status === "pending" || input.part.state.status === "running") {
@@ -185,18 +201,13 @@ export namespace SessionShell {
         state: {
           status: "error",
           input: input.part.state.input,
-          failure: toolFailureCauseFromUnknown({
-            error: input.error,
-            originSite: "SessionShell.shell",
-            classification: "tool-execution",
-            kind: "session-shell-execution-failed",
-            data: {
-              sessionID: input.message.sessionID,
-              messageID: input.message.id,
-              toolPartID: input.part.id,
-              callID: input.part.callID,
-            },
-          }),
+          failure: Message.AbortedError.isInstance(error)
+            ? toolFailureCauseFromMessageError({
+                ...failureContext,
+                error,
+                occurrence: failureOccurrenceAnchor({ sessionID: input.message.sessionID, assistantMessageID: input.message.id, error }),
+              })
+            : toolFailureCauseFromUnknown({ ...failureContext, error: input.error, kind: "session-shell-execution-failed" }),
           time: { start: input.part.state.time.start, end: Math.max(now, input.part.state.time.start + 1) },
         },
       }
@@ -208,7 +219,7 @@ export namespace SessionShell {
       input.message.time.completed === undefined
         ? {
             ...input.message,
-            error: Message.fromError(input.error, { providerID: input.message.providerID }),
+            error,
             finish: "error",
             time: { ...input.message.time, completed: completedAt },
           }
@@ -297,7 +308,7 @@ export namespace SessionShell {
     const settled = await MessageStore.get({ sessionID: input.sessionID, messageID: input.assistantMessageID })
     if (settled.info.role !== "assistant") throw new Error("Settled shell assistant required")
     const failure = settled.parts.flatMap(part => part.type === "tool" && part.state.status === "error" ? [part.state.failure] : [])[0]
-    await publishTerminal(settled.info, false, failure)
+    await publishTerminal(settled.info, failure)
     return settled
   }
 
@@ -396,7 +407,7 @@ export namespace SessionShell {
         id: Identifier.ascending("part"),
         messageID: userMsg.id,
         sessionID: input.sessionID,
-        text: "The following tool was executed by the user",
+        text: input.command,
       }
       const msg: Message.Assistant = {
         id: Identifier.ascending("message"),
@@ -632,8 +643,6 @@ export namespace SessionShell {
         supervisor.stdout?.on("data", (chunk) => appendOutput(stdoutDecoder.write(chunk)))
         supervisor.stderr?.on("data", (chunk) => appendOutput(stderrDecoder.write(chunk)))
 
-        let aborted = false
-
         let terminationPromise: Promise<number> | undefined
         let resolveTerminationRequested: ((promise: Promise<number>) => void) | undefined
         const terminationRequested = new Promise<Promise<number>>((resolve) => {
@@ -649,7 +658,6 @@ export namespace SessionShell {
         }
 
         const abortHandler = () => {
-          aborted = abort.aborted
           requestTermination(leaseRenewalFailure ? "lease loss" : "abort")
         }
 
@@ -683,7 +691,10 @@ export namespace SessionShell {
           }
         }
 
-        output = shellResultOutput(output, exitCode, aborted ? ["User aborted the command"] : [])
+        await queueProgress({ ...processProgressMetadata, output, exit: exitCode, description: "" })
+        if (progressFailure) throw progressFailure.error
+        abort.throwIfAborted()
+        output = shellResultOutput(output, exitCode)
         const completedPart: Message.ToolPart =
           part.state.status === "running"
             ? {
@@ -710,7 +721,7 @@ export namespace SessionShell {
           finish: "stop",
           time: { ...msg.time, completed: Date.now() },
         }
-        return settleOwnedTerminal({ message: completedMessage, part: completedPart, ownership, aborted })
+        return settleOwnedTerminal({ message: completedMessage, part: completedPart, ownership })
       })().catch(async (error) => {
         if (error instanceof ControlLeaseFenceLostError) {
           return terminalizeInterruptedOccurrence({ sessionID: msg.sessionID, assistantMessageID: msg.id })

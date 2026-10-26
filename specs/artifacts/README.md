@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [用户命令原文与停止结果](2026-10-26-user-shell-message-and-stop/README.md)：四张实页原图及规范取消、原输入和进程事实。
+
 - [直接用户命令执行状态](2026-10-26-shell-execution-lifecycle/README.md)：四张实际原图及运行/停止/完成持久事实。
 
 - [Shell 文本输出与停止保留](2026-10-26-shell-text-encoding/README.md)：十张原实图、原中文失败/实时缺口及最终真实输出和取消保留。

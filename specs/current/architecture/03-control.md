@@ -166,6 +166,14 @@ or recovered interruption is error. The publisher accepts an optional Task
 identity, preserves the first terminal fact, and leaves newer occurrences alone.
 Replay returns the original terminal history; recovery publishes only the exact
 occurrence whose durable shell result it has actually converged.
+The shell input Message contains the user's original command verbatim, including
+spacing, line breaks and Unicode. After physical/output settlement, the original
+abort signal closes an operator-stopped shell as canonical MessageAbortedError in
+both Message and Tool, carrying the same cancellation authority and failure
+occurrence. Its final committed progress retains the observed output and exit.
+Only a naturally completed command uses the completed Tool result, including a
+natural nonzero exit. No English placeholder or output note substitutes for those
+participant and cancellation facts.
 
 Graceful shutdown distinguishes physical Prompt ownership from Task execution.
 The exact cancellation receipt captures the current input occurrence before

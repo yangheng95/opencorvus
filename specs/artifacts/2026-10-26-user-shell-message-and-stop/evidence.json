@@ -1,0 +1,858 @@
+{
+  "date": "2026-10-26",
+  "scope": "Verbatim user shell Message and canonical operator cancellation after original process/output/progress settlement",
+  "checks": {
+    "red": {
+      "exit": 1,
+      "tests": 1,
+      "failures": 2,
+      "assertions": 10
+    },
+    "final": {
+      "exit": 0,
+      "tests": 49,
+      "failures": 0,
+      "assertions": 162
+    },
+    "verbatim": {
+      "exit": 0,
+      "tests": 3,
+      "failures": 0,
+      "assertions": 21
+    },
+    "backendAndTouchedTestsTypes": {
+      "exit": 0
+    }
+  },
+  "noAuth634": {
+    "request": {
+      "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+      "body": {
+        "messageID": "msg_634_stop_6c01354acf6f44ac96053ede3dd91ad4",
+        "agent": "work",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "command": "python -u -c \"import time; print('用户停止验收', flush=True); time.sleep(180)\""
+      },
+      "at": "2026-10-26T13:41:48.240Z"
+    },
+    "rejected": {
+      "status": 400,
+      "at": "2026-10-26T13:41:48.290Z",
+      "body": {
+        "name": "ProviderModelNotFoundError",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      }
+    },
+    "database": {
+      "schema": 8,
+      "integrity": "ok",
+      "clonedTables": 92,
+      "clonedRows": 23682,
+      "originalSourceAllRowsPreserved": true,
+      "protectedTables": {
+        "session": {
+          "original": 20,
+          "current": 20,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "message": {
+          "original": 86,
+          "current": 86,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "part": {
+          "original": 151,
+          "current": 151,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "tool_part_request": {
+          "original": 25,
+          "current": 25,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "tool_part_progress": {
+          "original": 92,
+          "current": 92,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "tool_part_outcome": {
+          "original": 25,
+          "current": 25,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "provider_activity_request": {
+          "original": 42,
+          "current": 42,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "provider_activity_outcome": {
+          "original": 42,
+          "current": 42,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "protocol_event": {
+          "original": 188,
+          "current": 188,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        }
+      }
+    },
+    "closure": {
+      "originalExec": 31510,
+      "originalExecExit": 0,
+      "publicShutdown": 200,
+      "reserveMs": 1060054,
+      "physical": {
+        "native": {
+          "occurrence": "user-shell-stop-634-44a91a3f-4410-4596-8b4f-dcb24d4e3e59",
+          "outcome": "settled",
+          "host": {
+            "pid": 96016,
+            "processInstanceID": "win32:639286188445555805",
+            "occurrenceID": "7a27f6f7-9275-48f9-819d-bb35d02d9a71"
+          },
+          "target": {
+            "pid": 95284,
+            "processInstanceID": "win32:639286188455261943",
+            "occurrenceID": "ec840d46-cdb5-4591-a2cb-42a321789b92"
+          },
+          "observedAtUtc": "2026-10-26T13:43:04.454Z",
+          "deadlineAt": 1793023244508,
+          "terminal": {
+            "occurrenceID": "user-shell-stop-634-44a91a3f-4410-4596-8b4f-dcb24d4e3e59",
+            "pid": 95284,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "launcher": {
+          "observedAtUtc": "2026-10-26T13:43:04.484167Z",
+          "originalChildExit": 0
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 96016,
+              "processInstanceID": "win32:639286188445555805",
+              "occurrenceID": "7a27f6f7-9275-48f9-819d-bb35d02d9a71"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 95284,
+              "processInstanceID": "win32:639286188455261943",
+              "occurrenceID": "ec840d46-cdb5-4591-a2cb-42a321789b92"
+            }
+          }
+        ],
+        "observedAtUtc": "2026-10-26T13:43:05.5515184Z"
+      }
+    },
+    "authCopied": false,
+    "newProviderActivityRequests": 0,
+    "qualification": "Current model-projection contract rejected the unconfigured model before command admission; not a command pass or a claim that user hot authentication failed"
+  },
+  "runtime635": {
+    "port": 38140,
+    "uiEntry": "main-DqXsnf2O.js",
+    "preflight": {
+      "sessionID": "ses_hpRZwz9bhuqHdCCd8jcs",
+      "credential": "usable",
+      "catalog": "projected",
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true
+    },
+    "commands": [
+      {
+        "mode": "stop",
+        "request": {
+          "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+          "body": {
+            "messageID": "msg_635_stop_8587a11e6cab44a9aa3ff575a05f0750",
+            "agent": "work",
+            "model": {
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol"
+            },
+            "command": "python -u -c \"import time; print('用户停止验收', flush=True); time.sleep(180)\""
+          },
+          "at": "2026-10-26T13:45:34.485Z"
+        },
+        "response": {
+          "status": 200,
+          "at": "2026-10-26T13:46:48.956Z",
+          "body": {
+            "info": {
+              "id": "msg_g0VZAAzJ200pKeSgU03j",
+              "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+              "author": "work",
+              "role": "assistant",
+              "time": {
+                "created": 1793022334529,
+                "completed": 1793022408807
+              },
+              "error": {
+                "name": "MessageAbortedError",
+                "data": {
+                  "message": "Work stopped",
+                  "cancellation": {
+                    "actor": "right_sidebar_conversation",
+                    "source": "right_sidebar.abort",
+                    "surface": "right_sidebar",
+                    "requestID": "20b5fd43-6125-447a-a75e-6bb94de3bd3e",
+                    "reason": "Work stopped",
+                    "targetSessionID": "ses_-zUQryl9CzzNEb5MNLb0"
+                  }
+                }
+              },
+              "parentID": "msg_635_stop_8587a11e6cab44a9aa3ff575a05f0750",
+              "acceptedInputMessageIDs": [
+                "msg_635_stop_8587a11e6cab44a9aa3ff575a05f0750"
+              ],
+              "modelID": "gpt-6.1-sol",
+              "providerID": "openai",
+              "agent": "work",
+              "path": {
+                "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-26\\archive-tool-guidance-607\\project",
+                "root": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-26\\archive-tool-guidance-607\\project"
+              },
+              "cost": 0,
+              "tokens": {
+                "total": 0,
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cache": {
+                  "read": 0,
+                  "write": 0
+                }
+              },
+              "finish": "error",
+              "orderKey": "v1:0001793022334529:0000000000000030:0000000000000000:message:msg_g0VZAAzJ200pKeSgU03j"
+            },
+            "parts": [
+              {
+                "id": "prt_g0VZAAzJ201e48dXFYS3",
+                "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+                "messageID": "msg_g0VZAAzJ200pKeSgU03j",
+                "type": "tool",
+                "callID": "01M5W7B5J17FFEZ65W8RMFW0YG",
+                "tool": "bash",
+                "state": {
+                  "status": "error",
+                  "input": {
+                    "command": "python -u -c \"import time; print('用户停止验收', flush=True); time.sleep(180)\""
+                  },
+                  "failure": {
+                    "kind": "MessageAbortedError",
+                    "name": "MessageAbortedError",
+                    "message": "Work stopped",
+                    "originSite": "SessionShell.shell",
+                    "classification": "tool-execution",
+                    "data": {
+                      "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+                      "messageID": "msg_g0VZAAzJ200pKeSgU03j",
+                      "toolPartID": "prt_g0VZAAzJ201e48dXFYS3",
+                      "callID": "01M5W7B5J17FFEZ65W8RMFW0YG",
+                      "canonical_error_metadata": {
+                        "cancellation": {
+                          "actor": "right_sidebar_conversation",
+                          "source": "right_sidebar.abort",
+                          "surface": "right_sidebar",
+                          "requestID": "20b5fd43-6125-447a-a75e-6bb94de3bd3e",
+                          "reason": "Work stopped",
+                          "targetSessionID": "ses_-zUQryl9CzzNEb5MNLb0"
+                        }
+                      },
+                      "failure_occurrence": {
+                        "session_id": "ses_-zUQryl9CzzNEb5MNLb0",
+                        "assistant_message_id": "msg_g0VZAAzJ200pKeSgU03j",
+                        "error_name": "MessageAbortedError"
+                      }
+                    }
+                  },
+                  "metadata": {
+                    "sessionShellChildProcessOccurrence": {
+                      "pid": 99200,
+                      "processInstanceID": "win32:639286191346841359",
+                      "occurrenceID": "2f195ac5-2233-4430-be2a-0b72cddb923b"
+                    },
+                    "output": "用户停止验收\r\n",
+                    "exit": 1,
+                    "description": ""
+                  },
+                  "time": {
+                    "start": 1793022334529,
+                    "end": 1793022408807
+                  }
+                },
+                "metadata": {
+                  "sessionShellProcessOwnership": {
+                    "version": 1,
+                    "owner": {
+                      "pid": 98200,
+                      "processInstanceID": "win32:639286190879841752",
+                      "occurrenceID": "9353f219-a03f-4722-aff4-3d3b897d7944"
+                    },
+                    "leaseID": "cal_hQPKkhEBXrxm1vN1q16q",
+                    "leaseOwnerOccurrenceID": "01M5W7B5J17FFEZ65W8RMFW0YG"
+                  }
+                },
+                "orderKey": "v1:0001793022334541:0000000000000031:0000000000000000:part:prt_g0VZAAzJ201e48dXFYS3"
+              }
+            ]
+          }
+        },
+        "view": {
+          "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+          "agentID": "work",
+          "orderKey": "v1:0001793022334528:0000000000000030:0000000000000000:message:msg_635_stop_8587a11e6cab44a9aa3ff575a05f0750",
+          "stage": "assistant",
+          "messageIDs": [
+            "msg_635_stop_8587a11e6cab44a9aa3ff575a05f0750",
+            "msg_g0VZAAzJ200pKeSgU03j"
+          ],
+          "firstMessageTime": 1793022334528,
+          "lastMessageTime": 1793022334528,
+          "firstObservedAt": 1793022334528,
+          "lastObservedAt": 1793022408817,
+          "status": "skipped",
+          "activity": [
+            {
+              "id": "prt_g0VZAAzJ201e48dXFYS3",
+              "messageID": "msg_g0VZAAzJ200pKeSgU03j",
+              "orderKey": "v1:0001793022334541:0000000000000031:0000000000000000:part:prt_g0VZAAzJ201e48dXFYS3",
+              "type": "tool",
+              "tool": "bash",
+              "callID": "01M5W7B5J17FFEZ65W8RMFW0YG",
+              "state": {
+                "failure": {
+                  "classification": "tool-execution",
+                  "data": {
+                    "callID": "01M5W7B5J17FFEZ65W8RMFW0YG",
+                    "canonical_error_metadata": "{nested value}",
+                    "failure_occurrence": "{nested value}",
+                    "messageID": "msg_g0VZAAzJ200pKeSgU03j",
+                    "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+                    "toolPartID": "prt_g0VZAAzJ201e48dXFYS3"
+                  },
+                  "kind": "MessageAbortedError",
+                  "message": "Work stopped",
+                  "name": "MessageAbortedError",
+                  "originSite": "SessionShell.shell"
+                },
+                "input": {
+                  "command": "python -u -c \"import time; print('用户停止验收', flush=True); time.sleep(180)\""
+                },
+                "metadata": {
+                  "description": "",
+                  "exit": 1,
+                  "output": "用户停止验收",
+                  "sessionShellChildProcessOccurrence": {
+                    "occurrenceID": "2f195ac5-2233-4430-be2a-0b72cddb923b",
+                    "pid": 99200,
+                    "processInstanceID": "win32:639286191346841359"
+                  }
+                },
+                "status": "error",
+                "time": {
+                  "end": 1793022408807,
+                  "start": 1793022334529
+                }
+              }
+            }
+          ],
+          "todos": [],
+          "todoUpdatedAt": 0,
+          "placement": "top_level",
+          "errorReason": "Work stopped",
+          "lastDisplayMessageID": "msg_g0VZAAzJ200pKeSgU03j",
+          "inputPreview": {
+            "text": "python -u -c \"import time; print('用户停止验收', flush=True); time.sleep(180)\"",
+            "messageID": "msg_635_stop_8587a11e6cab44a9aa3ff575a05f0750",
+            "observedAt": 1793022334528,
+            "source": "user_message"
+          },
+          "executionID": "msg_635_stop_8587a11e6cab44a9aa3ff575a05f0750",
+          "inputMessageID": "msg_635_stop_8587a11e6cab44a9aa3ff575a05f0750"
+        },
+        "events": [
+          {
+            "id": "pev_g0VZAAzJQ00h3H032iqg",
+            "kind": "event",
+            "type": "agent.execution.lifecycle",
+            "aggregate_type": "session",
+            "aggregate_id": "ses_-zUQryl9CzzNEb5MNLb0",
+            "project_id": null,
+            "task_id": null,
+            "session_id": null,
+            "interaction_id": null,
+            "stream_id": null,
+            "source": "session.bridge",
+            "target": null,
+            "causation_id": null,
+            "correlation_id": null,
+            "reply_to": null,
+            "seq": 66,
+            "deadline_ms": null,
+            "emitted_at": 1793022334552,
+            "payload": {
+              "inputMessageID": "msg_635_stop_8587a11e6cab44a9aa3ff575a05f0750",
+              "status": {
+                "type": "streaming"
+              }
+            }
+          },
+          {
+            "id": "pev_g0VZABIdG00csimQBPvg",
+            "kind": "event",
+            "type": "agent.execution.lifecycle",
+            "aggregate_type": "session",
+            "aggregate_id": "ses_-zUQryl9CzzNEb5MNLb0",
+            "project_id": null,
+            "task_id": null,
+            "session_id": null,
+            "interaction_id": null,
+            "stream_id": null,
+            "source": "session.bridge",
+            "target": null,
+            "causation_id": null,
+            "correlation_id": null,
+            "reply_to": null,
+            "seq": 67,
+            "deadline_ms": null,
+            "emitted_at": 1793022408817,
+            "payload": {
+              "inputMessageID": "msg_635_stop_8587a11e6cab44a9aa3ff575a05f0750",
+              "status": {
+                "type": "terminal",
+                "reason": "aborted",
+                "error": "Work stopped",
+                "final_message_id": "msg_g0VZAAzJ200pKeSgU03j"
+              }
+            }
+          }
+        ],
+        "physical": {
+          "output": {
+            "status": "fulfilled",
+            "at": "2026-10-26T13:46:48.798Z"
+          },
+          "kind": "spawnHostShellGated",
+          "identity": {
+            "pid": 99200,
+            "processInstanceID": "win32:639286191346841359",
+            "occurrenceID": "d5e4bfd4-3abd-411b-82e6-c10ee82eb271"
+          },
+          "state": "dead_or_reused",
+          "terminal": {
+            "status": "fulfilled",
+            "value": {
+              "exitCode": 1,
+              "signal": null
+            },
+            "at": "2026-10-26T13:46:48.8Z"
+          },
+          "settlement": {
+            "status": "fulfilled",
+            "at": "2026-10-26T13:46:48.801Z"
+          },
+          "observedCommand": "\n            shopt -s expand_aliases\n            [[ -f ~/.bashrc ]] && source ~/.bashrc >/dev/null 2>&1 || true\n            eval \"python -u -c \\\"import time; print('用户停止验收', flush=True); time.sleep(180)\\\"\"\n          "
+        }
+      },
+      {
+        "mode": "complete",
+        "request": {
+          "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+          "body": {
+            "messageID": "msg_635_complete_3c795f7d530848ac8de65d747a42d022",
+            "agent": "work",
+            "model": {
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol"
+            },
+            "command": "python -u -c \"print('原文命令完成')\""
+          },
+          "at": "2026-10-26T13:47:27.397Z"
+        },
+        "response": {
+          "status": 200,
+          "at": "2026-10-26T13:47:28.251Z",
+          "body": {
+            "info": {
+              "id": "msg_g0VZABSgF00VbEWsvemL",
+              "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+              "author": "work",
+              "role": "assistant",
+              "time": {
+                "created": 1793022447444,
+                "completed": 1793022448079
+              },
+              "parentID": "msg_635_complete_3c795f7d530848ac8de65d747a42d022",
+              "acceptedInputMessageIDs": [
+                "msg_635_complete_3c795f7d530848ac8de65d747a42d022"
+              ],
+              "modelID": "gpt-6.1-sol",
+              "providerID": "openai",
+              "agent": "work",
+              "path": {
+                "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-26\\archive-tool-guidance-607\\project",
+                "root": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-26\\archive-tool-guidance-607\\project"
+              },
+              "cost": 0,
+              "tokens": {
+                "total": 0,
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cache": {
+                  "read": 0,
+                  "write": 0
+                }
+              },
+              "finish": "stop",
+              "orderKey": "v1:0001793022447444:0000000000000030:0000000000000000:message:msg_g0VZABSgF00VbEWsvemL"
+            },
+            "parts": [
+              {
+                "id": "prt_g0VZABSgF01f9kkUFcs3",
+                "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+                "messageID": "msg_g0VZABSgF00VbEWsvemL",
+                "type": "tool",
+                "callID": "01M5W7EKTKZDVMQ1RRZT5JS10D",
+                "tool": "bash",
+                "state": {
+                  "status": "completed",
+                  "input": {
+                    "command": "python -u -c \"print('原文命令完成')\""
+                  },
+                  "output": "原文命令完成\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+                  "title": "",
+                  "metadata": {
+                    "output": "原文命令完成\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+                    "exit": 0,
+                    "description": ""
+                  },
+                  "time": {
+                    "start": 1793022447443,
+                    "end": 1793022448079
+                  }
+                },
+                "metadata": {
+                  "sessionShellProcessOwnership": {
+                    "version": 1,
+                    "owner": {
+                      "pid": 98200,
+                      "processInstanceID": "win32:639286190879841752",
+                      "occurrenceID": "9353f219-a03f-4722-aff4-3d3b897d7944"
+                    },
+                    "leaseID": "cal_hLi8SoQrVyWxJiiaKFlX",
+                    "leaseOwnerOccurrenceID": "01M5W7EKTKZDVMQ1RRZT5JS10D"
+                  }
+                },
+                "orderKey": "v1:0001793022447453:0000000000000031:0000000000000000:part:prt_g0VZABSgF01f9kkUFcs3"
+              }
+            ]
+          }
+        },
+        "view": {
+          "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+          "agentID": "work",
+          "orderKey": "v1:0001793022447443:0000000000000030:0000000000000000:message:msg_635_complete_3c795f7d530848ac8de65d747a42d022",
+          "stage": "assistant",
+          "messageIDs": [
+            "msg_635_complete_3c795f7d530848ac8de65d747a42d022",
+            "msg_g0VZABSgF00VbEWsvemL"
+          ],
+          "firstMessageTime": 1793022447443,
+          "lastMessageTime": 1793022447443,
+          "firstObservedAt": 1793022447443,
+          "lastObservedAt": 1793022448094,
+          "status": "completed",
+          "activity": [
+            {
+              "id": "prt_g0VZABSgF01f9kkUFcs3",
+              "messageID": "msg_g0VZABSgF00VbEWsvemL",
+              "orderKey": "v1:0001793022447453:0000000000000031:0000000000000000:part:prt_g0VZABSgF01f9kkUFcs3",
+              "type": "tool",
+              "tool": "bash",
+              "callID": "01M5W7EKTKZDVMQ1RRZT5JS10D",
+              "state": {
+                "input": {
+                  "command": "python -u -c \"print('原文命令完成')\""
+                },
+                "metadata": {
+                  "description": "",
+                  "exit": 0,
+                  "output": "原文命令完成 <bash_metadata> exit code: 0 </bash_metadata>"
+                },
+                "output": "原文命令完成 <bash_metadata> exit code: 0 </bash_metadata>",
+                "status": "completed",
+                "time": {
+                  "end": 1793022448079,
+                  "start": 1793022447443
+                },
+                "title": ""
+              }
+            }
+          ],
+          "todos": [],
+          "todoUpdatedAt": 0,
+          "placement": "top_level",
+          "lastDisplayMessageID": "msg_g0VZABSgF00VbEWsvemL",
+          "inputPreview": {
+            "text": "python -u -c \"print('原文命令完成')\"",
+            "messageID": "msg_635_complete_3c795f7d530848ac8de65d747a42d022",
+            "observedAt": 1793022447443,
+            "source": "user_message"
+          },
+          "executionID": "msg_635_complete_3c795f7d530848ac8de65d747a42d022",
+          "inputMessageID": "msg_635_complete_3c795f7d530848ac8de65d747a42d022"
+        },
+        "events": [
+          {
+            "id": "pev_g0VZABSga00R8hhP0bz4",
+            "kind": "event",
+            "type": "agent.execution.lifecycle",
+            "aggregate_type": "session",
+            "aggregate_id": "ses_-zUQryl9CzzNEb5MNLb0",
+            "project_id": null,
+            "task_id": null,
+            "session_id": null,
+            "interaction_id": null,
+            "stream_id": null,
+            "source": "session.bridge",
+            "target": null,
+            "causation_id": null,
+            "correlation_id": null,
+            "reply_to": null,
+            "seq": 68,
+            "deadline_ms": null,
+            "emitted_at": 1793022447464,
+            "payload": {
+              "inputMessageID": "msg_635_complete_3c795f7d530848ac8de65d747a42d022",
+              "status": {
+                "type": "streaming"
+              }
+            }
+          },
+          {
+            "id": "pev_g0VZABSqk000lvgXmar0",
+            "kind": "event",
+            "type": "agent.execution.lifecycle",
+            "aggregate_type": "session",
+            "aggregate_id": "ses_-zUQryl9CzzNEb5MNLb0",
+            "project_id": null,
+            "task_id": null,
+            "session_id": null,
+            "interaction_id": null,
+            "stream_id": null,
+            "source": "session.bridge",
+            "target": null,
+            "causation_id": null,
+            "correlation_id": null,
+            "reply_to": null,
+            "seq": 69,
+            "deadline_ms": null,
+            "emitted_at": 1793022448094,
+            "payload": {
+              "inputMessageID": "msg_635_complete_3c795f7d530848ac8de65d747a42d022",
+              "status": {
+                "type": "terminal",
+                "reason": "completed",
+                "final_message_id": "msg_g0VZABSgF00VbEWsvemL"
+              }
+            }
+          }
+        ],
+        "physical": {
+          "output": {
+            "status": "fulfilled",
+            "at": "2026-10-26T13:47:28.066Z"
+          },
+          "kind": "spawnHostShellGated",
+          "identity": {
+            "pid": 46672,
+            "processInstanceID": "win32:639286192476096521",
+            "occurrenceID": "b19ccb08-6995-4631-92c7-219b2eafcb2f"
+          },
+          "state": "dead_or_reused",
+          "terminal": {
+            "status": "fulfilled",
+            "value": {
+              "exitCode": 0,
+              "signal": null
+            },
+            "at": "2026-10-26T13:47:28.072Z"
+          },
+          "settlement": {
+            "status": "fulfilled",
+            "at": "2026-10-26T13:47:28.074Z"
+          },
+          "observedCommand": "\n            shopt -s expand_aliases\n            [[ -f ~/.bashrc ]] && source ~/.bashrc >/dev/null 2>&1 || true\n            eval \"python -u -c \\\"print('原文命令完成')\\\"\"\n          "
+        }
+      }
+    ],
+    "database": {
+      "schema": 8,
+      "integrity": "ok",
+      "clonedTables": 92,
+      "clonedRows": 23682,
+      "originalSourceAllRowsPreserved": true,
+      "protectedTables": {
+        "session": {
+          "original": 20,
+          "current": 21,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "message": {
+          "original": 86,
+          "current": 92,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "part": {
+          "original": 151,
+          "current": 157,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "tool_part_request": {
+          "original": 25,
+          "current": 27,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "tool_part_progress": {
+          "original": 92,
+          "current": 98,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "tool_part_outcome": {
+          "original": 25,
+          "current": 27,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "provider_activity_request": {
+          "original": 42,
+          "current": 43,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "provider_activity_outcome": {
+          "original": 42,
+          "current": 43,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "protocol_event": {
+          "original": 188,
+          "current": 196,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        }
+      }
+    },
+    "attachments": {
+      "pairs": 12,
+      "originalSourceBytesPreserved": true
+    },
+    "requests": 4,
+    "cumulativeRequests": 215,
+    "requestOutcomes": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      }
+    ],
+    "sourceAuthenticationAndCatalog": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "closure": {
+      "originalExec": 97247,
+      "originalExecExit": 0,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "reserveMs": 934216,
+      "physical": true,
+      "output": true,
+      "requests": true,
+      "ownedTab18Closed": true,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true
+    }
+  },
+  "visual": {
+    "screenshots": [
+      "01-original-command-running.jpg",
+      "02-canonical-cancelled.jpg",
+      "03-next-command-completed.jpg",
+      "04-reopened-cancelled.jpg"
+    ],
+    "dimensions": [
+      1280,
+      720
+    ],
+    "qualification": "Four unmodified actual English-interface viewport images manually inspected. User Chinese command is literal. Real UI Stop and renderer reload; public API starts commands. No claimed direct UI command submission or backend restart."
+  },
+  "limits": [
+    "No UI source or automated UI test changed",
+    "Historical stored user Messages and outcomes preserved",
+    "Natural nonzero command exit remains completed; original cancelled execution retains observed exit as metadata",
+    "Model calls are the paired preflight and existing auxiliary flow; direct user commands have no model generation step",
+    "No user database, port18571 process, user window, version or release definitions changed"
+  ]
+}

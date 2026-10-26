@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [用户命令原文与停止结果](records/2026-10/2026-10-26-user-shell-message-and-stop.md)：真实输入、规范取消与输出/退出保留。
+
 - [直接用户命令执行状态](records/2026-10/2026-10-26-shell-execution-lifecycle.md)：规范生命周期与参与者运行、停止、完成状态。
 
 - [Shell 文本输出与停止保留](records/2026-10/2026-10-26-shell-text-encoding.md)：编码、真实进度与当前工具正文的完整链路修复。

@@ -90,7 +90,7 @@ async function persistShellOccurrence(input: {
         id: Identifier.ascending("part"),
         messageID: user.id,
         sessionID: input.sessionID,
-        text: "The following tool was executed by the user",
+        text: input.body.command,
       },
     ],
   })
