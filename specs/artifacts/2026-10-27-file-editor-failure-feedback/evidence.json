@@ -1,0 +1,562 @@
+{
+  "date": "2026-10-27",
+  "scope": "Localized file save/operation feedback and current-language rendering; original diagnostics and draft/revision ownership retained",
+  "checks": {
+    "build": {
+      "label": "file-failure-ui-build",
+      "startedAt": 1793033146741,
+      "closedAt": 1793033259935,
+      "code": 0,
+      "signal": null,
+      "childPID": 97452
+    },
+    "types": {
+      "label": "file-failure-ui-types",
+      "startedAt": 1793033177782,
+      "closedAt": 1793033208035,
+      "code": 0,
+      "signal": null,
+      "childPID": 23576
+    },
+    "language": {
+      "label": "file-failure-ui-language",
+      "startedAt": 1793033177646,
+      "closedAt": 1793033180528,
+      "code": 0,
+      "signal": null,
+      "childPID": 95764
+    },
+    "rendererSurface": {
+      "label": "file-failure-ui-surface",
+      "startedAt": 1793033177727,
+      "closedAt": 1793033180923,
+      "code": 0,
+      "signal": null,
+      "childPID": 98780
+    },
+    "docs": {
+      "label": "file-failure-docs",
+      "startedAt": 1793034093180,
+      "closedAt": 1793034102403,
+      "code": 0,
+      "signal": null,
+      "childPID": 98220
+    }
+  },
+  "actualOriginalDiagnostics": {
+    "before": {
+      "missing": {
+        "method": "PATCH",
+        "status": 404,
+        "requestID": "5debd936-4bb8-44fa-af97-7e129f8a9f35",
+        "body": {
+          "name": "FileNotFoundError",
+          "data": {
+            "path": "file-editor-failure-644/missing-edit.txt",
+            "message": "File entry not found: file-editor-failure-644/missing-edit.txt"
+          }
+        }
+      },
+      "conflict": {
+        "method": "PATCH",
+        "status": 409,
+        "requestID": "866d6848-3ba3-4acb-9392-2266f2e7d728",
+        "body": {
+          "name": "FileWriteConflictError",
+          "data": {
+            "path": "file-editor-failure-644/conflict-edit.txt",
+            "message": "File changed since it was loaded: file-editor-failure-644/conflict-edit.txt. Reload the current file before saving."
+          }
+        }
+      }
+    },
+    "after": {
+      "missing": {
+        "method": "PATCH",
+        "status": 404,
+        "requestID": "c733b63d-f9c2-492a-b85c-dbccbb14d8d5",
+        "body": {
+          "name": "FileNotFoundError",
+          "data": {
+            "path": "file-editor-failure-644/missing-edit.txt",
+            "message": "File entry not found: file-editor-failure-644/missing-edit.txt"
+          }
+        }
+      },
+      "generic": {
+        "method": "PATCH",
+        "status": 400,
+        "requestID": "eae2a8fc-ec58-4f97-987d-bc7ae1eff122",
+        "body": {
+          "name": "FileInvalidPathError",
+          "data": {
+            "path": "file-editor-failure-644/generic-edit.txt",
+            "message": "Cannot edit binary file: file-editor-failure-644/generic-edit.txt"
+          }
+        }
+      },
+      "dialogConflict": {
+        "method": "PATCH",
+        "status": 409,
+        "requestID": "8c9f3177-3f17-4e17-b501-ed1e7b93b53f",
+        "body": {
+          "name": "FileWriteConflictError",
+          "data": {
+            "path": "file-editor-failure-644/conflict-edit.txt",
+            "message": "File changed since it was loaded: file-editor-failure-644/conflict-edit.txt. Reload the current file before saving."
+          }
+        }
+      }
+    }
+  },
+  "fileFacts": {
+    "missing": {
+      "content": "原始正文：文件错误反馈验收。\r\n草稿恢复验收：保留当前编辑。\r\n修复后保存反馈验收。\r\n",
+      "originalSummaryPreserved": true
+    },
+    "genericOriginalBinary": {
+      "action": "binary",
+      "bytes": 8,
+      "content": "AAECA3+A/v8="
+    },
+    "genericRestoredInput": {
+      "action": "restore",
+      "bytes": 44,
+      "content": "原始正文：通用错误反馈验收。\r\n"
+    },
+    "genericSaved": {
+      "action": "inspect",
+      "bytes": 73,
+      "content": "原始正文：通用错误反馈验收。\r\n通用错误草稿验收。\r\n"
+    },
+    "externalContent": "外部调用者保存的第二个版本。\r\n",
+    "originalSummaryPreserved": true
+  },
+  "publicApi": {
+    "before": {
+      "moveAway": {
+        "method": "PATCH",
+        "route": "/file/item",
+        "input": {
+          "path": "file-editor-failure-644/missing-edit.txt",
+          "newPath": "file-editor-failure-644/moved-original.txt"
+        },
+        "status": 200,
+        "requestID": "1ac61147-dbce-47a4-bb7c-c666a47a9901",
+        "body": {
+          "previousPath": "file-editor-failure-644/missing-edit.txt",
+          "path": "file-editor-failure-644/moved-original.txt",
+          "node": {
+            "name": "moved-original.txt",
+            "path": "file-editor-failure-644\\moved-original.txt",
+            "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-26\\archive-tool-guidance-607\\project\\file-editor-failure-644\\moved-original.txt",
+            "type": "file",
+            "ignored": false
+          }
+        }
+      },
+      "moveBack": {
+        "method": "PATCH",
+        "route": "/file/item",
+        "input": {
+          "path": "file-editor-failure-644/moved-original.txt",
+          "newPath": "file-editor-failure-644/missing-edit.txt"
+        },
+        "status": 200,
+        "requestID": "4d645dd0-3d87-480a-ae47-2358fdfd9fac",
+        "body": {
+          "previousPath": "file-editor-failure-644/moved-original.txt",
+          "path": "file-editor-failure-644/missing-edit.txt",
+          "node": {
+            "name": "missing-edit.txt",
+            "path": "file-editor-failure-644\\missing-edit.txt",
+            "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-26\\archive-tool-guidance-607\\project\\file-editor-failure-644\\missing-edit.txt",
+            "type": "file",
+            "ignored": false
+          }
+        }
+      },
+      "externalEdit": {
+        "observations": [
+          {
+            "method": "GET",
+            "route": "/file/content?path=file-editor-failure-644%2Fconflict-edit.txt",
+            "status": 200,
+            "requestID": "ddd11ec5-9b7d-41fd-86a4-c729a1c32309",
+            "body": {
+              "type": "text",
+              "content": "原始正文：文件错误反馈验收。\r\n",
+              "revision": "e5f1b813e6db2cc3bfb1bc9bc7589bc1ef88c1b1520c595febe188e9d2ff34b7"
+            }
+          },
+          {
+            "method": "PATCH",
+            "route": "/file/content",
+            "status": 200,
+            "requestID": "e0b625ba-eb8c-4c1c-82f0-de55e5883e13",
+            "body": {
+              "type": "text",
+              "content": "外部调用者已保存的新版本。\r\n",
+              "revision": "32a1b1ea289b5a0ad8a4d6e00545fb547b9df2a4821d18573faf44778b0bc433"
+            }
+          }
+        ],
+        "content": "外部调用者已保存的新版本。\r\n"
+      }
+    },
+    "after": {
+      "moveAway": {
+        "method": "PATCH",
+        "route": "/file/item",
+        "input": {
+          "path": "file-editor-failure-644/missing-edit.txt",
+          "newPath": "file-editor-failure-644/moved-original.txt"
+        },
+        "status": 200,
+        "requestID": "7a98647b-628b-48ab-81e3-1d5676b0982e",
+        "body": {
+          "previousPath": "file-editor-failure-644/missing-edit.txt",
+          "path": "file-editor-failure-644/moved-original.txt",
+          "node": {
+            "name": "moved-original.txt",
+            "path": "file-editor-failure-644\\moved-original.txt",
+            "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-26\\archive-tool-guidance-607\\project\\file-editor-failure-644\\moved-original.txt",
+            "type": "file",
+            "ignored": false
+          }
+        }
+      },
+      "moveBack": {
+        "method": "PATCH",
+        "route": "/file/item",
+        "input": {
+          "path": "file-editor-failure-644/moved-original.txt",
+          "newPath": "file-editor-failure-644/missing-edit.txt"
+        },
+        "status": 200,
+        "requestID": "a0517d28-943b-4ec4-b5bc-cd962bb01998",
+        "body": {
+          "previousPath": "file-editor-failure-644/moved-original.txt",
+          "path": "file-editor-failure-644/missing-edit.txt",
+          "node": {
+            "name": "missing-edit.txt",
+            "path": "file-editor-failure-644\\missing-edit.txt",
+            "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-26\\archive-tool-guidance-607\\project\\file-editor-failure-644\\missing-edit.txt",
+            "type": "file",
+            "ignored": false
+          }
+        }
+      },
+      "externalEdit": {
+        "observations": [
+          {
+            "method": "GET",
+            "route": "/file/content?path=file-editor-failure-644%2Fconflict-edit.txt",
+            "status": 200,
+            "requestID": "bb5dafd0-f423-4a0a-936d-d67a8a62296d",
+            "body": {
+              "type": "text",
+              "content": "外部调用者已保存的新版本。\r\n",
+              "revision": "32a1b1ea289b5a0ad8a4d6e00545fb547b9df2a4821d18573faf44778b0bc433"
+            }
+          },
+          {
+            "method": "PATCH",
+            "route": "/file/content",
+            "status": 200,
+            "requestID": "d05a935f-72f1-497e-8cde-6169d1f7c9df",
+            "body": {
+              "type": "text",
+              "content": "外部调用者保存的第二个版本。\r\n",
+              "revision": "b2d3abb6e8be961240378b22b680a074c0c443c77470c4056e3b8b25dddb1588"
+            }
+          }
+        ],
+        "content": "外部调用者保存的第二个版本。\r\n"
+      }
+    }
+  },
+  "runs": [
+    {
+      "run": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-26/file-editor-failure-644",
+      "port": 38149,
+      "uiEntry": "main-BGrTrwC8.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 30029,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 23,
+            "current": 23,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "message": {
+            "original": 125,
+            "current": 125,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "part": {
+            "original": 198,
+            "current": 198,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 37,
+            "current": 37,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 98,
+            "current": 98,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 37,
+            "current": 37,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 45,
+            "current": 45,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 45,
+            "current": 45,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 208,
+            "current": 208,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          }
+        }
+      },
+      "publicShutdown": 200,
+      "reserveMs": 690731,
+      "physical": {
+        "native": {
+          "occurrence": "file-editor-failure-644-733fdf44-d2fe-4349-bea5-d28240fb4c07",
+          "outcome": "settled",
+          "host": {
+            "pid": 99212,
+            "processInstanceID": "win32:639286293427344052",
+            "occurrenceID": "ba9b242a-4b8f-4d58-85ba-4f613c261169"
+          },
+          "target": {
+            "pid": 42068,
+            "processInstanceID": "win32:639286293442102575",
+            "occurrenceID": "f13f8b04-5b02-4981-9e2d-76e5e1a84e73"
+          },
+          "observedAtUtc": "2026-10-26T16:44:11.149Z",
+          "deadlineAt": 1793033741880,
+          "terminal": {
+            "occurrenceID": "file-editor-failure-644-733fdf44-d2fe-4349-bea5-d28240fb4c07",
+            "pid": 42068,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "launcher": {
+          "observedAtUtc": "2026-10-26T16:44:11.7538045Z",
+          "originalChildExit": 0
+        },
+        "chain": [
+          {
+            "identity": {
+              "pid": 99212,
+              "processInstanceID": "win32:639286293427344052",
+              "occurrenceID": "ba9b242a-4b8f-4d58-85ba-4f613c261169"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 42068,
+              "processInstanceID": "win32:639286293442102575",
+              "occurrenceID": "f13f8b04-5b02-4981-9e2d-76e5e1a84e73"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "observedAtUtc": "2026-10-26T16:44:25.3673182Z"
+      },
+      "successfulShutdown": true
+    },
+    {
+      "run": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-26/file-editor-failure-645",
+      "port": 38150,
+      "uiEntry": "main-CQhqpHfW.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 30131,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 23,
+            "current": 23,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "message": {
+            "original": 125,
+            "current": 125,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "part": {
+            "original": 198,
+            "current": 198,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 37,
+            "current": 37,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 98,
+            "current": 98,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 37,
+            "current": 37,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 45,
+            "current": 45,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 45,
+            "current": 45,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 208,
+            "current": 208,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          }
+        }
+      },
+      "publicShutdown": 200,
+      "reserveMs": 596077,
+      "physical": {
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-26T16:58:45.45207Z"
+        },
+        "chain": [
+          {
+            "identity": {
+              "pid": 23296,
+              "processInstanceID": "win32:639286301215322156",
+              "occurrenceID": "623355b1-4a59-4208-950e-9846c66ceaaf"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 4576,
+              "processInstanceID": "win32:639286301223089167",
+              "occurrenceID": "433ed1ed-b488-439b-a26a-e3a58c27e49d"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "native": {
+          "occurrence": "file-editor-failure-645-ce084c35-8331-4427-b205-1f210a2ea50b",
+          "outcome": "settled",
+          "host": {
+            "pid": 23296,
+            "processInstanceID": "win32:639286301215322156",
+            "occurrenceID": "623355b1-4a59-4208-950e-9846c66ceaaf"
+          },
+          "target": {
+            "pid": 4576,
+            "processInstanceID": "win32:639286301223089167",
+            "occurrenceID": "433ed1ed-b488-439b-a26a-e3a58c27e49d"
+          },
+          "observedAtUtc": "2026-10-26T16:58:45.419Z",
+          "deadlineAt": 1793034521496,
+          "terminal": {
+            "occurrenceID": "file-editor-failure-645-ce084c35-8331-4427-b205-1f210a2ea50b",
+            "pid": 4576,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-26T16:58:53.6559895Z"
+      },
+      "successfulShutdown": true
+    }
+  ],
+  "attachments": [
+    {
+      "pairs": 13,
+      "originalSourceBytesPreserved": true
+    },
+    {
+      "pairs": 13,
+      "originalSourceBytesPreserved": true
+    }
+  ],
+  "ui": {
+    "beforeEntry": "main-BGrTrwC8.js",
+    "afterEntry": "main-CQhqpHfW.js",
+    "screenshots": 15,
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "manualInteractionAndReview": true,
+    "automatedUITests": false,
+    "closedOwnedTabs": [
+      "27",
+      "28"
+    ],
+    "scope": "Dark desktop, real missing-file/generic-save/conflict and leave/reload flows; actual language settings"
+  },
+  "newModelRequests": 0,
+  "cumulativeModelRequests": 218,
+  "credentialsCopied": false,
+  "boundaries": [
+    "No user18571 process/window/database operation",
+    "No backend API, database schema, migration, version or release change",
+    "No claim of download, close-failure or offline qualification",
+    "645 ten-minute close target exceeded by about 4 seconds; original twenty-minute physical boundary retained"
+  ]
+}

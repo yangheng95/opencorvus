@@ -61,16 +61,17 @@ function canEdit(content: FileContent | null | undefined): boolean {
   return !!content && content.type === "text" && !content.encoding
 }
 
-function errorMessage(error: unknown): string {
+function saveFailureMessageKey(error: unknown): string {
   if (
     error instanceof ApiError &&
-    error.status === 409 &&
     error.body &&
-    typeof error.body === "object" &&
-    (error.body as { name?: unknown }).name === "FileWriteConflictError"
-  )
-    return t("file_editor.save_conflict")
-  return error instanceof Error ? error.message : String(error)
+    typeof error.body === "object"
+  ) {
+    const name = (error.body as { name?: unknown }).name
+    if (error.status === 409 && name === "FileWriteConflictError") return "file_editor.save_conflict"
+    if (error.status === 404 && name === "FileNotFoundError") return "file_editor.save_missing"
+  }
+  return "file_editor.save_failed"
 }
 
 function ownsFileTarget(target: FileEditorTarget): boolean {
@@ -90,7 +91,7 @@ function sameFileResourceTarget(left: FileEditorTarget | null, right: FileEditor
   )
 }
 
-type FileEditorFailure = { cause?: unknown } & ({ message: string } | { messageKey: string })
+type FileEditorFailure = { messageKey: string; cause?: unknown }
 
 export function FileEditorPane() {
   const [draft, setDraft] = createSignal("")
@@ -167,7 +168,7 @@ export function FileEditorPane() {
   const isBusy = () => loading() || saving() || reloading() || identityOf(target()) !== activeTargetIdentity
   const currentErrorMessage = () => {
     const failure = error()
-    return failure && ("messageKey" in failure ? t(failure.messageKey) : failure.message)
+    return failure && t(failure.messageKey)
   }
 
   const retireDownload = () => {
@@ -255,7 +256,7 @@ export function FileEditorPane() {
     if (!file || !writable() || !dirty()) return !dirty()
     const expectedRevision = savedBaseline()?.revision
     if (!expectedRevision) {
-      setError({ message: t("file_editor.revision_required") })
+      setError({ messageKey: "file_editor.revision_required" })
       return false
     }
     const authority = captureApiAuthority()
@@ -274,7 +275,7 @@ export function FileEditorPane() {
       return ownsSubmittedDraft
     } catch (err) {
       if (requestGeneration === saveGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)) {
-        setError({ message: errorMessage(err), cause: err })
+        setError({ messageKey: saveFailureMessageKey(err), cause: err })
       }
       return false
     } finally {
@@ -346,7 +347,7 @@ export function FileEditorPane() {
       const next = await readFileContent(file, authority)
       if (generation !== reloadGeneration || !ownsFileTarget(file) || !isApiAuthorityCurrent(authority)) return
       if (draftRevision !== requestedDraftRevision) {
-        setError({ message: t("file_editor.reload_edited") })
+        setError({ messageKey: "file_editor.reload_edited" })
         return
       }
       setLoadFailure(null)
@@ -354,7 +355,7 @@ export function FileEditorPane() {
     } catch (cause) {
       if (generation === reloadGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)) {
         if (loadFailure()) setLoadFailure({ error: cause })
-        else setError({ message: t("file_editor.reload_failed"), cause })
+        else setError({ messageKey: "file_editor.reload_failed", cause })
       }
     } finally {
       if (generation === reloadGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)) setReloading(false)
@@ -376,7 +377,7 @@ export function FileEditorPane() {
       }
     } catch (cause) {
       if (generation === loadGeneration && isApiAuthorityCurrent(authority) && (!file || ownsFileTarget(file))) {
-        setError({ message: errorMessage(cause), cause })
+        setError({ messageKey: "file_editor.close_failed", cause })
       }
     }
   }

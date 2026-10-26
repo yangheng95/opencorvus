@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件保存失败与草稿恢复反馈](records/2026-10/2026-10-27-file-editor-failure-feedback.md)：清楚的操作提示、当前语言与草稿/外部版本保护实测。
+
 - [OCI 执行后端来源调查](records/2026-10/2026-10-27-oci-origin-investigation.md)：追溯实际历史、旧实验环境与引入决策的证据边界。
 
 - [文件操作与模型可用性边界](records/2026-10/2026-10-26-file-operation-model-independence.md)：普通文件写入独立模型、共享插件初始化与真实前后验收。

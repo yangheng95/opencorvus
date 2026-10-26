@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [文件保存失败与草稿恢复反馈](2026-10-27-file-editor-failure-feedback.md)：原件不可用、通用错误、版本冲突与中英确认框实测。
+
 - [OCI 执行后端来源调查](2026-10-27-oci-origin-investigation.md)：引入来源、部署与旧基准测试的可核对时间线。
 
 - [文件操作与模型可用性边界](2026-10-26-file-operation-model-independence.md)：七种变更、版本保护、格式化、插件与实际页面验证。

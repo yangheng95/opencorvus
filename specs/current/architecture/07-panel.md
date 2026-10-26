@@ -134,11 +134,15 @@ Feedback presents a concise localized hint, full original HTTP diagnostics
 and explicit Retry through the existing reload operation. A repeated retry
 failure replaces that record; success or target retirement clears it. Loaded
 draft reload failures keep the original draft/leave safeguards and action-error
-ownership. The single action error retains its original cause beside its current
-message. A failed reload presents a concise hint and complete diagnostics through
+ownership. The single action error retains its original cause beside one message
+key, translated when rendered in the current interface language. Save conflicts,
+an unavailable original file and other save failures present concise operation
+feedback while the full original error, HTTP response and request identity stay
+in Details. Drafts retain their original save/reload/leave safeguards. A failed
+reload presents a concise hint and complete diagnostics through
 shared Feedback; its bounded native scroll region leaves the loaded editor
 available. The leave dialog reads the same action error. Save conflicts retain
-their existing message and write preconditions. No automatic retry loop or
+their existing meaning and write preconditions. No automatic retry loop or
 parallel file loader is introduced.
 
 Shared CodeEditor keeps original CRLF, LF and CR separators as line-boundary
