@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [直接用户命令执行状态](records/2026-10/2026-10-26-shell-execution-lifecycle.md)：规范生命周期与参与者运行、停止、完成状态。
+
 - [Shell 文本输出与停止保留](records/2026-10/2026-10-26-shell-text-encoding.md)：编码、真实进度与当前工具正文的完整链路修复。
 
 - [Task 回复与决定回执](records/2026-10/2026-10-26-task-response-decision-repair.md)：真实重复回复根因、有效控制回执与原问句复测。

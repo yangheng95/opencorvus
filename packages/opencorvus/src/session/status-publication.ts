@@ -11,7 +11,7 @@ import { awaitWithAbort } from "@/util/abort"
 
 type SettledSessionTerminalStatusInput = {
   session: Pick<Session.Info, "id" | "directory" | "projectID">
-  taskID: string
+  taskID?: string
   inputMessageID: string
   status: Extract<SessionStatus.Info, { type: "terminal" }>
   signal?: AbortSignal
@@ -57,11 +57,12 @@ export async function publishSessionStatus(
 }
 
 /**
- * Close one Session after its physical prompt and ingress ownership have already
- * settled. This is the restart-safe complement to publishSessionStatus:
- * process-local state can be empty while the durable Task ledger still ends in
- * streaming/retry. Persist the process latch's first terminal fact when one
- * exists; otherwise make the requested terminal fact the latch owner.
+ * Close one exact occurrence after its physical execution and durable owning
+ * facts have settled: the Task ledger or the fenced standalone shell result.
+ * This is the restart-safe complement to publishSessionStatus; process-local
+ * state can be empty while durable history still ends in streaming/retry.
+ * Preserve the process latch's first terminal fact when one exists; otherwise
+ * make the requested terminal fact the latch owner.
  */
 async function persistSettledSessionTerminalStatus(
   input: SettledSessionTerminalStatusInput,

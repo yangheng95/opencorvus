@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [直接用户命令执行状态](2026-10-26-shell-execution-lifecycle.md)：原输入执行事实、共享恢复边界与633真实页面验证。
+
 - [Shell 文本输出与停止保留](2026-10-26-shell-text-encoding.md)：56项140断言、630–632真实Sol及中英实页验收。
 
 - [Task 回复与决定回执](2026-10-26-task-response-decision-repair.md)：首轮/继续提示统一，46项后端合同及628真实原问句通过。

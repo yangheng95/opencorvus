@@ -6,6 +6,7 @@ import { readFile, stat, writeFile } from "node:fs/promises"
 import { createManagedTemporaryDirectory, removeManagedDirectoryTree } from "@opencorvus-ai/util/runtime-directories"
 import { Identifier } from "../../src/id/id"
 import { Instance } from "../../src/project/instance"
+import { ProtocolStore } from "../../src/protocol/store"
 import { Provider, type Provider as ProviderType } from "../../src/provider/provider"
 import {
   currentRuntimeProcessOccurrence,
@@ -650,6 +651,8 @@ describe("public Session shell identity", () => {
             sameAssistant: true,
             commandRuns: 1,
           })
+          expect(ProtocolStore.latestSessionOccurrenceEvent(session.id, "agent.execution.lifecycle", messageID)?.payload?.status)
+            .toEqual({ type: "terminal", reason: "completed", final_message_id: first.info.id })
         } finally {
           provider.mockRestore()
         }
@@ -708,6 +711,8 @@ describe("public Session shell identity", () => {
           replayAssistant: occurrence.assistant.id,
           commandRuns: 0,
         })
+        expect(ProtocolStore.latestSessionOccurrenceEvent(session.id, "agent.execution.lifecycle", body.messageID)?.payload?.status)
+          .toMatchObject({ type: "terminal", reason: "error", final_message_id: occurrence.assistant.id })
       },
     })
   })
@@ -964,6 +969,8 @@ describe("public Session shell identity", () => {
             sameAssistant: true,
             spawnCalls: 1,
           })
+          expect(ProtocolStore.latestSessionOccurrenceEvent(session.id, "agent.execution.lifecycle", body.messageID)?.payload?.status)
+            .toMatchObject({ type: "terminal", reason: "error", final_message_id: failed.info.id, error: failed.info.error.data.message })
         } finally {
           spawn.mockRestore()
           provider.mockRestore()
@@ -1153,6 +1160,8 @@ describe("public Session shell identity", () => {
           toolState: "error",
           failureKind: "process-execution-interrupted",
         })
+        expect(ProtocolStore.latestSessionOccurrenceEvent(session.id, "agent.execution.lifecycle", body.messageID)?.payload?.status)
+          .toMatchObject({ type: "terminal", reason: "error", final_message_id: occurrence.assistant.id })
       },
     })
   })

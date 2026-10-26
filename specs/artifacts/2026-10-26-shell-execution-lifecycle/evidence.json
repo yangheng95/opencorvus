@@ -1,0 +1,670 @@
+{
+  "date": "2026-10-26",
+  "scope": "Original direct user-shell occurrence lifecycle; current canonical producer and public conversation projection",
+  "original630": {
+    "id": "msg_g0VZ9inC0009NFpbAmqq",
+    "parentID": "msg_630_unicode_beb69e453de04cd980311be39cd2964f",
+    "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+    "time": {
+      "created": 1793015614781,
+      "completed": 1793015615962
+    },
+    "finish": "stop",
+    "input": "msg_630_unicode_beb69e453de04cd980311be39cd2964f",
+    "lifecycleCount": 0,
+    "qualification": "Original completed Message and Tool are intact; no fabricated historical lifecycle backfill"
+  },
+  "checks": {
+    "red": {
+      "exit": 1,
+      "tests": 0,
+      "failures": 3,
+      "assertions": 5
+    },
+    "firstProductionContracts": {
+      "exit": 0,
+      "tests": 41,
+      "failures": 0,
+      "assertions": 111
+    },
+    "correctedErrorExpectation": {
+      "exit": 1,
+      "tests": 56,
+      "failures": 1,
+      "assertions": 159
+    },
+    "normalAndStopBeforeRecoveryReview": {
+      "exit": 0,
+      "tests": 57,
+      "failures": 0,
+      "assertions": 159
+    },
+    "final": {
+      "exit": 0,
+      "tests": 57,
+      "failures": 0,
+      "assertions": 160
+    },
+    "backendAndTouchedTestsTypes": {
+      "exit": 0
+    }
+  },
+  "runtime": {
+    "port": 38138,
+    "uiEntry": "main-DqXsnf2O.js",
+    "preflight": {
+      "sessionID": "ses_hdqT52NAXcIR5COQIIcs",
+      "credential": "usable",
+      "catalog": "projected",
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true
+    },
+    "commands": [
+      {
+        "mode": "stop",
+        "request": {
+          "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+          "body": {
+            "messageID": "msg_633_stop_56637b4596e849b8b36be888ee22f991",
+            "agent": "work",
+            "model": {
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol"
+            },
+            "command": "python -u -c \"import time; print('生命周期运行中', flush=True); time.sleep(180)\""
+          },
+          "at": "2026-10-26T13:11:51.526Z"
+        },
+        "response": {
+          "status": 200,
+          "at": "2026-10-26T13:13:36.147Z",
+          "body": {
+            "info": {
+              "id": "msg_g0VZA2V2f00v4B8AWi12",
+              "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+              "author": "work",
+              "role": "assistant",
+              "time": {
+                "created": 1793020311570,
+                "completed": 1793020416037
+              },
+              "parentID": "msg_633_stop_56637b4596e849b8b36be888ee22f991",
+              "acceptedInputMessageIDs": [
+                "msg_633_stop_56637b4596e849b8b36be888ee22f991"
+              ],
+              "modelID": "gpt-6.1-sol",
+              "providerID": "openai",
+              "agent": "work",
+              "path": {
+                "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-26\\archive-tool-guidance-607\\project",
+                "root": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-26\\archive-tool-guidance-607\\project"
+              },
+              "cost": 0,
+              "tokens": {
+                "total": 0,
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cache": {
+                  "read": 0,
+                  "write": 0
+                }
+              },
+              "finish": "stop",
+              "orderKey": "v1:0001793020311570:0000000000000030:0000000000000000:message:msg_g0VZA2V2f00v4B8AWi12"
+            },
+            "parts": [
+              {
+                "id": "prt_g0VZA2V2f01WkN5Li4AR",
+                "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+                "messageID": "msg_g0VZA2V2f00v4B8AWi12",
+                "type": "tool",
+                "callID": "01M5W5DE0HAN9D2EBSBH825R1D",
+                "tool": "bash",
+                "state": {
+                  "status": "completed",
+                  "input": {
+                    "command": "python -u -c \"import time; print('生命周期运行中', flush=True); time.sleep(180)\""
+                  },
+                  "output": "生命周期运行中\r\n\n\n<bash_metadata>\nexit code: 1\nUser aborted the command\n</bash_metadata>",
+                  "title": "",
+                  "metadata": {
+                    "output": "生命周期运行中\r\n\n\n<bash_metadata>\nexit code: 1\nUser aborted the command\n</bash_metadata>",
+                    "exit": 1,
+                    "description": ""
+                  },
+                  "time": {
+                    "start": 1793020311570,
+                    "end": 1793020416037
+                  }
+                },
+                "metadata": {
+                  "sessionShellProcessOwnership": {
+                    "version": 1,
+                    "owner": {
+                      "pid": 31828,
+                      "processInstanceID": "win32:639286170461977364",
+                      "occurrenceID": "bde9fc06-c089-4e5b-bf39-e2e5335284dc"
+                    },
+                    "leaseID": "cal_h1utUSk7ImIFwsgPO6Au",
+                    "leaseOwnerOccurrenceID": "01M5W5DE0HAN9D2EBSBH825R1D"
+                  }
+                },
+                "orderKey": "v1:0001793020311588:0000000000000031:0000000000000000:part:prt_g0VZA2V2f01WkN5Li4AR"
+              }
+            ]
+          }
+        },
+        "view": {
+          "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+          "agentID": "work",
+          "orderKey": "v1:0001793020311569:0000000000000030:0000000000000000:message:msg_633_stop_56637b4596e849b8b36be888ee22f991",
+          "stage": "assistant",
+          "messageIDs": [
+            "msg_633_stop_56637b4596e849b8b36be888ee22f991",
+            "msg_g0VZA2V2f00v4B8AWi12"
+          ],
+          "firstMessageTime": 1793020311569,
+          "lastMessageTime": 1793020311569,
+          "firstObservedAt": 1793020311569,
+          "lastObservedAt": 1793020416051,
+          "status": "skipped",
+          "activity": [
+            {
+              "id": "prt_g0VZA2V2f01WkN5Li4AR",
+              "messageID": "msg_g0VZA2V2f00v4B8AWi12",
+              "orderKey": "v1:0001793020311588:0000000000000031:0000000000000000:part:prt_g0VZA2V2f01WkN5Li4AR",
+              "type": "tool",
+              "tool": "bash",
+              "callID": "01M5W5DE0HAN9D2EBSBH825R1D",
+              "state": {
+                "input": {
+                  "command": "python -u -c \"import time; print('生命周期运行中', flush=True); time.sleep(180)\""
+                },
+                "metadata": {
+                  "description": "",
+                  "exit": 1,
+                  "output": "生命周期运行中 <bash_metadata> exit code: 1 User aborted the command </bash_metadata>"
+                },
+                "output": "生命周期运行中 <bash_metadata> exit code: 1 User aborted the command </bash_metadata>",
+                "status": "completed",
+                "time": {
+                  "end": 1793020416037,
+                  "start": 1793020311570
+                },
+                "title": ""
+              }
+            }
+          ],
+          "todos": [],
+          "todoUpdatedAt": 0,
+          "placement": "top_level",
+          "lastDisplayMessageID": "msg_g0VZA2V2f00v4B8AWi12",
+          "inputPreview": {
+            "text": "The following tool was executed by the user",
+            "messageID": "msg_633_stop_56637b4596e849b8b36be888ee22f991",
+            "observedAt": 1793020311569,
+            "source": "user_message"
+          },
+          "executionID": "msg_633_stop_56637b4596e849b8b36be888ee22f991",
+          "inputMessageID": "msg_633_stop_56637b4596e849b8b36be888ee22f991"
+        },
+        "events": [
+          {
+            "id": "pev_g0VZA2V3B00aysFZmzJn",
+            "kind": "event",
+            "type": "agent.execution.lifecycle",
+            "aggregate_type": "session",
+            "aggregate_id": "ses_-zUQryl9CzzNEb5MNLb0",
+            "project_id": null,
+            "task_id": null,
+            "session_id": null,
+            "interaction_id": null,
+            "stream_id": null,
+            "source": "session.bridge",
+            "target": null,
+            "causation_id": null,
+            "correlation_id": null,
+            "reply_to": null,
+            "seq": 62,
+            "deadline_ms": null,
+            "emitted_at": 1793020311600,
+            "payload": {
+              "inputMessageID": "msg_633_stop_56637b4596e849b8b36be888ee22f991",
+              "status": {
+                "type": "streaming"
+              }
+            }
+          },
+          {
+            "id": "pev_g0VZA2wDr00WTSSXYRpf",
+            "kind": "event",
+            "type": "agent.execution.lifecycle",
+            "aggregate_type": "session",
+            "aggregate_id": "ses_-zUQryl9CzzNEb5MNLb0",
+            "project_id": null,
+            "task_id": null,
+            "session_id": null,
+            "interaction_id": null,
+            "stream_id": null,
+            "source": "session.bridge",
+            "target": null,
+            "causation_id": null,
+            "correlation_id": null,
+            "reply_to": null,
+            "seq": 63,
+            "deadline_ms": null,
+            "emitted_at": 1793020416051,
+            "payload": {
+              "inputMessageID": "msg_633_stop_56637b4596e849b8b36be888ee22f991",
+              "status": {
+                "type": "terminal",
+                "reason": "aborted",
+                "final_message_id": "msg_g0VZA2V2f00v4B8AWi12"
+              }
+            }
+          }
+        ],
+        "qualification": "Public API starts original user command; actual UI Stop cancels it; original command output and exit retained"
+      },
+      {
+        "mode": "complete",
+        "request": {
+          "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+          "body": {
+            "messageID": "msg_633_complete_225743d3cdc14e6ea99fc8abd5a1ea4a",
+            "agent": "work",
+            "model": {
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol"
+            },
+            "command": "python -u -c \"print('生命周期已完成')\""
+          },
+          "at": "2026-10-26T13:13:44.527Z"
+        },
+        "response": {
+          "status": 200,
+          "at": "2026-10-26T13:13:45.011Z",
+          "body": {
+            "info": {
+              "id": "msg_g0VZA2yRF00oinWijVc6",
+              "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+              "author": "work",
+              "role": "assistant",
+              "time": {
+                "created": 1793020424570,
+                "completed": 1793020424924
+              },
+              "parentID": "msg_633_complete_225743d3cdc14e6ea99fc8abd5a1ea4a",
+              "acceptedInputMessageIDs": [
+                "msg_633_complete_225743d3cdc14e6ea99fc8abd5a1ea4a"
+              ],
+              "modelID": "gpt-6.1-sol",
+              "providerID": "openai",
+              "agent": "work",
+              "path": {
+                "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-26\\archive-tool-guidance-607\\project",
+                "root": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-26\\archive-tool-guidance-607\\project"
+              },
+              "cost": 0,
+              "tokens": {
+                "total": 0,
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cache": {
+                  "read": 0,
+                  "write": 0
+                }
+              },
+              "finish": "stop",
+              "orderKey": "v1:0001793020424570:0000000000000030:0000000000000000:message:msg_g0VZA2yRF00oinWijVc6"
+            },
+            "parts": [
+              {
+                "id": "prt_g0VZA2yRF01mV0b5gJq1",
+                "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+                "messageID": "msg_g0VZA2yRF00oinWijVc6",
+                "type": "tool",
+                "callID": "01M5W5GWBSZSKQTWNXM9VQ8VZ6",
+                "tool": "bash",
+                "state": {
+                  "status": "completed",
+                  "input": {
+                    "command": "python -u -c \"print('生命周期已完成')\""
+                  },
+                  "output": "生命周期已完成\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+                  "title": "",
+                  "metadata": {
+                    "output": "生命周期已完成\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+                    "exit": 0,
+                    "description": ""
+                  },
+                  "time": {
+                    "start": 1793020424569,
+                    "end": 1793020424924
+                  }
+                },
+                "metadata": {
+                  "sessionShellProcessOwnership": {
+                    "version": 1,
+                    "owner": {
+                      "pid": 31828,
+                      "processInstanceID": "win32:639286170461977364",
+                      "occurrenceID": "bde9fc06-c089-4e5b-bf39-e2e5335284dc"
+                    },
+                    "leaseID": "cal_hVxbdcGu2HHIzZGyMDl9",
+                    "leaseOwnerOccurrenceID": "01M5W5GWBSZSKQTWNXM9VQ8VZ6"
+                  }
+                },
+                "orderKey": "v1:0001793020424577:0000000000000031:0000000000000000:part:prt_g0VZA2yRF01mV0b5gJq1"
+              }
+            ]
+          }
+        },
+        "view": {
+          "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+          "agentID": "work",
+          "orderKey": "v1:0001793020424569:0000000000000030:0000000000000000:message:msg_633_complete_225743d3cdc14e6ea99fc8abd5a1ea4a",
+          "stage": "assistant",
+          "messageIDs": [
+            "msg_633_complete_225743d3cdc14e6ea99fc8abd5a1ea4a",
+            "msg_g0VZA2yRF00oinWijVc6"
+          ],
+          "firstMessageTime": 1793020424569,
+          "lastMessageTime": 1793020424569,
+          "firstObservedAt": 1793020424569,
+          "lastObservedAt": 1793020424931,
+          "status": "completed",
+          "activity": [
+            {
+              "id": "prt_g0VZA2yRF01mV0b5gJq1",
+              "messageID": "msg_g0VZA2yRF00oinWijVc6",
+              "orderKey": "v1:0001793020424577:0000000000000031:0000000000000000:part:prt_g0VZA2yRF01mV0b5gJq1",
+              "type": "tool",
+              "tool": "bash",
+              "callID": "01M5W5GWBSZSKQTWNXM9VQ8VZ6",
+              "state": {
+                "input": {
+                  "command": "python -u -c \"print('生命周期已完成')\""
+                },
+                "metadata": {
+                  "description": "",
+                  "exit": 0,
+                  "output": "生命周期已完成 <bash_metadata> exit code: 0 </bash_metadata>"
+                },
+                "output": "生命周期已完成 <bash_metadata> exit code: 0 </bash_metadata>",
+                "status": "completed",
+                "time": {
+                  "end": 1793020424924,
+                  "start": 1793020424569
+                },
+                "title": ""
+              }
+            }
+          ],
+          "todos": [],
+          "todoUpdatedAt": 0,
+          "placement": "top_level",
+          "lastDisplayMessageID": "msg_g0VZA2yRF00oinWijVc6",
+          "inputPreview": {
+            "text": "The following tool was executed by the user",
+            "messageID": "msg_633_complete_225743d3cdc14e6ea99fc8abd5a1ea4a",
+            "observedAt": 1793020424569,
+            "source": "user_message"
+          },
+          "executionID": "msg_633_complete_225743d3cdc14e6ea99fc8abd5a1ea4a",
+          "inputMessageID": "msg_633_complete_225743d3cdc14e6ea99fc8abd5a1ea4a"
+        },
+        "events": [
+          {
+            "id": "pev_g0VZA2yRb00txYXhwz0R",
+            "kind": "event",
+            "type": "agent.execution.lifecycle",
+            "aggregate_type": "session",
+            "aggregate_id": "ses_-zUQryl9CzzNEb5MNLb0",
+            "project_id": null,
+            "task_id": null,
+            "session_id": null,
+            "interaction_id": null,
+            "stream_id": null,
+            "source": "session.bridge",
+            "target": null,
+            "causation_id": null,
+            "correlation_id": null,
+            "reply_to": null,
+            "seq": 64,
+            "deadline_ms": null,
+            "emitted_at": 1793020424590,
+            "payload": {
+              "inputMessageID": "msg_633_complete_225743d3cdc14e6ea99fc8abd5a1ea4a",
+              "status": {
+                "type": "streaming"
+              }
+            }
+          },
+          {
+            "id": "pev_g0VZA2yX500TNhfZWJoc",
+            "kind": "event",
+            "type": "agent.execution.lifecycle",
+            "aggregate_type": "session",
+            "aggregate_id": "ses_-zUQryl9CzzNEb5MNLb0",
+            "project_id": null,
+            "task_id": null,
+            "session_id": null,
+            "interaction_id": null,
+            "stream_id": null,
+            "source": "session.bridge",
+            "target": null,
+            "causation_id": null,
+            "correlation_id": null,
+            "reply_to": null,
+            "seq": 65,
+            "deadline_ms": null,
+            "emitted_at": 1793020424931,
+            "payload": {
+              "inputMessageID": "msg_633_complete_225743d3cdc14e6ea99fc8abd5a1ea4a",
+              "status": {
+                "type": "terminal",
+                "reason": "completed",
+                "final_message_id": "msg_g0VZA2yRF00oinWijVc6"
+              }
+            }
+          }
+        ],
+        "qualification": "Public API executes original user command naturally; actual UI reads its completed participant and Tool; renderer reload rereads the same durable occurrence"
+      }
+    ],
+    "database": {
+      "schema": 8,
+      "integrity": "ok",
+      "clonedTables": 92,
+      "clonedRows": 22351,
+      "originalSourceAllRowsPreserved": true,
+      "protectedTables": {
+        "session": {
+          "original": 19,
+          "current": 20,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "message": {
+          "original": 80,
+          "current": 86,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "part": {
+          "original": 145,
+          "current": 151,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "tool_part_request": {
+          "original": 23,
+          "current": 25,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "tool_part_progress": {
+          "original": 88,
+          "current": 92,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "tool_part_outcome": {
+          "original": 23,
+          "current": 25,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "provider_activity_request": {
+          "original": 41,
+          "current": 42,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "provider_activity_outcome": {
+          "original": 41,
+          "current": 42,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        },
+        "protocol_event": {
+          "original": 180,
+          "current": 188,
+          "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+          "updates": []
+        }
+      }
+    },
+    "attachments": {
+      "pairs": 12,
+      "originalSourceBytesPreserved": true
+    },
+    "requests": 4,
+    "cumulativeRequests": 211,
+    "requestOutcomes": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      }
+    ],
+    "sourceAuthenticationAndCatalog": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "closure": {
+      "originalExec": 32077,
+      "originalExecExit": 0,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "reserveMs": 847470,
+      "physical": true,
+      "output": true,
+      "requests": true,
+      "ownedTab16Closed": true,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true
+    },
+    "commandPhysical": [
+      {
+        "output": {
+          "status": "fulfilled",
+          "at": "2026-10-26T13:13:36.033Z"
+        },
+        "kind": "spawnHostShellGated",
+        "identity": {
+          "pid": 2680,
+          "processInstanceID": "win32:639286171117565979",
+          "occurrenceID": "ba452e5a-f318-4dff-b7bf-0a6d8dc95969"
+        },
+        "settlement": {
+          "status": "fulfilled",
+          "at": "2026-10-26T13:13:36.036Z"
+        },
+        "state": "dead_or_reused",
+        "terminal": {
+          "status": "fulfilled",
+          "value": {
+            "exitCode": 1,
+            "signal": null
+          },
+          "at": "2026-10-26T13:13:36.034Z"
+        }
+      },
+      {
+        "output": {
+          "status": "fulfilled",
+          "at": "2026-10-26T13:13:44.921Z"
+        },
+        "kind": "spawnHostShellGated",
+        "identity": {
+          "pid": 89952,
+          "processInstanceID": "win32:639286172247226456",
+          "occurrenceID": "9ef9fac8-9560-40e1-9205-c8bdeea54950"
+        },
+        "settlement": {
+          "status": "fulfilled",
+          "at": "2026-10-26T13:13:44.924Z"
+        },
+        "state": "dead_or_reused",
+        "terminal": {
+          "status": "fulfilled",
+          "value": {
+            "exitCode": 0,
+            "signal": null
+          },
+          "at": "2026-10-26T13:13:44.922Z"
+        }
+      }
+    ]
+  },
+  "visual": {
+    "screenshots": [
+      "01-running.jpg",
+      "02-stopped-occurrence.jpg",
+      "03-completed-occurrence.jpg",
+      "04-reopened-completed.jpg"
+    ],
+    "dimensions": [
+      1280,
+      720
+    ],
+    "qualification": "Four unmodified actual English-interface viewport screenshots manually inspected; Chinese user command/output kept literal. Stopped and Completed rail tooltips observed. Reopened renderer uses same backend, not a claimed backend restart."
+  },
+  "limits": [
+    "No UI automation created or run; no UI source changed",
+    "The immutable-completed-Message/interrupted-Tool recovery publication was added after633; that branch is qualified by focused production-route tests, while the normal and operator-stop branches observed in633 retain the same behavior",
+    "No automatic lifecycle backfill for completed historical inputs without original lifecycle observations",
+    "Original direct-shell Tool contract retains completed with observed nonzero exit and User aborted note after Stop; participant occurrence accurately retains aborted/skipped",
+    "No direct UI shell-submission entry was claimed; API execution and actual UI reading/Stop are separately qualified",
+    "No user database, port18571 process, user window, release or version definition was modified"
+  ]
+}

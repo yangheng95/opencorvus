@@ -14,6 +14,9 @@ import { shellResultOutput } from "@/shell/result"
 import { PidGuard } from "@/shell/pid-guard"
 import { ProcessSupervisor } from "@/shell/process-supervisor"
 import { SessionPromptState } from "./prompt/state"
+import { SessionStatus } from "./status"
+import { publishSettledSessionTerminalStatusInCurrentProject } from "./status-publication"
+import { ensureTaskMessageProtocolBridge } from "@/orchestrator/protocol/message-bridge"
 import { gitCeilingEnvForWorktree } from "@/worktree/git-ceiling"
 import { SessionContext } from "./context"
 import { EffectiveConfig } from "@/config/effective"
@@ -29,7 +32,7 @@ import {
   type RuntimeProcessOccurrenceInfo,
 } from "@/runtime/process-occurrence"
 import { executionInterruptionFailure } from "@/engine/execution-interruption"
-import { toolFailureCauseFromUnknown } from "./tool-failure-cause"
+import { renderToolFailureCause, toolFailureCauseFromUnknown, type ToolFailureCause } from "./tool-failure-cause"
 import {
   ControlLeaseFenceLostError,
   acquireControlLease,
@@ -117,11 +120,28 @@ export namespace SessionShell {
     return child.success ? { ...parsed.data, child: child.data } : parsed.data
   }
 
-  function settleOwnedTerminal(input: {
+  async function publishTerminal(message: Message.Assistant, aborted = false, failure?: ToolFailureCause): Promise<void> {
+    const error = message.error?.data.message ?? (failure ? renderToolFailureCause(failure) : undefined)
+    await publishSettledSessionTerminalStatusInCurrentProject({
+      session: await Session.get(message.sessionID),
+      inputMessageID: message.parentID,
+      status: {
+        type: "terminal",
+        reason: aborted || Message.AbortedError.isInstance(message.error) || Message.AbortedError.isInstance(failure)
+          ? "aborted"
+          : message.error || failure ? "error" : "completed",
+        ...(error ? { error } : {}),
+        final_message_id: message.id,
+      },
+    })
+  }
+
+  async function settleOwnedTerminal(input: {
     message: Message.Assistant
     part: Message.ToolPart
     ownership: ProcessOwnership
-  }): Message.WithParts {
+    aborted?: boolean
+  }): Promise<Message.WithParts> {
     let fencedAt = 0
     const settled = Session.updateMessageAndPartWithCommit(
       { info: input.message, part: input.part },
@@ -146,15 +166,16 @@ export namespace SessionShell {
         if (!released) throw new ControlLeaseFenceLostError(`Session shell ${input.part.id} lost its terminal lease`)
       },
     )
+    await publishTerminal(input.message, input.aborted, input.part.state.status === "error" ? input.part.state.failure : undefined)
     return { info: settled.info, parts: [settled.part] }
   }
 
-  function settleCaughtExecutionFailure(input: {
+  async function settleCaughtExecutionFailure(input: {
     message: Message.Assistant
     part: Message.ToolPart
     ownership: ProcessOwnership
     error: unknown
-  }): Message.WithParts {
+  }): Promise<Message.WithParts> {
     const now = Date.now()
     let completedAt = now
     let failedPart = input.part
@@ -273,7 +294,11 @@ export namespace SessionShell {
         await Session.updateMessage(terminalMessage)
       }
     }
-    return MessageStore.get({ sessionID: input.sessionID, messageID: input.assistantMessageID })
+    const settled = await MessageStore.get({ sessionID: input.sessionID, messageID: input.assistantMessageID })
+    if (settled.info.role !== "assistant") throw new Error("Settled shell assistant required")
+    const failure = settled.parts.flatMap(part => part.type === "tool" && part.state.status === "error" ? [part.state.failure] : [])[0]
+    await publishTerminal(settled.info, false, failure)
+    return settled
   }
 
   export const ShellInput = z.object({
@@ -465,6 +490,12 @@ export namespace SessionShell {
     const executionAbort = AbortSignal.any([abort, leaseAbort.signal])
     try {
       return await (async () => {
+        SessionStatus.beginExecutionOccurrence(input.sessionID, msg.parentID, abort)
+        ensureTaskMessageProtocolBridge()
+        await SessionStatus.set(input.sessionID, { type: "streaming" }, {
+          promptGenerationOwner: abort,
+          inputMessageID: msg.parentID,
+        })
         const shellBin = Shell.preferred()
         const shellName = (
           process.platform === "win32" ? path.win32.basename(shellBin, ".exe") : path.basename(shellBin)
@@ -679,13 +710,13 @@ export namespace SessionShell {
           finish: "stop",
           time: { ...msg.time, completed: Date.now() },
         }
-        return settleOwnedTerminal({ message: completedMessage, part: completedPart, ownership })
+        return settleOwnedTerminal({ message: completedMessage, part: completedPart, ownership, aborted })
       })().catch(async (error) => {
         if (error instanceof ControlLeaseFenceLostError) {
           return terminalizeInterruptedOccurrence({ sessionID: msg.sessionID, assistantMessageID: msg.id })
         }
         try {
-          return settleCaughtExecutionFailure({ message: msg, part, ownership, error })
+          return await settleCaughtExecutionFailure({ message: msg, part, ownership, error })
         } catch (settlementError) {
           if (settlementError instanceof ControlLeaseFenceLostError) {
             return terminalizeInterruptedOccurrence({ sessionID: msg.sessionID, assistantMessageID: msg.id })

@@ -55,7 +55,7 @@ export namespace SessionStatus {
    * Execution lifecycle fact for one exact input user message. Session rows
    * remain topology; this value describes work caused by an input occurrence.
    *
-   *   streaming = LLM round-trip in flight (overlay shows spinner)
+   *   streaming = LLM round-trip or direct user-shell execution in flight
    *   retry     = streaming, currently sleeping between provider retries
    *   idle      = between turns, awaiting user message / next wake (no spinner)
    *   terminal  = the physical Turn settled; reason explains why

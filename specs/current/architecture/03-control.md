@@ -156,6 +156,16 @@ completion. With attached callbacks, the existing resumed SessionLoop inherits
 the owner and completes it through its own finally; normal shell completion
 does not manufacture cancellation provenance. Public replay keeps its original
 Message and Tool outcome, while a subsequent command receives a new occurrence.
+The direct shell binds its committed user Message to that captured owner and
+publishes the same execution lifecycle as other producers. Its start is
+streaming; once the original process, output, progress and fenced terminal
+Message/Tool commit have settled, the shared current-project terminal publisher
+records that input and final Message. An observed nonzero command exit is a
+completed command; an original cancellation is aborted, and an execution failure
+or recovered interruption is error. The publisher accepts an optional Task
+identity, preserves the first terminal fact, and leaves newer occurrences alone.
+Replay returns the original terminal history; recovery publishes only the exact
+occurrence whose durable shell result it has actually converged.
 
 Graceful shutdown distinguishes physical Prompt ownership from Task execution.
 The exact cancellation receipt captures the current input occurrence before
