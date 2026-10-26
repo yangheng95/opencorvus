@@ -77,7 +77,7 @@ export async function prepareDmgBundler() {
   const environment = Object.fromEntries(
     Object.entries(process.env).filter(([name]) => !name.startsWith("TAURI_SIGNING_")),
   )
-  const version = requireCreateDmgVersion(await $`create-dmg --version`.env(environment).text())
+  const version = requireCreateDmgVersion(await $`create-dmg --pure-version`.env(environment).text())
   console.log(`[package] create-dmg ${version}`)
   return async (input: {
     configuration: DmgConfiguration
