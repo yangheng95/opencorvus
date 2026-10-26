@@ -7,11 +7,13 @@ import {
   type ExpertSquadOption,
 } from "../services/expert-squad"
 import { projectDirectoryLabel } from "../utils/project-directory"
+import { formatErrorDetails } from "../services/diagnostics"
 import { t } from "../utils/i18n"
 import { AutoGrowTextarea } from "./ui/AutoGrowTextarea"
 import { Button } from "./ui/Button"
 import { Checkbox } from "./ui/Checkbox"
 import { Dialog } from "./ui/Dialog"
+import { Feedback } from "./ui/Feedback"
 import { Icon } from "./ui/Icon"
 import { SegmentedControl, type SegmentedControlOption } from "./ui/SegmentedControl"
 import { SelectControl } from "./ui/SelectControl"
@@ -81,10 +83,11 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   const [marketInstallingID, setMarketInstallingID] = createSignal("")
   const [marketInstalledID, setMarketInstalledID] = createSignal("")
   const [submitting, setSubmitting] = createSignal(false)
-  const [error, setError] = createSignal("")
+  const [error, setError] = createSignal<{ mode: MissionCreateMode; cause: unknown }>()
   const [submitAttempted, setSubmitAttempted] = createSignal(false)
   let requestRef: HTMLTextAreaElement | undefined
   let titleRef: HTMLInputElement | undefined
+  let submitFeedback: HTMLDivElement | undefined
   let dialogGeneration = 0
   let expertSquadRequestSequence = 0
 
@@ -267,7 +270,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   function changeMissionType(pillar: ProductPillar): void {
     setProductPillar(pillar)
     setExpertSquadQuery("")
-    setError("")
+    setError(undefined)
     const directory = projectDirectory()
     if (directory) void loadExpertSquadsForContext(directory, pillar)
   }
@@ -314,7 +317,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
         setMarketInstallingID("")
         setMarketInstalledID("")
         setSubmitting(false)
-        setError("")
+        setError(undefined)
         setSubmitAttempted(false)
         queueMicrotask(() => requestRef?.focus())
       },
@@ -443,7 +446,8 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
       return
     }
     setSubmitting(true)
-    setError("")
+    setError(undefined)
+    const createMode = mode()
     const common = {
       directory: projectDirectory(),
       request: request().trim(),
@@ -451,7 +455,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
       expertSquadIDs: [...expertSquadIDs()],
     }
     try {
-      if (mode() === "manual") {
+      if (createMode === "manual") {
         await props.onCreateManual({ ...common, title: title().trim() })
       } else {
         await props.onCreateWithAI(common)
@@ -459,7 +463,11 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
       props.onClose()
     } catch (nextError) {
       if (nextError instanceof DOMException && nextError.name === "AbortError") return
-      setError(nextError instanceof Error ? nextError.message : String(nextError))
+      const failure = { mode: createMode, cause: nextError }
+      setError(failure)
+      queueMicrotask(() => {
+        if (props.open && error() === failure) submitFeedback?.focus()
+      })
     } finally {
       setSubmitting(false)
     }
@@ -534,7 +542,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
           onChange={(nextMode) => {
             if (submitting()) return
             setMode(nextMode)
-            setError("")
+            setError(undefined)
             setSubmitAttempted(false)
           }}
         />
@@ -792,10 +800,23 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
           </div>
         </Show>
 
-        <Show when={error() || marketError()}>
+        <Show when={error()}>
+          {(failure) => (
+            <Feedback
+              ref={submitFeedback}
+              tone="error"
+              tabIndex={-1}
+              data-ui="mission-create-submit-error"
+              details={formatErrorDetails(failure().cause)}
+            >
+              {t(failure().mode === "manual" ? "mission_board.create.manual_failed" : "mission_board.create.ai_failed")}
+            </Feedback>
+          )}
+        </Show>
+        <Show when={!error() && marketError()}>
           <div class="mission-create-form__error" role="alert" tabIndex={-1}>
             <Icon name="error-reason" size="compact" />
-            <span>{error() || marketError()}</span>
+            <span>{marketError()}</span>
           </div>
         </Show>
       </form>

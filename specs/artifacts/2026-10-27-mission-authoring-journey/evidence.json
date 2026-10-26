@@ -1,0 +1,651 @@
+{
+  "qualification": "Real manual desktop /ui interactions, original screenshots, public HTTP responses and read-only database full-row evidence; no UI automated tests",
+  "screenshots": [
+    "01-mission-board-empty.jpg",
+    "02-manual-draft-form-en.jpg",
+    "03-manual-type-mode-preserved.jpg",
+    "04-manual-draft-provider-error.jpg",
+    "05-manual-draft-error-visible.jpg",
+    "06-created-draft-board-en.jpg",
+    "07-saved-draft-context-en.jpg",
+    "08-edited-draft-board-en.jpg",
+    "09-renamed-pinned-draft-context-en.jpg",
+    "10-real-offline-create-feedback-en.jpg",
+    "11-real-offline-create-details-en.jpg",
+    "12-reopened-draft-board-en.jpg",
+    "13-renamed-context-synchronized-en.jpg",
+    "14-reopened-context-zh.jpg",
+    "15-real-offline-create-feedback-zh.jpg",
+    "16-real-offline-create-details-zh.jpg",
+    "17-real-offline-preserved-input-zh.jpg"
+  ],
+  "runs": [
+    {
+      "name": "652",
+      "port": 38157,
+      "uiEntry": "main-CPbUlxFr.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 608,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "automation": {
+            "original": 4,
+            "current": 4,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire": {
+            "original": 3,
+            "current": 3,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_project_target": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "message": {
+            "original": 2,
+            "current": 2,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "part": {
+            "original": 4,
+            "current": 4,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 4,
+            "current": 4,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "session": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          }
+        }
+      },
+      "originalReadmeBytesPreserved": true,
+      "credentialsCopied": false,
+      "requests": 0,
+      "cumulativeRequests": 222,
+      "publicShutdown": 200,
+      "reserveMs": 884047,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "processChain": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ]
+    },
+    {
+      "name": "653",
+      "port": 38158,
+      "uiEntry": "main-BT5CRZvS.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 608,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "automation": {
+            "original": 4,
+            "current": 4,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire": {
+            "original": 3,
+            "current": 3,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_project_target": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "message": {
+            "original": 2,
+            "current": 2,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "part": {
+            "original": 4,
+            "current": 4,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 4,
+            "current": 4,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "session": {
+            "original": 1,
+            "current": 2,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          }
+        }
+      },
+      "originalReadmeBytesPreserved": true,
+      "credentialsCopied": false,
+      "requests": 0,
+      "cumulativeRequests": 222,
+      "publicShutdown": 200,
+      "reserveMs": 738253,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "processChain": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ]
+    },
+    {
+      "name": "654",
+      "port": 38159,
+      "uiEntry": "main-B5mx0xcQ.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 700,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "automation": {
+            "original": 4,
+            "current": 4,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire": {
+            "original": 3,
+            "current": 3,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_project_target": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "message": {
+            "original": 2,
+            "current": 2,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "part": {
+            "original": 4,
+            "current": 4,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 4,
+            "current": 4,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "session": {
+            "original": 2,
+            "current": 2,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": [
+              {
+                "id": "ses_-zUQoSqybzzsmgcixXsH",
+                "columns": [
+                  "title",
+                  "time_updated"
+                ],
+                "reason": "Exact saved Mission renamed through the current public UI; all other original fields remain exact"
+              }
+            ]
+          },
+          "tool_part_outcome": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          }
+        }
+      },
+      "originalReadmeBytesPreserved": true,
+      "credentialsCopied": false,
+      "requests": 0,
+      "cumulativeRequests": 222,
+      "publicShutdown": 200,
+      "reserveMs": 1075445,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "processChain": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ]
+    }
+  ],
+  "missionJourney": {
+    "created": [
+      {
+        "missionID": "fbacaa9772437660",
+        "sessionID": "ses_-zUQoSqybzzsmgcixXsH",
+        "title": "Mission草稿体验653",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-27\\scheduled-settlement-648\\project",
+        "created": 1793042391426,
+        "updated": 1793042391450,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "这是一份仅保存、不启动执行的自有验收需求。先核对需求与看板的一致性，再由用户明确启动。"
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    ],
+    "edited": [
+      {
+        "missionID": "fbacaa9772437660",
+        "sessionID": "ses_-zUQoSqybzzsmgcixXsH",
+        "title": "Mission草稿体验653",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-27\\scheduled-settlement-648\\project",
+        "created": 1793042391426,
+        "updated": 1793042467736,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "这是已经编辑并保存的自有验收需求653。只保存草稿，保留原 Mission 与会话身份；暂不启动任何执行。"
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    ],
+    "reopened": [
+      {
+        "missionID": "fbacaa9772437660",
+        "sessionID": "ses_-zUQoSqybzzsmgcixXsH",
+        "title": "Mission草稿体验653 · 已编辑",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-27\\scheduled-settlement-648\\project",
+        "created": 1793042391426,
+        "updated": 1793042560985,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "这是已经编辑并保存的自有验收需求653。只保存草稿，保留原 Mission 与会话身份；暂不启动任何执行。"
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    ],
+    "final": {
+      "missionID": "fbacaa9772437660",
+      "sessionID": "ses_-zUQoSqybzzsmgcixXsH",
+      "title": "Mission草稿体验653 · 标题同步654",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-27\\scheduled-settlement-648\\project",
+      "created": 1793042391426,
+      "updated": 1793043442383,
+      "interruptible": false,
+      "productPillar": "work",
+      "boardLane": "backlog",
+      "pendingInteractions": 0,
+      "pendingPrompt": {
+        "text": "这是已经编辑并保存的自有验收需求653。只保存草稿，保留原 Mission 与会话身份；暂不启动任何执行。"
+      },
+      "tasks": [],
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      }
+    },
+    "finalMessages": [],
+    "finalLedger": [
+      {
+        "kind": "mission",
+        "id": "fbacaa9772437660",
+        "missionID": "fbacaa9772437660",
+        "sessionID": "ses_-zUQoSqybzzsmgcixXsH",
+        "title": "Mission草稿体验653 · 标题同步654",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-27\\scheduled-settlement-648\\project",
+        "created": 1793042391426,
+        "started": 1793042391426,
+        "updated": 1793043442383,
+        "pinned": true,
+        "interruptible": false,
+        "productPillar": "work",
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        },
+        "pendingInteractions": 0,
+        "tasks": []
+      }
+    ],
+    "automationStatus": "paused",
+    "publicResponses": [
+      {
+        "route": "/mission?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-27%2Fscheduled-settlement-648%2Fproject",
+        "status": 200,
+        "requestID": "31e2c375-b1d9-4ab1-a0c0-5834b03e88ca"
+      },
+      {
+        "route": "/work-ledger",
+        "status": 200,
+        "requestID": "5eb8870b-9ae6-4f89-a3e0-0f32843bbea8"
+      },
+      {
+        "route": "/global/automations",
+        "status": 200,
+        "requestID": "aeec3b97-6853-430c-945a-b2becd70254f"
+      },
+      {
+        "route": "/session/ses_-zUQoSqybzzsmgcixXsH/message?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-27%5Cscheduled-settlement-648%5Cproject",
+        "status": 200,
+        "requestID": "16b56108-ec75-4c0c-9ffd-873be9c5b1d4"
+      }
+    ]
+  },
+  "checks": {
+    "coldPublicRouter": {
+      "tests": 2,
+      "expects": 24,
+      "exitCode": 0
+    },
+    "routeClassification": {
+      "tests": 12,
+      "expects": 12,
+      "exitCode": 0
+    },
+    "intrinsicDraftTransactions": {
+      "tests": 1,
+      "expects": 29,
+      "exitCode": 0,
+      "qualification": "Uses the existing controlled executor; proves intrinsic transactions only"
+    },
+    "overlayTypes": {
+      "label": "mission-authoring-final-types",
+      "startedAt": 1793043158709,
+      "closedAt": 1793043183281,
+      "code": 0,
+      "signal": null,
+      "childPID": 7524
+    },
+    "finalBuild": {
+      "label": "mission-authoring-final-build",
+      "startedAt": 1793043158709,
+      "closedAt": 1793043220623,
+      "code": 0,
+      "signal": null,
+      "childPID": 79376
+    },
+    "i18n": {
+      "locales": 2,
+      "keys": 2555,
+      "exitCode": 0
+    },
+    "rendererSurface": {
+      "assignments": 1,
+      "globals": 1,
+      "exitCode": 0
+    }
+  },
+  "limits": [
+    "Mission dispatch and AI creation were not executed through the UI in this batch",
+    "Task metadata was qualified through the real backend router, not through a Task page",
+    "English Details first-frame screenshot does not show the technical body; final Chinese screenshot does",
+    "Built-in squad description localization remains a subsequent investigation"
+  ]
+}

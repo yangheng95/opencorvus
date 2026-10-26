@@ -2,6 +2,15 @@ import { describe, expect, test } from "bun:test"
 import { projectRouteContextKind } from "@/server/project-route-context"
 
 describe("Project route context authority", () => {
+  test("assigns Mission authoring and Task titles to Project identity while dispatch retains runtime", () => {
+    expect({
+      draft: projectRouteContextKind("/mission/draft", "POST"),
+      edit: projectRouteContextKind("/mission/mission_1/draft", "PATCH"),
+      missionTitle: projectRouteContextKind("/mission/mission_1/title", "PATCH"),
+      taskTitle: projectRouteContextKind("/task/tsk_1/title", "PATCH"),
+      dispatch: projectRouteContextKind("/mission/mission_1/dispatch", "POST"),
+    }).toEqual({ draft: "identity", edit: "identity", missionTitle: "identity", taskTitle: "identity", dispatch: "runtime" })
+  })
   test("assigns explicit file mutations to Project identity", () => {
     expect([
       projectRouteContextKind("/file/content", "PATCH"),
@@ -191,15 +200,17 @@ describe("Project route context authority", () => {
     ]).toEqual(["identity", "identity"])
   })
 
-  test("gives project-owned routes on globally-served routers the same runtime authority as their siblings", () => {
+  test("gives project-owned administrative and attachment routes their required authority", () => {
     expect({
       taskPin: projectRouteContextKind("/work-ledger/item/task/tsk_1/pin", "PATCH"),
       missionPin: projectRouteContextKind("/work-ledger/item/mission/ses_1/pin", "PATCH"),
+      chatPin: projectRouteContextKind("/work-ledger/item/chat/ses_2/pin", "PATCH"),
       directoryReference: projectRouteContextKind("/attachment/directory-reference", "POST"),
       attachmentUpload: projectRouteContextKind("/attachment", "POST"),
     }).toEqual({
-      taskPin: "runtime",
-      missionPin: "runtime",
+      taskPin: "identity",
+      missionPin: "identity",
+      chatPin: "identity",
       directoryReference: "runtime",
       attachmentUpload: "runtime",
     })

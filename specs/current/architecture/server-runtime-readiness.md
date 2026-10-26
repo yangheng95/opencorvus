@@ -28,6 +28,19 @@ runtime event coalescing can omit that final notification. Observation stops
 on the validated receipt, failure, or caller cancellation; each launch keeps
 its own directory and occurrence identity. Startup deadlines remain unchanged.
 
+## Project authority for authoring
+
+The single `project-route-context` policy selects exact Project identity for
+manual Mission draft creation/editing, Mission/Task title changes and Work Ledger
+item pin changes. These durable authoring operations retain their existing
+owner/kind checks, writer transactions and event publication without requiring
+conversation-model initialization. Session item pin lookup uses the current
+Project explicitly; globally named Project pin retains its global authority.
+Explicit Mission dispatch and AI creation continue through the full runtime
+model preflight. The public router owns this distinction, so an independently
+mounted or pre-initialized handler is insufficient qualification of cold reads
+and writes.
+
 ## Command execution and settlement
 
 The shared Process facade owns exact command arguments, byte collection,

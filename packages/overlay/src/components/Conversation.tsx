@@ -31,6 +31,7 @@ import { StatusIndicator } from "./ui/StatusIndicator"
 import { projectDirectoryKey, projectDirectoryLabel } from "../utils/project-directory"
 import { retrySelectedTaskSelection } from "../services/task"
 import { missionBoardStore } from "../services/mission-board"
+import { workLedgerActiveItem } from "../services/work-ledger"
 import {
   buildSubagentConversationItems,
   isSubagentActivityRecord,
@@ -894,7 +895,9 @@ export function Conversation(props: {
             <span class="chat-empty-kicker">
               {savedMissionRequest() ? t("mission_board.create.manual_draft") : t("chat.empty")}
             </span>
-            <h2 class="chat-empty-title">{sessionBoard()?.title || emptyMissionSource()?.id}</h2>
+            <h2 class="chat-empty-title">
+              {workLedgerActiveItem({ sessionID: emptyMissionSource()?.id })?.title || emptyMissionSource()?.id}
+            </h2>
             <Show when={savedMissionRequest()} keyed>
               {(request) => (
                 <div

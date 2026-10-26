@@ -16,6 +16,7 @@ import { isRightSidebarConversationSession } from "@/chat/session"
 import { ConversationHandoffEvent } from "@/chat/handoff"
 import { MissionHandoffEvent } from "@/mission/caller-receipt"
 import { Project } from "@/project/project"
+import { Instance } from "@/project/instance"
 import { ProtocolStore, type ProtocolEventView } from "@/protocol/store"
 import { Session, SessionStatus } from "@/session"
 import { EngineService } from "@/task-api"
@@ -265,7 +266,7 @@ export function WorkLedgerRoutes() {
           await EngineService.setTaskPinned(itemID, pinned)
           return c.json({ pinned })
         }
-        const session = await Session.get(itemID)
+        const session = await Session.getInProject({ sessionID: itemID, projectID: Instance.project.id })
         const matchesKind =
           kind === "mission" ? isMissionWorkLedgerSession(session) : isRightSidebarConversationSession(session)
         if (!matchesKind) {

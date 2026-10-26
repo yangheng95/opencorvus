@@ -864,10 +864,25 @@ Board refreshes do not replace its authored input. Save uses `mission.editDraft`
 and the shared refresh lifecycle. Typed conflicts preserve entered text for
 review/copy; cancellation and saving do not dispatch an execution.
 
+Manual Mission draft creation, draft edits, Mission/Task titles and Work Ledger
+item pin changes use Project identity independently of execution-model readiness.
+Their existing exact owner, kind, revision, transaction and event contracts still
+apply. Item pin reads the Session in that exact Project; Project pin remains a
+global operation naming its Project directly. AI creation and explicit dispatch
+retain execution-model admission.
+
+Mission creation failures preserve the entered fields and focus the existing
+inline Feedback into view. Its current-language summary identifies the submitted
+creation mode; the original diagnostic remains in expandable Details. Changing
+mode or reopening clears that submission's feedback through the form's owner.
+
 A hydrated empty Mission conversation reads its exact Session/directory record
 from that same loaded Mission Board store. Its saved pending request is a
 read-only context section outside the message tree, with the existing Board
-action for editing or starting. Loading, failed or mismatched list data does not
+action for editing or starting. Its displayed title reads the same current
+Work Ledger Session item as the header, rather than the hydration snapshot's
+title; renaming therefore updates both displays through one existing metadata
+projection. Loading, failed or mismatched list data does not
 supply draft text. Long requests retain native focused-region keyboard scrolling;
 the parent history keymap owns only its directly focused viewport. Opening the
 already selected source from the Board reveals that conversation without another

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Mission 草稿完整体验](2026-10-27-mission-authoring-journey.md)：真实创建编辑重开、标题同步、冷项目接口与原输入保护。
+
 - [对话查找、归档与恢复体验](2026-10-27-conversation-archive-journey.md)：原消息保留、双语查找与工作项/项目菜单实际复核。
 
 - [计划任务完整控制体验](2026-10-27-scheduled-control-journey.md)：创建编辑、暂停恢复、运行回执、长请求与真实结果导航。

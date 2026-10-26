@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Mission 草稿完整体验](2026-10-27-mission-authoring-journey/README.md)：17张手工原图、三个隔离实例与规范数据/进程结清事实。
+
 - [对话查找、归档与恢复体验](2026-10-27-conversation-archive-journey/README.md)：26张手工原图、完整归档恢复与三次隔离运行结清事实。
 
 - [计划任务完整控制体验](2026-10-27-scheduled-control-journey/README.md)：20张真实原图、失败与修复后的流式执行和完整结清事实。

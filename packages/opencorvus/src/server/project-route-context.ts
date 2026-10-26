@@ -30,6 +30,7 @@ const PROJECT_IDENTITY_ROUTE_KEYS = new Set([
   "GET /expert-squad/evolution-history",
   "POST /expert-squad/evolution-history/detail",
   "GET /mission-skill/catalog",
+  "POST /mission/draft",
   "GET /experimental/project-memory",
   "POST /project/current/init-git",
   "GET /expert-squad/market",
@@ -77,6 +78,9 @@ const PROJECT_IDENTITY_PROVIDER_ROUTE_KEYS = [
 ]
 
 const PROJECT_IDENTITY_CONVERSATION_ROUTE_PATTERNS = [
+  /^PATCH \/mission\/[^/]+\/(?:draft|title)$/,
+  /^PATCH \/task\/[^/]+\/title$/,
+  /^PATCH \/work-ledger\/item\/(?:mission|task|chat)\/[^/]+\/pin$/,
   /^GET \/mission\/[^/]+\/(?:status|activity-cursor)$/,
   /^POST \/task\/[^/]+\/artifact-read$/,
   /^(?:GET|POST|PATCH) \/continuous-goal\/(?:chat|task|mission)\/[^/]+$/,

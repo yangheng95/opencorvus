@@ -2212,6 +2212,8 @@
   "mission_board.create.action": "Create Mission",
   "mission_board.create.mode": "Creation method",
   "mission_board.create.manual": "Create manually",
+  "mission_board.create.manual_failed": "There was a problem saving the Mission draft. Your input is preserved.",
+  "mission_board.create.ai_failed": "There was a problem creating the Mission. Your input is preserved.",
   "mission_board.create.ai": "Create with AI",
   "mission_board.create.title": "Mission title",
   "mission_board.create.title_placeholder": "Name the Mission outcome",
