@@ -135,7 +135,7 @@ export function CommandPalette(props: {
         id: `ledger:${row.kind}:${row.id}`,
         label: row.title || row.id,
         hint: rowCommandHint(row),
-        group: t("cmdk.group.tasks"),
+        group: t("cmdk.group.work"),
         icon: rowCommandIcon(row),
         run: async () => {
           if (row.kind === "mission") {

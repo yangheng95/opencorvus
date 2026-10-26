@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [对话查找、归档与恢复体验](2026-10-27-conversation-archive-journey/README.md)：26张手工原图、完整归档恢复与三次隔离运行结清事实。
+
 - [计划任务完整控制体验](2026-10-27-scheduled-control-journey/README.md)：20张真实原图、失败与修复后的流式执行和完整结清事实。
 
 - [文件保存失败与草稿恢复反馈](2026-10-27-file-editor-failure-feedback/README.md)：15张真实原图、原错误/草稿/外部版本及隔离运行结清事实。

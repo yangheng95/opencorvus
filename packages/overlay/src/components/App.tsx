@@ -136,8 +136,8 @@ function ChatViewTitle(props: {
               tone="neutral"
               data-chrome="icon-action"
               data-ui="chat-title-more"
-              title={t("project.more_actions")}
-              aria-label={t("project.more_actions")}
+              title={t("work_ledger.action.more")}
+              aria-label={t("work_ledger.action.more")}
             >
               <Icon name="more-horizontal" size="medium" />
             </DropdownMenu.Trigger>

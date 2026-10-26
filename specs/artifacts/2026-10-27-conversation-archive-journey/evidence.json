@@ -1,0 +1,508 @@
+{
+  "qualification": "Manual real desktop page interactions and original screenshots, public HTTP reads and read-only full-row database evidence; no UI automated tests",
+  "screenshots": [
+    "01-original-result-session.jpg",
+    "02-original-menu-without-rename.jpg",
+    "03-renamed-original-session.jpg",
+    "04-search-original-renamed-result.jpg",
+    "05-archived-selection-closed.jpg",
+    "06-archive-row-en.jpg",
+    "07-archive-no-match-en.jpg",
+    "08-archive-row-zh.jpg",
+    "09-restored-query-state-zh.jpg",
+    "10-empty-archive-after-restore-zh.jpg",
+    "11-restored-search-zh-before.jpg",
+    "12-restored-original-reply-zh.jpg",
+    "13-current-search-en.jpg",
+    "14-current-item-menu-en.jpg",
+    "15-current-project-menu-en.jpg",
+    "16-current-archived-row-zh.jpg",
+    "17-current-search-zh.jpg",
+    "18-current-search-entry-zh.jpg",
+    "19-current-item-menu-zh.jpg",
+    "20-current-restored-original-reply-zh.jpg",
+    "21-current-project-menu-zh.jpg",
+    "22-final-search-en.jpg",
+    "23-final-no-match-en.jpg",
+    "24-final-search-zh.jpg",
+    "25-final-no-match-zh.jpg",
+    "26-final-original-reply-zh.jpg"
+  ],
+  "original": {
+    "sessionID": "ses_automation_e5be13f68bb63665233c525b9648f5e1",
+    "title": "Chat",
+    "messageIDs": [
+      "msg_automation_e5be13f68bb63665233c525b9648f5e1",
+      "msg_g0VZBCaZo00MEohhJYxV"
+    ]
+  },
+  "actualJourney": {
+    "sessionID": "ses_automation_e5be13f68bb63665233c525b9648f5e1",
+    "title": "对话归档体验649",
+    "archivedAt": 1793039025281,
+    "finalCreatedAt": 1793037492195,
+    "finalUpdatedAt": 1793039082669,
+    "finalArchived": null,
+    "messageIDs": [
+      "msg_automation_e5be13f68bb63665233c525b9648f5e1",
+      "msg_g0VZBCaZo00MEohhJYxV"
+    ],
+    "originalReply": "SCHEDULE648READY",
+    "activeRow": {
+      "kind": "chat",
+      "experience": "chat",
+      "id": "ses_automation_e5be13f68bb63665233c525b9648f5e1",
+      "sessionID": "ses_automation_e5be13f68bb63665233c525b9648f5e1",
+      "title": "对话归档体验649",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-27\\scheduled-settlement-648\\runtime\\data\\projects\\2026\\10\\27\\ac48fb02-80d3-4725-8d9e-37aaa0c23f66",
+      "created": 1793037492195,
+      "started": 1793037492195,
+      "updated": 1793039082669,
+      "pinned": false,
+      "status": "idle"
+    },
+    "archiveRows": 0,
+    "automationStatus": "paused"
+  },
+  "before": {
+    "port": 38154,
+    "uiEntry": "main-BKiGP2PC.js",
+    "schema": 8,
+    "clonedTables": 92,
+    "clonedRows": 543,
+    "originalSourceAllRowsPreserved": true,
+    "protectedTables": {
+      "automation": {
+        "original": 4,
+        "current": 4,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "automation_definition_tombstone": {
+        "original": 0,
+        "current": 0,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "automation_delay_settlement": {
+        "original": 0,
+        "current": 0,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "automation_fire": {
+        "original": 3,
+        "current": 3,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "automation_fire_attempt": {
+        "original": 1,
+        "current": 1,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "automation_fire_attempt_receipt": {
+        "original": 1,
+        "current": 1,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "automation_fire_frontier": {
+        "original": 0,
+        "current": 0,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "automation_project_target": {
+        "original": 0,
+        "current": 0,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "automation_run": {
+        "original": 1,
+        "current": 1,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "automation_run_receipt": {
+        "original": 1,
+        "current": 1,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "message": {
+        "original": 2,
+        "current": 2,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "part": {
+        "original": 4,
+        "current": 4,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "protocol_event": {
+        "original": 4,
+        "current": 4,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "provider_activity_outcome": {
+        "original": 1,
+        "current": 1,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "provider_activity_request": {
+        "original": 1,
+        "current": 1,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "session": {
+        "original": 1,
+        "current": 1,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": [
+          {
+            "id": "ses_automation_e5be13f68bb63665233c525b9648f5e1",
+            "columns": [
+              "title",
+              "time_updated"
+            ],
+            "reason": "Exact final changed fields after the observed public UI operations; intermediate archive/restore is recorded separately in public snapshots"
+          }
+        ]
+      },
+      "tool_part_outcome": {
+        "original": 0,
+        "current": 0,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "tool_part_progress": {
+        "original": 0,
+        "current": 0,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "tool_part_request": {
+        "original": 0,
+        "current": 0,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      }
+    },
+    "originalReadmeBytesPreserved": true,
+    "credentialsCopied": false,
+    "requests": 0,
+    "cumulativeRequests": 222,
+    "publicShutdown": 200,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "reserveMs": 791625
+  },
+  "after": {
+    "port": 38155,
+    "uiEntry": "main-CPbUlxFr.js",
+    "schema": 8,
+    "clonedTables": 92,
+    "clonedRows": 582,
+    "originalSourceAllRowsPreserved": true,
+    "protectedTables": {
+      "automation": {
+        "original": 4,
+        "current": 4,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "automation_definition_tombstone": {
+        "original": 0,
+        "current": 0,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "automation_delay_settlement": {
+        "original": 0,
+        "current": 0,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "automation_fire": {
+        "original": 3,
+        "current": 3,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "automation_fire_attempt": {
+        "original": 1,
+        "current": 1,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "automation_fire_attempt_receipt": {
+        "original": 1,
+        "current": 1,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "automation_fire_frontier": {
+        "original": 0,
+        "current": 0,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "automation_project_target": {
+        "original": 0,
+        "current": 0,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "automation_run": {
+        "original": 1,
+        "current": 1,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "automation_run_receipt": {
+        "original": 1,
+        "current": 1,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "message": {
+        "original": 2,
+        "current": 2,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "part": {
+        "original": 4,
+        "current": 4,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "protocol_event": {
+        "original": 4,
+        "current": 4,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "provider_activity_outcome": {
+        "original": 1,
+        "current": 1,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "provider_activity_request": {
+        "original": 1,
+        "current": 1,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "session": {
+        "original": 1,
+        "current": 1,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": [
+          {
+            "id": "ses_automation_e5be13f68bb63665233c525b9648f5e1",
+            "columns": [
+              "time_updated"
+            ],
+            "reason": "Exact final changed fields after the observed public UI operations; intermediate archive/restore is recorded separately in public snapshots"
+          }
+        ]
+      },
+      "tool_part_outcome": {
+        "original": 0,
+        "current": 0,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "tool_part_progress": {
+        "original": 0,
+        "current": 0,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      },
+      "tool_part_request": {
+        "original": 0,
+        "current": 0,
+        "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+        "updates": []
+      }
+    },
+    "originalReadmeBytesPreserved": true,
+    "credentialsCopied": false,
+    "requests": 0,
+    "cumulativeRequests": 222,
+    "publicShutdown": 200,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "reserveMs": 911251
+  },
+  "limits": [
+    "Archive/restore was correct before these presentation changes.",
+    "Pure UI semantics only; no backend, scheduling, schema or model behavior change.",
+    "No new paid provider requests. Running Task/Mission recovery, pagination and concurrency were not newly exercised.",
+    "The deliberately uncredentialed scopes show model configuration unavailable; history, rename, search and archive/restore remain usable."
+  ],
+  "final": {
+    "qualification": "Final empty-state copy and original result manually viewed in the current ordinary build",
+    "port": 38156,
+    "uiEntry": "main-CPbUlxFr.js",
+    "sessionID": "ses_automation_e5be13f68bb63665233c525b9648f5e1",
+    "title": "对话归档体验649",
+    "messageIDs": [
+      "msg_automation_e5be13f68bb63665233c525b9648f5e1",
+      "msg_g0VZBCaZo00MEohhJYxV"
+    ],
+    "reply": "SCHEDULE648READY",
+    "archiveRows": 0,
+    "finalArchived": null,
+    "database": {
+      "schema": 8,
+      "integrity": "ok",
+      "clonedTables": 92,
+      "clonedRows": 608,
+      "originalSourceAllRowsPreserved": true,
+      "protectedTables": {
+        "automation": {
+          "original": 4,
+          "current": 4,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_definition_tombstone": {
+          "original": 0,
+          "current": 0,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_delay_settlement": {
+          "original": 0,
+          "current": 0,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_fire": {
+          "original": 3,
+          "current": 3,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_fire_attempt": {
+          "original": 1,
+          "current": 1,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_fire_attempt_receipt": {
+          "original": 1,
+          "current": 1,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_fire_frontier": {
+          "original": 0,
+          "current": 0,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_project_target": {
+          "original": 0,
+          "current": 0,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_run": {
+          "original": 1,
+          "current": 1,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_run_receipt": {
+          "original": 1,
+          "current": 1,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "message": {
+          "original": 2,
+          "current": 2,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "part": {
+          "original": 4,
+          "current": 4,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "protocol_event": {
+          "original": 4,
+          "current": 4,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "provider_activity_outcome": {
+          "original": 1,
+          "current": 1,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "provider_activity_request": {
+          "original": 1,
+          "current": 1,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "session": {
+          "original": 1,
+          "current": 1,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "tool_part_outcome": {
+          "original": 0,
+          "current": 0,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "tool_part_progress": {
+          "original": 0,
+          "current": 0,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "tool_part_request": {
+          "original": 0,
+          "current": 0,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        }
+      }
+    },
+    "originalReadmeBytesPreserved": true,
+    "credentialsCopied": false,
+    "requests": 0,
+    "cumulativeRequests": 222,
+    "publicShutdown": 200,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "reserveMs": 1042786
+  }
+}

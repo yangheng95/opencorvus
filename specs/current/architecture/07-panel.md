@@ -3542,6 +3542,13 @@ The shared active/archive projection treats percent,
 underscore and backslash literally using one escaped SQL LIKE parameter;
 archive visibility and directory boundaries remain unchanged.
 
+The shared search entry and its input describe chats, work and commands in the
+current UI language. Canonical ledger results share a Chats and work heading;
+empty results describe the same scope, and each row retains its original title
+and actual kind. The selected conversation
+header's item menu uses the same More actions label as Work Ledger item menus,
+while the actual Project menu retains its Project actions identity.
+
 Top-level selectable item membership comes from the Work Ledger response.
 The palette keeps its existing parent/child relevance selection when expanding
 a Mission's complete Task collection. Accepted ledger items proceed directly
