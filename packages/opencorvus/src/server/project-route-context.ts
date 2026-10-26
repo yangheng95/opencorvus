@@ -82,6 +82,7 @@ const PROJECT_IDENTITY_CONVERSATION_ROUTE_PATTERNS = [
   /^PATCH \/task\/[^/]+\/title$/,
   /^PATCH \/work-ledger\/item\/(?:mission|task|chat)\/[^/]+\/pin$/,
   /^GET \/mission\/[^/]+\/(?:status|activity-cursor)$/,
+  /^GET \/task\/[^/]+\/turn-artifacts$/,
   /^POST \/task\/[^/]+\/artifact-read$/,
   /^(?:GET|POST|PATCH) \/continuous-goal\/(?:chat|task|mission)\/[^/]+$/,
   /^PATCH \/coding\/(?:chat|work)\/session\/[^/]+\/archive$/,

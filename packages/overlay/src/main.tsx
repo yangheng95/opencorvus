@@ -1856,6 +1856,18 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return !!value && typeof value === "object" && !Array.isArray(value)
 }
 
+async function openRenderedFileLink(element: HTMLElement, open: () => Promise<void>): Promise<void> {
+  const authority = captureApiAuthority()
+  const epoch = boardStore.selectEpoch
+  const reveal = fileEditorRevealRevision()
+  // The file workbench and its draft dialog live outside an artifact's
+  // fullscreen subtree. Finish leaving it before admitting that navigation.
+  if (document.fullscreenElement?.contains(element)) await document.exitFullscreen()
+  assertApiAuthorityCurrent(authority)
+  if (!ownsWorkspaceSelection(epoch) || fileEditorRevealRevision() !== reveal) return
+  await open()
+}
+
 // Delegate clicks on rendered-markdown file links (see utils/markdown.ts —
 // codespans that look like file paths are emitted with data-file-path).
 // A single document-level listener keeps this decoupled from the message
@@ -1884,7 +1896,9 @@ document.addEventListener(
       const reference = elementFileReference(link, FILE_REFERENCE_PATH_ATTRIBUTE)
       if (!reference) return
       ev.preventDefault()
-      runMainAsync("workspace.open-file-link", () => openPathInSelectedEditor(reference.path, reference))
+      runMainAsync("workspace.open-file-link", () =>
+        openRenderedFileLink(link, () => openPathInSelectedEditor(reference.path, reference)),
+      )
       return
     }
     const projectFileLink = target.closest<HTMLElement>(`[${PROJECT_FILE_REFERENCE_PATH_ATTRIBUTE}]`)
@@ -1892,7 +1906,9 @@ document.addEventListener(
     const projectFile = elementFileReference(projectFileLink, PROJECT_FILE_REFERENCE_PATH_ATTRIBUTE)
     if (!projectFile) return
     ev.preventDefault()
-    runMainAsync("workspace.open-project-file", () => openProjectFile(projectFile.path, projectFile))
+    runMainAsync("workspace.open-project-file", () =>
+      openRenderedFileLink(projectFileLink, () => openProjectFile(projectFile.path, projectFile)),
+    )
   },
   listenerOpts,
 )

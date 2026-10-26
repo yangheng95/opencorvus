@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件阅读与编辑交付体验](records/2026-10/2026-10-27-file-reading-editing-journey.md)：全屏文件导航、草稿与文件操作复核，修复只读交付记录的模型误依赖。
+
 - [时间线计划的选择、导航与语言](records/2026-10/2026-10-27-timeline-plan-journey.md)：显式初始视口空白修复、当前语言及同实例导航复核。
 
 - [交互表格原值与语言](records/2026-10/2026-10-27-interactive-table-data-journey.md)：真实混合布尔值、日期语言及原文/显示搜索修复。

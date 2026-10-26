@@ -120,6 +120,12 @@ formatting and canonical file events remain owned by the existing File API.
 An already active Runtime retains its listeners; a cold file operation does
 not claim full Runtime initialization or admit model execution.
 
+The independent Task turn-artifact catalog GET uses that same Project identity
+admission as immutable artifact byte reads and Session artifact readers. It reads
+the existing completion occurrence, message ownership and canonical catalog,
+retaining Task-to-Project checks and the original artifact contracts without
+requiring an executable model.
+
 VCS information, local branches and diff GET readers use the same Project
 identity admission independently of executable model bootstrap. Information
 and branch selection query the existing physical Git branch reader for their
@@ -3110,7 +3116,13 @@ The local error boundary contains the request-owning body and child renderers.
 mounted renderer in compact Conversation form and, when supported, through the
 browser Fullscreen API; it never creates a second renderer tree or copies the
 payload into a modal. MCP Apps keep their protocol-owned display modes and do
-not receive this native control. One Overlay artifact-theme materializer reads
+not receive this native control. Delegated Markdown file links leave their owning
+fullscreen subtree before opening the existing file workbench or its draft
+decision dialog. The native transition uses the current connection, workspace
+selection and file reveal revision to retire a stale click. Both codespan and
+authored file-link destinations retain their exact existing path/range and editor
+policy; no second renderer or file-navigation owner handles this transition.
+One Overlay artifact-theme materializer reads
 the applied product CSS custom properties and supplies the semantic palette,
 type, surface, axis, grid, legend, and interaction values used by the mature
 renderer libraries. Chart and Dashboard share its Vega-Lite configuration;
