@@ -27,8 +27,11 @@ type WorkflowJob = {
   needs?: string | string[]
   outputs?: Record<string, string>
   strategy?: {
-    matrix?: {
+    "fail-fast"?: boolean
+    matrix?: string | {
       include?: Array<{ runner: string; platform: string }>
+      kind?: string[]
+      settings?: Array<{ name: string; host: string }>
     }
   }
   steps?: WorkflowStep[]
@@ -36,6 +39,7 @@ type WorkflowJob = {
 
 type Workflow = {
   on?: Record<string, unknown>
+  env?: Record<string, string>
   permissions?: Record<string, string>
   concurrency?: Record<string, unknown>
   jobs?: Record<string, WorkflowJob>
@@ -48,6 +52,26 @@ async function readWorkflow(file: string): Promise<Workflow> {
 }
 
 describe("GitHub Actions workflow contract", () => {
+  test("selects qualified installer files through the shared native transfer owner", async () => {
+    const overlay = await readWorkflow("package-overlay.yml")
+    expect(overlay.env?.OVERLAY_TRANSFER_PATH).toBe(
+      "packages/overlay/dist-artifacts/${{ inputs.platform }}${{ inputs.release-run-id != '' && '/OpenCorvus_*' || '' }}",
+    )
+    for (const job of [overlay.jobs?.build, overlay.jobs?.["assemble-linux"]]) {
+      expect(job?.steps?.find(({ name }) => name === "Upload overlay artifact")?.with?.path).toBe(
+        "${{ env.OVERLAY_TRANSFER_PATH }}",
+      )
+    }
+  })
+
+  test("lets native preflight establish the dependency cache used by canonical Intel builds", async () => {
+    const workflow = await readWorkflow("package-overlay.yml")
+    expect(workflow.jobs?.build?.steps?.find(({ uses }) => uses === "Swatinem/rust-cache@v2")?.with).toEqual({
+      workspaces: "packages/overlay/src-tauri -> target",
+      "save-if": "${{ inputs.platform != 'darwin-x64' || inputs.release-run-id == '' }}",
+    })
+  })
+
   test("qualifies website archives through the prepared isolated backend runner", async () => {
     const workflow = await readWorkflow("deploy-opencorvus-com.yml")
     expect(
@@ -507,7 +531,7 @@ describe("GitHub Actions workflow contract", () => {
       (step: { name?: string }) => step.name === "Resolve release version",
     )
 
-    expect(resolve, "build.yml lost its release-version resolve step").toBeDefined()
+    if (!resolve?.run) throw new Error("build.yml must declare its release-version resolve command")
     expect(resolve.id).toBe("meta")
     expect(resolve.run).toContain("normalizeReleaseVersion")
     expect(resolve.run).toContain('echo "version=$VERSION" >> "$GITHUB_OUTPUT"')
@@ -603,7 +627,7 @@ describe("GitHub Actions workflow contract", () => {
     expect(["package-overlay", "package-cli"].map((job) => workflow.jobs?.[job]?.needs)).toEqual(["prepare", "prepare"])
     expect(assetSteps.indexOf(verifyUpload!)).toBeLessThan(assetSteps.indexOf(verifyUploadPublication!))
     expect(assetSteps.indexOf(verifyUploadPublication!)).toBeLessThan(assetSteps.indexOf(stage!))
-    expect(stage, "build.yml lost its Release upload step").toBeDefined()
+    if (!stage?.run) throw new Error("build.yml must declare its Release upload command")
     expect(stage.run).toContain('gh release upload "v${VERSION}" "${FILES[@]}" --clobber')
 
     const publicationSteps = workflow.jobs?.["publish-release"]?.steps ?? []
@@ -642,6 +666,7 @@ describe("GitHub Actions workflow contract", () => {
     const dispatch = publicationSteps.find(
       (step: { name?: string }) => step.name === "Dispatch public download page deployment",
     )
+    if (!dispatch) throw new Error("build.yml must declare its website deployment step")
     expect(dispatch.id).toBe("website")
     expect(dispatch.env?.SOURCE_SHA).toBe("${{ needs.prepare.outputs.source-sha }}")
     expect(dispatch.run).toBe("bun script/release-automation.ts dispatch-website")
@@ -684,8 +709,11 @@ describe("GitHub Actions workflow contract", () => {
       { runner: "windows-latest", platform: "windows-x64" },
     ]
 
-    expect(jobs["package-overlay"]?.strategy?.matrix?.include).toEqual(nativeMatrix)
-    expect(jobs["package-cli"]?.strategy?.matrix?.include).toEqual(nativeMatrix)
+    for (const name of ["package-overlay", "package-cli"]) {
+      const matrix = jobs[name]?.strategy?.matrix
+      if (!matrix || typeof matrix === "string") throw new Error(`${name} must declare its native platform rows`)
+      expect(matrix.include).toEqual(nativeMatrix)
+    }
     expect(jobs["package-cli"]?.steps?.find(({ uses }) => uses === "./.github/actions/setup-bun")?.with).toEqual({
       prepare_compile_runtimes: "true",
     })
@@ -728,7 +756,7 @@ describe("GitHub Actions workflow contract", () => {
     })
     expect(jobs["package-cli"]?.steps?.find(({ uses }) => uses === "actions/upload-artifact@v7")?.with).toEqual({
       name: "cli-${{ matrix.platform }}",
-      path: "packages/opencorvus/dist/opencorvus-${{ matrix.platform }}\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}.tar.gz\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline.tar.gz\npackages/opencorvus/dist/work-artifact-qualification-opencorvus-${{ matrix.platform }}*.json\n",
+      path: "packages/opencorvus/dist/opencorvus-${{ matrix.platform }}.tar.gz\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline.tar.gz\npackages/opencorvus/dist/work-artifact-qualification-opencorvus-${{ matrix.platform }}*.json\n",
       "if-no-files-found": "error",
       "retention-days": 7,
     })

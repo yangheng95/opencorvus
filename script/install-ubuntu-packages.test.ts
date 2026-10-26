@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test"
-import { spawnSync } from "node:child_process"
+import { execFileSync, spawnSync } from "node:child_process"
 import fs from "node:fs"
 import os from "node:os"
 import path from "node:path"
@@ -7,6 +7,19 @@ import { fileURLToPath } from "node:url"
 
 const script = fileURLToPath(new URL("./install-ubuntu-packages.sh", import.meta.url))
 const shellPath = (value: string) => (process.platform === "win32" ? value.replaceAll("\\", "/") : value)
+const bash =
+  process.platform === "win32"
+    ? path.resolve(
+        execFileSync("git", ["--exec-path"], { encoding: "utf8", windowsHide: true }).trim(),
+        "../../../usr/bin/bash.exe",
+      )
+    : "bash"
+const shellEnvironment = { ...process.env }
+if (process.platform === "win32") {
+  for (const key of Object.keys(shellEnvironment)) if (key.toLowerCase() === "path") delete shellEnvironment[key]
+  shellEnvironment.PATH = `${path.dirname(bash)}${path.delimiter}${process.env.PATH ?? ""}`
+}
+const shellOptions = { encoding: "utf8" as const, windowsHide: true, env: shellEnvironment }
 
 function rewrite(source: string, architecture: string) {
   const parent = path.resolve(os.tmpdir())
@@ -16,7 +29,7 @@ function rewrite(source: string, architecture: string) {
     const output = path.join(root, "output.sources")
     fs.writeFileSync(input, source)
     const result = spawnSync(
-      "bash",
+      bash,
       [
         "--noprofile",
         "--norc",
@@ -28,7 +41,7 @@ function rewrite(source: string, architecture: string) {
         shellPath(output),
         architecture,
       ],
-      { encoding: "utf8", windowsHide: true },
+      shellOptions,
     )
     if (result.error) throw result.error
     return { status: result.status, error: result.stderr.trim(), output: fs.readFileSync(output, "utf8") }
@@ -99,10 +112,7 @@ test("maps a source without a repository URI to the declared configuration error
 test.each([{ args: [] }, { args: ["--command"] }])(
   "maps an empty installer request %j to the usage contract",
   ({ args }) => {
-    const result = spawnSync("bash", ["--noprofile", "--norc", shellPath(script), ...args], {
-      encoding: "utf8",
-      windowsHide: true,
-    })
+    const result = spawnSync(bash, ["--noprofile", "--norc", shellPath(script), ...args], shellOptions)
     if (result.error) throw result.error
     expect({ status: result.status, error: result.stderr.trim() }).toEqual({
       status: 2,
@@ -113,7 +123,7 @@ test.each([{ args: [] }, { args: ["--command"] }])(
 
 test("writes the inherited apt-get policy with binary-specific precedence", () => {
   const result = spawnSync(
-    "bash",
+    bash,
     [
       "--noprofile",
       "--norc",
@@ -122,7 +132,7 @@ test("writes the inherited apt-get policy with binary-specific precedence", () =
       "config-contract",
       shellPath(script),
     ],
-    { encoding: "utf8", windowsHide: true },
+    shellOptions,
   )
   if (result.error) throw result.error
   expect({ status: result.status, error: result.stderr.trim(), configuration: result.stdout }).toEqual({
@@ -144,7 +154,7 @@ test("writes the inherited apt-get policy with binary-specific precedence", () =
 
 test.each(['"', "\\", "\n", "\r"])("maps an unrepresentable source path %j to the configuration error", (value) => {
   const result = spawnSync(
-    "bash",
+    bash,
     [
       "--noprofile",
       "--norc",
@@ -153,7 +163,7 @@ test.each(['"', "\\", "\n", "\r"])("maps an unrepresentable source path %j to th
       "config-contract",
       shellPath(script),
     ],
-    { encoding: "utf8", windowsHide: true, input: `/tmp/${value}/ubuntu.sources` },
+    { ...shellOptions, input: `/tmp/${value}/ubuntu.sources` },
   )
   if (result.error) throw result.error
   expect({ status: result.status, error: result.stderr.trim() }).toEqual({

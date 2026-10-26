@@ -4,6 +4,48 @@
 
 ## 未发布
 
+## 0.1.32 - 2026-10-27
+
+### zh-CN
+
+#### 调整
+
+- 正式 CI（Continuous Integration，持续集成）只传输已通过检查的安装包、CLI（Command Line Interface，命令行界面）归档及资格回执，减少不会公开的裸程序和解包目录副本；调试构建保留完整产物，安装器、归档内容和签名合同保持。
+- Intel Mac 原生预检可保存同一生产构建的 Rust 依赖缓存，正式发布恢复该缓存；原五平台验收、源码归属和从创建起计算的40分钟联合期限保持。
+
+#### 修复
+
+- 定时任务的“立即运行”持续等待服务端真实执行回执，避免原15秒通用请求期限使较长执行过早报告失败；执行中的反馈、原运行身份及历史结果保持一致，完成后可打开对应真实会话。
+- 暂停状态明确表示“自动运行已暂停”，仍可手动执行一次；中英状态和本地化日期按当前界面语言显示，保留原计划与暂停决定。
+- 搜索入口、分类和空结果明确包括工作记录，重命名与归档动作按实际对象命名；中英界面保留同一查询和原归档状态。
+- 补齐 Intel Mac 准备阶段一直无法建立依赖缓存的问题，并精简原生验收后的发布传输，为资源公开、更新结算和配对官网保留执行时间。
+
+#### 用户影响与已知限制
+
+- `0.1.31` 已公开五平台安装包、CLI 和签名更新，但配对官网在联合期限内未完成，下载清单仍停留在旧版；本版本继续完成该联合交付，保留31的真实发布及原始日志。[31的完整产品变化与升级说明](https://opencorvus.com/zh-cn/changelog/0.1.31/)仍适用，26或31用户均可升级。
+- 本次不改变数据库结构；受支持基线继续自动迁移到版本8并保留备份。专家团冻结修订、投影子任务完整物理停止及长对话压缩的既有边界保持，未声称全部解除。
+- macOS 仍为临时签名（ad hoc），未包含 Apple 公证。原生 Rust 的 `glib`（中危，GHSA-wrw7-89jp-8q8g）与 `rand`（低危，GHSA-cq8v-f236-94qc）通告仍未关闭；本次不升级这两项。
+
+### en-US
+
+#### Changed
+
+- Transfer only qualified installers, CLI (Command Line Interface) archives and qualification receipts in canonical CI (Continuous Integration), reducing copies of bare executables and unpacked directories that are not public assets. Debug builds retain complete outputs; installer contents, archives and signing contracts remain unchanged.
+- Allow Intel Mac native preflight to save the same producer's Rust dependency cache for canonical builds to restore. Retain all five native platforms, source ownership and the original 40-minute combined budget measured from creation.
+
+#### Fixed
+
+- Keep scheduled Run now requests attached to the server's actual execution receipt instead of prematurely reporting failure at the generic 15-second request timeout. Running feedback, execution identity and history stay consistent, with navigation to the actual result conversation after settlement.
+- Describe paused schedules as Automatic runs paused while retaining one-time manual execution. English/Chinese state and local dates follow the current interface language, preserving the schedule and the user's pause decision.
+- Include work records explicitly in search entry points, groups and empty results, with rename/archive actions naming their actual object. Both languages retain the same query and original archive state.
+- Restore the missing Intel Mac dependency-cache preparation path and reduce post-qualification transfer work, leaving time for asset publication, update settlement and paired website deployment.
+
+#### Upgrade impact and known limitations
+
+- `0.1.31` publicly delivered all five native installers, CLI archives and signed updates, but its paired website missed the combined deadline and retained the older download manifest. This release continues that combined delivery while retaining the actual 31 publication and logs. [The complete 31 product and upgrade notes](https://opencorvus.com/changelog/0.1.31/) still apply; users on 26 or 31 can upgrade.
+- Database structure is unchanged; supported baselines still migrate automatically to version 8 with retained backups. Existing frozen Squad revisions, complete physical stopping of projected child work and long-conversation compaction limitations remain without a claim of complete resolution.
+- macOS retains ad hoc signing without Apple notarization. Native Rust advisories for `glib` (medium, GHSA-wrw7-89jp-8q8g) and `rand` (low, GHSA-cq8v-f236-94qc) remain open; this release does not upgrade those dependencies.
+
 ## 0.1.31 - 2026-10-27
 
 ### zh-CN

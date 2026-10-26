@@ -97,9 +97,11 @@ see [docs/packaging.md](/docs/packaging.md).
 - Latest release: <https://github.com/yangheng95/opencorvus/releases/latest>
 - All releases: <https://github.com/yangheng95/opencorvus/releases>
 
-The matrix first uploads one temporary GitHub Actions artifact per platform.
-That artifact aggregates the executable and all installer formats for transfer
-between jobs, so its displayed size is not one installer's size.
+The matrix first uploads temporary GitHub Actions artifacts per platform.
+Canonical GUI transfer includes the validated installer formats and updater
+signatures; CLI transfer includes the validated archives and qualification
+receipts. Debug GUI transfer retains the complete staging directory. A displayed
+artifact size still aggregates multiple files rather than one installer.
 
 For a real release, `publish-release-assets` downloads those temporary
 artifacts, validates and flattens the installer files with

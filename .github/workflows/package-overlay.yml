@@ -29,6 +29,9 @@ permissions:
   contents: read
   actions: read
 
+env:
+  OVERLAY_TRANSFER_PATH: packages/overlay/dist-artifacts/${{ inputs.platform }}${{ inputs.release-run-id != '' && '/OpenCorvus_*' || '' }}
+
 jobs:
   build:
     name: compile (${{ inputs.platform }})
@@ -55,9 +58,8 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: packages/overlay/src-tauri -> target
-          # Reserve the remaining whole-release budget for publication on Intel macOS.
-          # Cache restore still helps; optional post-job cache save stays off its critical path.
-          save-if: ${{ inputs.platform != 'darwin-x64' }}
+          # Debug preflight populates Intel dependencies; canonical publication only restores them.
+          save-if: ${{ inputs.platform != 'darwin-x64' || inputs.release-run-id == '' }}
       - name: Verify remaining release budget
         if: ${{ inputs.release-run-id != '' }}
         env:
@@ -98,7 +100,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: overlay-${{ inputs.platform }}
-          path: packages/overlay/dist-artifacts/${{ inputs.platform }}
+          path: ${{ env.OVERLAY_TRANSFER_PATH }}
           if-no-files-found: error
           compression-level: 0
           overwrite: true
@@ -280,7 +282,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: overlay-${{ inputs.platform }}
-          path: packages/overlay/dist-artifacts/${{ inputs.platform }}
+          path: ${{ env.OVERLAY_TRANSFER_PATH }}
           if-no-files-found: error
           compression-level: 0
           overwrite: true

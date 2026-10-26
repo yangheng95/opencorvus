@@ -303,9 +303,7 @@ jobs:
         with:
           name: cli-${{ matrix.platform }}
           path: |
-            packages/opencorvus/dist/opencorvus-${{ matrix.platform }}
             packages/opencorvus/dist/opencorvus-${{ matrix.platform }}.tar.gz
-            packages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline
             packages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline.tar.gz
             packages/opencorvus/dist/work-artifact-qualification-opencorvus-${{ matrix.platform }}*.json
           if-no-files-found: error

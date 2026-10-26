@@ -156,10 +156,20 @@ and other format artifacts; re-running the complete parent native workflow is a 
 rebuild. Transfers expire after seven days for release builds or three days for debug
 builds. Once expired, the native row must be rebuilt. Never mix artifacts from other runs.
 
-Each `package-overlay` and `package-cli` row uploads its whole validated staging directory as one
-short-lived GitHub Actions artifact. Its displayed byte count is the aggregate
-of the executable and every installer format for that platform; it is not the
-size of one installer.
+Each native row runs its complete executable/installer or packaged-runtime
+qualification before upload. Canonical GUI transfer then selects the validated
+`OpenCorvus_*` installers and updater signatures; CLI transfer selects the
+platform archives and qualification receipts. Unpacked CLI directories and bare
+GUI executables remain local build outputs. Debug GUI transfer retains its full
+staging directory. The displayed Actions artifact byte count is still an
+aggregate of multiple files rather than the size of one installer.
+
+Intel macOS preflight uses the same native producer and can save its normal Rust
+dependency cache from the default branch. Canonical Intel publication restores
+that cache and keeps optional cache saving off its critical path. The cache
+retains the existing job/host/toolchain/lock identity; it is not a source of
+cross-run product artifacts. Run the exact-source debug preflight and confirm its
+cache save before tagging when that dependency identity has no entry.
 
 `publish-release-assets` downloads those row artifacts, then
 `script/stage-release-upload-assets.ts` validates and flattens the installer and
