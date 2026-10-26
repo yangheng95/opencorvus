@@ -3118,8 +3118,14 @@ Network consumes its library style values and Diagram passes its product font
 to Mermaid. Timeline's existing stylesheet projects product tokens into the
 vis-timeline surface, including explicit selected foreground/background for
 point and other supported item shapes; authored inline colors keep their
-existing payload precedence. Diagram's fullscreen SVG relinquishes Mermaid's compact
-intrinsic width cap while retaining the original mounted viewBox and graph.
+existing payload precedence. Timeline completes its final layout on the library's
+public range-settled event, including the first explicit payload viewport with
+automatic resize polling disabled. Its scoped Moment date constructor and selected
+event details follow the current product language; language updates use the same
+mounted instance and retain its current viewport and selection. Authored event
+timestamps retain their existing local-time display contract. Diagram's fullscreen
+SVG relinquishes Mermaid's compact intrinsic width cap while retaining the original
+mounted viewBox and graph.
 This keeps data semantics in the durable payload while making visual
 hierarchy a deterministic product responsibility rather than model-authored
 styling.

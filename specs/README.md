@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [时间线计划的选择、导航与语言](records/2026-10/2026-10-27-timeline-plan-journey.md)：显式初始视口空白修复、当前语言及同实例导航复核。
+
 - [交互表格原值与语言](records/2026-10/2026-10-27-interactive-table-data-journey.md)：真实混合布尔值、日期语言及原文/显示搜索修复。
 
 - [真实执行与CSV交付体验](records/2026-10/2026-10-27-task-delivery-journey.md)：实际Mission到Task文件交付、CSV表格搜索和精确金额排序。

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [时间线计划体验证据](2026-10-27-timeline-plan-journey/README.md)：14张原图、真实计划、实际CSV导出和三个运行实例结清。
+
 - [交互表格原值与语言](2026-10-27-interactive-table-data-journey/README.md)：10张原图、规范发布数据、实际导出与结清事实。
 
 - [真实执行与CSV交付体验](2026-10-27-task-delivery-journey/README.md)：15张原图、真实CSV/报告、下载字节及执行结清事实。

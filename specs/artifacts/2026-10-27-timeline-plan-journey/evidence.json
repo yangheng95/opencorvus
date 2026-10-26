@@ -1,0 +1,718 @@
+{
+  "qualification": "Actual streamed model publication, exact public reads, manual desktop /ui interaction and original screenshots, independent actual CSV export and preserved-data verification; no UI automated tests",
+  "screenshots": [
+    "01-plan-request-zh.jpg",
+    "02-plan-baseline-zh.jpg",
+    "03-fit-initialization-baseline-zh.jpg",
+    "04-initial-view-repaired-en.jpg",
+    "05-range-selection-zoom-en.jpg",
+    "06-range-workspace-en.jpg",
+    "07-visible-locale-baseline-zh.jpg",
+    "08-pan-state-zh.jpg",
+    "09-final-zoom-en.jpg",
+    "10-locale-switch-zh.jpg",
+    "11-range-detail-zh.jpg",
+    "12-range-workspace-zh.jpg",
+    "13-point-fit-zh.jpg",
+    "14-pan-retained-point-zh.jpg"
+  ],
+  "content": {
+    "at": "2026-10-26T22:24:36.129Z",
+    "sessionID": "ses_-zUQnq6PJzzYvrd1SI45",
+    "artifactID": "art_g0VZC9vaU0065nwhpZ9c",
+    "messageID": "msg_g0VZC9tuJ00NEhGV3NKx",
+    "exactPublicationRetained": true,
+    "exactMessagesRetained": true,
+    "items": 4,
+    "groups": 2,
+    "viewport": {
+      "start": "2026-10-26T00:00:00+08:00",
+      "end": "2026-11-02T00:00:00+08:00"
+    },
+    "downloads": [
+      {
+        "run": "665",
+        "bytes": 369,
+        "events": 4,
+        "exactCanonicalEvents": true,
+        "exactOriginalExport": true
+      },
+      {
+        "run": "666",
+        "bytes": 369,
+        "events": 4,
+        "exactCanonicalEvents": true,
+        "exactOriginalExport": true
+      },
+      {
+        "run": "667",
+        "bytes": 369,
+        "events": 4,
+        "exactCanonicalEvents": true,
+        "exactOriginalExport": true
+      }
+    ]
+  },
+  "runs": [
+    {
+      "name": "665",
+      "port": 38170,
+      "uiEntry": "main-DD9IIRAw.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 17362,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "automation": {
+            "original": 4,
+            "current": 4,
+            "updates": []
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0,
+            "updates": []
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0,
+            "updates": []
+          },
+          "automation_fire": {
+            "original": 3,
+            "current": 3,
+            "updates": []
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1,
+            "updates": []
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1,
+            "updates": []
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0,
+            "updates": []
+          },
+          "automation_project_target": {
+            "original": 0,
+            "current": 0,
+            "updates": []
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1,
+            "updates": []
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1,
+            "updates": []
+          },
+          "message": {
+            "original": 50,
+            "current": 55,
+            "updates": []
+          },
+          "part": {
+            "original": 167,
+            "current": 178,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 151,
+            "current": 161,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 61,
+            "current": 64,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 61,
+            "current": 64,
+            "updates": []
+          },
+          "session": {
+            "original": 10,
+            "current": 12,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 54,
+            "current": 55,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 10,
+            "current": 10,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 54,
+            "current": 55,
+            "updates": []
+          }
+        }
+      },
+      "credentialsCopied": true,
+      "requests": 5,
+      "cumulativeRequests": 292,
+      "publicShutdown": 200,
+      "reserveMs": 761493,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "processChain": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ]
+    },
+    {
+      "name": "666",
+      "port": 38171,
+      "uiEntry": "main-DdtSSUqq.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 18695,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "automation": {
+            "original": 4,
+            "current": 4,
+            "updates": []
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0,
+            "updates": []
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0,
+            "updates": []
+          },
+          "automation_fire": {
+            "original": 3,
+            "current": 3,
+            "updates": []
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1,
+            "updates": []
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1,
+            "updates": []
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0,
+            "updates": []
+          },
+          "automation_project_target": {
+            "original": 0,
+            "current": 0,
+            "updates": []
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1,
+            "updates": []
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1,
+            "updates": []
+          },
+          "message": {
+            "original": 55,
+            "current": 55,
+            "updates": []
+          },
+          "part": {
+            "original": 178,
+            "current": 178,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 161,
+            "current": 161,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 64,
+            "current": 64,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 64,
+            "current": 64,
+            "updates": []
+          },
+          "session": {
+            "original": 12,
+            "current": 12,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 55,
+            "current": 55,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 10,
+            "current": 10,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 55,
+            "current": 55,
+            "updates": []
+          }
+        }
+      },
+      "credentialsCopied": false,
+      "requests": 0,
+      "cumulativeRequests": 292,
+      "publicShutdown": 200,
+      "reserveMs": 830704,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "processChain": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ]
+    },
+    {
+      "name": "667",
+      "port": 38172,
+      "uiEntry": "main-DX4hLjui.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 18695,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "automation": {
+            "original": 4,
+            "current": 4,
+            "updates": []
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0,
+            "updates": []
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0,
+            "updates": []
+          },
+          "automation_fire": {
+            "original": 3,
+            "current": 3,
+            "updates": []
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1,
+            "updates": []
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1,
+            "updates": []
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0,
+            "updates": []
+          },
+          "automation_project_target": {
+            "original": 0,
+            "current": 0,
+            "updates": []
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1,
+            "updates": []
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1,
+            "updates": []
+          },
+          "message": {
+            "original": 55,
+            "current": 55,
+            "updates": []
+          },
+          "part": {
+            "original": 178,
+            "current": 178,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 161,
+            "current": 161,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 64,
+            "current": 64,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 64,
+            "current": 64,
+            "updates": []
+          },
+          "session": {
+            "original": 12,
+            "current": 12,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 55,
+            "current": 55,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 10,
+            "current": 10,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 55,
+            "current": 55,
+            "updates": []
+          }
+        }
+      },
+      "credentialsCopied": false,
+      "requests": 0,
+      "cumulativeRequests": 292,
+      "publicShutdown": 200,
+      "reserveMs": 1024170,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "processChain": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "sourceReader": "settled",
+      "terminal": "eof",
+      "agentID": "memory"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "sourceReader": "settled",
+      "terminal": "eof",
+      "agentID": "chat"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "sourceReader": "settled",
+      "terminal": "eof",
+      "agentID": "memory"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "sourceReader": "settled",
+      "terminal": "eof",
+      "agentID": "work"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "sourceReader": "settled",
+      "terminal": "eof",
+      "agentID": "work"
+    }
+  ],
+  "credentialRetirement": {
+    "credentialCopyRetired": true,
+    "modelCatalogCopyRetired": true,
+    "cumulativeRequests": 292
+  },
+  "publication": {
+    "sessionID": "ses_-zUQnq6PJzzYvrd1SI45",
+    "messageID": "msg_g0VZC9tuJ00NEhGV3NKx",
+    "artifactID": "art_g0VZC9vaU0065nwhpZ9c",
+    "part": {
+      "messageID": "msg_g0VZC9tuJ00NEhGV3NKx",
+      "part": {
+        "id": "prt_g0VZC9vaW00kuYbwSRg3",
+        "sessionID": "ses_-zUQnq6PJzzYvrd1SI45",
+        "messageID": "msg_g0VZC9tuJ00NEhGV3NKx",
+        "orderKey": "v1:0001793051634587:0000000000000031:0000000000000000:part:prt_g0VZC9vaW00kuYbwSRg3",
+        "type": "interactive-artifact",
+        "artifactID": "art_g0VZC9vaU0065nwhpZ9c",
+        "toolPartID": "prt_g0VZC9usg00kgUpZOpJA"
+      }
+    },
+    "record": {
+      "id": "art_g0VZC9vaU0065nwhpZ9c",
+      "sessionID": "ses_-zUQnq6PJzzYvrd1SI45",
+      "messageID": "msg_g0VZC9tuJ00NEhGV3NKx",
+      "payload": {
+        "schemaVersion": "1",
+        "title": "计划导航与语言665",
+        "renderer": "timeline@1",
+        "groups": [
+          {
+            "id": "design",
+            "label": "设计"
+          },
+          {
+            "id": "verify",
+            "label": "验证"
+          }
+        ],
+        "items": [
+          {
+            "id": "scope",
+            "content": "需求梳理",
+            "group": "design",
+            "kind": "range",
+            "start": "2026-10-27T09:00:00+08:00",
+            "end": "2026-10-28T18:00:00+08:00"
+          },
+          {
+            "id": "validate",
+            "content": "端到端验收",
+            "group": "verify",
+            "kind": "range",
+            "start": "2026-10-29T09:30:00+08:00",
+            "end": "2026-10-30T16:00:00+08:00"
+          },
+          {
+            "id": "review",
+            "content": "完成复核",
+            "group": "verify",
+            "kind": "point",
+            "start": "2026-10-31T10:00:00+08:00"
+          },
+          {
+            "id": "window",
+            "content": "检查窗口",
+            "kind": "background",
+            "start": "2026-10-27T00:00:00+08:00",
+            "end": "2026-11-01T00:00:00+08:00"
+          }
+        ],
+        "viewport": {
+          "start": "2026-10-26T00:00:00+08:00",
+          "end": "2026-11-02T00:00:00+08:00"
+        }
+      },
+      "timeCreated": 1793051634578,
+      "timeUpdated": 1793051634578
+    },
+    "beforeReads": [
+      {
+        "path": "/session/ses_-zUQnq6PJzzYvrd1SI45?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-27%2Ftask-delivery-659%2Fproject",
+        "status": 200,
+        "requestID": "2496fbc3-d614-4468-b7ef-e269fbe57e28"
+      },
+      {
+        "path": "/session/ses_-zUQnq6PJzzYvrd1SI45/message?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-27%2Ftask-delivery-659%2Fproject",
+        "status": 200,
+        "requestID": "4a8b276c-bf6e-4eba-8d6a-1b840a69d150"
+      },
+      {
+        "path": "/session/ses_-zUQnq6PJzzYvrd1SI45/interactive-artifact/art_g0VZC9vaU0065nwhpZ9c?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-27%2Ftask-delivery-659%2Fproject",
+        "status": 200,
+        "requestID": "6b0d781f-9ff2-498f-b95f-679952b468ea"
+      }
+    ],
+    "reopenedReads": [
+      {
+        "path": "/session/ses_-zUQnq6PJzzYvrd1SI45?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-27%2Ftask-delivery-659%2Fproject",
+        "status": 200,
+        "requestID": "c51a7f7c-97fe-4908-a1ea-f4799b86606c"
+      },
+      {
+        "path": "/session/ses_-zUQnq6PJzzYvrd1SI45/message?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-27%2Ftask-delivery-659%2Fproject",
+        "status": 200,
+        "requestID": "25644b36-53f9-4400-b78e-110715d39cac"
+      },
+      {
+        "path": "/session/ses_-zUQnq6PJzzYvrd1SI45/interactive-artifact/art_g0VZC9vaU0065nwhpZ9c?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-27%2Ftask-delivery-659%2Fproject",
+        "status": 200,
+        "requestID": "5f1a1ed9-498b-4b49-87c6-08e9eab00887"
+      }
+    ]
+  },
+  "baselineRendering": {
+    "axisLabels": [
+      "0",
+      "0",
+      "26",
+      "27",
+      "28",
+      "29",
+      "30",
+      "31",
+      "1",
+      "November 2026",
+      "2",
+      "October 2026",
+      "0",
+      "0",
+      "26",
+      "27",
+      "28",
+      "29",
+      "30",
+      "31",
+      "1",
+      "November 2026",
+      "2",
+      "October 2026"
+    ],
+    "hostReady": null,
+    "items": [
+      {
+        "class": "vis-item vis-background",
+        "text": "检查窗口",
+        "visible": "hidden"
+      },
+      {
+        "class": "vis-item vis-range vis-readonly",
+        "text": "需求梳理",
+        "visible": "hidden"
+      },
+      {
+        "class": "vis-item vis-range vis-readonly",
+        "text": "端到端验收",
+        "visible": "hidden"
+      },
+      {
+        "class": "vis-item vis-point vis-readonly",
+        "text": "完成复核",
+        "visible": "hidden"
+      }
+    ],
+    "rootStyle": "touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); visibility: hidden; max-height: 520px; min-height: 280px; height: 218px;",
+    "rootVisibility": "hidden"
+  },
+  "moduleGraph": [
+    {
+      "file": "moment-BKqHChZh.js",
+      "bytes": 62845,
+      "imports": []
+    },
+    {
+      "file": "TimelineArtifact-DH2eJ8p8.js",
+      "bytes": 551559,
+      "imports": [
+        "./CommandMenuSurface-CN3W_QEU.js",
+        "./moment-BKqHChZh.js",
+        "./main-DX4hLjui.js"
+      ]
+    },
+    {
+      "file": "zh-cn-D87JY8qe.js",
+      "bytes": 1977,
+      "imports": [
+        "./moment-BKqHChZh.js"
+      ]
+    }
+  ],
+  "checks": {
+    "tests": {
+      "label": "timeline-locale-esm-contract",
+      "startedAt": 1793053217557,
+      "closedAt": 1793053219364,
+      "code": 0,
+      "signal": null,
+      "childPID": 85592
+    },
+    "types": {
+      "label": "timeline-locale-esm-types",
+      "startedAt": 1793053220406,
+      "closedAt": 1793053245213,
+      "code": 0,
+      "signal": null,
+      "childPID": 68192
+    },
+    "build": {
+      "label": "timeline-locale-esm-build",
+      "startedAt": 1793053220375,
+      "closedAt": 1793053283334,
+      "code": 0,
+      "signal": null,
+      "childPID": 97164
+    },
+    "language": {
+      "label": "timeline-locale-language",
+      "startedAt": 1793053024921,
+      "closedAt": 1793053027507,
+      "code": 0,
+      "signal": null,
+      "childPID": 34224
+    },
+    "surface": {
+      "label": "timeline-locale-surface",
+      "startedAt": 1793053104956,
+      "closedAt": 1793053106956,
+      "code": 0,
+      "signal": null,
+      "childPID": 92432
+    },
+    "documentation": {
+      "label": "timeline-plan-docs",
+      "startedAt": 1793053627737,
+      "closedAt": 1793053636455,
+      "code": 0,
+      "signal": null,
+      "childPID": 75952
+    }
+  },
+  "limits": [
+    "One actual requested sample plan; five requests include preflight and product memory helper turns",
+    "666/667 read retained publications without auth and correctly display a missing-model reminder",
+    "Screenshots06–08 and12–14 are original native fullscreen 2560x1440 captures; the library keeps its compact vertical height and remaining fullscreen space is visible",
+    "Screenshots05/09/10 show the upper graph near the fold; screenshot11 shows range details with the artifact header above the viewport",
+    "Axis label order retains the vis-timeline default format; date details use localized Intl medium-date/short-time output",
+    "Local timezone behavior is unchanged; cross-timezone display was not qualified",
+    "This Git delivery is not part of the already frozen v0.1.33 installer"
+  ]
+}

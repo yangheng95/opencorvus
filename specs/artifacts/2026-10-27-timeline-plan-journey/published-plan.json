@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "1",
+  "title": "计划导航与语言665",
+  "renderer": "timeline@1",
+  "groups": [
+    {
+      "id": "design",
+      "label": "设计"
+    },
+    {
+      "id": "verify",
+      "label": "验证"
+    }
+  ],
+  "items": [
+    {
+      "id": "scope",
+      "content": "需求梳理",
+      "group": "design",
+      "kind": "range",
+      "start": "2026-10-27T09:00:00+08:00",
+      "end": "2026-10-28T18:00:00+08:00"
+    },
+    {
+      "id": "validate",
+      "content": "端到端验收",
+      "group": "verify",
+      "kind": "range",
+      "start": "2026-10-29T09:30:00+08:00",
+      "end": "2026-10-30T16:00:00+08:00"
+    },
+    {
+      "id": "review",
+      "content": "完成复核",
+      "group": "verify",
+      "kind": "point",
+      "start": "2026-10-31T10:00:00+08:00"
+    },
+    {
+      "id": "window",
+      "content": "检查窗口",
+      "kind": "background",
+      "start": "2026-10-27T00:00:00+08:00",
+      "end": "2026-11-01T00:00:00+08:00"
+    }
+  ],
+  "viewport": {
+    "start": "2026-10-26T00:00:00+08:00",
+    "end": "2026-11-02T00:00:00+08:00"
+  }
+}

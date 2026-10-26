@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [时间线计划的选择、导航与语言](2026-10-27-timeline-plan-journey.md)：真实发布、首绘收敛、中英日期与原事件导出验证。
+
 - [交互表格原值与语言](2026-10-27-interactive-table-data-journey.md)：原生发布、中英切换、原值查询和真实导出复核。
 
 - [真实执行与CSV交付体验](2026-10-27-task-delivery-journey.md)：真实流式执行、不可变下载核对、表格预览及双语实测。

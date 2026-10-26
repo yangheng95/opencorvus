@@ -1,8 +1,9 @@
 import { Timeline, type DataGroup, type DataItem } from "vis-timeline"
 import "vis-timeline/styles/vis-timeline-graph2d.css"
-import { Show, createMemo, createSignal, onCleanup, onMount } from "solid-js"
+import { Show, createEffect, createMemo, createSignal, onCleanup, onMount } from "solid-js"
+import { createArtifactTimelinePresentation } from "../../services/artifact-timeline"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
-import { t } from "../../utils/i18n"
+import { localeTag, t } from "../../utils/i18n"
 import { Button } from "../ui/Button"
 import { ArtifactFrame } from "./ArtifactFrame"
 
@@ -25,6 +26,11 @@ export function TimelineArtifact(props: { payload: TimelinePayload }) {
   let resizeObserver: ResizeObserver | undefined
   const [selectedID, setSelectedID] = createSignal<string>()
   const selected = createMemo(() => props.payload.items.find((item) => item.id === selectedID()))
+  const presentation = createMemo(() => createArtifactTimelinePresentation(localeTag()))
+  createEffect(() => {
+    const { moment } = presentation()
+    timeline?.setOptions({ moment })
+  })
   const fitAll = (animation: boolean) => {
     const timestamps = props.payload.items.flatMap((item) => [
       Date.parse(item.start),
@@ -52,6 +58,7 @@ export function TimelineArtifact(props: { payload: TimelinePayload }) {
       content: group.label,
     }))
     const options = {
+      moment: presentation().moment,
       autoResize: false,
       editable: false,
       selectable: true,
@@ -80,6 +87,9 @@ export function TimelineArtifact(props: { payload: TimelinePayload }) {
       },
     }
     timeline = groups.length ? new Timeline(host, items, groups, options) : new Timeline(host, items, options)
+    // With resize polling disabled, a settled initial viewport still needs its
+    // final layout pass before the library completes its first draw.
+    timeline.on("rangechanged", () => timeline?.redraw())
     resizeObserver = new ResizeObserver(() => timeline?.redraw())
     resizeObserver.observe(host)
     timeline.on("select", (properties: { items?: Array<string | number> }) => {
@@ -120,14 +130,9 @@ export function TimelineArtifact(props: { payload: TimelinePayload }) {
           <div class="msg-artifact-timeline__detail" role="status">
             <strong>{item().content}</strong>
             <span>
-              {new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" }).format(
-                Date.parse(item().start),
-              )}
+              {presentation().formatDateTime(item().start)}
               {timelineItemEnd(item()) &&
-                ` – ${new Intl.DateTimeFormat(undefined, {
-                  dateStyle: "medium",
-                  timeStyle: "short",
-                }).format(Date.parse(timelineItemEnd(item())!))}`}
+                ` – ${presentation().formatDateTime(timelineItemEnd(item())!)}`}
             </span>
           </div>
         )}
