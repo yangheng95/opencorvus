@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件操作与模型可用性边界](records/2026-10/2026-10-26-file-operation-model-independence.md)：普通文件写入独立模型、共享插件初始化与真实前后验收。
+
 - [文件浏览器工具名称统一](records/2026-10/2026-10-26-explorer-tool-identity.md)：资源管理器与文件页的明确区分及全入口同源。
 
 - [文件阅读操作与关闭反馈](records/2026-10/2026-10-26-file-explorer-reading-experience.md)：真实文件链路、准确关闭名称和查找按钮修复。

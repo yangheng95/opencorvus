@@ -1,4 +1,5 @@
 import { Hono } from "hono"
+import { createMiddleware } from "hono/factory"
 import { Readable } from "node:stream"
 import { describeRoute, resolver } from "hono-openapi"
 import { validator } from "@/server/validator"
@@ -8,6 +9,12 @@ import { Ripgrep } from "../../file/ripgrep"
 import { Instance } from "../../project/instance"
 import { badRequestOrNamedErrorResponse, errors, namedErrorResponse } from "../error"
 import { lazy } from "../../util/lazy"
+import { Plugin } from "../../plugin"
+
+const initializeFileMutationPlugins = createMiddleware(async (_c, next) => {
+  await Plugin.init()
+  await next()
+})
 
 export const FileRoutes = lazy(() =>
   new Hono()
@@ -244,6 +251,7 @@ export const FileRoutes = lazy(() =>
           expectedRevision: File.ContentRevision,
         }),
       ),
+      initializeFileMutationPlugins,
       async (c) => {
         const input = c.req.valid("json")
         const content = await File.writeText(input.path, input.content, input.expectedRevision)
@@ -269,6 +277,7 @@ export const FileRoutes = lazy(() =>
         },
       }),
       validator("json", File.CreateRequest),
+      initializeFileMutationPlugins,
       async (c) => {
         const input = c.req.valid("json")
         const node = await File.create(input)
@@ -294,6 +303,7 @@ export const FileRoutes = lazy(() =>
         },
       }),
       validator("json", File.CopyRequest),
+      initializeFileMutationPlugins,
       async (c) => {
         const input = c.req.valid("json")
         const result = await File.copy(input)
@@ -319,6 +329,7 @@ export const FileRoutes = lazy(() =>
         },
       }),
       validator("json", File.MoveRequest),
+      initializeFileMutationPlugins,
       async (c) => {
         const input = c.req.valid("json")
         const result = await File.move(input)
@@ -349,6 +360,7 @@ export const FileRoutes = lazy(() =>
           path: z.string(),
         }),
       ),
+      initializeFileMutationPlugins,
       async (c) => {
         const path = c.req.valid("query").path
         const result = await File.remove({ path })
@@ -374,6 +386,7 @@ export const FileRoutes = lazy(() =>
         },
       }),
       validator("json", File.UploadRequest),
+      initializeFileMutationPlugins,
       async (c) => {
         const input = c.req.valid("json")
         const result = await File.upload(input)

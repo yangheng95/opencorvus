@@ -108,6 +108,14 @@ not publish runtime state or invoke service/config/Bus activation. Loaded module
 state retains its actual specifier input, which also supplies its materialization
 revision rather than a later read of mutable configuration.
 
+Plugin activation uses one Instance-scoped initialization Promise. The config
+hooks, service declarations and event subscription are shared by explicit file
+mutations and full Project bootstrap, so repeated or concurrent entry does not
+register a second event consumer. Initialization failure and Instance disposal
+follow the existing Instance-state retry and teardown ownership. File entry
+does not grant executable model or scheduler authority. Plugin event hooks
+retain their original transient projection contract.
+
 Plugin receives one runtime-neutral structured process capability, not a Bun shell object. Its command is always an
 explicit executable plus argv; the public contract expresses environment as strings, I/O as asynchronous byte
 sources/sinks, signals as strings, a caller-visible occurrence identity, abort/deadline settlement and one terminal

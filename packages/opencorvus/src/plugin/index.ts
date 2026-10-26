@@ -845,27 +845,35 @@ export namespace Plugin {
     return globalProviderHooks()
   }
 
-  export async function init() {
-    const hooks = await state().then((x) => x.hooks)
-    const config = await Config.get()
-    for (const entry of hooks) {
-      if (!entry.hook.config) continue
-      try {
-        await entry.hook.config(config)
-      } catch (cause) {
-        throw pluginFailure("config hook", entry.specifier, cause)
-      }
-    }
-    await services()
-    Bus.subscribeAll(async (input) => {
+  const initialization = createInstanceState(
+    async () => {
+      const hooks = await state().then((x) => x.hooks)
+      const config = await Config.get()
       for (const entry of hooks) {
-        if (!entry.hook.event) continue
+        if (!entry.hook.config) continue
         try {
-          await entry.hook.event({ event: input })
+          await entry.hook.config(config)
         } catch (cause) {
-          throw pluginFailure("event hook", entry.specifier, cause)
+          throw pluginFailure("config hook", entry.specifier, cause)
         }
       }
-    })
+      await services()
+      Bus.subscribeAll(async (input) => {
+        for (const entry of hooks) {
+          if (!entry.hook.event) continue
+          try {
+            await entry.hook.event({ event: input })
+          } catch (cause) {
+            throw pluginFailure("event hook", entry.specifier, cause)
+          }
+        }
+      })
+    },
+    undefined,
+    "plugin-initialization",
+  )
+
+  export async function init() {
+    await initialization()
   }
 }

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [文件操作与模型可用性边界](2026-10-26-file-operation-model-independence.md)：七种变更、版本保护、格式化、插件与实际页面验证。
+
 - [文件浏览器工具名称统一](2026-10-26-explorer-tool-identity.md)：中英菜单、并列标签、环境入口与关闭焦点实测。
 
 - [文件阅读操作与关闭反馈](2026-10-26-file-explorer-reading-experience.md)：中英实页、查找焦点及原草稿保护验收。

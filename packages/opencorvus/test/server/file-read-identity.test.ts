@@ -93,17 +93,20 @@ test("PDF and image readers return exact encoded preview bytes in both file scop
   }
 }, 30_000)
 
-test("file writes retain the execution model error contract", async () => {
+test("file writes preserve their bytes and revision independently of the execution model", async () => {
   await using project = await memoryProject("file-reader-write-runtime")
   await configure(project.path, "FileReaderMarker\n")
   const loaded = await read(project.path, "/file/content?path=README.md")
-  const response = await runOutsideInstanceContext(() => Server.App().request("/file/content", {
-    method: "PATCH",
-    headers: { "x-opencorvus-directory": project.path, "content-type": "application/json" },
-    body: JSON.stringify({ path: "README.md", content: "New content\n", expectedRevision: loaded.body.revision }),
-  }))
+  const response = await runOutsideInstanceContext(() =>
+    Server.App().request("/file/content", {
+      method: "PATCH",
+      headers: { "x-opencorvus-directory": project.path, "content-type": "application/json" },
+      body: JSON.stringify({ path: "README.md", content: "New content\n", expectedRevision: loaded.body.revision }),
+    }),
+  )
   expect({ status: response.status, body: await response.json() }).toMatchObject({
-    status: 400,
-    body: { name: "ProviderModelNotFoundError", data: { providerID: "missing-file-reader", modelID: "model" } },
+    status: 200,
+    body: { type: "text", content: "New content\n", revision: expect.any(String) },
   })
+  expect(await fs.readFile(path.join(project.path, "README.md"), "utf8")).toBe("New content\n")
 }, 30_000)

@@ -1,0 +1,556 @@
+{
+  "date": "2026-10-26",
+  "scope": "Exact file mutations independent of execution model availability; shared original plugin initialization",
+  "checks": {
+    "tests": {
+      "label": "file-model-positive-final",
+      "startedAt": 1793031245077,
+      "closedAt": 1793031317331,
+      "code": 0,
+      "signal": null,
+      "childPID": 92272,
+      "passed": 28,
+      "assertions": 127,
+      "files": 5
+    },
+    "types": {
+      "label": "file-model-final-test-types",
+      "startedAt": 1793031672838,
+      "closedAt": 1793031728309,
+      "code": 0,
+      "signal": null,
+      "childPID": 26540
+    },
+    "docs": {
+      "label": "file-model-docs",
+      "startedAt": 1793031774884,
+      "closedAt": 1793031786919,
+      "code": 0,
+      "signal": null,
+      "childPID": 92256
+    }
+  },
+  "before": {
+    "receipts": [
+      {
+        "name": "read",
+        "method": "GET",
+        "path": "/file/content",
+        "status": 200,
+        "requestID": "3b09ebb5-857a-4849-86fb-07c89450305a",
+        "revision": "32c82f81a335a4f5b7124a9b996fdf83e8c9b826612c2e46c04985b11b3e3ffe"
+      },
+      {
+        "name": "save",
+        "method": "PATCH",
+        "path": "/file/content",
+        "status": 400,
+        "requestID": "166a69bc-42b5-4204-a7b6-eadc4ec809a2",
+        "error": "ProviderModelNotFoundError"
+      },
+      {
+        "name": "create-file",
+        "method": "POST",
+        "path": "/file/item",
+        "status": 400,
+        "requestID": "2bd7b8d6-5164-4cfd-a65e-aba433b9e72d",
+        "error": "ProviderModelNotFoundError"
+      },
+      {
+        "name": "create-directory",
+        "method": "POST",
+        "path": "/file/item",
+        "status": 400,
+        "requestID": "f8013963-b499-41d9-95ac-b787abb6c049",
+        "error": "ProviderModelNotFoundError"
+      },
+      {
+        "name": "upload",
+        "method": "POST",
+        "path": "/file/upload",
+        "status": 400,
+        "requestID": "865f2b46-a9d4-4409-9a64-727a27e988f3",
+        "error": "ProviderModelNotFoundError"
+      },
+      {
+        "name": "copy",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": 400,
+        "requestID": "f77796b7-df9c-48fd-a653-0e54fc1c3001",
+        "error": "ProviderModelNotFoundError"
+      },
+      {
+        "name": "move",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": 400,
+        "requestID": "bf1b41e4-1d47-4dcd-8200-a80b1b926329",
+        "error": "ProviderModelNotFoundError"
+      },
+      {
+        "name": "delete",
+        "method": "DELETE",
+        "path": "/file/item",
+        "status": 400,
+        "requestID": "5057d834-60be-4ad2-ac73-553ab5628782",
+        "error": "ProviderModelNotFoundError"
+      }
+    ],
+    "writeMatchesInitial": true,
+    "originalSummaryPreserved": true
+  },
+  "after": {
+    "receipts": [
+      {
+        "name": "read",
+        "method": "GET",
+        "path": "/file/content",
+        "status": 200,
+        "requestID": "64c3c062-de32-485a-9687-f59b46125e45",
+        "revision": "457a29df8729bfedcf22e81f7ba1bf325b79f39a40b16010215c12f40dfc0895"
+      },
+      {
+        "name": "save",
+        "method": "PATCH",
+        "path": "/file/content",
+        "status": 200,
+        "requestID": "91c857b2-6fed-47f9-a4eb-a6deb315f926",
+        "revision": "623f22a1de106247814ca8e9df77dd938a46788b3d315750ec145a1827f68b24"
+      },
+      {
+        "name": "create-file",
+        "method": "POST",
+        "path": "/file/item",
+        "status": 200,
+        "requestID": "c6f8f4a5-3841-4c50-8500-b5804f4a4ede"
+      },
+      {
+        "name": "create-directory",
+        "method": "POST",
+        "path": "/file/item",
+        "status": 200,
+        "requestID": "aadf21b8-58b7-48e2-8987-c77d9ef7c41f"
+      },
+      {
+        "name": "upload",
+        "method": "POST",
+        "path": "/file/upload",
+        "status": 200,
+        "requestID": "42c2e311-ecfc-4de5-b190-273dd1f11c89"
+      },
+      {
+        "name": "copy",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": 200,
+        "requestID": "904126c1-a9bf-4b82-8364-51e9e813cb34"
+      },
+      {
+        "name": "move",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": 200,
+        "requestID": "2543c178-faa7-4229-9321-1c5bb7351197"
+      },
+      {
+        "name": "delete",
+        "method": "DELETE",
+        "path": "/file/item",
+        "status": 200,
+        "requestID": "36fe354b-3c8b-4b41-abfd-0f8249f479a0"
+      },
+      {
+        "name": "read-retired-move-source.txt",
+        "method": "GET",
+        "path": "/file/content",
+        "status": 404,
+        "requestID": "9f9dfb29-9e32-4458-936c-173fd96a7fef",
+        "error": "FileNotFoundError"
+      },
+      {
+        "name": "read-retired-delete-source.txt",
+        "method": "GET",
+        "path": "/file/content",
+        "status": 404,
+        "requestID": "77f82648-d44f-4bfc-a40a-d007aa9d5241",
+        "error": "FileNotFoundError"
+      },
+      {
+        "name": "read-conflict-input",
+        "method": "GET",
+        "path": "/file/content",
+        "status": 200,
+        "requestID": "c08f5c77-0c57-4997-9f2b-8955004b94d0",
+        "revision": "ace2aec5877d66e77a8cbc92725076f234e51f15e21376874a6f61ca7e92add8"
+      },
+      {
+        "name": "revision-conflict",
+        "method": "PATCH",
+        "path": "/file/content",
+        "status": 409,
+        "requestID": "3ba38efd-6a3a-4c2e-8002-349ebf2960a2",
+        "error": "FileWriteConflictError"
+      },
+      {
+        "name": "create-conflict",
+        "method": "POST",
+        "path": "/file/item",
+        "status": 409,
+        "requestID": "e04147c9-d092-45d1-a8e6-42356758a43c",
+        "error": "FileConflictError"
+      },
+      {
+        "name": "outside-path",
+        "method": "POST",
+        "path": "/file/item",
+        "status": 400,
+        "requestID": "ea529b43-f82c-4685-a428-6cd2a6f44cf7",
+        "error": "FileInvalidPathError"
+      },
+      {
+        "name": "read-ui-saved-file",
+        "method": "GET",
+        "path": "/file/content",
+        "status": 200,
+        "requestID": "484c1ffe-a9b2-4271-a52f-6b8f45c83113",
+        "revision": "f702fd371e8e1afc1ed401081a6cc5fe65f2fc664dfdbf96e179afdb23258f83"
+      },
+      {
+        "name": "read-ui-created-file",
+        "method": "GET",
+        "path": "/file/content",
+        "status": 200,
+        "requestID": "4b3b7bfa-0929-47e2-a9be-00c3b078fb04",
+        "revision": "f50a8c1114a88d71471056d7ac5d47102ba5c0c4a3bf32e15d4abb2edc027006"
+      }
+    ],
+    "uiSavedContent": "初始内容：文件写入验证。\r\n保存验证：当前操作不需要模型推理。\r\n",
+    "uiCreatedContent": "",
+    "originalSummaryPreserved": true,
+    "files": [
+      {
+        "name": "api-write.txt",
+        "type": "file",
+        "bytes": 35
+      },
+      {
+        "name": "copied.txt",
+        "type": "file",
+        "bytes": 35
+      },
+      {
+        "name": "created-api.txt",
+        "type": "file",
+        "bytes": 17
+      },
+      {
+        "name": "created-directory",
+        "type": "directory",
+        "bytes": 0
+      },
+      {
+        "name": "created-ui.txt",
+        "type": "file",
+        "bytes": 0
+      },
+      {
+        "name": "moved.txt",
+        "type": "file",
+        "bytes": 32
+      },
+      {
+        "name": "upload-原件.txt",
+        "type": "file",
+        "bytes": 44
+      },
+      {
+        "name": "write-check.txt",
+        "type": "file",
+        "bytes": 91
+      }
+    ]
+  },
+  "runs": [
+    {
+      "run": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-26/file-model-boundary-642",
+      "port": 38147,
+      "uiEntry": "main-BGrTrwC8.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 29842,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 23,
+            "current": 23,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "message": {
+            "original": 125,
+            "current": 125,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "part": {
+            "original": 198,
+            "current": 198,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 37,
+            "current": 37,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 98,
+            "current": 98,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 37,
+            "current": 37,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 45,
+            "current": 45,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 45,
+            "current": 45,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 208,
+            "current": 208,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          }
+        }
+      },
+      "publicShutdown": 200,
+      "reserveMs": 860476,
+      "physical": {
+        "observedAtUtc": "2026-10-26T15:46:14.4678895Z",
+        "native": {
+          "occurrence": "file-model-boundary-642-0787b2e6-c593-423a-b343-f74f36bd8001",
+          "outcome": "settled",
+          "host": {
+            "pid": 31804,
+            "processInstanceID": "win32:639286260335431567",
+            "occurrenceID": "c9a8ed65-979e-41a8-958e-490594916255"
+          },
+          "target": {
+            "pid": 27640,
+            "processInstanceID": "win32:639286260344625219",
+            "occurrenceID": "4c901986-8f8b-4c4b-bc57-90d1754beeab"
+          },
+          "observedAtUtc": "2026-10-26T15:46:13.031Z",
+          "deadlineAt": 1793030433507,
+          "terminal": {
+            "occurrenceID": "file-model-boundary-642-0787b2e6-c593-423a-b343-f74f36bd8001",
+            "pid": 27640,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "launcher": {
+          "observedAtUtc": "2026-10-26T15:46:13.0646375Z",
+          "originalChildExit": 0
+        },
+        "chain": [
+          {
+            "identity": {
+              "pid": 31804,
+              "processInstanceID": "win32:639286260335431567",
+              "occurrenceID": "c9a8ed65-979e-41a8-958e-490594916255"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 27640,
+              "processInstanceID": "win32:639286260344625219",
+              "occurrenceID": "4c901986-8f8b-4c4b-bc57-90d1754beeab"
+            },
+            "state": "dead_or_reused"
+          }
+        ]
+      },
+      "successfulShutdown": true
+    },
+    {
+      "run": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-26/file-model-boundary-643",
+      "port": 38148,
+      "uiEntry": "main-BGrTrwC8.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 29842,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 23,
+            "current": 23,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "message": {
+            "original": 125,
+            "current": 125,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "part": {
+            "original": 198,
+            "current": 198,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 37,
+            "current": 37,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 98,
+            "current": 98,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 37,
+            "current": 37,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 45,
+            "current": 45,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 45,
+            "current": 45,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 208,
+            "current": 208,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          }
+        }
+      },
+      "publicShutdown": 200,
+      "reserveMs": 1038006,
+      "physical": {
+        "observedAtUtc": "2026-10-26T16:19:54.4906970Z",
+        "native": {
+          "occurrence": "file-model-boundary-643-f99d578e-94e8-4fc1-b095-f5693c919f98",
+          "outcome": "settled",
+          "host": {
+            "pid": 81884,
+            "processInstanceID": "win32:639286282244675110",
+            "occurrenceID": "11caa6ff-17d3-44ee-98d8-08d7bfde83a9"
+          },
+          "target": {
+            "pid": 73880,
+            "processInstanceID": "win32:639286282252285668",
+            "occurrenceID": "49102a76-8fbe-4a37-92f7-73c20d825616"
+          },
+          "observedAtUtc": "2026-10-26T16:19:46.249Z",
+          "deadlineAt": 1793032624255,
+          "terminal": {
+            "occurrenceID": "file-model-boundary-643-f99d578e-94e8-4fc1-b095-f5693c919f98",
+            "pid": 73880,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-26T16:19:46.2824495Z"
+        },
+        "chain": [
+          {
+            "identity": {
+              "pid": 81884,
+              "processInstanceID": "win32:639286282244675110",
+              "occurrenceID": "11caa6ff-17d3-44ee-98d8-08d7bfde83a9"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 73880,
+              "processInstanceID": "win32:639286282252285668",
+              "occurrenceID": "49102a76-8fbe-4a37-92f7-73c20d825616"
+            },
+            "state": "dead_or_reused"
+          }
+        ]
+      },
+      "successfulShutdown": true
+    }
+  ],
+  "attachments": [
+    {
+      "pairs": 13,
+      "originalSourceBytesPreserved": true
+    },
+    {
+      "pairs": 13,
+      "originalSourceBytesPreserved": true
+    }
+  ],
+  "newModelRequests": 0,
+  "cumulativeModelRequests": 218,
+  "credentialsCopied": false,
+  "ui": {
+    "entry": "main-BGrTrwC8.js",
+    "actualScreenshots": 8,
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "manualReview": true,
+    "automatedUITests": false,
+    "closedOwnedTabs": [
+      "25",
+      "26"
+    ],
+    "upload": "Actual public HTTP and manual open/read; file chooser not exercised"
+  },
+  "boundaries": [
+    "No user18571 process, window or database operation",
+    "No schema/migration change",
+    "No claim of cold scheduler recovery qualification",
+    "No version, release, tag or pull request"
+  ]
+}

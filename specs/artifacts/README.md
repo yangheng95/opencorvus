@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件操作与模型可用性边界](2026-10-26-file-operation-model-independence/README.md)：八张手工实页原图、HTTP与真实文件/独立运行结清事实。
+
 - [文件浏览器工具名称统一](2026-10-26-explorer-tool-identity/README.md)：十张真实原图、原数据与独立运行结清事实。
 
 - [文件阅读操作与关闭反馈](2026-10-26-file-explorer-reading-experience/README.md)：九张真实原图和原文件/运行结清事实。

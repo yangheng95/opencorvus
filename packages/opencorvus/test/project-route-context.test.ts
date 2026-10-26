@@ -2,6 +2,17 @@ import { describe, expect, test } from "bun:test"
 import { projectRouteContextKind } from "@/server/project-route-context"
 
 describe("Project route context authority", () => {
+  test("assigns explicit file mutations to Project identity", () => {
+    expect([
+      projectRouteContextKind("/file/content", "PATCH"),
+      projectRouteContextKind("/file/item", "POST"),
+      projectRouteContextKind("/file/item", "PATCH"),
+      projectRouteContextKind("/file/item", "DELETE"),
+      projectRouteContextKind("/file/item/copy", "POST"),
+      projectRouteContextKind("/file/upload", "POST"),
+    ]).toEqual(["identity", "identity", "identity", "identity", "identity", "identity"])
+  })
+
   test("assigns durable continuous-goal intent to Project identity for every owner kind", () => {
     expect(
       ["chat", "task", "mission"].map((kind) => ({

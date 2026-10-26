@@ -111,7 +111,14 @@ GET readers use the existing Project identity admission independently of
 executable model bootstrap. They retain the selected Project directory,
 relative-path and canonical physical-path boundaries, exact absolute-source
 validation, original file errors, content revisions and actual Git/process
-owners. File mutations keep their runtime and write-precondition contracts.
+owners. The exact file save, create, upload, copy, move and delete routes also
+use Project identity independently of executable model availability. After
+their original request validators, they await the same project-scoped plugin
+initialization used by full bootstrap. Original path/root protection,
+no-overwrite publication, loaded content revisions, atomic writes, configured
+formatting and canonical file events remain owned by the existing File API.
+An already active Runtime retains its listeners; a cold file operation does
+not claim full Runtime initialization or admit model execution.
 
 VCS information, local branches and diff GET readers use the same Project
 identity admission independently of executable model bootstrap. Information
