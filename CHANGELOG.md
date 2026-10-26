@@ -4,9 +4,59 @@
 
 ## 未发布
 
+## 0.1.33 - 2026-10-27
+
+### zh-CN
+
+#### 调整
+
+- 正式 CI（Continuous Integration，持续集成）在原生验收之后传输完整安装器、更新签名、CLI（Command Line Interface，命令行界面）归档及资格回执；调试保留完整输出。Intel Mac 预检可保存同一 Rust 依赖缓存，正式构建恢复缓存；五平台检查、源码归属和从创建起计算的40分钟联合期限保持。
+- 专家团选择显示当前已选数量和完整说明，区分已安装搜索结果与市场结果，双语提示跟随界面语言；包作者的原始描述保持原文。
+
+#### 修复
+
+- 上传选择与最终发布器共用现有资产命名及完整性契约，覆盖使用连字符的 RPM（Red Hat Package Manager，红帽软件包管理器）文件名；上传前验证每个平台的完整安装器和更新签名，修复0.1.32在原生检查通过后遗漏RPM导致发布失败的问题。发布控制步骤减少无关规格截图资料的传输，产品构建和官网验收仍完整执行。
+- 定时任务“立即运行”沿服务端真实执行回执等待结算，不再被通用15秒请求超时提前报错；运行反馈、执行身份和历史一致，完成后可进入真实结果对话。暂停状态明确为“自动运行已暂停”，保留单次手动运行及用户原暂停决定。
+- 搜索入口、分组与空结果明确包含工作记录，重命名和归档菜单准确说明操作对象；中英文保留原查询与归档状态。
+- 模型不可用的冷项目仍可创建、编辑和重开未执行的 Mission 草稿，并完成标题与固定操作；真正执行继续校验原模型。Chat、Work 和 Mission 的固定操作验证真实项目归属。
+- Mission 草稿中央标题与页头、侧栏读取同一当前目录事实，改名后保持一致；请求失败显示可读反馈和完整详情，保留已输入名称与需求。
+- 专家团查询和清除查询保留用户明确选择，包括主动取消全部选择；输入搜索词不会自动勾选候选。零选择、已安装范围无匹配和真正无兼容候选提供准确双语说明，保存与重开保留原草稿身份和固定专家团快照。
+
+#### 升级影响与已知限制
+
+- 本版本从已公开的0.1.31继续交付，纳入0.1.32未公开候选的定时、搜索和发布修复。31的原联合运行超时，官网已由后续普通部署恢复31；32因上传遗漏RPM未公开。历史标签、草稿和日志保留。[31的完整产品变化与升级说明](https://opencorvus.com/zh-cn/changelog/0.1.31/)仍适用。
+- 数据库结构不变；受支持基线继续自动迁移至版本8并保留备份。Mission 本批验收覆盖草稿作者操作和固定快照，不扩大为执行、并发恢复或已固定快照与当前生效配置完全一致的声明。投影子任务完整物理停止和长对话压缩的既有边界保持。
+- macOS 仍使用临时签名（ad hoc），未包含 Apple 公证。原生 Rust 的 `glib`（中危，GHSA-wrw7-89jp-8q8g）与 `rand`（低危，GHSA-cq8v-f236-94qc）通告仍未关闭。
+
+### en-US
+
+#### Changed
+
+- Transfer the complete qualified installers, updater signatures, CLI (Command Line Interface) archives and qualification receipts after native acceptance in canonical CI (Continuous Integration). Debug builds retain complete outputs. Intel Mac preflight can save the same Rust dependency cache for canonical builds to restore, retaining all five platforms, source ownership and the original 40-minute combined deadline.
+- Show the current expert-squad selection count and complete descriptions, distinguishing installed search results from marketplace results. Interface prompts follow English or Chinese while package authors' original descriptions retain their text.
+
+#### Fixed
+
+- Use the existing asset-name and completeness contract for both upload selection and final publication, including hyphenated RPM (Red Hat Package Manager) filenames. Validate each platform's full installer and updater-signature set before transfer, fixing the missing RPM that stopped 0.1.32 after native checks succeeded. Publication control steps reduce transfers of unrelated specification screenshots; product builds and website acceptance retain their complete checks.
+- Keep scheduled Run now requests attached to the server's actual execution receipt instead of prematurely reporting failure at the generic 15-second request timeout. Running feedback, identity and history agree, with navigation to the actual result conversation after settlement. Describe paused schedules as Automatic runs paused while retaining one-time manual execution and the user's pause decision.
+- Include work records explicitly in search entry points, groups and empty results. Rename and archive actions identify their actual object in both languages, preserving the query and archive state.
+- Allow cold projects without an available model to create, edit and reopen unexecuted Mission drafts and manage titles and pins. Execution still validates the original model. Chat, Work and Mission pin operations verify actual project ownership.
+- Read the central Mission draft title from the same current catalog fact as the header and sidebar, keeping renames consistent. Request failures show readable feedback and complete details while retaining the entered name and requirements.
+- Preserve explicit expert-squad choices when searching or clearing a query, including a deliberate empty selection. Typing a query no longer selects a candidate. Distinguish zero selection, no installed match and unavailable compatible candidates in both languages; saving and reopening retain the draft identity and frozen squad snapshot.
+
+#### Upgrade impact and known limitations
+
+- This version follows the publicly available 0.1.31 and includes the scheduled-control, search and release fixes from the unpublished 0.1.32 candidate. The original 31 combined run expired; a later ordinary deployment restored its website. Version 32 remained unpublished after upload omitted RPM. Historical tags, drafts and logs remain. [The complete 31 product and upgrade notes](https://opencorvus.com/changelog/0.1.31/) still apply.
+- Database structure is unchanged; supported baselines still migrate automatically to version 8 with retained backups. Mission acceptance covers draft authoring and frozen snapshots, without extending the claim to execution, concurrent recovery or equivalence between frozen and currently effective squad configuration. Existing physical-stop and long-conversation compaction limitations remain.
+- macOS retains ad hoc signing without Apple notarization. Native Rust advisories for `glib` (medium, GHSA-wrw7-89jp-8q8g) and `rand` (low, GHSA-cq8v-f236-94qc) remain open.
+
 ## 0.1.32 - 2026-10-27
 
 ### zh-CN
+
+#### 发布状态
+
+- 未公开候选。五平台原生构建与验收成功，但正式运行40387163641的上传规则遗漏连字符RPM，发布器按完整安装器契约拒绝，草稿保持未公开；原标签、空草稿和失败日志保留，后续由0.1.33修复。
 
 #### 调整
 
@@ -27,6 +77,10 @@
 - macOS 仍为临时签名（ad hoc），未包含 Apple 公证。原生 Rust 的 `glib`（中危，GHSA-wrw7-89jp-8q8g）与 `rand`（低危，GHSA-cq8v-f236-94qc）通告仍未关闭；本次不升级这两项。
 
 ### en-US
+
+#### Publication status
+
+- Unpublished candidate. All five native builds and acceptance checks succeeded, but canonical run 40387163641 omitted hyphenated RPM files during upload. The publication stager rejected the incomplete installer set, leaving the draft unpublished. The original tag, empty draft and failure logs remain; 0.1.33 carries the fix forward.
 
 #### Changed
 

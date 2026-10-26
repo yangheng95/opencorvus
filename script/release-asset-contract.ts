@@ -130,3 +130,35 @@ export function updaterSignatureName(bundleName: string): string {
 export function looksLikeOverlayBundle(filename: string): boolean {
   return /^OpenCorvus(?:[-_]|$)/.test(filename) && /\.(?:dmg|app\.tar\.gz|AppImage|deb|msi|rpm|exe)$/.test(filename)
 }
+
+/** The same classification is used before transfer and after artifact download. */
+export function overlayReleaseAssetName(platform: string, version: string, filename: string): string | undefined {
+  if (overlayBundlePatterns(platform, version).some(({ pattern }) => pattern.test(filename))) return filename
+  const updater = overlayUpdaterContract(platform, version)
+  if (filename.endsWith(".sig") && updater.bundlePattern.test(filename.slice(0, -4))) return filename
+  if (looksLikeOverlayBundle(filename)) {
+    throw new Error(`Overlay bundle does not match release ${version} for ${platform}: ${filename}`)
+  }
+  return undefined
+}
+
+export function selectOverlayReleaseAssets(
+  platform: string,
+  version: string,
+  filenames: string[],
+  context: string,
+): string[] {
+  const assets = filenames.flatMap((filename) => {
+    const asset = overlayReleaseAssetName(platform, version, filename)
+    return asset ? [asset] : []
+  })
+  for (const { label, pattern } of overlayBundlePatterns(platform, version)) {
+    if (!assets.some((asset) => pattern.test(asset))) throw new Error(`Missing ${label} in ${context}`)
+  }
+  const updater = overlayUpdaterContract(platform, version)
+  const bundles = assets.filter((asset) => updater.bundlePattern.test(asset))
+  if (bundles.length !== 1) throw new Error(`${updater.label} must resolve to exactly one asset in ${context}`)
+  const signature = updaterSignatureName(bundles[0]!)
+  if (!assets.includes(signature)) throw new Error(`Missing ${updater.label} signature in ${context}: ${signature}`)
+  return assets.sort()
+}

@@ -158,7 +158,9 @@ builds. Once expired, the native row must be rebuilt. Never mix artifacts from o
 
 Each native row runs its complete executable/installer or packaged-runtime
 qualification before upload. Canonical GUI transfer then selects the validated
-`OpenCorvus_*` installers and updater signatures; CLI transfer selects the
+installer formats and updater signatures through `script/select-overlay-transfer.ts`,
+using the same `release-asset-contract.ts` classification and complete-row validation
+as the publication stager. This includes the hyphenated RPM names. CLI transfer selects the
 platform archives and qualification receipts. Unpacked CLI directories and bare
 GUI executables remain local build outputs. Debug GUI transfer retains its full
 staging directory. The displayed Actions artifact byte count is still an

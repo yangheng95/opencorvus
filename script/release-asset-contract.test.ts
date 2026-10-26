@@ -1,7 +1,60 @@
 import { describe, expect, test } from "bun:test"
-import { cliArchiveNames, overlayBundlePatterns, overlayUpdaterContract } from "./release-asset-contract"
+import {
+  cliArchiveNames,
+  overlayBundlePatterns,
+  overlayUpdaterContract,
+  selectOverlayReleaseAssets,
+} from "./release-asset-contract"
 
 describe("Overlay release asset contract", () => {
+  const linuxAssets = [
+    "OpenCorvus_0.1.33_aarch64.AppImage",
+    "OpenCorvus_0.1.33_aarch64.AppImage.sig",
+    "OpenCorvus_0.1.33_arm64.deb",
+    "OpenCorvus-0.1.33-1.aarch64.rpm",
+  ]
+
+  test("selects the complete Linux installer and signed update contract from native output", () => {
+    expect(
+      selectOverlayReleaseAssets(
+        "linux-arm64",
+        "0.1.33",
+        [...linuxAssets, "opencorvus-overlay"],
+        "native output linux-arm64",
+      ),
+    ).toEqual(linuxAssets.toSorted())
+  })
+
+  test("reports the precise missing RPM contract before native transfer", () => {
+    expect(() =>
+      selectOverlayReleaseAssets("linux-arm64", "0.1.33", linuxAssets.slice(0, 3), "native output linux-arm64"),
+    ).toThrow("Missing Linux RPM bundle in native output linux-arm64")
+  })
+
+  test("reports the precise missing update signature contract", () => {
+    expect(() =>
+      selectOverlayReleaseAssets(
+        "linux-arm64",
+        "0.1.33",
+        [linuxAssets[0]!, ...linuxAssets.slice(2)],
+        "native output linux-arm64",
+      ),
+    ).toThrow(
+      "Missing Linux AppImage updater bundle signature in native output linux-arm64: OpenCorvus_0.1.33_aarch64.AppImage.sig",
+    )
+  })
+
+  test("reports an installer whose version differs from the release manifest", () => {
+    expect(() =>
+      selectOverlayReleaseAssets(
+        "linux-arm64",
+        "0.1.33",
+        [...linuxAssets, "OpenCorvus-0.1.32-1.aarch64.rpm"],
+        "native output linux-arm64",
+      ),
+    ).toThrow("Overlay bundle does not match release 0.1.33 for linux-arm64: OpenCorvus-0.1.32-1.aarch64.rpm")
+  })
+
   test("maps the Linux ARM64 native bundle filenames produced by Tauri", () => {
     const patterns = overlayBundlePatterns("linux-arm64", "0.0.35-beta")
     const produced = [

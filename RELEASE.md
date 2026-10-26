@@ -99,7 +99,8 @@ see [docs/packaging.md](/docs/packaging.md).
 
 The matrix first uploads temporary GitHub Actions artifacts per platform.
 Canonical GUI transfer includes the validated installer formats and updater
-signatures; CLI transfer includes the validated archives and qualification
+signatures through the shared asset contract, with complete-row validation before
+upload and after download; CLI transfer includes the validated archives and qualification
 receipts. Debug GUI transfer retains the complete staging directory. A displayed
 artifact size still aggregates multiple files rather than one installer.
 

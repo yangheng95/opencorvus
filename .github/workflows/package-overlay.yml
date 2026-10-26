@@ -29,9 +29,6 @@ permissions:
   contents: read
   actions: read
 
-env:
-  OVERLAY_TRANSFER_PATH: packages/overlay/dist-artifacts/${{ inputs.platform }}${{ inputs.release-run-id != '' && '/OpenCorvus_*' || '' }}
-
 jobs:
   build:
     name: compile (${{ inputs.platform }})
@@ -95,12 +92,19 @@ jobs:
         run: |
           mkdir -p .scratch/installer-diagnostics
           bun run package:gui-installer-matrix 2>&1 | tee .scratch/installer-diagnostics/package.log
+      - name: Select overlay transfer files
+        id: transfer
+        if: ${{ !startsWith(inputs.platform, 'linux-') }}
+        env:
+          OVERLAY_TRANSFER_PLATFORM: ${{ inputs.platform }}
+          RELEASE_RUN_ID: ${{ inputs.release-run-id }}
+        run: bun script/select-overlay-transfer.ts >> "$GITHUB_OUTPUT"
       - name: Upload overlay artifact
         if: ${{ !startsWith(inputs.platform, 'linux-') }}
         uses: actions/upload-artifact@v7
         with:
           name: overlay-${{ inputs.platform }}
-          path: ${{ env.OVERLAY_TRANSFER_PATH }}
+          path: ${{ steps.transfer.outputs.paths }}
           if-no-files-found: error
           compression-level: 0
           overwrite: true
@@ -278,11 +282,17 @@ jobs:
             tar -xf ".scratch/gui-bundles/gui-bundle-$kind.tar" -C packages/overlay/src-tauri/target/release
           done
           bun run package:gui-installer-matrix --skip-build
+      - name: Select overlay transfer files
+        id: transfer
+        env:
+          OVERLAY_TRANSFER_PLATFORM: ${{ inputs.platform }}
+          RELEASE_RUN_ID: ${{ inputs.release-run-id }}
+        run: bun script/select-overlay-transfer.ts >> "$GITHUB_OUTPUT"
       - name: Upload overlay artifact
         uses: actions/upload-artifact@v7
         with:
           name: overlay-${{ inputs.platform }}
-          path: ${{ env.OVERLAY_TRANSFER_PATH }}
+          path: ${{ steps.transfer.outputs.paths }}
           if-no-files-found: error
           compression-level: 0
           overwrite: true

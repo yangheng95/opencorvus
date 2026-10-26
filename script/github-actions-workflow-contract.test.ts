@@ -54,13 +54,29 @@ async function readWorkflow(file: string): Promise<Workflow> {
 describe("GitHub Actions workflow contract", () => {
   test("selects qualified installer files through the shared native transfer owner", async () => {
     const overlay = await readWorkflow("package-overlay.yml")
-    expect(overlay.env?.OVERLAY_TRANSFER_PATH).toBe(
-      "packages/overlay/dist-artifacts/${{ inputs.platform }}${{ inputs.release-run-id != '' && '/OpenCorvus_*' || '' }}",
-    )
     for (const job of [overlay.jobs?.build, overlay.jobs?.["assemble-linux"]]) {
+      const selection = job?.steps?.find(({ id }) => id === "transfer")
+      expect(selection?.run).toBe('bun script/select-overlay-transfer.ts >> "$GITHUB_OUTPUT"')
+      expect(selection?.env).toEqual({
+        OVERLAY_TRANSFER_PLATFORM: "${{ inputs.platform }}",
+        RELEASE_RUN_ID: "${{ inputs.release-run-id }}",
+      })
       expect(job?.steps?.find(({ name }) => name === "Upload overlay artifact")?.with?.path).toBe(
-        "${{ env.OVERLAY_TRANSFER_PATH }}",
+        "${{ steps.transfer.outputs.paths }}",
       )
+    }
+    expect(overlay.jobs?.build?.steps?.find(({ id }) => id === "transfer")?.if).toBe("${{ !startsWith(inputs.platform, 'linux-') }}")
+  })
+
+  test("keeps complete release code in metadata checkouts while limiting evidence transfer", async () => {
+    const native = await readWorkflow("build.yml")
+    const website = await readWorkflow("deploy-opencorvus-com.yml")
+    for (const job of [native.jobs?.["publish-release-assets"], native.jobs?.["publish-release"], website.jobs?.["resolve-source"]]) {
+      expect(job?.steps?.find(({ uses }) => uses?.startsWith("actions/checkout@"))?.with).toEqual({
+        "persist-credentials": false,
+        "sparse-checkout": "/*\n!/specs/\n",
+        "sparse-checkout-cone-mode": false,
+      })
     }
   })
 
