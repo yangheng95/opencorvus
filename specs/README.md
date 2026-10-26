@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [0.1.27 正式发布](records/2026-10/2026-10-26-release-0.1.27.md)：双语日志、精确源码与五平台原生/官网联合交付。
+
 - [命令真实结果与执行收尾](records/2026-10/2026-10-26-command-outcome-visibility.md)：真实退出码、长结果与模型可见事实、Shell所有权收尾及重启接续验证。
 
 - [压缩包输入到可下载成果](records/2026-10/2026-10-26-zip-intake-delivery.md)：606/607真实Sol闭环、工具格式说明冲突修正与实际下载。
