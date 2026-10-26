@@ -276,5 +276,10 @@ test("automation service sends the full lifecycle through global target-aware HT
     kind: "json",
     value: { status: "active", expectedRevisionId: "atm_revision_paused" },
   })
+  expect(requests[5]).toMatchObject({
+    method: "POST",
+    path: "global/automations/atm_1/run",
+    timeoutMilliseconds: null,
+  })
   expect(requests[7]?.query).toEqual({ expectedRevisionId: "atm_revision_resumed" })
 })

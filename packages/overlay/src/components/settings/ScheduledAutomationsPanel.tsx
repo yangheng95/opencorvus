@@ -52,7 +52,9 @@ type AutomationError = { message: string; retry?: () => void; source?: "list-loa
 type AutomationModelOption = ConnectedModelOption & { defaultModel?: boolean; retained?: boolean }
 type AutomationFilter = "all" | "active" | "paused"
 type AutomationScopeFilter = "all" | AutomationScope
-type AutomationMutationOwner = { kind: "save"; id: string } | { kind: "action"; id: string }
+type AutomationMutationOwner =
+  | { kind: "save"; id: string }
+  | { kind: "action"; id: string; operation: "run" | "status" | "delete" }
 type AutomationRunState = {
   automationID: string
   status: "idle" | "loading" | "ready" | "error"
@@ -151,6 +153,10 @@ function formatTimestamp(value: number | null): string {
   }).format(new Date(value))
 }
 
+function nextRunValue(automation: AutomationView): string {
+  return automation.status === "paused" ? t("automations.automatic_paused") : formatTimestamp(automation.nextRun)
+}
+
 function recurrenceSummary(recurrence: string): string {
   const parsed = parseAutomationRecurrence(recurrence)
   if (parsed.preset === "custom") return parsed.customRule
@@ -192,6 +198,10 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   const [mutationOwner, setMutationOwner] = createSignal<AutomationMutationOwner | null>(null)
   const saving = createMemo(() => mutationOwner()?.kind === "save")
   const busyAction = createMemo(() => mutationOwner()?.id ?? "")
+  const runningAutomationID = createMemo(() => {
+    const owner = mutationOwner()
+    return owner?.kind === "action" && owner.operation === "run" ? owner.id : ""
+  })
   const [error, setError] = createSignal<AutomationError | null>(null)
   const [editTarget, setEditTarget] = createSignal<AutomationView | null>(null)
   const editing = () => editTarget() !== null
@@ -624,9 +634,9 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     }
   }
 
-  async function performAction(id: string, action: () => Promise<unknown>): Promise<void> {
+  async function performAction(id: string, operation: "run" | "status", action: () => Promise<unknown>): Promise<void> {
     if (busyAction()) return
-    const owner: AutomationMutationOwner = { kind: "action", id }
+    const owner: AutomationMutationOwner = { kind: "action", id, operation }
     setMutationOwner(owner)
     setError(null)
     try {
@@ -653,7 +663,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     const active = document.activeElement
     const removingFocusedRow = active instanceof HTMLElement && Boolean(active.closest(".automation-list-row"))
     if (removingFocusedRow) rememberListFocus()
-    const owner: AutomationMutationOwner = { kind: "action", id }
+    const owner: AutomationMutationOwner = { kind: "action", id, operation: "delete" }
     setMutationOwner(owner)
     setError(null)
     try {
@@ -874,7 +884,9 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                               </span>
                             </span>
                             <span class="automation-list-item__next">
-                              {t("automations.next_run", { value: formatTimestamp(automation.nextRun) })}
+                              {automation.status === "active"
+                                ? t("automations.next_run", { value: nextRunValue(automation) })
+                                : nextRunValue(automation)}
                             </span>
                           </span>
                         </SettingsRow>
@@ -984,10 +996,10 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                             tone="neutral"
                             data-ui="automation-run-now"
                             disabled={Boolean(busyAction())}
-                            onClick={() => void performAction(automation().id, () => runAutomationNow(automation().id))}
+                            onClick={() => void performAction(automation().id, "run", () => runAutomationNow(automation().id))}
                           >
-                            <Icon name="run" />
-                            {t("automations.run_now")}
+                            <Icon name={runningAutomationID() === automation().id ? "loading" : "run"} />
+                            {t(runningAutomationID() === automation().id ? "automations.running" : "automations.run_now")}
                           </Button>
                           <Button
                             type="button"
@@ -1012,6 +1024,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                               const current = automation()
                               void performAction(
                                 current.id,
+                                "status",
                                 current.status === "active"
                                   ? () => pauseAutomation(current.id, current.revisionId)
                                   : () => resumeAutomation(current.id, current.revisionId),
@@ -1049,7 +1062,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         </Show>
                         <div>
                           <span>{t("automations.next")}</span>
-                          <strong>{formatTimestamp(automation().nextRun)}</strong>
+                          <strong>{nextRunValue(automation())}</strong>
                         </div>
                         <div>
                           <span>{t("automations.last")}</span>

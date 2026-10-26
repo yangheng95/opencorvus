@@ -1,4 +1,4 @@
-import { apiJson } from "./api"
+import { apiJson, serverSettledRequest } from "./api"
 import { directoryScopedPath } from "./task-path"
 import type {
   GlobalAutomationsCreateData,
@@ -58,7 +58,7 @@ export function resumeAutomation(id: string, expectedRevisionId: string): Promis
 }
 
 export function runAutomationNow(id: string): Promise<AutomationRunView[]> {
-  return apiJson(automationPath(`/${encodeURIComponent(id)}/run`), { method: "POST" })
+  return apiJson(automationPath(`/${encodeURIComponent(id)}/run`), serverSettledRequest({ method: "POST" }))
 }
 
 export function listAutomationRuns(id: string, signal?: AbortSignal): Promise<AutomationRunView[]> {

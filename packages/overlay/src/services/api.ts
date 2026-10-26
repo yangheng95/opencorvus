@@ -248,7 +248,8 @@ export interface ApiJsonInit extends RequestInit {
 /**
  * Opt one lifecycle mutation into server-owned request settlement. The server
  * response, or an explicit caller signal, is the only truthful completion
- * boundary for operations that stop live execution before committing data.
+ * boundary for operations that await execution results or stop live execution
+ * before committing data.
  */
 export function serverSettledRequest(init: ApiJsonInit): ApiJsonInit {
   return { ...init, timeoutMilliseconds: null }

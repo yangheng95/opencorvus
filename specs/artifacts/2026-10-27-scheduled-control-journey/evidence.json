@@ -1,0 +1,78 @@
+{
+  "qualification": "Manual desktop interactions and original screenshots, service tests, actual streamed provider execution; no UI automation",
+  "screenshots": [
+    "01-empty-scheduled-page.jpg",
+    "02-create-future-form.jpg",
+    "03-created-future-detail.jpg",
+    "04-paused-detail.jpg",
+    "05-paused-row-all-before.jpg",
+    "06-paused-filter-before.jpg",
+    "07-paused-search-global-before.jpg",
+    "08-paused-list-english-after.jpg",
+    "09-paused-detail-after.jpg",
+    "10-resume-original-date-after.jpg",
+    "11-manual-run-observation.jpg",
+    "12-original-run-success-after-refresh.jpg",
+    "13-original-model-result-opened.jpg",
+    "14-current-paused-list-en.jpg",
+    "15-current-resume-calendar-en.jpg",
+    "16-current-running-en.jpg",
+    "17-current-request-after-fifteen-seconds.jpg",
+    "18-current-result-session-en.jpg",
+    "19-current-paused-list-zh.jpg",
+    "20-current-success-paused-detail-zh.jpg"
+  ],
+  "before": {
+    "scope": 647,
+    "requests": 3,
+    "cumulativeRequests": 221,
+    "executionMs": 49264,
+    "ui": "Default fifteen-second timeout and stale last-run/history despite the same durable successful Fire/Run/Session"
+  },
+  "after": {
+    "scope": 648,
+    "automationID": "atm_g0VZBCRAF00qYY71nENH",
+    "definitionStatus": "paused",
+    "retainedRecurrence": "DTSTART;TZID=Asia/Shanghai:20990105T090000\nRRULE:FREQ=DAILY",
+    "retainedNextRun": 4071258000000,
+    "fireID": "atm_g0VZBCaCj003e4gov7P0",
+    "runID": "atr_automation_e8327aba34b8ffdef5132fccbc2fde24",
+    "sessionID": "ses_automation_e5be13f68bb63665233c525b9648f5e1",
+    "outcome": "succeeded",
+    "startedAt": 1793037491023,
+    "completedAt": 1793037497409,
+    "executionMs": 6386,
+    "reply": "SCHEDULE648READY",
+    "readmeOriginalBytesPreserved": true,
+    "requests": 1,
+    "cumulativeRequests": 222,
+    "requestOutcomes": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      }
+    ],
+    "credentialProof": "Prior actual successful 647 preflight reused with current matching source metadata, valid OAuth and exact current projection; no new paid preflight",
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "retiredCredentialAndCatalogCopies": 2,
+    "publicShutdown": 200,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "reserveMs": 1049542
+  },
+  "limits": [
+    "The new model run lasted 6386ms; observation after fifteen seconds is not a slow-model proof. Real loopback HTTP service tests separately verify seventeen-second responses through both production host transports.",
+    "Chinese paused list/detail and English running/result were manually viewed; Chinese in-flight label was not separately exercised.",
+    "Shared retry/recovery/concurrency/multiple-project audit is code evidence, not newly executed paid coverage for every scenario."
+  ]
+}

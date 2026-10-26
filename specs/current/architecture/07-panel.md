@@ -881,6 +881,13 @@ advanced expressions retain their complete authored rule as technical content.
 The machine calendar service owns parsing, serialization and edit comparison,
 without a parallel hard-coded English presentation export.
 
+Paused definitions present an explicit localized automatic-runs-paused state in
+both list and detail. Their retained calendar frontier remains the authority for
+resume. Manual Run now uses the existing server-settled request policy because
+its response contains completed execution receipts. The panel's single mutation
+owner also supplies its localized Running state until that response and the
+canonical definition/run refresh settle; it does not retry the execution.
+
 Scheduled automation basic fields own an explicit start date, time, time zone
 and weekly day. The date/weekday of today are creation defaults only; changing
 unrelated fields omits recurrence from the existing PATCH. Seconds and advanced
