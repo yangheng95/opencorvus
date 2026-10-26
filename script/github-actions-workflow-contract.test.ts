@@ -48,6 +48,20 @@ async function readWorkflow(file: string): Promise<Workflow> {
 }
 
 describe("GitHub Actions workflow contract", () => {
+  test("qualifies website archives through the prepared isolated backend runner", async () => {
+    const workflow = await readWorkflow("deploy-opencorvus-com.yml")
+    expect(
+      workflow.jobs?.["archive-determinism"]?.steps?.filter(({ run }) => run).map(({ name, run }) => ({ name, run })),
+    ).toEqual([
+      { name: "Install frozen dependencies", run: "bun install --frozen-lockfile --no-progress --ignore-scripts" },
+      { name: "Build SDK dependency", run: "bun run --cwd packages/sdk/js build" },
+      {
+        name: "Verify fixed canonical archive bytes",
+        run: "bun packages/opencorvus/script/run-tests.ts test/expert-squad/static-distribution-archive.test.ts",
+      },
+    ])
+  })
+
   test("passes every packaged profile and bundle to the qualification checker", async () => {
     const workflow = await readWorkflow("build.yml")
     const run = workflow.jobs?.["package-cli"]?.steps?.find(
