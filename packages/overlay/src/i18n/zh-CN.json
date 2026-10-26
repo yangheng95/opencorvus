@@ -2064,7 +2064,7 @@
   "file_editor.save_conflict": "磁盘上的文件已发生变化。你的编辑仍保留在这里。请重新加载并查看当前版本后再保存。",
   "file_editor.revision_required": "请先重新加载磁盘文件，取得当前版本后再保存。你的编辑仍保留在这里。",
   "file_editor.reload_edited": "重新加载期间你又编辑了文件，最新输入已保留。准备好后请再次重新加载。",
-  "workspace.close": "关闭工作区",
+  "file_editor.close": "关闭文件 {{path}}",
   "workspace.diff": "差异",
   "workspace.editor_launchers": "IDE 快捷入口",
   "workspace.editor_launchers_menu": "选择 IDE",

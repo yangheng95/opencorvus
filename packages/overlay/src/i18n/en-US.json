@@ -2065,7 +2065,7 @@
   "file_editor.save_conflict": "This file changed on disk. Your edits are kept here. Reload from disk to review the current version before saving again.",
   "file_editor.revision_required": "Reload from disk before saving to obtain the current file revision. Your edits are kept here.",
   "file_editor.reload_edited": "You edited this file while it was reloading. Your latest input is kept; reload again when you are ready.",
-  "workspace.close": "Close workspace",
+  "file_editor.close": "Close file {{path}}",
   "workspace.diff": "Diff",
   "workspace.editor_launchers": "IDE launchers",
   "workspace.editor_launchers_menu": "Choose IDE",

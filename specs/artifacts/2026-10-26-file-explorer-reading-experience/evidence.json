@@ -1,0 +1,433 @@
+{
+  "date": "2026-10-26",
+  "scope": "Accurate current-file close names and the existing CodeMirror search close control theme",
+  "checks": {
+    "build": {
+      "label": "file-reading-build",
+      "startedAt": 1793027087030,
+      "closedAt": 1793027154225,
+      "code": 0,
+      "signal": null,
+      "childPID": 92812
+    },
+    "types": {
+      "label": "file-reading-types",
+      "startedAt": 1793027087096,
+      "closedAt": 1793027117283,
+      "code": 0,
+      "signal": null,
+      "childPID": 53860
+    },
+    "language": {
+      "label": "file-reading-language",
+      "startedAt": 1793027087109,
+      "closedAt": 1793027090312,
+      "code": 0,
+      "signal": null,
+      "childPID": 88160
+    },
+    "tokens": {
+      "label": "file-reading-tokens",
+      "startedAt": 1793027087107,
+      "closedAt": 1793027094059,
+      "code": 0,
+      "signal": null,
+      "childPID": 90016
+    }
+  },
+  "runs": {
+    "639": {
+      "port": 38144,
+      "uiEntry": "main-tVtk65-S.js",
+      "credentialsCopied": false,
+      "maximumRequests": 0,
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 29842,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 23,
+            "current": 23,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "message": {
+            "original": 125,
+            "current": 125,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "part": {
+            "original": 198,
+            "current": 198,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 37,
+            "current": 37,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 98,
+            "current": 98,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 37,
+            "current": 37,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 45,
+            "current": 45,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 45,
+            "current": 45,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 208,
+            "current": 208,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          }
+        }
+      },
+      "attachments": {
+        "pairs": 13,
+        "originalSourceBytesPreserved": true
+      },
+      "requestInventory": {
+        "GET /global/health": 39,
+        "GET /ui/": 1,
+        "GET /ui/assets/main-tVtk65-S.js": 1,
+        "GET /ui/assets/CommandMenuSurface-9Ez69chO.css": 1,
+        "GET /ui/assets/main-CXJM4wkN.css": 1,
+        "GET /ui/assets/CommandMenuSurface-CN3W_QEU.js": 1,
+        "GET /ui/assets/opencorvus-logo-light-D2HTuSVO.svg": 2,
+        "GET /ui/assets/opencorvus-logo-dark-DzLoBvHF.svg": 1,
+        "GET /ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2": 1,
+        "GET /ui/i18n/zh-CN.json": 1,
+        "GET /ui/i18n/en-US.json": 1,
+        "GET /global/composer-references": 1,
+        "POST /global/transport/stream": 2,
+        "GET /mailbox": 2,
+        "GET /expert-squad/catalog": 1,
+        "GET /chat/capability": 1,
+        "GET /expert-squad/search": 1,
+        "GET /mission-skill/catalog": 1,
+        "GET /work-ledger/events": 1,
+        "GET /coding/work/session/ses_-zUQryl9CzzNEb5MNLb0": 1,
+        "GET /work-ledger": 2,
+        "GET /mission": 2,
+        "GET /continuous-goal/chat/ses_-zUQryl9CzzNEb5MNLb0": 76,
+        "GET /ui/assets/noto-sans-sc-119-wght-normal-BfzSEbFz.woff2": 1,
+        "GET /ui/assets/noto-sans-sc-118-wght-normal-BPEb0gM9.woff2": 1,
+        "GET /ui/assets/noto-sans-sc-117-wght-normal-Dsz3vkzU.woff2": 1,
+        "GET /ui/assets/noto-sans-sc-116-wght-normal-vdFVzbO2.woff2": 1,
+        "GET /ui/assets/noto-sans-sc-115-wght-normal-BN__2iBG.woff2": 1,
+        "GET /ui/assets/noto-sans-sc-113-wght-normal-OgQXOX6x.woff2": 1,
+        "GET /ui/assets/noto-sans-sc-110-wght-normal-D2JBr045.woff2": 1,
+        "GET /ui/assets/noto-sans-sc-114-wght-normal-CRH9SDZu.woff2": 1,
+        "GET /ui/assets/noto-sans-sc-108-wght-normal-7aXvqIa2.woff2": 1,
+        "GET /ui/assets/noto-sans-sc-112-wght-normal-CiZxJMyY.woff2": 1,
+        "GET /ui/assets/noto-sans-sc-111-wght-normal-ClFr5QXM.woff2": 1,
+        "GET /config": 2,
+        "GET /channel": 2,
+        "GET /skill/mounts": 2,
+        "GET /mcp": 2,
+        "GET /path": 2,
+        "GET /vcs": 2,
+        "GET /global/tasks": 3,
+        "GET /expert-squad/inspect": 1,
+        "GET /experimental/project-memory": 2,
+        "GET /session/ses_-zUQryl9CzzNEb5MNLb0/conversation": 1,
+        "GET /session/ses_-zUQryl9CzzNEb5MNLb0/config": 2,
+        "GET /ui/assets/markdown-render.worker-DXg_fqFo.js": 1,
+        "GET /ui/assets/jetbrains-mono-latin-wght-normal-B9CIFXIH.woff2": 1,
+        "GET /session/ses_-zUQryl9CzzNEb5MNLb0/events": 1,
+        "POST /log": 2,
+        "GET /file": 24,
+        "GET /find/file": 4,
+        "GET /file/content": 1,
+        "GET /ui/assets/CodeEditor-DEuMaVrQ.js": 1,
+        "GET /ui/assets/index-CKHbdxOs.js": 1,
+        "GET /ui/assets/index-DyJmuvrP.js": 1,
+        "GET /ui/assets/index-BQZmoghd.js": 1,
+        "GET /ui/assets/index-rUDGojwW.js": 1,
+        "GET /ui/assets/index-DUgHsSw9.js": 1,
+        "GET /ui/assets/noto-sans-sc-90-wght-normal-BWcrRNoG.woff2": 1,
+        "POST /shutdown": 1
+      },
+      "closure": {
+        "originalExec": 50545,
+        "originalExecExit": 0,
+        "tab": 22,
+        "tabClosed": true,
+        "publicShutdown": 200,
+        "reserveMs": 798401,
+        "occurrence": "file-reading-639-5c0b4d71-e315-4abb-b876-5b5f26432a7b",
+        "nativeOutcome": "settled",
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "chain": [
+          {
+            "identity": {
+              "pid": 64864,
+              "processInstanceID": "win32:639286232916153152",
+              "occurrenceID": "2ee3d4cc-3566-4eb5-bbb8-1bff3a8633f8"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 75100,
+              "processInstanceID": "win32:639286232923560235",
+              "occurrenceID": "0b5d092f-9415-4776-a303-0d795a0d5d94"
+            },
+            "state": "dead_or_reused"
+          }
+        ]
+      }
+    },
+    "640": {
+      "port": 38145,
+      "uiEntry": "main--T1b_THW.js",
+      "credentialsCopied": false,
+      "maximumRequests": 0,
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 29842,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 23,
+            "current": 23,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "message": {
+            "original": 125,
+            "current": 125,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "part": {
+            "original": 198,
+            "current": 198,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 37,
+            "current": 37,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 98,
+            "current": 98,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 37,
+            "current": 37,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 45,
+            "current": 45,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 45,
+            "current": 45,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 208,
+            "current": 208,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          }
+        }
+      },
+      "attachments": {
+        "pairs": 13,
+        "originalSourceBytesPreserved": true
+      },
+      "requestInventory": {
+        "GET /global/health": 25,
+        "GET /ui/": 1,
+        "GET /ui/assets/main--T1b_THW.js": 1,
+        "GET /ui/assets/CommandMenuSurface-9Ez69chO.css": 1,
+        "GET /ui/assets/CommandMenuSurface-CN3W_QEU.js": 1,
+        "GET /ui/assets/main-CXJM4wkN.css": 1,
+        "GET /ui/assets/opencorvus-logo-light-D2HTuSVO.svg": 2,
+        "GET /ui/assets/opencorvus-logo-dark-DzLoBvHF.svg": 1,
+        "GET /ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2": 1,
+        "GET /ui/i18n/zh-CN.json": 1,
+        "GET /ui/i18n/en-US.json": 1,
+        "GET /global/composer-references": 1,
+        "POST /global/transport/stream": 2,
+        "GET /mailbox": 2,
+        "GET /expert-squad/catalog": 1,
+        "GET /expert-squad/search": 1,
+        "GET /mission-skill/catalog": 1,
+        "GET /chat/capability": 1,
+        "GET /work-ledger/events": 1,
+        "GET /coding/work/session/ses_-zUQryl9CzzNEb5MNLb0": 1,
+        "GET /work-ledger": 2,
+        "GET /mission": 2,
+        "GET /continuous-goal/chat/ses_-zUQryl9CzzNEb5MNLb0": 47,
+        "GET /ui/assets/noto-sans-sc-119-wght-normal-BfzSEbFz.woff2": 1,
+        "GET /ui/assets/noto-sans-sc-118-wght-normal-BPEb0gM9.woff2": 1,
+        "GET /ui/assets/noto-sans-sc-117-wght-normal-Dsz3vkzU.woff2": 1,
+        "GET /ui/assets/noto-sans-sc-115-wght-normal-BN__2iBG.woff2": 1,
+        "GET /ui/assets/noto-sans-sc-116-wght-normal-vdFVzbO2.woff2": 1,
+        "GET /ui/assets/noto-sans-sc-113-wght-normal-OgQXOX6x.woff2": 1,
+        "GET /ui/assets/noto-sans-sc-110-wght-normal-D2JBr045.woff2": 1,
+        "GET /ui/assets/noto-sans-sc-108-wght-normal-7aXvqIa2.woff2": 1,
+        "GET /ui/assets/noto-sans-sc-114-wght-normal-CRH9SDZu.woff2": 1,
+        "GET /ui/assets/noto-sans-sc-112-wght-normal-CiZxJMyY.woff2": 1,
+        "GET /ui/assets/noto-sans-sc-111-wght-normal-ClFr5QXM.woff2": 1,
+        "GET /config": 2,
+        "GET /channel": 2,
+        "GET /skill/mounts": 2,
+        "GET /mcp": 2,
+        "GET /path": 2,
+        "GET /vcs": 2,
+        "GET /global/tasks": 3,
+        "GET /expert-squad/inspect": 1,
+        "GET /experimental/project-memory": 2,
+        "GET /session/ses_-zUQryl9CzzNEb5MNLb0/conversation": 1,
+        "GET /session/ses_-zUQryl9CzzNEb5MNLb0/config": 2,
+        "GET /ui/assets/markdown-render.worker-DXg_fqFo.js": 1,
+        "GET /ui/assets/jetbrains-mono-latin-wght-normal-B9CIFXIH.woff2": 1,
+        "GET /session/ses_-zUQryl9CzzNEb5MNLb0/events": 1,
+        "POST /log": 2,
+        "GET /file": 13,
+        "GET /file/content": 2,
+        "GET /ui/assets/CodeEditor-BEKbpvYC.js": 1,
+        "GET /ui/assets/index-Cc9X2rz_.js": 1,
+        "GET /ui/assets/index-DfQ_jsok.js": 1,
+        "GET /ui/assets/index-CI4NyG7a.js": 1,
+        "GET /ui/assets/index-1uXDmVUV.js": 1,
+        "GET /ui/assets/index-C_teF7JS.js": 1,
+        "GET /ui/assets/GeneralPanel-CRhZXE2F.js": 1,
+        "GET /ui/assets/Switch-B1JfZVF_.js": 1,
+        "GET /ui/assets/AppearancePanel-0CnHen6f.js": 1,
+        "GET /ui/assets/SelectField-OopUwBL5.js": 1,
+        "GET /ui/assets/noto-sans-sc-109-wght-normal-CnjNbNmw.woff2": 1,
+        "GET /ui/assets/noto-sans-sc-107-wght-normal-kFQzJDLH.woff2": 1,
+        "GET /ui/assets/noto-sans-sc-90-wght-normal-BWcrRNoG.woff2": 1,
+        "POST /shutdown": 1
+      },
+      "closure": {
+        "originalExec": 40417,
+        "originalExecExit": 0,
+        "tab": 23,
+        "tabClosed": true,
+        "publicShutdown": 200,
+        "reserveMs": 946999,
+        "occurrence": "file-reading-640-9dd9cfaf-fec4-4101-a160-c8792d6f201f",
+        "nativeOutcome": "settled",
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "chain": [
+          {
+            "identity": {
+              "pid": 94616,
+              "processInstanceID": "win32:639286240034631939",
+              "occurrenceID": "5cb84bc1-c1df-46db-bf86-da47712760c1"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 95660,
+              "processInstanceID": "win32:639286240042698761",
+              "occurrenceID": "6f99ff09-d40a-4e20-9daa-5242462ff893"
+            },
+            "state": "dead_or_reused"
+          }
+        ]
+      }
+    }
+  },
+  "editorFile": {
+    "path": "summary.md",
+    "bytes": 201,
+    "originalBytesPreserved": true,
+    "qualification": "Original complete bytes captured before640; editor input was only an unsaved manual draft and was discarded through its original confirmation"
+  },
+  "visual": {
+    "method": "Manual development /ui interaction and actual original screenshot review; no UI automated tests",
+    "desktop": {
+      "width": 1280,
+      "height": 720,
+      "dockWidth": 380
+    },
+    "screenshots": [
+      "01-cancelled-switch-before.jpg",
+      "02-editor-find-before.jpg",
+      "03-close-file-guard-before.jpg",
+      "04-find-close-focused-en.jpg",
+      "05-find-close-focused-zh.jpg",
+      "06-close-file-guard-zh.jpg",
+      "07-cancel-keeps-draft-zh.jpg",
+      "08-file-closed-project-retained-zh.jpg",
+      "09-second-file-reading-zh.jpg"
+    ],
+    "observedNames": [
+      "Close workspace (before)",
+      "Close file summary.md",
+      "关闭文件 summary.md",
+      "关闭文件 README.md"
+    ],
+    "keyboard": "Find query 校验; actual Next; Tab from Replace all to Close with visible focus, Return closes the original panel and returns editor focus",
+    "language": "English to Simplified Chinese through actual Settings; same search query and document retained",
+    "qualifications": [
+      "01 Explorer selection and editor target have different semantics; no selection bug claimed",
+      "No native title tooltip screenshot is claimed",
+      "Actual File desktop dark UI only; other Artifact callers and other themes were not individually exercised",
+      "NoAuth model unavailable message is expected isolation, not user authentication failure",
+      "No file save, Provider execution, schema or lifecycle behavior change in this UI batch"
+    ]
+  },
+  "provider": {
+    "newRequests": 0,
+    "cumulativeRequests": 218,
+    "credentialsCopied": false
+  },
+  "references": [
+    {
+      "title": "CodeMirror official Styling example",
+      "url": "https://raw.githubusercontent.com/codemirror/website/main/site/examples/styling/index.md",
+      "qualification": "Primary website source; rendered site returned403, installed library source corroborates the original close button and theme boundary"
+    }
+  ]
+}

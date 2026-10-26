@@ -144,6 +144,10 @@ deleted separators. External values use canonical Text equality before any
 document replacement; format-only updates keep the text and cursor intact.
 File drafts, artifact edits and exact-byte file revision/write contracts share
 this one serialization boundary; no second raw-text draft or undo stack exists.
+The shared editor theme also styles the original CodeMirror search-panel close
+button with the existing icon-control size, reserved end space and keyboard
+focus treatment. CodeMirror retains the query, localized panel and close/focus
+behavior; no parallel search panel or state is introduced.
 
 File Editor renders base64 image content from its existing FileContent response
 through the shared PreviewableImage and image preview host. Image viewing is
@@ -2837,7 +2841,8 @@ the chooser becomes hidden and uses the same reflow frame to focus the newly
 selected visible tab. Ordinary tools and a new Browser tab keep their existing
 creation callbacks and identities. The add menu retains its primitive's own
 focus lifecycle; a tool body that has already acquired focus keeps it.
-The File pane's Close workspace action uses the same focus selection after a
+The File pane names its close action with the current original file title in
+the current interface language. Its Close file action uses the same focus selection after a
 successful close and its resulting layout frame. Its content-side entry must
 not leave focus on the removed editor; navigation admission keeps its own
 destination focus. Both presentation entries preserve focus already moved by

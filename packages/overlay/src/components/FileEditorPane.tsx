@@ -484,8 +484,8 @@ export function FileEditorPane() {
             data-ui="file-editor-close"
             disabled={isBusy() || fileEditorReserved()}
             onClick={() => void closeCurrentFile()}
-            title={t("workspace.close")}
-            aria-label={t("workspace.close")}
+            title={t("file_editor.close", { path: fileTitle() })}
+            aria-label={t("file_editor.close", { path: fileTitle() })}
           >
             <Icon name="close" />
           </Button>

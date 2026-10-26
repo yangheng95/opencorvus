@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件阅读操作与关闭反馈](records/2026-10/2026-10-26-file-explorer-reading-experience.md)：真实文件链路、准确关闭名称和查找按钮修复。
+
 - [已完成目标摘要与首页体验](records/2026-10/2026-10-26-goal-summary-density.md)：单行摘要、完整详情和真实侧聊复核。
 
 - [用户命令原文与停止结果](records/2026-10/2026-10-26-user-shell-message-and-stop.md)：真实输入、规范取消与输出/退出保留。

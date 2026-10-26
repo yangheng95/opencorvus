@@ -160,12 +160,32 @@ const overlayEditorTheme = EditorView.theme({
   ".cm-textfield": { backgroundColor: "var(--surface-strong)", caretColor: "var(--accent)" },
   ".cm-button, .cm-button:active": { backgroundColor: "var(--subtle-2)", backgroundImage: "none" },
   ".cm-button:hover": { backgroundColor: "var(--subtle-3)" },
-  ".cm-textfield:focus-visible, .cm-button:focus-visible": {
+  ".cm-textfield:focus-visible, .cm-button:focus-visible, .cm-panel.cm-search [name=close]:focus-visible": {
     outline: "none",
     borderColor: "var(--accent)",
     boxShadow: "0 0 0 calc(2px * var(--ui-scale)) var(--oc-control-focus-ring)",
   },
   ".cm-panel.cm-search label": { fontSize: "var(--ui-font-body)" },
+  ".cm-panel.cm-search": {
+    paddingInlineEnd: "calc(var(--oc-density-icon-button) + var(--ui-gap-sm))",
+  },
+  ".cm-panel.cm-search [name=close]": {
+    top: "var(--ui-gap-xs)",
+    right: "var(--ui-gap-xs)",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "var(--oc-density-icon-button)",
+    height: "var(--oc-density-icon-button)",
+    boxSizing: "border-box",
+    border: "var(--oc-border-width) solid transparent",
+    borderRadius: "var(--oc-radius-soft)",
+    fontSize: "var(--oc-icon-size-large)",
+    lineHeight: "var(--ui-line-height-flat)",
+    color: "var(--text-soft)",
+    cursor: "pointer",
+  },
+  ".cm-panel.cm-search [name=close]:hover": { backgroundColor: "var(--subtle-2)", color: "var(--text-strong)" },
   ".cm-collapsedLines": {
     background: "var(--subtle-2)",
     color: "var(--text-muted)",

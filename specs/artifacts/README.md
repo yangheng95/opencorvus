@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件阅读操作与关闭反馈](2026-10-26-file-explorer-reading-experience/README.md)：九张真实原图和原文件/运行结清事实。
+
 - [已完成目标摘要与首页体验](2026-10-26-goal-summary-density/README.md)：15张实页原图、规范Goal及运行结清事实。
 
 - [用户命令原文与停止结果](2026-10-26-user-shell-message-and-stop/README.md)：四张实页原图及规范取消、原输入和进程事实。
