@@ -159,7 +159,7 @@ for (const bundles of groups.filter((group) => group.length > 0)) {
       dmgBundler({
         configuration: (await Bun.file(path.join(tauri, "tauri.conf.json")).json()) as DmgConfiguration,
         arch: hostArch,
-        overlayDirectory: dir,
+        configurationDirectory: tauri,
         release,
       }),
     )

@@ -1,14 +1,14 @@
 import { expect, test } from "bun:test"
 import path from "node:path"
+import { fileURLToPath } from "node:url"
 import { dmgCommand, requireCreateDmgVersion, type DmgConfiguration } from "../packages/overlay/script/dmg-bundler"
 
-const configuration = (await Bun.file(
-  new URL("../packages/overlay/src-tauri/tauri.conf.json", import.meta.url),
-).json()) as DmgConfiguration
+const configurationDirectory = fileURLToPath(new URL("../packages/overlay/src-tauri/", import.meta.url))
+const configuration = (await Bun.file(path.join(configurationDirectory, "tauri.conf.json")).json()) as DmgConfiguration
 const root = path.resolve("dmg-test-root")
 const input = {
   configuration,
-  overlayDirectory: path.join(root, "overlay"),
+  configurationDirectory,
   source: path.join(root, "staged-app"),
   outputDirectory: path.join(root, "images"),
 }
@@ -36,6 +36,7 @@ test.each(["x64", "arm64"] as const)("projects the %s installer identity and dec
     executable: "create-dmg",
     image,
     app: "OpenCorvus.app",
+    volumeIcon: path.join(configurationDirectory, "icons", "icon.icns"),
     args: [
       "--volname",
       "OpenCorvus",
@@ -52,12 +53,21 @@ test.each(["x64", "arm64"] as const)("projects the %s installer identity and dec
       "--hide-extension",
       "OpenCorvus.app",
       "--volicon",
-      path.join(input.overlayDirectory, "icons", "icon.icns"),
+      path.join(configurationDirectory, "icons", "icon.icns"),
       "--skip-jenkins",
       image,
       input.source,
     ],
   })
+})
+
+test("resolves the configured volume icon to the actual Tauri ICNS container", async () => {
+  const command = dmgCommand({ ...input, arch: "arm64", ci: true })
+  const bytes = await Bun.file(command.volumeIcon).arrayBuffer()
+  expect({
+    magic: new TextDecoder().decode(bytes.slice(0, 4)),
+    declaredLength: new DataView(bytes).getUint32(4),
+  }).toEqual({ magic: "icns", declaredLength: bytes.byteLength })
 })
 
 test("installs the native disk-image producer with the macOS build prerequisites", async () => {

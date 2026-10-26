@@ -29,7 +29,7 @@ export function requireCreateDmgVersion(observed: string): string {
 export function dmgCommand(input: {
   configuration: DmgConfiguration
   arch: OverlayArtifactArch
-  overlayDirectory: string
+  configurationDirectory: string
   source: string
   outputDirectory: string
   ci: boolean
@@ -44,6 +44,7 @@ export function dmgCommand(input: {
   const { appPosition, applicationFolderPosition, windowSize } = config.bundle.macOS.dmg
   const icon = config.bundle.icon.find((file) => path.extname(file) === ".icns")
   if (!icon) throw new Error("DMG packaging requires the configured ICNS icon")
+  const volumeIcon = path.resolve(input.configurationDirectory, icon)
   const arch = overlayBundleArchitecture(`darwin-${input.arch}`).mac
   const image = path.join(input.outputDirectory, `${config.productName}_${config.version}_${arch}.dmg`)
   const app = `${config.productName}.app`
@@ -63,12 +64,12 @@ export function dmgCommand(input: {
     "--hide-extension",
     app,
     "--volicon",
-    path.resolve(input.overlayDirectory, icon),
+    volumeIcon,
     ...(input.ci ? ["--skip-jenkins"] : []),
     image,
     input.source,
   ]
-  return { executable: "create-dmg", args, image, app }
+  return { executable: "create-dmg", args, image, app, volumeIcon }
 }
 
 /** One DMG producer; Tauri remains the app and signed updater-archive owner. */
@@ -82,7 +83,7 @@ export async function prepareDmgBundler() {
   return async (input: {
     configuration: DmgConfiguration
     arch: OverlayArtifactArch
-    overlayDirectory: string
+    configurationDirectory: string
     release: string
   }) => {
     const output = path.join(input.release, "bundle", "dmg")
@@ -92,6 +93,7 @@ export async function prepareDmgBundler() {
     const command = dmgCommand({ ...input, source, outputDirectory: output, ci: process.env.CI === "true" })
     let mounted = false
     try {
+      await fs.access(command.volumeIcon)
       const app = path.join(input.release, "bundle", "macos", command.app)
       const staged = path.join(source, command.app)
       await $`ditto ${app} ${staged}`.env(environment)
