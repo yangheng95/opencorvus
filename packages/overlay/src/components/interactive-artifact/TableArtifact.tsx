@@ -11,24 +11,14 @@ import {
 import { For, createMemo, createSignal } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
 import type { ArtifactExport } from "../../services/artifact-export"
-import { t } from "../../utils/i18n"
+import { createArtifactTablePresentation } from "../../services/artifact-table"
+import { localeTag, t } from "../../utils/i18n"
 import { Button } from "../ui/Button"
 import { SearchField } from "../ui/SearchField"
 import { ArtifactFrame } from "./ArtifactFrame"
 
 type TablePayload = Extract<InteractiveArtifactPayload, { renderer: "table@1" }>
 type TableRow = TablePayload["rows"][number]
-
-function displayCell(value: TableRow[string], dataType: TablePayload["columns"][number]["dataType"]): string {
-  if (value === null || value === undefined) return "—"
-  if (dataType === "boolean") return value ? "Yes" : "No"
-  if (dataType === "number" && typeof value === "number") return new Intl.NumberFormat().format(value)
-  if (dataType === "date") {
-    const date = new Date(String(value))
-    if (!Number.isNaN(date.getTime())) return new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(date)
-  }
-  return String(value)
-}
 
 export function TableArtifact(props: {
   payload: TablePayload
@@ -37,12 +27,21 @@ export function TableArtifact(props: {
 }) {
   const [sorting, setSorting] = createSignal<SortingState>([])
   const [filter, setFilter] = createSignal("")
-  const columns = createMemo<ColumnDef<TableRow>[]>(() =>
-    props.payload.columns.map((column) => ({
+  const presentation = createMemo(() =>
+    createArtifactTablePresentation(localeTag(), {
+      yes: t("artifact.table.yes"),
+      no: t("artifact.table.no"),
+    }),
+  )
+  const columnTypes = createMemo(() => new Map(props.payload.columns.map((column) => [column.id, column.dataType])))
+  const search = createMemo(() => ({ query: filter(), presentation: presentation(), columnTypes: columnTypes() }))
+  const columns = createMemo<ColumnDef<TableRow>[]>(() => {
+    const current = presentation()
+    return props.payload.columns.map((column) => ({
       id: column.id,
       accessorFn: (row) => row[column.id],
       header: column.label,
-      cell: (context) => displayCell(context.getValue() as TableRow[string], column.dataType),
+      cell: (context) => current.formatCell(context.getValue() as TableRow[string], column.dataType),
       sortDescFirst: false,
       ...(props.compareCells
         ? ({
@@ -50,8 +49,8 @@ export function TableArtifact(props: {
               props.compareCells!(left.getValue(columnID), right.getValue(columnID)),
           } satisfies Partial<ColumnDef<TableRow>>)
         : {}),
-    })),
-  )
+    }))
+  })
   const table = createSolidTable({
     get data() {
       return props.payload.rows
@@ -64,11 +63,13 @@ export function TableArtifact(props: {
         return sorting()
       },
       get globalFilter() {
-        return filter()
+        return search()
       },
     },
     onSortingChange: (updater) => setSorting((current) => (typeof updater === "function" ? updater(current) : updater)),
-    onGlobalFilterChange: (value) => setFilter(String(value ?? "")),
+    getColumnCanGlobalFilter: () => true,
+    globalFilterFn: (row, columnID, criteria: ReturnType<typeof search>) =>
+      criteria.presentation.matchesCell(criteria.query, row.getValue(columnID), criteria.columnTypes.get(columnID)!),
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),

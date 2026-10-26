@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1",
+  "title": "验收数据原值663",
+  "renderer": "table@1",
+  "columns": [
+    {
+      "id": "name",
+      "label": "name",
+      "dataType": "string"
+    },
+    {
+      "id": "passed",
+      "label": "passed",
+      "dataType": "boolean"
+    },
+    {
+      "id": "date",
+      "label": "date",
+      "dataType": "date"
+    },
+    {
+      "id": "count",
+      "label": "count",
+      "dataType": "number"
+    }
+  ],
+  "rows": [
+    {
+      "name": "原生通过",
+      "passed": true,
+      "date": "2026-10-27",
+      "count": 12345.67
+    },
+    {
+      "name": "原生失败",
+      "passed": false,
+      "date": "2026-10-26",
+      "count": 25
+    },
+    {
+      "name": "来源字符串",
+      "passed": "false",
+      "date": "2026-10-25",
+      "count": 0
+    }
+  ]
+}

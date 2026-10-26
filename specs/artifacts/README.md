@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [交互表格原值与语言](2026-10-27-interactive-table-data-journey/README.md)：10张原图、规范发布数据、实际导出与结清事实。
+
 - [真实执行与CSV交付体验](2026-10-27-task-delivery-journey/README.md)：15张原图、真实CSV/报告、下载字节及执行结清事实。
 
 - [专家团理解与明确选择](2026-10-27-expert-squad-selection-journey/README.md)：16张真实原图、单项快照与四次隔离运行结清事实。

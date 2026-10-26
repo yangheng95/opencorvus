@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [交互表格原值与语言](records/2026-10/2026-10-27-interactive-table-data-journey.md)：真实混合布尔值、日期语言及原文/显示搜索修复。
+
 - [真实执行与CSV交付体验](records/2026-10/2026-10-27-task-delivery-journey.md)：实际Mission到Task文件交付、CSV表格搜索和精确金额排序。
 
 - [0.1.33 统一资产选择与发布](records/2026-10/2026-10-27-release-0.1.33.md)：生产者与发布器共用完整安装器合同，五平台和配对官网真实验收。

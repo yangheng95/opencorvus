@@ -1,0 +1,498 @@
+{
+  "qualification": "Actual streamed model publication and canonical public reads, manual desktop /ui interactions and original screenshots, independent real browser-export and original-data verification; no UI automated tests",
+  "screenshots": [
+    "01-request-zh.jpg",
+    "02-boolean-date-baseline-zh.jpg",
+    "03-boolean-search-baseline-zh.jpg",
+    "04-values-final-en.jpg",
+    "05-source-search-final-en.jpg",
+    "06-locale-query-preserved-zh.jpg",
+    "07-localized-boolean-search-zh.jpg",
+    "08-localized-date-search-zh.jpg",
+    "09-values-final-zh.jpg",
+    "10-csv-shared-filter-regression-zh.jpg"
+  ],
+  "content": {
+    "at": "2026-10-26T21:36:47.041638+00:00",
+    "qualification": "Actual canonical producer payload and immutable message comparison plus independent browser-export bytes; not UI automation",
+    "sessionID": "ses_-zUQnyKTxzzFJ0yNSeLz",
+    "artifactID": "art_g0VZC1kQB00IP64jiJlS",
+    "canonicalArtifactAndMessagesUnchanged": true,
+    "sourceRows": [
+      {
+        "name": "原生通过",
+        "passed": true,
+        "date": "2026-10-27",
+        "count": 12345.67
+      },
+      {
+        "name": "原生失败",
+        "passed": false,
+        "date": "2026-10-26",
+        "count": 25
+      },
+      {
+        "name": "来源字符串",
+        "passed": "false",
+        "date": "2026-10-25",
+        "count": 0
+      }
+    ],
+    "download": {
+      "filename": "验收数据原值663.csv",
+      "bytes": 163,
+      "csvRows": [
+        [
+          "name",
+          "passed",
+          "date",
+          "count"
+        ],
+        [
+          "原生通过",
+          "true",
+          "2026-10-27",
+          "12345.67"
+        ],
+        [
+          "原生失败",
+          "false",
+          "2026-10-26",
+          "25"
+        ],
+        [
+          "来源字符串",
+          "false",
+          "2026-10-25",
+          "0"
+        ]
+      ],
+      "allOriginalRowsDespiteLocalizedDateFilter": true,
+      "exactDeclaredUtf8CsvBytes": true
+    },
+    "priorTaskInputAndOutputBytesPreserved": true,
+    "requests": 5,
+    "cumulativeRequests": 287,
+    "allRequestsStreamingExactModelHttp200SettledEof": true,
+    "credentialPairRetired": true,
+    "sourceMetadata": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "bothOriginalRuntimeClosuresPassed": true
+  },
+  "runs": [
+    {
+      "name": "663",
+      "port": 38168,
+      "uiEntry": "main-cbWCPQ1o.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 16029,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "automation": {
+            "original": 4,
+            "current": 4,
+            "updates": []
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0,
+            "updates": []
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0,
+            "updates": []
+          },
+          "automation_fire": {
+            "original": 3,
+            "current": 3,
+            "updates": []
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1,
+            "updates": []
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1,
+            "updates": []
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0,
+            "updates": []
+          },
+          "automation_project_target": {
+            "original": 0,
+            "current": 0,
+            "updates": []
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1,
+            "updates": []
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1,
+            "updates": []
+          },
+          "message": {
+            "original": 45,
+            "current": 50,
+            "updates": []
+          },
+          "part": {
+            "original": 156,
+            "current": 167,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 141,
+            "current": 151,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 58,
+            "current": 61,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 58,
+            "current": 61,
+            "updates": []
+          },
+          "session": {
+            "original": 8,
+            "current": 10,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 53,
+            "current": 54,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 10,
+            "current": 10,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 53,
+            "current": 54,
+            "updates": []
+          }
+        }
+      },
+      "credentialsCopied": true,
+      "requests": 5,
+      "cumulativeRequests": 287,
+      "publicShutdown": 200,
+      "reserveMs": 904365,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "processChain": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ]
+    },
+    {
+      "name": "664",
+      "port": 38169,
+      "uiEntry": "main-DD9IIRAw.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 17362,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "automation": {
+            "original": 4,
+            "current": 4,
+            "updates": []
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0,
+            "updates": []
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0,
+            "updates": []
+          },
+          "automation_fire": {
+            "original": 3,
+            "current": 3,
+            "updates": []
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1,
+            "updates": []
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1,
+            "updates": []
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0,
+            "updates": []
+          },
+          "automation_project_target": {
+            "original": 0,
+            "current": 0,
+            "updates": []
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1,
+            "updates": []
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1,
+            "updates": []
+          },
+          "message": {
+            "original": 50,
+            "current": 50,
+            "updates": []
+          },
+          "part": {
+            "original": 167,
+            "current": 167,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 151,
+            "current": 151,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 61,
+            "current": 61,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 61,
+            "current": 61,
+            "updates": []
+          },
+          "session": {
+            "original": 10,
+            "current": 10,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 54,
+            "current": 54,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 10,
+            "current": 10,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 54,
+            "current": 54,
+            "updates": []
+          }
+        }
+      },
+      "credentialsCopied": false,
+      "requests": 0,
+      "cumulativeRequests": 287,
+      "publicShutdown": 200,
+      "reserveMs": 967094,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "processChain": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ]
+    }
+  ],
+  "publication": {
+    "sessionID": "ses_-zUQnyKTxzzFJ0yNSeLz",
+    "messageID": "msg_g0VZC1hpi00Q3HJFH8fj",
+    "artifactID": "art_g0VZC1kQB00IP64jiJlS",
+    "part": {
+      "messageID": "msg_g0VZC1hpi00Q3HJFH8fj",
+      "part": {
+        "id": "prt_g0VZC1kQG004j7pAZX1A",
+        "sessionID": "ses_-zUQnyKTxzzFJ0yNSeLz",
+        "messageID": "msg_g0VZC1hpi00Q3HJFH8fj",
+        "orderKey": "v1:0001793049685055:0000000000000031:0000000000000000:part:prt_g0VZC1kQG004j7pAZX1A",
+        "type": "interactive-artifact",
+        "artifactID": "art_g0VZC1kQB00IP64jiJlS",
+        "toolPartID": "prt_g0VZC1jzz00494rX0WTF"
+      }
+    },
+    "record": {
+      "id": "art_g0VZC1kQB00IP64jiJlS",
+      "sessionID": "ses_-zUQnyKTxzzFJ0yNSeLz",
+      "messageID": "msg_g0VZC1hpi00Q3HJFH8fj",
+      "payload": {
+        "schemaVersion": "1",
+        "title": "验收数据原值663",
+        "renderer": "table@1",
+        "columns": [
+          {
+            "id": "name",
+            "label": "name",
+            "dataType": "string"
+          },
+          {
+            "id": "passed",
+            "label": "passed",
+            "dataType": "boolean"
+          },
+          {
+            "id": "date",
+            "label": "date",
+            "dataType": "date"
+          },
+          {
+            "id": "count",
+            "label": "count",
+            "dataType": "number"
+          }
+        ],
+        "rows": [
+          {
+            "name": "原生通过",
+            "passed": true,
+            "date": "2026-10-27",
+            "count": 12345.67
+          },
+          {
+            "name": "原生失败",
+            "passed": false,
+            "date": "2026-10-26",
+            "count": 25
+          },
+          {
+            "name": "来源字符串",
+            "passed": "false",
+            "date": "2026-10-25",
+            "count": 0
+          }
+        ]
+      },
+      "timeCreated": 1793049685031,
+      "timeUpdated": 1793049685031
+    },
+    "beforeReads": [
+      {
+        "path": "/session/ses_-zUQnyKTxzzFJ0yNSeLz?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-27%2Ftask-delivery-659%2Fproject",
+        "status": 200,
+        "requestID": "8622822d-fd9a-4182-a0ae-c419b1893b11"
+      },
+      {
+        "path": "/session/ses_-zUQnyKTxzzFJ0yNSeLz/message?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-27%2Ftask-delivery-659%2Fproject",
+        "status": 200,
+        "requestID": "a99b3fdb-24f8-49f2-bbfc-e3220abf1634"
+      },
+      {
+        "path": "/session/ses_-zUQnyKTxzzFJ0yNSeLz/interactive-artifact/art_g0VZC1kQB00IP64jiJlS?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-27%2Ftask-delivery-659%2Fproject",
+        "status": 200,
+        "requestID": "13580a52-4953-41cb-b5f5-58217d5f7957"
+      }
+    ],
+    "reopenedReads": [
+      {
+        "path": "/session/ses_-zUQnyKTxzzFJ0yNSeLz?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-27%2Ftask-delivery-659%2Fproject",
+        "status": 200,
+        "requestID": "8086ebce-2a7c-4b90-8635-ca4ee115d1f9"
+      },
+      {
+        "path": "/session/ses_-zUQnyKTxzzFJ0yNSeLz/message?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-27%2Ftask-delivery-659%2Fproject",
+        "status": 200,
+        "requestID": "835dfbf6-3847-41ee-a456-65f1dd41f46a"
+      },
+      {
+        "path": "/session/ses_-zUQnyKTxzzFJ0yNSeLz/interactive-artifact/art_g0VZC1kQB00IP64jiJlS?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-27%2Ftask-delivery-659%2Fproject",
+        "status": 200,
+        "requestID": "10f31104-4de7-41d0-adf6-85ad09667ba7"
+      }
+    ]
+  },
+  "checks": {
+    "tests": {
+      "label": "table-values-contract",
+      "startedAt": 1793050156241,
+      "closedAt": 1793050160175,
+      "code": 0,
+      "signal": null,
+      "childPID": 88152
+    },
+    "types": {
+      "label": "table-values-types",
+      "startedAt": 1793050156240,
+      "closedAt": 1793050185975,
+      "code": 0,
+      "signal": null,
+      "childPID": 87440
+    },
+    "build": {
+      "label": "table-values-build",
+      "startedAt": 1793050156240,
+      "closedAt": 1793050238464,
+      "code": 0,
+      "signal": null,
+      "childPID": 92804
+    },
+    "language": {
+      "label": "table-values-language",
+      "startedAt": 1793050156261,
+      "closedAt": 1793050159272,
+      "code": 0,
+      "signal": null,
+      "childPID": 66392
+    },
+    "style": {
+      "label": "table-values-style",
+      "startedAt": 1793050765387,
+      "closedAt": 1793050771018,
+      "code": 0,
+      "signal": null,
+      "childPID": 99468
+    },
+    "surface": {
+      "label": "table-values-surface",
+      "startedAt": 1793050765397,
+      "closedAt": 1793050767669,
+      "code": 0,
+      "signal": null,
+      "childPID": 71348
+    }
+  },
+  "limits": [
+    "Only one actual user request published a native table; five model requests include preflight and helper turns",
+    "No-auth664 legitimately shows the missing-model reminder while retained conversations/artifacts remain readable",
+    "Three-row real dataset did not cross pages; pagination retains existing library reset semantics",
+    "Date locale was repaired; timezone parsing keeps its current contract and cross-timezone behavior was not qualified",
+    "Screenshot06 includes the current Settings hover hint; screenshot09 pagination is at the fold while all three actual data rows are visible",
+    "CSV stores lexical false for both native boolean and string false; canonical JSON retains their different source types",
+    "Screenshot10 qualifies the actual filtered CSV row and selected sort control, not a fresh full-three-row sorting proof",
+    "This Git delivery is not part of the already frozen v0.1.33 installer"
+  ]
+}

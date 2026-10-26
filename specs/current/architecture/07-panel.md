@@ -2998,6 +2998,17 @@ sheet navigation, graph/timeline/tree exploration, terminal transcript search,
 3D camera control, and other presentation-only interactions remain
 renderer-local.
 
+Native Table cells format actual booleans, numbers and dates with the current
+product locale. Boolean columns do not apply truthiness to mixed scalar source
+values: a string `"false"` remains that string in a boolean column. The shared
+pure presentation owns both display text and literal search across original and
+formatted values. Every declared column can participate, including boolean or
+initially empty columns. Query, current presentation and declared column types
+derive one controlled filter input, so locale changes refresh matching rows as
+well as cells without replacing the mounted table's query or sorting state.
+Pagination retains TanStack's existing reset behavior when filtered results change.
+Authored labels and exported payload values retain their original identities.
+
 Editable Code presents this local lifetime beside the editor, asks the operator
 to copy or download before leaving, and derives a modified marker from its one
 current source against the published payload. It does not write a durable draft
