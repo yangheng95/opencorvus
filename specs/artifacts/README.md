@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Task 回复与决定回执](2026-10-26-task-response-decision-repair/README.md)：原三条失败历史保留、当前单次答复和原控制回执三张实图。
+
 - [已接受停止的持续收敛](2026-10-26-stop-retry-ownership/README.md)：四张实图、两轮原取消及三条原生重复回复证据。
 
 - [停止控制与模型独立性](2026-10-26-stop-control-model-independence/README.md)：五张实图、原编码/预算失败、停止与同一会话恢复证据。

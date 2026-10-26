@@ -248,8 +248,10 @@ function taskRootDecisionRepairPrompt(input: { attempt: number; limit: number })
   return [
     "<task-root-decision-repair>",
     `The previous streamed Provider step ended without a valid Task-root decision receipt (attempt ${input.attempt} of ${input.limit}).`,
+    "Any text you already streamed is visible to the operator and remains part of this same assistant response. Do not repeat or paraphrase that answer.",
     "Continue the same visible assistant Turn and now call exactly one valid current decision Tool, using the active frontier dispatch Tool when the decision contains parallel workers.",
-    "Do not repeat the diagnosis as prose alone. Inspect current facts as needed, but the Host will not infer or choose the decision for you.",
+    "Complete the missing control receipt using the callable Tool's exact argument schema and current Task facts. A restriction on product work does not waive this protocol receipt; it does prohibit unrequested commands, edits, research or delegation. Do not resume historical work merely to finish the receipt.",
+    "Inspect facts only when the decision still requires them. Add visible prose only for a material correction or new information. The Host will not infer or choose the decision for you.",
     "</task-root-decision-repair>",
   ].join("\n")
 }

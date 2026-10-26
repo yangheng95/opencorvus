@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Task 回复与决定回执](2026-10-26-task-response-decision-repair.md)：首轮/继续提示统一，46项后端合同及628真实原问句通过。
+
 - [已接受停止的持续收敛](2026-10-26-stop-retry-ownership.md)：原驱动连续所有权、75项后端验证及626真实Task复核。
 
 - [停止控制与模型独立性](2026-10-26-stop-control-model-independence.md)：六类公开停止入口、23项后端合同及623/624实页验证。

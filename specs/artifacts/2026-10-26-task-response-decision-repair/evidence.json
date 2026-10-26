@@ -1,0 +1,283 @@
+{
+  "date": "2026-10-26",
+  "scope": "Same retained real Task, exact original follow-up through production CLI /ui; manual interaction and visual review",
+  "task": {
+    "id": "tsk_g00VZ9I3ro00dzgkqHTO",
+    "originalFailure": {
+      "assistantID": "msg_hgQa9zVDY0R2nZNVzgj6",
+      "textParts": [
+        {
+          "id": "prt_g0VZ9IQwB00iCvKNi4TO",
+          "text": "任务已停止，历史保留"
+        },
+        {
+          "id": "prt_g0VZ9ITqn00fbMTW5jB2",
+          "text": "任务已停止，历史保留"
+        },
+        {
+          "id": "prt_g0VZ9IXsJ00mINY9LnIc",
+          "text": "任务已停止，历史保留"
+        }
+      ]
+    },
+    "current": {
+      "userID": "msg_g0VZ9SPhB00PIWvxwLXj",
+      "assistantID": "msg_hGVk8ROLAgjwJIfXQAqA",
+      "textParts": [
+        {
+          "id": "prt_g0VZ9SS3j00VquBSwYdn",
+          "text": "任务已停止，历史保留"
+        }
+      ],
+      "finish": "tool-calls",
+      "tool": {
+        "requestPartID": "prt_g0VZ9SS6A004purK7kOS",
+        "name": "manage_task",
+        "input": {
+          "summary": "已按本次要求仅回复“任务已停止，历史保留”，未重新执行测试、改动文件、委派或创建子任务及子 agent。该回复是用户要求的确认语，不作为命令曾运行或停止成功的独立验证。",
+          "evidence_locators": [
+            {
+              "source": "session",
+              "session_id": "ses_-zUQqhupqzz9YKIfu3M4"
+            }
+          ],
+          "deliverable_artifact_locators": [],
+          "accepted_delivery_slice_revision_ids": [],
+          "workflow_id": null,
+          "action": "complete_task"
+        },
+        "outcomeID": "prt_hxIM4REV54wt189fe8Mu",
+        "outcome": "completed"
+      },
+      "completion": {
+        "type": "task.completed",
+        "seq": 32,
+        "payload": {
+          "execution_epoch": 3,
+          "summary": "已按本次要求仅回复“任务已停止，历史保留”，未重新执行测试、改动文件、委派或创建子任务及子 agent。该回复是用户要求的确认语，不作为命令曾运行或停止成功的独立验证。"
+        },
+        "correlation_id": null
+      },
+      "disposition": {
+        "id": "art_hb3FWaeQpqXrfo60MNMA",
+        "task_id": "tsk_g00VZ9I3ro00dzgkqHTO",
+        "ingress_id": "art_h5ETjCwoEgT6hG7H9XLb",
+        "execution_epoch": 3,
+        "disposition": "terminal_inapplicable",
+        "evidence_ids": [
+          "pev_g0VZ9STKN001nT3XNIjr"
+        ],
+        "time_created": 1793011725326
+      },
+      "status": "completed"
+    }
+  },
+  "provider": {
+    "credentialPreflight": "usable",
+    "catalogPreflight": "gpt-6.1-sol projected",
+    "requests": 5,
+    "cumulativeRequests": 194,
+    "maximum": 12,
+    "unusedRetired": 7,
+    "rootRequest": {
+      "auditIndex": 3,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "toolNames": [
+        "capability_search",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "dispatch_agents",
+        "manage_task",
+        "no_action",
+        "publish_interactive_artifact",
+        "read_agent_message",
+        "read_task_message",
+        "skill"
+      ],
+      "toolChoice": "auto",
+      "decisionPrompt": {
+        "coreReceiptContractPresent": true,
+        "repairBlock": null,
+        "manageTaskActions": [
+          "complete_task",
+          "fail_task"
+        ]
+      }
+    },
+    "outcomes": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      }
+    ]
+  },
+  "preservation": {
+    "sourceTables": 92,
+    "sourceRows": 15292,
+    "sourceRowsPreserved": true,
+    "protectedTables": {
+      "session": {
+        "original": 15,
+        "current": 16,
+        "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+        "updates": [
+          {
+            "id": "ses_-zUQqhvvfzzytpNzSJCo",
+            "column": "time_updated",
+            "before": 1793009325036,
+            "after": 1793011711227,
+            "reason": "Actual new streamed Sol input and its original Task control decision in the retained root/orchestrator Sessions"
+          },
+          {
+            "id": "ses_-zUQqhupqzz9YKIfu3M4",
+            "column": "time_updated",
+            "before": 1793009359888,
+            "after": 1793011716086,
+            "reason": "Actual new streamed Sol input and its original Task control decision in the retained root/orchestrator Sessions"
+          }
+        ]
+      },
+      "message": {
+        "original": 61,
+        "current": 66,
+        "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+        "updates": []
+      },
+      "part": {
+        "original": 117,
+        "current": 126,
+        "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+        "updates": []
+      },
+      "tool_part_request": {
+        "original": 18,
+        "current": 19,
+        "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+        "updates": []
+      },
+      "tool_part_progress": {
+        "original": 18,
+        "current": 18,
+        "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+        "updates": []
+      },
+      "tool_part_outcome": {
+        "original": 18,
+        "current": 19,
+        "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+        "updates": []
+      },
+      "provider_activity_request": {
+        "original": 33,
+        "current": 35,
+        "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+        "updates": []
+      },
+      "provider_activity_outcome": {
+        "original": 33,
+        "current": 35,
+        "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+        "updates": []
+      },
+      "protocol_event": {
+        "original": 137,
+        "current": 150,
+        "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+        "updates": []
+      }
+    },
+    "attachments": 8,
+    "schema": 8,
+    "integrity": "ok",
+    "sourceAuthenticationMetadataPreserved": true,
+    "sourceCatalogMetadataPreserved": true,
+    "sourceCatalogBytesPreserved": true
+  },
+  "closure": {
+    "publicShutdown": 200,
+    "reserveMs": 958433,
+    "originalExecExit": 0,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physical": true,
+    "output": true,
+    "requests": true,
+    "credentialCopyRetired": true,
+    "modelCatalogCopyRetired": true,
+    "ownedTabClosed": true
+  },
+  "validation": {
+    "checks": [
+      {
+        "label": "reply-contracts",
+        "tests": 9,
+        "assertions": 38,
+        "exitCode": 0,
+        "scope": "Backend runtime contracts; scripted Provider/processor cases are not real Sol acceptance"
+      },
+      {
+        "label": "decision-recovery",
+        "tests": 37,
+        "assertions": 232,
+        "exitCode": 0,
+        "scope": "Backend runtime contracts; scripted Provider/processor cases are not real Sol acceptance"
+      }
+    ],
+    "backendTypes": 0,
+    "uiAutomation": "Not created or run",
+    "screenshots": {
+      "reviewed": 3,
+      "rawSize": [
+        1119,
+        720
+      ],
+      "viewport": [
+        1280,
+        720
+      ],
+      "qualifier": "Unmodified left capture; rightmost viewport portion is outside the images"
+    }
+  },
+  "limits": [
+    "One exact original real Sol follow-up; not a statistical reliability claim",
+    "The core instruction fixed this case on its first Provider step; the repair context was not exercised by this paid request",
+    "Required Task control receipt is an actual visible Tool call; this is not a zero-Tool pass",
+    "The current API opens a new epoch for every operator Message on a terminal Task; no prose routing or historical-work restart was introduced",
+    "Prior command did not execute because the Dynamic package grants no Bash; this is not a long-command physical stop acceptance",
+    "Chinese Python environment and projected-child physical stop remain separate unresolved product checks"
+  ]
+}

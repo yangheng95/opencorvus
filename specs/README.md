@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Task 回复与决定回执](records/2026-10/2026-10-26-task-response-decision-repair.md)：真实重复回复根因、有效控制回执与原问句复测。
+
 - [已接受停止的持续收敛](records/2026-10/2026-10-26-stop-retry-ownership.md)：冷身份下自动重试原取消/关闭，保留真实Task续聊失败现场。
 
 - [停止控制与模型独立性](records/2026-10/2026-10-26-stop-control-model-independence.md)：停止准入、独立取消所有权、冷恢复和真实Sol停止/续聊验收。
