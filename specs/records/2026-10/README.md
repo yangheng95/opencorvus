@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [专家团理解与明确选择](2026-10-27-expert-squad-selection-journey.md)：查找清除/增减选择、双语提示和规范草稿快照重开验证。
+
 - [Mission 草稿完整体验](2026-10-27-mission-authoring-journey.md)：真实创建编辑重开、标题同步、冷项目接口与原输入保护。
 
 - [对话查找、归档与恢复体验](2026-10-27-conversation-archive-journey.md)：原消息保留、双语查找与工作项/项目菜单实际复核。

@@ -520,6 +520,13 @@ body {
   margin-bottom: var(--ui-gap-xs);
 }
 
+.mission-create-form__selection-count {
+  margin-inline-start: auto;
+  color: var(--text-muted);
+  font-weight: var(--ui-font-weight-body);
+  white-space: nowrap;
+}
+
 .mission-create-form__expert-squad-list {
   display: flex;
   max-height: calc(240px * var(--ui-scale));
@@ -583,7 +590,7 @@ body {
 }
 
 .mission-create-form__option strong,
-.mission-create-form__option small {
+.oc-select-option .mission-create-form__option small {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -603,6 +610,8 @@ body {
 .mission-create-form__option small {
   color: var(--text-muted);
   font-size: var(--ui-font-body);
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .mission-create-form__market {

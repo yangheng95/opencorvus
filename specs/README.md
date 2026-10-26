@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [专家团理解与明确选择](records/2026-10/2026-10-27-expert-squad-selection-journey.md)：查询保留用户选择、准确空状态、完整说明及固定快照实测。
+
 - [Mission 草稿完整体验](records/2026-10/2026-10-27-mission-authoring-journey.md)：作者操作独立模型、精确项目归属、当前标题及双语失败反馈修复。
 
 - [对话查找、归档与恢复体验](records/2026-10/2026-10-27-conversation-archive-journey.md)：完整原会话数据旅程、搜索分类及菜单对象名称修复。

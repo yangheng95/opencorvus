@@ -876,6 +876,15 @@ inline Feedback into view. Its current-language summary identifies the submitted
 creation mode; the original diagnostic remains in expandable Details. Changing
 mode or reopening clears that submission's feedback through the form's owner.
 
+Mission creation searches update candidates while retaining the exact authored
+selection, including a deliberately cleared selection. Context initialization,
+explicit installation and user checkboxes remain the selection owners; search
+ranking does not choose a candidate. The existing selected-ID count is shown in
+the current language and number format. Available candidates with no selection,
+an empty query result and an unavailable compatible catalog have distinct hints.
+Package-authored descriptions wrap fully in the native scrolling checklist;
+the Project directory dropdown retains its compact path presentation.
+
 A hydrated empty Mission conversation reads its exact Session/directory record
 from that same loaded Mission Board store. Its saved pending request is a
 read-only context section outside the message tree, with the existing Board

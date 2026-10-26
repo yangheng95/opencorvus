@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [专家团理解与明确选择](2026-10-27-expert-squad-selection-journey/README.md)：16张真实原图、单项快照与四次隔离运行结清事实。
+
 - [Mission 草稿完整体验](2026-10-27-mission-authoring-journey/README.md)：17张手工原图、三个隔离实例与规范数据/进程结清事实。
 
 - [对话查找、归档与恢复体验](2026-10-27-conversation-archive-journey/README.md)：26张手工原图、完整归档恢复与三次隔离运行结清事实。

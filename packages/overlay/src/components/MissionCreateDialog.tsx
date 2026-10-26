@@ -8,7 +8,7 @@ import {
 } from "../services/expert-squad"
 import { projectDirectoryLabel } from "../utils/project-directory"
 import { formatErrorDetails } from "../services/diagnostics"
-import { t } from "../utils/i18n"
+import { localeTag, t } from "../utils/i18n"
 import { AutoGrowTextarea } from "./ui/AutoGrowTextarea"
 import { Button } from "./ui/Button"
 import { Checkbox } from "./ui/Checkbox"
@@ -151,7 +151,11 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     if (!productPillar()) return t("mission_board.create.select_mission_type")
     if (expertSquadLoading()) return t("mission_board.create.loading_context")
     if (expertSquadError()) return t("mission_board.create.context_load_failed")
-    if (selectedExpertSquadCount() === 0) return t("mission_board.create.no_compatible_squad")
+    if (selectedExpertSquadCount() === 0) {
+      if (expertSquads().length > 0) return t("mission_board.create.expert_squad_placeholder")
+      if (expertSquadQuery().trim()) return t("mission_board.create.no_matching_squads")
+      return t("mission_board.create.no_compatible_squad")
+    }
     return ""
   })
   const titleInvalid = createMemo(() => mode() === "manual" && submitAttempted() && !title().trim())
@@ -207,7 +211,6 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
       if (!ownsSquadRequest(generation, sequence, directory, pillar)) return
       const squads = mergeSquadOptions(page.entries, expertSquads(), expertSquadIDs())
       setExpertSquads(squads)
-      if (expertSquadIDs().length === 0 && squads[0]?.id) setExpertSquadIDs([squads[0].id])
     } catch (nextError) {
       if (!ownsSquadRequest(generation, sequence, directory, pillar)) return
       setExpertSquadError(nextError instanceof Error ? nextError.message : String(nextError))
@@ -639,6 +642,13 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
               <Show when={expertSquadLoading()}>
                 <Icon name="loading" size="compact" />
               </Show>
+              <Show when={productPillar() && !expertSquadLoading() && !expertSquadError()}>
+                <span class="mission-create-form__selection-count" role="status">
+                  {t("mission_board.create.squads_selected", {
+                    count: new Intl.NumberFormat(localeTag()).format(selectedExpertSquadCount()),
+                  })}
+                </span>
+              </Show>
             </TextField.Label>
             <SearchField
               clearable
@@ -651,6 +661,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
               placeholder={t("chat.references.search_placeholder")}
               size="sm"
             />
+            <p class="mission-create-form__context-status">{t("mission_board.create.squad_selection_help")}</p>
             <div
               class="mission-create-form__expert-squad-list"
               role="group"
