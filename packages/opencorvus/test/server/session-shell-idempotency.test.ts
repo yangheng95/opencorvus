@@ -744,7 +744,7 @@ describe("public Session shell identity", () => {
         const assistant = durable.find((message) => message.info.id === occurrence.assistant.id)
         const outcomes = recovered.map((message) => ({
           finish: message.info.role === "assistant" ? message.info.finish : undefined,
-          completed: message.info.time.completed,
+          completed: message.info.role === "assistant" ? message.info.time.completed : undefined,
           toolState: message.parts[0]?.type === "tool" ? message.parts[0].state.status : undefined,
           failureKind:
             message.parts[0]?.type === "tool" && message.parts[0].state.status === "error"

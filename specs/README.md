@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Shell 文本输出与停止保留](records/2026-10/2026-10-26-shell-text-encoding.md)：编码、真实进度与当前工具正文的完整链路修复。
+
 - [Task 回复与决定回执](records/2026-10/2026-10-26-task-response-decision-repair.md)：真实重复回复根因、有效控制回执与原问句复测。
 
 - [已接受停止的持续收敛](records/2026-10/2026-10-26-stop-retry-ownership.md)：冷身份下自动重试原取消/关闭，保留真实Task续聊失败现场。

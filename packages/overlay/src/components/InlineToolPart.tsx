@@ -297,6 +297,11 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
   const failure = createMemo(() => toolFailurePresentation(state().failure))
   const error = () => stripAnsi(failure().message || state().error || "") || output()
   const key = () => toolNameKey(toolName())
+  const shellProgressOutput = createMemo(() => {
+    if (!SHELL_TOOLS.has(key()) || (status() !== "running" && status() !== "error")) return ""
+    const metadata = state().metadata
+    return isRecord(metadata) && typeof metadata.output === "string" ? stripAnsi(metadata.output) : ""
+  })
   const readView = createMemo(() => {
     if (status() !== "completed") return null
     if (!FILE_READ_TOOLS.has(key())) return null
@@ -405,6 +410,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
         browserEvidence() ||
         computerControl() ||
         attachments().length > 0 ||
+        shellProgressOutput().trim() ||
         showPlainOutput() ||
         (status() === "error" && error()),
     ),
@@ -474,7 +480,9 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
           </Show>
           <Show when={status() === "pending" || status() === "running"}>
             <div class="msg-tool-state" role="status">
-              {t(status() === "pending" ? "tool.receiving_input" : "tool.awaiting_result")}
+              {status() === "pending"
+                ? t("tool.receiving_input")
+                : shellProgressOutput().trim() ? display().statusLabel : t("tool.awaiting_result")}
             </div>
           </Show>
           <Show when={display().commandExitCode !== undefined}>
@@ -567,6 +575,15 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
                 </Show>
                 <Show when={showPlainOutput()}>
                   <ToolPayload stateKey={payloadStateKey("output")} messageID={part().messageID} label={t("tool.output")} value={output()} />
+                </Show>
+                <Show when={shellProgressOutput().trim()}>
+                  <ToolPayload
+                    stateKey={payloadStateKey("output")}
+                    messageID={part().messageID}
+                    label={t(status() === "running" ? "tool.live_output" : "tool.recorded_output")}
+                    value={shellProgressOutput()}
+                    live={status() === "running"}
+                  />
                 </Show>
               </>
             }

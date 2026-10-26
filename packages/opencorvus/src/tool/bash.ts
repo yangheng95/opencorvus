@@ -365,12 +365,13 @@ export const BashTool = Tool.define("bash", async () => {
       const localEnvironment = await LocalEnvironment.projectShellCommand(params.command)
       const guardEnv = await PidGuard.env(shell)
       const commandEnvironment = { ...process.env, ...shellEnv.env, ...localEnvironment.variables }
-      const childEnv = sanitizeShellEnvironment(process.env, {
-        ...shellEnv.env,
-        ...localEnvironment.variables,
-        ...gitCeilingEnvForWorktree(cwd, commandEnvironment),
-        ...guardEnv,
-      })
+      const childEnv = sanitizeShellEnvironment(
+        process.env,
+        shellEnv.env,
+        localEnvironment.variables,
+        gitCeilingEnvForWorktree(cwd, commandEnvironment),
+        guardEnv,
+      )
       const spawnDiagnostics = createBashSpawnDiagnostics({
         shell,
         cwd,

@@ -37,7 +37,7 @@ export function projectToolPartInTransaction(
     .from(ToolPartOutcomeTable)
     .where(eq(ToolPartOutcomeTable.request_part_id, row.id))
     .get()
-  const progress = !outcome
+  const progress = outcome?.data.outcome !== "completed"
     ? db
         .select()
         .from(ToolPartProgressTable)
@@ -50,6 +50,9 @@ export function projectToolPartInTransaction(
     : undefined
   const liveTitle = progress?.title ?? request.title
   const liveMetadata = progress?.metadata ?? request.metadata
+  const failureMetadata = outcome?.data.outcome === "failed" && (liveMetadata || outcome.data.metadata)
+    ? { ...liveMetadata, ...outcome.data.metadata }
+    : undefined
   const state: Message.ToolPart["state"] = !outcome
     ? {
         status: "running",
@@ -72,7 +75,7 @@ export function projectToolPartInTransaction(
           status: "error",
           input: request.input,
           failure: outcome.data.failure,
-          ...(outcome.data.metadata ? { metadata: outcome.data.metadata } : {}),
+          ...(failureMetadata ? { metadata: failureMetadata } : {}),
           time: { start: request.time.start, end: outcome.data.time.end },
         }
   return Message.ToolPart.parse({

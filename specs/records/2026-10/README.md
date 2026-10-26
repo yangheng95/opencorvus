@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Shell 文本输出与停止保留](2026-10-26-shell-text-encoding.md)：56项140断言、630–632真实Sol及中英实页验收。
+
 - [Task 回复与决定回执](2026-10-26-task-response-decision-repair.md)：首轮/继续提示统一，46项后端合同及628真实原问句通过。
 
 - [已接受停止的持续收敛](2026-10-26-stop-retry-ownership.md)：原驱动连续所有权、75项后端验证及626真实Task复核。

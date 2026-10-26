@@ -1518,6 +1518,23 @@ path. Remounting a member's transcript retains those operator choices and its
 layout; translated labels and payload contents do not define identity. The same
 bounded store owns these preferences, without component-local duplicate state
 or a second payload cache. Clipboard feedback remains local to its actual action.
+Shell Tool bodies display the canonical committed progress `metadata.output` while
+running and after failure or cancellation. The running view is labelled Live output;
+the terminal partial observation is labelled Recorded output, with the original
+failure or cancellation still visible. These labels and their named copy/expansion
+controls follow the current interface language. A running command with observed
+output uses its actual active status rather than claiming that it is waiting for a
+result. Completed Tools continue to display their definitive `state.output` once.
+All views use the existing producing Part and output-slot identity, ToolPayload
+reader, bounded preview and clipboard writer.
+
+The canonical Tool Part reader joins the last immutable progress fact for a running
+or failed request. Failed metadata combines that progress with explicit terminal
+metadata, whose fields take precedence; it preserves the original failure and
+stored request/progress/outcome facts. A completed outcome owns its final metadata
+and output directly. Progress admission already closes at the committed outcome,
+so rereading a failed Tool after restart exposes the same recorded observation
+without a new message, a copied result, or renewed execution authority.
 Bounded payload bodies retain their scroll position in that same record, separately
 for raw and readable formats. Restoration waits for the visible content box and
 yields to user input. Full-height expansion keeps the bounded preview's reading

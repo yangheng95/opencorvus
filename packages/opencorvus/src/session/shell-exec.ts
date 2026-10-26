@@ -1,4 +1,5 @@
 import path from "path"
+import { StringDecoder } from "node:string_decoder"
 import z from "zod"
 import { Identifier } from "../id/id"
 import { Message } from "./message"
@@ -504,13 +505,14 @@ export namespace SessionShell {
           terminateChildrenOnRootExit: true,
           shell: shellBin,
           owner: `session-shell:${input.sessionID}:${msg.id}`,
-          env: sanitizeShellEnvironment(process.env, {
-            ...shellEnv.env,
-            ...localEnvironment.variables,
-            TERM: "dumb",
-            ...gitCeilingEnvForWorktree(cwd, commandEnvironment),
-            ...guardEnv,
-          }),
+          env: sanitizeShellEnvironment(
+            process.env,
+            shellEnv.env,
+            localEnvironment.variables,
+            { TERM: "dumb" },
+            gitCeilingEnvForWorktree(cwd, commandEnvironment),
+            guardEnv,
+          ),
         }
         executionAbort.throwIfAborted()
         const executionAuthority = await resolveSessionExecutionAuthority({
@@ -583,8 +585,10 @@ export namespace SessionShell {
               )
 
         let output = ""
-        supervisor.stdout?.on("data", (chunk) => {
-          const text = chunk.toString()
+        const stdoutDecoder = new StringDecoder("utf8")
+        const stderrDecoder = new StringDecoder("utf8")
+        const appendOutput = (text: string) => {
+          if (!text) return
           output += text
           if (part.state.status === "running") {
             void queueProgress({
@@ -593,19 +597,9 @@ export namespace SessionShell {
               description: "",
             })
           }
-        })
-
-        supervisor.stderr?.on("data", (chunk) => {
-          const text = chunk.toString()
-          output += text
-          if (part.state.status === "running") {
-            void queueProgress({
-              ...processProgressMetadata,
-              output: output,
-              description: "",
-            })
-          }
-        })
+        }
+        supervisor.stdout?.on("data", (chunk) => appendOutput(stdoutDecoder.write(chunk)))
+        supervisor.stderr?.on("data", (chunk) => appendOutput(stderrDecoder.write(chunk)))
 
         let aborted = false
 
@@ -645,6 +639,8 @@ export namespace SessionShell {
           const failures: unknown[] = primaryError ? [primaryError] : []
           try {
             await ProcessSupervisor.disposeAndWaitForExit(supervisor, "session shell")
+            appendOutput(stdoutDecoder.end())
+            appendOutput(stderrDecoder.end())
           } catch (error) {
             failures.push(error)
           }

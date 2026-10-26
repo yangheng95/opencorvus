@@ -1,0 +1,838 @@
+{
+  "date": "2026-10-26",
+  "scope": "Original Unicode command, direct user-shell byte decoding, actual live and recorded output, visible cancellation and retained history",
+  "sourceChanges": [
+    "One product shell-environment merge, with UTF-8 standard-stream default and explicit native-name overrides",
+    "Independent incremental stdout/stderr decoders in the existing Session shell",
+    "Failed Tool Part metadata projected from original committed progress plus explicit terminal fields",
+    "One existing Shell Tool body/ToolPayload presents actual live or recorded progress with current-language controls"
+  ],
+  "checks": {
+    "redEncoding": {
+      "label": "encoding-before",
+      "exit": 1,
+      "testsPassed": 10,
+      "testsFailed": 5,
+      "assertions": 35,
+      "physicalAndOutputSettled": true
+    },
+    "invalidProgressFixture": {
+      "label": "progress-before",
+      "exit": 1,
+      "testsPassed": 0,
+      "testsFailed": 2,
+      "assertions": 2,
+      "physicalAndOutputSettled": true,
+      "qualified": false,
+      "reason": "Required ToolFailureCause classification omitted; not counted as a product red case"
+    },
+    "redProgress": {
+      "label": "progress-qualified-before",
+      "exit": 1,
+      "testsPassed": 0,
+      "testsFailed": 2,
+      "assertions": 4,
+      "physicalAndOutputSettled": true
+    },
+    "redOrderedLayers": {
+      "label": "environment-layers-before",
+      "exit": 1,
+      "testsPassed": 3,
+      "testsFailed": 1,
+      "assertions": 5,
+      "physicalAndOutputSettled": true
+    },
+    "final": {
+      "label": "final-layered-output-contracts",
+      "exit": 0,
+      "testsPassed": 56,
+      "testsFailed": 0,
+      "assertions": 140,
+      "physicalAndOutputSettled": true
+    },
+    "privateRunnerFailures": [
+      {
+        "label": "shell-routing",
+        "exit": 1,
+        "testsPassed": 18,
+        "testsFailed": 2,
+        "assertions": 35,
+        "physicalAndOutputSettled": true
+      },
+      {
+        "label": "shell-routing-canonical",
+        "exit": 1,
+        "testsPassed": 2,
+        "testsFailed": 2,
+        "assertions": 2,
+        "physicalAndOutputSettled": true
+      }
+    ],
+    "normalCanonicalRunner": {
+      "label": "shell-routing-standard-temp",
+      "exit": 0,
+      "testsPassed": 4,
+      "testsFailed": 0,
+      "assertions": 4,
+      "physicalAndOutputSettled": true
+    },
+    "types": {
+      "backendAndTouchedTests": 0,
+      "overlay": 0
+    },
+    "languages": {
+      "locales": 2,
+      "keys": 2549,
+      "exit": 0
+    },
+    "nodeUiBuild": {
+      "at": "2026-10-26T12:08:39.350Z",
+      "entry": "main-DqXsnf2O.js",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\shell-text-629\\ui-build-final",
+      "qualification": "Current source ordinary Node Vite production build, served by isolated development CLI; no UI instrumentation"
+    }
+  },
+  "runs": [
+    {
+      "id": 630,
+      "port": 38135,
+      "uiEntry": "main-Dm1PjLZY.js",
+      "preflight": {
+        "sessionID": "ses_hJZqzQKelP5no8InTQzB",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "actualCommand": {
+        "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+        "requestPartID": "prt_g0VZ9hmpI00vVRqFgkTV",
+        "assistantMessageID": "msg_g0VZ9hlWA009QerEni7N",
+        "input": {
+          "command": "python -u -c \"import time; [(print('停止验收', flush=True), time.sleep(1)) for _ in range(180)]\"",
+          "timeout": 190000,
+          "description": "原样复测中文输出并等待用户停止",
+          "background": false
+        },
+        "lastProgress": {
+          "id": "prt_g0VZ9i9KQ003AtiFunUF",
+          "at": 1793015461542,
+          "lineCount": 86,
+          "exactLine": "停止验收",
+          "outputBytes": 1204
+        },
+        "outcomeID": "prt_hU6i0b4YSSP1l0589WwL",
+        "outcome": {
+          "outcome": "failed",
+          "failure": {
+            "kind": "MessageAbortedError",
+            "name": "MessageAbortedError",
+            "message": "session aborted",
+            "originSite": "session.processor.catch",
+            "classification": "llm-activity",
+            "data": {
+              "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+              "canonical_error_metadata": {
+                "cancellation": {
+                  "actor": "user",
+                  "source": "session.abort",
+                  "surface": "session",
+                  "requestID": "8ffe9d82-1197-4b9d-ad48-86a0252e3228",
+                  "reason": "session aborted",
+                  "targetSessionID": "ses_-zUQryl9CzzNEb5MNLb0"
+                }
+              },
+              "failure_occurrence": {
+                "session_id": "ses_-zUQryl9CzzNEb5MNLb0",
+                "assistant_message_id": "msg_g0VZ9hlWA009QerEni7N",
+                "error_name": "MessageAbortedError"
+              }
+            }
+          },
+          "time": {
+            "end": 1793015461936
+          }
+        },
+        "qualification": "Actual streamed Sol Tool call; original command unchanged; explicit manual Stop, not natural exit or encoding failure"
+      },
+      "originalFailure": {
+        "requestPartID": "prt_g0VZ961vK007QO4E7IWz",
+        "exit": 1,
+        "codec": "cp1252",
+        "preserved": true
+      },
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 16606,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 16,
+            "current": 17,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": [
+              {
+                "id": "ses_-zUQryl9CzzNEb5MNLb0",
+                "column": "time_updated",
+                "before": 1793007142705,
+                "after": 1793015370561,
+                "reason": "Actual new streamed Sol input and original user-shell commands in the retained Chat Session"
+              }
+            ]
+          },
+          "message": {
+            "original": 66,
+            "current": 72,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "part": {
+            "original": 126,
+            "current": 133,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 19,
+            "current": 21,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 18,
+            "current": 43,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 19,
+            "current": 21,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 35,
+            "current": 37,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 35,
+            "current": 37,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 150,
+            "current": 160,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          }
+        }
+      },
+      "attachments": {
+        "pairs": 9,
+        "originalSourceBytesPreserved": true
+      },
+      "requests": 5,
+      "cumulativeRequests": 199,
+      "unusedRetired": 5,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "sourceAuthenticationAndCatalog": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "commandPhysical": [
+        {
+          "output": {
+            "status": "fulfilled",
+            "at": "2026-10-26T11:51:01.979Z"
+          },
+          "identity": {
+            "pid": 93600,
+            "processInstanceID": "win32:639286121764006401",
+            "occurrenceID": "35e07631-8ff9-4344-8138-5afcfc6eb1f8"
+          },
+          "state": "dead_or_reused",
+          "kind": "spawnHostShell",
+          "terminal": {
+            "status": "fulfilled",
+            "value": {
+              "exitCode": 1,
+              "signal": null
+            },
+            "at": "2026-10-26T11:51:01.984Z"
+          },
+          "settlement": {
+            "status": "fulfilled",
+            "at": "2026-10-26T11:51:01.989Z"
+          }
+        },
+        {
+          "output": {
+            "status": "fulfilled",
+            "at": "2026-10-26T11:53:35.958Z"
+          },
+          "identity": {
+            "pid": 92644,
+            "processInstanceID": "win32:639286124150162252",
+            "occurrenceID": "d11cf6cc-948e-4677-abe0-b32cd7a46e72"
+          },
+          "state": "dead_or_reused",
+          "kind": "spawnHostShellGated",
+          "terminal": {
+            "status": "fulfilled",
+            "value": {
+              "exitCode": 0,
+              "signal": null
+            },
+            "at": "2026-10-26T11:53:35.96Z"
+          },
+          "settlement": {
+            "status": "fulfilled",
+            "at": "2026-10-26T11:53:35.961Z"
+          }
+        }
+      ],
+      "closure": {
+        "publicShutdown": 200,
+        "reserveMs": 682681,
+        "originalExec": 65908,
+        "originalExecExit": 0,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physical": true,
+        "output": true,
+        "requests": true,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "ownedTabClosed": true
+      }
+    },
+    {
+      "id": 631,
+      "port": 38136,
+      "uiEntry": "main-DqXsnf2O.js",
+      "preflight": {
+        "sessionID": "ses_h7tMYP7s65EZi2hHJ5gL",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "actualCommand": {
+        "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+        "requestPartID": "prt_g0VZ9o8z9002v17jPyv3",
+        "assistantMessageID": "msg_g0VZ9o7tC00pR69rjKD0",
+        "input": {
+          "command": "python -u -c \"import time; [(print('停止验收', flush=True), time.sleep(1)) for _ in range(180)]\"",
+          "timeout": 190000,
+          "description": "原样执行最终页面停止验收命令",
+          "background": false
+        },
+        "lastProgress": {
+          "id": "prt_g0VZ9oo0900NxN3Vte4E",
+          "at": 1793017047857,
+          "lineCount": 157,
+          "exactLine": "停止验收",
+          "outputBytes": 2198
+        },
+        "outcomeID": "prt_hJEq6DnxoGakz4v6tkO0",
+        "outcome": {
+          "outcome": "failed",
+          "failure": {
+            "kind": "MessageAbortedError",
+            "name": "MessageAbortedError",
+            "message": "session aborted",
+            "originSite": "session.processor.catch",
+            "classification": "llm-activity",
+            "data": {
+              "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+              "canonical_error_metadata": {
+                "cancellation": {
+                  "actor": "user",
+                  "source": "session.abort",
+                  "surface": "session",
+                  "requestID": "7be046de-4e37-4ad7-86b9-078c84ca7328",
+                  "reason": "session aborted",
+                  "targetSessionID": "ses_-zUQryl9CzzNEb5MNLb0"
+                }
+              },
+              "failure_occurrence": {
+                "session_id": "ses_-zUQryl9CzzNEb5MNLb0",
+                "assistant_message_id": "msg_g0VZ9o7tC00pR69rjKD0",
+                "error_name": "MessageAbortedError"
+              }
+            }
+          },
+          "time": {
+            "end": 1793017049896
+          }
+        },
+        "qualification": "Actual streamed Sol Tool call; original command unchanged; explicit manual Stop, not natural exit or encoding failure"
+      },
+      "originalFailure": {
+        "requestPartID": "prt_g0VZ961vK007QO4E7IWz",
+        "exit": 1,
+        "codec": "cp1252",
+        "preserved": true
+      },
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 18813,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 17,
+            "current": 18,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": [
+              {
+                "id": "ses_-zUQryl9CzzNEb5MNLb0",
+                "column": "time_updated",
+                "before": 1793015370561,
+                "after": 1793016886572,
+                "reason": "Actual new streamed Sol input and original user-shell commands in the retained Chat Session"
+              }
+            ]
+          },
+          "message": {
+            "original": 72,
+            "current": 76,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "part": {
+            "original": 133,
+            "current": 139,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 21,
+            "current": 22,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 43,
+            "current": 75,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 21,
+            "current": 22,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 37,
+            "current": 39,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 37,
+            "current": 39,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 160,
+            "current": 170,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          }
+        }
+      },
+      "attachments": {
+        "pairs": 10,
+        "originalSourceBytesPreserved": true
+      },
+      "requests": 4,
+      "cumulativeRequests": 203,
+      "unusedRetired": 6,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "sourceAuthenticationAndCatalog": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "commandPhysical": [
+        {
+          "output": {
+            "status": "fulfilled",
+            "at": "2026-10-26T12:17:29.946Z"
+          },
+          "identity": {
+            "pid": 92400,
+            "processInstanceID": "win32:639286136915971968",
+            "occurrenceID": "f5962b43-e847-4e52-8723-6451d999b2a0"
+          },
+          "state": "dead_or_reused",
+          "kind": "spawnHostShell",
+          "terminal": {
+            "status": "fulfilled",
+            "value": {
+              "exitCode": 1,
+              "signal": null
+            },
+            "at": "2026-10-26T12:17:29.954Z"
+          },
+          "settlement": {
+            "status": "fulfilled",
+            "at": "2026-10-26T12:17:29.961Z"
+          }
+        }
+      ],
+      "closure": {
+        "publicShutdown": 200,
+        "reserveMs": 600296,
+        "originalExec": 7638,
+        "originalExecExit": 0,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physical": true,
+        "output": true,
+        "requests": true,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "ownedTabClosed": true
+      }
+    },
+    {
+      "id": 632,
+      "port": 38137,
+      "uiEntry": "main-DqXsnf2O.js",
+      "preflight": {
+        "sessionID": "ses_hyM2FIUdNghb3c1taXey",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "actualCommand": {
+        "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+        "requestPartID": "prt_g0VZ9vVpg00CHQoFFSNR",
+        "assistantMessageID": "msg_g0VZ9vUfT00i1FDawAw4",
+        "input": {
+          "command": "python -u -c \"import time; [(print('停止验收', flush=True), time.sleep(1)) for _ in range(180)]\"",
+          "timeout": 190000,
+          "description": "原样执行中文实时验收并等待停止",
+          "background": false
+        },
+        "lastProgress": {
+          "id": "prt_g0VZ9vlno00LUfkp54lg",
+          "at": 1793018707700,
+          "lineCount": 61,
+          "exactLine": "停止验收",
+          "outputBytes": 854
+        },
+        "outcomeID": "prt_hXlKHG7wXGvBa433zTVS",
+        "outcome": {
+          "outcome": "failed",
+          "failure": {
+            "kind": "MessageAbortedError",
+            "name": "MessageAbortedError",
+            "message": "session aborted",
+            "originSite": "session.processor.catch",
+            "classification": "llm-activity",
+            "data": {
+              "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+              "canonical_error_metadata": {
+                "cancellation": {
+                  "actor": "user",
+                  "source": "session.abort",
+                  "surface": "session",
+                  "requestID": "a6d99a92-7447-40d4-812e-0f249751cafa",
+                  "reason": "session aborted",
+                  "targetSessionID": "ses_-zUQryl9CzzNEb5MNLb0"
+                }
+              },
+              "failure_occurrence": {
+                "session_id": "ses_-zUQryl9CzzNEb5MNLb0",
+                "assistant_message_id": "msg_g0VZ9vUfT00i1FDawAw4",
+                "error_name": "MessageAbortedError"
+              }
+            }
+          },
+          "time": {
+            "end": 1793018708596
+          }
+        },
+        "qualification": "Actual streamed Sol Tool call; original command unchanged; explicit manual Stop, not natural exit or encoding failure"
+      },
+      "originalFailure": {
+        "requestPartID": "prt_g0VZ961vK007QO4E7IWz",
+        "exit": 1,
+        "codec": "cp1252",
+        "preserved": true
+      },
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 20954,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 18,
+            "current": 19,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": [
+              {
+                "id": "ses_-zUQryl9CzzNEb5MNLb0",
+                "column": "time_updated",
+                "before": 1793016886572,
+                "after": 1793018642488,
+                "reason": "Actual new streamed Sol input and original user-shell commands in the retained Chat Session"
+              }
+            ]
+          },
+          "message": {
+            "original": 76,
+            "current": 80,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "part": {
+            "original": 139,
+            "current": 145,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 22,
+            "current": 23,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 75,
+            "current": 88,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 22,
+            "current": 23,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 39,
+            "current": 41,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 39,
+            "current": 41,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 170,
+            "current": 180,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          }
+        }
+      },
+      "attachments": {
+        "pairs": 11,
+        "originalSourceBytesPreserved": true
+      },
+      "requests": 4,
+      "cumulativeRequests": 207,
+      "unusedRetired": 4,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "sourceAuthenticationAndCatalog": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "commandPhysical": [
+        {
+          "output": {
+            "status": "fulfilled",
+            "at": "2026-10-26T12:45:08.642Z"
+          },
+          "identity": {
+            "pid": 79268,
+            "processInstanceID": "win32:639286154475702418",
+            "occurrenceID": "cc6d3197-0447-4bab-ab56-09bba8859082"
+          },
+          "settlement": {
+            "status": "fulfilled",
+            "at": "2026-10-26T12:45:08.656Z"
+          },
+          "terminal": {
+            "status": "fulfilled",
+            "value": {
+              "exitCode": 1,
+              "signal": null
+            },
+            "at": "2026-10-26T12:45:08.651Z"
+          },
+          "state": "dead_or_reused",
+          "kind": "spawnHostShell"
+        }
+      ],
+      "closure": {
+        "publicShutdown": 200,
+        "reserveMs": 764743,
+        "originalExec": 75439,
+        "originalExecExit": 0,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physical": true,
+        "output": true,
+        "requests": true,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "ownedTabClosed": true
+      }
+    }
+  ],
+  "directUserShell": {
+    "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+    "assistantMessageID": "msg_g0VZ9inC0009NFpbAmqq",
+    "partID": "prt_g0VZ9inC001Iv8TZ0Enw",
+    "command": "python -u -c \"import sys,time; pairs=[(sys.stdout,'中文🙂'.encode()),(sys.stderr,'错误🚀'.encode())]; [(stream.buffer.write(raw[i:i+1]),stream.buffer.flush(),time.sleep(.03)) for i in range(max(len(raw) for stream,raw in pairs)) for stream,raw in pairs if i<len(raw)]\"",
+    "exit": 0,
+    "output": "中错文误🙂🚀\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "qualification": "Production public session.shell API execution with manual actual-page reading; the unsent bang draft was cleared; not a UI command-submission pass"
+  },
+  "visualReview": {
+    "screenshots": [
+      "01-original-chinese-error.jpg",
+      "02-live-output-missing.jpg",
+      "03-command-stopped.jpg",
+      "04-user-shell-unicode-result.jpg",
+      "05-restored-recorded-output-en.jpg",
+      "06-live-chinese-output-en.jpg",
+      "07-stopped-output-retained-en.jpg",
+      "08-recorded-output-zh.jpg",
+      "09-live-output-zh-final.jpg",
+      "10-stopped-output-zh-final.jpg"
+    ],
+    "dimensions": [
+      1280,
+      720
+    ],
+    "review": "All ten unmodified real-page images manually inspected; viewport limits and long-output scrolling retained",
+    "baseline630": "Live progress persisted while UI showed awaiting-result; stopped card omitted it",
+    "final631": "English cold reread restored original stopped progress; live stream displayed actual Chinese; after manual Stop output and original cancellation remained; English and Chinese expansion/copy controls returned success feedback",
+    "final632": "Final ordered-layer backend with the same final UI; actual Chinese live and recorded output manually inspected before and after the original Stop",
+    "clipboardQualification": "Actual contextual Copied/已复制 feedback observed; clipboard bytes were not independently read"
+  },
+  "limits": [
+    "One original command per paid run; no statistical reliability claim",
+    "Explicit legacy output encoding remains an intentional caller choice; arbitrary mixed encodings are not detected",
+    "Windows rejects overlong CreateProcessW working directories; the private checker was fixed to use the canonical runner and standard managed TEMP, without adding a production alias or fallback",
+    "UI automated tests were not created or run",
+    "Projected-child physical Stop and further product walkthroughs remain separate work",
+    "No user database, service on port18571, or user window was operated; schema remains8; release/version definitions unchanged"
+  ]
+}

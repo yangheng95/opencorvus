@@ -75,6 +75,28 @@ EngineInteraction 持久化；进程恢复复用同一 Request 创建时间与�
 问题建立期间的基础设施失败形成 `abandoned(origin=infrastructure)` 物理清理事实，
 不属于回答、操作员拒绝或期限失效中的任何一种业务结果。
 
+### Project command environment
+
+`Config.Info.local_environment` is the project-owned source for command environment
+variables and setup source. Bash Tool and explicit Session shell commands consume
+the same `LocalEnvironment.projectShellCommand` projection and final
+`sanitizeShellEnvironment` merge. Explicit plugin and project values retain their
+existing order above the host environment; execution guard values remain last.
+Each layer reaches that merge separately, so JavaScript object insertion order
+cannot promote an older case alias over a later project or execution-guard value.
+Environment-name identity follows the native platform: case-insensitive on
+Windows and case-sensitive on POSIX. A later explicit spelling owns that name's
+single child-environment entry; input objects and host process variables stay intact.
+
+These product text pipes are consumed as UTF-8, so their shared projection defaults
+`PYTHONIOENCODING` to `utf-8` only when no encoding value was supplied. Existing host,
+plugin or project encoding choices remain explicit overrides. This configures Python
+standard streams, rather than its file-encoding mode, and does not change commands,
+the interactive system terminal, or raw-byte Process interfaces. Both production
+command entry points independently decode stdout and stderr across byte boundaries;
+Session shell flushes those decoders after its original process/output settlement
+and before its original persisted progress and terminal Tool result settle.
+
 ### Layer 2: Overlay Preferences — 客户端 UI 偏好
 
 Overlay 的配置投影按当前实际目录选择读取范围：项目读取 `/config?directory=…` 与项目 channel，
