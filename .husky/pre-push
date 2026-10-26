@@ -33,4 +33,4 @@ done
 # Block in-tree secrets before they reach a remote branch. The script exits 1 on any hit and prints
 # the file:line + pattern id; deliberate test fixtures should mark the
 # offending line with `// secret-scan: ignore`.
-printf '%s\n' "$pre_push_refs" | bun run script/secret-scan.ts --pre-push-stdin
+printf '%s\n' "$pre_push_refs" | bun run script/secret-scan.ts --pre-push-stdin --remote "$1"

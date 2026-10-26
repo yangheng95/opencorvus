@@ -108,6 +108,8 @@ export interface ScanOptions {
   files?: string[]
   /** Exact four-field Git hook updates. Without hook input, scan HEAD and the index. */
   pushUpdates?: PrePushUpdate[]
+  /** Git's target remote name or URL, required for a pre-push publication boundary. */
+  targetRemote?: string
   /** Override the pattern set (used by tests). */
   patterns?: ReadonlyArray<SecretPattern>
 }
@@ -215,14 +217,59 @@ export function parsePrePushUpdates(input: string): PrePushUpdate[] {
   return updates
 }
 
-function listPushedChanges(repoRoot: string, updates: PrePushUpdate[]): GitIndexEntry[] {
+function publishedRemoteCommits(repoRoot: string, targetRemote: string | undefined): string[] {
+  if (!targetRemote?.trim()) throw new Error("Pre-push secret scan requires the target remote")
+  const remote = spawnSync("git", ["-C", repoRoot, "ls-remote", "--", targetRemote], {
+    maxBuffer: 64 * 1024 * 1024,
+    windowsHide: true,
+  })
+  if (remote.error) throw remote.error
+  if (remote.status !== 0)
+    throw new Error(`Secret scan remote inventory unavailable: ${remote.stderr.toString("utf8").trim()}`)
+  const objectIds = [
+    ...new Set(
+      remote.stdout
+        .toString("utf8")
+        .split(/\r?\n/)
+        .filter(Boolean)
+        .map((line) => {
+          const match = /^([a-f0-9]{40}|[a-f0-9]{64})\s+\S+$/.exec(line)
+          if (!match) throw new Error("Secret scan remote inventory returned invalid ref metadata")
+          return match[1]!
+        }),
+    ),
+  ]
+  if (objectIds.length === 0) return []
+  // Unknown objects cannot prove a local ancestry boundary. Never fetch unrelated remote history here.
+  const metadata = spawnSync("git", ["-C", repoRoot, "cat-file", "--batch-check=%(objectname) %(objecttype)"], {
+    input: objectIds.join("\n") + "\n",
+    env: { ...process.env, GIT_NO_LAZY_FETCH: "1" },
+    maxBuffer: 64 * 1024 * 1024,
+    windowsHide: true,
+  })
+  if (metadata.error) throw metadata.error
+  if (metadata.status !== 0) throw new Error("Secret scan remote commit metadata could not be read")
+  const rows = metadata.stdout.toString("utf8").trim().split(/\r?\n/)
+  if (rows.length !== objectIds.length) throw new Error("Secret scan remote commit metadata is incomplete")
+  return rows.flatMap((row, index) => {
+    const [objectId, type] = row.split(" ")
+    if (objectId !== objectIds[index] || !type) throw new Error("Secret scan remote commit identity mismatch")
+    return type === "commit" ? [objectId!] : []
+  })
+}
+
+function listPushedChanges(repoRoot: string, updates: PrePushUpdate[], targetRemote?: string): GitIndexEntry[] {
+  const tips = [
+    ...new Set(updates.filter((update) => !/^0+$/.test(update.localObjectId)).map((update) => update.localObjectId)),
+  ]
+  if (tips.length === 0) return []
+  const published = new Set([
+    ...publishedRemoteCommits(repoRoot, targetRemote),
+    ...updates.filter((update) => !/^0+$/.test(update.remoteObjectId)).map((update) => update.remoteObjectId),
+  ])
+  const revisions = [...tips, ...[...published].map((objectId) => `^${objectId}`)]
   const commits = new Set<string>()
-  for (const update of updates) {
-    if (/^0+$/.test(update.localObjectId)) continue
-    const revisions = [
-      update.localObjectId,
-      ...(/^0+$/.test(update.remoteObjectId) ? [] : [`^${update.remoteObjectId}`]),
-    ]
+  {
     const result = spawnSync("git", ["-C", repoRoot, "rev-list", "--reverse", ...revisions, "--"], {
       maxBuffer: 64 * 1024 * 1024,
     })
@@ -436,7 +483,7 @@ export function scan(opts: ScanOptions): SecretHit[] {
 
   const refEntries = scanTips(opts.repoRoot, opts.pushUpdates).flatMap((ref) => listTreeEntries(opts.repoRoot, ref))
   const indexEntries = listTrackedEntries(opts.repoRoot)
-  const pushedEntries = opts.pushUpdates ? listPushedChanges(opts.repoRoot, opts.pushUpdates) : []
+  const pushedEntries = opts.pushUpdates ? listPushedChanges(opts.repoRoot, opts.pushUpdates, opts.targetRemote) : []
   const entries = new Map<string, GitIndexEntry>()
   for (const entry of [...refEntries, ...indexEntries, ...pushedEntries]) {
     if (!shouldScan(entry.file) || entry.mode === GITLINK_MODE || entry.size > MAX_SCANNED_BYTES) continue
@@ -458,22 +505,28 @@ export function scan(opts: ScanOptions): SecretHit[] {
 
 if (import.meta.main) {
   const args = process.argv.slice(2)
-  if (args.some((arg) => arg !== "--pre-push-stdin")) {
-    console.error("usage: bun run script/secret-scan.ts [--pre-push-stdin]")
-    process.exit(2)
+  let prePush = false
+  let targetRemote: string | undefined
+  for (let index = 0; index < args.length; index++) {
+    if (args[index] === "--pre-push-stdin" && !prePush) prePush = true
+    else if (args[index] === "--remote" && args[index + 1]?.trim() && !targetRemote) targetRemote = args[++index]
+    else {
+      console.error("usage: bun run script/secret-scan.ts [--pre-push-stdin --remote <target>]")
+      process.exit(2)
+    }
   }
   // `new URL(import.meta.url).pathname` returns `/C:/...` on Windows
   // — leading slash poisons `path.resolve`. `fileURLToPath` is the
   // canonical conversion that handles both POSIX and Windows.
   const here = path.dirname(fileURLToPath(import.meta.url))
   const repoRoot = path.resolve(here, "..")
-  const pushUpdates = args.includes("--pre-push-stdin") ? parsePrePushUpdates(fs.readFileSync(0, "utf8")) : undefined
+  const pushUpdates = prePush ? parsePrePushUpdates(fs.readFileSync(0, "utf8")) : undefined
   console.log(
     pushUpdates
       ? "[secret-scan] Checking pushed file snapshots and the index"
       : "[secret-scan] Checking HEAD and index file snapshots",
   )
-  const hits = scan({ repoRoot, pushUpdates })
+  const hits = scan({ repoRoot, pushUpdates, targetRemote })
   if (hits.length === 0) {
     console.log(`[secret-scan] OK — 0 hits across tracked sources`)
     process.exit(0)

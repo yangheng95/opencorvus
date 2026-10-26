@@ -16,6 +16,9 @@ function fixture(run: (repo: string) => void, objectFormat = "sha1") {
   const repo = fs.mkdtempSync(path.join(parent, "opencorvus-secret-scan-"))
   try {
     git(repo, ["init", "--initial-branch=scan-fixture", `--object-format=${objectFormat}`])
+    const remote = path.join(repo, ".git", "scanner-target.git")
+    git(repo, ["init", "--bare", `--object-format=${objectFormat}`, remote])
+    git(repo, ["remote", "add", "origin", remote])
     run(repo)
   } finally {
     if (path.dirname(path.resolve(repo)) !== parent || !path.basename(repo).startsWith("opencorvus-secret-scan-")) {
@@ -115,7 +118,7 @@ test("historical versions, shared content paths and the staged snapshot produce 
     const tip = commit(repo)
     write(repo, "staged.ts", fakeSlack)
     fs.writeFileSync(path.join(repo, "staged.ts"), "public working copy\n")
-    expect(report(scan({ repoRoot: repo, pushUpdates: [update(tip, base)] }))).toEqual([
+    expect(report(scan({ repoRoot: repo, targetRemote: "origin", pushUpdates: [update(tip, base)] }))).toEqual([
       { file: "a.ts", lineNumber: 1, patternId: "github-pat" },
       { file: "a.ts", lineNumber: 1, patternId: "provider-key" },
       { file: "b.ts", lineNumber: 1, patternId: "provider-key" },
@@ -125,7 +128,7 @@ test("historical versions, shared content paths and the staged snapshot produce 
   })
 })
 
-test("new refs and merge ancestry expose their changed file snapshots", () => {
+test("multi-ref publication shares its published boundary and reports new merge snapshots", () => {
   fixture((repo) => {
     write(repo, "base.ts", "public baseline")
     write(repo, "root.ts", fakeSlack)
@@ -142,11 +145,85 @@ test("new refs and merge ancestry expose their changed file snapshots", () => {
     const mergeTree = git(repo, ["write-tree"])
     const merge = git(repo, ["commit-tree", mergeTree, "-p", left, "-p", right, "-m", "merged public snapshot"])
     git(repo, ["update-ref", "HEAD", merge])
-    expect(report(scan({ repoRoot: repo, pushUpdates: [update(merge, zero), update(right, base)] }))).toEqual([
+    expect(
+      report(scan({ repoRoot: repo, targetRemote: "origin", pushUpdates: [update(merge, zero), update(right, base)] })),
+    ).toEqual([
       { file: "left.ts", lineNumber: 1, patternId: "provider-key" },
       { file: "right.ts", lineNumber: 1, patternId: "github-pat" },
-      { file: "root.ts", lineNumber: 1, patternId: "slack-token" },
     ])
+  })
+})
+
+test("new tag publication reports new historical and staged credentials beyond the target's published commits", () => {
+  fixture((repo) => {
+    write(repo, "published.ts", fakeProvider)
+    commit(repo)
+    write(repo, "published.ts", "public baseline")
+    commit(repo)
+    git(repo, ["push", "origin", "HEAD:refs/heads/published"])
+    write(repo, "new.ts", fakeGithub)
+    commit(repo)
+    write(repo, "new.ts", "public final snapshot")
+    const tip = commit(repo)
+    write(repo, "staged.ts", fakeSlack)
+    expect(
+      report(
+        scan({
+          repoRoot: repo,
+          targetRemote: "origin",
+          pushUpdates: [{ ...update(tip, zero), localRef: "refs/tags/v1", remoteRef: "refs/tags/v1" }],
+        }),
+      ),
+    ).toEqual([
+      { file: "new.ts", lineNumber: 1, patternId: "github-pat" },
+      { file: "staged.ts", lineNumber: 1, patternId: "slack-token" },
+    ])
+  })
+})
+
+test("a published credential in the exact release tip still produces its report", () => {
+  fixture((repo) => {
+    write(repo, "tip.ts", fakeProvider)
+    const tip = commit(repo)
+    git(repo, ["push", "origin", "HEAD:refs/heads/published"])
+    expect(report(scan({ repoRoot: repo, targetRemote: "origin", pushUpdates: [update(tip, zero)] }))).toEqual([
+      { file: "tip.ts", lineNumber: 1, patternId: "provider-key" },
+    ])
+  })
+})
+
+test("a different empty remote receives the complete historical credential report", () => {
+  fixture((repo) => {
+    write(repo, "history.ts", fakeProvider)
+    commit(repo)
+    write(repo, "history.ts", "public final snapshot")
+    const tip = commit(repo)
+    git(repo, ["push", "origin", "HEAD:refs/heads/published"])
+    const other = path.join(repo, ".git", "other-target.git")
+    git(repo, ["init", "--bare", other])
+    expect(report(scan({ repoRoot: repo, targetRemote: other, pushUpdates: [update(tip, zero)] }))).toEqual([
+      { file: "history.ts", lineNumber: 1, patternId: "provider-key" },
+    ])
+  })
+})
+
+test("a missing target identity returns its explicit pre-push error", () => {
+  fixture((repo) => {
+    write(repo, "public.ts", "public baseline")
+    const tip = commit(repo)
+    expect(() => scan({ repoRoot: repo, pushUpdates: [update(tip, zero)] })).toThrow(
+      "Pre-push secret scan requires the target remote",
+    )
+  })
+})
+
+test("an unavailable target inventory returns its explicit error", () => {
+  fixture((repo) => {
+    write(repo, "public.ts", "public baseline")
+    const tip = commit(repo)
+    expect(() =>
+      scan({ repoRoot: repo, targetRemote: path.join(repo, "missing.git"), pushUpdates: [update(tip, zero)] }),
+    ).toThrow("Secret scan remote inventory unavailable:")
   })
 })
 
@@ -177,7 +254,7 @@ test("the real CLI rejects a pushed intermediate credential with an explicit fil
     const script = path.join(repo, "script", "secret-scan.ts")
     fs.mkdirSync(path.dirname(script))
     fs.copyFileSync(fileURLToPath(new URL("./secret-scan.ts", import.meta.url)), script)
-    const result = spawnSync(process.execPath, [script, "--pre-push-stdin"], {
+    const result = spawnSync(process.execPath, [script, "--pre-push-stdin", "--remote", "origin"], {
       cwd: repo,
       input: `refs/heads/scan-fixture ${tip} refs/heads/scan-fixture ${base}\n`,
       encoding: "utf8",
