@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [OCI 执行后端来源调查](2026-10-27-oci-origin-investigation.md)：引入来源、部署与旧基准测试的可核对时间线。
+
 - [文件操作与模型可用性边界](2026-10-26-file-operation-model-independence.md)：七种变更、版本保护、格式化、插件与实际页面验证。
 
 - [0.1.30 Ubuntu依赖与发布](2026-10-27-release-0.1.30.md)：保留29失败事实，修正依赖来源并验证正式发布。

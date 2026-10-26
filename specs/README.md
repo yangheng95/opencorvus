@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [OCI 执行后端来源调查](records/2026-10/2026-10-27-oci-origin-investigation.md)：追溯实际历史、旧实验环境与引入决策的证据边界。
+
 - [文件操作与模型可用性边界](records/2026-10/2026-10-26-file-operation-model-independence.md)：普通文件写入独立模型、共享插件初始化与真实前后验收。
 
 - [0.1.30 Ubuntu依赖与发布](records/2026-10/2026-10-27-release-0.1.30.md)：官方签名HTTPS归档、Linux原生预检与完整联合交付。
