@@ -11,6 +11,17 @@ binary, the Tauri overlay desktop app, release CI, and local smoke packaging.
 
 ## Package Surfaces
 
+macOS app bundles, signatures and updater archives are produced by Tauri. DMG
+images use create-dmg 1.3.0, installed with the native macOS prerequisites, with
+the layout declared in Tauri configuration. Its bounded system-image retries
+replace the older vendor script's single create call. Packaging verifies the
+image, mounts it read-only, verifies the app signature and version, then detaches
+the owned mount. The updater trust root and archive contract remain unchanged.
+
+Release retries use `gh run rerun <run-id> --failed` for the complete failed set,
+including the independent deadline observer and aggregate. Successful compile,
+format and platform artifacts remain available within the original run budget.
+
 | Surface                   | Main output                                                                                                        | UI hosting model                                                                                                                                                            | Current owner                                                                                                         |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | Native CLI bundle         | `packages/opencorvus/dist/opencorvus-<platform>/` plus a platform archive                                          | The native packager stages the Overlay UI beside the executable and verifies the complete colocated runtime before archiving it.                                            | `script/package-native-binary.ts` and `script/package-binary-matrix.ts`                                               |

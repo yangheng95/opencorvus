@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/nicedoc/tauri/refs/heads/v2/crates/tauri-cli/schema.json",
   "productName": "OpenCorvus",
-  "version": "0.1.27",
+  "version": "0.1.28",
   "identifier": "ai.opencorvus.overlay",
   "build": {
     "frontendDist": "../dist-vite",
@@ -78,9 +78,25 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
+    "macOS": {
+      "dmg": {
+        "windowSize": {
+          "width": 660,
+          "height": 400
+        },
+        "appPosition": {
+          "x": 180,
+          "y": 170
+        },
+        "applicationFolderPosition": {
+          "x": 480,
+          "y": 170
+        }
+      }
+    },
     "windows": {
       "wix": {
-        "version": "0.1.27"
+        "version": "0.1.28"
       },
       "webviewInstallMode": {
         "type": "embedBootstrapper"

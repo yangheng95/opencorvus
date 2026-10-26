@@ -56,8 +56,11 @@ The workflow does all of the following in one pipeline:
 9. Require native publication, updater settlement, website activation, public readback and the final aggregate result to complete within the original 40-minute run budget
 
 Early admission leaves an exact tag and empty draft if native compilation later
-fails. Re-run failed jobs in the same workflow run to retain that ownership and
-reuse successful platform artifacts. A new workflow run cannot adopt another
+fails. Re-run the complete failed-job set in the same workflow run with
+`gh run rerun <run-id> --failed` to retain that ownership, restart the independent
+deadline watcher and aggregate result, and reuse successful platform artifacts.
+Job-only reruns leave the completed deadline observer stopped and are not the
+supported release retry procedure. A new workflow run cannot adopt another
 run's draft. Publication admission failure stops the native matrix; network or
 service failures later in the run still require retry. The release inventory
 uses one request per bounded page and remains the sole draft lookup authority.
@@ -66,8 +69,8 @@ uses one request per bounded page and remains the sole draft lookup authority.
 Both workflows call `package-overlay.yml`. Linux rows compile once, then generate
 DEB, RPM and AppImage in independently retryable parallel jobs. Their retained
 compile/format artifacts feed a complete-row validation job; public publication
-still requires every format, signature and native platform. Retry the failed inner
-format job within the same run to reuse the successful compilation. See the
+still requires every format, signature and native platform. Retry the failed-job
+set within the same run to reuse successful compilation and format artifacts. See the
 [transfer and retry contract](docs/packaging.md#ci-transfer-artifacts-and-public-release-assets).
 
 Native publication, the desktop update channel and website deployment are one automatic release scope for tag pushes, manual dispatch and the local release command. The website workflow retains its own signing-version counter and main-only production environment; its checkout verifies the exact release tag/source and parent run. The native workflow waits on the workflow ID returned by GitHub's 2026-03-10 dispatch API, so deployment failure fails the combined release. A same-run publication retry still executes website deployment even when the update channel is already current.

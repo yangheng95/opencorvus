@@ -4,9 +4,101 @@
 
 ## 未发布
 
+## 0.1.28 - 2026-10-26
+
+### zh-CN
+
+#### 新增
+
+- 支持生成经过格式验证的 DOCX、XLSX 工作产物，并保存、预览和下载原始 Office 文件；附件可保存为项目文件，保存结果进入真实文件变更记录。
+- 项目文件提供原件下载，包括 ZIP、图片、PDF、文本、JSON 和零字节文件；没有可用模型的冷启动项目也可下载，保留原始字节及中文文件名。
+- 网页抓取来源提供可读摘录，正文和附件共用真实内容身份，便于在 Sources 中查看与继续读取原文。
+
+#### 调整
+
+- 持续目标统一从 Chat/Work 输入区加号菜单和 `/goal` 进入；可打开已有目标，预算保持可选，创建与编辑保留草稿、当前会话和焦点。执行结束后及时刷新真实用量与状态。
+- 修订 Data Analysis、Viral Content、Commercial Legal、HR Operations、Tax Compliance、Sales Strategy、Omnichannel Distribution、Marketing Growth 和 SEO/GEO 九个专家团的前驱输入与终稿交付合同。Data Analysis、HR Operations、Sales Strategy 为 `2026.10.24.3`，Marketing Growth、SEO/GEO 为 `2026.10.24.2`，其余四包为 `2026.10.24.1`。发布器使用 `predecessor_artifact_locators` 和精确 Engine Artifact 前驱，保留原文件语义证据与用户指定的规范交付路径。
+- Evolution Lab `2026.10.24.7` 按产物分支声明输入，统一发布、测量与资源还原时的完整读取和身份验证；机会、归因、候选、审阅与评分的实际证据进入来源图，保留附加语义来源与跨 Task 原生产者。增长类发布器验证完整字节、版本、领域内容及生产者。
+- Review Debug `2026.10.23.1` 与 Evolution 因果调查角色采用通用委派模板；Squad SDK `2026.10.23.2` 明确强制输出合同，可移植模板 `2026.10.24.1` 使用当前 Host 发布接口并纳入原生执行和类型检查。包修订与运行时共用版本递增规则，避免 UTC 日期落后时倒退版本。
+- 文件冲突先显示可读原因，再提供完整路径和诊断；终端工具明确展示真实退出码，长输出、折叠摘要及交给模型的结果保留同一退出事实。Read/Bash 说明明确二进制格式支持范围与 UTF-8 输出要求。
+
+#### 修复
+
+- macOS 磁盘映像改由 create-dmg 1.3.0 生成，采用上游对系统忙状态的有限重试；Tauri 继续生成和签名应用及更新档案。打包后实际验证映像、只读挂载的应用签名和版本，并释放挂载，保留原安装窗口布局。
+- 官网跨平台归档验证复用原隔离后端测试 runner，在功能测试开始前准备 Windows 进程监督器。发布重试使用同一运行的完整失败集合，重启截止观察者并复用成功资源，原40分钟时钟保持。
+- 持续目标在说明页往返后保留预算与完成依据。模型不可用时仍可保存、暂停和完成目标，真实执行准入失败会将对应目标收敛为明确阻塞；恢复继续使用原目标和累计用量，保留用户较新的暂停及领域关闭决定。
+- 修复包工具 RPC（Remote Procedure Call，远程过程调用）等待超时及 Host 效果尚未结算就返回的问题。物理退出、输出关闭、请求清理与 Host 工作共同完成后交付结果；共享进程监督器使用原有完整5秒处置期限，避免并行1秒时钟误报正确退出。
+- 修复配置同步与 MCP 初始化之间的锁顺序死锁、跨项目更新的重复事件，以及失败恢复后下一次配置丢失凭据的问题。独立后台协调取得自己的写入权限，按当前规范配置结算凭据，保留有序事件与原重试合同。
+- 配置写入保留自定义来源优先级、项目工作树身份和候选插件/Skill 校验；已提交但运行时协调失败的配置仍保留保存事实，并可继续恢复。模型目录按真实归属投影，角色模型覆盖复用统一解析器，解除辅助角色与 Provider 运行时的循环依赖。
+- 修复文本写入差异、目录别名并发写入及格式化后过早报告保存完成的问题。后续编辑依据工具实际读到的字节，外部修改会返回真实冲突；格式化、附件物化和文件复制均保留最终保存事实。
+- Task 根会话在用量与预测触发的压缩中保留同一活跃激活、消息及工具事实。默认保尾预算正确处理首个大执行消息；Task、Mission 和普通 Session 沿真实锚点压缩并保留后续输入与新增工具结果身份。Host 缺少持久回复的错误按基础故障结算，Task 可继续接收输入。
+- 修复外部压缩租约等待中的唤醒区分、消息移交后的延迟增量，以及执行恢复中的重复效果风险。持久回执、原始消息和真实续轮身份共同用于恢复；已完成工作轮次按实际结果收尾，启动时先准备运行时再暴露可执行输入。
+- Question 与 Permission 的人类回复、原终态和记忆登记按同一真实投递结算；早到审批、晚到请求和消费后通知恢复保持原来源、项目及 Task 归属。历史权限与效果回执通过版本化迁移恢复，无法满足迁移完整性合同时保留数据库和备份并返回明确错误。
+- 独立旁聊按已结算回复选择复制边界，维护助手不再扩大历史范围，真实工具控制终态可继承；Mission 普通 fork 沿原权限合同拒绝。取消任务、工具与审批时保留真实取消原因，已结束消息的待审批请求及时收敛。
+- 修复主会话、成员会话及旁聊在重连、恢复、字体缩放、面板调整和来源加载时的读位、选中项与焦点丢失；成员历史使用统一 Part 顺序。代码复制保留字面实体，展开工具结果可完整滚动，恢复提示和实际业务失败分开呈现。
+- 修复 PDF 页导航与页面几何初始化、PDF/图片预览原件下载和产物下载反馈；下载与保存保留项目边界、真实文件名及原始错误。
+- 修复 Linux/macOS 字面反斜杠文件的物理路径身份、Git 暂存快照读取及别名工作树恢复；离线启动或原启动目录不可用时，工作区按已保存身份恢复。已登记工作树复用真实 Git 发现结果。
+- 独立 Shell 在真实子进程和输出完成后释放自己的执行所有权，连续命令、重启重放和服务关闭可正常收尾；有用户输入接续时仍由原会话循环接管。
+- 更新受影响的网络、构建和解析依赖，修复实际 BiDi/GitLab 的 Zod 调用契约；此前运行时与依赖修复已通过三平台完整 CI（Continuous Integration，持续集成），新增目标控制修复通过聚焦测试和真实页面及模型执行验证，发布工具链使用原生构建与安装校验。
+
+#### 用户影响与已知限制
+
+- 本版本包含0.1.27未公开候选的全部产品改动。0.1.27因macOS Intel磁盘映像失败未完成发布，原标签、草稿和失败记录保留；可安装版本从0.1.26升级到本版本。
+- 受支持基线内的数据库自动升级到当前声明的版本8，保留用户数据并在迁移前生成可独立读取的数据库备份；升级失败保留原库、版本和备份路径。非空且尚无受支持基线的旧库仍需明确授权维护。数据库备份不包含项目文件、附件及配置，这些文件仍需一起备份。
+- 已绑定 Task 保持冻结的专家团包修订；新安装与明确授权更新才采用上述新合同。已有模型、项目和历史消息保持原始身份。
+- 0.1.26 披露的长对话压缩语义限制尚无本版本全面解除的验收证据，仍保留该边界。二进制终端处理依赖已安装工具，模型生成的编码或命令参数仍可能需要纠正。
+- 原生 Rust 依赖 `glib`（中危，GHSA-wrw7-89jp-8q8g）和 `rand`（低危，GHSA-cq8v-f236-94qc）仍有未关闭通告；历史取证锁文件也记录相同依赖。本次未升级这两项，JavaScript 审计通过不表示所有生态告警归零。
+
+### en-US
+
+#### Added
+
+- Generate format-validated DOCX and XLSX work artifacts, with original Office file saving, preview and download. Attachments can be saved into projects, and accepted saves appear in the actual file-change history.
+- Download original project files, including ZIP, images, PDF, text, JSON and empty files. Cold projects can download without an available model, preserving exact bytes and Unicode filenames.
+- Read excerpts from fetched web sources. Source bodies and attachments share the identity of the actual fetched content for inspection and further reading in Sources.
+
+#### Changed
+
+- Manage continuous goals through the Chat/Work composer plus menu and `/goal`, including existing goals. Budgets remain optional; creation and editing retain drafts, conversation ownership and focus. Settled execution refreshes actual usage and status.
+- Update predecessor inputs and final delivery contracts for Data Analysis, Viral Content, Commercial Legal, HR Operations, Tax Compliance, Sales Strategy, Omnichannel Distribution, Marketing Growth and SEO/GEO. Data Analysis, HR Operations and Sales Strategy use `2026.10.24.3`; Marketing Growth and SEO/GEO use `2026.10.24.2`; the other four use `2026.10.24.1`. Publishers use `predecessor_artifact_locators` and exact Engine Artifact predecessors while retaining original-file evidence and the user's canonical delivery path.
+- Evolution Lab `2026.10.24.7` declares inputs per artifact branch and shares complete reads and identity checks across publishing, measurement and resource restoration. Opportunity, attribution, candidate, review and scoring evidence enters the source graph with additional semantic sources and original producers across Tasks. Growth publishers verify complete bytes, version, domain content and producer.
+- Review Debug `2026.10.23.1` and Evolution causal investigators use the general delegation template. Squad SDK `2026.10.23.2` specifies required outputs; portable template `2026.10.24.1` uses the current Host publication interface with native execution and type validation. Revision generation shares the runtime's monotonic version rule when the UTC date trails an existing revision.
+- File conflicts show a readable reason before full paths and diagnostics. Terminal results expose the actual exit code in expanded output, collapsed summaries and model-visible results. Read/Bash instructions clarify binary format coverage and UTF-8 output.
+
+#### Fixed
+
+- Produce macOS disk images with create-dmg 1.3.0 and its bounded upstream retries for system-busy failures. Tauri still produces and signs the app and updater archive. Packaging verifies the image, mounts it read-only to check the app signature and version, and detaches its mount while retaining the installer layout.
+- Run website archive qualification through the existing isolated backend runner, preparing the Windows process supervisor before functional tests start. Retry the complete failed-job set in the same release run to restart deadline observation and reuse successful assets without resetting the original 40-minute clock.
+- Retain continuous-goal budgets and completion evidence across guide navigation. Goals remain editable, pausable and completable when the model is unavailable; actual execution admission settles the affected goal as explicitly blocked. Resume retains goal identity and accumulated usage while preserving newer user pauses and domain closure decisions.
+- Fix package-tool RPC (Remote Procedure Call) timeouts and results returned before Host effects settled. Results wait for physical exit, output closure, request cleanup and Host work. The shared process supervisor uses the existing complete five-second disposal deadline instead of incorrectly failing valid exits against a separate one-second clock.
+- Fix lock-order deadlocks between configuration synchronization and MCP initialization, duplicate cross-project events, and credential loss on a subsequent configure after failed recovery. Independent background reconciliation obtains its own mutation authority, settles credentials against canonical configuration and preserves ordered events and retry contracts.
+- Preserve custom configuration source precedence, project worktree identity and candidate plugin/Skill validation. Committed configuration remains saved when runtime reconciliation fails and can recover later. Model catalog projection follows actual ownership; role overrides share one model-reference resolver without the auxiliary-role/Provider dependency cycle.
+- Fix text-write comparisons, concurrent writes through directory aliases and save receipts returned before formatting completed. Later edits use the bytes actually observed by tools and report real conflicts after external changes. Formatting, attachment materialization and file copying retain the final saved facts.
+- Retain the same active Task activation, messages and tool facts through usage-triggered and predictive compaction. Tail budgets handle a first large execution message; Task, Mission and ordinary Session compaction preserves actual anchors, later input and new tool-result identities. Missing durable Host replies settle through the infrastructure-failure path while the Task can accept further input.
+- Fix wakeup distinction while waiting for external compaction leases, delayed increments after message handoff and duplicate-effect risks during recovery. Durable receipts, original messages and actual continuation identities drive recovery. Settled worker occurrences close from real results, and runtime admission precedes exposing executable root input.
+- Settle Question and Permission human replies, original terminal states and memory registration through the same actual delivery. Early approvals, late requests and consumed-notification recovery retain source, project and Task ownership. Versioned migrations recover historical permission/effect receipts or retain the database and backup with an explicit error when migration integrity contracts cannot be satisfied.
+- Select independent side-chat copy boundaries from settled replies without including maintenance-assistant history. Actual tool-control terminal states are inherited, while ordinary Mission forks retain the existing permission rejection. Task, tool and approval cancellation preserves its real cause and retires pending requests for concluded messages.
+- Preserve reading positions, selections and focus across reconnects, recovery, font scaling, panel resizing and source loading in main, member and side conversations. Member history uses canonical Part order. Code copying retains literal entities, expanded tool output scrolls completely, and recovery notices remain distinct from business failures.
+- Fix PDF navigation and page-geometry initialization, original PDF/image downloads and artifact download feedback. Downloads and saves preserve project boundaries, actual filenames and original errors.
+- Fix physical identities for literal backslash filenames on Linux/macOS, staged Git snapshot reads and aliased-worktree recovery. Offline startup and unavailable launch directories restore workspaces from their saved identities. Registered worktrees reuse actual Git discovery results.
+- Release standalone Shell execution ownership after the real process and output settle, allowing consecutive commands, restart replay and clean shutdown. New user input still resumes through the original session loop.
+- Update affected network, build and parsing dependencies and repair the actual BiDi/GitLab Zod contracts. Earlier runtime and dependency fixes passed complete three-platform CI (Continuous Integration); the added goal controls passed focused tests, real-page review and actual model execution. The release toolchain uses native build and installer qualification.
+
+#### Upgrade impact and known limitations
+
+- This version includes all product changes from the unpublished 0.1.27 candidate. Its macOS Intel disk-image failure prevented a complete release; the original tag, draft and failure records remain. Installations upgrade from 0.1.26 to this version.
+- Supported baseline databases automatically migrate to the currently declared version 8, preserving user data and producing an independently readable database backup before migration. Failures retain the original database, version and backup path. Nonempty legacy databases without a supported baseline still require explicitly authorized maintenance. Project files, attachments and configuration require their own accompanying backups.
+- Bound Tasks retain their frozen Expert Squad revisions. New installations and explicitly authorized updates adopt the new contracts. Existing model, project and historical-message identities remain intact.
+- The long-conversation compaction semantics limitation disclosed in 0.1.26 has not received evidence of complete resolution in this version. Binary terminal processing depends on installed tools; model-generated encoding choices or command arguments can still require correction.
+- Native Rust dependencies `glib` (medium, GHSA-wrw7-89jp-8q8g) and `rand` (low, GHSA-cq8v-f236-94qc) retain open advisories; historical evidence lockfiles also contain these dependencies. This release does not upgrade them. Passing the JavaScript audit does not mean every ecosystem advisory is cleared.
+
 ## 0.1.27 - 2026-10-26
 
 ### zh-CN
+
+#### 发布状态
+
+- 未公开候选。原生运行40272814683在macOS Intel创建DMG时失败，同运行重试未能在原40分钟截止完成；原标签、草稿和成功资源保留。后续0.1.28继承以下产品变更。
 
 #### 新增
 
@@ -46,6 +138,10 @@
 - 原生 Rust 依赖 `glib`（中危，GHSA-wrw7-89jp-8q8g）和 `rand`（低危，GHSA-cq8v-f236-94qc）仍有未关闭通告；历史取证锁文件也记录相同依赖。本次未升级这两项，JavaScript 审计通过不表示所有生态告警归零。
 
 ### en-US
+
+#### Publication status
+
+- Unpublished candidate. Native run 40272814683 failed while creating the macOS Intel DMG, and its retry did not complete within the original 40-minute deadline. The tag, draft and successful assets remain. Version 0.1.28 inherits the product changes below.
 
 #### Added
 

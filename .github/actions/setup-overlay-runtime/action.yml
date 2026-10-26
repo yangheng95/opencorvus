@@ -16,7 +16,7 @@ runs:
     - name: Install macOS overlay runtime dependencies
       if: runner.os == 'macOS'
       shell: bash
-      run: brew install ripgrep
+      run: brew install ripgrep create-dmg
     - name: Install Windows overlay runtime dependencies
       if: runner.os == 'Windows'
       shell: pwsh

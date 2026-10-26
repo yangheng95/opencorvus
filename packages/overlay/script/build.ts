@@ -10,6 +10,7 @@ import { writeOverlayPayloadStamp } from "../../opencorvus/script/build-overlay-
 import { finalizeWorkArtifactPackage } from "../../opencorvus/script/finalize-work-artifact-package"
 import { parseOverlayReleaseBuildArgs } from "./release-build-options"
 import { installerBundler } from "./installer-bundler"
+import { prepareDmgBundler, type DmgConfiguration } from "./dmg-bundler"
 
 import {
   overlayArchFromNode,
@@ -38,6 +39,8 @@ const distServer = path.join(distServerDir, serverFile)
 const packagingSnapshot = path.join(release, "package-input", overlayFile)
 const stagedResources = path.join(tauri, "resources")
 const options = parseOverlayReleaseBuildArgs(process.argv.slice(2))
+const dmgBundler =
+  process.platform === "darwin" && options.bundles.includes("dmg") ? await prepareDmgBundler() : undefined
 
 async function exists(file: string) {
   return fs
@@ -141,13 +144,23 @@ if (options.compile) {
 }
 
 // The same bundle phase serves local full builds and independent Linux CI jobs.
-// Keep the paired macOS/Windows invocation; Linux formats each get their own timer.
+// Tauri owns the app/updater; the current create-dmg owns macOS disk images.
 const groups = process.platform === "linux" ? options.bundles.map((kind) => [kind]) : [options.bundles]
 for (const bundles of groups.filter((group) => group.length > 0)) {
   if (!(await exists(packagingSnapshot))) throw new Error(`Missing compiled installer input: ${packagingSnapshot}`)
   if (process.platform === "linux") await copyReleaseFile(packagingSnapshot, path.join(release, overlayFile))
-  const bundler = await installerBundler(bundles)
-  await runTimedStage(`Tauri installer bundle (${bundles.join(", ")})`, async () => {
-    await $`${bundler} bundle --bundles ${bundles} ${tauriArgs()}`.cwd(dir).env(tauriEnvironment)
+  const tauriBundles = process.platform === "darwin" ? bundles.filter((kind) => kind !== "dmg") : bundles
+  const bundler = await installerBundler(tauriBundles)
+  await runTimedStage(`Tauri installer bundle (${tauriBundles.join(", ")})`, async () => {
+    await $`${bundler} bundle --bundles ${tauriBundles} ${tauriArgs()}`.cwd(dir).env(tauriEnvironment)
   })
+  if (dmgBundler)
+    await runTimedStage("macOS disk image", async () =>
+      dmgBundler({
+        configuration: (await Bun.file(path.join(tauri, "tauri.conf.json")).json()) as DmgConfiguration,
+        arch: hostArch,
+        overlayDirectory: dir,
+        release,
+      }),
+    )
 }
