@@ -75,6 +75,7 @@ const systemReasons = new Set([
   "token_budget",
   "turn_budget",
   "model_not_configured",
+  "model_unavailable",
 ])
 
 function needsBudgetIncrease(goal: ContinuousGoal): boolean {
@@ -132,6 +133,7 @@ export function ContinuousGoalControl(props: {
     return current?.key === source()?.key ? current?.value : undefined
   }
   const [mode, setMode] = createSignal<"details" | "create" | "complete" | "about" | null>(null)
+  const [guideReturn, setGuideReturn] = createSignal<"details" | "create" | "complete">()
   const [editing, setEditing] = createSignal<ContinuousGoal>()
   const [objective, setObjective] = createSignal("")
   const [tokens, setTokens] = createSignal("")
@@ -178,6 +180,7 @@ export function ContinuousGoalControl(props: {
     if (props.home && launchOwner && (launchOwner.authority.revision !== revision ||
       launchOwner.selectionEpoch !== selectionEpoch || launchOwner.composerDraftKey !== draftKey)) {
       setMode(null)
+      setGuideReturn(undefined)
     }
   })
 
@@ -186,6 +189,7 @@ export function ContinuousGoalControl(props: {
       () => source()?.key,
       () => {
         setMode(null)
+        setGuideReturn(undefined)
         setEditing(undefined)
         setFailure(undefined)
         setValidation("")
@@ -257,37 +261,44 @@ export function ContinuousGoalControl(props: {
     const transfer = mode() !== null && mode() !== next && dialog?.contains(focusOwner)
       ? { sourceKey: source()?.key, epoch: props.selectionEpoch, authority: captureApiAuthority() }
       : undefined
-    if (props.home && next === "create") {
-      if (props.selectionEpoch === undefined) throw new Error("Home Goal form requires its workspace selection epoch")
-      launchOwner = {
-        authority: captureApiAuthority(), selectionEpoch: props.selectionEpoch, composerDraftKey: props.composerDraftKey,
+    const returning = mode() === "about" && guideReturn() === next
+    if (next === "about") {
+      const previous = mode()
+      setGuideReturn(hasForm() && previous && previous !== "about" ? previous : undefined)
+    } else if (!returning) {
+      if (props.home && next === "create") {
+        if (props.selectionEpoch === undefined) throw new Error("Home Goal form requires its workspace selection epoch")
+        launchOwner = {
+          authority: captureApiAuthority(), selectionEpoch: props.selectionEpoch, composerDraftKey: props.composerDraftKey,
+        }
+      } else launchOwner = undefined
+      const current = goal()
+      if (next === "create") {
+        const key = props.composerDraftKey
+        const text = key ? composerDraftText(key) : ""
+        const scope = JSON.stringify([captureApiAuthority().revision, props.selectionEpoch, source()?.key, key, text])
+        setEditing(undefined)
+        if (createDraft?.scope !== scope) {
+          createDraft = { scope, key, text }
+          setObjective(text)
+          setTokens("")
+          setTurns("")
+        }
+      } else {
+        createDraft = undefined
+        setEditing(current)
+        setObjective(current?.objective ?? "")
+        setTokens(current?.tokenBudget === undefined ? "" : String(current.tokenBudget))
+        setTurns(current?.turnBudget === undefined ? "" : String(current.turnBudget))
       }
-    } else launchOwner = undefined
-    const current = goal()
-    if (next === "create") {
-      const key = props.composerDraftKey
-      const text = key ? composerDraftText(key) : ""
-      const scope = JSON.stringify([captureApiAuthority().revision, props.selectionEpoch, source()?.key, key, text])
-      setEditing(undefined)
-      if (createDraft?.scope !== scope) {
-        createDraft = { scope, key, text }
-        setObjective(text)
-        setTokens("")
-        setTurns("")
-      }
-    } else if (next !== "about") {
-      createDraft = undefined
-      setEditing(current)
-      setObjective(current?.objective ?? "")
-      setTokens(current?.tokenBudget === undefined ? "" : String(current.tokenBudget))
-      setTurns(current?.turnBudget === undefined ? "" : String(current.turnBudget))
+      setReason("")
+      setBudgetOptionsOpen(next !== "create" || Boolean(tokens() || turns()))
+      setResume(false)
+      setFailure(undefined)
+      setValidation("")
+      attempt = undefined
     }
-    setReason("")
-    setBudgetOptionsOpen(next !== "create" || Boolean(tokens() || turns()))
-    setResume(false)
-    setFailure(undefined)
-    setValidation("")
-    attempt = undefined
+    if (next !== "about") setGuideReturn(undefined)
     setMode(next)
     if (!transfer) return
     queueMicrotask(() => {
@@ -578,7 +589,10 @@ export function ContinuousGoalControl(props: {
                 : "continuous_goal.details_title",
         )}
         onClose={() => {
-          if (!busy()) setMode(null)
+          if (!busy()) {
+            setMode(null)
+            setGuideReturn(undefined)
+          }
         }}
         backdropClose={!busy()}
         class="continuous-goal-dialog"
@@ -597,13 +611,28 @@ export function ContinuousGoalControl(props: {
                 {t("continuous_goal.learn")}
               </Button>
             </Show>
+            <Show when={mode() === "about" && guideReturn()}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                tone="neutral"
+                disabled={busy()}
+                onClick={() => open(guideReturn()!)}
+              >
+                {t("continuous_goal.back_to_form")}
+              </Button>
+            </Show>
             <Button
               type="button"
               variant="ghost"
               size="sm"
               tone="neutral"
               disabled={busy()}
-              onClick={() => setMode(null)}
+              onClick={() => {
+                setMode(null)
+                setGuideReturn(undefined)
+              }}
               ref={(element) => { closeControl = element }}
             >
               {t("common.close")}

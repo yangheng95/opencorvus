@@ -7,6 +7,7 @@ import { Identifier } from "@/id/id"
 import { Scheduler } from "@/scheduler"
 import { Log } from "@/util/log"
 import { MissingModelConfigError } from "@/config/model-resolution-error"
+import { Provider } from "@/provider/provider"
 import {
   runWithIndependentProjectIdentity,
   runWithInitializedIndependentProject,
@@ -196,6 +197,32 @@ async function deliverConversation(
   return identity.messageID
 }
 
+type GoalModelBlockReason = "model_not_configured" | "model_unavailable"
+
+function modelBlockReason(error: unknown): GoalModelBlockReason | undefined {
+  if (MissingModelConfigError.isInstance(error) && error.data.agent) return "model_not_configured"
+  if (Provider.ModelNotFoundError.isInstance(error)) return "model_unavailable"
+}
+
+function recordModelBlock(owner: GoalOwner, goal: ContinuousGoalView, reason: GoalModelBlockReason, error: unknown) {
+  const outcome = Database.immediateTransaction(() => {
+    const current = readContinuousGoal(owner)
+    // Domain cancellation can pause the projection without a new Goal intent.
+    if (current?.id === goal.id && current.revision === goal.revision && current.status === "paused") return "paused"
+    updateContinuousGoal(owner, {
+      requestID: `${goal.id}:${goal.revision}:${reason}`,
+      goalID: goal.id,
+      expectedRevision: goal.revision,
+      status: "blocked",
+      reason,
+    }, "goal-controller")
+    return "blocked"
+  })
+  if (outcome === "blocked")
+    log.error("goal blocked by model admission", { owner, goalID: goal.id, revision: goal.revision, reason, error: String(error) })
+  return outcome
+}
+
 /** One normal and restart path. Its result is diagnostic, not a persisted queue state. */
 export async function reconcileContinuousGoal(owner: GoalOwner, signal?: AbortSignal): Promise<string> {
   const goal = readContinuousGoal(owner)
@@ -203,23 +230,13 @@ export async function reconcileContinuousGoal(owner: GoalOwner, signal?: AbortSi
   try {
     return await reconcileGoal(owner, goal, signal)
   } catch (error) {
-    if (!MissingModelConfigError.isInstance(error) || !error.data.agent) throw error
+    signal?.throwIfAborted()
+    const reason = modelBlockReason(error)
+    if (!reason) throw error
     // Model admission failed on the original execution path. Record that real
     // blocker on the same intent revision, before asking the operator to resume.
     // A concurrent user decision or owner boundary retains its existing fence.
-    updateContinuousGoal(
-      owner,
-      {
-        requestID: `${goal.id}:${goal.revision}:model_not_configured`,
-        goalID: goal.id,
-        expectedRevision: goal.revision,
-        status: "blocked",
-        reason: "model_not_configured",
-      },
-      "goal-controller",
-    )
-    log.error("goal blocked by missing model configuration", { owner, error: String(error) })
-    return "blocked"
+    return recordModelBlock(owner, goal, reason, error)
   }
 }
 
@@ -271,14 +288,15 @@ async function reconcileGoal(owner: GoalOwner, goal: ContinuousGoalView, signal?
   return plan.outcome
 }
 
-/** Exact owner hints from the same plan used at execution; no queue or stored plan. */
-export async function projectGoalExecutionCandidates(): Promise<ContinuousGoalOwner[]> {
+type GoalExecutionCandidate = { owner: GoalOwner; goal: ContinuousGoalView }
+
+async function projectGoalExecutionPlans(): Promise<GoalExecutionCandidate[]> {
   const candidates = await Promise.all(
     projectGoalOwners().map(async (candidate) => {
       try {
         const owner = resolveGoalOwner(candidate)
         const goal = readContinuousGoal(owner)
-        return goal && (await planGoalReconciliation(owner, goal)).request ? candidate : undefined
+        return goal && (await planGoalReconciliation(owner, goal)).request ? { owner, goal } : undefined
       } catch (error) {
         if (!ContinuousGoalError.isInstance(error as Error))
           log.error("goal reconciliation failed", { owner: candidate, error: String(error) })
@@ -286,7 +304,47 @@ export async function projectGoalExecutionCandidates(): Promise<ContinuousGoalOw
       }
     }),
   )
-  return candidates.filter((candidate): candidate is ContinuousGoalOwner => candidate !== undefined)
+  return candidates.filter((candidate): candidate is GoalExecutionCandidate => candidate !== undefined)
+}
+
+/** Exact owner hints from the same plan used at execution; no queue or stored plan. */
+export async function projectGoalExecutionCandidates(): Promise<ContinuousGoalOwner[]> {
+  return (await projectGoalExecutionPlans()).map(({ owner }) => ({ kind: owner.kind, id: owner.id }))
+}
+
+async function reconcileProjectGoals(directory: string, signal: AbortSignal) {
+  const candidates = await runWithIndependentProjectIdentity({ directory, fn: projectGoalExecutionPlans })
+  if (candidates.length === 0) return
+  signal.throwIfAborted()
+  try {
+    await runWithInitializedIndependentProject({
+      directory,
+      signal,
+      fn: async () => {
+        await Promise.allSettled(candidates.map(async ({ owner }) => {
+          try {
+            await reconcileContinuousGoal(resolveGoalOwner(owner), signal)
+          } catch (error) {
+            if (ContinuousGoalError.isInstance(error as Error)) return
+            log.error("goal reconciliation failed", { owner, error: String(error) })
+          }
+        }))
+      },
+    })
+  } catch (error) {
+    signal.throwIfAborted()
+    const reason = modelBlockReason(error)
+    if (!reason) throw error
+    await runWithIndependentProjectIdentity({ directory, fn: () => {
+      for (const { owner, goal } of candidates) {
+        try {
+          recordModelBlock(owner, goal, reason, error)
+        } catch (conflict) {
+          if (!ContinuousGoalError.isInstance(conflict as Error)) throw conflict
+        }
+      }
+    } })
+  }
 }
 
 export function initializeContinuousGoals() {
@@ -312,29 +370,9 @@ export function initializeContinuousGoals() {
       await Promise.allSettled(
         rows.map(async ({ directory }) => {
           try {
-            const candidates = await runWithIndependentProjectIdentity({
-              directory,
-              fn: projectGoalExecutionCandidates,
-            })
-            if (candidates.length === 0) return
-            signal.throwIfAborted()
-            await runWithInitializedIndependentProject({
-              directory,
-              signal,
-              fn: async () => {
-                await Promise.allSettled(
-                  candidates.map(async (candidate) => {
-                    try {
-                      await reconcileContinuousGoal(resolveGoalOwner(candidate), signal)
-                    } catch (error) {
-                      if (ContinuousGoalError.isInstance(error as Error)) return
-                      log.error("goal reconciliation failed", { owner: candidate, error: String(error) })
-                    }
-                  }),
-                )
-              },
-            })
+            await reconcileProjectGoals(directory, signal)
           } catch (error) {
+            if (signal.aborted && error === signal.reason) return
             log.error("goal project reconciliation failed", { directory, error: String(error) })
           }
         }),

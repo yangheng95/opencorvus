@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test"
 import { projectRouteContextKind } from "@/server/project-route-context"
 
 describe("Project route context authority", () => {
-  test("assigns continuous-goal reads to Project identity and mutations to runtime for every owner kind", () => {
+  test("assigns durable continuous-goal intent to Project identity for every owner kind", () => {
     expect(
       ["chat", "task", "mission"].map((kind) => ({
         kind,
@@ -11,9 +11,9 @@ describe("Project route context authority", () => {
         update: projectRouteContextKind(`/continuous-goal/${kind}/owner_1`, "PATCH"),
       })),
     ).toEqual([
-      { kind: "chat", read: "identity", create: "runtime", update: "runtime" },
-      { kind: "task", read: "identity", create: "runtime", update: "runtime" },
-      { kind: "mission", read: "identity", create: "runtime", update: "runtime" },
+      { kind: "chat", read: "identity", create: "identity", update: "identity" },
+      { kind: "task", read: "identity", create: "identity", update: "identity" },
+      { kind: "mission", read: "identity", create: "identity", update: "identity" },
     ])
   })
 

@@ -2491,6 +2491,7 @@
   "continuous_goal.open": "Open goal",
   "continuous_goal.about": "A continuous goal authorizes work toward your objective across turns, until it is completed, paused, blocked, or reaches a budget. It uses the conversation's model and permissions.",
   "continuous_goal.learn": "About goals",
+  "continuous_goal.back_to_form": "Back to form",
   "continuous_goal.details": "Details",
   "continuous_goal.create_title": "Create a continuous goal",
   "continuous_goal.details_title": "Continuous goal settings",
@@ -2578,5 +2579,6 @@
   "continuous_goal.guide.manage.title": "Track progress and pause",
   "continuous_goal.guide.manage.body": "Use the top bar to review usage, adjust budgets, pause, or mark complete. If blocked, resolve the displayed cause and choose Resume.",
   "continuous_goal.reason.model_not_configured": "A model is required to continue. Choose a connected model or configure a default, then choose Resume.",
+  "continuous_goal.reason.model_unavailable": "The configured model is unavailable. Review the Provider and model settings, then choose Resume.",
   "continuous_goal.pending_context_hint": "The goal uses the outcome text below. Quotes and attachments stay in the message input. To include them as context, close this form and send them first."
 }

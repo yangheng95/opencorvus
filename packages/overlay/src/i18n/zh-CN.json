@@ -2490,6 +2490,7 @@
   "continuous_goal.open": "打开持续目标",
   "continuous_goal.about": "持续目标授权会话跨轮次推进工作，直到完成、暂停、遇到阻塞或达到预算。执行沿用会话的模型与权限。",
   "continuous_goal.learn": "了解持续目标",
+  "continuous_goal.back_to_form": "返回表单",
   "continuous_goal.details": "详情",
   "continuous_goal.create_title": "创建持续目标",
   "continuous_goal.details_title": "持续目标设置",
@@ -2577,5 +2578,6 @@
   "continuous_goal.guide.manage.title": "查看进度，随时暂停",
   "continuous_goal.guide.manage.body": "在顶部查看用量、调整预算、暂停或标记完成。遇到阻塞时，先解决显示的原因，再点击“恢复”。",
   "continuous_goal.reason.model_not_configured": "尚未配置执行模型。请选择已连接的模型或配置默认模型，然后点击“恢复”。",
+  "continuous_goal.reason.model_unavailable": "已配置的模型当前不可用。请检查 Provider 和模型设置，然后点击“恢复”。",
   "continuous_goal.pending_context_hint": "目标使用下方填写的成果文字。引用和附件保留在消息输入框中；如需作为上下文，请先关闭表单并发送。"
 }

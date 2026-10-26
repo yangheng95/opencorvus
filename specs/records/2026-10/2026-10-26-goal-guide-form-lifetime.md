@@ -1,0 +1,92 @@
+# Goal 说明与未提交表单
+
+## Recall
+
+用户要求持续自主体验整个产品的UI（User Interface，用户界面）/UX（User Experience，用户体验）和功能、查明根因、修复、真实验收、提交并正常推送；当前明确只由一个agent工作。自动Goal文本中的旧Astra并行描述被用户后续单agent指令覆盖，不委托。Rendering及Sources闪烁已有交付，不再作为主线；首页保留用户既定普通Composer布局和加号、/goal入口。
+
+前批95f8d9a3611a1fa14d8286948e4425948b629c63已正常提交并推送，第三次HTTP/1.1连接保留证书校验及全部正常hooks；fresh fetch/merge后HEAD/upstream均95f8、差异0/0。14项后端测试/64断言、18次真实Sol流式请求和双语实图完成；608–614全部自有进程及标签关闭、配对auth/models副本退休，累计实际模型请求160。当前HEAD已有同行b5d6afffc CI（Continuous Integration，持续集成）验收文档提交，非本批源文件改动；工作区177项同行视频/旧图清理、三个README整理及.bun目录保留，只在真实冲突时等待。
+
+已读AGENTS.md、current/architecture/07-panel.md的continuous-goal presentation、continuous-goal.md的User controls/Verification、ContinuousGoalControl.tsx、GoalDialogHost.tsx、continuous-goal service、Composer命令语法和App所有者装配、公开continuous-goal路由、614隔离运行/凭据退休合同。全仓检索Goal入口、onStartGoal、parseComposerCommand、请求及刷新调用点。GoalDialogHost属于另一Delivery Slice Goal编辑语义，本批不混用或改写。目标组件与同语义utils检索未发现UI自动化测试，禁止新增或运行此类测试。
+
+## 修改前问题深度与影响
+
+线索来自当前真实代码：ContinuousGoalControl的How it works调用open(about)，该方法会清空reason/resume/attempt；说明视图只有关闭按钮。现有Goal的details/complete再次打开会从持久Goal重填预算并回到details，因此未提交预算/完成依据可能丢失。现有home create通过createDraft scope保留部分草稿，这是明确架构合同；不能直接推断其完整回退路径或将代码线索当作网页复现。
+
+直接触发、实际失效范围和键盘表现待真实页面确认。已知单一事实来源为HTTP Goal投影，原revision/requestID、预算累计语义和owner/API（Application Programming Interface，应用程序接口）/selection lifetime必须保留。没有观察到调度/队列/恢复/终态异常；若出现，立即横向审计所有生产入口与共享执行轮次，不用单场景归因。预期是界面本地说明导航/表单生命周期，暂不涉及数据库、SDK（Software Development Kit，软件开发工具包）、路由、Goal执行器或LLM流程门；是否成立需实证。
+
+## 调查与验收方案
+
+1. 新615独立CLI（Command Line Interface，命令行界面）使用已关闭614自有数据库的只读backup，逐行核对全部表，同时复制按新数据库路径划分的真实附件命名空间；原文件/原数据不改。监听38124先实际绑定探测；复用未变的610普通Node生产UI main-aiwHubjd.js，通过正式/ui入口手工交互。
+2. 成对复制已授权OpenAI auth与完整models目录；分别验证凭据可用、目标已投影和实际gpt-6.1-sol流式请求。615最多6次含预检/辅助，累计起点160；从真实UI新建一个turnBudget=1的Goal，明确仅用一句话回复、不调用工具、不创建子任务或子agent。单次执行后预算停止自动接续，供表单操作使用，不造Goal或消息。
+3. 实际创建、预算用尽、打开详情、修改未提交预算、查看说明及返回；再输入未提交完成依据、查看说明及返回，截图人工复核是否丢失。核对公开Goal事实和真实请求；仅以行为/数据确认问题。保存原始错误，不把正常预算限制当执行故障。
+4. 根因和影响分析完成后再落盘具体修复方案。若确认说明导航问题，复用现有Dialog、字段signals和焦点转移，保持同一表单及owner lifetime，不复制Goal状态、不新建持久草稿或另一入口。新文案接中英两语言；纯UI改动只做实际页面操作、截图人工复核、必要类型/普通Node构建/i18n（Internationalization，国际化）检查，不写UI自动化。
+5. 每次20分钟物理边界、十分钟内公开shutdown目标，留五分钟结算；原exec/native/launcher与physical/output/request全部结清后退休成对凭据。修复后新616加载最终普通构建，重新使用真实Goal历史验收创建草稿、详情预算、完成依据、说明返回、实际提交及双语；若无需模型则不配置凭据。遇到工具链问题先修工具并重跑原验收。
+6. 更新架构合同、证据和三个索引，运行当前docs:check；只提交本批文件，保留同行更改。正常fetch/merge、完整待推集合检查、必要验证和正常push，网络失败继续安全重试。不发布、不建branch/worktree、不操作用户18571或用户数据库。
+
+## 615实证与实施决策
+
+615实际只读复制已关闭614的92表7561行，原表逐行相同、原continuous_goal事件为0；成对复制4组真实附件原件/metadata。真实UI通过/goal打开Home表单，目标文本进入原Composer及同一表单；显式设置turnBudget=1后确认，创建真实Work Conversation及唯一Chat Goal pev_g0VZ81F7b00kCVVI16P0，owner ses_-zUQryl9CzzNEb5MNLb0。实际流式Sol回复“Goal 表单验证就绪”，finish=stop，Goal正确累计36749 tokens/1 accepted turn并显示budget_limited。公开GET及原消息核对同一事实，未直接构造Goal、Tool或模型消息。
+
+界面复现：在详情输入未提交65000/3预算，点击About goals后只剩Close；关闭说明后重新打开Details，预算重置为No limit/1。完成表单中输入的真实完成依据也在同一说明/关闭/重开路径丢失，回到输入框只剩placeholder。7张实图逐张人工查看。这里不是服务器丢数据：未点击保存/完成，公开Goal仍保留原预算1及budget_limited；直接触发是说明没有返回编辑路径，open(about)还立即清空reason、resume和请求尝试，随后正常打开又重初始化字段。原createDraft仅保护创建目标/预算，未处理现有Goal和完成视图导航，因此旧草稿修复未根治本问题。
+
+影响面限定同一ContinuousGoalControl：Home创建、Main的Chat/Task/Mission及独立SideChat共用；Goal HTTP投影、预算、expectedRevision、requestID和执行调度不改。保留现有createDraft及全部字段signals作为唯一草稿；新增的局部guideReturn只记录本Dialog从哪个form mode进入说明，不存Goal值、不形成第二事实来源。进入说明和从说明返回时不重新初始化字段、不清除reason/resume/错误/请求尝试；其它正常打开/关闭规则沿用。保持Home launchOwner在说明期间的原authority/selection lifetime；服务/owner/selection退休时清除返回意图。已有焦点转移在返回后分别落到创建Objective、详情Objective或完成依据。说明中明确增加本地化Back to form/返回表单，关闭仍是关闭，不替代返回操作。
+
+工具链资格：本轮CUA（Computer Use Agent，计算机操作接口）截图实为JPEG且只捕获文档左侧1119px，最初误以.png命名已在保存原字节的前提下更正为.jpg。只读DOM（Document Object Model，文档对象模型）布局检查确认实际viewport为1280×720、文档scrollWidth1280，Goal与聊天容器右界1280，排除“Goal撑破桌面布局”的误判。目标Dialog横向360–920，完整位于实际截图内，可作为本批表单视觉证据；不将裁切的背景右侧动作宣称完整布局验收。
+
+615已先物理收尾：公开shutdown200，原exec1214/native/launcher均0、physical/output/request全部结清、原身份dead_or_reused，提前765100ms关闭，自建tab1关闭。4次真实请求全部gpt-6.1-sol/stream=true/200/EOF settled，累计160→164，未用2额度退休；auth/models配对副本退休，源完整目录字节/元数据和源auth元数据保持。修复实施从已关闭状态开始，不重启615。
+
+具体实施只改共享Goal控件、两语言键和当前User controls合同，不改其它GoalDialogHost、路由或数据库。最终616从615完整真实历史只读复制，使用当前普通Node构建；不配凭据、不执行模型，复核原budget_limited Goal的65000/3未提交预算经说明返回保持、完成依据经说明返回保持、实际完成提交后持久状态/evidence正确。再复核新Goal创建草稿、关闭/取消、双语和焦点；模型不可用提示为此无凭据验收的明确范围，不误报凭据故障或替代615真实模型资格。
+
+## 616实际提交失败与追加根因分析
+
+616从615只读复制92表8614行，使用普通Node构建main-ChrYow38.js；overlay typecheck和双语2546键检查通过。真实页面已确认Home目标/50000/3预算经说明返回保持，原Goal的65000/3预算保持，完成依据在中英两语言下均保留原文并恢复输入焦点；英文还实际通过Shift+Tab、Enter返回。关闭说明与返回表单区分明确。
+
+但真实点击Mark complete得到HTTP400 ProviderModelNotFoundError，不能将本批包装为功能完整通过。requestID 079207d2-7541-4518-810f-93ec57d57813对应服务日志证明：PATCH /continuous-goal/chat/:id被projectRouteContextKind划为runtime，进入Instance.provide(init=InstanceBootstrap)，在config.validate.models发现已配置openai/gpt-6.1-sol当前未挂载而拒绝，请求尚未进入Goal route/store。GET同一Goal为identity上下文仍200，原Goal ID/revision/status/usage完整保持。这与需要实际执行模型的SessionShell不同：用户只是记录完成决定，不需要调用模型，也不能因Provider登出而失去暂停/完成/预算管理能力。
+
+横向影响：现有分类对Chat/Task/Mission全部Goal POST/PATCH均强制完整runtime初始化，故暂停、完成、保存预算及明确的恢复意图都同受影响；控制写入本身只解析owner、校验当前Project/领域边界、revision/requestID、预算和ProtocolStore事务。GET已是同一identity上下文，不能用只对某个状态/错误文案的body gate或fallback修补。旧测试明确断言mutation=runtime，这个断言现已被真实业务要求证伪，应按当前正确契约更新而不保留旧路径。
+
+既有生产执行路径已读并排除遗漏：initializeContinuousGoals全局注册真实reconciler，先以独立Project identity只读计划候选，再在runWithInitializedIndependentProject内执行，随后走原Chat/Mission wake或Task交付；模型、能力、owner、并发和终态约束在真实执行准入处继续生效。只读计划对complete/paused/blocked直接返回，没有执行。此次失败发生在用户控制写入前，未观察到调度/队列异常，不修改Controller、Task/Mission状态机、请求协议或模型检查。数据控制沿用现有最小Project identity权限，实际模型执行仍要求原runtime权限；这不是教LLM选流程的host旁路。
+
+追加实施：将唯一project-route-context的精确Goal GET/POST/PATCH模式统一为identity；保留owner-kind、方法、路径约束及其余runtime路由。更新现有正向路由分类合同；新增完整Server.App中间件的正向测试，在实际临时Project与不可执行模型配置下创建、暂停、调整预算、完成并读取/replay Chat和Work Goal，验证真实持久事实、跨Project typed owner错误，以及实际执行配置仍返回原ProviderModelNotFoundError。先复现旧代码失败再改；局部检查不冒充真实网络/界面。
+
+616真实完成失败截图及原响应已保留，其余表单视觉通过不覆盖此失败。服务先结清：public shutdown200，原exec2789/native/launcher0、physical/output/request均settled，提前727209ms，自建tab3关闭；无auth副本/新增模型请求，累计164。最初早于监听打开的自建tab2进入浏览器data错误页，URL策略拒绝重新绑定，未绕过策略或重启服务；临时标签由Browser Use在回合结束回收。后续必须先核对ui-ready再打开页面。
+
+最终改用617无凭据隔离服务重新验证原真实Goal的完成提交及同一证据/用量；复用未变化的616前端构建，后端使用修正源码。必要的真实Provider执行复核另设新预算与运行，不把616的400误报为认证配置无效或隐藏其产品根因。
+
+追加验证边界：新完整Server.App正向测试先在旧分类复现POST期望200实为400；修正唯一分类后12项/47断言通过，backend typecheck通过。617真实页面已从说明返回后成功提交原完成依据，独立GET确认同一Goal complete、tokensUsed36749、turnsAccepted1且原依据相同。还需验证本次统一intent上下文后的新建/恢复不会掩盖实际模型不可用：在同一独立会话通过真实表单新建一轮有限Goal，观察真实reconciler与持久事实；若出现active空转或反复初始化异常，按共享调度机制立即审计并根治，不能仅以控制路由通过交付。
+
+## 617发现共享初始化失败不收敛
+
+实际新建第二个Goal pev_g0VZ87uxJ00xuczzPmwv，turnBudget=1、期望在模型不可用时显示真实阻塞。公开Goal持续active、tokensUsed0/turnsAccepted0；服务日志05:20:50.875–05:21:30.974记录41次相同ProviderModelNotFoundError，均在Project初始化失败，证明不是模型行为或单一UI刷新。已用真实Pause按钮将同一Goal明确暂停，公开GET核对paused及原用户原因，再关闭617：public shutdown200，原exec12170/native/launcher0、physical/output/request结清，提前915366ms，自建tab4关闭，无凭据副本或新增模型请求，累计仍164。原92表8614源行及184原业务事实保持。
+
+立即横向审计：全仓生产调用reconcileContinuousGoal仅来自initializeContinuousGoals的同一Project定时入口；Server.listen与InstanceBootstrap只向同一Scheduler ID注册，register按ID复用，不产生第二队列。Chat/Mission执行走SessionWake及Mission opened fence，Task走既有Task控制入口。projectGoalExecutionCandidates同时用于真实process checker的冷恢复诊断，必须保持其owner身份投影合同。正常、paused/blocked/complete、预算边界上未回答输入的恢复均由同一planGoalReconciliation决定；原模型缺省错误在已初始化Project内才由reconcileContinuousGoal捕获。当前ProviderModelNotFoundError发生在runWithInitializedIndependentProject进入fn前，越过该catch，外层只记录日志，故原active意图每秒重试。其它active Goal在Provider失效后也受同一根因影响，不限本次新建。
+
+修复前决策：原只读计划在唯一实现中同时返回原owner和Goal.id/revision的短期执行尝试快照，现有公开candidate函数只投影其中的kind/id，继续供checker使用；不新增持久队列、Goal状态副本或另一套计划。将原每Project初始化/执行收束为同一生产函数供Scheduler调用。初始化前后两处仅依据真实MissingModelConfigError或Provider.ModelNotFoundError归类，复用一个blocked写入函数；前者保留model_not_configured，后者新增model_unavailable本地化原因。只有该原Goal/revision仍有效才写blocked，requestID绑定它及真实原因；用户暂停/完成、另一个Goal、scope/Project改变和取消保持各自事实，不以当前状态反推旧失败。
+
+正常执行仍完整初始化Project，不跳过模型/权限/owner校验。并行Project各自捕获自己的真实失败并写回其精确owner；同Project多个候选在共享初始化失败时逐一按原revision收敛。明确恢复后重新走原路径，预算和usage累计不重置；预算用尽但已有未回答输入的恢复仍保留原收据合同。非模型异常继续原错误路径，不能用宽泛catch把取消或其它故障伪装成模型问题。
+
+聚焦正向验证计划：复用已有model-block测试的真实Chat/Task/Mission领域fixture，新增完整Project初始化入口对不可用模型的blocked事实、同Goal显式重试、并行Project隔离与较新用户决定保护；先复现旧实现失败。保留已有MissingModelConfig、并发及用户Pause正向契约。新618使用完整当前普通Node构建，从617真实暂停Goal重启，实际UI恢复后应收敛为本地化blocked、显示原模型原因，再验证预算/说明/完成控制可用；所有Provider调用仍为0。必要的正常Provider执行复核另设新运行与预算，不能以局部测试替代实际端到端。
+
+共享边界追加实证：原Chat/Task/Mission模型缺省、并发和用户Pause合同及新增三角色Project初始化/显式重试、双Project并行已9项/34断言通过；新入口测试先在旧代码复现Goal保持active、10秒不收敛。继续检查发现domain关闭/取消只改变Goal的规范投影，未必改变Goal.revision；因此仅依赖expectedRevision仍可在旧模型失败后写入较新的blocked意图，吞掉原边界的序号保护。正向Mission关闭并重开用例实际复现期望paused却得到blocked。将共享blocker writer在同一immediate事务中先读取同一Goal/revision的真实paused投影并保留它，再按原更新合同写其它模型失败；用户显式新revision仍走既有冲突保护，不以状态文本判断。
+
+该边界测试最初的手工Chat lifecycle夹具遗漏协议order_key与input Message身份，验收不成立；先修复测试的pending结清，显露真实夹具错误，再改用既有Mission规范关闭/重开领域事实。两次无资格夹具失败私有保留，不将其closing lease副作用误报为产品根因或通过证据。
+
+## 618最终无模型验收
+
+当前精确源码通过25项/120断言：模型阻塞与边界10项/36断言，完整控制路由、分类、named错误及三角色预算边界恢复15项/84断言；backend typecheck通过，2语言2547键通过，普通Node构建main-BgjVdyol.js。Mission关闭/重开用例先真实得到blocked而非paused，修复共享事务守卫后得到paused及原revision。
+
+618从617只读复制92表8617行，原真实Goal pev_g0VZ87uxJ00xuczzPmwv重启仍paused。UI明确恢复后，真实初始化错误写入同一Goal的blocked/model_unavailable；公开GET与实际中英页面一致，只有该次真实失败的blocker记录。实际在阻塞状态修改65000/3预算、进入说明再返回，字段和不恢复的选择保持，点击Save后Goal仍blocked且额度实际持久化。再明确Resume产生第二次真实初始化和第二条对应blocker，累计用量仍0/0，完整原因可读。最后中文完成表单经说明往返后提交成功，独立GET确认同一Goal complete、原中文依据及65000/3预算保持；没有补写假消息或执行结果。
+
+618已先结清：shutdown200，原exec24307/native/launcher0、physical/output/request settled，提前864515ms，自建tab5关闭，无凭据副本和新增模型请求，累计164。源92表8617行逐一保持；目标9类原持久事实243行保持，含新增核验的protocol_event原Goal历史，真实变更只追加本批控制事实。15–20实图覆盖完成控制恢复、真实active错误基线、英/中文阻塞、预算保存及最终中文完成。
+
+交付前再做619正常Provider执行：从已关闭618只读复制完整真实历史和原件，复用最终未变UI main-BgjVdyol.js，端口38128；成对授权auth/完整models，独立验证可用/投影/实际请求模型。最多6请求含预检及辅助，起点164、上限170，全部gpt-6.1-sol流式。UI在已有会话新建turnBudget1的有限Goal，仅要求一句话回复、不调用工具、不建子任务或子agent；核对正常实际执行及预算收敛，然后由真实UI记录完成依据。20分钟物理边界、十分钟关闭目标及五分钟结算合同保持，结清后退休副本；不能以615修改前执行替代这次最终源码验收。
+
+## 619最终真实执行与收尾
+
+最终源码普通Node构建main-BgjVdyol.js，从已关闭618只读复制92表8623行及4组原附件；成对完整模型目录/认证预检分别确认凭据可用、模型已投影、实际gpt-6.1-sol且stream=true。真实UI在原Session新建Goal pev_g0VZ8Gnco00JXTkNJldK、turnBudget1，实际回复“Goal 恢复执行验证通过”。公开投影与页面一致：36950 tokens、1 accepted turn后budget_limited。完成依据经About/Back仍原文保留，实际Mark complete成功，独立GET确认同Goal complete、原依据与36950/1用量保持；21–23三张实图人工复核。
+
+619共3次真实Sol流式请求，全部200/EOF settled，累计164→167，未用3额度退休。public shutdown200，原exec23910/native/launcher均0、physical/output/request全部结清，提前785633ms，tab6关闭；auth/完整models配对副本退休，源模型字节/元数据和认证元数据相同。源92表8623行逐一保持；目标9类249条原事实保持，只有本次实际复用Session的time_updated从1792990463248更新为1792994172325，符合真实新输入/回复。原始精确检查先报告这一列差异，核对后只对这个Session这一列做明确活动时间许可，全部其他列和原Protocol历史仍精确检查，重跑通过。未接触用户数据库、18571进程或窗口。
+
+当前25项/120断言和精确源码backend types、普通构建/i18n全部通过。最终构建原exec32107已收集exit0，不为观察超时重启。615–619全部关闭、凭据已退休。剩余交付：当前overlay类型/文档检查、范围diff复核、独立索引提交、fresh fetch/merge与完整待推集合审查、正常hooks推送；同行0.1.27/0.1.28发布与旧图/视频清理保持，不因无冲突而等待。下一批应重新从当前真实页面挑选其他可验证体验问题，不重复已关闭Rendering问题。
+
+交付检查完成：精确最终overlay类型exit0；当前docs:check exit0，351 operations/26 groups。源码/调用点与完整数据控制、初始化准入和领域暂停边界已复核；23张原实图及脱敏运行证据归档，三个索引只暂存本批独立行。提交/正常推送的最终Git回执保留在本轮私有交付目录，不把同行未提交发布/清理混入。

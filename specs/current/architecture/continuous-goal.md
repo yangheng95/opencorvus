@@ -118,6 +118,20 @@ retain their original error paths. This configuration blocker does not create a
 Message, count a turn, choose a model or retry through another execution path.
 After configuring the model, the operator explicitly resumes the same goal;
 original usage and accepted input identities remain intact.
+An unavailable configured model uses the same blocker writer with reason
+`model_unavailable`. Project-initialization failures are observed before the
+delivery callback can run, so the read-only plan retains its exact owner and
+Goal revision for that attempt. The initialized execution path still replans
+under its real authority. If initialization reports the typed model failure,
+an independent identity context records the blocker only for those original
+revisions; a newer operator decision or owner boundary keeps its own facts.
+The blocker transaction also retains a same-revision paused projection from a
+domain cancellation or Mission close/reopen, whose event order is independent
+of Goal intent revision. A delayed model failure cannot consume that boundary.
+Each Project handles its own candidates, and cancellation retains its original
+authority. The public candidate diagnostic remains an owner-only projection of
+this single plan. Blocked goals wait for explicit resume rather than repeatedly
+initializing an unavailable model.
 Archived/deleted owners and closed Mission occurrences are not silently reopened.
 Cancellation/closure after the last explicit goal revision keeps that goal paused
 even when an operator later reopens the owner. Only an explicit active revision
@@ -127,6 +141,13 @@ owner-control authorship. Restoring visibility retains that pause; child Session
 archives affect only goals whose exact owner is that Session.
 
 ## User controls
+
+Goal reads and explicit intent mutations use the existing Project identity
+context. Recording a pause, budget or completion decision does not require an
+available Provider or a valid execution model. Owner, Project, revision,
+idempotency and domain-boundary checks still run in the canonical Goal store.
+The controller initializes the full independent Project runtime before actual
+continuation admission; durable user intent is separate from model execution.
 
 The home page places the heading, existing composer and suggested conversation
 starters together. The composer's + menu offers Continuous goal and opens the
@@ -161,6 +182,13 @@ already committed; cancellation never needs a compensating deletion.
 No user Message is fabricated. Submission uses the same continuous-goal endpoint,
 budgets and visible controller Messages; existing-owner and SideChat controls
 retain their current mutation path. Help in that dialog opens its introduction mode.
+The introduction provides an explicit return to its originating form mode.
+This view change preserves the existing field signals, budget disclosure, resume
+choice, completion evidence and captured revision/request attempt. It does not
+reload saved values or acquire a new Home launch authority. Returning restores
+the existing mode-specific focus target; owner, service or selection retirement
+also retires this local return intent. Closing the introduction still closes the
+dialog, independently of returning to the same unsubmitted form.
 Starting from the composer moves its text and quotation through one write to the
 existing draft store, after creation authority is rechecked and before selecting
 the newly published Session. That creation preserves staged attachments; ordinary

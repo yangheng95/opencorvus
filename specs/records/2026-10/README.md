@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Goal 表单与执行控制](2026-10-26-goal-guide-form-lifetime.md)：615–619双语实页、初始化失败根因、领域边界和最终流式执行验收。
+
 - [0.1.27 正式发布](2026-10-26-release-0.1.27.md)：唯一版本投影、五平台原生与官网双语发布回读。
 
 - [命令真实结果与执行收尾](2026-10-26-command-outcome-visibility.md)：608–614真实双语页面、流式Sol、连续Shell与callback接续验收。

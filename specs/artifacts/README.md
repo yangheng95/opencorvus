@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Goal 表单与执行控制](2026-10-26-goal-guide-form-lifetime/README.md)：23张人工复核实图、模型阻塞/控制恢复及真实Sol闭环证据。
+
 - [命令真实结果与执行收尾](2026-10-26-command-outcome-visibility/README.md)：12张人工复核实图、退出码原事实及失败后重启/正常关闭证据。
 
 - [压缩包输入到可下载成果](2026-10-26-zip-intake-delivery/README.md)：606/607四张实图、两份实际下载摘要与关闭证据。

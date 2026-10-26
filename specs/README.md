@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Goal 表单与执行控制](records/2026-10/2026-10-26-goal-guide-form-lifetime.md)：说明返回保持输入、无模型控制与共享阻塞收敛及真实Sol执行。
+
 - [0.1.27 正式发布](records/2026-10/2026-10-26-release-0.1.27.md)：双语日志、精确源码与五平台原生/官网联合交付。
 
 - [命令真实结果与执行收尾](records/2026-10/2026-10-26-command-outcome-visibility.md)：真实退出码、长结果与模型可见事实、Shell所有权收尾及重启接续验证。

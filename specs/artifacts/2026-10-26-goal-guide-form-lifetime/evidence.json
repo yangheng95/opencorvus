@@ -1,0 +1,581 @@
+{
+  "date": "2026-10-26",
+  "scope": "Goal form navigation, durable controls without a Provider, shared model-admission convergence and normal streamed execution",
+  "sourceChanges": {
+    "schema": false,
+    "release": false,
+    "modelFlowGate": false
+  },
+  "actualNormalExecution": {
+    "run": 619,
+    "goal": {
+      "id": "pev_g0VZ8Gnco00JXTkNJldK",
+      "revision": "pev_g0VZ8Gyav005MeXh6mYe",
+      "owner": {
+        "kind": "chat",
+        "id": "ses_-zUQryl9CzzNEb5MNLb0"
+      },
+      "objective": "持续验证 Goal 的正常执行与手动完成流程。当前轮仅回复“Goal 恢复执行验证通过”。不要调用工具，不创建文件、子任务或子 Agent；等待用户在目标表单中手动完成。",
+      "status": "complete",
+      "reason": "最终源码已使用真实 gpt-6.1-sol 流式回复“Goal 恢复执行验证通过”，累计 36950 tokens、1/1 自动轮次后按预算收敛；说明返回后依据原文保留，由用户明确记录完成。",
+      "turnBudget": 1,
+      "tokensUsed": 36950,
+      "turnsAccepted": 1,
+      "createdAt": 1792994166921,
+      "updatedAt": 1792994209089,
+      "sessionID": "ses_-zUQryl9CzzNEb5MNLb0",
+      "projectID": "prj_hQdBBeB7Yfrhpa1iPDlY",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-26\\archive-tool-guidance-607\\project"
+    },
+    "requests": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      }
+    ],
+    "reply": "Goal 恢复执行验证通过",
+    "publicGet": 200
+  },
+  "baselineFailures": [
+    {
+      "run": 615,
+      "failure": "About/Close/reopen discarded unsaved 65000/3 budgets and completion evidence; original saved Goal stayed intact"
+    },
+    {
+      "run": 616,
+      "failure": "Real completion PATCH returned 400 ProviderModelNotFoundError during Project initialization before Goal store",
+      "requestID": "079207d2-7541-4518-810f-93ec57d57813"
+    },
+    {
+      "run": 617,
+      "failure": "New active Goal stayed 0/0 with 41 repeated Project model-initialization errors over 40 seconds",
+      "goal": "pev_g0VZ87uxJ00xuczzPmwv",
+      "safeSettlement": "Paused through actual UI, independently read paused, then shut down normally"
+    }
+  ],
+  "finalUnavailableModel": {
+    "run": 618,
+    "goalID": "pev_g0VZ87uxJ00xuczzPmwv",
+    "restartStatus": "paused",
+    "explicitResumeStatus": "blocked",
+    "reason": "model_unavailable",
+    "savedBudgets": {
+      "tokenBudget": 65000,
+      "turnBudget": 3
+    },
+    "usage": {
+      "tokens": 0,
+      "turns": 0
+    },
+    "explicitFailureEvents": 2,
+    "completedStatus": "complete",
+    "evidence": "已验证模型不可用时进入真实阻塞；预算65000/3已保存，显式恢复后仍按实际模型错误收敛，说明往返保留完成依据。"
+  },
+  "checks": {
+    "backendPositiveTests": 25,
+    "assertions": 120,
+    "modelAdmissionTests": 10,
+    "modelAdmissionAssertions": 36,
+    "controlTests": 15,
+    "controlAssertions": 84,
+    "backendTypecheck": 0,
+    "ordinaryNodeBuild": 0,
+    "uiEntry": "main-BgjVdyol.js",
+    "locales": 2,
+    "translationKeys": 2547,
+    "uiAutomation": "None created or run",
+    "overlayTypecheck": 0,
+    "docsCheck": {
+      "exit": 0,
+      "operations": 351,
+      "groups": 26
+    }
+  },
+  "qualification": {
+    "ui": "Real isolated CLI /ui pages, manual interactions, screenshots visually reviewed",
+    "taskMission": "Actual shared Scheduler and domain fixtures; no claim of real Provider end-to-end execution for Task or Mission in this batch",
+    "capture": "Unmodified JPEG captures cover document x=0..1119 in a 1280x720 viewport; all target dialogs x=360..920 are fully captured. Background right controls are partially cropped by capture, not page overflow.",
+    "invalidFixture": "Early hand-built Chat lifecycle fixture was invalid; original failure retained privately and replaced with canonical Mission close/reopen domain facts before acceptance",
+    "data": "Read-only copies of prior isolated runs; source tables preserved exactly. Only existing target Session time_updated is explicitly allowed to advance after a real new input/reply in 619; all other original protected columns and immutable history checked exactly."
+  },
+  "runs": [
+    {
+      "run": 615,
+      "port": 38124,
+      "uiEntry": "main-aiwHubjd.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 7561,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 7,
+            "current": 9,
+            "originalRowsPreserved": true
+          },
+          "message": {
+            "original": 32,
+            "current": 36,
+            "originalRowsPreserved": true
+          },
+          "part": {
+            "original": 55,
+            "current": 63,
+            "originalRowsPreserved": true
+          },
+          "tool_part_request": {
+            "original": 15,
+            "current": 15,
+            "originalRowsPreserved": true
+          },
+          "tool_part_progress": {
+            "original": 10,
+            "current": 10,
+            "originalRowsPreserved": true
+          },
+          "tool_part_outcome": {
+            "original": 15,
+            "current": 15,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_request": {
+            "original": 16,
+            "current": 18,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_outcome": {
+            "original": 16,
+            "current": 18,
+            "originalRowsPreserved": true
+          }
+        }
+      },
+      "shutdown": {
+        "http": 200,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "reserveMs": 765100
+      },
+      "provider": {
+        "requests": 4,
+        "cumulativeRequests": 164,
+        "maximumRequests": 6,
+        "unusedAllowanceRetired": 2,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "sourceUnchanged": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "requestOutcomes": [
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "readerState": "settled",
+            "terminal": "eof"
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "readerState": "settled",
+            "terminal": "eof"
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "readerState": "settled",
+            "terminal": "eof"
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "readerState": "settled",
+            "terminal": "eof"
+          }
+        ]
+      }
+    },
+    {
+      "run": 616,
+      "port": 38125,
+      "uiEntry": "main-ChrYow38.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 8614,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 9,
+            "current": 9,
+            "originalRowsPreserved": true
+          },
+          "message": {
+            "original": 36,
+            "current": 36,
+            "originalRowsPreserved": true
+          },
+          "part": {
+            "original": 63,
+            "current": 63,
+            "originalRowsPreserved": true
+          },
+          "tool_part_request": {
+            "original": 15,
+            "current": 15,
+            "originalRowsPreserved": true
+          },
+          "tool_part_progress": {
+            "original": 10,
+            "current": 10,
+            "originalRowsPreserved": true
+          },
+          "tool_part_outcome": {
+            "original": 15,
+            "current": 15,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_request": {
+            "original": 18,
+            "current": 18,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_outcome": {
+            "original": 18,
+            "current": 18,
+            "originalRowsPreserved": true
+          }
+        }
+      },
+      "shutdown": {
+        "http": 200,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "reserveMs": 727209
+      },
+      "provider": {
+        "requests": 0,
+        "cumulativeRequests": 164,
+        "credentialsStaged": false
+      }
+    },
+    {
+      "run": 617,
+      "port": 38126,
+      "uiEntry": "main-ChrYow38.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 8614,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 9,
+            "current": 9,
+            "originalRowsPreserved": true
+          },
+          "message": {
+            "original": 36,
+            "current": 36,
+            "originalRowsPreserved": true
+          },
+          "part": {
+            "original": 63,
+            "current": 63,
+            "originalRowsPreserved": true
+          },
+          "tool_part_request": {
+            "original": 15,
+            "current": 15,
+            "originalRowsPreserved": true
+          },
+          "tool_part_progress": {
+            "original": 10,
+            "current": 10,
+            "originalRowsPreserved": true
+          },
+          "tool_part_outcome": {
+            "original": 15,
+            "current": 15,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_request": {
+            "original": 18,
+            "current": 18,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_outcome": {
+            "original": 18,
+            "current": 18,
+            "originalRowsPreserved": true
+          }
+        }
+      },
+      "shutdown": {
+        "http": 200,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "reserveMs": 915366
+      },
+      "provider": {
+        "requests": 0,
+        "cumulativeRequests": 164,
+        "credentialsStaged": false
+      }
+    },
+    {
+      "run": 618,
+      "port": 38127,
+      "uiEntry": "main-BgjVdyol.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 8617,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 9,
+            "current": 9,
+            "originalRowsPreserved": true
+          },
+          "message": {
+            "original": 36,
+            "current": 36,
+            "originalRowsPreserved": true
+          },
+          "part": {
+            "original": 63,
+            "current": 63,
+            "originalRowsPreserved": true
+          },
+          "tool_part_request": {
+            "original": 15,
+            "current": 15,
+            "originalRowsPreserved": true
+          },
+          "tool_part_progress": {
+            "original": 10,
+            "current": 10,
+            "originalRowsPreserved": true
+          },
+          "tool_part_outcome": {
+            "original": 15,
+            "current": 15,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_request": {
+            "original": 18,
+            "current": 18,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_outcome": {
+            "original": 18,
+            "current": 18,
+            "originalRowsPreserved": true
+          },
+          "protocol_event": {
+            "original": 59,
+            "current": 65,
+            "originalRowsPreserved": true
+          }
+        }
+      },
+      "shutdown": {
+        "http": 200,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "reserveMs": 864515
+      },
+      "provider": {
+        "requests": 0,
+        "cumulativeRequests": 164,
+        "credentialsStaged": false
+      }
+    },
+    {
+      "run": 619,
+      "port": 38128,
+      "uiEntry": "main-BgjVdyol.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 8623,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "session": {
+            "original": 9,
+            "current": 10,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": [
+              {
+                "id": "ses_-zUQryl9CzzNEb5MNLb0",
+                "column": "time_updated",
+                "before": 1792990463248,
+                "after": 1792994172325,
+                "reason": "Actual new Goal input and settled reply in this existing conversation"
+              }
+            ]
+          },
+          "message": {
+            "original": 36,
+            "current": 40,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "part": {
+            "original": 63,
+            "current": 71,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 15,
+            "current": 15,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 10,
+            "current": 10,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 15,
+            "current": 15,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 18,
+            "current": 20,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 18,
+            "current": 20,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 65,
+            "current": 77,
+            "originalRowsPreservedExceptExplicitActivityTimestamp": true,
+            "updates": []
+          }
+        }
+      },
+      "shutdown": {
+        "http": 200,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "reserveMs": 785633
+      },
+      "provider": {
+        "requests": 3,
+        "cumulativeRequests": 167,
+        "maximumRequests": 6,
+        "unusedAllowanceRetired": 3,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "sourceUnchanged": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "requestOutcomes": [
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "readerState": "settled",
+            "terminal": "eof"
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "readerState": "settled",
+            "terminal": "eof"
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "readerState": "settled",
+            "terminal": "eof"
+          }
+        ]
+      }
+    }
+  ],
+  "screenshots": [
+    "01-create-baseline.jpg",
+    "02-budget-reached.jpg",
+    "03-unsaved-budget-baseline.jpg",
+    "04-guide-without-return-baseline.jpg",
+    "05-budget-reset-baseline.jpg",
+    "06-unsaved-evidence-baseline.jpg",
+    "07-evidence-reset-baseline.jpg",
+    "08-guide-return-english.jpg",
+    "09-create-draft-retained.jpg",
+    "10-budget-draft-retained.jpg",
+    "11-evidence-retained-english.jpg",
+    "12-completion-provider-error.jpg",
+    "13-guide-return-chinese.jpg",
+    "14-evidence-retained-chinese.jpg",
+    "15-completed-without-provider.jpg",
+    "16-model-admission-active-baseline.jpg",
+    "17-model-blocked-english.jpg",
+    "18-blocked-budget-draft.jpg",
+    "19-model-blocked-chinese.jpg",
+    "20-completed-chinese.jpg",
+    "21-normal-provider-budget-reached.jpg",
+    "22-normal-provider-evidence-retained.jpg",
+    "23-normal-provider-completed.jpg"
+  ]
+}
