@@ -11,6 +11,12 @@ binary, the Tauri overlay desktop app, release CI, and local smoke packaging.
 
 ## Package Surfaces
 
+Ubuntu build prerequisites use the single `script/install-ubuntu-packages.sh`
+entry point. It retains the runner's signed Deb822 suites and components while
+selecting Canonical's official HTTPS archive for the actual architecture in an
+owned temporary source file. The runner's source configuration and the original
+step and whole-release deadlines remain intact.
+
 macOS app bundles, signatures and updater archives are produced by Tauri. DMG
 images use create-dmg 1.3.0, installed with the native macOS prerequisites, with
 the layout declared in Tauri configuration. Its bounded system-image retries

@@ -2,6 +2,8 @@
 
 - [文件操作与模型可用性边界](records/2026-10/2026-10-26-file-operation-model-independence.md)：普通文件写入独立模型、共享插件初始化与真实前后验收。
 
+- [0.1.30 Ubuntu依赖与发布](records/2026-10/2026-10-27-release-0.1.30.md)：官方签名HTTPS归档、Linux原生预检与完整联合交付。
+
 - [文件浏览器工具名称统一](records/2026-10/2026-10-26-explorer-tool-identity.md)：资源管理器与文件页的明确区分及全入口同源。
 
 - [文件阅读操作与关闭反馈](records/2026-10/2026-10-26-file-explorer-reading-experience.md)：真实文件链路、准确关闭名称和查找按钮修复。
@@ -20,7 +22,7 @@
 
 - [停止控制与模型独立性](records/2026-10/2026-10-26-stop-control-model-independence.md)：停止准入、独立取消所有权、冷恢复和真实Sol停止/续聊验收。
 
-- [0.1.29 原生预检与发布](records/2026-10/2026-10-26-release-0.1.29.md)：机器版本接口、两Mac预检及精确联合交付。
+- [0.1.29 失败候选](records/2026-10/2026-10-26-release-0.1.29.md)：双Mac通过、标签边界修复及Ubuntu慢下载失败。
 
 - [设置与归档完整体验](records/2026-10/2026-10-26-settings-archive-experience.md)：修复模型不可用时归档/恢复失败，保留真实取消、终态与原历史。
 
