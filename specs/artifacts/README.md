@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [原生依赖修复证据](2026-10-28-native-advisory-followup/README.md)：前后完整审计、原构建与实际库行为，保留首次失败。
+
 - [成果读取与依赖修复证据](2026-10-28-artifact-journey-and-dependency-audit/README.md)：五张原图、真实下载与先失败后通过的依赖检查。
 
 - [业务标题与Goal操作证据](2026-10-28-opening-reference-title-and-goal/README.md)：真实模型、十张原图、持久事件与原实例结清。

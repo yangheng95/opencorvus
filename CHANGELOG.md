@@ -15,6 +15,7 @@
 - 2026-10-28：修复引用中的无效转义导致编辑器发送状态停滞、会话历史读取失败的问题。原文保持可编辑，合法后续引用正常识别；格式修正建议直接显示并跟随界面语言，数据库无需迁移。
 - 2026-10-28：自动标题优先展示开场引用之后的业务正文，减少专家团/Skill语法占据侧栏标题的问题；正文中的引用、原始消息、仅含引用的请求和已有名称保持，数据库无需迁移。
 - 2026-10-28：将共享 HTTP 查询依赖 `qs` 的固定版本更新至 `6.16.1`，修复逗号数组格式处理特殊对象时抛出异常的问题；覆盖 MCP 与 Slack 的实际依赖链，应用版本和数据库结构不变。
+- 2026-10-28：更新原生加密、证书与异步运行依赖；更新器固定官方 ZIP 9 修复提交，并同步其必需的 Tauri 2.12 依赖。源码构建需 Rust 1.90 以上及访问该固定 Git 来源；应用版本、更新签名边界和数据库结构不变。
 
 ### en-US
 
@@ -27,6 +28,7 @@
 - 2026-10-28: Fixed malformed reference escapes that stalled composer submission state and failed conversation hydration. Original text stays editable and later valid references are recognized; actionable guidance is visible and follows the interface language without a database migration.
 - 2026-10-28: Automatic titles use the outcome text after opening references, giving sidebar labels more room for the actual request. Inline references, original messages, reference-only requests and existing titles retain their content without a database migration.
 - 2026-10-28: Updated the shared HTTP query dependency pin to `qs 6.16.1`, fixing comma-array serialization of special object elements. Verified the actual MCP and Slack dependency chains without changing the application version or database schema.
+- 2026-10-28: Updated native encryption, certificate and async-runtime dependencies. The updater uses the official ZIP 9 fix at a pinned Git commit, with its required Tauri 2.12 dependencies. Source builds require Rust 1.90 or later and access to that Git source; the application version, update-signature boundary and database schema are unchanged.
 
 ## 0.1.33 - 2026-10-27
 

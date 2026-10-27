@@ -216,8 +216,11 @@ try {
     darling: packageID("darling", "0.23.0"),
     darlingCore: packageID("darling_core", "0.23.0"),
     darlingMacro: packageID("darling_macro", "0.23.0"),
-    rustls: packageID("rustls", "0.23.45"),
-    webpki: packageID("rustls-webpki", "0.103.14"),
+    rustls: packageID("rustls", "0.23.46"),
+    webpki: packageID("rustls-webpki", "0.103.16"),
+    tokio: packageID("tokio", "1.51.6"),
+    zip: packageID("zip", "9.1.2"),
+    updater: packageID("tauri-plugin-updater", "2.14.0"),
     anyhow: packageID("anyhow", "1.0.103"),
     plist: packageID("plist", "1.10.0"),
   }
@@ -283,7 +286,7 @@ try {
       alias: "tauri_utils",
       name: "tauri-utils",
       target: "tauri_utils",
-      version: "2.9.1",
+      version: "2.10.2",
       role: "runtime",
       features: ["brotli", "compression", "resources", "walkdir"],
     },
@@ -347,7 +350,7 @@ try {
       alias: "rustls",
       name: "rustls",
       target: "rustls",
-      version: "0.23.45",
+      version: "0.23.46",
       role: "runtime",
       features: ["ring", "std", "tls12"],
     },
@@ -355,7 +358,7 @@ try {
       alias: "webpki",
       name: "rustls-webpki",
       target: "webpki",
-      version: "0.103.14",
+      version: "0.103.16",
       role: "runtime",
       features: ["alloc", "ring", "std"],
     },
@@ -382,6 +385,54 @@ try {
       version: "1.10.0",
       role: "runtime",
       features: ["default", "serde"],
+    },
+    {
+      alias: "tokio",
+      name: "tokio",
+      target: "tokio",
+      version: "1.51.6",
+      role: "runtime",
+      features: ["bytes", "default", "fs", "io-util", "libc", "mio", "net", "rt", "rt-multi-thread", "socket2", "sync", "time", "windows-sys"],
+    },
+    {
+      alias: "zip",
+      name: "zip",
+      target: "zip",
+      version: "9.1.2",
+      role: "runtime",
+      features: [],
+    },
+    {
+      alias: "tauri_plugin_updater",
+      name: "tauri-plugin-updater",
+      target: "tauri_plugin_updater",
+      version: "2.14.0",
+      role: "runtime",
+      features: ["default", "rustls-tls", "system-proxy", "zip"],
+    },
+    {
+      alias: "urlpattern",
+      name: "urlpattern",
+      target: "urlpattern",
+      version: "0.6.0",
+      role: "runtime",
+      features: [],
+    },
+    {
+      alias: "minisign_verify",
+      name: "minisign-verify",
+      target: "minisign_verify",
+      version: "0.3.0",
+      role: "runtime",
+      features: [],
+    },
+    {
+      alias: "tempfile",
+      name: "tempfile",
+      target: "tempfile",
+      version: "3.26.0",
+      role: "runtime",
+      features: ["default", "getrandom"],
     },
   ] as const
   const bindings = specs.map((spec) => {
@@ -447,7 +498,7 @@ try {
   const nativeSummary = tests.match(/test result: ok\. (\d+) passed; 0 failed;/)
   assert(nativeSummary, "Actual production native fixture must report successful settlement")
   const actualNativePassed = Number(nativeSummary[1])
-  assert.equal(actualNativePassed, 12, "Current production native fixture has twelve qualified contracts")
+  assert.equal(actualNativePassed, 19, "Current production native fixture has nineteen qualified contracts")
   const plistContractNames = [
     "actual_plist_xml_and_binary_return_complete_values",
     "actual_plist_serde_returns_typed_values_and_explicit_type_error",
@@ -457,15 +508,27 @@ try {
   assert.equal(completedNativeNames.length, actualNativePassed)
   const actualPlistNames = completedNativeNames.filter((name) => plistContractNames.includes(name))
   assert.deepEqual(actualPlistNames.slice().sort(), plistContractNames.slice().sort())
+  const upgradeContractNames = [
+    "actual_rustls_authenticated_tls12_delivers_the_protected_payload",
+    "actual_tokio_runtime_transfers_both_tcp_payloads_and_joins",
+    "actual_updater_parses_the_platform_feed_and_typed_target_error",
+    "actual_zip_extracts_the_complete_regular_file",
+    "actual_zip_maps_an_escaping_symlink_to_the_archive_error",
+    "actual_urlpattern_captures_the_route_and_maps_duplicate_names_to_the_parser_error",
+    "actual_minisign_verifies_the_public_vector_and_maps_the_signature_error",
+  ]
+  const actualUpgradeNames = completedNativeNames.filter((name) => upgradeContractNames.includes(name))
+  assert.deepEqual(actualUpgradeNames.slice().sort(), upgradeContractNames.slice().sort())
   receipt.nativeContracts = {
     passed: actualNativePassed,
     scopes: {
-      originalProduction: { passed: completedNativeNames.length - actualPlistNames.length },
+      originalProduction: { passed: completedNativeNames.length - actualPlistNames.length - actualUpgradeNames.length },
       plistProduction: { passed: actualPlistNames.length, names: actualPlistNames },
+      securityUpgradeProduction: { passed: actualUpgradeNames.length, names: actualUpgradeNames },
       eventLibrary: "separately recorded below after its actual fixture",
     },
     qualification:
-      "Original six Tauri/KeyValueMap/PHF cases plus real authenticated TLS13 data, typed key-boundary error/alert, typed anyhow mutation and actual plist XML/binary/serde/Tauri association contracts",
+      "Original twelve contracts plus TLS12, Tokio TCP, safe ZIP extraction and its typed symlink error, updater feed/target error, URL capture/parser error and public Minisign verification/signature error; all libraries belong to the current production build",
   }
 
   // This invocation qualifies a library from the same lock on Windows. Its

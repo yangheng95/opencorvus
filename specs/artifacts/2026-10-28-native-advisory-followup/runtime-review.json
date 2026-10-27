@@ -1,0 +1,291 @@
+{
+  "observedAt": "2026-10-27T23:17:00.206Z",
+  "scope": {
+    "modelRequests": 0,
+    "gui": "Not performed; no UI implementation changed",
+    "applicationVersion": "0.1.33",
+    "schemaVersion": 9,
+    "userDataAuthority": "Private HOME/runtime/Cargo/target; user runtime and authentication were not used"
+  },
+  "updater": {
+    "repository": "https://github.com/tauri-apps/plugins-workspace",
+    "revision": "ba98bfadc4c868c9a7e1a226c83af528e1f11b89",
+    "version": "2.14.0",
+    "zip": "9.1.2",
+    "tauri": "2.12.5",
+    "reason": "Official ZIP9 commit; published registry updater at the same version still uses ZIP4"
+  },
+  "audits": {
+    "before": {
+      "database": {
+        "advisory-count": 1380,
+        "last-commit": "99670cfc0bc574433034b75876a4b791ccaa2efb",
+        "last-updated": "2026-10-27T11:02:42+01:00"
+      },
+      "dependencies": {
+        "dependency-count": 615
+      },
+      "vulnerabilities": 9,
+      "warnings": {
+        "unmaintained": [
+          {
+            "name": "fxhash",
+            "version": "0.2.1",
+            "advisory": "RUSTSEC-2025-0057"
+          },
+          {
+            "name": "proc-macro-error",
+            "version": "1.0.4",
+            "advisory": "RUSTSEC-2024-0370"
+          },
+          {
+            "name": "unic-char-property",
+            "version": "0.9.0",
+            "advisory": "RUSTSEC-2025-0081"
+          },
+          {
+            "name": "unic-char-range",
+            "version": "0.9.0",
+            "advisory": "RUSTSEC-2025-0075"
+          },
+          {
+            "name": "unic-common",
+            "version": "0.9.0",
+            "advisory": "RUSTSEC-2025-0080"
+          },
+          {
+            "name": "unic-ucd-ident",
+            "version": "0.9.0",
+            "advisory": "RUSTSEC-2025-0100"
+          },
+          {
+            "name": "unic-ucd-version",
+            "version": "0.9.0",
+            "advisory": "RUSTSEC-2025-0098"
+          },
+          {
+            "name": "zbus_names",
+            "version": "4.3.1",
+            "advisory": "RUSTSEC-2026-0371"
+          },
+          {
+            "name": "zvariant",
+            "version": "5.10.0",
+            "advisory": "RUSTSEC-2026-0370"
+          },
+          {
+            "name": "zvariant_derive",
+            "version": "5.10.0",
+            "advisory": "RUSTSEC-2026-0372"
+          }
+        ],
+        "unsound": [
+          {
+            "name": "glib",
+            "version": "0.18.5",
+            "advisory": "RUSTSEC-2024-0429"
+          },
+          {
+            "name": "rand",
+            "version": "0.7.3",
+            "advisory": "RUSTSEC-2026-0097"
+          },
+          {
+            "name": "tokio",
+            "version": "1.50.0",
+            "advisory": "RUSTSEC-2026-0386"
+          }
+        ],
+        "yanked": [
+          {
+            "name": "clipboard-win",
+            "version": "5.4.1",
+            "advisory": null
+          },
+          {
+            "name": "uds_windows",
+            "version": "1.2.0",
+            "advisory": null
+          }
+        ]
+      }
+    },
+    "after": {
+      "database": {
+        "advisory-count": 1380,
+        "last-commit": "99670cfc0bc574433034b75876a4b791ccaa2efb",
+        "last-updated": "2026-10-27T11:02:42+01:00"
+      },
+      "dependencies": {
+        "dependency-count": 622
+      },
+      "vulnerabilities": 0,
+      "warnings": {
+        "unmaintained": [
+          {
+            "name": "fxhash",
+            "version": "0.2.1",
+            "advisory": "RUSTSEC-2025-0057"
+          },
+          {
+            "name": "proc-macro-error",
+            "version": "1.0.4",
+            "advisory": "RUSTSEC-2024-0370"
+          },
+          {
+            "name": "zbus_names",
+            "version": "4.3.1",
+            "advisory": "RUSTSEC-2026-0371"
+          },
+          {
+            "name": "zvariant",
+            "version": "5.10.0",
+            "advisory": "RUSTSEC-2026-0370"
+          },
+          {
+            "name": "zvariant_derive",
+            "version": "5.10.0",
+            "advisory": "RUSTSEC-2026-0372"
+          }
+        ],
+        "unsound": [
+          {
+            "name": "glib",
+            "version": "0.18.5",
+            "advisory": "RUSTSEC-2024-0429"
+          },
+          {
+            "name": "rand",
+            "version": "0.7.3",
+            "advisory": "RUSTSEC-2026-0097"
+          }
+        ],
+        "yanked": [
+          {
+            "name": "clipboard-win",
+            "version": "5.4.1",
+            "advisory": null
+          },
+          {
+            "name": "uds_windows",
+            "version": "1.2.0",
+            "advisory": null
+          }
+        ]
+      }
+    },
+    "supervisor": {
+      "database": {
+        "advisory-count": 1380,
+        "last-commit": "99670cfc0bc574433034b75876a4b791ccaa2efb",
+        "last-updated": "2026-10-27T11:02:42+01:00"
+      },
+      "dependencies": {
+        "dependency-count": 22
+      },
+      "vulnerabilities": 0,
+      "warnings": {}
+    }
+  },
+  "native": {
+    "status": "passed",
+    "production": {
+      "passed": 19,
+      "scopes": {
+        "originalProduction": {
+          "passed": 9
+        },
+        "plistProduction": {
+          "passed": 3,
+          "names": [
+            "actual_plist_serde_returns_typed_values_and_explicit_type_error",
+            "actual_plist_xml_and_binary_return_complete_values",
+            "actual_tauri_association_plist_retains_dictionary_contract"
+          ]
+        },
+        "securityUpgradeProduction": {
+          "passed": 7,
+          "names": [
+            "actual_minisign_verifies_the_public_vector_and_maps_the_signature_error",
+            "actual_rustls_authenticated_tls12_delivers_the_protected_payload",
+            "actual_tokio_runtime_transfers_both_tcp_payloads_and_joins",
+            "actual_updater_parses_the_platform_feed_and_typed_target_error",
+            "actual_urlpattern_captures_the_route_and_maps_duplicate_names_to_the_parser_error",
+            "actual_zip_extracts_the_complete_regular_file",
+            "actual_zip_maps_an_escaping_symlink_to_the_archive_error"
+          ]
+        },
+        "eventLibrary": "separately recorded below after its actual fixture"
+      },
+      "qualification": "Original twelve contracts plus TLS12, Tokio TCP, safe ZIP extraction and its typed symlink error, updater feed/target error, URL capture/parser error and public Minisign verification/signature error; all libraries belong to the current production build"
+    },
+    "eventLibrary": 2,
+    "firstRun": {
+      "firstRun": "passed",
+      "sessionsCreated": 4,
+      "persistedAcrossRestart": 2,
+      "realProvider": false
+    },
+    "processReceipt": {
+      "started": 1793142309456,
+      "closed": 1793142800234,
+      "deadlineAt": 1793143368027,
+      "exitCode": 0,
+      "settlementConfirmed": true,
+      "receipt": {
+        "occurrenceID": "cc199409-6da6-4237-93e1-63038ff2315f",
+        "pid": 92324,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "environmentOwner": "One private HOME/cache/target with the existing finite host profile; owned descendants retire at root exit"
+    },
+    "absoluteDeadlineReserveMs": 567793
+  },
+  "checks": {
+    "native-checker-types-final": {
+      "label": "native-checker-types-final",
+      "startedAt": 1793142831443,
+      "closedAt": 1793142836452,
+      "code": 0,
+      "signal": null,
+      "childPID": 42156
+    },
+    "native-final-resolve-review": {
+      "label": "native-final-resolve-review",
+      "startedAt": 1793142831406,
+      "closedAt": 1793142833778,
+      "code": 0,
+      "signal": null,
+      "childPID": 95980
+    },
+    "native-advisory-docs": {
+      "label": "native-advisory-docs",
+      "startedAt": 1793143027736,
+      "closedAt": 1793143038418,
+      "code": 0,
+      "signal": null,
+      "childPID": 79376
+    },
+    "native-advisory-architecture": {
+      "label": "native-advisory-architecture",
+      "startedAt": 1793143027730,
+      "closedAt": 1793143031137,
+      "code": 0,
+      "signal": null,
+      "childPID": 20652
+    }
+  },
+  "limits": [
+    "Windows production-library behavior and isolated packaged backend only; no native window or update installation",
+    "Linux/macOS applications and Unix AsyncFd have not run",
+    "Nine remaining warnings retained without ignore filters",
+    "Specific native-01 residual child role was not conclusively observed",
+    "STATIC_VCRUNTIME deprecation still reported"
+  ],
+  "generated": {
+    "tauriSchemas": "Four additional permission identifiers; application capability grants unchanged",
+    "expertPayload": "39 generated lines synchronize already committed efa51438e Skill names/revisions; expert-squads sources are unchanged"
+  }
+}

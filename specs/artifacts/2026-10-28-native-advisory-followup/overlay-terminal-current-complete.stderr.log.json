@@ -1,0 +1,5 @@
+{
+  "source": "overlay-terminal-current-complete.stderr.log",
+  "encoding": "utf8",
+  "content": "    Fetching advisory database from `https://github.com/RustSec/advisory-db.git`\n      Loaded 1380 security advisories (from D:\\myhexin-local\\opencorvus\\.tmp-office748/rustsec-db)\n    Updating crates.io index\n    Scanning D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\Cargo.lock for vulnerabilities (615 crate dependencies)\nerror: 9 vulnerabilities found!\nwarning: 15 allowed warnings found\nTest runtime retained after unsuccessful run: D:\\myhexin-local\\opencorvus\\.tmp-office748\\tmp\\opencorvus-test-run-URnXtP\nPhysical/output settlement confirmed: true\n"
+}

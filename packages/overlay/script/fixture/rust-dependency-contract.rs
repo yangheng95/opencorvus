@@ -224,6 +224,10 @@ mod production {
     // rustls-test helpers (Apache-2.0 OR ISC OR MIT). The runner fetches their public
     // test PKI into an ignored directory; no test key is embedded in this source.
     fn tls_pair() -> (rustls::Connection, rustls::Connection) {
+        tls_pair_for(&rustls::version::TLS13)
+    }
+
+    fn tls_pair_for(protocol: &'static rustls::SupportedProtocolVersion) -> (rustls::Connection, rustls::Connection) {
         use rustls_pki_types::pem::PemObject;
         use rustls_pki_types::{CertificateDer, PrivatePkcs8KeyDer, ServerName};
         use std::sync::Arc;
@@ -245,12 +249,12 @@ mod production {
         }
         let provider = Arc::new(rustls::crypto::ring::default_provider());
         let client = rustls::ClientConfig::builder_with_provider(provider.clone())
-            .with_protocol_versions(&[&rustls::version::TLS13])
+            .with_protocol_versions(&[protocol])
             .unwrap()
             .with_root_certificates(roots)
             .with_no_client_auth();
         let server = rustls::ServerConfig::builder_with_provider(provider)
-            .with_protocol_versions(&[&rustls::version::TLS13])
+            .with_protocol_versions(&[protocol])
             .unwrap()
             .with_no_client_auth()
             .with_single_cert(chain, key.into())
@@ -279,17 +283,22 @@ mod production {
         }
     }
 
+    fn complete_tls_handshake(client: &mut rustls::Connection, server: &mut rustls::Connection) {
+        for _ in 0..16 {
+            transfer_tls(client, server);
+            transfer_tls(server, client);
+            if !client.is_handshaking() && !server.is_handshaking() {
+                return;
+            }
+        }
+        panic!("TLS handshake exceeded its bounded exchange count");
+    }
+
     #[test]
     fn actual_rustls_authenticated_tls13_delivers_both_protected_payloads() {
         use std::io::{Read, Write};
         let (mut client, mut server) = tls_pair();
-        for _ in 0..16 {
-            transfer_tls(&mut client, &mut server);
-            transfer_tls(&mut server, &mut client);
-            if !client.is_handshaking() && !server.is_handshaking() {
-                break;
-            }
-        }
+        complete_tls_handshake(&mut client, &mut server);
         assert_eq!(
             client.protocol_version(),
             Some(rustls::ProtocolVersion::TLSv1_3)
@@ -315,6 +324,134 @@ mod production {
         let mut response = [0; 25];
         client.reader().read_exact(&mut response).unwrap();
         assert_eq!(&response, b"server protected response");
+    }
+
+    #[test]
+    fn actual_rustls_authenticated_tls12_delivers_the_protected_payload() {
+        use std::io::{Read, Write};
+        let (mut client, mut server) = tls_pair_for(&rustls::version::TLS12);
+        complete_tls_handshake(&mut client, &mut server);
+        assert_eq!(client.protocol_version(), Some(rustls::ProtocolVersion::TLSv1_2));
+        assert_eq!(server.protocol_version(), Some(rustls::ProtocolVersion::TLSv1_2));
+        let expected = b"tls12 authenticated payload";
+        client.writer().write_all(expected).unwrap();
+        transfer_tls(&mut client, &mut server);
+        let mut received = vec![0; expected.len()];
+        server.reader().read_exact(&mut received).unwrap();
+        assert_eq!(received, expected);
+    }
+
+    #[test]
+    fn actual_tokio_runtime_transfers_both_tcp_payloads_and_joins() {
+        use tokio::io::{AsyncReadExt, AsyncWriteExt};
+        let runtime = tokio::runtime::Builder::new_current_thread().enable_all().build().unwrap();
+        runtime.block_on(async {
+            tokio::time::timeout(std::time::Duration::from_secs(5), async {
+                let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+                let address = listener.local_addr().unwrap();
+                let client = tokio::spawn(async move {
+                    let mut socket = tokio::net::TcpStream::connect(address).await.unwrap();
+                    socket.write_all(b"ping").await.unwrap();
+                    let mut reply = [0; 4];
+                    socket.read_exact(&mut reply).await.unwrap();
+                    reply
+                });
+                let (mut socket, _) = listener.accept().await.unwrap();
+                let mut request = [0; 4];
+                socket.read_exact(&mut request).await.unwrap();
+                assert_eq!(&request, b"ping");
+                socket.write_all(b"pong").await.unwrap();
+                assert_eq!(&client.await.unwrap(), b"pong");
+            }).await.expect("owned local TCP exchange completes within five seconds");
+        });
+    }
+
+    #[test]
+    fn actual_updater_parses_the_platform_feed_and_typed_target_error() {
+        let release: tauri_plugin_updater::RemoteRelease = serde_json::from_value(serde_json::json!({
+            "version": "0.1.34",
+            "notes": "Native updater contract",
+            "pub_date": "2026-10-28T00:00:00Z",
+            "platforms": { "windows-x86_64": {
+                "url": "https://example.invalid/opencorvus-update.zip",
+                "signature": "public-contract-signature"
+            } }
+        })).unwrap();
+        assert_eq!(release.version.to_string(), "0.1.34");
+        assert_eq!(release.notes.as_deref(), Some("Native updater contract"));
+        assert_eq!(release.download_url("windows-x86_64").unwrap().as_str(), "https://example.invalid/opencorvus-update.zip");
+        assert_eq!(release.signature("windows-x86_64").unwrap(), "public-contract-signature");
+        match release.download_url("linux-x86_64") {
+            Err(tauri_plugin_updater::Error::TargetNotFound(target)) => assert_eq!(target, "linux-x86_64"),
+            other => panic!("Expected the concrete target error, received {other:?}"),
+        }
+    }
+
+    #[test]
+    fn actual_zip_extracts_the_complete_regular_file() {
+        use std::io::{Cursor, Write};
+        let mut writer = zip::ZipWriter::new(Cursor::new(Vec::new()));
+        writer.start_file("payload/report.txt", zip::write::SimpleFileOptions::default()
+            .compression_method(zip::CompressionMethod::Stored)).unwrap();
+        writer.write_all(b"complete updater payload").unwrap();
+        let bytes = writer.finish().unwrap();
+        let destination = tempfile::tempdir().unwrap();
+        zip::ZipArchive::new(bytes).unwrap().extract(destination.path()).unwrap();
+        assert_eq!(std::fs::read(destination.path().join("payload/report.txt")).unwrap(), b"complete updater payload");
+    }
+
+    #[test]
+    fn actual_zip_maps_an_escaping_symlink_to_the_archive_error() {
+        use std::io::Cursor;
+        let root = tempfile::tempdir().unwrap();
+        std::fs::write(root.path().join("outside.txt"), b"owned test target").unwrap();
+        let destination = root.path().join("extract");
+        std::fs::create_dir(&destination).unwrap();
+        let mut writer = zip::ZipWriter::new(Cursor::new(Vec::new()));
+        writer.add_symlink("link", "../outside.txt", zip::write::SimpleFileOptions::default()
+            .compression_method(zip::CompressionMethod::Stored)).unwrap();
+        let bytes = writer.finish().unwrap();
+        match zip::ZipArchive::new(bytes).unwrap().extract(&destination) {
+            Err(zip::result::ZipError::InvalidArchive(message)) => assert_eq!(message.as_ref(), "Path escapes the destination directory"),
+            other => panic!("Expected the concrete escaping-link archive error, received {other:?}"),
+        }
+    }
+
+    #[test]
+    fn actual_urlpattern_captures_the_route_and_maps_duplicate_names_to_the_parser_error() {
+        let pattern = <urlpattern::UrlPattern>::parse(urlpattern::UrlPatternInit {
+            protocol: Some("https".into()), hostname: Some("example.invalid".into()), pathname: Some("/reports/:id".into()),
+            ..Default::default()
+        }, Default::default()).unwrap();
+        let result = pattern.exec(urlpattern::UrlPatternMatchInput::Url("https://example.invalid/reports/42".parse().unwrap()))
+            .unwrap().expect("the declared report route matches");
+        assert_eq!(result.pathname.input, "/reports/42");
+        assert_eq!(result.pathname.groups.get("id").unwrap().as_deref(), Some("42"));
+        match <urlpattern::UrlPattern>::parse(urlpattern::UrlPatternInit {
+            pathname: Some("/:id/:id".into()), ..Default::default()
+        }, Default::default()) {
+            Err(urlpattern::Error::Parser(error)) => assert_eq!(error.to_string(), "pattern contains duplicate name id"),
+            other => panic!("Expected the duplicate-name parser error, received {other:?}"),
+        }
+    }
+
+    // Public verification vector from minisign-verify 0.3.0's MIT-licensed tests.
+    // This is a public verification key and signature; no signing key is present.
+    #[test]
+    fn actual_minisign_verifies_the_public_vector_and_maps_the_signature_error() {
+        let key = minisign_verify::PublicKey::from_base64("RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3").unwrap();
+        let signature = minisign_verify::Signature::decode(concat!(
+            "untrusted comment: signature from minisign secret key\n",
+            "RWQf6LRCGA9i59SLOFxz6NxvASXDJeRtuZykwQepbDEGt87ig1BNpWaVWuNrm73YiIiJbq71Wi+dP9eKL8OC351vwIasSSbXxwA=\n",
+            "trusted comment: timestamp:1555779966\tfile:test\n",
+            "QtKMXWyYcwdpZAlPF7tE2ENJkRd1ujvKjlj1m9RtHTBnZPa5WKU5uWRs5GoP5M/VqE81QFuMKI5k/SfNQUaOAA=="
+        )).unwrap();
+        key.verify(b"test", &signature, true).expect("the published public verification vector authenticates");
+        assert_eq!(signature.trusted_comment(), "timestamp:1555779966\tfile:test");
+        match key.verify(b"Test", &signature, true) {
+            Err(minisign_verify::Error::InvalidSignature) => (),
+            other => panic!("Expected the concrete signature error, received {other:?}"),
+        }
     }
 
     #[test]

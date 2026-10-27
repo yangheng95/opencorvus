@@ -1,0 +1,26 @@
+{
+  "started": 1793142388546,
+  "closed": 1793142391207,
+  "code": 1,
+  "signal": null,
+  "receipt": {
+    "started": 1793142388646,
+    "closed": 1793142391168,
+    "deadlineAt": 1793143368027,
+    "exitCode": 1,
+    "settlementConfirmed": true,
+    "receipt": {
+      "occurrenceID": "652887a4-d578-4c36-8847-6c08129f3d5b",
+      "pid": 82928,
+      "reason": "exited",
+      "exitCode": 1,
+      "signal": null
+    },
+    "environmentOwner": "One private HOME/cache/target with the existing finite host profile; owned descendants retire at root exit"
+  },
+  "failure": {
+    "name": "AssertionError",
+    "message": "AssertionError [ERR_ASSERTION]: metadata failed; exact stdout/stderr retained in D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\native-advisory-748\\native-metadata-error\n\n101 !== 0\n"
+  },
+  "scope": "Original real checker, real offline Cargo cache-miss error, retained output and exit1"
+}

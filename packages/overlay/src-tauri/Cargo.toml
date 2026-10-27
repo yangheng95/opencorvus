@@ -21,7 +21,7 @@ tauri-plugin-dialog = "2"
 tauri-plugin-clipboard-manager = "2"
 tauri-plugin-opener = "2"
 tauri-plugin-notification = "2"
-tauri-plugin-updater = "2.12.0"
+tauri-plugin-updater = { git = "https://github.com/tauri-apps/plugins-workspace", rev = "ba98bfadc4c868c9a7e1a226c83af528e1f11b89" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 json5 = "0.4"

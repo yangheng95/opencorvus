@@ -1,0 +1,21 @@
+{
+  "name": "overlay-json-final",
+  "started": 1793142831520,
+  "closed": 1793142837332,
+  "code": 0,
+  "signal": null,
+  "executable": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\rustsec-tools\\bin\\cargo-audit.exe",
+  "args": [
+    "audit",
+    "--file",
+    "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\Cargo.lock",
+    "--db",
+    "D:\\myhexin-local\\opencorvus\\.tmp-office748/rustsec-db",
+    "--json"
+  ],
+  "cwd": "D:\\myhexin-local\\opencorvus\\.tmp-office748/audit-work",
+  "cargo": "C:\\Users\\hengu\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+  "publicCargoHome": "D:\\myhexin-local\\opencorvus\\.tmp-office748/cargo-public",
+  "lockInputBytesRetained": true,
+  "physicalCloseObserved": true
+}

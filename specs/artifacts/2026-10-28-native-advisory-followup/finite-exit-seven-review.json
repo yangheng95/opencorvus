@@ -1,0 +1,22 @@
+{
+  "started": 1793142388538,
+  "closed": 1793142390800,
+  "code": 7,
+  "signal": null,
+  "receipt": {
+    "started": 1793142388646,
+    "closed": 1793142390766,
+    "deadlineAt": 1793142988646,
+    "exitCode": 7,
+    "settlementConfirmed": true,
+    "receipt": {
+      "occurrenceID": "184a397d-8278-4b1e-bf98-ee0f83c25ca1",
+      "pid": 41060,
+      "reason": "exited",
+      "exitCode": 7,
+      "signal": null
+    },
+    "environmentOwner": "One private HOME/cache/target with the existing finite host profile; owned descendants retire at root exit"
+  },
+  "scope": "Real foreground exit7 and owned live descendant with finite-host policy"
+}
