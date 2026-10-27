@@ -694,6 +694,11 @@ single live collection. Completion removes only its own token. Receipt and
 operation validation keep late input bound to the Project that accepted it.
 Current failures retain their own error feedback even when allocation rejects;
 actual workspace navigation expires old input effects.
+The shared workspace runtime departure clears the existing volatile attachment
+list alongside conversation replay and projection. Global New Chat, project
+switches and project close follow this same owner. Same-project intent changes
+retain their explicit attachment handoff; durable original files and scoped text
+drafts retain their existing owners.
 Automatic Project allocation transfers the current draft from its global launcher
 key to its admitted Project key through the same draft-store operation used for
 Project-to-Session creation. Each transfer reads the latest source record and

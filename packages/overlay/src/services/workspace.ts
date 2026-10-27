@@ -27,7 +27,7 @@ import {
   FileEditorAdmissionError,
   type FileEditorCloseHandle,
 } from "./file-workbench"
-import { abortChatRequest } from "../store/messages"
+import { abortChatRequest, setChatAttachments } from "../store/messages"
 import { clearConversationUiState } from "../store/conversation-ui"
 import { appStore, setAppStore } from "../store/app"
 import { fileReferenceRange, type FileReferenceLocation } from "../utils/file-reference"
@@ -200,6 +200,7 @@ export function enterSessionWorkspace(): never {
  */
 function clearConversationRuntime(cause: string): void {
   abortChatRequest()
+  setChatAttachments([])
   cancelConversationReplay()
   clearConversationUiState()
   resetConversationProjection({ scrollIntent: "bottom", cause })

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [附件工作区生命周期](2026-10-27-attachment-workspace-lifetime.md)：单代理共享工作区离开修复。
+
 - [附件存储与HTTP失败阶段](2026-10-27-attachment-capture-and-http-provenance.md)：单代理当前存储与传输边界修复。
 
 - [新对话分配和列表更新](2026-10-27-composer-allocation-ledger-journey.md)：单代理当前真实使用流程。

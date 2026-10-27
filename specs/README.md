@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [附件工作区生命周期](records/2026-10/2026-10-27-attachment-workspace-lifetime.md)：新对话和项目离开时的暂存附件归属。
+
 - [附件存储与HTTP失败阶段](records/2026-10/2026-10-27-attachment-capture-and-http-provenance.md)：离线附件身份、真实请求阶段与列表调查。
 
 - [新对话分配和列表更新](records/2026-10/2026-10-27-composer-allocation-ledger-journey.md)：实际上传、草稿和列表连接调查。

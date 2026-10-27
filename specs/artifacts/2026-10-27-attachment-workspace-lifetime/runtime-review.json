@@ -1,0 +1,112 @@
+{
+  "at": "2026-10-27T14:41:19.049Z",
+  "instance": 725,
+  "port": 38230,
+  "build": "main-B4zmaP-p.js",
+  "sourceTables": 92,
+  "sourceRows": 246158,
+  "allOriginalRowsPreserved": true,
+  "criticalRows": 7286,
+  "projectFilesPreserved": 166,
+  "schema": 9,
+  "integrity": "ok",
+  "actualOriginals": [
+    {
+      "projectID": "prj_hioJhYbRtEXyJojgDtT2",
+      "filename": "验收说明 717（原件）.txt",
+      "bytes": 143,
+      "status": 200,
+      "physicalAndHTTPBytesMatch": true
+    },
+    {
+      "projectID": "prj_hO40lH5hCyaPVnIHfHNM",
+      "filename": "验收说明 717（原件）.txt",
+      "bytes": 143,
+      "status": 200,
+      "physicalAndHTTPBytesMatch": true
+    }
+  ],
+  "modelRequests": 0,
+  "cumulativeRequests": 373,
+  "publicShutdown": 200,
+  "reserveMs": 811066,
+  "physicalCompletion": true,
+  "outputDrainComplete": true,
+  "requestCleanupComplete": true,
+  "nativeExit": 0,
+  "launcherExit": 0,
+  "consoleEvidence": [
+    {
+      "level": "debug",
+      "at": "2026-10-27T14:33:44.886Z",
+      "host": "browser",
+      "method": "GET",
+      "origin": "http://127.0.0.1:38230",
+      "path": "/mailbox",
+      "phase": "fetch",
+      "status": null,
+      "requestID": null,
+      "responseKind": "json",
+      "authorityRevision": 0,
+      "aborted": true,
+      "durationMs": 47,
+      "errorKind": "DOMException"
+    },
+    {
+      "level": "debug",
+      "at": "2026-10-27T14:33:44.887Z",
+      "host": "browser",
+      "method": "GET",
+      "origin": "http://127.0.0.1:38230",
+      "path": "/work-ledger",
+      "phase": "fetch",
+      "status": null,
+      "requestID": null,
+      "responseKind": "json",
+      "authorityRevision": 0,
+      "aborted": true,
+      "durationMs": 154,
+      "errorKind": "DOMException"
+    },
+    {
+      "level": "debug",
+      "at": "2026-10-27T14:33:44.887Z",
+      "host": "browser",
+      "method": "GET",
+      "origin": "http://127.0.0.1:38230",
+      "path": "/mission",
+      "phase": "fetch",
+      "status": null,
+      "requestID": null,
+      "responseKind": "json",
+      "authorityRevision": 0,
+      "aborted": true,
+      "durationMs": 153,
+      "errorKind": "DOMException"
+    },
+    {
+      "level": "debug",
+      "at": "2026-10-27T14:39:04.398Z",
+      "host": "browser",
+      "method": "GET",
+      "origin": "http://127.0.0.1:38230",
+      "path": "/work-ledger",
+      "phase": "fetch",
+      "status": null,
+      "requestID": null,
+      "responseKind": "json",
+      "authorityRevision": 0,
+      "aborted": true,
+      "durationMs": 133,
+      "errorKind": "DOMException"
+    }
+  ],
+  "manualOriginalImages": 12,
+  "overlayTypecheck": 0,
+  "ordinaryNodeBuild": 0,
+  "limitations": [
+    "native directory chooser requires desktop; not qualified in browser",
+    "non-cancelled Failed to fetch root cause remains unknown",
+    "no model execution during this UI-only batch"
+  ]
+}
