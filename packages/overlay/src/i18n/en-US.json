@@ -2563,7 +2563,7 @@
   "continuous_goal.turns_short": "turns",
   "continuous_goal.tokens_used": "{{count}} tokens used",
   "continuous_goal.turns_used": "Automatic turns accepted: {{count}}",
-  "continuous_goal.usage_hint": "Cumulative goal usage. Open details to view or adjust its limits.",
+  "continuous_goal.usage_hint": "Model usage is linked to the goal at request start. Linked requests still count after the goal completes; new requests afterward are separate.",
   "continuous_goal.status.active": "Active",
   "continuous_goal.status.paused": "Paused",
   "continuous_goal.status.blocked": "Blocked",

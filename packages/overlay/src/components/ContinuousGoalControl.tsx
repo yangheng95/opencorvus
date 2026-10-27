@@ -292,7 +292,7 @@ export function ContinuousGoalControl(props: {
         setTurns(current?.turnBudget === undefined ? "" : String(current.turnBudget))
       }
       setReason("")
-      setBudgetOptionsOpen(next !== "create" || Boolean(tokens() || turns()))
+      setBudgetOptionsOpen(next === "create" ? Boolean(tokens() || turns()) : current?.status !== "complete")
       setResume(false)
       setFailure(undefined)
       setValidation("")
@@ -751,6 +751,7 @@ export function ContinuousGoalControl(props: {
                         })}
                       </span>
                     </div>
+                    <p class="continuous-goal__hint">{t("continuous_goal.usage_hint")}</p>
                   </Show>
                   <Disclosure.Root
                     class="continuous-goal__budget-options"

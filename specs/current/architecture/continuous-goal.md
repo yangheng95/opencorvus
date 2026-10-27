@@ -52,6 +52,16 @@ that original goal after completion, a newer goal or owner retention. The reques
 creates a goal has already started and is not retroactively billed. Tokens include input,
 output, reasoning and cache according to the existing Provider normalization.
 
+The shared Goal details show this request-start attribution scope beside the
+cumulative total, using the same localized explanation as the header usage
+tooltip. A completed Goal's total may differ from its conversation turn when
+another Provider request starts after completion. The UI reads the existing
+usage association and does not reassign or infer usage from message timestamps.
+Completed Goal details initially collapse their read-only budget section so the
+next-goal action stays visible. Operators can expand the existing values, and
+returning from the guide preserves that explicit choice. Unfinished details and
+the creation draft retain their existing budget disclosure rules.
+
 tokenBudget stops admitting new automatic turns; it cannot retract accepted requests
 or cap an in-flight turn's final usage. turnBudget counts accepted automatic continuation
 Messages. The last admitted turn can settle after admission reaches the limit.

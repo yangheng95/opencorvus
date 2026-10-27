@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Goal用量与完成详情](2026-10-28-goal-usage-scope.md)：单代理真实阅读与已完成详情密度改进。
+
 - [执行轮次完整消息事实](2026-10-28-occurrence-timing-projection.md)：共享投影保留无正文执行事实。
 
 - [当前默认页和Goal使用流程](2026-10-28-goal-home-current-journey.md)：单代理按当前版本复现和改进。

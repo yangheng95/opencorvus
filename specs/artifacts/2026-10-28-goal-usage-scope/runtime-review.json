@@ -1,0 +1,113 @@
+{
+  "at": "2026-10-27T17:52:58.363Z",
+  "accounting": {
+    "at": "2026-10-27T17:38:19.917Z",
+    "schema": 9,
+    "method": "Exact goal.usage references and actual wake_reason goal IDs / assistant parent IDs; timestamps only verify ordering",
+    "cases": [
+      {
+        "goalID": "pev_g0VZGjuKQ00c0b3fDuB7",
+        "inputMessageID": "msg_h8U1MyvoVR9CrN9Enw2v",
+        "status": "complete",
+        "completedAt": 1793119320273,
+        "linkedUsage": [
+          {
+            "id": "pvu_g0VZGjvjZ00fKQyYs4z9",
+            "occurred_at": 1793119320293,
+            "total_tokens": 35983
+          }
+        ],
+        "goalTokens": 35983,
+        "conversationTokens": 71852,
+        "laterMessageID": "msg_g0VZGjvkf00hoZhFmL84",
+        "laterMessageCreatedAt": 1793119320361
+      },
+      {
+        "goalID": "pev_g0VZGrg3l00TpG3kLZWO",
+        "inputMessageID": "msg_hQjdrZURubEewNQpMh56",
+        "status": "complete",
+        "completedAt": 1793121171237,
+        "linkedUsage": [
+          {
+            "id": "pvu_g0VZGrhFi00H563Apkc4",
+            "occurred_at": 1793121171250,
+            "total_tokens": 36481
+          }
+        ],
+        "goalTokens": 36481,
+        "conversationTokens": 72849,
+        "laterMessageID": "msg_g0VZGrhGa00VDOXNCoWu",
+        "laterMessageCreatedAt": 1793121171304
+      }
+    ]
+  },
+  "publicGoal": {
+    "at": "2026-10-27T17:44:10.224Z",
+    "status": 200,
+    "goalID": "pev_g0VZGrg3l00TpG3kLZWO",
+    "tokensUsed": 36481,
+    "statusValue": "complete",
+    "turnsAccepted": 1,
+    "conversationTokens": 72849
+  },
+  "builds": {
+    "initial": "main-X4YOMnEN.js",
+    "final": "main-DRjWtQ3E.js"
+  },
+  "scopes": [
+    {
+      "scope": "goal-usage-scope-732",
+      "publicShutdown": 200,
+      "originalExecExit": 0,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "reserveMs": 1010867,
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 388,
+      "sourceMetadata": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 2427,
+      "allOriginalRowsPreserved": true,
+      "sourceRowsPreserved": true,
+      "integrity": "ok"
+    },
+    {
+      "scope": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\goal-usage-scope-733",
+      "publicShutdown": 200,
+      "originalExecExit": 0,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "reserveMs": 794005,
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 388,
+      "sourceMetadata": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 2427,
+      "allOriginalRowsPreserved": true,
+      "sourceRowsPreserved": true,
+      "integrity": "ok"
+    }
+  ],
+  "visualReview": "Six original screenshots manually displayed and reviewed through real development CLI pages; no UI automated tests",
+  "limitation": "Read-only historical Goal review; no new Provider calls or backend accounting change"
+}

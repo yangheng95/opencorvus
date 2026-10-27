@@ -2562,7 +2562,7 @@
   "continuous_goal.turns_short": "轮",
   "continuous_goal.tokens_used": "已用 {{count}} 令牌",
   "continuous_goal.turns_used": "已接收 {{count}} 个自动轮次",
-  "continuous_goal.usage_hint": "目标的累计用量。打开详情查看或调整上限。",
+  "continuous_goal.usage_hint": "每次模型请求开始时确定用量归属。已归属的请求在目标完成后结束，仍会计入；完成后新开始的请求不计入此处。",
   "continuous_goal.status.active": "进行中",
   "continuous_goal.status.paused": "已暂停",
   "continuous_goal.status.blocked": "遇到阻塞",
