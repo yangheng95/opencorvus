@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [当前Sources与网络证据](2026-10-27-current-source-and-network-journey/README.md)：真实流式模型、原件与来源页面。
+
 - [附件工作区证据](2026-10-27-attachment-workspace-lifetime/README.md)：真实文件选择、导航与模式切换。
 
 - [附件存储与HTTP阶段证据](2026-10-27-attachment-capture-and-http-provenance/README.md)：实际页面、原字节与真实请求结清。

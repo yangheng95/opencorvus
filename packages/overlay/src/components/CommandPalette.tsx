@@ -20,7 +20,7 @@ import { Show, createEffect, createMemo, createSignal, on, onCleanup, onMount } 
 import { applyLocalePreference } from "../services/locale-preference"
 import { applyThemePreference } from "../services/theme-preference"
 import { themeOptionsForCurrentHost } from "../services/theme-registry"
-import { browseDirectory } from "../services/workspace"
+import { activeDirectory, browseDirectory, closeProject } from "../services/workspace"
 import { matchesSearchParts } from "../services/text-search"
 import { conversationExperienceIcon, conversationExperienceLabel } from "../services/conversation-experience"
 import {
@@ -173,6 +173,17 @@ export function CommandPalette(props: {
       visibleWhenEmpty: true,
       run: browseDirectory,
     })
+
+    if (activeDirectory().trim()) {
+      cmds.push({
+        id: "workspace:close-project",
+        label: t("titlebar.file.close"),
+        group: t("cmdk.group.commands"),
+        keywords: "close project folder workspace leave",
+        icon: "folder",
+        run: closeProject,
+      })
+    }
 
     cmds.push({
       id: "settings:general-suggested",

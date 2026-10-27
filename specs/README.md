@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [当前Sources与真实模型网络流程](records/2026-10/2026-10-27-current-source-and-network-journey.md)：单代理当前原件、来源和连接体验。
+
 - [附件工作区生命周期](records/2026-10/2026-10-27-attachment-workspace-lifetime.md)：新对话和项目离开时的暂存附件归属。
 
 - [附件存储与HTTP失败阶段](records/2026-10/2026-10-27-attachment-capture-and-http-provenance.md)：离线附件身份、真实请求阶段与列表调查。

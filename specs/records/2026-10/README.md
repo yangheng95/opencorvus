@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [当前Sources与真实模型网络流程](2026-10-27-current-source-and-network-journey.md)：单代理实际功能及阶段诊断调查。
+
 - [附件工作区生命周期](2026-10-27-attachment-workspace-lifetime.md)：单代理共享工作区离开修复。
 
 - [附件存储与HTTP失败阶段](2026-10-27-attachment-capture-and-http-provenance.md)：单代理当前存储与传输边界修复。

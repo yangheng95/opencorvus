@@ -1190,6 +1190,10 @@ exact Mission, Task or conversation.
 Global New chat actions from the rail, palette and titlebar all enter main's
 single global Composer lifecycle: close Settings, open the directory-free
 workspace, apply the default chat intent and reset the primary center surface.
+The command palette exposes Close project while a project is active, using the
+same localized label and workspace close action as the File menu. File departure
+admission, volatile attachment cleanup and retained scoped text drafts remain
+owned by that existing lifecycle; the command does not delete project data.
 
 Usage presents the current server's real aggregate with an OpenCorvus identity,
 five equal metrics, activity grid, and side-by-side token/provider breakdowns.
