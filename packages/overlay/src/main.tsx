@@ -183,7 +183,12 @@ import { openGoalDialog } from "./services/dialog"
 import { closeConfigDialog, openConfigDialog } from "./services/config-dialog-control"
 import { installClipboardApiKeyPrompt } from "./services/clipboard-api-key-prompt"
 import { cardTreeStore } from "./store/card-tree"
-import { workspaceComposerDraftKey, composerDraftText, setComposerDraft } from "./services/composer-draft"
+import {
+  workspaceComposerDraftKey,
+  composerDraftText,
+  setComposerDraft,
+  moveComposerDraft,
+} from "./services/composer-draft"
 import { normalizeDebugDirectory } from "./utils/debug-text"
 import {
   cancelConversationReplay,
@@ -1675,10 +1680,12 @@ async function restoreClientLocation(location: ClientWorkspaceLocation, authorit
     )
     if (!owns()) return
     const missionID = session.metadata?.mission?.id
-    if (session.kind !== "mission" || !missionID) throw new Error("Mission workspace location requires a persisted Mission session")
+    if (session.kind !== "mission" || !missionID)
+      throw new Error("Mission workspace location requires a persisted Mission session")
     mission = await loadMissionStatus({ missionID, directory: location.directory, authority })
     if (!owns()) return
-    if (mission.sessionID !== location.sessionID) throw new Error("Mission workspace location differs from its persisted Mission")
+    if (mission.sessionID !== location.sessionID)
+      throw new Error("Mission workspace location differs from its persisted Mission")
   } catch (error) {
     if (!owns()) return
     throw error
@@ -2340,9 +2347,14 @@ function OverlayRoot() {
   })
   createEffect(on(subagentSelectionScope, () => setSelectedSubagentSessionID("")))
 
-  createEffect(on(() => settingsStore.workspaceEpoch, () => {
-    pendingPrimaryBrowserPreviewNavigation = undefined
-  }))
+  createEffect(
+    on(
+      () => settingsStore.workspaceEpoch,
+      () => {
+        pendingPrimaryBrowserPreviewNavigation = undefined
+      },
+    ),
+  )
 
   createEffect(() => {
     runMainAsync("locale.apply-settings", () => setLocale(settingsStore.locale))
@@ -2460,7 +2472,9 @@ function OverlayRoot() {
         if (context.composerDraftKey !== panelComposerDraftKey()) {
           throw new DOMException("Home Goal draft superseded", "AbortError")
         }
-        let request: { sessionID: string; authority: typeof authority; selectionEpoch: number; input: typeof input } | undefined
+        let request:
+          | { sessionID: string; authority: typeof authority; selectionEpoch: number; input: typeof input }
+          | undefined
         await runUserNavigation("goal.start-chat", async () => {
           const directory = activeDirectory().trim()
           const model = appStore.composerModel || undefined
@@ -2719,7 +2733,6 @@ function OverlayRoot() {
             const intent = { ...composerIntent() }
             const needsProject = !activeDirectory().trim()
             const sourceDraftKey = panelComposerDraftKey()
-            const sourceDraft = composerDraftText(sourceDraftKey)
             const operation = resolveGlobalComposerProject({ kind: "attachment", selectionEpoch, authority })
             return {
               ...operation,
@@ -2732,9 +2745,7 @@ function OverlayRoot() {
                     rememberProjectComposerIntent(directory, intent),
                   )
                 const targetDraftKey = panelComposerDraftKey()
-                if (sourceDraftKey !== targetDraftKey && sourceDraft && !composerDraftText(targetDraftKey)) {
-                  setComposerDraft(targetDraftKey, sourceDraft)
-                }
+                moveComposerDraft(sourceDraftKey, targetDraftKey)
                 return resolution
               }),
             }

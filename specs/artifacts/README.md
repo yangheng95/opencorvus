@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [新对话分配与列表证据](2026-10-27-composer-allocation-ledger-journey/README.md)：真实上传、草稿和列表错误观察。
+
 - [附件与来源阅读证据](2026-10-27-attachment-source-journey/README.md)：当前真实模型、原图与持久事实。
 
 - [文件路径搜索证据](2026-10-27-file-path-search/README.md)：真实文件和目录查询、页面与项目隔离。

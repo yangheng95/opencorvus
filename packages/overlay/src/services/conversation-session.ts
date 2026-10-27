@@ -13,14 +13,20 @@ import { startSSE, stopSSE } from "./sse"
 import { resetSelectedLiveCursor } from "./selected-stream-cursor"
 import { loadConversationUiStateForSource } from "../store/conversation-ui"
 import { apiJson, ApiError, serverSettledRequest } from "./api"
-import { ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
+import {
+  ApiAuthorityChangedError,
+  captureApiAuthority,
+  isApiAuthorityCurrent,
+  assertApiAuthorityCurrent,
+  type ApiAuthority,
+} from "./api"
 import { applyDirectory, ownsWorkspaceSelection } from "./workspace"
 import { AppLog } from "../utils/log"
 import { formatErrorDetails } from "./diagnostics"
 import type { WorkLedgerStreamEvent } from "./sse"
 import { clearComposerModelProjection, projectComposerModelFromSession } from "./composer-model"
 import { replaceWorkspaceLocation } from "./workspace-location"
-import { moveComposerDraftToNewSession } from "./composer-draft"
+import { moveComposerDraft, workspaceComposerDraftKey } from "./composer-draft"
 
 type ConversationSessionResponse = {
   session: ConversationSessionInfo
@@ -39,7 +45,14 @@ export function retireConversationSessionProjection(clear = true): void {
   sessionListLoadOwner = null
   sessionListLoadMoreOwner = null
   sessionActionOwner = null
-  setConversationStore({ loading: false, loadingMore: false, actionBusyID: "", error: "", nextCursor: null, ...(clear ? { sessions: [], searchQuery: "" } : {}) })
+  setConversationStore({
+    loading: false,
+    loadingMore: false,
+    actionBusyID: "",
+    error: "",
+    nextCursor: null,
+    ...(clear ? { sessions: [], searchQuery: "" } : {}),
+  })
 }
 
 export type SelectConversationSessionOptions = {
@@ -214,7 +227,8 @@ export async function loadConversationSessions(options: {
     sessionListLoadMoreOwner = null
     setConversationStore("loadingMore", false)
   }
-  const ownsOwner = () => isApiAuthorityCurrent(authority) && (append ? sessionListLoadMoreOwner === token : sessionListLoadOwner === token)
+  const ownsOwner = () =>
+    isApiAuthorityCurrent(authority) && (append ? sessionListLoadMoreOwner === token : sessionListLoadOwner === token)
   const ownsRequest = () => {
     if (!ownsOwner()) return false
     if (conversationSessionStore.searchQuery.trim() !== searchQuery) return false
@@ -296,7 +310,8 @@ async function createConversationSessionFromPath(options: {
     throw new DOMException("Conversation creation superseded", "AbortError")
   }
   assertNotAborted(options.signal)
-  if (options.composerDraftKey) moveComposerDraftToNewSession(options.composerDraftKey, sessionIDFromResponse(response))
+  if (options.composerDraftKey)
+    moveComposerDraft(options.composerDraftKey, workspaceComposerDraftKey("", sessionIDFromResponse(response), ""))
   setSessionRow(response.session)
   try {
     return await selectConversationSession({
@@ -310,7 +325,8 @@ async function createConversationSessionFromPath(options: {
     })
   } catch (error) {
     // Creation already has its canonical receipt; retired view hydration does not undo it.
-    if (!isApiAuthorityCurrent(authority) && error instanceof ApiAuthorityChangedError) return sessionIDFromResponse(response)
+    if (!isApiAuthorityCurrent(authority) && error instanceof ApiAuthorityChangedError)
+      return sessionIDFromResponse(response)
     throw error
   }
 }
@@ -449,7 +465,8 @@ export async function selectConversationSession(options: SelectConversationSessi
     return await currentActivation
   } catch (error) {
     if (
-      isApiAuthorityCurrent(authority) && ownsWorkspaceSelection(selectionEpoch) &&
+      isApiAuthorityCurrent(authority) &&
+      ownsWorkspaceSelection(selectionEpoch) &&
       boardStore.selectedSource?.kind === "session" &&
       boardStore.selectedSource.id === requestedSessionID
     ) {
@@ -461,7 +478,8 @@ export async function selectConversationSession(options: SelectConversationSessi
     }
     throw error
   } finally {
-    if (isApiAuthorityCurrent(authority) && ownsWorkspaceSelection(selectionEpoch)) setBoardStore("taskSwitching", false)
+    if (isApiAuthorityCurrent(authority) && ownsWorkspaceSelection(selectionEpoch))
+      setBoardStore("taskSwitching", false)
   }
 }
 

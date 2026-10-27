@@ -690,6 +690,13 @@ single live collection. Completion removes only its own token. Receipt and
 operation validation keep late input bound to the Project that accepted it.
 Current failures retain their own error feedback even when allocation rejects;
 actual workspace navigation expires old input effects.
+Automatic Project allocation transfers the current draft from its global launcher
+key to its admitted Project key through the same draft-store operation used for
+Project-to-Session creation. Each transfer reads the latest source record and
+retains its text and existing quotation, with other scopes preserved. An
+independently authored destination retains both records. Successful dispatch
+clears the admitted input without leaving the sent text in the global launcher.
+Persisted draft format and submission identity boundaries retain their contracts.
 
 The registered file owner exposes its existing dirty memo for browser exit.
 Only dirty pages register cancellable beforeunload confirmation. Actual page

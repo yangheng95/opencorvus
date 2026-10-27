@@ -1,0 +1,181 @@
+{
+  "observedAt": "2026-10-27T13:14:52.360Z",
+  "attempts": [
+    {
+      "instance": 720,
+      "sourceRows": 243818,
+      "tables": 92,
+      "sourceAllOriginalRowsPreserved": true,
+      "targetOriginalRowsRetained": true,
+      "immutableOriginalRowsPreserved": 243818,
+      "normalCapacitySlotReuses": 0,
+      "capacityOwnersMatchOwnedRuntime": true,
+      "capacitySlotsReleasedBeforeClosure": true,
+      "protectedRows": 7232,
+      "projectFiles": 166,
+      "requests": 0,
+      "cumulativeRequests": 365,
+      "uiEntry": "main-DWsznkdt.js",
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "reserveMs": 668074,
+      "ledgerCompleted": 13,
+      "ledgerStatuses": [
+        200
+      ]
+    },
+    {
+      "instance": 721,
+      "sourceRows": 243821,
+      "tables": 92,
+      "sourceAllOriginalRowsPreserved": true,
+      "targetOriginalRowsRetained": true,
+      "immutableOriginalRowsPreserved": 243819,
+      "normalCapacitySlotReuses": 2,
+      "capacityOwnersMatchOwnedRuntime": true,
+      "capacitySlotsReleasedBeforeClosure": true,
+      "protectedRows": 7232,
+      "projectFiles": 166,
+      "requests": 4,
+      "cumulativeRequests": 369,
+      "uiEntry": "main-DWsznkdt.js",
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "reserveMs": 987084,
+      "ledgerCompleted": 36,
+      "ledgerStatuses": [
+        200
+      ]
+    },
+    {
+      "instance": 722,
+      "sourceRows": 244985,
+      "tables": 92,
+      "sourceAllOriginalRowsPreserved": true,
+      "targetOriginalRowsRetained": true,
+      "immutableOriginalRowsPreserved": 244983,
+      "normalCapacitySlotReuses": 2,
+      "capacityOwnersMatchOwnedRuntime": true,
+      "capacitySlotsReleasedBeforeClosure": true,
+      "protectedRows": 7259,
+      "projectFiles": 166,
+      "requests": 4,
+      "cumulativeRequests": 373,
+      "uiEntry": "main-w0G0uquP.js",
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "reserveMs": 702245,
+      "ledgerCompleted": 50,
+      "ledgerStatuses": [
+        200
+      ]
+    }
+  ],
+  "messages": [
+    {
+      "instance": 721,
+      "sessionID": "ses_-zUQkBevXzzldAtYkh3h",
+      "userText": "草稿归属721A：附件仅供下一步参考，现在只回复“已收到721A”。不要调用工具、创建任何代理、Task、Goal、访问网络或修改项目文件。",
+      "assistantText": "已收到721A",
+      "file": {
+        "filename": "验收说明 717（原件）.txt",
+        "url": "/attachment/prj_hIsTGaLA2l3wWf5pa9Wg/1f43fa934cc057b5a83486d8802c594b3c0d3a03a73824279575afaf4ff543a3.txt",
+        "presentation": "attachment-index"
+      },
+      "naturallyPersisted": true
+    },
+    {
+      "instance": 722,
+      "sessionID": "ses_-zUQk8ZXVzzvmQMn6k38",
+      "userText": "草稿归属722A：附件仅供下一步参考，现在只回复“已收到722A”。不要调用工具、创建任何代理、Task、Goal、访问网络或修改项目文件。\n分配期间增补：这句新输入也必须保留。",
+      "assistantText": "已收到722A",
+      "file": {
+        "filename": "验收说明 717（原件）.txt",
+        "url": "/attachment/prj_hWlRlYyL4knyLa3Jcnki/1f43fa934cc057b5a83486d8802c594b3c0d3a03a73824279575afaf4ff543a3.txt",
+        "presentation": "attachment-index"
+      },
+      "naturallyPersisted": true
+    }
+  ],
+  "fileBytes": {
+    "bytes": 143,
+    "storedBytesMatchOriginal": true,
+    "canonicalMetadataMatchesOriginalName": true
+  },
+  "actualVisualChecks": {
+    "screenshots": 17,
+    "baselineSentTextReappeared": 7,
+    "fixedNewChatEmpty": 11,
+    "latestInputPreserved": 8,
+    "attachmentRemovalPreservedText": 9,
+    "loadedHistory": 13,
+    "independentDraftRestored": 14,
+    "independentDraftAfterReload": 15,
+    "chineseLightDraft": 16,
+    "chineseLightHistory": 17,
+    "loadingOnlyImage": 12
+  },
+  "requestOutcomes": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    }
+  ],
+  "sourceAuthority": {
+    "catalogSameBytes": true,
+    "catalogSameMetadata": true,
+    "authSameMetadata": true
+  },
+  "checks": {
+    "serializedDraftContractTests": 9,
+    "assertions": 9,
+    "uiAutomationTestsRun": 0,
+    "overlayTypecheck": 0,
+    "i18n": 0,
+    "nodeViteBuild": 0,
+    "rendererSurface": 0,
+    "docsCheck": {
+      "exit": 0,
+      "operations": 351,
+      "groups": 26
+    },
+    "architectureIndex": {
+      "exit": 0,
+      "currentDocuments": 20
+    },
+    "finalDraftContractExit": 0
+  },
+  "limits": [
+    "719 and720 online ledger Failed to fetch cause remains unresolved;721 and722 successful runs do not establish its cause.",
+    "720 unauthenticated attachment upload returned the actual configured-model admission error; authenticated upload/send qualification is721 and722.",
+    "Existing persisted drafts retain their data; no blanket cleanup or browser storage migration was performed.",
+    "Native desktop qualification was not performed."
+  ]
+}

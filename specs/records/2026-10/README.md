@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [新对话分配和列表更新](2026-10-27-composer-allocation-ledger-journey.md)：单代理当前真实使用流程。
+
 - [附件到回复和来源阅读](2026-10-27-attachment-source-journey.md)：真实文件选择、模型读取、来源和后续对话。
 
 - [文件路径搜索分隔符一致性](2026-10-27-file-path-search.md)：单代理修复Windows正斜杠路径查询。

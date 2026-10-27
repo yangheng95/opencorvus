@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [新对话分配和列表更新](records/2026-10/2026-10-27-composer-allocation-ledger-journey.md)：实际上传、草稿和列表连接调查。
+
 - [附件到回复和来源阅读](records/2026-10/2026-10-27-attachment-source-journey.md)：单代理当前真实Sol与附件完整使用流程。
 
 - [文件路径搜索分隔符一致性](records/2026-10/2026-10-27-file-path-search.md)：嵌套路径查询、原文件身份和跨项目真实验收。
