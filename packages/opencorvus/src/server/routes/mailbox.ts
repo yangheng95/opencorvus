@@ -22,6 +22,7 @@ const MailboxListQuery = z
   .object({
     view: MailboxView.optional(),
     limit: z.coerce.number().int().min(1).max(100).optional(),
+    search: z.string().optional(),
     cursorCreatedAt: z.coerce.number().int().positive().optional(),
     cursorID: z.string().min(1).optional(),
   })
@@ -60,7 +61,7 @@ export const MailboxRoutes = lazy(() =>
       describeRoute({
         summary: "List the global mailbox",
         description:
-          "Return the durable Mailbox projection across registered projects, with each item carrying its owning project directory. Active and archived views fold acknowledgement events over protocol history.",
+          "Return the durable Mailbox projection across registered projects. Search matches literal case-insensitive text before pagination; counts retain their global scope. Active and archived views fold acknowledgement events over protocol history.",
         operationId: "mailbox.list",
         responses: {
           200: {
@@ -77,6 +78,7 @@ export const MailboxRoutes = lazy(() =>
           listMailbox({
             view: query.view,
             limit: query.limit,
+            search: query.search,
             cursor:
               query.cursorCreatedAt !== undefined && query.cursorID
                 ? { createdAt: query.cursorCreatedAt, id: query.cursorID }

@@ -10,12 +10,13 @@ import {
   type MailboxAction,
   type MailboxCursor,
   type MailboxItem,
+  type MailboxPage,
   type MailboxView,
 } from "../services/mailbox"
 import { projectMailboxNotifications } from "../services/desktop-notifications"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { showAppDialog } from "../services/app-dialog"
-import { syncActiveDirectoryApiContext } from "../services/workspace"
+import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import { loadTasks } from "../store/board"
 import { appStore } from "../store/app"
 import { detailStamp, relativeTime } from "../utils/time"
@@ -55,7 +56,9 @@ function categoryLabel(item: MailboxItem): string {
 function mergeItems(current: MailboxItem[], next: MailboxItem[]): MailboxItem[] {
   const byID = new Map(current.map((item) => [item.id, item]))
   for (const item of next) byID.set(item.id, item)
-  return [...byID.values()].sort((left, right) => right.createdAt - left.createdAt || right.id.localeCompare(left.id))
+  return [...byID.values()].sort((left, right) =>
+    right.createdAt - left.createdAt || (left.id === right.id ? 0 : left.id < right.id ? 1 : -1),
+  )
 }
 
 export interface MailboxPanelProps {
@@ -82,7 +85,7 @@ export function MailboxPanel(props: MailboxPanelProps) {
   const [counts, setCounts] = createSignal({ unread: 0, active: 0, archived: 0 })
   const [loading, setLoading] = createSignal(true)
   const [loadingMore, setLoadingMore] = createSignal(false)
-  const [loadedDirectory, setLoadedDirectory] = createSignal("")
+  const [loadedAuthorityRevision, setLoadedAuthorityRevision] = createSignal<number>()
   const [pendingActionTokens, setPendingActionTokens] = createSignal<ReadonlyMap<string, symbol>>(new Map())
   const [markAllReadPending, setMarkAllReadPending] = createSignal(false)
   const [deletePending, setDeletePending] = createSignal(false)
@@ -97,27 +100,10 @@ export function MailboxPanel(props: MailboxPanelProps) {
   let disposed = false
   const mailboxActionOperations = new Map<string, MailboxActionOperation>()
 
-  const currentDirectory = createMemo(() => syncActiveDirectoryApiContext().trim())
-
-  const visibleItems = createMemo(() => {
-    const needle = query().trim().toLocaleLowerCase()
-    if (!needle) return items()
-    return items().filter((item) => {
-      const directory = projectDirectoryLabel(item.taskDirectory, item.taskDirectory)
-      return [
-        item.subject,
-        item.body,
-        item.sourceAgentID,
-        item.expertSquadID,
-        item.taskTitle,
-        item.taskDirectory,
-        directory.name,
-        directory.parent,
-      ]
-        .filter(Boolean)
-        .some((value) => String(value).toLocaleLowerCase().includes(needle))
-    })
-  })
+  const currentAuthority = createMemo(captureApiAuthority)
+  const currentSearch = createMemo(() => query().trim())
+  const visibleItems = items
+  const currentRequestScope = () => ({ authority: currentAuthority(), view: MAILBOX_VIEW, search: currentSearch() })
 
   const visibleProjectGroups = createMemo<MailboxProjectGroup[]>(() => {
     const grouped = new Map<string, MailboxProjectGroup>()
@@ -201,25 +187,31 @@ export function MailboxPanel(props: MailboxPanelProps) {
   }
 
   async function refresh(append = false): Promise<void> {
-    const directory = currentDirectory()
-    if (!directory) return
+    if (!appStore.connected) return
+    const authority = currentAuthority()
     const requestView = MAILBOX_VIEW
-    const requestedScope = { directory, view: requestView }
+    const requestedScope = { authority, view: requestView, search: currentSearch() }
+    const previousTail = items().at(-1)
+    let retainedTail: MailboxItem | undefined
     const request = (() => {
       if (append) return requestOwner.join(requestedScope)
       const base = requestOwner.beginBase(requestedScope, () => {
+        const sameAuthority = loadedAuthorityRevision() === authority.revision
         batch(() => {
           setItems([])
           setCursor(null)
-          setCounts({ unread: 0, active: 0, archived: 0 })
-          setLoadedDirectory("")
+          if (!sameAuthority) {
+            setCounts({ unread: 0, active: 0, archived: 0 })
+            setLoadedAuthorityRevision(undefined)
+            setExpandedMessageIDs(new Set<string>())
+          }
           setLoadError("")
           setLoading(true)
           setLoadingMore(false)
-          setExpandedMessageIDs(new Set<string>())
         })
       })
       if (!base.scopeChanged) {
+        retainedTail = previousTail
         batch(() => {
           setLoadError("")
           setLoading(true)
@@ -233,55 +225,65 @@ export function MailboxPanel(props: MailboxPanelProps) {
       setLoadError("")
     }
     try {
-      const page = await loadMailbox({
-        view: requestView,
-        limit: MAILBOX_PAGE_SIZE,
-        cursor: append ? cursor() : null,
-        signal: request.signal,
-      })
-      if (disposed) return
-      const committed = request.commit({ directory: currentDirectory(), view: MAILBOX_VIEW }, () => {
-        setItems((current) => (append ? mergeItems(current, page.items) : page.items))
-        setCursor(page.nextCursor)
+      let page: MailboxPage
+      let nextCursor = append ? cursor() : null
+      let refreshed: MailboxItem[] = []
+      do {
+        page = await loadMailbox({
+          view: requestView,
+          search: requestedScope.search,
+          limit: MAILBOX_PAGE_SIZE,
+          cursor: nextCursor,
+          signal: request.signal,
+        })
+        if (disposed || !request.owns(currentRequestScope())) return
+        refreshed = mergeItems(refreshed, page.items)
+        nextCursor = page.nextCursor
+        const oldest = refreshed.at(-1)
+        if (append || !retainedTail || !nextCursor || !oldest || oldest.createdAt < retainedTail.createdAt ||
+          (oldest.createdAt === retainedTail.createdAt && oldest.id <= retainedTail.id)) break
+      } while (true)
+      const committed = request.commit(currentRequestScope(), () => {
+        setItems((current) => (append ? mergeItems(current, refreshed) : refreshed))
+        setCursor(nextCursor)
         setCounts({ unread: page.unreadCount, active: page.activeCount, archived: page.archivedCount })
-        if (!append) setLoadedDirectory(directory)
+        if (!append) setLoadedAuthorityRevision(authority.revision)
       })
       if (!committed) return
       if (!append) {
         const notificationRequest = requestOwner.join(requestedScope)
         void projectMailboxNotifications({
-          directory,
           view: requestView,
-          page,
+          page: requestedScope.search ? undefined : { ...page, items: refreshed, nextCursor },
           signal: notificationRequest.signal,
         }).finally(() => notificationRequest.complete())
       }
     } catch (error) {
       if (disposed) return
-      request.commit({ directory: currentDirectory(), view: MAILBOX_VIEW }, () => {
+      request.commit(currentRequestScope(), () => {
         setLoadError(error instanceof Error ? error.message : String(error))
       })
     } finally {
-      const ownsCurrentScope = !disposed && request.owns({ directory: currentDirectory(), view: MAILBOX_VIEW })
+      const ownsCurrentScope = !disposed && request.owns(currentRequestScope())
       request.complete()
       if (ownsCurrentScope) append ? setLoadingMore(false) : setLoading(false)
     }
   }
 
-  function scheduleRefresh(directory: string): void {
+  function scheduleRefresh(authority: ApiAuthority): void {
     if (refreshTimer) clearTimeout(refreshTimer)
     refreshTimer = setTimeout(() => {
       refreshTimer = undefined
-      if (disposed || currentDirectory() !== directory) return
+      if (disposed || !appStore.connected || !isApiAuthorityCurrent(authority)) return
       void refresh()
     }, MAILBOX_REFRESH_DEBOUNCE_MILLISECONDS)
   }
 
-  function connect(directory: string): void {
+  function connect(authority: ApiAuthority): void {
     if (disposed) return
     unsubscribeMailboxChanges?.()
     unsubscribeMailboxChanges = subscribeMailboxChangeNotifications({
-      onRefresh: () => scheduleRefresh(directory),
+      onRefresh: () => scheduleRefresh(authority),
       onError(error) {
         console.error("[mailbox] change stream failed", error)
       },
@@ -326,15 +328,14 @@ export function MailboxPanel(props: MailboxPanelProps) {
   }
 
   async function markAllAsRead(): Promise<void> {
-    const directory = currentDirectory()
-    if (!directory || counts().unread === 0 || markAllReadPending()) return
+    if (!appStore.connected || counts().unread === 0 || markAllReadPending()) return
     setMarkAllReadPending(true)
     try {
       await markAllMailboxItemsRead()
       await refresh()
     } catch (error) {
       reportError({
-        id: `mailbox:read-all:${directory}`,
+        id: "mailbox:read-all",
         title: t("mailbox.action_failed"),
         message: error instanceof Error ? error.message : String(error),
         details: formatErrorDetails(error),
@@ -411,16 +412,15 @@ export function MailboxPanel(props: MailboxPanelProps) {
   }
 
   createEffect(
-    on([() => appStore.connected, currentDirectory], ([connected, directory]) => {
-      if (!connected || !directory) {
-        const emptyScope = { directory: "", view: MAILBOX_VIEW }
-        const emptyRequest = requestOwner.beginBase(emptyScope, () => undefined).request
-        emptyRequest.complete()
+    on([() => appStore.connected, currentAuthority, currentSearch], ([connected]) => {
+      if (!connected) {
+        requestOwner.abortAll()
         setItems([])
         setCursor(null)
         setCounts({ unread: 0, active: 0, archived: 0 })
         setLoadError("")
-        setLoadedDirectory("")
+        setLoadedAuthorityRevision(undefined)
+        setExpandedMessageIDs(new Set<string>())
         setLoading(false)
         setLoadingMore(false)
         return
@@ -448,13 +448,13 @@ export function MailboxPanel(props: MailboxPanelProps) {
   })
 
   createEffect(() => {
-    const directory = currentDirectory()
+    const authority = currentAuthority()
     const connected = appStore.connected
     if (refreshTimer) clearTimeout(refreshTimer)
     refreshTimer = undefined
     unsubscribeMailboxChanges?.()
     unsubscribeMailboxChanges = undefined
-    if (connected && directory) connect(directory)
+    if (connected) connect(authority)
   })
 
   onCleanup(() => {
@@ -578,7 +578,7 @@ export function MailboxPanel(props: MailboxPanelProps) {
         </Show>
       </header>
 
-      <div class="mailbox-panel__body" aria-busy={loading()} data-loaded-directory={loadedDirectory()}>
+      <div class="mailbox-panel__body" aria-busy={loading()}>
         <Show when={loadError()}>
           <Feedback
             tone="error"
@@ -603,7 +603,7 @@ export function MailboxPanel(props: MailboxPanelProps) {
                 <div class="mailbox-panel__empty">
                   <Icon name="notifications" size="large" />
                   <Show
-                    when={query()}
+                    when={currentSearch()}
                     fallback={
                       <>
                         <div class="mailbox-panel__empty-title">{t("mailbox.empty.active")}</div>
@@ -792,7 +792,7 @@ export function MailboxPanel(props: MailboxPanelProps) {
                 }}
               </For>
             </div>
-            <Show when={cursor() && !query()}>
+            <Show when={cursor()}>
               <div class="mailbox-panel__load-more">
                 <Button
                   type="button"

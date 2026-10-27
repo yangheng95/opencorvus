@@ -183,9 +183,8 @@ async function loadAllActiveMailboxItems(
 }
 
 export async function projectMailboxNotifications(input: {
-  directory: string
   view: MailboxView
-  page: MailboxPage
+  page?: MailboxPage
   signal: AbortSignal
 }): Promise<void> {
   try {

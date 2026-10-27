@@ -87100,7 +87100,7 @@
         ]
       },
       "get": {
-        "description": "Return the durable Mailbox projection across registered projects, with each item carrying its owning project directory. Active and archived views fold acknowledgement events over protocol history.",
+        "description": "Return the durable Mailbox projection across registered projects. Search matches literal case-insensitive text before pagination; counts retain their global scope. Active and archived views fold acknowledgement events over protocol history.",
         "operationId": "mailbox.list",
         "parameters": [
           {
@@ -87121,6 +87121,13 @@
               "maximum": 100,
               "minimum": 1,
               "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string"
             }
           },
           {

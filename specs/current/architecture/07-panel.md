@@ -2782,6 +2782,20 @@ collapsible around its nested message Accordion. Directory and message ID keys
 preserve Disclosure state, item expansion, focus, and DOM identity across
 same-scope backend refreshes.
 
+Mailbox read ownership follows the current API connection authority, view, and
+trimmed search query. Selecting another registered project, including Open
+Task navigation, preserves the global loaded range and expanded messages.
+Connection rotation retires prior reads and notification projection. Search
+is a literal case-insensitive query over canonical subject, body, source agent,
+squad, task title, and project directory, applied before cursor pagination by
+the sole Mailbox API. Counts remain global. Filtered results expose the same
+Load more operation; acknowledgements and invalidations revalidate the accepted
+prefix through its original oldest position before committing the fresh page
+sequence. Search results never substitute for the native notification
+projector's complete active global snapshot. Dense row timestamps may truncate
+to preserve the subject; their complete localized date remains available on
+hover.
+
 Every `mailbox.connected` frame triggers a canonical `/mailbox` refetch,
 so durable items written while the change stream was disconnected converge
 without replay cursors or a second client-side history.

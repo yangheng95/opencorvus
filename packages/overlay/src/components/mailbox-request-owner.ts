@@ -1,6 +1,9 @@
+import type { ApiAuthority } from "../services/api"
+
 export type MailboxRequestScope = {
-  directory: string
+  authority: ApiAuthority
   view: string
+  search: string
 }
 
 export type OwnedMailboxRequest = {
@@ -20,7 +23,7 @@ export type MailboxRequestOwner = {
 }
 
 function scopeKey(scope: MailboxRequestScope): string {
-  return `${scope.directory}\u0000${scope.view}`
+  return `${scope.authority.revision}\u0000${scope.view}\u0000${scope.search}`
 }
 
 export function createMailboxRequestOwner(): MailboxRequestOwner {
@@ -72,7 +75,7 @@ export function createMailboxRequestOwner(): MailboxRequestOwner {
       const requestScopeKey = scopeKey(scope)
       if (currentScopeKey !== requestScopeKey) {
         abortAll()
-        throw new Error("Mailbox request does not belong to the active directory and view scope")
+        throw new Error("Mailbox request does not belong to the active connection, view and query scope")
       }
       return createRequest(requestScopeKey)
     },

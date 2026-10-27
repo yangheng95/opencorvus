@@ -1,0 +1,887 @@
+{
+  "at": "2026-10-27T04:40:41.920Z",
+  "qualification": "28 original screenshots manually viewed; no UI automated tests; all service/UI occurrences settled",
+  "runs": [
+    {
+      "label": "mailbox-reading-689",
+      "port": 38194,
+      "uiEntry": "main-_tEJutEr.js",
+      "database": {
+        "schema": 9,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 29661,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "automation": {
+            "original": 4,
+            "current": 4,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire": {
+            "original": 3,
+            "current": 3,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_project_target": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "message": {
+            "original": 94,
+            "current": 94,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "part": {
+            "original": 284,
+            "current": 284,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 254,
+            "current": 256,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 94,
+            "current": 94,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 94,
+            "current": 94,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "session": {
+            "original": 22,
+            "current": 22,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 78,
+            "current": 78,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 14,
+            "current": 14,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 78,
+            "current": 78,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          }
+        }
+      },
+      "requests": 0,
+      "cumulativeRequests": 332,
+      "publicShutdown": 200,
+      "reserveMs": 862847,
+      "successfulShutdown": true,
+      "physical": {
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "chainStates": [
+          "dead_or_reused",
+          "dead_or_reused"
+        ]
+      },
+      "retirement": {
+        "at": "2026-10-27T03:39:54.460Z",
+        "credentialCopyCreated": false,
+        "modelCatalogCopyRetired": true,
+        "requests": 0,
+        "cumulativeRequests": 332,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "reserveMs": 862847,
+        "publicShutdown": 200,
+        "physical": {
+          "native": {
+            "occurrence": "mailbox-reading-689-146fa395-f1d4-4d3f-a5d5-10a036813cd8",
+            "outcome": "settled",
+            "host": {
+              "pid": 33052,
+              "processInstanceID": "win32:639286688426771727",
+              "occurrenceID": "91260ed5-263a-4893-8b64-d864568e46a4"
+            },
+            "target": {
+              "pid": 85016,
+              "processInstanceID": "win32:639286688434009572",
+              "occurrenceID": "cbed67ce-6adf-4524-94af-18d278278d26"
+            },
+            "observedAtUtc": "2026-10-27T03:39:39.664Z",
+            "deadlineAt": 1793073242511,
+            "terminal": {
+              "occurrenceID": "mailbox-reading-689-146fa395-f1d4-4d3f-a5d5-10a036813cd8",
+              "pid": 85016,
+              "reason": "exited",
+              "exitCode": 0,
+              "signal": null
+            },
+            "physicalCompletion": true,
+            "outputDrainComplete": true,
+            "requestCleanupComplete": true,
+            "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+          },
+          "observedAtUtc": "2026-10-27T03:39:54.0272969Z",
+          "launcher": {
+            "observedAtUtc": "2026-10-27T03:39:39.6957617Z",
+            "originalChildExit": 0
+          },
+          "chain": [
+            {
+              "identity": {
+                "pid": 33052,
+                "processInstanceID": "win32:639286688426771727",
+                "occurrenceID": "91260ed5-263a-4893-8b64-d864568e46a4"
+              },
+              "state": "dead_or_reused"
+            },
+            {
+              "identity": {
+                "pid": 85016,
+                "processInstanceID": "win32:639286688434009572",
+                "occurrenceID": "cbed67ce-6adf-4524-94af-18d278278d26"
+              },
+              "state": "dead_or_reused"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "label": "mailbox-reading-690",
+      "port": 38195,
+      "uiEntry": "main-_tEJutEr.js",
+      "database": {
+        "sourceSchema": 8,
+        "schema": 9,
+        "integrity": "ok",
+        "sourceTables": 92,
+        "sourceRows": 218638,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "automation": {
+            "original": 2,
+            "current": 2,
+            "originalRowsPreserved": true
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreserved": true
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreserved": true
+          },
+          "automation_fire": {
+            "original": 2,
+            "current": 2,
+            "originalRowsPreserved": true
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreserved": true
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreserved": true
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreserved": true
+          },
+          "automation_project_target": {
+            "original": 2,
+            "current": 2,
+            "originalRowsPreserved": true
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreserved": true
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreserved": true
+          },
+          "message": {
+            "original": 794,
+            "current": 794,
+            "originalRowsPreserved": true
+          },
+          "part": {
+            "original": 1935,
+            "current": 1935,
+            "originalRowsPreserved": true
+          },
+          "protocol_event": {
+            "original": 2304,
+            "current": 2305,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_outcome": {
+            "original": 524,
+            "current": 524,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_request": {
+            "original": 524,
+            "current": 524,
+            "originalRowsPreserved": true
+          },
+          "session": {
+            "original": 268,
+            "current": 268,
+            "originalRowsPreserved": true
+          },
+          "tool_part_outcome": {
+            "original": 255,
+            "current": 255,
+            "originalRowsPreserved": true
+          },
+          "tool_part_progress": {
+            "original": 29,
+            "current": 29,
+            "originalRowsPreserved": true
+          },
+          "tool_part_request": {
+            "original": 255,
+            "current": 255,
+            "originalRowsPreserved": true
+          }
+        }
+      },
+      "projectFilesPreserved": 166,
+      "requests": 0,
+      "cumulativeRequests": 332,
+      "publicShutdown": 200,
+      "reserveMs": 900441,
+      "successfulShutdown": true,
+      "physical": {
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "chainStates": [
+          "dead_or_reused",
+          "dead_or_reused"
+        ]
+      },
+      "retirement": {
+        "at": "2026-10-27T03:59:20.297Z",
+        "credentialCopyCreated": false,
+        "modelCatalogCopyRetired": true,
+        "requests": 0,
+        "cumulativeRequests": 332,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "reserveMs": 900441,
+        "publicShutdown": 200,
+        "physical": {
+          "observedAtUtc": "2026-10-27T03:59:17.9857889Z",
+          "launcher": {
+            "observedAtUtc": "2026-10-27T03:59:07.3674035Z",
+            "originalChildExit": 0
+          },
+          "chain": [
+            {
+              "identity": {
+                "pid": 99264,
+                "processInstanceID": "win32:639286700478112033",
+                "occurrenceID": "284d92d0-1e23-4aca-90df-52bb06c5e4db"
+              },
+              "state": "dead_or_reused"
+            },
+            {
+              "identity": {
+                "pid": 75952,
+                "processInstanceID": "win32:639286700483276656",
+                "occurrenceID": "950766d5-77f9-42b3-af73-033fa4fe8c6c"
+              },
+              "state": "dead_or_reused"
+            }
+          ],
+          "native": {
+            "occurrence": "mailbox-reading-690-434ed8e8-70fd-4591-8500-e86694975f53",
+            "outcome": "settled",
+            "host": {
+              "pid": 99264,
+              "processInstanceID": "win32:639286700478112033",
+              "occurrenceID": "284d92d0-1e23-4aca-90df-52bb06c5e4db"
+            },
+            "target": {
+              "pid": 75952,
+              "processInstanceID": "win32:639286700483276656",
+              "occurrenceID": "950766d5-77f9-42b3-af73-033fa4fe8c6c"
+            },
+            "observedAtUtc": "2026-10-27T03:59:07.336Z",
+            "deadlineAt": 1793074447777,
+            "terminal": {
+              "occurrenceID": "mailbox-reading-690-434ed8e8-70fd-4591-8500-e86694975f53",
+              "pid": 75952,
+              "reason": "exited",
+              "exitCode": 0,
+              "signal": null
+            },
+            "physicalCompletion": true,
+            "outputDrainComplete": true,
+            "requestCleanupComplete": true,
+            "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+          }
+        }
+      }
+    },
+    {
+      "label": "mailbox-reading-691",
+      "port": 38196,
+      "uiEntry": "main-Bpsz8ZMp.js",
+      "database": {
+        "sourceSchema": 9,
+        "schema": 9,
+        "integrity": "ok",
+        "sourceTables": 92,
+        "sourceRows": 218639,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "automation": {
+            "original": 2,
+            "current": 2,
+            "originalRowsPreserved": true
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreserved": true
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreserved": true
+          },
+          "automation_fire": {
+            "original": 2,
+            "current": 2,
+            "originalRowsPreserved": true
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreserved": true
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreserved": true
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreserved": true
+          },
+          "automation_project_target": {
+            "original": 2,
+            "current": 2,
+            "originalRowsPreserved": true
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreserved": true
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreserved": true
+          },
+          "message": {
+            "original": 794,
+            "current": 794,
+            "originalRowsPreserved": true
+          },
+          "part": {
+            "original": 1935,
+            "current": 1935,
+            "originalRowsPreserved": true
+          },
+          "protocol_event": {
+            "original": 2305,
+            "current": 2308,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_outcome": {
+            "original": 524,
+            "current": 524,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_request": {
+            "original": 524,
+            "current": 524,
+            "originalRowsPreserved": true
+          },
+          "session": {
+            "original": 268,
+            "current": 268,
+            "originalRowsPreserved": true
+          },
+          "tool_part_outcome": {
+            "original": 255,
+            "current": 255,
+            "originalRowsPreserved": true
+          },
+          "tool_part_progress": {
+            "original": 29,
+            "current": 29,
+            "originalRowsPreserved": true
+          },
+          "tool_part_request": {
+            "original": 255,
+            "current": 255,
+            "originalRowsPreserved": true
+          }
+        }
+      },
+      "projectFilesPreserved": 166,
+      "requests": 0,
+      "cumulativeRequests": 332,
+      "publicShutdown": 200,
+      "reserveMs": 894394,
+      "successfulShutdown": true,
+      "physical": {
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "chainStates": [
+          "dead_or_reused",
+          "dead_or_reused"
+        ]
+      },
+      "retirement": {
+        "at": "2026-10-27T04:27:42.945Z",
+        "credentialCopyCreated": false,
+        "modelCatalogCopyRetired": true,
+        "requests": 0,
+        "cumulativeRequests": 332,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "reserveMs": 894394,
+        "publicShutdown": 200,
+        "physical": {
+          "chain": [
+            {
+              "state": "dead_or_reused",
+              "identity": {
+                "pid": 80336,
+                "processInstanceID": "win32:639286717538808965",
+                "occurrenceID": "50571aff-e320-4292-823d-cf9583dedd93"
+              }
+            },
+            {
+              "state": "dead_or_reused",
+              "identity": {
+                "pid": 95876,
+                "processInstanceID": "win32:639286717544104182",
+                "occurrenceID": "177f42f5-cac4-4dca-b59e-ef8135ecee61"
+              }
+            }
+          ],
+          "launcher": {
+            "originalChildExit": 0,
+            "observedAtUtc": "2026-10-27T04:27:39.4900944Z"
+          },
+          "native": {
+            "occurrence": "mailbox-reading-691-f6dc1c3d-2f67-450c-a252-f570809cf7ff",
+            "outcome": "settled",
+            "host": {
+              "pid": 80336,
+              "processInstanceID": "win32:639286717538808965",
+              "occurrenceID": "50571aff-e320-4292-823d-cf9583dedd93"
+            },
+            "target": {
+              "pid": 95876,
+              "processInstanceID": "win32:639286717544104182",
+              "occurrenceID": "177f42f5-cac4-4dca-b59e-ef8135ecee61"
+            },
+            "observedAtUtc": "2026-10-27T04:27:39.452Z",
+            "deadlineAt": 1793076153846,
+            "terminal": {
+              "occurrenceID": "mailbox-reading-691-f6dc1c3d-2f67-450c-a252-f570809cf7ff",
+              "pid": 95876,
+              "reason": "exited",
+              "exitCode": 0,
+              "signal": null
+            },
+            "physicalCompletion": true,
+            "outputDrainComplete": true,
+            "requestCleanupComplete": true,
+            "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+          },
+          "observedAtUtc": "2026-10-27T04:27:40.4520314Z"
+        }
+      }
+    },
+    {
+      "label": "mailbox-reading-692",
+      "port": 38197,
+      "uiEntry": "main-DafGt6-L.js",
+      "database": {
+        "sourceSchema": 9,
+        "schema": 9,
+        "integrity": "ok",
+        "sourceTables": 92,
+        "sourceRows": 218642,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "automation": {
+            "original": 2,
+            "current": 2,
+            "originalRowsPreserved": true
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreserved": true
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreserved": true
+          },
+          "automation_fire": {
+            "original": 2,
+            "current": 2,
+            "originalRowsPreserved": true
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreserved": true
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreserved": true
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreserved": true
+          },
+          "automation_project_target": {
+            "original": 2,
+            "current": 2,
+            "originalRowsPreserved": true
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreserved": true
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreserved": true
+          },
+          "message": {
+            "original": 794,
+            "current": 794,
+            "originalRowsPreserved": true
+          },
+          "part": {
+            "original": 1935,
+            "current": 1935,
+            "originalRowsPreserved": true
+          },
+          "protocol_event": {
+            "original": 2308,
+            "current": 2309,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_outcome": {
+            "original": 524,
+            "current": 524,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_request": {
+            "original": 524,
+            "current": 524,
+            "originalRowsPreserved": true
+          },
+          "session": {
+            "original": 268,
+            "current": 268,
+            "originalRowsPreserved": true
+          },
+          "tool_part_outcome": {
+            "original": 255,
+            "current": 255,
+            "originalRowsPreserved": true
+          },
+          "tool_part_progress": {
+            "original": 29,
+            "current": 29,
+            "originalRowsPreserved": true
+          },
+          "tool_part_request": {
+            "original": 255,
+            "current": 255,
+            "originalRowsPreserved": true
+          }
+        }
+      },
+      "projectFilesPreserved": 166,
+      "requests": 0,
+      "cumulativeRequests": 332,
+      "publicShutdown": 200,
+      "reserveMs": 969266,
+      "successfulShutdown": true,
+      "physical": {
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "chainStates": [
+          "dead_or_reused",
+          "dead_or_reused"
+        ]
+      },
+      "retirement": {
+        "at": "2026-10-27T04:39:17.291Z",
+        "credentialCopyCreated": false,
+        "modelCatalogCopyRetired": true,
+        "requests": 0,
+        "cumulativeRequests": 332,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "reserveMs": 969266,
+        "publicShutdown": 200,
+        "physical": {
+          "chain": [
+            {
+              "identity": {
+                "pid": 41192,
+                "processInstanceID": "win32:639286725148658421",
+                "occurrenceID": "fbe5deb8-91ce-468b-8e7a-e772852e8387"
+              },
+              "state": "dead_or_reused"
+            },
+            {
+              "identity": {
+                "pid": 67568,
+                "processInstanceID": "win32:639286725153836076",
+                "occurrenceID": "5bfa5033-b887-40c6-95b6-725f044b0a90"
+              },
+              "state": "dead_or_reused"
+            }
+          ],
+          "observedAtUtc": "2026-10-27T04:39:14.8991598Z",
+          "native": {
+            "occurrence": "mailbox-reading-692-395d2feb-6daf-4d9e-84b4-cc96cdfe2d9c",
+            "outcome": "settled",
+            "host": {
+              "pid": 41192,
+              "processInstanceID": "win32:639286725148658421",
+              "occurrenceID": "fbe5deb8-91ce-468b-8e7a-e772852e8387"
+            },
+            "target": {
+              "pid": 67568,
+              "processInstanceID": "win32:639286725153836076",
+              "occurrenceID": "5bfa5033-b887-40c6-95b6-725f044b0a90"
+            },
+            "observedAtUtc": "2026-10-27T04:39:05.565Z",
+            "deadlineAt": 1793076914831,
+            "terminal": {
+              "occurrenceID": "mailbox-reading-692-395d2feb-6daf-4d9e-84b4-cc96cdfe2d9c",
+              "pid": 67568,
+              "reason": "exited",
+              "exitCode": 0,
+              "signal": null
+            },
+            "physicalCompletion": true,
+            "outputDrainComplete": true,
+            "requestCleanupComplete": true,
+            "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+          },
+          "launcher": {
+            "observedAtUtc": "2026-10-27T04:39:05.6008811Z",
+            "originalChildExit": 0
+          }
+        }
+      }
+    }
+  ],
+  "checks": [
+    {
+      "label": "mailbox-692-owner-tests",
+      "startedAt": 1793075577703,
+      "closedAt": 1793075582933,
+      "code": 0,
+      "signal": null,
+      "childPID": 100240
+    },
+    {
+      "label": "mailbox-692-types-ui-correct",
+      "startedAt": 1793075614496,
+      "closedAt": 1793075641470,
+      "code": 0,
+      "signal": null,
+      "childPID": 69296
+    },
+    {
+      "label": "mailbox-692-backend-checker",
+      "startedAt": 1793075660750,
+      "closedAt": 1793075693193,
+      "code": 0,
+      "signal": null,
+      "childPID": 33484
+    },
+    {
+      "label": "mailbox-692-build",
+      "startedAt": 1793075590941,
+      "closedAt": 1793075675700,
+      "code": 0,
+      "signal": null,
+      "childPID": 20020
+    },
+    {
+      "label": "mailbox-692-docs",
+      "startedAt": 1793076050706,
+      "closedAt": 1793076061627,
+      "code": 0,
+      "signal": null,
+      "childPID": 88500
+    },
+    {
+      "label": "mailbox-692-i18n",
+      "startedAt": 1793076050706,
+      "closedAt": 1793076053676,
+      "code": 0,
+      "signal": null,
+      "childPID": 83036
+    },
+    {
+      "label": "mailbox-692-css",
+      "startedAt": 1793076050707,
+      "closedAt": 1793076064925,
+      "code": 0,
+      "signal": null,
+      "childPID": 92732
+    }
+  ],
+  "finalNavigation": {
+    "before": {
+      "expanded": [
+        "pev_g0VYhrk1T00LpQwpABaz",
+        "pev_g0VYf1dvf00rpqRdJOHk",
+        "pev_g0VXzhoiK00qoGFA7Zbi"
+      ],
+      "rows": 146
+    },
+    "after": {
+      "dates": [
+        {
+          "text": "2026年10月14日 11:52",
+          "title": "2026年10月14日 11:52"
+        },
+        {
+          "text": "2026年10月14日 11:50",
+          "title": "2026年10月14日 11:50"
+        }
+      ],
+      "expanded": [
+        "pev_g0VYhrk1T00LpQwpABaz",
+        "pev_g0VYf1dvf00rpqRdJOHk",
+        "pev_g0VXzhoiK00qoGFA7Zbi"
+      ],
+      "rows": 146
+    }
+  },
+  "filtered": {
+    "query": "Permission requested",
+    "rows": 77
+  },
+  "diagnostics": [],
+  "limits": "No new model requests or authentication copied. Schema unchanged in production source; only owned 690 copy migrated 8 to 9. Read-only inspection plus real acknowledgement actions. Prior 591 aborted memory reader is not claimed EOF."
+}

@@ -21,11 +21,13 @@ export interface MailboxDeleteResult {
 export async function loadMailbox(input: {
   view: MailboxView
   limit?: number
+  search?: string
   cursor?: MailboxCursor | null
   signal?: AbortSignal
 }): Promise<MailboxPage> {
   const params = new URLSearchParams({ view: input.view })
   if (typeof input.limit === "number") params.set("limit", String(input.limit))
+  if (input.search?.trim()) params.set("search", input.search.trim())
   if (input.cursor) {
     params.set("cursorCreatedAt", String(input.cursor.createdAt))
     params.set("cursorID", input.cursor.id)

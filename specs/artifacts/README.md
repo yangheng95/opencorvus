@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [收件箱完整阅读体验证据](2026-10-27-mailbox-reading-journey/README.md)：28张实际原图，历史搜索、分页阅读和跨项目保留修复，四个隔离实例结清。
+
 - [图表完整交互体验证据](2026-10-27-chart-interaction-journey/README.md)：真实模型产物、40张原图人工复核、连续交互修复及四次运行结清事实。
 
 - [侧聊与引用交接体验证据](2026-10-27-side-chat-handoff-journey/README.md)：21张真实原图，复制产物修复、版本9保留数据迁移、精确请求通知归属与Sol流式验收。

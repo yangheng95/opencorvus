@@ -23990,6 +23990,7 @@ export type MailboxListData = {
   query?: {
     view?: "active" | "archived"
     limit?: number
+    search?: string
     cursorCreatedAt?: number
     cursorID?: string
   }

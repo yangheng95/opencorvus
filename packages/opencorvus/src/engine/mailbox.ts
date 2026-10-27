@@ -298,9 +298,10 @@ function allMailboxSourceRows(): MailboxSourceRow[] {
   ).filter((row) => isMailboxSourceEvent(row.event.type, row.event.payload))
 }
 
-export function listMailbox(input: { view?: MailboxView; cursor?: MailboxCursor; limit?: number }): MailboxPage {
+export function listMailbox(input: { view?: MailboxView; cursor?: MailboxCursor; limit?: number; search?: string }): MailboxPage {
   const view = input.view ?? "active"
   const limit = Math.min(MAILBOX_MAX_PAGE_SIZE, Math.max(1, input.limit ?? MAILBOX_DEFAULT_PAGE_SIZE))
+  const search = input.search?.trim().toLowerCase() ?? ""
   const state = mailboxState()
   const allRows = allMailboxSourceRows()
   let activeCount = 0
@@ -321,6 +322,12 @@ export function listMailbox(input: { view?: MailboxView; cursor?: MailboxCursor;
     if (itemState?.deletedAt !== undefined) return false
     const inView = view === "archived" ? itemState?.archivedAt !== undefined : itemState?.archivedAt === undefined
     if (!inView) return false
+    if (search) {
+      const item = mailboxItemFromRow({ row, state: itemState })
+      const fields = [item.subject, item.body, item.sourceAgentID, item.expertSquadID, item.taskTitle,
+        item.taskDirectory, item.taskDirectory.replaceAll("\\", "/")]
+      if (!fields.some(value => value?.toLowerCase().includes(search))) return false
+    }
     if (!input.cursor) return true
     return (
       row.event.emitted_at < input.cursor.createdAt ||

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [收件箱阅读、查找与返回任务](records/2026-10/2026-10-27-mailbox-reading-journey.md)：全局通知、正文与已读、查找和所属任务导航体验。
+
 - [图表筛选、布局与交付体验](records/2026-10/2026-10-27-chart-interaction-journey.md)：原生图表与仪表盘选择、筛选、尺寸/主题和语言的完整使用调查。
 
 - [侧聊与引用回主对话的完整体验](records/2026-10/2026-10-27-side-chat-handoff-journey.md)：真实打开、上下文、发送、引用、草稿和阅读状态调查。

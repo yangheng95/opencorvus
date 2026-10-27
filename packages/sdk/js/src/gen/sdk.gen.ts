@@ -9474,12 +9474,13 @@ export class Mailbox extends HeyApiClient {
   /**
    * List the global mailbox
    *
-   * Return the durable Mailbox projection across registered projects, with each item carrying its owning project directory. Active and archived views fold acknowledgement events over protocol history.
+   * Return the durable Mailbox projection across registered projects. Search matches literal case-insensitive text before pagination; counts retain their global scope. Active and archived views fold acknowledgement events over protocol history.
    */
   public list<ThrowOnError extends boolean = false>(
     parameters?: {
       view?: "active" | "archived"
       limit?: number
+      search?: string
       cursorCreatedAt?: number
       cursorID?: string
     },
@@ -9492,6 +9493,7 @@ export class Mailbox extends HeyApiClient {
           args: [
             { in: "query", key: "view" },
             { in: "query", key: "limit" },
+            { in: "query", key: "search" },
             { in: "query", key: "cursorCreatedAt" },
             { in: "query", key: "cursorID" },
           ],

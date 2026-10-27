@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [收件箱阅读、查找与返回任务](2026-10-27-mailbox-reading-journey.md)：单代理真实通知完整阅读流程调查。
+
 - [图表筛选、布局与交付体验](2026-10-27-chart-interaction-journey.md)：单代理真实图表/仪表盘交互与交付路径调查。
 
 - [侧聊与引用回主对话的完整体验](2026-10-27-side-chat-handoff-journey.md)：单代理实际体验侧聊与主输入框的完整交互链。
