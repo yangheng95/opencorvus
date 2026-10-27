@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [归档恢复与告警核对](2026-10-28-archive-journey-and-alert-reconciliation.md)：单代理真实旅程、跨项目事务与全局投影收敛。
+
 - [原生依赖当前告警与修复](2026-10-28-native-advisory-followup.md)：完整审计、单一锁升级、19项生产库行为与进程结清。
 
 - [成果读取与依赖告警](2026-10-28-artifact-journey-and-dependency-audit.md)：单代理实页旅程及qs补丁正向验收。

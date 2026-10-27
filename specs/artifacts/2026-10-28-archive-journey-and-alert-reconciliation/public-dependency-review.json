@@ -1,0 +1,223 @@
+{
+  "created": "2026-10-27T23:25:30Z",
+  "packages": 962,
+  "qualification": "Public current package identities only; SBOM is not the authenticated alert list and does not identify the twelve alert IDs/manifests",
+  "selected": [
+    {
+      "name": "zip",
+      "version": "9.1.2",
+      "refs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/zip@9.1.2"
+        }
+      ]
+    },
+    {
+      "name": "rustls-webpki",
+      "version": "0.103.16",
+      "refs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/rustls-webpki@0.103.16"
+        }
+      ]
+    },
+    {
+      "name": "tauri-plugin-updater",
+      "version": "2.14.0",
+      "refs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/tauri-plugin-updater@2.14.0"
+        }
+      ]
+    },
+    {
+      "name": "rand",
+      "version": "0.7.3",
+      "refs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/rand@0.7.3"
+        }
+      ]
+    },
+    {
+      "name": "rustls",
+      "version": "0.23.46",
+      "refs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/rustls@0.23.46"
+        }
+      ]
+    },
+    {
+      "name": "tauri",
+      "version": "2.12.5",
+      "refs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/tauri@2.12.5"
+        }
+      ]
+    },
+    {
+      "name": "webpki-root-certs",
+      "version": "1.0.11",
+      "refs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/webpki-root-certs@1.0.11"
+        }
+      ]
+    },
+    {
+      "name": "rand",
+      "version": "0.9.4",
+      "refs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/rand@0.9.4"
+        }
+      ]
+    },
+    {
+      "name": "glib",
+      "version": "0.18.5",
+      "refs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/glib@0.18.5"
+        }
+      ]
+    },
+    {
+      "name": "tokio",
+      "version": "1.51.6",
+      "refs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/tokio@1.51.6"
+        }
+      ]
+    },
+    {
+      "name": "rand",
+      "version": "0.8.6",
+      "refs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/rand@0.8.6"
+        }
+      ]
+    },
+    {
+      "name": "tauri-plugin-updater",
+      "version": "2.12.0",
+      "refs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/tauri-plugin-updater@2.12.0"
+        }
+      ]
+    },
+    {
+      "name": "rustls",
+      "version": "0.23.45",
+      "refs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/rustls@0.23.45"
+        }
+      ]
+    },
+    {
+      "name": "tokio",
+      "version": "1.50.0",
+      "refs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/tokio@1.50.0"
+        }
+      ]
+    },
+    {
+      "name": "tauri",
+      "version": "2.11.1",
+      "refs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/tauri@2.11.1"
+        }
+      ]
+    },
+    {
+      "name": "webpki-root-certs",
+      "version": "1.0.9",
+      "refs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/webpki-root-certs@1.0.9"
+        }
+      ]
+    },
+    {
+      "name": "zip",
+      "version": "4.6.1",
+      "refs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/zip@4.6.1"
+        }
+      ]
+    },
+    {
+      "name": "rustls-webpki",
+      "version": "0.103.14",
+      "refs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/rustls-webpki@0.103.14"
+        }
+      ]
+    }
+  ],
+  "alertAccess": {
+    "started": 1793143551374,
+    "closed": 1793143551796,
+    "url": "https://api.github.com/repos/yangheng95/opencorvus/dependabot/alerts?state=open&per_page=100",
+    "code": 22,
+    "signal": null,
+    "error": "curl: (22) The requested URL returned error: 401\r\n",
+    "authentication": "None; curl configuration disabled and no Authorization header",
+    "headerStatus": [
+      "HTTP/1.1 200 Connection established",
+      "HTTP/1.1 401 Unauthorized",
+      "X-RateLimit-Limit: 60",
+      "X-RateLimit-Remaining: 39",
+      "X-RateLimit-Used: 21",
+      "X-RateLimit-Resource: core",
+      "X-RateLimit-Reset: 1793146286"
+    ]
+  }
+}

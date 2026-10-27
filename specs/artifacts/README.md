@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [归档恢复实页证据](2026-10-28-archive-journey-and-alert-reconciliation/README.md)：八张原图、21项断言及原始行完整保留。
+
 - [原生依赖修复证据](2026-10-28-native-advisory-followup/README.md)：前后完整审计、原构建与实际库行为，保留首次失败。
 
 - [成果读取与依赖修复证据](2026-10-28-artifact-journey-and-dependency-audit/README.md)：五张原图、真实下载与先失败后通过的依赖检查。

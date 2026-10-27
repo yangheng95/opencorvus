@@ -20,6 +20,7 @@ import { Instance } from "@/project/instance"
 import { ProtocolStore, type ProtocolEventView } from "@/protocol/store"
 import { Session, SessionStatus } from "@/session"
 import { EngineService } from "@/task-api"
+import { Event as EngineEvent } from "@/engine/model"
 import { isMailboxChangeEventType } from "@/engine/mailbox"
 import { ProjectMemory } from "@/memory/project-memory"
 import { listArchivedWorkLedger, listWorkLedger } from "@/work-ledger/projection"
@@ -329,7 +330,20 @@ export function WorkLedgerRoutes() {
                 cleanup({ closeStream: true })
               })
           }
-          const globalBusListener = bind((event: { payload?: unknown }) => {
+          const globalBusListener = bind((event: { directory?: string; payload?: unknown }) => {
+            const envelope = event.payload as { type?: unknown; properties?: unknown } | undefined
+            if (envelope?.type === EngineEvent.TaskUpdated.type) {
+              const task = EngineEvent.TaskUpdated.properties.parse(envelope.properties)
+              writeWorkLedgerEventData(writeData, {
+                type: "work-ledger.changed",
+                sourceType: EngineEvent.TaskUpdated.type,
+                taskID: task.taskID,
+                directory: event.directory,
+                // Metadata publications invalidate current reads without advancing a Protocol cursor.
+                sequence: 0,
+              })
+              return
+            }
             const missionHandoffEvent = workLedgerGlobalBusMissionHandoffEvent(event)
             if (missionHandoffEvent) {
               writeWorkLedgerEventData(writeData, missionHandoffEvent)

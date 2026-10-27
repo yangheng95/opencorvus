@@ -1,0 +1,66 @@
+{
+  "at": "2026-10-27T23:39:45.258Z",
+  "credentialCopyCreated": false,
+  "modelCatalogCopyRetired": true,
+  "requests": 0,
+  "cumulativeRequests": 726,
+  "source": {
+    "catalogSameBytes": true,
+    "catalogSameMetadata": true,
+    "authSameMetadata": true
+  },
+  "reserveMs": 370537,
+  "publicShutdown": 200,
+  "physical": {
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 73824,
+          "processInstanceID": "win32:639287410126791937",
+          "occurrenceID": "d8866907-93cb-40d1-b004-ac3b2d99d1e6"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 64992,
+          "processInstanceID": "win32:639287410139169681",
+          "occurrenceID": "7bd317d0-fc29-474c-9f97-91e8a149f1b0"
+        }
+      }
+    ],
+    "native": {
+      "occurrence": "archive-journey-749-d9ca57e3-f728-4e29-b6c3-dc0fad38e306",
+      "outcome": "settled",
+      "host": {
+        "pid": 73824,
+        "processInstanceID": "win32:639287410126791937",
+        "occurrenceID": "d8866907-93cb-40d1-b004-ac3b2d99d1e6"
+      },
+      "target": {
+        "pid": 64992,
+        "processInstanceID": "win32:639287410139169681",
+        "occurrenceID": "7bd317d0-fc29-474c-9f97-91e8a149f1b0"
+      },
+      "observedAtUtc": "2026-10-27T23:39:43.765Z",
+      "deadlineAt": 1793144754302,
+      "terminal": {
+        "occurrenceID": "archive-journey-749-d9ca57e3-f728-4e29-b6c3-dc0fad38e306",
+        "pid": 64992,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "launcher": {
+      "originalChildExit": 0,
+      "observedAtUtc": "2026-10-27T23:39:43.8074091Z"
+    },
+    "observedAtUtc": "2026-10-27T23:39:45.1596872Z"
+  }
+}

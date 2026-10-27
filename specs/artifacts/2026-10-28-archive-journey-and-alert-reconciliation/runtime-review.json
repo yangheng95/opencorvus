@@ -1,0 +1,521 @@
+{
+  "observedAt": "2026-10-27T23:42:12.315Z",
+  "scope": {
+    "taskID": "tsk_g00VZHd0gV00QEPVDCEU",
+    "missionID": "0249bbe6c48d8cce",
+    "tabs": [
+      "135",
+      "136"
+    ],
+    "before": {
+      "port": 38254,
+      "entry": "main-D85kJ8wr.js"
+    },
+    "after": {
+      "port": 38255,
+      "entry": "main-B03SQ_Ed.js"
+    },
+    "deadlineAt": 1793144754302,
+    "requests": 0,
+    "cumulativeRequests": 726,
+    "credentialsCopied": false
+  },
+  "observedFixes": [
+    "Inline committed restore confirmation translates with live locale",
+    "Canonical global metadata invalidation refreshes Mission outcome and restored Task without page reload"
+  ],
+  "screenshots": [
+    {
+      "name": "01-archive-empty-before.jpg",
+      "port": 38254,
+      "publication": "main-D85kJ8wr.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "02-task-archived-before.jpg",
+      "port": 38254,
+      "publication": "main-D85kJ8wr.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "03-search-empty-before.jpg",
+      "port": 38254,
+      "publication": "main-D85kJ8wr.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "04-restored-no-feedback-before.jpg",
+      "port": 38254,
+      "publication": "main-D85kJ8wr.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "05-stale-mission-after-restore.jpg",
+      "port": 38254,
+      "publication": "main-D85kJ8wr.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "06-restored-visible-en.jpg",
+      "port": 38255,
+      "publication": "main-B03SQ_Ed.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "07-restored-visible-zh.jpg",
+      "port": 38255,
+      "publication": "main-B03SQ_Ed.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "08-mission-restored-converged-zh.jpg",
+      "port": 38255,
+      "publication": "main-B03SQ_Ed.js",
+      "manuallyReviewed": true
+    }
+  ],
+  "data": {
+    "originalRows": 91300,
+    "instances": {
+      "source": {
+        "schema": 9,
+        "integrity": "ok",
+        "currentRows": 91300,
+        "originalRowsRetained": 91300
+      },
+      "before": {
+        "schema": 9,
+        "integrity": "ok",
+        "currentRows": 91326,
+        "originalRowsRetained": 91300
+      },
+      "after": {
+        "schema": 9,
+        "integrity": "ok",
+        "currentRows": 91352,
+        "originalRowsRetained": 91300
+      }
+    }
+  },
+  "physical": {
+    "before": {
+      "at": "2026-10-27T23:36:10.769Z",
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 726,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 590947,
+      "publicShutdown": 200,
+      "physical": {
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 46016,
+              "processInstanceID": "win32:639287403546008784",
+              "occurrenceID": "263bad75-7a45-46af-aecb-c60195f72578"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 97292,
+              "processInstanceID": "win32:639287403554105564",
+              "occurrenceID": "858d91ad-d3a2-4ae2-b2a7-51ca6c01be89"
+            }
+          }
+        ],
+        "launcher": {
+          "observedAtUtc": "2026-10-27T23:36:03.3908924Z",
+          "originalChildExit": 0
+        },
+        "observedAtUtc": "2026-10-27T23:36:10.6699947Z",
+        "native": {
+          "occurrence": "archive-journey-749-16bce237-840b-46e4-828c-e09a1c57f29f",
+          "outcome": "settled",
+          "host": {
+            "pid": 46016,
+            "processInstanceID": "win32:639287403546008784",
+            "occurrenceID": "263bad75-7a45-46af-aecb-c60195f72578"
+          },
+          "target": {
+            "pid": 97292,
+            "processInstanceID": "win32:639287403554105564",
+            "occurrenceID": "858d91ad-d3a2-4ae2-b2a7-51ca6c01be89"
+          },
+          "observedAtUtc": "2026-10-27T23:36:03.355Z",
+          "deadlineAt": 1793144754302,
+          "terminal": {
+            "occurrenceID": "archive-journey-749-16bce237-840b-46e4-828c-e09a1c57f29f",
+            "pid": 97292,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        }
+      }
+    },
+    "after": {
+      "at": "2026-10-27T23:39:45.258Z",
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 726,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 370537,
+      "publicShutdown": 200,
+      "physical": {
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 73824,
+              "processInstanceID": "win32:639287410126791937",
+              "occurrenceID": "d8866907-93cb-40d1-b004-ac3b2d99d1e6"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 64992,
+              "processInstanceID": "win32:639287410139169681",
+              "occurrenceID": "7bd317d0-fc29-474c-9f97-91e8a149f1b0"
+            }
+          }
+        ],
+        "native": {
+          "occurrence": "archive-journey-749-d9ca57e3-f728-4e29-b6c3-dc0fad38e306",
+          "outcome": "settled",
+          "host": {
+            "pid": 73824,
+            "processInstanceID": "win32:639287410126791937",
+            "occurrenceID": "d8866907-93cb-40d1-b004-ac3b2d99d1e6"
+          },
+          "target": {
+            "pid": 64992,
+            "processInstanceID": "win32:639287410139169681",
+            "occurrenceID": "7bd317d0-fc29-474c-9f97-91e8a149f1b0"
+          },
+          "observedAtUtc": "2026-10-27T23:39:43.765Z",
+          "deadlineAt": 1793144754302,
+          "terminal": {
+            "occurrenceID": "archive-journey-749-d9ca57e3-f728-4e29-b6c3-dc0fad38e306",
+            "pid": 64992,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-27T23:39:43.8074091Z"
+        },
+        "observedAtUtc": "2026-10-27T23:39:45.1596872Z"
+      }
+    }
+  },
+  "checks": {
+    "archive-feedback-build": {
+      "label": "archive-feedback-build",
+      "startedAt": 1793143752576,
+      "closedAt": 1793143814346,
+      "code": 0,
+      "signal": null,
+      "childPID": 61452
+    },
+    "archive-feedback-build-final": {
+      "label": "archive-feedback-build-final",
+      "startedAt": 1793143857365,
+      "closedAt": 1793143918976,
+      "code": 0,
+      "signal": null,
+      "childPID": 65824
+    },
+    "archive-ledger-fanout": {
+      "label": "archive-ledger-fanout",
+      "startedAt": 1793144134404,
+      "closedAt": 1793144148853,
+      "code": 1,
+      "signal": null,
+      "childPID": 27140
+    },
+    "archive-ledger-fanout-lifecycle": {
+      "label": "archive-ledger-fanout-lifecycle",
+      "startedAt": 1793144197132,
+      "closedAt": 1793144211422,
+      "code": 0,
+      "signal": null,
+      "childPID": 92344
+    },
+    "archive-journey-docs": {
+      "label": "archive-journey-docs",
+      "startedAt": 1793144576115,
+      "closedAt": 1793144584576,
+      "code": 0,
+      "signal": null,
+      "childPID": 93056
+    },
+    "archive-journey-architecture": {
+      "label": "archive-journey-architecture",
+      "startedAt": 1793144576115,
+      "closedAt": 1793144578053,
+      "code": 0,
+      "signal": null,
+      "childPID": 25036
+    }
+  },
+  "test": {
+    "passed": 1,
+    "expectCalls": 21,
+    "actualRoutes": true,
+    "actualTransactions": true,
+    "parallelProjects": 2,
+    "firstFailure": "Old fanout fixture lacked an execution-open lifecycle fact; fixed to the current contract before actual metadata service assertions"
+  },
+  "publicDependencies": {
+    "created": "2026-10-27T23:25:30Z",
+    "packages": 962,
+    "qualification": "Public current package identities only; SBOM is not the authenticated alert list and does not identify the twelve alert IDs/manifests",
+    "selected": [
+      {
+        "name": "zip",
+        "version": "9.1.2",
+        "refs": [
+          {
+            "referenceCategory": "PACKAGE-MANAGER",
+            "referenceType": "purl",
+            "referenceLocator": "pkg:cargo/zip@9.1.2"
+          }
+        ]
+      },
+      {
+        "name": "rustls-webpki",
+        "version": "0.103.16",
+        "refs": [
+          {
+            "referenceCategory": "PACKAGE-MANAGER",
+            "referenceType": "purl",
+            "referenceLocator": "pkg:cargo/rustls-webpki@0.103.16"
+          }
+        ]
+      },
+      {
+        "name": "tauri-plugin-updater",
+        "version": "2.14.0",
+        "refs": [
+          {
+            "referenceCategory": "PACKAGE-MANAGER",
+            "referenceType": "purl",
+            "referenceLocator": "pkg:cargo/tauri-plugin-updater@2.14.0"
+          }
+        ]
+      },
+      {
+        "name": "rand",
+        "version": "0.7.3",
+        "refs": [
+          {
+            "referenceCategory": "PACKAGE-MANAGER",
+            "referenceType": "purl",
+            "referenceLocator": "pkg:cargo/rand@0.7.3"
+          }
+        ]
+      },
+      {
+        "name": "rustls",
+        "version": "0.23.46",
+        "refs": [
+          {
+            "referenceCategory": "PACKAGE-MANAGER",
+            "referenceType": "purl",
+            "referenceLocator": "pkg:cargo/rustls@0.23.46"
+          }
+        ]
+      },
+      {
+        "name": "tauri",
+        "version": "2.12.5",
+        "refs": [
+          {
+            "referenceCategory": "PACKAGE-MANAGER",
+            "referenceType": "purl",
+            "referenceLocator": "pkg:cargo/tauri@2.12.5"
+          }
+        ]
+      },
+      {
+        "name": "webpki-root-certs",
+        "version": "1.0.11",
+        "refs": [
+          {
+            "referenceCategory": "PACKAGE-MANAGER",
+            "referenceType": "purl",
+            "referenceLocator": "pkg:cargo/webpki-root-certs@1.0.11"
+          }
+        ]
+      },
+      {
+        "name": "rand",
+        "version": "0.9.4",
+        "refs": [
+          {
+            "referenceCategory": "PACKAGE-MANAGER",
+            "referenceType": "purl",
+            "referenceLocator": "pkg:cargo/rand@0.9.4"
+          }
+        ]
+      },
+      {
+        "name": "glib",
+        "version": "0.18.5",
+        "refs": [
+          {
+            "referenceCategory": "PACKAGE-MANAGER",
+            "referenceType": "purl",
+            "referenceLocator": "pkg:cargo/glib@0.18.5"
+          }
+        ]
+      },
+      {
+        "name": "tokio",
+        "version": "1.51.6",
+        "refs": [
+          {
+            "referenceCategory": "PACKAGE-MANAGER",
+            "referenceType": "purl",
+            "referenceLocator": "pkg:cargo/tokio@1.51.6"
+          }
+        ]
+      },
+      {
+        "name": "rand",
+        "version": "0.8.6",
+        "refs": [
+          {
+            "referenceCategory": "PACKAGE-MANAGER",
+            "referenceType": "purl",
+            "referenceLocator": "pkg:cargo/rand@0.8.6"
+          }
+        ]
+      },
+      {
+        "name": "tauri-plugin-updater",
+        "version": "2.12.0",
+        "refs": [
+          {
+            "referenceCategory": "PACKAGE-MANAGER",
+            "referenceType": "purl",
+            "referenceLocator": "pkg:cargo/tauri-plugin-updater@2.12.0"
+          }
+        ]
+      },
+      {
+        "name": "rustls",
+        "version": "0.23.45",
+        "refs": [
+          {
+            "referenceCategory": "PACKAGE-MANAGER",
+            "referenceType": "purl",
+            "referenceLocator": "pkg:cargo/rustls@0.23.45"
+          }
+        ]
+      },
+      {
+        "name": "tokio",
+        "version": "1.50.0",
+        "refs": [
+          {
+            "referenceCategory": "PACKAGE-MANAGER",
+            "referenceType": "purl",
+            "referenceLocator": "pkg:cargo/tokio@1.50.0"
+          }
+        ]
+      },
+      {
+        "name": "tauri",
+        "version": "2.11.1",
+        "refs": [
+          {
+            "referenceCategory": "PACKAGE-MANAGER",
+            "referenceType": "purl",
+            "referenceLocator": "pkg:cargo/tauri@2.11.1"
+          }
+        ]
+      },
+      {
+        "name": "webpki-root-certs",
+        "version": "1.0.9",
+        "refs": [
+          {
+            "referenceCategory": "PACKAGE-MANAGER",
+            "referenceType": "purl",
+            "referenceLocator": "pkg:cargo/webpki-root-certs@1.0.9"
+          }
+        ]
+      },
+      {
+        "name": "zip",
+        "version": "4.6.1",
+        "refs": [
+          {
+            "referenceCategory": "PACKAGE-MANAGER",
+            "referenceType": "purl",
+            "referenceLocator": "pkg:cargo/zip@4.6.1"
+          }
+        ]
+      },
+      {
+        "name": "rustls-webpki",
+        "version": "0.103.14",
+        "refs": [
+          {
+            "referenceCategory": "PACKAGE-MANAGER",
+            "referenceType": "purl",
+            "referenceLocator": "pkg:cargo/rustls-webpki@0.103.14"
+          }
+        ]
+      }
+    ],
+    "alertAccess": {
+      "started": 1793143551374,
+      "closed": 1793143551796,
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/dependabot/alerts?state=open&per_page=100",
+      "code": 22,
+      "signal": null,
+      "error": "curl: (22) The requested URL returned error: 401\r\n",
+      "authentication": "None; curl configuration disabled and no Authorization header",
+      "headerStatus": [
+        "HTTP/1.1 200 Connection established",
+        "HTTP/1.1 401 Unauthorized",
+        "X-RateLimit-Limit: 60",
+        "X-RateLimit-Remaining: 39",
+        "X-RateLimit-Used: 21",
+        "X-RateLimit-Resource: core",
+        "X-RateLimit-Reset: 1793146286"
+      ]
+    }
+  },
+  "limits": [
+    "No UI automation was created or run",
+    "No permanent deletion, full Chat/Mission archive journey or dynamic list-refresh failure injection",
+    "No credential use or real Provider request",
+    "Exact twelve GitHub alert IDs and manifests still require the requested read-only authorization"
+  ]
+}

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [归档恢复与告警核对](records/2026-10/2026-10-28-archive-journey-and-alert-reconciliation.md)：恢复可见反馈、共享元数据事件修复及实页验收。
+
 - [原生依赖当前告警与修复](records/2026-10/2026-10-28-native-advisory-followup.md)：官方ZIP修复来源、九项漏洞升级及真实原生验收。
 
 - [成果读取与依赖告警](records/2026-10/2026-10-28-artifact-journey-and-dependency-audit.md)：真实预览、来源、下载及共享查询依赖修复。

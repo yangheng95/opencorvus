@@ -51,6 +51,7 @@ export default function ArchivePanel() {
   const [loading, setLoading] = createSignal(false)
   const [busyID, setBusyID] = createSignal("")
   const [error, setError] = createSignal("")
+  const [committedAction, setCommittedAction] = createSignal<{ action: "restore" | "delete"; title: string }>()
   let requestGeneration = 0
   let controller: AbortController | undefined
   let panelElement: HTMLDivElement | undefined
@@ -179,6 +180,7 @@ export default function ArchivePanel() {
     const ownsAction = () => ownsRequest(generation, authority)
     setBusyID(rowKey)
     setError("")
+    setCommittedAction(undefined)
     let committed = false
     try {
       if (action === "restore") {
@@ -239,7 +241,10 @@ export default function ArchivePanel() {
         id: `settings:archive:${action}:projection:${row.kind}:${row.id}`,
         title: "Archive row reconciliation after committed mutation",
       },
-      () => setRows((current) => current.filter((item) => archiveRowKey(item) !== rowKey)),
+      () => {
+        setCommittedAction({ action, title: row.title || row.id })
+        setRows((current) => current.filter((item) => archiveRowKey(item) !== rowKey))
+      },
     )
 
     const requestController = new AbortController()
@@ -302,6 +307,7 @@ export default function ArchivePanel() {
     setBusyID("")
     setLoading(false)
     setError("")
+    setCommittedAction(undefined)
     untrack(() => void load(false))
   })
   onCleanup(() => {
@@ -311,6 +317,16 @@ export default function ArchivePanel() {
 
   return (
     <SettingsPanel ref={panelElement} data-ui="archive-panel" aria-busy={loading() || !!busyID() ? "true" : undefined}>
+      <Show when={committedAction()}>
+        {(result) => (
+          <Feedback
+            tone="success"
+            title={result().action === "restore" ? t("archive.restore_succeeded") : t("archive.delete_succeeded")}
+          >
+            {result().title}
+          </Feedback>
+        )}
+      </Show>
       <Show when={error() && rows().length > 0}>
         <Feedback tone="error">{error()}</Feedback>
       </Show>

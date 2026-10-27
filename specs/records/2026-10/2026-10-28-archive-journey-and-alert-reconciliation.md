@@ -1,0 +1,62 @@
+# 归档恢复实际旅程与远端告警核对
+
+## Recall
+
+用户要求持续单代理自主体验、修复真实问题、实际验收并提交推送，只有真正冲突时等待；不使用子代理，不重复调查已修好的闪烁。上一批为progress（实际进展）：bbb13e180dc61a43efe1fc6570c6711cf692560f已正常推送main，2026-10-27T23:22:28Z新fetch/merge为0/0，本任务文件干净，176项外部改动保留。原生正式构建、19项生产库行为、2项独立event库行为及打包后端首次运行通过，用户数据库未触及；最新完整RustSec审计0漏洞/9警告，Supervisor0/0。GitHub实际push提示12告警（4 moderate、8 low），尚未取得精确告警ID和manifest，禁止将RustSec结果冒充GitHub清单。
+
+这批推进尚未覆盖的归档/恢复旅程，同时用公开只读资料核对上述提示。验收指标：从真实桌面/ui进入设置归档，核对检索、混合Chat/Task/Mission身份、恢复动作及返回后的状态；当前代理查看原始截图并据此修改、重新查看。修复前追加完整根因/影响分析；未复现缺陷不凭感觉改代码。任何非UI合同改动须聚焦正向测试进入原checker，不写或运行UI自动化。
+
+## 已读资料与检索
+
+已读上一批Recall/最终证据、当前AGENTS、ArchivePanel、历史依赖调查与03-control中的原轮次/恢复合同；已搜索所有受Git跟踪的锁以及原生审计/依赖记录。当前生产锁只有根bun.lock、Overlay Cargo.lock和Supervisor Cargo.lock；另有历史取证锁和独立native-query-stream实验锁。需要按实际包/文件区分，不能通过删除历史证据、改名或过滤消除告警。公开GitHub文档说明仓库告警接口需要认证权限，公开仓库SBOM（Software Bill of Materials，软件物料清单）可匿名读取；本批尚未使用GitHub账户凭据。
+
+已读原747服务准备、原进程完整结清和数据检查：92表91300行、schema9，旧auth副本未创建、完整模型目录副本已退休、请求0。新实例只复制这个已关闭的自有数据库与当前普通构建UI；独立HOME、运行数据、端口和进程occurrence（执行轮次）。只通过原开发serve入口提供/ui，不另起Vite，不操作用户18571或窗口。
+
+## 修改前现象与方案边界
+
+远端12项提示是实际证据，但具体受影响包和文件未知。先匿名读取公开仓库/SBOM及相关官方公告；若需要账号权限，缺少的授权不阻断独立归档体验。禁止提取Git凭据或把OpenAI授权扩展为GitHub账户使用。
+
+归档路径当前以复合cursor分页，检索和authority/revision替换会退休旧请求；恢复/删除通过各真实领域API执行，mutation后复读列表并保持焦点。直接触发、控制/数据流根因、旧路径未根治原因和影响仍需实际页面及持久化证据，不预先指定补丁。共享调度/终态异常若出现，立即审计全部生产入口、Task/Mission/Session轮次、正常/终态/重试/重启、串并行和多项目隔离；当前尚未发现这类异常。
+
+操作限定在新复制的自有实例，模型请求上限0，不复制auth。保留完整模型目录以区别真实模型投影和凭据配置，但不触发模型。归档/恢复可逆；不在UI执行永久删除，不运行真实Provider、更新安装、发布或用户进程操作。原生依赖不再重复构建，除非本批代码实际触及其运行合同。
+
+## 实施和交付顺序
+
+1. 保存开始状态，匿名只读核对远端可见性与依赖事实，明确不能取得的精确告警清单。
+2. 新独立实例复制已结清747数据及当前build:overlay UI，校验真实数据/schema完整性；单一20分钟绝对运行截止，保留原调用，完成后经公开shutdown和原物理/输出/请求回执结清。不因观察超时重开服务。
+3. 内置浏览器真实交互、原始截图人工复核；复现后补齐全仓定义/调用/同语义/公共合同/数据/测试/文档/交付/风险分析再修改。修复后普通构建、当前UI发布及真实复核。
+4. 新证据和本记录同步三索引，执行当前docs/architecture及相关聚焦检查，范围提交；fresh上游合并、完整待推集合审查、正常push。其他工作区改动全部保留，持续目标保持active。
+
+## 实页复现及修改前根因/影响分析
+
+当前真实页面tab135、端口38254、普通native-02构建的main-D85kJ8wr.js，初始归档空。通过全局搜索进入真实已完成Task订单精确计算与汇总交付（tsk_g00VZHd0gV00QEPVDCEU），由页头菜单归档，设置归档页显示正确Task/原目录/本地归档时间；中文标题检索、无匹配提示及清除均正常。点击Restore后行消失、计数0、焦点落在归档标题，但截图完全没有成功确认。恢复后任务是否返回及历史仍需继续复核，不把行消失当作完整端到端结论。
+
+直接触发是ArchivePanel的runRowAction在真实mutation成功并复读列表后，仅调用reportSuccess。该函数在services/diagnostics.ts唯一实现只调用AppLog.info，不渲染界面，也不发布可见通知。页面只渲染error，未呈现已提交动作的结果；因此最后一行恢复后看起来只是重新回到空列表。旧路径虽然有本地化success key和名为notification的post-commit effect，名字不等于真实用户反馈，这正是此前未根治的原因。
+
+全仓检索reportSuccess的所有定义/调用、其他设置页Feedback tone=success实现、当前Feedback primitive、ArchivePanel与work-ledger loader/领域动作、07-panel-reactivity及continuous-goal归档合同。reportSuccess作为诊断工具继续保留当前合同，不全局改变日志语义或引入Toast/伪造Mailbox消息。当前ArchivePanel没有对应UI自动化文件，不新增UI测试；检索到的diagnostics测试为其他服务，未运行。不存在数据库/公开API/SDK/OpenAPI/调度变更；不改Task归档时的Goal暂停或恢复继续规则。
+
+修复只在当前页面生命周期保存已观察到的提交反馈{action,title}，由同一已有ownsAction/generation/authority限定；真实mutation成功后先呈现该事实，再执行原列表复读。复读失败保留成功反馈并同时显示读取错误，不能把已提交成功改成失败。新动作、查询/authority替换和卸载按现有owner退休反馈。呈现时使用现有双语key，记录标题保留原文；locale改变重新翻译控件，禁止把已翻译字符串作为另一状态源。复用现有Feedback的status/aria-live，不写新领域事实或聊天消息。
+
+交付影响为恢复/删除后的页面反馈；永久删除路径只复用相同真实提交点，本批不在UI执行永久删除。纯UI修改不增后端测试；需普通前端构建、独立发布、真实恢复交互/原截图，英文和中文各复核。风险是查询/来源切换泄漏陈旧反馈及刷新错误误报：通过现有owner检查、替换清空及提交与读取分别呈现处理，不增加备用实现。服务重开如果需要保持原749绝对截止，不用重开延长验收时钟。
+
+公开GitHub仓库与SBOM匿名返回200；当前962个package节点已包含ZIP9.1.2、rustls0.23.46、webpki0.103.16等本批实际新版本。告警接口匿名401，未使用账户凭据；已向用户请求仅此仓库告警的只读授权，独立页面工作继续。
+
+## 恢复投影未收敛的即时共享机制审计与方案
+
+恢复后数分钟，原tab侧栏仍只显示一个Mission子Task，父Mission的Blocked也消失，真实截图及新AX观察未变化。直接读取同一实例/work-ledger?search=orders.csv，HTTP200已返回outcome=blocked、taskStats.total=2以及原失败/完成两项。全92表对比表明原始行最终保持，新增只在Bus publication/receipt与其control activation lease；Protocol事件没有新增。由此区分真实列表投影停留在归档期间快照和业务终态丢失，不能以标题或最后状态判因。
+
+控制链根因：EngineService.setTaskArchived的terminal归档和restore，以及updateTaskTitle/updateTaskBudget/setTaskPinned，都在唯一事务中改当前SQL行并Bus.publishOwnedInTransaction(Event.TaskUpdated)。全局/work-ledger/events的GlobalBus监听只处理Session/Project/Memory/Status/Handoff，Task只从ProtocolStore.subscribeEvents取得。ProtocolStore.dispatchEvent只调用自己的订阅，不把Bus元数据出版伪造成Protocol事实。于是这些真实变更没有进入统一通知流。归档入口main中的手工refreshToken能掩盖本窗口归档遗漏，但设置恢复只loadTasks更新Board，不能刷新WorkLedger；其他窗口的名称/置顶同样受影响。禁止再加只针对恢复的前端刷新旁路。
+
+横审覆盖所有TaskUpdated生产调用、EngineService上述五类事务、engine/protocol与ProtocolStore、Bus durable publication/GlobalBus、两个SSE消费者及WorkLedger当前加载/authority所有者。Task/Mission/Session的正常/终态、重试/重启恢复、串并行和多Project：执行轮次与终态继续由原协议/SQL决定；Session及Mission可见性已走真实Session.Updated的GlobalBus映射，任务执行/Interaction仍走原Protocol订阅；Bus持久投递和重试发真实TaskUpdated，重新连接的connected通知触发当前全量读取。共同缺口是Task元数据出版未被同一全局流消费，而不是队列或执行调度损坏。修复不修改原Task/Mission/Session occurrence、取消租约、恢复或终态事实。
+
+唯一修复是在现有GlobalBus listener加入对真实Event.TaskUpdated.properties的严格schema解析，按原envelope目录及taskID发work-ledger.changed。sequence=0表示没有Protocol序号的当前状态失效提示；客户端已有0序号处理，不能用Date.now冒充Protocol序号而触发游标gap。协议事实继续单独订阅，来源互异、不双写、不合成协议事件。实际Hono流测试补充真实EngineService元数据事务，覆盖两个Project并发改名/置顶、终态归档/恢复、对应目录、当前SQL字段及真实SSE输出；原终态/Interaction跨Project测试保留。其测试是非UI的真实路由/事务验收，UI仍用原实例手动交互和截图。
+
+复核scope会覆盖新实例的当前前端和修正后真实服务，沿原绝对截止1793144754302，不延长时钟。原749先经公开shutdown及原回执完整结清后才复制并开启新occurrence；所有旧数据及实际新增Bus事实保留，禁止清空。
+
+## 当前验收结果
+
+正常前端build及renderer public-surface检查通过。源审查时将反馈设置移入现有post-commit wrapper，防止UI呈现异常被当成业务mutation失败；随后重跑原build，最终main-B03SQ_Ed.js成功。首次新非UI测试暴露旧fixture只插入Task SQL行而缺少execution-open事实，不能调用真实领域服务；原错误保留。按当前生命周期合同在同一事务追加实际opened事实，并为终态事件提供execution_epoch，修正后原真实路由checker1项/21断言通过，含两个Project并发元数据变更及真正EngineService终态归档/恢复。未把fixture初始化失败当成本次产品缺陷的红灯复现。
+
+原749公开shutdown200、原exec53363退出0、物理/输出/请求/launcher完整结清后创建after实例；沿同一截止，端口38255，tab136，真实开发serve与新不可变UI。真实归档/恢复后，成功反馈立即显示Restored和原标题；通过现有View→Language切换，当前反馈即时变成已恢复，界面正文/控件亦随语言变化。返回主界面前无需刷新页面，父Mission重新显示受阻；打开原Mission后两个子Task分别保持失败/已完成，原交付文件仍可见。当前代理已查看并保存8张前后原始截图。永久删除、其他类型的完整归档旅程及刷新故障动态注入未执行，不扩大本次结果。
+
+after实例经公开shutdown200、原exec96336退出0及精确进程链死亡/复用、物理/输出/请求/launcher回执结清；停止时距原截止370537ms。两实例模型请求均0，累计仍726，未复制auth，模型目录副本均已退休，原auth/catalog元数据和catalog字节保持。保留原数据库进行完整行对比，结果在最终证据中列出。当前精确GitHub告警IDs/manifest仍缺授权，匿名401与真实SBOM均保留；未使用凭据、关闭告警或删除历史锁。

@@ -1,0 +1,18 @@
+{
+  "started": 1793143528925,
+  "closed": 1793143529511,
+  "url": "https://api.github.com/repos/yangheng95/opencorvus",
+  "code": 0,
+  "signal": null,
+  "error": "",
+  "authentication": "None; curl configuration disabled and no Authorization header",
+  "headerStatus": [
+    "HTTP/1.1 200 Connection established",
+    "HTTP/1.1 200 OK",
+    "X-RateLimit-Limit: 60",
+    "X-RateLimit-Remaining: 41",
+    "X-RateLimit-Used: 19",
+    "X-RateLimit-Resource: core",
+    "X-RateLimit-Reset: 1793146286"
+  ]
+}

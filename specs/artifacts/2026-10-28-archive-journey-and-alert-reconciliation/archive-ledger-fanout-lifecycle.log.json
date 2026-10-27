@@ -1,0 +1,4 @@
+{
+  "encoding": "utf8",
+  "content": "$ bun script/run-tests.ts ./test/server/work-ledger-event-fanout.test.ts\n[1/1] START test/server/work-ledger-event-fanout.test.ts\nbun test v1.4.0 (34cbb9a40) 1x PARALLEL\n\ntest\\isolated-test-entry.test.ts:\n(pass) global ledger stream fans out durable Task events to every affected projection across projects [5373.64ms]\n\n 1 pass\n 0 fail\n 21 expect() calls\nRan 1 test across 1 file. [10.90s]\n[1/1] DONE test/server/work-ledger-event-fanout.test.ts exit=0 duration=12.54s\n"
+}

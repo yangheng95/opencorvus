@@ -1,11 +1,13 @@
 import { afterEach, expect, test } from "bun:test"
 import { EngineTaskTable } from "@/engine/engine.sql"
+import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
 import { ProtocolStore } from "@/protocol/store"
 import { Server } from "@/server/server"
 import { Session } from "@/session"
-import { Database } from "@/storage/db"
+import { Database, eq } from "@/storage/db"
+import { EngineService } from "@/task-api"
 import { WorkLedgerEvent } from "@opencorvus-ai/transport-protocol"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
@@ -58,6 +60,7 @@ test("global ledger stream fans out durable Task events to every affected projec
   }
   try {
     expect((await next("work-ledger.connected")).type).toBe("work-ledger.connected")
+    const affected: Array<{ project: typeof first; taskID: string }> = []
     for (const [index, type] of [
       "task.completed",
       "task.failed",
@@ -70,7 +73,7 @@ test("global ledger stream fans out durable Task events to every affected projec
         fn: async () => {
           const root = await Session.create({ kind: "root", title: type })
           const taskID = Identifier.ascending("task")
-          Database.use((db) =>
+          Database.transaction((db) => {
             db
               .insert(EngineTaskTable)
               .values({
@@ -83,19 +86,21 @@ test("global ledger stream fans out durable Task events to every affected projec
                 request: "Verify durable notification fan-out",
                 time_created: Date.now(),
               })
-              .run(),
-          )
+              .run()
+            appendTaskOpenedInTransaction({ db, taskID, sessionID: root.id, now: Date.now(), source: "test.work-ledger-fanout" })
+          })
           return ProtocolStore.appendEvent({
             kind: "event",
             type,
             aggregate: "task",
             aggregate_id: taskID,
             source: "test.work-ledger-fanout",
-            payload: {},
+            payload: { execution_epoch: 1 },
           })
         },
       })
       await Database.awaitEffectIdle(5_000)
+      affected.push({ project, taskID: event.taskID! })
       if (type !== "task.cancelled") {
         expect(await next("mailbox.changed", type, event.taskID)).toEqual({
           type: "mailbox.changed",
@@ -116,6 +121,38 @@ test("global ledger stream fans out durable Task events to every affected projec
         taskID: event.taskID,
         sequence: event.sequence,
       })
+    }
+    const renamed = affected[0]!
+    const pinned = affected[1]!
+    await Promise.all([
+      Instance.provide({ directory: renamed.project.path, fn: () => EngineService.updateTaskTitle(renamed.taskID, "Restorable ledger task") }),
+      Instance.provide({ directory: pinned.project.path, fn: () => EngineService.setTaskPinned(pinned.taskID, true) }),
+    ])
+    for (const target of [renamed, pinned]) {
+      expect(await next("work-ledger.changed", "task.updated", target.taskID)).toEqual({
+        type: "work-ledger.changed",
+        sourceType: "task.updated",
+        taskID: target.taskID,
+        directory: target.project.path,
+        sequence: 0,
+      })
+    }
+    expect(Database.use(db => db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, renamed.taskID)).get())?.title)
+      .toBe("Restorable ledger task")
+    expect(Database.use(db => db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, pinned.taskID)).get())?.time_pinned)
+      .toBeGreaterThan(0)
+    for (const archived of [true, false] as const) {
+      await Instance.provide({ directory: renamed.project.path, fn: () => EngineService.setTaskArchived(renamed.taskID, archived) })
+      expect(await next("work-ledger.changed", "task.updated", renamed.taskID)).toEqual({
+        type: "work-ledger.changed",
+        sourceType: "task.updated",
+        taskID: renamed.taskID,
+        directory: renamed.project.path,
+        sequence: 0,
+      })
+      const record = Database.use(db => db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, renamed.taskID)).get())!
+      if (archived) expect(record.time_archived).toBeGreaterThan(0)
+      else expect(record.time_archived).toBeNull()
     }
   } finally {
     abort.abort()

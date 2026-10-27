@@ -916,6 +916,17 @@ while its owner belongs to the current API authority. Health recovery, workspace
 projection refresh and the stream's retry share that owner, preserving live
 notification delivery. Explicit disposal, an expired authority or an actual
 disconnect ends the owner before another connection takes its place.
+Task metadata mutations (archive/restore, title, budget and pin state) publish
+their committed `TaskUpdated` through the existing durable Bus. The same global
+stream maps that publication to `work-ledger.changed` with the source directory,
+Task identity and sequence zero: it invalidates a current read without advancing
+the execution Protocol cursor. Execution/Interaction facts retain their original
+Protocol subscription and sequence. Reconnection hydrates the current canonical
+projection, including Mission outcomes and child Tasks.
+Archive actions show their observed committed result with the shared inline
+Feedback component. Subsequent list-read errors retain that success alongside
+the read error; source/query replacement retires the feedback. Its action key
+is translated at render time while the original item title remains unchanged.
 Every Mailbox change causes a fresh
 canonical page read, so the notification stream is not a second payload/history
 source. Project directory changes abort the previous

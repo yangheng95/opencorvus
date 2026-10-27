@@ -1,0 +1,18 @@
+{
+  "started": 1793143551374,
+  "closed": 1793143551796,
+  "url": "https://api.github.com/repos/yangheng95/opencorvus/dependabot/alerts?state=open&per_page=100",
+  "code": 22,
+  "signal": null,
+  "error": "curl: (22) The requested URL returned error: 401\r\n",
+  "authentication": "None; curl configuration disabled and no Authorization header",
+  "headerStatus": [
+    "HTTP/1.1 200 Connection established",
+    "HTTP/1.1 401 Unauthorized",
+    "X-RateLimit-Limit: 60",
+    "X-RateLimit-Remaining: 39",
+    "X-RateLimit-Used: 21",
+    "X-RateLimit-Resource: core",
+    "X-RateLimit-Reset: 1793146286"
+  ]
+}
