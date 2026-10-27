@@ -1,0 +1,207 @@
+{
+  "date": "2026-10-28",
+  "scope": {
+    "taskID": "tsk_g00VZHd0gV00QEPVDCEU",
+    "port": 38252,
+    "tab": "134",
+    "frontend": "main-DwCZURJW.js",
+    "requests": 0,
+    "cumulativeRequests": 726,
+    "physical": {
+      "native": {
+        "occurrence": "artifact-journey-747-6b18577c-c1c8-4b02-afa8-b48ac965dec6",
+        "outcome": "settled",
+        "host": {
+          "pid": 44700,
+          "processInstanceID": "win32:639287345370855297",
+          "occurrenceID": "2c4b3238-df57-46d0-a7fa-1202b5541d20"
+        },
+        "target": {
+          "pid": 88148,
+          "processInstanceID": "win32:639287345380324745",
+          "occurrenceID": "63276f93-3a8a-47b7-bd62-eb309c689a47"
+        },
+        "observedAtUtc": "2026-10-27T21:54:53.271Z",
+        "deadlineAt": 1793138937029,
+        "terminal": {
+          "occurrenceID": "artifact-journey-747-6b18577c-c1c8-4b02-afa8-b48ac965dec6",
+          "pid": 88148,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 44700,
+            "processInstanceID": "win32:639287345370855297",
+            "occurrenceID": "2c4b3238-df57-46d0-a7fa-1202b5541d20"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 88148,
+            "processInstanceID": "win32:639287345380324745",
+            "occurrenceID": "63276f93-3a8a-47b7-bd62-eb309c689a47"
+          }
+        }
+      ],
+      "observedAtUtc": "2026-10-27T21:55:02.6431250Z",
+      "launcher": {
+        "originalChildExit": 0,
+        "observedAtUtc": "2026-10-27T21:54:53.3166137Z"
+      }
+    },
+    "publicShutdown": 200,
+    "reserveMs": 843758,
+    "credentialCopyCreated": false,
+    "modelCatalogCopyRetired": true,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    }
+  },
+  "data": {
+    "schema": 9,
+    "tableCount": 92,
+    "originalRows": 91300,
+    "currentRows": 91300,
+    "allOriginalRowsPreserved": true,
+    "sourceRowsPreserved": true,
+    "integrity": "ok"
+  },
+  "downloads": [
+    {
+      "name": "orders.csv",
+      "bytes": 91,
+      "actualBrowserDownload": true,
+      "equalsOriginalProjectBytes": true
+    },
+    {
+      "name": "review-summary.json",
+      "bytes": 58,
+      "actualBrowserDownload": true,
+      "equalsOriginalProjectBytes": true
+    }
+  ],
+  "tests": {
+    "red": {
+      "pass": 13,
+      "fail": 8,
+      "expectCalls": 14
+    },
+    "green": {
+      "pass": 21,
+      "fail": 0,
+      "expectCalls": 26
+    },
+    "realHTTP": true
+  },
+  "checks": {
+    "artifact-dependency-qs-install": {
+      "label": "artifact-dependency-qs-install",
+      "startedAt": 1793138284494,
+      "closedAt": 1793138296080,
+      "code": 0,
+      "signal": null,
+      "childPID": 95004
+    },
+    "artifact-dependency-qs-frozen": {
+      "label": "artifact-dependency-qs-frozen",
+      "startedAt": 1793138364077,
+      "closedAt": 1793138366271,
+      "code": 0,
+      "signal": null,
+      "childPID": 91684
+    },
+    "artifact-dependency-audit-after": {
+      "label": "artifact-dependency-audit-after",
+      "startedAt": 1793138331882,
+      "closedAt": 1793138334584,
+      "code": 0,
+      "signal": null,
+      "childPID": 99744
+    },
+    "artifact-dependency-qs-chain-after": {
+      "label": "artifact-dependency-qs-chain-after",
+      "startedAt": 1793138331882,
+      "closedAt": 1793138334394,
+      "code": 0,
+      "signal": null,
+      "childPID": 34776
+    },
+    "artifact-dependency-backend-types": {
+      "label": "artifact-dependency-backend-types",
+      "startedAt": 1793138376714,
+      "closedAt": 1793138415718,
+      "code": 0,
+      "signal": null,
+      "childPID": 98576
+    },
+    "artifact-dependency-channel-types": {
+      "label": "artifact-dependency-channel-types",
+      "startedAt": 1793138376566,
+      "closedAt": 1793138379954,
+      "code": 0,
+      "signal": null,
+      "childPID": 71876
+    },
+    "artifact-dependency-docs": {
+      "label": "artifact-dependency-docs",
+      "startedAt": 1793138459776,
+      "closedAt": 1793138469614,
+      "code": 0,
+      "signal": null,
+      "childPID": 98372
+    },
+    "artifact-dependency-architecture": {
+      "label": "artifact-dependency-architecture",
+      "startedAt": 1793138459807,
+      "closedAt": 1793138461985,
+      "code": 0,
+      "signal": null,
+      "childPID": 99256
+    }
+  },
+  "remainingScope": "Bun audit covers the npm lock only; GitHub and native Rust advisories are not declared cleared.",
+  "screenshots": [
+    {
+      "name": "01-order-task.jpg",
+      "bytes": 67385,
+      "originalBytes": true,
+      "manuallyViewed": true
+    },
+    {
+      "name": "02-json-preview.jpg",
+      "bytes": 67445,
+      "originalBytes": true,
+      "manuallyViewed": true
+    },
+    {
+      "name": "03-csv-preview.jpg",
+      "bytes": 69830,
+      "originalBytes": true,
+      "manuallyViewed": true
+    },
+    {
+      "name": "04-source-orders.jpg",
+      "bytes": 87943,
+      "originalBytes": true,
+      "manuallyViewed": true
+    },
+    {
+      "name": "05-artifact-workspace.jpg",
+      "bytes": 34184,
+      "originalBytes": true,
+      "manuallyViewed": true
+    }
+  ]
+}

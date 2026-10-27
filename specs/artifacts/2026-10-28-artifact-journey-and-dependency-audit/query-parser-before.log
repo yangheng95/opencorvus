@@ -1,0 +1,126 @@
+$ bun script/run-tests.ts test/mcp/query-parser-limits.test.ts
+[1/1] START test/mcp/query-parser-limits.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) MCP SDK query parser dependency > parses comma arrays at the declared limit [1.84ms]
+(pass) MCP SDK query parser dependency > maps an oversized comma array to the documented RangeError [0.67ms]
+(pass) MCP SDK query parser dependency > round trips constructor-shaped query data as ordinary data [7.68ms]
+151 |         if (encodeValuesOnly && encoder) {
+152 |             obj = utils.maybeMap(obj, function (v) {
+153 |                 return v == null ? v : encoder(v);
+154 |             });
+155 |         }
+156 |         objKeys = [{ value: obj.length > 0 ? obj.join(',') || null : void undefined }];
+                                                       ^
+TypeError: No default value
+      at stringify (D:\myhexin-local\opencorvus\node_modules\.bun\qs@6.16.0\node_modules\qs\lib\stringify.js:156:50)
+      at <anonymous> (D:\myhexin-local\opencorvus\node_modules\.bun\qs@6.16.0\node_modules\qs\lib\stringify.js:340:27)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\mcp\query-parser-limits.test.ts:40:17)
+(fail) MCP SDK query parser dependency > serializes JSON object elements with a string-valued toString in comma arrays [0.69ms]
+151 |         if (encodeValuesOnly && encoder) {
+152 |             obj = utils.maybeMap(obj, function (v) {
+153 |                 return v == null ? v : encoder(v);
+154 |             });
+155 |         }
+156 |         objKeys = [{ value: obj.length > 0 ? obj.join(',') || null : void undefined }];
+                                                       ^
+TypeError: No default value
+      at stringify (D:\myhexin-local\opencorvus\node_modules\.bun\qs@6.16.0\node_modules\qs\lib\stringify.js:156:50)
+      at <anonymous> (D:\myhexin-local\opencorvus\node_modules\.bun\qs@6.16.0\node_modules\qs\lib\stringify.js:340:27)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\mcp\query-parser-limits.test.ts:46:17)
+(fail) MCP SDK query parser dependency > serializes null-prototype object elements in comma arrays [0.65ms]
+(pass) Express query parser dependency > parses comma arrays at the declared limit [0.36ms]
+(pass) Express query parser dependency > maps an oversized comma array to the documented RangeError [0.05ms]
+(pass) Express query parser dependency > round trips constructor-shaped query data as ordinary data [0.13ms]
+151 |         if (encodeValuesOnly && encoder) {
+152 |             obj = utils.maybeMap(obj, function (v) {
+153 |                 return v == null ? v : encoder(v);
+154 |             });
+155 |         }
+156 |         objKeys = [{ value: obj.length > 0 ? obj.join(',') || null : void undefined }];
+                                                       ^
+TypeError: No default value
+      at stringify (D:\myhexin-local\opencorvus\node_modules\.bun\qs@6.16.0\node_modules\qs\lib\stringify.js:156:50)
+      at <anonymous> (D:\myhexin-local\opencorvus\node_modules\.bun\qs@6.16.0\node_modules\qs\lib\stringify.js:340:27)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\mcp\query-parser-limits.test.ts:40:17)
+(fail) Express query parser dependency > serializes JSON object elements with a string-valued toString in comma arrays [0.26ms]
+151 |         if (encodeValuesOnly && encoder) {
+152 |             obj = utils.maybeMap(obj, function (v) {
+153 |                 return v == null ? v : encoder(v);
+154 |             });
+155 |         }
+156 |         objKeys = [{ value: obj.length > 0 ? obj.join(',') || null : void undefined }];
+                                                       ^
+TypeError: No default value
+      at stringify (D:\myhexin-local\opencorvus\node_modules\.bun\qs@6.16.0\node_modules\qs\lib\stringify.js:156:50)
+      at <anonymous> (D:\myhexin-local\opencorvus\node_modules\.bun\qs@6.16.0\node_modules\qs\lib\stringify.js:340:27)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\mcp\query-parser-limits.test.ts:46:17)
+(fail) Express query parser dependency > serializes null-prototype object elements in comma arrays [0.23ms]
+(pass) body-parser query parser dependency > parses comma arrays at the declared limit [0.08ms]
+(pass) body-parser query parser dependency > maps an oversized comma array to the documented RangeError [0.03ms]
+(pass) body-parser query parser dependency > round trips constructor-shaped query data as ordinary data [0.10ms]
+151 |         if (encodeValuesOnly && encoder) {
+152 |             obj = utils.maybeMap(obj, function (v) {
+153 |                 return v == null ? v : encoder(v);
+154 |             });
+155 |         }
+156 |         objKeys = [{ value: obj.length > 0 ? obj.join(',') || null : void undefined }];
+                                                       ^
+TypeError: No default value
+      at stringify (D:\myhexin-local\opencorvus\node_modules\.bun\qs@6.16.0\node_modules\qs\lib\stringify.js:156:50)
+      at <anonymous> (D:\myhexin-local\opencorvus\node_modules\.bun\qs@6.16.0\node_modules\qs\lib\stringify.js:340:27)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\mcp\query-parser-limits.test.ts:40:17)
+(fail) body-parser query parser dependency > serializes JSON object elements with a string-valued toString in comma arrays [0.64ms]
+151 |         if (encodeValuesOnly && encoder) {
+152 |             obj = utils.maybeMap(obj, function (v) {
+153 |                 return v == null ? v : encoder(v);
+154 |             });
+155 |         }
+156 |         objKeys = [{ value: obj.length > 0 ? obj.join(',') || null : void undefined }];
+                                                       ^
+TypeError: No default value
+      at stringify (D:\myhexin-local\opencorvus\node_modules\.bun\qs@6.16.0\node_modules\qs\lib\stringify.js:156:50)
+      at <anonymous> (D:\myhexin-local\opencorvus\node_modules\.bun\qs@6.16.0\node_modules\qs\lib\stringify.js:340:27)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\mcp\query-parser-limits.test.ts:46:17)
+(fail) body-parser query parser dependency > serializes null-prototype object elements in comma arrays [0.51ms]
+(pass) Slack Express query parser dependency > parses comma arrays at the declared limit [0.10ms]
+(pass) Slack Express query parser dependency > maps an oversized comma array to the documented RangeError [0.04ms]
+(pass) Slack Express query parser dependency > round trips constructor-shaped query data as ordinary data [0.14ms]
+151 |         if (encodeValuesOnly && encoder) {
+152 |             obj = utils.maybeMap(obj, function (v) {
+153 |                 return v == null ? v : encoder(v);
+154 |             });
+155 |         }
+156 |         objKeys = [{ value: obj.length > 0 ? obj.join(',') || null : void undefined }];
+                                                       ^
+TypeError: No default value
+      at stringify (D:\myhexin-local\opencorvus\node_modules\.bun\qs@6.16.0\node_modules\qs\lib\stringify.js:156:50)
+      at <anonymous> (D:\myhexin-local\opencorvus\node_modules\.bun\qs@6.16.0\node_modules\qs\lib\stringify.js:340:27)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\mcp\query-parser-limits.test.ts:40:17)
+(fail) Slack Express query parser dependency > serializes JSON object elements with a string-valued toString in comma arrays [0.28ms]
+151 |         if (encodeValuesOnly && encoder) {
+152 |             obj = utils.maybeMap(obj, function (v) {
+153 |                 return v == null ? v : encoder(v);
+154 |             });
+155 |         }
+156 |         objKeys = [{ value: obj.length > 0 ? obj.join(',') || null : void undefined }];
+                                                       ^
+TypeError: No default value
+      at stringify (D:\myhexin-local\opencorvus\node_modules\.bun\qs@6.16.0\node_modules\qs\lib\stringify.js:156:50)
+      at <anonymous> (D:\myhexin-local\opencorvus\node_modules\.bun\qs@6.16.0\node_modules\qs\lib\stringify.js:340:27)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\mcp\query-parser-limits.test.ts:46:17)
+(fail) Slack Express query parser dependency > serializes null-prototype object elements in comma arrays [0.21ms]
+(pass) MCP Express dependency serves extended query and form data over HTTP [3020.86ms]
+
+ 13 pass
+ 8 fail
+ 14 expect() calls
+Ran 21 tests across 1 file. [7.26s]
+[1/1] DONE test/mcp/query-parser-limits.test.ts exit=1 duration=8.90s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\mcp\query-parser-limits.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\mcp\query-parser-limits.test.ts
+Test runtime retained after unsuccessful run: D:\myhexin-local\opencorvus\.tmp-office747\qs-before-patch\tmp\opencorvus-test-run-WVR1hP
+Physical/output settlement confirmed: true
+error: script "test" exited with code 1

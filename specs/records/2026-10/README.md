@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [成果读取与依赖告警](2026-10-28-artifact-journey-and-dependency-audit.md)：单代理实页旅程及qs补丁正向验收。
+
 - [引用开场标题与Goal完整操作](2026-10-28-opening-reference-title-and-goal.md)：单一标题投影与首页持续目标实测。
 
 - [引用输入的解码与编辑稳定性](2026-10-28-composer-reference-decoding.md)：公共词法根因、原文保留和实页迭代。

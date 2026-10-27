@@ -1,0 +1,32 @@
+$ bun script/run-tests.ts test/mcp/query-parser-limits.test.ts
+[1/1] START test/mcp/query-parser-limits.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) MCP SDK query parser dependency > parses comma arrays at the declared limit [1.71ms]
+(pass) MCP SDK query parser dependency > maps an oversized comma array to the documented RangeError [0.14ms]
+(pass) MCP SDK query parser dependency > round trips constructor-shaped query data as ordinary data [0.90ms]
+(pass) MCP SDK query parser dependency > serializes JSON object elements with a string-valued toString in comma arrays [0.35ms]
+(pass) MCP SDK query parser dependency > serializes null-prototype object elements in comma arrays [0.11ms]
+(pass) Express query parser dependency > parses comma arrays at the declared limit [0.08ms]
+(pass) Express query parser dependency > maps an oversized comma array to the documented RangeError [0.03ms]
+(pass) Express query parser dependency > round trips constructor-shaped query data as ordinary data [0.09ms]
+(pass) Express query parser dependency > serializes JSON object elements with a string-valued toString in comma arrays [0.11ms]
+(pass) Express query parser dependency > serializes null-prototype object elements in comma arrays [0.06ms]
+(pass) body-parser query parser dependency > parses comma arrays at the declared limit [0.07ms]
+(pass) body-parser query parser dependency > maps an oversized comma array to the documented RangeError [0.02ms]
+(pass) body-parser query parser dependency > round trips constructor-shaped query data as ordinary data [0.09ms]
+(pass) body-parser query parser dependency > serializes JSON object elements with a string-valued toString in comma arrays [0.09ms]
+(pass) body-parser query parser dependency > serializes null-prototype object elements in comma arrays [0.02ms]
+(pass) Slack Express query parser dependency > parses comma arrays at the declared limit [0.04ms]
+(pass) Slack Express query parser dependency > maps an oversized comma array to the documented RangeError [0.02ms]
+(pass) Slack Express query parser dependency > round trips constructor-shaped query data as ordinary data [0.06ms]
+(pass) Slack Express query parser dependency > serializes JSON object elements with a string-valued toString in comma arrays [0.13ms]
+(pass) Slack Express query parser dependency > serializes null-prototype object elements in comma arrays [0.08ms]
+(pass) MCP Express dependency serves extended query and form data over HTTP [474.69ms]
+
+ 21 pass
+ 0 fail
+ 26 expect() calls
+Ran 21 tests across 1 file. [3.22s]
+[1/1] DONE test/mcp/query-parser-limits.test.ts exit=0 duration=5.47s

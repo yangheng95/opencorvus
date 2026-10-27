@@ -1,0 +1,79 @@
+{
+  "downloads": [
+    {
+      "name": "orders.csv",
+      "bytes": 91,
+      "actualBrowserDownload": true,
+      "equalsOriginalProjectBytes": true
+    },
+    {
+      "name": "review-summary.json",
+      "bytes": 58,
+      "actualBrowserDownload": true,
+      "equalsOriginalProjectBytes": true
+    }
+  ],
+  "lock": {
+    "uniqueRecordChanges": {
+      "removed": [
+        "qs@6.16.0"
+      ],
+      "added": [
+        "qs@6.16.1"
+      ]
+    },
+    "placements": [
+      {
+        "key": "commander",
+        "before": "commander@14.0.3",
+        "after": "commander@7.2.0"
+      },
+      {
+        "key": "iconv-lite",
+        "before": "iconv-lite@0.7.3",
+        "after": "iconv-lite@0.6.3"
+      },
+      {
+        "key": "qs",
+        "before": "qs@6.16.0",
+        "after": "qs@6.16.1"
+      },
+      {
+        "key": "d3-dsv/commander",
+        "before": "commander@7.2.0",
+        "after": null
+      },
+      {
+        "key": "d3-dsv/iconv-lite",
+        "before": "iconv-lite@0.6.3",
+        "after": null
+      },
+      {
+        "key": "d3-geo-projection/commander",
+        "before": "commander@7.2.0",
+        "after": null
+      },
+      {
+        "key": "@hey-api/openapi-ts/commander",
+        "before": null,
+        "after": "commander@14.0.3"
+      },
+      {
+        "key": "body-parser/iconv-lite",
+        "before": null,
+        "after": "iconv-lite@0.7.3"
+      },
+      {
+        "key": "raw-body/iconv-lite",
+        "before": null,
+        "after": "iconv-lite@0.7.3"
+      },
+      {
+        "key": "tedious/iconv-lite",
+        "before": null,
+        "after": "iconv-lite@0.7.3"
+      }
+    ],
+    "meaning": "Only qs changes package/version/content record; commander and iconv-lite existing records are relocated by the normal Bun resolver, without adding or replacing their versions."
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "qs": [
+    {
+      "id": 1243452,
+      "url": "https://github.com/advisories/GHSA-6pq8-jhm2-2vcw",
+      "title": "qs : qs.stringify with arrayFormat 'comma' throws an uncaught TypeError on array elements carrying a non-callable own toString (DoS)",
+      "severity": "moderate",
+      "vulnerable_versions": ">=6.7.0 <=6.16.0",
+      "cwe": [
+        "CWE-248",
+        "CWE-704"
+      ],
+      "cvss": {
+        "score": 5.3,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+      }
+    }
+  ]
+}
