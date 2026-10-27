@@ -360,6 +360,14 @@ Task-message or Session-config APIs cannot change `promptProfile`. Correcting a
 selection creates a new Task. This is an immutable identity/data-integrity
 contract, not a host workflow state machine.
 
+Task authors preserve operation restrictions from the actual operator input,
+repository instructions and observed authority. Network, external-transmission
+and outside-project boundaries do not imply a ban on project-local engineering
+steps. The selected runtime owns its local commit and merge contract, subject to
+explicit operator and repository restrictions; a local commit grants no remote
+push or publication authority. The shared Task-request scope prompt carries
+this authoring contract for Chat, Work, Mission and Control.
+
 `PromptProfileResolver` receives the immutable Task pillar and rejects an
 incompatible active package before runtime projection. The pillar answers
 “which product contract owns this Task”; `prompt_profile.active` remains the

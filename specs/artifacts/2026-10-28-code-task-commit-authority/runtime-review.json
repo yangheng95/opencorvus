@@ -1,0 +1,171 @@
+{
+  "at": "2026-10-27T19:27:33.782Z",
+  "schema": 9,
+  "tables": 92,
+  "sourceRows": 47312,
+  "sourceRowsPreserved": true,
+  "targetOldRowsExact": 47310,
+  "qualifiedLeaseReuse": {
+    "slots": [
+      0,
+      1
+    ],
+    "nativePID": 91216
+  },
+  "integrity": "ok",
+  "missionID": "586aecffc30805c8",
+  "missionSession": "ses_-zUQicQugzzzwNVRGmlu",
+  "taskID": "tsk_g00VZHNpHv00U1GVjV5r",
+  "missionStatus": "completed",
+  "taskStatus": "completed",
+  "packageBinding": {
+    "artifactID": "art_g0VZHNpZA00w6rx5yUcs",
+    "packageID": "base",
+    "scope": "built_in",
+    "version": "2026.10.14.1"
+  },
+  "completionDecision": {
+    "artifactID": "art_g0VZHP4nS00E6UYwcIaH",
+    "deliverables": 1,
+    "timeRecorded": 1793129126554
+  },
+  "originalAuthority": {
+    "messageID": "msg_hEevUaLjXOCcRUtay2sb",
+    "partID": "prt_h0m0pgvTLmh9M1Sh5jMX",
+    "request": "在当前隔离项目中修复 invoice.py 的 sum_due(rows)。输入为 (quantity 整数, unit_price 十进制字符串) 的列表，输出必须是按 ROUND_HALF_UP 四舍五入保留两位的总额字符串，保持精确十进制计算。验收值：[(3,\"0.10\")] => \"0.30\"；[(1,\"1.005\")] => \"1.01\"；[(1,\"9007199254740993.10\"),(1,\"0.20\")] => \"9007199254740993.30\"；[] => \"0.00\"。补充正向 Python unittest，实际运行测试，并交付修复文件、测试和简短验证报告。保留 README，不联网、不对外发送、不改项目外文件。这是单个明确交付目标，请在当前项目完成。"
+  },
+  "createdRequest": {
+    "partID": "prt_g0VZHNmBW00D1L7PGGhB",
+    "input": {
+      "title": "修复发票总额并验证精确计算",
+      "request": "在当前隔离项目完成单个明确交付目标：修复 invoice.py 的 sum_due(rows)，补充正向 Python unittest、实际运行测试，交付修复文件、测试和简短中文验证报告。输入是 (quantity 整数, unit_price 十进制字符串) 列表，输出为精确十进制求和后按 ROUND_HALF_UP 四舍五入保留两位的总额字符串；不得经由二进制浮点数丢失精度。\n必须验收：[(3,\"0.10\")] => \"0.30\"；[(1,\"1.005\")] => \"1.01\"；[(1,\"9007199254740993.10\"),(1,\"0.20\")] => \"9007199254740993.30\"；[] => \"0.00\"。\n硬约束：保留 README；不联网、不对外发送、不改项目外文件。当前目录即唯一交付仓库 C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\code-task-commit-authority-737\\project。不要增加其他交付界面或平台。\n本 Task 拥有实现、测试、纠正和独立验证的完整闭环，不需要另拆阶段。先查明适用仓库规则和当前代码，再作最小合理修复；根据输入位数合理处理 Decimal 上下文精度，避免大数被默认精度意外舍入（这是保持精确计算的实现指导，不是新增输入类型要求）。遵循实际 Task 运行和仓库本地 Git 交付约定：用户未禁止本地提交，网络/外发禁令不应解释为禁止项目本地提交；不得远程推送或发送任何内容。\n验证应在实际当前项目交付结果上运行，记录目录、命令、用例和结果，独立核对四个精确值及 README 保留。以可读取的最终交付证据覆盖代码、测试内容、实际运行结果和简短报告；源代码和测试应留在当前项目。所有约束和行为结论据实说明，勿用校验和代替功能测试。",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\code-task-commit-authority-737\\project",
+      "promptProfile": "base",
+      "expectedPackageDigest": "83ea97ae6b85c404ff6ff75b43ab0d72fe907d3013a3dcd651b322c5a5579f4f"
+    }
+  },
+  "localCommit": {
+    "commit": "24cc9f46c194483b0e37fdad10e460d7cfcb1799",
+    "partID": "prt_g0VZHOFez00CgRUZ9YFx",
+    "files": [
+      "invoice.py",
+      "test_invoice.py",
+      "verification_report.md"
+    ],
+    "exitCode": 0,
+    "output": " invoice.py             | 23 ++++++++++++++++++++++-\n test_invoice.py        | 48 ++++++++++++++++++++++++++++++++++++++++++++++++\n verification_report.md | 27 +++++++++++++++++++++++++++\n 3 files changed, 97 insertions(+), 1 deletion(-)\n[main 24cc9f4] Fix invoice totals with exact decimal arithmetic and positive tests\n 3 files changed, 97 insertions(+), 1 deletion(-)\n create mode 100644 test_invoice.py\n create mode 100644 verification_report.md\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>"
+  },
+  "independentPython": {
+    "command": "python -B -m unittest discover -v",
+    "tests": 6,
+    "exitCode": 0,
+    "output": "test_beyond_default_decimal_precision (test_invoice.SumDueTests.test_beyond_default_decimal_precision) ... ok\r\ntest_fraction_alignment_and_carry (test_invoice.SumDueTests.test_fraction_alignment_and_carry) ... ok\r\ntest_large_quantity (test_invoice.SumDueTests.test_large_quantity) ... ok\r\ntest_local_precision_and_context_preservation (test_invoice.SumDueTests.test_local_precision_and_context_preservation) ... ok\r\ntest_required_values (test_invoice.SumDueTests.test_required_values) ... ok\r\ntest_round_only_after_sum (test_invoice.SumDueTests.test_round_only_after_sum) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 6 tests in 0.001s\r\n\r\nOK\r\n",
+    "values": [
+      "0.30",
+      "1.01",
+      "9007199254740993.30",
+      "0.00"
+    ]
+  },
+  "productionIndependentOracle": {
+    "partID": "prt_g0VZHOj73008FZ1IDZRB",
+    "sessionID": "ses_hj5XtKUjPgdbIIKyngFi",
+    "exitCode": 0,
+    "output": "PASS: 200 deterministic integer-oracle cases; 1-25 rows, price coefficients up to 100 digits, quantity up to 60 digits, fractional scales 0-80\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "cases": 200
+  },
+  "readmeOriginalBytesPreserved": true,
+  "deliveredFilesMatchImmutableCommit": true,
+  "missionCompletionPartID": "prt_g0VZHPNy000Qq5gecBem",
+  "before": {
+    "taskID": "tsk_g00VZH4Swp00oZbphtIe",
+    "creationPartID": "prt_g0VZH4PgM00MX1rmSe86",
+    "authoredRequest": "在当前隔离项目中完成一个完整交付：修复 invoice.py 的 sum_due(rows)，补充正向 Python unittest，实际运行测试，并交付修复源文件、测试及简短中文验证报告。输入是 (quantity 整数, unit_price 十进制字符串) 的列表；输出是总额字符串，必须以 ROUND_HALF_UP 四舍五入保留两位，全程精确十进制计算。四个必验值：[(3,\"0.10\")] => \"0.30\"；[(1,\"1.005\")] => \"1.01\"；[(1,\"9007199254740993.10\"),(1,\"0.20\")] => \"9007199254740993.30\"；[] => \"0.00\"。\n硬约束：保留 README（不修改）；不联网、不对外发送、不改项目外文件；在给定当前项目完成。不要使用网络检索、外部服务或安装联网依赖。不要提交或推送 git，除非项目内明确指令确实要求且不违反上述限制。\n实施建议（非用户新增要求）：先检查本地项目指令、现有代码与测试约定；避免 float 转换，注意 Decimal 上下文精度不能损坏大数或长十进制的精确求和，在总额处最终舍入。测试覆盖四个原始验收值，并添加适当正向用例。将实现、测试、复核置于本任务内，不创建外部阶段。\n必须在当前交付项目实际执行 unittest，记录精确命令、工作目录、结果与测试数量；核对最终 diff 和 README 未变。交付证据应含可读源文件与测试内容/资源、简短验证报告及独立复核结论，以便核对行为和约束；报告可作为任务交付证据，不需为报告新增文档文件。源文件和测试必须实际保存在当前项目。遵守用户禁止项目外写入的限制，避免 Python 测试生成项目外文件。",
+    "originalUserInput": "Same request as case/request.txt",
+    "scope": "Historical Task remains unchanged; the coordinator-added Git restriction is preserved as original evidence"
+  },
+  "runtime": {
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "requests": 68,
+    "allHTTP200": true,
+    "allReadersSettledEOF": true,
+    "previousRequests": 556,
+    "cumulativeRequests": 624,
+    "publicShutdown": 200,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "reserveMs": 677734,
+    "tenMinuteShutdownTargetMet": true,
+    "credentialCopyRetired": true,
+    "modelCatalogCopyRetired": true,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    }
+  },
+  "checks": {
+    "authoringPolicy": {
+      "code": 0,
+      "tests": 2,
+      "expectCalls": 6
+    },
+    "typecheck": 0,
+    "docs": 0,
+    "architecture": 0
+  },
+  "screenshots": [
+    {
+      "name": "01-original-request.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "02-mission-running.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "03-local-commit-receipt.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "04-independent-review.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "05-task-completed.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "06-mission-completed.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    }
+  ],
+  "limits": [
+    "The new Task selected Base, not the previous Dynamic package; this validates the shared authoring boundary and actual scoped commit, not every Build or managed-worktree path.",
+    "Explicit operator commit restrictions, remote push and publication were not exercised or widened.",
+    "The final Mission header reads Not running while the canonical Mission outcome is accepted/completed; that UI distinction is an open observation for a later batch.",
+    "No UI automated tests, application release or schema change."
+  ]
+}

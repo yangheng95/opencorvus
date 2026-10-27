@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [代码任务本地提交边界](records/2026-10/2026-10-28-code-task-commit-authority.md)：真实约束来源与任务交付调查。
+
 - [代码任务交付与Skill加载](records/2026-10/2026-10-28-code-task-delivery-journey.md)：真实任务、文件交付与内置提示名称合同。
 
 - [Goal用量与完成详情](records/2026-10/2026-10-28-goal-usage-scope.md)：解释请求归属并改善下一目标操作可见性。

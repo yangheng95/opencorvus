@@ -9,12 +9,14 @@
 #### 修复
 
 - 2026-10-28：修正16个内置专家团共26处 Skill 加载指令，使其使用真实技能名称，避免把能力引用当作工具参数而先失败再重试。受影响包更新为 `2026.10.28.1`；原权限、能力引用和已固定的历史任务修订保持。应用版本及数据库结构不变。
+- 2026-10-28：澄清任务分派中的本地工程边界，避免将“不联网、不外发、不改项目外”扩大成用户未提出的本地提交禁令，减少与构建角色交付要求的冲突。真实用户与项目限制仍须遵守，对外推送和发布仍需各自授权。
 
 ### en-US
 
 #### Fixed
 
 - 2026-10-28: Corrected 26 Skill-loading instructions across 16 built-in Expert Squads to use declared Skill names. Affected packages advance to `2026.10.28.1`; capability grants and historical pinned Task revisions retain their original identities. Application and database versions are unchanged.
+- 2026-10-28: Clarified Task-authoring boundaries so network, external-transmission and outside-project restrictions do not become invented local-commit prohibitions. Explicit operator and repository restrictions remain binding; remote pushes and publication require their own authority.
 
 ## 0.1.33 - 2026-10-27
 

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [代码任务本地提交边界](2026-10-28-code-task-commit-authority.md)：单代理约束来源与真实交付验收。
+
 - [代码任务交付与Skill加载](2026-10-28-code-task-delivery-journey.md)：单代理真实执行及跨包提示修复。
 
 - [Goal用量与完成详情](2026-10-28-goal-usage-scope.md)：单代理真实阅读与已完成详情密度改进。
