@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [当前默认页和Goal使用流程](records/2026-10/2026-10-28-goal-home-current-journey.md)：真实目标完成和控制消息紧凑呈现。
+
 - [数据库开库结果日志](records/2026-10/2026-10-28-schema-open-observability.md)：区分初始化、当前版本校验和实际升级。
 
 - [当前Sources与真实模型网络流程](records/2026-10/2026-10-27-current-source-and-network-journey.md)：单代理当前原件、来源和连接体验。

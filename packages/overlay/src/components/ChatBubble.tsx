@@ -189,12 +189,14 @@ export function ChatBubble(props: { node: CardNode; depth: number; collapsible?:
   const align = () => bubbleAlign(props.node)
   const normalizedRole = () => normalizeAgentRole(props.node.role || props.node.stage || "")
   const isUser = () => normalizedRole() === "user"
-  const collapsible = () => !isUser() && props.collapsible !== false
-  const defaultExpanded = () => defaultExpandedForNode(props.node)
-  const expanded = () => isUser() || !collapsible() || cardExpanded(props.node.id, defaultExpanded())
+  const isGoalController = () => messageParticipant(props.node) === "goal-controller"
+  const collapsible = () => isGoalController() || (!isUser() && props.collapsible !== false)
+  const defaultExpanded = () => (isGoalController() ? false : defaultExpandedForNode(props.node))
+  const expanded = () =>
+    (isUser() && !isGoalController()) || !collapsible() || cardExpanded(props.node.id, defaultExpanded())
   const errorReason = () => (props.node.status === "error" ? String(props.node.errorReason || "").trim() : "")
   const collapsedPreview = createMemo(() => {
-    if (expanded()) return ""
+    if (expanded() || isGoalController()) return ""
     const text = collectLatestActivityText(props.node)
     return collapsedActivityPreviewText(text, props.node.title)
   })

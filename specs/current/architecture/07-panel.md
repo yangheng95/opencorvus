@@ -1951,6 +1951,13 @@ a server response status or request ID.
 
 ## Current Surface Ownership
 
+Goal controller messages retain their real `goal-controller` author and complete
+original body. ChatBubble renders their existing localized participant heading
+as a disclosure, collapsed by default even in the main conversation. Expanding
+uses the same CardParts body and canonical card-expansion store; the operator's
+choice survives ordinary conversation navigation. Human messages and model
+results retain their existing presentation and expansion rules.
+
 | Surface          | Source                                                                                   | Responsibility                                                                                                                                                                                                                                                                                                                                                                  |
 | ---------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Work Ledger      | global task summaries                                                                    | Select projects, Missions, tasks, Chat conversations, and Work conversations.                                                                                                                                                                                                                                                                                                   |

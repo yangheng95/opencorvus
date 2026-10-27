@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [当前默认页和Goal流程证据](2026-10-28-goal-home-current-journey/README.md)：原始页面、真实模型与数据结清。
+
 - [数据库开库结果证据](2026-10-28-schema-open-observability/README.md)：真实日志、备份和完整克隆数据核对。
 
 - [当前Sources与网络证据](2026-10-27-current-source-and-network-journey/README.md)：真实流式模型、原件与来源页面。

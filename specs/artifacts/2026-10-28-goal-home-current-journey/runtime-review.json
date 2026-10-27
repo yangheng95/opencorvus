@@ -1,0 +1,100 @@
+{
+  "at": "2026-10-27T16:53:15.519Z",
+  "build": "main-BuWTgbZ5.js",
+  "manualOriginalImages": 11,
+  "realGoal": {
+    "status": "complete",
+    "turnsAccepted": 1,
+    "tokensUsed": 35983,
+    "reason": "已回复指定文本“目标流程已核对729”，未修改任何文件。",
+    "model": "gpt-6.1-sol",
+    "requests": 4,
+    "requestOutcomes": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      }
+    ],
+    "credentialCopyRetired": true,
+    "modelCatalogCopyRetired": true,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "shutdown": 200,
+    "reserveMs": 734042,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "chain": [
+      "dead_or_reused",
+      "dead_or_reused"
+    ]
+  },
+  "newBuildVisualReview": {
+    "requests": 0,
+    "credentialsCopied": false,
+    "modelCatalogCopyRetired": true,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "schema": 9,
+    "originalRows": 1270,
+    "tables": 92,
+    "allOriginalRowsPreserved": true,
+    "sourceRowsPreserved": true,
+    "integrity": "ok",
+    "shutdown": 200,
+    "reserveMs": 1060622,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "chain": [
+      "dead_or_reused",
+      "dead_or_reused"
+    ]
+  },
+  "cumulativeRequests": 384,
+  "checks": {
+    "overlayTypecheck": 0,
+    "ordinaryNodeBuild": 0,
+    "i18n": 0,
+    "rendererPublicSurface": 0
+  },
+  "limitations": [
+    "04 is an intermediate navigation frame; 06 still shows the immutable old frontend and does not qualify the fix",
+    "07-10 deliberately use a credential-free historical reading instance; its model-unavailable feedback is expected",
+    "The live Work duration was 8s in 05 and the persisted reconstruction was 4s in 07; the duration derivation still requires a separate root-cause investigation"
+  ]
+}

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [当前默认页和Goal使用流程](2026-10-28-goal-home-current-journey.md)：单代理按当前版本复现和改进。
+
 - [数据库开库结果日志](2026-10-28-schema-open-observability.md)：单代理修正开库结果误导。
 
 - [当前Sources与真实模型网络流程](2026-10-27-current-source-and-network-journey.md)：单代理实际功能及阶段诊断调查。
