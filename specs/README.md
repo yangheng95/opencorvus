@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件操作忙态与键盘恢复](records/2026-10/2026-10-27-file-editor-action-focus.md)：保存失败与后续键盘操作完整旅程。
+
 - [保存冲突后的版本比较](records/2026-10/2026-10-27-file-conflict-comparison.md)：保留草稿读取磁盘、比较版本与安全恢复。
 
 - [Goal启动与完成阅读衔接](records/2026-10/2026-10-27-goal-completion-journey.md)：默认页、真实Sol与原目标操作。

@@ -707,6 +707,15 @@ publishes a successful response still owned by the resource, generation and
 draft revision; failed or superseded reads retain input. Save-and-leave errors
 remain visible inside its decision dialog.
 
+File actions retain their native focus during transient save, reload and download
+work through the shared Button's ARIA disabled/busy states. The existing action
+owner guards repeated activation, including Cancel/Discard while the unsaved
+decision is saving. Native disabled remains for an unready resource or reserved
+navigation. A clean Save remains discoverable and ARIA disabled; the existing
+dirty check owns whether any write is needed. Successful leave retains the
+destination's focus lifecycle. No delayed focus repair or parallel focus store
+supplies this behavior.
+
 The same file owner offers a read-only disk comparison in its header and named
 save-conflict feedback, including its unsaved decision. One cancellable read of
 the existing file-content route owns the disk snapshot; the loaded baseline and

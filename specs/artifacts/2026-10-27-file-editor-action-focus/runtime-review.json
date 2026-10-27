@@ -1,0 +1,179 @@
+{
+  "reviewedAt": "2026-10-27T11:10:21.365Z",
+  "runtime": [
+    {
+      "instance": 714,
+      "port": 38219,
+      "uiEntry": "main-DnfRmDOe.js",
+      "schema": 9,
+      "sourceTables": 92,
+      "sourceRows": 240229,
+      "allOriginalTargetRowsPreserved": true,
+      "protectedRows": 7147,
+      "projectFilesPreserved": 166,
+      "requests": 0,
+      "cumulativeRequests": 353,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "reserveMs": 1045436,
+      "sourceCatalogBytesPreserved": true,
+      "sourceCatalogMetadataPreserved": true,
+      "sourceAuthMetadataPreserved": true,
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true
+    },
+    {
+      "instance": 715,
+      "port": 38220,
+      "uiEntry": "main-BT_sDM31.js",
+      "schema": 9,
+      "sourceTables": 92,
+      "sourceRows": 240246,
+      "allOriginalTargetRowsPreserved": true,
+      "protectedRows": 7147,
+      "projectFilesPreserved": 166,
+      "requests": 0,
+      "cumulativeRequests": 353,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "reserveMs": 705104,
+      "sourceCatalogBytesPreserved": true,
+      "sourceCatalogMetadataPreserved": true,
+      "sourceAuthMetadataPreserved": true,
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true
+    }
+  ],
+  "manualVisualReview": {
+    "images": [
+      "01-baseline-save-error-focus.jpg",
+      "02-baseline-unsaved-error-focus.jpg",
+      "03-baseline-reload-focus.jpg",
+      "04-baseline-binary-download-focus.jpg",
+      "05-final-save-error-focus.jpg",
+      "06-final-unsaved-save-focus.jpg",
+      "07-final-save-success-focus.jpg",
+      "08-final-reload-focus.jpg",
+      "09-final-shortcut-editor-focus.jpg",
+      "10-final-save-and-leave.jpg",
+      "11-final-binary-download-focus.jpg",
+      "12-final-zh-header-download-focus.jpg",
+      "13-path-search-forward-slash.jpg",
+      "14-path-search-backslash.jpg",
+      "15-path-search-filename.jpg",
+      "16-final-zh-clean-save-focus.jpg"
+    ],
+    "ordinaryDevelopmentCLI": true,
+    "automatedUITestsRun": 0,
+    "instrumentedUI": false,
+    "finalBuild": "main-BT_sDM31.js",
+    "localesAndThemes": [
+      "English dark",
+      "中文浅色"
+    ],
+    "verifiedFlows": [
+      "header Enter Save returns real 404, keeps draft and button focus",
+      "unsaved decision Save returns 404 and keeps Save focus",
+      "Cancel returns original Close file focus",
+      "successful clean Save keeps discoverable focus",
+      "two Return keys produce one successful write",
+      "Reload retains focus during and after request",
+      "Control+s keeps editor focus",
+      "Save and leave hands focus to Explorer tab",
+      "real binary body and header downloads retain their own focus",
+      "same saved final text reopens correctly",
+      "actual Shift+Tab reaches clean ARIA-disabled Save; Return preserves state"
+    ],
+    "notQualified": [
+      "slow-network race timing",
+      "every error type",
+      "project/API switch during an active request"
+    ]
+  },
+  "files": {
+    "714": {
+      "at": "2026-10-27T10:59:10.265Z",
+      "draftBytes": 74,
+      "draftSavedExactly": true,
+      "binaryDownloadExact": true,
+      "binaryBytes": 8,
+      "originalProjectFilesPreserved": 17
+    },
+    "715": {
+      "at": "2026-10-27T11:10:21.358Z",
+      "initialSavedDraftBytes": 74,
+      "finalSavedDraftBytes": 77,
+      "finalSavedExactly": true,
+      "originalProjectFilesPreserved": 19,
+      "downloads": [
+        {
+          "bytes": 8,
+          "exactOriginal": true
+        },
+        {
+          "bytes": 8,
+          "exactOriginal": true
+        }
+      ],
+      "realFileWriteRequests": 5,
+      "realBinaryDownloadRequests": 2,
+      "firstPhase": {
+        "failedHeaderSave": 1,
+        "failedDialogSave": 1,
+        "successfulHeaderSaveWithTwoReturnKeys": 1,
+        "observedWrites": 3
+      },
+      "laterSuccessfulWrites": [
+        "editor Control+s",
+        "unsaved decision Save and leave"
+      ]
+    }
+  },
+  "checks": {
+    "build-final": {
+      "exitCode": 0,
+      "elapsedMs": 71750
+    },
+    "typecheck-final": {
+      "exitCode": 0,
+      "elapsedMs": 33029
+    },
+    "css-final": {
+      "exitCode": 0,
+      "elapsedMs": 8807
+    },
+    "i18n-final": {
+      "exitCode": 0,
+      "elapsedMs": 1467
+    },
+    "docs-first": {
+      "exitCode": 0,
+      "elapsedMs": 11737
+    }
+  },
+  "nextInvestigation": {
+    "area": "File search on Windows",
+    "observed": "Forward-slash relative path returns no matches; the same backslash path and filename return the existing file.",
+    "images": [
+      "13-path-search-forward-slash.jpg",
+      "14-path-search-backslash.jpg",
+      "15-path-search-filename.jpg"
+    ],
+    "rootCause": "Not yet investigated in this focus change; continue through the real find/file route."
+  },
+  "limitations": [
+    "Read-only and resource-reservation admission remain unchanged.",
+    "No new real-provider requests required; cumulative evidence remains 353.",
+    "Native failed locator.press on an ARIA-disabled clean Save is a tool enablement guard; actual Shift+Tab and Return qualified native focus.",
+    "First CodeMirror fill during opening prepended draft to original; replaced with actual Control+a and native text input before any save. No product data-loss conclusion drawn.",
+    "Existing large-chunk and third-party use-client build warnings remain."
+  ]
+}

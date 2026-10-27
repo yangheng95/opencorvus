@@ -179,7 +179,8 @@ export function FileEditorPane() {
   const downloadable = () => textContent() || content()?.encoding === "base64" || projectBinary()
   const identityOf = (file: FileEditorTarget | null) => file
     ? `${file.directory}\u0000${file.path}\u0000${file.sourceAbsolutePath ?? ""}` : ""
-  const isBusy = () => loading() || saving() || reloading() || identityOf(target()) !== activeTargetIdentity
+  const resourceReady = () => !loading() && identityOf(target()) === activeTargetIdentity
+  const isBusy = () => !resourceReady() || saving() || reloading()
   const currentErrorMessage = () => {
     const failure = error()
     return failure && t(failure.messageKey)
@@ -223,7 +224,8 @@ export function FileEditorPane() {
   }
   const conflictComparisonAction = () => error()?.messageKey === "file_editor.save_conflict" ? (
       <Button type="button" variant="outline" size="sm" tone="neutral"
-        disabled={isBusy() || fileEditorReserved()} onClick={() => void compareWithDisk()}>
+        disabled={!resourceReady() || fileEditorReserved()} aria-disabled={isBusy() || fileEditorReserved() || undefined}
+        onClick={() => void compareWithDisk()}>
         {t("file_editor.compare")}
       </Button>
   ) : undefined
@@ -422,6 +424,7 @@ export function FileEditorPane() {
   }
 
   const closeCurrentFile = async (): Promise<void> => {
+    if (isBusy() || fileEditorReserved()) return
     const file = target()
     const authority = captureApiAuthority()
     const generation = loadGeneration
@@ -499,7 +502,9 @@ export function FileEditorPane() {
                 data-dirty={dirty() ? "true" : "false"}
                 title={`${t("common.save")} (Ctrl/Cmd+S)`}
                 aria-keyshortcuts="Control+s Meta+s"
-                disabled={!dirty() || isBusy() || fileEditorReserved()}
+                disabled={!resourceReady() || fileEditorReserved()}
+                aria-disabled={!dirty() || isBusy() || fileEditorReserved() || undefined}
+                aria-busy={saving() || undefined}
                 onClick={() => void save()}
               >
                 {saving() ? t("common.saving") : t("common.save")}
@@ -510,7 +515,8 @@ export function FileEditorPane() {
           </Show>
           <Show when={writable()}>
             <Button type="button" variant="ghost" size="icon" tone="neutral"
-              data-ui="file-editor-compare" disabled={isBusy() || fileEditorReserved()}
+              data-ui="file-editor-compare" disabled={!resourceReady() || fileEditorReserved()}
+              aria-disabled={isBusy() || fileEditorReserved() || undefined}
               title={t("file_editor.compare")} aria-label={t("file_editor.compare")}
               onClick={() => void compareWithDisk()}>
               <Icon name="git-compare" />
@@ -522,7 +528,9 @@ export function FileEditorPane() {
               variant="ghost"
               size="icon"
               tone="neutral"
-              disabled={isBusy() || fileEditorReserved() || downloading()}
+              disabled={!resourceReady() || fileEditorReserved()}
+              aria-disabled={isBusy() || fileEditorReserved() || downloading() || undefined}
+              aria-busy={downloading() || undefined}
               title={t(downloading() ? "file.downloading" : dirty() ? "file_editor.download_draft" : "file.download")}
               aria-label={t(downloading() ? "file.downloading" : dirty() ? "file_editor.download_draft" : "file.download")}
               onClick={() => void downloadCurrentFile()}
@@ -536,7 +544,9 @@ export function FileEditorPane() {
             size="icon"
             tone="neutral"
             data-ui="file-editor-reload"
-            disabled={isBusy() || fileEditorReserved()}
+            disabled={!resourceReady() || fileEditorReserved()}
+            aria-disabled={isBusy() || fileEditorReserved() || undefined}
+            aria-busy={reloading() || undefined}
             title={t("file_editor.reload")}
             aria-label={t("file_editor.reload")}
             onClick={() => void reload()}
@@ -550,7 +560,8 @@ export function FileEditorPane() {
             tone="neutral"
             data-chrome="icon-action"
             data-ui="file-editor-close"
-            disabled={isBusy() || fileEditorReserved()}
+            disabled={!resourceReady() || fileEditorReserved()}
+            aria-disabled={isBusy() || fileEditorReserved() || undefined}
             onClick={() => void closeCurrentFile()}
             title={t("file_editor.close", { path: fileTitle() })}
             aria-label={t("file_editor.close", { path: fileTitle() })}
@@ -582,7 +593,9 @@ export function FileEditorPane() {
                       variant="outline"
                       size="sm"
                       tone="neutral"
-                      disabled={isBusy() || fileEditorReserved()}
+                      disabled={!resourceReady() || fileEditorReserved()}
+                      aria-disabled={isBusy() || fileEditorReserved() || undefined}
+                      aria-busy={reloading() || undefined}
                       onClick={() => void reload()}
                     >
                       {reloading() ? t("common.loading") : t("common.retry")}
@@ -603,7 +616,9 @@ export function FileEditorPane() {
                       variant="outline"
                       size="sm"
                       tone="neutral"
-                      disabled={isBusy() || fileEditorReserved() || downloading()}
+                      disabled={!resourceReady() || fileEditorReserved()}
+                      aria-disabled={isBusy() || fileEditorReserved() || downloading() || undefined}
+                      aria-busy={downloading() || undefined}
                       onClick={() => void downloadCurrentFile()}
                     >
                       {t(downloading() ? "file.downloading" : "file.download")}
@@ -670,8 +685,8 @@ export function FileEditorPane() {
               size="md"
               tone="neutral"
               data-ui="file-editor-leave-cancel"
-              disabled={leaveSaving()}
-              onClick={() => finishLeaveDecision(false)}
+              aria-disabled={leaveSaving() || undefined}
+              onClick={() => { if (!leaveSaving()) finishLeaveDecision(false) }}
             >
               {t("common.cancel")}
             </Button>
@@ -680,9 +695,9 @@ export function FileEditorPane() {
               variant="outline"
               size="md"
               tone="danger"
-              disabled={leaveSaving()}
+              aria-disabled={leaveSaving() || undefined}
               data-ui="file-editor-discard"
-              onClick={() => finishLeaveDecision(true)}
+              onClick={() => { if (!leaveSaving()) finishLeaveDecision(true) }}
             >
               {t(leaveReason() === "reload" ? "file_editor.discard_reload" : "file_editor.discard")}
             </Button>
@@ -691,7 +706,8 @@ export function FileEditorPane() {
               variant="solid"
               size="md"
               tone="accent"
-              disabled={leaveSaving()}
+              aria-disabled={leaveSaving() || undefined}
+              aria-busy={leaveSaving() || undefined}
               data-ui="file-editor-save-and-leave"
               onClick={() => void saveAndLeave()}
             >

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件操作键盘恢复证据](2026-10-27-file-editor-action-focus/README.md)：真实页面、原始截图与数据结清。
+
 - [文件冲突比较证据](2026-10-27-file-conflict-comparison/README.md)：真实保存冲突、草稿/外部版本与比较页面。
 
 - [Goal完整旅程证据](2026-10-27-goal-completion-journey/README.md)：当前实页、真实模型及结清事实。
