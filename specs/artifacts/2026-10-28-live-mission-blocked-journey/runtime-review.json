@@ -1,0 +1,597 @@
+{
+  "at": "2026-10-27T20:35:14.487Z",
+  "mission": {
+    "id": "0249bbe6c48d8cce",
+    "sessionID": "ses_-zUQiNDP0zzyyPiL2nvx",
+    "outcome": {
+      "messageID": "msg_g0VZHeKYP00ht4HgyCIt",
+      "toolCallID": "call_70756f3593cd4951bb2a52d932f8a4fa",
+      "toolPartID": "prt_g0VZHeLJ000OmFFVyT2O",
+      "summary": "第一项已交付并验收：实际读取 orders.csv，逐行精确计算 12.50、7.50、20.00，3 笔合计 40.00 CNY；当前项目 review-summary.json 内容符合要求，calculation-evidence.json 及独立重算证据已核查。orders.csv 与 README.md 保持原样。第二项未完成：双方精确读取 customer-signoff.md 均不存在，客户原文读取、订单比对及基于原件的复核结论均无法完成。需要客户提供真实 customer-signoff.md；本轮不补充，不再询问、重试或等待。已发布交付与受阻总览，整体按真实外部依赖受阻结束，不宣称完整成功。",
+      "timeRecorded": 1793132770786,
+      "kind": "blocked",
+      "unresolvedCriteria": [
+        "第二项必须实际读取客户真实 customer-signoff.md、对比客户确认内容与原始订单，并交付基于原件证据的复核结论；客户尚未提供且本轮不提供该准确原件，禁止创建、猜测或以汇总代替，故该项与完整成功条件仍未满足。"
+      ]
+    },
+    "boardLane": "attention",
+    "ledgerOutcome": "blocked",
+    "interruptible": false,
+    "heldExpertSquadIDs": [
+      "base"
+    ],
+    "tasks": [
+      {
+        "id": "tsk_g00VZHd47u00r0Pa5iWM",
+        "title": "客户原件复核与阻塞确认",
+        "lifecycleStatus": "failed",
+        "activityStatus": "inactive",
+        "completed": 1793132601714
+      },
+      {
+        "id": "tsk_g00VZHd0gV00QEPVDCEU",
+        "title": "订单精确计算与汇总交付",
+        "lifecycleStatus": "completed",
+        "activityStatus": "inactive",
+        "completed": 1793132674388
+      }
+    ]
+  },
+  "formalTool": {
+    "requestPartID": "prt_g0VZHeLJ000OmFFVyT2O",
+    "messageID": "msg_g0VZHeKYP00ht4HgyCIt",
+    "callID": "call_70756f3593cd4951bb2a52d932f8a4fa",
+    "tool": "panel_block_mission",
+    "outcomePartID": "prt_hzkGD4B9jcoha1HA3jcA",
+    "outcome": "completed"
+  },
+  "business": {
+    "at": "2026-10-27T20:33:09.606Z",
+    "schema": 9,
+    "integrity": "ok",
+    "sourceRows": 64357,
+    "sourceRowsPreserved": true,
+    "tables": {
+      "automation": {
+        "original": 0,
+        "current": 0
+      },
+      "automation_definition_tombstone": {
+        "original": 0,
+        "current": 0
+      },
+      "automation_delay_settlement": {
+        "original": 0,
+        "current": 0
+      },
+      "automation_fire": {
+        "original": 0,
+        "current": 0
+      },
+      "automation_fire_attempt": {
+        "original": 0,
+        "current": 0
+      },
+      "automation_fire_attempt_receipt": {
+        "original": 0,
+        "current": 0
+      },
+      "automation_fire_frontier": {
+        "original": 0,
+        "current": 0
+      },
+      "automation_project_target": {
+        "original": 0,
+        "current": 0
+      },
+      "automation_run": {
+        "original": 0,
+        "current": 0
+      },
+      "automation_run_receipt": {
+        "original": 0,
+        "current": 0
+      },
+      "bus_publication_attempt_receipt": {
+        "original": 0,
+        "current": 0
+      },
+      "bus_publication_delivery": {
+        "original": 12638,
+        "current": 17502
+      },
+      "bus_publication_delivery_receipt": {
+        "original": 12638,
+        "current": 17502
+      },
+      "bus_publication_outbox": {
+        "original": 1582,
+        "current": 2186
+      },
+      "bus_publication_owner": {
+        "original": 1582,
+        "current": 2186
+      },
+      "bus_publication_phase_receipt": {
+        "original": 4746,
+        "current": 6558
+      },
+      "channel_ingress_accepted": {
+        "original": 0,
+        "current": 0
+      },
+      "channel_ingress_outcome": {
+        "original": 0,
+        "current": 0
+      },
+      "control_account": {
+        "original": 0,
+        "current": 0
+      },
+      "database_authority": {
+        "original": 1,
+        "current": 1
+      },
+      "decision_log": {
+        "original": 0,
+        "current": 0
+      },
+      "engine_artifact": {
+        "original": 39,
+        "current": 55
+      },
+      "engine_artifact_catalog_revision": {
+        "original": 39,
+        "current": 55
+      },
+      "engine_artifact_version": {
+        "original": 0,
+        "current": 0
+      },
+      "engine_browser_preview_target_identity": {
+        "original": 0,
+        "current": 0
+      },
+      "engine_build_observation_cleanup": {
+        "original": 3,
+        "current": 3
+      },
+      "engine_build_observation_cleanup_receipt": {
+        "original": 3,
+        "current": 3
+      },
+      "engine_channel_binding": {
+        "original": 0,
+        "current": 0
+      },
+      "engine_control_activation_lease": {
+        "original": 13176,
+        "current": 18328
+      },
+      "engine_control_activation_lease_grant": {
+        "original": 13194,
+        "current": 18349
+      },
+      "engine_git_checkpoint_outcome": {
+        "original": 6,
+        "current": 10
+      },
+      "engine_git_checkpoint_request": {
+        "original": 6,
+        "current": 10
+      },
+      "engine_goal": {
+        "original": 0,
+        "current": 0
+      },
+      "engine_interaction_outcome": {
+        "original": 0,
+        "current": 0
+      },
+      "engine_interaction_request": {
+        "original": 0,
+        "current": 0
+      },
+      "engine_metric_result": {
+        "original": 0,
+        "current": 0
+      },
+      "engine_metric_spec": {
+        "original": 0,
+        "current": 0
+      },
+      "engine_progress_snapshot": {
+        "original": 0,
+        "current": 0
+      },
+      "engine_task": {
+        "original": 3,
+        "current": 5
+      },
+      "engine_task_creation_contract": {
+        "original": 3,
+        "current": 5
+      },
+      "engine_task_root_ingress": {
+        "original": 10,
+        "current": 14
+      },
+      "engine_task_root_ingress_policy": {
+        "original": 1,
+        "current": 1
+      },
+      "engine_task_wait_registration": {
+        "original": 0,
+        "current": 0
+      },
+      "engine_task_wait_settlement": {
+        "original": 0,
+        "current": 0
+      },
+      "event_job": {
+        "original": 0,
+        "current": 0
+      },
+      "event_job_definition_tombstone": {
+        "original": 0,
+        "current": 0
+      },
+      "event_job_fire": {
+        "original": 0,
+        "current": 0
+      },
+      "event_job_fire_receipt": {
+        "original": 0,
+        "current": 0
+      },
+      "event_occurrence": {
+        "original": 1578,
+        "current": 2182
+      },
+      "expert_squad_mutation_receipt": {
+        "original": 0,
+        "current": 0
+      },
+      "global_creation_allocation": {
+        "original": 5,
+        "current": 6
+      },
+      "interactive_artifact": {
+        "original": 4,
+        "current": 5
+      },
+      "memory_chunk": {
+        "original": 8,
+        "current": 10
+      },
+      "memory_embedding": {
+        "original": 0,
+        "current": 0
+      },
+      "memory_file": {
+        "original": 8,
+        "current": 10
+      },
+      "memory_fts": {
+        "original": 0,
+        "current": 0
+      },
+      "memory_fts_config": {
+        "original": 1,
+        "current": 1
+      },
+      "memory_fts_content": {
+        "original": 0,
+        "current": 0
+      },
+      "memory_fts_data": {
+        "original": 2,
+        "current": 2
+      },
+      "memory_fts_docsize": {
+        "original": 0,
+        "current": 0
+      },
+      "memory_fts_idx": {
+        "original": 0,
+        "current": 0
+      },
+      "message": {
+        "original": 198,
+        "current": 272
+      },
+      "part": {
+        "original": 619,
+        "current": 863
+      },
+      "permission_execution_result": {
+        "original": 71,
+        "current": 92
+      },
+      "permission_ledger": {
+        "original": 363,
+        "current": 468
+      },
+      "permission_policy": {
+        "original": 12,
+        "current": 17
+      },
+      "project": {
+        "original": 8,
+        "current": 10
+      },
+      "project_directory_admission": {
+        "original": 0,
+        "current": 0
+      },
+      "project_maintenance_fence": {
+        "original": 0,
+        "current": 0
+      },
+      "protocol_delivery_receipt": {
+        "original": 3,
+        "current": 7
+      },
+      "protocol_event": {
+        "original": 579,
+        "current": 810
+      },
+      "protocol_inbox": {
+        "original": 3,
+        "current": 7
+      },
+      "provider_activity_outcome": {
+        "original": 231,
+        "current": 323
+      },
+      "provider_activity_request": {
+        "original": 231,
+        "current": 323
+      },
+      "provider_usage_event": {
+        "original": 244,
+        "current": 339
+      },
+      "quick_note": {
+        "original": 0,
+        "current": 0
+      },
+      "runtime_execution_capacity_lease": {
+        "original": 3,
+        "current": 3
+      },
+      "session": {
+        "original": 21,
+        "current": 29
+      },
+      "session_control_event": {
+        "original": 13,
+        "current": 19
+      },
+      "session_control_record": {
+        "original": 13,
+        "current": 19
+      },
+      "session_prompt_owner": {
+        "original": 0,
+        "current": 0
+      },
+      "session_share": {
+        "original": 0,
+        "current": 0
+      },
+      "task_plan": {
+        "original": 0,
+        "current": 0
+      },
+      "todo": {
+        "original": 0,
+        "current": 0
+      },
+      "todo_snapshot": {
+        "original": 0,
+        "current": 0
+      },
+      "tool_part_outcome": {
+        "original": 213,
+        "current": 297
+      },
+      "tool_part_progress": {
+        "original": 31,
+        "current": 37
+      },
+      "tool_part_request": {
+        "original": 213,
+        "current": 297
+      },
+      "workbench_brief_snapshot": {
+        "original": 6,
+        "current": 9
+      },
+      "worker_turn_descriptor": {
+        "original": 6,
+        "current": 8
+      },
+      "workspace": {
+        "original": 0,
+        "current": 0
+      },
+      "workspace_lifecycle_admission": {
+        "original": 0,
+        "current": 0
+      }
+    },
+    "originalRowChanges": {
+      "count": 3,
+      "table": "runtime_execution_capacity_lease",
+      "reason": "Three expired capacity slots reused by exact owned native process during actual execution",
+      "ownerPID": 95348,
+      "identitiesAndBoundsQualified": true
+    },
+    "otherOriginalRowsPreserved": true,
+    "originalInputsPreserved": true,
+    "summary": {
+      "order_count": 3,
+      "total_amount": "40.00",
+      "currency": "CNY"
+    },
+    "independentIntegerCents": {
+      "lineAmounts": [
+        "1250",
+        "750",
+        "2000"
+      ],
+      "total": "4000"
+    },
+    "missingOriginal": {
+      "operation": "readFile",
+      "path": "customer-signoff.md",
+      "code": "ENOENT"
+    },
+    "localCommits": "c0419a0 客户原件复核与阻塞确认\n88f107b Checkpoint before 订单精确计算与汇总交付",
+    "projectHead": "c0419a08d7fd645e81986eb8b2af185df094ba26",
+    "projectStatus": ""
+  },
+  "live": {
+    "port": 38246,
+    "uiEntry": "main-CgP2W82b.js",
+    "requests": 95,
+    "previousRequests": 624,
+    "cumulativeRequests": 719,
+    "actualModel": "gpt-6.1-sol",
+    "allStreaming200Eof": true,
+    "credentialCopyRetired": true,
+    "modelCatalogCopyRetired": true,
+    "publicShutdown": 200,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "reserveMs": 663436,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    }
+  },
+  "visualReview": {
+    "port": 38247,
+    "uiEntry": "main-v37-7PhG.js",
+    "sourceRows": 89238,
+    "sourceRowsPreserved": true,
+    "allOriginalRowsPreserved": true,
+    "schema": 9,
+    "integrity": "ok",
+    "requests": 0,
+    "credentialCopyCreated": false,
+    "modelCatalogCopyRetired": true,
+    "publicShutdown": 200,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "reserveMs": 958255,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    }
+  },
+  "screenshots": [
+    {
+      "name": "01-live-request.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "02-live-running.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "03-live-source-task.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "04-live-mission-review.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "05-live-mission-blocked.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "07-after-mission-base-context.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "08-after-mission-en-clean.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "09-after-task-package.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "10-after-chat-context.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "11-after-mission-zh-context.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    }
+  ],
+  "limits": [
+    "742 is an intentionally unauthenticated read-only copy; its model-unavailable banner is expected isolation evidence.",
+    "First exploratory hand-written deep link lacked sessionKind/directory and produced the documented link error; navigation through the actual sidebar opened the canonical Mission URL.",
+    "The local receipt checker initially queried the generic part table; it was corrected to join current tool_part_request/tool_part_outcome facts and rerun successfully. This was a checker error, not a product state failure.",
+    "No UI automated tests, application release, schema migration or unrelated process operation."
+  ],
+  "checks": {
+    "blocked-composer-ui": {
+      "code": 0
+    },
+    "blocked-composer-types": {
+      "code": 0
+    },
+    "blocked-composer-docs": {
+      "code": 0
+    },
+    "blocked-composer-architecture": {
+      "code": 0
+    },
+    "blocked-composer-renderer": {
+      "code": 0
+    }
+  }
+}

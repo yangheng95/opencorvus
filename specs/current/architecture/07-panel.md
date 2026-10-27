@@ -2550,6 +2550,8 @@ directory-free launcher 从既有 Overlay settings 的 `lastSelectedModel` 恢�
 首次显式 Mission 发送才通过 `/global/projects/anonymous` 创建并激活它的独立 Project。
 Mission 草稿标题、输入提示与首页说明使用通用 Mission 语义；选择 Mission 目标本身不代表
 已选专家团或执行上下文已就绪。已选 Squad 的精确身份继续由同一份真实可见 reference 展示。
+既有 Mission / Chat 的只读上下文沿用首条消息的真实 references；目录默认包不是该会话的专家团分配。
+只有冻结包绑定的 Task 显示其实际分配包及版本，不能把 session-effective catalog 的默认包当成 Mission held set。
 Directory-free launcher 的 reference catalog 只读取 built-in 与 user-global Agent Squad /
 Mission Skill，通过 `/global/composer-references` 投影最多二十项的 Expert Squad 首页，并通过
 bounded server search 查询其余项，不需要也不得为查询目录而创建

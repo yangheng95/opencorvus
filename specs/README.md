@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [实时Mission部分交付与受阻体验](records/2026-10/2026-10-28-live-mission-blocked-journey.md)：真实缺材料收敛、会话上下文身份根因修复与双语实页验收。
+
 - [Mission正式结果呈现](records/2026-10/2026-10-28-mission-outcome-presentation.md)：统一列表投影和页头、侧栏结果一致性。
 
 - [代码任务本地提交边界](records/2026-10/2026-10-28-code-task-commit-authority.md)：真实约束来源与任务交付调查。

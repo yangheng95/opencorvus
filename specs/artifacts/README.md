@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [实时Mission受阻与上下文证据](2026-10-28-live-mission-blocked-journey/README.md)：真实流式执行、原始截图与实例完整结清。
+
 - [Mission正式结果呈现证据](2026-10-28-mission-outcome-presentation/README.md)：真实前后页面和公共投影验收。
 
 - [代码任务本地提交边界证据](2026-10-28-code-task-commit-authority/README.md)：同一原始需求与自然本地工程交付。

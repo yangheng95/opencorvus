@@ -1456,7 +1456,7 @@ export function ChatComposer(props: ChatComposerProps) {
             skills={props.skills}
             missionSkills={props.missionSkills}
             expertSquads={props.expertSquads}
-            activePackage={props.activeExpertSquadPackage}
+            activePackage={props.activeWorkItemKind === "task" ? props.activeExpertSquadPackage : null}
             referenceOrigin={props.activeWorkItemKind === "task" ? "task-request" : "first-message"}
             catalogError={props.referenceCatalogError}
             onCatalogRetry={props.onReferenceCatalogRetry}
