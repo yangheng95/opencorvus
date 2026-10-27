@@ -1,0 +1,131 @@
+{
+  "at": "2026-10-27T17:24:43.630Z",
+  "build": "main-B3quBS7i.js",
+  "manualOriginalImages": 8,
+  "database": {
+    "at": "2026-10-27T17:18:55.593Z",
+    "schema": 9,
+    "integrity": "ok",
+    "tables": 92,
+    "sourceRows": 1270,
+    "sourceRowsPreserved": true,
+    "targetOriginalRowsUnchanged": 1267,
+    "normalMutableRows": {
+      "capacitySlotReuse": 2,
+      "continuedSessionUpdatedAt": 1
+    },
+    "allOriginalMessageAndPartRowsPreserved": true,
+    "occurrences": [
+      {
+        "inputMessageID": "msg_h8U1MyvoVR9CrN9Enw2v",
+        "assistantMessages": [
+          {
+            "id": "msg_g0VZGjuYY00A2RIcUFtY",
+            "created": 1793119315766,
+            "completed": 1793119320323,
+            "finish": "tool-calls",
+            "model": "openai/gpt-6.1-sol",
+            "totalTokens": 35983
+          },
+          {
+            "id": "msg_g0VZGjvkf00hoZhFmL84",
+            "created": 1793119320361,
+            "completed": 1793119323868,
+            "finish": "stop",
+            "model": "openai/gpt-6.1-sol",
+            "totalTokens": 35869
+          }
+        ],
+        "durationMs": 8102,
+        "totalTokens": 71852
+      },
+      {
+        "inputMessageID": "msg_hQjdrZURubEewNQpMh56",
+        "assistantMessages": [
+          {
+            "id": "msg_g0VZGrgBI00jjHTP957B",
+            "created": 1793121167132,
+            "completed": 1793121171275,
+            "finish": "tool-calls",
+            "model": "openai/gpt-6.1-sol",
+            "totalTokens": 36481
+          },
+          {
+            "id": "msg_g0VZGrhGa00VDOXNCoWu",
+            "created": 1793121171304,
+            "completed": 1793121174468,
+            "finish": "stop",
+            "model": "openai/gpt-6.1-sol",
+            "totalTokens": 36368
+          }
+        ],
+        "durationMs": 7336,
+        "totalTokens": 72849
+      }
+    ],
+    "requests": 4,
+    "cumulativeRequests": 388
+  },
+  "model": "gpt-6.1-sol",
+  "requests": 4,
+  "cumulativeRequests": 388,
+  "requestOutcomes": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    }
+  ],
+  "credentialCopyRetired": true,
+  "modelCatalogCopyRetired": true,
+  "source": {
+    "catalogSameBytes": true,
+    "catalogSameMetadata": true,
+    "authSameMetadata": true
+  },
+  "shutdown": 200,
+  "reserveMs": 923177,
+  "nativeExit": 0,
+  "launcherExit": 0,
+  "physicalCompletion": true,
+  "outputDrainComplete": true,
+  "requestCleanupComplete": true,
+  "chain": [
+    "dead_or_reused",
+    "dead_or_reused"
+  ],
+  "checks": {
+    "overlayTypes": 0,
+    "ordinaryNodeBuild": 0,
+    "i18n": 0,
+    "rendererPublicSurface": 0
+  },
+  "limitations": [
+    "Manual execution covered two Work occurrences in the same conversation and an independent Chat in another Project; new Task/Mission error/cancel or leading-only metadata scenarios were not produced in this batch",
+    "06 contains the ordinary sidebar tooltip; the unobscured original reply is verified in 07",
+    "Goal cumulative token accounting after marking complete is a separate backend attribution question; this change corrects conversation-card aggregation"
+  ]
+}

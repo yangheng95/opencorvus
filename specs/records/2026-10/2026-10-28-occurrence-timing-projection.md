@@ -1,0 +1,45 @@
+# 执行轮次的完整消息事实投影
+
+## Recall
+
+持续执行用户单agent（代理）完整产品迭代，不委托，不回到已解决的Rendering闪烁。上一目标轮次是progress（实际进展）：c1fe7ada3准确区分开库初始化/校验/迁移，a855df462让真实Goal（目标）控制器消息默认紧凑折叠；两个提交均正常hook（钩子）推送，2026-10-27T16:57:39Z最新fetch/merge（拉取/合并）后main/upstream（上游）0/0，本任务文件干净，176他人工作保留。729/730原exec80582/55566及native/launcher均0，公有关闭200，凭据/目录副本退休，累计384真实Sol流式请求。730源与副本92表1270原行保持，schema（数据库结构）9；本批不改数据库或迁移。
+
+上一批图05实时Work为8秒，同一真实会话重建后图07为4秒，是当前可复现线索。必须追查原始消息、真实执行轮次和当前共享投影，不能直接宣称执行丢失。本批先完成完整分析再修改；纯UI（用户界面）投影只以真实页面、原始截图和人工视觉复核验收，不新增/运行UI自动化测试。非UI合同若修改另加聚焦正向测试。用户偏好Goal仍经加号或/goal启动，不恢复首页常驻入口。任何文件修改须范围提交、最新拉取合并并正常推送；不新建分支/工作树，不动18571用户进程、窗口、真实数据库或认证。
+
+## 修改前证据和根因
+
+已重读前批Recall/最终记录、07-panel会话/Side（侧聊）/显示内容/真实消息合同、tree-writer的live（实时）更新和完整快照校验/提交/尾部合并/历史加载、CardDurationChip/cardDurationMs、Backend ConversationView显示判定、SessionStatus的精确inputMessageID生命周期、既有249侧栏耗时修复。全仓检索metadataOnly、occurrenceCardIDs/Identities、Card模型/用量写入与全部调用点；相关检索没有发现UI自动化测试。Card时间始终由真实Message/执行终态产生，格式化不制造时间。
+
+729实际闭库事实：同Session ses_-zUQjG5w1zzaRvO66aZO的两条assistant Message共用精确父输入msg_h8U1MyvoVR9CrN9Enw2v。第一条1793119315766→1793119320323，finish=tool-calls，4557ms；最后一条1793119320361→1793119323868，finish=stop，完整首尾8102ms。原消息、模型流和native均正常结清。最后一条没有可展示正文，但有真实完成时间、模型和用量。其持久消息/Parts仍在完整transcript（消息记录）中，Backend显示判定正确地不为其新增空正文卡片。
+
+直接根因有三处同源丢失：prepareConversationView为metadataOnly消息保留了身份/Parts却未保留settlement（完成事实）；regroupTimelineSegments在聚合前将全部metadataOnly过滤，后续只能读前一条4557ms；live早退与hydrate末尾仅投影display消息，也遗漏这些真实消息的模型/用量。实时执行终态曾给卡片完整8秒，持久重建又取可展示消息的4秒。已有249修复只覆盖Side单Message和子会话activity时钟，没有覆盖主会话多Message聚合。不能改原始持久化时间、补造消息或以now（当前时钟）猜历史耗时。
+
+## 横向审计、范围和风险
+
+全部生产入口：applyEvent→handleMessageUpdated及完整消息merge；mergeSessionConnectionSnapshot、hydrateTaskConversation/hydrateConversation、Task尾部合并、loadOlderConversationHistory、loadConversationSessionHistory都进入同一prepare/commit和regroup。Task（任务）、Mission（编排会话）、独立Chat/Work的主Conversation共用这条数据路径，问题不属于Goal专用计时。SideChatPanel按各条真实Message传time/completed；SubagentConversationPanel按同Session选中activity的startedAt/completedAt传入，不经过主卡片多消息聚合，时钟定义保持其原合同。
+
+正常/终态：Backend及前端的真实assistant error（错误）即使正文为空也有显示资格，不能变成无正文吞错；错误/取消保持原assistantMessageFailure与同轮lifecycle（生命周期）选择，完成时间必须来自同一已选settlement，不能又优先读另一条旧Message。重试和重连/重启读取完整transcript，不能另造补偿时钟或重复统计同一Message。串并行和多项目：归属必须同时匹配原Session、既有参与者/阶段/父Session键和精确父输入；禁止以最近全局消息或同标题归属。原API（应用编程接口）authority（连接身份）、selection/replay epoch（选择/重放代次）、resetWriter和自然orderKey（排序身份）继续隔离项目/会话；不改变调度、队列、唤醒、恢复、执行容量或权限。当前原始运行/持久事实排除了执行未终止或工作丢失；发现新的调度异常仍须立即扩展共享机制调查，不能以此结论排除未来证据。
+
+数据/公共合同：完整transcript与显示清单仍是既有公开接口，所有事实从当前真实Message读取，不加接口、事件、持久字段或版本。唯一改变是共享UI投影保留无正文消息的执行事实；空正文不创建叙述卡片，原可见卡片身份/正文顺序保持。主要风险是将另一轮次的空消息合入、重复模型用量、让无正文工具/step进入正文，或历史快照覆盖错误终态。需要用真实两条同轮消息、跨会话往返/刷新、普通人类消息及实际用量细分核对，不以字符串/DOM（文档对象模型）断言代替验收。
+
+## 实施方案与验收
+
+使用现有MessageInfo和metadata缓存。完整快照为无正文消息保留同一assistantMessageSettlement；模型/用量先按真实Message身份登记到现有session缓存，再由原卡片归属汇总，删除只针对有正文消息的两处重复投影写入。regroup在同一自然消息顺序中读取全部真实消息，但只由有正文消息建立可见segment（片段）。无正文消息按既有参与者片段键和精确父输入归给该轮最近已建立片段；该轮尚无可见片段时，暂存在本次纯派生局部集合，遇到该轮第一条可见消息即并入。不存在可见片段的轮次保持只有原执行事实，不新增空卡片。该局部归属不跨regroup保存，不形成影子状态或后备路径。
+
+卡片身份、正文和边界仅取可展示成员；起止时间和模型/用量取归属同片段的全部真实成员。终态时间与已选正常/错误/取消settlement一致。原卡片折叠、工具/来源和阅读状态继续使用现有身份。修改后先前端类型、普通Node构建、本地化及公开面辅助检查，再以新自有实例的真实开发CLI（命令行）/ui人工阅读当前8102ms历史会话，查看8秒、完整正文和模型用量；刷新及会话往返复核。
+
+如需新的live→history端到端，再复制已授权认证及完整模型目录，分别验证凭据、投影和实际gpt-6.1-sol一致，全部流式、预先声明累计请求额度，单实例20分钟边界/目标10分钟关闭/至少5分钟物理结清余量；前后分别逐行保护源和副本。不能热替前端冒充新构建：服务启动固定完整资源字节，必须使用独立新实例。关闭后退休配对副本和页签。具体真实运行资格与未验证范围在结果中登记，完成三索引、文档检查、范围提交和正常推送。
+
+## 实施与真实验收结果
+
+删除仅面向有正文消息的两处模型/用量投影写入，统一retainMessageMetadata登记当前Message实际事实，再由原归属汇总。无正文完整快照保留assistantMessageSettlement。regroup按自然顺序把同Session/参与者/精确父输入的无正文消息归给本次派生片段，可见身份/边界/Parts仅来自有正文成员；参与归属的消息索引一起清理再重建，避免空正文转换留下旧Part索引。最早真实成员给起点，最新成员及同一已选settlement给终态；所有原消息仍可由原完整transcript核对。
+
+前端类型检查0，普通Node构建main-B3quBS7i.js（54.70秒）和本地化2语言2585键/公开渲染面检查均0。此后只补充注释，不改变已体验的构建行为。没有UI自动化测试。
+
+731独立实例使用730已关闭的当前数据克隆，模型目录/认证配对，预检验证registered OAuth（已注册授权）、实际模型投影/请求均gpt-6.1-sol且流式。实际页面图01显示原Work8秒，图02完整用量71852；同一会话真实/goal创建下一目标，轮次预算1。模型回复执行计时已核对731并实际update_continuous_goal完成，常规执行随后Not running。图03实时与04刷新均旧8秒/新7秒，05新轮用量72849。跨到另一Project实际Chat原文/OK/4秒后返回，08中文两个成果和时长保持。新轮原始两条Message为1793121167132→1793121174468，共7336ms；精确父输入msg_hQjdrZURubEewNQpMh56与原轮不同。原轮8102ms/71852及新轮7336ms/72849均由真实闭库数据再次核对。
+
+四次Sol请求全部200/EOF，当前UI读取期间console（控制台）error（错误）列表为空；这些只是辅助证据，视觉资格来自8张已人工查看原图。731公有shutdown200，原exec80389/native/launcher0、物理/输出/请求均结清，余量923177ms，认证/目录副本退休，源元数据保持，累计388。没有待决测试目标或自建运行进程。
+
+源92表1270原行逐行相等，副本1267原行完全保持。三条变化均经实际逐字段核对：两条runtime_execution_capacity_lease在启动前已过期，只更新新lease/owner/time，owner匹配当前native Target且关闭前已过期；另一条是本次继续的同一Session time_updated，落在新两条真实模型消息的执行跨度内。原Message/Part/其他事实保持，schema9、完整性ok，没有迁移。不能宣称副本1270原行全部不变。
+
+实际运行资格限同一会话两次Work、独立Chat、跨项目往返、刷新和中英文；Task/Mission错误/取消、全空正文及前置空正文路径本批只审计代码，没有新造运行案例。还发现Goal本身的完成后累计用量与完整会话卡片用量是另一后端归属问题：captureContinuousGoalUsage在每次流开始读取当前有效Goal，完成工具之后的同轮后续流可能不再归属该Goal。这里只纠正会话卡片真实消息聚合，不改后端Goal计账、执行调度或其持久协议，也不把该问题包装为已修。下一批以真实usage/event/occurrence（执行轮次）证据继续追查。

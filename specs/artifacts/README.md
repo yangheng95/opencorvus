@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [执行轮次完整消息证据](2026-10-28-occurrence-timing-projection/README.md)：真实双轮次耗时、模型用量和数据结清。
+
 - [当前默认页和Goal流程证据](2026-10-28-goal-home-current-journey/README.md)：原始页面、真实模型与数据结清。
 
 - [数据库开库结果证据](2026-10-28-schema-open-observability/README.md)：真实日志、备份和完整克隆数据核对。

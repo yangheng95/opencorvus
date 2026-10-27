@@ -152,17 +152,10 @@ function modelProjectionFromInfo(info: any): MessageModelProjection | undefined 
   }
 }
 
-function projectModelOntoCard(
-  session: SessionInfo,
-  messageID: string,
-  model: MessageModelProjection | undefined,
-): void {
-  session.messageModels.set(messageID, model)
-  const targetCardID = session.messageCardIDs.get(messageID)
-  if (!targetCardID) {
-    throw new Error(`message ${messageID} missing rendered card projection for model metadata`)
-  }
-  refreshModelProjectionForCard(targetCardID)
+function retainMessageMetadata(session: SessionInfo, messageID: string, info: any): void {
+  const usage = usageProjectionFromInfo(info)
+  if (usage) session.messageUsage.set(messageID, usage)
+  if (messageInfoIsAssistant(info)) session.messageModels.set(messageID, modelProjectionFromInfo(info))
 }
 
 function refreshModelProjectionForCard(targetCardID: string): void {
@@ -182,15 +175,6 @@ function refreshModelProjectionForCard(targetCardID: string): void {
     }
   }
   setCardTreeStore("cards", targetCardID, "model", distinctModelCount === 1 ? sharedModel : undefined)
-}
-
-function projectUsageOntoCard(session: SessionInfo, messageID: string, usage: MessageUsageProjection): void {
-  session.messageUsage.set(messageID, usage)
-  const targetCardID = session.messageCardIDs.get(messageID)
-  if (!targetCardID) {
-    throw new Error(`message ${messageID} missing rendered card projection for usage metadata`)
-  }
-  refreshUsageProjectionForCard(targetCardID)
 }
 
 function refreshUsageProjectionForCard(targetCardID: string): void {
@@ -427,7 +411,7 @@ function actualMessageQualificationFacts(info: any): Pick<
 interface MessageInfo extends ProjectedMessageFacts {
   stepParts?: readonly ProjectedStepPartFacts[]
   toolParts?: readonly ProjectedToolPartFacts[]
-  /** Actual metadata retained without a display-card projection. */
+  /** Actual facts retained without a dedicated message-body row. */
   metadataOnly?: boolean
   id: string
   sessionID: string
@@ -1207,6 +1191,7 @@ function handleMessageUpdated(event: any, options: { metadataOnly?: boolean } = 
 
   // Index the message.
   messages.set(id, nextMessageInfo)
+  retainMessageMetadata(session, id, info)
   if (!nextMessageInfo.metadataOnly && (!latestTimelineMessage || messageTimeOrder(latestTimelineMessage, nextMessageInfo) <= 0)) {
     latestTimelineMessage = nextMessageInfo
   } else if (latestTimelineMessage?.id === id) {
@@ -1216,7 +1201,13 @@ function handleMessageUpdated(event: any, options: { metadataOnly?: boolean } = 
   const priorMessageCount = session.messageIDs.size
   session.messageIDs.add(id)
 
-  if (nextMessageInfo.metadataOnly && !session.messageCardIDs.has(id)) return
+  if (nextMessageInfo.metadataOnly && !session.messageCardIDs.has(id)) {
+    regroupTimelineSegments()
+    const cardID = session.messageCardIDs.get(id)
+    if (cardID) refreshMetadataProjectionForCard(cardID)
+    drainPendingSessionStatus(sessionID)
+    return
+  }
 
   const messageCardID = ensureMessageTurnProjection(session, id, {
     stage,
@@ -1257,11 +1248,7 @@ function handleMessageUpdated(event: any, options: { metadataOnly?: boolean } = 
   //
   // Segment cards can own multiple assistant messages, so usage stays
   // per-message and is summed onto the ordinary owner card.
-  const usageProjection = usageProjectionFromInfo(info)
-  if (usageProjection) projectUsageOntoCard(session, id, usageProjection)
-  if (messageInfoIsAssistant(info)) {
-    projectModelOntoCard(session, id, modelProjectionFromInfo(info))
-  }
+  refreshMetadataProjectionForCard(requireMessageCardProjection(session, id, "message.updated metadata"))
 
   drainPendingSessionStatus(sessionID)
 }
@@ -2780,6 +2767,7 @@ interface TimelineSegment {
   cardID: string
   session: SessionInfo
   stage: string
+  /** Visible members and exact-occurrence execution metadata in natural order. */
   messages: MessageInfo[]
 }
 
@@ -3028,7 +3016,7 @@ function regroupTimelineSegments(opts: { deferHierarchy?: boolean } = {}): void 
   for (const message of pendingPartFirstMessages.values()) timelineMessages.set(message.id, message)
   for (const message of messages.values()) timelineMessages.set(message.id, message)
   const ordered = [...timelineMessages.values()]
-    .filter((message) => sessions.has(message.sessionID) && !message.metadataOnly)
+    .filter((message) => sessions.has(message.sessionID))
     .sort(messageTimeOrder)
   if (ordered.length === 0) return
   const projectionItems: TimelineProjectionItem[] = []
@@ -3048,6 +3036,8 @@ function regroupTimelineSegments(opts: { deferHierarchy?: boolean } = {}): void 
   const targetMessageIDs = new Set<string>()
   let previousAdjacentSegment: TimelineSegment | undefined
   let previousMessageOrderKey = ""
+  const executionSegments = new Map<string, TimelineSegment>()
+  const pendingExecutionMessages = new Map<string, MessageInfo[]>()
 
   for (const item of projectionItems) {
     const message = item.message
@@ -3055,6 +3045,23 @@ function regroupTimelineSegments(opts: { deferHierarchy?: boolean } = {}): void 
     if (!session) continue
     const stage = message.stage || session.stage
     const key = timelineSegmentKey(message, session, stage)
+    const executionKey = message.role === "assistant" && message.parentMessageID
+      ? JSON.stringify([key, message.parentMessageID])
+      : undefined
+    if (message.metadataOnly) {
+      if (!executionKey) continue
+      const owner = executionSegments.get(executionKey)
+      if (owner) {
+        owner.messages.push(message)
+        desiredCardByMessage.set(message.id, owner.cardID)
+        targetMessageIDs.add(message.id)
+      } else {
+        const pending = pendingExecutionMessages.get(executionKey) ?? []
+        pending.push(message)
+        pendingExecutionMessages.set(executionKey, pending)
+      }
+      continue
+    }
     const interactionBreaksAdjacency =
       previousMessageOrderKey.length > 0 &&
       interactionBoundaryKeys.some(
@@ -3070,6 +3077,15 @@ function regroupTimelineSegments(opts: { deferHierarchy?: boolean } = {}): void 
       segments.push(segment)
     }
     previousAdjacentSegment = segment
+    if (executionKey) {
+      for (const retained of pendingExecutionMessages.get(executionKey) ?? []) {
+        segment.messages.push(retained)
+        desiredCardByMessage.set(retained.id, segment.cardID)
+        targetMessageIDs.add(retained.id)
+      }
+      pendingExecutionMessages.delete(executionKey)
+      executionSegments.set(executionKey, segment)
+    }
     segment.messages.push(message)
     desiredCardByMessage.set(message.id, segment.cardID)
     targetMessageIDs.add(message.id)
@@ -3108,7 +3124,9 @@ function regroupTimelineSegments(opts: { deferHierarchy?: boolean } = {}): void 
   }
 
   for (const segment of segments) {
-    const first = segment.messages[0]
+    segment.messages.sort(messageTimeOrder)
+    const displayMessages = segment.messages.filter((message) => !message.metadataOnly)
+    const first = displayMessages[0]
     if (!first) continue
     const existing = cardTreeStore.cards[segment.cardID]
     const latest = segment.messages.at(-1)!
@@ -3141,13 +3159,13 @@ function regroupTimelineSegments(opts: { deferHierarchy?: boolean } = {}): void 
       accent: !isUserStage(segment.stage) && segment.stage ? stageAccent(segment.stage) : undefined,
       title: roleTitleKey(segment.stage),
       orderKey: first.orderKey,
-      time: first.time,
+      time: segment.messages[0].time,
       status,
-      timeCompleted: latest.settlement?.timeCompleted ?? settlement?.timeCompleted ?? (hasCurrentAssistant ? undefined : existing?.timeCompleted),
+      timeCompleted: settlement?.timeCompleted ?? (hasCurrentAssistant ? undefined : existing?.timeCompleted),
       terminalReason: settlement?.terminalReason ?? (hasCurrentAssistant ? undefined : existing?.terminalReason),
       errorReason: failure?.errorReason ?? (hasCurrentAssistant ? undefined : existing?.errorReason),
       errorDetails: failure ? failure.errorDetails : (hasCurrentAssistant ? undefined : existing?.errorDetails),
-      collapsedContextMessageIDs: segment.messages
+      collapsedContextMessageIDs: displayMessages
         .filter((message) => message.delegatedContext)
         .map((message) => message.id),
     }
@@ -3156,7 +3174,7 @@ function regroupTimelineSegments(opts: { deferHierarchy?: boolean } = {}): void 
     // every target message, so it is rebuilt whether or not the card itself
     // changed. Only the store write below is conditional.
     const rebuiltParts: any[] = existing?.parts?.filter(isReviewStreamPart) ?? []
-    for (const [index, message] of segment.messages.entries()) {
+    for (const [index, message] of displayMessages.entries()) {
       if (index > 0) {
         const boundaryKey = `__boundary__:${segment.session.sessionID}:${message.id}`
         const boundary = {
@@ -3376,6 +3394,7 @@ export function prepareConversationView(view: any, transcript: any[]): PreparedC
       resolvedRole: displayRoleForResolvedRole(info.resolvedRole), agent: typeof info.agent === "string" ? info.agent : "",
       parentSessionID: String(info.parentSessionID || ""), parentMessageID: String(info.parentID || ""),
       serverTimeConfirmed: true, delegatedContext: isDelegatedContextMessage(origin), metadataOnly: true,
+      settlement: assistantMessageSettlement(info),
     }
     replaceActualPartFacts(metadata, payload.parts)
     metadataOnlyMessages.push(metadata)
@@ -3490,6 +3509,7 @@ export function commitPreparedConversationView(prepared: PreparedConversationVie
     pendingPartFirstMessages.delete(message.id)
     messages.set(message.id, message)
     session.messageIDs.add(message.id)
+    retainMessageMetadata(session, message.id, transcriptByMessageID.get(message.id)!.info)
     touched.add(message.sessionID)
   }
   for (const meta of ordered) {
@@ -3567,6 +3587,7 @@ export function commitPreparedConversationView(prepared: PreparedConversationVie
       delegatedContext: isDelegatedContextMessage(origin),
     })
     session.messageIDs.add(messageID)
+    retainMessageMetadata(session, messageID, info)
     replaceActualPartFacts(messages.get(messageID)!, message.parts)
     const cardID = ensureMessageTurnProjection(session, messageID, {
       stage,
@@ -3601,22 +3622,16 @@ export function commitPreparedConversationView(prepared: PreparedConversationVie
     touched.add(sessionID)
   }
   regroupTimelineSegments({ deferHierarchy: true })
-  for (const meta of ordered) {
-    const message = transcriptByMessageID.get(meta.messageID)
-    const info = message?.info
-    const messageID = meta.messageID
-    const sessionID = meta.sessionID
-    const session = sessions.get(sessionID)
-    const usageProjection = usageProjectionFromInfo(info)
-    if (usageProjection) {
-      if (!session) throw new Error(`message ${messageID} missing session projection for usage metadata`)
-      projectUsageOntoCard(session, messageID, usageProjection)
-    }
-    if (messageInfoIsAssistant(info)) {
-      if (!session) throw new Error(`message ${messageID} missing session projection for model metadata`)
-      projectModelOntoCard(session, messageID, modelProjectionFromInfo(info))
-    }
+  const metadataCardIDs = new Set<string>()
+  for (const payload of transcriptByMessageID.values()) {
+    const messageID = String(payload.info.id)
+    const session = sessions.get(String(payload.info.sessionID))
+    if (!session) throw new Error(`message ${messageID} missing session projection for metadata`)
+    const cardID = session.messageCardIDs.get(messageID)
+    if (cardID) metadataCardIDs.add(cardID)
+    else if (!messages.get(messageID)?.metadataOnly) throw new Error(`message ${messageID} missing rendered card projection for metadata`)
   }
+  for (const cardID of metadataCardIDs) refreshMetadataProjectionForCard(cardID)
   rebuildCardHierarchy()
   for (const sessionID of touched) {
     drainPendingSessionStatus(sessionID)

@@ -1958,6 +1958,17 @@ uses the same CardParts body and canonical card-expansion store; the operator's
 choice survives ordinary conversation navigation. Human messages and model
 results retain their existing presentation and expansion rules.
 
+Conversation segments retain execution metadata from every real assistant
+Message in the same Session, participant and exact parent-input occurrence.
+Messages without displayable body contribute their original completion, model
+and usage facts to the existing visible segment; they do not create an empty
+message row or body boundary. A leading metadata-only message joins that
+occurrence's first visible segment. Card identity and body order remain based on
+displayable messages, while elapsed time spans the retained actual messages and
+uses the same selected settlement as terminal status. Live updates, reconnect,
+tail/history merge and cold hydration share this projection and per-message
+usage ownership.
+
 | Surface          | Source                                                                                   | Responsibility                                                                                                                                                                                                                                                                                                                                                                  |
 | ---------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Work Ledger      | global task summaries                                                                    | Select projects, Missions, tasks, Chat conversations, and Work conversations.                                                                                                                                                                                                                                                                                                   |
