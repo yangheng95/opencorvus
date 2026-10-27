@@ -758,7 +758,14 @@ perform another target query after publication.
 Explorer's current successful listing owns this target fact. Expansion, folder
 menus and destination actions use the link's original logical path. Selection
 retains entry identity and its listing/file origin rather than copying a target
-flag. File search remains a file-path result. A successful parent listing retires
+flag. File search remains a file-path result. Its shared host search compares
+queries and enumerated candidates through forward-slash matching keys derived
+from the host path separator. The fuzzy library returns the original candidate
+identity, including the directory suffix. Windows native and portable separators
+therefore match the same file; POSIX literal backslashes retain their identity.
+Hidden-directory preference consumes that same matching projection. The index,
+API result paths and file-opening authority remain the original sources.
+A successful parent listing retires
 unavailable child directory namespaces across expanded paths, cached children,
 errors, loading and existing read tokens; it does not cover `..` siblings of an
 empty project-root key. Failed parent reads preserve the last successful facts.

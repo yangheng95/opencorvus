@@ -57,6 +57,44 @@ test("cold file readers use exact Project file facts with unavailable execution 
   }
 }, 30_000)
 
+test("nested path queries return original file identities and each Project's content", async () => {
+  await using first = await memoryProject("file-search-path-first")
+  await using second = await memoryProject("file-search-path-second")
+  const relative = path.join("工作目录", "review v1.txt")
+  for (const [directory, marker] of [[first.path, "FIRST"], [second.path, "SECOND"]] as const) {
+    await configure(directory, `Search project ${marker}\n`)
+    const content = `Path search ${marker}\n`
+    await fs.mkdir(path.join(directory, "工作目录"), { recursive: true })
+    await fs.writeFile(path.join(directory, relative), content)
+    for (const query of [relative.split(path.sep).join("/"), relative]) {
+      for (const type of ["file", undefined] as const) {
+        const params = new URLSearchParams({ query, limit: "10" })
+        if (type) params.set("type", type)
+        const result = await read(directory, `/find/file?${params}`)
+        expect(result).toEqual({ status: 200, body: [relative] })
+        const opened = await read(directory, `/file/content?${new URLSearchParams({ path: result.body[0] })}`)
+        expect(opened).toMatchObject({ status: 200, body: { type: "text", content, revision: expect.any(String) } })
+      }
+    }
+  }
+}, 30_000)
+
+test("native and portable directory queries retain visible and hidden directory identities", async () => {
+  await using project = await memoryProject("file-search-directory-paths")
+  await configure(project.path, "Directory search project\n")
+  const directories = [path.join("目录索引", "公开", "子目录"), path.join("目录索引", ".审核", "子目录")]
+  for (const relative of directories) {
+    await fs.mkdir(path.join(project.path, relative), { recursive: true })
+    await fs.writeFile(path.join(project.path, relative, "receipt.txt"), `Directory ${relative}\n`)
+  }
+  for (const relative of directories) {
+    for (const query of [relative.split(path.sep).join("/"), relative]) {
+      const result = await read(project.path, `/find/file?${new URLSearchParams({ query, type: "directory", limit: "1" })}`)
+      expect(result).toEqual({ status: 200, body: [`${relative}/`] })
+    }
+  }
+}, 30_000)
+
 test("source readers retain explicit path and missing-file error contracts", async () => {
   await using project = await memoryProject("file-reader-errors")
   await configure(project.path, "FileReaderMarker\n")

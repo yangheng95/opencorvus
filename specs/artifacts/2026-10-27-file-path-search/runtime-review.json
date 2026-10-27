@@ -1,0 +1,305 @@
+{
+  "reviewedAt": "2026-10-27T11:30:40.218Z",
+  "runtime": {
+    "instance": 716,
+    "port": 38221,
+    "uiEntry": "main-BT_sDM31.js",
+    "frontendSourceUnchanged": true,
+    "schema": 9,
+    "sourceTables": 92,
+    "sourceRows": 240297,
+    "allOriginalTargetRowsPreserved": true,
+    "protectedRows": 7147,
+    "oldProjectFilesPreserved": 166,
+    "requests": 0,
+    "cumulativeRequests": 353,
+    "publicShutdown": 200,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "reserveMs": 827021,
+    "sourceCatalogBytesPreserved": true,
+    "sourceCatalogMetadataPreserved": true,
+    "sourceAuthMetadataPreserved": true,
+    "credentialCopyCreated": false,
+    "modelCatalogCopyRetired": true
+  },
+  "projects": [
+    {
+      "project": "A",
+      "originalFilesPreserved": 21,
+      "originalGitHeadPreserved": true,
+      "newFileBytes": 96,
+      "hiddenFileBytes": 57,
+      "originalNewInputBytesPreserved": true
+    },
+    {
+      "project": "B",
+      "originalFilesPreserved": 4,
+      "originalGitHeadPreserved": true,
+      "newFileBytes": 96,
+      "hiddenFileBytes": 57,
+      "originalNewInputBytesPreserved": true
+    }
+  ],
+  "backendTests": {
+    "before": {
+      "exitCode": 1,
+      "selected": 2,
+      "failed": 2,
+      "observed": "Actual HTTP 200 with empty path arrays for portable nested file and directory queries"
+    },
+    "after": {
+      "exitCode": 0,
+      "tests": 6,
+      "assertions": 44,
+      "actualProjectFiles": true,
+      "actualServerApp": true,
+      "providerCredentials": false
+    }
+  },
+  "liveAPI": {
+    "at": "2026-10-27T11:24:20.429Z",
+    "checks": 24,
+    "receipts": [
+      {
+        "project": "A",
+        "kind": "file",
+        "query": "路径搜索716/子目录/核对 文件.txt",
+        "result": [
+          "路径搜索716\\子目录\\核对 文件.txt"
+        ]
+      },
+      {
+        "project": "A",
+        "path": "路径搜索716\\子目录\\核对 文件.txt",
+        "type": "text",
+        "bytes": 96,
+        "contentMatchesProject": true
+      },
+      {
+        "project": "A",
+        "kind": "file",
+        "query": "路径搜索716\\子目录\\核对 文件.txt",
+        "result": [
+          "路径搜索716\\子目录\\核对 文件.txt"
+        ]
+      },
+      {
+        "project": "A",
+        "path": "路径搜索716\\子目录\\核对 文件.txt",
+        "type": "text",
+        "bytes": 96,
+        "contentMatchesProject": true
+      },
+      {
+        "project": "A",
+        "kind": "directory",
+        "query": "路径搜索716/子目录/",
+        "result": [
+          "路径搜索716\\子目录/"
+        ]
+      },
+      {
+        "project": "A",
+        "kind": "directory",
+        "query": "路径搜索716\\子目录/",
+        "result": [
+          "路径搜索716\\子目录/"
+        ]
+      },
+      {
+        "project": "A",
+        "kind": "directory",
+        "query": "路径搜索716/.校验/",
+        "result": [
+          "路径搜索716\\.校验/"
+        ]
+      },
+      {
+        "project": "A",
+        "kind": "directory",
+        "query": "路径搜索716\\.校验/",
+        "result": [
+          "路径搜索716\\.校验/"
+        ]
+      },
+      {
+        "project": "A",
+        "kind": "file",
+        "query": "路径搜索716/.校验/检查.txt",
+        "result": [
+          "路径搜索716\\.校验\\检查.txt"
+        ]
+      },
+      {
+        "project": "A",
+        "path": "路径搜索716\\.校验\\检查.txt",
+        "type": "text",
+        "bytes": 57,
+        "contentMatchesProject": true
+      },
+      {
+        "project": "A",
+        "kind": "file",
+        "query": "路径搜索716\\.校验\\检查.txt",
+        "result": [
+          "路径搜索716\\.校验\\检查.txt"
+        ]
+      },
+      {
+        "project": "A",
+        "path": "路径搜索716\\.校验\\检查.txt",
+        "type": "text",
+        "bytes": 57,
+        "contentMatchesProject": true
+      },
+      {
+        "project": "B",
+        "kind": "file",
+        "query": "路径搜索716/子目录/核对 文件.txt",
+        "result": [
+          "路径搜索716\\子目录\\核对 文件.txt"
+        ]
+      },
+      {
+        "project": "B",
+        "path": "路径搜索716\\子目录\\核对 文件.txt",
+        "type": "text",
+        "bytes": 96,
+        "contentMatchesProject": true
+      },
+      {
+        "project": "B",
+        "kind": "file",
+        "query": "路径搜索716\\子目录\\核对 文件.txt",
+        "result": [
+          "路径搜索716\\子目录\\核对 文件.txt"
+        ]
+      },
+      {
+        "project": "B",
+        "path": "路径搜索716\\子目录\\核对 文件.txt",
+        "type": "text",
+        "bytes": 96,
+        "contentMatchesProject": true
+      },
+      {
+        "project": "B",
+        "kind": "directory",
+        "query": "路径搜索716/子目录/",
+        "result": [
+          "路径搜索716\\子目录/"
+        ]
+      },
+      {
+        "project": "B",
+        "kind": "directory",
+        "query": "路径搜索716\\子目录/",
+        "result": [
+          "路径搜索716\\子目录/"
+        ]
+      },
+      {
+        "project": "B",
+        "kind": "directory",
+        "query": "路径搜索716/.校验/",
+        "result": [
+          "路径搜索716\\.校验/"
+        ]
+      },
+      {
+        "project": "B",
+        "kind": "directory",
+        "query": "路径搜索716\\.校验/",
+        "result": [
+          "路径搜索716\\.校验/"
+        ]
+      },
+      {
+        "project": "B",
+        "kind": "file",
+        "query": "路径搜索716/.校验/检查.txt",
+        "result": [
+          "路径搜索716\\.校验\\检查.txt"
+        ]
+      },
+      {
+        "project": "B",
+        "path": "路径搜索716\\.校验\\检查.txt",
+        "type": "text",
+        "bytes": 57,
+        "contentMatchesProject": true
+      },
+      {
+        "project": "B",
+        "kind": "file",
+        "query": "路径搜索716\\.校验\\检查.txt",
+        "result": [
+          "路径搜索716\\.校验\\检查.txt"
+        ]
+      },
+      {
+        "project": "B",
+        "path": "路径搜索716\\.校验\\检查.txt",
+        "type": "text",
+        "bytes": 57,
+        "contentMatchesProject": true
+      }
+    ]
+  },
+  "manualVisualReview": {
+    "images": [
+      "01-forward-path-now-found.jpg",
+      "02-original-file-opened.jpg",
+      "03-project-a-portable-path.jpg",
+      "04-project-a-native-path.jpg",
+      "05-project-a-file-content.jpg",
+      "06-hidden-path-found.jpg",
+      "07-project-b-portable-path-zh.jpg",
+      "08-project-b-file-content-zh.jpg",
+      "09-returned-project-a-content-zh.jpg"
+    ],
+    "ordinaryDevelopmentCLI": true,
+    "instrumentedUI": false,
+    "automatedUITestsRun": 0,
+    "localesAndThemes": [
+      "English dark",
+      "中文浅色"
+    ],
+    "flows": [
+      "previously failing forward-slash path finds and opens original 77-byte file",
+      "Chinese and spaced nested file queries with portable and native separators return original identity",
+      "explicit hidden-directory file query",
+      "Project A real 96-byte content",
+      "Project B same path returns its distinct 96-byte content",
+      "return to Project A restores its actual content"
+    ]
+  },
+  "checks": {
+    "search-after": {
+      "exitCode": 0,
+      "elapsedMs": 60200
+    },
+    "typecheck-final": {
+      "exitCode": 0,
+      "elapsedMs": 75723
+    },
+    "docs-first": {
+      "exitCode": 0,
+      "elapsedMs": 14782
+    },
+    "routes-final": {
+      "exitCode": 0,
+      "elapsedMs": 15068
+    }
+  },
+  "limitations": [
+    "Windows was the actual test host; POSIX literal-backslash preservation follows the host-separator projection but was not exercised on a POSIX host.",
+    "CLI consumer inspected; actual end-to-end covered development server and UI, not a separate debug CLI invocation.",
+    "No UI source or resource rebuild required; current ordinary main-BT_sDM31.js reused with fixed backend.",
+    "No new real-model requests; cumulative 353. Model-unavailable banner is expected in this explicitly unauthenticated isolated reader."
+  ]
+}

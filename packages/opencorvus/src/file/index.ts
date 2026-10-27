@@ -1791,7 +1791,8 @@ export namespace File {
   }
 
   export async function search(input: { query: string; limit?: number; dirs?: boolean; type?: "file" | "directory" }) {
-    const query = input.query.trim()
+    const searchKey = (item: string) => item.split(path.sep).join("/")
+    const query = searchKey(input.query.trim())
     const limit = input.limit ?? 100
     const kind = input.type ?? (input.dirs === false ? "file" : "all")
     log.info("search", { query, kind })
@@ -1799,7 +1800,7 @@ export namespace File {
     const result = await state().then((x) => x.files())
 
     const hidden = (item: string) => {
-      const normalized = item.replaceAll("\\", "/").replace(/\/+$/, "")
+      const normalized = searchKey(item).replace(/\/+$/, "")
       return normalized.split("/").some((p) => p.startsWith(".") && p.length > 1)
     }
     const preferHidden = query.startsWith(".") || query.includes("/.")
@@ -1823,7 +1824,7 @@ export namespace File {
       kind === "file" ? result.files : kind === "directory" ? result.dirs : [...result.files, ...result.dirs]
 
     const searchLimit = kind === "directory" && !preferHidden ? limit * 20 : limit
-    const sorted = fuzzysort.go(query, items, { limit: searchLimit }).map((r) => r.target)
+    const sorted = fuzzysort.go(query, items, { key: searchKey, limit: searchLimit }).map((r) => r.obj)
     const output = kind === "directory" ? sortHiddenLast(sorted).slice(0, limit) : sorted
 
     log.info("search", { query, kind, results: output.length })

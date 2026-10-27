@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [文件路径搜索分隔符一致性](2026-10-27-file-path-search.md)：单代理修复Windows正斜杠路径查询。
+
 - [文件操作忙态与键盘恢复](2026-10-27-file-editor-action-focus.md)：单代理真实保存、重载与下载焦点调查。
 
 - [保存冲突后的版本比较](2026-10-27-file-conflict-comparison.md)：单代理文件冲突完整恢复旅程。

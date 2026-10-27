@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件路径搜索分隔符一致性](records/2026-10/2026-10-27-file-path-search.md)：嵌套路径查询、原文件身份和跨项目真实验收。
+
 - [文件操作忙态与键盘恢复](records/2026-10/2026-10-27-file-editor-action-focus.md)：保存失败与后续键盘操作完整旅程。
 
 - [保存冲突后的版本比较](records/2026-10/2026-10-27-file-conflict-comparison.md)：保留草稿读取磁盘、比较版本与安全恢复。
