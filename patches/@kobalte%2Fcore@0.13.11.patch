@@ -278,14 +278,41 @@ diff --git a/dist/chunk/3NI6FTA2.jsx b/dist/chunk/3NI6FTA2.jsx
  }
  function disableBodyPointerEvents(node) {
 diff --git a/src/popper/popper-root.tsx b/src/popper/popper-root.tsx
+index 1b7900f51fd39e08b0ce7cae855f8c60126e772b..c1f4de68fec5beb69d1421be6e895f7ed36ecef4 100644
 --- a/src/popper/popper-root.tsx
 +++ b/src/popper/popper-root.tsx
-@@ -103,0 +104,3 @@
+@@ -101,6 +101,9 @@ export interface PopperRootOptions {
+ 	/** Whether to hide the popper when the anchor element becomes occluded. */
+ 	hideWhenDetached?: boolean;
+ 
 +	/** Whether to update the popper position on every animation frame. */
 +	autoUpdateAnimationFrame?: boolean;
 +
-@@ -346,0 +350 @@
+ 	/** The minimum padding in order to consider the anchor element occluded. */
+ 	detachedPadding?: number;
+ 
+@@ -278,6 +281,13 @@ export function PopperRoot(props: PopperRootProps) {
+ 			middleware,
+ 			platform: {
+ 				...platform,
++				getClippingRect(args) {
++					const fullscreen = args.element.ownerDocument.fullscreenElement;
++					return platform.getClippingRect.call(this, {
++						...args,
++						...(fullscreen?.contains(args.element) ? { boundary: fullscreen } : {}),
++					});
++				},
+ 				isRTL: () => direction() === "rtl",
+ 			},
+ 		});
+@@ -344,6 +354,7 @@ export function PopperRoot(props: PopperRootProps) {
+ 			{
+ 				// JSDOM doesn't support ResizeObserver
+ 				elementResize: typeof ResizeObserver === "function",
 +				animationFrame: mergedProps.autoUpdateAnimationFrame,
+ 			},
+ 		);
+ 
 diff --git a/dist/popper-root-14a88a55.d.ts b/dist/popper-root-14a88a55.d.ts
 --- a/dist/popper-root-14a88a55.d.ts
 +++ b/dist/popper-root-14a88a55.d.ts
@@ -298,9 +325,24 @@ diff --git a/dist/popper-root-14a88a55.d.ts b/dist/popper-root-14a88a55.d.ts
      /** The minimum padding in order to consider the anchor element occluded. */
      detachedPadding?: number;
 diff --git a/dist/chunk/LMWVDFW6.js b/dist/chunk/LMWVDFW6.js
+index e59bb7d9dd08bf488458ebb109c9af2654c74bb0..49ba3cc8c0c8a3335e1c847b5c09743837d2d58a 100644
 --- a/dist/chunk/LMWVDFW6.js
 +++ b/dist/chunk/LMWVDFW6.js
-@@ -303,6 +303,7 @@ function PopperRoot(props) {
+@@ -261,6 +261,13 @@ function PopperRoot(props) {
+       middleware,
+       platform: {
+         ...platform,
++        getClippingRect(args) {
++          const fullscreen = args.element.ownerDocument.fullscreenElement;
++          return platform.getClippingRect.call(this, {
++            ...args,
++            ...(fullscreen?.contains(args.element) ? { boundary: fullscreen } : {})
++          });
++        },
+         isRTL: () => direction() === "rtl"
+       }
+     });
+@@ -303,7 +310,8 @@ function PopperRoot(props) {
      }
      const cleanupAutoUpdate = autoUpdate(referenceEl, floatingEl, updatePosition, {
        // JSDOM doesn't support ResizeObserver
@@ -309,16 +351,33 @@ diff --git a/dist/chunk/LMWVDFW6.js b/dist/chunk/LMWVDFW6.js
 +      animationFrame: mergedProps.autoUpdateAnimationFrame
      });
      onCleanup(cleanupAutoUpdate);
+   });
 diff --git a/dist/chunk/2CTBMVJ4.jsx b/dist/chunk/2CTBMVJ4.jsx
+index d6727fedf8009f6be7adb2232722d8bd9b7d05ab..7562e56dbb00406c239c15d022604186c887b8ee 100644
 --- a/dist/chunk/2CTBMVJ4.jsx
 +++ b/dist/chunk/2CTBMVJ4.jsx
-@@ -365,5 +365,6 @@ function PopperRoot(props) {
+@@ -319,6 +319,13 @@ function PopperRoot(props) {
+       middleware,
+       platform: {
+         ...platform,
++        getClippingRect(args) {
++          const fullscreen = args.element.ownerDocument.fullscreenElement;
++          return platform.getClippingRect.call(this, {
++            ...args,
++            ...(fullscreen?.contains(args.element) ? { boundary: fullscreen } : {})
++          });
++        },
+         isRTL: () => direction() === "rtl"
+       }
+     });
+@@ -364,6 +371,7 @@ function PopperRoot(props) {
+       floatingEl,
+       updatePosition,
        {
-         // JSDOM doesn't support ResizeObserver
 +        animationFrame: mergedProps.autoUpdateAnimationFrame,
+         // JSDOM doesn't support ResizeObserver
          elementResize: typeof ResizeObserver === "function"
        }
-     );
 diff --git a/dist/chunk/ZKYDDHM6.js b/dist/chunk/ZKYDDHM6.js
 --- a/dist/chunk/ZKYDDHM6.js
 +++ b/dist/chunk/ZKYDDHM6.js

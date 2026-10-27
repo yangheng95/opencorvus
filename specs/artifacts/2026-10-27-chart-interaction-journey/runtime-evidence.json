@@ -1,0 +1,450 @@
+{
+  "at": "2026-10-27T03:23:56.299Z",
+  "method": "Real isolated development CLI /ui interactions, original screenshots and manual visual review; no UI automation tests",
+  "schemaChange": false,
+  "cumulativeRequests": {
+    "before": 326,
+    "after": 332
+  },
+  "runs": [
+    {
+      "id": 684,
+      "port": 38189,
+      "uiEntry": "main-C96VN_8Q.js",
+      "requests": 6,
+      "cumulativeRequests": 332,
+      "schema": 9,
+      "sourceTables": 92,
+      "sourceRows": 28154,
+      "originalSourceAllRowsPreserved": true,
+      "protectedOriginalRows": 978,
+      "projectFilesPreserved": 7,
+      "publicShutdown": 200,
+      "originalExecExit": 0,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "physicalChain": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ],
+      "reserveMs": 719754,
+      "credentialsCopied": true,
+      "modelCatalogCopyRetired": true,
+      "pairedCredentialCopyRetired": true,
+      "sourceMetadataPreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "id": 686,
+      "port": 38191,
+      "uiEntry": "main-roBTDuzM.js",
+      "requests": 0,
+      "cumulativeRequests": 332,
+      "schema": 9,
+      "sourceTables": 92,
+      "sourceRows": 29661,
+      "originalSourceAllRowsPreserved": true,
+      "protectedOriginalRows": 1023,
+      "projectFilesPreserved": 7,
+      "publicShutdown": 200,
+      "originalExecExit": 0,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "physicalChain": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ],
+      "reserveMs": 615156,
+      "credentialsCopied": false,
+      "modelCatalogCopyRetired": true,
+      "sourceMetadataPreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "id": 687,
+      "port": 38192,
+      "uiEntry": "main-BmBCCx89.js",
+      "requests": 0,
+      "cumulativeRequests": 332,
+      "schema": 9,
+      "sourceTables": 92,
+      "sourceRows": 29661,
+      "originalSourceAllRowsPreserved": true,
+      "protectedOriginalRows": 1023,
+      "projectFilesPreserved": 7,
+      "publicShutdown": 200,
+      "originalExecExit": 0,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "physicalChain": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ],
+      "reserveMs": 1029237,
+      "credentialsCopied": false,
+      "modelCatalogCopyRetired": true,
+      "sourceMetadataPreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "id": 688,
+      "port": 38193,
+      "uiEntry": "main-_tEJutEr.js",
+      "requests": 0,
+      "cumulativeRequests": 332,
+      "schema": 9,
+      "sourceTables": 92,
+      "sourceRows": 29661,
+      "originalSourceAllRowsPreserved": true,
+      "protectedOriginalRows": 1023,
+      "projectFilesPreserved": 7,
+      "publicShutdown": 200,
+      "originalExecExit": 0,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "physicalChain": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ],
+      "reserveMs": 952574,
+      "credentialsCopied": false,
+      "modelCatalogCopyRetired": true,
+      "sourceMetadataPreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    }
+  ],
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "readerTerminal": {
+        "kind": "eof",
+        "at": 1793067418548
+      },
+      "chunkCount": 16,
+      "byteCount": 32933
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "readerTerminal": {
+        "kind": "eof",
+        "at": 1793067418383
+      },
+      "chunkCount": 41,
+      "byteCount": 530753
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "readerTerminal": {
+        "kind": "eof",
+        "at": 1793067493583
+      },
+      "chunkCount": 241,
+      "byteCount": 749624
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "readerTerminal": {
+        "kind": "eof",
+        "at": 1793067467204
+      },
+      "chunkCount": 114,
+      "byteCount": 677232
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "readerTerminal": {
+        "kind": "eof",
+        "at": 1793067475691
+      },
+      "chunkCount": 74,
+      "byteCount": 681393
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "readerTerminal": {
+        "kind": "eof",
+        "at": 1793067481297
+      },
+      "chunkCount": 47,
+      "byteCount": 619959
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "art_g0VZDEMNm00Qw1X6aYxu",
+      "messageID": "msg_g0VZDEKET0038JUIi9v5",
+      "payload": {
+        "schemaVersion": "1",
+        "title": "交付节奏684",
+        "renderer": "chart@1",
+        "spec": {
+          "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+          "params": [
+            {
+              "name": "picked",
+              "select": {
+                "type": "point",
+                "fields": [
+                  "stage"
+                ],
+                "on": "click",
+                "toggle": false,
+                "clear": "dblclick"
+              }
+            }
+          ],
+          "mark": "bar",
+          "encoding": {
+            "x": {
+              "field": "stage",
+              "type": "nominal",
+              "title": "阶段",
+              "sort": null
+            },
+            "y": {
+              "field": "value",
+              "type": "quantitative",
+              "title": "数量"
+            },
+            "color": {
+              "condition": {
+                "param": "picked",
+                "empty": true,
+                "value": "#2563eb"
+              },
+              "value": "#94a3b8"
+            },
+            "opacity": {
+              "condition": {
+                "param": "picked",
+                "empty": true,
+                "value": 1
+              },
+              "value": 0.25
+            },
+            "tooltip": [
+              {
+                "field": "stage",
+                "type": "nominal",
+                "title": "stage"
+              },
+              {
+                "field": "value",
+                "type": "quantitative",
+                "title": "value",
+                "format": ".15~g"
+              },
+              {
+                "field": "region",
+                "type": "nominal",
+                "title": "region"
+              }
+            ]
+          }
+        },
+        "data": [
+          {
+            "stage": "调研",
+            "value": 12345.67,
+            "region": "华东"
+          },
+          {
+            "stage": "设计",
+            "value": 15670,
+            "region": "华西"
+          },
+          {
+            "stage": "开发",
+            "value": 11200,
+            "region": "华东"
+          },
+          {
+            "stage": "复核",
+            "value": 8500,
+            "region": "华西"
+          }
+        ]
+      },
+      "relatedRealPartIDs": [
+        "prt_g0VZDEMNo005iuMirVvq"
+      ],
+      "originalSnapshotPreserved": true
+    },
+    {
+      "id": "art_g0VZDEOag005Q5Nz2Ea7",
+      "messageID": "msg_g0VZDEMP1001pSGJvowh",
+      "payload": {
+        "schemaVersion": "1",
+        "title": "交付看板684",
+        "renderer": "dashboard@1",
+        "metrics": [
+          {
+            "id": "sample-delivery",
+            "label": "样例交付量",
+            "value": 12345.67,
+            "delta": 0.125,
+            "unit": "项"
+          }
+        ],
+        "filters": [
+          {
+            "id": "region",
+            "label": "区域",
+            "field": "region",
+            "values": [
+              "华东",
+              "华西"
+            ]
+          }
+        ],
+        "views": [
+          {
+            "id": "region-stage-delivery",
+            "title": "区域阶段交付",
+            "spec": {
+              "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+              "mark": "bar",
+              "encoding": {
+                "x": {
+                  "field": "stage",
+                  "type": "nominal",
+                  "title": "阶段",
+                  "sort": null
+                },
+                "y": {
+                  "field": "value",
+                  "type": "quantitative",
+                  "title": "数量"
+                },
+                "color": {
+                  "field": "region",
+                  "type": "nominal",
+                  "title": "区域"
+                },
+                "tooltip": [
+                  {
+                    "field": "stage",
+                    "type": "nominal",
+                    "title": "stage"
+                  },
+                  {
+                    "field": "value",
+                    "type": "quantitative",
+                    "title": "value",
+                    "format": ".15~g"
+                  },
+                  {
+                    "field": "region",
+                    "type": "nominal",
+                    "title": "region"
+                  }
+                ]
+              }
+            },
+            "span": "full"
+          }
+        ],
+        "data": [
+          {
+            "stage": "调研",
+            "value": 12345.67,
+            "region": "华东"
+          },
+          {
+            "stage": "设计",
+            "value": 15670,
+            "region": "华西"
+          },
+          {
+            "stage": "开发",
+            "value": 11200,
+            "region": "华东"
+          },
+          {
+            "stage": "复核",
+            "value": 8500,
+            "region": "华西"
+          }
+        ]
+      },
+      "relatedRealPartIDs": [
+        "prt_g0VZDEOag0090SDcGRHI"
+      ],
+      "originalSnapshotPreserved": true
+    }
+  ],
+  "finalManualReview": {
+    "selection": "Design selected; retained through dock resize, native workspace, Light, Chinese; Development selected after restoration, retained through Dark and English; double-click cleared all selection",
+    "dashboard": "All -> East by keyboard -> West in ordinary view -> Chinese/workspace retains West -> All restores four original rows; metric remains 12345.67 and delta 0.125",
+    "fullscreenDropdownGeometry": [
+      {
+        "id": "select-cl-493-trigger",
+        "rect": {
+          "h": 34,
+          "w": 160,
+          "x": 61,
+          "y": 221
+        }
+      },
+      {
+        "id": "select-cl-493-listbox",
+        "rect": {
+          "h": 108.671875,
+          "w": 158,
+          "x": 62,
+          "y": 260
+        }
+      }
+    ],
+    "nativeVegaAndArtifactDownloadMenus": "Shown and visually reviewed in native fullscreen; SVG/PNG labels follow Chinese; exact .vl.json identity visible",
+    "downloadedFileBytes": "Not collected; no downloaded-byte qualification claimed"
+  },
+  "limits": [
+    "Desktop 1280x720 ordinary and 1920x1080 native fullscreen only",
+    "Original authored Vega-Lite v5 declaration retained; actual runtime v6.4.3 warnings preserved",
+    "No new model requests after baseline; final read-only runs intentionally have no auth",
+    "Current continuous product iteration remains active"
+  ]
+}

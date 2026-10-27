@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [图表完整交互体验证据](2026-10-27-chart-interaction-journey/README.md)：真实模型产物、40张原图人工复核、连续交互修复及四次运行结清事实。
+
 - [侧聊与引用交接体验证据](2026-10-27-side-chat-handoff-journey/README.md)：21张真实原图，复制产物修复、版本9保留数据迁移、精确请求通知归属与Sol流式验收。
 
 - [作品返回导航调查证据](2026-10-27-artifact-return-navigation/README.md)：全屏返回失位基线、精确时序日志、最终读位与29张实页原图。

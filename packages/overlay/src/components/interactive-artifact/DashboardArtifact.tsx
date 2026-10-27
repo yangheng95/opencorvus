@@ -1,10 +1,8 @@
-import vegaEmbed, { type Result as VegaEmbedResult } from "vega-embed"
-import { For, Show, createEffect, createMemo, createSignal, onCleanup, onMount } from "solid-js"
+import { For, Show, createMemo, createSignal } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
-import { observeAppliedTheme } from "../../services/theme"
+import { localeTag, t } from "../../utils/i18n"
 import { ArtifactFrame } from "./ArtifactFrame"
-import { artifactVegaConfig, artifactVisualTheme } from "./theme-color"
-import { INLINE_VEGA_EMBED_OPTIONS } from "./vega-embed-policy"
+import { createInlineVegaView } from "./inline-vega-view"
 import { SelectControl } from "../ui/SelectControl"
 
 type DashboardPayload = Extract<InteractiveArtifactPayload, { renderer: "dashboard@1" }>
@@ -19,112 +17,27 @@ const VEGA_AXIS_AND_ACTIONS_WIDTH = 128
 
 function DashboardView(props: { view: DashboardViewPayload; data: DashboardRow[] }) {
   let host: HTMLDivElement | undefined
-  let result: VegaEmbedResult | undefined
-  let stopThemeObserver: (() => void) | undefined
-  let resizeObserver: ResizeObserver | undefined
-  let intersectionObserver: IntersectionObserver | undefined
-  let generation = 0
-  let rendering = false
-  let renderPending = false
-  let renderedWidth = 0
   const [error, setError] = createSignal("")
-  const availableWidth = () =>
-    Math.min(Math.floor(host?.parentElement?.clientWidth ?? host?.clientWidth ?? 0), MAX_DASHBOARD_WIDTH)
-
-  const render = () => {
-    if (!host) return
-    const width = availableWidth()
-    if (width <= 0) {
-      renderPending = true
-      return
-    }
-    if (rendering) {
-      renderPending = true
-      return
-    }
-    rendering = true
-    const current = ++generation
-    const data = props.data
-    renderedWidth = width
-    result?.finalize()
-    result = undefined
-    delete host.dataset.ready
-    host.replaceChildren()
-    setError("")
-    const theme = artifactVisualTheme(host)
-    const source = props.view.spec as Record<string, unknown>
-    const sourceConfig =
-      source.config && typeof source.config === "object" && !Array.isArray(source.config)
-        ? (source.config as Record<string, unknown>)
-        : {}
-    void vegaEmbed(
-      host,
-      {
-        ...source,
-        data: { values: data },
-        width: source.width ?? Math.max(MIN_DASHBOARD_PLOT_WIDTH, width - VEGA_AXIS_AND_ACTIONS_WIDTH),
-        height: source.height ?? 260,
-        background: source.background ?? "transparent",
-        config: artifactVegaConfig(theme, sourceConfig),
-      } as unknown as Parameters<typeof vegaEmbed>[1],
-      INLINE_VEGA_EMBED_OPTIONS,
-    )
-      .then((next) => {
-        if (generation !== current) {
-          next.finalize()
-          return
-        }
-        result = next
-        if (host) host.dataset.ready = "true"
-      })
-      .catch((reason: unknown) => {
-        if (generation === current) setError(reason instanceof Error ? reason.message : String(reason))
-      })
-      .finally(() => {
-        rendering = false
-        if (!renderPending) return
-        renderPending = false
-        queueMicrotask(render)
-      })
-  }
-
-  createEffect(() => {
-    props.data
-    queueMicrotask(render)
+  createInlineVegaView({
+    host: () => host,
+    observed: () => host?.parentElement ?? undefined,
+    source: () => props.view.spec,
+    data: () => props.data,
+    measure: () => {
+      const width = Math.min(Math.floor(host?.parentElement?.clientWidth ?? 0), MAX_DASHBOARD_WIDTH)
+      return { width: width > 0 ? Math.max(MIN_DASHBOARD_PLOT_WIDTH, width - VEGA_AXIS_AND_ACTIONS_WIDTH) : 0, height: 260 }
+    },
+    error: setError,
+    ready: (element, ready) => {
+      if (ready) element.dataset.ready = "true"
+      else delete element.dataset.ready
+    },
   })
-  onMount(() => {
-    stopThemeObserver = observeAppliedTheme(render)
-    resizeObserver = new ResizeObserver(() => {
-      if (!host || Math.abs(availableWidth() - renderedWidth) <= 2) return
-      queueMicrotask(render)
-    })
-    if (host?.parentElement) resizeObserver.observe(host.parentElement)
-    intersectionObserver = new IntersectionObserver((entries) => {
-      if (!entries.some((entry) => entry.isIntersecting)) return
-      queueMicrotask(render)
-    })
-    if (host) intersectionObserver.observe(host)
-  })
-  onCleanup(() => {
-    generation += 1
-    renderPending = false
-    resizeObserver?.disconnect()
-    intersectionObserver?.disconnect()
-    stopThemeObserver?.()
-    result?.finalize()
-  })
-
   return (
     <section class="msg-artifact-dashboard__view" data-span={props.view.span} aria-label={props.view.title}>
       <h4>{props.view.title}</h4>
-      <Show when={!error()} fallback={<div class="msg-artifact-render-error">{error()}</div>}>
-        <div
-          class="msg-artifact-dashboard__chart msg-artifact-vega"
-          ref={(element) => {
-            host = element
-          }}
-        />
-      </Show>
+      <div class="msg-artifact-dashboard__chart msg-artifact-vega" ref={host} hidden={!!error()} />
+      <Show when={error()}>{message => <div class="msg-artifact-render-error">{message()}</div>}</Show>
     </section>
   )
 }
@@ -135,7 +48,7 @@ function DashboardFilterControl(props: {
   onChange: (value: DashboardRow[string] | undefined) => void
 }) {
   const options = createMemo<DashboardFilterOption[]>(() => [
-    { id: "all", label: "All", value: undefined },
+    { id: "all", label: t("artifact.dashboard.all"), value: undefined },
     ...props.filter.values.map((value, index) => ({ id: String(index), label: String(value), value })),
   ])
   const selectedOption = createMemo(
@@ -152,7 +65,7 @@ function DashboardFilterControl(props: {
         onChange={(option) => props.onChange(option?.value)}
         optionValue="id"
         optionTextValue="label"
-        renderValue={(option) => option?.label ?? "All"}
+        renderValue={(option) => option?.label ?? t("artifact.dashboard.all")}
         renderOptionLabel={(option) => option.label}
         ariaLabel={props.filter.label}
         disallowEmptySelection
@@ -162,6 +75,8 @@ function DashboardFilterControl(props: {
 }
 
 export function DashboardArtifact(props: { payload: DashboardPayload }) {
+  const numbers = createMemo(() => new Intl.NumberFormat(localeTag(), { maximumFractionDigits: 20 }))
+  const percentages = createMemo(() => new Intl.NumberFormat(localeTag(), { style: "percent", maximumFractionDigits: 1 }))
   const [filters, setFilters] = createSignal<Record<string, DashboardRow[string] | undefined>>({})
   const filtered = createMemo(() =>
     props.payload.data.filter((row) =>
@@ -182,15 +97,13 @@ export function DashboardArtifact(props: { payload: DashboardPayload }) {
                 <div class="msg-artifact-dashboard__metric" data-metric-id={metric.id}>
                   <span>{metric.label}</span>
                   <strong>
-                    {metric.value}
+                    {typeof metric.value === "number" ? numbers().format(metric.value) : metric.value}
                     {metric.unit ? ` ${metric.unit}` : ""}
                   </strong>
                   <Show when={metric.delta !== undefined}>
                     <small data-direction={metric.delta! < 0 ? "down" : "up"}>
                       {metric.delta! > 0 ? "+" : ""}
-                      {new Intl.NumberFormat(undefined, { style: "percent", maximumFractionDigits: 1 }).format(
-                        metric.delta!,
-                      )}
+                      {percentages().format(metric.delta!)}
                     </small>
                   </Show>
                 </div>

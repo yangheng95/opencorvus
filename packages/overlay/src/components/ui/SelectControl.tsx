@@ -3,6 +3,7 @@ import { Show, type JSX } from "solid-js"
 import { Icon } from "./Icon"
 import { Tooltip } from "./Tooltip"
 import { useTextFieldControlProps } from "./TextField"
+import { fullscreenPortalMount } from "../../utils/fullscreen"
 
 type SelectDataAttributes = Record<string, string | undefined>
 export type SelectControlVariant = "control" | "composer"
@@ -42,6 +43,7 @@ function withClass(base: string, extra?: string): string {
 }
 
 export function SelectControl<T extends object>(props: SelectControlProps<T>): JSX.Element {
+  let trigger: HTMLButtonElement | undefined
   const variant = () => props.variant ?? "control"
   const textFieldControl = useTextFieldControlProps()
   const ariaDescribedBy = () => props.ariaDescribedBy ?? textFieldControl.describedBy()
@@ -92,7 +94,7 @@ export function SelectControl<T extends object>(props: SelectControlProps<T>): J
               <Tooltip.Trigger as="span" class="oc-select-option-copy">
                 {optionCopy()}
               </Tooltip.Trigger>
-              <Tooltip.Portal>
+              <Tooltip.Portal mount={fullscreenPortalMount(trigger)}>
                 <Tooltip.Content class="oc-select-option-tooltip">{tooltipCopy()}</Tooltip.Content>
               </Tooltip.Portal>
             </Tooltip.Root>
@@ -134,7 +136,10 @@ export function SelectControl<T extends object>(props: SelectControlProps<T>): J
         aria-describedby={ariaDescribedBy()}
         aria-invalid={invalid() ? "true" : undefined}
         aria-errormessage={invalid() ? errorMessageID() : undefined}
-        ref={props.triggerRef}
+        ref={(element) => {
+          trigger = element
+          props.triggerRef?.(element)
+        }}
       >
         <Select.Value<T> class="oc-select-value">{() => props.renderValue(props.value)}</Select.Value>
         <Select.Icon class="oc-select-icon">
@@ -148,7 +153,7 @@ export function SelectControl<T extends object>(props: SelectControlProps<T>): J
         aria-invalid={invalid() ? "true" : undefined}
         aria-errormessage={invalid() ? errorMessageID() : undefined}
       />
-      <Select.Portal>
+      <Select.Portal mount={fullscreenPortalMount(trigger)}>
         <Select.Content class="oc-select-content" data-variant={variant()}>
           <Select.Listbox class="oc-select-listbox" data-variant={variant()} />
         </Select.Content>

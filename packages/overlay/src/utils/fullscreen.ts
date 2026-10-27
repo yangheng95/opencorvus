@@ -1,6 +1,12 @@
 const FULLSCREEN_TRANSITION_EVENT = "opencorvus:fullscreen-transition"
 const pendingRequests = new Set<{ element: HTMLElement }>()
 
+/** A floating control belongs inside fullscreen only when its trigger does. */
+export function fullscreenPortalMount(anchor: Element | undefined): Element | undefined {
+  const fullscreen = anchor?.ownerDocument.fullscreenElement
+  return fullscreen && anchor && fullscreen.contains(anchor) ? fullscreen : undefined
+}
+
 /** Notify readers before the browser resizes the viewport for native fullscreen. */
 export async function requestNativeFullscreen(element: HTMLElement): Promise<void> {
   const request = { element }

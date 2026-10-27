@@ -10,6 +10,7 @@ import { useDisclosure } from "../../solid/disclosure"
 import { Button } from "../ui/Button"
 import { Icon } from "../ui/Icon"
 import { DropdownMenu } from "../ui/DropdownMenu"
+import { fullscreenPortalMount } from "../../utils/fullscreen"
 
 export function ArtifactActions(props: {
   files: () => ArtifactExport[]
@@ -30,6 +31,7 @@ export function ArtifactActions(props: {
   const downloads = useDisclosure()
   let reset: ReturnType<typeof setTimeout> | undefined
   let disposed = false
+  let trigger: HTMLButtonElement | undefined
   const matchesCurrent = (entry: Action) => {
     if (disposed || props.copyText !== entry.copyAccessor) return false
     if (entry.authority && (!isApiAuthorityCurrent(entry.authority) || boardStore.selectEpoch !== entry.selection))
@@ -161,6 +163,7 @@ export function ArtifactActions(props: {
       <DropdownMenu.Root open={downloads.open()} onOpenChange={prepareDownloads}>
         <DropdownMenu.Trigger
           as={Button}
+          ref={trigger}
           variant="ghost"
           size="sm"
           tone="neutral"
@@ -174,7 +177,7 @@ export function ArtifactActions(props: {
           <span>{t("artifact.actions.download")}</span>
           <Icon name="chevron-down" size="compact" />
         </DropdownMenu.Trigger>
-        <DropdownMenu.Portal mount={document.fullscreenElement ?? undefined}>
+        <DropdownMenu.Portal mount={fullscreenPortalMount(trigger)}>
           <DropdownMenu.Content class="msg-artifact__download-menu">
             <For each={files()}>
               {(file) => (

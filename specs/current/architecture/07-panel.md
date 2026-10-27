@@ -3209,8 +3209,23 @@ interpreter mode, so Chart and every Dashboard view execute declarative Vega
 expressions under the native `script-src 'self'` Content Security Policy (CSP)
 without dynamic JavaScript evaluation or an `unsafe-eval` exception. The same
 policy loads the mature Vega Embed and Vega Tooltip styles as one build-time
-local stylesheet and disables both libraries' runtime style injection. Maps
-carry inline GeoJSON and never accept model-selected styles, tiles, scripts,
+local stylesheet and disables both libraries' runtime style injection.
+Chart and Dashboard also share one native View lifecycle. Pane/fullscreen size
+changes and visibility updates resize the mounted View through its public API.
+Theme or product-language changes rebuild presentation, transferring the same
+View's native signal state and arrays belonging to explicitly declared compiled
+data sets, including nested groups. Runtime scenegraph/mark data is outside that
+transfer; a changed source specification or external data starts a new intent.
+The current container size is applied after state restoration settles. Vega
+export controls use the current product language. Dashboard's default filter
+label and numeric metrics follow that language; authored labels, strings, units,
+and published metric values retain their payload identity.
+Select and artifact-download portals use their actual trigger's fullscreen
+ownership. The existing Kobalte patch makes Floating UI clip a fullscreen-owned
+floating element to that native fullscreen root, preserving ordinary clipping
+and the library's placement/collision behavior elsewhere.
+
+Maps carry inline GeoJSON and never accept model-selected styles, tiles, scripts,
 or network data. The Overlay's single basemap configuration supplies the
 OpenFreeMap MapLibre style; that style and its TileJSON metadata are the sole
 visible OpenFreeMap, OpenMapTiles, and OpenStreetMap attribution source. The
