@@ -1,0 +1,108 @@
+{
+  "reviewedAt": "2026-10-27T09:54:47.543Z",
+  "runtime": [
+    {
+      "instance": 709,
+      "port": 38214,
+      "sourceTables": 92,
+      "sourceRows": 239061,
+      "protectedRows": 7117,
+      "sourceOriginalRowsPreserved": true,
+      "projectFilesUnchanged": 164,
+      "projectAuditFilesAppended": 2,
+      "originalAuditPrefixesPreserved": true,
+      "requests": 4,
+      "cumulativeRequests": 353,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "reserveMs": 754364
+    },
+    {
+      "instance": 710,
+      "port": 38215,
+      "sourceTables": 92,
+      "sourceRows": 240178,
+      "protectedRows": 7147,
+      "sourceOriginalRowsPreserved": true,
+      "projectFilesUnchanged": 166,
+      "projectAuditFilesAppended": 0,
+      "originalAuditPrefixesPreserved": true,
+      "requests": 0,
+      "cumulativeRequests": 353,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "reserveMs": 1066555
+    }
+  ],
+  "realProvider": {
+    "previous": 349,
+    "current": 353,
+    "maximum": 355,
+    "actualRequests": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "readerState": "settled",
+        "terminal": "eof"
+      }
+    ],
+    "pairedCopiesRetired": true,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    }
+  },
+  "goal": {
+    "status": "complete",
+    "tokensUsed": 36175,
+    "turnsAccepted": 1,
+    "tokenBudget": 65000,
+    "turnBudget": 1,
+    "originalTwoMessagesPreserved": true,
+    "nextGoalOnlyOpenedAndCancelled": true
+  },
+  "after": {
+    "tables": 92,
+    "rows": 240178,
+    "identity": "Actual rowid or complete declared primary key",
+    "allOriginalRowsPreserved": true
+  },
+  "checks": {
+    "build-final": 0,
+    "typecheck-final": 0,
+    "i18n-final": 0,
+    "docs-final": 0
+  },
+  "qualification": "Manual real-page interactions and original screenshot review; 709 real bounded model execution; 710 cold history and localized scope; no UI automation"
+}

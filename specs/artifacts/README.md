@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Goal完整旅程证据](2026-10-27-goal-completion-journey/README.md)：当前实页、真实模型及结清事实。
+
 - [文件操作体验证据](2026-10-27-file-mutation-journey/README.md)：真实目录操作、编辑与归属复核。
 
 - [应用菜单与搜索体验证据](2026-10-27-menu-search-journey/README.md)：真实菜单、快捷键与焦点复核。

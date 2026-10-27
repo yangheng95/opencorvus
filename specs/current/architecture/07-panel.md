@@ -3657,6 +3657,10 @@ and optional budgets remain within the original form and guide. Opening
 the home form preserves the composer draft and creates no owner, Message, or
 goal; confirmation invokes the existing new-conversation/goal launch flow.
 Selected conversations keep the owner-bound strip above their transcript.
+Session-scoped Goal forms describe their scope as the current conversation,
+covering both Chat and Work experiences without exposing the internal chat kind
+as a different product mode. The original conversation title still identifies
+the exact owner; Task and Mission forms retain their specific owned-work scope.
 Completed goals use one summary row with their status, truncated original
 objective and existing Details action, including narrow desktop and compact
 SideChat surfaces. Details retains the complete objective, completion evidence,
