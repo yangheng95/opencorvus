@@ -3595,6 +3595,10 @@ updates first; exact server and workspace facts plus keyboard shortcuts remain
 available in disclosures. Usage gives the measured Token total and selected
 calendar period one dominant summary, keeps supporting metrics compact, and
 preserves official Provider reconciliation as a separate compare-only section.
+Its server identity uses compact inline chrome above the existing overview;
+the measured total has the primary typographic weight. Composition and Provider
+sections follow one vertical reading column when the canonical call count is
+positive, while zero-valued activity buckets remain available for inspection.
 
 Release notes is a canonical CONFIG_SECTIONS entry with an About action. Its
 lazy panel bundles root CHANGELOG.md through the shared util parser and uses the

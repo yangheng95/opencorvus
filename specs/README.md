@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [用量统计与周期阅读体验](records/2026-10/2026-10-27-usage-reading-journey.md)：真实历史统计、周期、空状态和键盘查看流程。
+
 - [收件箱阅读、查找与返回任务](records/2026-10/2026-10-27-mailbox-reading-journey.md)：全局通知、正文与已读、查找和所属任务导航体验。
 
 - [图表筛选、布局与交付体验](records/2026-10/2026-10-27-chart-interaction-journey.md)：原生图表与仪表盘选择、筛选、尺寸/主题和语言的完整使用调查。

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [用量统计阅读体验证据](2026-10-27-usage-reading-journey/README.md)：14张真实原图，年度首屏、简洁空态与键盘查看复核，812条原账本保持。
+
 - [收件箱完整阅读体验证据](2026-10-27-mailbox-reading-journey/README.md)：28张实际原图，历史搜索、分页阅读和跨项目保留修复，四个隔离实例结清。
 
 - [图表完整交互体验证据](2026-10-27-chart-interaction-journey/README.md)：真实模型产物、40张原图人工复核、连续交互修复及四次运行结清事实。

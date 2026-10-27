@@ -10,34 +10,35 @@
 .usage-hero {
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: var(--ui-gap-md) 0 var(--ui-gap-xl);
-  text-align: center;
+  justify-content: flex-start;
+  padding: 0;
+  text-align: left;
 }
 
 .usage-hero__copy {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  gap: var(--ui-gap-md);
+  gap: var(--ui-gap-xs) var(--ui-gap-md);
   max-width: calc(520px * var(--ui-scale));
 }
 
 .usage-hero__copy h2 {
-  margin: var(--ui-gap-md) 0 0;
+  margin: 0;
   color: var(--text-strong);
-  font: var(--ui-font-weight-medium) var(--ui-font-page) / var(--ui-line-height-tight) var(--font);
+  font: var(--ui-font-weight-medium) var(--ui-font-emphasis) / var(--ui-line-height-tight) var(--font);
 }
 
 .usage-profile-mark {
   display: grid;
   place-items: center;
-  width: calc(80px * var(--ui-scale));
-  height: calc(80px * var(--ui-scale));
+  grid-row: span 2;
+  width: calc(36px * var(--ui-scale));
+  height: calc(36px * var(--ui-scale));
   border-radius: var(--oc-radius-pill);
   background: var(--surface-inset);
   color: var(--text-strong);
-  font-size: var(--ui-font-page);
+  font-size: var(--ui-font-body);
 }
 
 .usage-hero__copy p,
@@ -65,7 +66,7 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   gap: var(--ui-gap-md);
   margin-top: calc(-1 * var(--ui-gap-lg));
   color: var(--text-muted);
@@ -88,7 +89,8 @@
 
 .usage-metrics {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1.5fr) repeat(4, minmax(0, 1fr));
+  align-items: center;
 }
 
 .usage-metric {
@@ -125,6 +127,16 @@
   margin-top: var(--ui-gap-sm);
   color: var(--text-muted);
   font: var(--ui-font-weight-body) var(--ui-font-body) / var(--ui-line-height-tight) var(--font);
+}
+
+.usage-metric--primary {
+  align-items: flex-start;
+  padding-inline-start: var(--ui-gap-2xl);
+  text-align: left;
+}
+
+.usage-metric--primary strong {
+  font-size: var(--ui-font-page);
 }
 
 .usage-official-grid {
@@ -489,7 +501,7 @@
 
 .usage-insights {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--ui-gap-4xl);
 }
 

@@ -473,7 +473,7 @@ export default function UsagePanel() {
             <section class="usage-overview" aria-label={t("usage.summary_aria")}>
               <div class="usage-metrics">
                 <div
-                  class="usage-metric"
+                  class="usage-metric usage-metric--primary"
                   aria-live="polite"
                   title={exactNumber(resolved().current.summary.tokens.total)}
                 >
@@ -554,80 +554,82 @@ export default function UsagePanel() {
       <Show when={data()}>
         {(resolved) => (
           <>
-            <div class="usage-insights">
-              <section class="usage-insight">
-                <header class="usage-section__head">
-                  <div>
-                    <h2>{t("usage.composition_title")}</h2>
-                    <p>
-                      {t("usage.average_per_call", {
-                        value: formatTokenCount(resolved().current.summary.averageTokensPerCall),
-                      })}
-                    </p>
-                  </div>
-                </header>
-                <TokenComposition data={resolved()} />
-                <dl class="usage-coverage-list">
-                  <div>
-                    <dt>
-                      <span class="usage-dot usage-dot--priced" />
-                      {t("usage.coverage_priced")}
-                    </dt>
-                    <dd>{exactNumber(resolved().current.summary.billing.pricedTokens)}</dd>
-                  </div>
-                  <div>
-                    <dt>
-                      <span class="usage-dot usage-dot--unpriced" />
-                      {t("usage.coverage_unpriced")}
-                    </dt>
-                    <dd>{exactNumber(resolved().current.summary.billing.unpricedTokens)}</dd>
-                  </div>
-                  <div>
-                    <dt>
-                      <span class="usage-dot usage-dot--unknown" />
-                      {t("usage.coverage_unknown")}
-                    </dt>
-                    <dd>{exactNumber(resolved().current.summary.billing.unknownTokens)}</dd>
-                  </div>
-                </dl>
-              </section>
+            <Show when={resolved().current.summary.calls > 0}>
+              <div class="usage-insights">
+                <section class="usage-insight">
+                  <header class="usage-section__head">
+                    <div>
+                      <h2>{t("usage.composition_title")}</h2>
+                      <p>
+                        {t("usage.average_per_call", {
+                          value: formatTokenCount(resolved().current.summary.averageTokensPerCall),
+                        })}
+                      </p>
+                    </div>
+                  </header>
+                  <TokenComposition data={resolved()} />
+                  <dl class="usage-coverage-list">
+                    <div>
+                      <dt>
+                        <span class="usage-dot usage-dot--priced" />
+                        {t("usage.coverage_priced")}
+                      </dt>
+                      <dd>{exactNumber(resolved().current.summary.billing.pricedTokens)}</dd>
+                    </div>
+                    <div>
+                      <dt>
+                        <span class="usage-dot usage-dot--unpriced" />
+                        {t("usage.coverage_unpriced")}
+                      </dt>
+                      <dd>{exactNumber(resolved().current.summary.billing.unpricedTokens)}</dd>
+                    </div>
+                    <div>
+                      <dt>
+                        <span class="usage-dot usage-dot--unknown" />
+                        {t("usage.coverage_unknown")}
+                      </dt>
+                      <dd>{exactNumber(resolved().current.summary.billing.unknownTokens)}</dd>
+                    </div>
+                  </dl>
+                </section>
 
-              <section class="usage-insight">
-                <header class="usage-section__head">
-                  <div>
-                    <h2>{t("usage.providers_title")}</h2>
-                    <p>{t("usage.providers_description")}</p>
+                <section class="usage-insight">
+                  <header class="usage-section__head">
+                    <div>
+                      <h2>{t("usage.providers_title")}</h2>
+                      <p>{t("usage.providers_description")}</p>
+                    </div>
+                    <span class="usage-section__meta">{resolved().providers.length}</span>
+                  </header>
+                  <div class="usage-provider-list">
+                    <For each={resolved().providers}>
+                      {(provider) => (
+                        <div class="usage-provider-row">
+                          <div class="usage-provider-row__identity">
+                            <strong>{provider.providerID}</strong>
+                            <span>{tc("usage.models_count", provider.modelCount)}</span>
+                          </div>
+                          <div class="usage-provider-row__measure">
+                            <span>
+                              {exactNumber(provider.summary.tokens.total)} {t("usage.table_tokens")}
+                            </span>
+                            <span>{formatDetailedCostUSD(provider.summary.costUSD)}</span>
+                          </div>
+                          <div class="usage-provider-row__bar" aria-hidden="true">
+                            <span style={{ width: `${provider.share * 100}%` }} />
+                          </div>
+                        </div>
+                      )}
+                    </For>
+                    <Show when={resolved().providers.length === 0}>
+                      <div class="usage-list-empty">{t("usage.no_provider_data")}</div>
+                    </Show>
                   </div>
-                  <span class="usage-section__meta">{resolved().providers.length}</span>
-                </header>
-                <div class="usage-provider-list">
-                  <For each={resolved().providers}>
-                    {(provider) => (
-                      <div class="usage-provider-row">
-                        <div class="usage-provider-row__identity">
-                          <strong>{provider.providerID}</strong>
-                          <span>{tc("usage.models_count", provider.modelCount)}</span>
-                        </div>
-                        <div class="usage-provider-row__measure">
-                          <span>
-                            {exactNumber(provider.summary.tokens.total)} {t("usage.table_tokens")}
-                          </span>
-                          <span>{formatDetailedCostUSD(provider.summary.costUSD)}</span>
-                        </div>
-                        <div class="usage-provider-row__bar" aria-hidden="true">
-                          <span style={{ width: `${provider.share * 100}%` }} />
-                        </div>
-                      </div>
-                    )}
-                  </For>
-                  <Show when={resolved().providers.length === 0}>
-                    <div class="usage-list-empty">{t("usage.no_provider_data")}</div>
-                  </Show>
-                </div>
-              </section>
-            </div>
+                </section>
+              </div>
 
-            <p class="usage-coverage-note">{t("usage.coverage_note")}</p>
+              <p class="usage-coverage-note">{t("usage.coverage_note")}</p>
+            </Show>
 
             <Show when={visibleOfficialSources().length > 0}>
               <Disclosure.Root class="usage-section usage-section--official">

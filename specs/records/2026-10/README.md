@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [用量统计与周期阅读体验](2026-10-27-usage-reading-journey.md)：单代理实际设置用量完整旅程。
+
 - [收件箱阅读、查找与返回任务](2026-10-27-mailbox-reading-journey.md)：单代理真实通知完整阅读流程调查。
 
 - [图表筛选、布局与交付体验](2026-10-27-chart-interaction-journey.md)：单代理真实图表/仪表盘交互与交付路径调查。

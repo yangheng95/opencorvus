@@ -1,0 +1,367 @@
+{
+  "at": "2026-10-27T04:59:45.479Z",
+  "qualification": "14 original screenshots manually viewed; no UI automated tests; server values and original ledger verified",
+  "runs": [
+    {
+      "label": "usage-reading-693",
+      "port": 38198,
+      "uiEntry": "main-DafGt6-L.js",
+      "database": {
+        "sourceSchema": 9,
+        "schema": 9,
+        "integrity": "ok",
+        "sourceTables": 92,
+        "sourceRows": 218643,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "automation": {
+            "original": 2,
+            "current": 2,
+            "originalRowsPreserved": true
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreserved": true
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreserved": true
+          },
+          "automation_fire": {
+            "original": 2,
+            "current": 2,
+            "originalRowsPreserved": true
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreserved": true
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreserved": true
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreserved": true
+          },
+          "automation_project_target": {
+            "original": 2,
+            "current": 2,
+            "originalRowsPreserved": true
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreserved": true
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreserved": true
+          },
+          "message": {
+            "original": 794,
+            "current": 794,
+            "originalRowsPreserved": true
+          },
+          "part": {
+            "original": 1935,
+            "current": 1935,
+            "originalRowsPreserved": true
+          },
+          "protocol_event": {
+            "original": 2309,
+            "current": 2309,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_outcome": {
+            "original": 524,
+            "current": 524,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_request": {
+            "original": 524,
+            "current": 524,
+            "originalRowsPreserved": true
+          },
+          "session": {
+            "original": 268,
+            "current": 268,
+            "originalRowsPreserved": true
+          },
+          "tool_part_outcome": {
+            "original": 255,
+            "current": 255,
+            "originalRowsPreserved": true
+          },
+          "tool_part_progress": {
+            "original": 29,
+            "current": 29,
+            "originalRowsPreserved": true
+          },
+          "tool_part_request": {
+            "original": 255,
+            "current": 255,
+            "originalRowsPreserved": true
+          }
+        }
+      },
+      "projectFilesPreserved": 166,
+      "ledger": {
+        "table": "provider_usage_event",
+        "originalRows": 812,
+        "currentRows": 812,
+        "allOriginalRowsPreserved": true
+      },
+      "requests": 0,
+      "cumulativeRequests": 332,
+      "publicShutdown": 200,
+      "reserveMs": 1002510,
+      "successfulShutdown": true,
+      "physical": {
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "chainStates": [
+          "dead_or_reused",
+          "dead_or_reused"
+        ]
+      },
+      "copies": {
+        "credentialCopyCreated": false,
+        "modelCatalogCopyRetired": true,
+        "originalSource": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        }
+      }
+    },
+    {
+      "label": "usage-reading-694",
+      "port": 38199,
+      "uiEntry": "main--VnmC3yE.js",
+      "database": {
+        "sourceSchema": 9,
+        "schema": 9,
+        "integrity": "ok",
+        "sourceTables": 92,
+        "sourceRows": 218643,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "automation": {
+            "original": 2,
+            "current": 2,
+            "originalRowsPreserved": true
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreserved": true
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreserved": true
+          },
+          "automation_fire": {
+            "original": 2,
+            "current": 2,
+            "originalRowsPreserved": true
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreserved": true
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreserved": true
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreserved": true
+          },
+          "automation_project_target": {
+            "original": 2,
+            "current": 2,
+            "originalRowsPreserved": true
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreserved": true
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreserved": true
+          },
+          "message": {
+            "original": 794,
+            "current": 794,
+            "originalRowsPreserved": true
+          },
+          "part": {
+            "original": 1935,
+            "current": 1935,
+            "originalRowsPreserved": true
+          },
+          "protocol_event": {
+            "original": 2309,
+            "current": 2309,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_outcome": {
+            "original": 524,
+            "current": 524,
+            "originalRowsPreserved": true
+          },
+          "provider_activity_request": {
+            "original": 524,
+            "current": 524,
+            "originalRowsPreserved": true
+          },
+          "session": {
+            "original": 268,
+            "current": 268,
+            "originalRowsPreserved": true
+          },
+          "tool_part_outcome": {
+            "original": 255,
+            "current": 255,
+            "originalRowsPreserved": true
+          },
+          "tool_part_progress": {
+            "original": 29,
+            "current": 29,
+            "originalRowsPreserved": true
+          },
+          "tool_part_request": {
+            "original": 255,
+            "current": 255,
+            "originalRowsPreserved": true
+          }
+        }
+      },
+      "projectFilesPreserved": 166,
+      "ledger": {
+        "table": "provider_usage_event",
+        "originalRows": 812,
+        "currentRows": 812,
+        "allOriginalRowsPreserved": true
+      },
+      "requests": 0,
+      "cumulativeRequests": 332,
+      "publicShutdown": 200,
+      "reserveMs": 957788,
+      "successfulShutdown": true,
+      "physical": {
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "chainStates": [
+          "dead_or_reused",
+          "dead_or_reused"
+        ]
+      },
+      "copies": {
+        "credentialCopyCreated": false,
+        "modelCatalogCopyRetired": true,
+        "originalSource": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        }
+      }
+    }
+  ],
+  "periods": {
+    "periods": [
+      {
+        "period": "day",
+        "calls": 0,
+        "tokens": 0,
+        "buckets": 24,
+        "timeZone": "Asia/Shanghai"
+      },
+      {
+        "period": "week",
+        "calls": 0,
+        "tokens": 0,
+        "buckets": 7,
+        "timeZone": "Asia/Shanghai"
+      },
+      {
+        "period": "month",
+        "calls": 812,
+        "tokens": 26599459,
+        "buckets": 31,
+        "timeZone": "Asia/Shanghai"
+      },
+      {
+        "period": "year",
+        "calls": 812,
+        "tokens": 26599459,
+        "buckets": 365,
+        "timeZone": "Asia/Shanghai"
+      }
+    ],
+    "originalCanonicalResultsPreserved": true
+  },
+  "checks": [
+    {
+      "label": "usage-694-types",
+      "startedAt": 1793076714200,
+      "closedAt": 1793076741265,
+      "code": 0,
+      "signal": null,
+      "childPID": 89140
+    },
+    {
+      "label": "usage-694-css",
+      "startedAt": 1793076714208,
+      "closedAt": 1793076720214,
+      "code": 0,
+      "signal": null,
+      "childPID": 71004
+    },
+    {
+      "label": "usage-694-i18n",
+      "startedAt": 1793076750542,
+      "closedAt": 1793076752756,
+      "code": 0,
+      "signal": null,
+      "childPID": 52092
+    },
+    {
+      "label": "usage-694-build",
+      "startedAt": 1793076714208,
+      "closedAt": 1793076784385,
+      "code": 0,
+      "signal": null,
+      "childPID": 98788
+    },
+    {
+      "label": "usage-694-docs",
+      "startedAt": 1793077114517,
+      "closedAt": 1793077123623,
+      "code": 0,
+      "signal": null,
+      "childPID": 69276
+    }
+  ],
+  "diagnostics": [],
+  "limits": "English dark and Chinese light desktop. No new provider calls, authentication copied, original schema/data changes or official financial number qualification."
+}
