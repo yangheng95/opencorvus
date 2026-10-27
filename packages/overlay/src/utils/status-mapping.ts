@@ -10,6 +10,7 @@ const STATUS_ICON_NAME: Record<string, IconName> = {
   failed: "status-failed",
   error: "status-failed",
   cancelled: "status-cancelled",
+  blocked: "status-cancelled",
   skipped: "status-cancelled",
 }
 

@@ -18,7 +18,7 @@ import { SessionDialogHost } from "./SessionDialogHost"
 import { TaskStatusHeader } from "./TaskStatusHeader"
 import { ContinuousGoalControl, type GoalFormRequest, type GoalLaunchContext } from "./ContinuousGoalControl"
 import type { ContinuousGoalCreateInput } from "../services/continuous-goal"
-import { TaskOutcomeBadge } from "./TaskOutcomeBadge"
+import { WorkOutcomeBadge } from "./WorkOutcomeBadge"
 import { TitlebarBrand } from "./titlebar/TitlebarBrand"
 import { TitlebarMenubar } from "./titlebar/TitlebarMenubar"
 import { TitlebarNavigation } from "./titlebar/TitlebarNavigation"
@@ -44,7 +44,7 @@ import { cardTreeStore } from "../store/card-tree"
 import { dialogStore } from "../store/dialog"
 import { openConfigDialog } from "../services/config-dialog-control"
 import type { AutomationRunSession } from "../services/automations"
-import type { WorkLedgerItemRow, WorkLedgerMissionRow, WorkLedgerTaskRow } from "../services/work-ledger"
+import type { WorkLedgerItemRow, WorkLedgerMissionRow } from "../services/work-ledger"
 
 const MAILBOX_HOVER_OPEN_DELAY_MILLISECONDS = 180
 
@@ -576,15 +576,7 @@ export function App(props: AppProps) {
                                   onRename={props.onRenameConversationItem}
                                   onArchive={props.onArchiveConversationItem}
                                 />
-                                <Show
-                                  when={
-                                    props.conversationItem()?.kind === "task"
-                                      ? (props.conversationItem() as WorkLedgerTaskRow)
-                                      : undefined
-                                  }
-                                >
-                                  {(task) => <TaskOutcomeBadge status={task().lifecycleStatus} />}
-                                </Show>
+                                <WorkOutcomeBadge item={props.conversationItem()} />
                                 <div class="chat-header-status" id="solidTaskStatusMount">
                                   <TaskStatusHeader />
                                 </div>

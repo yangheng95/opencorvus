@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Mission正式结果呈现证据](2026-10-28-mission-outcome-presentation/README.md)：真实前后页面和公共投影验收。
+
 - [代码任务本地提交边界证据](2026-10-28-code-task-commit-authority/README.md)：同一原始需求与自然本地工程交付。
 
 - [代码任务交付证据](2026-10-28-code-task-delivery-journey/README.md)：真实Sol、任务终态与精确Skill加载。

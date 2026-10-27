@@ -1,0 +1,326 @@
+{
+  "at": "2026-10-27T20:00:38.432Z",
+  "before": {
+    "missionID": "586aecffc30805c8",
+    "sessionID": "ses_-zUQicQugzzzwNVRGmlu",
+    "canonicalOutcome": {
+      "messageID": "msg_g0VZHPNGi00DJMum4hrx",
+      "toolCallID": "call_b2719efa2138493ea15cae73d77e9343",
+      "toolPartID": "prt_g0VZHPNy000Qq5gecBem",
+      "summary": "已在当前隔离项目完成 sum_due 精确十进制修复，交付 invoice.py、test_invoice.py 和中文验证报告。四个指定值均正确，实际运行的 6 个 unittest 方法和独立 200 组整数参考对照全部通过；README 保留，核对记录未见联网、外发或项目外修改。最终交付概览已发布。",
+      "timeRecorded": 1793129202912,
+      "kind": "accepted"
+    },
+    "boardLane": "completed",
+    "ledgerRowKeys": [
+      "kind",
+      "id",
+      "missionID",
+      "sessionID",
+      "title",
+      "directory",
+      "created",
+      "started",
+      "updated",
+      "pinned",
+      "interruptible",
+      "productPillar",
+      "taskStats",
+      "pendingInteractions",
+      "tasks"
+    ]
+  },
+  "after": {
+    "missionID": "586aecffc30805c8",
+    "sessionID": "ses_-zUQicQugzzzwNVRGmlu",
+    "canonicalOutcome": {
+      "messageID": "msg_g0VZHPNGi00DJMum4hrx",
+      "toolCallID": "call_b2719efa2138493ea15cae73d77e9343",
+      "toolPartID": "prt_g0VZHPNy000Qq5gecBem",
+      "summary": "已在当前隔离项目完成 sum_due 精确十进制修复，交付 invoice.py、test_invoice.py 和中文验证报告。四个指定值均正确，实际运行的 6 个 unittest 方法和独立 200 组整数参考对照全部通过；README 保留，核对记录未见联网、外发或项目外修改。最终交付概览已发布。",
+      "timeRecorded": 1793129202912,
+      "kind": "accepted"
+    },
+    "boardLane": "completed",
+    "ledgerOutcome": "accepted",
+    "originalTask": {
+      "kind": "task",
+      "id": "tsk_g00VZHNpHv00U1GVjV5r",
+      "title": "修复发票总额并验证精确计算",
+      "description": "在当前隔离项目完成单个明确交付目标：修复 invoice.py 的 sum_due(rows)，补充正向 Python unittest、实际运行测试，交付修复文件、测试和简短中文验证报告。输入是 (quantity 整数, unit_price 十进制字符串) 列表，输出为精确十进制求和后按 ROUND_HALF_UP 四舍五入保留两位的总额字符串；不得经由二进制浮点数丢失精度。\n必须验收：[(3,\"0.10\")] => \"0.30\"；[(1,\"1.005\")] => \"1.01\"；[(1,\"9007199254740993.10\"),(1,\"0.20\")] => \"9007199254740993.30\"；[] => \"0.00\"。\n硬约束：保留 README；不联网、不对外发送、不改项目外文件。当前目录即唯一交付仓库 C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\code-task-commit-authority-737\\project。不要增加其他交付界面或平台。\n本 Task 拥有实现、测试、纠正和独立验证的完整闭环，不需要另拆阶段。先查明适用仓库规则和当前代码，再作最小合理修复；根据输入位数合理处理 Decimal 上下文精度，避免大数被默认精度意外舍入（这是保持精确计算的实现指导，不是新增输入类型要求）。遵循实际 Task 运行和仓库本地 Git 交付约定：用户未禁止本地提交，网络/外发禁令不应解释为禁止项目本地提交；不得远程推送或发送任何内容。\n验证应在实际当前项目交付结果上运行，记录目录、命令、用例和结果，独立核对四个精确值及 README 保留。以可读取的最终交付证据覆盖代码、测试内容、实际运行结果和简短报告；源代码和测试应留在当前项目。所有约束和行为结论据实说明，勿用校验和代替功能测试。",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\code-task-commit-authority-737\\project",
+      "created": 1793128828635,
+      "started": 1793128828635,
+      "completed": 1793129126554,
+      "updated": 1793129126554,
+      "pinned": false,
+      "lifecycleStatus": "completed",
+      "cancellationStatus": "none",
+      "activityStatus": "inactive",
+      "priority": "normal",
+      "source": "mission",
+      "productPillar": "code",
+      "pendingInteractions": 0,
+      "missionID": "586aecffc30805c8",
+      "missionSessionID": "ses_-zUQicQugzzzwNVRGmlu"
+    }
+  },
+  "draft": {
+    "missionID": "fd2fe5542b20088f",
+    "sessionID": "ses_-zUQiSy3lzzHIaqSL6cV",
+    "title": "状态展示草稿740",
+    "pendingPrompt": {
+      "text": "仅保存草稿用于核对界面中的未完成状态，不启动执行。"
+    },
+    "boardLane": "backlog",
+    "outcome": null,
+    "taskStats": {
+      "total": 0,
+      "running": 0,
+      "inactive": 0
+    },
+    "originalAcceptedOutcome": "accepted"
+  },
+  "scopes": [
+    {
+      "id": "738",
+      "port": 38243,
+      "uiEntry": "main-DRjWtQ3E.js",
+      "originalRows": 64304,
+      "sourceRowsPreserved": true,
+      "allOriginalRowsPreserved": true,
+      "integrity": "ok",
+      "schema": 9,
+      "additions": [],
+      "requests": 0,
+      "cumulativeRequests": 624,
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "reserveMs": 1113021,
+      "tenMinuteShutdownTargetMet": true
+    },
+    {
+      "id": "739",
+      "port": 38244,
+      "uiEntry": "main-DZJNpAO3.js",
+      "originalRows": 64304,
+      "sourceRowsPreserved": true,
+      "allOriginalRowsPreserved": true,
+      "integrity": "ok",
+      "schema": 9,
+      "additions": [],
+      "requests": 0,
+      "cumulativeRequests": 624,
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "reserveMs": 1094173,
+      "tenMinuteShutdownTargetMet": true
+    },
+    {
+      "id": "740",
+      "port": 38245,
+      "uiEntry": "main-CgP2W82b.js",
+      "originalRows": 64304,
+      "sourceRowsPreserved": true,
+      "allOriginalRowsPreserved": true,
+      "integrity": "ok",
+      "schema": 9,
+      "additions": [
+        {
+          "table": "bus_publication_delivery",
+          "original": 12630,
+          "current": 12638
+        },
+        {
+          "table": "bus_publication_delivery_receipt",
+          "original": 12630,
+          "current": 12638
+        },
+        {
+          "table": "bus_publication_outbox",
+          "original": 1578,
+          "current": 1582
+        },
+        {
+          "table": "bus_publication_owner",
+          "original": 1578,
+          "current": 1582
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "original": 4734,
+          "current": 4746
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "original": 13168,
+          "current": 13176
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "original": 13186,
+          "current": 13194
+        },
+        {
+          "table": "session",
+          "original": 20,
+          "current": 21
+        }
+      ],
+      "requests": 0,
+      "cumulativeRequests": 624,
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "reserveMs": 996525,
+      "tenMinuteShutdownTargetMet": true
+    }
+  ],
+  "checks": {
+    "mission-outcome-sdk": {
+      "code": 0
+    },
+    "mission-outcome-types": {
+      "code": 0
+    },
+    "mission-outcome-overlay-final-types": {
+      "code": 0
+    },
+    "mission-outcome-contract-exact": {
+      "code": 0
+    },
+    "mission-outcome-i18n": {
+      "code": 0
+    },
+    "mission-outcome-docs": {
+      "code": 0
+    },
+    "mission-outcome-architecture": {
+      "code": 0
+    },
+    "mission-outcome-renderer": {
+      "code": 0
+    },
+    "mission-outcome-ui-final": {
+      "code": 0
+    }
+  },
+  "positiveBackend": {
+    "tests": 2,
+    "expectCalls": 22,
+    "checkerCode": 0,
+    "coverage": [
+      "Actual complete_mission Tool, public current ledger and archived ledger accepted outcome",
+      "A real new original user input maps to the current null outcome",
+      "Actual block_mission Tool and current blocked outcome",
+      "Restart retains the canonical result; a newer child occurrence maps to current null outcome"
+    ]
+  },
+  "transportContract": {
+    "tests": 34,
+    "expectCalls": 1172,
+    "checkerCode": 0
+  },
+  "i18n": {
+    "locales": 2,
+    "topLevelKeys": 2586
+  },
+  "screenshots": [
+    {
+      "name": "01-before-mission.jpg",
+      "scope": "738",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "02-after-mission-en.jpg",
+      "scope": "739",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "03-final-mission-en.jpg",
+      "scope": "740",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "04-final-task-en.jpg",
+      "scope": "740",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "05-final-chat-en.jpg",
+      "scope": "740",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "06-final-mission-zh.jpg",
+      "scope": "740",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "07-final-draft-zh.jpg",
+      "scope": "740",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    }
+  ],
+  "limits": [
+    "The first full-text sidebar badge was an intermediate layout regression and was replaced after actual visual review.",
+    "Blocked outcome semantics and invalidation passed the backend checker; a real blocked Mission page was not presented in this batch.",
+    "The inactive draft and ordinary Chat were presented; no new live active model execution was started.",
+    "Model-unavailable banners reflect intentionally unconfigured read-only instances; no authentication was copied and no model call was made.",
+    "The Chat screenshot includes a transient genuine project tooltip; it is evidence of the header, original reply and activity distinction, not tooltip-layout acceptance.",
+    "No UI automated tests, schema migration, application release or version change."
+  ]
+}

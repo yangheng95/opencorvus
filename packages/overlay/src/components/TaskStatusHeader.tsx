@@ -13,6 +13,7 @@ import { selectedTaskSseActiveElapsedMs, taskRuntimeActivityKey } from "../servi
 import {
   workLedgerPresentationLabel,
   workLedgerPresentationStatus,
+  workLedgerOutcomeStatus,
   workLedgerSessionExecution,
   workLedgerStatusVisible,
   workLedgerTaskExecution,
@@ -45,7 +46,14 @@ export function TaskStatusHeader() {
     const current = execution()
     return current?.kind === "task" ? current.lifecycleStatus : ""
   })
-  const visible = createMemo(() => Boolean(execution()) && workLedgerStatusVisible(status()))
+  const outcome = createMemo(() => {
+    const current = execution()
+    return current ? workLedgerOutcomeStatus(current) : null
+  })
+  const visible = createMemo(() => {
+    const current = execution()
+    return Boolean(current) && workLedgerStatusVisible(status()) && !(current?.kind === "mission" && outcome() && !isActive())
+  })
   const timedTaskVisible = createMemo(() => execution()?.kind === "task")
   const elapsedKey = createMemo(() => {
     const taskID = String(task()?.id || "")
@@ -125,7 +133,7 @@ export function TaskStatusHeader() {
   })
 
   const labelText = createMemo(() => {
-    if (TERMINAL_STATUSES.has(lifecycleStatus()) && !isActive()) return ""
+    if (outcome() && !isActive()) return ""
     const current = execution()
     return current ? workLedgerPresentationLabel(current) : ""
   })

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Mission正式结果呈现](2026-10-28-mission-outcome-presentation.md)：单代理真实结果与活动状态分离。
+
 - [代码任务本地提交边界](2026-10-28-code-task-commit-authority.md)：单代理约束来源与真实交付验收。
 
 - [代码任务交付与Skill加载](2026-10-28-code-task-delivery-journey.md)：单代理真实执行及跨包提示修复。

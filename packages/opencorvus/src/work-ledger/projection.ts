@@ -185,6 +185,7 @@ async function workLedgerMissionFromCandidate(
     pinned: candidate.pinned === 1,
     archived: record.archived,
     interruptible: record.interruptible,
+    outcome: record.outcome?.kind ?? null,
     productPillar: record.productPillar,
     taskStats: record.taskStats,
     pendingInteractions: tasks.reduce((count, task) => count + task.pendingInteractions, 0),

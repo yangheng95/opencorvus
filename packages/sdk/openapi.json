@@ -140842,6 +140842,20 @@
                                 "pattern": "^[a-z0-9-]+$",
                                 "type": "string"
                               },
+                              "outcome": {
+                                "anyOf": [
+                                  {
+                                    "enum": [
+                                      "accepted",
+                                      "blocked"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
                               "pendingInteractions": {
                                 "maximum": 9007199254740991,
                                 "minimum": 0,
@@ -141022,6 +141036,7 @@
                               "updated",
                               "pinned",
                               "interruptible",
+                              "outcome",
                               "productPillar",
                               "taskStats",
                               "pendingInteractions",
@@ -141366,6 +141381,20 @@
                                 "pattern": "^[a-z0-9-]+$",
                                 "type": "string"
                               },
+                              "outcome": {
+                                "anyOf": [
+                                  {
+                                    "enum": [
+                                      "accepted",
+                                      "blocked"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
                               "pendingInteractions": {
                                 "maximum": 9007199254740991,
                                 "minimum": 0,
@@ -141546,6 +141575,7 @@
                               "updated",
                               "pinned",
                               "interruptible",
+                              "outcome",
                               "productPillar",
                               "taskStats",
                               "pendingInteractions",

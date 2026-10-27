@@ -40333,6 +40333,7 @@ export type WorkLedgerListResponses = {
           interruptible: boolean
           kind: "mission"
           missionID: string
+          outcome: "accepted" | "blocked" | null
           pendingInteractions: number
           pinned: boolean
           productPillar: "code" | "work"
@@ -40452,6 +40453,7 @@ export type WorkLedgerListArchivedResponses = {
           interruptible: boolean
           kind: "mission"
           missionID: string
+          outcome: "accepted" | "blocked" | null
           pendingInteractions: number
           pinned: boolean
           productPillar: "code" | "work"

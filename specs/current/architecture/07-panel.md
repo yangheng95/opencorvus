@@ -1951,6 +1951,19 @@ a server response status or request ID.
 
 ## Current Surface Ownership
 
+Work Ledger Mission rows project their current canonical `missionRecord.outcome`
+kind as required nullable `outcome: accepted | blocked | null`. Header and sidebar
+use the same WorkOutcomeBadge mapping: an accepted Mission is completed and a
+blocked Mission retains its distinct blocked result. Child Task totals or idle
+activity never establish Mission acceptance. The existing Mission outcome reader
+retires stale results when authoritative input or child occurrences change.
+Physical activity remains independent; a settled Mission result replaces the
+redundant idle header label, while current activity keeps its original meaning.
+Task terminal badges and Chat/Work activity retain their existing contracts.
+Headers retain the full outcome label. Compact sidebar rows show the same
+outcome through an icon badge with its complete accessible name and title,
+preserving title space while retaining the result identity.
+
 Goal controller messages retain their real `goal-controller` author and complete
 original body. ChatBubble renders their existing localized participant heading
 as a disclosure, collapsed by default even in the main conversation. Expanding

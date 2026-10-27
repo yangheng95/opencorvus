@@ -404,6 +404,7 @@ export const WorkLedgerMissionRow = z
     pinned: z.boolean(),
     archived: z.number().optional(),
     interruptible: z.boolean(),
+    outcome: z.enum(["accepted", "blocked"]).nullable(),
     productPillar: ProductPillarSchema,
     taskStats: WorkLedgerTaskStats,
     pendingInteractions: z.number().int().nonnegative(),

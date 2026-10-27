@@ -1,5 +1,5 @@
 import { Tooltip } from "./ui/Tooltip"
-import { TaskOutcomeBadge } from "./TaskOutcomeBadge"
+import { WorkOutcomeBadge } from "./WorkOutcomeBadge"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import {
   batch,
@@ -544,9 +544,7 @@ function WorkLedgerRowView(props: {
                   </span>
                 </Show>
                 <span class="work-row-title">{rowTitle(row())}</span>
-                <Show when={row().kind === "task" ? (row() as WorkLedgerTaskRow) : undefined}>
-                  {(task) => <TaskOutcomeBadge status={task().lifecycleStatus} />}
-                </Show>
+                <WorkOutcomeBadge item={row()} compact />
                 <Show when={pendingInteractionCount(row()) > 0}>
                   <Badge
                     class="work-row-attention"

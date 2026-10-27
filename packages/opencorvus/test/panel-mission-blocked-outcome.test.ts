@@ -19,6 +19,7 @@ import { Tool } from "@/tool/tool"
 import { PanelLeafTools } from "@/tool/panel"
 import { persistEstablishedTask } from "./fixture/engine-task"
 import { memoryProject } from "./fixture/memory"
+import { listWorkLedger } from "@/work-ledger/projection"
 
 const packageRevision = {
   scope: "built_in" as const,
@@ -215,6 +216,8 @@ test("a failed child Task can settle its Mission as an evidenced blocked outcome
       expect(missionStatusRecord(mission)).toMatchObject({
         outcome: { kind: "blocked", summary: args.summary }, tasks: [{ taskID, lifecycleStatus: "failed" }],
       })
+      expect((await listWorkLedger({ directory: project.path })).rows.find(row => row.kind === "mission" && row.missionID === mission.missionID))
+        .toMatchObject({ kind: "mission", outcome: "blocked" })
       const observe = () => observeMissionSettlement({ directory: project.path, missionID: mission.missionID, sessionID: mission.id })
       expect((await observe()).status).toBe("pending")
       ensureTaskMessageProtocolBridge()
@@ -256,6 +259,8 @@ test("a failed child Task can settle its Mission as an evidenced blocked outcome
       expect(missionBoardProjection(mission, {
         interruptible: false, pendingInteractions: 0, taskLifecycleStatuses: ["completed"],
       })).toMatchObject({ lane: "review" })
+      expect((await listWorkLedger({ directory: project.path })).rows.find(row => row.kind === "mission" && row.missionID === mission.missionID))
+        .toMatchObject({ kind: "mission", outcome: null, tasks: [{ id: identity.taskID, lifecycleStatus: "completed" }] })
       expect((await observeMissionSettlement({ directory: project.path, missionID: mission.missionID, sessionID: mission.id })).status).toBe("pending")
     },
   })

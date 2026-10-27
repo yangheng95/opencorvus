@@ -94,6 +94,14 @@ export function workLedgerPresentationStatus(row: WorkLedgerItemRow): WorkLedger
   return "inactive"
 }
 
+export type WorkLedgerOutcomeStatus = Exclude<WorkLedgerTaskRow["lifecycleStatus"], "active"> | "blocked"
+
+export function workLedgerOutcomeStatus(row: WorkLedgerItemRow): WorkLedgerOutcomeStatus | null {
+  if (row.kind === "task") return row.lifecycleStatus === "active" ? null : row.lifecycleStatus
+  if (row.kind === "mission") return row.outcome === "accepted" ? "completed" : row.outcome
+  return null
+}
+
 export function workLedgerStatusVisible(status: WorkLedgerPresentationStatus | ""): boolean {
   return status !== ""
 }

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Mission正式结果呈现](records/2026-10/2026-10-28-mission-outcome-presentation.md)：统一列表投影和页头、侧栏结果一致性。
+
 - [代码任务本地提交边界](records/2026-10/2026-10-28-code-task-commit-authority.md)：真实约束来源与任务交付调查。
 
 - [代码任务交付与Skill加载](records/2026-10/2026-10-28-code-task-delivery-journey.md)：真实任务、文件交付与内置提示名称合同。
