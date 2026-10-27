@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [全局查找与跨项目打开证据](2026-10-27-global-search-journey/README.md)：真实页面与身份、运行结清事实，19张真实原图、分页阅读/活动项身份修复及三轮结清事实。
+
 - [文件差异审查体验证据](2026-10-27-file-diff-review-journey/README.md)：真实页面、模型及运行结清事实，18张真实原图、可展开上下文、Sol提交说明及三轮结清事实。
 
 - [用量统计阅读体验证据](2026-10-27-usage-reading-journey/README.md)：14张真实原图，年度首屏、简洁空态与键盘查看复核，812条原账本保持。

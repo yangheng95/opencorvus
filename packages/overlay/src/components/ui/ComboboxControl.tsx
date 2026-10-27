@@ -42,7 +42,7 @@ export interface ComboboxControlProps<T extends object> {
   emptyContent?: JSX.Element
 }
 
-function ComboboxFocusFirst(props: { open?: boolean; options: readonly object[] }): null {
+function ComboboxFocus(props: { open?: boolean; options: readonly object[] }): null {
   const context = Combobox.useComboboxContext()
   createEffect(() => {
     if (!props.open) return
@@ -53,8 +53,9 @@ function ComboboxFocusFirst(props: { open?: boolean; options: readonly object[] 
       const listState = context.listState()
       const collection = listState.collection()
       const selectionManager = listState.selectionManager()
+      const focusedKey = selectionManager.focusedKey()
+      if (focusedKey != null && collection.getItem(focusedKey)) return
       selectionManager.setFocused(true)
-      selectionManager.setFocusedKey(undefined)
       selectionManager.setFocusedKey(collection.getFirstKey())
     })
   })
@@ -92,10 +93,16 @@ export function ComboboxControl<T extends object>(props: ComboboxControlProps<T>
   }
 
   function ComboboxControlItem(itemProps: Combobox.ComboboxRootItemComponentProps<T>): JSX.Element {
+    const context = Combobox.useComboboxContext()
     const option = () => itemProps.item.rawValue
     const optionData = () => props.optionData?.(option()) ?? {}
     return (
-      <Combobox.Item item={itemProps.item} class={optionClass()} {...optionData()}>
+      <Combobox.Item
+        id={context.generateId(`option-${encodeURIComponent(itemProps.item.key)}`)}
+        item={itemProps.item}
+        class={optionClass()}
+        {...optionData()}
+      >
         <Show when={props.renderOptionPrefix?.(option())}>
           {(prefix) => <span class={optionPrefixClass()}>{prefix()}</span>}
         </Show>
@@ -149,7 +156,7 @@ export function ComboboxControl<T extends object>(props: ComboboxControlProps<T>
       itemComponent={ComboboxControlItem}
     >
       <ComboboxContextBridge />
-      <ComboboxFocusFirst open={props.open} options={props.options} />
+      <ComboboxFocus open={props.open} options={props.options} />
       <Combobox.Control class={controlClass()}>
         <Combobox.Input id={props.inputID} ref={props.inputRef} class={inputClass()} aria-label={props.ariaLabel} />
       </Combobox.Control>

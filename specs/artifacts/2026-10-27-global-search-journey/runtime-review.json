@@ -1,0 +1,331 @@
+{
+  "at": "2026-10-27T06:56:06.587Z",
+  "qualification": "19 original screenshots actually viewed with real native/browser interactions; no UI automation",
+  "runs": [
+    {
+      "label": "global-search-698",
+      "port": 38203,
+      "uiEntry": "main-BZfAr50Y.js",
+      "database": {
+        "schema": 9,
+        "integrity": "ok",
+        "sourceTables": 92,
+        "sourceRows": 221451,
+        "originalSourceAllRowsPreserved": true,
+        "protectedOriginalRows": 6985,
+        "protectedOriginalRowsPreserved": true
+      },
+      "originalProjectFiles": 166,
+      "modelRequests": 0,
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "reserveMs": 766334,
+      "physical": {
+        "originalExec": 59519,
+        "originalExit": 0,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "allOriginalProcessesRetired": true
+      },
+      "qualification": "Failed: appending results resets the focused option and reading position"
+    },
+    {
+      "label": "global-search-699",
+      "port": 38204,
+      "uiEntry": "main-lCb-W5Y7.js",
+      "database": {
+        "schema": 9,
+        "integrity": "ok",
+        "sourceTables": 92,
+        "sourceRows": 221451,
+        "originalSourceAllRowsPreserved": true,
+        "protectedOriginalRows": 6985,
+        "protectedOriginalRowsPreserved": true
+      },
+      "originalProjectFiles": 166,
+      "modelRequests": 0,
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "reserveMs": 919327,
+      "physical": {
+        "originalExec": 53743,
+        "originalExit": 0,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "allOriginalProcessesRetired": true
+      },
+      "qualification": "Incomplete: retained scroll/key but old active-descendant element no longer exists"
+    },
+    {
+      "label": "global-search-700",
+      "port": 38205,
+      "uiEntry": "main-Dkd-Ot7F.js",
+      "database": {
+        "schema": 9,
+        "integrity": "ok",
+        "sourceTables": 92,
+        "sourceRows": 221451,
+        "originalSourceAllRowsPreserved": true,
+        "protectedOriginalRows": 6985,
+        "protectedOriginalRowsPreserved": true
+      },
+      "originalProjectFiles": 166,
+      "modelRequests": 0,
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "reserveMs": 748892,
+      "physical": {
+        "originalExec": 43449,
+        "originalExit": 0,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "allOriginalProcessesRetired": true
+      },
+      "qualification": "Passed: retained position, key and live element; exact Chat/Task navigation, query replacement, localized commands and shared time-zone controls"
+    }
+  ],
+  "modelRequests": 0,
+  "cumulativeModelRequests": 345,
+  "scrollBefore": {
+    "before": {
+      "clientHeight": 562,
+      "scrollHeight": 927,
+      "scrollTop": 365
+    },
+    "after": {
+      "activeDescendant": "commandPaletteListbox-item-cl-955",
+      "activeElement": "commandPaletteInput",
+      "clientHeight": 562,
+      "scrollHeight": 1359,
+      "scrollTop": 4
+    }
+  },
+  "guardOnlyReview": {
+    "before": {
+      "activeKey": "ledger:chat:ses_hVBntls2qVLfuzrEdjKF",
+      "clientHeight": 562,
+      "scrollHeight": 927,
+      "scrollTop": 365
+    },
+    "after": {
+      "activeElement": "commandPaletteInput",
+      "clientHeight": 562,
+      "scrollHeight": 1359,
+      "scrollTop": 365
+    }
+  },
+  "guardOnlyAccessibility": {
+    "authority": "Read-only live DOM observation returned by cua_repl while screenshot 11 was displayed",
+    "activeDescendant": "commandPaletteListbox-item-cl-915",
+    "activeElementResolved": false,
+    "highlighted": {
+      "id": "commandPaletteListbox-item-cl-971",
+      "key": "ledger:chat:ses_hVBntls2qVLfuzrEdjKF"
+    },
+    "qualification": "699 retained scroll and key but has an unresolved accessibility reference; not full acceptance"
+  },
+  "finalScrollAndAccessibility": {
+    "before": {
+      "activeDescendant": "combobox-cl-774-option-ledger%3Achat%3Ases_hVBntls2qVLfuzrEdjKF",
+      "activeElementResolved": true,
+      "activeKey": "ledger:chat:ses_hVBntls2qVLfuzrEdjKF",
+      "clientHeight": 562,
+      "scrollHeight": 927,
+      "scrollTop": 365
+    },
+    "after": {
+      "activeDescendant": "combobox-cl-774-option-ledger%3Achat%3Ases_hVBntls2qVLfuzrEdjKF",
+      "activeElementResolved": true,
+      "activeKey": "ledger:chat:ses_hVBntls2qVLfuzrEdjKF",
+      "clientHeight": 562,
+      "scrollHeight": 1359,
+      "scrollTop": 365
+    }
+  },
+  "canonicalFinalQueries": [
+    {
+      "query": "ses_hVBntls2qVLfuzrEdjKF",
+      "status": 200,
+      "body": {
+        "rows": [
+          {
+            "kind": "chat",
+            "experience": "chat",
+            "id": "ses_hVBntls2qVLfuzrEdjKF",
+            "sessionID": "ses_hVBntls2qVLfuzrEdjKF",
+            "title": "Reply with OK.",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-24\\member-dock-loading-571-before\\runtime\\data\\projects\\2026\\10\\24\\56bd7b0d-6670-4788-8265-7d18a4a15369",
+            "created": 1792813210858,
+            "started": 1792813210858,
+            "updated": 1792813216885,
+            "pinned": false,
+            "status": "idle"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "query": "tsk_g00VYm7BEt003EK3o91d",
+      "status": 200,
+      "body": {
+        "rows": [
+          {
+            "kind": "task",
+            "id": "tsk_g00VYm7BEt003EK3o91d",
+            "title": "双成员来源与正文追加 537",
+            "description": "这是一个有限的隔离产品体验Task。Base任务所有者把下面A、B两项互相独立、无前后依赖的只读责任在同一个就绪前沿并发交给两个真实Base Researcher产品成员，各保留真实会话、工具、来源、权限和最终正文。开发和人工UI观察由外部单一操作者完成；这些产品成员不操作、检查或宣称验证UI。\nA责任：第一入口 https://arxiv.org/abs/2509.11035v1 ，第二入口 https://arxiv.org/html/2509.11035v1 。先仅实际读取自己的第一个指定入口一次，读取完成后用约150中文字的可见正文准确报告此次返回的材料身份与证据边界。随后仅实际读取自己的第二个指定入口一次，再报告第二次返回的材料身份，最后在同一会话assistant正文输出约3500中文字、八节的原创《来源与长文阅读说明》。八节标题依次为“## 第一节”至“## 第八节”，包含连续长段落、列表、一张至少八行的Markdown表格与一个纯文本围栏；内容用于外部操作者阅读排版，区分真实来源事实、工具结果与一般写作说明，不虚构论文结论、实验或界面验收。第一节包含一个引用式演示链接，文末再定义为https://example.com/，只排版、不访问。用该成员自己的BEGIN/END标记划清正文范围。每入口只一次，失败如实说明，不重试、不扩大搜索；正文只可见输出，不生成文件或其他Artifact。 A标记为LIVE537A_BEGIN与LIVE537A_END，引用式标识live537-a。\nB责任：第一入口 https://aclanthology.org/2025.naacl-long.475/ ，第二入口 https://aclanthology.org/2025.acl-long.195/ 。先仅实际读取自己的第一个指定入口一次，读取完成后用约150中文字的可见正文准确报告此次返回的材料身份与证据边界。随后仅实际读取自己的第二个指定入口一次，再报告第二次返回的材料身份，最后在同一会话assistant正文输出约3500中文字、八节的原创《来源与长文阅读说明》。八节标题依次为“## 第一节”至“## 第八节”，包含连续长段落、列表、一张至少八行的Markdown表格与一个纯文本围栏；内容用于外部操作者阅读排版，区分真实来源事实、工具结果与一般写作说明，不虚构论文结论、实验或界面验收。第一节包含一个引用式演示链接，文末再定义为https://example.com/，只排版、不访问。用该成员自己的BEGIN/END标记划清正文范围。每入口只一次，失败如实说明，不重试、不扩大搜索；正文只可见输出，不生成文件或其他Artifact。 B标记为LIVE537B_BEGIN与LIVE537B_END，引用式标识live537-b。\n两成员各只承担该责任，可以读取当前真实Task/派发记录理解来源身份，但不读写用户文件、不执行shell、不创建Task/Mission/持续目标或其他成员，不增加网站/搜索责任。所有模型和helper沿用当前配置gpt-6.1-sol流式。任务所有者等待两位原成员自然结束，直接读取真实最终正文与工具事实，只给简洁完成/未达摘要，并依据当前Task结束合同自然收敛；不代写他们的正文，不声称人工视觉验收通过。",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\live-task-source-growth-537-after\\runtime\\data\\projects\\2026\\10\\22\\7f6e95df-9037-456b-a2f2-d67cf237dfe5",
+            "created": 1792666795023,
+            "started": 1792666795023,
+            "completed": 1792669731035,
+            "updated": 1792669731035,
+            "pinned": false,
+            "lifecycleStatus": "completed",
+            "cancellationStatus": "none",
+            "activityStatus": "inactive",
+            "priority": "normal",
+            "source": "live-task-source-growth-537",
+            "productPillar": "work",
+            "pendingInteractions": 0
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "query": "GOAL575READY",
+      "status": 200,
+      "body": {
+        "rows": [
+          {
+            "kind": "chat",
+            "experience": "work",
+            "id": "ses_-zUR3NNSmzzAfat1t3GY",
+            "sessionID": "ses_-zUR3NNSmzzAfat1t3GY",
+            "title": "在本对话完整输出 GOAL575READY，然后使用现有持续目标工具将本目标标记完成。只输出该标记及简短完成说明，不访问网络或文件，不创建成员、helpe...",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-24\\goal-composer-command-575-verified\\runtime\\data\\projects\\2026\\10\\24\\ebad45c4-5fd7-4d4d-a18a-a12ca7eedf14",
+            "created": 1792822051475,
+            "started": 1792822051475,
+            "updated": 1792822115747,
+            "pinned": false,
+            "status": "idle"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "query": "MISSION463READY",
+      "status": 200,
+      "body": {
+        "rows": [
+          {
+            "kind": "mission",
+            "id": "cf0a5f07eb9045c3",
+            "missionID": "cf0a5f07eb9045c3",
+            "sessionID": "ses_-zURQjvQ8zz3y3NgFyVx",
+            "title": "For this isolated product verification, reply exactly MISSION463READY. Do not...",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\runtime\\data\\projects\\2026\\10\\20\\894b4635-0b80-49f1-850f-5f487731db86",
+            "created": 1792476821999,
+            "started": 1792476821999,
+            "updated": 1792476900547,
+            "pinned": false,
+            "interruptible": false,
+            "productPillar": "work",
+            "taskStats": {
+              "total": 0,
+              "running": 0,
+              "inactive": 0
+            },
+            "pendingInteractions": 0,
+            "tasks": []
+          }
+        ],
+        "nextCursor": null
+      }
+    }
+  ],
+  "manualNavigation": {
+    "before": {
+      "task": "tsk_g00VYm7BEt003EK3o91d",
+      "work": "ses_-zUR3NNSmzzAfat1t3GY",
+      "mission": "ses_-zURQjvQ8zz3y3NgFyVx"
+    },
+    "final": {
+      "chat": "ses_hVBntls2qVLfuzrEdjKF",
+      "task": "tsk_g00VYm7BEt003EK3o91d"
+    },
+    "source": "Original CUA state and screenshots 07-09, 15, 18"
+  },
+  "sharedTimeZone": {
+    "guardOnly": "Filtered Europe/Paris, Enter selected, Cancel retired the unsaved draft",
+    "final": "Filtered Asia/Tokyo; live element combobox-cl-1606-option-Asia%2FTokyo matched active key Asia/Tokyo; Enter selected and Cancel retired the unsaved draft",
+    "source": "Original CUA state with screenshots 12 and 19"
+  },
+  "checks": {
+    "overlayTypecheck": "passed both stages",
+    "ordinaryNodeBuilds": [
+      "main-lCb-W5Y7.js",
+      "main-Dkd-Ot7F.js"
+    ],
+    "docs": {
+      "passed": true,
+      "operations": 351,
+      "groups": 26
+    }
+  },
+  "pictures": [
+    "01-recent-cross-project-items-en.jpg",
+    "02-history-search-first-page-en.jpg",
+    "03-appended-history-results-en.jpg",
+    "04-scrolled-history-before-continuation-en.jpg",
+    "05-continuation-jumps-to-first-results-en.jpg",
+    "06-same-title-different-project-tasks-en.jpg",
+    "07-cross-project-task-opened-en.jpg",
+    "08-original-work-opened-en.jpg",
+    "09-original-mission-opened-en.jpg",
+    "10-fixed-continuation-before-en.jpg",
+    "11-reading-position-retained-en.jpg",
+    "12-shared-time-zone-filter-en.jpg",
+    "13-final-before-continuation-en.jpg",
+    "14-final-context-and-active-option-retained-en.jpg",
+    "15-retained-candidate-opens-exact-chat-en.jpg",
+    "16-final-empty-search-en.jpg",
+    "17-final-cross-project-search-light-zh.jpg",
+    "18-final-exact-task-opened-light-zh.jpg",
+    "19-final-time-zone-keyboard-light-zh.jpg"
+  ],
+  "limits": [
+    "699 incomplete accessibility qualification remains recorded",
+    "No model or scheduler execution qualification claimed",
+    "Native browser date/time localization was not qualified by this shared-control review"
+  ]
+}

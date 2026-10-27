@@ -3731,6 +3731,16 @@ retry removes its focused button, only that still-current operation may restore
 the search input, and only if focus has fallen to the document body. It preserves
 scroll position and does not override a new user focus target.
 
+The shared ComboboxControl retains an existing focused option while its canonical
+key remains in the current collection. Appending results or updating their labels
+does not reset the active option to the first row or trigger a return to the top.
+Only an empty or retired key receives the current first option after collection
+commit. Kobalte retains ownership of input filtering, keyboard selection and
+scrolling; neither caller stores a parallel focus key or scroll compensation.
+Option elements derive their IDs from the existing Combobox root namespace and
+canonical item keys, so collection updates retain valid active-descendant and
+label/description references alongside the actual highlighted option.
+
 Closing the palette restores its original visible focus target through the
 Dialog's close-auto-focus lifecycle, after Combobox selection has finished
 focusing its own input. A newly opened palette or a command's new focus target
