@@ -13,6 +13,7 @@
 - 2026-10-28：Mission 的正式完成或受阻结果进入统一工作列表，页头显示完整结果，侧栏使用紧凑状态徽标保留标题空间，避免已验收完成后只显示“未运行”。活动信号保持独立，新输入使原结果失效；同步更新接口契约，数据库结构不变。
 - 2026-10-28：修正 Mission 和普通对话底部把目录默认专家包显示为当前分配的问题；上下文按首条消息的真实引用展示，Task 仍保留实际固定包与版本。经真实部分交付、缺材料受阻及中英文页面复核，应用与数据库版本不变。
 - 2026-10-28：修复引用中的无效转义导致编辑器发送状态停滞、会话历史读取失败的问题。原文保持可编辑，合法后续引用正常识别；格式修正建议直接显示并跟随界面语言，数据库无需迁移。
+- 2026-10-28：自动标题优先展示开场引用之后的业务正文，减少专家团/Skill语法占据侧栏标题的问题；正文中的引用、原始消息、仅含引用的请求和已有名称保持，数据库无需迁移。
 
 ### en-US
 
@@ -23,6 +24,7 @@
 - 2026-10-28: Projected current accepted or blocked Mission outcomes into the unified Work Ledger, with full header labels and compact sidebar badges that preserve title space. Activity remains independent and new authority invalidates stale outcomes; generated contracts are updated without a database change.
 - 2026-10-28: Corrected Mission and ordinary conversation context controls that presented the catalog default Expert Squad as an assignment. Context uses actual first-message references; Tasks retain their fixed package and version. Verified real partial delivery, missing-input blocking, and English/Chinese pages without changing application or database versions.
 - 2026-10-28: Fixed malformed reference escapes that stalled composer submission state and failed conversation hydration. Original text stays editable and later valid references are recognized; actionable guidance is visible and follows the interface language without a database migration.
+- 2026-10-28: Automatic titles use the outcome text after opening references, giving sidebar labels more room for the actual request. Inline references, original messages, reference-only requests and existing titles retain their content without a database migration.
 
 ## 0.1.33 - 2026-10-27
 

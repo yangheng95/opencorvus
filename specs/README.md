@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [引用开场标题与Goal完整操作](records/2026-10/2026-10-28-opening-reference-title-and-goal.md)：业务标题投影修复及真实Goal创建、预算与自动完成。
+
 - [引用输入的解码与编辑稳定性](records/2026-10/2026-10-28-composer-reference-decoding.md)：修复无效引用造成的编辑停滞和公开会话读取失败。
 
 - [实时Mission部分交付与受阻体验](records/2026-10/2026-10-28-live-mission-blocked-journey.md)：真实缺材料收敛、会话上下文身份根因修复与双语实页验收。

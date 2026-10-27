@@ -15,6 +15,60 @@ import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
 afterEach(resetMemoryDatabase)
 
+test.each(["chat", "work", "mission"] as const)(
+  "%s names the original outcome while retaining its visible launch references",
+  async (kind) => {
+    await using project = await memoryProject(`opening-reference-${kind}`)
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const session =
+          kind === "mission"
+            ? await ensureMissionSession({
+                missionID: randomUUID(),
+                defaultCwd: project.path,
+                productPillar: "work",
+                heldExpertSquadIDs: ["base"],
+              })
+            : await createRightSidebarConversationSession(kind)
+        const text = '@squad("base") @skill("review")\n核对本地订单\n说明计算依据'
+        const original = await message(session.id, "user", text)
+        await setSessionTitleFromFirstUserMessage(original)
+        expect(await Session.get(session.id)).toMatchObject({
+          id: session.id,
+          projectID: session.projectID,
+          title: "核对本地订单",
+          metadata: session.metadata,
+        })
+        expect(await Session.messages({ sessionID: session.id })).toMatchObject([
+          { info: { id: original.messageID, author: "user" }, parts: [{ type: "text", text }] },
+        ])
+      },
+    })
+  },
+)
+
+test("a Goal title uses the outcome while its structured objective keeps the references", async () => {
+  await using project = await memoryProject("opening-reference-goal")
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const session = await createRightSidebarConversationSession("work")
+      const objective = '@squad("base")\n核对本地订单'
+      const goal = createContinuousGoal(
+        resolveGoalOwner({ kind: "chat", id: session.id }),
+        { requestID: "reference-title", objective, turnBudget: 1 },
+        "user",
+      )
+      expect({
+        title: (await Session.get(session.id)).title,
+        owner: goal.owner,
+        objective: goal.objective,
+      }).toMatchObject({ title: "核对本地订单", owner: { kind: "chat", id: session.id }, objective })
+    },
+  })
+})
+
 async function message(sessionID: string, author: string, text: string) {
   const id = Identifier.ascending("message")
   const parts = [{ id: Identifier.ascending("part"), sessionID, messageID: id, type: "text" as const, text }]

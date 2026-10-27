@@ -1,0 +1,245 @@
+{
+  "at": "2026-10-27T21:32:44.611Z",
+  "beforeTitleExample": {
+    "sessionID": "ses_-zUQiNDP0zzyyPiL2nvx",
+    "title": "@squad(\"base\") 请在当前隔离项目完成两个可独立验收的结果。第一项：实际读取 orders.csv，精确计算每行 quantity × uni...",
+    "length": 80,
+    "sameBusinessCaseAsAfter": false,
+    "historicalTitleRetained": true
+  },
+  "mission": {
+    "id": "8ce1dd0029ef8f5e",
+    "sessionID": "ses_-zUQi8aC3zzDyYDXPxXm",
+    "title": "会话问候确认",
+    "heldExpertSquadIDs": [
+      "base"
+    ],
+    "originalUserText": "@squad(\"base\") 会话问候确认\n请仅在当前会话回复一句“问候已收到”，这是本次完整且唯一的目标；回复后结束本次执行。不要创建Task、执行命令、读写项目文件、联网或对外发送。",
+    "reply": "问候已收到",
+    "taskCount": 0,
+    "interruptible": false,
+    "boardLane": "backlog",
+    "formalAcceptanceRecorded": false
+  },
+  "goal": {
+    "id": "pev_g0VZHsCRh00Hzrrdo3OR",
+    "revision": "pev_g0VZHsEIu00i4wHm3Gv9",
+    "owner": {
+      "kind": "chat",
+      "id": "ses_-zUQi7npGzzhHa1Pu5Lm"
+    },
+    "objective": "持续目标回复验证\n在当前会话回复一句“持续目标验证已完成”，这是本目标完整且唯一的可验收结果；该回复真实可见后自主结束目标。不要创建Task、执行命令、读写文件、联网或对外发送。",
+    "status": "complete",
+    "reason": "已在当前会话实际发送可见回复“持续目标验证已完成”，满足完整且唯一的可验收结果。未创建Task、执行命令、读写文件、联网或对外发送。",
+    "turnBudget": 1,
+    "tokensUsed": 36354,
+    "turnsAccepted": 1,
+    "createdAt": 1793136067493,
+    "updatedAt": 1793136074636,
+    "sessionID": "ses_-zUQi7npGzzhHa1Pu5Lm",
+    "projectID": "prj_hBr2l31UUEXnTt59Ni6z",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\title-goal-746\\runtime\\data\\projects\\2026\\10\\28\\9d5984f2-c3a2-4a8f-9542-7426fd386eb8",
+    "creationAuthor": "user",
+    "completionAuthor": "ses_-zUQi7npGzzhHa1Pu5Lm",
+    "reply": "持续目标验证已完成",
+    "completeTool": {
+      "tool": "update_continuous_goal",
+      "messageID": "msg_g0VZHsCh000OjzK38i5U",
+      "partID": "prt_g0VZHsDrj00VQXxjQV4f",
+      "callID": "call_3aadd626e2f8494cbb9444fbda3621e7",
+      "input": {
+        "goalID": "pev_g0VZHsCRh00Hzrrdo3OR",
+        "expectedRevision": "pev_g0VZHsCRh00Hzrrdo3OR",
+        "status": "complete",
+        "reason": "已在当前会话实际发送可见回复“持续目标验证已完成”，满足完整且唯一的可验收结果。未创建Task、执行命令、读写文件、联网或对外发送。"
+      },
+      "outcomePartID": "prt_hCRQyAZY98G7roA0I9wP",
+      "outcome": "completed"
+    }
+  },
+  "preflight": {
+    "sessionID": "ses_hlf28vPxqOOnapDf6rHu",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "configuredDefaultIsSeparate": {
+    "id": "dynamic",
+    "version": "2026.10.28.1"
+  },
+  "scope": {
+    "port": 38251,
+    "uiEntry": "main-DwCZURJW.js",
+    "requests": 7,
+    "cumulativeRequests": 726,
+    "actualModel": "gpt-6.1-sol",
+    "allStreaming200Eof": true,
+    "credentialCopyRetired": true,
+    "modelCatalogCopyRetired": true,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "publicShutdown": 200,
+    "nativePID": 82512,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "reserveMs": 676133
+  },
+  "data": {
+    "schema": 9,
+    "integrity": "ok",
+    "tables": 92,
+    "originalRows": 89238,
+    "currentRows": 91300,
+    "sourceRowsPreserved": true,
+    "otherOriginalRowsPreserved": true,
+    "capacitySlotsReused": 2,
+    "capacitySlotIdentitiesAndTimeBoundsQualified": true,
+    "newSessionCount": 3,
+    "tools": [
+      {
+        "id": "prt_g0VZHsDrj00VQXxjQV4f",
+        "session_id": "ses_-zUQi7npGzzhHa1Pu5Lm",
+        "tool": "update_continuous_goal"
+      }
+    ],
+    "readmePreserved": true,
+    "seedCommit": "795c867834224eb0125c36caa04f0a9d33ebaa2c",
+    "projectStatus": "?? .gitattributes\n?? .gitignore\n?? .opencorvus/",
+    "hostMetadataNote": "Git support files and .opencorvus config/runtime metadata are recorded separately; this is not a zero-directory-write claim."
+  },
+  "tests": {
+    "semantic": {
+      "tests": 6,
+      "expectCalls": 6
+    },
+    "persistedTitle": {
+      "tests": 10,
+      "expectCalls": 20
+    },
+    "red": {
+      "pass": 9,
+      "fail": 5,
+      "scope": "Initial 14-case implementation"
+    },
+    "green": {
+      "pass": 16,
+      "expectCalls": 26
+    },
+    "emptyIdentityRed": {
+      "pass": 4,
+      "fail": 2
+    }
+  },
+  "checks": {
+    "title-opening-red": {
+      "code": 1
+    },
+    "title-opening-green": {
+      "code": 0
+    },
+    "title-opening-types": {
+      "code": 0
+    },
+    "title-goal-docs": {
+      "code": 0
+    },
+    "title-goal-architecture": {
+      "code": 0
+    },
+    "title-empty-identity-red": {
+      "code": 1
+    },
+    "title-opening-final": {
+      "code": 0
+    },
+    "title-goal-docs-final": {
+      "code": 0
+    }
+  },
+  "screenshots": [
+    {
+      "name": "00-before-reference-title.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "01-live-reference-request.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "02-live-business-title.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "03-home-goal-form.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "04-goal-guide.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "05-goal-budget-retained.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "06-live-goal-created.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "07-live-goal-details-en.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "08-live-goal-limits.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "09-live-goal-details-zh.jpg",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    }
+  ],
+  "limits": [
+    "The reply-only Mission has no formal acceptance receipt; it verifies naming, actual reply and inactive execution, not Mission acceptance.",
+    "This Goal matrix covers Home creation into a Work conversation, guide return, one-round budget, automatic completion and English/Chinese details. Other owners and pause/resume were not rerun.",
+    "Historical names remain unchanged; the old title screenshot has a different business request from the new greeting case.",
+    "No frontend source change, UI automated tests, schema migration or application release.",
+    "The final empty-identity guard was verified by the current focused backend checker; valid Base and Goal paths retain their conditions, with no extra paid rerun."
+  ]
+}

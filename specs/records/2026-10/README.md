@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [引用开场标题与Goal完整操作](2026-10-28-opening-reference-title-and-goal.md)：单一标题投影与首页持续目标实测。
+
 - [引用输入的解码与编辑稳定性](2026-10-28-composer-reference-decoding.md)：公共词法根因、原文保留和实页迭代。
 
 - [实时Mission部分交付与受阻体验](2026-10-28-live-mission-blocked-journey.md)：真实双结果验收及目录默认包误显示修复。

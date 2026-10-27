@@ -707,6 +707,7 @@ Evolution Comparison的`calculation_inputs.native_measurements`记录当前评�
 ## session 域（9 表）
 
 Session 标题通过同一个事务 primitive 写入并发布真实 Updated 事件；已有事务的业务创建可直接使用它，异步调用继续使用 Session.setTitle。自动命名携带读取时的 expectedTitle，并在写事务内与当前值比较：匹配才提交生成名称，不匹配返回当前真实 Session，保留用户期间选择的名称。显式重命名不携带该条件。首次人类命名由持久化 Message 的 role=user 且 author=user 身份确定，允许其后已有其他输入；控制器/调度器的传输 user 角色不构成人类作者。流式标题生成沿用同一身份与条件写回，消息与模型请求仍保留真实参与者。
+共享自动标题投影通过公共引用词法范围识别连续开场引用；存在业务正文时由正文首个非空行命名并沿用80字符上限。正文内引用、仅含引用的请求及非法前缀保持原有文本语义；消息、Goal目标和Task请求不改写，历史或用户自定义标题不批量更新。
 
 `src/session/session.sql.ts`：
 

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [业务标题与Goal操作证据](2026-10-28-opening-reference-title-and-goal/README.md)：真实模型、十张原图、持久事件与原实例结清。
+
 - [引用解码与反馈证据](2026-10-28-composer-reference-decoding/README.md)：真实输入、双语修正提示及后端先失败后通过。
 
 - [实时Mission受阻与上下文证据](2026-10-28-live-mission-blocked-journey/README.md)：真实流式执行、原始截图与实例完整结清。
