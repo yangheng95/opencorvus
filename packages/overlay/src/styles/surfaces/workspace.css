@@ -437,6 +437,77 @@ code .file-link:focus-visible {
   overscroll-behavior: contain;
 }
 
+.file-editor-compare-feedback {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.file-editor-compare-feedback > .oc-feedback__actions {
+  align-self: flex-start;
+}
+
+.dialog-form.file-comparison-frame {
+  overflow: hidden;
+}
+
+.file-comparison-frame > .dialog-header,
+.file-comparison-frame > .dialog-actions {
+  flex-shrink: 0;
+}
+
+.file-comparison-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-gap-md);
+  min-height: 0;
+  overflow: auto;
+}
+
+.file-comparison-path,
+.file-comparison-hint {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.file-comparison-path {
+  font-family: var(--mono);
+  font-size: var(--ui-font-caption);
+}
+
+.file-comparison-hint {
+  color: var(--text-soft);
+  font-size: var(--ui-font-caption);
+}
+
+.file-comparison-content > .oc-segmented {
+  flex-wrap: wrap;
+  align-self: flex-start;
+}
+
+.file-comparison-labels {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--ui-gap-md);
+  font-size: var(--ui-font-caption);
+}
+
+.file-comparison-labels > :first-child {
+  color: var(--diff-del-fg);
+}
+
+.file-comparison-labels > :last-child {
+  color: var(--good);
+}
+
+.file-comparison-diff {
+  min-height: calc(160px * var(--ui-scale));
+  max-height: min(calc(360px * var(--ui-scale)), 45vh);
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: var(--oc-border-width) solid var(--border);
+  border-radius: var(--oc-radius-soft);
+}
+
 .pane-resizer {
   position: relative;
   flex: 0 0 var(--ui-resizer-width);

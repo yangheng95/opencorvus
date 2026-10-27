@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [保存冲突后的版本比较](records/2026-10/2026-10-27-file-conflict-comparison.md)：保留草稿读取磁盘、比较版本与安全恢复。
+
 - [Goal启动与完成阅读衔接](records/2026-10/2026-10-27-goal-completion-journey.md)：默认页、真实Sol与原目标操作。
 
 - [项目文件操作与编辑衔接](records/2026-10/2026-10-27-file-mutation-journey.md)：目录操作、未保存内容和项目切换调查。

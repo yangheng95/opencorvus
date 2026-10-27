@@ -28,6 +28,8 @@ import { Badge } from "./ui/Badge"
 import { Dialog } from "./ui/Dialog"
 import { Feedback } from "./ui/Feedback"
 import { PreviewableImage } from "./ImagePreview"
+import { TextDiffView } from "./DiffView"
+import { SegmentedControl } from "./ui/SegmentedControl"
 
 function fileContentPath(target: FileEditorTarget): string {
   const query = new URLSearchParams({
@@ -37,9 +39,9 @@ function fileContentPath(target: FileEditorTarget): string {
   return `file/${target.sourceAbsolutePath ? "source-content" : "content"}?${query.toString()}`
 }
 
-async function readFileContent(target: FileEditorTarget | null, authority: ApiAuthority): Promise<FileContent | null> {
+async function readFileContent(target: FileEditorTarget | null, authority: ApiAuthority, signal?: AbortSignal): Promise<FileContent | null> {
   if (!target) return null
-  return (await apiJson(fileContentPath(target), { authority })) as FileContent
+  return (await apiJson(fileContentPath(target), { authority, signal })) as FileContent
 }
 
 async function writeFileContent(
@@ -92,6 +94,16 @@ function sameFileResourceTarget(left: FileEditorTarget | null, right: FileEditor
 }
 
 type FileEditorFailure = { messageKey: string; cause?: unknown }
+type ComparisonMode = "disk-draft" | "base-disk" | "base-draft"
+type FileComparison = {
+  target: FileEditorTarget
+  authority: ApiAuthority
+  controller: AbortController
+} & (
+  | { status: "loading" }
+  | { status: "loaded"; content: FileContent | null }
+  | { status: "failed"; cause: unknown }
+)
 
 export function FileEditorPane() {
   const [draft, setDraft] = createSignal("")
@@ -104,6 +116,8 @@ export function FileEditorPane() {
   const [leaveDialogOpen, setLeaveDialogOpen] = createSignal(false)
   const [leaveSaving, setLeaveSaving] = createSignal(false)
   const [leaveReason, setLeaveReason] = createSignal<"leave" | "reload">("leave")
+  const [comparison, setComparison] = createSignal<FileComparison | null>(null)
+  const [comparisonMode, setComparisonMode] = createSignal<ComparisonMode>("disk-draft")
   let pendingLeaveDecision: Promise<number | null> | undefined
   let settleLeaveDecision: ((revision: number | null) => void) | undefined
   let leaveFocus: {
@@ -171,6 +185,49 @@ export function FileEditorPane() {
     return failure && t(failure.messageKey)
   }
 
+  const comparisonPair = createMemo(() => {
+    const read = comparison()
+    const baseline = savedBaseline()
+    if (read?.status !== "loaded" || !canEdit(read.content) || !baseline) return undefined
+    const disk = read.content!.content
+    switch (comparisonMode()) {
+      case "base-disk":
+        return { before: baseline.content, after: disk, left: "file_editor.compare_base", right: "file_editor.compare_disk" }
+      case "base-draft":
+        return { before: baseline.content, after: draft(), left: "file_editor.compare_base", right: "file_editor.compare_draft" }
+      case "disk-draft":
+        return { before: disk, after: draft(), left: "file_editor.compare_disk", right: "file_editor.compare_draft" }
+    }
+  })
+  const retireComparison = () => {
+    comparison()?.controller.abort()
+    setComparison(null)
+  }
+  const compareWithDisk = async (resetMode = true) => {
+    const file = target()
+    if (!file || !writable() || !savedBaseline() || isBusy() || fileEditorReserved()) return
+    comparison()?.controller.abort()
+    if (resetMode) setComparisonMode("disk-draft")
+    const authority = captureApiAuthority()
+    const controller = new AbortController()
+    const request = { target: file, authority, controller }
+    setComparison({ ...request, status: "loading" })
+    const current = () => comparison()?.controller === controller && !controller.signal.aborted &&
+      ownsFileTarget(file) && isApiAuthorityCurrent(authority)
+    try {
+      const next = await readFileContent(file, authority, controller.signal)
+      if (current()) setComparison({ ...request, status: "loaded", content: next })
+    } catch (cause) {
+      if (current()) setComparison({ ...request, status: "failed", cause })
+    }
+  }
+  const conflictComparisonAction = () => error()?.messageKey === "file_editor.save_conflict" ? (
+      <Button type="button" variant="outline" size="sm" tone="neutral"
+        disabled={isBusy() || fileEditorReserved()} onClick={() => void compareWithDisk()}>
+        {t("file_editor.compare")}
+      </Button>
+  ) : undefined
+
   const retireDownload = () => {
     downloadController?.abort()
     downloadController = undefined
@@ -223,6 +280,7 @@ export function FileEditorPane() {
     const file = contentTarget()
     const authority = captureApiAuthority()
     untrack(() => {
+      retireComparison()
       retireDownload()
       const identity = identityOf(file)
       const retainDraft = identity === activeTargetIdentity && dirty()
@@ -323,6 +381,7 @@ export function FileEditorPane() {
     isBusy,
   })
   onCleanup(() => {
+    retireComparison()
     retireDownload()
     loadGeneration += 1
     reloadGeneration += 1
@@ -449,6 +508,14 @@ export function FileEditorPane() {
           >
             <Badge tone="neutral" size="sm">{t("file_editor.read_only")}</Badge>
           </Show>
+          <Show when={writable()}>
+            <Button type="button" variant="ghost" size="icon" tone="neutral"
+              data-ui="file-editor-compare" disabled={isBusy() || fileEditorReserved()}
+              title={t("file_editor.compare")} aria-label={t("file_editor.compare")}
+              onClick={() => void compareWithDisk()}>
+              <Icon name="git-compare" />
+            </Button>
+          </Show>
           <Show when={downloadable()}>
             <Button
               type="button"
@@ -568,9 +635,10 @@ export function FileEditorPane() {
         </div>
         <Show when={error()}>{(failure) =>
           <Feedback
-            class="file-editor-error"
+              class="file-editor-error file-editor-compare-feedback"
             tone="error"
             details={formatErrorDetails(failure().cause) || undefined}
+            actions={conflictComparisonAction()}
           >
             {currentErrorMessage()}
           </Feedback>
@@ -638,10 +706,70 @@ export function FileEditorPane() {
           })}
         </p>
         <Show when={error()}>{(failure) =>
-          <Feedback tone="error" details={formatErrorDetails(failure().cause) || undefined}>
+            <Feedback class="file-editor-compare-feedback" tone="error" details={formatErrorDetails(failure().cause) || undefined} actions={conflictComparisonAction()}>
             {currentErrorMessage()}
           </Feedback>
         }
+        </Show>
+      </Dialog>
+      <Dialog
+        id="fileEditorComparisonDialog"
+        open={comparison() !== null}
+        title={t("file_editor.compare_title", { path: fileTitle() })}
+        wide
+        formClass="file-comparison-frame"
+        onClose={retireComparison}
+        footer={
+          <>
+            <Button type="button" variant="ghost" size="md" tone="neutral"
+                onClick={() => void compareWithDisk(false)}>
+              {t("file_editor.compare_refresh")}
+            </Button>
+            <Button type="button" variant="solid" size="md" tone="neutral" onClick={retireComparison}>
+              {t("common.close")}
+            </Button>
+          </>
+        }
+      >
+        <Show when={comparison()}>
+          {(read) => (
+            <div class="file-comparison-content">
+              <p class="file-comparison-path">{read().target.path}</p>
+              <p class="file-comparison-hint">{t("file_editor.compare_hint")}</p>
+              <SegmentedControl<ComparisonMode>
+                value={comparisonMode()} onChange={setComparisonMode} ariaLabel={t("file_editor.compare_versions")}
+                options={[
+                  { value: "disk-draft", label: t("file_editor.compare_disk_draft") },
+                  { value: "base-disk", label: t("file_editor.compare_base_disk") },
+                  { value: "base-draft", label: t("file_editor.compare_base_draft") },
+                ]}
+              />
+              <Switch>
+                <Match when={read().status === "loading"}>
+                  <Feedback tone="neutral">{t("common.loading")}</Feedback>
+                </Match>
+                <Match when={read().status === "failed"}>
+                  <Feedback tone="error" details={read().status === "failed" ? formatErrorDetails((read() as Extract<FileComparison, { status: "failed" }>).cause) : undefined}>
+                    {t("file_editor.compare_failed")}
+                  </Feedback>
+                </Match>
+                <Match when={read().status === "loaded"}>
+                  <Show when={comparisonPair()} fallback={<Feedback tone="warning">{t("file_editor.compare_non_text")}</Feedback>}>
+                    {(pair) => (
+                      <>
+                        <div class="file-comparison-labels">
+                          <span>− {t(pair().left)}</span><span>+ {t(pair().right)}</span>
+                        </div>
+                        <div class="file-comparison-diff" tabIndex={0} role="region" aria-label={t("file_editor.compare_versions")}>
+                          <TextDiffView before={pair().before} after={pair().after} />
+                        </div>
+                      </>
+                    )}
+                  </Show>
+                </Match>
+              </Switch>
+            </div>
+          )}
         </Show>
       </Dialog>
     </section>

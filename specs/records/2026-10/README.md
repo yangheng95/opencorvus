@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [保存冲突后的版本比较](2026-10-27-file-conflict-comparison.md)：单代理文件冲突完整恢复旅程。
+
 - [Goal启动与完成阅读衔接](2026-10-27-goal-completion-journey.md)：单代理当前Goal完整使用旅程。
 
 - [项目文件操作与编辑衔接](2026-10-27-file-mutation-journey.md)：单代理文件完整操作旅程。

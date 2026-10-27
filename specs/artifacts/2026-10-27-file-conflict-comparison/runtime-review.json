@@ -1,0 +1,178 @@
+{
+  "reviewedAt": "2026-10-27T10:45:52.789Z",
+  "runtime": [
+    {
+      "instance": 711,
+      "port": 38216,
+      "uiEntry": "main-B5-sSU_F.js",
+      "schema": 9,
+      "sourceTables": 92,
+      "sourceRows": 240178,
+      "allOriginalTargetRowsPreserved": true,
+      "protectedRows": 7147,
+      "projectFilesPreserved": 166,
+      "requests": 0,
+      "cumulativeRequests": 353,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "reserveMs": 1036987,
+      "sourceCatalogBytesPreserved": true,
+      "sourceCatalogMetadataPreserved": true,
+      "sourceAuthMetadataPreserved": true,
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true
+    },
+    {
+      "instance": 712,
+      "port": 38217,
+      "uiEntry": "main-BYCBk2Ra.js",
+      "schema": 9,
+      "sourceTables": 92,
+      "sourceRows": 240195,
+      "allOriginalTargetRowsPreserved": true,
+      "protectedRows": 7147,
+      "projectFilesPreserved": 166,
+      "requests": 0,
+      "cumulativeRequests": 353,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "reserveMs": 473019,
+      "sourceCatalogBytesPreserved": true,
+      "sourceCatalogMetadataPreserved": true,
+      "sourceAuthMetadataPreserved": true,
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true
+    },
+    {
+      "instance": 713,
+      "port": 38218,
+      "uiEntry": "main-DnfRmDOe.js",
+      "schema": 9,
+      "sourceTables": 92,
+      "sourceRows": 240212,
+      "allOriginalTargetRowsPreserved": true,
+      "protectedRows": 7147,
+      "projectFilesPreserved": 166,
+      "requests": 0,
+      "cumulativeRequests": 353,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "reserveMs": 893130,
+      "sourceCatalogBytesPreserved": true,
+      "sourceCatalogMetadataPreserved": true,
+      "sourceAuthMetadataPreserved": true,
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true
+    }
+  ],
+  "manualVisualReview": {
+    "images": [
+      "01-conflict-without-comparison.jpg",
+      "02-baseline-draft-saved.jpg",
+      "03-disk-versus-draft.jpg",
+      "04-base-versus-disk.jpg",
+      "05-base-versus-draft.jpg",
+      "06-refreshed-disk-snapshot.jpg",
+      "07-real-comparison-read-error.jpg",
+      "08-real-non-text-version.jpg",
+      "09-comparison-within-unsaved-decision.jpg",
+      "10-returned-to-unsaved-decision.jpg",
+      "11-original-tool-review.jpg",
+      "12-final-compact-disk-draft.jpg",
+      "13-final-base-disk.jpg",
+      "14-final-refresh-focus.jpg",
+      "15-final-unsaved-feedback.jpg",
+      "16-final-zh-light.jpg",
+      "17-final-saved-base.jpg",
+      "18-final-project-b.jpg",
+      "19-final-tool-review.jpg"
+    ],
+    "ordinaryDevelopmentCLI": true,
+    "automatedUITestsRun": 0,
+    "instrumentedUI": false,
+    "finalBuild": "main-DnfRmDOe.js",
+    "desktopLocalesAndThemes": [
+      "English dark",
+      "中文浅色"
+    ],
+    "actualFlows": [
+      "real external file revision and HTTP 409",
+      "three text endpoint pairs",
+      "disk snapshot stays until explicit read",
+      "keyboard refresh retains focus during and after read",
+      "actual missing file read error and diagnostics",
+      "actual non-text file warning",
+      "nested unsaved decision and return",
+      "exact draft download",
+      "explicit save after operator restored original test input",
+      "saved baseline matches disk",
+      "project A to project B ownership",
+      "existing real tool change review and context expansion"
+    ]
+  },
+  "files": {
+    "711": {
+      "draftBytes": 71,
+      "externalBytes": 71,
+      "originalProjectFilesPreserved": true
+    },
+    "712": {
+      "at": "2026-10-27T10:37:44.216Z",
+      "diskDraftSaved": true,
+      "externalFirstPreserved": true,
+      "externalLatestPreserved": true,
+      "originalProjectFilesPreserved": 11,
+      "downloadExactDraft": true
+    },
+    "713": {
+      "at": "2026-10-27T10:45:52.781Z",
+      "diskDraftSaved": true,
+      "downloadExactDraft": true,
+      "draftBytes": 71,
+      "externalFirstPreserved": true,
+      "externalLatestPreserved": true,
+      "originalProjectFilesPreserved": 14
+    }
+  },
+  "checks": {
+    "build-final": {
+      "exitCode": 0,
+      "elapsedMs": 66430
+    },
+    "typecheck-final": {
+      "exitCode": 0,
+      "elapsedMs": 27244
+    },
+    "i18n-final": {
+      "exitCode": 0,
+      "elapsedMs": 3244
+    },
+    "css-final": {
+      "exitCode": 0,
+      "elapsedMs": 6584
+    },
+    "docs-final": {
+      "exitCode": 0,
+      "elapsedMs": 8991
+    }
+  },
+  "limitations": [
+    "Read-only comparison; save conflict remains protected. No automatic merge or force overwrite.",
+    "No new real-provider request was required for these UI-only changes; existing provider evidence remains cumulative 353.",
+    "711/712/713 use isolated copied data, not the user database.",
+    "712 exceeded the ten-minute target but settled within the original twenty-minute deadline with 473019ms reserve.",
+    "Vite reported existing large-chunk warnings."
+  ]
+}

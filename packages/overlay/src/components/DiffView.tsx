@@ -196,18 +196,13 @@ interface DiffViewProps {
 }
 
 export function DiffView(props: DiffViewProps) {
-  const ops = createMemo(() => {
+  const text = createMemo(() => {
     const item = props.item
-    if (
-      item.evidence.kind !== "complete" ||
-      item.isText !== true ||
-      typeof item.before !== "string" ||
-      typeof item.after !== "string"
-    )
-      return []
-    return collapseDiffOps(buildDiffOps(item.before, item.after))
+    return item.evidence.kind === "complete" && item.isText === true &&
+      typeof item.before === "string" && typeof item.after === "string"
+      ? { before: item.before, after: item.after }
+      : undefined
   })
-  const hasChanges = createMemo(() => ops().some((op) => op.kind === "add" || op.kind === "del"))
   const emptyMessage = createMemo(() => {
     const it = props.item
     if (it.evidence.kind === "incomplete") return t(`diff.incomplete.${it.evidence.reason}`)
@@ -220,13 +215,24 @@ export function DiffView(props: DiffViewProps) {
 
   return (
     <Show
-      when={hasChanges()}
+      when={text()}
       fallback={
         <div class="diff-empty">
           <p class="empty-hint">{emptyMessage()}</p>
         </div>
       }
     >
+      {(value) => <TextDiffView before={value().before} after={value().after} />}
+    </Show>
+  )
+}
+
+/** Read-only comparison of actual text values, independent of persisted change receipts. */
+export function TextDiffView(props: { before: string; after: string }) {
+  const ops = createMemo(() => collapseDiffOps(buildDiffOps(props.before, props.after)))
+  const hasChanges = createMemo(() => ops().some((op) => op.kind === "add" || op.kind === "del"))
+  return (
+    <Show when={hasChanges()} fallback={<div class="diff-empty"><p class="empty-hint">{t("diff.empty_unchanged")}</p></div>}>
       <div class="diff-lines">
         <For each={ops()}>
           {(line) => (line.kind === "skip" ? <DiffContext lines={line.lines} /> : <DiffLineRow line={line} />)}

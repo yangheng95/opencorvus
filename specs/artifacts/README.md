@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件冲突比较证据](2026-10-27-file-conflict-comparison/README.md)：真实保存冲突、草稿/外部版本与比较页面。
+
 - [Goal完整旅程证据](2026-10-27-goal-completion-journey/README.md)：当前实页、真实模型及结清事实。
 
 - [文件操作体验证据](2026-10-27-file-mutation-journey/README.md)：真实目录操作、编辑与归属复核。
