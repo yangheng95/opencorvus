@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [引用输入的解码与编辑稳定性](2026-10-28-composer-reference-decoding.md)：公共词法根因、原文保留和实页迭代。
+
 - [实时Mission部分交付与受阻体验](2026-10-28-live-mission-blocked-journey.md)：真实双结果验收及目录默认包误显示修复。
 
 - [Mission正式结果呈现](2026-10-28-mission-outcome-presentation.md)：单代理真实结果与活动状态分离。

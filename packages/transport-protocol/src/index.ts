@@ -176,7 +176,15 @@ export function visibleMentionDirectiveRanges(text: string): VisibleMentionDirec
     if (index < 0 || !visibleMentionBoundaryAllows(text, index)) continue
     const kind = visibleMentionKindForSyntax(match[1]!)
     if (!kind) continue
-    const value = JSON.parse(`"${match[3]!}"`)
+    if (match[4] !== (match[2] === '"' ? '"' : "”")) continue
+    let value: unknown
+    try {
+      value = JSON.parse(`"${match[3]!}"`)
+    } catch (error) {
+      // Incomplete editor text is not a directive; submission validates it separately.
+      if (error instanceof SyntaxError) continue
+      throw error
+    }
     if (typeof value !== "string") continue
     directives.push({
       kind,

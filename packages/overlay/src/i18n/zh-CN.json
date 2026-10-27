@@ -439,6 +439,7 @@
   "chat.mention.error_unknown_skill": "Skill {{name}} 未投影到当前输入区作用域。",
   "chat.mention.error_unknown_mission_skill": "Mission Skill {{name}} 在当前输入区作用域不可用。",
   "chat.mention.error_unknown_squad": "专家团 {{name}} 在当前输入区作用域不可用。",
+  "chat.mention.error_malformed_reference": "引用格式有误。请使用成对的双引号，并检查反斜杠转义，例如 @squad(\"base\")。输入已保留，可以直接修改。",
   "chat.references.trigger": "Skill 与专家团",
   "chat.references.view": "查看对话上下文",
   "chat.references.title": "选择 Skill 与专家团",

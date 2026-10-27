@@ -12,6 +12,7 @@
 - 2026-10-28：澄清任务分派中的本地工程边界，避免将“不联网、不外发、不改项目外”扩大成用户未提出的本地提交禁令，减少与构建角色交付要求的冲突。真实用户与项目限制仍须遵守，对外推送和发布仍需各自授权。
 - 2026-10-28：Mission 的正式完成或受阻结果进入统一工作列表，页头显示完整结果，侧栏使用紧凑状态徽标保留标题空间，避免已验收完成后只显示“未运行”。活动信号保持独立，新输入使原结果失效；同步更新接口契约，数据库结构不变。
 - 2026-10-28：修正 Mission 和普通对话底部把目录默认专家包显示为当前分配的问题；上下文按首条消息的真实引用展示，Task 仍保留实际固定包与版本。经真实部分交付、缺材料受阻及中英文页面复核，应用与数据库版本不变。
+- 2026-10-28：修复引用中的无效转义导致编辑器发送状态停滞、会话历史读取失败的问题。原文保持可编辑，合法后续引用正常识别；格式修正建议直接显示并跟随界面语言，数据库无需迁移。
 
 ### en-US
 
@@ -21,6 +22,7 @@
 - 2026-10-28: Clarified Task-authoring boundaries so network, external-transmission and outside-project restrictions do not become invented local-commit prohibitions. Explicit operator and repository restrictions remain binding; remote pushes and publication require their own authority.
 - 2026-10-28: Projected current accepted or blocked Mission outcomes into the unified Work Ledger, with full header labels and compact sidebar badges that preserve title space. Activity remains independent and new authority invalidates stale outcomes; generated contracts are updated without a database change.
 - 2026-10-28: Corrected Mission and ordinary conversation context controls that presented the catalog default Expert Squad as an assignment. Context uses actual first-message references; Tasks retain their fixed package and version. Verified real partial delivery, missing-input blocking, and English/Chinese pages without changing application or database versions.
+- 2026-10-28: Fixed malformed reference escapes that stalled composer submission state and failed conversation hydration. Original text stays editable and later valid references are recognized; actionable guidance is visible and follows the interface language without a database migration.
 
 ## 0.1.33 - 2026-10-27
 

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [引用输入的解码与编辑稳定性](records/2026-10/2026-10-28-composer-reference-decoding.md)：修复无效引用造成的编辑停滞和公开会话读取失败。
+
 - [实时Mission部分交付与受阻体验](records/2026-10/2026-10-28-live-mission-blocked-journey.md)：真实缺材料收敛、会话上下文身份根因修复与双语实页验收。
 
 - [Mission正式结果呈现](records/2026-10/2026-10-28-mission-outcome-presentation.md)：统一列表投影和页头、侧栏结果一致性。

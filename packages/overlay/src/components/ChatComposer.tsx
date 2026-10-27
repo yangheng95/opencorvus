@@ -405,7 +405,9 @@ function ComposerAttachmentLoaders(props: ComposerAttachmentLoadersProps): JSX.E
             >
               <Icon name="folder-open" size="medium" />
               <span>
-                {t(canPickFolder ? "chat.attachment_loader.folder_title" : "chat.attachment_loader.folder_desktop_title")}
+                {t(
+                  canPickFolder ? "chat.attachment_loader.folder_title" : "chat.attachment_loader.folder_desktop_title",
+                )}
               </span>
             </DropdownMenu.Item>
             <DropdownMenu.Separator />
@@ -595,11 +597,11 @@ export function ChatComposer(props: ChatComposerProps) {
   const [caretPosition, setCaretPosition] = createSignal(0)
   const [dismissedMentionQueryKey, setDismissedMentionQueryKey] = createSignal("")
   const [highlightedMentionKey, setHighlightedMentionKey] = createSignal("")
-  const [submissionError, setSubmissionError] = createSignal("")
+  const [submissionError, setSubmissionError] = createSignal<{ cause: unknown }>()
   createEffect(
     on(
       () => props.draftKey,
-      () => setSubmissionError(""),
+      () => setSubmissionError(undefined),
     ),
   )
   const [submitting, setSubmitting] = createSignal(false)
@@ -610,7 +612,7 @@ export function ChatComposer(props: ChatComposerProps) {
       () => {
         submissionGeneration += 1
         setSubmitting(false)
-        setSubmissionError("")
+        setSubmissionError(undefined)
       },
     ),
   )
@@ -1028,7 +1030,7 @@ export function ChatComposer(props: ChatComposerProps) {
 
   function submitErrorMessage(error: unknown): string {
     if (error instanceof ComposerMentionDirectiveError) {
-      if (error.code === "malformed_reference") return error.entity
+      if (error.code === "malformed_reference") return t("chat.mention.error_malformed_reference")
       if (error.code === "unknown_skill") return t("chat.mention.error_unknown_skill", { name: error.entity })
       if (error.code === "unknown_mission_skill") {
         return t("chat.mention.error_unknown_mission_skill", { name: error.entity })
@@ -1055,7 +1057,7 @@ export function ChatComposer(props: ChatComposerProps) {
     const generation = ++submissionGeneration
     const owns = () => generation === submissionGeneration && isApiAuthorityCurrent(authority)
     const quotation = composerQuotation(submittedDraftKey)
-    setSubmissionError("")
+    setSubmissionError(undefined)
     setSubmitting(true)
     try {
       const command = localCommand()
@@ -1111,7 +1113,7 @@ export function ChatComposer(props: ChatComposerProps) {
         setComposerDraft(submittedDraftKey, trimmed)
         setComposerQuotation(submittedDraftKey, quotation)
       }
-      setSubmissionError(submitErrorMessage(error))
+      setSubmissionError({ cause: error })
     } finally {
       if (owns()) setSubmitting(false)
     }
@@ -1280,7 +1282,8 @@ export function ChatComposer(props: ChatComposerProps) {
     if (reason === "empty") return t("chat.disabled_empty")
     return t(localCommand()?.kind === "goal" ? "continuous_goal.open" : "chat.send_title")
   }
-  const sendAriaLabel = () => t(stopMode() ? "chat.stop_label" : localCommand()?.kind === "goal" ? "continuous_goal.open" : "chat.send_label")
+  const sendAriaLabel = () =>
+    t(stopMode() ? "chat.stop_label" : localCommand()?.kind === "goal" ? "continuous_goal.open" : "chat.send_label")
   const sendLabel = sendAriaLabel
   const activeComposerIntent = createMemo(() => props.activeComposerIntent ?? props.composerIntent)
   const productPillarOptions = createMemo<ComposerIntentOption<ProductPillar>[]>(() => [
@@ -1505,18 +1508,28 @@ export function ChatComposer(props: ChatComposerProps) {
         )}
       </Show>
       <Show when={submissionError()}>
-        {(details) => (
+        {(failure) => (
           <Feedback
             tone="error"
             title={t("chat.send_failed_title")}
-            details={details()}
+            details={
+              failure().cause instanceof ComposerMentionDirectiveError ? undefined : submitErrorMessage(failure().cause)
+            }
             actions={
-              <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => setSubmissionError("")}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                tone="neutral"
+                onClick={() => setSubmissionError(undefined)}
+              >
                 {t("common.dismiss")}
               </Button>
             }
           >
-            {t("chat.send_failed_inline")}
+            {failure().cause instanceof ComposerMentionDirectiveError
+              ? submitErrorMessage(failure().cause)
+              : t("chat.send_failed_inline")}
           </Feedback>
         )}
       </Show>

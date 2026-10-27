@@ -1,0 +1,276 @@
+{
+  "at": "2026-10-27T21:01:50.467Z",
+  "before": {
+    "observedEffect": "Input remains visible, but Send stays disabled with empty-input help; replacing with ordinary text does not recover submission state",
+    "errors": [
+      {
+        "message": "SyntaxError: Bad escaped character in JSON at position 2 (line 1 column 3)",
+        "timestamp": "2026-10-27T20:44:26.953Z"
+      },
+      {
+        "message": "SyntaxError: Bad escaped character in JSON at position 2 (line 1 column 3)",
+        "timestamp": "2026-10-27T20:44:26.960Z"
+      }
+    ]
+  },
+  "after": {
+    "observedEffect": "Malformed reference remains editable, explicit submission feedback is actionable, same feedback switches from English to Chinese without resubmission, dismiss and valid typographic Base reference continue normally",
+    "finalEntry": "main-DwCZURJW.js"
+  },
+  "protocol": {
+    "red": {
+      "pass": 2,
+      "fail": 5
+    },
+    "green": {
+      "pass": 7,
+      "expectCalls": 12
+    },
+    "coverage": [
+      "Invalid escape",
+      "Truncated Unicode escape",
+      "Raw newline and control character",
+      "Exact later-valid ranges and ordered identities",
+      "Valid Unicode, quote and backslash escapes",
+      "Paired typographic quotes and mismatched quote candidates"
+    ]
+  },
+  "backend": {
+    "red": {
+      "tests": 2,
+      "status": 500
+    },
+    "green": {
+      "tests": 2,
+      "expectCalls": 8,
+      "status": 200
+    },
+    "coverage": [
+      "Real persisted ordinary Session and Mission inputs",
+      "Public conversation hydration route after reopening",
+      "Complete original human Message text",
+      "Current valid Skill projection"
+    ]
+  },
+  "checks": {
+    "reference-decoding-contract-red-qualified": {
+      "code": 1
+    },
+    "reference-decoding-contract-green": {
+      "code": 0
+    },
+    "reference-decoding-ui": {
+      "code": 0
+    },
+    "reference-decoding-ui-feedback": {
+      "code": 0
+    },
+    "reference-decoding-protocol-types": {
+      "code": 0
+    },
+    "reference-decoding-overlay-types": {
+      "code": 0
+    },
+    "reference-decoding-feedback-types": {
+      "code": 0
+    },
+    "reference-decoding-i18n": {
+      "code": 0
+    },
+    "reference-decoding-renderer": {
+      "code": 0
+    },
+    "reference-http-red": {
+      "code": 1
+    },
+    "reference-http-green": {
+      "code": 0
+    },
+    "reference-decoding-docs": {
+      "code": 0
+    },
+    "reference-decoding-architecture": {
+      "code": 0
+    }
+  },
+  "scopes": [
+    {
+      "id": "743",
+      "port": 38248,
+      "uiEntry": "main-v37-7PhG.js",
+      "tables": 92,
+      "originalRows": 89238,
+      "sourceRowsPreserved": true,
+      "allOriginalRowsPreserved": true,
+      "schema": 9,
+      "integrity": "ok",
+      "requests": 0,
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "cumulativeRequests": 719,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "reserveMs": 1122967,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "id": "744",
+      "port": 38249,
+      "uiEntry": "main-DYwP_2WS.js",
+      "tables": 92,
+      "originalRows": 89238,
+      "sourceRowsPreserved": true,
+      "allOriginalRowsPreserved": true,
+      "schema": 9,
+      "integrity": "ok",
+      "requests": 0,
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "cumulativeRequests": 719,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "reserveMs": 1048784,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "id": "745",
+      "port": 38250,
+      "uiEntry": "main-DwCZURJW.js",
+      "tables": 92,
+      "originalRows": 89238,
+      "sourceRowsPreserved": true,
+      "allOriginalRowsPreserved": true,
+      "schema": 9,
+      "integrity": "ok",
+      "requests": 0,
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "cumulativeRequests": 719,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "reserveMs": 1021120,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    }
+  ],
+  "screenshots": [
+    {
+      "name": "01-before-invalid-escape.jpg",
+      "scope": "743",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "02-before-recovered-text.jpg",
+      "scope": "743",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "03-after-invalid-editable.jpg",
+      "scope": "744",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "04-after-error-en.jpg",
+      "scope": "744",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "05-after-error-details-en.jpg",
+      "scope": "744",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "06-after-recovery.jpg",
+      "scope": "744",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "07-after-valid-reference.jpg",
+      "scope": "744",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "08-final-guidance-en.jpg",
+      "scope": "745",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "09-final-same-guidance-zh.jpg",
+      "scope": "745",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "10-final-guidance-zh-clean.jpg",
+      "scope": "745",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    },
+    {
+      "name": "11-final-valid-reference-zh.jpg",
+      "scope": "745",
+      "format": "jpeg",
+      "width": 1280,
+      "height": 720,
+      "originalBytesPreserved": true
+    }
+  ],
+  "limits": [
+    "No real model execution in this batch; all three diagnostic instances have no authentication and zero requests.",
+    "744 is an intermediate implementation with actionable advice hidden in Details; final visual acceptance uses 745.",
+    "Raw String.raw typographic test input was corrected to a normal Unicode suffix before qualifying red evidence; a fixture representation issue is not a product failure.",
+    "Title readability and complete default-home/Goal journeys remain subsequent work.",
+    "No UI automated tests, schema migration or application release."
+  ]
+}

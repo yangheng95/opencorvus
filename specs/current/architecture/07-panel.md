@@ -2552,6 +2552,9 @@ Mission 草稿标题、输入提示与首页说明使用通用 Mission 语义；
 已选专家团或执行上下文已就绪。已选 Squad 的精确身份继续由同一份真实可见 reference 展示。
 既有 Mission / Chat 的只读上下文沿用首条消息的真实 references；目录默认包不是该会话的专家团分配。
 只有冻结包绑定的 Task 显示其实际分配包及版本，不能把 session-effective catalog 的默认包当成 Mission held set。
+可见引用的共享词法扫描只投影成对引号及合法 JSON 字符串转义；编辑中的无效候选保持原文，继续扫描后续合法引用。
+提交校验仍将无效候选映射到明确的引用格式错误；修正建议直接显示在反馈正文，并按当前界面语言从原始错误原因投影。
+普通会话与 Mission 的公开历史读取使用同一词法实现，不因历史原文中的无效候选中断或改写消息。
 Directory-free launcher 的 reference catalog 只读取 built-in 与 user-global Agent Squad /
 Mission Skill，通过 `/global/composer-references` 投影最多二十项的 Expert Squad 首页，并通过
 bounded server search 查询其余项，不需要也不得为查询目录而创建

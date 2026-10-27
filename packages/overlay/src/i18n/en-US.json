@@ -439,6 +439,7 @@
   "chat.mention.error_unknown_skill": "Skill {{name}} is not projected in the current composer scope.",
   "chat.mention.error_unknown_mission_skill": "Mission Skill {{name}} is not available in the current composer scope.",
   "chat.mention.error_unknown_squad": "Expert Squad {{name}} is not available in the current composer scope.",
+  "chat.mention.error_malformed_reference": "Check the quotes and escape sequences in your reference. Use paired double quotes, for example @squad(\"base\"). Your text is kept for editing.",
   "chat.references.trigger": "Skills & squads",
   "chat.references.view": "View conversation context",
   "chat.references.title": "Select skills and expert squads",
