@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [多页归档恢复与阅读连续性](records/2026-10/2026-10-27-archive-pagination-journey.md)：真实正文、后页恢复和原项目身份。
+
 - [全局查找与跨项目打开体验](records/2026-10/2026-10-27-global-search-journey.md)：历史候选、分页、键盘与真实目标身份。
 
 - [文件差异阅读与版本操作体验](records/2026-10/2026-10-27-file-diff-review-journey.md)：真实写入前后、完整差异与版本操作流程。

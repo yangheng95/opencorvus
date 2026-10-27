@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [多页归档恢复体验证据](2026-10-27-archive-pagination-journey/README.md)：107→100旧缺陷、106→105修复、16张原图和原文保留。
+
 - [全局查找与跨项目打开证据](2026-10-27-global-search-journey/README.md)：真实页面与身份、运行结清事实，19张真实原图、分页阅读/活动项身份修复及三轮结清事实。
 
 - [文件差异审查体验证据](2026-10-27-file-diff-review-journey/README.md)：真实页面、模型及运行结清事实，18张真实原图、可展开上下文、Sol提交说明及三轮结清事实。

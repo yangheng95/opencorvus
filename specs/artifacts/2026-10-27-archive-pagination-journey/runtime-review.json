@@ -1,0 +1,61 @@
+{
+  "reviewedAt": "2026-10-27T07:37:05.441Z",
+  "ui": "Actual development CLI pages; manual CUA interaction and original screenshot review; no UI automated tests",
+  "before": {
+    "uiEntry": "main-Dkd-Ot7F.js",
+    "loadedRows": 107,
+    "restored": "Original real-body Chat in project-a",
+    "settledVisibleRows": 100,
+    "stillArchivedButDroppedFromWindow": 6,
+    "focus": "Draft006 Restore",
+    "shutdown": 200,
+    "requests": 4,
+    "cumulativeRequests": 349,
+    "reserveMs": 483151,
+    "physical": true
+  },
+  "after": {
+    "uiEntry": "main-f9xQwgaU.js",
+    "loadedRows": 106,
+    "restored": "Existing Work in project-b",
+    "settledVisibleRows": 105,
+    "tail": "归档阅读701 · 草稿001ChatC:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-27\\archive-pagination-701\\project-aArchived Oct 27, 2026, 03:18 PM",
+    "focusRow": "归档阅读701 · 草稿001ChatC:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-27\\archive-pagination-701\\project-aArchived Oct 27, 2026, 03:18 PM",
+    "query": "归档阅读701",
+    "shutdown": 200,
+    "requests": 0,
+    "cumulativeRequests": 349,
+    "reserveMs": 995982,
+    "physical": true
+  },
+  "preservation": {
+    "sourceTables": 92,
+    "sourceRows": 238827,
+    "sourceAllRowsPreserved": true,
+    "oldCriticalFacts": 6985,
+    "includingOwnedCriticalFacts": 7117,
+    "protectedProjectFiles": 166,
+    "ownProjectReadmesAndGitHeads": 2,
+    "ownedSessionIdentities": 107,
+    "ownedRemainingArchived": 105,
+    "originalChatMessagesAndPartsPreserved": true,
+    "schema": 9,
+    "integrity": "ok"
+  },
+  "visual": {
+    "originalImages": 16,
+    "reviewed": "EN dark and ZH light; query replacement/clear, restored Work original project and original Sol Chat body",
+    "limitations": [
+      "03 captures Loading, not a settled first page",
+      "701 Chat107→106 and702 Work106→105 are natural consecutive operations, not a reset identical dataset",
+      "702 deliberately has no credentials; model configuration unavailable notice is expected while historical reading works",
+      "Permanent deletion not executed; irreversible domain transaction unchanged",
+      "No claim of complete product-wide acceptance"
+    ]
+  },
+  "checks": {
+    "build": 0,
+    "typecheck": 0,
+    "docs": 0
+  }
+}

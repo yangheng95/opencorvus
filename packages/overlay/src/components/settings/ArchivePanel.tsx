@@ -59,6 +59,40 @@ export default function ArchivePanel() {
   const ownsRequest = (generation: number, authority: ApiAuthority) =>
     generation === requestGeneration && isApiAuthorityCurrent(authority)
 
+  const readPages = async (input: {
+    cursor: WorkLedgerCursor | null
+    retainedTail?: WorkLedgerItemRow
+    search: string
+    signal: AbortSignal
+    generation: number
+    authority: ApiAuthority
+  }) => {
+    let cursor = input.cursor
+    const refreshed: WorkLedgerItemRow[] = []
+    do {
+      const page = await loadArchivedWorkLedger({
+        search: input.search,
+        limit: ARCHIVE_PAGE_SIZE,
+        cursor,
+        signal: input.signal,
+        authority: input.authority,
+      })
+      if (!ownsRequest(input.generation, input.authority)) return
+      refreshed.push(...page.rows)
+      cursor = page.nextCursor
+      const tail = input.retainedTail
+      // Follow the public pinned/updated/kind:id cursor through the accepted read window.
+      const beforeTail = cursor && tail && (
+        Number(cursor.pinned) > Number(tail.pinned) ||
+        (cursor.pinned === tail.pinned && (
+          cursor.updated > tail.updated ||
+          (cursor.updated === tail.updated && cursor.rowKey > `${tail.kind}:${tail.id}`)
+        ))
+      )
+      if (!beforeTail) return { rows: refreshed, nextCursor: cursor }
+    } while (true)
+  }
+
   const focusAfterAction = (
     rowKey: string,
     previousIndex: number,
@@ -96,14 +130,14 @@ export default function ArchivePanel() {
     setLoading(true)
     setError("")
     try {
-      const result = await loadArchivedWorkLedger({
+      const result = await readPages({
         search: search().trim(),
-        limit: ARCHIVE_PAGE_SIZE,
         cursor,
         signal: requestController.signal,
+        generation,
         authority,
       })
-      if (!ownsRequest(generation, authority)) return
+      if (!result || !ownsRequest(generation, authority)) return
       setRows((current) => (append ? [...current, ...result.rows] : result.rows))
       setNextCursor(result.nextCursor)
     } catch (cause) {
@@ -137,6 +171,7 @@ export default function ArchivePanel() {
       rows().findIndex((item) => archiveRowKey(item) === rowKey),
     )
     const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    const retainedTail = rows().filter((item) => archiveRowKey(item) !== rowKey).at(-1)
     controller?.abort()
     controller = undefined
     const generation = ++requestGeneration
@@ -211,14 +246,15 @@ export default function ArchivePanel() {
     controller = requestController
     setLoading(true)
     try {
-      const result = await loadArchivedWorkLedger({
+      const result = await readPages({
         search: search().trim(),
-        limit: ARCHIVE_PAGE_SIZE,
         cursor: null,
+        retainedTail,
         signal: requestController.signal,
+        generation,
         authority,
       })
-      if (!ownsAction()) return
+      if (!result || !ownsAction()) return
       setRows(result.rows)
       setNextCursor(result.nextCursor)
     } catch (cause) {

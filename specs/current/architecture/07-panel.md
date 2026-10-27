@@ -3685,6 +3685,12 @@ Continuation and post-mutation reload keep the current query. The shared search
 field stays editable during reads and is disabled during a row mutation; clearing
 it reloads the first unfiltered page. Empty results are localized separately from
 an empty archive. Restore/delete and their focus ownership remain unchanged.
+After a committed row action, the same reader follows canonical cursor pages
+through the previously loaded surviving tail, or through exhaustion. Its boundary
+uses the public pinned/updated/kind:id order, independently of directory-scoped
+UI row identity. Each page retains the existing request generation and authority;
+the refreshed window and continuation cursor commit together. Ordinary initial
+and continuation reads still fetch one page.
 
 ## Command palette queries
 

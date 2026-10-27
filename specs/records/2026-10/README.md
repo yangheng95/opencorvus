@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [多页归档恢复与阅读连续性](2026-10-27-archive-pagination-journey.md)：单代理后页操作及真实历史保留调查。
+
 - [全局查找与跨项目打开体验](2026-10-27-global-search-journey.md)：单代理全局搜索及选择流程调查。
 
 - [文件差异阅读与版本操作体验](2026-10-27-file-diff-review-journey.md)：单代理真实文件审查与Git操作调查。
