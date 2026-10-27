@@ -808,6 +808,12 @@ API paths, completed receipts and original Details retain their identities.
 
 One Explorer action outcome retains its actual completed receipts, the failed
 member or operation cause, and every started directory/search refresh receipt.
+An explicit FileEditorAdmissionError cancelled decision derives a neutral
+current-language cancellation from that same outcome. Cancellation before any
+completed member has one message; cancellation after completed members retains
+their count and every refresh result and explains that remaining operations were
+cancelled. Busy, superseded and actual read/write failures keep their original
+diagnostics and severity; generic AbortError does not imply operator cancellation.
 Completed counts derive only from successful responses. Member failure and
 subsequent refresh failure remain independent original diagnostics; all started
 reads settle before that action owner publishes its final outcome. A current

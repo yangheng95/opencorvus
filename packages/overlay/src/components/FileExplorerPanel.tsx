@@ -20,6 +20,7 @@ import {
   collectFileRefreshReceipts,
   copyFileItem,
   fileEditorReserved,
+  FileEditorAdmissionError,
   createFileItem,
   deleteFileItem,
   loadFileDirectory,
@@ -243,7 +244,7 @@ function fileErrorSummary(error: unknown, operation: ExplorerFailureOperation): 
   return operationFailureMessage(operation)
 }
 
-function feedbackTone(feedback: ExplorerFeedback): "error" | "warning" | "success" {
+function feedbackTone(feedback: ExplorerFeedback): "neutral" | "error" | "warning" | "success" {
   if (feedback.kind !== "outcome") return "error"
   if (
     feedback.failures.some((failure) => !isStoppedFailure(failure)) ||
@@ -252,12 +253,17 @@ function feedbackTone(feedback: ExplorerFeedback): "error" | "warning" | "succes
   )
     return "error"
   if (
-    feedback.failures.length > 0 ||
+    feedback.failures.some((failure) => !isCancelledFailure(failure)) ||
     feedback.refresh.some((read) => read.state.status === "retired") ||
     (feedback.postOpen && feedback.postOpen.status !== "opened")
   )
     return "warning"
+  if (feedback.failures.some(isCancelledFailure)) return "neutral"
   return "success"
+}
+
+function isCancelledFailure(failure: ExplorerFailure): boolean {
+  return failure.error instanceof FileEditorAdmissionError && failure.error.reason === "cancelled"
 }
 
 function isStoppedFailure(failure: ExplorerFailure): boolean {
@@ -316,7 +322,11 @@ function feedbackMessage(feedback: ExplorerFeedback): string {
         if (feedback.refresh.some((read) => read.state.status === "retired")) return t("explorer.refresh_unconfirmed")
         return t("explorer.refresh_success")
       }
-      if (completed === 0) return t("explorer.no_completed_items")
+      if (completed === 0) {
+        if (feedback.failures.length > 0 && feedback.failures.every(isCancelledFailure) && feedback.refresh.length === 0)
+          return t("explorer.operation_cancelled")
+        return t("explorer.no_completed_items")
+      }
       const path = feedback.completed[0]!.path
       switch (feedback.operation) {
         case "create-file":
@@ -394,7 +404,12 @@ function ExplorerActionFeedback(props: { feedback: ExplorerFeedback; dataUI?: st
       <Show when={props.feedback.kind === "outcome" ? props.feedback : undefined}>
         {(outcome) => (
           <>
-            <For each={outcome().failures}>
+            <Show when={outcome().completed.length > 0 && outcome().failures.some(isCancelledFailure)}>
+              <Feedback class="file-explorer-feedback" tone="neutral">
+                {t("explorer.remaining_operations_cancelled")}
+              </Feedback>
+            </Show>
+            <For each={outcome().failures.filter((failure) => !isCancelledFailure(failure))}>
               {(failure) => (
                 <Feedback
                   class="file-explorer-feedback"

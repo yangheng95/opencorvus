@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件操作体验证据](2026-10-27-file-mutation-journey/README.md)：真实目录操作、编辑与归属复核。
+
 - [应用菜单与搜索体验证据](2026-10-27-menu-search-journey/README.md)：真实菜单、快捷键与焦点复核。
 
 - [会话下载体验证据](2026-10-27-conversation-download-journey/README.md)：实际菜单、原始下载与无模型历史读取。

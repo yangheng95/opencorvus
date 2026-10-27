@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [项目文件操作与编辑衔接](records/2026-10/2026-10-27-file-mutation-journey.md)：目录操作、未保存内容和项目切换调查。
+
 - [应用菜单、搜索与快捷键衔接](records/2026-10/2026-10-27-menu-search-journey.md)：菜单声明、搜索入口与Dialog键盘归属。
 
 - [会话下载与离线历史交付](records/2026-10/2026-10-27-conversation-download-journey.md)：原始对话下载入口、项目身份与完整消息。

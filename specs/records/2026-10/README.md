@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [项目文件操作与编辑衔接](2026-10-27-file-mutation-journey.md)：单代理文件完整操作旅程。
+
 - [应用菜单、搜索与快捷键衔接](2026-10-27-menu-search-journey.md)：单代理实际菜单及键盘旅程。
 
 - [会话下载与离线历史交付](2026-10-27-conversation-download-journey.md)：单代理完整会话交付体验。

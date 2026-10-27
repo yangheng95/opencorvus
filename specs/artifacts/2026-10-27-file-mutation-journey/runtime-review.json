@@ -1,0 +1,63 @@
+{
+  "reviewedAt": "2026-10-27T09:27:29.171Z",
+  "runtime": [
+    {
+      "instance": 707,
+      "port": 38212,
+      "uiEntry": "main-Cn8FV1dF.js",
+      "sourceTables": 92,
+      "sourceRows": 238840,
+      "protectedRows": 7117,
+      "schema": 9,
+      "sourceAllRowsPreserved": true,
+      "projectFilesPreserved": 166,
+      "requests": 0,
+      "cumulativeRequests": 349,
+      "publicShutdown": 200,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "reserveMs": 906264
+    },
+    {
+      "instance": 708,
+      "port": 38213,
+      "uiEntry": "main-B5-sSU_F.js",
+      "sourceTables": 92,
+      "sourceRows": 238993,
+      "protectedRows": 7117,
+      "schema": 9,
+      "sourceAllRowsPreserved": true,
+      "projectFilesPreserved": 166,
+      "requests": 0,
+      "cumulativeRequests": 349,
+      "publicShutdown": 200,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "reserveMs": 843481
+    }
+  ],
+  "after": {
+    "editedBytes": 92,
+    "copyBytes": 68,
+    "actualDownloadEqualsSaved": true,
+    "firstMemberCompleted": true,
+    "secondCancelledDraftSaved": true,
+    "conflictOriginalBytesPreserved": true,
+    "allOriginalTargetRowsPreserved": 238993,
+    "tables": 92,
+    "originalProjectsPreserved": true
+  },
+  "checks": {
+    "build-final": 0,
+    "typecheck-final": 0,
+    "docs-final": 0,
+    "i18n-final": 0
+  },
+  "qualification": "Manual real-page interactions and original screenshots; zero credentials and model calls; no UI automation"
+}

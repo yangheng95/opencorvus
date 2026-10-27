@@ -1713,6 +1713,8 @@
   },
   "explorer.no_completed_items": "尚未确认任何已完成的文件更改。",
   "explorer.operation_stopped": "操作在完成此步骤前已停止。",
+  "explorer.operation_cancelled": "文件操作已取消。",
+  "explorer.remaining_operations_cancelled": "后续文件操作已取消。",
   "explorer.open_stopped": "已停止打开文件。",
   "explorer.member_failure": "{{path}}：{{message}}",
   "explorer.refresh_unconfirmed": "刷新尚未确认。",
