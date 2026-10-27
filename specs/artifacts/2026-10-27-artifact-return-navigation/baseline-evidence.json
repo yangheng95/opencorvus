@@ -1,0 +1,405 @@
+{
+  "qualification": "Actual current desktop page, original screenshots and read-only visible DOM geometry; no UI automated tests",
+  "before": {
+    "focus": {
+      "label": null,
+      "tag": "BUTTON",
+      "text": "JSONjson-readability-671.jsonorchestrator · 394 BPreview"
+    },
+    "frame": {
+      "card": "orchestrator:session:ses_-zUQnSSsczzyhSuDhQNY:message:msg_task-root-control_art_hTO0PHweLmRQPsZMSWOl_art_hTO0PHweLmRQPsZMSWOl",
+      "fullscreen": false,
+      "height": 606,
+      "rect": {
+        "height": 607.3333740234375,
+        "width": 734.3333740234375,
+        "x": 434,
+        "y": 143.2604217529297
+      },
+      "style": null
+    },
+    "scroll": {
+      "client": 635,
+      "following": "false",
+      "height": 2173,
+      "rect": {
+        "height": 635.3333740234375,
+        "width": 942.3333740234376,
+        "x": 337.66668701171875,
+        "y": 84.66667175292969
+      },
+      "top": 1141.3333740234375,
+      "width": 927
+    },
+    "virtual": {
+      "rect": {
+        "height": 1889.916748046875,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": -1024.666748046875
+      },
+      "style": "contain: size style; overflow-anchor: none; flex: 0 0 auto; position: relative; width: 100%; height: 1889.92px; pointer-events: inherit;"
+    }
+  },
+  "during": {
+    "focus": {
+      "label": "Close outputs/json-readability-671.json artifact workspace",
+      "tag": "BUTTON",
+      "text": "Close"
+    },
+    "frame": {
+      "card": "orchestrator:session:ses_-zUQnSSsczzyhSuDhQNY:message:msg_task-root-control_art_hTO0PHweLmRQPsZMSWOl_art_hTO0PHweLmRQPsZMSWOl",
+      "fullscreen": true,
+      "height": 1440,
+      "rect": {
+        "height": 1440,
+        "width": 2560,
+        "x": 0,
+        "y": 0
+      },
+      "style": null
+    },
+    "scroll": {
+      "client": 1355,
+      "following": "false",
+      "height": 1536,
+      "rect": {
+        "height": 1355.3333740234375,
+        "width": 2222.33349609375,
+        "x": 337.66668701171875,
+        "y": 84.66667175292969
+      },
+      "top": 180.6666717529297,
+      "width": 2207
+    },
+    "virtual": {
+      "rect": {
+        "height": 1252.59375,
+        "width": 759.6666870117188,
+        "x": 1061.3333740234375,
+        "y": -64
+      },
+      "style": "contain: size style; overflow-anchor: none; flex: 0 0 auto; position: relative; width: 100%; height: 1252.59px; pointer-events: inherit;"
+    }
+  },
+  "after": {
+    "focus": {
+      "label": "Open outputs/json-readability-671.json in artifact workspace",
+      "tag": "BUTTON",
+      "text": "Open"
+    },
+    "frame": {
+      "card": "orchestrator:session:ses_-zUQnSSsczzyhSuDhQNY:message:msg_task-root-control_art_hTO0PHweLmRQPsZMSWOl_art_hTO0PHweLmRQPsZMSWOl",
+      "fullscreen": false,
+      "height": 606,
+      "rect": {
+        "height": 607.3333740234375,
+        "width": 734.3333740234375,
+        "x": 434,
+        "y": 383.9270935058594
+      },
+      "style": null
+    },
+    "scroll": {
+      "client": 635,
+      "following": "false",
+      "height": 2173,
+      "rect": {
+        "height": 635.3333740234375,
+        "width": 942.3333740234376,
+        "x": 337.66668701171875,
+        "y": 84.66667175292969
+      },
+      "top": 900.6666870117188,
+      "width": 927
+    },
+    "virtual": {
+      "rect": {
+        "height": 1889.916748046875,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": -784
+      },
+      "style": "contain: size style; overflow-anchor: none; flex: 0 0 auto; position: relative; width: 100%; height: 1889.92px; pointer-events: inherit;"
+    }
+  },
+  "beforeSearch": {
+    "focus": {
+      "label": "Open outputs/json-readability-671.json in artifact workspace",
+      "tag": "BUTTON",
+      "text": "Open"
+    },
+    "frame": {
+      "card": "orchestrator:session:ses_-zUQnSSsczzyhSuDhQNY:message:msg_task-root-control_art_hTO0PHweLmRQPsZMSWOl_art_hTO0PHweLmRQPsZMSWOl",
+      "fullscreen": false,
+      "height": 606,
+      "rect": {
+        "height": 607.3333740234375,
+        "width": 734.3333740234375,
+        "x": 434,
+        "y": 153.2604217529297
+      },
+      "style": null
+    },
+    "scroll": {
+      "client": 635,
+      "following": "false",
+      "height": 2173,
+      "rect": {
+        "height": 635.3333740234375,
+        "width": 942.3333740234376,
+        "x": 337.66668701171875,
+        "y": 84.66667175292969
+      },
+      "top": 1131.3333740234375,
+      "width": 927
+    },
+    "virtual": {
+      "rect": {
+        "height": 1889.916748046875,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": -1014.6666870117188
+      },
+      "style": "contain: size style; overflow-anchor: none; flex: 0 0 auto; position: relative; width: 100%; height: 1889.92px; pointer-events: inherit;"
+    }
+  },
+  "search": {
+    "focus": {
+      "label": "Search hierarchy",
+      "tag": "INPUT",
+      "text": ""
+    },
+    "frame": {
+      "card": "orchestrator:session:ses_-zUQnSSsczzyhSuDhQNY:message:msg_task-root-control_art_hTO0PHweLmRQPsZMSWOl_art_hTO0PHweLmRQPsZMSWOl",
+      "fullscreen": true,
+      "height": 1440,
+      "rect": {
+        "height": 1440,
+        "width": 2560,
+        "x": 0,
+        "y": 0
+      },
+      "style": null
+    },
+    "scroll": {
+      "client": 1355,
+      "following": "false",
+      "height": 1536,
+      "rect": {
+        "height": 1355.3333740234375,
+        "width": 2222.33349609375,
+        "x": 337.66668701171875,
+        "y": 84.66667175292969
+      },
+      "top": 180.6666717529297,
+      "width": 2207
+    },
+    "virtual": {
+      "rect": {
+        "height": 1252.59375,
+        "width": 759.6666870117188,
+        "x": 1061.3333740234375,
+        "y": -64
+      },
+      "style": "contain: size style; overflow-anchor: none; flex: 0 0 auto; position: relative; width: 100%; height: 1252.59px; pointer-events: inherit;"
+    }
+  },
+  "afterSearch": {
+    "focus": {
+      "label": "Open outputs/json-readability-671.json in artifact workspace",
+      "tag": "BUTTON",
+      "text": "Open"
+    },
+    "frame": {
+      "card": "orchestrator:session:ses_-zUQnSSsczzyhSuDhQNY:message:msg_task-root-control_art_hTO0PHweLmRQPsZMSWOl_art_hTO0PHweLmRQPsZMSWOl",
+      "fullscreen": false,
+      "height": 285,
+      "rect": {
+        "height": 286.66668701171875,
+        "width": 734.3333740234375,
+        "x": 434,
+        "y": 1103.9271240234375
+      },
+      "style": null
+    },
+    "scroll": {
+      "client": 635,
+      "following": "false",
+      "height": 1853,
+      "rect": {
+        "height": 635.3333740234375,
+        "width": 942.3333740234376,
+        "x": 337.66668701171875,
+        "y": 84.66667175292969
+      },
+      "top": 180.6666717529297,
+      "width": 927
+    },
+    "virtual": {
+      "rect": {
+        "height": 1569.25,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": -64
+      },
+      "style": "contain: size style; overflow-anchor: none; flex: 0 0 auto; position: relative; width: 100%; height: 1569.25px; pointer-events: inherit;"
+    }
+  },
+  "publicRead": {
+    "at": "2026-10-27T00:07:20.234Z",
+    "taskID": "tsk_g00VZCXW9Q00V0HGAp4Q",
+    "taskStatus": "completed",
+    "catalogStatus": 200,
+    "exactOriginalPublication": true,
+    "status": 200,
+    "requestID": "60bf234f-ea8c-455c-b83a-ae1076d5a89a",
+    "bytes": 394,
+    "exactOriginalFile": true,
+    "modelRequests": 0,
+    "catalog": [
+      {
+        "messageID": "msg_hhrcRq50qogQBOiRYn15",
+        "userMessageID": "msg_task-root-control_art_hTO0PHweLmRQPsZMSWOl_art_hTO0PHweLmRQPsZMSWOl",
+        "task": {
+          "id": "tsk_g00VZCXW9Q00V0HGAp4Q",
+          "title": "结构化数据阅读671",
+          "status": "completed"
+        },
+        "declaredOutputs": [
+          {
+            "declarationLocator": {
+              "source": "task_artifact_resource",
+              "ref": {
+                "snapshot": {
+                  "schema_version": 2,
+                  "project_id": "prj_hZJ83kgKX6eshCcwFA7H",
+                  "task_id": "tsk_g00VZCXW9Q00V0HGAp4Q",
+                  "snapshot_id": "ac3dbbdb-eb4c-5ea7-a12a-5138074ad5a9",
+                  "manifest_sha256": "6891e6fac0243f439978151b6eb2509fb3f1082c4a4fc269e7aab3e4d0c3a5e7"
+                },
+                "tree": "resources",
+                "path": "outputs/json-readability-671.json",
+                "media_type": "application/json",
+                "bytes": 394,
+                "sha256": "ae13b52724e6aa9329ab7550cee1f7585988698e6556832479ef6e0a16b5be6f"
+              }
+            },
+            "producer": {
+              "owner_kind": "projected-scheduler",
+              "expert_squad_id": "base",
+              "package_revision": {
+                "scope": "built_in",
+                "project_id": null,
+                "namespace": "builtin",
+                "id": "base",
+                "version": "2026.10.14.1",
+                "package_digest": "83ea97ae6b85c404ff6ff75b43ab0d72fe907d3013a3dcd651b322c5a5579f4f"
+              },
+              "agent_id": "orchestrator",
+              "projection_hash": "776bdea69effd166524e6d6c8ceb292116dd8a1824ab67ead36aa148bf6a8a95",
+              "session_id": "ses_-zUQnSSsczzyhSuDhQNY",
+              "message_id": "msg_h9qrM64AGPMIXRWp5RjC",
+              "tool_call_id": "call_0b59040650174608b45015ce844b7068"
+            },
+            "label": "outputs/json-readability-671.json",
+            "resources": [
+              {
+                "snapshot": {
+                  "schema_version": 2,
+                  "project_id": "prj_hZJ83kgKX6eshCcwFA7H",
+                  "task_id": "tsk_g00VZCXW9Q00V0HGAp4Q",
+                  "snapshot_id": "ac3dbbdb-eb4c-5ea7-a12a-5138074ad5a9",
+                  "manifest_sha256": "6891e6fac0243f439978151b6eb2509fb3f1082c4a4fc269e7aab3e4d0c3a5e7"
+                },
+                "tree": "resources",
+                "path": "outputs/json-readability-671.json",
+                "media_type": "application/json",
+                "bytes": 394,
+                "sha256": "ae13b52724e6aa9329ab7550cee1f7585988698e6556832479ef6e0a16b5be6f"
+              }
+            ]
+          }
+        ],
+        "entries": [
+          {
+            "source": "task_artifact",
+            "locator": {
+              "source": "task_artifact_resource",
+              "ref": {
+                "snapshot": {
+                  "schema_version": 2,
+                  "project_id": "prj_hZJ83kgKX6eshCcwFA7H",
+                  "task_id": "tsk_g00VZCXW9Q00V0HGAp4Q",
+                  "snapshot_id": "ac3dbbdb-eb4c-5ea7-a12a-5138074ad5a9",
+                  "manifest_sha256": "6891e6fac0243f439978151b6eb2509fb3f1082c4a4fc269e7aab3e4d0c3a5e7"
+                },
+                "tree": "resources",
+                "path": "outputs/json-readability-671.json",
+                "media_type": "application/json",
+                "bytes": 394,
+                "sha256": "ae13b52724e6aa9329ab7550cee1f7585988698e6556832479ef6e0a16b5be6f"
+              }
+            },
+            "kind": "task_artifact_resource",
+            "schema_diagnostic_truncated": false,
+            "label": "outputs/json-readability-671.json",
+            "label_truncated": false,
+            "goal_id": null,
+            "import_source_task_id": null,
+            "producer": {
+              "owner_kind": "projected-scheduler",
+              "expert_squad_id": "base",
+              "package_revision": {
+                "scope": "built_in",
+                "project_id": null,
+                "namespace": "builtin",
+                "id": "base",
+                "version": "2026.10.14.1",
+                "package_digest": "83ea97ae6b85c404ff6ff75b43ab0d72fe907d3013a3dcd651b322c5a5579f4f"
+              },
+              "agent_id": "orchestrator",
+              "projection_hash": "776bdea69effd166524e6d6c8ceb292116dd8a1824ab67ead36aa148bf6a8a95",
+              "session_id": "ses_-zUQnSSsczzyhSuDhQNY",
+              "message_id": "msg_h9qrM64AGPMIXRWp5RjC",
+              "tool_call_id": "call_0b59040650174608b45015ce844b7068"
+            },
+            "created_at_ms": 1793057291162,
+            "bytes": 394,
+            "sha256": "ae13b52724e6aa9329ab7550cee1f7585988698e6556832479ef6e0a16b5be6f",
+            "resource_count": 1,
+            "resource_media_types": [
+              "application/json"
+            ],
+            "resource_media_types_truncated": false,
+            "version": {
+              "state": "immutable",
+              "publication_sequence": 1
+            }
+          }
+        ],
+        "catalogComplete": true,
+        "providerErrors": []
+      }
+    ]
+  },
+  "files": {
+    "at": "2026-10-27T00:13:59.372Z",
+    "originalFivePreserved": true,
+    "jsonInputPreserved": true,
+    "jsonOutputPreserved": true,
+    "jsonBytes": 394
+  },
+  "closure": {
+    "reserveMs": 876367,
+    "requests": 0,
+    "cumulativeRequests": 315,
+    "sourceRows": 24614,
+    "protectedRows": 888,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true
+  }
+}

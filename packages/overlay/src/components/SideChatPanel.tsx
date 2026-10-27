@@ -151,7 +151,7 @@ export function SideChatPanel(props: {
   const report = (error: unknown) => setError(() => error)
   const rememberReadingPosition = () => {
     const owner = reader
-    if (!owner || owner.restoring || !isApiAuthorityCurrent(owner.authority) || boardStore.selectEpoch !== owner.epoch || selected() !== owner.sessionID || sourceKey() !== owner.sourceKey) return
+    if (!owner || owner.restoring || !owner.controller.canCaptureReading() || !isApiAuthorityCurrent(owner.authority) || boardStore.selectEpoch !== owner.epoch || selected() !== owner.sessionID || sourceKey() !== owner.sourceKey) return
     if (!scroll?.isConnected || scroll.clientHeight <= 0 || scroll.closest("[inert], [hidden]")) return
     if (owner.controller.hasViewportResize() && !owner.controller.hasScrollInput()) return
     setSideChatReadingPosition(owner.key, { ...owner.controller.readingPosition(), anchor: captureConversationReadingAnchor(scroll, sideChatReadingPosition(owner.key)?.anchor) })
@@ -280,6 +280,7 @@ export function SideChatPanel(props: {
           isTracking: tracking,
           onUserScrollUp: () => { setTracking(false); rememberReadingPosition() },
           onFollowRequested: () => { setTracking(true); rememberReadingPosition() },
+          onPositionRestored: rememberReadingPosition,
         })
         follow = controller
         reader = { key: readingKey, sourceKey: readingSource, sessionID, authority, epoch: boardStore.selectEpoch, controller, restoring: Boolean(position && !position.following) }

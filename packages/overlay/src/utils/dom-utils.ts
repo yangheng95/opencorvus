@@ -20,6 +20,7 @@ import { hasWorkspaceSelection, beginWorkspaceSelection } from "../services/work
 import { t } from "./i18n"
 import { iconHtml } from "./icon-html"
 import { escapeHtml } from "./markdown"
+import { isFullscreenViewportVisible, observeFullscreenViewport } from "./fullscreen"
 
 // ── Auto-scroll ──
 
@@ -41,8 +42,8 @@ import { escapeHtml } from "./markdown"
  * - `scrollToBottom` on the returned controller jumps to the bottom without
  *   being mis-classified as a user scroll (used when the caller turns
  *   tracking on again).
- * - `scrollToTop` mirrors that behavior for explicit jumps to the start of
- *   the transcript without polluting user-scroll detection.
+ * - Native fullscreen preserves the covered transcript's reading position;
+ *   fullscreen input belongs to its visible content, not the background reader.
  *
  * Program-initiated scrolls (our own scrollTop writes) are distinguished
  * from user scrolls by tracking the last landing position we set. Scroll
@@ -74,6 +75,7 @@ export type AutoScrollRestorePosition = {
 export interface AutoScrollOptions {
   initialPosition: { kind: "bottom" } | AutoScrollRestorePosition
   onViewportResize?: () => AutoScrollRestorePosition | undefined
+  onPositionRestored?: () => void
   isTracking: () => boolean
   onUserScrollUp: () => void
   onFollowRequested: () => void
@@ -83,10 +85,10 @@ export interface AutoScrollController {
   readingPosition: () => { top: number; following: boolean }
   hasScrollInput: () => boolean
   hasViewportResize: () => boolean
+  canCaptureReading: () => boolean
   cleanup: () => void
   contentChanged: () => void
   scrollToBottom: () => void
-  scrollToTop: () => void
 }
 
 export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoScrollController {
@@ -103,19 +105,65 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   let viewportHeight = el.clientHeight
   let restoreGeometry = ""
   let stableRestoreFrames = 0
+  let fullscreenReturnPending = false
+  let fullscreenReturnViewport: { width: number; height: number } | undefined
   let observedContentElements = new Set<Element>()
 
   const contentResizeObserver = new ResizeObserver(() => scheduleFollowScroll())
 
   function retirePositionRestore(restored = false) {
     if (restoreTop === null) return
+    const settled = restoration?.onRestoreSettled
     restoreTop = null
-    restoration?.onRestoreSettled?.(restored)
+    restoration = undefined
+    fullscreenReturnPending = false
+    fullscreenReturnViewport = undefined
+    settled?.(restored)
+  }
+
+  function pauseCoveredViewport(beforeRequest = false): boolean {
+    if (isFullscreenViewportVisible(el)) return false
+    if (!fullscreenReturnPending) {
+      fullscreenReturnPending = true
+      if (beforeRequest) {
+        const viewport = el.ownerDocument.documentElement
+        fullscreenReturnViewport = { width: viewport.clientWidth, height: viewport.clientHeight }
+      }
+      if (restoreTop === null) {
+        const top = beforeRequest ? el.scrollTop : expectedTop
+        restoreTop = top
+        restoration = {
+          kind: "position", top, layoutRoot: el,
+          onRestoreSettled: (restored) => { if (restored) opts.onPositionRestored?.() },
+        }
+      }
+      restoreGeometry = ""
+      stableRestoreFrames = 0
+      programScrollTarget = null
+      inputIntent = null
+      pointerScrollIntent = false
+      touchStartY = null
+    }
+    return true
+  }
+
+  function fullscreenViewportRestored(): boolean {
+    if (!fullscreenReturnViewport) return true
+    const viewport = el.ownerDocument.documentElement
+    return viewport.clientWidth === fullscreenReturnViewport.width && viewport.clientHeight === fullscreenReturnViewport.height
+  }
+
+  function takeOverFullscreenReturn() {
+    if (!fullscreenReturnPending) return
+    retirePositionRestore()
+    expectedTop = el.scrollTop
+    programScrollTarget = null
   }
 
   function onReadingIntent(event: Event) {
     // Only the nearest transcript owns this operator intent.
     event.stopPropagation()
+    if (pauseCoveredViewport()) return
     releaseFollowForReading()
   }
 
@@ -129,12 +177,14 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   }
 
   function onFocusIn(event: FocusEvent) {
+    if (fullscreenReturnPending) return
     if (event.target !== el && ownsTranscriptInput(event.target)) releaseFollowForReading()
   }
 
   function syncObservedContentElements() {
     const nextElements = new Set<Element>([
       el,
+      el.ownerDocument.documentElement,
       ...Array.from(el.children),
       ...(opts.initialPosition.kind === "position" ? [opts.initialPosition.layoutRoot] : []),
     ])
@@ -148,7 +198,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   }
 
   function ownsTranscriptInput(target: EventTarget | null): boolean {
-    return target instanceof Element && target.closest("[data-follow-lock]") === el
+    return !pauseCoveredViewport() && target instanceof Element && target.closest("[data-follow-lock]") === el
   }
 
   function rememberInputIntent(direction: "up" | "down") {
@@ -169,7 +219,9 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   }
 
   function onKeyDown(event: KeyboardEvent) {
-    if (!ownsTranscriptInput(event.target) || event.defaultPrevented || event.altKey || event.metaKey || event.shiftKey) return
+    if (!ownsTranscriptInput(event.target)) return
+    takeOverFullscreenReturn()
+    if (event.defaultPrevented || event.altKey || event.metaKey || event.shiftKey) return
     if (event.ctrlKey && event.key !== "Home" && event.key !== "End") return
     if (event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"]), [role="textbox"], [role="combobox"], [role="slider"]')) return
     if (event.key === "End") {
@@ -194,6 +246,8 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   }
 
   function onPointerDown(event: PointerEvent) {
+    if (!ownsTranscriptInput(event.target)) return
+    takeOverFullscreenReturn()
     if (event.target === el) {
       retirePositionRestore()
       pointerScrollIntent = true
@@ -232,6 +286,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   }
 
   function onScroll() {
+    if (pauseCoveredViewport() || fullscreenReturnPending) return
     const nextTop = el.scrollTop
     const delta = nextTop - expectedTop
     const bottomDistance = distanceFromBottom()
@@ -270,32 +325,35 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   }
 
   function restoreReadingPosition() {
-    if (restoreTop === null) return
+    if (restoreTop === null) return false
     if (restoration?.resolveTop) {
       const currentTop = restoration.resolveTop()
-      if (currentTop === null) return
+      if (currentTop === null) return false
       restoreTop = currentTop
     }
     const availableTop = Math.max(0, el.scrollHeight - el.clientHeight)
     el.scrollTop = Math.min(restoreTop, availableTop)
     programScrollTarget = el.scrollTop
     expectedTop = el.scrollTop
-    if (!restoration) return
+    if (!restoration) return false
     const layout = restoration.layoutRoot.getBoundingClientRect()
     const geometry = `${layout.width}:${layout.height}:${el.clientHeight}:${el.scrollHeight}:${restoreTop}`
     stableRestoreFrames = geometry === restoreGeometry ? stableRestoreFrames + 1 : 0
     restoreGeometry = geometry
-    if (availableTop >= restoreTop && layout.width > 0 && stableRestoreFrames >= 2) retirePositionRestore(true)
+    if ((availableTop >= restoreTop || fullscreenReturnPending) && layout.width > 0 && stableRestoreFrames >= 2)
+      retirePositionRestore(true)
+    return true
   }
 
   function scheduleFollowScroll() {
-    if (disposed) return
+    if (disposed || pauseCoveredViewport() || !fullscreenViewportRestored()) return
+    if (fullscreenReturnPending && opts.isTracking()) retirePositionRestore()
     const width = el.clientWidth
     const height = el.clientHeight
     if (width > 0 && height > 0 && (width !== viewportWidth || height !== viewportHeight)) {
       viewportWidth = width
       viewportHeight = height
-      const position = !opts.isTracking() ? opts.onViewportResize?.() : undefined
+      const position = !fullscreenReturnPending && !opts.isTracking() ? opts.onViewportResize?.() : undefined
       if (position) {
         restoration = position
         restoreTop = position.top
@@ -318,11 +376,11 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
     rafPending = true
     requestAnimationFrame(() => {
       rafPending = false
-      if (disposed) return
+      if (disposed || pauseCoveredViewport() || !fullscreenViewportRestored()) return
       syncFollowLockAttribute()
       if (restoreTop !== null) {
-        restoreReadingPosition()
-        if (restoreTop !== null && el.scrollHeight - el.clientHeight >= restoreTop) scheduleFollowScroll()
+        const resolved = restoreReadingPosition()
+        if (resolved && restoreTop !== null && (fullscreenReturnPending || el.scrollHeight - el.clientHeight >= restoreTop)) scheduleFollowScroll()
         return
       }
       if (!opts.isTracking()) return
@@ -342,7 +400,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
       // Gated on `isTracking()` so a user who has
       // scrolled away never gets yanked back.
       requestAnimationFrame(() => {
-        if (disposed || !opts.isTracking()) return
+        if (disposed || pauseCoveredViewport() || !fullscreenViewportRestored() || !opts.isTracking()) return
         if (distanceFromBottom() > BOTTOM_TOLERANCE) pinToBottom()
       })
     })
@@ -362,10 +420,14 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   el.addEventListener("scroll", onScroll, { passive: true })
   window.addEventListener("pointerup", clearPointerScrollIntent)
   window.addEventListener("pointercancel", clearPointerScrollIntent)
+  const stopObservingFullscreen = observeFullscreenViewport(el, (beforeRequest) => {
+    if (beforeRequest) pauseCoveredViewport(true)
+    scheduleFollowScroll()
+  })
   syncObservedContentElements()
 
   requestAnimationFrame(() => {
-    if (disposed) return
+    if (disposed || pauseCoveredViewport() || !fullscreenViewportRestored()) return
     syncFollowLockAttribute()
     if (opts.initialPosition.kind === "bottom") pinToBottom()
     else scheduleFollowScroll()
@@ -373,10 +435,12 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
 
   return {
     readingPosition: () => ({ top: restoreTop ?? el.scrollTop, following: opts.isTracking() }),
-    hasScrollInput: () => pointerScrollIntent || Boolean(inputIntent && performance.now() <= inputIntent.expiresAt),
+    hasScrollInput: () => isFullscreenViewportVisible(el) && (pointerScrollIntent || Boolean(inputIntent && performance.now() <= inputIntent.expiresAt)),
     hasViewportResize: () => el.clientWidth !== viewportWidth || el.clientHeight !== viewportHeight,
+    canCaptureReading: () => !disposed && !fullscreenReturnPending && isFullscreenViewportVisible(el),
     cleanup: () => {
       disposed = true
+      stopObservingFullscreen()
       retirePositionRestore()
       el.removeEventListener("wheel", onWheel)
       el.removeEventListener(TRANSCRIPT_READING_EVENT, onReadingIntent)
@@ -399,18 +463,10 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
       scheduleFollowScroll()
     },
     scrollToBottom: () => {
+      if (pauseCoveredViewport()) return
       retirePositionRestore()
       syncFollowLockAttribute()
-      el.scrollTop = el.scrollHeight
-      programScrollTarget = el.scrollTop
-      expectedTop = el.scrollTop
-    },
-    scrollToTop: () => {
-      retirePositionRestore()
-      syncFollowLockAttribute()
-      el.scrollTop = 0
-      programScrollTarget = el.scrollTop
-      expectedTop = el.scrollTop
+      pinToBottom()
     },
   }
 }

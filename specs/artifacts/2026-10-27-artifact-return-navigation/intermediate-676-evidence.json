@@ -1,0 +1,803 @@
+{
+  "qualification": "Actual intermediate UI review: search return improved, repeated return retains 57px deviation; not final success. No UI automated tests.",
+  "uiEntry": "main-B9axdZ-5.js",
+  "geometry": {
+    "json-after-direct-close": {
+      "focus": {
+        "label": "Open outputs/json-readability-671.json in artifact workspace",
+        "tag": "BUTTON",
+        "text": "Open"
+      },
+      "frame": {
+        "fullscreen": false,
+        "height": 606,
+        "rect": {
+          "height": 607.3333740234375,
+          "width": 734.3333740234375,
+          "x": 434,
+          "y": 244.59375
+        }
+      },
+      "scroll": {
+        "client": 635,
+        "following": "false",
+        "height": 2173,
+        "rect": {
+          "height": 635.3333740234375,
+          "width": 942.3333740234376,
+          "x": 337.66668701171875,
+          "y": 84.66667175292969
+        },
+        "top": 1040,
+        "width": 927
+      },
+      "virtual": {
+        "height": 1889.916748046875,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": -923.3333740234376
+      }
+    },
+    "json-after-keyboard-close": {
+      "focus": {
+        "label": "Open outputs/json-readability-671.json in artifact workspace",
+        "tag": "BUTTON",
+        "text": "Open"
+      },
+      "frame": {
+        "fullscreen": false,
+        "height": 606,
+        "rect": {
+          "height": 607.3333740234375,
+          "width": 734.3333740234375,
+          "x": 434,
+          "y": 553.2604370117188
+        }
+      },
+      "scroll": {
+        "client": 635,
+        "following": "false",
+        "height": 2173,
+        "rect": {
+          "height": 635.3333740234375,
+          "width": 942.3333740234376,
+          "x": 337.66668701171875,
+          "y": 84.66667175292969
+        },
+        "top": 731.3333129882812,
+        "width": 927
+      },
+      "virtual": {
+        "height": 1889.916748046875,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": -614.6666870117188
+      }
+    },
+    "json-after-native-escape-attempt": {
+      "focus": {
+        "label": "Search hierarchy",
+        "tag": "INPUT",
+        "text": ""
+      },
+      "frame": {
+        "fullscreen": true,
+        "height": 1440,
+        "rect": {
+          "height": 1440,
+          "width": 2560,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "scroll": {
+        "client": 1355,
+        "following": "false",
+        "height": 1536,
+        "rect": {
+          "height": 1355.3333740234375,
+          "width": 2222.33349609375,
+          "x": 337.66668701171875,
+          "y": 84.66667175292969
+        },
+        "top": 180.6666717529297,
+        "width": 2207
+      },
+      "virtual": {
+        "height": 1252.59375,
+        "width": 759.6666870117188,
+        "x": 1061.3333740234375,
+        "y": -64
+      }
+    },
+    "json-after-search-close": {
+      "focus": {
+        "label": "Open outputs/json-readability-671.json in artifact workspace",
+        "tag": "BUTTON",
+        "text": "Open"
+      },
+      "frame": {
+        "fullscreen": false,
+        "height": 285,
+        "rect": {
+          "height": 286.66668701171875,
+          "width": 734.3333740234375,
+          "x": 434,
+          "y": 244.59375
+        }
+      },
+      "scroll": {
+        "client": 635,
+        "following": "false",
+        "height": 1853,
+        "rect": {
+          "height": 635.3333740234375,
+          "width": 942.3333740234376,
+          "x": 337.66668701171875,
+          "y": 84.66667175292969
+        },
+        "top": 1040,
+        "width": 927
+      },
+      "virtual": {
+        "height": 1569.25,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": -923.3333740234376
+      }
+    },
+    "json-before-keyboard-open": {
+      "focus": {
+        "label": "Open outputs/json-readability-671.json in artifact workspace",
+        "tag": "BUTTON",
+        "text": "Open"
+      },
+      "frame": {
+        "fullscreen": false,
+        "height": 606,
+        "rect": {
+          "height": 607.3333740234375,
+          "width": 734.3333740234375,
+          "x": 434,
+          "y": 553.2604370117188
+        }
+      },
+      "scroll": {
+        "client": 635,
+        "following": "false",
+        "height": 2173,
+        "rect": {
+          "height": 635.3333740234375,
+          "width": 942.3333740234376,
+          "x": 337.66668701171875,
+          "y": 84.66667175292969
+        },
+        "top": 731.3333129882812,
+        "width": 927
+      },
+      "virtual": {
+        "height": 1889.916748046875,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": -614.6666870117188
+      }
+    },
+    "json-before-pointer-open": {
+      "focus": {
+        "label": "Open outputs/json-readability-671.json in artifact workspace",
+        "tag": "BUTTON",
+        "text": "Open"
+      },
+      "frame": {
+        "fullscreen": false,
+        "height": 606,
+        "rect": {
+          "height": 607.3333740234375,
+          "width": 734.3333740234375,
+          "x": 434,
+          "y": 409.2604370117187
+        }
+      },
+      "scroll": {
+        "client": 635,
+        "following": "false",
+        "height": 2173,
+        "rect": {
+          "height": 635.3333740234375,
+          "width": 942.3333740234376,
+          "x": 337.66668701171875,
+          "y": 84.66667175292969
+        },
+        "top": 875.3333129882812,
+        "width": 927
+      },
+      "virtual": {
+        "height": 1889.916748046875,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": -758.6666870117188
+      }
+    },
+    "json-before-search-open": {
+      "focus": {
+        "label": "Open outputs/json-readability-671.json in artifact workspace",
+        "tag": "BUTTON",
+        "text": "Open"
+      },
+      "frame": {
+        "fullscreen": false,
+        "height": 606,
+        "rect": {
+          "height": 607.3333740234375,
+          "width": 734.3333740234375,
+          "x": 434,
+          "y": 244.59375
+        }
+      },
+      "scroll": {
+        "client": 635,
+        "following": "false",
+        "height": 2173,
+        "rect": {
+          "height": 635.3333740234375,
+          "width": 942.3333740234376,
+          "x": 337.66668701171875,
+          "y": 84.66667175292969
+        },
+        "top": 1040,
+        "width": 927
+      },
+      "virtual": {
+        "height": 1889.916748046875,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": -923.3333740234376
+      }
+    },
+    "json-explicit-follow": {
+      "focus": null,
+      "frame": {
+        "fullscreen": false,
+        "height": 606,
+        "rect": {
+          "height": 607.3333740234375,
+          "width": 734.3333740234375,
+          "x": 434,
+          "y": -253.40625
+        }
+      },
+      "scroll": {
+        "client": 635,
+        "following": "true",
+        "height": 2173,
+        "rect": {
+          "height": 635.3333740234375,
+          "width": 942.3333740234376,
+          "x": 337.66668701171875,
+          "y": 84.66667175292969
+        },
+        "top": 1538,
+        "width": 927
+      },
+      "virtual": {
+        "height": 1889.916748046875,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": -1421.3333740234375
+      }
+    },
+    "json-fullscreen-direct": {
+      "focus": {
+        "label": "Close outputs/json-readability-671.json artifact workspace",
+        "tag": "BUTTON",
+        "text": "Close"
+      },
+      "frame": {
+        "fullscreen": true,
+        "height": 1440,
+        "rect": {
+          "height": 1440,
+          "width": 2560,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "scroll": {
+        "client": 1355,
+        "following": "false",
+        "height": 1536,
+        "rect": {
+          "height": 1355.3333740234375,
+          "width": 2222.33349609375,
+          "x": 337.66668701171875,
+          "y": 84.66667175292969
+        },
+        "top": 180.6666717529297,
+        "width": 2207
+      },
+      "virtual": {
+        "height": 1252.59375,
+        "width": 759.6666870117188,
+        "x": 1061.3333740234375,
+        "y": -64
+      }
+    },
+    "json-fullscreen-searched": {
+      "focus": {
+        "label": "Search hierarchy",
+        "tag": "INPUT",
+        "text": ""
+      },
+      "frame": {
+        "fullscreen": true,
+        "height": 1440,
+        "rect": {
+          "height": 1440,
+          "width": 2560,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "scroll": {
+        "client": 1355,
+        "following": "false",
+        "height": 1536,
+        "rect": {
+          "height": 1355.3333740234375,
+          "width": 2222.33349609375,
+          "x": 337.66668701171875,
+          "y": 84.66667175292969
+        },
+        "top": 180.6666717529297,
+        "width": 2207
+      },
+      "virtual": {
+        "height": 1252.59375,
+        "width": 759.6666870117188,
+        "x": 1061.3333740234375,
+        "y": -64
+      }
+    },
+    "json-initial-position": {
+      "focus": {
+        "label": null,
+        "tag": "BUTTON",
+        "text": "JSONjson-readability-671.jsonorchestrator · 394 BPreview"
+      },
+      "frame": {
+        "fullscreen": false,
+        "height": 606,
+        "rect": {
+          "height": 607.3333740234375,
+          "width": 734.3333740234375,
+          "x": 434,
+          "y": 185.92709350585935
+        }
+      },
+      "scroll": {
+        "client": 635,
+        "following": "false",
+        "height": 2173,
+        "rect": {
+          "height": 635.3333740234375,
+          "width": 942.3333740234376,
+          "x": 337.66668701171875,
+          "y": 84.66667175292969
+        },
+        "top": 1098.6666259765625,
+        "width": 927
+      },
+      "virtual": {
+        "height": 1889.916748046875,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": -982
+      }
+    },
+    "json-stable-after-native-close": {
+      "focus": {
+        "label": "Open outputs/json-readability-671.json in artifact workspace",
+        "tag": "BUTTON",
+        "text": "Open"
+      },
+      "frame": {
+        "fullscreen": false,
+        "height": 606,
+        "rect": {
+          "height": 607.3333740234375,
+          "width": 734.3333740234375,
+          "x": 434,
+          "y": 466.59375
+        }
+      },
+      "scroll": {
+        "client": 635,
+        "following": "false",
+        "height": 2173,
+        "rect": {
+          "height": 635.3333740234375,
+          "width": 942.3333740234376,
+          "x": 337.66668701171875,
+          "y": 84.66667175292969
+        },
+        "top": 818,
+        "width": 927
+      },
+      "virtual": {
+        "height": 1889.916748046875,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": -701.3333740234375
+      }
+    },
+    "json-stable-before-native-open": {
+      "focus": {
+        "label": "Open outputs/json-readability-671.json in artifact workspace",
+        "tag": "BUTTON",
+        "text": "Open"
+      },
+      "frame": {
+        "fullscreen": false,
+        "height": 606,
+        "rect": {
+          "height": 607.3333740234375,
+          "width": 734.3333740234375,
+          "x": 434,
+          "y": 409.2604370117187
+        }
+      },
+      "scroll": {
+        "client": 635,
+        "following": "false",
+        "height": 2173,
+        "rect": {
+          "height": 635.3333740234375,
+          "width": 942.3333740234376,
+          "x": 337.66668701171875,
+          "y": 84.66667175292969
+        },
+        "top": 875.3333129882812,
+        "width": 927
+      },
+      "virtual": {
+        "height": 1889.916748046875,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": -758.6666870117188
+      }
+    }
+  },
+  "physical": {
+    "at": "2026-10-27T00:35:05.644Z",
+    "run": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-27/artifact-return-676",
+    "port": 38181,
+    "uiEntry": "main-B9axdZ-5.js",
+    "database": {
+      "schema": 8,
+      "integrity": "ok",
+      "clonedTables": 92,
+      "clonedRows": 24614,
+      "originalSourceAllRowsPreserved": true,
+      "protectedTables": {
+        "automation": {
+          "original": 4,
+          "current": 4,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_definition_tombstone": {
+          "original": 0,
+          "current": 0,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_delay_settlement": {
+          "original": 0,
+          "current": 0,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_fire": {
+          "original": 3,
+          "current": 3,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_fire_attempt": {
+          "original": 1,
+          "current": 1,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_fire_attempt_receipt": {
+          "original": 1,
+          "current": 1,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_fire_frontier": {
+          "original": 0,
+          "current": 0,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_project_target": {
+          "original": 0,
+          "current": 0,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_run": {
+          "original": 1,
+          "current": 1,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_run_receipt": {
+          "original": 1,
+          "current": 1,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "message": {
+          "original": 72,
+          "current": 72,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "part": {
+          "original": 236,
+          "current": 236,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "protocol_event": {
+          "original": 221,
+          "current": 221,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "provider_activity_outcome": {
+          "original": 85,
+          "current": 85,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "provider_activity_request": {
+          "original": 85,
+          "current": 85,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "session": {
+          "original": 16,
+          "current": 16,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "tool_part_outcome": {
+          "original": 74,
+          "current": 74,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "tool_part_progress": {
+          "original": 14,
+          "current": 14,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "tool_part_request": {
+          "original": 74,
+          "current": 74,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        }
+      }
+    },
+    "originalReadmeBytesPreserved": true,
+    "credentialsCopied": false,
+    "requests": 0,
+    "cumulativeRequests": 315,
+    "publicShutdown": 200,
+    "reserveMs": 1006153,
+    "physical": {
+      "observedAtUtc": "2026-10-27T00:35:04.7517444Z",
+      "native": {
+        "occurrence": "artifact-return-676-c8fe48c2-cc2c-4e34-a864-6aa400302dd9",
+        "outcome": "settled",
+        "host": {
+          "pid": 99472,
+          "processInstanceID": "win32:639286578895603263",
+          "occurrenceID": "20456854-7fae-45e1-bd21-79a840a918f6"
+        },
+        "target": {
+          "pid": 32884,
+          "processInstanceID": "win32:639286578902894066",
+          "occurrenceID": "36f9df81-5949-4384-a332-f876c5890c34"
+        },
+        "observedAtUtc": "2026-10-27T00:34:42.618Z",
+        "deadlineAt": 1793062288771,
+        "terminal": {
+          "occurrenceID": "artifact-return-676-c8fe48c2-cc2c-4e34-a864-6aa400302dd9",
+          "pid": 32884,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 99472,
+            "processInstanceID": "win32:639286578895603263",
+            "occurrenceID": "20456854-7fae-45e1-bd21-79a840a918f6"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 32884,
+            "processInstanceID": "win32:639286578902894066",
+            "occurrenceID": "36f9df81-5949-4384-a332-f876c5890c34"
+          }
+        }
+      ],
+      "launcher": {
+        "observedAtUtc": "2026-10-27T00:34:42.6512116Z",
+        "originalChildExit": 0
+      }
+    },
+    "successfulShutdown": true
+  },
+  "publicRead": {
+    "at": "2026-10-27T00:31:48.433Z",
+    "taskID": "tsk_g00VZCXW9Q00V0HGAp4Q",
+    "taskStatus": "completed",
+    "catalogStatus": 200,
+    "exactOriginalPublication": true,
+    "status": 200,
+    "requestID": "a8149426-ea25-4477-a53e-7503da4ba880",
+    "bytes": 394,
+    "exactOriginalFile": true,
+    "modelRequests": 0,
+    "catalog": [
+      {
+        "messageID": "msg_hhrcRq50qogQBOiRYn15",
+        "userMessageID": "msg_task-root-control_art_hTO0PHweLmRQPsZMSWOl_art_hTO0PHweLmRQPsZMSWOl",
+        "task": {
+          "id": "tsk_g00VZCXW9Q00V0HGAp4Q",
+          "title": "结构化数据阅读671",
+          "status": "completed"
+        },
+        "declaredOutputs": [
+          {
+            "declarationLocator": {
+              "source": "task_artifact_resource",
+              "ref": {
+                "snapshot": {
+                  "schema_version": 2,
+                  "project_id": "prj_hZJ83kgKX6eshCcwFA7H",
+                  "task_id": "tsk_g00VZCXW9Q00V0HGAp4Q",
+                  "snapshot_id": "ac3dbbdb-eb4c-5ea7-a12a-5138074ad5a9",
+                  "manifest_sha256": "6891e6fac0243f439978151b6eb2509fb3f1082c4a4fc269e7aab3e4d0c3a5e7"
+                },
+                "tree": "resources",
+                "path": "outputs/json-readability-671.json",
+                "media_type": "application/json",
+                "bytes": 394,
+                "sha256": "ae13b52724e6aa9329ab7550cee1f7585988698e6556832479ef6e0a16b5be6f"
+              }
+            },
+            "producer": {
+              "owner_kind": "projected-scheduler",
+              "expert_squad_id": "base",
+              "package_revision": {
+                "scope": "built_in",
+                "project_id": null,
+                "namespace": "builtin",
+                "id": "base",
+                "version": "2026.10.14.1",
+                "package_digest": "83ea97ae6b85c404ff6ff75b43ab0d72fe907d3013a3dcd651b322c5a5579f4f"
+              },
+              "agent_id": "orchestrator",
+              "projection_hash": "776bdea69effd166524e6d6c8ceb292116dd8a1824ab67ead36aa148bf6a8a95",
+              "session_id": "ses_-zUQnSSsczzyhSuDhQNY",
+              "message_id": "msg_h9qrM64AGPMIXRWp5RjC",
+              "tool_call_id": "call_0b59040650174608b45015ce844b7068"
+            },
+            "label": "outputs/json-readability-671.json",
+            "resources": [
+              {
+                "snapshot": {
+                  "schema_version": 2,
+                  "project_id": "prj_hZJ83kgKX6eshCcwFA7H",
+                  "task_id": "tsk_g00VZCXW9Q00V0HGAp4Q",
+                  "snapshot_id": "ac3dbbdb-eb4c-5ea7-a12a-5138074ad5a9",
+                  "manifest_sha256": "6891e6fac0243f439978151b6eb2509fb3f1082c4a4fc269e7aab3e4d0c3a5e7"
+                },
+                "tree": "resources",
+                "path": "outputs/json-readability-671.json",
+                "media_type": "application/json",
+                "bytes": 394,
+                "sha256": "ae13b52724e6aa9329ab7550cee1f7585988698e6556832479ef6e0a16b5be6f"
+              }
+            ]
+          }
+        ],
+        "entries": [
+          {
+            "source": "task_artifact",
+            "locator": {
+              "source": "task_artifact_resource",
+              "ref": {
+                "snapshot": {
+                  "schema_version": 2,
+                  "project_id": "prj_hZJ83kgKX6eshCcwFA7H",
+                  "task_id": "tsk_g00VZCXW9Q00V0HGAp4Q",
+                  "snapshot_id": "ac3dbbdb-eb4c-5ea7-a12a-5138074ad5a9",
+                  "manifest_sha256": "6891e6fac0243f439978151b6eb2509fb3f1082c4a4fc269e7aab3e4d0c3a5e7"
+                },
+                "tree": "resources",
+                "path": "outputs/json-readability-671.json",
+                "media_type": "application/json",
+                "bytes": 394,
+                "sha256": "ae13b52724e6aa9329ab7550cee1f7585988698e6556832479ef6e0a16b5be6f"
+              }
+            },
+            "kind": "task_artifact_resource",
+            "schema_diagnostic_truncated": false,
+            "label": "outputs/json-readability-671.json",
+            "label_truncated": false,
+            "goal_id": null,
+            "import_source_task_id": null,
+            "producer": {
+              "owner_kind": "projected-scheduler",
+              "expert_squad_id": "base",
+              "package_revision": {
+                "scope": "built_in",
+                "project_id": null,
+                "namespace": "builtin",
+                "id": "base",
+                "version": "2026.10.14.1",
+                "package_digest": "83ea97ae6b85c404ff6ff75b43ab0d72fe907d3013a3dcd651b322c5a5579f4f"
+              },
+              "agent_id": "orchestrator",
+              "projection_hash": "776bdea69effd166524e6d6c8ceb292116dd8a1824ab67ead36aa148bf6a8a95",
+              "session_id": "ses_-zUQnSSsczzyhSuDhQNY",
+              "message_id": "msg_h9qrM64AGPMIXRWp5RjC",
+              "tool_call_id": "call_0b59040650174608b45015ce844b7068"
+            },
+            "created_at_ms": 1793057291162,
+            "bytes": 394,
+            "sha256": "ae13b52724e6aa9329ab7550cee1f7585988698e6556832479ef6e0a16b5be6f",
+            "resource_count": 1,
+            "resource_media_types": [
+              "application/json"
+            ],
+            "resource_media_types_truncated": false,
+            "version": {
+              "state": "immutable",
+              "publication_sequence": 1
+            }
+          }
+        ],
+        "catalogComplete": true,
+        "providerErrors": []
+      }
+    ]
+  },
+  "browserConsole": [],
+  "projectFiles": {
+    "at": "2026-10-27T00:36:02.465Z",
+    "originalFivePreserved": true,
+    "jsonInputPreserved": true,
+    "jsonOutputPreserved": true,
+    "jsonBytes": 394
+  }
+}

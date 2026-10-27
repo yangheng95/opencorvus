@@ -1980,6 +1980,28 @@ input intent instead of consuming it as a return to the bottom. Programmatic
 echoes and content-layout rebasing keep their existing discrimination. An
 ordinary return to the bottom re-arms follow mode.
 
+ArtifactFrame and MCP App native fullscreen requests notify this same controller
+before invoking the browser API, since the browser resizes before announcing its
+fullscreen element. An actual pending request covers that transition; the native
+fullscreen element determines visibility thereafter. A fullscreen ancestor of
+the scrollport remains visible; background ancestor and sibling scrollports
+retain their existing restore position and follow state without adopting the
+temporary layout or fullscreen content's input and focus.
+
+On return, the same scroll writer waits for the native document viewport to
+return to its pre-request dimensions, then restores the retained position after
+stable layout, accepting the available end when fullscreen interaction shortened
+the content. The existing ResizeObserver observes the document root as well as
+the scrollport; a temporarily stable full-height viewport cannot settle a return
+against its temporary scroll limit. Fresh visible input can take over a changed
+viewport. Following readers return to the bottom. Native focus restoration cannot
+cancel this return; fresh visible reading input can take over. Main, selected
+Agent and Side Chat capture their existing source-owned reading records only
+from visible, settled scrollports. Main history loading and width restoration
+observe the same ownership. Disposal retires the document subscription and queued
+work with the existing controller/source lifetime; no separate artifact bookmark,
+renderer copy, or close-button scroll writer owns the return.
+
 The main virtual Conversation reads that same follow signal for its render
 buffer. Following the output uses the viewport range; reading history uses the
 existing four-card pixel buffer. This keeps directional scroll/idle overscan

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [作品返回导航调查证据](2026-10-27-artifact-return-navigation/README.md)：全屏返回失位基线、精确时序日志、最终读位与29张实页原图。
+
 - [JSON交付物阅读体验证据](2026-10-27-json-reading-journey/README.md)：14张原图、真实JSON/Task交付、23次模型请求及复制下载原字节。
 
 - [文件阅读与编辑体验证据](2026-10-27-file-reading-editing-journey/README.md)：17张原图、新建文件原文、真实目录/字节/项目隔离回执和运行结清。

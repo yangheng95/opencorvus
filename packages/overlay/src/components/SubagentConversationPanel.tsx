@@ -88,6 +88,7 @@ function SubagentConversationScroll(props: {
     }
   })
   const saveReadingPosition = () => {
+    if (!scrollController?.canCaptureReading()) return
     // Hiding the pane can clamp its geometry before Solid retires this owner.
     // The last visible observation remains the reader's intended position.
     if (scrollController?.hasViewportResize() && !scrollController.hasScrollInput()) return
@@ -133,6 +134,7 @@ function SubagentConversationScroll(props: {
         isTracking: tracking,
         onUserScrollUp: () => changeTracking(false),
         onFollowRequested: () => changeTracking(true),
+        onPositionRestored: saveReadingPosition,
       })
       onCleanup(() => {
         scrollController?.cleanup()

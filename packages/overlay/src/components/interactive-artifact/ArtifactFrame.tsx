@@ -3,6 +3,7 @@ import type { InteractiveArtifactPayload } from "../../services/interactive-arti
 import { artifactExports, type ArtifactExport } from "../../services/artifact-export"
 import { reportError } from "../../services/diagnostics"
 import { t } from "../../utils/i18n"
+import { requestNativeFullscreen } from "../../utils/fullscreen"
 import { Button } from "../ui/Button"
 import { Icon } from "../ui/Icon"
 import { ArtifactActions } from "./ArtifactActions"
@@ -45,7 +46,7 @@ export function ArtifactFrame(props: {
     }
     setImmersive(true)
     try {
-      await frame.requestFullscreen()
+      await requestNativeFullscreen(frame)
     } catch (error) {
       setImmersive(false)
       reportError({

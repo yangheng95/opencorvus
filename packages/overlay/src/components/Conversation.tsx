@@ -448,7 +448,7 @@ export function Conversation(props: {
     isApiAuthorityCurrent(owner.authority) && readingKey() === owner.key
   const rememberReadingPosition = (currentLayout = false) => {
     const owner = reader
-    if (!owner || !ownsReader(owner) || owner.pending || !scrollController || boardStore.taskSwitching ||
+    if (!owner || !ownsReader(owner) || owner.pending || !scrollController?.canCaptureReading() || boardStore.taskSwitching ||
       !ownsConversationHistory(owner.source, owner.authority) || !hasItems() || !el.isConnected ||
       el.clientHeight <= 0 || el.clientWidth <= 0 || el.closest("[inert], [hidden]")) return
     const position = scrollController.readingPosition()
@@ -481,6 +481,7 @@ export function Conversation(props: {
       isTracking: tracking,
       onUserScrollUp: () => changeTracking(false),
       onFollowRequested: () => changeTracking(true),
+      onPositionRestored: () => rememberReadingPosition(true),
     })
   }
   const bindReader = () => {
@@ -563,7 +564,7 @@ export function Conversation(props: {
   })
   const measuredContentChanged = () => {
     const owner = reader
-    if (owner && ownsReader(owner) && !owner.pending && !tracking() && !scrollController?.hasScrollInput() && el.clientWidth > 0) {
+    if (owner && ownsReader(owner) && !owner.pending && !tracking() && scrollController?.canCaptureReading() && !scrollController.hasScrollInput() && el.clientWidth > 0) {
       const position = mainReadingPosition(owner.key)
       if (position && !position.following && position.viewportWidth !== el.clientWidth) {
         owner.pending = position
@@ -747,6 +748,7 @@ export function Conversation(props: {
     }
     const hasHistoryIntent = () => Date.now() <= historyIntentUntil
     const onHistoryWheel = (event: WheelEvent) => {
+      if (!scrollController?.canCaptureReading()) return
       if (event.deltaY < 0) markHistoryIntent()
     }
     const keyboardLineStep = () => {
@@ -762,6 +764,7 @@ export function Conversation(props: {
       End: () => el.scrollTo({ top: el.scrollHeight, behavior: "smooth" }),
     }
     const onHistoryKeyDown = (event: KeyboardEvent) => {
+      if (!scrollController?.canCaptureReading()) return
       if (event.target !== el || event.defaultPrevented) return
       if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
       const scroll = keyboardScrollActions[event.key]
@@ -771,15 +774,18 @@ export function Conversation(props: {
       scroll()
     }
     const onHistoryTouchStart = (event: TouchEvent) => {
+      if (!scrollController?.canCaptureReading()) return
       touchStartY = event.touches[0]?.clientY ?? null
     }
     const onHistoryTouchMove = (event: TouchEvent) => {
+      if (!scrollController?.canCaptureReading()) return
       const y = event.touches[0]?.clientY ?? null
       if (touchStartY !== null && y !== null && y > touchStartY + 8) {
         markHistoryIntent()
       }
     }
     const onHistoryScroll = () => {
+      if (!scrollController?.canCaptureReading()) return
       rememberReadingPosition()
       if (reader?.pending) return
       if (historyLoadInFlight || el.scrollTop > 96 || !hasHistoryIntent()) return

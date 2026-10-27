@@ -1,0 +1,350 @@
+{
+  "qualification": "Intermediate candidate failed exact reading return; not final acceptance.",
+  "uiEntry": "main-DbACRFVt.js",
+  "geometry": {
+    "json-after-direct-close": {
+      "focus": {
+        "label": "Open outputs/json-readability-671.json in artifact workspace",
+        "tag": "BUTTON",
+        "text": "Open"
+      },
+      "frame": {
+        "card": "orchestrator:session:ses_-zUQnSSsczzyhSuDhQNY:message:msg_task-root-control_art_hTO0PHweLmRQPsZMSWOl_art_hTO0PHweLmRQPsZMSWOl",
+        "fullscreen": false,
+        "height": 606,
+        "rect": {
+          "height": 607.3333740234375,
+          "width": 734.3333740234375,
+          "x": 434,
+          "y": 466.59375
+        }
+      },
+      "scroll": {
+        "client": 635,
+        "following": "false",
+        "height": 2173,
+        "rect": {
+          "height": 635.3333740234375,
+          "width": 942.3333740234376,
+          "x": 337.66668701171875,
+          "y": 84.66667175292969
+        },
+        "top": 818,
+        "width": 927
+      },
+      "virtual": {
+        "height": 1889.916748046875,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": -701.3333740234375
+      }
+    },
+    "json-before-direct-open": {
+      "focus": {
+        "label": null,
+        "tag": "BUTTON",
+        "text": "JSONjson-readability-671.jsonorchestrator · 394 BPreview"
+      },
+      "frame": {
+        "card": "orchestrator:session:ses_-zUQnSSsczzyhSuDhQNY:message:msg_task-root-control_art_hTO0PHweLmRQPsZMSWOl_art_hTO0PHweLmRQPsZMSWOl",
+        "fullscreen": false,
+        "height": 606,
+        "rect": {
+          "height": 607.3333740234375,
+          "width": 734.3333740234375,
+          "x": 434,
+          "y": 185.92709350585935
+        }
+      },
+      "scroll": {
+        "client": 635,
+        "following": "false",
+        "height": 2173,
+        "rect": {
+          "height": 635.3333740234375,
+          "width": 942.3333740234376,
+          "x": 337.66668701171875,
+          "y": 84.66667175292969
+        },
+        "top": 1098.6666259765625,
+        "width": 927
+      },
+      "virtual": {
+        "height": 1889.916748046875,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": -982
+      }
+    },
+    "json-direct-fullscreen": {
+      "focus": {
+        "label": "Close outputs/json-readability-671.json artifact workspace",
+        "tag": "BUTTON",
+        "text": "Close"
+      },
+      "frame": {
+        "card": "orchestrator:session:ses_-zUQnSSsczzyhSuDhQNY:message:msg_task-root-control_art_hTO0PHweLmRQPsZMSWOl_art_hTO0PHweLmRQPsZMSWOl",
+        "fullscreen": true,
+        "height": 1440,
+        "rect": {
+          "height": 1440,
+          "width": 2560,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "scroll": {
+        "client": 1355,
+        "following": "false",
+        "height": 1536,
+        "rect": {
+          "height": 1355.3333740234375,
+          "width": 2222.33349609375,
+          "x": 337.66668701171875,
+          "y": 84.66667175292969
+        },
+        "top": 180.6666717529297,
+        "width": 2207
+      },
+      "virtual": {
+        "height": 1252.59375,
+        "width": 759.6666870117188,
+        "x": 1061.3333740234375,
+        "y": -64
+      }
+    },
+    "json-stable-before-direct-open": {
+      "focus": {
+        "label": null,
+        "tag": "BUTTON",
+        "text": "JSONjson-readability-671.jsonorchestrator · 394 BPreview"
+      },
+      "frame": {
+        "card": "orchestrator:session:ses_-zUQnSSsczzyhSuDhQNY:message:msg_task-root-control_art_hTO0PHweLmRQPsZMSWOl_art_hTO0PHweLmRQPsZMSWOl",
+        "fullscreen": false,
+        "height": 606,
+        "rect": {
+          "height": 607.3333740234375,
+          "width": 734.3333740234375,
+          "x": 434,
+          "y": 185.92709350585935
+        }
+      },
+      "scroll": {
+        "client": 635,
+        "following": "false",
+        "height": 2173,
+        "rect": {
+          "height": 635.3333740234375,
+          "width": 942.3333740234376,
+          "x": 337.66668701171875,
+          "y": 84.66667175292969
+        },
+        "top": 1098.6666259765625,
+        "width": 927
+      },
+      "virtual": {
+        "height": 1889.916748046875,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": -982
+      }
+    }
+  },
+  "physical": {
+    "at": "2026-10-27T00:39:10.371Z",
+    "run": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-27/artifact-return-677",
+    "port": 38182,
+    "uiEntry": "main-DbACRFVt.js",
+    "database": {
+      "schema": 8,
+      "integrity": "ok",
+      "clonedTables": 92,
+      "clonedRows": 24614,
+      "originalSourceAllRowsPreserved": true,
+      "protectedTables": {
+        "automation": {
+          "original": 4,
+          "current": 4,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_definition_tombstone": {
+          "original": 0,
+          "current": 0,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_delay_settlement": {
+          "original": 0,
+          "current": 0,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_fire": {
+          "original": 3,
+          "current": 3,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_fire_attempt": {
+          "original": 1,
+          "current": 1,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_fire_attempt_receipt": {
+          "original": 1,
+          "current": 1,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_fire_frontier": {
+          "original": 0,
+          "current": 0,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_project_target": {
+          "original": 0,
+          "current": 0,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_run": {
+          "original": 1,
+          "current": 1,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_run_receipt": {
+          "original": 1,
+          "current": 1,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "message": {
+          "original": 72,
+          "current": 72,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "part": {
+          "original": 236,
+          "current": 236,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "protocol_event": {
+          "original": 221,
+          "current": 221,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "provider_activity_outcome": {
+          "original": 85,
+          "current": 85,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "provider_activity_request": {
+          "original": 85,
+          "current": 85,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "session": {
+          "original": 16,
+          "current": 16,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "tool_part_outcome": {
+          "original": 74,
+          "current": 74,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "tool_part_progress": {
+          "original": 14,
+          "current": 14,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "tool_part_request": {
+          "original": 74,
+          "current": 74,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        }
+      }
+    },
+    "originalReadmeBytesPreserved": true,
+    "credentialsCopied": false,
+    "requests": 0,
+    "cumulativeRequests": 315,
+    "publicShutdown": 200,
+    "reserveMs": 1072832,
+    "physical": {
+      "observedAtUtc": "2026-10-27T00:39:09.6209417Z",
+      "native": {
+        "occurrence": "artifact-return-677-ebef48e5-b463-4bb0-9694-ec4813de54c5",
+        "outcome": "settled",
+        "host": {
+          "pid": 83216,
+          "processInstanceID": "win32:639286582220047537",
+          "occurrenceID": "ff6b1622-8ec3-4336-80ba-cd1a0c5f4a2d"
+        },
+        "target": {
+          "pid": 67064,
+          "processInstanceID": "win32:639286582228019011",
+          "occurrenceID": "ee373af8-991b-46aa-9f65-17af734335d3"
+        },
+        "observedAtUtc": "2026-10-27T00:39:08.644Z",
+        "deadlineAt": 1793062621476,
+        "terminal": {
+          "occurrenceID": "artifact-return-677-ebef48e5-b463-4bb0-9694-ec4813de54c5",
+          "pid": 67064,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 83216,
+            "processInstanceID": "win32:639286582220047537",
+            "occurrenceID": "ff6b1622-8ec3-4336-80ba-cd1a0c5f4a2d"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 67064,
+            "processInstanceID": "win32:639286582228019011",
+            "occurrenceID": "ee373af8-991b-46aa-9f65-17af734335d3"
+          }
+        }
+      ],
+      "launcher": {
+        "observedAtUtc": "2026-10-27T00:39:08.677124Z",
+        "originalChildExit": 0
+      }
+    },
+    "successfulShutdown": true
+  },
+  "browserConsole": [],
+  "projectFiles": {
+    "at": "2026-10-27T00:43:50.047Z",
+    "originalFivePreserved": true,
+    "jsonInputPreserved": true,
+    "jsonOutputPreserved": true,
+    "jsonBytes": 394
+  }
+}

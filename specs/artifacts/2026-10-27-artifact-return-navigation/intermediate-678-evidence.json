@@ -1,0 +1,263 @@
+{
+  "qualification": "Temporary diagnostic output did not serialize object arguments; tools repaired before next observation.",
+  "uiEntry": "main-De2FDcxd.js",
+  "geometry": {},
+  "physical": {
+    "at": "2026-10-27T00:42:53.530Z",
+    "run": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-27/artifact-return-678",
+    "port": 38183,
+    "uiEntry": "main-De2FDcxd.js",
+    "database": {
+      "schema": 8,
+      "integrity": "ok",
+      "clonedTables": 92,
+      "clonedRows": 24614,
+      "originalSourceAllRowsPreserved": true,
+      "protectedTables": {
+        "automation": {
+          "original": 4,
+          "current": 4,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_definition_tombstone": {
+          "original": 0,
+          "current": 0,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_delay_settlement": {
+          "original": 0,
+          "current": 0,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_fire": {
+          "original": 3,
+          "current": 3,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_fire_attempt": {
+          "original": 1,
+          "current": 1,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_fire_attempt_receipt": {
+          "original": 1,
+          "current": 1,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_fire_frontier": {
+          "original": 0,
+          "current": 0,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_project_target": {
+          "original": 0,
+          "current": 0,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_run": {
+          "original": 1,
+          "current": 1,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "automation_run_receipt": {
+          "original": 1,
+          "current": 1,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "message": {
+          "original": 72,
+          "current": 72,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "part": {
+          "original": 236,
+          "current": 236,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "protocol_event": {
+          "original": 221,
+          "current": 221,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "provider_activity_outcome": {
+          "original": 85,
+          "current": 85,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "provider_activity_request": {
+          "original": 85,
+          "current": 85,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "session": {
+          "original": 16,
+          "current": 16,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "tool_part_outcome": {
+          "original": 74,
+          "current": 74,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "tool_part_progress": {
+          "original": 14,
+          "current": 14,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        },
+        "tool_part_request": {
+          "original": 74,
+          "current": 74,
+          "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+          "updates": []
+        }
+      }
+    },
+    "originalReadmeBytesPreserved": true,
+    "credentialsCopied": false,
+    "requests": 0,
+    "cumulativeRequests": 315,
+    "publicShutdown": 200,
+    "reserveMs": 1111551,
+    "physical": {
+      "observedAtUtc": "2026-10-27T00:42:52.7532774Z",
+      "native": {
+        "occurrence": "artifact-return-678-05c0cdbf-c31a-4b60-956b-cefb7b7b544e",
+        "outcome": "settled",
+        "host": {
+          "pid": 11428,
+          "processInstanceID": "win32:639286584840513958",
+          "occurrenceID": "f351e4c0-5f2c-4064-bc2f-996ce89a9419"
+        },
+        "target": {
+          "pid": 99676,
+          "processInstanceID": "win32:639286584847530210",
+          "occurrenceID": "af4b030f-e7a6-47b0-827d-655e18207792"
+        },
+        "observedAtUtc": "2026-10-27T00:42:51.689Z",
+        "deadlineAt": 1793062883240,
+        "terminal": {
+          "occurrenceID": "artifact-return-678-05c0cdbf-c31a-4b60-956b-cefb7b7b544e",
+          "pid": 99676,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 11428,
+            "processInstanceID": "win32:639286584840513958",
+            "occurrenceID": "f351e4c0-5f2c-4064-bc2f-996ce89a9419"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 99676,
+            "processInstanceID": "win32:639286584847530210",
+            "occurrenceID": "af4b030f-e7a6-47b0-827d-655e18207792"
+          }
+        }
+      ],
+      "launcher": {
+        "originalChildExit": 0,
+        "observedAtUtc": "2026-10-27T00:42:51.7201848Z"
+      }
+    },
+    "successfulShutdown": true
+  },
+  "browserConsole": [],
+  "projectFiles": {
+    "at": "2026-10-27T00:43:50.055Z",
+    "originalFivePreserved": true,
+    "jsonInputPreserved": true,
+    "jsonOutputPreserved": true,
+    "jsonBytes": 394
+  },
+  "diagnosticLog": [
+    {
+      "level": "debug",
+      "message": "fullscreen-reading Object",
+      "timestamp": "2026-10-27T00:42:09.219Z",
+      "url": "http://127.0.0.1:38183/ui/assets/main-De2FDcxd.js"
+    },
+    {
+      "level": "debug",
+      "message": "fullscreen-reading Object",
+      "timestamp": "2026-10-27T00:42:09.264Z",
+      "url": "http://127.0.0.1:38183/ui/assets/main-De2FDcxd.js"
+    },
+    {
+      "level": "debug",
+      "message": "fullscreen-reading Object",
+      "timestamp": "2026-10-27T00:42:09.330Z",
+      "url": "http://127.0.0.1:38183/ui/assets/main-De2FDcxd.js"
+    },
+    {
+      "level": "debug",
+      "message": "fullscreen-reading Object",
+      "timestamp": "2026-10-27T00:42:09.588Z",
+      "url": "http://127.0.0.1:38183/ui/assets/main-De2FDcxd.js"
+    },
+    {
+      "level": "debug",
+      "message": "fullscreen-reading Object",
+      "timestamp": "2026-10-27T00:42:09.598Z",
+      "url": "http://127.0.0.1:38183/ui/assets/main-De2FDcxd.js"
+    },
+    {
+      "level": "debug",
+      "message": "fullscreen-reading Object",
+      "timestamp": "2026-10-27T00:42:09.608Z",
+      "url": "http://127.0.0.1:38183/ui/assets/main-De2FDcxd.js"
+    },
+    {
+      "level": "debug",
+      "message": "fullscreen-reading Object",
+      "timestamp": "2026-10-27T00:42:09.615Z",
+      "url": "http://127.0.0.1:38183/ui/assets/main-De2FDcxd.js"
+    },
+    {
+      "level": "debug",
+      "message": "fullscreen-reading Object",
+      "timestamp": "2026-10-27T00:42:09.623Z",
+      "url": "http://127.0.0.1:38183/ui/assets/main-De2FDcxd.js"
+    },
+    {
+      "level": "debug",
+      "message": "fullscreen-reading Object",
+      "timestamp": "2026-10-27T00:42:09.628Z",
+      "url": "http://127.0.0.1:38183/ui/assets/main-De2FDcxd.js"
+    },
+    {
+      "level": "debug",
+      "message": "fullscreen-reading Object",
+      "timestamp": "2026-10-27T00:42:09.629Z",
+      "url": "http://127.0.0.1:38183/ui/assets/main-De2FDcxd.js"
+    }
+  ]
+}

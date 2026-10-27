@@ -28,6 +28,7 @@ import { getHostTransport } from "../../services/host-transport-runtime"
 import { promptSessionMessage } from "../../services/chat"
 import { appliedColorScheme, observeAppliedTheme } from "../../services/theme"
 import { AppLog } from "../../utils/log"
+import { requestNativeFullscreen } from "../../utils/fullscreen"
 import { getLocale, t } from "../../utils/i18n"
 import { OVERLAY_VERSION } from "../../utils/version"
 import { Button } from "../ui/Button"
@@ -229,7 +230,7 @@ function McpAppInstance(props: McpAppArtifactProps & { authority: ApiAuthority }
       if (mode === "fullscreen") {
         if (shell.matches(":popover-open")) shell.hidePopover()
         shell.removeAttribute("popover")
-        await shell.requestFullscreen()
+        await requestNativeFullscreen(shell)
         if (!owns() || teardownPromise) {
           await leaveTopLayer()
           return "inline"
