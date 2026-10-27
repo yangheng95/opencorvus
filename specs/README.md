@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [侧聊与引用回主对话的完整体验](records/2026-10/2026-10-27-side-chat-handoff-journey.md)：真实打开、上下文、发送、引用、草稿和阅读状态调查。
+
 - [作品全屏返回对话的阅读位置](records/2026-10/2026-10-27-artifact-return-navigation.md)：修复原生视口过渡覆盖读位与提前结清，实页复核JSON、表格和背景成员。
 
 - [结构化交付数据的阅读体验](records/2026-10/2026-10-27-json-reading-journey.md)：真实JSON交付、类型与空值的可辨性调查和当前页面验收。

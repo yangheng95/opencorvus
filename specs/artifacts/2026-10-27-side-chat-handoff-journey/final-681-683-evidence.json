@@ -1,0 +1,793 @@
+{
+  "at": "2026-10-27T02:02:53.584Z",
+  "qualification": "Actual development CLI pages, native CUA interactions and original screenshots manually reviewed; focused backend contracts are separate from visual acceptance.",
+  "runs": [
+    {
+      "id": "681",
+      "uiEntry": "main-Co5MUWyl.js",
+      "database": {
+        "schema": 8,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 24614,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "automation": {
+            "original": 4,
+            "current": 4,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire": {
+            "original": 3,
+            "current": 3,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_project_target": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "message": {
+            "original": 72,
+            "current": 79,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "part": {
+            "original": 236,
+            "current": 251,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 221,
+            "current": 229,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 85,
+            "current": 87,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 85,
+            "current": 87,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "session": {
+            "original": 16,
+            "current": 18,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 74,
+            "current": 75,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 14,
+            "current": 14,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 74,
+            "current": 75,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          }
+        }
+      },
+      "requests": 4,
+      "cumulativeRequests": 319,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 732343,
+      "publicShutdown": 200,
+      "physical": {
+        "native": 0,
+        "launcher": 0,
+        "completion": true,
+        "outputDrain": true,
+        "requestCleanup": true
+      },
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "admission": {
+        "credential": "registered OAuth",
+        "projectedModel": "gpt-6.1-sol",
+        "model": "openai/gpt-6.1-sol",
+        "authority": "Isolated Task delivery scope: paired credential, complete catalog and exact streamed model"
+      }
+    },
+    {
+      "id": "682",
+      "uiEntry": "main-Co5MUWyl.js",
+      "database": {
+        "schema": 9,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 26132,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "automation": {
+            "original": 4,
+            "current": 4,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire": {
+            "original": 3,
+            "current": 3,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_project_target": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "message": {
+            "original": 79,
+            "current": 86,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "part": {
+            "original": 251,
+            "current": 266,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": [
+              {
+                "partID": "prt_g0VZCxhUr03OsVMTc7fb",
+                "artifactID": "art_g0VZD5nhP007sj6k386M"
+              }
+            ]
+          },
+          "protocol_event": {
+            "original": 229,
+            "current": 238,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 87,
+            "current": 89,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 87,
+            "current": 89,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "session": {
+            "original": 18,
+            "current": 20,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 75,
+            "current": 76,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 14,
+            "current": 14,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 75,
+            "current": 76,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          }
+        }
+      },
+      "requests": 5,
+      "cumulativeRequests": 324,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "readerState": "fetch_failed"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 839711,
+      "publicShutdown": 200,
+      "physical": {
+        "native": 0,
+        "launcher": 0,
+        "completion": true,
+        "outputDrain": true,
+        "requestCleanup": true
+      },
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "admission": {
+        "credential": "registered OAuth",
+        "projectedModel": "gpt-6.1-sol",
+        "model": "openai/gpt-6.1-sol",
+        "authority": "Isolated Task delivery scope: paired credential, complete catalog and exact streamed model"
+      }
+    },
+    {
+      "id": "683",
+      "uiEntry": "main-C96VN_8Q.js",
+      "database": {
+        "schema": 9,
+        "integrity": "ok",
+        "clonedTables": 92,
+        "clonedRows": 27687,
+        "originalSourceAllRowsPreserved": true,
+        "protectedTables": {
+          "automation": {
+            "original": 4,
+            "current": 4,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire": {
+            "original": 3,
+            "current": 3,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_project_target": {
+            "original": 0,
+            "current": 0,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "message": {
+            "original": 86,
+            "current": 88,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "part": {
+            "original": 266,
+            "current": 270,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "protocol_event": {
+            "original": 238,
+            "current": 242,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "provider_activity_outcome": {
+            "original": 89,
+            "current": 90,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "provider_activity_request": {
+            "original": 89,
+            "current": 90,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "session": {
+            "original": 20,
+            "current": 21,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "tool_part_outcome": {
+            "original": 76,
+            "current": 76,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "tool_part_progress": {
+            "original": 14,
+            "current": 14,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          },
+          "tool_part_request": {
+            "original": 76,
+            "current": 76,
+            "originalRowsPreservedExceptExplicitTitleAndActivity": true,
+            "updates": []
+          }
+        }
+      },
+      "requests": 2,
+      "cumulativeRequests": 326,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 879413,
+      "publicShutdown": 200,
+      "physical": {
+        "native": 0,
+        "launcher": 0,
+        "completion": true,
+        "outputDrain": true,
+        "requestCleanup": true
+      },
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "admission": {
+        "credential": "registered OAuth",
+        "projectedModel": "gpt-6.1-sol",
+        "model": "openai/gpt-6.1-sol",
+        "authority": "Isolated Task delivery scope: paired credential, complete catalog and exact streamed model"
+      }
+    }
+  ],
+  "migration": {
+    "from": 8,
+    "to": 9,
+    "backupAllTables": 92,
+    "backupAllRows": 26132,
+    "originalBackupRowsPreserved": true,
+    "at": "2026-10-27T01:46:35.555Z",
+    "schema": 9,
+    "repairs": [
+      {
+        "partID": "prt_g0VZCxhUr03OsVMTc7fb",
+        "messageID": "msg_g0VZCxhUr01jtkGzaNZN",
+        "sessionID": "ses_-zUQn2IVAzzt6IhtnRhs",
+        "originalArtifactID": "art_g0VZC1kQB00IP64jiJlS",
+        "artifactID": "art_g0VZD5nhP007sj6k386M",
+        "completePayloadAndOriginalTimes": true
+      }
+    ],
+    "reads": [
+      {
+        "sessionID": "ses_-zUQn2IVAzzt6IhtnRhs",
+        "status": 200,
+        "record": {
+          "id": "art_g0VZD5nhP007sj6k386M",
+          "sessionID": "ses_-zUQn2IVAzzt6IhtnRhs",
+          "messageID": "msg_g0VZCxhUr01jtkGzaNZN",
+          "payload": {
+            "schemaVersion": "1",
+            "title": "验收数据原值663",
+            "renderer": "table@1",
+            "columns": [
+              {
+                "id": "name",
+                "label": "name",
+                "dataType": "string"
+              },
+              {
+                "id": "passed",
+                "label": "passed",
+                "dataType": "boolean"
+              },
+              {
+                "id": "date",
+                "label": "date",
+                "dataType": "date"
+              },
+              {
+                "id": "count",
+                "label": "count",
+                "dataType": "number"
+              }
+            ],
+            "rows": [
+              {
+                "name": "原生通过",
+                "passed": true,
+                "date": "2026-10-27",
+                "count": 12345.67
+              },
+              {
+                "name": "原生失败",
+                "passed": false,
+                "date": "2026-10-26",
+                "count": 25
+              },
+              {
+                "name": "来源字符串",
+                "passed": "false",
+                "date": "2026-10-25",
+                "count": 0
+              }
+            ]
+          },
+          "timeCreated": 1793049685031,
+          "timeUpdated": 1793049685031
+        },
+        "display": {
+          "id": "prt_g0VZCxhUr03OsVMTc7fb",
+          "sessionID": "ses_-zUQn2IVAzzt6IhtnRhs",
+          "messageID": "msg_g0VZCxhUr01jtkGzaNZN",
+          "orderKey": "v1:0001793063496829:0000000000000031:0000000000000000:part:prt_g0VZCxhUr03OsVMTc7fb",
+          "type": "interactive-artifact",
+          "artifactID": "art_g0VZD5nhP007sj6k386M",
+          "toolPartID": "prt_g0VZCxhUr02bVJ4kSpeC"
+        }
+      },
+      {
+        "sessionID": "ses_-zUQmtpfNzzfr74VI9BD",
+        "status": 200,
+        "record": {
+          "id": "art_g0VZD6AKe00Y217MdyRH",
+          "sessionID": "ses_-zUQmtpfNzzfr74VI9BD",
+          "messageID": "msg_g0VZD6AKe01Pfdz7qXkX",
+          "payload": {
+            "schemaVersion": "1",
+            "title": "验收数据原值663",
+            "renderer": "table@1",
+            "columns": [
+              {
+                "id": "name",
+                "label": "name",
+                "dataType": "string"
+              },
+              {
+                "id": "passed",
+                "label": "passed",
+                "dataType": "boolean"
+              },
+              {
+                "id": "date",
+                "label": "date",
+                "dataType": "date"
+              },
+              {
+                "id": "count",
+                "label": "count",
+                "dataType": "number"
+              }
+            ],
+            "rows": [
+              {
+                "name": "原生通过",
+                "passed": true,
+                "date": "2026-10-27",
+                "count": 12345.67
+              },
+              {
+                "name": "原生失败",
+                "passed": false,
+                "date": "2026-10-26",
+                "count": 25
+              },
+              {
+                "name": "来源字符串",
+                "passed": "false",
+                "date": "2026-10-25",
+                "count": 0
+              }
+            ]
+          },
+          "timeCreated": 1793049685031,
+          "timeUpdated": 1793049685031
+        },
+        "display": {
+          "id": "prt_g0VZD6AKe03VbgMpsZ3Y",
+          "sessionID": "ses_-zUQmtpfNzzfr74VI9BD",
+          "messageID": "msg_g0VZD6AKe01Pfdz7qXkX",
+          "orderKey": "v1:0001793065514297:0000000000000031:0000000000000000:part:prt_g0VZD6AKe03VbgMpsZ3Y",
+          "type": "interactive-artifact",
+          "artifactID": "art_g0VZD6AKe00Y217MdyRH",
+          "toolPartID": "prt_g0VZD6AKe024pOb9M8Sj"
+        }
+      }
+    ]
+  },
+  "diagnostics": {
+    "eventID": "pev_g0VZD6K9i008AKOi3X2g",
+    "sessionID": "ses_-zUQmtpfNzzfr74VI9BD",
+    "payload": {
+      "error": {
+        "name": "APIError",
+        "data": {
+          "message": "Cannot connect to API: The socket connection was closed unexpectedly. For more information, pass `verbose: true` in the second argument to fetch()",
+          "isRetryable": true,
+          "metadata": {
+            "url": "https://api.openai.com/v1/responses"
+          }
+        }
+      },
+      "streamRequest": {
+        "requestID": "msg_e4c7e6b7-31bb-4fd0-8c4c-41adcbe2f63c",
+        "agentID": "memory",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "apiModelID": "gpt-6.1-sol"
+      },
+      "summary": "Cannot connect to API: The socket connection was closed unexpectedly. For more information, pass `verbose: true` in the second argument to fetch()"
+    },
+    "input": {
+      "id": "msg_e4c7e6b7-31bb-4fd0-8c4c-41adcbe2f63c",
+      "role": "user",
+      "agent": "chat"
+    },
+    "reply": {
+      "id": "msg_g0VZD6Jzq00jlU4nB6i7",
+      "agent": "chat",
+      "finish": "stop",
+      "completed": 1793065556570
+    }
+  },
+  "actualSideReconnectRoutes": [
+    {
+      "id": 85,
+      "at": "2026-10-27T01:54:16.057Z",
+      "phase": "arrived",
+      "method": "POST",
+      "path": "/global/transport/stream",
+      "admission": {
+        "method": "GET",
+        "path": "/session/ses_-zUQmtpfNzzfr74VI9BD/events",
+        "streamID": "69747d93-8dbc-46ec-916f-deb52b93263f"
+      }
+    },
+    {
+      "id": 86,
+      "at": "2026-10-27T01:54:16.082Z",
+      "phase": "arrived",
+      "method": "GET",
+      "path": "/session/ses_-zUQmtpfNzzfr74VI9BD/events"
+    },
+    {
+      "id": 86,
+      "at": "2026-10-27T01:54:25.331Z",
+      "phase": "aborted",
+      "path": "/session/ses_-zUQmtpfNzzfr74VI9BD/events"
+    },
+    {
+      "id": 96,
+      "at": "2026-10-27T01:54:25.651Z",
+      "phase": "arrived",
+      "method": "POST",
+      "path": "/global/transport/stream",
+      "admission": {
+        "method": "GET",
+        "path": "/session/ses_-zUQmtpfNzzfr74VI9BD/events",
+        "streamID": "4c3855ca-8415-47f5-b7f0-8cd8b751e48b"
+      }
+    },
+    {
+      "id": 97,
+      "at": "2026-10-27T01:54:25.731Z",
+      "phase": "arrived",
+      "method": "GET",
+      "path": "/session/ses_-zUQmtpfNzzfr74VI9BD/events"
+    },
+    {
+      "id": 97,
+      "at": "2026-10-27T01:58:26.609Z",
+      "phase": "aborted",
+      "path": "/session/ses_-zUQmtpfNzzfr74VI9BD/events"
+    }
+  ],
+  "finalBrowserConsole": [],
+  "limits": [
+    "MCP lifecycle and attachment byte copies have focused backend verification; all MCP application interaction variants were not visually exercised.",
+    "CSV export was clicked on the actual page; a saved-file receipt was not collected.",
+    "Historical payloads already missing at migration time cannot be reconstructed."
+  ]
+}

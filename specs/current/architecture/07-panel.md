@@ -964,6 +964,16 @@ remaps Message/Part and accepted-input identities, and snapshots the source root
 configuration overlay. Shared LLM system composition marks inherited context as
 reference and only newly authored side-chat requests as active instructions.
 
+The shared fork transaction also copies each Message-owned interactive artifact
+into a complete snapshot owned by the new Message, deduplicating repeated display
+references within that Message. Display artifact IDs and Tool bindings are remapped;
+original Tool outputs and copy evidence retain their historical content. Exact
+Project and producing-Session read admission remains authoritative. Canonical
+same-Project attachments retain their identity and download bytes. MCP resource
+and lifecycle snapshots belong to the copy, so subsequent lifecycle updates address
+that copy. Data revision 9 repairs existing same-Project copied references when
+the original payload is still available; missing payloads remain explicit errors.
+
 Listing retained Side chats uses Project identity admission independently of
 execution-model bootstrap. The addressed source must belong to the current
 Project; the list reads that source's nonarchived retained side Sessions through
@@ -984,7 +994,12 @@ the same transcript remain with that historical Message. Current and uncorrelate
 diagnostics still reach the panel's notice owner, as do additional persistence
 or observation failures. A cancellation is neutral only when those additional
 faults are absent. The existing transcript supplies this qualification; there
-is no extra error cache, message lookup or inferred timestamp boundary.
+is no extra error cache, separate message request or inferred timestamp boundary.
+Raw stream-request errors with a known user Message also match that input's
+actual agent identity before owning a conversation-wide notice. Background
+requests sharing the Session keep their original protocol diagnostics without
+claiming the foreground input's failure. Uncorrelated errors and explicit
+convergence/observation faults retain their visible attention contract.
 The reference-history disclosure retains the user's open/closed choice in the
 existing conversation disclosure store, scoped to API authority, source and Side
 Session. Its layout choice survives Dock remounts and primary-conversation

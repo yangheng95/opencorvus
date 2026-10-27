@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [侧聊与引用交接体验证据](2026-10-27-side-chat-handoff-journey/README.md)：21张真实原图，复制产物修复、版本9保留数据迁移、精确请求通知归属与Sol流式验收。
+
 - [作品返回导航调查证据](2026-10-27-artifact-return-navigation/README.md)：全屏返回失位基线、精确时序日志、最终读位与29张实页原图。
 
 - [JSON交付物阅读体验证据](2026-10-27-json-reading-journey/README.md)：14张原图、真实JSON/Task交付、23次模型请求及复制下载原字节。

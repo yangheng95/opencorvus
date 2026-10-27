@@ -31,6 +31,8 @@ import { sessionDirectoryFilterCondition } from "./directory-filter"
 import { Log } from "../util/log"
 import { Message } from "./message"
 import { MessageCopyEvidence } from "./copy-evidence"
+import { prepareInteractiveArtifactCopies } from "@/interactive-artifact/copy"
+import { copyMessageInteractiveArtifactsInTransaction } from "@/interactive-artifact/persist"
 import { AssistantDiagnostics } from "./assistant-diagnostics"
 import { isSettledReplyToUserMessage } from "./completed-reply"
 import { HelperAgentRegistry } from "@/agent/helper-agent-registry"
@@ -505,10 +507,14 @@ export namespace Session {
         return copied
       }
       const clones: { info: Message.Info; parts: Message.Part[] }[] = []
+      const artifactCopies: { sourceMessageID: string; messageID: string; artifacts: ReadonlyMap<string, string> }[] = []
 
       for (const msg of msgs) {
         const newID = idMap.get(msg.info.id)!
         const partIDs = partIDMaps.get(msg.info.id)!
+        const artifacts = prepareInteractiveArtifactCopies(msg.parts.flatMap(part =>
+          part.type === "interactive-artifact" ? [part.artifactID] : []))
+        artifactCopies.push({ sourceMessageID: msg.info.id, messageID: newID, artifacts })
 
         const parentID =
           msg.info.role === "assistant" ? copiedMessageID(msg.info.parentID, `Message ${msg.info.id}`) : undefined
@@ -547,6 +553,7 @@ export namespace Session {
             messageID: clonedInfo.id,
             sessionID: prepared.id,
             ...(toolPartID ? { toolPartID } : {}),
+            ...(part.type === "interactive-artifact" ? { artifactID: artifacts.get(part.artifactID)! } : {}),
             ...(part.type === "compaction"
               ? { anchor_id: copiedBoundary(part.anchor_id), tail_start_id: copiedBoundary(part.tail_start_id) }
               : {}),
@@ -583,6 +590,10 @@ export namespace Session {
             persistMessageBundleRows(clone, undefined, undefined, undefined, { preserveCreated: true })
           }
         }
+        copyMessageInteractiveArtifactsInTransaction(db, {
+          projectID: Instance.project.id, sourceSessionID: original.id,
+          sessionID: session.id, messages: artifactCopies,
+        })
         return session
       })
     },

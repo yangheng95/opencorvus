@@ -252,6 +252,41 @@ export function findInteractiveArtifact(input: {
   }
 }
 
+/** Commit copied snapshots with their new Messages in the caller's atomic fork. */
+export function copyMessageInteractiveArtifactsInTransaction(
+  db: Database.TxOrDb,
+  input: {
+    projectID: string
+    sourceSessionID: string
+    sessionID: string
+    messages: readonly { sourceMessageID: string; messageID: string; artifacts: ReadonlyMap<string, string> }[]
+  },
+): void {
+  Database.requireActiveTransaction("copyMessageInteractiveArtifactsInTransaction")
+  for (const message of input.messages) {
+    if (!message.artifacts.size) continue
+    const target = db.select({ id: MessageTable.id }).from(MessageTable)
+      .innerJoin(SessionTable, eq(MessageTable.session_id, SessionTable.id))
+      .where(and(eq(MessageTable.id, message.messageID), eq(MessageTable.session_id, input.sessionID),
+        eq(SessionTable.project_id, input.projectID))).get()
+    if (!target) throw new Error(`Copied interactive artifact Message not found: ${message.messageID}`)
+    for (const [sourceID, id] of message.artifacts) {
+      const source = db.select({ artifact: InteractiveArtifactTable }).from(InteractiveArtifactTable)
+        .innerJoin(MessageTable, eq(InteractiveArtifactTable.message_id, MessageTable.id))
+        .innerJoin(SessionTable, eq(MessageTable.session_id, SessionTable.id))
+        .where(and(eq(InteractiveArtifactTable.id, sourceID), eq(MessageTable.id, message.sourceMessageID),
+          eq(MessageTable.session_id, input.sourceSessionID), eq(SessionTable.project_id, input.projectID))).get()
+      if (!source) throw new InteractiveArtifactCorruptionError({
+        artifactID: sourceID,
+        message: `Copied Message ${message.sourceMessageID} has no owned interactive artifact ${sourceID}`,
+      })
+      db.insert(InteractiveArtifactTable).values({
+        ...source.artifact, id, message_id: message.messageID,
+      }).run()
+    }
+  }
+}
+
 export function updateMcpAppToolLifecycle(input: {
   sessionID: string
   artifactID: string

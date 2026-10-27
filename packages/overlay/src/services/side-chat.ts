@@ -125,11 +125,17 @@ export function connectSideChat(
               const original = transcript?.messages.find((message) =>
                 message.messageID === occurrence?.assistant_message_id && message.sessionID === occurrence?.session_id)
               const latest = original && transcript?.messages.findLast((message) => message.sessionID === original.sessionID)
+              const request = payload?.streamRequest
+              const input = request && transcript?.messages.find((message) =>
+                message.info.role === "user" && message.messageID === request.requestID)
+              // Helpers share this Session's transport. A known input's actor,
+              // rather than its Session alone, owns a raw request failure.
+              const belongsToInput = !!occurrence || !input || input.info.agent === request.agentID
               // Reconnection replays historical diagnostics. Their original
               // Message keeps the reason; only the current occurrence owns a
               // conversation-wide notice. Unsettled persistence faults still
               // require attention even after a subsequent Message arrives.
-              if (!original || latest?.messageID === original.messageID ||
+              if ((belongsToInput && (!original || latest?.messageID === original.messageID)) ||
                 payload.convergenceFailure || payload.observationFailures?.length) handlers.error(payload)
             }
             if (event.session_id === target.sessionID) {
