@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [应用菜单、搜索与快捷键衔接](records/2026-10/2026-10-27-menu-search-journey.md)：菜单声明、搜索入口与Dialog键盘归属。
+
 - [会话下载与离线历史交付](records/2026-10/2026-10-27-conversation-download-journey.md)：原始对话下载入口、项目身份与完整消息。
 
 - [多页归档恢复与阅读连续性](records/2026-10/2026-10-27-archive-pagination-journey.md)：真实正文、后页恢复和原项目身份。

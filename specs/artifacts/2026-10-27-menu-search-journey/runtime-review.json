@@ -1,0 +1,59 @@
+{
+  "reviewedAt": "2026-10-27T08:55:51.629Z",
+  "before": {
+    "uiEntry": "main-CUI7eQ55.js",
+    "advertisedSearch": "Ctrl+G",
+    "observedG": "Composer retains focus; palette remains closed",
+    "observedK": "Canonical search opens",
+    "menuSearch": "Works, including Settings; not reported as broken",
+    "goalCtrlN": "Background New chat navigates away and closes form; returning original Chat shows empty Objective",
+    "shutdown": 200,
+    "reserveMs": 1038014,
+    "physical": true
+  },
+  "after": {
+    "uiEntry": "main-Cn8FV1dF.js",
+    "search": "G opens canonical search from composer, Settings and collapsed sidebar; repeated G retains query; menu and K remain available",
+    "foreground": "Goal Objective, original owner and focus persist through N/comma/Alt+E/G/K",
+    "editing": "Ctrl+A and Ctrl+C copy the exact own draft",
+    "navigation": "Close then Ctrl+N opens Home; Alt+E and Search work after Close",
+    "homeGoal": "Chinese light Home form retains original draft under Ctrl+N",
+    "shutdown": 200,
+    "reserveMs": 852061,
+    "physical": true
+  },
+  "checks": {
+    "typecheck": 0,
+    "build": 0,
+    "i18n": 0,
+    "docs": 0
+  },
+  "data": {
+    "sourceTables": 92,
+    "sourceRows": 238840,
+    "sourceAllRowsPreserved": true,
+    "targetAll92TablesEqualBefore": true,
+    "targetAllRowsEqualBefore": true,
+    "criticalFacts": 7117,
+    "protectedFiles": 166,
+    "ownProjectReadmesAndGitHeads": 2,
+    "schema": 9,
+    "integrity": "ok",
+    "newGoals": 0,
+    "newMessages": 0,
+    "credentialsCopied": false,
+    "modelRequests": 0,
+    "cumulativeRequests": 349
+  },
+  "visual": {
+    "originalScreenshots": 17,
+    "reviewed": "Actual development CLI /ui; manual CUA interaction and original image review; no UI automated tests",
+    "limitations": [
+      "10 captures an opened search while records are loading, not a settled result list; 09/11/17 show actual results",
+      "Composer getAttribute(value)=null was an HTML attribute read and proves no draft value; no draft-loss conclusion uses it",
+      "Native macOS menu events share the reviewed action boundary; native macOS window/accelerator visual acceptance is unavailable on this Windows host",
+      "First main-Cluc2lrs.js build is a draft; only final main-Cn8FV1dF.js qualified 706",
+      "No full-product completion claim"
+    ]
+  }
+}

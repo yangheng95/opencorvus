@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [应用菜单与搜索体验证据](2026-10-27-menu-search-journey/README.md)：真实菜单、快捷键与焦点复核。
+
 - [会话下载体验证据](2026-10-27-conversation-download-journey/README.md)：实际菜单、原始下载与无模型历史读取。
 
 - [多页归档恢复体验证据](2026-10-27-archive-pagination-journey/README.md)：107→100旧缺陷、106→105修复、16张原图和原文保留。

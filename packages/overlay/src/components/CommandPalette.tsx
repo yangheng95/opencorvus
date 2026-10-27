@@ -334,7 +334,7 @@ export function CommandPalette(props: {
 
   onMount(() => {
     const openFromChrome = () => {
-      if (palette.open()) return
+      if (palette.open() || document.querySelector(".dialog")) return
       priorFocus = (document.activeElement as HTMLElement | null) ?? null
       palette.openIt()
     }

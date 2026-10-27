@@ -68,7 +68,7 @@ const MACOS_FILE_SHORTCUTS: Record<FileShortcutID, { display: string; aria: stri
   exit: { display: "⌘Q", aria: "Meta+Q" },
 }
 
-const SEARCH_SHORTCUT = { display: "Ctrl+G", aria: "Control+G" }
+const SEARCH_SHORTCUT = { key: "g", display: "Ctrl+G", aria: "Control+G" }
 const MACOS_SEARCH_SHORTCUT = { display: "⌘G", aria: "Meta+G" }
 
 function fileShortcutIDForEvent(event: KeyboardEvent): FileShortcutID | null {
@@ -93,7 +93,13 @@ function menuActionErrorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error)
 }
 
+function hasForegroundDialog(): boolean {
+  // The command palette owns global navigation; other dialogs own their form input.
+  return document.querySelector(".dialog:not(#commandPaletteDialog)") !== null
+}
+
 function runTitlebarMenuAction(label: string, action: () => void | Promise<void>): void {
+  if (hasForegroundDialog()) return
   try {
     void Promise.resolve(action()).catch((error) => {
       if (error instanceof DOMException && error.name === "AbortError") return
@@ -373,14 +379,9 @@ export function TitlebarMenubar(props: { onNewChat: () => Promise<void> }) {
     closeMenu()
   }
 
-  function focusSidebarSearch() {
+  function openSearch() {
     closeMenu()
-    const input = document.querySelector<HTMLInputElement>('[data-ui="work-ledger-search"]')
-    if (input) {
-      input.focus()
-      return
-    }
-    document.querySelector<HTMLButtonElement>('[data-ui="work-ledger-search-toggle"]')?.click()
+    window.dispatchEvent(new CustomEvent("oc:open-command-palette"))
   }
 
   async function exitApp() {
@@ -409,7 +410,7 @@ export function TitlebarMenubar(props: { onNewChat: () => Promise<void> }) {
     "native-menu:quick-chat": startNewChat,
     "native-menu:open-folder": openFolder,
     "native-menu:close-project": closeCurrentProject,
-    "native-menu:search": focusSidebarSearch,
+    "native-menu:search": openSearch,
     "native-menu:providers": () => openConfig("providers"),
     "native-menu:theme-system": () => setTheme("system"),
     "native-menu:theme-light": () => setTheme("light"),
@@ -464,6 +465,24 @@ export function TitlebarMenubar(props: { onNewChat: () => Promise<void> }) {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.defaultPrevented || event.isComposing) return
       const shortcutID = fileShortcutIDForEvent(event)
+      const searchRequested =
+        event.key.toLowerCase() === SEARCH_SHORTCUT.key && event.ctrlKey &&
+        !event.metaKey && !event.altKey && !event.shiftKey
+      if (hasForegroundDialog()) {
+        const menuAccessRequested = event.key === "Alt" || (
+          event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey &&
+          menuIDForAccessKey(event.key) !== null
+        )
+        if (shortcutID || searchRequested || menuAccessRequested) event.preventDefault()
+        altPressedOnly = false
+        return
+      }
+      if (searchRequested) {
+        event.preventDefault()
+        altPressedOnly = false
+        runTitlebarMenuAction(SEARCH_SHORTCUT.display, openSearch)
+        return
+      }
       if (shortcutID) {
         if (shortcutID === "open-folder" && !nativeCommands["workspace.pickDir"]) return
         event.preventDefault()
@@ -492,6 +511,11 @@ export function TitlebarMenubar(props: { onNewChat: () => Promise<void> }) {
       }
     }
     const onKeyUp = (event: KeyboardEvent) => {
+      if (hasForegroundDialog()) {
+        if (event.key === "Alt") event.preventDefault()
+        altPressedOnly = false
+        return
+      }
       if (event.key !== "Alt" || !altPressedOnly) return
       altPressedOnly = false
       event.preventDefault()
@@ -624,7 +648,7 @@ export function TitlebarMenubar(props: { onNewChat: () => Promise<void> }) {
 
                 <Show when={menu.id === "edit"}>
                   <MenuItem
-                    onClick={focusSidebarSearch}
+                    onClick={openSearch}
                     meta={searchShortcut().display}
                     ariaKeyShortcuts={searchShortcut().aria}
                     testid="titlebar-edit-search"

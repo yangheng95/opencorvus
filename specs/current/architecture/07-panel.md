@@ -3711,6 +3711,15 @@ and continuation reads still fetch one page.
 
 ## Command palette queries
 
+Edit → Search and the declared Windows/Linux Ctrl+G accelerator request the same
+command palette directly, alongside its existing Ctrl/Cmd+K entry. The macOS
+native menu retains its own Cmd+G binding and mutually exclusive event bridge.
+Search does not locate an obsolete sidebar input or synthesize another button
+click. Ordinary shared dialogs own foreground keyboard input: global File/Alt
+shortcuts and native menu actions cannot navigate away from their unsaved forms.
+The command palette itself retains global navigation ownership. Chrome search
+requests obey the same foreground-dialog boundary as its K shortcut.
+
 The command palette reads current, unarchived Chat/Task/Mission records through the
 existing Work Ledger search and public cursor. An empty query shows up to nine
 recent selectable items; Project rows do not consume that allowance. Nonempty
