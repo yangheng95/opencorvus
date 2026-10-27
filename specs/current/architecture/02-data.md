@@ -110,6 +110,11 @@ payload 语义变更必须追加连续版本。`PRAGMA user_version` 是唯一�
 首次运行验收另外拥有自建临时运行目录，不以用户数据库验证初始化或升级。
 正常应用启动的版本化迁移合同保持独立。
 
+`Database.Client` 成功完成开库后只输出一条 `database schema ready` 完成记录，
+包含实际数据库 `path`、迁移事务回执的 `from`/`to` 与存在时的 `backupPath`。
+`action` 根据同一回执区分 `initialized`（从0创建）、`validated`（版本相同的校验）
+和 `migrated`（非零旧版本升级），不能把当前版本开库校验记为结构升级。
+
 版本9沿用版本8的表结构，只修复既有复制历史中同Project的跨Session产物引用。
 按目标Message与原artifactID去重复制完整payload及原时间，展示Part绑定新身份；
 原Message、Tool输出、复制证据与源记录保持。压缩覆盖先验证原Part的精确摘要，

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [数据库开库结果证据](2026-10-28-schema-open-observability/README.md)：真实日志、备份和完整克隆数据核对。
+
 - [当前Sources与网络证据](2026-10-27-current-source-and-network-journey/README.md)：真实流式模型、原件与来源页面。
 
 - [附件工作区证据](2026-10-27-attachment-workspace-lifetime/README.md)：真实文件选择、导航与模式切换。

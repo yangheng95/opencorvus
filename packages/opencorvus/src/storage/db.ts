@@ -1300,8 +1300,11 @@ export namespace Database {
         )
       }
       if (existed) configureSqlite(sqlite)
-      if (migration.backupPath) log.info("database migration completed", migration)
-      log.info("schema applied")
+      log.info("database schema ready", {
+        path: dbPath,
+        action: migration.from === 0 ? "initialized" : migration.from === migration.to ? "validated" : "migrated",
+        ...migration,
+      })
 
       const db = drizzle({ client: sqlite, schema: ApplicationSchema })
 

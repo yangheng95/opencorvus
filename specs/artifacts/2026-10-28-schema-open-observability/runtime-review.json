@@ -1,0 +1,46 @@
+{
+  "at": "2026-10-27T16:36:27.786Z",
+  "schema": 9,
+  "tables": 92,
+  "rows": 248252,
+  "sourceRowsPreserved": true,
+  "cloneRowsPreserved": true,
+  "integrity": "ok",
+  "opener": {
+    "version": [
+      {
+        "user_version": 9
+      }
+    ],
+    "records": [
+      {
+        "level": "info",
+        "time": "2026-10-27T16:36:20.894Z",
+        "service": "db",
+        "logDomain": "non-session",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-office728\\db-current-final\\tmp\\opencorvus-test-run-MNysuB\\runner-74608-wmk7q6\\runtime-root\\data\\opencorvus.db",
+          "action": "validated",
+          "from": 9,
+          "to": 9
+        },
+        "message": "database schema ready"
+      }
+    ],
+    "requests": 0
+  },
+  "checks": {
+    "focusedTests": {
+      "passed": 3,
+      "assertions": 8,
+      "realDatabaseAndDurableLog": true
+    },
+    "backendTypes": "passed",
+    "migrationRegistry": {
+      "passed": true,
+      "kind": "in-memory",
+      "target": 9
+    }
+  },
+  "uiChanges": false
+}

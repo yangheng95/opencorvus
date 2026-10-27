@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [数据库开库结果日志](records/2026-10/2026-10-28-schema-open-observability.md)：区分初始化、当前版本校验和实际升级。
+
 - [当前Sources与真实模型网络流程](records/2026-10/2026-10-27-current-source-and-network-journey.md)：单代理当前原件、来源和连接体验。
 
 - [附件工作区生命周期](records/2026-10/2026-10-27-attachment-workspace-lifetime.md)：新对话和项目离开时的暂存附件归属。

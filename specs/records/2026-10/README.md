@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [数据库开库结果日志](2026-10-28-schema-open-observability.md)：单代理修正开库结果误导。
+
 - [当前Sources与真实模型网络流程](2026-10-27-current-source-and-network-journey.md)：单代理实际功能及阶段诊断调查。
 
 - [附件工作区生命周期](2026-10-27-attachment-workspace-lifetime.md)：单代理共享工作区离开修复。
