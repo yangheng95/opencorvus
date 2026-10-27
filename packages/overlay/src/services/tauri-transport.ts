@@ -432,8 +432,15 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
         input.body,
       )
       let response: TransportResponse<T>
+      const startedAt = performance.now()
+      let failurePhase: "fetch" | "response_body" = "fetch"
+      let responseStatus: number | null = null
+      let responseRequestID: string | null = null
       try {
         const res = await fetch(url.toString(), init)
+        failurePhase = "response_body"
+        responseStatus = res.status
+        responseRequestID = res.headers.get("x-opencorvus-request-id")
         const body =
           res.ok || input.responseKind === "binary"
             ? await readResponse<T>(res, input.responseKind)
@@ -447,6 +454,31 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
       } catch (error) {
         if (error instanceof ApiAuthorityChangedError) throw error
         assertApiAuthorityCurrent(authority, { phase: "transport_failure", cause: error })
+        const evidence = {
+          host: kind,
+          method: init.method,
+          origin: url.origin,
+          path: url.pathname,
+          phase: failurePhase,
+          status: responseStatus,
+          requestID: responseRequestID,
+          responseKind: input.responseKind ?? "json",
+          authorityRevision: authority.revision,
+          aborted: signal?.aborted ?? false,
+          durationMs: Math.round(performance.now() - startedAt),
+          errorKind:
+            error instanceof DOMException
+              ? "DOMException"
+              : error instanceof SyntaxError
+                ? "SyntaxError"
+                : error instanceof TypeError
+                  ? "TypeError"
+                  : error instanceof Error
+                    ? "Error"
+                    : typeof error,
+        }
+        if (evidence.aborted) console.debug("[transport.http.failure]", JSON.stringify(evidence))
+        else console.warn("[transport.http.failure]", JSON.stringify(evidence))
         throw error
       }
       assertApiAuthorityCurrent(authority, { phase: "response", response })

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [附件存储与HTTP阶段证据](2026-10-27-attachment-capture-and-http-provenance/README.md)：实际页面、原字节与真实请求结清。
+
 - [新对话分配与列表证据](2026-10-27-composer-allocation-ledger-journey/README.md)：真实上传、草稿和列表错误观察。
 
 - [附件与来源阅读证据](2026-10-27-attachment-source-journey/README.md)：当前真实模型、原图与持久事实。

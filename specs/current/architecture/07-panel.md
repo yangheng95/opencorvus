@@ -119,6 +119,10 @@ no-overwrite publication, loaded content revisions, atomic writes, configured
 formatting and canonical file events remain owned by the existing File API.
 An already active Runtime retains its listeners; a cold file operation does
 not claim full Runtime initialization or admit model execution.
+Raw attachment capture and local-directory reference creation use the same exact
+Project identity admission. They retain their original validators and canonical
+AttachmentStore publication without requiring executable model availability;
+conversation creation and prompts retain full Runtime admission.
 
 The independent Task turn-artifact catalog GET uses that same Project identity
 admission as immutable artifact byte reads and Session artifact readers. It reads

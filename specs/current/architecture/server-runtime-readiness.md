@@ -40,6 +40,17 @@ Explicit Mission dispatch and AI creation continue through the full runtime
 model preflight. The public router owns this distinction, so an independently
 mounted or pre-initialized handler is insufficient qualification of cold reads
 and writes.
+Raw attachment capture and local-directory reference creation also select exact
+Project identity. Their original directory admission, request validators and
+canonical AttachmentStore writes retain ownership; executable model validation
+belongs to the existing runtime entry points.
+
+The shared overlay HTTP request boundary records rejected fetch/response-body
+phases with the actual received status and server request identifier, when
+available. Evidence includes method, origin/path, response kind, authority,
+cancellation state and elapsed time. Query strings, credentials, headers, bodies
+and arbitrary error text are excluded from this structured diagnostic. Original
+errors and caller-owned cancellation retain their contracts.
 
 ## Command execution and settlement
 

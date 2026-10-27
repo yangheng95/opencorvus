@@ -14,6 +14,8 @@ const PROJECT_IDENTITY_ROUTE_KEYS = new Set([
   "DELETE /file/item",
   "POST /file/item/copy",
   "POST /file/upload",
+  "POST /attachment",
+  "POST /attachment/directory-reference",
   "GET /session/status",
   "GET /session",
   "GET /vcs",

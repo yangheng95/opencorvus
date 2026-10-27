@@ -222,8 +222,8 @@ describe("Project route context authority", () => {
       taskPin: "identity",
       missionPin: "identity",
       chatPin: "identity",
-      directoryReference: "runtime",
-      attachmentUpload: "runtime",
+      directoryReference: "identity",
+      attachmentUpload: "identity",
     })
   })
 })

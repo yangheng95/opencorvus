@@ -1,0 +1,131 @@
+{
+  "at": "2026-10-27T14:25:27.302Z",
+  "instances": [
+    {
+      "instance": 723,
+      "port": 38228,
+      "sourceTables": 92,
+      "sourceRows": 246149,
+      "allOriginalRowsPreserved": true,
+      "projectFilesPreserved": 166,
+      "schema": 9,
+      "integrity": "ok",
+      "modelRequests": 0,
+      "cumulativeRequests": 373,
+      "publicShutdown": 200,
+      "reserveMs": 917243,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0
+    },
+    {
+      "instance": 724,
+      "port": 38229,
+      "sourceTables": 92,
+      "sourceRows": 246152,
+      "allOriginalRowsPreserved": true,
+      "projectFilesPreserved": 166,
+      "schema": 9,
+      "integrity": "ok",
+      "modelRequests": 0,
+      "cumulativeRequests": 373,
+      "publicShutdown": 200,
+      "reserveMs": 782753,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0
+    }
+  ],
+  "actualHTTP": {
+    "independentProjects": 2,
+    "originalFilename": "验收说明 717（原件）.txt",
+    "originalBytes": 143,
+    "projects": [
+      {
+        "id": "prj_hEbz6mVQIbRuC6XdwIQr",
+        "status": 200,
+        "physicalAndHTTPBytesMatch": true
+      },
+      {
+        "id": "prj_hK6s6BjXEhYvDEgsAUdh",
+        "status": 200,
+        "physicalAndHTTPBytesMatch": true
+      }
+    ],
+    "directoryStatus": 200,
+    "directoryManifestMatches": true,
+    "executionStatus": 400,
+    "executionError": "ProviderModelNotFoundError"
+  },
+  "consoleEvidence": [
+    {
+      "level": "debug",
+      "at": "2026-10-27T14:17:23.929Z",
+      "host": "browser",
+      "method": "GET",
+      "origin": "http://127.0.0.1:38229",
+      "path": "/mailbox",
+      "phase": "fetch",
+      "status": null,
+      "requestID": null,
+      "responseKind": "json",
+      "authorityRevision": 0,
+      "aborted": true,
+      "durationMs": 40,
+      "errorKind": "DOMException"
+    },
+    {
+      "level": "debug",
+      "at": "2026-10-27T14:17:23.930Z",
+      "host": "browser",
+      "method": "GET",
+      "origin": "http://127.0.0.1:38229",
+      "path": "/work-ledger",
+      "phase": "fetch",
+      "status": null,
+      "requestID": null,
+      "responseKind": "json",
+      "authorityRevision": 0,
+      "aborted": true,
+      "durationMs": 156,
+      "errorKind": "DOMException"
+    },
+    {
+      "level": "debug",
+      "at": "2026-10-27T14:17:23.930Z",
+      "host": "browser",
+      "method": "GET",
+      "origin": "http://127.0.0.1:38229",
+      "path": "/mission",
+      "phase": "fetch",
+      "status": null,
+      "requestID": null,
+      "responseKind": "json",
+      "authorityRevision": 0,
+      "aborted": true,
+      "durationMs": 156,
+      "errorKind": "DOMException"
+    }
+  ],
+  "unresolved": [
+    "719/720 non-cancelled network failure root cause remains unknown",
+    "new chat retains previous staged attachment (image 04)"
+  ],
+  "tests": {
+    "backend": {
+      "tests": 16,
+      "assertions": 31
+    },
+    "http": {
+      "tests": 7,
+      "assertions": 20
+    },
+    "backendTypecheck": 0,
+    "overlayTypecheck": 0,
+    "nodeBuild": 0
+  }
+}

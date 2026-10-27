@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [附件存储与HTTP失败阶段](records/2026-10/2026-10-27-attachment-capture-and-http-provenance.md)：离线附件身份、真实请求阶段与列表调查。
+
 - [新对话分配和列表更新](records/2026-10/2026-10-27-composer-allocation-ledger-journey.md)：实际上传、草稿和列表连接调查。
 
 - [附件到回复和来源阅读](records/2026-10/2026-10-27-attachment-source-journey.md)：单代理当前真实Sol与附件完整使用流程。
