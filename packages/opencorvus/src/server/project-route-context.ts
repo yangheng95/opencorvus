@@ -105,6 +105,7 @@ const PROJECT_IDENTITY_CONVERSATION_ROUTE_PATTERNS = [
   /^GET \/session\/[^/]+\/message\/[^/]+\/part\/[^/]+$/,
   /^GET \/session\/[^/]+\/events$/,
   /^GET \/session\/[^/]+\/side-chat$/,
+  /^GET \/export\/session\/[^/]+$/,
 ]
 
 /** Selects the least-capable Project authority required by the exact route. */

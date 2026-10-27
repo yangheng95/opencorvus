@@ -1,4 +1,5 @@
-import { Show, createMemo, createSignal, onCleanup, type JSX } from "solid-js"
+import { Show, createEffect, createMemo, createSignal, on, onCleanup, type JSX } from "solid-js"
+import type { ExportSessionResponse } from "@opencorvus-ai/sdk"
 import { AppDialogHost } from "./AppDialogHost"
 import { CommandPalette } from "./CommandPalette"
 import { ConnectionBadge } from "./ConnectionBadge"
@@ -26,7 +27,10 @@ import { WorkspaceEditorLaunchers, workspaceEditorLaunchersAvailable } from "./W
 import { ProjectRuntimeToolbarActions } from "./TaskDirBar"
 import { Button } from "./ui/Button"
 import { Feedback } from "./ui/Feedback"
-import { formatErrorDetails } from "../services/diagnostics"
+import { formatErrorDetails, reportError } from "../services/diagnostics"
+import { apiJson, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
+import { directoryScopedPath } from "../services/task-path"
+import { downloadBlob } from "../services/file-download"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import { Tooltip } from "./ui/Tooltip"
 import { t } from "../utils/i18n"
@@ -65,37 +69,107 @@ function ChatViewTitle(props: {
   onArchive: (row: WorkLedgerItemRow) => void | Promise<void>
 }) {
   const usageText = createMemo(() => formatUsageStrip(cardTreeStore.usageAggregate))
-  const [copyFeedback, setCopyFeedback] = createSignal<
-    { kind: "copied" } | { kind: "failed"; message?: string } | null
+  const [exporting, setExporting] = createSignal(false)
+  const [actionFeedback, setActionFeedback] = createSignal<
+    { kind: "copied" | "exported" } | { kind: "failed"; message?: string } | null
   >(null)
-  const copyFeedbackText = createMemo(() => {
-    const feedback = copyFeedback()
+  const actionFeedbackText = createMemo(() => {
+    if (exporting()) return t("chat.exporting")
+    const feedback = actionFeedback()
     if (feedback?.kind === "copied") return t("chat.debug_copy_success")
+    if (feedback?.kind === "exported") return t("chat.export_started")
     if (feedback?.kind === "failed") return feedback.message || t("markdown.copy_failed")
     return ""
   })
-  let copyFeedbackTimer: number | undefined
+  let actionFeedbackTimer: number | undefined
+  let exportController: AbortController | undefined
+  const exportScope = createMemo(() => {
+    const item = props.item()
+    return `${boardStore.selectEpoch}:${captureApiAuthority().revision}:${item?.kind}:${item?.id}:${item?.directory}`
+  })
+
+  function clearFeedbackAfterDelay(): void {
+    if (actionFeedbackTimer !== undefined) window.clearTimeout(actionFeedbackTimer)
+    actionFeedbackTimer = window.setTimeout(() => {
+      setActionFeedback(null)
+      actionFeedbackTimer = undefined
+    }, 4000)
+  }
+
+  createEffect(on(
+    exportScope,
+    () => {
+      exportController?.abort()
+      exportController = undefined
+      setExporting(false)
+      setActionFeedback(null)
+      if (actionFeedbackTimer !== undefined) window.clearTimeout(actionFeedbackTimer)
+      actionFeedbackTimer = undefined
+    },
+  ))
 
   onCleanup(() => {
-    if (copyFeedbackTimer !== undefined) window.clearTimeout(copyFeedbackTimer)
+    exportController?.abort()
+    if (actionFeedbackTimer !== undefined) window.clearTimeout(actionFeedbackTimer)
   })
 
   async function copyDebugInfo(): Promise<void> {
-    if (copyFeedbackTimer !== undefined) window.clearTimeout(copyFeedbackTimer)
+    if (actionFeedbackTimer !== undefined) window.clearTimeout(actionFeedbackTimer)
     try {
       await props.onCopyDebug()
-      setCopyFeedback({ kind: "copied" })
+      setActionFeedback({ kind: "copied" })
     } catch (error) {
       console.error("[chat-view-title dblclick] clipboard write failed", error)
-      setCopyFeedback({
+      setActionFeedback({
         kind: "failed",
         message: debugCopyFailureMessage(error, t("markdown.copy_failed")),
       })
     }
-    copyFeedbackTimer = window.setTimeout(() => {
-      setCopyFeedback(null)
-      copyFeedbackTimer = undefined
-    }, 4000)
+    clearFeedbackAfterDelay()
+  }
+
+  async function exportConversation(): Promise<void> {
+    const row = props.item()
+    if (row?.kind !== "chat" || exporting()) return
+    const authority = captureApiAuthority()
+    const epoch = boardStore.selectEpoch
+    const requestController = new AbortController()
+    exportController = requestController
+    const ownsExport = () => {
+      const current = props.item()
+      return !requestController.signal.aborted && isApiAuthorityCurrent(authority) &&
+        boardStore.selectEpoch === epoch && current?.kind === "chat" &&
+        current.sessionID === row.sessionID && current.directory === row.directory
+    }
+    if (actionFeedbackTimer !== undefined) window.clearTimeout(actionFeedbackTimer)
+    setActionFeedback(null)
+    setExporting(true)
+    try {
+      const exported = await apiJson<ExportSessionResponse>(directoryScopedPath(
+        `export/session/${encodeURIComponent(row.sessionID)}`, row.directory, "exportConversation",
+      ), { authority, signal: requestController.signal })
+      if (!ownsExport()) return
+      downloadBlob(
+        new Blob([JSON.stringify(exported, null, 2) + "\n"], { type: "application/json;charset=utf-8" }),
+        `${row.title || row.sessionID} - ${row.sessionID}.json`,
+      )
+      setActionFeedback({ kind: "exported" })
+      clearFeedbackAfterDelay()
+    } catch (error) {
+      if (!ownsExport()) return
+      setActionFeedback({ kind: "failed", message: t("chat.export_failed") })
+      clearFeedbackAfterDelay()
+      reportError({
+        id: `chat-export:${row.sessionID}`,
+        title: t("chat.export_failed"),
+        details: formatErrorDetails(error),
+      })
+    } finally {
+      if (exportController === requestController) {
+        exportController = undefined
+        setExporting(false)
+      }
+    }
   }
 
   return (
@@ -105,10 +179,10 @@ function ChatViewTitle(props: {
           as="span"
           class="chat-title chat-title-usage-trigger oc-surface-header__title"
           id="chatViewTitle"
-          data-copy-feedback={copyFeedback()?.kind}
+          data-copy-feedback={actionFeedback()?.kind}
           onDblClick={() => void copyDebugInfo()}
         >
-          {copyFeedbackText() || props.title()}
+          {actionFeedbackText() || props.title()}
         </Tooltip.Trigger>
         <Tooltip.Portal>
           <Tooltip.Content class="chat-title-usage-tooltip" data-ui="chat-title-usage-tooltip">
@@ -118,12 +192,12 @@ function ChatViewTitle(props: {
                 {usageText()}
               </strong>
             </Show>
-            <span class="chat-title-usage-tooltip__debug-hint">{copyFeedbackText() || t("chat.debug_copy_hint")}</span>
+            <span class="chat-title-usage-tooltip__debug-hint">{actionFeedbackText() || t("chat.debug_copy_hint")}</span>
           </Tooltip.Content>
         </Tooltip.Portal>
       </Tooltip.Root>
       <span class="chat-title-copy-feedback-a11y" role="status" aria-live="polite" aria-atomic="true">
-        {copyFeedbackText()}
+        {actionFeedbackText()}
       </span>
       <Show when={props.item()}>
         {(item) => (
@@ -143,6 +217,18 @@ function ChatViewTitle(props: {
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
               <DropdownMenu.Content class="chat-title-menu" data-ui="chat-title-menu">
+                <Show when={item().kind === "chat"}>
+                  <DropdownMenu.Item
+                    as="button"
+                    type="button"
+                    data-ui="chat-title-export"
+                    disabled={exporting()}
+                    onSelect={() => void exportConversation()}
+                  >
+                    <Icon name="download" size="medium" />
+                    <span>{t(exporting() ? "chat.exporting" : "chat.export_action")}</span>
+                  </DropdownMenu.Item>
+                </Show>
                 <DropdownMenu.Item
                   as="button"
                   type="button"

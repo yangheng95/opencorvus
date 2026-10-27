@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [会话下载与离线历史交付](records/2026-10/2026-10-27-conversation-download-journey.md)：原始对话下载入口、项目身份与完整消息。
+
 - [多页归档恢复与阅读连续性](records/2026-10/2026-10-27-archive-pagination-journey.md)：真实正文、后页恢复和原项目身份。
 
 - [全局查找与跨项目打开体验](records/2026-10/2026-10-27-global-search-journey.md)：历史候选、分页、键盘与真实目标身份。

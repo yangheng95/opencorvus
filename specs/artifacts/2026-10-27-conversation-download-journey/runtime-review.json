@@ -1,0 +1,84 @@
+{
+  "reviewedAt": "2026-10-27T08:06:02.840Z",
+  "before": {
+    "uiEntry": "main-f9xQwgaU.js",
+    "conversationAndMessagesHTTP": 200,
+    "exportHTTP": 400,
+    "exportError": "ProviderModelNotFoundError",
+    "menu": "Copy diagnostics, Pin, Rename, Archive; export not available",
+    "shutdown": 200,
+    "reserveMs": 1142356,
+    "physical": true
+  },
+  "after": {
+    "uiEntry": "main-CUI7eQ55.js",
+    "exportHTTP": 200,
+    "crossProjectHTTP": 404,
+    "crossProjectError": "NotFoundError",
+    "downloads": [
+      {
+        "name": "real-chat",
+        "bytes": 6063,
+        "sessionID": "ses_-zUQlYwmnzzVdoOBEQoi",
+        "messages": 2,
+        "parts": 4,
+        "toolParts": 0,
+        "canonicalValuesEqual": true
+      },
+      {
+        "name": "empty-work",
+        "bytes": 213,
+        "sessionID": "ses_-zUQlXpgYzzIAAwyz1lj",
+        "messages": 0,
+        "parts": 0,
+        "toolParts": 0,
+        "canonicalValuesEqual": true
+      },
+      {
+        "name": "real-tools-chat",
+        "bytes": 26489,
+        "sessionID": "ses_-zUQm2YEOzzH4qN4Iut5",
+        "messages": 5,
+        "parts": 15,
+        "toolParts": 3,
+        "canonicalValuesEqual": true
+      }
+    ],
+    "shutdown": 200,
+    "reserveMs": 852157,
+    "physical": true
+  },
+  "checks": {
+    "backendTests": 16,
+    "backendAssertions": 26,
+    "backendTestExit": 0,
+    "typecheck": 0,
+    "build": 0,
+    "i18n": 0,
+    "docs": 0
+  },
+  "data": {
+    "sourceTables": 92,
+    "sourceRows": 238840,
+    "sourceAllRowsPreserved": true,
+    "oldCriticalFacts": 7117,
+    "protectedProjectFiles": 166,
+    "ownProjectReadmesAndGitHeads": 2,
+    "schema": 9,
+    "integrity": "ok",
+    "credentialsCopied": false,
+    "modelRequests": 0,
+    "cumulativeModelRequests": 349
+  },
+  "visual": {
+    "originalScreenshots": 10,
+    "reviewed": "EN dark and ZH light; actual clicks/downloads, keyboard Home/Enter, original diagnostics copy and original body reading",
+    "limitations": [
+      "09 captures the conversation transition, not settled body; 10 is the settled confirmation",
+      "No forced delayed-network/connection race UI test; scope retirement is source-reviewed and ordinary cross-project navigation was exercised",
+      "Downloads are the selected Session canonical history, not child Session trees, Task/Mission archives or import formats",
+      "No new model execution; exported bodies/tools originate from existing real Sol runs",
+      "Full-product completion is not claimed"
+    ]
+  }
+}

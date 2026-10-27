@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [会话下载与离线历史交付](2026-10-27-conversation-download-journey.md)：单代理完整会话交付体验。
+
 - [多页归档恢复与阅读连续性](2026-10-27-archive-pagination-journey.md)：单代理后页操作及真实历史保留调查。
 
 - [全局查找与跨项目打开体验](2026-10-27-global-search-journey.md)：单代理全局搜索及选择流程调查。

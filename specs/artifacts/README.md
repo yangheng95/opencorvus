@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [会话下载体验证据](2026-10-27-conversation-download-journey/README.md)：实际菜单、原始下载与无模型历史读取。
+
 - [多页归档恢复体验证据](2026-10-27-archive-pagination-journey/README.md)：107→100旧缺陷、106→105修复、16张原图和原文保留。
 
 - [全局查找与跨项目打开证据](2026-10-27-global-search-journey/README.md)：真实页面与身份、运行结清事实，19张真实原图、分页阅读/活动项身份修复及三轮结清事实。

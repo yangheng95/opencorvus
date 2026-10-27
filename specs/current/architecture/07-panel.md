@@ -3669,6 +3669,23 @@ Loaded logs have one local literal, case-insensitive query through the shared se
 
 Support ZIP exports exact retained raw files, canonical-time formatted records and original subject details. Historical timestamp/ts fields are diagnostic content rather than alternate clocks. Logging is diagnostic presentation; these records do not synthesize conversation participants or replace durable activity/occurrence timestamps.
 
+## Conversation downloads
+
+The main Chat/Work conversation menu exports the selected Session through the
+existing Project-scoped `GET /export/session/:sessionID` reader. This read uses
+Project identity independently of execution-model availability and retains the
+original Project lineage check. The download contains the canonical Session
+metadata and all persisted Message/Part values for that Session, including
+history outside the loaded viewport; it is not a Task/Mission archive or a child
+Session tree export. The browser saves JSON through the existing Blob download
+primitive and safe filename, with the original title and Session identity.
+
+The request captures API authority, selection lifetime and original Session/
+directory. Scope changes and disposal abort it; only the same current target
+can initiate the download or show its localized busy/result feedback. The shared
+header feedback announces download initiation, rather than claiming the browser
+has finished saving. It does not synthesize messages or invoke a model.
+
 ## Archive queries
 
 The Chat/Work, Task and Mission archive/restore endpoints use the existing
