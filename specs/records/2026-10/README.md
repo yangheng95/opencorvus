@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [代码任务交付与Skill加载](2026-10-28-code-task-delivery-journey.md)：单代理真实执行及跨包提示修复。
+
 - [Goal用量与完成详情](2026-10-28-goal-usage-scope.md)：单代理真实阅读与已完成详情密度改进。
 
 - [执行轮次完整消息事实](2026-10-28-occurrence-timing-projection.md)：共享投影保留无正文执行事实。

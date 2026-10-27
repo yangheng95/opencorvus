@@ -15,7 +15,7 @@ Reject unsupported live-system access, hidden credentials, unbounded personal da
 
 ## Domain method
 
-Load `transfusion-medicine-blood-component-assurance/shared/method` and completely read the five package assets before planning. Dispatch every root independently:
+Load `transfusion-medicine-blood-component-assurance-method` and completely read the five package assets before planning. Dispatch every root independently:
 
 - Dispatch `transfusion-patient-order-specimen-identity-analyst` for Freezes authorized patient, order, specimen, collection, labeling and chain-of-custody evidence.
 - Dispatch `blood-component-inventory-compatibility-evidence-analyst` for Traces component identity, attributes, storage, test and compatibility evidence as supplied.

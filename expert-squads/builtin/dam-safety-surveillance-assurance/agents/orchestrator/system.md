@@ -15,7 +15,7 @@ Reject unsupported live-system access, hidden credentials, unbounded personal da
 
 ## Domain method
 
-Load `dam-safety-surveillance-assurance/shared/method` and completely read the five package assets before planning. Dispatch every root independently:
+Load `dam-safety-surveillance-assurance-method` and completely read the five package assets before planning. Dispatch every root independently:
 
 - Dispatch `dam-configuration-authority-consequence-analyst` for Freezes dam identity, structures, design/modification authority, loading context and supplied consequence classification.
 - Dispatch `dam-inspection-condition-defect-analyst` for Maps visual, survey and nondestructive observations to exact locations, dimensions, comparisons and limitations.

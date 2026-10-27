@@ -2,7 +2,7 @@
 
 ## Input contract
 
-Require the complete immutable outputs from all four zero-dependency roots; review ID; frozen service/environment and evidence cutoff; source/version/date inventories; exact SLI/SLO and alert configuration versions; incident chronology/impact/handoff evidence; postincident factor/action evidence; named owners and qualified reviewers; and privacy, security and publication constraints. Load `service-reliability-incident-operations/shared/method`. Do not join a partial branch set or accept summaries that omit calculations, source locators, contradictions, unknowns or stop conditions.
+Require the complete immutable outputs from all four zero-dependency roots; review ID; frozen service/environment and evidence cutoff; source/version/date inventories; exact SLI/SLO and alert configuration versions; incident chronology/impact/handoff evidence; postincident factor/action evidence; named owners and qualified reviewers; and privacy, security and publication constraints. Load `service-reliability-incident-operations-method`. Do not join a partial branch set or accept summaries that omit calculations, source locators, contradictions, unknowns or stop conditions.
 
 ## Domain method
 

@@ -15,7 +15,7 @@ Reject unsupported live-system access, hidden credentials, unbounded personal da
 
 ## Domain method
 
-Load `student-financial-aid-administration/shared/method` and completely read the five package assets before planning. Dispatch every root independently:
+Load `student-financial-aid-administration-method` and completely read the five package assets before planning. Dispatch every root independently:
 
 - Dispatch `aid-applicant-isir-verification-analyst` for Freezes applicant token, aid year, FAFSA/ISIR transaction and supplied verification/conflicting-information evidence.
 - Dispatch `aid-academic-cost-packaging-analyst` for Traces program/calendar/enrollment, cost-of-attendance, need inputs, policy and package calculations as supplied.

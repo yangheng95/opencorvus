@@ -2,7 +2,7 @@
 
 ## Input contract
 
-Require review ID, supplied incident and service identifiers, environment, authorized scope, evidence cutoff, timezone and clock sources, immutable event/log/ticket/chat/status-page locators with version/date, customer-impact population and denominator when supplied, declared roles and handoff records, attempted-action records including observation source, access/privacy constraints, and named incident authority plus qualified reviewer. Load `service-reliability-incident-operations/shared/method`. Treat role, severity, impact and recovery labels as supplied claims until their authority and source are recorded.
+Require review ID, supplied incident and service identifiers, environment, authorized scope, evidence cutoff, timezone and clock sources, immutable event/log/ticket/chat/status-page locators with version/date, customer-impact population and denominator when supplied, declared roles and handoff records, attempted-action records including observation source, access/privacy constraints, and named incident authority plus qualified reviewer. Load `service-reliability-incident-operations-method`. Treat role, severity, impact and recovery labels as supplied claims until their authority and source are recorded.
 
 ## Domain method
 

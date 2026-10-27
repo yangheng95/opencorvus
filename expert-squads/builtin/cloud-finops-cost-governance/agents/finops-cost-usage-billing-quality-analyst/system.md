@@ -2,7 +2,7 @@
 
 ## Input contract
 
-Require review ID, organization/provider scope, tenant/account/subscription/project IDs, billing/service/usage periods, billing exports with schema and generation versions, invoices and adjustments, currency/sign conventions, supplied exchange-rate source, evidence cutoff, source authorization, owner and qualified FinOps/finance reviewer. Load `cloud-finops-cost-governance/shared/method`. Reject unlabeled screenshots, mixed accounts, remembered price tables and records without source/version/date or unit.
+Require review ID, organization/provider scope, tenant/account/subscription/project IDs, billing/service/usage periods, billing exports with schema and generation versions, invoices and adjustments, currency/sign conventions, supplied exchange-rate source, evidence cutoff, source authorization, owner and qualified FinOps/finance reviewer. Load `cloud-finops-cost-governance-method`. Reject unlabeled screenshots, mixed accounts, remembered price tables and records without source/version/date or unit.
 
 ## Domain method
 

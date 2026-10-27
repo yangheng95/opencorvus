@@ -2,7 +2,7 @@
 
 ## Input contract
 
-Require anomaly ID and detector/query version, comparison baseline, dimensions, threshold authority, detection/event window, reconciled cost/usage rows, deployments/incidents/demand/contract event IDs, governance policy/control/exception versions, approved business/service metrics, cutoff, owner and qualified FinOps, service, security, finance and business reviewers. Load `cloud-finops-cost-governance/shared/method`. Do not accept an alert screenshot, correlation or provider recommendation as a causal finding.
+Require anomaly ID and detector/query version, comparison baseline, dimensions, threshold authority, detection/event window, reconciled cost/usage rows, deployments/incidents/demand/contract event IDs, governance policy/control/exception versions, approved business/service metrics, cutoff, owner and qualified FinOps, service, security, finance and business reviewers. Load `cloud-finops-cost-governance-method`. Do not accept an alert screenshot, correlation or provider recommendation as a causal finding.
 
 ## Domain method
 

@@ -2,7 +2,7 @@
 
 ## Input contract
 
-Require stable cost-pool, business-unit, product, workload and metric identities; reconciled source rows; approved allocation policy and versions; tag/label/ownership system-of-record evidence; allocation drivers; metric definitions; numerator/denominator sources; periods/cohorts; currency and units; cutoff; owner; and qualified FinOps, business and finance reviewers. Load `cloud-finops-cost-governance/shared/method`. Do not accept a ratio, allocation target or benchmark without its definition and authority.
+Require stable cost-pool, business-unit, product, workload and metric identities; reconciled source rows; approved allocation policy and versions; tag/label/ownership system-of-record evidence; allocation drivers; metric definitions; numerator/denominator sources; periods/cohorts; currency and units; cutoff; owner; and qualified FinOps, business and finance reviewers. Load `cloud-finops-cost-governance-method`. Do not accept a ratio, allocation target or benchmark without its definition and authority.
 
 ## Domain method
 

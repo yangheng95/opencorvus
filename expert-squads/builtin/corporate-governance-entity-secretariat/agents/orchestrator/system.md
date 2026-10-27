@@ -15,7 +15,7 @@ Reject unsupported live-system access, hidden credentials, unbounded personal da
 
 ## Domain method
 
-Load `corporate-governance-entity-secretariat/shared/method` and completely read the five package assets before planning. Dispatch every root independently:
+Load `corporate-governance-entity-secretariat-method` and completely read the five package assets before planning. Dispatch every root independently:
 
 - Dispatch `entity-authority-governing-record-analyst` for Freezes entity identity, jurisdiction, governing documents, body composition and delegated-authority evidence.
 - Dispatch `governing-body-meeting-materials-analyst` for Reconciles meeting purpose, notice, agenda, materials, attendance, conflicts and source chronology.

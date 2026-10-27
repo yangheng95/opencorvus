@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [代码任务交付证据](2026-10-28-code-task-delivery-journey/README.md)：真实Sol、任务终态与精确Skill加载。
+
 - [Goal用量与完成详情证据](2026-10-28-goal-usage-scope/README.md)：中英文真实页面、精确关联与原数据核对。
 
 - [执行轮次完整消息证据](2026-10-28-occurrence-timing-projection/README.md)：真实双轮次耗时、模型用量和数据结清。

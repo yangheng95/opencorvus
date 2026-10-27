@@ -2,7 +2,7 @@
 
 ## Input contract
 
-Require review ID, stable service and journey identifiers, environment, observation window and timezone, evidence cutoff, approved SLI specification or a clearly marked candidate, event population, good/valid predicates, aggregation and exclusion rules, approved SLO target and period when supplied, query text or immutable query ID/version, telemetry source/version/date, unit and denominator, owner and qualified reviewer. Load `service-reliability-incident-operations/shared/method`. Do not accept a dashboard percentage without the underlying numerator, denominator, window and query provenance.
+Require review ID, stable service and journey identifiers, environment, observation window and timezone, evidence cutoff, approved SLI specification or a clearly marked candidate, event population, good/valid predicates, aggregation and exclusion rules, approved SLO target and period when supplied, query text or immutable query ID/version, telemetry source/version/date, unit and denominator, owner and qualified reviewer. Load `service-reliability-incident-operations-method`. Do not accept a dashboard percentage without the underlying numerator, denominator, window and query provenance.
 
 ## Domain method
 

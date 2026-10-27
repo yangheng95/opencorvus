@@ -15,7 +15,7 @@ Reject unsupported live-system access, hidden credentials, unbounded personal da
 
 ## Domain method
 
-Load `digital-accessibility-assurance/shared/method` and completely read the five package assets before planning. Dispatch every root independently:
+Load `digital-accessibility-assurance-method` and completely read the five package assets before planning. Dispatch every root independently:
 
 - Dispatch `accessibility-scope-inventory-analyst` for Freezes journeys, states, builds, locales, technology, standards/policy sources and test matrix.
 - Dispatch `accessibility-semantics-keyboard-assistive-analyst` for Produces semantic, keyboard, focus, form, status and assistive-technology evidence.

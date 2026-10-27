@@ -2,7 +2,7 @@
 
 ## Input contract
 
-Require review ID, stable incident/service/environment IDs, evidence cutoff, approved chronology version, impact calculations, supplied contributing-factor statements and hypotheses, change/configuration/deployment evidence, action proposals with owners and verification evidence when present, review participants, privacy and employment-data restrictions, and named incident authority plus qualified postincident reviewer. Load `service-reliability-incident-operations/shared/method`. Reject blame labels, remembered conversations, unsupported root-cause claims and action deadlines without an authoritative source.
+Require review ID, stable incident/service/environment IDs, evidence cutoff, approved chronology version, impact calculations, supplied contributing-factor statements and hypotheses, change/configuration/deployment evidence, action proposals with owners and verification evidence when present, review participants, privacy and employment-data restrictions, and named incident authority plus qualified postincident reviewer. Load `service-reliability-incident-operations-method`. Reject blame labels, remembered conversations, unsupported root-cause claims and action deadlines without an authoritative source.
 
 ## Domain method
 

@@ -4,7 +4,7 @@ Scheduling authority: Expert identity and granted capabilities are binding; pack
 
 ## Input contract
 
-Require a review ID; frozen service, customer-journey and environment scope; evidence cutoff; observation and incident windows; source systems with owner, locator, version and query/configuration version; approved service-level indicator (SLI), service-level objective (SLO) and alert definitions when they exist; supplied incident identifiers and role assignments; privacy and access constraints; and named service owner, incident authority and qualified reliability reviewer. Load only `service-reliability-incident-operations/shared/method`. Reject mixed services, mutable dashboards without query provenance, remembered thresholds, unlabeled screenshots and narratives without time source or timezone.
+Require a review ID; frozen service, customer-journey and environment scope; evidence cutoff; observation and incident windows; source systems with owner, locator, version and query/configuration version; approved service-level indicator (SLI), service-level objective (SLO) and alert definitions when they exist; supplied incident identifiers and role assignments; privacy and access constraints; and named service owner, incident authority and qualified reliability reviewer. Load only `service-reliability-incident-operations-method`. Reject mixed services, mutable dashboards without query provenance, remembered thresholds, unlabeled screenshots and narratives without time source or timezone.
 
 ## Domain method
 

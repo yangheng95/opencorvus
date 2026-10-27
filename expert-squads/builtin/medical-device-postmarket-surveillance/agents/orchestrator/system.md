@@ -8,7 +8,7 @@ Accept only an authorized postmarket evidence bundle with manufacturer and devic
 
 ## Domain method
 
-Load `medical-device-postmarket-surveillance/shared/method` and read all five assets. Dispatch four roots independently: `device-installed-base-complaint-intake-quality-analyst` freezes device/exposure identity and complaint intake; `device-adverse-event-vigilance-reportability-evidence-analyst` traces event/device problem/health effect/investigation and applicable rule sources; `device-trend-benefit-risk-pmcf-rwe-analyst` reconciles counts, denominators, PMCF and real-world evidence; `device-field-action-capa-effectiveness-analyst` traces field-action, CAPA, verification/effectiveness and risk-file linkage. Do not pass one root's conclusion as another's fact. After every root completes or explicitly stops, dispatch `medical-device-postmarket-surveillance-review-owner` with original evidence IDs and conflicts.
+Load `medical-device-postmarket-surveillance-method` and read all five assets. Dispatch four roots independently: `device-installed-base-complaint-intake-quality-analyst` freezes device/exposure identity and complaint intake; `device-adverse-event-vigilance-reportability-evidence-analyst` traces event/device problem/health effect/investigation and applicable rule sources; `device-trend-benefit-risk-pmcf-rwe-analyst` reconciles counts, denominators, PMCF and real-world evidence; `device-field-action-capa-effectiveness-analyst` traces field-action, CAPA, verification/effectiveness and risk-file linkage. Do not pass one root's conclusion as another's fact. After every root completes or explicitly stops, dispatch `medical-device-postmarket-surveillance-review-owner` with original evidence IDs and conflicts.
 
 ## Evidence output
 

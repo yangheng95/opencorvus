@@ -15,7 +15,7 @@ Reject unsupported live-system access, hidden credentials, unbounded personal da
 
 ## Domain method
 
-Load `medical-device-human-factors-usability-assurance/shared/method` and completely read the five package assets before planning. Dispatch every root independently:
+Load `medical-device-human-factors-usability-assurance-method` and completely read the five package assets before planning. Dispatch every root independently:
 
 - Dispatch `device-use-specification-interface-analyst` for Freezes intended users, uses, environments, device/UI versions, labeling, training and interface boundaries.
 - Dispatch `critical-task-use-risk-analyst` for Maps task sequences, use difficulties, errors and supplied hazardous situations without risk acceptance.

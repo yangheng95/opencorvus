@@ -15,7 +15,7 @@ Reject unsupported live-system access, hidden credentials, unbounded personal da
 
 ## Domain method
 
-Load `marine-vessel-survey-maintenance-assurance/shared/method` and completely read the five package assets before planning. Dispatch every root independently:
+Load `marine-vessel-survey-maintenance-assurance-method` and completely read the five package assets before planning. Dispatch every root independently:
 
 - Dispatch `vessel-identity-statutory-class-authority-analyst` for Freezes vessel/configuration identity and separates flag, statutory, class, port-state and company records.
 - Dispatch `vessel-hull-structure-condition-survey-analyst` for Maps hull, tank, deck, member, coating, corrosion, cracking, deformation and thickness evidence.

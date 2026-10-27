@@ -15,7 +15,7 @@ Reject unsupported live-system access, hidden credentials, unbounded personal da
 
 ## Domain method
 
-Load `clinical-genomics-variant-evidence-review/shared/method` and completely read the five package assets before planning. Dispatch every root independently:
+Load `clinical-genomics-variant-evidence-review-method` and completely read the five package assets before planning. Dispatch every root independently:
 
 - Dispatch `genomic-case-build-identity-analyst` for Freezes case, specimen, phenotype, gene-disease, build, transcript and normalized variant identity.
 - Dispatch `population-computational-evidence-analyst` for Builds versioned population-frequency and computational-evidence observations without clinical interpretation.

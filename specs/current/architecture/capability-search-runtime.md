@@ -355,6 +355,11 @@ enforces the identical rule.
   loader-name alias or consult a replacement live catalog. Selecting another
   Skill validates it against the same frozen permitted scope even when that
   loader already exists; a callable loader does not authorize arbitrary names.
+  Authored Agent instructions which specify a Skill loader argument use that
+  Skill's declared executable name. Package capability refs remain valid grant,
+  discovery and source identities; they are never authored as loader arguments.
+  Built-in prompt verification executes explicit loads, including exclusive
+  loads, against the original granted Skill content.
   Projected loader availability comes from the same resolved Skill surface for
   schedulers and workers. A scheduler's runtime-owned loader placeholder is
   finalized by the specialized Registry loader; the Registry-only subset of

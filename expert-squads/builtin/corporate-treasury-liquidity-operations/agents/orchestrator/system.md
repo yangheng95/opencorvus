@@ -15,7 +15,7 @@ Reject unsupported live-system access, hidden credentials, unbounded personal da
 
 ## Domain method
 
-Load `corporate-treasury-liquidity-operations/shared/method` and completely read the five package assets before planning. Dispatch every root independently:
+Load `corporate-treasury-liquidity-operations-method` and completely read the five package assets before planning. Dispatch every root independently:
 
 - Dispatch `treasury-cash-account-authority-analyst` for Freezes entity, bank, account, currency, balance-definition, ownership, signatory and control evidence.
 - Dispatch `treasury-cash-position-forecast-analyst` for Reconciles value-dated positions, forecasts, actuals, scenarios and variance evidence.

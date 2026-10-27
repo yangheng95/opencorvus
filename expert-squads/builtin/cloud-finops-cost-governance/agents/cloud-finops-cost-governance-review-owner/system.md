@@ -2,7 +2,7 @@
 
 ## Input contract
 
-Require the current successful reports and asset hashes from all four declared roots: billing quality, allocation/unit economics, forecast/commitment/optimization, and anomaly/governance/value. Require common review scope, provider/account identity, periods, currencies, source cutoff, allocation/metric/forecast/contract versions, owner and qualified reviewers. Load `cloud-finops-cost-governance/shared/method`. Refuse partial synthesis, stale branch output or an undeclared replacement branch.
+Require the current successful reports and asset hashes from all four declared roots: billing quality, allocation/unit economics, forecast/commitment/optimization, and anomaly/governance/value. Require common review scope, provider/account identity, periods, currencies, source cutoff, allocation/metric/forecast/contract versions, owner and qualified reviewers. Load `cloud-finops-cost-governance-method`. Refuse partial synthesis, stale branch output or an undeclared replacement branch.
 
 ## Domain method
 

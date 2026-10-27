@@ -1,0 +1,603 @@
+{
+  "at": "2026-10-27T19:01:55.661Z",
+  "changes": {
+    "initialExplicitLoads": [
+      {
+        "packageID": "bridge-structural-integrity-assurance",
+        "version": "2026.10.14.1",
+        "agent": "orchestrator",
+        "file": "expert-squads/builtin/bridge-structural-integrity-assurance/agents/orchestrator/system.md",
+        "ref": "bridge-structural-integrity-assurance/shared/method",
+        "name": "bridge-structural-integrity-assurance-method"
+      },
+      {
+        "packageID": "clinical-biostatistics-data-monitoring",
+        "version": "2026.10.14.1",
+        "agent": "orchestrator",
+        "file": "expert-squads/builtin/clinical-biostatistics-data-monitoring/agents/orchestrator/system.md",
+        "ref": "clinical-biostatistics-data-monitoring/shared/method",
+        "name": "clinical-biostatistics-data-monitoring-method"
+      },
+      {
+        "packageID": "clinical-genomics-variant-evidence-review",
+        "version": "2026.10.14.1",
+        "agent": "orchestrator",
+        "file": "expert-squads/builtin/clinical-genomics-variant-evidence-review/agents/orchestrator/system.md",
+        "ref": "clinical-genomics-variant-evidence-review/shared/method",
+        "name": "clinical-genomics-variant-evidence-review-method"
+      },
+      {
+        "packageID": "cloud-finops-cost-governance",
+        "version": "2026.10.14.1",
+        "agent": "finops-cost-usage-billing-quality-analyst",
+        "file": "expert-squads/builtin/cloud-finops-cost-governance/agents/finops-cost-usage-billing-quality-analyst/system.md",
+        "ref": "cloud-finops-cost-governance/shared/method",
+        "name": "cloud-finops-cost-governance-method"
+      },
+      {
+        "packageID": "cloud-finops-cost-governance",
+        "version": "2026.10.14.1",
+        "agent": "finops-allocation-unit-economics-analyst",
+        "file": "expert-squads/builtin/cloud-finops-cost-governance/agents/finops-allocation-unit-economics-analyst/system.md",
+        "ref": "cloud-finops-cost-governance/shared/method",
+        "name": "cloud-finops-cost-governance-method"
+      },
+      {
+        "packageID": "cloud-finops-cost-governance",
+        "version": "2026.10.14.1",
+        "agent": "finops-forecast-commitment-optimization-analyst",
+        "file": "expert-squads/builtin/cloud-finops-cost-governance/agents/finops-forecast-commitment-optimization-analyst/system.md",
+        "ref": "cloud-finops-cost-governance/shared/method",
+        "name": "cloud-finops-cost-governance-method"
+      },
+      {
+        "packageID": "cloud-finops-cost-governance",
+        "version": "2026.10.14.1",
+        "agent": "finops-anomaly-governance-value-analyst",
+        "file": "expert-squads/builtin/cloud-finops-cost-governance/agents/finops-anomaly-governance-value-analyst/system.md",
+        "ref": "cloud-finops-cost-governance/shared/method",
+        "name": "cloud-finops-cost-governance-method"
+      },
+      {
+        "packageID": "cloud-finops-cost-governance",
+        "version": "2026.10.14.1",
+        "agent": "cloud-finops-cost-governance-review-owner",
+        "file": "expert-squads/builtin/cloud-finops-cost-governance/agents/cloud-finops-cost-governance-review-owner/system.md",
+        "ref": "cloud-finops-cost-governance/shared/method",
+        "name": "cloud-finops-cost-governance-method"
+      },
+      {
+        "packageID": "corporate-governance-entity-secretariat",
+        "version": "2026.10.14.1",
+        "agent": "orchestrator",
+        "file": "expert-squads/builtin/corporate-governance-entity-secretariat/agents/orchestrator/system.md",
+        "ref": "corporate-governance-entity-secretariat/shared/method",
+        "name": "corporate-governance-entity-secretariat-method"
+      },
+      {
+        "packageID": "corporate-treasury-liquidity-operations",
+        "version": "2026.10.14.1",
+        "agent": "orchestrator",
+        "file": "expert-squads/builtin/corporate-treasury-liquidity-operations/agents/orchestrator/system.md",
+        "ref": "corporate-treasury-liquidity-operations/shared/method",
+        "name": "corporate-treasury-liquidity-operations-method"
+      },
+      {
+        "packageID": "dam-safety-surveillance-assurance",
+        "version": "2026.10.14.1",
+        "agent": "orchestrator",
+        "file": "expert-squads/builtin/dam-safety-surveillance-assurance/agents/orchestrator/system.md",
+        "ref": "dam-safety-surveillance-assurance/shared/method",
+        "name": "dam-safety-surveillance-assurance-method"
+      },
+      {
+        "packageID": "digital-accessibility-assurance",
+        "version": "2026.10.14.1",
+        "agent": "orchestrator",
+        "file": "expert-squads/builtin/digital-accessibility-assurance/agents/orchestrator/system.md",
+        "ref": "digital-accessibility-assurance/shared/method",
+        "name": "digital-accessibility-assurance-method"
+      },
+      {
+        "packageID": "dynamic",
+        "version": "2026.10.14.1",
+        "agent": "dynamic-generalist",
+        "file": "expert-squads/builtin/dynamic/agents/dynamic-generalist/system.md",
+        "ref": "dynamic/shared/method",
+        "name": "dynamic-team-method"
+      },
+      {
+        "packageID": "dynamic",
+        "version": "2026.10.14.1",
+        "agent": "dynamic-builder",
+        "file": "expert-squads/builtin/dynamic/agents/dynamic-builder/system.md",
+        "ref": "dynamic/shared/method",
+        "name": "dynamic-team-method"
+      },
+      {
+        "packageID": "marine-vessel-survey-maintenance-assurance",
+        "version": "2026.10.14.1",
+        "agent": "orchestrator",
+        "file": "expert-squads/builtin/marine-vessel-survey-maintenance-assurance/agents/orchestrator/system.md",
+        "ref": "marine-vessel-survey-maintenance-assurance/shared/method",
+        "name": "marine-vessel-survey-maintenance-assurance-method"
+      },
+      {
+        "packageID": "medical-device-human-factors-usability-assurance",
+        "version": "2026.10.14.1",
+        "agent": "orchestrator",
+        "file": "expert-squads/builtin/medical-device-human-factors-usability-assurance/agents/orchestrator/system.md",
+        "ref": "medical-device-human-factors-usability-assurance/shared/method",
+        "name": "medical-device-human-factors-usability-assurance-method"
+      },
+      {
+        "packageID": "medical-device-postmarket-surveillance",
+        "version": "2026.10.14.1",
+        "agent": "orchestrator",
+        "file": "expert-squads/builtin/medical-device-postmarket-surveillance/agents/orchestrator/system.md",
+        "ref": "medical-device-postmarket-surveillance/shared/method",
+        "name": "medical-device-postmarket-surveillance-method"
+      },
+      {
+        "packageID": "radiation-therapy-physics-quality-assurance",
+        "version": "2026.10.14.1",
+        "agent": "orchestrator",
+        "file": "expert-squads/builtin/radiation-therapy-physics-quality-assurance/agents/orchestrator/system.md",
+        "ref": "radiation-therapy-physics-quality-assurance/shared/method",
+        "name": "radiation-therapy-physics-quality-assurance-method"
+      },
+      {
+        "packageID": "service-reliability-incident-operations",
+        "version": "2026.10.14.1",
+        "agent": "reliability-sli-slo-error-budget-analyst",
+        "file": "expert-squads/builtin/service-reliability-incident-operations/agents/reliability-sli-slo-error-budget-analyst/system.md",
+        "ref": "service-reliability-incident-operations/shared/method",
+        "name": "service-reliability-incident-operations-method"
+      },
+      {
+        "packageID": "service-reliability-incident-operations",
+        "version": "2026.10.14.1",
+        "agent": "reliability-observability-alert-quality-analyst",
+        "file": "expert-squads/builtin/service-reliability-incident-operations/agents/reliability-observability-alert-quality-analyst/system.md",
+        "ref": "service-reliability-incident-operations/shared/method",
+        "name": "service-reliability-incident-operations-method"
+      },
+      {
+        "packageID": "service-reliability-incident-operations",
+        "version": "2026.10.14.1",
+        "agent": "reliability-incident-coordination-handoff-analyst",
+        "file": "expert-squads/builtin/service-reliability-incident-operations/agents/reliability-incident-coordination-handoff-analyst/system.md",
+        "ref": "service-reliability-incident-operations/shared/method",
+        "name": "service-reliability-incident-operations-method"
+      },
+      {
+        "packageID": "service-reliability-incident-operations",
+        "version": "2026.10.14.1",
+        "agent": "reliability-postincident-learning-action-analyst",
+        "file": "expert-squads/builtin/service-reliability-incident-operations/agents/reliability-postincident-learning-action-analyst/system.md",
+        "ref": "service-reliability-incident-operations/shared/method",
+        "name": "service-reliability-incident-operations-method"
+      },
+      {
+        "packageID": "service-reliability-incident-operations",
+        "version": "2026.10.14.1",
+        "agent": "service-reliability-incident-review-owner",
+        "file": "expert-squads/builtin/service-reliability-incident-operations/agents/service-reliability-incident-review-owner/system.md",
+        "ref": "service-reliability-incident-operations/shared/method",
+        "name": "service-reliability-incident-operations-method"
+      },
+      {
+        "packageID": "student-financial-aid-administration",
+        "version": "2026.10.14.1",
+        "agent": "orchestrator",
+        "file": "expert-squads/builtin/student-financial-aid-administration/agents/orchestrator/system.md",
+        "ref": "student-financial-aid-administration/shared/method",
+        "name": "student-financial-aid-administration-method"
+      },
+      {
+        "packageID": "transfusion-medicine-blood-component-assurance",
+        "version": "2026.10.14.1",
+        "agent": "orchestrator",
+        "file": "expert-squads/builtin/transfusion-medicine-blood-component-assurance/agents/orchestrator/system.md",
+        "ref": "transfusion-medicine-blood-component-assurance/shared/method",
+        "name": "transfusion-medicine-blood-component-assurance-method"
+      }
+    ],
+    "additionalExclusiveLoad": {
+      "packageID": "service-reliability-incident-operations",
+      "agent": "orchestrator",
+      "name": "service-reliability-incident-operations-method"
+    },
+    "prompts": 26,
+    "packages": 16,
+    "packageVersion": "2026.10.28.1",
+    "semanticsAudit": {
+      "remainingReferenceContexts": 365,
+      "possibleLoaderContexts": 6,
+      "additionalBrokenArguments": 1,
+      "retainedIdentityExample": "Light exact_refs / next_owner.name preserves the capability-reference versus executable-name distinction"
+    }
+  },
+  "checks": {
+    "initialRed": 1,
+    "intermediateHarnessFailure": 1,
+    "incompleteDefaultGrantFixture": 1,
+    "intermediateGreen": 0,
+    "exclusiveLoadRed": 1,
+    "finalPositive": {
+      "started": 1793127395268,
+      "closed": 1793127437557,
+      "code": 0,
+      "signal": null,
+      "checker": [
+        "run",
+        "--cwd",
+        "packages/opencorvus",
+        "test",
+        "test/expert-squad/prompt-skill-load-contract.test.ts"
+      ],
+      "tests": 2,
+      "assertions": 59
+    },
+    "backendTypecheck": 0
+  },
+  "bindings": [
+    {
+      "taskID": "tsk_g00VZH4Swp00oZbphtIe",
+      "artifactID": "art_g0VZH4TAA00HHEk0E5ki",
+      "packageID": "dynamic",
+      "scope": "built_in",
+      "version": "2026.10.14.1",
+      "immutableFact": true
+    },
+    {
+      "taskID": "tsk_g00VZHAq8900E5iJwrbu",
+      "artifactID": "art_g0VZHAqMN00A1vv1ZDds",
+      "packageID": "dynamic",
+      "scope": "built_in",
+      "version": "2026.10.28.1",
+      "immutableFact": true
+    }
+  ],
+  "before": {
+    "at": "2026-10-27T18:22:15.904Z",
+    "schema": 9,
+    "tables": 92,
+    "originalRows": 2427,
+    "sourceRowsPreserved": true,
+    "oldRowsUnchanged": 2425,
+    "oldRowChanges": [
+      {
+        "table": "runtime_execution_capacity_lease",
+        "identity": "[1]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "identity": "[2]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      }
+    ],
+    "integrity": "ok",
+    "independentPython": {
+      "command": "python -B -m unittest discover -v",
+      "exitCode": 0,
+      "tests": 12,
+      "output": "test_cancellation_preserves_small_amount (test_invoice.SumDueTests.test_cancellation_preserves_small_amount) ... ok\r\ntest_decimal_multiplication (test_invoice.SumDueTests.test_decimal_multiplication) ... ok\r\ntest_empty (test_invoice.SumDueTests.test_empty) ... ok\r\ntest_half_up (test_invoice.SumDueTests.test_half_up) ... ok\r\ntest_independent_of_caller_context (test_invoice.SumDueTests.test_independent_of_caller_context) ... ok\r\ntest_large_integer_and_fraction (test_invoice.SumDueTests.test_large_integer_and_fraction) ... ok\r\ntest_large_original_acceptance (test_invoice.SumDueTests.test_large_original_acceptance) ... ok\r\ntest_large_quantity (test_invoice.SumDueTests.test_large_quantity) ... ok\r\ntest_long_fraction_below_half (test_invoice.SumDueTests.test_long_fraction_below_half) ... ok\r\ntest_negative_half_up (test_invoice.SumDueTests.test_negative_half_up) ... ok\r\ntest_round_only_final_total (test_invoice.SumDueTests.test_round_only_final_total) ... ok\r\ntest_sum_carry (test_invoice.SumDueTests.test_sum_carry) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 12 tests in 0.002s\r\n\r\nOK\r\n",
+      "acceptanceValues": [
+        "0.30",
+        "1.01",
+        "9007199254740993.30",
+        "0.00"
+      ]
+    },
+    "readmePreserved": true,
+    "commit": "7ec5560fb0fba5616255a083940f5a16c1b6e9e7",
+    "files": [
+      "invoice.py",
+      "test_invoice.py"
+    ],
+    "fileBytesMatchLocalCommit": true,
+    "leaseReuse": {
+      "qualified": true,
+      "slots": [
+        0,
+        1
+      ],
+      "nativePID": 10360,
+      "authority": "Existing expired slots reused by exact production native occurrence; original resource and slot remain"
+    },
+    "scope": "2427 source rows preserved; 2425 target rows exact plus two qualified capacity-slot reuses",
+    "skillCalls": [
+      {
+        "partID": "prt_g0VZH4Vpc005AamPYnTa",
+        "sessionID": "ses_-zUQivVm1zzEQEgs7y7x",
+        "status": "completed",
+        "input": {
+          "name": "dynamic-team-method"
+        },
+        "title": "Loaded skill: dynamic-team-method",
+        "loadedName": "dynamic-team-method"
+      },
+      {
+        "partID": "prt_g0VZH4hJW009BHhNVMWW",
+        "sessionID": "ses_hr5JEZ6FJGeIXCiZK9Cr",
+        "status": "failed",
+        "input": {
+          "name": "dynamic/shared/method"
+        },
+        "failure": {
+          "kind": "tool-execution",
+          "name": "Error",
+          "message": "Skill \"dynamic/shared/method\" not found or not allowed. Compatible skills: dynamic-team-method",
+          "originSite": "session.processor.tool-error",
+          "classification": "tool-execution",
+          "data": {
+            "toolCallId": "call_8390823e1e35473dbf631a34a5855f8f",
+            "toolName": "skill"
+          }
+        }
+      },
+      {
+        "partID": "prt_g0VZH4iC300eWjWZ1mHv",
+        "sessionID": "ses_hr5JEZ6FJGeIXCiZK9Cr",
+        "status": "completed",
+        "input": {
+          "name": "dynamic-team-method"
+        },
+        "title": "Loaded skill: dynamic-team-method",
+        "loadedName": "dynamic-team-method"
+      },
+      {
+        "partID": "prt_g0VZH5hwl001I2dtjkFh",
+        "sessionID": "ses_hE53oYKRI34xdvtDigvg",
+        "status": "completed",
+        "input": {
+          "name": "dynamic-team-method"
+        },
+        "title": "Loaded skill: dynamic-team-method",
+        "loadedName": "dynamic-team-method"
+      },
+      {
+        "partID": "prt_g0VZH5j2M00w89Yfrwss",
+        "sessionID": "ses_hE53oYKRI34xdvtDigvg",
+        "status": "failed",
+        "input": {
+          "name": "dynamic/shared/method"
+        },
+        "failure": {
+          "kind": "tool-execution",
+          "name": "Error",
+          "message": "Skill \"dynamic/shared/method\" not found or not allowed. Compatible skills: dynamic-team-method",
+          "originSite": "session.processor.tool-error",
+          "classification": "tool-execution",
+          "data": {
+            "toolCallId": "call_c6f260cffc5445ca9caa3692e3f518eb",
+            "toolName": "skill"
+          }
+        }
+      }
+    ]
+  },
+  "after": {
+    "at": "2026-10-27T18:50:17.204Z",
+    "schema": 9,
+    "tables": 92,
+    "originalRows": 30229,
+    "sourceRowsPreserved": true,
+    "oldRowsUnchanged": 30225,
+    "oldRowChanges": [
+      {
+        "table": "memory_chunk",
+        "identity": "[5]",
+        "fields": [
+          "content",
+          "token_count",
+          "time_updated"
+        ]
+      },
+      {
+        "table": "memory_file",
+        "identity": "[5]",
+        "fields": [
+          "time_updated"
+        ]
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "identity": "[1]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "identity": "[2]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      }
+    ],
+    "integrity": "ok",
+    "independentPython": {
+      "command": "python -B -m unittest discover -v",
+      "exitCode": 0,
+      "tests": 12,
+      "output": "test_cancellation_preserves_small_amount (test_invoice.SumDueTests.test_cancellation_preserves_small_amount) ... ok\r\ntest_decimal_multiplication (test_invoice.SumDueTests.test_decimal_multiplication) ... ok\r\ntest_empty (test_invoice.SumDueTests.test_empty) ... ok\r\ntest_half_up (test_invoice.SumDueTests.test_half_up) ... ok\r\ntest_independent_of_caller_context (test_invoice.SumDueTests.test_independent_of_caller_context) ... ok\r\ntest_large_integer_and_fraction (test_invoice.SumDueTests.test_large_integer_and_fraction) ... ok\r\ntest_large_original_acceptance (test_invoice.SumDueTests.test_large_original_acceptance) ... ok\r\ntest_large_quantity (test_invoice.SumDueTests.test_large_quantity) ... ok\r\ntest_long_fraction_below_half (test_invoice.SumDueTests.test_long_fraction_below_half) ... ok\r\ntest_negative_half_up (test_invoice.SumDueTests.test_negative_half_up) ... ok\r\ntest_round_only_final_total (test_invoice.SumDueTests.test_round_only_final_total) ... ok\r\ntest_sum_carry (test_invoice.SumDueTests.test_sum_carry) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 12 tests in 0.002s\r\n\r\nOK\r\n",
+      "acceptanceValues": [
+        "0.30",
+        "1.01",
+        "9007199254740993.30",
+        "0.00"
+      ]
+    },
+    "readmePreserved": true,
+    "commit": "7ec5560fb0fba5616255a083940f5a16c1b6e9e7",
+    "files": [
+      "invoice.py",
+      "test_invoice.py"
+    ],
+    "fileBytesMatchLocalCommit": true,
+    "memoryQualification": {
+      "projectID": "prj_hJdoxVnJqyVZSpiLlYXE",
+      "fileID": "mem_hFWc5fl4qEaqHlqP39dN",
+      "revisionBefore": 2,
+      "revisionAfter": 3,
+      "sourceUserMessageID": "msg_hVvbX9raakpgFUKvNqMr",
+      "canonicalDocumentAndMetadataMatch": true
+    },
+    "leaseReuse": {
+      "qualified": true,
+      "slots": [
+        0,
+        1
+      ],
+      "nativePID": 99908,
+      "authority": "Existing expired slots reused by exact production native occurrence; original resource and slot remain"
+    },
+    "scope": "30229 source rows preserved; 30225 target rows exact plus the source-bound Project Memory revision and two qualified capacity-slot reuses",
+    "skillCalls": [
+      {
+        "partID": "prt_g0VZHAsio00vx6Y45jEB",
+        "sessionID": "ses_-zUQip8cgzzGs0zvujml",
+        "status": "completed",
+        "input": {
+          "name": "dynamic-team-method"
+        },
+        "title": "Loaded skill: dynamic-team-method",
+        "loadedName": "dynamic-team-method"
+      },
+      {
+        "partID": "prt_g0VZHB58A00Vbdg5j6XG",
+        "sessionID": "ses_hhMptHIUKYZMBfLxtRgb",
+        "status": "completed",
+        "input": {
+          "name": "dynamic-team-method"
+        },
+        "title": "Loaded skill: dynamic-team-method",
+        "loadedName": "dynamic-team-method"
+      },
+      {
+        "partID": "prt_g0VZHBjYn006SnPNpWyP",
+        "sessionID": "ses_har7PDXfpnwjlKaNdyOs",
+        "status": "completed",
+        "input": {
+          "name": "dynamic-team-method"
+        },
+        "title": "Loaded skill: dynamic-team-method",
+        "loadedName": "dynamic-team-method"
+      }
+    ]
+  },
+  "reader": {
+    "schema": 9,
+    "originalRows": 47312,
+    "allOriginalRowsPreserved": true,
+    "sourceRowsPreserved": true,
+    "integrity": "ok",
+    "downloads": [
+      {
+        "filename": "invoice.py",
+        "bytes": 889,
+        "actualBrowserDownloadCompleted": true,
+        "equalsCurrentProject": true,
+        "equalsOriginalDeliveredCommit": true
+      },
+      {
+        "filename": "test_invoice.py",
+        "bytes": 2053,
+        "actualBrowserDownloadCompleted": true,
+        "equalsCurrentProject": true,
+        "equalsOriginalDeliveredCommit": true
+      }
+    ]
+  },
+  "scopes": [
+    {
+      "scope": "code-task-delivery-734",
+      "requests": 104,
+      "cumulativeRequests": 492,
+      "credentialCopiesRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "originalExecExit": 0,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "reserveMs": 362410,
+      "targetTenMinutesMet": false,
+      "allProviderRequestsQualified": true,
+      "credentialCopyCreated": true
+    },
+    {
+      "scope": "code-task-delivery-735",
+      "requests": 64,
+      "cumulativeRequests": 556,
+      "credentialCopiesRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "originalExecExit": 0,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "reserveMs": 460670,
+      "targetTenMinutesMet": false,
+      "allProviderRequestsQualified": true,
+      "credentialCopyCreated": true
+    },
+    {
+      "scope": "code-task-delivery-736",
+      "requests": 0,
+      "cumulativeRequests": 556,
+      "credentialCopiesRetired": false,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "originalExecExit": 0,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "reserveMs": 734069,
+      "targetTenMinutesMet": true,
+      "allProviderRequestsQualified": true,
+      "credentialCopyCreated": false
+    }
+  ],
+  "scopeLimit": "Two real finite Code Missions; 16 packages verified through actual Skill loaders, not 16 domain-model end-to-end cases. Mission-added Git restriction remains a separate investigation."
+}

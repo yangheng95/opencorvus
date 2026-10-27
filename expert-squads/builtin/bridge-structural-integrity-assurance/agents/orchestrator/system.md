@@ -15,7 +15,7 @@ Reject unsupported live-system access, hidden credentials, unbounded personal da
 
 ## Domain method
 
-Load `bridge-structural-integrity-assurance/shared/method` and completely read the five package assets before planning. Dispatch every root independently:
+Load `bridge-structural-integrity-assurance-method` and completely read the five package assets before planning. Dispatch every root independently:
 
 - Dispatch `bridge-asset-configuration-authority-analyst` for Freezes bridge/span/element identity, records, modifications, inspection program and professional authority.
 - Dispatch `bridge-inspection-condition-defect-analyst` for Maps material and element observations to reproducible locations, dimensions, evidence and limitations.

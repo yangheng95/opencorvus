@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [代码任务交付与Skill加载](records/2026-10/2026-10-28-code-task-delivery-journey.md)：真实任务、文件交付与内置提示名称合同。
+
 - [Goal用量与完成详情](records/2026-10/2026-10-28-goal-usage-scope.md)：解释请求归属并改善下一目标操作可见性。
 
 - [执行轮次完整消息事实](records/2026-10/2026-10-28-occurrence-timing-projection.md)：修复实时与历史耗时、用量不一致。

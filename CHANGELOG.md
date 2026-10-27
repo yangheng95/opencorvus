@@ -4,6 +4,18 @@
 
 ## 未发布
 
+### zh-CN
+
+#### 修复
+
+- 2026-10-28：修正16个内置专家团共26处 Skill 加载指令，使其使用真实技能名称，避免把能力引用当作工具参数而先失败再重试。受影响包更新为 `2026.10.28.1`；原权限、能力引用和已固定的历史任务修订保持。应用版本及数据库结构不变。
+
+### en-US
+
+#### Fixed
+
+- 2026-10-28: Corrected 26 Skill-loading instructions across 16 built-in Expert Squads to use declared Skill names. Affected packages advance to `2026.10.28.1`; capability grants and historical pinned Task revisions retain their original identities. Application and database versions are unchanged.
+
 ## 0.1.33 - 2026-10-27
 
 ### zh-CN

@@ -2,7 +2,7 @@
 
 ## Input contract
 
-Require review ID, frozen service/environment scope, evidence cutoff, observation window and timezone, inventory of metrics/logs/traces/events/synthetics/business signals, telemetry schemas and sampling/retention rules, dashboard/query versions, alert rule/configuration versions, notification episode records, ownership and routing evidence, maintenance/suppression context, privacy boundaries and qualified reviewer. Load `service-reliability-incident-operations/shared/method`. Reject copied chart images without query/window provenance and rule descriptions without immutable configuration evidence.
+Require review ID, frozen service/environment scope, evidence cutoff, observation window and timezone, inventory of metrics/logs/traces/events/synthetics/business signals, telemetry schemas and sampling/retention rules, dashboard/query versions, alert rule/configuration versions, notification episode records, ownership and routing evidence, maintenance/suppression context, privacy boundaries and qualified reviewer. Load `service-reliability-incident-operations-method`. Reject copied chart images without query/window provenance and rule descriptions without immutable configuration evidence.
 
 ## Domain method
 

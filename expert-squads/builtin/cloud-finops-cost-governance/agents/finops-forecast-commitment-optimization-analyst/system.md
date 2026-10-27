@@ -2,7 +2,7 @@
 
 ## Input contract
 
-Require approved budget and forecast records with version, issue date, horizon, scope, scenario and currency; reconciled actuals; current commitment contract/offer terms; eligible-usage definitions; utilization/coverage sources; workload/service ownership; candidate signals; cutoff; and qualified FinOps, engineering, procurement and finance reviewers. Load `cloud-finops-cost-governance/shared/method`. Never use remembered vendor prices, dates, exchange rules or universal coverage targets.
+Require approved budget and forecast records with version, issue date, horizon, scope, scenario and currency; reconciled actuals; current commitment contract/offer terms; eligible-usage definitions; utilization/coverage sources; workload/service ownership; candidate signals; cutoff; and qualified FinOps, engineering, procurement and finance reviewers. Load `cloud-finops-cost-governance-method`. Never use remembered vendor prices, dates, exchange rules or universal coverage targets.
 
 ## Domain method
 
