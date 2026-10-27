@@ -1,0 +1,174 @@
+{
+  "observedAt": "2026-10-27T12:26:19.143Z",
+  "scope": "Operator-owned actual attachment upload, real streamed read, source reader and follow-up",
+  "attempts": [
+    {
+      "instance": 717,
+      "originalRows": 240297,
+      "tables": 92,
+      "originalRowsRetained": true,
+      "immutableOriginalRowsPreserved": 240295,
+      "normalExpiredCapacitySlotReuses": 2,
+      "allCapacityOwnersMatchOwnedRuntime": true,
+      "allReusedCapacitySlotsReleasedByClosure": true,
+      "sourceAllRowsPreserved": true,
+      "modelRequests": 5,
+      "cumulativeRequests": 358,
+      "uiEntry": "main-BT_sDM31.js",
+      "publicShutdown": 200,
+      "exitCode": 0,
+      "launcherExitCode": 0,
+      "reserveMs": 723163,
+      "protectedRows": 7147,
+      "originalProjectFiles": 166
+    },
+    {
+      "instance": 718,
+      "originalRows": 241767,
+      "tables": 92,
+      "originalRowsRetained": true,
+      "immutableOriginalRowsPreserved": 241767,
+      "normalExpiredCapacitySlotReuses": 0,
+      "allCapacityOwnersMatchOwnedRuntime": true,
+      "allReusedCapacitySlotsReleasedByClosure": true,
+      "sourceAllRowsPreserved": true,
+      "modelRequests": 0,
+      "cumulativeRequests": 358,
+      "uiEntry": "main-BT_sDM31.js",
+      "publicShutdown": 200,
+      "exitCode": 0,
+      "launcherExitCode": 0,
+      "reserveMs": 1119948,
+      "protectedRows": 7184,
+      "originalProjectFiles": 166
+    },
+    {
+      "instance": 719,
+      "originalRows": 241767,
+      "tables": 92,
+      "originalRowsRetained": true,
+      "immutableOriginalRowsPreserved": 241765,
+      "normalExpiredCapacitySlotReuses": 2,
+      "allCapacityOwnersMatchOwnedRuntime": true,
+      "allReusedCapacitySlotsReleasedByClosure": true,
+      "sourceAllRowsPreserved": true,
+      "modelRequests": 7,
+      "cumulativeRequests": 365,
+      "uiEntry": "main-DWsznkdt.js",
+      "publicShutdown": 200,
+      "exitCode": 0,
+      "launcherExitCode": 0,
+      "reserveMs": 835103,
+      "protectedRows": 7184,
+      "originalProjectFiles": 166
+    }
+  ],
+  "qualification": {
+    "selection": "Real browser filechooser from Composer menu",
+    "filename": "验收说明 717（原件）.txt",
+    "bytes": 143,
+    "filePartName": "验收说明 717（原件）.txt",
+    "sourceTitle": "验收说明 717（原件）.txt",
+    "sourceOrigin": "attachment",
+    "toolOutcome": "completed",
+    "toolTotalLines": 4,
+    "metadataName": "验收说明 717（原件）.txt",
+    "sourceCopyMatchesActualPath": true,
+    "followupPersisted": true,
+    "historyReloadedManually": true,
+    "actualBodyLinkNewTab": 104,
+    "conversationTabPreserved": 103,
+    "englishDarkAndChineseLightManuallyReviewed": true
+  },
+  "file": {
+    "at": "2026-10-27T12:23:10.913Z",
+    "bytes": 143,
+    "originalFilename": "验收说明 717（原件）.txt",
+    "rawStatus": 200,
+    "sourceStatus": 200,
+    "rawDisposition": "inline; filename*=UTF-8''%E9%AA%8C%E6%94%B6%E8%AF%B4%E6%98%8E%20717%EF%BC%88%E5%8E%9F%E4%BB%B6%EF%BC%89.txt",
+    "sourceType": "text",
+    "canonicalURL": "/attachment/prj_hw4anVdZMgWO7I2COMPK/1f43fa934cc057b5a83486d8802c594b3c0d3a03a73824279575afaf4ff543a3.txt",
+    "physicalAndHTTPBytesMatchOriginal": true,
+    "sourceTextMatchesOriginal": true
+  },
+  "requestOutcomes": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    }
+  ],
+  "sourceAuthority": {
+    "catalogSameBytes": true,
+    "catalogSameMetadata": true,
+    "authSameMetadata": true
+  },
+  "checks": {
+    "positiveContractTests": 13,
+    "positiveAssertions": 70,
+    "overlayTypecheck": 0,
+    "i18n": 0,
+    "ordinaryNodeViteBuild": 0,
+    "rendererSurface": 0,
+    "docsCheck": {
+      "exit": 0,
+      "operations": 351,
+      "groups": 26
+    },
+    "architectureIndex": {
+      "exit": 0,
+      "currentDocuments": 20
+    },
+    "cssTokens": 0
+  },
+  "limits": [
+    "718 cloned database has a different attachment namespace; screenshot04 proves navigation away, not successful original retrieval. Actual original read succeeded in717 and new upload in719.",
+    "Native desktop URL opening and protected remote resource access were not exercised.",
+    "A transient sidebar Failed to fetch appeared during project allocation and cleared after sending; its cause remains under active separate investigation."
+  ]
+}

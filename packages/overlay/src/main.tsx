@@ -100,6 +100,7 @@ import {
   assertApiAuthorityCurrent,
   isApiAuthorityCurrent,
   ApiAuthorityChangedError,
+  resolveResourceUrl,
 } from "./services/api"
 import type { AutomationRunSession } from "./services/automations"
 import { t } from "./utils/i18n"
@@ -1920,6 +1921,9 @@ document.addEventListener(
     if (!target) return
     const anchor = target.closest<HTMLAnchorElement>("a[href]")
     if (!anchor || anchor.hasAttribute(FILE_REFERENCE_PATH_ATTRIBUTE)) return
+    const resourceUrl = anchor.getAttribute("data-api-resource-url")
+    // Resolve at activation so retained messages follow the current server connection.
+    if (resourceUrl) anchor.href = resolveResourceUrl(resourceUrl)
     const previewUrl = anchor.getAttribute("data-browser-preview-url") || ""
     const href = previewUrl || anchor.getAttribute("href") || ""
     if (!/^https?:\/\//i.test(href)) return

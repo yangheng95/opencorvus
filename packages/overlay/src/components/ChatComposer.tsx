@@ -238,18 +238,6 @@ const UTF8_ENCODER = new TextEncoder()
 
 // ── Helpers ──
 
-// Names that propagate from drop / paste / file-picker into the
-// orchestrator's attachment inventory must be:
-//   - non-empty (paste hands us "" on Chromium)
-//   - shell-safe (no path separators, no metacharacters) — server-side
-//     `displayFilename` replaces unsafe names with a generated display name
-//     that stays readable to sub-agents
-// Mirrors the SAFE_FILENAME_RE rule in
-// `opencorvus/src/storage/attachment-store.ts`. Keeping the regex
-// duplicated here (the server-side helper is not bundled into the
-// overlay) is the lesser evil; the alternative is shipping the server
-// rule through the SDK just for one literal.
-const SAFE_FILENAME_RE = /^[A-Za-z0-9._\-一-鿿 ]+$/
 const PASTE_EXT_BY_MIME: Record<string, string> = {
   "image/png": "png",
   "image/jpeg": "jpg",
@@ -508,7 +496,8 @@ function ComposerAttachmentLoaders(props: ComposerAttachmentLoadersProps): JSX.E
 }
 
 function chooseAttachmentFilename(original: string | undefined, mime: string): string {
-  if (original && SAFE_FILENAME_RE.test(original)) return original
+  // Display identity belongs to the original file; the server owns staging names.
+  if (original) return original
   const ext = PASTE_EXT_BY_MIME[mime] ?? (mime.split("/")[1] ?? "bin").replace(/[^A-Za-z0-9]/g, "")
   // Stamp lets the operator distinguish multiple pastes within one
   // composer session at a glance — sha-style handles all blur together.

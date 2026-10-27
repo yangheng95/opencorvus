@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [附件到回复和来源阅读](2026-10-27-attachment-source-journey.md)：真实文件选择、模型读取、来源和后续对话。
+
 - [文件路径搜索分隔符一致性](2026-10-27-file-path-search.md)：单代理修复Windows正斜杠路径查询。
 
 - [文件操作忙态与键盘恢复](2026-10-27-file-editor-action-focus.md)：单代理真实保存、重载与下载焦点调查。

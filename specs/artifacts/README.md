@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [附件与来源阅读证据](2026-10-27-attachment-source-journey/README.md)：当前真实模型、原图与持久事实。
+
 - [文件路径搜索证据](2026-10-27-file-path-search/README.md)：真实文件和目录查询、页面与项目隔离。
 
 - [文件操作键盘恢复证据](2026-10-27-file-editor-action-focus/README.md)：真实页面、原始截图与数据结清。

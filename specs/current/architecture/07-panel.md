@@ -220,6 +220,13 @@ open one project target, preserving drafts across repeated citations. External
 absolute paths retain the source reader. Explicit attachment sources retain their
 original display names and source targets. Existing persisted source snapshots
 are not rewritten.
+Composer uploads preserve every supplied nonempty original filename before
+metadata is stored; generated paste names apply only to unnamed inputs. Physical
+staging names remain the AttachmentStore's responsibility. Server-relative
+canonical attachment links in Markdown open the existing raw resource in a new
+tab, preserving the conversation. At activation, the shared resource URL resolver
+uses the current server connection; native external URL opening retains its
+existing capability admission. Sources continues to use the read-only workbench.
 The file workbench prioritizes the exact filename in its compact heading and
 text editor's accessible name; a long parent directory cannot consume the space
 before the filename. Explicit displayName values remain authored presentation

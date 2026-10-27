@@ -201,8 +201,9 @@ marked.use({
       const href = safeMarkdownHref(token.href)
       if (!href) return label
       const title = token.title ? ` title="${escapeAttr(token.title)}"` : ""
-      const external = isHttpUrl(href) ? ` target="_blank" rel="noopener noreferrer"` : ""
-      return `<a href="${escapeAttr(href)}"${title}${external}${browserPreviewAttrs(href)}>${label}</a>`
+      const resource = isAttachmentResourceUrl(href) ? ` data-api-resource-url="${escapeAttr(href)}"` : ""
+      const external = isHttpUrl(href) || resource ? ` target="_blank" rel="noopener noreferrer"` : ""
+      return `<a href="${escapeAttr(href)}"${title}${external}${resource}${browserPreviewAttrs(href)}>${label}</a>`
     },
     image({ href, title, text }: { href: string; title?: string | null; text: string }) {
       const src = safeMarkdownImageSrc(href)
@@ -287,6 +288,10 @@ function isHttpUrl(raw: string): boolean {
   return /^https?:\/\//i.test(raw)
 }
 
+function isAttachmentResourceUrl(raw: string): boolean {
+  return /^\/attachment(?:\/|$)/i.test(raw)
+}
+
 function browserPreviewAttrs(raw: string): string {
   return isHttpUrl(raw) ? ` data-browser-preview-url="${escapeAttr(raw)}"` : ""
 }
@@ -303,7 +308,7 @@ function markdownProjectFileReference(raw: string): FileReference | null {
   const reference = parseFileReference(String(raw || "").trim())
   const value = reference.path
   if (!value || /[\u0000-\u001f\u007f]/.test(value)) return null
-  if (value.startsWith("#") || value.startsWith("//") || /^\/attachment(?:\/|$)/i.test(value)) return null
+  if (value.startsWith("#") || value.startsWith("//") || isAttachmentResourceUrl(value)) return null
   const windowsAbsolutePath = /^[A-Za-z]:[\\/]/.test(value)
   if (!windowsAbsolutePath && /^[a-z][a-z0-9+.-]*:/i.test(value)) return null
   if (/[?#]/.test(value)) return null
