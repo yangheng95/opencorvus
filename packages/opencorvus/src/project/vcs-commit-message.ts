@@ -1,11 +1,14 @@
 import { HelperAgentRegistry } from "@/agent/helper-agent-registry"
 import { resolveAgentModel } from "@/agent/model"
+import { Auth } from "@/auth"
 import { EffectiveConfig } from "@/config/effective"
 import { streamText } from "@/llm/api"
 import { collectLLMText, NonReplayableLLMActivityPolicy } from "@/llm/activity"
 import { Provider } from "@/provider/provider"
 import { ProviderLLM } from "@/provider/llm"
+import { ProviderTransform } from "@/provider/transform"
 import { Vcs } from "@/project/vcs"
+import { mergeDeep } from "remeda"
 
 export const VCS_COMMIT_MESSAGE_CONFIG = {
   contextCharacters: 60_000,
@@ -91,21 +94,30 @@ export async function streamCommitMessage(input: CommitMessageInput): Promise<st
   const config = await EffectiveConfig.effective(resolutionScope)
   const helper = await HelperAgentRegistry.get("summary", { config })
   const model = await resolveAgentModel(helper.name, resolutionScope)
-  const language = ProviderLLM.wrapModel(await Provider.getLanguage(model, { config }), model, {})
+  const [baseLanguage, provider, auth] = await Promise.all([
+    Provider.getLanguage(model, { config }),
+    Provider.getProvider(model.providerID, { config }),
+    Auth.get(model.providerID),
+  ])
+  const sessionID = input.sessionID ?? input.taskID ?? "vcs-commit-message"
   const context = buildCommitMessageContext({ files, recentSubjects })
-  const messages = [
-    {
-      role: "system" as const,
-      content:
-        "Generate exactly one concise Git commit subject for the supplied repository changes. Match the repository's recent subject style when it is consistent. Describe the actual change, use imperative wording, output no quotes, Markdown, body, explanation, or blank line.",
-    },
-    { role: "user" as const, content: context },
-  ]
+  const instructions =
+    "Generate exactly one concise Git commit subject for the supplied repository changes. Match the repository's recent subject style when it is consistent. Describe the actual change, use imperative wording, output no quotes, Markdown, body, explanation, or blank line."
+  const prompt = ProviderTransform.instructionOptions(model, {
+    text: instructions,
+    oauth: auth?.type === "oauth",
+    options: mergeDeep(
+      mergeDeep(ProviderTransform.options({ model, sessionID, providerOptions: provider.options }), model.options),
+      helper.options,
+    ),
+  })
+  const language = ProviderLLM.wrapModel(baseLanguage, model, prompt.options)
+  const messages = [{ role: "user" as const, content: context }]
   try {
     const external = input.signal ?? new AbortController().signal
     const raw = await collectLLMText({
       context: {
-        sessionID: input.sessionID ?? input.taskID ?? "vcs-commit-message",
+        sessionID,
         provider: model.providerID,
         model: model.id,
       },
@@ -117,6 +129,8 @@ export async function streamCommitMessage(input: CommitMessageInput): Promise<st
           model: language,
           usagePurpose: "vcs-commit-message",
           temperature: model.providerID.startsWith("moonshotai") ? 1 : 0,
+          instructions: prompt.instructions,
+          providerOptions: ProviderTransform.providerOptions(model, prompt.options),
           messages,
           abortSignal: run.signal,
           timeoutMs: false,

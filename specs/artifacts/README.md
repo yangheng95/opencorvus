@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件差异审查体验证据](2026-10-27-file-diff-review-journey/README.md)：真实页面、模型及运行结清事实，18张真实原图、可展开上下文、Sol提交说明及三轮结清事实。
+
 - [用量统计阅读体验证据](2026-10-27-usage-reading-journey/README.md)：14张真实原图，年度首屏、简洁空态与键盘查看复核，812条原账本保持。
 
 - [收件箱完整阅读体验证据](2026-10-27-mailbox-reading-journey/README.md)：28张实际原图，历史搜索、分页阅读和跨项目保留修复，四个隔离实例结清。

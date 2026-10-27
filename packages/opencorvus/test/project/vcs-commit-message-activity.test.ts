@@ -2,10 +2,12 @@ import { afterEach, expect, spyOn, test } from "bun:test"
 import * as AgentModel from "@/agent/model"
 import { HelperAgentRegistry } from "@/agent/helper-agent-registry"
 import { EffectiveConfig } from "@/config/effective"
-import * as LLMApi from "@/llm/api"
+import { Auth } from "@/auth"
 import { Provider } from "@/provider/provider"
+import { ProviderLLM } from "@/provider/llm"
 import { streamCommitMessage } from "@/project/vcs-commit-message"
 import { Vcs } from "@/project/vcs"
+import { streamingModelMetadata, streamingTextModel } from "../fixture/streaming-language"
 
 const restore: Array<() => void> = []
 
@@ -18,44 +20,58 @@ afterEach(() => {
   for (const cleanup of restore.splice(0).reverse()) cleanup()
 })
 
-test("streams one bounded VCS commit subject and publishes each successful delta once", async () => {
-  track(
-    spyOn(Vcs, "diff").mockResolvedValue([
-      { file: "src/example.ts", status: "modified", additions: 2, deletions: 1, patch: "+bounded" },
-    ]),
-  )
-  track(spyOn(Vcs, "recentSubjects").mockResolvedValue(["fix: prior subject"]))
-  track(spyOn(EffectiveConfig, "effective").mockResolvedValue({} as never))
-  track(spyOn(HelperAgentRegistry, "get").mockResolvedValue({ name: "summary", options: {} } as never))
-  track(spyOn(AgentModel, "resolveAgentModel").mockResolvedValue({ providerID: "test", id: "commit-model" } as never))
-  track(spyOn(Provider, "getLanguage").mockResolvedValue({} as never))
-  const streamSpy = track(
-    spyOn(LLMApi, "streamText").mockReturnValue({
-      stream: (async function* () {
-        yield { type: "start" as const }
-        yield { type: "text-delta" as const, id: "text-1", text: "fix: " }
-        yield { type: "text-delta" as const, id: "text-1", text: "bound helper streams" }
-        yield { type: "finish" as const }
-      })(),
-    } as never),
-  )
-  const deltas: string[] = []
+for (const oauth of [false, true])
+  test(`streams a bounded VCS subject through SDK and ${oauth ? "OAuth" : "API"} provider options`, async () => {
+    track(
+      spyOn(Vcs, "diff").mockResolvedValue([
+        { file: "src/example.ts", status: "modified", additions: 2, deletions: 1, patch: "+bounded" },
+      ]),
+    )
+    track(spyOn(Vcs, "recentSubjects").mockResolvedValue(["fix: prior subject"]))
+    track(spyOn(EffectiveConfig, "effective").mockResolvedValue({} as never))
+    track(
+      spyOn(HelperAgentRegistry, "get").mockResolvedValue({
+        name: "summary",
+        options: { reasoningEffort: "low" },
+      } as never),
+    )
+    track(
+      spyOn(AgentModel, "resolveAgentModel").mockResolvedValue({
+        ...streamingModelMetadata,
+        options: { textVerbosity: "low" },
+      }),
+    )
+    track(spyOn(Provider, "getProvider").mockResolvedValue({ id: "openai", options: {} } as never))
+    track(spyOn(Auth, "get").mockResolvedValue(oauth ? ({ type: "oauth" } as never) : undefined))
+    const language = streamingTextModel(["fix: ", "bound helper streams"])
+    track(spyOn(Provider, "getLanguage").mockResolvedValue(language))
+    track(spyOn(ProviderLLM, "wrapModel").mockImplementation((model) => model))
+    const deltas: string[] = []
 
-  const message = await streamCommitMessage({
-    taskID: "task-vcs-activity",
-    sessionID: "session-vcs-activity",
-    onDelta: (delta) => {
-      deltas.push(delta)
-    },
-  })
+    const message = await streamCommitMessage({
+      taskID: "task-vcs-activity",
+      sessionID: "session-vcs-activity",
+      onDelta: (delta) => {
+        deltas.push(delta)
+      },
+    })
 
-  expect({ message, deltas }).toEqual({
-    message: "fix: bound helper streams",
-    deltas: ["fix: ", "bound helper streams"],
+    expect({ message, deltas }).toEqual({
+      message: "fix: bound helper streams",
+      deltas: ["fix: ", "bound helper streams"],
+    })
+    const instructions = expect.stringContaining("Generate exactly one concise Git commit subject")
+    expect(language.doStreamCalls[0]!.prompt).toEqual([
+      ...(oauth ? [] : [{ role: "system", content: instructions }]),
+      { role: "user", content: [{ type: "text", text: expect.stringContaining("### src/example.ts") }] },
+    ])
+    expect(language.doStreamCalls[0]!.providerOptions).toEqual({
+      openai: {
+        store: false,
+        promptCacheKey: "session-vcs-activity",
+        textVerbosity: "low",
+        reasoningEffort: "low",
+        ...(oauth ? { instructions } : {}),
+      },
+    })
   })
-  expect(streamSpy.mock.calls[0]![0]).toMatchObject({
-    usagePurpose: "vcs-commit-message",
-    timeoutMs: false,
-    retries: 0,
-  })
-})

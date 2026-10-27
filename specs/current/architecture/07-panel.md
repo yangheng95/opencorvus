@@ -525,6 +525,12 @@ and observed comparison identity. Multiple Edit receipts still require full text
 endpoints and normal causal evidence before composition. Current working files
 cannot substitute for historical endpoints. Apply Patch deletion counts use the
 same text comparison as additions, updates and Review, including trailing newlines.
+Long unchanged context remains part of that exact comparison. The shared native
+Disclosure exposes each collapsed run with localized show/hide counts and
+Enter/Space operation; revealed rows use the same renderer and original line
+numbers as the surrounding comparison. Collapsed runs defer their row DOM until
+opened. This presentation does not reload current files or alter historical
+comparison endpoints.
 
 Review layout follows its actual panel width through the existing CSS container
 primitive. Narrow panels place the file scope above a full-width wrapping diff,

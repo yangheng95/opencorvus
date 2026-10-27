@@ -1101,9 +1101,13 @@
   "diff.non_text_short": "非文本",
   "diff.empty_unchanged": "此项比较的文本内容没有差异。",
   "diff.select_file": "选择文件查看差异。",
-  "diff.unchanged_hidden": {
-    "one": "已折叠 {{count}} 行未变更内容",
-    "other": "已折叠 {{count}} 行未变更内容"
+  "diff.show_unchanged": {
+    "one": "显示 {{count}} 行未改动内容",
+    "other": "显示 {{count}} 行未改动内容"
+  },
+  "diff.hide_unchanged": {
+    "one": "收起 {{count}} 行未改动内容",
+    "other": "收起 {{count}} 行未改动内容"
   },
   "model_selector.configure_provider": "配置 Provider…",
   "model_selector.configure_provider_description": "连接 Provider 并管理可用模型。",

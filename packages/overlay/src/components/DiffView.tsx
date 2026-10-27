@@ -1,12 +1,13 @@
 // ── DiffView ──
-// Shared side-by-side diff renderer (jsdiff + collapsed context). Extracted from
+// Shared unified diff renderer (jsdiff + revealable context). Extracted from
 // ChangesPanel so both the inline file list and the workspace diff preview
 // render the same visuals from a single source.
 
 import { diffLines } from "diff"
-import { createMemo, For, Show } from "solid-js"
+import { createMemo, createSignal, For, Show } from "solid-js"
 import { t, tc } from "../utils/i18n"
 import type { ConversationDeferredToolState } from "@opencorvus-ai/transport-protocol"
+import { Disclosure } from "./ui/Disclosure"
 
 // ── Types ──
 
@@ -53,13 +54,14 @@ export interface FileChange {
   afterObject?: { oid: string; bytes: number } | null
 }
 
-interface DiffOp {
-  kind: "context" | "add" | "del" | "skip"
-  left?: number | ""
-  right?: number | ""
-  text?: string
-  count?: number
+interface DiffLine {
+  kind: "context" | "add" | "del"
+  left: number | ""
+  right: number | ""
+  text: string
 }
+
+type DiffOp = DiffLine | { kind: "skip"; lines: DiffLine[] }
 
 // ── Diff helpers ──
 
@@ -71,8 +73,8 @@ function splitDiffLines(text: string): string[] {
   return lines
 }
 
-function buildDiffOps(before: string, after: string): DiffOp[] {
-  const ops: DiffOp[] = []
+function buildDiffOps(before: string, after: string): DiffLine[] {
+  const ops: DiffLine[] = []
   let leftLine = 1
   let rightLine = 1
 
@@ -102,7 +104,7 @@ function buildDiffOps(before: string, after: string): DiffOp[] {
   return ops
 }
 
-function collapseDiffOps(ops: DiffOp[]): DiffOp[] {
+function collapseDiffOps(ops: DiffLine[]): DiffOp[] {
   const next: DiffOp[] = []
   let index = 0
   while (index < ops.length) {
@@ -120,12 +122,39 @@ function collapseDiffOps(ops: DiffOp[]): DiffOp[] {
       next.push(...chunk)
     } else {
       next.push(...chunk.slice(0, 3))
-      next.push({ kind: "skip", count: chunk.length - 6 })
+      next.push({ kind: "skip", lines: chunk.slice(3, -3) })
       next.push(...chunk.slice(-3))
     }
     index = end
   }
   return next
+}
+
+function DiffLineRow(props: { line: DiffLine }) {
+  return (
+    <div class="diff-row" data-kind={props.line.kind}>
+      <div class="diff-gutter">{props.line.kind === "add" ? "+" : props.line.kind === "del" ? "-" : " "}</div>
+      <div class="diff-num">{props.line.left}</div>
+      <div class="diff-num">{props.line.right}</div>
+      <div class="diff-code">{props.line.text || " "}</div>
+    </div>
+  )
+}
+
+function DiffContext(props: { lines: DiffLine[] }) {
+  const [expanded, setExpanded] = createSignal(false)
+  return (
+    <Disclosure.Root class="diff-context" open={expanded()} onOpenChange={setExpanded}>
+      <Disclosure.Trigger class="diff-context__trigger">
+        <span>{tc(expanded() ? "diff.hide_unchanged" : "diff.show_unchanged", props.lines.length)}</span>
+      </Disclosure.Trigger>
+      <Disclosure.Content class="diff-context__lines">
+        <Show when={expanded()}>
+          <For each={props.lines}>{(line) => <DiffLineRow line={line} />}</For>
+        </Show>
+      </Disclosure.Content>
+    </Disclosure.Root>
+  )
 }
 
 // ── Status label helper ──
@@ -200,26 +229,7 @@ export function DiffView(props: DiffViewProps) {
     >
       <div class="diff-lines">
         <For each={ops()}>
-          {(line) => (
-            <Show
-              when={line.kind !== "skip"}
-              fallback={
-                <div class="diff-row" data-kind="skip">
-                  <div class="diff-gutter">...</div>
-                  <div class="diff-num" />
-                  <div class="diff-num" />
-                  <div class="diff-code">{tc("diff.unchanged_hidden", line.count ?? 0)}</div>
-                </div>
-              }
-            >
-              <div class="diff-row" data-kind={line.kind}>
-                <div class="diff-gutter">{line.kind === "add" ? "+" : line.kind === "del" ? "-" : " "}</div>
-                <div class="diff-num">{line.left ?? ""}</div>
-                <div class="diff-num">{line.right ?? ""}</div>
-                <div class="diff-code">{line.text ?? " "}</div>
-              </div>
-            </Show>
-          )}
+          {(line) => (line.kind === "skip" ? <DiffContext lines={line.lines} /> : <DiffLineRow line={line} />)}
         </For>
       </div>
     </Show>

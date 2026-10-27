@@ -211,7 +211,7 @@ memory 与原始历史继续权威。所有摘要识别、持久化与 memory �
 Agent.run()                                     agent 发起 LLM 调用
   │
   └→ ProviderLLM.stream({ model, system, ... })  统一 LLM 入口 (provider/llm.ts)
-       ├→ Provider.getLanguage(model)             Layer 1-4: 解析 + SDK + Auth + LanguageModelV2
+       ├→ Provider.getLanguage(model)             Layer 1-4: 解析 + SDK + Auth + LanguageModel
        ├→ ProviderTransform.options(model)        Layer 5: 参数适配 (reasoning, caching, store)
        ├→ ProviderTransform.providerOptions()     Layer 5: SDK namespace 封装
        ├→ ProviderTransform.maxOutputTokens()     Layer 5: 输出 token 限制
@@ -223,6 +223,14 @@ Agent.run()                                     agent 发起 LLM 调用
 
 **session/llm.ts** 复用 `ProviderLLM.wrapModel()` + `baseHeaders()`，叠加 session 特有逻辑
 （plugin / trace / permission / inactivity）。
+
+生产调用通过 `ProviderTransform.instructionOptions` 投影受信行为指令：普通请求使用 AI SDK 的
+`instructions`，OpenAI OAuth（开放授权）使用既有 Provider 顶层指令合同。`messages` 承载原用户、
+助手和工具对话数据。主会话、VCS 提交主题和 Metric Judge 都复用规范 Provider 默认值、模型配置及
+SDK 命名空间映射，辅助调用不得使用空选项遗漏 `store` 等服务商约束。VCS 保留当前 Git 差异及近期
+主题，Judge 保留冻结 criteria、rubric 与不可变证据。Provider 线协议中的 system 角色由标准化边界
+生成，不能与调用方把指令混入对话数组等同。验收应实际经过该 SDK 边界并观察明确
+流式输出，替换整个 `streamText` 返回值只能验证局部消费行为。
 
 原生 OpenAI / Azure OpenAI 在复杂 Tool surface 上采用单步串行 function-call 策略。凡
 `requiresSerializedOpenAIToolCalls(model)` 为真且当前请求携带 Tool，参数转换层必须在进入

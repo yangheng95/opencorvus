@@ -1089,6 +1089,17 @@ export namespace ProviderTransform {
     return {}
   }
 
+  /** Project trusted instructions through the provider's existing authentication contract. */
+  export function instructionOptions(
+    model: ProviderModel,
+    input: { text: string; oauth: boolean; options: Record<string, any> },
+  ) {
+    if (model.providerID === "openai" && input.oauth) {
+      return { instructions: undefined, options: { ...input.options, instructions: input.text } }
+    }
+    return { instructions: input.text, options: input.options }
+  }
+
   // Maps model ID prefix to provider slug used in providerOptions.
   // Example: "amazon/nova-2-lite" → "bedrock"
   const SLUG_OVERRIDES: Record<string, string> = {

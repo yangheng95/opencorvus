@@ -1101,9 +1101,13 @@
   "diff.non_text_short": "Non-text",
   "diff.empty_unchanged": "No text differences in this recorded comparison.",
   "diff.select_file": "Select a file to view its diff.",
-  "diff.unchanged_hidden": {
-    "one": "{{count}} unchanged line hidden",
-    "other": "{{count}} unchanged lines hidden"
+  "diff.show_unchanged": {
+    "one": "Show {{count}} unchanged line",
+    "other": "Show {{count}} unchanged lines"
+  },
+  "diff.hide_unchanged": {
+    "one": "Hide {{count}} unchanged line",
+    "other": "Hide {{count}} unchanged lines"
   },
   "model_selector.configure_provider": "Configure Provider…",
   "model_selector.configure_provider_description": "Connect providers and manage available models.",

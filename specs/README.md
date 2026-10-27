@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件差异阅读与版本操作体验](records/2026-10/2026-10-27-file-diff-review-journey.md)：真实写入前后、完整差异与版本操作流程。
+
 - [用量统计与周期阅读体验](records/2026-10/2026-10-27-usage-reading-journey.md)：真实历史统计、周期、空状态和键盘查看流程。
 
 - [收件箱阅读、查找与返回任务](records/2026-10/2026-10-27-mailbox-reading-journey.md)：全局通知、正文与已读、查找和所属任务导航体验。

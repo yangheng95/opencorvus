@@ -1,7 +1,10 @@
 import { streamText } from "@/llm/api"
+import { Auth } from "@/auth"
 import { EffectiveConfig } from "@/config/effective"
 import { Provider } from "@/provider/provider"
 import { ProviderLLM } from "@/provider/llm"
+import { ProviderTransform } from "@/provider/transform"
+import { mergeDeep } from "remeda"
 import {
   MetricJudgeInactivityError,
   MetricJudgeInputError,
@@ -16,6 +19,8 @@ import type { TaskToolExecutionScope } from "./task-tool-execution-scope"
 export type MetricJudgeRuntimeDependencies = {
   effectiveConfig: typeof EffectiveConfig.effective
   getModel: typeof Provider.getModel
+  getProvider: typeof Provider.getProvider
+  getAuth: typeof Auth.get
   getLanguage: typeof Provider.getLanguage
   wrapModel: typeof ProviderLLM.wrapModel
   streamText: typeof streamText
@@ -24,6 +29,8 @@ export type MetricJudgeRuntimeDependencies = {
 const PRODUCTION_METRIC_JUDGE_DEPENDENCIES: MetricJudgeRuntimeDependencies = {
   effectiveConfig: EffectiveConfig.effective,
   getModel: Provider.getModel,
+  getProvider: Provider.getProvider,
+  getAuth: Auth.get,
   getLanguage: Provider.getLanguage,
   wrapModel: ProviderLLM.wrapModel,
   streamText,
@@ -71,7 +78,6 @@ export function metricJudgeMessages(request: JudgeRequest) {
     }
   })
   return [
-    { role: "system" as const, content: JUDGE_SYSTEM_PROTOCOL },
     {
       role: "user" as const,
       content: JSON.stringify({
@@ -103,7 +109,20 @@ export function createMetricJudgeRunnerWithDependencies(
     const runtime = JudgeMetricEvaluatorConfigSchema.parse(request.spec.evaluator_config)
     const config = await dependencies.effectiveConfig({ taskID: scope.taskID, sessionID: scope.sessionID })
     const model = await dependencies.getModel(runtime.provider_id, runtime.model_id, { config })
-    const language = dependencies.wrapModel(await dependencies.getLanguage(model, { config }), model, {})
+    const [baseLanguage, provider, auth] = await Promise.all([
+      dependencies.getLanguage(model, { config }),
+      dependencies.getProvider(model.providerID, { config }),
+      dependencies.getAuth(model.providerID),
+    ])
+    const prompt = ProviderTransform.instructionOptions(model, {
+      text: JUDGE_SYSTEM_PROTOCOL,
+      oauth: auth?.type === "oauth",
+      options: mergeDeep(
+        ProviderTransform.options({ model, sessionID: scope.sessionID, providerOptions: provider.options }),
+        model.options,
+      ),
+    })
+    const language = dependencies.wrapModel(baseLanguage, model, prompt.options)
     const activity = withStreamActivity({
       idleMs: runtime.inactivity_timeout_ms,
       label: `metric-judge:${request.spec.id}`,
@@ -113,6 +132,8 @@ export function createMetricJudgeRunnerWithDependencies(
       const result = dependencies.streamText({
         model: language,
         usagePurpose: "metric-judge",
+        instructions: prompt.instructions,
+        providerOptions: ProviderTransform.providerOptions(model, prompt.options),
         messages: metricJudgeMessages(request),
         abortSignal: activity.signal,
         timeoutMs: false,

@@ -227,7 +227,6 @@ export namespace LLM {
       Provider.getProvider(input.model.providerID, { config }),
       Auth.get(input.model.providerID),
     ])
-    const isOpenaiOauth = provider.id === "openai" && auth?.type === "oauth"
 
     const system = await composeSystem({ ...input, agent, sessionID: input.sessionID })
     system[0] = [system[0], SystemPrompt.requestLanguage()].filter(Boolean).join("\n\n")
@@ -254,15 +253,11 @@ export namespace LLM {
           sessionID: input.sessionID,
           providerOptions: provider.options,
         })
-    const options: Record<string, any> = pipe(
-      base,
-      mergeDeep(input.model.options),
-      mergeDeep(agent.options),
-      mergeDeep(variant),
-    )
-    if (isOpenaiOauth) {
-      options.instructions = system.join("\n")
-    }
+    const { instructions, options } = ProviderTransform.instructionOptions(input.model, {
+      text: system.join("\n"),
+      oauth: auth?.type === "oauth",
+      options: pipe(base, mergeDeep(input.model.options), mergeDeep(agent.options), mergeDeep(variant)),
+    })
 
     const maxOutputTokens = ProviderTransform.maxOutputTokens(input.model)
     const baseParams = {
@@ -410,7 +405,7 @@ export namespace LLM {
       activeTools: Object.keys(tools),
       tools,
       toolChoice,
-      ...(isOpenaiOauth ? {} : { instructions: systemText }),
+      instructions,
       maxOutputTokens: params.maxOutputTokens,
       abortSignal: input.abort,
       // Disable the wrapper's 5 s default soft timeout — every production

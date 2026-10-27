@@ -2053,7 +2053,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           })
           // Production message rendering, with no Provider call: content and
           // selected Message bodies are preserved, not a claim of model understanding.
-          const judgeEvidence = JSON.parse(judgeInput[1]!.content).selected_evidence[0]
+          const judgeEvidence = JSON.parse(judgeInput[0]!.content).selected_evidence[0]
           expect(judgeEvidence.content).toBe(canonicalTaskRunEvidenceJSON(subjectBundle))
           expect(JSON.parse(judgeEvidence.content).messages).toEqual(subjectBundle.messages)
           const subjectMaterialization = (subjectAttempt.execution as { cwd: string }).cwd

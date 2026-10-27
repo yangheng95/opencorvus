@@ -1,0 +1,321 @@
+{
+  "at": "2026-10-27T06:16:53.647Z",
+  "qualification": "18 original screenshots manually viewed with real page interactions; no UI automation",
+  "runs": [
+    {
+      "label": "file-diff-review-695",
+      "port": 38200,
+      "uiEntry": "main--VnmC3yE.js",
+      "database": {
+        "schema": 9,
+        "integrity": "ok",
+        "sourceTables": 92,
+        "sourceRows": 218643,
+        "originalSourceAllRowsPreserved": true,
+        "protectedOriginalRows": 6903,
+        "protectedOriginalRowsPreserved": true
+      },
+      "originalProjectFiles": 166,
+      "publicShutdown": 200,
+      "reserveMs": 618932,
+      "physical": {
+        "originalExec": 50847,
+        "originalExit": 0,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "allOriginalProcessesRetired": true
+      },
+      "provider": {
+        "model": "gpt-6.1-sol",
+        "requests": 7,
+        "maximumRequests": 8,
+        "outcomes": [
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "readerState": "settled",
+            "terminal": "eof"
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "readerState": "settled",
+            "terminal": "eof"
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "readerState": "settled",
+            "terminal": "eof"
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "readerState": "settled",
+            "terminal": "eof"
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "readerState": "settled",
+            "terminal": "eof"
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "readerState": "settled",
+            "terminal": "eof"
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "readerState": "settled",
+            "terminal": "eof"
+          }
+        ],
+        "exhausted": false,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        }
+      },
+      "qualification": {
+        "fileEdit": true,
+        "reviewContext": false,
+        "commitMessage": false,
+        "manualCommit": true,
+        "reason": "Collapsed original context had no expansion control; helper rejected by SDK before outbound request"
+      }
+    },
+    {
+      "label": "file-diff-review-696",
+      "port": 38201,
+      "uiEntry": "main-BZfAr50Y.js",
+      "database": {
+        "schema": 9,
+        "integrity": "ok",
+        "sourceTables": 92,
+        "sourceRows": 220516,
+        "originalSourceAllRowsPreserved": true,
+        "protectedOriginalRows": 6959,
+        "protectedOriginalRowsPreserved": true
+      },
+      "originalProjectFiles": 166,
+      "publicShutdown": 200,
+      "reserveMs": 762467,
+      "physical": {
+        "originalExec": 11805,
+        "originalExit": 0,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "allOriginalProcessesRetired": true
+      },
+      "provider": {
+        "model": "gpt-6.1-sol",
+        "requests": 3,
+        "maximumRequests": 4,
+        "outcomes": [
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "readerState": "settled",
+            "terminal": "eof"
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "readerState": "settled",
+            "terminal": "eof"
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 400,
+            "readerState": "http_error"
+          }
+        ],
+        "exhausted": false,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        }
+      },
+      "qualification": {
+        "reviewContext": true,
+        "commitMessage": false,
+        "reason": "Actual VCS helper returned HTTP 400: Store must be set to false"
+      }
+    },
+    {
+      "label": "file-diff-review-697",
+      "port": 38202,
+      "uiEntry": "main-BZfAr50Y.js",
+      "database": {
+        "schema": 9,
+        "integrity": "ok",
+        "sourceTables": 92,
+        "sourceRows": 220983,
+        "originalSourceAllRowsPreserved": true,
+        "protectedOriginalRows": 6972,
+        "protectedOriginalRowsPreserved": true
+      },
+      "originalProjectFiles": 166,
+      "publicShutdown": 200,
+      "reserveMs": 1019125,
+      "physical": {
+        "originalExec": 7028,
+        "originalExit": 0,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "allOriginalProcessesRetired": true
+      },
+      "provider": {
+        "model": "gpt-6.1-sol",
+        "requests": 3,
+        "maximumRequests": 4,
+        "outcomes": [
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "readerState": "settled",
+            "terminal": "eof"
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "readerState": "settled",
+            "terminal": "eof"
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "readerState": "settled",
+            "terminal": "eof"
+          }
+        ],
+        "exhausted": false,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        }
+      },
+      "qualification": {
+        "reviewContext": true,
+        "commitMessage": true,
+        "editedKeyboardCommit": true
+      }
+    }
+  ],
+  "realProviderCalls": 13,
+  "cumulativeProviderCalls": 345,
+  "originalSession": "ses_-zUQm2YEOzzH4qN4Iut5",
+  "originalEdit": {
+    "part": "prt_g0VZDxUTX00IzSVaQP2U",
+    "session": "ses_-zUQm2YEOzzH4qN4Iut5",
+    "before": "# 交付复核指南\n\n## 阅读范围\n\n从当前任务的真实输入和产出开始阅读。\n原始文件身份与引用必须保持一致。\n先记录已经核实的事实，再说明仍未知的范围。\n\n## 交付说明\n\n交付以实际保存的文件为准。\n正文与下载原件应当描述同一份内容。\n验收标记：上下文阅读可以核对这一行。\n\n## 操作顺序\n\n打开文件前先核对所属项目。\n修改之前读取原始内容。\n保存后检查实际文件中的目标行。\n\n## 审核状态\n\n审核状态：草稿\n审核结论只能引用已经观察到的行为。\n尚未进行的检查必须明确保留。\n\n## 风险边界\n\n完整上下文用于理解单行修改的影响。\n不得把模型自述当成磁盘文件证据。\n不得把工具局部结果说成全链路验收。\n\n## 版本记录\n\n版本说明应与实际修改范围一致。\n独立测试项目不会向远端发布。\n原始输入与业务历史保持可追溯。\n\n## 复核要求\n\n用户可通过文件差异查看修改前后。\n长段不变内容应当可以按需阅读。\n使用键盘也应该能够进入完整内容。\n\n## 完成条件\n\n目标行更新后应保留其余文件内容。\n重新打开文件可看到同样的最终值。\n明确说明本次真实执行过的操作。\n",
+    "after": "# 交付复核指南\n\n## 阅读范围\n\n从当前任务的真实输入和产出开始阅读。\n原始文件身份与引用必须保持一致。\n先记录已经核实的事实，再说明仍未知的范围。\n\n## 交付说明\n\n交付以实际保存的文件为准。\n正文与下载原件应当描述同一份内容。\n验收标记：上下文阅读可以核对这一行。\n\n## 操作顺序\n\n打开文件前先核对所属项目。\n修改之前读取原始内容。\n保存后检查实际文件中的目标行。\n\n## 审核状态\n\n审核状态：已复核\n审核结论只能引用已经观察到的行为。\n尚未进行的检查必须明确保留。\n\n## 风险边界\n\n完整上下文用于理解单行修改的影响。\n不得把模型自述当成磁盘文件证据。\n不得把工具局部结果说成全链路验收。\n\n## 版本记录\n\n版本说明应与实际修改范围一致。\n独立测试项目不会向远端发布。\n原始输入与业务历史保持可追溯。\n\n## 复核要求\n\n用户可通过文件差异查看修改前后。\n长段不变内容应当可以按需阅读。\n使用键盘也应该能够进入完整内容。\n\n## 完成条件\n\n目标行更新后应保留其余文件内容。\n重新打开文件可看到同样的最终值。\n明确说明本次真实执行过的操作。\n",
+    "additions": 1,
+    "deletions": 1
+  },
+  "finalCommit": {
+    "at": "2026-10-27T06:12:52.976Z",
+    "head": "99d9c89172da6e5b76e46b26af72263340c761b9",
+    "subject": "Add review notes for the isolated guide status update and keyboard review",
+    "files": "docs/review-notes.md",
+    "status": "",
+    "remotes": "",
+    "generatedSubject": "Add review notes for the isolated guide status update",
+    "editedSubject": "Add review notes for the isolated guide status update and keyboard review",
+    "originalGuideAndNotesPreserved": true
+  },
+  "checks": {
+    "focusedBackendTests": {
+      "passed": 13,
+      "assertions": 71,
+      "realSDK": true,
+      "network": "Official model stub; not Provider E2E"
+    },
+    "frozenEvidence": {
+      "passed": 1,
+      "assertions": 144,
+      "checker": "Original run-tests.ts; runtime command inside immutable package"
+    },
+    "backendTypecheck": "passed after final Provider fix",
+    "overlayTypecheck": "passed with current UI",
+    "build": {
+      "runner": "Node Vite",
+      "entry": "main-BZfAr50Y.js",
+      "passed": true
+    },
+    "i18n": {
+      "keys": 2566,
+      "passed": true
+    },
+    "css": {
+      "references": 8881,
+      "tokens": 268,
+      "styles": 60,
+      "tsx": 387,
+      "passed": true
+    },
+    "docs": {
+      "operations": 351,
+      "groups": 26,
+      "passed": true
+    }
+  },
+  "pictures": [
+    "01-real-file-edit-submitted-en.jpg",
+    "02-real-edit-completed-and-review-en.jpg",
+    "03-real-review-and-collapsed-context-en.jpg",
+    "04-hidden-context-cannot-open-en.jpg",
+    "05-real-repository-status-en.jpg",
+    "06-manual-git-commit-after-generation-error-en.jpg",
+    "07-manual-commit-success-and-preserved-review-en.jpg",
+    "08-native-context-controls-en.jpg",
+    "09-original-context-expanded-en.jpg",
+    "10-second-context-keyboard-and-filter-en.jpg",
+    "11-localized-retained-context-zh.jpg",
+    "12-light-theme-keyboard-context-zh.jpg",
+    "13-original-file-line-navigation-zh.jpg",
+    "14-provider-contract-failure-after-sdk-fix-zh.jpg",
+    "15-real-sol-generated-commit-subject-en.jpg",
+    "16-edited-commit-subject-en.jpg",
+    "17-real-generated-and-edited-commit-success-en.jpg",
+    "18-commit-preserves-original-context-en.jpg"
+  ],
+  "limits": [
+    "696 actual Provider returned HTTP 400 and remains failed",
+    "Metric Judge final contract verified through installed SDK; this batch real Provider UI acceptance covers VCS and Session preflight"
+  ]
+}

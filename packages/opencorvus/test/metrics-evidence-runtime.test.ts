@@ -35,6 +35,8 @@ import {
 } from "../src/tool/metric-judge-runner"
 import { VISUAL_FEEDBACK_VERIFICATION_ARTIFACT_LABEL } from "../src/acceptance/visual-feedback-verification"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { streamingModelMetadata, streamingTextModel } from "./fixture/streaming-language"
+import { streamText } from "../src/llm/api"
 
 let project: Awaited<ReturnType<typeof memoryProject>> | undefined
 
@@ -92,7 +94,7 @@ describe("Metric scorer exact evidence runtime", () => {
   test("runs the exact provider, model, messages, and zero-retry production judge dependencies", async () => {
     const calls: Array<{ name: string; input: unknown }> = []
     const config = { marker: "effective-config" } as never
-    const model = { marker: "exact-model" } as never
+    const model = { ...streamingModelMetadata, providerID: "exact-provider", id: "exact-model" }
     const language = { marker: "wrapped-language" } as never
     let streamInput: Record<string, unknown> | undefined
     const dependencies: MetricJudgeRuntimeDependencies = {
@@ -104,6 +106,14 @@ describe("Metric scorer exact evidence runtime", () => {
         calls.push({ name: "getModel", input: { providerID, modelID, options } })
         return model
       }) as MetricJudgeRuntimeDependencies["getModel"],
+      getProvider: (async (providerID, options) => {
+        calls.push({ name: "getProvider", input: { providerID, options } })
+        return { options: {} }
+      }) as MetricJudgeRuntimeDependencies["getProvider"],
+      getAuth: (async (providerID) => {
+        calls.push({ name: "getAuth", input: providerID })
+        return undefined
+      }) as MetricJudgeRuntimeDependencies["getAuth"],
       getLanguage: (async (inputModel, options) => {
         calls.push({ name: "getLanguage", input: { model: inputModel, options } })
         return language
@@ -139,13 +149,17 @@ describe("Metric scorer exact evidence runtime", () => {
         input: { providerID: "exact-provider", modelID: "exact-model", options: { config } },
       },
       { name: "getLanguage", input: { model, options: { config } } },
-      { name: "wrapModel", input: { language, model, options: {} } },
+      { name: "getProvider", input: { providerID: "exact-provider", options: { config } } },
+      { name: "getAuth", input: "exact-provider" },
+      { name: "wrapModel", input: { language, model, options: { store: false } } },
     ])
     expect(streamInput).toMatchObject({
       model: language,
       timeoutMs: false,
       retries: 0,
-      messages: [{ role: "system" }, { role: "user" }],
+      instructions: expect.stringContaining("Evaluate only the immutable data in the user message"),
+      messages: [{ role: "user" }],
+      providerOptions: { openai: { store: false } },
     })
     expect(events).toEqual([
       { type: "rationale_delta", text: "The immutable evidence satisfies the criterion.\nFINAL_SCORE=1" },
@@ -153,11 +167,54 @@ describe("Metric scorer exact evidence runtime", () => {
     ])
   })
 
+  for (const oauth of [false, true])
+    test(`streams an evidence-grounded judge result through SDK and ${oauth ? "OAuth" : "API"} provider options`, async () => {
+      const language = streamingTextModel(["The immutable evidence satisfies the criterion.\n", "FINAL_SCORE=1"])
+      const request = judgeRequest()
+      const runner = createMetricJudgeRunnerWithDependencies(
+        { taskID: "task-production-judge", sessionID: "session-production-judge" } as TaskToolExecutionScope,
+        {
+          effectiveConfig: (async () => ({})) as MetricJudgeRuntimeDependencies["effectiveConfig"],
+          getModel: async () => ({ ...streamingModelMetadata, options: { reasoningEffort: "low" } }),
+          getProvider: (async () => ({ options: {} })) as MetricJudgeRuntimeDependencies["getProvider"],
+          getAuth: (async () => (oauth ? { type: "oauth" } : undefined)) as MetricJudgeRuntimeDependencies["getAuth"],
+          getLanguage: (async () => language) as MetricJudgeRuntimeDependencies["getLanguage"],
+          wrapModel: (model) => model,
+          streamText,
+        },
+      )
+      const events = []
+      for await (const event of runner(request)) events.push(event)
+      expect(events).toEqual([
+        { type: "rationale_delta", text: "The immutable evidence satisfies the criterion.\n" },
+        { type: "rationale_delta", text: "FINAL_SCORE=1" },
+        { type: "result", score: 1 },
+      ])
+      const instructions = expect.stringContaining("Evaluate only the immutable data in the user message")
+      expect(language.doStreamCalls[0]!.prompt).toEqual([
+        ...(oauth ? [] : [{ role: "system", content: instructions }]),
+        {
+          role: "user",
+          content: [{ type: "text", text: expect.stringContaining('"content":"{\\"accepted\\":true}"') }],
+        },
+      ])
+      expect(language.doStreamCalls[0]!.providerOptions).toEqual({
+        openai: {
+          store: false,
+          promptCacheKey: "session-production-judge",
+          reasoningEffort: "low",
+          ...(oauth ? { instructions } : {}),
+        },
+      })
+    })
+
   test("treats an empty-only production judge stream as real-output inactivity", async () => {
     const language = {} as never
     const dependencies = {
       effectiveConfig: (async () => ({}) as never) as MetricJudgeRuntimeDependencies["effectiveConfig"],
-      getModel: (async () => ({}) as never) as MetricJudgeRuntimeDependencies["getModel"],
+      getModel: async () => streamingModelMetadata,
+      getProvider: (async () => ({ options: {} })) as MetricJudgeRuntimeDependencies["getProvider"],
+      getAuth: async () => undefined,
       getLanguage: (async () => language) as MetricJudgeRuntimeDependencies["getLanguage"],
       wrapModel: (() => language) as MetricJudgeRuntimeDependencies["wrapModel"],
       streamText: ((input: { abortSignal: AbortSignal }) => {
@@ -215,7 +272,11 @@ describe("Metric scorer exact evidence runtime", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const session = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Metric evidence runtime" })
+        const session = Session.prepareRootNext({
+          kind: "root",
+          directory: Instance.directory,
+          title: "Metric evidence runtime",
+        })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
         const metricPackageRevision = {
@@ -431,8 +492,8 @@ describe("Metric scorer exact evidence runtime", () => {
             },
           ],
         })
-        expect(judgeMessages.map((message) => message.role)).toEqual(["system", "user"])
-        expect(JSON.parse(judgeMessages[1]!.content)).toEqual({
+        expect(judgeMessages.map((message) => message.role)).toEqual(["user"])
+        expect(JSON.parse(judgeMessages[0]!.content)).toEqual({
           criteria: "Score the complete selected evidence",
           rubric: [{ score: 1, label: "complete", anchor: "All evidence is present", passes: true }],
           selected_evidence: [
@@ -725,7 +786,6 @@ describe("Metric scorer exact evidence runtime", () => {
         )!
         expect(persistedMeasured.evidence_ref).toBe(canonicalMetricJSON(measuredResult.evidence_ref))
 
-
         const wrongIdentityOutcome = await executeMetrics(
           {
             task_id: taskID,
@@ -792,7 +852,10 @@ describe("Metric scorer exact evidence runtime", () => {
             throw new Error("observer failed")
           },
         })
-        expect(callbackFailure.failure).toEqual({ kind: "output", message: "Process output observer failed: observer failed" })
+        expect(callbackFailure.failure).toEqual({
+          kind: "output",
+          message: "Process output observer failed: observer failed",
+        })
         await execution.close()
       },
     })
@@ -804,7 +867,11 @@ describe("Metric scorer exact evidence runtime", () => {
     await Instance.provide({
       directory: projectPath,
       fn: async () => {
-        const session = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Metric subject" })
+        const session = Session.prepareRootNext({
+          kind: "root",
+          directory: Instance.directory,
+          title: "Metric subject",
+        })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
         const packageRevision = {
