@@ -1,11 +1,50 @@
 import { afterAll, expect, test } from "bun:test"
 import { Hono } from "hono"
+import sharp from "sharp"
 import { Instance } from "../../src/project/instance"
 import { AttachmentRoutes } from "../../src/server/routes/attachment"
 import { AttachmentStore } from "../../src/storage/attachment-store"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
 afterAll(resetMemoryDatabase)
+
+test("image preview and thumbnail serve their raster profiles while preserving the canonical SVG", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const app = new Hono().route("/attachment", AttachmentRoutes())
+      const server = Bun.serve({
+        hostname: "127.0.0.1",
+        port: 0,
+        fetch: (request) => Instance.provide({ directory: project.path, fn: () => app.fetch(request) }),
+      })
+      try {
+        const svg = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="800"><rect width="1000" height="800" fill="#3660ff"/></svg>')
+        const reference = await AttachmentStore.write(Instance.project.id, svg, "image/svg+xml", "品牌.svg")
+        const fullUrl = new URL(reference.url + "?variant=image-preview", server.url)
+        const full = await fetch(fullUrl)
+        expect({ status: full.status, mime: full.headers.get("content-type") }).toEqual({ status: 200, mime: "image/webp" })
+        const fullBytes = Buffer.from(await full.arrayBuffer())
+        const fullInfo = await sharp(fullBytes).metadata()
+        expect({ width: fullInfo.width, height: fullInfo.height, format: fullInfo.format }).toEqual({ width: 1000, height: 800, format: "webp" })
+        const pixels = await sharp(fullBytes).raw().toBuffer()
+        expect([...pixels.subarray(0, 3)]).toEqual([54, 96, 255])
+        const repeat = await fetch(fullUrl)
+        expect({ status: repeat.status, bytes: Buffer.from(await repeat.arrayBuffer()) }).toEqual({ status: 200, bytes: fullBytes })
+        const thumbnail = await fetch(new URL(reference.url + "?variant=screenshot-browser-thumbnail", server.url))
+        expect({ status: thumbnail.status, mime: thumbnail.headers.get("content-type") }).toEqual({ status: 200, mime: "image/webp" })
+        const thumbnailInfo = await sharp(Buffer.from(await thumbnail.arrayBuffer())).metadata()
+        expect({ width: thumbnailInfo.width, height: thumbnailInfo.height }).toEqual({ width: 300, height: 240 })
+        const original = await fetch(new URL(reference.url, server.url))
+        expect({ status: original.status, mime: original.headers.get("content-type"), disposition: original.headers.get("content-disposition"), sniff: original.headers.get("x-content-type-options") }).toEqual({ status: 200, mime: "application/octet-stream", disposition: "attachment; filename*=UTF-8''%E5%93%81%E7%89%8C.svg", sniff: "nosniff" })
+        expect(Buffer.from(await original.arrayBuffer())).toEqual(svg)
+      } finally {
+        await server.stop(true)
+      }
+    },
+  })
+})
 
 test("canonical Office downloads preserve actual bytes, MIME and Unicode filenames over HTTP", async () => {
   await using project = await memoryProject()

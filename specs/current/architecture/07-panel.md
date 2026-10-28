@@ -231,6 +231,9 @@ staging names remain the AttachmentStore's responsibility.
 Nonimage file chips open an existing Dialog for review before submission. Stored
 text MIME types and JSON use the same ResourceTextPreview as File preview
 artifacts; other formats retain FilePart media or original-download presentation.
+FilePart's PDF branches load the same PdfPreview on demand, including canonical
+attachments; they do not depend on a host PDF plugin. The composer's constrained
+body scrolls independently of its header and footer, keeping Close visible.
 Image chips keep their existing full-image preview and folders remain references.
 Review is read-only and retains the original draft and attachment list. The
 dialog retires with its selection/API authority or attachment row, and closes
@@ -291,6 +294,16 @@ Canonical attachment HTTP responses read the same verified reference and bytes,
 and retain its filename through RFC 5987 UTF-8 Content-Disposition. Office source
 types come from the qualified profile registry; PDF and other safe preview types
 remain inline, while active SVG remains download-only octet-stream with nosniff.
+Canonical SVG image display selects the explicit `image-preview` rendition:
+lossless WebP, at most 4096 by 4096 pixels, without enlargement. It shares
+AttachmentStore's single image-rendition pipeline and namespace cache with the
+unchanged `screenshot-browser-thumbnail` profile. Originals and metadata remain
+the canonical bytes; derived images are disposable representations. FilePart
+also owns composer thumbnail presentation, using the same image reader.
+Image preview captures the original resource MIME and derives its display URL
+from that one resource identity. Download reads the authenticated original,
+retiring pending work on close, request replacement or API authority change;
+it does not save a raster representation under the original SVG filename.
 Explicit Markdown image-file links and path-like image codespans use the shared
 project-file recognition list and the existing workbench admission. The image
 extensions accepted by that list follow the File reader's image formats, while
@@ -299,7 +312,7 @@ external URL and inline Markdown image semantics remain unchanged.
 Project and absolute-source file reads also return PDF bytes through the same
 FileContent base64/mimeType contract. Encoded PDFs remain read-only under the
 existing write admission. File Editor lazily loads the shared PdfPreview used
-by FilePreviewArtifact, retaining one PDF.js document/canvas lifecycle, resource
+by FilePreviewArtifact and FilePart, retaining one PDF.js document/canvas lifecycle, resource
 authority, page and zoom controls. The current viewport ref owns its resize
 observer so error recovery observes the replacement node. Resource errors are
 checked before reading a failed Solid resource. A pending navigation is read

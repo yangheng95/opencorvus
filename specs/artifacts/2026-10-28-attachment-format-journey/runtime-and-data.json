@@ -1,0 +1,198 @@
+{
+  "at": "2026-10-28T12:19:20.825Z",
+  "scopes": [
+    {
+      "tag": "baseline",
+      "ui": "main-CA287XoV.js",
+      "retirement": {
+        "at": "2026-10-28T11:37:03.812Z",
+        "credentialCopyCreated": false,
+        "modelCatalogCopyRetired": true,
+        "requests": 0,
+        "cumulativeRequests": 759,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "reserveMs": 1925306,
+        "publicShutdown": 200,
+        "physical": {
+          "chain": [
+            {
+              "identity": {
+                "pid": 94476,
+                "processInstanceID": "win32:639287837469985198",
+                "occurrenceID": "fa03b256-6486-4a22-8a26-60cb57207eb3"
+              },
+              "state": "dead_or_reused"
+            },
+            {
+              "identity": {
+                "pid": 99712,
+                "processInstanceID": "win32:639287837478692285",
+                "occurrenceID": "118a8662-7953-438c-a252-c834c75c7a30"
+              },
+              "state": "dead_or_reused"
+            }
+          ],
+          "observedAtUtc": "2026-10-28T11:37:03.1840656Z",
+          "native": {
+            "occurrence": "attachment-format-journey-766-fa5fa771-4c70-4f17-9b94-f5f3eab78bf6",
+            "outcome": "settled",
+            "host": {
+              "pid": 94476,
+              "processInstanceID": "win32:639287837469985198",
+              "occurrenceID": "fa03b256-6486-4a22-8a26-60cb57207eb3"
+            },
+            "target": {
+              "pid": 99712,
+              "processInstanceID": "win32:639287837478692285",
+              "occurrenceID": "118a8662-7953-438c-a252-c834c75c7a30"
+            },
+            "observedAtUtc": "2026-10-28T11:37:01.646Z",
+            "deadlineAt": 1793189346952,
+            "terminal": {
+              "occurrenceID": "attachment-format-journey-766-fa5fa771-4c70-4f17-9b94-f5f3eab78bf6",
+              "pid": 99712,
+              "reason": "exited",
+              "exitCode": 0,
+              "signal": null
+            },
+            "physicalCompletion": true,
+            "outputDrainComplete": true,
+            "requestCleanupComplete": true,
+            "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+          },
+          "launcher": {
+            "observedAtUtc": "2026-10-28T11:37:01.6886353Z",
+            "originalChildExit": 0
+          }
+        }
+      },
+      "shutdownPlan": {
+        "registeredAt": 1793186952727,
+        "dueAt": 1793187672727,
+        "physicalDeadlineAt": 1793189346952,
+        "occurrence": "attachment-format-journey-766-fa5fa771-4c70-4f17-9b94-f5f3eab78bf6",
+        "owner": {
+          "pid": 99712,
+          "processInstanceID": "win32:639287837478692285",
+          "occurrenceID": "db649d9f-d62f-454c-8288-a270daa791af"
+        }
+      },
+      "commandHandles": 63,
+      "originalTerminalOutputSettlement": "fulfilled"
+    },
+    {
+      "tag": "after",
+      "ui": "main-AH2FS94m.js",
+      "retirement": {
+        "at": "2026-10-28T12:00:46.542Z",
+        "credentialCopyCreated": false,
+        "modelCatalogCopyRetired": true,
+        "requests": 0,
+        "cumulativeRequests": 759,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "reserveMs": 502490,
+        "publicShutdown": 200,
+        "physical": {
+          "chain": [
+            {
+              "identity": {
+                "pid": 22672,
+                "processInstanceID": "win32:639287852882231205",
+                "occurrenceID": "40fe8ea2-3f1e-4984-ab75-ef9a30c51aa8"
+              },
+              "state": "dead_or_reused"
+            },
+            {
+              "identity": {
+                "pid": 8808,
+                "processInstanceID": "win32:639287852889557523",
+                "occurrenceID": "6ee352e4-807a-45f2-9b17-e68fde4fc3aa"
+              },
+              "state": "dead_or_reused"
+            }
+          ],
+          "observedAtUtc": "2026-10-28T12:00:45.9105653Z",
+          "launcher": {
+            "observedAtUtc": "2026-10-28T12:00:44.5019852Z",
+            "originalChildExit": 0
+          },
+          "native": {
+            "occurrence": "attachment-format-journey-766-after-b17b7c68-53de-48fd-a5fb-704294312f00",
+            "outcome": "settled",
+            "host": {
+              "pid": 22672,
+              "processInstanceID": "win32:639287852882231205",
+              "occurrenceID": "40fe8ea2-3f1e-4984-ab75-ef9a30c51aa8"
+            },
+            "target": {
+              "pid": 8808,
+              "processInstanceID": "win32:639287852889557523",
+              "occurrenceID": "6ee352e4-807a-45f2-9b17-e68fde4fc3aa"
+            },
+            "observedAtUtc": "2026-10-28T12:00:44.462Z",
+            "deadlineAt": 1793189346952,
+            "terminal": {
+              "occurrenceID": "attachment-format-journey-766-after-b17b7c68-53de-48fd-a5fb-704294312f00",
+              "pid": 8808,
+              "reason": "exited",
+              "exitCode": 0,
+              "signal": null
+            },
+            "physicalCompletion": true,
+            "outputDrainComplete": true,
+            "requestCleanupComplete": true,
+            "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+          }
+        }
+      },
+      "shutdownPlan": {
+        "registeredAt": 1793188492608,
+        "dueAt": 1793188972608,
+        "physicalDeadlineAt": 1793189346952,
+        "occurrence": "attachment-format-journey-766-after-b17b7c68-53de-48fd-a5fb-704294312f00",
+        "owner": {
+          "pid": 8808,
+          "processInstanceID": "win32:639287852889557523",
+          "occurrenceID": "5f70261b-7cc7-470d-a100-0114309423df"
+        }
+      },
+      "commandHandles": 63,
+      "originalTerminalOutputSettlement": "fulfilled"
+    }
+  ],
+  "data": [
+    {
+      "tag": "baseline",
+      "originals": 101330,
+      "exact": 101330,
+      "total": 101332,
+      "sourceRowsExact": 101330,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "after",
+      "originals": 101332,
+      "exact": 101332,
+      "total": 101334,
+      "sourceRowsExact": 101332,
+      "schema": 9,
+      "integrity": "ok"
+    }
+  ],
+  "providerRequests": 0,
+  "cumulativeRequests": 759,
+  "temporaryViewport": "1119x720; reset after each scope",
+  "ownedTabsClosed": [
+    173,
+    174
+  ]
+}

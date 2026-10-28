@@ -7,7 +7,6 @@ import {
   createSignal,
   createMemo,
   createEffect,
-  createResource,
   For,
   Show,
   onCleanup,
@@ -39,14 +38,12 @@ import {
 } from "../services/attachment-upload"
 import {
   ApiError,
-  fetchResourceAsObjectUrl,
   captureApiAuthority,
   isApiAuthorityCurrent,
   type ApiAuthority,
 } from "../services/api"
 import { fileEditorReserved } from "../services/file-workbench"
 import {
-  SCREENSHOT_BROWSER_THUMBNAIL_VARIANT,
   type VisibleComposerReferences,
   visibleComposerReferences,
 } from "@opencorvus-ai/transport-protocol"
@@ -56,7 +53,7 @@ import { Badge } from "./ui/Badge"
 import { Feedback } from "./ui/Feedback"
 import { Button } from "./ui/Button"
 import { SelectControl } from "./ui/SelectControl"
-import { PreviewableImage } from "./ImagePreview"
+import { FilePart } from "./FilePart"
 import {
   clampComposerTextareaHeight,
   composerTextareaResizeBounds,
@@ -506,35 +503,6 @@ function chooseAttachmentFilename(original: string | undefined, mime: string): s
   // composer session at a glance — sha-style handles all blur together.
   const stamp = new Date().toISOString().replace(/[-:T]/g, "").replace(/\..+/, "")
   return `pasted-${stamp}.${ext || "bin"}`
-}
-
-function ComposerAttachmentThumbnail(props: { attachment: ChatAttachment }): JSX.Element {
-  const thumbnailUrl = () => `${props.attachment.url}?variant=${SCREENSHOT_BROWSER_THUMBNAIL_VARIANT}`
-  const [source] = createResource(
-    () => ({ url: thumbnailUrl(), authority: captureApiAuthority() }),
-    async (input) => {
-      const url = await fetchResourceAsObjectUrl(input.url, { authority: input.authority })
-      return isApiAuthorityCurrent(input.authority) ? url : undefined
-    },
-  )
-  return (
-    <Show
-      when={source()}
-      fallback={<span class="chat-attachment-icon">{props.attachment.filename.split(".").pop()?.toUpperCase()}</span>}
-    >
-      {(url) => (
-        <PreviewableImage
-          src={url()}
-          alt={props.attachment.filename}
-          triggerClass="composer-attachment-preview-trigger"
-          imageClass="chat-attachment-thumb"
-          imageDataUI="composer-image-attachment-thumbnail"
-          previewLoader={() => fetchResourceAsObjectUrl(props.attachment.url)}
-          resourceUrl={props.attachment.url}
-        />
-      )}
-    </Show>
-  )
 }
 
 function utf8ByteLength(value: string): number {
@@ -1561,7 +1529,7 @@ export function ChatComposer(props: ChatComposerProps) {
                   when={att.kind === "file" && !att.mime.startsWith("image/")}
                   fallback={
                     <>
-                      <Show when={att.kind === "folder"} fallback={<ComposerAttachmentThumbnail attachment={att} />}>
+                      <Show when={att.kind === "folder"} fallback={<FilePart part={{ type: "file", ...att }} presentation="composer-thumbnail" />}>
                         <span class="chat-attachment-icon">
                           <Icon name="folder-open" size="medium" />
                         </span>

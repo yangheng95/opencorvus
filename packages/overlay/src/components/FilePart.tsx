@@ -1,5 +1,5 @@
 import { SCREENSHOT_BROWSER_THUMBNAIL_VARIANT } from "@opencorvus-ai/transport-protocol"
-import { createResource, Show, Switch, Match } from "solid-js"
+import { createResource, Show, Switch, Match, lazy, Suspense } from "solid-js"
 import {
   captureApiAuthority,
   fetchResourceAsObjectUrl,
@@ -8,6 +8,17 @@ import {
 } from "../services/api"
 import { t } from "../utils/i18n"
 import { PreviewableImage } from "./ImagePreview"
+import { attachmentImagePreviewUrl } from "../utils/attachment-resource"
+
+const LazyPdfPreview = lazy(async () => ({ default: (await import("./PdfPreview")).PdfPreview }))
+
+function PdfContent(props: { url: string; name: string }) {
+  return (
+    <Suspense fallback={<div role="status">{t("common.loading")}</div>}>
+      <LazyPdfPreview url={props.url} label={props.name} />
+    </Suspense>
+  )
+}
 
 // Render a message "file" part: server-persisted attachments carry a URL that
 // is either a server-relative path (/attachment/<projectID>/<sha>.<ext>) or
@@ -25,7 +36,7 @@ import { PreviewableImage } from "./ImagePreview"
 //   image/*             → <img>
 //   video/*             → <video controls>
 //   audio/*             → <audio controls>
-//   application/pdf     → <iframe> (WebView2 has a built-in viewer)
+//   application/pdf     → shared PDF.js preview
 //   anything else       → filename chip with a download affordance
 //
 // Failures are surfaced, not papered over: a fetch error prints to console
@@ -43,7 +54,7 @@ export type MessageFilePart = {
   alt?: string
 }
 
-type FilePartPresentation = "content" | "thumbnail"
+type FilePartPresentation = "content" | "thumbnail" | "composer-thumbnail"
 
 function mimeOf(part: MessageFilePart): string {
   return (part.mime || part.mediaType || "").toLowerCase()
@@ -90,21 +101,22 @@ export function FilePart(props: { part: MessageFilePart; presentation?: FilePart
   const alt = () => props.part.alt || name()
   const kind = () => kindOf(props.part)
   const authed = () => needsAuthedFetch(url())
-  const thumbnail = () => props.presentation === "thumbnail"
+  const thumbnail = () => props.presentation === "thumbnail" || props.presentation === "composer-thumbnail"
+  const composerThumbnail = () => props.presentation === "composer-thumbnail"
 
   return (
     <Switch fallback={<FallbackDownload url={url()} name={name()} mime={mimeOf(props.part)} authed={authed()} />}>
       <Match when={kind() === "image" && url() && authed()}>
-        <AuthedImage url={url()} alt={alt()} thumbnail={thumbnail()} />
+        <AuthedImage url={url()} alt={alt()} mime={mimeOf(props.part)} presentation={props.presentation ?? "content"} />
       </Match>
       <Match when={kind() === "image" && url()}>
-        <div class={thumbnail() ? "msg-image-attachment" : "msg-img-wrap"}>
+        <div class={composerThumbnail() ? "composer-attachment-thumbnail" : thumbnail() ? "msg-image-attachment" : "msg-img-wrap"}>
           <PreviewableImage
             src={resolveResourceUrl(url())}
             alt={alt()}
-            triggerClass={thumbnail() ? "msg-image-attachment__trigger" : undefined}
-            imageClass={thumbnail() ? "msg-image-attachment__image" : undefined}
-            imageDataUI={thumbnail() ? "message-image-attachment-thumbnail" : undefined}
+            triggerClass={composerThumbnail() ? "composer-attachment-preview-trigger" : thumbnail() ? "msg-image-attachment__trigger" : undefined}
+            imageClass={composerThumbnail() ? "chat-attachment-thumb" : thumbnail() ? "msg-image-attachment__image" : undefined}
+            imageDataUI={composerThumbnail() ? "composer-image-attachment-thumbnail" : thumbnail() ? "message-image-attachment-thumbnail" : undefined}
           />
         </div>
       </Match>
@@ -132,7 +144,7 @@ export function FilePart(props: { part: MessageFilePart; presentation?: FilePart
       </Match>
       <Match when={kind() === "pdf" && url()}>
         <div class="msg-pdf-wrap">
-          <iframe class="md-pdf" src={resolveResourceUrl(url())} title={name()} />
+          <PdfContent url={url()} name={name()} />
         </div>
       </Match>
     </Switch>
@@ -145,9 +157,12 @@ export function FilePart(props: { part: MessageFilePart; presentation?: FilePart
 // `initialValue` seeds the resource signal from the cache so a cache-hit
 // path renders on the first tick without a spinner flash.
 
-function AuthedImage(props: { url: string; alt: string; thumbnail: boolean }) {
+function AuthedImage(props: { url: string; alt: string; mime: string; presentation: FilePartPresentation }) {
+  const thumbnail = () => props.presentation !== "content"
+  const composerThumbnail = () => props.presentation === "composer-thumbnail"
+  const previewUrl = () => attachmentImagePreviewUrl(props.url, props.mime)
   const displayUrl = () =>
-    props.thumbnail ? `${props.url}?variant=${SCREENSHOT_BROWSER_THUMBNAIL_VARIANT}` : props.url
+    thumbnail() ? `${props.url}?variant=${SCREENSHOT_BROWSER_THUMBNAIL_VARIANT}` : previewUrl()
   const [objectUrl] = createResource(
     () => ({ url: displayUrl(), authority: captureApiAuthority() }),
     (source) => fetchResourceAsObjectUrl(source.url, { authority: source.authority }),
@@ -158,17 +173,18 @@ function AuthedImage(props: { url: string; alt: string; thumbnail: boolean }) {
 
   return (
     <Show when={!objectUrl.error} fallback={<LoadError name={props.alt} />}>
-      <Show when={!objectUrl.loading && objectUrl()}>
+      <Show when={!objectUrl.loading && objectUrl()} fallback={composerThumbnail() ? <span class="chat-attachment-icon">{props.alt.split(".").pop()?.toUpperCase()}</span> : undefined}>
         {(resolved) => (
-          <div class={props.thumbnail ? "msg-image-attachment" : "msg-img-wrap"}>
+          <div class={composerThumbnail() ? "composer-attachment-thumbnail" : thumbnail() ? "msg-image-attachment" : "msg-img-wrap"}>
             <PreviewableImage
               src={resolved()}
               resourceUrl={props.url}
+              resourceMime={props.mime}
               alt={props.alt}
-              triggerClass={props.thumbnail ? "msg-image-attachment__trigger" : undefined}
-              imageClass={props.thumbnail ? "msg-image-attachment__image" : undefined}
-              imageDataUI={props.thumbnail ? "message-image-attachment-thumbnail" : undefined}
-              previewLoader={props.thumbnail ? () => fetchResourceAsObjectUrl(props.url) : undefined}
+              triggerClass={composerThumbnail() ? "composer-attachment-preview-trigger" : thumbnail() ? "msg-image-attachment__trigger" : undefined}
+              imageClass={composerThumbnail() ? "chat-attachment-thumb" : thumbnail() ? "msg-image-attachment__image" : undefined}
+              imageDataUI={composerThumbnail() ? "composer-image-attachment-thumbnail" : thumbnail() ? "message-image-attachment-thumbnail" : undefined}
+              previewLoader={thumbnail() ? () => fetchResourceAsObjectUrl(previewUrl()) : undefined}
             />
           </div>
         )}
@@ -238,7 +254,7 @@ function AuthedPdf(props: { url: string; name: string }) {
       <Show when={!objectUrl.loading && objectUrl()}>
         {(resolved) => (
           <div class="msg-pdf-wrap">
-            <iframe class="md-pdf" src={resolved()} title={props.name} />
+            <PdfContent url={resolved()} name={props.name} />
             <DownloadLink href={resolved()} name={props.name} />
           </div>
         )}

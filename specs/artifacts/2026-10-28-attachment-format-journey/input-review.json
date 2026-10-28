@@ -1,0 +1,83 @@
+{
+  "at": "2026-10-28T12:15:59.065Z",
+  "projectFilesExact": 3,
+  "inputsPreserved": [
+    "specs/artifacts/2026-09-08-founder-case-brief/opencorvus-case-brief-en-zh.pdf",
+    "packages/overlay/src/opencorvus-logo-dark.svg"
+  ],
+  "uploads": [
+    [
+      {
+        "filename": "opencorvus-case-brief-en-zh.pdf",
+        "mime": "application/pdf",
+        "bytes": 111015,
+        "exactOriginalBytes": true
+      },
+      {
+        "filename": "opencorvus-logo-dark.svg",
+        "mime": "image/svg+xml",
+        "bytes": 6426,
+        "exactOriginalBytes": true
+      }
+    ],
+    [
+      {
+        "filename": "opencorvus-case-brief-en-zh.pdf",
+        "mime": "application/pdf",
+        "bytes": 111015,
+        "exactOriginalBytes": true
+      },
+      {
+        "filename": "opencorvus-logo-dark.svg",
+        "mime": "image/svg+xml",
+        "bytes": 6426,
+        "exactOriginalBytes": true
+      },
+      {
+        "filename": "12-after-chinese-home-hint.jpg",
+        "mime": "image/jpeg",
+        "bytes": 47688,
+        "exactOriginalBytes": true
+      }
+    ]
+  ],
+  "representations": [
+    {
+      "width": 1000,
+      "height": 1000,
+      "format": "webp",
+      "bytes": 19068
+    }
+  ],
+  "downloads": [
+    {
+      "file": "C:/Users/hengu/Downloads/opencorvus-case-brief-en-zh (1).pdf",
+      "bytes": 111015,
+      "exactOriginalBytes": true
+    },
+    {
+      "file": "C:/Users/hengu/Downloads/opencorvus-logo-dark.svg",
+      "bytes": 6426,
+      "exactOriginalBytes": true
+    },
+    {
+      "file": "C:/Users/hengu/Downloads/opencorvus-logo-dark (1).svg",
+      "bytes": 6426,
+      "exactOriginalBytes": true
+    }
+  ],
+  "pdf": {
+    "source": "specs\\artifacts\\2026-09-08-founder-case-brief\\opencorvus-case-brief-en-zh.pdf",
+    "download": "C:\\Users\\hengu\\Downloads\\opencorvus-case-brief-en-zh.pdf",
+    "bytes": 111015,
+    "exactOriginalBytes": true,
+    "pages": 2,
+    "encrypted": false,
+    "pageTextLengths": [
+      1404,
+      635
+    ],
+    "referenceRenderer": "bundled pypdfium2; read-only input, unedited page render",
+    "pdfAuthoredOrModified": false
+  }
+}

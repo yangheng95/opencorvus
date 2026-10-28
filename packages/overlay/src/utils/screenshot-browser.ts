@@ -1,4 +1,5 @@
 import { SCREENSHOT_BROWSER_THUMBNAIL_VARIANT } from "@opencorvus-ai/transport-protocol"
+import { isStoredAttachmentUrl } from "./attachment-resource"
 import { normalizeAgentRole, type AgentRole } from "./message"
 import { isBoundaryMessagePart } from "./message-part"
 import type { CardNode } from "../store/card-tree"
@@ -198,10 +199,6 @@ function ownerFields(owner: ScreenshotBrowserOwner) {
     ownerTime: owner.time,
     ownerLabel: owner.ownerLabel,
   }
-}
-
-export function isStoredAttachmentUrl(url: string): boolean {
-  return /^\/attachment\/[^/\\?#]+\/[^/\\?#]+$/i.test(url)
 }
 
 export function screenshotBrowserThumbnailUrl(url: string): string {

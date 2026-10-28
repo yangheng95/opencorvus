@@ -45,6 +45,7 @@ export function ComposerAttachmentPreview(props: { attachment: StoredAttachmentR
         open={open()}
         wide
         class="composer-attachment-dialog"
+        formClass="composer-attachment-dialog__frame"
         title={props.attachment.filename}
         returnFocusTarget={() => (current() ? trigger ?? null : null)}
         onClose={() => setOpen(false)}
@@ -54,7 +55,7 @@ export function ComposerAttachmentPreview(props: { attachment: StoredAttachmentR
           </Button>
         }
       >
-        <Show when={open()}>
+        <div class="composer-attachment-dialog__body"><Show when={open()}>
           <Show when={text()} fallback={<FilePart part={{ type: "file", ...props.attachment }} />}>
             <ResourceTextPreview
               url={props.attachment.url}
@@ -63,7 +64,7 @@ export function ComposerAttachmentPreview(props: { attachment: StoredAttachmentR
               authority={context()?.authority}
             />
           </Show>
-        </Show>
+        </Show></div>
       </Dialog>
     </>
   )

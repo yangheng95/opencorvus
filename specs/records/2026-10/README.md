@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-28-attachment-format-journey.md](2026-10-28-attachment-format-journey.md)：共享PDF阅读器、SVG安全全图派生和附件核对布局。
+
 - [2026-10-28-composer-attachment-review.md](2026-10-28-composer-attachment-review.md)：提交前附件核对、共享文本预览及删除焦点修复。
 
 - [Issue 51、40 与 58–60 跟进](2026-10-28-issue-followup-51-58-60.md)：真实合同复现、共享机制审计及带证据关闭。

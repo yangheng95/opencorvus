@@ -1,0 +1,82 @@
+{
+  "checks": {
+    "frontendTypecheck": {
+      "label": "format-766-types-final",
+      "startedAt": 1793188387310,
+      "closedAt": 1793188417135,
+      "code": 0,
+      "signal": null,
+      "childPID": 92876
+    },
+    "backendTypecheck": {
+      "label": "format-766-backend-types",
+      "startedAt": 1793188387310,
+      "closedAt": 1793188439675,
+      "code": 0,
+      "signal": null,
+      "childPID": 95480
+    },
+    "build": {
+      "label": "format-766-build-final",
+      "startedAt": 1793188387358,
+      "closedAt": 1793188462604,
+      "code": 0,
+      "signal": null,
+      "childPID": 66072
+    },
+    "i18n": {
+      "label": "format-766-i18n",
+      "startedAt": 1793189759698,
+      "closedAt": 1793189760970,
+      "code": 0,
+      "signal": null,
+      "childPID": 34964
+    },
+    "docs": {
+      "label": "format-766-docs-final",
+      "startedAt": 1793189842918,
+      "closedAt": 1793189851850,
+      "code": 0,
+      "signal": null,
+      "childPID": 36592
+    },
+    "httpContracts": {
+      "label": "format-766-contracts-green",
+      "startedAt": 1793187870784,
+      "closedAt": 1793187884605,
+      "code": 0,
+      "signal": null,
+      "childPID": 48416
+    },
+    "urlContracts": {
+      "label": "format-766-url-unit",
+      "startedAt": 1793188144000,
+      "closedAt": 1793188149183,
+      "code": 0,
+      "signal": null,
+      "childPID": 20804
+    }
+  },
+  "backendContracts": "3 tests / 18 assertions; actual Hono HTTP, Sharp and original bytes",
+  "urlContracts": "1 test / 2 positive identity-output assertions; no DOM or rendering",
+  "originalHttpFailure": {
+    "label": "format-766-contracts-red",
+    "startedAt": 1793187708711,
+    "closedAt": 1793187723326,
+    "code": 1,
+    "signal": null,
+    "childPID": 96444
+  },
+  "uiAutomation": "None added, modified or run",
+  "visual": "14 unedited JPEGs manually reviewed; 2 read-only PDFium reference page PNGs manually reviewed",
+  "intermediateBuild": {
+    "label": "format-766-build",
+    "startedAt": 1793188144074,
+    "closedAt": 1793188210666,
+    "code": 0,
+    "signal": null,
+    "childPID": 64788
+  },
+  "coverageLimit": "Screenshot gallery SVG MIME projection remains unresolved; not all SVG paths completed. External PDF and broader owner/race matrix also unverified",
+  "overallGoal": "active"
+}

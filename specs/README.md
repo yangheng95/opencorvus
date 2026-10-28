@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [PDF与SVG附件实际体验](records/2026-10/2026-10-28-attachment-format-journey.md)：修复PDF空白/关闭布局与SVG全图，原件身份和安全派生实证。
+
 - [输入区附件核对与键盘删除](records/2026-10/2026-10-28-composer-attachment-review.md)：真实附件只读预览、原件下载与移除焦点交接。
 
 - [Issue 51、40 与 58–60 跟进](records/2026-10/2026-10-28-issue-followup-51-58-60.md)：复核既有交付，修复结构化交接、输入终态竞态与冻结别名引用并关闭已解决事项。

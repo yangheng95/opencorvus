@@ -7,10 +7,10 @@ import {
   buildScreenshotBrowserRows,
   groupScreenshotBrowserItems,
   isScreenshotBrowserThumbnailUrl,
-  isStoredAttachmentUrl,
   type ScreenshotBrowserItem,
   type ScreenshotBrowserRow,
 } from "../utils/screenshot-browser"
+import { isStoredAttachmentUrl } from "../utils/attachment-resource"
 import { captureApiAuthority, fetchResourceAsObjectUrl, peekResourceObjectUrl } from "../services/api"
 import { fullStampWithRelative, compactDetailStamp, shortStamp } from "../utils/time"
 import { t } from "../utils/i18n"

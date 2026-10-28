@@ -9,6 +9,7 @@ import path from "node:path"
 import { pathToFileURL } from "node:url"
 import {
   DIRECTORY_REFERENCE_MIME,
+  ATTACHMENT_IMAGE_PREVIEW_VARIANT as SHARED_ATTACHMENT_IMAGE_PREVIEW_VARIANT,
   SCREENSHOT_BROWSER_THUMBNAIL_VARIANT as SHARED_SCREENSHOT_BROWSER_THUMBNAIL_VARIANT,
 } from "@opencorvus-ai/transport-protocol"
 import { Project } from "@/project/project"
@@ -125,9 +126,13 @@ async function withAttachmentPairLock<T>(abs: string, operation: () => Promise<T
 export namespace AttachmentStore {
   export const ROUTE_PREFIX = ATTACHMENT_ROUTE_PREFIX
   export const SCREENSHOT_BROWSER_THUMBNAIL_VARIANT = SHARED_SCREENSHOT_BROWSER_THUMBNAIL_VARIANT
-  export const SCREENSHOT_BROWSER_THUMBNAIL_MIME = "image/webp"
-  const SCREENSHOT_BROWSER_THUMBNAIL_WIDTH = 360
-  const SCREENSHOT_BROWSER_THUMBNAIL_HEIGHT = 240
+  export const IMAGE_PREVIEW_VARIANT = SHARED_ATTACHMENT_IMAGE_PREVIEW_VARIANT
+  export const IMAGE_RENDITION_MIME = "image/webp"
+  const IMAGE_RENDITION_PROFILES = {
+    [SCREENSHOT_BROWSER_THUMBNAIL_VARIANT]: { width: 360, height: 240, webp: { quality: 78, effort: 4 } },
+    [IMAGE_PREVIEW_VARIANT]: { width: 4096, height: 4096, webp: { lossless: true, effort: 4 } },
+  } as const
+  export type ImageRenditionVariant = keyof typeof IMAGE_RENDITION_PROFILES
 
   export const TestHooks: {
     afterVerifiedBlobStat?: (input: { projectID: string; name: string; abs: string }) => void | Promise<void>
@@ -537,35 +542,32 @@ export namespace AttachmentStore {
     size: number
   }
 
-  function derivedThumbnailName(name: string): string {
+  function derivedImageName(name: string, variant: ImageRenditionVariant): string {
     if (!name || /[/\\?#]/.test(name)) {
-      throw new Error(`AttachmentStore.screenshotBrowserThumbnail: invalid attachment name ${name}`)
+      throw new Error(`AttachmentStore.imageRendition: invalid attachment name ${name}`)
     }
     const ext = path.extname(name)
     const stem = ext ? name.slice(0, -ext.length) : name
-    if (!stem) throw new Error(`AttachmentStore.screenshotBrowserThumbnail: invalid attachment name ${name}`)
-    return `${stem}.${SCREENSHOT_BROWSER_THUMBNAIL_VARIANT}.webp`
+    if (!stem) throw new Error(`AttachmentStore.imageRendition: invalid attachment name ${name}`)
+    return `${stem}.${variant}.webp`
   }
 
-  function derivedThumbnailDirectory(sourceAbs: string): string {
-    return path.join(path.dirname(sourceAbs), ".derived", SCREENSHOT_BROWSER_THUMBNAIL_VARIANT)
-  }
-
-  export async function screenshotBrowserThumbnail(projectID: string, name: string): Promise<DerivedAttachment> {
+  export async function imageRendition(projectID: string, name: string, variant: ImageRenditionVariant): Promise<DerivedAttachment> {
+    const profile = IMAGE_RENDITION_PROFILES[variant]
     const sourceAbs = resolveAbsolute(projectID, name)
     if (!sourceAbs) throw new Error(`attachment ${projectID}/${name} is not resolvable`)
     const sourceStat = await fs.stat(sourceAbs)
     if (!sourceStat.isFile()) throw new Error(`attachment ${projectID}/${name} is not a file`)
 
-    const derivedName = derivedThumbnailName(name)
-    const derivedDir = derivedThumbnailDirectory(sourceAbs)
+    const derivedName = derivedImageName(name, variant)
+    const derivedDir = path.join(path.dirname(sourceAbs), ".derived", variant)
     const derivedAbs = path.join(derivedDir, derivedName)
     const existing = await fs.stat(derivedAbs).catch(() => null)
     if (existing?.isFile()) {
       return {
         name: derivedName,
         abs: derivedAbs,
-        mime: SCREENSHOT_BROWSER_THUMBNAIL_MIME,
+        mime: IMAGE_RENDITION_MIME,
         size: existing.size,
       }
     }
@@ -573,12 +575,12 @@ export namespace AttachmentStore {
     const bytes = await sharp(sourceAbs, { failOn: "error" })
       .rotate()
       .resize({
-        width: SCREENSHOT_BROWSER_THUMBNAIL_WIDTH,
-        height: SCREENSHOT_BROWSER_THUMBNAIL_HEIGHT,
+        width: profile.width,
+        height: profile.height,
         fit: "inside",
         withoutEnlargement: true,
       })
-      .webp({ quality: 78, effort: 4 })
+      .webp(profile.webp)
       .toBuffer()
 
     await fs.mkdir(derivedDir, { recursive: true })
@@ -590,7 +592,7 @@ export namespace AttachmentStore {
     return {
       name: derivedName,
       abs: derivedAbs,
-      mime: SCREENSHOT_BROWSER_THUMBNAIL_MIME,
+      mime: IMAGE_RENDITION_MIME,
       size: info.size,
     }
   }

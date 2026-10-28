@@ -54,6 +54,12 @@
   flex-shrink: 0;
 }
 
+.composer-attachment-thumbnail {
+  flex: 0 0 calc(28px * var(--ui-scale));
+  width: calc(28px * var(--ui-scale));
+  height: calc(28px * var(--ui-scale));
+}
+
 .oc-button[data-ui="image-preview-trigger"].composer-attachment-preview-trigger {
   --oc-button-height: calc(28px * var(--ui-scale));
   --oc-button-padding-x: 0;
@@ -115,6 +121,23 @@
 
 .composer-attachment-dialog .msg-artifact-code {
   max-height: min(calc(560px * var(--ui-scale)), 55vh);
+}
+
+.dialog-form.composer-attachment-dialog__frame {
+  overflow: hidden;
+}
+
+.composer-attachment-dialog__frame > .dialog-actions {
+  flex-shrink: 0;
+}
+
+.composer-attachment-dialog__body {
+  min-height: 0;
+  overflow: auto;
+}
+
+.composer-attachment-dialog .msg-artifact-pdf {
+  max-height: 45vh;
 }
 
 .chat-attachment-item .oc-button[data-ui="chat-attachment-remove"] {

@@ -30,6 +30,7 @@ import { Button } from "./ui/Button"
 import { ContextMenu } from "./ui/ContextMenu"
 import { Icon } from "./ui/Icon"
 import { Feedback } from "./ui/Feedback"
+import { attachmentImagePreviewUrl } from "../utils/attachment-resource"
 
 const SCALE_STEP = 0.25
 const COPY_FEEDBACK_DURATION_MS = 2400
@@ -83,6 +84,7 @@ export function PreviewableImage(props: {
   imageAttributes?: PreviewableImageAttributes
   previewLoader?: PreviewImageLoader
   resourceUrl?: string
+  resourceMime?: string
 }) {
   const alt = () => props.alt || ""
   const trigger = createMemo(() => imagePreviewTriggerContract({ src: props.src, alt: alt() }))
@@ -91,7 +93,7 @@ export function PreviewableImage(props: {
   const imageAttributes = () => props.imageAttributes ?? {}
   const [failedSource, setFailedSource] = createSignal<string | null>(null)
   const failed = () => failedSource() === props.src
-  const delegatedPreview = () => !props.previewLoader
+  const delegatedPreview = () => !props.previewLoader && !props.resourceUrl
   const loadPreviewSource = async () => (props.previewLoader ? await props.previewLoader() : props.src)
   let pendingRequestRevision: number | null = null
 
@@ -115,7 +117,7 @@ export function PreviewableImage(props: {
         requestRevision,
         src,
         alt(),
-        resourceUrl && authority ? { resourceUrl, authority } : undefined,
+        resourceUrl && authority ? { resourceUrl, authority, mime: props.resourceMime } : undefined,
       )
     } catch (error) {
       if (!imagePreviewRequestIsCurrent(requestRevision)) return
@@ -181,7 +183,7 @@ export function ImagePreviewHost() {
     () => {
       const state = imagePreviewState()
       return state.open && state.resourceUrl
-        ? { url: state.resourceUrl, revision: state.revision, authority: captureApiAuthority() }
+        ? { url: attachmentImagePreviewUrl(state.resourceUrl, state.resourceMime ?? ""), revision: state.revision, authority: captureApiAuthority() }
         : null
     },
     (source) => fetchResourceAsObjectUrl(source.url, { authority: source.authority }),
@@ -198,6 +200,9 @@ export function ImagePreviewHost() {
   const imageReady = () => !imageUnavailable() && imageSize().width > 0 && imageSize().height > 0
   const [bodyGeometry, setBodyGeometry] = createSignal<ImagePreviewBodyGeometry | null>(null)
   const [copyInFlight, setCopyInFlight] = createSignal(false)
+  const [downloadInFlight, setDownloadInFlight] = createSignal(false)
+  let downloadGeneration = 0
+  let downloadController: AbortController | undefined
   const [copyFeedback, setCopyFeedback] = createSignal<CopyFeedback | null>(null)
   const [panStart, setPanStart] = createSignal<{
     pointerID: number
@@ -233,6 +238,10 @@ export function ImagePreviewHost() {
     const state = imagePreviewState()
     const src = previewSource()
     copyGeneration += 1
+    downloadGeneration += 1
+    downloadController?.abort()
+    downloadController = undefined
+    setDownloadInFlight(false)
     setCopyInFlight(false)
     clearCopyFeedback()
     setPanStart(null)
@@ -262,6 +271,8 @@ export function ImagePreviewHost() {
   })
 
   onCleanup(() => {
+    downloadGeneration += 1
+    downloadController?.abort()
     bodyRef?.removeEventListener("wheel", handleWheel)
     resizeObserver?.disconnect()
     applyOpenScaleOnFrame.cancel()
@@ -486,17 +497,36 @@ export function ImagePreviewHost() {
     }
   }
 
-  function downloadPreviewImage(): void {
+  async function downloadPreviewImage(): Promise<void> {
+    if (downloadInFlight()) return
     const preview = imagePreviewState()
-    const src = previewSource()
-    if (!src) return
-    const download = document.createElement("a")
-    download.href = src
-    download.download = preview.alt.split(/[\\/]/).pop()?.trim() || t("image_preview.title")
-    download.rel = "noopener noreferrer"
-    document.body.append(download)
-    download.click()
-    download.remove()
+    const authority = preview.resourceUrl ? captureApiAuthority() : undefined
+    const generation = ++downloadGeneration
+    const controller = new AbortController()
+    downloadController = controller
+    const current = () => generation === downloadGeneration && imagePreviewState().open &&
+      imagePreviewState().revision === preview.revision && (!authority || isApiAuthorityCurrent(authority))
+    setDownloadInFlight(true)
+    try {
+      const src = preview.resourceUrl
+        ? await fetchResourceAsObjectUrl(preview.resourceUrl, { authority, signal: controller.signal })
+        : previewSource()
+      if (!src || !current()) return
+      const download = document.createElement("a")
+      download.href = src
+      download.download = preview.alt.split(/[\\/]/).pop()?.trim() || t("image_preview.title")
+      download.rel = "noopener noreferrer"
+      document.body.append(download)
+      download.click()
+      download.remove()
+    } catch (error) {
+      if (current()) reportError({ title: t("file.download"), message: t("file.load_failed", { name: preview.alt }), details: formatErrorDetails(error) })
+    } finally {
+      if (generation === downloadGeneration) {
+        downloadController = undefined
+        setDownloadInFlight(false)
+      }
+    }
   }
 
   function handleWheel(event: WheelEvent): void {
@@ -566,8 +596,8 @@ export function ImagePreviewHost() {
             data-chrome="icon-action"
             title={t("file.download")}
             aria-label={t("file.download")}
-            disabled={!previewSource()}
-            onClick={downloadPreviewImage}
+            disabled={!previewSource() || downloadInFlight()}
+            onClick={() => void downloadPreviewImage()}
           >
             <Icon name="download" />
           </Button>

@@ -78,9 +78,9 @@ function attachmentHeaders(name: string, reference: AttachmentStore.Reference) {
   return headers
 }
 
-function thumbnailHeaders(size: number) {
+function imageRenditionHeaders(size: number) {
   return {
-    "content-type": AttachmentStore.SCREENSHOT_BROWSER_THUMBNAIL_MIME,
+    "content-type": AttachmentStore.IMAGE_RENDITION_MIME,
     "content-length": String(size),
     "cache-control": "public, max-age=31536000, immutable",
     "x-content-type-options": "nosniff",
@@ -198,16 +198,16 @@ export const AttachmentRoutes = lazy(() =>
         }
         const variant = c.req.valid("query").variant ?? ""
         if (variant) {
-          if (variant !== AttachmentStore.SCREENSHOT_BROWSER_THUMBNAIL_VARIANT) return c.text("Not found", 404)
+          if (variant !== AttachmentStore.SCREENSHOT_BROWSER_THUMBNAIL_VARIANT && variant !== AttachmentStore.IMAGE_PREVIEW_VARIANT) return c.text("Not found", 404)
           const sourceAbs = AttachmentStore.resolveAbsolute(projectID, name)
           if (!sourceAbs) return c.text("Not found", 404)
           const sourceInfo = await statFileOrMissing(sourceAbs)
           if (!sourceInfo || !sourceInfo.isFile()) return c.text("Not found", 404)
-          const thumbnail = await AttachmentStore.screenshotBrowserThumbnail(projectID, name)
-          const body = await fs.readFile(thumbnail.abs)
+          const rendition = await AttachmentStore.imageRendition(projectID, name, variant)
+          const body = await fs.readFile(rendition.abs)
           return new Response(body as unknown as BodyInit, {
             status: 200,
-            headers: thumbnailHeaders(thumbnail.size),
+            headers: imageRenditionHeaders(rendition.size),
           })
         }
         const abs = AttachmentStore.resolveAbsolute(projectID, name)

@@ -742,6 +742,7 @@ export function conversationDeferredToolState(value: unknown): ConversationDefer
 // ── Attachment resource variants ──
 
 export const SCREENSHOT_BROWSER_THUMBNAIL_VARIANT = "screenshot-browser-thumbnail" as const
+export const ATTACHMENT_IMAGE_PREVIEW_VARIANT = "image-preview" as const
 
 // ── Conversation message part projection ──
 
