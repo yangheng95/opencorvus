@@ -115,12 +115,12 @@ jobs:
           HUSKY: "0"
         run: bun install --frozen-lockfile --no-progress --ignore-scripts
 
-      - name: Verify Ubuntu policy through sudo
-        run: bun test ./script/install-ubuntu-packages.test.ts
-
       - name: Build generated Software Development Kit
         shell: bash
         run: bun run --cwd packages/sdk/js build
+
+      - name: Verify Ubuntu policy through sudo
+        run: bun test ./script/install-ubuntu-packages.test.ts
 
       - name: Verify generated repository fixed point
         shell: bash
