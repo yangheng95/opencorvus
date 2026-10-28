@@ -1,0 +1,99 @@
+{
+  "at": "2026-10-28T18:00:27.339Z",
+  "scope": "Same user-authorized read-only Dependabot access; no dismiss or settings writes",
+  "open": [
+    {
+      "number": 30,
+      "state": "open",
+      "package": {
+        "ecosystem": "rust",
+        "name": "rustls"
+      },
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "ghsa": "GHSA-vp88-798v-h67f",
+      "severity": "low"
+    },
+    {
+      "number": 29,
+      "state": "open",
+      "package": {
+        "ecosystem": "rust",
+        "name": "rustls"
+      },
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "ghsa": "GHSA-w44r-93j7-qv28",
+      "severity": "low"
+    },
+    {
+      "number": 28,
+      "state": "open",
+      "package": {
+        "ecosystem": "rust",
+        "name": "rustls"
+      },
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "ghsa": "GHSA-c8m5-c952-6cm4",
+      "severity": "medium"
+    },
+    {
+      "number": 27,
+      "state": "open",
+      "package": {
+        "ecosystem": "rust",
+        "name": "rustls"
+      },
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "ghsa": "GHSA-h2v8-394m-p7vv",
+      "severity": "low"
+    },
+    {
+      "number": 14,
+      "state": "open",
+      "package": {
+        "ecosystem": "rust",
+        "name": "rand"
+      },
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "ghsa": "GHSA-cq8v-f236-94qc",
+      "severity": "low"
+    },
+    {
+      "number": 13,
+      "state": "open",
+      "package": {
+        "ecosystem": "rust",
+        "name": "glib"
+      },
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "ghsa": "GHSA-wrw7-89jp-8q8g",
+      "severity": "medium"
+    },
+    {
+      "number": 5,
+      "state": "open",
+      "package": {
+        "ecosystem": "rust",
+        "name": "glib"
+      },
+      "manifest": "packages/overlay/src-tauri/Cargo.lock",
+      "ghsa": "GHSA-wrw7-89jp-8q8g",
+      "severity": "medium"
+    }
+  ],
+  "currentRandAlert": {
+    "number": 6,
+    "state": "fixed",
+    "fixedAt": "2026-10-28T05:54:23Z",
+    "dependency": {
+      "package": {
+        "ecosystem": "rust",
+        "name": "rand"
+      },
+      "manifest_path": "packages/overlay/src-tauri/Cargo.lock",
+      "version_requirement": "= 0.7.3",
+      "scope": "runtime",
+      "relationship": "unknown"
+    },
+    "ghsa": "GHSA-cq8v-f236-94qc"
+  }
+}

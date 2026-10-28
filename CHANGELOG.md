@@ -13,6 +13,7 @@
 #### 修复
 
 - PDF 翻页或缩放达到边界后保持键盘焦点，Tab 可继续导航；归档页说明与空状态统一使用“对话”，覆盖 Chat 和 Work。
+- 来源摘录在侧栏宽度变化、收起重开后保留正在阅读的文字位置，避免换行后跳过内容。
 
 ### en-US
 
@@ -23,6 +24,7 @@
 #### Fixed
 
 - Retain keyboard focus at PDF page and zoom limits, allowing Tab navigation to continue. Archive descriptions and empty states consistently refer to conversations, covering both Chat and Work.
+- Preserve the current text position in source excerpts when sidebars resize or excerpts reopen, keeping line wrapping changes from skipping content.
 
 ## 0.1.35 - 2026-10-29
 

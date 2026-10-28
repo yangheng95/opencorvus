@@ -1,0 +1,149 @@
+{
+  "at": "2026-10-28T18:14:06.053Z",
+  "scopes": [
+    {
+      "tag": "baseline",
+      "port": 38302,
+      "entry": "main-CTR34niN.js",
+      "originalExec": 94794,
+      "originalExecExit": 0,
+      "occurrence": "source-reader-journey-771-58495517-e7a8-48e0-bfab-a4e78714bce6",
+      "originalDeadline": 1793212975762,
+      "settled": "2026-10-28T17:58:10.688Z",
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "identityChain": [
+        {
+          "identity": {
+            "pid": 74824,
+            "processInstanceID": "win32:639288061763350631",
+            "occurrenceID": "5aa37322-eb90-4097-b5b6-043229907bf4"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "identity": {
+            "pid": 86632,
+            "processInstanceID": "win32:639288061774061074",
+            "occurrenceID": "03b46b68-5253-443c-a211-b92b6bbabbc4"
+          },
+          "state": "dead_or_reused"
+        }
+      ],
+      "requests": 0,
+      "cumulativeRequests": 767,
+      "reserveMs": 2685074,
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "canonicalAttachmentFilesExact": 13
+    },
+    {
+      "tag": "reading",
+      "port": 38303,
+      "entry": "main-CTR34niN.js",
+      "originalExec": 15490,
+      "originalExecExit": 0,
+      "occurrence": "source-reader-journey-771-4937428c-d00d-4686-8441-523e9e71a892",
+      "originalDeadline": 1793212975762,
+      "settled": "2026-10-28T18:05:03.691Z",
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "identityChain": [
+        {
+          "identity": {
+            "pid": 84840,
+            "processInstanceID": "win32:639288072598164397",
+            "occurrenceID": "c6e89108-592f-431f-86a8-164877ff75ae"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "identity": {
+            "pid": 81248,
+            "processInstanceID": "win32:639288072608339151",
+            "occurrenceID": "23f51ce4-dcb2-4188-9f07-53b357282ace"
+          },
+          "state": "dead_or_reused"
+        }
+      ],
+      "requests": 0,
+      "cumulativeRequests": 767,
+      "reserveMs": 2272071,
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "canonicalAttachmentFilesExact": 13
+    },
+    {
+      "tag": "after",
+      "port": 38304,
+      "entry": "main-DbAtT6ad.js",
+      "originalExec": 84266,
+      "originalExecExit": 0,
+      "occurrence": "source-reader-journey-771-after-2828604b-b45a-4319-8740-1bb9eaa26ed3",
+      "originalDeadline": 1793212975762,
+      "settled": "2026-10-28T18:12:33.277Z",
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "identityChain": [
+        {
+          "identity": {
+            "pid": 73904,
+            "processInstanceID": "win32:639288076119948906",
+            "occurrenceID": "20a451eb-3413-412d-a76e-2aae274f6685"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "identity": {
+            "pid": 89496,
+            "processInstanceID": "win32:639288076135045536",
+            "occurrenceID": "b3685bcf-cbb1-4973-892d-65bfffc4c542"
+          },
+          "state": "dead_or_reused"
+        }
+      ],
+      "requests": 0,
+      "cumulativeRequests": 767,
+      "reserveMs": 1822485,
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "canonicalAttachmentFilesExact": 13
+    }
+  ],
+  "modelRequests": 0,
+  "cumulativeRequests": 767,
+  "allOwnedPagesClosed": [
+    "186",
+    "187",
+    "188",
+    "189"
+  ],
+  "user18571Operated": false
+}

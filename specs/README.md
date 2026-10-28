@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [代码与网页来源实际阅读](records/2026-10/2026-10-29-source-reader-journey.md)：摘录改宽与重开保留文字位置，原文件定位/复制、双语与只读告警复核。
+
 - [HeavyWorkBench-10构建与独立审查](records/2026-10/2026-10-29-heavy-workbench.md)：十项全链路重型任务、200项评分、真实诊断/计划检查及成熟度证据边界。
 
 - [历史消息附件阅读与对话返回](records/2026-10/2026-10-29-message-reader-journey.md)：紧凑PDF原名、共享阅读器边界焦点、真实归档恢复和双语说明。

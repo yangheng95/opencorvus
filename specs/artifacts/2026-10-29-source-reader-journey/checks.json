@@ -1,0 +1,47 @@
+{
+  "at": "2026-10-28T18:14:06.058Z",
+  "checks": [
+    {
+      "label": "source-reader-771-build-before",
+      "startedAt": 1793209130732,
+      "closedAt": 1793209214660,
+      "code": 0,
+      "signal": null,
+      "childPID": 94848
+    },
+    {
+      "label": "source-reader-771-types-after",
+      "startedAt": 1793210680645,
+      "closedAt": 1793210701692,
+      "code": 0,
+      "signal": null,
+      "childPID": 71884
+    },
+    {
+      "label": "source-reader-771-build-after",
+      "startedAt": 1793210704391,
+      "closedAt": 1793210783887,
+      "code": 0,
+      "signal": null,
+      "childPID": 9232
+    },
+    {
+      "label": "source-reader-771-i18n",
+      "startedAt": 1793210820124,
+      "closedAt": 1793210822133,
+      "code": 0,
+      "signal": null,
+      "childPID": 77636
+    },
+    {
+      "label": "source-reader-771-docs",
+      "startedAt": 1793211300291,
+      "closedAt": 1793211311337,
+      "code": 0,
+      "signal": null,
+      "childPID": 8224
+    }
+  ],
+  "uiAutomationRun": false,
+  "visualEvidence": "Raw screenshots manually reviewed during actual isolated development /ui interactions."
+}

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-29-source-reader-journey.md](2026-10-29-source-reader-journey.md)：Sources文字锚点修复、宽度/重开/跨会话/双语实页与只读告警。
+
 - [2026-10-29-heavy-workbench.md](2026-10-29-heavy-workbench.md)：十题重型工作基准、原始输入、独立多轮审查与工具验证。
 
 - [2026-10-29-message-reader-journey.md](2026-10-29-message-reader-journey.md)：消息PDF按需阅读、四个边界按钮焦点及归档说明实际验收。

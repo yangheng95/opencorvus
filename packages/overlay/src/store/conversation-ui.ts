@@ -20,7 +20,7 @@ type ConversationUiState = {
   storageKey: string
   expandedCards: Record<string, boolean>
   expandedDisclosures: Record<string, boolean>
-  sourceExcerptPositions: Record<string, number>
+  sourceExcerptPositions: Record<string, { top: number; anchor?: TextReadingAnchor }>
   sideChatReadingPositions: Record<string, ConversationReadingPosition>
   toolPayloadDisplays: Record<string, ToolPayloadDisplayState>
 }
@@ -214,14 +214,14 @@ export function setConversationDisclosureExpanded(id: string, value: boolean): v
 }
 
 /** Source reading intent belongs to the same retained conversation record. */
-export function sourceExcerptReadingTop(id: string): number | undefined {
+export function sourceExcerptReadingPosition(id: string): { top: number; anchor?: TextReadingAnchor } | undefined {
   return currentState()?.sourceExcerptPositions[id]
 }
 
-export function setSourceExcerptReadingTop(id: string, top: number): void {
+export function setSourceExcerptReadingPosition(id: string, position: { top: number; anchor?: TextReadingAnchor }): void {
   const current = currentState()
-  if (!id || !current || !Number.isFinite(top)) return
-  setStore("conversations", store.activeKey, "sourceExcerptPositions", reconcile(remember(current.sourceExcerptPositions, id, Math.max(0, top)), { merge: false }))
+  if (!id || !current || !Number.isFinite(position.top)) return
+  setStore("conversations", store.activeKey, "sourceExcerptPositions", reconcile(remember(current.sourceExcerptPositions, id, { ...position, top: Math.max(0, position.top) }), { merge: false }))
 }
 
 export function sideChatReadingPosition(id: string): ConversationReadingPosition | undefined {

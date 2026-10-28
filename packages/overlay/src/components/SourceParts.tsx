@@ -15,13 +15,14 @@ import { createClipboardCopy } from "./ui/clipboard-copy"
 import {
   cardExpanded,
   setCardExpanded,
-  sourceExcerptReadingTop,
-  setSourceExcerptReadingTop,
+  sourceExcerptReadingPosition,
+  setSourceExcerptReadingPosition,
 } from "../store/conversation-ui"
 import { captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { AppLog } from "../utils/log"
 import { pauseAutoScrollForReading } from "../utils/dom-utils"
 import { createAnimationFrameScheduler } from "../utils/animation-frame"
+import { captureTextReadingAnchor, resolveTextReadingTop } from "../utils/conversation-reading-anchor"
 
 export type ConversationSourcePart = {
   type: "source-url" | "source-document" | "source-file"
@@ -341,38 +342,41 @@ function SourceExcerptBody(props: { source: ConversationSourcePart }) {
   const identity = sourceIdentity(props.source)
   const readingKey = JSON.stringify([authority.revision, identity])
   let body: HTMLDivElement | undefined
-  let pendingTop = untrack(() => sourceExcerptReadingTop(readingKey))
+  const position = () => untrack(() => sourceExcerptReadingPosition(readingKey))
+  let restoring = true
+  let width = 0
   let resizeObserver: ResizeObserver | undefined
   const current = () =>
     isApiAuthorityCurrent(authority) && boardStore.selectEpoch === epoch && sourceIdentity(props.source) === identity
   const visible = () => body?.isConnected && body.clientHeight > 0 && !body.closest("[inert], [hidden]")
   const saveReadingPosition = () => {
-    if (pendingTop === undefined && current() && visible() && body) setSourceExcerptReadingTop(readingKey, body.scrollTop)
-  }
-  const finishRestore = () => {
-    pendingTop = undefined
-    resizeObserver?.disconnect()
-    resizeObserver = undefined
+    if (restoring || !current() || !visible() || !body || body.clientWidth !== width) return
+    setSourceExcerptReadingPosition(readingKey, {
+      top: body.scrollTop,
+      anchor: captureTextReadingAnchor(body, body.getBoundingClientRect(), position()?.anchor),
+    })
   }
   const restore = createAnimationFrameScheduler(() => {
-    if (!current()) {
-      finishRestore()
-      return
-    }
-    if (pendingTop === undefined || !visible() || !body) return
-    const top = pendingTop
-    finishRestore()
-    body.scrollTop = top
+    if (!current() || !visible() || !body) return
+    const saved = position()
+    body.scrollTop = saved?.anchor ? resolveTextReadingTop(body, saved.anchor) ?? saved.top : saved?.top ?? 0
+    width = body.clientWidth
+    restoring = false
     saveReadingPosition()
   })
   const cancelRestoreForReading = () => {
     restore.cancel()
-    finishRestore()
+    restoring = false
+    if (body) width = body.clientWidth
     saveReadingPosition()
   }
   onMount(() => {
-    if (pendingTop === undefined || !body) return
-    resizeObserver = new ResizeObserver(() => restore.schedule())
+    if (!body) return
+    resizeObserver = new ResizeObserver(() => {
+      if (!current() || !visible()) return
+      restoring = true
+      restore.schedule()
+    })
     resizeObserver.observe(body)
     restore.schedule()
   })

@@ -1814,6 +1814,15 @@ Its value dependency compares the actual text: replacing source metadata with
 an equivalent location during streaming retains the in-flight copy and its
 feedback. A changed text value or retired control still ends that ownership.
 
+Expanded source excerpts retain a text reading anchor and its viewport offset in
+the existing conversation-owned UI record. Resizing either sidebar or reopening
+the excerpt restores the same text through the shared reading-anchor primitive;
+pixel offsets alone do not define reading intent after line wrapping changes.
+The mounted excerpt observes its dimensions throughout reading, and explicit
+wheel, pointer or navigation-key input takes over from a pending restoration.
+Authority, selection epoch and source identity guard both saving and restoring.
+Reading positions remain transient UI state, separate from persisted sources.
+
 Interactive Artifact frames expose a shared copy/download/open strip. Downloads
 name their actual format: original attachments, Markdown, CSV, source code,
 patches, notebooks or visualization data. Editable Code and Spreadsheet exports
