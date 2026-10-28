@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [HeavyWorkBench-10](2026-10-29-heavy-workbench/README.md)：十题、200评分叶、输入/公开合同、参考计算、计划验算与审查账本；经验成熟度尚未达成。
+
 - [2026-10-29-message-reader-journey](2026-10-29-message-reader-journey/README.md)：32张实页原图、PDF下载/键盘、归档恢复及数据/原生结算。
 
 - [2026-10-29-release-0.1.34](2026-10-29-release-0.1.34/README.md)：未公开候选的双语官网日志预备截图，保留真实发布边界。

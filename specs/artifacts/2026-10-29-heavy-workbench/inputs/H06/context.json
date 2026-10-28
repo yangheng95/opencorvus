@@ -1,0 +1,177 @@
+{
+  "case": "H06",
+  "provenance": "original-fictional-2026-10-29",
+  "license": "repository-license",
+  "clock": "2026-10-29T00:00:00+08:00",
+  "scenario": "为虚构制造企业做12周、6种物料的采购库存决策。建立成本模型和可运行求解器，给出每周常规采购、加急、库存与履约计划，并在供应能力下降时制定应对。最后提交计划工作簿、管理层说明及复跑代码。任务核心是可行、可解释的业务计划；不能只算需求和成本诊断，也不能把启发式结果宣称为已证全局最优。",
+  "dictionary_and_protocol": "每SKU每周demand必须当周满足；常规当周到货量0..capacity，加急当周到货不限，整数采购量；初始库存0，周末库存可跨周，成本1 CNY/单位/周；常规到岸价unit_cost+2，加急unit_cost+12；第12周末库存必须0。SKU间不共享容量。baseline为每周先用常规、再加急且不持库存的可行成本上界。另评估第6-8周capacity下降20%向下取整的压力情景。",
+  "diagnostic_tables": [
+    {
+      "name": "demand",
+      "keys": [
+        "sku"
+      ],
+      "columns": [
+        "units"
+      ],
+      "numeric": [
+        "units"
+      ]
+    },
+    {
+      "name": "landed",
+      "keys": [
+        "sku",
+        "week"
+      ],
+      "columns": [
+        "regular",
+        "expedite"
+      ],
+      "numeric": [
+        "regular",
+        "expedite"
+      ]
+    },
+    {
+      "name": "capacity",
+      "keys": [
+        "sku",
+        "week"
+      ],
+      "columns": [
+        "expedite_needed_without_inventory"
+      ],
+      "numeric": [
+        "expedite_needed_without_inventory"
+      ]
+    },
+    {
+      "name": "baseline",
+      "keys": [
+        "id"
+      ],
+      "columns": [
+        "cost"
+      ],
+      "numeric": [
+        "cost"
+      ]
+    }
+  ],
+  "diagnostic_schema": [
+    {
+      "artifact": "diagnostics/demand.csv",
+      "keys": [
+        "sku"
+      ],
+      "columns": [
+        "units"
+      ],
+      "field_types": {
+        "sku": "canonical-string",
+        "units": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": [
+        {
+          "sku": "SKU0"
+        },
+        {
+          "sku": "SKU1"
+        },
+        {
+          "sku": "SKU2"
+        },
+        {
+          "sku": "SKU3"
+        },
+        {
+          "sku": "SKU4"
+        },
+        {
+          "sku": "SKU5"
+        }
+      ]
+    },
+    {
+      "artifact": "diagnostics/landed.csv",
+      "keys": [
+        "sku",
+        "week"
+      ],
+      "columns": [
+        "regular",
+        "expedite"
+      ],
+      "field_types": {
+        "sku": "canonical-string",
+        "week": "canonical-string",
+        "regular": "number",
+        "expedite": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": null
+    },
+    {
+      "artifact": "diagnostics/capacity.csv",
+      "keys": [
+        "sku",
+        "week"
+      ],
+      "columns": [
+        "expedite_needed_without_inventory"
+      ],
+      "field_types": {
+        "sku": "canonical-string",
+        "week": "canonical-string",
+        "expedite_needed_without_inventory": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": null
+    },
+    {
+      "artifact": "diagnostics/baseline.csv",
+      "keys": [
+        "id"
+      ],
+      "columns": [
+        "cost"
+      ],
+      "field_types": {
+        "id": "canonical-string",
+        "cost": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": [
+        {
+          "id": "just_in_time"
+        }
+      ]
+    }
+  ],
+  "plan_contract": {
+    "keys": [
+      "sku",
+      "week"
+    ],
+    "columns": [
+      "regular",
+      "expedite",
+      "closing_inventory"
+    ],
+    "regular_freight": 2,
+    "expedite_freight": 12,
+    "holding_cost": 1,
+    "stress_weeks": [
+      6,
+      8
+    ],
+    "stress_capacity_factor": 0.8,
+    "scenarios": [
+      "base",
+      "stress"
+    ],
+    "units": "采购/库存为整数单位，week规范整数键；cost单位CNY"
+  }
+}

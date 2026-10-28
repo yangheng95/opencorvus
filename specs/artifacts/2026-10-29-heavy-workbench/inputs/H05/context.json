@@ -1,0 +1,148 @@
+{
+  "case": "H05",
+  "provenance": "original-fictional-2026-10-29",
+  "license": "repository-license",
+  "clock": "2026-10-29T00:00:00+08:00",
+  "scenario": "接手虚构支付汇总服务事故：收入重复、租户对账出现偏差，旧服务把event_id当全局唯一并无持久去重。完成事实时间线、根因审计、修复、历史重放、重启/重复/跨租户验证、上线与恢复方案，以及能给业务方阅读的事故报告。输入事件会重复且乱序，不可通过丢弃某个租户或只按收到顺序修补数字。只在本题提供的隔离样例服务上工作。",
+  "dictionary_and_protocol": "唯一业务身份为(tenant,event_id)，同一身份重复载荷在本题金额相同；amount是整数最小货币单位。三租户各240个业务事件，存在103次额外传输重复，received_at不保证输入顺序。最终ledger每业务身份一行；duplicates列出attempts>1的身份；totals按tenant聚合；replay列出第一、第二次全量重放后的distinct与total。需持久化且对跨租户重复event_id保持独立。",
+  "diagnostic_tables": [
+    {
+      "name": "ledger",
+      "keys": [
+        "tenant",
+        "event_id"
+      ],
+      "columns": [
+        "amount"
+      ],
+      "numeric": [
+        "amount"
+      ]
+    },
+    {
+      "name": "duplicates",
+      "keys": [
+        "tenant",
+        "event_id"
+      ],
+      "columns": [
+        "attempts"
+      ],
+      "numeric": [
+        "attempts"
+      ]
+    },
+    {
+      "name": "totals",
+      "keys": [
+        "tenant"
+      ],
+      "columns": [
+        "total"
+      ],
+      "numeric": [
+        "total"
+      ]
+    },
+    {
+      "name": "replay",
+      "keys": [
+        "pass"
+      ],
+      "columns": [
+        "distinct",
+        "total"
+      ],
+      "numeric": [
+        "distinct",
+        "total"
+      ]
+    }
+  ],
+  "diagnostic_schema": [
+    {
+      "artifact": "diagnostics/ledger.csv",
+      "keys": [
+        "tenant",
+        "event_id"
+      ],
+      "columns": [
+        "amount"
+      ],
+      "field_types": {
+        "tenant": "canonical-string",
+        "event_id": "canonical-string",
+        "amount": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": null
+    },
+    {
+      "artifact": "diagnostics/duplicates.csv",
+      "keys": [
+        "tenant",
+        "event_id"
+      ],
+      "columns": [
+        "attempts"
+      ],
+      "field_types": {
+        "tenant": "canonical-string",
+        "event_id": "canonical-string",
+        "attempts": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": null
+    },
+    {
+      "artifact": "diagnostics/totals.csv",
+      "keys": [
+        "tenant"
+      ],
+      "columns": [
+        "total"
+      ],
+      "field_types": {
+        "tenant": "canonical-string",
+        "total": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": [
+        {
+          "tenant": "alpha"
+        },
+        {
+          "tenant": "beta"
+        },
+        {
+          "tenant": "gamma"
+        }
+      ]
+    },
+    {
+      "artifact": "diagnostics/replay.csv",
+      "keys": [
+        "pass"
+      ],
+      "columns": [
+        "distinct",
+        "total"
+      ],
+      "field_types": {
+        "pass": "canonical-string",
+        "distinct": "number",
+        "total": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": [
+        {
+          "pass": "1"
+        },
+        {
+          "pass": "2"
+        }
+      ],
+      "pass": "规范字符串1和2"
+    }
+  ]
+}

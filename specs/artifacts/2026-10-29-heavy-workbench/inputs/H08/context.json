@@ -1,0 +1,160 @@
+{
+  "case": "H08",
+  "provenance": "original-fictional-2026-10-29",
+  "license": "repository-license",
+  "clock": "2026-10-29T00:00:00+08:00",
+  "scenario": "为虚构机构安排一项数据平台和培训联合交付项目：24项工作、三种专业角色、依赖与预算约束。完成范围拆解、资源受限排程、成本与现金计划、风险情景、管理层审批材料和交付移交。不能把仅按依赖算的最早完工日当作资源可行承诺。若目标不可行，可用经验证的不可行证明和最小放宽方案完成任务。",
+  "dictionary_and_protocol": "task唯一；duration为不可拆分的连续工作日，使用从0开始的整数日期，无节假日；deps用|分隔，必须前置任务finish<=后任务start。每角色一人，每天只能执行一项对应角色任务；daily_cost为CNY/人日。基础承诺finish<=38，总成本<=90000。压力情景T07工期增加3日。诊断earliest只按依赖、不考虑资源；costs为duration*daily_cost；roles为总人日；bounds是依赖下界和总成本。",
+  "diagnostic_tables": [
+    {
+      "name": "earliest",
+      "keys": [
+        "task"
+      ],
+      "columns": [
+        "start",
+        "finish"
+      ],
+      "numeric": [
+        "start",
+        "finish"
+      ]
+    },
+    {
+      "name": "costs",
+      "keys": [
+        "task"
+      ],
+      "columns": [
+        "cost"
+      ],
+      "numeric": [
+        "cost"
+      ]
+    },
+    {
+      "name": "roles",
+      "keys": [
+        "role"
+      ],
+      "columns": [
+        "person_days"
+      ],
+      "numeric": [
+        "person_days"
+      ]
+    },
+    {
+      "name": "bounds",
+      "keys": [
+        "id"
+      ],
+      "columns": [
+        "days",
+        "cost"
+      ],
+      "numeric": [
+        "days",
+        "cost"
+      ]
+    }
+  ],
+  "diagnostic_schema": [
+    {
+      "artifact": "diagnostics/earliest.csv",
+      "keys": [
+        "task"
+      ],
+      "columns": [
+        "start",
+        "finish"
+      ],
+      "field_types": {
+        "task": "canonical-string",
+        "start": "number",
+        "finish": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": null
+    },
+    {
+      "artifact": "diagnostics/costs.csv",
+      "keys": [
+        "task"
+      ],
+      "columns": [
+        "cost"
+      ],
+      "field_types": {
+        "task": "canonical-string",
+        "cost": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": null
+    },
+    {
+      "artifact": "diagnostics/roles.csv",
+      "keys": [
+        "role"
+      ],
+      "columns": [
+        "person_days"
+      ],
+      "field_types": {
+        "role": "canonical-string",
+        "person_days": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": [
+        {
+          "role": "analyst"
+        },
+        {
+          "role": "engineer"
+        },
+        {
+          "role": "trainer"
+        }
+      ]
+    },
+    {
+      "artifact": "diagnostics/bounds.csv",
+      "keys": [
+        "id"
+      ],
+      "columns": [
+        "days",
+        "cost"
+      ],
+      "field_types": {
+        "id": "canonical-string",
+        "days": "number",
+        "cost": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": [
+        {
+          "id": "dependency_only"
+        }
+      ]
+    }
+  ],
+  "plan_contract": {
+    "keys": [
+      "task"
+    ],
+    "columns": [
+      "start",
+      "finish"
+    ],
+    "deadline": 38,
+    "budget_cny": 90000,
+    "stress_task": "T07",
+    "stress_extra_days": 3,
+    "scenarios": [
+      "base",
+      "stress"
+    ],
+    "units": "从0开始整数工作日；finish为不含该日的结束边界，角色从records取得"
+  }
+}

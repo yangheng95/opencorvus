@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-29-heavy-workbench.md](2026-10-29-heavy-workbench.md)：十题重型工作基准、原始输入、独立多轮审查与工具验证。
+
 - [2026-10-29-message-reader-journey.md](2026-10-29-message-reader-journey.md)：消息PDF按需阅读、四个边界按钮焦点及归档说明实际验收。
 
 - [2026-10-29-release-0.1.35.md](2026-10-29-release-0.1.35.md)：当前编辑合同、过期UI测试退休与35不可变源码正式交付。

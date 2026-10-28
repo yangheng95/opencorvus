@@ -1,0 +1,136 @@
+{
+  "case": "H04",
+  "provenance": "original-fictional-2026-10-29",
+  "license": "repository-license",
+  "clock": "2026-10-29T00:00:00+08:00",
+  "scenario": "为虚构订单工具完成v1到v2的数据系统迁移。必须交付真正可执行的迁移、目标SQLite数据库、API示例、迁移与恢复演练记录以及运维交接。目标是规范客户身份、金额最小单位和退款，在保留用户资料的前提下升级；不能只导出几张CSV后宣称迁移成功。提供600行旧订单CSV作为v1持久快照、原始读取器和目标合同。",
+  "dictionary_and_protocol": "id为唯一订单号；customer是客户自然键；currency为CNY/USD均有两位小数；total以十进制文本表示原币金额，负数为退款。v2 customers(customer_id INTEGER PRIMARY KEY,legacy_key TEXT UNIQUE NOT NULL)，按legacy_key升序分配1..N；orders(order_id TEXT PRIMARY KEY,customer_id INTEGER NOT NULL REFERENCES customers,currency TEXT NOT NULL,total_minor INTEGER NOT NULL)。还需schema_version版本表。四个诊断导出表按此合同生成，audit按币种分组。",
+  "diagnostic_tables": [
+    {
+      "name": "customers",
+      "keys": [
+        "customer_id"
+      ],
+      "columns": [
+        "legacy_key"
+      ],
+      "numeric": []
+    },
+    {
+      "name": "orders",
+      "keys": [
+        "order_id"
+      ],
+      "columns": [
+        "customer_id",
+        "currency",
+        "total_minor"
+      ],
+      "numeric": [
+        "customer_id",
+        "total_minor"
+      ]
+    },
+    {
+      "name": "audit",
+      "keys": [
+        "currency"
+      ],
+      "columns": [
+        "count",
+        "total_minor"
+      ],
+      "numeric": [
+        "count",
+        "total_minor"
+      ]
+    },
+    {
+      "name": "refunds",
+      "keys": [
+        "order_id"
+      ],
+      "columns": [
+        "amount_minor"
+      ],
+      "numeric": [
+        "amount_minor"
+      ]
+    }
+  ],
+  "diagnostic_schema": [
+    {
+      "artifact": "diagnostics/customers.csv",
+      "keys": [
+        "customer_id"
+      ],
+      "columns": [
+        "legacy_key"
+      ],
+      "field_types": {
+        "customer_id": "canonical-string",
+        "legacy_key": "canonical-string"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": null
+    },
+    {
+      "artifact": "diagnostics/orders.csv",
+      "keys": [
+        "order_id"
+      ],
+      "columns": [
+        "customer_id",
+        "currency",
+        "total_minor"
+      ],
+      "field_types": {
+        "order_id": "canonical-string",
+        "customer_id": "number",
+        "currency": "canonical-string",
+        "total_minor": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": null
+    },
+    {
+      "artifact": "diagnostics/audit.csv",
+      "keys": [
+        "currency"
+      ],
+      "columns": [
+        "count",
+        "total_minor"
+      ],
+      "field_types": {
+        "currency": "canonical-string",
+        "count": "number",
+        "total_minor": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": [
+        {
+          "currency": "CNY"
+        },
+        {
+          "currency": "USD"
+        }
+      ]
+    },
+    {
+      "artifact": "diagnostics/refunds.csv",
+      "keys": [
+        "order_id"
+      ],
+      "columns": [
+        "amount_minor"
+      ],
+      "field_types": {
+        "order_id": "canonical-string",
+        "amount_minor": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": null
+    }
+  ]
+}

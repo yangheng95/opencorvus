@@ -1,0 +1,209 @@
+{
+  "case": "H02",
+  "provenance": "original-fictional-2026-10-29",
+  "license": "repository-license",
+  "clock": "2026-10-29T00:00:00+08:00",
+  "scenario": "为虚构实验室复现随包原创《滚动预测比较技术说明》的全部诊断结果，建立可复跑的研究仓库，并做一项有意义的扩展。这里复现的是明确标注的原创模拟研究协议，不声称复现某篇外部已发表论文。需要从方法理解、数据边界、实现、基准实验、泄漏审计、误差分析直到研究报告交付。性能提升不是先验必须成立的结论，负结果可以获得满分。",
+  "dictionary_and_protocol": "t=0..391连续日序列，value为负载。origin取168/224/280/336；每次仅训练t<origin，预测未来28天。last重复最后值；seasonal7重复最后7天，h从0计时取train[-7+h%7]；mean28重复最近28天均值。MAE为28天绝对误差均值。leakage_probe表是明示无效的未来28天均值诊断，不可作为合法模型排名。扩展方法必须只用训练数据选择超参数。",
+  "diagnostic_tables": [
+    {
+      "name": "forecasts",
+      "keys": [
+        "origin",
+        "model",
+        "horizon"
+      ],
+      "columns": [
+        "prediction"
+      ],
+      "numeric": [
+        "prediction"
+      ]
+    },
+    {
+      "name": "metrics",
+      "keys": [
+        "origin",
+        "model"
+      ],
+      "columns": [
+        "mae"
+      ],
+      "numeric": [
+        "mae"
+      ]
+    },
+    {
+      "name": "splits",
+      "keys": [
+        "origin"
+      ],
+      "columns": [
+        "train_end",
+        "test_end"
+      ],
+      "numeric": [
+        "train_end",
+        "test_end"
+      ]
+    },
+    {
+      "name": "leakage_probe",
+      "keys": [
+        "origin"
+      ],
+      "columns": [
+        "oracle_future_mean"
+      ],
+      "numeric": [
+        "oracle_future_mean"
+      ]
+    }
+  ],
+  "diagnostic_schema": [
+    {
+      "artifact": "diagnostics/forecasts.csv",
+      "keys": [
+        "origin",
+        "model",
+        "horizon"
+      ],
+      "columns": [
+        "prediction"
+      ],
+      "field_types": {
+        "origin": "canonical-string",
+        "model": "canonical-string",
+        "horizon": "canonical-string",
+        "prediction": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": null,
+      "horizon": "1..28，对应内部h=0..27；origin/model做笛卡尔积"
+    },
+    {
+      "artifact": "diagnostics/metrics.csv",
+      "keys": [
+        "origin",
+        "model"
+      ],
+      "columns": [
+        "mae"
+      ],
+      "field_types": {
+        "origin": "canonical-string",
+        "model": "canonical-string",
+        "mae": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": [
+        {
+          "origin": "168",
+          "model": "last"
+        },
+        {
+          "origin": "168",
+          "model": "seasonal7"
+        },
+        {
+          "origin": "168",
+          "model": "mean28"
+        },
+        {
+          "origin": "224",
+          "model": "last"
+        },
+        {
+          "origin": "224",
+          "model": "seasonal7"
+        },
+        {
+          "origin": "224",
+          "model": "mean28"
+        },
+        {
+          "origin": "280",
+          "model": "last"
+        },
+        {
+          "origin": "280",
+          "model": "seasonal7"
+        },
+        {
+          "origin": "280",
+          "model": "mean28"
+        },
+        {
+          "origin": "336",
+          "model": "last"
+        },
+        {
+          "origin": "336",
+          "model": "seasonal7"
+        },
+        {
+          "origin": "336",
+          "model": "mean28"
+        }
+      ]
+    },
+    {
+      "artifact": "diagnostics/splits.csv",
+      "keys": [
+        "origin"
+      ],
+      "columns": [
+        "train_end",
+        "test_end"
+      ],
+      "field_types": {
+        "origin": "canonical-string",
+        "train_end": "number",
+        "test_end": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": [
+        {
+          "origin": "168"
+        },
+        {
+          "origin": "224"
+        },
+        {
+          "origin": "280"
+        },
+        {
+          "origin": "336"
+        }
+      ]
+    },
+    {
+      "artifact": "diagnostics/leakage_probe.csv",
+      "keys": [
+        "origin"
+      ],
+      "columns": [
+        "oracle_future_mean"
+      ],
+      "field_types": {
+        "origin": "canonical-string",
+        "oracle_future_mean": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": [
+        {
+          "origin": "168"
+        },
+        {
+          "origin": "224"
+        },
+        {
+          "origin": "280"
+        },
+        {
+          "origin": "336"
+        }
+      ]
+    }
+  ]
+}

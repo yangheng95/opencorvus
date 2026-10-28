@@ -1,0 +1,180 @@
+{
+  "case": "H03",
+  "provenance": "original-fictional-2026-10-29",
+  "license": "repository-license",
+  "clock": "2026-10-29T00:00:00+08:00",
+  "scenario": "担任虚构 Cedar Services 的经营分析负责人，将年度混合状态、混合币种凭证转成可审计经营包。完成数据口径审查、权责发生口径、现金口径、部门预算差异、驱动归因、至少三种情景及管理层建议。最终交付可重算模型、管理层报告和核对底稿；这是模拟经营案例，不构成真实投资或税务建议。",
+  "dictionary_and_protocol": "records含1080条互不重复凭证，单位原币元；fx为该笔锁定的CNY/原币汇率。posted只进入费用口径；paid只进入现金口径，二者是不同凭证事件，不互相补计；void计入审计统计。负数是退款。按每笔amount*fx按十进制ROUND_HALF_UP四舍五入到分后聚合。预算每月每部门18000 CNY。本题口径为模拟管理口径，不是法定会计准则。",
+  "diagnostic_tables": [
+    {
+      "name": "ledger",
+      "keys": [
+        "id"
+      ],
+      "columns": [
+        "month",
+        "department",
+        "amount_cny"
+      ],
+      "numeric": [
+        "amount_cny"
+      ]
+    },
+    {
+      "name": "variance",
+      "keys": [
+        "month",
+        "department"
+      ],
+      "columns": [
+        "actual",
+        "budget"
+      ],
+      "numeric": [
+        "actual",
+        "budget"
+      ]
+    },
+    {
+      "name": "cash",
+      "keys": [
+        "month"
+      ],
+      "columns": [
+        "net"
+      ],
+      "numeric": [
+        "net"
+      ]
+    },
+    {
+      "name": "status_audit",
+      "keys": [
+        "status"
+      ],
+      "columns": [
+        "count"
+      ],
+      "numeric": [
+        "count"
+      ]
+    }
+  ],
+  "diagnostic_schema": [
+    {
+      "artifact": "diagnostics/ledger.csv",
+      "keys": [
+        "id"
+      ],
+      "columns": [
+        "month",
+        "department",
+        "amount_cny"
+      ],
+      "field_types": {
+        "id": "canonical-string",
+        "month": "canonical-string",
+        "department": "canonical-string",
+        "amount_cny": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": null
+    },
+    {
+      "artifact": "diagnostics/variance.csv",
+      "keys": [
+        "month",
+        "department"
+      ],
+      "columns": [
+        "actual",
+        "budget"
+      ],
+      "field_types": {
+        "month": "canonical-string",
+        "department": "canonical-string",
+        "actual": "number",
+        "budget": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": null
+    },
+    {
+      "artifact": "diagnostics/cash.csv",
+      "keys": [
+        "month"
+      ],
+      "columns": [
+        "net"
+      ],
+      "field_types": {
+        "month": "canonical-string",
+        "net": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": [
+        {
+          "month": "2026-01"
+        },
+        {
+          "month": "2026-02"
+        },
+        {
+          "month": "2026-03"
+        },
+        {
+          "month": "2026-04"
+        },
+        {
+          "month": "2026-05"
+        },
+        {
+          "month": "2026-06"
+        },
+        {
+          "month": "2026-07"
+        },
+        {
+          "month": "2026-08"
+        },
+        {
+          "month": "2026-09"
+        },
+        {
+          "month": "2026-10"
+        },
+        {
+          "month": "2026-11"
+        },
+        {
+          "month": "2026-12"
+        }
+      ]
+    },
+    {
+      "artifact": "diagnostics/status_audit.csv",
+      "keys": [
+        "status"
+      ],
+      "columns": [
+        "count"
+      ],
+      "field_types": {
+        "status": "canonical-string",
+        "count": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": [
+        {
+          "status": "posted"
+        },
+        {
+          "status": "paid"
+        },
+        {
+          "status": "void"
+        }
+      ]
+    }
+  ]
+}

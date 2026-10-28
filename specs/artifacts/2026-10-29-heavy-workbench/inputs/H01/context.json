@@ -1,0 +1,157 @@
+{
+  "case": "H01",
+  "provenance": "original-fictional-2026-10-29",
+  "license": "repository-license",
+  "clock": "2026-10-29T00:00:00+08:00",
+  "scenario": "你受委托为虚构教育实验 Lab Cedar 完成一篇可复核的实证研究论文。问题是：学校层面分配的辅导方案对学习成绩的影响，在存在差异失访时是否仍有可辩护的证据？资料是原创模拟教育实验，24所学校、每校30名学生，学校按arm分配。不能把模拟观察说成真实受试者发现，也不能把完整病例估计称作全体意向治疗效应。请从问题界定、方法依据、输入核验、分析方案、代码和实验、图表、写作，到复现交接全部完成。论文面向方法研讨会；显著性或正向结论都不是验收目标。",
+  "dictionary_and_protocol": "id为学生身份，school为随机分配单元；arm=0对照、1辅导；eligible=1进入目标队列；post空白表示失访，pre均可观察。诊断口径：每校eligible且post可观察者的post-pre均值；学校等权；effect=处理校均值-对照校均值；se=sqrt(s1²/n1+s0²/n0)，s²为样本方差；normal区间为effect±1.96se，仅是需在论文中批判讨论的诊断。另需独立进行聚类适当推断与失访敏感性分析。",
+  "diagnostic_tables": [
+    {
+      "name": "cohort",
+      "keys": [
+        "id"
+      ],
+      "columns": [
+        "school",
+        "arm",
+        "observed"
+      ],
+      "numeric": [
+        "observed"
+      ]
+    },
+    {
+      "name": "schools",
+      "keys": [
+        "school"
+      ],
+      "columns": [
+        "arm",
+        "change"
+      ],
+      "numeric": [
+        "arm",
+        "change"
+      ]
+    },
+    {
+      "name": "estimate",
+      "keys": [
+        "id"
+      ],
+      "columns": [
+        "effect",
+        "se",
+        "low_normal",
+        "high_normal"
+      ],
+      "numeric": [
+        "effect",
+        "se",
+        "low_normal",
+        "high_normal"
+      ]
+    },
+    {
+      "name": "attrition",
+      "keys": [
+        "arm"
+      ],
+      "columns": [
+        "eligible",
+        "missing"
+      ],
+      "numeric": [
+        "eligible",
+        "missing"
+      ]
+    }
+  ],
+  "diagnostic_schema": [
+    {
+      "artifact": "diagnostics/cohort.csv",
+      "keys": [
+        "id"
+      ],
+      "columns": [
+        "school",
+        "arm",
+        "observed"
+      ],
+      "field_types": {
+        "id": "canonical-string",
+        "school": "canonical-string",
+        "arm": "canonical-string",
+        "observed": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": null
+    },
+    {
+      "artifact": "diagnostics/schools.csv",
+      "keys": [
+        "school"
+      ],
+      "columns": [
+        "arm",
+        "change"
+      ],
+      "field_types": {
+        "school": "canonical-string",
+        "arm": "number",
+        "change": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": null
+    },
+    {
+      "artifact": "diagnostics/estimate.csv",
+      "keys": [
+        "id"
+      ],
+      "columns": [
+        "effect",
+        "se",
+        "low_normal",
+        "high_normal"
+      ],
+      "field_types": {
+        "id": "canonical-string",
+        "effect": "number",
+        "se": "number",
+        "low_normal": "number",
+        "high_normal": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": [
+        {
+          "id": "complete_case"
+        }
+      ]
+    },
+    {
+      "artifact": "diagnostics/attrition.csv",
+      "keys": [
+        "arm"
+      ],
+      "columns": [
+        "eligible",
+        "missing"
+      ],
+      "field_types": {
+        "arm": "canonical-string",
+        "eligible": "number",
+        "missing": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": [
+        {
+          "arm": "0"
+        },
+        {
+          "arm": "1"
+        }
+      ]
+    }
+  ]
+}

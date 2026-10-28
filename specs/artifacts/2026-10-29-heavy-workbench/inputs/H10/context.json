@@ -1,0 +1,182 @@
+{
+  "case": "H10",
+  "provenance": "original-fictional-2026-10-29",
+  "license": "repository-license",
+  "clock": "2026-10-29T00:00:00+08:00",
+  "scenario": "为虚构园区三个站点完成储能设计及运行方案。分析30天逐时负荷和分时价，选型、容量与调度，验证能量守恒和经济性，做价格/效率压力情景，交付技术设计、决策模型和运维方案。只做模拟概念设计，不能声称经过真实工程认证、并网审批或给出无依据安全承诺。",
+  "dictionary_and_protocol": "每小时kwh数值也对应该小时平均kW；电价CNY/kWh，忽略需量费。每站候选容量0/50/100 kWh，功率上限25 kW；充放电效率各0.95，小时末SOC范围0..容量，起止SOC均为0；禁止同小时同时充放电，禁止向电网售电。电池采购1000 CNY/kWh，寿命5年，每年固定运维为投资1%，一年按此30天重复12次。贴现率8%。另做电价整体+20%及单程效率0.9压力情景。baseline无电池，peak取最大逐时负荷，stress诊断只算无电池电价+20%。",
+  "diagnostic_tables": [
+    {
+      "name": "daily",
+      "keys": [
+        "site",
+        "day"
+      ],
+      "columns": [
+        "kwh"
+      ],
+      "numeric": [
+        "kwh"
+      ]
+    },
+    {
+      "name": "baseline",
+      "keys": [
+        "site"
+      ],
+      "columns": [
+        "cost"
+      ],
+      "numeric": [
+        "cost"
+      ]
+    },
+    {
+      "name": "peak",
+      "keys": [
+        "site"
+      ],
+      "columns": [
+        "kw"
+      ],
+      "numeric": [
+        "kw"
+      ]
+    },
+    {
+      "name": "stress",
+      "keys": [
+        "site"
+      ],
+      "columns": [
+        "cost_plus20"
+      ],
+      "numeric": [
+        "cost_plus20"
+      ]
+    }
+  ],
+  "diagnostic_schema": [
+    {
+      "artifact": "diagnostics/daily.csv",
+      "keys": [
+        "site",
+        "day"
+      ],
+      "columns": [
+        "kwh"
+      ],
+      "field_types": {
+        "site": "canonical-string",
+        "day": "canonical-string",
+        "kwh": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": null
+    },
+    {
+      "artifact": "diagnostics/baseline.csv",
+      "keys": [
+        "site"
+      ],
+      "columns": [
+        "cost"
+      ],
+      "field_types": {
+        "site": "canonical-string",
+        "cost": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": [
+        {
+          "site": "A"
+        },
+        {
+          "site": "B"
+        },
+        {
+          "site": "C"
+        }
+      ]
+    },
+    {
+      "artifact": "diagnostics/peak.csv",
+      "keys": [
+        "site"
+      ],
+      "columns": [
+        "kw"
+      ],
+      "field_types": {
+        "site": "canonical-string",
+        "kw": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": [
+        {
+          "site": "A"
+        },
+        {
+          "site": "B"
+        },
+        {
+          "site": "C"
+        }
+      ]
+    },
+    {
+      "artifact": "diagnostics/stress.csv",
+      "keys": [
+        "site"
+      ],
+      "columns": [
+        "cost_plus20"
+      ],
+      "field_types": {
+        "site": "canonical-string",
+        "cost_plus20": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": [
+        {
+          "site": "A"
+        },
+        {
+          "site": "B"
+        },
+        {
+          "site": "C"
+        }
+      ]
+    }
+  ],
+  "plan_contract": {
+    "keys": [
+      "site",
+      "day",
+      "hour"
+    ],
+    "columns": [
+      "capacity_kwh",
+      "charge_kwh",
+      "discharge_kwh",
+      "soc_kwh",
+      "grid_kwh"
+    ],
+    "capacities_kwh": [
+      0,
+      50,
+      100
+    ],
+    "power_kw": 25,
+    "efficiency": 0.95,
+    "stress_efficiency": 0.9,
+    "stress_price_factor": 1.2,
+    "scenarios": [
+      "base",
+      "price",
+      "efficiency"
+    ],
+    "units": "所有能量为该小时kWh；day=1..30/hour=0..23规范整数键；每站capacity全时段固定，soc为小时末，起止为0"
+  }
+}

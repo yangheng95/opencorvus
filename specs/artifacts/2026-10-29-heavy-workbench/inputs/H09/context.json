@@ -1,0 +1,147 @@
+{
+  "case": "H09",
+  "provenance": "original-fictional-2026-10-29",
+  "license": "repository-license",
+  "clock": "2026-10-29T00:00:00+08:00",
+  "scenario": "为虚构企业学院开发一门6周数据工程训练课程。24名学员有不同经验与四领域诊断成绩。需要从需求分析、能力目标、分层路径、每周完整教学材料和练习，到可执行数据实验、前后测与评分量规、试教及修订、教师交接全部交付。不能把课程大纲或幻灯片标题当作完整课程，也不能伪造真人试教。可使用明确标注的脚本化学员试运行。",
+  "dictionary_and_protocol": "每学员每主题一条诊断，score范围0..100，>=70判定该主题mastered。前12名novice，其余experienced；主题sql/pipelines/quality/governance。scores原值与阈值结果；mastery按主题已掌握人数；cohorts按唯一学员计数；support为每学员低于70的主题数。每周3小时课堂+2小时练习，合计30小时；至少6个可运行数据实验，并覆盖四领域。",
+  "diagnostic_tables": [
+    {
+      "name": "scores",
+      "keys": [
+        "learner",
+        "topic"
+      ],
+      "columns": [
+        "score",
+        "mastered"
+      ],
+      "numeric": [
+        "score",
+        "mastered"
+      ]
+    },
+    {
+      "name": "mastery",
+      "keys": [
+        "topic"
+      ],
+      "columns": [
+        "count"
+      ],
+      "numeric": [
+        "count"
+      ]
+    },
+    {
+      "name": "cohorts",
+      "keys": [
+        "cohort"
+      ],
+      "columns": [
+        "count"
+      ],
+      "numeric": [
+        "count"
+      ]
+    },
+    {
+      "name": "support",
+      "keys": [
+        "learner"
+      ],
+      "columns": [
+        "topics_below_70"
+      ],
+      "numeric": [
+        "topics_below_70"
+      ]
+    }
+  ],
+  "diagnostic_schema": [
+    {
+      "artifact": "diagnostics/scores.csv",
+      "keys": [
+        "learner",
+        "topic"
+      ],
+      "columns": [
+        "score",
+        "mastered"
+      ],
+      "field_types": {
+        "learner": "canonical-string",
+        "topic": "canonical-string",
+        "score": "number",
+        "mastered": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": null
+    },
+    {
+      "artifact": "diagnostics/mastery.csv",
+      "keys": [
+        "topic"
+      ],
+      "columns": [
+        "count"
+      ],
+      "field_types": {
+        "topic": "canonical-string",
+        "count": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": [
+        {
+          "topic": "sql"
+        },
+        {
+          "topic": "pipelines"
+        },
+        {
+          "topic": "quality"
+        },
+        {
+          "topic": "governance"
+        }
+      ]
+    },
+    {
+      "artifact": "diagnostics/cohorts.csv",
+      "keys": [
+        "cohort"
+      ],
+      "columns": [
+        "count"
+      ],
+      "field_types": {
+        "cohort": "canonical-string",
+        "count": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": [
+        {
+          "cohort": "novice"
+        },
+        {
+          "cohort": "experienced"
+        }
+      ]
+    },
+    {
+      "artifact": "diagnostics/support.csv",
+      "keys": [
+        "learner"
+      ],
+      "columns": [
+        "topics_below_70"
+      ],
+      "field_types": {
+        "learner": "canonical-string",
+        "topics_below_70": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": null
+    }
+  ]
+}

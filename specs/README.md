@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [HeavyWorkBench-10构建与独立审查](records/2026-10/2026-10-29-heavy-workbench.md)：十项全链路重型任务、200项评分、真实诊断/计划检查及成熟度证据边界。
+
 - [历史消息附件阅读与对话返回](records/2026-10/2026-10-29-message-reader-journey.md)：紧凑PDF原名、共享阅读器边界焦点、真实归档恢复和双语说明。
 
 - [0.1.35 发布](records/2026-10/2026-10-29-release-0.1.35.md)：退休过期界面模拟验收、保留34候选历史并以新源码完整发布。

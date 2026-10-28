@@ -1,0 +1,603 @@
+{
+  "assessment": "diagnostic_reference_checker_replay_only",
+  "version": "0.1.0-dev",
+  "started_at": "2026-10-28T17:25:08.107541+00:00",
+  "ended_at": "2026-10-28T17:25:15.015916+00:00",
+  "python": "3.14.2",
+  "cases": [
+    {
+      "case": "H01",
+      "source_rows": 720,
+      "exit_code": 0,
+      "points": 20,
+      "maximum": 20,
+      "checks": [
+        {
+          "leaf": "H01-O01",
+          "reason": "records_match",
+          "checked_records": 696
+        },
+        {
+          "leaf": "H01-O02",
+          "reason": "records_match",
+          "checked_records": 24
+        },
+        {
+          "leaf": "H01-O03",
+          "reason": "records_match",
+          "checked_records": 1
+        },
+        {
+          "leaf": "H01-O04",
+          "reason": "records_match",
+          "checked_records": 2
+        }
+      ]
+    },
+    {
+      "case": "H02",
+      "source_rows": 392,
+      "exit_code": 0,
+      "points": 20,
+      "maximum": 20,
+      "checks": [
+        {
+          "leaf": "H02-O01",
+          "reason": "records_match",
+          "checked_records": 336
+        },
+        {
+          "leaf": "H02-O02",
+          "reason": "records_match",
+          "checked_records": 12
+        },
+        {
+          "leaf": "H02-O03",
+          "reason": "records_match",
+          "checked_records": 4
+        },
+        {
+          "leaf": "H02-O04",
+          "reason": "records_match",
+          "checked_records": 4
+        }
+      ]
+    },
+    {
+      "case": "H03",
+      "source_rows": 1080,
+      "exit_code": 0,
+      "points": 20,
+      "maximum": 20,
+      "checks": [
+        {
+          "leaf": "H03-O01",
+          "reason": "records_match",
+          "checked_records": 689
+        },
+        {
+          "leaf": "H03-O02",
+          "reason": "records_match",
+          "checked_records": 36
+        },
+        {
+          "leaf": "H03-O03",
+          "reason": "records_match",
+          "checked_records": 12
+        },
+        {
+          "leaf": "H03-O04",
+          "reason": "records_match",
+          "checked_records": 3
+        }
+      ]
+    },
+    {
+      "case": "H04",
+      "source_rows": 600,
+      "exit_code": 0,
+      "points": 20,
+      "maximum": 20,
+      "checks": [
+        {
+          "leaf": "H04-O01",
+          "reason": "records_match",
+          "checked_records": 71
+        },
+        {
+          "leaf": "H04-O02",
+          "reason": "records_match",
+          "checked_records": 600
+        },
+        {
+          "leaf": "H04-O03",
+          "reason": "records_match",
+          "checked_records": 2
+        },
+        {
+          "leaf": "H04-O04",
+          "reason": "records_match",
+          "checked_records": 21
+        }
+      ]
+    },
+    {
+      "case": "H05",
+      "source_rows": 823,
+      "exit_code": 0,
+      "points": 20,
+      "maximum": 20,
+      "checks": [
+        {
+          "leaf": "H05-O01",
+          "reason": "records_match",
+          "checked_records": 720
+        },
+        {
+          "leaf": "H05-O02",
+          "reason": "records_match",
+          "checked_records": 103
+        },
+        {
+          "leaf": "H05-O03",
+          "reason": "records_match",
+          "checked_records": 3
+        },
+        {
+          "leaf": "H05-O04",
+          "reason": "records_match",
+          "checked_records": 2
+        }
+      ]
+    },
+    {
+      "case": "H06",
+      "source_rows": 72,
+      "exit_code": 0,
+      "points": 20,
+      "maximum": 20,
+      "checks": [
+        {
+          "leaf": "H06-O01",
+          "reason": "records_match",
+          "checked_records": 6
+        },
+        {
+          "leaf": "H06-O02",
+          "reason": "records_match",
+          "checked_records": 72
+        },
+        {
+          "leaf": "H06-O03",
+          "reason": "records_match",
+          "checked_records": 72
+        },
+        {
+          "leaf": "H06-O04",
+          "reason": "records_match",
+          "checked_records": 1
+        }
+      ]
+    },
+    {
+      "case": "H07",
+      "source_rows": 30,
+      "exit_code": 0,
+      "points": 20,
+      "maximum": 20,
+      "checks": [
+        {
+          "leaf": "H07-O01",
+          "reason": "records_match",
+          "checked_records": 30
+        },
+        {
+          "leaf": "H07-O02",
+          "reason": "records_match",
+          "checked_records": 20
+        },
+        {
+          "leaf": "H07-O03",
+          "reason": "records_match",
+          "checked_records": 1
+        },
+        {
+          "leaf": "H07-O04",
+          "reason": "records_match",
+          "checked_records": 2
+        }
+      ]
+    },
+    {
+      "case": "H08",
+      "source_rows": 24,
+      "exit_code": 0,
+      "points": 20,
+      "maximum": 20,
+      "checks": [
+        {
+          "leaf": "H08-O01",
+          "reason": "records_match",
+          "checked_records": 24
+        },
+        {
+          "leaf": "H08-O02",
+          "reason": "records_match",
+          "checked_records": 24
+        },
+        {
+          "leaf": "H08-O03",
+          "reason": "records_match",
+          "checked_records": 3
+        },
+        {
+          "leaf": "H08-O04",
+          "reason": "records_match",
+          "checked_records": 1
+        }
+      ]
+    },
+    {
+      "case": "H09",
+      "source_rows": 96,
+      "exit_code": 0,
+      "points": 20,
+      "maximum": 20,
+      "checks": [
+        {
+          "leaf": "H09-O01",
+          "reason": "records_match",
+          "checked_records": 96
+        },
+        {
+          "leaf": "H09-O02",
+          "reason": "records_match",
+          "checked_records": 4
+        },
+        {
+          "leaf": "H09-O03",
+          "reason": "records_match",
+          "checked_records": 2
+        },
+        {
+          "leaf": "H09-O04",
+          "reason": "records_match",
+          "checked_records": 24
+        }
+      ]
+    },
+    {
+      "case": "H10",
+      "source_rows": 2160,
+      "exit_code": 0,
+      "points": 20,
+      "maximum": 20,
+      "checks": [
+        {
+          "leaf": "H10-O01",
+          "reason": "records_match",
+          "checked_records": 90
+        },
+        {
+          "leaf": "H10-O02",
+          "reason": "records_match",
+          "checked_records": 3
+        },
+        {
+          "leaf": "H10-O03",
+          "reason": "records_match",
+          "checked_records": 3
+        },
+        {
+          "leaf": "H10-O04",
+          "reason": "records_match",
+          "checked_records": 3
+        }
+      ]
+    }
+  ],
+  "incident_input_reproduction": {
+    "first": {
+      "alpha": 21234,
+      "beta": 15755,
+      "gamma": 15691
+    },
+    "same_instance": {
+      "alpha": 21234,
+      "beta": 15755,
+      "gamma": 15691
+    },
+    "after_restart": {
+      "alpha": 42468,
+      "beta": 31510,
+      "gamma": 31382
+    },
+    "expected_restart_relation": "each incorrect tenant total doubles",
+    "observed_relation": true
+  },
+  "schedule_feasibility_witness": {
+    "schedule": [
+      {
+        "task": "T00",
+        "role": "analyst",
+        "start": 0,
+        "finish": 1
+      },
+      {
+        "task": "T01",
+        "role": "engineer",
+        "start": 0,
+        "finish": 2
+      },
+      {
+        "task": "T02",
+        "role": "engineer",
+        "start": 2,
+        "finish": 5
+      },
+      {
+        "task": "T03",
+        "role": "trainer",
+        "start": 0,
+        "finish": 4
+      },
+      {
+        "task": "T04",
+        "role": "engineer",
+        "start": 5,
+        "finish": 10
+      },
+      {
+        "task": "T05",
+        "role": "analyst",
+        "start": 2,
+        "finish": 3
+      },
+      {
+        "task": "T06",
+        "role": "engineer",
+        "start": 10,
+        "finish": 12
+      },
+      {
+        "task": "T07",
+        "role": "trainer",
+        "start": 4,
+        "finish": 7
+      },
+      {
+        "task": "T08",
+        "role": "engineer",
+        "start": 12,
+        "finish": 16
+      },
+      {
+        "task": "T09",
+        "role": "engineer",
+        "start": 16,
+        "finish": 21
+      },
+      {
+        "task": "T10",
+        "role": "analyst",
+        "start": 12,
+        "finish": 13
+      },
+      {
+        "task": "T11",
+        "role": "trainer",
+        "start": 7,
+        "finish": 9
+      },
+      {
+        "task": "T12",
+        "role": "engineer",
+        "start": 21,
+        "finish": 24
+      },
+      {
+        "task": "T13",
+        "role": "analyst",
+        "start": 21,
+        "finish": 25
+      },
+      {
+        "task": "T14",
+        "role": "engineer",
+        "start": 24,
+        "finish": 29
+      },
+      {
+        "task": "T15",
+        "role": "trainer",
+        "start": 25,
+        "finish": 26
+      },
+      {
+        "task": "T16",
+        "role": "engineer",
+        "start": 29,
+        "finish": 31
+      },
+      {
+        "task": "T17",
+        "role": "engineer",
+        "start": 31,
+        "finish": 34
+      },
+      {
+        "task": "T18",
+        "role": "analyst",
+        "start": 31,
+        "finish": 35
+      },
+      {
+        "task": "T19",
+        "role": "trainer",
+        "start": 26,
+        "finish": 31
+      },
+      {
+        "task": "T20",
+        "role": "engineer",
+        "start": 34,
+        "finish": 35
+      },
+      {
+        "task": "T21",
+        "role": "analyst",
+        "start": 35,
+        "finish": 37
+      },
+      {
+        "task": "T22",
+        "role": "engineer",
+        "start": 35,
+        "finish": 38
+      },
+      {
+        "task": "T23",
+        "role": "trainer",
+        "start": 31,
+        "finish": 35
+      }
+    ],
+    "makespan": 38,
+    "constraint_violations": [],
+    "cost_cny": 67400,
+    "dependency_only_lower_bound": 26,
+    "engineer_person_day_lower_bound": 38
+  },
+  "plan_feasibility_checks": [
+    {
+      "case": "H06",
+      "scenario": "base",
+      "assessment": "plan_feasibility_only",
+      "passed": true,
+      "violations": [],
+      "metrics": {
+        "cost_cny": 123672.0,
+        "terminal_inventory": {
+          "SKU0": 0.0,
+          "SKU1": 0.0,
+          "SKU2": 0.0,
+          "SKU3": 0.0,
+          "SKU4": 0.0,
+          "SKU5": 0.0
+        }
+      },
+      "comparable": false
+    },
+    {
+      "case": "H06",
+      "scenario": "stress",
+      "assessment": "plan_feasibility_only",
+      "passed": true,
+      "violations": [],
+      "metrics": {
+        "cost_cny": 124802.0,
+        "terminal_inventory": {
+          "SKU0": 0.0,
+          "SKU1": 0.0,
+          "SKU2": 0.0,
+          "SKU3": 0.0,
+          "SKU4": 0.0,
+          "SKU5": 0.0
+        }
+      },
+      "comparable": false
+    },
+    {
+      "case": "H08",
+      "scenario": "base",
+      "assessment": "plan_feasibility_only",
+      "passed": true,
+      "violations": [],
+      "metrics": {
+        "cost_cny": 67400,
+        "makespan_days": 38.0
+      },
+      "comparable": false
+    },
+    {
+      "case": "H08",
+      "scenario": "stress",
+      "assessment": "plan_feasibility_only",
+      "passed": true,
+      "violations": [],
+      "metrics": {
+        "cost_cny": 69200,
+        "makespan_days": 38.0
+      },
+      "comparable": false
+    },
+    {
+      "case": "H10",
+      "scenario": "base",
+      "assessment": "plan_feasibility_only",
+      "passed": true,
+      "violations": [],
+      "metrics": {
+        "grid_cost_cny": {
+          "A": 18959.438079999985,
+          "B": 22956.968759999985,
+          "C": 26979.579719999998
+        },
+        "capacities_kwh": {
+          "A": 50.0,
+          "B": 0.0,
+          "C": 0.0
+        }
+      },
+      "comparable": false
+    },
+    {
+      "case": "H10",
+      "scenario": "price",
+      "assessment": "plan_feasibility_only",
+      "passed": true,
+      "violations": [],
+      "metrics": {
+        "grid_cost_cny": {
+          "A": 22751.32569599999,
+          "B": 27548.362512000025,
+          "C": 32375.495664000005
+        },
+        "capacities_kwh": {
+          "A": 50.0,
+          "B": 0.0,
+          "C": 0.0
+        }
+      },
+      "comparable": false
+    },
+    {
+      "case": "H10",
+      "scenario": "efficiency",
+      "assessment": "plan_feasibility_only",
+      "passed": true,
+      "violations": [],
+      "metrics": {
+        "grid_cost_cny": {
+          "A": 18959.465829999986,
+          "B": 22956.968759999985,
+          "C": 26979.579719999998
+        },
+        "capacities_kwh": {
+          "A": 50.0,
+          "B": 0.0,
+          "C": 0.0
+        }
+      },
+      "comparable": false
+    }
+  ],
+  "model_calls": 0,
+  "comparable": false,
+  "limits": [
+    "No model or expert full task submissions",
+    "Reference generator shares author with oracle",
+    "Independent small-vector calculations are unit tests, not judge calibration",
+    "Isolation and professional validity remain unverified"
+  ]
+}

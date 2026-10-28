@@ -1,0 +1,139 @@
+{
+  "case": "H07",
+  "provenance": "original-fictional-2026-10-29",
+  "license": "repository-license",
+  "clock": "2026-10-29T00:00:00+08:00",
+  "scenario": "为虚构公共培训基金审查成人培训干预证据，完成筛选方案、双向可追溯提取、偏倚评价、定量合成、敏感性和决策备忘录。30项研究均为明确标注的虚构教学资料，不能称作真实文献综述或据此给真实人群作政策结论。需要展示完整系统综述工作链，并解释为何证据强弱不等同于效应大小。",
+  "dictionary_and_protocol": "纳入设计为randomized且followup_weeks>=8，其他排除；全部人口字段相同。effect为统一尺度效应量，se为其标准误。诊断固定效应模型w=1/se²，pooled=sum(w*effect)/sum(w)，pooled_se=sqrt(1/sum(w))。risk是资料中给定的一阶风险标签，不替代完整偏倚讨论。须额外做异质性量化、适当的替代合成以及去除high风险的敏感性。",
+  "diagnostic_tables": [
+    {
+      "name": "screening",
+      "keys": [
+        "study"
+      ],
+      "columns": [
+        "included"
+      ],
+      "numeric": [
+        "included"
+      ]
+    },
+    {
+      "name": "effects",
+      "keys": [
+        "study"
+      ],
+      "columns": [
+        "effect",
+        "weight"
+      ],
+      "numeric": [
+        "effect",
+        "weight"
+      ]
+    },
+    {
+      "name": "pooled",
+      "keys": [
+        "id"
+      ],
+      "columns": [
+        "effect",
+        "se"
+      ],
+      "numeric": [
+        "effect",
+        "se"
+      ]
+    },
+    {
+      "name": "bias",
+      "keys": [
+        "risk"
+      ],
+      "columns": [
+        "count"
+      ],
+      "numeric": [
+        "count"
+      ]
+    }
+  ],
+  "diagnostic_schema": [
+    {
+      "artifact": "diagnostics/screening.csv",
+      "keys": [
+        "study"
+      ],
+      "columns": [
+        "included"
+      ],
+      "field_types": {
+        "study": "canonical-string",
+        "included": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": null
+    },
+    {
+      "artifact": "diagnostics/effects.csv",
+      "keys": [
+        "study"
+      ],
+      "columns": [
+        "effect",
+        "weight"
+      ],
+      "field_types": {
+        "study": "canonical-string",
+        "effect": "number",
+        "weight": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": null
+    },
+    {
+      "artifact": "diagnostics/pooled.csv",
+      "keys": [
+        "id"
+      ],
+      "columns": [
+        "effect",
+        "se"
+      ],
+      "field_types": {
+        "id": "canonical-string",
+        "effect": "number",
+        "se": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": [
+        {
+          "id": "fixed_effect"
+        }
+      ]
+    },
+    {
+      "artifact": "diagnostics/bias.csv",
+      "keys": [
+        "risk"
+      ],
+      "columns": [
+        "count"
+      ],
+      "field_types": {
+        "risk": "canonical-string",
+        "count": "number"
+      },
+      "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+      "record_keys": [
+        {
+          "risk": "low"
+        },
+        {
+          "risk": "high"
+        }
+      ]
+    }
+  ]
+}
