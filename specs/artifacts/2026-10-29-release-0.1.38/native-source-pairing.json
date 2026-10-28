@@ -1,0 +1,21 @@
+{
+  "nativeRunID": "40762229379",
+  "source": "e1a1a809879c3ad33975f88b49495b79a071b91b",
+  "intelJobID": "123078631403",
+  "intelNativeLog": [
+    "2026-10-28T20:27:02.0131580Z Cache hit for: v0-rust-build-Darwin-x64-825c9b43-356de801",
+    "2026-10-28T20:27:50.8128060Z Restored from cache key \"v0-rust-build-Darwin-x64-825c9b43-356de801\" full match: true.",
+    "2026-10-28T20:32:16.6536230Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "2026-10-28T20:39:20.5512130Z     Finished `release` profile [optimized] target(s) in 6m 38s"
+  ],
+  "pairedWebsiteRunID": "40766173216",
+  "publisherLog": [
+    "2026-10-28T20:45:56.9631787Z Website workflow: https://github.com/yangheng95/opencorvus/actions/runs/40766173216",
+    "2026-10-28T20:53:34.8752423Z Website run 40766173216 completed successfully within the release budget"
+  ],
+  "websiteResolverLog": [
+    "2026-10-28T20:47:06.0681775Z   SOURCE_SHA: e1a1a809879c3ad33975f88b49495b79a071b91b",
+    "2026-10-28T20:47:06.0682013Z   RELEASE_RUN_ID: 40762229379",
+    "2026-10-28T20:47:07.2378042Z Resolved immutable website source e1a1a809879c3ad33975f88b49495b79a071b91b"
+  ]
+}

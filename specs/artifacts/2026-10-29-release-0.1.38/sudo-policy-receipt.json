@@ -1,0 +1,15 @@
+{
+  "version": "0.1.38",
+  "source": "e1a1a809879c3ad33975f88b49495b79a071b91b",
+  "runID": "40762229379",
+  "jobID": 123076912683,
+  "checker": "bun test ./script/install-ubuntu-packages.test.ts",
+  "caseLog": "2026-10-28T20:21:56.4415432Z (pass) the real GitHub Linux sudo caller exposes the effective IPv4 APT policy [37.58ms]",
+  "totals": [
+    "2026-10-28T20:21:56.4632361Z  13 pass",
+    "2026-10-28T20:21:56.4632659Z  0 fail",
+    "2026-10-28T20:21:56.4632946Z  13 expect() calls"
+  ],
+  "contract": "Real sudo caller, real helper and temporary APT_CONFIG, real apt-config: status 0 and transport=true; case executed rather than skipped",
+  "scope": "Ubuntu CI protocol configuration; not an installer or UI acceptance substitute"
+}
