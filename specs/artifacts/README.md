@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [MCP空参数实页证据](2026-10-28-mcp-empty-arguments/README.md)：相同输入修复前后、真实命令/进程、六张原图与原数据保留。
+
 - [MCP连接管理实页证据](2026-10-28-mcp-connection-current-journey/README.md)：15张原图、真实协议连接与六个原进程/数据复核。
 
 - [同组来源复制实页证据](2026-10-28-grouped-source-current-journey/README.md)：13张原图、真实剪贴板及工具/数据/进程复核。

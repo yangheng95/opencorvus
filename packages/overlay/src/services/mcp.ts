@@ -58,6 +58,7 @@ function mcpPath(path: string, options: McpRequestOptions = {}): string {
 export function parseMcpArguments(input: string): string[] {
   const args: string[] = []
   let current = ""
+  let started = false
   let quote: "'" | '"' | "" = ""
 
   for (const char of input) {
@@ -70,21 +71,24 @@ export function parseMcpArguments(input: string): string[] {
       continue
     }
     if (char === "'" || char === '"') {
+      started = true
       quote = char
       continue
     }
     if (/\s/.test(char)) {
-      if (current) {
+      if (started) {
         args.push(current)
         current = ""
+        started = false
       }
       continue
     }
     current += char
+    started = true
   }
 
   if (quote) throw new Error("MCP arguments contain an unterminated quote")
-  if (current) args.push(current)
+  if (started) args.push(current)
   return args
 }
 

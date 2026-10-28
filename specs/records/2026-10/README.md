@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [MCP空参数保真](2026-10-28-mcp-empty-arguments.md)：词法token存在性与实际argv闭合验收。
+
 - [MCP连接管理体验](2026-10-28-mcp-connection-current-journey.md)：真实连接控制、稳定焦点及项目/effective状态归属。
 
 - [同组来源批量复制](2026-10-28-grouped-source-current-journey.md)：补齐组级位置复制，保留顺序、行列与阅读焦点。

@@ -1,0 +1,267 @@
+{
+  "at": "2026-10-28T02:32:04.074Z",
+  "input": "\"C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-28/mcp-connection-753-server/node_modules/@modelcontextprotocol/server-filesystem/dist/index.js\" \"\"",
+  "server": {
+    "at": "2026-10-28T01:26:31.136Z",
+    "run": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-28/mcp-connection-753-server",
+    "name": "@modelcontextprotocol/server-filesystem",
+    "version": "2.0.1",
+    "registry": "https://registry.npmjs.org/",
+    "repository": {
+      "url": "git+https://github.com/modelcontextprotocol/servers.git",
+      "type": "git"
+    },
+    "bin": {
+      "mcp-server-filesystem": "dist/index.js"
+    },
+    "engines": {
+      "node": ">=24"
+    }
+  },
+  "baseline": {
+    "at": "2026-10-28T02:10:58.141Z",
+    "input": "\"C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-28/mcp-connection-753-server/node_modules/@modelcontextprotocol/server-filesystem/dist/index.js\" \"\"",
+    "status": {
+      "empty-root-754": {
+        "status": "failed",
+        "error": "Local MCP startup failed (diagnostic ID: d966adbb-4a75-4cfb-b36a-718bd3ede6b9)"
+      }
+    },
+    "definition": {
+      "type": "local",
+      "command": [
+        "C:/Program Files/nodejs/node.exe",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-28/mcp-connection-753-server/node_modules/@modelcontextprotocol/server-filesystem/dist/index.js"
+      ]
+    },
+    "processes": [
+      {
+        "kind": "spawnHostCommand",
+        "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\mcp-empty-arguments-754\\project",
+        "owner": "mcp-stdio",
+        "executable": "C:/Program Files/nodejs/node.exe",
+        "args": [
+          "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-28/mcp-connection-753-server/node_modules/@modelcontextprotocol/server-filesystem/dist/index.js"
+        ],
+        "pid": 80720,
+        "startedAt": "2026-10-28T02:10:01.787Z",
+        "identity": {
+          "pid": 80720,
+          "processInstanceID": "win32:639287502017553643",
+          "occurrenceID": "153d5790-fa78-466e-94ef-3511e945f382"
+        },
+        "output": {
+          "status": "fulfilled",
+          "at": "2026-10-28T02:10:02.046Z"
+        },
+        "terminal": {
+          "status": "fulfilled",
+          "value": {
+            "exitCode": 1,
+            "signal": null
+          },
+          "at": "2026-10-28T02:10:02.047Z"
+        },
+        "settlement": {
+          "status": "fulfilled",
+          "at": "2026-10-28T02:10:02.050Z"
+        }
+      }
+    ]
+  },
+  "diagnostic": {
+    "id": "d966adbb-4a75-4cfb-b36a-718bd3ede6b9",
+    "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\mcp-empty-arguments-754\\project",
+    "error": "MCP error -32000: Connection closed",
+    "stderrExcerpt": "Server cannot operate: No allowed directories available.",
+    "interpretation": "原服务声明未收到允许目录且客户端不支持Roots；完整原始stderr仅保留私有诊断文件。"
+  },
+  "states": [
+    {
+      "at": "2026-10-28T02:19:11.719Z",
+      "input": "\"C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-28/mcp-connection-753-server/node_modules/@modelcontextprotocol/server-filesystem/dist/index.js\" \"\"",
+      "status": {
+        "empty-root-754": {
+          "status": "connected"
+        }
+      },
+      "definition": {
+        "type": "local",
+        "command": [
+          "C:/Program Files/nodejs/node.exe",
+          "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-28/mcp-connection-753-server/node_modules/@modelcontextprotocol/server-filesystem/dist/index.js",
+          ""
+        ]
+      },
+      "processes": [
+        {
+          "kind": "spawnHostCommand",
+          "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\mcp-empty-arguments-754\\project",
+          "owner": "mcp-stdio",
+          "executable": "C:/Program Files/nodejs/node.exe",
+          "args": [
+            "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-28/mcp-connection-753-server/node_modules/@modelcontextprotocol/server-filesystem/dist/index.js",
+            ""
+          ],
+          "pid": 93044,
+          "startedAt": "2026-10-28T02:18:44.015Z",
+          "identity": {
+            "pid": 93044,
+            "processInstanceID": "win32:639287507239847826",
+            "occurrenceID": "3bbea976-6e42-4a7d-b3f9-419053a97cad"
+          }
+        }
+      ]
+    },
+    {
+      "at": "2026-10-28T02:20:24.159Z",
+      "input": "\"C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-28/mcp-connection-753-server/node_modules/@modelcontextprotocol/server-filesystem/dist/index.js\" \"\"",
+      "status": {
+        "empty-root-754": {
+          "status": "disabled"
+        }
+      },
+      "definition": {
+        "type": "local",
+        "command": [
+          "C:/Program Files/nodejs/node.exe",
+          "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-28/mcp-connection-753-server/node_modules/@modelcontextprotocol/server-filesystem/dist/index.js",
+          ""
+        ]
+      },
+      "processes": [
+        {
+          "kind": "spawnHostCommand",
+          "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\mcp-empty-arguments-754\\project",
+          "owner": "mcp-stdio",
+          "executable": "C:/Program Files/nodejs/node.exe",
+          "args": [
+            "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-28/mcp-connection-753-server/node_modules/@modelcontextprotocol/server-filesystem/dist/index.js",
+            ""
+          ],
+          "pid": 93044,
+          "startedAt": "2026-10-28T02:18:44.015Z",
+          "identity": {
+            "pid": 93044,
+            "processInstanceID": "win32:639287507239847826",
+            "occurrenceID": "3bbea976-6e42-4a7d-b3f9-419053a97cad"
+          },
+          "output": {
+            "status": "fulfilled",
+            "at": "2026-10-28T02:20:13.140Z"
+          },
+          "terminal": {
+            "status": "fulfilled",
+            "value": {
+              "exitCode": 0,
+              "signal": null
+            },
+            "at": "2026-10-28T02:20:13.142Z"
+          },
+          "settlement": {
+            "status": "fulfilled",
+            "at": "2026-10-28T02:20:13.144Z"
+          }
+        }
+      ]
+    },
+    {
+      "at": "2026-10-28T02:20:59.239Z",
+      "input": "\"C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-28/mcp-connection-753-server/node_modules/@modelcontextprotocol/server-filesystem/dist/index.js\" \"\"",
+      "status": {
+        "empty-root-754": {
+          "status": "connected"
+        }
+      },
+      "definition": {
+        "type": "local",
+        "command": [
+          "C:/Program Files/nodejs/node.exe",
+          "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-28/mcp-connection-753-server/node_modules/@modelcontextprotocol/server-filesystem/dist/index.js",
+          ""
+        ]
+      },
+      "processes": [
+        {
+          "kind": "spawnHostCommand",
+          "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\mcp-empty-arguments-754\\project",
+          "owner": "mcp-stdio",
+          "executable": "C:/Program Files/nodejs/node.exe",
+          "args": [
+            "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-28/mcp-connection-753-server/node_modules/@modelcontextprotocol/server-filesystem/dist/index.js",
+            ""
+          ],
+          "pid": 93044,
+          "startedAt": "2026-10-28T02:18:44.015Z",
+          "identity": {
+            "pid": 93044,
+            "processInstanceID": "win32:639287507239847826",
+            "occurrenceID": "3bbea976-6e42-4a7d-b3f9-419053a97cad"
+          },
+          "output": {
+            "status": "fulfilled",
+            "at": "2026-10-28T02:20:13.140Z"
+          },
+          "terminal": {
+            "status": "fulfilled",
+            "value": {
+              "exitCode": 0,
+              "signal": null
+            },
+            "at": "2026-10-28T02:20:13.142Z"
+          },
+          "settlement": {
+            "status": "fulfilled",
+            "at": "2026-10-28T02:20:13.144Z"
+          }
+        },
+        {
+          "kind": "spawnHostCommand",
+          "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\mcp-empty-arguments-754\\project",
+          "owner": "mcp-stdio",
+          "executable": "C:/Program Files/nodejs/node.exe",
+          "args": [
+            "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-28/mcp-connection-753-server/node_modules/@modelcontextprotocol/server-filesystem/dist/index.js",
+            ""
+          ],
+          "pid": 73016,
+          "startedAt": "2026-10-28T02:20:35.174Z",
+          "identity": {
+            "pid": 73016,
+            "processInstanceID": "win32:639287508351421420",
+            "occurrenceID": "cd979cb1-2c79-4770-829b-b60e943713b6"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "at": "2026-10-28T02:18:44.303Z",
+      "requestID": "7a8b8464-19ff-41d2-aee9-07f5c2cb8745",
+      "method": "POST",
+      "path": "/mcp",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 446
+    },
+    {
+      "at": "2026-10-28T02:20:13.148Z",
+      "requestID": "fde78eef-cfe5-41be-a586-c07f493e9ea9",
+      "method": "POST",
+      "path": "/mcp/empty-root-754/disconnect",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 38
+    },
+    {
+      "at": "2026-10-28T02:20:35.425Z",
+      "requestID": "64fddae3-4ac5-4c64-a54d-e4650b485a61",
+      "method": "POST",
+      "path": "/mcp/empty-root-754/connect",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 316
+    }
+  ]
+}

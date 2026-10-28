@@ -1,0 +1,50 @@
+{
+  "processes": [
+    {
+      "terminal": {
+        "exitCode": 1,
+        "signal": null
+      },
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 80720,
+        "processInstanceID": "win32:639287502017553643",
+        "occurrenceID": "153d5790-fa78-466e-94ef-3511e945f382"
+      },
+      "output": "fulfilled",
+      "phase": "baseline",
+      "settlement": "fulfilled"
+    },
+    {
+      "terminal": {
+        "exitCode": 0,
+        "signal": null
+      },
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 93044,
+        "processInstanceID": "win32:639287507239847826",
+        "occurrenceID": "3bbea976-6e42-4a7d-b3f9-419053a97cad"
+      },
+      "output": "fulfilled",
+      "phase": "after",
+      "settlement": "fulfilled"
+    },
+    {
+      "terminal": {
+        "exitCode": 0,
+        "signal": null
+      },
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 73016,
+        "processInstanceID": "win32:639287508351421420",
+        "occurrenceID": "cd979cb1-2c79-4770-829b-b60e943713b6"
+      },
+      "output": "fulfilled",
+      "phase": "after",
+      "settlement": "fulfilled"
+    }
+  ],
+  "at": "2026-10-28T02:32:22.8297105Z"
+}

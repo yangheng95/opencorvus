@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [本地MCP空参数保真](records/2026-10/2026-10-28-mcp-empty-arguments.md)：修复显式空参数丢失，真实服务从启动失败恢复连接。
+
 - [MCP连接管理当前体验](records/2026-10/2026-10-28-mcp-connection-current-journey.md)：补齐逐服务连接/断开、项目归属与等待反馈，真实本地服务验收。
 
 - [同组来源批量复制](records/2026-10/2026-10-28-grouped-source-current-journey.md)：真实8项检索、组级复制与双语定位实页验收。

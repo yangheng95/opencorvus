@@ -191,6 +191,21 @@ describe("MCP overlay service", () => {
     expect(parseMcpArguments('one "two words" three')).toEqual(["one", "two words", "three"])
   })
 
+  test("preserves explicit empty arguments and adjoining quoted fragments", () => {
+    expect(parseMcpArguments(`"" middle '' ""`)).toEqual(["", "middle", "", ""])
+    expect(parseMcpArguments(`pre""fix ""suffix "  " C:\\work\\path`))
+      .toEqual(["prefix", "suffix", "  ", "C:\\work\\path"])
+    expect(buildMcpAddRequest({
+      name: "filesystem",
+      type: "local",
+      command: "node",
+      args: '"server path.js" ""',
+    })).toEqual({
+      name: "filesystem",
+      config: { type: "local", command: ["node", "server path.js", ""] },
+    })
+  })
+
   test("uses canonical project-scoped connection, auth, and removal routes", async () => {
     const requests: TransportRequest[] = []
     __setHostTransportForTest(fakeTransport((req) => requests.push(req)))

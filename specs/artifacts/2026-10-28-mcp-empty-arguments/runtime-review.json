@@ -1,0 +1,127 @@
+{
+  "at": "2026-10-28T02:34:14.979Z",
+  "qualification": "Actual local MCP argument preservation and failed-definition recovery, six raw screenshots manually reviewed",
+  "images": [
+    {
+      "name": "01-explicit-empty-argument-input-en.jpg",
+      "publication": "main-BQOHnBym.js",
+      "port": 38265,
+      "manuallyReviewed": true
+    },
+    {
+      "name": "02-real-service-fails-after-empty-argument-loss-en.jpg",
+      "publication": "main-BQOHnBym.js",
+      "port": 38265,
+      "manuallyReviewed": true
+    },
+    {
+      "name": "03-same-authored-arguments-resubmitted-en.jpg",
+      "publication": "main-B3AIDWl3.js",
+      "port": 38266,
+      "manuallyReviewed": true
+    },
+    {
+      "name": "04-same-service-connects-with-empty-argument-en.jpg",
+      "publication": "main-B3AIDWl3.js",
+      "port": 38266,
+      "manuallyReviewed": true
+    },
+    {
+      "name": "05-disconnect-settles-empty-argument-service-en.jpg",
+      "publication": "main-B3AIDWl3.js",
+      "port": 38266,
+      "manuallyReviewed": true
+    },
+    {
+      "name": "06-reconnected-saved-empty-argument-zh.jpg",
+      "publication": "main-B3AIDWl3.js",
+      "port": 38266,
+      "manuallyReviewed": true
+    }
+  ],
+  "modelRequests": 0,
+  "cumulativeRequests": 747,
+  "deadlineAt": 1793155076127,
+  "results": [
+    "Identical authored input includes explicit empty final argument",
+    "Original form drops it from persisted command and original native argv; official filesystem server fails with exit1 and no allowed directory",
+    "Changed parser preserves the same empty argument in canonical Config and actual native invocation",
+    "Same definition becomes connected after exact original input is resubmitted through the real UI",
+    "Explicit disconnect settles the first corrected process at exit0; keyboard reconnect uses the same stored empty argument",
+    "English and Chinese state, controls and one-definition count reviewed",
+    "All 98287 original rows retained exactly; schema9/integrity ok; original README/owned input retained"
+  ],
+  "processes": {
+    "before": {
+      "pid": 80720,
+      "exitCode": 1
+    },
+    "after": [
+      {
+        "pid": 93044,
+        "exitCode": 0
+      },
+      {
+        "pid": 73016,
+        "exitCode": 0
+      }
+    ],
+    "physical": "mcp-physical-reviewed.json"
+  },
+  "checks": {
+    "service": {
+      "pass": 7,
+      "expectations": 16
+    },
+    "ordinaryBuild": {
+      "entry": "main-B3AIDWl3.js",
+      "exitCode": 0
+    },
+    "docs": {
+      "operations": 351,
+      "groups": 26
+    },
+    "architecture": {
+      "documents": 20
+    }
+  },
+  "retirement": {
+    "files": [
+      "retirement.json",
+      "retirement-after.json"
+    ],
+    "modelCatalogCopiesRetired": 2,
+    "authCopied": false,
+    "finalReserveMs": 613033
+  },
+  "data": {
+    "at": "2026-10-28T02:32:02.023Z",
+    "originalRows": 98287,
+    "instances": {
+      "source": {
+        "rows": 98287,
+        "exactOriginalRows": 98287,
+        "schema": 9,
+        "integrity": "ok"
+      },
+      "baseline": {
+        "rows": 98292,
+        "exactOriginalRows": 98287,
+        "schema": 9,
+        "integrity": "ok"
+      },
+      "after": {
+        "rows": 98294,
+        "exactOriginalRows": 98287,
+        "schema": 9,
+        "integrity": "ok"
+      }
+    }
+  },
+  "limits": [
+    "Already persisted definitions that lost an argument cannot reveal the original author intent; resubmission is required, without speculative migration",
+    "No remote MCP, model-side tool call, resource-read or file-write invocation qualification",
+    "This actual Windows stdio journey qualifies one official service; unit contracts additionally cover empty single quotes, adjoining fragments and Windows backslashes",
+    "No UI automated tests, user app/database/process changes, new branch/worktree or release"
+  ]
+}

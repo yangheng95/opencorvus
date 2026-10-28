@@ -1,0 +1,66 @@
+{
+  "at": "2026-10-28T02:13:47.191Z",
+  "credentialCopyCreated": false,
+  "modelCatalogCopyRetired": true,
+  "requests": 0,
+  "cumulativeRequests": 747,
+  "source": {
+    "catalogSameBytes": true,
+    "catalogSameMetadata": true,
+    "authSameMetadata": true
+  },
+  "reserveMs": 1450069,
+  "publicShutdown": 200,
+  "physical": {
+    "observedAtUtc": "2026-10-28T02:13:47.0994354Z",
+    "native": {
+      "occurrence": "mcp-empty-arguments-754-8ff05913-ba75-4043-ad2d-cf4512849d61",
+      "outcome": "settled",
+      "host": {
+        "pid": 28524,
+        "processInstanceID": "win32:639287500764166581",
+        "occurrenceID": "d0fc3871-9a52-450c-95e4-97dc7b071d0a"
+      },
+      "target": {
+        "pid": 98904,
+        "processInstanceID": "win32:639287500771415126",
+        "occurrenceID": "c17ae196-43a0-4c64-8cac-7ab95d10d55f"
+      },
+      "observedAtUtc": "2026-10-28T02:13:46.058Z",
+      "deadlineAt": 1793155076127,
+      "terminal": {
+        "occurrenceID": "mcp-empty-arguments-754-8ff05913-ba75-4043-ad2d-cf4512849d61",
+        "pid": 98904,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 28524,
+          "processInstanceID": "win32:639287500764166581",
+          "occurrenceID": "d0fc3871-9a52-450c-95e4-97dc7b071d0a"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 98904,
+          "processInstanceID": "win32:639287500771415126",
+          "occurrenceID": "c17ae196-43a0-4c64-8cac-7ab95d10d55f"
+        }
+      }
+    ],
+    "launcher": {
+      "observedAtUtc": "2026-10-28T02:13:46.1013106Z",
+      "originalChildExit": 0
+    }
+  }
+}
