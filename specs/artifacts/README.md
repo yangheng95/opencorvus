@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-29-release-0.1.35](2026-10-29-release-0.1.35/README.md)：35官网日志预备原图，明确已公开安装包但联合发布超时的边界。
+
 - [2026-10-29-source-reader-journey](2026-10-29-source-reader-journey/README.md)：24张原图、真实来源阅读与原文件定位、逐行数据和原生结算。
 
 - [HeavyWorkBench-10](2026-10-29-heavy-workbench/README.md)：十题、200评分叶、输入/公开合同、参考计算、计划验算与审查账本；经验成熟度尚未达成。

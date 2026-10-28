@@ -88,6 +88,19 @@ describe("GitHub Actions workflow contract", () => {
     })
   })
 
+  test("keeps complete production inputs in website auxiliary jobs within the shared release budget", async () => {
+    const workflow = await readWorkflow("deploy-opencorvus-com.yml")
+    for (const id of ["deadline", "archive-determinism", "sign-and-deploy"]) {
+      const checkout = workflow.jobs?.[id]?.steps?.find(({ uses }) => uses?.startsWith("actions/checkout@"))
+      expect(checkout?.with).toEqual({
+        "persist-credentials": false,
+        ...(id === "deadline" ? {} : { ref: "${{ needs.resolve-source.outputs.source-sha }}" }),
+        "sparse-checkout": "/*\n!/specs/\n",
+        "sparse-checkout-cone-mode": false,
+      })
+    }
+  })
+
   test("qualifies website archives through the prepared isolated backend runner", async () => {
     const workflow = await readWorkflow("deploy-opencorvus-com.yml")
     expect(

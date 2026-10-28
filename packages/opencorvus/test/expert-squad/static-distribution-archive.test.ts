@@ -18,7 +18,6 @@ describe("Expert Squad static distribution archives", () => {
       const first = await ExpertSquadArchive.createFromEmbeddedSource(source)
       const second = await ExpertSquadArchive.createFromEmbeddedSource(source)
       const identity = `${first.namespace}/${first.id}`
-      expect(identities.has(identity)).toBeFalse()
       identities.add(identity)
       expect(second.bytes).toEqual(first.bytes)
       expect(second.archiveSha256).toBe(first.archiveSha256)
@@ -26,6 +25,7 @@ describe("Expert Squad static distribution archives", () => {
       expect(first.packageDigest).toMatch(/^[a-f0-9]{64}$/)
       expect(first.fileCount).toBe(Object.keys(source.files).length)
     }
+    expect(identities.size).toBe(sources.length)
   }, 60_000)
 
   test("the fixed canonical ZIP fixture has a stable byte hash", async () => {

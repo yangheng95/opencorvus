@@ -6,29 +6,51 @@
 
 ### zh-CN
 
+### en-US
+
+## 0.1.36 - 2026-10-29
+
+### zh-CN
+
 #### 调整
 
 - 历史用户消息中的 PDF 默认以原文件名折叠显示，按需展开共享阅读器及原件下载，便于同时阅读正文与回复。
+- 官网发布辅助作业仅检出完整产品代码与所需配置，省去历史规格和验收资料下载；保留三平台专家包归档校验、签名及原40分钟联合发布期限。
 
 #### 修复
 
 - PDF 翻页或缩放达到边界后保持键盘焦点，Tab 可继续导航；归档页说明与空状态统一使用“对话”，覆盖 Chat 和 Work。
 - 来源摘录在侧栏宽度变化、收起重开后保留正在阅读的文字位置，避免换行后跳过内容。
+- 修复官网 Windows 归档校验作业下载大量无关资料，挤占安装包公开后官网部署剩余时间的问题。
+
+#### 升级影响与已知限制
+
+- 延续0.1.35的功能与数据库9自动迁移，保留用户数据，无需清空数据库。macOS 仍为临时签名，未包含 Apple 公证；原生 glib 中危通告 GHSA-wrw7-89jp-8q8g 仍未解决。
 
 ### en-US
 
 #### Changed
 
 - Show PDFs in user messages as compact filename disclosures. Expand the shared reader and original download on demand while keeping the conversation readable.
+- Website release helper jobs check out all product code and required configuration while excluding historical specifications and verification evidence. Three-platform Expert Squad archive checks, signing, and the original 40-minute combined release deadline remain required.
 
 #### Fixed
 
 - Retain keyboard focus at PDF page and zoom limits, allowing Tab navigation to continue. Archive descriptions and empty states consistently refer to conversations, covering both Chat and Work.
 - Preserve the current text position in source excerpts when sidebars resize or excerpts reopen, keeping line wrapping changes from skipping content.
+- Correct the Windows website archive job's unnecessary evidence downloads, which consumed the deployment time remaining after native publication.
+
+#### Upgrade impact and known limitations
+
+- Retain the features and automatic database migration to version 9 from 0.1.35, preserving user data without a database reset. macOS remains ad hoc signed without Apple notarization. The medium-severity native glib advisory GHSA-wrw7-89jp-8q8g remains unresolved.
 
 ## 0.1.35 - 2026-10-29
 
 ### zh-CN
+
+#### 发布状态
+
+- 五平台安装包、29项独立资源和稳定更新已公开；配对官网在原40分钟期限内未完成，联合发布验收失败，保留原公开版本与运行记录。
 
 #### 新增
 
@@ -59,6 +81,10 @@
 - 源码构建需 Rust 1.90 以上，并能访问更新器固定的 Git 来源。macOS 仍为临时签名（ad hoc），未包含 Apple 公证；原生 `glib` 中危通告 GHSA-wrw7-89jp-8q8g 仍未解决。
 
 ### en-US
+
+#### Publication status
+
+- Native installers for all five platforms, 29 independent assets, and the stable update channel were published. The paired website did not complete within the original 40-minute deadline; combined release validation failed. The public version and original run records remain available.
 
 #### Added
 

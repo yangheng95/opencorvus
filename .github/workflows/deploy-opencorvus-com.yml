@@ -62,6 +62,10 @@ jobs:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
+          sparse-checkout: |
+            /*
+            !/specs/
+          sparse-checkout-cone-mode: false
       - uses: ./.github/actions/setup-bun
         with:
           install_dependencies: "false"
@@ -116,6 +120,10 @@ jobs:
         with:
           persist-credentials: false
           ref: ${{ needs.resolve-source.outputs.source-sha }}
+          sparse-checkout: |
+            /*
+            !/specs/
+          sparse-checkout-cone-mode: false
 
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
         with:
@@ -277,6 +285,10 @@ jobs:
         with:
           persist-credentials: false
           ref: ${{ needs.resolve-source.outputs.source-sha }}
+          sparse-checkout: |
+            /*
+            !/specs/
+          sparse-checkout-cone-mode: false
       - uses: ./.github/actions/setup-bun
         with:
           install_dependencies: "false"
