@@ -3988,3 +3988,14 @@ original diagnostic and show the shared localized AppDialog only while that
 owner remains current. An unconfirmed result is not presented as a committed
 or rolled-back mutation. Closing the notice returns to the explicitly captured
 current header trigger or sidebar main button through the shared Dialog owner.
+
+Project-group actions likewise return their original promises to their component.
+Its API authority, directory and action generation own busy state and visible
+failure diagnostics; the Project pin adapter does not consume mutation errors.
+Rename, anonymous naming and delete confirmation pass the shared AppDialog's
+existing presentation callbacks through their original business callbacks.
+Their return target is the visible Project main button under the existing group
+head, because the hover-only action trigger may remain connected while hidden.
+The main button stays focusable during an action while ignoring repeat clicks;
+other action buttons disable duplicate submission. A retired group or API scope
+cannot open a late failure dialog or reclaim focus in another scope.

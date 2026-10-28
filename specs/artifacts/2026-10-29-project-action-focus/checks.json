@@ -1,0 +1,49 @@
+{
+  "attempts": [
+    {
+      "label": "project-action-777-typecheck",
+      "startedAt": 1793226318829,
+      "closedAt": 1793226336091,
+      "code": 0,
+      "signal": null,
+      "childPID": 14344
+    },
+    {
+      "label": "project-action-777-build",
+      "startedAt": 1793226358238,
+      "closedAt": 1793226419690,
+      "code": 0,
+      "signal": null,
+      "childPID": 72056
+    },
+    {
+      "label": "project-action-777-i18n",
+      "startedAt": 1793226358238,
+      "closedAt": 1793226360154,
+      "code": 0,
+      "signal": null,
+      "childPID": 54888
+    },
+    {
+      "label": "project-action-777-docs",
+      "startedAt": 1793226766679,
+      "closedAt": 1793226774736,
+      "code": 0,
+      "signal": null,
+      "childPID": 93872
+    }
+  ],
+  "ui": "20 original JPEG captures rendered and manually reviewed during isolated development /ui interaction. No UI automated tests or DOM/text/pixel assertions.",
+  "verified": [
+    "Rename cancel and successful rename return to visible Project main button.",
+    "Actual Project pin/unpin and rename round trip restore original record fields.",
+    "Delete and anonymous naming confirmations were cancelled and returned to their owning main buttons.",
+    "English and Chinese actual offline pin failure preserve original details; closing returns to main button and menu can reopen.",
+    "Chinese offline rename failure retains input and original form error; Escape returns to original main button."
+  ],
+  "limits": [
+    "Successful pin/unpin remounts across sidebar sections and loses keyboard focus.",
+    "Existing Copy path notice focus, slow requests and cross-connection late completion were not fully verified.",
+    "Permanent deletion and anonymous directory migration were not executed."
+  ]
+}

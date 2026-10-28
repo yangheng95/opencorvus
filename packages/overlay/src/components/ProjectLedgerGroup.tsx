@@ -1,6 +1,8 @@
 import { DropdownMenu } from "./ui/DropdownMenu"
-import { createSignal, Show, type JSX } from "solid-js"
+import { createEffect, createSignal, onCleanup, Show, type JSX } from "solid-js"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
+import { showAppDialog, type AppDialogOpenOptions } from "../services/app-dialog"
+import { ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { t } from "../utils/i18n"
 import { projectDirectoryKey, projectDirectoryLabel, projectDisplayName } from "../utils/project-directory"
 import { workLedgerSummaryAnchorRect } from "../utils/work-ledger-summary-anchor"
@@ -8,6 +10,8 @@ import { Icon } from "./ui/Icon"
 import { Button } from "./ui/Button"
 import { Tooltip } from "./ui/Tooltip"
 import { pathRevealLabelKey } from "../services/workspace"
+
+export type ProjectActionPresentation = Pick<AppDialogOpenOptions, "openingGuard" | "returnFocusTarget">
 
 export interface ProjectLedgerGroupProps {
   directory: string
@@ -20,9 +24,9 @@ export interface ProjectLedgerGroupProps {
   onPinnedChange?: (pinned: boolean) => void | Promise<void>
   onCreateChat?: (directory: string) => void | Promise<void>
   onOpenProjectDirectory?: (directory: string) => void | Promise<void>
-  onRenameProject?: (directory: string, currentName: string) => void | Promise<void>
-  onPromoteProject?: (directory: string) => void | Promise<void>
-  onDeleteProject?: (directory: string) => void | Promise<void>
+  onRenameProject?: (directory: string, currentName: string, presentation: ProjectActionPresentation) => void | Promise<void>
+  onPromoteProject?: (directory: string, presentation: ProjectActionPresentation) => void | Promise<void>
+  onDeleteProject?: (directory: string, presentation: ProjectActionPresentation) => void | Promise<void>
   children: JSX.Element
   class?: string
   dataUi?: string
@@ -54,32 +58,58 @@ function projectLedgerGroupBodyElementID(directory: string, dataUi: string | und
   return raw.replace(/[^A-Za-z0-9_-]+/g, "-").replace(/^-+|-+$/g, "") || "project-group-body"
 }
 
-function projectActionErrorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : String(error)
-}
+export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
+  let groupHeadRef!: HTMLDivElement
+  const [busy, setBusy] = createSignal(false)
+  let actionGeneration = 0
+  createEffect(() => {
+    captureApiAuthority()
+    props.directory
+    actionGeneration += 1
+    setBusy(false)
+  })
+  onCleanup(() => {
+    actionGeneration += 1
+  })
 
-function runProjectAction(owner: string, action: () => void | Promise<void>): void {
-  try {
-    void Promise.resolve(action()).catch((error) => {
+  async function runProjectAction(
+    owner: string,
+    action: (presentation: ProjectActionPresentation) => void | Promise<void>,
+  ): Promise<void> {
+    if (busy()) return
+    const authority = captureApiAuthority()
+    const directory = props.directory
+    const generation = ++actionGeneration
+    const title = label().name
+    const ownsAction = () =>
+      generation === actionGeneration && isApiAuthorityCurrent(authority) && props.directory === directory
+    const presentation: ProjectActionPresentation = {
+      openingGuard: ownsAction,
+      returnFocusTarget: () =>
+        ownsAction() ? groupHeadRef?.querySelector<HTMLButtonElement>('[data-ui="project-group-toggle"]') ?? null : null,
+    }
+    setBusy(true)
+    try {
+      await action(presentation)
+    } catch (error) {
+      if (!ownsAction() || error instanceof ApiAuthorityChangedError || (error instanceof DOMException && error.name === "AbortError")) return
       reportError({
         id: `project-ledger:${owner}`,
         title: t("common.error"),
-        message: projectActionErrorMessage(error),
+        message: error instanceof Error ? error.message : String(error),
         details: formatErrorDetails(error),
       })
-    })
-  } catch (error) {
-    reportError({
-      id: `project-ledger:${owner}`,
-      title: t("common.error"),
-      message: projectActionErrorMessage(error),
-      details: formatErrorDetails(error),
-    })
+      await showAppDialog({
+        ...presentation,
+        title: t("work_ledger.action_failed_title"),
+        message: t("work_ledger.action_failed_message", { title }),
+        details: formatErrorDetails(error),
+        kind: "error",
+      }).catch((cause) => reportError({ title: t("common.error"), details: formatErrorDetails(cause) }))
+    } finally {
+      if (ownsAction()) setBusy(false)
+    }
   }
-}
-
-export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
-  let groupHeadRef!: HTMLDivElement
   const directoryLabel = () => projectDirectoryLabel(props.directory, t("task.project.unknown"))
   const label = () => {
     const directoryDefaults = directoryLabel()
@@ -141,6 +171,7 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
                 : t("task.project.collapse", { name: label().name })
             }
             onClick={() => {
+              if (busy()) return
               props.onToggle()
               if (props.onSelectProject) {
                 runProjectAction(`select:${props.directory}`, () => props.onSelectProject?.(props.directory))
@@ -207,6 +238,7 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
                 tone="neutral"
                 data-chrome="icon-action"
                 data-ui="project-group-more"
+                disabled={busy()}
                 title={t("project.more_actions")}
                 aria-label={t("project.more_actions")}
               >
@@ -252,8 +284,8 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
                       class="project-group-menu-item"
                       data-ui="project-group-rename"
                       onSelect={() => {
-                        runProjectAction(`rename:${props.directory}`, () =>
-                          props.onRenameProject?.(props.directory, label().name),
+                        runProjectAction(`rename:${props.directory}`, (presentation) =>
+                          props.onRenameProject?.(props.directory, label().name, presentation),
                         )
                       }}
                     >
@@ -268,7 +300,7 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
                       class="project-group-menu-item"
                       data-ui="project-group-promote-anonymous"
                       onSelect={() => {
-                        runProjectAction(`promote:${props.directory}`, () => props.onPromoteProject?.(props.directory))
+                        runProjectAction(`promote:${props.directory}`, (presentation) => props.onPromoteProject?.(props.directory, presentation))
                       }}
                     >
                       <Icon name="project-add" size="medium" />
@@ -292,7 +324,7 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
                       data-ui="project-group-delete"
                       data-project-delete={props.directory}
                       onSelect={() => {
-                        runProjectAction(`delete:${props.directory}`, () => props.onDeleteProject?.(props.directory))
+                        runProjectAction(`delete:${props.directory}`, (presentation) => props.onDeleteProject?.(props.directory, presentation))
                       }}
                     >
                       <Icon name="delete" size="medium" />
@@ -311,6 +343,7 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
               tone="neutral"
               data-chrome="icon-action"
               data-ui="project-group-new-chat"
+              disabled={busy()}
               data-project-new-chat={props.directory}
               title={t("project.new_chat_button_title")}
               aria-label={t("project.new_chat_button_title")}

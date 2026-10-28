@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-29-project-action-focus](2026-10-29-project-action-focus/README.md)：20张实页原图、项目改名往返与双语错误、焦点和持久数据结算。
+
 - [2026-10-29-ledger-action-feedback](2026-10-29-ledger-action-feedback/README.md)：真实归档恢复、静默失败与焦点诊断原图、规范数据与进程结算。
 
 - [2026-10-29-release-0.1.38](2026-10-29-release-0.1.38/README.md)：真实sudo策略验收、38双语原图及完整正式发布回读。

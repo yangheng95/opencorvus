@@ -63,6 +63,14 @@ Kobalte's default mount focus lifecycle; input and choice dialogs retain their
 existing explicit initial selection. The canonical Kobalte patch respects a
 prevented dropdown close-autofocus event instead of refocusing its old trigger.
 
+Project actions use their current API authority, directory and generation for
+that presentation ownership. Rename, anonymous naming and delete confirmation
+return to the visible main button in the existing Project group head, rather
+than its hover-only menu trigger. The main button remains focusable while the
+action completion is pending; duplicate clicks do not start another operation.
+Project pin errors reach this owner through the original mutation promise.
+Group disposal and connection/directory changes retire its presentation scope.
+
 Dialog dismissal separates pointer intent from keyboard focus movement. A
 non-modal interaction prompt stays visible when Tab moves focus outside its
 content, while retaining its original pending interaction and reply authority.

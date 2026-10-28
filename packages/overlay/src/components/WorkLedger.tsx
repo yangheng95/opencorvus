@@ -69,7 +69,7 @@ import { Button } from "./ui/Button"
 import { LedgerList } from "./LedgerList"
 import { ProgressiveList } from "./ui/ProgressiveList"
 import { LedgerRowMainButton } from "./LedgerRowMainButton"
-import { createProjectLedgerGroupCollapseState, ProjectLedgerGroup } from "./ProjectLedgerGroup"
+import { createProjectLedgerGroupCollapseState, ProjectLedgerGroup, type ProjectLedgerGroupProps } from "./ProjectLedgerGroup"
 import { useTaskRowActionsKeyboard } from "./useTaskRowActionsKeyboard"
 
 const WORK_LEDGER_PAGE_SIZE = 80
@@ -116,10 +116,10 @@ export interface WorkLedgerProps {
   onCreateGlobalChat: () => void | Promise<void>
   onCreateChat: (directory: string) => void | Promise<void>
   onOpenProjectDirectory?: (directory: string) => void | Promise<void>
-  onRenameProject: (directory: string, currentName: string) => void | Promise<void>
-  onPromoteProject: (directory: string) => void | Promise<void>
+  onRenameProject: NonNullable<ProjectLedgerGroupProps["onRenameProject"]>
+  onPromoteProject: NonNullable<ProjectLedgerGroupProps["onPromoteProject"]>
   onStartMulticaImport: (directory: string) => void | Promise<void>
-  onDeleteProject: (directory: string) => void | Promise<void>
+  onDeleteProject: NonNullable<ProjectLedgerGroupProps["onDeleteProject"]>
   onSelectProject: (directory: string) => void | Promise<void>
   onStopChat: (row: WorkLedgerChatRow) => void | Promise<void>
   onRenameChat: (row: WorkLedgerChatRow) => void | Promise<void>
@@ -1123,19 +1123,8 @@ export function WorkLedger(props: WorkLedgerProps) {
 
   async function updateProjectPinned(project: WorkLedgerProjectRow, pinned: boolean): Promise<void> {
     const authority = captureApiAuthority()
-    try {
-      await setWorkLedgerProjectPinned({ projectID: project.id, pinned, authority })
-      await reload(authority)
-    } catch (nextError) {
-      if (!isApiAuthorityCurrent(authority) || nextError instanceof ApiAuthorityChangedError) return
-      reportError({
-        id: `project:pin:${project.id}`,
-        title: t("common.error"),
-        message: nextError instanceof Error ? nextError.message : String(nextError),
-        details: formatErrorDetails(nextError),
-      })
-      await reload(authority)
-    }
+    await setWorkLedgerProjectPinned({ projectID: project.id, pinned, authority })
+    await reload(authority)
   }
 
   async function updateWorkLedgerOrganization(next: WorkLedgerOrganization): Promise<void> {

@@ -32,6 +32,7 @@ import {
   type ComposerIntent,
 } from "@opencorvus-ai/transport-protocol"
 import { WorkLedger } from "./components/WorkLedger"
+import type { ProjectActionPresentation } from "./components/ProjectLedgerGroup"
 import { replaceWorkspaceLocation, type ClientWorkspaceLocation } from "./services/workspace-location"
 import type { ApiAuthority } from "./services/api"
 import { MissionBoard } from "./components/MissionBoard"
@@ -941,11 +942,12 @@ async function selectWorkLedgerProject(directory: string): Promise<void> {
   focusComposerInput()
 }
 
-async function deleteWorkLedgerProject(directory: string): Promise<void> {
+async function deleteWorkLedgerProject(directory: string, presentation: ProjectActionPresentation): Promise<void> {
   const authority = captureApiAuthority()
   const projectDirectory = directory.trim()
   if (!projectDirectory) throw new Error(t("project.delete_missing_directory"))
   const dialog = await showAppDialog({
+    ...presentation,
     title: t("project.delete_title"),
     message: t("project.delete_confirm", { directory: projectDirectory }),
     cancel: true,
@@ -1009,11 +1011,12 @@ async function openWorkLedgerProjectDirectory(directory: string): Promise<void> 
   await openDirectory(projectDirectory)
 }
 
-async function renameWorkLedgerProject(directory: string, currentName: string): Promise<void> {
+async function renameWorkLedgerProject(directory: string, currentName: string, presentation: ProjectActionPresentation): Promise<void> {
   const authority = captureApiAuthority()
   const projectDirectory = directory.trim()
   if (!projectDirectory) throw new Error(t("project.rename_missing_directory"))
   await showAppDialog({
+    ...presentation,
     title: t("project.rename_title"),
     message: t("project.rename_message", { directory: projectDirectory }),
     input: true,
@@ -1037,11 +1040,12 @@ async function renameWorkLedgerProject(directory: string, currentName: string): 
   })
 }
 
-async function promoteWorkLedgerAnonymousProject(directory: string): Promise<void> {
+async function promoteWorkLedgerAnonymousProject(directory: string, presentation: ProjectActionPresentation): Promise<void> {
   const authority = captureApiAuthority()
   const source = directory.trim()
   if (!source) throw new Error(t("project.promote_anonymous_missing_directory"))
   const nameDialog = await showAppDialog({
+    ...presentation,
     title: t("project.promote_anonymous_title"),
     message: t("project.promote_anonymous_message"),
     input: true,
@@ -2634,29 +2638,15 @@ function OverlayRoot() {
           onRenameTask={renameWorkLedgerTask}
           onArchiveTask={archiveWorkLedgerTask}
           onCreateGlobalChat={() => openGlobalComposer(DEFAULT_COMPOSER_INTENT)}
-          onCreateChat={(directory) =>
-            runUserNavigation("work-ledger.project-new-chat", () => selectWorkLedgerProject(directory))
-          }
-          onOpenProjectDirectory={(directory) =>
-            runMainAsync("work-ledger.project-open-directory", () => openWorkLedgerProjectDirectory(directory))
-          }
-          onRenameProject={(directory, currentName) =>
-            runMainAsync("work-ledger.project-rename", () => renameWorkLedgerProject(directory, currentName))
-          }
-          onPromoteProject={(directory) =>
-            runUserNavigation("work-ledger.project-promote-anonymous", () =>
-              promoteWorkLedgerAnonymousProject(directory),
-            )
-          }
+          onCreateChat={selectWorkLedgerProject}
+          onOpenProjectDirectory={openWorkLedgerProjectDirectory}
+          onRenameProject={renameWorkLedgerProject}
+          onPromoteProject={promoteWorkLedgerAnonymousProject}
           onStartMulticaImport={(directory) =>
             runUserNavigation("work-ledger.multica-import", () => startWorkLedgerMulticaImport(directory))
           }
-          onDeleteProject={(directory) =>
-            runMainAsync("work-ledger.project-delete", () => deleteWorkLedgerProject(directory))
-          }
-          onSelectProject={(directory) =>
-            runUserNavigation("work-ledger.project-select", () => selectWorkLedgerProject(directory))
-          }
+          onDeleteProject={deleteWorkLedgerProject}
+          onSelectProject={selectWorkLedgerProject}
           onStopChat={stopWorkLedgerChat}
           onRenameChat={renameWorkLedgerChat}
           onArchiveChat={archiveWorkLedgerChat}

@@ -6,6 +6,7 @@
 
 ### zh-CN
 
+- 项目重命名、匿名项目命名与移除确认关闭后返回可见的项目入口；项目置顶等操作失败显示当前语言提示与原始详情，避免异常被上层回调吞掉。
 - 标题栏和侧栏操作失败时显示原记录名称与技术详情；修复菜单启动弹窗时的焦点争抢，以及弹窗内部焦点范围重建时过早清理返回入口的问题。
 - 项目、对话、Work、Task 与 Mission 重命名等待实际保存完成；失败后原位保留输入和技术详情，超长或空标题显示对应校验提示，保存中防止重复提交。
 - Task 名称已保存后，后续列表读取失败保留读取错误，不再将已确认的改名误报为写入失败。
@@ -14,6 +15,7 @@
 
 ### en-US
 
+- Return project rename, anonymous naming and removal confirmations to the visible project entry. Show localized project-action failures with original diagnostics instead of consuming their promises in entry wrappers.
 - Show the original record and diagnostics when header or sidebar actions fail. Fix menu-to-dialog focus conflicts and retain the return target when a dialog's internal focus scope remounts.
 - Project, Chat, Work, Task and Mission rename dialogs wait for saving, retain input and diagnostics on failure, validate empty or long titles, and prevent duplicate submission while saving.
 - Preserve an acknowledged Task rename when a later list refresh fails, retaining the original read error instead of reporting a rejected write.

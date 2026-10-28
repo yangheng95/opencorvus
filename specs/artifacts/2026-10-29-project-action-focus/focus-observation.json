@@ -1,0 +1,20 @@
+{
+  "baseline": {
+    "active": "BODY",
+    "trigger": {
+      "id": "dropdownmenu-cl-266-trigger",
+      "connected": true,
+      "rects": 1,
+      "visible": false
+    }
+  },
+  "after": {
+    "active": {
+      "id": "",
+      "label": "收起 Project journey 773",
+      "tag": "BUTTON",
+      "ui": "project-group-toggle"
+    }
+  },
+  "source": "Direct read-only DOM observations during real manual UI interaction; no automated assertions."
+}
