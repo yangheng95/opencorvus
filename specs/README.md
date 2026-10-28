@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [中文Work查找与键盘阅读](records/2026-10/2026-10-28-conversation-search-interaction.md)：真实Esc/Tab、原消息定位和双语归档文案复核。
+
 - [会话分页异步错误合同](records/2026-10/2026-10-28-conversation-page-async-contract.md)：真实公共入口的退休连接错误及共享页读取回归。
 
 - [会话历史定位与正文阅读](records/2026-10/2026-10-28-conversation-reading-journey.md)：真实旧消息、来源与跨项目阅读体验。

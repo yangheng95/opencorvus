@@ -37,6 +37,8 @@ export interface DialogProps {
   onOpenAutoFocus?: (event: Event) => void
   /** Close hook; preventDefault retains caller ownership instead of restoring the modal opener. */
   onCloseAutoFocus?: (event: Event) => void
+  /** Caller-captured return target, read at close; null retires restoration after a scope change. */
+  returnFocusTarget?: () => HTMLElement | null
   /** Close callback fired after Kobalte requests the controlled dialog to close. */
   onClose?: (dialog: HTMLElement) => void
   /** Dialog body content. */

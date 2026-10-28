@@ -23,6 +23,7 @@ export interface ComboboxControlProps<T extends object> {
   allowsEmptyCollection?: boolean
   disallowEmptySelection?: boolean
   closeOnSelection?: boolean
+  noResetInputOnBlur?: boolean
   class?: string
   controlClass?: string
   inputClass?: string
@@ -36,6 +37,7 @@ export interface ComboboxControlProps<T extends object> {
   inputRef?: (el: HTMLInputElement) => void
   ariaLabel?: string
   onInputChange?: (value: string) => void
+  onInputKeyDown?: JSX.EventHandlerUnion<HTMLInputElement, KeyboardEvent>
   renderOptionPrefix?: (option: T) => JSX.Element | undefined
   renderOptionDescription?: (option: T) => JSX.Element | undefined
   optionData?: (option: T) => ComboboxDataAttributes
@@ -153,12 +155,13 @@ export function ComboboxControl<T extends object>(props: ComboboxControlProps<T>
       allowsEmptyCollection={props.allowsEmptyCollection}
       disallowEmptySelection={props.disallowEmptySelection}
       closeOnSelection={props.closeOnSelection}
+      noResetInputOnBlur={props.noResetInputOnBlur}
       itemComponent={ComboboxControlItem}
     >
       <ComboboxContextBridge />
       <ComboboxFocus open={props.open} options={props.options} />
       <Combobox.Control class={controlClass()}>
-        <Combobox.Input id={props.inputID} ref={props.inputRef} class={inputClass()} aria-label={props.ariaLabel} />
+        <Combobox.Input id={props.inputID} ref={props.inputRef} class={inputClass()} aria-label={props.ariaLabel} onKeyDown={props.onInputKeyDown} />
       </Combobox.Control>
       <Combobox.Listbox id={props.listboxID} class={listboxClass()} />
       <ComboboxEmptyState open={props.open}>{props.emptyContent}</ComboboxEmptyState>

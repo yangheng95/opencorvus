@@ -1,0 +1,64 @@
+{
+  "checks": {
+    "typecheck": {
+      "label": "reading-763-types-final",
+      "startedAt": 1793171796768,
+      "closedAt": 1793171823698,
+      "code": 0,
+      "signal": null,
+      "childPID": 97208
+    },
+    "build": {
+      "label": "reading-763-build-final",
+      "startedAt": 1793171796768,
+      "closedAt": 1793171864383,
+      "code": 0,
+      "signal": null,
+      "childPID": 82400
+    },
+    "i18n": {
+      "label": "reading-763-i18n",
+      "startedAt": 1793171235490,
+      "closedAt": 1793171238519,
+      "code": 0,
+      "signal": null,
+      "childPID": 88088
+    },
+    "docs": {
+      "label": "reading-763-docs-final",
+      "startedAt": 1793172562065,
+      "closedAt": 1793172572118,
+      "code": 0,
+      "signal": null,
+      "childPID": 73420
+    }
+  },
+  "uiAutomation": "None added or run; UI-only edits",
+  "visual": "22 unedited raw screenshots manually reviewed; see README for phase-specific success and failed interaction attempts",
+  "previousNonUIContracts": "762: 20 tests/42 assertions; not rerun or claimed as UI verification",
+  "installedUITestRetirement": {
+    "at": "2026-10-28T07:07:14.661Z",
+    "local": "packages/overlay/node_modules/@kobalte/core/src/combobox/combobox.test.tsx",
+    "resolved": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\@kobalte+core@0.13.11+ee58d66d663bac7b\\node_modules\\@kobalte\\core\\src\\combobox\\combobox.test.tsx",
+    "bytes": 90833,
+    "action": "Removed the inspected installed dependency UI test; never executed; runtime package sources and lock unchanged"
+  },
+  "initialChecks": {
+    "types": {
+      "label": "reading-763-types",
+      "startedAt": 1793171235474,
+      "closedAt": 1793171264159,
+      "code": 0,
+      "signal": null,
+      "childPID": 70176
+    },
+    "build": {
+      "label": "reading-763-build",
+      "startedAt": 1793171235490,
+      "closedAt": 1793171303438,
+      "code": 0,
+      "signal": null,
+      "childPID": 87968
+    }
+  }
+}

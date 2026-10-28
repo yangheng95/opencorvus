@@ -21,6 +21,7 @@ export function ConversationSearchDialog(props: {
   open: boolean
   target: () => { sessionID: string; directory: string } | null
   onClose: () => void
+  returnFocusTarget: () => HTMLElement | null
 }) {
   const [snapshot, setSnapshot] = createSignal<ReturnType<typeof readConversationSnapshot>>()
   const [query, setQuery] = createSignal("")
@@ -109,12 +110,20 @@ export function ConversationSearchDialog(props: {
 
   return <Dialog open={props.open} title={t("chat.search_action")} class="cmdk-dialog conversation-search-dialog"
     overlayClass="cmdk-backdrop" formClass="cmdk-panel" onClose={props.onClose}
+    returnFocusTarget={props.returnFocusTarget}
     onOpenAutoFocus={(event) => { event.preventDefault(); input?.focus() }}>
     <ComboboxControl<ConversationSearchHit> class="cmdk-combobox" controlClass="cmdk-control" inputClass="cmdk-input"
       listboxClass="cmdk-list" optionClass="cmdk-item" optionLabelClass="cmdk-item-label"
       inputID="conversationSearchInput" listboxID="conversationSearchListbox" inputRef={(element) => { input = element }}
       options={hits()} optionValue="id" optionTextValue="preview" optionLabel="preview" value={null}
       open={props.open} onInputChange={setQuery} defaultFilter={() => true} allowsEmptyCollection closeOnSelection={false}
+      noResetInputOnBlur
+      onInputKeyDown={(event) => {
+        if (event.key !== "Escape" || event.isComposing) return
+        event.preventDefault()
+        event.stopPropagation()
+        props.onClose()
+      }}
       onChange={(hit) => void locate(hit)} ariaLabel={t("chat.search_placeholder")} placeholder={t("chat.search_placeholder")}
       renderOptionLabel={(hit) => <span class="conversation-search-hit">
         <span class="conversation-search-hit__meta"><strong>{hit.author}</strong><time>{date().format(hit.created)}</time></span>
@@ -127,7 +136,9 @@ export function ConversationSearchDialog(props: {
       <div role="status" aria-live="polite">{loading() ? t("common.loading") : locating() ? t("chat.search_locating") :
         query().trim() ? t(hits().length === 1 ? "chat.search_result" : "chat.search_results", { count: hits().length.toLocaleString(getLocale()) }) :
           t("chat.search_ready", { count: (snapshot()?.messages.length ?? 0).toLocaleString(getLocale()) })}</div>
-      <Button type="button" variant="ghost" size="sm" tone="neutral" disabled={loading() || !!locating()} onClick={() => void load()}>{t("common.refresh")}</Button>
+      <Button type="button" variant="ghost" size="sm" tone="neutral" aria-disabled={loading() || !!locating()} onClick={() => {
+        if (!loading() && !locating()) void load()
+      }}>{t("common.refresh")}</Button>
       <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={props.onClose}>{t("common.close")}</Button>
     </div>
     <Show when={error()}><Feedback tone="error">{error()}</Feedback></Show>

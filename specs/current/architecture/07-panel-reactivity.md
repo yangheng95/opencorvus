@@ -9,6 +9,13 @@ same-source/authority older-page read, then uses the existing expansion and
 virtualized scroll mechanism. Dialog lifetime, selection epoch, authority and
 Session/directory ownership retire stale reads and navigation. The conversation
 shortcut respects other dialogs and editor-handled keyboard events.
+The search input owns Escape to close its dialog. Its inline result list
+preserves the query when Tab moves focus to Refresh or Close; other combobox
+consumers retain their existing keyboard and selection behavior.
+Callers that open search before a popup focus transition capture the return
+target at the actual trigger. Dialog reads that target at close, with null
+retiring restoration on a source change, and retains its existing focus safety
+checks. Refresh remains focusable while its busy state disables the action.
 
 Chat and Work conversation downloads offer Markdown and JSON from the same
 complete project-scoped Session export snapshot. One formatter validates that

@@ -67,6 +67,7 @@ export function Dialog(rawProps: DialogProps) {
     "onClose",
     "onOpenAutoFocus",
     "onCloseAutoFocus",
+    "returnFocusTarget",
     "children",
   ])
 
@@ -189,7 +190,7 @@ export function Dialog(rawProps: DialogProps) {
   }
 
   function handleOpenAutoFocus(event: Event) {
-    const active = document.activeElement
+    const active = local.returnFocusTarget ? undefined : document.activeElement
     focusReturnTarget =
       local.modal && active instanceof HTMLElement && active !== document.body && !dialogRef?.contains(active)
         ? active
@@ -198,7 +199,7 @@ export function Dialog(rawProps: DialogProps) {
   }
 
   function handleCloseAutoFocus(event: Event) {
-    const target = focusReturnTarget
+    const target = local.returnFocusTarget ? local.returnFocusTarget() : focusReturnTarget
     focusReturnTarget = undefined
     local.onCloseAutoFocus?.(event)
     if (event.defaultPrevented || local.open || !local.modal || !target?.isConnected) return

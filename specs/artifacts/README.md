@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [会话查找键盘实页证据](2026-10-28-conversation-search-interaction/README.md)：中文Work、英文Chat、原失败与改后原图。
+
 - [会话分页异步合同证据](2026-10-28-conversation-page-async-contract/README.md)：实际生产service先红后绿及原检查器输出。
 
 - [会话阅读实页证据](2026-10-28-conversation-reading-journey/README.md)：实际截图、原会话与运行结算。

@@ -74,6 +74,8 @@ function ChatViewTitle(props: {
   const usageText = createMemo(() => formatUsageStrip(cardTreeStore.usageAggregate))
   const [exporting, setExporting] = createSignal(false)
   const [searchOpen, setSearchOpen] = createSignal(false)
+  let searchReturnFocus: HTMLElement | null = null
+  let searchMenuTrigger: HTMLElement | undefined
   const [actionFeedback, setActionFeedback] = createSignal<
     { kind: "copied" | "exported" } | { kind: "failed"; message?: string } | null
   >(null)
@@ -107,6 +109,7 @@ function ChatViewTitle(props: {
       exportController = undefined
       setExporting(false)
       setSearchOpen(false)
+      searchReturnFocus = null
       setActionFeedback(null)
       if (actionFeedbackTimer !== undefined) window.clearTimeout(actionFeedbackTimer)
       actionFeedbackTimer = undefined
@@ -125,9 +128,14 @@ function ChatViewTitle(props: {
       if (event.defaultPrevented) return
       event.preventDefault()
       if (searchOpen()) document.getElementById("conversationSearchInput")?.focus()
-      else setSearchOpen(true)
+      else openConversationSearch()
     },
   })
+
+  function openConversationSearch(target?: HTMLElement): void {
+    searchReturnFocus = target ?? (document.activeElement instanceof HTMLElement ? document.activeElement : null)
+    setSearchOpen(true)
+  }
 
   async function copyDebugInfo(): Promise<void> {
     if (actionFeedbackTimer !== undefined) window.clearTimeout(actionFeedbackTimer)
@@ -233,6 +241,7 @@ function ChatViewTitle(props: {
               tone="neutral"
               data-chrome="icon-action"
               data-ui="chat-title-more"
+              ref={(element) => { searchMenuTrigger = element }}
               title={t("work_ledger.action.more")}
               aria-label={t("work_ledger.action.more")}
             >
@@ -241,7 +250,7 @@ function ChatViewTitle(props: {
             <DropdownMenu.Portal>
               <DropdownMenu.Content class="chat-title-menu" data-ui="chat-title-menu">
                 <Show when={item().kind === "chat"}>
-                  <DropdownMenu.Item as="button" type="button" data-ui="chat-title-find" onSelect={() => setSearchOpen(true)}>
+                  <DropdownMenu.Item as="button" type="button" data-ui="chat-title-find" onSelect={() => openConversationSearch(searchMenuTrigger)}>
                     <Icon name="search" size="medium" />
                     <span>{t("chat.search_action")}</span>
                   </DropdownMenu.Item>
@@ -302,7 +311,7 @@ function ChatViewTitle(props: {
           </DropdownMenu.Root>
         )}
       </Show>
-      <ConversationSearchDialog open={searchOpen()} onClose={() => setSearchOpen(false)} target={() => {
+      <ConversationSearchDialog open={searchOpen()} onClose={() => setSearchOpen(false)} returnFocusTarget={() => searchReturnFocus} target={() => {
         const row = props.item()
         return row?.kind === "chat" ? { sessionID: row.sessionID, directory: row.directory } : null
       }} />

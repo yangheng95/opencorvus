@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [中文Work查找与键盘阅读](2026-10-28-conversation-search-interaction.md)：查找关闭、焦点/查询保留与共享归档文案。
+
 - [会话分页异步错误合同](2026-10-28-conversation-page-async-contract.md)：Task/Mission/Session退休连接的明确Promise错误合同。
 
 - [会话历史定位与正文阅读](2026-10-28-conversation-reading-journey.md)：当前实页与完整消息定位调查。
