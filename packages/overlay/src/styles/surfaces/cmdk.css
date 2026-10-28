@@ -6,6 +6,33 @@
    Component: src/components/CommandPalette.tsx.
    ───────────────────────────────────────────────────────────── */
 
+.conversation-search-hit {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-gap-xs);
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.55;
+}
+
+.conversation-search-hit__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ui-gap-md);
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+}
+
+.conversation-search-footer {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-gap-sm);
+}
+
+.conversation-search-footer > [role="status"] {
+  flex: 1;
+}
+
 .cmdk-backdrop {
   position: fixed;
   inset: 0;

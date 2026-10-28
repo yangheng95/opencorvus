@@ -1,5 +1,15 @@
 # 07-panel-reactivity — Overlay Reactive Projection
 
+Chat and Work find-in-conversation reads the same complete project-scoped
+Session snapshot as downloads and shares its identity/structure validator.
+Search matches original message text and structured error reasons, in producer
+order, independently of mounted cards. Refresh obtains a current snapshot.
+Navigation resolves the actual writer-owned message/card target, joins any
+same-source/authority older-page read, then uses the existing expansion and
+virtualized scroll mechanism. Dialog lifetime, selection epoch, authority and
+Session/directory ownership retire stale reads and navigation. The conversation
+shortcut respects other dialogs and editor-handled keyboard events.
+
 Chat and Work conversation downloads offer Markdown and JSON from the same
 complete project-scoped Session export snapshot. One formatter validates that
 snapshot's Session and message identities and retains producer message/Part

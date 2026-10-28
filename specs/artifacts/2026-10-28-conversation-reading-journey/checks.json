@@ -1,0 +1,55 @@
+{
+  "checks": {
+    "unit": {
+      "label": "reading-761-unit-final",
+      "startedAt": 1793168517787,
+      "closedAt": 1793168522118,
+      "code": 0,
+      "signal": null,
+      "childPID": 72956
+    },
+    "typecheck": {
+      "label": "reading-761-types-final",
+      "startedAt": 1793168566367,
+      "closedAt": 1793168599678,
+      "code": 0,
+      "signal": null,
+      "childPID": 74464
+    },
+    "build": {
+      "label": "reading-761-build-final",
+      "startedAt": 1793168839355,
+      "closedAt": 1793168899228,
+      "code": 0,
+      "signal": null,
+      "childPID": 78552
+    },
+    "i18n": {
+      "label": "reading-761-i18n-final",
+      "startedAt": 1793169400243,
+      "closedAt": 1793169401940,
+      "code": 0,
+      "signal": null,
+      "childPID": 98064
+    },
+    "docs": {
+      "label": "reading-761-docs-final",
+      "startedAt": 1793169403050,
+      "closedAt": 1793169411210,
+      "code": 0,
+      "signal": null,
+      "childPID": 95156
+    }
+  },
+  "contracts": "15 positive non-UI tests, 28 assertions",
+  "uiAutomation": "None added or run",
+  "visual": "Eight raw JPEG screenshots manually reviewed; final English Chat with 8 original messages; see README for unfinished real-page coverage",
+  "initialTypecheck": {
+    "label": "reading-761-types",
+    "startedAt": 1793168437825,
+    "closedAt": 1793168459560,
+    "code": 2,
+    "signal": null,
+    "childPID": 60232
+  }
+}

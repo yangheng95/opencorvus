@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [会话历史定位与正文阅读](records/2026-10/2026-10-28-conversation-reading-journey.md)：真实旧消息、来源与跨项目阅读体验。
+
 - [当前Dependabot告警与父依赖](records/2026-10/2026-10-28-dependabot-current-alerts.md)：授权只读清单、当前锁与历史取证区分及兼容修复调查。
 
 - [对话Markdown交接](records/2026-10/2026-10-28-conversation-markdown-export.md)：同一完整会话快照的可读导出与实际文件验收。

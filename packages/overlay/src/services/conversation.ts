@@ -44,6 +44,7 @@ import { isSubagentActivityRecord } from "../utils/subagent-presentation"
 import { conversationEventOwner } from "./event-policy"
 import { conversationHistoryPath } from "./conversation-history-path"
 import { captureMainReadingPosition } from "../store/conversation-ui"
+import { ConversationHistoryPageReader } from "./conversation-history-page-reader"
 import { preparePermissionInteractions } from "../utils/permission-interaction"
 import { prepareQuestionInteractions } from "../utils/question-interaction"
 import { publishSubagentConversationUpdate } from "./subagent-conversation"
@@ -66,6 +67,7 @@ type HistoryState = {
 
 const INITIAL_CONVERSATION_TAIL_LIMIT = 80
 const CONVERSATION_HISTORY_PAGE_LIMIT = 160
+const historyPageReader = new ConversationHistoryPageReader()
 
 let replayEpoch = 0
 let replayAbort: AbortController | null = null
@@ -923,7 +925,18 @@ export function conversationCardContainsMessage(cardID: string, messageID: strin
   return visit(targetCardID)
 }
 
-export async function loadOlderConversationHistory(
+export function loadOlderConversationHistory(
+  source: BoardSource | null = boardStore.selectedSource,
+  authority = captureApiAuthority(),
+): Promise<boolean> {
+  assertApiAuthorityCurrent(authority)
+  if (!source) return Promise.resolve(false)
+  const ownedSource = { ...source } as BoardSource
+  const scope = `${sourceKey(ownedSource)}:${authority.revision}:${conversationSourceDirectory(ownedSource)}`
+  return historyPageReader.read(scope, () => loadOlderConversationHistoryPage(ownedSource, authority))
+}
+
+async function loadOlderConversationHistoryPage(
   source: BoardSource | null = boardStore.selectedSource,
   authority = captureApiAuthority(),
 ): Promise<boolean> {

@@ -35,6 +35,8 @@ import { DropdownMenu } from "./ui/DropdownMenu"
 import { Tooltip } from "./ui/Tooltip"
 import { getLocale, t } from "../utils/i18n"
 import { conversationExport, type ConversationExportFormat } from "../services/conversation-export"
+import { ConversationSearchDialog } from "./ConversationSearchDialog"
+import { useHotkey } from "../solid/hotkey"
 import { debugCopyFailureMessage } from "../utils/debug-info"
 import { conversationExperienceIcon } from "../services/conversation-experience"
 import { formatUsageStrip } from "../utils/format-usage"
@@ -71,6 +73,7 @@ function ChatViewTitle(props: {
 }) {
   const usageText = createMemo(() => formatUsageStrip(cardTreeStore.usageAggregate))
   const [exporting, setExporting] = createSignal(false)
+  const [searchOpen, setSearchOpen] = createSignal(false)
   const [actionFeedback, setActionFeedback] = createSignal<
     { kind: "copied" | "exported" } | { kind: "failed"; message?: string } | null
   >(null)
@@ -103,6 +106,7 @@ function ChatViewTitle(props: {
       exportController?.abort()
       exportController = undefined
       setExporting(false)
+      setSearchOpen(false)
       setActionFeedback(null)
       if (actionFeedbackTimer !== undefined) window.clearTimeout(actionFeedbackTimer)
       actionFeedbackTimer = undefined
@@ -112,6 +116,17 @@ function ChatViewTitle(props: {
   onCleanup(() => {
     exportController?.abort()
     if (actionFeedbackTimer !== undefined) window.clearTimeout(actionFeedbackTimer)
+  })
+
+  useHotkey({
+    key: "f", cmdOrCtrl: true, alt: false, shift: false, target: "window",
+    when: () => props.item()?.kind === "chat" && (searchOpen() || !document.querySelector(".dialog")),
+    run: (event) => {
+      if (event.defaultPrevented) return
+      event.preventDefault()
+      if (searchOpen()) document.getElementById("conversationSearchInput")?.focus()
+      else setSearchOpen(true)
+    },
   })
 
   async function copyDebugInfo(): Promise<void> {
@@ -226,6 +241,10 @@ function ChatViewTitle(props: {
             <DropdownMenu.Portal>
               <DropdownMenu.Content class="chat-title-menu" data-ui="chat-title-menu">
                 <Show when={item().kind === "chat"}>
+                  <DropdownMenu.Item as="button" type="button" data-ui="chat-title-find" onSelect={() => setSearchOpen(true)}>
+                    <Icon name="search" size="medium" />
+                    <span>{t("chat.search_action")}</span>
+                  </DropdownMenu.Item>
                   <For each={["markdown", "json"] as const}>
                     {(format) => (
                       <DropdownMenu.Item
@@ -283,6 +302,10 @@ function ChatViewTitle(props: {
           </DropdownMenu.Root>
         )}
       </Show>
+      <ConversationSearchDialog open={searchOpen()} onClose={() => setSearchOpen(false)} target={() => {
+        const row = props.item()
+        return row?.kind === "chat" ? { sessionID: row.sessionID, directory: row.directory } : null
+      }} />
     </div>
   )
 }
