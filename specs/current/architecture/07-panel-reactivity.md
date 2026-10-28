@@ -45,11 +45,23 @@ use the existing full narrative column. Transport role, message identity, Parts,
 ordering, expansion and the shared text renderer remain unchanged.
 
 Modal Dialogs capture their actual external opener before the open autofocus
-hook. On close, caller autofocus hooks run first and may prevent the default.
+hook. A menu's labelled controller is its surviving opener when that controller
+explicitly controls the menu; nested menus follow the same ARIA relationships.
+FocusScope cleanup while the controlled Dialog remains open preserves that
+opener and cancels close autofocus. Only actual closure retires the capture.
+On close, caller autofocus hooks run first and may prevent the default.
 Otherwise an available, visible, enabled opener receives focus only while BODY
 or the retiring Dialog still owns it. A reopened dialog or a new focus owner is
 respected. Non-modal prompts retain their existing close focus behavior; missing
 or detached openers do not cause a search for another target or delayed retries.
+
+Asynchronous menu actions supply their current UI owner's explicit return target
+through AppDialog's presentation options. That callback checks the same record,
+selection and connection lifetime, and returns null when retired. It is not
+persisted or used to choose a business operation. Non-input AppDialogs retain
+Kobalte's default mount focus lifecycle; input and choice dialogs retain their
+existing explicit initial selection. The canonical Kobalte patch respects a
+prevented dropdown close-autofocus event instead of refocusing its old trigger.
 
 Dialog dismissal separates pointer intent from keyboard focus movement. A
 non-modal interaction prompt stays visible when Tab moves focus outside its

@@ -431,3 +431,42 @@ index dc2d6c5fb..1eb0ca5b7 100644
  				hideTooltip(true);
  			}
  		};
+diff --git a/dist/chunk/V6FPT6B6.jsx b/dist/chunk/V6FPT6B6.jsx
+index b14503f11af619c445f9ea78c5f0adf77a98f8aa..d465e35248daea62752ed02addad22f720cd4642 100644
+--- a/dist/chunk/V6FPT6B6.jsx
++++ b/dist/chunk/V6FPT6B6.jsx
+@@ -67,7 +67,7 @@ function DropdownMenuContent(props) {
+   let hasInteractedOutside = false;
+   const onCloseAutoFocus = (e) => {
+     local.onCloseAutoFocus?.(e);
+-    if (!hasInteractedOutside) {
++    if (!e.defaultPrevented && !hasInteractedOutside) {
+       focusWithoutScrolling(context.triggerRef());
+     }
+     hasInteractedOutside = false;
+diff --git a/dist/chunk/YJ7Q7MW3.js b/dist/chunk/YJ7Q7MW3.js
+index 6f0ab4fdb832e7279910408648630688e4a05a67..1b6d3b05304f0c62d360d91c66487f81db70965f 100644
+--- a/dist/chunk/YJ7Q7MW3.js
++++ b/dist/chunk/YJ7Q7MW3.js
+@@ -37,7 +37,7 @@ function DropdownMenuContent(props) {
+   let hasInteractedOutside = false;
+   const onCloseAutoFocus = (e) => {
+     local.onCloseAutoFocus?.(e);
+-    if (!hasInteractedOutside) {
++    if (!e.defaultPrevented && !hasInteractedOutside) {
+       focusWithoutScrolling(context.triggerRef());
+     }
+     hasInteractedOutside = false;
+diff --git a/src/dropdown-menu/dropdown-menu-content.tsx b/src/dropdown-menu/dropdown-menu-content.tsx
+index 02672fa3904984be01c5c5f3b0f172812e38f84e..5851ec96343a68cf0891620cbee18efc727fc5ec 100644
+--- a/src/dropdown-menu/dropdown-menu-content.tsx
++++ b/src/dropdown-menu/dropdown-menu-content.tsx
+@@ -46,7 +46,7 @@ export function DropdownMenuContent<T extends ValidComponent = "div">(
+ 	const onCloseAutoFocus = (e: Event) => {
+ 		local.onCloseAutoFocus?.(e);
+ 
+-		if (!hasInteractedOutside) {
++		if (!e.defaultPrevented && !hasInteractedOutside) {
+ 			focusWithoutScrolling(context.triggerRef());
+ 		}
+ 

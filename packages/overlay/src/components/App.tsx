@@ -28,7 +28,8 @@ import { ProjectRuntimeToolbarActions } from "./TaskDirBar"
 import { Button } from "./ui/Button"
 import { Feedback } from "./ui/Feedback"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
-import { apiJson, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
+import { apiJson, ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
+import { showAppDialog } from "../services/app-dialog"
 import { directoryScopedPath } from "../services/task-path"
 import { downloadBlob } from "../services/file-download"
 import { DropdownMenu } from "./ui/DropdownMenu"
@@ -74,6 +75,8 @@ function ChatViewTitle(props: {
   const usageText = createMemo(() => formatUsageStrip(cardTreeStore.usageAggregate))
   const [exporting, setExporting] = createSignal(false)
   const [searchOpen, setSearchOpen] = createSignal(false)
+  const [itemActionBusy, setItemActionBusy] = createSignal(false)
+  let disposed = false
   let searchReturnFocus: HTMLElement | null = null
   let searchMenuTrigger: HTMLElement | undefined
   const [actionFeedback, setActionFeedback] = createSignal<
@@ -108,6 +111,7 @@ function ChatViewTitle(props: {
       exportController?.abort()
       exportController = undefined
       setExporting(false)
+      setItemActionBusy(false)
       setSearchOpen(false)
       searchReturnFocus = null
       setActionFeedback(null)
@@ -117,6 +121,7 @@ function ChatViewTitle(props: {
   ))
 
   onCleanup(() => {
+    disposed = true
     exportController?.abort()
     if (actionFeedbackTimer !== undefined) window.clearTimeout(actionFeedbackTimer)
   })
@@ -135,6 +140,32 @@ function ChatViewTitle(props: {
   function openConversationSearch(target?: HTMLElement): void {
     searchReturnFocus = target ?? (document.activeElement instanceof HTMLElement ? document.activeElement : null)
     setSearchOpen(true)
+  }
+
+  async function runItemAction(actionName: string, action: (row: WorkLedgerItemRow) => void | Promise<void>): Promise<void> {
+    const row = props.item()
+    if (!row || itemActionBusy()) return
+    const authority = captureApiAuthority()
+    const scope = exportScope()
+    const ownsAction = () => !disposed && exportScope() === scope && isApiAuthorityCurrent(authority)
+    setItemActionBusy(true)
+    try {
+      await action(row)
+    } catch (error) {
+      if (!ownsAction() || error instanceof ApiAuthorityChangedError) return
+      const details = formatErrorDetails(error)
+      reportError({ id: `work-ledger:header:${actionName}:${row.kind}:${row.id}`, title: t("work_ledger.action_failed_title"), details })
+      await showAppDialog({
+        title: t("work_ledger.action_failed_title"),
+        message: t("work_ledger.action_failed_message", { title: row.title || row.id }),
+        details,
+        kind: "error",
+        openingGuard: ownsAction,
+        returnFocusTarget: () => ownsAction() ? searchMenuTrigger ?? null : null,
+      }).catch((cause) => reportError({ title: t("common.error"), details: formatErrorDetails(cause) }))
+    } finally {
+      if (ownsAction()) setItemActionBusy(false)
+    }
   }
 
   async function copyDebugInfo(): Promise<void> {
@@ -283,7 +314,8 @@ function ChatViewTitle(props: {
                   type="button"
                   data-ui="chat-title-pin"
                   data-pinned={item().pinned ? "true" : "false"}
-                  onSelect={() => props.onPinnedChange(item(), !item().pinned)}
+                  disabled={itemActionBusy()}
+                  onSelect={() => void runItemAction("pin", (row) => props.onPinnedChange(row, !row.pinned))}
                 >
                   <Icon name="pin" size="medium" />
                   <span>{item().pinned ? t("work_ledger.action.unpin") : t("work_ledger.action.pin")}</span>
@@ -292,7 +324,8 @@ function ChatViewTitle(props: {
                   as="button"
                   type="button"
                   data-ui="chat-title-rename"
-                  onSelect={() => props.onRename(item())}
+                  disabled={itemActionBusy()}
+                  onSelect={() => void runItemAction("rename", props.onRename)}
                 >
                   <Icon name="edit" size="medium" />
                   <span>{workLedgerRenameLabel(item())}</span>
@@ -301,7 +334,8 @@ function ChatViewTitle(props: {
                   as="button"
                   type="button"
                   data-ui="chat-title-archive"
-                  onSelect={() => props.onArchive(item())}
+                  disabled={itemActionBusy()}
+                  onSelect={() => void runItemAction("archive", props.onArchive)}
                 >
                   <Icon name="archive" size="medium" />
                   <span>{workLedgerArchiveLabel(item())}</span>

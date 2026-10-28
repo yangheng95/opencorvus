@@ -1,0 +1,564 @@
+{
+  "at": "2026-10-28T22:12:56.421Z",
+  "deadlineAt": 1793226208892,
+  "stages": [
+    {
+      "stage": "baseline",
+      "execSession": 62499,
+      "originalExecExitCode": 0,
+      "at": "2026-10-28T21:24:09.294Z",
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 767,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 3561777,
+      "publicShutdown": 200,
+      "physical": {
+        "chain": [
+          {
+            "identity": {
+              "pid": 98716,
+              "processInstanceID": "win32:639288194095202837",
+              "occurrenceID": "44664c55-3339-4e8e-92d9-5a6ac5b3d650"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 60148,
+              "processInstanceID": "win32:639288194103288924",
+              "occurrenceID": "aefcdb35-5554-4285-ab32-0f784a74bce9"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "launcher": {
+          "observedAtUtc": "2026-10-28T21:24:07.1617474Z",
+          "originalChildExit": 0
+        },
+        "native": {
+          "occurrence": "ledger-action-feedback-776-64ca9a2b-1580-486c-a55e-481a054aed8b",
+          "outcome": "settled",
+          "host": {
+            "pid": 98716,
+            "processInstanceID": "win32:639288194095202837",
+            "occurrenceID": "44664c55-3339-4e8e-92d9-5a6ac5b3d650"
+          },
+          "target": {
+            "pid": 60148,
+            "processInstanceID": "win32:639288194103288924",
+            "occurrenceID": "aefcdb35-5554-4285-ab32-0f784a74bce9"
+          },
+          "observedAtUtc": "2026-10-28T21:24:07.115Z",
+          "deadlineAt": 1793226208892,
+          "terminal": {
+            "occurrenceID": "ledger-action-feedback-776-64ca9a2b-1580-486c-a55e-481a054aed8b",
+            "pid": 60148,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-28T21:24:08.6317432Z"
+      }
+    },
+    {
+      "stage": "-after",
+      "execSession": 99637,
+      "originalExecExitCode": 0,
+      "at": "2026-10-28T21:31:48.765Z",
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 767,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 3102471,
+      "publicShutdown": 200,
+      "physical": {
+        "launcher": {
+          "observedAtUtc": "2026-10-28T21:31:46.4664781Z",
+          "originalChildExit": 0
+        },
+        "chain": [
+          {
+            "identity": {
+              "pid": 97916,
+              "processInstanceID": "win32:639288196684859591",
+              "occurrenceID": "0b493aa8-a16a-4674-b99d-ec7238fb56fb"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 77036,
+              "processInstanceID": "win32:639288196692989569",
+              "occurrenceID": "6630c300-92eb-4c0a-a924-004fb504b6bb"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "observedAtUtc": "2026-10-28T21:31:48.0843196Z",
+        "native": {
+          "occurrence": "ledger-action-feedback-776-after-b259f026-0e4f-4c27-9e7c-ebfd7451819c",
+          "outcome": "settled",
+          "host": {
+            "pid": 97916,
+            "processInstanceID": "win32:639288196684859591",
+            "occurrenceID": "0b493aa8-a16a-4674-b99d-ec7238fb56fb"
+          },
+          "target": {
+            "pid": 77036,
+            "processInstanceID": "win32:639288196692989569",
+            "occurrenceID": "6630c300-92eb-4c0a-a924-004fb504b6bb"
+          },
+          "observedAtUtc": "2026-10-28T21:31:46.421Z",
+          "deadlineAt": 1793226208892,
+          "terminal": {
+            "occurrenceID": "ledger-action-feedback-776-after-b259f026-0e4f-4c27-9e7c-ebfd7451819c",
+            "pid": 77036,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        }
+      }
+    },
+    {
+      "stage": "-after2",
+      "execSession": 70592,
+      "originalExecExitCode": 0,
+      "at": "2026-10-28T21:44:22.303Z",
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 767,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 2349444,
+      "publicShutdown": 200,
+      "physical": {
+        "chain": [
+          {
+            "identity": {
+              "pid": 85608,
+              "processInstanceID": "win32:639288204893202306",
+              "occurrenceID": "ed5505c3-6cf9-4f29-acda-97d46a2ea2ee"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 28624,
+              "processInstanceID": "win32:639288204900382689",
+              "occurrenceID": "8f2faf75-a590-49a0-bcac-a030ed5f5d08"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "native": {
+          "occurrence": "ledger-action-feedback-776-after2-31635f73-e8d8-4c0d-ae0c-9cdabfefdfe0",
+          "outcome": "settled",
+          "host": {
+            "pid": 85608,
+            "processInstanceID": "win32:639288204893202306",
+            "occurrenceID": "ed5505c3-6cf9-4f29-acda-97d46a2ea2ee"
+          },
+          "target": {
+            "pid": 28624,
+            "processInstanceID": "win32:639288204900382689",
+            "occurrenceID": "8f2faf75-a590-49a0-bcac-a030ed5f5d08"
+          },
+          "observedAtUtc": "2026-10-28T21:44:19.448Z",
+          "deadlineAt": 1793226208892,
+          "terminal": {
+            "occurrenceID": "ledger-action-feedback-776-after2-31635f73-e8d8-4c0d-ae0c-9cdabfefdfe0",
+            "pid": 28624,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-28T21:44:21.5607166Z",
+        "launcher": {
+          "observedAtUtc": "2026-10-28T21:44:19.4859692Z",
+          "originalChildExit": 0
+        }
+      }
+    },
+    {
+      "stage": "-after3",
+      "execSession": 83004,
+      "originalExecExitCode": 0,
+      "at": "2026-10-28T21:52:04.882Z",
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 767,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 1886230,
+      "publicShutdown": 200,
+      "physical": {
+        "launcher": {
+          "observedAtUtc": "2026-10-28T21:52:02.6991847Z",
+          "originalChildExit": 0
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 55360,
+              "processInstanceID": "win32:639288209269727131",
+              "occurrenceID": "8a4ed7d2-cfe3-4f22-a349-90a469631156"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 93812,
+              "processInstanceID": "win32:639288209277406704",
+              "occurrenceID": "148a996c-0182-4635-85d0-f0dec419a64b"
+            }
+          }
+        ],
+        "native": {
+          "occurrence": "ledger-action-feedback-776-after3-9cbf4028-b847-4a91-89aa-2d1d36af6a67",
+          "outcome": "settled",
+          "host": {
+            "pid": 55360,
+            "processInstanceID": "win32:639288209269727131",
+            "occurrenceID": "8a4ed7d2-cfe3-4f22-a349-90a469631156"
+          },
+          "target": {
+            "pid": 93812,
+            "processInstanceID": "win32:639288209277406704",
+            "occurrenceID": "148a996c-0182-4635-85d0-f0dec419a64b"
+          },
+          "observedAtUtc": "2026-10-28T21:52:02.662Z",
+          "deadlineAt": 1793226208892,
+          "terminal": {
+            "occurrenceID": "ledger-action-feedback-776-after3-9cbf4028-b847-4a91-89aa-2d1d36af6a67",
+            "pid": 93812,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-28T21:52:04.2429750Z"
+      }
+    },
+    {
+      "stage": "-after4",
+      "execSession": 20958,
+      "originalExecExitCode": 0,
+      "at": "2026-10-28T21:54:42.788Z",
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 767,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 1728238,
+      "publicShutdown": 200,
+      "physical": {
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-28T21:54:40.6866468Z"
+        },
+        "native": {
+          "occurrence": "ledger-action-feedback-776-after4-3ff9f94b-6b2b-44ff-ac0c-0064ccdbfa19",
+          "outcome": "settled",
+          "host": {
+            "pid": 96668,
+            "processInstanceID": "win32:639288211701313088",
+            "occurrenceID": "c166d81d-17f0-4b89-9ced-45567026f97b"
+          },
+          "target": {
+            "pid": 6756,
+            "processInstanceID": "win32:639288211709161561",
+            "occurrenceID": "f61972d2-907a-45b3-8a51-91e28e7ad5cb"
+          },
+          "observedAtUtc": "2026-10-28T21:54:40.654Z",
+          "deadlineAt": 1793226208892,
+          "terminal": {
+            "occurrenceID": "ledger-action-feedback-776-after4-3ff9f94b-6b2b-44ff-ac0c-0064ccdbfa19",
+            "pid": 6756,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 96668,
+              "processInstanceID": "win32:639288211701313088",
+              "occurrenceID": "c166d81d-17f0-4b89-9ced-45567026f97b"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 6756,
+              "processInstanceID": "win32:639288211709161561",
+              "occurrenceID": "f61972d2-907a-45b3-8a51-91e28e7ad5cb"
+            }
+          }
+        ],
+        "observedAtUtc": "2026-10-28T21:54:42.1590476Z"
+      }
+    },
+    {
+      "stage": "-after5",
+      "execSession": 16556,
+      "originalExecExitCode": 0,
+      "at": "2026-10-28T21:58:46.495Z",
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 767,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 1484460,
+      "publicShutdown": 200,
+      "physical": {
+        "chain": [
+          {
+            "identity": {
+              "pid": 91540,
+              "processInstanceID": "win32:639288213846755247",
+              "occurrenceID": "4956b762-7db6-42c3-ab79-09dae4b44155"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 94712,
+              "processInstanceID": "win32:639288213853725377",
+              "occurrenceID": "63e341dc-9d85-4dd2-8282-a3881820ce89"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-28T21:58:44.4654823Z"
+        },
+        "observedAtUtc": "2026-10-28T21:58:45.8861480Z",
+        "native": {
+          "occurrence": "ledger-action-feedback-776-after5-35521f64-c9cd-4c82-a654-ff29be7d853e",
+          "outcome": "settled",
+          "host": {
+            "pid": 91540,
+            "processInstanceID": "win32:639288213846755247",
+            "occurrenceID": "4956b762-7db6-42c3-ab79-09dae4b44155"
+          },
+          "target": {
+            "pid": 94712,
+            "processInstanceID": "win32:639288213853725377",
+            "occurrenceID": "63e341dc-9d85-4dd2-8282-a3881820ce89"
+          },
+          "observedAtUtc": "2026-10-28T21:58:44.432Z",
+          "deadlineAt": 1793226208892,
+          "terminal": {
+            "occurrenceID": "ledger-action-feedback-776-after5-35521f64-c9cd-4c82-a654-ff29be7d853e",
+            "pid": 94712,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        }
+      }
+    },
+    {
+      "stage": "-after6",
+      "execSession": null,
+      "originalExecExitCode": 1,
+      "at": "2026-10-28T22:05:10.999Z",
+      "admissionFailure": "15-minute window exceeded the original deadline minus the required five-minute reserve",
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 767,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 1184619,
+      "publicShutdown": null,
+      "physical": {
+        "native": {
+          "occurrence": "ledger-action-feedback-776-after6-9f7dea7a-5880-4b2a-b121-f504462c2f49",
+          "outcome": "settled",
+          "host": {
+            "pid": 88320,
+            "processInstanceID": "win32:639288218201771302",
+            "occurrenceID": "7f2f889d-2dbd-43e8-9a78-161a8833db68"
+          },
+          "target": {
+            "pid": 94100,
+            "processInstanceID": "win32:639288218208900113",
+            "occurrenceID": "65ba148a-fed6-4386-addc-9cd5d785a439"
+          },
+          "observedAtUtc": "2026-10-28T22:03:44.273Z",
+          "deadlineAt": 1793226208892,
+          "terminal": {
+            "occurrenceID": "ledger-action-feedback-776-after6-9f7dea7a-5880-4b2a-b121-f504462c2f49",
+            "pid": 94100,
+            "reason": "exited",
+            "exitCode": 7,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-28T22:04:35.8535426Z",
+        "chain": [
+          {
+            "identity": {
+              "pid": 88320,
+              "processInstanceID": "win32:639288218201771302",
+              "occurrenceID": "7f2f889d-2dbd-43e8-9a78-161a8833db68"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 94100,
+              "processInstanceID": "win32:639288218208900113",
+              "occurrenceID": "65ba148a-fed6-4386-addc-9cd5d785a439"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "launcher": {
+          "observedAtUtc": "2026-10-28T22:03:44.3176401Z",
+          "originalChildExit": 7
+        }
+      }
+    },
+    {
+      "stage": "-after7",
+      "execSession": 42181,
+      "originalExecExitCode": 0,
+      "at": "2026-10-28T22:06:15.892Z",
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 767,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 1035238,
+      "publicShutdown": 200,
+      "physical": {
+        "observedAtUtc": "2026-10-28T22:06:15.1978591Z",
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 66392,
+              "processInstanceID": "win32:639288219243146290",
+              "occurrenceID": "3c09985f-fe61-4619-9600-7c77b7e229b4"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 100336,
+              "processInstanceID": "win32:639288219251003493",
+              "occurrenceID": "f279335c-3f68-4d00-80ba-fd2c3db6bad9"
+            }
+          }
+        ],
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-28T22:06:13.6870729Z"
+        },
+        "native": {
+          "occurrence": "ledger-action-feedback-776-after7-7194988b-d96a-4260-a119-e671a5a9c100",
+          "outcome": "settled",
+          "host": {
+            "pid": 66392,
+            "processInstanceID": "win32:639288219243146290",
+            "occurrenceID": "3c09985f-fe61-4619-9600-7c77b7e229b4"
+          },
+          "target": {
+            "pid": 100336,
+            "processInstanceID": "win32:639288219251003493",
+            "occurrenceID": "f279335c-3f68-4d00-80ba-fd2c3db6bad9"
+          },
+          "observedAtUtc": "2026-10-28T22:06:13.654Z",
+          "deadlineAt": 1793226208892,
+          "terminal": {
+            "occurrenceID": "ledger-action-feedback-776-after7-7194988b-d96a-4260-a119-e671a5a9c100",
+            "pid": 100336,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        }
+      }
+    }
+  ],
+  "requests": 0,
+  "cumulativeRequests": 767,
+  "credentialsCopied": false,
+  "normalInstances": 7,
+  "admissionRejectedInstances": 1
+}

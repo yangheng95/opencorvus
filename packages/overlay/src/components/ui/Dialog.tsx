@@ -23,6 +23,25 @@ function clampOffset(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max)
 }
 
+function dialogOpeningFocusTarget(active: HTMLElement): HTMLElement {
+  let target = active
+  const visited = new Set<Element>()
+  let menu = target.closest('[role="menu"]')
+  while (menu && !visited.has(menu)) {
+    visited.add(menu)
+    const controller = (menu.getAttribute("aria-labelledby") || "")
+      .split(/\s+/)
+      .map((id) => target.ownerDocument.getElementById(id))
+      .find((element): element is HTMLElement =>
+        element instanceof HTMLElement && Boolean(element.getAttribute("aria-controls")?.split(/\s+/).includes(menu!.id)),
+      )
+    if (!controller) break
+    target = controller
+    menu = target.closest('[role="menu"]')
+  }
+  return target
+}
+
 function clampDialogOffset(form: HTMLElement, x: number, y: number): { x: number; y: number } {
   const rect = form.getBoundingClientRect()
   const viewport = document.documentElement
@@ -191,18 +210,24 @@ export function Dialog(rawProps: DialogProps) {
 
   function handleOpenAutoFocus(event: Event) {
     const active = local.returnFocusTarget ? undefined : document.activeElement
-    focusReturnTarget =
-      local.modal && active instanceof HTMLElement && active !== document.body && !dialogRef?.contains(active)
-        ? active
-        : undefined
+    const opener = active instanceof HTMLElement ? dialogOpeningFocusTarget(active) : undefined
+    if (local.modal && opener && opener !== document.body && !dialogRef?.contains(opener)) {
+      focusReturnTarget = opener
+    }
     local.onOpenAutoFocus?.(event)
   }
 
   function handleCloseAutoFocus(event: Event) {
+    // FocusScope can remount while this controlled dialog is still open.
+    // Retain its opener until the dialog itself closes.
+    if (local.open) {
+      event.preventDefault()
+      return
+    }
     const target = local.returnFocusTarget ? local.returnFocusTarget() : focusReturnTarget
     focusReturnTarget = undefined
     local.onCloseAutoFocus?.(event)
-    if (event.defaultPrevented || local.open || !local.modal || !target?.isConnected) return
+    if (event.defaultPrevented || !local.modal || !target?.isConnected) return
     if (
       target.closest('[hidden], [inert], [aria-hidden="true"]') ||
       target.matches(':disabled, [aria-disabled="true"]') ||

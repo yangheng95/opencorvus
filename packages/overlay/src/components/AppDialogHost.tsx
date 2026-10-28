@@ -23,7 +23,6 @@ export function AppDialogHost() {
     setDetailsOpen(false)
   })
 
-  let okButtonRef: HTMLButtonElement | undefined
   let inputRef: HTMLInputElement | undefined
   let selectRef: HTMLButtonElement | undefined
 
@@ -52,18 +51,19 @@ export function AppDialogHost() {
       formClass="app-dialog-form"
       aria-describedby="appDialogBody"
       aria-busy={dialogStore.app.submitting}
+      returnFocusTarget={dialogStore.app.returnFocusTarget}
       onOpenAutoFocus={(event) => {
-        event.preventDefault()
         if (dialogStore.app.input && inputRef) {
+          event.preventDefault()
           inputRef.focus()
           inputRef.select()
           return
         }
         if (dialogStore.app.select && selectRef) {
+          event.preventDefault()
           selectRef.focus()
           return
         }
-        okButtonRef?.focus()
       }}
       onClose={(dialog) => {
         void dismissAppDialog(dialog)
@@ -118,9 +118,6 @@ export function AppDialogHost() {
             size="md"
             tone={dialogStore.app.okTone || "accent"}
             disabled={dialogStore.app.submitting}
-            ref={(el) => {
-              okButtonRef = el
-            }}
             onClick={() => {
               void confirm()
             }}

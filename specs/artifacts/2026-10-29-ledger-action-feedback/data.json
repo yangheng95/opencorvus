@@ -1,0 +1,232 @@
+{
+  "at": "2026-10-28T22:12:56.419Z",
+  "databases": [
+    {
+      "tag": "baseline",
+      "tables": 92,
+      "oldCount": 103588,
+      "exact": 103588,
+      "total": 103588,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "after",
+      "tables": 92,
+      "oldCount": 103588,
+      "exact": 103585,
+      "total": 103724,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "focus",
+      "tables": 92,
+      "oldCount": 103724,
+      "exact": 103724,
+      "total": 103724,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "handoff",
+      "tables": 92,
+      "oldCount": 103724,
+      "exact": 103724,
+      "total": 103724,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "diagnostic",
+      "tables": 92,
+      "oldCount": 103724,
+      "exact": 103724,
+      "total": 103724,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "final",
+      "tables": 92,
+      "oldCount": 103724,
+      "exact": 103724,
+      "total": 103724,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "admission-failed",
+      "tables": 92,
+      "oldCount": 103724,
+      "exact": 103724,
+      "total": 103724,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "owned-focus",
+      "tables": 92,
+      "oldCount": 103724,
+      "exact": 103724,
+      "total": 103724,
+      "schema": 9,
+      "integrity": "ok"
+    }
+  ],
+  "changes": [
+    {
+      "tag": "after",
+      "table": "session",
+      "id": "ses_-zUQi8aC3zzDyYDXPxXm",
+      "fields": [
+        "time_updated"
+      ],
+      "title": "会话问候确认",
+      "updatedBefore": 1793221377985,
+      "updatedAfter": 1793223018039
+    },
+    {
+      "tag": "after",
+      "table": "session",
+      "id": "ses_-zUQgm405zzb2xZnkVrc",
+      "fields": [
+        "time_updated"
+      ],
+      "title": "对话导出体验759",
+      "updatedBefore": 1793221243941,
+      "updatedAfter": 1793223034726
+    },
+    {
+      "tag": "after",
+      "table": "session",
+      "id": "ses_-zUQePN8bzzO0tkLjwWg",
+      "fields": [
+        "time_updated"
+      ],
+      "title": "请确认收到了品牌 SVG 附件，只回复“已收到”。不调用工具，不创建任务或委派其他代理。",
+      "updatedBefore": 1793221290198,
+      "updatedAfter": 1793223028236
+    }
+  ],
+  "addedCounts": {
+    "bus_publication_delivery": 20,
+    "bus_publication_delivery_receipt": 20,
+    "bus_publication_outbox": 10,
+    "bus_publication_owner": 10,
+    "bus_publication_phase_receipt": 30,
+    "engine_control_activation_lease": 22,
+    "engine_control_activation_lease_grant": 22,
+    "protocol_event": 2
+  },
+  "publicationTypes": {
+    "session.updated": 8,
+    "task.updated": 2
+  },
+  "deliveryOutcomes": {
+    "succeeded": 20
+  },
+  "activationRecordTargets": {
+    "bus_delivery": 20,
+    "runtime_process": 1,
+    "lifecycle": 1
+  },
+  "runtimeProcessReceipt": {
+    "id": "act_g0VZNkxOU00XEyveVMdU",
+    "physicalPID": 77036,
+    "processInstanceID": "win32:639288196692989569",
+    "physicalState": "dead_or_reused",
+    "storageEnd": 9007199254740991
+  },
+  "protocol": [
+    {
+      "id": "pev_g0VZNkxON00fVrW24ceZ",
+      "type": "mission.execution.closing",
+      "aggregate": "ses_-zUQi8aC3zzDyYDXPxXm",
+      "source": "mission.archive",
+      "correlation": "4b258f7c-946a-4d55-896e-c7547e35680a"
+    },
+    {
+      "id": "pev_g0VZNkxOc00a7kg80w7t",
+      "type": "mission.execution.closed",
+      "aggregate": "ses_-zUQi8aC3zzDyYDXPxXm",
+      "source": "mission.archive",
+      "correlation": "4b258f7c-946a-4d55-896e-c7547e35680a"
+    }
+  ],
+  "inputs": [
+    {
+      "filename": "test_invoice.py",
+      "bytes": 1520,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "invoice.py",
+      "bytes": 953,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "README.md",
+      "bytes": 191,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "mcp.ts",
+      "bytes": 5539,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "chat.ts",
+      "bytes": 14692,
+      "exactBytes": true,
+      "exactMetadata": true
+    }
+  ],
+  "namespace": [
+    {
+      "stage": "baseline",
+      "files": 13,
+      "exactBytes": true
+    },
+    {
+      "stage": "-after",
+      "files": 13,
+      "exactBytes": true
+    },
+    {
+      "stage": "-after2",
+      "files": 13,
+      "exactBytes": true
+    },
+    {
+      "stage": "-after3",
+      "files": 13,
+      "exactBytes": true
+    },
+    {
+      "stage": "-after4",
+      "files": 13,
+      "exactBytes": true
+    },
+    {
+      "stage": "-after5",
+      "files": 13,
+      "exactBytes": true
+    },
+    {
+      "stage": "-after6",
+      "files": 13,
+      "exactBytes": true
+    },
+    {
+      "stage": "-after7",
+      "files": 13,
+      "exactBytes": true
+    }
+  ],
+  "sourceDatabases": "Every source database matches all pre-copy rows; all archived and pinned states were restored through the real UI."
+}

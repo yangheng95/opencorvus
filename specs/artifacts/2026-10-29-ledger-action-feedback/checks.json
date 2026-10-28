@@ -1,0 +1,118 @@
+{
+  "attempts": [
+    {
+      "label": "ledger776-build",
+      "startedAt": 1793222762569,
+      "closedAt": 1793222839300,
+      "code": 0,
+      "signal": null,
+      "childPID": 73856
+    },
+    {
+      "label": "ledger776-types",
+      "startedAt": 1793222762576,
+      "closedAt": 1793222791390,
+      "code": 0,
+      "signal": null,
+      "childPID": 63708
+    },
+    {
+      "label": "ledger776-i18n",
+      "startedAt": 1793222762583,
+      "closedAt": 1793222765159,
+      "code": 0,
+      "signal": null,
+      "childPID": 38272
+    },
+    {
+      "label": "ledger776-build-focus",
+      "startedAt": 1793223606752,
+      "closedAt": 1793223670052,
+      "code": 0,
+      "signal": null,
+      "childPID": 36424
+    },
+    {
+      "label": "ledger776-types-focus",
+      "startedAt": 1793223616695,
+      "closedAt": 1793223637648,
+      "code": 0,
+      "signal": null,
+      "childPID": 80776
+    },
+    {
+      "label": "ledger776-build-handoff",
+      "startedAt": 1793224008150,
+      "closedAt": 1793224072369,
+      "code": 0,
+      "signal": null,
+      "childPID": 96116
+    },
+    {
+      "label": "ledger776-types-handoff",
+      "startedAt": 1793224018290,
+      "closedAt": 1793224039573,
+      "code": 0,
+      "signal": null,
+      "childPID": 99664
+    },
+    {
+      "label": "ledger776-build-diagnostic",
+      "startedAt": 1793224293834,
+      "closedAt": 1793224354688,
+      "code": 0,
+      "signal": null,
+      "childPID": 85076
+    },
+    {
+      "label": "ledger776-types-final",
+      "startedAt": 1793224499934,
+      "closedAt": 1793224523073,
+      "code": 0,
+      "signal": null,
+      "childPID": 81748
+    },
+    {
+      "label": "ledger776-build-final",
+      "startedAt": 1793224499989,
+      "closedAt": 1793224561518,
+      "code": 0,
+      "signal": null,
+      "childPID": 96036
+    },
+    {
+      "label": "ledger776-build-owned-focus",
+      "startedAt": 1793224917670,
+      "closedAt": 1793224984967,
+      "code": 0,
+      "signal": null,
+      "childPID": 65328
+    },
+    {
+      "label": "ledger776-types-owned-focus",
+      "startedAt": 1793224917677,
+      "closedAt": 1793224942459,
+      "code": 0,
+      "signal": null,
+      "childPID": 95568
+    },
+    {
+      "label": "ledger776-docs",
+      "startedAt": 1793225471874,
+      "closedAt": 1793225479627,
+      "code": 0,
+      "signal": null,
+      "childPID": 81112
+    }
+  ],
+  "ui": "29 original JPEG captures were rendered and manually reviewed; diagnostic-focus.json is an actual passive console trace. No UI automated tests or DOM/text/pixel assertions.",
+  "verified": [
+    "Actual pin/unpin and Chat, Work, Task and Mission archive/restore.",
+    "Final header failure opens with OK focus and Enter returns to its captured trigger.",
+    "Final Chinese sidebar failure retains original details; Tab/Enter returns to the original main button and the menu reopens."
+  ],
+  "limits": [
+    "Project menu opener retirement still leaves BODY focus; the continuous goal retains this issue.",
+    "Slow requests, cross-connection late completion and all other menu consumers were not fully exercised."
+  ]
+}

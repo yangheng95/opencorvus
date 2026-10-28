@@ -1,0 +1,63 @@
+# 导航操作失败的可见反馈
+
+## Recall
+
+用户要求持续单agent自主体验、改进UI/UX（用户界面与体验）和功能，真实页面验证后范围提交与正常push；不使用子agent，旧Goal的Astra文字被最新指示覆盖。上一批9d465eb1954000485b960ac5c7f3518c9f69c32e正常推送，21:18:38Z fresh fetch/merge0/0、40自有文件清洁，保留177外部改动。775四个隔离实例均公开200、原exec/native/launcher0和三项收拢，catalog副本退休，原截止不续开；21图验证五类重命名与双语失败保留，完整92表/原文件一致。模型0/累计767，无auth复制。用户18571与页面不刷新/重启/关闭；不建branch/worktree，不碰另一个发布聊天的38日志和索引。用户已授权只读GitHub告警，7项事实已记录，不新增远端设置/发布操作。
+
+## 现象、触发和根因
+
+本批从当前代码调查：App.ChatViewTitle的Pin/Rename/Archive直接调用props；main三处header回调外包runMainAsync，该包装器catch后只reportOverlayRuntimeError，返回resolved Promise，真实错误不能传回UI。侧栏WorkLedgerRowView.runAction已有busy、actionGeneration、当前row/API authority归属与诊断，但catch也只reportError。diagnostics.reportError确认为AppLog写入，不能当用户可见反馈。用户从菜单点失败操作后只会看到菜单消失、原数据留下，没有当前操作结果。775只修复输入型rename的共享确认合同，不能覆盖无输入Pin/Archive/Download/Stop异常；不以复制全局错误状态或改reportError全局语义绕过调用链。
+
+已读main入口包装、三header回调及全部四metadata/归档服务调用，App标题栏和既有导出/复制反馈/作用域，WorkLedger完整行操作、reconcile(renderKey)稳定身份、确认Stop入口，Settings Archive完整restore/delete/readPages/aftercommit/错误反馈与focus合同；07-panel的共享弹窗和Archive合同、775 Recall与产物。全仓搜索showAppDialog、runMainAsync、onConversationPinnedChange/onRenameConversationItem/onArchiveConversationItem、runAction和同义archive/restore。Settings归档页已有行失败反馈和已提交/刷新区分，本批不重写。检索命中work-ledger-notification-stream.test.ts为非UI传输契约，不运行/修改；没有命中当前标题/导航操作的UI自动化。
+
+## 实施方案与影响
+
+先真实基线：从闭合775-after3逐行复制到本批开发38317/ui，打开现有Chat，正常公开shutdown自有实例后分别点击header Archive、sidebar Pin，观察实际结果和原日志，截图复核。禁止网络拦截/模拟数据/UI测试。实现前仍以实际现象核对分析。
+
+App标题操作由当前ChatViewTitle接回真实Promise：main三回调直接调用既有业务函数，不再吞掉它们的错误；其余runMainAsync入口不变。标题栏增加单一当前操作busy并复用现有selection epoch/API revision/kind:id/directory scope，不增加业务状态。操作前捕获当前item，菜单三mutation在busy期间禁止重复，scope改变/卸载恢复新scope；失败只在原scope仍当前时先保留真实诊断，再通过现showAppDialog显示当前语言摘要、原记录标题与原技术详情，openingGuard使用同一owner。操作成功保持原业务投影与选择收拢；rename内部775回调失败仍在原输入表单，不形成两个错误来源。
+
+侧栏在现runAction catch后复用同一共享AppDialog呈现，沿原generation/authority/row判断和openingGuard；不增加平行error store、不改业务mutation、不自动重试写操作。错误弹窗仅描述“未能确认操作结果”，保留不确定提交的真实语义；关闭后用户从原菜单重新选择操作。两处共享locale键，不翻译记录原文和技术详情。标题栏顺便将英语Rename chat文案统一为Rename conversation，和已交付Archive conversation及Chat/Work共同事实一致，中文“对话”不变。
+
+共享机制影响：覆盖header的Chat/Work、Task、Mission Pin/Rename/Archive与sidebar既有所有runAction入口。现Dialog epoch、替换/occlusion transition归属不改；header旧scope完成不得写新scope或打开迟到错误。row reconcile保持原身份；同一行重复操作沿原busy阻止，不新增调度gate。业务Task/Mission/Session occurrence（执行轮次）、终态、重试/重启恢复、串并行与多项目隔离仍由原API拥有，本批只改变异步错误的UI归属与呈现，不调用新wake/dispatch/resume或LLM，不改HTTP/SDK/schema。若发现真实执行/恢复异常立即按共享机制横审；不能凭错误名称宣称是调度问题。风险是菜单焦点和异步scope退休，须实页检查并如实记录未覆盖矩阵。
+
+## 验收与交付
+
+改后普通build、开发38318/ui：实际Chat/Work与可用Task/Mission既有记录的Pin/取消Pin、归档/Settings Restore，恢复原QA状态，不做永久删除；源库、旧行与规范发布/收拢事实逐表核对。先加载双语界面，最后公开shutdown后重试当前header Archive和sidebar Pin，确认双语错误弹窗、完整详情、关闭后原上下文和可重新打开菜单。截图人工复核，禁止UI自动化或DOM/源码文案断言；不将类型/build/console充当视觉证据。非UI服务契约未变，不新增镜像实现测试。
+
+本批最初启动起固定60分钟截止不续开，每实例15分钟预定正常shutdown，至少5分钟收拢，0模型调用/累计767、完整catalog仅供历史投影、无auth复制。原exec join0、公开200、native/launcher0、物理/输出/请求与精确出生身份退休后清退catalog。更新当前架构、Unreleased双语日志、三索引与产物记录，跑当前docs:check、overlay typecheck/i18n/build/renderer及正常push hooks；只提交本批文件，fresh fetch/merge并审查完整待推集合后push、fresh sync和结束git status。未知慢请求/替换矩阵继续如实限定，不宣称全产品完成。
+
+基线38317实证：图01真实header Archive菜单；公开shutdown200、原exec62499/native/launcher0、三项收拢、精确出生退休和catalog清退后点击Archive，图02只剩通用Offline banner，原会话/侧栏保留，无操作反馈。随后通过真实侧栏主按钮Right/Return打开行菜单点击Pin，图03仍只有Offline banner，置顶未变、无结果反馈。202已关闭。无写入或模型调用，保留最初截止不重开，开始按方案实施。
+
+## 实页发现的菜单焦点交接根因
+
+38318图04–11实际完成header Pin/Unpin与Chat/Work/Task/Mission归档、Settings逐条Restore到空归档，再回原Chat打开并取消Rename conversation。图12公开shutdown后的归档错误已经可见，图13保留真实Failed to fetch调用栈。但反复AX及只读DOM均证实新modal aria-modal=true时activeElement仍为dropdownmenu-cl-1695-trigger，需继续修复，不能将可见弹窗当键盘验收通过。203已关闭，原exec99637/native/launcher0、公开200/完整结算/catalog退休，原776截止1793226208892不续开。
+
+完整读共享DropdownMenu/Dialog/AppDialogHost、安装版Kobalte0.13.11 source与两份dist、现唯一core补丁、全部onCloseAutoFocus生产调用及既有531/410焦点记录。根因在DropdownMenuContent：FocusScope关闭时发现焦点已进入外部可聚焦元素，会先preventDefault；DropdownMenuContent调用自定义hook后却不检查defaultPrevented，无条件按hasInteractedOutside重聚焦trigger。MenuItem另以库自有timeout关闭，解释异步错误modal先获得焦点又被旧menu关闭抢回。不能用应用timer重抢焦点、切nonmodal、复制scope或改通用Dialog遮蔽此缺陷。
+
+[Kobalte官方Content合同](https://kobalte.dev/docs/core/components/dropdown-menu/)明确关闭自动聚焦可preventDefault；当前上游main相同缺检查，不能假设简单升版本解决。当前仓库已声明patches/@kobalte%2Fcore@0.13.11.patch为唯一补丁来源，已有类型/Popper/Tooltip修正。本批用[Bun正式patch流程](https://bun.sh/docs/pm/cli/patch)先unlinked prepare，再只把DropdownMenuContent条件改为!e.defaultPrevented && !hasInteractedOutside，源tsx及两份dist同步，保留全部现有补丁；不改FocusScope或新增UI focus handler。普通菜单仍按原默认归还，已有preventDefault与转入另一focusable目标由原FocusScope保持。
+
+影响横审包括所有DropdownMenu.Content、nested SubContent仍由原独立合同管理，原WorkLedger Project自定义close hook、用户直接聚焦其它控件、AppDialog/Goal/Settings/编辑器等新modal、正常Escape与键盘Menu选择。现有依赖补丁扩展是UIprimitive修复，无UI自动化；以新普通build/38319真实菜单→rename/cancel、Escape归还、错误modal初始OK焦点/Tab/Enter、header与sidebar双语失败/详情为验收，另跑类型/build/renderer/依赖拓扑和正常hooks。未覆盖全站每个menu应如实限定。
+
+38319继续实证否定“单改该条件足够”：图14普通菜单Esc正确回trigger、图15 Rename输入焦点正确，但Esc后AX为WebArea/BODY（图16）；图17错误modal仍回header，按Enter打开背后菜单，而不是确认。204已关闭，原exec70592/native/launcher0、公开200/三项/出生链结算、catalog退休，不能把17包装成通过。
+
+再核对AppDialogHost：非输入也event.preventDefault并同步okButtonRef.focus，绕过Kobalte FocusScope原生延后focus。库源码明确默认延后是为等待DismissableLayer入栈；MenuItem关闭与FocusScope cleanup也各有库自己的时序。正确组合应保留该默认生命周期，同时让Dropdown尊重其取消信号；应用不增加timer重试。输入/select已有真实正确焦点和选中文本合同继续显式处理；非输入交给原生firstTabbable焦点（详情/取消等首控件），不强求最初方案的OK。移除只为旧同步聚焦存在的okButtonRef及对应ref，无其它调用影响。
+
+关闭丢焦点的独立根因是Dialog只捕获当前menuitem，它在menu关闭后卸载。实际DOM已读到role=menu的aria-labelledby指向仍存活trigger，且trigger的aria-controls包含该menu ID。现唯一Dialog opener捕获沿此真实双向ARIA（Accessible Rich Internet Applications，无障碍富互联网应用）关联解析到菜单控制按钮；nested menu继续沿控制关系到根按钮，防循环，不按标题/ID前缀猜测，不缓存第二个opener。现explicit returnFocusTarget、自定义hook、连接/可见性/当前焦点检查仍优先。统一修复所有由菜单启动的Dialog归还合同，而非为本批error加专用焦点恢复。
+
+工具链：root/workspace symlink布局下Bun patch prepare报ENOENT，未编辑共享缓存。改用本批隔离hoisted/copyfile工具目录，复制现有唯一补丁，官方prepare退出0，再修改三处并commit退出0。只将生成的三diff节追加到原补丁（完整旧字节保留）；初次加空分隔行导致Bun严格hunk解析失败，按生成节原边界修正后root frozen-lockfile/ignore-scripts安装0，根package.json/bun.lock不变。私有.bun-tag节未引入canonical patch。此工具目录只生成依赖补丁，不是UI fixture或平行实现。
+
+38320图18输入取消后仍为WebArea/BODY，当前return capture解释不足，不能继续假定已修。下一步普通诊断build只在既有Dialog open/close hook旁console.info实际active tag/id、捕获target id、connected、defaultPrevented/open；不写DOM、不改事件顺序、不加定时焦点、不加断言，原callback仍只调用一次。沿自有开发/ui人工打开/取消与断网错误，读取实际console，确定根因再修；最终构建前精确移除此临时日志，原scope先公开关闭/结算，不续最初截止。
+
+38320图19已经证实默认生命周期使错误modal初始OK获得焦点，Enter确实关闭；但关闭仍BODY。38321实际诊断将剩余根因定位到共享Dialog guard顺序：21:53:17.038/.039两次open均正确捕获header trigger；17.073的两次FocusScope cleanup在controlled open仍true时调用close hook，现代码先清focusReturnTarget再检查local.open，导致最终17.520真正关闭/BODY时target已丢失。完整只读原日志在diagnostic-focus.json。不能把scope cleanup当成controlled Dialog真正关闭；当前opener解析是正确的，丢失在该过早清理。
+
+最终修复在handleCloseAutoFocus最前核对local.open；仍打开时preventDefault并返回，保留唯一opener且不触发调用方close hook。真正关闭才读取/清理opener并沿原可见性/焦点合同恢复。同时open hook仅在观察到真实外部opener时更新捕获，原dialog内部重建不覆盖同一生命周期的有效opener。三条临时console.info精确移除。206/原exec20958及自有服务完整退休后以普通最终build/38322验证，仍沿22:23:28.892Z最初截止。
+
+38322图20证实Rename输入Esc返回header按钮；图21项目菜单触发器会在离开hover/焦点时退休，现连接/可见性合同正确拒绝恢复其旧节点，仍BODY，不能宣称该入口完成。图22错误modal初始OK正确，但异步失败的打开时刻不保证仍有原menu DOM，图23关闭仍BODY。异步操作owner已经拥有明确且稳定的入口，应使用Dialog现有returnFocusTarget公开合同，不再依赖事后推断。将该UI-only callback作为AppDialog呈现选项直接透传（不持久化、不是业务onConfirm），header按原scope返回既有more trigger，sidebar暴露现键盘controller已有mainButtonRef的只读getter并按原generation返回同一主按钮；无第二ref或平行focus状态，scope退休返回null。默认捕获仍服务没有显式入口的同步Dialog。另一个Project入口的节点生命周期作为已知未完成项继续迭代，不能将全站menu矩阵标成通过。
+
+## 最终实页和数据收拢
+
+38323启动时，15分钟正常shutdown窗口已超出原截止减5分钟余量，工具assert拒绝；实际原exec工具1/native7/launcher7，物理/输出/请求和出生链均收拢，catalog清退，SQL原行全同。保留失败回执，不伪称公开shutdown200或正常0，也未重启该scope。修正自有验收窗口为5分钟，38324仍沿原最初截止，图24/25确认英文header错误初始OK、Enter后回原more trigger；26–29确认中文sidebar错误、完整详情、Tab到OK/Enter回原主按钮、重新Right/Return菜单可用。208关闭，最后正常公开200/原exec42181/native/launcher0，剩余1035238ms；其它7个scope已分别退出与清退，所有模型0/累计767。
+
+完整8库每库92表/schema9/integrity ok，源库保持：基线103588旧行精确相同，改后103724行，只有三个Session time_updated变化；全部归档/置顶/标题与原行其它字段恢复，后六副本（含拒绝启动实例）103724行精确相同。新增136行：20 delivery、20成功receipt、10 outbox、10 owner、30 phase、22 activation lease、22 grant、2 protocol event。8个session.updated（Chat Pin/Unpin与三类Session归档/恢复）、2个task.updated；两条mission.execution.closing/closed来自同一archive correlation、同一Mission，符合原关闭合同；20 bus_delivery与1 lifecycle lease已按时间释放；1 runtime_process为process-liveness.ts明确的MAX_SAFE_INTEGER永久身份回执，原PID77036与processInstanceID匹配自有原native target，OS出生链dead_or_reused证明退出，不把存储哨兵误当未释放TTL，未创建消息或新执行，所有启动recovery0。五QA文件字节/尺寸/mtime及8份13文件namespace保持。数据复核不是UI自动化或哈希验收。
+
+仍未完成Project菜单退役入口的焦点改进，保留图21继续下一批；没有将慢请求/跨连接迟到回调、其它所有menu或全产品标成完成。最终代码类型与普通build/renderer通过，i18n2619键通过；临时诊断已移除，原Kobalte补丁旧内容保留，根依赖版本/lock未变。当前文档检查、范围提交和正常push另按最终回执收拢。

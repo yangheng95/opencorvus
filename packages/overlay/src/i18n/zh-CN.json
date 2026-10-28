@@ -2224,6 +2224,8 @@
   "work_ledger.action.download_mission": "下载 Mission 项目",
   "work_ledger.action.rename_mission": "重命名 Mission",
   "work_ledger.action.rename_chat": "重命名对话",
+  "work_ledger.action_failed_title": "未能确认操作结果",
+  "work_ledger.action_failed_message": "请查看详细信息，再对“{{title}}”重试操作。",
   "work_ledger.action.rename_placeholder": "输入新标题",
   "work_ledger.action.pin": "置顶",
   "work_ledger.action.unpin": "取消置顶",

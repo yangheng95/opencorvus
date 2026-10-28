@@ -25,6 +25,7 @@ export type AppDialogOptions = {
   inputRequiredMessage?: string
   inputMaxLength?: number
   inputError?: string
+  returnFocusTarget?: () => HTMLElement | null
   select?: boolean
   selectLabel?: string
   selectValue?: string
@@ -154,6 +155,7 @@ export function showAppDialog(options: AppDialogOpenOptions = {}): Promise<AppDi
           inputRequiredMessage: options.inputRequiredMessage || t("dialog.input_required"),
           inputMaxLength: options.inputMaxLength,
           inputError: "",
+          returnFocusTarget: options.returnFocusTarget,
           submitting: false,
           submitError: "",
           submitErrorDetails: "",

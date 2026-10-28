@@ -1,0 +1,17 @@
+{
+  "dependency": "@kobalte/core@0.13.11",
+  "existingPatchRetained": true,
+  "rootPackageAndLockExactBytes": true,
+  "addedDiffSections": 3,
+  "change": "Respect defaultPrevented in DropdownMenuContent source and both published dist variants.",
+  "preparation": {
+    "workspaceAttempts": "Bun patch preparation failed with ENOENT in the workspace symlink layout; the shared cache was not edited.",
+    "repair": "Official bun patch prepare and commit succeeded in an owned hoisted/copyfile tool directory with the original canonical patch.",
+    "rootInstall": "bun install --frozen-lockfile --ignore-scripts exited zero after applying the generated diff sections.",
+    "correctedPatchAssembly": "An extra blank section separator initially failed the strict hunk parser; original generated section boundaries applied successfully."
+  },
+  "references": [
+    "https://kobalte.dev/docs/core/components/dropdown-menu/",
+    "https://bun.sh/docs/pm/cli/patch"
+  ]
+}

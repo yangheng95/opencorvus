@@ -2555,13 +2555,13 @@ function OverlayRoot() {
       }
       onCopyConversationDebug={copyActiveConversationDebug}
       onConversationPinnedChange={(row, pinned) =>
-        runMainAsync("work-ledger.header-pin", () => setActiveWorkLedgerItemPinned(row, pinned))
+        setActiveWorkLedgerItemPinned(row, pinned)
       }
       onRenameConversationItem={(row) =>
-        runMainAsync("work-ledger.header-rename", () => renameActiveWorkLedgerItem(row))
+        renameActiveWorkLedgerItem(row)
       }
       onArchiveConversationItem={(row) =>
-        runMainAsync("work-ledger.header-archive", () => archiveActiveWorkLedgerItem(row))
+        archiveActiveWorkLedgerItem(row)
       }
       onOpenAutomationSession={openAutomationSession}
       sidebarToggle={

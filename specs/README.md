@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [导航操作结果与焦点归属](records/2026-10/2026-10-29-ledger-action-feedback.md)：归档/置顶真实往返、失败反馈和菜单弹窗生命周期调查。
+
 - [重命名保存与失败反馈](records/2026-10/2026-10-29-rename-feedback-journey.md)：五类名称实际保存、原位错误与输入保留、双语校验和四实例完整收拢。
 
 - [项目搜索与键盘导航](records/2026-10/2026-10-29-project-search-journey.md)：全局项目搜索、目录分行与键盘导航实页复核，修复Windows检查器并发准备的运行文件冲突。

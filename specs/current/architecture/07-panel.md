@@ -3979,3 +3979,12 @@ A confirmed Task rename remains successful if a subsequent list or board read
 fails. The existing read-error state and diagnostic retain that refresh failure;
 the acknowledged mutation is not reported as a rejected write. Shared refresh
 effects after all metadata renames use the existing post-commit effect owner.
+
+Header mutations return their original promises to the current title component.
+Its selection/API scope owns duplicate-submission state and visible failures;
+the main entry wrapper does not consume these errors first. Sidebar row actions
+use their existing generation, stable row and API authority. Both retain the
+original diagnostic and show the shared localized AppDialog only while that
+owner remains current. An unconfirmed result is not presented as a committed
+or rolled-back mutation. Closing the notice returns to the explicitly captured
+current header trigger or sidebar main button through the shared Dialog owner.

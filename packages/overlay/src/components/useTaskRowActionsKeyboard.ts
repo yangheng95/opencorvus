@@ -63,6 +63,7 @@ export function useTaskRowActionsKeyboard(hasActions: Accessor<boolean>) {
     actionButtonTabIndex,
     setRowRef,
     setMainButtonRef,
+    getMainButton: () => mainButtonRef,
     getSummaryAnchorRect,
     openActionsFromKeyboard,
     closeActionsFromKeyboard,

@@ -416,6 +416,14 @@ function WorkLedgerRowView(props: {
         message: error instanceof Error ? error.message : String(error),
         details: formatErrorDetails(error),
       })
+      await showAppDialog({
+        title: t("work_ledger.action_failed_title"),
+        message: t("work_ledger.action_failed_message", { title: current.title || current.id }),
+        details: formatErrorDetails(error),
+        kind: "error",
+        openingGuard: ownsAction,
+        returnFocusTarget: () => ownsAction() ? rowActions.getMainButton() ?? null : null,
+      }).catch((cause) => reportError({ title: t("common.error"), details: formatErrorDetails(cause) }))
     } finally {
       if (ownsAction()) setBusy(false)
     }
