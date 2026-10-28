@@ -1,5 +1,6 @@
 import { afterEach, expect, spyOn, test } from "bun:test"
 import type { EvidenceLocatorInput } from "@opencorvus-ai/plugin/artifact-catalog"
+import { EngineArtifactEnvelopeSchema } from "@opencorvus-ai/plugin/artifact-catalog"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { ExpertSquadRegistry } from "@/expert-squad/registry"
@@ -683,6 +684,50 @@ test("reports a typed data migration requirement for the legacy expanded Project
     },
   })
 }, 60_000)
+
+test("delivers a resource-free business output through its explicit completion authority", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({ directory: project.path, fn: async () => {
+    const source = await taskFixture(project.path)
+    const payload = { rollout: { stage: "canary", percent: 5 }, cohorts: ["internal", "early"] }
+    const output = await publishExpertArtifact({ scope: source.scope, artifact: {
+      artifact_type: "base/business-rollout-plan", schema_version: 1, label: "Requested structured rollout plan",
+      payload, resources: [], source_artifact_locators: [], idempotent: true,
+    } })
+    const evidence = await publishExpertArtifact({ scope: source.scope, artifact: {
+      artifact_type: "base/acceptance-checklist", schema_version: 1, label: "Decision-only acceptance evidence",
+      payload: { checks: [{ id: "requested-scope", status: "passed" }] },
+      resources: [], source_artifact_locators: [], idempotent: true,
+    } })
+    const { expected_sha256: ignoredDigest, ...namedEvidence } = evidence.locator
+    expect(await completeFixtureTask(source, project.path, [output.locator], "structured-business-output", null, [namedEvidence]))
+      .toMatchObject({ title: "Task Completed" })
+    const terminal = requireTask(source.taskID)
+    const decision = findTaskCompletionDecisionForTerminalTime({ taskID: source.taskID, timeCompleted: terminal.time_completed! })!
+    expect({ evidence: decision.payload.evidence_locators, deliverables: decision.payload.deliverable_artifact_locators }).toEqual({
+      evidence: [evidence.locator], deliverables: [output.locator],
+    })
+    const importer = { missionID: source.missionID, sessionID: source.missionSessionID,
+      messageID: Identifier.ascending("message"), toolCallID: "call-import-structured-business-output" }
+    const resolved = resolveCrossTaskArtifactSources({ projectID: Instance.project.id, importer,
+      sources: [{ authority: "completion_decision", source_task_id: source.taskID }] })
+    expect(resolved.imports.map((item) => item.locator)).toEqual([output.locator])
+    const target = await taskFixture(project.path)
+    const prepared = await prepareCrossTaskArtifactSourceImports({ resolved, projectID: Instance.project.id,
+      targetProjectDirectory: project.path, targetTaskID: target.taskID, importer })
+    Database.transaction((db) => persistPreparedCrossTaskArtifactImports(db, { targetTaskID: target.taskID,
+      prepared: prepared.imports, authorities: prepared.authorities, timeCreated: Date.now() }))
+    const mappings = listCrossTaskArtifactImportMappings(target.taskID)
+    expect(mappings.map((item) => ({ taskID: item.source_task_id, locator: item.source_locator }))).toEqual([
+      { taskID: source.taskID, locator: output.locator },
+    ])
+    const imported = EngineArtifactEnvelopeSchema.parse(Database.use((db) => db.select().from(EngineArtifactTable)
+      .where(eq(EngineArtifactTable.id, mappings[0]!.imported_locator.artifact_id)).get()!.payload))
+    expect({ type: imported.artifact_type, payload: imported.payload, resources: imported.resources }).toEqual({
+      type: "base/business-rollout-plan", payload, resources: [],
+    })
+  } })
+})
 
 test("closes continuation admission before the real completion checkpoint and imports only declared deliverables", async () => {
   await using project = await memoryProject()

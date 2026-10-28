@@ -440,6 +440,8 @@ event 加调用者提供的精确 immutable locator 构成恢复权威。两种�
 不存在旧 `artifact_imports` 输入、latest-wins selector 或 fuzzy recovery。prepare 阶段冻结 source epoch/decision，target Task 与
 imported Artifact 的同一事务再次进行 compare-and-swap（CAS，比较并交换）复核；source 已 reopen
 或换 epoch 时整个 target commit 失败，准备期 TaskArtifact 由既有创建失败清理路径删除。
+显式交付按用户/后继Task用途定义，业务结构化Artifact即使resources为空也可作为deliverable；仅验收用途的记录仍属evidence，
+同一产物可同时具备两种明确用途。请求实际文件时仍须真实资源；不把全部evidence自动展开为交付，也不以resource数量分类交付意图。
 Reviewer artifact 的 producer Session、completed assistant message、Slice revision、
 RequirementSet、ContractGraph 和 evidence artifact 引用同样由
 `recordIntegrityReview` writer 验证为同一 Task；这是数据完整性约束，不是调度

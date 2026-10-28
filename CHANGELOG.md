@@ -9,6 +9,7 @@
 #### 修复
 
 - 2026-10-28：修复 Evolution 历史和晋升准入遗漏已消费 Candidate 导入别名的问题。历史保留当前项目、原目录上界内完整的同 Task 冻结引用；实时准入与新鲜性校验共用完整引用上下文，保留精确历史版本、导入身份及新增测量/Review 的原差异检查。
+- 2026-10-28：统一 Task 完成与 Mission 交接的模型面说明：明确交付给用户或后继 Task 的结构化业务 Artifact 即使没有文件资源，也应列为显式交付；仅验收用途的记录仍作为证据。实际文件格式要求和原完成权威导入保持，避免结构化输出在交接时遗漏。
 - 2026-10-28：修正16个内置专家团共26处 Skill 加载指令，使其使用真实技能名称，避免把能力引用当作工具参数而先失败再重试。受影响包更新为 `2026.10.28.1`；原权限、能力引用和已固定的历史任务修订保持。应用版本及数据库结构不变。
 - 2026-10-28：澄清任务分派中的本地工程边界，避免将“不联网、不外发、不改项目外”扩大成用户未提出的本地提交禁令，减少与构建角色交付要求的冲突。真实用户与项目限制仍须遵守，对外推送和发布仍需各自授权。
 - 2026-10-28：Mission 的正式完成或受阻结果进入统一工作列表，页头显示完整结果，侧栏使用紧凑状态徽标保留标题空间，避免已验收完成后只显示“未运行”。活动信号保持独立，新输入使原结果失效；同步更新接口契约，数据库结构不变。
@@ -23,6 +24,7 @@
 #### Fixed
 
 - 2026-10-28: Preserve consumed Candidate import aliases in Evolution history and promotion admission. History retains the complete Task reference context within its original Project and catalog bound; live admission and freshness validation share the complete context, preserving exact historical versions, import identity and the existing checks for new measurements and Reviews.
+- 2026-10-28: Align Task completion and Mission handoff instructions: structured business Artifacts intended for the user or a downstream Task are explicit deliverables even without file resources. Decision-only records remain evidence. Requested file formats and the existing completion-authority import rules remain intact, preserving structured outputs during handoff.
 - 2026-10-28: Corrected 26 Skill-loading instructions across 16 built-in Expert Squads to use declared Skill names. Affected packages advance to `2026.10.28.1`; capability grants and historical pinned Task revisions retain their original identities. Application and database versions are unchanged.
 - 2026-10-28: Clarified Task-authoring boundaries so network, external-transmission and outside-project restrictions do not become invented local-commit prohibitions. Explicit operator and repository restrictions remain binding; remote pushes and publication require their own authority.
 - 2026-10-28: Projected current accepted or blocked Mission outcomes into the unified Work Ledger, with full header labels and compact sidebar badges that preserve title space. Activity remains independent and new authority invalidates stale outcomes; generated contracts are updated without a database change.
