@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [停止后续聊实页证据](2026-10-28-stopped-session-followup-journey/README.md)：原始截图、请求与历史数据/结算复核。
+
 - [当前停止与继续实页证据](2026-10-28-stream-stop-current-journey/README.md)：原始截图、真实取消与Provider结算复核。
 
 - [MCP空参数实页证据](2026-10-28-mcp-empty-arguments/README.md)：相同输入修复前后、真实命令/进程、六张原图与原数据保留。

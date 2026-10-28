@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [停止后续聊与历史定位](records/2026-10/2026-10-28-stopped-session-followup-journey.md)：真实同会话跟进、原停止归属与重命名搜索。
+
 - [当前停止与继续体验](records/2026-10/2026-10-28-stream-stop-current-journey.md)：真实流式输出、停止与同会话继续的当前实页验收。
 
 - [本地MCP空参数保真](records/2026-10/2026-10-28-mcp-empty-arguments.md)：修复显式空参数丢失，真实服务从启动失败恢复连接。

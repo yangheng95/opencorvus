@@ -1,0 +1,60 @@
+{
+  "at": "2026-10-28T03:59:27.228Z",
+  "sourceRowsExact": 100281,
+  "originalRows": 100281,
+  "originalRowsExact": 100276,
+  "totalRows": 101266,
+  "schema": 9,
+  "integrity": "ok",
+  "projectFilesExact": 3,
+  "authorizedChanges": [
+    {
+      "table": "memory_chunk",
+      "identity": "mck_h6EvLigbGJ7HKAw1igbo",
+      "fileID": "mem_hQGxyxDBE1BdkM8gs1tW",
+      "projectID": "prj_hFmj1f6BXMBemXaPwm5n",
+      "revisionFrom": 1,
+      "revisionTo": 2,
+      "coveredInputMessageIDs": [
+        "msg_c4afcfe4-6a5c-49f5-9fc4-56ffc7fc1bbd",
+        "msg_6ec55843-41ab-4554-843e-fec4d71839d6"
+      ],
+      "tokenCount": 438,
+      "updatedAt": 1793157349042
+    },
+    {
+      "table": "memory_file",
+      "identity": "mem_hQGxyxDBE1BdkM8gs1tW",
+      "projectID": "prj_hFmj1f6BXMBemXaPwm5n",
+      "updatedAt": 1793157349042
+    },
+    {
+      "table": "runtime_execution_capacity_lease",
+      "key": "1",
+      "slot": 0,
+      "priorExpiresAt": 1793156068003,
+      "owner": "runtime:80336:a52f513c-a395-4676-af87-1cdb841bb27f",
+      "timeAcquired": 1793157334478,
+      "releasedAt": 1793157349036
+    },
+    {
+      "table": "runtime_execution_capacity_lease",
+      "key": "2",
+      "slot": 1,
+      "priorExpiresAt": 1793156034820,
+      "owner": "runtime:80336:1028e42c-6377-4f50-b639-339403cc158d",
+      "timeAcquired": 1793157335199,
+      "releasedAt": 1793157340397
+    },
+    {
+      "table": "session",
+      "identity": "ses_-zUQgm405zzb2xZnkVrc",
+      "fields": [
+        "title",
+        "time_updated"
+      ],
+      "title": "停止与续聊 · 体验复核756",
+      "updatedAt": 1793157405744
+    }
+  ]
+}

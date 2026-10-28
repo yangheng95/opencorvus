@@ -1,0 +1,102 @@
+{
+  "at": "2026-10-28T03:54:48.300Z",
+  "qualification": "Resource acceptance failed: original native absolute deadline reached; physical/output/request settlement complete, copies retired without restarting",
+  "credentialCopyRetired": true,
+  "modelCatalogCopyRetired": true,
+  "requests": 4,
+  "previousRequests": 755,
+  "cumulativeRequests": 759,
+  "maximumRequests": 6,
+  "unusedAllowanceRetired": 2,
+  "exhausted": false,
+  "requestOutcomes": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    }
+  ],
+  "source": {
+    "catalogSameBytes": true,
+    "catalogSameMetadata": true,
+    "authSameMetadata": true
+  },
+  "publicShutdown": null,
+  "publicShutdownQualification": "Not sent before absolute deadline; no fabricated normal shutdown",
+  "reserveMs": -119,
+  "physical": {
+    "launcher": {
+      "originalChildExit": 1,
+      "observedAtUtc": "2026-10-28T03:43:49.6524767Z"
+    },
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 98036,
+          "processInstanceID": "win32:639287540301390100",
+          "occurrenceID": "2a2d4bae-5364-4e07-b7f3-bdc1022dcb73"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 80336,
+          "processInstanceID": "win32:639287540308913903",
+          "occurrenceID": "38257b90-4a85-4350-a861-b693d84d5cff"
+        }
+      }
+    ],
+    "observedAtUtc": "2026-10-28T03:54:48.1225037Z",
+    "native": {
+      "occurrence": "stopped-followup-756-0a90948c-6aba-440c-99dc-bcc4aff54656",
+      "outcome": "settled",
+      "host": {
+        "pid": 98036,
+        "processInstanceID": "win32:639287540301390100",
+        "occurrenceID": "2a2d4bae-5364-4e07-b7f3-bdc1022dcb73"
+      },
+      "target": {
+        "pid": 80336,
+        "processInstanceID": "win32:639287540308913903",
+        "occurrenceID": "38257b90-4a85-4350-a861-b693d84d5cff"
+      },
+      "observedAtUtc": "2026-10-28T03:43:49.611Z",
+      "deadlineAt": 1793159029492,
+      "terminal": {
+        "occurrenceID": "stopped-followup-756-0a90948c-6aba-440c-99dc-bcc4aff54656",
+        "pid": 80336,
+        "reason": "deadline_exceeded",
+        "exitCode": 1,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    }
+  }
+}

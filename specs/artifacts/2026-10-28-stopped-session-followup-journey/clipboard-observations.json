@@ -1,0 +1,21 @@
+{
+  "first": {
+    "feedback": "Copied",
+    "characters": 863,
+    "originalRequestMatched": false,
+    "originalSessionMatched": false,
+    "cause": "unknown",
+    "pastedDraft": "cleared without send; content not retained"
+  },
+  "second": {
+    "feedback": "Copied",
+    "characters": 361,
+    "exactOriginalReasonAndStructuredError": true,
+    "requestID": "5b73fd48-d727-4a58-857b-a42ee6a50fef"
+  },
+  "finalPaste": {
+    "inputSent": false,
+    "reason": "The exact owned service had reached its original native physical deadline; Composer disabled and input preparation rejected"
+  },
+  "qualification": "Second actual clipboard read matched; full clipboard/paste acceptance incomplete; no product change inferred from unknown first observation"
+}
