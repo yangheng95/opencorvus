@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-29-release-0.1.34](2026-10-29-release-0.1.34/README.md)：未公开候选的双语官网日志预备截图，保留真实发布边界。
+
 - [2026-10-28-run-control-save-journey](2026-10-28-run-control-save-journey/README.md)：17张实际原图、真实400/200、Sol流式发送与数据/原生结算。
 
 - [2026-10-28-draft-attachment-lifecycle](2026-10-28-draft-attachment-lifecycle/README.md)：三张实页原图、旧副本回收日志和逐表数据复核。

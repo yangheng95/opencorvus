@@ -4,9 +4,76 @@
 
 ## 未发布
 
+## 0.1.35 - 2026-10-29
+
+### zh-CN
+
+#### 新增
+
+- 对话内查找支持定位原始消息、保留搜索上下文和键盘焦点；可导出原始会话及便于阅读的 Markdown，无需先配置可用模型。
+- CSV 交付可直接查看为可搜索表格；JSON、表格、时间线和图表完善类型、筛选、复制与全屏阅读，返回后保留原阅读位置。来源分组支持批量复制位置，交付文件可直接揭示并打开。
+- 输入区支持核对待发送附件、只读预览、下载原件及键盘移除；本地附件引用无需启动模型运行。补齐本地 MCP 服务的连接、断开与项目归属反馈，并在搜索中提供关闭项目入口。
+
+#### 调整
+
+- 包含0.1.34未公开候选的全部改进，并退休与当前草稿编辑合同冲突的过期界面模拟检查；保留原文可编辑和引用修正体验。
+- 持续目标入口和作用范围更加清楚，完成目标详情更简洁；编辑预算保留原暂停决定。Mission 正式完成或受阻结果进入统一工作列表，控制器原始指令默认折叠，保留真实活动和执行身份。
+- 运行控件以实际保存结果更新并行度；连续键盘编辑保持焦点，保存失败显示原位反馈和完整详情。设置导航、搜索、菜单快捷键和表单操作补齐双语说明。
+
+#### 修复
+
+- 修复旧完成调用提前结束已有后续输入的任务：完成事务保留已接纳消息的原队列与执行轮次，处理后续输入后才写入最终完成决定，显式取消保持原语义。
+- 修复 Evolution 历史与晋升准入遗漏已消费 Candidate 导入别名的问题。历史在当前项目和原目录上界内保留完整冻结引用；实时准入与新鲜性校验共用精确上下文，保留历史身份及新增测量和 Review 的差异检查。
+- Task 完成与 Mission 交接统一按交付意图区分业务产物与验收证据。交给用户或后继 Task 的结构化 Artifact 即使没有文件资源，也可声明为显式交付；实际文件格式要求和原完成权威导入保持。
+- 修正16个内置专家团共26处 Skill 加载指令，使用真实技能名称；受影响包更新为 `2026.10.28.1`，同步完整修订登记，保留已有 Task 固定的历史包。澄清任务中的本地工程权限，遵守用户真实限制和对外操作的独立授权。
+- 修复 PDF 阅读空白、附件预览关闭后的布局及 SVG 全图显示；图库、消息和下载使用同一原件身份，SVG 的安全显示派生与原始文件分开。完善附件名称、跨工作区草稿交接、文件路径匹配与冲突时的磁盘/草稿对比。
+- 修复无效引用转义造成的发送停滞和会话历史读取失败，保留可编辑原文及修正提示；自动标题优先显示引用之后的实际任务正文。Mission 和普通对话上下文按真实引用展示，Task 保留实际固定专家包。
+- 修复已复制交互产物的身份保留和侧边对话错误归属；停止后保留响应详情并支持同会话继续。归档恢复保留已加载分页，全局邮箱搜索和跨项目阅读保持原上下文，异步读取返回真实错误。
+- 更新共享 `qs`、原生加密、证书及异步运行依赖，移除旧 `rand` 依赖链。更新器固定官方 ZIP 9 修复提交及其所需 Tauri 2.12 依赖，保持现有更新签名合同。
+
+#### 升级影响与已知限制
+
+- 数据库通过既有版本化自动迁移升级到9，保留用户数据，并为历史复制的交互产物恢复独立身份；本版不要求清空数据库。已固定 Task 的专家包版本保持原身份。
+- 源码构建需 Rust 1.90 以上，并能访问更新器固定的 Git 来源。macOS 仍为临时签名（ad hoc），未包含 Apple 公证；原生 `glib` 中危通告 GHSA-wrw7-89jp-8q8g 仍未解决。
+
+### en-US
+
+#### Added
+
+- Find text within conversations, jump to original Messages, and retain search context and keyboard focus. Export original conversations or readable Markdown without first configuring an available model.
+- Inspect CSV deliveries as searchable tables. JSON, tables, timelines and charts improve typed values, filtering, copying and fullscreen reading while preserving reading positions. Copy all locations in an expanded source group and reveal delivered files directly.
+- Review pending attachments with read-only previews, original-file downloads and keyboard removal. Capture local attachment references without starting a model run. Manage local MCP connections with project-scoped feedback, and find the close-project action through search.
+
+#### Changed
+
+- Include all improvements from the unpublished 0.1.34 candidate and retire obsolete UI simulation checks that conflict with current draft editing. Editable originals and reference-correction behavior remain intact.
+- Clarify continuous-goal entry points and scope, simplify completed details, and preserve pauses when editing budgets. Show accepted or blocked Mission outcomes in the unified Work Ledger; collapse original controller instructions by default while retaining real activity and execution identity.
+- Update concurrency controls from actual saved configuration. Repeated keyboard edits retain focus; failed saves expose local feedback and full details. Improve bilingual settings guidance, search, menu shortcuts and form interactions.
+
+#### Fixed
+
+- Older completion calls preserve accepted successor input in its original queue and execution epoch. Final completion is recorded after that input is handled; explicit cancellation retains its own semantics.
+- Preserve consumed Candidate import aliases in Evolution history and promotion admission. Frozen history retains the complete reference context within its original Project and catalog bound; live admission and freshness share exact context while retaining historical identity and checks for new measurements and Reviews.
+- Distinguish intended business outputs from acceptance-only evidence in Task completion and Mission handoffs. Structured Artifacts intended for the user or a downstream Task can be explicit deliverables without file resources. Requested file formats and completion-authority import rules remain intact.
+- Correct 26 Skill-loading instructions across 16 built-in Expert Squads to use declared Skill names. Affected packages advance to `2026.10.28.1` with the complete revision registry; existing Tasks keep their pinned packages. Clarify local engineering authority while preserving actual user restrictions and independent authorization for external effects.
+- Repair blank PDF reading, attachment-preview close layouts and SVG full-image display. Galleries, Messages and downloads share the original resource identity, with safe SVG display derivatives kept separate. Preserve attachment names and cross-workspace drafts, match portable file paths and compare disk and draft versions after conflicts.
+- Repair malformed reference escapes that stalled submission and history loading, preserving editable originals and actionable guidance. Automatic titles focus on task text after opening references. Mission and conversation context uses actual references; Tasks retain their assigned Expert Squad revision.
+- Preserve copied interactive artifacts and side-chat error ownership. Retain stopped response details and continue within the same conversation. Archive restoration keeps loaded pages; global mailbox search and cross-project reading retain context, and asynchronous reads return their real errors.
+- Update shared `qs`, native encryption, certificate and async-runtime dependencies, and retire the legacy `rand` dependency chain. Pin the official ZIP 9 updater fix and its required Tauri 2.12 dependencies while retaining update-signature contracts.
+
+#### Upgrade impact and known limitations
+
+- Existing versioned automatic migrations advance the database to 9, preserving user data and restoring independent identities for historical copied interactive artifacts. No database reset is required. Tasks keep their pinned Expert Squad revision.
+- Source builds require Rust 1.90 or later and access to the updater's pinned Git source. macOS remains ad hoc signed without Apple notarization. Native `glib` advisory GHSA-wrw7-89jp-8q8g remains unresolved.
+
+
 ## 0.1.34 - 2026-10-29
 
 ### zh-CN
+
+#### 发布状态
+
+- 本候选未公开：正式构建准备已通过，但同源 CI 发现过期的界面模拟测试合同，流水线随后主动取消。标签、草稿及历史日志保留；本候选未交付公开安装包。改进继续进入0.1.35。
 
 #### 新增
 
@@ -36,6 +103,10 @@
 - 源码构建需 Rust 1.90 以上，并能访问更新器固定的 Git 来源。macOS 仍为临时签名（ad hoc），未包含 Apple 公证；原生 `glib` 中危通告 GHSA-wrw7-89jp-8q8g 仍未解决。
 
 ### en-US
+
+#### Publication status
+
+- This candidate was not published. Native preparation passed, but CI for the same source exposed an obsolete UI simulation contract and the release run was deliberately cancelled. Its tag, draft and written history are retained; no public installers were delivered. The improvements continue in 0.1.35.
 
 #### Added
 
