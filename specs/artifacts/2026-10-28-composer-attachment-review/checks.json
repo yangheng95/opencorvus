@@ -1,0 +1,56 @@
+{
+  "checks": {
+    "typecheck": {
+      "label": "composer-765-types-focus",
+      "startedAt": 1793185969726,
+      "closedAt": 1793185993408,
+      "code": 0,
+      "signal": null,
+      "childPID": 95964
+    },
+    "build": {
+      "label": "composer-765-build-focus",
+      "startedAt": 1793185980282,
+      "closedAt": 1793186043084,
+      "code": 0,
+      "signal": null,
+      "childPID": 21688
+    },
+    "i18n": {
+      "label": "composer-765-i18n",
+      "startedAt": 1793185317038,
+      "closedAt": 1793185319418,
+      "code": 0,
+      "signal": null,
+      "childPID": 91572
+    },
+    "docs": {
+      "label": "composer-765-docs-final",
+      "startedAt": 1793186364230,
+      "closedAt": 1793186374252,
+      "code": 0,
+      "signal": null,
+      "childPID": 92724
+    }
+  },
+  "uiAutomation": "None added, modified or run; UI-only implementation",
+  "visual": "20 unedited raw JPEGs manually reviewed; README separates index transition, original missing review and actual focus defect from final evidence",
+  "previousTypesFailure": {
+    "label": "composer-765-types",
+    "startedAt": 1793185306384,
+    "closedAt": 1793185331233,
+    "code": 2,
+    "signal": null,
+    "childPID": 67464
+  },
+  "intermediatePassedTypes": {
+    "label": "composer-765-types-final",
+    "startedAt": 1793185427888,
+    "closedAt": 1793185447866,
+    "code": 0,
+    "signal": null,
+    "childPID": 88928
+  },
+  "coverageLimits": "PDF/media/Office, old file-preview artifact consumer, dynamic failures and authority race matrix unverified; no Provider execution",
+  "overallGoal": "active"
+}

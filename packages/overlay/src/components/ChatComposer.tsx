@@ -72,6 +72,7 @@ import type { ExpertSquadMarketIndexItem, ExpertSquadOption } from "../services/
 import { currentUIScale } from "../utils/layout-tokens"
 import { ComposerModelSelector } from "./ComposerModelSelector"
 import { ComposerPermissionControl } from "./ComposerPermissionControl"
+import { ComposerAttachmentPreview } from "./ComposerAttachmentPreview"
 import { appStore } from "../store/app"
 import { currentProjectConfigRequestOptions, patchConfig } from "../services/config"
 import {
@@ -949,8 +950,25 @@ export function ChatComposer(props: ChatComposerProps) {
     }
   }
 
-  function removeAttachment(index: number) {
+  function removeAttachment(index: number, origin: HTMLButtonElement) {
+    const restoreFocus = document.activeElement === origin
+    const epoch = boardStore.selectEpoch
+    const authority = captureApiAuthority()
+    const draftKey = normalizeComposerDraftKey(props.draftKey)
+    const strip = origin.closest(".chat-attachments")
     setAttachments((prev) => prev.filter((_, i) => i !== index))
+    if (!restoreFocus) return
+    queueMicrotask(() => {
+      if (!isApiAuthorityCurrent(authority) || boardStore.selectEpoch !== epoch ||
+        normalizeComposerDraftKey(props.draftKey) !== draftKey) return
+      if (document.activeElement !== origin && document.activeElement !== document.body) return
+      const controls = strip?.isConnected
+        ? strip.querySelectorAll<HTMLButtonElement>('[data-ui="chat-attachment-remove"]')
+        : undefined
+      const target = controls?.[Math.min(index, controls.length - 1)] ?? textareaRef
+      if (target?.isConnected && !target.disabled && target.getClientRects().length &&
+        !target.closest("[inert], [hidden]")) target.focus({ preventScroll: true })
+    })
   }
 
   async function addFiles(files: readonly File[]): Promise<void> {
@@ -1540,25 +1558,20 @@ export function ChatComposer(props: ChatComposerProps) {
             {(att, index) => (
               <div class="chat-attachment-item" title={att.filename}>
                 <Show
-                  when={att.kind === "folder"}
+                  when={att.kind === "file" && !att.mime.startsWith("image/")}
                   fallback={
-                    <Show
-                      when={att.mime.startsWith("image/")}
-                      fallback={
+                    <>
+                      <Show when={att.kind === "folder"} fallback={<ComposerAttachmentThumbnail attachment={att} />}>
                         <span class="chat-attachment-icon">
-                          {att.filename?.split(".").pop()?.toUpperCase() || "FILE"}
+                          <Icon name="folder-open" size="medium" />
                         </span>
-                      }
-                    >
-                      <ComposerAttachmentThumbnail attachment={att} />
-                    </Show>
+                      </Show>
+                      <span class="chat-attachment-name">{att.filename || "file"}</span>
+                    </>
                   }
                 >
-                  <span class="chat-attachment-icon">
-                    <Icon name="folder-open" size="medium" />
-                  </span>
+                  <ComposerAttachmentPreview attachment={att} />
                 </Show>
-                <span class="chat-attachment-name">{att.filename || "file"}</span>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -1566,8 +1579,8 @@ export function ChatComposer(props: ChatComposerProps) {
                   type="button"
                   data-ui="chat-attachment-remove"
                   data-chrome="icon-action"
-                  aria-label={t("chat.attachment.remove")}
-                  onClick={() => removeAttachment(index())}
+                  aria-label={t("chat.attachment.remove", { name: att.filename })}
+                  onClick={(event) => removeAttachment(index(), event.currentTarget)}
                 >
                   <Icon name="close" size="compact" />
                 </Button>

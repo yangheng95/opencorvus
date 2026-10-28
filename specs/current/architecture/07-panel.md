@@ -226,8 +226,22 @@ original display names and source targets. Existing persisted source snapshots
 are not rewritten.
 Composer uploads preserve every supplied nonempty original filename before
 metadata is stored; generated paste names apply only to unnamed inputs. Physical
-staging names remain the AttachmentStore's responsibility. Server-relative
-canonical attachment links in Markdown open the existing raw resource in a new
+staging names remain the AttachmentStore's responsibility.
+
+Nonimage file chips open an existing Dialog for review before submission. Stored
+text MIME types and JSON use the same ResourceTextPreview as File preview
+artifacts; other formats retain FilePart media or original-download presentation.
+Image chips keep their existing full-image preview and folders remain references.
+Review is read-only and retains the original draft and attachment list. The
+dialog retires with its selection/API authority or attachment row, and closes
+back to its current visible trigger. Removal controls include the exact filename
+in their localized accessible names.
+Keyboard removal keeps focus on the next surviving removal action (or the
+previous one when removing the tail); an empty strip returns to its composer.
+This handoff retains the current selection, API authority and draft scope, and
+does not take focus back after another control acquires it.
+
+Server-relative canonical attachment links in Markdown open the existing raw resource in a new
 tab, preserving the conversation. At activation, the shared resource URL resolver
 uses the current server connection; native external URL opening retains its
 existing capability admission. Sources continues to use the read-only workbench.

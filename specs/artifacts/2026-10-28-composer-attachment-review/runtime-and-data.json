@@ -1,0 +1,308 @@
+{
+  "at": "2026-10-28T11:20:22.320Z",
+  "scopes": [
+    {
+      "tag": "baseline",
+      "ui": "main-C-ao02O_.js",
+      "retirement": {
+        "at": "2026-10-28T10:57:00.238Z",
+        "credentialCopyCreated": false,
+        "modelCatalogCopyRetired": true,
+        "requests": 0,
+        "cumulativeRequests": 759,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "reserveMs": 2177765,
+        "publicShutdown": 200,
+        "physical": {
+          "native": {
+            "occurrence": "composer-attachment-review-765-33d4a411-77e8-4066-bf5a-942010b1b16d",
+            "outcome": "settled",
+            "host": {
+              "pid": 86952,
+              "processInstanceID": "win32:639287815958334839",
+              "occurrenceID": "36d49fba-4345-462d-9dfb-2a4865843b42"
+            },
+            "target": {
+              "pid": 97108,
+              "processInstanceID": "win32:639287815967406989",
+              "occurrenceID": "46870e57-3611-4aee-ad0e-31e082bfbbf4"
+            },
+            "observedAtUtc": "2026-10-28T10:56:58.005Z",
+            "deadlineAt": 1793187195770,
+            "terminal": {
+              "occurrenceID": "composer-attachment-review-765-33d4a411-77e8-4066-bf5a-942010b1b16d",
+              "pid": 97108,
+              "reason": "exited",
+              "exitCode": 0,
+              "signal": null
+            },
+            "physicalCompletion": true,
+            "outputDrainComplete": true,
+            "requestCleanupComplete": true,
+            "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+          },
+          "chain": [
+            {
+              "state": "dead_or_reused",
+              "identity": {
+                "pid": 86952,
+                "processInstanceID": "win32:639287815958334839",
+                "occurrenceID": "36d49fba-4345-462d-9dfb-2a4865843b42"
+              }
+            },
+            {
+              "state": "dead_or_reused",
+              "identity": {
+                "pid": 97108,
+                "processInstanceID": "win32:639287815967406989",
+                "occurrenceID": "46870e57-3611-4aee-ad0e-31e082bfbbf4"
+              }
+            }
+          ],
+          "observedAtUtc": "2026-10-28T10:56:59.5535604Z",
+          "launcher": {
+            "observedAtUtc": "2026-10-28T10:56:58.0473767Z",
+            "originalChildExit": 0
+          }
+        }
+      },
+      "shutdownPlan": {
+        "registeredAt": 1793184801475,
+        "dueAt": 1793185521475,
+        "physicalDeadlineAt": 1793187195770,
+        "occurrence": "composer-attachment-review-765-33d4a411-77e8-4066-bf5a-942010b1b16d",
+        "owner": {
+          "pid": 97108,
+          "processInstanceID": "win32:639287815967406989",
+          "occurrenceID": "c7e8fb30-2939-4a21-8dc2-a617014cf72d"
+        }
+      },
+      "commandHandles": 63,
+      "originalTerminalOutputSettlement": "fulfilled",
+      "attachmentTraffic": {
+        "POST /attachment": 2,
+        "GET /attachment/prj_hFmj1f6BXMBemXaPwm5n/f33221ffe39539c919f37f4f28a4765c302439ffe6bb38f780c800ead3aa23dd.jpg": 2
+      }
+    },
+    {
+      "tag": "after",
+      "ui": "main-DbyB9YUC.js",
+      "retirement": {
+        "at": "2026-10-28T11:11:36.508Z",
+        "credentialCopyCreated": false,
+        "modelCatalogCopyRetired": true,
+        "requests": 0,
+        "cumulativeRequests": 759,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "reserveMs": 1301462,
+        "publicShutdown": 200,
+        "physical": {
+          "launcher": {
+            "originalChildExit": 0,
+            "observedAtUtc": "2026-10-28T11:11:34.3510721Z"
+          },
+          "chain": [
+            {
+              "state": "dead_or_reused",
+              "identity": {
+                "pid": 76860,
+                "processInstanceID": "win32:639287823506059128",
+                "occurrenceID": "78cda514-578b-4b10-a725-f4f98089878a"
+              }
+            },
+            {
+              "state": "dead_or_reused",
+              "identity": {
+                "pid": 68004,
+                "processInstanceID": "win32:639287823513227572",
+                "occurrenceID": "0ea099e9-edf8-41e1-9d7c-432e50b885db"
+              }
+            }
+          ],
+          "observedAtUtc": "2026-10-28T11:11:35.8452669Z",
+          "native": {
+            "occurrence": "composer-attachment-review-765-after-9e0ebd16-dacd-49ff-a010-1124f94beaec",
+            "outcome": "settled",
+            "host": {
+              "pid": 76860,
+              "processInstanceID": "win32:639287823506059128",
+              "occurrenceID": "78cda514-578b-4b10-a725-f4f98089878a"
+            },
+            "target": {
+              "pid": 68004,
+              "processInstanceID": "win32:639287823513227572",
+              "occurrenceID": "0ea099e9-edf8-41e1-9d7c-432e50b885db"
+            },
+            "observedAtUtc": "2026-10-28T11:11:34.308Z",
+            "deadlineAt": 1793187195770,
+            "terminal": {
+              "occurrenceID": "composer-attachment-review-765-after-9e0ebd16-dacd-49ff-a010-1124f94beaec",
+              "pid": 68004,
+              "reason": "exited",
+              "exitCode": 0,
+              "signal": null
+            },
+            "physicalCompletion": true,
+            "outputDrainComplete": true,
+            "requestCleanupComplete": true,
+            "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+          }
+        }
+      },
+      "shutdownPlan": {
+        "registeredAt": 1793185554839,
+        "dueAt": 1793186274839,
+        "physicalDeadlineAt": 1793187195770,
+        "occurrence": "composer-attachment-review-765-after-9e0ebd16-dacd-49ff-a010-1124f94beaec",
+        "owner": {
+          "pid": 68004,
+          "processInstanceID": "win32:639287823513227572",
+          "occurrenceID": "d593ec22-fcb9-4935-886b-7f1e862c9c90"
+        }
+      },
+      "commandHandles": 63,
+      "originalTerminalOutputSettlement": "fulfilled",
+      "attachmentTraffic": {
+        "POST /attachment": 4,
+        "GET /attachment/prj_hFmj1f6BXMBemXaPwm5n/f33221ffe39539c919f37f4f28a4765c302439ffe6bb38f780c800ead3aa23dd.jpg": 2,
+        "GET /attachment/prj_hFmj1f6BXMBemXaPwm5n/ead2113ee29ba2fe1f986da6b04ca3f360a22db2cfff7fde47316dac7b5810d0.md": 1,
+        "GET /attachment/prj_hFmj1f6BXMBemXaPwm5n/980e42669a18044a6d1b19c86cd14e9ee74d0426938ee5e4eb45d8fe72364546.json": 1,
+        "GET /attachment/prj_hFmj1f6BXMBemXaPwm5n/e99e4c75582f06ec0e7e9ea7560511fe58c88e0871f5f2caf3fc6743a25d5d0b.lock": 1
+      }
+    },
+    {
+      "tag": "final",
+      "ui": "main-CA287XoV.js",
+      "retirement": {
+        "at": "2026-10-28T11:16:39.827Z",
+        "credentialCopyCreated": false,
+        "modelCatalogCopyRetired": true,
+        "requests": 0,
+        "cumulativeRequests": 759,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "reserveMs": 998025,
+        "publicShutdown": 200,
+        "physical": {
+          "launcher": {
+            "originalChildExit": 0,
+            "observedAtUtc": "2026-10-28T11:16:37.7896596Z"
+          },
+          "chain": [
+            {
+              "state": "dead_or_reused",
+              "identity": {
+                "pid": 96736,
+                "processInstanceID": "win32:639287828783512056",
+                "occurrenceID": "bbcd807e-8495-4498-a9bc-7503a1f0deb7"
+              }
+            },
+            {
+              "state": "dead_or_reused",
+              "identity": {
+                "pid": 97712,
+                "processInstanceID": "win32:639287828793220389",
+                "occurrenceID": "789f8c6b-4f7d-4835-89b1-32e672297297"
+              }
+            }
+          ],
+          "observedAtUtc": "2026-10-28T11:16:39.1967013Z",
+          "native": {
+            "occurrence": "composer-attachment-review-765-final-7432a0ac-ce59-4399-80b5-5c59910ceab0",
+            "outcome": "settled",
+            "host": {
+              "pid": 96736,
+              "processInstanceID": "win32:639287828783512056",
+              "occurrenceID": "bbcd807e-8495-4498-a9bc-7503a1f0deb7"
+            },
+            "target": {
+              "pid": 97712,
+              "processInstanceID": "win32:639287828793220389",
+              "occurrenceID": "789f8c6b-4f7d-4835-89b1-32e672297297"
+            },
+            "observedAtUtc": "2026-10-28T11:16:37.745Z",
+            "deadlineAt": 1793187195770,
+            "terminal": {
+              "occurrenceID": "composer-attachment-review-765-final-7432a0ac-ce59-4399-80b5-5c59910ceab0",
+              "pid": 97712,
+              "reason": "exited",
+              "exitCode": 0,
+              "signal": null
+            },
+            "physicalCompletion": true,
+            "outputDrainComplete": true,
+            "requestCleanupComplete": true,
+            "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+          }
+        }
+      },
+      "shutdownPlan": {
+        "registeredAt": 1793186082930,
+        "dueAt": 1793186442930,
+        "physicalDeadlineAt": 1793187195770,
+        "occurrence": "composer-attachment-review-765-final-7432a0ac-ce59-4399-80b5-5c59910ceab0",
+        "owner": {
+          "pid": 97712,
+          "processInstanceID": "win32:639287828793220389",
+          "occurrenceID": "44d04d23-01eb-4f38-b7e4-8352b46f6490"
+        }
+      },
+      "commandHandles": 63,
+      "originalTerminalOutputSettlement": "fulfilled",
+      "attachmentTraffic": {
+        "POST /attachment": 3,
+        "GET /attachment/prj_hFmj1f6BXMBemXaPwm5n/f33221ffe39539c919f37f4f28a4765c302439ffe6bb38f780c800ead3aa23dd.jpg": 1,
+        "GET /attachment/prj_hFmj1f6BXMBemXaPwm5n/ead2113ee29ba2fe1f986da6b04ca3f360a22db2cfff7fde47316dac7b5810d0.md": 1
+      }
+    }
+  ],
+  "data": [
+    {
+      "tag": "baseline",
+      "originals": 101324,
+      "exact": 101324,
+      "total": 101326,
+      "sourceRowsExact": 101324,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "after",
+      "originals": 101326,
+      "exact": 101326,
+      "total": 101328,
+      "sourceRowsExact": 101326,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "final",
+      "originals": 101328,
+      "exact": 101328,
+      "total": 101330,
+      "sourceRowsExact": 101328,
+      "schema": 9,
+      "integrity": "ok"
+    }
+  ],
+  "projectFilesExact": 3,
+  "providerRequests": 0,
+  "cumulativeRequests": 759,
+  "temporaryViewport": "1119x720; reset after each scope",
+  "ownedTabsClosed": [
+    170,
+    171,
+    172
+  ]
+}

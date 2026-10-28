@@ -97,6 +97,26 @@
   min-width: 0;
 }
 
+.chat-attachment-item .composer-attachment-file-trigger {
+  --oc-button-height: calc(28px * var(--ui-scale));
+  --oc-button-padding-x: 0;
+  --oc-button-padding-y: 0;
+
+  min-width: 0;
+  gap: var(--ui-gap-sm);
+  font-size: inherit;
+  color: inherit;
+}
+
+.composer-attachment-file-trigger:hover .chat-attachment-name,
+.composer-attachment-file-trigger:focus-visible .chat-attachment-name {
+  text-decoration: underline;
+}
+
+.composer-attachment-dialog .msg-artifact-code {
+  max-height: min(calc(560px * var(--ui-scale)), 55vh);
+}
+
 .chat-attachment-item .oc-button[data-ui="chat-attachment-remove"] {
   --oc-button-height: var(--oc-density-chip-height);
   --oc-button-padding-x: 0;

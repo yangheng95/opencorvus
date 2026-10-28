@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-28-composer-attachment-review.md](2026-10-28-composer-attachment-review.md)：提交前附件核对、共享文本预览及删除焦点修复。
+
 - [Issue 51、40 与 58–60 跟进](2026-10-28-issue-followup-51-58-60.md)：真实合同复现、共享机制审计及带证据关闭。
 
 - [2026-10-28-default-goal-journey.md](2026-10-28-default-goal-journey.md)：默认页持续目标入口、双语提示、预算/指南草稿与既有目标详情体验。

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-28-composer-attachment-review](2026-10-28-composer-attachment-review/README.md)：附件核对、中文原文、原件下载、首末项/空列表焦点的真实原图与资源数据证据。
+
 - [2026-10-28-default-goal-journey](2026-10-28-default-goal-journey/README.md)：默认页持续目标可发现性及真实交互原图、隔离运行与数据检查。
 
 - [会话查找键盘实页证据](2026-10-28-conversation-search-interaction/README.md)：中文Work、英文Chat、原失败与改后原图。
