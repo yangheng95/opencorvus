@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Sources 当前实页证据](2026-10-28-source-reading-current-journey/README.md)：14张原图、两个真实网页来源与独立数据/进程复核。
+
 - [Goal 生命周期实测证据](2026-10-28-goal-control-lifecycle-journey/README.md)：13张原图、三轮实际会话及隔离数据与进程复核。
 
 - [归档恢复实页证据](2026-10-28-archive-journey-and-alert-reconciliation/README.md)：八张原图、21项断言及原始行完整保留。

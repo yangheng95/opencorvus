@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Sources 当前阅读体验](records/2026-10/2026-10-28-source-reading-current-journey.md)：文件原件与真实网页来源、摘录和链接完整流程验收。
+
 - [Goal 暂停与恢复体验](records/2026-10/2026-10-28-goal-control-lifecycle-journey.md)：预算耗尽的明确保存选择、三轮实际交付与完成。
 
 - [归档恢复与告警核对](records/2026-10/2026-10-28-archive-journey-and-alert-reconciliation.md)：恢复可见反馈、共享元数据事件修复及实页验收。

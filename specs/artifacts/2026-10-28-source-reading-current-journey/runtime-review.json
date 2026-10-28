@@ -1,0 +1,452 @@
+{
+  "at": "2026-10-28T00:47:25.660Z",
+  "qualification": "Current product manual verification; no production change or UI automated test",
+  "scope": {
+    "historyPort": 38258,
+    "webPort": 38259,
+    "publication": "main-BLfBYC1M.js",
+    "tabs": [
+      "139",
+      "140",
+      "141"
+    ],
+    "requests": 6,
+    "maximumWebRequests": 8,
+    "cumulativeRequests": 742,
+    "deadlineAt": 1793148427172
+  },
+  "results": [
+    "Current default desktop page title/composer/starters reviewed",
+    "Four actual tester file Sources readable; orders.csv opens the actual original three-row file",
+    "Returning from File to Agents retains source reading position",
+    "Two real streamed webfetch results publish exact Source/ToolPart bindings with actual document titles and domains",
+    "Source excerpt scroll, collapse/reopen and live locale change retain reading position",
+    "Original Source link opens the matching official W3C page",
+    "Canonical webfetch result loads when the Tool is expanded; final owner idle"
+  ],
+  "screenshots": [
+    {
+      "name": "01-current-home-en.jpg",
+      "port": 38258,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "02-completed-task-history-en.jpg",
+      "port": 38258,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "03-actual-sources-dock-en.jpg",
+      "port": 38258,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "04-visible-file-sources-en.jpg",
+      "port": 38258,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "05-original-orders-open-en.jpg",
+      "port": 38258,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "06-sources-return-reading-position-en.jpg",
+      "port": 38258,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "07-main-context-source-reading-en.jpg",
+      "port": 38258,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "08-live-web-source-excerpt-en.jpg",
+      "port": 38259,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "09-excerpt-scrolled-en.jpg",
+      "port": 38259,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "10-excerpt-position-restored-en.jpg",
+      "port": 38259,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "11-web-source-excerpt-zh.jpg",
+      "port": 38259,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "12-two-web-sources-and-reply-zh.jpg",
+      "port": 38259,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "13-source-opens-official-page.jpg",
+      "port": 38259,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "14-original-webfetch-result-zh.jpg",
+      "port": 38259,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    }
+  ],
+  "data": {
+    "baselineRows": 95070,
+    "schema": 9,
+    "instances": {
+      "source": {
+        "currentRows": 95070,
+        "exactOriginalRowsRetained": 95070,
+        "originalIdentitiesRetained": 95070,
+        "advancedCapacitySlots": [],
+        "schema": 9,
+        "integrity": "ok"
+      },
+      "history": {
+        "currentRows": 95070,
+        "exactOriginalRowsRetained": 95070,
+        "originalIdentitiesRetained": 95070,
+        "advancedCapacitySlots": [],
+        "schema": 9,
+        "integrity": "ok"
+      },
+      "web": {
+        "currentRows": 96679,
+        "exactOriginalRowsRetained": 95066,
+        "originalIdentitiesRetained": 95070,
+        "advancedCapacitySlots": [
+          {
+            "slot": 0,
+            "originalExpiredAt": 1793146489307,
+            "newAcquiredAt": 1793147758728,
+            "releasedAt": 1793147765688,
+            "physicalOwnerPID": 70600
+          },
+          {
+            "slot": 1,
+            "originalExpiredAt": 1793146169855,
+            "newAcquiredAt": 1793147753313,
+            "releasedAt": 1793147756735,
+            "physicalOwnerPID": 70600
+          }
+        ],
+        "memoryEnvelope": {
+          "fileID": "mem_hXuaE6U7jTMSf48Txzwf",
+          "chunkID": "mck_hZAucfmMguWiXf77awEY",
+          "projectID": "prj_h1BsWORAq81U9xpPqhbA",
+          "originalRevision": 0,
+          "currentRevision": 1,
+          "originalMarkdownCharacters": 0,
+          "currentMarkdownCharacters": 620,
+          "currentTokens": 155,
+          "coveredOccurrenceIDs": [
+            "msg_9df2a86f-3fc0-4447-833d-7a96a009e144"
+          ],
+          "updatedAt": 1793147753543
+        },
+        "schema": 9,
+        "integrity": "ok"
+      }
+    },
+    "qualification": "Every original row identity preserved. History and source retain every original row exactly. Web retains all original data except two fenced capacity slot generations and this exact project context envelope: an initially empty revision 0 advances to revision 1 over the actual new human input, with its matching file update time. No prior memory text was replaced."
+  },
+  "physical": {
+    "history": {
+      "at": "2026-10-28T00:34:05.097Z",
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 736,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 783332,
+      "publicShutdown": 200,
+      "physical": {
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-28T00:34:03.8789469Z"
+        },
+        "native": {
+          "occurrence": "source-reading-751-483063db-e071-43bf-818f-cd86dae933db",
+          "outcome": "settled",
+          "host": {
+            "pid": 85820,
+            "processInstanceID": "win32:639287440277407308",
+            "occurrenceID": "17b73bf5-92a3-41c5-aea5-9027b4dd6c7d"
+          },
+          "target": {
+            "pid": 92996,
+            "processInstanceID": "win32:639287440285067617",
+            "occurrenceID": "9c28a159-4e70-4cba-ab78-7375b15301b1"
+          },
+          "observedAtUtc": "2026-10-28T00:34:03.84Z",
+          "deadlineAt": 1793148427172,
+          "terminal": {
+            "occurrenceID": "source-reading-751-483063db-e071-43bf-818f-cd86dae933db",
+            "pid": 92996,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 85820,
+              "processInstanceID": "win32:639287440277407308",
+              "occurrenceID": "17b73bf5-92a3-41c5-aea5-9027b4dd6c7d"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 92996,
+              "processInstanceID": "win32:639287440285067617",
+              "occurrenceID": "9c28a159-4e70-4cba-ab78-7375b15301b1"
+            }
+          }
+        ],
+        "observedAtUtc": "2026-10-28T00:34:05.0087947Z"
+      }
+    },
+    "web": {
+      "at": "2026-10-28T00:41:03.646Z",
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "requests": 6,
+      "previousRequests": 736,
+      "cumulativeRequests": 742,
+      "maximumRequests": 8,
+      "exhausted": false,
+      "model": "gpt-6.1-sol",
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "reserveMs": 365125,
+      "physical": {
+        "observedAtUtc": "2026-10-28T00:41:03.5460183Z",
+        "launcher": {
+          "observedAtUtc": "2026-10-28T00:41:02.0884387Z",
+          "originalChildExit": 0
+        },
+        "native": {
+          "occurrence": "goal-lifecycle-750-d93bdc6b-52ae-4b41-86b1-c8e10d39a23e",
+          "outcome": "settled",
+          "host": {
+            "pid": 72104,
+            "processInstanceID": "win32:639287444881238916",
+            "occurrenceID": "7fe1be5c-77ab-4e7e-a21e-f584c4bffdef"
+          },
+          "target": {
+            "pid": 70600,
+            "processInstanceID": "win32:639287444888755613",
+            "occurrenceID": "91783d91-e1a7-4f27-8e35-ed239973a04f"
+          },
+          "observedAtUtc": "2026-10-28T00:41:02.047Z",
+          "deadlineAt": 1793148427172,
+          "terminal": {
+            "occurrenceID": "goal-lifecycle-750-d93bdc6b-52ae-4b41-86b1-c8e10d39a23e",
+            "pid": 70600,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 72104,
+              "processInstanceID": "win32:639287444881238916",
+              "occurrenceID": "7fe1be5c-77ab-4e7e-a21e-f584c4bffdef"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 70600,
+              "processInstanceID": "win32:639287444888755613",
+              "occurrenceID": "91783d91-e1a7-4f27-8e35-ed239973a04f"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "sources": [
+    {
+      "sourcePartID": "prt_g0VZIfELt005vkXHYoCa",
+      "sourceId": "8bb78863e84318e2bef75d847d0f60b0e1eae8b7fc1fbdf0ac507804a60da96b",
+      "messageID": "msg_g0VZIfDBd007HVK92WIY",
+      "sessionID": "ses_-zUQhKnB8zz3ewKRgYaM",
+      "toolPartID": "prt_g0VZIfE5000FjqwOFwQd",
+      "url": "https://www.w3.org/WAI/fundamentals/accessibility-intro/",
+      "title": "Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C",
+      "snippetCharacters": 4087,
+      "provider": "opencorvus-webfetch",
+      "request": {
+        "tool": "webfetch",
+        "input": {
+          "url": "https://www.w3.org/WAI/fundamentals/accessibility-intro/",
+          "format": "markdown"
+        }
+      },
+      "outcome": {
+        "status": "completed",
+        "resultAttemptID": "per_hQ01LR558A5N80aORf8g",
+        "completedAt": 1793147752890,
+        "title": "https://www.w3.org/WAI/fundamentals/accessibility-intro/ (text/html; charset=utf-8)",
+        "metadata": {
+          "originalBytes": 23805,
+          "shownBytes": 23805,
+          "webfetchOutputClipped": false,
+          "webfetchEmbeddedAttachmentCount": 0,
+          "truncated": false
+        }
+      },
+      "durableResult": {
+        "kind": "json",
+        "outputCharacters": 23672
+      }
+    },
+    {
+      "sourcePartID": "prt_g0VZIfFlE00X1sUsMAyL",
+      "sourceId": "141e55538fffe596710ea7d1fc07b41230c4ce70e0ee60e08bf3678bae384698",
+      "messageID": "msg_g0VZIfEN0003l06fuqXL",
+      "sessionID": "ses_-zUQhKnB8zz3ewKRgYaM",
+      "toolPartID": "prt_g0VZIfFA500wzB5JjD9H",
+      "url": "https://www.w3.org/WAI/tips/writing/",
+      "title": "Writing for Web Accessibility – Tips for Getting Started | Web Accessibility Initiative (WAI) | W3C",
+      "snippetCharacters": 2376,
+      "provider": "opencorvus-webfetch",
+      "request": {
+        "tool": "webfetch",
+        "input": {
+          "url": "https://www.w3.org/WAI/tips/writing/",
+          "format": "markdown"
+        }
+      },
+      "outcome": {
+        "status": "completed",
+        "resultAttemptID": "per_hcYXiHSoqCis7zuxnALM",
+        "completedAt": 1793147758305,
+        "title": "https://www.w3.org/WAI/tips/writing/ (text/html; charset=utf-8)",
+        "metadata": {
+          "originalBytes": 25648,
+          "shownBytes": 25648,
+          "webfetchOutputClipped": false,
+          "webfetchEmbeddedAttachmentCount": 0,
+          "truncated": false
+        }
+      },
+      "durableResult": {
+        "kind": "json",
+        "outputCharacters": 25590
+      }
+    }
+  ],
+  "checks": {
+    "source-reading-docs": {
+      "label": "source-reading-docs",
+      "startedAt": 1793148446324,
+      "closedAt": 1793148455498,
+      "code": 0,
+      "signal": null,
+      "childPID": 73616
+    },
+    "source-reading-architecture": {
+      "label": "source-reading-architecture",
+      "startedAt": 1793148446343,
+      "closedAt": 1793148449482,
+      "code": 0,
+      "signal": null,
+      "childPID": 95336
+    }
+  },
+  "limits": [
+    "No source-document or grouped More Sources scenario in this dataset",
+    "Live source arrived during observation, but the first captured excerpt frame is already settled; append-while-reading not qualified",
+    "Some external-page/returned-page viewport sizes changed naturally; no fixed-size claim for every screenshot",
+    "No UI automation, new production fix, user database, user process/window action, release or installation",
+    "Authenticated GitHub alert list still awaits separate earlier read-only authorization"
+  ]
+}

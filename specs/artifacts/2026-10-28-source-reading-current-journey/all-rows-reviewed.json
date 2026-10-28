@@ -1,0 +1,60 @@
+{
+  "baselineRows": 95070,
+  "schema": 9,
+  "instances": {
+    "source": {
+      "currentRows": 95070,
+      "exactOriginalRowsRetained": 95070,
+      "originalIdentitiesRetained": 95070,
+      "advancedCapacitySlots": [],
+      "schema": 9,
+      "integrity": "ok"
+    },
+    "history": {
+      "currentRows": 95070,
+      "exactOriginalRowsRetained": 95070,
+      "originalIdentitiesRetained": 95070,
+      "advancedCapacitySlots": [],
+      "schema": 9,
+      "integrity": "ok"
+    },
+    "web": {
+      "currentRows": 96679,
+      "exactOriginalRowsRetained": 95066,
+      "originalIdentitiesRetained": 95070,
+      "advancedCapacitySlots": [
+        {
+          "slot": 0,
+          "originalExpiredAt": 1793146489307,
+          "newAcquiredAt": 1793147758728,
+          "releasedAt": 1793147765688,
+          "physicalOwnerPID": 70600
+        },
+        {
+          "slot": 1,
+          "originalExpiredAt": 1793146169855,
+          "newAcquiredAt": 1793147753313,
+          "releasedAt": 1793147756735,
+          "physicalOwnerPID": 70600
+        }
+      ],
+      "memoryEnvelope": {
+        "fileID": "mem_hXuaE6U7jTMSf48Txzwf",
+        "chunkID": "mck_hZAucfmMguWiXf77awEY",
+        "projectID": "prj_h1BsWORAq81U9xpPqhbA",
+        "originalRevision": 0,
+        "currentRevision": 1,
+        "originalMarkdownCharacters": 0,
+        "currentMarkdownCharacters": 620,
+        "currentTokens": 155,
+        "coveredOccurrenceIDs": [
+          "msg_9df2a86f-3fc0-4447-833d-7a96a009e144"
+        ],
+        "updatedAt": 1793147753543
+      },
+      "schema": 9,
+      "integrity": "ok"
+    }
+  },
+  "qualification": "Every original row identity preserved. History and source retain every original row exactly. Web retains all original data except two fenced capacity slot generations and this exact project context envelope: an initially empty revision 0 advances to revision 1 over the actual new human input, with its matching file update time. No prior memory text was replaced."
+}
