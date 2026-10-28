@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-28-default-goal-journey.md](2026-10-28-default-goal-journey.md)：默认页持续目标入口、双语提示、预算/指南草稿与既有目标详情体验。
+
 - [中文Work查找与键盘阅读](2026-10-28-conversation-search-interaction.md)：查找关闭、焦点/查询保留与共享归档文案。
 
 - [会话分页异步错误合同](2026-10-28-conversation-page-async-contract.md)：Task/Mission/Session退休连接的明确Promise错误合同。

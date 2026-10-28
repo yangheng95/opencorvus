@@ -1,0 +1,40 @@
+{
+  "checks": {
+    "typecheck": {
+      "label": "default-764-types",
+      "startedAt": 1793174516845,
+      "closedAt": 1793174541877,
+      "code": 0,
+      "signal": null,
+      "childPID": 2152
+    },
+    "build": {
+      "label": "default-764-build",
+      "startedAt": 1793174516892,
+      "closedAt": 1793174586896,
+      "code": 0,
+      "signal": null,
+      "childPID": 6224
+    },
+    "i18n": {
+      "label": "default-764-i18n",
+      "startedAt": 1793174516887,
+      "closedAt": 1793174519199,
+      "code": 0,
+      "signal": null,
+      "childPID": 72104
+    },
+    "docs": {
+      "label": "default-764-docs-final",
+      "startedAt": 1793175320220,
+      "closedAt": 1793175328795,
+      "code": 0,
+      "signal": null,
+      "childPID": 89280
+    }
+  },
+  "uiAutomation": "None added, updated or run; UI-only edit",
+  "visual": "15 unedited raw JPEG screenshots manually reviewed; README distinguishes capture diagnostics and actual online interactions",
+  "coverageLimits": "Completed-goal guide return/new-create-cancel, new execution, all owner matrix and full native 1280 pixels not verified in 764",
+  "overallGoal": "active"
+}

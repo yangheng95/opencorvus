@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [默认页与持续目标使用流程](records/2026-10/2026-10-28-default-goal-journey.md)：首页双语入口提示、真实表单/指南/命令与完成目标详情复核，原图、数据与资源证据。
+
 - [中文Work查找与键盘阅读](records/2026-10/2026-10-28-conversation-search-interaction.md)：真实Esc/Tab、原消息定位和双语归档文案复核。
 
 - [会话分页异步错误合同](records/2026-10/2026-10-28-conversation-page-async-contract.md)：真实公共入口的退休连接错误及共享页读取回归。

@@ -1,0 +1,203 @@
+{
+  "at": "2026-10-28T08:15:51.142Z",
+  "scopes": [
+    {
+      "tag": "baseline",
+      "ui": "main-CM7QQMFI.js",
+      "retirement": {
+        "at": "2026-10-28T07:55:44.200Z",
+        "credentialCopyCreated": false,
+        "modelCatalogCopyRetired": true,
+        "requests": 0,
+        "cumulativeRequests": 759,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "reserveMs": 1674940,
+        "publicShutdown": 200,
+        "physical": {
+          "launcher": {
+            "observedAtUtc": "2026-10-28T07:54:30.70633Z",
+            "originalChildExit": 0
+          },
+          "chain": [
+            {
+              "identity": {
+                "pid": 53404,
+                "processInstanceID": "win32:639287701461457739",
+                "occurrenceID": "708c2680-69d6-4ac9-8f8e-585ba564783a"
+              },
+              "state": "dead_or_reused"
+            },
+            {
+              "identity": {
+                "pid": 96144,
+                "processInstanceID": "win32:639287701469434408",
+                "occurrenceID": "611f4bfe-801b-42ec-af68-4bb542116c7a"
+              },
+              "state": "dead_or_reused"
+            }
+          ],
+          "observedAtUtc": "2026-10-28T07:55:43.5679310Z",
+          "native": {
+            "occurrence": "default-goal-journey-764-322da5c9-6c21-4151-947a-211c39526b5f",
+            "outcome": "settled",
+            "host": {
+              "pid": 53404,
+              "processInstanceID": "win32:639287701461457739",
+              "occurrenceID": "708c2680-69d6-4ac9-8f8e-585ba564783a"
+            },
+            "target": {
+              "pid": 96144,
+              "processInstanceID": "win32:639287701469434408",
+              "occurrenceID": "611f4bfe-801b-42ec-af68-4bb542116c7a"
+            },
+            "observedAtUtc": "2026-10-28T07:54:30.665Z",
+            "deadlineAt": 1793175745605,
+            "terminal": {
+              "occurrenceID": "default-goal-journey-764-322da5c9-6c21-4151-947a-211c39526b5f",
+              "pid": 96144,
+              "reason": "exited",
+              "exitCode": 0,
+              "signal": null
+            },
+            "physicalCompletion": true,
+            "outputDrainComplete": true,
+            "requestCleanupComplete": true,
+            "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+          }
+        }
+      },
+      "shutdownPlan": {
+        "registeredAt": 1793173350540,
+        "dueAt": 1793174070540,
+        "physicalDeadlineAt": 1793175745605,
+        "occurrence": "default-goal-journey-764-322da5c9-6c21-4151-947a-211c39526b5f",
+        "owner": {
+          "pid": 96144,
+          "processInstanceID": "win32:639287701469434408",
+          "occurrenceID": "c46c0819-64b0-4065-ace4-757753f914ce"
+        }
+      },
+      "commandHandles": 63,
+      "originalTerminalOutputSettlement": "fulfilled",
+      "goalReads": {}
+    },
+    {
+      "tag": "after",
+      "ui": "main-C-ao02O_.js",
+      "retirement": {
+        "at": "2026-10-28T08:13:20.252Z",
+        "credentialCopyCreated": false,
+        "modelCatalogCopyRetired": true,
+        "requests": 0,
+        "cumulativeRequests": 759,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "reserveMs": 624597,
+        "publicShutdown": 200,
+        "physical": {
+          "native": {
+            "occurrence": "default-goal-journey-764-after-f2f64947-79eb-4fef-8452-6d75e071fc54",
+            "outcome": "settled",
+            "host": {
+              "pid": 96472,
+              "processInstanceID": "win32:639287714368946358",
+              "occurrenceID": "11753c39-baaa-4406-be8f-5ba881a16d36"
+            },
+            "target": {
+              "pid": 97752,
+              "processInstanceID": "win32:639287714376123208",
+              "occurrenceID": "cf90848d-4977-4d57-833d-497852f755ee"
+            },
+            "observedAtUtc": "2026-10-28T08:12:01.008Z",
+            "deadlineAt": 1793175745605,
+            "terminal": {
+              "occurrenceID": "default-goal-journey-764-after-f2f64947-79eb-4fef-8452-6d75e071fc54",
+              "pid": 97752,
+              "reason": "exited",
+              "exitCode": 0,
+              "signal": null
+            },
+            "physicalCompletion": true,
+            "outputDrainComplete": true,
+            "requestCleanupComplete": true,
+            "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+          },
+          "chain": [
+            {
+              "identity": {
+                "pid": 96472,
+                "processInstanceID": "win32:639287714368946358",
+                "occurrenceID": "11753c39-baaa-4406-be8f-5ba881a16d36"
+              },
+              "state": "dead_or_reused"
+            },
+            {
+              "identity": {
+                "pid": 97752,
+                "processInstanceID": "win32:639287714376123208",
+                "occurrenceID": "cf90848d-4977-4d57-833d-497852f755ee"
+              },
+              "state": "dead_or_reused"
+            }
+          ],
+          "launcher": {
+            "observedAtUtc": "2026-10-28T08:12:01.0419617Z",
+            "originalChildExit": 0
+          },
+          "observedAtUtc": "2026-10-28T08:13:19.6341259Z"
+        }
+      },
+      "shutdownPlan": {
+        "registeredAt": 1793174640881,
+        "dueAt": 1793175120881,
+        "physicalDeadlineAt": 1793175745605,
+        "occurrence": "default-goal-journey-764-after-f2f64947-79eb-4fef-8452-6d75e071fc54",
+        "owner": {
+          "pid": 97752,
+          "processInstanceID": "win32:639287714376123208",
+          "occurrenceID": "0de32b32-43f5-48b2-92ee-5a1bf42b8e65"
+        }
+      },
+      "commandHandles": 77,
+      "originalTerminalOutputSettlement": "fulfilled",
+      "goalReads": {
+        "/continuous-goal/chat/ses_-zUQhR9QqzzzMZkMj093": 59
+      }
+    }
+  ],
+  "data": [
+    {
+      "tag": "baseline",
+      "originals": 101320,
+      "exact": 101320,
+      "total": 101322,
+      "sourceRowsExact": 101320,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "after",
+      "originals": 101322,
+      "exact": 101322,
+      "total": 101324,
+      "sourceRowsExact": 101322,
+      "schema": 9,
+      "integrity": "ok"
+    }
+  ],
+  "projectFilesExact": 3,
+  "providerRequests": 0,
+  "cumulativeRequests": 759,
+  "temporaryViewport": "1119x720 to align actual capture and DOM; reset after review",
+  "ownedTabsClosed": [
+    168,
+    169
+  ]
+}

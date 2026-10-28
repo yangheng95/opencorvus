@@ -160,7 +160,9 @@ The controller initializes the full independent Project runtime before actual
 continuation admission; durable user intent is separate from model execution.
 
 The home page places the heading, existing composer and suggested conversation
-starters together. The composer's + menu offers Continuous goal and opens the
+starters together. Its localized subtitle explains the + menu and `/goal` entry
+for work across turns, using the current localized goal action label. The
+composer's + menu offers Continuous goal and opens the
 same goal form in Home, Chat, Task and Mission. SideChat's own composer + menu
 opens that form for its independent Session. The explicit `/goal` input command
 in either composer opens the same form or current goal details. An optional
