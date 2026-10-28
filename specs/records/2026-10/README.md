@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [设置导航说明与返回](2026-10-28-settings-navigation-current-journey.md)：当前帮助文案、焦点与布局体验。
+
 - [停止后续聊与历史定位](2026-10-28-stopped-session-followup-journey.md)：真实后续请求及当前历史发现流程。
 
 - [当前停止与继续体验](2026-10-28-stream-stop-current-journey.md)：原请求、输出保留与后续发送的真实闭合。

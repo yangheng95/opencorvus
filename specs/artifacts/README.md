@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [设置导航当前实页证据](2026-10-28-settings-navigation-current-journey/README.md)：中英文原图与精确数据/进程复核。
+
 - [停止后续聊实页证据](2026-10-28-stopped-session-followup-journey/README.md)：原始截图、请求与历史数据/结算复核。
 
 - [当前停止与继续实页证据](2026-10-28-stream-stop-current-journey/README.md)：原始截图、真实取消与Provider结算复核。

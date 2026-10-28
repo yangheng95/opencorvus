@@ -1,0 +1,39 @@
+{
+  "method": "Actual development CLI /ui interaction, original JPEG screenshots and manual visual review",
+  "before": {
+    "english": [
+      "Settings",
+      "Settings"
+    ],
+    "chinese": [
+      "设置",
+      "设置"
+    ],
+    "ui": "main-Xiv41lg0.js"
+  },
+  "after": {
+    "english": [
+      "Settings",
+      "Configure appearance, model providers, connections, and shared resources."
+    ],
+    "chinese": [
+      "设置",
+      "管理外观、模型服务、连接与共享资源。"
+    ],
+    "ui": "main-E2LfApsH.js"
+  },
+  "visual": {
+    "english": "Purpose wraps within the existing tooltip width; title and body are distinct",
+    "chinese": "Purpose fits on one line within the same tooltip recipe",
+    "home": "Title, composer and suggested starters remain in the same layout"
+  },
+  "draft": "检查设置返回后草稿保留758",
+  "interaction": "Draft remained unchanged through settings and language selection; Back to app restored focus to the actual settings opener in both scopes and locales",
+  "screenshots": [
+    "01-before-english.jpg",
+    "02-before-chinese.jpg",
+    "03-after-english.jpg",
+    "04-after-chinese.jpg"
+  ],
+  "uncovered": "Pointer hover dwell and a full keyboard Tab traversal were not separately exercised; focus evidence comes from real Back to app restoration"
+}

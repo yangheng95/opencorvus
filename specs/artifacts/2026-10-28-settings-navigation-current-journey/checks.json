@@ -1,0 +1,38 @@
+{
+  "checks": {
+    "build": {
+      "label": "settings-nav-758-build",
+      "startedAt": 1793160902551,
+      "closedAt": 1793161001800,
+      "code": 0,
+      "signal": null,
+      "childPID": 52560
+    },
+    "typecheck": {
+      "label": "settings-nav-758-typecheck",
+      "startedAt": 1793160947752,
+      "closedAt": 1793160980984,
+      "code": 0,
+      "signal": null,
+      "childPID": 43788
+    },
+    "i18n": {
+      "label": "settings-nav-758-i18n",
+      "startedAt": 1793160947779,
+      "closedAt": 1793160952437,
+      "code": 0,
+      "signal": null,
+      "childPID": 72936
+    },
+    "docs": {
+      "label": "settings-nav-758-docs",
+      "startedAt": 1793160947743,
+      "closedAt": 1793160959937,
+      "code": 0,
+      "signal": null,
+      "childPID": 99360
+    }
+  },
+  "qualification": "Supplementary build/type/localization/document checks; manual screenshots are visual evidence",
+  "uiAutomation": "None added or run"
+}

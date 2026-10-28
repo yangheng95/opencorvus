@@ -1,5 +1,10 @@
 # 07-panel-reactivity — Overlay Reactive Projection
 
+Workspace navigation explainers use the destination label as their heading and
+localized purpose copy as their description. Settings explains its appearance,
+provider, connection and shared-resource scope through the existing work-ledger
+tooltip copy; the trigger name, navigation and focus owner remain unchanged.
+
 Main conversation message settlement preserves the structured cancellation's
 original reason and details alongside completed/aborted. Live lifecycle updates
 and complete transcript hydration consume that same settlement, so the existing

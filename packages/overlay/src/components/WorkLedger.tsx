@@ -1503,7 +1503,7 @@ export function WorkLedger(props: WorkLedgerProps) {
             data-ui="work-ledger-settings"
             icon="config-general"
             label={t("config.title")}
-            description={t("config.title")}
+            description={t("work_ledger.tooltip.settings")}
             active={
               dialogStore.config.open &&
               !["scheduled", "expert-squad-install", "expert-squad"].includes(dialogStore.config.activeTab)
