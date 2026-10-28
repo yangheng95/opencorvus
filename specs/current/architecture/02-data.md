@@ -425,6 +425,13 @@ Completion Decision 的 evidence 或 deliverable 集合；缺少任一项时返�
 进程启动时只清理非终态 Task 的遗留租约；成功完成后的租约保留为该 epoch 的收敛 receipt，但不
 替代不可变 `TaskCompletionDecision`。
 
+成功完成与后续业务 Message 的接纳使用同一事务边界：当前 Task、Project 和 execution epoch
+内尚未激活且没有不可变 disposition 的 Message ingress 必须先沿原 FIFO 处理。
+完成事务在该情况下整体回滚终态和 Completion Decision，释放自己的 closure，并返回真实的
+`Completion Deferred` Tool 结果来结束旧 Turn。原 Tool 决策结算旧 ingress；Task 保持 active，
+原队列继续处理相同 Message 和 ingress，不换 epoch 或复制输入。显式取消及失败仍按各自
+终止授权收敛，生命周期、等待及恢复通知继续使用原终态合同。
+
 Expert output publication 在同一个 Artifact 写事务中读取 Task terminal 状态；终态之后只允许内容和
 identity 完全相同的 idempotent replay，拒绝新的不同产物。
 idempotent expert output 的业务 ID 由 canonical publication material 经统一 deterministic Identifier

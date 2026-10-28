@@ -47,6 +47,7 @@ import {
   requireTaskCompletionDecisionArtifact,
 } from "@/engine/completion-decision-read"
 import { EngineGit } from "@/engine/git"
+import { persistTaskRootMessageIngressInTransaction, taskRootIngressDebugProjection } from "@/engine/task-root-ingress-delivery"
 import {
   acquireTaskCompletionClosureInTransaction,
   taskCompletionClosureInTransaction,
@@ -726,6 +727,35 @@ test("delivers a resource-free business output through its explicit completion a
     expect({ type: imported.artifact_type, payload: imported.payload, resources: imported.resources }).toEqual({
       type: "base/business-rollout-plan", payload, resources: [],
     })
+  } })
+})
+
+test("completes one Task while another Task retains its accepted input", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({ directory: project.path, fn: async () => {
+    const finishing = await taskFixture(project.path)
+    const waiting = await taskFixture(project.path)
+    const message = await Session.updateMessage({
+      id: Identifier.ascending("message"), sessionID: waiting.sessionID,
+      role: "user", author: "user", time: { created: Date.now() },
+      agent: "orchestrator", model: { providerID: "test", modelID: "pending-input" },
+      extra: { task_root_message: {
+        protocol: "task-root-message", taskID: waiting.taskID, kind: "operator", source: "api",
+      } },
+    })
+    await Session.updatePart({ id: Identifier.ascending("part"), sessionID: waiting.sessionID,
+      messageID: message.id, type: "text", text: "Continue the other Task." })
+    const ingressID = Database.transaction((db) => persistTaskRootMessageIngressInTransaction(db, {
+      task: requireTask(waiting.taskID), messageID: message.id, kind: "operator", now: Date.now(),
+    }))
+    using baseline = spyOn(EngineGit, "prepare").mockImplementation(async (task) => ({ task }))
+    using checkpoint = spyOn(EngineGit, "complete").mockImplementation(async (task) => ({ task }))
+    const result = await completeFixtureTask(finishing, project.path, [], "isolated-completion")
+    expect(result.title).toBe("Task Completed")
+    expect(deriveTaskStatus(requireTask(finishing.taskID))).toBe("completed")
+    expect(taskRootIngressDebugProjection(waiting.taskID).map((row) => ({
+      ingressID: row.ingressID, state: row.projection.state, sourceID: row.sourceID,
+    }))).toEqual([{ ingressID, state: "ready", sourceID: message.id }])
   } })
 })
 

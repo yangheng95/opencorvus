@@ -5,9 +5,9 @@ import {
   type EngineArtifactLocator,
   type EvidenceLocator,
 } from "@opencorvus-ai/plugin/artifact-catalog"
-import { EngineArtifactTable } from "./engine.sql"
+import { EngineArtifactTable, EngineControlActivationLeaseTable, EngineTaskRootIngressTable } from "./engine.sql"
 import { insertEngineArtifact } from "./artifact"
-import { Database, and, desc, eq } from "@/storage/db"
+import { Database, and, asc, desc, eq, sql } from "@/storage/db"
 import { assertTaskAssistantProducerToolPart } from "./producer-turn"
 import { assertTaskEvidenceLocators } from "./evidence-locator"
 import { Identifier } from "@/id/id"
@@ -16,6 +16,47 @@ import { assertTaskWorkflowPackageInTransaction } from "./workflow-binding-facts
 import { assertCurrentDeliverySliceRevisionIDsInTransaction } from "./delivery-slice-membership-facts"
 import type { TaskRow } from "./store"
 import { TaskCompletionDecisionPayloadSchema, type TaskCompletionDecisionPayload } from "./completion-decision-facts"
+import { taskLifecycleProjectionInTransaction } from "./task-lifecycle"
+import { taskRootIngressDispositionInTransaction } from "./task-root-ingress-disposition"
+
+export class TaskCompletionPendingInputError extends Error {
+  constructor(
+    readonly taskID: string,
+    readonly ingressIDs: readonly string[],
+  ) {
+    super(`Task ${taskID} has accepted successor input pending delivery: ${ingressIDs.join(", ")}`)
+    this.name = "TaskCompletionPendingInputError"
+  }
+}
+
+function assertTaskCompletionInputSettledInTransaction(db: Database.TxOrDb, task: TaskRow): void {
+  const lifecycle = taskLifecycleProjectionInTransaction(db, task.id)
+  // The physical Task driver serializes activations. An accepted Message with
+  // no activation is still ahead of its first handling occurrence, regardless
+  // of the completion timestamp allocated before an asynchronous checkpoint.
+  const pending = db
+    .select({ id: EngineTaskRootIngressTable.id })
+    .from(EngineTaskRootIngressTable)
+    .where(
+      and(
+        eq(EngineTaskRootIngressTable.task_id, task.id),
+        eq(EngineTaskRootIngressTable.project_id, task.project_id),
+        eq(EngineTaskRootIngressTable.execution_epoch, lifecycle.epoch),
+        eq(EngineTaskRootIngressTable.source, "message"),
+        sql`not exists (select 1 from ${EngineControlActivationLeaseTable}
+        where ${EngineControlActivationLeaseTable.target} = 'task_root_ingress'
+          and ${EngineControlActivationLeaseTable.target_id} = ${EngineTaskRootIngressTable.id})`,
+      ),
+    )
+    .orderBy(asc(EngineTaskRootIngressTable.sequence))
+    .all()
+    .filter((row) => !taskRootIngressDispositionInTransaction(db, { taskID: task.id, ingressID: row.id }))
+  if (pending.length)
+    throw new TaskCompletionPendingInputError(
+      task.id,
+      pending.map((row) => row.id),
+    )
+}
 
 export type PreparedTaskCompletionDecision = {
   artifactID: string
@@ -129,6 +170,7 @@ export function insertPreparedTaskCompletionDecision(
       `Task completion decision ${prepared.artifactID} does not match the winning completed Task transition`,
     )
   }
+  assertTaskCompletionInputSettledInTransaction(db, terminalTask)
   assertTaskWorkflowPackageInTransaction({
     db,
     taskID: prepared.taskID,

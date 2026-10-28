@@ -8,6 +8,7 @@
 
 #### 修复
 
+- 2026-10-28：修复旧完成调用提前结束已有后续输入的任务。完成事务保留已接纳消息的原队列和执行轮次，处理完后续输入后才写入最终完成决定；显式取消保持原语义。
 - 2026-10-28：修复 Evolution 历史和晋升准入遗漏已消费 Candidate 导入别名的问题。历史保留当前项目、原目录上界内完整的同 Task 冻结引用；实时准入与新鲜性校验共用完整引用上下文，保留精确历史版本、导入身份及新增测量/Review 的原差异检查。
 - 2026-10-28：统一 Task 完成与 Mission 交接的模型面说明：明确交付给用户或后继 Task 的结构化业务 Artifact 即使没有文件资源，也应列为显式交付；仅验收用途的记录仍作为证据。实际文件格式要求和原完成权威导入保持，避免结构化输出在交接时遗漏。
 - 2026-10-28：修正16个内置专家团共26处 Skill 加载指令，使其使用真实技能名称，避免把能力引用当作工具参数而先失败再重试。受影响包更新为 `2026.10.28.1`；原权限、能力引用和已固定的历史任务修订保持。应用版本及数据库结构不变。
@@ -23,6 +24,7 @@
 
 #### Fixed
 
+- 2026-10-28: Fixed older completion calls ending a Task with accepted successor input still pending. The completion transaction preserves the original queue and execution epoch, and records final completion after that input is handled. Explicit cancellation retains its existing semantics.
 - 2026-10-28: Preserve consumed Candidate import aliases in Evolution history and promotion admission. History retains the complete Task reference context within its original Project and catalog bound; live admission and freshness validation share the complete context, preserving exact historical versions, import identity and the existing checks for new measurements and Reviews.
 - 2026-10-28: Align Task completion and Mission handoff instructions: structured business Artifacts intended for the user or a downstream Task are explicit deliverables even without file resources. Decision-only records remain evidence. Requested file formats and the existing completion-authority import rules remain intact, preserving structured outputs during handoff.
 - 2026-10-28: Corrected 26 Skill-loading instructions across 16 built-in Expert Squads to use declared Skill names. Affected packages advance to `2026.10.28.1`; capability grants and historical pinned Task revisions retain their original identities. Application and database versions are unchanged.

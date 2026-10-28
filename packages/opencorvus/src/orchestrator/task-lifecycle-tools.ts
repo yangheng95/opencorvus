@@ -11,6 +11,7 @@ import {
   allocateTaskCompletionDecisionTime,
   insertPreparedTaskCompletionDecision,
   prepareTaskCompletionDecision,
+  TaskCompletionPendingInputError,
 } from "@/engine/completion-decision"
 import { findTaskCompletionDecisionForTerminalTime } from "@/engine/completion-decision-read"
 import { resolveTaskArtifactReadLocators, resolveTaskEvidenceLocators } from "@/engine/evidence-locator"
@@ -102,7 +103,7 @@ export function createTaskLifecycleTools(input: {
         "When visual review was requested, cite the exact durable locators produced by the responsible review path: the latest core visual_review locator and its completeness_findings for a commissioned VisualReview, or the browser-preview capture locators when the selected expert-squad workflow assigns independent image review to its scheduler. Generic prose and unattached screenshot claims are not durable visual evidence. " +
         "Current Delivery Slice revisions, independent activity/evidence/review associations, and explicit Completion Decision acceptance are separate facts; none owns or gates Task lifecycle. " +
         "Call this only when you, the Orchestrator, have decided the task is complete from the current durable task snapshot. " +
-        "Successful completion parks the current Turn. Deliver any requested conversational answer in your natural assistant Message before this call; the acceptance summary and worker evidence do not replace that answer.",
+        "This call parks the current Turn. If successor input was accepted before the completion transaction, the Task stays active and its original queue handles that input before a later completion. Deliver any requested conversational answer in your natural assistant Message before this call; the acceptance summary and worker evidence do not replace that answer.",
       inputSchema: CompleteTaskInputSchema,
       execute: async (
         {
@@ -194,6 +195,14 @@ export function createTaskLifecycleTools(input: {
               taskID: input.taskID,
               error: releaseError,
             })
+            throw error
+          }
+          if (error instanceof TaskCompletionPendingInputError) {
+            return {
+              title: "Completion Deferred",
+              output: `Task ${input.taskID} remains active: accepted successor input is pending delivery. This Turn has ended; the original Task queue will handle the accepted input.`,
+              metadata: withImmediateParkToolResultControl({}),
+            }
           }
           throw error
         }
