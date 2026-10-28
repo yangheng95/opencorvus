@@ -1,0 +1,23 @@
+# 会话分页的异步错误合同
+
+## Recall
+
+用户要求持续单代理自主迭代，实际验收、范围提交和正常fetch/merge/push；仅真实不可安全处理的冲突等待，不重查Rendering。761查找已推送9d451cbc190c8c5a122027763f505245a2e71667，06:41:53Z fresh fetch/merge为0/0，本任务源干净，176项外部改动保持。三个原开发实例均0/HTTP200/三项结算和精确身份退休、完整旧行保持，原40分钟deadline已收敛，不复用或延长。模型0/累计759。真实英文Chat查找和定位通过，中文Work/键盘/空态/长历史仍待后续实页，不把本轮非UI检查补称视觉验收。授权GitHub只读已完成，#6 fixed，glib与历史告警未解决，无GitHub写入。
+
+761收尾代码复核发现：新exported分页包装为了共享页请求改成普通function，而入口仍直接调用assertApiAuthorityCurrent。旧async公共合同把该Typed Error作为Promise rejection（异步拒绝），新包装可能在返回Promise前同步throw。触发点是明确退休的API（Application Programming Interface，应用程序接口）authority，不是模型行为或队列终态。旧页主体仍是async，拥有原epoch/AbortController/状态与日志；问题只在新公共包装的异步边界，上一轮纯PageReader测试没有覆盖真实公共入口的前置校验。
+
+已读当前AGENTS、761方案/差异、07-panel、api/api-state与真实单测runner。全仓搜索loadOlderConversationHistory仅一个定义：生产消费者包括Conversation滚动与消息导航、查找对话以及history-until-card的Session/Task分支；Mission使用Task/Session同一读取源。共享读取类只有此生产调用，既有七项纯数据/Promise合同。公共参数/返回类型、Typed Error字段、目录与来源匹配、所有持久化、调度/唤醒/恢复和数据库schema不变。没有观察到调度或持久执行终态异常；本轮不是另建恢复或调度路径。
+
+## 实施前方案与影响
+
+先在隔离非UI进程导入真实service并以真实capture/renew产生退休authority，核对调用结果是否为Promise以及原ApiAuthorityChangedError的phase/expectedRevision/currentRevision。禁止DOM、组件、源码文案或UI自动化测试；若生产service不可在真实非UIrunner运行，不造浏览器mock冒充验证，先查依赖原因。
+
+最小修正恢复公共包装原async声明。公共返回Promise可正常adopt内部共享Promise；唯一PageReader仍负责一个真实页请求，原load/cancel/epoch/authority校验全部保持。不为追求外层Promise对象同一身份改变已有调用合同，不添加try/catch平行错误、fallback或新primitive。null source仍按原顺序先校验authority，再异步返回false。
+
+添加聚焦真实公共入口正向合同：当前authority+空source返回明确false，退休authority+Session/Task/null source分别以Promise拒绝精确ApiAuthorityChangedError字段；使用明确错误类型/字段，属于正向错误合同。实际复现先红再修，再经原runner执行；同时复验内部共享读取/全文查找与原导出合同、类型和普通构建。没有UI页面改动，本轮不以数据检查冒充761未完成的中文实页；下轮继续实际体验。原开发实例已关闭，不需启动Provider或用户应用。所有更改和证据进specs、同步三索引、文档checker、范围提交及正常推送。
+
+隔离真实service可直接导入，无DOM环境或mock。原入口探针在调用处直接抛ApiAuthorityChangedError（before_dispatch、revision0→1），尚未返回Promise；正式原runner复现1pass/3fail，三个退休source都在生产conversation.ts:932同步throw。物理/输出结算确认，原失败保留。证据已支持精确一字修正；再增加Mission真实BoardSource变体覆盖同一公共前置校验，其他Task/Session入口与持久执行机制不变。
+
+## 验证结果
+
+恢复async后，真实公共入口5项/14断言、原共享页/搜索7项/12断言、原导出8项/16断言均通过，共20项/42断言。前置退休authority明确返回Promise并按原字段拒绝，当前空来源异步false；没有造Transport或页面mock。类型检查0；普通Node/Vite构建0、main-Cqo4Q4D-.js，renderer公开面0；文档351操作/26组通过。普通构建仍保留原大chunk提示，本轮没有把它当功能失败或偷偷调高阈值。全部隔离检查原进程0，失败复现1且物理/输出结算确认；没有开发实例、用户数据库访问、凭据副本或模型请求。原失败和最终输出见对应artifact。本次公共合同修复不改变761记录的实页范围，整体Goal保持active。

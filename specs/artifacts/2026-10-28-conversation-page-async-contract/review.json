@@ -1,0 +1,55 @@
+{
+  "at": "2026-10-28T06:46:39.354Z",
+  "checks": {
+    "unit-before": {
+      "label": "reading-762-unit-before",
+      "startedAt": 1793169817917,
+      "closedAt": 1793169821776,
+      "code": 1,
+      "signal": null,
+      "childPID": 61704
+    },
+    "unit-after": {
+      "label": "reading-762-unit-after",
+      "startedAt": 1793169859910,
+      "closedAt": 1793169864601,
+      "code": 0,
+      "signal": null,
+      "childPID": 74784
+    },
+    "types": {
+      "label": "reading-762-types",
+      "startedAt": 1793169865655,
+      "closedAt": 1793169890431,
+      "code": 0,
+      "signal": null,
+      "childPID": 11980
+    },
+    "build": {
+      "label": "reading-762-build",
+      "startedAt": 1793169875864,
+      "closedAt": 1793169945413,
+      "code": 0,
+      "signal": null,
+      "childPID": 94824
+    },
+    "docs": {
+      "label": "reading-762-docs",
+      "startedAt": 1793169951037,
+      "closedAt": 1793169959980,
+      "code": 0,
+      "signal": null,
+      "childPID": 89388
+    }
+  },
+  "contracts": {
+    "productionHistory": 5,
+    "searchAndPageReader": 7,
+    "originalExport": 8,
+    "assertions": 42
+  },
+  "uiAutomation": "None added or run",
+  "providerRequests": 0,
+  "cumulativeRequests": 759,
+  "scope": "One async modifier restores the original public Promise error contract; no UI changes or real-page claims"
+}

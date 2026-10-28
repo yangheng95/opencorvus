@@ -925,7 +925,7 @@ export function conversationCardContainsMessage(cardID: string, messageID: strin
   return visit(targetCardID)
 }
 
-export function loadOlderConversationHistory(
+export async function loadOlderConversationHistory(
   source: BoardSource | null = boardStore.selectedSource,
   authority = captureApiAuthority(),
 ): Promise<boolean> {

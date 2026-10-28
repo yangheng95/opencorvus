@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [会话分页异步错误合同](records/2026-10/2026-10-28-conversation-page-async-contract.md)：真实公共入口的退休连接错误及共享页读取回归。
+
 - [会话历史定位与正文阅读](records/2026-10/2026-10-28-conversation-reading-journey.md)：真实旧消息、来源与跨项目阅读体验。
 
 - [当前Dependabot告警与父依赖](records/2026-10/2026-10-28-dependabot-current-alerts.md)：授权只读清单、当前锁与历史取证区分及兼容修复调查。

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [会话分页异步合同证据](2026-10-28-conversation-page-async-contract/README.md)：实际生产service先红后绿及原检查器输出。
+
 - [会话阅读实页证据](2026-10-28-conversation-reading-journey/README.md)：实际截图、原会话与运行结算。
 
 - [当前Dependabot告警证据](2026-10-28-dependabot-current-alerts/README.md)：无凭据只读结果、父链及公开上游事实。

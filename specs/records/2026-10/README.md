@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [会话分页异步错误合同](2026-10-28-conversation-page-async-contract.md)：Task/Mission/Session退休连接的明确Promise错误合同。
+
 - [会话历史定位与正文阅读](2026-10-28-conversation-reading-journey.md)：当前实页与完整消息定位调查。
 
 - [当前Dependabot告警与父依赖](2026-10-28-dependabot-current-alerts.md)：实际告警身份与原生依赖约束。
