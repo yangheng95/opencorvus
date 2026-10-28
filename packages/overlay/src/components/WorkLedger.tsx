@@ -60,6 +60,7 @@ import {
 import {
   implicitProjectSuffix,
   isImplicitProjectDirectory,
+  projectDirectoryKey,
   projectDirectoryLabel,
   projectDisplayName as resolveProjectDisplayName,
 } from "../utils/project-directory"
@@ -898,6 +899,17 @@ export function WorkLedger(props: WorkLedgerProps) {
   let loadSequence = 0
   let loadedRows: WorkLedgerRow[] = []
   let startGlobalChatAfterCreateMenuClose = false
+  let projectsScrollRef!: HTMLDivElement
+  let projectPinFocusSequence = 0
+  const [projectPinFocus, setProjectPinFocus] = createSignal<{
+    sequence: number
+    authority: ApiAuthority
+    projectID: string
+    directory: string
+    pinned: boolean
+    organization: WorkLedgerOrganization
+    phase: "saving" | "refreshing"
+  } | null>(null)
   const organizationPreferenceOwner = createPersistedSelectionOwner<WorkLedgerOrganization, PersistedOverlaySettings>({
     read: () => settingsStore.workLedgerOrganization,
     write: (value) => setSettingsStore("workLedgerOrganization", value),
@@ -933,8 +945,7 @@ export function WorkLedger(props: WorkLedgerProps) {
       }),
   })
 
-  const isPinnedProjectGroup = (group: WorkLedgerGroup) =>
-    !!group.project?.pinned && !isImplicitProjectDirectory(group.directory)
+  const isPinnedProjectGroup = (group: WorkLedgerGroup) => !!group.project?.pinned
 
   function renderGroups(): void {
     const sort = settingsStore.workLedgerSort
@@ -1071,6 +1082,48 @@ export function WorkLedger(props: WorkLedgerProps) {
   const pinnedProjects = createMemo(() => groups.filter(isPinnedProjectGroup))
 
   const unpinnedGroups = createMemo(() => groups.filter((group) => !isPinnedProjectGroup(group)))
+
+  // This presentation intent belongs to the parent that survives a Project's
+  // move between lists. The current projection remains the sole pin authority.
+  createEffect(() => {
+    const request = projectPinFocus()
+    if (!request) return
+    if (!isApiAuthorityCurrent(request.authority) || settingsStore.workLedgerOrganization !== request.organization) {
+      setProjectPinFocus(null)
+      return
+    }
+    if (request.phase === "saving" || loading()) return
+    const group = groups.find((item) => item.project?.id === request.projectID)
+    setProjectPinFocus(null)
+    if (error() || !group || group.project?.pinned !== request.pinned) return
+    if (projectDirectoryKey(group.directory) !== projectDirectoryKey(request.directory)) return
+    if (document.activeElement !== document.body) return
+
+    const ordinaryList = projectsScrollRef?.querySelector<HTMLElement>('[data-ui="ledger-list"]')
+    let target: HTMLElement | null = null
+    if (request.pinned || request.organization === "by-project") {
+      const projectElement = Array.from(
+        projectsScrollRef?.querySelectorAll<HTMLElement>(".project-group[data-project-directory]") ?? [],
+      ).find((element) => projectDirectoryKey(element.dataset.projectDirectory ?? "") === projectDirectoryKey(group.directory))
+      target = projectElement?.querySelector<HTMLElement>('[data-ui="project-group-toggle"]') ?? null
+    } else {
+      const itemKeys = new Set(group.items.map(rowKey))
+      const row = Array.from(ordinaryList?.querySelectorAll<HTMLElement>('[data-ui="work-ledger-row"]') ?? [])
+        .find((element) => itemKeys.has(element.dataset.rowKey ?? ""))
+      target = row?.querySelector<HTMLElement>(".work-row-main") ?? null
+    }
+    if (!target) {
+      if (request.organization === "by-project" || group.items.length > 0) {
+        target = ordinaryList?.querySelector<HTMLElement>(
+          ':scope > [data-ui="ledger-progressive-list"] > [data-ui="progressive-list-toggle"]',
+        ) ?? null
+      }
+      target ??= projectsScrollRef?.querySelector<HTMLElement>('[data-ui="work-ledger-organize-trigger"]') ?? null
+    }
+    if (!target?.isConnected || target.matches(":disabled") || target.getClientRects().length === 0) return
+    if (target.closest('[hidden], [inert], [aria-hidden="true"]')) return
+    target.focus()
+  })
   const recentGroup = createMemo<WorkLedgerGroup>(() => ({
     renderKey: "recent",
     directory: "",
@@ -1123,8 +1176,28 @@ export function WorkLedger(props: WorkLedgerProps) {
 
   async function updateProjectPinned(project: WorkLedgerProjectRow, pinned: boolean): Promise<void> {
     const authority = captureApiAuthority()
-    await setWorkLedgerProjectPinned({ projectID: project.id, pinned, authority })
-    await reload(authority)
+    const request = {
+      sequence: ++projectPinFocusSequence,
+      authority,
+      projectID: project.id,
+      directory: project.directory,
+      pinned,
+      organization: settingsStore.workLedgerOrganization,
+      phase: "saving" as const,
+    }
+    const ownsFocus = () => projectPinFocus()?.sequence === request.sequence
+    setProjectPinFocus(request)
+    try {
+      await setWorkLedgerProjectPinned({ projectID: project.id, pinned, authority })
+      await batch(() => {
+        const refresh = reload(authority)
+        if (ownsFocus()) setProjectPinFocus({ ...request, phase: "refreshing" })
+        return refresh
+      })
+    } catch (error) {
+      if (ownsFocus()) setProjectPinFocus(null)
+      throw error
+    }
   }
 
   async function updateWorkLedgerOrganization(next: WorkLedgerOrganization): Promise<void> {
@@ -1192,12 +1265,12 @@ export function WorkLedger(props: WorkLedgerProps) {
           />
         </div>
       </div>
-      <div class="work-ledger-projects-scroll" id="workLedgerProjectsScroll" data-ui="work-ledger-projects-scroll">
+      <div ref={projectsScrollRef} class="work-ledger-projects-scroll" id="workLedgerProjectsScroll" data-ui="work-ledger-projects-scroll">
         <Show when={pinnedProjects().length > 0}>
           <div class="work-ledger-section-title oc-section-heading">{t("work_ledger.pinned")}</div>
           <div class="work-ledger-pinned-groups" data-ui="work-ledger-pinned-groups">
             <For each={pinnedProjects()}>
-              {(group) => projectGroupView(group, "work-ledger-pinned-project-group", true)}
+              {(group) => projectGroupView(group, "work-ledger-pinned-project-group", true, isImplicitProjectDirectory(group.directory))}
             </For>
           </div>
         </Show>

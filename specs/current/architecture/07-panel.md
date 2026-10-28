@@ -3999,3 +3999,21 @@ head, because the hover-only action trigger may remain connected while hidden.
 The main button stays focusable during an action while ignoring repeat clicks;
 other action buttons disable duplicate submission. A retired group or API scope
 cannot open a late failure dialog or reclaim focus in another scope.
+
+All Project records, including anonymous projects, enter the Pinned section from
+their canonical `pinned` property. Pinned anonymous groups retain their existing
+anonymous header and conversion action. Normal progressive grouping remains
+independent of that section.
+
+Successful Project pin changes transfer keyboard continuity through the surviving
+Work Ledger parent. One transient presentation intent records the originating
+API, Project, directory, organization and requested pin; it never supplies the
+business projection. After acknowledgement, the existing complete paginated
+refresh and its current loading/error owner determine when reconciliation has
+settled. The matching current Project main button receives focus only if BODY
+still owns it. In one-list organization, a visible record from that Project is
+the destination; a hidden entry uses the same collection's expansion control,
+and a Project with no rendered representation uses its organization control.
+The browser reveals the newly focused control without selecting a record or
+expanding the list. New focus, superseding action, layout/API retirement and
+failed reads retire the intent; no old-component retry timer reclaims focus.

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-29-project-pin-continuity](2026-10-29-project-pin-continuity/README.md)：项目置顶跨分区、匿名分区与键盘焦点实页、数据和服务结算。
+
 - [2026-10-29-project-action-focus](2026-10-29-project-action-focus/README.md)：20张实页原图、项目改名往返与双语错误、焦点和持久数据结算。
 
 - [2026-10-29-ledger-action-feedback](2026-10-29-ledger-action-feedback/README.md)：真实归档恢复、静默失败与焦点诊断原图、规范数据与进程结算。

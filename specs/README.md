@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [项目置顶与键盘连续性](records/2026-10/2026-10-29-project-pin-continuity.md)：跨分区呈现owner、匿名项目真实置顶与单列表/渐进目标规则。
+
 - [项目菜单反馈与可见焦点](records/2026-10/2026-10-29-project-action-focus.md)：隐藏触发器根因、项目Promise错误归属、双语真实失败与确认取消。
 
 - [导航操作结果与焦点归属](records/2026-10/2026-10-29-ledger-action-feedback.md)：归档/置顶真实往返、失败反馈和菜单弹窗生命周期调查。

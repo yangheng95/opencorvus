@@ -71,6 +71,17 @@ action completion is pending; duplicate clicks do not start another operation.
 Project pin errors reach this owner through the original mutation promise.
 Group disposal and connection/directory changes retire its presentation scope.
 
+A successful Project pin may remount its group in another list. Its focus handoff
+therefore belongs to the surviving Work Ledger, independently of the retired
+child's action presentation. The parent waits for the acknowledged pin and the
+current complete projection's loading owner, including a newer read that
+superseded the initiating reload. It consumes the matching intent once, then
+focuses the current visible representation only while BODY owns focus. It never
+uses the requested pin as a second data source. Project identity, API authority
+and organization scope constrain this handoff; new operations or read errors
+retire it. Anonymous projects use the same canonical pinned grouping and retain
+their actual anonymous Project header.
+
 Dialog dismissal separates pointer intent from keyboard focus movement. A
 non-modal interaction prompt stays visible when Tab moves focus outside its
 content, while retaining its original pending interaction and reply authority.

@@ -1,0 +1,77 @@
+{
+  "attempts": [
+    {
+      "label": "project-pin-778-build",
+      "startedAt": 1793227573818,
+      "closedAt": 1793227662026,
+      "code": 0,
+      "signal": null,
+      "childPID": 91012
+    },
+    {
+      "label": "project-pin-778-typecheck",
+      "startedAt": 1793227573818,
+      "closedAt": 1793227604792,
+      "code": 0,
+      "signal": null,
+      "childPID": 73856
+    },
+    {
+      "label": "project-pin-778-i18n",
+      "startedAt": 1793227678529,
+      "closedAt": 1793227685188,
+      "code": 0,
+      "signal": null,
+      "childPID": 96664
+    },
+    {
+      "label": "project-pin-778-final-build",
+      "startedAt": 1793227692612,
+      "closedAt": 1793227775688,
+      "code": 0,
+      "signal": null,
+      "childPID": 96228
+    },
+    {
+      "label": "project-pin-778-docs",
+      "startedAt": 1793228429970,
+      "closedAt": 1793228440237,
+      "code": 0,
+      "signal": null,
+      "childPID": 79820
+    },
+    {
+      "label": "project-pin-778-empty-final-build",
+      "startedAt": 1793228622798,
+      "closedAt": 1793228698647,
+      "code": 0,
+      "signal": null,
+      "childPID": 60696
+    },
+    {
+      "label": "project-pin-778-docs-final",
+      "startedAt": 1793229195265,
+      "closedAt": 1793229202714,
+      "code": 0,
+      "signal": null,
+      "childPID": 8296
+    }
+  ],
+  "ui": "28 original JPEG captures rendered and manually reviewed on three real isolated development /ui pages. The final ordinary main-BCs5veQK.js verifies the existing empty Project and repeats normal pin/unpin. No UI automated tests or DOM/text/pixel assertions.",
+  "verified": [
+    "Ordinary and anonymous Project pin/unpin transfer to the current main button.",
+    "Native Tab/Enter continues from actual transferred focus to the Project menu.",
+    "Anonymous projects enter Pinned with their header and conversion action in English and Chinese.",
+    "One-list unpin transfers to a visible record of the same Project.",
+    "Manual order with a folded destination transfers to Show more; Enter expands it.",
+    "A collapsed Project retains collapse state during pin/unpin.",
+    "Original organization, sort, language, conversation and all pin states restored.",
+    "Actual post-shutdown failure retains original details and returns to Project main button.",
+    "Existing empty Project in one-list organization returns to Organize sidebar even when Show more is present."
+  ],
+  "limits": [
+    "Slow-request focus movement, concurrent Project pin actions, cross-connection completion and superseding read races were not fully exercised.",
+    "Priority sort was not separately cycled.",
+    "Organization checkbox Escape dismissal remains unresolved; native and locator keyboard attempts kept the menu and Tooltip visible, while the trigger click closed it."
+  ]
+}

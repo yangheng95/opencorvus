@@ -1,0 +1,83 @@
+{
+  "at": "2026-10-28T23:13:56.901Z",
+  "databases": [
+    {
+      "tag": "baseline",
+      "tables": 92,
+      "oldCount": 103724,
+      "exact": 103724,
+      "total": 103724,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "after",
+      "tables": 92,
+      "oldCount": 103724,
+      "exact": 103724,
+      "total": 103724,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "final-empty",
+      "tables": 92,
+      "oldCount": 103724,
+      "exact": 103724,
+      "total": 103724,
+      "schema": 9,
+      "integrity": "ok"
+    }
+  ],
+  "sourceDatabases": "Every source database matches all pre-copy rows.",
+  "allOriginalRowsExact": true,
+  "inputs": [
+    {
+      "filename": "test_invoice.py",
+      "bytes": 1520,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "invoice.py",
+      "bytes": 953,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "README.md",
+      "bytes": 191,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "mcp.ts",
+      "bytes": 5539,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "chat.ts",
+      "bytes": 14692,
+      "exactBytes": true,
+      "exactMetadata": true
+    }
+  ],
+  "namespace": [
+    {
+      "stage": "baseline",
+      "files": 13,
+      "exactBytes": true
+    },
+    {
+      "stage": "-after",
+      "files": 13,
+      "exactBytes": true
+    },
+    {
+      "stage": "-after2",
+      "files": 13,
+      "exactBytes": true
+    }
+  ]
+}
