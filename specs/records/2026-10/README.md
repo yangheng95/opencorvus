@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Goal 控制生命周期体验](2026-10-28-goal-control-lifecycle-journey.md)：中英文保存暂停、累计预算、显式恢复和真实模型完成。
+
 - [归档恢复与告警核对](2026-10-28-archive-journey-and-alert-reconciliation.md)：单代理真实旅程、跨项目事务与全局投影收敛。
 
 - [原生依赖当前告警与修复](2026-10-28-native-advisory-followup.md)：完整审计、单一锁升级、19项生产库行为与进程结清。

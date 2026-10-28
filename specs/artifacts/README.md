@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Goal 生命周期实测证据](2026-10-28-goal-control-lifecycle-journey/README.md)：13张原图、三轮实际会话及隔离数据与进程复核。
+
 - [归档恢复实页证据](2026-10-28-archive-journey-and-alert-reconciliation/README.md)：八张原图、21项断言及原始行完整保留。
 
 - [原生依赖修复证据](2026-10-28-native-advisory-followup/README.md)：前后完整审计、原构建与实际库行为，保留首次失败。

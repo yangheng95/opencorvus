@@ -265,6 +265,10 @@ Details expose the complete objective, original reason/evidence, localized date 
 budget controls. Creation allows unspecified budgets. Once set, a budget requires a
 positive whole number; changes retain cumulative usage. Paused/blocked goals whose
 limits are exhausted use the same Adjust & resume form as budget_limited goals.
+Adjust & resume selects resumption explicitly. Opening Details instead also lets an
+operator save a budget-limited goal as paused using Save without resuming; the
+existing Resume after saving choice controls this intent. Editing a paused goal
+retains its state and accumulated usage unless resumption is explicitly selected.
 Pausing admits no new automatic input and leaves accepted work to settle; the existing
 conversation Stop operation retains its own meaning.
 

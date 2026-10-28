@@ -1,0 +1,4 @@
+{
+  "encoding": "utf8",
+  "content": "$ bun script/run-tests.ts ./test/continuous-goal.test.ts \"--test-name-pattern=one exact continuation reserves one turn\"\n[1/1] START test/continuous-goal.test.ts\nbun test v1.4.0 (34cbb9a40) 1x PARALLEL\n\ntest\\isolated-test-entry.test.ts:\n(pass) durable continuous goal contracts > one exact continuation reserves one turn and reports the explicit budget terminal [2036.16ms]\n\n 1 pass\n 18 filtered out\n 0 fail\n 9 expect() calls\nRan 1 test across 1 file. [7.60s]\n[1/1] DONE test/continuous-goal.test.ts exit=0 duration=9.32s\n"
+}

@@ -1,0 +1,687 @@
+{
+  "observedAt": "2026-10-28T00:18:45.992Z",
+  "scope": {
+    "tabs": [
+      "137",
+      "138"
+    ],
+    "before": {
+      "port": 38256,
+      "entry": "main-B03SQ_Ed.js"
+    },
+    "after": {
+      "port": 38257,
+      "entry": "main-BLfBYC1M.js"
+    },
+    "originalOwner": {
+      "kind": "chat",
+      "id": "ses_-zUQhUDWdzzX0g71aRx5"
+    },
+    "correctedOwner": {
+      "kind": "chat",
+      "id": "ses_-zUQhR9QqzzzMZkMj093"
+    },
+    "originalGoal": "pev_g0VZIVmpj00RsyHU58hy",
+    "correctedGoal": "pev_g0VZIYqxL00XXlFpf86N",
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "maximumRequests": 10,
+    "actualRequests": 10,
+    "cumulativeRequests": 736
+  },
+  "fix": "Budget-limited Details exposes explicit save-as-paused; Adjust & resume retains explicit resumption",
+  "screenshots": [
+    {
+      "name": "01-create-bounded-goal.jpg",
+      "port": 38256,
+      "publication": "main-B03SQ_Ed.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "02-live-goal-started.jpg",
+      "port": 38256,
+      "publication": "main-B03SQ_Ed.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "03-budget-reached-details.jpg",
+      "port": 38256,
+      "publication": "main-B03SQ_Ed.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "04-save-without-resuming-en.jpg",
+      "port": 38257,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "05-original-paused-en.jpg",
+      "port": 38257,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "06-adjust-resume-selected-en.jpg",
+      "port": 38257,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "07-direct-resume-choice-en.jpg",
+      "port": 38257,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "08-save-paused-choice-en.jpg",
+      "port": 38257,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "09-budget-increased-still-paused-en.jpg",
+      "port": 38257,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "10-save-without-resuming-zh.jpg",
+      "port": 38257,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "11-two-turns-paused-zh.jpg",
+      "port": 38257,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "12-three-rounds-completed-zh.jpg",
+      "port": 38257,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "13-completed-usage-evidence-zh.jpg",
+      "port": 38257,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    }
+  ],
+  "lifecycle": {
+    "original": {
+      "before": {
+        "id": "pev_g0VZIVmpj00RsyHU58hy",
+        "revision": "pev_g0VZIVmpj00RsyHU58hy",
+        "owner": {
+          "kind": "chat",
+          "id": "ses_-zUQhUDWdzzX0g71aRx5"
+        },
+        "objective": "持续目标控制流程体验\n请在三个真实会话轮次中，分阶段整理一份简短的“本地文档交接说明”。首次输入这一轮只交付阶段一：用两句话说明交付范围；第一次自动继续的轮次只交付阶段二：用两句话说明核对方式；下一次自动继续的轮次交付阶段三：用两句话说明完成条件。每轮只完成对应阶段，保持目标未完成，直到三个阶段都已在会话中实际可见，再根据完整结果自主结束目标。这是有明确结束条件的任务，无需等待我逐步确认。无需创建Task、执行命令、读写文件、访问网站或对外发送。",
+        "status": "budget_limited",
+        "reason": "turn_budget",
+        "turnBudget": 1,
+        "tokensUsed": 36322,
+        "turnsAccepted": 1,
+        "createdAt": 1793145502159,
+        "updatedAt": 1793145502159,
+        "sessionID": "ses_-zUQhUDWdzzX0g71aRx5",
+        "projectID": "prj_h1BsWORAq81U9xpPqhbA",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\goal-lifecycle-750\\project"
+      },
+      "after": {
+        "id": "pev_g0VZIVmpj00RsyHU58hy",
+        "revision": "pev_g0VZIYib000ZZplWiu4O",
+        "owner": {
+          "kind": "chat",
+          "id": "ses_-zUQhUDWdzzX0g71aRx5"
+        },
+        "objective": "持续目标控制流程体验\n请在三个真实会话轮次中，分阶段整理一份简短的“本地文档交接说明”。首次输入这一轮只交付阶段一：用两句话说明交付范围；第一次自动继续的轮次只交付阶段二：用两句话说明核对方式；下一次自动继续的轮次交付阶段三：用两句话说明完成条件。每轮只完成对应阶段，保持目标未完成，直到三个阶段都已在会话中实际可见，再根据完整结果自主结束目标。这是有明确结束条件的任务，无需等待我逐步确认。无需创建Task、执行命令、读写文件、访问网站或对外发送。",
+        "status": "paused",
+        "reason": "The user paused the continuous goal from its controls.",
+        "turnBudget": 1,
+        "tokensUsed": 36322,
+        "turnsAccepted": 1,
+        "createdAt": 1793145502159,
+        "updatedAt": 1793146200854,
+        "sessionID": "ses_-zUQhUDWdzzX0g71aRx5",
+        "projectID": "prj_h1BsWORAq81U9xpPqhbA",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\goal-lifecycle-750\\project"
+      }
+    },
+    "corrected": [
+      {
+        "id": "pev_g0VZIYqxL00XXlFpf86N",
+        "revision": "pev_g0VZIYqxL00XXlFpf86N",
+        "owner": {
+          "kind": "chat",
+          "id": "ses_-zUQhR9QqzzzMZkMj093"
+        },
+        "objective": "本地文档交接说明：三个自动轮次\n请通过恰好三个真实的Goal自动轮次分阶段整理简短交接说明。第一次自动轮次只输出阶段一，用两句话说明文档交付范围；第二次自动轮次只输出阶段二，用两句话说明核对方式；第三次自动轮次输出阶段三，用两句话说明完成条件。每个轮次只交付对应阶段；在三个阶段都已经真实显示后，自主记录目标完成并说明交付已齐备。首次收到的Goal控制器自动输入就是第一轮。无需等待我逐步确认，无需创建Task、执行命令、读写文件、访问网站或对外发送。",
+        "status": "budget_limited",
+        "reason": "turn_budget",
+        "turnBudget": 1,
+        "tokensUsed": 36496,
+        "turnsAccepted": 1,
+        "createdAt": 1793146232990,
+        "updatedAt": 1793146232990,
+        "sessionID": "ses_-zUQhR9QqzzzMZkMj093",
+        "projectID": "prj_h7xqyhFgxDAr57RRR74Q",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\goal-lifecycle-750-after2\\runtime\\data\\projects\\2026\\10\\28\\1951a57d-8710-4bc7-9eda-60220c307735"
+      },
+      {
+        "id": "pev_g0VZIYqxL00XXlFpf86N",
+        "revision": "pev_g0VZIZ9vF00eMjvkJzct",
+        "owner": {
+          "kind": "chat",
+          "id": "ses_-zUQhR9QqzzzMZkMj093"
+        },
+        "objective": "本地文档交接说明：三个自动轮次\n请通过恰好三个真实的Goal自动轮次分阶段整理简短交接说明。第一次自动轮次只输出阶段一，用两句话说明文档交付范围；第二次自动轮次只输出阶段二，用两句话说明核对方式；第三次自动轮次输出阶段三，用两句话说明完成条件。每个轮次只交付对应阶段；在三个阶段都已经真实显示后，自主记录目标完成并说明交付已齐备。首次收到的Goal控制器自动输入就是第一轮。无需等待我逐步确认，无需创建Task、执行命令、读写文件、访问网站或对外发送。",
+        "status": "paused",
+        "reason": "The user paused the continuous goal from its controls.",
+        "turnBudget": 1,
+        "tokensUsed": 36496,
+        "turnsAccepted": 1,
+        "createdAt": 1793146232990,
+        "updatedAt": 1793146305897,
+        "sessionID": "ses_-zUQhR9QqzzzMZkMj093",
+        "projectID": "prj_h7xqyhFgxDAr57RRR74Q",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\goal-lifecycle-750-after2\\runtime\\data\\projects\\2026\\10\\28\\1951a57d-8710-4bc7-9eda-60220c307735"
+      },
+      {
+        "id": "pev_g0VZIYqxL00XXlFpf86N",
+        "revision": "pev_g0VZIZFHM00K4i48nVuP",
+        "owner": {
+          "kind": "chat",
+          "id": "ses_-zUQhR9QqzzzMZkMj093"
+        },
+        "objective": "本地文档交接说明：三个自动轮次\n请通过恰好三个真实的Goal自动轮次分阶段整理简短交接说明。第一次自动轮次只输出阶段一，用两句话说明文档交付范围；第二次自动轮次只输出阶段二，用两句话说明核对方式；第三次自动轮次输出阶段三，用两句话说明完成条件。每个轮次只交付对应阶段；在三个阶段都已经真实显示后，自主记录目标完成并说明交付已齐备。首次收到的Goal控制器自动输入就是第一轮。无需等待我逐步确认，无需创建Task、执行命令、读写文件、访问网站或对外发送。",
+        "status": "paused",
+        "reason": "The user paused the continuous goal from its controls.",
+        "turnBudget": 3,
+        "tokensUsed": 36496,
+        "turnsAccepted": 1,
+        "createdAt": 1793146232990,
+        "updatedAt": 1793146326488,
+        "sessionID": "ses_-zUQhR9QqzzzMZkMj093",
+        "projectID": "prj_h7xqyhFgxDAr57RRR74Q",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\goal-lifecycle-750-after2\\runtime\\data\\projects\\2026\\10\\28\\1951a57d-8710-4bc7-9eda-60220c307735"
+      },
+      {
+        "id": "pev_g0VZIYqxL00XXlFpf86N",
+        "revision": "pev_g0VZIZnWE001WQViGP0d",
+        "owner": {
+          "kind": "chat",
+          "id": "ses_-zUQhR9QqzzzMZkMj093"
+        },
+        "objective": "本地文档交接说明：三个自动轮次\n请通过恰好三个真实的Goal自动轮次分阶段整理简短交接说明。第一次自动轮次只输出阶段一，用两句话说明文档交付范围；第二次自动轮次只输出阶段二，用两句话说明核对方式；第三次自动轮次输出阶段三，用两句话说明完成条件。每个轮次只交付对应阶段；在三个阶段都已经真实显示后，自主记录目标完成并说明交付已齐备。首次收到的Goal控制器自动输入就是第一轮。无需等待我逐步确认，无需创建Task、执行命令、读写文件、访问网站或对外发送。",
+        "status": "paused",
+        "reason": "用户通过界面暂停了持续目标。",
+        "turnBudget": 3,
+        "tokensUsed": 73369,
+        "turnsAccepted": 2,
+        "createdAt": 1793146232990,
+        "updatedAt": 1793146458106,
+        "sessionID": "ses_-zUQhR9QqzzzMZkMj093",
+        "projectID": "prj_h7xqyhFgxDAr57RRR74Q",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\goal-lifecycle-750-after2\\runtime\\data\\projects\\2026\\10\\28\\1951a57d-8710-4bc7-9eda-60220c307735"
+      },
+      {
+        "id": "pev_g0VZIYqxL00XXlFpf86N",
+        "revision": "pev_g0VZIZutg00YEv5D1AWQ",
+        "owner": {
+          "kind": "chat",
+          "id": "ses_-zUQhR9QqzzzMZkMj093"
+        },
+        "objective": "本地文档交接说明：三个自动轮次\n请通过恰好三个真实的Goal自动轮次分阶段整理简短交接说明。第一次自动轮次只输出阶段一，用两句话说明文档交付范围；第二次自动轮次只输出阶段二，用两句话说明核对方式；第三次自动轮次输出阶段三，用两句话说明完成条件。每个轮次只交付对应阶段；在三个阶段都已经真实显示后，自主记录目标完成并说明交付已齐备。首次收到的Goal控制器自动输入就是第一轮。无需等待我逐步确认，无需创建Task、执行命令、读写文件、访问网站或对外发送。",
+        "status": "complete",
+        "reason": "三个真实控制器自动轮次均已执行：第一轮最终消息显示阶段一及两句交付范围；第二轮最终消息显示阶段二及两句核对方式；第三轮本次可见进度消息已显示阶段三及两句完成条件。三个阶段已依次实际显示，未创建Task、执行命令、读写文件、访问网站或对外发送，交付已齐备。",
+        "turnBudget": 3,
+        "tokensUsed": 148493,
+        "turnsAccepted": 3,
+        "createdAt": 1793146232990,
+        "updatedAt": 1793146486468,
+        "sessionID": "ses_-zUQhR9QqzzzMZkMj093",
+        "projectID": "prj_h7xqyhFgxDAr57RRR74Q",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\goal-lifecycle-750-after2\\runtime\\data\\projects\\2026\\10\\28\\1951a57d-8710-4bc7-9eda-60220c307735"
+      }
+    ],
+    "controllerMessages": [
+      {
+        "id": "msg_h2UyIJjdPHwrj1Oz8n4O",
+        "author": "goal-controller",
+        "role": "user"
+      },
+      {
+        "id": "msg_hodjwDBMK1tLatZtbSv3",
+        "author": "goal-controller",
+        "role": "user"
+      },
+      {
+        "id": "msg_hSfbbN92TjYp7sxzgRIh",
+        "author": "goal-controller",
+        "role": "user"
+      }
+    ],
+    "finalBoard": "idle"
+  },
+  "data": {
+    "baselineRows": 91352,
+    "qualification": "All 91 business/protocol tables retain every original row exactly. All three capacity slot identities persist; two expired runtime capacity leases advance through actual Provider use and release. This is physical admission bookkeeping, not user data, a schema migration, or job/retry/completion state.",
+    "instances": {
+      "source": {
+        "rows": 91352,
+        "originalIdentitiesRetained": 91352,
+        "exactOriginalRowsRetained": 91352,
+        "businessAndProtocolRowsRetained": 91349,
+        "advancedCapacitySlots": []
+      },
+      "before": {
+        "rows": 92375,
+        "originalIdentitiesRetained": 91352,
+        "exactOriginalRowsRetained": 91350,
+        "businessAndProtocolRowsRetained": 91349,
+        "advancedCapacitySlots": [
+          {
+            "slot": 0,
+            "originalExpiredAt": 1793136077684,
+            "newAcquiredAt": 1793145503197,
+            "releasedAt": 1793145507224,
+            "physicalOwnerPID": 36792,
+            "authority": "DurableExecutionCapacity.tryAcquire replaces only an expired slot; release expires the current fenced lease after physical stream settlement"
+          },
+          {
+            "slot": 1,
+            "originalExpiredAt": 1793135885380,
+            "newAcquiredAt": 1793145421654,
+            "releasedAt": 1793145423789,
+            "physicalOwnerPID": 36792,
+            "authority": "DurableExecutionCapacity.tryAcquire replaces only an expired slot; release expires the current fenced lease after physical stream settlement"
+          }
+        ]
+      },
+      "failed-after": {
+        "rows": 92375,
+        "originalIdentitiesRetained": 91352,
+        "exactOriginalRowsRetained": 91350,
+        "businessAndProtocolRowsRetained": 91349,
+        "advancedCapacitySlots": [
+          {
+            "slot": 0,
+            "originalExpiredAt": 1793136077684,
+            "newAcquiredAt": 1793145503197,
+            "releasedAt": 1793145507224,
+            "physicalOwnerPID": 36792,
+            "authority": "DurableExecutionCapacity.tryAcquire replaces only an expired slot; release expires the current fenced lease after physical stream settlement"
+          },
+          {
+            "slot": 1,
+            "originalExpiredAt": 1793135885380,
+            "newAcquiredAt": 1793145421654,
+            "releasedAt": 1793145423789,
+            "physicalOwnerPID": 36792,
+            "authority": "DurableExecutionCapacity.tryAcquire replaces only an expired slot; release expires the current fenced lease after physical stream settlement"
+          }
+        ]
+      },
+      "after": {
+        "rows": 95070,
+        "originalIdentitiesRetained": 91352,
+        "exactOriginalRowsRetained": 91350,
+        "businessAndProtocolRowsRetained": 91349,
+        "advancedCapacitySlots": [
+          {
+            "slot": 0,
+            "originalExpiredAt": 1793136077684,
+            "newAcquiredAt": 1793146486862,
+            "releasedAt": 1793146489307,
+            "physicalOwnerPID": 75632,
+            "authority": "DurableExecutionCapacity.tryAcquire replaces only an expired slot; release expires the current fenced lease after physical stream settlement"
+          },
+          {
+            "slot": 1,
+            "originalExpiredAt": 1793135885380,
+            "newAcquiredAt": 1793146163570,
+            "releasedAt": 1793146169855,
+            "physicalOwnerPID": 75632,
+            "authority": "DurableExecutionCapacity.tryAcquire replaces only an expired slot; release expires the current fenced lease after physical stream settlement"
+          }
+        ]
+      }
+    }
+  },
+  "physical": {
+    "before": {
+      "at": "2026-10-28T00:06:10.765Z",
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "requests": 3,
+      "previousRequests": 726,
+      "cumulativeRequests": 729,
+      "maximumRequests": 10,
+      "exhausted": false,
+      "model": "gpt-6.1-sol",
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "reserveMs": 1846562,
+      "physical": {
+        "launcher": {
+          "observedAtUtc": "2026-10-28T00:06:04.8767236Z",
+          "originalChildExit": 0
+        },
+        "native": {
+          "occurrence": "goal-lifecycle-750-d123762a-4e75-47a6-80bc-a1ecb5d8999e",
+          "outcome": "settled",
+          "host": {
+            "pid": 83308,
+            "processInstanceID": "win32:639287422115420052",
+            "occurrenceID": "944766b2-ec65-4a4e-91bd-753f3585bbc3"
+          },
+          "target": {
+            "pid": 36792,
+            "processInstanceID": "win32:639287422122494509",
+            "occurrenceID": "c8dc710e-ce65-4cfd-8976-54b2346ad75f"
+          },
+          "observedAtUtc": "2026-10-28T00:06:04.823Z",
+          "deadlineAt": 1793147811385,
+          "terminal": {
+            "occurrenceID": "goal-lifecycle-750-d123762a-4e75-47a6-80bc-a1ecb5d8999e",
+            "pid": 36792,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 83308,
+              "processInstanceID": "win32:639287422115420052",
+              "occurrenceID": "944766b2-ec65-4a4e-91bd-753f3585bbc3"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 36792,
+              "processInstanceID": "win32:639287422122494509",
+              "occurrenceID": "c8dc710e-ce65-4cfd-8976-54b2346ad75f"
+            }
+          }
+        ],
+        "observedAtUtc": "2026-10-28T00:06:10.6771908Z"
+      }
+    },
+    "failedAfter": {
+      "at": "2026-10-28T00:09:11.052Z",
+      "failure": "Private launcher replaced retained project path with a missing after directory before preflight",
+      "requests": 0,
+      "originalExit": 1,
+      "physical": {
+        "chain": [
+          {
+            "identity": {
+              "pid": 95120,
+              "processInstanceID": "win32:639287429231487485",
+              "occurrenceID": "67d96630-b30f-43af-8cf5-86ae8acedc32"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 99812,
+              "processInstanceID": "win32:639287429246200271",
+              "occurrenceID": "22f6d665-cb2f-4488-8798-8651c0ed63f1"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "launcher": {
+          "originalChildExit": 1,
+          "observedAtUtc": "2026-10-28T00:08:47.4611006Z"
+        },
+        "observedAtUtc": "2026-10-28T00:09:10.4665799Z",
+        "native": {
+          "occurrence": "goal-lifecycle-750-cb960c0d-5e0c-4660-a7f0-185b3c26eff6",
+          "outcome": "settled",
+          "host": {
+            "pid": 95120,
+            "processInstanceID": "win32:639287429231487485",
+            "occurrenceID": "67d96630-b30f-43af-8cf5-86ae8acedc32"
+          },
+          "target": {
+            "pid": 99812,
+            "processInstanceID": "win32:639287429246200271",
+            "occurrenceID": "22f6d665-cb2f-4488-8798-8651c0ed63f1"
+          },
+          "observedAtUtc": "2026-10-28T00:08:47.418Z",
+          "deadlineAt": 1793147811385,
+          "terminal": {
+            "occurrenceID": "goal-lifecycle-750-cb960c0d-5e0c-4660-a7f0-185b3c26eff6",
+            "pid": 99812,
+            "reason": "exited",
+            "exitCode": 1,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        }
+      },
+      "copiesRetired": 2,
+      "deadlineAt": 1793147811385
+    },
+    "after": {
+      "at": "2026-10-28T00:15:27.073Z",
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "requests": 7,
+      "previousRequests": 729,
+      "cumulativeRequests": 736,
+      "maximumRequests": 7,
+      "exhausted": false,
+      "model": "gpt-6.1-sol",
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "reserveMs": 1285461,
+      "physical": {
+        "observedAtUtc": "2026-10-28T00:15:26.9849983Z",
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-28T00:15:25.9604377Z"
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 62980,
+              "processInstanceID": "win32:639287429547795658",
+              "occurrenceID": "f9d3aec8-cbfa-4dd0-8269-3ff6326e79e8"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 75632,
+              "processInstanceID": "win32:639287429554763035",
+              "occurrenceID": "ecf3149b-72b1-4493-8468-c0d57ae6d2e3"
+            }
+          }
+        ],
+        "native": {
+          "occurrence": "goal-lifecycle-750-a0a121ef-d371-440d-b208-bf586ab93442",
+          "outcome": "settled",
+          "host": {
+            "pid": 62980,
+            "processInstanceID": "win32:639287429547795658",
+            "occurrenceID": "f9d3aec8-cbfa-4dd0-8269-3ff6326e79e8"
+          },
+          "target": {
+            "pid": 75632,
+            "processInstanceID": "win32:639287429554763035",
+            "occurrenceID": "ecf3149b-72b1-4493-8468-c0d57ae6d2e3"
+          },
+          "observedAtUtc": "2026-10-28T00:15:25.924Z",
+          "deadlineAt": 1793147811385,
+          "terminal": {
+            "occurrenceID": "goal-lifecycle-750-a0a121ef-d371-440d-b208-bf586ab93442",
+            "pid": 75632,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        }
+      }
+    }
+  },
+  "checks": {
+    "goal-lifecycle-build": {
+      "label": "goal-lifecycle-build",
+      "startedAt": 1793145999967,
+      "closedAt": 1793146090047,
+      "code": 0,
+      "signal": null,
+      "childPID": 78928
+    },
+    "goal-budget-contract": {
+      "label": "goal-budget-contract",
+      "startedAt": 1793146039926,
+      "closedAt": 1793146099142,
+      "code": 1,
+      "signal": null,
+      "childPID": 72532
+    },
+    "goal-budget-contract-focused": {
+      "label": "goal-budget-contract-focused",
+      "startedAt": 1793146109668,
+      "closedAt": 1793146120888,
+      "code": 0,
+      "signal": null,
+      "childPID": 99580
+    },
+    "goal-lifecycle-docs": {
+      "label": "goal-lifecycle-docs",
+      "startedAt": 1793146726630,
+      "closedAt": 1793146735430,
+      "code": 0,
+      "signal": null,
+      "childPID": 94656
+    },
+    "goal-lifecycle-architecture": {
+      "label": "goal-lifecycle-architecture",
+      "startedAt": 1793146736382,
+      "closedAt": 1793146738238,
+      "code": 0,
+      "signal": null,
+      "childPID": 24256
+    }
+  },
+  "test": {
+    "focusedPassed": 1,
+    "focusedPositiveExpectCalls": 9,
+    "earlierTargetFilePassed": 19,
+    "earlierExpectCalls": 106,
+    "invocationCorrection": "Initial space-separated filter was invalid for this runner; original wrapper failed after the target file passed. Reran the documented equals form through the same runner."
+  },
+  "limits": [
+    "No UI automation created or run",
+    "Shared component changed; real manual lifecycle exercised Chat, not every Task/Mission/SideChat owner",
+    "First objective ambiguously distinguished initial input from automatic turn; retained its actual stage-two result and paused state",
+    "No release, installation, user window/process or user database operation",
+    "Authenticated GitHub alert list still awaits the earlier separate read-only authorization"
+  ]
+}

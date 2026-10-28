@@ -450,9 +450,11 @@ export function ContinuousGoalControl(props: {
         return
       }
       const status =
-        resume() || existing.status === "budget_limited"
+        resume()
           ? "active"
-          : (existing.status as "active" | "paused" | "blocked" | "complete")
+          : existing.status === "budget_limited"
+            ? "paused"
+            : existing.status
       if (
         status === "active" &&
         ((tokenBudget !== undefined && tokenBudget <= (goal()?.tokensUsed ?? existing.tokensUsed)) ||
@@ -466,7 +468,9 @@ export function ContinuousGoalControl(props: {
         reason:
           status === existing.status && (status === "paused" || status === "blocked")
             ? existing.reason
-            : t(resume() ? "continuous_goal.intent.budget_resume" : "continuous_goal.intent.budget"),
+            : t(status === "paused"
+              ? "continuous_goal.intent.pause"
+              : resume() ? "continuous_goal.intent.budget_resume" : "continuous_goal.intent.budget"),
         ...(tokenBudget !== undefined ? { tokenBudget } : {}),
         ...(turnBudget !== undefined ? { turnBudget } : {}),
       })
@@ -651,9 +655,11 @@ export function ContinuousGoalControl(props: {
                       ? CREATE_ACTION_LABEL_KEY
                       : mode() === "complete"
                         ? "continuous_goal.mark_complete"
-                        : resume() || editing()?.status === "budget_limited"
+                        : resume()
                           ? "continuous_goal.save_resume"
-                          : "common.save",
+                          : editing()?.status === "budget_limited"
+                            ? "continuous_goal.save_paused"
+                            : "common.save",
                 )}
               </Button>
             </Show>
@@ -817,7 +823,7 @@ export function ContinuousGoalControl(props: {
                       <p class="continuous-goal__hint">{t("continuous_goal.pause_hint")}</p>
                     </Disclosure.Content>
                   </Disclosure.Root>
-                  <Show when={editing() && ["paused", "blocked"].includes(editing()!.status)}>
+                  <Show when={editing() && ["paused", "blocked", "budget_limited"].includes(editing()!.status)}>
                     <Checkbox checked={resume()} onChange={setResume} disabled={busy()}>
                       {t("continuous_goal.resume_on_save")}
                     </Checkbox>

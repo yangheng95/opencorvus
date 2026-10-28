@@ -1,0 +1,60 @@
+{
+  "at": "2026-10-28T00:09:11.052Z",
+  "failure": "Private launcher replaced retained project path with a missing after directory before preflight",
+  "requests": 0,
+  "originalExit": 1,
+  "physical": {
+    "chain": [
+      {
+        "identity": {
+          "pid": 95120,
+          "processInstanceID": "win32:639287429231487485",
+          "occurrenceID": "67d96630-b30f-43af-8cf5-86ae8acedc32"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "identity": {
+          "pid": 99812,
+          "processInstanceID": "win32:639287429246200271",
+          "occurrenceID": "22f6d665-cb2f-4488-8798-8651c0ed63f1"
+        },
+        "state": "dead_or_reused"
+      }
+    ],
+    "launcher": {
+      "originalChildExit": 1,
+      "observedAtUtc": "2026-10-28T00:08:47.4611006Z"
+    },
+    "observedAtUtc": "2026-10-28T00:09:10.4665799Z",
+    "native": {
+      "occurrence": "goal-lifecycle-750-cb960c0d-5e0c-4660-a7f0-185b3c26eff6",
+      "outcome": "settled",
+      "host": {
+        "pid": 95120,
+        "processInstanceID": "win32:639287429231487485",
+        "occurrenceID": "67d96630-b30f-43af-8cf5-86ae8acedc32"
+      },
+      "target": {
+        "pid": 99812,
+        "processInstanceID": "win32:639287429246200271",
+        "occurrenceID": "22f6d665-cb2f-4488-8798-8651c0ed63f1"
+      },
+      "observedAtUtc": "2026-10-28T00:08:47.418Z",
+      "deadlineAt": 1793147811385,
+      "terminal": {
+        "occurrenceID": "goal-lifecycle-750-cb960c0d-5e0c-4660-a7f0-185b3c26eff6",
+        "pid": 99812,
+        "reason": "exited",
+        "exitCode": 1,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    }
+  },
+  "copiesRetired": 2,
+  "deadlineAt": 1793147811385
+}
