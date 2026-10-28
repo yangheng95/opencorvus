@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [当前Dependabot告警与父依赖](records/2026-10/2026-10-28-dependabot-current-alerts.md)：授权只读清单、当前锁与历史取证区分及兼容修复调查。
+
 - [对话Markdown交接](records/2026-10/2026-10-28-conversation-markdown-export.md)：同一完整会话快照的可读导出与实际文件验收。
 
 - [设置导航说明与返回](records/2026-10/2026-10-28-settings-navigation-current-journey.md)：当前入口帮助、双语和默认页返回实页复核。

@@ -1,0 +1,371 @@
+{
+  "at": "2026-10-28T05:47:49.392Z",
+  "native": {
+    "status": "passed",
+    "production": {
+      "passed": 21,
+      "scopes": {
+        "originalProduction": {
+          "passed": 8
+        },
+        "plistProduction": {
+          "passed": 3,
+          "names": [
+            "actual_plist_serde_returns_typed_values_and_explicit_type_error",
+            "actual_plist_xml_and_binary_return_complete_values",
+            "actual_tauri_association_plist_retains_dictionary_contract"
+          ]
+        },
+        "securityUpgradeProduction": {
+          "passed": 7,
+          "names": [
+            "actual_minisign_verifies_the_public_vector_and_maps_the_signature_error",
+            "actual_rustls_authenticated_tls12_delivers_the_protected_payload",
+            "actual_tokio_runtime_transfers_both_tcp_payloads_and_joins",
+            "actual_updater_parses_the_platform_feed_and_typed_target_error",
+            "actual_urlpattern_captures_the_route_and_maps_duplicate_names_to_the_parser_error",
+            "actual_zip_extracts_the_complete_regular_file",
+            "actual_zip_maps_an_escaping_symlink_to_the_archive_error"
+          ]
+        },
+        "filesystemProduction": {
+          "passed": 3,
+          "names": [
+            "actual_fs_file_url_decodes_to_the_exact_windows_path",
+            "actual_fs_paths_return_typed_traversal_and_url_errors",
+            "actual_fs_safe_paths_preserve_relative_colons_and_unicode"
+          ]
+        },
+        "eventLibrary": "separately recorded below after its actual fixture"
+      },
+      "qualification": "Current PHF 0.13 deterministic lookups, ten retained original contracts, seven security upgrade contracts, and three actual filesystem path/Unicode, file URL and typed traversal/URL error contracts; all libraries belong to the current production build"
+    },
+    "event": {
+      "passed": 2,
+      "artifact": {
+        "reason": "compiler-artifact",
+        "package_id": "registry+https://github.com/rust-lang/crates.io-index#event-listener@5.4.2",
+        "manifest_path": "D:\\myhexin-local\\opencorvus\\.tmp-office748\\cargo-build\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\event-listener-5.4.2\\Cargo.toml",
+        "target": {
+          "kind": [
+            "lib"
+          ],
+          "crate_types": [
+            "lib"
+          ],
+          "name": "event_listener",
+          "src_path": "D:\\myhexin-local\\opencorvus\\.tmp-office748\\cargo-build\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\event-listener-5.4.2\\src\\lib.rs",
+          "edition": "2021",
+          "doc": true,
+          "doctest": true,
+          "test": true
+        },
+        "profile": {
+          "opt_level": "s",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "default",
+          "parking",
+          "std"
+        ],
+        "filenames": [
+          "D:\\myhexin-local\\opencorvus\\.tmp-office748\\native-target\\x86_64-pc-windows-msvc\\release\\libevent_listener.rlib",
+          "D:\\myhexin-local\\opencorvus\\.tmp-office748\\native-target\\x86_64-pc-windows-msvc\\release\\deps\\libevent_listener-11c70891047d07c5.rmeta"
+        ],
+        "executable": null,
+        "fresh": true
+      },
+      "target": "x86_64-pc-windows-msvc",
+      "targetDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-office748\\native-target\\x86_64-pc-windows-msvc",
+      "dependencyDirectories": [
+        "D:\\myhexin-local\\opencorvus\\.tmp-office748\\native-target\\x86_64-pc-windows-msvc\\release\\deps",
+        "D:\\myhexin-local\\opencorvus\\.tmp-office748\\native-target\\x86_64-pc-windows-msvc\\release"
+      ],
+      "nativeSearchPaths": [],
+      "qualification": "Separate Windows library-only Send-tag/cancel-forward/reuse contracts; Linux cross-compiled units only activate the real dependency branch and are not linked or executed here; no application or Linux D-Bus execution claim"
+    },
+    "physical": {
+      "started": 1793165820738,
+      "closed": 1793166457409,
+      "deadlineAt": 1793168217244,
+      "exitCode": 0,
+      "settlementConfirmed": true,
+      "receipt": {
+        "occurrenceID": "ffb38ff9-ddcd-4698-9658-5df0d65793e4",
+        "pid": 72288,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "environmentOwner": "One private HOME/cache/target with the existing finite host profile; owned descendants retire at root exit"
+    },
+    "deadline": {
+      "createdAt": 1793165817244,
+      "deadlineAt": 1793168217244,
+      "scope": "One full canonical native qualification including any justified repair retry; no deadline reset",
+      "minimumReserveMs": 300000
+    },
+    "reserveMs": 1759835
+  },
+  "firstRun": {
+    "firstRun": "passed",
+    "sessionsCreated": 4,
+    "persistedAcrossRestart": 2,
+    "realProvider": false
+  },
+  "audits": {
+    "database": {
+      "advisory-count": 1380,
+      "last-commit": "99670cfc0bc574433034b75876a4b791ccaa2efb",
+      "last-updated": "2026-10-27T11:02:42+01:00"
+    },
+    "overlay": {
+      "dependencies": 580,
+      "vulnerabilities": 0,
+      "warnings": [
+        {
+          "kind": "unmaintained",
+          "packages": [
+            {
+              "name": "proc-macro-error",
+              "version": "1.0.4",
+              "id": "RUSTSEC-2024-0370"
+            },
+            {
+              "name": "zbus_names",
+              "version": "4.3.1",
+              "id": "RUSTSEC-2026-0371"
+            },
+            {
+              "name": "zvariant",
+              "version": "5.10.0",
+              "id": "RUSTSEC-2026-0370"
+            },
+            {
+              "name": "zvariant_derive",
+              "version": "5.10.0",
+              "id": "RUSTSEC-2026-0372"
+            }
+          ]
+        },
+        {
+          "kind": "unsound",
+          "packages": [
+            {
+              "name": "glib",
+              "version": "0.18.5",
+              "id": "RUSTSEC-2024-0429"
+            }
+          ]
+        },
+        {
+          "kind": "yanked",
+          "packages": [
+            {
+              "name": "clipboard-win",
+              "version": "5.4.1"
+            },
+            {
+              "name": "uds_windows",
+              "version": "1.2.0"
+            }
+          ]
+        }
+      ]
+    },
+    "supervisor": {
+      "dependencies": 22,
+      "vulnerabilities": 0,
+      "warnings": {}
+    },
+    "commands": [
+      {
+        "name": "overlay-json-cache-recheck",
+        "result": {
+          "name": "overlay-json-cache-recheck",
+          "started": 1793166046420,
+          "closed": 1793166056522,
+          "code": 0,
+          "signal": null,
+          "executable": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\rustsec-tools\\bin\\cargo-audit.exe",
+          "args": [
+            "audit",
+            "--file",
+            "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\Cargo.lock",
+            "--db",
+            "D:\\myhexin-local\\opencorvus\\.tmp-office760/rustsec-db",
+            "--json"
+          ],
+          "cwd": "D:\\myhexin-local\\opencorvus\\.tmp-office760/audit-work",
+          "cargo": "C:\\Users\\hengu\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+          "publicCargoHome": "D:\\myhexin-local\\opencorvus\\.tmp-office760/cargo-public",
+          "lockInputBytesRetained": true,
+          "physicalCloseObserved": true
+        },
+        "process": {
+          "started": 1793166046641,
+          "closed": 1793166056496,
+          "deadlineAt": 1793166646641,
+          "exitCode": 0,
+          "settlementConfirmed": true,
+          "receipt": {
+            "occurrenceID": "a4eb6f1a-b792-49f4-aa9a-44bb589d98a5",
+            "pid": 96088,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "environmentOwner": "One private HOME/cache/target with the existing finite host profile; owned descendants retire at root exit"
+        }
+      },
+      {
+        "name": "overlay-terminal-cache-complete",
+        "result": {
+          "name": "overlay-terminal-cache-complete",
+          "started": 1793166119121,
+          "closed": 1793166125063,
+          "code": 0,
+          "signal": null,
+          "executable": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\rustsec-tools\\bin\\cargo-audit.exe",
+          "args": [
+            "audit",
+            "--file",
+            "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\Cargo.lock",
+            "--db",
+            "D:\\myhexin-local\\opencorvus\\.tmp-office760/rustsec-db"
+          ],
+          "cwd": "D:\\myhexin-local\\opencorvus\\.tmp-office760/audit-work",
+          "cargo": "C:\\Users\\hengu\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+          "publicCargoHome": "D:\\myhexin-local\\opencorvus\\.tmp-office760/cargo-public",
+          "lockInputBytesRetained": true,
+          "physicalCloseObserved": true
+        },
+        "process": {
+          "started": 1793166119275,
+          "closed": 1793166125034,
+          "deadlineAt": 1793166719275,
+          "exitCode": 0,
+          "settlementConfirmed": true,
+          "receipt": {
+            "occurrenceID": "a307bc11-e3d7-4336-9ad6-7e1792570b1a",
+            "pid": 87236,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "environmentOwner": "One private HOME/cache/target with the existing finite host profile; owned descendants retire at root exit"
+        }
+      },
+      {
+        "name": "supervisor-json-current",
+        "result": {
+          "name": "supervisor-json-current",
+          "started": 1793166158244,
+          "closed": 1793166162055,
+          "code": 0,
+          "signal": null,
+          "executable": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\rustsec-tools\\bin\\cargo-audit.exe",
+          "args": [
+            "audit",
+            "--file",
+            "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\native\\process-supervisor\\Cargo.lock",
+            "--db",
+            "D:\\myhexin-local\\opencorvus\\.tmp-office760/rustsec-db",
+            "--json"
+          ],
+          "cwd": "D:\\myhexin-local\\opencorvus\\.tmp-office760/audit-work",
+          "cargo": "C:\\Users\\hengu\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+          "publicCargoHome": "D:\\myhexin-local\\opencorvus\\.tmp-office760/cargo-public",
+          "lockInputBytesRetained": true,
+          "physicalCloseObserved": true
+        },
+        "process": {
+          "started": 1793166158313,
+          "closed": 1793166162026,
+          "deadlineAt": 1793166758313,
+          "exitCode": 0,
+          "settlementConfirmed": true,
+          "receipt": {
+            "occurrenceID": "ebb52249-281c-4e21-b33f-2fc22425a7ac",
+            "pid": 39064,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "environmentOwner": "One private HOME/cache/target with the existing finite host profile; owned descendants retire at root exit"
+        }
+      },
+      {
+        "name": "supervisor-terminal-current",
+        "result": {
+          "name": "supervisor-terminal-current",
+          "started": 1793166184920,
+          "closed": 1793166187715,
+          "code": 0,
+          "signal": null,
+          "executable": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\rustsec-tools\\bin\\cargo-audit.exe",
+          "args": [
+            "audit",
+            "--file",
+            "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\native\\process-supervisor\\Cargo.lock",
+            "--db",
+            "D:\\myhexin-local\\opencorvus\\.tmp-office760/rustsec-db"
+          ],
+          "cwd": "D:\\myhexin-local\\opencorvus\\.tmp-office760/audit-work",
+          "cargo": "C:\\Users\\hengu\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+          "publicCargoHome": "D:\\myhexin-local\\opencorvus\\.tmp-office760/cargo-public",
+          "lockInputBytesRetained": true,
+          "physicalCloseObserved": true
+        },
+        "process": {
+          "started": 1793166185079,
+          "closed": 1793166187681,
+          "deadlineAt": 1793166785079,
+          "exitCode": 0,
+          "settlementConfirmed": true,
+          "receipt": {
+            "occurrenceID": "1129a811-ad16-43a6-b491-2ee8424fe81e",
+            "pid": 87284,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "environmentOwner": "One private HOME/cache/target with the existing finite host profile; owned descendants retire at root exit"
+        }
+      }
+    ]
+  },
+  "checks": {
+    "docs": {
+      "label": "dependabot-760-docs",
+      "startedAt": 1793165961347,
+      "closedAt": 1793165972822,
+      "code": 0,
+      "signal": null,
+      "childPID": 100088
+    },
+    "checker-types-owned": {
+      "label": "dependabot-760-checker-types-owned",
+      "startedAt": 1793166273208,
+      "closedAt": 1793166278035,
+      "code": 0,
+      "signal": null,
+      "childPID": 46624
+    },
+    "docsFinal": {
+      "label": "dependabot-760-docs-final",
+      "startedAt": 1793166562456,
+      "closedAt": 1793166572226,
+      "code": 0,
+      "signal": null,
+      "childPID": 74100
+    }
+  },
+  "providerRequests": 0,
+  "cumulativeRequests": 759,
+  "limits": "No native GUI, actual dialog window, Linux/macOS execution or update installation. glib/current and historical evidence alerts retained; no dismiss/settings writes. First incomplete registry audit, three-letter URL probe failure and two local type-config failures retained privately and explicitly qualified in the spec."
+}

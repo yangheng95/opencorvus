@@ -1,0 +1,955 @@
+{
+  "at": "2026-10-28T05:47:49.356Z",
+  "previousAuditInputExact": true,
+  "windowsMetadata": [
+    {
+      "name": "rand",
+      "version": "0.7.3",
+      "id": "registry+https://github.com/rust-lang/crates.io-index#rand@0.7.3",
+      "features": [
+        "alloc",
+        "default",
+        "getrandom",
+        "getrandom_package",
+        "libc",
+        "rand_pcg",
+        "small_rng",
+        "std"
+      ],
+      "parents": [
+        {
+          "name": "phf_generator",
+          "version": "0.8.0",
+          "dependencies": [
+            {
+              "name": "rand",
+              "source": "registry+https://github.com/rust-lang/crates.io-index",
+              "req": "^0.7",
+              "kind": null,
+              "rename": null,
+              "optional": false,
+              "uses_default_features": true,
+              "features": [
+                "small_rng"
+              ],
+              "target": null,
+              "registry": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "rand",
+      "version": "0.8.6",
+      "id": "registry+https://github.com/rust-lang/crates.io-index#rand@0.8.6",
+      "features": [
+        "alloc",
+        "default",
+        "getrandom",
+        "libc",
+        "rand_chacha",
+        "small_rng",
+        "std",
+        "std_rng"
+      ],
+      "parents": [
+        {
+          "name": "phf_generator",
+          "version": "0.10.0",
+          "dependencies": [
+            {
+              "name": "rand",
+              "source": "registry+https://github.com/rust-lang/crates.io-index",
+              "req": "^0.8",
+              "kind": null,
+              "rename": null,
+              "optional": false,
+              "uses_default_features": true,
+              "features": [
+                "small_rng"
+              ],
+              "target": null,
+              "registry": null
+            }
+          ]
+        },
+        {
+          "name": "phf_generator",
+          "version": "0.11.3",
+          "dependencies": [
+            {
+              "name": "rand",
+              "source": "registry+https://github.com/rust-lang/crates.io-index",
+              "req": "^0.8",
+              "kind": null,
+              "rename": null,
+              "optional": false,
+              "uses_default_features": false,
+              "features": [
+                "small_rng"
+              ],
+              "target": null,
+              "registry": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "rand",
+      "version": "0.9.4",
+      "id": "registry+https://github.com/rust-lang/crates.io-index#rand@0.9.4",
+      "features": [
+        "alloc",
+        "default",
+        "os_rng",
+        "small_rng",
+        "std",
+        "std_rng",
+        "thread_rng"
+      ],
+      "parents": [
+        {
+          "name": "tauri-plugin-notification",
+          "version": "2.3.3",
+          "dependencies": [
+            {
+              "name": "rand",
+              "source": "registry+https://github.com/rust-lang/crates.io-index",
+              "req": "^0.9",
+              "kind": null,
+              "rename": null,
+              "optional": false,
+              "uses_default_features": true,
+              "features": [],
+              "target": null,
+              "registry": null
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "allPlatformLock": {
+    "at": "2026-10-28T05:30:08.637Z",
+    "scope": "All platforms in the current production lock; prior metadata is specifically Windows",
+    "packages": [
+      {
+        "name": "glib",
+        "version": "0.18.5",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "233daaf6e83ae6a12a52055f568f9d7cf4671dabb78ff9560ab6da230ce00ee5",
+        "dependencies": [
+          "bitflags 2.11.0",
+          "futures-channel",
+          "futures-core",
+          "futures-executor",
+          "futures-task",
+          "futures-util",
+          "gio-sys",
+          "glib-macros",
+          "glib-sys",
+          "gobject-sys",
+          "libc",
+          "memchr",
+          "once_cell",
+          "smallvec",
+          "thiserror 1.0.69"
+        ],
+        "parents": [
+          {
+            "name": "atk",
+            "version": "0.18.2"
+          },
+          {
+            "name": "cairo-rs",
+            "version": "0.18.5"
+          },
+          {
+            "name": "gdk",
+            "version": "0.18.2"
+          },
+          {
+            "name": "gdk-pixbuf",
+            "version": "0.18.5"
+          },
+          {
+            "name": "gdkx11",
+            "version": "0.18.2"
+          },
+          {
+            "name": "gio",
+            "version": "0.18.4"
+          },
+          {
+            "name": "gtk",
+            "version": "0.18.2"
+          },
+          {
+            "name": "javascriptcore-rs",
+            "version": "1.1.2"
+          },
+          {
+            "name": "libappindicator",
+            "version": "0.9.0"
+          },
+          {
+            "name": "pango",
+            "version": "0.18.3"
+          },
+          {
+            "name": "soup3",
+            "version": "0.5.0"
+          },
+          {
+            "name": "webkit2gtk",
+            "version": "2.0.2"
+          }
+        ]
+      },
+      {
+        "name": "kuchikiki",
+        "version": "0.8.8-speedreader",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "02cb977175687f33fa4afa0c95c112b987ea1443e5a51c8f8ff27dc618270cc2",
+        "dependencies": [
+          "cssparser 0.29.6",
+          "html5ever 0.29.1",
+          "indexmap 2.13.0",
+          "selectors 0.24.0"
+        ],
+        "parents": [
+          {
+            "name": "tauri-utils",
+            "version": "2.10.2"
+          }
+        ]
+      },
+      {
+        "name": "phf_codegen",
+        "version": "0.8.0",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "cbffee61585b0411840d3ece935cce9cb6321f01c45477d30066498cd5e1a815",
+        "dependencies": [
+          "phf_generator 0.8.0",
+          "phf_shared 0.8.0"
+        ],
+        "parents": [
+          {
+            "name": "selectors",
+            "version": "0.24.0"
+          }
+        ]
+      },
+      {
+        "name": "phf_codegen",
+        "version": "0.11.3",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "aef8048c789fa5e851558d709946d6d79a8ff88c0440c587967f8e94bfb1216a",
+        "dependencies": [
+          "phf_generator 0.11.3",
+          "phf_shared 0.11.3"
+        ],
+        "parents": [
+          {
+            "name": "markup5ever",
+            "version": "0.14.1"
+          }
+        ]
+      },
+      {
+        "name": "phf_codegen",
+        "version": "0.13.1",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "49aa7f9d80421bca176ca8dbfebe668cc7a2684708594ec9f3c0db0805d5d6e1",
+        "dependencies": [
+          "phf_generator 0.13.1",
+          "phf_shared 0.13.1"
+        ],
+        "parents": [
+          {
+            "name": "selectors",
+            "version": "0.38.0"
+          },
+          {
+            "name": "web_atoms",
+            "version": "0.2.4"
+          }
+        ]
+      },
+      {
+        "name": "phf_generator",
+        "version": "0.8.0",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "17367f0cc86f2d25802b2c26ee58a7b23faeccf78a396094c13dced0d0182526",
+        "dependencies": [
+          "phf_shared 0.8.0",
+          "rand 0.7.3"
+        ],
+        "parents": [
+          {
+            "name": "phf_codegen",
+            "version": "0.8.0"
+          }
+        ]
+      },
+      {
+        "name": "phf_generator",
+        "version": "0.10.0",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "5d5285893bb5eb82e6aaf5d59ee909a06a16737a8970984dd7746ba9283498d6",
+        "dependencies": [
+          "phf_shared 0.10.0",
+          "rand 0.8.6"
+        ],
+        "parents": [
+          {
+            "name": "phf_macros",
+            "version": "0.10.0"
+          }
+        ]
+      },
+      {
+        "name": "phf_generator",
+        "version": "0.11.3",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "3c80231409c20246a13fddb31776fb942c38553c51e871f8cbd687a4cfb5843d",
+        "dependencies": [
+          "phf_shared 0.11.3",
+          "rand 0.8.6"
+        ],
+        "parents": [
+          {
+            "name": "phf_codegen",
+            "version": "0.11.3"
+          },
+          {
+            "name": "string_cache_codegen",
+            "version": "0.5.4"
+          }
+        ]
+      },
+      {
+        "name": "phf_generator",
+        "version": "0.13.1",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "135ace3a761e564ec88c03a77317a7c6b80bb7f7135ef2544dbe054243b89737",
+        "dependencies": [
+          "fastrand",
+          "phf_shared 0.13.1"
+        ],
+        "parents": [
+          {
+            "name": "phf_codegen",
+            "version": "0.13.1"
+          },
+          {
+            "name": "phf_macros",
+            "version": "0.13.1"
+          },
+          {
+            "name": "string_cache_codegen",
+            "version": "0.6.1"
+          }
+        ]
+      },
+      {
+        "name": "rand",
+        "version": "0.7.3",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "6a6b1679d49b24bbfe0c803429aa1874472f50d9b363131f0e89fc356b544d03",
+        "dependencies": [
+          "getrandom 0.1.16",
+          "libc",
+          "rand_chacha 0.2.2",
+          "rand_core 0.5.1",
+          "rand_hc",
+          "rand_pcg"
+        ],
+        "parents": [
+          {
+            "name": "phf_generator",
+            "version": "0.8.0"
+          }
+        ]
+      },
+      {
+        "name": "rand",
+        "version": "0.8.6",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "5ca0ecfa931c29007047d1bc58e623ab12e5590e8c7cc53200d5202b69266d8a",
+        "dependencies": [
+          "libc",
+          "rand_chacha 0.3.1",
+          "rand_core 0.6.4"
+        ],
+        "parents": [
+          {
+            "name": "phf_generator",
+            "version": "0.10.0"
+          },
+          {
+            "name": "phf_generator",
+            "version": "0.11.3"
+          }
+        ]
+      },
+      {
+        "name": "rand",
+        "version": "0.9.4",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "44c5af06bb1b7d3216d91932aed5265164bf384dc89cd6ba05cf59a35f5f76ea",
+        "dependencies": [
+          "rand_chacha 0.9.0",
+          "rand_core 0.9.5"
+        ],
+        "parents": [
+          {
+            "name": "tauri-plugin-notification",
+            "version": "2.3.3"
+          }
+        ]
+      },
+      {
+        "name": "selectors",
+        "version": "0.24.0",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "0c37578180969d00692904465fb7f6b3d50b9a2b952b87c23d0e2e5cb5013416",
+        "dependencies": [
+          "bitflags 1.3.2",
+          "cssparser 0.29.6",
+          "derive_more 0.99.20",
+          "fxhash",
+          "log",
+          "phf 0.8.0",
+          "phf_codegen 0.8.0",
+          "precomputed-hash",
+          "servo_arc 0.2.0",
+          "smallvec"
+        ],
+        "parents": [
+          {
+            "name": "kuchikiki",
+            "version": "0.8.8-speedreader"
+          }
+        ]
+      },
+      {
+        "name": "selectors",
+        "version": "0.38.0",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "8adfa1c298912827b8a28b223b3b874357397ae706e6190acd9bf28cee99114d",
+        "dependencies": [
+          "bitflags 2.11.0",
+          "cssparser 0.37.0",
+          "derive_more 2.1.1",
+          "log",
+          "new_debug_unreachable",
+          "phf 0.13.1",
+          "phf_codegen 0.13.1",
+          "precomputed-hash",
+          "rustc-hash",
+          "servo_arc 0.4.3",
+          "smallvec"
+        ],
+        "parents": [
+          {
+            "name": "dom_query",
+            "version": "0.28.0"
+          }
+        ]
+      },
+      {
+        "name": "tauri-build",
+        "version": "2.7.4",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "adddb0e648752aaac5da9c3c3c6a68e1e87cab55e3b757b18a9441ef8c3ac614",
+        "dependencies": [
+          "anyhow",
+          "cargo_toml",
+          "dirs",
+          "glob",
+          "heck 0.5.0",
+          "json-patch",
+          "schemars 0.8.22",
+          "semver",
+          "serde",
+          "serde_json",
+          "static_vcruntime",
+          "strsim",
+          "tauri-utils",
+          "tauri-winres",
+          "walkdir"
+        ],
+        "parents": [
+          {
+            "name": "opencorvus-overlay",
+            "version": "0.1.33"
+          },
+          {
+            "name": "tauri",
+            "version": "2.12.5"
+          }
+        ]
+      },
+      {
+        "name": "tauri-codegen",
+        "version": "2.7.4",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "fb37631cf71dab5e8ab55e1bdd701e18a52653d90b78e71d0e5598b1e0a61316",
+        "dependencies": [
+          "base64 0.23.1",
+          "brotli",
+          "ico",
+          "json-patch",
+          "plist",
+          "png",
+          "proc-macro2",
+          "quote",
+          "semver",
+          "serde",
+          "serde_json",
+          "sha2",
+          "syn 2.0.117",
+          "tauri-utils",
+          "thiserror 2.0.18",
+          "time",
+          "url",
+          "uuid",
+          "walkdir"
+        ],
+        "parents": [
+          {
+            "name": "tauri-macros",
+            "version": "2.7.4"
+          }
+        ]
+      },
+      {
+        "name": "tauri-macros",
+        "version": "2.7.4",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "0cc38db58854c10fb5f91a887ed8bf82d3239bb92b5d8db86eda09e96d9963d1",
+        "dependencies": [
+          "heck 0.5.0",
+          "proc-macro2",
+          "quote",
+          "syn 2.0.117",
+          "tauri-codegen",
+          "tauri-utils"
+        ],
+        "parents": [
+          {
+            "name": "tauri",
+            "version": "2.12.5"
+          }
+        ]
+      },
+      {
+        "name": "tauri-utils",
+        "version": "2.10.2",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "362ab21cd4cc713f2a02b1a9b5688198b1541cfb6907c4281e9190e0f0ef4aa3",
+        "dependencies": [
+          "anyhow",
+          "brotli",
+          "cargo_metadata",
+          "ctor",
+          "dom_query",
+          "dunce",
+          "glob",
+          "html5ever 0.29.1",
+          "http",
+          "infer",
+          "json-patch",
+          "kuchikiki",
+          "log",
+          "memchr",
+          "phf 0.13.1",
+          "plist",
+          "proc-macro2",
+          "quote",
+          "regex",
+          "schemars 0.8.22",
+          "semver",
+          "serde",
+          "serde-untagged",
+          "serde_json",
+          "serde_with",
+          "swift-rs",
+          "thiserror 2.0.18",
+          "toml 0.9.12+spec-1.1.0",
+          "url",
+          "urlpattern",
+          "uuid",
+          "walkdir"
+        ],
+        "parents": [
+          {
+            "name": "tauri",
+            "version": "2.12.5"
+          },
+          {
+            "name": "tauri-build",
+            "version": "2.7.4"
+          },
+          {
+            "name": "tauri-codegen",
+            "version": "2.7.4"
+          },
+          {
+            "name": "tauri-macros",
+            "version": "2.7.4"
+          },
+          {
+            "name": "tauri-plugin",
+            "version": "2.7.2"
+          },
+          {
+            "name": "tauri-plugin-deep-link",
+            "version": "2.4.9"
+          },
+          {
+            "name": "tauri-plugin-fs",
+            "version": "2.4.5"
+          },
+          {
+            "name": "tauri-runtime",
+            "version": "2.12.2"
+          },
+          {
+            "name": "tauri-runtime-wry",
+            "version": "2.12.3"
+          }
+        ]
+      }
+    ]
+  },
+  "registry": [
+    {
+      "name": "glib",
+      "current": [],
+      "latestStable": "0.22.10"
+    },
+    {
+      "name": "rand",
+      "current": [
+        "0.7.3",
+        "0.8.6",
+        "0.9.4"
+      ],
+      "latestStable": "0.10.3"
+    },
+    {
+      "name": "kuchikiki",
+      "current": [
+        "0.8.8-speedreader"
+      ],
+      "latestStable": "0.8.2"
+    },
+    {
+      "name": "tauri-utils",
+      "current": [
+        "2.10.2"
+      ],
+      "latestStable": "2.10.2"
+    },
+    {
+      "name": "tauri",
+      "current": [
+        "2.12.5"
+      ],
+      "latestStable": "2.12.5"
+    },
+    {
+      "name": "phf_codegen",
+      "current": [
+        "0.8.0",
+        "0.11.3",
+        "0.13.1"
+      ],
+      "latestStable": "0.14.0"
+    },
+    {
+      "name": "phf_generator",
+      "current": [
+        "0.8.0",
+        "0.10.0",
+        "0.11.3",
+        "0.13.1"
+      ],
+      "latestStable": "0.14.0"
+    },
+    {
+      "name": "tauri-plugin-notification",
+      "current": [
+        "2.3.3"
+      ],
+      "latestStable": "2.8.0"
+    }
+  ],
+  "filesystemParent": {
+    "at": "2026-10-28T05:30:50.189Z",
+    "parents": [
+      {
+        "name": "tauri-plugin-dialog",
+        "version": "2.6.0",
+        "dependencies": [
+          {
+            "name": "tauri-plugin-fs",
+            "source": "registry+https://github.com/rust-lang/crates.io-index",
+            "req": "^2.4.5",
+            "kind": null,
+            "rename": null,
+            "optional": false,
+            "uses_default_features": true,
+            "features": [],
+            "target": null,
+            "registry": null
+          }
+        ]
+      }
+    ],
+    "current": "2.4.5",
+    "latest": "2.7.1",
+    "versions": [
+      {
+        "version": "2.4.5",
+        "dependencies": [
+          {
+            "name": "tauri",
+            "req": "^2.9.3",
+            "features": [],
+            "optional": false,
+            "default_features": false,
+            "target": null,
+            "kind": "normal"
+          },
+          {
+            "name": "tauri-plugin",
+            "req": "^2.4",
+            "features": [
+              "build"
+            ],
+            "optional": false,
+            "default_features": true,
+            "target": null,
+            "kind": "build"
+          },
+          {
+            "name": "tauri-utils",
+            "req": "^2.7",
+            "features": [
+              "build"
+            ],
+            "optional": false,
+            "default_features": true,
+            "target": null,
+            "kind": "build"
+          }
+        ],
+        "features": {
+          "watch": [
+            "notify",
+            "notify-debouncer-full"
+          ]
+        }
+      },
+      {
+        "version": "2.5.2",
+        "dependencies": [
+          {
+            "name": "tauri",
+            "req": "^2.10",
+            "features": [],
+            "optional": false,
+            "default_features": false,
+            "target": null,
+            "kind": "normal"
+          },
+          {
+            "name": "tauri-plugin",
+            "req": "^2.5",
+            "features": [
+              "build"
+            ],
+            "optional": false,
+            "default_features": true,
+            "target": null,
+            "kind": "build"
+          },
+          {
+            "name": "tauri-utils",
+            "req": "^2.8",
+            "features": [],
+            "optional": false,
+            "default_features": true,
+            "target": null,
+            "kind": "build"
+          }
+        ],
+        "features": {
+          "watch": [
+            "notify",
+            "notify-debouncer-full"
+          ]
+        }
+      },
+      {
+        "version": "2.6.0",
+        "dependencies": [
+          {
+            "name": "tauri",
+            "req": "^2.12",
+            "features": [],
+            "optional": false,
+            "default_features": false,
+            "target": null,
+            "kind": "normal"
+          },
+          {
+            "name": "tauri",
+            "req": "^2.12",
+            "features": [
+              "wry"
+            ],
+            "optional": false,
+            "default_features": false,
+            "target": null,
+            "kind": "dev"
+          },
+          {
+            "name": "tauri-plugin",
+            "req": "^2.7",
+            "features": [
+              "build"
+            ],
+            "optional": false,
+            "default_features": true,
+            "target": null,
+            "kind": "build"
+          },
+          {
+            "name": "tauri-utils",
+            "req": "^2.10",
+            "features": [],
+            "optional": false,
+            "default_features": true,
+            "target": null,
+            "kind": "build"
+          }
+        ],
+        "features": {
+          "watch": [
+            "notify",
+            "notify-debouncer-full"
+          ]
+        }
+      },
+      {
+        "version": "2.7.0",
+        "dependencies": [
+          {
+            "name": "tauri",
+            "req": "^2.12",
+            "features": [],
+            "optional": false,
+            "default_features": false,
+            "target": null,
+            "kind": "normal"
+          },
+          {
+            "name": "tauri",
+            "req": "^2.12",
+            "features": [
+              "wry"
+            ],
+            "optional": false,
+            "default_features": false,
+            "target": null,
+            "kind": "dev"
+          },
+          {
+            "name": "tauri-plugin",
+            "req": "^2.7.1",
+            "features": [
+              "build"
+            ],
+            "optional": false,
+            "default_features": true,
+            "target": null,
+            "kind": "build"
+          },
+          {
+            "name": "tauri-utils",
+            "req": "^2.10",
+            "features": [],
+            "optional": false,
+            "default_features": true,
+            "target": null,
+            "kind": "build"
+          }
+        ],
+        "features": {
+          "watch": [
+            "notify",
+            "notify-debouncer-full"
+          ]
+        }
+      },
+      {
+        "version": "2.7.1",
+        "dependencies": [
+          {
+            "name": "tauri",
+            "req": "^2.12",
+            "features": [],
+            "optional": false,
+            "default_features": false,
+            "target": null,
+            "kind": "normal"
+          },
+          {
+            "name": "tauri",
+            "req": "^2.12",
+            "features": [
+              "wry"
+            ],
+            "optional": false,
+            "default_features": false,
+            "target": null,
+            "kind": "dev"
+          },
+          {
+            "name": "tauri-plugin",
+            "req": "^2.7.1",
+            "features": [
+              "build"
+            ],
+            "optional": false,
+            "default_features": true,
+            "target": null,
+            "kind": "build"
+          },
+          {
+            "name": "tauri-utils",
+            "req": "^2.10",
+            "features": [],
+            "optional": false,
+            "default_features": true,
+            "target": null,
+            "kind": "build"
+          }
+        ],
+        "features": {
+          "watch": [
+            "notify",
+            "notify-debouncer-full"
+          ]
+        }
+      }
+    ]
+  },
+  "qualification": "Windows feature metadata is distinct from the complete all-platform lock. Published registry archives were checked against immutable registry identity. No reachability proof for Linux or all attack configurations."
+}

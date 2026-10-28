@@ -6,6 +6,39 @@ mod production {
     use tauri_utils::config::RunnerConfig;
 
     #[test]
+    fn actual_fs_safe_paths_preserve_relative_colons_and_unicode() {
+        use std::{path::PathBuf, str::FromStr};
+        for path in ["notes:2024.txt", "报告/交接说明.md", "C:\\owned\\report.md"] {
+            let parsed = tauri_plugin_fs::SafeFilePath::from_str(path)
+                .expect("actual fs safe path parsing");
+            assert_eq!(parsed.into_path().expect("actual path value"), PathBuf::from(path));
+        }
+    }
+
+    #[test]
+    fn actual_fs_file_url_decodes_to_the_exact_windows_path() {
+        let parsed: tauri_plugin_fs::SafeFilePath = serde_json::from_str(
+            "\"file:///C:/owned/%E6%8A%A5%E5%91%8A.md\"",
+        ).expect("actual fs input deserialization");
+        assert_eq!(
+            parsed.into_path().expect("actual file URL decoding"),
+            std::path::PathBuf::from("C:\\owned\\报告.md"),
+        );
+    }
+
+    #[test]
+    fn actual_fs_paths_return_typed_traversal_and_url_errors() {
+        use std::str::FromStr;
+        let traversal = tauri_plugin_fs::SafeFilePath::from_str("../report.md")
+            .expect_err("actual parent traversal error");
+        assert!(matches!(traversal, tauri_plugin_fs::Error::UnsafePathBuf(_)));
+        let url = tauri_plugin_fs::SafeFilePath::from_str("https://example.com/report.md")
+            .expect("actual URL parsing").into_path().expect_err("actual URL path error");
+        assert!(matches!(url, tauri_plugin_fs::Error::InvalidPathUrl));
+        assert_eq!(serde_json::to_value(&url).expect("actual error response"), "URL is not a valid path");
+    }
+
+    #[test]
     fn actual_tauri_runner_config_serializes_and_round_trips_exactly() {
         let cases = [
             (
@@ -86,37 +119,26 @@ mod production {
         assert_eq!(error.to_string(), "missing value for `$key$` field");
     }
 
-    macro_rules! qualify_phf {
-        ($generator:ident, $shared:ident) => {{
-            let entries = [("alpha", 11), ("beta", 22), ("gamma", 33), ("delta", 44)];
-            let keys: Vec<_> = entries.iter().map(|(key, _)| *key).collect();
-            let generated = $generator::generate_hash(&keys);
-            let actual: Vec<_> = keys
-                .iter()
-                .map(|key| {
-                    let hashes = $shared::hash(key, &generated.key);
-                    let slot =
-                        $shared::get_index(&hashes, &generated.disps, generated.map.len()) as usize;
-                    entries[generated.map[slot]]
-                })
-                .collect();
-            assert_eq!(actual, entries);
-            let repeated = $generator::generate_hash(&keys);
-            assert_eq!(
-                (repeated.key, repeated.disps, repeated.map),
-                (generated.key, generated.disps, generated.map)
-            );
-        }};
-    }
-
     #[test]
-    fn actual_phf_010_generator_returns_exact_deterministic_lookups() {
-        qualify_phf!(phf_generator_010, phf_shared_010);
-    }
-
-    #[test]
-    fn actual_phf_011_generator_returns_exact_deterministic_lookups() {
-        qualify_phf!(phf_generator_011, phf_shared_011);
+    fn actual_phf_013_generator_returns_exact_deterministic_lookups() {
+        let entries = [("alpha", 11), ("beta", 22), ("gamma", 33), ("delta", 44)];
+        let keys: Vec<_> = entries.iter().map(|(key, _)| *key).collect();
+        let generated = phf_generator_013::generate_hash(&keys);
+        let actual: Vec<_> = keys
+            .iter()
+            .map(|key| {
+                let hashes = phf_shared_013::hash(key, &generated.key);
+                let slot =
+                    phf_shared_013::get_index(&hashes, &generated.disps, generated.map.len()) as usize;
+                entries[generated.map[slot]]
+            })
+            .collect();
+        assert_eq!(actual, entries);
+        let repeated = phf_generator_013::generate_hash(&keys);
+        assert_eq!(
+            (repeated.key, repeated.disps, repeated.map),
+            (generated.key, generated.disps, generated.map)
+        );
     }
 
     #[derive(Debug)]

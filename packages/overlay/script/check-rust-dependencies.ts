@@ -212,7 +212,7 @@ try {
   const patched = {
     serde: packageID("serde_with", "3.21.0"),
     macros: packageID("serde_with_macros", "3.21.0"),
-    rand: packageID("rand", "0.8.6"),
+    rand: packageID("rand", "0.9.4"),
     darling: packageID("darling", "0.23.0"),
     darlingCore: packageID("darling_core", "0.23.0"),
     darlingMacro: packageID("darling_macro", "0.23.0"),
@@ -221,13 +221,9 @@ try {
     tokio: packageID("tokio", "1.51.6"),
     zip: packageID("zip", "9.1.2"),
     updater: packageID("tauri-plugin-updater", "2.14.0"),
+    filesystem: packageID("tauri-plugin-fs", "2.7.1"),
     anyhow: packageID("anyhow", "1.0.103"),
     plist: packageID("plist", "1.10.0"),
-  }
-  for (const version of ["0.10.0", "0.11.3"]) {
-    const generatorID = packageID("phf_generator", version)
-    const generator = metadata.resolve.nodes.find((node) => node.id === generatorID)
-    assert.equal(generator?.deps.find((dep) => dep.name === "rand")?.pkg, patched.rand)
   }
   receipt.selectedGraph = metadata.resolve.nodes.filter((node) => Object.values(patched).includes(node.id))
   // Cargo's filtered package set omits Linux-only glib. The cross-target lock,
@@ -236,7 +232,6 @@ try {
     package: Array<{ name: string; version: string; source?: string }>
   }
   receipt.residuals = [
-    { name: "rand", version: "0.7.3" },
     { name: "glib", version: "0.18.5" },
   ].map((expected) => {
     const locked = lock.package.filter((entry) => entry.name === expected.name && entry.version === expected.version)
@@ -315,34 +310,18 @@ try {
       features: ["alloc", "default", "macros", "std"],
     },
     {
-      alias: "phf_generator_010",
+      alias: "phf_generator_013",
       name: "phf_generator",
       target: "phf_generator",
-      version: "0.10.0",
+      version: "0.13.1",
       role: "host",
       features: [],
     },
     {
-      alias: "phf_shared_010",
+      alias: "phf_shared_013",
       name: "phf_shared",
       target: "phf_shared",
-      version: "0.10.0",
-      role: "host",
-      features: ["std"],
-    },
-    {
-      alias: "phf_generator_011",
-      name: "phf_generator",
-      target: "phf_generator",
-      version: "0.11.3",
-      role: "host",
-      features: [],
-    },
-    {
-      alias: "phf_shared_011",
-      name: "phf_shared",
-      target: "phf_shared",
-      version: "0.11.3",
+      version: "0.13.1",
       role: "host",
       features: ["default", "std"],
     },
@@ -399,6 +378,14 @@ try {
       name: "zip",
       target: "zip",
       version: "9.1.2",
+      role: "runtime",
+      features: [],
+    },
+    {
+      alias: "tauri_plugin_fs",
+      name: "tauri-plugin-fs",
+      target: "tauri_plugin_fs",
+      version: "2.7.1",
       role: "runtime",
       features: [],
     },
@@ -498,7 +485,7 @@ try {
   const nativeSummary = tests.match(/test result: ok\. (\d+) passed; 0 failed;/)
   assert(nativeSummary, "Actual production native fixture must report successful settlement")
   const actualNativePassed = Number(nativeSummary[1])
-  assert.equal(actualNativePassed, 19, "Current production native fixture has nineteen qualified contracts")
+  assert.equal(actualNativePassed, 21, "Current production native fixture has twenty-one qualified contracts")
   const plistContractNames = [
     "actual_plist_xml_and_binary_return_complete_values",
     "actual_plist_serde_returns_typed_values_and_explicit_type_error",
@@ -519,16 +506,24 @@ try {
   ]
   const actualUpgradeNames = completedNativeNames.filter((name) => upgradeContractNames.includes(name))
   assert.deepEqual(actualUpgradeNames.slice().sort(), upgradeContractNames.slice().sort())
+  const filesystemContractNames = [
+    "actual_fs_safe_paths_preserve_relative_colons_and_unicode",
+    "actual_fs_file_url_decodes_to_the_exact_windows_path",
+    "actual_fs_paths_return_typed_traversal_and_url_errors",
+  ]
+  const actualFilesystemNames = completedNativeNames.filter((name) => filesystemContractNames.includes(name))
+  assert.deepEqual(actualFilesystemNames.slice().sort(), filesystemContractNames.slice().sort())
   receipt.nativeContracts = {
     passed: actualNativePassed,
     scopes: {
-      originalProduction: { passed: completedNativeNames.length - actualPlistNames.length - actualUpgradeNames.length },
+      originalProduction: { passed: completedNativeNames.length - actualPlistNames.length - actualUpgradeNames.length - actualFilesystemNames.length },
       plistProduction: { passed: actualPlistNames.length, names: actualPlistNames },
       securityUpgradeProduction: { passed: actualUpgradeNames.length, names: actualUpgradeNames },
+      filesystemProduction: { passed: actualFilesystemNames.length, names: actualFilesystemNames },
       eventLibrary: "separately recorded below after its actual fixture",
     },
     qualification:
-      "Original twelve contracts plus TLS12, Tokio TCP, safe ZIP extraction and its typed symlink error, updater feed/target error, URL capture/parser error and public Minisign verification/signature error; all libraries belong to the current production build",
+      "Current PHF 0.13 deterministic lookups, ten retained original contracts, seven security upgrade contracts, and three actual filesystem path/Unicode, file URL and typed traversal/URL error contracts; all libraries belong to the current production build",
   }
 
   // This invocation qualifies a library from the same lock on Windows. Its

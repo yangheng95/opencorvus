@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [当前Dependabot告警证据](2026-10-28-dependabot-current-alerts/README.md)：无凭据只读结果、父链及公开上游事实。
+
 - [对话Markdown导出证据](2026-10-28-conversation-markdown-export/README.md)：真实文件、双语原图和数据/进程复核。
 
 - [设置导航当前实页证据](2026-10-28-settings-navigation-current-journey/README.md)：中英文原图与精确数据/进程复核。

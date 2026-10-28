@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [当前Dependabot告警与父依赖](2026-10-28-dependabot-current-alerts.md)：实际告警身份与原生依赖约束。
+
 - [对话Markdown交接](2026-10-28-conversation-markdown-export.md)：原消息/来源/停止事实的完整导出。
 
 - [设置导航说明与返回](2026-10-28-settings-navigation-current-journey.md)：当前帮助文案、焦点与布局体验。
