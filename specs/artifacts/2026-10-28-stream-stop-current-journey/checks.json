@@ -1,0 +1,40 @@
+{
+  "checks": {
+    "build": {
+      "label": "stream-stop-755-build",
+      "startedAt": 1793156244984,
+      "closedAt": 1793156310000,
+      "code": 0,
+      "signal": null,
+      "childPID": 87672
+    },
+    "typecheck": {
+      "label": "stream-stop-755-typecheck",
+      "startedAt": 1793156298679,
+      "closedAt": 1793156323242,
+      "code": 0,
+      "signal": null,
+      "childPID": 85000
+    },
+    "docs": {
+      "label": "stream-stop-755-docs",
+      "startedAt": 1793156384247,
+      "closedAt": 1793156393361,
+      "code": 0,
+      "signal": null,
+      "childPID": 23116
+    },
+    "architecture": {
+      "label": "stream-stop-755-architecture",
+      "startedAt": 1793156384319,
+      "closedAt": 1793156386242,
+      "code": 0,
+      "signal": null,
+      "childPID": 80080
+    }
+  },
+  "uiAutomation": "None added or run; six original screenshots manually reviewed",
+  "liveBeforeUI": "main-B3AIDWl3.js",
+  "afterUI": "main-Xiv41lg0.js",
+  "subsequentPaidSend": "Uncovered: all eight admitted requests consumed before manual stop; allowance not increased or reset"
+}

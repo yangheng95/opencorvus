@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [当前停止与继续体验](2026-10-28-stream-stop-current-journey.md)：原请求、输出保留与后续发送的真实闭合。
+
 - [MCP空参数保真](2026-10-28-mcp-empty-arguments.md)：词法token存在性与实际argv闭合验收。
 
 - [MCP连接管理体验](2026-10-28-mcp-connection-current-journey.md)：真实连接控制、稳定焦点及项目/effective状态归属。

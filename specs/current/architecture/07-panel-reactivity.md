@@ -1,5 +1,11 @@
 # 07-panel-reactivity — Overlay Reactive Projection
 
+Main conversation message settlement preserves the structured cancellation's
+original reason and details alongside completed/aborted. Live lifecycle updates
+and complete transcript hydration consume that same settlement, so the existing
+neutral stopped-message disclosure remains available with the original output.
+Cancellation is classified from MessageAbortedError, never translated prose.
+
 Authored participants with user transport role retain their actual author and
 full original body. ChatBubble shares one participant classification between its
 identity and presentation marker. Human input card width, trailing placement and

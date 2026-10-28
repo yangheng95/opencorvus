@@ -1,0 +1,73 @@
+{
+  "at": "2026-10-28T03:03:38.404Z",
+  "comparisons": [
+    {
+      "tag": "before",
+      "originals": 98294,
+      "total": 100279,
+      "schema": 9,
+      "integrity": "ok",
+      "changed": [],
+      "missing": []
+    },
+    {
+      "tag": "after",
+      "originals": 100279,
+      "total": 100281,
+      "schema": 9,
+      "integrity": "ok",
+      "changed": [],
+      "missing": []
+    }
+  ],
+  "projectFilesExact": 3,
+  "expectedCapacityReuses": [
+    {
+      "table": "runtime_execution_capacity_lease",
+      "key": "1",
+      "prior": {
+        "rowid": 1,
+        "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+        "slot": 0,
+        "lease_id": "6c2aae81-3def-4b26-849b-8135a9b1137e",
+        "owner_id": "runtime:98076:4107bcee-0c63-40c9-85c8-3d728a33dc4c",
+        "time_acquired": 1793149290884,
+        "expires_at": 1793149296945
+      },
+      "current": {
+        "rowid": 1,
+        "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+        "slot": 0,
+        "lease_id": "86bd75b3-8f68-4708-a6b7-77632cf2998e",
+        "owner_id": "runtime:67792:9bb98a0f-d3bd-4e9a-a13b-54ad92982973",
+        "time_acquired": 1793156050026,
+        "expires_at": 1793156068003
+      },
+      "authority": "Expired slot reused by original owned provider process and released before its physical terminal"
+    },
+    {
+      "table": "runtime_execution_capacity_lease",
+      "key": "2",
+      "prior": {
+        "rowid": 2,
+        "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+        "slot": 1,
+        "lease_id": "8d7a6a8f-a105-4823-a0b7-a3aa293d481a",
+        "owner_id": "runtime:98076:512058d9-37c3-4b11-8b85-72f3d2997436",
+        "time_acquired": 1793149296124,
+        "expires_at": 1793149302036
+      },
+      "current": {
+        "rowid": 2,
+        "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+        "slot": 1,
+        "lease_id": "2977cf79-43b0-4730-bd33-6f11fd7f5611",
+        "owner_id": "runtime:67792:c89a7055-c214-4cee-a0d0-77fc2bab6676",
+        "time_acquired": 1793156025905,
+        "expires_at": 1793156034820
+      },
+      "authority": "Expired slot reused by original owned provider process and released before its physical terminal"
+    }
+  ],
+  "closedSourceRowsExact": 98294
+}

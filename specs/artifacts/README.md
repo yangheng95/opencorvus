@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [当前停止与继续实页证据](2026-10-28-stream-stop-current-journey/README.md)：原始截图、真实取消与Provider结算复核。
+
 - [MCP空参数实页证据](2026-10-28-mcp-empty-arguments/README.md)：相同输入修复前后、真实命令/进程、六张原图与原数据保留。
 
 - [MCP连接管理实页证据](2026-10-28-mcp-connection-current-journey/README.md)：15张原图、真实协议连接与六个原进程/数据复核。

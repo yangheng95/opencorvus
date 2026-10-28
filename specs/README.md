@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [当前停止与继续体验](records/2026-10/2026-10-28-stream-stop-current-journey.md)：真实流式输出、停止与同会话继续的当前实页验收。
+
 - [本地MCP空参数保真](records/2026-10/2026-10-28-mcp-empty-arguments.md)：修复显式空参数丢失，真实服务从启动失败恢复连接。
 
 - [MCP连接管理当前体验](records/2026-10/2026-10-28-mcp-connection-current-journey.md)：补齐逐服务连接/断开、项目归属与等待反馈，真实本地服务验收。

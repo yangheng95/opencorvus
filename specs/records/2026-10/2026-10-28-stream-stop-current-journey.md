@@ -1,0 +1,39 @@
+# 当前流式回复停止与继续体验
+
+## Recall
+
+用户要求单代理持续自主体验、改进整个产品，实际验证后范围提交并正常推送；仅真实冲突才等待。不要再追已解决的Rendering闪烁。当前b57f2eb6c已推送并fresh fetch/merge为0/0，176项外部更改保持；754所有自有页面、进程、输出、请求及catalog副本已结清，模型累计747次。旧Goal里的多Astra要求已被后续单代理指令覆盖，持续Goal保持active。GitHub只读告警清单的既有凭据授权仍待答复，不使用登录、不阻塞产品工作。
+
+本批自主检查当前真实Code Chat的停止→保留输出→同会话再发送。已读当前AGENTS、07-panel-reactivity、26日停止控制模型独立/重试所有权记录、overlay chat与conversation-session停止入口、Server session.abort、Provider审计与stream-activity源reader合同。搜索现有停止调用、真实物理/流结算定义；历史修复不是当前缺陷证据，本批尚未发现新的失败。没有查找或运行UI自动化测试。
+
+只复制已关闭754-after自有数据库及durable资源，原98294行逐表保存；创建新隔离Project，输入为当前公开生产源码的实际副本。当前普通构建main-B3AIDWl3.js由开发CLI serve /ui提供，不单开Vite，不操作用户18571/窗口/数据库。配对复制已授权OpenAI auth与完整models目录，独立确认凭据可用、gpt-6.1-sol投影及真实Sol流式预检。不得刷新复制凭据、回写来源或将凭据写入prompt/spec/日志/提交。所有模型请求含预检/标题/记忆辅助总计最多8次，累计从747起；失败/重跑不重置。一个40分钟原生物理绝对截止贯穿本批，至少保留5分钟关闭结算余量；观察超时不代表物理终态，不重复启动。
+
+## 修改前分析与执行边界
+
+可观察目标是已有输出、活动停止控件、点击后的真实状态和后续回复。直接触发为Composer Stop，原chat请求先取消本地transport，再按精确session/directory调用唯一session.abort；Server使用当前Prompt owner请求停止并等待原Prompt finished。Source reader明确区分eof/error/cancelled/aborted。取消是有身份的真实结果，不能把全部非EOF视为失败，也不能随意接受错误为取消。当前根因未知、旧路径是否仍有问题未知，先实测再决定修改，不能重做已关闭历史缺陷。
+
+跨层影响包括前端请求owner/消息Parts、Session abort公共响应、Provider reader及其原requestContext、持久消息/活动投影、下一次发送和关闭。若出现调度/队列/唤醒/恢复/并发/终态异常，立即横审所有生产入口及Task/Mission/Session轮次、正常终态、重试重启、串并行与多项目，不先分类为局部。当前没有schema、迁移、SDK、Provider配置或发布变更需求；原用户数据、协议与授权边界保持。实现前必须以真实证据补齐触发/根因/旧路径/调用契约/测试文档交付风险，再落盘决定。
+
+真实请求阅读当前项目实际源码并给出有用的足量解释；不要求执行命令、修改文件、联网、Task或委派，不隐藏角色已授权的通用工具。实际看到Provider 200、source reader读取/字节活动及页面部分输出后点击Stop。记录真实UI操作时点、唯一abort路径/响应、原reader结算与原持久消息，随后在同一会话发送简短确认并核对真实回复、旧输出与Composer状态。中英文及当前区域原始截图人工查看，禁止UI源码/DOM/组件/快照/Playwright测试。局部静态/数据库检查不能冒充实页验收。
+
+原CLI/native/launcher、物理/输出/请求结清及公开shutdown200之后，核对精确进程身份、原来源元数据/完整模型字节，再删除仅本批普通文件auth/models副本。原停止请求的reader取消结果必须由实际Stop时点、session/request身份和持久取消事实支持，辅助及后续正常请求应各自按真实EOF/错误合同记录；不以宽泛放行替代证明。逐表核对全部旧行，合法活动更新精确绑定所有者；schema9/integrity与项目输入保留。若有生产修复，非UI部分补聚焦正向合同测试，UI只真实人工验收，普通build/typecheck及相关检查后范围提交；正常fetch/merge、完整待推集合审查、原hooks推送。不创建branch/worktree/tag/Release或版本变更。
+
+## 本批状态
+
+755已实际启动38267，完整旧库98294行复制，schema9仅validated。真实凭据、目录和Sol预检均通过。实际请求先glob两次、read两个文件，再产生长回复；两次预检请求、memory及正式回复/工具轮次合计8次，未越额、exhausted=false，后续付费续聊本批未覆盖，不延长或重置预算。页面149已看到正式正文后于1793156067947点击Stop，1793156068001交互完成；同一Session/原input的末assistant msg_g0VZJE2jm00MLrGg0G5x于1793156068023保存MessageAbortedError，真实user/session.abort取消来源及请求5b73fd48-d727-4a58-857b-a42ee6a50fef完整。该原reader77chunks/475841bytes、HTTP200，1793156068002以error/read/Error结清；这是该实际停止对应的源读取错误，不能改称EOF或丢弃。其余七个原reader均200/EOF。原图01实际输出中，02停止后保留正文、输入恢复；没有共享调度/恢复/终态收敛异常证据。
+
+## 当前缺陷与实施决定
+
+真实页面停止后只剩Not running和被截断正文，没有历史合同要求的“已停止”原因/详情。Server完整MessageAbortedError及取消来源已保存在原message API，故不是取消未生效或数据丢失。全仓搜索唯一assistantMessageSettlement和所有调用：main tree-writer的cancelled分支只返回completed/aborted/time，漏了共享assistantMessageFailure已经生成的reason/details；普通失败分支及SideMessage/成员保留这些字段。regroup、live生命周期和完整hydrate均从该原settlement写errorReason/errorDetails；ChatBubbleFailureState要求aborted且errorReason非空，故main真实取消无法进入现有中性停止说明。554旧改动统一取消分类并允许组件显示aborted，但没有把main该分支的原因带过去；blame及原提交c3f75a2f93可核对，非新协议或偶发模型问题。
+
+限定修复：在现有唯一assistantMessageSettlement的cancelled分支同步透传failure.reason和failure.details；继续completed/aborted，不改终态writer、消息、Parts、路由、Schema、恢复、Provider或队列。复用现有AssistantMessageFailure、Disclosure、中性样式及中英文词条，不增加第二错误状态或合成消息。风险为错误归属/历史重建显示，使用原真实停止会话在新普通构建实例读取、展开完整取消详情，英中截图人工复核；原正文/Sources及原请求身份保持。此为纯UI事实投影修复，不新增或运行UI自动化测试；typecheck/build只补充实际截图。真实再次发送成功仍未覆盖，不能以输入框恢复或构建通过声称已通过。
+
+## 实施与实际验收
+
+唯一cancelled分支透传两字段，07-panel当前合同同步。普通Node构建main-Xiv41lg0.js及renderer public surface通过，overlay typecheck通过，docs:check为351操作/26组，architecture-index为20文档。未新增/运行UI自动化测试。新38268从已关闭755原库100279行完整复制，当前{}隔离配置、完整catalog及Provider上限0，不复制auth、不再付费。页面150通过原Session/directory/experience读取真实历史：英文Stopped与折叠Details出现，展开显示原MessageAbortedError、user/session.abort、同一5b73fd48请求和Session；中文已停止、复制停止详情、详细信息及原英文错误原文保持，原755字符部分正文和文件Sources保留。六张原始JPEG均人工查看，图05保留当时Settings tooltip，最终图06没有遮挡目标区域。没有把复制按钮可见冒充剪贴板内容验证，也未覆盖改后再实际Stop、同会话再次付费发送或成员取消；本批真实红绿为同一持久消息在旧/新普通构建的原图02/03–06。
+
+原exec73057/39762、native及launcher均0，公开shutdown均200、physical/output/request均真实结清、原host/target身份dead_or_reused后退休本批两份catalog及一份auth；来源auth/catalog元数据及完整catalog字节保持。共享40分钟截止未重置，关闭余量2090477/1840786ms，Provider总8次，七个EOF和一个有原操作/持久取消身份支持的read Error，累计755。retirement checker对索引7要求与cancellation-reviewed的原terminal完全一致，其余均要求真实EOF，不宽泛放行非正常结算。
+
+原来源自有754-after的98294行仍完全保持。755原98292行精确保留；另两行原runtime_execution_capacity_lease已经过期，按现有唯一容量lease实现被实际67792 Provider进程复用相同resource/slot并于原停止/正常请求结算释放，字段与原native身份/时点精确核对，不能当成历史业务数据丢失。改后100279行全精确保留，最终100281行，schema9/integrity ok，三个项目输入字节保持。没有用户数据库、schema升级、版本、发布或远端资源变更。
+
+工具链事实也保留：准备模板首次生成保留旧751路径，在启动前审查发现并全部改用已核对752脚本生成，未启动旧实例或接触旧runtime；第一次shutdown调用Windows PowerShell5，既有身份观察器ArgumentList不受支持，在发送shutdown之前失败。已改用当前pwsh重跑原完整公开shutdown/精确身份checker，原验收全部成功，不用该失败掩盖结算。全部任务文件将范围提交，正常fresh fetch/merge、完整待推集合审查和hooks推送后持续下一批；续聊成功仍是未覆盖项。

@@ -1,0 +1,50 @@
+{
+  "at": "2026-10-28T02:57:58.671Z",
+  "sessionID": "ses_-zUQgm405zzb2xZnkVrc",
+  "stoppedProviderRequestIndex": 7,
+  "requestContext": {
+    "sessionID": "ses_-zUQgm405zzb2xZnkVrc",
+    "streamRequest": {
+      "requestID": "msg_c4afcfe4-6a5c-49f5-9fc4-56ffc7fc1bbd",
+      "agentID": "chat",
+      "providerID": "openai",
+      "modelID": "gpt-6.1-sol",
+      "apiModelID": "gpt-6.1-sol"
+    },
+    "activity": {
+      "id": "act_g0VZJE2oI00ZMAMBMhHS",
+      "attempt": 0,
+      "assistantMessageID": "msg_g0VZJE2jm00MLrGg0G5x"
+    }
+  },
+  "originalReaderTerminal": {
+    "kind": "error",
+    "at": 1793156068002,
+    "error": {
+      "origin": "read",
+      "type": "Error"
+    }
+  },
+  "action": {
+    "clickedAt": 1793156067947,
+    "completedAt": 1793156068001,
+    "sessionID": "ses_-zUQgm405zzb2xZnkVrc",
+    "control": "btnTaskInterrupt",
+    "tabID": "149"
+  },
+  "cancellation": {
+    "actor": "user",
+    "source": "session.abort",
+    "surface": "session",
+    "requestID": "5b73fd48-d727-4a58-857b-a42ee6a50fef",
+    "reason": "session aborted",
+    "targetSessionID": "ses_-zUQgm405zzb2xZnkVrc"
+  },
+  "messageID": "msg_g0VZJE2jm00MLrGg0G5x",
+  "completedAt": 1793156068023,
+  "partialTextCharacters": 755,
+  "actualRequests": 8,
+  "maximumRequests": 8,
+  "cumulativeRequests": 755,
+  "qualification": "Manual stop after partial text, original reader read error settled 55ms after click, matching durable user/session.abort origin; subsequent paid send uncovered"
+}

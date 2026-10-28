@@ -119,6 +119,8 @@ function assistantMessageSettlement(info: any): ProjectedSessionStatus | undefin
     return {
       cardStatus: "completed",
       terminalReason: "aborted",
+      errorReason: failure.reason,
+      errorDetails: failure.details,
       ...(completedAt > 0 ? { timeCompleted: completedAt } : {}),
     }
   }
