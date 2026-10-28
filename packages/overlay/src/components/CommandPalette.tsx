@@ -6,7 +6,7 @@
 // by an internal signal flipped by the global keyboard hotkey.
 //
 // Command sources:
-//   * Recent items or paginated search (work ledger → session/task selection)
+//   * Recent items or paginated search (work ledger → project/session/task selection)
 //   * Settings sections (CONFIG_SECTIONS -> openConfigDialog)
 //   * Theme switcher (settingsStore.theme + applyTheme)
 //   * Locale switcher
@@ -28,6 +28,7 @@ import {
   type WorkLedgerChatRow,
   type WorkLedgerCursor,
   type WorkLedgerMissionRow,
+  type WorkLedgerProjectRow,
   type WorkLedgerRow,
   type WorkLedgerTaskRow,
 } from "../services/work-ledger"
@@ -43,9 +44,11 @@ import { ComboboxControl } from "./ui/ComboboxControl"
 import { Icon, type IconName } from "./ui/Icon"
 import { Button } from "./ui/Button"
 import { Feedback } from "./ui/Feedback"
+import { projectDisplayName } from "../utils/project-directory"
 
 interface Command {
   id: string
+  kind?: WorkLedgerRow["kind"]
   label: string
   hint?: string
   shortcut?: string
@@ -71,13 +74,13 @@ const LOCALES: Array<{ id: string; label: string }> = [
   { id: "zh-CN", label: "中文 (简体)" },
 ]
 
-type PaletteLedgerRow = WorkLedgerChatRow | WorkLedgerTaskRow | WorkLedgerMissionRow
+type PaletteLedgerRow = WorkLedgerProjectRow | WorkLedgerChatRow | WorkLedgerTaskRow | WorkLedgerMissionRow
 type LedgerSearch = { query: string; authority: ApiAuthority; controller: AbortController }
 
 function paletteLedgerRows(rows: readonly WorkLedgerRow[], query: string): PaletteLedgerRow[] {
   const entries: PaletteLedgerRow[] = []
   for (const row of rows) {
-    if (row.kind === "project") continue
+    if (row.kind === "project" && !query.trim()) continue
     // Mission results include descendants whose individual relevance is selected here.
     if (row.kind === "mission") {
       if (rowMatches(row, query)) entries.push(row)
@@ -90,12 +93,14 @@ function paletteLedgerRows(rows: readonly WorkLedgerRow[], query: string): Palet
 }
 
 function rowCommandIcon(row: PaletteLedgerRow): IconName {
+  if (row.kind === "project") return "folder"
   if (row.kind === "mission") return "mission"
   if (row.kind === "task") return "workflow"
   return conversationExperienceIcon(row.experience)
 }
 
 function rowCommandHint(row: PaletteLedgerRow): string {
+  if (row.kind === "project") return `${t("work_ledger.kind.project")} · ${row.directory}`
   const directory = String(row.directory || "")
     .split(/[\\/]/)
     .filter(Boolean)
@@ -110,6 +115,7 @@ function rowMatches(row: WorkLedgerMissionRow | WorkLedgerTaskRow, query: string
 
 export function CommandPalette(props: {
   onNewChat: () => Promise<void>
+  onSelectProject: (directory: string) => Promise<void>
   onSelectMission: (row: WorkLedgerMissionRow) => Promise<void>
   onSelectTask: (taskID: string, directory: string) => Promise<void>
   onSelectChat: (sessionID: string, directory: string, experience: "chat" | "work") => Promise<void>
@@ -133,11 +139,21 @@ export function CommandPalette(props: {
     for (const row of ledgerRows()) {
       cmds.push({
         id: `ledger:${row.kind}:${row.id}`,
-        label: row.title || row.id,
+        kind: row.kind,
+        label: row.kind === "project" ? projectDisplayName({
+          directory: row.directory,
+          customName: row.title,
+          unknownName: t("task.project.unknown"),
+          implicitProjectName: t("work_ledger.implicit_project"),
+        }) : row.title || row.id,
         hint: rowCommandHint(row),
         group: t("cmdk.group.work"),
         icon: rowCommandIcon(row),
         run: async () => {
+          if (row.kind === "project") {
+            await props.onSelectProject(row.directory)
+            return
+          }
           if (row.kind === "mission") {
             await props.onSelectMission(row)
             return
@@ -509,6 +525,7 @@ export function CommandPalette(props: {
         )}
         optionData={(command) => ({
           "data-command-id": command.id,
+          "data-kind": command.kind,
           "data-group": command.group,
           "data-group-start": command.groupStart ? "" : undefined,
         })}

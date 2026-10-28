@@ -4,6 +4,33 @@ import path from "node:path"
 import fs from "node:fs"
 import { expectedTestProcessSupervisor } from "./test-process-supervisor"
 
+/** Publish a completed executable without replacing one already in use. */
+export function publishTestProcessSupervisor(source: string, helper: string): string {
+  const destination = path.dirname(helper)
+  fs.mkdirSync(path.dirname(destination), { recursive: true })
+  const staging = fs.mkdtempSync(path.join(path.dirname(destination), ".supervisor-publication-"))
+  const stagedHelper = path.join(staging, path.basename(helper))
+  try {
+    fs.copyFileSync(source, stagedHelper, fs.constants.COPYFILE_EXCL)
+    try {
+      fs.renameSync(staging, destination)
+    } catch (error) {
+      const code = (error as NodeJS.ErrnoException).code
+      if (code !== "EEXIST" && code !== "ENOTEMPTY" && code !== "EPERM") throw error
+      if (fs.statSync(helper).size === 0) throw error
+    }
+    return helper
+  } finally {
+    for (const remove of [() => fs.unlinkSync(stagedHelper), () => fs.rmdirSync(staging)]) {
+      try {
+        remove()
+      } catch (error) {
+        if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error
+      }
+    }
+  }
+}
+
 function resolveInstalledRustTool(name: "cargo" | "rustc", environment: NodeJS.ProcessEnv): string {
   const result = spawnSync("rustup", ["which", name], {
     encoding: "utf8",
@@ -24,7 +51,7 @@ export function prepareTestProcessSupervisor(): string | undefined {
     if (fs.statSync(helper).size > 0) return helper
   } catch {}
   const manifest = path.resolve(import.meta.dir, "../native/process-supervisor/Cargo.toml")
-  const targetDirectory = path.resolve(helper, "..", "..")
+  const targetDirectory = path.resolve(helper, "..", "..", "build")
   const buildRoot = path.join(os.tmpdir(), "opencorvus-native-build")
   const cargoHome = path.join(buildRoot, "cargo-home")
   const temporary = path.join(buildRoot, "tmp")
@@ -69,7 +96,7 @@ export function prepareTestProcessSupervisor(): string | undefined {
   })
   if (result.error) throw result.error
   if (result.status !== 0) throw new Error(`Native test process supervisor build failed with exit ${result.status}`)
-  return helper
+  return publishTestProcessSupervisor(path.join(targetDirectory, "debug", path.basename(helper)), helper)
 }
 
 if (import.meta.main) {

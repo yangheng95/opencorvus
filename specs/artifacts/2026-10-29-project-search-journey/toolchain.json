@@ -1,0 +1,18 @@
+{
+  "initialFailure": {
+    "checker": "project774-overlay-types",
+    "exitCode": 1,
+    "stage": "native helper build before tsc",
+    "error": "Cargo failed to remove its debug executable: Access is denied (os error 5)."
+  },
+  "repair": "Separate Cargo build output from the single published executable; publish a completed private directory and reuse the current canonical publication.",
+  "actualValidation": [
+    "Cold-cache typecheck, i18n and docs original checkers started at the same millisecond and all exited zero.",
+    "The formal positive test observed the published executable exact_live during a second publication; its original output completed and physical/output settlement succeeded."
+  ],
+  "officialReferences": [
+    "https://nodejs.org/api/fs.html#fscopyfilesyncsrc-dest-mode",
+    "https://nodejs.org/api/fs.html#fsrenamesyncoldpath-newpath"
+  ],
+  "scope": "Test/checker preparation only; packaged runtime process supervision and Task/Mission/Session scheduling protocols retain their contracts."
+}

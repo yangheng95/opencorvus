@@ -1,0 +1,108 @@
+{
+  "attempts": [
+    {
+      "label": "project774-overlay-types",
+      "startedAt": 1793217562515,
+      "closedAt": 1793217587117,
+      "code": 1,
+      "signal": null,
+      "childPID": 99924
+    },
+    {
+      "label": "project774-ui-build",
+      "startedAt": 1793217562558,
+      "closedAt": 1793217700540,
+      "code": 0,
+      "signal": null,
+      "childPID": 98888
+    },
+    {
+      "label": "project774-i18n",
+      "startedAt": 1793217562515,
+      "closedAt": 1793217603290,
+      "code": 0,
+      "signal": null,
+      "childPID": 99840
+    },
+    {
+      "label": "project774-overlay-types-fixed",
+      "startedAt": 1793217974018,
+      "closedAt": 1793218044431,
+      "code": 0,
+      "signal": null,
+      "childPID": 98052
+    },
+    {
+      "label": "project774-i18n-concurrent",
+      "startedAt": 1793217974019,
+      "closedAt": 1793218026694,
+      "code": 0,
+      "signal": null,
+      "childPID": 99864
+    },
+    {
+      "label": "project774-docs-concurrent",
+      "startedAt": 1793217974018,
+      "closedAt": 1793218004527,
+      "code": 0,
+      "signal": null,
+      "childPID": 96184
+    },
+    {
+      "label": "project774-publication-test",
+      "startedAt": 1793218025054,
+      "closedAt": 1793218036720,
+      "code": 0,
+      "signal": null,
+      "childPID": 80136
+    },
+    {
+      "label": "project774-backend-types",
+      "startedAt": 1793218147063,
+      "closedAt": 1793218187472,
+      "code": 0,
+      "signal": null,
+      "childPID": 70052
+    },
+    {
+      "label": "project774-overlay-types-final",
+      "startedAt": 1793218389732,
+      "closedAt": 1793218418813,
+      "code": 0,
+      "signal": null,
+      "childPID": 91844
+    },
+    {
+      "label": "project774-ui-build-final",
+      "startedAt": 1793218389732,
+      "closedAt": 1793218464316,
+      "code": 0,
+      "signal": null,
+      "childPID": 12500
+    },
+    {
+      "label": "project774-ui-build-polished",
+      "startedAt": 1793218798128,
+      "closedAt": 1793218858284,
+      "code": 0,
+      "signal": null,
+      "childPID": 57108
+    },
+    {
+      "label": "project774-docs-final",
+      "startedAt": 1793219251399,
+      "closedAt": 1793219259456,
+      "code": 0,
+      "signal": null,
+      "childPID": 97108
+    }
+  ],
+  "correctedFailures": [
+    "Initial typecheck runner failed while Cargo tried to overwrite the running executable; canonical publication repair passed the original concurrent checkers."
+  ],
+  "uiAcceptance": "19 original JPEG captures, reviewed manually. No UI automated tests, DOM assertions or pixel baselines.",
+  "notes": [
+    "The added test verifies a real executable and physical/output settlement, and contains no UI automation.",
+    "Build and type checks supplement actual UI evidence."
+  ]
+}

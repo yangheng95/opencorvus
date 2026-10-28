@@ -339,6 +339,7 @@ export interface AppProps {
   composerDraftKey?: string
   hasStagedAttachments?: boolean
   onSelectMission: (row: WorkLedgerMissionRow) => Promise<void>
+  onSelectProject: (directory: string) => Promise<void>
   onSelectTask: (taskID: string, directory: string) => Promise<void>
   onSelectChat: (sessionID: string, directory: string, experience: "chat" | "work") => Promise<void>
   conversationExperience: () => "chat" | "work" | undefined
@@ -781,6 +782,7 @@ export function App(props: AppProps) {
       <div id="commandPaletteHost">
         <CommandPalette
           onNewChat={props.onNewChat}
+          onSelectProject={props.onSelectProject}
           onSelectMission={props.onSelectMission}
           onSelectTask={props.onSelectTask}
           onSelectChat={props.onSelectChat}

@@ -347,3 +347,12 @@ readers as well as configuration writers. The scope wraps the original middlewar
 operation and preserves its response, error and streaming lifetime; disabled debug
 diagnostics execute the same operation directly. Log ingestion retains its recursion
 exclusion. Diagnostic spans are observations, not publication or readiness authority.
+
+The Windows test/checker supervisor has one source-keyed published executable.
+Cargo output lives in the same cache occurrence's separate build directory.
+Preparation copies a completed executable into a private sibling directory,
+then publishes that directory; concurrent producers reuse the canonical
+publication. Checkers execute only the published path, so later Cargo links
+cannot replace an executable held by a running checker. The source-derived
+cache location selects build artifacts and does not prove functional correctness;
+real process output and physical/output settlement remain the acceptance evidence.

@@ -3882,18 +3882,19 @@ shortcuts and native menu actions cannot navigate away from their unsaved forms.
 The command palette itself retains global navigation ownership. Chrome search
 requests obey the same foreground-dialog boundary as its K shortcut.
 
-The command palette reads current, unarchived Chat/Task/Mission records through the
+The command palette reads current, unarchived Project/Chat/Task/Mission records through the
 existing Work Ledger search and public cursor. An empty query shows up to nine
-recent selectable items; Project rows do not consume that allowance. Nonempty
-queries use bounded pages, with explicit continuation, and flatten only the
+recent selectable work items; Project rows do not consume that empty-query allowance.
+Nonempty queries include matching Project names, IDs and directories, use bounded
+pages with explicit continuation, and flatten only the
 canonical Mission child Tasks. Search covers original titles, IDs, directories
 and technical kinds, including each conversation's canonical Chat/Work experience.
 The shared active/archive projection treats percent,
 underscore and backslash literally using one escaped SQL LIKE parameter;
 archive visibility and directory boundaries remain unchanged.
 
-The shared search entry and its input describe chats, work and commands in the
-current UI language. Canonical ledger results share a Chats and work heading;
+The shared search entry and its input describe projects, chats, work and commands in the
+current UI language. Canonical ledger results share a Projects, chats and work heading;
 empty results describe the same scope, and each row retains its original title
 and actual kind. The selected conversation
 header's item menu uses the same More actions label as Work Ledger item menus,
@@ -3906,8 +3907,15 @@ to the visible command list; local action commands retain their text filter.
 Conversation experience is read from the same canonical metadata used to
 classify that conversation and to produce its public row.
 
-Selectable ledger commands retain the original title and show the current UI
-language's kind label beside the original Project directory basename. Chat and
+Selectable work commands retain the original title and show the current UI
+language's kind label beside the original Project directory basename. Project
+commands use the shared Project display name and show the localized Project kind
+beside the original full directory, so equal names remain distinguishable. Each
+Project keeps its name on its own line and lets the directory wrap below it;
+the selected candidate background covers both lines while its group heading stays separate.
+Selecting a Project calls the same existing Project navigation owner as its sidebar header;
+it restores that Project's composer intent without creating a conversation or execution.
+Chat and
 Work icons and labels use the same canonical conversation-experience helpers as
 the Work Ledger and Archive, so equal titles within one Project remain
 distinguishable through the existing visible and accessible option description.

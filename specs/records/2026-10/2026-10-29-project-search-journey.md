@@ -1,0 +1,48 @@
+# 全局项目搜索与现行导航
+
+## Recall
+
+用户要求持续单代理自主迭代UI/UX与功能，直到明确停止；不用子agent覆盖旧Goal的Astra文字。不重查已修Rendering、不建branch/worktree、不重启/刷新用户18571及窗口、只在实际无法安全判断冲突时等待。先完整根因/影响分析并落spec，UI只用实际开发/ui交互/原图人工复核，不写/运行任何UI自动化。范围commit、fresh fetch/merge/完整待推集合审核及正常hooks/push；不创建Release/tag/PR，整体Goal保持active。
+
+上一turn为progress：c6f890007979ee3f5568824f154110cd877ba17d已正常push，19:54:38Z fresh sync0/0、39自有文件清洁，保留177外部状态。项目名称纯metadata进入identity路径、不触发模型执行初始化/teardown；Home和sidebar使用同一Project投影，15正式正向测试与16实页原图完成。三个773实例均公开200、原exec/native/launcher0及物理/输出/请求结算、精确出生链与catalog退休，原截止不重开。当前已闭合源773-after2仍为92表103484行/schema9，QA Project.name为Project journey 773、未置顶；原库/五文件及catalog/auth metadata保持、模型0/累计767。GitHub只读告警已获授权并取过清单，当前不重复请求或写远端设置。另一人类聊天处理37/38发布，保留其版本/日志/索引改动，只有真实冲突才协调。
+
+## 现象、根因及范围
+
+上一批图11/12真实输入Project journey 773后请求完成、命令面板0候选，侧栏原Project可见；本批重新呈现原图12人工确认。当前HEAD中的CommandPalette未变。现公开搜索文案和07-panel合同原本只承诺Chats/work/commands，因此本批是补齐Project导航能力，不伪称它违反原先项目搜索契约。后端Work Ledger topRowCandidates已规范返回匹配Project.name/id/worktree的project行，当前paletteLedgerRows在转换首步直接continue丢弃project；旧Home名称修复不涉及候选membership，所以不会解决此缺口。不存在后端数据缺失或搜索索引双源。
+
+已读根AGENTS（全仓仅一份）、07-panel Command palette queries/Project identity与Home名称合同、上一批Recall/请求/结算、完整CommandPalette生成/查询/authority/分页/键盘/关闭焦点、AppProps与唯一main App调用、main.selectWorkLedgerProject、workspace.applyDirectory及原导航admission/epoch、backend Work Ledger查询/route和现搜索正向测试。全仓搜索palette/props/项目选择/i18n/测试路径：没有命中CommandPalette相关UI自动化；现work-ledger-search.test.ts是真实持久投影测试，不是视觉证据，也不因本次纯UI新增测试。项目名读取复用现projectDisplayName；当前WorkLedger服务已将全部分页Project行保留在同一runtimeRows投影，不新增名称缓存或查询writer。
+
+## 实施方案与公共合同
+
+仅非空query允许规范Project结果成为候选；空query依旧只取九个最近Chat/Task/Mission，Project不占额度。PaletteLedgerRow扩展现WorkLedgerProjectRow，Project label通过现projectDisplayName使用title/name投影与目录缺省合同；Project hint使用当前语言的Project种类标签和真实完整目录，保证同名项目可辨。Project icon用既有folder，其他行现图标/描述/排序不改。所有ledger结果仍按同一kind:id键、原cursor、API authority/AbortController、当前query所有权及Kobalte键盘焦点/数字快捷键处理；不新增本地二次过滤或平行搜索。
+
+Project选择经CommandPalette→AppProps→main增加onSelectProject，直接调用原selectWorkLedgerProject，不复制导航实现，不创建聊天/任务/目录。该原入口requestWorkspaceSelection→closeConfigDialog→原epoch/authority校验→projectComposerIntent→applyDirectory→focusComposerInput，沿用草稿/前台对话框/多项目选择的统一admission。Task/Mission/Session调度、轮次、终态/恢复/重试与执行身份不改变；本批未发现该共享机制异常，不新增host gate或执行分支。已有项目切换可能显示原配置不可用提示，metadata导航本身仍应成功，不能据模型不可用误报凭据/目录问题。
+
+同步中英文placeholder/empty/group工作范围及新增Project kind标签，语言、可访问名称和完整路径原文保持一致；更新当前07-panel替换原排除Project的非空搜索合同。后端API、SDK、SQLite schema及数据格式不变，不作迁移。纯UI验收不以typecheck/build/i18n/docs替代截图。
+
+## 实际验收与资源
+
+从已闭合773-after2逐行备份、namespace/规范资源与当前普通build启动独立开发/ui，首端口38310，必要改后38311；不单启Vite。启动前固定本批60分钟绝对截止，每实例15分钟预定公开正常shutdown、至少5分钟收拢；超时只查原handle/精确出生身份，不重开旧实例。Provider额度0/累计767、完整catalog只用于历史投影、无auth复制。所有物理/输出/请求与公开200、原exec/native/launcher0、出生链退休后清退副本。
+
+桌面实际按显示名/Project ID/原目录搜索，键盘Enter与数字候选选择、取消保持原阅读、空query最近项、中英文、同名/目录辨识、从设置及无目录首页重开项目；能力之外不创建新执行。按真实结果迭代；不可依当前规划宣称全部通过。核对92表全部原行、预期仅UI偏好/明确QA metadata变更、源库、schema/integrity、五原文件与源catalog/auth metadata。原图/非秘密证据落artifact并同步根/月/artifact索引、当前docs检查，范围commit和正常push。批次完成后自主下一批，保留未验收边界。
+## 检查器并发构建故障：横审与实施资格
+
+首轮typecheck未进入tsc，正式runner在prepareTestProcessSupervisor失败：Cargo target/runtime-ca3719eff83c74a8/debug/opencorvus-process-supervisor.exe正在被并发build/check使用，后续cargo移除该同路径产物失败Access denied/os5/exit101。i18n相同版本38编译成功，另一个build原handle57843已0；不得把编译失败包装成类型通过。发布聊天正在更新38的Cargo版本，两个prepare/expected脚本本身无外部差异，不覆盖其Cargo/版本改动。
+
+已全仓搜索prepare/expected所有生产调用与same-path实现：30余独立check/benchmark及run-tests/run-with-inactivity共用同一cache locator；另一个cold-skill checker只通过expected读取。当前先在锁外判helper不存在，再cargo build，cargo build-directory锁只能串行编译，不能撤销第二个调用已经作出的重编译决定；不同隔离CARGO_HOME还会触发再链接。它将可执行产物直接作为cargo输出运行，后到编译器因Windows运行文件锁失败。不是Task/Mission/Session队列或终态业务异常；真实生产打包helper、其owner lease/物理结算/重启恢复/多项目调度均未改变。全部工具入口的串行/并行、cold/warm、版本分离统一修在唯一准备脚本，不给单个checker重试旁路。当前sourceIdentity仅定位已有源码对应的build缓存，不能作为功能验收；不新增摘要门槛。
+
+决定将Cargo输出与已发布执行文件分开：expected路径改为当前runtime缓存的published目录，Cargo仍写同一runtime/build目录，永不编译运行中的published/exe。正式构建成功后先在同父级唯一staging目录复制完整可执行文件，再以目录rename发布；已存在且完整的同一发布作为并发winner，loser清退其自己的一文件staging。不会覆盖已发布可执行文件，不删除旧运行进程或历史缓存、不新增fallback或平行locator。保留同步prepare函数和所有调用点合同。Node官方fs文档明确copyFile不保证原子性，因此不直接COPYFILE_EXCL到最终可见路径；使用同卷完整目录发布，Windows真实运行验证目录竞争和文件锁行为。
+
+新增聚焦正向非UI测试验证真实可执行文件初次发布/运行、其运行时第二次发布返回同一规范位置、原进程输出与正常结算。随后从cold published cache并发运行原typecheck/i18n/docs checker，原错误必须被真实链路排除。这个工具链修复跟随本批交付，既有UI搜索仍须独立实页验收；不因工具检查通过省略UI。
+## 实页发现的长目录布局根因与修正
+
+38310/195，图01–08实际呈现：空query九条原最近work候选；Project journey 773命中规范prj_hF...并显示完整真实目录，Enter正常；prj_hJOM...查询命中752原项目，Ctrl+1切换，异步结算后composer实际获得焦点。打开759原对话、查询source-group-752得到两Chat与两个Project，Escape保持同一URL/Session/原阅读。模型不可用原位提示属于无auth实例的执行环境条件，读取与Project导航仍成功，未发模型。
+
+图07发现匿名Project名称在视觉上为0宽，AX仍有Anonymous project；这是真实呈现问题而非名称数据缺失。cmdk.css现三列24px/minmax(0,1fr)/auto，hint的完整长路径撑开第三列，允许第二列label降到0。旧短basename hint没有暴露，新增完整Project路径触发。全仓同class消费者为CommandPalette及ConversationSearchDialog，后者不使用Project kind。本批为ledger Command保留原kind并投影data-kind，以结构化Project类型限定CSS，不以名称/路径关键字匹配。Project候选改为图标+名称一行，当前语言kind/完整原目录与数字快捷键下一行；长目录自然换行，名不再与路径争同一列，groupStart的heading/name/hint分别占三行。其他Chat/Task/Mission及本地命令保留现行密度/键盘/焦点语义。shared Combobox primitive不改、无新DOM结构/元数据writer或UI测试。原实例关闭/公开正常shutdown并完整结算后，普通重建并启38311沿原21:06:57.506Z截止，必须复看长目录Project和首行groupStart、重复名称、中文及设置导航。
+补充图12的首Project结果：group-start背景pseudo仍固定只覆盖row2，新增目录row3未纳入同一候选的选中背景。按现cmdk第一组标题与候选分离的真实CSS控制流，仅Project group-start的高亮pseudo延伸row2–3；不覆盖heading、不改变其他行。再次普通构建并用38312最后scope确认完整选中背景、中英文项目路径与directory-free重开。图13实际Project选择已关闭设置并返回中文Home，无新执行；原38311随后正常收拢，沿原774截止不续期。
+
+工具决策依据：[Node.js fs.copyFileSync](https://nodejs.org/api/fs.html#fscopyfilesyncsrc-dest-mode)明确不保证复制原子性；[fs.renameSync](https://nodejs.org/api/fs.html#fsrenamesyncoldpath-newpath)给出目录重命名接口。真实Windows并发三checker及运行中发布测试用于行为证明，不把文档或cache摘要当功能验收。
+原生工具链最终已有真实证据：project774-publication-test正式isolated runner 1 pass/3 expect，真实复制Bun可执行文件、native host观察exact_live时再次发布、原stdout publication-settled/exit0/settlementConfirmed。cold cache同毫秒启动的types/i18n/docs三原checker分别0，发布后路径稳定，编译器不再碰运行中的exe；后端tsc亦0。未用mock或新UI测试。当前已发布cache与Cargo build两目录分离，唯一expected locator没有旧路径双读。
+
+最终普通UI构建main-CQktGvd7.js，图16完整Project候选高亮覆盖名称及目录、组标题独立；图17长目录名/全路径换行保持可读，图18当前英文空状态范围完整。此前图01–15已实测原九个最近项、名称/标识/目录、Enter/Ctrl数字选择、同名匿名项目路径辨识、分页追加/原列表滚动、取消保持原Session阅读、中文本地命令、设置页搜索选择关闭设置、directory-free首页中文打开对照项目。图19最终Enter回Project journey 773首页；同一callback与最终CSS均沿原public identity/authority。原模型配置不可用提示只限制执行，无模型请求。其余故障/多宿主/非桌面和全部调度组合未实操，不扩大验收结论。
+最终三个scope已全部结算：原exec36114/40878/24080均0，公开shutdown200、native/launcher0及物理/输出/请求三项完成，精确出生链退休；catalog副本全部清退，最少余2511715ms。92表103484旧行在三个克隆及各自源库逐行完全相同，schema9/integrity ok，五原QA文件字节/metadata和三个13文件附件namespace逐字节保持。实际模型0/累计767、未复制auth，用户18571没有操作。最终Project选择异步完成后焦点确实为chatTextarea，再关闭197页；195/196也已关闭。19张截图完成且均已人工查看。当前进入范围提交和正常fresh sync/push，保留另一人类聊天38版本及索引状态。

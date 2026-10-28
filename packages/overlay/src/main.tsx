@@ -2497,6 +2497,7 @@ function OverlayRoot() {
         return request
       }}
       onSelectMission={openWorkLedgerMission}
+      onSelectProject={selectWorkLedgerProject}
       onSelectTask={selectTaskWithUILifecycle}
       onSelectChat={(sessionID, directory, experience) =>
         selectConversationWithUILifecycle(sessionID, directory, experience)

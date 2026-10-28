@@ -277,6 +277,35 @@
   white-space: nowrap;
 }
 
+.cmdk-item[data-kind="project"] {
+  grid-template-columns: calc(24px * var(--ui-scale)) minmax(0, 1fr);
+}
+
+.cmdk-item[data-kind="project"] .cmdk-item-hint {
+  grid-column: 2;
+  grid-row: 2;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.cmdk-item[data-kind="project"][data-group-start] .cmdk-item-hint {
+  grid-row: 3;
+}
+
+.cmdk-item[data-kind="project"][data-group-start]::before {
+  grid-row: 2 / 4;
+}
+
+.cmdk-item[data-kind="project"] .cmdk-item-project {
+  flex: 1;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.cmdk-item[data-kind="project"] .cmdk-item-shortcut {
+  flex: none;
+}
+
 .cmdk-empty {
   padding: var(--ui-gap-lg);
   color: var(--text-muted);

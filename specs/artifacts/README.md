@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-29-project-search-journey](2026-10-29-project-search-journey/README.md)：19张实页原图、项目搜索/分页/设置与无目录导航、实际原生发布测试与完整结算。
+
 - [2026-10-29-release-0.1.37](2026-10-29-release-0.1.37/README.md)：37日志原图、成功Intel预检及0资源取消候选收据。
 
 - [2026-10-29-project-identity-journey](2026-10-29-project-identity-journey/README.md)：16张原图、模型不可用时真实改名、名称一致/关闭重开/双语与三实例完整结算。

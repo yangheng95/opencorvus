@@ -6,7 +6,13 @@
 
 ### zh-CN
 
+- 全局搜索支持按项目名称、标识或目录打开既有项目；项目候选分行显示名称与完整目录，支持键盘选择并保留空查询的最近对话。
+- 修复 Windows 检查器并发准备原生辅助程序时，编译产物与运行文件互相冲突导致的拒绝访问。
+
 ### en-US
+
+- Global search can open existing projects by name, identifier or directory, with readable names, full paths and keyboard selection while retaining recent conversations for empty queries.
+- Fix access-denied failures when concurrent Windows checkers build and run the native helper.
 
 ## 0.1.38 - 2026-10-29
 

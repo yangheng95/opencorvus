@@ -15,7 +15,7 @@ export function expectedTestProcessSupervisor(): string | undefined {
     nativeRoot,
     "target",
     `runtime-${sourceIdentity}`,
-    "debug",
+    "published",
     "opencorvus-process-supervisor.exe",
   )
 }

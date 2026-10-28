@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [项目搜索与键盘导航](records/2026-10/2026-10-29-project-search-journey.md)：全局项目搜索、目录分行与键盘导航实页复核，修复Windows检查器并发准备的运行文件冲突。
+
 - [0.1.38 发布](records/2026-10/2026-10-29-release-0.1.38.md)：补齐sudo环境边界与真实APT策略验收，新源码完整发布。
 
 - [项目名称与首页作用域](records/2026-10/2026-10-29-project-identity-journey.md)：纯名称修改独立于模型启动，侧栏与首页统一现行项目投影，真实改名/关闭重开/双语验收。
