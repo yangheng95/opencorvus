@@ -244,6 +244,18 @@ previous one when removing the tail); an empty strip returns to its composer.
 This handoff retains the current selection, API authority and draft scope, and
 does not take focus back after another control acquires it.
 
+Composer run controls use the config service's currently owned snapshot as the
+saved value. The parallel slider keeps its thumb mounted across numeric updates;
+its local interaction draft synchronizes with that snapshot when a save settles
+and when the editor opens. A rejected write restores the actual value, while a
+committed-mutation error retains the receipt's real configuration. Busy saves
+retain focus and expose their state, with repeated edits guarded by the existing
+save owner. Keyboard submenu entry focuses its slider; its interactive content
+allows native Tab and Shift+Tab between the slider and diagnostic disclosure,
+while Escape returns through the existing menu lifecycle. Localized failure
+feedback sits with the control, keeps the original diagnostic in a bounded,
+scrollable disclosure, and retires with a new attempt or selection/API authority.
+
 Server-relative canonical attachment links in Markdown open the existing raw resource in a new
 tab, preserving the conversation. At activation, the shared resource URL resolver
 uses the current server connection; native external URL opening retains its

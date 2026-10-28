@@ -1,5 +1,9 @@
 # Artifact entry points
 
+- [2026-10-28-run-control-save-journey](2026-10-28-run-control-save-journey/README.md)：17张实际原图、真实400/200、Sol流式发送与数据/原生结算。
+
+- [2026-10-28-draft-attachment-lifecycle](2026-10-28-draft-attachment-lifecycle/README.md)：三张实页原图、旧副本回收日志和逐表数据复核。
+
 - [2026-10-28-gallery-image-resource-journey](2026-10-28-gallery-image-resource-journey/README.md)：图库SVG失败与修复、实际流式发送、双语原图和原件/数据结算。
 
 - [2026-10-28-attachment-format-journey](2026-10-28-attachment-format-journey/README.md)：PDF/SVG/JPEG实页、两页原件参考、下载/派生与数据证据。

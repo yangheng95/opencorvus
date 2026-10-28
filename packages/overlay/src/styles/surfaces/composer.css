@@ -730,6 +730,20 @@
   position: fixed;
   width: calc(244px * var(--ui-scale));
   padding: var(--ui-gap-lg);
+  max-height: var(--kb-popper-content-available-height);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.composer-parallelism-menu .oc-feedback__diagnostic {
+  max-height: min(30vh, calc(200px * var(--ui-scale)));
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.composer-parallelism-content {
+  display: grid;
+  gap: var(--ui-gap-3xs);
 }
 
 .composer-parallelism-slider {

@@ -1,0 +1,327 @@
+{
+  "at": "2026-10-28T16:32:21.517Z",
+  "batchDeadline": {
+    "deadlineAt": 1793206031588,
+    "startedAt": 1793202431587
+  },
+  "preflight": {
+    "sessionID": "ses_hiNEELopqzFgSvr1Of55",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "scopes": {
+    "error": {
+      "port": 38294,
+      "uiEntry": "main-BVzUox09.js",
+      "at": "2026-10-28T15:51:25.993Z",
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 763,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 3347826,
+      "publicShutdown": 200,
+      "physical": {
+        "observedAtUtc": "2026-10-28T15:51:25.2821824Z",
+        "chain": [
+          {
+            "identity": {
+              "pid": 88328,
+              "processInstanceID": "win32:639287992323422128",
+              "occurrenceID": "507d26fb-da44-4d12-b66d-abf6ea84c3ed"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 53620,
+              "processInstanceID": "win32:639287992331460105",
+              "occurrenceID": "287aba91-00a7-429b-8e9a-6b469a346b81"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "native": {
+          "occurrence": "run-control-journey-769-error-53ba8e39-5bb9-40d8-b0e2-eef6d6060aa7",
+          "outcome": "settled",
+          "host": {
+            "pid": 88328,
+            "processInstanceID": "win32:639287992323422128",
+            "occurrenceID": "507d26fb-da44-4d12-b66d-abf6ea84c3ed"
+          },
+          "target": {
+            "pid": 53620,
+            "processInstanceID": "win32:639287992331460105",
+            "occurrenceID": "287aba91-00a7-429b-8e9a-6b469a346b81"
+          },
+          "observedAtUtc": "2026-10-28T15:51:23.762Z",
+          "deadlineAt": 1793206031588,
+          "terminal": {
+            "occurrenceID": "run-control-journey-769-error-53ba8e39-5bb9-40d8-b0e2-eef6d6060aa7",
+            "pid": 53620,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "launcher": {
+          "observedAtUtc": "2026-10-28T15:51:23.8058133Z",
+          "originalChildExit": 0
+        }
+      }
+    },
+    "layout": {
+      "port": 38296,
+      "uiEntry": "main-lAfU1X2f.js",
+      "at": "2026-10-28T16:01:58.848Z",
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 763,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 2714907,
+      "publicShutdown": 200,
+      "physical": {
+        "chain": [
+          {
+            "identity": {
+              "pid": 71216,
+              "processInstanceID": "win32:639287996261740099",
+              "occurrenceID": "9ec86e02-b79d-4f4b-865e-c8ed40cc8c0d"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 20168,
+              "processInstanceID": "win32:639287996268922907",
+              "occurrenceID": "65600582-c2b8-4027-8bcd-d842876a2bce"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "native": {
+          "occurrence": "run-control-journey-769-layout-ebfa6918-9b18-4635-9cce-1ca646631777",
+          "outcome": "settled",
+          "host": {
+            "pid": 71216,
+            "processInstanceID": "win32:639287996261740099",
+            "occurrenceID": "9ec86e02-b79d-4f4b-865e-c8ed40cc8c0d"
+          },
+          "target": {
+            "pid": 20168,
+            "processInstanceID": "win32:639287996268922907",
+            "occurrenceID": "65600582-c2b8-4027-8bcd-d842876a2bce"
+          },
+          "observedAtUtc": "2026-10-28T16:01:56.681Z",
+          "deadlineAt": 1793206031588,
+          "terminal": {
+            "occurrenceID": "run-control-journey-769-layout-ebfa6918-9b18-4635-9cce-1ca646631777",
+            "pid": 20168,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "launcher": {
+          "observedAtUtc": "2026-10-28T16:01:56.7161031Z",
+          "originalChildExit": 0
+        },
+        "observedAtUtc": "2026-10-28T16:01:58.1771860Z"
+      }
+    },
+    "keyboard": {
+      "port": 38297,
+      "uiEntry": "main-B1FK__YA.js",
+      "at": "2026-10-28T16:08:10.916Z",
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 763,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 2342905,
+      "publicShutdown": 200,
+      "physical": {
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-28T16:08:08.715998Z"
+        },
+        "native": {
+          "occurrence": "run-control-journey-769-keyboard-a7eb11eb-f6b9-4ee1-90d3-0da1b56e39af",
+          "outcome": "settled",
+          "host": {
+            "pid": 64020,
+            "processInstanceID": "win32:639288002615904127",
+            "occurrenceID": "0e25a12a-1b04-41b7-8422-b49f6e43cf4d"
+          },
+          "target": {
+            "pid": 92524,
+            "processInstanceID": "win32:639288002623031759",
+            "occurrenceID": "afe14b12-4742-4ed7-a952-f57e37c57db6"
+          },
+          "observedAtUtc": "2026-10-28T16:08:08.683Z",
+          "deadlineAt": 1793206031588,
+          "terminal": {
+            "occurrenceID": "run-control-journey-769-keyboard-a7eb11eb-f6b9-4ee1-90d3-0da1b56e39af",
+            "pid": 92524,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-28T16:08:10.2724671Z",
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 64020,
+              "processInstanceID": "win32:639288002615904127",
+              "occurrenceID": "0e25a12a-1b04-41b7-8422-b49f6e43cf4d"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 92524,
+              "processInstanceID": "win32:639288002623031759",
+              "occurrenceID": "afe14b12-4742-4ed7-a952-f57e37c57db6"
+            }
+          }
+        ]
+      }
+    },
+    "success": {
+      "port": 38295,
+      "uiEntry": "main-B1FK__YA.js",
+      "at": "2026-10-28T16:17:11.849Z",
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "requests": 4,
+      "maximumRequests": 6,
+      "cumulativeRequests": 767,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 1801774,
+      "publicShutdown": 200,
+      "physical": {
+        "observedAtUtc": "2026-10-28T16:17:11.2225496Z",
+        "native": {
+          "occurrence": "run-control-journey-769-success-f3591995-7bd6-4248-b3b9-475d5450c407",
+          "outcome": "settled",
+          "host": {
+            "pid": 75564,
+            "processInstanceID": "win32:639288006037443769",
+            "occurrenceID": "454872e0-a4d3-4c1b-8db2-8b68cf9439dc"
+          },
+          "target": {
+            "pid": 69072,
+            "processInstanceID": "win32:639288006044951794",
+            "occurrenceID": "1599fd83-95e7-49ce-ab43-e20c69f4754e"
+          },
+          "observedAtUtc": "2026-10-28T16:17:09.814Z",
+          "deadlineAt": 1793206031588,
+          "terminal": {
+            "occurrenceID": "run-control-journey-769-success-f3591995-7bd6-4248-b3b9-475d5450c407",
+            "pid": 69072,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "launcher": {
+          "observedAtUtc": "2026-10-28T16:17:09.8481916Z",
+          "originalChildExit": 0
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 75564,
+              "processInstanceID": "win32:639288006037443769",
+              "occurrenceID": "454872e0-a4d3-4c1b-8db2-8b68cf9439dc"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 69072,
+              "processInstanceID": "win32:639288006044951794",
+              "occurrenceID": "1599fd83-95e7-49ce-ab43-e20c69f4754e"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "tabsClosed": [
+    "178",
+    "179",
+    "180",
+    "181"
+  ],
+  "temporaryViewportReset": true,
+  "userApplicationOperated": false
+}

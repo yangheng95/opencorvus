@@ -1,0 +1,37 @@
+{
+  "at": "2026-10-28T16:32:21.525Z",
+  "database": {
+    "tag": "draft-768",
+    "tables": 92,
+    "oldCount": 102427,
+    "exact": 102427,
+    "total": 102427,
+    "schema": 9,
+    "integrity": "ok"
+  },
+  "sourceProjectFilesExact": [
+    "README.md",
+    "mcp.ts",
+    "chat.ts"
+  ],
+  "pdfDownload": {
+    "filename": "opencorvus-case-brief-en-zh (2).pdf",
+    "bytes": 111015
+  },
+  "copyExperiment": {
+    "copiedAtMs": 1793192535937,
+    "sourceMtimeMs": 1793188524529.1355,
+    "copyMtimeMs": 1793188524529.1355,
+    "bytesExact": true
+  },
+  "actualStartupSweep": {
+    "at": "2026-10-28T13:07:38.890Z",
+    "deleted": 2,
+    "bytesFreed": 158703,
+    "skippedYoung": 0,
+    "kept": 2,
+    "retries": [],
+    "failures": []
+  },
+  "qualification": "Old unsubmitted namespace copies qualified for GC; actual new uploads survived settings/rejected-save journey. Successful config updates were verified separately in batch769."
+}

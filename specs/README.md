@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+- [运行控件保存与连续键盘编辑](records/2026-10/2026-10-28-run-control-save-journey.md)：真实保存结果、局部错误详情、稳定焦点与双语实页验收。
+
+- [待发送附件生命周期调查](records/2026-10/2026-10-28-draft-attachment-lifecycle.md)：旧拷贝回收直接日志、真实上传保留和运行控件问题定位。
+
 - [图库图片资源身份与SVG全图](records/2026-10/2026-10-28-gallery-image-resource-journey.md)：规范原件URI的统一显示映射、真实持久消息图库与下载复核。
 
 - [PDF与SVG附件实际体验](records/2026-10/2026-10-28-attachment-format-journey.md)：修复PDF空白/关闭布局与SVG全图，原件身份和安全派生实证。

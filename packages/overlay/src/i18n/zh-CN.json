@@ -514,6 +514,7 @@
   "chat.unattended": "无人值守",
   "chat.unattended_hint": "自动创建建议的后续任务，并在五分钟过期时间后跳过无人回答的问题。",
   "chat.run_control_save_failed": "更新运行控件失败",
+  "chat.run_control_save_failed_inline": "更新未完成。请核对当前设置并查看详情后重试。",
   "chat.permission_mode_title": "授权模式：{{mode}}",
   "chat.permission_mode_aria": "授权模式，当前为 {{mode}}",
   "chat.permission_ask_hint": "有风险的 Tool、MCP、浏览器和插件调用在执行前等你明确决定。",

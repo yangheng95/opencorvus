@@ -1,0 +1,226 @@
+{
+  "at": "2026-10-28T16:26:59.780Z",
+  "databases": [
+    {
+      "tag": "draft-768",
+      "tables": 92,
+      "oldCount": 102427,
+      "exact": 102427,
+      "total": 102427,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "error",
+      "tables": 92,
+      "oldCount": 102427,
+      "exact": 102427,
+      "total": 102427,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "layout",
+      "tables": 92,
+      "oldCount": 102427,
+      "exact": 102427,
+      "total": 102427,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "keyboard",
+      "tables": 92,
+      "oldCount": 102427,
+      "exact": 102427,
+      "total": 102427,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "success",
+      "tables": 92,
+      "oldCount": 102427,
+      "exact": 102422,
+      "total": 103456,
+      "schema": 9,
+      "integrity": "ok"
+    }
+  ],
+  "reviewedCurrentUpdates": [
+    {
+      "table": "memory_chunk",
+      "id": "mck_h6EvLigbGJ7HKAw1igbo",
+      "fields": [
+        "content",
+        "token_count",
+        "time_updated"
+      ],
+      "contract": "Current user occurrence updates the project memory document"
+    },
+    {
+      "table": "memory_file",
+      "id": "mem_hQGxyxDBE1BdkM8gs1tW",
+      "fields": [
+        "time_updated"
+      ],
+      "contract": "Current user occurrence updates the project memory document"
+    },
+    {
+      "table": "runtime_execution_capacity_lease",
+      "id": 1,
+      "fields": [
+        "lease_id",
+        "owner_id",
+        "time_acquired",
+        "expires_at"
+      ],
+      "contract": "Actual stream EOF releases the current owned slot"
+    },
+    {
+      "table": "runtime_execution_capacity_lease",
+      "id": 2,
+      "fields": [
+        "lease_id",
+        "owner_id",
+        "time_acquired",
+        "expires_at"
+      ],
+      "contract": "Actual stream EOF releases the current owned slot"
+    },
+    {
+      "table": "session",
+      "id": "ses_-zUQePN8bzzO0tkLjwWg",
+      "fields": [
+        "time_updated"
+      ],
+      "contract": "Same real session receives the new natural user and assistant messages"
+    }
+  ],
+  "sourceProjectFilesExact": [
+    "README.md",
+    "mcp.ts",
+    "chat.ts"
+  ],
+  "configRestoration": {
+    "at": "2026-10-28T16:18:43.343Z",
+    "savedValueBeforeRestoration": 5,
+    "originalContentExact": true,
+    "originalHadExplicitAssistant": false,
+    "restoredAfterPhysicalSettlement": true
+  },
+  "canonicalFiles": [
+    {
+      "filename": "opencorvus-case-brief-en-zh.pdf",
+      "mime": "application/pdf",
+      "bytes": 111015,
+      "url": "/attachment/prj_hFmj1f6BXMBemXaPwm5n/6d34d82b266780915404921eea16dfd83f646d19eb677ec3e1b2777fc559c9b4.pdf",
+      "exact": true
+    },
+    {
+      "filename": "12-after-chinese-home-hint.jpg",
+      "mime": "image/jpeg",
+      "bytes": 47688,
+      "url": "/attachment/prj_hFmj1f6BXMBemXaPwm5n/f33221ffe39539c919f37f4f28a4765c302439ffe6bb38f780c800ead3aa23dd.jpg",
+      "exact": true
+    }
+  ],
+  "pdfDownloadsExact": [
+    {
+      "filename": "opencorvus-case-brief-en-zh (2).pdf",
+      "bytes": 111015
+    },
+    {
+      "filename": "opencorvus-case-brief-en-zh (3).pdf",
+      "bytes": 111015
+    }
+  ],
+  "actualConfigRequests": {
+    "draft": [
+      {
+        "at": "2026-10-28T13:11:18.769Z",
+        "requestID": "0a215360-7bdf-4f17-b494-2861a19e848a",
+        "status": 400,
+        "durationMs": 54
+      }
+    ],
+    "error": [
+      {
+        "at": "2026-10-28T15:48:09.109Z",
+        "requestID": "bfce0f56-9cfa-474f-8518-a4c85150bc46",
+        "status": 400,
+        "durationMs": 44
+      }
+    ],
+    "layout": [
+      {
+        "at": "2026-10-28T15:54:32.545Z",
+        "requestID": "21e924f5-577b-4299-8bb6-4af4dc29b4d0",
+        "status": 400,
+        "durationMs": 48
+      },
+      {
+        "at": "2026-10-28T15:56:26.743Z",
+        "requestID": "a864ba99-23f5-4920-af3e-63138703f876",
+        "status": 400,
+        "durationMs": 46
+      }
+    ],
+    "keyboard": [
+      {
+        "at": "2026-10-28T16:05:43.386Z",
+        "requestID": "09fef184-9876-4406-acd3-3c9717ff7929",
+        "status": 400,
+        "durationMs": 41
+      },
+      {
+        "at": "2026-10-28T16:06:23.863Z",
+        "requestID": "ce48c0f0-38ba-4392-b974-151f93c05326",
+        "status": 400,
+        "durationMs": 36
+      },
+      {
+        "at": "2026-10-28T16:07:38.091Z",
+        "requestID": "d5fef88c-2064-47a5-b0dd-7a4edd0ae2f1",
+        "status": 400,
+        "durationMs": 36
+      }
+    ],
+    "success": [
+      {
+        "at": "2026-10-28T16:12:31.763Z",
+        "requestID": "b8d92c66-9827-4f0b-bdc1-450221a4bfc6",
+        "status": 200,
+        "durationMs": 64
+      },
+      {
+        "at": "2026-10-28T16:12:42.629Z",
+        "requestID": "af264055-68f1-48c3-b47c-3c74d5329abe",
+        "status": 200,
+        "durationMs": 54
+      },
+      {
+        "at": "2026-10-28T16:13:49.211Z",
+        "requestID": "52c9cacb-40e1-4ca2-b6ea-6f22bdabf6bb",
+        "status": 200,
+        "durationMs": 67
+      },
+      {
+        "at": "2026-10-28T16:13:49.481Z",
+        "requestID": "93e6ae4b-8def-4277-8a4b-041448c09dad",
+        "status": 200,
+        "durationMs": 52
+      }
+    ]
+  },
+  "firstPDFReadAfterBothUploadRequestsMs": 144395,
+  "actualConfirmation": {
+    "sessionID": "ses_-zUQePN8bzzO0tkLjwWg",
+    "userMessageID": "msg_86e06856-7d4c-4f8c-88a5-1a996732006e",
+    "reply": "本次附件已收到"
+  },
+  "savedAtThree": {
+    "at": "2026-10-28T16:13:24.612Z",
+    "parallelism": 3
+  }
+}

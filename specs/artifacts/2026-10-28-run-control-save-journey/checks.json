@@ -1,0 +1,59 @@
+{
+  "at": "2026-10-28T16:32:42.380Z",
+  "checks": [
+    {
+      "label": "run-control-769-types-keyboard",
+      "startedAt": 1793203319426,
+      "closedAt": 1793203341077,
+      "code": 0,
+      "signal": null,
+      "childPID": 97204
+    },
+    {
+      "label": "run-control-769-build-keyboard",
+      "startedAt": 1793203329816,
+      "closedAt": 1793203391075,
+      "code": 0,
+      "signal": null,
+      "childPID": 100020
+    },
+    {
+      "label": "run-control-769-i18n",
+      "startedAt": 1793202221573,
+      "closedAt": 1793202223999,
+      "code": 0,
+      "signal": null,
+      "childPID": 88308
+    },
+    {
+      "label": "run-control-769-docs",
+      "startedAt": 1793205142691,
+      "closedAt": 1793205151606,
+      "code": 0,
+      "signal": null,
+      "childPID": 81368
+    }
+  ],
+  "actualUI": {
+    "rawScreenshots": 17,
+    "manuallyReviewed": true,
+    "languages": [
+      "en-US",
+      "zh-CN"
+    ],
+    "keyboard": "Native menu entry, slider edits, Tab/Shift+Tab, Enter disclosure, Escape return",
+    "configResults": {
+      "finalKeyboard400": 3,
+      "success200": 4
+    },
+    "canonicalSavedValue": 3
+  },
+  "actualProvider": {
+    "requests": 4,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "status": 200,
+    "readers": "EOF"
+  },
+  "qualification": "Pure UI change; actual page interaction and screenshot review supply visual acceptance. Typecheck/build/i18n/docs provide auxiliary evidence. Final post-page source edit adjusted JSX indentation only."
+}

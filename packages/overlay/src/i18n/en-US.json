@@ -514,6 +514,7 @@
   "chat.unattended": "Auto",
   "chat.unattended_hint": "Automatically create proposed follow-up tasks and skip unanswered questions after the five-minute stale timeout.",
   "chat.run_control_save_failed": "Failed to update run controls",
+  "chat.run_control_save_failed_inline": "The update could not be completed. Check the current setting and review the details before retrying.",
   "chat.permission_mode_title": "Authorization mode: {{mode}}",
   "chat.permission_mode_aria": "Authorization mode, currently {{mode}}",
   "chat.permission_ask_hint": "Risk-bearing Tool, MCP, Browser, and plugin calls wait for an explicit decision before they run.",

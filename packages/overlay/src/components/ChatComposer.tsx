@@ -322,6 +322,7 @@ interface ComposerAttachmentLoadersProps {
   parallelism: number | null
   unattended: boolean | null
   runControlBusy: boolean
+  parallelismFailure?: { cause: unknown }
   onFiles: (files: readonly File[]) => void | Promise<void>
   onFolder: () => void | Promise<void>
   onParallelismChange: (value: number) => void
@@ -331,7 +332,18 @@ interface ComposerAttachmentLoadersProps {
 
 function ComposerAttachmentLoaders(props: ComposerAttachmentLoadersProps): JSX.Element {
   let fileInputRef: HTMLInputElement | undefined
+  let parallelismThumb: HTMLElement | undefined
   const canPickFolder = getHostTransport().capabilities.nativeCommands["workspace.pickDir"]
+  const [parallelismDraft, setParallelismDraft] = createSignal(props.parallelism ?? 1)
+  createEffect(() => {
+    const saved = props.parallelism
+    if (!props.runControlBusy) setParallelismDraft(saved ?? 1)
+  })
+
+  function commitParallelism(value: number | undefined): void {
+    if (props.runControlBusy || value === undefined || value === props.parallelism) return
+    props.onParallelismChange(value)
+  }
 
   function openFilePicker(): void {
     if (props.disabled) return
@@ -421,11 +433,17 @@ function ComposerAttachmentLoaders(props: ComposerAttachmentLoadersProps): JSX.E
               <span class="composer-attachment-menu-command">/goal</span>
             </DropdownMenu.Item>
             <DropdownMenu.Separator />
-            <DropdownMenu.Sub gutter={6}>
+            <DropdownMenu.Sub
+              gutter={6}
+              onOpenChange={(open) => {
+                if (open && !props.runControlBusy) setParallelismDraft(props.parallelism ?? 1)
+              }}
+            >
               <DropdownMenu.SubTrigger
                 class="composer-attachment-menu-item composer-runtime-menu-item"
                 data-ui="composer-parallelism-control"
-                disabled={props.parallelism === null || props.runControlBusy}
+                disabled={props.parallelism === null}
+                aria-disabled={props.runControlBusy || undefined}
                 textValue={t("chat.parallelism")}
                 title={t("chat.parallelism_hint")}
               >
@@ -437,42 +455,61 @@ function ComposerAttachmentLoaders(props: ComposerAttachmentLoadersProps): JSX.E
                 <Icon class="composer-runtime-menu-chevron" name="chevron" />
               </DropdownMenu.SubTrigger>
               <DropdownMenu.Portal>
-                <DropdownMenu.SubContent class="composer-parallelism-menu">
-                  <Show when={props.parallelism} keyed>
-                    {(parallelism) => {
-                      let keyboardValue = parallelism
-                      const commitValue = (value: number | undefined) => {
-                        if (value !== undefined && value !== parallelism) props.onParallelismChange(value)
-                      }
-                      return (
-                        <Slider.Root
-                          class="composer-parallelism-slider"
-                          defaultValue={[parallelism]}
-                          minValue={1}
-                          maxValue={parallelism * 2}
-                          step={1}
-                          disabled={props.runControlBusy}
-                          getValueLabel={({ values }) => String(values[0] ?? parallelism)}
-                          onChange={(values) => {
-                            keyboardValue = values[0] ?? parallelism
-                          }}
-                          onChangeEnd={(values) => commitValue(values[0])}
-                        >
-                          <div class="composer-parallelism-slider-header">
-                            <Slider.Label>{t("chat.parallelism")}</Slider.Label>
-                            <Slider.ValueLabel />
-                          </div>
-                          <Slider.Track>
-                            <Slider.Fill />
-                            <Slider.Thumb onKeyUp={() => commitValue(keyboardValue)}>
-                              <Slider.Input />
-                            </Slider.Thumb>
-                          </Slider.Track>
-                          <p>{t("chat.parallelism_hint")}</p>
-                        </Slider.Root>
-                      )
+                <DropdownMenu.SubContent
+                  class="composer-parallelism-menu"
+                  onFocus={(event) => {
+                    if (event.target === event.currentTarget) parallelismThumb?.focus()
+                  }}
+                >
+                  <div
+                    class="composer-parallelism-content"
+                    onKeyDown={(event) => {
+                      if (event.key === "Tab") event.stopPropagation()
                     }}
-                  </Show>
+                  >
+                    <Show when={props.parallelism !== null}>
+                      <Slider.Root
+                        class="composer-parallelism-slider"
+                        value={[parallelismDraft()]}
+                        minValue={1}
+                        maxValue={(props.parallelism ?? 1) * 2}
+                        step={1}
+                        aria-busy={props.runControlBusy}
+                        getValueLabel={({ values }) => String(values[0] ?? props.parallelism)}
+                        onChange={(values) => {
+                          if (!props.runControlBusy) setParallelismDraft(values[0] ?? props.parallelism ?? 1)
+                        }}
+                        onChangeEnd={(values) => commitParallelism(values[0])}
+                      >
+                        <div class="composer-parallelism-slider-header">
+                          <Slider.Label>{t("chat.parallelism")}</Slider.Label>
+                          <Slider.ValueLabel />
+                        </div>
+                        <Slider.Track>
+                          <Slider.Fill />
+                          <Slider.Thumb
+                            ref={(element) => { parallelismThumb = element }}
+                            aria-disabled={props.runControlBusy || undefined}
+                            onKeyUp={() => commitParallelism(parallelismDraft())}
+                          >
+                            <Slider.Input />
+                          </Slider.Thumb>
+                        </Slider.Track>
+                        <p>{t("chat.parallelism_hint")}</p>
+                      </Slider.Root>
+                    </Show>
+                    <Show when={props.parallelismFailure}>
+                      {(failure) => (
+                        <Feedback
+                          tone="error"
+                          title={t("chat.run_control_save_failed")}
+                          details={formatErrorDetails(failure().cause)}
+                        >
+                          {t("chat.run_control_save_failed_inline")}
+                        </Feedback>
+                      )}
+                    </Show>
+                  </div>
                 </DropdownMenu.SubContent>
               </DropdownMenu.Portal>
             </DropdownMenu.Sub>
@@ -598,10 +635,14 @@ export function ChatComposer(props: ChatComposerProps) {
   })
   const attachmentCounts = createMemo(() => composerAttachmentCounts(attachments()))
   const [savingRunControl, setSavingRunControl] = createSignal<"parallelism" | "unattended" | null>(null)
+  const [parallelismFailure, setParallelismFailure] = createSignal<{ cause: unknown }>()
   createEffect(
     on(
       () => [captureApiAuthority().revision, boardStore.selectEpoch],
-      () => setSavingRunControl(null),
+      () => {
+        setSavingRunControl(null)
+        setParallelismFailure(undefined)
+      },
     ),
   )
   const [textareaResizeHeight, setTextareaResizeHeight] = createSignal<number | null>(null)
@@ -694,10 +735,12 @@ export function ChatComposer(props: ChatComposerProps) {
       boardStore.selectEpoch === selectionEpoch &&
       activeProjectDirectory() === directory
     setSavingRunControl(owner)
+    setParallelismFailure(undefined)
     try {
       await patchConfig(diff, { ...currentProjectConfigRequestOptions(), authority, ownsResponse: owns })
     } catch (error) {
       if (!owns()) return
+      if (owner === "parallelism") setParallelismFailure({ cause: error })
       reportError({
         id: `composer-run-control:${owner}`,
         title: t("chat.run_control_save_failed"),
@@ -1698,6 +1741,7 @@ export function ChatComposer(props: ChatComposerProps) {
               parallelism={runControlState().parallelism}
               unattended={runControlState().unattended}
               runControlBusy={savingRunControl() !== null || props.busy}
+              parallelismFailure={parallelismFailure()}
               onFiles={addFiles}
               onFolder={addFolder}
               onParallelismChange={setParallelism}
