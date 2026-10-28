@@ -1,0 +1,99 @@
+{
+  "at": "2026-10-28T18:55:43.409Z",
+  "scopes": [
+    {
+      "tag": "baseline",
+      "port": 38305,
+      "entry": "main-dBVUGENE.js",
+      "originalExec": 84415,
+      "originalExecExit": 0,
+      "occurrence": "goal-return-journey-772-40428cc4-3910-432d-9aef-e54eefa62492",
+      "originalDeadline": 1793215782862,
+      "settled": "2026-10-28T18:39:01.397Z",
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "identityChain": [
+        {
+          "identity": {
+            "pid": 93572,
+            "processInstanceID": "win32:639288089835764759",
+            "occurrenceID": "f9cbf423-dba0-4faa-815b-9770b416da03"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "identity": {
+            "pid": 74344,
+            "processInstanceID": "win32:639288089842869975",
+            "occurrenceID": "d790040b-3cc8-4960-ae6c-8f2edbf58314"
+          },
+          "state": "dead_or_reused"
+        }
+      ],
+      "reserveMs": 3041465,
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "canonicalAttachmentFilesExact": 13
+    },
+    {
+      "tag": "after",
+      "port": 38306,
+      "entry": "main-DU6kovHR.js",
+      "originalExec": 15594,
+      "originalExecExit": 0,
+      "occurrence": "goal-return-journey-772-910b6a5c-0f07-41bf-b84d-89d0d915f91d",
+      "originalDeadline": 1793215782862,
+      "settled": "2026-10-28T18:53:17.915Z",
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "identityChain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 91100,
+            "processInstanceID": "win32:639288097438407558",
+            "occurrenceID": "b0b953ac-9003-4fa0-9204-5f8b17a8cfd0"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 34632,
+            "processInstanceID": "win32:639288097445779418",
+            "occurrenceID": "25f2d0ed-518d-45da-bc1f-11a022d230f6"
+          }
+        }
+      ],
+      "reserveMs": 2184947,
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "canonicalAttachmentFilesExact": 13
+    }
+  ],
+  "requests": 0,
+  "cumulativeRequests": 767,
+  "pagesClosed": [
+    "190",
+    "191"
+  ],
+  "clipboardUsed": false,
+  "user18571Operated": false
+}

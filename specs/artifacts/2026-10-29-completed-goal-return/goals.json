@@ -1,0 +1,87 @@
+{
+  "at": "2026-10-28T18:55:43.392Z",
+  "complete": {
+    "id": "pev_g0VZIYqxL00XXlFpf86N",
+    "status": "complete",
+    "revision": "pev_g0VZIZutg00YEv5D1AWQ",
+    "turnBudget": 3,
+    "tokensUsed": 148493,
+    "turnsAccepted": 3
+  },
+  "paused": {
+    "before": {
+      "id": "pev_g0VZIVmpj00RsyHU58hy",
+      "status": "paused",
+      "revision": "pev_g0VZIYib000ZZplWiu4O",
+      "turnBudget": 1,
+      "tokensUsed": 36322,
+      "turnsAccepted": 1
+    },
+    "saved": {
+      "id": "pev_g0VZIVmpj00RsyHU58hy",
+      "status": "paused",
+      "revision": "pev_g0VZN6esG00pBfdjdhJC",
+      "turnBudget": 2,
+      "tokensUsed": 36322,
+      "turnsAccepted": 1
+    },
+    "restored": {
+      "id": "pev_g0VZIVmpj00RsyHU58hy",
+      "status": "paused",
+      "revision": "pev_g0VZN6mXC00z6Bf5O27s",
+      "turnBudget": 1,
+      "tokensUsed": 36322,
+      "turnsAccepted": 1
+    }
+  },
+  "updates": [
+    {
+      "id": "pev_g0VZN6esG00pBfdjdhJC",
+      "type": "continuous_goal.updated",
+      "emittedAt": 1793213395043,
+      "goalID": "pev_g0VZIVmpj00RsyHU58hy",
+      "idempotencyRequestID": "7b308b68-f5af-4b7c-8e5b-ec41f09aa654",
+      "input": {
+        "turnBudget": 2,
+        "requestID": "7b308b68-f5af-4b7c-8e5b-ec41f09aa654",
+        "goalID": "pev_g0VZIVmpj00RsyHU58hy",
+        "expectedRevision": "pev_g0VZIYib000ZZplWiu4O",
+        "status": "paused",
+        "reason": "The user paused the continuous goal from its controls."
+      },
+      "author": "user"
+    },
+    {
+      "id": "pev_g0VZN6mXC00z6Bf5O27s",
+      "type": "continuous_goal.updated",
+      "emittedAt": 1793213424490,
+      "goalID": "pev_g0VZIVmpj00RsyHU58hy",
+      "idempotencyRequestID": "ba4e8407-ac2c-4e6b-a6a5-bd84978b6098",
+      "input": {
+        "turnBudget": 1,
+        "requestID": "ba4e8407-ac2c-4e6b-a6a5-bd84978b6098",
+        "goalID": "pev_g0VZIVmpj00RsyHU58hy",
+        "expectedRevision": "pev_g0VZN6esG00pBfdjdhJC",
+        "status": "paused",
+        "reason": "The user paused the continuous goal from its controls."
+      },
+      "author": "user"
+    }
+  ],
+  "transportRequests": [
+    {
+      "at": "2026-10-28T18:49:55.052Z",
+      "requestID": "bbd84767-cf00-49c8-bb3e-91df7f141eee",
+      "path": "/continuous-goal/chat/ses_-zUQhUDWdzzX0g71aRx5",
+      "status": 200,
+      "durationMs": 12
+    },
+    {
+      "at": "2026-10-28T18:50:24.494Z",
+      "requestID": "46460f3f-67de-4751-a2ba-c470d5adc7b5",
+      "path": "/continuous-goal/chat/ses_-zUQhUDWdzzX0g71aRx5",
+      "status": 200,
+      "durationMs": 6
+    }
+  ]
+}

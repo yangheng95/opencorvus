@@ -46,6 +46,16 @@ export type GoalFormRequest = {
   input: ContinuousGoalCreateInput
 }
 
+type GoalCreationDraft = {
+  scope: string
+  key?: string
+  text: string
+  objective: string
+  tokens: string
+  turns: string
+  budgetOptionsOpen: boolean
+}
+
 function GoalGuideSteps() {
   return (
     <ol class="continuous-goal__steps">
@@ -135,10 +145,23 @@ export function ContinuousGoalControl(props: {
   const [mode, setMode] = createSignal<"details" | "create" | "complete" | "about" | null>(null)
   const [guideReturn, setGuideReturn] = createSignal<"details" | "create" | "complete">()
   const [editing, setEditing] = createSignal<ContinuousGoal>()
-  const [objective, setObjective] = createSignal("")
-  const [tokens, setTokens] = createSignal("")
-  const [turns, setTurns] = createSignal("")
-  const [budgetOptionsOpen, setBudgetOptionsOpen] = createSignal(false)
+  const [createDraft, setCreateDraft] = createSignal<GoalCreationDraft>()
+  const [editedTokens, setEditedTokens] = createSignal("")
+  const [editedTurns, setEditedTurns] = createSignal("")
+  const [editedBudgetOptionsOpen, setEditedBudgetOptionsOpen] = createSignal(false)
+  const creating = () => mode() === "create" || (mode() === "about" && guideReturn() === "create")
+  const objective = () => creating() ? createDraft()?.objective ?? "" : editing()?.objective ?? ""
+  const tokens = () => creating() ? createDraft()?.tokens ?? "" : editedTokens()
+  const turns = () => creating() ? createDraft()?.turns ?? "" : editedTurns()
+  const budgetOptionsOpen = () => creating() ? createDraft()?.budgetOptionsOpen ?? false : editedBudgetOptionsOpen()
+  const updateCreateDraft = (fields: Partial<Pick<GoalCreationDraft, "objective" | "tokens" | "turns" | "budgetOptionsOpen">>) =>
+    setCreateDraft((current) => current && { ...current, ...fields })
+  const setObjective = (value: string) => updateCreateDraft({ objective: value })
+  const setTokens = (value: string) => creating() ? updateCreateDraft({ tokens: value }) : setEditedTokens(value)
+  const setTurns = (value: string) => creating() ? updateCreateDraft({ turns: value }) : setEditedTurns(value)
+  const setBudgetOptionsOpen = (value: boolean) => creating()
+    ? updateCreateDraft({ budgetOptionsOpen: value })
+    : setEditedBudgetOptionsOpen(value)
   const [reason, setReason] = createSignal("")
   const [resume, setResume] = createSignal(false)
   const [busy, setBusy] = createSignal(false)
@@ -146,7 +169,6 @@ export function ContinuousGoalControl(props: {
   const [validation, setValidation] = createSignal("")
   const [notice, setNotice] = createSignal("")
   let attempt: { key: string; requestID: string } | undefined
-  let createDraft: { scope: string; key?: string; text: string } | undefined
   let launchOwner: GoalLaunchContext | undefined
   let disposed = false
   let root: HTMLElement | undefined
@@ -196,7 +218,7 @@ export function ContinuousGoalControl(props: {
         setNotice("")
         setBusy(false)
         attempt = undefined
-        createDraft = undefined
+        setCreateDraft(undefined)
       },
     ),
   )
@@ -276,23 +298,18 @@ export function ContinuousGoalControl(props: {
       if (next === "create") {
         const key = props.composerDraftKey
         const text = key ? composerDraftText(key) : ""
-        const scope = JSON.stringify([captureApiAuthority().revision, props.selectionEpoch, source()?.key, key, text])
+        const scope = JSON.stringify([captureApiAuthority().revision, props.selectionEpoch, source()?.key, current?.id, key, text])
         setEditing(undefined)
-        if (createDraft?.scope !== scope) {
-          createDraft = { scope, key, text }
-          setObjective(text)
-          setTokens("")
-          setTurns("")
+        if (createDraft()?.scope !== scope) {
+          setCreateDraft({ scope, key, text, objective: text, tokens: "", turns: "", budgetOptionsOpen: false })
         }
       } else {
-        createDraft = undefined
         setEditing(current)
-        setObjective(current?.objective ?? "")
-        setTokens(current?.tokenBudget === undefined ? "" : String(current.tokenBudget))
-        setTurns(current?.turnBudget === undefined ? "" : String(current.turnBudget))
+        setEditedTokens(current?.tokenBudget === undefined ? "" : String(current.tokenBudget))
+        setEditedTurns(current?.turnBudget === undefined ? "" : String(current.turnBudget))
+        setEditedBudgetOptionsOpen(current?.status !== "complete")
       }
       setReason("")
-      setBudgetOptionsOpen(next === "create" ? Boolean(tokens() || turns()) : current?.status !== "complete")
       setResume(false)
       setFailure(undefined)
       setValidation("")
@@ -382,10 +399,11 @@ export function ContinuousGoalControl(props: {
           ? await updateContinuousGoal(current.target, body, current.authority)
           : await createContinuousGoal(current.target, body, current.authority)
       if (!owns(current.key)) return
-      if ("objective" in body && createDraft?.key && !pendingComposerContext() && composerDraftText(createDraft.key) === createDraft.text) {
-        setComposerDraft(createDraft.key, "")
+      const draft = "objective" in body ? createDraft() : undefined
+      if (draft?.key && !pendingComposerContext() && composerDraftText(draft.key) === draft.text) {
+        setComposerDraft(draft.key, "")
       }
-      createDraft = undefined
+      if ("objective" in body) setCreateDraft(undefined)
       attempt = undefined
       setMode(null)
       noticeState = `${saved.id}:${saved.status}`

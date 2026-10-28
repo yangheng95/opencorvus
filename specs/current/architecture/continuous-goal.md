@@ -286,6 +286,13 @@ operator explicitly reviews the current revision before resubmitting. Owner/serv
 selection retires the dialog and pending UI feedback. Request IDs bind the same
 submission content. Product labels, errors and number/date formatting follow the
 current locale; user/model originals and technical identities retain their actual values.
+The creation form owns one transient draft of its objective, budgets and budget
+disclosure state. Reading a completed goal's details or its guide preserves that
+draft, so reopening through Details or the composer restores the same values.
+Saved goal details read their existing projection; editing their budgets owns
+separate values. Creation scope includes the current goal identity and original
+composer text alongside the existing authority, selection and owner scope. A new
+scope initializes from its own composer, and successful creation retires its draft.
 Objective, budget and completion-evidence fields retain native constraint validation.
 Their invalid events report the existing localized goal error, and editing clears
 the custom validity and the prior local submission summary before updating the

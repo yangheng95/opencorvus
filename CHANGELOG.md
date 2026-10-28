@@ -6,7 +6,15 @@
 
 ### zh-CN
 
+#### 修复
+
+- 创建下一持续目标时，保留取消后的目标、预算和展开状态；查看已完成目标详情或指南后重新进入，草稿与输入区入口一致。
+
 ### en-US
+
+#### Fixed
+
+- Retain the next continuous goal's objective, budgets, and disclosure state after closing the form. Reopening through completed-goal details or the composer restores the same draft.
 
 ## 0.1.36 - 2026-10-29
 

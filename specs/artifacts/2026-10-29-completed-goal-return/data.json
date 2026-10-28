@@ -1,0 +1,69 @@
+{
+  "at": "2026-10-28T18:55:43.394Z",
+  "databases": [
+    {
+      "tag": "baseline",
+      "tables": 92,
+      "oldCount": 103482,
+      "exact": 103482,
+      "total": 103482,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "after",
+      "tables": 92,
+      "oldCount": 103482,
+      "exact": 103482,
+      "total": 103484,
+      "schema": 9,
+      "integrity": "ok"
+    }
+  ],
+  "inputs": [
+    {
+      "filename": "test_invoice.py",
+      "bytes": 1520,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "invoice.py",
+      "bytes": 953,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "README.md",
+      "bytes": 191,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "mcp.ts",
+      "bytes": 5539,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "chat.ts",
+      "bytes": 14692,
+      "exactBytes": true,
+      "exactMetadata": true
+    }
+  ],
+  "newRows": [
+    {
+      "table": "protocol_event",
+      "id": "pev_g0VZN6esG00pBfdjdhJC",
+      "type": "continuous_goal.updated"
+    },
+    {
+      "table": "protocol_event",
+      "id": "pev_g0VZN6mXC00z6Bf5O27s",
+      "type": "continuous_goal.updated"
+    }
+  ],
+  "sourceDatabasesExact": true,
+  "originalGoalAndMessageRowsExact": true
+}

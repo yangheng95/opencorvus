@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [已完成目标的返回与下一目标草稿](records/2026-10/2026-10-29-completed-goal-return.md)：详情/指南往返保留创建草稿，暂停预算真实保存与首页作用域复核。
+
 - [H05 OpenCorvus真实试跑](records/2026-10/2026-10-29-heavy-workbench-h05-opencorvus.md)：真实Task、流式模型、预算/会话归属修正、全部原始运行与未交付结果。
 
 - [0.1.36 发布](records/2026-10/2026-10-29-release-0.1.36.md)：官网辅助作业收敛检出输入、保留35公开历史并完整验证新发布。

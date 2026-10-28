@@ -1,0 +1,47 @@
+{
+  "at": "2026-10-28T18:55:43.410Z",
+  "checks": [
+    {
+      "label": "goal-return-772-build-before",
+      "startedAt": 1793212097686,
+      "closedAt": 1793212160701,
+      "code": 0,
+      "signal": null,
+      "childPID": 30548
+    },
+    {
+      "label": "goal-return-772-types-after",
+      "startedAt": 1793212793714,
+      "closedAt": 1793212811081,
+      "code": 0,
+      "signal": null,
+      "childPID": 6120
+    },
+    {
+      "label": "goal-return-772-build-after",
+      "startedAt": 1793212856102,
+      "closedAt": 1793212918846,
+      "code": 0,
+      "signal": null,
+      "childPID": 98372
+    },
+    {
+      "label": "goal-return-772-i18n",
+      "startedAt": 1793212949697,
+      "closedAt": 1793212951070,
+      "code": 0,
+      "signal": null,
+      "childPID": 94972
+    },
+    {
+      "label": "goal-return-772-docs",
+      "startedAt": 1793213801037,
+      "closedAt": 1793213814283,
+      "code": 0,
+      "signal": null,
+      "childPID": 66716
+    }
+  ],
+  "visualEvidence": "28 original screenshots manually reviewed on isolated development /ui.",
+  "uiAutomationRun": false
+}
