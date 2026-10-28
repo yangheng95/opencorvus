@@ -1,0 +1,39 @@
+# MCP连接管理当前体验
+
+## Recall
+
+用户要求持续单代理自主迭代整个当前产品，涵盖界面、功能、缺陷，真实体验验证后提交推送；不使用子代理、不再追已解决闪烁。上一轮progress为c859331ce4f13417cc26cf63418057a1e5a0ad86已推送main；2026-10-28T01:23:03Z最新fetch/merge为0/0，30任务文件干净，176外部变动保持。新增同组来源复制8个原位置，13原图人工查看，中英文和剪贴板/定位/收起焦点通过；752/after原handle、native、launcher均0、公开shutdown200且物理/输出/请求结清，三份自有auth/catalog副本退休，源保持；5次准确Sol流式200/EOF，累计747。原96679身份完整保留，仅两过期容量槽正常推进释放，after98278行精确保持/schema9。Goal保持active，后续单代理指令覆盖旧Goal文本中的三Astra。GitHub8告警私有清单只读授权仍待既有答复，不使用该凭据，不以此阻塞产品工作。
+
+本轮进入MCP（Model Context Protocol，模型上下文协议）连接管理，检查新增本地服务、连接状态、断开/重连与错误反馈；不把Sources完成等同全部产品完成。当前仅静态线索：SkillMarketPanel MCP行只有badge，现有connectMcp/disconnectMcp服务和公共后端路由已存在，是否实际缺口须以新页面确认。已读AGENTS、04-extensions MCP单连接/终态合同、07-panel资源action notices、MCP公共routes、index connect/disconnect/runtime control、overlay mcp服务/参数解析/配置写入、SkillMarketPanel创建/状态刷新/行渲染和settings-status-labels；全仓搜索生产调用、现有同语义实现及mcp-service正向服务测试（非DOM/组件测试），未发现本轮触及UI自动化测试。没有生产修改。
+
+使用已关闭752-after的98278行数据库和durable resources副本，独立mcp-connection-753 runtime与新Project/自有Git输入；不能修改旧752业务Project/config或用户18571库/窗口/进程。新普通开发serve/ui冻结当前main-BuUt9mjo.js；需要前端改动则普通构建并新实例冻结资源，沿本批同一30分钟绝对截止，保留至少5分钟结清余量，不因观察过期重复启动。总模型上限0，不复制认证；仅复制完整模型目录用于既有页面读取，结清后退休，累计747不增加。UI仅实际CUA操作、原始截图、人工查看，不新增/运行UI自动化测试。
+
+真实本地连接使用官方filesystem MCP npm包，公开资料https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem已读取：允许根通过命令参数指定，客户端initialize与tools inventory进入实际协议路径；仅开放本轮自有目录，采用公开registry解析并固定实际版本、忽略安装脚本、独立npm配置/cache，不使用用户registry凭据，不改项目依赖。执行Node和安装包路径保留空格并在实页验证参数；不调用写入工具，不引入fixture假状态或模拟UI。若无法准备官方真实服务，本批必须明确缺失，不用mock冒充。无需外部账户或OAuth授权；连接控制不等于tool assignment或permission。
+
+实施前须在此补齐真实现象、触发、根因、旧路径、定义/调用/契约、数据、测试、文档、交付与风险。若遇连接并发/恢复/终态异常，立即横审全部生产入口及Task/Mission/Session轮次、正常/终态/重试/重启、串并行和多项目后才分类，不局部打补丁。后端/服务变化有聚焦正向测试；纯UI依实页验收。所有新spec/artifact同步三索引与docs:check，范围提交、最新fetch/merge和正常hook推送，不新建branch/worktree/Release，保留176外部变动。
+
+## 实页发现及实施前完整分析
+
+官方@modelcontextprotocol/server-filesystem@2.0.1（公开registry实际版本，Node>=24，本机25.7.0）已独立安装12包，无安装脚本/用户npm配置/认证。通过真实新增Project菜单选择753/project，再在MCP页填写Node可执行文件及两个带引号参数，点击新增后实际connected。原图03清楚显示owned-files-753只有Connected正文+徽标，不能从该页面断开或重连。原请求mcp/project 200且唯一服务connected，原生产mcp-stdio handle PID87288/processInstanceID win32:639287478990740218/occurrence fd8eaf67-0e89-4e11-aae6-f099d6bb2c59真实存活，命令/参数与UI完全一致。当前后端connect/disconnect已有配置generation、唯一runtime control及物理清理，不需要新后端状态机、路由、fallback或服务副本；缺口在SkillMarketPanel只将status/error传入纯badge的SettingsRow，旧服务函数从未接入该列表。公共接口、SDK、模型、schema和持久格式不变。
+
+本轮另见两个确实当前的界面问题。最初隔离配置继承了指定Sol model/small_model却未复制auth，Project bootstrap按既有严格候选模型校验正确返回ProviderModelNotFoundError；不是MCP server或认证丢失。保留原私有配置后仅将本轮自有global配置设{}，现有Config generation正确收敛，空项目MCP状态加载200，整个过程不重启。独立directory手写URL也不是受支持的workspace link，改经正常菜单打开，不能把该无效链接当产品bug。真正界面问题是mcp/project加载失败期间，列表仍借用了appStore.mcp中全局browser/computer状态，错误地标成Project servers，原图01有证据。该页必须只有接受过当前Project/连接authority成功读后的行才可呈现操作；不增加另一份MCP状态，只记录当前读的directory/API authority这一界面请求所有权，列表事实仍来自原appStore.mcp。失败撤销该读所有权，并保留原错误Feedback；未成功读时不宣称空配置/数量0。
+
+新增时01:31:38点击后AX明确仍显示enabled Add MCP且表单未改变，直到连接完成才关闭。现handler没有pending/loading保护，提交按钮也未接loading；这会让慢连接重复提交同一配置。复用原loading信号作为该面板动作pending，新增/逐服务连接/断开与Delete All在pending时禁用，handler同步guard防重复。当前每秒状态轮询Object.entries产生新tuple，For按tuple对象会重建每行；接入可聚焦按钮必须改用现有Key按真实server name稳定行，并在同一当前directory/API authority成功读取范围内读取最新status。不是连接调度故障，不改后台轮次/恢复/配置generation/任务隔离合同；新动作只调用已公开connectMcp/disconnectMcp，捕获实际directory与API authority后同步开始请求，回调复核同一authority/directory，错误走现有Notice，成功刷新原状态，不写伪连接状态、不自动重放工具调用。
+
+行内connected显示Disconnect；disabled/disconnected/failed显示Connect（failed可用同一动作重试）；connecting仅原状态，不发并发连接；needs_auth/needs_client_registration继续如实显示认证状态，不冒充Connect可完成OAuth，本轮不获取任何外部认证。按钮无障碍名含实际服务名，中英文正文/错误/反馈沿现有t和Feedback；状态不再重复成正文+badge。SettingsRow自身已有actions flex布局，不新增视觉基础组件或CSS。新增、连接和断开都不等于给任何LLM分配MCP工具或权限，不改变Chat/Work assignment。
+
+全仓定义/调用搜索确认唯一设置面板入口，现有服务与后端路由可直接复用；mcp-service测试仅非UI正向服务合同不需改动，不新增/运行任何UI自动化。04-extensions后端合同保持，07-panel补充当前读所有权、稳定行、动作pending及连接控制UI合同；所有生产变更限UI组件与双语文案。风险为轮询导致焦点/动作丢失、跨项目旧响应、pending重复入场及进程未结清，分别以Key/原请求authority/原loading和实际Disconnect/Connect的原handle物理终态验证。改前服务先公开shutdown结清后退休catalog，普通构建后新无认证服务沿同一30分钟截止，真实实页复验两次断开/重连、英文/中文、每秒轮询后的键盘焦点、参数与原配置保留、后端请求状态及所有新MCP进程清理。预置无效模型不再传给复验；失败场景需重现当前加载失败时真实页面不再冒用全局行，不能以静态断言代替。无版本或发布变化。
+
+补充调用审计：loadExtensions也会通过loadMcpStatus将effective MCP inventory发布到同一个appStore.mcp。仅用面板的成功读标志不足以识别随后发生的effective覆盖，不能给同一数据再建一份Project状态。修改现有唯一setMcp publication，原子随map记录scope（project/effective）、真实directory和原API authority元数据；两个既有reader明确发布自己的scope，面板同时要求当前project scope和自身成功读所有权。元数据不是第二份MCP状态或配置。setMcp其他直接调用只作无归属发布，不可作为Project列表事实。该非UI投影元数据改动增加聚焦正向服务测试，验证实际project/effective两个读结果的map与scope原子投影、真实directory/authority和请求路由；不以源码字符串/DOM/负向断言验收。此前第一次普通构建通过，但尚未实页复验，最终须重建包含此补充。
+
+第一次after实页已验证原模型错误下正确呈现错误详情且项目区域不借用全局browser/computer，修正自有隔离配置后Disconnected→Connect→真实Connected成功。原图06暴露新接入pending时复用面板顶部loading-hint会插入约80px高区块，使列表整体跳动；这是本轮真实视觉发现，不能作为最终布局交付。保留06和原after实例，结清后进行第二次普通构建。MCP改为将等待提示放在现有Server connections header的inline Badge，沿同一loading事实，不新建pending状态/协议；行内Button使用现有aria-disabled样式和同步handler guard保留键盘焦点，避免native disabled剥离焦点，新增/删除按钮仍原native禁用。Key保持实际server name/control，点击完成后还是同一个按钮。最终after2沿同一原截止，模型仍0，不替换任何活服务的冻结UI资源。
+
+## 最终实现与真实验收结果
+
+最终生产界面补齐逐服务Connect/Disconnect；复用既有公共服务和后端唯一runtime control，不改持久定义或工具assignment。唯一appStore.mcp publication原子带project/effective、directory和API authority修订元数据（ApiAuthority只含revision，不含凭据），MCP页只接纳当前成功Project读；失败不再借全局builtin行。当前服务名Key与最新状态accessor保留轮询焦点，状态只显示一份。新增/删除/连接共用原loading pending事实；MCP等待提示在现有header Badge中显示，不再插入顶部区块。行按钮沿既有aria-disabled样式/同步handler guard保留焦点，中英文按钮及含真实名字的无障碍名齐全。未更改后端调度、schema、API或SDK，没有发现待横审的异常执行终态。
+
+官方filesystem2.0.1真实Node服务而非mock；两个持久local定义命令/参数与原界面完全一致，根仅753/allowed-files。最终38264普通开发serve/ui使用main-BQOHnBym，完成两次断开/重连循环：实际MCP进程32312→0；94632→0；中文重连95644，与第二服务99584并存，最后公有shutdown全部0。八张最终原图08–15实际查看，覆盖紧凑等待/原位置、每秒轮询焦点、键盘Return断开与重连、第二服务新增pending/提交禁用、两个连接、中文独立控制和最终焦点；含改前/中间诊断共15张原图。06为确实发现并已修复的中间布局问题，非通过证据。04错误归属截图是中间main-DE-HSN-k中已完成且与最终相同的归属代码，其最终正常/等待布局另实页复核，未谎称04为最终资源。
+
+最终六次来自UI的POST（3 connect、2 disconnect、1 add）在真实server日志均200；真实GET状态与原监督handle相符，两个持久定义保持，没有执行MCP文件写入工具或模型工具调用。后端原实例91318/86584/2113与native/launcher全部exit0，shutdown200，物理/输出/请求结清；六个实际MCP进程的terminal/output/settled均fulfilled、exit0，原process occurrence另读已dead_or_reused。三份自有catalog在完整结清后退休，无认证复制；源catalog字节/元数据和auth元数据保持，总Provider请求0，累计仍747。三实例沿同一30分钟截止，最终余量400937ms。所有98278原行精确保持，三自有实例98283/98285/98287行，schema9及integrity ok，原README与allowed input保持，无用户数据库升级。
+
+聚焦非UI服务测试通过6项13断言，证明唯一map与project/effective真实读归属/路由合同，非UI端到端或视觉替代物。完整前端类型通过、最终普通构建与renderer public surface通过；2593键双语、351 operations/26 groups文档与20项架构索引均通过。补充最后两处注释仅纠正MCP全称和面板动作说明，不改变已实测构建行为。没有UI自动化测试。远端OAuth/static credential、模型实际调用工具、Delete All真正删除、所有平台与跨项目并发尚未逐一实页验收，不以当前本地两连接代表全部MCP完成。待范围提交、fresh upstream merge及正常推送；整个持续迭代Goal仍active。

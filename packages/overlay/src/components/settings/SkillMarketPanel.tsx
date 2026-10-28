@@ -4,14 +4,15 @@ import { Feedback } from "../ui/Feedback"
 // Solid.js component for managing project Skills and MCP server definitions.
 // Displays:
 // • Installed custom skills with add/remove/open actions
-// • Installed MCP servers with add/remove actions
+// • Project MCP servers with add/remove and connection actions
 // All CRUD operations are self-contained — no dependency on static HTML dialogs.
 
 import { createEffect, createSignal, createMemo, For, onCleanup, Show } from "solid-js"
 import { createStore } from "solid-js/store"
+import { Key } from "@solid-primitives/keyed"
 import type { SkillMountsResponse } from "@opencorvus-ai/sdk"
 import { t } from "../../utils/i18n"
-import { ApiError, configure as configureApi } from "../../services/api"
+import { ApiError, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority, configure as configureApi } from "../../services/api"
 import {
   pathRevealFailureText,
   pathRevealLabelKey,
@@ -44,7 +45,7 @@ import {
   type SkillMarketCandidate,
   type SkillMarketDetail,
 } from "../../services/extensions"
-import { addMcpServer, deleteAllMcp, type RemoteMcpCredentialType, type RemoteMcpTransport } from "../../services/mcp"
+import { addMcpServer, connectMcp, disconnectMcp, deleteAllMcp, type RemoteMcpCredentialType, type RemoteMcpTransport } from "../../services/mcp"
 import {
   mcpConnectionStatusOrDisabledLabel,
   mcpConnectionStatusOrDisabledTone,
@@ -290,6 +291,7 @@ function SharedResourceManagementPanel(props: {
   ]
   const [notice, setNotice] = createSignal<ResourceNotice>()
   const [loading, setLoading] = createSignal(false)
+  const [mcpReadOwner, setMcpReadOwner] = createSignal<{ directory: string; authority: ApiAuthority }>()
   const [skillDragActive, setSkillDragActive] = createSignal(false)
   const [skillLoadIssues, setSkillLoadIssues] = createSignal<SkillLoadIssue[]>([])
 
@@ -338,15 +340,27 @@ function SharedResourceManagementPanel(props: {
     (): Record<string, McpItem> => (mcpPanelActive() ? { ...(appStore.mcp as Record<string, McpItem>) } : {}),
   )
 
-  const mcpEntries = createMemo(() => Object.entries(mcp()))
+  const mcpStatusCurrent = () => {
+    const owner = mcpReadOwner()
+    const scope = appStore.mcpReadScope
+    return owner && scope?.kind === "project" && scope.directory === owner.directory &&
+      isApiAuthorityCurrent(scope.authority) && isApiAuthorityCurrent(owner.authority) && sourceMatchesDirectory(owner.directory)
+  }
+  const mcpEntries = createMemo(() => mcpStatusCurrent() ? Object.entries(mcp()) : [])
 
   async function refreshMcpStatus(options: { directory?: string } = {}) {
     const directory = options.directory ?? currentDirectory()
     if (!directory) return undefined
-    return (await loadProjectMcpStatus({
-      directory,
-      isCurrentDirectory: sourceMatchesDirectory,
-    })) as Record<string, McpItem>
+    const authority = captureApiAuthority()
+    const current = () => isApiAuthorityCurrent(authority) && sourceMatchesDirectory(directory)
+    try {
+      const result = await loadProjectMcpStatus({ directory, authority, isCurrentDirectory: sourceMatchesDirectory })
+      if (current()) setMcpReadOwner({ directory, authority })
+      return result as Record<string, McpItem>
+    } catch (error) {
+      if (current()) setMcpReadOwner(undefined)
+      throw error
+    }
   }
 
   function notifyResourceChange() {
@@ -452,6 +466,7 @@ function SharedResourceManagementPanel(props: {
   }
 
   async function handleDeleteAllMcp() {
+    if (loading()) return
     const directory = currentDirectory()
     if (!directory) {
       setPanelNotice("workspace.no_directory", { tone: "warning" })
@@ -459,13 +474,40 @@ function SharedResourceManagementPanel(props: {
     }
     const names = mcpEntries().map(([name]) => name)
     if (names.length === 0) return
+    const authority = captureApiAuthority()
+    const current = () => isApiAuthorityCurrent(authority) && sourceMatchesDirectory(directory)
     if (!(await nativeConfirm(t("mcp.delete_all_confirm", { count: names.length }), { okTone: "danger" }))) return
+    if (!current() || loading()) return
+    setLoading(true)
     try {
       await deleteAllMcp({ directory, isCurrentDirectory: sourceMatchesDirectory, names })
+      if (!current()) return
       await reloadCurrentPanel({ directory })
       notifyResourceChange()
     } catch (e) {
-      if (sourceMatchesDirectory(directory)) setPanelError(e)
+      if (current()) setPanelError(e)
+    } finally {
+      if (current()) setLoading(false)
+    }
+  }
+
+  async function handleMcpConnection(name: string, disconnect: boolean) {
+    if (loading()) return
+    const directory = currentDirectory()
+    if (!directory) return
+    const authority = captureApiAuthority()
+    const current = () => isApiAuthorityCurrent(authority) && sourceMatchesDirectory(directory)
+    setLoading(true)
+    setNotice(undefined)
+    try {
+      await (disconnect ? disconnectMcp : connectMcp)(name, { directory })
+      if (!current()) return
+      await refreshMcpStatus({ directory })
+      notifyResourceChange()
+    } catch (error) {
+      if (current()) setPanelError(error)
+    } finally {
+      if (current()) setLoading(false)
     }
   }
 
@@ -669,11 +711,16 @@ function SharedResourceManagementPanel(props: {
   })
 
   async function handleAddMcp() {
+    if (loading()) return
     const directory = currentDirectory()
     if (!directory) {
       setPanelNotice("workspace.no_directory", { tone: "warning" })
       return
     }
+    const authority = captureApiAuthority()
+    const current = () => isApiAuthorityCurrent(authority) && sourceMatchesDirectory(directory)
+    setLoading(true)
+    setNotice(undefined)
     try {
       const request =
         mcpForm.type === "remote"
@@ -693,7 +740,7 @@ function SharedResourceManagementPanel(props: {
               args: mcpForm.args,
             }
       await addMcpServer(request, { directory, isCurrentDirectory: sourceMatchesDirectory })
-      if (!sourceMatchesDirectory(directory)) return
+      if (!current()) return
       setMcpForm({
         name: "",
         type: "remote",
@@ -709,7 +756,9 @@ function SharedResourceManagementPanel(props: {
       await reloadCurrentPanel({ directory })
       notifyResourceChange()
     } catch (e) {
-      if (sourceMatchesDirectory(directory)) setPanelError(e, undefined, { origin: "mcp-add", directory })
+      if (current()) setPanelError(e, undefined, { origin: "mcp-add", directory })
+    } finally {
+      if (current()) setLoading(false)
     }
   }
 
@@ -771,7 +820,7 @@ function SharedResourceManagementPanel(props: {
 
   return (
     <>
-      <Show when={loading()}>
+      <Show when={loading() && props.mode !== "mcp"}>
         <div class="loading-hint">{t("common.loading")}</div>
       </Show>
 
@@ -1177,6 +1226,7 @@ function SharedResourceManagementPanel(props: {
                 data-ui="tool-panel-action"
                 title={t("mcp.add_action")}
                 aria-label={t("mcp.add_action")}
+                disabled={loading()}
                 onClick={() =>
                   runPanelAction(t("mcp.add_action"), () => {
                     setShowAddMcp(!showAddMcp())
@@ -1194,7 +1244,7 @@ function SharedResourceManagementPanel(props: {
                 data-ui="tool-panel-action"
                 title={t("mcp.delete_all")}
                 aria-label={t("mcp.delete_all")}
-                disabled={mcpEntries().length === 0}
+                disabled={loading() || mcpEntries().length === 0}
                 onClick={() => runPanelAction(t("mcp.delete_all"), handleDeleteAllMcp)}
               >
                 <Icon name="cancel" />
@@ -1321,6 +1371,7 @@ function SharedResourceManagementPanel(props: {
                     size="md"
                     tone="accent"
                     disabled={
+                      loading() ||
                       !mcpForm.name.trim() ||
                       (mcpForm.type === "remote"
                         ? !mcpForm.url.trim() ||
@@ -1340,33 +1391,58 @@ function SharedResourceManagementPanel(props: {
               class="extension-list"
               title={t("mcp.configured_status")}
               description={t("mcp.configured_status_help")}
-              actions={<Badge tone="neutral">{mcpEntries().length}</Badge>}
+              actions={
+                <Show when={loading()} fallback={<Show when={mcpStatusCurrent()}><Badge tone="neutral">{mcpEntries().length}</Badge></Show>}>
+                  <Badge tone="neutral">{t("common.loading")}</Badge>
+                </Show>
+              }
             >
               <div id="mcpList">
                 <Show
                   when={mcpEntries().length > 0}
                   fallback={
-                    <Show when={!loading()}>
+                    <Show when={!loading() && mcpStatusCurrent()}>
                       <div class="empty-hint">{t("mcp.none")}</div>
                     </Show>
                   }
                 >
-                  <For each={mcpEntries()}>
-                    {([name, item]) => {
-                      const status = item?.status
-                      const label = mcpConnectionStatusOrDisabledLabel(status)
-                      const detail = item?.error || ""
+                  <Key each={mcpEntries()} by={(entry) => entry[0]}>
+                    {(entry) => {
+                      const name = () => entry()[0]
+                      const status = () => entry()[1]?.status
+                      const label = () => mcpConnectionStatusOrDisabledLabel(status())
+                      const detail = () => entry()[1]?.error || ""
+                      const controllable = () => ["connected", "disabled", "disconnected", "failed"].includes(status() || "")
+                      const action = () => status() === "connected" ? "mcp.disconnect" : "mcp.connect"
                       return (
                         <SettingsRow
                           class="extension-settings-row"
-                          title={name}
-                          desc={detail ? detail : label}
+                          title={name()}
+                          desc={detail() || undefined}
                           interactive
-                          actions={<Badge tone={mcpConnectionStatusOrDisabledTone(status)}>{label}</Badge>}
+                          actions={
+                            <>
+                              <Badge tone={mcpConnectionStatusOrDisabledTone(status())}>{label()}</Badge>
+                              <Show when={controllable()}>
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="sm"
+                                  tone="neutral"
+                                  aria-disabled={loading() || undefined}
+                                  aria-busy={loading() || undefined}
+                                  aria-label={t(`${action()}_server`, { name: name() })}
+                                  onClick={() => void handleMcpConnection(name(), status() === "connected")}
+                                >
+                                  {t(action())}
+                                </Button>
+                              </Show>
+                            </>
+                          }
                         />
                       )
                     }}
-                  </For>
+                  </Key>
                 </Show>
               </div>
             </SettingsDetailSection>

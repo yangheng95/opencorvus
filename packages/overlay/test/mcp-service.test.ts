@@ -11,7 +11,8 @@ import {
   parseMcpArguments,
   removeMcpAuth,
 } from "../src/services/mcp"
-import { setMcp } from "../src/store/app"
+import { appStore, setMcp } from "../src/store/app"
+import { loadMcpStatus, loadProjectMcpStatus } from "../src/services/extensions"
 
 const PROJECT_DIR = "C:/Users/example/project"
 
@@ -36,6 +37,32 @@ describe("MCP overlay service", () => {
     __setHostTransportForTest(undefined)
     configure({ directory: "" })
     setMcp({})
+  })
+
+  test("publishes each MCP status map with its actual read scope", async () => {
+    const requests: TransportRequest[] = []
+    __setHostTransportForTest({
+      ...fakeTransport((request) => requests.push(request)),
+      async request<T>(request: TransportRequest): Promise<TransportResponse<T>> {
+        requests.push(request)
+        const body = request.path === "mcp/project"
+          ? { files: { status: "connected" } }
+          : { files: { status: "disabled" }, browser: { status: "disconnected" } }
+        return { status: 200, ok: true, headers: {}, body: body as T }
+      },
+    })
+    const authority = captureApiAuthority()
+    const project = await loadProjectMcpStatus({ directory: PROJECT_DIR, authority })
+    expect(appStore.mcp).toEqual(project)
+    expect(appStore.mcpReadScope).toEqual({ kind: "project", directory: PROJECT_DIR, authority })
+
+    const effective = await loadMcpStatus({ directory: PROJECT_DIR, authority })
+    expect(appStore.mcp).toEqual(effective)
+    expect(appStore.mcpReadScope).toEqual({ kind: "effective", directory: PROJECT_DIR, authority })
+    expect(requests.map((request) => [request.path, request.query?.directory, request.authority])).toEqual([
+      ["mcp/project", PROJECT_DIR, authority],
+      ["mcp", PROJECT_DIR, authority],
+    ])
   })
 
   test("adds a project-scoped remote MCP server through the canonical route", async () => {

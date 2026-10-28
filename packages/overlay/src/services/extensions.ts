@@ -272,7 +272,7 @@ export async function loadMcpStatus(options: DirectoryOwnedRequestOptions = {}):
   if (!mcp || typeof mcp !== "object" || Array.isArray(mcp)) {
     throw new Error("mcp returned a non-object payload")
   }
-  if (ownsDirectoryRequest(options)) setMcp(mcp)
+  if (ownsDirectoryRequest(options)) setMcp(mcp, { kind: "effective", directory: options.directory?.trim() || "", authority: options.authority! })
   return mcp
 }
 
@@ -282,7 +282,7 @@ export async function loadProjectMcpStatus(options: DirectoryOwnedRequestOptions
   if (!mcp || typeof mcp !== "object" || Array.isArray(mcp)) {
     throw new Error("mcp/project returned a non-object payload")
   }
-  if (ownsDirectoryRequest(options)) setMcp(mcp)
+  if (ownsDirectoryRequest(options)) setMcp(mcp, { kind: "project", directory: options.directory?.trim() || "", authority: options.authority! })
   return mcp
 }
 

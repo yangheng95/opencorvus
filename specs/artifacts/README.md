@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [MCP连接管理实页证据](2026-10-28-mcp-connection-current-journey/README.md)：15张原图、真实协议连接与六个原进程/数据复核。
+
 - [同组来源复制实页证据](2026-10-28-grouped-source-current-journey/README.md)：13张原图、真实剪贴板及工具/数据/进程复核。
 
 - [Sources 当前实页证据](2026-10-28-source-reading-current-journey/README.md)：14张原图、两个真实网页来源与独立数据/进程复核。

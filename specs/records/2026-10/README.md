@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [MCP连接管理体验](2026-10-28-mcp-connection-current-journey.md)：真实连接控制、稳定焦点及项目/effective状态归属。
+
 - [同组来源批量复制](2026-10-28-grouped-source-current-journey.md)：补齐组级位置复制，保留顺序、行列与阅读焦点。
 
 - [Sources 当前阅读流程](2026-10-28-source-reading-current-journey.md)：当前默认页、原件打开、网页摘录阅读位置与真实模型事实。

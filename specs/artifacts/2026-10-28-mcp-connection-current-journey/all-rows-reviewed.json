@@ -1,0 +1,30 @@
+{
+  "at": "2026-10-28T01:52:14.345Z",
+  "originalRows": 98278,
+  "instances": {
+    "source": {
+      "rows": 98278,
+      "exactOriginalRows": 98278,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    "baseline": {
+      "rows": 98283,
+      "exactOriginalRows": 98278,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    "after": {
+      "rows": 98285,
+      "exactOriginalRows": 98278,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    "final": {
+      "rows": 98287,
+      "exactOriginalRows": 98278,
+      "schema": 9,
+      "integrity": "ok"
+    }
+  }
+}

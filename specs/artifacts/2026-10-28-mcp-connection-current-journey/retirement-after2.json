@@ -1,0 +1,66 @@
+{
+  "at": "2026-10-28T01:51:21.450Z",
+  "credentialCopyCreated": false,
+  "modelCatalogCopyRetired": true,
+  "requests": 0,
+  "cumulativeRequests": 747,
+  "source": {
+    "catalogSameBytes": true,
+    "catalogSameMetadata": true,
+    "authSameMetadata": true
+  },
+  "reserveMs": 400937,
+  "publicShutdown": 200,
+  "physical": {
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 75080,
+          "processInstanceID": "win32:639287487778320990",
+          "occurrenceID": "2ba23684-86fd-414f-89c8-8f9323063b0d"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 97736,
+          "processInstanceID": "win32:639287487786270624",
+          "occurrenceID": "9dfad440-5293-4a12-a1e0-71430e3869d9"
+        }
+      }
+    ],
+    "launcher": {
+      "originalChildExit": 0,
+      "observedAtUtc": "2026-10-28T01:51:20.3372063Z"
+    },
+    "observedAtUtc": "2026-10-28T01:51:21.3596567Z",
+    "native": {
+      "occurrence": "mcp-connection-753-after2-7c168111-8633-4e07-b0e0-d72ad1fa4d2a",
+      "outcome": "settled",
+      "host": {
+        "pid": 75080,
+        "processInstanceID": "win32:639287487778320990",
+        "occurrenceID": "2ba23684-86fd-414f-89c8-8f9323063b0d"
+      },
+      "target": {
+        "pid": 97736,
+        "processInstanceID": "win32:639287487786270624",
+        "occurrenceID": "9dfad440-5293-4a12-a1e0-71430e3869d9"
+      },
+      "observedAtUtc": "2026-10-28T01:51:20.28Z",
+      "deadlineAt": 1793152681217,
+      "terminal": {
+        "occurrenceID": "mcp-connection-753-after2-7c168111-8633-4e07-b0e0-d72ad1fa4d2a",
+        "pid": 97736,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    }
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "processes": [
+    {
+      "state": "dead_or_reused",
+      "settlement": "fulfilled",
+      "output": "fulfilled",
+      "phase": "baseline",
+      "identity": {
+        "pid": 87288,
+        "processInstanceID": "win32:639287478990740218",
+        "occurrenceID": "fd8eaf67-0e89-4e11-aae6-f099d6bb2c59"
+      },
+      "terminal": {
+        "exitCode": 0,
+        "signal": null
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "settlement": "fulfilled",
+      "output": "fulfilled",
+      "phase": "after",
+      "identity": {
+        "pid": 92804,
+        "processInstanceID": "win32:639287485812213231",
+        "occurrenceID": "3f481152-def5-43b8-992b-f610f13657de"
+      },
+      "terminal": {
+        "exitCode": 0,
+        "signal": null
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "settlement": "fulfilled",
+      "output": "fulfilled",
+      "phase": "final",
+      "identity": {
+        "pid": 32312,
+        "processInstanceID": "win32:639287488231959350",
+        "occurrenceID": "4e090284-2fc4-4c69-b178-60cce0e7530d"
+      },
+      "terminal": {
+        "exitCode": 0,
+        "signal": null
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "settlement": "fulfilled",
+      "output": "fulfilled",
+      "phase": "final",
+      "identity": {
+        "pid": 94632,
+        "processInstanceID": "win32:639287488821689274",
+        "occurrenceID": "f88103be-8a4e-4573-8baa-fde6c80ad0bc"
+      },
+      "terminal": {
+        "exitCode": 0,
+        "signal": null
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "settlement": "fulfilled",
+      "output": "fulfilled",
+      "phase": "final",
+      "identity": {
+        "pid": 99584,
+        "processInstanceID": "win32:639287489481683626",
+        "occurrenceID": "559d9b59-9e0a-45f0-b814-49dd7358058d"
+      },
+      "terminal": {
+        "exitCode": 0,
+        "signal": null
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "settlement": "fulfilled",
+      "output": "fulfilled",
+      "phase": "final",
+      "identity": {
+        "pid": 95644,
+        "processInstanceID": "win32:639287490375131872",
+        "occurrenceID": "05f21d01-5b6b-4f74-b5bf-703e38b456eb"
+      },
+      "terminal": {
+        "exitCode": 0,
+        "signal": null
+      }
+    }
+  ],
+  "at": "2026-10-28T01:52:29.9926178Z"
+}

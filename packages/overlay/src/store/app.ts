@@ -3,6 +3,8 @@
 // entries. Complements the settings store with runtime/volatile state.
 
 import { createStore, reconcile } from "solid-js/store"
+import { batch } from "solid-js"
+import type { ApiAuthority } from "../services/api"
 import type { SkillMountsResponse } from "@opencorvus-ai/sdk"
 import type { OverlayThemeID } from "@opencorvus-ai/transport-protocol"
 
@@ -10,6 +12,12 @@ import type { OverlayThemeID } from "@opencorvus-ai/transport-protocol"
 
 export type LogLevel = "debug" | "info" | "warn" | "error"
 export type LogSource = "overlay" | "server" | "pipeline"
+
+export interface McpReadScope {
+  kind: "project" | "effective"
+  directory: string
+  authority: ApiAuthority
+}
 
 export interface LogEntry {
   /** ISO timestamp string, e.g. "2026-03-25T10:00:00" */
@@ -115,8 +123,9 @@ export interface AppState {
   skills: any[]
   /** Agent skill mount matrix returned by /skill/mounts */
   skillMounts: SkillMountsResponse | null
-  /** MCP (Model Control Protocol) config/status map keyed by name */
+  /** MCP (Model Context Protocol) config/status map keyed by name */
   mcp: Record<string, any>
+  mcpReadScope: McpReadScope | null
   // ── NdjsonLog (mirrors state.ndjsonEvents / state.ndjsonStartMs) ──
   /** Raw ndjson log events accumulated for the current session */
   ndjsonEvents: NdjsonEvent[]
@@ -169,6 +178,7 @@ const DEFAULT_APP_STATE: AppState = {
   skills: [],
   skillMounts: null,
   mcp: {},
+  mcpReadScope: null,
   ndjsonEvents: [],
   ndjsonStartMs: 0,
   memoryFiles: [],
@@ -286,6 +296,9 @@ export function setSkillMounts(value: SkillMountsResponse | null): void {
   setAppStore("skillMounts", reconcile(value, { merge: false }))
 }
 
-export function setMcp(map: Record<string, any>): void {
-  setAppStore("mcp", reconcile(map && typeof map === "object" && !Array.isArray(map) ? map : {}, { merge: false }))
+export function setMcp(map: Record<string, any>, scope?: McpReadScope): void {
+  batch(() => {
+    setAppStore("mcp", reconcile(map && typeof map === "object" && !Array.isArray(map) ? map : {}, { merge: false }))
+    setAppStore("mcpReadScope", scope ?? null)
+  })
 }

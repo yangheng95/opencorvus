@@ -157,6 +157,22 @@ ApiError, its request ID in the existing disclosure. Dismissal clears only that
 notice. Source ownership checks and form values retain their existing contracts.
 This presentation does not reclassify backend errors or add resource operations.
 
+The MCP settings list exposes the existing per-server connection and disconnect
+operations beside its canonical status. Connected servers can disconnect;
+disabled, disconnected and failed servers can connect. Authentication states
+remain explicit and do not imply that connection can complete authorization.
+Only a successful project-status read for the current directory and API authority
+admits project rows and their count; a failed read retires that read ownership
+instead of presenting global MCP inventory as project-owned definitions. The
+existing store remains the only status projection; its map and actual
+project/effective scope, directory and API authority publish atomically. An
+effective-inventory publication cannot stand in for a project-status read.
+Rows key by server name so
+periodic status reads retain their controls and keyboard focus. Add, removal and
+connection actions share the panel's pending admission, capture their actual
+directory and API authority, and refresh canonical status after success. They do
+not rewrite definitions, tool assignments, permissions or runtime connection state.
+
 The same resource notice records its explicit form origin and actual request
 directory. Skill installation and MCP addition render that notice near the open
 form's submit controls; closing the form retains it in the panel slot. Only an

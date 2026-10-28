@@ -1,0 +1,66 @@
+{
+  "at": "2026-10-28T01:44:34.058Z",
+  "credentialCopyCreated": false,
+  "modelCatalogCopyRetired": true,
+  "requests": 0,
+  "cumulativeRequests": 747,
+  "source": {
+    "catalogSameBytes": true,
+    "catalogSameMetadata": true,
+    "authSameMetadata": true
+  },
+  "reserveMs": 808359,
+  "publicShutdown": 200,
+  "physical": {
+    "observedAtUtc": "2026-10-28T01:44:33.9723970Z",
+    "chain": [
+      {
+        "identity": {
+          "pid": 95000,
+          "processInstanceID": "win32:639287484907471808",
+          "occurrenceID": "e9f92a3b-f54f-417d-8e73-c51e7e0f8f36"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "identity": {
+          "pid": 84124,
+          "processInstanceID": "win32:639287484915129580",
+          "occurrenceID": "c0f31ec1-4529-4ca9-8484-097cc51a05e0"
+        },
+        "state": "dead_or_reused"
+      }
+    ],
+    "native": {
+      "occurrence": "mcp-connection-753-after-615f4a7c-41fa-458d-b695-2bde632b27e5",
+      "outcome": "settled",
+      "host": {
+        "pid": 95000,
+        "processInstanceID": "win32:639287484907471808",
+        "occurrenceID": "e9f92a3b-f54f-417d-8e73-c51e7e0f8f36"
+      },
+      "target": {
+        "pid": 84124,
+        "processInstanceID": "win32:639287484915129580",
+        "occurrenceID": "c0f31ec1-4529-4ca9-8484-097cc51a05e0"
+      },
+      "observedAtUtc": "2026-10-28T01:44:32.858Z",
+      "deadlineAt": 1793152681217,
+      "terminal": {
+        "occurrenceID": "mcp-connection-753-after-615f4a7c-41fa-458d-b695-2bde632b27e5",
+        "pid": 84124,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "launcher": {
+      "originalChildExit": 0,
+      "observedAtUtc": "2026-10-28T01:44:32.899552Z"
+    }
+  }
+}

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [MCP连接管理当前体验](records/2026-10/2026-10-28-mcp-connection-current-journey.md)：补齐逐服务连接/断开、项目归属与等待反馈，真实本地服务验收。
+
 - [同组来源批量复制](records/2026-10/2026-10-28-grouped-source-current-journey.md)：真实8项检索、组级复制与双语定位实页验收。
 
 - [Sources 当前阅读体验](records/2026-10/2026-10-28-source-reading-current-journey.md)：文件原件与真实网页来源、摘录和链接完整流程验收。
