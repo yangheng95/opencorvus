@@ -108,7 +108,7 @@ jobs:
 
       - name: Verify CI and release workflow contracts
         if: needs.changes.outputs.scope == 'code'
-        run: bun test ./script/ci-scope.test.ts ./script/github-actions-workflow-contract.test.ts
+        run: bun test ./script/ci-scope.test.ts ./script/github-actions-workflow-contract.test.ts ./script/install-ubuntu-packages.test.ts
 
       - name: Install critical build runtime dependencies
         if: needs.changes.outputs.scope == 'code'
@@ -116,7 +116,7 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          sudo bash script/install-ubuntu-packages.sh ripgrep
+          sudo --preserve-env=GITHUB_ACTIONS bash script/install-ubuntu-packages.sh ripgrep
 
       - name: Run critical builds
         if: needs.changes.outputs.scope == 'code'
@@ -179,7 +179,7 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          sudo bash script/install-ubuntu-packages.sh ripgrep
+          sudo --preserve-env=GITHUB_ACTIONS bash script/install-ubuntu-packages.sh ripgrep
 
       - name: Install macOS test runtime dependencies
         if: runner.os == 'macOS'

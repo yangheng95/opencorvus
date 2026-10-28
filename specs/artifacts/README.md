@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-29-release-0.1.37](2026-10-29-release-0.1.37/README.md)：37日志原图、成功Intel预检及0资源取消候选收据。
+
 - [2026-10-29-project-identity-journey](2026-10-29-project-identity-journey/README.md)：16张原图、模型不可用时真实改名、名称一致/关闭重开/双语与三实例完整结算。
 
 - [2026-10-29-release-0.1.36](2026-10-29-release-0.1.36/README.md)：未公开候选的双语日志原图与原40分钟重试失败边界。

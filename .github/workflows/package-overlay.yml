@@ -187,7 +187,7 @@ jobs:
           key: ${{ runner.os }}-${{ steps.rpm-tool.outputs.key }}
       - name: Install RPM package verifier
         if: matrix.kind == 'rpm'
-        run: sudo bash script/install-ubuntu-packages.sh rpm python3-rpm
+        run: sudo --preserve-env=GITHUB_ACTIONS bash script/install-ubuntu-packages.sh rpm python3-rpm
       - name: Verify native RPM checker contract
         if: matrix.kind == 'rpm'
         run: /usr/bin/python3 -B script/check-rpm-package.test.py

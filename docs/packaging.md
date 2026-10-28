@@ -20,7 +20,9 @@ step and whole-release deadlines remain intact. The same entry accepts
 It exports the scoped `APT_CONFIG` to the command and its descendants, preserving
 the machine's current APT directory values and configuration fragments.
 GitHub Actions downloads select IPv4 through that same binary-specific policy;
-ordinary hosts retain their configured transport selection. Linux
+callers explicitly preserve only `GITHUB_ACTIONS` across `sudo`. Native preparation
+and CI verify the effective policy through real `sudo` and `apt-config` before
+publication. Ordinary hosts retain their configured transport selection. Linux
 Playwright system dependencies run in this root context; browser downloads still
 run as the original runner user so their executable and cache ownership agree.
 

@@ -88,6 +88,26 @@ describe("GitHub Actions workflow contract", () => {
     })
   })
 
+  test("passes the CI policy marker across every Ubuntu installer privilege boundary", async () => {
+    const calls: string[] = []
+    for (const file of (await fs.readdir(workflowRoot)).filter((file) => file.endsWith(".yml"))) {
+      const workflow = await readWorkflow(file)
+      for (const job of Object.values(workflow.jobs ?? {})) {
+        for (const step of job.steps ?? []) if (step.run?.includes("install-ubuntu-packages.sh")) calls.push(step.run)
+      }
+    }
+    const setup = Bun.YAML.parse(await Bun.file(path.join(workflowRoot, "../actions/setup-overlay-runtime/action.yml")).text()) as {
+      runs: { steps: WorkflowStep[] }
+    }
+    for (const step of setup.runs.steps) if (step.run?.includes("install-ubuntu-packages.sh")) calls.push(step.run)
+    expect(calls).toHaveLength(6)
+    for (const call of calls) expect(call).toContain("sudo --preserve-env=GITHUB_ACTIONS bash ")
+    const native = await readWorkflow("build.yml")
+    expect(native.jobs?.prepare?.steps?.find(({ name }) => name === "Verify Ubuntu policy through sudo")).toEqual({
+      name: "Verify Ubuntu policy through sudo", run: "bun test ./script/install-ubuntu-packages.test.ts",
+    })
+  })
+
   test("retains product inputs in native helpers and full evidence in release preparation", async () => {
     const native = await readWorkflow("build.yml")
     const overlay = await readWorkflow("package-overlay.yml")
@@ -388,8 +408,8 @@ describe("GitHub Actions workflow contract", () => {
       "bun run docs:check\nbun run check:architecture-index\n",
       "bun ./script/sync-version.ts --check\nbun ./script/generate.ts\nbun ./script/generated-artifacts.ts --check-clean-worktree\n",
       "bun run typecheck",
-      "bun test ./script/ci-scope.test.ts ./script/github-actions-workflow-contract.test.ts",
-      "sudo bash script/install-ubuntu-packages.sh ripgrep\n",
+      "bun test ./script/ci-scope.test.ts ./script/github-actions-workflow-contract.test.ts ./script/install-ubuntu-packages.test.ts",
+      "sudo --preserve-env=GITHUB_ACTIONS bash script/install-ubuntu-packages.sh ripgrep\n",
       "bun run --cwd packages/opencorvus build --single --skip-install",
     ])
     expect(ci.jobs?.audit?.steps).toEqual([
@@ -872,6 +892,7 @@ describe("GitHub Actions workflow contract", () => {
       "Verify written release notes",
       "Verify immutable release identity",
       "Verify frozen dependency graph",
+      "Verify Ubuntu policy through sudo",
       "Build generated Software Development Kit",
       "Verify generated repository fixed point",
       "Verify publication budget before claiming identity",
@@ -1122,7 +1143,7 @@ describe("GitHub Actions workflow contract", () => {
     // compiler, and published nothing: `-y` stops neither a debconf prompt nor
     // the runner's own unattended-upgrades holding the lock.
     const boundedApt = (run: string) => ({ "timeout-minutes": 15, env: { DEBIAN_FRONTEND: "noninteractive" }, run })
-    const aptRipgrep = "sudo bash script/install-ubuntu-packages.sh ripgrep\n"
+    const aptRipgrep = "sudo --preserve-env=GITHUB_ACTIONS bash script/install-ubuntu-packages.sh ripgrep\n"
     expect(jobs.verify?.steps?.find(({ name }) => name === "Install critical build runtime dependencies")).toEqual({
       name: "Install critical build runtime dependencies",
       if: "needs.changes.outputs.scope == 'code'",

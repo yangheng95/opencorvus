@@ -1,0 +1,45 @@
+{
+  "runID": 40753116971,
+  "source": "a3b63d1fc0bb102a7659668efa57ae7cc44790a6",
+  "status": "completed",
+  "conclusion": "success",
+  "createdAt": "2026-10-28T19:18:30Z",
+  "updatedAt": "2026-10-28T19:45:10Z",
+  "firstRun": {
+    "firstRun": "passed",
+    "sessionsCreated": 4,
+    "persistedAcrossRestart": 2,
+    "realProvider": false
+  },
+  "job": {
+    "id": 123045118325,
+    "conclusion": "success",
+    "steps": [
+      {
+        "completedAt": "2026-10-28T19:42:36Z",
+        "conclusion": "success",
+        "name": "Package GUI installers",
+        "number": 11,
+        "startedAt": "2026-10-28T19:22:14Z",
+        "status": "completed"
+      },
+      {
+        "completedAt": "2026-10-28T19:42:56Z",
+        "conclusion": "success",
+        "name": "Upload overlay artifact",
+        "number": 13,
+        "startedAt": "2026-10-28T19:42:37Z",
+        "status": "completed"
+      },
+      {
+        "completedAt": "2026-10-28T19:45:02Z",
+        "conclusion": "success",
+        "name": "Post Run Swatinem/rust-cache@v2",
+        "number": 30,
+        "startedAt": "2026-10-28T19:42:56Z",
+        "status": "completed"
+      }
+    ]
+  },
+  "scope": "dependency preflight; not formal release acceptance"
+}

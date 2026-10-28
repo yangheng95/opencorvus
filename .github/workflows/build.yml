@@ -115,6 +115,9 @@ jobs:
           HUSKY: "0"
         run: bun install --frozen-lockfile --no-progress --ignore-scripts
 
+      - name: Verify Ubuntu policy through sudo
+        run: bun test ./script/install-ubuntu-packages.test.ts
+
       - name: Build generated Software Development Kit
         shell: bash
         run: bun run --cwd packages/sdk/js build
@@ -234,7 +237,7 @@ jobs:
         if: runner.os == 'Linux'
         timeout-minutes: 15
         run: |
-          sudo bash script/install-ubuntu-packages.sh ripgrep
+          sudo --preserve-env=GITHUB_ACTIONS bash script/install-ubuntu-packages.sh ripgrep
           rg --version
 
       - name: Install macOS CLI runtime dependencies
@@ -264,7 +267,7 @@ jobs:
         run: |
           playwright_cli="$(node -p "require('node:path').join(require('node:path').dirname(require.resolve('playwright/package.json')), 'cli.js')")"
           if [[ "$RUNNER_OS" == Linux ]]; then
-            sudo bash "$GITHUB_WORKSPACE/script/install-ubuntu-packages.sh" --command \
+            sudo --preserve-env=GITHUB_ACTIONS bash "$GITHUB_WORKSPACE/script/install-ubuntu-packages.sh" --command \
               "$(command -v node)" "$playwright_cli" install-deps chromium
             node "$playwright_cli" install chromium
           else

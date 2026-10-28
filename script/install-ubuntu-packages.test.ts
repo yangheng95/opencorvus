@@ -153,6 +153,21 @@ test.each(["", "true"])("writes the inherited apt-get policy for GitHub Actions=
   })
 })
 
+const testRealUbuntuPolicy = process.platform === "linux" && process.env.GITHUB_ACTIONS === "true" ? test : test.skip
+testRealUbuntuPolicy(
+  "the real GitHub Linux sudo caller exposes the effective IPv4 APT policy",
+  () => {
+    const result = spawnSync("sudo", [
+      "--non-interactive", "--preserve-env=GITHUB_ACTIONS", "bash", script, "--command",
+      "apt-config", "shell", "transport", "Binary::apt-get::Acquire::ForceIPv4",
+    ], shellOptions)
+    if (result.error) throw result.error
+    expect({ status: result.status, output: result.stdout }, result.stderr).toEqual({
+      status: 0, output: "transport='true'\n",
+    })
+  },
+)
+
 test.each(['"', "\\", "\n", "\r"])("maps an unrepresentable source path %j to the configuration error", (value) => {
   const result = spawnSync(
     bash,
