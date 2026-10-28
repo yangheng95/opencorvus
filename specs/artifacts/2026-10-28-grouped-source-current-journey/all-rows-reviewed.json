@@ -1,0 +1,60 @@
+{
+  "baselineRows": 96679,
+  "instances": {
+    "source": {
+      "currentRows": 96679,
+      "exactOriginalRowsRetained": 96679,
+      "originalIdentitiesRetained": 96679,
+      "advancedCapacitySlots": [],
+      "schema": 9,
+      "integrity": "ok"
+    },
+    "live": {
+      "currentRows": 98278,
+      "exactOriginalRowsRetained": 96677,
+      "originalIdentitiesRetained": 96679,
+      "advancedCapacitySlots": [
+        {
+          "slot": 0,
+          "originalExpiredAt": 1793147765688,
+          "newAcquiredAt": 1793149290884,
+          "releasedAt": 1793149296945,
+          "physicalOwnerPID": 98076
+        },
+        {
+          "slot": 1,
+          "originalExpiredAt": 1793147756735,
+          "newAcquiredAt": 1793149296124,
+          "releasedAt": 1793149302036,
+          "physicalOwnerPID": 98076
+        }
+      ],
+      "schema": 9,
+      "integrity": "ok"
+    },
+    "after": {
+      "currentRows": 98278,
+      "exactOriginalRowsRetained": 96677,
+      "originalIdentitiesRetained": 96679,
+      "advancedCapacitySlots": [
+        {
+          "slot": 0,
+          "originalExpiredAt": 1793147765688,
+          "newAcquiredAt": 1793149290884,
+          "releasedAt": 1793149296945,
+          "physicalOwnerPID": 98076
+        },
+        {
+          "slot": 1,
+          "originalExpiredAt": 1793147756735,
+          "newAcquiredAt": 1793149296124,
+          "releasedAt": 1793149302036,
+          "physicalOwnerPID": 98076
+        }
+      ],
+      "schema": 9,
+      "integrity": "ok"
+    }
+  },
+  "qualification": "All original row identities retained; original rows exact except two expired execution capacity generations advanced and released by this owned live PID. After UI instance retains every live row exactly; source schema 9 and integrity ok. Original project inputs unchanged."
+}

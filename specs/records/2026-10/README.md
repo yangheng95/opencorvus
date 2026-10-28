@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [同组来源批量复制](2026-10-28-grouped-source-current-journey.md)：补齐组级位置复制，保留顺序、行列与阅读焦点。
+
 - [Sources 当前阅读流程](2026-10-28-source-reading-current-journey.md)：当前默认页、原件打开、网页摘录阅读位置与真实模型事实。
 
 - [Goal 控制生命周期体验](2026-10-28-goal-control-lifecycle-journey.md)：中英文保存暂停、累计预算、显式恢复和真实模型完成。

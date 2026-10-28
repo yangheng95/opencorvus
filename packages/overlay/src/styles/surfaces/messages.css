@@ -1066,9 +1066,16 @@
   padding-block-start: var(--ui-gap-sm);
 }
 
-.msg-sources__collapse.oc-button {
-  --oc-button-color: var(--text-muted);
+.msg-sources__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ui-gap-sm);
   margin-block-start: var(--ui-gap-sm);
+}
+
+.msg-sources__actions > .oc-button {
+  --oc-button-color: var(--text-muted);
 }
 
 .msg-source-chip {

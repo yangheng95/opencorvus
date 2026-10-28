@@ -609,6 +609,15 @@ the original summary and brings the collapsed source group into view. The native
 details keeps one summary; the trailing action is an ordinary Button, without a
 second expansion authority or asynchronous scroll restoration.
 
+The same footer offers copying the group's source locations when at least two
+leaves have a canonical URL or file path. It includes the first visible leaf,
+preserves producer order and duplicates, and joins the same locations used by
+individual copy actions with newlines. Its localized count describes copyable
+locations; documents without an address do not acquire one from a display title.
+The shared clipboard primitive owns pending, confirmation and failure feedback
+for the current value and mounted control. Copying declares reading intent;
+neither source identity nor disclosure state is rewritten.
+
 An expanded web-source leaf shows its full wrapping title and a secondary host
 derived directly from that same canonical URL, including any port. The URL
 remains the link target and full Tooltip detail; a title/provider is never used

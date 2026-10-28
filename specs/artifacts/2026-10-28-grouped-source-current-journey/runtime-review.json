@@ -1,0 +1,570 @@
+{
+  "at": "2026-10-28T01:17:47.975Z",
+  "qualification": "UI feature: copy all canonical source locations of the current expanded group. Actual browser interaction and manual review; no UI automated tests.",
+  "scope": {
+    "livePort": 38260,
+    "afterPort": 38261,
+    "baselinePublication": "main-BLfBYC1M.js",
+    "changedPublication": "main-BuUt9mjo.js",
+    "tabs": [
+      "142",
+      "143"
+    ],
+    "requests": 5,
+    "maximumRequests": 8,
+    "afterMaximumRequests": 0,
+    "cumulativeRequests": 747,
+    "deadlineAt": 1793151009135
+  },
+  "results": [
+    "One actual completed search_code published 8 file Sources in one message/tool group",
+    "Baseline expanded group has per-leaf copy and trailing collapse only",
+    "New English and Chinese group copy actions count all 8 locations while summary counts remaining 7",
+    "Actual clipboard read and paste into an unsent composer preserve 8 canonical paths, lines, columns and producer order; draft cleared without sending",
+    "Existing individual copy matches the first canonical path/range",
+    "Sixth source opens actual line 38 before change; seventh opens actual line 44 after change",
+    "New footer actions remain readable with File dock open; trailing collapse returns keyboard focus to summary; Return reopens same group; closing dock preserves expansion",
+    "Original 96679 identities retained, only 2 expired capacity generations advance; after UI retains all 98278 live rows exactly"
+  ],
+  "screenshots": [
+    {
+      "name": "01-eight-source-group-collapsed-en.jpg",
+      "port": 38260,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "02-eight-source-group-expanded-en.jpg",
+      "port": 38260,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "03-sixth-source-line38-en.jpg",
+      "port": 38260,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "04-return-group-preserved-en.jpg",
+      "port": 38260,
+      "publication": "main-BLfBYC1M.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "05-group-copy-action-en.jpg",
+      "port": 38261,
+      "publication": "main-BuUt9mjo.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "06-group-copy-confirmed-en.jpg",
+      "port": 38261,
+      "publication": "main-BuUt9mjo.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "09-eight-locations-verified-unsent-en.jpg",
+      "port": 38261,
+      "publication": "main-BuUt9mjo.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "11-copied-final-positions-visible-en.jpg",
+      "port": 38261,
+      "publication": "main-BuUt9mjo.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "12-group-copy-action-zh.jpg",
+      "port": 38261,
+      "publication": "main-BuUt9mjo.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "13-group-copy-confirmed-zh.jpg",
+      "port": 38261,
+      "publication": "main-BuUt9mjo.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "14-line44-and-narrow-actions-zh.jpg",
+      "port": 38261,
+      "publication": "main-BuUt9mjo.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "15-collapse-focus-and-line44-zh.jpg",
+      "port": 38261,
+      "publication": "main-BuUt9mjo.js",
+      "manuallyReviewed": true
+    },
+    {
+      "name": "16-final-return-group-copy-zh.jpg",
+      "port": 38261,
+      "publication": "main-BuUt9mjo.js",
+      "manuallyReviewed": true
+    }
+  ],
+  "data": {
+    "baselineRows": 96679,
+    "instances": {
+      "source": {
+        "currentRows": 96679,
+        "exactOriginalRowsRetained": 96679,
+        "originalIdentitiesRetained": 96679,
+        "advancedCapacitySlots": [],
+        "schema": 9,
+        "integrity": "ok"
+      },
+      "live": {
+        "currentRows": 98278,
+        "exactOriginalRowsRetained": 96677,
+        "originalIdentitiesRetained": 96679,
+        "advancedCapacitySlots": [
+          {
+            "slot": 0,
+            "originalExpiredAt": 1793147765688,
+            "newAcquiredAt": 1793149290884,
+            "releasedAt": 1793149296945,
+            "physicalOwnerPID": 98076
+          },
+          {
+            "slot": 1,
+            "originalExpiredAt": 1793147756735,
+            "newAcquiredAt": 1793149296124,
+            "releasedAt": 1793149302036,
+            "physicalOwnerPID": 98076
+          }
+        ],
+        "schema": 9,
+        "integrity": "ok"
+      },
+      "after": {
+        "currentRows": 98278,
+        "exactOriginalRowsRetained": 96677,
+        "originalIdentitiesRetained": 96679,
+        "advancedCapacitySlots": [
+          {
+            "slot": 0,
+            "originalExpiredAt": 1793147765688,
+            "newAcquiredAt": 1793149290884,
+            "releasedAt": 1793149296945,
+            "physicalOwnerPID": 98076
+          },
+          {
+            "slot": 1,
+            "originalExpiredAt": 1793147756735,
+            "newAcquiredAt": 1793149296124,
+            "releasedAt": 1793149302036,
+            "physicalOwnerPID": 98076
+          }
+        ],
+        "schema": 9,
+        "integrity": "ok"
+      }
+    },
+    "qualification": "All original row identities retained; original rows exact except two expired execution capacity generations advanced and released by this owned live PID. After UI instance retains every live row exactly; source schema 9 and integrity ok. Original project inputs unchanged."
+  },
+  "physical": {
+    "live": {
+      "at": "2026-10-28T01:06:39.506Z",
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "requests": 5,
+      "previousRequests": 742,
+      "cumulativeRequests": 747,
+      "maximumRequests": 8,
+      "exhausted": false,
+      "model": "gpt-6.1-sol",
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "reserveMs": 1411424,
+      "physical": {
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-28T01:06:37.7522603Z"
+        },
+        "native": {
+          "occurrence": "source-group-752-669ddf22-7a17-4d1a-b5c0-80a4feecaff8",
+          "outcome": "settled",
+          "host": {
+            "pid": 83036,
+            "processInstanceID": "win32:639287460098197989",
+            "occurrenceID": "e95bf338-78ea-40e7-aae9-19b8617c5ce2"
+          },
+          "target": {
+            "pid": 98076,
+            "processInstanceID": "win32:639287460112776512",
+            "occurrenceID": "b9293be8-71ca-4752-a1d7-4a7740809839"
+          },
+          "observedAtUtc": "2026-10-28T01:06:37.711Z",
+          "deadlineAt": 1793151009135,
+          "terminal": {
+            "occurrenceID": "source-group-752-669ddf22-7a17-4d1a-b5c0-80a4feecaff8",
+            "pid": 98076,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "chain": [
+          {
+            "identity": {
+              "pid": 83036,
+              "processInstanceID": "win32:639287460098197989",
+              "occurrenceID": "e95bf338-78ea-40e7-aae9-19b8617c5ce2"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 98076,
+              "processInstanceID": "win32:639287460112776512",
+              "occurrenceID": "b9293be8-71ca-4752-a1d7-4a7740809839"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "observedAtUtc": "2026-10-28T01:06:39.3415062Z"
+      }
+    },
+    "after": {
+      "at": "2026-10-28T01:15:58.283Z",
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 747,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 851951,
+      "publicShutdown": 200,
+      "physical": {
+        "native": {
+          "occurrence": "source-group-752-after-50a02ae4-7be9-4152-937c-2077d8639375",
+          "outcome": "settled",
+          "host": {
+            "pid": 100264,
+            "processInstanceID": "win32:639287465798335533",
+            "occurrenceID": "766ad7a3-d0d9-4b1b-90d5-f4f61c8eb083"
+          },
+          "target": {
+            "pid": 94852,
+            "processInstanceID": "win32:639287465805504140",
+            "occurrenceID": "a2d7ec92-d024-4cc9-ad5c-743d0db97c47"
+          },
+          "observedAtUtc": "2026-10-28T01:15:57.184Z",
+          "deadlineAt": 1793151009135,
+          "terminal": {
+            "occurrenceID": "source-group-752-after-50a02ae4-7be9-4152-937c-2077d8639375",
+            "pid": 94852,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 100264,
+              "processInstanceID": "win32:639287465798335533",
+              "occurrenceID": "766ad7a3-d0d9-4b1b-90d5-f4f61c8eb083"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 94852,
+              "processInstanceID": "win32:639287465805504140",
+              "occurrenceID": "a2d7ec92-d024-4cc9-ad5c-743d0db97c47"
+            }
+          }
+        ],
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-28T01:15:57.2177094Z"
+        },
+        "observedAtUtc": "2026-10-28T01:15:58.1982337Z"
+      }
+    }
+  },
+  "sources": [
+    {
+      "sourcePartID": "prt_g0VZIlhbG00T1rItzzNR",
+      "sourceId": "a410f9819600cfa915942e744c1b6e3bd79fee901c299e87489bd4feb2314dd3",
+      "messageID": "msg_g0VZIlgSB00a4GFj0lX4",
+      "sessionID": "ses_-zUQhEK3XzzF60jsSpyK",
+      "toolPartID": "prt_g0VZIlhJg00tucu0P2ka",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\source-group-752\\project\\test_invoice.py",
+      "range": {
+        "startLine": 4,
+        "endLine": 4,
+        "startColumn": 21
+      },
+      "request": {
+        "tool": "search_code",
+        "input": {
+          "pattern": "sum_due"
+        }
+      },
+      "outcome": {
+        "status": "completed",
+        "completedAt": 1793149295287
+      },
+      "durableResult": {
+        "kind": "native-tool-inline-outcome",
+        "outputCharacters": 770
+      }
+    },
+    {
+      "sourcePartID": "prt_g0VZIlhbI00G1Cknq7dz",
+      "sourceId": "c1fa96853ac5e3ecd4578d7897f76083aa58e8dc305887e238a88d29396da7fb",
+      "messageID": "msg_g0VZIlgSB00a4GFj0lX4",
+      "sessionID": "ses_-zUQhEK3XzzF60jsSpyK",
+      "toolPartID": "prt_g0VZIlhJg00tucu0P2ka",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\source-group-752\\project\\test_invoice.py",
+      "range": {
+        "startLine": 17,
+        "endLine": 17,
+        "startColumn": 34
+      },
+      "request": {
+        "tool": "search_code",
+        "input": {
+          "pattern": "sum_due"
+        }
+      },
+      "outcome": {
+        "status": "completed",
+        "completedAt": 1793149295287
+      },
+      "durableResult": {
+        "kind": "native-tool-inline-outcome",
+        "outputCharacters": 770
+      }
+    },
+    {
+      "sourcePartID": "prt_g0VZIlhbL00jJ7E4NVZG",
+      "sourceId": "8725572f6ccc30721b23c3ecff4fac944eae1dcd0d7ddc54cdaa53205ec67dab",
+      "messageID": "msg_g0VZIlgSB00a4GFj0lX4",
+      "sessionID": "ses_-zUQhEK3XzzF60jsSpyK",
+      "toolPartID": "prt_g0VZIlhJg00tucu0P2ka",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\source-group-752\\project\\test_invoice.py",
+      "range": {
+        "startLine": 20,
+        "endLine": 20,
+        "startColumn": 26
+      },
+      "request": {
+        "tool": "search_code",
+        "input": {
+          "pattern": "sum_due"
+        }
+      },
+      "outcome": {
+        "status": "completed",
+        "completedAt": 1793149295287
+      },
+      "durableResult": {
+        "kind": "native-tool-inline-outcome",
+        "outputCharacters": 770
+      }
+    },
+    {
+      "sourcePartID": "prt_g0VZIlhbM00m7YsObGTO",
+      "sourceId": "01a5c2cd358c85cb666368ec0eadb84d326ceef3c2cf467d470404f0b10f8c3e",
+      "messageID": "msg_g0VZIlgSB00a4GFj0lX4",
+      "sessionID": "ses_-zUQhEK3XzzF60jsSpyK",
+      "toolPartID": "prt_g0VZIlhJg00tucu0P2ka",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\source-group-752\\project\\test_invoice.py",
+      "range": {
+        "startLine": 24,
+        "endLine": 24,
+        "startColumn": 13
+      },
+      "request": {
+        "tool": "search_code",
+        "input": {
+          "pattern": "sum_due"
+        }
+      },
+      "outcome": {
+        "status": "completed",
+        "completedAt": 1793149295287
+      },
+      "durableResult": {
+        "kind": "native-tool-inline-outcome",
+        "outputCharacters": 770
+      }
+    },
+    {
+      "sourcePartID": "prt_g0VZIlhbO00oYJNTL4r2",
+      "sourceId": "4f38e8a000d76808d938050905d536ce5738000b83ea24c6f02f00553f425805",
+      "messageID": "msg_g0VZIlgSB00a4GFj0lX4",
+      "sessionID": "ses_-zUQhEK3XzzF60jsSpyK",
+      "toolPartID": "prt_g0VZIlhJg00tucu0P2ka",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\source-group-752\\project\\test_invoice.py",
+      "range": {
+        "startLine": 30,
+        "endLine": 30,
+        "startColumn": 13
+      },
+      "request": {
+        "tool": "search_code",
+        "input": {
+          "pattern": "sum_due"
+        }
+      },
+      "outcome": {
+        "status": "completed",
+        "completedAt": 1793149295287
+      },
+      "durableResult": {
+        "kind": "native-tool-inline-outcome",
+        "outputCharacters": 770
+      }
+    },
+    {
+      "sourcePartID": "prt_g0VZIlhbP00EDP20sGKm",
+      "sourceId": "bb39f454c7f1a527f4a93026054ab55ef860834eaa2d48c86e98bfcf0a2a50ab",
+      "messageID": "msg_g0VZIlgSB00a4GFj0lX4",
+      "sessionID": "ses_-zUQhEK3XzzF60jsSpyK",
+      "toolPartID": "prt_g0VZIlhJg00tucu0P2ka",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\source-group-752\\project\\test_invoice.py",
+      "range": {
+        "startLine": 38,
+        "endLine": 38,
+        "startColumn": 17
+      },
+      "request": {
+        "tool": "search_code",
+        "input": {
+          "pattern": "sum_due"
+        }
+      },
+      "outcome": {
+        "status": "completed",
+        "completedAt": 1793149295287
+      },
+      "durableResult": {
+        "kind": "native-tool-inline-outcome",
+        "outputCharacters": 770
+      }
+    },
+    {
+      "sourcePartID": "prt_g0VZIlhbR00qQC0QT5bp",
+      "sourceId": "3ba24d0dad863280477db5e8d092f9d1d2885c20981c4bb018aef2f3ff6a6acf",
+      "messageID": "msg_g0VZIlgSB00a4GFj0lX4",
+      "sessionID": "ses_-zUQhEK3XzzF60jsSpyK",
+      "toolPartID": "prt_g0VZIlhJg00tucu0P2ka",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\source-group-752\\project\\test_invoice.py",
+      "range": {
+        "startLine": 44,
+        "endLine": 44,
+        "startColumn": 26
+      },
+      "request": {
+        "tool": "search_code",
+        "input": {
+          "pattern": "sum_due"
+        }
+      },
+      "outcome": {
+        "status": "completed",
+        "completedAt": 1793149295287
+      },
+      "durableResult": {
+        "kind": "native-tool-inline-outcome",
+        "outputCharacters": 770
+      }
+    },
+    {
+      "sourcePartID": "prt_g0VZIlhbS009ts8MJ49M",
+      "sourceId": "1addadf4a901c16f29d9135d480c38700d62e9b0f2f6c633f9ae7e8994baa984",
+      "messageID": "msg_g0VZIlgSB00a4GFj0lX4",
+      "sessionID": "ses_-zUQhEK3XzzF60jsSpyK",
+      "toolPartID": "prt_g0VZIlhJg00tucu0P2ka",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\source-group-752\\project\\invoice.py",
+      "range": {
+        "startLine": 4,
+        "endLine": 4,
+        "startColumn": 5
+      },
+      "request": {
+        "tool": "search_code",
+        "input": {
+          "pattern": "sum_due"
+        }
+      },
+      "outcome": {
+        "status": "completed",
+        "completedAt": 1793149295287
+      },
+      "durableResult": {
+        "kind": "native-tool-inline-outcome",
+        "outputCharacters": 770
+      }
+    }
+  ],
+  "checks": {},
+  "limits": [
+    "First paste picked up unrelated clipboard contents; its cause remains unknown. That attempt is retained privately, excluded from passing evidence. Subsequent direct clipboard reads and actual paste verified all 8 locations in English; Chinese copy read identical content.",
+    "Early Control+End did not scroll the composer; actual manual scrolling supplies the final-position screenshot instead.",
+    "All passing UI evidence is current ordinary /ui development serve; after instance intentionally has no credentials and shows model configuration unavailable. It makes zero model requests.",
+    "Current feature manually verified for a real file-source group. Mixed URL/document groups, duplicates, live append, clipboard errors, all owner variants and other platforms are not separately qualified.",
+    "No user database/window/process action, release, installation, API or schema change."
+  ]
+}

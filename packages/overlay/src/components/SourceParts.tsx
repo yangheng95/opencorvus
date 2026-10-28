@@ -60,6 +60,12 @@ function fileSourceLocation(label: string, range: ConversationSourcePart["range"
   return `${label}:${lines}${range.startColumn === undefined ? "" : `:${range.startColumn}`}`
 }
 
+function sourceLocation(source: ConversationSourcePart): string {
+  if (source.type === "source-url") return source.url || ""
+  if (source.type === "source-file" && source.path) return fileSourceLocation(source.path, source.range)
+  return ""
+}
+
 /** Decode visible international URL text without changing encoded ASCII structure. */
 function readableSourceUrlText(value: string): string {
   return value.replace(/(?:%[89a-f][0-9a-f])+/gi, (encoded) => {
@@ -398,11 +404,7 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
   const excerptKey = () => `source-excerpt:${sourceIdentity(props.source)}`
   const expanded = () => cardExpanded(excerptKey(), false)
   const excerptLabel = () => `${t("chat.source_excerpt")}: ${sourceLabel(props.source)}`
-  const location = () => props.source.type === "source-url"
-    ? props.source.url || ""
-    : props.source.type === "source-file" && props.source.path
-      ? fileSourceLocation(props.source.path, props.source.range)
-      : ""
+  const location = () => sourceLocation(props.source)
   const clipboard = createClipboardCopy({
     text: location,
     label: () => t("chat.source_copy_location", {
@@ -476,6 +478,12 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
 export function SourceParts(props: { sources: ConversationSourcePart[] }) {
   let group!: HTMLDivElement
   let trigger!: HTMLElement
+  const locations = () => props.sources.map(sourceLocation).filter(Boolean)
+  const clipboard = createClipboardCopy({
+    text: () => locations().join("\n"),
+    label: () => t("chat.sources_copy_locations", { count: locations().length }),
+    diagnosticID: "source-locations",
+  })
   const key = () => {
     const first = props.sources[0]
     return `sources:${first?.sessionID || ""}:${first?.messageID || ""}:${first?.sourceId || ""}`
@@ -522,22 +530,44 @@ export function SourceParts(props: { sources: ConversationSourcePart[] }) {
                 )}
               </Key>
             </Disclosure.Content>
-            <Button
-              type="button"
-              class="msg-sources__collapse"
-              variant="ghost"
-              size="mini"
-              tone="neutral"
-              onClick={(event) => {
-                pauseAutoScrollForReading(event.currentTarget)
-                setCardExpanded(key(), false)
-                trigger.focus({ preventScroll: true })
-                group.scrollIntoView({ block: "nearest", inline: "nearest" })
-              }}
-            >
-              <Icon name="chevron-up" size="compact" />
-              {t("chat.collapse_sources")}
-            </Button>
+            <div class="msg-sources__actions">
+              <Button
+                type="button"
+                variant="ghost"
+                size="mini"
+                tone="neutral"
+                onClick={(event) => {
+                  pauseAutoScrollForReading(event.currentTarget)
+                  setCardExpanded(key(), false)
+                  trigger.focus({ preventScroll: true })
+                  group.scrollIntoView({ block: "nearest", inline: "nearest" })
+                }}
+              >
+                <Icon name="chevron-up" size="compact" />
+                {t("chat.collapse_sources")}
+              </Button>
+              <Show when={locations().length > 1}>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="mini"
+                  tone="neutral"
+                  aria-disabled={clipboard.pending() || undefined}
+                  aria-busy={clipboard.pending() || undefined}
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    pauseAutoScrollForReading(event.currentTarget)
+                    void clipboard.copy()
+                  }}
+                >
+                  <Icon name={clipboard.copied() ? "check" : "copy"} size="compact" />
+                  {clipboard.label()}
+                </Button>
+              </Show>
+            </div>
+            <Show when={clipboard.failure()}>
+              {(failure) => <Feedback tone="error" title={t("clipboard.copy_failed")} details={failure().details}>{failure().message}</Feedback>}
+            </Show>
           </Show>
         </Disclosure.Root>
       </Show>
