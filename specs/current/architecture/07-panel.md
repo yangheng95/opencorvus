@@ -228,10 +228,19 @@ Composer uploads preserve every supplied nonempty original filename before
 metadata is stored; generated paste names apply only to unnamed inputs. Physical
 staging names remain the AttachmentStore's responsibility.
 
+User-message PDF parts retain their chronological position and show the original
+filename in a compact native disclosure by default. Expanding it loads the same
+PDF reader and original download; its reading viewport scrolls within a bound.
+Collapsing releases that document, and reopening starts its normal document
+lifecycle. Other file-content consumers retain their full-content presentation.
+The shared PDF reader expresses page and zoom limits with guarded aria-disabled
+buttons and removes unavailable actions from the Tab sequence. Reaching a limit
+keeps the current button focused, allowing native Tab navigation to continue.
+
 Nonimage file chips open an existing Dialog for review before submission. Stored
 text MIME types and JSON use the same ResourceTextPreview as File preview
 artifacts; other formats retain FilePart media or original-download presentation.
-FilePart's PDF branches load the same PdfPreview on demand, including canonical
+FilePart's PDF content loads the same PdfPreview on demand, including canonical
 attachments; they do not depend on a host PDF plugin. The composer's constrained
 body scrolls independently of its header and footer, keeping Close visible.
 Image chips keep their existing full-image preview and folders remain references.

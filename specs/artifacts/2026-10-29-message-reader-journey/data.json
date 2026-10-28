@@ -1,0 +1,171 @@
+{
+  "at": "2026-10-28T17:15:46.056Z",
+  "databases": [
+    {
+      "tag": "baseline",
+      "tables": 92,
+      "oldCount": 103456,
+      "exact": 103456,
+      "total": 103456,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "after",
+      "tables": 92,
+      "oldCount": 103456,
+      "exact": 103456,
+      "total": 103456,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "final",
+      "tables": 92,
+      "oldCount": 103456,
+      "exact": 103455,
+      "total": 103482,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "copy",
+      "tables": 92,
+      "oldCount": 103482,
+      "exact": 103482,
+      "total": 103482,
+      "schema": 9,
+      "integrity": "ok"
+    }
+  ],
+  "resources": [
+    {
+      "scope": "baseline",
+      "filename": "opencorvus-case-brief-en-zh.pdf",
+      "bytes": 111015,
+      "exact": true
+    },
+    {
+      "scope": "baseline",
+      "filename": "12-after-chinese-home-hint.jpg",
+      "bytes": 47688,
+      "exact": true
+    },
+    {
+      "scope": "-after",
+      "filename": "opencorvus-case-brief-en-zh.pdf",
+      "bytes": 111015,
+      "exact": true
+    },
+    {
+      "scope": "-after",
+      "filename": "12-after-chinese-home-hint.jpg",
+      "bytes": 47688,
+      "exact": true
+    },
+    {
+      "scope": "-final",
+      "filename": "opencorvus-case-brief-en-zh.pdf",
+      "bytes": 111015,
+      "exact": true
+    },
+    {
+      "scope": "-final",
+      "filename": "12-after-chinese-home-hint.jpg",
+      "bytes": 47688,
+      "exact": true
+    },
+    {
+      "scope": "-copy",
+      "filename": "opencorvus-case-brief-en-zh.pdf",
+      "bytes": 111015,
+      "exact": true
+    },
+    {
+      "scope": "-copy",
+      "filename": "12-after-chinese-home-hint.jpg",
+      "bytes": 47688,
+      "exact": true
+    }
+  ],
+  "download": {
+    "filename": "opencorvus-case-brief-en-zh (4).pdf",
+    "bytes": 111015,
+    "exact": true,
+    "completedAt": "2026-10-28T17:04:37.473Z"
+  },
+  "sourceProjectFilesExact": [
+    "README.md",
+    "mcp.ts",
+    "chat.ts"
+  ],
+  "sourceConfigExact": true,
+  "reviewedSessionUpdate": {
+    "sessionID": "ses_-zUQePN8bzzO0tkLjwWg",
+    "fields": [
+      "time_updated"
+    ],
+    "contract": "Actual archive and restoration updates session time; restored original archive state and all other original fields retained"
+  },
+  "archiveAndRestore": {
+    "requests": [
+      {
+        "at": "2026-10-28T17:01:48.788Z",
+        "requestID": "71b1af81-80fd-4cc8-82a3-216a850b86b8",
+        "method": "PATCH",
+        "path": "/coding/work/session/ses_-zUQePN8bzzO0tkLjwWg/archive",
+        "status": 200,
+        "durationMs": 42
+      },
+      {
+        "at": "2026-10-28T17:02:42.215Z",
+        "requestID": "92a54365-2a99-49fb-a003-7c03e6f12793",
+        "method": "PATCH",
+        "path": "/coding/work/session/ses_-zUQePN8bzzO0tkLjwWg/archive",
+        "status": 200,
+        "durationMs": 27
+      }
+    ],
+    "newRows": [
+      {
+        "table": "bus_publication_delivery",
+        "count": 4
+      },
+      {
+        "table": "bus_publication_delivery_receipt",
+        "count": 4
+      },
+      {
+        "table": "bus_publication_outbox",
+        "count": 2
+      },
+      {
+        "table": "bus_publication_owner",
+        "count": 2
+      },
+      {
+        "table": "bus_publication_phase_receipt",
+        "count": 6
+      },
+      {
+        "table": "engine_control_activation_lease",
+        "count": 4
+      },
+      {
+        "table": "engine_control_activation_lease_grant",
+        "count": 4
+      }
+    ],
+    "outboxOccurrences": [
+      "bus-occurrence:38d0847d-1a23-41bf-a81b-312fc7fe785c",
+      "bus-occurrence:d7b7b3d1-00da-4760-9559-28f01c93730d"
+    ],
+    "phases": [
+      "exact",
+      "wildcard",
+      "global"
+    ],
+    "successfulDeliveries": 4,
+    "releasedLeases": 4
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "at": "2026-10-28T17:21:39.979Z",
+  "checks": [
+    {
+      "label": "message-reader-770-types-final",
+      "startedAt": 1793206268573,
+      "closedAt": 1793206294911,
+      "code": 0,
+      "signal": null,
+      "childPID": 98352
+    },
+    {
+      "label": "message-reader-770-build-publication",
+      "startedAt": 1793207324726,
+      "closedAt": 1793207390725,
+      "code": 0,
+      "signal": null,
+      "childPID": 39656
+    },
+    {
+      "label": "message-reader-770-i18n-final",
+      "startedAt": 1793207196727,
+      "closedAt": 1793207199044,
+      "code": 0,
+      "signal": null,
+      "childPID": 43632
+    },
+    {
+      "label": "message-reader-770-docs",
+      "startedAt": 1793208005666,
+      "closedAt": 1793208016168,
+      "code": 0,
+      "signal": null,
+      "childPID": 86952
+    }
+  ],
+  "actualUI": {
+    "rawScreenshots": 32,
+    "manuallyReviewed": true,
+    "languages": [
+      "en-US",
+      "zh-CN"
+    ],
+    "desktop": "1280x720",
+    "PDF": "Default filename disclosure, native Space/Enter, pages1/2 and2/2, zoom50% and250%, boundary focus/Tab, original download, composer full-content regression",
+    "conversation": "Original message search, actual archive and restoration of the same isolated Work session"
+  },
+  "actualProvider": {
+    "requests": 0,
+    "cumulativeRequests": 767
+  },
+  "qualification": "UI changes use actual interaction and raw screenshot review. Auxiliary checks are not visual acceptance; final publication snapshots28–32 include latest archive copy and unreleased notes. Later version projections belong to the independently authorized release task."
+}

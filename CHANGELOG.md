@@ -4,6 +4,26 @@
 
 ## 未发布
 
+### zh-CN
+
+#### 调整
+
+- 历史用户消息中的 PDF 默认以原文件名折叠显示，按需展开共享阅读器及原件下载，便于同时阅读正文与回复。
+
+#### 修复
+
+- PDF 翻页或缩放达到边界后保持键盘焦点，Tab 可继续导航；归档页说明与空状态统一使用“对话”，覆盖 Chat 和 Work。
+
+### en-US
+
+#### Changed
+
+- Show PDFs in user messages as compact filename disclosures. Expand the shared reader and original download on demand while keeping the conversation readable.
+
+#### Fixed
+
+- Retain keyboard focus at PDF page and zoom limits, allowing Tab navigation to continue. Archive descriptions and empty states consistently refer to conversations, covering both Chat and Work.
+
 ## 0.1.35 - 2026-10-29
 
 ### zh-CN

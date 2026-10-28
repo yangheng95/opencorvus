@@ -249,6 +249,7 @@ export function ChatBubble(props: { node: CardNode; depth: number; collapsible?:
   const renderBodyParts = () => (
     <CardParts
       parts={userPartPartition().body}
+      filePresentation={isUser() ? "thumbnail" : "content"}
       collapsedContextMessageIDs={props.node.collapsedContextMessageIDs}
       depth={props.depth}
       streaming={props.node.status === "running"}

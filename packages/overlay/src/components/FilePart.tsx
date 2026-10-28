@@ -1,5 +1,5 @@
 import { SCREENSHOT_BROWSER_THUMBNAIL_VARIANT } from "@opencorvus-ai/transport-protocol"
-import { createResource, Show, Switch, Match, lazy, Suspense } from "solid-js"
+import { createResource, createSignal, Show, Switch, Match, lazy, Suspense } from "solid-js"
 import {
   captureApiAuthority,
   fetchResourceAsObjectUrl,
@@ -9,6 +9,7 @@ import {
 import { t } from "../utils/i18n"
 import { PreviewableImage } from "./ImagePreview"
 import { attachmentImagePreviewUrl } from "../utils/attachment-resource"
+import { Disclosure } from "./ui/Disclosure"
 
 const LazyPdfPreview = lazy(async () => ({ default: (await import("./PdfPreview")).PdfPreview }))
 
@@ -54,7 +55,7 @@ export type MessageFilePart = {
   alt?: string
 }
 
-type FilePartPresentation = "content" | "thumbnail" | "composer-thumbnail"
+export type FilePartPresentation = "content" | "thumbnail" | "composer-thumbnail"
 
 function mimeOf(part: MessageFilePart): string {
   return (part.mime || part.mediaType || "").toLowerCase()
@@ -139,15 +140,37 @@ export function FilePart(props: { part: MessageFilePart; presentation?: FilePart
         </div>
       </Match>
 
-      <Match when={kind() === "pdf" && url() && authed()}>
-        <AuthedPdf url={url()} name={name()} />
-      </Match>
       <Match when={kind() === "pdf" && url()}>
-        <div class="msg-pdf-wrap">
-          <PdfContent url={url()} name={name()} />
-        </div>
+        <PdfAttachment url={url()} name={name()} authed={authed()} compact={props.presentation === "thumbnail"} />
       </Match>
     </Switch>
+  )
+}
+
+function PdfAttachment(props: { url: string; name: string; authed: boolean; compact: boolean }) {
+  const [expanded, setExpanded] = createSignal(false)
+  const content = () => (
+    <Show when={props.authed} fallback={<div class="msg-pdf-wrap"><PdfContent url={props.url} name={props.name} /></div>}>
+      <AuthedPdf url={props.url} name={props.name} />
+    </Show>
+  )
+
+  return (
+    <Show when={props.compact} fallback={content()}>
+      <Disclosure.Root class="msg-pdf-attachment" variant="surface" open={expanded()} onOpenChange={setExpanded}>
+        <Disclosure.Trigger
+          indicatorPosition="end"
+          title={props.name}
+          aria-label={t("chat.attachment.preview", { name: props.name })}
+        >
+          <span class="msg-pdf-attachment__type">PDF</span>
+          <span class="msg-pdf-attachment__name">{props.name}</span>
+        </Disclosure.Trigger>
+        <Disclosure.Content>
+          <Show when={expanded()}>{content()}</Show>
+        </Disclosure.Content>
+      </Disclosure.Root>
+    </Show>
   )
 }
 

@@ -4,7 +4,7 @@ import type { CardNode } from "../store/card-tree"
 import { TextPart } from "./TextPart"
 import { InteractionCard } from "./InteractionCard"
 import { PermissionRequestContent } from "./PermissionRequestContent"
-import { FilePart } from "./FilePart"
+import { FilePart, type FilePartPresentation } from "./FilePart"
 import { describeToolPart, shortRelativePath, type ToolDisplayModel } from "../utils/tool"
 import { boardStore, selectedTaskDirectory } from "../store/board"
 import { toolToCardNode } from "../utils/tool-card-node"
@@ -80,6 +80,7 @@ function RenderableCardPart(props: {
   depth: number
   streaming?: boolean
   streamingTextPart?: any
+  filePresentation?: FilePartPresentation
   renderNestedCard: (node: CardNode, depth: number) => JSX.Element
 }) {
   const part = () => props.part
@@ -107,7 +108,7 @@ function RenderableCardPart(props: {
         </div>
       </Match>
       <Match when={part()?.type === "file"}>
-        <FilePart part={part()} />
+        <FilePart part={part()} presentation={props.filePresentation} />
       </Match>
       <Match when={part()?.type === "interactive-artifact"}>
         <InteractiveArtifactPart part={part()} />
@@ -152,6 +153,7 @@ interface PartCollectionProps {
   streaming?: boolean
   streamingTextPart?: any
   collapseWorkDetails?: boolean
+  filePresentation?: FilePartPresentation
   renderNestedCard: (node: CardNode, depth: number) => JSX.Element
   turnArtifacts?: NonNullable<CardNode["turnArtifacts"]>
 }
@@ -187,6 +189,7 @@ function CitationAwareBodyParts(props: PartCollectionProps) {
                   depth={props.depth}
                   streaming={props.streaming}
                   streamingTextPart={props.streamingTextPart}
+                  filePresentation={props.filePresentation}
                   renderNestedCard={props.renderNestedCard}
                 />
               )}
@@ -319,6 +322,7 @@ function ExecutionEventRun(props: PartCollectionProps) {
                         part={part()}
                         depth={props.depth}
                         streaming={props.streaming}
+                        filePresentation={props.filePresentation}
                         renderNestedCard={props.renderNestedCard}
                       />
                     }

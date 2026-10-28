@@ -955,6 +955,35 @@
   max-width: 100%;
 }
 
+.msg-pdf-attachment.oc-disclosure {
+  margin-block: var(--ui-gap-xs);
+  border: var(--oc-border-width) solid var(--border);
+  background: var(--surface-inset);
+}
+
+.msg-pdf-attachment > .oc-disclosure__trigger {
+  padding: var(--ui-gap-sm) var(--ui-gap-md);
+}
+
+.msg-pdf-attachment__type {
+  flex: 0 0 auto;
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+}
+
+.msg-pdf-attachment__name {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-strong);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.msg-pdf-attachment .msg-artifact-pdf {
+  max-height: min(50vh, calc(620px * var(--ui-scale)));
+  overscroll-behavior: contain;
+}
+
 .msg-file-chip__name {
   font-family: var(--mono);
   color: var(--text);

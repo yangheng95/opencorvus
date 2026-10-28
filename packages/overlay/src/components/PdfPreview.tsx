@@ -27,6 +27,10 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
   const [navigationError, setNavigationError] = createSignal<unknown>()
   const [currentDocument, setCurrentDocument] = createSignal<pdfjs.PDFDocumentProxy>()
   const [navigationRender, setNavigationRender] = createSignal(0)
+  const canPreviousPage = () => page() > 1
+  const canNextPage = () => pageCount() > 0 && page() < pageCount()
+  const canZoomOut = () => zoom() > PDF_MIN_ZOOM
+  const canZoomIn = () => zoom() < PDF_MAX_ZOOM
   let sourceGeneration = 0
   let navigationSequence = 0
   let pendingNavigation: {
@@ -354,8 +358,11 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
                 variant="ghost"
                 size="sm"
                 tone="neutral"
-                disabled={page() <= 1}
-                onClick={() => changePage(Math.max(1, page() - 1))}
+                aria-disabled={!canPreviousPage() || undefined}
+                tabIndex={canPreviousPage() ? undefined : -1}
+                onClick={() => {
+                  if (canPreviousPage()) changePage(Math.max(1, page() - 1))
+                }}
               >
                 {t("artifact.file.previous")}
               </Button>
@@ -366,8 +373,11 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
                 variant="ghost"
                 size="sm"
                 tone="neutral"
-                disabled={!pageCount() || page() >= pageCount()}
-                onClick={() => changePage(Math.min(pageCount(), page() + 1))}
+                aria-disabled={!canNextPage() || undefined}
+                tabIndex={canNextPage() ? undefined : -1}
+                onClick={() => {
+                  if (canNextPage()) changePage(Math.min(pageCount(), page() + 1))
+                }}
               >
                 {t("artifact.file.next")}
               </Button>
@@ -377,8 +387,11 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
                 variant="ghost"
                 size="sm"
                 tone="neutral"
-                disabled={zoom() <= PDF_MIN_ZOOM}
-                onClick={() => changeZoom(Math.max(PDF_MIN_ZOOM, zoom() - 0.25))}
+                aria-disabled={!canZoomOut() || undefined}
+                tabIndex={canZoomOut() ? undefined : -1}
+                onClick={() => {
+                  if (canZoomOut()) changeZoom(Math.max(PDF_MIN_ZOOM, zoom() - 0.25))
+                }}
               >
                 {t("artifact.file.zoom_out")}
               </Button>
@@ -390,8 +403,11 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
                 variant="ghost"
                 size="sm"
                 tone="neutral"
-                disabled={zoom() >= PDF_MAX_ZOOM}
-                onClick={() => changeZoom(Math.min(PDF_MAX_ZOOM, zoom() + 0.25))}
+                aria-disabled={!canZoomIn() || undefined}
+                tabIndex={canZoomIn() ? undefined : -1}
+                onClick={() => {
+                  if (canZoomIn()) changeZoom(Math.min(PDF_MAX_ZOOM, zoom() + 0.25))
+                }}
               >
                 {t("artifact.file.zoom_in")}
               </Button>
