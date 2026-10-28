@@ -1,7 +1,7 @@
 import { afterAll, describe, expect, spyOn, test } from "bun:test"
 import { writeExpertSquadPackage, type ExpertSquadPackageDefinition } from "@opencorvus-ai/sdk/expert-squad-authoring"
-import { EngineArtifactEnvelopeSchema, EvolutionArtifactSchemas, createEvolutionArtifactReferences, EvolutionArtifactReferenceError, EvolutionTrialSlotConflictError } from "@opencorvus-ai/plugin"
-import { rm, writeFile } from "node:fs/promises"
+import { EngineArtifactEnvelopeSchema, EvolutionArtifactSchemas, EvolutionHistoryListResponseSchema, EvolutionCampaignDetailResponseSchema, createEvolutionArtifactReferences, EvolutionArtifactReferenceError, EvolutionTrialSlotConflictError } from "@opencorvus-ai/plugin"
+import { lstat, rm, writeFile } from "node:fs/promises"
 import { registerBaselineSpec } from "../src/metrics/store"
 import { createMetricEvaluationHost } from "../src/tool/metric-evaluation-host"
 import { deriveEvolutionNativeMeasurements, type MetricRecordedSnapshot } from "@opencorvus-ai/plugin"
@@ -40,6 +40,7 @@ import { requireTask } from "../src/engine/store"
 import { resolveCrossTaskArtifactSources, prepareCrossTaskArtifactSourceImports, persistPreparedCrossTaskArtifactImports, listCrossTaskArtifactImportMappings } from "../src/engine/cross-task-artifact-import"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
+import { Server } from "../src/server/server"
 import { Session } from "../src/session"
 import { MessageStore } from "../src/session/message-store"
 import { EngineService } from "../src/task-api"
@@ -190,7 +191,8 @@ afterAll(async () => {
 })
 
 describe("authorized expert squad evolution mutation", () => {
-  test.each(["recovery", "review-freshness", "review-recovery", "alias-review", "imported-evidence"] as const)("authorized exact installation: %s", async (scenario) => {
+  test.each(["recovery", "review-freshness", "review-recovery", "alias-review", "imported-evidence", "imported-candidate-alias"] as const)("authorized exact installation: %s", async (scenario) => {
+    const importedEvidence = scenario === "imported-evidence" || scenario === "imported-candidate-alias"
     const sourceRoot = await Global.createTemporaryDirectory("expert-squad-evolution-mutation-")
     await using project = await memoryProject()
     await using foreignProject = await memoryProject()
@@ -234,7 +236,7 @@ describe("authorized expert squad evolution mutation", () => {
             },
           })
           const missionID = "imported-evolution-mutation"
-          const mission = scenario === "imported-evidence" ? {
+          const mission = importedEvidence ? {
             id: missionID,
             sessionID: (await Session.create({ kind: "mission", title: "Imported Evolution mutation",
               metadata: { mission: { id: missionID, channelKey: `mission:${missionID}`, cwd: project.path,
@@ -604,7 +606,7 @@ describe("authorized expert squad evolution mutation", () => {
             payload: comparisonPayload,
             sources: comparisonSources,
           })
-          if (scenario === "imported-evidence") {
+          if (importedEvidence) {
             await terminalTask(requireTask(operationTask.taskID), {
               status: "failed", error: "Deterministic fixture retains its published comparison for another Task",
             }, "Preserve the original measured evidence", { preExecutionInfrastructureFailure: true, terminalAt: Date.now() })
@@ -630,11 +632,24 @@ describe("authorized expert squad evolution mutation", () => {
             }
             const incomplete = await importEvidence([campaign, candidateArtifact, comparison], "Incomplete imported comparison")
             const complete = await importEvidence([...comparisonSources, comparison], "Complete imported comparison")
-            const importedIntent = {
+            const importedInputs = {
+              campaign: campaignPayload, campaignLocator: complete.mapped(campaign),
+              candidate: candidatePayload, candidateLocator: complete.mapped(candidateArtifact),
+              runs: [...baselineRuns, ...candidateRuns, runAlias].map((item) => ({ ...item, locator: complete.mapped(item.locator) })),
+              evaluations: [...baselineEvaluations, ...candidateEvaluations, evaluationAlias].map((item) => ({ ...item, locator: complete.mapped(item.locator) })),
+              reviews: [...baselineReviews, ...candidateReviews, revisionReview].map((item) => ({ ...item, locator: complete.mapped(item.locator) })),
+            }
+            let importedIntent = {
               operation: "promotion" as const,
               campaignSpecLocator: complete.mapped(campaign), candidateRevisionLocator: complete.mapped(candidateArtifact),
               comparisonResultLocator: complete.mapped(comparison), expectedCurrentPackageDigest: baselineRevision.package_digest,
             }
+            const importedComparisonInRecord = (record: ReturnType<typeof EvolutionHistoryListResponseSchema.parse>["records"][number]) =>
+              record.candidates
+                .find((item) => item.artifact.locator.artifact_id === importedIntent.candidateRevisionLocator.artifact_id)!.comparisons
+                .find((item) => item.artifact.locator.artifact_id === importedIntent.comparisonResultLocator.artifact_id)!
+            const importedComparisonInHistory = (history: ReturnType<typeof EvolutionHistoryListResponseSchema.parse>) =>
+              importedComparisonInRecord(history.records.find((item) => item.campaign.artifact.task_id === complete.taskID)!)
             const confirm = (intent: typeof importedIntent) => evolutionMutationConfirmationText({
               projectID: Instance.project.id, target, beforeDigest: baselineRevision.package_digest,
               afterDigest: candidateRevision.package_digest, operation: "promotion",
@@ -649,14 +664,63 @@ describe("authorized expert squad evolution mutation", () => {
             catch (error) { missingError = error }
             expect(missingError).toBeInstanceOf(EvolutionArtifactReferenceError)
             expect(missingError).toMatchObject({ code: "missing_source" })
+            let consumedAlias: typeof campaign | undefined
+            if (scenario === "imported-candidate-alias") {
+              await terminalTask(requireTask(incomplete.taskID), {
+                status: "failed", error: "Retain a second authorized predecessor path",
+              }, "Preserve the transported Candidate", { preExecutionInfrastructureFailure: true, terminalAt: Date.now() })
+              const importer = { missionID: mission!.id, sessionID: mission!.sessionID,
+                messageID: Identifier.ascending("message"), toolCallID: "call-second-candidate-path" }
+              const resolved = resolveCrossTaskArtifactSources({ projectID: Instance.project.id, importer,
+                sources: [{ authority: "terminal_lifecycle", source_task_id: incomplete.taskID,
+                  locator: incomplete.mapped(candidateArtifact) }] })
+              const prepared = await prepareCrossTaskArtifactSourceImports({ resolved, projectID: Instance.project.id,
+                targetProjectDirectory: project.path, targetTaskID: complete.taskID, importer })
+              Database.transaction((db) => persistPreparedCrossTaskArtifactImports(db, {
+                targetTaskID: complete.taskID, prepared: prepared.imports, authorities: prepared.authorities, timeCreated: Date.now(),
+              }))
+              consumedAlias = exactEngineArtifactLocator({ taskID: complete.taskID, artifactID: prepared.imports[0]!.importedArtifactID })
+              const sources = [...comparisonSources.map(complete.mapped), consumedAlias]
+              const references = createEvolutionArtifactReferences(sources.map((locator) => ({ locator,
+                envelope: EngineArtifactEnvelopeSchema.parse(requireEngineArtifactByLocator({ taskID: complete.taskID, locator }).payload) })))
+              const payload = deriveComparisonRecommendation({ ...importedInputs, candidateLocator: consumedAlias, references })
+              const comparisonAlias = recordEvolutionArtifact({ taskID: complete.taskID,
+                type: "evolution-lab/comparison-recommendation", payload, sources })
+              importedIntent = { ...importedIntent, comparisonResultLocator: comparisonAlias }
+              expect(payload.calculation_inputs?.candidate).toEqual(consumedAlias)
+              const query = new URLSearchParams({ namespace: target.namespace, id: target.id,
+                installationScope: "project", directory: project.path })
+              const response = await Server.App().request(`/expert-squad/evolution-history?${query}`)
+              const body = await response.json()
+              expect({ status: response.status, error: response.status === 200 ? null : body }).toEqual({ status: 200, error: null })
+              const history = EvolutionHistoryListResponseSchema.parse(body)
+              expect(importedComparisonInHistory(history).promotion_intent?.request).toEqual(importedIntent)
+            }
             const before = await readEvolutionHistory({ namespace: target.namespace, id: target.id, installationScope: "project" })
-            const record = before.records.find((item) => item.campaign.artifact.task_id === complete.taskID)!
-            expect(record.candidates[0]!.comparisons[0]!.promotion_intent?.request).toEqual(importedIntent)
+            expect(importedComparisonInHistory(before).promotion_intent?.request).toEqual(importedIntent)
             const detailInput = { namespace: target.namespace, id: target.id, installationScope: "project",
               campaignTaskID: complete.taskID, campaignLocator: importedIntent.campaignSpecLocator,
               candidateLocator: importedIntent.candidateRevisionLocator, comparisonLocator: importedIntent.comparisonResultLocator,
               catalogRevisionUpper: before.catalog_revision_upper }
             const detail = await readEvolutionCampaignDetail(detailInput)
+            if (consumedAlias) {
+              const readDetail = async () => {
+                const response = await Server.App().request(`/expert-squad/evolution-history/detail?${new URLSearchParams({ directory: project.path })}`, {
+                  method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(detailInput),
+                })
+                expect(response.status).toBe(200)
+                const result = EvolutionCampaignDetailResponseSchema.parse(await response.json())
+                expect({ candidate: result.selected_candidate_locator, comparison: result.selected_comparison_locator }).toEqual({
+                  candidate: importedIntent.candidateRevisionLocator, comparison: importedIntent.comparisonResultLocator,
+                })
+              }
+              await readDetail()
+              const frozen = requireEngineArtifactByLocator({ taskID: complete.taskID, locator: consumedAlias })
+              updateEngineArtifact({ id: consumedAlias.artifact_id, payload: frozen.payload })
+              await readDetail()
+              expect(importedComparisonInHistory(await readEvolutionHistory({ namespace: target.namespace,
+                id: target.id, installationScope: "project" })).promotion_intent?.request).toEqual(importedIntent)
+            }
             expect(detail.slots.find((slot) => slot.arm === "candidate" && slot.repetition === 0)!.review_history.map((item) => ({
               locator: item.artifact.locator, disposition: item.disposition,
             }))).toEqual(expect.arrayContaining([
@@ -672,10 +736,10 @@ describe("authorized expert squad evolution mutation", () => {
             const importedChange = await executeEvolutionPackageMutation({ ...importedIntent, authorization: authorization.authorization }).catch((error) => error)
             expect(importedChange).toBeInstanceOf(EvolutionComparisonReviewChangedError)
             const after = await readEvolutionHistory({ namespace: target.namespace, id: target.id, installationScope: "project" })
-            const stale = after.records.find((item) => item.campaign.artifact.task_id === complete.taskID)!.candidates[0]!.comparisons[0]!
+            const stale = importedComparisonInHistory(after)
             expect({ recommendation: stale.recommendation, intent: stale.promotion_intent, issues: stale.graph_issues.map((issue) => issue.code) })
               .toEqual({ recommendation: "promote", intent: null, issues: ["REVIEW_SNAPSHOT_CHANGED"] })
-            expect((await readEvolutionCampaignDetail(detailInput)).record.candidates[0]!.comparisons[0]!.promotion_intent?.request)
+            expect(importedComparisonInRecord((await readEvolutionCampaignDetail(detailInput)).record).promotion_intent?.request)
               .toEqual(importedIntent)
             const correctedValue = { ...revisionPayload, evaluation_result_locator: complete.mapped(candidateEvaluation.locator),
               revision: { supersedes: [complete.mapped(revisionReview.locator), late], reason: "Corrected the same original imported evidence." } }
@@ -685,12 +749,8 @@ describe("authorized expert squad evolution mutation", () => {
             const referenceEvidence = localSources.map((locator) => ({ locator,
               envelope: EngineArtifactEnvelopeSchema.parse(requireEngineArtifactByLocator({ taskID: complete.taskID, locator }).payload) }))
             const value = deriveComparisonRecommendation({
-              campaign: campaignPayload, campaignLocator: importedIntent.campaignSpecLocator,
-              candidate: candidatePayload, candidateLocator: importedIntent.candidateRevisionLocator,
-              runs: [...baselineRuns, ...candidateRuns, runAlias].map((item) => ({ locator: complete.mapped(item.locator), value: item.value })),
-              evaluations: [...baselineEvaluations, ...candidateEvaluations, evaluationAlias].map((item) => ({ locator: complete.mapped(item.locator), value: item.value })),
-              reviews: [...baselineReviews, ...candidateReviews, revisionReview].map((item) => ({ locator: complete.mapped(item.locator), value: item.value }))
-                .concat([{ locator: late, value: lateValue }, { locator: corrected, value: correctedValue }]),
+              ...importedInputs,
+              reviews: [...importedInputs.reviews, { locator: late, value: lateValue }, { locator: corrected, value: correctedValue }],
               references: createEvolutionArtifactReferences(referenceEvidence),
             })
             expect(value.recommendation).toBe("promote")
@@ -1785,6 +1845,11 @@ describe("authorized expert squad evolution mutation", () => {
         },
       })
     } finally {
+      const resolved = path.resolve(sourceRoot)
+      if (path.dirname(resolved) !== path.resolve(Global.Path.temporary) || !path.basename(resolved).startsWith("expert-squad-evolution-mutation-")) {
+        throw new Error(`Unsafe evolution fixture cleanup: ${resolved}`)
+      }
+      if ((await lstat(resolved)).isSymbolicLink()) throw new Error(`Linked evolution fixture: ${resolved}`)
       await rm(sourceRoot, { recursive: true, force: true })
     }
   })

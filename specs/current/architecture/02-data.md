@@ -624,6 +624,10 @@ publisher在一次冻结Task catalog分页内，经`evolutionComparisonMembers`�
 Comparison的`calculation_inputs`由唯一比较器盖章exact Campaign/Candidate及实际消费的全部
 Run/Evaluation/Review身份（含等值别名与已取代Review）；它与保留的同Turn宽来源图不同。
 共享reader校验原直接来源和原件类型，重放、history与晋升使用同一当前Task引用索引。
+History新鲜性解析保留同一Task在原Project及Catalog上界内的完整冻结Artifact上下文，包含全部合法导入别名与历史revision，
+不能从显示的Campaign/Candidate重建精简引用图；差异仍只对照该冻结边界内最新的Run/Evaluation/Review目录。
+实时晋升准入与提交新鲜性校验共用同一当前Task上下文reader，包含当前目录、调用者确切历史版本及原生Comparison直接来源；
+不从其他Task补读源库，也不以三个显示定位符代替完整已授权别名闭包。
 历史缺字段表示没有记录计算输入，保留原结果并公开COMPARISON_INPUTS_UNAVAILABLE、
 promotion_intent=null，不能从宽来源猜值或改写历史。新比较的授权Campaign/Candidate必须匹配
 实际计算身份；额外背景来源不扩大权限。Review新鲜性对照实际已消费Review，而非宽来源成员。

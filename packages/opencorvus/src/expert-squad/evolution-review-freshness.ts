@@ -15,8 +15,8 @@ import {
 } from "@opencorvus-ai/plugin"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { requireEngineArtifactByLocator } from "@/engine/engine-artifact-version-facts"
-import { EngineArtifactTable } from "@/engine/engine.sql"
-import { Database, and, eq, inArray } from "@/storage/db"
+import { Database } from "@/storage/db"
+import { readCurrentEvolutionArtifactContext } from "./evolution-artifact-context"
 
 type Envelope = z.infer<typeof EngineArtifactEnvelopeSchema>
 type EvidenceArtifact = { locator: EngineArtifactLocator; envelope: Envelope }
@@ -130,34 +130,9 @@ export function requireCurrentEvolutionEvidence(input: { taskID: string; compari
     const read = (locator: EngineArtifactLocator) =>
       EngineArtifactEnvelopeSchema.parse(requireEngineArtifactByLocator({ db, taskID: input.taskID, locator }).payload)
     const comparison = read(input.comparisonLocator)
-    const nativeSources = (comparison.producer.owner_kind === "mission" ? [] : comparison.source_artifact_locators).flatMap((locator) =>
-      locator.source === "engine_artifact" ? [{ locator, envelope: read(locator) }] : [],
-    )
-    const catalog = db
-      .select({
-        artifactID: EngineArtifactTable.id,
-        catalogRevision: EngineArtifactTable.catalog_revision,
-        sha256: EngineArtifactTable.payload_sha256,
-      })
-      .from(EngineArtifactTable)
-      .where(
-        and(
-          eq(EngineArtifactTable.task_id, input.taskID),
-          eq(EngineArtifactTable.kind, "expert_output"),
-          inArray(EngineArtifactTable.catalog_artifact_type, Object.keys(EvolutionArtifactSchemas)),
-        ),
-      )
-      .all()
-      .map((row) => {
-        const locator: EngineArtifactLocator = {
-          source: "engine_artifact",
-          artifact_id: row.artifactID,
-          catalog_revision: row.catalogRevision,
-          expected_sha256: row.sha256,
-        }
-        return { locator, envelope: read(locator) }
-      })
-    const references = createEvolutionArtifactReferences([...catalog, ...nativeSources])
+    const { catalog, references } = readCurrentEvolutionArtifactContext(db, {
+      taskID: input.taskID, exactArtifacts: [{ locator: input.comparisonLocator, envelope: comparison }],
+    })
     const consumed = resolveEvolutionComparisonInputs(comparison, references)
     requireEvolutionTrialSlotIdentity({
       runs: consumed.runs.map(({ locator, artifact }) => ({ locator,

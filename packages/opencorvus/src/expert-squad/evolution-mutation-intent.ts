@@ -1,7 +1,6 @@
 import z from "zod"
 import {
   canonicalEvolutionJSON,
-  createEvolutionArtifactReferences,
   evolutionArtifactProvenance,
   evolutionComparisonInputs,
   EngineArtifactEnvelopeSchema,
@@ -14,6 +13,8 @@ import {
 } from "@opencorvus-ai/plugin"
 import { requireEngineArtifactByLocator } from "@/engine/engine-artifact-version-facts"
 import { Instance } from "@/project/instance"
+import { Database } from "@/storage/db"
+import { readCurrentEvolutionArtifactContext } from "./evolution-artifact-context"
 import { FEEDBACK_REVISION_COMPONENT_ID } from "./feedback-revision"
 
 export const EVOLUTION_LAB_EXPERT_SQUAD_ID = "evolution-lab"
@@ -140,11 +141,11 @@ export function prepareEvolutionPackageMutation(input: {
       locator: intent.comparisonResultLocator,
       artifactType: "evolution-lab/comparison-recommendation",
     })
-    const references = createEvolutionArtifactReferences([
+    const { references } = Database.use((db) => readCurrentEvolutionArtifactContext(db, { taskID: input.taskID, exactArtifacts: [
       { locator: intent.campaignSpecLocator, envelope: campaignArtifact.envelope },
       { locator: intent.candidateRevisionLocator, envelope: candidateArtifact.envelope },
       { locator: intent.comparisonResultLocator, envelope: comparisonArtifact.envelope },
-    ])
+    ] }))
     const consumed = evolutionComparisonInputs(comparisonArtifact.envelope)
     if (!references.same(consumed.campaign, intent.campaignSpecLocator) ||
         !references.same(consumed.candidate, intent.candidateRevisionLocator))

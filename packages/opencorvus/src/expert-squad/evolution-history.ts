@@ -564,7 +564,8 @@ function buildComparison(input: {
   }
   const snapshot = {
     comparison: input.graph.comparison.envelope,
-    measurements: [...input.graph.evaluations, ...input.graph.runs, ...input.graph.reviews, input.campaign, input.candidate],
+    // Displayed aliases need not be the exact aliases consumed by this Comparison.
+    measurements: input.read.artifacts.filter((artifact) => artifact.catalog.taskID === input.graph.comparison.catalog.taskID),
     catalog: [...catalogEvidence.values()],
   }
   const resolvable = graphIssues.length === 0

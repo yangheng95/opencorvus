@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Issue 51、40 与 58–60 跟进](2026-10-28-issue-followup-51-58-60.md)：真实合同复现、共享机制审计及带证据关闭。
+
 - [2026-10-28-default-goal-journey.md](2026-10-28-default-goal-journey.md)：默认页持续目标入口、双语提示、预算/指南草稿与既有目标详情体验。
 
 - [中文Work查找与键盘阅读](2026-10-28-conversation-search-interaction.md)：查找关闭、焦点/查询保留与共享归档文案。
