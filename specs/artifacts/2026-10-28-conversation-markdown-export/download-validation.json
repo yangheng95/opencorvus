@@ -1,0 +1,62 @@
+{
+  "at": "2026-10-28T05:08:32.448Z",
+  "baseline": {
+    "at": "2026-10-28T04:41:34.555Z",
+    "path": "C:\\Users\\hengu\\Downloads\\对话导出体验759 - ses_-zUQgm405zzb2xZnkVrc.json",
+    "bytes": 57622,
+    "sessionID": "ses_-zUQgm405zzb2xZnkVrc",
+    "messages": 8,
+    "parts": 23,
+    "actualCanonicalValuesEqual": true
+  },
+  "after": [
+    {
+      "sessionID": "ses_-zUQgm405zzb2xZnkVrc",
+      "messages": 8,
+      "originalSessionAndMessagesExact": true,
+      "textPartsVisible": 5,
+      "authors": [
+        "user",
+        "chat"
+      ],
+      "sourceParts": 2,
+      "toolParts": 4,
+      "stoppedMessages": 1,
+      "locale": "en-US",
+      "at": "2026-10-28T04:57:31.500Z",
+      "name": "chat-markdown",
+      "path": "C:\\Users\\hengu\\Downloads\\对话导出体验759 - ses_-zUQgm405zzb2xZnkVrc.md",
+      "bytes": 58445
+    },
+    {
+      "sessionID": "ses_-zUQgm405zzb2xZnkVrc",
+      "messages": 8,
+      "originalSnapshotExact": true,
+      "at": "2026-10-28T04:59:23.350Z",
+      "name": "chat-json",
+      "path": "C:\\Users\\hengu\\Downloads\\对话导出体验759 - ses_-zUQgm405zzb2xZnkVrc (1).json",
+      "bytes": 57622
+    },
+    {
+      "sessionID": "ses_-zUQhR9QqzzzMZkMj093",
+      "messages": 8,
+      "originalSessionAndMessagesExact": true,
+      "textPartsVisible": 7,
+      "authors": [
+        "goal-controller",
+        "work"
+      ],
+      "sourceParts": 0,
+      "toolParts": 2,
+      "stoppedMessages": 0,
+      "locale": "zh-CN",
+      "at": "2026-10-28T05:02:25.789Z",
+      "name": "work-markdown",
+      "path": "C:\\Users\\hengu\\Downloads\\本地文档交接说明：三个自动轮次 - ses_-zUQhR9QqzzzMZkMj093.md",
+      "bytes": 41247
+    }
+  ],
+  "qualification": "Real menu downloads obtained through the browser download event/path; independent Markdown lexer recovered all original Session/message records, and non-metadata text retained each original text Part",
+  "emptyConversation": "Positive formatter contract only; a current real empty Work session was not available",
+  "preview": "Six original screenshots manually reviewed; English Chat and Chinese Work actual downloaded files visually reviewed through standard Marked reading previews, separately from the product UI; not application file viewer acceptance"
+}

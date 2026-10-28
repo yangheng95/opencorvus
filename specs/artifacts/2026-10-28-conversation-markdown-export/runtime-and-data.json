@@ -1,0 +1,207 @@
+{
+  "at": "2026-10-28T05:08:32.445Z",
+  "scopes": [
+    {
+      "tag": "before",
+      "ui": "main-E2LfApsH.js",
+      "retirement": {
+        "at": "2026-10-28T04:42:45.240Z",
+        "credentialCopyCreated": false,
+        "modelCatalogCopyRetired": true,
+        "requests": 0,
+        "cumulativeRequests": 759,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "reserveMs": 2126365,
+        "publicShutdown": 200,
+        "physical": {
+          "chain": [
+            {
+              "identity": {
+                "pid": 13560,
+                "processInstanceID": "win32:639287590240938403",
+                "occurrenceID": "3f6ee071-4937-4a30-b6f0-a246139c8702"
+              },
+              "state": "dead_or_reused"
+            },
+            {
+              "identity": {
+                "pid": 81284,
+                "processInstanceID": "win32:639287590252494216",
+                "occurrenceID": "9de1769a-aecf-4c02-a2ef-2b14fa0b2ec2"
+              },
+              "state": "dead_or_reused"
+            }
+          ],
+          "native": {
+            "occurrence": "conversation-md-759-3006063a-f804-4a71-99bc-86a344c9292d",
+            "outcome": "settled",
+            "host": {
+              "pid": 13560,
+              "processInstanceID": "win32:639287590240938403",
+              "occurrenceID": "3f6ee071-4937-4a30-b6f0-a246139c8702"
+            },
+            "target": {
+              "pid": 81284,
+              "processInstanceID": "win32:639287590252494216",
+              "occurrenceID": "9de1769a-aecf-4c02-a2ef-2b14fa0b2ec2"
+            },
+            "observedAtUtc": "2026-10-28T04:41:37.002Z",
+            "deadlineAt": 1793164623367,
+            "terminal": {
+              "occurrenceID": "conversation-md-759-3006063a-f804-4a71-99bc-86a344c9292d",
+              "pid": 81284,
+              "reason": "exited",
+              "exitCode": 0,
+              "signal": null
+            },
+            "physicalCompletion": true,
+            "outputDrainComplete": true,
+            "requestCleanupComplete": true,
+            "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+          },
+          "launcher": {
+            "observedAtUtc": "2026-10-28T04:41:37.0398487Z",
+            "originalChildExit": 0
+          },
+          "observedAtUtc": "2026-10-28T04:42:45.0705519Z"
+        }
+      },
+      "shutdownPlan": {
+        "registeredAt": 1793162229905,
+        "dueAt": 1793162589905,
+        "physicalDeadlineAt": 1793164623367,
+        "occurrence": "conversation-md-759-3006063a-f804-4a71-99bc-86a344c9292d",
+        "owner": {
+          "pid": 81284,
+          "processInstanceID": "win32:639287590252494216",
+          "occurrenceID": "6b3f1e12-e16a-4c13-b123-e805f0be15b4"
+        }
+      },
+      "commandHandles": 75,
+      "originalTerminalOutputSettlement": "fulfilled"
+    },
+    {
+      "tag": "after",
+      "ui": "main-CZ--UKQz.js",
+      "retirement": {
+        "at": "2026-10-28T05:02:42.929Z",
+        "credentialCopyCreated": false,
+        "modelCatalogCopyRetired": true,
+        "requests": 0,
+        "cumulativeRequests": 759,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "reserveMs": 863052,
+        "publicShutdown": 200,
+        "physical": {
+          "observedAtUtc": "2026-10-28T05:02:42.5300881Z",
+          "launcher": {
+            "observedAtUtc": "2026-10-28T05:02:40.3794846Z",
+            "originalChildExit": 0
+          },
+          "native": {
+            "occurrence": "conversation-md-759-after-c82a8970-3ccf-42fa-9f70-91bdf7c944bc",
+            "outcome": "settled",
+            "host": {
+              "pid": 28424,
+              "processInstanceID": "win32:639287600931500276",
+              "occurrenceID": "64946d3f-917c-464e-8e94-9b16558777b3"
+            },
+            "target": {
+              "pid": 44044,
+              "processInstanceID": "win32:639287600945162659",
+              "occurrenceID": "89c9de84-db01-496d-9dfa-0c9cdd469035"
+            },
+            "observedAtUtc": "2026-10-28T05:02:40.315Z",
+            "deadlineAt": 1793164623367,
+            "terminal": {
+              "occurrenceID": "conversation-md-759-after-c82a8970-3ccf-42fa-9f70-91bdf7c944bc",
+              "pid": 44044,
+              "reason": "exited",
+              "exitCode": 0,
+              "signal": null
+            },
+            "physicalCompletion": true,
+            "outputDrainComplete": true,
+            "requestCleanupComplete": true,
+            "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+          },
+          "chain": [
+            {
+              "state": "dead_or_reused",
+              "identity": {
+                "pid": 28424,
+                "processInstanceID": "win32:639287600931500276",
+                "occurrenceID": "64946d3f-917c-464e-8e94-9b16558777b3"
+              }
+            },
+            {
+              "state": "dead_or_reused",
+              "identity": {
+                "pid": 44044,
+                "processInstanceID": "win32:639287600945162659",
+                "occurrenceID": "89c9de84-db01-496d-9dfa-0c9cdd469035"
+              }
+            }
+          ]
+        }
+      },
+      "shutdownPlan": {
+        "registeredAt": 1793163299334,
+        "dueAt": 1793163899334,
+        "physicalDeadlineAt": 1793164623367,
+        "occurrence": "conversation-md-759-after-c82a8970-3ccf-42fa-9f70-91bdf7c944bc",
+        "owner": {
+          "pid": 44044,
+          "processInstanceID": "win32:639287600945162659",
+          "occurrenceID": "3eff175f-f815-4419-bbe6-f92966aa17cb"
+        }
+      },
+      "commandHandles": 100,
+      "originalTerminalOutputSettlement": "fulfilled"
+    }
+  ],
+  "data": [
+    {
+      "tag": "before",
+      "originals": 101272,
+      "exact": 101271,
+      "total": 101304,
+      "changes": [
+        {
+          "table": "session",
+          "id": "ses_-zUQgm405zzb2xZnkVrc",
+          "fields": [
+            "title",
+            "time_updated"
+          ],
+          "title": "对话导出体验759",
+          "timeUpdated": 1793162283785
+        }
+      ],
+      "sourceRowsExact": 101272,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "after",
+      "originals": 101304,
+      "exact": 101304,
+      "total": 101306,
+      "changes": [],
+      "sourceRowsExact": 101304,
+      "schema": 9,
+      "integrity": "ok"
+    }
+  ],
+  "projectFilesExact": 3,
+  "providerRequests": 0,
+  "cumulativeRequests": 759
+}

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [对话Markdown交接](records/2026-10/2026-10-28-conversation-markdown-export.md)：同一完整会话快照的可读导出与实际文件验收。
+
 - [设置导航说明与返回](records/2026-10/2026-10-28-settings-navigation-current-journey.md)：当前入口帮助、双语和默认页返回实页复核。
 
 - [停止后续聊与历史定位](records/2026-10/2026-10-28-stopped-session-followup-journey.md)：真实同会话跟进、原停止归属与重命名搜索。

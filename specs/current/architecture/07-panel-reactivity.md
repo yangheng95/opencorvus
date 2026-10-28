@@ -1,5 +1,14 @@
 # 07-panel-reactivity — Overlay Reactive Projection
 
+Chat and Work conversation downloads offer Markdown and JSON from the same
+complete project-scoped Session export snapshot. One formatter validates that
+snapshot's Session and message identities and retains producer message/Part
+order. Markdown presents original text, actual authors, localized dates and
+structured failure status, with expandable original Session/message data that
+includes every tool and Source Part. It does not rebuild from visible cards or
+generate content. JSON remains the complete original snapshot. Both options
+share the existing request owner, cancellation, busy feedback and Blob download.
+
 Workspace navigation explainers use the destination label as their heading and
 localized purpose copy as their description. Settings explains its appearance,
 provider, connection and shared-resource scope through the existing work-ledger

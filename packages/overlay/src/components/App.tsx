@@ -1,4 +1,4 @@
-import { Show, createEffect, createMemo, createSignal, on, onCleanup, type JSX } from "solid-js"
+import { For, Show, createEffect, createMemo, createSignal, on, onCleanup, type JSX } from "solid-js"
 import type { ExportSessionResponse } from "@opencorvus-ai/sdk"
 import { AppDialogHost } from "./AppDialogHost"
 import { CommandPalette } from "./CommandPalette"
@@ -33,7 +33,8 @@ import { directoryScopedPath } from "../services/task-path"
 import { downloadBlob } from "../services/file-download"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import { Tooltip } from "./ui/Tooltip"
-import { t } from "../utils/i18n"
+import { getLocale, t } from "../utils/i18n"
+import { conversationExport, type ConversationExportFormat } from "../services/conversation-export"
 import { debugCopyFailureMessage } from "../utils/debug-info"
 import { conversationExperienceIcon } from "../services/conversation-experience"
 import { formatUsageStrip } from "../utils/format-usage"
@@ -128,7 +129,7 @@ function ChatViewTitle(props: {
     clearFeedbackAfterDelay()
   }
 
-  async function exportConversation(): Promise<void> {
+  async function exportConversation(format: ConversationExportFormat): Promise<void> {
     const row = props.item()
     if (row?.kind !== "chat" || exporting()) return
     const authority = captureApiAuthority()
@@ -149,9 +150,16 @@ function ChatViewTitle(props: {
         `export/session/${encodeURIComponent(row.sessionID)}`, row.directory, "exportConversation",
       ), { authority, signal: requestController.signal })
       if (!ownsExport()) return
+      const file = conversationExport(exported, {
+        sessionID: row.sessionID, format, locale: getLocale(), labels: {
+          sessionID: t("chat.export.session_id"), messageID: t("chat.export.message_id"),
+          created: t("chat.export.created"), updated: t("chat.export.updated"),
+          sessionData: t("chat.export.session_data"), messageData: t("chat.export.message_data"),
+          empty: t("chat.export.empty"), stopped: t("card.cancelled_reason_title"), failed: t("card.response_failed_title"),
+        },
+      })
       downloadBlob(
-        new Blob([JSON.stringify(exported, null, 2) + "\n"], { type: "application/json;charset=utf-8" }),
-        `${row.title || row.sessionID} - ${row.sessionID}.json`,
+        new Blob([file.text], { type: file.mime }), file.filename,
       )
       setActionFeedback({ kind: "exported" })
       clearFeedbackAfterDelay()
@@ -218,16 +226,20 @@ function ChatViewTitle(props: {
             <DropdownMenu.Portal>
               <DropdownMenu.Content class="chat-title-menu" data-ui="chat-title-menu">
                 <Show when={item().kind === "chat"}>
-                  <DropdownMenu.Item
-                    as="button"
-                    type="button"
-                    data-ui="chat-title-export"
-                    disabled={exporting()}
-                    onSelect={() => void exportConversation()}
-                  >
-                    <Icon name="download" size="medium" />
-                    <span>{t(exporting() ? "chat.exporting" : "chat.export_action")}</span>
-                  </DropdownMenu.Item>
+                  <For each={["markdown", "json"] as const}>
+                    {(format) => (
+                      <DropdownMenu.Item
+                        as="button"
+                        type="button"
+                        data-ui={format === "json" ? "chat-title-export" : "chat-title-export-markdown"}
+                        disabled={exporting()}
+                        onSelect={() => void exportConversation(format)}
+                      >
+                        <Icon name="download" size="medium" />
+                        <span>{t(exporting() ? "chat.exporting" : format === "json" ? "chat.export_action" : "chat.export_markdown_action")}</span>
+                      </DropdownMenu.Item>
+                    )}
+                  </For>
                 </Show>
                 <DropdownMenu.Item
                   as="button"

@@ -1,0 +1,55 @@
+{
+  "checks": {
+    "unit": {
+      "label": "conversation-md-759-unit-long-history",
+      "startedAt": 1793164019788,
+      "closedAt": 1793164023731,
+      "code": 0,
+      "signal": null,
+      "childPID": 78548
+    },
+    "build": {
+      "label": "conversation-md-759-build",
+      "startedAt": 1793162953462,
+      "closedAt": 1793163027506,
+      "code": 0,
+      "signal": null,
+      "childPID": 45840
+    },
+    "typecheck": {
+      "label": "conversation-md-759-typecheck",
+      "startedAt": 1793162833457,
+      "closedAt": 1793162853305,
+      "code": 0,
+      "signal": null,
+      "childPID": 82752
+    },
+    "i18n": {
+      "label": "conversation-md-759-i18n",
+      "startedAt": 1793162990502,
+      "closedAt": 1793162992461,
+      "code": 0,
+      "signal": null,
+      "childPID": 43728
+    },
+    "docs": {
+      "label": "conversation-md-759-docs",
+      "startedAt": 1793162990626,
+      "closedAt": 1793163000490,
+      "code": 0,
+      "signal": null,
+      "childPID": 66668
+    },
+    "docsFinal": {
+      "label": "conversation-md-759-docs-final",
+      "startedAt": 1793164827470,
+      "closedAt": 1793164835944,
+      "code": 0,
+      "signal": null,
+      "childPID": 98124
+    }
+  },
+  "uiAutomation": "None added or run; formatter tests parse downloaded-file format, not DOM/components/visual snapshots",
+  "formatter": "8 positive tests, 16 assertions",
+  "visual": "Six original browser screenshots manually reviewed: baseline menu, two localized product menus, original Work content, two actual exported document reading previews"
+}
