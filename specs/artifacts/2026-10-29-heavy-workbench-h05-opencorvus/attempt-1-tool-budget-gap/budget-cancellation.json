@@ -1,0 +1,14 @@
+{
+  "requested_at": "2026-10-28T18:15:07.687598+00:00",
+  "http_status": 202,
+  "response": {
+    "requestEventID": "pev_g0VZMxtpW00yQGFPHady",
+    "requestedAt": 1793211307582,
+    "source": "task.cancel",
+    "requestID": "7e390c92-4619-400c-b78d-b6c30ea3949b",
+    "actor": "user",
+    "surface": "api",
+    "reason": "HeavyWorkBench H05 frozen total_model_tokens budget 1000000 exceeded; retain this original occurrence and all evidence",
+    "status": "cancelling"
+  }
+}

@@ -1,0 +1,58 @@
+# HeavyWorkBench H05 · OpenCorvus真实试跑
+
+## Recall
+
+- 用户要求：用OpenCorvus进行一个case的测试。延续HeavyWorkBench-10任务，选择H05事故取证、跨租户幂等修复、恢复演练；不缩减冻结委托与20叶评分。
+- 验收：真实OpenCorvus Task由现有Inspect适配器创建并执行；取得实际Provider流式请求、任务身份/终态、自然消息和真实工作物；在清洁目录复跑交付，再进入现有HeavyWorkBench checker与逐叶证据评审。生命周期完成与业务通过分开；不足如实报告。
+- 已读：原构建Recall及H05题卡、当前inspect-benchmark架构、Inspect README与adapter/solver/task、运行目录与Provider模型投影、现有stageDiagnosticProvider/native-provider-audit-plugin/RealProviderAudit、server生命周期和隔离试验代码。
+- 全仓搜索：现有Inspect拥有运行/重试/日志与事实无活动超时；既有审计插件核验精确模型、streaming及读取结清，不保留请求正文/headers。现有evolution-diagnostic绑定另一模型/案例并要求整仓干净，不适用于本次，不添加兼容旁路或修改它。重用其Provider配对和审计primitive，另写仅负责新实例准备/收尾的薄启动器；不重造Task调度器。
+- 模型与授权：用户本轮明确要求真实OpenCorvus测试，使用已有OpenAI OAuth访问与匹配完整模型目录，仅在本次自有隔离实例绑定；目标openai/gpt-6.1-sol已在源目录投影，访问有效期预检通过。真实可用性与实际请求模型仍须启动后流式预检确认。凭据值不入prompt、日志、spec或提交，禁止刷新副本；运行物理结清后删除配对副本。
+- 约束：保留其他工作区删除/排序/发布记录；不新建branch/worktree，不操作用户窗口/进程；使用新建测试项目和运行目录，不借用已有服务。无UI变更或UI自动化。只运行一个case/一次任务；不事后修补模型交付冒充原始成功。
+- 评分边界：本次是本机开发试跑，项目/运行数据分开，但未取得操作系统强隔离资格、离线工具网络限制及CPU/内存硬配额，因此comparable=false；不能称正式隔离排行榜。预算沿用100万模型词元、600秒真实无活动窗口；Inspect负责观察，模型重试记入真实记录，不加人为偏小请求次数或总墙钟失败。
+
+## 修改/执行前分析
+
+现象：原包仅验证参考计算，尚无真实被测系统单题结果。触发点为用户要求试跑。根因是本题数据包尚未和现有实际执行路径连接；不能把参考回放或Task最终文字当完成。影响面限薄实例启动器、固定公开输入导出、Inspect JSONL输入、独立评分及记录索引；不修改生产Task/Mission/Session调度、Provider协议、schema、UI或已冻结rubric。
+
+输入流：suite公开投影→新项目TASK/task.json/inputs→Inspect原始request→公共POST /task→生产原生Host/Agent流式模型和工具→实际文件与终态→封存→清洁复跑→checker/领域叶项。评分端suite/oracle不放入项目，模型不被授予读取评估资料的业务授权。本地进程分目录不是安全边界，必须明确限制。
+
+风险：未执行的代码、伪造演练、汇总口径或重启/并发遗漏；通过独立复跑、真实SQLite/进程行为、证据绑定审查定位。模型可能合理失败、基础设施可能失败，分别报告。若观察到生产调度/唤醒/终态异常，立即按根AGENTS进行全入口横向审计后才修复，不将其归为模型偶发。
+
+## 执行方案
+
+1. 新建专用运行根、项目、证据目录；导出H05公开输入并记录模型/预算/工具/源码身份，初始化本题输入Git仓库（不是源仓库branch/worktree）。
+2. 配对暂存OpenAI访问与完整模型目录，复用精确模型/流式审计；新建OpenCorvus开发实例，公共Chat做最小真实预检。
+3. 使用现有Inspect opencorvus_benchmark，product_pillar=code、prompt_profile=base、scorer=task_completed、model=openai/gpt-6.1-sol、timeout_seconds=600，目标委托保持原文。Inspect终态分数只表示生命周期。
+4. 定时读取紧凑活动事实及文件进展，不持续尾随日志；完成后导出真实Task、状态、对话/产物、Provider审计和用量。
+5. 原提交封存，在新目录仅使用源码/输入复跑；独立执行H05 checker并核对服务重启、跨租户、并发、原子性、历史与恢复。保留原失败及全部未满足叶项，评审不替代真人校准。
+6. 自有实例结清后回收凭据副本；记录结果与边界，更新索引与文档检查，范围提交并按当前分支规则fetch/merge/push。
+
+## 当前状态
+
+首轮真实运行已完成但不具备正式评分资格：Task `tsk_g00VZMw8Ce00pQsoS61K` 经Inspect创建，实际gpt-6.1-sol流式响应200；终态为预算取消，Inspect生命周期分0。原始记录与故障保留，不将其替换成新运行。
+
+## 首轮发现与修正前分析
+
+本地薄启动器仅把100万词元写入registration，没有计量后的执行约束。Inspect本身只观测Task生命周期和无活动，不知道OpenCorvus内部Provider用量；所以真实35条usage记录已累计2,060,878，控制端才人工发现并取消。此为评测工具预算缺口，不证明模型违反可感知约束，也不能冒充在预算内完成的业务失败。
+
+原始分组事实：orchestrator 17次/1,247,977词元，base-developer 15次/776,297，Chat预检1次/32,496，memory2次/4,108（均为记录总量，包含缓存读；不是费用账单）。独立核对冻结预算包含总词元与所有子任务/重试，不可见到结果后改为仅计未缓存输入或放宽预算。原Task取消202后，公开状态cancelled/inactive、running=0；自有实例已物理结清，配对凭据已删除。
+
+修正范围只在本地实例启动器：复用ProviderUsageEventTable单一用量事实，每秒累计本实例已结算词元；达到原100万上限后，对本题新实例拥有的Task调用公共cancel并记录触发值/时间/响应。该控制只执行资源合同，不给模型指定工具或工作流。既有生产EngineBudget只支持并行执行组数，不改该公共合同，不引入生产token配置双源。计量在请求结算后才确定，最后一个在途请求可能超过阈值，必须报告真实触发与最终量，不声称零超额硬预估。
+
+按修复工具后重跑原验收要求，以相同H05、相同模型/委托/100万上限创建新occurrence，只修预算监控；第二份registration在启动前冻结并关联原始无资格运行。不挑选最好成绩，两个记录共同交付。若第二轮正常耗尽预算，作为本题明确资源结果结束测试，不修改原任务或生产编排来追求通过。
+
+## 第二轮独立复核与计量边界纠正
+
+第二轮在实例结算总量1,009,509触发公共取消且正常结清；独立审查发现其中预检会话33,188，H05归属仅976,321。因此第二轮不能称冻结题目预算耗尽，属于评测控制端计量归属错误，两轮原记录均保留且不用于正式业务评分。首轮去除预检后仍2,027,671，失格结论保留。
+
+第三轮启动前固定`tokenBudgetScope=task-session-lineage`：只复用当前`sessionBelongsToTask`权威将usage事件绑定本实例Task及其子会话，不凭agent名称/时间窗口猜归属，不将独立预检记入Case预算；输出归属usage ID、非Case会话量和无归属量。预算仍100万，输入、模型、profile、无活动窗口不变。若存在未归属用量另行披露，不能补造归属。按纠正后的原合同重新验收，再度保留全部前轮失格记录；不通过切换模型或扩大上限追求成功。
+
+## 最终真实结果与验收
+
+第三轮Task `tsk_g00VZN2mKc00HuXdJoOS` 经原Inspect/Task公共入口运行约72秒（Inspect整体约80秒）。Case已结算1,088,634，独立预检33,217，无归属0，实例共1,121,851。触发前998,170，末次90,464；179ms后公共cancel202，最终cancelled/inactive/running0。实例和配对凭据全部结清。末次请求造成88,634超额，如实保留，不宣称硬限额。
+
+独立agent使用耐久Session父链重算的16个Case事件ID与触发/最终导出完全一致，18条实例用量与18次目标模型流式EOF对应。Case编排15次/1,085,561词元，memory一次/3,073；仅读取与产物准备工具调用，未形成service.py/reproduce.py或正式交付。本题交付未完成、未进入清洁复跑和领域rubric业务验收；业务分为null，不能用Inspect生命周期0分冒充0/100业务分。未建立生产调度故障根因，不为追求通过改生产实现。
+
+前两次评测工具资格失败及所有原始注册/取消/状态/用量/审计/Inspect记录与第三次共同保存在[本轮产物目录](../../artifacts/2026-10-29-heavy-workbench-h05-opencorvus/README.md)，非盲独立审查在其中REVIEW.md。原H05输入、模型、profile与上限保持，源码没有代替被测系统写业务答案。
+
+薄启动器格式检查通过；定向TypeScript类型检查实际命令：`bunx tsc --noEmit --module preserve --moduleResolution bundler --target esnext --lib ESNext,DOM --typeRoots packages/opencorvus/node_modules/@types --types bun --skipLibCheck script/benchmark/serve_heavy_workbench.ts`。直接`--types bun`最初未定位workspace依赖，已补正确typeRoots重跑通过；只读进展脚本的Windows默认cp1252编码错误已用`python -X utf8`修正并重跑。预算与归属控制都进入真实Task取消路径验证，不用mock或字符串断言替代。

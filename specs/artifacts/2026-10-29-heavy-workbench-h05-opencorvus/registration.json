@@ -1,0 +1,24 @@
+{
+  "benchmark": "HeavyWorkBench-10/0.1.0-dev",
+  "case": "H05",
+  "model": "openai/gpt-6.1-sol",
+  "runRoot": "D:/opencorvus-benchmark-runs/heavywork-H05-20261029-0c6c698c",
+  "project": "D:/opencorvus-benchmark-runs/heavywork-H05-20261029-0c6c698c/project",
+  "inactivitySeconds": 600,
+  "runtimeSourceCommit": "b92f01e302e252d5f2acb40611384154f54d07c7",
+  "mode": "local-development-single-occurrence",
+  "comparable": false,
+  "budget": {
+    "total_model_tokens": 1000000,
+    "cpu_seconds": 7200,
+    "memory_gib": 16,
+    "disk_gib": 5,
+    "inactivity_seconds": 600,
+    "expert_hours_estimate": [
+      8,
+      32
+    ],
+    "estimate_status": "uncalibrated",
+    "external_model_calls": 0
+  }
+}

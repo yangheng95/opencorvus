@@ -1,0 +1,77 @@
+{
+  "occurrence": "attempt-3-task-lineage",
+  "task_id": "tsk_g00VZN2mKc00HuXdJoOS",
+  "project_id": "prj_hCtf30WBoNVYvCwKmbhm",
+  "root_session_id": "ses_-zUQcxDQkzz1IJwLT1Jx",
+  "model": "openai/gpt-6.1-sol",
+  "lifecycle": "cancelled",
+  "status": "inactive",
+  "running": 0,
+  "instance_recorded_tokens": 1121851,
+  "case_accounting": {
+    "authority": "Independent read-only recursive SQL over engine_task.session_id and session.parent_id",
+    "case_recorded_tokens": 1088634,
+    "case_usage_event_ids": [
+      "pvu_g0VZN2pO000JzKiKMei7",
+      "pvu_g0VZN2qL5002lNBm4QoI",
+      "pvu_g0VZN2r8500Rx4WaI7Iu",
+      "pvu_g0VZN2rpk00z8LCBZgTH",
+      "pvu_g0VZN2sbq00JMm3gE8QB",
+      "pvu_g0VZN2u0200Qag1iXnjX",
+      "pvu_g0VZN2ujl00mTlMgXN1F",
+      "pvu_g0VZN2vhf00KFwo6LGC3",
+      "pvu_g0VZN2xuF00k0xk3F7fQ",
+      "pvu_g0VZN2yt700PrEeEPDWa",
+      "pvu_g0VZN2zwQ00msvzmK6OT",
+      "pvu_g0VZN30t500Na6B7mEqe",
+      "pvu_g0VZN31lW00pWD1VXb9a",
+      "pvu_g0VZN33AU00DJ5eSRqDJ",
+      "pvu_g0VZN342H00NRb7t6w66",
+      "pvu_g0VZN353500S1eL5uizC"
+    ],
+    "other_session_tokens": 33217,
+    "unattributed_tokens": 0,
+    "matches_launcher_case_ids": true,
+    "matches_trigger_case_ids": true,
+    "tokens_before_last_settlement": 998170,
+    "last_settled_request_tokens": 90464,
+    "cancel_latency_ms": 179
+  },
+  "by_case_agent": [
+    {
+      "agent": "memory",
+      "calls": 1,
+      "recorded_total_tokens": 3073,
+      "uncached_input_tokens": 1811,
+      "cache_read_tokens": 0,
+      "output_tokens": 1262
+    },
+    {
+      "agent": "orchestrator",
+      "calls": 15,
+      "recorded_total_tokens": 1085561,
+      "uncached_input_tokens": 119061,
+      "cache_read_tokens": 965504,
+      "output_tokens": 950
+    }
+  ],
+  "wire_requests": 18,
+  "wire_http_200": 18,
+  "all_observed_model_and_stream_match": true,
+  "request_preserved": true,
+  "submitted_workproducts": [],
+  "replay_status": "unavailable_no_submitted_reproduction_program",
+  "business_score": null,
+  "lifecycle_score": 0,
+  "assessment": "case_budget_exhausted_before_final_submission",
+  "threshold": 1000000,
+  "guard_policy": "settled-usage-soft-threshold; standalone preflight excluded",
+  "cleanup": {
+    "runtimeDisposed": true,
+    "credentialsRemoved": true
+  },
+  "external_invoice_cost_usd": null,
+  "comparable": false,
+  "launch_head_from_local_reflog": "9cf0ed178dc474aeabd6224d742f186fe61a7fdd",
+  "registered_baseline_commit": "b92f01e302e252d5f2acb40611384154f54d07c7"
+}

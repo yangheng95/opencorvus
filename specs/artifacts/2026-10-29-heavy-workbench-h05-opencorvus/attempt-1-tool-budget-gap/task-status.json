@@ -1,0 +1,691 @@
+{
+  "taskID": "tsk_g00VZMw8Ce00pQsoS61K",
+  "title": "H05 跨租户幂等修复与恢复演练",
+  "status": "inactive",
+  "lifecycleStatus": "cancelled",
+  "source": "inspect-ai",
+  "productPillar": "code",
+  "priority": "normal",
+  "directory": "D:\\opencorvus-benchmark-runs\\heavywork-H05-20261029-0c6c698c\\project",
+  "error": "task cancelled",
+  "activity": {
+    "total": 1,
+    "running": 0,
+    "inactive": 1
+  },
+  "sessionInvocationTopology": {
+    "taskID": "tsk_g00VZMw8Ce00pQsoS61K",
+    "rootSessionID": "ses_-zUQd3rE9zzkBKk1Ua2H",
+    "nodes": [
+      {
+        "sessionID": "ses_-zUQd3ptazzj3l5NCgIZ",
+        "orderKey": "v1:0001793210893477:0000000000000050:0000000000000000:session:ses_-zUQd3ptazzj3l5NCgIZ",
+        "agent": "orchestrator",
+        "kind": "orchestrator",
+        "title": "Agent: H05 跨租户幂等修复与恢复演练",
+        "parentSessionID": "ses_-zUQd3rE9zzkBKk1Ua2H",
+        "time": {
+          "created": 1793210893477,
+          "updated": 1793210979120
+        }
+      },
+      {
+        "sessionID": "ses_h2bZ81oHxdfUVrZjztnH",
+        "orderKey": "v1:0001793210979053:0000000000000050:0000000000000000:session:ses_h2bZ81oHxdfUVrZjztnH",
+        "agent": "base-developer",
+        "kind": "build",
+        "title": "base-developer (build): H05 跨租户幂等修复与恢复演练",
+        "parentSessionID": "ses_-zUQd3ptazzj3l5NCgIZ",
+        "parentAgentSessionID": "ses_-zUQd3ptazzj3l5NCgIZ",
+        "time": {
+          "created": 1793210979053,
+          "updated": 1793211041665
+        }
+      }
+    ],
+    "edges": [
+      {
+        "fromSessionID": "ses_-zUQd3ptazzj3l5NCgIZ",
+        "toSessionID": "ses_h2bZ81oHxdfUVrZjztnH",
+        "relation": "agent_call"
+      }
+    ],
+    "topLevelSessionIDs": [
+      "ses_-zUQd3ptazzj3l5NCgIZ"
+    ]
+  },
+  "executionProjection": {
+    "taskID": "tsk_g00VZMw8Ce00pQsoS61K",
+    "occurrences": [
+      {
+        "inputMessageID": "msg_g0VZMwWMf00Y2k5jzCbv",
+        "sessionID": "ses_h2bZ81oHxdfUVrZjztnH",
+        "agent": "base-developer",
+        "kind": "build",
+        "preparedAt": 1793210979061,
+        "events": [
+          {
+            "eventID": "pev_g0VZMwWVr00U7QpAS6xw",
+            "sequence": 42,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210979623
+          },
+          {
+            "eventID": "pev_g0VZMwWYO00TijTGEV26",
+            "sequence": 43,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210979780
+          },
+          {
+            "eventID": "pev_g0VZMwXlY00MaK9eLFJL",
+            "sequence": 44,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210984440
+          },
+          {
+            "eventID": "pev_g0VZMwXmb00W7EjoVaTl",
+            "sequence": 45,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210984504
+          },
+          {
+            "eventID": "pev_g0VZMwYed00kwSZOo57r",
+            "sequence": 46,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210987854
+          },
+          {
+            "eventID": "pev_g0VZMwYfd00b9UDRi2xx",
+            "sequence": 47,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210987916
+          },
+          {
+            "eventID": "pev_g0VZMwZrX00l6tNaN1bH",
+            "sequence": 48,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210992498
+          },
+          {
+            "eventID": "pev_g0VZMwZsg001Mdj32QTp",
+            "sequence": 49,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210992570
+          },
+          {
+            "eventID": "pev_g0VZMwb1N00zdd3BcNnL",
+            "sequence": 50,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210996952
+          },
+          {
+            "eventID": "pev_g0VZMwb2I00GqGL3lvaz",
+            "sequence": 51,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210997010
+          },
+          {
+            "eventID": "pev_g0VZMwcAh00SJWloJkdr",
+            "sequence": 52,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793211001375
+          },
+          {
+            "eventID": "pev_g0VZMwcBv005w5HX43LE",
+            "sequence": 53,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793211001451
+          },
+          {
+            "eventID": "pev_g0VZMwd5800SZdr4cWZv",
+            "sequence": 54,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793211004873
+          },
+          {
+            "eventID": "pev_g0VZMwd7R009XnX7QTba",
+            "sequence": 55,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793211005017
+          },
+          {
+            "eventID": "pev_g0VZMweGb00LGzn0vFbZ",
+            "sequence": 56,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793211009429
+          },
+          {
+            "eventID": "pev_g0VZMweHr00n3q1rHsNy",
+            "sequence": 57,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793211009506
+          },
+          {
+            "eventID": "pev_g0VZMwg6600FSBJubb7g",
+            "sequence": 58,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793211016465
+          },
+          {
+            "eventID": "pev_g0VZMwg7O0007eQ2fELI",
+            "sequence": 59,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793211016546
+          },
+          {
+            "eventID": "pev_g0VZMwh1j00NcshZFL11",
+            "sequence": 60,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793211020039
+          },
+          {
+            "eventID": "pev_g0VZMwh3B00OFlo0BQo3",
+            "sequence": 61,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793211020128
+          },
+          {
+            "eventID": "pev_g0VZMwhsp00OaduvnX4h",
+            "sequence": 62,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793211023331
+          },
+          {
+            "eventID": "pev_g0VZMwhu300nc7DndL0x",
+            "sequence": 63,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793211023406
+          },
+          {
+            "eventID": "pev_g0VZMwipV00Znzm4xDNg",
+            "sequence": 64,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793211026969
+          },
+          {
+            "eventID": "pev_g0VZMwiqc00HCM65HedW",
+            "sequence": 65,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793211027038
+          },
+          {
+            "eventID": "pev_g0VZMwjti00S6ZsYT3Ti",
+            "sequence": 66,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793211031074
+          },
+          {
+            "eventID": "pev_g0VZMwjug00wTncQhETG",
+            "sequence": 67,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793211031134
+          },
+          {
+            "eventID": "pev_g0VZMwkaM00ufsC3annk",
+            "sequence": 68,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793211033718
+          },
+          {
+            "eventID": "pev_g0VZMwkbU00PBmlEQjCr",
+            "sequence": 69,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793211033788
+          },
+          {
+            "eventID": "pev_g0VZMwliZ005taUF7Wc3",
+            "sequence": 70,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793211038071
+          },
+          {
+            "eventID": "pev_g0VZMwljm00Ftiicco4m",
+            "sequence": 71,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793211038145
+          },
+          {
+            "eventID": "pev_g0VZMwmje00Kq1qUveZq",
+            "sequence": 72,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793211041982
+          },
+          {
+            "eventID": "pev_g0VZMwmkh00eYUpMsGZg",
+            "sequence": 73,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793211042047
+          },
+          {
+            "eventID": "pev_g0VZMxXDq00Mi94ZhwVS",
+            "sequence": 74,
+            "status": {
+              "type": "retry"
+            },
+            "emittedAt": 1793211220678
+          },
+          {
+            "eventID": "pev_g0VZMxXVX00HLvRbwUh8",
+            "sequence": 75,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793211221775
+          },
+          {
+            "eventID": "pev_g0VZMxtqS00CUPb0hp7h",
+            "sequence": 77,
+            "status": {
+              "type": "idle"
+            },
+            "emittedAt": 1793211307640
+          },
+          {
+            "eventID": "pev_g0VZMxtsP00nxCs9GzF8",
+            "sequence": 80,
+            "status": {
+              "type": "idle"
+            },
+            "emittedAt": 1793211307761
+          },
+          {
+            "eventID": "pev_g0VZMxtwe00Ezk2olcKA",
+            "sequence": 81,
+            "status": {
+              "type": "terminal",
+              "reason": "aborted",
+              "error": "HeavyWorkBench H05 frozen total_model_tokens budget 1000000 exceeded; retain this original occurrence and all evidence"
+            },
+            "emittedAt": 1793211308023
+          }
+        ],
+        "latest": {
+          "eventID": "pev_g0VZMxtwe00Ezk2olcKA",
+          "sequence": 81,
+          "status": {
+            "type": "terminal",
+            "reason": "aborted",
+            "error": "HeavyWorkBench H05 frozen total_model_tokens budget 1000000 exceeded; retain this original occurrence and all evidence"
+          },
+          "emittedAt": 1793211308023
+        }
+      },
+      {
+        "inputMessageID": "msg_task-root-control_art_hdfE0cV50qiv6Ltjic35_art_hdfE0cV50qiv6Ltjic35",
+        "sessionID": "ses_-zUQd3ptazzj3l5NCgIZ",
+        "agent": "orchestrator",
+        "kind": "orchestrator",
+        "events": [
+          {
+            "eventID": "pev_g0VZMwAPS00Mp0aMixqA",
+            "sequence": 5,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210894658
+          },
+          {
+            "eventID": "pev_g0VZMwAQx002YhyjSH7e",
+            "sequence": 6,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210894751
+          },
+          {
+            "eventID": "pev_g0VZMwBem00D9mmBbBWR",
+            "sequence": 7,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210899452
+          },
+          {
+            "eventID": "pev_g0VZMwBfz0093HUIlcZB",
+            "sequence": 8,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210899526
+          },
+          {
+            "eventID": "pev_g0VZMwCTb00TW7k7GUiR",
+            "sequence": 9,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210902603
+          },
+          {
+            "eventID": "pev_g0VZMwCUj00TS9G06hEc",
+            "sequence": 10,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210902673
+          },
+          {
+            "eventID": "pev_g0VZMwDCm005SzQG0NAR",
+            "sequence": 11,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210905404
+          },
+          {
+            "eventID": "pev_g0VZMwDE500O4YTB5XDQ",
+            "sequence": 12,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210905485
+          },
+          {
+            "eventID": "pev_g0VZMwE4V00dL1aP2a5B",
+            "sequence": 13,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210908734
+          },
+          {
+            "eventID": "pev_g0VZMwE5T006kDTpHtxf",
+            "sequence": 14,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210908794
+          },
+          {
+            "eventID": "pev_g0VZMwEsy00IVIYjnU4U",
+            "sequence": 15,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210911863
+          },
+          {
+            "eventID": "pev_g0VZMwEv500mj4g77YjU",
+            "sequence": 16,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210911995
+          },
+          {
+            "eventID": "pev_g0VZMwFb000l6fmGOHKD",
+            "sequence": 17,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210914594
+          },
+          {
+            "eventID": "pev_g0VZMwFcZ000C1jNR2i9",
+            "sequence": 18,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210914691
+          },
+          {
+            "eventID": "pev_g0VZMwGaM00TRcrSYdox",
+            "sequence": 19,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210918398
+          },
+          {
+            "eventID": "pev_g0VZMwGbd005EGttZ3KF",
+            "sequence": 20,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210918476
+          },
+          {
+            "eventID": "pev_g0VZMwHi400PlDP7oW2y",
+            "sequence": 21,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210922720
+          },
+          {
+            "eventID": "pev_g0VZMwHj000MA19aZR1f",
+            "sequence": 22,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210922778
+          },
+          {
+            "eventID": "pev_g0VZMwIjx00UcSxXmWa2",
+            "sequence": 23,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210926681
+          },
+          {
+            "eventID": "pev_g0VZMwIkx00Lx08WbXDk",
+            "sequence": 24,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210926742
+          },
+          {
+            "eventID": "pev_g0VZMwJkJ00giu9YNvn4",
+            "sequence": 25,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210930547
+          },
+          {
+            "eventID": "pev_g0VZMwJlS000x8jSDqsH",
+            "sequence": 26,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210930618
+          },
+          {
+            "eventID": "pev_g0VZMwKbT00AL8gEir4W",
+            "sequence": 27,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210933843
+          },
+          {
+            "eventID": "pev_g0VZMwKcT00IjVB09M7p",
+            "sequence": 28,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210933905
+          },
+          {
+            "eventID": "pev_g0VZMwLQD00hnbBZYQyj",
+            "sequence": 29,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210936988
+          },
+          {
+            "eventID": "pev_g0VZMwLRp00Kzaq1hH0D",
+            "sequence": 30,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210937089
+          },
+          {
+            "eventID": "pev_g0VZMwMJ200IPRzl0LbY",
+            "sequence": 31,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210940388
+          },
+          {
+            "eventID": "pev_g0VZMwMKb00vN7wkzyuq",
+            "sequence": 32,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210940485
+          },
+          {
+            "eventID": "pev_g0VZMwN8H00DOSBftK1v",
+            "sequence": 33,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210943565
+          },
+          {
+            "eventID": "pev_g0VZMwN9C00V7VJd2PdG",
+            "sequence": 34,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210943622
+          },
+          {
+            "eventID": "pev_g0VZMwO6i009D9cGuagE",
+            "sequence": 35,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210947312
+          },
+          {
+            "eventID": "pev_g0VZMwO7r00J9rFpKGUL",
+            "sequence": 36,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210947382
+          },
+          {
+            "eventID": "pev_g0VZMwP9b0024EREBHgU",
+            "sequence": 37,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210951334
+          },
+          {
+            "eventID": "pev_g0VZMwPAc00cZaM7o0AB",
+            "sequence": 38,
+            "status": {
+              "type": "streaming"
+            },
+            "emittedAt": 1793210951397
+          },
+          {
+            "eventID": "pev_g0VZMwWRE00jTRr15yP8",
+            "sequence": 40,
+            "status": {
+              "type": "idle"
+            },
+            "emittedAt": 1793210979336
+          },
+          {
+            "eventID": "pev_g0VZMxtrk00rlDPR8328",
+            "sequence": 79,
+            "status": {
+              "type": "idle"
+            },
+            "emittedAt": 1793211307719
+          }
+        ],
+        "latest": {
+          "eventID": "pev_g0VZMxtrk00rlDPR8328",
+          "sequence": 79,
+          "status": {
+            "type": "idle"
+          },
+          "emittedAt": 1793211307719
+        }
+      }
+    ]
+  },
+  "requirements": [],
+  "goals": [],
+  "time": {
+    "created": 1793210886176,
+    "updated": 1793211308033,
+    "started": 1793210886176,
+    "completed": 1793211308033
+  }
+}

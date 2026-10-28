@@ -1,0 +1,289 @@
+{
+  "benchmark": "HeavyWorkBench-10/0.1.0-dev",
+  "case": "H05",
+  "outcome": "case_budget_exhausted_without_final_submission",
+  "business_assessment": "not_evaluated",
+  "business_score": null,
+  "occurrences": [
+    {
+      "occurrence": "attempt-1-tool-budget-gap",
+      "task_id": "tsk_g00VZMw8Ce00pQsoS61K",
+      "project_id": "prj_hLEpprmwiGwppbQCrgED",
+      "root_session_id": "ses_-zUQd3rE9zzkBKk1Ua2H",
+      "model": "openai/gpt-6.1-sol",
+      "lifecycle": "cancelled",
+      "status": "inactive",
+      "running": 0,
+      "recorded_total_tokens": 2060878,
+      "by_agent": [
+        {
+          "agent": "base-developer",
+          "calls": 15,
+          "recorded_total_tokens": 776297,
+          "uncached_input_tokens": 62869,
+          "cache_read_tokens": 712448,
+          "output_tokens": 971
+        },
+        {
+          "agent": "chat",
+          "calls": 1,
+          "recorded_total_tokens": 32496,
+          "uncached_input_tokens": 32491,
+          "cache_read_tokens": 0,
+          "output_tokens": 5
+        },
+        {
+          "agent": "memory",
+          "calls": 2,
+          "recorded_total_tokens": 4108,
+          "uncached_input_tokens": 2376,
+          "cache_read_tokens": 0,
+          "output_tokens": 1660
+        },
+        {
+          "agent": "orchestrator",
+          "calls": 17,
+          "recorded_total_tokens": 1247977,
+          "uncached_input_tokens": 121714,
+          "cache_read_tokens": 1124096,
+          "output_tokens": 2121
+        }
+      ],
+      "wire_requests": 37,
+      "wire_http_200": 37,
+      "all_observed_model_and_stream_match": true,
+      "request_preserved": true,
+      "submitted_workproducts": [],
+      "replay_status": "unavailable_no_submitted_reproduction_program",
+      "business_score": null,
+      "lifecycle_score": 0,
+      "external_invoice_cost_usd": null,
+      "cleanup": {
+        "runtimeDisposed": true,
+        "credentialsRemoved": true
+      },
+      "comparable": false,
+      "assessment": "unqualified_evaluator_budget_gap",
+      "validity": "Not an in-budget score; retained original occurrence",
+      "case_accounting": {
+        "authority": "Independent read-only recursive SQL over engine_task.session_id and session.parent_id",
+        "task_ids": [
+          "tsk_g00VZMw8Ce00pQsoS61K"
+        ],
+        "case_recorded_tokens": 2027671,
+        "case_usage_event_ids": [
+          "pvu_g0VZMwBa900W15JT4Mk5",
+          "pvu_g0VZMwCPL00IHw4KAcQd",
+          "pvu_g0VZMwD7200je5A9q8wL",
+          "pvu_g0VZMwDyM00C9IuWrQz4",
+          "pvu_g0VZMwElg00lSHc2tPdj",
+          "pvu_g0VZMwFWP00qskdpPJOU",
+          "pvu_g0VZMwGVk0044EawgdOk",
+          "pvu_g0VZMwGl700BiLr4CnYw",
+          "pvu_g0VZMwHdO00zYCCtHr9D",
+          "pvu_g0VZMwIfh00LKVHZ9FfH",
+          "pvu_g0VZMwJfG00Vd6lgBngu",
+          "pvu_g0VZMwKWw00qmyyfW2b2",
+          "pvu_g0VZMwLKZ00cGdG2oMTC",
+          "pvu_g0VZMwMB600HcfSwdi1k",
+          "pvu_g0VZMwN3h00Urf4H4Nnj",
+          "pvu_g0VZMwO2400DCkvbA3oM",
+          "pvu_g0VZMwP5400Zzu9BnX7r",
+          "pvu_g0VZMwWNW00uEY10I4Ku",
+          "pvu_g0VZMwXhA00YyIkgys2M",
+          "pvu_g0VZMwYb500viEpHTpg5",
+          "pvu_g0VZMwZnT008s7YuBbGl",
+          "pvu_g0VZMwaxe00541XobORc",
+          "pvu_g0VZMwc6t00aJCqW7LyR",
+          "pvu_g0VZMwcyd00YAd72IMJ9",
+          "pvu_g0VZMweCB00gsO1JuPDJ",
+          "pvu_g0VZMwg2J00y6jiB10TF",
+          "pvu_g0VZMwgxs006E18ZFKTY",
+          "pvu_g0VZMwhp000geplmZf9i",
+          "pvu_g0VZMwiku001Qbo4DwAi",
+          "pvu_g0VZMwjpw003FjLnV0uU",
+          "pvu_g0VZMwkWZ00pT4s69IaF",
+          "pvu_g0VZMwle700zWRAF42NJ",
+          "pvu_g0VZMwmeK00xx71LLuUB"
+        ],
+        "other_session_tokens": 33207,
+        "unattributed_tokens": 0
+      },
+      "launch_head_from_local_reflog": "b92f01e302e252d5f2acb40611384154f54d07c7",
+      "registered_baseline_commit": "b92f01e302e252d5f2acb40611384154f54d07c7"
+    },
+    {
+      "occurrence": "attempt-2-budget-enforced",
+      "task_id": "tsk_g00VZMzeYe00fLcMVyjK",
+      "project_id": "prj_ho7ilEdwXsekZC6M5y3N",
+      "root_session_id": "ses_-zUQd0Ktzzzz5zifxvKM",
+      "model": "openai/gpt-6.1-sol",
+      "lifecycle": "cancelled",
+      "status": "inactive",
+      "running": 0,
+      "recorded_total_tokens": 1009509,
+      "by_agent": [
+        {
+          "agent": "chat",
+          "calls": 1,
+          "recorded_total_tokens": 32512,
+          "uncached_input_tokens": 32507,
+          "cache_read_tokens": 0,
+          "output_tokens": 5
+        },
+        {
+          "agent": "memory",
+          "calls": 2,
+          "recorded_total_tokens": 3979,
+          "uncached_input_tokens": 2367,
+          "cache_read_tokens": 0,
+          "output_tokens": 1568
+        },
+        {
+          "agent": "orchestrator",
+          "calls": 14,
+          "recorded_total_tokens": 973018,
+          "uncached_input_tokens": 118831,
+          "cache_read_tokens": 853248,
+          "output_tokens": 895
+        }
+      ],
+      "wire_requests": 19,
+      "wire_http_200": 17,
+      "all_observed_model_and_stream_match": true,
+      "request_preserved": true,
+      "submitted_workproducts": [],
+      "replay_status": "unavailable_no_submitted_reproduction_program",
+      "business_score": null,
+      "lifecycle_score": 0,
+      "external_invoice_cost_usd": null,
+      "cleanup": {
+        "runtimeDisposed": true,
+        "credentialsRemoved": true
+      },
+      "comparable": false,
+      "assessment": "unqualified_budget_scope_error",
+      "threshold": 1000000,
+      "settled_tokens_at_trigger": 1009509,
+      "budget_policy": "instance settled total includes preflight/cache; soft threshold, not strict pre-allocation",
+      "case_accounting": {
+        "authority": "Independent read-only recursive SQL over engine_task.session_id and session.parent_id",
+        "task_ids": [
+          "tsk_g00VZMzeYe00fLcMVyjK"
+        ],
+        "case_recorded_tokens": 976321,
+        "case_usage_event_ids": [
+          "pvu_g0VZMziMu002Zwml3Dgi",
+          "pvu_g0VZMzjF800uURf4WZHf",
+          "pvu_g0VZMzkAn00C9d49xK4B",
+          "pvu_g0VZMzlH000uLnSFLjqW",
+          "pvu_g0VZMzmC500UFmiH7Rrj",
+          "pvu_g0VZMznIu00hwSZaGC0G",
+          "pvu_g0VZMzoFL00I2oKNEDy8",
+          "pvu_g0VZMzpBO00FC90YAsLI",
+          "pvu_g0VZMzqoB00G4GrJ1kLf",
+          "pvu_g0VZMzsPN001zh1WAXT2",
+          "pvu_g0VZMztqu00WfoGV1T0s",
+          "pvu_g0VZMzuy400RBfve1CfG",
+          "pvu_g0VZMzwZt004vdbnZ1J3",
+          "pvu_g0VZMzxb000awZPhuqOs",
+          "pvu_g0VZMzydI00tHwk4wgYm"
+        ],
+        "other_session_tokens": 33188,
+        "unattributed_tokens": 0
+      },
+      "validity": "Instance total includes standalone preflight; this cancellation does not establish case budget exhaustion",
+      "launch_head_from_local_reflog": "ff502f56a8c7270023d549468eb1d9ea0d2626f2",
+      "registered_baseline_commit": "b92f01e302e252d5f2acb40611384154f54d07c7"
+    },
+    {
+      "occurrence": "attempt-3-task-lineage",
+      "task_id": "tsk_g00VZN2mKc00HuXdJoOS",
+      "project_id": "prj_hCtf30WBoNVYvCwKmbhm",
+      "root_session_id": "ses_-zUQcxDQkzz1IJwLT1Jx",
+      "model": "openai/gpt-6.1-sol",
+      "lifecycle": "cancelled",
+      "status": "inactive",
+      "running": 0,
+      "instance_recorded_tokens": 1121851,
+      "case_accounting": {
+        "authority": "Independent read-only recursive SQL over engine_task.session_id and session.parent_id",
+        "case_recorded_tokens": 1088634,
+        "case_usage_event_ids": [
+          "pvu_g0VZN2pO000JzKiKMei7",
+          "pvu_g0VZN2qL5002lNBm4QoI",
+          "pvu_g0VZN2r8500Rx4WaI7Iu",
+          "pvu_g0VZN2rpk00z8LCBZgTH",
+          "pvu_g0VZN2sbq00JMm3gE8QB",
+          "pvu_g0VZN2u0200Qag1iXnjX",
+          "pvu_g0VZN2ujl00mTlMgXN1F",
+          "pvu_g0VZN2vhf00KFwo6LGC3",
+          "pvu_g0VZN2xuF00k0xk3F7fQ",
+          "pvu_g0VZN2yt700PrEeEPDWa",
+          "pvu_g0VZN2zwQ00msvzmK6OT",
+          "pvu_g0VZN30t500Na6B7mEqe",
+          "pvu_g0VZN31lW00pWD1VXb9a",
+          "pvu_g0VZN33AU00DJ5eSRqDJ",
+          "pvu_g0VZN342H00NRb7t6w66",
+          "pvu_g0VZN353500S1eL5uizC"
+        ],
+        "other_session_tokens": 33217,
+        "unattributed_tokens": 0,
+        "matches_launcher_case_ids": true,
+        "matches_trigger_case_ids": true,
+        "tokens_before_last_settlement": 998170,
+        "last_settled_request_tokens": 90464,
+        "cancel_latency_ms": 179
+      },
+      "by_case_agent": [
+        {
+          "agent": "memory",
+          "calls": 1,
+          "recorded_total_tokens": 3073,
+          "uncached_input_tokens": 1811,
+          "cache_read_tokens": 0,
+          "output_tokens": 1262
+        },
+        {
+          "agent": "orchestrator",
+          "calls": 15,
+          "recorded_total_tokens": 1085561,
+          "uncached_input_tokens": 119061,
+          "cache_read_tokens": 965504,
+          "output_tokens": 950
+        }
+      ],
+      "wire_requests": 18,
+      "wire_http_200": 18,
+      "all_observed_model_and_stream_match": true,
+      "request_preserved": true,
+      "submitted_workproducts": [],
+      "replay_status": "unavailable_no_submitted_reproduction_program",
+      "business_score": null,
+      "lifecycle_score": 0,
+      "assessment": "case_budget_exhausted_before_final_submission",
+      "threshold": 1000000,
+      "guard_policy": "settled-usage-soft-threshold; standalone preflight excluded",
+      "cleanup": {
+        "runtimeDisposed": true,
+        "credentialsRemoved": true
+      },
+      "external_invoice_cost_usd": null,
+      "comparable": false,
+      "launch_head_from_local_reflog": "9cf0ed178dc474aeabd6224d742f186fe61a7fdd",
+      "registered_baseline_commit": "b92f01e302e252d5f2acb40611384154f54d07c7"
+    }
+  ],
+  "comparison_eligibility": false,
+  "review_protocol": "developmental unblinded evidence review; not two independent blind graders",
+  "limitations": [
+    "No repaired-service acceptance because no final submission",
+    "Case budget uses durable Task/Session lineage; preflight separately recorded",
+    "Usage settles after each request, so threshold can be crossed by the last request",
+    "Failed/aborted requests without usage and actual billing remain unknown",
+    "OS isolation and CPU/memory hard quotas unqualified",
+    "Single case; two evaluator qualification failures plus one case-scoped occurrence; no ranking"
+  ],
+  "qualified_development_occurrence": "attempt-3-task-lineage",
+  "source_identity_evidence": "source-identity.json"
+}

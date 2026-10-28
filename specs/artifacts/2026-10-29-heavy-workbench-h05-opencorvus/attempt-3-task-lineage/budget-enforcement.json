@@ -1,0 +1,49 @@
+{
+  "observedAt": "2026-10-28T18:35:42.543Z",
+  "threshold": 1000000,
+  "settledTokensAtTrigger": 1088634,
+  "accounting": "provider_usage_event.total_tokens bound by sessionBelongsToTask; includes task children/cache, excludes standalone preflight",
+  "caseAccounting": {
+    "taskIDs": [
+      "tsk_g00VZN2mKc00HuXdJoOS"
+    ],
+    "taskRecordedTokens": 1088634,
+    "taskUsageEventIDs": [
+      "pvu_g0VZN2pO000JzKiKMei7",
+      "pvu_g0VZN2qL5002lNBm4QoI",
+      "pvu_g0VZN2r8500Rx4WaI7Iu",
+      "pvu_g0VZN2rpk00z8LCBZgTH",
+      "pvu_g0VZN2sbq00JMm3gE8QB",
+      "pvu_g0VZN2u0200Qag1iXnjX",
+      "pvu_g0VZN2ujl00mTlMgXN1F",
+      "pvu_g0VZN2vhf00KFwo6LGC3",
+      "pvu_g0VZN2xuF00k0xk3F7fQ",
+      "pvu_g0VZN2yt700PrEeEPDWa",
+      "pvu_g0VZN2zwQ00msvzmK6OT",
+      "pvu_g0VZN30t500Na6B7mEqe",
+      "pvu_g0VZN31lW00pWD1VXb9a",
+      "pvu_g0VZN33AU00DJ5eSRqDJ",
+      "pvu_g0VZN342H00NRb7t6w66",
+      "pvu_g0VZN353500S1eL5uizC"
+    ],
+    "otherSessionTokens": 33217,
+    "unattributedTokens": 0
+  },
+  "cancellations": [
+    {
+      "taskID": "tsk_g00VZN2mKc00HuXdJoOS",
+      "status": 202,
+      "response": {
+        "requestEventID": "pev_g0VZN355y00ILRqRNtl6",
+        "requestedAt": 1793212542526,
+        "source": "task.cancel",
+        "requestID": "62685745-2069-4ece-ba46-e57184e593a7",
+        "actor": "user",
+        "surface": "api",
+        "reason": "HeavyWorkBench total_model_tokens budget 1000000 exhausted",
+        "status": "cancelling"
+      }
+    }
+  ],
+  "limitation": "settled usage; the final in-flight request may cross the threshold"
+}

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [H05 OpenCorvus真实试跑](records/2026-10/2026-10-29-heavy-workbench-h05-opencorvus.md)：真实Task、流式模型、预算/会话归属修正、全部原始运行与未交付结果。
+
 - [0.1.36 发布](records/2026-10/2026-10-29-release-0.1.36.md)：官网辅助作业收敛检出输入、保留35公开历史并完整验证新发布。
 
 - [代码与网页来源实际阅读](records/2026-10/2026-10-29-source-reader-journey.md)：摘录改宽与重开保留文字位置，原文件定位/复制、双语与只读告警复核。

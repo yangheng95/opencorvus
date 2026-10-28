@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [H05 OpenCorvus真实试跑](2026-10-29-heavy-workbench-h05-opencorvus/README.md)：三轮原始Task/用量/流式审计与Inspect记录；第三轮按Case血缘预算取消，业务交付未完成。
+
 - [2026-10-29-release-0.1.35](2026-10-29-release-0.1.35/README.md)：35官网日志预备原图，明确已公开安装包但联合发布超时的边界。
 
 - [2026-10-29-source-reader-journey](2026-10-29-source-reader-journey/README.md)：24张原图、真实来源阅读与原文件定位、逐行数据和原生结算。

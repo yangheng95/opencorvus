@@ -1,0 +1,24 @@
+{
+  "method": "Read-only local Git reflog times compared with preserved server-result.startedAt; not an immutable image qualification",
+  "registration_baseline": "b92f01e302e252d5f2acb40611384154f54d07c7",
+  "observed_launch_heads": {
+    "attempt-1-tool-budget-gap": "b92f01e302e252d5f2acb40611384154f54d07c7",
+    "attempt-2-budget-enforced": "ff502f56a8c7270023d549468eb1d9ea0d2626f2",
+    "attempt-3-task-lineage": "9cf0ed178dc474aeabd6224d742f186fe61a7fdd"
+  },
+  "changes_in_runtime_source_paths_since_baseline": [],
+  "runtime_source_paths_checked": [
+    "packages/opencorvus/src",
+    "expert-squads",
+    "packages/plugin/src",
+    "packages/util/src",
+    "packages/sdk/js/src"
+  ],
+  "release_metadata_changed_during_attempt_2": true,
+  "comparable": false,
+  "package_version_at_launch_head": {
+    "attempt-1-tool-budget-gap": "0.1.35",
+    "attempt-2-budget-enforced": "0.1.35",
+    "attempt-3-task-lineage": "0.1.36"
+  }
+}

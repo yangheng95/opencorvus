@@ -1,0 +1,84 @@
+{
+  "occurrence": "attempt-2-budget-enforced",
+  "task_id": "tsk_g00VZMzeYe00fLcMVyjK",
+  "project_id": "prj_ho7ilEdwXsekZC6M5y3N",
+  "root_session_id": "ses_-zUQd0Ktzzzz5zifxvKM",
+  "model": "openai/gpt-6.1-sol",
+  "lifecycle": "cancelled",
+  "status": "inactive",
+  "running": 0,
+  "recorded_total_tokens": 1009509,
+  "by_agent": [
+    {
+      "agent": "chat",
+      "calls": 1,
+      "recorded_total_tokens": 32512,
+      "uncached_input_tokens": 32507,
+      "cache_read_tokens": 0,
+      "output_tokens": 5
+    },
+    {
+      "agent": "memory",
+      "calls": 2,
+      "recorded_total_tokens": 3979,
+      "uncached_input_tokens": 2367,
+      "cache_read_tokens": 0,
+      "output_tokens": 1568
+    },
+    {
+      "agent": "orchestrator",
+      "calls": 14,
+      "recorded_total_tokens": 973018,
+      "uncached_input_tokens": 118831,
+      "cache_read_tokens": 853248,
+      "output_tokens": 895
+    }
+  ],
+  "wire_requests": 19,
+  "wire_http_200": 17,
+  "all_observed_model_and_stream_match": true,
+  "request_preserved": true,
+  "submitted_workproducts": [],
+  "replay_status": "unavailable_no_submitted_reproduction_program",
+  "business_score": null,
+  "lifecycle_score": 0,
+  "external_invoice_cost_usd": null,
+  "cleanup": {
+    "runtimeDisposed": true,
+    "credentialsRemoved": true
+  },
+  "comparable": false,
+  "assessment": "unqualified_budget_scope_error",
+  "threshold": 1000000,
+  "settled_tokens_at_trigger": 1009509,
+  "budget_policy": "instance settled total includes preflight/cache; soft threshold, not strict pre-allocation",
+  "case_accounting": {
+    "authority": "Independent read-only recursive SQL over engine_task.session_id and session.parent_id",
+    "task_ids": [
+      "tsk_g00VZMzeYe00fLcMVyjK"
+    ],
+    "case_recorded_tokens": 976321,
+    "case_usage_event_ids": [
+      "pvu_g0VZMziMu002Zwml3Dgi",
+      "pvu_g0VZMzjF800uURf4WZHf",
+      "pvu_g0VZMzkAn00C9d49xK4B",
+      "pvu_g0VZMzlH000uLnSFLjqW",
+      "pvu_g0VZMzmC500UFmiH7Rrj",
+      "pvu_g0VZMznIu00hwSZaGC0G",
+      "pvu_g0VZMzoFL00I2oKNEDy8",
+      "pvu_g0VZMzpBO00FC90YAsLI",
+      "pvu_g0VZMzqoB00G4GrJ1kLf",
+      "pvu_g0VZMzsPN001zh1WAXT2",
+      "pvu_g0VZMztqu00WfoGV1T0s",
+      "pvu_g0VZMzuy400RBfve1CfG",
+      "pvu_g0VZMzwZt004vdbnZ1J3",
+      "pvu_g0VZMzxb000awZPhuqOs",
+      "pvu_g0VZMzydI00tHwk4wgYm"
+    ],
+    "other_session_tokens": 33188,
+    "unattributed_tokens": 0
+  },
+  "validity": "Instance total includes standalone preflight; this cancellation does not establish case budget exhaustion",
+  "launch_head_from_local_reflog": "ff502f56a8c7270023d549468eb1d9ea0d2626f2",
+  "registered_baseline_commit": "b92f01e302e252d5f2acb40611384154f54d07c7"
+}

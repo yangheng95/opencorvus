@@ -1,0 +1,23 @@
+{
+  "observedAt": "2026-10-28T18:23:23.258Z",
+  "threshold": 1000000,
+  "settledTokensAtTrigger": 1009509,
+  "accounting": "provider_usage_event.total_tokens, includes preflight and cache reads",
+  "cancellations": [
+    {
+      "taskID": "tsk_g00VZMzeYe00fLcMVyjK",
+      "status": 202,
+      "response": {
+        "requestEventID": "pev_g0VZMzyl900S63xZ4PHb",
+        "requestedAt": 1793211803187,
+        "source": "task.cancel",
+        "requestID": "274ab0d6-40df-4391-8419-73763bfb92e8",
+        "actor": "user",
+        "surface": "api",
+        "reason": "HeavyWorkBench total_model_tokens budget 1000000 exhausted",
+        "status": "cancelling"
+      }
+    }
+  ],
+  "limitation": "settled usage; the final in-flight request may cross the threshold"
+}

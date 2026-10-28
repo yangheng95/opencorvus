@@ -1,0 +1,107 @@
+{
+  "occurrence": "attempt-1-tool-budget-gap",
+  "task_id": "tsk_g00VZMw8Ce00pQsoS61K",
+  "project_id": "prj_hLEpprmwiGwppbQCrgED",
+  "root_session_id": "ses_-zUQd3rE9zzkBKk1Ua2H",
+  "model": "openai/gpt-6.1-sol",
+  "lifecycle": "cancelled",
+  "status": "inactive",
+  "running": 0,
+  "recorded_total_tokens": 2060878,
+  "by_agent": [
+    {
+      "agent": "base-developer",
+      "calls": 15,
+      "recorded_total_tokens": 776297,
+      "uncached_input_tokens": 62869,
+      "cache_read_tokens": 712448,
+      "output_tokens": 971
+    },
+    {
+      "agent": "chat",
+      "calls": 1,
+      "recorded_total_tokens": 32496,
+      "uncached_input_tokens": 32491,
+      "cache_read_tokens": 0,
+      "output_tokens": 5
+    },
+    {
+      "agent": "memory",
+      "calls": 2,
+      "recorded_total_tokens": 4108,
+      "uncached_input_tokens": 2376,
+      "cache_read_tokens": 0,
+      "output_tokens": 1660
+    },
+    {
+      "agent": "orchestrator",
+      "calls": 17,
+      "recorded_total_tokens": 1247977,
+      "uncached_input_tokens": 121714,
+      "cache_read_tokens": 1124096,
+      "output_tokens": 2121
+    }
+  ],
+  "wire_requests": 37,
+  "wire_http_200": 37,
+  "all_observed_model_and_stream_match": true,
+  "request_preserved": true,
+  "submitted_workproducts": [],
+  "replay_status": "unavailable_no_submitted_reproduction_program",
+  "business_score": null,
+  "lifecycle_score": 0,
+  "external_invoice_cost_usd": null,
+  "cleanup": {
+    "runtimeDisposed": true,
+    "credentialsRemoved": true
+  },
+  "comparable": false,
+  "assessment": "unqualified_evaluator_budget_gap",
+  "validity": "Not an in-budget score; retained original occurrence",
+  "case_accounting": {
+    "authority": "Independent read-only recursive SQL over engine_task.session_id and session.parent_id",
+    "task_ids": [
+      "tsk_g00VZMw8Ce00pQsoS61K"
+    ],
+    "case_recorded_tokens": 2027671,
+    "case_usage_event_ids": [
+      "pvu_g0VZMwBa900W15JT4Mk5",
+      "pvu_g0VZMwCPL00IHw4KAcQd",
+      "pvu_g0VZMwD7200je5A9q8wL",
+      "pvu_g0VZMwDyM00C9IuWrQz4",
+      "pvu_g0VZMwElg00lSHc2tPdj",
+      "pvu_g0VZMwFWP00qskdpPJOU",
+      "pvu_g0VZMwGVk0044EawgdOk",
+      "pvu_g0VZMwGl700BiLr4CnYw",
+      "pvu_g0VZMwHdO00zYCCtHr9D",
+      "pvu_g0VZMwIfh00LKVHZ9FfH",
+      "pvu_g0VZMwJfG00Vd6lgBngu",
+      "pvu_g0VZMwKWw00qmyyfW2b2",
+      "pvu_g0VZMwLKZ00cGdG2oMTC",
+      "pvu_g0VZMwMB600HcfSwdi1k",
+      "pvu_g0VZMwN3h00Urf4H4Nnj",
+      "pvu_g0VZMwO2400DCkvbA3oM",
+      "pvu_g0VZMwP5400Zzu9BnX7r",
+      "pvu_g0VZMwWNW00uEY10I4Ku",
+      "pvu_g0VZMwXhA00YyIkgys2M",
+      "pvu_g0VZMwYb500viEpHTpg5",
+      "pvu_g0VZMwZnT008s7YuBbGl",
+      "pvu_g0VZMwaxe00541XobORc",
+      "pvu_g0VZMwc6t00aJCqW7LyR",
+      "pvu_g0VZMwcyd00YAd72IMJ9",
+      "pvu_g0VZMweCB00gsO1JuPDJ",
+      "pvu_g0VZMwg2J00y6jiB10TF",
+      "pvu_g0VZMwgxs006E18ZFKTY",
+      "pvu_g0VZMwhp000geplmZf9i",
+      "pvu_g0VZMwiku001Qbo4DwAi",
+      "pvu_g0VZMwjpw003FjLnV0uU",
+      "pvu_g0VZMwkWZ00pT4s69IaF",
+      "pvu_g0VZMwle700zWRAF42NJ",
+      "pvu_g0VZMwmeK00xx71LLuUB"
+    ],
+    "other_session_tokens": 33207,
+    "unattributed_tokens": 0
+  },
+  "launch_head_from_local_reflog": "b92f01e302e252d5f2acb40611384154f54d07c7",
+  "registered_baseline_commit": "b92f01e302e252d5f2acb40611384154f54d07c7"
+}
