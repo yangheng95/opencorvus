@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [0.1.34 发布](records/2026-10/2026-10-29-release-0.1.34.md)：生成登记修复、版本与双语日志、正式五平台及官网交付回执。
+
 - [运行控件保存与连续键盘编辑](records/2026-10/2026-10-28-run-control-save-journey.md)：真实保存结果、局部错误详情、稳定焦点与双语实页验收。
 
 - [待发送附件生命周期调查](records/2026-10/2026-10-28-draft-attachment-lifecycle.md)：旧拷贝回收直接日志、真实上传保留和运行控件问题定位。

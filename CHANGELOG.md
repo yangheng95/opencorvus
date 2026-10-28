@@ -4,37 +4,66 @@
 
 ## 未发布
 
+## 0.1.34 - 2026-10-29
+
 ### zh-CN
+
+#### 新增
+
+- 对话内查找支持定位原始消息、保留搜索上下文和键盘焦点；可导出原始会话及便于阅读的 Markdown，无需先配置可用模型。
+- CSV 交付可直接查看为可搜索表格；JSON、表格、时间线和图表完善类型、筛选、复制与全屏阅读，返回后保留原阅读位置。来源分组支持批量复制位置，交付文件可直接揭示并打开。
+- 输入区支持核对待发送附件、只读预览、下载原件及键盘移除；本地附件引用无需启动模型运行。补齐本地 MCP 服务的连接、断开与项目归属反馈，并在搜索中提供关闭项目入口。
+
+#### 调整
+
+- 持续目标入口和作用范围更加清楚，完成目标详情更简洁；编辑预算保留原暂停决定。Mission 正式完成或受阻结果进入统一工作列表，控制器原始指令默认折叠，保留真实活动和执行身份。
+- 运行控件以实际保存结果更新并行度；连续键盘编辑保持焦点，保存失败显示原位反馈和完整详情。设置导航、搜索、菜单快捷键和表单操作补齐双语说明。
 
 #### 修复
 
-- 2026-10-28：修复旧完成调用提前结束已有后续输入的任务。完成事务保留已接纳消息的原队列和执行轮次，处理完后续输入后才写入最终完成决定；显式取消保持原语义。
-- 2026-10-28：修复 Evolution 历史和晋升准入遗漏已消费 Candidate 导入别名的问题。历史保留当前项目、原目录上界内完整的同 Task 冻结引用；实时准入与新鲜性校验共用完整引用上下文，保留精确历史版本、导入身份及新增测量/Review 的原差异检查。
-- 2026-10-28：统一 Task 完成与 Mission 交接的模型面说明：明确交付给用户或后继 Task 的结构化业务 Artifact 即使没有文件资源，也应列为显式交付；仅验收用途的记录仍作为证据。实际文件格式要求和原完成权威导入保持，避免结构化输出在交接时遗漏。
-- 2026-10-28：修正16个内置专家团共26处 Skill 加载指令，使其使用真实技能名称，避免把能力引用当作工具参数而先失败再重试。受影响包更新为 `2026.10.28.1`；原权限、能力引用和已固定的历史任务修订保持。应用版本及数据库结构不变。
-- 2026-10-28：澄清任务分派中的本地工程边界，避免将“不联网、不外发、不改项目外”扩大成用户未提出的本地提交禁令，减少与构建角色交付要求的冲突。真实用户与项目限制仍须遵守，对外推送和发布仍需各自授权。
-- 2026-10-28：Mission 的正式完成或受阻结果进入统一工作列表，页头显示完整结果，侧栏使用紧凑状态徽标保留标题空间，避免已验收完成后只显示“未运行”。活动信号保持独立，新输入使原结果失效；同步更新接口契约，数据库结构不变。
-- 2026-10-28：修正 Mission 和普通对话底部把目录默认专家包显示为当前分配的问题；上下文按首条消息的真实引用展示，Task 仍保留实际固定包与版本。经真实部分交付、缺材料受阻及中英文页面复核，应用与数据库版本不变。
-- 2026-10-28：修复引用中的无效转义导致编辑器发送状态停滞、会话历史读取失败的问题。原文保持可编辑，合法后续引用正常识别；格式修正建议直接显示并跟随界面语言，数据库无需迁移。
-- 2026-10-28：自动标题优先展示开场引用之后的业务正文，减少专家团/Skill语法占据侧栏标题的问题；正文中的引用、原始消息、仅含引用的请求和已有名称保持，数据库无需迁移。
-- 2026-10-28：将共享 HTTP 查询依赖 `qs` 的固定版本更新至 `6.16.1`，修复逗号数组格式处理特殊对象时抛出异常的问题；覆盖 MCP 与 Slack 的实际依赖链，应用版本和数据库结构不变。
-- 2026-10-28：更新原生加密、证书与异步运行依赖；更新器固定官方 ZIP 9 修复提交，并同步其必需的 Tauri 2.12 依赖。源码构建需 Rust 1.90 以上及访问该固定 Git 来源；应用版本、更新签名边界和数据库结构不变。
+- 修复旧完成调用提前结束已有后续输入的任务：完成事务保留已接纳消息的原队列与执行轮次，处理后续输入后才写入最终完成决定，显式取消保持原语义。
+- 修复 Evolution 历史与晋升准入遗漏已消费 Candidate 导入别名的问题。历史在当前项目和原目录上界内保留完整冻结引用；实时准入与新鲜性校验共用精确上下文，保留历史身份及新增测量和 Review 的差异检查。
+- Task 完成与 Mission 交接统一按交付意图区分业务产物与验收证据。交给用户或后继 Task 的结构化 Artifact 即使没有文件资源，也可声明为显式交付；实际文件格式要求和原完成权威导入保持。
+- 修正16个内置专家团共26处 Skill 加载指令，使用真实技能名称；受影响包更新为 `2026.10.28.1`，同步完整修订登记，保留已有 Task 固定的历史包。澄清任务中的本地工程权限，遵守用户真实限制和对外操作的独立授权。
+- 修复 PDF 阅读空白、附件预览关闭后的布局及 SVG 全图显示；图库、消息和下载使用同一原件身份，SVG 的安全显示派生与原始文件分开。完善附件名称、跨工作区草稿交接、文件路径匹配与冲突时的磁盘/草稿对比。
+- 修复无效引用转义造成的发送停滞和会话历史读取失败，保留可编辑原文及修正提示；自动标题优先显示引用之后的实际任务正文。Mission 和普通对话上下文按真实引用展示，Task 保留实际固定专家包。
+- 修复已复制交互产物的身份保留和侧边对话错误归属；停止后保留响应详情并支持同会话继续。归档恢复保留已加载分页，全局邮箱搜索和跨项目阅读保持原上下文，异步读取返回真实错误。
+- 更新共享 `qs`、原生加密、证书及异步运行依赖，移除旧 `rand` 依赖链。更新器固定官方 ZIP 9 修复提交及其所需 Tauri 2.12 依赖，保持现有更新签名合同。
+
+#### 升级影响与已知限制
+
+- 数据库通过既有版本化自动迁移升级到9，保留用户数据，并为历史复制的交互产物恢复独立身份；本版不要求清空数据库。已固定 Task 的专家包版本保持原身份。
+- 源码构建需 Rust 1.90 以上，并能访问更新器固定的 Git 来源。macOS 仍为临时签名（ad hoc），未包含 Apple 公证；原生 `glib` 中危通告 GHSA-wrw7-89jp-8q8g 仍未解决。
 
 ### en-US
 
+#### Added
+
+- Find text within conversations, jump to original Messages, and retain search context and keyboard focus. Export original conversations or readable Markdown without first configuring an available model.
+- Inspect CSV deliveries as searchable tables. JSON, tables, timelines and charts improve typed values, filtering, copying and fullscreen reading while preserving reading positions. Copy all locations in an expanded source group and reveal delivered files directly.
+- Review pending attachments with read-only previews, original-file downloads and keyboard removal. Capture local attachment references without starting a model run. Manage local MCP connections with project-scoped feedback, and find the close-project action through search.
+
+#### Changed
+
+- Clarify continuous-goal entry points and scope, simplify completed details, and preserve pauses when editing budgets. Show accepted or blocked Mission outcomes in the unified Work Ledger; collapse original controller instructions by default while retaining real activity and execution identity.
+- Update concurrency controls from actual saved configuration. Repeated keyboard edits retain focus; failed saves expose local feedback and full details. Improve bilingual settings guidance, search, menu shortcuts and form interactions.
+
 #### Fixed
 
-- 2026-10-28: Fixed older completion calls ending a Task with accepted successor input still pending. The completion transaction preserves the original queue and execution epoch, and records final completion after that input is handled. Explicit cancellation retains its existing semantics.
-- 2026-10-28: Preserve consumed Candidate import aliases in Evolution history and promotion admission. History retains the complete Task reference context within its original Project and catalog bound; live admission and freshness validation share the complete context, preserving exact historical versions, import identity and the existing checks for new measurements and Reviews.
-- 2026-10-28: Align Task completion and Mission handoff instructions: structured business Artifacts intended for the user or a downstream Task are explicit deliverables even without file resources. Decision-only records remain evidence. Requested file formats and the existing completion-authority import rules remain intact, preserving structured outputs during handoff.
-- 2026-10-28: Corrected 26 Skill-loading instructions across 16 built-in Expert Squads to use declared Skill names. Affected packages advance to `2026.10.28.1`; capability grants and historical pinned Task revisions retain their original identities. Application and database versions are unchanged.
-- 2026-10-28: Clarified Task-authoring boundaries so network, external-transmission and outside-project restrictions do not become invented local-commit prohibitions. Explicit operator and repository restrictions remain binding; remote pushes and publication require their own authority.
-- 2026-10-28: Projected current accepted or blocked Mission outcomes into the unified Work Ledger, with full header labels and compact sidebar badges that preserve title space. Activity remains independent and new authority invalidates stale outcomes; generated contracts are updated without a database change.
-- 2026-10-28: Corrected Mission and ordinary conversation context controls that presented the catalog default Expert Squad as an assignment. Context uses actual first-message references; Tasks retain their fixed package and version. Verified real partial delivery, missing-input blocking, and English/Chinese pages without changing application or database versions.
-- 2026-10-28: Fixed malformed reference escapes that stalled composer submission state and failed conversation hydration. Original text stays editable and later valid references are recognized; actionable guidance is visible and follows the interface language without a database migration.
-- 2026-10-28: Automatic titles use the outcome text after opening references, giving sidebar labels more room for the actual request. Inline references, original messages, reference-only requests and existing titles retain their content without a database migration.
-- 2026-10-28: Updated the shared HTTP query dependency pin to `qs 6.16.1`, fixing comma-array serialization of special object elements. Verified the actual MCP and Slack dependency chains without changing the application version or database schema.
-- 2026-10-28: Updated native encryption, certificate and async-runtime dependencies. The updater uses the official ZIP 9 fix at a pinned Git commit, with its required Tauri 2.12 dependencies. Source builds require Rust 1.90 or later and access to that Git source; the application version, update-signature boundary and database schema are unchanged.
+- Older completion calls preserve accepted successor input in its original queue and execution epoch. Final completion is recorded after that input is handled; explicit cancellation retains its own semantics.
+- Preserve consumed Candidate import aliases in Evolution history and promotion admission. Frozen history retains the complete reference context within its original Project and catalog bound; live admission and freshness share exact context while retaining historical identity and checks for new measurements and Reviews.
+- Distinguish intended business outputs from acceptance-only evidence in Task completion and Mission handoffs. Structured Artifacts intended for the user or a downstream Task can be explicit deliverables without file resources. Requested file formats and completion-authority import rules remain intact.
+- Correct 26 Skill-loading instructions across 16 built-in Expert Squads to use declared Skill names. Affected packages advance to `2026.10.28.1` with the complete revision registry; existing Tasks keep their pinned packages. Clarify local engineering authority while preserving actual user restrictions and independent authorization for external effects.
+- Repair blank PDF reading, attachment-preview close layouts and SVG full-image display. Galleries, Messages and downloads share the original resource identity, with safe SVG display derivatives kept separate. Preserve attachment names and cross-workspace drafts, match portable file paths and compare disk and draft versions after conflicts.
+- Repair malformed reference escapes that stalled submission and history loading, preserving editable originals and actionable guidance. Automatic titles focus on task text after opening references. Mission and conversation context uses actual references; Tasks retain their assigned Expert Squad revision.
+- Preserve copied interactive artifacts and side-chat error ownership. Retain stopped response details and continue within the same conversation. Archive restoration keeps loaded pages; global mailbox search and cross-project reading retain context, and asynchronous reads return their real errors.
+- Update shared `qs`, native encryption, certificate and async-runtime dependencies, and retire the legacy `rand` dependency chain. Pin the official ZIP 9 updater fix and its required Tauri 2.12 dependencies while retaining update-signature contracts.
+
+#### Upgrade impact and known limitations
+
+- Existing versioned automatic migrations advance the database to 9, preserving user data and restoring independent identities for historical copied interactive artifacts. No database reset is required. Tasks keep their pinned Expert Squad revision.
+- Source builds require Rust 1.90 or later and access to the updater's pinned Git source. macOS remains ad hoc signed without Apple notarization. Native `glib` advisory GHSA-wrw7-89jp-8q8g remains unresolved.
+
 
 ## 0.1.33 - 2026-10-27
 

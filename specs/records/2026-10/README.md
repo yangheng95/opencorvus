@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-29-release-0.1.34.md](2026-10-29-release-0.1.34.md)：原生成物检查修复、0.1.34准备与正式联合发布回执。
+
 - [2026-10-28-run-control-save-journey.md](2026-10-28-run-control-save-journey.md)：配置快照驱动并行度、原位错误与真实键盘/连续保存验收。
 
 - [2026-10-28-draft-attachment-lifecycle.md](2026-10-28-draft-attachment-lifecycle.md)：待发送附件生命周期取证和运行控件根因发现。
