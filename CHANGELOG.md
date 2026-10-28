@@ -6,19 +6,59 @@
 
 ### zh-CN
 
+### en-US
+
+## 0.1.37 - 2026-10-29
+
+### zh-CN
+
+#### 调整
+
+- 历史用户消息中的 PDF 默认以原文件名折叠显示，按需展开共享阅读器及原件下载，便于同时阅读正文与回复。
+- 官网发布辅助作业仅检出完整产品代码与所需配置，省去历史规格和验收资料下载；保留三平台专家包归档校验、签名及原40分钟联合发布期限。
+
 #### 修复
 
 - 创建下一持续目标时，保留取消后的目标、预算和展开状态；查看已完成目标详情或指南后重新进入，草稿与输入区入口一致。
+- 在 GitHub Actions 的统一 Ubuntu 依赖配置中明确使用互联网协议第四版（IPv4），避免不可达 IPv6 路径中断原生包构建；普通宿主继续使用其原有网络配置。
+- 原生打包、格式生成与传输辅助作业省去历史规格资料检出；依赖缓存只以根工作区锁文件确定身份，完整准备、签名和原联合发布期限保持。
+
+- PDF 翻页或缩放达到边界后保持键盘焦点，Tab 可继续导航；归档页说明与空状态统一使用“对话”，覆盖 Chat 和 Work。
+- 来源摘录在侧栏宽度变化、收起重开后保留正在阅读的文字位置，避免换行后跳过内容。
+- 修复官网 Windows 归档校验作业下载大量无关资料，挤占安装包公开后官网部署剩余时间的问题。
+
+#### 升级影响与已知限制
+
+- 延续0.1.35的功能与数据库9自动迁移，保留用户数据，无需清空数据库。macOS 仍为临时签名，未包含 Apple 公证；原生 glib 中危通告 GHSA-wrw7-89jp-8q8g 仍未解决。
 
 ### en-US
 
+#### Changed
+
+- Show PDFs in user messages as compact filename disclosures. Expand the shared reader and original download on demand while keeping the conversation readable.
+- Website release helper jobs check out all product code and required configuration while excluding historical specifications and verification evidence. Three-platform Expert Squad archive checks, signing, and the original 40-minute combined release deadline remain required.
+
 #### Fixed
 
-- Retain the next continuous goal's objective, budgets, and disclosure state after closing the form. Reopening through completed-goal details or the composer restores the same draft.
+- Retain the next continuous goal’s objective, budgets, and disclosure state after closing the form. Reopening through completed-goal details or the composer restores the same draft.
+- Select Internet Protocol version 4 (IPv4) in the shared Ubuntu dependency configuration for GitHub Actions, keeping unreachable IPv6 routes from interrupting native packaging. Ordinary hosts retain their existing network configuration.
+- Exclude historical specification evidence from native packaging, format, and transfer helper checkouts. Key the dependency cache from the root workspace lockfile while retaining full preparation checks, signing, and the original combined release deadline.
+
+- Retain keyboard focus at PDF page and zoom limits, allowing Tab navigation to continue. Archive descriptions and empty states consistently refer to conversations, covering both Chat and Work.
+- Preserve the current text position in source excerpts when sidebars resize or excerpts reopen, keeping line wrapping changes from skipping content.
+- Correct the Windows website archive job's unnecessary evidence downloads, which consumed the deployment time remaining after native publication.
+
+#### Upgrade impact and known limitations
+
+- Retain the features and automatic database migration to version 9 from 0.1.35, preserving user data without a database reset. macOS remains ad hoc signed without Apple notarization. The medium-severity native glib advisory GHSA-wrw7-89jp-8q8g remains unresolved.
 
 ## 0.1.36 - 2026-10-29
 
 ### zh-CN
+
+#### 发布状态
+
+- 本候选未公开。原生 x64 RPM 依赖安装遇到 IPv6 无路由错误；原运行完整失败集合重试仍触发最初40分钟截止，保留25资源草稿与原运行记录，不作为完整发布。
 
 #### 调整
 
@@ -36,6 +76,10 @@
 - 延续0.1.35的功能与数据库9自动迁移，保留用户数据，无需清空数据库。macOS 仍为临时签名，未包含 Apple 公证；原生 glib 中危通告 GHSA-wrw7-89jp-8q8g 仍未解决。
 
 ### en-US
+
+#### Publication status
+
+- This candidate was not published. Native x64 RPM dependency setup encountered an unreachable IPv6 route. A complete failed-job retry in the original run still reached its original 40-minute deadline. Its 25-asset draft and run records are retained; this was not a completed release.
 
 #### Changed
 

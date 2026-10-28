@@ -88,6 +88,30 @@ describe("GitHub Actions workflow contract", () => {
     })
   })
 
+  test("retains product inputs in native helpers and full evidence in release preparation", async () => {
+    const native = await readWorkflow("build.yml")
+    const overlay = await readWorkflow("package-overlay.yml")
+    const debug = await readWorkflow("build-overlays.yml")
+    const jobs = [
+      native.jobs?.deadline,
+      native.jobs?.["package-cli"],
+      overlay.jobs?.build,
+      overlay.jobs?.["bundle-linux"],
+      overlay.jobs?.["assemble-linux"],
+      debug.jobs?.["select-platforms"],
+    ]
+    for (const job of jobs) {
+      expect(job?.steps?.find(({ uses }) => uses?.startsWith("actions/checkout@"))?.with).toEqual({
+        "persist-credentials": false,
+        "sparse-checkout": "/*\n!/specs/\n",
+        "sparse-checkout-cone-mode": false,
+      })
+    }
+    expect(native.jobs?.prepare?.steps?.find(({ uses }) => uses?.startsWith("actions/checkout@"))?.with).toEqual({
+      "persist-credentials": false,
+    })
+  })
+
   test("keeps complete production inputs in website auxiliary jobs within the shared release budget", async () => {
     const workflow = await readWorkflow("deploy-opencorvus-com.yml")
     for (const id of ["deadline", "archive-determinism", "sign-and-deploy"]) {
@@ -204,7 +228,7 @@ describe("GitHub Actions workflow contract", () => {
     expect(setup.runs.steps.find(({ name }) => name === "Restore Bun dependencies")).toMatchObject({
       if: "runner.os == 'Linux' || runner.os == 'macOS'",
       uses: "actions/cache/restore@v6",
-      with: { path: "~/.bun/install/cache" },
+      with: { path: "~/.bun/install/cache", key: "${{ runner.os }}-bun-${{ hashFiles('bun.lock') }}" },
     })
     expect(setup.runs.steps.find(({ name }) => name === "Save Bun dependencies")).toMatchObject({
       if: "${{ inputs.install_dependencies == 'true' && (runner.os == 'Linux' || (runner.os == 'macOS' && runner.arch != 'X64')) && steps.bun-cache.outputs.cache-hit != 'true' }}",

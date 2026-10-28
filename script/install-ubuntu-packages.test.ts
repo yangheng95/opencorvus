@@ -121,7 +121,7 @@ test.each([{ args: [] }, { args: ["--command"] }])(
   },
 )
 
-test("writes the inherited apt-get policy with binary-specific precedence", () => {
+test.each(["", "true"])("writes the inherited apt-get policy for GitHub Actions=%j", (githubActions) => {
   const result = spawnSync(
     bash,
     [
@@ -132,13 +132,14 @@ test("writes the inherited apt-get policy with binary-specific precedence", () =
       "config-contract",
       shellPath(script),
     ],
-    shellOptions,
+    { ...shellOptions, env: { ...shellEnvironment, GITHUB_ACTIONS: githubActions } },
   )
   if (result.error) throw result.error
   expect({ status: result.status, error: result.stderr.trim(), configuration: result.stdout }).toEqual({
     status: 0,
     error: "",
-    configuration: `Binary::apt-get {
+    configuration:
+      `Binary::apt-get {
   Dir "/";
   Dir::Etc "etc/apt";
   Dir::Etc::sourcelist "/tmp/signed sources/ubuntu.sources";
@@ -148,7 +149,7 @@ test("writes the inherited apt-get policy with binary-specific precedence", () =
   Acquire::http::Timeout "20";
   APT::Update::Error-Mode "any";
 };
-`,
+` + (githubActions === "true" ? 'Binary::apt-get::Acquire::ForceIPv4 "true";\n' : ""),
   })
 })
 

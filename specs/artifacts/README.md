@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-29-release-0.1.36](2026-10-29-release-0.1.36/README.md)：未公开候选的双语日志原图与原40分钟重试失败边界。
+
 - [2026-10-29-completed-goal-return](2026-10-29-completed-goal-return/README.md)：28张实页原图、Goal草稿/原预算、两次真实保存与全数据/原生结算。
 
 - [H05 OpenCorvus真实试跑](2026-10-29-heavy-workbench-h05-opencorvus/README.md)：三轮原始Task/用量/流式审计与Inspect记录；第三轮按Case血缘预算取消，业务交付未完成。

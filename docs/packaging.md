@@ -18,7 +18,9 @@ owned temporary source file. The runner's source configuration and the original
 step and whole-release deadlines remain intact. The same entry accepts
 `--command COMMAND...` for dependency installers that launch their own `apt-get`.
 It exports the scoped `APT_CONFIG` to the command and its descendants, preserving
-the machine's current APT directory values and configuration fragments. Linux
+the machine's current APT directory values and configuration fragments.
+GitHub Actions downloads select IPv4 through that same binary-specific policy;
+ordinary hosts retain their configured transport selection. Linux
 Playwright system dependencies run in this root context; browser downloads still
 run as the original runner user so their executable and cache ownership agree.
 
@@ -32,6 +34,14 @@ the owned mount. The updater trust root and archive contract remain unchanged.
 Release retries use `gh run rerun <run-id> --failed` for the complete failed set,
 including the independent deadline observer and aggregate. Successful compile,
 format and platform artifacts remain available within the original run budget.
+
+Native packaging, format, transfer and deadline helpers check out all product
+inputs while excluding `specs/` evidence. Release preparation retains the complete
+checkout for its generated fixed-point and documentation checks. The shared Bun
+dependency cache is keyed by the root workspace `bun.lock`, which owns the actual
+installed dependency graph. Run the existing `build-overlays` Intel preflight
+from main to establish its dependency cache before canonical Intel publication,
+whose native build restores that cache read-only.
 
 | Surface                   | Main output                                                                                                        | UI hosting model                                                                                                                                                            | Current owner                                                                                                         |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |

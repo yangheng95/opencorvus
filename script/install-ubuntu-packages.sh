@@ -35,6 +35,9 @@ Binary::apt-get {
   APT::Update::Error-Mode "any";
 };
 EOF
+  if [[ "${GITHUB_ACTIONS:-}" == true ]]; then
+    printf 'Binary::apt-get::Acquire::ForceIPv4 "true";\n'
+  fi
 }
 
 with_ubuntu_apt() (

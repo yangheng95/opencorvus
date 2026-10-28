@@ -44,6 +44,10 @@ jobs:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
+          sparse-checkout: |
+            /*
+            !/specs/
+          sparse-checkout-cone-mode: false
       - uses: ./.github/actions/setup-bun
       - name: Verify version alignment
         env:
@@ -155,6 +159,10 @@ jobs:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
+          sparse-checkout: |
+            /*
+            !/specs/
+          sparse-checkout-cone-mode: false
       - uses: ./.github/actions/setup-bun
       - uses: ./.github/actions/setup-overlay-runtime
         timeout-minutes: 15
@@ -258,6 +266,10 @@ jobs:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
+          sparse-checkout: |
+            /*
+            !/specs/
+          sparse-checkout-cone-mode: false
       - uses: ./.github/actions/setup-bun
       - uses: actions/download-artifact@v8
         with:
