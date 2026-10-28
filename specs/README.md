@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [图库图片资源身份与SVG全图](records/2026-10/2026-10-28-gallery-image-resource-journey.md)：规范原件URI的统一显示映射、真实持久消息图库与下载复核。
+
 - [PDF与SVG附件实际体验](records/2026-10/2026-10-28-attachment-format-journey.md)：修复PDF空白/关闭布局与SVG全图，原件身份和安全派生实证。
 
 - [输入区附件核对与键盘删除](records/2026-10/2026-10-28-composer-attachment-review.md)：真实附件只读预览、原件下载与移除焦点交接。

@@ -1,0 +1,74 @@
+{
+  "at": "2026-10-28T12:54:30.424Z",
+  "checks": [
+    {
+      "label": "gallery-767-url-red",
+      "startedAt": 1793190930026,
+      "closedAt": 1793190934000,
+      "code": 1,
+      "signal": null,
+      "childPID": 51404
+    },
+    {
+      "label": "gallery-767-url-green",
+      "startedAt": 1793191105057,
+      "closedAt": 1793191110393,
+      "code": 0,
+      "signal": null,
+      "childPID": 46624
+    },
+    {
+      "label": "gallery-767-http",
+      "startedAt": 1793191105176,
+      "closedAt": 1793191118873,
+      "code": 0,
+      "signal": null,
+      "childPID": 16932
+    },
+    {
+      "label": "gallery-767-types",
+      "startedAt": 1793191105164,
+      "closedAt": 1793191131991,
+      "code": 0,
+      "signal": null,
+      "childPID": 33664
+    },
+    {
+      "label": "gallery-767-build",
+      "startedAt": 1793191136849,
+      "closedAt": 1793191210253,
+      "code": 0,
+      "signal": null,
+      "childPID": 71360
+    },
+    {
+      "label": "gallery-767-i18n",
+      "startedAt": 1793192034884,
+      "closedAt": 1793192036898,
+      "code": 0,
+      "signal": null,
+      "childPID": 95660
+    },
+    {
+      "label": "gallery-767-docs",
+      "startedAt": 1793192034865,
+      "closedAt": 1793192044186,
+      "code": 0,
+      "signal": null,
+      "childPID": 96144
+    }
+  ],
+  "positiveFunctionalResults": {
+    "uri": {
+      "tests": 1,
+      "assertions": 2,
+      "explicitResourceMappings": 9
+    },
+    "actualAttachmentHTTP": {
+      "tests": 3,
+      "assertions": 18
+    }
+  },
+  "uiAcceptance": "15 raw real-page JPEG screenshots manually reviewed; no UI automated tests",
+  "qualification": "Red shows the previous required MIME contract; actual gallery failure and correction are shown by real pages, not by the URI test"
+}

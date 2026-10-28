@@ -10,7 +10,7 @@ import {
   type ScreenshotBrowserItem,
   type ScreenshotBrowserRow,
 } from "../utils/screenshot-browser"
-import { isStoredAttachmentUrl } from "../utils/attachment-resource"
+import { attachmentImagePreviewUrl, isStoredAttachmentUrl } from "../utils/attachment-resource"
 import { captureApiAuthority, fetchResourceAsObjectUrl, peekResourceObjectUrl } from "../services/api"
 import { fullStampWithRelative, compactDetailStamp, shortStamp } from "../utils/time"
 import { t } from "../utils/i18n"
@@ -160,7 +160,7 @@ function ScreenshotThumbnail(props: { item: ScreenshotBrowserItem }) {
               src={resolved()}
               resourceUrl={props.item.src}
               alt={props.item.alt}
-              previewLoader={() => fetchResourceAsObjectUrl(props.item.src)}
+              previewLoader={() => fetchResourceAsObjectUrl(attachmentImagePreviewUrl(props.item.src))}
               triggerClass="screenshot-browser__thumb-trigger"
               imageClass="screenshot-browser__thumb-image"
               imageAttributes={{

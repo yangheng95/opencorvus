@@ -84,7 +84,6 @@ export function PreviewableImage(props: {
   imageAttributes?: PreviewableImageAttributes
   previewLoader?: PreviewImageLoader
   resourceUrl?: string
-  resourceMime?: string
 }) {
   const alt = () => props.alt || ""
   const trigger = createMemo(() => imagePreviewTriggerContract({ src: props.src, alt: alt() }))
@@ -117,7 +116,7 @@ export function PreviewableImage(props: {
         requestRevision,
         src,
         alt(),
-        resourceUrl && authority ? { resourceUrl, authority, mime: props.resourceMime } : undefined,
+        resourceUrl && authority ? { resourceUrl, authority } : undefined,
       )
     } catch (error) {
       if (!imagePreviewRequestIsCurrent(requestRevision)) return
@@ -183,7 +182,7 @@ export function ImagePreviewHost() {
     () => {
       const state = imagePreviewState()
       return state.open && state.resourceUrl
-        ? { url: attachmentImagePreviewUrl(state.resourceUrl, state.resourceMime ?? ""), revision: state.revision, authority: captureApiAuthority() }
+        ? { url: attachmentImagePreviewUrl(state.resourceUrl), revision: state.revision, authority: captureApiAuthority() }
         : null
     },
     (source) => fetchResourceAsObjectUrl(source.url, { authority: source.authority }),

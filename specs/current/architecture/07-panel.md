@@ -300,8 +300,10 @@ AttachmentStore's single image-rendition pipeline and namespace cache with the
 unchanged `screenshot-browser-thumbnail` profile. Originals and metadata remain
 the canonical bytes; derived images are disposable representations. FilePart
 also owns composer thumbnail presentation, using the same image reader.
-Image preview captures the original resource MIME and derives its display URL
-from that one resource identity. Download reads the authenticated original,
+Image preview derives its display URL from the canonical stored filename's
+media extension, matching the original attachment route. FilePart, the image
+gallery and the global preview host use that single mapping, including records
+whose optional message MIME is absent. Download reads the authenticated original,
 retiring pending work on close, request replacement or API authority change;
 it does not save a raster representation under the original SVG filename.
 Explicit Markdown image-file links and path-like image codespans use the shared

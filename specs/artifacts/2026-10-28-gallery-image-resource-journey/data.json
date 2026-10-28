@@ -1,0 +1,111 @@
+{
+  "at": "2026-10-28T12:51:33.773Z",
+  "databases": [
+    {
+      "tag": "baseline",
+      "tables": 92,
+      "originals": 101334,
+      "exact": 101330,
+      "total": 102427,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "after",
+      "tables": 92,
+      "originals": 102427,
+      "exact": 102427,
+      "total": 102427,
+      "schema": 9,
+      "integrity": "ok"
+    }
+  ],
+  "reviewedCurrentUpdates": [
+    {
+      "table": "memory_chunk",
+      "id": "mck_h6EvLigbGJ7HKAw1igbo",
+      "fields": [
+        "content",
+        "token_count",
+        "time_updated"
+      ],
+      "contract": "Current real user occurrence added to project memory"
+    },
+    {
+      "table": "memory_file",
+      "id": "mem_hQGxyxDBE1BdkM8gs1tW",
+      "fields": [
+        "time_updated"
+      ],
+      "contract": "Current real user occurrence added to project memory"
+    },
+    {
+      "table": "runtime_execution_capacity_lease",
+      "id": 0,
+      "fields": [
+        "lease_id",
+        "owner_id",
+        "time_acquired",
+        "expires_at"
+      ],
+      "contract": "Physical stream lease released at observed EOF"
+    },
+    {
+      "table": "runtime_execution_capacity_lease",
+      "id": 1,
+      "fields": [
+        "lease_id",
+        "owner_id",
+        "time_acquired",
+        "expires_at"
+      ],
+      "contract": "Physical stream lease released at observed EOF"
+    }
+  ],
+  "originalProjectFiles": [
+    "README.md",
+    "mcp.ts",
+    "chat.ts"
+  ],
+  "sourceSVGBytes": 6426,
+  "sourceJPEGBytes": 47688,
+  "namespaceCopies": [
+    {
+      "copy": "namespace-copy.json",
+      "retained": 5,
+      "missingCopiedEntries": [
+        "6d34d82b266780915404921eea16dfd83f646d19eb677ec3e1b2777fc559c9b4.pdf",
+        "6d34d82b266780915404921eea16dfd83f646d19eb677ec3e1b2777fc559c9b4.pdf.metadata.json",
+        "f33221ffe39539c919f37f4f28a4765c302439ffe6bb38f780c800ead3aa23dd.jpg",
+        "f33221ffe39539c919f37f4f28a4765c302439ffe6bb38f780c800ead3aa23dd.jpg.metadata.json"
+      ]
+    },
+    {
+      "copy": "namespace-copy-after.json",
+      "retained": 7,
+      "missingCopiedEntries": []
+    }
+  ],
+  "canonicalSVGExact": true,
+  "originalDownloads": [
+    {
+      "filename": "opencorvus-logo-dark (2).svg",
+      "bytes": 6426,
+      "exact": true
+    },
+    {
+      "filename": "opencorvus-logo-dark (3).svg",
+      "bytes": 6426,
+      "exact": true
+    }
+  ],
+  "realSession": {
+    "id": "ses_-zUQePN8bzzO0tkLjwWg",
+    "file": {
+      "url": "/attachment/prj_hFmj1f6BXMBemXaPwm5n/b7f11664096b2e85bc69f7e57d9952529d6fd67029db53a03631240c8c93d50b.svg",
+      "mime": "image/svg+xml",
+      "filename": "opencorvus-logo-dark.svg"
+    },
+    "reply": "已收到"
+  }
+}

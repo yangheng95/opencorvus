@@ -4,7 +4,6 @@ import { assertApiAuthorityCurrent, captureApiAuthority, type ApiAuthority } fro
 export interface ImagePreviewResource {
   resourceUrl: string
   authority: ApiAuthority
-  mime?: string
 }
 
 export interface ImagePreviewState {
@@ -13,7 +12,6 @@ export interface ImagePreviewState {
   alt: string
   revision: number
   resourceUrl?: string
-  resourceMime?: string
 }
 
 let imagePreviewRevision = 0
@@ -51,7 +49,7 @@ export function openImagePreviewForRequest(
   if (resource) assertApiAuthorityCurrent(resource.authority)
   const resourceUrl = resource?.resourceUrl ?? (src.startsWith("/") ? src : undefined)
   if (resourceUrl && !resourceUrl.startsWith("/")) throw new Error("Image preview resource must be host-relative")
-  setImagePreviewState({ open: true, src, alt, revision: requestRevision, ...(resourceUrl ? { resourceUrl } : {}), ...(resource?.mime ? { resourceMime: resource.mime } : {}) })
+  setImagePreviewState({ open: true, src, alt, revision: requestRevision, ...(resourceUrl ? { resourceUrl } : {}) })
   return true
 }
 

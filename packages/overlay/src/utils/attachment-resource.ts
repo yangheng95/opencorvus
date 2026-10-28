@@ -4,8 +4,10 @@ export function isStoredAttachmentUrl(url: string): boolean {
   return /^\/attachment\/[^/\\?#]+\/[^/\\?#]+$/i.test(url)
 }
 
-export function attachmentImagePreviewUrl(url: string, mime: string): string {
-  return mime.toLowerCase() === "image/svg+xml" && isStoredAttachmentUrl(url)
+// Stored attachment names carry their canonical media extension; the original
+// HTTP route uses that same extension for its SVG download-only contract.
+export function attachmentImagePreviewUrl(url: string): string {
+  return isStoredAttachmentUrl(url) && /\.svg$/i.test(url)
     ? `${url}?variant=${ATTACHMENT_IMAGE_PREVIEW_VARIANT}`
     : url
 }

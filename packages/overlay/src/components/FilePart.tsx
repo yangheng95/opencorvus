@@ -107,7 +107,7 @@ export function FilePart(props: { part: MessageFilePart; presentation?: FilePart
   return (
     <Switch fallback={<FallbackDownload url={url()} name={name()} mime={mimeOf(props.part)} authed={authed()} />}>
       <Match when={kind() === "image" && url() && authed()}>
-        <AuthedImage url={url()} alt={alt()} mime={mimeOf(props.part)} presentation={props.presentation ?? "content"} />
+        <AuthedImage url={url()} alt={alt()} presentation={props.presentation ?? "content"} />
       </Match>
       <Match when={kind() === "image" && url()}>
         <div class={composerThumbnail() ? "composer-attachment-thumbnail" : thumbnail() ? "msg-image-attachment" : "msg-img-wrap"}>
@@ -157,10 +157,10 @@ export function FilePart(props: { part: MessageFilePart; presentation?: FilePart
 // `initialValue` seeds the resource signal from the cache so a cache-hit
 // path renders on the first tick without a spinner flash.
 
-function AuthedImage(props: { url: string; alt: string; mime: string; presentation: FilePartPresentation }) {
+function AuthedImage(props: { url: string; alt: string; presentation: FilePartPresentation }) {
   const thumbnail = () => props.presentation !== "content"
   const composerThumbnail = () => props.presentation === "composer-thumbnail"
-  const previewUrl = () => attachmentImagePreviewUrl(props.url, props.mime)
+  const previewUrl = () => attachmentImagePreviewUrl(props.url)
   const displayUrl = () =>
     thumbnail() ? `${props.url}?variant=${SCREENSHOT_BROWSER_THUMBNAIL_VARIANT}` : previewUrl()
   const [objectUrl] = createResource(
@@ -179,7 +179,6 @@ function AuthedImage(props: { url: string; alt: string; mime: string; presentati
             <PreviewableImage
               src={resolved()}
               resourceUrl={props.url}
-              resourceMime={props.mime}
               alt={props.alt}
               triggerClass={composerThumbnail() ? "composer-attachment-preview-trigger" : thumbnail() ? "msg-image-attachment__trigger" : undefined}
               imageClass={composerThumbnail() ? "chat-attachment-thumb" : thumbnail() ? "msg-image-attachment__image" : undefined}

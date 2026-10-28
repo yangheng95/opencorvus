@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-28-gallery-image-resource-journey](2026-10-28-gallery-image-resource-journey/README.md)：图库SVG失败与修复、实际流式发送、双语原图和原件/数据结算。
+
 - [2026-10-28-attachment-format-journey](2026-10-28-attachment-format-journey/README.md)：PDF/SVG/JPEG实页、两页原件参考、下载/派生与数据证据。
 
 - [2026-10-28-composer-attachment-review](2026-10-28-composer-attachment-review/README.md)：附件核对、中文原文、原件下载、首末项/空列表焦点的真实原图与资源数据证据。

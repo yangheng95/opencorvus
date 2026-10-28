@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-28-gallery-image-resource-journey.md](2026-10-28-gallery-image-resource-journey.md)：图库与消息的单一图片资源身份，持久SVG真实前后验收。
+
 - [2026-10-28-attachment-format-journey.md](2026-10-28-attachment-format-journey.md)：共享PDF阅读器、SVG安全全图派生和附件核对布局。
 
 - [2026-10-28-composer-attachment-review.md](2026-10-28-composer-attachment-review.md)：提交前附件核对、共享文本预览及删除焦点修复。
