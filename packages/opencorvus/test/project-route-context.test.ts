@@ -2,6 +2,13 @@ import { describe, expect, test } from "bun:test"
 import { projectRouteContextKind } from "@/server/project-route-context"
 
 describe("Project route context authority", () => {
+  test("assigns Project display metadata to identity while general Project properties retain runtime", () => {
+    expect({
+      current: projectRouteContextKind("/project/current", "GET"),
+      rename: projectRouteContextKind("/project/current", "PATCH"),
+      properties: projectRouteContextKind("/project/prj_1", "PATCH"),
+    }).toEqual({ current: "identity", rename: "identity", properties: "runtime" })
+  })
   test("assigns durable Task, Session and native artifact reads to Project identity", () => {
     expect({
       taskDeliveries: projectRouteContextKind("/task/tsk_1/turn-artifacts", "GET"),

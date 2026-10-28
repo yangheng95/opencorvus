@@ -1,0 +1,109 @@
+{
+  "attempts": [
+    {
+      "label": "project773-backend-test",
+      "startedAt": 1793216107118,
+      "closedAt": 1793216122042,
+      "code": 1,
+      "signal": null,
+      "childPID": 66088
+    },
+    {
+      "label": "project773-backend-test-fixed",
+      "startedAt": 1793216215192,
+      "closedAt": 1793216230075,
+      "code": 0,
+      "signal": null,
+      "childPID": 92192
+    },
+    {
+      "label": "project773-sdk",
+      "startedAt": 1793216166699,
+      "closedAt": 1793216187483,
+      "code": 0,
+      "signal": null,
+      "childPID": 100332
+    },
+    {
+      "label": "project773-backend-types",
+      "startedAt": 1793216300982,
+      "closedAt": 1793216357672,
+      "code": 0,
+      "signal": null,
+      "childPID": 70160
+    },
+    {
+      "label": "project773-overlay-types",
+      "startedAt": 1793216301084,
+      "closedAt": 1793216334222,
+      "code": 2,
+      "signal": null,
+      "childPID": 68428
+    },
+    {
+      "label": "project773-overlay-types-final",
+      "startedAt": 1793216412431,
+      "closedAt": 1793216438999,
+      "code": 0,
+      "signal": null,
+      "childPID": 49464
+    },
+    {
+      "label": "project773-ui-build",
+      "startedAt": 1793216301098,
+      "closedAt": 1793216378619,
+      "code": 0,
+      "signal": null,
+      "childPID": 8048
+    },
+    {
+      "label": "project773-ui-build-final",
+      "startedAt": 1793216402199,
+      "closedAt": 1793216470963,
+      "code": 0,
+      "signal": null,
+      "childPID": 99364
+    },
+    {
+      "label": "project773-docs-generate",
+      "startedAt": 1793216301108,
+      "closedAt": 1793216312904,
+      "code": 0,
+      "signal": null,
+      "childPID": 98080
+    },
+    {
+      "label": "project773-routes",
+      "startedAt": 1793216412431,
+      "closedAt": 1793216423081,
+      "code": 0,
+      "signal": null,
+      "childPID": 65016
+    },
+    {
+      "label": "project773-i18n",
+      "startedAt": 1793216412457,
+      "closedAt": 1793216416002,
+      "code": 0,
+      "signal": null,
+      "childPID": 29096
+    },
+    {
+      "label": "project773-docs-final",
+      "startedAt": 1793216971519,
+      "closedAt": 1793216980163,
+      "code": 0,
+      "signal": null,
+      "childPID": 98592
+    }
+  ],
+  "correctedFailures": [
+    "Initial classification test incorrectly expected init-git runtime; replaced with the existing general-properties runtime contract.",
+    "Initial Home consumer used name instead of WorkLedgerProjectRow.title; corrected before final build and visual verification."
+  ],
+  "uiAcceptance": "16 original JPEG captures, reviewed manually. No UI automated tests, DOM assertions or pixel baselines.",
+  "notes": [
+    "work-ledger-notification-stream.test.ts was inspected as a non-UI transport service test; it was not run or modified.",
+    "Build and type checks supplement actual UI evidence."
+  ]
+}

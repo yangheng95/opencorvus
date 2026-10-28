@@ -21141,6 +21141,20 @@ export type GatewayStatsData = {
   url: "/gateway/stats"
 }
 
+export type GatewayStatsErrors = {
+  /**
+   * Project not found
+   */
+  404: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "NotFoundError"
+  }
+}
+
+export type GatewayStatsError = GatewayStatsErrors[keyof GatewayStatsErrors]
+
 export type GatewayStatsResponses = {
   /**
    * Gateway stats
@@ -26972,6 +26986,27 @@ export type ProjectCurrentData = {
   }
   url: "/project/current"
 }
+
+export type ProjectCurrentErrors = {
+  /**
+   * Not found
+   */
+  404:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "NotFoundError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "LogFileNotFoundError"
+      }
+}
+
+export type ProjectCurrentError = ProjectCurrentErrors[keyof ProjectCurrentErrors]
 
 export type ProjectCurrentResponses = {
   /**

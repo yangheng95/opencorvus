@@ -99,10 +99,13 @@ export const ProjectRoutes = lazy(() =>
               },
             },
           },
+          ...errors(404),
         },
       }),
       async (c) => {
-        return c.json(Instance.project)
+        const project = Project.get(Instance.project.id)
+        if (!project) throw new NotFoundError({ message: `Project not found: ${Instance.project.id}` })
+        return c.json(project)
       },
     )
     .delete(
@@ -160,7 +163,6 @@ export const ProjectRoutes = lazy(() =>
       async (c) => {
         const body = c.req.valid("json")
         const project = await Project.update({ projectID: Instance.project.id, name: body.name })
-        await Instance.refresh()
         return c.json(project)
       },
     )

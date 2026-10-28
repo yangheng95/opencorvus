@@ -28,10 +28,10 @@ import { Icon } from "./ui/Icon"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import { Button } from "./ui/Button"
 import { StatusIndicator } from "./ui/StatusIndicator"
-import { projectDirectoryKey, projectDirectoryLabel } from "../utils/project-directory"
+import { projectDirectoryKey, projectDisplayName } from "../utils/project-directory"
 import { retrySelectedTaskSelection } from "../services/task"
 import { missionBoardStore } from "../services/mission-board"
-import { workLedgerActiveItem } from "../services/work-ledger"
+import { workLedgerActiveItem, workLedgerProject } from "../services/work-ledger"
 import {
   buildSubagentConversationItems,
   isSubagentActivityRecord,
@@ -664,7 +664,12 @@ export function Conversation(props: {
   const homeProjectDirectory = () => selectedSessionDirectory() || settingsStore.directory.trim()
   const homeProjectName = () => {
     const directory = homeProjectDirectory()
-    return projectDirectoryLabel(directory, directory, t("work_ledger.implicit_project")).name
+    return projectDisplayName({
+      directory,
+      customName: workLedgerProject(directory)?.title,
+      unknownName: directory,
+      implicitProjectName: t("work_ledger.implicit_project"),
+    })
   }
   const homeSuggestions = createMemo(() => [
     {

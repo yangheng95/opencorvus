@@ -219,6 +219,7 @@ import type {
   GatewayControlActionErrors,
   GatewayControlActionResponses,
   GatewayControlMessageResponses,
+  GatewayStatsErrors,
   GatewayStatsResponses,
   GlobalAgentsListResponses,
   GlobalAutomationsCreateErrors,
@@ -413,6 +414,7 @@ import type {
   ProjectCurrentCleanupCandidatesResponses,
   ProjectCurrentDeleteErrors,
   ProjectCurrentDeleteResponses,
+  ProjectCurrentErrors,
   ProjectCurrentInitGitErrors,
   ProjectCurrentInitGitResponses,
   ProjectCurrentPromoteAnonymousErrors,
@@ -6269,7 +6271,7 @@ export class Gateway extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).get<GatewayStatsResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).get<GatewayStatsResponses, GatewayStatsErrors, ThrowOnError>({
       url: "/gateway/stats",
       ...options,
       ...params,
@@ -11293,7 +11295,7 @@ export class Project2 extends HeyApiClient {
     options?: Options<never, ThrowOnError>,
   ) {
     const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
-    return (options?.client ?? this.client).get<ProjectCurrentResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).get<ProjectCurrentResponses, ProjectCurrentErrors, ThrowOnError>({
       url: "/project/current",
       ...options,
       ...params,

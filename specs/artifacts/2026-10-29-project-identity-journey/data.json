@@ -1,0 +1,141 @@
+{
+  "at": "2026-10-28T19:47:53.120Z",
+  "databases": [
+    {
+      "tag": "baseline",
+      "tables": 92,
+      "oldCount": 103484,
+      "exact": 103483,
+      "total": 103484,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "after",
+      "tables": 92,
+      "oldCount": 103484,
+      "exact": 103483,
+      "total": 103484,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "final",
+      "tables": 92,
+      "oldCount": 103484,
+      "exact": 103483,
+      "total": 103484,
+      "schema": 9,
+      "integrity": "ok"
+    }
+  ],
+  "changes": [
+    {
+      "tag": "baseline",
+      "table": "project",
+      "id": "prj_hFmj1f6BXMBemXaPwm5n",
+      "fields": [
+        "time_pinned"
+      ],
+      "before": {
+        "name": null,
+        "updated": 1793155984617,
+        "pinned": null
+      },
+      "after": {
+        "name": null,
+        "updated": 1793155984617,
+        "pinned": 1793215410757
+      }
+    },
+    {
+      "tag": "after",
+      "table": "project",
+      "id": "prj_hFmj1f6BXMBemXaPwm5n",
+      "fields": [
+        "name",
+        "time_updated",
+        "time_pinned"
+      ],
+      "before": {
+        "name": null,
+        "updated": 1793155984617,
+        "pinned": 1793215410757
+      },
+      "after": {
+        "name": "项目体验773",
+        "updated": 1793216245860,
+        "pinned": null
+      }
+    },
+    {
+      "tag": "final",
+      "table": "project",
+      "id": "prj_hFmj1f6BXMBemXaPwm5n",
+      "fields": [
+        "name",
+        "time_updated"
+      ],
+      "before": {
+        "name": "项目体验773",
+        "updated": 1793216245860,
+        "pinned": null
+      },
+      "after": {
+        "name": "Project journey 773",
+        "updated": 1793216542485,
+        "pinned": null
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "filename": "test_invoice.py",
+      "bytes": 1520,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "invoice.py",
+      "bytes": 953,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "README.md",
+      "bytes": 191,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "mcp.ts",
+      "bytes": 5539,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "chat.ts",
+      "bytes": 14692,
+      "exactBytes": true,
+      "exactMetadata": true
+    }
+  ],
+  "namespace": [
+    {
+      "stage": "baseline",
+      "files": 13,
+      "exactBytes": true
+    },
+    {
+      "stage": "-after",
+      "files": 13,
+      "exactBytes": true
+    },
+    {
+      "stage": "-after2",
+      "files": 13,
+      "exactBytes": true
+    }
+  ],
+  "sources": "All source databases match their complete pre-copy rows; only the selected isolated Project metadata changes. All 103484 original rows remain present."
+}

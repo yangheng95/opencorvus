@@ -3945,3 +3945,13 @@ the existing UI locale, including candidate counts, localized numbers, selection
 announcements and suggestion labels. Original option text is preserved. This
 applies to the command palette and scheduled-automation timezone control without
 a separate locale provider or custom announcement channel.
+
+The current Project GET and display-name PATCH use Project identity admission.
+Display metadata is read from the canonical Project record, and a name-only
+update publishes its existing `project.updated` fact without entering Instance
+teardown or executable-model initialization. General Project property updates
+retain their runtime lifecycle. The Work Ledger runtime projection retains its
+Project rows alongside execution rows; directory lists and the Home project
+name derive from this same projection. Home and the sidebar use the shared
+project display-name formatter, so an existing custom name survives selection,
+metadata refresh and reopening without changing the workspace directory.

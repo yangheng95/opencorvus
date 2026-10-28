@@ -1,0 +1,35 @@
+{
+  "requests": [
+    {
+      "stage": "baseline",
+      "time": "2026-10-28T19:13:23.896Z",
+      "requestID": "926267ba-96b7-4bc5-8170-21db99854c43",
+      "method": "PATCH",
+      "path": "/project/current",
+      "status": "completed",
+      "statusCode": 400,
+      "duration": 13
+    },
+    {
+      "stage": "backend",
+      "time": "2026-10-28T19:37:25.866Z",
+      "requestID": "4e254a7e-9672-4b2c-95cb-73f8b1df9024",
+      "method": "PATCH",
+      "path": "/project/current",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 9
+    },
+    {
+      "stage": "final",
+      "time": "2026-10-28T19:42:22.491Z",
+      "requestID": "7ca2b100-67dc-458f-9636-c98c95906fae",
+      "method": "PATCH",
+      "path": "/project/current",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 8
+    }
+  ],
+  "scope": "Real browser rename actions through the ordinary development server /ui. Baseline failed before metadata mutation; backend/final succeeded."
+}

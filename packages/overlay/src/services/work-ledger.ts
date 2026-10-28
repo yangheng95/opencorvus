@@ -16,6 +16,7 @@ import { apiJson, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority 
 import { createSignal } from "solid-js"
 import { t } from "../utils/i18n"
 import { directoryScopedPath } from "./task-path"
+import { projectDirectoryKey } from "../utils/project-directory"
 
 export type WorkLedgerItemRow = WorkLedgerMissionRow | WorkLedgerTaskRow | WorkLedgerChatRow
 export type WorkLedgerTopLevelItemRow = WorkLedgerMissionRow | WorkLedgerTaskRow | WorkLedgerChatRow
@@ -36,17 +37,12 @@ export type {
 }
 
 const [runtimeRowsRevision, setRuntimeRowsRevision] = createSignal(0)
-const runtimeRows = new Map<string, WorkLedgerItemRow>()
-let runtimeProjectDirectoryList: string[] = []
+const runtimeRows = new Map<string, WorkLedgerRow>()
 
 export function setWorkLedgerRuntimeRows(rows: readonly WorkLedgerRow[], authority = captureApiAuthority()): void {
   if (!isApiAuthorityCurrent(authority)) return
   runtimeRows.clear()
-  runtimeProjectDirectoryList = [
-    ...new Set(rows.filter((row): row is WorkLedgerProjectRow => row.kind === "project").map((row) => row.directory)),
-  ].sort((left, right) => left.localeCompare(right))
   for (const row of rows) {
-    if (row.kind === "project") continue
     runtimeRows.set(`${row.kind}:${row.id}`, row)
     if (row.kind === "mission") {
       for (const task of row.tasks) runtimeRows.set(`task:${task.id}`, task)
@@ -57,7 +53,21 @@ export function setWorkLedgerRuntimeRows(rows: readonly WorkLedgerRow[], authori
 
 export function workLedgerProjectDirectories(): string[] {
   runtimeRowsRevision()
-  return [...runtimeProjectDirectoryList]
+  return [
+    ...new Set(
+      [...runtimeRows.values()]
+        .filter((row): row is WorkLedgerProjectRow => row.kind === "project")
+        .map((row) => row.directory),
+    ),
+  ].sort((left, right) => left.localeCompare(right))
+}
+
+export function workLedgerProject(directory: string): WorkLedgerProjectRow | undefined {
+  runtimeRowsRevision()
+  const key = projectDirectoryKey(directory)
+  return [...runtimeRows.values()].find(
+    (row): row is WorkLedgerProjectRow => row.kind === "project" && projectDirectoryKey(row.directory) === key,
+  )
 }
 
 export function workLedgerSessionExecution(sessionID: string): WorkLedgerMissionRow | WorkLedgerChatRow | null {
@@ -113,7 +123,6 @@ export function workLedgerPresentationLabel(row: WorkLedgerItemRow): string {
 
 export function retireWorkLedgerProjection(): void {
   runtimeRows.clear()
-  runtimeProjectDirectoryList = []
   setRuntimeRowsRevision((revision) => revision + 1)
 }
 

@@ -1,0 +1,216 @@
+{
+  "at": "2026-10-28T19:47:53.125Z",
+  "deadlineAt": 1793218215297,
+  "stages": [
+    {
+      "stage": "baseline",
+      "execSession": 15216,
+      "originalExecExitCode": 0,
+      "at": "2026-10-28T19:27:09.365Z",
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 767,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 2693623,
+      "publicShutdown": 200,
+      "physical": {
+        "launcher": {
+          "observedAtUtc": "2026-10-28T19:25:21.7135972Z",
+          "originalChildExit": 0
+        },
+        "native": {
+          "occurrence": "project-identity-journey-773-be312b54-59cf-48f0-9c0b-00a1915a1903",
+          "outcome": "settled",
+          "host": {
+            "pid": 92192,
+            "processInstanceID": "win32:639288114160070508",
+            "occurrenceID": "a557a8cb-fe9b-431a-ac89-118d1077baaa"
+          },
+          "target": {
+            "pid": 69636,
+            "processInstanceID": "win32:639288114168901082",
+            "occurrenceID": "f85ff9bd-97ed-4d62-b084-4d8a58d02688"
+          },
+          "observedAtUtc": "2026-10-28T19:25:21.674Z",
+          "deadlineAt": 1793218215297,
+          "terminal": {
+            "occurrenceID": "project-identity-journey-773-be312b54-59cf-48f0-9c0b-00a1915a1903",
+            "pid": 69636,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-28T19:27:09.2442357Z",
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 92192,
+              "processInstanceID": "win32:639288114160070508",
+              "occurrenceID": "a557a8cb-fe9b-431a-ac89-118d1077baaa"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 69636,
+              "processInstanceID": "win32:639288114168901082",
+              "occurrenceID": "f85ff9bd-97ed-4d62-b084-4d8a58d02688"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "stage": "backend",
+      "execSession": 38739,
+      "originalExecExitCode": 0,
+      "at": "2026-10-28T19:39:46.857Z",
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 767,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 1851519,
+      "publicShutdown": 200,
+      "physical": {
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 85048,
+              "processInstanceID": "win32:639288129981466575",
+              "occurrenceID": "5ba06ea7-acd8-44c1-85a0-d1ada21c3286"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 44584,
+              "processInstanceID": "win32:639288129994662887",
+              "occurrenceID": "89b45c5e-4d67-4379-9e70-0ea5cd18b9a2"
+            }
+          }
+        ],
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-28T19:39:23.8058634Z"
+        },
+        "native": {
+          "occurrence": "project-identity-journey-773-5409e4e5-0141-4fa3-b5c7-b0e53733103d",
+          "outcome": "settled",
+          "host": {
+            "pid": 85048,
+            "processInstanceID": "win32:639288129981466575",
+            "occurrenceID": "5ba06ea7-acd8-44c1-85a0-d1ada21c3286"
+          },
+          "target": {
+            "pid": 44584,
+            "processInstanceID": "win32:639288129994662887",
+            "occurrenceID": "89b45c5e-4d67-4379-9e70-0ea5cd18b9a2"
+          },
+          "observedAtUtc": "2026-10-28T19:39:23.778Z",
+          "deadlineAt": 1793218215297,
+          "terminal": {
+            "occurrenceID": "project-identity-journey-773-5409e4e5-0141-4fa3-b5c7-b0e53733103d",
+            "pid": 44584,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-28T19:39:46.4346040Z"
+      }
+    },
+    {
+      "stage": "final",
+      "execSession": 50245,
+      "originalExecExitCode": 0,
+      "at": "2026-10-28T19:45:49.359Z",
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 767,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 1476514,
+      "publicShutdown": 200,
+      "physical": {
+        "native": {
+          "occurrence": "project-identity-journey-773-dd35abaf-e451-4e6b-b701-fe2731e92489",
+          "outcome": "settled",
+          "host": {
+            "pid": 97372,
+            "processInstanceID": "win32:639288132915821781",
+            "occurrenceID": "755ec503-6fda-4b73-bf91-44759667840c"
+          },
+          "target": {
+            "pid": 93248,
+            "processInstanceID": "win32:639288132924408479",
+            "occurrenceID": "565e2a5f-8199-453e-858a-002567869080"
+          },
+          "observedAtUtc": "2026-10-28T19:45:38.783Z",
+          "deadlineAt": 1793218215297,
+          "terminal": {
+            "occurrenceID": "project-identity-journey-773-dd35abaf-e451-4e6b-b701-fe2731e92489",
+            "pid": 93248,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-28T19:45:38.8163975Z"
+        },
+        "observedAtUtc": "2026-10-28T19:45:49.1931257Z",
+        "chain": [
+          {
+            "identity": {
+              "pid": 97372,
+              "processInstanceID": "win32:639288132915821781",
+              "occurrenceID": "755ec503-6fda-4b73-bf91-44759667840c"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 93248,
+              "processInstanceID": "win32:639288132924408479",
+              "occurrenceID": "565e2a5f-8199-453e-858a-002567869080"
+            },
+            "state": "dead_or_reused"
+          }
+        ]
+      }
+    }
+  ],
+  "requests": 0,
+  "cumulativeRequests": 767,
+  "credentialsCopied": false
+}

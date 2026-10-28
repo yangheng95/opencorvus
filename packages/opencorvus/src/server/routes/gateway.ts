@@ -10,6 +10,8 @@ import { ControlMessage } from "@/control/message"
 import { ControlMessageInput, ControlMessageResult } from "@/control/message-schema"
 import { EngineService } from "@/task-api"
 import { Instance } from "@/project/instance"
+import { Project } from "@/project/project"
+import { NotFoundError } from "@/storage/db"
 import { PanelActionSchema, PanelCapabilityResponse, panelCapabilities } from "@/panel/capability"
 import { createPanelUIRequestToolContext, PanelTool } from "@/tool/panel"
 import { requestID as resolveRequestID } from "@/server/error-handler"
@@ -101,12 +103,14 @@ async function gatewayStats(input: z.infer<typeof GatewayStatsQuery>) {
     ChannelSupervisor.status(),
   ])
   const actions = panelCapabilities("gateway").actions
+  const project = Project.get(Instance.project.id)
+  if (!project) throw new NotFoundError({ message: `Project not found: ${Instance.project.id}` })
   return GatewayStats.parse({
     generatedAt: Date.now(),
     project: {
-      id: Instance.project.id,
-      name: Instance.project.name,
-      worktree: Instance.project.worktree,
+      id: project.id,
+      name: project.name,
+      worktree: project.worktree,
       directory: Instance.directory,
     },
     tasks: {
@@ -164,6 +168,7 @@ export function GatewayRoutes() {
             description: "Gateway stats",
             content: { "application/json": { schema: resolver(GatewayStats) } },
           },
+          404: namedErrorResponse("Project not found", "NotFoundError"),
         },
       }),
       validator("query", GatewayStatsQuery),

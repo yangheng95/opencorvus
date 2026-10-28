@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-29-project-identity-journey.md](2026-10-29-project-identity-journey.md)：项目重命名身份路径、共享名称投影、真实页面与规范数据保留。
+
 - [2026-10-29-release-0.1.37.md](2026-10-29-release-0.1.37.md)：36重试失败事实、37共享工具链修复及完整发布证据。
 
 - [2026-10-29-completed-goal-return.md](2026-10-29-completed-goal-return.md)：创建草稿独立权威、详情/指南/双入口/中文与首页真实验收。

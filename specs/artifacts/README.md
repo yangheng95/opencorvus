@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-29-project-identity-journey](2026-10-29-project-identity-journey/README.md)：16张原图、模型不可用时真实改名、名称一致/关闭重开/双语与三实例完整结算。
+
 - [2026-10-29-release-0.1.36](2026-10-29-release-0.1.36/README.md)：未公开候选的双语日志原图与原40分钟重试失败边界。
 
 - [2026-10-29-completed-goal-return](2026-10-29-completed-goal-return/README.md)：28张实页原图、Goal草稿/原预算、两次真实保存与全数据/原生结算。

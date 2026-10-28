@@ -6,7 +6,11 @@
 
 ### zh-CN
 
+- 修复项目重命名被不可用模型阻止的问题；首页与侧栏同步使用项目显示名称，名称修改保留当前项目身份。
+
 ### en-US
+
+- Fix project rename failing when its execution model is unavailable; Home and the sidebar now share the project display name while retaining its identity.
 
 ## 0.1.37 - 2026-10-29
 
