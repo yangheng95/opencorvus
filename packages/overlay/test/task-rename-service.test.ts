@@ -40,7 +40,7 @@ function fakeTransport(responder: Responder): HostTransport {
 }
 
 const { renameTask } = await import("../src/services/task")
-const { clearBoard, setTasksData } = await import("../src/store/board")
+const { boardStore, clearBoard, setTasksData } = await import("../src/store/board")
 
 let captured: Captured[]
 const TASK_DIRECTORY = "D:/repo/task-rename"
@@ -65,7 +65,7 @@ afterEach(() => {
   __setHostTransportForTest(undefined)
 })
 
-function recordingTransport(patchStatus = 200): HostTransport {
+function recordingTransport(patchStatus = 200, readStatus = 200): HostTransport {
   return fakeTransport((req) => {
     captured.push({
       path: req.path,
@@ -78,7 +78,7 @@ function recordingTransport(patchStatus = 200): HostTransport {
     if (req.method === "PATCH") {
       return { status: patchStatus, ok: patchStatus < 400, headers: {}, body: true }
     }
-    return { status: 200, ok: true, headers: {}, body: { tasks: [] } }
+    return { status: readStatus, ok: readStatus < 400, headers: {}, body: { tasks: [] } }
   })
 }
 
@@ -97,5 +97,14 @@ describe("renameTask service contract", () => {
   test("server error rejects with the API error", async () => {
     __setHostTransportForTest(recordingTransport(500))
     await expect(renameTask("tsk_abc123", "New name")).rejects.toThrow("API 500")
+  })
+
+  test("a confirmed rename returns success while a failed refresh keeps its original read error", async () => {
+    __setHostTransportForTest(recordingTransport(200, 503))
+    const ok = await renameTask("tsk_abc123", "Committed name")
+    expect({ ok, readError: boardStore.tasksError }).toEqual({
+      ok: true,
+      readError: expect.stringContaining("API 503"),
+    })
   })
 })

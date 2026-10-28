@@ -82,6 +82,9 @@ export const CONFIG_SECTIONS: readonly ConfigSection[] = [
 export interface AppDialogState extends AppDialogOptions {
   open: boolean
   epoch: number
+  submitting: boolean
+  submitError: string
+  submitErrorDetails: string
 }
 
 export interface SessionDialogState {
@@ -132,6 +135,9 @@ const DEFAULT_DIALOG_STATE: DialogState = {
     inputRequired: false,
     inputRequiredMessage: "",
     inputError: "",
+    submitting: false,
+    submitError: "",
+    submitErrorDetails: "",
     select: false,
     selectLabel: "",
     selectValue: "",

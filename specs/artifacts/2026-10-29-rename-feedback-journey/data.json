@@ -1,0 +1,215 @@
+{
+  "at": "2026-10-28T21:13:29.592Z",
+  "databases": [
+    {
+      "tag": "baseline",
+      "tables": 92,
+      "oldCount": 103484,
+      "exact": 103484,
+      "total": 103484,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "after",
+      "tables": 92,
+      "oldCount": 103484,
+      "exact": 103480,
+      "total": 103588,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "final-locale",
+      "tables": 92,
+      "oldCount": 103588,
+      "exact": 103588,
+      "total": 103588,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "final-copy",
+      "tables": 92,
+      "oldCount": 103588,
+      "exact": 103588,
+      "total": 103588,
+      "schema": 9,
+      "integrity": "ok"
+    }
+  ],
+  "changes": [
+    {
+      "tag": "after",
+      "table": "project",
+      "id": "prj_hFmj1f6BXMBemXaPwm5n",
+      "fields": [
+        "time_updated"
+      ],
+      "retainedTitle": "Project journey 773",
+      "updatedBefore": 1793216542485,
+      "updatedAfter": 1793221427366
+    },
+    {
+      "tag": "after",
+      "table": "session",
+      "id": "ses_-zUQi8aC3zzDyYDXPxXm",
+      "fields": [
+        "time_updated"
+      ],
+      "retainedTitle": "会话问候确认",
+      "updatedBefore": 1793135885395,
+      "updatedAfter": 1793221377985
+    },
+    {
+      "tag": "after",
+      "table": "session",
+      "id": "ses_-zUQgm405zzb2xZnkVrc",
+      "fields": [
+        "time_updated"
+      ],
+      "retainedTitle": "对话导出体验759",
+      "updatedBefore": 1793162283785,
+      "updatedAfter": 1793221243941
+    },
+    {
+      "tag": "after",
+      "table": "session",
+      "id": "ses_-zUQePN8bzzO0tkLjwWg",
+      "fields": [
+        "time_updated"
+      ],
+      "retainedTitle": "请确认收到了品牌 SVG 附件，只回复“已收到”。不调用工具，不创建任务或委派其他代理。",
+      "updatedBefore": 1793206962190,
+      "updatedAfter": 1793221290198
+    }
+  ],
+  "addedCounts": {
+    "bus_publication_delivery": 16,
+    "bus_publication_delivery_receipt": 16,
+    "bus_publication_outbox": 8,
+    "bus_publication_owner": 8,
+    "bus_publication_phase_receipt": 24,
+    "engine_control_activation_lease": 16,
+    "engine_control_activation_lease_grant": 16
+  },
+  "publications": [
+    {
+      "occurrence": "bus-occurrence:05d25efa-cb74-448e-98f4-8ad02245a21e",
+      "type": "session.updated",
+      "project": "prj_hFmj1f6BXMBemXaPwm5n",
+      "identity": "ses_-zUQgm405zzb2xZnkVrc",
+      "title": "对话保存体验775"
+    },
+    {
+      "occurrence": "bus-occurrence:47ddf155-5712-44e9-a1b6-634e404075d7",
+      "type": "session.updated",
+      "project": "prj_hFmj1f6BXMBemXaPwm5n",
+      "identity": "ses_-zUQgm405zzb2xZnkVrc",
+      "title": "对话导出体验759"
+    },
+    {
+      "occurrence": "bus-occurrence:4fcb9b9c-b70d-4cff-94aa-fcbf19e9b071",
+      "type": "session.updated",
+      "project": "prj_hFmj1f6BXMBemXaPwm5n",
+      "identity": "ses_-zUQePN8bzzO0tkLjwWg",
+      "title": "Work 保存体验775"
+    },
+    {
+      "occurrence": "bus-occurrence:6746a800-5028-4654-848c-646dc3c7d921",
+      "type": "session.updated",
+      "project": "prj_hFmj1f6BXMBemXaPwm5n",
+      "identity": "ses_-zUQePN8bzzO0tkLjwWg",
+      "title": "请确认收到了品牌 SVG 附件，只回复“已收到”。不调用工具，不创建任务或委派其他代理。"
+    },
+    {
+      "occurrence": "bus-occurrence:0ad33ee4-c0e9-43ee-b004-d9d56d2520ea",
+      "type": "task.updated",
+      "project": "prj_hJdoxVnJqyVZSpiLlYXE",
+      "identity": "tsk_g00VZH4Swp00oZbphtIe"
+    },
+    {
+      "occurrence": "bus-occurrence:761e03a6-ff34-4f90-94ff-dd8baaeca69a",
+      "type": "task.updated",
+      "project": "prj_hJdoxVnJqyVZSpiLlYXE",
+      "identity": "tsk_g00VZH4Swp00oZbphtIe"
+    },
+    {
+      "occurrence": "bus-occurrence:4763f166-18e4-4abd-ba23-a67f408c489b",
+      "type": "session.updated",
+      "project": "prj_hgdSEVIPNvqnnfCMXUpF",
+      "identity": "ses_-zUQi8aC3zzDyYDXPxXm",
+      "title": "Mission 保存体验775"
+    },
+    {
+      "occurrence": "bus-occurrence:5f773e59-945a-4a70-bbfa-5e9d16eccb84",
+      "type": "session.updated",
+      "project": "prj_hgdSEVIPNvqnnfCMXUpF",
+      "identity": "ses_-zUQi8aC3zzDyYDXPxXm",
+      "title": "会话问候确认"
+    }
+  ],
+  "deliveryOutcomes": {
+    "succeeded": 16
+  },
+  "busDeliveryLeases": {
+    "count": 16,
+    "settled": true
+  },
+  "inputs": [
+    {
+      "filename": "test_invoice.py",
+      "bytes": 1520,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "invoice.py",
+      "bytes": 953,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "README.md",
+      "bytes": 191,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "mcp.ts",
+      "bytes": 5539,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "chat.ts",
+      "bytes": 14692,
+      "exactBytes": true,
+      "exactMetadata": true
+    }
+  ],
+  "namespace": [
+    {
+      "stage": "baseline",
+      "files": 13,
+      "exactBytes": true
+    },
+    {
+      "stage": "-after",
+      "files": 13,
+      "exactBytes": true
+    },
+    {
+      "stage": "-after2",
+      "files": 13,
+      "exactBytes": true
+    },
+    {
+      "stage": "-after3",
+      "files": 13,
+      "exactBytes": true
+    }
+  ],
+  "sourceDatabases": "Every source database matches all pre-copy rows.",
+  "task": "The canonical Task setter changes only title; restoring it leaves the original Task row exactly equal."
+}

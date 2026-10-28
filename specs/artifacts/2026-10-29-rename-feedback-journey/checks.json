@@ -1,0 +1,86 @@
+{
+  "attempts": [
+    {
+      "label": "rename775-types",
+      "startedAt": 1793220726945,
+      "closedAt": 1793220752996,
+      "code": 0,
+      "signal": null,
+      "childPID": 66828
+    },
+    {
+      "label": "rename775-service-test",
+      "startedAt": 1793220726945,
+      "closedAt": 1793220732637,
+      "code": 0,
+      "signal": null,
+      "childPID": 84576
+    },
+    {
+      "label": "rename775-i18n",
+      "startedAt": 1793220726953,
+      "closedAt": 1793220729892,
+      "code": 0,
+      "signal": null,
+      "childPID": 98112
+    },
+    {
+      "label": "rename775-build",
+      "startedAt": 1793220727099,
+      "closedAt": 1793220796046,
+      "code": 0,
+      "signal": null,
+      "childPID": 94848
+    },
+    {
+      "label": "rename775-build-final",
+      "startedAt": 1793221188517,
+      "closedAt": 1793221256135,
+      "code": 0,
+      "signal": null,
+      "childPID": 95960
+    },
+    {
+      "label": "rename775-i18n-final",
+      "startedAt": 1793221219732,
+      "closedAt": 1793221221458,
+      "code": 0,
+      "signal": null,
+      "childPID": 93128
+    },
+    {
+      "label": "rename775-build-polished",
+      "startedAt": 1793221583322,
+      "closedAt": 1793221648991,
+      "code": 0,
+      "signal": null,
+      "childPID": 38328
+    },
+    {
+      "label": "rename775-types-final",
+      "startedAt": 1793221693966,
+      "closedAt": 1793221713933,
+      "code": 0,
+      "signal": null,
+      "childPID": 92480
+    },
+    {
+      "label": "rename775-docs",
+      "startedAt": 1793222025694,
+      "closedAt": 1793222034132,
+      "code": 0,
+      "signal": null,
+      "childPID": 98284
+    }
+  ],
+  "serviceTest": "3 passed, 7 expect calls; transport mapping and acknowledged write/read error contract only.",
+  "ui": "21 original JPEG screenshots, actually rendered and manually reviewed. No UI automated tests or text/DOM/pixel assertions.",
+  "correctedVisualFindings": [
+    "Single-brace maximum placeholder corrected to the existing double-brace interpolation contract.",
+    "Three metadata rename callers now use the generic required-input message rather than a file-browser path requirement."
+  ],
+  "limits": [
+    "Slow saving and dialog replacement/late completion matrix has code and type evidence only.",
+    "A real UI refresh-503 path was not exercised; the selected service test covers its local contract."
+  ]
+}

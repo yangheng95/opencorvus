@@ -5,6 +5,7 @@
 import { t } from "../utils/i18n"
 import { dialogStore, setDialogStore } from "../store/dialog"
 import { occludeNativeSurfaces, revealNativeSurfaces } from "./native-surface-occlusion"
+import { formatErrorDetails } from "../utils/error-details"
 
 export type AppDialogOptions = {
   title?: string
@@ -22,6 +23,7 @@ export type AppDialogOptions = {
   inputValue?: string
   inputRequired?: boolean
   inputRequiredMessage?: string
+  inputMaxLength?: number
   inputError?: string
   select?: boolean
   selectLabel?: string
@@ -35,7 +37,10 @@ export type AppDialogOptions = {
   link?: { url: string; label: string }
 }
 
-export type AppDialogOpenOptions = AppDialogOptions & { openingGuard?: () => boolean }
+export type AppDialogOpenOptions = AppDialogOptions & {
+  openingGuard?: () => boolean
+  onConfirm?: (value: string | null) => Promise<void>
+}
 
 export type AppDialogResult = { confirmed: boolean; value: string | null }
 
@@ -45,6 +50,7 @@ type AppDialogCompletion = {
   occlusionOwner: string
   resolve: (value: AppDialogResult) => void
   reject: (reason: unknown) => void
+  onConfirm?: AppDialogOpenOptions["onConfirm"]
 }
 let activeDialog: AppDialogCompletion | null = null
 
@@ -127,7 +133,7 @@ export function showAppDialog(options: AppDialogOpenOptions = {}): Promise<AppDi
           resolve({ confirmed: false, value: null })
           return
         }
-        const completion = { epoch, occlusionOwner, resolve, reject }
+        const completion = { epoch, occlusionOwner, resolve, reject, onConfirm: options.onConfirm }
         setDialogStore("app", {
           open: true,
           epoch,
@@ -146,7 +152,11 @@ export function showAppDialog(options: AppDialogOpenOptions = {}): Promise<AppDi
           inputValue: options.inputValue || "",
           inputRequired: options.inputRequired === true,
           inputRequiredMessage: options.inputRequiredMessage || t("dialog.input_required"),
+          inputMaxLength: options.inputMaxLength,
           inputError: "",
+          submitting: false,
+          submitError: "",
+          submitErrorDetails: "",
           select: options.select === true,
           selectLabel: options.selectLabel || t("dialog.input"),
           selectValue,
@@ -180,14 +190,29 @@ export async function nativeMessage(
   })
 }
 
-async function finishAppDialog(confirmed: boolean, epoch: number, dialog?: HTMLElement): Promise<boolean> {
-  if (confirmed && dialogStore.app.input && dialogStore.app.inputRequired && !dialogStore.app.inputValue.trim()) {
-    setDialogStore("app", "inputError", dialogStore.app.inputRequiredMessage || t("dialog.input_required"))
-    return false
+function ownsDialog(completion: AppDialogCompletion): boolean {
+  return activeDialog === completion && dialogStore.app.open && dialogStore.app.epoch === completion.epoch
+}
+
+async function completeAppDialog(completion: AppDialogCompletion, confirmed: boolean, value: string | null): Promise<void> {
+  if (!ownsDialog(completion)) return
+  activeDialog = null
+  setDialogStore("app", "open", false)
+  try {
+    await revealNativeSurfaces(completion.occlusionOwner)
+  } catch (error) {
+    completion.reject(error)
+    return
   }
-  await runAppDialogTransition(async () => {
+  completion.resolve({ confirmed, value })
+}
+
+async function finishAppDialog(confirmed: boolean, epoch: number): Promise<boolean> {
+  const decision = await runAppDialogTransition(async () => {
     const completion = activeDialog
-    if (!completion || completion.epoch !== epoch || epoch !== dialogStore.app.epoch) return
+    if (!completion || completion.epoch !== epoch || epoch !== dialogStore.app.epoch || dialogStore.app.submitting) {
+      return { kind: "settled" } as const
+    }
     const inputValue =
       typeof document !== "undefined"
         ? (document.getElementById("appDialogInput") as HTMLInputElement | null)?.value
@@ -197,18 +222,45 @@ async function finishAppDialog(confirmed: boolean, epoch: number, dialog?: HTMLE
       : dialogStore.app.select
         ? dialogStore.app.selectValue
         : null
-    activeDialog = null
-    setDialogStore("app", "open", false)
-    try {
-      await revealNativeSurfaces(completion.occlusionOwner)
-    } catch (error) {
-      completion.reject(error)
-      return
+    if (confirmed && dialogStore.app.input) {
+      const trimmed = String(value ?? "").trim()
+      if (dialogStore.app.inputRequired && !trimmed) {
+        setDialogStore("app", "inputError", dialogStore.app.inputRequiredMessage || t("dialog.input_required"))
+        return { kind: "invalid" } as const
+      }
+      const maximum = dialogStore.app.inputMaxLength
+      if (maximum !== undefined && trimmed.length > maximum) {
+        setDialogStore("app", "inputError", t("dialog.input_too_long", { max: maximum }))
+        return { kind: "invalid" } as const
+      }
     }
-    completion.resolve({ confirmed, value })
+    if (confirmed && completion.onConfirm) {
+      setDialogStore("app", { submitting: true, submitError: "", submitErrorDetails: "" })
+      return { kind: "submit", completion, value } as const
+    }
+    await completeAppDialog(completion, confirmed, value)
+    return { kind: "settled" } as const
   })
-  void dialog
-  return true
+  if (decision.kind !== "submit") return decision.kind !== "invalid"
+  try {
+    await decision.completion.onConfirm!(decision.value)
+  } catch (error) {
+    return runAppDialogTransition(async () => {
+      if (!ownsDialog(decision.completion)) return true
+      setDialogStore("app", {
+        submitting: false,
+        submitError: t("dialog.submit_failed"),
+        submitErrorDetails: formatErrorDetails(error),
+      })
+      return false
+    })
+  }
+  return runAppDialogTransition(async () => {
+    if (!ownsDialog(decision.completion)) return true
+    setDialogStore("app", "submitting", false)
+    await completeAppDialog(decision.completion, true, decision.value)
+    return true
+  })
 }
 
 export function settleAppDialog(confirmed: boolean, epoch = dialogStore.app.epoch): Promise<boolean> {
@@ -217,5 +269,5 @@ export function settleAppDialog(confirmed: boolean, epoch = dialogStore.app.epoc
 
 export function dismissAppDialog(dialog?: HTMLElement): Promise<boolean> {
   const epoch = Number(dialog?.dataset.dialogEpoch || dialogStore.app.epoch)
-  return finishAppDialog(false, epoch, dialog)
+  return finishAppDialog(false, epoch)
 }

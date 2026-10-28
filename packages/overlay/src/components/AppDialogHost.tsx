@@ -8,6 +8,7 @@ import { Button } from "./ui/Button"
 import { TextField } from "./ui/TextField"
 import { SelectControl } from "./ui/SelectControl"
 import { Disclosure } from "./ui/Disclosure"
+import { Feedback } from "./ui/Feedback"
 
 type AppDialogSelectOption = { value: string; label?: string }
 
@@ -31,9 +32,14 @@ export function AppDialogHost() {
   const setSelectOption = (option: AppDialogSelectOption | null) => {
     if (!option) return
     setDialogStore("app", "selectValue", option.value)
+    setDialogStore("app", { submitError: "", submitErrorDetails: "" })
   }
   const confirm = async () => {
-    if (!(await settleAppDialog(true, dialogStore.app.epoch))) inputRef?.focus()
+    const epoch = dialogStore.app.epoch
+    const settled = await settleAppDialog(true, epoch)
+    if (!settled && dialogStore.app.open && dialogStore.app.epoch === epoch && !dialogStore.app.submitting) {
+      inputRef?.focus()
+    }
   }
 
   return (
@@ -45,6 +51,7 @@ export function AppDialogHost() {
       overlayClass="app-dialog-overlay"
       formClass="app-dialog-form"
       aria-describedby="appDialogBody"
+      aria-busy={dialogStore.app.submitting}
       onOpenAutoFocus={(event) => {
         event.preventDefault()
         if (dialogStore.app.input && inputRef) {
@@ -72,6 +79,7 @@ export function AppDialogHost() {
                 variant="outline"
                 size="md"
                 tone="accent"
+                disabled={dialogStore.app.submitting}
                 onClick={() => {
                   // Synchronous on purpose. The browser transport reaches
                   // window.open before its first await, so this call still
@@ -95,6 +103,7 @@ export function AppDialogHost() {
               variant="ghost"
               size="md"
               tone="neutral"
+              disabled={dialogStore.app.submitting}
               onClick={() => {
                 void settleAppDialog(false, dialogStore.app.epoch)
               }}
@@ -108,6 +117,7 @@ export function AppDialogHost() {
             variant="solid"
             size="md"
             tone={dialogStore.app.okTone || "accent"}
+            disabled={dialogStore.app.submitting}
             ref={(el) => {
               okButtonRef = el
             }}
@@ -115,7 +125,7 @@ export function AppDialogHost() {
               void confirm()
             }}
           >
-            {dialogStore.app.okLabel || t("common.ok")}
+            {dialogStore.app.submitting ? t("common.saving") : dialogStore.app.okLabel || t("common.ok")}
           </Button>
         </>
       }
@@ -128,6 +138,11 @@ export function AppDialogHost() {
             <Disclosure.Content class="oc-feedback__diagnostic">{dialogStore.app.details}</Disclosure.Content>
           </Disclosure.Root>
         </Show>
+        <Show when={dialogStore.app.submitError}>
+          <Feedback tone="error" details={dialogStore.app.submitErrorDetails}>
+            {dialogStore.app.submitError}
+          </Feedback>
+        </Show>
       </div>
       <Show when={linkError()}>
         <p class="app-dialog-link-error" data-ui="app-dialog-link-error" role="alert">
@@ -139,6 +154,7 @@ export function AppDialogHost() {
         classList={{ hidden: dialogStore.app.input !== true }}
         id="appDialogInputField"
         invalid={Boolean(dialogStore.app.inputError)}
+        disabled={dialogStore.app.submitting}
       >
         <TextField.Label id="appDialogInputLabel">
           {dialogStore.app.inputLabel || t("dialog.input")}
@@ -155,6 +171,7 @@ export function AppDialogHost() {
           onInput={(event) => {
             setDialogStore("app", "inputValue", event.currentTarget.value)
             if (dialogStore.app.inputError) setDialogStore("app", "inputError", "")
+            if (dialogStore.app.submitError) setDialogStore("app", { submitError: "", submitErrorDetails: "" })
           }}
           onKeyDown={(event) => {
             if (event.isComposing) return
@@ -180,6 +197,7 @@ export function AppDialogHost() {
           optionValue="value"
           optionTextValue="label"
           disallowEmptySelection
+          disabled={dialogStore.app.submitting}
           gutter={4}
           sameWidth
           triggerID="appDialogSelect"

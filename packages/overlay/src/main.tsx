@@ -1013,7 +1013,7 @@ async function renameWorkLedgerProject(directory: string, currentName: string): 
   const authority = captureApiAuthority()
   const projectDirectory = directory.trim()
   if (!projectDirectory) throw new Error(t("project.rename_missing_directory"))
-  const dialog = await showAppDialog({
+  await showAppDialog({
     title: t("project.rename_title"),
     message: t("project.rename_message", { directory: projectDirectory }),
     input: true,
@@ -1024,15 +1024,17 @@ async function renameWorkLedgerProject(directory: string, currentName: string): 
     inputRequiredMessage: t("project.rename_name_required"),
     cancel: true,
     okLabel: t("project.rename_menu_label"),
+    onConfirm: async (value) => {
+      const name = String(value || "").trim()
+      if (name === currentName.trim()) return
+      assertApiAuthorityCurrent(authority)
+      await renameProjectRecord(projectDirectory, name, authority)
+      if (!isApiAuthorityCurrent(authority)) return
+      runPostCommitUiEffect({ id: `project:rename:${projectDirectory}`, title: t("project.rename_title") }, () =>
+        setMissionSharedRefreshToken((token) => token + 1),
+      )
+    },
   })
-  if (!dialog.confirmed) return
-  const name = String(dialog.value || "").trim()
-  if (!name) throw new Error(t("project.rename_name_required"))
-  if (name === currentName.trim()) return
-  assertApiAuthorityCurrent(authority)
-  await renameProjectRecord(projectDirectory, name, authority)
-  if (!isApiAuthorityCurrent(authority)) return
-  setMissionSharedRefreshToken((value) => value + 1)
 }
 
 async function promoteWorkLedgerAnonymousProject(directory: string): Promise<void> {
@@ -1238,24 +1240,28 @@ async function downloadWorkLedgerMission(row: WorkLedgerMissionRow): Promise<voi
 
 async function renameWorkLedgerMission(row: WorkLedgerMissionRow): Promise<void> {
   const authority = captureApiAuthority()
-  const dialog = await showAppDialog({
+  await showAppDialog({
     title: t("work_ledger.action.rename_mission"),
     input: true,
     inputLabel: t("work_ledger.action.rename_placeholder"),
     inputPlaceholder: t("work_ledger.action.rename_placeholder"),
     inputValue: row.title || row.missionID,
+    inputMaxLength: 200,
     inputRequired: true,
-    inputRequiredMessage: t("explorer.name_required"),
+    inputRequiredMessage: t("dialog.input_required"),
     cancel: true,
     okLabel: t("common.ok"),
+    onConfirm: async (value) => {
+      const title = String(value || "").trim()
+      if (title === (row.title || "").trim()) return
+      assertApiAuthorityCurrent(authority)
+      await renameMission({ missionID: row.missionID, directory: row.directory, authority }, title)
+      if (!isApiAuthorityCurrent(authority)) return
+      runPostCommitUiEffect({ id: `mission:rename:${row.missionID}`, title: t("work_ledger.action.rename_mission") }, () =>
+        setMissionSharedRefreshToken((token) => token + 1),
+      )
+    },
   })
-  if (!dialog.confirmed) return
-  const title = String(dialog.value || "").trim()
-  if (!title || title === (row.title || "").trim()) return
-  assertApiAuthorityCurrent(authority)
-  await renameMission({ missionID: row.missionID, directory: row.directory, authority }, title)
-  if (!isApiAuthorityCurrent(authority)) return
-  setMissionSharedRefreshToken((value) => value + 1)
 }
 
 async function archiveWorkLedgerMission(row: WorkLedgerMissionRow): Promise<void> {
@@ -1308,25 +1314,29 @@ async function downloadWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
 
 async function renameWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
   const authority = captureApiAuthority()
-  const dialog = await showAppDialog({
+  await showAppDialog({
     title: t("task.rename_button_title"),
     input: true,
     inputLabel: t("task.rename_placeholder"),
     inputPlaceholder: t("task.rename_placeholder"),
     inputValue: row.title || row.id,
+    inputMaxLength: 200,
     inputRequired: true,
-    inputRequiredMessage: t("explorer.name_required"),
+    inputRequiredMessage: t("dialog.input_required"),
     cancel: true,
     okLabel: t("common.ok"),
+    onConfirm: async (value) => {
+      const title = String(value || "").trim()
+      if (title === (row.title || "").trim()) return
+      assertApiAuthorityCurrent(authority)
+      const ok = await renameTask(row.id, title, authority)
+      if (!isApiAuthorityCurrent(authority)) return
+      if (!ok) throw new Error(t("task.rename_placeholder"))
+      runPostCommitUiEffect({ id: `task:rename:${row.id}`, title: t("task.rename_button_title") }, () =>
+        setMissionSharedRefreshToken((token) => token + 1),
+      )
+    },
   })
-  if (!dialog.confirmed) return
-  const title = String(dialog.value || "").trim()
-  if (!title || title === (row.title || "").trim()) return
-  assertApiAuthorityCurrent(authority)
-  const ok = await renameTask(row.id, title, authority)
-  if (!isApiAuthorityCurrent(authority)) return
-  if (!ok) throw new Error(t("task.rename_placeholder"))
-  setMissionSharedRefreshToken((value) => value + 1)
 }
 
 async function archiveWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
@@ -1357,27 +1367,31 @@ async function stopWorkLedgerChat(row: WorkLedgerChatRow): Promise<void> {
 
 async function renameWorkLedgerChat(row: WorkLedgerChatRow): Promise<void> {
   const authority = captureApiAuthority()
-  const dialog = await showAppDialog({
+  await showAppDialog({
     title: t("work_ledger.action.rename_chat"),
     input: true,
     inputLabel: t("work_ledger.action.rename_placeholder"),
     inputPlaceholder: t("work_ledger.action.rename_placeholder"),
     inputValue: row.title || row.sessionID,
+    inputMaxLength: 200,
     inputRequired: true,
-    inputRequiredMessage: t("explorer.name_required"),
+    inputRequiredMessage: t("dialog.input_required"),
     cancel: true,
     okLabel: t("common.ok"),
+    onConfirm: async (value) => {
+      const title = String(value || "").trim()
+      if (title === (row.title || "").trim()) return
+      assertApiAuthorityCurrent(authority)
+      await renameConversationSession(
+        { sessionID: row.sessionID, directory: row.directory, experience: row.experience, authority },
+        title,
+      )
+      if (!isApiAuthorityCurrent(authority)) return
+      runPostCommitUiEffect({ id: `chat:rename:${row.sessionID}`, title: t("work_ledger.action.rename_chat") }, () =>
+        setMissionSharedRefreshToken((token) => token + 1),
+      )
+    },
   })
-  if (!dialog.confirmed) return
-  const title = String(dialog.value || "").trim()
-  if (!title || title === (row.title || "").trim()) return
-  assertApiAuthorityCurrent(authority)
-  await renameConversationSession(
-    { sessionID: row.sessionID, directory: row.directory, experience: row.experience, authority },
-    title,
-  )
-  if (!isApiAuthorityCurrent(authority)) return
-  setMissionSharedRefreshToken((value) => value + 1)
 }
 
 async function archiveWorkLedgerChat(row: WorkLedgerChatRow): Promise<void> {

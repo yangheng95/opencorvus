@@ -1099,6 +1099,8 @@
   "detail.pending_interactions": "Pending Interactions",
   "dialog.input": "Input",
   "dialog.input_required": "Enter a value before continuing.",
+  "dialog.input_too_long": "Use no more than {{max}} characters.",
+  "dialog.submit_failed": "Couldn't confirm the update. Your input is kept so you can retry.",
   "dialog.notice": "Notice",
   "diff.loading": "Loading diff…",
   "diff.no_preview": "No preview available for this file.",

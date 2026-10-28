@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-29-rename-feedback-journey.md](2026-10-29-rename-feedback-journey.md)：共享确认回调与当前弹窗归属、改名成功和读取失败分离、真实页面验收。
+
 - [2026-10-29-project-search-journey.md](2026-10-29-project-search-journey.md)：非空项目候选、共享导航入口、长路径布局与原生检查器发布根因。
 
 - [2026-10-29-release-0.1.38.md](2026-10-29-release-0.1.38.md)：37未公开候选、六调用方环境传递及真实提权正向检查。

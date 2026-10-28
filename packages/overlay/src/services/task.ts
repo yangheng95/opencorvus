@@ -533,7 +533,8 @@ export async function deleteTask(taskID: string, provenance: TaskCancellationReq
 /**
  * Rename a task in place. Trimming and length enforcement match the server-side
  * Zod schema (1–200 chars after trim). Invalid client-side input returns false;
- * backend and refresh failures reject so the row can surface the original error.
+ * backend failures reject; a later refresh error retains the committed result
+ * and the original read error in the board store and diagnostic log.
  */
 export async function renameTask(taskID: string, title: string, authority = captureApiAuthority()): Promise<boolean> {
   if (!taskID) return false
@@ -546,9 +547,15 @@ export async function renameTask(taskID: string, title: string, authority = capt
     body: JSON.stringify({ title: trimmed }),
   })
   if (!isApiAuthorityCurrent(authority)) return true
-  await loadTasks({ requireFresh: true, authority })
-  if (isApiAuthorityCurrent(authority) && activeTaskID() === taskID) {
-    await loadBoard({ authority })
+  try {
+    await loadTasks({ requireFresh: true, authority })
+    if (isApiAuthorityCurrent(authority) && activeTaskID() === taskID) {
+      await loadBoard({ authority })
+    }
+  } catch (error) {
+    if (isApiAuthorityCurrent(authority)) {
+      AppLog.warn("task", "Task rename committed; refresh failed", { taskID, error: formatErrorDetails(error) })
+    }
   }
   return true
 }

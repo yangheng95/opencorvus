@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [重命名保存与失败反馈](records/2026-10/2026-10-29-rename-feedback-journey.md)：五类名称实际保存、原位错误与输入保留、双语校验和四实例完整收拢。
+
 - [项目搜索与键盘导航](records/2026-10/2026-10-29-project-search-journey.md)：全局项目搜索、目录分行与键盘导航实页复核，修复Windows检查器并发准备的运行文件冲突。
 
 - [0.1.38 发布](records/2026-10/2026-10-29-release-0.1.38.md)：补齐sudo环境边界与真实APT策略验收，新源码完整发布。

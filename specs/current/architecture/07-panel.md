@@ -3963,3 +3963,19 @@ Project rows alongside execution rows; directory lists and the Home project
 name derive from this same projection. Home and the sidebar use the shared
 project display-name formatter, so an existing custom name survives selection,
 metadata refresh and reopening without changing the workspace directory.
+
+Metadata rename operations use the shared AppDialog's asynchronous confirmation.
+The current completion owns the callback; presentation state stays in the existing
+dialog store. Validation and ownership checks run inside the existing transition
+queue, while the mutation runs outside that queue. The dialog retains input and
+shows a localized error with original diagnostic details when confirmation fails.
+Only its current completion may close it or restore input focus; replacement and
+late completion retain the existing epoch and native-surface ownership contract.
+Submitting disables duplicate confirmation and form dismissal until that write
+settles. Chat, Work, Task and Mission retain the existing trimmed 200-character
+title contract; Project names retain their own existing validation.
+
+A confirmed Task rename remains successful if a subsequent list or board read
+fails. The existing read-error state and diagnostic retain that refresh failure;
+the acknowledged mutation is not reported as a rejected write. Shared refresh
+effects after all metadata renames use the existing post-commit effect owner.

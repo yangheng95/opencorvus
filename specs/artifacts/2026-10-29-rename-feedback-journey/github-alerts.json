@@ -1,0 +1,70 @@
+{
+  "at": "2026-10-28T21:13:29.616Z",
+  "operation": "Authenticated read-only GET /repos/yangheng95/opencorvus/dependabot/alerts?state=open&per_page=100 with pagination; explicit human authorization.",
+  "alerts": [
+    {
+      "number": 30,
+      "severity": "low",
+      "package": "rustls",
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "summary": "rustls: ECH rejection can expose buffered application data to authenticated outer server before `ech_required` alert",
+      "firstPatched": "0.23.46",
+      "url": "https://github.com/yangheng95/opencorvus/security/dependabot/30"
+    },
+    {
+      "number": 29,
+      "severity": "low",
+      "package": "rustls",
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "summary": "rustls: An unauthenticated ServerHello poisons the per-name key-exchange record, so later ClientHellos carry only a classical X25519 share",
+      "firstPatched": "0.23.46",
+      "url": "https://github.com/yangheng95/opencorvus/security/dependabot/29"
+    },
+    {
+      "number": 28,
+      "severity": "medium",
+      "package": "rustls",
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "summary": "Rustls: Session Debug formatting exposes TLS master secrets and resumption PSKs",
+      "firstPatched": "0.23.46",
+      "url": "https://github.com/yangheng95/opencorvus/security/dependabot/28"
+    },
+    {
+      "number": 27,
+      "severity": "low",
+      "package": "rustls",
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "summary": "Rustls: Brotli certificate decompression can allocate an attacker-controlled amount of memory up to 1 GiB before authentication.",
+      "firstPatched": "0.23.46",
+      "url": "https://github.com/yangheng95/opencorvus/security/dependabot/27"
+    },
+    {
+      "number": 14,
+      "severity": "low",
+      "package": "rand",
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "summary": "Rand is unsound with a custom logger using rand::rng()",
+      "firstPatched": "0.8.6",
+      "url": "https://github.com/yangheng95/opencorvus/security/dependabot/14"
+    },
+    {
+      "number": 13,
+      "severity": "medium",
+      "package": "glib",
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "summary": "Unsoundness in `Iterator` and `DoubleEndedIterator` impls for `glib::VariantStrIter`",
+      "firstPatched": "0.20.0",
+      "url": "https://github.com/yangheng95/opencorvus/security/dependabot/13"
+    },
+    {
+      "number": 5,
+      "severity": "medium",
+      "package": "glib",
+      "manifest": "packages/overlay/src-tauri/Cargo.lock",
+      "summary": "Unsoundness in `Iterator` and `DoubleEndedIterator` impls for `glib::VariantStrIter`",
+      "firstPatched": "0.20.0",
+      "url": "https://github.com/yangheng95/opencorvus/security/dependabot/5"
+    }
+  ],
+  "interpretation": "Six findings refer to an archived evidence Cargo.lock; one medium glib finding refers to the current desktop Cargo.lock. No alerts or settings were modified."
+}

@@ -1099,6 +1099,8 @@
   "detail.pending_interactions": "待处理请求",
   "dialog.input": "输入",
   "dialog.input_required": "请输入内容后再继续。",
+  "dialog.input_too_long": "请将内容控制在 {{max}} 个字符以内。",
+  "dialog.submit_failed": "未能确认保存结果，已保留输入。请重试。",
   "dialog.notice": "提示",
   "diff.loading": "正在加载差异…",
   "diff.no_preview": "此文件暂无可用预览。",

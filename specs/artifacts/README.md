@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-29-rename-feedback-journey](2026-10-29-rename-feedback-journey/README.md)：21张实页原图、五类改名与双语失败反馈、数据和原生运行结算。
+
 - [2026-10-29-project-search-journey](2026-10-29-project-search-journey/README.md)：19张实页原图、项目搜索/分页/设置与无目录导航、实际原生发布测试与完整结算。
 
 - [2026-10-29-release-0.1.37](2026-10-29-release-0.1.37/README.md)：37日志原图、成功Intel预检及0资源取消候选收据。
