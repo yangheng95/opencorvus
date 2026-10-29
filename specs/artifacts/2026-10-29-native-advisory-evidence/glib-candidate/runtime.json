@@ -1,0 +1,176 @@
+{
+  "at": "2026-10-29T08:30:17.967Z",
+  "deadlineAt": 1793262838134,
+  "originalImageExec": 28618,
+  "image": {
+    "started": 1793259238231,
+    "closed": 1793259798129,
+    "deadlineAt": 1793262838134,
+    "exitCode": 0,
+    "settlementConfirmed": true,
+    "receipt": {
+      "occurrenceID": "d2272770-6dfc-4681-bd7b-d37077605090",
+      "pid": 43844,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "environmentOwner": "One private HOME/cache/target with the existing finite host profile; owned descendants retire at root exit"
+  },
+  "environment": {
+    "started": 1793259904476,
+    "closed": 1793259907034,
+    "deadlineAt": 1793262838134,
+    "exitCode": 0,
+    "settlementConfirmed": true,
+    "receipt": {
+      "occurrenceID": "609ead89-a35f-40d4-afcc-1f01828507eb",
+      "pid": 90416,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "environmentOwner": "One private HOME/cache/target with the existing finite host profile; owned descendants retire at root exit"
+  },
+  "first": {
+    "originalClientExec": 60773,
+    "clientExit": 1,
+    "actualDaemon": {
+      "cid": "9187dfb944e2ef7dfdb76a7954facabbf9ca757aad2ee6d0999315b9302f581a",
+      "started": 1793261274178,
+      "closed": 1793261677824,
+      "deadlineAt": 1793262838134,
+      "observationExpired": false,
+      "dockerWaitExitCode": 0,
+      "signal": null,
+      "stdout": "1\n",
+      "stderr": "",
+      "containerExitCode": 1,
+      "qualification": "Docker wait subscribes to the original exact live container. The work is never restarted because an observation client timed out."
+    },
+    "result": {
+      "status": "failed",
+      "at": "2026-10-29T08:14:37.531Z",
+      "commands": [
+        {
+          "label": "cargo-update",
+          "command": "cargo",
+          "args": [
+            "update",
+            "--offline",
+            "--manifest-path",
+            "/work/repo/packages/overlay/src-tauri/Cargo.toml",
+            "-p",
+            "glib@0.18.5"
+          ],
+          "extra": {},
+          "started": 1793261677482,
+          "closed": 1793261677524,
+          "code": 1,
+          "signal": null
+        }
+      ],
+      "error": "AssertionError [ERR_ASSERTION]: cargo-update failed; raw output retained\n\n1 !== 0\n"
+    }
+  },
+  "second": {
+    "terminal": {
+      "started": 1793261866854,
+      "closed": 1793261872220,
+      "deadlineAt": 1793262838134,
+      "exitCode": 1,
+      "settlementConfirmed": true,
+      "receipt": {
+        "occurrenceID": "db4dbb84-d7b0-4797-b9fa-a90208713f4a",
+        "pid": 45128,
+        "reason": "exited",
+        "exitCode": 1,
+        "signal": null
+      },
+      "environmentOwner": "One private HOME/cache/target with the existing finite host profile; owned descendants retire at root exit"
+    },
+    "result": {
+      "status": "failed",
+      "at": "2026-10-29T08:17:52.005Z",
+      "commands": [
+        {
+          "label": "rustc-version",
+          "command": "rustc",
+          "args": [
+            "-vV"
+          ],
+          "extra": {},
+          "started": 1793261869268,
+          "closed": 1793261869298,
+          "code": 0,
+          "signal": null
+        },
+        {
+          "label": "cargo-update",
+          "command": "cargo",
+          "args": [
+            "update",
+            "--offline",
+            "--manifest-path",
+            "/work/repo/packages/overlay/src-tauri/Cargo.toml",
+            "-p",
+            "glib@0.18.5"
+          ],
+          "extra": {},
+          "started": 1793261869299,
+          "closed": 1793261871468,
+          "code": 0,
+          "signal": null
+        },
+        {
+          "label": "metadata",
+          "command": "cargo",
+          "args": [
+            "metadata",
+            "--locked",
+            "--offline",
+            "--format-version",
+            "1",
+            "--manifest-path",
+            "/work/repo/packages/overlay/src-tauri/Cargo.toml"
+          ],
+          "extra": {},
+          "started": 1793261871505,
+          "closed": 1793261872003,
+          "code": 101,
+          "signal": null
+        }
+      ],
+      "error": "AssertionError [ERR_ASSERTION]: metadata failed; raw output retained\n\n101 !== 0\n"
+    }
+  },
+  "third": {
+    "originalExec": 39754,
+    "originalExecExitCode": 0,
+    "terminal": {
+      "started": 1793262107248,
+      "closed": 1793262164596,
+      "deadlineAt": 1793262838134,
+      "exitCode": 0,
+      "settlementConfirmed": true,
+      "receipt": {
+        "occurrenceID": "60dffb1c-7da6-4e28-be4c-e6079921f9b2",
+        "pid": 29096,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "environmentOwner": "One private HOME/cache/target with the existing finite host profile; owned descendants retire at root exit"
+    },
+    "reserveMs": 673538
+  },
+  "remainingOwnedContainers": 0,
+  "publicCacheVolumes": [
+    "oc-native789-cargo",
+    "oc-native789-target-s",
+    "oc-native789-target-3"
+  ],
+  "cacheQualification": "Owned public cache and target data retained for the next distinct production-build phase; no service or user credential is retained.",
+  "providerRequests": 0,
+  "cumulativeRequests": 793
+}

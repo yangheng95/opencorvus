@@ -1,0 +1,20 @@
+diff --git "a/D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\native-advisory-789/upstream-glib/glib-0.18.5/src/variant_iter.rs" "b/D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\native-advisory-789/linux-prototype/patched-glib/src/variant_iter.rs"
+index b4061728a..e0997f651 100644
+--- "a/D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\native-advisory-789/upstream-glib/glib-0.18.5/src/variant_iter.rs"
++++ "b/D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\native-advisory-789/linux-prototype/patched-glib/src/variant_iter.rs"
+@@ -117,13 +117,13 @@ impl<'a> VariantStrIter<'a> {
+ 
+     fn impl_get(&self, i: usize) -> &'a str {
+         unsafe {
+-            let p: *mut libc::c_char = std::ptr::null_mut();
++            let mut p: *mut libc::c_char = std::ptr::null_mut();
+             let s = b"&s\0";
+             ffi::g_variant_get_child(
+                 self.variant.to_glib_none().0,
+                 i,
+                 s as *const u8 as *const _,
+-                &p,
++                &mut p,
+                 std::ptr::null::<i8>(),
+             );
+             let p = std::ffi::CStr::from_ptr(p);

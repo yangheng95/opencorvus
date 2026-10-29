@@ -1,0 +1,924 @@
+{
+  "at": "2026-10-29T08:30:17.962Z",
+  "status": "candidate-passed",
+  "base": "1521be8d7614e1f8a701961e416be02df4987d7a",
+  "environment": "Linux 6.6.87.2-microsoft-standard-WSL2 x86_64\nrustc 1.99.1 (58cf8f9c3 2026-10-13)\ncargo 1.99.1 (5f94df478 2026-08-27)\n1.4.0\n2.74.6\n2.74.6\n3.24.38\n2.50.6\n",
+  "provenance": {
+    "url": "https://static.crates.io/crates/glib/glib-0.18.5.crate",
+    "registryChecksum": "233daaf6e83ae6a12a52055f568f9d7cf4671dabb78ff9560ab6da230ce00ee5",
+    "bytes": 267679,
+    "officialFix": "https://github.com/gtk-rs/gtk-rs-core/commit/b5a4071e439bef2b5eea76c3aa25e5ae84839e34",
+    "files": [
+      ".cargo_vcs_info.json",
+      "benches",
+      "Cargo.toml",
+      "Cargo.toml.orig",
+      "COPYRIGHT",
+      "Gir.toml",
+      "Gir_GObject.toml",
+      "LICENSE",
+      "README.md",
+      "src",
+      "tests"
+    ],
+    "qualification": "Checksum proves the immutable published crate identity already recorded by the production Cargo.lock; it is not a mutable source acceptance gate."
+  },
+  "qualifications": [
+    {
+      "opt": "s",
+      "unit": {
+        "reason": "compiler-artifact",
+        "package_id": "path+file:///work/patched-glib#glib@0.18.5",
+        "manifest_path": "/work/patched-glib/Cargo.toml",
+        "target": {
+          "kind": [
+            "lib"
+          ],
+          "crate_types": [
+            "lib"
+          ],
+          "name": "glib",
+          "src_path": "/work/patched-glib/src/lib.rs",
+          "edition": "2021",
+          "doc": true,
+          "doctest": true,
+          "test": true
+        },
+        "profile": {
+          "opt_level": "s",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "default",
+          "gio",
+          "gio_ffi",
+          "v2_58",
+          "v2_60",
+          "v2_62",
+          "v2_64",
+          "v2_66",
+          "v2_68",
+          "v2_70"
+        ],
+        "filenames": [
+          "/target-s/release/libglib.rlib",
+          "/target-s/release/deps/libglib-e1f680bdd9a90bdd.rmeta"
+        ],
+        "executable": null,
+        "fresh": false
+      },
+      "contracts": 4,
+      "scope": "Actual optimized GLib library only, using the existing copied canonical project/lock and contract file; not Tauri application or GUI qualification."
+    },
+    {
+      "opt": "3",
+      "unit": {
+        "reason": "compiler-artifact",
+        "package_id": "path+file:///work/patched-glib#glib@0.18.5",
+        "manifest_path": "/work/patched-glib/Cargo.toml",
+        "target": {
+          "kind": [
+            "lib"
+          ],
+          "crate_types": [
+            "lib"
+          ],
+          "name": "glib",
+          "src_path": "/work/patched-glib/src/lib.rs",
+          "edition": "2021",
+          "doc": true,
+          "doctest": true,
+          "test": true
+        },
+        "profile": {
+          "opt_level": "3",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "default",
+          "gio",
+          "gio_ffi",
+          "v2_58",
+          "v2_60",
+          "v2_62",
+          "v2_64",
+          "v2_66",
+          "v2_68",
+          "v2_70"
+        ],
+        "filenames": [
+          "/target-3/release/libglib.rlib",
+          "/target-3/release/deps/libglib-4fb5ea76b7e8cd91.rmeta"
+        ],
+        "executable": null,
+        "fresh": false
+      },
+      "contracts": 4,
+      "scope": "Actual optimized GLib library only, using the existing copied canonical project/lock and contract file; not Tauri application or GUI qualification."
+    }
+  ],
+  "commands": [
+    {
+      "label": "rustc-version",
+      "command": "rustc",
+      "args": [
+        "-vV"
+      ],
+      "extra": {},
+      "started": 1793262110439,
+      "closed": 1793262110488,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "cargo-update",
+      "command": "cargo",
+      "args": [
+        "update",
+        "--offline",
+        "--manifest-path",
+        "/work/repo/packages/overlay/src-tauri/Cargo.toml",
+        "-p",
+        "glib@0.18.5"
+      ],
+      "extra": {},
+      "started": 1793262110489,
+      "closed": 1793262112347,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "metadata",
+      "command": "cargo",
+      "args": [
+        "metadata",
+        "--locked",
+        "--format-version",
+        "1",
+        "--filter-platform",
+        "x86_64-unknown-linux-gnu",
+        "--manifest-path",
+        "/work/repo/packages/overlay/src-tauri/Cargo.toml"
+      ],
+      "extra": {},
+      "started": 1793262112659,
+      "closed": 1793262113517,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "glib-opt-s",
+      "command": "cargo",
+      "args": [
+        "build",
+        "--locked",
+        "--manifest-path",
+        "/work/repo/packages/overlay/src-tauri/Cargo.toml",
+        "-p",
+        "glib@0.18.5",
+        "--lib",
+        "--release",
+        "--message-format=json-render-diagnostics"
+      ],
+      "extra": {
+        "CARGO_TARGET_DIR": "/target-s",
+        "CARGO_PROFILE_RELEASE_OPT_LEVEL": "s"
+      },
+      "started": 1793262113630,
+      "closed": 1793262139489,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "compile-contract-s",
+      "command": "rustc",
+      "args": [
+        "--test",
+        "--edition=2021",
+        "--cfg",
+        "glib_contract",
+        "-C",
+        "opt-level=s",
+        "/work/repo/packages/overlay/script/fixture/rust-dependency-contract.rs",
+        "--extern",
+        "glib=/target-s/release/libglib.rlib",
+        "-L",
+        "dependency=/target-s/release/deps",
+        "-L",
+        "dependency=/target-s/release/build/quote-561bb848b9984fae",
+        "-L",
+        "dependency=/target-s/release/build/serde-a50ee36f8e9dd9c7",
+        "-L",
+        "dependency=/target-s/release/build/proc-macro2-d710be444873d5e2",
+        "-L",
+        "dependency=/target-s/release/build/serde_core-8736246e66886f18",
+        "-L",
+        "dependency=/target-s/release/build/target-lexicon-aec8fc3c1d32a2b0",
+        "-L",
+        "dependency=/target-s/release/build/serde_core-af2aca461031a11d",
+        "-L",
+        "dependency=/target-s/release/build/syn-33652eca48f5b86f",
+        "-L",
+        "dependency=/target-s/release/build/thiserror-d5e970a6abc6277d",
+        "-L",
+        "dependency=/target-s/release/build/proc-macro-error-attr-1b6a202d0ac5a7b1",
+        "-L",
+        "dependency=/target-s/release/build/proc-macro-error-3163031785537033",
+        "-L",
+        "dependency=/target-s/release/build/libc-03a5b10a812c7191",
+        "-L",
+        "dependency=/target-s/release/build/gobject-sys-c6eab653330b18a4",
+        "-L",
+        "dependency=/target-s/release/build/gio-sys-1d5b9a1ca9cd3fc1",
+        "-L",
+        "dependency=/target-s/release/build/glib-sys-b66b2b056bcf5c5b",
+        "-L",
+        "dependency=/target-s/release",
+        "-o",
+        "/work/results-03/glib-contract-s"
+      ],
+      "extra": {},
+      "started": 1793262139491,
+      "closed": 1793262140312,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "contracts-s",
+      "command": "/work/results-03/glib-contract-s",
+      "args": [
+        "--test-threads=1",
+        "--nocapture"
+      ],
+      "extra": {},
+      "started": 1793262140312,
+      "closed": 1793262140337,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "glib-opt-3",
+      "command": "cargo",
+      "args": [
+        "build",
+        "--locked",
+        "--manifest-path",
+        "/work/repo/packages/overlay/src-tauri/Cargo.toml",
+        "-p",
+        "glib@0.18.5",
+        "--lib",
+        "--release",
+        "--message-format=json-render-diagnostics"
+      ],
+      "extra": {
+        "CARGO_TARGET_DIR": "/target-3",
+        "CARGO_PROFILE_RELEASE_OPT_LEVEL": "3"
+      },
+      "started": 1793262140337,
+      "closed": 1793262162680,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "compile-contract-3",
+      "command": "rustc",
+      "args": [
+        "--test",
+        "--edition=2021",
+        "--cfg",
+        "glib_contract",
+        "-C",
+        "opt-level=3",
+        "/work/repo/packages/overlay/script/fixture/rust-dependency-contract.rs",
+        "--extern",
+        "glib=/target-3/release/libglib.rlib",
+        "-L",
+        "dependency=/target-3/release/deps",
+        "-L",
+        "dependency=/target-3/release/build/quote-561bb848b9984fae",
+        "-L",
+        "dependency=/target-3/release/build/proc-macro2-d710be444873d5e2",
+        "-L",
+        "dependency=/target-3/release/build/serde-a50ee36f8e9dd9c7",
+        "-L",
+        "dependency=/target-3/release/build/serde_core-8736246e66886f18",
+        "-L",
+        "dependency=/target-3/release/build/target-lexicon-aec8fc3c1d32a2b0",
+        "-L",
+        "dependency=/target-3/release/build/serde_core-af2aca461031a11d",
+        "-L",
+        "dependency=/target-3/release/build/syn-33652eca48f5b86f",
+        "-L",
+        "dependency=/target-3/release/build/libc-03a5b10a812c7191",
+        "-L",
+        "dependency=/target-3/release/build/proc-macro-error-attr-1b6a202d0ac5a7b1",
+        "-L",
+        "dependency=/target-3/release/build/proc-macro-error-3163031785537033",
+        "-L",
+        "dependency=/target-3/release/build/thiserror-d5e970a6abc6277d",
+        "-L",
+        "dependency=/target-3/release/build/gio-sys-1d5b9a1ca9cd3fc1",
+        "-L",
+        "dependency=/target-3/release/build/glib-sys-b66b2b056bcf5c5b",
+        "-L",
+        "dependency=/target-3/release/build/gobject-sys-c6eab653330b18a4",
+        "-L",
+        "dependency=/target-3/release",
+        "-o",
+        "/work/results-03/glib-contract-3"
+      ],
+      "extra": {},
+      "started": 1793262162682,
+      "closed": 1793262163459,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "contracts-3",
+      "command": "/work/results-03/glib-contract-3",
+      "args": [
+        "--test-threads=1",
+        "--nocapture"
+      ],
+      "extra": {},
+      "started": 1793262163459,
+      "closed": 1793262163478,
+      "code": 0,
+      "signal": null
+    }
+  ],
+  "metadata": {
+    "host": "x86_64-unknown-linux-gnu",
+    "packages": 421,
+    "glib": {
+      "name": "glib",
+      "version": "0.18.5",
+      "id": "path+file:///work/patched-glib#glib@0.18.5",
+      "license": "MIT",
+      "license_file": null,
+      "description": "Rust bindings for the GLib library",
+      "source": null,
+      "dependencies": [
+        {
+          "name": "bitflags",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "req": "^2.3",
+          "kind": null,
+          "rename": null,
+          "optional": false,
+          "uses_default_features": true,
+          "features": [],
+          "target": null,
+          "registry": null
+        },
+        {
+          "name": "glib-sys",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "req": "^0.18",
+          "kind": null,
+          "rename": "ffi",
+          "optional": false,
+          "uses_default_features": true,
+          "features": [],
+          "target": null,
+          "registry": null
+        },
+        {
+          "name": "futures-channel",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "req": "^0.3",
+          "kind": null,
+          "rename": null,
+          "optional": false,
+          "uses_default_features": true,
+          "features": [],
+          "target": null,
+          "registry": null
+        },
+        {
+          "name": "futures-core",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "req": "^0.3",
+          "kind": null,
+          "rename": null,
+          "optional": false,
+          "uses_default_features": false,
+          "features": [],
+          "target": null,
+          "registry": null
+        },
+        {
+          "name": "futures-executor",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "req": "^0.3",
+          "kind": null,
+          "rename": null,
+          "optional": false,
+          "uses_default_features": true,
+          "features": [],
+          "target": null,
+          "registry": null
+        },
+        {
+          "name": "futures-task",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "req": "^0.3",
+          "kind": null,
+          "rename": null,
+          "optional": false,
+          "uses_default_features": false,
+          "features": [],
+          "target": null,
+          "registry": null
+        },
+        {
+          "name": "futures-util",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "req": "^0.3",
+          "kind": null,
+          "rename": null,
+          "optional": false,
+          "uses_default_features": true,
+          "features": [],
+          "target": null,
+          "registry": null
+        },
+        {
+          "name": "gio-sys",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "req": "^0.18",
+          "kind": null,
+          "rename": "gio_ffi",
+          "optional": true,
+          "uses_default_features": true,
+          "features": [],
+          "target": null,
+          "registry": null
+        },
+        {
+          "name": "glib-macros",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "req": "^0.18",
+          "kind": null,
+          "rename": null,
+          "optional": false,
+          "uses_default_features": true,
+          "features": [],
+          "target": null,
+          "registry": null
+        },
+        {
+          "name": "gobject-sys",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "req": "^0.18",
+          "kind": null,
+          "rename": "gobject_ffi",
+          "optional": false,
+          "uses_default_features": true,
+          "features": [],
+          "target": null,
+          "registry": null
+        },
+        {
+          "name": "libc",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "req": "^0.2",
+          "kind": null,
+          "rename": null,
+          "optional": false,
+          "uses_default_features": true,
+          "features": [],
+          "target": null,
+          "registry": null
+        },
+        {
+          "name": "memchr",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "req": "^2.5.0",
+          "kind": null,
+          "rename": null,
+          "optional": false,
+          "uses_default_features": true,
+          "features": [],
+          "target": null,
+          "registry": null
+        },
+        {
+          "name": "once_cell",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "req": "^1.0",
+          "kind": null,
+          "rename": null,
+          "optional": false,
+          "uses_default_features": true,
+          "features": [],
+          "target": null,
+          "registry": null
+        },
+        {
+          "name": "log",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "req": "^0.4",
+          "kind": null,
+          "rename": "rs-log",
+          "optional": true,
+          "uses_default_features": true,
+          "features": [],
+          "target": null,
+          "registry": null
+        },
+        {
+          "name": "smallvec",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "req": "^1.0",
+          "kind": null,
+          "rename": null,
+          "optional": false,
+          "uses_default_features": true,
+          "features": [
+            "union",
+            "const_generics",
+            "const_new"
+          ],
+          "target": null,
+          "registry": null
+        },
+        {
+          "name": "thiserror",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "req": "^1",
+          "kind": null,
+          "rename": null,
+          "optional": false,
+          "uses_default_features": true,
+          "features": [],
+          "target": null,
+          "registry": null
+        },
+        {
+          "name": "criterion",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "req": "^0.5.1",
+          "kind": "dev",
+          "rename": null,
+          "optional": false,
+          "uses_default_features": true,
+          "features": [],
+          "target": null,
+          "registry": null
+        },
+        {
+          "name": "gir-format-check",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "req": "^0.1",
+          "kind": "dev",
+          "rename": null,
+          "optional": false,
+          "uses_default_features": true,
+          "features": [],
+          "target": null,
+          "registry": null
+        },
+        {
+          "name": "tempfile",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "req": "^3",
+          "kind": "dev",
+          "rename": null,
+          "optional": false,
+          "uses_default_features": true,
+          "features": [],
+          "target": null,
+          "registry": null
+        },
+        {
+          "name": "trybuild2",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "req": "^1",
+          "kind": "dev",
+          "rename": null,
+          "optional": false,
+          "uses_default_features": true,
+          "features": [],
+          "target": null,
+          "registry": null
+        }
+      ],
+      "targets": [
+        {
+          "kind": [
+            "lib"
+          ],
+          "crate_types": [
+            "lib"
+          ],
+          "name": "glib",
+          "src_path": "/work/patched-glib/src/lib.rs",
+          "edition": "2021",
+          "doc": true,
+          "doctest": true,
+          "test": true
+        },
+        {
+          "kind": [
+            "test"
+          ],
+          "crate_types": [
+            "bin"
+          ],
+          "name": "check_gir",
+          "src_path": "/work/patched-glib/tests/check_gir.rs",
+          "edition": "2021",
+          "doc": false,
+          "doctest": false,
+          "test": true
+        },
+        {
+          "kind": [
+            "test"
+          ],
+          "crate_types": [
+            "bin"
+          ],
+          "name": "clone",
+          "src_path": "/work/patched-glib/tests/clone.rs",
+          "edition": "2021",
+          "doc": false,
+          "doctest": false,
+          "test": true
+        },
+        {
+          "kind": [
+            "test"
+          ],
+          "crate_types": [
+            "bin"
+          ],
+          "name": "derive",
+          "src_path": "/work/patched-glib/tests/derive.rs",
+          "edition": "2021",
+          "doc": false,
+          "doctest": false,
+          "test": true
+        },
+        {
+          "kind": [
+            "test"
+          ],
+          "crate_types": [
+            "bin"
+          ],
+          "name": "log",
+          "src_path": "/work/patched-glib/tests/log.rs",
+          "edition": "2021",
+          "doc": false,
+          "doctest": false,
+          "test": true
+        },
+        {
+          "kind": [
+            "test"
+          ],
+          "crate_types": [
+            "bin"
+          ],
+          "name": "print",
+          "src_path": "/work/patched-glib/tests/print.rs",
+          "edition": "2021",
+          "doc": false,
+          "doctest": false,
+          "test": true
+        },
+        {
+          "kind": [
+            "test"
+          ],
+          "crate_types": [
+            "bin"
+          ],
+          "name": "structured_log",
+          "src_path": "/work/patched-glib/tests/structured_log.rs",
+          "edition": "2021",
+          "doc": false,
+          "doctest": false,
+          "test": true
+        },
+        {
+          "kind": [
+            "test"
+          ],
+          "crate_types": [
+            "bin"
+          ],
+          "name": "subclass_compiletest",
+          "src_path": "/work/patched-glib/tests/subclass_compiletest.rs",
+          "edition": "2021",
+          "required-features": [
+            "compiletests"
+          ],
+          "doc": false,
+          "doctest": false,
+          "test": true
+        },
+        {
+          "kind": [
+            "test"
+          ],
+          "crate_types": [
+            "bin"
+          ],
+          "name": "value",
+          "src_path": "/work/patched-glib/tests/value.rs",
+          "edition": "2021",
+          "doc": false,
+          "doctest": false,
+          "test": true
+        },
+        {
+          "kind": [
+            "bench"
+          ],
+          "crate_types": [
+            "bin"
+          ],
+          "name": "gstring",
+          "src_path": "/work/patched-glib/benches/gstring.rs",
+          "edition": "2021",
+          "doc": false,
+          "doctest": false,
+          "test": false
+        }
+      ],
+      "features": {
+        "compiletests": [],
+        "default": [
+          "gio"
+        ],
+        "gio": [
+          "gio_ffi"
+        ],
+        "gio_ffi": [
+          "dep:gio_ffi"
+        ],
+        "log": [
+          "rs-log"
+        ],
+        "log_macros": [
+          "log"
+        ],
+        "rs-log": [
+          "dep:rs-log"
+        ],
+        "v2_58": [
+          "ffi/v2_58",
+          "gobject_ffi/v2_58"
+        ],
+        "v2_60": [
+          "v2_58",
+          "ffi/v2_60"
+        ],
+        "v2_62": [
+          "v2_60",
+          "ffi/v2_62",
+          "gobject_ffi/v2_62"
+        ],
+        "v2_64": [
+          "v2_62",
+          "ffi/v2_64"
+        ],
+        "v2_66": [
+          "v2_64",
+          "ffi/v2_66",
+          "gobject_ffi/v2_66"
+        ],
+        "v2_68": [
+          "v2_66",
+          "ffi/v2_68",
+          "gobject_ffi/v2_68"
+        ],
+        "v2_70": [
+          "v2_68",
+          "ffi/v2_70",
+          "gobject_ffi/v2_70"
+        ],
+        "v2_72": [
+          "v2_70",
+          "ffi/v2_72",
+          "gobject_ffi/v2_72"
+        ],
+        "v2_74": [
+          "v2_72",
+          "ffi/v2_74",
+          "gobject_ffi/v2_74"
+        ],
+        "v2_76": [
+          "v2_74",
+          "ffi/v2_76",
+          "gobject_ffi/v2_76"
+        ],
+        "v2_78": [
+          "v2_76",
+          "ffi/v2_78",
+          "gobject_ffi/v2_78"
+        ]
+      },
+      "manifest_path": "/work/patched-glib/Cargo.toml",
+      "metadata": {
+        "docs": {
+          "rs": {
+            "all-features": true,
+            "rustc-args": [
+              "--cfg",
+              "docsrs"
+            ],
+            "rustdoc-args": [
+              "--cfg",
+              "docsrs",
+              "--generate-link-to-definition"
+            ]
+          }
+        }
+      },
+      "publish": null,
+      "authors": [
+        "The gtk-rs Project Developers"
+      ],
+      "categories": [],
+      "keywords": [
+        "glib",
+        "gtk-rs",
+        "gnome",
+        "GUI"
+      ],
+      "readme": "README.md",
+      "repository": "https://github.com/gtk-rs/gtk-rs-core",
+      "homepage": "https://gtk-rs.org/",
+      "documentation": "https://gtk-rs.org/gtk-rs-core/stable/latest/docs/glib/",
+      "edition": "2021",
+      "links": null,
+      "default_run": null,
+      "rust_version": "1.70"
+    },
+    "parents": [
+      {
+        "id": "registry+https://github.com/rust-lang/crates.io-index#atk@0.18.2",
+        "name": "atk"
+      },
+      {
+        "id": "registry+https://github.com/rust-lang/crates.io-index#cairo-rs@0.18.5",
+        "name": "cairo-rs"
+      },
+      {
+        "id": "registry+https://github.com/rust-lang/crates.io-index#gdk@0.18.2",
+        "name": "gdk"
+      },
+      {
+        "id": "registry+https://github.com/rust-lang/crates.io-index#gdk-pixbuf@0.18.5",
+        "name": "gdk-pixbuf"
+      },
+      {
+        "id": "registry+https://github.com/rust-lang/crates.io-index#gdkx11@0.18.2",
+        "name": "gdkx11"
+      },
+      {
+        "id": "registry+https://github.com/rust-lang/crates.io-index#gio@0.18.4",
+        "name": "gio"
+      },
+      {
+        "id": "registry+https://github.com/rust-lang/crates.io-index#gtk@0.18.2",
+        "name": "gtk"
+      },
+      {
+        "id": "registry+https://github.com/rust-lang/crates.io-index#javascriptcore-rs@1.1.2",
+        "name": "javascriptcore-rs"
+      },
+      {
+        "id": "registry+https://github.com/rust-lang/crates.io-index#libappindicator@0.9.0",
+        "name": "libappindicator"
+      },
+      {
+        "id": "registry+https://github.com/rust-lang/crates.io-index#pango@0.18.3",
+        "name": "pango"
+      },
+      {
+        "id": "registry+https://github.com/rust-lang/crates.io-index#soup3@0.5.0",
+        "name": "soup3"
+      },
+      {
+        "id": "registry+https://github.com/rust-lang/crates.io-index#webkit2gtk@2.0.2",
+        "name": "webkit2gtk"
+      }
+    ]
+  },
+  "lock": {
+    "packages": 580,
+    "onlyDelta": "glib0.18.5 resolves to the single candidate path; all versions and other package records exactly retained"
+  },
+  "qualification": "Actual optimized GLib library candidate in the existing copied Overlay Cargo project. Production Cargo/source/checker remain unchanged; this is not canonical Tauri application, GUI, packaging or all-platform qualification."
+}

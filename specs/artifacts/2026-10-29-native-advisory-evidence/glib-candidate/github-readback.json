@@ -1,0 +1,79 @@
+{
+  "at": "2026-10-29T08:26:51.307Z",
+  "method": "GET",
+  "alerts": [
+    {
+      "dismissedReason": null,
+      "fixedAt": null,
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "number": 31,
+      "package": "zip",
+      "severity": "critical",
+      "state": "open"
+    },
+    {
+      "dismissedReason": null,
+      "fixedAt": null,
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "number": 30,
+      "package": "rustls",
+      "severity": "low",
+      "state": "open"
+    },
+    {
+      "dismissedReason": null,
+      "fixedAt": null,
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "number": 29,
+      "package": "rustls",
+      "severity": "low",
+      "state": "open"
+    },
+    {
+      "dismissedReason": null,
+      "fixedAt": null,
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "number": 28,
+      "package": "rustls",
+      "severity": "medium",
+      "state": "open"
+    },
+    {
+      "dismissedReason": null,
+      "fixedAt": null,
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "number": 27,
+      "package": "rustls",
+      "severity": "low",
+      "state": "open"
+    },
+    {
+      "dismissedReason": null,
+      "fixedAt": null,
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "number": 14,
+      "package": "rand",
+      "severity": "low",
+      "state": "open"
+    },
+    {
+      "dismissedReason": null,
+      "fixedAt": null,
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "number": 13,
+      "package": "glib",
+      "severity": "medium",
+      "state": "open"
+    },
+    {
+      "dismissedReason": null,
+      "fixedAt": null,
+      "manifest": "packages/overlay/src-tauri/Cargo.lock",
+      "number": 5,
+      "package": "glib",
+      "severity": "medium",
+      "state": "open"
+    }
+  ],
+  "qualification": "Read-only use of the previously authorized local GitHub login. No alert mutation, dismissal or suppression."
+}

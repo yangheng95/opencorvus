@@ -31,3 +31,27 @@ GitHub官方[依赖图支持说明](https://docs.github.com/en/code-security/ref
 移动前保存/核对每份当前工作副本、HEAD blob及首次Git来源的原字节，保存私有备份；精确文件移动，不覆盖目标，不动他人删除/修改。移动后通过实际Git新数据blob/导出内容与历史来源逐字节核对，确认可恢复原始Cargo.lock/checker/fixture输入。这是真实不可变原件身份验收，不是可变源码摘要门槛。风险是阅读者按旧名寻找、脚本误读和远端索引异步：以当前映射入口、全仓生产消费者搜索、docs检查及推送后只读回查处理。历史API里的旧路径仍是查询时真实事实，不做全局替换。
 
 实际归档已完成：三文件均逐字节等于首次来源c59cf33bc765d17f079d1d4c5665a4f5e9df4a01及移动前HEAD，160323/20698/13282字节。独立临时Git index的真实add/write-tree/archive、tar导出和check-attr全部通过；三个新数据blob保留同一原Git blob身份，Git识别为100%原样改名。归档属性text=unset，当前生产锁/清单/checker/fixture没有变化。旧父目录README和新before映射入口、当前三索引已同步；[实际记录](../../artifacts/2026-10-29-native-advisory-evidence/README.md)。该独立交付先范围提交与正常推送，随后只读查询远端实际告警，不提前声称关闭。GLib生产修复仍在继续，镜像构建中不作完成声明。
+
+## Linux候选实物资格（生产修改前）
+
+归档1521be8d7已正常推送，fresh同步0/0；07:51:27Z只读回查仍8项open，远端尚未证实收敛，不作关闭声明。镜像原exec28618真实exit0/560027ms、finite owner物理结算；自有只读/无网络容器探针exit0，Linux6.6.87.2/x86_64、Rust/Cargo1.99.1、Bun1.4.0、GLib/GIO2.74.6、GTK3.24.38、WebKit2.50.6已实际返回。Ubuntu WSL失败不再是本批Linux库验证的阻塞。仍沿1793262838134原绝对截止，无续期；无原生GUI/发布或模型。
+
+官方glib0.18.5.crate已从static.crates.io取得，精确匹配当前Cargo.lock声明的不可变发布checksum；这个校验用于发布原件身份，不用于可变源码验收。实际normalized Cargo.toml确认全部0.18 registry依赖、lib/features/最低Rust1.70；src/variant_iter.rs仍含官方已定位的共享out指针。MIT/COPYRIGHT需随任何源码回移保留，不能从Git工作区manifest引入GTK兄弟path依赖。
+
+先在私有候选目录原样导出当前Git的同一Overlay Cargo项目/锁/原合同文件，复制已校验的完整官方crate，仅应用官方两行修正，并给这个现有项目声明单一候选Cargo patch路径。不是新增fixture Cargo项目或生产fallback。用自有Docker容器/缓存/target，仅读取此前本agent无认证public Cargo缓存registry/git；不挂载用户HOME或凭据。先离线解析，保存真实错误，若缺公开缓存则修复自有工具链后重跑，不以缺缓存冒充不可修。
+
+只对真实glib库按该项目release opt-level=s及显式opt-level3分别构建，保存独立Cargo compiler JSON，精确选择本次path包唯一rlib/profile/features；用原合同文件的独立GLib cfg区段编译实际优化测试并运行。正向输出覆盖混合next/next_back/nth/nth_back/last、完整正反Unicode顺序、跳跃后的size_hint/count、原Variant存活而iterator已释放后的借用字符串字节。不得运行upstream通用测试（含未审负向用例），不按文件名glob/mtime挑缓存库。库级候选资格不能冒充实际Tauri production artifact或Linux GUI；通过后再完成生产唯一patch源、全父图/锁、所有构建入口及原checker整合，另行落实真实生产构建。当前生产源未改，未宣称GLib修复交付。
+
+首轮外层Docker客户端因静默cache复制超时而exit1，随后inspect确认同一CID仍running且原timeout/复制进程在推进（目录374→524/572），不能据客户端超时重启真实任务。已向原CID注册docker wait，真实容器于08:14:37Z退出1且--rm完成；原始失败及等待回执保留。真实错误并非GLib或Cargo图：覆盖RUSTUP_TOOLCHAIN=stable要求安装另一个toolchain，而镜像实际default是1.99.1-x86_64-unknown-linux-gnu，Rustup试写只读/usr/local/rustup/tmp。已用新只读容器实际rustup show/which确认cargo/rustc/rustdoc的精确已安装路径。缓存准备完整保留在本批自有volume，不重拷；原helper/results保留，新结果目录02、同一候选源/锁/合同、精确compiler二进制/PATH、原截止和5分钟收尾重跑。未改镜像或系统权限，没有重启用户服务、扩大网络或让模型运行。
+
+02已真实终态exit1/物理结算：精确rustc成功，Cargo update成功，580个全平台锁记录逐项核对，只改变glib同版本的source/checksum；metadata随后因离线缺少bumpalo3.20.2失败。该包属于非当前Linux目标缓存，Linux库资格使用实际rustc host过滤metadata，完整580锁审查仍保留；不把本次库级metadata称作全平台生产编译。03允许无认证的官方锁定包下载，保留TLS/只读rootfs/非特权，同一候选/缓存/目标，结果目录03，不增模型或用户凭据。原绝对截止仍1793262838134，执行时间扣除5分钟收尾后至少5分钟；原private launcher额外要求10分钟执行预算的保守检查不属于验收用例，按此阶段实际预算修正，两个优化等级和4项真实合同均不缩减。一次Node/PowerShell参数转义错误与拒绝准入保留在工具输出，没有启动额外容器或改动目标；改为保存的结构化参数脚本，避免拼接shell代码。
+
+## 候选真实结果与未完成项
+
+原exec39754已join0，Docker/finite原receipt exit0、settlementConfirmed，原CID自动退休；本批label下所有容器均已退出。03从08:21:47Z到08:22:44Z完成，原截止前余673538ms，未续期。真实release opt=s与opt=3各4项合同全部通过，完整原输出保留，不能只拿版本/manifest或build冒充行为。两次实际compiler unit均是唯一path glib0.18.5、同一feature集合default/gio/gio_ffi及v2_58到v2_70；分别从本次Cargo JSON的返回rlib/profile/features编译原合同cfg区段，没有glob/mtime选旧库。借用字符串/中文/混合双向迭代的明确输出均已执行。全580锁记录只变glib来源；Linux metadata421包，12直接父节点均引用唯一候选包。上游旧源码在新Rust有34条lifetime语法警告，未扩展为无关清理或声称无警告。
+
+当前生产Cargo.toml/lock、原checker/fixture、Docker脚本/文件均与HEAD相同，生产glib尚未修复交付；候选目录不是第二当前实现或用户入口。必须继续完成唯一licensed生产patch源、所有父边/构建入口、正式checker整合与canonical应用编译，Linux GUI/安装及所有平台运行也未验。现有Docker入口flat mount若使用根patch路径需要一并处理；Dockerfile默认Bun1.3.14与根packageManager1.4.0的来源差异已见，实际本批使用既有参数1.4.0，后续进入正式入口前应收敛单一版本来源，不保留平行配置。不能把候选8项通过包装成Tauri已修复或整体Goal完成。
+
+08:26:51Z远端仍8项open，默认分支/main的远端HEAD已确认为1521be8d7，没有dismiss或设置修改；异步依赖图尚未证明收敛，需要继续依据实际远端事实处理。源用户DB/应用、OpenAI凭据/模型目录未触及，模型0/累计793。保留原失败、自有公开cache/target用于下一独立生产构建阶段，不复活已退休任务/截止；证据见[候选资格](../../artifacts/2026-10-29-native-advisory-evidence/glib-candidate/README.md)。本阶段证据和方案范围提交、fresh fetch/merge与正常push，整体Goal继续active。
+
+提交检查识别原始diff的空白上下文和Rust test原输出结尾空行；不改写原始证据来迎合格式检查。补丁使用仓库既有.patch数据类型（原字节不变），原生产日志按既有调查证据惯例以限定目录的-text/原始空白属性保存，实际Git导出须再逐字节核对原producer输出。范围不覆盖产品代码或其他目录，不绕hook；首次失败的私有index保留，新index重新审查。
