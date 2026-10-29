@@ -37,11 +37,7 @@ describe("Engine Git closed execution environment", () => {
           await fs.writeFile(path.join(project.path, "sample.txt"), "baseline raw bytes\n")
           const binaryBytes = Buffer.from([0, 10, 13, 255, 65, 0, 66])
           await fs.writeFile(path.join(project.path, "binary.bin"), binaryBytes)
-          const specialPaths = [
-            "-leading-dash.txt",
-            "space name.txt",
-            "unicode-机器学习.txt",
-          ]
+          const specialPaths = ["-leading-dash.txt", "space name.txt", "unicode-机器学习.txt"]
           await Promise.all(
             specialPaths.map((relativePath) =>
               fs.writeFile(path.join(project.path, relativePath), `bytes:${relativePath}`),
@@ -89,10 +85,15 @@ describe("Engine Git closed execution environment", () => {
           await fs.writeFile(path.join(project.path, "space name.txt", "nested.txt"), "replacement bytes")
           const completed = await EngineGit.complete(requireTask(taskID))
           expect((completed.task.metadata as any).git.result.mode).toBe("created_commit")
+          const resultCommit = (completed.task.metadata as any).git.result.commit
 
-          const blob = await requireSuccess(await hostGit(["show", "HEAD:sample.txt"], { cwd: project.path }))
+          const blob = await requireSuccess(
+            await hostGit(["show", `${resultCommit}:sample.txt`], { cwd: project.path }),
+          )
           expect(blob.text()).toBe("result raw bytes\n")
-          const binaryBlob = await requireSuccess(await hostGit(["show", "HEAD:binary.bin"], { cwd: project.path }))
+          const binaryBlob = await requireSuccess(
+            await hostGit(["show", `${resultCommit}:binary.bin`], { cwd: project.path }),
+          )
           expect(binaryBlob.stdout).toEqual(binaryBytes)
           const receipt = (completed.task.metadata as any).git.result.checkpoint_receipt
           expect(receipt).toMatchObject({
@@ -108,7 +109,7 @@ describe("Engine Git closed execution environment", () => {
           })
           expect(receipt.checkpoint_git_process_launch_count).toBeLessThanOrEqual(32)
           const tree = await requireSuccess(
-            await hostGit(["ls-tree", "-rz", "--full-tree", "HEAD"], { cwd: project.path }),
+            await hostGit(["ls-tree", "-rz", "--full-tree", resultCommit], { cwd: project.path }),
           )
           const projected = tree.stdout
             .toString()
@@ -138,7 +139,9 @@ describe("Engine Git closed execution environment", () => {
             ].toSorted((left, right) => left.path.localeCompare(right.path)),
           )
           if (process.platform !== "win32") {
-            const linkBlob = await requireSuccess(await hostGit(["show", "HEAD:sample-link"], { cwd: project.path }))
+            const linkBlob = await requireSuccess(
+              await hostGit(["show", `${resultCommit}:sample-link`], { cwd: project.path }),
+            )
             expect(linkBlob.stdout).toEqual(Buffer.from("sample.txt"))
           }
           const repositories = (completed.task.metadata as any).git.result.repositories
@@ -192,9 +195,7 @@ describe("Engine Git closed execution environment", () => {
           await requireSuccess(
             await hostGit(["config", "user.email", "opencorvus-test@example.invalid"], { cwd: project.path }),
           )
-          await requireSuccess(
-            await hostGit(["commit", "--allow-empty", "--no-verify", "-m", "sha256 root"], { cwd: project.path }),
-          )
+          await requireSuccess(await hostGit(["commit", "--allow-empty", "-m", "sha256 root"], { cwd: project.path }))
           const source = Buffer.from([0, 1, 2, 10, 13, 254, 255])
           await fs.writeFile(path.join(project.path, "sha256.bin"), source)
           const taskID = await createEngineGitCheckpointTask({
@@ -216,7 +217,9 @@ describe("Engine Git closed execution environment", () => {
           await fs.writeFile(path.join(project.path, "sha256.bin"), resultBytes)
           const completed = await EngineGit.complete(requireTask(taskID))
           const metadata = (completed.task.metadata as any).git.result
-          const blob = await requireSuccess(await hostGit(["show", "HEAD:sha256.bin"], { cwd: project.path }))
+          const blob = await requireSuccess(
+            await hostGit(["show", `${metadata.commit}:sha256.bin`], { cwd: project.path }),
+          )
           expect({
             bytes: blob.stdout,
             commit: metadata.commit,

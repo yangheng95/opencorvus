@@ -24,13 +24,17 @@ async function git(directory: string, args: string[]) {
 async function longProject(label: string) {
   const owner = await memoryProject(`frozen-directory-${label}`)
   try {
-    let directory = path.join(owner.path, `long-${label}`)
-    while (Buffer.byteLength(directory) < 310) directory = path.join(directory, "目录".repeat(12))
-    expect(directory.length).toBeLessThan(260)
+    let directory = path.join(owner.path, `long-${label}`, "目录")
+    const executionDirectory = () =>
+      label === "managed" ? path.join(Worktree.worktreesRoot(directory), "m404") : directory
+    while (Buffer.byteLength(executionDirectory()) < 310) directory += "目"
+    expect(executionDirectory().length).toBeLessThan(260)
     console.log("Long UTF-8 fixture", {
       directory,
       utf8Bytes: Buffer.byteLength(directory),
       utf16CodeUnits: directory.length,
+      executionUtf8Bytes: Buffer.byteLength(executionDirectory()),
+      executionUtf16CodeUnits: executionDirectory().length,
     })
     await fs.mkdir(directory, { recursive: true })
     await git(directory, ["init"])
@@ -80,6 +84,7 @@ function checkpointFacts(taskID: string) {
 
 async function checkpointCycle(directory: string, label: string, markerKind: "directory" | "file" = "directory") {
   expect(Buffer.byteLength(directory)).toBeGreaterThanOrEqual(300)
+  const userHead = (await git(directory, ["rev-parse", "HEAD"])).text().trim()
   const projectID = Instance.project.id
   const identityBytes = await fs.readFile(path.join(directory, "identity.txt"))
   expect(identityBytes.toString().replace(/\r?\n$/, "")).toBe(`PUBLIC-${label}`)
@@ -117,7 +122,8 @@ async function checkpointCycle(directory: string, label: string, markerKind: "di
     index_import_process_count: 1,
   })
   expect((await git(directory, ["show", `${result.commit}:raw.bin`])).stdout).toEqual(updated)
-  expect((await git(directory, ["show", "HEAD:identity.txt"])).stdout).toEqual(identityBytes)
+  expect((await git(directory, ["show", `${result.commit}:identity.txt`])).stdout).toEqual(identityBytes)
+  expect((await git(directory, ["rev-parse", "HEAD"])).text().trim()).toBe(userHead)
   expect(requireTask(taskID).project_id).toBe(projectID)
   const beforeReplay = checkpointFacts(taskID)
   expect(

@@ -384,6 +384,29 @@ The first Tool request row owns its transport timestamp and display metadata. Re
 Git, filesystem, dispatch, build cleanup, Permission, Channel ingress, Interaction, and Bus effects follow the same request/outcome rule using their domain-specific sole fact types. In particular:
 
 - `engine_git_checkpoint_request` is written before repository publication and `engine_git_checkpoint_outcome` is its only result authority. The same Task mandatory and auxiliary process write leases remain held through the awaited checkpoint callback success or failure. Other Task keys remain isolated; the separate Git tree owner still owns repository consistency. This lease lifetime changes no execution epoch, cancellation barrier or retry policy. Task metadata and progress rows project Git evidence at read time and never store a second copy. An unreceipted request is not replayed; an authoritative repository query or explicit operator reconciliation appends its exact result.
+
+  Baseline, result and acceptance-round checkpoints retain commit objects through
+  private `refs/opencorvus/task-checkpoints/<request>/<repository>` anchors. The
+  exact write-ahead request and repository identity determine each anchor; native
+  compare-and-swap creates it only from a missing ref, with no dereferencing.
+  Even a `recorded_head` outcome receives a retained anchor. `checkpoint_ref`
+  identifies that anchor, while `ref` and `head_before` retain the observed user
+  checkout identity. These snapshots preserve the user's branch, detached or
+  unborn HEAD, canonical index and staged content. Temporary indexes assemble
+  snapshots only. A completed or failed Task is not permission to publish a user
+  commit. Actual user commits remain explicit VCS or authorized Tool effects.
+  Rollback releases only this operation's exact created anchors; an external
+  winner returns a recovery conflict and retains its commit. Snapshot history,
+  like the prior checkpoint commits, can remain in the repository after Task
+  removal; it is distinct from temporary Build-observation refs and their cleanup.
+  Subsequent checkpoints derive explicitly declared ignored files from successful
+  acceptance requests and outcomes in the same epoch, preserving readable
+  artifacts without promoting those paths into the user's index. Historical
+  outcomes remain immutable facts; no new required storage field, schema or
+  alternate historical writer is introduced.
+  Checkpoint `dirty` compares its captured tree with the observed HEAD tree;
+  live staging, worktree and upstream counts remain VCS facts rather than
+  synthetic zero-valued fields in a snapshot outcome.
 - `channel_ingress_accepted` requires the caller's stable `request_id`; an ingress without that causal identity is rejected before execution. Every production Channel adapter maps its provider event/message identity into that field; synthetic injection uses the exact newly-created provider message identity. Its envelope columns own `platform` and `request_id`, while the JSON payload excludes both. `channel_ingress_outcome` owns the result. If execution completed before the outcome commit, ordinary replay returns the typed unknown-outcome contract until exact downstream evidence reconciles it.
 - one `permission_ledger(requested)` row owns authorization input. Decision/execution rows contain only their branch delta. The canonical Tool result is stored once as `(attempt_id, result, time_created)` in `permission_execution_result`; Session and Tool identities are derived through the attempt/request chain, and Tool outcome points to that attempt identity instead of copying the payload or its hash.
 

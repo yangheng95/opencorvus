@@ -1,0 +1,114 @@
+$ bun script/run-tests.ts ./test/engine-git-frozen-directory.test.ts
+[1/1] START test/engine-git-frozen-directory.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+Long UTF-8 fixture {
+  directory: "D:\\oc795-tPOg5y\\frozen-final\\tmp\\opencorvus-test-run-xGUvwY\\runner-11840-RcNdch\\runtime-root\\tmp\\opencorvus-test-run-frW3gm\\test-30768-W6qo6K\\fixtures\\memory-awaiaG\\long-single\\目录目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目",
+  utf8Bytes: 312,
+  utf16CodeUnits: 222,
+  executionUtf8Bytes: 312,
+  executionUtf16CodeUnits: 222,
+}
+Frozen directory baseline {
+  directoryBytes: 312,
+  projectID: "prj_hKBi7nrguYXg2K2DF4JW",
+  taskID: "tsk_g00VZRtmBh002psxJ239",
+  error: undefined,
+}
+(pass) real checkpoints preserve raw bytes and immutable receipts with UTF-8 paths over 300 bytes and UTF-16 below 260 units [12413.10ms]
+Long UTF-8 fixture {
+  directory: "D:\\oc795-tPOg5y\\frozen-final\\tmp\\opencorvus-test-run-xGUvwY\\runner-11840-RcNdch\\runtime-root\\tmp\\opencorvus-test-run-frW3gm\\test-30768-W6qo6K\\fixtures\\memory-WelDCs\\long-left\\目录目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目",
+  utf8Bytes: 310,
+  utf16CodeUnits: 220,
+  executionUtf8Bytes: 310,
+  executionUtf16CodeUnits: 220,
+}
+Long UTF-8 fixture {
+  directory: "D:\\oc795-tPOg5y\\frozen-final\\tmp\\opencorvus-test-run-xGUvwY\\runner-11840-RcNdch\\runtime-root\\tmp\\opencorvus-test-run-frW3gm\\test-30768-W6qo6K\\fixtures\\memory-bvFTNT\\long-right\\目录目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目",
+  utf8Bytes: 311,
+  utf16CodeUnits: 221,
+  executionUtf8Bytes: 311,
+  executionUtf16CodeUnits: 221,
+}
+Frozen directory baseline {
+  directoryBytes: 310,
+  projectID: "prj_hkNYjWqMeehqZLZa4izZ",
+  taskID: "tsk_g00VZRtpau00jWlBUVLJ",
+  error: undefined,
+}
+Frozen directory baseline {
+  directoryBytes: 311,
+  projectID: "prj_h7jeGYE0oGZVmP9QMr9Z",
+  taskID: "tsk_g00VZRtpgO00zSOh0KqO",
+  error: undefined,
+}
+(pass) two Projects retain their frozen roots and bytes through concurrent checkpoints with UTF-8 over 300 bytes and UTF-16 below 260 units [13768.80ms]
+Long UTF-8 fixture {
+  directory: "D:\\oc795-tPOg5y\\frozen-final\\tmp\\opencorvus-test-run-xGUvwY\\runner-11840-RcNdch\\runtime-root\\tmp\\opencorvus-test-run-frW3gm\\test-30768-W6qo6K\\fixtures\\memory-m93Ky2\\long-managed\\目录目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目",
+  utf8Bytes: 274,
+  utf16CodeUnits: 210,
+  executionUtf8Bytes: 312,
+  executionUtf16CodeUnits: 248,
+}
+Production managed worktree {
+  directory: "D:\\oc795-tPOg5y\\frozen-final\\tmp\\opencorvus-test-run-xGUvwY\\runner-11840-RcNdch\\runtime-root\\tmp\\opencorvus-test-run-frW3gm\\test-30768-W6qo6K\\fixtures\\memory-m93Ky2\\long-managed\\目录目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目\\.opencorvus\\.r\\project\\worktrees\\m404",
+  utf8Bytes: 312,
+  utf16CodeUnits: 248,
+}
+Frozen directory baseline {
+  directoryBytes: 312,
+  projectID: "prj_h3jB1GsBIvgT5L00rG48",
+  taskID: "tsk_g00VZRtsv500nqYkBwQE",
+  error: undefined,
+}
+119 |     repository_count: 1,
+120 |     blob_import_process_count: 1,
+121 |     index_import_process_count: 1,
+122 |   })
+123 |   expect((await git(directory, ["show", `${result.commit}:raw.bin`])).stdout).toEqual(updated)
+124 |   expect((await git(directory, ["show", "HEAD:identity.txt"])).stdout).toEqual(identityBytes)
+                                                                             ^
+error: expect(received).toEqual(expected)
+
+  {
+    "data": [
+      80,
+      85,
+      66,
+      76,
+      73,
+      67,
+      45,
+      109,
+      97,
+      110,
+      97,
+      103,
+      101,
+      100,
+-     13,
+      10,
+    ],
+    "type": "Buffer",
+  }
+
+- Expected  - 1
++ Received  + 0
+
+      at checkpointCycle (D:\myhexin-local\opencorvus\packages\opencorvus\test\engine-git-frozen-directory.test.ts:124:72)
+(fail) the production managed-worktree entry reaches readiness and real checkpoints through its frozen external admin directory [10462.46ms]
+
+ 2 pass
+ 1 fail
+ 98 expect() calls
+Ran 3 tests across 1 file. [39.30s]
+[1/1] DONE test/engine-git-frozen-directory.test.ts exit=1 duration=40.96s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\engine-git-frozen-directory.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\engine-git-frozen-directory.test.ts
+Test runtime retained after unsuccessful run: D:\oc795-tPOg5y\frozen-final\tmp\opencorvus-test-run-xGUvwY\runner-11840-RcNdch\runtime-root\tmp\opencorvus-test-run-frW3gm
+Physical/output settlement confirmed: true
+error: script "test" exited with code 1
+Test runtime retained after unsuccessful run: D:\oc795-tPOg5y\frozen-final\tmp\opencorvus-test-run-xGUvwY
+Physical/output settlement confirmed: true

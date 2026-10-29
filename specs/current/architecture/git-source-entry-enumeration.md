@@ -62,13 +62,18 @@ as a symlink placeholder. It changes neither repository configuration nor branch
 checkout/restore policy. Terminal junctions still require the raw comparison
 because Git for Windows identifies their reparse tag as a directory.
 
-The extracted `git-index-lock` primitive is shared with Engine Git checkpoint
-publication and recovery. It compares exact predecessor index bytes, writes and
+The `git-index-lock` primitive owns explicit user-index staging publication
+and recovery. It compares exact predecessor index bytes, writes and
 syncs the prepared index through an exclusively owned canonical lock, and installs
 that lock atomically. Lock identity uses exact BigInt filesystem facts and captures
 final timestamps after handle closure. Cleanup verifies ownership; a competing
 index or lock is an observable error. The preparation index is a transaction
 artifact, never a second authoritative index.
+
+Engine Git checkpoints instead build their snapshot through a private temporary
+index and retain the resulting object under the request's private checkpoint ref.
+They read the user's real index for selection and mode facts and preserve its
+staging authority; they do not publish a replacement canonical index.
 
 Engine Git checkpoint enumeration and Execution Capsule source snapshots share
 this selection and retain their existing raw-link blob and stable snapshot

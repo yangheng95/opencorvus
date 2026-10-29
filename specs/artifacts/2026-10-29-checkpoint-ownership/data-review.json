@@ -1,0 +1,430 @@
+{
+  "at": "2026-10-29T14:51:31.290Z",
+  "databases": [
+    {
+      "tables": 92,
+      "rows": 148796,
+      "schema": 9,
+      "integrity": "ok",
+      "changed": []
+    },
+    {
+      "tables": 92,
+      "rows": 161325,
+      "schema": 9,
+      "integrity": "ok",
+      "changed": [
+        {
+          "table": "bus_publication_delivery",
+          "before": 28959,
+          "after": 31448,
+          "added": 2489,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 28959,
+          "after": 31448,
+          "added": 2489,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 3922,
+          "after": 4217,
+          "added": 295,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 3922,
+          "after": 4217,
+          "added": 295,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 11766,
+          "after": 12651,
+          "added": 885,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "decision_log",
+          "before": 1,
+          "after": 2,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_artifact",
+          "before": 74,
+          "after": 82,
+          "added": 8,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_artifact_catalog_revision",
+          "before": 74,
+          "after": 82,
+          "added": 8,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 30118,
+          "after": 32704,
+          "added": 2586,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 30156,
+          "after": 32748,
+          "added": 2592,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_git_checkpoint_outcome",
+          "before": 15,
+          "after": 17,
+          "added": 2,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_git_checkpoint_request",
+          "before": 15,
+          "after": 17,
+          "added": 2,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_task",
+          "before": 6,
+          "after": 7,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_task_creation_contract",
+          "before": 6,
+          "after": 7,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_task_root_ingress",
+          "before": 20,
+          "after": 22,
+          "added": 2,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "event_occurrence",
+          "before": 3737,
+          "after": 4032,
+          "added": 295,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "memory_chunk",
+          "before": 34,
+          "after": 35,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "memory_file",
+          "before": 34,
+          "after": 35,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "message",
+          "before": 520,
+          "after": 546,
+          "added": 26,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "part",
+          "before": 1452,
+          "after": 1568,
+          "added": 116,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "permission_execution_result",
+          "before": 121,
+          "after": 130,
+          "added": 9,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "permission_ledger",
+          "before": 617,
+          "after": 662,
+          "added": 45,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "permission_policy",
+          "before": 27,
+          "after": 30,
+          "added": 3,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "project",
+          "before": 34,
+          "after": 35,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "protocol_delivery_receipt",
+          "before": 11,
+          "after": 12,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "protocol_event",
+          "before": 1574,
+          "after": 1702,
+          "added": 128,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "protocol_inbox",
+          "before": 11,
+          "after": 12,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "provider_activity_outcome",
+          "before": 510,
+          "after": 558,
+          "added": 48,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "provider_activity_request",
+          "before": 510,
+          "after": 558,
+          "added": 48,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "provider_usage_event",
+          "before": 500,
+          "after": 548,
+          "added": 48,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "runtime_execution_capacity_lease",
+          "before": 3,
+          "after": 3,
+          "added": 0,
+          "removed": 0,
+          "updated": [
+            {
+              "key": "1",
+              "columns": [
+                "lease_id",
+                "owner_id",
+                "time_acquired",
+                "expires_at"
+              ]
+            },
+            {
+              "key": "2",
+              "columns": [
+                "lease_id",
+                "owner_id",
+                "time_acquired",
+                "expires_at"
+              ]
+            }
+          ]
+        },
+        {
+          "table": "session",
+          "before": 68,
+          "after": 73,
+          "added": 5,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "session_control_event",
+          "before": 50,
+          "after": 52,
+          "added": 2,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "session_control_record",
+          "before": 49,
+          "after": 51,
+          "added": 2,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "tool_part_outcome",
+          "before": 404,
+          "after": 447,
+          "added": 43,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "tool_part_progress",
+          "before": 47,
+          "after": 51,
+          "added": 4,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "tool_part_request",
+          "before": 404,
+          "after": 447,
+          "added": 43,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "workbench_brief_snapshot",
+          "before": 14,
+          "after": 16,
+          "added": 2,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "worker_turn_descriptor",
+          "before": 10,
+          "after": 11,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        }
+      ]
+    }
+  ],
+  "attachments": [
+    {
+      "files": 17,
+      "exact": 17
+    },
+    {
+      "files": 10,
+      "exact": 10
+    },
+    {
+      "files": 12,
+      "exact": 12
+    }
+  ],
+  "project": {
+    "headBefore": "4f0111e3bcf3dea3571f5db546086ec724b0d79f",
+    "headAfter": "4f0111e3bcf3dea3571f5db546086ec724b0d79f",
+    "refBefore": "refs/heads/main",
+    "refAfter": "refs/heads/main",
+    "entriesBefore": "100644 42fdeb2f52db9d1845188ac151e4991bd66f5d92 0\t.gitattributes\u0000100644 d6e3f6bd7bf1c1af01941aedb4babbdd0a87eafd 0\t.gitignore\u0000100644 7fe452dceaa7df4424d447b4fb7c8dafa1cc4eea 0\t.opencorvus/opencorvus.jsonc\u0000100644 fb049fa6f5b380ab531b81bf4b7554ab675e9ce4 0\tREADME.md\u0000100644 68f42d73365ea83036d5da9552275d9d1036b12f 0\tcounter.py\u0000100644 6ab64befa5551c96995b18c910fc61e34e4491d8 0\toperator-note.txt\u0000",
+    "entriesAfter": "100644 42fdeb2f52db9d1845188ac151e4991bd66f5d92 0\t.gitattributes\u0000100644 d6e3f6bd7bf1c1af01941aedb4babbdd0a87eafd 0\t.gitignore\u0000100644 7fe452dceaa7df4424d447b4fb7c8dafa1cc4eea 0\t.opencorvus/opencorvus.jsonc\u0000100644 fb049fa6f5b380ab531b81bf4b7554ab675e9ce4 0\tREADME.md\u0000100644 68f42d73365ea83036d5da9552275d9d1036b12f 0\tcounter.py\u0000100644 6ab64befa5551c96995b18c910fc61e34e4491d8 0\toperator-note.txt\u0000",
+    "indexExactBytes": true,
+    "protectedFiles": [
+      {
+        "path": ".gitattributes",
+        "exact": true
+      },
+      {
+        "path": ".gitignore",
+        "exact": true
+      },
+      {
+        "path": ".opencorvus/opencorvus.jsonc",
+        "exact": true
+      },
+      {
+        "path": "README.md",
+        "exact": true
+      },
+      {
+        "path": "operator-note.txt",
+        "exact": true
+      }
+    ],
+    "noteWorking": "OPERATOR_WORKING_795\n",
+    "noteStaged": "OPERATOR_STAGED_795\n",
+    "counter": "def next_serial(value):\n    return value + 1\n",
+    "test": "import unittest\n\nfrom counter import next_serial\n\n\nclass NextSerialTests(unittest.TestCase):\n    def test_zero_to_one(self):\n        self.assertEqual(next_serial(0), 1)\n\n    def test_forty_one_to_forty_two(self):\n        self.assertEqual(next_serial(41), 42)\n\n\nif __name__ == \"__main__\":\n    unittest.main()\n"
+  },
+  "originalQAProject": {
+    "head": "1b6ae6e649db0022aa197592e5a7c8f24d264ef8",
+    "expectedHead": "1b6ae6e649db0022aa197592e5a7c8f24d264ef8",
+    "files": [
+      {
+        "path": ".gitattributes",
+        "exact": true
+      },
+      {
+        "path": ".gitignore",
+        "exact": true
+      },
+      {
+        "path": ".opencorvus/opencorvus.jsonc",
+        "exact": true
+      },
+      {
+        "path": "README.md",
+        "exact": true
+      },
+      {
+        "path": "counter.py",
+        "exact": true
+      },
+      {
+        "path": "test_counter.py",
+        "exact": true
+      }
+    ]
+  }
+}

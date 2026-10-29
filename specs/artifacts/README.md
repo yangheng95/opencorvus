@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-29-checkpoint-ownership](2026-10-29-checkpoint-ownership/README.md)：三阶段快照、真实Git状态保全、故障恢复与独立代码Task页面。
+
 - [2026-10-29-task-recovery-integrity](2026-10-29-task-recovery-integrity/README.md)：原选文与投递red/green、104项后端回归、真实Task续跑和四张页面。
 
 - [2026-10-29-build-handoff-observation](2026-10-29-build-handoff-observation/README.md)：正式后端合同、真实协调阶段Review与模型/数据/运行结算。

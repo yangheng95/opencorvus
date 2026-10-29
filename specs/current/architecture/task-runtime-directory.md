@@ -128,8 +128,10 @@ and restart share this same Instance mechanism.
 Engine Git checkpoint commands retain one frozen repository authority. Their
 single explicit argument encoding uses `-C <dirname(git_dir)>`,
 `--git-dir=<basename(git_dir)>` and `--work-tree=<workspace>`. The host process
-working directory remains the original workspace, as do pathspec, index and
-locking contracts. This addresses Git for Windows' explicit-directory string
+working directory remains the original workspace, as do pathspec, index-read and
+repository locking contracts. Checkpoints assemble a temporary index and retain
+private object refs; user HEAD and index publication are separate explicit effects.
+This addresses Git for Windows' explicit-directory string
 limit without repository rediscovery, a retry path or a shorter workspace.
 It does not remove the native Windows process-current-directory boundary;
 the 404 record preserves the separate ASCII long-directory CreateProcessW 267

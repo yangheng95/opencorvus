@@ -1,0 +1,42 @@
+$ bun script/run-tests.ts ./test/engine-git-checkpoint-ownership.test.ts ./test/engine-git-batched-transaction.test.ts ./test/engine-git-fact-reconciliation.test.ts
+[1/3] START test/engine-git-checkpoint-ownership.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) baseline, acceptance and result retain exact snapshots with the user's staged and working state [16413.74ms]
+(pass) parallel Tasks retain distinct checkpoint anchors within and across Projects [25333.82ms]
+(pass) a real failed terminal transition retains readable evidence and the original user staging [14488.36ms]
+
+ 3 pass
+ 0 fail
+ 132 expect() calls
+Ran 3 tests across 1 file. [62.91s]
+[1/3] DONE test/engine-git-checkpoint-ownership.test.ts exit=0 duration=64.98s
+[2/3] START test/engine-git-batched-transaction.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) final lease failure returns its exact error and preserves the user's repository state [6593.79ms]
+(pass) a partial nested-ref failure settles its recovery and the next Task retains exact child gitlinks [29276.49ms]
+(pass) a competing private-ref winner retains its exact commit and external user staging on recovery conflict [8987.19ms]
+(pass) detached checkout retains its original identity and a readable private snapshot [7220.77ms]
+(pass) unborn checkout retains its original identity and a readable private snapshot [6308.46ms]
+
+ 5 pass
+ 0 fail
+ 79 expect() calls
+Ran 5 tests across 1 file. [59.63s]
+[2/3] DONE test/engine-git-batched-transaction.test.ts exit=0 duration=59.88s
+[3/3] START test/engine-git-fact-reconciliation.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Engine Git immutable checkpoint facts > an unreceipted checkpoint preserves its exact physical anchor and reconciles through the original outcome [8877.10ms]
+(pass) Engine Git immutable checkpoint facts > a migrated acceptance-round outcome absorbs replay without requiring unavailable legacy input [3069.39ms]
+(pass) Engine Git immutable checkpoint facts > a settled baseline failure replays its exact error instead of projecting success [1635.11ms]
+
+ 3 pass
+ 0 fail
+ 13 expect() calls
+Ran 3 tests across 1 file. [14.32s]
+[3/3] DONE test/engine-git-fact-reconciliation.test.ts exit=0 duration=14.42s

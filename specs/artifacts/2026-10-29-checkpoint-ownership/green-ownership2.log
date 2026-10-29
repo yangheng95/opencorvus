@@ -1,0 +1,13 @@
+$ bun script/run-tests.ts ./test/engine-git-checkpoint-ownership.test.ts
+[1/1] START test/engine-git-checkpoint-ownership.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) baseline, acceptance and result retain exact snapshots with the user's staged and working state [16003.72ms]
+(pass) a real failed terminal transition retains readable evidence and the original user staging [8593.63ms]
+
+ 2 pass
+ 0 fail
+ 59 expect() calls
+Ran 2 tests across 1 file. [28.61s]
+[1/1] DONE test/engine-git-checkpoint-ownership.test.ts exit=0 duration=30.23s

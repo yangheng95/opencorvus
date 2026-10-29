@@ -1,0 +1,31 @@
+{
+  "at": "2026-10-29T15:08:20.219Z",
+  "taskID": "tsk_g00VZRwPYV00d8tnhr0L",
+  "checkpoint": {
+    "commit": "fea43c8056f2339ab84fa375af3a447f86cf2e7c",
+    "ref": "refs/opencorvus/task-checkpoints/art_herv8F3M4YLGR17JsikQ/art_hxbYNGdASVyT1Gk6WcBQ"
+  },
+  "lifecycle": {
+    "terminalEventID": "pev_g0VZRxrak00RWm0Ug5m9",
+    "terminalStatus": "failed",
+    "timeCompleted": 1793285180654,
+    "terminalError": "Orchestrator error: Error: E2E_REQUEST_BUDGET_EXHAUSTED",
+    "terminalReason": "interrupted"
+  },
+  "consumer": {
+    "outcome": "collected",
+    "bundleKeys": [
+      "schema_version",
+      "usage",
+      "task",
+      "revision_facts",
+      "workspace_checkpoint",
+      "terminal_occurrence",
+      "sessions",
+      "messages",
+      "engine_artifacts",
+      "task_artifacts",
+      "canonical_sha256"
+    ]
+  }
+}

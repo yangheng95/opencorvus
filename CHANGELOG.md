@@ -6,6 +6,8 @@
 
 ### zh-CN
 
+- Task 启动、正常完成、失败及验收轮次以私有 Git 引用保留真实快照，保持用户原分支、暂存内容和工作副本；后续快照继续保留验收轮次声明的忽略文件，终态证据按实际对象读取。
+
 - 修复目录元数据补充后原 Task 续跑误报保留用户原文损坏的问题；从同一真实工具请求与结果核对原身份、作者、范围和原文，无需修改既有消息或清空数据库。
 - 已完成的业务错误结算原调度唤醒，保留可见失败；真正未完成或进程中断仍按原执行轮次恢复，避免同一投递持续产生失败回复。
 
@@ -39,6 +41,8 @@
 - 修复 Windows 检查器并发准备原生辅助程序时，编译产物与运行文件互相冲突导致的拒绝访问。
 
 ### en-US
+
+- Retain Task startup, completion, failure and acceptance snapshots through private Git refs while preserving the user's branch, staging and working files. Later snapshots retain explicitly declared acceptance artifacts, and terminal evidence reads the actual snapshot object.
 
 - Fix retained user-text integrity failures when resuming an original Task after catalog metadata is attached. Replay checks identity, author, range and verbatim text against the original Tool request and result, preserving existing messages and data.
 - Settle scheduler wakes after completed business errors while preserving the visible failure. Unfinished and process-interrupted replies retain occurrence-bound recovery, preventing repeated failed replies for the same delivery.

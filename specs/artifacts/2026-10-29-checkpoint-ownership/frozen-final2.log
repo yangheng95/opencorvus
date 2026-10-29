@@ -1,0 +1,71 @@
+$ bun script/run-tests.ts ./test/engine-git-frozen-directory.test.ts
+[1/1] START test/engine-git-frozen-directory.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+Long UTF-8 fixture {
+  directory: "D:\\oc795-tPOg5y\\frozen-final2\\tmp\\opencorvus-test-run-rXpc8M\\runner-84648-bq7VmV\\runtime-root\\tmp\\opencorvus-test-run-skg6TV\\test-87984-uFXN0C\\fixtures\\memory-mRwoG5\\long-single\\目录目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目",
+  utf8Bytes: 310,
+  utf16CodeUnits: 222,
+  executionUtf8Bytes: 310,
+  executionUtf16CodeUnits: 222,
+}
+Frozen directory baseline {
+  directoryBytes: 310,
+  projectID: "prj_hfHUyLaDkjGEdkJ5yyix",
+  taskID: "tsk_g00VZRuhs200jDiLoFTx",
+  error: undefined,
+}
+(pass) real checkpoints preserve raw bytes and immutable receipts with UTF-8 paths over 300 bytes and UTF-16 below 260 units [8946.80ms]
+Long UTF-8 fixture {
+  directory: "D:\\oc795-tPOg5y\\frozen-final2\\tmp\\opencorvus-test-run-rXpc8M\\runner-84648-bq7VmV\\runtime-root\\tmp\\opencorvus-test-run-skg6TV\\test-87984-uFXN0C\\fixtures\\memory-NL4t6Z\\long-left\\目录目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目",
+  utf8Bytes: 311,
+  utf16CodeUnits: 221,
+  executionUtf8Bytes: 311,
+  executionUtf16CodeUnits: 221,
+}
+Long UTF-8 fixture {
+  directory: "D:\\oc795-tPOg5y\\frozen-final2\\tmp\\opencorvus-test-run-rXpc8M\\runner-84648-bq7VmV\\runtime-root\\tmp\\opencorvus-test-run-skg6TV\\test-87984-uFXN0C\\fixtures\\memory-2UJGg2\\long-right\\目录目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目",
+  utf8Bytes: 312,
+  utf16CodeUnits: 222,
+  executionUtf8Bytes: 312,
+  executionUtf16CodeUnits: 222,
+}
+Frozen directory baseline {
+  directoryBytes: 312,
+  projectID: "prj_h9qe7cwUwqixPtW5fJf3",
+  taskID: "tsk_g00VZRukS600gp1j6BIB",
+  error: undefined,
+}
+Frozen directory baseline {
+  directoryBytes: 311,
+  projectID: "prj_hWSVDbiKGti3ll1kVqX7",
+  taskID: "tsk_g00VZRukYs00DrQegATP",
+  error: undefined,
+}
+(pass) two Projects retain their frozen roots and bytes through concurrent checkpoints with UTF-8 over 300 bytes and UTF-16 below 260 units [11945.63ms]
+Long UTF-8 fixture {
+  directory: "D:\\oc795-tPOg5y\\frozen-final2\\tmp\\opencorvus-test-run-rXpc8M\\runner-84648-bq7VmV\\runtime-root\\tmp\\opencorvus-test-run-skg6TV\\test-87984-uFXN0C\\fixtures\\memory-Dr49hW\\long-managed\\目录目目目目目目目目目目目目目目目目目目目目目目目目目目目目目",
+  utf8Bytes: 272,
+  utf16CodeUnits: 210,
+  executionUtf8Bytes: 310,
+  executionUtf16CodeUnits: 248,
+}
+Production managed worktree {
+  directory: "D:\\oc795-tPOg5y\\frozen-final2\\tmp\\opencorvus-test-run-rXpc8M\\runner-84648-bq7VmV\\runtime-root\\tmp\\opencorvus-test-run-skg6TV\\test-87984-uFXN0C\\fixtures\\memory-Dr49hW\\long-managed\\目录目目目目目目目目目目目目目目目目目目目目目目目目目目目目目\\.opencorvus\\.r\\project\\worktrees\\m404",
+  utf8Bytes: 310,
+  utf16CodeUnits: 248,
+}
+Frozen directory baseline {
+  directoryBytes: 310,
+  projectID: "prj_hJBxJzXdrhF9BDA72U2v",
+  taskID: "tsk_g00VZRunPa00MKVcI6wO",
+  error: undefined,
+}
+(pass) the production managed-worktree entry reaches readiness and real checkpoints through its frozen external admin directory [8831.48ms]
+
+ 3 pass
+ 0 fail
+ 116 expect() calls
+Ran 3 tests across 1 file. [31.82s]
+[1/1] DONE test/engine-git-frozen-directory.test.ts exit=0 duration=33.05s

@@ -1,0 +1,151 @@
+$ bun script/run-tests.ts ./test/engine-git-safe-environment.test.ts ./test/engine-git-fact-reconciliation.test.ts ./test/engine-git-batched-scale.test.ts ./test/engine-git-batched-raw-import.test.ts ./test/engine-git-frozen-directory.test.ts ./test/engine-git-project-metadata.test.ts ./test/process-checkpoint-lifetime.test.ts
+[1/7] START test/engine-git-safe-environment.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Engine Git closed execution environment > checkpoints exact workspace bytes under a repository-declared clean filter [19867.84ms]
+(pass) Engine Git closed execution environment > checkpoints native SHA-256 object identifiers and raw bytes [12692.98ms]
+
+ 2 pass
+ 0 fail
+ 24 expect() calls
+Ran 2 tests across 1 file. [36.62s]
+[1/7] DONE test/engine-git-safe-environment.test.ts exit=0 duration=38.75s
+[2/7] START test/engine-git-fact-reconciliation.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Engine Git immutable checkpoint facts > an unreceipted checkpoint preserves its exact physical anchor and reconciles through the original outcome [11691.81ms]
+(pass) Engine Git immutable checkpoint facts > a migrated acceptance-round outcome absorbs replay without requiring unavailable legacy input [2778.37ms]
+(pass) Engine Git immutable checkpoint facts > a settled baseline failure replays its exact error instead of projecting success [2503.36ms]
+
+ 3 pass
+ 0 fail
+ 13 expect() calls
+Ran 3 tests across 1 file. [18.63s]
+[2/7] DONE test/engine-git-fact-reconciliation.test.ts exit=0 duration=18.80s
+[3/7] START test/engine-git-batched-scale.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Engine Git fixed process topology > projects 2300 source files through one blob import and one index import [48992.36ms]
+
+ 1 pass
+ 0 fail
+ 2 expect() calls
+Ran 1 test across 1 file. [50.41s]
+[3/7] DONE test/engine-git-batched-scale.test.ts exit=0 duration=50.60s
+[4/7] START test/engine-git-batched-raw-import.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Engine Git batched raw import > projects complete marks independently of export record order [2400.91ms]
+(pass) Engine Git batched raw import > returns the snapshot identity error when the pathname no longer names the opened file [1469.29ms]
+
+ 2 pass
+ 0 fail
+ 7 expect() calls
+Ran 2 tests across 1 file. [5.28s]
+[4/7] DONE test/engine-git-batched-raw-import.test.ts exit=0 duration=5.46s
+[5/7] START test/engine-git-frozen-directory.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+Long UTF-8 fixture {
+  directory: "D:\\oc795-tPOg5y\\git-regression-final\\tmp\\opencorvus-test-run-CBlg6y\\runner-38580-h7B0A0\\runtime-root\\tmp\\opencorvus-test-run-YtzpNK\\test-89336-Mk09Ny\\fixtures\\memory-KrLuHY\\long-single\\目录目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目",
+  utf8Bytes: 311,
+  utf16CodeUnits: 227,
+  executionUtf8Bytes: 311,
+  executionUtf16CodeUnits: 227,
+}
+Frozen directory baseline {
+  directoryBytes: 311,
+  projectID: "prj_hDayO2xXX2NGb16MPD1D",
+  taskID: "tsk_g00VZRwt7V00lDoTZLCn",
+  error: undefined,
+}
+(pass) real checkpoints preserve raw bytes and immutable receipts with UTF-8 paths over 300 bytes and UTF-16 below 260 units [23117.51ms]
+Long UTF-8 fixture {
+  directory: "D:\\oc795-tPOg5y\\git-regression-final\\tmp\\opencorvus-test-run-CBlg6y\\runner-38580-h7B0A0\\runtime-root\\tmp\\opencorvus-test-run-YtzpNK\\test-89336-Mk09Ny\\fixtures\\memory-KCj0Wq\\long-left\\目录目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目",
+  utf8Bytes: 312,
+  utf16CodeUnits: 226,
+  executionUtf8Bytes: 312,
+  executionUtf16CodeUnits: 226,
+}
+Long UTF-8 fixture {
+  directory: "D:\\oc795-tPOg5y\\git-regression-final\\tmp\\opencorvus-test-run-CBlg6y\\runner-38580-h7B0A0\\runtime-root\\tmp\\opencorvus-test-run-YtzpNK\\test-89336-Mk09Ny\\fixtures\\memory-duD43J\\long-right\\目录目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目目",
+  utf8Bytes: 310,
+  utf16CodeUnits: 226,
+  executionUtf8Bytes: 310,
+  executionUtf16CodeUnits: 226,
+}
+Frozen directory baseline {
+  directoryBytes: 310,
+  projectID: "prj_hFS843s0VHsjO0emgw5J",
+  taskID: "tsk_g00VZRwzJt00l47uLTEX",
+  error: undefined,
+}
+Frozen directory baseline {
+  directoryBytes: 312,
+  projectID: "prj_h58LORaoJQxdT4zNfFUo",
+  taskID: "tsk_g00VZRwzV700rt1hJhoO",
+  error: undefined,
+}
+(pass) two Projects retain their frozen roots and bytes through concurrent checkpoints with UTF-8 over 300 bytes and UTF-16 below 260 units [22806.79ms]
+Long UTF-8 fixture {
+  directory: "D:\\oc795-tPOg5y\\git-regression-final\\tmp\\opencorvus-test-run-CBlg6y\\runner-38580-h7B0A0\\runtime-root\\tmp\\opencorvus-test-run-YtzpNK\\test-89336-Mk09Ny\\fixtures\\memory-Uq7bAY\\long-managed\\目录目目目目目目目目目目目目目目目目目目目目目目目目目目目",
+  utf8Bytes: 273,
+  utf16CodeUnits: 215,
+  executionUtf8Bytes: 311,
+  executionUtf16CodeUnits: 253,
+}
+Production managed worktree {
+  directory: "D:\\oc795-tPOg5y\\git-regression-final\\tmp\\opencorvus-test-run-CBlg6y\\runner-38580-h7B0A0\\runtime-root\\tmp\\opencorvus-test-run-YtzpNK\\test-89336-Mk09Ny\\fixtures\\memory-Uq7bAY\\long-managed\\目录目目目目目目目目目目目目目目目目目目目目目目目目目目目\\.opencorvus\\.r\\project\\worktrees\\m404",
+  utf8Bytes: 311,
+  utf16CodeUnits: 253,
+}
+Frozen directory baseline {
+  directoryBytes: 311,
+  projectID: "prj_h2zopvnckCAF4Ong2nap",
+  taskID: "tsk_g00VZRx7au00WcOmKySi",
+  error: undefined,
+}
+(pass) the production managed-worktree entry reaches readiness and real checkpoints through its frozen external admin directory [39729.60ms]
+
+ 3 pass
+ 0 fail
+ 116 expect() calls
+Ran 3 tests across 1 file. [87.20s]
+[5/7] DONE test/engine-git-frozen-directory.test.ts exit=0 duration=87.46s
+[6/7] START test/engine-git-project-metadata.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) project metadata preserves a NUL-free PDF byte-for-byte through autocrlf checkout [2391.15ms]
+(pass) managed worktree merge materializes an exact parseable PDF in the primary project [15454.34ms]
+
+ 2 pass
+ 0 fail
+ 13 expect() calls
+Ran 2 tests across 1 file. [20.90s]
+[6/7] DONE test/engine-git-project-metadata.test.ts exit=0 duration=21.42s
+[7/7] START test/process-checkpoint-lifetime.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+{"role":"mandatory","a":{"taskID":"tsk_g00VZRxMwE00d337EUMp","projectID":"prj_hAgG2Rv63xERWvpcvnea","cwd":"D:\\oc795-tPOg5y\\git-regression-final\\tmp\\opencorvus-test-run-CBlg6y\\runner-38580-h7B0A0\\runtime-root\\tmp\\opencorvus-test-run-YtzpNK\\test-72168-jiv1dq\\fixtures\\memory-s7PFdS","binding":{"protocol":"task-native-process-binding-v2","task_id":"tsk_g00VZRxMwE00d337EUMp","project_id":"prj_hAgG2Rv63xERWvpcvnea","package_revision_sha256":"3923b708a0ba91a7cc1a79afdd9447147ba70d0fcef1bd1e58baf49134d7b020","mode":"native","logical_workspace_root":"D:\\oc795-tPOg5y\\git-regression-final\\tmp\\opencorvus-test-run-CBlg6y\\runner-38580-h7B0A0\\runtime-root\\tmp\\opencorvus-test-run-YtzpNK\\test-72168-jiv1dq\\fixtures\\memory-s7PFdS","workspace_root":"D:\\oc795-tPOg5y\\git-regression-final\\tmp\\opencorvus-test-run-CBlg6y\\runner-38580-h7B0A0\\runtime-root\\tmp\\opencorvus-test-run-YtzpNK\\test-72168-jiv1dq\\fixtures\\memory-s7PFdS","initial_tree_sha256":"671e808b77e184b1546cf7d84c309e6f761fac5d2f90775f23527962c583684d","time_created":1793285062826}},"b":{"taskID":"tsk_g00VZRxMcV001EtiuGHo","projectID":"prj_hmkrimREPkg1N9s5VfFU","cwd":"D:\\oc795-tPOg5y\\git-regression-final\\tmp\\opencorvus-test-run-CBlg6y\\runner-38580-h7B0A0\\runtime-root\\tmp\\opencorvus-test-run-YtzpNK\\test-72168-jiv1dq\\fixtures\\memory-3az03u","binding":{"protocol":"task-native-process-binding-v2","task_id":"tsk_g00VZRxMcV001EtiuGHo","project_id":"prj_hmkrimREPkg1N9s5VfFU","package_revision_sha256":"3923b708a0ba91a7cc1a79afdd9447147ba70d0fcef1bd1e58baf49134d7b020","mode":"native","logical_workspace_root":"D:\\oc795-tPOg5y\\git-regression-final\\tmp\\opencorvus-test-run-CBlg6y\\runner-38580-h7B0A0\\runtime-root\\tmp\\opencorvus-test-run-YtzpNK\\test-72168-jiv1dq\\fixtures\\memory-3az03u","workspace_root":"D:\\oc795-tPOg5y\\git-regression-final\\tmp\\opencorvus-test-run-CBlg6y\\runner-38580-h7B0A0\\runtime-root\\tmp\\opencorvus-test-run-YtzpNK\\test-72168-jiv1dq\\fixtures\\memory-3az03u","initial_tree_sha256":"671e808b77e184b1546cf7d84c309e6f761fac5d2f90775f23527962c583684d","time_created":1793285061604}},"receipts":["checkpoint-entered","other-task-admitted","other-task-settled","checkpoint-completed","same-task-admitted","same-task-settled"],"checkpointResult":"checkpoint-completed","sameResult":{"taskID":"tsk_g00VZRxMwE00d337EUMp","pid":73672,"stdout":"{\"marker\":\"same-task\",\"cwd\":\"D:\\\\oc795-tPOg5y\\\\git-regression-final\\\\tmp\\\\opencorvus-test-run-CBlg6y\\\\runner-38580-h7B0A0\\\\runtime-root\\\\tmp\\\\opencorvus-test-run-YtzpNK\\\\test-72168-jiv1dq\\\\fixtures\\\\memory-s7PFdS\"}\n","stderr":"","exitCode":0,"metric":{"live":1,"owners":{"unclassified":{"count":1,"pids":[73672]}}}},"otherResult":{"taskID":"tsk_g00VZRxMcV001EtiuGHo","pid":66760,"stdout":"{\"marker\":\"other-task\",\"cwd\":\"D:\\\\oc795-tPOg5y\\\\git-regression-final\\\\tmp\\\\opencorvus-test-run-CBlg6y\\\\runner-38580-h7B0A0\\\\runtime-root\\\\tmp\\\\opencorvus-test-run-YtzpNK\\\\test-72168-jiv1dq\\\\fixtures\\\\memory-3az03u\"}\n","stderr":"","exitCode":0,"metric":{"live":1,"owners":{"unclassified":{"count":1,"pids":[66760]}}}},"state":"completed","boundary":"real native Task binding and lease callbacks; data fixture Task creation without model execution epoch"}
+{"role":"mandatory","joined":["fulfilled","fulfilled","fulfilled"]}
+(pass) native mandatory checkpoint callback holds sameTask admission and preserves otherTask output [8771.01ms]
+{"role":"auxiliary","a":{"taskID":"tsk_g00VZRxOjm005sqHWXS4","projectID":"prj_hcbbmOdXrfWe5VPx2dTn","cwd":"D:\\oc795-tPOg5y\\git-regression-final\\tmp\\opencorvus-test-run-CBlg6y\\runner-38580-h7B0A0\\runtime-root\\tmp\\opencorvus-test-run-YtzpNK\\test-72168-jiv1dq\\fixtures\\memory-2LVBU7","binding":{"protocol":"task-native-process-binding-v2","task_id":"tsk_g00VZRxOjm005sqHWXS4","project_id":"prj_hcbbmOdXrfWe5VPx2dTn","package_revision_sha256":"3923b708a0ba91a7cc1a79afdd9447147ba70d0fcef1bd1e58baf49134d7b020","mode":"native","logical_workspace_root":"D:\\oc795-tPOg5y\\git-regression-final\\tmp\\opencorvus-test-run-CBlg6y\\runner-38580-h7B0A0\\runtime-root\\tmp\\opencorvus-test-run-YtzpNK\\test-72168-jiv1dq\\fixtures\\memory-2LVBU7","workspace_root":"D:\\oc795-tPOg5y\\git-regression-final\\tmp\\opencorvus-test-run-CBlg6y\\runner-38580-h7B0A0\\runtime-root\\tmp\\opencorvus-test-run-YtzpNK\\test-72168-jiv1dq\\fixtures\\memory-2LVBU7","initial_tree_sha256":"671e808b77e184b1546cf7d84c309e6f761fac5d2f90775f23527962c583684d","time_created":1793285069742}},"b":{"taskID":"tsk_g00VZRxOSe00hq84bHcn","projectID":"prj_hZLPRsyvlpDtPE31eSbm","cwd":"D:\\oc795-tPOg5y\\git-regression-final\\tmp\\opencorvus-test-run-CBlg6y\\runner-38580-h7B0A0\\runtime-root\\tmp\\opencorvus-test-run-YtzpNK\\test-72168-jiv1dq\\fixtures\\memory-24OpCE","binding":{"protocol":"task-native-process-binding-v2","task_id":"tsk_g00VZRxOSe00hq84bHcn","project_id":"prj_hZLPRsyvlpDtPE31eSbm","package_revision_sha256":"3923b708a0ba91a7cc1a79afdd9447147ba70d0fcef1bd1e58baf49134d7b020","mode":"native","logical_workspace_root":"D:\\oc795-tPOg5y\\git-regression-final\\tmp\\opencorvus-test-run-CBlg6y\\runner-38580-h7B0A0\\runtime-root\\tmp\\opencorvus-test-run-YtzpNK\\test-72168-jiv1dq\\fixtures\\memory-24OpCE","workspace_root":"D:\\oc795-tPOg5y\\git-regression-final\\tmp\\opencorvus-test-run-CBlg6y\\runner-38580-h7B0A0\\runtime-root\\tmp\\opencorvus-test-run-YtzpNK\\test-72168-jiv1dq\\fixtures\\memory-24OpCE","initial_tree_sha256":"671e808b77e184b1546cf7d84c309e6f761fac5d2f90775f23527962c583684d","time_created":1793285068680}},"receipts":["checkpoint-entered","other-task-admitted","other-task-settled","checkpoint-completed","same-task-admitted","same-task-settled"],"checkpointResult":"checkpoint-completed","sameResult":{"taskID":"tsk_g00VZRxOjm005sqHWXS4","pid":47992,"stdout":"{\"marker\":\"same-task\",\"cwd\":\"D:\\\\oc795-tPOg5y\\\\git-regression-final\\\\tmp\\\\opencorvus-test-run-CBlg6y\\\\runner-38580-h7B0A0\\\\runtime-root\\\\tmp\\\\opencorvus-test-run-YtzpNK\\\\test-72168-jiv1dq\\\\fixtures\\\\memory-2LVBU7\"}\n","stderr":"","exitCode":0,"metric":{"live":1,"owners":{"unclassified":{"count":1,"pids":[47992]}}}},"otherResult":{"taskID":"tsk_g00VZRxOSe00hq84bHcn","pid":99156,"stdout":"{\"marker\":\"other-task\",\"cwd\":\"D:\\\\oc795-tPOg5y\\\\git-regression-final\\\\tmp\\\\opencorvus-test-run-CBlg6y\\\\runner-38580-h7B0A0\\\\runtime-root\\\\tmp\\\\opencorvus-test-run-YtzpNK\\\\test-72168-jiv1dq\\\\fixtures\\\\memory-24OpCE\"}\n","stderr":"","exitCode":0,"metric":{"live":1,"owners":{"unclassified":{"count":1,"pids":[99156]}}}},"state":"completed","boundary":"real native Task binding and lease callbacks; data fixture Task creation without model execution epoch"}
+{"role":"auxiliary","joined":["fulfilled","fulfilled","fulfilled"]}
+(pass) native auxiliary checkpoint callback holds sameTask admission and preserves otherTask output [6611.64ms]
+{"role":"mandatory","order":["checkpoint-rejected","next-admitted"],"failure":"rejected","result":{"stdout":"LEGAL_AFTER_REJECTION","exitCode":0}}
+(pass) native mandatory checkpoint rejection retains the original error and admits its next legal Task command [3023.11ms]
+{"role":"auxiliary","order":["checkpoint-rejected","next-admitted"],"failure":"rejected","result":{"stdout":"LEGAL_AFTER_REJECTION","exitCode":0}}
+(pass) native auxiliary checkpoint rejection retains the original error and admits its next legal Task command [3000.97ms]
+
+ 4 pass
+ 0 fail
+ 14 expect() calls
+Ran 4 tests across 1 file. [26.46s]
+[7/7] DONE test/process-checkpoint-lifetime.test.ts exit=0 duration=26.72s

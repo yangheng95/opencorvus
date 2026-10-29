@@ -1,0 +1,94 @@
+{
+  "dir": "D:/oc795-tPOg5y/git-semantics-0ighW3",
+  "tree": "4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+  "commit": "2025b3c4ecd4cb70b219bdbf94380e7e091ca7ea",
+  "results": [
+    {
+      "args": [
+        "init",
+        "--initial-branch=main"
+      ],
+      "code": 0,
+      "stdout": "Initialized empty Git repository in D:/oc795-tPOg5y/git-semantics-0ighW3/.git/",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "show-ref",
+        "--verify",
+        "--hash",
+        "refs/opencorvus/probe/anchor"
+      ],
+      "code": 128,
+      "stdout": "",
+      "stderr": "fatal: 'refs/opencorvus/probe/anchor' - not a valid ref"
+    },
+    {
+      "args": [
+        "update-ref",
+        "--no-deref",
+        "refs/opencorvus/probe/anchor",
+        "2025b3c4ecd4cb70b219bdbf94380e7e091ca7ea",
+        "0000000000000000000000000000000000000000"
+      ],
+      "code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "update-ref",
+        "--no-deref",
+        "refs/opencorvus/probe/other",
+        "2025b3c4ecd4cb70b219bdbf94380e7e091ca7ea",
+        "0000000000000000000000000000000000000000"
+      ],
+      "code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "symbolic-ref",
+        "refs/opencorvus/probe/anchor",
+        "refs/opencorvus/probe/other"
+      ],
+      "code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "update-ref",
+        "--no-deref",
+        "-d",
+        "refs/opencorvus/probe/anchor",
+        "2025b3c4ecd4cb70b219bdbf94380e7e091ca7ea"
+      ],
+      "code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "symbolic-ref",
+        "-q",
+        "refs/opencorvus/probe/anchor"
+      ],
+      "code": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "show-ref",
+        "--verify",
+        "--hash",
+        "refs/opencorvus/probe/other"
+      ],
+      "code": 0,
+      "stdout": "2025b3c4ecd4cb70b219bdbf94380e7e091ca7ea",
+      "stderr": ""
+    }
+  ]
+}

@@ -16,7 +16,7 @@ afterAll(async () => {
 })
 
 describe("Engine Git immutable checkpoint facts", () => {
-  test("an effect completed before its receipt is never replayed and converges through an exact outcome", async () => {
+  test("an unreceipted checkpoint preserves its exact physical anchor and reconciles through the original outcome", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -45,12 +45,21 @@ describe("Engine Git immutable checkpoint facts", () => {
         EngineGit.reconcileCheckpoint(interrupted!)
         const recovered = await EngineGit.prepare(requireTask(taskID))
         expect((recovered.task.metadata as any).git.baseline.checkpoint_receipt.outcome).toBe("success")
-        expect((recovered.task.metadata as any).git.baseline.commit).toBe(publishedHead)
+        const checkpoint = (recovered.task.metadata as any).git.baseline
+        expect(checkpoint.commit).toBe(interrupted!.result.commit)
+        expect((await hostGit(["rev-parse", checkpoint.checkpoint_ref], { cwd: project.path })).text().trim()).toBe(
+          checkpoint.commit,
+        )
+        expect((await hostGit(["show", `${checkpoint.commit}:checkpoint.txt`], { cwd: project.path })).text()).toBe(
+          "immutable git effect\n",
+        )
 
-        expect(Database.use((db) => ({
-          requests: db.select().from(EngineGitCheckpointRequestTable).all(),
-          outcomes: db.select().from(EngineGitCheckpointOutcomeTable).all(),
-        }))).toMatchObject({
+        expect(
+          Database.use((db) => ({
+            requests: db.select().from(EngineGitCheckpointRequestTable).all(),
+            outcomes: db.select().from(EngineGitCheckpointOutcomeTable).all(),
+          })),
+        ).toMatchObject({
           requests: [{ task_id: taskID, stage: "baseline" }],
           outcomes: [{ request_id: interrupted!.requestID }],
         })
@@ -70,27 +79,37 @@ describe("Engine Git immutable checkpoint facts", () => {
         const operationKey = "acceptance_round:1:1"
         const requestID = Identifier.deterministic("artifact", `git-checkpoint\0${taskID}\0${operationKey}`)
         Database.transaction((db) => {
-          db.insert(EngineGitCheckpointRequestTable).values({
-            id: requestID,
-            task_id: taskID,
-            stage: "acceptance_round",
-            operation_key: operationKey,
-            input: {},
-            time_created: 1,
-          }).run()
-          db.insert(EngineGitCheckpointOutcomeTable).values({
-            request_id: requestID,
-            result: { error: "legacy acceptance checkpoint failed" },
-            time_created: 2,
-          }).run()
+          db.insert(EngineGitCheckpointRequestTable)
+            .values({
+              id: requestID,
+              task_id: taskID,
+              stage: "acceptance_round",
+              operation_key: operationKey,
+              input: {},
+              time_created: 1,
+            })
+            .run()
+          db.insert(EngineGitCheckpointOutcomeTable)
+            .values({
+              request_id: requestID,
+              result: { error: "legacy acceptance checkpoint failed" },
+              time_created: 2,
+            })
+            .run()
         })
         const head = (await hostGit(["rev-parse", "HEAD"], { cwd: project.path })).text().trim()
-        await expect(EngineGit.commitAcceptanceRound({
-          task: requireTask(taskID),
-          iteration: 1,
-          verdict: { verdict: "rejected", summary: "new input cannot rewrite the migrated occurrence", rejection_count: 1 },
-          declaredChangedFiles: ["checkpoint.txt"],
-        })).resolves.toEqual({ mode: "skipped", error: "legacy acceptance checkpoint failed" })
+        await expect(
+          EngineGit.commitAcceptanceRound({
+            task: requireTask(taskID),
+            iteration: 1,
+            verdict: {
+              verdict: "rejected",
+              summary: "new input cannot rewrite the migrated occurrence",
+              rejection_count: 1,
+            },
+            declaredChangedFiles: ["checkpoint.txt"],
+          }),
+        ).resolves.toEqual({ mode: "skipped", error: "legacy acceptance checkpoint failed" })
         expect((await hostGit(["rev-parse", "HEAD"], { cwd: project.path })).text().trim()).toBe(head)
       },
     })
@@ -108,25 +127,36 @@ describe("Engine Git immutable checkpoint facts", () => {
         const operationKey = "baseline:1"
         const requestID = Identifier.deterministic("artifact", `git-checkpoint\0${taskID}\0${operationKey}`)
         Database.transaction((db) => {
-          db.insert(EngineGitCheckpointRequestTable).values({
-            id: requestID,
-            task_id: taskID,
-            stage: "baseline",
-            operation_key: operationKey,
-            input: {},
-            time_created: 1,
-          }).run()
-          db.insert(EngineGitCheckpointOutcomeTable).values({
-            request_id: requestID,
-            result: { error: "baseline checkpoint failed" },
-            time_created: 2,
-          }).run()
+          db.insert(EngineGitCheckpointRequestTable)
+            .values({
+              id: requestID,
+              task_id: taskID,
+              stage: "baseline",
+              operation_key: operationKey,
+              input: {},
+              time_created: 1,
+            })
+            .run()
+          db.insert(EngineGitCheckpointOutcomeTable)
+            .values({
+              request_id: requestID,
+              result: { error: "baseline checkpoint failed" },
+              time_created: 2,
+            })
+            .run()
         })
 
         const replay = await EngineGit.prepare(requireTask(taskID))
         expect(replay.error).toBe("baseline checkpoint failed")
-        expect(Database.use((db) => db.select().from(EngineGitCheckpointOutcomeTable)
-          .where(eq(EngineGitCheckpointOutcomeTable.request_id, requestID)).get())).toEqual({
+        expect(
+          Database.use((db) =>
+            db
+              .select()
+              .from(EngineGitCheckpointOutcomeTable)
+              .where(eq(EngineGitCheckpointOutcomeTable.request_id, requestID))
+              .get(),
+          ),
+        ).toEqual({
           request_id: requestID,
           result: { error: "baseline checkpoint failed" },
           time_created: 2,

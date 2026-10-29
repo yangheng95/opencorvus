@@ -1,0 +1,29 @@
+$ bun script/run-tests.ts ./test/engine-git-checkpoint-ownership.test.ts ./test/engine-git-batched-transaction.test.ts
+[1/2] START test/engine-git-checkpoint-ownership.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) baseline, acceptance and result retain exact snapshots with the user's staged and working state [21576.16ms]
+(pass) parallel Tasks retain distinct checkpoint anchors within and across Projects [33264.49ms]
+(pass) a real failed terminal transition retains readable evidence and the original user staging [9479.04ms]
+
+ 3 pass
+ 0 fail
+ 132 expect() calls
+Ran 3 tests across 1 file. [68.33s]
+[1/2] DONE test/engine-git-checkpoint-ownership.test.ts exit=0 duration=69.96s
+[2/2] START test/engine-git-batched-transaction.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) final lease failure returns its exact error and preserves the user's repository state [9481.06ms]
+(pass) a partial nested-ref failure settles its recovery and the next Task retains exact child gitlinks [33812.20ms]
+(pass) a competing private-ref winner retains its exact commit and external user staging on recovery conflict [12125.87ms]
+(pass) detached checkout retains its original identity and a readable private snapshot [10804.74ms]
+(pass) unborn checkout retains its original identity and a readable private snapshot [7544.05ms]
+
+ 5 pass
+ 0 fail
+ 79 expect() calls
+Ran 5 tests across 1 file. [74.73s]
+[2/2] DONE test/engine-git-batched-transaction.test.ts exit=0 duration=74.85s

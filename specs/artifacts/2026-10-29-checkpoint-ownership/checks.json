@@ -1,0 +1,137 @@
+{
+  "at": "2026-10-29T14:55:07.443Z",
+  "checks": [
+    {
+      "label": "red-ownership3",
+      "startedAt": 1793283435964,
+      "closedAt": 1793283458150,
+      "code": 1,
+      "signal": null,
+      "childPID": 70492,
+      "output": "red-ownership3.log"
+    },
+    {
+      "label": "green-ownership2",
+      "startedAt": 1793283735219,
+      "closedAt": 1793283767265,
+      "code": 0,
+      "signal": null,
+      "childPID": 72788,
+      "output": "green-ownership2.log"
+    },
+    {
+      "label": "ownership-final",
+      "startedAt": 1793283998814,
+      "closedAt": 1793284145443,
+      "code": 0,
+      "signal": null,
+      "childPID": 23828,
+      "output": "ownership-final.log"
+    },
+    {
+      "label": "git-regression",
+      "startedAt": 1793283998824,
+      "closedAt": 1793284140459,
+      "code": 1,
+      "signal": null,
+      "childPID": 85108,
+      "output": "git-regression.log.json"
+    },
+    {
+      "label": "frozen-final",
+      "startedAt": 1793284196919,
+      "closedAt": 1793284239800,
+      "code": 1,
+      "signal": null,
+      "childPID": 11840,
+      "output": "frozen-final.log"
+    },
+    {
+      "label": "frozen-final2",
+      "startedAt": 1793284421383,
+      "closedAt": 1793284456027,
+      "code": 0,
+      "signal": null,
+      "childPID": 84648,
+      "output": "frozen-final2.log"
+    },
+    {
+      "label": "git-regression-final",
+      "startedAt": 1793284825500,
+      "closedAt": 1793285077781,
+      "code": 0,
+      "signal": null,
+      "childPID": 38580,
+      "output": "git-regression-final.log"
+    },
+    {
+      "label": "types-final",
+      "startedAt": 1793284207584,
+      "closedAt": 1793284249331,
+      "code": 0,
+      "signal": null,
+      "childPID": 55928,
+      "output": "types-final.log"
+    },
+    {
+      "label": "topology-index",
+      "startedAt": 1793284992715,
+      "closedAt": 1793285094945,
+      "code": 0,
+      "signal": null,
+      "childPID": 44556,
+      "output": "topology-index.log"
+    },
+    {
+      "label": "docs-final",
+      "startedAt": 1793284992753,
+      "closedAt": 1793285013678,
+      "code": 0,
+      "signal": null,
+      "childPID": 73244,
+      "output": "docs-final.log"
+    },
+    {
+      "label": "architecture-final",
+      "startedAt": 1793284993310,
+      "closedAt": 1793285001904,
+      "code": 0,
+      "signal": null,
+      "childPID": 92580,
+      "output": "architecture-final.log"
+    },
+    {
+      "label": "matcher",
+      "startedAt": 1793283733025,
+      "closedAt": 1793283734502,
+      "code": 0,
+      "signal": null,
+      "childPID": 94676,
+      "output": "matcher.log"
+    },
+    {
+      "label": "ownership-delivery",
+      "startedAt": 1793286112548,
+      "closedAt": 1793286254448,
+      "code": 0,
+      "signal": null,
+      "childPID": 73096,
+      "output": "ownership-delivery.log"
+    },
+    {
+      "label": "real-reader",
+      "startedAt": 1793286495156,
+      "closedAt": 1793286500354,
+      "code": 0,
+      "signal": null,
+      "childPID": 39636,
+      "output": "real-reader.log"
+    }
+  ],
+  "backendTests": {
+    "ownership": 8,
+    "regression": 17,
+    "total": 25
+  },
+  "scope": "Final ownership and complete original seven-file Git regression are green. Earlier red and checker failures are retained separately. These are backend/native Git contracts; UI screenshots are manual observations."
+}
