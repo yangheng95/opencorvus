@@ -1,0 +1,36 @@
+{
+  "at": "2026-10-29T01:42:13.844Z",
+  "side": {
+    "id": "ses_-zUQbFLWozzgGwLyX4QG",
+    "title": "Side chat · 对话导出体验759",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project",
+    "inherited": 8
+  },
+  "goal": {
+    "id": "pev_g0VZOmQ0000BoeVreL6I",
+    "revision": "pev_g0VZOmQGA00Fu3hNqjaN",
+    "owner": {
+      "kind": "chat",
+      "id": "ses_-zUQbFLWozzgGwLyX4QG"
+    },
+    "objective": "第二次人工文字核对：确认目标正文中的技术标识 user_paused 已实际显示，再以原文 user_paused 记录完成依据。仅由操作员核对本界面，不要求模型回复、执行命令、文件或网络操作，也不创建Task或委派。",
+    "status": "blocked",
+    "reason": "model_unavailable",
+    "tokensUsed": 0,
+    "turnsAccepted": 0,
+    "createdAt": 1793238123976,
+    "updatedAt": 1793238124978,
+    "sessionID": "ses_-zUQbFLWozzgGwLyX4QG",
+    "projectID": "prj_hFmj1f6BXMBemXaPwm5n",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project"
+  },
+  "session": {
+    "id": "ses_-zUQbFLWozzgGwLyX4QG",
+    "kind": "assistant",
+    "source": "ses_-zUQgm405zzb2xZnkVrc",
+    "inherited": 8
+  },
+  "messages": [],
+  "requests": [],
+  "exhausted": false
+}

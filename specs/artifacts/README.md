@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-29-goal-completion-evidence-text](2026-10-29-goal-completion-evidence-text/README.md)：原文输入、代码碰撞误译、修复后实页与元数据核验。
+
 - [2026-10-29-goal-reason-localization](2026-10-29-goal-reason-localization/README.md)：目标暂停原因的原始截图、真实控制事实与数据结算。
 
 - [2026-10-29-goal-owner-control-journey](2026-10-29-goal-owner-control-journey/README.md)：23张实页原图、真实流式模型与Goal事实、数据及服务结算。

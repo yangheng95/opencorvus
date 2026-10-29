@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [持续目标完成依据的原文边界](records/2026-10/2026-10-29-goal-completion-evidence-text.md)：系统代码碰撞的真实误译与完成证据原文复核。
+
 - [持续目标控制原因的语言身份](records/2026-10/2026-10-29-goal-reason-localization.md)：稳定控制原因、原始证据保留及中英文实页复核。
 
 - [持续目标作用域与历史复制](records/2026-10/2026-10-29-goal-owner-control-journey.md)：模型不可用时准备侧聊/副本、规范错误与独立侧聊两轮实际目标验收。

@@ -1,0 +1,55 @@
+{
+  "at": "2026-10-29T01:48:33.954Z",
+  "checks": [
+    {
+      "label": "goal-evidence-782-build",
+      "startedAt": 1793237907062,
+      "closedAt": 1793237972330,
+      "code": 0,
+      "signal": null,
+      "childPID": 94168
+    },
+    {
+      "label": "goal-evidence-782-typecheck",
+      "startedAt": 1793237907080,
+      "closedAt": 1793237932738,
+      "code": 0,
+      "signal": null,
+      "childPID": 98592
+    },
+    {
+      "label": "goal-evidence-782-i18n",
+      "startedAt": 1793237907102,
+      "closedAt": 1793237909581,
+      "code": 0,
+      "signal": null,
+      "childPID": 34372
+    },
+    {
+      "label": "goal-evidence-782-architecture",
+      "startedAt": 1793238342221,
+      "closedAt": 1793238344305,
+      "code": 0,
+      "signal": null,
+      "childPID": 80632
+    },
+    {
+      "label": "goal-evidence-782-docs",
+      "startedAt": 1793238342221,
+      "closedAt": 1793238351319,
+      "code": 0,
+      "signal": null,
+      "childPID": 95744
+    },
+    {
+      "label": "goal-evidence-782-docs-final",
+      "startedAt": 1793238491065,
+      "closedAt": 1793238499051,
+      "code": 0,
+      "signal": null,
+      "childPID": 99016
+    }
+  ],
+  "ui": "16 original real-page captures rendered and manually inspected, covering old/new code collisions, original input, unchanged completed facts in two languages, unfinished reason localization and next draft guide/cancel/reopen. No UI automation or DOM/text/pixel assertions.",
+  "limitations": "Manual metadata objectives only, not new Provider or automatic-execution qualification; not every owner or every reason identifier individually exercised."
+}

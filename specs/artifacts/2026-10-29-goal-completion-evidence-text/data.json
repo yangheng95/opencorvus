@@ -1,0 +1,194 @@
+{
+  "at": "2026-10-29T01:46:57.371Z",
+  "databases": [
+    {
+      "tag": "baseline",
+      "tables": 92,
+      "oldCount": 109155,
+      "exact": 109155,
+      "total": 109851,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "completion-text",
+      "tables": 92,
+      "oldCount": 109851,
+      "exact": 109851,
+      "total": 109854,
+      "schema": 9,
+      "integrity": "ok"
+    }
+  ],
+  "sourceDatabases": "Every source pre-copy row remains exact.",
+  "originalRowComparison": "All existing rows in both isolated instances remain exact.",
+  "addedRowsByStage": {
+    "baseline": {
+      "bus_publication_delivery": 113,
+      "bus_publication_delivery_receipt": 113,
+      "bus_publication_outbox": 41,
+      "bus_publication_owner": 41,
+      "bus_publication_phase_receipt": 123,
+      "engine_control_activation_lease": 113,
+      "engine_control_activation_lease_grant": 113,
+      "message": 8,
+      "part": 19,
+      "protocol_event": 3,
+      "session": 1,
+      "tool_part_outcome": 4,
+      "tool_part_request": 4
+    },
+    "completion-text": {
+      "protocol_event": 3
+    }
+  },
+  "originalInputs": [
+    {
+      "filename": "test_invoice.py",
+      "bytes": 1520,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "invoice.py",
+      "bytes": 953,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "README.md",
+      "bytes": 191,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "mcp.ts",
+      "bytes": 5539,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "chat.ts",
+      "bytes": 14692,
+      "exactBytes": true,
+      "exactMetadata": true
+    }
+  ],
+  "attachmentNamespaces": [
+    {
+      "stage": "baseline",
+      "files": 17,
+      "exactBytes": true
+    },
+    {
+      "stage": "-after",
+      "files": 17,
+      "exactBytes": true
+    }
+  ],
+  "originalCompletedGoal": {
+    "id": "pev_g0VZOkp9m00D5x2JCl8s",
+    "revision": "pev_g0VZOl1BT00g4yPrx71Z",
+    "sameCompleteProjection": true,
+    "reason": "turn_budget"
+  },
+  "controlEvents": [
+    {
+      "stage": "baseline",
+      "eventID": "pev_g0VZOkp9m00D5x2JCl8s",
+      "type": "continuous_goal.created",
+      "aggregateID": "ses_-zUQbFLWozzgGwLyX4QG",
+      "owner": {
+        "kind": "chat",
+        "id": "ses_-zUQbFLWozzgGwLyX4QG"
+      },
+      "request_id": "f25742d4-aa6c-47bb-9254-c8cfeeef96b7",
+      "input": {
+        "requestID": "f25742d4-aa6c-47bb-9254-c8cfeeef96b7",
+        "objective": "人工文字核对：操作员确认本目标正文中的技术标识 turn_budget 已在界面实际显示，再将同一标识 turn_budget 原样填入完成依据并标记完成。仅需这一次界面人工核对，不要求模型回复、执行命令、读写文件、联网、创建Task或委派。"
+      },
+      "author": "user"
+    },
+    {
+      "stage": "baseline",
+      "eventID": "pev_g0VZOkpBi00VbDjNA7aT",
+      "type": "continuous_goal.updated",
+      "aggregateID": "ses_-zUQbFLWozzgGwLyX4QG",
+      "goal_id": "pev_g0VZOkp9m00D5x2JCl8s",
+      "request_id": "pev_g0VZOkp9m00D5x2JCl8s:pev_g0VZOkp9m00D5x2JCl8s:model_unavailable",
+      "input": {
+        "requestID": "pev_g0VZOkp9m00D5x2JCl8s:pev_g0VZOkp9m00D5x2JCl8s:model_unavailable",
+        "goalID": "pev_g0VZOkp9m00D5x2JCl8s",
+        "expectedRevision": "pev_g0VZOkp9m00D5x2JCl8s",
+        "status": "blocked",
+        "reason": "model_unavailable"
+      },
+      "author": "goal-controller"
+    },
+    {
+      "stage": "baseline",
+      "eventID": "pev_g0VZOl1BT00g4yPrx71Z",
+      "type": "continuous_goal.updated",
+      "aggregateID": "ses_-zUQbFLWozzgGwLyX4QG",
+      "goal_id": "pev_g0VZOkp9m00D5x2JCl8s",
+      "request_id": "13a99c32-d240-4828-8116-bc885c6492a4",
+      "input": {
+        "requestID": "13a99c32-d240-4828-8116-bc885c6492a4",
+        "goalID": "pev_g0VZOkp9m00D5x2JCl8s",
+        "expectedRevision": "pev_g0VZOkpBi00VbDjNA7aT",
+        "status": "complete",
+        "reason": "turn_budget"
+      },
+      "author": "user"
+    },
+    {
+      "stage": "completion-text",
+      "eventID": "pev_g0VZOmQ0000BoeVreL6I",
+      "type": "continuous_goal.created",
+      "aggregateID": "ses_-zUQbFLWozzgGwLyX4QG",
+      "owner": {
+        "kind": "chat",
+        "id": "ses_-zUQbFLWozzgGwLyX4QG"
+      },
+      "request_id": "76594859-2dd9-4042-9af4-eb104cc7c95d",
+      "input": {
+        "requestID": "76594859-2dd9-4042-9af4-eb104cc7c95d",
+        "objective": "第二次人工文字核对：确认目标正文中的技术标识 user_paused 已实际显示，再以原文 user_paused 记录完成依据。仅由操作员核对本界面，不要求模型回复、执行命令、文件或网络操作，也不创建Task或委派。"
+      },
+      "author": "user"
+    },
+    {
+      "stage": "completion-text",
+      "eventID": "pev_g0VZOmQGA00Fu3hNqjaN",
+      "type": "continuous_goal.updated",
+      "aggregateID": "ses_-zUQbFLWozzgGwLyX4QG",
+      "goal_id": "pev_g0VZOmQ0000BoeVreL6I",
+      "request_id": "pev_g0VZOmQ0000BoeVreL6I:pev_g0VZOmQ0000BoeVreL6I:model_unavailable",
+      "input": {
+        "requestID": "pev_g0VZOmQ0000BoeVreL6I:pev_g0VZOmQ0000BoeVreL6I:model_unavailable",
+        "goalID": "pev_g0VZOmQ0000BoeVreL6I",
+        "expectedRevision": "pev_g0VZOmQ0000BoeVreL6I",
+        "status": "blocked",
+        "reason": "model_unavailable"
+      },
+      "author": "goal-controller"
+    },
+    {
+      "stage": "completion-text",
+      "eventID": "pev_g0VZOmdwA00qcQtgzusw",
+      "type": "continuous_goal.updated",
+      "aggregateID": "ses_-zUQbFLWozzgGwLyX4QG",
+      "goal_id": "pev_g0VZOmQ0000BoeVreL6I",
+      "request_id": "b055e7bc-556a-492f-a1fe-b28171103859",
+      "input": {
+        "requestID": "b055e7bc-556a-492f-a1fe-b28171103859",
+        "goalID": "pev_g0VZOmQ0000BoeVreL6I",
+        "expectedRevision": "pev_g0VZOmQGA00Fu3hNqjaN",
+        "status": "complete",
+        "reason": "user_paused"
+      },
+      "author": "user"
+    }
+  ],
+  "executionScope": "Two operator-authored manual text-verification objectives. No credential copy, Provider request or accepted automatic turn. The new side chat inherits eight original completed Messages and their reference Parts/tool facts; these are copied history rather than new tool execution."
+}

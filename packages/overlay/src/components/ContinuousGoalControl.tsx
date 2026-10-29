@@ -184,7 +184,9 @@ export function ContinuousGoalControl(props: {
   let noticeState = ""
   const number = (value: number) => new Intl.NumberFormat(localeTag()).format(value)
   const currentReason = () => {
-    const value = goal()?.reason
+    const current = goal()
+    const value = current?.reason
+    if (current?.status === "complete") return value
     return value && systemReasons.has(value) ? t(`continuous_goal.reason.${value}`) : value
   }
   const owns = (key: string) => !disposed && source()?.key === key

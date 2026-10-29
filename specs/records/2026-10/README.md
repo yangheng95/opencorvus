@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-29-goal-completion-evidence-text.md](2026-10-29-goal-completion-evidence-text.md)：完成依据按真实状态保留原文，现系统原因继续本地化。
+
 - [2026-10-29-goal-reason-localization.md](2026-10-29-goal-reason-localization.md)：持续目标控制原因跨语言呈现与真实模型验收。
 
 - [2026-10-29-goal-owner-control-journey.md](2026-10-29-goal-owner-control-journey.md)：Task/Mission入口、历史复制准入、OpenAPI错误声明与真实侧聊Goal闭环。

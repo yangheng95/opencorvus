@@ -39,6 +39,9 @@ budget_updated_and_resumed, and render these through the current locale alongsid
 the existing owner, budget and model reasons. Ordinary paused/blocked budget saves
 retain the prior reason. Completion evidence and unclassified historical free text
 retain their original content; locale changes do not mutate durable decisions.
+For a complete goal, reason is always completion evidence and is displayed verbatim,
+even when its text exactly matches a known system reason identifier. Reason-code
+localization applies to unfinished status explanations, not completed evidence.
 Explicit paused/blocked intent takes precedence over exhausted budgets; budget_limited
 is derived only for active intent. Resuming preserves all usage and rechecks the limit.
 
