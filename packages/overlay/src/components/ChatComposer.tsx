@@ -155,6 +155,7 @@ export interface ChatComposerProps {
    * Availability derived by the existing connection and launcher owners.
    */
   availability: "ready" | "submitting" | "unavailable"
+  unavailableReason?: string
   /**
    * Whether a task is active (in-flight request or interruptable task status).
    * When true the send button becomes a stop button.
@@ -1306,7 +1307,7 @@ export function ChatComposer(props: ChatComposerProps) {
     const reason = sendDisabledReason()
     if (reason === "submitting") return t("chat.disabled_submitting")
     if (reason === "uploading") return t("chat.attachment_loader.uploading", { count: uploadingCount() })
-    if (reason === "unavailable") return t("chat.disabled_unavailable")
+    if (reason === "unavailable") return props.unavailableReason ?? t("chat.disabled_unavailable")
     if (reason === "model-required") return t("chat.disabled_model_required")
     if (reason === "empty") return t("chat.disabled_empty")
     return t(localCommand()?.kind === "goal" ? "continuous_goal.open" : "chat.send_title")
@@ -1693,7 +1694,7 @@ export function ChatComposer(props: ChatComposerProps) {
                   ? t("chat.placeholder_submitting")
                   : composerEnabled()
                     ? props.placeholder?.trim() || t("chat.placeholder")
-                    : t("chat.placeholder_disabled")
+                    : props.unavailableReason ?? t("chat.placeholder_disabled")
               }
               title={t("chat.tip")}
               value={text()}

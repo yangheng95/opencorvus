@@ -1,0 +1,8 @@
+[
+  {
+    "level": "error",
+    "message": "TypeError: Cannot read properties of undefined (reading 'row')\n    at Object.i (http://localhost:38376/ui/assets/main-vPf32J9i.js:270:30209)\n    at Object.fn (http://localhost:38376/ui/assets/main-vPf32J9i.js:247:5431)\n    at on (http://localhost:38376/ui/assets/CommandMenuSurface-BIbnvijt.js:1:7259)\n    at Q (http://localhost:38376/ui/assets/CommandMenuSurface-BIbnvijt.js:1:7190)\n    at $ (http://localhost:38376/ui/assets/CommandMenuSurface-BIbnvijt.js:1:3311)\n    at gze (http://localhost:38376/ui/assets/main-vPf32J9i.js:247:5414)\n    at http://localhost:38376/ui/assets/CommandMenuSurface-BIbnvijt.js:1:11703\n    at S (http://localhost:38376/ui/assets/CommandMenuSurface-BIbnvijt.js:1:5300)\n    at c (http://localhost:38376/ui/assets/CommandMenuSurface-BIbnvijt.js:1:11697)\n    at http://localhost:38376/ui/assets/main-vPf32J9i.js:247:14930",
+    "timestamp": "2026-10-29T23:13:18.155Z",
+    "url": "http://localhost:38376/ui/assets/main-vPf32J9i.js"
+  }
+]

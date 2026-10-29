@@ -12,6 +12,7 @@ import {
   createRoot,
   createEffect,
   createMemo,
+  createResource,
   createSignal,
   For,
   onCleanup,
@@ -39,6 +40,8 @@ import { MissionBoard } from "./components/MissionBoard"
 import type { MissionCreateRequest, MissionManualCreateRequest } from "./components/MissionCreateDialog"
 import {
   setWorkLedgerItemPinned,
+  loadWorkLedgerSelection,
+  type WorkLedgerItemRow,
   workLedgerActiveItem,
   workLedgerProjectDirectories,
   workLedgerSessionExecution,
@@ -2204,8 +2207,7 @@ function conversationSubmitActive(): boolean {
   return composerIntent().conversationTarget === "chat" && !activeTaskID() && !isConversationSource()
 }
 
-function resolvedActiveComposerIntent(): ComposerIntent | undefined {
-  const item = workLedgerActiveItem({ taskID: activeTaskID(), sessionID: activeSessionID() })
+function resolvedActiveComposerIntent(item: WorkLedgerItemRow | null): ComposerIntent | undefined {
   if (!item) return undefined
   if (item.kind === "chat") {
     return {
@@ -2247,6 +2249,69 @@ const paneCallbacks = {
 }
 
 function OverlayRoot() {
+  const selectionRequest = createMemo(() => {
+    const source = boardStore.selectedSource
+    const authority = captureApiAuthority()
+    if (!source || boardStore.taskSwitching || !appStore.connected || !source.directory) return undefined
+    return {
+      kind: source.kind, id: source.id, directory: source.directory, authority,
+      key: JSON.stringify([authority.revision, boardStore.selectEpoch, source.kind, source.id, source.directory]),
+    }
+  }, undefined, { equals: (a, b) => a?.key === b?.key })
+  let selectionController: AbortController | undefined
+  const [selection, { refetch: refetchSelection }] = createResource(selectionRequest, async (request) => {
+    selectionController?.abort()
+    selectionController = new AbortController()
+    return { key: request.key, row: await loadWorkLedgerSelection({ ...request, signal: selectionController.signal }) }
+  })
+  const selectedItem = () => {
+    if (selection.error) return null
+    const current = selection()
+    return current && current.key === selectionRequest()?.key ? current.row : null
+  }
+  const selectionUnavailable = () => !!boardStore.selectedSource && (!selectedItem() || !!selection.error)
+  const selectedArchived = () => selectedItem()?.archived !== undefined
+  let refreshPending: Promise<void> | undefined
+  let refreshQueued = false
+  const refreshSelection = (): Promise<void> => {
+    if (!selectionRequest()) return Promise.resolve()
+    if (refreshPending) { refreshQueued = true; return refreshPending }
+    refreshPending = (async () => {
+      do { refreshQueued = false; await refetchSelection() } while (refreshQueued && selectionRequest())
+    })().finally(() => { refreshPending = undefined })
+    return refreshPending
+  }
+  createEffect(on(missionSharedRefreshToken, () => {
+    void refreshSelection().catch(() => { /* The resource presents the read error with Retry. */ })
+  }, { defer: true }))
+  createEffect(() => { if (!selectionRequest()) selectionController?.abort() })
+  onCleanup(() => selectionController?.abort())
+  const [restoringSelection, setRestoringSelection] = createSignal(false)
+  const [restoreFailure, setRestoreFailure] = createSignal<unknown>()
+  createEffect(on(() => selectionRequest()?.key, () => { setRestoringSelection(false); setRestoreFailure(undefined) }))
+  async function restoreSelection(): Promise<void> {
+    const item = selectedItem(), request = selectionRequest()
+    if (!item || item.archived === undefined || !request || restoringSelection()) return
+    const owns = () => selectionRequest()?.key === request.key && isApiAuthorityCurrent(request.authority)
+    const trigger = document.activeElement
+    setRestoringSelection(true)
+    setRestoreFailure(undefined)
+    let restored = false
+    try {
+      const target = { directory: item.directory, authority: request.authority }
+      if (item.kind === "task") await setTaskArchived({ ...target, taskID: item.id }, false)
+      else if (item.kind === "mission") await setMissionArchived({ ...target, missionID: item.missionID }, false)
+      else await setConversationSessionArchived({ ...target, sessionID: item.sessionID, experience: item.experience }, false)
+      restored = true
+      if (!owns()) return
+      await refreshSelection()
+      if (owns()) {
+        setMissionSharedRefreshToken((value) => value + 1)
+        if (!selectedArchived() && (document.activeElement === trigger || document.activeElement === document.body)) focusComposerInput()
+      }
+    } catch (error) { if (owns() && !restored) setRestoreFailure(error) }
+    finally { if (owns()) setRestoringSelection(false) }
+  }
   const homeActive = createMemo(launcherHomeActive)
   const composerExpertSquadCatalog = createMemo(() => {
     const catalog = composerExpertSquadCatalogForRequest(
@@ -2528,14 +2593,7 @@ function OverlayRoot() {
       }
       conversationTitle={() => {
         settingsStore.locale
-        const activeItem = workLedgerActiveItem({
-          taskID: activeTaskID(),
-          sessionID: activeSessionID(),
-        })
-        const selectedTaskTitle =
-          boardStore.selectedSource?.kind === "task" && typeof boardStore.board?.task?.title === "string"
-            ? boardStore.board.task.title.trim()
-            : ""
+        const activeItem = selectedItem()
         return missionSubmitActive()
           ? t("mission.launcher.title")
           : conversationSubmitActive()
@@ -2549,14 +2607,14 @@ function OverlayRoot() {
                   ? conversationSourceExperience() === "work" || composerIntent().productPillar === "work"
                     ? t("work_ledger.kind.work")
                     : t("chat.panel_title")
-                  : selectedTaskTitle || t("task.panel_title"))
+                  : t("task.panel_title"))
       }}
-      conversationItem={() =>
-        workLedgerActiveItem({
-          taskID: activeTaskID(),
-          sessionID: activeSessionID(),
-        })
-      }
+      conversationItem={selectedItem}
+      conversationReadError={() => selectionRequest() ? selection.error : undefined}
+      onRetryConversationRead={() => refreshSelection()}
+      restoringConversation={restoringSelection()}
+      conversationRestoreError={restoreFailure()}
+      onRestoreConversation={() => restoreSelection()}
       onCopyConversationDebug={copyActiveConversationDebug}
       onConversationPinnedChange={(row, pinned) =>
         setActiveWorkLedgerItemPinned(row, pinned)
@@ -2670,19 +2728,20 @@ function OverlayRoot() {
           onGoal={onGoal}
           onSideChat={async (prompt) => requestSideChat(undefined, prompt)}
           availability={
-            !canComposeChat()
+            !canComposeChat() || selectionUnavailable() || selectedArchived()
               ? "unavailable"
               : missionLauncherSubmitting() || expertSquadLauncherSubmitting() || assistantLauncherSubmitting()
                 ? "submitting"
                 : "ready"
           }
+          unavailableReason={selectedArchived() ? t("work_ledger.archived_readonly") : undefined}
           busy={
             !!messageStore.chatRequest || isTaskInterruptable() || workLedgerSessionInterruptible(activeSessionID())
           }
           stopping={composerStopping()}
           draftKey={panelComposerDraftKey()}
           placeholder={
-            missionSubmitActive()
+            selectedArchived() ? t("work_ledger.archived_readonly") : missionSubmitActive()
               ? t("mission.launcher.placeholder")
               : conversationSubmitActive()
                 ? composerIntent().productPillar === "work"
@@ -2728,8 +2787,8 @@ function OverlayRoot() {
           launchReferences={composerLaunchReferences()}
           conversationExperience={conversationSourceExperience()}
           composerIntent={composerIntent()}
-          activeComposerIntent={resolvedActiveComposerIntent()}
-          activeWorkItemKind={workLedgerActiveItem({ taskID: activeTaskID(), sessionID: activeSessionID() })?.kind}
+          activeComposerIntent={resolvedActiveComposerIntent(selectedItem())}
+          activeWorkItemKind={selectedItem()?.kind}
           onComposerIntentChange={(intent) =>
             runUserNavigation("composer.mode-change", () => handleComposerIntentChange(intent))
           }

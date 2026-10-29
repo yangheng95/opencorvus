@@ -17,7 +17,7 @@ ID otherwise. requestID replays one mutation; updates require goalID and expecte
 All three methods use the shared Project identity context, like persisted
 conversation reads. Stored objective, status and usage remain readable and
 explicit user decisions remain writable when the selected model is unavailable.
-Owner membership, deletion and archive validation still apply. Actual
+Reads validate owner membership and deletion; mutations also validate archive state. Actual
 continuation admission initializes its full independent execution runtime.
 
 The shared Goal control distinguishes a failed current read from a failed user
@@ -55,8 +55,12 @@ Explicit paused/blocked intent takes precedence over exhausted budgets; budget_l
 is derived only for active intent. Resuming preserves all usage and rechecks the limit.
 
 At most one unresolved goal owns any overlapping Session/Task/Mission scope.
-Archived owners retain that scope and inherited usage association while paused;
-creation and explicit active updates recheck exclusivity in the same transaction.
+Archived owners retain that scope and inherited usage association while paused.
+the public Goal GET includes archived owners for history reading and reports
+the `owner_archived` boundary. Their UI permits reading details while edits
+remain unavailable until explicit restoration; mutation owner validation is
+unchanged. Reading or restoring visibility never resumes the goal.
+Creation and explicit active updates recheck exclusivity in the same transaction.
 Owner deletion follows the existing Session/Task deletion facts, including retained
 history rows. A retained row alone does not authorize execution or public goal access.
 Objective and identity are immutable; updates preserve accumulated usage and accepted

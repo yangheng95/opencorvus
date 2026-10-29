@@ -186,6 +186,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/work-ledger/events` | Subscribe to Work Ledger change notifications | `workLedger.events` |
 | PATCH | `/work-ledger/item/{kind}/{itemID}/pin` | Pin or unpin a Work Ledger item Body: `pinned`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `workLedger.setItemPinned` |
 | PATCH | `/work-ledger/project/{projectID}/pin` | Pin or unpin a Work Ledger project Body: `pinned`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `workLedger.setProjectPinned` |
+| GET | `/work-ledger/selection/{kind}/{id}` | Read the exact selected Work Ledger item Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `workLedger.selection` |
 
 ### Session
 

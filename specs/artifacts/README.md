@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-30-archived-conversation-reading](2026-10-30-archived-conversation-reading/README.md)：归档会话准确标题、只读阅读、真实Sources原件和明确恢复，14张实页与数据保全。
+
 - [2026-10-30-heavy-workbench-tool-liveness](2026-10-30-heavy-workbench-tool-liveness/README.md)：共享超时/取消源审、固定执行期限和真实SDK/进程/MCP资格原件，不作候选成绩。
 
 - [2026-10-30-goal-terminal-owner-experience](2026-10-30-goal-terminal-owner-experience/README.md)：持续目标保存失败反馈、真实复核恢复、终态入口及数据保全。

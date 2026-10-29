@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-30-archived-conversation-reading.md](2026-10-30-archived-conversation-reading.md)：真实归档历史的准确标题、只读输入、Sources原件与明确恢复，14张实页及数据保全。
+
 - [2026-10-30-heavy-workbench-tool-liveness.md](2026-10-30-heavy-workbench-tool-liveness.md)：L06真实运行的共享Tool暂停/取消问题、修复方案与有限执行治理资格。
 
 - [2026-10-30-goal-terminal-owner-experience.md](2026-10-30-goal-terminal-owner-experience.md)：持续目标的终态所属对象和实际恢复反馈调查。

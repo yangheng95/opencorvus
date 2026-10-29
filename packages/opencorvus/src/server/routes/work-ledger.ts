@@ -5,6 +5,7 @@ import { validator } from "@/server/validator"
 import z from "zod"
 import {
   WorkLedgerArchiveList,
+  WorkLedgerArchiveRow,
   WorkLedgerEvent,
   WorkLedgerList,
   WorkLedgerConversationHandoffEvent,
@@ -23,7 +24,7 @@ import { EngineService } from "@/task-api"
 import { Event as EngineEvent } from "@/engine/model"
 import { isMailboxChangeEventType } from "@/engine/mailbox"
 import { ProjectMemory } from "@/memory/project-memory"
-import { listArchivedWorkLedger, listWorkLedger } from "@/work-ledger/projection"
+import { listArchivedWorkLedger, listWorkLedger, readWorkLedgerSelection } from "@/work-ledger/projection"
 import { errors } from "../error"
 import { streamGlobalSSE } from "../sse"
 import { isTaskListProjectionEventType, taskListProtocolEvent } from "./orchestrator"
@@ -226,6 +227,21 @@ function workLedgerGlobalBusConversationHandoffEvent(input: {
 
 export function WorkLedgerRoutes() {
   return new Hono()
+    .get(
+      "/selection/:kind/:id",
+      describeRoute({
+        summary: "Read the exact selected Work Ledger item",
+        description: "Read current metadata for a Task or canonical Chat, Work, or Mission Session, including archived items. Reading does not restore or execute the owner.",
+        operationId: "workLedger.selection",
+        responses: {
+          200: { description: "Selected item", content: { "application/json": { schema: resolver(WorkLedgerArchiveRow) } } },
+          ...errors(400, 404),
+        },
+      }),
+      validator("param", z.object({ kind: z.enum(["task", "session"]), id: z.string().min(1) })),
+      validator("query", z.object({ directory: z.string().min(1) })),
+      async (c) => c.json(await readWorkLedgerSelection({ ...c.req.valid("param"), ...c.req.valid("query") })),
+    )
     .patch(
       "/project/:projectID/pin",
       describeRoute({

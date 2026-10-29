@@ -111,6 +111,7 @@ function errorSummary(error: unknown): string {
 export function ContinuousGoalControl(props: {
   owner?: ContinuousGoalTarget
   ownerLabel?: string
+  readOnly?: boolean
   compact?: boolean
   home?: boolean
   openRequest: number
@@ -191,7 +192,7 @@ export function ContinuousGoalControl(props: {
   }
   const owns = (key: string) => !disposed && source()?.key === key
   const initialLoading = () => projection.state === "pending"
-  const disabled = () => busy() || initialLoading() || !source() || !!projection.error
+  const disabled = () => !!props.readOnly || busy() || initialLoading() || !source() || !!projection.error
   const pendingComposerContext = () => !!props.hasStagedAttachments || !!composerQuotation(props.composerDraftKey)
   const ownsLaunch = () => !disposed && !!launchOwner && isApiAuthorityCurrent(launchOwner.authority) &&
     launchOwner.selectionEpoch === props.selectionEpoch && launchOwner.composerDraftKey === props.composerDraftKey
@@ -285,6 +286,7 @@ export function ContinuousGoalControl(props: {
   })
 
   function open(next: "details" | "create" | "complete" | "about") {
+    if (props.readOnly && (next === "create" || next === "complete")) next = goal() ? "details" : "about"
     const focusOwner = document.activeElement
     const transfer = mode() !== null && mode() !== next && dialog?.contains(focusOwner)
       ? { sourceKey: source()?.key, epoch: props.selectionEpoch, authority: captureApiAuthority() }
@@ -393,7 +395,7 @@ export function ContinuousGoalControl(props: {
     input: Omit<ContinuousGoalCreateInput, "requestID"> | Omit<ContinuousGoalUpdateInput, "requestID">,
   ) {
     const current = source()
-    if (!current || busy()) return
+    if (!current || busy() || props.readOnly) return
     setBusy(true)
     setFailure(undefined)
     setValidation("")
@@ -536,7 +538,7 @@ export function ContinuousGoalControl(props: {
                 <span class="continuous-goal__objective" title={current().objective}>
                   {current().objective}
                 </span>
-                <Show when={current().status !== "complete"}>
+                <Show when={current().status !== "complete" && !props.readOnly}>
                   <span class="continuous-goal__usage" title={t("continuous_goal.usage_hint")}>
                     {number(current().tokensUsed)}
                     {current().tokenBudget === undefined ? "" : ` / ${number(current().tokenBudget!)}`}{" "}
@@ -673,7 +675,7 @@ export function ContinuousGoalControl(props: {
             >
               {t("common.close")}
             </Button>
-            <Show when={hasForm() && (source() || props.home) && (editing()?.status !== "complete" || mode() === "create")}>
+            <Show when={!props.readOnly && hasForm() && (source() || props.home) && (editing()?.status !== "complete" || mode() === "create")}>
               <Button type="submit" form={formID} variant="solid" size="sm" tone="accent"
                 disabled={props.home ? busy() || props.starting || !appStore.connected || !ownsLaunch() : disabled()}>
                 {t(
@@ -765,6 +767,7 @@ export function ContinuousGoalControl(props: {
                   rows={3}
                   disabled={busy()}
                   placeholder={t("continuous_goal.objective_placeholder")}
+                  readOnly={props.readOnly}
                 />
               </TextField.Root>
             </Show>
@@ -808,7 +811,7 @@ export function ContinuousGoalControl(props: {
                             min="1"
                             step="1"
                             value={tokens()}
-                            disabled={busy() || editing()?.status === "complete"}
+                            disabled={props.readOnly || busy() || editing()?.status === "complete"}
                             onInvalid={(e) => {
                               setBudgetOptionsOpen(true)
                               e.currentTarget.setCustomValidity(t("continuous_goal.validation.budget"))
@@ -829,7 +832,7 @@ export function ContinuousGoalControl(props: {
                             min="1"
                             step="1"
                             value={turns()}
-                            disabled={busy() || editing()?.status === "complete"}
+                            disabled={props.readOnly || busy() || editing()?.status === "complete"}
                             onInvalid={(e) => {
                               setBudgetOptionsOpen(true)
                               e.currentTarget.setCustomValidity(t("continuous_goal.validation.budget"))
@@ -851,13 +854,13 @@ export function ContinuousGoalControl(props: {
                       <p class="continuous-goal__hint">{t("continuous_goal.pause_hint")}</p>
                     </Disclosure.Content>
                   </Disclosure.Root>
-                  <Show when={editing() && ["paused", "blocked", "budget_limited"].includes(editing()!.status)}>
+                  <Show when={!props.readOnly && editing() && ["paused", "blocked", "budget_limited"].includes(editing()!.status)}>
                     <Checkbox checked={resume()} onChange={setResume} disabled={busy()}>
                       {t("continuous_goal.resume_on_save")}
                     </Checkbox>
                   </Show>
                   <Show when={editing()}>
-                    <div class="continuous-goal__secondary">
+                    <div class="continuous-goal__secondary" hidden={props.readOnly}>
                       <Button
                         type="button"
                         variant="outline"

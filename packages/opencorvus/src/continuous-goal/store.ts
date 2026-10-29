@@ -150,8 +150,9 @@ function append(owner: GoalOwner, type: string, payload: Record<string, unknown>
 export function goalOwnerBoundary(owner: GoalOwner, afterRevisionSeq?: number): string | undefined {
   return Database.use((db) => {
     const session = db.select().from(SessionTable).where(eq(SessionTable.id, owner.sessionID)).get()
-    if (!session || session.time_archived !== null || Session.deletedInTransaction(db, owner.sessionID))
+    if (!session || Session.deletedInTransaction(db, owner.sessionID))
       return "owner_unavailable"
+    if (session.time_archived !== null) return "owner_archived"
     if (afterRevisionSeq !== undefined) {
       const stopped = db
         .select()
@@ -176,7 +177,8 @@ export function goalOwnerBoundary(owner: GoalOwner, afterRevisionSeq?: number): 
     }
     if (owner.kind === "task") {
       const task = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, owner.id)).get()
-      if (!task || task.time_archived !== null || taskDeletedInTransaction(db, owner.id)) return "owner_unavailable"
+      if (!task || taskDeletedInTransaction(db, owner.id)) return "owner_unavailable"
+      if (task.time_archived !== null) return "owner_archived"
       const lifecycle = taskLifecycleProjectionInTransaction(db, owner.id)
       if (lifecycle.status === "cancelled" || lifecycle.status === "cancelling") return "owner_cancelled"
     }

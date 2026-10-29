@@ -40744,6 +40744,132 @@ export type WorkLedgerSetProjectPinnedResponses = {
 export type WorkLedgerSetProjectPinnedResponse =
   WorkLedgerSetProjectPinnedResponses[keyof WorkLedgerSetProjectPinnedResponses]
 
+export type WorkLedgerSelectionData = {
+  body?: never
+  path: {
+    kind: "task" | "session"
+    id: string
+  }
+  query: {
+    directory: string
+  }
+  url: "/work-ledger/selection/{kind}/{id}"
+}
+
+export type WorkLedgerSelectionErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Not found
+   */
+  404:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "NotFoundError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "LogFileNotFoundError"
+      }
+}
+
+export type WorkLedgerSelectionError = WorkLedgerSelectionErrors[keyof WorkLedgerSelectionErrors]
+
+export type WorkLedgerSelectionResponses = {
+  /**
+   * Selected item
+   */
+  200:
+    | {
+        archived?: number
+        created: number
+        directory: string
+        id: string
+        interruptible: boolean
+        kind: "mission"
+        missionID: string
+        outcome: "accepted" | "blocked" | null
+        pendingInteractions: number
+        pinned: boolean
+        productPillar: "code" | "work"
+        sessionID: string
+        started: number
+        taskStats: {
+          inactive: number
+          running: number
+          total: number
+        }
+        tasks: Array<{
+          activityStatus: "running" | "inactive"
+          archived?: number
+          cancellationStatus: "none" | "cancelling" | "cancelled"
+          completed?: number
+          created: number
+          description: string
+          directory: string
+          id: string
+          kind: "task"
+          lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
+          missionID: string
+          missionSessionID: string
+          pendingInteractions: number
+          pinned: boolean
+          priority: "critical" | "high" | "normal" | "low"
+          productPillar: "code" | "work"
+          source: string
+          started: number
+          title: string
+          updated: number
+        }>
+        title: string
+        updated: number
+      }
+    | {
+        activityStatus: "running" | "inactive"
+        archived?: number
+        cancellationStatus: "none" | "cancelling" | "cancelled"
+        completed?: number
+        created: number
+        description: string
+        directory: string
+        id: string
+        kind: "task"
+        lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
+        missionID?: string
+        missionSessionID?: string
+        pendingInteractions: number
+        pinned: boolean
+        priority: "critical" | "high" | "normal" | "low"
+        productPillar: "code" | "work"
+        source: string
+        started: number
+        title: string
+        updated: number
+      }
+    | {
+        archived?: number
+        created: number
+        directory: string
+        experience: "chat" | "work"
+        id: string
+        kind: "chat"
+        pinned: boolean
+        sessionID: string
+        started: number
+        status: "active" | "idle" | "terminal"
+        title: string
+        updated: number
+      }
+}
+
+export type WorkLedgerSelectionResponse = WorkLedgerSelectionResponses[keyof WorkLedgerSelectionResponses]
+
 export type WorkCapabilityGetData = {
   body?: never
   path?: never

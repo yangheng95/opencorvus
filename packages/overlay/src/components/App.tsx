@@ -34,7 +34,7 @@ import { directoryScopedPath } from "../services/task-path"
 import { downloadBlob } from "../services/file-download"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import { Tooltip } from "./ui/Tooltip"
-import { getLocale, t } from "../utils/i18n"
+import { getLocale, localeTag, t } from "../utils/i18n"
 import { conversationExport, type ConversationExportFormat } from "../services/conversation-export"
 import { ConversationSearchDialog } from "./ConversationSearchDialog"
 import { useHotkey } from "../solid/hotkey"
@@ -314,7 +314,7 @@ function ChatViewTitle(props: {
                   type="button"
                   data-ui="chat-title-pin"
                   data-pinned={item().pinned ? "true" : "false"}
-                  disabled={itemActionBusy()}
+                  disabled={itemActionBusy() || item().archived !== undefined}
                   onSelect={() => void runItemAction("pin", (row) => props.onPinnedChange(row, !row.pinned))}
                 >
                   <Icon name="pin" size="medium" />
@@ -324,7 +324,7 @@ function ChatViewTitle(props: {
                   as="button"
                   type="button"
                   data-ui="chat-title-rename"
-                  disabled={itemActionBusy()}
+                  disabled={itemActionBusy() || item().archived !== undefined}
                   onSelect={() => void runItemAction("rename", props.onRename)}
                 >
                   <Icon name="edit" size="medium" />
@@ -334,7 +334,7 @@ function ChatViewTitle(props: {
                   as="button"
                   type="button"
                   data-ui="chat-title-archive"
-                  disabled={itemActionBusy()}
+                  disabled={itemActionBusy() || item().archived !== undefined}
                   onSelect={() => void runItemAction("archive", props.onArchive)}
                 >
                   <Icon name="archive" size="medium" />
@@ -379,6 +379,11 @@ export interface AppProps {
   conversationExperience: () => "chat" | "work" | undefined
   conversationTitle: () => string
   conversationItem: () => WorkLedgerItemRow | null
+  conversationReadError: () => unknown
+  onRetryConversationRead: () => Promise<void>
+  restoringConversation: boolean
+  conversationRestoreError: unknown
+  onRestoreConversation: () => Promise<void>
   onCopyConversationDebug: () => Promise<void>
   onConversationPinnedChange: (row: WorkLedgerItemRow, pinned: boolean) => void | Promise<void>
   onRenameConversationItem: (row: WorkLedgerItemRow) => void | Promise<void>
@@ -657,7 +662,7 @@ export function App(props: AppProps) {
                                 />
                                 <WorkOutcomeBadge item={props.conversationItem()} />
                                 <div class="chat-header-status" id="solidTaskStatusMount">
-                                  <TaskStatusHeader />
+                                <TaskStatusHeader item={props.conversationItem} />
                                 </div>
                               </div>
                               <div class="chat-header-meta oc-surface-header__actions">
@@ -702,6 +707,7 @@ export function App(props: AppProps) {
                             </header>
                             <Show when={!props.homeActive}>
                               <ContinuousGoalControl
+                                readOnly={props.conversationItem()?.archived !== undefined}
                                 openRequest={goalOpenRequest()}
                                 ownerLabel={props.conversationTitle()}
                                 composerDraftKey={props.composerDraftKey}
@@ -723,6 +729,26 @@ export function App(props: AppProps) {
                             </Show>
                             <div class="chat-content-frame" id="chatContentFrame">
                               <div class="chat-message-pane" id="chatMessagePane">
+                                <Show when={props.conversationItem()?.archived !== undefined}>
+                                    <Feedback tone="neutral" title={t("archive.archived_at", {
+                                      time: new Intl.DateTimeFormat(localeTag(), { dateStyle: "medium", timeStyle: "short" }).format(props.conversationItem()!.archived!),
+                                    })} actions={
+                                      <Button type="button" variant="outline" size="sm" tone="neutral"
+                                        disabled={props.restoringConversation}
+                                        onClick={() => void props.onRestoreConversation()}>
+                                        {t(props.restoringConversation ? "work_ledger.restoring" : "work_ledger.restore")}
+                                      </Button>
+                                    }>
+                                      {t("work_ledger.archived_readonly")}
+                                    </Feedback>
+                                </Show>
+                                <Show when={props.conversationReadError() || props.conversationRestoreError}>
+                                  {(error) => <Feedback tone="error" title={t(props.conversationRestoreError ? "work_ledger.restore_error" : "work_ledger.selection_error")}
+                                    details={formatErrorDetails(error())} actions={
+                                      <Button type="button" variant="ghost" size="sm" tone="neutral"
+                                        onClick={() => void (props.conversationRestoreError ? props.onRestoreConversation() : props.onRetryConversationRead()).catch(() => {})}>{t("common.retry")}</Button>
+                                    }>{t(props.conversationRestoreError ? "work_ledger.restore_error_hint" : "work_ledger.selection_error_hint")}</Feedback>}
+                                </Show>
                                 <Show when={appStore.workspaceLocationError}>
                                   {(error) => (
                                     <Feedback

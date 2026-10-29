@@ -1,5 +1,6 @@
 import {
   WorkLedgerArchiveList as WorkLedgerArchiveListSchema,
+  WorkLedgerArchiveRow as WorkLedgerArchiveRowSchema,
   WorkLedgerList as WorkLedgerListSchema,
   type WorkLedgerArchiveList,
   type WorkLedgerArchiveRow,
@@ -173,6 +174,13 @@ export async function loadArchivedWorkLedger(
   return WorkLedgerArchiveListSchema.parse(
     await apiJson<unknown>(`work-ledger/archive${suffix}`, { signal: input.signal, authority: input.authority }),
   )
+}
+
+export async function loadWorkLedgerSelection(input: { kind: "task" | "session"; id: string; directory: string; authority: ApiAuthority; signal: AbortSignal }): Promise<WorkLedgerItemRow> {
+  return WorkLedgerArchiveRowSchema.parse(await apiJson<unknown>(
+    directoryScopedPath(`work-ledger/selection/${input.kind}/${encodeURIComponent(input.id)}`, input.directory),
+    { authority: input.authority, signal: input.signal },
+  ))
 }
 
 export async function setWorkLedgerProjectPinned(input: { projectID: string; pinned: boolean; authority?: ApiAuthority }): Promise<void> {

@@ -203,10 +203,12 @@ describe("independent continuous goal persistence and authority audit", () => {
           expect(typeof secondCapture).toBe("function")
           await Session.setArchived({ sessionID: session.id, time: 0 })
           const archivedRead = await goalRequest(goalApp(), owner, "GET")
-          expect(archivedRead.status).toBe(409)
+          expect(archivedRead.status).toBe(200)
           expect(await archivedRead.json()).toMatchObject({
-            name: "ContinuousGoalError",
-            data: { code: "owner_unavailable" },
+            id: second.id,
+            objective: second.objective,
+            status: "paused",
+            reason: "owner_archived",
           })
           recordUsage(child.id, 17, firstCapture)
           recordUsage(child.id, 31, secondCapture)
@@ -343,7 +345,7 @@ describe("independent continuous goal persistence and authority audit", () => {
         expect(inheritedContinuousGoal(task.agent.id)).toMatchObject({
           id: goal.id,
           status: "paused",
-          reason: "owner_unavailable",
+          reason: "owner_archived",
         })
         recordUsage(task.agent.id, 41, captureContinuousGoalUsage(task.agent.id))
         await Session.setArchived({ sessionID: mission.session.id, time: null })

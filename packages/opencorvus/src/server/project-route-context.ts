@@ -82,6 +82,7 @@ const PROJECT_IDENTITY_PROVIDER_ROUTE_KEYS = [
 ]
 
 const PROJECT_IDENTITY_CONVERSATION_ROUTE_PATTERNS = [
+  /^GET \/work-ledger\/selection\/(?:task|session)\/[^/]+$/,
   /^PATCH \/mission\/[^/]+\/(?:draft|title)$/,
   /^PATCH \/task\/[^/]+\/title$/,
   /^PATCH \/work-ledger\/item\/(?:mission|task|chat)\/[^/]+\/pin$/,

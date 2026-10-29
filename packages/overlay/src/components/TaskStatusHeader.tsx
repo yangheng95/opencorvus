@@ -6,7 +6,6 @@
 // that updates only the affected text/attribute when boardStore changes.
 
 import { createEffect, createMemo, Show } from "solid-js"
-import { boardStore } from "../store/board"
 import { formatDuration } from "../utils/time"
 import { AppLog } from "../utils/log"
 import { selectedTaskSseActiveElapsedMs, taskRuntimeActivityKey } from "../services/task-runtime-activity"
@@ -14,21 +13,16 @@ import {
   workLedgerPresentationLabel,
   workLedgerPresentationStatus,
   workLedgerOutcomeStatus,
-  workLedgerSessionExecution,
+  type WorkLedgerItemRow,
   workLedgerStatusVisible,
-  workLedgerTaskExecution,
 } from "../services/work-ledger"
 
 const ACTIVE_STATUS = "active"
 const TERMINAL_STATUSES = new Set(["completed", "failed", "cancelled"])
 
-export function TaskStatusHeader() {
+export function TaskStatusHeader(props: { item: () => WorkLedgerItemRow | null }) {
   let loggedRuntimeTimeError = ""
-  const execution = createMemo(() => {
-    const source = boardStore.selectedSource
-    if (!source) return null
-    return source.kind === "task" ? workLedgerTaskExecution(source.id) : workLedgerSessionExecution(source.id)
-  })
+  const execution = createMemo(props.item)
   const task = createMemo(() => {
     const current = execution()
     return current?.kind === "task" ? current : null

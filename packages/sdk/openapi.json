@@ -27490,7 +27490,7 @@
     },
     "/continuous-goal/{kind}/{ownerID}": {
       "get": {
-        "description": "Read the ongoing goal for a Chat Session, Task or Mission Session in the selected Project. Separate from Delivery Slice Goals.",
+        "description": "Read the ongoing goal for a Chat Session, Task or Mission Session in the selected Project, including archived owners. Reading does not restore or resume the owner. Separate from Delivery Slice Goals.",
         "operationId": "continuousGoal.get",
         "parameters": [
           {
@@ -142457,6 +142457,538 @@
           {
             "lang": "js",
             "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.workLedger.setProjectPinned({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/work-ledger/selection/{kind}/{id}": {
+      "get": {
+        "description": "Read current metadata for a Task or canonical Chat, Work, or Mission Session, including archived items. Reading does not restore or execute the owner.",
+        "operationId": "workLedger.selection",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "kind",
+            "required": true,
+            "schema": {
+              "enum": [
+                "task",
+                "session"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "directory",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "archived": {
+                          "type": "number"
+                        },
+                        "created": {
+                          "type": "number"
+                        },
+                        "directory": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "maxLength": 64,
+                          "minLength": 1,
+                          "pattern": "^[a-z0-9-]+$",
+                          "type": "string"
+                        },
+                        "interruptible": {
+                          "type": "boolean"
+                        },
+                        "kind": {
+                          "const": "mission",
+                          "type": "string"
+                        },
+                        "missionID": {
+                          "maxLength": 64,
+                          "minLength": 1,
+                          "pattern": "^[a-z0-9-]+$",
+                          "type": "string"
+                        },
+                        "outcome": {
+                          "anyOf": [
+                            {
+                              "enum": [
+                                "accepted",
+                                "blocked"
+                              ],
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "pendingInteractions": {
+                          "maximum": 9007199254740991,
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "pinned": {
+                          "type": "boolean"
+                        },
+                        "productPillar": {
+                          "enum": [
+                            "code",
+                            "work"
+                          ],
+                          "type": "string"
+                        },
+                        "sessionID": {
+                          "type": "string"
+                        },
+                        "started": {
+                          "type": "number"
+                        },
+                        "taskStats": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "inactive": {
+                              "type": "number"
+                            },
+                            "running": {
+                              "type": "number"
+                            },
+                            "total": {
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "total",
+                            "running",
+                            "inactive"
+                          ],
+                          "type": "object"
+                        },
+                        "tasks": {
+                          "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "activityStatus": {
+                                "enum": [
+                                  "running",
+                                  "inactive"
+                                ],
+                                "type": "string"
+                              },
+                              "archived": {
+                                "type": "number"
+                              },
+                              "cancellationStatus": {
+                                "enum": [
+                                  "none",
+                                  "cancelling",
+                                  "cancelled"
+                                ],
+                                "type": "string"
+                              },
+                              "completed": {
+                                "type": "number"
+                              },
+                              "created": {
+                                "type": "number"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "directory": {
+                                "type": "string"
+                              },
+                              "id": {
+                                "type": "string"
+                              },
+                              "kind": {
+                                "const": "task",
+                                "type": "string"
+                              },
+                              "lifecycleStatus": {
+                                "enum": [
+                                  "active",
+                                  "completed",
+                                  "failed",
+                                  "cancelled"
+                                ],
+                                "type": "string"
+                              },
+                              "missionID": {
+                                "maxLength": 64,
+                                "minLength": 1,
+                                "pattern": "^[a-z0-9-]+$",
+                                "type": "string"
+                              },
+                              "missionSessionID": {
+                                "type": "string"
+                              },
+                              "pendingInteractions": {
+                                "maximum": 9007199254740991,
+                                "minimum": 0,
+                                "type": "integer"
+                              },
+                              "pinned": {
+                                "type": "boolean"
+                              },
+                              "priority": {
+                                "enum": [
+                                  "critical",
+                                  "high",
+                                  "normal",
+                                  "low"
+                                ],
+                                "type": "string"
+                              },
+                              "productPillar": {
+                                "enum": [
+                                  "code",
+                                  "work"
+                                ],
+                                "type": "string"
+                              },
+                              "source": {
+                                "type": "string"
+                              },
+                              "started": {
+                                "type": "number"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "updated": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "id",
+                              "title",
+                              "description",
+                              "directory",
+                              "created",
+                              "started",
+                              "updated",
+                              "pinned",
+                              "lifecycleStatus",
+                              "cancellationStatus",
+                              "activityStatus",
+                              "priority",
+                              "source",
+                              "productPillar",
+                              "pendingInteractions",
+                              "missionID",
+                              "missionSessionID"
+                            ],
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "updated": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "id",
+                        "missionID",
+                        "sessionID",
+                        "title",
+                        "directory",
+                        "created",
+                        "started",
+                        "updated",
+                        "pinned",
+                        "interruptible",
+                        "outcome",
+                        "productPillar",
+                        "taskStats",
+                        "pendingInteractions",
+                        "tasks"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "activityStatus": {
+                          "enum": [
+                            "running",
+                            "inactive"
+                          ],
+                          "type": "string"
+                        },
+                        "archived": {
+                          "type": "number"
+                        },
+                        "cancellationStatus": {
+                          "enum": [
+                            "none",
+                            "cancelling",
+                            "cancelled"
+                          ],
+                          "type": "string"
+                        },
+                        "completed": {
+                          "type": "number"
+                        },
+                        "created": {
+                          "type": "number"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "directory": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "kind": {
+                          "const": "task",
+                          "type": "string"
+                        },
+                        "lifecycleStatus": {
+                          "enum": [
+                            "active",
+                            "completed",
+                            "failed",
+                            "cancelled"
+                          ],
+                          "type": "string"
+                        },
+                        "missionID": {
+                          "maxLength": 64,
+                          "minLength": 1,
+                          "pattern": "^[a-z0-9-]+$",
+                          "type": "string"
+                        },
+                        "missionSessionID": {
+                          "type": "string"
+                        },
+                        "pendingInteractions": {
+                          "maximum": 9007199254740991,
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "pinned": {
+                          "type": "boolean"
+                        },
+                        "priority": {
+                          "enum": [
+                            "critical",
+                            "high",
+                            "normal",
+                            "low"
+                          ],
+                          "type": "string"
+                        },
+                        "productPillar": {
+                          "enum": [
+                            "code",
+                            "work"
+                          ],
+                          "type": "string"
+                        },
+                        "source": {
+                          "type": "string"
+                        },
+                        "started": {
+                          "type": "number"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "updated": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "id",
+                        "title",
+                        "description",
+                        "directory",
+                        "created",
+                        "started",
+                        "updated",
+                        "pinned",
+                        "lifecycleStatus",
+                        "cancellationStatus",
+                        "activityStatus",
+                        "priority",
+                        "source",
+                        "productPillar",
+                        "pendingInteractions"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "archived": {
+                          "type": "number"
+                        },
+                        "created": {
+                          "type": "number"
+                        },
+                        "directory": {
+                          "type": "string"
+                        },
+                        "experience": {
+                          "enum": [
+                            "chat",
+                            "work"
+                          ],
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "kind": {
+                          "const": "chat",
+                          "type": "string"
+                        },
+                        "pinned": {
+                          "type": "boolean"
+                        },
+                        "sessionID": {
+                          "type": "string"
+                        },
+                        "started": {
+                          "type": "number"
+                        },
+                        "status": {
+                          "enum": [
+                            "active",
+                            "idle",
+                            "terminal"
+                          ],
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "updated": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "experience",
+                        "id",
+                        "sessionID",
+                        "title",
+                        "directory",
+                        "created",
+                        "started",
+                        "updated",
+                        "pinned",
+                        "status"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Selected item"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "NotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "LogFileNotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Not found"
+          }
+        },
+        "summary": "Read the exact selected Work Ledger item",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.workLedger.selection({\n  ...\n})"
           }
         ]
       }

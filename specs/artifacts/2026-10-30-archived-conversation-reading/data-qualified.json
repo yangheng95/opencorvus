@@ -1,0 +1,325 @@
+{
+  "at": "2026-10-29T23:30:15.369Z",
+  "database": [
+    {
+      "phase": "source",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 204260,
+      "rows": 204260,
+      "originalValues": "exact SQLite EXCEPT",
+      "targetSessionAllowedFields": [],
+      "additions": []
+    },
+    {
+      "phase": "before",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 204260,
+      "rows": 204292,
+      "originalValues": "exact SQLite EXCEPT",
+      "targetSessionAllowedFields": [
+        "time_archived",
+        "time_updated"
+      ],
+      "additions": [
+        {
+          "table": "bus_publication_delivery",
+          "rows": 6
+        },
+        {
+          "table": "bus_publication_delivery_receipt",
+          "rows": 6
+        },
+        {
+          "table": "bus_publication_outbox",
+          "rows": 1
+        },
+        {
+          "table": "bus_publication_owner",
+          "rows": 1
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "rows": 3
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "rows": 7
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "rows": 7
+        },
+        {
+          "table": "event_occurrence",
+          "rows": 1
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 204260,
+      "rows": 204292,
+      "originalValues": "exact SQLite EXCEPT",
+      "targetSessionAllowedFields": [
+        "time_archived",
+        "time_updated"
+      ],
+      "additions": [
+        {
+          "table": "bus_publication_delivery",
+          "rows": 6
+        },
+        {
+          "table": "bus_publication_delivery_receipt",
+          "rows": 6
+        },
+        {
+          "table": "bus_publication_outbox",
+          "rows": 1
+        },
+        {
+          "table": "bus_publication_owner",
+          "rows": 1
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "rows": 3
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "rows": 7
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "rows": 7
+        },
+        {
+          "table": "event_occurrence",
+          "rows": 1
+        }
+      ]
+    },
+    {
+      "phase": "after2",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 204260,
+      "rows": 204294,
+      "originalValues": "exact SQLite EXCEPT",
+      "targetSessionAllowedFields": [
+        "time_archived",
+        "time_updated"
+      ],
+      "additions": [
+        {
+          "table": "bus_publication_delivery",
+          "rows": 6
+        },
+        {
+          "table": "bus_publication_delivery_receipt",
+          "rows": 6
+        },
+        {
+          "table": "bus_publication_outbox",
+          "rows": 1
+        },
+        {
+          "table": "bus_publication_owner",
+          "rows": 1
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "rows": 3
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "rows": 8
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "rows": 8
+        },
+        {
+          "table": "event_occurrence",
+          "rows": 1
+        }
+      ]
+    },
+    {
+      "phase": "after3",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 204260,
+      "rows": 204326,
+      "originalValues": "exact SQLite EXCEPT",
+      "targetSessionAllowedFields": [
+        "time_archived",
+        "time_updated"
+      ],
+      "additions": [
+        {
+          "table": "bus_publication_delivery",
+          "rows": 12
+        },
+        {
+          "table": "bus_publication_delivery_receipt",
+          "rows": 12
+        },
+        {
+          "table": "bus_publication_outbox",
+          "rows": 2
+        },
+        {
+          "table": "bus_publication_owner",
+          "rows": 2
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "rows": 6
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "rows": 15
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "rows": 15
+        },
+        {
+          "table": "event_occurrence",
+          "rows": 2
+        }
+      ]
+    }
+  ],
+  "attachments": [
+    {
+      "phase": "before",
+      "files": 17,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "before",
+      "files": 10,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "before",
+      "files": 16,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "before",
+      "files": 24,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "before",
+      "files": 6,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "before",
+      "files": 2,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 17,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 10,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 16,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 24,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 6,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 2,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after2",
+      "files": 17,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after2",
+      "files": 10,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after2",
+      "files": 16,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after2",
+      "files": 24,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after2",
+      "files": 6,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after2",
+      "files": 2,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after3",
+      "files": 17,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after3",
+      "files": 10,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after3",
+      "files": 16,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after3",
+      "files": 24,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after3",
+      "files": 6,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after3",
+      "files": 2,
+      "sourceAndCopyBytes": "exact"
+    }
+  ],
+  "projects": 3,
+  "trackedProjectFiles": 16,
+  "gitAndFileBytes": "exact",
+  "providerRequests": 0
+}

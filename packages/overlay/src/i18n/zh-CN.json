@@ -1,4 +1,11 @@
 {
+  "work_ledger.archived_readonly": "此会话已归档，历史记录仍可阅读。恢复后可发送消息或修改目标。",
+  "work_ledger.restore": "恢复会话",
+  "work_ledger.restoring": "正在恢复…",
+  "work_ledger.selection_error": "无法读取会话详情",
+  "work_ledger.restore_error": "无法恢复会话",
+  "work_ledger.restore_error_hint": "历史记录仍可阅读，请重试恢复会话。",
+  "work_ledger.selection_error_hint": "历史记录仍然保留，请重试读取当前会话详情后继续操作。",
   "releases.title": "更新日志",
   "titlebar.homepage": "OpenCorvus 官网",
   "provider.form.api_invalid": "请输入以 http:// 或 https:// 开头的完整有效 API 地址",

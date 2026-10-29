@@ -1,4 +1,11 @@
 {
+  "work_ledger.archived_readonly": "This conversation is archived. You can read its history. Restore it to write messages or change its goal.",
+  "work_ledger.restore": "Restore conversation",
+  "work_ledger.restoring": "Restoring…",
+  "work_ledger.selection_error": "Conversation details could not be loaded",
+  "work_ledger.restore_error": "Conversation could not be restored",
+  "work_ledger.restore_error_hint": "Your history is still readable. Try restoring the conversation again.",
+  "work_ledger.selection_error_hint": "Your history is preserved. Retry loading the current conversation details before continuing.",
   "releases.title": "Release notes",
   "titlebar.homepage": "OpenCorvus homepage",
   "provider.form.api_invalid": "Enter a valid, complete API URL starting with http:// or https://",

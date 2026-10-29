@@ -1,0 +1,4 @@
+{
+  "encoding": "UTF-8",
+  "output": "$ node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit\n"
+}

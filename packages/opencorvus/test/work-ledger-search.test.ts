@@ -3,13 +3,69 @@ import { createRightSidebarConversationSession } from "../src/chat/session"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { Identifier } from "../src/id/id"
 import { ensureMissionSession } from "../src/mission/session"
-import { Instance } from "../src/project/instance"
+import { Instance, runOutsideInstanceContext } from "../src/project/instance"
+import { Server } from "../src/server/server"
+import { Database, eq } from "../src/storage/db"
+import { EngineTaskTable } from "../src/engine/engine.sql"
+import { createContinuousGoal, resolveGoalOwner } from "../src/continuous-goal/store"
 import { Session } from "../src/session"
 import { listArchivedWorkLedger, listWorkLedger } from "../src/work-ledger/projection"
 import { persistEstablishedTask } from "./fixture/engine-task"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
-afterEach(resetMemoryDatabase)
+afterEach(async () => { Server.resetProjectRoutesAppForTest(); await resetMemoryDatabase() })
+
+test("the public selected reader keeps exact active and archived Chat, Work, Mission and Task identities", async () => {
+  await using project = await memoryProject("selected-reader")
+  await using other = await memoryProject("selected-reader-other")
+  const owners = await Instance.provide({ directory: project.path, fn: async () => {
+    const chat = await createRightSidebarConversationSession("chat", { title: "Selected Chat history" })
+    const work = await createRightSidebarConversationSession("work", { title: "Selected Work history" })
+    const mission = await ensureMissionSession({ missionID: "selected-mission", defaultCwd: project.path, productPillar: "work", heldExpertSquadIDs: ["base"] })
+    const taskID = await task("Selected Task history")
+    const generic = await Session.create({ kind: "assistant", title: "Generic session" })
+    const goal = createContinuousGoal(resolveGoalOwner({ kind: "chat", id: chat.id }), { requestID: "selected-goal", objective: "Retain this archived goal" }, "user")
+    return { chat, work, mission, taskID, generic, goal }
+  } })
+  const request = (url: string, directory = project.path) => runOutsideInstanceContext(() => Server.App().request(url, {
+    headers: { "x-opencorvus-directory": directory },
+  }))
+  const read = async (kind: "task" | "session", id: string, directory = project.path) => {
+    const response = await request(`/work-ledger/selection/${kind}/${id}?directory=${encodeURIComponent(directory)}`, directory)
+    return { status: response.status, body: await response.json() }
+  }
+  const cases = [
+    { kind: "session" as const, id: owners.chat.id, expected: { kind: "chat", experience: "chat", title: owners.chat.title } },
+    { kind: "session" as const, id: owners.work.id, expected: { kind: "chat", experience: "work", title: owners.work.title } },
+    { kind: "session" as const, id: owners.mission.id, expected: { kind: "mission", missionID: owners.mission.missionID } },
+    { kind: "task" as const, id: owners.taskID, expected: { kind: "task", id: owners.taskID, title: "Selected Task history" } },
+  ]
+  for (const item of cases) expect(await read(item.kind, item.id)).toMatchObject({ status: 200, body: { ...item.expected, directory: project.path } })
+  const archived = Date.now()
+  await Instance.provideProjectIdentity({ directory: project.path, fn: async () => {
+    for (const session of [owners.chat, owners.work, owners.mission]) await Session.setArchived({ sessionID: session.id, time: archived })
+    Database.use(db => db.update(EngineTaskTable).set({ time_archived: archived }).where(eq(EngineTaskTable.id, owners.taskID)).run())
+  } })
+  for (const item of cases) expect(await read(item.kind, item.id)).toMatchObject({ status: 200, body: { ...item.expected, archived, directory: project.path } })
+  const goalResponse = await request(`/continuous-goal/chat/${owners.chat.id}`)
+  expect({ status: goalResponse.status, body: await goalResponse.json() }).toMatchObject({ status: 200, body: {
+    id: owners.goal.id, objective: owners.goal.objective, status: "paused", reason: "owner_archived",
+  } })
+  for (const [id, directory] of [[owners.chat.id, other.path], [owners.generic.id, project.path], ["ses_missing-selected-reader", project.path]]) {
+    expect(await read("session", id!, directory)).toMatchObject({ status: 404, body: { name: "NotFoundError" } })
+  }
+  const mutation = await runOutsideInstanceContext(() => Server.App().request(`/continuous-goal/chat/${owners.chat.id}`, {
+    method: "POST", headers: { "x-opencorvus-directory": project.path, "Content-Type": "application/json" },
+    body: JSON.stringify({ requestID: "archived-create", objective: "Explicit write contract" }),
+  }))
+  expect({ status: mutation.status, body: await mutation.json() }).toMatchObject({ status: 409, body: { name: "ContinuousGoalError", data: { code: "owner_unavailable" } } })
+  const { EngineService } = await import("../src/task-api")
+  const deleted = await Instance.provideProjectIdentity({ directory: project.path, fn: () => EngineService.deleteSession(owners.work.id, {
+    projectID: owners.work.projectID,
+  }) })
+  expect(deleted).toMatchObject({ status: "physically_deleted", sessionHistoryRetained: false })
+  expect(await read("session", owners.work.id)).toMatchObject({ status: 404, body: { name: "NotFoundError" } })
+}, 60_000)
 
 test("canonical Work experience searches preserve active, archived, Project and cursor identities after renaming", async () => {
   await using first = await memoryProject("experience-first")

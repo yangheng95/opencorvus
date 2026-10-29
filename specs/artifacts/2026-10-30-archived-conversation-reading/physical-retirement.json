@@ -1,0 +1,154 @@
+[
+  {
+    "phase": "before",
+    "runtimeOwner": {
+      "pid": 92568,
+      "processInstanceID": "win32:639289105581987258",
+      "occurrenceID": "2bf07865-9fe5-4648-b7d3-390d6eed6dd5"
+    },
+    "providerRequests": 0,
+    "cumulativeRequests": 1083,
+    "credentialCopyRetired": true,
+    "modelCatalogCopyRetired": true,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "publicShutdown": 200,
+    "reserveMs": 3130223,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "chain": [
+      {
+        "pid": 84640,
+        "processInstanceID": "win32:639289105573648339",
+        "occurrenceID": "bb7ece5e-909a-4648-8d4a-17d3233a41fd",
+        "state": "dead_or_reused"
+      },
+      {
+        "pid": 92568,
+        "processInstanceID": "win32:639289105581987258",
+        "occurrenceID": "aba3da68-dd4e-442a-8346-3e3dca81ecfe",
+        "state": "dead_or_reused"
+      }
+    ]
+  },
+  {
+    "phase": "after",
+    "runtimeOwner": {
+      "pid": 61684,
+      "processInstanceID": "win32:639289123787552170",
+      "occurrenceID": "93a239da-90ad-4e80-907d-c783049c7e40"
+    },
+    "providerRequests": 0,
+    "cumulativeRequests": 1083,
+    "credentialCopyRetired": true,
+    "modelCatalogCopyRetired": true,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "publicShutdown": 200,
+    "reserveMs": 1702065,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "chain": [
+      {
+        "pid": 76852,
+        "processInstanceID": "win32:639289123773801708",
+        "occurrenceID": "cb2a92b0-5da2-4783-a205-7f1bf96833ad",
+        "state": "dead_or_reused"
+      },
+      {
+        "pid": 61684,
+        "processInstanceID": "win32:639289123787552170",
+        "occurrenceID": "f0b55a51-2f8e-4c5d-989a-9886a18be34a",
+        "state": "dead_or_reused"
+      }
+    ]
+  },
+  {
+    "phase": "after2",
+    "runtimeOwner": {
+      "pid": 97060,
+      "processInstanceID": "win32:639289127333656731",
+      "occurrenceID": "f7143326-5435-4b32-b9e2-f968f46f888b"
+    },
+    "providerRequests": 0,
+    "cumulativeRequests": 1083,
+    "credentialCopyRetired": true,
+    "modelCatalogCopyRetired": true,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "publicShutdown": 200,
+    "reserveMs": 1318130,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "chain": [
+      {
+        "pid": 71544,
+        "processInstanceID": "win32:639289127326216132",
+        "occurrenceID": "e8ac5072-d9dd-42ae-8a6a-cd53053635e6",
+        "state": "dead_or_reused"
+      },
+      {
+        "pid": 97060,
+        "processInstanceID": "win32:639289127333656731",
+        "occurrenceID": "02e07bfd-f661-4f13-bbda-ca92cd2b9c48",
+        "state": "dead_or_reused"
+      }
+    ]
+  },
+  {
+    "phase": "after3",
+    "runtimeOwner": {
+      "pid": 94300,
+      "processInstanceID": "win32:639289129544380840",
+      "occurrenceID": "f0c27bc4-1e58-4def-8dd9-bee0268eb31d"
+    },
+    "providerRequests": 0,
+    "cumulativeRequests": 1083,
+    "credentialCopyRetired": true,
+    "modelCatalogCopyRetired": true,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "publicShutdown": 200,
+    "reserveMs": 772894,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "chain": [
+      {
+        "pid": 43436,
+        "processInstanceID": "win32:639289129527178142",
+        "occurrenceID": "1b4fff2e-9bf3-41bf-9d89-b01f3c03b24b",
+        "state": "dead_or_reused"
+      },
+      {
+        "pid": 94300,
+        "processInstanceID": "win32:639289129544380840",
+        "occurrenceID": "47e94242-f0fa-43e0-9023-47b421208585",
+        "state": "dead_or_reused"
+      }
+    ]
+  }
+]

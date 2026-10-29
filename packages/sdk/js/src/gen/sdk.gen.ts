@@ -657,6 +657,8 @@ import type {
   WorkLedgerListArchivedResponses,
   WorkLedgerListErrors,
   WorkLedgerListResponses,
+  WorkLedgerSelectionErrors,
+  WorkLedgerSelectionResponses,
   WorkLedgerSetItemPinnedErrors,
   WorkLedgerSetItemPinnedResponses,
   WorkLedgerSetProjectPinnedErrors,
@@ -2401,7 +2403,7 @@ export class ContinuousGoal extends HeyApiClient {
   /**
    * Read continuous goal
    *
-   * Read the ongoing goal for a Chat Session, Task or Mission Session in the selected Project. Separate from Delivery Slice Goals.
+   * Read the ongoing goal for a Chat Session, Task or Mission Session in the selected Project, including archived owners. Reading does not restore or resume the owner. Separate from Delivery Slice Goals.
    */
   public get<ThrowOnError extends boolean = false>(
     parameters: {
@@ -14821,6 +14823,38 @@ export class WorkLedger extends HeyApiClient {
         ...options?.headers,
         ...params.headers,
       },
+    })
+  }
+
+  /**
+   * Read the exact selected Work Ledger item
+   *
+   * Read current metadata for a Task or canonical Chat, Work, or Mission Session, including archived items. Reading does not restore or execute the owner.
+   */
+  public selection<ThrowOnError extends boolean = false>(
+    parameters: {
+      kind: "task" | "session"
+      id: string
+      directory: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "kind" },
+            { in: "path", key: "id" },
+            { in: "query", key: "directory" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<WorkLedgerSelectionResponses, WorkLedgerSelectionErrors, ThrowOnError>({
+      url: "/work-ledger/selection/{kind}/{id}",
+      ...options,
+      ...params,
     })
   }
 }

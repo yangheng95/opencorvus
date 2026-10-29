@@ -16,6 +16,9 @@ import { findTask, listTaskRows, pendingInteractionCounts } from "@/engine/store
 import { missionRecord, missionTaskBinding, type MissionTaskProjectionValue } from "@/mission/projection"
 import { getMissionSessionByDirectory } from "@/mission/session"
 import { ProjectTable } from "@/project/project.sql"
+import { Project } from "@/project/project"
+import { Instance } from "@/project/instance"
+import { NotFoundError } from "@/storage/db"
 import { Session } from "@/session"
 import { resolveSessionActivityStatus } from "@/session/lifecycle"
 import { SessionTable } from "@/session/session.sql"
@@ -43,6 +46,32 @@ export type WorkLedgerRowValue = z.infer<typeof WorkLedgerRow>
 export type WorkLedgerListValue = z.infer<typeof WorkLedgerList>
 export type WorkLedgerArchiveRowValue = z.infer<typeof WorkLedgerArchiveRow>
 export type WorkLedgerArchiveListValue = z.infer<typeof WorkLedgerArchiveList>
+
+/** The selected reader has its own identity; active sidebar membership is not ownership. */
+export async function readWorkLedgerSelection(input: { kind: "task" | "session"; id: string; directory: string }): Promise<WorkLedgerArchiveRowValue> {
+  const unavailable = () => new NotFoundError({ message: "Selected Work Ledger item is unavailable in this Project and directory." })
+  const pending = pendingInteractionCounts()
+  if (input.kind === "task") {
+    const task = findTask(input.id)
+    if (!task || task.project_id !== Instance.project.id) throw unavailable()
+    const row = workLedgerTaskFromTaskID(task.id, pending)
+    if (!Project.samePath(row.directory, input.directory)) throw unavailable()
+    return row
+  }
+  const session = await Session.getInProject({ sessionID: input.id, projectID: Instance.project.id })
+  if (!Project.samePath(session.directory, input.directory)) throw unavailable()
+  const mission = session.metadata?.mission as { id?: string } | undefined
+  const kind = session.kind === "mission" && mission?.id ? "mission" : rightSidebarConversationExperience(session) ? "chat" : undefined
+  if (!kind) throw unavailable()
+  const candidate: WorkLedgerTopRowCandidate = {
+    kind, id: kind === "mission" ? mission!.id! : session.id, sessionID: session.id,
+    directory: session.directory, title: session.title, created: session.time.created,
+    updated: session.time.updated, pinned: session.time.pinned === undefined ? 0 : 1, rowKey: `${kind}:${session.id}`,
+  }
+  const row = kind === "mission" ? await workLedgerMissionFromCandidate(candidate, pending) : await workLedgerChatFromCandidate(candidate)
+  if (row.sessionID !== input.id) throw unavailable()
+  return row
+}
 
 type WorkLedgerTopRowCandidate = {
   kind: "project" | "mission" | "task" | "chat"

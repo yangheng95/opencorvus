@@ -1,0 +1,68 @@
+{
+  "at": "2026-10-29T22:50:00.355Z",
+  "target": {
+    "id": "ses_-zUQZxfS4zzCqp9pVfVD",
+    "projectID": "prj_hI8KlTauJPN4k6J7iYKT",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project",
+    "title": "请只读取本条消息附加的 session-data-788.json，给出 check、answer 和 status 的实际值，并说明 answer 的 ...",
+    "experience": "chat",
+    "messages": 3,
+    "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-30/goal-terminal-803-after"
+  },
+  "archivedAt": 1793313817211,
+  "canonicalArchivedRow": {
+    "kind": "chat",
+    "experience": "chat",
+    "id": "ses_-zUQZxfS4zzCqp9pVfVD",
+    "sessionID": "ses_-zUQZxfS4zzCqp9pVfVD",
+    "title": "请只读取本条消息附加的 session-data-788.json，给出 check、answer 和 status 的实际值，并说明 answer 的 ...",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project",
+    "created": 1793256692599,
+    "started": 1793256692599,
+    "updated": 1793313817213,
+    "pinned": false,
+    "archived": 1793313817211,
+    "status": "idle"
+  },
+  "activeListRows": 0,
+  "history": [
+    {
+      "id": "msg_3b69e5f1-7882-4b51-8a4b-65c17f8fe20d",
+      "role": "user",
+      "partIDs": [
+        "prt_g0VZQ2L2O00WqKz3vodG",
+        "prt_g0VZQ2L2O01SCRehrMSo"
+      ]
+    },
+    {
+      "id": "msg_g0VZQ2L6D00YB8MQBJ9f",
+      "role": "assistant",
+      "partIDs": [
+        "prt_g0VZQ2LKG00BsuUOv8fr",
+        "prt_g0VZQ2MA700gu89P0dhl",
+        "prt_g0VZQ2MMu00nZu2Q76ym",
+        "prt_g0VZQ2MN000JryV0jEqW"
+      ]
+    },
+    {
+      "id": "msg_g0VZQ2MOU00SzBMnwyZH",
+      "role": "assistant",
+      "partIDs": [
+        "prt_g0VZQ2MZF00W6Ba0627e",
+        "prt_g0VZQ2NqO00cMagUpgcz",
+        "prt_g0VZQ2O6J00aIDwTkG3H"
+      ]
+    }
+  ],
+  "goal": {
+    "status": 409,
+    "body": {
+      "name": "ContinuousGoalError",
+      "data": {
+        "code": "owner_unavailable",
+        "message": "Continuous goal Session is unavailable in the current Project."
+      }
+    }
+  },
+  "requests": 0
+}

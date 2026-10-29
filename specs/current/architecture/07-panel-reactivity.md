@@ -1049,6 +1049,17 @@ Archive actions show their observed committed result with the shared inline
 Feedback component. Subsequent list-read errors retain that success alongside
 the read error; source/query replacement retires the feedback. Its action key
 is translated at render time while the original item title remains unchanged.
+The selected conversation reads its exact Task or canonical Session metadata
+through `GET /work-ledger/selection/:kind/:id?directory=…`, using the same
+Work Ledger projection factories as the lists. Active-list membership never
+decides a selected archived object's identity. The cancellable reader belongs
+to the API authority, workspace selection epoch, source identity and directory;
+existing stream invalidations refresh that reader. Its title, status and Goal
+owner share that one response. Archived history remains readable with its real
+title and a localized archive date. The mounted composer and Goal mutations
+are read-only; explicit Restore uses the existing owner archive endpoint and
+refreshes the same selection without executing or resuming it. Read failures
+retain the history with an actionable error, and keep execution input unavailable.
 Every Mailbox change causes a fresh
 canonical page read, so the notification stream is not a second payload/history
 source. Project directory changes abort the previous

@@ -1,0 +1,17 @@
+{
+  "publications": 2,
+  "eventType": "session.updated",
+  "targetSessionID": "ses_-zUQZxfS4zzCqp9pVfVD",
+  "archiveAndRestore": [
+    null,
+    1793313817211
+  ],
+  "deliveries": 12,
+  "succeeded": 12,
+  "phaseReceipts": 6,
+  "leases": {
+    "runtimeProcess": 3,
+    "busDelivery": 12
+  },
+  "runtimeProcessOwners": "Runtime owner UUID matches the native authority-ready receipt; PID and OS birth match the retired supervisor chain. Observed supervisor UUID is a separate identity; MAX_SAFE_INTEGER is not evidence of a live process."
+}

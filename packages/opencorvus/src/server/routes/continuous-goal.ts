@@ -24,7 +24,7 @@ export function ContinuousGoalRoutes() {
         summary: "Read continuous goal",
         operationId: "continuousGoal.get",
         description:
-          "Read the ongoing goal for a Chat Session, Task or Mission Session in the selected Project. Separate from Delivery Slice Goals.",
+          "Read the ongoing goal for a Chat Session, Task or Mission Session in the selected Project, including archived owners. Reading does not restore or resume the owner. Separate from Delivery Slice Goals.",
         responses: {
           200: response,
           409: namedErrorResponse("Goal owner or revision conflict.", "ContinuousGoalError"),
@@ -33,7 +33,7 @@ export function ContinuousGoalRoutes() {
       validator("param", OwnerParams),
       async (c) => {
         const { kind, ownerID: id } = c.req.valid("param")
-        return c.json(readContinuousGoal(resolveGoalOwner({ kind, id })) ?? null)
+        return c.json(readContinuousGoal(resolveGoalOwner({ kind, id }, { includeArchived: true })) ?? null)
       },
     )
     .post(
