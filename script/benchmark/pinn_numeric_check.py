@@ -125,16 +125,23 @@ def metrics(problem, layers, data):
     initial = forward_jets(layers, data["initial"])
     initial_target = exact_jets(problem, data["initial"])["u"]
     left, right = forward_jets(layers, data["boundary_left"]), forward_jets(layers, data["boundary_right"])
-    constraints = [initial["u"] - initial_target]
+    constraints = {"initial_value": initial["u"] - initial_target}
     if problem == "wave":
-        constraints.extend([initial["ut"], left["u"], right["u"]])
+        constraints.update(initial_velocity=initial["ut"], boundary_left=left["u"], boundary_right=right["u"])
     else:
-        constraints.append(left["u"] - right["u"])
-    constraint_vector = np.concatenate(constraints)
+        constraints["periodic_value"] = left["u"] - right["u"]
+    constraint_vector = np.concatenate(list(constraints.values()))
     residual_loss = float(0.5 * np.mean(residual**2))
     constraint_loss = float(0.5 * np.mean(constraint_vector**2))
-    prediction = forward_jets(layers, data["evaluation"])["u"]
+    evaluation = forward_jets(layers, data["evaluation"])
+    evaluation_residual = operator_residual(problem, evaluation)
+    prediction = evaluation["u"]
     truth = exact_jets(problem, data["evaluation"])["u"]
+    families = {
+        name: {"count": len(values), "loss": float(0.5 * np.mean(values**2)),
+               "rmse": float(np.sqrt(np.mean(values**2)))}
+        for name, values in constraints.items()
+    }
     answer = {
         "problem": problem,
         "residual_points": len(residual),
@@ -143,10 +150,16 @@ def metrics(problem, layers, data):
         "residual_loss": residual_loss,
         "constraint_loss": constraint_loss,
         "total_loss": residual_loss + constraint_loss,
+        "residual_rmse": float(np.sqrt(np.mean(residual**2))),
+        "evaluation_residual_loss": float(0.5 * np.mean(evaluation_residual**2)),
+        "evaluation_residual_rmse": float(np.sqrt(np.mean(evaluation_residual**2))),
+        "constraint_families": families,
         "l2re": l2re(prediction, truth),
         "parameter_count": sum(weight.size + bias.size for weight, bias in layers),
     }
-    if not all(np.isfinite(value) for value in answer.values() if isinstance(value, (float, int))):
+    scalars = [value for value in answer.values() if isinstance(value, (float, int))]
+    scalars.extend(value for family in families.values() for value in family.values())
+    if not all(np.isfinite(value) for value in scalars):
         raise ContractError("nonfinite_metric", problem)
     return answer
 

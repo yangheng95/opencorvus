@@ -1,0 +1,113 @@
+{
+  "source_version": "source-snapshot",
+  "synthetic_reader_contract_only": true,
+  "training_occurred": false,
+  "observations": [
+    {
+      "probe": "zero_attempt_nonnull_trace_scope",
+      "outcome": "accepted",
+      "artifact_contract_checked": true,
+      "study_complete": "unassessed",
+      "solution_reproduced": "unassessed",
+      "continuation_parent": null,
+      "solution_checkpoints": {
+        "convection": null,
+        "reaction": null,
+        "wave": null
+      }
+    },
+    {
+      "probe": "zero_attempt_nonnull_receipt_type",
+      "outcome": "accepted",
+      "artifact_contract_checked": true,
+      "study_complete": "unassessed",
+      "solution_reproduced": "unassessed",
+      "continuation_parent": null,
+      "solution_checkpoints": {
+        "convection": null,
+        "reaction": null,
+        "wave": null
+      }
+    },
+    {
+      "probe": "valid_custom_output_manifest",
+      "outcome": "error",
+      "error_type": "ContractError",
+      "code": "json_read",
+      "detail": "json_read: D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reviewer-manifest-20261029\\temporary\\tmpv44wceqp\\results\\manifest.json: [Errno 2] No such file or directory: 'D:\\\\opencorvus-benchmark-runs\\\\paperbench-discovery-20261029\\\\reviewer-manifest-20261029\\\\temporary\\\\tmpv44wceqp\\\\results\\\\manifest.json'"
+    },
+    {
+      "probe": "nul_path_real_cli",
+      "exit_code": 2,
+      "command_argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reviewer-manifest-20261029\\source-snapshot\\script\\benchmark\\pinn_submission_check.py",
+        "--root",
+        "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reviewer-manifest-20261029\\temporary\\tmpkyryzfry",
+        "--profile",
+        "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reviewer-manifest-20261029\\source-snapshot\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\public\\profile.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reviewer-manifest-20261029\\temporary\\tmpkyryzfry\\machine-receipt.json"
+      ],
+      "machine_receipt": {
+        "artifact_contract_checked": false,
+        "error": "artifact_file",
+        "detail": "artifact_file: wave-adam-s345-lr1e-03.checkpoints.initial"
+      }
+    },
+    {
+      "probe": "parent_small_lr_and_final_lexical_id_ties",
+      "outcome": "accepted",
+      "artifact_contract_checked": true,
+      "study_complete": "unassessed",
+      "solution_reproduced": "unassessed",
+      "continuation_parent": "convection-hybrid-s345-lr1e-04",
+      "solution_checkpoints": {
+        "convection": "convection-hybrid-s345-lr1e-02",
+        "reaction": null,
+        "wave": null
+      }
+    },
+    {
+      "probe": "different_initials_for_same_problem_seed",
+      "outcome": "error",
+      "error_type": "ContractError",
+      "code": "initial_pairing",
+      "detail": "initial_pairing: wave-lbfgs-s345-lrnone"
+    },
+    {
+      "probe": "finite_plateau_one_update",
+      "outcome": "accepted",
+      "artifact_contract_checked": true,
+      "study_complete": "unassessed",
+      "solution_reproduced": "unassessed",
+      "continuation_parent": null,
+      "solution_checkpoints": {
+        "convection": null,
+        "reaction": null,
+        "wave": "wave-lbfgs-s345-lrnone"
+      }
+    },
+    {
+      "probe": "optimizer_stalled_zero_attempts",
+      "outcome": "accepted",
+      "artifact_contract_checked": true,
+      "study_complete": "unassessed",
+      "solution_reproduced": "unassessed",
+      "continuation_parent": null,
+      "solution_checkpoints": {
+        "convection": null,
+        "reaction": null,
+        "wave": "wave-lbfgs-s345-lrnone"
+      }
+    },
+    {
+      "probe": "duplicate_registry_id",
+      "outcome": "error",
+      "error_type": "ContractError",
+      "code": "run_id_unique",
+      "detail": "run_id_unique: runs[].config_id"
+    }
+  ]
+}

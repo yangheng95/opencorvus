@@ -1,0 +1,30 @@
+{
+  "captured_at_utc": "2026-10-29T09:06:17.394794+00:00",
+  "files": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\script\\benchmark\\pinn_numeric_check.py",
+      "snapshot": "source-snapshot\\pinn_numeric_check.py",
+      "byte_equal_at_capture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\script\\benchmark\\test_pinn_numeric_check.py",
+      "snapshot": "source-snapshot\\test_pinn_numeric_check.py",
+      "byte_equal_at_capture": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\late-newton-200-qualification\\nncg-mu-1.0\\final.npz",
+      "snapshot": "observed-exports\\convection.npz",
+      "scope": "preexisting evaluator qualification, not candidate"
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\qualification\\reaction-checkpoint.npz",
+      "snapshot": "observed-exports\\reaction.npz",
+      "scope": "preexisting evaluator qualification, not candidate"
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\qualification\\wave-checkpoint.npz",
+      "snapshot": "observed-exports\\wave.npz",
+      "scope": "preexisting evaluator qualification, not candidate"
+    }
+  ]
+}

@@ -6,7 +6,7 @@ L01针对Rathore等ICML2024论文《Challenges in Training PINNs: A Loss Landsca
 
 拟公开合同见[public/TASK.md](public/TASK.md)，尚须根据真实收敛资格和独立审查收敛后冻结。当前只有L01在进行环境/数值资格；不能把原有其余九题或整个十题套件宣称为已完成小时级升级。
 
-[public/profile.json](public/profile.json)列出19基础配置、5续训分支及有效父状态选择规则；[rubric.draft.json](rubric.draft.json)含178个二元原子叶、100分组权重，**其中9分结果锚点待校准，禁止发布总成绩**。原子数量不是难度证据。公开论文、数据与各自许可在`public/`，评估侧原官方rubric、真实资格源码/导出/回执在[evaluator/](evaluator/README.md)，不进入候选项目。
+[public/profile.json](public/profile.json)列出19基础配置、5续训分支及有效父状态选择规则；[rubric.draft.json](rubric.draft.json)含189个二元原子叶、100分组权重，**其中9分结果锚点待校准，禁止发布总成绩**。原子数量不是难度证据。公开论文、数据与各自许可在`public/`，评估侧原官方rubric、真实资格源码/导出/回执在[evaluator/](evaluator/README.md)，不进入候选项目。
 
 ## 数值资格
 
@@ -20,6 +20,12 @@ L01针对Rathore等ICML2024论文《Challenges in Training PINNs: A Loss Landsca
 
 后续[晚期资格](evaluator/late-qualification/README.md)已取得真实60分钟代表训练、非正曲率失败与21步低秩刷新路径。原小阻尼两分支失败保留，新增μ=1为冻结前派生阻尼敏感性；μ=10仅为资格探索。21步与单一代表配置不能证明完整200步、选优父配置或整个19-run研究已通过。R9及正式候选长跑继续待完成。
 
-最新[完整续训和恢复资格](evaluator/full-continuation-and-restore/README.md)已取得μ1×200实际接受、10刷新与Adam/L-BFGS真实新进程恢复，后者逐参数最大差0。[R9独立设计审查](evaluator/r9-design-review/REVIEW.md)同时指出原非关键9分的加权通过漏洞；当前待校准PDE质量叶均为关键项，公开区分研究完成与解复现成功。阈值、每族条件指标、选优和原子化继续待证据，不能由91分方法成绩代替物理解质量。
+最新[完整续训和恢复资格](evaluator/full-continuation-and-restore/README.md)已取得μ1×200实际接受、10刷新与Adam/L-BFGS真实新进程恢复，后者逐参数最大差0。[R9独立设计审查](evaluator/r9-design-review/REVIEW.md)同时指出原非关键9分的加权通过漏洞；当前待校准PDE质量叶均为关键项，公开区分研究完成与解复现成功。阈值及完整选择合同的可达性继续待证据，不能由91分方法成绩代替物理解质量。
 
 [最终注册工具审查](evaluator/registration-review-uncapped/REVIEW.md)实际通过4项元数据合同测试与定向类型/格式检查。当前薄启动只接受显式null token政策，已删除原总量阈值取消路径；真实模型/Provider/Task端到端仍待冻结后的pilot。科学资格、注册检查和候选成绩分别记录。
+
+本轮补充[OUTPUTS.md机器交付合同](public/OUTPUTS.md)：24配置覆盖、逐阶段计数/路径、初始化及续训父配对、实际执行证据与每PDE同一final的训练loss选优。评估侧`pinn_submission_check.py`是薄只读结构/权重端点检查，训练来源、日志内容与科学状态仍待实际完整复训和审查，不能用合成记录通过冒充科学验收。
+
+[新增质量指标独立复核](evaluator/quality-metrics-review/REVIEW.md)实际重跑18项测试、三份真实导出CLI与独立CPU自动微分；完整评价网格残差和逐条件族指标匹配，低质量网络/解析诊断分开保留。没有填写R9阈值或批准freeze。当前三代表资格及另两注册convection学习率仍按Recall继续，尚无新候选成绩。
+
+[机器交付独立审查](evaluator/manifest-review/REVIEW.md)实际找出并复核修复了项目/输出根混淆、未开始记录的非null引用、plateau/stalled声明计数矛盾；最终15项manifest测试与独立端点/两种tie探针通过。当前工具全范围[36项实跑](evaluator/artifact-contract-validation/README.md)仅证明数值与结构合同。R9已拆为14个pending关键质量叶、共9分，阈值仍null，完整选择可达性仍待终态证据。

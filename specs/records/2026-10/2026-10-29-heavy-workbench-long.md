@@ -115,3 +115,57 @@ Adam补充已实际完成：producer600更新并保存500状态，另一真实Do
 下一轮先读取本表实际活跃事实，完成末态后独立重算/审查，停止把旧已移除容器当失败。可独立推进：扩展NumPy检查器报告独立评价网格残差与各初边值族量；用手算函数和真实导出正向验证。按R9独立报告准备零/常数/仅初值拟合等低质量见证，与三问题可达见证一起校准，不能只拆叶或按当前误差倒填阈值；确定同一checkpoint的公开选择规则及原子质量合同，明确study_complete与solution_reproduced。
 
 同时补齐候选manifest明确I/O与逐配置独立检查边界（元数据不能证明训练来源，仍需受控清洁重训/源码/真实执行），再经既有独立agent审查冻结。启动工具已准备，无须重复做注册实现；冻结后才生成只含public文件的新项目和真实Inspect单样本，成对暂存auth/models并核验实际模型，保持无总token/总墙钟截断。环境可准备样本自有科学容器并提供真实工作路径/CID，闲置环境不计工作量；不引入替代LLM调用器或隐藏工具。完成后完整原件封存、独立清洁重训与同一冻结rubric审查，必要时新鲜Codex对照；按用户条件再升级。其余九题仍须实质升级与验证，不能忘记整个十题目标。
+
+## 08:57 UTC接续：R9度量实现前分析
+
+三自有代表配置仍在真实推进，无新终态。当前NumPy checker已在完整评价网格计算输入导数，却只保留预测值；初边值仅按训练定义拼接输出一个均值，无法逐族判定。这是观测/评分合同缺口，不是训练、Task调度或Provider故障。直接调用者全仓搜索仅Torch checker按三个既有标量选择训练目标，现有15项数值测试；没有生产或UI调用。新增指标必须保留既有训练loss和Torch分量对应，不改变采样、优化轨迹、选基点或官方论文口径。
+
+本轮在同一metrics实现输出完整评价网格PDE半均方损失及RMSE（Root Mean Square Error，均方根误差），并逐族输出count、半均方loss、RMSE。各族从同一checkpoint前向得到，拼接总量保持原样；先用非平凡手算时间tanh区分训练/评价点、wave线性时间函数验证四族独立量及按count聚合，再对已有真实float64导出作NumPy与独立Torch自动微分差分。所有嵌套数值也须有限，精确具名错误仍属正向合同测试。评价残差与物理解误差不同，不能互相替代。
+
+输出只是校准可观察量，暂不填写质量阈值或批准R9；独立review须重跑工具与实际见证。无候选代码执行器、无新的训练/模型调用、无UI或schema变化。完成后归档实际执行与独立检查，按本任务范围提交并正常同步上游。
+
+### manifest与选择合同：实施前分析
+
+现状：public/TASK.md只以自然语言要求manifest，profile有唯一24配置注册和续训父选择，但没有机器字段形状、文件身份/路径、计数错误或R9最终解选择。直接影响是不同候选难以一致评价，甚至不同checkpoint拼接质量。根因是评估协议尚未收敛，不是候选错误；旧H05的简单manifest工具不适用本研究，不沿用它或新增训练调度器。
+
+本轮把交付字段写入public/OUTPUTS.md，由profile继续作为唯一配置身份/参数和选择规则来源。评估侧薄Python checker只读JSON与纯NumPy权重，检查24配置覆盖、明确状态/计数、根内相对文件路径、阶段checkpoint/父引用，并独立重算终值与选择。实际训练/计数真实性仍由命令/逐尝试轨迹、受控完整清洁复训和独立源码审查验证；文件存在、计数和自报状态不能冒充科学成功。明确返回artifact_contract_checked和训练未认证，而不返回study_complete或solution_reproduced。
+
+候选未开始，先公开新增solution_selection：每PDE从seed345合格基础终态（convection还含合法终态续训）按独立训练loss最小选一个checkpoint、完全相等时config ID字典序。该规则与原续训基点三混合LR选优分开，同一选定checkpoint同时报告所有质量分量，禁止按L2RE挑选或拼接。全部不合格则无解质量候选。仍待完整矩阵可达见证，规则不保证科学成功且不得因此放宽R9。
+
+有限且零进展的合法终态和有证据的数值/算法失败可以结构完整，incomplete/dependency_incomplete必须保持未完成语义；checker只给合同诊断，故意允许它们出现在真实未完成提交中，不给通过分。聚焦正向测试覆盖有全部24记录的结构例、零步具名状态/无父依赖、精确错误路径、真实数值CLI以及选择训练loss/tie规则；合成结构例仅局部合同，不能当训练资格。仅新增本题文件并更新spec索引，生产调度/数据库/UI/Provider与发布均不适用。
+
+### 三学习率父选择的真实资格补齐
+
+当前仅默认convection混合学习率在跑，不能用其终值冒充三候选最优。剩余两已注册学习率是完整父选择合同的证据缺口，不是重复实验凑时间。GPU实测4700MiB、44%利用，三现有进程保持有效；在不改变/打断它们的前提下启动1e-3与1e-2各一次真实资格，继续区分共享GPU时间和独占测时。
+
+私有资格入口过去在脚本内按problem硬编码默认LR，无法准确投影profile三候选。先保存已执行源，再将未来资格入口改为读取评估者保存的同一公开profile与明确config ID，仅接受注册hybrid，problem/seed/LR/Adam切换与更新上限全部来自该记录；不再保留未来--problem硬编码入口。三正在运行的进程使用各自已捕获旧源，命令与原件保留。新进程使用独立不可变执行快照、单独输出根和Docker CID；准备/真实活动写入收据，不用总时长截断。只扩展资格注册投影，不是生产调度或候选执行器；异常按原始退出及真实事件调查，不能凭没结果判成数学失败。
+
+独立manifest初审发现两项局部真实缺口：输出根可选但检查器写死results/manifest.json；未开始的incomplete仅在引用必需时才校验trace/receipt，非null坏引用可被略过。前者根因是项目根/输出选择混为一个参数；后者是把“是否必需”和“存在时是否合法”的两种数据约束合并。修正为必需的显式相对项目根manifest参数，所有非null证据引用一律检验，另判必需性；控制字符（含NUL）映射明确artifact_path而非原生路径异常。相关定义/调用只在本轮新checker和测试/示例，不影响生产。保留原独立快照与失败见证，修后重跑真实错误CLI及任意输出根合同。
+
+一次无目标过宽Python测试pattern把已知宿主缺Torch也选入，28项数值/manifest本身通过但该命令整体失败，不能报全通过。随后在既定科学镜像的自有只读CPU容器实际运行3项Torch测试通过；最终将按修后源码快照在该现成依赖环境重跑完整31项以上，主机不新增全局依赖。此为验证环境纠正，不掩盖科学资格或候选未完成。
+
+R9按已独立实现的真实输出原子化：每PDE L2RE1分、评价残差RMSE1分、条件族共1分（两族各.5，wave四族各.25），14个待校准critical叶替换原3个，当前189叶/100分、pending仍9分。每叶明确同一profile.solution_selection checkpoint、指标路径、<=和null阈值；所有质量叶必需，方法分仍不能补偿。分组求和/14叶9分/critical及null状态已实际核对；数量和结构完整不证明阈值可达或benchmark难度，不发布分数。
+
+独立复核继续实际发现：声明finite_plateau但仅1个接受更新、或optimizer_stalled但0次attempt/closure仍可进入合格选择。这不只是日志真实性未知，而是声明计数与公开终态条件已自相矛盾；根因是reader只做通用计数上下界，没有状态特定的必要条件。修复终态声明：max_updates各阶段attempt=accepted=注册上限；finite_plateau终阶段至少25次接受且没有未接受尝试；optimizer_stalled及NNCG algorithm_failure终阶段恰有一次未接受终结尝试。真实梯度、连续25轨迹等充分证据仍须独立运行检查，不能反向把必要计数当充分验收。增加有效25步plateau/真实零步终结结构和明确错误码测试，保存旧/修后独立快照。
+
+NUL旧版本独立实跑实际已返回artifact_file且退出2，并非未捕获崩溃；本轮新artifact_path是更明确的路径错误分类。保留原始实证，纠正早期仅担心可能异常的描述，不夸大旧问题。
+
+## 09:30 UTC最新接续状态与下一轮优先项
+
+本轮新增NumPy评价残差/逐族质量量，18测试及独立真实三导出CPU自动微分匹配；新增公开OUTPUTS和唯一profile选择投影、薄只读manifest checker，独立发现/修复输出选择、非null引用和终态必要计数缺口，最终15测试+额外实际集成探针通过。修后完整工具在既定科学镜像实际36项（18+15+3）通过，源码/精确命令/输出在evaluator/artifact-contract-validation/terminal-count-repair/；原34与独立10/13历史完整保留。没有候选Task、没有科学结果通过分；thin reader始终unassessed，不能当实际训练或完整验收。
+
+R9当前189叶总100分，其中14个critical质量叶共9分，阈值null；公开同一seed345最终checkpoint按训练loss选择，父选优仍三hybrid LR、较小LR tie，最终解完全等loss按config ID tie。独立实际读取权重验证了两种tie/初始配对/失败排除，所有阈值与真实完整选择合同可达性继续pending。不得据计数、结构或局部工具通过宣布成熟/冻结。
+
+当前五个自有GPU资格仍在真实推进（共享GPU），未终态不重复启动、不机械中止；容器自动清理后以封存末态为准。
+
+| 自有容器 | 外部cache实时事实 | exec session | 最新实际事件 |
+| --- | --- | --- | --- |
+| oc-pinn-convection-contract-20261029-a | convection-contract-qualification/events.json | 22932 | lbfgs_progress: 20100尝试/20100接受 |
+| oc-pinn-reaction-convergence-20261029-a | reaction-convergence-qualification/events.json | 6261 | lbfgs_progress: 20300尝试/20300接受 |
+| oc-pinn-wave-convergence-20261029-a | wave-convergence-qualification/events.json | 60677 | lbfgs_progress: 16800尝试/16800接受 |
+| oc-pinn-convection-lr003-20261029-a | convection-lr003-qualification/events.json | 92625 | lbfgs_progress: 500尝试/500接受 |
+| oc-pinn-convection-lr002-20261029-a | convection-lr002-qualification/events.json | 93028 | lbfgs_progress: 400尝试/400接受 |
+
+两个新LR的真实start已投影同一public profile，.001/.01分别完成11000 Adam后切换；初始化与默认LR逐参数最大差0。当前私有资格入口未来使用--profile/--config-id，从唯一注册记录读problem/seed/LR/更新数，3个旧活跃命令使用各自已捕获旧源，不把新源码强行当旧执行身份。两新CID、源/profile/common源副本和原始活动分别在外部对应目录，启动/初始化证据在evaluator/learning-rate-selection/。这是补完整父选择缺口，不是候选或重复实验。
+
+下一轮：先检查本表五个events/trace和进程；代表配置自然终态后封存原件、逐尝试终态计数与独立完整网格指标/参数梯度，完成三LR父选择再做该真实父的晚期路径和谱比较。既有旧基点NN200/恢复只保留其限定资格，不冒充新父/完整研究。按新选择规则收集各PDE可达见证与受控退化、零/常数/解析初值延拓对照，制定有科学意义的质量目标，若协议不足以可达则调整研究范围，不能按当前误差倒填宽松阈值。清洁重训和独立复核仍必需，核准完整合同后冻结，再用已经修好的无总量截断Inspect薄启动运行真实长程OpenCorvus，候选只获public。之后同一冻结rubric实际评价和新鲜Codex对照，两方好则升级；其余九题升级与审查仍未完成，整个目标继续。

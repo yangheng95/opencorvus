@@ -1,0 +1,122 @@
+diff --git a/script/benchmark/pinn_numeric_check.py b/script/benchmark/pinn_numeric_check.py
+index dc87f1d9a..28fd6a242 100644
+--- a/script/benchmark/pinn_numeric_check.py
++++ b/script/benchmark/pinn_numeric_check.py
+@@ -125,16 +125,23 @@ def metrics(problem, layers, data):
+     initial = forward_jets(layers, data["initial"])
+     initial_target = exact_jets(problem, data["initial"])["u"]
+     left, right = forward_jets(layers, data["boundary_left"]), forward_jets(layers, data["boundary_right"])
+-    constraints = [initial["u"] - initial_target]
++    constraints = {"initial_value": initial["u"] - initial_target}
+     if problem == "wave":
+-        constraints.extend([initial["ut"], left["u"], right["u"]])
++        constraints.update(initial_velocity=initial["ut"], boundary_left=left["u"], boundary_right=right["u"])
+     else:
+-        constraints.append(left["u"] - right["u"])
+-    constraint_vector = np.concatenate(constraints)
++        constraints["periodic_value"] = left["u"] - right["u"]
++    constraint_vector = np.concatenate(list(constraints.values()))
+     residual_loss = float(0.5 * np.mean(residual**2))
+     constraint_loss = float(0.5 * np.mean(constraint_vector**2))
+-    prediction = forward_jets(layers, data["evaluation"])["u"]
++    evaluation = forward_jets(layers, data["evaluation"])
++    evaluation_residual = operator_residual(problem, evaluation)
++    prediction = evaluation["u"]
+     truth = exact_jets(problem, data["evaluation"])["u"]
++    families = {
++        name: {"count": len(values), "loss": float(0.5 * np.mean(values**2)),
++               "rmse": float(np.sqrt(np.mean(values**2)))}
++        for name, values in constraints.items()
++    }
+     answer = {
+         "problem": problem,
+         "residual_points": len(residual),
+@@ -143,10 +150,16 @@ def metrics(problem, layers, data):
+         "residual_loss": residual_loss,
+         "constraint_loss": constraint_loss,
+         "total_loss": residual_loss + constraint_loss,
++        "residual_rmse": float(np.sqrt(np.mean(residual**2))),
++        "evaluation_residual_loss": float(0.5 * np.mean(evaluation_residual**2)),
++        "evaluation_residual_rmse": float(np.sqrt(np.mean(evaluation_residual**2))),
++        "constraint_families": families,
+         "l2re": l2re(prediction, truth),
+         "parameter_count": sum(weight.size + bias.size for weight, bias in layers),
+     }
+-    if not all(np.isfinite(value) for value in answer.values() if isinstance(value, (float, int))):
++    scalars = [value for value in answer.values() if isinstance(value, (float, int))]
++    scalars.extend(value for family in families.values() for value in family.values())
++    if not all(np.isfinite(value) for value in scalars):
+         raise ContractError("nonfinite_metric", problem)
+     return answer
+ 
+diff --git a/script/benchmark/test_pinn_numeric_check.py b/script/benchmark/test_pinn_numeric_check.py
+index df5604ad1..4e28e01dd 100644
+--- a/script/benchmark/test_pinn_numeric_check.py
++++ b/script/benchmark/test_pinn_numeric_check.py
+@@ -77,6 +77,56 @@ class PositiveNumericalContracts(unittest.TestCase):
+         result = check.metrics("wave", linear_time, data)
+         self.assertAlmostEqual(result["constraint_loss"], 0.125)
+ 
++    def test_evaluation_physics_uses_evaluation_coordinates(self):
++        time_tanh = [(np.array([[0.0, 1.0]]), np.zeros(1)), (np.ones((1, 1)), np.zeros(1))]
++        data = {"residual": np.array([[0.2, 0.0]]),
++                "initial": np.array([[0.0, 0.0], [np.pi / 2, 0.0]]),
++                "boundary_left": np.array([[0.0, 0.5]]),
++                "boundary_right": np.array([[2 * np.pi, 0.5]]),
++                "evaluation": np.array([[0.2, 1.0]])}
++        result = check.metrics("convection", time_tanh, data)
++        self.assertAlmostEqual(result["residual_loss"], 0.5)
++        self.assertAlmostEqual(result["residual_rmse"], 1.0)
++        self.assertAlmostEqual(result["evaluation_residual_rmse"], 1 / np.cosh(1.0)**2)
++        self.assertAlmostEqual(result["evaluation_residual_loss"], 0.5 / np.cosh(1.0)**4)
++        self.assertAlmostEqual(result["constraint_families"]["initial_value"]["rmse"], np.sqrt(0.5))
++        self.assertEqual(result["constraint_families"]["periodic_value"], {"count": 1, "loss": 0.0, "rmse": 0.0})
++        self.assertAlmostEqual(result["constraint_loss"], 1 / 6)
++
++    def test_wave_families_have_separate_errors_and_count_weighted_pool(self):
++        linear = [(np.array([[1.0, 2.0]]), np.zeros(1))]
++        times = np.array([0.25, 0.75])
++        data = {"residual": np.array([[0.2, 0.4]]),
++                "initial": np.array([[0.0, 0.0], [0.5, 0.0], [1.0, 0.0]]),
++                "boundary_left": np.column_stack((np.zeros(2), times)),
++                "boundary_right": np.column_stack((np.ones(2), times)),
++                "evaluation": np.array([[0.5, 0.0]])}
++        result = check.metrics("wave", linear, data)
++        families = result["constraint_families"]
++        for name, count, mse in (("initial_value", 3, 2 / 3), ("initial_velocity", 3, 4.0),
++                                 ("boundary_left", 2, 1.25), ("boundary_right", 2, 4.25)):
++            self.assertEqual(families[name]["count"], count)
++            self.assertAlmostEqual(families[name]["loss"], 0.5 * mse)
++            self.assertAlmostEqual(families[name]["rmse"], np.sqrt(mse))
++        pooled = sum(f["count"] * f["loss"] for f in families.values()) / result["constraint_count"]
++        self.assertAlmostEqual(result["constraint_loss"], 1.25)
++        self.assertAlmostEqual(pooled, result["constraint_loss"])
++        self.assertAlmostEqual(result["evaluation_residual_rmse"], 0.0)
++
++    def test_reaction_constant_equilibrium_reports_initial_mismatch(self):
++        one = [(np.zeros((1, 2)), np.ones(1))]
++        data = {"residual": np.array([[0.2, 0.4]]),
++                "initial": np.array([[np.pi, 0.0], [0.0, 0.0]]),
++                "boundary_left": np.array([[0.0, 0.5]]),
++                "boundary_right": np.array([[2 * np.pi, 0.5]]),
++                "evaluation": np.array([[np.pi, 0.5], [0.0, 0.5]])}
++        result = check.metrics("reaction", one, data)
++        self.assertEqual(result["evaluation_residual_rmse"], 0.0)
++        self.assertEqual(result["constraint_families"]["initial_value"]["count"], 2)
++        self.assertAlmostEqual(result["constraint_families"]["initial_value"]["rmse"], (1 - np.exp(-8)) / np.sqrt(2))
++        self.assertEqual(result["constraint_families"]["periodic_value"]["rmse"], 0.0)
++        self.assertGreater(result["l2re"], 0.5)
++
+     def test_four_layer_export_load_and_real_cli_evaluation(self):
+         with tempfile.TemporaryDirectory() as directory:
+             root = Path(directory)
+@@ -94,6 +144,9 @@ class PositiveNumericalContracts(unittest.TestCase):
+             self.assertEqual(result["evaluation_points"], 8385)
+             self.assertEqual(result["constraint_count"], 716)
+             self.assertAlmostEqual(result["l2re"], 1.0)
++            self.assertEqual(result["evaluation_residual_rmse"], 0.0)
++            self.assertEqual(result["constraint_families"]["initial_velocity"]["count"], 257)
++            self.assertAlmostEqual(result["constraint_families"]["initial_value"]["loss"], 80 / 257)
+ 
+     def test_wave_initial_velocity_and_boundary_match_public_equation(self):
+         initial = np.array([[0.1, 0.0], [0.5, 0.0], [0.9, 0.0]])

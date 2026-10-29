@@ -1,0 +1,63 @@
+{
+  "observed_at": "2026-10-29T09:14:53.776720+00:00",
+  "runs": [
+    {
+      "container_id": "98aaf311ffb8f6227a28e4ff4abe579199a5b0d55e07893ad35ee8e11ff0df87",
+      "name": "oc-pinn-convection-lr003-20261029-a",
+      "image_id": "sha256:366454c0a7b7f023131af29ec68696859c8d39f1a1b2a3a61e32c35ff03ae9dc",
+      "command": [
+        "python",
+        "-u",
+        "qualify_convection_lr1e-03_executed.py",
+        "--profile",
+        "/work/qualification-profile-20261029.json",
+        "--config-id",
+        "convection-hybrid-s345-lr1e-03",
+        "--output",
+        "/work/convection-lr003-qualification"
+      ],
+      "started_at": "2026-10-29T09:14:12.857658496Z",
+      "status": "running",
+      "session": 92625,
+      "config_start": {
+        "event": "start",
+        "config_id": "convection-hybrid-s345-lr1e-03",
+        "problem": "convection",
+        "seed": 345,
+        "adam_lr": 0.001,
+        "started_at": "2026-10-29T09:14:17.031831+00:00",
+        "scope": "representative feasibility qualification only"
+      },
+      "scope": "evaluator feasibility only; no candidate score"
+    },
+    {
+      "container_id": "0b4d747d62832ebf67fd71a9e29f478271c8024850b907ff4631ed771adc1245",
+      "name": "oc-pinn-convection-lr002-20261029-a",
+      "image_id": "sha256:366454c0a7b7f023131af29ec68696859c8d39f1a1b2a3a61e32c35ff03ae9dc",
+      "command": [
+        "python",
+        "-u",
+        "qualify_convection_lr1e-02_executed.py",
+        "--profile",
+        "/work/qualification-profile-20261029.json",
+        "--config-id",
+        "convection-hybrid-s345-lr1e-02",
+        "--output",
+        "/work/convection-lr002-qualification"
+      ],
+      "started_at": "2026-10-29T09:14:23.106593582Z",
+      "status": "running",
+      "session": 93028,
+      "config_start": {
+        "event": "start",
+        "config_id": "convection-hybrid-s345-lr1e-02",
+        "problem": "convection",
+        "seed": 345,
+        "adam_lr": 0.01,
+        "started_at": "2026-10-29T09:14:27.419606+00:00",
+        "scope": "representative feasibility qualification only"
+      },
+      "scope": "evaluator feasibility only; no candidate score"
+    }
+  ]
+}

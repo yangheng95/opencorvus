@@ -4,7 +4,7 @@
 
 - [2026-10-29-text-encoding-journey](2026-10-29-text-encoding-journey/README.md)：Unicode原文乱码修复、双语错误、真实JSON和五份下载核验。
 
-- [长程论文复现资格与审查稿](2026-10-29-heavy-workbench-long/README.md)：真实GPU/独立数值资格、论文原件、19配置合同和未冻结rubric，未取得候选小时级成绩。
+- [长程论文复现资格与审查稿](2026-10-29-heavy-workbench-long/README.md)：真实GPU/逐族独立数值资格、19基础+5续训及机器交付合同，rubric未冻结，未取得候选小时级成绩。
 
 - [2026-10-29-text-attachment-history](2026-10-29-text-attachment-history/README.md)：23张真实发送/历史回看原图、指定模型流式请求、原件下载与数据/运行结算。
 

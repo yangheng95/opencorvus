@@ -8,7 +8,7 @@
 
 - [2026-10-29-heavy-workbench-cross-system.md](2026-10-29-heavy-workbench-cross-system.md)：同一H05旧题两方真实业务交付、清洁复跑、升级触发及小时级要求。
 
-- [2026-10-29-heavy-workbench-long.md](2026-10-29-heavy-workbench-long.md)：真实论文与数值环境资格、实验范围和尚未验证的小时级目标。
+- [2026-10-29-heavy-workbench-long.md](2026-10-29-heavy-workbench-long.md)：真实论文与数值环境资格、同一checkpoint逐族质量/交付合同及未验证的小时级目标。
 
 - [2026-10-29-attachment-workspace-journey.md](2026-10-29-attachment-workspace-journey.md)：跨项目文件附加、内容核对与草稿作用域实页调查。
 

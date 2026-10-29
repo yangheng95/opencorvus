@@ -1,0 +1,237 @@
+{
+  "thresholds_assigned": false,
+  "candidate_scores": false,
+  "controls": [
+    {
+      "problem": "convection",
+      "control": "actual_four_layer_network",
+      "constant": 0.0,
+      "metrics": {
+        "problem": "convection",
+        "residual_points": 10000,
+        "constraint_count": 358,
+        "evaluation_points": 8385,
+        "residual_loss": 0.0,
+        "constraint_loss": 0.1787709497206704,
+        "total_loss": 0.1787709497206704,
+        "residual_rmse": 0.0,
+        "evaluation_residual_loss": 0.0,
+        "evaluation_residual_rmse": 0.0,
+        "constraint_families": {
+          "initial_value": {
+            "count": 257,
+            "loss": 0.2490272373540856,
+            "rmse": 0.7057297462259694
+          },
+          "periodic_value": {
+            "count": 101,
+            "loss": 0.0,
+            "rmse": 0.0
+          }
+        },
+        "l2re": 1.0,
+        "parameter_count": 20601
+      }
+    },
+    {
+      "problem": "convection",
+      "control": "actual_four_layer_network",
+      "constant": 1.0,
+      "metrics": {
+        "problem": "convection",
+        "residual_points": 10000,
+        "constraint_count": 358,
+        "evaluation_points": 8385,
+        "residual_loss": 0.0,
+        "constraint_loss": 0.5377094972067039,
+        "total_loss": 0.5377094972067039,
+        "residual_rmse": 0.0,
+        "evaluation_residual_loss": 0.0,
+        "evaluation_residual_rmse": 0.0,
+        "constraint_families": {
+          "initial_value": {
+            "count": 257,
+            "loss": 0.7490272373540856,
+            "rmse": 1.2239503563086909
+          },
+          "periodic_value": {
+            "count": 101,
+            "loss": 0.0,
+            "rmse": 0.0
+          }
+        },
+        "l2re": 1.7324405110192516,
+        "parameter_count": 20601
+      }
+    },
+    {
+      "problem": "convection",
+      "control": "analytic_initial_extension_only_not_network",
+      "l2re": 1.3971150787213324,
+      "evaluation_residual_rmse": 28.393688566080964,
+      "scope": "analytic function, satisfies initial/value-boundary conditions; wave velocity zero; not a trained or exported network"
+    },
+    {
+      "problem": "reaction",
+      "control": "actual_four_layer_network",
+      "constant": 0.0,
+      "metrics": {
+        "problem": "reaction",
+        "residual_points": 10000,
+        "constraint_count": 358,
+        "evaluation_points": 8385,
+        "residual_loss": 0.0,
+        "constraint_loss": 0.07921581349494837,
+        "total_loss": 0.07921581349494837,
+        "residual_rmse": 0.0,
+        "evaluation_residual_loss": 0.0,
+        "evaluation_residual_rmse": 0.0,
+        "constraint_families": {
+          "initial_value": {
+            "count": 257,
+            "loss": 0.11034731996572575,
+            "rmse": 0.4697814810435289
+          },
+          "periodic_value": {
+            "count": 101,
+            "loss": 0.0,
+            "rmse": 0.0
+          }
+        },
+        "l2re": 1.0,
+        "parameter_count": 20601
+      }
+    },
+    {
+      "problem": "reaction",
+      "control": "actual_four_layer_network",
+      "constant": 1.0,
+      "metrics": {
+        "problem": "reaction",
+        "residual_points": 10000,
+        "constraint_count": 358,
+        "evaluation_points": 8385,
+        "residual_loss": 0.0,
+        "constraint_loss": 0.21411147709953987,
+        "total_loss": 0.21411147709953987,
+        "residual_rmse": 0.0,
+        "evaluation_residual_loss": 0.0,
+        "evaluation_residual_rmse": 0.0,
+        "constraint_families": {
+          "initial_value": {
+            "count": 257,
+            "loss": 0.2982564544810711,
+            "rmse": 0.7723424816505577
+          },
+          "periodic_value": {
+            "count": 101,
+            "loss": 0.0,
+            "rmse": 0.0
+          }
+        },
+        "l2re": 0.8879416037696533,
+        "parameter_count": 20601
+      }
+    },
+    {
+      "problem": "reaction",
+      "control": "analytic_initial_extension_only_not_network",
+      "l2re": 0.5034390291630245,
+      "evaluation_residual_rmse": 0.6382217279389134,
+      "scope": "analytic function, satisfies initial/value-boundary conditions; wave velocity zero; not a trained or exported network"
+    },
+    {
+      "problem": "wave",
+      "control": "actual_four_layer_network",
+      "constant": 0.0,
+      "metrics": {
+        "problem": "wave",
+        "residual_points": 10000,
+        "constraint_count": 716,
+        "evaluation_points": 8385,
+        "residual_loss": 0.0,
+        "constraint_loss": 0.11173184357541899,
+        "total_loss": 0.11173184357541899,
+        "residual_rmse": 0.0,
+        "evaluation_residual_loss": 0.0,
+        "evaluation_residual_rmse": 0.0,
+        "constraint_families": {
+          "initial_value": {
+            "count": 257,
+            "loss": 0.311284046692607,
+            "rmse": 0.7890298431524716
+          },
+          "initial_velocity": {
+            "count": 257,
+            "loss": 0.0,
+            "rmse": 0.0
+          },
+          "boundary_left": {
+            "count": 101,
+            "loss": 0.0,
+            "rmse": 0.0
+          },
+          "boundary_right": {
+            "count": 101,
+            "loss": 0.0,
+            "rmse": 0.0
+          }
+        },
+        "l2re": 1.0,
+        "parameter_count": 20601
+      }
+    },
+    {
+      "problem": "wave",
+      "control": "actual_four_layer_network",
+      "constant": 1.0,
+      "metrics": {
+        "problem": "wave",
+        "residual_points": 10000,
+        "constraint_count": 716,
+        "evaluation_points": 8385,
+        "residual_loss": 0.0,
+        "constraint_loss": 0.1818925014026753,
+        "total_loss": 0.1818925014026753,
+        "residual_rmse": 0.0,
+        "evaluation_residual_loss": 0.0,
+        "evaluation_residual_rmse": 0.0,
+        "constraint_families": {
+          "initial_value": {
+            "count": 257,
+            "loss": 0.11375498445258951,
+            "rmse": 0.4769800508461324
+          },
+          "initial_velocity": {
+            "count": 257,
+            "loss": 0.0,
+            "rmse": 0.0
+          },
+          "boundary_left": {
+            "count": 101,
+            "loss": 0.5,
+            "rmse": 1.0
+          },
+          "boundary_right": {
+            "count": 101,
+            "loss": 0.5,
+            "rmse": 1.0
+          }
+        },
+        "l2re": 2.0268796468683097,
+        "parameter_count": 20601
+      }
+    },
+    {
+      "problem": "wave",
+      "control": "analytic_initial_extension_only_not_network",
+      "l2re": 1.7056057308448835,
+      "evaluation_residual_rmse": 348.69859349570845,
+      "scope": "analytic function, satisfies initial/value-boundary conditions; wave velocity zero; not a trained or exported network"
+    }
+  ],
+  "finite_error_contract": {
+    "input": "finite actual four-layer weights with evaluation-only residual-square overflow",
+    "code": "nonfinite_metric"
+  }
+}

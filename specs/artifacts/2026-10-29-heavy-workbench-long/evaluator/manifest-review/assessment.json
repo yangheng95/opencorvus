@@ -1,0 +1,26 @@
+{
+  "reviewer": "/root/benchmark_review",
+  "created_at_utc": "2026-10-29T09:28:48.034762+00:00",
+  "final_reviewed_version": "source-final-stop",
+  "local_reader_contract_accepted": true,
+  "substantive_blockers_in_final_reviewed_scope": [],
+  "final_original_unit_count": 15,
+  "historical_unit_counts": [
+    10,
+    13
+  ],
+  "historical_findings_preserved": true,
+  "all_final_commands_exit_zero": true,
+  "path_custom_output_and_terminal_count_repairs_verified": true,
+  "different_parent_and_final_tie_rules_verified": true,
+  "initial_pairing_and_failed_endpoint_exclusion_verified": true,
+  "synthetic_records_and_empty_trace_are_not_training": true,
+  "scientific_outcomes_unassessed_verified": true,
+  "r9_quick_check": "r9-quick-check.json",
+  "quality_thresholds_assigned": false,
+  "candidate_scores_assigned": false,
+  "formal_freeze_approved": false,
+  "model_service_gpu_training_or_credentials_used": false,
+  "main_repository_modified_by_reviewer": false,
+  "delegation_performed": false
+}

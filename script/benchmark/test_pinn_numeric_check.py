@@ -77,6 +77,56 @@ class PositiveNumericalContracts(unittest.TestCase):
         result = check.metrics("wave", linear_time, data)
         self.assertAlmostEqual(result["constraint_loss"], 0.125)
 
+    def test_evaluation_physics_uses_evaluation_coordinates(self):
+        time_tanh = [(np.array([[0.0, 1.0]]), np.zeros(1)), (np.ones((1, 1)), np.zeros(1))]
+        data = {"residual": np.array([[0.2, 0.0]]),
+                "initial": np.array([[0.0, 0.0], [np.pi / 2, 0.0]]),
+                "boundary_left": np.array([[0.0, 0.5]]),
+                "boundary_right": np.array([[2 * np.pi, 0.5]]),
+                "evaluation": np.array([[0.2, 1.0]])}
+        result = check.metrics("convection", time_tanh, data)
+        self.assertAlmostEqual(result["residual_loss"], 0.5)
+        self.assertAlmostEqual(result["residual_rmse"], 1.0)
+        self.assertAlmostEqual(result["evaluation_residual_rmse"], 1 / np.cosh(1.0)**2)
+        self.assertAlmostEqual(result["evaluation_residual_loss"], 0.5 / np.cosh(1.0)**4)
+        self.assertAlmostEqual(result["constraint_families"]["initial_value"]["rmse"], np.sqrt(0.5))
+        self.assertEqual(result["constraint_families"]["periodic_value"], {"count": 1, "loss": 0.0, "rmse": 0.0})
+        self.assertAlmostEqual(result["constraint_loss"], 1 / 6)
+
+    def test_wave_families_have_separate_errors_and_count_weighted_pool(self):
+        linear = [(np.array([[1.0, 2.0]]), np.zeros(1))]
+        times = np.array([0.25, 0.75])
+        data = {"residual": np.array([[0.2, 0.4]]),
+                "initial": np.array([[0.0, 0.0], [0.5, 0.0], [1.0, 0.0]]),
+                "boundary_left": np.column_stack((np.zeros(2), times)),
+                "boundary_right": np.column_stack((np.ones(2), times)),
+                "evaluation": np.array([[0.5, 0.0]])}
+        result = check.metrics("wave", linear, data)
+        families = result["constraint_families"]
+        for name, count, mse in (("initial_value", 3, 2 / 3), ("initial_velocity", 3, 4.0),
+                                 ("boundary_left", 2, 1.25), ("boundary_right", 2, 4.25)):
+            self.assertEqual(families[name]["count"], count)
+            self.assertAlmostEqual(families[name]["loss"], 0.5 * mse)
+            self.assertAlmostEqual(families[name]["rmse"], np.sqrt(mse))
+        pooled = sum(f["count"] * f["loss"] for f in families.values()) / result["constraint_count"]
+        self.assertAlmostEqual(result["constraint_loss"], 1.25)
+        self.assertAlmostEqual(pooled, result["constraint_loss"])
+        self.assertAlmostEqual(result["evaluation_residual_rmse"], 0.0)
+
+    def test_reaction_constant_equilibrium_reports_initial_mismatch(self):
+        one = [(np.zeros((1, 2)), np.ones(1))]
+        data = {"residual": np.array([[0.2, 0.4]]),
+                "initial": np.array([[np.pi, 0.0], [0.0, 0.0]]),
+                "boundary_left": np.array([[0.0, 0.5]]),
+                "boundary_right": np.array([[2 * np.pi, 0.5]]),
+                "evaluation": np.array([[np.pi, 0.5], [0.0, 0.5]])}
+        result = check.metrics("reaction", one, data)
+        self.assertEqual(result["evaluation_residual_rmse"], 0.0)
+        self.assertEqual(result["constraint_families"]["initial_value"]["count"], 2)
+        self.assertAlmostEqual(result["constraint_families"]["initial_value"]["rmse"], (1 - np.exp(-8)) / np.sqrt(2))
+        self.assertEqual(result["constraint_families"]["periodic_value"]["rmse"], 0.0)
+        self.assertGreater(result["l2re"], 0.5)
+
     def test_four_layer_export_load_and_real_cli_evaluation(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -94,6 +144,9 @@ class PositiveNumericalContracts(unittest.TestCase):
             self.assertEqual(result["evaluation_points"], 8385)
             self.assertEqual(result["constraint_count"], 716)
             self.assertAlmostEqual(result["l2re"], 1.0)
+            self.assertEqual(result["evaluation_residual_rmse"], 0.0)
+            self.assertEqual(result["constraint_families"]["initial_velocity"]["count"], 257)
+            self.assertAlmostEqual(result["constraint_families"]["initial_value"]["loss"], 80 / 257)
 
     def test_wave_initial_velocity_and_boundary_match_public_equation(self):
         initial = np.array([[0.1, 0.0], [0.5, 0.0], [0.9, 0.0]])

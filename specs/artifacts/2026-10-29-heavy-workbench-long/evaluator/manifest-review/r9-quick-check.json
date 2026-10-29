@@ -1,0 +1,116 @@
+{
+  "leaf_count": 189,
+  "total_points": 100.0,
+  "group_points_actual": {
+    "A": 20.0,
+    "B": 30.000000000000004,
+    "C": 15.0,
+    "D": 10.0,
+    "R": 15.0,
+    "E": 10.0
+  },
+  "pending_count": 14,
+  "pending_points": 9.0,
+  "all_pending_critical_and_null": true,
+  "metric_paths": [
+    {
+      "id": "L01-R-convection-solution-error",
+      "problem": "convection",
+      "metric": "l2re",
+      "resolves_to_numeric": true,
+      "threshold": null
+    },
+    {
+      "id": "L01-R-convection-evaluation-physics",
+      "problem": "convection",
+      "metric": "evaluation_residual_rmse",
+      "resolves_to_numeric": true,
+      "threshold": null
+    },
+    {
+      "id": "L01-R-convection-initial_value",
+      "problem": "convection",
+      "metric": "constraint_families.initial_value.rmse",
+      "resolves_to_numeric": true,
+      "threshold": null
+    },
+    {
+      "id": "L01-R-convection-periodic_value",
+      "problem": "convection",
+      "metric": "constraint_families.periodic_value.rmse",
+      "resolves_to_numeric": true,
+      "threshold": null
+    },
+    {
+      "id": "L01-R-reaction-solution-error",
+      "problem": "reaction",
+      "metric": "l2re",
+      "resolves_to_numeric": true,
+      "threshold": null
+    },
+    {
+      "id": "L01-R-reaction-evaluation-physics",
+      "problem": "reaction",
+      "metric": "evaluation_residual_rmse",
+      "resolves_to_numeric": true,
+      "threshold": null
+    },
+    {
+      "id": "L01-R-reaction-initial_value",
+      "problem": "reaction",
+      "metric": "constraint_families.initial_value.rmse",
+      "resolves_to_numeric": true,
+      "threshold": null
+    },
+    {
+      "id": "L01-R-reaction-periodic_value",
+      "problem": "reaction",
+      "metric": "constraint_families.periodic_value.rmse",
+      "resolves_to_numeric": true,
+      "threshold": null
+    },
+    {
+      "id": "L01-R-wave-solution-error",
+      "problem": "wave",
+      "metric": "l2re",
+      "resolves_to_numeric": true,
+      "threshold": null
+    },
+    {
+      "id": "L01-R-wave-evaluation-physics",
+      "problem": "wave",
+      "metric": "evaluation_residual_rmse",
+      "resolves_to_numeric": true,
+      "threshold": null
+    },
+    {
+      "id": "L01-R-wave-initial_value",
+      "problem": "wave",
+      "metric": "constraint_families.initial_value.rmse",
+      "resolves_to_numeric": true,
+      "threshold": null
+    },
+    {
+      "id": "L01-R-wave-initial_velocity",
+      "problem": "wave",
+      "metric": "constraint_families.initial_velocity.rmse",
+      "resolves_to_numeric": true,
+      "threshold": null
+    },
+    {
+      "id": "L01-R-wave-boundary_left",
+      "problem": "wave",
+      "metric": "constraint_families.boundary_left.rmse",
+      "resolves_to_numeric": true,
+      "threshold": null
+    },
+    {
+      "id": "L01-R-wave-boundary_right",
+      "problem": "wave",
+      "metric": "constraint_families.boundary_right.rmse",
+      "resolves_to_numeric": true,
+      "threshold": null
+    }
+  ],
+  "quality_calibrated": false
+}

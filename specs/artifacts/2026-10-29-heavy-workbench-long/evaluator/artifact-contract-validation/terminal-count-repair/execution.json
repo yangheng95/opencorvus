@@ -1,0 +1,32 @@
+{
+  "started_at": "2026-10-29T09:25:35.302747+00:00",
+  "elapsed_seconds": 37.544588400051,
+  "command": [
+    "docker",
+    "run",
+    "--rm",
+    "--network",
+    "none",
+    "--cpus",
+    "2",
+    "--name",
+    "oc-pinn-terminal-count-validation-20261029-a",
+    "--mount",
+    "type=bind,source=D:/opencorvus-benchmark-runs/paperbench-discovery-20261029/metrics-manifest-validation-terminal-20261029/source,target=/study,readonly",
+    "-w",
+    "/study",
+    "opencorvus-benchmark-science:20261029",
+    "python",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "script/benchmark",
+    "-p",
+    "test_pinn_*check.py",
+    "-v"
+  ],
+  "exit_code": 0,
+  "scope": "final necessary-count repair, read-only CPU tool tests; no training/model/GPU or scientific certification"
+}

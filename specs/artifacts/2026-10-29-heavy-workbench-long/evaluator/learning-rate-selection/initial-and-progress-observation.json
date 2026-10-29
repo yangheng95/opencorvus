@@ -1,0 +1,29 @@
+{
+  "observed_at": "2026-10-29T09:20:39.257082+00:00",
+  "runs": [
+    {
+      "folder": "convection-lr003-qualification",
+      "latest_event": {
+        "event": "adam_progress",
+        "attempt": 5000,
+        "accepted_updates": 5000,
+        "loss": 0.008491660834263183,
+        "seconds": 344.19902307586744
+      },
+      "initial_max_parameter_difference_from_default_lr": 0.0,
+      "scope": "partial evaluator qualification; not terminal or candidate score"
+    },
+    {
+      "folder": "convection-lr002-qualification",
+      "latest_event": {
+        "event": "adam_progress",
+        "attempt": 5000,
+        "accepted_updates": 5000,
+        "loss": 0.02453391234341775,
+        "seconds": 343.1165800821036
+      },
+      "initial_max_parameter_difference_from_default_lr": 0.0,
+      "scope": "partial evaluator qualification; not terminal or candidate score"
+    }
+  ]
+}

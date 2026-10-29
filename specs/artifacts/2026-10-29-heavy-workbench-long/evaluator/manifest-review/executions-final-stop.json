@@ -1,0 +1,27 @@
+[
+  {
+    "label": "source-final-stop-unit-tests",
+    "started_at_utc": "2026-10-29T09:25:40.549834+00:00",
+    "elapsed_seconds": 7.933038000017405,
+    "command_argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reviewer-manifest-20261029\\source-final-stop\\script\\benchmark\\test_pinn_submission_check.py"
+    ],
+    "exit_code": 0,
+    "scope": "synthetic local reader contracts; no training or scientific score"
+  },
+  {
+    "label": "source-final-stop-adversarial-local-probes",
+    "started_at_utc": "2026-10-29T09:25:48.483778+00:00",
+    "elapsed_seconds": 6.409170800354332,
+    "command_argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reviewer-manifest-20261029\\probes-final.py",
+      "source-final-stop"
+    ],
+    "exit_code": 0,
+    "scope": "synthetic local reader contracts; no training or scientific score"
+  }
+]

@@ -1,0 +1,107 @@
+[
+  {
+    "label": "numpy-18-tests",
+    "started_at_utc": "2026-10-29T09:06:18.205511+00:00",
+    "elapsed_seconds": 1.8801446999423206,
+    "command_argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reviewer-r9-metrics-20261029\\source-snapshot\\test_pinn_numeric_check.py"
+    ],
+    "exit_code": 0,
+    "scope": "reviewer-only numerical inference/tests; no training/GPU/provider"
+  },
+  {
+    "label": "quality-controls-and-finite-error",
+    "started_at_utc": "2026-10-29T09:06:20.086291+00:00",
+    "elapsed_seconds": 2.6703502000309527,
+    "command_argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reviewer-r9-metrics-20261029\\diagnostics.py"
+    ],
+    "exit_code": 0,
+    "scope": "reviewer-only numerical inference/tests; no training/GPU/provider"
+  },
+  {
+    "label": "cli-convection",
+    "started_at_utc": "2026-10-29T09:06:22.757181+00:00",
+    "elapsed_seconds": 0.7913329997099936,
+    "command_argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reviewer-r9-metrics-20261029\\source-snapshot\\pinn_numeric_check.py",
+      "evaluate",
+      "--problem",
+      "convection",
+      "--checkpoint",
+      "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reviewer-r9-metrics-20261029\\observed-exports\\convection.npz",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reviewer-r9-metrics-20261029\\cli-results\\convection.json"
+    ],
+    "exit_code": 0,
+    "scope": "reviewer-only numerical inference/tests; no training/GPU/provider"
+  },
+  {
+    "label": "cli-reaction",
+    "started_at_utc": "2026-10-29T09:06:23.548970+00:00",
+    "elapsed_seconds": 0.7767448001541197,
+    "command_argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reviewer-r9-metrics-20261029\\source-snapshot\\pinn_numeric_check.py",
+      "evaluate",
+      "--problem",
+      "reaction",
+      "--checkpoint",
+      "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reviewer-r9-metrics-20261029\\observed-exports\\reaction.npz",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reviewer-r9-metrics-20261029\\cli-results\\reaction.json"
+    ],
+    "exit_code": 0,
+    "scope": "reviewer-only numerical inference/tests; no training/GPU/provider"
+  },
+  {
+    "label": "cli-wave",
+    "started_at_utc": "2026-10-29T09:06:24.326179+00:00",
+    "elapsed_seconds": 0.7933586998842657,
+    "command_argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reviewer-r9-metrics-20261029\\source-snapshot\\pinn_numeric_check.py",
+      "evaluate",
+      "--problem",
+      "wave",
+      "--checkpoint",
+      "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reviewer-r9-metrics-20261029\\observed-exports\\wave.npz",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reviewer-r9-metrics-20261029\\cli-results\\wave.json"
+    ],
+    "exit_code": 0,
+    "scope": "reviewer-only numerical inference/tests; no training/GPU/provider"
+  },
+  {
+    "label": "independent-torch-cpu",
+    "started_at_utc": "2026-10-29T09:06:25.120105+00:00",
+    "elapsed_seconds": 4.395501899998635,
+    "command_argv": [
+      "C:/Program Files/Docker/Docker/resources/bin/docker.exe",
+      "run",
+      "--rm",
+      "--network",
+      "none",
+      "--cpus",
+      "1",
+      "-e",
+      "PYTHONDONTWRITEBYTECODE=1",
+      "--mount",
+      "type=bind,source=D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reviewer-r9-metrics-20261029,target=/review",
+      "pytorch/pytorch@sha256:c16f4c749e2d9e96878875cdf6cc45cddda1d1a36fddd371dd6f2360f1b6e2a2",
+      "python",
+      "-B",
+      "/review/torch_crosscheck.py"
+    ],
+    "exit_code": 0,
+    "scope": "reviewer-only numerical inference/tests; no training/GPU/provider"
+  }
+]

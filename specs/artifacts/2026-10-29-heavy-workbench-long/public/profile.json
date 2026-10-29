@@ -257,5 +257,19 @@
       "optimizer_stalled"
     ],
     "all_ineligible": "dependency_incomplete; no alternate parent"
+  },
+  "solution_selection": {
+    "seed": 345,
+    "candidates": "eligible terminal base configurations for each PDE at seed345, plus registered convection continuations",
+    "metric": "independently recomputed terminal train total loss",
+    "ties": "lexicographically smallest config ID, exact loss ties only",
+    "eligible_terminal_states": [
+      "max_updates",
+      "gradient_converged",
+      "finite_plateau",
+      "optimizer_stalled"
+    ],
+    "all_ineligible": "null; solution_reproduced cannot be true",
+    "same_checkpoint": "all quality components for one PDE use the single selected final numeric export"
   }
 }

@@ -64,7 +64,7 @@ Nyström合同：在CUDA上以float64和单独`torch.Generator(device="cuda").ma
 
 - `plan.md`：执行前形成研究问题、预注册矩阵、选优规则、失败判据和分析范围；偏离逐条记录。不得事后伪造注册时间。
 - `src/`、锁定依赖、实际数值单测及命令；提交`run_study.py --output <新目录> --device cuda`，能够只用公共输入从头完成全部注册实验；支持`--only <config-id>`清洁重训、`--resume`实际恢复。全量复跑不读取本次旧训练结果或评估器。
-- `results/manifest.json`列出全部19基础配置和5续训分支的参数、初始checkpoint、父分支、实际更新、closure、梯度/Hessian向量乘、状态、停止理由、路径和开始/结束时间；真实进度与命令收据对应提交版本。保存init、11k分叉、final及关键续训checkpoint与实际训练轨迹，避免大量重复完整权重。
+- `results/manifest.json`按[OUTPUTS.md](OUTPUTS.md)的机器合同列出全部19基础配置和5续训分支的参数、初始checkpoint、父分支、实际更新、closure、梯度/Hessian向量乘、状态、停止理由、路径和开始/结束时间；真实进度与命令收据对应提交版本。保存init、11k分叉、final及关键续训checkpoint与实际训练轨迹，避免大量重复完整权重。每PDE按profile.solution_selection的训练loss规则选同一个final评价全部质量项；续训父选择单独保持原规则。
 - 每个待评价checkpoint同时导出纯NumPy NPZ，仅`weight_0,bias_0,…,weight_3,bias_3`8数组，shape依次100×2、100×100、100×100、1×100与对应bias，全部float64、finite。评估者独立重算前向、PDE导数、损失、L2RE，候选推理函数和自报指标不能充当评分器。
 - `paper.md`、`paper.pdf`、`figures/`、`references.json`：完整引言/方法/结果/讨论/局限；所有图由实际数据生成并实际查看，曲线标明更新/closure/秒单位、失败/停止状态、配对关系和本派生范围。报告原文Table2 convection NNCG为3.63e-7（Markdown抽取丢指数），不要照抄错误OCR。不得用论文数值充当本次结果。
 - `reproduction.md`：环境、命令、源码版本、未决失败与恢复、重新训练和仅重新评价的区别。清洁环境评估实际重训与独立数值重算，不能只重新绘图/读取已交结果称作复现。

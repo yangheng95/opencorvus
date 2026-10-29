@@ -1,0 +1,110 @@
+{
+  "source_version": "source-final-stop",
+  "synthetic_reader_contract_only": true,
+  "training_occurred": false,
+  "observations": [
+    {
+      "probe": "zero_attempt_nonnull_trace_scope",
+      "outcome": "error",
+      "error_type": "ContractError",
+      "code": "artifact_scope",
+      "detail": "artifact_scope: convection-adam-s345-lr1e-04.trace"
+    },
+    {
+      "probe": "zero_attempt_nonnull_receipt_type",
+      "outcome": "error",
+      "error_type": "ContractError",
+      "code": "artifact_path",
+      "detail": "artifact_path: convection-adam-s345-lr1e-04.receipt"
+    },
+    {
+      "probe": "valid_custom_output_manifest",
+      "outcome": "accepted",
+      "artifact_contract_checked": true,
+      "study_complete": "unassessed",
+      "solution_reproduced": "unassessed",
+      "continuation_parent": null,
+      "solution_checkpoints": {
+        "convection": null,
+        "reaction": null,
+        "wave": null
+      }
+    },
+    {
+      "probe": "nul_path_real_cli",
+      "exit_code": 2,
+      "command_argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reviewer-manifest-20261029\\source-final-stop\\script\\benchmark\\pinn_submission_check.py",
+        "--root",
+        "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reviewer-manifest-20261029\\temporary\\tmp1yx4nvin",
+        "--profile",
+        "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reviewer-manifest-20261029\\source-final-stop\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\public\\profile.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reviewer-manifest-20261029\\temporary\\tmp1yx4nvin\\machine-receipt.json",
+        "--manifest",
+        "results/manifest.json"
+      ],
+      "machine_receipt": {
+        "artifact_contract_checked": false,
+        "error": "artifact_path",
+        "detail": "artifact_path: wave-adam-s345-lr1e-03.checkpoints.initial"
+      }
+    },
+    {
+      "probe": "parent_small_lr_and_final_lexical_id_ties",
+      "outcome": "accepted",
+      "artifact_contract_checked": true,
+      "study_complete": "unassessed",
+      "solution_reproduced": "unassessed",
+      "continuation_parent": "convection-hybrid-s345-lr1e-04",
+      "solution_checkpoints": {
+        "convection": "convection-hybrid-s345-lr1e-02",
+        "reaction": null,
+        "wave": null
+      }
+    },
+    {
+      "probe": "different_initials_for_same_problem_seed",
+      "outcome": "error",
+      "error_type": "ContractError",
+      "code": "initial_pairing",
+      "detail": "initial_pairing: wave-adam-s345-lr1e-03"
+    },
+    {
+      "probe": "finite_plateau_one_update",
+      "outcome": "error",
+      "error_type": "ContractError",
+      "code": "plateau_count",
+      "detail": "plateau_count: wave-lbfgs-s345-lrnone"
+    },
+    {
+      "probe": "optimizer_stalled_zero_attempts",
+      "outcome": "error",
+      "error_type": "ContractError",
+      "code": "terminal_attempt",
+      "detail": "terminal_attempt: wave-lbfgs-s345-lrnone"
+    },
+    {
+      "probe": "duplicate_registry_id",
+      "outcome": "error",
+      "error_type": "ContractError",
+      "code": "run_id_unique",
+      "detail": "run_id_unique: runs[].config_id"
+    },
+    {
+      "probe": "failed_lower_loss_endpoint_excluded_from_solution",
+      "outcome": "accepted",
+      "artifact_contract_checked": true,
+      "study_complete": "unassessed",
+      "solution_reproduced": "unassessed",
+      "continuation_parent": null,
+      "solution_checkpoints": {
+        "convection": null,
+        "reaction": "reaction-adam-s345-lr1e-03",
+        "wave": null
+      }
+    }
+  ]
+}
