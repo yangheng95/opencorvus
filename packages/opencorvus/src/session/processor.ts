@@ -23,7 +23,9 @@ import {
   LLMActivityError,
   type LLMActivityEvent,
   type LLMActivityPolicy,
+  type LLMActivityRun,
 } from "@/llm/activity"
+import { assertToolExecutionDeadline, type ToolExecutionDeadline } from "@/tool/execution-deadline"
 import {
   ToolPersistenceConvergenceFailure,
   failureOccurrenceAnchor,
@@ -230,6 +232,7 @@ export namespace SessionProcessor {
     const mcpAppCalls = new Map<string, McpAppToolLifecycleController>()
     const toolPartLocks = new Map<string, Promise<void>>()
     const toolPauseOwner = (toolCallID: string) => `tool-call:${toolCallID}`
+    const sdkExecutions = new Map<string, { run: LLMActivityRun; settled: boolean }>()
 
     const withToolPartLock = async <T>(toolCallID: string, fn: () => Promise<T>): Promise<T> => {
       const previous = toolPartLocks.get(toolCallID)
@@ -561,6 +564,13 @@ export namespace SessionProcessor {
       },
       partFromToolCall(toolCallID: string) {
         return toolcalls[toolCallID]
+      },
+      holdToolExecutionDeadline(toolCallID: string, deadline: ToolExecutionDeadline): Disposable {
+        assertToolExecutionDeadline(deadline)
+        const execution = sdkExecutions.get(toolCallID)
+        if (!execution || execution.settled)
+          throw new Error("Execution deadline requires the exact active SDK Tool call")
+        return execution.run.holdPauseUntil(deadline.settlementDeadlineAt)
       },
       registerMcpAppToolLifecycle(toolName: string, lifecycle: McpAppToolLifecycleController) {
         return registerMcpAppToolLifecycleController(mcpAppToolLifecycles, toolName, lifecycle)
@@ -957,7 +967,44 @@ export namespace SessionProcessor {
                             run.signal.throwIfAborted()
                             // The SDK can execute a Tool before the consumer admits its Tool-call event.
                             markToolExecutionStarted(run.attempt)
-                            return execute(...args)
+                            const toolCallID = args[1].toolCallId
+                            const execution = { run, settled: false }
+                            sdkExecutions.set(toolCallID, execution)
+                            // Execution proves that upstream arrived before its queued
+                            // event reaches the consumer. This is transport proof, not
+                            // an invented second semantic Tool-call chunk.
+                            run.bump("first-byte")
+                            run.pause(toolPauseOwner(toolCallID))
+                            const settle = () => {
+                              if (sdkExecutions.get(toolCallID) === execution) execution.settled = true
+                              run.resume(toolPauseOwner(toolCallID))
+                            }
+                            try {
+                              const output = execute(...args)
+                              if (
+                                output &&
+                                typeof (output as AsyncIterable<unknown>)[Symbol.asyncIterator] === "function"
+                              ) {
+                                // SDK streaming Tool outputs must remain AsyncIterable,
+                                // rather than becoming a Promise of an iterator object.
+                                const iterable = output as AsyncIterable<unknown>
+                                return (async function* () {
+                                  try {
+                                    yield* iterable
+                                  } finally {
+                                    settle()
+                                  }
+                                })()
+                              }
+                              if (output && typeof (output as PromiseLike<unknown>).then === "function") {
+                                return Promise.resolve(output).finally(settle)
+                              }
+                              settle()
+                              return output
+                            } catch (error) {
+                              settle()
+                              throw error
+                            }
                           },
                         }),
                       ]
@@ -1161,7 +1208,9 @@ export namespace SessionProcessor {
                         // trip otherwise. Resume on tool-result. Per rule 23 the
                         // pause is scoped to known stream-pause semantics (tool-call
                         // boundary), not a generic disable switch.
-                        run.pause(toolPauseOwner(value.toolCallId))
+                        if (sdkExecutions.get(value.toolCallId)?.settled !== true) {
+                          run.pause(toolPauseOwner(value.toolCallId))
+                        }
                         const persistedToolInput = cloneToolInputForPersistence(value.input)
                         const part = await withToolPartLock(value.toolCallId, async () => {
                           const match = await priorToolPart(value.toolCallId)
@@ -1240,6 +1289,7 @@ export namespace SessionProcessor {
                         // matching tool-call after a recovery), so this is safe to
                         // run unconditionally before the match check.
                         run.resume(toolPauseOwner(value.toolCallId))
+                        sdkExecutions.delete(value.toolCallId)
                         const output = normalizeToolResult(value.output)
                         const metadata = output.metadata
                         const control = await completeToolPart(
@@ -1286,6 +1336,7 @@ export namespace SessionProcessor {
                         // Pair with the exact call-owned pause from tool-call (errors close the
                         // tool-call window just like results).
                         run.resume(toolPauseOwner(value.toolCallId))
+                        sdkExecutions.delete(value.toolCallId)
                         let toolErrorAccepted = false
                         await withToolPartLock(value.toolCallId, async () => {
                           const match = toolcalls[value.toolCallId] ?? (await priorToolPart(value.toolCallId))

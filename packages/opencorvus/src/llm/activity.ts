@@ -203,10 +203,9 @@ export interface LLMActivityPolicy {
   /** Mid-stream silence threshold. Started lazily on first heartbeat;
    *  before that the first-byte timer is responsible. */
   idleMs: number
-  /** Upper bound on one continuous idle-monitor pause. A tool that never
-   *  returns must not disarm liveness forever; the bound is deliberately far
-   *  above any legitimate tool runtime so it eliminates the unbounded state
-   *  without tightening normal timeouts. */
+  /** Observation bound for an ungoverned pause or protocol handoff. A trusted
+   * executor can supply its fixed finite execution/settlement deadline;
+   * a bare pending Promise cannot disarm this guard. */
   maxPauseMs: number
 
   /** Maximum gap between request dispatch and first heartbeat. Once any
@@ -264,6 +263,7 @@ export interface LLMActivityRun {
    *  Pair each owner with one matching resume(). */
   pause(owner: string): void
   resume(owner: string): void
+  holdPauseUntil(deadlineAt: number): Disposable
   /** 0-indexed attempt counter. */
   attempt: number
 }
@@ -654,6 +654,7 @@ export async function withLLMActivity<T>(
       let unregisterActivityMonitor: (() => void) | undefined
       const idleCtrl = new AbortController()
       let lastHeartbeat: { kind: HeartbeatKind; ts: number } | undefined
+      const executionHolds = new Map<symbol, { deadlineAt: number; release?: Disposable }>()
 
       const composed = AbortSignal.any([externalProxy.signal, totalCtrl.signal, firstByteCtrl.signal, idleCtrl.signal])
 
@@ -666,10 +667,17 @@ export async function withLLMActivity<T>(
           describePause: () => Array.from(pauseOwners).join(", "),
         })
         idleHolder.monitor = monitor
+        for (const _owner of pauseOwners) monitor.pause()
+        for (const hold of executionHolds.values()) hold.release = monitor.holdPauseUntil(hold.deadlineAt)
         unregisterActivityMonitor = options.publishActivityMonitor?.(monitor)
         monitor.signal.addEventListener("abort", () => {
           if (monitor.timedOut() && !idleCtrl.signal.aborted) {
-            idleCtrl.abort(makeAbortReason("idle", `LLMActivity idle > ${policy.idleMs}ms`))
+            const reason = makeAbortReason(
+              "idle",
+              monitor.signal.reason instanceof Error ? monitor.signal.reason.message : String(monitor.signal.reason),
+            )
+            Object.defineProperty(reason, "cause", { value: monitor.signal.reason })
+            idleCtrl.abort(reason)
           }
         })
       }
@@ -677,6 +685,7 @@ export async function withLLMActivity<T>(
         unregisterActivityMonitor?.()
         unregisterActivityMonitor = undefined
         idleHolder.monitor?.dispose()
+        executionHolds.clear()
         idleHolder.monitor = null
       }
 
@@ -714,6 +723,19 @@ export async function withLLMActivity<T>(
           if (!endPause(owner)) return
           idleHolder.monitor?.resume()
           sink({ type: "resumed", id, ts: Date.now(), reason: owner })
+        },
+        holdPauseUntil: (deadlineAt) => {
+          if (!Number.isSafeInteger(deadlineAt) || deadlineAt <= 0)
+            throw new Error("Execution handoff requires a finite deadline")
+          if (terminalEmitted) return { [Symbol.dispose]() {} }
+          const owner = Symbol("execution-deadline")
+          executionHolds.set(owner, { deadlineAt, release: idleHolder.monitor?.holdPauseUntil(deadlineAt) })
+          return {
+            [Symbol.dispose]() {
+              executionHolds.get(owner)?.release?.[Symbol.dispose]()
+              executionHolds.delete(owner)
+            },
+          }
         },
       }
 

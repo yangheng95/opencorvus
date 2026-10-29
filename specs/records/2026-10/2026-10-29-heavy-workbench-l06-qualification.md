@@ -252,3 +252,10 @@ D02尚有真实执行缺口：同一冻结源码未从变价raw新生成全交�
 
 
 20:42UTC补充实际活动：Task仍active；最近reader20:24:47 EOF之后原生bash tool part明确running。真实命令的自有容器l06-refined-main/CID59907a5e8513...在20:24:48启动，只挂候选project/networknone/已验依赖镜像，20:42:32 CPU799.83%/275.8MiB，正在有效CPU优化。不是模型继续思考16分钟或调度已挂；不取消/重启。此容器由候选--rm运行，终态自动清理后以原生tool exit/output封存，不重复启动。无新分数/小时；八核累计CPU不算数小时候选墙钟。六旧昂贵容器仍Paused。完整动态状态与L05独立mini关闭见长程Recall末节。
+
+
+## 22:06 UTC原候选与运行时干扰
+
+原Task发生共享父暂停guard提前中断（35分钟Tool在约20分钟结束）与180秒错误归因，副作用后unsafe-retry保护仍正确。Task自然恢复；完整根因/45源横审/有限真实executor deadline修复/最终53项及单层独立批准见[工具活动记录](2026-10-30-heavy-workbench-tool-liveness.md)。当前冻结public/rubric/1%/90+critical规则未改；运行时修复不热改旧PID，不伪称候选无故障。
+
+22:06原Task仍active，developer已自然交接tester，其已有独立冷求解正在等待真实终态。l06-refined-main自动清理，l06-final-main于21:16:58Z自然exit0。保持原Task与动态定位，不重建/重启；自然终态封存完成版后才评估侧source-only执行/实际图形与同冻结rubric独立评价，顺序fresh Codex尚未启动。无最终新分数/有效小时/完整十题通过；八核累计CPU与运行时受干扰墙钟均不替代小时级题目证据。

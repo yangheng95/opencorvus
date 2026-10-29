@@ -334,3 +334,12 @@ L06 Task在20:40:39仍active。最近60真实模型HTTP请求全部streaming、g
 
 
 本阶段最终docs:check通过351 ops/26 groups，新增L05六Python语法、五JSON、两个ZIP原件完整性及11相对链接通过，仅包装检查。功能以真实HTTP/两个库/自有进程/独立冷复跑与错误控制为依据；没有生产代码修改、没有新Provider/LLM smoke或GPU恢复。三个共享索引只暂存本任务hunk，其他视频/旧图删除、CSS和其他架构改动完整保留。本范围提交后正常fetch/merge、审查完整待推集合并push；目标未全成、心跳继续ACTIVE。
+
+
+## 22:06 UTC接续Recall：真实候选暴露共享运行时问题，已修复并独立通过
+
+原35分钟Bash在20:44:47Z被20分钟session_tool_idle暂停guard中断，LLMActivity又误标180秒；工具已开始，unsafe-retry正确拒绝同消息重放。Task自行恢复，原件完整保留；不是L06业务0或题目小时证明。按AGENTS横审Task/Mission/Session全部入口、SDK早执行/并行call/恢复/取消，另发现三MCP入口漏signal。修改前分析、真正武装固定deadline/有界cleanup的唯一实现、53项/实际SessionLoop-Bash进程三路径/MCP三入口及独立最终审查都在[工具活动Recall](2026-10-30-heavy-workbench-tool-liveness.md)和[原件](../../artifacts/2026-10-30-heavy-workbench-tool-liveness/README.md)。当前无实质实现阻断，仅认可修复范围；旧listener未热修/重启，不能把局部资格当候选成绩或十题完成。
+
+22:06:09Z原tsk_g00VZTFvzf0073YLIAGl仍running/active，base-developer已自然交接base-tester，工具等待其已有独立冷求解终态。原l06-refined-main已自动清理，l06-final-main于21:16:58Z自然exit0；不重复启动/取消，不因输出存在提前封存完成版。只按动态定位/原API接续，先保留终态与子工作再正常cleanup listener和暂存凭据，之后同冻结评估与fresh Codex。旧运行时失败/自动续跑及比较限制保留；有效小时资格仍0/10。
+
+L05完整预案独立审查已归档cases/L05/evaluator/full-scene-design-review，负账户可达/版本冲突/旧HTTP身份集合三构造问题的拟闭合选择落入L05 Recall；计划尚未实现，不冒称完整题批准。其他九题真实材料/参考/checker/全rubric与独立冻结仍需推进，心跳ACTIVE。

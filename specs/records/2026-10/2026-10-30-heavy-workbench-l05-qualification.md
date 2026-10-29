@@ -61,3 +61,12 @@ L06 Task在20:40:39仍active。最近60真实模型HTTP请求全部streaming、g
 
 
 本阶段最终docs:check通过351 ops/26 groups，新增L05六Python语法、五JSON、两个ZIP原件完整性及11相对链接通过，仅包装检查。功能以真实HTTP/两个库/自有进程/独立冷复跑与错误控制为依据；没有生产代码修改、没有新Provider/LLM smoke或GPU恢复。三个共享索引只暂存本任务hunk，其他视频/旧图删除、CSS和其他架构改动完整保留。本范围提交后正常fetch/merge、审查完整待推集合并push；目标未全成、心跳继续ACTIVE。
+
+
+## 完整现场独立审查归档与下一实施决定
+
+完整预案单层独立审查已封存[full-scene-design-review](../../artifacts/2026-10-29-heavy-workbench-long/cases/L05/evaluator/full-scene-design-review/README.md)，结论construction_decisions_proposed_not_implemented_not_approved；不是mini复测或完整冻结。原三个矛盾和条件性算术例完整保留。下一合同选择：最高revision多载荷quarantined且有效贡献0，唯一更高版可解除；settle非负整数/cancel0；批准调整进入本地和远端目标，用户注释只保留。单USD合法账户域提供已批准不可修订opening事实和真实post/receipt，全部允许负调整（包括后续注入）须满足O+Σmin(0,a)≥0，而不只检查原顺序/最终和。业务来源与冲正parent资金来源分离；负调整可以消耗同租户opening/其他正post，保留原开账事实/receipt不等于要求parent余量永远原值。
+
+epoch只在本地事务阻止旧generation新登记，不能撤回已飞行HTTP。合作旧程序所有wire动作必须先以唯一载荷持久登记，暂停线性化取得有限完整key集合；通过查询/同键POST让每项达到确定原receipt，再按固定accepted前缀与旧真实effects前向补偿。包括晚到旧请求及ACK未知；缺键/身份不确定明确保留中止，不猜新key。原parent须同租户正post、累计旧reversal合法且可拓扑执行，故障最终解除。新旧接受与修复前缀分开，已接受重试可查询原结果，不能由stale推断从未接受。
+
+后续先做真实旧程序生成的完整小现场、source-only可达参考及独立逐业务/调整来源checker；两种正确即时/延迟posting图均须通过，冲突先到先得/失ACK换key/回备份漏accepted作为三个真实错误控制。不能匹配参考ID/路径/中间动作数。再补完整职业交付与原子rubric/审查冻结，当前尚未实施。其间L06真实试跑暴露共享运行时问题，已按全入口审计并修复，[独立资格](2026-10-30-heavy-workbench-tool-liveness.md)不改变本mini或完整题完成度。

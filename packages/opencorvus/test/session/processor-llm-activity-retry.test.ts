@@ -522,7 +522,7 @@ describe("SessionProcessor semantic LLM activity retry", () => {
             elapsedBeforeAbort: firstAttemptAbortedAt - firstAttemptStartedAt,
             firstAttemptAborted: firstAttemptSignal?.aborted,
           }).toEqual({
-            reason: expect.stringContaining("LLMActivity idle"),
+            reason: expect.stringContaining("stream idle > 250ms"),
             elapsedBeforeAbort: expect.any(Number),
             firstAttemptAborted: true,
           })

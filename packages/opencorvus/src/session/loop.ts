@@ -101,6 +101,7 @@ import {
   redactToolDiagnosticValue,
 } from "@/tool/result-attachment-materialization"
 import { ToolLiveMetadataSink } from "@/tool/live-metadata-sink"
+import { assertToolExecutionDeadline, type ToolExecutionDeadline } from "@/tool/execution-deadline"
 import { runSessionPrompt } from "./prompt/run"
 import { muteAISdkWarnings } from "@/runtime/shims"
 import { Config } from "@/config/config"
@@ -3767,6 +3768,30 @@ export namespace SessionLoop {
             model: input.model,
           }),
           liveMetadataSink: metadataSink,
+          toolExecutionDeadlineObserver: async (deadline: ToolExecutionDeadline): Promise<AsyncDisposable> => {
+            assertToolExecutionDeadline(deadline)
+            const match = input.processor.partFromToolCall(options.toolCallId)
+            if (!match || match.state.status !== "running")
+              throw new Error("Execution deadline requires a running Tool Part")
+            await Session.appendToolProgress({
+              sessionID: input.session.id,
+              messageID: match.messageID,
+              partID: match.id,
+              metadata: {
+                ...match.state.metadata,
+                execution_deadline: {
+                  deadline_at: deadline.deadlineAt,
+                  settlement_deadline_at: deadline.settlementDeadlineAt,
+                },
+              },
+            })
+            const hold = input.processor.holdToolExecutionDeadline(options.toolCallId, deadline)
+            return {
+              async [Symbol.asyncDispose]() {
+                hold[Symbol.dispose]()
+              },
+            }
+          },
           ...(invocation
             ? {
                 projectID: invocation.projectID,

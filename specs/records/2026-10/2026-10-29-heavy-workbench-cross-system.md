@@ -42,3 +42,8 @@ Codex独立agent `/root/codex_h05_baseline`（fork none、禁止再委托）已�
 长程先研究真实完整论文复现任务，使用作者共建、以实际执行/结果为主的成熟rubric，而非20个宽泛写作锚点。已读取PaperBench官方说明/实现、Inspect实现；固定上游`openai/frontier-evals`提交`b78dab1da774a6456b1ed9c48c9ff194ee3ff36d`，原始树及PINN资料在`D:/opencorvus-benchmark-runs/paperbench-discovery-20261029`。PINN是《Challenges in Training PINNs: A Loss Landscape Perspective》，不需HF或外部模型私有凭据，数据可由公开PDE生成，当前GPU为RTX5090 32GiB，Docker29.7.2及Ubuntu24.04可用，Torch尚未安装。硬件/环境可行不等于已验证数小时；下一步先完成来源/许可、实验矩阵及GPU运行资格，再冻结长程任务和rubric，后运行真实pilot。不导入PaperBench默认token/消息/总墙钟上限。
 
 PINN完整官方rubric本地递归统计1963叶（1815执行、126代码、22分析）；这只是结构事实，不以叶项数当难度证明。原研究包含3种PDE、5随机种子、4网络宽度、多个学习率及切换配置、41000迭代与谱分析，完整矩阵可能超出“几个小时”，必须先做实际单步/子实验测时来定义明确且科学有意义的小时级范围；若裁剪则使用新派生版本，不冒充官方全PaperBench分数，也不在看到模型结果后改范围。
+
+
+## L06冻结新对照接续：保留原运行时干扰
+
+新L06/0.2.0已按唯一18public预注册顺序OpenCorvus→fresh Codex，定位D:/opencorvus-benchmark-runs/L06-current-pair-20261029.json。≥90且critical全过为作者预注册good，两good另升新版本；实际模型/资源不同的comparable=false限制保留。22:06UTC原OpenCorvus仍active，已自然进入base-tester验收，fresh Codex未启动。原候选在35分钟Tool自身期限前被20分钟共享暂停guard干扰且误报180秒，随后自然续跑；这是真实运行时失败，原件不能删，也不能判业务0或据此声称任务本身需要数小时。共享机制修复/真实资格及独立结论见[专门记录](2026-10-30-heavy-workbench-tool-liveness.md)，旧PID未热修。待自然终态封存、同合同独立业务评估后再fresh Codex，当前无新版成对成绩。

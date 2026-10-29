@@ -324,13 +324,14 @@ export namespace MCP {
     const tool = dynamicTool({
       description: mcpTool.description ?? "",
       inputSchema: jsonSchema(schema),
-      execute: async (args: unknown) => {
+      execute: async (args: unknown, options) => {
         assertMcpCapability(`MCP ${source.serverID}/${mcpTool.name}`, source.type, source.processAuthority)
         return callToolWithTaskRecovery({
           client,
           tool: mcpTool,
           args: (args || {}) as Record<string, unknown>,
           timeout,
+          signal: options.abortSignal,
         })
       },
     })
@@ -1066,8 +1067,8 @@ export namespace MCP {
     const tool = dynamicTool({
       description: mcpTool.description ?? "",
       inputSchema: jsonSchema(schema),
-      execute: async (args: unknown) =>
-        callScopedToolDefinition(input, mcpTool, (args || {}) as Record<string, unknown>),
+      execute: async (args: unknown, options) =>
+        callScopedToolDefinition(input, mcpTool, (args || {}) as Record<string, unknown>, options.abortSignal),
     })
     toolAuthorityBindings.set(tool, {
       serverID: input.key,
@@ -1151,17 +1152,18 @@ export namespace MCP {
     input: Omit<ScopedToolInput, "toolName">,
     tool: MCPToolDef,
     args: Record<string, unknown>,
+    signal?: AbortSignal,
   ): Promise<CallToolResult> {
     assertMcpCapability(`MCP ${input.key}/${tool.name}`, input.mcp.type, input.processAuthority)
     return withScopedClient(
       input,
-      async (client, timeout) => callToolWithTaskRecovery({ client, tool, args, timeout }),
+      async (client, timeout) => callToolWithTaskRecovery({ client, tool, args, timeout, signal }),
       { skipToolListVerification: true },
     )
   }
 
   export async function callScopedTool(
-    input: ScopedToolInput & { args: Record<string, unknown> },
+    input: ScopedToolInput & { args: Record<string, unknown>; signal?: AbortSignal },
   ): Promise<CallToolResult> {
     return withScopedClient(
       input,
@@ -1169,7 +1171,7 @@ export namespace MCP {
         const tool = connection.capabilitySnapshot.tool_definitions.find((item) => item.name === input.toolName)
         if (!tool) throw new Error(`Scoped MCP server ${input.key} does not expose tool ${input.toolName}`)
         assertMcpCapability(`MCP ${input.key}/${tool.name}`, input.mcp.type, input.processAuthority)
-        return callToolWithTaskRecovery({ client, tool, args: input.args, timeout })
+        return callToolWithTaskRecovery({ client, tool, args: input.args, timeout, signal: input.signal })
       },
       { skipToolListVerification: true },
     )

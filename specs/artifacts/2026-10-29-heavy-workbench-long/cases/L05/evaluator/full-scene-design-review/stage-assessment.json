@@ -1,0 +1,47 @@
+{
+  "reviewer": "/root/benchmark_review",
+  "scope": "L05 full scene implementation-before-design audit only",
+  "status": "construction_decisions_proposed_not_implemented_not_approved",
+  "initial_blockers": [
+    {
+      "id": "P1-01",
+      "issue": "highest-revision conflict, cancellation and approved-adjustment target semantics",
+      "main_proposal": "quarantine target zero; higher unique revision resolves; settle nonnegative, cancel zero; adjustments included, notes preserved only",
+      "assessment": "mathematically coherent if incorporated into the unique public contract; no implementation evidence"
+    },
+    {
+      "id": "P1-02",
+      "issue": "current post/reversal primitive cannot reach negative tenant totals",
+      "main_proposal": "immutable approved positive opening and nonnegative account target domain",
+      "assessment": "conditionally reachable; all permitted adjustment prefixes must satisfy domain; negative source attribution must be distinct from funding-parent source"
+    },
+    {
+      "id": "P1-03",
+      "issue": "local epoch does not cancel already-in-flight legacy HTTP effects",
+      "main_proposal": "epoch-protected complete stable intent catalog, then force each original key to a definite matching receipt before compensation",
+      "assessment": "coherent if catalog completeness, immutable payloads, total reversal capacity, dependency order and finite fault cessation are established"
+    }
+  ],
+  "necessary_followups": [
+    "write one public normative business/ingress/epoch/effect export contract before generating the full scene",
+    "prove opening plus all permitted negative adjustments remains nonnegative for every allowed prefix",
+    "allow authorized negative adjustments to reverse funds from a different positive source in the same tenant",
+    "capture all legacy wire keys and payloads in the epoch-protected intent catalog before sending",
+    "decide old accepted-request retries across epoch changes without equating stale response to never accepted",
+    "check logical provenance and actual receipts without reference posting graph or concurrency-order matching",
+    "produce actual raw-source full small scene, reference and error controls"
+  ],
+  "evidence": {
+    "source_inventory": "read-source-inventory.json",
+    "offline_arithmetic_script": "math_review.py",
+    "offline_arithmetic_results": "math-examples.json",
+    "conditional_fold_permutations": 6,
+    "new_HTTP_or_candidate_run": false,
+    "solver_GPU_Provider_Docker_UI_or_user_process_action": false
+  },
+  "full_L05_frozen": false,
+  "hours_validated": false,
+  "candidate_score": null,
+  "mature_benchmark_or_ten_cases_complete": false,
+  "next_priority": "seal this plan stage, then read-only shared-runtime idle and cancellation audit requested by main"
+}

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-30-heavy-workbench-tool-liveness.md](2026-10-30-heavy-workbench-tool-liveness.md)：L06真实运行的共享Tool暂停/取消问题、修复方案与有限执行治理资格。
+
 - [2026-10-30-goal-terminal-owner-experience.md](2026-10-30-goal-terminal-owner-experience.md)：持续目标的终态所属对象和实际恢复反馈调查。
 
 - [2026-10-30-attachment-download-recovery.md](2026-10-30-attachment-download-recovery.md)：原文件下载失败及实际局部恢复验收。

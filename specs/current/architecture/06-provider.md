@@ -617,6 +617,8 @@ Session processor 通过统一流式调用的 `prepareStep` 在每个 Provider �
 
 SDK 7 在 Provider `finish` 转换为 `model-call-end` 后执行本次已收集的 Tool；流式测试参与者必须先交付该事件，再观察或等待实际副作用。HTTP 成功响应正文的物理读取错误由 SDK 包装在 `APICallError.cause` 中，统一 LLMActivity 分类器在保留明确 HTTP/Host/取消优先级后沿该 typed cause 分类，并终止循环 cause。只有原有可重试类别能进入同一 attempt cleanup；未知/语义错误仍按明确终态结算，已开始工具执行的 attempt 继续由原保护拒绝重放。
 
+实际 SDK Tool execute 入口在 consumer 事件之前建立精确 call 的暂停所有权，并保持同步值、PromiseLike 和直接 AsyncIterable 的原返回契约。只有真实执行器已武装的固定 deadline/有界物理 cleanup 对象，经 SessionLoop 内部 typed observer 与同一 Tool progress 写者提交后，才可有限延长该 call 的暂停观察；无治理 Promise/普通 metadata/保留期不能关闭 guard。实际执行结束与晚到结果交接重新适用有限观察，外部取消仍以原 signal/cause 传播。普通 Catalog、Scoped 定义和直接 Scoped MCP 调用将 caller signal 传入同一既有 MCP 请求/Task恢复函数；取消查询不被宣称为远端 Task 已停止。进程 CLI 退出也不被宣称为 Docker daemon 中的外部工作已停止。
+
 拒绝重放的 `ProcessorUnsafeRetryError` 保留真实 `Error.cause` 链中的名称、消息与自身字符串 code，并在循环引用处留下明确标记。落入现有 Message 错误文案前使用共享 Provider 脱敏规则，避免 SDK 外层通用文案遮掉连接重置等物理原因。该诊断文本不改变重试资格、attempt 边界或已执行 Tool 的持久事实；没有新增错误协议或独立故障状态。
 
 Provider 流式正文 TextPart 的 `time.start` 是该 Part 实际接受 `text-start` 时记录的时间；前缀持久化、正常 `text-end` 与中止闭合都保留这个值，只在实际完成时追加 `time.end`。正常结束时点仍位于前缀队列等待和 `experimental.text.complete` 插件完成之后。重试成功 Part 使用自身尝试的开始事实，不继承失败尝试的时间。持久 Part 和 `PartUpdated` 事件使用同一组数值，没有估算、界面计时来源、历史回填或第二组时钟。用户/控制正文的可选时间定义保持原契约。

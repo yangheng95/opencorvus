@@ -1,0 +1,43 @@
+{
+  "reviewer": "/root/benchmark_review",
+  "stage": "shared-runtime read-only horizontal idle/cancellation audit",
+  "status": "shared_source_audit_complete_fix_and_verification_pending",
+  "observed_occurrence": {
+    "task_id": "tsk_g00VZTFvzf0073YLIAGl",
+    "session_id": "ses_h1cLvoTSVyZcm6Py69aU",
+    "input_message_id": "msg_g0VZTGgM100am0uTc1V7",
+    "emitted_at": 1793306687927,
+    "error": "ProcessorUnsafeRetryError caused by generic LLMActivity idle AbortError",
+    "underlying_twenty_minute_pause": "strongly consistent with shared source and main tool-start observation; original public status does not retain raw monitor pause cause"
+  },
+  "findings": [
+    {"id": "IDLE-01", "priority": "P1", "status": "current_source_confirmed", "issue": "parent bounded Tool pause can terminate a legitimate silent independently governed Tool; pause also begins only at consumer event while SDK can execute earlier"},
+    {"id": "IDLE-02", "priority": "P1", "status": "current_source_confirmed", "issue": "all monitor timeout causes are rewritten to policy.idleMs, losing pause threshold and owner provenance"},
+    {"id": "CANCEL-01", "priority": "P1", "status": "current_source_confirmed_runtime_reproduction_not_run", "issue": "ordinary and Scoped MCP entrypoints omit existing underlying cancellation signal; MCP App path supplies it"}
+  ],
+  "proposal": {
+    "unbounded_execute_promise_delegation": "not_approved",
+    "finite_authoritative_execution_deadline_projection": "direction_supported_with_conditions_not_implementation_approved",
+    "conditions": [
+      "one actual executor deadline variable drives timeout/abort and durable projection",
+      "trusted typed invocation-bound governance fact, not arbitrary metadata",
+      "fixed absolute deadline, no working/poll/timer renewal",
+      "MCP Task TTL is retention/lifetime metadata, not execution deadline proof",
+      "package RPC currently has resettable inactivity rather than a fixed execution deadline",
+      "parallel and early-execute ownership, first-byte installation, late-result handoff and exact generation release remain finite",
+      "own cleanup/physical receipts and unsafe-retry fence remain intact"
+    ]
+  },
+  "coverage": ["Task root", "Task worker/Build", "Mission wake and close", "public Session prompt/command", "scheduler automation/event", "direct Session shell", "permission continuation", "compaction/text helpers", "normal/error/abort/retry/recovery", "serial/parallel/multiple-project identity"],
+  "evidence": ["source-initial/", "source-additional/", "status-original.json", "status-extract.json", "read-command-receipts.json", "additional-read-command-receipts.json", "sdk-primary-source-excerpts.txt", "additional-primary-SDK-excerpts.txt"],
+  "official_source": "https://modelcontextprotocol.io/specification/2025-11-25/basic/utilities/tasks#ttl-and-resource-management",
+  "limitations": {
+    "production_changes": false,
+    "tests_or_new_runtime_executed": false,
+    "candidate_or_container_or_user_service_operated": false,
+    "Provider_GPU_solver_Docker_UI_or_redelegation": false,
+    "current_disk_source_is_complete_running_backend_identity": "not independently established in this scope",
+    "mathematical_candidate_failure_or_score": null,
+    "fix_accepted": false
+  }
+}

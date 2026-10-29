@@ -1,0 +1,82 @@
+{
+  "reviewer": "/root/benchmark_review",
+  "status": "implementation_review_and_final_qualification_accepted_with_stated_scope",
+  "substantive_blockers": [],
+  "final_source_identity": {
+    "count": 16,
+    "all_current_match_executed_snapshot": true,
+    "evidence": "final-source-identity.json"
+  },
+  "main_final_regression": {
+    "pass": 53,
+    "fail": 0,
+    "assertions": 146,
+    "reported_seconds": 94.71,
+    "files": 7,
+    "command_exitcode": 0,
+    "execution_start": "2026-10-29T21:57:23.571104+00:00",
+    "execution_end": "2026-10-29T21:58:58.742238+00:00",
+    "main_before_after_source_receipt": true,
+    "reviewer_reexecuted": false
+  },
+  "main_real_tool_paths": {
+    "pass": 3,
+    "fail": 0,
+    "assertions": 13,
+    "reported_seconds": 13.65,
+    "scope": "actual SessionLoop/SDK/Bash/SQLite/file and two physical timeout/caller-abort paths; controlled finite Provider participant",
+    "reviewer_reexecuted": false
+  },
+  "typecheck": {
+    "command": [
+      "C:/Users/hengu/.bun/bin/bun.exe",
+      "run",
+      "typecheck"
+    ],
+    "exitcode": 0,
+    "raw_stdout_stderr_copied": true,
+    "reviewer_reexecuted": false
+  },
+  "docs_check": {
+    "source": "main provided original tool receipt identifier, not an independently read raw log",
+    "chunk_id": "957534",
+    "exitcode": 0,
+    "ops": 351,
+    "groups": 26,
+    "reviewer_reexecuted": false
+  },
+  "documents_read": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\current\\architecture\\06-provider.md",
+      "snapshot": "D:\\opencorvus-benchmark-runs\\l06-idle-implementation-review-20261030\\final-documents\\06-provider.md"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\current\\architecture\\task-control-plane.md",
+      "snapshot": "D:\\opencorvus-benchmark-runs\\l06-idle-implementation-review-20261030\\final-documents\\task-control-plane.md"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\records\\2026-10\\2026-10-30-heavy-workbench-tool-liveness.md",
+      "snapshot": "D:\\opencorvus-benchmark-runs\\l06-idle-implementation-review-20261030\\final-documents\\2026-10-30-heavy-workbench-tool-liveness.md"
+    }
+  ],
+  "formatter_scope": "main retained original/current/formatted-base three-way artifacts; not treated as functional correctness evidence",
+  "prior_history_preserved": [
+    "source-initial/",
+    "source-reviewed/",
+    "ROUND1.md",
+    "stage-assessment.json",
+    "INVALID-PROBE-INITIAL.md",
+    "sdk-probe-command.json"
+  ],
+  "limits": [
+    "acceptance is for reviewed finite trusted Tool lifecycle, SDK shape and MCP signal propagation implementation",
+    "no arbitrary third-party promise receives unbounded delegation or a fake deadline from TTL/working/metadata",
+    "no real Provider run by reviewer and no operation or hot fix of old L06 candidate or containers",
+    "old runtime interference history, mathematical candidate outcome and fresh pilot remain separate",
+    "not ten-case completion, professional benchmark maturity or hour-level validation"
+  ],
+  "new_tests_or_runtime_invocations": false,
+  "repository_modified_or_committed": false,
+  "old_L06_hot_fixed": false,
+  "candidate_score": null
+}

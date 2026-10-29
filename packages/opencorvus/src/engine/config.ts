@@ -21,9 +21,9 @@ import { Config } from "@/config/config"
 /**
  * ActivityConfig — chunk-driven inactivity thresholds.
  *
- * These drive `withStreamActivity` (util/stream-activity.ts) at every
- * streaming boundary. They are TCP-level "no-byte-moved" deadlines,
- * NOT agent-level turn budgets. Rule of thumb when tuning:
+ * These drive semantic stream and durable execution observation, rather than
+ * agent-level turn budgets. Trusted finite Tool deadlines govern their actual
+ * execution; arbitrary metadata and timers never manufacture progress.
  *
  * `execution_progress_idle_ms` is the max no-activity window for one
  * Provider-backed execution — measured from the last observed chunk-driven
@@ -51,7 +51,7 @@ const DEFAULTS: EngineConfigType = {
     // hang to alibaba-coding-plan-cn, NAT-silenced connection).
     session_llm_idle_ms: 180_000,
     // Tool execution pauses Provider chunk-idle accounting. The pause remains
-    // bounded by durable running Tool Part metadata rather than wall time.
+    // bounded by durable progress, or a trusted executor's fixed deadline.
     session_tool_idle_ms: 20 * 60_000,
     // Durable execution recovery compares against chunk-driven progress;
     // this is a real deadline, not a self-fed timer.

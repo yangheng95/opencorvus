@@ -1,0 +1,27 @@
+{
+  "purpose": "Capture exact executed and reviewed immutable artifacts; not functional correctness or benchmark success",
+  "created_at": "2026-10-29T22:07:06.783904+00:00",
+  "archives": [
+    {
+      "section": "primary",
+      "source_files": 77,
+      "native_metadata_files": 5,
+      "zip_bytes": 684165,
+      "byte_identity": true
+    },
+    {
+      "section": "source-audit",
+      "source_files": 65,
+      "native_metadata_files": 0,
+      "zip_bytes": 596785,
+      "byte_identity": true
+    },
+    {
+      "section": "implementation-review",
+      "source_files": 89,
+      "native_metadata_files": 0,
+      "zip_bytes": 671892,
+      "byte_identity": true
+    }
+  ]
+}

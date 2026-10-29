@@ -1,0 +1,18 @@
+# 共享Tool有限治理实现：第一轮独立审查记录
+
+当前审到的修订未发现尚未反馈的新P1；最终实现认可仍待主方固定源码/最后聚焦收据，不能把本记录作为全部修复完成。原源码审查位于l06-idle-shared-review-20261029，本目录不覆盖它。
+
+已读根spec Recall与当前七模块差异、ProcessSupervisor实际cleanup契约。最初观察到的三处实现风险已立即反馈并在当前源码中看到修正：SDK execute原先async-await破坏直接AsyncIterable返回，现保留sync/Promise/AsyncIterable；Bash原来发布的settlement deadline未驱动所有物理cleanup，现terminate/dispose共享一个固定绝对截止；deadline构造原在spawn后保护外，现前置验证并将实际构造放进supervisor finally，构造失败仍走canonical有界disposal。disposed deadline的WeakSet品牌已撤销；迭代器判断已对齐SDK函数判定。初快照与实际第一轮读到的不同历史时间点不得混用。
+
+信任链符合方向：只有真实创建并武装timer的对象通过WeakSet断言；普通metadata不参与hold授权。SessionLoop通过typed observer向tool_part_progress追加期限，再向本processor的active SDK call授予有限hold。它没有把MCP TTL、working轮询、package可重置inactivity或工具名当真实固定deadline；没有Task总预算。SDK真实execute先first-byte证明与call-owned pause，finally/迭代结束结算，晚到consumer不再为已settled调用制造ghost pause。共享monitor只在pause内应用hold；普通Provider idle保持有限。主方保留副作用开始后的unsafe-retry fence。
+
+独立实际新增仅两种廉价探针，不重复43/13回归或mini40：
+
+1. 精确捕获production execute包装AST，以有限内存SDK测试参与者交给真实安装AI SDK。原工具与包装工具均真实yield2、两个preliminary和相同final值，pause/resume各一。见sdk-iterable-repaired-observation.json、sdk-probe-repaired-command.json。它是确切包装体和SDK合同验证，**未完整调用SessionProcessor/真实Provider**。
+2. captured实际stream-activity模块四个合同全过：有hold但未pause时仍普通idle超时；两owner独立释放而另一有效；不释放的有限hold到期给pause及owner；外部取消保留同一reason对象。见finite-monitor-observation.json与finite-probe-command.json。它们是局部primitive，不是业务候选或长跑。
+
+审查脚本首次SDK探针因Bun.Transpiler移除未使用顶层箭头表达式，实际callback为空。该输出中的regression_observed=true是**无效审查证据**，不得作为产品失败。原脚本、空transpile、JSON和命令均保留；INVALID-PROBE-INITIAL.md说明原因。修后脚本用可观察赋值和callback类型断言，另存文件重新运行，不覆盖历史。
+
+只读核验主方真实新路径：real-loop-b日志有SessionLoop/Bash completed/exit0、真实落盘artifact及ToolPartProgress期限断言，1项通过；三个stdio MCP实际执行后取消，分别观察原requestId的notifications/cancelled，3项通过；unmanaged/parallel/AsyncIterable实际SDK三个增量测试通过。首轮resident Session cleanup超时及MCP预期/fixture修正留原件，不能当已证产品行为或隐去。日志路径均为D:/opencorvus-benchmark-runs/l06-tool-liveness-qualification-20261030。
+
+剩余核对：最终固定模块与上述快照差异、最后cleanup相关/类型回归收据及范围文档；当前报告没有宣称复现原运行后端、热修旧候选、数学候选失败、小时资格或benchmark完成。未改主仓、未委托、未操作原候选/容器/用户服务、未运行Provider/LLM/GPU/solver/Docker/UI。

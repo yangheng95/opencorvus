@@ -1,0 +1,120 @@
+{
+  "status": "arithmetic_examples_completed",
+  "scope": "finite offline design counterexamples; not HTTP, a reference implementation, a grader, or a candidate result",
+  "ambiguous_conflict": {
+    "input": {
+      "accepted": [
+        {
+          "revision": 1,
+          "amount": 100
+        },
+        {
+          "revision": 2,
+          "amount": 80
+        },
+        {
+          "revision": 2,
+          "amount": 90
+        }
+      ],
+      "already_external": 100
+    },
+    "possible_policies": [
+      {
+        "policy": "quarantine_zero",
+        "target": 0,
+        "forward_delta": -100
+      },
+      {
+        "policy": "quarantine_freeze_previously_valid",
+        "target": 100,
+        "forward_delta": 0
+      }
+    ]
+  },
+  "conditional_fold_example": {
+    "policy": "zero_quarantine_if_main_explicitly_chooses_it",
+    "permutations_checked": 6,
+    "conflict_result": {
+      "revision": 2,
+      "status": "quarantined",
+      "target": 0
+    },
+    "higher_unique_result": {
+      "revision": 3,
+      "status": "settle",
+      "target": 60
+    }
+  },
+  "negative_target": {
+    "current_primitive_allows_minimum_tenant_net": 0,
+    "example_approved_target": -5,
+    "reachability": "impossible_under_current_protocol_without_extra_baseline_or_different_target_semantics"
+  },
+  "two_correct_posting_graphs": [
+    {
+      "name": "eager_revision_updates",
+      "entries": [
+        {
+          "id": "p1",
+          "amount": 100,
+          "reverses": null
+        },
+        {
+          "id": "p2",
+          "amount": 20,
+          "reverses": null
+        },
+        {
+          "id": "r2",
+          "amount": -20,
+          "reverses": "p2"
+        }
+      ]
+    },
+    {
+      "name": "deferred_final_reconciliation",
+      "entries": [
+        {
+          "id": "q1",
+          "amount": 100,
+          "reverses": null
+        }
+      ]
+    }
+  ],
+  "late_legacy_after_local_epoch": {
+    "events": [
+      "local_pause_commits_epoch2",
+      "repair_GET_old_key_returns_unknown",
+      "repair_posts_correct100_under_new_key",
+      "already_in_flight_legacy_HTTP_commits_old100"
+    ],
+    "final_remote": 200,
+    "desired": 100,
+    "meaning": "need a public old-dispatch quiescence barrier or explicit no-legacy-inflight initial condition"
+  },
+  "equal_total_wrong_business_attribution": {
+    "correct": {
+      "A/x": 100,
+      "A/y": 0
+    },
+    "incorrect": {
+      "A/x": 0,
+      "A/y": 100
+    },
+    "both_tenant_total": 100
+  },
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l05-full-scene-plan-review-20261030\\math_review.py"
+  ],
+  "started_utc": "2026-10-29T20:53:59.188718+00:00",
+  "ended_utc": "2026-10-29T20:53:59.282496+00:00",
+  "elapsed_seconds": 0.09377209981903434,
+  "full_L05_frozen": false,
+  "candidate_score": null
+}

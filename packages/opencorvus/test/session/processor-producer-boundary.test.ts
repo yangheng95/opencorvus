@@ -30,6 +30,7 @@ import { AgentTrace } from "@/trace"
 import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
 import { completedReadResult } from "../fixture/completed-read-result"
 import { HostProcessingFaultError } from "@/llm/host-fault"
+import { createToolExecutionDeadline } from "@/tool/execution-deadline"
 
 // These producer-boundary spies intentionally expose only stream. The unknown
 // intermediate marks that partial fixture boundary, not a complete SDK result.
@@ -139,6 +140,242 @@ test("real idle retry scopes pending JSON observations to each actual attempt be
     }
   }, { bindTask: true })
 }, 30_000)
+
+test("a silent managed Tool finishes beyond the parent pause observation window", async () => {
+  await processorFixture(async ({ directory, process, processor, controller }) => {
+    const file = path.join(directory, "managed-result.txt")
+    using provider = spyOn(Provider, "getLanguage").mockResolvedValue(
+      new MockLanguageModelV3({
+        doStream: async () => ({
+          stream: simulateReadableStream({
+            chunks: [
+              { type: "stream-start", warnings: [] },
+              { type: "tool-call", toolCallId: "managed-call", toolName: "managed", input: "{}" },
+              {
+                type: "finish",
+                finishReason: { unified: "tool-calls", raw: "tool_calls" },
+                usage: {
+                  inputTokens: { total: 1, noCache: 1, cacheRead: 0, cacheWrite: 0 },
+                  outputTokens: { total: 1, text: 1, reasoning: 0 },
+                },
+              },
+            ],
+          }),
+        }),
+      }),
+    )
+    using engine = spyOn(EngineConfig, "get").mockResolvedValue({
+      ...EngineConfig.defaults,
+      activity: { ...EngineConfig.defaults.activity, session_llm_idle_ms: 1_000, session_tool_idle_ms: 40 },
+    })
+    using backoff = spyOn(DefaultLLMActivityPolicy, "backoffMs").mockReturnValue(0)
+    try {
+      await process({
+        managed: tool({
+          inputSchema: z.object({}),
+          execute: async (_args, options) => {
+            using deadline = createToolExecutionDeadline({
+              timeoutMs: 1_000,
+              settlementMs: 100,
+              signal: options.abortSignal!,
+            })
+            using hold = processor.holdToolExecutionDeadline(options.toolCallId, deadline)
+            await new Promise<void>((resolve, reject) => {
+              const finish = () => {
+                deadline.signal.removeEventListener("abort", aborted)
+                resolve()
+              }
+              const timer = setTimeout(finish, 180)
+              const aborted = () => {
+                clearTimeout(timer)
+                reject(deadline.signal.reason)
+              }
+              if (deadline.signal.aborted) aborted()
+              else deadline.signal.addEventListener("abort", aborted, { once: true })
+            })
+            await fs.writeFile(file, "managed execution completed\n")
+            return { title: "Managed", output: "managed execution completed", metadata: {} }
+          },
+        }),
+      })
+      const parts = await MessageStore.parts(processor.message.id)
+      expect(parts.filter((part) => part.type === "tool").map((part) => part.state)).toMatchObject([
+        { status: "completed", output: "managed execution completed" },
+      ])
+      expect(await fs.readFile(file, "utf8")).toBe("managed execution completed\n")
+    } finally {
+      controller.abort(new DOMException("Release the owned managed Tool test", "AbortError"))
+    }
+  })
+}, 30_000)
+
+test("an unmanaged SDK Tool retains the finite paused-boundary error", async () => {
+  await processorFixture(async ({ process, processor, controller }) => {
+    using provider = spyOn(Provider, "getLanguage").mockResolvedValue(toolCallModel(["unmanaged"]))
+    using engine = spyOn(EngineConfig, "get").mockResolvedValue({
+      ...EngineConfig.defaults,
+      activity: { ...EngineConfig.defaults.activity, session_llm_idle_ms: 1000, session_tool_idle_ms: 40 },
+    })
+    using backoff = spyOn(DefaultLLMActivityPolicy, "backoffMs").mockReturnValue(0)
+    try {
+      await process({
+        unmanaged: tool({
+          inputSchema: z.object({}),
+          execute: async (_args, options) => {
+            await waitOwned(180, options.abortSignal!)
+            return { title: "Unmanaged", output: "Completed", metadata: {} }
+          },
+        }),
+      })
+      expect(
+        (await MessageStore.parts(processor.message.id))
+          .filter((part) => part.type === "tool")
+          .map((part) => part.state),
+      ).toMatchObject([
+        {
+          status: "error",
+          failure: { classification: "llm-activity", message: expect.stringContaining("stream paused > 40ms") },
+        },
+      ])
+    } finally {
+      controller.abort(new DOMException("Close the owned unmanaged Tool case", "AbortError"))
+    }
+  })
+}, 30_000)
+
+test("parallel SDK calls retain their own finite execution owners", async () => {
+  await processorFixture(async ({ directory, process, processor, controller }) => {
+    using provider = spyOn(Provider, "getLanguage").mockResolvedValue(toolCallModel(["first", "second"]))
+    using engine = spyOn(EngineConfig, "get").mockResolvedValue({
+      ...EngineConfig.defaults,
+      activity: { ...EngineConfig.defaults.activity, session_llm_idle_ms: 1000, session_tool_idle_ms: 40 },
+    })
+    const tools = Object.fromEntries(
+      ["first", "second"].map((name, index) => [
+        name,
+        tool({
+          inputSchema: z.object({}),
+          execute: async (_args, options) => {
+            using deadline = createToolExecutionDeadline({
+              timeoutMs: 1000,
+              settlementMs: 100,
+              signal: options.abortSignal!,
+            })
+            using hold = processor.holdToolExecutionDeadline(options.toolCallId, deadline)
+            await waitOwned(100 + index * 100, deadline.signal)
+            await fs.writeFile(path.join(directory, `${name}.txt`), name)
+            return { title: name, output: name, metadata: {} }
+          },
+        }),
+      ]),
+    )
+    try {
+      await process(tools)
+      const parts = (await MessageStore.parts(processor.message.id)).filter((part) => part.type === "tool")
+      expect(
+        parts
+          .map((part) => part.state)
+          .sort((a, b) =>
+            (a.status === "completed" ? a.output : "").localeCompare(b.status === "completed" ? b.output : ""),
+          ),
+      ).toMatchObject([
+        { status: "completed", output: "first" },
+        { status: "completed", output: "second" },
+      ])
+      expect(
+        await Promise.all(["first", "second"].map((name) => fs.readFile(path.join(directory, `${name}.txt`), "utf8"))),
+      ).toEqual(["first", "second"])
+    } finally {
+      controller.abort(new DOMException("Close the owned parallel Tool case", "AbortError"))
+    }
+  })
+}, 30_000)
+
+test("the SDK wrapper preserves a Tool's direct AsyncIterable output", async () => {
+  await processorFixture(async ({ process, processor }) => {
+    const observed: string[] = []
+    using provider = spyOn(LLM, "stream").mockImplementation(async (input) => {
+      const value = input.tools.progress!.execute!(
+        {},
+        { toolCallId: "progress-call", messages: [], abortSignal: input.abort },
+      )
+      for await (const output of value as AsyncIterable<{ output: string }>) observed.push(output.output)
+      return {
+        stream: (async function* () {
+          yield { type: "start" }
+          yield { type: "tool-call", toolCallId: "progress-call", toolName: "progress", input: {} }
+          yield {
+            type: "tool-result",
+            toolCallId: "progress-call",
+            toolName: "progress",
+            input: {},
+            output: { title: "Final", output: observed.at(-1), metadata: {} },
+          }
+          yield {
+            type: "finish",
+            finishReason: "stop",
+            totalUsage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 },
+          }
+        })(),
+      } as unknown as Awaited<ReturnType<typeof LLM.stream>>
+    })
+    await process({
+      progress: tool({
+        inputSchema: z.object({}),
+        execute: async function* () {
+          yield { title: "Partial", output: "first observed output", metadata: {} }
+          yield { title: "Final", output: "final observed output", metadata: {} }
+        },
+      }),
+    })
+    expect(observed).toEqual(["first observed output", "final observed output"])
+    expect(
+      (await MessageStore.parts(processor.message.id)).filter((part) => part.type === "tool").map((part) => part.state),
+    ).toMatchObject([{ status: "completed", output: "final observed output" }])
+  })
+}, 30_000)
+
+function waitOwned(ms: number, signal: AbortSignal) {
+  return new Promise<void>((resolve, reject) => {
+    const finish = () => {
+      signal.removeEventListener("abort", abort)
+      resolve()
+    }
+    const timer = setTimeout(finish, ms)
+    const abort = () => {
+      clearTimeout(timer)
+      reject(signal.reason)
+    }
+    if (signal.aborted) abort()
+    else signal.addEventListener("abort", abort, { once: true })
+  })
+}
+
+function toolCallModel(names: string[]) {
+  return new MockLanguageModelV3({
+    doStream: async () => ({
+      stream: simulateReadableStream({
+        chunks: [
+          { type: "stream-start", warnings: [] },
+          ...names.map((name) => ({
+            type: "tool-call" as const,
+            toolCallId: `${name}-call`,
+            toolName: name,
+            input: "{}",
+          })),
+          {
+            type: "finish",
+            finishReason: { unified: "tool-calls", raw: "tool_calls" },
+            usage: {
+              inputTokens: { total: 1, noCache: 1, cacheRead: 0, cacheWrite: 0 },
+              outputTokens: { total: 1, text: 1, reasoning: 0 },
+            },
+          },
+        ],
+      }),
+    }),
+  })
+}
 
 async function processorFixture(
   run: (input: {

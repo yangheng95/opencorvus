@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [长程Tool活动所有权](records/2026-10/2026-10-30-heavy-workbench-tool-liveness.md)：真实benchmark揭示20分钟暂停误杀与错误归因、有限可信deadline/取消传播修复和独立审查。
+
 - [Goal 终态所属对象体验](records/2026-10/2026-10-30-goal-terminal-owner-experience.md)：当前已完成 Task 和已关闭 Mission 的持续目标入口调查。
 
 - [附件原件失败恢复](records/2026-10/2026-10-30-attachment-download-recovery.md)：真实缺失原件、错误边界与下载恢复调查。

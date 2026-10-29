@@ -33,6 +33,12 @@ import { redactInlinePayloads } from "@/util/inline-base64"
 import { activeTaskExecutionCapsule } from "@/engine/task-execution-capsule-binding"
 import { StringDecoder } from "node:string_decoder"
 import { decodeUtf8Prefix } from "@/util/utf8"
+import {
+  assertToolExecutionDurations,
+  createToolExecutionDeadline,
+  observeToolExecutionDeadline,
+  type ToolExecutionDeadline,
+} from "./execution-deadline"
 
 const MAX_METADATA_LENGTH = 30_000
 export const BASH_LIVE_PREVIEW_LENGTH = 4_096
@@ -294,6 +300,8 @@ export const BashTool = Tool.define("bash", async () => {
         throw new Error(`Invalid leaseTimeout value: ${params.leaseTimeout}. leaseTimeout must be a positive number.`)
       }
       const timeout = params.timeout ?? DEFAULT_TIMEOUT
+      if (!params.background)
+        assertToolExecutionDurations(Math.ceil(timeout + 100), ProcessSupervisor.TERMINATION_CLEANUP_TIMEOUT_MS)
       // Block commands that kill processes by name — these can destroy the host
       // process, benchmark, or sibling executors. Worktree isolation only covers
       // the filesystem; the process namespace is shared.
@@ -428,13 +436,23 @@ export const BashTool = Tool.define("bash", async () => {
       let exitCode: number | null = null
 
       let terminationPromise: Promise<number> | undefined
+      let foregroundDeadline: ToolExecutionDeadline | undefined
+      let foregroundCleanupDeadlineAt: number | undefined
+      const foregroundCleanupDeadline = () => {
+        const disposalDeadline = Date.now() + ProcessSupervisor.TERMINATION_CLEANUP_TIMEOUT_MS
+        return (foregroundCleanupDeadlineAt ??= foregroundDeadline
+          ? Math.min(disposalDeadline, foregroundDeadline.settlementDeadlineAt)
+          : disposalDeadline) // Construction failed: physical disposal still has its canonical bound.
+      }
       let resolveTerminationRequested: ((promise: Promise<number>) => void) | undefined
       const terminationRequested = new Promise<Promise<number>>((resolve) => {
         resolveTerminationRequested = resolve
       })
       const requestTermination = (reason: string) => {
         if (!terminationPromise) {
-          terminationPromise = ProcessSupervisor.terminateAndWaitForExit(supervisor, `bash foreground ${reason}`)
+          terminationPromise = ProcessSupervisor.terminateAndWaitForExit(supervisor, `bash foreground ${reason}`, {
+            deadlineAt: foregroundCleanupDeadline(),
+          })
           terminationPromise.catch(() => undefined)
           resolveTerminationRequested?.(terminationPromise)
         }
@@ -564,24 +582,30 @@ export const BashTool = Tool.define("bash", async () => {
         }
       }
 
-      const abortHandler = () => {
-        aborted = true
-        requestTermination("abort")
-      }
-
-      ctx.abort.addEventListener("abort", abortHandler, { once: true })
-
-      const timeoutTimer = setTimeout(() => {
-        timedOut = true
-        requestTermination(`timeout ${timeout}ms`)
-      }, timeout + 100)
+      let executionDeadline: ToolExecutionDeadline | undefined
+      let abortHandler: (() => void) | undefined
+      let deadlineObservation: AsyncDisposable | undefined
 
       let primaryError: unknown
       try {
-        if (ctx.abort.aborted) {
-          aborted = true
-          requestTermination("abort")
+        const deadline = createToolExecutionDeadline({
+          timeoutMs: Math.ceil(timeout + 100),
+          settlementMs: ProcessSupervisor.TERMINATION_CLEANUP_TIMEOUT_MS,
+          signal: ctx.abort,
+        })
+        executionDeadline = foregroundDeadline = deadline
+        abortHandler = () => {
+          if (deadline.signal.reason === deadline.timeoutReason) {
+            timedOut = true
+            requestTermination(`timeout ${timeout}ms`)
+          } else {
+            aborted = true
+            requestTermination("abort")
+          }
         }
+        deadline.signal.addEventListener("abort", abortHandler, { once: true })
+        deadlineObservation = await observeToolExecutionDeadline(ctx.extra, deadline)
+        if (deadline.signal.aborted) abortHandler()
         exitCode = await Promise.race([supervisor.exited, terminationRequested.then((cleanup) => cleanup)])
         exited = true
         if (terminationPromise) {
@@ -591,15 +615,26 @@ export const BashTool = Tool.define("bash", async () => {
         primaryError = error
         throw error
       } finally {
-        clearTimeout(timeoutTimer)
-        ctx.abort.removeEventListener("abort", abortHandler)
+        if (abortHandler) executionDeadline?.signal.removeEventListener("abort", abortHandler)
+        const cleanupErrors: unknown[] = []
         try {
-          await ProcessSupervisor.disposeAndWaitForExit(supervisor, "bash foreground")
+          await ProcessSupervisor.disposeAndWaitForExit(supervisor, "bash foreground", {
+            deadlineAt: foregroundCleanupDeadline(),
+          })
         } catch (error) {
-          if (primaryError) {
-            throw ProcessSupervisor.combineFailures("Bash execution and disposal failed", [primaryError, error])
-          }
-          throw error
+          cleanupErrors.push(error)
+        }
+        executionDeadline?.[Symbol.dispose]()
+        try {
+          await deadlineObservation?.[Symbol.asyncDispose]()
+        } catch (error) {
+          cleanupErrors.push(error)
+        }
+        if (cleanupErrors.length) {
+          throw ProcessSupervisor.combineFailures("Bash execution and disposal failed", [
+            ...(primaryError ? [primaryError] : []),
+            ...cleanupErrors,
+          ])
         }
       }
       output += liveOutput.end()

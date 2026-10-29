@@ -43,6 +43,8 @@ export interface StreamActivityMonitor {
   pause(): void
   /** Counterpart to pause(); reschedules the idle timer. */
   resume(): void
+  /** Finite handoff from a real executor. Releasing it restores the pause guard. */
+  holdPauseUntil(deadlineAt: number): Disposable
   /** True while one or more explicit stream-pause owners remain active. */
   paused(): boolean
   /** Millisecond timestamp of the most recent observe() (or construction). */
@@ -325,6 +327,7 @@ export function withStreamActivity(options: StreamActivityOptions): StreamActivi
    *  scheduled only when depth === 0. Allows nested pause regions (e.g. one
    *  tool dispatched inside another). */
   let pauseDepth = 0
+  const holds = new Map<symbol, number>()
 
   const trip = () => {
     if (disposed) return
@@ -375,7 +378,17 @@ export function withStreamActivity(options: StreamActivityOptions): StreamActivi
     if (disposed) return
     clearPause()
     if (pauseDepth <= 0 || options.maxPauseMs === undefined) return
-    pauseTimer = setTimeout(tripPause, options.maxPauseMs)
+    const deadlineAt = Math.max(Date.now() + options.maxPauseMs, ...holds.values())
+    const arm = () => {
+      if (disposed || pauseDepth <= 0) return
+      const remaining = deadlineAt - Date.now()
+      if (remaining <= 0) {
+        tripPause()
+        return
+      }
+      pauseTimer = setTimeout(arm, Math.min(remaining, 2_147_483_647))
+    }
+    arm()
   }
 
   schedule()
@@ -412,6 +425,20 @@ export function withStreamActivity(options: StreamActivityOptions): StreamActivi
         schedule()
       }
     },
+    holdPauseUntil(deadlineAt) {
+      if (!Number.isSafeInteger(deadlineAt) || deadlineAt <= 0)
+        throw new Error("Execution handoff requires a finite deadline")
+      const owner = Symbol("execution-deadline")
+      if (!disposed) {
+        holds.set(owner, deadlineAt)
+        schedulePause()
+      }
+      return {
+        [Symbol.dispose]() {
+          if (holds.delete(owner)) schedulePause()
+        },
+      }
+    },
     paused() {
       return !disposed && pauseDepth > 0
     },
@@ -445,6 +472,7 @@ export function withStreamActivity(options: StreamActivityOptions): StreamActivi
     dispose() {
       if (disposed) return
       disposed = true
+      holds.clear()
       clear()
       clearPause()
     },
