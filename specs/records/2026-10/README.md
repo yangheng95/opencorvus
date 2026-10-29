@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-30-goal-terminal-owner-experience.md](2026-10-30-goal-terminal-owner-experience.md)：持续目标的终态所属对象和实际恢复反馈调查。
+
 - [2026-10-30-attachment-download-recovery.md](2026-10-30-attachment-download-recovery.md)：原文件下载失败及实际局部恢复验收。
 
 - [2026-10-30-approved-code-workflow.md](2026-10-30-approved-code-workflow.md)：独立QA的真实审批后提交全流程，保留旧793失败历史。

@@ -1,0 +1,358 @@
+{
+  "at": "2026-10-29T21:56:14.275Z",
+  "databases": [
+    {
+      "label": "source",
+      "schema": 9,
+      "tables": 92,
+      "integrity": "ok",
+      "foreignKeys": "ok",
+      "rowCount": 203938,
+      "preserved": 203938,
+      "changed": [],
+      "added": []
+    },
+    {
+      "label": "before",
+      "schema": 9,
+      "tables": 92,
+      "integrity": "ok",
+      "foreignKeys": "ok",
+      "rowCount": 203940,
+      "preserved": 203938,
+      "changed": [],
+      "added": [
+        {
+          "table": "engine_control_activation_lease",
+          "count": 1
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "label": "after",
+      "schema": 9,
+      "tables": 92,
+      "integrity": "ok",
+      "foreignKeys": "ok",
+      "rowCount": 204260,
+      "preserved": 203938,
+      "changed": [],
+      "added": [
+        {
+          "table": "bus_publication_delivery",
+          "count": 66
+        },
+        {
+          "table": "bus_publication_delivery_receipt",
+          "count": 66
+        },
+        {
+          "table": "bus_publication_outbox",
+          "count": 9
+        },
+        {
+          "table": "bus_publication_owner",
+          "count": 9
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "count": 27
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "count": 67
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "count": 67
+        },
+        {
+          "table": "event_occurrence",
+          "count": 9
+        },
+        {
+          "table": "session",
+          "count": 2
+        }
+      ]
+    }
+  ],
+  "completeValueComparisons": [
+    {
+      "phase": "before",
+      "tables": 92,
+      "sourceRows": 203938,
+      "completeSQLiteValues": "Native EXCEPT equality, including BLOBs and embedded-NUL TEXT"
+    },
+    {
+      "phase": "after",
+      "tables": 92,
+      "sourceRows": 203938,
+      "completeSQLiteValues": "Native EXCEPT equality, including BLOBs and embedded-NUL TEXT"
+    }
+  ],
+  "attachmentCopies": [
+    {
+      "phase": "before",
+      "sourceFiles": 17,
+      "retainedCopyFiles": 17,
+      "sourceBytes": "exact",
+      "retainedCopyBytes": "exact",
+      "sweptPairs": []
+    },
+    {
+      "phase": "before",
+      "sourceFiles": 16,
+      "retainedCopyFiles": 10,
+      "sourceBytes": "exact",
+      "retainedCopyBytes": "exact",
+      "sweptPairs": [
+        {
+          "file": "staged-preview-802.txt",
+          "bytes": 35,
+          "blob": "c86db8bdbf13ecaa2c535106eb9becf65f4e0c69d281cc3036271e79f35e425f.txt"
+        },
+        {
+          "file": "staged-binary-802.bin",
+          "bytes": 4,
+          "blob": "b2313f68e074ee8e0dccad2e61c1b41c20649e1deef859949c3712549c11e411.bin"
+        },
+        {
+          "file": "staged-preview-zh-802.txt",
+          "bytes": 35,
+          "blob": "b1efcc2518348e4168095301dc0e39792130bd613893862af95bf3ab607b4482.txt"
+        }
+      ]
+    },
+    {
+      "phase": "before",
+      "sourceFiles": 16,
+      "retainedCopyFiles": 16,
+      "sourceBytes": "exact",
+      "retainedCopyBytes": "exact",
+      "sweptPairs": []
+    },
+    {
+      "phase": "before",
+      "sourceFiles": 24,
+      "retainedCopyFiles": 24,
+      "sourceBytes": "exact",
+      "retainedCopyBytes": "exact",
+      "sweptPairs": []
+    },
+    {
+      "phase": "before",
+      "sourceFiles": 6,
+      "retainedCopyFiles": 6,
+      "sourceBytes": "exact",
+      "retainedCopyBytes": "exact",
+      "sweptPairs": []
+    },
+    {
+      "phase": "before",
+      "sourceFiles": 2,
+      "retainedCopyFiles": 2,
+      "sourceBytes": "exact",
+      "retainedCopyBytes": "exact",
+      "sweptPairs": []
+    },
+    {
+      "phase": "after",
+      "sourceFiles": 17,
+      "retainedCopyFiles": 17,
+      "sourceBytes": "exact",
+      "retainedCopyBytes": "exact",
+      "sweptPairs": []
+    },
+    {
+      "phase": "after",
+      "sourceFiles": 16,
+      "retainedCopyFiles": 10,
+      "sourceBytes": "exact",
+      "retainedCopyBytes": "exact",
+      "sweptPairs": [
+        {
+          "file": "staged-preview-802.txt",
+          "bytes": 35,
+          "blob": "c86db8bdbf13ecaa2c535106eb9becf65f4e0c69d281cc3036271e79f35e425f.txt"
+        },
+        {
+          "file": "staged-binary-802.bin",
+          "bytes": 4,
+          "blob": "b2313f68e074ee8e0dccad2e61c1b41c20649e1deef859949c3712549c11e411.bin"
+        },
+        {
+          "file": "staged-preview-zh-802.txt",
+          "bytes": 35,
+          "blob": "b1efcc2518348e4168095301dc0e39792130bd613893862af95bf3ab607b4482.txt"
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "sourceFiles": 16,
+      "retainedCopyFiles": 16,
+      "sourceBytes": "exact",
+      "retainedCopyBytes": "exact",
+      "sweptPairs": []
+    },
+    {
+      "phase": "after",
+      "sourceFiles": 24,
+      "retainedCopyFiles": 24,
+      "sourceBytes": "exact",
+      "retainedCopyBytes": "exact",
+      "sweptPairs": []
+    },
+    {
+      "phase": "after",
+      "sourceFiles": 6,
+      "retainedCopyFiles": 6,
+      "sourceBytes": "exact",
+      "retainedCopyBytes": "exact",
+      "sweptPairs": []
+    },
+    {
+      "phase": "after",
+      "sourceFiles": 2,
+      "retainedCopyFiles": 2,
+      "sourceBytes": "exact",
+      "retainedCopyBytes": "exact",
+      "sweptPairs": []
+    }
+  ],
+  "sourceAttachmentFiles": 81,
+  "retainedPublishedAttachmentFiles": 75,
+  "sweeps": [
+    {
+      "phase": "before",
+      "level": "info",
+      "time": "2026-10-29T21:32:25.638Z",
+      "service": "attachment-store",
+      "logDomain": "non-session",
+      "data": {
+        "projectID": "prj_hI8KlTauJPN4k6J7iYKT",
+        "deleted": 3,
+        "bytesFreed": 74,
+        "skippedYoung": 0,
+        "kept": 5,
+        "retries": [],
+        "failures": []
+      },
+      "message": "AttachmentStore.sweep"
+    },
+    {
+      "phase": "after",
+      "level": "info",
+      "time": "2026-10-29T21:40:14.316Z",
+      "service": "attachment-store",
+      "logDomain": "non-session",
+      "data": {
+        "projectID": "prj_hI8KlTauJPN4k6J7iYKT",
+        "deleted": 3,
+        "bytesFreed": 74,
+        "skippedYoung": 0,
+        "kept": 5,
+        "retries": [],
+        "failures": []
+      },
+      "message": "AttachmentStore.sweep"
+    }
+  ],
+  "projects": [
+    {
+      "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-29/source-file-recovery-784/project",
+      "head": "545fce2642894d41513fb05c88f5e0dc3cad9d27",
+      "files": 3,
+      "index": "exact",
+      "workingBytes": "exact"
+    },
+    {
+      "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-30/approved-code-801/project",
+      "head": "a6d424e29eca2edbc2fc027d51d102a106c55d2c",
+      "files": 7,
+      "index": "exact",
+      "workingBytes": "exact"
+    },
+    {
+      "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-29/review-handoff-793/project",
+      "head": "1b6ae6e649db0022aa197592e5a7c8f24d264ef8",
+      "files": 6,
+      "index": "exact",
+      "workingBytes": "exact"
+    }
+  ],
+  "runtimeLeases": [
+    {
+      "phase": "before",
+      "owner": {
+        "pid": 77252,
+        "processInstanceID": "win32:639289063416341392",
+        "occurrenceID": "990071e3-9acd-4a2f-a1b5-8238ee4f5580"
+      },
+      "lease": {
+        "rowid": 41822,
+        "id": "act_g0VZTc9TE00tcYIAUr73",
+        "target": "runtime_process",
+        "target_id": "990071e3-9acd-4a2f-a1b5-8238ee4f5580",
+        "owner_occurrence_id": "{\"pid\":77252,\"processInstanceID\":\"win32:639289063416341392\",\"occurrenceID\":\"990071e3-9acd-4a2f-a1b5-8238ee4f5580\"}",
+        "time_activated": 1793309558839,
+        "expires_at": 9007199254740991
+      },
+      "grant": {
+        "rowid": 41880,
+        "lease_id": "act_g0VZTc9TE00tcYIAUr73",
+        "ordinal": 1,
+        "expires_at": 9007199254740991,
+        "time_created": 1793309558839
+      },
+      "physical": "exact identity dead",
+      "contract": "joinProcessLiveness durable runtime identity receipt; storage MAX_SAFE_INTEGER is not a scheduler TTL"
+    },
+    {
+      "phase": "after",
+      "owner": {
+        "pid": 83036,
+        "processInstanceID": "win32:639289068111465507",
+        "occurrenceID": "bfe6074d-9d9a-427b-aba9-0e6966e0da01"
+      },
+      "lease": {
+        "rowid": 41822,
+        "id": "act_g0VZTeASR00iUKsgujtq",
+        "target": "runtime_process",
+        "target_id": "bfe6074d-9d9a-427b-aba9-0e6966e0da01",
+        "owner_occurrence_id": "{\"pid\":83036,\"processInstanceID\":\"win32:639289068111465507\",\"occurrenceID\":\"bfe6074d-9d9a-427b-aba9-0e6966e0da01\"}",
+        "time_activated": 1793310039290,
+        "expires_at": 9007199254740991
+      },
+      "grant": {
+        "rowid": 41880,
+        "lease_id": "act_g0VZTeASR00iUKsgujtq",
+        "ordinal": 1,
+        "expires_at": 9007199254740991,
+        "time_created": 1793310039290
+      },
+      "physical": "exact identity dead",
+      "contract": "joinProcessLiveness durable runtime identity receipt; storage MAX_SAFE_INTEGER is not a scheduler TTL"
+    }
+  ],
+  "newSessions": [
+    "ses_-zUQWL1zKzzXx2Ng4OqQ",
+    "ses_-zUQWKSgYzzXgm2YLTag"
+  ],
+  "bus": {
+    "events": 9,
+    "deliveries": 66,
+    "receipts": 66,
+    "outcomes": "succeeded",
+    "deliveryLeases": "ended at matching receipt time",
+    "phaseReceipts": 27,
+    "scope": "Only the two newly created Sessions"
+  },
+  "requests": 0,
+  "cumulativeRequests": 1083
+}

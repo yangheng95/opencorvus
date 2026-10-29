@@ -1,0 +1,56 @@
+{
+  "at": "2026-10-29T21:37:47.650Z",
+  "requests": 0,
+  "cumulativeRequests": 1083,
+  "maximumRequests": 0,
+  "credentialCopyRetired": true,
+  "modelCatalogCopyRetired": true,
+  "source": {
+    "authSameMetadata": true,
+    "catalogSameMetadata": true,
+    "catalogSameBytes": true
+  },
+  "settlement": {
+    "originalExec": 68750,
+    "normalShutdownReceipt": false,
+    "at": "2026-10-29T21:37:46.6200166Z",
+    "chain": [
+      {
+        "identity": {
+          "pid": 20324,
+          "processInstanceID": "win32:639289063320412916",
+          "occurrenceID": "aed601fd-5f2b-45f9-91ea-478a0cff1cc1"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "identity": {
+          "pid": 99088,
+          "processInstanceID": "win32:639289063401521051",
+          "occurrenceID": "cbbf8dc2-6c09-4649-b2ea-c08f717b9abe"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "identity": {
+          "pid": 77252,
+          "processInstanceID": "win32:639289063416341392",
+          "occurrenceID": "52b49f61-3511-4fe8-9946-1083955b629d"
+        },
+        "state": "dead_or_reused"
+      }
+    ],
+    "requestCleanupEvidence": "No Provider requests were admitted; original exact process ancestry and listening socket are closed. Native graceful settlement receipt was not produced.",
+    "portClosed": true,
+    "originalRunner": {
+      "label": "native",
+      "startedAt": 1793309530423,
+      "closedAt": 1793309728278,
+      "code": 1,
+      "signal": null,
+      "childPID": 35028
+    },
+    "outcome": "diagnostic_runner_stdout_inactivity",
+    "physicalAndOutputSettlement": "original runner confirmed"
+  }
+}

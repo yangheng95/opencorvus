@@ -20,6 +20,15 @@ explicit user decisions remain writable when the selected model is unavailable.
 Owner membership, deletion and archive validation still apply. Actual
 continuation admission initializes its full independent execution runtime.
 
+The shared Goal control distinguishes a failed current read from a failed user
+mutation. Read errors retain their original diagnostic and an explicit read Retry.
+Once the current read succeeds, a remaining mutation error says that the change
+was not saved and opens the current Goal details, or its creation form if absent.
+This review action uses the current owner projection and existing creation draft;
+it does not replay a mutation or reopen an execution owner. A current read error
+takes display precedence while the original mutation error remains available
+after that read recovers.
+
 Owner, request and revision conflicts return HTTP 409 with the named
 `ContinuousGoalError` body and its domain `data.code`. All three operation responses
 declare that same name in OpenAPI and the generated SDK; human descriptions are

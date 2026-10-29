@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-30-goal-terminal-owner-experience](2026-10-30-goal-terminal-owner-experience/README.md)：持续目标保存失败反馈、真实复核恢复、终态入口及数据保全。
+
 - [2026-10-30-attachment-download-recovery](2026-10-30-attachment-download-recovery/README.md)：原件错误局部化、预览/下载重试、14张实页及原数据完整核证。
 
 - [2026-10-30-approved-code-workflow](2026-10-30-approved-code-workflow/README.md)：真实批准后提交全流程、选择控件焦点根因修复、最终搜索视觉及原数据保全。

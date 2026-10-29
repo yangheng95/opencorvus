@@ -1,0 +1,19 @@
+{
+  "owner": {
+    "pid": 83036,
+    "processInstanceID": "win32:639289068111465507",
+    "occurrenceID": "bfe6074d-9d9a-427b-aba9-0e6966e0da01"
+  },
+  "parent": {
+    "pid": 88328,
+    "processInstanceID": "win32:639289068111041314",
+    "occurrenceID": "1db5fb06-e8da-4df6-8f43-0ca7d9089aba"
+  },
+  "occurrence": "goal-terminal-803-after-b75441ea-5d90-425a-9def-953373a0024a",
+  "admission": {
+    "credential": "registered copied OAuth",
+    "projectedModel": "gpt-6.1-sol",
+    "model": "openai/gpt-6.1-sol",
+    "authority": "Paired copied OAuth and full catalog locally projected; actual streaming model verification is required before the new bounded Task."
+  }
+}

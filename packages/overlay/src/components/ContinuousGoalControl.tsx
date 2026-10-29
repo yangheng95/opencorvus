@@ -502,7 +502,8 @@ export function ContinuousGoalControl(props: {
       setValidation(error instanceof Error ? error.message : String(error))
     }
   }
-  const error = () => failure() ?? projection.error
+  const error = () => projection.error ?? failure()
+  const saveFailed = () => !projection.error && !!failure()
   const canReviewCurrentRevision = () =>
     error() instanceof ApiError &&
     (error() as ApiError).body &&
@@ -595,17 +596,20 @@ export function ContinuousGoalControl(props: {
               variant="ghost"
               size="sm"
               tone="neutral"
-              disabled={!source() || busy()}
+              disabled={busy() || initialLoading() || (!source() && !props.home)}
               onClick={() => {
-                setFailure(undefined)
+                if (saveFailed()) {
+                  open(goal() ? "details" : "create")
+                  return
+                }
                 void refetch()
               }}
             >
-              {t("common.retry")}
+              {t(saveFailed() ? "continuous_goal.review_goal" : "common.retry")}
             </Button>
           }
         >
-          {t("continuous_goal.error.inline")}
+          {t(saveFailed() ? "continuous_goal.error.save_inline" : "continuous_goal.error.inline")}
         </Feedback>
       </Show>
       <Dialog

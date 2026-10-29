@@ -1,0 +1,45 @@
+[
+  {
+    "at": "2026-10-29T21:43:49.888Z",
+    "method": "POST",
+    "path": "/session",
+    "status": 200,
+    "body": {
+      "id": "ses_-zUQWL1zKzzXx2Ng4OqQ",
+      "slug": "gentle-comet",
+      "version": "local",
+      "projectID": "prj_hI8KlTauJPN4k6J7iYKT",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project",
+      "title": "归档目标读取803",
+      "kind": "assistant",
+      "metadata": {},
+      "permission": [],
+      "time": {
+        "created": 1793310229769,
+        "updated": 1793310229769
+      }
+    }
+  },
+  {
+    "at": "2026-10-29T21:43:49.973Z",
+    "method": "PATCH",
+    "path": "/session/ses_-zUQWL1zKzzXx2Ng4OqQ",
+    "status": 200,
+    "body": {
+      "id": "ses_-zUQWL1zKzzXx2Ng4OqQ",
+      "slug": "gentle-comet",
+      "projectID": "prj_hI8KlTauJPN4k6J7iYKT",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project",
+      "title": "归档目标读取803",
+      "version": "local",
+      "kind": "assistant",
+      "metadata": {},
+      "permission": [],
+      "time": {
+        "created": 1793310229769,
+        "updated": 1793310229902,
+        "archived": 1793310229891
+      }
+    }
+  }
+]

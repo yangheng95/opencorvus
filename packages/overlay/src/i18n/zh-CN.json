@@ -2637,6 +2637,8 @@
   "continuous_goal.error.overlapping_owner": "此执行范围已有一个持续目标。",
   "continuous_goal.error.request": "持续目标请求失败",
   "continuous_goal.error.inline": "无法确认当前目标，请重试读取实际状态。",
+  "continuous_goal.error.save_inline": "持续目标更改未保存。请打开目标，核对当前状态后重试。",
+  "continuous_goal.review_goal": "查看目标",
   "continuous_goal.error.review": "表单草稿已保留。请核对当前状态；错误详情保留原始响应。",
   "continuous_goal.validation.title": "请检查目标设置",
   "continuous_goal.validation.objective": "请填写目标。",

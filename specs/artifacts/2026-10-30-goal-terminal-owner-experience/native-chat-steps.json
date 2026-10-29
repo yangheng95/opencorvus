@@ -1,0 +1,86 @@
+{
+  "records": [
+    {
+      "at": "2026-10-29T21:46:05.548Z",
+      "method": "POST",
+      "path": "/coding/chat/session",
+      "status": 201,
+      "body": {
+        "session": {
+          "id": "ses_-zUQWKSgYzzXgm2YLTag",
+          "slug": "nimble-lagoon",
+          "version": "local",
+          "projectID": "prj_hI8KlTauJPN4k6J7iYKT",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project",
+          "title": "Chat",
+          "kind": "assistant",
+          "metadata": {
+            "conversation": {
+              "experience": "chat",
+              "surface": "right-sidebar"
+            }
+          },
+          "time": {
+            "created": 1793310365473,
+            "updated": 1793310365473
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-10-29T21:46:05.602Z",
+      "method": "PATCH",
+      "path": "/coding/chat/session/ses_-zUQWKSgYzzXgm2YLTag",
+      "status": 200,
+      "body": {
+        "session": {
+          "id": "ses_-zUQWKSgYzzXgm2YLTag",
+          "slug": "nimble-lagoon",
+          "projectID": "prj_hI8KlTauJPN4k6J7iYKT",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project",
+          "title": "原生对话读取错误803",
+          "version": "local",
+          "kind": "assistant",
+          "metadata": {
+            "conversation": {
+              "experience": "chat",
+              "surface": "right-sidebar"
+            }
+          },
+          "time": {
+            "created": 1793310365473,
+            "updated": 1793310365555
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-10-29T21:46:24.214Z",
+      "method": "PATCH",
+      "path": "/coding/chat/session/ses_-zUQWKSgYzzXgm2YLTag/archive",
+      "status": 200,
+      "body": {
+        "session": {
+          "id": "ses_-zUQWKSgYzzXgm2YLTag",
+          "slug": "nimble-lagoon",
+          "projectID": "prj_hI8KlTauJPN4k6J7iYKT",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project",
+          "title": "原生对话读取错误803",
+          "version": "local",
+          "kind": "assistant",
+          "metadata": {
+            "conversation": {
+              "experience": "chat",
+              "surface": "right-sidebar"
+            }
+          },
+          "time": {
+            "created": 1793310365473,
+            "updated": 1793310384133,
+            "archived": 1793310384132
+          }
+        }
+      }
+    }
+  ]
+}

@@ -2638,6 +2638,8 @@
   "continuous_goal.error.overlapping_owner": "This execution scope already has an ongoing goal.",
   "continuous_goal.error.request": "Continuous goal request failed",
   "continuous_goal.error.inline": "The current goal could not be confirmed. Retry to read its actual state.",
+  "continuous_goal.error.save_inline": "Your goal change was not saved. Open the goal to review its current state and try again.",
+  "continuous_goal.review_goal": "Review goal",
   "continuous_goal.error.review": "Your draft is preserved. Review the current state; error details retain the original response.",
   "continuous_goal.validation.title": "Check the goal settings",
   "continuous_goal.validation.objective": "Enter an objective.",
