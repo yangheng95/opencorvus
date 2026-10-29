@@ -1,0 +1,66 @@
+{
+  "at": "2026-10-29T18:09:26.089Z",
+  "credentialCopyCreated": false,
+  "modelCatalogCopyRetired": true,
+  "requests": 0,
+  "cumulativeRequests": 993,
+  "source": {
+    "catalogSameBytes": true,
+    "catalogSameMetadata": true,
+    "authSameMetadata": true
+  },
+  "reserveMs": 3503697,
+  "publicShutdown": 200,
+  "physical": {
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 83472,
+          "processInstanceID": "win32:639288940684488739",
+          "occurrenceID": "29f40d01-94b1-48ab-9be8-3eb814c313ae"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 89588,
+          "processInstanceID": "win32:639288940695037081",
+          "occurrenceID": "845e8bc1-e211-467d-acef-e23977e44cd1"
+        }
+      }
+    ],
+    "native": {
+      "occurrence": "source-board-799-before-bc0a9e43-8bbf-4fbe-ad9a-72920475d783",
+      "outcome": "settled",
+      "host": {
+        "pid": 83472,
+        "processInstanceID": "win32:639288940684488739",
+        "occurrenceID": "29f40d01-94b1-48ab-9be8-3eb814c313ae"
+      },
+      "target": {
+        "pid": 89588,
+        "processInstanceID": "win32:639288940695037081",
+        "occurrenceID": "845e8bc1-e211-467d-acef-e23977e44cd1"
+      },
+      "observedAtUtc": "2026-10-29T18:09:24.644Z",
+      "deadlineAt": 1793300868341,
+      "terminal": {
+        "occurrenceID": "source-board-799-before-bc0a9e43-8bbf-4fbe-ad9a-72920475d783",
+        "pid": 89588,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "observedAtUtc": "2026-10-29T18:09:25.9345053Z",
+    "launcher": {
+      "observedAtUtc": "2026-10-29T18:09:24.6929036Z",
+      "originalChildExit": 0
+    }
+  }
+}

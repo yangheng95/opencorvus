@@ -116,7 +116,7 @@ body {
   flex: 1 1 auto;
   min-width: 0;
   min-height: 0;
-  grid-template-columns: repeat(5, minmax(calc(184px * var(--ui-scale)), 1fr));
+  grid-template-columns: repeat(5, minmax(calc(160px * var(--ui-scale)), 1fr));
   gap: var(--ui-gap-lg);
   overflow: auto;
   padding: 0 var(--ui-gap-3xl) var(--ui-gap-3xl);

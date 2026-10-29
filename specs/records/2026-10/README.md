@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-30-source-and-board-desktop.md](2026-10-30-source-and-board-desktop.md)：零Provider的Sources实页检查和默认桌面看板布局迭代。
+
 - [2026-10-30-mission-acceptance-closure.md](2026-10-30-mission-acceptance-closure.md)：原已完成代码Task的Mission完整验收、只读保全及真实运行结算。
 
 - [2026-10-29-artifact-selection-purpose.md](2026-10-29-artifact-selection-purpose.md)：13 次保全用途声明的真实输入输出调查与工具职责澄清。
