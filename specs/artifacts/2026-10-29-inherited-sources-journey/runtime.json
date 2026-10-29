@@ -1,0 +1,70 @@
+{
+  "at": "2026-10-29T02:14:43.006Z",
+  "port": 38341,
+  "uiEntry": "main-D3yYQ3l6.js",
+  "originalExecSession": 58716,
+  "originalExecExitCode": 0,
+  "credentialCopyCreated": false,
+  "modelCatalogCopyRetired": true,
+  "requests": 0,
+  "cumulativeRequests": 777,
+  "source": {
+    "catalogSameBytes": true,
+    "catalogSameMetadata": true,
+    "authSameMetadata": true
+  },
+  "reserveMs": 2739967,
+  "publicShutdown": 200,
+  "physical": {
+    "chain": [
+      {
+        "identity": {
+          "pid": 93816,
+          "processInstanceID": "win32:639288360147916083",
+          "occurrenceID": "b65e32ca-54b0-4058-ba3a-89153e0f0f96"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "identity": {
+          "pid": 73612,
+          "processInstanceID": "win32:639288360160583809",
+          "occurrenceID": "ba182154-a558-40a7-9ea1-bffd9696d960"
+        },
+        "state": "dead_or_reused"
+      }
+    ],
+    "observedAtUtc": "2026-10-29T02:14:42.9221283Z",
+    "launcher": {
+      "observedAtUtc": "2026-10-29T02:14:34.0428835Z",
+      "originalChildExit": 0
+    },
+    "native": {
+      "occurrence": "source-inherited-783-39ac8937-0ff5-4e73-bc8f-fc732c1086c7",
+      "outcome": "settled",
+      "host": {
+        "pid": 93816,
+        "processInstanceID": "win32:639288360147916083",
+        "occurrenceID": "b65e32ca-54b0-4058-ba3a-89153e0f0f96"
+      },
+      "target": {
+        "pid": 73612,
+        "processInstanceID": "win32:639288360160583809",
+        "occurrenceID": "ba182154-a558-40a7-9ea1-bffd9696d960"
+      },
+      "observedAtUtc": "2026-10-29T02:14:33.998Z",
+      "deadlineAt": 1793242813965,
+      "terminal": {
+        "occurrenceID": "source-inherited-783-39ac8937-0ff5-4e73-bc8f-fc732c1086c7",
+        "pid": 73612,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    }
+  }
+}

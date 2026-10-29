@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-29-inherited-sources-journey.md](2026-10-29-inherited-sources-journey.md)：继承来源身份、真实文件/列号与侧聊阅读连续性验收。
+
 - [2026-10-29-goal-completion-evidence-text.md](2026-10-29-goal-completion-evidence-text.md)：完成依据按真实状态保留原文，现系统原因继续本地化。
 
 - [2026-10-29-goal-reason-localization.md](2026-10-29-goal-reason-localization.md)：持续目标控制原因跨语言呈现与真实模型验收。

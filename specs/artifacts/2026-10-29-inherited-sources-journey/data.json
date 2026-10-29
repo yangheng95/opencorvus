@@ -1,0 +1,179 @@
+{
+  "at": "2026-10-29T02:17:00.592Z",
+  "report": {
+    "tables": 92,
+    "oldCount": 109854,
+    "exact": 109854,
+    "total": 110245,
+    "schema": 9,
+    "integrity": "ok"
+  },
+  "sourceDatabase": "Every pre-copy row remains exact.",
+  "oldRows": "Every original isolated row remains exact.",
+  "addedRowsByTable": {
+    "bus_publication_delivery": 64,
+    "bus_publication_delivery_receipt": 64,
+    "bus_publication_outbox": 23,
+    "bus_publication_owner": 23,
+    "bus_publication_phase_receipt": 69,
+    "engine_control_activation_lease": 64,
+    "engine_control_activation_lease_grant": 64,
+    "message": 3,
+    "part": 14,
+    "session": 1,
+    "tool_part_outcome": 1,
+    "tool_part_request": 1
+  },
+  "inputs": [
+    {
+      "filename": "test_invoice.py",
+      "bytes": 1520,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "invoice.py",
+      "bytes": 953,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "README.md",
+      "bytes": 191,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "mcp.ts",
+      "bytes": 5539,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "chat.ts",
+      "bytes": 14692,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "mcp.ts",
+      "bytes": 5539,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "chat.ts",
+      "bytes": 14692,
+      "exactBytes": true,
+      "exactMetadata": true
+    }
+  ],
+  "attachmentNamespace": {
+    "files": 17,
+    "exactBytes": true
+  },
+  "sideChat": {
+    "id": "ses_-zUQb7vTQzzAmxYLzNT3",
+    "sourceSessionID": "ses_-zUQhEK3XzzF60jsSpyK",
+    "inheritedMessages": 3,
+    "sourceParts": [
+      {
+        "partID": "prt_g0VZOs4Wd03YslDf16Es",
+        "originalPartID": "prt_g0VZIlhbG00T1rItzzNR",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\source-group-752\\project\\test_invoice.py",
+        "range": {
+          "startLine": 4,
+          "endLine": 4,
+          "startColumn": 21
+        },
+        "sourceId": "a410f9819600cfa915942e744c1b6e3bd79fee901c299e87489bd4feb2314dd3",
+        "semanticCopyExact": true
+      },
+      {
+        "partID": "prt_g0VZOs4Wd04epQn9zns6",
+        "originalPartID": "prt_g0VZIlhbI00G1Cknq7dz",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\source-group-752\\project\\test_invoice.py",
+        "range": {
+          "startLine": 17,
+          "endLine": 17,
+          "startColumn": 34
+        },
+        "sourceId": "c1fa96853ac5e3ecd4578d7897f76083aa58e8dc305887e238a88d29396da7fb",
+        "semanticCopyExact": true
+      },
+      {
+        "partID": "prt_g0VZOs4Wd05iwVrJCd6P",
+        "originalPartID": "prt_g0VZIlhbL00jJ7E4NVZG",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\source-group-752\\project\\test_invoice.py",
+        "range": {
+          "startLine": 20,
+          "endLine": 20,
+          "startColumn": 26
+        },
+        "sourceId": "8725572f6ccc30721b23c3ecff4fac944eae1dcd0d7ddc54cdaa53205ec67dab",
+        "semanticCopyExact": true
+      },
+      {
+        "partID": "prt_g0VZOs4Wd06cuGBvvFnT",
+        "originalPartID": "prt_g0VZIlhbM00m7YsObGTO",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\source-group-752\\project\\test_invoice.py",
+        "range": {
+          "startLine": 24,
+          "endLine": 24,
+          "startColumn": 13
+        },
+        "sourceId": "01a5c2cd358c85cb666368ec0eadb84d326ceef3c2cf467d470404f0b10f8c3e",
+        "semanticCopyExact": true
+      },
+      {
+        "partID": "prt_g0VZOs4Wd073TgTRCsuT",
+        "originalPartID": "prt_g0VZIlhbO00oYJNTL4r2",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\source-group-752\\project\\test_invoice.py",
+        "range": {
+          "startLine": 30,
+          "endLine": 30,
+          "startColumn": 13
+        },
+        "sourceId": "4f38e8a000d76808d938050905d536ce5738000b83ea24c6f02f00553f425805",
+        "semanticCopyExact": true
+      },
+      {
+        "partID": "prt_g0VZOs4Wd08fqfqWGF63",
+        "originalPartID": "prt_g0VZIlhbP00EDP20sGKm",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\source-group-752\\project\\test_invoice.py",
+        "range": {
+          "startLine": 38,
+          "endLine": 38,
+          "startColumn": 17
+        },
+        "sourceId": "bb39f454c7f1a527f4a93026054ab55ef860834eaa2d48c86e98bfcf0a2a50ab",
+        "semanticCopyExact": true
+      },
+      {
+        "partID": "prt_g0VZOs4Wd09rGzINBjeK",
+        "originalPartID": "prt_g0VZIlhbR00qQC0QT5bp",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\source-group-752\\project\\test_invoice.py",
+        "range": {
+          "startLine": 44,
+          "endLine": 44,
+          "startColumn": 26
+        },
+        "sourceId": "3ba24d0dad863280477db5e8d092f9d1d2885c20981c4bb018aef2f3ff6a6acf",
+        "semanticCopyExact": true
+      },
+      {
+        "partID": "prt_g0VZOs4Wd0Ap44tfh14e",
+        "originalPartID": "prt_g0VZIlhbS009ts8MJ49M",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\source-group-752\\project\\invoice.py",
+        "range": {
+          "startLine": 4,
+          "endLine": 4,
+          "startColumn": 5
+        },
+        "sourceId": "1addadf4a901c16f29d9135d480c38700d62e9b0f2f6c633f9ae7e8994baa984",
+        "semanticCopyExact": true
+      }
+    ]
+  },
+  "scope": "One real side chat created through the ordinary UI, inheriting three original messages. Copied references are existing history, not new tool executions."
+}

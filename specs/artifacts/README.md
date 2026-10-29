@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-29-inherited-sources-journey](2026-10-29-inherited-sources-journey/README.md)：十六张来源实页原图、复制身份与数据/运行结算。
+
 - [2026-10-29-goal-completion-evidence-text](2026-10-29-goal-completion-evidence-text/README.md)：原文输入、代码碰撞误译、修复后实页与元数据核验。
 
 - [2026-10-29-goal-reason-localization](2026-10-29-goal-reason-localization/README.md)：目标暂停原因的原始截图、真实控制事实与数据结算。
