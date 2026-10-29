@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-29-artifact-selection-purpose.md](2026-10-29-artifact-selection-purpose.md)：13 次保全用途声明的真实输入输出调查与工具职责澄清。
+
 - [Task检查点所有权实证](../../artifacts/2026-10-29-checkpoint-ownership/README.md)：删除Host用户分支/index发布路径，保留私有快照与真实终态证据。
 
 - [Task恢复实证](../../artifacts/2026-10-29-task-recovery-integrity/README.md)：真实原Task/Session证据重放与失败唤醒结算，完整提交工作流仍待验收。

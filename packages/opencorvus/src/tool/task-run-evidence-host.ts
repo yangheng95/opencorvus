@@ -167,9 +167,8 @@ export async function collectTaskRunEvidence(input: {
         const executionBaselineTreeSHA256 = z.string().regex(/^[a-f0-9]{64}$/).parse(
           baselineMetadata.workspace_tree_sha256,
         )
-        if (executionBaselineTreeSHA256 !== initialTreeSHA256) {
-          throw new Error(`Task ${task.id} execution baseline differs from its immutable creation workspace`)
-        }
+        // EngineGit.prepare validates creation identity before the first execution.
+        // A resumed occurrence retains that identity and captures its own baseline.
         const workflowDigests = currentArtifacts
           .filter((artifact) => artifact.kind === "dispatch_lineage" || artifact.kind === "task_completion_decision")
           .map((artifact) => {

@@ -1,0 +1,43 @@
+{
+  "at": "2026-10-29T16:01:24.395Z",
+  "taskID": "tsk_g00VZRwPYV00d8tnhr0L",
+  "checkpoint": {
+    "commit": "52062f2a90a2e3ebe70a1b7b88d901a11c392875",
+    "ref": "refs/opencorvus/task-checkpoints/art_hifpbu2MI7CLnYoe8dLX/art_hxbYNGdASVyT1Gk6WcBQ"
+  },
+  "lifecycle": {
+    "terminalEventID": "pev_g0VZSDzhU001PP3uocYr",
+    "terminalStatus": "completed",
+    "timeCompleted": 1793289022103
+  },
+  "decision": {
+    "source": "engine_artifact",
+    "artifact_id": "art_g0VZSDywD00w7dE4YBqF",
+    "catalog_revision": 86,
+    "expected_sha256": "5e2564128bfd82681545baee8d54e92cce18d2c6a118462522caa5d1c99e8a50"
+  },
+  "consumer": {
+    "outcome": "collected",
+    "bundleKeys": [
+      "schema_version",
+      "usage",
+      "task",
+      "revision_facts",
+      "workspace_checkpoint",
+      "terminal_occurrence",
+      "sessions",
+      "messages",
+      "engine_artifacts",
+      "task_artifacts",
+      "canonical_sha256"
+    ]
+  },
+  "missionDelivery": {
+    "passed": true,
+    "pendingInboxIDs": [],
+    "leasedInboxIDs": [],
+    "unansweredInboxIDs": [],
+    "deadLetterInboxIDs": [],
+    "invalidTerminalInboxIDs": []
+  }
+}

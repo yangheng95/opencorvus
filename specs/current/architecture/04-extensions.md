@@ -1093,6 +1093,9 @@ Artifact transport 可用不等于当前任务必须先枚举目录：明确授�
 Artifact discovery 优先使用已知精确筛选并完整遍历该查询的分页；只有明确证据缺口仍未解决时才扩大为完整目录枚举。
 consumer 必须先完整精确读取，再明确选择 typed output 的语义来源。需要独立选择回执的消费者使用 `artifact_select`；通用发布直接在本次请求中选择已完整读取的来源。完整但未选择的读取只进入
 `observed_artifact_locators`，成功选择的来源进入 `source_artifact_locators`，且 source 必须是 observed 的子集；
+独立选择的 `purpose` 说明特定消费者输出如何使用该来源。`artifact_snapshot` 成功即已保存捕获字节，
+`artifact_read` 交付精确内容供核对；`artifact_select` 记录语义来源回执，不承担字节保全或文件版本比较。
+仅仅读取或保留文件不是选择理由，真正支持输出的来源仍须按上述消费者合同明确选择。
 零选择与缺省可选字段均合法。固定阶段依赖的包发布器通过 `predecessor_artifact_locators`
 接收精确 Engine Artifact 前驱；初始阶段使用空数组。此参数只验证阶段依赖，不重复提交输出的
 完整语义来源。原始文件资源等附加证据仍沿真实完整读取/选择，由 Plugin ToolHost 的同 Turn

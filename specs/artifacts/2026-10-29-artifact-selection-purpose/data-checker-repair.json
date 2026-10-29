@@ -1,0 +1,6 @@
+{
+  "initial_helper": { "pid": 92896, "parent_pid": 87768, "session_id": 58406, "exit_code": 1, "settled": true },
+  "local_reproduction": { "error_code": "ERR_ASSERTION", "input": "SQLite null-prototype row and JSON-decoded row with identical id=1", "reason": "node:assert/strict.deepEqual compares prototypes" },
+  "repair": "Compare complete row JSON values per table with a bounded boolean assertion; do not dump database contents in assertion diagnostics.",
+  "rerun": "verify-data.mjs exited 0 and produced data-review.json"
+}

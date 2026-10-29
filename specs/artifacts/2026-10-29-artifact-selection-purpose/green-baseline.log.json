@@ -1,0 +1,4 @@
+{
+  "encoding": "raw UTF-8, lossless JSON string",
+  "raw_utf8": "[1/1] START test/task-run-evidence-reopened-baseline.test.ts\nbun test v1.4.0 (34cbb9a40) 1x PARALLEL\n\ntest\\isolated-test-entry.test.ts:\n(pass) reopened evidence retains creation identity and the current occurrence baseline across Projects and restart [26111.99ms]\n\n 1 pass\n 0 fail\n 36 expect() calls\nRan 1 test across 1 file. [30.47s]\n[1/1] DONE test/task-run-evidence-reopened-baseline.test.ts exit=0 duration=31.76s\n"
+}

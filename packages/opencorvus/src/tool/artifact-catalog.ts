@@ -73,7 +73,10 @@ const ARTIFACT_READ_DESCRIPTION =
   "Missing, foreign-Task, corrupt, wrong-path, and digest-mismatched references fail explicitly; no locator is inferred or substituted."
 
 const ARTIFACT_SELECT_DESCRIPTION =
-  "Declare that one exact Artifact is a semantic source for the current consumer output using artifact_read_ref. " +
+  "Declare one exact Artifact as a semantic source for a specific current consumer output that requires an independent selection receipt, using artifact_read_ref. " +
+  "Explain in purpose which output the source supports and how. This receipt records semantic provenance; artifact_snapshot already preserves captured file bytes, and artifact_read supplies their exact content for inspection. " +
+  "A selection does not capture bytes or compare file versions. Reading a file or retaining its original bytes alone does not require a selection. " +
+  "For generic artifact_publish, choose that publication's sources directly in source_read_refs using complete artifact_read_ref values. " +
   "Call only after artifact_read has completely covered this exact locator in the current Session and Turn. " +
   "The Host validates the selection against persisted complete-read facts; a consulted but unselected Artifact remains observation only. " +
   "Zero selections are valid when no Artifact semantically supports the output. Selection does not dispatch, route, accept, retry, or complete work."
@@ -94,6 +97,7 @@ const ARTIFACT_PUBLISH_DESCRIPTION =
 
 const CURRENT_PROJECT_ARTIFACT_SNAPSHOT_DESCRIPTION =
   "Publish real files from the canonical current Task primary project as one immutable Task Artifact snapshot. " +
+  "A successful result has already preserved the captured bytes; source selection is a separate semantic provenance operation. " +
   "This tool never reads a projected worker's mutable managed worktree and does not claim Build merge authority. " +
   "Supply canonical project-relative paths and normalized media types. The Host validates Task ownership and stable " +
   "regular-file bytes, then atomically publishes or reuses the exact Task-scoped content snapshot. The result returns the resource_set for publication plus artifact_locator_ref values for exact snapshot/resource reads; never reconstruct opaque IDs or digests. The Host expands the set in canonical UTF-8 byte path order. Pass resource_set to artifact_publish " +

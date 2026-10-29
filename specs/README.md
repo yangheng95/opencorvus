@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Artifact 来源声明与文件保全](records/2026-10/2026-10-29-artifact-selection-purpose.md)：真实来源声明的语义边界及同一代码 Task 的独立审阅续跑。
+
 - [Task检查点与用户Git状态](artifacts/2026-10-29-checkpoint-ownership/README.md)：私有对象引用、原暂存/分支保全及真实代码Task验收。
 
 - [Task续跑与失败唤醒验收](artifacts/2026-10-29-task-recovery-integrity/README.md)：同一原Task/Session的真实Sol续跑、104项后端合同与数据和运行结算。

@@ -1,0 +1,43 @@
+{
+  "at": "2026-10-29T16:04:21.808Z",
+  "source": {
+    "tables": 92,
+    "rows": 161325,
+    "allRowsUnchanged": true,
+    "schema": 9
+  },
+  "current": {
+    "tables": 92,
+    "rows": 172843,
+    "originalIdentitiesRetained": 161325,
+    "schema": 9,
+    "integrity": "ok"
+  },
+  "project": {
+    "head": "4f0111e3bcf3dea3571f5db546086ec724b0d79f",
+    "ref": "refs/heads/main",
+    "indexBytesPreserved": true,
+    "stageEntriesPreserved": true,
+    "filesPreserved": [
+      ".gitattributes",
+      ".gitignore",
+      ".opencorvus/opencorvus.jsonc",
+      "README.md",
+      "counter.py",
+      "operator-note.txt",
+      "test_counter.py"
+    ],
+    "noteStaged": "OPERATOR_STAGED_795\n",
+    "noteWorking": "OPERATOR_WORKING_795\n"
+  },
+  "attachmentCopies": {
+    "namespaces": 4,
+    "counts": [
+      17,
+      10,
+      16,
+      8
+    ],
+    "bytesEqualAcrossOriginalAndCopy": true
+  }
+}

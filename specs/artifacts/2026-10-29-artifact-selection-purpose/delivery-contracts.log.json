@@ -1,0 +1,4 @@
+{
+  "encoding": "raw UTF-8, lossless JSON string",
+  "raw_utf8": "[1/1] START test/protocol-scheduler-message-delivery.test.ts\nbun test v1.4.0 (34cbb9a40) 1x PARALLEL\n\ntest\\isolated-test-entry.test.ts:\n(pass) Protocol immutable lifecycle delivery fact > derives the public timeline key and typed identities from one durable lifecycle envelope [1828.80ms]\n\n 1 pass\n 0 fail\n 4 expect() calls\nRan 1 test across 1 file. [4.79s]\n[1/1] DONE test/protocol-scheduler-message-delivery.test.ts exit=0 duration=6.20s\n"
+}

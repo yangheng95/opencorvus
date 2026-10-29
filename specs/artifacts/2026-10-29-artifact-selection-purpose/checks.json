@@ -1,0 +1,119 @@
+[
+  {
+    "label": "references",
+    "startedAt": 1793288357776,
+    "closedAt": 1793288384734,
+    "code": 0,
+    "signal": null,
+    "childPID": 38468,
+    "output": "references.log.json"
+  },
+  {
+    "label": "types",
+    "startedAt": 1793288383226,
+    "closedAt": 1793288385102,
+    "code": 1,
+    "signal": null,
+    "childPID": 62216,
+    "output": "types.log.json"
+  },
+  {
+    "label": "types2",
+    "startedAt": 1793288442693,
+    "closedAt": 1793288478202,
+    "code": 0,
+    "signal": null,
+    "childPID": 50868,
+    "output": "types2.log.json"
+  },
+  {
+    "label": "docs",
+    "startedAt": 1793288383226,
+    "closedAt": 1793288390972,
+    "code": 0,
+    "signal": null,
+    "childPID": 98864,
+    "output": "docs.log.json"
+  },
+  {
+    "label": "architecture",
+    "startedAt": 1793288405806,
+    "closedAt": 1793288407074,
+    "code": 0,
+    "signal": null,
+    "childPID": 44016,
+    "output": "architecture.log.json"
+  },
+  {
+    "label": "delivery-contracts",
+    "startedAt": 1793289306409,
+    "closedAt": 1793289314082,
+    "code": 0,
+    "signal": null,
+    "childPID": 25232,
+    "output": "delivery-contracts.log.json"
+  },
+  {
+    "label": "red-baseline",
+    "startedAt": 1793289576406,
+    "closedAt": 1793289609748,
+    "code": 1,
+    "signal": null,
+    "childPID": 95804,
+    "output": "red-baseline.log.json"
+  },
+  {
+    "label": "green-baseline",
+    "startedAt": 1793289656024,
+    "closedAt": 1793289689463,
+    "code": 0,
+    "signal": null,
+    "childPID": 98952,
+    "output": "green-baseline.log.json"
+  },
+  {
+    "label": "real-reader",
+    "startedAt": 1793289377257,
+    "closedAt": 1793289382917,
+    "code": 1,
+    "signal": null,
+    "childPID": 78088,
+    "output": "real-reader.log.json"
+  },
+  {
+    "label": "real-reader-green",
+    "startedAt": 1793289676606,
+    "closedAt": 1793289684588,
+    "code": 0,
+    "signal": null,
+    "childPID": 13476,
+    "output": "real-reader-green.log.json"
+  },
+  {
+    "label": "types-final",
+    "startedAt": 1793289675927,
+    "closedAt": 1793289720737,
+    "code": 0,
+    "signal": null,
+    "childPID": 73016,
+    "output": "types-final.log.json"
+  },
+  {
+    "label": "docs-final",
+    "startedAt": 1793290021990,
+    "closedAt": 1793290031645,
+    "code": 0,
+    "signal": null,
+    "childPID": 8268,
+    "output": "docs-final.log.json"
+  },
+  {
+    "label": "architecture-final",
+    "startedAt": 1793290021976,
+    "closedAt": 1793290024240,
+    "code": 0,
+    "signal": null,
+    "childPID": 23204,
+    "output": "architecture-final.log.json"
+  }
+]
