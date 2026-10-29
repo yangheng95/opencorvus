@@ -1,0 +1,75 @@
+$ bun script/run-tests.ts test/scheduler-reply-boundary.test.ts test/scheduler-task-root-message-schema.test.ts test/mission-process-recovery.test.ts test/mission-process-recovery-driver.test.ts test/mission-streamed-recovery.test.ts
+[1/5] START test/scheduler-reply-boundary.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) persisted Scheduler reply boundaries share the Session completed-step, typed-control and accepted-batch contract [3592.56ms]
+
+ 1 pass
+ 0 fail
+ 14 expect() calls
+Ran 1 test across 1 file. [6.27s]
+[1/5] DONE test/scheduler-reply-boundary.test.ts exit=0 duration=7.75s
+[2/5] START test/scheduler-task-root-message-schema.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) scheduler Task-root Message protocol > fresh Mission delivery propagates Project cancellation through its actual wake reservation and settles the receipt [4755.64ms]
+(pass) scheduler Task-root Message protocol > settles Project discovery queued after teardown starts while its initialized owner is still admitted [3384.37ms]
+(pass) scheduler Task-root Message protocol > global discovery admits a later Project and settles admitted work during Project teardown [10485.01ms]
+(pass) scheduler Task-root Message protocol > discovers a large scheduler Project backlog through fixed database cursor pages [2459.42ms]
+(pass) scheduler Task-root Message protocol > settles a Mission delivery against the occurrence open at enqueue after close and reopen [2999.74ms]
+(pass) scheduler Task-root Message protocol > materializes one delivery reference into the persisted Message and Orchestrator wake [3172.60ms]
+(pass) scheduler Task-root Message protocol > pages only due unresolved recipient heads and refills the shared production capacity [16166.71ms]
+(pass) scheduler Task-root Message protocol > recovers an unfinished scheduler wake and settles its failed reply inside the enqueue-time Mission occurrence [4702.67ms]
+
+ 8 pass
+ 0 fail
+ 105 expect() calls
+Ran 8 tests across 1 file. [54.74s]
+[2/5] DONE test/scheduler-task-root-message-schema.test.ts exit=0 duration=54.94s
+[3/5] START test/mission-process-recovery.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) canonical Mission close and process reconciliation > Project opening recovers its pending Mission deletion while the unopened sibling stays actionable [3785.43ms]
+(pass) canonical Mission close and process reconciliation > discovers one Project's Mission recovery candidates through fixed cursor pages [6005.69ms]
+(pass) canonical Mission close and process reconciliation > startup discovers one pure closing occurrence and resumes its original provenance [2840.39ms]
+(pass) canonical Mission close and process reconciliation > preserves an exact live Prompt owner and its persisted assistant frontier [1945.30ms]
+
+ 4 pass
+ 0 fail
+ 10 expect() calls
+Ran 4 tests across 1 file. [17.11s]
+[3/5] DONE test/mission-process-recovery.test.ts exit=0 duration=17.33s
+[4/5] START test/mission-process-recovery-driver.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a failed recovery worker exposes its exit and final diagnostics before verbose startup output [38.04ms]
+(pass) write-ahead takeover preserves one Message and a later owner death in the same opened occurrence gets a new identity [27572.74ms]
+(pass) the production close route takes over a dead recovery write-ahead owner before committing closed [10765.32ms]
+(pass) an absolute deadline fences a live hung recovery owner and a successor resumes its write-ahead Message [12640.85ms]
+(pass) caller abort fences a live hung recovery owner and a successor resumes its write-ahead Message [12894.12ms]
+(pass) an admitted Mission recovery completes beyond its admission deadline [13256.45ms]
+(pass) an admitted Mission recovery settles its caller-abort origin [12484.70ms]
+(pass) an admitted Mission recovery settles its typed-caller-abort origin [13240.87ms]
+(pass) the live Project driver preserves a peer owner and takes over after that owner dies without restart [15062.07ms]
+(pass) startup takes over an abort-closed delete intent after the route owner dies [6877.96ms]
+
+ 10 pass
+ 0 fail
+ 19 expect() calls
+Ran 10 tests across 1 file. [125.70s]
+[4/5] DONE test/mission-process-recovery-driver.test.ts exit=0 duration=125.80s
+[5/5] START test/mission-streamed-recovery.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a Mission recovers a committed side effect, corrects a stale continuation and starts its independent verifier [69860.07ms]
+
+ 1 pass
+ 0 fail
+ 34 expect() calls
+Ran 1 test across 1 file. [71.90s]
+[5/5] DONE test/mission-streamed-recovery.test.ts exit=0 duration=72.08s

@@ -1,0 +1,100 @@
+{
+  "at": "2026-10-29T14:02:12.266Z",
+  "checks": [
+    {
+      "label": "red-tests",
+      "startedAt": 1793279697579,
+      "closedAt": 1793279703949,
+      "code": 1,
+      "signal": null,
+      "childPID": 75516
+    },
+    {
+      "label": "red-original",
+      "startedAt": 1793279697579,
+      "closedAt": 1793279703353,
+      "code": 1,
+      "signal": null,
+      "childPID": 64996
+    },
+    {
+      "label": "red-recovery",
+      "startedAt": 1793280495333,
+      "closedAt": 1793280501116,
+      "code": 1,
+      "signal": null,
+      "childPID": 32216
+    },
+    {
+      "label": "green-original2",
+      "startedAt": 1793279862579,
+      "closedAt": 1793279868303,
+      "code": 0,
+      "signal": null,
+      "childPID": 100020
+    },
+    {
+      "label": "green-recovery",
+      "startedAt": 1793280643879,
+      "closedAt": 1793280650995,
+      "code": 0,
+      "signal": null,
+      "childPID": 72420
+    },
+    {
+      "label": "focused-final",
+      "startedAt": 1793279912499,
+      "closedAt": 1793279959259,
+      "code": 0,
+      "signal": null,
+      "childPID": 91572
+    },
+    {
+      "label": "recovery-full",
+      "startedAt": 1793280717932,
+      "closedAt": 1793280998283,
+      "code": 0,
+      "signal": null,
+      "childPID": 87504
+    },
+    {
+      "label": "compaction-regression",
+      "startedAt": 1793280882814,
+      "closedAt": 1793280986644,
+      "code": 0,
+      "signal": null,
+      "childPID": 81368
+    },
+    {
+      "label": "types3",
+      "startedAt": 1793280717932,
+      "closedAt": 1793280785964,
+      "code": 0,
+      "signal": null,
+      "childPID": 95220
+    },
+    {
+      "label": "topology-index",
+      "startedAt": 1793280961301,
+      "closedAt": 1793281010989,
+      "code": 0,
+      "signal": null,
+      "childPID": 91012
+    },
+    {
+      "label": "source-binding2",
+      "startedAt": 1793281506538,
+      "closedAt": 1793281511579,
+      "code": 0,
+      "signal": null,
+      "childPID": 81516
+    }
+  ],
+  "backendTests": {
+    "focused": 37,
+    "recovery": 24,
+    "compactionRegression": 43,
+    "total": 104
+  },
+  "scope": "Formal backend checkers and actual closed-data reader/audit; browser interactions and screenshots are separate manual acceptance. First three checks are expected pre-fix failures."
+}

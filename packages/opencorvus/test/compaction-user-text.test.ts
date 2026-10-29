@@ -36,7 +36,8 @@ async function select(
 ) {
   const selected = CompactionUserText.create(messages, () => {})
   const result = (await selected.execute!(input, options())) as { output: string }
-  return { input, result, receipt: CompactionUserText.Receipt.parse(JSON.parse(result.output)) }
+  const receipt = { ...CompactionUserText.Receipt.parse(JSON.parse(result.output)), excerpts: input.excerpts }
+  return { input, result, receipt: CompactionUserText.readReceipt(checkpoint("msg_selection", receipt).parts)! }
 }
 function checkpoint(id: string, receipt?: CompactionUserText.Selection, completed = true): Message.WithParts {
   const tool: Message.ToolPart[] = receipt
@@ -50,8 +51,8 @@ function checkpoint(id: string, receipt?: CompactionUserText.Selection, complete
           callID: receipt.selection_call_id,
           state: {
             status: "completed",
-            input: {},
-            output: JSON.stringify(receipt),
+            input: { excerpts: receipt.excerpts },
+            output: JSON.stringify({ status: receipt.status, selection_call_id: receipt.selection_call_id, sources: receipt.sources }),
             title: "Selection",
             metadata: {},
             time: { start: 1, end: 2 },
@@ -98,6 +99,24 @@ test("exact source selection replays the original user identity and contiguous U
   expect(source).toEqual(original)
 })
 
+test("retained original instructions survive execution metadata added after their actual selection", async () => {
+  const original = structuredClone(source)
+  original.info.author = "orchestrator"
+  original.parts[0]!.kind = "control"
+  original.parts[0]!.source = "system"
+  const { receipt } = await select([original])
+  const admitted = structuredClone(original)
+  admitted.parts[0]!.metadata = {
+    catalog_snapshot_ref: "/attachment/project_catalog/current.json",
+    catalog_snapshot_hash: "a".repeat(64),
+  }
+  const projected = CompactionUserText.project(receipt, [admitted])
+  expect(projected).toEqual([{ info: admitted.info, parts: [{ ...admitted.parts[0], text: quote }] }])
+  expect(CompactionUserText.excerptSource(projected[0]!.parts[0] as Message.TextPart)).toMatchObject({
+    originalRole: "user", originalAuthor: "orchestrator", partID: original.parts[0]!.id, offset: 24, end: 24 + quote.length,
+  })
+})
+
 test.each(["assistant", "tool"])(
   "%s evidence claiming user authority returns an explicit source error",
   async (kind) => {
@@ -140,7 +159,10 @@ test("repeated excerpts require an exact offset and preserve that occurrence", a
     { excerpts: [{ part_id: message.parts[0]!.id, text: "repeat", offset: 14 }] },
     options(),
   )) as { output: string }
-  expect(CompactionUserText.project(JSON.parse(result.output), [message])[0]!.parts).toEqual([
+  const selection = CompactionUserText.readReceipt(checkpoint("msg_repeat_selection", {
+    ...JSON.parse(result.output), excerpts: [{ part_id: message.parts[0]!.id, text: "repeat", offset: 14 }],
+  }).parts)!
+  expect(CompactionUserText.project(selection, [message])[0]!.parts).toEqual([
     { ...message.parts[0], text: "repeat" },
   ])
   await expect(
@@ -188,6 +210,37 @@ test("malformed stored selection receipts return the explicit integrity error", 
   expect(() => CompactionUserText.readReceipt(summary.parts)).toThrow(CompactionUserText.IntegrityError)
 })
 
+test.each(["count", "source", "text", "offset"] as const)(
+  "a stored selection with a mismatched %s request returns its typed integrity error",
+  async (field) => {
+    const { receipt } = await select()
+    const summary = checkpoint("msg_request_pair", receipt)
+    const part = summary.parts[0] as Message.ToolPart
+    if (part.state.status !== "completed") throw new Error("Expected completed selection")
+    const other = user("msg_other", (source.parts[0] as Message.TextPart).text)
+    const excerpt = { part_id: source.parts[0]!.id, text: quote, offset: 24 }
+    if (field === "source") excerpt.part_id = other.parts[0]!.id
+    if (field === "text") excerpt.text = "x".repeat(quote.length)
+    if (field === "offset") excerpt.offset = 25
+    part.state.input = { excerpts: field === "count" ? [] : [excerpt] }
+    expect(() => CompactionUserText.project(CompactionUserText.readReceipt(summary.parts), [source, other]))
+      .toThrow(expect.objectContaining({ name: "CompactionUserTextIntegrityError", code: "COMPACTION_USER_TEXT_INVALID" }))
+  },
+)
+
+test.each(["role", "author", "session"] as const)(
+  "a retained source with changed %s returns its typed identity error",
+  async (field) => {
+    const { receipt } = await select()
+    const changed = structuredClone(source)
+    if (field === "role") (changed.info as { role: string }).role = "assistant"
+    if (field === "author") changed.info.author = "another participant"
+    if (field === "session") changed.parts[0]!.sessionID = "ses_another"
+    expect(() => CompactionUserText.project(receipt, [changed]))
+      .toThrow(expect.objectContaining({ name: "CompactionUserTextIntegrityError", code: "COMPACTION_USER_TEXT_INVALID" }))
+  },
+)
+
 test("copied user sources resolve original selection identities through their recorded ancestry", async () => {
   const { receipt } = await select()
   const copy = user("msg_copy", (source.parts[0] as Message.TextPart).text)
@@ -204,7 +257,7 @@ test("copied user sources resolve original selection identities through their re
 test("published selection persists through a new checkpoint and failed attempts until explicitly replaced", async () => {
   const { receipt } = await select()
   const original = checkpoint("msg_first", receipt)
-  const release: CompactionUserText.Selection = { status: "retained", selection_call_id: "release_1", sources: [] }
+  const release: CompactionUserText.Selection = { status: "retained", selection_call_id: "release_1", sources: [], excerpts: [] }
   const next = checkpoint("msg_next")
   const failed = checkpoint("msg_failed", release, false)
   expect(CompactionUserText.selection([source, original, next, failed], next.info.id)).toEqual(receipt)
@@ -318,7 +371,7 @@ test("atomic checkpoint publication validates the current canonical selected use
 })
 
 test("parallel selection results retain the latest authored call when results arrive in reverse order", async () => {
-  const { receipt } = await select()
+  const { result } = await select()
   const later = { status: "retained", selection_call_id: "select_2", sources: [] }
   const messages: ModelMessage[] = [
     {
@@ -341,7 +394,7 @@ test("parallel selection results retain the latest authored call when results ar
           type: "tool-result",
           toolName: CompactionUserText.TOOL_NAME,
           toolCallId: "select_1",
-          output: { type: "text", value: JSON.stringify(receipt) },
+          output: { type: "text", value: result.output },
         },
       ],
     },

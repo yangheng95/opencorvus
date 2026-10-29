@@ -1,0 +1,65 @@
+$ bun script/run-tests.ts test/compaction-user-text.test.ts test/compaction-transcript-budget.test.ts
+[1/2] START test/compaction-user-text.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) exact source selection replays the original user identity and contiguous Unicode text [4.87ms]
+(pass) retained original instructions survive execution metadata added after their actual selection [0.68ms]
+(pass) assistant evidence claiming user authority returns an explicit source error [0.41ms]
+(pass) tool evidence claiming user authority returns an explicit source error [0.08ms]
+(pass) repeated excerpts require an exact offset and preserve that occurrence [0.64ms]
+(pass) a fixed-source receipt reports changed user content as an integrity error [0.52ms]
+(pass) paraphrased text returns an actionable source-integrity error [0.16ms]
+(pass) incorrect explicit offset returns an actionable source-integrity error [0.03ms]
+(pass) malformed stored selection receipts return the explicit integrity error [0.44ms]
+(pass) a stored selection with a mismatched count request returns its typed integrity error [0.46ms]
+(pass) a stored selection with a mismatched source request returns its typed integrity error [0.21ms]
+(pass) a stored selection with a mismatched text request returns its typed integrity error [0.23ms]
+(pass) a stored selection with a mismatched offset request returns its typed integrity error [0.24ms]
+(pass) a retained source with changed role returns its typed identity error [0.32ms]
+(pass) a retained source with changed author returns its typed identity error [0.16ms]
+(pass) a retained source with changed session returns its typed identity error [0.27ms]
+(pass) copied user sources resolve original selection identities through their recorded ancestry [0.74ms]
+(pass) published selection persists through a new checkpoint and failed attempts until explicitly replaced [0.53ms]
+(pass) working notes preserve the genuine selection exchange and enforce the shared capacity [8.94ms]
+(pass) atomic checkpoint publication validates the current canonical selected user source [1918.35ms]
+(pass) parallel selection results retain the latest authored call when results arrive in reverse order [0.78ms]
+
+ 21 pass
+ 0 fail
+ 31 expect() calls
+Ran 21 tests across 1 file. [4.16s]
+[1/2] DONE test/compaction-user-text.test.ts exit=0 duration=5.56s
+[2/2] START test/compaction-transcript-budget.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) mandatory context overflow persists a typed failure and the original source through reopening [2300.12ms]
+(pass) request space preserves complete long user and Tool fields with their source identities [27.83ms]
+(pass) a complete source inventory fits its exact request budget [2.10ms]
+(pass) fitted evidence preserves the initially visible original source inventory [23.27ms]
+(pass) a constrained whole request retains exact readable locators and source pagination [13.87ms]
+{"scenario":"transcript-packing-scale","fields":64,"sourceCharacters":1152694,"estimatedTokens":11841,"milliseconds":10.066899999999805}
+(pass) packing many individually short fields respects the whole request budget [15.15ms]
+{"scenario":"source-catalog-scale","sources":64,"capacity":19000,"estimatedTokens":18872,"milliseconds":3.9990000000007058}
+(pass) a 64-source catalog fits its configured helper request [6.68ms]
+{"scenario":"source-catalog-scale","sources":256,"capacity":19000,"estimatedTokens":18992,"milliseconds":11.352799999999661}
+(pass) a 256-source catalog fits its configured helper request [15.64ms]
+{"scenario":"source-catalog-scale","sources":1024,"capacity":19000,"estimatedTokens":18992,"milliseconds":40.177700000000186}
+(pass) a 1024-source catalog fits its configured helper request [53.32ms]
+(pass) a single Message with 1024 Parts remains readable across narrow and wide renderings [86.26ms]
+(pass) catalog requests bind the exact helper identity and return exact page ranges [11.64ms]
+{"scenario":"streamed-large-catalog","sources":256,"steps":20,"status":"completed","requests":17,"pages":10,"nodes":10,"catalogChars":211713,"deliveredCatalogChars":3340,"retainedMessageID":"msg_g0VZRbpM200F1xxDMNn1"}
+(pass) navigation to the penultimate original source in a 256-source catalog with 20 steps reports completed [5501.18ms]
+{"scenario":"streamed-large-catalog","sources":1024,"steps":20,"status":"completed","requests":19,"pages":12,"nodes":12,"catalogChars":849388,"deliveredCatalogChars":4003,"retainedMessageID":"msg_g0VZRbrn400WD6rtWPcV"}
+(pass) navigation to the penultimate original source in a 1024-source catalog with 20 steps reports completed [13618.51ms]
+{"scenario":"streamed-large-catalog","sources":1024,"steps":2,"status":"step_limit","requests":2,"pages":1,"nodes":1,"catalogChars":849388,"deliveredCatalogChars":316}
+(pass) navigation to the penultimate original source in a 1024-source catalog with 2 steps reports step_limit [12508.26ms]
+(pass) bounded retained-user references recover their exact selected range through the canonical reader [5.21ms]
+(pass) file-backed output keeps its authoritative file and exact reader content [1449.40ms]
+
+ 16 pass
+ 0 fail
+ 2964 expect() calls
+Ran 16 tests across 1 file. [38.99s]
+[2/2] DONE test/compaction-transcript-budget.test.ts exit=0 duration=39.15s

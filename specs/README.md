@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Task续跑与失败唤醒验收](artifacts/2026-10-29-task-recovery-integrity/README.md)：同一原Task/Session的真实Sol续跑、104项后端合同与数据和运行结算。
+
 - [L04持久迁移与切换资格](records/2026-10/2026-10-29-heavy-workbench-l04-qualification.md)：合成旧库实跑、事务版本与epoch、受控进程中断；先做便宜可达性，不当重型题完成。
 
 - [协调阶段文件差异](records/2026-10/2026-10-29-build-handoff-observation.md)：Build共享物理终态发布缺口、两模式与多项目正向回归及真实Review验收。

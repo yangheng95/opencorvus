@@ -771,11 +771,14 @@ test("bounded retained-user references recover their exact selected range throug
   const quote = part.text.slice(offset, offset + 4400)
   const before = structuredClone(original)
   const options = { toolCallId: "select_range", messages: [], context: {}, abortSignal: new AbortController().signal }
-  const result = (await CompactionUserText.create([original], () => {}).execute!(
-    { excerpts: [{ part_id: part.id, text: quote }] },
-    options,
-  )) as { output: string }
-  const retained = CompactionUserText.project(CompactionUserText.Receipt.parse(JSON.parse(result.output)), [original])
+  const input = { excerpts: [{ part_id: part.id, text: quote }] }
+  const result = (await CompactionUserText.create([original], () => {}).execute!(input, options)) as { output: string }
+  const selection = CompactionUserText.readReceipt([{
+    id: "prt_select_range", messageID: "msg_select_range", sessionID: part.sessionID,
+    type: "tool", tool: CompactionUserText.TOOL_NAME, callID: options.toolCallId,
+    state: { status: "completed", input, output: result.output, title: "Selection", metadata: {}, time: { start: 1, end: 2 } },
+  }])!
+  const retained = CompactionUserText.project(selection, [original])
   const rendered = field(text(catalogMessages(projected(retained, 0).transcript.catalog.content)), "text")
     .trim()
     .split("\n")

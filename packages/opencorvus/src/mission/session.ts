@@ -1,3 +1,4 @@
+import { settledRecoveryReplyPredicateSql } from "@/session/completed-reply"
 import { Database, NotFoundError, and, desc, eq, isNull, like, or, sql } from "../storage/db"
 import fs from "node:fs/promises"
 import path from "node:path"
@@ -591,19 +592,7 @@ export function listGlobalMissionProcessRecoveryCandidates(input: {
                   SELECT 1
                   FROM ${MessageTable} AS terminal_recovery_reply
                   WHERE terminal_recovery_reply.session_id = ${SessionTable.id}
-                    AND json_extract(terminal_recovery_reply.data, '$.role') = 'assistant'
-                    AND json_extract(terminal_recovery_reply.data, '$.parentID') = recovery_wake.id
-                    AND json_extract(terminal_recovery_reply.data, '$.time.completed') IS NOT NULL
-                    AND NOT (
-                      json_extract(terminal_recovery_reply.data, '$.finish') = 'error'
-                      AND json_extract(terminal_recovery_reply.data, '$.error.name') = 'ProcessExecutionInterruptedError'
-                      AND json_type(terminal_recovery_reply.data, '$.error') = 'object'
-                      AND (SELECT COUNT(*) FROM json_each(json_extract(terminal_recovery_reply.data, '$.error'))) = 2
-                      AND json_type(terminal_recovery_reply.data, '$.error.data') = 'object'
-                      AND (SELECT COUNT(*) FROM json_each(json_extract(terminal_recovery_reply.data, '$.error.data'))) = 1
-                      AND json_type(terminal_recovery_reply.data, '$.error.data.message') = 'text'
-                      AND length(json_extract(terminal_recovery_reply.data, '$.error.data.message')) > 0
-                    )
+                    AND ${settledRecoveryReplyPredicateSql({ data: sql`terminal_recovery_reply.data`, messageID: sql`terminal_recovery_reply.id`, userMessageID: sql`recovery_wake.id` })}
                 )
             )
               )

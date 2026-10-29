@@ -6,6 +6,9 @@
 
 ### zh-CN
 
+- 修复目录元数据补充后原 Task 续跑误报保留用户原文损坏的问题；从同一真实工具请求与结果核对原身份、作者、范围和原文，无需修改既有消息或清空数据库。
+- 已完成的业务错误结算原调度唤醒，保留可见失败；真正未完成或进程中断仍按原执行轮次恢复，避免同一投递持续产生失败回复。
+
 - 修复执行者修改文件后请求协调时漏存差异的问题；Review 在续跑后保留原执行轮次的文件变化，必需观测失败仍返回明确的部分完成状态。
 
 - 记忆与上下文按项目选择，支持直接阅读真实的项目 MEMORY.MD、版本及更新时间；仅有 Chat 的项目也可使用，并保留当前对话和项目知识检索。
@@ -36,6 +39,9 @@
 - 修复 Windows 检查器并发准备原生辅助程序时，编译产物与运行文件互相冲突导致的拒绝访问。
 
 ### en-US
+
+- Fix retained user-text integrity failures when resuming an original Task after catalog metadata is attached. Replay checks identity, author, range and verbatim text against the original Tool request and result, preserving existing messages and data.
+- Settle scheduler wakes after completed business errors while preserving the visible failure. Unfinished and process-interrupted replies retain occurrence-bound recovery, preventing repeated failed replies for the same delivery.
 
 - Preserve file changes when a Build worker requests coordination after editing. Review retains the original physical-turn diff across continuation; required observation failures keep their typed partial outcome.
 

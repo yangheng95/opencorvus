@@ -1,0 +1,332 @@
+{
+  "at": "2026-10-29T13:59:50.641Z",
+  "databases": [
+    {
+      "file": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-29/review-handoff-793/runtime/data/opencorvus.db",
+      "tables": 92,
+      "rows": 146855,
+      "schema": 9,
+      "integrity": "ok",
+      "changed": []
+    },
+    {
+      "file": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-29/compaction-catalog-794/runtime/data/opencorvus.db",
+      "tables": 92,
+      "rows": 148796,
+      "schema": 9,
+      "integrity": "ok",
+      "changed": [
+        {
+          "table": "bus_publication_delivery",
+          "before": 28583,
+          "after": 28959,
+          "added": 376,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 28583,
+          "after": 28959,
+          "added": 376,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 3867,
+          "after": 3922,
+          "added": 55,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 3867,
+          "after": 3922,
+          "added": 55,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 11601,
+          "after": 11766,
+          "added": 165,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_artifact",
+          "before": 73,
+          "after": 74,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_artifact_catalog_revision",
+          "before": 73,
+          "after": 74,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 29739,
+          "after": 30118,
+          "added": 379,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 29768,
+          "after": 30156,
+          "added": 388,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_git_checkpoint_outcome",
+          "before": 14,
+          "after": 15,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_git_checkpoint_request",
+          "before": 14,
+          "after": 15,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_interaction_outcome",
+          "before": 0,
+          "after": 1,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_interaction_request",
+          "before": 0,
+          "after": 1,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_task_root_ingress",
+          "before": 19,
+          "after": 20,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "event_occurrence",
+          "before": 3682,
+          "after": 3737,
+          "added": 55,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "memory_chunk",
+          "before": 34,
+          "after": 34,
+          "added": 0,
+          "removed": 0,
+          "updated": [
+            {
+              "key": "34",
+              "columns": [
+                "content",
+                "token_count",
+                "time_updated"
+              ]
+            }
+          ]
+        },
+        {
+          "table": "memory_file",
+          "before": 34,
+          "after": 34,
+          "added": 0,
+          "removed": 0,
+          "updated": [
+            {
+              "key": "34",
+              "columns": [
+                "time_updated"
+              ]
+            }
+          ]
+        },
+        {
+          "table": "message",
+          "before": 515,
+          "after": 520,
+          "added": 5,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "part",
+          "before": 1431,
+          "after": 1452,
+          "added": 21,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "permission_execution_result",
+          "before": 120,
+          "after": 121,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "permission_ledger",
+          "before": 612,
+          "after": 617,
+          "added": 5,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "protocol_event",
+          "before": 1554,
+          "after": 1574,
+          "added": 20,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "provider_activity_outcome",
+          "before": 504,
+          "after": 510,
+          "added": 6,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "provider_activity_request",
+          "before": 504,
+          "after": 510,
+          "added": 6,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "provider_usage_event",
+          "before": 491,
+          "after": 500,
+          "added": 9,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "runtime_execution_capacity_lease",
+          "before": 3,
+          "after": 3,
+          "added": 0,
+          "removed": 0,
+          "updated": [
+            {
+              "key": "1",
+              "columns": [
+                "lease_id",
+                "owner_id",
+                "time_acquired",
+                "expires_at"
+              ]
+            },
+            {
+              "key": "2",
+              "columns": [
+                "lease_id",
+                "owner_id",
+                "time_acquired",
+                "expires_at"
+              ]
+            }
+          ]
+        },
+        {
+          "table": "session",
+          "before": 67,
+          "after": 68,
+          "added": 1,
+          "removed": 0,
+          "updated": [
+            {
+              "key": "64",
+              "columns": [
+                "time_updated"
+              ]
+            },
+            {
+              "key": "65",
+              "columns": [
+                "time_updated"
+              ]
+            }
+          ]
+        },
+        {
+          "table": "tool_part_outcome",
+          "before": 399,
+          "after": 404,
+          "added": 5,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "tool_part_request",
+          "before": 399,
+          "after": 404,
+          "added": 5,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "workbench_brief_snapshot",
+          "before": 13,
+          "after": 14,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        }
+      ]
+    }
+  ],
+  "attachments": [
+    {
+      "files": 17,
+      "exact": 17
+    },
+    {
+      "files": 10,
+      "exact": 10
+    },
+    {
+      "files": 12,
+      "exact": 12
+    }
+  ],
+  "project": {
+    "headBefore": "1b6ae6e649db0022aa197592e5a7c8f24d264ef8",
+    "headAfter": "1b6ae6e649db0022aa197592e5a7c8f24d264ef8",
+    "statusBefore": "",
+    "statusAfter": "",
+    "trackedFiles": 6,
+    "exactTrackedFiles": 6
+  }
+}

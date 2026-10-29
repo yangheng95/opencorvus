@@ -2,7 +2,7 @@ import { Message } from "@/session/message"
 import { MessageTable } from "@/session/session.sql"
 import { and, eq, sql, type Database } from "@/storage/db"
 import { SchedulerMessageWakeReason } from "./scheduler-message-wake-reason"
-import { completedReplyPredicateSql } from "@/session/completed-reply"
+import { completedReplyPredicateSql, settledRecoveryReplyPredicateSql } from "@/session/completed-reply"
 
 /**
  * Whether the persisted wake Message is the one this scheduler delivery owns.
@@ -36,7 +36,7 @@ export function schedulerWakeMessageMatchesInTransaction(
   return reason.data.eventID === input.eventID && reason.data.inboxID === input.inboxID
 }
 
-export function successfulSchedulerWakeReplyExistsInTransaction(
+export function settledSchedulerWakeReplyExistsInTransaction(
   db: Database.TxOrDb,
   input: { sessionID: string; messageID: string },
 ): boolean {
@@ -47,7 +47,7 @@ export function successfulSchedulerWakeReplyExistsInTransaction(
       .where(
         and(
           eq(MessageTable.session_id, input.sessionID),
-          completedReplyPredicateSql({
+          settledRecoveryReplyPredicateSql({
             data: sql`${MessageTable.data}`,
             messageID: sql`${MessageTable.id}`,
             userMessageID: sql`${input.messageID}`,

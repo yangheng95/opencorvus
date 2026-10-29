@@ -182,8 +182,15 @@ Project memory has three explicitly scoped authorities:
    `RetainCompactionUserText` lets the compactor select contiguous verbatim
    excerpts from original user text. A successful visible Tool result records
    exact source identities, role/author, Unicode-safe ranges and a fixed-source
-   fingerprint in the existing canonical Tool request/outcome store. The host
-   validates provenance and capacity, not the meaning of authorization. It
+   fingerprint in the existing canonical Tool request/outcome store. Replay
+   binds the selection to that same immutable Tool request and result:
+   the original author/role and exact source identities, request-to-receipt
+   correspondence, Unicode-safe offsets and verbatim selected text must agree.
+   The capture-time whole-Part fingerprint remains historical provenance;
+   execution metadata added at later assistant admission does not change the
+   selected user instruction. Whole-Part copy ancestry retains its separate
+   exact-copy integrity contract.
+   The host validates provenance and capacity, not the meaning of authorization. It
    cannot promote Tool quotations or assistant paraphrases to user instructions.
    Task-root participant input first follows the existing single-record delivery
    into its Orchestrator Session, preserving the real Message/Part identity,

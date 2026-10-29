@@ -44,6 +44,28 @@ export function completedReplyPredicateSql(input: {
   )`
 }
 
+/** A completed business error settles its wake. Only the runtime's exact
+ * process-interruption receipt leaves physical recovery work. */
+export function settledRecoveryReplyPredicateSql(input: {
+  data: SQL
+  messageID: SQL
+  userMessageID: SQL
+}): SQL {
+  return sql`(
+    ${completedReplyPredicateSql({ ...input, includeFailedReply: true })}
+    AND NOT coalesce((
+      json_extract(${input.data}, '$.finish') = 'error'
+      AND json_extract(${input.data}, '$.error.name') = 'ProcessExecutionInterruptedError'
+      AND json_type(${input.data}, '$.error') = 'object'
+      AND (SELECT count(*) FROM json_each(json_extract(${input.data}, '$.error'))) = 2
+      AND json_type(${input.data}, '$.error.data') = 'object'
+      AND (SELECT count(*) FROM json_each(json_extract(${input.data}, '$.error.data'))) = 1
+      AND json_type(${input.data}, '$.error.data.message') = 'text'
+      AND length(json_extract(${input.data}, '$.error.data.message')) > 0
+    ), 0)
+  )`
+}
+
 export function isSettledReplyToUserMessage(
   message: Message.WithParts,
   userMessageID: string,

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Task恢复实证](../../artifacts/2026-10-29-task-recovery-integrity/README.md)：真实原Task/Session证据重放与失败唤醒结算，完整提交工作流仍待验收。
+
 - [2026-10-29-heavy-workbench-l04-qualification.md](2026-10-29-heavy-workbench-l04-qualification.md)：合成原库、真实ACK及原子版本/写者切换与进程恢复的便宜构造。
 
 - [2026-10-29-build-handoff-observation.md](2026-10-29-build-handoff-observation.md)：协调前保留实际文件观测、失败回执与续跑Review。

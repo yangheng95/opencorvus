@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-29-task-recovery-integrity](2026-10-29-task-recovery-integrity/README.md)：原选文与投递red/green、104项后端回归、真实Task续跑和四张页面。
+
 - [2026-10-29-build-handoff-observation](2026-10-29-build-handoff-observation/README.md)：正式后端合同、真实协调阶段Review与模型/数据/运行结算。
 
 - [2026-10-29-memory-context-journey](2026-10-29-memory-context-journey/README.md)：16张项目记忆原图、真实只读文档和逐行数据/运行结算。

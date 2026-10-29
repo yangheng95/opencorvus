@@ -1,0 +1,85 @@
+$ bun script/run-tests.ts test/compaction-fork-lifecycle.test.ts test/compaction-integrity.test.ts test/compaction-task-authority.test.ts test/compaction-recovery-boundary.test.ts
+[1/4] START test/compaction-fork-lifecycle.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) reconstructs the original anchor and retained tail after fork [1987.80ms]
+(pass) reconstructs the original anchor and retained tail after side-chat [1773.71ms]
+(pass) reports a typed integrity failure for a checkpoint pointing outside copied history [1582.09ms]
+(pass) recovers literal source citations after successive fork copies [2635.05ms]
+(pass) recovers literal source citations after successive side-chat copies [1818.95ms]
+(pass) reports a changed copied source while reading its current exact content [1665.43ms]
+{"scenario":"copy-evidence-depth","copies":32,"chars":136000,"elapsedMs":1213}
+(pass) preserves a deep copied evidence chain while fencing another Project [4433.72ms]
+(pass) keeps historical execution references read-only in an independent side context [1464.46ms]
+(pass) copies the completed reply's exact accepted steering batch [1812.03ms]
+(pass) retains independent side-chat source evidence when deleting its standalone source [1772.35ms]
+(pass) rolls back physical deletion when an independent copy commits before its fence [1387.10ms]
+(pass) physically deletes a standalone source when only another Project declares a reference [2732.03ms]
+
+ 12 pass
+ 0 fail
+ 48 expect() calls
+Ran 12 tests across 1 file. [29.19s]
+[1/4] DONE test/compaction-fork-lifecycle.test.ts exit=0 duration=30.49s
+[2/4] START test/compaction-integrity.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) compaction request and continuation contracts > assistant selects its entire first open execution with default tail and preserve=4000 [1545.13ms]
+(pass) compaction request and continuation contracts > assistant selects its entire first open execution with default tail and preserve=default [1382.59ms]
+(pass) compaction request and continuation contracts > assistant selects its entire first completed execution with default tail and preserve=4000 [1482.42ms]
+(pass) compaction request and continuation contracts > assistant selects its entire first completed execution with default tail and preserve=default [1407.79ms]
+(pass) compaction request and continuation contracts > mission selects its entire first open execution with default tail and preserve=4000 [2003.28ms]
+(pass) compaction request and continuation contracts > mission selects its entire first open execution with default tail and preserve=default [1185.53ms]
+(pass) compaction request and continuation contracts > mission selects its entire first completed execution with default tail and preserve=4000 [1308.71ms]
+(pass) compaction request and continuation contracts > mission selects its entire first completed execution with default tail and preserve=default [1443.50ms]
+(pass) compaction request and continuation contracts > intersects input capacity with the actual combined-window output reservation [1.65ms]
+(pass) compaction request and continuation contracts > preserves the initial anchor with a retained tail before-source and repeated continuation compaction [1607.96ms]
+(pass) compaction request and continuation contracts > preserves the initial anchor with a retained tail after-source and repeated continuation compaction [1747.93ms]
+(pass) compaction request and continuation contracts > preserves the initial anchor with a retained tail at-source and repeated continuation compaction [1826.72ms]
+(pass) compaction request and continuation contracts > prices compaction system, tools and binary images in the same request envelope [5.28ms]
+(pass) compaction request and continuation contracts > retains a completed assistant tool step and reconstructs the same tail [1825.26ms]
+(pass) compaction request and continuation contracts > bounded summary input keeps an exact readable result and attachment locator [6.48ms]
+(pass) real local streaming compaction transport > checks the final continuation envelope after tool-result growth [1688.12ms]
+(pass) real local streaming compaction transport > checks the final continuation envelope after step-system growth [1393.68ms]
+(pass) real local streaming compaction transport > publishes the completed contract through HTTP stream, processor and durable control [2992.45ms]
+(pass) real local streaming compaction transport > publishes the incomplete contract through HTTP stream, processor and durable control [2146.71ms]
+(pass) real local streaming compaction transport > publishes the incomplete contract through HTTP stream, processor and durable control [1673.32ms]
+(pass) real local streaming compaction transport > publishes the not_smaller contract through HTTP stream, processor and durable control [1750.36ms]
+
+ 21 pass
+ 0 fail
+ 100 expect() calls
+Ran 21 tests across 1 file. [32.46s]
+[2/4] DONE test/compaction-integrity.test.ts exit=0 duration=32.59s
+[3/4] START test/compaction-task-authority.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) retains the exact Task authority and source evidence across three worker checkpoints [3622.37ms]
+(pass) reconstructs descriptor-backed Task evidence as independent side history [2541.99ms]
+(pass) returns a Task ownership conflict when copying root execution identity (checkpoint: false) [2826.50ms]
+(pass) returns a Task ownership conflict when copying root execution identity (checkpoint: true) [1955.81ms]
+(pass) returns a Task ownership conflict when copying worker execution identity (checkpoint: false) [2833.97ms]
+(pass) returns a Task ownership conflict when copying worker execution identity (checkpoint: true) [3465.28ms]
+
+ 6 pass
+ 0 fail
+ 46 expect() calls
+Ran 6 tests across 1 file. [19.16s]
+[3/4] DONE test/compaction-task-authority.test.ts exit=0 duration=19.31s
+[4/4] START test/compaction-recovery-boundary.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a recovered first checkpoint preserves later accepted input (overflow=false) [5314.24ms]
+(pass) a recovered repeated checkpoint preserves later accepted input (overflow=false) [4238.53ms]
+(pass) a recovered first checkpoint preserves later accepted input (overflow=true) [4231.54ms]
+(pass) a recovered repeated checkpoint preserves later accepted input (overflow=true) [3419.37ms]
+
+ 4 pass
+ 0 fail
+ 34 expect() calls
+Ran 4 tests across 1 file. [19.51s]
+[4/4] DONE test/compaction-recovery-boundary.test.ts exit=0 duration=19.69s

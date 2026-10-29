@@ -13,7 +13,7 @@ import {
   SessionTable,
 } from "@/session/session.sql"
 import { Message } from "@/session/message"
-import { completedReplyPredicateSql } from "@/session/completed-reply"
+import { settledRecoveryReplyPredicateSql } from "@/session/completed-reply"
 import { and, asc, Database, eq, inArray, or, sql } from "@/storage/db"
 import { TaskCreatorMetadata } from "@/task-api/task-creator"
 import { ProtocolDeliveryReceiptTable, ProtocolEventTable, ProtocolInboxTable } from "./protocol.sql"
@@ -37,7 +37,7 @@ import { assertTaskNotDeletedInTransaction, projectTaskRowInTransaction, type Ta
 import {
   completedSchedulerWakeReplyExistsInTransaction,
   schedulerWakeMessageMatchesInTransaction,
-  successfulSchedulerWakeReplyExistsInTransaction,
+  settledSchedulerWakeReplyExistsInTransaction,
 } from "./session-wake-state"
 
 const SCHEDULER_MESSAGE_EVENT_TYPE = "scheduler.message"
@@ -118,9 +118,9 @@ function schedulerSessionWakeHasRecoverableTerminalReceipt() {
     AND NOT EXISTS (
       SELECT 1
       FROM protocol_delivery_receipt AS scheduler_session_wake_receipt
-      JOIN message AS scheduler_successful_reply
-        ON scheduler_successful_reply.session_id = ${ProtocolInboxTable.actor_id}
-       AND ${completedReplyPredicateSql({ data: sql`scheduler_successful_reply.data`, messageID: sql`scheduler_successful_reply.id`, userMessageID: sql`json_extract(scheduler_session_wake_receipt.receipt, '$.message_id')` })}
+      JOIN message AS scheduler_settled_reply
+        ON scheduler_settled_reply.session_id = ${ProtocolInboxTable.actor_id}
+       AND ${settledRecoveryReplyPredicateSql({ data: sql`scheduler_settled_reply.data`, messageID: sql`scheduler_settled_reply.id`, userMessageID: sql`json_extract(scheduler_session_wake_receipt.receipt, '$.message_id')` })}
       WHERE scheduler_session_wake_receipt.inbox_id = ${ProtocolInboxTable.id}
         AND json_extract(scheduler_session_wake_receipt.receipt, '$.kind') = 'session_wake'
     )`
@@ -163,12 +163,12 @@ function schedulerSessionWakeHasActiveOccurrence() {
   )`
 }
 
-function schedulerSessionWakeHasNoSuccessfulReply() {
+function schedulerSessionWakeHasNoSettledReply() {
   return sql`NOT EXISTS (
     SELECT 1
-    FROM message AS scheduler_successful_reply
-    WHERE scheduler_successful_reply.session_id = ${ProtocolInboxTable.actor_id}
-      AND ${completedReplyPredicateSql({ data: sql`scheduler_successful_reply.data`, messageID: sql`scheduler_successful_reply.id`, userMessageID: sql`json_extract(${ProtocolDeliveryReceiptTable.receipt}, '$.message_id')` })}
+    FROM message AS scheduler_settled_reply
+    WHERE scheduler_settled_reply.session_id = ${ProtocolInboxTable.actor_id}
+      AND ${settledRecoveryReplyPredicateSql({ data: sql`scheduler_settled_reply.data`, messageID: sql`scheduler_settled_reply.id`, userMessageID: sql`json_extract(${ProtocolDeliveryReceiptTable.receipt}, '$.message_id')` })}
   )`
 }
 
@@ -1706,7 +1706,7 @@ export function listUnansweredSchedulerSessionWakes(input: {
           eq(ProtocolInboxTable.actor, "session"),
           eq(ProtocolEventTable.type, SCHEDULER_MESSAGE_EVENT_TYPE),
           sql`json_extract(${ProtocolDeliveryReceiptTable.receipt}, '$.kind') = 'session_wake'`,
-          schedulerSessionWakeHasNoSuccessfulReply(),
+          schedulerSessionWakeHasNoSettledReply(),
           schedulerSessionWakeHasActiveOccurrence(),
           ...(input.afterInboxID ? [sql`${ProtocolInboxTable.id} > ${input.afterInboxID}`] : []),
         ),
@@ -1773,7 +1773,7 @@ export function auditSchedulerSessionDeliverySettlement(sessionID: string): {
           sessionID,
           messageID: delivery.delivery_result.message_id,
         }
-        if (successfulSchedulerWakeReplyExistsInTransaction(db, reply)) return false
+        if (settledSchedulerWakeReplyExistsInTransaction(db, reply)) return false
         const envelope = db
           .select({ type: ProtocolEventTable.type })
           .from(ProtocolEventTable)
@@ -1864,7 +1864,7 @@ export function schedulerSessionWakeNeedsRecovery(input: {
       openedEventID: input.openedEventID,
     })
     if (disposition.kind === "mission_closed") return false
-    return !successfulSchedulerWakeReplyExistsInTransaction(db, {
+    return !settledSchedulerWakeReplyExistsInTransaction(db, {
       sessionID: input.sessionID,
       messageID: input.messageID,
     })

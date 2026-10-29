@@ -1309,7 +1309,7 @@ describe("scheduler Task-root Message protocol", () => {
     })
   }, 120_000)
 
-  test("resumes an errored scheduler wake only inside its enqueue-time Mission occurrence", async () => {
+  test("recovers an unfinished scheduler wake and settles its failed reply inside the enqueue-time Mission occurrence", async () => {
     const project = recoveryProject
     const fixture = await Instance.provide({
       directory: project.path,
@@ -1515,7 +1515,7 @@ describe("scheduler Task-root Message protocol", () => {
         path: { cwd: project.path, root: project.path },
         cost: 0,
         tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
-        error: { name: "UnknownError", data: { message: "Retryable scheduler wake failure" } },
+        error: { name: "UnknownError", data: { message: "Terminal scheduler wake failure" } },
       })
       recoveryOrder.push("reply:persisted")
     })
@@ -1573,8 +1573,7 @@ describe("scheduler Task-root Message protocol", () => {
       expect(recoveredWake).toEqual(fixture.persisted)
       expect(occurrenceCounts).toEqual({ messages: 1, parts: 1, controls: 1 })
       expect(auditSchedulerSessionDeliverySettlement(fixture.missionSessionID)).toMatchObject({
-        passed: false,
-        unansweredInboxIDs: [fixture.receipt.inboxID],
+        passed: true,
       })
       expect(requireSchedulerDelivery(fixture.receipt.inboxID).deliveryResult).toEqual({
         kind: "session_wake",

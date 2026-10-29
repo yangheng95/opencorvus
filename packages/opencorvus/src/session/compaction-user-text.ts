@@ -52,7 +52,9 @@ export namespace CompactionUserText {
       sources: z.array(Source),
     })
     .strict()
-  export type Selection = z.infer<typeof Receipt>
+  export type Receipt = z.infer<typeof Receipt>
+  /** The original request is read from the same immutable Tool exchange. */
+  export type Selection = Receipt & { excerpts: z.infer<typeof Parameters>["excerpts"] }
   const excerpts = new WeakMap<Message.TextPart, z.infer<typeof Source>>()
   export const excerptSource = (part: Message.TextPart) => excerpts.get(part)
 
@@ -72,7 +74,7 @@ export namespace CompactionUserText {
     )
   }
 
-  function receiptOutput(output: string, callID: string): Selection {
+  function receiptOutput(output: string, callID: string): Receipt {
     let parsed: unknown
     try {
       parsed = JSON.parse(output)
@@ -90,7 +92,11 @@ export namespace CompactionUserText {
       (part) => part.type === "tool" && part.tool === TOOL_NAME && part.state.status === "completed",
     )
     if (!part || part.type !== "tool" || part.state.status !== "completed") return undefined
-    return receiptOutput(part.state.output, part.callID)
+    const receipt = receiptOutput(part.state.output, part.callID)
+    const request = Parameters.safeParse(part.state.input)
+    if (!request.success || request.data.excerpts.length !== receipt.sources.length)
+      throw new IntegrityError(`User-text selection ${part.callID} has an invalid original Tool request.`)
+    return { ...receipt, excerpts: request.data.excerpts }
   }
 
   /** Input is canonical chronological history, never prose claiming to be a Tool. */
@@ -118,8 +124,11 @@ export namespace CompactionUserText {
     const bound = CompactionEvidenceReader.bind(messages)
     const projected = new Map<string, Message.WithParts>()
     const selected = new Set<string>()
-    for (const source of receipt.sources) {
+    for (const [index, source] of receipt.sources.entries()) {
+      const excerpt = receipt.excerpts[index]
+      if (!excerpt) throw new IntegrityError(`User-text selection ${receipt.selection_call_id} has no original excerpt.`)
       const { part, owner, origin } = bound.resolvePart(source.partID)
+      const requested = bound.resolvePart(excerpt.part_id)
       if (
         part.type !== "text" ||
         owner.role !== "user" ||
@@ -127,21 +136,25 @@ export namespace CompactionUserText {
         source.originalRole !== owner.role ||
         source.sessionID !== (origin?.sessionID ?? part.sessionID) ||
         source.messageID !== (origin?.messageID ?? owner.id) ||
-        MessageCopyEvidence.digest(owner, part) !== source.sha256 ||
+        requested.part.id !== part.id ||
+        requested.owner.id !== owner.id ||
         selected.has(part.id) ||
         source.end <= source.offset ||
+        source.end - source.offset !== excerpt.text.length ||
+        (excerpt.offset !== undefined && excerpt.offset !== source.offset) ||
         !boundary(part.text, source.offset) ||
-        !boundary(part.text, source.end)
+        !boundary(part.text, source.end) ||
+        part.text.slice(source.offset, source.end) !== excerpt.text
       )
         throw new IntegrityError(
           `Retained user source ${source.partID} no longer matches its exact original identity and range.`,
         )
       selected.add(part.id)
-      const excerpt = { ...part, text: part.text.slice(source.offset, source.end) }
-      excerpts.set(excerpt, { ...source, sessionID: part.sessionID, messageID: owner.id, partID: part.id })
+      const retainedPart = { ...part, text: excerpt.text }
+      excerpts.set(retainedPart, { ...source, sessionID: part.sessionID, messageID: owner.id, partID: part.id })
       let message = projected.get(owner.id)
       if (!message) projected.set(owner.id, (message = { info: owner, parts: [] }))
-      message.parts.push(excerpt)
+      message.parts.push(retainedPart)
     }
     // Original Message and Part order, independent of the model's selection order.
     return messages.flatMap((message) => {
@@ -205,7 +218,7 @@ export namespace CompactionUserText {
             end,
           })
         }
-        const receipt: Selection = { status: "retained", selection_call_id: options.toolCallId, sources }
+        const receipt: Receipt = { status: "retained", selection_call_id: options.toolCallId, sources }
         const output = JSON.stringify(receipt)
         fit({ name: TOOL_NAME, input, output, options })
         return { title: "Original user text selected", output, metadata: { selectedParts: sources.length } }

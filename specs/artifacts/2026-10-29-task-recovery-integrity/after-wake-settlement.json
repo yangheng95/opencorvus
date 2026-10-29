@@ -1,0 +1,27 @@
+{
+  "at": "2026-10-29T13:30:50.793Z",
+  "sessionID": "ses_-zUQYZsqLzz6t3a5Qq9O",
+  "audit": {
+    "passed": true,
+    "pendingInboxIDs": [],
+    "leasedInboxIDs": [],
+    "unansweredInboxIDs": [],
+    "deadLetterInboxIDs": [],
+    "invalidTerminalInboxIDs": []
+  },
+  "originalError": {
+    "messageID": "msg_g0VZRRpZV00BgIvtMT1Y",
+    "parentID": "msg_htxYCH4yX1D34y6SAuBR",
+    "finish": "error",
+    "time": {
+      "created": 1793277546397,
+      "completed": 1793277547478
+    },
+    "error": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Error: E2E_REQUEST_BUDGET_EXHAUSTED"
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+$ bun script/run-tests.ts test/compaction-user-text.test.ts "--test-name-pattern=retained.original.instructions"
+[1/1] START test/compaction-user-text.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+131 |         selected.has(part.id) ||
+132 |         source.end <= source.offset ||
+133 |         !boundary(part.text, source.offset) ||
+134 |         !boundary(part.text, source.end)
+135 |       )
+136 |         throw new IntegrityError(
+                    ^
+CompactionUserTextIntegrityError: Retained user source prt_msg_update no longer matches its exact original identity and range.
+ code: "COMPACTION_USER_TEXT_INVALID"
+
+      at project (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\compaction-user-text.ts:136:15)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\compaction-user-text.test.ts:112:40)
+(fail) retained original instructions survive execution metadata added after their actual selection [5.52ms]
+
+ 0 pass
+ 13 filtered out
+ 1 fail
+Ran 1 test across 1 file. [2.83s]
+[1/1] DONE test/compaction-user-text.test.ts exit=1 duration=4.33s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\compaction-user-text.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\compaction-user-text.test.ts
+Test runtime retained after unsuccessful run: D:\oc794-mvtjzye1\red-tests\tmp\opencorvus-test-run-gk5H3m\runner-75516-qWnCaH\runtime-root\tmp\opencorvus-test-run-lLDIfv
+Physical/output settlement confirmed: true
+error: script "test" exited with code 1
+Test runtime retained after unsuccessful run: D:\oc794-mvtjzye1\red-tests\tmp\opencorvus-test-run-gk5H3m
+Physical/output settlement confirmed: true
