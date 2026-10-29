@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Mission 创建选择旅程](records/2026-10/2026-10-30-mission-selection-journey.md)：真实搜索、保留选择、类型切换及取消状态调查。
+
 - [Sources 与默认桌面看板](records/2026-10/2026-10-30-source-and-board-desktop.md)：真实来源操作复核及默认展开侧栏时的五列可读性。
 
 - [原代码 Mission 验收收口](records/2026-10/2026-10-30-mission-acceptance-closure.md)：保留原Task和失败历史，验证完整真实证据、交互交付与Mission终态。

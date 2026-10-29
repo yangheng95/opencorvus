@@ -1,0 +1,66 @@
+{
+  "at": "2026-10-29T18:53:41.913Z",
+  "credentialCopyCreated": false,
+  "modelCatalogCopyRetired": true,
+  "requests": 0,
+  "cumulativeRequests": 993,
+  "source": {
+    "catalogSameBytes": true,
+    "catalogSameMetadata": true,
+    "authSameMetadata": true
+  },
+  "reserveMs": 2382710,
+  "publicShutdown": 200,
+  "physical": {
+    "native": {
+      "occurrence": "mission-selection-800-after-dd47bd91-cabe-4f4d-a9ca-e4f50dd71a69",
+      "outcome": "settled",
+      "host": {
+        "pid": 73568,
+        "processInstanceID": "win32:639288961206589897",
+        "occurrenceID": "2b009a72-a525-4112-ac59-9400cfdbb9b3"
+      },
+      "target": {
+        "pid": 99256,
+        "processInstanceID": "win32:639288961215867454",
+        "occurrenceID": "eae15a06-67af-4825-be04-2e25dc48ec27"
+      },
+      "observedAtUtc": "2026-10-29T18:53:40.849Z",
+      "deadlineAt": 1793302403559,
+      "terminal": {
+        "occurrenceID": "mission-selection-800-after-dd47bd91-cabe-4f4d-a9ca-e4f50dd71a69",
+        "pid": 99256,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "launcher": {
+      "originalChildExit": 0,
+      "observedAtUtc": "2026-10-29T18:53:40.8821114Z"
+    },
+    "observedAtUtc": "2026-10-29T18:53:41.8287112Z",
+    "chain": [
+      {
+        "identity": {
+          "pid": 73568,
+          "processInstanceID": "win32:639288961206589897",
+          "occurrenceID": "2b009a72-a525-4112-ac59-9400cfdbb9b3"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "identity": {
+          "pid": 99256,
+          "processInstanceID": "win32:639288961215867454",
+          "occurrenceID": "eae15a06-67af-4825-be04-2e25dc48ec27"
+        },
+        "state": "dead_or_reused"
+      }
+    ]
+  }
+}

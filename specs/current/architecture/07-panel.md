@@ -1027,6 +1027,15 @@ an empty query result and an unavailable compatible catalog have distinct hints.
 Package-authored descriptions wrap fully in the native scrolling checklist;
 the Project directory dropdown retains its compact path presentation.
 
+The creation dialog's current catalog request projection retains the exact
+returned matching identities alongside its selectable options. Options kept for
+an authored selection carry an outside-search label when they did not match the
+current query. An empty search result is explained beside the search field;
+existing selections remain visible and eligible for submission. With no selected
+squad, that same empty-result fact explains the creation prerequisite. Context
+changes and dialog reopening clear the request projection through its existing
+generation/sequence owner.
+
 A hydrated empty Mission conversation reads its exact Session/directory record
 from that same loaded Mission Board store. Its saved pending request is a
 read-only context section outside the message tree, with the existing Board

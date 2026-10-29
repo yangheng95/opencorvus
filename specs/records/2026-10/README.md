@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-30-mission-selection-journey.md](2026-10-30-mission-selection-journey.md)：创建表单专家团搜索与选择的实际体验。
+
 - [2026-10-30-source-and-board-desktop.md](2026-10-30-source-and-board-desktop.md)：零Provider的Sources实页检查和默认桌面看板布局迭代。
 
 - [2026-10-30-mission-acceptance-closure.md](2026-10-30-mission-acceptance-closure.md)：原已完成代码Task的Mission完整验收、只读保全及真实运行结算。

@@ -527,6 +527,12 @@ body {
   white-space: nowrap;
 }
 
+.mission-create-form__search-origin {
+  align-self: flex-start;
+  max-width: 100%;
+  white-space: normal;
+}
+
 .mission-create-form__expert-squad-list {
   display: flex;
   max-height: calc(240px * var(--ui-scale));

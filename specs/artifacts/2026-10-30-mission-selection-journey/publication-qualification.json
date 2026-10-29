@@ -1,0 +1,80 @@
+{
+  "sessionID": "ses_-zUQX2jmmzzvFt8xAveR",
+  "events": [
+    {
+      "event": "session.created",
+      "occurrence": "bus-occurrence:53c57c61-06be-43e0-b626-3e3e73b31f6e",
+      "sessionID": "ses_-zUQX2jmmzzvFt8xAveR"
+    },
+    {
+      "event": "session.updated",
+      "occurrence": "bus-occurrence:a3cf80e7-f099-47d2-a66c-2ed5ffe8e1a4",
+      "sessionID": "ses_-zUQX2jmmzzvFt8xAveR"
+    },
+    {
+      "event": "session.updated",
+      "occurrence": "bus-occurrence:0d4e1cda-f0b6-420a-8798-eb1473acd9fd",
+      "sessionID": "ses_-zUQX2jmmzzvFt8xAveR"
+    },
+    {
+      "event": "session.updated",
+      "occurrence": "bus-occurrence:7d26be61-9b65-4879-82fb-04dd7f9db03e",
+      "sessionID": "ses_-zUQX2jmmzzvFt8xAveR"
+    }
+  ],
+  "deliveryReceipts": [
+    {
+      "occurrence": "bus-occurrence:53c57c61-06be-43e0-b626-3e3e73b31f6e",
+      "phase": "global",
+      "outcome": "succeeded"
+    },
+    {
+      "occurrence": "bus-occurrence:a3cf80e7-f099-47d2-a66c-2ed5ffe8e1a4",
+      "phase": "global",
+      "outcome": "succeeded"
+    },
+    {
+      "occurrence": "bus-occurrence:0d4e1cda-f0b6-420a-8798-eb1473acd9fd",
+      "phase": "global",
+      "outcome": "succeeded"
+    },
+    {
+      "occurrence": "bus-occurrence:7d26be61-9b65-4879-82fb-04dd7f9db03e",
+      "phase": "global",
+      "outcome": "succeeded"
+    },
+    {
+      "occurrence": "bus-occurrence:53c57c61-06be-43e0-b626-3e3e73b31f6e",
+      "phase": "global",
+      "outcome": "succeeded"
+    },
+    {
+      "occurrence": "bus-occurrence:a3cf80e7-f099-47d2-a66c-2ed5ffe8e1a4",
+      "phase": "global",
+      "outcome": "succeeded"
+    },
+    {
+      "occurrence": "bus-occurrence:0d4e1cda-f0b6-420a-8798-eb1473acd9fd",
+      "phase": "global",
+      "outcome": "succeeded"
+    },
+    {
+      "occurrence": "bus-occurrence:7d26be61-9b65-4879-82fb-04dd7f9db03e",
+      "phase": "global",
+      "outcome": "succeeded"
+    }
+  ],
+  "ownedDeliveryLeases": 8,
+  "linkedLeaseGrants": 8,
+  "additionalRows": {
+    "bus_publication_delivery": 8,
+    "bus_publication_delivery_receipt": 8,
+    "bus_publication_outbox": 4,
+    "bus_publication_owner": 4,
+    "bus_publication_phase_receipt": 12,
+    "engine_control_activation_lease": 8,
+    "engine_control_activation_lease_grant": 8,
+    "session": 1
+  },
+  "allNewPublicationFactsBelongToSavedDraft": true
+}

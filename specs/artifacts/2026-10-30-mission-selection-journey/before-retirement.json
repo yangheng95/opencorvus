@@ -1,0 +1,66 @@
+{
+  "at": "2026-10-29T18:39:50.602Z",
+  "credentialCopyCreated": false,
+  "modelCatalogCopyRetired": true,
+  "requests": 0,
+  "cumulativeRequests": 993,
+  "source": {
+    "catalogSameBytes": true,
+    "catalogSameMetadata": true,
+    "authSameMetadata": true
+  },
+  "reserveMs": 3214170,
+  "publicShutdown": 200,
+  "physical": {
+    "observedAtUtc": "2026-10-29T18:39:50.5073154Z",
+    "native": {
+      "occurrence": "mission-selection-800-before-263e6258-df2a-450a-a32c-38ec5519c0f1",
+      "outcome": "settled",
+      "host": {
+        "pid": 94972,
+        "processInstanceID": "win32:639288956039454288",
+        "occurrenceID": "86a035b8-a138-4e33-beab-5f9faa4f86ff"
+      },
+      "target": {
+        "pid": 98452,
+        "processInstanceID": "win32:639288956048752888",
+        "occurrenceID": "0855db31-b365-49dd-a4d6-1cc2ff1f25ce"
+      },
+      "observedAtUtc": "2026-10-29T18:39:49.389Z",
+      "deadlineAt": 1793302403559,
+      "terminal": {
+        "occurrenceID": "mission-selection-800-before-263e6258-df2a-450a-a32c-38ec5519c0f1",
+        "pid": 98452,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "launcher": {
+      "observedAtUtc": "2026-10-29T18:39:49.4232391Z",
+      "originalChildExit": 0
+    },
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 94972,
+          "processInstanceID": "win32:639288956039454288",
+          "occurrenceID": "86a035b8-a138-4e33-beab-5f9faa4f86ff"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 98452,
+          "processInstanceID": "win32:639288956048752888",
+          "occurrenceID": "0855db31-b365-49dd-a4d6-1cc2ff1f25ce"
+        }
+      }
+    ]
+  }
+}

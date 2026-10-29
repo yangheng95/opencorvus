@@ -1,0 +1,33 @@
+{
+  "at": "2026-10-29T18:54:51.580Z",
+  "missionID": "66393cec906d4d96",
+  "sessionID": "ses_-zUQX2jmmzzvFt8xAveR",
+  "title": "搜索选择保全800",
+  "kind": "mission",
+  "boardLane": "backlog",
+  "productPillar": "code",
+  "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\checkpoint-ownership-795\\checkpoint-qa-795",
+  "visibleExpertSquadIDs": [
+    "base"
+  ],
+  "pendingPrompt": {
+    "text": "这是一份未执行的创建表单验收草稿，只保存此原文；不得启动执行、创建 Task、调用模型或修改项目文件。"
+  },
+  "taskStats": {
+    "total": 0,
+    "running": 0,
+    "inactive": 0
+  },
+  "addedRowsByTable": {
+    "bus_publication_delivery": 8,
+    "bus_publication_delivery_receipt": 8,
+    "bus_publication_outbox": 4,
+    "bus_publication_owner": 4,
+    "bus_publication_phase_receipt": 12,
+    "engine_control_activation_lease": 8,
+    "engine_control_activation_lease_grant": 8,
+    "session": 1
+  },
+  "totalAdded": 53,
+  "publicAndPersistedSelectionAgree": true
+}

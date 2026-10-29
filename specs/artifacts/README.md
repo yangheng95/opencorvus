@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-30-mission-selection-journey](2026-10-30-mission-selection-journey/README.md)：匹配结果与保留选择的根因修复、真实草稿持久选择及16张实页。
+
 - [2026-10-30-source-board-desktop](2026-10-30-source-board-desktop/README.md)：默认五列布局修复、零Provider来源操作、13张实页及原数据保全。
 
 - [2026-10-30-mission-acceptance-closure](2026-10-30-mission-acceptance-closure/README.md)：修正诊断关闭计时、保留原中断、同一Task/Mission真实完整收口与八张实页。

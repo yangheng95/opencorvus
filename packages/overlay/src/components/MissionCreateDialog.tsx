@@ -10,6 +10,7 @@ import { projectDirectoryLabel } from "../utils/project-directory"
 import { formatErrorDetails } from "../services/diagnostics"
 import { localeTag, t } from "../utils/i18n"
 import { AutoGrowTextarea } from "./ui/AutoGrowTextarea"
+import { Badge } from "./ui/Badge"
 import { Button } from "./ui/Button"
 import { Checkbox } from "./ui/Checkbox"
 import { Dialog } from "./ui/Dialog"
@@ -22,7 +23,8 @@ import { TextField } from "./ui/TextField"
 
 type MissionCreateMode = "manual" | "ai"
 type MissionTypeSelection = ProductPillar | ""
-type SelectOption = { value: string; label: string; description?: string; action?: "install-more" }
+type SelectOption = { value: string; label: string; description?: string; action?: "install-more"; outsideSearch?: boolean }
+type SquadSearchResult = { options: ExpertSquadOption[]; matchingIDs: readonly string[] }
 
 export interface MissionCreateRequest {
   directory: string
@@ -72,7 +74,8 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   const [request, setRequest] = createSignal("")
   const [projectDirectory, setProjectDirectory] = createSignal("")
   const [productPillar, setProductPillar] = createSignal<MissionTypeSelection>("")
-  const [expertSquads, setExpertSquads] = createSignal<ExpertSquadOption[]>([])
+  const [expertSquadResult, setExpertSquadResult] = createSignal<SquadSearchResult>({ options: [], matchingIDs: [] })
+  const expertSquads = () => expertSquadResult().options
   const [expertSquadIDs, setExpertSquadIDs] = createSignal<string[]>([])
   const [expertSquadQuery, setExpertSquadQuery] = createSignal("")
   const [expertSquadLoading, setExpertSquadLoading] = createSignal(false)
@@ -121,6 +124,11 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
       value: squad.id,
       label: squad.display_label,
       description: squad.description,
+      outsideSearch:
+        Boolean(expertSquadQuery().trim()) &&
+        !expertSquadLoading() &&
+        !expertSquadError() &&
+        !expertSquadResult().matchingIDs.includes(squad.id),
     }))
     if (!projectDirectory()) return options
     return [
@@ -134,6 +142,13 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     ]
   })
   const selectedExpertSquadCount = createMemo(() => expertSquadIDs().length)
+  const noMatchingSquads = createMemo(
+    () =>
+      Boolean(expertSquadQuery().trim()) &&
+      !expertSquadLoading() &&
+      !expertSquadError() &&
+      expertSquadResult().matchingIDs.length === 0,
+  )
   const canSubmit = createMemo(
     () =>
       Boolean(
@@ -152,8 +167,8 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     if (expertSquadLoading()) return t("mission_board.create.loading_context")
     if (expertSquadError()) return t("mission_board.create.context_load_failed")
     if (selectedExpertSquadCount() === 0) {
+      if (noMatchingSquads()) return t("mission_board.create.no_matching_squads")
       if (expertSquads().length > 0) return t("mission_board.create.expert_squad_placeholder")
-      if (expertSquadQuery().trim()) return t("mission_board.create.no_matching_squads")
       return t("mission_board.create.no_compatible_squad")
     }
     return ""
@@ -175,7 +190,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     const generation = dialogGeneration
     const sequence = ++expertSquadRequestSequence
     setExpertSquadIDs([])
-    setExpertSquads([])
+    setExpertSquadResult({ options: [], matchingIDs: [] })
     setExpertSquadLoading(true)
     setExpertSquadError("")
     try {
@@ -188,7 +203,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
       const activeID = squads.some((squad) => squad.id === catalog.active.effective)
         ? catalog.active.effective
         : (squads[0]?.id ?? "")
-      setExpertSquads(squads)
+      setExpertSquadResult({ options: squads, matchingIDs: page.entries.map((squad) => squad.id) })
       setExpertSquadIDs(activeID ? [activeID] : [])
     } catch (nextError) {
       if (!ownsSquadRequest(generation, sequence, directory, pillar)) return
@@ -210,7 +225,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
       const page = await searchExpertSquads({ directory, productPillar: pillar, query, limit: 20 })
       if (!ownsSquadRequest(generation, sequence, directory, pillar)) return
       const squads = mergeSquadOptions(page.entries, expertSquads(), expertSquadIDs())
-      setExpertSquads(squads)
+      setExpertSquadResult({ options: squads, matchingIDs: page.entries.map((squad) => squad.id) })
     } catch (nextError) {
       if (!ownsSquadRequest(generation, sequence, directory, pillar)) return
       setExpertSquadError(nextError instanceof Error ? nextError.message : String(nextError))
@@ -243,7 +258,10 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
       const entries = installed
         ? [installed, ...page.entries.filter((entry) => entry.id !== installed.id)]
         : page.entries
-      setExpertSquads(mergeSquadOptions(entries, expertSquads(), selectedIDs))
+      setExpertSquadResult({
+        options: mergeSquadOptions(entries, expertSquads(), selectedIDs),
+        matchingIDs: page.entries.map((squad) => squad.id),
+      })
       setExpertSquadIDs(selectedIDs)
     } catch (nextError) {
       if (!ownsSquadRequest(generation, sequence, directory, pillar)) return
@@ -257,7 +275,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     expertSquadRequestSequence += 1
     setProjectDirectory(directory)
     setExpertSquadQuery("")
-    setExpertSquads([])
+    setExpertSquadResult({ options: [], matchingIDs: [] })
     setExpertSquadIDs([])
     setExpertSquadLoading(false)
     setExpertSquadError("")
@@ -309,7 +327,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
         setRequest("")
         setProjectDirectory(preferredDirectory)
         setProductPillar("")
-        setExpertSquads([])
+        setExpertSquadResult({ options: [], matchingIDs: [] })
         setExpertSquadIDs([])
         setExpertSquadQuery("")
         setExpertSquadLoading(false)
@@ -662,6 +680,15 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
               size="sm"
             />
             <p class="mission-create-form__context-status">{t("mission_board.create.squad_selection_help")}</p>
+            <Show when={noMatchingSquads()}>
+              <p class="mission-create-form__context-status" role="status">
+                {t("mission_board.create.no_matching_squads")}
+                <Show when={selectedExpertSquadCount() > 0}>
+                  {" "}
+                  {t("mission_board.create.selection_retained")}
+                </Show>
+              </p>
+            </Show>
             <div
               class="mission-create-form__expert-squad-list"
               role="group"
@@ -705,6 +732,11 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
                     >
                       <span class="mission-create-form__option">
                         <strong>{option.label}</strong>
+                        <Show when={option.outsideSearch}>
+                          <Badge class="mission-create-form__search-origin" tone="muted" size="sm">
+                            {t("mission_board.create.outside_search")}
+                          </Badge>
+                        </Show>
                         <Show when={option.description}>
                           <small>{option.description}</small>
                         </Show>
@@ -718,7 +750,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
           <Show
             when={expertSquadError()}
             fallback={
-              <Show when={prerequisiteMessage()}>
+              <Show when={prerequisiteMessage() && !noMatchingSquads()}>
                 <p class="mission-create-form__context-status" role="status">
                   {prerequisiteMessage()}
                 </p>
