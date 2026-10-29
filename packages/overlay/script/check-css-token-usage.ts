@@ -112,7 +112,11 @@ const HOST_RUNTIME_TOKEN_OWNERS = new Map<string, string[]>([
 ])
 const HOST_RUNTIME_TOKENS = new Set(HOST_RUNTIME_TOKEN_OWNERS.keys())
 // Kobalte owns these values on the rendered primitive elements.
-const PRIMITIVE_RUNTIME_TOKENS = new Set(["--kb-progress-fill-width", "--kb-tooltip-content-transform-origin"])
+const PRIMITIVE_RUNTIME_TOKENS = new Set([
+  "--kb-progress-fill-width",
+  "--kb-tooltip-content-transform-origin",
+  "--kb-popper-content-available-height",
+])
 const RUNTIME_TOKENS = new Set([...HOST_RUNTIME_TOKENS, ...PRIMITIVE_RUNTIME_TOKENS])
 
 interface TokenUse {

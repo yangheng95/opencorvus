@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [批准后的代码提交验收](records/2026-10/2026-10-30-approved-code-workflow.md)：完整真实改码、测试、批准和范围Git提交的当前版本验收。
+
 - [Mission 创建选择旅程](records/2026-10/2026-10-30-mission-selection-journey.md)：真实搜索、保留选择、类型切换及取消状态调查。
 
 - [Sources 与默认桌面看板](records/2026-10/2026-10-30-source-and-board-desktop.md)：真实来源操作复核及默认展开侧栏时的五列可读性。

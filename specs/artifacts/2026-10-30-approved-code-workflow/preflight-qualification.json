@@ -1,0 +1,24 @@
+{
+  "at": "2026-10-29T19:22:29.569Z",
+  "sessionID": "ses_-zUQWv3mfzziN0Hb5sbP",
+  "visibleRequest": "Reply with OK.",
+  "visibleReply": "OK",
+  "projectedModel": "gpt-6.1-sol",
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    }
+  ],
+  "source": "Actual canonical UI preflight in its new anonymous project; no existing Task was messaged"
+}

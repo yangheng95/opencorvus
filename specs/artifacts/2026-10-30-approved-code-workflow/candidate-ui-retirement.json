@@ -1,0 +1,94 @@
+{
+  "at": "2026-10-29T20:08:20.343Z",
+  "credentialCopyRetired": true,
+  "modelCatalogCopyRetired": true,
+  "requests": 3,
+  "previousRequests": 1080,
+  "cumulativeRequests": 1083,
+  "maximumRequests": 6,
+  "unusedAllowanceRetired": 3,
+  "exhausted": false,
+  "model": "gpt-6.1-sol",
+  "requestOutcomes": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof"
+    }
+  ],
+  "source": {
+    "catalogSameBytes": true,
+    "catalogSameMetadata": true,
+    "authSameMetadata": true
+  },
+  "publicShutdown": 200,
+  "reserveMs": 1650093,
+  "physical": {
+    "observedAtUtc": "2026-10-29T20:08:20.1714810Z",
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 87780,
+          "processInstanceID": "win32:639289011496634516",
+          "occurrenceID": "62fe7ae0-e7d6-4e63-a28c-137f6bce9ea5"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 93496,
+          "processInstanceID": "win32:639289011503985603",
+          "occurrenceID": "00f164b0-9c50-4ed0-b85d-8a9eea247fd4"
+        }
+      }
+    ],
+    "launcher": {
+      "originalChildExit": 0,
+      "observedAtUtc": "2026-10-29T20:08:18.7487523Z"
+    },
+    "native": {
+      "occurrence": "approved-code-801-ui-d8d33153-a1d0-4f68-99a6-c10de76b8039",
+      "outcome": "settled",
+      "host": {
+        "pid": 87780,
+        "processInstanceID": "win32:639289011496634516",
+        "occurrenceID": "62fe7ae0-e7d6-4e63-a28c-137f6bce9ea5"
+      },
+      "target": {
+        "pid": 93496,
+        "processInstanceID": "win32:639289011503985603",
+        "occurrenceID": "00f164b0-9c50-4ed0-b85d-8a9eea247fd4"
+      },
+      "observedAtUtc": "2026-10-29T20:08:18.715Z",
+      "deadlineAt": 1793306148808,
+      "terminal": {
+        "occurrenceID": "approved-code-801-ui-d8d33153-a1d0-4f68-99a6-c10de76b8039",
+        "pid": 93496,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    }
+  }
+}

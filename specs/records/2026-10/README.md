@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-30-approved-code-workflow.md](2026-10-30-approved-code-workflow.md)：独立QA的真实审批后提交全流程，保留旧793失败历史。
+
 - [2026-10-30-mission-selection-journey.md](2026-10-30-mission-selection-journey.md)：创建表单专家团搜索与选择的实际体验。
 
 - [2026-10-30-source-and-board-desktop.md](2026-10-30-source-and-board-desktop.md)：零Provider的Sources实页检查和默认桌面看板布局迭代。

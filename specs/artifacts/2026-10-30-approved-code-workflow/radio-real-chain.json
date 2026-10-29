@@ -1,0 +1,98 @@
+{
+  "session": "ses_-zUQWjFrVzzB0pQXHFG0",
+  "tools": [
+    {
+      "id": "prt_g0VZTGlcS000GuyypzwQ",
+      "messageID": "msg_g0VZTGke700yYxGZTTKx",
+      "at": 1793304462874,
+      "request": {
+        "type": "tool-request",
+        "callID": "call_eb8f11ad09274673bf897d00429a9456",
+        "tool": "question",
+        "input": {
+          "questions": [
+            {
+              "question": "请选择一个字母",
+              "header": "选择",
+              "options": [
+                {
+                  "value": "甲",
+                  "label": "甲",
+                  "description": "甲"
+                },
+                {
+                  "value": "乙",
+                  "label": "乙",
+                  "description": "乙"
+                }
+              ],
+              "multiple": false,
+              "custom": false
+            }
+          ]
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "fc_0e9eb6336c3fe627016ae3a78e2cdc81919d547280eb0143b1"
+          }
+        },
+        "time": {
+          "start": 1793304462268
+        }
+      },
+      "outcome": {
+        "outcome": "completed",
+        "output": "User answered:\n\"请选择一个字母\" -> 乙 [乙]",
+        "title": "Asked 1 question",
+        "metadata": {
+          "status": "answered",
+          "answers": [
+            [
+              "乙"
+            ]
+          ],
+          "truncated": false
+        },
+        "time": {
+          "end": 1793304470582
+        }
+      }
+    }
+  ],
+  "texts": [
+    {
+      "id": "prt_g0VZTGkZ500YddddmP48",
+      "messageID": "msg_bb05cfe9-ebb6-47c4-8768-c538f27752e0",
+      "at": 1793304458224,
+      "author": "user",
+      "part": {
+        "type": "text",
+        "text": "请仅用 question 工具提出一个单选问题：“请选择一个字母”，选项为“甲”和“乙”，等待我的真实选择。收到实际回答后只复述所选项即可，不创建 Task，不改文件，不访问网站。",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hi9QtbGgfIVTYYphOM4j/6b495c03b6620c613a10fab2e6bc9325dfaa83c6be9f3ca5468fa381436c68e1.json",
+          "catalog_snapshot_hash": "6b495c03b6620c613a10fab2e6bc9325dfaa83c6be9f3ca5468fa381436c68e1"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VZTGoZZ00SsNm5E6YB",
+      "messageID": "msg_g0VZTGnnc00A4X4YUOlH",
+      "at": 1793304473621,
+      "author": "work",
+      "part": {
+        "type": "text",
+        "text": "乙",
+        "time": {
+          "start": 1793304473621,
+          "end": 1793304473739
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_0e3f75ab13ffff13016ae3a7998774819186e3010f435d36f5",
+            "phase": "final_answer"
+          }
+        }
+      }
+    }
+  ]
+}

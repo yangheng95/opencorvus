@@ -1,0 +1,27 @@
+{
+  "at": "2026-10-29T19:28:36.335Z",
+  "head": "109735578eb9d43659ac6cdf85c1bf5c67457f8d",
+  "stageEntriesPreserved": true,
+  "bootstrapWriter": "Instance.bootstrapContext -> engine.git.ensure-project-metadata -> ensureGitProjectMetadata",
+  "metadata": [
+    {
+      "path": ".gitattributes",
+      "before": "* text=auto eol=lf\n",
+      "after": "* text=auto eol=lf\n*.pdf binary\n*.doc binary\n*.docx binary\n*.docm binary\n*.xls binary\n*.xlsx binary\n*.xlsm binary\n*.xlsb binary\n*.ppt binary\n*.pptx binary\n*.pptm binary\n"
+    },
+    {
+      "path": ".gitignore",
+      "before": "__pycache__/\n*.py[cod]\n",
+      "after": "__pycache__/\n*.py[cod]\n.opencorvus/.r/\n"
+    }
+  ],
+  "otherFiles": [
+    ".opencorvus/opencorvus.jsonc",
+    "README.md",
+    "counter.py",
+    "operator-note.txt"
+  ],
+  "canonicalWriterMatchesActual": true,
+  "idempotent": true,
+  "taskStartBaselineEstablished": true
+}

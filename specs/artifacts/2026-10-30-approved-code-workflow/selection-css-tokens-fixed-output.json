@@ -1,0 +1,4 @@
+{
+  "encoding": "UTF-8",
+  "output": "$ bun run script/check-css-token-usage.ts\n509 |       }\n510 |     }\n511 |   }\n512 | }\n513 | if (typographyViolations.length > 0) {\n514 |   throw new Error(`Overlay application typography escapes the bounded role scale:\\n${typographyViolations.join(\"\\n\")}`)\n                  ^\nerror: Overlay application typography escapes the bounded role scale:\nsrc\\styles\\surfaces\\cmdk.css:14 (.conversation-search-hit): line-height must consume a canonical role, received 1.55\n      at D:\\myhexin-local\\opencorvus\\packages\\overlay\\script\\check-css-token-usage.ts:514:13\n\nBun v1.4.0 (Windows x64)\nerror: script \"check:css-tokens\" exited with code 1\nTest runtime retained after unsuccessful run: D:\\oc801-L4wn32\\selection-css-tokens-fixed\\tmp\\opencorvus-test-run-3J4Xmr\nPhysical/output settlement confirmed: true\n"
+}

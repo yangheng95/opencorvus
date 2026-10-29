@@ -12,7 +12,7 @@
   gap: var(--ui-gap-xs);
   white-space: normal;
   overflow-wrap: anywhere;
-  line-height: 1.55;
+  line-height: var(--ui-line-height-normal);
 }
 
 .conversation-search-hit__meta {

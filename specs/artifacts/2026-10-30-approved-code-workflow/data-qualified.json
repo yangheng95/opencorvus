@@ -1,0 +1,373 @@
+{
+  "at": "2026-10-29T20:09:40.636Z",
+  "comparisons": [
+    {
+      "label": "primary",
+      "schema": 9,
+      "integrity": "ok",
+      "foreignKeys": "ok",
+      "oldCount": 178233,
+      "newCount": 203134,
+      "oldRowsPreserved": 178230,
+      "leaseChanges": [
+        {
+          "old": {
+            "rowid": 1,
+            "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+            "slot": 0,
+            "lease_id": "23ab18f7-7b0d-4340-87b4-bb67c20fbdca",
+            "owner_id": "runtime:93460:d3030b7e-72fb-4a10-8367-49fb87c3c067",
+            "time_acquired": 1793294071246,
+            "expires_at": 1793294079759
+          },
+          "current": {
+            "rowid": 1,
+            "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+            "slot": 0,
+            "lease_id": "9bc871b8-fabb-4eb4-b17a-5278f8241b4b",
+            "owner_id": "runtime:88520:960500ed-ff77-480e-b9d7-74ff251147c6",
+            "time_acquired": 1793303179177,
+            "expires_at": 1793303184512
+          }
+        },
+        {
+          "old": {
+            "rowid": 2,
+            "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+            "slot": 1,
+            "lease_id": "4b745841-9b6f-4adb-be60-ba3dcaad2d81",
+            "owner_id": "runtime:93460:28573774-848f-4843-8865-646292bbda01",
+            "time_acquired": 1793293940585,
+            "expires_at": 1793293947554
+          },
+          "current": {
+            "rowid": 2,
+            "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+            "slot": 1,
+            "lease_id": "b2ae78f5-3d78-47fb-86e8-f788574960b3",
+            "owner_id": "runtime:88520:6711e92e-0356-4dfb-9a39-24bfe676b79b",
+            "time_acquired": 1793303072795,
+            "expires_at": 1793303078046
+          }
+        },
+        {
+          "old": {
+            "rowid": 3,
+            "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+            "slot": 2,
+            "lease_id": "ad6e87f0-3209-464e-8909-262a21239188",
+            "owner_id": "runtime:95348:f66786bb-52a2-4738-acb7-8ce646d9ba2d",
+            "time_acquired": 1793132599014,
+            "expires_at": 1793132622721
+          },
+          "current": {
+            "rowid": 3,
+            "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+            "slot": 2,
+            "lease_id": "80d9904e-c126-468d-9970-4255cecc56bc",
+            "owner_id": "runtime:88520:a668eb9b-a94d-41b0-a5fc-7185ed79a7bb",
+            "time_acquired": 1793302974316,
+            "expires_at": 1793302993930
+          }
+        }
+      ],
+      "added": [
+        {
+          "table": "bus_publication_delivery",
+          "count": 4837
+        },
+        {
+          "table": "bus_publication_delivery_receipt",
+          "count": 4837
+        },
+        {
+          "table": "bus_publication_outbox",
+          "count": 551
+        },
+        {
+          "table": "bus_publication_owner",
+          "count": 551
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "count": 1653
+        },
+        {
+          "table": "engine_artifact",
+          "count": 10
+        },
+        {
+          "table": "engine_artifact_catalog_revision",
+          "count": 10
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "count": 5392
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "count": 5405
+        },
+        {
+          "table": "engine_git_checkpoint_outcome",
+          "count": 2
+        },
+        {
+          "table": "engine_git_checkpoint_request",
+          "count": 2
+        },
+        {
+          "table": "engine_interaction_outcome",
+          "count": 1
+        },
+        {
+          "table": "engine_interaction_request",
+          "count": 1
+        },
+        {
+          "table": "engine_task",
+          "count": 1
+        },
+        {
+          "table": "engine_task_creation_contract",
+          "count": 1
+        },
+        {
+          "table": "engine_task_root_ingress",
+          "count": 4
+        },
+        {
+          "table": "event_occurrence",
+          "count": 547
+        },
+        {
+          "table": "interactive_artifact",
+          "count": 2
+        },
+        {
+          "table": "memory_chunk",
+          "count": 2
+        },
+        {
+          "table": "memory_file",
+          "count": 2
+        },
+        {
+          "table": "message",
+          "count": 61
+        },
+        {
+          "table": "part",
+          "count": 225
+        },
+        {
+          "table": "permission_execution_result",
+          "count": 26
+        },
+        {
+          "table": "permission_ledger",
+          "count": 130
+        },
+        {
+          "table": "permission_policy",
+          "count": 3
+        },
+        {
+          "table": "project",
+          "count": 2
+        },
+        {
+          "table": "protocol_delivery_receipt",
+          "count": 5
+        },
+        {
+          "table": "protocol_event",
+          "count": 202
+        },
+        {
+          "table": "protocol_inbox",
+          "count": 5
+        },
+        {
+          "table": "provider_activity_outcome",
+          "count": 82
+        },
+        {
+          "table": "provider_activity_request",
+          "count": 82
+        },
+        {
+          "table": "provider_usage_event",
+          "count": 87
+        },
+        {
+          "table": "session",
+          "count": 5
+        },
+        {
+          "table": "session_control_event",
+          "count": 6
+        },
+        {
+          "table": "session_control_record",
+          "count": 6
+        },
+        {
+          "table": "tool_part_outcome",
+          "count": 75
+        },
+        {
+          "table": "tool_part_progress",
+          "count": 10
+        },
+        {
+          "table": "tool_part_request",
+          "count": 75
+        },
+        {
+          "table": "workbench_brief_snapshot",
+          "count": 2
+        },
+        {
+          "table": "worker_turn_descriptor",
+          "count": 1
+        }
+      ],
+      "leaseAuthority": "DurableExecutionCapacity.acquire/tryAcquire uses the same resource/slot primary key after expiry; release writes the exact current time with lease/owner fence."
+    },
+    {
+      "label": "ui",
+      "schema": 9,
+      "integrity": "ok",
+      "foreignKeys": "ok",
+      "oldCount": 203134,
+      "newCount": 203936,
+      "oldRowsPreserved": 203132,
+      "leaseChanges": [
+        {
+          "old": {
+            "rowid": 1,
+            "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+            "slot": 0,
+            "lease_id": "9bc871b8-fabb-4eb4-b17a-5278f8241b4b",
+            "owner_id": "runtime:88520:960500ed-ff77-480e-b9d7-74ff251147c6",
+            "time_acquired": 1793303179177,
+            "expires_at": 1793303184512
+          },
+          "current": {
+            "rowid": 1,
+            "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+            "slot": 0,
+            "lease_id": "8076572b-513b-422d-95b8-27d0f1226bea",
+            "owner_id": "runtime:93496:0a8d195c-8e00-4ac7-8176-43a08dbb0f01",
+            "time_acquired": 1793304471232,
+            "expires_at": 1793304473989
+          }
+        },
+        {
+          "old": {
+            "rowid": 2,
+            "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+            "slot": 1,
+            "lease_id": "b2ae78f5-3d78-47fb-86e8-f788574960b3",
+            "owner_id": "runtime:88520:6711e92e-0356-4dfb-9a39-24bfe676b79b",
+            "time_acquired": 1793303072795,
+            "expires_at": 1793303078046
+          },
+          "current": {
+            "rowid": 2,
+            "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+            "slot": 1,
+            "lease_id": "4977eaad-2f34-4977-a9fe-7cbb4c4d7933",
+            "owner_id": "runtime:93496:b1217d7a-f931-4f72-9369-765ea24fcd51",
+            "time_acquired": 1793304459746,
+            "expires_at": 1793304463128
+          }
+        }
+      ],
+      "added": [
+        {
+          "table": "bus_publication_delivery",
+          "count": 157
+        },
+        {
+          "table": "bus_publication_delivery_receipt",
+          "count": 157
+        },
+        {
+          "table": "bus_publication_outbox",
+          "count": 24
+        },
+        {
+          "table": "bus_publication_owner",
+          "count": 24
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "count": 72
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "count": 158
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "count": 158
+        },
+        {
+          "table": "event_occurrence",
+          "count": 24
+        },
+        {
+          "table": "memory_chunk",
+          "count": 1
+        },
+        {
+          "table": "memory_file",
+          "count": 1
+        },
+        {
+          "table": "message",
+          "count": 3
+        },
+        {
+          "table": "part",
+          "count": 6
+        },
+        {
+          "table": "project",
+          "count": 1
+        },
+        {
+          "table": "protocol_event",
+          "count": 6
+        },
+        {
+          "table": "provider_activity_outcome",
+          "count": 2
+        },
+        {
+          "table": "provider_activity_request",
+          "count": 2
+        },
+        {
+          "table": "provider_usage_event",
+          "count": 3
+        },
+        {
+          "table": "session",
+          "count": 1
+        },
+        {
+          "table": "tool_part_outcome",
+          "count": 1
+        },
+        {
+          "table": "tool_part_request",
+          "count": 1
+        }
+      ],
+      "leaseAuthority": "DurableExecutionCapacity.acquire/tryAcquire uses the same resource/slot primary key after expiry; release writes the exact current time with lease/owner fence."
+    }
+  ]
+}

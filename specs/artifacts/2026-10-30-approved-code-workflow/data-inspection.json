@@ -1,0 +1,39 @@
+{
+  "sourceRows": 178233,
+  "targetRows": 203134,
+  "changedTables": [
+    {
+      "table": "runtime_execution_capacity_lease",
+      "missing": [],
+      "changed": [
+        {
+          "id": "[1]",
+          "columns": [
+            "lease_id",
+            "owner_id",
+            "time_acquired",
+            "expires_at"
+          ]
+        },
+        {
+          "id": "[2]",
+          "columns": [
+            "lease_id",
+            "owner_id",
+            "time_acquired",
+            "expires_at"
+          ]
+        },
+        {
+          "id": "[3]",
+          "columns": [
+            "lease_id",
+            "owner_id",
+            "time_acquired",
+            "expires_at"
+          ]
+        }
+      ]
+    }
+  ]
+}

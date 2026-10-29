@@ -1,6 +1,7 @@
 .oc-checkbox,
 .oc-switch,
 .oc-radio {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: var(--ui-gap-sm);

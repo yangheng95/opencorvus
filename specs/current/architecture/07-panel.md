@@ -6,6 +6,13 @@ Rebuilding an input directory does not switch a running page's module version;
 new server processes capture the new publication. Project and conversation data
 continue through their existing dynamic readers and subscriptions.
 
+Shared Checkbox, Switch and Radio roots establish their own relative positioning
+context in `selection-control.css`. Their visually hidden absolute inputs remain
+anchored to the visible control during native keyboard focus. A nested scrolling
+form therefore scrolls its content rather than the enclosing dialog frame; its
+header and actions keep their layout. Selection state and native keyboard behavior
+remain owned by the existing input primitives.
+
 A complete `message.moved` bundle transfers the original Message and Parts from
 its named source Session to their authoritative target positions. Source-side
 full or Part-first projections retire before the target bundle is applied; a
