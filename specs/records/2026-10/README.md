@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-29-heavy-workbench-l04-qualification.md](2026-10-29-heavy-workbench-l04-qualification.md)：合成原库、真实ACK及原子版本/写者切换与进程恢复的便宜构造。
+
 - [2026-10-29-build-handoff-observation.md](2026-10-29-build-handoff-observation.md)：协调前保留实际文件观测、失败回执与续跑Review。
 
 - [2026-10-29-task-terminal-checkpoint-recovery.md](2026-10-29-task-terminal-checkpoint-recovery.md)：原Task Git终态、55条预算失败与续跑原文身份错误的共享机制后续方案。

@@ -3,15 +3,50 @@ import argparse
 import json
 from pathlib import Path
 import time
+from dataclasses import dataclass
+from fractions import Fraction
 
 import numpy as np
-from scipy.optimize import milp, Bounds, LinearConstraint
-from scipy.sparse import coo_matrix
+from scipy.optimize import milp, linprog, Bounds, LinearConstraint
+from scipy.sparse import coo_matrix, vstack
 
 from l06_input import InputError, read_json, validate_instance
+from l06_bound_certificate import evaluate_certificate
 
 
-def solve(data, minimum_credit=False):
+@dataclass
+class LinearModel:
+    keys: list
+    upper: list
+    objective_numerators: list
+    objective_denominator: int
+    matrix: object
+    lower_rows: list
+    upper_rows: list
+    credit_index: object
+
+    @property
+    def objective(self):
+        return np.asarray(self.objective_numerators,dtype=float)/self.objective_denominator
+
+    def payload(self):
+        matrix=self.matrix.tocsr()
+        def integer(value):
+            assert np.isfinite(value) and value==int(value),value
+            return int(value)
+        rows=[]
+        for row in range(matrix.shape[0]):
+            start,end=matrix.indptr[row:row+2]
+            rows.append({'lower':None if not np.isfinite(self.lower_rows[row]) else integer(self.lower_rows[row]),
+                         'upper':None if not np.isfinite(self.upper_rows[row]) else integer(self.upper_rows[row]),
+                         'terms':[[int(matrix.indices[k]),integer(matrix.data[k])] for k in range(start,end)]})
+        return {'format':'l06-linear-relaxation/1','variable_keys':[list(key) for key in self.keys],
+                'variable_lower':[0]*len(self.keys),'variable_upper':[integer(v) for v in self.upper],
+                'objective_numerators':self.objective_numerators,'objective_denominator':self.objective_denominator,
+                'rows':rows}
+
+
+def build_model(data, minimum_credit=False):
     validate_instance(data)
     T, M, J, S, P = data['weeks'], len(data['raw_materials']), len(data['products']), len(data['suppliers']), len(data['plants'])
     keys, index, upper, objective, weekly_cost = [], {}, [], [], {}
@@ -19,8 +54,7 @@ def solve(data, minimum_credit=False):
 
     def variable(key, limit, cost, scenario, week):
         i = len(keys); keys.append(key); index[key] = i; upper.append(limit)
-        probability = scenario['probability_numerator']/data['probability_denominator']
-        objective.append(cost*probability)
+        objective.append(cost*scenario['probability_numerator'])
         weekly_cost.setdefault((scenario['id'], week), {})[i] = cost
         return i
 
@@ -52,7 +86,7 @@ def solve(data, minimum_credit=False):
     credit_index = None
     if minimum_credit:
         credit_index = len(keys); keys.append(('credit_limit',)); index[('credit_limit',)] = credit_index
-        upper.append(data['credit_limit_minor']); objective = [0.0]*credit_index+[1.0]
+        upper.append(data['credit_limit_minor']); objective = [0]*credit_index+[1]
 
     for scenario in data['scenarios']:
         s = scenario['id']; cumulative_cost = {}; received = 0
@@ -114,9 +148,18 @@ def solve(data, minimum_credit=False):
                 counterpart = (key[0],first,*key[2:])
                 constraint({i:1,index[counterpart]:-1},0,0)
     matrix = coo_matrix((np.asarray(coefficients,dtype=float),(row_indices,columns)),shape=(len(lower_rows),len(keys))).tocsc()
+    return LinearModel(keys,upper,objective,1 if minimum_credit else data['probability_denominator'],matrix,lower_rows,upper_rows,credit_index)
+
+
+def solve(data, minimum_credit=False):
+    model=build_model(data,minimum_credit)
+    keys,upper,matrix,lower_rows,upper_rows=model.keys,model.upper,model.matrix,model.lower_rows,model.upper_rows
+    index={key:i for i,key in enumerate(keys)}
+    credit_index=model.credit_index
+    T,M,J,S,P=data['weeks'],len(data['raw_materials']),len(data['products']),len(data['suppliers']),len(data['plants'])
     print(json.dumps({'event':'solving','variables':len(keys),'integer_variables':len(keys),'constraints':len(lower_rows),'nonzero_coefficients':matrix.nnz}),flush=True)
     start = time.perf_counter()
-    result = milp(np.array(objective),integrality=np.ones(len(keys)),bounds=Bounds(np.zeros(len(keys)),upper),
+    result = milp(model.objective,integrality=np.ones(len(keys)),bounds=Bounds(np.zeros(len(keys)),upper),
                   constraints=LinearConstraint(matrix,lower_rows,upper_rows),options={'mip_rel_gap':0.0 if minimum_credit else 0.002,'disp':True})
     report = {'objective_name':'minimum_credit_minor' if minimum_credit else 'expected_operating_cost_minor','status':int(result.status),'message':result.message,'seconds':time.perf_counter()-start,
               'objective':None if result.fun is None else float(result.fun),
@@ -142,8 +185,45 @@ def solve(data, minimum_credit=False):
     return report,{'format':'l06-plan/1','decisions':decisions}
 
 
+def solve_relaxation(data,minimum_credit=False):
+    model=build_model(data,minimum_credit)
+    eq=[];ineq=[];parts=[];rhs=[]
+    for row,(lo,hi) in enumerate(zip(model.lower_rows,model.upper_rows)):
+        if np.isfinite(lo) and lo==hi:
+            eq.append(row)
+        else:
+            if np.isfinite(hi):
+                ineq.append({'row':row,'side':'upper'});parts.append(model.matrix[row:row+1]);rhs.append(hi)
+            if np.isfinite(lo):
+                ineq.append({'row':row,'side':'lower'});parts.append(-model.matrix[row:row+1]);rhs.append(-lo)
+    print(json.dumps({'event':'continuous_solving','variables':len(model.keys),'integer_variables':0,'equalities':len(eq),'inequalities':len(ineq)}),flush=True)
+    start=time.perf_counter()
+    result=linprog(model.objective,A_ub=vstack(parts).tocsc() if parts else None,b_ub=rhs or None,
+                   A_eq=model.matrix[eq] if eq else None,b_eq=[model.upper_rows[i] for i in eq] if eq else None,
+                   bounds=list(zip([0]*len(model.keys),model.upper)),method='highs',options={'disp':True})
+    report={'objective_name':'minimum_credit_minor' if minimum_credit else 'expected_operating_cost_minor',
+            'method':'continuous_relaxation','status':int(result.status),'message':result.message,
+            'seconds':time.perf_counter()-start,'objective':None if result.fun is None else float(result.fun),
+            'variables':len(model.keys),'constraints':len(model.lower_rows),'iterations':int(result.nit),
+            'interpretation':'lower-bound qualification only; fractional solution is not a business plan'}
+    if result.status!=0:return report,None
+    certificate={'format':'l06-row-dual-certificate/1','multipliers':[]}
+    for row,value in zip(eq,result.eqlin.marginals):
+        certificate['multipliers'].append({'row':row,'side':'equality','value':str(Fraction(str(float(value)))),'solver_value':float(value)})
+    for entry,value in zip(ineq,result.ineqlin.marginals):
+        certificate['multipliers'].append({**entry,'value':str(min(Fraction(0),Fraction(str(float(value))))),'solver_value':float(value)})
+    start=time.perf_counter()
+    payload=model.payload()
+    exact=evaluate_certificate(payload,certificate)
+    report['exact_certificate_seconds']=time.perf_counter()-start
+    report['certified_lower_bound_exact']=exact['lower_bound_exact']
+    report['certified_lower_bound']=exact['lower_bound']
+    report['primal_maximum_row_violation']=float(max([0.0]+[max((lo-float(value)) if np.isfinite(lo) else 0,(float(value)-hi) if np.isfinite(hi) else 0) for value,lo,hi in zip(model.matrix@result.x,model.lower_rows,model.upper_rows)]))
+    return report,{'model':payload,'certificate':certificate,'certificate_check':exact,'fractional_solution':result.x.tolist()}
+
+
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,required=True);parser.add_argument('--input',type=Path,required=True);parser.add_argument('--minimum-credit',action='store_true');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,required=True);parser.add_argument('--input',type=Path,required=True);parser.add_argument('--minimum-credit',action='store_true');parser.add_argument('--mode',choices=['integer','relaxation'],default='integer');args=parser.parse_args()
     args.output.mkdir(parents=True,exist_ok=False)
     try:
         data=validate_instance(read_json(args.input,'instance_invalid'))
@@ -151,7 +231,13 @@ def main():
         (args.output/'solver.json').write_text(json.dumps({'status':'instance_invalid','path':error.path,'detail':error.detail},indent=2)+'\n')
         raise SystemExit(2)
     (args.output/'instance.json').write_text(json.dumps(data,indent=2)+'\n')
-    report,plan=solve(data, minimum_credit=args.minimum_credit)
+    if args.mode=='relaxation':
+        report,proof=solve_relaxation(data,minimum_credit=args.minimum_credit)
+        if proof is not None:
+            for name,value in proof.items():(args.output/(name+'.json')).write_text(json.dumps(value,indent=2,allow_nan=False)+'\n')
+        plan=None
+    else:
+        report,plan=solve(data, minimum_credit=args.minimum_credit)
     (args.output/'solver.json').write_text(json.dumps(report,indent=2,allow_nan=False)+'\n')
     if plan is not None:
         (args.output/'plan.json').write_text(json.dumps(plan,indent=2)+'\n')

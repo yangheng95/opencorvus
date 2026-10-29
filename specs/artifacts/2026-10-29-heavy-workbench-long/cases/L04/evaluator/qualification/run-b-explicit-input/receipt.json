@@ -1,0 +1,49 @@
+{
+  "status": "passed",
+  "scope": "synthetic tiny SQLite migration/epoch/process qualification only; not frozen heavy case or hours",
+  "cases": [
+    {
+      "case": "normal",
+      "status": "passed",
+      "database": "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-b-explicit-input\\normal\\application.sqlite",
+      "version": 2,
+      "epoch": 4,
+      "canonical_entries": 7,
+      "quarantined_records": 6
+    },
+    {
+      "case": "before_commit_fault",
+      "status": "passed",
+      "database": "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-b-explicit-input\\before_commit_fault\\application.sqlite",
+      "version": 2,
+      "epoch": 4,
+      "canonical_entries": 7,
+      "quarantined_records": 6
+    },
+    {
+      "case": "after_commit_fault",
+      "status": "passed",
+      "database": "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-b-explicit-input\\after_commit_fault\\application.sqlite",
+      "version": 2,
+      "epoch": 4,
+      "canonical_entries": 7,
+      "quarantined_records": 6
+    },
+    {
+      "case": "queued_cutover",
+      "status": "passed",
+      "database": "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-b-explicit-input\\queued_cutover\\application.sqlite",
+      "version": 2,
+      "epoch": 4,
+      "canonical_entries": 7,
+      "quarantined_records": 6
+    }
+  ],
+  "seconds": 6.14801329979673,
+  "check_count": 217,
+  "subprocess_count": 43,
+  "sqlite_version": "3.50.4",
+  "journal_mode": "DELETE",
+  "physical_power_loss_tested": false,
+  "heavy_case_count_increment": 0
+}

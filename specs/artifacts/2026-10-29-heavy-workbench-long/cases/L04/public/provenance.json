@@ -1,0 +1,11 @@
+{
+  "synthetic": true,
+  "sqlite_version": "3.50.4",
+  "schema_version": 1,
+  "epoch": 3,
+  "customers": 4,
+  "entries": 10,
+  "journal_mode": "delete",
+  "synchronous": "FULL",
+  "history_timestamp": "synthetic fixture date, not a real deployment claim"
+}

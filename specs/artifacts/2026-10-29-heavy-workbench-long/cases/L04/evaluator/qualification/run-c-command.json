@@ -1,0 +1,14 @@
+{
+  "cmd": "C:/Python314/python.exe -B D:/opencorvus-benchmark-runs/l04-migration-qualification-20261029/qualify_migration.py --input D:/opencorvus-benchmark-runs/l04-migration-qualification-20261029/inputs/v1 --output D:/opencorvus-benchmark-runs/l04-migration-qualification-20261029/run-c-identity-repair",
+  "start": {
+    "current_time": "2026-10-29 13:04:20 UTC"
+  },
+  "end": {
+    "current_time": "2026-10-29 13:04:28 UTC"
+  },
+  "chunk_id": "2ad125",
+  "wall_time_seconds": 7.5457518,
+  "exit_code": 0,
+  "original_token_count": 16,
+  "output": "{\"status\": \"passed\", \"cases\": 6, \"seconds\": 7.175823000259697}\r\n"
+}

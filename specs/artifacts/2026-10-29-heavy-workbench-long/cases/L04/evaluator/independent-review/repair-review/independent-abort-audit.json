@@ -1,0 +1,34 @@
+[
+  {
+    "case": "unresolved_receipt",
+    "reference_construction": "frozen input copied to in-memory SQLite, same explicit boundary injection; independently compare all sqlite_master rows and every table row",
+    "all_table_counts": {
+      "audit_events": 10,
+      "control": 1,
+      "legacy_customers": 4,
+      "legacy_entries": 10,
+      "schema_migrations": 1,
+      "sqlite_sequence": 1,
+      "write_receipts": 1
+    },
+    "response": {
+      "status": "unresolved_receipt_identity"
+    }
+  },
+  {
+    "case": "unresolved_entry",
+    "reference_construction": "frozen input copied to in-memory SQLite, same explicit boundary injection; independently compare all sqlite_master rows and every table row",
+    "all_table_counts": {
+      "audit_events": 11,
+      "control": 1,
+      "legacy_customers": 4,
+      "legacy_entries": 11,
+      "schema_migrations": 1,
+      "sqlite_sequence": 1,
+      "write_receipts": 0
+    },
+    "response": {
+      "status": "unresolved_entry_identity"
+    }
+  }
+]

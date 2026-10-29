@@ -1,0 +1,12 @@
+{
+  "lower_exact": "577753327609889925273/12500000000000000",
+  "upper_exact": "51263",
+  "absolute_gap_exact": "63034172390110074727/12500000000000000",
+  "gap_over_lower_exact": "63034172390110074727/577753327609889925273",
+  "gap_over_lower_percent": 10.910222300384905,
+  "gap_over_upper_percent": 9.836985332908347,
+  "one_percent_upper_certified": false,
+  "true_integer_optimum_gap_known": false,
+  "optional_integer_objective_lattice_bound": "462203/10",
+  "lattice_bound_assumptions": "source MIP declares every variable integer; exact objective numerator coefficients integers and objective constant0; ceiling objective, never rounding LP variables"
+}

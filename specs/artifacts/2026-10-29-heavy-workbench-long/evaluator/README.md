@@ -36,3 +36,5 @@ python -m unittest discover -s script/benchmark -p test_pinn_torch_check.py
 [cheap-first/](cheap-first/README.md)是用户纠正后的当前实验优先级及六容器暂停原件；旧活跃表不授权自动恢复。[native-lbfgs-zero/](native-lbfgs-zero/README.md)保存真实原生零步和独立重算。[nine-case-review/](nine-case-review/README.md)保存28次旧checker实跑、九题升级设计与未冻结矩阵；新增[L06阶段资格](../cases/L06/README.md)只在数学/业务范围局部有效，不计作完成十题。
 
 [S06最终微型判定](../cases/L06/smoke/evaluator/final-smoke-assessment.json)四项通过：原生650.922秒，两方独立源码复跑/业务checker分别.818秒和.923秒，两值4.5/5.5；实际流式模型/子角色与dirty runtime如实保留，comparable=false。不是重型case、小时级或整个套件通过。
+
+当前便宜接续：[L06严格下界独立审查](../cases/L06/evaluator/independent-relaxation/REVIEW.md)另从原输入重建1488变量/1096行，精确下界约46220.2662、可行上界51263，仍不能认证1%；[L04独立最终审查](../cases/L04/evaluator/independent-review/repair-review/REVIEW.md)冷跑实际迁移/epoch/进程恢复，抓到并复核共享NULL身份修复，最终4升级+2明确中止，原数据保存。两者都是局部资格，未批准重型冻结/候选分/小时级。

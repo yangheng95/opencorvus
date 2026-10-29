@@ -1,0 +1,1031 @@
+[
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\legacy_writer.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\application.sqlite",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\legacy-request.json"
+    ],
+    "pid": 81796,
+    "started_utc": "2026-10-29T13:07:35.264105+00:00",
+    "seconds": 0.21456770040094852,
+    "returncode": 0,
+    "stdout": "{\"status\": \"accepted\", \"entry_id\": \"O2\", \"epoch\": 3, \"source_schema\": 1}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\legacy_writer.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\application.sqlite",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\legacy-request.json"
+    ],
+    "pid": 89236,
+    "started_utc": "2026-10-29T13:07:35.478710+00:00",
+    "seconds": 0.13452709978446364,
+    "returncode": 0,
+    "stdout": "{\"status\": \"duplicate\", \"receipt\": {\"entry_id\": \"O2\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\legacy_writer.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\application.sqlite",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\invalid-v1-0.json"
+    ],
+    "pid": 90080,
+    "started_utc": "2026-10-29T13:07:35.613685+00:00",
+    "seconds": 0.12629840010777116,
+    "returncode": 0,
+    "stdout": "{\"status\": \"invalid_request\", \"field\": \"op_key\"}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\legacy_writer.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\application.sqlite",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\invalid-v1-1.json"
+    ],
+    "pid": 88140,
+    "started_utc": "2026-10-29T13:07:35.740437+00:00",
+    "seconds": 0.13772879960015416,
+    "returncode": 0,
+    "stdout": "{\"status\": \"invalid_request\", \"field\": \"op_key\"}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\legacy_writer.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\application.sqlite",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\invalid-v1-2.json"
+    ],
+    "pid": 77316,
+    "started_utc": "2026-10-29T13:07:35.878694+00:00",
+    "seconds": 0.13011519983410835,
+    "returncode": 0,
+    "stdout": "{\"status\": \"invalid_request\", \"field\": \"entry_id\"}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\legacy_writer.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\application.sqlite",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\invalid-v1-3.json"
+    ],
+    "pid": 97012,
+    "started_utc": "2026-10-29T13:07:36.009403+00:00",
+    "seconds": 0.12658849963918328,
+    "returncode": 0,
+    "stdout": "{\"status\": \"invalid_request\", \"field\": \"epoch\"}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\application.sqlite",
+      "--action",
+      "upgrade",
+      "--authority",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\original-input\\authority.json"
+    ],
+    "pid": 33584,
+    "started_utc": "2026-10-29T13:07:36.136066+00:00",
+    "seconds": 0.15447030030190945,
+    "returncode": 0,
+    "stdout": "{\"status\": \"upgraded\", \"version\": 2, \"epoch\": 4}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\legacy_writer.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\application.sqlite",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\legacy-request.json"
+    ],
+    "pid": 71876,
+    "started_utc": "2026-10-29T13:07:36.292101+00:00",
+    "seconds": 0.12490489985793829,
+    "returncode": 0,
+    "stdout": "{\"status\": \"stale_epoch\", \"current_epoch\": 4}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\application.sqlite",
+      "--action",
+      "write",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\new-request.json"
+    ],
+    "pid": 57812,
+    "started_utc": "2026-10-29T13:07:36.417555+00:00",
+    "seconds": 0.13668410014361143,
+    "returncode": 0,
+    "stdout": "{\"status\": \"accepted\", \"entry_id\": \"N_FEE\", \"epoch\": 4, \"source_schema\": 2}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\application.sqlite",
+      "--action",
+      "write",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\new-request.json"
+    ],
+    "pid": 98424,
+    "started_utc": "2026-10-29T13:07:36.554265+00:00",
+    "seconds": 0.12787390034645796,
+    "returncode": 0,
+    "stdout": "{\"status\": \"duplicate\", \"receipt\": {\"entry_id\": \"N_FEE\", \"epoch\": 4, \"source_schema\": 2, \"status\": \"accepted\"}}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\application.sqlite",
+      "--action",
+      "write",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\invalid-v2-0.json"
+    ],
+    "pid": 85204,
+    "started_utc": "2026-10-29T13:07:36.682606+00:00",
+    "seconds": 0.12919670017436147,
+    "returncode": 0,
+    "stdout": "{\"status\": \"invalid_request\", \"field\": \"op_key\"}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\application.sqlite",
+      "--action",
+      "write",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\invalid-v2-1.json"
+    ],
+    "pid": 97880,
+    "started_utc": "2026-10-29T13:07:36.812261+00:00",
+    "seconds": 0.14155999990180135,
+    "returncode": 0,
+    "stdout": "{\"status\": \"invalid_request\", \"field\": \"op_key\"}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\application.sqlite",
+      "--action",
+      "write",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\invalid-v2-2.json"
+    ],
+    "pid": 98284,
+    "started_utc": "2026-10-29T13:07:36.954290+00:00",
+    "seconds": 0.13130779983475804,
+    "returncode": 0,
+    "stdout": "{\"status\": \"invalid_request\", \"field\": \"entry_id\"}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\application.sqlite",
+      "--action",
+      "write",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\invalid-v2-3.json"
+    ],
+    "pid": 52660,
+    "started_utc": "2026-10-29T13:07:37.086069+00:00",
+    "seconds": 0.13527859980240464,
+    "returncode": 0,
+    "stdout": "{\"status\": \"invalid_request\", \"field\": \"epoch\"}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\application.sqlite",
+      "--action",
+      "write",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\new-request.json"
+    ],
+    "pid": 92524,
+    "started_utc": "2026-10-29T13:07:37.221797+00:00",
+    "seconds": 0.12842340022325516,
+    "returncode": 0,
+    "stdout": "{\"status\": \"operation_conflict\"}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\application.sqlite",
+      "--action",
+      "upgrade",
+      "--authority",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\original-input\\authority.json"
+    ],
+    "pid": 70976,
+    "started_utc": "2026-10-29T13:07:37.350242+00:00",
+    "seconds": 0.125619700178504,
+    "returncode": 0,
+    "stdout": "{\"status\": \"already_current\", \"version\": 2, \"epoch\": 4}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\application.sqlite",
+      "--action",
+      "receipt",
+      "--id",
+      "before-cutover"
+    ],
+    "pid": 87288,
+    "started_utc": "2026-10-29T13:07:37.475923+00:00",
+    "seconds": 0.12920530000701547,
+    "returncode": 0,
+    "stdout": "{\"status\": \"ok\", \"receipt\": {\"entry_id\": \"O2\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\normal\\application.sqlite",
+      "--action",
+      "get",
+      "--id",
+      "N_FEE"
+    ],
+    "pid": 79176,
+    "started_utc": "2026-10-29T13:07:37.608114+00:00",
+    "seconds": 0.13122300012037158,
+    "returncode": 0,
+    "stdout": "{\"status\": \"ok\", \"entry\": {\"entry_id\": \"N_FEE\", \"customer_key\": \"C-ALPHA\", \"currency\": \"USD\", \"amount_minor\": 333, \"reversal_of\": null, \"fee_minor\": 7}}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\legacy_writer.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\before_commit_fault\\application.sqlite",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\before_commit_fault\\legacy-request.json"
+    ],
+    "pid": 29888,
+    "started_utc": "2026-10-29T13:07:37.740585+00:00",
+    "seconds": 0.13107910007238388,
+    "returncode": 0,
+    "stdout": "{\"status\": \"accepted\", \"entry_id\": \"O2\", \"epoch\": 3, \"source_schema\": 1}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\legacy_writer.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\before_commit_fault\\application.sqlite",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\before_commit_fault\\legacy-request.json"
+    ],
+    "pid": 94888,
+    "started_utc": "2026-10-29T13:07:37.871691+00:00",
+    "seconds": 0.12030169973149896,
+    "returncode": 0,
+    "stdout": "{\"status\": \"duplicate\", \"receipt\": {\"entry_id\": \"O2\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\before_commit_fault\\application.sqlite",
+      "--action",
+      "upgrade",
+      "--authority",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\original-input\\authority.json",
+      "--pause-at",
+      "before_commit"
+    ],
+    "pid": 93264,
+    "started_utc": "2026-10-29T13:07:38.002804+00:00",
+    "control_events": [
+      {
+        "checkpoint": {
+          "event": "checkpoint",
+          "name": "before_commit",
+          "pid": 93264,
+          "transaction_open": true
+        },
+        "independent_database_state": {
+          "version": 1,
+          "epoch": 3
+        }
+      },
+      {
+        "action": "terminate_owned_subprocess",
+        "pid": 93264,
+        "checkpoint": "before_commit"
+      }
+    ],
+    "returncode": 1,
+    "stdout": "{\"event\": \"checkpoint\", \"name\": \"before_commit\", \"pid\": 93264, \"transaction_open\": true}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\before_commit_fault\\application.sqlite",
+      "--action",
+      "upgrade",
+      "--authority",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\original-input\\authority.json"
+    ],
+    "pid": 98900,
+    "started_utc": "2026-10-29T13:07:38.125840+00:00",
+    "seconds": 0.14399530040100217,
+    "returncode": 0,
+    "stdout": "{\"status\": \"upgraded\", \"version\": 2, \"epoch\": 4}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\legacy_writer.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\before_commit_fault\\application.sqlite",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\before_commit_fault\\legacy-request.json"
+    ],
+    "pid": 11272,
+    "started_utc": "2026-10-29T13:07:38.271512+00:00",
+    "seconds": 0.12356610037386417,
+    "returncode": 0,
+    "stdout": "{\"status\": \"stale_epoch\", \"current_epoch\": 4}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\before_commit_fault\\application.sqlite",
+      "--action",
+      "write",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\before_commit_fault\\new-request.json"
+    ],
+    "pid": 95480,
+    "started_utc": "2026-10-29T13:07:38.395557+00:00",
+    "seconds": 0.13353849994018674,
+    "returncode": 0,
+    "stdout": "{\"status\": \"accepted\", \"entry_id\": \"N_FEE\", \"epoch\": 4, \"source_schema\": 2}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\before_commit_fault\\application.sqlite",
+      "--action",
+      "write",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\before_commit_fault\\new-request.json"
+    ],
+    "pid": 99244,
+    "started_utc": "2026-10-29T13:07:38.529122+00:00",
+    "seconds": 0.12884909985587,
+    "returncode": 0,
+    "stdout": "{\"status\": \"duplicate\", \"receipt\": {\"entry_id\": \"N_FEE\", \"epoch\": 4, \"source_schema\": 2, \"status\": \"accepted\"}}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\before_commit_fault\\application.sqlite",
+      "--action",
+      "write",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\before_commit_fault\\new-request.json"
+    ],
+    "pid": 16992,
+    "started_utc": "2026-10-29T13:07:38.658442+00:00",
+    "seconds": 0.2229614001698792,
+    "returncode": 0,
+    "stdout": "{\"status\": \"operation_conflict\"}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\before_commit_fault\\application.sqlite",
+      "--action",
+      "upgrade",
+      "--authority",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\original-input\\authority.json"
+    ],
+    "pid": 80984,
+    "started_utc": "2026-10-29T13:07:38.881430+00:00",
+    "seconds": 0.12512960005551577,
+    "returncode": 0,
+    "stdout": "{\"status\": \"already_current\", \"version\": 2, \"epoch\": 4}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\before_commit_fault\\application.sqlite",
+      "--action",
+      "receipt",
+      "--id",
+      "before-cutover"
+    ],
+    "pid": 92432,
+    "started_utc": "2026-10-29T13:07:39.006620+00:00",
+    "seconds": 0.13491690019145608,
+    "returncode": 0,
+    "stdout": "{\"status\": \"ok\", \"receipt\": {\"entry_id\": \"O2\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\before_commit_fault\\application.sqlite",
+      "--action",
+      "get",
+      "--id",
+      "N_FEE"
+    ],
+    "pid": 87824,
+    "started_utc": "2026-10-29T13:07:39.144283+00:00",
+    "seconds": 0.12820150004699826,
+    "returncode": 0,
+    "stdout": "{\"status\": \"ok\", \"entry\": {\"entry_id\": \"N_FEE\", \"customer_key\": \"C-ALPHA\", \"currency\": \"USD\", \"amount_minor\": 333, \"reversal_of\": null, \"fee_minor\": 7}}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\legacy_writer.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\after_commit_fault\\application.sqlite",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\after_commit_fault\\legacy-request.json"
+    ],
+    "pid": 36216,
+    "started_utc": "2026-10-29T13:07:39.274009+00:00",
+    "seconds": 0.13035920029506087,
+    "returncode": 0,
+    "stdout": "{\"status\": \"accepted\", \"entry_id\": \"O2\", \"epoch\": 3, \"source_schema\": 1}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\legacy_writer.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\after_commit_fault\\application.sqlite",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\after_commit_fault\\legacy-request.json"
+    ],
+    "pid": 33484,
+    "started_utc": "2026-10-29T13:07:39.404394+00:00",
+    "seconds": 0.12034530006349087,
+    "returncode": 0,
+    "stdout": "{\"status\": \"duplicate\", \"receipt\": {\"entry_id\": \"O2\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\after_commit_fault\\application.sqlite",
+      "--action",
+      "upgrade",
+      "--authority",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\original-input\\authority.json",
+      "--pause-at",
+      "after_commit"
+    ],
+    "pid": 63056,
+    "started_utc": "2026-10-29T13:07:39.535187+00:00",
+    "control_events": [
+      {
+        "checkpoint": {
+          "event": "checkpoint",
+          "name": "after_commit",
+          "pid": 63056,
+          "transaction_open": false
+        },
+        "independent_database_state": {
+          "version": 2,
+          "epoch": 4
+        }
+      },
+      {
+        "action": "terminate_owned_subprocess",
+        "pid": 63056,
+        "checkpoint": "after_commit"
+      }
+    ],
+    "returncode": 1,
+    "stdout": "{\"event\": \"checkpoint\", \"name\": \"after_commit\", \"pid\": 63056, \"transaction_open\": false}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\after_commit_fault\\application.sqlite",
+      "--action",
+      "upgrade",
+      "--authority",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\original-input\\authority.json"
+    ],
+    "pid": 35612,
+    "started_utc": "2026-10-29T13:07:39.665698+00:00",
+    "seconds": 0.12989499978721142,
+    "returncode": 0,
+    "stdout": "{\"status\": \"already_current\", \"version\": 2, \"epoch\": 4}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\legacy_writer.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\after_commit_fault\\application.sqlite",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\after_commit_fault\\legacy-request.json"
+    ],
+    "pid": 89988,
+    "started_utc": "2026-10-29T13:07:39.796259+00:00",
+    "seconds": 0.12456340016797185,
+    "returncode": 0,
+    "stdout": "{\"status\": \"stale_epoch\", \"current_epoch\": 4}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\after_commit_fault\\application.sqlite",
+      "--action",
+      "write",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\after_commit_fault\\new-request.json"
+    ],
+    "pid": 99092,
+    "started_utc": "2026-10-29T13:07:39.921331+00:00",
+    "seconds": 0.1398813002742827,
+    "returncode": 0,
+    "stdout": "{\"status\": \"accepted\", \"entry_id\": \"N_FEE\", \"epoch\": 4, \"source_schema\": 2}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\after_commit_fault\\application.sqlite",
+      "--action",
+      "write",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\after_commit_fault\\new-request.json"
+    ],
+    "pid": 36592,
+    "started_utc": "2026-10-29T13:07:40.061237+00:00",
+    "seconds": 0.134436400141567,
+    "returncode": 0,
+    "stdout": "{\"status\": \"duplicate\", \"receipt\": {\"entry_id\": \"N_FEE\", \"epoch\": 4, \"source_schema\": 2, \"status\": \"accepted\"}}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\after_commit_fault\\application.sqlite",
+      "--action",
+      "write",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\after_commit_fault\\new-request.json"
+    ],
+    "pid": 20160,
+    "started_utc": "2026-10-29T13:07:40.196037+00:00",
+    "seconds": 0.13717939984053373,
+    "returncode": 0,
+    "stdout": "{\"status\": \"operation_conflict\"}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\after_commit_fault\\application.sqlite",
+      "--action",
+      "upgrade",
+      "--authority",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\original-input\\authority.json"
+    ],
+    "pid": 38468,
+    "started_utc": "2026-10-29T13:07:40.333241+00:00",
+    "seconds": 0.12507419986650348,
+    "returncode": 0,
+    "stdout": "{\"status\": \"already_current\", \"version\": 2, \"epoch\": 4}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\after_commit_fault\\application.sqlite",
+      "--action",
+      "receipt",
+      "--id",
+      "before-cutover"
+    ],
+    "pid": 69288,
+    "started_utc": "2026-10-29T13:07:40.458378+00:00",
+    "seconds": 0.13235610025003552,
+    "returncode": 0,
+    "stdout": "{\"status\": \"ok\", \"receipt\": {\"entry_id\": \"O2\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\after_commit_fault\\application.sqlite",
+      "--action",
+      "get",
+      "--id",
+      "N_FEE"
+    ],
+    "pid": 96796,
+    "started_utc": "2026-10-29T13:07:40.593968+00:00",
+    "seconds": 0.13169860001653433,
+    "returncode": 0,
+    "stdout": "{\"status\": \"ok\", \"entry\": {\"entry_id\": \"N_FEE\", \"customer_key\": \"C-ALPHA\", \"currency\": \"USD\", \"amount_minor\": 333, \"reversal_of\": null, \"fee_minor\": 7}}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\legacy_writer.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\queued_cutover\\application.sqlite",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\queued_cutover\\legacy-request.json"
+    ],
+    "pid": 79244,
+    "started_utc": "2026-10-29T13:07:40.727027+00:00",
+    "seconds": 0.1310532996430993,
+    "returncode": 0,
+    "stdout": "{\"status\": \"accepted\", \"entry_id\": \"O2\", \"epoch\": 3, \"source_schema\": 1}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\legacy_writer.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\queued_cutover\\application.sqlite",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\queued_cutover\\legacy-request.json"
+    ],
+    "pid": 65976,
+    "started_utc": "2026-10-29T13:07:40.858106+00:00",
+    "seconds": 0.1255545997992158,
+    "returncode": 0,
+    "stdout": "{\"status\": \"duplicate\", \"receipt\": {\"entry_id\": \"O2\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\queued_cutover\\application.sqlite",
+      "--action",
+      "upgrade",
+      "--authority",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\original-input\\authority.json",
+      "--pause-at",
+      "before_commit"
+    ],
+    "pid": 95604,
+    "started_utc": "2026-10-29T13:07:40.994689+00:00",
+    "control_events": [
+      {
+        "checkpoint": {
+          "event": "checkpoint",
+          "name": "before_commit",
+          "pid": 95604,
+          "transaction_open": true
+        },
+        "independent_database_state": {
+          "version": 1,
+          "epoch": 3
+        }
+      }
+    ],
+    "returncode": 0,
+    "stdout": "{\"event\": \"checkpoint\", \"name\": \"before_commit\", \"pid\": 95604, \"transaction_open\": true}\n{\"status\": \"upgraded\", \"version\": 2, \"epoch\": 4}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\legacy_writer.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\queued_cutover\\application.sqlite",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\queued_cutover\\queued-request.json",
+      "--announce-attempt"
+    ],
+    "pid": 9972,
+    "started_utc": "2026-10-29T13:07:41.118371+00:00",
+    "control_events": [],
+    "returncode": 0,
+    "stdout": "{\"status\": \"stale_epoch\", \"current_epoch\": 4}\n",
+    "stderr": "{\"event\": \"write_attempt\", \"pid\": 9972}\n"
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\legacy_writer.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\queued_cutover\\application.sqlite",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\queued_cutover\\legacy-request.json"
+    ],
+    "pid": 86516,
+    "started_utc": "2026-10-29T13:07:41.248204+00:00",
+    "seconds": 0.12324910005554557,
+    "returncode": 0,
+    "stdout": "{\"status\": \"stale_epoch\", \"current_epoch\": 4}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\queued_cutover\\application.sqlite",
+      "--action",
+      "write",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\queued_cutover\\new-request.json"
+    ],
+    "pid": 66824,
+    "started_utc": "2026-10-29T13:07:41.371933+00:00",
+    "seconds": 0.13400090020149946,
+    "returncode": 0,
+    "stdout": "{\"status\": \"accepted\", \"entry_id\": \"N_FEE\", \"epoch\": 4, \"source_schema\": 2}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\queued_cutover\\application.sqlite",
+      "--action",
+      "write",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\queued_cutover\\new-request.json"
+    ],
+    "pid": 75860,
+    "started_utc": "2026-10-29T13:07:41.505959+00:00",
+    "seconds": 0.12995170010253787,
+    "returncode": 0,
+    "stdout": "{\"status\": \"duplicate\", \"receipt\": {\"entry_id\": \"N_FEE\", \"epoch\": 4, \"source_schema\": 2, \"status\": \"accepted\"}}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\queued_cutover\\application.sqlite",
+      "--action",
+      "write",
+      "--request",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\queued_cutover\\new-request.json"
+    ],
+    "pid": 94996,
+    "started_utc": "2026-10-29T13:07:41.636410+00:00",
+    "seconds": 0.12552980007603765,
+    "returncode": 0,
+    "stdout": "{\"status\": \"operation_conflict\"}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\queued_cutover\\application.sqlite",
+      "--action",
+      "upgrade",
+      "--authority",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\original-input\\authority.json"
+    ],
+    "pid": 48768,
+    "started_utc": "2026-10-29T13:07:41.761963+00:00",
+    "seconds": 0.12910330016165972,
+    "returncode": 0,
+    "stdout": "{\"status\": \"already_current\", \"version\": 2, \"epoch\": 4}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\queued_cutover\\application.sqlite",
+      "--action",
+      "receipt",
+      "--id",
+      "before-cutover"
+    ],
+    "pid": 91064,
+    "started_utc": "2026-10-29T13:07:41.891134+00:00",
+    "seconds": 0.13310630014166236,
+    "returncode": 0,
+    "stdout": "{\"status\": \"ok\", \"receipt\": {\"entry_id\": \"O2\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\queued_cutover\\application.sqlite",
+      "--action",
+      "get",
+      "--id",
+      "N_FEE"
+    ],
+    "pid": 66820,
+    "started_utc": "2026-10-29T13:07:42.027044+00:00",
+    "seconds": 0.13299519987776875,
+    "returncode": 0,
+    "stdout": "{\"status\": \"ok\", \"entry\": {\"entry_id\": \"N_FEE\", \"customer_key\": \"C-ALPHA\", \"currency\": \"USD\", \"amount_minor\": 333, \"reversal_of\": null, \"fee_minor\": 7}}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\unresolved_receipt\\application.sqlite",
+      "--action",
+      "upgrade",
+      "--authority",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\original-input\\authority.json"
+    ],
+    "pid": 76464,
+    "started_utc": "2026-10-29T13:07:42.169155+00:00",
+    "seconds": 0.1306367996148765,
+    "returncode": 0,
+    "stdout": "{\"status\": \"unresolved_receipt_identity\"}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\executed-source\\reference_api.py",
+      "--db",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\unresolved_entry\\application.sqlite",
+      "--action",
+      "upgrade",
+      "--authority",
+      "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-d-storage-identity-final\\original-input\\authority.json"
+    ],
+    "pid": 95004,
+    "started_utc": "2026-10-29T13:07:42.309318+00:00",
+    "seconds": 0.13425359968096018,
+    "returncode": 0,
+    "stdout": "{\"status\": \"unresolved_entry_identity\"}\n",
+    "stderr": ""
+  }
+]

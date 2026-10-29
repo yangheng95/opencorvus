@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [L04持久迁移与切换资格](records/2026-10/2026-10-29-heavy-workbench-l04-qualification.md)：合成旧库实跑、事务版本与epoch、受控进程中断；先做便宜可达性，不当重型题完成。
+
 - [协调阶段文件差异](records/2026-10/2026-10-29-build-handoff-observation.md)：Build共享物理终态发布缺口、两模式与多项目正向回归及真实Review验收。
 
 - [终态检查点与协调恢复](records/2026-10/2026-10-29-task-terminal-checkpoint-recovery.md)：真实验收暴露的失败自动提交、重复失败唤醒和压缩来源身份调查，未宣称完整流程通过。

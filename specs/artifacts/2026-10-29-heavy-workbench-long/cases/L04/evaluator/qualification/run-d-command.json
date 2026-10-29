@@ -1,0 +1,14 @@
+{
+  "cmd": "C:/Python314/python.exe -B D:/opencorvus-benchmark-runs/l04-migration-qualification-20261029/qualify_migration.py --input D:/opencorvus-benchmark-runs/l04-migration-qualification-20261029/inputs/v1 --output D:/opencorvus-benchmark-runs/l04-migration-qualification-20261029/run-d-storage-identity-final",
+  "start": {
+    "current_time": "2026-10-29 13:07:34 UTC"
+  },
+  "end": {
+    "current_time": "2026-10-29 13:07:42 UTC"
+  },
+  "chunk_id": "add7d5",
+  "wall_time_seconds": 7.5453038,
+  "exit_code": 0,
+  "original_token_count": 16,
+  "output": "{\"status\": \"passed\", \"cases\": 6, \"seconds\": 7.184308200143278}\r\n"
+}

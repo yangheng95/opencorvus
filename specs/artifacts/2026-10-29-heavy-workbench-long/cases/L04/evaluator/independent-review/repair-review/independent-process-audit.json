@@ -1,0 +1,143 @@
+{
+  "owned_subprocess_events": 53,
+  "fault_or_release_cases": [
+    {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\cold-run\\executed-source\\reference_api.py",
+        "--db",
+        "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\cold-run\\before_commit_fault\\application.sqlite",
+        "--action",
+        "upgrade",
+        "--authority",
+        "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\cold-run\\original-input\\authority.json",
+        "--pause-at",
+        "before_commit"
+      ],
+      "pid": 69636,
+      "phase": "before_commit",
+      "control_events": [
+        {
+          "checkpoint": {
+            "event": "checkpoint",
+            "name": "before_commit",
+            "pid": 69636,
+            "transaction_open": true
+          },
+          "independent_database_state": {
+            "version": 1,
+            "epoch": 3
+          }
+        },
+        {
+          "action": "terminate_owned_subprocess",
+          "pid": 69636,
+          "checkpoint": "before_commit"
+        }
+      ],
+      "returncode": 1,
+      "checks": {
+        "own_executed_source": true,
+        "actual_checkpoint_pid_matches_handle": true,
+        "phase_matches_transaction_property": true,
+        "external_version_epoch_fact": true,
+        "terminated_only_same_checkpoint_child": true
+      }
+    },
+    {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\cold-run\\executed-source\\reference_api.py",
+        "--db",
+        "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\cold-run\\after_commit_fault\\application.sqlite",
+        "--action",
+        "upgrade",
+        "--authority",
+        "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\cold-run\\original-input\\authority.json",
+        "--pause-at",
+        "after_commit"
+      ],
+      "pid": 95832,
+      "phase": "after_commit",
+      "control_events": [
+        {
+          "checkpoint": {
+            "event": "checkpoint",
+            "name": "after_commit",
+            "pid": 95832,
+            "transaction_open": false
+          },
+          "independent_database_state": {
+            "version": 2,
+            "epoch": 4
+          }
+        },
+        {
+          "action": "terminate_owned_subprocess",
+          "pid": 95832,
+          "checkpoint": "after_commit"
+        }
+      ],
+      "returncode": 1,
+      "checks": {
+        "own_executed_source": true,
+        "actual_checkpoint_pid_matches_handle": true,
+        "phase_matches_transaction_property": true,
+        "external_version_epoch_fact": true,
+        "terminated_only_same_checkpoint_child": true
+      }
+    },
+    {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\cold-run\\executed-source\\reference_api.py",
+        "--db",
+        "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\cold-run\\queued_cutover\\application.sqlite",
+        "--action",
+        "upgrade",
+        "--authority",
+        "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\cold-run\\original-input\\authority.json",
+        "--pause-at",
+        "before_commit"
+      ],
+      "pid": 98968,
+      "phase": "before_commit",
+      "control_events": [
+        {
+          "checkpoint": {
+            "event": "checkpoint",
+            "name": "before_commit",
+            "pid": 98968,
+            "transaction_open": true
+          },
+          "independent_database_state": {
+            "version": 1,
+            "epoch": 3
+          }
+        }
+      ],
+      "returncode": 0,
+      "checks": {
+        "own_executed_source": true,
+        "actual_checkpoint_pid_matches_handle": true,
+        "phase_matches_transaction_property": true,
+        "external_version_epoch_fact": true,
+        "released_original_transaction": true
+      }
+    }
+  ],
+  "queued_writer": {
+    "own_attempt_pid": true,
+    "response": {
+      "status": "stale_epoch",
+      "current_epoch": 4
+    },
+    "returned_stale_after_cutover": true,
+    "observation_limit": "write_attempt prints immediately before BEGIN; process enters before cutover, but no separate SQLITE_BUSY/busy-handler event proves engine-internal queue timing"
+  },
+  "all_observed_protocol_checks_passed": true,
+  "kill_scope_source_review": "harness stores only its own Popen handles; all .kill calls use those handles, never a PID from input or global process enumeration"
+}

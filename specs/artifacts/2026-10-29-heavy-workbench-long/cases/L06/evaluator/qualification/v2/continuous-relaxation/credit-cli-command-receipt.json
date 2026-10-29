@@ -1,0 +1,14 @@
+{
+  "cmd": "docker run --rm --name oc-l06-credit-lp-cli-20261029-a --cidfile D:/opencorvus-benchmark-runs/l06-procurement-qualification-20261029/v2/continuous-relaxation-qualification/credit-cli-container.cid --network none --mount type=bind,source=D:/opencorvus-benchmark-runs/l06-procurement-qualification-20261029,target=/work -w /work -e PYTHONDONTWRITEBYTECODE=1 -e OPENBLAS_NUM_THREADS=1 -e OMP_NUM_THREADS=1 opencorvus-benchmark-science:20261029 python -B qualify_l06.py --mode relaxation --minimum-credit --input /work/v2/continuous-relaxation-qualification/known-checks-repair/credit-input.json --output /work/v2/continuous-relaxation-qualification/credit-cli",
+  "start": {
+    "current_time": "2026-10-29 12:24:35 UTC"
+  },
+  "end": {
+    "current_time": "2026-10-29 12:24:37 UTC"
+  },
+  "chunk_id": "2b89d2",
+  "wall_time_seconds": 1.295128,
+  "exit_code": 0,
+  "original_token_count": 320,
+  "output": "{\"event\": \"continuous_solving\", \"variables\": 21, \"integer_variables\": 0, \"equalities\": 14, \"inequalities\": 36}\nRunning HiGHS 1.8.0 (git hash: 222cce7): Copyright (c) 2024 HiGHS under MIT licence terms\nCoefficient ranges:\n  Matrix [1e+00, 2e+00]\n  Cost   [1e+00, 1e+00]\n  Bound  [1e+00, 1e+01]\n  RHS    [1e+00, 1e+01]\nPresolving model\n17 rows, 8 cols, 46 nonzeros  0s\n12 rows, 5 cols, 34 nonzeros  0s\n3 rows, 4 cols, 7 nonzeros  0s\n0 rows, 0 cols, 0 nonzeros  0s\nPresolve : Reductions: rows 0(-50); columns 0(-21); elements 0(-116) - Reduced to empty\nSolving the original LP from the solution after postsolve\nModel status        : Optimal\nObjective value     :  2.0000000000e+00\nRelative P-D gap    :  0.0000000000e+00\nHiGHS run time      :          0.00\n{\"objective_name\": \"minimum_credit_minor\", \"method\": \"continuous_relaxation\", \"status\": 0, \"message\": \"Optimization terminated successfully. (HiGHS Status 7: Optimal)\", \"seconds\": 0.004164375364780426, \"objective\": 2.0, \"variables\": 21, \"constraints\": 38, \"iterations\": 0, \"interpretation\": \"lower-bound qualification only; fractional solution is not a business plan\", \"exact_certificate_seconds\": 0.0030701952055096626, \"certified_lower_bound_exact\": \"2\", \"certified_lower_bound\": 2.0, \"primal_maximum_row_violation\": 0.0}\n"
+}

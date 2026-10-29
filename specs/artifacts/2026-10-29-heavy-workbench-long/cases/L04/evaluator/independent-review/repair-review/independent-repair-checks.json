@@ -1,0 +1,3076 @@
+[
+  {
+    "contract": "v1.first.exact_historical_request",
+    "actual": true,
+    "expected": true,
+    "passed": true
+  },
+  {
+    "contract": "v1.first.typed_error",
+    "actual": {
+      "status": "invalid_request",
+      "field": "op_key"
+    },
+    "expected": {
+      "status": "invalid_request",
+      "field": "op_key"
+    },
+    "passed": true
+  },
+  {
+    "contract": "v1.identical.exact_historical_request",
+    "actual": true,
+    "expected": true,
+    "passed": true
+  },
+  {
+    "contract": "v1.identical.typed_error",
+    "actual": {
+      "status": "invalid_request",
+      "field": "op_key"
+    },
+    "expected": {
+      "status": "invalid_request",
+      "field": "op_key"
+    },
+    "passed": true
+  },
+  {
+    "contract": "v1.changed_same_null_key.exact_historical_request",
+    "actual": true,
+    "expected": true,
+    "passed": true
+  },
+  {
+    "contract": "v1.changed_same_null_key.typed_error",
+    "actual": {
+      "status": "invalid_request",
+      "field": "op_key"
+    },
+    "expected": {
+      "status": "invalid_request",
+      "field": "op_key"
+    },
+    "passed": true
+  },
+  {
+    "contract": "v1.all_request_failures_preserve_entire_database",
+    "actual": {
+      "schema": [
+        [
+          "index",
+          "legacy_entries_customer",
+          "legacy_entries",
+          "CREATE INDEX legacy_entries_customer ON legacy_entries(customer_id)"
+        ],
+        [
+          "index",
+          "sqlite_autoindex_legacy_entries_1",
+          "legacy_entries",
+          null
+        ],
+        [
+          "index",
+          "sqlite_autoindex_write_receipts_1",
+          "write_receipts",
+          null
+        ],
+        [
+          "table",
+          "audit_events",
+          "audit_events",
+          "CREATE TABLE audit_events(event_id INTEGER PRIMARY KEY AUTOINCREMENT,entry_id TEXT NOT NULL,source_schema INTEGER NOT NULL,payload TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "control",
+          "control",
+          "CREATE TABLE control(singleton INTEGER PRIMARY KEY CHECK(singleton=1), epoch INTEGER NOT NULL)"
+        ],
+        [
+          "table",
+          "legacy_customers",
+          "legacy_customers",
+          "CREATE TABLE legacy_customers(customer_id INTEGER PRIMARY KEY,display_name TEXT,email TEXT)"
+        ],
+        [
+          "table",
+          "legacy_entries",
+          "legacy_entries",
+          "CREATE TABLE legacy_entries(entry_id TEXT PRIMARY KEY,customer_id INTEGER NOT NULL,currency TEXT NOT NULL,amount TEXT NOT NULL,reversal_of TEXT)"
+        ],
+        [
+          "table",
+          "schema_migrations",
+          "schema_migrations",
+          "CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY,name TEXT NOT NULL,applied_at TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "sqlite_sequence",
+          "sqlite_sequence",
+          "CREATE TABLE sqlite_sequence(name,seq)"
+        ],
+        [
+          "table",
+          "write_receipts",
+          "write_receipts",
+          "CREATE TABLE write_receipts(op_key TEXT PRIMARY KEY,command_json TEXT NOT NULL,result_json TEXT NOT NULL)"
+        ],
+        [
+          "trigger",
+          "legacy_entry_audit",
+          "legacy_entries",
+          "CREATE TRIGGER legacy_entry_audit AFTER INSERT ON legacy_entries BEGIN INSERT INTO audit_events(entry_id,source_schema,payload) VALUES(NEW.entry_id,1,json_object('customer_id',NEW.customer_id,'currency',NEW.currency,'amount',NEW.amount,'reversal_of',NEW.reversal_of)); END"
+        ]
+      ],
+      "tables": {
+        "audit_events": [
+          [
+            1,
+            "O1",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12.34\",\"reversal_of\":null}"
+          ],
+          [
+            2,
+            "R1",
+            1,
+            "{\"customer_id\":9,\"currency\":\"USD\",\"amount\":\"-2.34\",\"reversal_of\":\"O1\"}"
+          ],
+          [
+            3,
+            "O_ALIAS",
+            1,
+            "{\"customer_id\":9,\"currency\":\"CNY\",\"amount\":\"2.50\",\"reversal_of\":null}"
+          ],
+          [
+            4,
+            "O_BETA",
+            1,
+            "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"7.00\",\"reversal_of\":null}"
+          ],
+          [
+            5,
+            "O_ZERO",
+            1,
+            "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"0.00\",\"reversal_of\":null}"
+          ],
+          [
+            6,
+            "O_SCALE",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"1.005\",\"reversal_of\":null}"
+          ],
+          [
+            7,
+            "O_TEXT",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12O.00\",\"reversal_of\":null}"
+          ],
+          [
+            8,
+            "O_UNKNOWN",
+            1,
+            "{\"customer_id\":11,\"currency\":\"USD\",\"amount\":\"3.00\",\"reversal_of\":null}"
+          ],
+          [
+            9,
+            "O_ORPHAN",
+            1,
+            "{\"customer_id\":999,\"currency\":\"CNY\",\"amount\":\"8.00\",\"reversal_of\":null}"
+          ],
+          [
+            10,
+            "R_BAD",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"-1.00\",\"reversal_of\":\"MISSING\"}"
+          ]
+        ],
+        "control": [
+          [
+            1,
+            3
+          ]
+        ],
+        "legacy_customers": [
+          [
+            7,
+            "张三",
+            "same@example.test"
+          ],
+          [
+            9,
+            "张三旧别名",
+            "alias@example.test"
+          ],
+          [
+            11,
+            "未核实",
+            "unknown@example.test"
+          ],
+          [
+            12,
+            "另一个同名客户",
+            "same@example.test"
+          ]
+        ],
+        "legacy_entries": [
+          [
+            "O1",
+            7,
+            "USD",
+            "12.34",
+            null
+          ],
+          [
+            "R1",
+            9,
+            "USD",
+            "-2.34",
+            "O1"
+          ],
+          [
+            "O_ALIAS",
+            9,
+            "CNY",
+            "2.50",
+            null
+          ],
+          [
+            "O_BETA",
+            12,
+            "USD",
+            "7.00",
+            null
+          ],
+          [
+            "O_ZERO",
+            7,
+            "CNY",
+            "0.00",
+            null
+          ],
+          [
+            "O_SCALE",
+            7,
+            "USD",
+            "1.005",
+            null
+          ],
+          [
+            "O_TEXT",
+            7,
+            "USD",
+            "12O.00",
+            null
+          ],
+          [
+            "O_UNKNOWN",
+            11,
+            "USD",
+            "3.00",
+            null
+          ],
+          [
+            "O_ORPHAN",
+            999,
+            "CNY",
+            "8.00",
+            null
+          ],
+          [
+            "R_BAD",
+            7,
+            "USD",
+            "-1.00",
+            "MISSING"
+          ]
+        ],
+        "schema_migrations": [
+          [
+            1,
+            "synthetic_legacy_v1",
+            "2026-10-01T00:00:00Z"
+          ]
+        ],
+        "sqlite_sequence": [
+          [
+            "audit_events",
+            10
+          ]
+        ],
+        "write_receipts": []
+      }
+    },
+    "expected": {
+      "schema": [
+        [
+          "index",
+          "legacy_entries_customer",
+          "legacy_entries",
+          "CREATE INDEX legacy_entries_customer ON legacy_entries(customer_id)"
+        ],
+        [
+          "index",
+          "sqlite_autoindex_legacy_entries_1",
+          "legacy_entries",
+          null
+        ],
+        [
+          "index",
+          "sqlite_autoindex_write_receipts_1",
+          "write_receipts",
+          null
+        ],
+        [
+          "table",
+          "audit_events",
+          "audit_events",
+          "CREATE TABLE audit_events(event_id INTEGER PRIMARY KEY AUTOINCREMENT,entry_id TEXT NOT NULL,source_schema INTEGER NOT NULL,payload TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "control",
+          "control",
+          "CREATE TABLE control(singleton INTEGER PRIMARY KEY CHECK(singleton=1), epoch INTEGER NOT NULL)"
+        ],
+        [
+          "table",
+          "legacy_customers",
+          "legacy_customers",
+          "CREATE TABLE legacy_customers(customer_id INTEGER PRIMARY KEY,display_name TEXT,email TEXT)"
+        ],
+        [
+          "table",
+          "legacy_entries",
+          "legacy_entries",
+          "CREATE TABLE legacy_entries(entry_id TEXT PRIMARY KEY,customer_id INTEGER NOT NULL,currency TEXT NOT NULL,amount TEXT NOT NULL,reversal_of TEXT)"
+        ],
+        [
+          "table",
+          "schema_migrations",
+          "schema_migrations",
+          "CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY,name TEXT NOT NULL,applied_at TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "sqlite_sequence",
+          "sqlite_sequence",
+          "CREATE TABLE sqlite_sequence(name,seq)"
+        ],
+        [
+          "table",
+          "write_receipts",
+          "write_receipts",
+          "CREATE TABLE write_receipts(op_key TEXT PRIMARY KEY,command_json TEXT NOT NULL,result_json TEXT NOT NULL)"
+        ],
+        [
+          "trigger",
+          "legacy_entry_audit",
+          "legacy_entries",
+          "CREATE TRIGGER legacy_entry_audit AFTER INSERT ON legacy_entries BEGIN INSERT INTO audit_events(entry_id,source_schema,payload) VALUES(NEW.entry_id,1,json_object('customer_id',NEW.customer_id,'currency',NEW.currency,'amount',NEW.amount,'reversal_of',NEW.reversal_of)); END"
+        ]
+      ],
+      "tables": {
+        "audit_events": [
+          [
+            1,
+            "O1",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12.34\",\"reversal_of\":null}"
+          ],
+          [
+            2,
+            "R1",
+            1,
+            "{\"customer_id\":9,\"currency\":\"USD\",\"amount\":\"-2.34\",\"reversal_of\":\"O1\"}"
+          ],
+          [
+            3,
+            "O_ALIAS",
+            1,
+            "{\"customer_id\":9,\"currency\":\"CNY\",\"amount\":\"2.50\",\"reversal_of\":null}"
+          ],
+          [
+            4,
+            "O_BETA",
+            1,
+            "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"7.00\",\"reversal_of\":null}"
+          ],
+          [
+            5,
+            "O_ZERO",
+            1,
+            "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"0.00\",\"reversal_of\":null}"
+          ],
+          [
+            6,
+            "O_SCALE",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"1.005\",\"reversal_of\":null}"
+          ],
+          [
+            7,
+            "O_TEXT",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12O.00\",\"reversal_of\":null}"
+          ],
+          [
+            8,
+            "O_UNKNOWN",
+            1,
+            "{\"customer_id\":11,\"currency\":\"USD\",\"amount\":\"3.00\",\"reversal_of\":null}"
+          ],
+          [
+            9,
+            "O_ORPHAN",
+            1,
+            "{\"customer_id\":999,\"currency\":\"CNY\",\"amount\":\"8.00\",\"reversal_of\":null}"
+          ],
+          [
+            10,
+            "R_BAD",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"-1.00\",\"reversal_of\":\"MISSING\"}"
+          ]
+        ],
+        "control": [
+          [
+            1,
+            3
+          ]
+        ],
+        "legacy_customers": [
+          [
+            7,
+            "张三",
+            "same@example.test"
+          ],
+          [
+            9,
+            "张三旧别名",
+            "alias@example.test"
+          ],
+          [
+            11,
+            "未核实",
+            "unknown@example.test"
+          ],
+          [
+            12,
+            "另一个同名客户",
+            "same@example.test"
+          ]
+        ],
+        "legacy_entries": [
+          [
+            "O1",
+            7,
+            "USD",
+            "12.34",
+            null
+          ],
+          [
+            "R1",
+            9,
+            "USD",
+            "-2.34",
+            "O1"
+          ],
+          [
+            "O_ALIAS",
+            9,
+            "CNY",
+            "2.50",
+            null
+          ],
+          [
+            "O_BETA",
+            12,
+            "USD",
+            "7.00",
+            null
+          ],
+          [
+            "O_ZERO",
+            7,
+            "CNY",
+            "0.00",
+            null
+          ],
+          [
+            "O_SCALE",
+            7,
+            "USD",
+            "1.005",
+            null
+          ],
+          [
+            "O_TEXT",
+            7,
+            "USD",
+            "12O.00",
+            null
+          ],
+          [
+            "O_UNKNOWN",
+            11,
+            "USD",
+            "3.00",
+            null
+          ],
+          [
+            "O_ORPHAN",
+            999,
+            "CNY",
+            "8.00",
+            null
+          ],
+          [
+            "R_BAD",
+            7,
+            "USD",
+            "-1.00",
+            "MISSING"
+          ]
+        ],
+        "schema_migrations": [
+          [
+            1,
+            "synthetic_legacy_v1",
+            "2026-10-01T00:00:00Z"
+          ]
+        ],
+        "sqlite_sequence": [
+          [
+            "audit_events",
+            10
+          ]
+        ],
+        "write_receipts": []
+      }
+    },
+    "passed": true
+  },
+  {
+    "contract": "v2.first.exact_historical_request",
+    "actual": true,
+    "expected": true,
+    "passed": true
+  },
+  {
+    "contract": "v2.first.typed_error",
+    "actual": {
+      "status": "invalid_request",
+      "field": "op_key"
+    },
+    "expected": {
+      "status": "invalid_request",
+      "field": "op_key"
+    },
+    "passed": true
+  },
+  {
+    "contract": "v2.identical.exact_historical_request",
+    "actual": true,
+    "expected": true,
+    "passed": true
+  },
+  {
+    "contract": "v2.identical.typed_error",
+    "actual": {
+      "status": "invalid_request",
+      "field": "op_key"
+    },
+    "expected": {
+      "status": "invalid_request",
+      "field": "op_key"
+    },
+    "passed": true
+  },
+  {
+    "contract": "v2.changed_same_null_key.exact_historical_request",
+    "actual": true,
+    "expected": true,
+    "passed": true
+  },
+  {
+    "contract": "v2.changed_same_null_key.typed_error",
+    "actual": {
+      "status": "invalid_request",
+      "field": "op_key"
+    },
+    "expected": {
+      "status": "invalid_request",
+      "field": "op_key"
+    },
+    "passed": true
+  },
+  {
+    "contract": "v2.all_request_failures_preserve_entire_database",
+    "actual": {
+      "schema": [
+        [
+          "index",
+          "entries_customer_currency",
+          "entries",
+          "CREATE INDEX entries_customer_currency ON entries(customer_key,currency)"
+        ],
+        [
+          "index",
+          "sqlite_autoindex_customers_1",
+          "customers",
+          null
+        ],
+        [
+          "index",
+          "sqlite_autoindex_entries_1",
+          "entries",
+          null
+        ],
+        [
+          "index",
+          "sqlite_autoindex_quarantine_1",
+          "quarantine",
+          null
+        ],
+        [
+          "index",
+          "sqlite_autoindex_write_receipts_1",
+          "write_receipts",
+          null
+        ],
+        [
+          "table",
+          "audit_events",
+          "audit_events",
+          "CREATE TABLE audit_events(event_id INTEGER PRIMARY KEY AUTOINCREMENT,entry_id TEXT NOT NULL,source_schema INTEGER NOT NULL,payload TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "control",
+          "control",
+          "CREATE TABLE control(singleton INTEGER PRIMARY KEY CHECK(singleton=1), epoch INTEGER NOT NULL)"
+        ],
+        [
+          "table",
+          "customer_aliases",
+          "customer_aliases",
+          "CREATE TABLE customer_aliases(legacy_id INTEGER PRIMARY KEY,customer_key TEXT NOT NULL REFERENCES customers(customer_key),raw_json TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "customers",
+          "customers",
+          "CREATE TABLE customers(customer_key TEXT PRIMARY KEY NOT NULL CHECK(typeof(customer_key)='text' AND length(trim(customer_key))>0),display_name TEXT NOT NULL,email TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "entries",
+          "entries",
+          "CREATE TABLE entries(entry_id TEXT PRIMARY KEY NOT NULL CHECK(typeof(entry_id)='text' AND length(trim(entry_id))>0),customer_key TEXT NOT NULL REFERENCES customers(customer_key),currency TEXT NOT NULL CHECK(currency IN ('USD','CNY')),amount_minor INTEGER NOT NULL CHECK(typeof(amount_minor)='integer'),reversal_of TEXT REFERENCES entries(entry_id) DEFERRABLE INITIALLY DEFERRED,fee_minor INTEGER NOT NULL DEFAULT 0 CHECK(typeof(fee_minor)='integer' AND fee_minor>=0),legacy_raw_json TEXT,CHECK((reversal_of IS NULL AND amount_minor>=0) OR (reversal_of IS NOT NULL AND amount_minor<0)))"
+        ],
+        [
+          "table",
+          "quarantine",
+          "quarantine",
+          "CREATE TABLE quarantine(kind TEXT NOT NULL,legacy_key TEXT NOT NULL,reason TEXT NOT NULL,raw_json TEXT NOT NULL,PRIMARY KEY(kind,legacy_key))"
+        ],
+        [
+          "table",
+          "schema_migrations",
+          "schema_migrations",
+          "CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY,name TEXT NOT NULL,applied_at TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "sqlite_sequence",
+          "sqlite_sequence",
+          "CREATE TABLE sqlite_sequence(name,seq)"
+        ],
+        [
+          "table",
+          "write_receipts",
+          "write_receipts",
+          "CREATE TABLE \"write_receipts\"(op_key TEXT PRIMARY KEY NOT NULL CHECK(typeof(op_key)='text' AND length(trim(op_key))>0),command_json TEXT NOT NULL,result_json TEXT NOT NULL)"
+        ],
+        [
+          "trigger",
+          "entry_audit",
+          "entries",
+          "CREATE TRIGGER entry_audit AFTER INSERT ON entries BEGIN INSERT INTO audit_events(entry_id,source_schema,payload) VALUES(NEW.entry_id,2,json_object('customer_key',NEW.customer_key,'currency',NEW.currency,'amount_minor',NEW.amount_minor,'reversal_of',NEW.reversal_of,'fee_minor',NEW.fee_minor)); END"
+        ]
+      ],
+      "tables": {
+        "audit_events": [
+          [
+            1,
+            "O1",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12.34\",\"reversal_of\":null}"
+          ],
+          [
+            2,
+            "R1",
+            1,
+            "{\"customer_id\":9,\"currency\":\"USD\",\"amount\":\"-2.34\",\"reversal_of\":\"O1\"}"
+          ],
+          [
+            3,
+            "O_ALIAS",
+            1,
+            "{\"customer_id\":9,\"currency\":\"CNY\",\"amount\":\"2.50\",\"reversal_of\":null}"
+          ],
+          [
+            4,
+            "O_BETA",
+            1,
+            "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"7.00\",\"reversal_of\":null}"
+          ],
+          [
+            5,
+            "O_ZERO",
+            1,
+            "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"0.00\",\"reversal_of\":null}"
+          ],
+          [
+            6,
+            "O_SCALE",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"1.005\",\"reversal_of\":null}"
+          ],
+          [
+            7,
+            "O_TEXT",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12O.00\",\"reversal_of\":null}"
+          ],
+          [
+            8,
+            "O_UNKNOWN",
+            1,
+            "{\"customer_id\":11,\"currency\":\"USD\",\"amount\":\"3.00\",\"reversal_of\":null}"
+          ],
+          [
+            9,
+            "O_ORPHAN",
+            1,
+            "{\"customer_id\":999,\"currency\":\"CNY\",\"amount\":\"8.00\",\"reversal_of\":null}"
+          ],
+          [
+            10,
+            "R_BAD",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"-1.00\",\"reversal_of\":\"MISSING\"}"
+          ],
+          [
+            11,
+            "O2",
+            1,
+            "{\"customer_id\":9,\"currency\":\"CNY\",\"amount\":\"5.00\",\"reversal_of\":null}"
+          ],
+          [
+            12,
+            "N_FEE",
+            2,
+            "{\"customer_key\":\"C-ALPHA\",\"currency\":\"USD\",\"amount_minor\":333,\"reversal_of\":null,\"fee_minor\":7}"
+          ]
+        ],
+        "control": [
+          [
+            1,
+            4
+          ]
+        ],
+        "customer_aliases": [
+          [
+            7,
+            "C-ALPHA",
+            "{\"customer_id\": 7, \"display_name\": \"张三\", \"email\": \"same@example.test\"}"
+          ],
+          [
+            9,
+            "C-ALPHA",
+            "{\"customer_id\": 9, \"display_name\": \"张三旧别名\", \"email\": \"alias@example.test\"}"
+          ],
+          [
+            12,
+            "C-BETA",
+            "{\"customer_id\": 12, \"display_name\": \"另一个同名客户\", \"email\": \"same@example.test\"}"
+          ]
+        ],
+        "customers": [
+          [
+            "C-ALPHA",
+            "甲客户",
+            "same@example.test"
+          ],
+          [
+            "C-BETA",
+            "乙客户",
+            "same@example.test"
+          ]
+        ],
+        "entries": [
+          [
+            "O1",
+            "C-ALPHA",
+            "USD",
+            1234,
+            null,
+            0,
+            "{\"amount\": \"12.34\", \"currency\": \"USD\", \"customer_id\": 7, \"entry_id\": \"O1\", \"reversal_of\": null}"
+          ],
+          [
+            "O2",
+            "C-ALPHA",
+            "CNY",
+            500,
+            null,
+            0,
+            "{\"amount\": \"5.00\", \"currency\": \"CNY\", \"customer_id\": 9, \"entry_id\": \"O2\", \"reversal_of\": null}"
+          ],
+          [
+            "O_ALIAS",
+            "C-ALPHA",
+            "CNY",
+            250,
+            null,
+            0,
+            "{\"amount\": \"2.50\", \"currency\": \"CNY\", \"customer_id\": 9, \"entry_id\": \"O_ALIAS\", \"reversal_of\": null}"
+          ],
+          [
+            "O_BETA",
+            "C-BETA",
+            "USD",
+            700,
+            null,
+            0,
+            "{\"amount\": \"7.00\", \"currency\": \"USD\", \"customer_id\": 12, \"entry_id\": \"O_BETA\", \"reversal_of\": null}"
+          ],
+          [
+            "O_ZERO",
+            "C-ALPHA",
+            "CNY",
+            0,
+            null,
+            0,
+            "{\"amount\": \"0.00\", \"currency\": \"CNY\", \"customer_id\": 7, \"entry_id\": \"O_ZERO\", \"reversal_of\": null}"
+          ],
+          [
+            "R1",
+            "C-ALPHA",
+            "USD",
+            -234,
+            "O1",
+            0,
+            "{\"amount\": \"-2.34\", \"currency\": \"USD\", \"customer_id\": 9, \"entry_id\": \"R1\", \"reversal_of\": \"O1\"}"
+          ],
+          [
+            "N_FEE",
+            "C-ALPHA",
+            "USD",
+            333,
+            null,
+            7,
+            null
+          ]
+        ],
+        "quarantine": [
+          [
+            "customer",
+            "11",
+            "unmapped_customer",
+            "{\"customer_id\": 11, \"display_name\": \"未核实\", \"email\": \"unknown@example.test\"}"
+          ],
+          [
+            "entry",
+            "O_ORPHAN",
+            "unmapped_customer",
+            "{\"amount\": \"8.00\", \"currency\": \"CNY\", \"customer_id\": 999, \"entry_id\": \"O_ORPHAN\", \"reversal_of\": null}"
+          ],
+          [
+            "entry",
+            "O_SCALE",
+            "amount_scale",
+            "{\"amount\": \"1.005\", \"currency\": \"USD\", \"customer_id\": 7, \"entry_id\": \"O_SCALE\", \"reversal_of\": null}"
+          ],
+          [
+            "entry",
+            "O_TEXT",
+            "invalid_amount",
+            "{\"amount\": \"12O.00\", \"currency\": \"USD\", \"customer_id\": 7, \"entry_id\": \"O_TEXT\", \"reversal_of\": null}"
+          ],
+          [
+            "entry",
+            "O_UNKNOWN",
+            "unmapped_customer",
+            "{\"amount\": \"3.00\", \"currency\": \"USD\", \"customer_id\": 11, \"entry_id\": \"O_UNKNOWN\", \"reversal_of\": null}"
+          ],
+          [
+            "entry",
+            "R_BAD",
+            "invalid_reversal",
+            "{\"amount\": \"-1.00\", \"currency\": \"USD\", \"customer_id\": 7, \"entry_id\": \"R_BAD\", \"reversal_of\": \"MISSING\"}"
+          ]
+        ],
+        "schema_migrations": [
+          [
+            1,
+            "synthetic_legacy_v1",
+            "2026-10-01T00:00:00Z"
+          ],
+          [
+            2,
+            "canonical_customers_integer_money",
+            "2026-10-29T13:10:18.736735+00:00"
+          ]
+        ],
+        "sqlite_sequence": [
+          [
+            "audit_events",
+            12
+          ]
+        ],
+        "write_receipts": [
+          [
+            "before-cutover",
+            "{\"amount\": \"5.00\", \"currency\": \"CNY\", \"customer_id\": 9, \"entry_id\": \"O2\", \"epoch\": 3, \"op_key\": \"before-cutover\"}",
+            "{\"entry_id\": \"O2\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}"
+          ],
+          [
+            "new-accepted",
+            "{\"amount_minor\": 333, \"currency\": \"USD\", \"customer_key\": \"C-ALPHA\", \"entry_id\": \"N_FEE\", \"epoch\": 4, \"fee_minor\": 7, \"op_key\": \"new-accepted\"}",
+            "{\"entry_id\": \"N_FEE\", \"epoch\": 4, \"source_schema\": 2, \"status\": \"accepted\"}"
+          ]
+        ]
+      }
+    },
+    "expected": {
+      "schema": [
+        [
+          "index",
+          "entries_customer_currency",
+          "entries",
+          "CREATE INDEX entries_customer_currency ON entries(customer_key,currency)"
+        ],
+        [
+          "index",
+          "sqlite_autoindex_customers_1",
+          "customers",
+          null
+        ],
+        [
+          "index",
+          "sqlite_autoindex_entries_1",
+          "entries",
+          null
+        ],
+        [
+          "index",
+          "sqlite_autoindex_quarantine_1",
+          "quarantine",
+          null
+        ],
+        [
+          "index",
+          "sqlite_autoindex_write_receipts_1",
+          "write_receipts",
+          null
+        ],
+        [
+          "table",
+          "audit_events",
+          "audit_events",
+          "CREATE TABLE audit_events(event_id INTEGER PRIMARY KEY AUTOINCREMENT,entry_id TEXT NOT NULL,source_schema INTEGER NOT NULL,payload TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "control",
+          "control",
+          "CREATE TABLE control(singleton INTEGER PRIMARY KEY CHECK(singleton=1), epoch INTEGER NOT NULL)"
+        ],
+        [
+          "table",
+          "customer_aliases",
+          "customer_aliases",
+          "CREATE TABLE customer_aliases(legacy_id INTEGER PRIMARY KEY,customer_key TEXT NOT NULL REFERENCES customers(customer_key),raw_json TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "customers",
+          "customers",
+          "CREATE TABLE customers(customer_key TEXT PRIMARY KEY NOT NULL CHECK(typeof(customer_key)='text' AND length(trim(customer_key))>0),display_name TEXT NOT NULL,email TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "entries",
+          "entries",
+          "CREATE TABLE entries(entry_id TEXT PRIMARY KEY NOT NULL CHECK(typeof(entry_id)='text' AND length(trim(entry_id))>0),customer_key TEXT NOT NULL REFERENCES customers(customer_key),currency TEXT NOT NULL CHECK(currency IN ('USD','CNY')),amount_minor INTEGER NOT NULL CHECK(typeof(amount_minor)='integer'),reversal_of TEXT REFERENCES entries(entry_id) DEFERRABLE INITIALLY DEFERRED,fee_minor INTEGER NOT NULL DEFAULT 0 CHECK(typeof(fee_minor)='integer' AND fee_minor>=0),legacy_raw_json TEXT,CHECK((reversal_of IS NULL AND amount_minor>=0) OR (reversal_of IS NOT NULL AND amount_minor<0)))"
+        ],
+        [
+          "table",
+          "quarantine",
+          "quarantine",
+          "CREATE TABLE quarantine(kind TEXT NOT NULL,legacy_key TEXT NOT NULL,reason TEXT NOT NULL,raw_json TEXT NOT NULL,PRIMARY KEY(kind,legacy_key))"
+        ],
+        [
+          "table",
+          "schema_migrations",
+          "schema_migrations",
+          "CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY,name TEXT NOT NULL,applied_at TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "sqlite_sequence",
+          "sqlite_sequence",
+          "CREATE TABLE sqlite_sequence(name,seq)"
+        ],
+        [
+          "table",
+          "write_receipts",
+          "write_receipts",
+          "CREATE TABLE \"write_receipts\"(op_key TEXT PRIMARY KEY NOT NULL CHECK(typeof(op_key)='text' AND length(trim(op_key))>0),command_json TEXT NOT NULL,result_json TEXT NOT NULL)"
+        ],
+        [
+          "trigger",
+          "entry_audit",
+          "entries",
+          "CREATE TRIGGER entry_audit AFTER INSERT ON entries BEGIN INSERT INTO audit_events(entry_id,source_schema,payload) VALUES(NEW.entry_id,2,json_object('customer_key',NEW.customer_key,'currency',NEW.currency,'amount_minor',NEW.amount_minor,'reversal_of',NEW.reversal_of,'fee_minor',NEW.fee_minor)); END"
+        ]
+      ],
+      "tables": {
+        "audit_events": [
+          [
+            1,
+            "O1",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12.34\",\"reversal_of\":null}"
+          ],
+          [
+            2,
+            "R1",
+            1,
+            "{\"customer_id\":9,\"currency\":\"USD\",\"amount\":\"-2.34\",\"reversal_of\":\"O1\"}"
+          ],
+          [
+            3,
+            "O_ALIAS",
+            1,
+            "{\"customer_id\":9,\"currency\":\"CNY\",\"amount\":\"2.50\",\"reversal_of\":null}"
+          ],
+          [
+            4,
+            "O_BETA",
+            1,
+            "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"7.00\",\"reversal_of\":null}"
+          ],
+          [
+            5,
+            "O_ZERO",
+            1,
+            "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"0.00\",\"reversal_of\":null}"
+          ],
+          [
+            6,
+            "O_SCALE",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"1.005\",\"reversal_of\":null}"
+          ],
+          [
+            7,
+            "O_TEXT",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12O.00\",\"reversal_of\":null}"
+          ],
+          [
+            8,
+            "O_UNKNOWN",
+            1,
+            "{\"customer_id\":11,\"currency\":\"USD\",\"amount\":\"3.00\",\"reversal_of\":null}"
+          ],
+          [
+            9,
+            "O_ORPHAN",
+            1,
+            "{\"customer_id\":999,\"currency\":\"CNY\",\"amount\":\"8.00\",\"reversal_of\":null}"
+          ],
+          [
+            10,
+            "R_BAD",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"-1.00\",\"reversal_of\":\"MISSING\"}"
+          ],
+          [
+            11,
+            "O2",
+            1,
+            "{\"customer_id\":9,\"currency\":\"CNY\",\"amount\":\"5.00\",\"reversal_of\":null}"
+          ],
+          [
+            12,
+            "N_FEE",
+            2,
+            "{\"customer_key\":\"C-ALPHA\",\"currency\":\"USD\",\"amount_minor\":333,\"reversal_of\":null,\"fee_minor\":7}"
+          ]
+        ],
+        "control": [
+          [
+            1,
+            4
+          ]
+        ],
+        "customer_aliases": [
+          [
+            7,
+            "C-ALPHA",
+            "{\"customer_id\": 7, \"display_name\": \"张三\", \"email\": \"same@example.test\"}"
+          ],
+          [
+            9,
+            "C-ALPHA",
+            "{\"customer_id\": 9, \"display_name\": \"张三旧别名\", \"email\": \"alias@example.test\"}"
+          ],
+          [
+            12,
+            "C-BETA",
+            "{\"customer_id\": 12, \"display_name\": \"另一个同名客户\", \"email\": \"same@example.test\"}"
+          ]
+        ],
+        "customers": [
+          [
+            "C-ALPHA",
+            "甲客户",
+            "same@example.test"
+          ],
+          [
+            "C-BETA",
+            "乙客户",
+            "same@example.test"
+          ]
+        ],
+        "entries": [
+          [
+            "O1",
+            "C-ALPHA",
+            "USD",
+            1234,
+            null,
+            0,
+            "{\"amount\": \"12.34\", \"currency\": \"USD\", \"customer_id\": 7, \"entry_id\": \"O1\", \"reversal_of\": null}"
+          ],
+          [
+            "O2",
+            "C-ALPHA",
+            "CNY",
+            500,
+            null,
+            0,
+            "{\"amount\": \"5.00\", \"currency\": \"CNY\", \"customer_id\": 9, \"entry_id\": \"O2\", \"reversal_of\": null}"
+          ],
+          [
+            "O_ALIAS",
+            "C-ALPHA",
+            "CNY",
+            250,
+            null,
+            0,
+            "{\"amount\": \"2.50\", \"currency\": \"CNY\", \"customer_id\": 9, \"entry_id\": \"O_ALIAS\", \"reversal_of\": null}"
+          ],
+          [
+            "O_BETA",
+            "C-BETA",
+            "USD",
+            700,
+            null,
+            0,
+            "{\"amount\": \"7.00\", \"currency\": \"USD\", \"customer_id\": 12, \"entry_id\": \"O_BETA\", \"reversal_of\": null}"
+          ],
+          [
+            "O_ZERO",
+            "C-ALPHA",
+            "CNY",
+            0,
+            null,
+            0,
+            "{\"amount\": \"0.00\", \"currency\": \"CNY\", \"customer_id\": 7, \"entry_id\": \"O_ZERO\", \"reversal_of\": null}"
+          ],
+          [
+            "R1",
+            "C-ALPHA",
+            "USD",
+            -234,
+            "O1",
+            0,
+            "{\"amount\": \"-2.34\", \"currency\": \"USD\", \"customer_id\": 9, \"entry_id\": \"R1\", \"reversal_of\": \"O1\"}"
+          ],
+          [
+            "N_FEE",
+            "C-ALPHA",
+            "USD",
+            333,
+            null,
+            7,
+            null
+          ]
+        ],
+        "quarantine": [
+          [
+            "customer",
+            "11",
+            "unmapped_customer",
+            "{\"customer_id\": 11, \"display_name\": \"未核实\", \"email\": \"unknown@example.test\"}"
+          ],
+          [
+            "entry",
+            "O_ORPHAN",
+            "unmapped_customer",
+            "{\"amount\": \"8.00\", \"currency\": \"CNY\", \"customer_id\": 999, \"entry_id\": \"O_ORPHAN\", \"reversal_of\": null}"
+          ],
+          [
+            "entry",
+            "O_SCALE",
+            "amount_scale",
+            "{\"amount\": \"1.005\", \"currency\": \"USD\", \"customer_id\": 7, \"entry_id\": \"O_SCALE\", \"reversal_of\": null}"
+          ],
+          [
+            "entry",
+            "O_TEXT",
+            "invalid_amount",
+            "{\"amount\": \"12O.00\", \"currency\": \"USD\", \"customer_id\": 7, \"entry_id\": \"O_TEXT\", \"reversal_of\": null}"
+          ],
+          [
+            "entry",
+            "O_UNKNOWN",
+            "unmapped_customer",
+            "{\"amount\": \"3.00\", \"currency\": \"USD\", \"customer_id\": 11, \"entry_id\": \"O_UNKNOWN\", \"reversal_of\": null}"
+          ],
+          [
+            "entry",
+            "R_BAD",
+            "invalid_reversal",
+            "{\"amount\": \"-1.00\", \"currency\": \"USD\", \"customer_id\": 7, \"entry_id\": \"R_BAD\", \"reversal_of\": \"MISSING\"}"
+          ]
+        ],
+        "schema_migrations": [
+          [
+            1,
+            "synthetic_legacy_v1",
+            "2026-10-01T00:00:00Z"
+          ],
+          [
+            2,
+            "canonical_customers_integer_money",
+            "2026-10-29T13:10:18.736735+00:00"
+          ]
+        ],
+        "sqlite_sequence": [
+          [
+            "audit_events",
+            12
+          ]
+        ],
+        "write_receipts": [
+          [
+            "before-cutover",
+            "{\"amount\": \"5.00\", \"currency\": \"CNY\", \"customer_id\": 9, \"entry_id\": \"O2\", \"epoch\": 3, \"op_key\": \"before-cutover\"}",
+            "{\"entry_id\": \"O2\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}"
+          ],
+          [
+            "new-accepted",
+            "{\"amount_minor\": 333, \"currency\": \"USD\", \"customer_key\": \"C-ALPHA\", \"entry_id\": \"N_FEE\", \"epoch\": 4, \"fee_minor\": 7, \"op_key\": \"new-accepted\"}",
+            "{\"entry_id\": \"N_FEE\", \"epoch\": 4, \"source_schema\": 2, \"status\": \"accepted\"}"
+          ]
+        ]
+      }
+    },
+    "passed": true
+  },
+  {
+    "contract": "unresolved_receipt.all_tables_and_schema_exactly_preserved",
+    "actual": {
+      "schema": [
+        [
+          "index",
+          "legacy_entries_customer",
+          "legacy_entries",
+          "CREATE INDEX legacy_entries_customer ON legacy_entries(customer_id)"
+        ],
+        [
+          "index",
+          "sqlite_autoindex_legacy_entries_1",
+          "legacy_entries",
+          null
+        ],
+        [
+          "index",
+          "sqlite_autoindex_write_receipts_1",
+          "write_receipts",
+          null
+        ],
+        [
+          "table",
+          "audit_events",
+          "audit_events",
+          "CREATE TABLE audit_events(event_id INTEGER PRIMARY KEY AUTOINCREMENT,entry_id TEXT NOT NULL,source_schema INTEGER NOT NULL,payload TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "control",
+          "control",
+          "CREATE TABLE control(singleton INTEGER PRIMARY KEY CHECK(singleton=1), epoch INTEGER NOT NULL)"
+        ],
+        [
+          "table",
+          "legacy_customers",
+          "legacy_customers",
+          "CREATE TABLE legacy_customers(customer_id INTEGER PRIMARY KEY,display_name TEXT,email TEXT)"
+        ],
+        [
+          "table",
+          "legacy_entries",
+          "legacy_entries",
+          "CREATE TABLE legacy_entries(entry_id TEXT PRIMARY KEY,customer_id INTEGER NOT NULL,currency TEXT NOT NULL,amount TEXT NOT NULL,reversal_of TEXT)"
+        ],
+        [
+          "table",
+          "schema_migrations",
+          "schema_migrations",
+          "CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY,name TEXT NOT NULL,applied_at TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "sqlite_sequence",
+          "sqlite_sequence",
+          "CREATE TABLE sqlite_sequence(name,seq)"
+        ],
+        [
+          "table",
+          "write_receipts",
+          "write_receipts",
+          "CREATE TABLE write_receipts(op_key TEXT PRIMARY KEY,command_json TEXT NOT NULL,result_json TEXT NOT NULL)"
+        ],
+        [
+          "trigger",
+          "legacy_entry_audit",
+          "legacy_entries",
+          "CREATE TRIGGER legacy_entry_audit AFTER INSERT ON legacy_entries BEGIN INSERT INTO audit_events(entry_id,source_schema,payload) VALUES(NEW.entry_id,1,json_object('customer_id',NEW.customer_id,'currency',NEW.currency,'amount',NEW.amount,'reversal_of',NEW.reversal_of)); END"
+        ]
+      ],
+      "tables": {
+        "audit_events": [
+          [
+            1,
+            "O1",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12.34\",\"reversal_of\":null}"
+          ],
+          [
+            2,
+            "R1",
+            1,
+            "{\"customer_id\":9,\"currency\":\"USD\",\"amount\":\"-2.34\",\"reversal_of\":\"O1\"}"
+          ],
+          [
+            3,
+            "O_ALIAS",
+            1,
+            "{\"customer_id\":9,\"currency\":\"CNY\",\"amount\":\"2.50\",\"reversal_of\":null}"
+          ],
+          [
+            4,
+            "O_BETA",
+            1,
+            "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"7.00\",\"reversal_of\":null}"
+          ],
+          [
+            5,
+            "O_ZERO",
+            1,
+            "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"0.00\",\"reversal_of\":null}"
+          ],
+          [
+            6,
+            "O_SCALE",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"1.005\",\"reversal_of\":null}"
+          ],
+          [
+            7,
+            "O_TEXT",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12O.00\",\"reversal_of\":null}"
+          ],
+          [
+            8,
+            "O_UNKNOWN",
+            1,
+            "{\"customer_id\":11,\"currency\":\"USD\",\"amount\":\"3.00\",\"reversal_of\":null}"
+          ],
+          [
+            9,
+            "O_ORPHAN",
+            1,
+            "{\"customer_id\":999,\"currency\":\"CNY\",\"amount\":\"8.00\",\"reversal_of\":null}"
+          ],
+          [
+            10,
+            "R_BAD",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"-1.00\",\"reversal_of\":\"MISSING\"}"
+          ]
+        ],
+        "control": [
+          [
+            1,
+            3
+          ]
+        ],
+        "legacy_customers": [
+          [
+            7,
+            "张三",
+            "same@example.test"
+          ],
+          [
+            9,
+            "张三旧别名",
+            "alias@example.test"
+          ],
+          [
+            11,
+            "未核实",
+            "unknown@example.test"
+          ],
+          [
+            12,
+            "另一个同名客户",
+            "same@example.test"
+          ]
+        ],
+        "legacy_entries": [
+          [
+            "O1",
+            7,
+            "USD",
+            "12.34",
+            null
+          ],
+          [
+            "R1",
+            9,
+            "USD",
+            "-2.34",
+            "O1"
+          ],
+          [
+            "O_ALIAS",
+            9,
+            "CNY",
+            "2.50",
+            null
+          ],
+          [
+            "O_BETA",
+            12,
+            "USD",
+            "7.00",
+            null
+          ],
+          [
+            "O_ZERO",
+            7,
+            "CNY",
+            "0.00",
+            null
+          ],
+          [
+            "O_SCALE",
+            7,
+            "USD",
+            "1.005",
+            null
+          ],
+          [
+            "O_TEXT",
+            7,
+            "USD",
+            "12O.00",
+            null
+          ],
+          [
+            "O_UNKNOWN",
+            11,
+            "USD",
+            "3.00",
+            null
+          ],
+          [
+            "O_ORPHAN",
+            999,
+            "CNY",
+            "8.00",
+            null
+          ],
+          [
+            "R_BAD",
+            7,
+            "USD",
+            "-1.00",
+            "MISSING"
+          ]
+        ],
+        "schema_migrations": [
+          [
+            1,
+            "synthetic_legacy_v1",
+            "2026-10-01T00:00:00Z"
+          ]
+        ],
+        "sqlite_sequence": [
+          [
+            "audit_events",
+            10
+          ]
+        ],
+        "write_receipts": [
+          [
+            null,
+            "{}",
+            "{\"status\":\"accepted\"}"
+          ]
+        ]
+      }
+    },
+    "expected": {
+      "schema": [
+        [
+          "index",
+          "legacy_entries_customer",
+          "legacy_entries",
+          "CREATE INDEX legacy_entries_customer ON legacy_entries(customer_id)"
+        ],
+        [
+          "index",
+          "sqlite_autoindex_legacy_entries_1",
+          "legacy_entries",
+          null
+        ],
+        [
+          "index",
+          "sqlite_autoindex_write_receipts_1",
+          "write_receipts",
+          null
+        ],
+        [
+          "table",
+          "audit_events",
+          "audit_events",
+          "CREATE TABLE audit_events(event_id INTEGER PRIMARY KEY AUTOINCREMENT,entry_id TEXT NOT NULL,source_schema INTEGER NOT NULL,payload TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "control",
+          "control",
+          "CREATE TABLE control(singleton INTEGER PRIMARY KEY CHECK(singleton=1), epoch INTEGER NOT NULL)"
+        ],
+        [
+          "table",
+          "legacy_customers",
+          "legacy_customers",
+          "CREATE TABLE legacy_customers(customer_id INTEGER PRIMARY KEY,display_name TEXT,email TEXT)"
+        ],
+        [
+          "table",
+          "legacy_entries",
+          "legacy_entries",
+          "CREATE TABLE legacy_entries(entry_id TEXT PRIMARY KEY,customer_id INTEGER NOT NULL,currency TEXT NOT NULL,amount TEXT NOT NULL,reversal_of TEXT)"
+        ],
+        [
+          "table",
+          "schema_migrations",
+          "schema_migrations",
+          "CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY,name TEXT NOT NULL,applied_at TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "sqlite_sequence",
+          "sqlite_sequence",
+          "CREATE TABLE sqlite_sequence(name,seq)"
+        ],
+        [
+          "table",
+          "write_receipts",
+          "write_receipts",
+          "CREATE TABLE write_receipts(op_key TEXT PRIMARY KEY,command_json TEXT NOT NULL,result_json TEXT NOT NULL)"
+        ],
+        [
+          "trigger",
+          "legacy_entry_audit",
+          "legacy_entries",
+          "CREATE TRIGGER legacy_entry_audit AFTER INSERT ON legacy_entries BEGIN INSERT INTO audit_events(entry_id,source_schema,payload) VALUES(NEW.entry_id,1,json_object('customer_id',NEW.customer_id,'currency',NEW.currency,'amount',NEW.amount,'reversal_of',NEW.reversal_of)); END"
+        ]
+      ],
+      "tables": {
+        "audit_events": [
+          [
+            1,
+            "O1",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12.34\",\"reversal_of\":null}"
+          ],
+          [
+            2,
+            "R1",
+            1,
+            "{\"customer_id\":9,\"currency\":\"USD\",\"amount\":\"-2.34\",\"reversal_of\":\"O1\"}"
+          ],
+          [
+            3,
+            "O_ALIAS",
+            1,
+            "{\"customer_id\":9,\"currency\":\"CNY\",\"amount\":\"2.50\",\"reversal_of\":null}"
+          ],
+          [
+            4,
+            "O_BETA",
+            1,
+            "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"7.00\",\"reversal_of\":null}"
+          ],
+          [
+            5,
+            "O_ZERO",
+            1,
+            "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"0.00\",\"reversal_of\":null}"
+          ],
+          [
+            6,
+            "O_SCALE",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"1.005\",\"reversal_of\":null}"
+          ],
+          [
+            7,
+            "O_TEXT",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12O.00\",\"reversal_of\":null}"
+          ],
+          [
+            8,
+            "O_UNKNOWN",
+            1,
+            "{\"customer_id\":11,\"currency\":\"USD\",\"amount\":\"3.00\",\"reversal_of\":null}"
+          ],
+          [
+            9,
+            "O_ORPHAN",
+            1,
+            "{\"customer_id\":999,\"currency\":\"CNY\",\"amount\":\"8.00\",\"reversal_of\":null}"
+          ],
+          [
+            10,
+            "R_BAD",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"-1.00\",\"reversal_of\":\"MISSING\"}"
+          ]
+        ],
+        "control": [
+          [
+            1,
+            3
+          ]
+        ],
+        "legacy_customers": [
+          [
+            7,
+            "张三",
+            "same@example.test"
+          ],
+          [
+            9,
+            "张三旧别名",
+            "alias@example.test"
+          ],
+          [
+            11,
+            "未核实",
+            "unknown@example.test"
+          ],
+          [
+            12,
+            "另一个同名客户",
+            "same@example.test"
+          ]
+        ],
+        "legacy_entries": [
+          [
+            "O1",
+            7,
+            "USD",
+            "12.34",
+            null
+          ],
+          [
+            "R1",
+            9,
+            "USD",
+            "-2.34",
+            "O1"
+          ],
+          [
+            "O_ALIAS",
+            9,
+            "CNY",
+            "2.50",
+            null
+          ],
+          [
+            "O_BETA",
+            12,
+            "USD",
+            "7.00",
+            null
+          ],
+          [
+            "O_ZERO",
+            7,
+            "CNY",
+            "0.00",
+            null
+          ],
+          [
+            "O_SCALE",
+            7,
+            "USD",
+            "1.005",
+            null
+          ],
+          [
+            "O_TEXT",
+            7,
+            "USD",
+            "12O.00",
+            null
+          ],
+          [
+            "O_UNKNOWN",
+            11,
+            "USD",
+            "3.00",
+            null
+          ],
+          [
+            "O_ORPHAN",
+            999,
+            "CNY",
+            "8.00",
+            null
+          ],
+          [
+            "R_BAD",
+            7,
+            "USD",
+            "-1.00",
+            "MISSING"
+          ]
+        ],
+        "schema_migrations": [
+          [
+            1,
+            "synthetic_legacy_v1",
+            "2026-10-01T00:00:00Z"
+          ]
+        ],
+        "sqlite_sequence": [
+          [
+            "audit_events",
+            10
+          ]
+        ],
+        "write_receipts": [
+          [
+            null,
+            "{}",
+            "{\"status\":\"accepted\"}"
+          ]
+        ]
+      }
+    },
+    "passed": true
+  },
+  {
+    "contract": "unresolved_receipt.explicit_error_response",
+    "actual": {
+      "status": "unresolved_receipt_identity"
+    },
+    "expected": {
+      "status": "unresolved_receipt_identity"
+    },
+    "passed": true
+  },
+  {
+    "contract": "unresolved_entry.all_tables_and_schema_exactly_preserved",
+    "actual": {
+      "schema": [
+        [
+          "index",
+          "legacy_entries_customer",
+          "legacy_entries",
+          "CREATE INDEX legacy_entries_customer ON legacy_entries(customer_id)"
+        ],
+        [
+          "index",
+          "sqlite_autoindex_legacy_entries_1",
+          "legacy_entries",
+          null
+        ],
+        [
+          "index",
+          "sqlite_autoindex_write_receipts_1",
+          "write_receipts",
+          null
+        ],
+        [
+          "table",
+          "audit_events",
+          "audit_events",
+          "CREATE TABLE audit_events(event_id INTEGER PRIMARY KEY AUTOINCREMENT,entry_id TEXT NOT NULL,source_schema INTEGER NOT NULL,payload TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "control",
+          "control",
+          "CREATE TABLE control(singleton INTEGER PRIMARY KEY CHECK(singleton=1), epoch INTEGER NOT NULL)"
+        ],
+        [
+          "table",
+          "legacy_customers",
+          "legacy_customers",
+          "CREATE TABLE legacy_customers(customer_id INTEGER PRIMARY KEY,display_name TEXT,email TEXT)"
+        ],
+        [
+          "table",
+          "legacy_entries",
+          "legacy_entries",
+          "CREATE TABLE legacy_entries(entry_id TEXT PRIMARY KEY,customer_id INTEGER NOT NULL,currency TEXT NOT NULL,amount TEXT NOT NULL,reversal_of TEXT)"
+        ],
+        [
+          "table",
+          "schema_migrations",
+          "schema_migrations",
+          "CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY,name TEXT NOT NULL,applied_at TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "sqlite_sequence",
+          "sqlite_sequence",
+          "CREATE TABLE sqlite_sequence(name,seq)"
+        ],
+        [
+          "table",
+          "write_receipts",
+          "write_receipts",
+          "CREATE TABLE write_receipts(op_key TEXT PRIMARY KEY,command_json TEXT NOT NULL,result_json TEXT NOT NULL)"
+        ],
+        [
+          "trigger",
+          "legacy_entry_audit",
+          "legacy_entries",
+          "CREATE TRIGGER legacy_entry_audit AFTER INSERT ON legacy_entries BEGIN INSERT INTO audit_events(entry_id,source_schema,payload) VALUES(NEW.entry_id,1,json_object('customer_id',NEW.customer_id,'currency',NEW.currency,'amount',NEW.amount,'reversal_of',NEW.reversal_of)); END"
+        ]
+      ],
+      "tables": {
+        "audit_events": [
+          [
+            1,
+            "O1",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12.34\",\"reversal_of\":null}"
+          ],
+          [
+            2,
+            "R1",
+            1,
+            "{\"customer_id\":9,\"currency\":\"USD\",\"amount\":\"-2.34\",\"reversal_of\":\"O1\"}"
+          ],
+          [
+            3,
+            "O_ALIAS",
+            1,
+            "{\"customer_id\":9,\"currency\":\"CNY\",\"amount\":\"2.50\",\"reversal_of\":null}"
+          ],
+          [
+            4,
+            "O_BETA",
+            1,
+            "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"7.00\",\"reversal_of\":null}"
+          ],
+          [
+            5,
+            "O_ZERO",
+            1,
+            "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"0.00\",\"reversal_of\":null}"
+          ],
+          [
+            6,
+            "O_SCALE",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"1.005\",\"reversal_of\":null}"
+          ],
+          [
+            7,
+            "O_TEXT",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12O.00\",\"reversal_of\":null}"
+          ],
+          [
+            8,
+            "O_UNKNOWN",
+            1,
+            "{\"customer_id\":11,\"currency\":\"USD\",\"amount\":\"3.00\",\"reversal_of\":null}"
+          ],
+          [
+            9,
+            "O_ORPHAN",
+            1,
+            "{\"customer_id\":999,\"currency\":\"CNY\",\"amount\":\"8.00\",\"reversal_of\":null}"
+          ],
+          [
+            10,
+            "R_BAD",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"-1.00\",\"reversal_of\":\"MISSING\"}"
+          ],
+          [
+            11,
+            "",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"1.00\",\"reversal_of\":null}"
+          ]
+        ],
+        "control": [
+          [
+            1,
+            3
+          ]
+        ],
+        "legacy_customers": [
+          [
+            7,
+            "张三",
+            "same@example.test"
+          ],
+          [
+            9,
+            "张三旧别名",
+            "alias@example.test"
+          ],
+          [
+            11,
+            "未核实",
+            "unknown@example.test"
+          ],
+          [
+            12,
+            "另一个同名客户",
+            "same@example.test"
+          ]
+        ],
+        "legacy_entries": [
+          [
+            "O1",
+            7,
+            "USD",
+            "12.34",
+            null
+          ],
+          [
+            "R1",
+            9,
+            "USD",
+            "-2.34",
+            "O1"
+          ],
+          [
+            "O_ALIAS",
+            9,
+            "CNY",
+            "2.50",
+            null
+          ],
+          [
+            "O_BETA",
+            12,
+            "USD",
+            "7.00",
+            null
+          ],
+          [
+            "O_ZERO",
+            7,
+            "CNY",
+            "0.00",
+            null
+          ],
+          [
+            "O_SCALE",
+            7,
+            "USD",
+            "1.005",
+            null
+          ],
+          [
+            "O_TEXT",
+            7,
+            "USD",
+            "12O.00",
+            null
+          ],
+          [
+            "O_UNKNOWN",
+            11,
+            "USD",
+            "3.00",
+            null
+          ],
+          [
+            "O_ORPHAN",
+            999,
+            "CNY",
+            "8.00",
+            null
+          ],
+          [
+            "R_BAD",
+            7,
+            "USD",
+            "-1.00",
+            "MISSING"
+          ],
+          [
+            "",
+            7,
+            "USD",
+            "1.00",
+            null
+          ]
+        ],
+        "schema_migrations": [
+          [
+            1,
+            "synthetic_legacy_v1",
+            "2026-10-01T00:00:00Z"
+          ]
+        ],
+        "sqlite_sequence": [
+          [
+            "audit_events",
+            11
+          ]
+        ],
+        "write_receipts": []
+      }
+    },
+    "expected": {
+      "schema": [
+        [
+          "index",
+          "legacy_entries_customer",
+          "legacy_entries",
+          "CREATE INDEX legacy_entries_customer ON legacy_entries(customer_id)"
+        ],
+        [
+          "index",
+          "sqlite_autoindex_legacy_entries_1",
+          "legacy_entries",
+          null
+        ],
+        [
+          "index",
+          "sqlite_autoindex_write_receipts_1",
+          "write_receipts",
+          null
+        ],
+        [
+          "table",
+          "audit_events",
+          "audit_events",
+          "CREATE TABLE audit_events(event_id INTEGER PRIMARY KEY AUTOINCREMENT,entry_id TEXT NOT NULL,source_schema INTEGER NOT NULL,payload TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "control",
+          "control",
+          "CREATE TABLE control(singleton INTEGER PRIMARY KEY CHECK(singleton=1), epoch INTEGER NOT NULL)"
+        ],
+        [
+          "table",
+          "legacy_customers",
+          "legacy_customers",
+          "CREATE TABLE legacy_customers(customer_id INTEGER PRIMARY KEY,display_name TEXT,email TEXT)"
+        ],
+        [
+          "table",
+          "legacy_entries",
+          "legacy_entries",
+          "CREATE TABLE legacy_entries(entry_id TEXT PRIMARY KEY,customer_id INTEGER NOT NULL,currency TEXT NOT NULL,amount TEXT NOT NULL,reversal_of TEXT)"
+        ],
+        [
+          "table",
+          "schema_migrations",
+          "schema_migrations",
+          "CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY,name TEXT NOT NULL,applied_at TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "sqlite_sequence",
+          "sqlite_sequence",
+          "CREATE TABLE sqlite_sequence(name,seq)"
+        ],
+        [
+          "table",
+          "write_receipts",
+          "write_receipts",
+          "CREATE TABLE write_receipts(op_key TEXT PRIMARY KEY,command_json TEXT NOT NULL,result_json TEXT NOT NULL)"
+        ],
+        [
+          "trigger",
+          "legacy_entry_audit",
+          "legacy_entries",
+          "CREATE TRIGGER legacy_entry_audit AFTER INSERT ON legacy_entries BEGIN INSERT INTO audit_events(entry_id,source_schema,payload) VALUES(NEW.entry_id,1,json_object('customer_id',NEW.customer_id,'currency',NEW.currency,'amount',NEW.amount,'reversal_of',NEW.reversal_of)); END"
+        ]
+      ],
+      "tables": {
+        "audit_events": [
+          [
+            1,
+            "O1",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12.34\",\"reversal_of\":null}"
+          ],
+          [
+            2,
+            "R1",
+            1,
+            "{\"customer_id\":9,\"currency\":\"USD\",\"amount\":\"-2.34\",\"reversal_of\":\"O1\"}"
+          ],
+          [
+            3,
+            "O_ALIAS",
+            1,
+            "{\"customer_id\":9,\"currency\":\"CNY\",\"amount\":\"2.50\",\"reversal_of\":null}"
+          ],
+          [
+            4,
+            "O_BETA",
+            1,
+            "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"7.00\",\"reversal_of\":null}"
+          ],
+          [
+            5,
+            "O_ZERO",
+            1,
+            "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"0.00\",\"reversal_of\":null}"
+          ],
+          [
+            6,
+            "O_SCALE",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"1.005\",\"reversal_of\":null}"
+          ],
+          [
+            7,
+            "O_TEXT",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12O.00\",\"reversal_of\":null}"
+          ],
+          [
+            8,
+            "O_UNKNOWN",
+            1,
+            "{\"customer_id\":11,\"currency\":\"USD\",\"amount\":\"3.00\",\"reversal_of\":null}"
+          ],
+          [
+            9,
+            "O_ORPHAN",
+            1,
+            "{\"customer_id\":999,\"currency\":\"CNY\",\"amount\":\"8.00\",\"reversal_of\":null}"
+          ],
+          [
+            10,
+            "R_BAD",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"-1.00\",\"reversal_of\":\"MISSING\"}"
+          ],
+          [
+            11,
+            "",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"1.00\",\"reversal_of\":null}"
+          ]
+        ],
+        "control": [
+          [
+            1,
+            3
+          ]
+        ],
+        "legacy_customers": [
+          [
+            7,
+            "张三",
+            "same@example.test"
+          ],
+          [
+            9,
+            "张三旧别名",
+            "alias@example.test"
+          ],
+          [
+            11,
+            "未核实",
+            "unknown@example.test"
+          ],
+          [
+            12,
+            "另一个同名客户",
+            "same@example.test"
+          ]
+        ],
+        "legacy_entries": [
+          [
+            "O1",
+            7,
+            "USD",
+            "12.34",
+            null
+          ],
+          [
+            "R1",
+            9,
+            "USD",
+            "-2.34",
+            "O1"
+          ],
+          [
+            "O_ALIAS",
+            9,
+            "CNY",
+            "2.50",
+            null
+          ],
+          [
+            "O_BETA",
+            12,
+            "USD",
+            "7.00",
+            null
+          ],
+          [
+            "O_ZERO",
+            7,
+            "CNY",
+            "0.00",
+            null
+          ],
+          [
+            "O_SCALE",
+            7,
+            "USD",
+            "1.005",
+            null
+          ],
+          [
+            "O_TEXT",
+            7,
+            "USD",
+            "12O.00",
+            null
+          ],
+          [
+            "O_UNKNOWN",
+            11,
+            "USD",
+            "3.00",
+            null
+          ],
+          [
+            "O_ORPHAN",
+            999,
+            "CNY",
+            "8.00",
+            null
+          ],
+          [
+            "R_BAD",
+            7,
+            "USD",
+            "-1.00",
+            "MISSING"
+          ],
+          [
+            "",
+            7,
+            "USD",
+            "1.00",
+            null
+          ]
+        ],
+        "schema_migrations": [
+          [
+            1,
+            "synthetic_legacy_v1",
+            "2026-10-01T00:00:00Z"
+          ]
+        ],
+        "sqlite_sequence": [
+          [
+            "audit_events",
+            11
+          ]
+        ],
+        "write_receipts": []
+      }
+    },
+    "passed": true
+  },
+  {
+    "contract": "unresolved_entry.explicit_error_response",
+    "actual": {
+      "status": "unresolved_entry_identity"
+    },
+    "expected": {
+      "status": "unresolved_entry_identity"
+    },
+    "passed": true
+  },
+  {
+    "contract": "storage.receipt_null",
+    "actual": "SQLITE_CONSTRAINT_NOTNULL",
+    "expected": "SQLITE_CONSTRAINT_NOTNULL",
+    "passed": true
+  },
+  {
+    "contract": "storage.receipt_blank",
+    "actual": "SQLITE_CONSTRAINT_CHECK",
+    "expected": "SQLITE_CONSTRAINT_CHECK",
+    "passed": true
+  },
+  {
+    "contract": "storage.customer_null",
+    "actual": "SQLITE_CONSTRAINT_NOTNULL",
+    "expected": "SQLITE_CONSTRAINT_NOTNULL",
+    "passed": true
+  },
+  {
+    "contract": "storage.customer_blank",
+    "actual": "SQLITE_CONSTRAINT_CHECK",
+    "expected": "SQLITE_CONSTRAINT_CHECK",
+    "passed": true
+  },
+  {
+    "contract": "storage.entry_null",
+    "actual": "SQLITE_CONSTRAINT_NOTNULL",
+    "expected": "SQLITE_CONSTRAINT_NOTNULL",
+    "passed": true
+  },
+  {
+    "contract": "storage.entry_blank",
+    "actual": "SQLITE_CONSTRAINT_CHECK",
+    "expected": "SQLITE_CONSTRAINT_CHECK",
+    "passed": true
+  },
+  {
+    "contract": "storage.quarantine_kind_null",
+    "actual": "SQLITE_CONSTRAINT_NOTNULL",
+    "expected": "SQLITE_CONSTRAINT_NOTNULL",
+    "passed": true
+  },
+  {
+    "contract": "storage.quarantine_key_null",
+    "actual": "SQLITE_CONSTRAINT_NOTNULL",
+    "expected": "SQLITE_CONSTRAINT_NOTNULL",
+    "passed": true
+  },
+  {
+    "contract": "storage_error_contracts_leave_entire_copy_unchanged",
+    "actual": {
+      "schema": [
+        [
+          "index",
+          "entries_customer_currency",
+          "entries",
+          "CREATE INDEX entries_customer_currency ON entries(customer_key,currency)"
+        ],
+        [
+          "index",
+          "sqlite_autoindex_customers_1",
+          "customers",
+          null
+        ],
+        [
+          "index",
+          "sqlite_autoindex_entries_1",
+          "entries",
+          null
+        ],
+        [
+          "index",
+          "sqlite_autoindex_quarantine_1",
+          "quarantine",
+          null
+        ],
+        [
+          "index",
+          "sqlite_autoindex_write_receipts_1",
+          "write_receipts",
+          null
+        ],
+        [
+          "table",
+          "audit_events",
+          "audit_events",
+          "CREATE TABLE audit_events(event_id INTEGER PRIMARY KEY AUTOINCREMENT,entry_id TEXT NOT NULL,source_schema INTEGER NOT NULL,payload TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "control",
+          "control",
+          "CREATE TABLE control(singleton INTEGER PRIMARY KEY CHECK(singleton=1), epoch INTEGER NOT NULL)"
+        ],
+        [
+          "table",
+          "customer_aliases",
+          "customer_aliases",
+          "CREATE TABLE customer_aliases(legacy_id INTEGER PRIMARY KEY,customer_key TEXT NOT NULL REFERENCES customers(customer_key),raw_json TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "customers",
+          "customers",
+          "CREATE TABLE customers(customer_key TEXT PRIMARY KEY NOT NULL CHECK(typeof(customer_key)='text' AND length(trim(customer_key))>0),display_name TEXT NOT NULL,email TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "entries",
+          "entries",
+          "CREATE TABLE entries(entry_id TEXT PRIMARY KEY NOT NULL CHECK(typeof(entry_id)='text' AND length(trim(entry_id))>0),customer_key TEXT NOT NULL REFERENCES customers(customer_key),currency TEXT NOT NULL CHECK(currency IN ('USD','CNY')),amount_minor INTEGER NOT NULL CHECK(typeof(amount_minor)='integer'),reversal_of TEXT REFERENCES entries(entry_id) DEFERRABLE INITIALLY DEFERRED,fee_minor INTEGER NOT NULL DEFAULT 0 CHECK(typeof(fee_minor)='integer' AND fee_minor>=0),legacy_raw_json TEXT,CHECK((reversal_of IS NULL AND amount_minor>=0) OR (reversal_of IS NOT NULL AND amount_minor<0)))"
+        ],
+        [
+          "table",
+          "quarantine",
+          "quarantine",
+          "CREATE TABLE quarantine(kind TEXT NOT NULL,legacy_key TEXT NOT NULL,reason TEXT NOT NULL,raw_json TEXT NOT NULL,PRIMARY KEY(kind,legacy_key))"
+        ],
+        [
+          "table",
+          "schema_migrations",
+          "schema_migrations",
+          "CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY,name TEXT NOT NULL,applied_at TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "sqlite_sequence",
+          "sqlite_sequence",
+          "CREATE TABLE sqlite_sequence(name,seq)"
+        ],
+        [
+          "table",
+          "write_receipts",
+          "write_receipts",
+          "CREATE TABLE \"write_receipts\"(op_key TEXT PRIMARY KEY NOT NULL CHECK(typeof(op_key)='text' AND length(trim(op_key))>0),command_json TEXT NOT NULL,result_json TEXT NOT NULL)"
+        ],
+        [
+          "trigger",
+          "entry_audit",
+          "entries",
+          "CREATE TRIGGER entry_audit AFTER INSERT ON entries BEGIN INSERT INTO audit_events(entry_id,source_schema,payload) VALUES(NEW.entry_id,2,json_object('customer_key',NEW.customer_key,'currency',NEW.currency,'amount_minor',NEW.amount_minor,'reversal_of',NEW.reversal_of,'fee_minor',NEW.fee_minor)); END"
+        ]
+      ],
+      "tables": {
+        "audit_events": [
+          [
+            1,
+            "O1",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12.34\",\"reversal_of\":null}"
+          ],
+          [
+            2,
+            "R1",
+            1,
+            "{\"customer_id\":9,\"currency\":\"USD\",\"amount\":\"-2.34\",\"reversal_of\":\"O1\"}"
+          ],
+          [
+            3,
+            "O_ALIAS",
+            1,
+            "{\"customer_id\":9,\"currency\":\"CNY\",\"amount\":\"2.50\",\"reversal_of\":null}"
+          ],
+          [
+            4,
+            "O_BETA",
+            1,
+            "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"7.00\",\"reversal_of\":null}"
+          ],
+          [
+            5,
+            "O_ZERO",
+            1,
+            "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"0.00\",\"reversal_of\":null}"
+          ],
+          [
+            6,
+            "O_SCALE",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"1.005\",\"reversal_of\":null}"
+          ],
+          [
+            7,
+            "O_TEXT",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12O.00\",\"reversal_of\":null}"
+          ],
+          [
+            8,
+            "O_UNKNOWN",
+            1,
+            "{\"customer_id\":11,\"currency\":\"USD\",\"amount\":\"3.00\",\"reversal_of\":null}"
+          ],
+          [
+            9,
+            "O_ORPHAN",
+            1,
+            "{\"customer_id\":999,\"currency\":\"CNY\",\"amount\":\"8.00\",\"reversal_of\":null}"
+          ],
+          [
+            10,
+            "R_BAD",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"-1.00\",\"reversal_of\":\"MISSING\"}"
+          ],
+          [
+            11,
+            "O2",
+            1,
+            "{\"customer_id\":9,\"currency\":\"CNY\",\"amount\":\"5.00\",\"reversal_of\":null}"
+          ],
+          [
+            12,
+            "N_FEE",
+            2,
+            "{\"customer_key\":\"C-ALPHA\",\"currency\":\"USD\",\"amount_minor\":333,\"reversal_of\":null,\"fee_minor\":7}"
+          ]
+        ],
+        "control": [
+          [
+            1,
+            4
+          ]
+        ],
+        "customer_aliases": [
+          [
+            7,
+            "C-ALPHA",
+            "{\"customer_id\": 7, \"display_name\": \"张三\", \"email\": \"same@example.test\"}"
+          ],
+          [
+            9,
+            "C-ALPHA",
+            "{\"customer_id\": 9, \"display_name\": \"张三旧别名\", \"email\": \"alias@example.test\"}"
+          ],
+          [
+            12,
+            "C-BETA",
+            "{\"customer_id\": 12, \"display_name\": \"另一个同名客户\", \"email\": \"same@example.test\"}"
+          ]
+        ],
+        "customers": [
+          [
+            "C-ALPHA",
+            "甲客户",
+            "same@example.test"
+          ],
+          [
+            "C-BETA",
+            "乙客户",
+            "same@example.test"
+          ]
+        ],
+        "entries": [
+          [
+            "O1",
+            "C-ALPHA",
+            "USD",
+            1234,
+            null,
+            0,
+            "{\"amount\": \"12.34\", \"currency\": \"USD\", \"customer_id\": 7, \"entry_id\": \"O1\", \"reversal_of\": null}"
+          ],
+          [
+            "O2",
+            "C-ALPHA",
+            "CNY",
+            500,
+            null,
+            0,
+            "{\"amount\": \"5.00\", \"currency\": \"CNY\", \"customer_id\": 9, \"entry_id\": \"O2\", \"reversal_of\": null}"
+          ],
+          [
+            "O_ALIAS",
+            "C-ALPHA",
+            "CNY",
+            250,
+            null,
+            0,
+            "{\"amount\": \"2.50\", \"currency\": \"CNY\", \"customer_id\": 9, \"entry_id\": \"O_ALIAS\", \"reversal_of\": null}"
+          ],
+          [
+            "O_BETA",
+            "C-BETA",
+            "USD",
+            700,
+            null,
+            0,
+            "{\"amount\": \"7.00\", \"currency\": \"USD\", \"customer_id\": 12, \"entry_id\": \"O_BETA\", \"reversal_of\": null}"
+          ],
+          [
+            "O_ZERO",
+            "C-ALPHA",
+            "CNY",
+            0,
+            null,
+            0,
+            "{\"amount\": \"0.00\", \"currency\": \"CNY\", \"customer_id\": 7, \"entry_id\": \"O_ZERO\", \"reversal_of\": null}"
+          ],
+          [
+            "R1",
+            "C-ALPHA",
+            "USD",
+            -234,
+            "O1",
+            0,
+            "{\"amount\": \"-2.34\", \"currency\": \"USD\", \"customer_id\": 9, \"entry_id\": \"R1\", \"reversal_of\": \"O1\"}"
+          ],
+          [
+            "N_FEE",
+            "C-ALPHA",
+            "USD",
+            333,
+            null,
+            7,
+            null
+          ]
+        ],
+        "quarantine": [
+          [
+            "customer",
+            "11",
+            "unmapped_customer",
+            "{\"customer_id\": 11, \"display_name\": \"未核实\", \"email\": \"unknown@example.test\"}"
+          ],
+          [
+            "entry",
+            "O_ORPHAN",
+            "unmapped_customer",
+            "{\"amount\": \"8.00\", \"currency\": \"CNY\", \"customer_id\": 999, \"entry_id\": \"O_ORPHAN\", \"reversal_of\": null}"
+          ],
+          [
+            "entry",
+            "O_SCALE",
+            "amount_scale",
+            "{\"amount\": \"1.005\", \"currency\": \"USD\", \"customer_id\": 7, \"entry_id\": \"O_SCALE\", \"reversal_of\": null}"
+          ],
+          [
+            "entry",
+            "O_TEXT",
+            "invalid_amount",
+            "{\"amount\": \"12O.00\", \"currency\": \"USD\", \"customer_id\": 7, \"entry_id\": \"O_TEXT\", \"reversal_of\": null}"
+          ],
+          [
+            "entry",
+            "O_UNKNOWN",
+            "unmapped_customer",
+            "{\"amount\": \"3.00\", \"currency\": \"USD\", \"customer_id\": 11, \"entry_id\": \"O_UNKNOWN\", \"reversal_of\": null}"
+          ],
+          [
+            "entry",
+            "R_BAD",
+            "invalid_reversal",
+            "{\"amount\": \"-1.00\", \"currency\": \"USD\", \"customer_id\": 7, \"entry_id\": \"R_BAD\", \"reversal_of\": \"MISSING\"}"
+          ]
+        ],
+        "schema_migrations": [
+          [
+            1,
+            "synthetic_legacy_v1",
+            "2026-10-01T00:00:00Z"
+          ],
+          [
+            2,
+            "canonical_customers_integer_money",
+            "2026-10-29T13:10:18.736735+00:00"
+          ]
+        ],
+        "sqlite_sequence": [
+          [
+            "audit_events",
+            12
+          ]
+        ],
+        "write_receipts": [
+          [
+            "before-cutover",
+            "{\"amount\": \"5.00\", \"currency\": \"CNY\", \"customer_id\": 9, \"entry_id\": \"O2\", \"epoch\": 3, \"op_key\": \"before-cutover\"}",
+            "{\"entry_id\": \"O2\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}"
+          ],
+          [
+            "new-accepted",
+            "{\"amount_minor\": 333, \"currency\": \"USD\", \"customer_key\": \"C-ALPHA\", \"entry_id\": \"N_FEE\", \"epoch\": 4, \"fee_minor\": 7, \"op_key\": \"new-accepted\"}",
+            "{\"entry_id\": \"N_FEE\", \"epoch\": 4, \"source_schema\": 2, \"status\": \"accepted\"}"
+          ]
+        ]
+      }
+    },
+    "expected": {
+      "schema": [
+        [
+          "index",
+          "entries_customer_currency",
+          "entries",
+          "CREATE INDEX entries_customer_currency ON entries(customer_key,currency)"
+        ],
+        [
+          "index",
+          "sqlite_autoindex_customers_1",
+          "customers",
+          null
+        ],
+        [
+          "index",
+          "sqlite_autoindex_entries_1",
+          "entries",
+          null
+        ],
+        [
+          "index",
+          "sqlite_autoindex_quarantine_1",
+          "quarantine",
+          null
+        ],
+        [
+          "index",
+          "sqlite_autoindex_write_receipts_1",
+          "write_receipts",
+          null
+        ],
+        [
+          "table",
+          "audit_events",
+          "audit_events",
+          "CREATE TABLE audit_events(event_id INTEGER PRIMARY KEY AUTOINCREMENT,entry_id TEXT NOT NULL,source_schema INTEGER NOT NULL,payload TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "control",
+          "control",
+          "CREATE TABLE control(singleton INTEGER PRIMARY KEY CHECK(singleton=1), epoch INTEGER NOT NULL)"
+        ],
+        [
+          "table",
+          "customer_aliases",
+          "customer_aliases",
+          "CREATE TABLE customer_aliases(legacy_id INTEGER PRIMARY KEY,customer_key TEXT NOT NULL REFERENCES customers(customer_key),raw_json TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "customers",
+          "customers",
+          "CREATE TABLE customers(customer_key TEXT PRIMARY KEY NOT NULL CHECK(typeof(customer_key)='text' AND length(trim(customer_key))>0),display_name TEXT NOT NULL,email TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "entries",
+          "entries",
+          "CREATE TABLE entries(entry_id TEXT PRIMARY KEY NOT NULL CHECK(typeof(entry_id)='text' AND length(trim(entry_id))>0),customer_key TEXT NOT NULL REFERENCES customers(customer_key),currency TEXT NOT NULL CHECK(currency IN ('USD','CNY')),amount_minor INTEGER NOT NULL CHECK(typeof(amount_minor)='integer'),reversal_of TEXT REFERENCES entries(entry_id) DEFERRABLE INITIALLY DEFERRED,fee_minor INTEGER NOT NULL DEFAULT 0 CHECK(typeof(fee_minor)='integer' AND fee_minor>=0),legacy_raw_json TEXT,CHECK((reversal_of IS NULL AND amount_minor>=0) OR (reversal_of IS NOT NULL AND amount_minor<0)))"
+        ],
+        [
+          "table",
+          "quarantine",
+          "quarantine",
+          "CREATE TABLE quarantine(kind TEXT NOT NULL,legacy_key TEXT NOT NULL,reason TEXT NOT NULL,raw_json TEXT NOT NULL,PRIMARY KEY(kind,legacy_key))"
+        ],
+        [
+          "table",
+          "schema_migrations",
+          "schema_migrations",
+          "CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY,name TEXT NOT NULL,applied_at TEXT NOT NULL)"
+        ],
+        [
+          "table",
+          "sqlite_sequence",
+          "sqlite_sequence",
+          "CREATE TABLE sqlite_sequence(name,seq)"
+        ],
+        [
+          "table",
+          "write_receipts",
+          "write_receipts",
+          "CREATE TABLE \"write_receipts\"(op_key TEXT PRIMARY KEY NOT NULL CHECK(typeof(op_key)='text' AND length(trim(op_key))>0),command_json TEXT NOT NULL,result_json TEXT NOT NULL)"
+        ],
+        [
+          "trigger",
+          "entry_audit",
+          "entries",
+          "CREATE TRIGGER entry_audit AFTER INSERT ON entries BEGIN INSERT INTO audit_events(entry_id,source_schema,payload) VALUES(NEW.entry_id,2,json_object('customer_key',NEW.customer_key,'currency',NEW.currency,'amount_minor',NEW.amount_minor,'reversal_of',NEW.reversal_of,'fee_minor',NEW.fee_minor)); END"
+        ]
+      ],
+      "tables": {
+        "audit_events": [
+          [
+            1,
+            "O1",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12.34\",\"reversal_of\":null}"
+          ],
+          [
+            2,
+            "R1",
+            1,
+            "{\"customer_id\":9,\"currency\":\"USD\",\"amount\":\"-2.34\",\"reversal_of\":\"O1\"}"
+          ],
+          [
+            3,
+            "O_ALIAS",
+            1,
+            "{\"customer_id\":9,\"currency\":\"CNY\",\"amount\":\"2.50\",\"reversal_of\":null}"
+          ],
+          [
+            4,
+            "O_BETA",
+            1,
+            "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"7.00\",\"reversal_of\":null}"
+          ],
+          [
+            5,
+            "O_ZERO",
+            1,
+            "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"0.00\",\"reversal_of\":null}"
+          ],
+          [
+            6,
+            "O_SCALE",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"1.005\",\"reversal_of\":null}"
+          ],
+          [
+            7,
+            "O_TEXT",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12O.00\",\"reversal_of\":null}"
+          ],
+          [
+            8,
+            "O_UNKNOWN",
+            1,
+            "{\"customer_id\":11,\"currency\":\"USD\",\"amount\":\"3.00\",\"reversal_of\":null}"
+          ],
+          [
+            9,
+            "O_ORPHAN",
+            1,
+            "{\"customer_id\":999,\"currency\":\"CNY\",\"amount\":\"8.00\",\"reversal_of\":null}"
+          ],
+          [
+            10,
+            "R_BAD",
+            1,
+            "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"-1.00\",\"reversal_of\":\"MISSING\"}"
+          ],
+          [
+            11,
+            "O2",
+            1,
+            "{\"customer_id\":9,\"currency\":\"CNY\",\"amount\":\"5.00\",\"reversal_of\":null}"
+          ],
+          [
+            12,
+            "N_FEE",
+            2,
+            "{\"customer_key\":\"C-ALPHA\",\"currency\":\"USD\",\"amount_minor\":333,\"reversal_of\":null,\"fee_minor\":7}"
+          ]
+        ],
+        "control": [
+          [
+            1,
+            4
+          ]
+        ],
+        "customer_aliases": [
+          [
+            7,
+            "C-ALPHA",
+            "{\"customer_id\": 7, \"display_name\": \"张三\", \"email\": \"same@example.test\"}"
+          ],
+          [
+            9,
+            "C-ALPHA",
+            "{\"customer_id\": 9, \"display_name\": \"张三旧别名\", \"email\": \"alias@example.test\"}"
+          ],
+          [
+            12,
+            "C-BETA",
+            "{\"customer_id\": 12, \"display_name\": \"另一个同名客户\", \"email\": \"same@example.test\"}"
+          ]
+        ],
+        "customers": [
+          [
+            "C-ALPHA",
+            "甲客户",
+            "same@example.test"
+          ],
+          [
+            "C-BETA",
+            "乙客户",
+            "same@example.test"
+          ]
+        ],
+        "entries": [
+          [
+            "O1",
+            "C-ALPHA",
+            "USD",
+            1234,
+            null,
+            0,
+            "{\"amount\": \"12.34\", \"currency\": \"USD\", \"customer_id\": 7, \"entry_id\": \"O1\", \"reversal_of\": null}"
+          ],
+          [
+            "O2",
+            "C-ALPHA",
+            "CNY",
+            500,
+            null,
+            0,
+            "{\"amount\": \"5.00\", \"currency\": \"CNY\", \"customer_id\": 9, \"entry_id\": \"O2\", \"reversal_of\": null}"
+          ],
+          [
+            "O_ALIAS",
+            "C-ALPHA",
+            "CNY",
+            250,
+            null,
+            0,
+            "{\"amount\": \"2.50\", \"currency\": \"CNY\", \"customer_id\": 9, \"entry_id\": \"O_ALIAS\", \"reversal_of\": null}"
+          ],
+          [
+            "O_BETA",
+            "C-BETA",
+            "USD",
+            700,
+            null,
+            0,
+            "{\"amount\": \"7.00\", \"currency\": \"USD\", \"customer_id\": 12, \"entry_id\": \"O_BETA\", \"reversal_of\": null}"
+          ],
+          [
+            "O_ZERO",
+            "C-ALPHA",
+            "CNY",
+            0,
+            null,
+            0,
+            "{\"amount\": \"0.00\", \"currency\": \"CNY\", \"customer_id\": 7, \"entry_id\": \"O_ZERO\", \"reversal_of\": null}"
+          ],
+          [
+            "R1",
+            "C-ALPHA",
+            "USD",
+            -234,
+            "O1",
+            0,
+            "{\"amount\": \"-2.34\", \"currency\": \"USD\", \"customer_id\": 9, \"entry_id\": \"R1\", \"reversal_of\": \"O1\"}"
+          ],
+          [
+            "N_FEE",
+            "C-ALPHA",
+            "USD",
+            333,
+            null,
+            7,
+            null
+          ]
+        ],
+        "quarantine": [
+          [
+            "customer",
+            "11",
+            "unmapped_customer",
+            "{\"customer_id\": 11, \"display_name\": \"未核实\", \"email\": \"unknown@example.test\"}"
+          ],
+          [
+            "entry",
+            "O_ORPHAN",
+            "unmapped_customer",
+            "{\"amount\": \"8.00\", \"currency\": \"CNY\", \"customer_id\": 999, \"entry_id\": \"O_ORPHAN\", \"reversal_of\": null}"
+          ],
+          [
+            "entry",
+            "O_SCALE",
+            "amount_scale",
+            "{\"amount\": \"1.005\", \"currency\": \"USD\", \"customer_id\": 7, \"entry_id\": \"O_SCALE\", \"reversal_of\": null}"
+          ],
+          [
+            "entry",
+            "O_TEXT",
+            "invalid_amount",
+            "{\"amount\": \"12O.00\", \"currency\": \"USD\", \"customer_id\": 7, \"entry_id\": \"O_TEXT\", \"reversal_of\": null}"
+          ],
+          [
+            "entry",
+            "O_UNKNOWN",
+            "unmapped_customer",
+            "{\"amount\": \"3.00\", \"currency\": \"USD\", \"customer_id\": 11, \"entry_id\": \"O_UNKNOWN\", \"reversal_of\": null}"
+          ],
+          [
+            "entry",
+            "R_BAD",
+            "invalid_reversal",
+            "{\"amount\": \"-1.00\", \"currency\": \"USD\", \"customer_id\": 7, \"entry_id\": \"R_BAD\", \"reversal_of\": \"MISSING\"}"
+          ]
+        ],
+        "schema_migrations": [
+          [
+            1,
+            "synthetic_legacy_v1",
+            "2026-10-01T00:00:00Z"
+          ],
+          [
+            2,
+            "canonical_customers_integer_money",
+            "2026-10-29T13:10:18.736735+00:00"
+          ]
+        ],
+        "sqlite_sequence": [
+          [
+            "audit_events",
+            12
+          ]
+        ],
+        "write_receipts": [
+          [
+            "before-cutover",
+            "{\"amount\": \"5.00\", \"currency\": \"CNY\", \"customer_id\": 9, \"entry_id\": \"O2\", \"epoch\": 3, \"op_key\": \"before-cutover\"}",
+            "{\"entry_id\": \"O2\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}"
+          ],
+          [
+            "new-accepted",
+            "{\"amount_minor\": 333, \"currency\": \"USD\", \"customer_key\": \"C-ALPHA\", \"entry_id\": \"N_FEE\", \"epoch\": 4, \"fee_minor\": 7, \"op_key\": \"new-accepted\"}",
+            "{\"entry_id\": \"N_FEE\", \"epoch\": 4, \"source_schema\": 2, \"status\": \"accepted\"}"
+          ]
+        ]
+      }
+    },
+    "passed": true
+  }
+]

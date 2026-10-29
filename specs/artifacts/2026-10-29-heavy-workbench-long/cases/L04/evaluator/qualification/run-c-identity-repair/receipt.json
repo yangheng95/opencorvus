@@ -1,0 +1,65 @@
+{
+  "status": "passed",
+  "scope": "synthetic tiny SQLite migration/epoch/process qualification only; not frozen heavy case or hours",
+  "cases": [
+    {
+      "case": "normal",
+      "status": "passed",
+      "database": "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-c-identity-repair\\normal\\application.sqlite",
+      "version": 2,
+      "epoch": 4,
+      "canonical_entries": 7,
+      "quarantined_records": 6
+    },
+    {
+      "case": "before_commit_fault",
+      "status": "passed",
+      "database": "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-c-identity-repair\\before_commit_fault\\application.sqlite",
+      "version": 2,
+      "epoch": 4,
+      "canonical_entries": 7,
+      "quarantined_records": 6
+    },
+    {
+      "case": "after_commit_fault",
+      "status": "passed",
+      "database": "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-c-identity-repair\\after_commit_fault\\application.sqlite",
+      "version": 2,
+      "epoch": 4,
+      "canonical_entries": 7,
+      "quarantined_records": 6
+    },
+    {
+      "case": "queued_cutover",
+      "status": "passed",
+      "database": "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-c-identity-repair\\queued_cutover\\application.sqlite",
+      "version": 2,
+      "epoch": 4,
+      "canonical_entries": 7,
+      "quarantined_records": 6
+    },
+    {
+      "case": "unresolved_receipt",
+      "status": "aborted_as_specified",
+      "database": "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-c-identity-repair\\unresolved_receipt\\application.sqlite",
+      "version": 1,
+      "epoch": 3,
+      "error": "unresolved_receipt_identity"
+    },
+    {
+      "case": "unresolved_entry",
+      "status": "aborted_as_specified",
+      "database": "D:\\opencorvus-benchmark-runs\\l04-migration-qualification-20261029\\run-c-identity-repair\\unresolved_entry\\application.sqlite",
+      "version": 1,
+      "epoch": 3,
+      "error": "unresolved_entry_identity"
+    }
+  ],
+  "seconds": 7.173026700038463,
+  "check_count": 244,
+  "subprocess_count": 53,
+  "sqlite_version": "3.50.4",
+  "journal_mode": "DELETE",
+  "physical_power_loss_tested": false,
+  "heavy_case_count_increment": 0
+}

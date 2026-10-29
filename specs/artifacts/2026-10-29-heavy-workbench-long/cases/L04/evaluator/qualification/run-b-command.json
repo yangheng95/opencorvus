@@ -1,0 +1,14 @@
+{
+  "cmd": "C:/Python314/python.exe -B D:/opencorvus-benchmark-runs/l04-migration-qualification-20261029/qualify_migration.py --input D:/opencorvus-benchmark-runs/l04-migration-qualification-20261029/inputs/v1 --output D:/opencorvus-benchmark-runs/l04-migration-qualification-20261029/run-b-explicit-input",
+  "start": {
+    "current_time": "2026-10-29 12:45:15 UTC"
+  },
+  "end": {
+    "current_time": "2026-10-29 12:45:22 UTC"
+  },
+  "chunk_id": "6d0805",
+  "wall_time_seconds": 6.6783382,
+  "exit_code": 0,
+  "original_token_count": 16,
+  "output": "{\"status\": \"passed\", \"cases\": 4, \"seconds\": 6.150745999999344}\r\n"
+}

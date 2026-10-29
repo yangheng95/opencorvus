@@ -1,0 +1,16 @@
+{
+  "objective_name": "minimum_credit_minor",
+  "method": "continuous_relaxation",
+  "status": 0,
+  "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+  "seconds": 0.004164375364780426,
+  "objective": 2.0,
+  "variables": 21,
+  "constraints": 38,
+  "iterations": 0,
+  "interpretation": "lower-bound qualification only; fractional solution is not a business plan",
+  "exact_certificate_seconds": 0.0030701952055096626,
+  "certified_lower_bound_exact": "2",
+  "certified_lower_bound": 2.0,
+  "primal_maximum_row_violation": 0.0
+}

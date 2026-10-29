@@ -1,0 +1,20 @@
+{
+  "lower_bound_exact": "577753327609889925273/12500000000000000",
+  "lower_bound": 46220.266208791196,
+  "row_dual_constant_exact": "2426039065934065893827/50000000000000000",
+  "box_correction_exact": "-23005151098901238547/10000000000000000",
+  "maximum_stationarity_residual_exact": "495",
+  "variables": 1488,
+  "rows": 1096,
+  "multipliers": 1285,
+  "side_counts": {
+    "equality": 571,
+    "upper": 381,
+    "lower": 333
+  },
+  "negative_box_terms": 237,
+  "all_model_bounds_exact_integers": true,
+  "arithmetic": "independent fractions.Fraction; solver_value ignored; no optimization",
+  "independent_load_and_exact_arithmetic_seconds": 0.14131540013477206,
+  "matches_recorded_exact_fields": true
+}

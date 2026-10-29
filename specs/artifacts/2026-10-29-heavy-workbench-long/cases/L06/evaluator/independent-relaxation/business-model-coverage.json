@@ -1,0 +1,31 @@
+{
+  "all_business_model_checks_passed": true,
+  "variable_types": {
+    "q": 576,
+    "truck": 144,
+    "produce": 384,
+    "raw": 192,
+    "fg": 192
+  },
+  "variables": 1488,
+  "rows": 1096,
+  "expected_row_families": {
+    "supplier_capacity": 144,
+    "shipment_MOQ": 144,
+    "plant_capacity": 96,
+    "raw_balance": 192,
+    "goods_balance": 192,
+    "raw_stage_peak": 48,
+    "goods_stage_peak": 48,
+    "cash_prefix": 48,
+    "nonanticipativity": 184
+  },
+  "variable_bound_or_objective_mismatches": [],
+  "extra_actual_rows": 0,
+  "missing_business_rows": 0,
+  "objective_denominator": 10,
+  "all_lower_bounds_zero": true,
+  "maximum_variable_upper": 240,
+  "integer_objective_constant": 0,
+  "scope": "independent reconstruction of actual finite v2 cost model from input; no builder/matrix or optimizer imported"
+}

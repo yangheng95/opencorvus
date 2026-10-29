@@ -1,0 +1,212 @@
+{
+  "observations": [
+    {
+      "version": "v1",
+      "step": "first",
+      "request": {
+        "epoch": 3,
+        "op_key": null,
+        "entry_id": "P_NULL_A",
+        "currency": "CNY",
+        "customer_id": 7,
+        "amount": "1.11"
+      },
+      "response": {
+        "status": "invalid_request",
+        "field": "op_key"
+      },
+      "command_receipt": {
+        "argv": [
+          "C:/Python314/python.exe",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\source-snapshot\\legacy_writer.py",
+          "--db",
+          "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\repaired-null-probe\\v1\\probe.sqlite",
+          "--request",
+          "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\repaired-null-probe\\v1\\first.request.json"
+        ],
+        "cwd": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review",
+        "started_utc": "2026-10-29T13:11:25.995592+00:00",
+        "seconds": 0.13049010001122952,
+        "returncode": 0,
+        "stdout": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\commands\\repaired-null-v1-first.stdout.txt",
+        "stderr": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\commands\\repaired-null-v1-first.stderr.txt"
+      }
+    },
+    {
+      "version": "v1",
+      "step": "identical",
+      "request": {
+        "epoch": 3,
+        "op_key": null,
+        "entry_id": "P_NULL_A",
+        "currency": "CNY",
+        "customer_id": 7,
+        "amount": "1.11"
+      },
+      "response": {
+        "status": "invalid_request",
+        "field": "op_key"
+      },
+      "command_receipt": {
+        "argv": [
+          "C:/Python314/python.exe",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\source-snapshot\\legacy_writer.py",
+          "--db",
+          "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\repaired-null-probe\\v1\\probe.sqlite",
+          "--request",
+          "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\repaired-null-probe\\v1\\identical.request.json"
+        ],
+        "cwd": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review",
+        "started_utc": "2026-10-29T13:11:26.140938+00:00",
+        "seconds": 0.15121310018002987,
+        "returncode": 0,
+        "stdout": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\commands\\repaired-null-v1-identical.stdout.txt",
+        "stderr": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\commands\\repaired-null-v1-identical.stderr.txt"
+      }
+    },
+    {
+      "version": "v1",
+      "step": "changed_same_null_key",
+      "request": {
+        "epoch": 3,
+        "op_key": null,
+        "entry_id": "P_NULL_B",
+        "currency": "CNY",
+        "customer_id": 7,
+        "amount": "1.11"
+      },
+      "response": {
+        "status": "invalid_request",
+        "field": "op_key"
+      },
+      "command_receipt": {
+        "argv": [
+          "C:/Python314/python.exe",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\source-snapshot\\legacy_writer.py",
+          "--db",
+          "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\repaired-null-probe\\v1\\probe.sqlite",
+          "--request",
+          "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\repaired-null-probe\\v1\\changed_same_null_key.request.json"
+        ],
+        "cwd": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review",
+        "started_utc": "2026-10-29T13:11:26.295479+00:00",
+        "seconds": 0.1268079001456499,
+        "returncode": 0,
+        "stdout": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\commands\\repaired-null-v1-changed_same_null_key.stdout.txt",
+        "stderr": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\commands\\repaired-null-v1-changed_same_null_key.stderr.txt"
+      }
+    },
+    {
+      "version": "v2",
+      "step": "first",
+      "request": {
+        "epoch": 4,
+        "op_key": null,
+        "entry_id": "P_NULL_A",
+        "currency": "CNY",
+        "customer_key": "C-ALPHA",
+        "amount_minor": 111,
+        "fee_minor": 0
+      },
+      "response": {
+        "status": "invalid_request",
+        "field": "op_key"
+      },
+      "command_receipt": {
+        "argv": [
+          "C:/Python314/python.exe",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\source-snapshot\\reference_api.py",
+          "--db",
+          "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\repaired-null-probe\\v2\\probe.sqlite",
+          "--action",
+          "write",
+          "--request",
+          "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\repaired-null-probe\\v2\\first.request.json"
+        ],
+        "cwd": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review",
+        "started_utc": "2026-10-29T13:11:26.430314+00:00",
+        "seconds": 0.13342180009931326,
+        "returncode": 0,
+        "stdout": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\commands\\repaired-null-v2-first.stdout.txt",
+        "stderr": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\commands\\repaired-null-v2-first.stderr.txt"
+      }
+    },
+    {
+      "version": "v2",
+      "step": "identical",
+      "request": {
+        "epoch": 4,
+        "op_key": null,
+        "entry_id": "P_NULL_A",
+        "currency": "CNY",
+        "customer_key": "C-ALPHA",
+        "amount_minor": 111,
+        "fee_minor": 0
+      },
+      "response": {
+        "status": "invalid_request",
+        "field": "op_key"
+      },
+      "command_receipt": {
+        "argv": [
+          "C:/Python314/python.exe",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\source-snapshot\\reference_api.py",
+          "--db",
+          "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\repaired-null-probe\\v2\\probe.sqlite",
+          "--action",
+          "write",
+          "--request",
+          "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\repaired-null-probe\\v2\\identical.request.json"
+        ],
+        "cwd": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review",
+        "started_utc": "2026-10-29T13:11:26.567300+00:00",
+        "seconds": 0.15149389998987317,
+        "returncode": 0,
+        "stdout": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\commands\\repaired-null-v2-identical.stdout.txt",
+        "stderr": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\commands\\repaired-null-v2-identical.stderr.txt"
+      }
+    },
+    {
+      "version": "v2",
+      "step": "changed_same_null_key",
+      "request": {
+        "epoch": 4,
+        "op_key": null,
+        "entry_id": "P_NULL_B",
+        "currency": "CNY",
+        "customer_key": "C-ALPHA",
+        "amount_minor": 111,
+        "fee_minor": 0
+      },
+      "response": {
+        "status": "invalid_request",
+        "field": "op_key"
+      },
+      "command_receipt": {
+        "argv": [
+          "C:/Python314/python.exe",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\source-snapshot\\reference_api.py",
+          "--db",
+          "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\repaired-null-probe\\v2\\probe.sqlite",
+          "--action",
+          "write",
+          "--request",
+          "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\repaired-null-probe\\v2\\changed_same_null_key.request.json"
+        ],
+        "cwd": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review",
+        "started_utc": "2026-10-29T13:11:26.722162+00:00",
+        "seconds": 0.1334033003076911,
+        "returncode": 0,
+        "stdout": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\commands\\repaired-null-v2-changed_same_null_key.stdout.txt",
+        "stderr": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\repair-review\\commands\\repaired-null-v2-changed_same_null_key.stderr.txt"
+      }
+    }
+  ],
+  "scope": "same historical request files on fresh reviewer-owned copies; real CLI"
+}

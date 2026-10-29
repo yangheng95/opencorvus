@@ -1,0 +1,510 @@
+{
+  "same_v2_input_as_business_ledger": true,
+  "variables_mapped": 1488,
+  "all_exact_box_bounds_passed": true,
+  "rows_checked": 1096,
+  "row_violations": [],
+  "ledger_field_mismatches": [],
+  "objective_exact": "51263",
+  "objective_matches_independent_v2_upper": true,
+  "all_passed": true,
+  "scenarios": {
+    "base": {
+      "active_counts": {
+        "supplier_capacity": 10,
+        "shipment_minimum": 3,
+        "plant_capacity": 14,
+        "raw_storage": 0,
+        "product_storage": 0,
+        "credit_limit": 1
+      },
+      "active_locations": {
+        "supplier_capacity": [
+          [
+            0,
+            "A"
+          ],
+          [
+            3,
+            "A"
+          ],
+          [
+            4,
+            "A"
+          ],
+          [
+            4,
+            "C"
+          ],
+          [
+            7,
+            "A"
+          ],
+          [
+            8,
+            "A"
+          ],
+          [
+            10,
+            "A"
+          ],
+          [
+            12,
+            "A"
+          ],
+          [
+            12,
+            "C"
+          ],
+          [
+            13,
+            "A"
+          ]
+        ],
+        "shipment_minimum": [
+          [
+            1,
+            "C"
+          ],
+          [
+            6,
+            "C"
+          ],
+          [
+            15,
+            "C"
+          ]
+        ],
+        "plant_capacity": [
+          [
+            3,
+            "F1"
+          ],
+          [
+            4,
+            "F1"
+          ],
+          [
+            5,
+            "F0"
+          ],
+          [
+            6,
+            "F1"
+          ],
+          [
+            7,
+            "F0"
+          ],
+          [
+            7,
+            "F1"
+          ],
+          [
+            8,
+            "F1"
+          ],
+          [
+            9,
+            "F0"
+          ],
+          [
+            9,
+            "F1"
+          ],
+          [
+            10,
+            "F0"
+          ],
+          [
+            10,
+            "F1"
+          ],
+          [
+            12,
+            "F0"
+          ],
+          [
+            14,
+            "F0"
+          ],
+          [
+            14,
+            "F1"
+          ]
+        ],
+        "credit_limit": [
+          3
+        ],
+        "plant_shutdown_zero_capacity": [
+          [
+            6,
+            "F0"
+          ]
+        ],
+        "raw_storage": [],
+        "product_storage": []
+      },
+      "matches_recorded_active_counts": true,
+      "cost_minor": 50929,
+      "positive_holding_cost_weeks": 16,
+      "used_positive_shipment_lead_times": {
+        "1": 13,
+        "2": 12,
+        "0": 7
+      },
+      "necessary_prebuild_observations": [
+        {
+          "week": 6,
+          "product": "P0",
+          "demand": 10,
+          "maximum_same_week_even_if_other_products_ignored": 0,
+          "minimum_prior_stock": 10,
+          "actual_prior_stock": 10
+        },
+        {
+          "week": 9,
+          "product": "P3",
+          "demand": 4,
+          "maximum_same_week_even_if_other_products_ignored": 3,
+          "minimum_prior_stock": 1,
+          "actual_prior_stock": 1
+        }
+      ],
+      "MOQ_exceeds_capacity_observations": [],
+      "interpretation": "binding/use/necessity facts only; positive cost or use alone is not an ablation or a causal optimality claim"
+    },
+    "supplier_disruption": {
+      "active_counts": {
+        "supplier_capacity": 12,
+        "shipment_minimum": 1,
+        "plant_capacity": 8,
+        "raw_storage": 0,
+        "product_storage": 0,
+        "credit_limit": 1
+      },
+      "active_locations": {
+        "supplier_capacity": [
+          [
+            0,
+            "A"
+          ],
+          [
+            3,
+            "A"
+          ],
+          [
+            4,
+            "A"
+          ],
+          [
+            4,
+            "C"
+          ],
+          [
+            5,
+            "A"
+          ],
+          [
+            5,
+            "C"
+          ],
+          [
+            6,
+            "C"
+          ],
+          [
+            7,
+            "C"
+          ],
+          [
+            8,
+            "C"
+          ],
+          [
+            9,
+            "A"
+          ],
+          [
+            11,
+            "C"
+          ],
+          [
+            14,
+            "C"
+          ]
+        ],
+        "shipment_minimum": [
+          [
+            1,
+            "C"
+          ]
+        ],
+        "plant_capacity": [
+          [
+            3,
+            "F1"
+          ],
+          [
+            6,
+            "F1"
+          ],
+          [
+            7,
+            "F0"
+          ],
+          [
+            7,
+            "F1"
+          ],
+          [
+            10,
+            "F0"
+          ],
+          [
+            10,
+            "F1"
+          ],
+          [
+            12,
+            "F0"
+          ],
+          [
+            12,
+            "F1"
+          ]
+        ],
+        "credit_limit": [
+          3
+        ],
+        "plant_shutdown_zero_capacity": [
+          [
+            6,
+            "F0"
+          ]
+        ],
+        "raw_storage": [],
+        "product_storage": []
+      },
+      "matches_recorded_active_counts": true,
+      "cost_minor": 51557,
+      "positive_holding_cost_weeks": 16,
+      "used_positive_shipment_lead_times": {
+        "1": 11,
+        "2": 13,
+        "0": 11
+      },
+      "necessary_prebuild_observations": [
+        {
+          "week": 6,
+          "product": "P0",
+          "demand": 10,
+          "maximum_same_week_even_if_other_products_ignored": 0,
+          "minimum_prior_stock": 10,
+          "actual_prior_stock": 11
+        },
+        {
+          "week": 9,
+          "product": "P3",
+          "demand": 4,
+          "maximum_same_week_even_if_other_products_ignored": 3,
+          "minimum_prior_stock": 1,
+          "actual_prior_stock": 2
+        }
+      ],
+      "MOQ_exceeds_capacity_observations": [
+        {
+          "week": 6,
+          "supplier": "A",
+          "capacity": 15,
+          "MOQ": 20,
+          "actual_truck": 0,
+          "actual_units": 0
+        },
+        {
+          "week": 7,
+          "supplier": "A",
+          "capacity": 15,
+          "MOQ": 20,
+          "actual_truck": 0,
+          "actual_units": 0
+        },
+        {
+          "week": 8,
+          "supplier": "A",
+          "capacity": 15,
+          "MOQ": 20,
+          "actual_truck": 0,
+          "actual_units": 0
+        }
+      ],
+      "interpretation": "binding/use/necessity facts only; positive cost or use alone is not an ablation or a causal optimality claim"
+    },
+    "demand_shift": {
+      "active_counts": {
+        "supplier_capacity": 10,
+        "shipment_minimum": 1,
+        "plant_capacity": 16,
+        "raw_storage": 0,
+        "product_storage": 0,
+        "credit_limit": 1
+      },
+      "active_locations": {
+        "supplier_capacity": [
+          [
+            0,
+            "A"
+          ],
+          [
+            3,
+            "A"
+          ],
+          [
+            4,
+            "A"
+          ],
+          [
+            4,
+            "C"
+          ],
+          [
+            5,
+            "C"
+          ],
+          [
+            6,
+            "A"
+          ],
+          [
+            7,
+            "C"
+          ],
+          [
+            10,
+            "A"
+          ],
+          [
+            11,
+            "A"
+          ],
+          [
+            13,
+            "C"
+          ]
+        ],
+        "shipment_minimum": [
+          [
+            1,
+            "C"
+          ]
+        ],
+        "plant_capacity": [
+          [
+            3,
+            "F1"
+          ],
+          [
+            4,
+            "F0"
+          ],
+          [
+            4,
+            "F1"
+          ],
+          [
+            5,
+            "F0"
+          ],
+          [
+            5,
+            "F1"
+          ],
+          [
+            6,
+            "F1"
+          ],
+          [
+            7,
+            "F0"
+          ],
+          [
+            7,
+            "F1"
+          ],
+          [
+            8,
+            "F0"
+          ],
+          [
+            8,
+            "F1"
+          ],
+          [
+            9,
+            "F0"
+          ],
+          [
+            9,
+            "F1"
+          ],
+          [
+            10,
+            "F1"
+          ],
+          [
+            11,
+            "F1"
+          ],
+          [
+            13,
+            "F1"
+          ],
+          [
+            14,
+            "F0"
+          ]
+        ],
+        "credit_limit": [
+          3
+        ],
+        "plant_shutdown_zero_capacity": [
+          [
+            6,
+            "F0"
+          ]
+        ],
+        "raw_storage": [],
+        "product_storage": []
+      },
+      "matches_recorded_active_counts": true,
+      "cost_minor": 51657,
+      "positive_holding_cost_weeks": 16,
+      "used_positive_shipment_lead_times": {
+        "1": 14,
+        "2": 10,
+        "0": 9
+      },
+      "necessary_prebuild_observations": [
+        {
+          "week": 6,
+          "product": "P0",
+          "demand": 11,
+          "maximum_same_week_even_if_other_products_ignored": 0,
+          "minimum_prior_stock": 11,
+          "actual_prior_stock": 11
+        },
+        {
+          "week": 9,
+          "product": "P3",
+          "demand": 5,
+          "maximum_same_week_even_if_other_products_ignored": 3,
+          "minimum_prior_stock": 2,
+          "actual_prior_stock": 3
+        }
+      ],
+      "MOQ_exceeds_capacity_observations": [],
+      "interpretation": "binding/use/necessity facts only; positive cost or use alone is not an ablation or a causal optimality claim"
+    }
+  },
+  "integer_plan_comes_from": "existing fully verified v2 action ledger, never from rounding fractional LP values"
+}

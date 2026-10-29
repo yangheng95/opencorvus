@@ -1,0 +1,11 @@
+{
+  "scope": "exact rational linear-model bound; model/business inclusion reviewed separately",
+  "lower_bound_exact": "577753327609889925273/12500000000000000",
+  "lower_bound": 46220.266208791196,
+  "row_dual_constant_exact": "2426039065934065893827/50000000000000000",
+  "box_correction_exact": "-23005151098901238547/10000000000000000",
+  "maximum_stationarity_residual_exact": "495",
+  "multipliers_evaluated": 1285,
+  "variables": 1488,
+  "arithmetic": "fractions.Fraction; no floating acceptance tolerance"
+}

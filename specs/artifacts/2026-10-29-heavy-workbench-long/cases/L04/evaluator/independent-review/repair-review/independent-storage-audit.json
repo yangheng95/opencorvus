@@ -1,0 +1,50 @@
+[
+  {
+    "contract": "receipt_null",
+    "sql": "INSERT INTO write_receipts VALUES(NULL,'{}','{}')",
+    "actual": "SQLITE_CONSTRAINT_NOTNULL",
+    "expected": "SQLITE_CONSTRAINT_NOTNULL"
+  },
+  {
+    "contract": "receipt_blank",
+    "sql": "INSERT INTO write_receipts VALUES('  ','{}','{}')",
+    "actual": "SQLITE_CONSTRAINT_CHECK",
+    "expected": "SQLITE_CONSTRAINT_CHECK"
+  },
+  {
+    "contract": "customer_null",
+    "sql": "INSERT INTO customers VALUES(NULL,'x','x')",
+    "actual": "SQLITE_CONSTRAINT_NOTNULL",
+    "expected": "SQLITE_CONSTRAINT_NOTNULL"
+  },
+  {
+    "contract": "customer_blank",
+    "sql": "INSERT INTO customers VALUES('  ','x','x')",
+    "actual": "SQLITE_CONSTRAINT_CHECK",
+    "expected": "SQLITE_CONSTRAINT_CHECK"
+  },
+  {
+    "contract": "entry_null",
+    "sql": "INSERT INTO entries(entry_id,customer_key,currency,amount_minor,reversal_of,fee_minor) VALUES(NULL,'C-ALPHA','USD',1,NULL,0)",
+    "actual": "SQLITE_CONSTRAINT_NOTNULL",
+    "expected": "SQLITE_CONSTRAINT_NOTNULL"
+  },
+  {
+    "contract": "entry_blank",
+    "sql": "INSERT INTO entries(entry_id,customer_key,currency,amount_minor,reversal_of,fee_minor) VALUES('  ','C-ALPHA','USD',1,NULL,0)",
+    "actual": "SQLITE_CONSTRAINT_CHECK",
+    "expected": "SQLITE_CONSTRAINT_CHECK"
+  },
+  {
+    "contract": "quarantine_kind_null",
+    "sql": "INSERT INTO quarantine VALUES(NULL,'x','x','{}')",
+    "actual": "SQLITE_CONSTRAINT_NOTNULL",
+    "expected": "SQLITE_CONSTRAINT_NOTNULL"
+  },
+  {
+    "contract": "quarantine_key_null",
+    "sql": "INSERT INTO quarantine VALUES('entry',NULL,'x','{}')",
+    "actual": "SQLITE_CONSTRAINT_NOTNULL",
+    "expected": "SQLITE_CONSTRAINT_NOTNULL"
+  }
+]

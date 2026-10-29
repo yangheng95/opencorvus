@@ -1,0 +1,100 @@
+{
+  "source_identity_only": {
+    "qualify_l06.py": true,
+    "l06_input.py": true,
+    "l06_bound_certificate.py": true,
+    "check_l06.py": true,
+    "qualify_relaxation_checks.py": true
+  },
+  "financing_repair": {
+    "probability_denominator": 2,
+    "objective_denominator": 1,
+    "nonzero_numerators": [
+      1
+    ],
+    "all_numerators_integer": true,
+    "exact_certificate": "2"
+  },
+  "LP_fractional_examples_not_a_business_plan": [
+    {
+      "variable": [
+        "q",
+        "base",
+        0,
+        0,
+        0
+      ],
+      "LP_value": 4.4
+    },
+    {
+      "variable": [
+        "q",
+        "base",
+        0,
+        0,
+        1
+      ],
+      "LP_value": 2.6
+    },
+    {
+      "variable": [
+        "q",
+        "base",
+        0,
+        0,
+        2
+      ],
+      "LP_value": 2.4
+    },
+    {
+      "variable": [
+        "q",
+        "base",
+        0,
+        0,
+        3
+      ],
+      "LP_value": 1.2
+    },
+    {
+      "variable": [
+        "truck",
+        "base",
+        0,
+        0
+      ],
+      "LP_value": 0.9
+    },
+    {
+      "variable": [
+        "q",
+        "base",
+        0,
+        1,
+        0
+      ],
+      "LP_value": 2.5
+    },
+    {
+      "variable": [
+        "q",
+        "base",
+        0,
+        1,
+        1
+      ],
+      "LP_value": 0.35
+    },
+    {
+      "variable": [
+        "q",
+        "base",
+        0,
+        1,
+        2
+      ],
+      "LP_value": 1.7000000000000002
+    }
+  ],
+  "LP_solution_dimensions": 1488
+}

@@ -1,0 +1,18 @@
+{
+  "assessment": "initial_fixed_input_cold_review",
+  "four_core_scenarios_passed": true,
+  "core_seconds": 10.471724700182676,
+  "outer_process_seconds": 10.78415869968012,
+  "owned_harness_processes": 43,
+  "author_contract_checks": 217,
+  "independent_sql_checks": 112,
+  "independent_sql_passed": true,
+  "owned_process_protocol_passed": true,
+  "shared_null_op_key_issue_confirmed": true,
+  "shared_identity_repair_independently_verified": false,
+  "stage": "preserved_initial_findings_waiting_repaired_four_source_snapshot",
+  "heavy_case_frozen": false,
+  "hours_validated": false,
+  "additional_delegation": false,
+  "Provider_GPU_or_user_process_actions": false
+}

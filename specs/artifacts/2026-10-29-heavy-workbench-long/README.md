@@ -31,3 +31,5 @@ L01针对Rathore等ICML2024论文《Challenges in Training PINNs: A Loss Landsca
 [机器交付独立审查](evaluator/manifest-review/REVIEW.md)实际找出并复核修复了项目/输出根混淆、未开始记录的非null引用、plateau/stalled声明计数矛盾；最终15项manifest测试与独立端点/两种tie探针通过。当前工具全范围[36项实跑](evaluator/artifact-contract-validation/README.md)仅证明数值与结构合同。R9已拆为14个pending关键质量叶、共9分，阈值仍null，完整选择可达性仍待终态证据。
 
 用户最新要求[便宜实验优先](evaluator/cheap-first/README.md)：六个自有昂贵容器已可逆暂停；先做必要条件/枚举/短程，而非同时完整训练。[九题独立审查](evaluator/nine-case-review/REVIEW.md)实跑28次旧checker并明确升级缺口。[L06](cases/L06/README.md)低成本审查发现并修正了期末/阶段仓容、输入维度/概率和严格JSON问题，仍未证明成本最优或小时级。[S06](cases/L06/smoke/README.md)真实原生完成、数学最优及两方清洁源码复跑均通过微型合同；它不计入十题，不证明重型难度。
+
+便宜接续新增[L06严格下界](cases/L06/evaluator/independent-relaxation/REVIEW.md)：完整LP .047秒，独立从输入重建1488变量/1096行并精确核算下界约46220.2662；与51263上界仍不能认证1%。[L04合成旧库迁移能力](cases/L04/README.md)已实际独立冷跑，修复共享NULL身份漏洞，4升级+2按合同中止/原库保留通过当前局部协议；两者均非冻结重型题、候选分或小时级成绩。

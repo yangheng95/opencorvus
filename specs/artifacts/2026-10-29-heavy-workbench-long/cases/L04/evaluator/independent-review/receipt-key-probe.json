@@ -1,0 +1,198 @@
+[
+  {
+    "version": "v1",
+    "observed": [
+      {
+        "step": "first",
+        "response": {
+          "status": "accepted",
+          "entry_id": "P_NULL_A",
+          "epoch": 3,
+          "source_schema": 1
+        },
+        "command": {
+          "argv": [
+            "C:/Python314/python.exe",
+            "-B",
+            "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\source-snapshot\\legacy_writer.py",
+            "--db",
+            "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\receipt-key-probe\\v1\\probe.sqlite",
+            "--request",
+            "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\receipt-key-probe\\v1\\first.request.json"
+          ],
+          "cwd": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029",
+          "started_utc": "2026-10-29T12:56:10.262540+00:00",
+          "seconds": 0.151488299947232,
+          "exit_code": 0,
+          "stdout": "commands\\null-key-v1-first.stdout.txt",
+          "stderr": "commands\\null-key-v1-first.stderr.txt"
+        }
+      },
+      {
+        "step": "identical",
+        "response": {
+          "status": "entry_conflict",
+          "sqlite_errorname": "SQLITE_CONSTRAINT_PRIMARYKEY"
+        },
+        "command": {
+          "argv": [
+            "C:/Python314/python.exe",
+            "-B",
+            "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\source-snapshot\\legacy_writer.py",
+            "--db",
+            "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\receipt-key-probe\\v1\\probe.sqlite",
+            "--request",
+            "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\receipt-key-probe\\v1\\identical.request.json"
+          ],
+          "cwd": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029",
+          "started_utc": "2026-10-29T12:56:10.421715+00:00",
+          "seconds": 0.13278109999373555,
+          "exit_code": 0,
+          "stdout": "commands\\null-key-v1-identical.stdout.txt",
+          "stderr": "commands\\null-key-v1-identical.stderr.txt"
+        }
+      },
+      {
+        "step": "changed_same_null_key",
+        "response": {
+          "status": "accepted",
+          "entry_id": "P_NULL_B",
+          "epoch": 3,
+          "source_schema": 1
+        },
+        "command": {
+          "argv": [
+            "C:/Python314/python.exe",
+            "-B",
+            "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\source-snapshot\\legacy_writer.py",
+            "--db",
+            "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\receipt-key-probe\\v1\\probe.sqlite",
+            "--request",
+            "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\receipt-key-probe\\v1\\changed_same_null_key.request.json"
+          ],
+          "cwd": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029",
+          "started_utc": "2026-10-29T12:56:10.562055+00:00",
+          "seconds": 0.16616169968619943,
+          "exit_code": 0,
+          "stdout": "commands\\null-key-v1-changed_same_null_key.stdout.txt",
+          "stderr": "commands\\null-key-v1-changed_same_null_key.stderr.txt"
+        }
+      }
+    ],
+    "null_receipt_rows": [
+      {
+        "op_key": null,
+        "command_json": "{\"amount\": \"1.11\", \"currency\": \"CNY\", \"customer_id\": 7, \"entry_id\": \"P_NULL_A\", \"epoch\": 3, \"op_key\": null}",
+        "result_json": "{\"entry_id\": \"P_NULL_A\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}"
+      },
+      {
+        "op_key": null,
+        "command_json": "{\"amount\": \"1.11\", \"currency\": \"CNY\", \"customer_id\": 7, \"entry_id\": \"P_NULL_B\", \"epoch\": 3, \"op_key\": null}",
+        "result_json": "{\"entry_id\": \"P_NULL_B\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}"
+      }
+    ],
+    "finding_confirmed": true,
+    "scope": "extra mutable probe copy only; original full cold-run databases/results preserved"
+  },
+  {
+    "version": "v2",
+    "observed": [
+      {
+        "step": "first",
+        "response": {
+          "status": "accepted",
+          "entry_id": "P_NULL_A",
+          "epoch": 4,
+          "source_schema": 2
+        },
+        "command": {
+          "argv": [
+            "C:/Python314/python.exe",
+            "-B",
+            "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\source-snapshot\\reference_api.py",
+            "--db",
+            "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\receipt-key-probe\\v2\\probe.sqlite",
+            "--action",
+            "write",
+            "--request",
+            "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\receipt-key-probe\\v2\\first.request.json"
+          ],
+          "cwd": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029",
+          "started_utc": "2026-10-29T12:56:10.738921+00:00",
+          "seconds": 0.16730570001527667,
+          "exit_code": 0,
+          "stdout": "commands\\null-key-v2-first.stdout.txt",
+          "stderr": "commands\\null-key-v2-first.stderr.txt"
+        }
+      },
+      {
+        "step": "identical",
+        "response": {
+          "status": "constraint_error",
+          "sqlite_errorname": "SQLITE_CONSTRAINT_PRIMARYKEY"
+        },
+        "command": {
+          "argv": [
+            "C:/Python314/python.exe",
+            "-B",
+            "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\source-snapshot\\reference_api.py",
+            "--db",
+            "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\receipt-key-probe\\v2\\probe.sqlite",
+            "--action",
+            "write",
+            "--request",
+            "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\receipt-key-probe\\v2\\identical.request.json"
+          ],
+          "cwd": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029",
+          "started_utc": "2026-10-29T12:56:10.914601+00:00",
+          "seconds": 0.15067669982090592,
+          "exit_code": 0,
+          "stdout": "commands\\null-key-v2-identical.stdout.txt",
+          "stderr": "commands\\null-key-v2-identical.stderr.txt"
+        }
+      },
+      {
+        "step": "changed_same_null_key",
+        "response": {
+          "status": "accepted",
+          "entry_id": "P_NULL_B",
+          "epoch": 4,
+          "source_schema": 2
+        },
+        "command": {
+          "argv": [
+            "C:/Python314/python.exe",
+            "-B",
+            "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\source-snapshot\\reference_api.py",
+            "--db",
+            "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\receipt-key-probe\\v2\\probe.sqlite",
+            "--action",
+            "write",
+            "--request",
+            "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029\\receipt-key-probe\\v2\\changed_same_null_key.request.json"
+          ],
+          "cwd": "D:\\opencorvus-benchmark-runs\\l04-migration-independent-review-20261029",
+          "started_utc": "2026-10-29T12:56:11.072251+00:00",
+          "seconds": 0.1452809004113078,
+          "exit_code": 0,
+          "stdout": "commands\\null-key-v2-changed_same_null_key.stdout.txt",
+          "stderr": "commands\\null-key-v2-changed_same_null_key.stderr.txt"
+        }
+      }
+    ],
+    "null_receipt_rows": [
+      {
+        "op_key": null,
+        "command_json": "{\"amount_minor\": 111, \"currency\": \"CNY\", \"customer_key\": \"C-ALPHA\", \"entry_id\": \"P_NULL_A\", \"epoch\": 4, \"fee_minor\": 0, \"op_key\": null}",
+        "result_json": "{\"entry_id\": \"P_NULL_A\", \"epoch\": 4, \"source_schema\": 2, \"status\": \"accepted\"}"
+      },
+      {
+        "op_key": null,
+        "command_json": "{\"amount_minor\": 111, \"currency\": \"CNY\", \"customer_key\": \"C-ALPHA\", \"entry_id\": \"P_NULL_B\", \"epoch\": 4, \"fee_minor\": 0, \"op_key\": null}",
+        "result_json": "{\"entry_id\": \"P_NULL_B\", \"epoch\": 4, \"source_schema\": 2, \"status\": \"accepted\"}"
+      }
+    ],
+    "finding_confirmed": true,
+    "scope": "extra mutable probe copy only; original full cold-run databases/results preserved"
+  }
+]

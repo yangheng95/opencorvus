@@ -1,0 +1,16 @@
+{
+  "objective_name": "expected_operating_cost_minor",
+  "method": "continuous_relaxation",
+  "status": 0,
+  "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+  "seconds": 0.04668134404346347,
+  "objective": 46220.2662087912,
+  "variables": 1488,
+  "constraints": 1096,
+  "iterations": 904,
+  "interpretation": "lower-bound qualification only; fractional solution is not a business plan",
+  "exact_certificate_seconds": 0.09100132575258613,
+  "certified_lower_bound_exact": "577753327609889925273/12500000000000000",
+  "certified_lower_bound": 46220.266208791196,
+  "primal_maximum_row_violation": 1.8189894035458565e-12
+}
