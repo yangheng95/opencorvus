@@ -120,7 +120,8 @@
 }
 
 .composer-attachment-dialog .msg-artifact-code {
-  max-height: min(calc(560px * var(--ui-scale)), 55vh);
+  height: min(calc(560px * var(--ui-scale)), 55vh);
+  min-height: 0;
 }
 
 .dialog-form.composer-attachment-dialog__frame {

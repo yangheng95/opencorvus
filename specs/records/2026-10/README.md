@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-29-attachment-workspace-journey.md](2026-10-29-attachment-workspace-journey.md)：跨项目文件附加、内容核对与草稿作用域实页调查。
+
 - [2026-10-29-quotation-composer-journey.md](2026-10-29-quotation-composer-journey.md)：真实引用移除的共享焦点缺失、修复与双输入实页复核。
 
 - [2026-10-29-source-file-recovery-journey.md](2026-10-29-source-file-recovery-journey.md)：失效引用重试、同目录项大小写改名与覆盖保护合同。

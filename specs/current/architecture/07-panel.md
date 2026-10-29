@@ -243,6 +243,9 @@ artifacts; other formats retain FilePart media or original-download presentation
 FilePart's PDF content loads the same PdfPreview on demand, including canonical
 attachments; they do not depend on a host PDF plugin. The composer's constrained
 body scrolls independently of its header and footer, keeping Close visible.
+Text review gives its editor a viewport-bounded reading height instead of
+shrinking to the inline artifact minimum; its internal scroller retains the
+complete document and keyboard navigation.
 Image chips keep their existing full-image preview and folders remain references.
 Review is read-only and retains the original draft and attachment list. The
 dialog retires with its selection/API authority or attachment row, and closes

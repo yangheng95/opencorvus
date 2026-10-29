@@ -1,0 +1,154 @@
+{
+  "at": "2026-10-29T05:18:06.210Z",
+  "reports": [
+    {
+      "tag": "original",
+      "tables": 92,
+      "oldCount": 112966,
+      "exact": 112966,
+      "total": 112966,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "fixed",
+      "tables": 92,
+      "oldCount": 112966,
+      "exact": 112966,
+      "total": 112966,
+      "schema": 9,
+      "integrity": "ok"
+    }
+  ],
+  "addedRows": 0,
+  "oldRows": "Every old row in both isolated and source databases remains exact.",
+  "inputs": [
+    {
+      "filename": "test_invoice.py",
+      "bytes": 1520,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "invoice.py",
+      "bytes": 953,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "README.md",
+      "bytes": 191,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "mcp.ts",
+      "bytes": 5539,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "chat.ts",
+      "bytes": 14692,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "mcp.ts",
+      "bytes": 5539,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "chat.ts",
+      "bytes": 14692,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "README.md",
+      "bytes": 176,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "invoice.py",
+      "bytes": 953,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "test_invoice.py",
+      "bytes": 1520,
+      "exactBytes": true,
+      "exactMetadata": true
+    }
+  ],
+  "namespaces": [
+    {
+      "stage": "original",
+      "files": 17,
+      "exactBytes": true
+    },
+    {
+      "stage": "-after",
+      "files": 19,
+      "exactBytes": true
+    }
+  ],
+  "uploads": [
+    {
+      "stage": "original",
+      "entries": [
+        {
+          "project": "A",
+          "filename": "README.md",
+          "bytes": 176,
+          "mime": "text/markdown",
+          "exactOriginalBytes": true
+        },
+        {
+          "project": "A",
+          "filename": "invoice.py",
+          "bytes": 953,
+          "mime": "text/x-python",
+          "exactOriginalBytes": true
+        },
+        {
+          "project": "B",
+          "filename": "test_invoice.py",
+          "bytes": 1520,
+          "mime": "text/x-python",
+          "exactOriginalBytes": true
+        }
+      ]
+    },
+    {
+      "stage": "-after",
+      "entries": [
+        {
+          "project": "A",
+          "filename": "README.md",
+          "bytes": 176,
+          "mime": "text/markdown",
+          "exactOriginalBytes": true
+        },
+        {
+          "project": "A",
+          "filename": "invoice.py",
+          "bytes": 953,
+          "mime": "text/x-python",
+          "exactOriginalBytes": true
+        },
+        {
+          "project": "B",
+          "filename": "test_invoice.py",
+          "bytes": 1520,
+          "mime": "text/x-python",
+          "exactOriginalBytes": true
+        }
+      ]
+    }
+  ],
+  "qualification": "Actual HTML file chooser uploads in two owned QA projects. Volatile attachment clearing on departure and scoped text drafts match the current contract. No messages were sent; pending uploads are not fabricated as durable message references."
+}

@@ -1,0 +1,32 @@
+{
+  "at": "2026-10-29T05:20:11.652Z",
+  "checks": [
+    {
+      "label": "attachment-workspace-786-build",
+      "startedAt": 1793250639019,
+      "closedAt": 1793250701149,
+      "code": 0,
+      "signal": null,
+      "childPID": 60132
+    },
+    {
+      "label": "attachment-workspace-786-docs",
+      "startedAt": 1793251150012,
+      "closedAt": 1793251161424,
+      "code": 0,
+      "signal": null,
+      "childPID": 97572
+    },
+    {
+      "label": "attachment-workspace-786-architecture",
+      "startedAt": 1793251150013,
+      "closedAt": 1793251152567,
+      "code": 0,
+      "signal": null,
+      "childPID": 81268
+    }
+  ],
+  "ui": "16 real unedited captures rendered and manually reviewed. Actual file choosers, text/code review, keyboard document-end navigation and Escape return, Chinese settings return, distinct project drafts and current volatile clearing contract. No UI automation or DOM/text/pixel assertions.",
+  "qualification": "Scoped CSS only. Ordinary build/renderer, docs and architecture are auxiliary. Current actual 1280x720 reading area grows from 193px to 369px; visible Close and original document retained.",
+  "limitations": "No new Provider requests, native folder picker, shorter viewport, in-flight upload switching or close-animation race matrix qualification. Capture14 is an intermediate B view, not a completed A navigation."
+}

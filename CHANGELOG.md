@@ -6,6 +6,8 @@
 
 ### zh-CN
 
+- 待发送文本与代码附件的核对窗口使用可用阅读高度，减少长文件滚动；保留完整原文、只读操作和始终可见的关闭入口。
+
 - 使用键盘移除主对话或侧聊中的引用卡片后，焦点回到当前输入框，保留草稿并可直接继续输入。
 - 修复 Windows 资源管理器仅修改文件、目录或 junction 名称大小写时误报“目标已存在”；保留不同目录项之间的覆盖保护。
 - 修复持续目标的完成依据恰好等于系统原因代码时被误译的问题；已完成目标始终显示原始证据文本。
@@ -21,6 +23,8 @@
 - 修复 Windows 检查器并发准备原生辅助程序时，编译产物与运行文件互相冲突导致的拒绝访问。
 
 ### en-US
+
+- Give pending text and code attachments a viewport-bounded reading area, retaining the complete read-only document and a visible Close action.
 
 - Return keyboard focus to the current main or side-chat composer after removing a quotation, preserving its draft for continued typing.
 - Fix case-only file, directory and junction renames in the Windows explorer while preserving destination conflict protection for distinct entries.

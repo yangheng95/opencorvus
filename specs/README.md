@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件附件与跨项目输入体验](records/2026-10/2026-10-29-attachment-workspace-journey.md)：真实文件选择、核对与暂存附件/独立草稿的归属调查。
+
 - [引用卡片与输入焦点](records/2026-10/2026-10-29-quotation-composer-journey.md)：主对话/侧聊引用移除、键盘续写与独立草稿保留。
 
 - [来源失效恢复与大小写改名](records/2026-10/2026-10-29-source-file-recovery-journey.md)：真实文件恢复体验及Windows同目录项改名冲突修复。
