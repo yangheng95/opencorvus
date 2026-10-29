@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-29-text-attachment-history.md](2026-10-29-text-attachment-history.md)：真实文本附件发送、历史阅读入口与原件身份验证。
+
 - [2026-10-29-heavy-workbench-cross-system.md](2026-10-29-heavy-workbench-cross-system.md)：同一H05旧题两方真实业务交付、清洁复跑、升级触发及小时级要求。
 
 - [2026-10-29-heavy-workbench-long.md](2026-10-29-heavy-workbench-long.md)：真实论文与数值环境资格、实验范围和尚未验证的小时级目标。

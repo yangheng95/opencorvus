@@ -10,6 +10,7 @@ import { t } from "../utils/i18n"
 import { PreviewableImage } from "./ImagePreview"
 import { attachmentImagePreviewUrl } from "../utils/attachment-resource"
 import { Disclosure } from "./ui/Disclosure"
+import { ResourceTextPreview } from "./ResourceTextPreview"
 
 const LazyPdfPreview = lazy(async () => ({ default: (await import("./PdfPreview")).PdfPreview }))
 
@@ -38,6 +39,7 @@ function PdfContent(props: { url: string; name: string }) {
 //   video/*             → <video controls>
 //   audio/*             → <audio controls>
 //   application/pdf     → shared PDF.js preview
+//   text/*, JSON        → on-demand text review in user-message history
 //   anything else       → filename chip with a download affordance
 //
 // Failures are surfaced, not papered over: a fetch error prints to console
@@ -107,6 +109,9 @@ export function FilePart(props: { part: MessageFilePart; presentation?: FilePart
 
   return (
     <Switch fallback={<FallbackDownload url={url()} name={name()} mime={mimeOf(props.part)} authed={authed()} />}>
+      <Match when={props.presentation === "thumbnail" && url() && (mimeOf(props.part).startsWith("text/") || mimeOf(props.part) === "application/json")}>
+        <TextAttachment url={url()} name={name()} mime={mimeOf(props.part)} authed={authed()} />
+      </Match>
       <Match when={kind() === "image" && url() && authed()}>
         <AuthedImage url={url()} alt={alt()} presentation={props.presentation ?? "content"} />
       </Match>
@@ -144,6 +149,30 @@ export function FilePart(props: { part: MessageFilePart; presentation?: FilePart
         <PdfAttachment url={url()} name={name()} authed={authed()} compact={props.presentation === "thumbnail"} />
       </Match>
     </Switch>
+  )
+}
+
+function TextAttachment(props: { url: string; name: string; mime: string; authed: boolean }) {
+  const [expanded, setExpanded] = createSignal(false)
+  return (
+    <Disclosure.Root class="msg-text-attachment" variant="surface" open={expanded()} onOpenChange={setExpanded}>
+      <Disclosure.Trigger
+        indicatorPosition="end"
+        title={props.name}
+        aria-label={t("chat.attachment.preview", { name: props.name })}
+      >
+        <span class="msg-text-attachment__type">{compactFileType(props.name, props.mime)}</span>
+        <span class="msg-text-attachment__name">{props.name}</span>
+      </Disclosure.Trigger>
+      <Disclosure.Content>
+        <Show when={expanded()}>
+          <ResourceTextPreview url={props.url} filename={props.name} label={props.name} />
+          <div class="msg-text-attachment__actions">
+            <OriginalFileDownload url={props.url} name={props.name} authed={props.authed} />
+          </div>
+        </Show>
+      </Disclosure.Content>
+    </Disclosure.Root>
   )
 }
 
@@ -288,6 +317,20 @@ function AuthedPdf(props: { url: string; name: string }) {
 // ── Fallback + helpers ──
 
 function FallbackDownload(props: { url: string; name: string; mime: string; authed: boolean }) {
+  return (
+    <div class="msg-file-chip">
+      <span class="msg-file-chip__name">{props.name}</span>
+      <Show when={props.mime}>
+        <span class="msg-file-chip__mime" title={props.mime}>
+          {compactFileType(props.name, props.mime)}
+        </span>
+      </Show>
+      <OriginalFileDownload url={props.url} name={props.name} authed={props.authed} />
+    </div>
+  )
+}
+
+function OriginalFileDownload(props: { url: string; name: string; authed: boolean }) {
   // For server-relative URLs we can't put them on <a href> directly (auth
   // header won't propagate on the resulting navigation). Fetch through the
   // authed proxy so the download link points at a blob URL the browser can
@@ -303,19 +346,7 @@ function FallbackDownload(props: { url: string; name: string; mime: string; auth
     return props.url
   }
 
-  return (
-    <div class="msg-file-chip">
-      <span class="msg-file-chip__name">{props.name}</span>
-      <Show when={props.mime}>
-        <span class="msg-file-chip__mime" title={props.mime}>
-          {compactFileType(props.name, props.mime)}
-        </span>
-      </Show>
-      <Show when={href()}>
-        <DownloadLink href={href()} name={props.name} />
-      </Show>
-    </div>
-  )
+  return <Show when={href()}><DownloadLink href={href()} name={props.name} /></Show>
 }
 
 function DownloadLink(props: { href: string; name: string }) {

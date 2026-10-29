@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [已发送文本附件的原文回看](records/2026-10/2026-10-29-text-attachment-history.md)：真实附件发送、历史下载与只读回看能力调查。
+
 - [H05横向对照与难度升级](records/2026-10/2026-10-29-heavy-workbench-cross-system.md)：两方旧标准100开发点、独立清洁复跑及天花板证据。
 
 - [数小时长程任务资格](records/2026-10/2026-10-29-heavy-workbench-long.md)：论文复现范围、真实GPU测时与独立评分防投机审查，尚未长跑验证。

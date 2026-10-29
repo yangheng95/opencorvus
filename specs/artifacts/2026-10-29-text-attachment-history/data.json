@@ -1,0 +1,400 @@
+{
+  "at": "2026-10-29T06:15:24.822Z",
+  "reports": [
+    {
+      "tag": "original",
+      "tables": 92,
+      "oldCount": 112966,
+      "exact": 112962,
+      "total": 114653,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "candidate",
+      "tables": 92,
+      "oldCount": 114653,
+      "exact": 114653,
+      "total": 114653,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "final-readback",
+      "tables": 92,
+      "oldCount": 114653,
+      "exact": 114653,
+      "total": 114653,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "authenticated-readback",
+      "tables": 92,
+      "oldCount": 114653,
+      "exact": 114653,
+      "total": 114655,
+      "schema": 9,
+      "integrity": "ok"
+    }
+  ],
+  "mutable": [
+    {
+      "table": "memory_chunk",
+      "id": "mck_h494mq4eEhZcCQ6lF2Yr",
+      "fromRevision": 1,
+      "toRevision": 2,
+      "qualification": "Normal project-memory reflection incorporates the actual attachment-only user request and retains the earlier covered occurrence."
+    },
+    {
+      "table": "memory_file",
+      "id": "mem_hToIKQudXZDIB5Pz1aau",
+      "qualification": "The existing project-memory identity advances its update time for the actual new user request."
+    },
+    {
+      "table": "runtime_execution_capacity_lease",
+      "slot": 0,
+      "qualification": "The same expired capacity slot is normally reused by the owned real-model process, then released."
+    },
+    {
+      "table": "runtime_execution_capacity_lease",
+      "slot": 1,
+      "qualification": "The same expired capacity slot is normally reused by the owned real-model process, then released."
+    }
+  ],
+  "addedByTable": {
+    "bus_publication_delivery": 330,
+    "bus_publication_delivery_receipt": 330,
+    "bus_publication_outbox": 48,
+    "bus_publication_owner": 48,
+    "bus_publication_phase_receipt": 144,
+    "engine_control_activation_lease": 334,
+    "engine_control_activation_lease_grant": 334,
+    "event_occurrence": 48,
+    "global_creation_allocation": 1,
+    "memory_chunk": 1,
+    "memory_file": 1,
+    "message": 6,
+    "part": 16,
+    "permission_execution_result": 2,
+    "permission_ledger": 10,
+    "permission_policy": 1,
+    "project": 1,
+    "protocol_event": 12,
+    "provider_activity_outcome": 4,
+    "provider_activity_request": 4,
+    "provider_usage_event": 6,
+    "session": 2,
+    "session_control_event": 1,
+    "session_control_record": 1,
+    "tool_part_outcome": 2,
+    "tool_part_request": 2
+  },
+  "inputs": [
+    {
+      "filename": "test_invoice.py",
+      "bytes": 1520,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "invoice.py",
+      "bytes": 953,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "README.md",
+      "bytes": 191,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "mcp.ts",
+      "bytes": 5539,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "chat.ts",
+      "bytes": 14692,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "mcp.ts",
+      "bytes": 5539,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "chat.ts",
+      "bytes": 14692,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "README.md",
+      "bytes": 176,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "invoice.py",
+      "bytes": 953,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "test_invoice.py",
+      "bytes": 1520,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "readback-original.txt.gz",
+      "bytes": 84,
+      "exactBytes": true,
+      "exactMetadata": true
+    }
+  ],
+  "namespaces": [
+    {
+      "stage": "original",
+      "priorNamespaceFiles": 19,
+      "exactPriorFiles": 19,
+      "realTextNamespaceFiles": 6,
+      "realTextBytesExact": true,
+      "collected": []
+    },
+    {
+      "stage": "candidate",
+      "priorNamespaceFiles": 19,
+      "exactPriorFiles": 19,
+      "realTextNamespaceFiles": 6,
+      "realTextBytesExact": true,
+      "collected": []
+    },
+    {
+      "stage": "final-readback",
+      "priorNamespaceFiles": 19,
+      "exactPriorFiles": 17,
+      "realTextNamespaceFiles": 6,
+      "realTextBytesExact": true,
+      "collected": [
+        {
+          "path": "535ad1bbe1b5aa22e2efeed87bc6f2e0d1f5537b7506c200dd98c7911d4ecaf9.py",
+          "filename": "test_invoice.py",
+          "qualification": "Copied previous batch pending attachment, normally collected at real project initialization."
+        },
+        {
+          "path": "535ad1bbe1b5aa22e2efeed87bc6f2e0d1f5537b7506c200dd98c7911d4ecaf9.py.metadata.json",
+          "filename": "test_invoice.py",
+          "qualification": "Copied previous batch pending attachment, normally collected at real project initialization."
+        }
+      ]
+    },
+    {
+      "stage": "authenticated-readback",
+      "priorNamespaceFiles": 17,
+      "exactPriorFiles": 17,
+      "realTextNamespaceFiles": 6,
+      "realTextBytesExact": true,
+      "collected": []
+    }
+  ],
+  "pendingSweep": {
+    "level": "info",
+    "time": "2026-10-29T05:50:18.342Z",
+    "service": "attachment-store",
+    "logDomain": "non-session",
+    "data": {
+      "projectID": "prj_hFmj1f6BXMBemXaPwm5n",
+      "deleted": 1,
+      "bytesFreed": 1520,
+      "skippedYoung": 0,
+      "kept": 7,
+      "retries": [],
+      "failures": []
+    },
+    "message": "AttachmentStore.sweep"
+  },
+  "downloads": [
+    {
+      "stage": "candidate",
+      "filename": "README.md",
+      "bytes": 176,
+      "exactOriginalBytes": true
+    },
+    {
+      "stage": "final",
+      "filename": "README.md",
+      "bytes": 176,
+      "exactOriginalBytes": true
+    },
+    {
+      "stage": "final",
+      "filename": "invoice.py",
+      "bytes": 953,
+      "exactOriginalBytes": true
+    },
+    {
+      "stage": "authenticated-readback",
+      "filename": "readback-original.txt.gz",
+      "bytes": 84,
+      "exactOriginalBytes": true
+    }
+  ],
+  "persistedFiles": [
+    {
+      "sessionID": "ses_-zUQePN8bzzO0tkLjwWg",
+      "filename": "opencorvus-logo-dark.svg",
+      "mime": "image/svg+xml",
+      "bytes": 6426,
+      "storedOriginalVerified": true
+    },
+    {
+      "sessionID": "ses_-zUQePN8bzzO0tkLjwWg",
+      "filename": "opencorvus-case-brief-en-zh.pdf",
+      "mime": "application/pdf",
+      "bytes": 111015,
+      "storedOriginalVerified": true
+    },
+    {
+      "sessionID": "ses_-zUQePN8bzzO0tkLjwWg",
+      "filename": "12-after-chinese-home-hint.jpg",
+      "mime": "image/jpeg",
+      "bytes": 47688,
+      "storedOriginalVerified": true
+    },
+    {
+      "sessionID": "ses_-zUQaHDCDzzrQyVxXODH",
+      "filename": "README.md",
+      "mime": "text/markdown",
+      "bytes": 176,
+      "storedOriginalVerified": true
+    },
+    {
+      "sessionID": "ses_-zUQaHDCDzzrQyVxXODH",
+      "filename": "invoice.py",
+      "mime": "text/x-python",
+      "bytes": 953,
+      "storedOriginalVerified": true
+    }
+  ],
+  "session": {
+    "sessionID": "ses_-zUQaHDCDzzrQyVxXODH",
+    "projectID": "prj_hI8KlTauJPN4k6J7iYKT",
+    "experience": "chat"
+  },
+  "files": [
+    {
+      "partID": "prt_g0VZPinOb01Ud0oMRk7O",
+      "filename": "README.md",
+      "mime": "text/markdown",
+      "url": "/attachment/prj_hI8KlTauJPN4k6J7iYKT/41e40dd1beacf06b584447853101912e32a92b903c147bbc91a626abfd72ef35.md",
+      "bytes": 176,
+      "exactOriginalBytes": true
+    },
+    {
+      "partID": "prt_g0VZPinOb02c0eduRmdl",
+      "filename": "invoice.py",
+      "mime": "text/x-python",
+      "url": "/attachment/prj_hI8KlTauJPN4k6J7iYKT/917b33c695b93c9379551c83ecabfbef302a2a8ea871f75f5d9062f347b9f451.py",
+      "bytes": 953,
+      "exactOriginalBytes": true
+    }
+  ],
+  "sources": [
+    {
+      "partID": "prt_g0VZPiorU00syi8A7JLL",
+      "title": "README.md",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project\\.opencorvus\\.r\\project\\attachments\\b910741db642c4d95f4bc19ab01dc934e61526b3f890c5d60ac76dd46fa8c41e\\41e40dd1beacf06b584447853101912e32a92b903c147bbc91a626abfd72ef35.md",
+      "origin": "attachment",
+      "toolPartID": "prt_g0VZPioZY004koB7ABaJ",
+      "exactOriginalBytes": true,
+      "qualification": "Source preserves the real read tool original physical attachment locator; FilePart downloads use the copied database canonical namespace."
+    },
+    {
+      "partID": "prt_g0VZPiqWo005PqQ7gxpn",
+      "title": "invoice.py",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project\\.opencorvus\\.r\\project\\attachments\\b910741db642c4d95f4bc19ab01dc934e61526b3f890c5d60ac76dd46fa8c41e\\917b33c695b93c9379551c83ecabfbef302a2a8ea871f75f5d9062f347b9f451.py",
+      "origin": "attachment",
+      "toolPartID": "prt_g0VZPiqHP00frnF2VaXz",
+      "exactOriginalBytes": true,
+      "qualification": "Source preserves the real read tool original physical attachment locator; FilePart downloads use the copied database canonical namespace."
+    }
+  ],
+  "reads": [
+    {
+      "partID": "prt_g0VZPioZY004koB7ABaJ",
+      "tool": "read",
+      "status": "completed",
+      "filePath": "/attachment/prj_hI8KlTauJPN4k6J7iYKT/41e40dd1beacf06b584447853101912e32a92b903c147bbc91a626abfd72ef35.md",
+      "lines": 3,
+      "totalLines": 3
+    },
+    {
+      "partID": "prt_g0VZPiqHP00frnF2VaXz",
+      "tool": "read",
+      "status": "completed",
+      "filePath": "/attachment/prj_hI8KlTauJPN4k6J7iYKT/917b33c695b93c9379551c83ecabfbef302a2a8ea871f75f5d9062f347b9f451.py",
+      "lines": 23,
+      "totalLines": 23
+    }
+  ],
+  "pendingBinary": {
+    "filename": "readback-original.txt.gz",
+    "mime": "application/x-gzip",
+    "bytes": 84,
+    "exactOriginalBytes": true,
+    "qualification": "Only uploaded, reviewed, downloaded and removed from the volatile draft; no model request or fabricated durable message reference."
+  },
+  "qualification": "Only the original real-model scope mutates four normal memory/capacity records. Every other old row, all three readback copies and all source databases remain exact. Actual project initialization collects one old uncommitted 1520-byte file plus its metadata under the existing lifecycle contract; all five persisted FilePart originals remain available.",
+  "addedByStage": {
+    "original": {
+      "bus_publication_delivery": 330,
+      "bus_publication_delivery_receipt": 330,
+      "bus_publication_outbox": 48,
+      "bus_publication_owner": 48,
+      "bus_publication_phase_receipt": 144,
+      "engine_control_activation_lease": 333,
+      "engine_control_activation_lease_grant": 333,
+      "event_occurrence": 48,
+      "global_creation_allocation": 1,
+      "memory_chunk": 1,
+      "memory_file": 1,
+      "message": 6,
+      "part": 16,
+      "permission_execution_result": 2,
+      "permission_ledger": 10,
+      "permission_policy": 1,
+      "project": 1,
+      "protocol_event": 12,
+      "provider_activity_outcome": 4,
+      "provider_activity_request": 4,
+      "provider_usage_event": 6,
+      "session": 2,
+      "session_control_event": 1,
+      "session_control_record": 1,
+      "tool_part_outcome": 2,
+      "tool_part_request": 2
+    },
+    "authenticated-readback": {
+      "engine_control_activation_lease": 1,
+      "engine_control_activation_lease_grant": 1
+    }
+  },
+  "readbackActivation": {
+    "leaseID": "act_g0VZPoN2K00VODHezsU9",
+    "target": "runtime_process",
+    "owner": {
+      "pid": 95780,
+      "processInstanceID": "win32:639288501478656640",
+      "occurrenceID": "8bb49392-bf7a-4d31-b4e1-fb8cf52391f9"
+    },
+    "grantOrdinal": 1,
+    "physicalOwnerRetired": true,
+    "qualification": "The authenticated readback creates one real runtime-process activation and its grant. They retain the exact physically retired owner identity; there is no new model request or synthetic Task/Mission/Session execution."
+  }
+}

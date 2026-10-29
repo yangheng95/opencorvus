@@ -955,23 +955,27 @@
   max-width: 100%;
 }
 
-.msg-pdf-attachment.oc-disclosure {
+.msg-pdf-attachment.oc-disclosure,
+.msg-text-attachment.oc-disclosure {
   margin-block: var(--ui-gap-xs);
   border: var(--oc-border-width) solid var(--border);
   background: var(--surface-inset);
 }
 
-.msg-pdf-attachment > .oc-disclosure__trigger {
+.msg-pdf-attachment > .oc-disclosure__trigger,
+.msg-text-attachment > .oc-disclosure__trigger {
   padding: var(--ui-gap-sm) var(--ui-gap-md);
 }
 
-.msg-pdf-attachment__type {
+.msg-pdf-attachment__type,
+.msg-text-attachment__type {
   flex: 0 0 auto;
   color: var(--text-muted);
   font-size: var(--ui-font-caption);
 }
 
-.msg-pdf-attachment__name {
+.msg-pdf-attachment__name,
+.msg-text-attachment__name {
   min-width: 0;
   overflow: hidden;
   color: var(--text-strong);
@@ -982,6 +986,30 @@
 .msg-pdf-attachment .msg-artifact-pdf {
   max-height: min(50vh, calc(620px * var(--ui-scale)));
   overscroll-behavior: contain;
+}
+
+.msg-text-attachment .msg-artifact-code {
+  flex: initial;
+  min-height: 0;
+  max-height: none;
+}
+
+.msg-text-attachment .file-editor-view {
+  flex: initial;
+}
+
+.msg-text-attachment .cm-editor {
+  height: auto;
+}
+
+.msg-text-attachment .cm-scroller {
+  max-height: min(50vh, calc(560px * var(--ui-scale)));
+  overscroll-behavior: contain;
+}
+
+.msg-text-attachment__actions {
+  display: flex;
+  padding: var(--ui-gap-sm) var(--ui-gap-md);
 }
 
 .msg-file-chip__name {

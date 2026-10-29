@@ -233,6 +233,13 @@ filename in a compact native disclosure by default. Expanding it loads the same
 PDF reader and original download; its reading viewport scrolls within a bound.
 Collapsing releases that document, and reopening starts its normal document
 lifecycle. Other file-content consumers retain their full-content presentation.
+User-message text MIME and JSON attachments also keep a compact, initially
+collapsed filename disclosure. Expanding loads the shared ResourceTextPreview
+with its complete read-only document and original download. Collapsing releases
+the reader; reopening uses the same canonical resource and authorized cache.
+Short documents use their natural reading height; the editor's internal
+scroller bounds longer documents to the viewport. Other
+file presentations and unknown binary formats retain their current behavior.
 The shared PDF reader expresses page and zoom limits with guarded aria-disabled
 buttons and removes unavailable actions from the Tab sequence. Reaching a limit
 keeps the current button focused, allowing native Tab navigation to continue.

@@ -1,0 +1,48 @@
+{
+  "at": "2026-10-29T06:23:25.960Z",
+  "checks": [
+    {
+      "label": "text-attachment-history-787-build",
+      "startedAt": 1793252301492,
+      "closedAt": 1793252370223,
+      "code": 0,
+      "signal": null,
+      "childPID": 98416
+    },
+    {
+      "label": "text-attachment-history-787-types",
+      "startedAt": 1793252301518,
+      "closedAt": 1793252327780,
+      "code": 0,
+      "signal": null,
+      "childPID": 97000
+    },
+    {
+      "label": "text-attachment-history-787-final-build",
+      "startedAt": 1793252693858,
+      "closedAt": 1793252771361,
+      "code": 0,
+      "signal": null,
+      "childPID": 38580
+    },
+    {
+      "label": "text-attachment-history-787-docs",
+      "startedAt": 1793254769814,
+      "closedAt": 1793254780734,
+      "code": 0,
+      "signal": null,
+      "childPID": 96764
+    },
+    {
+      "label": "text-attachment-history-787-architecture",
+      "startedAt": 1793254769946,
+      "closedAt": 1793254772567,
+      "code": 0,
+      "signal": null,
+      "childPID": 97268
+    }
+  ],
+  "ui": "23 real unedited captures rendered and manually reviewed. Actual chooser and natural two-file send, visible read tools and completed answer, default folded historical text, keyboard fold/reopen, document end, original downloads, Sources read-only original, PDF and JPEG, project return and both languages. Authenticated final readback uses the same ordinary final build and zero new model requests.",
+  "qualification": "UI-only production change reuses existing ResourceTextPreview, CodeEditor, Disclosure and resource cache. Build/renderer/type/docs/architecture are auxiliary; actual page interactions and inspected pixels are visual acceptance. Candidate fixed-height blank space was corrected and revalidated.",
+  "limitations": "No independently sent JSON or Office message, native folder picker, shorter viewport or in-flight connection matrix. Initial broad role selector did not match native summary; the real AX/observed SUMMARY control works. Captures05/18 are intermediate views, not completion proof. Data collector fixed its own unbound Session parameter, current request/outcome storage and physical Source locator assumptions before the full audit passed."
+}

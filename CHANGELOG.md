@@ -6,6 +6,8 @@
 
 ### zh-CN
 
+- 已发送的文本、代码和 JSON 附件支持在消息中折叠查看完整原文，按需加载共享只读阅读器并保留原件下载。
+
 - 待发送文本与代码附件的核对窗口使用可用阅读高度，减少长文件滚动；保留完整原文、只读操作和始终可见的关闭入口。
 
 - 使用键盘移除主对话或侧聊中的引用卡片后，焦点回到当前输入框，保留草稿并可直接继续输入。
@@ -23,6 +25,8 @@
 - 修复 Windows 检查器并发准备原生辅助程序时，编译产物与运行文件互相冲突导致的拒绝访问。
 
 ### en-US
+
+- Review sent text, code and JSON attachments in a compact message disclosure, loading the shared read-only viewer on demand with original downloads.
 
 - Give pending text and code attachments a viewport-bounded reading area, retaining the complete read-only document and a visible Close action.
 
