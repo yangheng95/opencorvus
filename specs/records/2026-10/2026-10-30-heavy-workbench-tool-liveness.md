@@ -65,3 +65,10 @@
 22:06:09Z原Task仍running/active，base-developer已交接给自然产生的base-tester，实际原生工具正在等待其既定独立冷求解终态。原l06-refined-main已自动清理；l06-final-main在21:16:58Z自然exit0，不能因消失重启，也不能把已输出报告当整个Task终态。旧listener仍加载2e6ffc7ce旧代码，当前修复没有热生效，不操作/重启有效工作。原20分钟失败与自动恢复必须保留为runtime interference，后续业务成绩/活动测时和是否需修复版fresh试跑另行判定。
 
 L06自然终态后才封存完成版本，进入同冻结合同评估侧实际source-only执行/图形复核/单层独立评分，再顺序启动已预注册的fresh Codex；不把观察器超时当业务0，不重建第二个同dataset Task。10题、新成对成绩、有效数小时与成熟性证据均未完成，心跳保持ACTIVE。
+
+
+## 推送检查发现的生成元数据同步
+
+首次正常push的hook在api:routes-check明确拒绝：Config工具暂停说明已按新语义修改，但packages/sdk/openapi.json仍为旧说明。不是路由/运行行为失败；全仓搜索同文案还定位SDK types.gen.ts注释。修改前SDK树无本地用户差异，已先保存全部tracked源；用现有SDK规范生成器从唯一源重建OpenAPI/注释/声明，不手改生成物、不绕hook，也不扩大为应用版本或发布。运行时16源不变，原53项资格继续有效；生成与hook复验结果追加原件。
+
+现有SDK规范生成器实际30.87秒exit0；真实diff恰OpenAPI说明与SDK类型注释各一行，没有路由/字段或其他生成文件变化。生成前全部SDK tracked对象、stdout/stderr/命令与生成后两文件封存primary/publish-metadata-originals.zip。主方最终包装docs:check再通过351 ops/26 groups（chunkdd786e），保留首push失败chunk4cf914，不绕hook；正常重新fetch/merge/检查待推集合后再次push。

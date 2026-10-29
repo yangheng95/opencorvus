@@ -7,3 +7,5 @@
 首次MCP测试错误地期望SDK不包装abort，并在direct-scoped初次调用前漏观察工具inventory；原失败通过会话chunk33c962保留，源与原因另存test-setup-findings。首次真实Loop测试误等待resident Session整体终结而非回复后关闭自有Session，另有生成脚本换行错误，原47秒失败收据保留；修后明确关闭自己创建的Session后真实完整路径通过。它们不是新产品缺陷，不能删失败或冒充首次全过。
 
 格式化前后current/base/formatted-base和三方无冲突收敛也保留，删除的仅本任务无关格式差异，未覆盖用户改动。包装/源码身份不替代真实行为验收。当前旧L06 listener加载旧代码，未经重启；候选成绩/小时与本修复资格分开。
+
+[生成元数据原件](publish-metadata-originals.zip)保留首次正常push被API生成物同步检查拒绝的具名事实、规范SDK生成器exit0/原输出和生成前后对象。旧OpenAPI及SDK注释各一行由规范源重建，源行为未再修改；未绕hook。此包装追加不倒改原53项执行。

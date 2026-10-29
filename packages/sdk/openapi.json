@@ -1539,7 +1539,7 @@
                     "type": "integer"
                   },
                   "session_tool_idle_ms": {
-                    "description": "Max idle window without a committed Tool progress fact, ms",
+                    "description": "Max Tool handoff idle without committed progress or a trusted executor deadline, ms",
                     "maximum": 9007199254740991,
                     "minimum": 1000,
                     "type": "integer"

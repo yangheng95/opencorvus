@@ -440,7 +440,7 @@ export type Config = {
        */
       session_llm_idle_ms?: number
       /**
-       * Max idle window without a committed Tool progress fact, ms
+       * Max Tool handoff idle without committed progress or a trusted executor deadline, ms
        */
       session_tool_idle_ms?: number
     }
