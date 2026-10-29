@@ -1,0 +1,9 @@
+{
+  "current": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L05\\public\\l05_effects.py",
+  "executed_snapshot": "D:\\opencorvus-benchmark-runs\\l05-inflight-independent-review-20261030\\configuration-final\\source\\public\\l05_effects.py",
+  "bytes": 12464,
+  "direct_byte_equal_at_finish": true,
+  "previous_repair_snapshot": "D:\\opencorvus-benchmark-runs\\l05-inflight-independent-review-20261030\\source-repaired-final\\public\\l05_effects.py",
+  "previous_tests_did_not_execute_final_bytes": true,
+  "relation": "exact AST after inlining named20/60 constants and removing their declarations; one fresh actual default/POST/stop test on final bytes"
+}

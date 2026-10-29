@@ -1,0 +1,18 @@
+{
+  "original_blocker": "B01 retained in REVIEW.md/stage-assessment.json and eof-held-probe",
+  "functional_checks_passed": true,
+  "public_protocol_read_and_bound": true,
+  "idle_shutdown_seconds": 1.0234108003787696,
+  "all_owned_processes_naturally_terminal": true,
+  "direct_current_source_files": 6,
+  "scope": "one actual controlled inflight interleaving plus necessary EOF/read/unknownACK repair boundaries; old failures retained",
+  "full_rubric_approved": false,
+  "hour_claim": false,
+  "original_EOF_repair_seconds": 2.154350300319493,
+  "parent_final_compatibility_recheck": "not yet observed; not claimed",
+  "unchanged_business_primitives": 12,
+  "stage": "controlled_inflight_and_finite_graceful_shutdown_locally_qualified_after_B01_repair",
+  "full_L05_frozen": false,
+  "candidate_score": null,
+  "blocking": []
+}

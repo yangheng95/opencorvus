@@ -2,11 +2,14 @@
 import argparse
 from contextlib import contextmanager
 import json
+import math
 import os
 import re
 import socket
 import sqlite3
+import sys
 import threading
+import time
 import urllib.parse
 import uuid
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -14,6 +17,8 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 FIELDS = {"tenant", "event_id", "kind", "amount_minor", "reverses"}
 IDENTITY = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{0,63}\Z")
+DEFAULT_READ_TIMEOUT_SECONDS = 20
+MAX_READ_TIMEOUT_SECONDS = 60
 
 
 class Invalid(ValueError):
@@ -152,10 +157,45 @@ def query(db, tenant, event_id):
         return (200, {"status": status, "receipt": receipt(row)}) if row else (404, {"status": status})
 
 
-def serve(db, drop=None):
+def serve(db, drop=None, hold=None, read_timeout=DEFAULT_READ_TIMEOUT_SECONDS):
+    if type(read_timeout) not in (int, float) or not math.isfinite(read_timeout) or not 0 < read_timeout <= MAX_READ_TIMEOUT_SECONDS:
+        raise Invalid("read_timeout_seconds")
+    held_identity = None
+    if hold:
+        pieces = hold.split("/")
+        if len(pieces) != 2 or not all(identity(p) for p in pieces):
+            raise Invalid("hold_once")
+        held_identity = tuple(pieces)
     initialize(db, drop)
+    held_release = threading.Event()
+    held_lock = threading.Lock()
+    held_claimed = False
 
     class Handler(BaseHTTPRequestHandler):
+        timeout = read_timeout
+
+        def setup(self):
+            super().setup()
+            self.read_expired = threading.Event()
+            def expire_read():
+                self.read_expired.set()
+                try:
+                    self.connection.shutdown(socket.SHUT_RD)
+                except OSError:
+                    pass
+            self.read_timer = threading.Timer(read_timeout, expire_read)
+            self.read_timer.daemon = True
+            self.read_timer.start()
+
+        def finish_read(self):
+            self.read_timer.cancel()
+            self.read_timer.join()
+            return self.read_expired.is_set()
+
+        def finish(self):
+            self.finish_read()
+            super().finish()
+
         def log_message(self, *args):
             pass
 
@@ -168,6 +208,7 @@ def serve(db, drop=None):
             self.wfile.write(body)
 
         def do_POST(self):
+            nonlocal held_claimed
             if self.path != "/effects":
                 self.respond(404, {"status": "route_unknown"})
                 return
@@ -175,11 +216,31 @@ def serve(db, drop=None):
                 length = int(self.headers.get("Content-Length", "-1"))
                 if not 0 <= length <= 65536:
                     raise Invalid("body_length")
-                data = decode(self.rfile.read(length))
+                raw = self.rfile.read(length)
+                if self.finish_read():
+                    self.respond(408, {"status": "request_timeout"})
+                    return
+                if len(raw) != length:
+                    raise Invalid("body_length")
+                data = decode(raw)
+            except TimeoutError:
+                self.finish_read()
+                self.respond(408, {"status": "request_timeout"})
+                return
             except (Invalid, ValueError) as error:
                 self.respond(422, {"status": "invalid_request", "field": str(error)})
                 return
+            claimed = False
+            with held_lock:
+                if held_identity == (data["tenant"], data["event_id"]) and not held_claimed:
+                    held_claimed = claimed = True
+            if claimed:
+                print(json.dumps({"status": "held_before_apply", "pid": os.getpid(), "identity": list(held_identity), "time_ns": time.time_ns()}), flush=True)
+                held_release.wait()
             code, body, dropped = apply(db, data)
+            if claimed:
+                print(json.dumps({"status": "held_request_settled", "pid": os.getpid(), "identity": list(held_identity),
+                                  "http_code": code, "response": body, "dropped": dropped, "time_ns": time.time_ns()}), flush=True)
             if dropped:
                 self.close_connection = True
                 self.connection.shutdown(socket.SHUT_RDWR)
@@ -188,6 +249,9 @@ def serve(db, drop=None):
             self.respond(code, body)
 
         def do_GET(self):
+            if self.finish_read():
+                self.respond(408, {"status": "request_timeout"})
+                return
             parsed = urllib.parse.urlsplit(self.path)
             if parsed.path != "/effects":
                 self.respond(404, {"status": "route_unknown"})
@@ -199,12 +263,23 @@ def serve(db, drop=None):
             self.respond(*query(db, fields["tenant"][0], fields["event_id"][0]))
 
     server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+    server.daemon_threads = False
+    server.block_on_close = True
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
-    print(json.dumps({"status": "ready", "pid": os.getpid(), "url": f"http://127.0.0.1:{server.server_port}"}), flush=True)
+    print(json.dumps({"status": "ready", "pid": os.getpid(), "url": f"http://127.0.0.1:{server.server_port}", "read_timeout_seconds": read_timeout}), flush=True)
     try:
-        input()
+        for line in sys.stdin:
+            command = line.strip()
+            if command == "stop":
+                break
+            if command == "release" and held_identity is not None and held_claimed and not held_release.is_set():
+                print(json.dumps({"status": "hold_released", "pid": os.getpid(), "identity": list(held_identity), "time_ns": time.time_ns()}), flush=True)
+                held_release.set()
+            else:
+                print(json.dumps({"status": "invalid_control", "allowed": ["release", "stop"]}), flush=True)
     finally:
+        held_release.set()
         server.shutdown()
         server.server_close()
         thread.join()
@@ -214,5 +289,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--db", required=True)
     parser.add_argument("--drop-once")
+    parser.add_argument("--hold-once")
+    parser.add_argument("--read-timeout-seconds", type=float, default=DEFAULT_READ_TIMEOUT_SECONDS)
     args = parser.parse_args()
-    serve(args.db, args.drop_once)
+    serve(args.db, args.drop_once, args.hold_once, args.read_timeout_seconds)

@@ -12,6 +12,10 @@ requests持久记录范围为通过静态schema的POST业务响应及合法GET�
 
 服务CLI `python l05_effects.py --db NEW_OR_EXISTING_DB [--drop-once TENANT/EVENT]`，stdout第一行ready包含自有PID与URL；stdin收到stop后正常关闭。drop-once由评估侧启动时注册，一次消费与首次effect共同提交，然后关闭socket不给HTTP响应；同DB重启不重复注入。未知ACK场景必须由真实首次POST建立，不预灌effect再伪称丢首次ACK。
 
+评估侧还可显式设置`--hold-once TENANT/EVENT`，只在本服务进程第一次匹配的合法POST完成静态解析后、进入apply事务前握手。服务stdout发真实`held_before_apply`/PID/联合身份；此时GET与另一个同键POST继续处理。只有已领取停点后stdin `release`才发`hold_released`并释放原请求，随后`held_request_settled`记录其真实HTTP结果。没有已领取停点的release或其他控制返回invalid_control；stdin stop或EOF先释放所有等待再正常join。候选只得到HTTP URL，不得到operator stdin；这是可重放物理故障注入，不是模型流程控制。hold是单进程一次，不和持久drop-once混称同DB重启不再注入。
+
+每个连接有从handler setup起算、不可按新字节续期的固定header/body读取截止，默认20秒；同一CLI可用`--read-timeout-seconds`指定正有限且不超过60秒的诊断窗口。完整header但body未读完而到期返回408/request_timeout；发送方向已EOF而实际body短于Content-Length时返回422/invalid_request/body_length。不完整header/空连接到期可直接关闭，不承诺JSON正文。完整读取后撤销并join读timer，已解码hold不继续消费该读取窗口；SQLite锁仍按20秒、socket写按当前read参数有界。请求线程明确非daemon，server_close等待请求结算，stop/EOF不能把serve_forever线程已join冒充业务请求已终态。该单请求治理不是用户或候选任务总预算。
+
 局部参考worker有独立业务SQLite：ingest将账与pending outbox原子提交；drain按原联合身份查询服务，unknown才POST，收到匹配immutable receipt才记录confirmed。transport_unknown是可恢复待对账状态，不是accepted false或另造key。自有worker可在after_remote_receipt_before_local_commit发PID/阶段握手并等stdin，评估侧只中断其原Popen句柄，独立核对两个库，再重启同键恢复。这个观测探针不是正常业务运行条件。
 
 最小账为A/E1+100、B/E1+200、A/R1−30引用A/E1：逐身份三效果，租户A70/B200。并发重复、服务重启、冲突A/E1+101、前置未到达再到达、全额冲正重发和两个超额合计冲正都用真实HTTP/SQL核对。故障最终解除，之后给正常请求收敛机会；无限故障下有限时收敛不在合同中。

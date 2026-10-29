@@ -50,3 +50,6 @@ PINN完整官方rubric本地递归统计1963叶（1815执行、126代码、22分
 
 
 原L06 OpenCorvus在22:34:59.758Z自然完成，Inspect2:30:45/task_completed accuracy1仅生命周期指标。完整版本/错误/自动恢复封存，listener正常退休，原API关闭不当失败。30冻结数值叶主方通过，真正评估侧单一8CPU源码冷执行已启动（动态定位active_evaluation）；17独立人工/执行及输入控制仍待。当前无完整业务分数/good，fresh Codex未启动。独立reviewer正按同冻结rubric审查已封存程序/报告/真实图，明确熟悉参考/非盲；未实测叶unassessed。原运行时干扰和native资源/模型限制保留，不拿墙钟、cache tokens或内部cost0作难度/费用排名。完成真正同合同评价后才启动只含同18public的fresh Codex（fork none/禁止再委托），两好另升版本，不改当前线。
+
+
+原OC的评估侧基例23:17:12Z自然exit0、C47648.2/固定L47380/30numeric过，主/独立均实际看新图，独立补D01/D08–10/F05 full。只剩关键D02报价/行序两个真实控制待完成，total/good仍null。报价23:20:36Z已顺序启动f9563061...，行序尚未启动，严格一次一组；以动态定位和原终态收据为准，不再请求退休原Task API。fresh Codex未启动，不能拿已有好迹象跳过真实输入计算/评分或预注册对照；两个好再新版本，旧线不变。

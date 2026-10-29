@@ -5,3 +5,5 @@
 `check_scene.py`用独立SQL最高版分组和实际两个库重算，对原事实/逐来源/服务receipt/parent余量/账户核对；只认证本作者schema的顺序场景，不是允许任意候选schema的全grader。`--policy oldest|newest`与`--style deferred|incremental`展示正确轨迹自由度；三个具名control是真实错误业务/HTTP/恢复操作，经同一checker判定，不能当候选样本或统计成熟校准。
 
 冻结、真实在途HTTP/epoch并发/进程故障、监测/职业交付、完整rubric和多质量审查仍未完成；不以本小闭环计小时。规范业务意图在public/SCENE-CONTRACT.draft.md，具体已运行状态以资格收据与独立审查为准。
+
+新增`qualify_inflight.py --input 原现场 --output NEW`检验一个真实old HTTP before-apply停点跨越pause/同键reconcile/resume的受控时序。pause在单事务返回已接受切片/完整intent目录，重复pause是already_paused；resume对未确认intent返回unsettled_intents，正常修复复用同一primitive。脚本只控制自己启动的receiver/sender，不以本场景替代完整并发/进程恢复资格。[限定范围的真实执行与独立复核](../qualification/inflight-main/README.md)已取得；EOF未join请求的原失败及有限读取修复另存，不由脚本存在推定全部并发已通过。

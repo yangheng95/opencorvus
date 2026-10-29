@@ -22,11 +22,13 @@ def backup(source, target):
         src.backup(dst)
 
 
-def start_receiver(db, output, drop=None):
+def start_receiver(db, output, drop=None, hold=None):
     source = Path(__file__).resolve().parents[2] / "public/l05_effects.py"
     command = [sys.executable, "-X", "utf8", str(source), "--db", str(db)]
     if drop:
         command += ["--drop-once", drop]
+    if hold:
+        command += ["--hold-once", hold]
     stderr = (output / "receiver.stderr.txt").open("w", encoding="utf-8")
     process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=stderr, text=True, encoding="utf-8")
     line = process.stdout.readline()

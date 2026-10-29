@@ -93,3 +93,30 @@ epoch只在本地事务阻止旧generation新登记，不能撤回已飞行HTTP�
 修后producer/checker复用public完整wire解码、联合身份绑定及本顺序范围的epoch/接受切片检查。单层独立复验两原坏库得到posting_wire_invalid/epoch_boundary_invalid；三正确14/19/17图继续成功，另唯一自有接收方实际合法consumer confirmed、缺字段/联合身份错位均具名ValueError，正常exit0。主方只补五次既有结果checker CLI，未重跑完整HTTP/cold或原40。独立最终author_schema_sequential_constructive_qualification_accepted_after_checker_repairs、blocking=[]，五执行源直接与最终快照一致；全部原失败/旧源/修后原件归档evaluator/scene-independent-review及qualification/scene-main。只认证顺序作者schema，完整L05/并发在途/进程中断/全因果/逻辑导出自由/监测/职业交付/全rubric/冻结/小时均未完成。
 
 下一最便宜有增量的实验是合作接收方真实HTTP before-apply握手：旧已登记wire实际在途，暂停/截取完整旧集合后，同键恢复可先拿确定receipt；随后释放旧HTTP应原键replayed。必须实际证明本地epoch不撤销旧socket、暂停只禁止新登记及原facts保留，之后再做修复前缀/进程中断。现有service只有drop-once，尚无该握手；需要修改唯一service并审全入口/必要正向回归，不能用mock/文本替代或宣称已通过。本轮先封存当前顺序版本，L06已自然终态进入唯一基例评估侧CPU冷复跑，不并发新长求解。
+
+
+## 在途HTTP握手：修改前分析与实施方案
+
+本轮先查Git/全部Recall，L06唯一评估侧基例仍有效计算，不新开solver/GPU。顺序资格已提交push4172af983；真正缺口是尚未将旧已登记HTTP停在服务apply之前与pause/同键收敛并发，因此没有证据证明epoch安全不依赖“旧socket已结束”。这不是已观察到的产品调度异常；新实验是检验完整场景合作假设。全L05源码搜索只发现唯一public effects服务、mini/counterexample/scene三个CLI启动器和decoder导入；它们都用stdin stop关闭，不存在生产Task/Mission/Session/模型路由调用。当前HTTP语义/数据库effects+receipt同事务保持；UI/凭据/产品schema/队列不适用。原服务只有drop-once，无法拿真实握手替代sleep/HTTP stub；pause/resume在scene_app.repair中内联，不能单独观察线性化切片。旧源已保存外部source-before。
+
+拟改唯一服务：增加只属于评估侧的--hold-once TENANT/EVENT，在静态decode后、apply前，仅第一次匹配请求通过锁领取一次真实停点，stdout发含PID/联合身份的held事件，等待评估者stdin release；正常stop/EOF必须先释放held请求再关闭并join。此是实际HTTP故障注入，不指导LLM选工具、不新增LLM路由/隐藏消息或第二接收方。GET和第二个同键POST继续正常处理；late旧POST在释放后走同一apply，必须获得replayed及同receipt。hold只限一个服务进程的一次实验，和持久drop-once消费明确区分，不能声称重启自动保持hold状态。现有无hold模式/stop合同保持，非法operator控制具名回应。
+
+scene_app抽出唯一pause(db,epoch)/resume(db,epoch)共享业务primitive，原repair调用它们；pause在同一BEGIN IMMEDIATE内验证epoch/active、更新暂停并读取accepted边界/完整当前intent目录，receipt更新可继续，新接受/intent登记按旧事务guard拒绝。resume只在同epoch暂停且所有已登记intent有确认时推进更高代。该局部receipt不冒充跨进程恢复checkpoint；未来完整审批/并发日志仍须实现。保留所有原accepted/posting字段，不能把暂停当旧HTTP远端栅栏。
+
+实验只复制同一真实original-input到新目录/receiver，另一个真实自有sender进程沿原pending键发请求。收到服务before-apply held后，先独立GET unknown；调用pause，验证切片完整及旧epoch新请求paused/已接受重试duplicate，随后原reconcile/resume沿同键先获得确定receipt并完成目标。release旧HTTP后让sender自然返回，独立核late replay/原receipt一致、逐来源/原事实和control终态，再走旧epoch新请求stale。无随机race、睡眠、假响应或用户进程。先主方一完整新interleaving及一次必要无hold既有路径回归（非重复旧40），再单层独立审查/唯一必要新目录复核。结论只覆盖这次受控并发，在途多故障/修复中进程退出/监测/职业交付/完整L05冻结仍未认证。
+
+
+### 在途首轮与EOF真实失败后的修复前分析
+
+主方新interleaving1.4318秒自然exit0，原键先applied、late旧HTTP随后replayed，同receipt/初修复1015/710及原事实通过；独立一次inflight1.489秒、一次无hold2.066秒和204SQL/原首次drop→GET→replay均过，仍发现EOF真实阻断B01。审查者先持自有SQLite BEGIN IMMEDIATE锁，再EOF释放held请求：receiver PID6968在约0.548秒自然exit0，client实际ConnectionResetError/WinError10054、effects/requests均空，held_request_settled未产生。不能拿主方成功路径或进程exit0包装请求已settled。原EOF失败/source-red均保留。
+
+根因是Python ThreadingHTTPServer显式daemon_threads=True，原finally只join serve_forever线程，server_close只等待非daemon请求线程。已读取实际Python3.14库源码及官方socketserver/http.server合同确认（https://docs.python.org/3.14/library/socketserver.html，https://docs.python.org/3.14/library/http.server.html）；本服务全部GET/POST/hold/drop/stop/EOF共享此路径，不能降为单个EOF偶发。生产Task/Mission/Session与此资格服务无导入关系；mini历史只在客户端完成后关闭，仍支持其已证范围，不能借此认证在途关闭。
+
+不只把daemon改false：当前header/body读取无固定截止，半包会让新join无限等待。拟让唯一server显式non-daemon/block_on_close，并给每个连接在setup武装固定header/body-read deadline：默认20秒，可由同CLI显式缩为正有限值作诊断；到期只关闭接收方向唤醒实际read，完整头但半body明确HTTP408/request_timeout。完成读取/GET解析后撤销并join该timer，之后仍按既有SQLite20秒/有界socket写治理；held是已解码故障停点，stop/EOF先release再server_close join请求。不能用可重置idle替代固定读界，不能让半包无限延长，也不能声称cancel查询就是远端工作已停止。接口变化只属本地合成接收方/评估operator，无产品schema/Provider/UI/路由变更。
+
+修后仅重放原EOF+DB锁探针（确认锁期间receiver仍活、释放后真实201与effect/receipt落库），加真实半body固定截止/408/自然join和必要合法请求边界；不再完整cold或旧40。新read超时只治理单个测试服务请求，不是候选/用户总额度或凑时长。仍不认证任意并发/修复中进程退出/完整L05。
+
+
+EOF修后独立原探针：receiver81088在持自有SQLite锁2秒观察期仍运行，解锁后旧HTTP真实201/applied/receipt与effect落库，随后自然exit0（2.154秒）；原0.548秒exit0/ConnectionReset/effects空的失败保留不覆盖。最终timer回调只set expired/SHUT_RD，不做输出I/O，避免日志背压卡住timer.join。真实半body用1秒诊断参数得到408/request_timeout，EOF短body422/invalid_request/body_length，随后合法完整POST201、idle连接EOF约1.023秒自然join；fresh首次commit/drop→GET→原receipt replay也通过。公共PROTOCOL已同步固定read窗口/<=60参数与边界，独立只读绑定，未新跑完整cold/旧40。主方同修后六源真实main兼容复验1.9762289秒exit0、原键late replay/逐来源通过，独立只读七项绑定。最终stage-assessment-repaired blocking=[]仅限一个受控在途交错和有限请求收尾，完整L05/任意并发/进程中断/持久恢复checkpoint/逻辑导出自由/监测/职业交付/全rubric/冻结/小时仍未认证。原/修后源码、真实失败、204SQL、冷跑及必要边界归档qualification/inflight-main与inflight-independent-review。
+
+最后将重复可执行默认20/上界60提取为同文件单源常量，serve/CLI/guard共同引用。独立只读内联完整AST与原fixed快照相同，并对最终字节另启动一个自有receiver：ready默认20、真实POST201/SQL effect及receipt对应、正常stop/exit0（0.946989秒）。原EOF/body测试仍绑定原执行源，当前常量重排关系单独说明，不伪称旧测试逐字节执行新文件。CONFIGURATION-FINAL-ADDENDUM及配置合同/源对象在inflight-independent-review及ZIP，未再跑旧套件。

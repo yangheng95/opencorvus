@@ -9,3 +9,5 @@
 [完整现场实施前独立审查](evaluator/full-scene-design-review/README.md)列明版本目标、负调整可达性和旧HTTP切换的构造条件；当前只是拟建设决策，不构成完整题实现或冻结批准。
 
 该预案之后新增[顺序事故现场参考](evaluator/scene-source/README.md)和[业务合同草案](public/SCENE-CONTRACT.draft.md)。主方已由真实旧程序/HTTP制造原库，从同一原现场冷执行两种正确资金分配/中间更新策略，并用独立SQL checker区分三个实际错误控制；[单层独立复核](evaluator/scene-independent-review/README.md)已通过修后顺序范围；两真实checker缺口与原失败完整保留。它补足业务版本/逐来源补偿的可达见证，完整在途并发/进程恢复、交付/正式grader/rubric与冻结仍未完成。
+
+[新增在途HTTP交错](evaluator/qualification/inflight-main/README.md)已真实跨越pause/同键恢复/resume，再释放旧请求得到原receipt重放。独立额外发现EOF时daemon请求未结算，修后真实锁/半包/idle/失ACK边界复验关闭；[原失败和追加](evaluator/inflight-independent-review/README.md)不覆盖。当前只增加一个受控交错和请求收尾资格，任意并发/修复中进程故障/完整L05仍未冻结。

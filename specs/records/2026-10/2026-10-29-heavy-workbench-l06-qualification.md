@@ -266,3 +266,11 @@ D02尚有真实执行缺口：同一冻结源码未从变价raw新生成全交�
 原Task在2026-10-29T22:34:59.758Z自然completed，启动20:04:23.819Z；Inspect显示2:30:45、task_completed accuracy1.000只表示Task完成，不是冻结业务分数。实际orchestrator/base-developer/base-tester，保留20分钟pause故障、后续自动续跑和Provider overloaded错误；不能把整个墙钟当题目有效工作。候选HEAD b4ae96c73ae82b8fcf626737db68d24012beb667，public/验证文件有未跟踪内容；完整669文件/约31MB含Git与原workspace已封存外部completed/completed-project.zip，不能只按HEAD丢未跟踪原件。22:42:26Z在真实Task及子计算终态后正常stop自有listener，runtimeDisposed/credentialsRemoved均true；源凭据未操作。六旧昂贵容器仍Paused。
 
 下一便宜检查先按冻结raw/唯一30数值checker重算已交付计划，不读候选normalized为业务权威；完整47叶与真正source-only复建仍需执行，暂不评分。基例冷执行只给封存根源码/README/声明依赖和18冻结public中的raw、新results、只读source/raw/networknone，单一8CPU容器、无旧plan/权重/评估器/参考/凭据。按候选README原命令默认内部solver1800秒/8worker执行，最多约30分钟是候选自设单次数学搜索参数，不是用户总墙钟/token额度，不改其源码或人为放慢。明确新假设是从原输入重建而非重放旧结果；终态后独立重算/实际图形，再顺序声明报价/行序控制，不能用参考资格或旧输入界套未知变体。只开这一组，不并发Codex/其他完整求解，正常source运行不机械取消。D02完整实际控制/单层独立17叶仍待完成，之后才fresh Codex。
+
+
+首次评估侧基例已23:17:12.112Z自然exit0，容器墙钟约1803.48秒、程序1801.459秒重叠不相加；内部CP-SAT1800秒到限FEASIBLE，C47648.2/native bound47360.5，不是精确最优。30数值叶全通过，固定L47380的gap=1341/236900约0.56606%；不同合法计划无需匹配旧交付47687.1。先封存inspect/stdout/stderr/source/raw/results，再精确清理该exited CID；外部completed-originals.zip和cleanup收据仍在base-cold，不能因容器消失当失败/重启。主方实际看两张新PNG，独立也另看新图/24项标准库核算，D01/D08–10/F05补full；原人工评价不改，只有D02还unassessed、total/good仍null。阶段原件cases/L06/evaluator/pilot-opencorvus-20261029/independent-assessment，首轮审查脚本FREEZE定位错误也保留，不是候选失败。
+
+基例通过后23:20:36.981Z才启动唯一报价控制oc-l06-eval-source-20261030-quote/CIDf956306113ba1b2ce7ab31087c1961c46c408f8bbd4b3ea88269d0e6af3d96b7：同封存源码/依赖/原README1800秒/8CPU，私有注册C/R0 45→46 raw只读、新results/networknone，无旧输出/参考/评估器/凭据。23:38仍真实running，不能提前给D02分。行序倒置输入已便宜核语义等同和注册有效，尚未启动；等报价自然终态再顺序执行。fresh Codex仍未启动，原Task已退休不再请求其API。
+
+
+报价控制23:50:40.685Z自然exit0，C47761.2、固定L47380/1%原注册不变，主方30numeric全过；先封存inspect/log/全部新输出再精确清理exited CID。此是D02一半，未提前给叶分。23:52:05.833Z才顺序启动唯一行序控制oc-l06-eval-source-20261030-row/CIDb6754c2763c623da0ac1e6c176d7fabd8c269c60e1dd2d5020ea1c5d66998b17，11CSV数据行反转、业务语义已独立核同，仍同sealed source/README1800秒/8CPU、readonly raw/source/new results/networknone。动态定位active_evaluation=row_reversed_source_cold、pending列表已空但行序并未完成；必须看真实末态，不重复旧base/quote。独立reviewer只读核报价半段，无新solver。row完成/同冻结独立D02与真正聚合后才fresh Codex。

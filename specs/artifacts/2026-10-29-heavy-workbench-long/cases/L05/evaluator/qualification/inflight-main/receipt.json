@@ -1,0 +1,32 @@
+{
+  "status": "main_fixed_interleaving_passed_and_independent_repair_qualified",
+  "main_seconds": 1.9762288997881114,
+  "main_accounts": {
+    "A": 1015,
+    "B": 710
+  },
+  "scope": "one controlled real before-apply HTTP crossing a sequential pause/recovery/resume; not all concurrent failures",
+  "independent_result": {
+    "original_blocker": "B01 retained in REVIEW.md/stage-assessment.json and eof-held-probe",
+    "functional_checks_passed": true,
+    "public_protocol_read_and_bound": true,
+    "idle_shutdown_seconds": 1.0234108003787696,
+    "all_owned_processes_naturally_terminal": true,
+    "direct_current_source_files": 6,
+    "scope": "one actual controlled inflight interleaving plus necessary EOF/read/unknownACK repair boundaries; old failures retained",
+    "full_rubric_approved": false,
+    "hour_claim": false,
+    "original_EOF_repair_seconds": 2.154350300319493,
+    "parent_final_compatibility_recheck": "not yet observed; not claimed",
+    "unchanged_business_primitives": 12,
+    "stage": "controlled_inflight_and_finite_graceful_shutdown_locally_qualified_after_B01_repair",
+    "full_L05_frozen": false,
+    "candidate_score": null,
+    "blocking": []
+  },
+  "original_failure_preserved": true,
+  "no_full_case_freeze": true,
+  "candidate_score": null,
+  "configuration_final_contract": "../../inflight-independent-review/configuration-contract.json",
+  "execution_identity_note": "EOF/body probes bind their original fixed snapshot; final 20/60 constant extraction is AST-equivalent after inlining and has its own actual default20/POST201/normalstop test; no claim old tests byte-executed the new file."
+}

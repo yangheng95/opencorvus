@@ -259,15 +259,45 @@ def reconcile(db, url, *, parent_policy="oldest"):
     settle_all(db, url)
 
 
+def pause(db, epoch):
+    with connect(db) as c:
+        c.execute("BEGIN IMMEDIATE")
+        error = control_error(c, epoch)
+        if error:
+            if error["status"] == "paused":
+                return {"status": "already_paused", "epoch": epoch}
+            return error
+        c.execute("UPDATE control SET active=0 WHERE id=1")
+        boundary = c.execute("SELECT COALESCE(MAX(seq),0) FROM journal").fetchone()[0]
+        intents = [dict(row) for row in c.execute("SELECT tenant,event_id,payload FROM postings ORDER BY seq")]
+        c.commit()
+    return {"status": "paused", "epoch": epoch, "accepted_boundary": boundary, "intent_keys": intents}
+
+
+def resume(db, epoch):
+    with connect(db) as c:
+        c.execute("BEGIN IMMEDIATE")
+        state = c.execute("SELECT epoch,active FROM control WHERE id=1").fetchone()
+        if type(epoch) is not int or epoch != state["epoch"]:
+            return {"status": "stale_epoch", "epoch": state["epoch"]}
+        if state["active"] != 0:
+            return {"status": "already_active", "epoch": epoch}
+        unresolved = c.execute("SELECT COUNT(*) FROM postings WHERE receipt_id IS NULL").fetchone()[0]
+        if unresolved:
+            return {"status": "unsettled_intents", "count": unresolved}
+        c.execute("UPDATE control SET active=1,epoch=epoch+1 WHERE id=1")
+        c.commit()
+    return {"status": "resumed", "epoch": epoch + 1}
+
+
 def repair(db, url, *, parent_policy="oldest"):
     with connect(db) as c:
-        c.execute("BEGIN IMMEDIATE")
-        c.execute("UPDATE control SET active=0 WHERE id=1")
-        c.commit()
-    reconcile(db, url, parent_policy=parent_policy)
-    with connect(db) as c:
-        c.execute("BEGIN IMMEDIATE")
-        c.execute("UPDATE control SET active=1,epoch=epoch+1 WHERE id=1")
         epoch = c.execute("SELECT epoch FROM control WHERE id=1").fetchone()[0]
-        c.commit()
-    return {"status": "resumed", "epoch": epoch}
+    paused = pause(db, epoch)
+    if paused["status"] != "paused":
+        raise ValueError("pause_failed:" + canonical(paused))
+    reconcile(db, url, parent_policy=parent_policy)
+    resumed = resume(db, epoch)
+    if resumed["status"] != "resumed":
+        raise ValueError("resume_failed:" + canonical(resumed))
+    return resumed

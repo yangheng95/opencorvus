@@ -1,0 +1,38 @@
+{
+  "format": "l06-manifest/1",
+  "outputs": {
+    "normalized": "normalized.json",
+    "plan": "plan.json",
+    "ledger": "ledger.json",
+    "summary": "summary.json",
+    "run": "run.json",
+    "report": "report.md"
+  },
+  "reproduce_command": [
+    "/opt/cpsat/bin/python",
+    "reproduce.py",
+    "--input",
+    "/raw",
+    "--output",
+    "/results/base"
+  ],
+  "supplementary": [
+    "source-map.json",
+    "weekly.csv",
+    "operations.png",
+    "costs.png",
+    "alternative-plan.json",
+    "alternative-ledger.json",
+    "alternative-summary.json",
+    "baseline-plan.json",
+    "baseline-check.json"
+  ],
+  "report_sources": [
+    "normalized.json",
+    "plan.json",
+    "ledger.json",
+    "summary.json",
+    "baseline-check.json",
+    "alternative-summary.json"
+  ]
+}

@@ -1,0 +1,389 @@
+{
+  "format": "l06-numeric-findings/1",
+  "status": "partially_assessed",
+  "scope": "30 numeric leaves only; execution/review and complete case grade pending",
+  "total_score": null,
+  "business_success": null,
+  "findings": [
+    {
+      "id": "A01",
+      "status": "verified_pass",
+      "where": "normalized",
+      "detail": {
+        "fields_mismatched": []
+      }
+    },
+    {
+      "id": "A02",
+      "status": "verified_pass",
+      "where": "normalized",
+      "detail": {
+        "fields_mismatched": []
+      }
+    },
+    {
+      "id": "A03",
+      "status": "verified_pass",
+      "where": "normalized",
+      "detail": {
+        "fields_mismatched": []
+      }
+    },
+    {
+      "id": "A04",
+      "status": "verified_pass",
+      "where": "normalized",
+      "detail": {
+        "fields_mismatched": []
+      }
+    },
+    {
+      "id": "B01",
+      "status": "verified_pass",
+      "where": "plan.control_schema",
+      "detail": null
+    },
+    {
+      "id": "B02",
+      "status": "verified_pass",
+      "where": "common_commitment",
+      "detail": {
+        "executed_predicates": 9,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B03",
+      "status": "verified_pass",
+      "where": "shipment_binary",
+      "detail": {
+        "executed_predicates": 144,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B04",
+      "status": "verified_pass",
+      "where": "shipment_minimum",
+      "detail": {
+        "executed_predicates": 144,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B05",
+      "status": "verified_pass",
+      "where": "supplier_capacity",
+      "detail": {
+        "executed_predicates": 144,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B06",
+      "status": "verified_pass",
+      "where": "product_assignment",
+      "detail": {
+        "executed_predicates": 384,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B07",
+      "status": "verified_pass",
+      "where": "plant_capacity",
+      "detail": {
+        "executed_predicates": 96,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B08",
+      "status": "verified_pass",
+      "where": "raw_availability",
+      "detail": {
+        "executed_predicates": 48,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B09",
+      "status": "verified_pass",
+      "where": "fulfilment",
+      "detail": {
+        "executed_predicates": 48,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B10",
+      "status": "verified_pass",
+      "where": "raw_storage_peak",
+      "detail": {
+        "executed_predicates": 48,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B11",
+      "status": "verified_pass",
+      "where": "product_storage_peak",
+      "detail": {
+        "executed_predicates": 48,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "C01",
+      "status": "verified_pass",
+      "where": "summary",
+      "detail": null
+    },
+    {
+      "id": "C02",
+      "status": "verified_pass",
+      "where": "cash_intermediate",
+      "detail": {
+        "executed_predicates": 45,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "C03",
+      "status": "verified_pass",
+      "where": "cash_terminal",
+      "detail": {
+        "executed_predicates": 3,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "C04",
+      "status": "verified_pass",
+      "where": "terminal_pipeline",
+      "detail": {
+        "executed_predicates": 144,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "C05",
+      "status": "verified_pass",
+      "where": "terminal_finished",
+      "detail": {
+        "executed_predicates": 3,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "C06",
+      "status": "verified_pass",
+      "where": "registered_reference",
+      "detail": {
+        "reference_id": "L06-v2-price-C-R0-plus1-20261029",
+        "trust_kind": "trusted_native_integer_search_bound",
+        "cost_exact": "238806/5",
+        "relative_gap_exact": "953/118450"
+      }
+    },
+    {
+      "id": "C07",
+      "status": "verified_pass",
+      "where": "summary",
+      "detail": null
+    },
+    {
+      "id": "C08",
+      "status": "verified_pass",
+      "where": "summary",
+      "detail": null
+    },
+    {
+      "id": "C09",
+      "status": "verified_pass",
+      "where": "summary",
+      "detail": null
+    },
+    {
+      "id": "C10",
+      "status": "verified_pass",
+      "where": "summary",
+      "detail": null
+    },
+    {
+      "id": "C11",
+      "status": "verified_pass",
+      "where": "summary",
+      "detail": null
+    },
+    {
+      "id": "D01",
+      "status": "unassessed",
+      "where": "evaluator",
+      "detail": "execution or independent review adapter is not implemented"
+    },
+    {
+      "id": "D02",
+      "status": "unassessed",
+      "where": "evaluator",
+      "detail": "execution or independent review adapter is not implemented"
+    },
+    {
+      "id": "D03",
+      "status": "verified_pass",
+      "where": "ledger",
+      "detail": null
+    },
+    {
+      "id": "D04",
+      "status": "verified_pass",
+      "where": "ledger",
+      "detail": null
+    },
+    {
+      "id": "D05",
+      "status": "verified_pass",
+      "where": "ledger",
+      "detail": null
+    },
+    {
+      "id": "D06",
+      "status": "verified_pass",
+      "where": "ledger",
+      "detail": null
+    },
+    {
+      "id": "D07",
+      "status": "unassessed",
+      "where": "evaluator",
+      "detail": "execution or independent review adapter is not implemented"
+    },
+    {
+      "id": "D08",
+      "status": "unassessed",
+      "where": "evaluator",
+      "detail": "execution or independent review adapter is not implemented"
+    },
+    {
+      "id": "D09",
+      "status": "unassessed",
+      "where": "evaluator",
+      "detail": "execution or independent review adapter is not implemented"
+    },
+    {
+      "id": "D10",
+      "status": "unassessed",
+      "where": "evaluator",
+      "detail": "execution or independent review adapter is not implemented"
+    },
+    {
+      "id": "E01",
+      "status": "unassessed",
+      "where": "evaluator",
+      "detail": "execution or independent review adapter is not implemented"
+    },
+    {
+      "id": "E02",
+      "status": "unassessed",
+      "where": "evaluator",
+      "detail": "execution or independent review adapter is not implemented"
+    },
+    {
+      "id": "E03",
+      "status": "unassessed",
+      "where": "evaluator",
+      "detail": "execution or independent review adapter is not implemented"
+    },
+    {
+      "id": "E04",
+      "status": "unassessed",
+      "where": "evaluator",
+      "detail": "execution or independent review adapter is not implemented"
+    },
+    {
+      "id": "E05",
+      "status": "unassessed",
+      "where": "evaluator",
+      "detail": "execution or independent review adapter is not implemented"
+    },
+    {
+      "id": "E06",
+      "status": "unassessed",
+      "where": "evaluator",
+      "detail": "execution or independent review adapter is not implemented"
+    },
+    {
+      "id": "F01",
+      "status": "unassessed",
+      "where": "evaluator",
+      "detail": "execution or independent review adapter is not implemented"
+    },
+    {
+      "id": "F02",
+      "status": "unassessed",
+      "where": "evaluator",
+      "detail": "execution or independent review adapter is not implemented"
+    },
+    {
+      "id": "F03",
+      "status": "unassessed",
+      "where": "evaluator",
+      "detail": "execution or independent review adapter is not implemented"
+    },
+    {
+      "id": "F04",
+      "status": "unassessed",
+      "where": "evaluator",
+      "detail": "execution or independent review adapter is not implemented"
+    },
+    {
+      "id": "F05",
+      "status": "unassessed",
+      "where": "evaluator",
+      "detail": "execution or independent review adapter is not implemented"
+    }
+  ],
+  "numeric_leaf_count": 30,
+  "counts": {
+    "verified_pass": 30,
+    "verified_fail": 0,
+    "candidate_incomplete": 0,
+    "blocked_candidate": 0,
+    "unassessed": 17
+  },
+  "known_critical_failures": [],
+  "business_primitive": {
+    "business_feasible": true,
+    "violation_count": 0,
+    "constraint_checks": {
+      "common_commitment": 9,
+      "shipment_binary": 144,
+      "supplier_capacity": 144,
+      "shipment_minimum": 144,
+      "terminal_pipeline": 144,
+      "product_assignment": 384,
+      "plant_capacity": 96,
+      "raw_storage_peak": 48,
+      "product_storage_peak": 48,
+      "raw_availability": 48,
+      "fulfilment": 48,
+      "cash_intermediate": 45,
+      "cash_terminal": 3,
+      "terminal_finished": 3
+    }
+  }
+}

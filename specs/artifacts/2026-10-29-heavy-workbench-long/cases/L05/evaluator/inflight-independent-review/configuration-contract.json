@@ -1,0 +1,67 @@
+{
+  "status": "final_constant_configuration_positive_contract_passed",
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l05-inflight-independent-review-20261030\\configuration-final\\source\\public\\l05_effects.py",
+    "--db",
+    "D:\\opencorvus-benchmark-runs\\l05-inflight-independent-review-20261030\\configuration-final\\remote.sqlite"
+  ],
+  "started_utc": "2026-10-29T23:48:32.680107+00:00",
+  "seconds": 0.9469889001920819,
+  "pid": 96416,
+  "exit_code": 0,
+  "constants": {
+    "DEFAULT_READ_TIMEOUT_SECONDS": 20,
+    "MAX_READ_TIMEOUT_SECONDS": 60
+  },
+  "only_constant_extraction_AST_after_inline": true,
+  "snapshot_current_bytes_equal_before_and_after": true,
+  "ready": {
+    "status": "ready",
+    "pid": 96416,
+    "url": "http://127.0.0.1:54358",
+    "read_timeout_seconds": 20
+  },
+  "HTTP": {
+    "http_code": 201,
+    "body": {
+      "status": "applied",
+      "receipt": {
+        "receipt_id": "08541f76-f122-4c1d-9fbe-3aa7e6fe8259",
+        "tenant": "Config",
+        "event_id": "final-default",
+        "kind": "post",
+        "amount_minor": 23,
+        "reverses": null
+      }
+    }
+  },
+  "effects": [
+    {
+      "tenant": "Config",
+      "event_id": "final-default",
+      "kind": "post",
+      "amount_minor": 23,
+      "reverses": null,
+      "receipt_id": "08541f76-f122-4c1d-9fbe-3aa7e6fe8259"
+    }
+  ],
+  "requests": [
+    {
+      "seq": 1,
+      "method": "POST",
+      "tenant": "Config",
+      "event_id": "final-default",
+      "status": "applied",
+      "receipt_id": "08541f76-f122-4c1d-9fbe-3aa7e6fe8259",
+      "dropped": 0
+    }
+  ],
+  "new_receivers": 1,
+  "new_HTTP_POSTs": 1,
+  "old_EOF_body_cold_SQL_suites_repeated": false,
+  "not_a_new_benchmark_sample": true
+}

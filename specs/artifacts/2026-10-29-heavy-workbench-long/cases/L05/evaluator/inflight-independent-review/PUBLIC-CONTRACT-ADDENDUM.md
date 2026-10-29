@@ -1,0 +1,7 @@
+# Current public text binding
+
+The updated public PROTOCOL.draft.md was actually reread and directly copied to source-repaired-final/public/PROTOCOL.draft.md after the functional repair probes. It now explicitly documents the fixed20s header/body read cutoff, CLI positive finite<=60s diagnostic cutoff,408/request_timeout for header-complete body expiry,422/invalid_request/body_length for EOF-short body, possible direct closure for incomplete headers, timer cancellation/join after full reading, independent decoded hold and20s DB/bounded socket I/O. Non-daemon request joining on stop/EOF is correctly stated.
+
+These are the actual tested or inspected semantics. The text preserves draft/mini status, operator-only hold, finite-fault assumption, immutable receipt/idempotency and the limitation that service requests logs cover only parsed legal business POST/GET, not every HTTP failure. There is no new candidate total budget, process-order requirement, second service, score or complete-L05 claim. The previously noted documentation omission is closed with this exact copied text; no new execution was necessary.
+
+Current local conclusion: B01 repaired with real original-boundary evidence; no remaining substantive blocker within the explicitly limited one-interleaving/read/cleanup qualification. The parent’s proposed final main compatibility recheck is separate evidence not yet read here and is not claimed as this reviewer’s run. All original failures and initial report remain historical records; all full-task/freeze/hour limitations continue.

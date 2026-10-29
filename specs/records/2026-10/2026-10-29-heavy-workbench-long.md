@@ -354,3 +354,15 @@ L05完整预案独立审查已归档cases/L05/evaluator/full-scene-design-review
 L05新顺序场景真实旧程序/HTTP生成原库、首次丢ACK，两个正确不同posting图与三个真实错误进入独立SQL checker；第三正确newest/deferred仅一次独立冷跑1.621727秒/17postings、158SQL/手算。独立发现部分wire/非法epoch切片两个假通过，producer/checker共同修复，原失败保留，必要复验关闭；最终author_schema_sequential_constructive_qualification_accepted_after_checker_repairs。资料cases/L05/evaluator/scene-source、qualification/scene-main、scene-independent-review及业务合同草案。只认证作者schema顺序范围，完整并发在途/进程中断/逻辑导出自由/监测/职业交付/全rubric/冻结仍未完成，不能当小时或正式候选分。后续最便宜增量是唯一接收方的真实before-apply HTTP握手，见L05 Recall；尚未实现，先不新开长计算。
 
 当前开发合同冻结仍1/10、有效候选小时资格0/10，fresh Codex未启动；六旧昂贵容器仍Paused，不操作用户进程/重启环境/UI自动化，心跳ACTIVE。
+
+
+## 本轮接续：基例冷复建通过，报价控制在运行；L05在途EOF实质漏洞修后关闭
+
+原OC Task继续保持自然completed/旧listener已正常退休，不重建。评估侧base-cold于23:17:12Z自然exit0，C47648.2、1801.459秒/FEASIBLE限时终态，30numeric全过；两个新PNG主方和单层reviewer实际查看，独立24项核对/D01/D08–10/F05补full。当前46叶有通过支持，只有关键D02仍unassessed，不提前发布总分/good。已先封存inspect/log/结果后精确清理旧CID，末态外部base-cold/completed-originals.zip。唯一当前长计算是23:20:36Z启动的quote control/CIDf9563061...，同一源码/冻结前注册C/R0 45→46、只读raw、新results/networknone/8CPU、候选README1800秒内部参数。动态定位active_evaluation已更新，别按旧base容器误报失败或重跑；报价自然终态后才行序控制，之后独立D02/真实聚合和fresh Codex。两方都好才新版本，不能按当前好迹象跳过对照。
+
+L05新增真实old HTTP before-apply跨pause/原键收据/更高epoch恢复/late replay，主1.4318秒与独立一次1.489秒、无hold2.066秒、204SQL通过；但EOF+真实SQLite锁发现daemon请求未join，receiver退出0而效果空/客户端Reset。已修唯一server non-daemon/server_close join及固定header/body read期限，避免半包无限等待；原EOF反例/代码全留。修后2秒持锁期间进程仍运行，解锁真实201/receipt落库再退出0；半包408、短包422/合法201/idle EOF/fresh drop重放均实测通过，主方1.9762秒兼容复验与独立绑定通过。范围限一个受控交错/请求收尾，完整case/任意并发/进程中断/持久恢复/监测/职业交付/全rubric/逻辑导出自由/冻结仍未完成。资料L05/evaluator/qualification/inflight-main与inflight-independent-review，Recall有完整源码搜索/横向分析/权威stdlib依据。
+
+冻结仍1/10、有效候选小时0/10；六旧昂贵容器Paused不恢复。其余研究/决策/教学题要继续落实真实材料/参考/checker，不得拿本协议资格代替十题。下一建设可推进L02有修订时点的as-of输入/执行接口，先便宜闭合信息边界；尚未实施，不报完成。所有本任务修改范围提交，正常fetch/merge/待推审查/hook/push；保护其他UI/Goal/SDK工作区，心跳ACTIVE。
+
+
+报价控制23:50:40.685Z自然exit0，C47761.2、固定L47380/1%原注册不变，主方30numeric全过；先封存inspect/log/全部新输出再精确清理exited CID。此是D02一半，未提前给叶分。23:52:05.833Z才顺序启动唯一行序控制oc-l06-eval-source-20261030-row/CIDb6754c2763c623da0ac1e6c176d7fabd8c269c60e1dd2d5020ea1c5d66998b17，11CSV数据行反转、业务语义已独立核同，仍同sealed source/README1800秒/8CPU、readonly raw/source/new results/networknone。动态定位active_evaluation=row_reversed_source_cold、pending列表已空但行序并未完成；必须看真实末态，不重复旧base/quote。独立reviewer只读核报价半段，无新solver。row完成/同冻结独立D02与真正聚合后才fresh Codex。

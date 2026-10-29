@@ -1,0 +1,61 @@
+{
+  "stage": "phase1_delivered_candidate_nonblind_independent_review",
+  "timestamp": "2026-10-29T22:58:27.909241+00:00",
+  "human_leaves_full": [
+    "D07",
+    "E01",
+    "E02",
+    "E03",
+    "E04",
+    "E05",
+    "E06",
+    "F01",
+    "F02",
+    "F03",
+    "F04"
+  ],
+  "unassessed": [
+    "D01",
+    "D02",
+    "D08",
+    "D09",
+    "D10",
+    "F05"
+  ],
+  "actual_review_findings": 17,
+  "numeric_receipt_passes": 30,
+  "numeric_arithmetic": {
+    "timestamp": "2026-10-29T22:55:12.745205+00:00",
+    "checks": 20,
+    "all_passed": true,
+    "failed": [],
+    "cost_exact": "476871/10",
+    "alternative_cost_exact": "238443/5",
+    "fixed_L": 47380,
+    "gap_relative_to_fixed_L_exact": "3071/473800",
+    "purchase_share_exact": "361816/476871",
+    "arithmetic_seconds": 0.9317125999368727,
+    "own_solver_calls": 0,
+    "own_Provider_calls": 0,
+    "own_Docker_calls": 0,
+    "total_score": null,
+    "business_success": null,
+    "review_scope": "delivered files and actual saved receipts; source-only execution leaves remain pending"
+  },
+  "total_score": null,
+  "business_success": null,
+  "good": null,
+  "phase_not_final": true,
+  "candidate_executions_started_by_reviewer": 0,
+  "Provider_calls": 0,
+  "Docker_calls": 0,
+  "delegations": 0,
+  "known_material_errors": [],
+  "scope_limits": [
+    "D01/D02/D08/D09/D10/F05 pending actual independent execution closure; not candidate failure",
+    "one actual nonblind AI-agent reviewer familiar with reference; no professional-human/statistical certification",
+    "runtime Task completed/Inspect1 is not business rubric success",
+    "old pause guard/Provider overload/auto-continuation preserved, not retroactively repaired",
+    "no cross-system/model causal rank or ten-case/hour-level maturity claim"
+  ]
+}

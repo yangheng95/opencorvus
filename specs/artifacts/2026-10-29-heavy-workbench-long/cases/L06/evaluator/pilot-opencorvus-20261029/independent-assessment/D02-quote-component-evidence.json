@@ -1,0 +1,33 @@
+{
+  "format": "l06-d02-component-evidence/1",
+  "component": "registered_quote_C_R0_plus1",
+  "component_execution_verified": true,
+  "D02_judgement": "unassessed",
+  "remaining": "actual same-source row-order execution and independent numeric binding not yet supplied",
+  "rater": "/root/benchmark_review; nonblind AI agent familiar with benchmark/reference; no further delegation",
+  "actual_cost": "238806/5",
+  "reference_id": "L06-v2-price-C-R0-plus1-20261029",
+  "registered_L": "47380",
+  "gap_exact": "953/118450",
+  "evidence": [
+    {
+      "path": "quote-cold-addendum/receipts/terminal-inspect.json",
+      "kind": "process_receipt",
+      "observation": "Actual quote source-only invocation naturally exited0 with readonly mounts and original defaults"
+    },
+    {
+      "path": "quote-cold-addendum/checks.json",
+      "kind": "business_oracle",
+      "observation": "Exact unique registered raw price change, full quote main/alternate business ledger, fixed-L quality and actual numeric30 independently verified"
+    },
+    {
+      "path": "SOURCE-AUDIT.md",
+      "kind": "source_audit",
+      "observation": "Inspected actual source rebuilds from supplied raw; quote checks bind9sources exactly to sealed candidate"
+    }
+  ],
+  "total_score": null,
+  "business_success": null,
+  "good": null,
+  "new_reviewer_solver_Docker_Provider_calls": 0
+}

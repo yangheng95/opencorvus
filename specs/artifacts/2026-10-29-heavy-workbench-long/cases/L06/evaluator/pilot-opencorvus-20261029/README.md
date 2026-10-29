@@ -7,3 +7,5 @@ Inspect的task_completed accuracy1.000只表示Task完成，不能冒充本题�
 [30数值叶](delivered-numeric.json)已由冻结raw独立重算全过；17执行/人工叶、真正清洁复建/两输入控制/实际图形和独立评分仍待完成，total_score/business_success/good均未出。[唯一基例冷执行](base-cold-launch.json)只挂封存源码/冻结raw/new results，networknone/8CPU，无旧输出/参考/评估器/凭据；按候选README内部solver1800秒默认执行，不是用户总额度。后续先读外部动态定位与真实终态，不重复启动该容器。
 
 [正常cleanup](cleanup.json)证明Task/子计算终态后才停止listener并移除暂存凭据。[内部用量](usage-summary.json)含大量cache；cost0不代表外部免费账单，comparable=false，不能和未知Codex模型/资源作费用速度因果排名。fresh Codex尚未启动，冻结47叶/90且critical全过的判据不改，两好才另升版本。
+
+[真正基例冷复建](base-cold/README.md)已自然exit0、C47648.2/30数值叶过；[独立基例补审](independent-assessment/BASE-COLD-ADDENDUM.md)支持D01/D08–10/F05 full，当前只余D02未评。报价控制正在顺序执行，行序控制待启动；仍无完整总分/good，不拿旧30或参考98替代当前叶。

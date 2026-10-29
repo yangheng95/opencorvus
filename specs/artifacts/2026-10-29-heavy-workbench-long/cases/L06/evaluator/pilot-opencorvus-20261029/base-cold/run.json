@@ -1,0 +1,42 @@
+{
+  "format": "l06-run/1",
+  "input_path": "/raw",
+  "command": [
+    "/opt/cpsat/bin/python",
+    "reproduce.py",
+    "--input",
+    "/raw",
+    "--output",
+    "/results/base"
+  ],
+  "dependencies": {
+    "python": "3.11.13",
+    "ortools": "9.15.6755",
+    "numpy": "2.4.6",
+    "matplotlib": "3.10.3"
+  },
+  "parameters": {
+    "max_time_in_seconds": 1800,
+    "num_search_workers": 8,
+    "random_seed": 20261029,
+    "relative_gap_limit": 0.001
+  },
+  "algorithm": {
+    "name": "joint scenario CP-SAT with independent exact simulation",
+    "termination_kind": "resource_limit",
+    "termination_detail": "native FEASIBLE at configured time limit"
+  },
+  "native_solver": {
+    "name": "OR-Tools CP-SAT",
+    "version": "9.15.6755",
+    "status": "FEASIBLE",
+    "objective_minor": 47648.2,
+    "best_bound_minor": 47360.5
+  },
+  "feasibility": "feasible",
+  "exact_optimal_claim": false,
+  "solver_wall_seconds": 1800.2209271430038,
+  "total_wall_seconds": 1801.4590631588362,
+  "subagents": false,
+  "solver_response_stats": "CpSolverResponse summary:\nstatus: FEASIBLE\nobjective: 476482\nbest_bound: 473605\nintegers: 1148\nbooleans: 761\nconflicts: 193540\nbranches: 502559\npropagations: 7101375\ninteger_propagations: 34059473\nrestarts: 134\nlp_iterations: 0\nwalltime: 1800.08\nusertime: 1800.08\ndeterministic_time: 6011.9\ngap_integral: 48403.6\nsolution_fingerprint: 0xbc6456aebd6ca29b\n"
+}

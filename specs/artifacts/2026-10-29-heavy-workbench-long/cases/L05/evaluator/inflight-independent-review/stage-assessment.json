@@ -1,0 +1,78 @@
+{
+  "stage": "controlled_inflight_reachable_shutdown_contract_blocked",
+  "blocking": [
+    {
+      "id": "B01",
+      "priority": "P1",
+      "source": "source/public/l05_effects.py:223,238-241",
+      "contract": "stdin EOF/stop releases held HTTP and naturally joins real request execution",
+      "observed": "receiver exit0 while real application waited on an owned SQLite lock; client ConnectionResetError10054; empty final effect/request tables",
+      "evidence": "eof-held-probe/result.json",
+      "repair": "Join actual finite request lifecycles after releasing hold; govern body reads if all handlers are joined; recheck exact original probe"
+    }
+  ],
+  "cold_runs": [
+    {
+      "argv": [
+        "C:/Python314/python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l05-inflight-independent-review-20261030\\source\\evaluator\\scene-source\\qualify_inflight.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l05-inflight-independent-review-20261030\\input",
+        "--output",
+        "D:\\opencorvus-benchmark-runs\\l05-inflight-independent-review-20261030\\cold-inflight"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\l05-inflight-independent-review-20261030",
+      "started_utc": "2026-10-29T23:19:42.039871+00:00",
+      "seconds": 1.4894362003542483,
+      "exit_code": 0,
+      "owned_process_only": true
+    },
+    {
+      "argv": [
+        "C:/Python314/python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l05-inflight-independent-review-20261030\\source\\evaluator\\scene-source\\run_scene.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l05-inflight-independent-review-20261030\\input",
+        "--output",
+        "D:\\opencorvus-benchmark-runs\\l05-inflight-independent-review-20261030\\cold-no-hold",
+        "--policy",
+        "newest",
+        "--style",
+        "deferred"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\l05-inflight-independent-review-20261030",
+      "started_utc": "2026-10-29T23:19:43.530065+00:00",
+      "seconds": 2.0655378997325897,
+      "exit_code": 0,
+      "owned_process_only": true
+    }
+  ],
+  "sql_checks": 204,
+  "sql_all_passed": true,
+  "eof_probe": "premature_receiver_exit_unsettled_request",
+  "fresh_drop_probe": "fresh_commit_drop_get_replay_confirmed",
+  "all_owned_probe_receivers_naturally_exited": true,
+  "no_source_changes": true,
+  "no_Provider_solver_GPU_Docker_UI": true,
+  "delegations": 0,
+  "accepted_scope": [
+    "single actual held before-apply POST crossing local pause/reconcile/resume and late200same-receipt replay",
+    "no-hold original scene regression after shared primitive extraction",
+    "independent per-source SQL/receipt and stable original facts",
+    "fresh commit/drop/get/replay"
+  ],
+  "not_approved": [
+    "graceful EOF/stop request completion pending B01 repair",
+    "all concurrent/crash/restart interleavings",
+    "logical-export freedom",
+    "complete professional task/rubric/freeze",
+    "hours or ten-case maturity"
+  ],
+  "candidate_score": null
+}

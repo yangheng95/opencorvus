@@ -12,4 +12,4 @@ tenant/event_id是业务身份。同业务取最高revision，该版本的语义
 
 每个外发posting必须先持久登记稳定联合身份/不可变wire载荷/逻辑来源/接受边界。失去HTTP确认是unknown，沿原键查询/重试直至取得匹配原receipt，不另造键。历史真实effects及其来源不能删除/改写或重新贴另一业务标签；修复只能新增可追溯前向动作。单看账户总额不够，还需逐business、adjustment、opening来源和真实服务receipt核对。
 
-暂停只在本地事务禁止旧generation新接受/新登记，不能撤回已飞行HTTP。完整切换需取得有限完整旧intent目录并逐键确定匹配receipt，再对固定accepted前缀补偿，恢复更高generation。缺身份/载荷歧义应保留中止待对账。此条是完整目标；当前顺序参考没有认证并发在途、进程崩溃和监测。公开完整旧应用/现场/证据范围及实现自由的逻辑导出接口尚未交付，不能把私有参考schema checker直接发布为正式候选grader。
+暂停只在本地事务禁止旧generation新接受/新登记，不能撤回已飞行HTTP。完整切换需取得有限完整旧intent目录并逐键确定匹配receipt，再对固定accepted前缀补偿，恢复更高generation。缺身份/载荷歧义应保留中止待对账。当前参考已有一个真实before-apply旧HTTP跨越暂停/恢复的受控交错资格，不据此认证任意并发、进程崩溃和监测。公开完整旧应用/现场/证据范围及实现自由的逻辑导出接口尚未交付，不能把私有参考schema checker直接发布为正式候选grader。

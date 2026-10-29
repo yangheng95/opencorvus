@@ -1,0 +1,147 @@
+{
+  "phase": "actual_base_source_replay",
+  "artifact_bindings_remain_original_sealed_candidate": {
+    "input": "D:\\opencorvus-benchmark-runs\\L06-paired-20261029-be2a55d1\\opencorvus\\completed\\submission\\inputs",
+    "normalized": "D:\\opencorvus-benchmark-runs\\L06-paired-20261029-be2a55d1\\opencorvus\\completed\\submission\\output\\normalized.json",
+    "plan": "D:\\opencorvus-benchmark-runs\\L06-paired-20261029-be2a55d1\\opencorvus\\completed\\submission\\output\\plan.json",
+    "summary": "D:\\opencorvus-benchmark-runs\\L06-paired-20261029-be2a55d1\\opencorvus\\completed\\submission\\output\\summary.json",
+    "ledger": "D:\\opencorvus-benchmark-runs\\L06-paired-20261029-be2a55d1\\opencorvus\\completed\\submission\\output\\ledger.json"
+  },
+  "findings": [
+    {
+      "id": "D01",
+      "judgement": "full",
+      "observation": "A different executor actually completed the sealed nine-source program from only source/declared dependencies/frozen raw in a new output mount. Natural exit0, actual numeric30 pass and independent full business ledger/summary pass. New strategy need not match original decisions. C47648.2 passes fixed47380 quality. No old answer/model/hint is available through mounts or source inventory.",
+      "evidence": [
+        {
+          "path": "base-cold-addendum/receipts/terminal-inspect.json",
+          "kind": "process_receipt",
+          "locator": "Id/State/Args/Mounts/Config/HostConfig",
+          "observation": "Exact owned evaluator CID3338994... naturally exited0 after readonly source/raw and new results/networknone execution; source9py+README+requirements match sealed bytes."
+        },
+        {
+          "path": "SOURCE-AUDIT.md",
+          "kind": "source_audit",
+          "locator": "five actually read execution modules; base-cold-addendum/checks.json source identity predicate",
+          "observation": "Main reads supplied raw and builds CP-SAT anew; no old plan/model/hint mount or program read; all9py exact sealed bytes."
+        },
+        {
+          "path": "base-cold-addendum/checks.json",
+          "kind": "business_oracle",
+          "locator": "24 real identity/physical/financial/native/report checks all passed",
+          "observation": "No optimizer was run by this reviewer; separate stdlib ledger/summary and actual saved stdout were checked."
+        }
+      ]
+    },
+    {
+      "id": "D08",
+      "judgement": "full",
+      "observation": "The independent real base run reports native FEASIBLE and resource_limit at its actual internal1800s timeout, consistent with saved native response/stdout. Original report also identifies FEASIBLE rather than exact optimum; do not substitute this new primal value for its separately retained original47687.1. This closes the previously pending execution observation with actual replay evidence.",
+      "evidence": [
+        {
+          "path": "base-cold-addendum/receipts/terminal-inspect.json",
+          "kind": "process_receipt",
+          "locator": "Id/State/Args/Mounts/Config/HostConfig",
+          "observation": "Exact owned evaluator CID3338994... naturally exited0 after readonly source/raw and new results/networknone execution; source9py+README+requirements match sealed bytes."
+        },
+        {
+          "path": "base-cold-addendum/receipts/container.stdout.txt",
+          "kind": "process_receipt",
+          "locator": "last actual native result; scaled CpSolverResponse",
+          "observation": "Actual FEASIBLE objective476482/bound473605 over denominator10; matches run and independently reconstructed cost47648.2."
+        },
+        {
+          "path": "base-cold-addendum/checks.json",
+          "kind": "business_oracle",
+          "locator": "24 real identity/physical/financial/native/report checks all passed",
+          "observation": "No optimizer was run by this reviewer; separate stdlib ledger/summary and actual saved stdout were checked."
+        }
+      ]
+    },
+    {
+      "id": "D09",
+      "judgement": "full",
+      "observation": "The actually obtained feasible policy and numerical bound are correctly recorded as known. No exact optimum is claimed; the positive gap and finite search are explained. No failed branch had to be manufactured for a successful submission. Actual new result47648.2/bound47360.5 is distinct from registered47380 and from original run; no unknown result is fabricated.",
+      "evidence": [
+        {
+          "path": "base-cold-addendum/receipts/terminal-inspect.json",
+          "kind": "process_receipt",
+          "locator": "Id/State/Args/Mounts/Config/HostConfig",
+          "observation": "Exact owned evaluator CID3338994... naturally exited0 after readonly source/raw and new results/networknone execution; source9py+README+requirements match sealed bytes."
+        },
+        {
+          "path": "base-cold-addendum/receipts/container.stdout.txt",
+          "kind": "process_receipt",
+          "locator": "last actual native result; scaled CpSolverResponse",
+          "observation": "Actual FEASIBLE objective476482/bound473605 over denominator10; matches run and independently reconstructed cost47648.2."
+        },
+        {
+          "path": "base-cold-addendum/snapshot/results/base/report.md",
+          "kind": "document_review",
+          "locator": "执行摘要 and 模型/局限",
+          "observation": "Actual report clearly separates feasible, native numerical bound, evaluator quality and exact optimality."
+        }
+      ]
+    },
+    {
+      "id": "D10",
+      "judgement": "full",
+      "observation": "Captured actual /opt/cpsat/bin/python reproduce.py --input /raw --output /results/base agrees with new run/manifest. Original README defaults1800s/8workers/seed20261029/gap.001, exact dependencies and source9py are preserved. External input/output paths are supported by README; no code/parameter correction was required. Actual source/input/output identity is recorded, not inferred from a checksum.",
+      "evidence": [
+        {
+          "path": "base-cold-addendum/receipts/terminal-inspect.json",
+          "kind": "process_receipt",
+          "locator": "Id/State/Args/Mounts/Config/HostConfig",
+          "observation": "Exact owned evaluator CID3338994... naturally exited0 after readonly source/raw and new results/networknone execution; source9py+README+requirements match sealed bytes."
+        },
+        {
+          "path": "base-cold-addendum/receipts/container.stdout.txt",
+          "kind": "process_receipt",
+          "locator": "last actual native result; scaled CpSolverResponse",
+          "observation": "Actual FEASIBLE objective476482/bound473605 over denominator10; matches run and independently reconstructed cost47648.2."
+        },
+        {
+          "path": "base-cold-addendum/checks.json",
+          "kind": "business_oracle",
+          "locator": "24 real identity/physical/financial/native/report checks all passed",
+          "observation": "No optimizer was run by this reviewer; separate stdlib ledger/summary and actual saved stdout were checked."
+        }
+      ]
+    },
+    {
+      "id": "F05",
+      "judgement": "full",
+      "observation": "Another executor successfully followed the declared Python entry/dependency image/default parameters with frozen raw and a new output root. Full artifacts, semantic ledger/summary, report and two real PNGs were generated and independently inspected. No missing-dependency or command repair was needed, so this is full rather than half.",
+      "evidence": [
+        {
+          "path": "base-cold-addendum/receipts/terminal-inspect.json",
+          "kind": "process_receipt",
+          "locator": "Id/State/Args/Mounts/Config/HostConfig",
+          "observation": "Exact owned evaluator CID3338994... naturally exited0 after readonly source/raw and new results/networknone execution; source9py+README+requirements match sealed bytes."
+        },
+        {
+          "path": "SOURCE-AUDIT.md",
+          "kind": "source_audit",
+          "locator": "five actually read execution modules; base-cold-addendum/checks.json source identity predicate",
+          "observation": "Main reads supplied raw and builds CP-SAT anew; no old plan/model/hint mount or program read; all9py exact sealed bytes."
+        },
+        {
+          "path": "base-cold-addendum/checks.json",
+          "kind": "business_oracle",
+          "locator": "24 real identity/physical/financial/native/report checks all passed",
+          "observation": "No optimizer was run by this reviewer; separate stdlib ledger/summary and actual saved stdout were checked."
+        },
+        {
+          "path": "base-cold-addendum/snapshot/source/README.md",
+          "kind": "document_review",
+          "locator": "依赖与构建; 标准入口 and output outside project allowed",
+          "observation": "Successful actual command uses the documented interface and declared dependency environment."
+        }
+      ]
+    }
+  ],
+  "D02": "unassessed",
+  "total_score": null,
+  "business_success": null,
+  "good": null
+}
