@@ -1,0 +1,140 @@
+[
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\qualify_l06.py",
+    "snapshot": "source-snapshot\\qualify_l06.py",
+    "bytes": 12311,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+    "snapshot": "source-snapshot\\check_l06.py",
+    "bytes": 9747,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\qualify_business_checks.py",
+    "snapshot": "source-snapshot\\qualify_business_checks.py",
+    "bytes": 4103,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\full-v1\\instance.json",
+    "snapshot": "source-snapshot\\full-v1\\instance.json",
+    "bytes": 11542,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\full-v1\\solver.json",
+    "snapshot": "source-snapshot\\full-v1\\solver.json",
+    "bytes": 306,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\full-v1.stdout.txt",
+    "snapshot": "source-snapshot\\full-v1.stdout.txt",
+    "bytes": 2242,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\full-v1.stderr.txt",
+    "snapshot": "source-snapshot\\full-v1.stderr.txt",
+    "bytes": 0,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\full-v1-executed-source.py",
+    "snapshot": "source-snapshot\\full-v1-executed-source.py",
+    "bytes": 11424,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\minimum-credit\\solver.json",
+    "snapshot": "source-snapshot\\minimum-credit\\solver.json",
+    "bytes": 436,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\minimum-credit\\plan.json",
+    "snapshot": "source-snapshot\\minimum-credit\\plan.json",
+    "bytes": 32544,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\minimum-credit\\instance.json",
+    "snapshot": "source-snapshot\\minimum-credit\\instance.json",
+    "bytes": 11642,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\minimum-credit\\witness-credit-input.json",
+    "snapshot": "source-snapshot\\minimum-credit\\witness-credit-input.json",
+    "bytes": 12578,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\minimum-credit\\independent-business-check.json",
+    "snapshot": "source-snapshot\\minimum-credit\\independent-business-check.json",
+    "bytes": 47218,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\minimum-credit-executed-source.py",
+    "snapshot": "source-snapshot\\minimum-credit-executed-source.py",
+    "bytes": 12311,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\minimum-credit.stdout.txt",
+    "snapshot": "source-snapshot\\minimum-credit.stdout.txt",
+    "bytes": 4288,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\minimum-credit.stderr.txt",
+    "snapshot": "source-snapshot\\minimum-credit.stderr.txt",
+    "bytes": 0,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\tiny-v1\\business-check.json",
+    "snapshot": "source-snapshot\\tiny-v1\\business-check.json",
+    "bytes": 3684,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\tiny-v1\\enumerated-best-plan.json",
+    "snapshot": "source-snapshot\\tiny-v1\\enumerated-best-plan.json",
+    "bytes": 1165,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\tiny-v1\\enumeration-and-probes.json",
+    "snapshot": "source-snapshot\\tiny-v1\\enumeration-and-probes.json",
+    "bytes": 3155,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\tiny-v1\\executed-source.py",
+    "snapshot": "source-snapshot\\tiny-v1\\executed-source.py",
+    "bytes": 11424,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\tiny-v1\\instance.json",
+    "snapshot": "source-snapshot\\tiny-v1\\instance.json",
+    "bytes": 2008,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\tiny-v1\\plan.json",
+    "snapshot": "source-snapshot\\tiny-v1\\plan.json",
+    "bytes": 1482,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\tiny-v1\\solver.json",
+    "snapshot": "source-snapshot\\tiny-v1\\solver.json",
+    "bytes": 304,
+    "byte_equal_at_copy": true
+  }
+]

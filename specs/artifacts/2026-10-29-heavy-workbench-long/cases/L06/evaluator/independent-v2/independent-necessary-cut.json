@@ -1,0 +1,255 @@
+{
+  "scope": "independent necessary physical-capacity inequality only; no optimization",
+  "maximum_mandatory_delivery_volume": 66,
+  "maximizers": [
+    {
+      "scenario": "demand_shift",
+      "week": 13,
+      "minimum_fg_stage_volume": 66
+    }
+  ],
+  "old_cap42_infeasible_under_stage_sequence": true,
+  "new_cap100_passes_necessary_condition_only": true,
+  "all_48_rows": [
+    {
+      "scenario": "base",
+      "week": 0,
+      "minimum_fg_stage_volume": 59
+    },
+    {
+      "scenario": "base",
+      "week": 1,
+      "minimum_fg_stage_volume": 61
+    },
+    {
+      "scenario": "base",
+      "week": 2,
+      "minimum_fg_stage_volume": 61
+    },
+    {
+      "scenario": "base",
+      "week": 3,
+      "minimum_fg_stage_volume": 62
+    },
+    {
+      "scenario": "base",
+      "week": 4,
+      "minimum_fg_stage_volume": 61
+    },
+    {
+      "scenario": "base",
+      "week": 5,
+      "minimum_fg_stage_volume": 59
+    },
+    {
+      "scenario": "base",
+      "week": 6,
+      "minimum_fg_stage_volume": 61
+    },
+    {
+      "scenario": "base",
+      "week": 7,
+      "minimum_fg_stage_volume": 61
+    },
+    {
+      "scenario": "base",
+      "week": 8,
+      "minimum_fg_stage_volume": 62
+    },
+    {
+      "scenario": "base",
+      "week": 9,
+      "minimum_fg_stage_volume": 59
+    },
+    {
+      "scenario": "base",
+      "week": 10,
+      "minimum_fg_stage_volume": 63
+    },
+    {
+      "scenario": "base",
+      "week": 11,
+      "minimum_fg_stage_volume": 59
+    },
+    {
+      "scenario": "base",
+      "week": 12,
+      "minimum_fg_stage_volume": 59
+    },
+    {
+      "scenario": "base",
+      "week": 13,
+      "minimum_fg_stage_volume": 64
+    },
+    {
+      "scenario": "base",
+      "week": 14,
+      "minimum_fg_stage_volume": 61
+    },
+    {
+      "scenario": "base",
+      "week": 15,
+      "minimum_fg_stage_volume": 59
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 0,
+      "minimum_fg_stage_volume": 59
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 1,
+      "minimum_fg_stage_volume": 61
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 2,
+      "minimum_fg_stage_volume": 61
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 3,
+      "minimum_fg_stage_volume": 62
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 4,
+      "minimum_fg_stage_volume": 61
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 5,
+      "minimum_fg_stage_volume": 59
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 6,
+      "minimum_fg_stage_volume": 61
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 7,
+      "minimum_fg_stage_volume": 61
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 8,
+      "minimum_fg_stage_volume": 62
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 9,
+      "minimum_fg_stage_volume": 59
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 10,
+      "minimum_fg_stage_volume": 63
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 11,
+      "minimum_fg_stage_volume": 59
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 12,
+      "minimum_fg_stage_volume": 59
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 13,
+      "minimum_fg_stage_volume": 64
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 14,
+      "minimum_fg_stage_volume": 61
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 15,
+      "minimum_fg_stage_volume": 59
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 0,
+      "minimum_fg_stage_volume": 59
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 1,
+      "minimum_fg_stage_volume": 61
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 2,
+      "minimum_fg_stage_volume": 61
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 3,
+      "minimum_fg_stage_volume": 62
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 4,
+      "minimum_fg_stage_volume": 63
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 5,
+      "minimum_fg_stage_volume": 61
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 6,
+      "minimum_fg_stage_volume": 63
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 7,
+      "minimum_fg_stage_volume": 63
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 8,
+      "minimum_fg_stage_volume": 64
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 9,
+      "minimum_fg_stage_volume": 61
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 10,
+      "minimum_fg_stage_volume": 65
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 11,
+      "minimum_fg_stage_volume": 61
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 12,
+      "minimum_fg_stage_volume": 61
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 13,
+      "minimum_fg_stage_volume": 66
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 14,
+      "minimum_fg_stage_volume": 63
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 15,
+      "minimum_fg_stage_volume": 61
+    }
+  ]
+}

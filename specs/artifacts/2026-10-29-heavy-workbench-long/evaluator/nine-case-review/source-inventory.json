@@ -1,0 +1,442 @@
+[
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/suite.json",
+    "bytes": 236533,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/reference_calculations.py",
+    "bytes": 21091,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "script/benchmark/heavy_workbench.py",
+    "bytes": 27253,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench-long/README.md",
+    "bytes": 5939,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/records/2026-10/2026-10-29-heavy-workbench-long.md",
+    "bytes": 39969,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/README.md",
+    "bytes": 5333,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/PROTOCOL.md",
+    "bytes": 9181,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/COMPARISON.md",
+    "bytes": 1933,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/REVIEW.md",
+    "bytes": 4640,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/RECORDS.md",
+    "bytes": 2036,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/VALIDATION.md",
+    "bytes": 2161,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/validation/checker-replay.json",
+    "bytes": 13347,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/cases/H02.md",
+    "bytes": 13232,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H02/context.json",
+    "bytes": 5636,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H02/records.csv",
+    "bytes": 5560,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H02/source-notes.md",
+    "bytes": 1449,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H02/forecasts.csv",
+    "bytes": 8993,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H02/leakage_probe.csv",
+    "bytes": 123,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H02/metrics.csv",
+    "bytes": 386,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H02/splits.csv",
+    "bytes": 79,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/cases/H03.md",
+    "bytes": 13103,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H03/context.json",
+    "bytes": 4838,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H03/records.csv",
+    "bytes": 45834,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H03/source-notes.md",
+    "bytes": 1449,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H03/cash.csv",
+    "bytes": 185,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H03/ledger.csv",
+    "bytes": 22032,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H03/status_audit.csv",
+    "bytes": 45,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H03/variance.csv",
+    "bytes": 1136,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/cases/H04.md",
+    "bytes": 13466,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H04/context.json",
+    "bytes": 4291,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H04/legacy_reader.py",
+    "bytes": 168,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H04/records.csv",
+    "bytes": 13673,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H04/source-notes.md",
+    "bytes": 1449,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H04/audit.csv",
+    "bytes": 62,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H04/customers.csv",
+    "bytes": 654,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H04/orders.csv",
+    "bytes": 11807,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H04/refunds.csv",
+    "bytes": 310,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/cases/H05.md",
+    "bytes": 13424,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H05/context.json",
+    "bytes": 4357,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H05/legacy_service.py",
+    "bytes": 1120,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H05/records.csv",
+    "bytes": 31036,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H05/source-notes.md",
+    "bytes": 1449,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H05/duplicates.csv",
+    "bytes": 1537,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H05/ledger.csv",
+    "bytes": 12024,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H05/replay.csv",
+    "bytes": 49,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H05/totals.csv",
+    "bytes": 52,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/cases/H06.md",
+    "bytes": 13378,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H06/context.json",
+    "bytes": 4883,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H06/records.csv",
+    "bytes": 1278,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H06/source-notes.md",
+    "bytes": 1449,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H06/baseline.csv",
+    "bytes": 30,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H06/capacity.csv",
+    "bytes": 813,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H06/demand.csv",
+    "bytes": 71,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H06/landed.csv",
+    "bytes": 1053,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/cases/H07.md",
+    "bytes": 13427,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H07/context.json",
+    "bytes": 3988,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H07/records.csv",
+    "bytes": 2041,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H07/source-notes.md",
+    "bytes": 1449,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H07/study-dossiers.md",
+    "bytes": 30500,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H07/bias.csv",
+    "bytes": 28,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H07/effects.csv",
+    "bytes": 599,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H07/pooled.csv",
+    "bytes": 69,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H07/screening.csv",
+    "bytes": 226,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/cases/H08.md",
+    "bytes": 13425,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H08/context.json",
+    "bytes": 4524,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H08/records.csv",
+    "bytes": 624,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H08/scope-brief.md",
+    "bytes": 3904,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H08/source-notes.md",
+    "bytes": 1449,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H08/bounds.csv",
+    "bytes": 40,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H08/costs.csv",
+    "bytes": 247,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H08/earliest.csv",
+    "bytes": 260,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H08/roles.csv",
+    "bytes": 55,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/cases/H09.md",
+    "bytes": 13299,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H09/context.json",
+    "bytes": 4289,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H09/records.csv",
+    "bytes": 2500,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H09/source-notes.md",
+    "bytes": 1449,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H09/cohorts.csv",
+    "bytes": 41,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H09/mastery.csv",
+    "bytes": 62,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H09/scores.csv",
+    "bytes": 1782,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H09/support.csv",
+    "bytes": 193,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/cases/H10.md",
+    "bytes": 13753,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H10/context.json",
+    "bytes": 4858,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H10/records.csv",
+    "bytes": 42696,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H10/source-notes.md",
+    "bytes": 1449,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H10/baseline.csv",
+    "bytes": 63,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H10/daily.csv",
+    "bytes": 1353,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H10/peak.csv",
+    "bytes": 39,
+    "snapshot_byte_equal_at_copy": true
+  },
+  {
+    "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H10/stress.csv",
+    "bytes": 72,
+    "snapshot_byte_equal_at_copy": true
+  }
+]

@@ -1,0 +1,710 @@
+[
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\cheap-necessary-cuts.json",
+    "snapshot": "source-snapshot\\v2\\cheap-necessary-cuts.json",
+    "bytes": 1158,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\check_l06.py",
+    "snapshot": "source-snapshot\\v2\\check_l06.py",
+    "bytes": 10793,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\complete-feasible-credit-witness\\input.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\complete-feasible-credit-witness\\input.json",
+    "bytes": 12632,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\complete-feasible-credit-witness\\plan.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\complete-feasible-credit-witness\\plan.json",
+    "bytes": 35033,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\complete-feasible-credit-witness\\result.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\complete-feasible-credit-witness\\result.json",
+    "bytes": 51296,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\complete-feasible-credit-witness\\stderr.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\complete-feasible-credit-witness\\stderr.txt",
+    "bytes": 0,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\complete-feasible-credit-witness\\stdout.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\complete-feasible-credit-witness\\stdout.txt",
+    "bytes": 232,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\cost-vector-dimension\\input.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\cost-vector-dimension\\input.json",
+    "bytes": 12597,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\cost-vector-dimension\\plan.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\cost-vector-dimension\\plan.json",
+    "bytes": 35033,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\cost-vector-dimension\\result.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\cost-vector-dimension\\result.json",
+    "bytes": 142,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\cost-vector-dimension\\stderr.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\cost-vector-dimension\\stderr.txt",
+    "bytes": 0,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\cost-vector-dimension\\stdout.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\cost-vector-dimension\\stdout.txt",
+    "bytes": 127,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\declared-stock-is-recomputed\\input.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\declared-stock-is-recomputed\\input.json",
+    "bytes": 12632,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\declared-stock-is-recomputed\\plan.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\declared-stock-is-recomputed\\plan.json",
+    "bytes": 35033,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\declared-stock-is-recomputed\\result.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\declared-stock-is-recomputed\\result.json",
+    "bytes": 201,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\declared-stock-is-recomputed\\stderr.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\declared-stock-is-recomputed\\stderr.txt",
+    "bytes": 0,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\declared-stock-is-recomputed\\stdout.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\declared-stock-is-recomputed\\stdout.txt",
+    "bytes": 133,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\duplicate-plan-json-field\\input.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\duplicate-plan-json-field\\input.json",
+    "bytes": 12632,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\duplicate-plan-json-field\\plan.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\duplicate-plan-json-field\\plan.json",
+    "bytes": 45,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\duplicate-plan-json-field\\result.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\duplicate-plan-json-field\\result.json",
+    "bytes": 250,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\duplicate-plan-json-field\\stderr.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\duplicate-plan-json-field\\stderr.txt",
+    "bytes": 0,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\duplicate-plan-json-field\\stdout.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\duplicate-plan-json-field\\stdout.txt",
+    "bytes": 235,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\feasible-dominated-terminal-purchase\\input.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\feasible-dominated-terminal-purchase\\input.json",
+    "bytes": 12632,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\feasible-dominated-terminal-purchase\\plan.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\feasible-dominated-terminal-purchase\\plan.json",
+    "bytes": 35039,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\feasible-dominated-terminal-purchase\\result.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\feasible-dominated-terminal-purchase\\result.json",
+    "bytes": 51312,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\feasible-dominated-terminal-purchase\\stderr.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\feasible-dominated-terminal-purchase\\stderr.txt",
+    "bytes": 0,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\feasible-dominated-terminal-purchase\\stdout.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\feasible-dominated-terminal-purchase\\stdout.txt",
+    "bytes": 232,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\fractional-purchase-lots\\input.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\fractional-purchase-lots\\input.json",
+    "bytes": 12632,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\fractional-purchase-lots\\plan.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\fractional-purchase-lots\\plan.json",
+    "bytes": 35035,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\fractional-purchase-lots\\result.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\fractional-purchase-lots\\result.json",
+    "bytes": 164,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\fractional-purchase-lots\\stderr.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\fractional-purchase-lots\\stderr.txt",
+    "bytes": 0,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\fractional-purchase-lots\\stdout.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\fractional-purchase-lots\\stdout.txt",
+    "bytes": 146,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\future-specific-early-order\\input.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\future-specific-early-order\\input.json",
+    "bytes": 12632,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\future-specific-early-order\\plan.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\future-specific-early-order\\plan.json",
+    "bytes": 35033,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\future-specific-early-order\\result.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\future-specific-early-order\\result.json",
+    "bytes": 155,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\future-specific-early-order\\stderr.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\future-specific-early-order\\stderr.txt",
+    "bytes": 0,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\future-specific-early-order\\stdout.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\future-specific-early-order\\stdout.txt",
+    "bytes": 137,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\malformed-instance-json\\input.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\malformed-instance-json\\input.json",
+    "bytes": 1,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\malformed-instance-json\\plan.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\malformed-instance-json\\plan.json",
+    "bytes": 35033,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\malformed-instance-json\\result.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\malformed-instance-json\\result.json",
+    "bytes": 311,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\malformed-instance-json\\stderr.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\malformed-instance-json\\stderr.txt",
+    "bytes": 0,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\malformed-instance-json\\stdout.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\malformed-instance-json\\stdout.txt",
+    "bytes": 296,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\malformed-plan-json\\input.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\malformed-plan-json\\input.json",
+    "bytes": 12632,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\malformed-plan-json\\plan.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\malformed-plan-json\\plan.json",
+    "bytes": 1,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\malformed-plan-json\\result.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\malformed-plan-json\\result.json",
+    "bytes": 299,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\malformed-plan-json\\stderr.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\malformed-plan-json\\stderr.txt",
+    "bytes": 0,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\malformed-plan-json\\stdout.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\malformed-plan-json\\stdout.txt",
+    "bytes": 284,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\original-insufficient-credit\\input.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\original-insufficient-credit\\input.json",
+    "bytes": 12632,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\original-insufficient-credit\\plan.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\original-insufficient-credit\\plan.json",
+    "bytes": 35033,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\original-insufficient-credit\\result.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\original-insufficient-credit\\result.json",
+    "bytes": 130,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\original-insufficient-credit\\stderr.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\original-insufficient-credit\\stderr.txt",
+    "bytes": 0,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\original-insufficient-credit\\stdout.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\original-insufficient-credit\\stdout.txt",
+    "bytes": 112,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\product-stage-peak-cannot-use-end-stock\\input.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\product-stage-peak-cannot-use-end-stock\\input.json",
+    "bytes": 12631,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\product-stage-peak-cannot-use-end-stock\\plan.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\product-stage-peak-cannot-use-end-stock\\plan.json",
+    "bytes": 35033,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\product-stage-peak-cannot-use-end-stock\\result.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\product-stage-peak-cannot-use-end-stock\\result.json",
+    "bytes": 134,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\product-stage-peak-cannot-use-end-stock\\stderr.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\product-stage-peak-cannot-use-end-stock\\stderr.txt",
+    "bytes": 0,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\product-stage-peak-cannot-use-end-stock\\stdout.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\product-stage-peak-cannot-use-end-stock\\stdout.txt",
+    "bytes": 116,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\raw-stage-peak-cannot-use-end-stock\\input.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\raw-stage-peak-cannot-use-end-stock\\input.json",
+    "bytes": 12632,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\raw-stage-peak-cannot-use-end-stock\\plan.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\raw-stage-peak-cannot-use-end-stock\\plan.json",
+    "bytes": 35033,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\raw-stage-peak-cannot-use-end-stock\\result.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\raw-stage-peak-cannot-use-end-stock\\result.json",
+    "bytes": 133,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\raw-stage-peak-cannot-use-end-stock\\stderr.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\raw-stage-peak-cannot-use-end-stock\\stderr.txt",
+    "bytes": 0,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\raw-stage-peak-cannot-use-end-stock\\stdout.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\raw-stage-peak-cannot-use-end-stock\\stdout.txt",
+    "bytes": 115,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\receipt.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\receipt.json",
+    "bytes": 21467,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\reported-zero-cost-is-recomputed\\input.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\reported-zero-cost-is-recomputed\\input.json",
+    "bytes": 12632,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\reported-zero-cost-is-recomputed\\plan.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\reported-zero-cost-is-recomputed\\plan.json",
+    "bytes": 35062,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\reported-zero-cost-is-recomputed\\result.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\reported-zero-cost-is-recomputed\\result.json",
+    "bytes": 51296,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\reported-zero-cost-is-recomputed\\stderr.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\reported-zero-cost-is-recomputed\\stderr.txt",
+    "bytes": 0,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\reported-zero-cost-is-recomputed\\stdout.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\reported-zero-cost-is-recomputed\\stdout.txt",
+    "bytes": 232,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\shared-supplier-capacity\\input.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\shared-supplier-capacity\\input.json",
+    "bytes": 12632,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\shared-supplier-capacity\\plan.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\shared-supplier-capacity\\plan.json",
+    "bytes": 35033,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\shared-supplier-capacity\\result.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\shared-supplier-capacity\\result.json",
+    "bytes": 133,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\shared-supplier-capacity\\stderr.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\shared-supplier-capacity\\stderr.txt",
+    "bytes": 0,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\shared-supplier-capacity\\stdout.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\shared-supplier-capacity\\stdout.txt",
+    "bytes": 115,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\stale-bom-consumption\\input.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\stale-bom-consumption\\input.json",
+    "bytes": 12634,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\stale-bom-consumption\\plan.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\stale-bom-consumption\\plan.json",
+    "bytes": 35033,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\stale-bom-consumption\\result.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\stale-bom-consumption\\result.json",
+    "bytes": 199,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\stale-bom-consumption\\stderr.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\stale-bom-consumption\\stderr.txt",
+    "bytes": 0,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\stale-bom-consumption\\stdout.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\stale-bom-consumption\\stdout.txt",
+    "bytes": 156,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\stale-demand-fulfilment\\input.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\stale-demand-fulfilment\\input.json",
+    "bytes": 12632,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\stale-demand-fulfilment\\plan.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\stale-demand-fulfilment\\plan.json",
+    "bytes": 35033,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\stale-demand-fulfilment\\result.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\stale-demand-fulfilment\\result.json",
+    "bytes": 198,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\stale-demand-fulfilment\\stderr.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\stale-demand-fulfilment\\stderr.txt",
+    "bytes": 0,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\stale-demand-fulfilment\\stdout.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\stale-demand-fulfilment\\stdout.txt",
+    "bytes": 155,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\strict-positive-probability\\input.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\strict-positive-probability\\input.json",
+    "bytes": 12634,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\strict-positive-probability\\plan.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\strict-positive-probability\\plan.json",
+    "bytes": 35033,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\strict-positive-probability\\result.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\strict-positive-probability\\result.json",
+    "bytes": 163,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\strict-positive-probability\\stderr.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\strict-positive-probability\\stderr.txt",
+    "bytes": 0,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\strict-positive-probability\\stdout.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\strict-positive-probability\\stdout.txt",
+    "bytes": 148,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\terminal-in-transit-order\\input.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\terminal-in-transit-order\\input.json",
+    "bytes": 12632,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\terminal-in-transit-order\\plan.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\terminal-in-transit-order\\plan.json",
+    "bytes": 35033,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\terminal-in-transit-order\\result.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\terminal-in-transit-order\\result.json",
+    "bytes": 158,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\terminal-in-transit-order\\stderr.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\terminal-in-transit-order\\stderr.txt",
+    "bytes": 0,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\terminal-in-transit-order\\stdout.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\terminal-in-transit-order\\stdout.txt",
+    "bytes": 140,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\top-level-plan-type\\input.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\top-level-plan-type\\input.json",
+    "bytes": 12632,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\top-level-plan-type\\plan.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\top-level-plan-type\\plan.json",
+    "bytes": 2,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\top-level-plan-type\\result.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\top-level-plan-type\\result.json",
+    "bytes": 131,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\top-level-plan-type\\stderr.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\top-level-plan-type\\stderr.txt",
+    "bytes": 0,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\top-level-plan-type\\stdout.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\top-level-plan-type\\stdout.txt",
+    "bytes": 113,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\unqualified-product-line\\input.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\unqualified-product-line\\input.json",
+    "bytes": 12632,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\unqualified-product-line\\plan.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\unqualified-product-line\\plan.json",
+    "bytes": 35033,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\unqualified-product-line\\result.json",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\unqualified-product-line\\result.json",
+    "bytes": 141,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\unqualified-product-line\\stderr.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\unqualified-product-line\\stderr.txt",
+    "bytes": 0,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts\\unqualified-product-line\\stdout.txt",
+    "snapshot": "source-snapshot\\v2\\full-business-contracts\\unqualified-product-line\\stdout.txt",
+    "bytes": 123,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-witness\\plan.json",
+    "snapshot": "source-snapshot\\v2\\full-witness\\plan.json",
+    "bytes": 32544,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\inputs\\full.json",
+    "snapshot": "source-snapshot\\v2\\inputs\\full.json",
+    "bytes": 12632,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\inputs\\tiny.json",
+    "snapshot": "source-snapshot\\v2\\inputs\\tiny.json",
+    "bytes": 2177,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\l06_input.py",
+    "snapshot": "source-snapshot\\v2\\l06_input.py",
+    "bytes": 5717,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\qualify_l06.py",
+    "snapshot": "source-snapshot\\v2\\qualify_l06.py",
+    "bytes": 13408,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\tiny-solver\\enumerated-plan.json",
+    "snapshot": "source-snapshot\\v2\\tiny-solver\\enumerated-plan.json",
+    "bytes": 1165,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\tiny-solver\\enumeration.json",
+    "snapshot": "source-snapshot\\v2\\tiny-solver\\enumeration.json",
+    "bytes": 588,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\tiny-solver\\instance.json",
+    "snapshot": "source-snapshot\\v2\\tiny-solver\\instance.json",
+    "bytes": 2029,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\tiny-solver\\plan.json",
+    "snapshot": "source-snapshot\\v2\\tiny-solver\\plan.json",
+    "bytes": 1482,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\tiny-solver\\solver.json",
+    "snapshot": "source-snapshot\\v2\\tiny-solver\\solver.json",
+    "bytes": 356,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\l06_input.py",
+    "snapshot": "source-snapshot\\l06_input.py",
+    "bytes": 5717,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+    "snapshot": "source-snapshot\\check_l06.py",
+    "bytes": 10793,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\qualify_l06.py",
+    "snapshot": "source-snapshot\\qualify_l06.py",
+    "bytes": 13408,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\qualify_business_checks.py",
+    "snapshot": "source-snapshot\\qualify_business_checks.py",
+    "bytes": 2537,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\qualify_full_business_checks.py",
+    "snapshot": "source-snapshot\\qualify_full_business_checks.py",
+    "bytes": 5263,
+    "byte_equal_at_copy": true
+  }
+]

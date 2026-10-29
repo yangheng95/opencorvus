@@ -1,0 +1,473 @@
+[
+  {
+    "label": "top-level-array-plan",
+    "result": null,
+    "exit_code": 1,
+    "stderr_last_line": "AttributeError: 'list' object has no attribute 'get'",
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\source-snapshot\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\reader-boundaries\\top-level-array-plan\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\reader-boundaries\\top-level-array-plan\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\reader-boundaries\\top-level-array-plan\\result.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029",
+      "started_utc": "2026-10-29T10:38:58.432242+00:00",
+      "wall_seconds": 0.14595969999209046,
+      "exit_code": 1,
+      "stdout": "commands\\boundary-top-level-array-plan.stdout.txt",
+      "stderr": "commands\\boundary-top-level-array-plan.stderr.txt"
+    }
+  },
+  {
+    "label": "malformed-json-plan",
+    "result": null,
+    "exit_code": 1,
+    "stderr_last_line": "json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)",
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\source-snapshot\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\reader-boundaries\\malformed-json-plan\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\reader-boundaries\\malformed-json-plan\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\reader-boundaries\\malformed-json-plan\\result.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029",
+      "started_utc": "2026-10-29T10:38:58.585469+00:00",
+      "wall_seconds": 0.15080170007422566,
+      "exit_code": 1,
+      "stdout": "commands\\boundary-malformed-json-plan.stdout.txt",
+      "stderr": "commands\\boundary-malformed-json-plan.stderr.txt"
+    }
+  },
+  {
+    "label": "negative-probability",
+    "result": {
+      "business_feasible": true,
+      "scope": "exact finite instance plan recurrence only; not execution attestation or optimality certificate",
+      "expected_cost_minor": 5.5,
+      "expected_cost_exact": {
+        "numerator": 11,
+        "denominator": 2
+      },
+      "scenarios": {
+        "one": {
+          "total_cost_minor": 5,
+          "final_cash_minor": 100,
+          "final_receivable_minor": 5,
+          "minimum_cash_minor": 96,
+          "active_constraints": {
+            "supplier_capacity": 1,
+            "shipment_minimum": 1,
+            "plant_capacity": 0,
+            "raw_storage": 0,
+            "product_storage": 2,
+            "credit_limit": 0
+          },
+          "weeks": [
+            {
+              "week": 0,
+              "raw_inventory": [
+                0
+              ],
+              "finished_inventory": [
+                0
+              ],
+              "arrivals": [
+                0
+              ],
+              "consumption": [
+                1
+              ],
+              "made": [
+                1
+              ],
+              "hours": [
+                1
+              ],
+              "supplier_volume": [
+                2,
+                0
+              ],
+              "purchase_cost": 2,
+              "freight_cost": 2,
+              "production_cost": 0,
+              "holding_cost": 0,
+              "cost": 4,
+              "receipts": 0,
+              "cash": 96
+            },
+            {
+              "week": 1,
+              "raw_inventory": [
+                1
+              ],
+              "finished_inventory": [
+                0
+              ],
+              "arrivals": [
+                2
+              ],
+              "consumption": [
+                1
+              ],
+              "made": [
+                1
+              ],
+              "hours": [
+                1
+              ],
+              "supplier_volume": [
+                0,
+                0
+              ],
+              "purchase_cost": 0,
+              "freight_cost": 0,
+              "production_cost": 0,
+              "holding_cost": 1,
+              "cost": 1,
+              "receipts": 5,
+              "cash": 100
+            }
+          ]
+        },
+        "two": {
+          "total_cost_minor": 4,
+          "final_cash_minor": 101,
+          "final_receivable_minor": 10,
+          "minimum_cash_minor": 96,
+          "active_constraints": {
+            "supplier_capacity": 1,
+            "shipment_minimum": 1,
+            "plant_capacity": 1,
+            "raw_storage": 0,
+            "product_storage": 2,
+            "credit_limit": 0
+          },
+          "weeks": [
+            {
+              "week": 0,
+              "raw_inventory": [
+                0
+              ],
+              "finished_inventory": [
+                0
+              ],
+              "arrivals": [
+                0
+              ],
+              "consumption": [
+                1
+              ],
+              "made": [
+                1
+              ],
+              "hours": [
+                1
+              ],
+              "supplier_volume": [
+                2,
+                0
+              ],
+              "purchase_cost": 2,
+              "freight_cost": 2,
+              "production_cost": 0,
+              "holding_cost": 0,
+              "cost": 4,
+              "receipts": 0,
+              "cash": 96
+            },
+            {
+              "week": 1,
+              "raw_inventory": [
+                0
+              ],
+              "finished_inventory": [
+                0
+              ],
+              "arrivals": [
+                2
+              ],
+              "consumption": [
+                2
+              ],
+              "made": [
+                2
+              ],
+              "hours": [
+                2
+              ],
+              "supplier_volume": [
+                0,
+                0
+              ],
+              "purchase_cost": 0,
+              "freight_cost": 0,
+              "production_cost": 0,
+              "holding_cost": 0,
+              "cost": 0,
+              "receipts": 5,
+              "cash": 101
+            }
+          ]
+        }
+      }
+    },
+    "exit_code": 0,
+    "stderr_last_line": null,
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\source-snapshot\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\reader-boundaries\\negative-probability\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\reader-boundaries\\negative-probability\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\reader-boundaries\\negative-probability\\result.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029",
+      "started_utc": "2026-10-29T10:38:58.746131+00:00",
+      "wall_seconds": 0.14444810012355447,
+      "exit_code": 0,
+      "stdout": "commands\\boundary-negative-probability.stdout.txt",
+      "stderr": "commands\\boundary-negative-probability.stderr.txt"
+    }
+  },
+  {
+    "label": "missing-holding-vector",
+    "result": {
+      "business_feasible": true,
+      "scope": "exact finite instance plan recurrence only; not execution attestation or optimality certificate",
+      "expected_cost_minor": 4.0,
+      "expected_cost_exact": {
+        "numerator": 4,
+        "denominator": 1
+      },
+      "scenarios": {
+        "one": {
+          "total_cost_minor": 4,
+          "final_cash_minor": 101,
+          "final_receivable_minor": 5,
+          "minimum_cash_minor": 96,
+          "active_constraints": {
+            "supplier_capacity": 1,
+            "shipment_minimum": 1,
+            "plant_capacity": 0,
+            "raw_storage": 0,
+            "product_storage": 2,
+            "credit_limit": 0
+          },
+          "weeks": [
+            {
+              "week": 0,
+              "raw_inventory": [
+                0
+              ],
+              "finished_inventory": [
+                0
+              ],
+              "arrivals": [
+                0
+              ],
+              "consumption": [
+                1
+              ],
+              "made": [
+                1
+              ],
+              "hours": [
+                1
+              ],
+              "supplier_volume": [
+                2,
+                0
+              ],
+              "purchase_cost": 2,
+              "freight_cost": 2,
+              "production_cost": 0,
+              "holding_cost": 0,
+              "cost": 4,
+              "receipts": 0,
+              "cash": 96
+            },
+            {
+              "week": 1,
+              "raw_inventory": [
+                1
+              ],
+              "finished_inventory": [
+                0
+              ],
+              "arrivals": [
+                2
+              ],
+              "consumption": [
+                1
+              ],
+              "made": [
+                1
+              ],
+              "hours": [
+                1
+              ],
+              "supplier_volume": [
+                0,
+                0
+              ],
+              "purchase_cost": 0,
+              "freight_cost": 0,
+              "production_cost": 0,
+              "holding_cost": 0,
+              "cost": 0,
+              "receipts": 5,
+              "cash": 101
+            }
+          ]
+        },
+        "two": {
+          "total_cost_minor": 4,
+          "final_cash_minor": 101,
+          "final_receivable_minor": 10,
+          "minimum_cash_minor": 96,
+          "active_constraints": {
+            "supplier_capacity": 1,
+            "shipment_minimum": 1,
+            "plant_capacity": 1,
+            "raw_storage": 0,
+            "product_storage": 2,
+            "credit_limit": 0
+          },
+          "weeks": [
+            {
+              "week": 0,
+              "raw_inventory": [
+                0
+              ],
+              "finished_inventory": [
+                0
+              ],
+              "arrivals": [
+                0
+              ],
+              "consumption": [
+                1
+              ],
+              "made": [
+                1
+              ],
+              "hours": [
+                1
+              ],
+              "supplier_volume": [
+                2,
+                0
+              ],
+              "purchase_cost": 2,
+              "freight_cost": 2,
+              "production_cost": 0,
+              "holding_cost": 0,
+              "cost": 4,
+              "receipts": 0,
+              "cash": 96
+            },
+            {
+              "week": 1,
+              "raw_inventory": [
+                0
+              ],
+              "finished_inventory": [
+                0
+              ],
+              "arrivals": [
+                2
+              ],
+              "consumption": [
+                2
+              ],
+              "made": [
+                2
+              ],
+              "hours": [
+                2
+              ],
+              "supplier_volume": [
+                0,
+                0
+              ],
+              "purchase_cost": 0,
+              "freight_cost": 0,
+              "production_cost": 0,
+              "holding_cost": 0,
+              "cost": 0,
+              "receipts": 5,
+              "cash": 101
+            }
+          ]
+        }
+      }
+    },
+    "exit_code": 0,
+    "stderr_last_line": null,
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\source-snapshot\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\reader-boundaries\\missing-holding-vector\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\reader-boundaries\\missing-holding-vector\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\reader-boundaries\\missing-holding-vector\\result.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029",
+      "started_utc": "2026-10-29T10:38:58.899537+00:00",
+      "wall_seconds": 0.14062489988282323,
+      "exit_code": 0,
+      "stdout": "commands\\boundary-missing-holding-vector.stdout.txt",
+      "stderr": "commands\\boundary-missing-holding-vector.stderr.txt"
+    }
+  },
+  {
+    "label": "inconsistent-pre-reveal-demand",
+    "result": {
+      "business_feasible": false,
+      "error": "instance_information",
+      "where": "two.demand",
+      "actual": null,
+      "required": null
+    },
+    "exit_code": 2,
+    "stderr_last_line": null,
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\source-snapshot\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\reader-boundaries\\inconsistent-pre-reveal-demand\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\reader-boundaries\\inconsistent-pre-reveal-demand\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\reader-boundaries\\inconsistent-pre-reveal-demand\\result.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029",
+      "started_utc": "2026-10-29T10:38:59.049855+00:00",
+      "wall_seconds": 0.12923739990219474,
+      "exit_code": 2,
+      "stdout": "commands\\boundary-inconsistent-pre-reveal-demand.stdout.txt",
+      "stderr": "commands\\boundary-inconsistent-pre-reveal-demand.stderr.txt"
+    }
+  }
+]

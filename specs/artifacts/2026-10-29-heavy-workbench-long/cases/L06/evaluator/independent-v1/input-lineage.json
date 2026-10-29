@@ -1,0 +1,19 @@
+{
+  "original_to_minimum_credit": {
+    "credit_limit_minor": {
+      "original": 5000,
+      "minimum_credit": 1000000
+    },
+    "qualification_variant": {
+      "original": null,
+      "minimum_credit": "cash-only relaxation to isolate infeasibility; not candidate input"
+    }
+  },
+  "minimum_credit_to_witness": {
+    "credit_limit_minor": {
+      "minimum_credit": 1000000,
+      "witness": 5369
+    }
+  },
+  "current_model_source_equals_minimum_credit_executed_source": true
+}

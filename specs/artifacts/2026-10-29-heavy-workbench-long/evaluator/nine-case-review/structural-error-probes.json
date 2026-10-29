@@ -1,0 +1,259 @@
+[
+  {
+    "case": "H06",
+    "description": "base plan re-used despite reduced supply capacity",
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+        "verify-plan",
+        "H06",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\specs\\artifacts\\2026-10-29-heavy-workbench\\inputs\\H06",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\structural-error-probes\\H06\\plan.csv",
+        "--scenario",
+        "stress",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\structural-error-probes\\H06\\verification.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+      "started_utc": "2026-10-29T09:49:35.315244+00:00",
+      "elapsed_seconds": 0.26672609988600016,
+      "exit_code": 0,
+      "stdout": "commands\\H06-structural-error.stdout.txt",
+      "stderr": "commands\\H06-structural-error.stderr.txt"
+    },
+    "result": {
+      "case": "H06",
+      "scenario": "stress",
+      "assessment": "plan_feasibility_only",
+      "passed": false,
+      "violations": [
+        {
+          "key": [
+            "SKU0",
+            "6"
+          ],
+          "code": "procurement_bounds"
+        },
+        {
+          "key": [
+            "SKU0",
+            "7"
+          ],
+          "code": "procurement_bounds"
+        },
+        {
+          "key": [
+            "SKU1",
+            "7"
+          ],
+          "code": "procurement_bounds"
+        },
+        {
+          "key": [
+            "SKU1",
+            "8"
+          ],
+          "code": "procurement_bounds"
+        },
+        {
+          "key": [
+            "SKU2",
+            "6"
+          ],
+          "code": "procurement_bounds"
+        },
+        {
+          "key": [
+            "SKU2",
+            "7"
+          ],
+          "code": "procurement_bounds"
+        },
+        {
+          "key": [
+            "SKU2",
+            "8"
+          ],
+          "code": "procurement_bounds"
+        },
+        {
+          "key": [
+            "SKU3",
+            "6"
+          ],
+          "code": "procurement_bounds"
+        },
+        {
+          "key": [
+            "SKU3",
+            "7"
+          ],
+          "code": "procurement_bounds"
+        },
+        {
+          "key": [
+            "SKU3",
+            "8"
+          ],
+          "code": "procurement_bounds"
+        },
+        {
+          "key": [
+            "SKU4",
+            "6"
+          ],
+          "code": "procurement_bounds"
+        },
+        {
+          "key": [
+            "SKU5",
+            "8"
+          ],
+          "code": "procurement_bounds"
+        }
+      ],
+      "metrics": {
+        "cost_cny": 123672.0,
+        "terminal_inventory": {
+          "SKU0": 0.0,
+          "SKU1": 0.0,
+          "SKU2": 0.0,
+          "SKU3": 0.0,
+          "SKU4": 0.0,
+          "SKU5": 0.0
+        }
+      },
+      "comparable": false
+    }
+  },
+  {
+    "case": "H08",
+    "description": "dependency-only earliest dates used as resource-feasible schedule",
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+        "verify-plan",
+        "H08",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\specs\\artifacts\\2026-10-29-heavy-workbench\\inputs\\H08",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\structural-error-probes\\H08\\plan.csv",
+        "--scenario",
+        "base",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\structural-error-probes\\H08\\verification.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+      "started_utc": "2026-10-29T09:49:35.603134+00:00",
+      "elapsed_seconds": 0.2668117000721395,
+      "exit_code": 0,
+      "stdout": "commands\\H08-structural-error.stdout.txt",
+      "stderr": "commands\\H08-structural-error.stderr.txt"
+    },
+    "result": {
+      "case": "H08",
+      "scenario": "base",
+      "assessment": "plan_feasibility_only",
+      "passed": false,
+      "violations": [
+        {
+          "role": "analyst",
+          "code": "resource_overlap"
+        },
+        {
+          "role": "engineer",
+          "code": "resource_overlap"
+        },
+        {
+          "role": "engineer",
+          "code": "resource_overlap"
+        },
+        {
+          "role": "engineer",
+          "code": "resource_overlap"
+        },
+        {
+          "role": "engineer",
+          "code": "resource_overlap"
+        },
+        {
+          "role": "engineer",
+          "code": "resource_overlap"
+        },
+        {
+          "role": "engineer",
+          "code": "resource_overlap"
+        }
+      ],
+      "metrics": {
+        "cost_cny": 67400,
+        "makespan_days": 26.0
+      },
+      "comparable": false
+    }
+  },
+  {
+    "case": "H10",
+    "description": "0.95 dispatch re-used under 0.90 physical efficiency",
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+        "verify-plan",
+        "H10",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\specs\\artifacts\\2026-10-29-heavy-workbench\\inputs\\H10",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\structural-error-probes\\H10\\plan.csv",
+        "--scenario",
+        "efficiency",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\structural-error-probes\\H10\\verification.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+      "started_utc": "2026-10-29T09:49:35.893946+00:00",
+      "elapsed_seconds": 0.4511677003465593,
+      "exit_code": 0,
+      "stdout": "commands\\H10-structural-error.stdout.txt",
+      "stderr": "commands\\H10-structural-error.stderr.txt"
+    },
+    "result": {
+      "case": "H10",
+      "scenario": "efficiency",
+      "assessment": "plan_feasibility_only",
+      "passed": false,
+      "violations": [
+        {
+          "key": [
+            "A",
+            "1",
+            "0"
+          ],
+          "code": "soc_balance"
+        },
+        {
+          "key": [
+            "A",
+            "1",
+            "1"
+          ],
+          "code": "soc_balance"
+        }
+      ],
+      "metrics": {
+        "grid_cost_cny": {
+          "A": 18959.438079999985,
+          "B": 22956.968759999985,
+          "C": 26979.579719999998
+        },
+        "capacities_kwh": {
+          "A": 50.0,
+          "B": 0.0,
+          "C": 0.0
+        }
+      },
+      "comparable": false
+    }
+  }
+]

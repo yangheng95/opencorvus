@@ -1,0 +1,30 @@
+{
+  "command": [
+    "docker",
+    "run",
+    "--rm",
+    "--network",
+    "none",
+    "--cpus",
+    "2",
+    "--name",
+    "oc-pinn-native-zero-20261029-a",
+    "--cidfile",
+    "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\native-lbfgs-zero-container.cid",
+    "--mount",
+    "type=bind,source=D:/opencorvus-benchmark-runs/paperbench-discovery-20261029,target=/work",
+    "--mount",
+    "type=bind,source=D:/myhexin-local/opencorvus/script/benchmark,target=/checks,readonly",
+    "-w",
+    "/work",
+    "opencorvus-benchmark-science:20261029",
+    "python",
+    "-B",
+    "qualify_native_lbfgs_zero.py"
+  ],
+  "container_id": "0ea586fb195a5cb40d4b5f9eac77f34e8ef223d81fb450ebb2bafc96ad5356db",
+  "exit_code": 0,
+  "observed_completed_at": "2026-10-29T09:40:36.467803+00:00",
+  "source_commit": "2ac423edcda53ad3745e9e5f31be88f1d9570d19",
+  "scope": "actual self-owned CPU process; no GPU, model or user processes"
+}

@@ -1,0 +1,82 @@
+{
+  "scope": "independent design audit plus actual old reference/checker probes",
+  "completed_utc": "2026-10-29T10:11:28.682527+00:00",
+  "reviewer": "/root/benchmark_review",
+  "delegation": "none",
+  "repo_writes": "none",
+  "provider_or_credential_use": "none",
+  "ui_or_user_process_actions": "none",
+  "gpu_training_or_interference": "none",
+  "new_case_implementation_or_candidate_answers": "none",
+  "reviewed_cases": [
+    "H02",
+    "H03",
+    "H04",
+    "H05",
+    "H06",
+    "H07",
+    "H08",
+    "H09",
+    "H10"
+  ],
+  "source_snapshot_count": 88,
+  "actual_objective_runs": 9,
+  "actual_numeric_error_objective_runs": 9,
+  "actual_author_feasibility_witness_runs": 7,
+  "actual_structural_error_plan_runs": 3,
+  "objective_result_scope": "20-point diagnostics only; no 80-point rubric grade",
+  "all_objectives_20": true,
+  "all_numeric_error_results_15": true,
+  "all_seven_old_witnesses_feasible": true,
+  "structural_error_codes": {
+    "H06": [
+      "procurement_bounds"
+    ],
+    "H08": [
+      "resource_overlap"
+    ],
+    "H10": [
+      "soc_balance"
+    ]
+  },
+  "stage": "new_versions_proposals_not_frozen",
+  "new_complete_reference_or_agent_runs": false,
+  "hours_validated": false,
+  "professional_or_blind_calibration": false,
+  "freeze_approved": false,
+  "native_addendum": "pure_stdlib_decoded_endpoints_and_math_only_not_second_native_run",
+  "command_receipts": [
+    "commands/H02-objective-error.json",
+    "commands/H02-objective.json",
+    "commands/H03-objective-error.json",
+    "commands/H03-objective.json",
+    "commands/H04-objective-error.json",
+    "commands/H04-objective.json",
+    "commands/H05-objective-error.json",
+    "commands/H05-objective.json",
+    "commands/H06-base-plan.json",
+    "commands/H06-objective-error.json",
+    "commands/H06-objective.json",
+    "commands/H06-stress-plan.json",
+    "commands/H06-structural-error.json",
+    "commands/H07-objective-error.json",
+    "commands/H07-objective.json",
+    "commands/H08-base-plan.json",
+    "commands/H08-objective-error.json",
+    "commands/H08-objective.json",
+    "commands/H08-stress-plan.json",
+    "commands/H08-structural-error.json",
+    "commands/H09-objective-error.json",
+    "commands/H09-objective.json",
+    "commands/H10-base-plan.json",
+    "commands/H10-efficiency-plan.json",
+    "commands/H10-objective-error.json",
+    "commands/H10-objective.json",
+    "commands/H10-price-plan.json",
+    "commands/H10-structural-error.json",
+    "commands/git-status-end.json",
+    "commands/git-status-start.json"
+  ],
+  "corrected_review_statement": "H06 R06 full/half baseline-equality wording overlaps; not assigned full or whole-task grade",
+  "remaining_work": "public input/contract, actual checker, full constructive reference, errors, cold replay, real fresh repeated systems, expert calibration"
+}

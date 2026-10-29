@@ -1,0 +1,3456 @@
+[
+  {
+    "case": "H02",
+    "title": "从方法说明到时序预测研究复现与扩展",
+    "rows": 392,
+    "columns": [
+      "t",
+      "value"
+    ],
+    "distinct_values": {
+      "t": 392,
+      "value": 392
+    },
+    "first_record": {
+      "t": "0",
+      "value": "79.83385"
+    },
+    "last_record": {
+      "t": "391",
+      "value": "122.96806"
+    },
+    "prompt": "# H02 从方法说明到时序预测研究复现与扩展\n\n为虚构实验室复现随包原创《滚动预测比较技术说明》的全部诊断结果，建立可复跑的研究仓库，并做一项有意义的扩展。这里复现的是明确标注的原创模拟研究协议，不声称复现某篇外部已发表论文。需要从方法理解、数据边界、实现、基准实验、泄漏审计、误差分析直到研究报告交付。性能提升不是先验必须成立的结论，负结果可以获得满分。\n\n## 输入与计算合同\n\nt=0..391连续日序列，value为负载。origin取168/224/280/336；每次仅训练t<origin，预测未来28天。last重复最后值；seasonal7重复最后7天，h从0计时取train[-7+h%7]；mean28重复最近28天均值。MAE为28天绝对误差均值。leakage_probe表是明示无效的未来28天均值诊断，不可作为合法模型排名。扩展方法必须只用训练数据选择超参数。\n\n输入文件见inputs/。诊断表字段、键和数值容差见task.json与context.json。\n\n## 实质交付要求\n\n1. 方法说明映射为明确实验假设：逐项对应三种方法、滚动预测及扩展假设，结果回答同一假设。\n2. 时间数据边界被审计：逐origin记录训练和测试时间边界并检查数据连续性。\n3. 基线实现遵循预测协议：独立运行三方法实际预测器并复现各origin的完整预测。\n4. 超参数选择与评估隔离：扩展仅在训练前缀内部验证选参并展示选参证据。\n5. 扩展具有可检验的研究理由：实现一种超出三基线的方法并说明适用假设。\n6. 扩展实验真实执行：每个origin保存预测和实际运行日志，报告可从它们重算。\n7. 消融回答方法机制问题：只改变一个与机制相关因素并同预算运行对照。\n8. 误差分析定位具体失败区间：按时段或预测步长分析误差并回指原始预测。\n9. 不确定性估计尊重时间相关：明确重复/重采样单位并量化方法差异区间。\n10. 泄漏探针被正确解释：解释未来均值为何非法并量化其与合法方法的误差差异。\n11. 计算成本可比较：记录相同环境的训练和预测资源及计量范围。\n12. 主张与实验规模相匹配：结论仅限此模拟序列和四个预测切点。\n13. 可视化解释预测误差：实际查看预测曲线与误差图，轴和数据与结果一致。\n14. 研究报告可独立复核：方法、结果、扩展和失败分析形成证据完整的报告。\n15. 清洁复跑恢复全部比较：隔离环境从records执行reproduce.py恢复基线与扩展预测。\n16. 研究交接声明可复现边界：版本、随机种子、硬件、耗时和已知限制均可核对。\n\n主要输出：report.md, report.pdf, src/, experiments.csv, figures/, reproduce.py, environment.txt\n请把实质交付放在outputs列出的相对路径；目录中的文件可按合理结构命名。另交diagnostics/下四张规定表，只是可审计的中间计算，合计20分，不能代替最终工作物。交reproduce.py，调用合同为python reproduce.py --inputs <目录> --output <新目录>；它必须从原始输入重建可执行结果，不能读取评分器、oracle或本次旧结果。定性评分80分，关键项必须满分且总分>=80才具备单次任务合格条件；清洁复跑与双人独立审查也必须完成。PDF/图表由审查者实际查看，不使用UI自动化。\n所有研究、组织、学习与业务记录为原创模拟资料；真实外部引用必须可核查，未知写明未知。不要发送外部邮件、实际下单、发布或使用私有凭据。可用本地通用编辑、终端、数据分析和制图工具；纯离线主赛道，真实方法来源可使用随包source-notes中的定位及有限原文事实，不要求联网；需扩大检索时另记开放检索赛道，不能混合成绩。不得调用外部模型。结果可用中文或英文，保留真实技术身份。\n每题统一预算100万总模型token、7200 CPU秒、16GiB内存、5GiB输出。闲置600秒由现有执行器按真实活动事实判断；预算耗尽与闲置失败分别记录，心跳不计活动。预算含模型重试及所有子任务。人类预计8–32小时仅是未校准估计。\n\n诊断完整列类型、键约定和单例键值见task.json.result_contract.diagnostic_schema；非键数值允许不同文本格式，身份键按规范字符串。\n",
+    "outputs": [
+      "report.md",
+      "report.pdf",
+      "src/",
+      "experiments.csv",
+      "figures/",
+      "reproduce.py",
+      "environment.txt"
+    ],
+    "budget_historical_do_not_reuse": {
+      "total_model_tokens": 1000000,
+      "cpu_seconds": 7200,
+      "memory_gib": 16,
+      "disk_gib": 5,
+      "inactivity_seconds": 600,
+      "expert_hours_estimate": [
+        8,
+        32
+      ],
+      "estimate_status": "uncalibrated",
+      "external_model_calls": 0
+    },
+    "protocol": "t=0..391连续日序列，value为负载。origin取168/224/280/336；每次仅训练t<origin，预测未来28天。last重复最后值；seasonal7重复最后7天，h从0计时取train[-7+h%7]；mean28重复最近28天均值。MAE为28天绝对误差均值。leakage_probe表是明示无效的未来28天均值诊断，不可作为合法模型排名。扩展方法必须只用训练数据选择超参数。",
+    "plan_contract": null,
+    "rubric": [
+      {
+        "id": "H02-O01",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "forecasts.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/forecasts.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/forecasts.csv",
+          "expected": "oracle/H02/forecasts.csv",
+          "keys": [
+            "origin",
+            "model",
+            "horizon"
+          ],
+          "columns": [
+            "prediction"
+          ],
+          "numeric": [
+            "prediction"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H02-O02",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "metrics.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/metrics.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/metrics.csv",
+          "expected": "oracle/H02/metrics.csv",
+          "keys": [
+            "origin",
+            "model"
+          ],
+          "columns": [
+            "mae"
+          ],
+          "numeric": [
+            "mae"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H02-O03",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "splits.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/splits.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/splits.csv",
+          "expected": "oracle/H02/splits.csv",
+          "keys": [
+            "origin"
+          ],
+          "columns": [
+            "train_end",
+            "test_end"
+          ],
+          "numeric": [
+            "train_end",
+            "test_end"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H02-O04",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "leakage_probe.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/leakage_probe.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/leakage_probe.csv",
+          "expected": "oracle/H02/leakage_probe.csv",
+          "keys": [
+            "origin"
+          ],
+          "columns": [
+            "oracle_future_mean"
+          ],
+          "numeric": [
+            "oracle_future_mean"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H02-R01",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "方法说明映射为明确实验假设",
+        "evidence": "report.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "逐项对应三种方法、滚动预测及扩展假设，结果回答同一假设",
+        "half": "三种方法完整但扩展假设尚无可判别预期",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H02-R02",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "时间数据边界被审计",
+        "evidence": "src/audit.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "逐origin记录训练和测试时间边界并检查数据连续性",
+        "half": "边界明确但数据连续性审计未完成",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H02-R03",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "基线实现遵循预测协议",
+        "evidence": "src/中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "独立运行三方法实际预测器并复现各origin的完整预测",
+        "half": "三种主体可运行但一个origin的执行证据不完整",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H02-R04",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "超参数选择与评估隔离",
+        "evidence": "src/selection.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "扩展仅在训练前缀内部验证选参并展示选参证据",
+        "half": "选参边界正确但候选比较证据不完整",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H02-R05",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "扩展具有可检验的研究理由",
+        "evidence": "src/中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "实现一种超出三基线的方法并说明适用假设",
+        "half": "方法可运行但研究理由与序列特征联系薄弱",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H02-R06",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "扩展实验真实执行",
+        "evidence": "experiments.csv中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "每个origin保存预测和实际运行日志，报告可从它们重算",
+        "half": "至少两个origin完整执行且其余缺口明确",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H02-R07",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "消融回答方法机制问题",
+        "evidence": "report.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "只改变一个与机制相关因素并同预算运行对照",
+        "half": "有实际消融但同时改变两个因素导致解释受限",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H02-R08",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "误差分析定位具体失败区间",
+        "evidence": "report.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "按时段或预测步长分析误差并回指原始预测",
+        "half": "定位一种失败模式但未解释其条件",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H02-R09",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "不确定性估计尊重时间相关",
+        "evidence": "report.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "明确重复/重采样单位并量化方法差异区间",
+        "half": "说明相关性但区间执行范围较窄",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H02-R10",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "泄漏探针被正确解释",
+        "evidence": "report.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "解释未来均值为何非法并量化其与合法方法的误差差异",
+        "half": "识别非法原因但缺量化对照",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H02-R11",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "计算成本可比较",
+        "evidence": "experiments.csv中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "记录相同环境的训练和预测资源及计量范围",
+        "half": "资源记录真实但缺一项计量范围",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H02-R12",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "主张与实验规模相匹配",
+        "evidence": "report.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "结论仅限此模拟序列和四个预测切点",
+        "half": "结论整体审慎但一项外推边界含糊",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H02-R13",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "可视化解释预测误差",
+        "evidence": "figures/中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "实际查看预测曲线与误差图，轴和数据与结果一致",
+        "half": "图真实可读但一种主要误差未体现",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H02-R14",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "研究报告可独立复核",
+        "evidence": "report.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "方法、结果、扩展和失败分析形成证据完整的报告",
+        "half": "报告主体完整但一个关键实验只能从代码推断",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H02-R15",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "清洁复跑恢复全部比较",
+        "evidence": "reproduce.py中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "隔离环境从records执行reproduce.py恢复基线与扩展预测",
+        "half": "清洁复跑完成全部基线但扩展需手动一步",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H02-R16",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "研究交接声明可复现边界",
+        "evidence": "environment.txt中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "版本、随机种子、硬件、耗时和已知限制均可核对",
+        "half": "依赖和种子清楚但一项资源限制未交代",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      }
+    ],
+    "oracle_tables": {
+      "forecasts.csv": {
+        "rows": 336,
+        "columns": [
+          "origin",
+          "model",
+          "horizon",
+          "prediction"
+        ]
+      },
+      "leakage_probe.csv": {
+        "rows": 4,
+        "columns": [
+          "origin",
+          "oracle_future_mean"
+        ]
+      },
+      "metrics.csv": {
+        "rows": 12,
+        "columns": [
+          "origin",
+          "model",
+          "mae"
+        ]
+      },
+      "splits.csv": {
+        "rows": 4,
+        "columns": [
+          "origin",
+          "train_end",
+          "test_end"
+        ]
+      }
+    }
+  },
+  {
+    "case": "H03",
+    "title": "从原始凭证到年度经营复盘与预算决策",
+    "rows": 1080,
+    "columns": [
+      "id",
+      "month",
+      "department",
+      "amount",
+      "currency",
+      "fx",
+      "status"
+    ],
+    "distinct_values": {
+      "id": 1080,
+      "month": 12,
+      "department": 3,
+      "amount": 740,
+      "currency": 2,
+      "fx": 2,
+      "status": 3
+    },
+    "first_record": {
+      "id": "TX0000",
+      "month": "2026-01",
+      "department": "engineering",
+      "amount": "-300",
+      "currency": "USD",
+      "fx": "7.1",
+      "status": "void"
+    },
+    "last_record": {
+      "id": "TX1079",
+      "month": "2026-12",
+      "department": "operations",
+      "amount": "679",
+      "currency": "CNY",
+      "fx": "1",
+      "status": "posted"
+    },
+    "prompt": "# H03 从原始凭证到年度经营复盘与预算决策\n\n担任虚构 Cedar Services 的经营分析负责人，将年度混合状态、混合币种凭证转成可审计经营包。完成数据口径审查、权责发生口径、现金口径、部门预算差异、驱动归因、至少三种情景及管理层建议。最终交付可重算模型、管理层报告和核对底稿；这是模拟经营案例，不构成真实投资或税务建议。\n\n## 输入与计算合同\n\nrecords含1080条互不重复凭证，单位原币元；fx为该笔锁定的CNY/原币汇率。posted只进入费用口径；paid只进入现金口径，二者是不同凭证事件，不互相补计；void计入审计统计。负数是退款。按每笔amount*fx按十进制ROUND_HALF_UP四舍五入到分后聚合。预算每月每部门18000 CNY。本题口径为模拟管理口径，不是法定会计准则。\n\n输入文件见inputs/。诊断表字段、键和数值容差见task.json与context.json。\n\n## 实质交付要求\n\n1. 经营口径可追踪到委托：明确posted费用与paid现金及退款的处理规则。\n2. 账目审计形成可核对清单：解释全部状态币种和异常值的处理与数量。\n3. 经营模型包含真实可重算公式：工作簿公式从凭证推导月度及部门汇总，改变源数能更新结果。\n4. 现金与费用口径可分别解释：两种口径分别核对并解释管理含义。\n5. 预算差异可分解为驱动：量化部门、月份、汇率或退款对关键差异的贡献。\n6. 建议回应实际经营矛盾：至少三项建议各自绑定量化驱动、负责人及可执行措施。\n7. 情景模型可重新计算：基准和两种扰动共享模型公式并清楚列出假设。\n8. 敏感性识别决策翻转边界：量化一个关键建议在何种假设下改变。\n9. 管理图形准确解释趋势：实际查看图形，单位、期间及统计口径与底稿一致。\n10. 执行摘要保持数值一致：摘要核心数字、驱动和建议与模型相符。\n11. 退款与跨币种处理可审计：逐笔保留原币、汇率和人民币值以及退款身份。\n12. 解释区分事实与推断：将凭证事实、管理假设和待确认因果分开。\n13. 报告达到管理会议可用程度：报告有清晰决策顺序、可读图表及可定位底稿。\n14. 核对揭示真实残差：各汇总与总账在明确舍入政策下对齐并解释差异。\n15. 清洁复跑重建经营底稿：隔离环境从records重算表并与工作簿关键输出核对。\n16. 交接说明经营模型使用边界：交代输入替换、公式范围、日期币种口径和待决事项。\n\n主要输出：model.xlsx, report.pdf, working-papers/, reproduce.py, handover.md\n请把实质交付放在outputs列出的相对路径；目录中的文件可按合理结构命名。另交diagnostics/下四张规定表，只是可审计的中间计算，合计20分，不能代替最终工作物。交reproduce.py，调用合同为python reproduce.py --inputs <目录> --output <新目录>；它必须从原始输入重建可执行结果，不能读取评分器、oracle或本次旧结果。定性评分80分，关键项必须满分且总分>=80才具备单次任务合格条件；清洁复跑与双人独立审查也必须完成。PDF/图表由审查者实际查看，不使用UI自动化。\n所有研究、组织、学习与业务记录为原创模拟资料；真实外部引用必须可核查，未知写明未知。不要发送外部邮件、实际下单、发布或使用私有凭据。可用本地通用编辑、终端、数据分析和制图工具；纯离线主赛道，真实方法来源可使用随包source-notes中的定位及有限原文事实，不要求联网；需扩大检索时另记开放检索赛道，不能混合成绩。不得调用外部模型。结果可用中文或英文，保留真实技术身份。\n每题统一预算100万总模型token、7200 CPU秒、16GiB内存、5GiB输出。闲置600秒由现有执行器按真实活动事实判断；预算耗尽与闲置失败分别记录，心跳不计活动。预算含模型重试及所有子任务。人类预计8–32小时仅是未校准估计。\n\n诊断完整列类型、键约定和单例键值见task.json.result_contract.diagnostic_schema；非键数值允许不同文本格式，身份键按规范字符串。\n",
+    "outputs": [
+      "model.xlsx",
+      "report.pdf",
+      "working-papers/",
+      "reproduce.py",
+      "handover.md"
+    ],
+    "budget_historical_do_not_reuse": {
+      "total_model_tokens": 1000000,
+      "cpu_seconds": 7200,
+      "memory_gib": 16,
+      "disk_gib": 5,
+      "inactivity_seconds": 600,
+      "expert_hours_estimate": [
+        8,
+        32
+      ],
+      "estimate_status": "uncalibrated",
+      "external_model_calls": 0
+    },
+    "protocol": "records含1080条互不重复凭证，单位原币元；fx为该笔锁定的CNY/原币汇率。posted只进入费用口径；paid只进入现金口径，二者是不同凭证事件，不互相补计；void计入审计统计。负数是退款。按每笔amount*fx按十进制ROUND_HALF_UP四舍五入到分后聚合。预算每月每部门18000 CNY。本题口径为模拟管理口径，不是法定会计准则。",
+    "plan_contract": null,
+    "rubric": [
+      {
+        "id": "H03-O01",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "ledger.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/ledger.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/ledger.csv",
+          "expected": "oracle/H03/ledger.csv",
+          "keys": [
+            "id"
+          ],
+          "columns": [
+            "month",
+            "department",
+            "amount_cny"
+          ],
+          "numeric": [
+            "amount_cny"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H03-O02",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "variance.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/variance.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/variance.csv",
+          "expected": "oracle/H03/variance.csv",
+          "keys": [
+            "month",
+            "department"
+          ],
+          "columns": [
+            "actual",
+            "budget"
+          ],
+          "numeric": [
+            "actual",
+            "budget"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H03-O03",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "cash.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/cash.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/cash.csv",
+          "expected": "oracle/H03/cash.csv",
+          "keys": [
+            "month"
+          ],
+          "columns": [
+            "net"
+          ],
+          "numeric": [
+            "net"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H03-O04",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "status_audit.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/status_audit.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/status_audit.csv",
+          "expected": "oracle/H03/status_audit.csv",
+          "keys": [
+            "status"
+          ],
+          "columns": [
+            "count"
+          ],
+          "numeric": [
+            "count"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H03-R01",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "经营口径可追踪到委托",
+        "evidence": "working-papers/policy.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "明确posted费用与paid现金及退款的处理规则",
+        "half": "主口径正确但一项退款解释不完整",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H03-R02",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "账目审计形成可核对清单",
+        "evidence": "working-papers/audit.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "解释全部状态币种和异常值的处理与数量",
+        "half": "主体清单完整但一类非关键异常未定位",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H03-R03",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "经营模型包含真实可重算公式",
+        "evidence": "model.xlsx中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "工作簿公式从凭证推导月度及部门汇总，改变源数能更新结果",
+        "half": "主公式有效但一个辅助分析为手工数",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H03-R04",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "现金与费用口径可分别解释",
+        "evidence": "report.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "两种口径分别核对并解释管理含义",
+        "half": "分别核对但一个差异驱动未解释",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H03-R05",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "预算差异可分解为驱动",
+        "evidence": "working-papers/variance.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "量化部门、月份、汇率或退款对关键差异的贡献",
+        "half": "有数值分解但一项贡献残差未解释",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H03-R06",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "建议回应实际经营矛盾",
+        "evidence": "report.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "至少三项建议各自绑定量化驱动、负责人及可执行措施",
+        "half": "建议对应驱动但一项执行责任未定",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H03-R07",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "情景模型可重新计算",
+        "evidence": "model.xlsx中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "基准和两种扰动共享模型公式并清楚列出假设",
+        "half": "两种情景实际可算但一项假设来源不清",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H03-R08",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "敏感性识别决策翻转边界",
+        "evidence": "working-papers/sensitivity.csv中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "量化一个关键建议在何种假设下改变",
+        "half": "有一维敏感性但翻转阈值未解出",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H03-R09",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "管理图形准确解释趋势",
+        "evidence": "report.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "实际查看图形，单位、期间及统计口径与底稿一致",
+        "half": "图形准确但缺一个影响阅读的口径标注",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H03-R10",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "执行摘要保持数值一致",
+        "evidence": "report.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "摘要核心数字、驱动和建议与模型相符",
+        "half": "核心数字正确但一项驱动表述较宽泛",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H03-R11",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "退款与跨币种处理可审计",
+        "evidence": "working-papers/中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "逐笔保留原币、汇率和人民币值以及退款身份",
+        "half": "值可核对但一列原始身份未保留",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H03-R12",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "解释区分事实与推断",
+        "evidence": "report.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "将凭证事实、管理假设和待确认因果分开",
+        "half": "总体区分明确但一项因果表述未限定",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H03-R13",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "报告达到管理会议可用程度",
+        "evidence": "report.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "报告有清晰决策顺序、可读图表及可定位底稿",
+        "half": "内容可用但一处排版或导航待修",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H03-R14",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "核对揭示真实残差",
+        "evidence": "working-papers/reconciliation.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "各汇总与总账在明确舍入政策下对齐并解释差异",
+        "half": "大项对齐但一处非关键舍入残差未说明",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H03-R15",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "清洁复跑重建经营底稿",
+        "evidence": "reproduce.py中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "隔离环境从records重算表并与工作簿关键输出核对",
+        "half": "底稿可重算但一张情景表需人工动作",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H03-R16",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "交接说明经营模型使用边界",
+        "evidence": "handover.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "交代输入替换、公式范围、日期币种口径和待决事项",
+        "half": "替换步骤可用但一种业务边界不清",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      }
+    ],
+    "oracle_tables": {
+      "cash.csv": {
+        "rows": 12,
+        "columns": [
+          "month",
+          "net"
+        ]
+      },
+      "ledger.csv": {
+        "rows": 689,
+        "columns": [
+          "id",
+          "month",
+          "department",
+          "amount_cny"
+        ]
+      },
+      "status_audit.csv": {
+        "rows": 3,
+        "columns": [
+          "status",
+          "count"
+        ]
+      },
+      "variance.csv": {
+        "rows": 36,
+        "columns": [
+          "month",
+          "department",
+          "actual",
+          "budget"
+        ]
+      }
+    }
+  },
+  {
+    "case": "H04",
+    "title": "从旧订单系统到保数据的可回滚迁移",
+    "rows": 600,
+    "columns": [
+      "id",
+      "customer",
+      "currency",
+      "total"
+    ],
+    "distinct_values": {
+      "id": 600,
+      "customer": 71,
+      "currency": 2,
+      "total": 321
+    },
+    "first_record": {
+      "id": "O0000",
+      "customer": "C000",
+      "currency": "USD",
+      "total": "-12.00"
+    },
+    "last_record": {
+      "id": "O0599",
+      "customer": "C031",
+      "currency": "CNY",
+      "total": "311.99"
+    },
+    "prompt": "# H04 从旧订单系统到保数据的可回滚迁移\n\n为虚构订单工具完成v1到v2的数据系统迁移。必须交付真正可执行的迁移、目标SQLite数据库、API示例、迁移与恢复演练记录以及运维交接。目标是规范客户身份、金额最小单位和退款，在保留用户资料的前提下升级；不能只导出几张CSV后宣称迁移成功。提供600行旧订单CSV作为v1持久快照、原始读取器和目标合同。\n\n## 输入与计算合同\n\nid为唯一订单号；customer是客户自然键；currency为CNY/USD均有两位小数；total以十进制文本表示原币金额，负数为退款。v2 customers(customer_id INTEGER PRIMARY KEY,legacy_key TEXT UNIQUE NOT NULL)，按legacy_key升序分配1..N；orders(order_id TEXT PRIMARY KEY,customer_id INTEGER NOT NULL REFERENCES customers,currency TEXT NOT NULL,total_minor INTEGER NOT NULL)。还需schema_version版本表。四个诊断导出表按此合同生成，audit按币种分组。\n\n输入文件见inputs/。诊断表字段、键和数值容差见task.json与context.json。\n\n## 实质交付要求\n\n1. 旧数据风险审计具有记录证据：识别自然键、退款、币种、精度和记录覆盖范围。\n2. 目标结构落实完整性合同：真实SQLite结构含主键、唯一、非空、外键和版本表并执行检查。\n3. 迁移金额使用十进制精确变换：使用Decimal或等价精确算法在真实迁移中保留分值。\n4. 版本化升级保留全部订单事实：升级后逐订单身份、客户、币种和退款金额与v1对齐。\n5. 迁移事务可中断恢复：注入执行中故障后旧快照可恢复且重新升级成功。\n6. 重复执行满足明确版本合同：首次升级与已升级再次执行产生明确版本结果。\n7. 备份恢复演练真实执行：从备份恢复v1并重做升级，核对完整记录。\n8. 新读取接口返回正确业务值：API运行示例覆盖订单、客户和退款并保持整数货币语义。\n9. 迁移验收覆盖边界输入：执行零值、负值和小数金额的明确输出合同。\n10. 数据库导出与原数据库一致：四个诊断CSV由实际v2查询导出并逐项核对。\n11. 性能实测对应真实数据规模：记录600行原始输入迁移耗时、环境和计量范围。\n12. 运维步骤包含失败处置：升级、备份、版本判断、恢复和失败升级处置可照做。\n13. 用户影响说明准确：明确读写切换、停机边界和退款表示变化。\n14. 迁移实现集中在一个当前路径：实现与文档指向同一版本化迁移入口并解释状态来源。\n15. 清洁复跑构建可查询数据库：隔离环境从原始CSV构建v2并真实查询验证结果。\n16. 交接能支持下一版本演进：说明schema版本、备份身份、约束和后续迁移扩展位置。\n\n主要输出：migration.py, v2.sqlite, api.py, exports/, verification/, runbook.md, reproduce.py\n请把实质交付放在outputs列出的相对路径；目录中的文件可按合理结构命名。另交diagnostics/下四张规定表，只是可审计的中间计算，合计20分，不能代替最终工作物。交reproduce.py，调用合同为python reproduce.py --inputs <目录> --output <新目录>；它必须从原始输入重建可执行结果，不能读取评分器、oracle或本次旧结果。定性评分80分，关键项必须满分且总分>=80才具备单次任务合格条件；清洁复跑与双人独立审查也必须完成。PDF/图表由审查者实际查看，不使用UI自动化。\n所有研究、组织、学习与业务记录为原创模拟资料；真实外部引用必须可核查，未知写明未知。不要发送外部邮件、实际下单、发布或使用私有凭据。可用本地通用编辑、终端、数据分析和制图工具；纯离线主赛道，真实方法来源可使用随包source-notes中的定位及有限原文事实，不要求联网；需扩大检索时另记开放检索赛道，不能混合成绩。不得调用外部模型。结果可用中文或英文，保留真实技术身份。\n每题统一预算100万总模型token、7200 CPU秒、16GiB内存、5GiB输出。闲置600秒由现有执行器按真实活动事实判断；预算耗尽与闲置失败分别记录，心跳不计活动。预算含模型重试及所有子任务。人类预计8–32小时仅是未校准估计。\n\n诊断完整列类型、键约定和单例键值见task.json.result_contract.diagnostic_schema；非键数值允许不同文本格式，身份键按规范字符串。\n",
+    "outputs": [
+      "migration.py",
+      "v2.sqlite",
+      "api.py",
+      "exports/",
+      "verification/",
+      "runbook.md",
+      "reproduce.py"
+    ],
+    "budget_historical_do_not_reuse": {
+      "total_model_tokens": 1000000,
+      "cpu_seconds": 7200,
+      "memory_gib": 16,
+      "disk_gib": 5,
+      "inactivity_seconds": 600,
+      "expert_hours_estimate": [
+        8,
+        32
+      ],
+      "estimate_status": "uncalibrated",
+      "external_model_calls": 0
+    },
+    "protocol": "id为唯一订单号；customer是客户自然键；currency为CNY/USD均有两位小数；total以十进制文本表示原币金额，负数为退款。v2 customers(customer_id INTEGER PRIMARY KEY,legacy_key TEXT UNIQUE NOT NULL)，按legacy_key升序分配1..N；orders(order_id TEXT PRIMARY KEY,customer_id INTEGER NOT NULL REFERENCES customers,currency TEXT NOT NULL,total_minor INTEGER NOT NULL)。还需schema_version版本表。四个诊断导出表按此合同生成，audit按币种分组。",
+    "plan_contract": null,
+    "rubric": [
+      {
+        "id": "H04-O01",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "customers.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/customers.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/customers.csv",
+          "expected": "oracle/H04/customers.csv",
+          "keys": [
+            "customer_id"
+          ],
+          "columns": [
+            "legacy_key"
+          ],
+          "numeric": [],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H04-O02",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "orders.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/orders.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/orders.csv",
+          "expected": "oracle/H04/orders.csv",
+          "keys": [
+            "order_id"
+          ],
+          "columns": [
+            "customer_id",
+            "currency",
+            "total_minor"
+          ],
+          "numeric": [
+            "customer_id",
+            "total_minor"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H04-O03",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "audit.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/audit.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/audit.csv",
+          "expected": "oracle/H04/audit.csv",
+          "keys": [
+            "currency"
+          ],
+          "columns": [
+            "count",
+            "total_minor"
+          ],
+          "numeric": [
+            "count",
+            "total_minor"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H04-O04",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "refunds.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/refunds.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/refunds.csv",
+          "expected": "oracle/H04/refunds.csv",
+          "keys": [
+            "order_id"
+          ],
+          "columns": [
+            "amount_minor"
+          ],
+          "numeric": [
+            "amount_minor"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H04-R01",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "旧数据风险审计具有记录证据",
+        "evidence": "verification/audit.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "识别自然键、退款、币种、精度和记录覆盖范围",
+        "half": "审计定位主要风险但一种精度边界未分析",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H04-R02",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "目标结构落实完整性合同",
+        "evidence": "v2.sqlite中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "真实SQLite结构含主键、唯一、非空、外键和版本表并执行检查",
+        "half": "结构主体正确但一项约束未落到数据库",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H04-R03",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "迁移金额使用十进制精确变换",
+        "evidence": "migration.py中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "使用Decimal或等价精确算法在真实迁移中保留分值",
+        "half": "主体精确但一个输入格式边界未处理",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H04-R04",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "版本化升级保留全部订单事实",
+        "evidence": "verification/data-check.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "升级后逐订单身份、客户、币种和退款金额与v1对齐",
+        "half": "所有主记录保留但一项审计元数据未交代",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H04-R05",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "迁移事务可中断恢复",
+        "evidence": "verification/failure-recovery.log中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "注入执行中故障后旧快照可恢复且重新升级成功",
+        "half": "故障后恢复成功但故障注入位置覆盖不足",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H04-R06",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "重复执行满足明确版本合同",
+        "evidence": "verification/repeat.log中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "首次升级与已升级再次执行产生明确版本结果",
+        "half": "行为正确但再次执行的返回合同未解释",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H04-R07",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "备份恢复演练真实执行",
+        "evidence": "verification/restore.log中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "从备份恢复v1并重做升级，核对完整记录",
+        "half": "恢复实际执行但缺一类核对",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H04-R08",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "新读取接口返回正确业务值",
+        "evidence": "api.py中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "API运行示例覆盖订单、客户和退款并保持整数货币语义",
+        "half": "普通订单接口运行正确但退款示例未完成",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H04-R09",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "迁移验收覆盖边界输入",
+        "evidence": "verification/amounts.log中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "执行零值、负值和小数金额的明确输出合同",
+        "half": "主要金额边界有输出但一种输入边界未完成",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H04-R10",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "数据库导出与原数据库一致",
+        "evidence": "verification/export.log中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "四个诊断CSV由实际v2查询导出并逐项核对",
+        "half": "主导出一致但一个审计表生成过程未记录",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H04-R11",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "性能实测对应真实数据规模",
+        "evidence": "verification/performance.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "记录600行原始输入迁移耗时、环境和计量范围",
+        "half": "有真实耗时但缺环境参数",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H04-R12",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "运维步骤包含失败处置",
+        "evidence": "runbook.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "升级、备份、版本判断、恢复和失败升级处置可照做",
+        "half": "正常步骤可做但一种失败处置含糊",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H04-R13",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "用户影响说明准确",
+        "evidence": "runbook.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "明确读写切换、停机边界和退款表示变化",
+        "half": "主要影响准确但一个切换条件未交代",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H04-R14",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "迁移实现集中在一个当前路径",
+        "evidence": "migration.py中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "实现与文档指向同一版本化迁移入口并解释状态来源",
+        "half": "入口明确但一段辅助代码职责未说明",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H04-R15",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "清洁复跑构建可查询数据库",
+        "evidence": "reproduce.py中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "隔离环境从原始CSV构建v2并真实查询验证结果",
+        "half": "清洁复跑构建成功但一种恢复演练需手动",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H04-R16",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "交接能支持下一版本演进",
+        "evidence": "runbook.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "说明schema版本、备份身份、约束和后续迁移扩展位置",
+        "half": "现版本清楚但后续迁移入口说明不足",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      }
+    ],
+    "oracle_tables": {
+      "audit.csv": {
+        "rows": 2,
+        "columns": [
+          "currency",
+          "count",
+          "total_minor"
+        ]
+      },
+      "customers.csv": {
+        "rows": 71,
+        "columns": [
+          "customer_id",
+          "legacy_key"
+        ]
+      },
+      "orders.csv": {
+        "rows": 600,
+        "columns": [
+          "order_id",
+          "customer_id",
+          "currency",
+          "total_minor"
+        ]
+      },
+      "refunds.csv": {
+        "rows": 21,
+        "columns": [
+          "order_id",
+          "amount_minor"
+        ]
+      }
+    }
+  },
+  {
+    "case": "H05",
+    "title": "从事故证据到跨租户幂等修复与恢复演练",
+    "rows": 823,
+    "columns": [
+      "tenant",
+      "event_id",
+      "amount",
+      "received_at"
+    ],
+    "distinct_values": {
+      "tenant": 3,
+      "event_id": 240,
+      "amount": 240,
+      "received_at": 240
+    },
+    "first_record": {
+      "tenant": "gamma",
+      "event_id": "E0132",
+      "amount": "232",
+      "received_at": "2026-10-01T02:12:00Z"
+    },
+    "last_record": {
+      "tenant": "alpha",
+      "event_id": "E0124",
+      "amount": "224",
+      "received_at": "2026-10-01T02:04:00Z"
+    },
+    "prompt": "# H05 从事故证据到跨租户幂等修复与恢复演练\n\n接手虚构支付汇总服务事故：收入重复、租户对账出现偏差，旧服务把event_id当全局唯一并无持久去重。完成事实时间线、根因审计、修复、历史重放、重启/重复/跨租户验证、上线与恢复方案，以及能给业务方阅读的事故报告。输入事件会重复且乱序，不可通过丢弃某个租户或只按收到顺序修补数字。只在本题提供的隔离样例服务上工作。\n\n## 输入与计算合同\n\n唯一业务身份为(tenant,event_id)，同一身份重复载荷在本题金额相同；amount是整数最小货币单位。三租户各240个业务事件，存在103次额外传输重复，received_at不保证输入顺序。最终ledger每业务身份一行；duplicates列出attempts>1的身份；totals按tenant聚合；replay列出第一、第二次全量重放后的distinct与total。需持久化且对跨租户重复event_id保持独立。\n\n输入文件见inputs/。诊断表字段、键和数值容差见task.json与context.json。\n\n## 实质交付要求\n\n1. 事故时间线绑定原始证据：区分事件业务时间、收到顺序、处理时间与未知时间。\n2. 根因解释跨租户身份错误：由旧代码与具体事件解释event_id全局去重怎样损坏结果。\n3. 根因解释重放重复累计：由代码和重放实证说明内存或无事务去重的失败机制。\n4. 影响范围核对全部租户：按三租户量化原错误与修复结果并解释业务影响。\n5. 修复持久化正确业务身份：真实服务使用tenant/event_id联合身份持久处理事件。\n6. 去重与累计共享原子提交：实现并运行事务保证一次业务事件对应一次入账。\n7. 恢复路径用持久事实收敛：真实重启后继续处理并得到完整正确租户账本。\n8. 并发路径保持业务账本正确：多进程或等价真实并发投递同事件后账本匹配。\n9. 乱序处理符合业务合同：按原序与重排事件执行得到同一正确账本。\n10. 历史修复可审计：从原始事件重建历史账目并明确新旧版本与核对。\n11. 监测指标能发现同类偏差：定义并实现重复率与账本对账指标及可执行告警阈值。\n12. 事故解释区分事实与未知：每项根因和影响断言有证据并把未观测情况写为未知。\n13. 修复范围审计覆盖共享入口：逐一审计样例服务导入、重放、重启和并发入口。\n14. 发布与恢复方案可演练：隔离环境演练切换和回滚并核对同一账本事实。\n15. 清洁复跑重建事故修复证据：隔离环境从原服务复现问题再运行修复并生成正确账本。\n16. 交付使业务方理解结果：事故报告明确受影响金额、修复结果、残余风险和责任动作。\n\n主要输出：service.py, incident.md, ledger.csv, duplicates.csv, totals.csv, replay.csv, verification/, runbook.md, reproduce.py\n请把实质交付放在outputs列出的相对路径；目录中的文件可按合理结构命名。另交diagnostics/下四张规定表，只是可审计的中间计算，合计20分，不能代替最终工作物。交reproduce.py，调用合同为python reproduce.py --inputs <目录> --output <新目录>；它必须从原始输入重建可执行结果，不能读取评分器、oracle或本次旧结果。定性评分80分，关键项必须满分且总分>=80才具备单次任务合格条件；清洁复跑与双人独立审查也必须完成。PDF/图表由审查者实际查看，不使用UI自动化。\n所有研究、组织、学习与业务记录为原创模拟资料；真实外部引用必须可核查，未知写明未知。不要发送外部邮件、实际下单、发布或使用私有凭据。可用本地通用编辑、终端、数据分析和制图工具；纯离线主赛道，真实方法来源可使用随包source-notes中的定位及有限原文事实，不要求联网；需扩大检索时另记开放检索赛道，不能混合成绩。不得调用外部模型。结果可用中文或英文，保留真实技术身份。\n每题统一预算100万总模型token、7200 CPU秒、16GiB内存、5GiB输出。闲置600秒由现有执行器按真实活动事实判断；预算耗尽与闲置失败分别记录，心跳不计活动。预算含模型重试及所有子任务。人类预计8–32小时仅是未校准估计。\n\n诊断完整列类型、键约定和单例键值见task.json.result_contract.diagnostic_schema；非键数值允许不同文本格式，身份键按规范字符串。\n",
+    "outputs": [
+      "service.py",
+      "incident.md",
+      "ledger.csv",
+      "duplicates.csv",
+      "totals.csv",
+      "replay.csv",
+      "verification/",
+      "runbook.md",
+      "reproduce.py"
+    ],
+    "budget_historical_do_not_reuse": {
+      "total_model_tokens": 1000000,
+      "cpu_seconds": 7200,
+      "memory_gib": 16,
+      "disk_gib": 5,
+      "inactivity_seconds": 600,
+      "expert_hours_estimate": [
+        8,
+        32
+      ],
+      "estimate_status": "uncalibrated",
+      "external_model_calls": 0
+    },
+    "protocol": "唯一业务身份为(tenant,event_id)，同一身份重复载荷在本题金额相同；amount是整数最小货币单位。三租户各240个业务事件，存在103次额外传输重复，received_at不保证输入顺序。最终ledger每业务身份一行；duplicates列出attempts>1的身份；totals按tenant聚合；replay列出第一、第二次全量重放后的distinct与total。需持久化且对跨租户重复event_id保持独立。",
+    "plan_contract": null,
+    "rubric": [
+      {
+        "id": "H05-O01",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "ledger.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/ledger.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/ledger.csv",
+          "expected": "oracle/H05/ledger.csv",
+          "keys": [
+            "tenant",
+            "event_id"
+          ],
+          "columns": [
+            "amount"
+          ],
+          "numeric": [
+            "amount"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H05-O02",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "duplicates.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/duplicates.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/duplicates.csv",
+          "expected": "oracle/H05/duplicates.csv",
+          "keys": [
+            "tenant",
+            "event_id"
+          ],
+          "columns": [
+            "attempts"
+          ],
+          "numeric": [
+            "attempts"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H05-O03",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "totals.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/totals.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/totals.csv",
+          "expected": "oracle/H05/totals.csv",
+          "keys": [
+            "tenant"
+          ],
+          "columns": [
+            "total"
+          ],
+          "numeric": [
+            "total"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H05-O04",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "replay.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/replay.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/replay.csv",
+          "expected": "oracle/H05/replay.csv",
+          "keys": [
+            "pass"
+          ],
+          "columns": [
+            "distinct",
+            "total"
+          ],
+          "numeric": [
+            "distinct",
+            "total"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H05-R01",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "事故时间线绑定原始证据",
+        "evidence": "incident.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "区分事件业务时间、收到顺序、处理时间与未知时间",
+        "half": "主要先后有证据但一种时间来源未标清",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H05-R02",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "根因解释跨租户身份错误",
+        "evidence": "incident.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "由旧代码与具体事件解释event_id全局去重怎样损坏结果",
+        "half": "根因方向正确但缺一对跨租户事件证据",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H05-R03",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "根因解释重放重复累计",
+        "evidence": "incident.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "由代码和重放实证说明内存或无事务去重的失败机制",
+        "half": "解释正确但一次执行证据不足",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H05-R04",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "影响范围核对全部租户",
+        "evidence": "verification/impact.csv中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "按三租户量化原错误与修复结果并解释业务影响",
+        "half": "三租户覆盖但一项差异未解释",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H05-R05",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "修复持久化正确业务身份",
+        "evidence": "service.py中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "真实服务使用tenant/event_id联合身份持久处理事件",
+        "half": "身份正确但持久恢复的一种情况未验证",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H05-R06",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "去重与累计共享原子提交",
+        "evidence": "service.py中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "实现并运行事务保证一次业务事件对应一次入账",
+        "half": "事务实现合理但一种中断位置未验证",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H05-R07",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "恢复路径用持久事实收敛",
+        "evidence": "verification/restart.log中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "真实重启后继续处理并得到完整正确租户账本",
+        "half": "重启成功但一处恢复步骤需人工修数",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H05-R08",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "并发路径保持业务账本正确",
+        "evidence": "verification/concurrent.log中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "多进程或等价真实并发投递同事件后账本匹配",
+        "half": "有实际并发但冲突输入范围有限",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H05-R09",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "乱序处理符合业务合同",
+        "evidence": "verification/order.log中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "按原序与重排事件执行得到同一正确账本",
+        "half": "一种乱序执行正确但缺与原序对照",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H05-R10",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "历史修复可审计",
+        "evidence": "verification/backfill.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "从原始事件重建历史账目并明确新旧版本与核对",
+        "half": "重建正确但一个审计定位欠缺",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H05-R11",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "监测指标能发现同类偏差",
+        "evidence": "verification/monitoring.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "定义并实现重复率与账本对账指标及可执行告警阈值",
+        "half": "指标实现可用但阈值依据不清",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H05-R12",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "事故解释区分事实与未知",
+        "evidence": "incident.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "每项根因和影响断言有证据并把未观测情况写为未知",
+        "half": "核心断言有证据但一项次要推断未限定",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H05-R13",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "修复范围审计覆盖共享入口",
+        "evidence": "verification/entrypoints.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "逐一审计样例服务导入、重放、重启和并发入口",
+        "half": "主要入口覆盖但一个终态核对未记载",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H05-R14",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "发布与恢复方案可演练",
+        "evidence": "runbook.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "隔离环境演练切换和回滚并核对同一账本事实",
+        "half": "切换演练成功但回滚后核对范围不足",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H05-R15",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "清洁复跑重建事故修复证据",
+        "evidence": "reproduce.py中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "隔离环境从原服务复现问题再运行修复并生成正确账本",
+        "half": "修复可复跑但原问题复现需手工步骤",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H05-R16",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "交付使业务方理解结果",
+        "evidence": "incident.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "事故报告明确受影响金额、修复结果、残余风险和责任动作",
+        "half": "结果可理解但一项责任动作未明确",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      }
+    ],
+    "oracle_tables": {
+      "duplicates.csv": {
+        "rows": 103,
+        "columns": [
+          "tenant",
+          "event_id",
+          "attempts"
+        ]
+      },
+      "ledger.csv": {
+        "rows": 720,
+        "columns": [
+          "tenant",
+          "event_id",
+          "amount"
+        ]
+      },
+      "replay.csv": {
+        "rows": 2,
+        "columns": [
+          "pass",
+          "distinct",
+          "total"
+        ]
+      },
+      "totals.csv": {
+        "rows": 3,
+        "columns": [
+          "tenant",
+          "total"
+        ]
+      }
+    }
+  },
+  {
+    "case": "H06",
+    "title": "从供需数据到可执行的采购与库存优化方案",
+    "rows": 72,
+    "columns": [
+      "sku",
+      "week",
+      "demand",
+      "capacity",
+      "unit_cost"
+    ],
+    "distinct_values": {
+      "sku": 6,
+      "week": 12,
+      "demand": 50,
+      "capacity": 6,
+      "unit_cost": 6
+    },
+    "first_record": {
+      "sku": "SKU0",
+      "week": "1",
+      "demand": "37",
+      "capacity": "45",
+      "unit_cost": "20"
+    },
+    "last_record": {
+      "sku": "SKU5",
+      "week": "12",
+      "demand": "79",
+      "capacity": "55",
+      "unit_cost": "35"
+    },
+    "prompt": "# H06 从供需数据到可执行的采购与库存优化方案\n\n为虚构制造企业做12周、6种物料的采购库存决策。建立成本模型和可运行求解器，给出每周常规采购、加急、库存与履约计划，并在供应能力下降时制定应对。最后提交计划工作簿、管理层说明及复跑代码。任务核心是可行、可解释的业务计划；不能只算需求和成本诊断，也不能把启发式结果宣称为已证全局最优。\n\n## 输入与计算合同\n\n每SKU每周demand必须当周满足；常规当周到货量0..capacity，加急当周到货不限，整数采购量；初始库存0，周末库存可跨周，成本1 CNY/单位/周；常规到岸价unit_cost+2，加急unit_cost+12；第12周末库存必须0。SKU间不共享容量。baseline为每周先用常规、再加急且不持库存的可行成本上界。另评估第6-8周capacity下降20%向下取整的压力情景。\n\n输入文件见inputs/。诊断表字段、键和数值容差见task.json与context.json。\n\n## 实质交付要求\n\n1. 业务模型完整定义物料流：用需求、常规、加急、库存和期末约束建立可检查模型。\n2. 目标函数计入完整实际成本：常规、加急和逐周持有成本与输入单位一致。\n3. 求解器生成实际采购计划：运行求解器输出每SKU每周的全部决策变量。\n4. 交付计划满足每周物料平衡：逐行重算库存递推和需求交付并全部满足。\n5. 常规采购满足整数与容量合同：所有SKU每周整数常规量在当周capacity内。\n6. 计划实现可核对的成本改进：成本不高于公开可行baseline并解释改进来源。\n7. 最优性主张有证据边界：给出可验证界或求解证书，或明确仅可行/启发式。\n8. 压力情景重新求解有效计划：按给定容量下降重新运行并保持每周履约。\n9. 方案量化成本与供应风险取舍：比较基础及压力情景的加急依赖和成本驱动。\n10. 实施节奏能直接用于下单：明确每周SKU常规和加急量及库存检查责任。\n11. 可重算工作簿与求解器一致：工作簿真实公式重算成本和库存并与CSV对齐。\n12. 单位与价格口径可审计：输入单位、到岸价格、持有成本和舍入政策全程一致。\n13. 关键建议绑定计划证据：建议基于具体SKU周次和情景结果。\n14. 报告和图表达到采购评审可用程度：实际查看成本与库存图，数值可回溯且排版完整。\n15. 清洁复跑恢复基础及压力计划：隔离环境执行求解并独立验算两个计划的平衡与成本。\n16. 交接定义数据更新与失效条件：明确需求/容量变化的重算步骤及方案适用边界。\n\n主要输出：plan.xlsx, allocation.csv, stress-allocation.csv, solver.py, decision.pdf, reproduce.py, handover.md\n请把实质交付放在outputs列出的相对路径；目录中的文件可按合理结构命名。另交diagnostics/下四张规定表，只是可审计的中间计算，合计20分，不能代替最终工作物。交reproduce.py，调用合同为python reproduce.py --inputs <目录> --output <新目录>；它必须从原始输入重建可执行结果，不能读取评分器、oracle或本次旧结果。定性评分80分，关键项必须满分且总分>=80才具备单次任务合格条件；清洁复跑与双人独立审查也必须完成。PDF/图表由审查者实际查看，不使用UI自动化。\n所有研究、组织、学习与业务记录为原创模拟资料；真实外部引用必须可核查，未知写明未知。不要发送外部邮件、实际下单、发布或使用私有凭据。可用本地通用编辑、终端、数据分析和制图工具；纯离线主赛道，真实方法来源可使用随包source-notes中的定位及有限原文事实，不要求联网；需扩大检索时另记开放检索赛道，不能混合成绩。不得调用外部模型。结果可用中文或英文，保留真实技术身份。\n每题统一预算100万总模型token、7200 CPU秒、16GiB内存、5GiB输出。闲置600秒由现有执行器按真实活动事实判断；预算耗尽与闲置失败分别记录，心跳不计活动。预算含模型重试及所有子任务。人类预计8–32小时仅是未校准估计。\n\n诊断完整列类型、键约定和单例键值见task.json.result_contract.diagnostic_schema；非键数值允许不同文本格式，身份键按规范字符串。\n\n计划CSV的键、字段、单位和情景以task.json.result_contract.plan_contract为准；可运行独立verify-plan检查约束。诊断正确不能替代计划可行。\n",
+    "outputs": [
+      "plan.xlsx",
+      "allocation.csv",
+      "stress-allocation.csv",
+      "solver.py",
+      "decision.pdf",
+      "reproduce.py",
+      "handover.md"
+    ],
+    "budget_historical_do_not_reuse": {
+      "total_model_tokens": 1000000,
+      "cpu_seconds": 7200,
+      "memory_gib": 16,
+      "disk_gib": 5,
+      "inactivity_seconds": 600,
+      "expert_hours_estimate": [
+        8,
+        32
+      ],
+      "estimate_status": "uncalibrated",
+      "external_model_calls": 0
+    },
+    "protocol": "每SKU每周demand必须当周满足；常规当周到货量0..capacity，加急当周到货不限，整数采购量；初始库存0，周末库存可跨周，成本1 CNY/单位/周；常规到岸价unit_cost+2，加急unit_cost+12；第12周末库存必须0。SKU间不共享容量。baseline为每周先用常规、再加急且不持库存的可行成本上界。另评估第6-8周capacity下降20%向下取整的压力情景。",
+    "plan_contract": {
+      "keys": [
+        "sku",
+        "week"
+      ],
+      "columns": [
+        "regular",
+        "expedite",
+        "closing_inventory"
+      ],
+      "regular_freight": 2,
+      "expedite_freight": 12,
+      "holding_cost": 1,
+      "stress_weeks": [
+        6,
+        8
+      ],
+      "stress_capacity_factor": 0.8,
+      "scenarios": [
+        "base",
+        "stress"
+      ],
+      "units": "采购/库存为整数单位，week规范整数键；cost单位CNY"
+    },
+    "rubric": [
+      {
+        "id": "H06-O01",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "demand.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/demand.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/demand.csv",
+          "expected": "oracle/H06/demand.csv",
+          "keys": [
+            "sku"
+          ],
+          "columns": [
+            "units"
+          ],
+          "numeric": [
+            "units"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H06-O02",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "landed.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/landed.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/landed.csv",
+          "expected": "oracle/H06/landed.csv",
+          "keys": [
+            "sku",
+            "week"
+          ],
+          "columns": [
+            "regular",
+            "expedite"
+          ],
+          "numeric": [
+            "regular",
+            "expedite"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H06-O03",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "capacity.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/capacity.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/capacity.csv",
+          "expected": "oracle/H06/capacity.csv",
+          "keys": [
+            "sku",
+            "week"
+          ],
+          "columns": [
+            "expedite_needed_without_inventory"
+          ],
+          "numeric": [
+            "expedite_needed_without_inventory"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H06-O04",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "baseline.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/baseline.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/baseline.csv",
+          "expected": "oracle/H06/baseline.csv",
+          "keys": [
+            "id"
+          ],
+          "columns": [
+            "cost"
+          ],
+          "numeric": [
+            "cost"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H06-R01",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "业务模型完整定义物料流",
+        "evidence": "decision.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "用需求、常规、加急、库存和期末约束建立可检查模型",
+        "half": "主平衡正确但一种期末条件未写清",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H06-R02",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "目标函数计入完整实际成本",
+        "evidence": "solver.py中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "常规、加急和逐周持有成本与输入单位一致",
+        "half": "采购成本完整但一项持有成本边界未说明",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H06-R03",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "求解器生成实际采购计划",
+        "evidence": "solver.py中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "运行求解器输出每SKU每周的全部决策变量",
+        "half": "主体计划实际运行但一类辅助变量需手算",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H06-R04",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "交付计划满足每周物料平衡",
+        "evidence": "allocation.csv中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "逐行重算库存递推和需求交付并全部满足",
+        "half": "只有局部辅助说明缺失且主平衡正确",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H06-R05",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "常规采购满足整数与容量合同",
+        "evidence": "allocation.csv中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "所有SKU每周整数常规量在当周capacity内",
+        "half": "容量正确但一种变量单位说明不足",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H06-R06",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "计划实现可核对的成本改进",
+        "evidence": "decision.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "成本不高于公开可行baseline并解释改进来源",
+        "half": "成本达到baseline且解释为何暂无改进",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H06-R07",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "最优性主张有证据边界",
+        "evidence": "decision.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "给出可验证界或求解证书，或明确仅可行/启发式",
+        "half": "诚实限定启发式但缺可量化上下界",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H06-R08",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "压力情景重新求解有效计划",
+        "evidence": "stress-allocation.csv中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "按给定容量下降重新运行并保持每周履约",
+        "half": "情景实际求解但一项核对未记录",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H06-R09",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "方案量化成本与供应风险取舍",
+        "evidence": "decision.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "比较基础及压力情景的加急依赖和成本驱动",
+        "half": "完成成本对比但一项风险驱动未量化",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H06-R10",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "实施节奏能直接用于下单",
+        "evidence": "plan.xlsx中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "明确每周SKU常规和加急量及库存检查责任",
+        "half": "计划可下单但一种责任动作不清",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H06-R11",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "可重算工作簿与求解器一致",
+        "evidence": "plan.xlsx中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "工作簿真实公式重算成本和库存并与CSV对齐",
+        "half": "主公式正确但压力情景一张表未联动",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H06-R12",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "单位与价格口径可审计",
+        "evidence": "handover.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "输入单位、到岸价格、持有成本和舍入政策全程一致",
+        "half": "单位正确但一种舍入口径未说明",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H06-R13",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "关键建议绑定计划证据",
+        "evidence": "decision.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "建议基于具体SKU周次和情景结果",
+        "half": "主建议有证据但一项业务解释宽泛",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H06-R14",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "报告和图表达到采购评审可用程度",
+        "evidence": "decision.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "实际查看成本与库存图，数值可回溯且排版完整",
+        "half": "图表可读准确但一处非关键标注待修",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H06-R15",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "清洁复跑恢复基础及压力计划",
+        "evidence": "reproduce.py中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "隔离环境执行求解并独立验算两个计划的平衡与成本",
+        "half": "基础计划可清洁复跑而压力情景需手动一步",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H06-R16",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "交接定义数据更新与失效条件",
+        "evidence": "handover.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "明确需求/容量变化的重算步骤及方案适用边界",
+        "half": "重算步骤可用但一种失效条件未写清",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      }
+    ],
+    "oracle_tables": {
+      "baseline.csv": {
+        "rows": 1,
+        "columns": [
+          "id",
+          "cost"
+        ]
+      },
+      "capacity.csv": {
+        "rows": 72,
+        "columns": [
+          "sku",
+          "week",
+          "expedite_needed_without_inventory"
+        ]
+      },
+      "demand.csv": {
+        "rows": 6,
+        "columns": [
+          "sku",
+          "units"
+        ]
+      },
+      "landed.csv": {
+        "rows": 72,
+        "columns": [
+          "sku",
+          "week",
+          "regular",
+          "expedite"
+        ]
+      }
+    }
+  },
+  {
+    "case": "H07",
+    "title": "从研究资料到系统性证据综述与决策建议",
+    "rows": 30,
+    "columns": [
+      "study",
+      "design",
+      "followup_weeks",
+      "effect",
+      "se",
+      "risk",
+      "population",
+      "source_kind"
+    ],
+    "distinct_values": {
+      "study": 30,
+      "design": 2,
+      "followup_weeks": 2,
+      "effect": 9,
+      "se": 5,
+      "risk": 2,
+      "population": 1,
+      "source_kind": 1
+    },
+    "first_record": {
+      "study": "R00",
+      "design": "observational",
+      "followup_weeks": "4",
+      "effect": "0.1",
+      "se": "0.06",
+      "risk": "high",
+      "population": "adult_training",
+      "source_kind": "fictional_study"
+    },
+    "last_record": {
+      "study": "R29",
+      "design": "randomized",
+      "followup_weeks": "12",
+      "effect": "0.17",
+      "se": "0.108",
+      "risk": "low",
+      "population": "adult_training",
+      "source_kind": "fictional_study"
+    },
+    "prompt": "# H07 从研究资料到系统性证据综述与决策建议\n\n为虚构公共培训基金审查成人培训干预证据，完成筛选方案、双向可追溯提取、偏倚评价、定量合成、敏感性和决策备忘录。30项研究均为明确标注的虚构教学资料，不能称作真实文献综述或据此给真实人群作政策结论。需要展示完整系统综述工作链，并解释为何证据强弱不等同于效应大小。\n\n## 输入与计算合同\n\n纳入设计为randomized且followup_weeks>=8，其他排除；全部人口字段相同。effect为统一尺度效应量，se为其标准误。诊断固定效应模型w=1/se²，pooled=sum(w*effect)/sum(w)，pooled_se=sqrt(1/sum(w))。risk是资料中给定的一阶风险标签，不替代完整偏倚讨论。须额外做异质性量化、适当的替代合成以及去除high风险的敏感性。\n\nstudy-dossiers.md提供30项原始虚构研究档案；records.csv是既有提取表，必须逐项核对摘要、方法与最终附录并记录更正。最终附录权威，初稿摘要可能有差异。输入文件见inputs/。诊断表字段、键和数值容差见task.json与context.json。\n\n## 实质交付要求\n\n1. 综述问题具有明确纳入边界：清楚写出人口、干预、对照、结局与纳入设计时间。\n2. 筛选过程逐研究可追溯：每项研究有纳入决定、具体排除理由与输入定位。\n3. 数据提取保留研究身份和单位：逐项效应标准误设计随访风险可追溯到原始资料。\n4. 合成实现按声明模型执行：运行固定效应与一种有理由的替代合成。\n5. 异质性计算支持解释：计算Q/I²或合适替代并解释有限研究条件下含义。\n6. 偏倚分析联系具体研究条件：以给定标签为起点识别可判断和资料不足的偏倚域。\n7. 高风险敏感性真实执行：剔除high标签研究重算合成并比较结论。\n8. 效应解释保持量表与不确定性：主结果给尺度、区间、纳入数并解释实际意义范围。\n9. 证据强度判断可审计：把风险、不一致、间接性及资料不足映射为有理由的确信等级。\n10. 证据地图可定位研究贡献：实际查看森林图或等价地图，权重区间标签正确。\n11. 综述结论区分模拟与真实证据：标题摘要讨论均准确标注虚构资料用途。\n12. 建议反映证据而非预设立场：建议强度随偏倚与敏感性结果变化且可回指证据。\n13. 解释处理相反与不显著结果：讨论证据分歧及区间重叠而非只择正向发现。\n14. 最终综述可供独立审阅：完整筛选流、方法、结果、局限和附件定位，排版实际复核。\n15. 清洁复跑恢复主及敏感性结果：隔离环境从records生成筛选和合成结果并核对正文。\n16. 交接解释证据更新方法：新研究纳入、风险复核和模型更新步骤可执行。\n\n主要输出：review.md, review.pdf, extraction.csv, screening-log.csv, analysis/, evidence-map/, reproduce.py, decision.md\n请把实质交付放在outputs列出的相对路径；目录中的文件可按合理结构命名。另交diagnostics/下四张规定表，只是可审计的中间计算，合计20分，不能代替最终工作物。交reproduce.py，调用合同为python reproduce.py --inputs <目录> --output <新目录>；它必须从原始输入重建可执行结果，不能读取评分器、oracle或本次旧结果。定性评分80分，关键项必须满分且总分>=80才具备单次任务合格条件；清洁复跑与双人独立审查也必须完成。PDF/图表由审查者实际查看，不使用UI自动化。\n所有研究、组织、学习与业务记录为原创模拟资料；真实外部引用必须可核查，未知写明未知。不要发送外部邮件、实际下单、发布或使用私有凭据。可用本地通用编辑、终端、数据分析和制图工具；纯离线主赛道，真实方法来源可使用随包source-notes中的定位及有限原文事实，不要求联网；需扩大检索时另记开放检索赛道，不能混合成绩。不得调用外部模型。结果可用中文或英文，保留真实技术身份。\n每题统一预算100万总模型token、7200 CPU秒、16GiB内存、5GiB输出。闲置600秒由现有执行器按真实活动事实判断；预算耗尽与闲置失败分别记录，心跳不计活动。预算含模型重试及所有子任务。人类预计8–32小时仅是未校准估计。\n\n诊断完整列类型、键约定和单例键值见task.json.result_contract.diagnostic_schema；非键数值允许不同文本格式，身份键按规范字符串。\n",
+    "outputs": [
+      "review.md",
+      "review.pdf",
+      "extraction.csv",
+      "screening-log.csv",
+      "analysis/",
+      "evidence-map/",
+      "reproduce.py",
+      "decision.md"
+    ],
+    "budget_historical_do_not_reuse": {
+      "total_model_tokens": 1000000,
+      "cpu_seconds": 7200,
+      "memory_gib": 16,
+      "disk_gib": 5,
+      "inactivity_seconds": 600,
+      "expert_hours_estimate": [
+        8,
+        32
+      ],
+      "estimate_status": "uncalibrated",
+      "external_model_calls": 0
+    },
+    "protocol": "纳入设计为randomized且followup_weeks>=8，其他排除；全部人口字段相同。effect为统一尺度效应量，se为其标准误。诊断固定效应模型w=1/se²，pooled=sum(w*effect)/sum(w)，pooled_se=sqrt(1/sum(w))。risk是资料中给定的一阶风险标签，不替代完整偏倚讨论。须额外做异质性量化、适当的替代合成以及去除high风险的敏感性。",
+    "plan_contract": null,
+    "rubric": [
+      {
+        "id": "H07-O01",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "screening.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/screening.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/screening.csv",
+          "expected": "oracle/H07/screening.csv",
+          "keys": [
+            "study"
+          ],
+          "columns": [
+            "included"
+          ],
+          "numeric": [
+            "included"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H07-O02",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "effects.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/effects.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/effects.csv",
+          "expected": "oracle/H07/effects.csv",
+          "keys": [
+            "study"
+          ],
+          "columns": [
+            "effect",
+            "weight"
+          ],
+          "numeric": [
+            "effect",
+            "weight"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H07-O03",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "pooled.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/pooled.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/pooled.csv",
+          "expected": "oracle/H07/pooled.csv",
+          "keys": [
+            "id"
+          ],
+          "columns": [
+            "effect",
+            "se"
+          ],
+          "numeric": [
+            "effect",
+            "se"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H07-O04",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "bias.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/bias.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/bias.csv",
+          "expected": "oracle/H07/bias.csv",
+          "keys": [
+            "risk"
+          ],
+          "columns": [
+            "count"
+          ],
+          "numeric": [
+            "count"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H07-R01",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "综述问题具有明确纳入边界",
+        "evidence": "review.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "清楚写出人口、干预、对照、结局与纳入设计时间",
+        "half": "主边界明确但一个对照定义含糊",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H07-R02",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "筛选过程逐研究可追溯",
+        "evidence": "screening-log.csv中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "每项研究有纳入决定、具体排除理由与输入定位",
+        "half": "所有决定可核对但一种排除理由过宽泛",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H07-R03",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "数据提取保留研究身份和单位",
+        "evidence": "extraction.csv中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "逐项效应标准误设计随访风险可追溯到原始资料",
+        "half": "主效应完整但一种辅助字段未定位",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H07-R04",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "合成实现按声明模型执行",
+        "evidence": "analysis/中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "运行固定效应与一种有理由的替代合成",
+        "half": "主模型完整但替代模型执行证据不足",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H07-R05",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "异质性计算支持解释",
+        "evidence": "analysis/heterogeneity.csv中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "计算Q/I²或合适替代并解释有限研究条件下含义",
+        "half": "异质性有数值但解释未考虑研究数量",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H07-R06",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "偏倚分析联系具体研究条件",
+        "evidence": "review.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "以给定标签为起点识别可判断和资料不足的偏倚域",
+        "half": "主偏倚有证据但一个未知域未声明",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H07-R07",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "高风险敏感性真实执行",
+        "evidence": "analysis/sensitivity.csv中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "剔除high标签研究重算合成并比较结论",
+        "half": "真实重算完成但变化解释不完整",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H07-R08",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "效应解释保持量表与不确定性",
+        "evidence": "review.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "主结果给尺度、区间、纳入数并解释实际意义范围",
+        "half": "主值区间正确但实际意义边界未写清",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H07-R09",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "证据强度判断可审计",
+        "evidence": "decision.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "把风险、不一致、间接性及资料不足映射为有理由的确信等级",
+        "half": "等级有理由但一种降级依据未清楚记录",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H07-R10",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "证据地图可定位研究贡献",
+        "evidence": "evidence-map/中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "实际查看森林图或等价地图，权重区间标签正确",
+        "half": "图准确可读但一种标签信息不足",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H07-R11",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "综述结论区分模拟与真实证据",
+        "evidence": "review.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "标题摘要讨论均准确标注虚构资料用途",
+        "half": "主体声明明确但一个摘要段落边界不够清楚",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H07-R12",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "建议反映证据而非预设立场",
+        "evidence": "decision.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "建议强度随偏倚与敏感性结果变化且可回指证据",
+        "half": "主要建议匹配但一种条件未明确",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H07-R13",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "解释处理相反与不显著结果",
+        "evidence": "review.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "讨论证据分歧及区间重叠而非只择正向发现",
+        "half": "分歧被识别但一种合理解释未展开",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H07-R14",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "最终综述可供独立审阅",
+        "evidence": "review.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "完整筛选流、方法、结果、局限和附件定位，排版实际复核",
+        "half": "主体可读但一处附件定位或版式需修",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H07-R15",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "清洁复跑恢复主及敏感性结果",
+        "evidence": "reproduce.py中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "隔离环境从records生成筛选和合成结果并核对正文",
+        "half": "主合成可复跑但一种替代合成需手工",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H07-R16",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "交接解释证据更新方法",
+        "evidence": "decision.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "新研究纳入、风险复核和模型更新步骤可执行",
+        "half": "更新流程可用但一项复核责任未定",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      }
+    ],
+    "oracle_tables": {
+      "bias.csv": {
+        "rows": 2,
+        "columns": [
+          "risk",
+          "count"
+        ]
+      },
+      "effects.csv": {
+        "rows": 20,
+        "columns": [
+          "study",
+          "effect",
+          "weight"
+        ]
+      },
+      "pooled.csv": {
+        "rows": 1,
+        "columns": [
+          "id",
+          "effect",
+          "se"
+        ]
+      },
+      "screening.csv": {
+        "rows": 30,
+        "columns": [
+          "study",
+          "included"
+        ]
+      }
+    }
+  },
+  {
+    "case": "H08",
+    "title": "从范围与资源约束到可执行项目交付方案",
+    "rows": 24,
+    "columns": [
+      "task",
+      "duration",
+      "deps",
+      "role",
+      "daily_cost"
+    ],
+    "distinct_values": {
+      "task": 24,
+      "duration": 5,
+      "deps": 21,
+      "role": 3,
+      "daily_cost": 3
+    },
+    "first_record": {
+      "task": "T00",
+      "duration": "1",
+      "deps": "",
+      "role": "analyst",
+      "daily_cost": "800"
+    },
+    "last_record": {
+      "task": "T23",
+      "duration": "4",
+      "deps": "T19",
+      "role": "trainer",
+      "daily_cost": "600"
+    },
+    "prompt": "# H08 从范围与资源约束到可执行项目交付方案\n\n为虚构机构安排一项数据平台和培训联合交付项目：24项工作、三种专业角色、依赖与预算约束。完成范围拆解、资源受限排程、成本与现金计划、风险情景、管理层审批材料和交付移交。不能把仅按依赖算的最早完工日当作资源可行承诺。若目标不可行，可用经验证的不可行证明和最小放宽方案完成任务。\n\n## 输入与计算合同\n\ntask唯一；duration为不可拆分的连续工作日，使用从0开始的整数日期，无节假日；deps用|分隔，必须前置任务finish<=后任务start。每角色一人，每天只能执行一项对应角色任务；daily_cost为CNY/人日。基础承诺finish<=38，总成本<=90000。压力情景T07工期增加3日。诊断earliest只按依赖、不考虑资源；costs为duration*daily_cost；roles为总人日；bounds是依赖下界和总成本。\n\n输入文件见inputs/。诊断表字段、键和数值容差见task.json与context.json。\n\n## 实质交付要求\n\n1. 范围界定覆盖真实交付目标：将24项输入对应到可验收交付和责任角色。\n2. 依赖网络保持全部约束：实际计划覆盖所有前置关系并能逐边复核。\n3. 排程满足角色资源限制：逐日核对三角色无重叠且连续任务满足工期。\n4. 排程实现承诺或证明不可行：可行finish<=38且cost<=90000，或提供有效约束矛盾证明及最小放宽。\n5. 成本模型与任务日历一致：真实重算任务成本及累计支出并与计划一致。\n6. 关键路径解释资源影响：区分依赖下界与资源约束后的关键链。\n7. 延迟情景实际重新排程：T07+3日后生成满足约束的计划并解释承诺影响。\n8. 风险登记能够触发具体应对：每项主要风险绑定触发阈值负责人和动作。\n9. 方案包含可执行质量验收：交付里程碑定义可观察结果及验收责任。\n10. 管理决策材料揭示取舍：比较基础与压力承诺以及成本资源权衡。\n11. 进度沟通可以追踪偏差：定义进度更新口径并提供一次有数据的偏差示例。\n12. 工作簿公式重算计划成本：改变单项工期能真实更新成本及资源视图。\n13. 时间与货币口径保持一致：日0整数日、连续工期和货币单位在材料一致。\n14. 审批材料可被实际阅读：实际查看甘特图和成本图，标签清楚与排程一致。\n15. 清洁复跑验证两情景约束：隔离环境生成两计划并独立重算依赖资源工期成本。\n16. 交接明确变更和重排责任：说明范围变更、延期和角色缺席的重新计划流程。\n\n主要输出：schedule.csv, stress-schedule.csv, plan.xlsx, charter.md, approval.pdf, risk-register.csv, reproduce.py, handover.md\n请把实质交付放在outputs列出的相对路径；目录中的文件可按合理结构命名。另交diagnostics/下四张规定表，只是可审计的中间计算，合计20分，不能代替最终工作物。交reproduce.py，调用合同为python reproduce.py --inputs <目录> --output <新目录>；它必须从原始输入重建可执行结果，不能读取评分器、oracle或本次旧结果。定性评分80分，关键项必须满分且总分>=80才具备单次任务合格条件；清洁复跑与双人独立审查也必须完成。PDF/图表由审查者实际查看，不使用UI自动化。\n所有研究、组织、学习与业务记录为原创模拟资料；真实外部引用必须可核查，未知写明未知。不要发送外部邮件、实际下单、发布或使用私有凭据。可用本地通用编辑、终端、数据分析和制图工具；纯离线主赛道，真实方法来源可使用随包source-notes中的定位及有限原文事实，不要求联网；需扩大检索时另记开放检索赛道，不能混合成绩。不得调用外部模型。结果可用中文或英文，保留真实技术身份。\n每题统一预算100万总模型token、7200 CPU秒、16GiB内存、5GiB输出。闲置600秒由现有执行器按真实活动事实判断；预算耗尽与闲置失败分别记录，心跳不计活动。预算含模型重试及所有子任务。人类预计8–32小时仅是未校准估计。\n\n诊断完整列类型、键约定和单例键值见task.json.result_contract.diagnostic_schema；非键数值允许不同文本格式，身份键按规范字符串。\n\n项目业务目标与24项工作名称、交付及验收语义见scope-brief.md。此题制定完整交付方案，不要求代团队实现24项平台功能。\n\n计划CSV的键、字段、单位和情景以task.json.result_contract.plan_contract为准；可运行独立verify-plan检查约束。诊断正确不能替代计划可行。\n",
+    "outputs": [
+      "schedule.csv",
+      "stress-schedule.csv",
+      "plan.xlsx",
+      "charter.md",
+      "approval.pdf",
+      "risk-register.csv",
+      "reproduce.py",
+      "handover.md"
+    ],
+    "budget_historical_do_not_reuse": {
+      "total_model_tokens": 1000000,
+      "cpu_seconds": 7200,
+      "memory_gib": 16,
+      "disk_gib": 5,
+      "inactivity_seconds": 600,
+      "expert_hours_estimate": [
+        8,
+        32
+      ],
+      "estimate_status": "uncalibrated",
+      "external_model_calls": 0
+    },
+    "protocol": "task唯一；duration为不可拆分的连续工作日，使用从0开始的整数日期，无节假日；deps用|分隔，必须前置任务finish<=后任务start。每角色一人，每天只能执行一项对应角色任务；daily_cost为CNY/人日。基础承诺finish<=38，总成本<=90000。压力情景T07工期增加3日。诊断earliest只按依赖、不考虑资源；costs为duration*daily_cost；roles为总人日；bounds是依赖下界和总成本。",
+    "plan_contract": {
+      "keys": [
+        "task"
+      ],
+      "columns": [
+        "start",
+        "finish"
+      ],
+      "deadline": 38,
+      "budget_cny": 90000,
+      "stress_task": "T07",
+      "stress_extra_days": 3,
+      "scenarios": [
+        "base",
+        "stress"
+      ],
+      "units": "从0开始整数工作日；finish为不含该日的结束边界，角色从records取得"
+    },
+    "rubric": [
+      {
+        "id": "H08-O01",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "earliest.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/earliest.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/earliest.csv",
+          "expected": "oracle/H08/earliest.csv",
+          "keys": [
+            "task"
+          ],
+          "columns": [
+            "start",
+            "finish"
+          ],
+          "numeric": [
+            "start",
+            "finish"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H08-O02",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "costs.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/costs.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/costs.csv",
+          "expected": "oracle/H08/costs.csv",
+          "keys": [
+            "task"
+          ],
+          "columns": [
+            "cost"
+          ],
+          "numeric": [
+            "cost"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H08-O03",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "roles.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/roles.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/roles.csv",
+          "expected": "oracle/H08/roles.csv",
+          "keys": [
+            "role"
+          ],
+          "columns": [
+            "person_days"
+          ],
+          "numeric": [
+            "person_days"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H08-O04",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "bounds.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/bounds.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/bounds.csv",
+          "expected": "oracle/H08/bounds.csv",
+          "keys": [
+            "id"
+          ],
+          "columns": [
+            "days",
+            "cost"
+          ],
+          "numeric": [
+            "days",
+            "cost"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H08-R01",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "范围界定覆盖真实交付目标",
+        "evidence": "charter.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "将24项输入对应到可验收交付和责任角色",
+        "half": "主交付明确但一项工作验收责任不清",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H08-R02",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "依赖网络保持全部约束",
+        "evidence": "schedule.csv中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "实际计划覆盖所有前置关系并能逐边复核",
+        "half": "依赖关系正确但一处说明未定位",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H08-R03",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "排程满足角色资源限制",
+        "evidence": "schedule.csv中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "逐日核对三角色无重叠且连续任务满足工期",
+        "half": "资源可行但一种资源统计未展示",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H08-R04",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "排程实现承诺或证明不可行",
+        "evidence": "approval.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "可行finish<=38且cost<=90000，或提供有效约束矛盾证明及最小放宽",
+        "half": "给出可行放宽方案但最小性证明不足",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H08-R05",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "成本模型与任务日历一致",
+        "evidence": "plan.xlsx中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "真实重算任务成本及累计支出并与计划一致",
+        "half": "总成本正确但一个累计期间口径不清",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H08-R06",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "关键路径解释资源影响",
+        "evidence": "approval.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "区分依赖下界与资源约束后的关键链",
+        "half": "区分正确但具体瓶颈量化不充分",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H08-R07",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "延迟情景实际重新排程",
+        "evidence": "stress-schedule.csv中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "T07+3日后生成满足约束的计划并解释承诺影响",
+        "half": "重新排程有效但一个承诺影响未解释",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H08-R08",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "风险登记能够触发具体应对",
+        "evidence": "risk-register.csv中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "每项主要风险绑定触发阈值负责人和动作",
+        "half": "主要风险动作可用但一种阈值含糊",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H08-R09",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "方案包含可执行质量验收",
+        "evidence": "charter.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "交付里程碑定义可观察结果及验收责任",
+        "half": "主里程碑可验收但一项责任未明",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H08-R10",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "管理决策材料揭示取舍",
+        "evidence": "approval.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "比较基础与压力承诺以及成本资源权衡",
+        "half": "主要取舍清楚但一个量化支撑缺失",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H08-R11",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "进度沟通可以追踪偏差",
+        "evidence": "handover.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "定义进度更新口径并提供一次有数据的偏差示例",
+        "half": "口径可用但偏差示例只覆盖单项",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H08-R12",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "工作簿公式重算计划成本",
+        "evidence": "plan.xlsx中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "改变单项工期能真实更新成本及资源视图",
+        "half": "成本公式有效但一种资源视图未联动",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H08-R13",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "时间与货币口径保持一致",
+        "evidence": "handover.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "日0整数日、连续工期和货币单位在材料一致",
+        "half": "口径正确但一处日期解释欠缺",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H08-R14",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "审批材料可被实际阅读",
+        "evidence": "approval.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "实际查看甘特图和成本图，标签清楚与排程一致",
+        "half": "图准确可读但一处非关键排版待修",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H08-R15",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "清洁复跑验证两情景约束",
+        "evidence": "reproduce.py中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "隔离环境生成两计划并独立重算依赖资源工期成本",
+        "half": "基础计划可复跑但压力验证需人工一步",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H08-R16",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "交接明确变更和重排责任",
+        "evidence": "handover.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "说明范围变更、延期和角色缺席的重新计划流程",
+        "half": "流程可执行但一种审批责任未明确",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      }
+    ],
+    "oracle_tables": {
+      "bounds.csv": {
+        "rows": 1,
+        "columns": [
+          "id",
+          "days",
+          "cost"
+        ]
+      },
+      "costs.csv": {
+        "rows": 24,
+        "columns": [
+          "task",
+          "cost"
+        ]
+      },
+      "earliest.csv": {
+        "rows": 24,
+        "columns": [
+          "task",
+          "start",
+          "finish"
+        ]
+      },
+      "roles.csv": {
+        "rows": 3,
+        "columns": [
+          "role",
+          "person_days"
+        ]
+      }
+    }
+  },
+  {
+    "case": "H09",
+    "title": "从学习需求到完整课程、考核与试教迭代",
+    "rows": 96,
+    "columns": [
+      "learner",
+      "topic",
+      "score",
+      "cohort"
+    ],
+    "distinct_values": {
+      "learner": 24,
+      "topic": 4,
+      "score": 45,
+      "cohort": 2
+    },
+    "first_record": {
+      "learner": "L00",
+      "topic": "sql",
+      "score": "35",
+      "cohort": "novice"
+    },
+    "last_record": {
+      "learner": "L23",
+      "topic": "governance",
+      "score": "69",
+      "cohort": "experienced"
+    },
+    "prompt": "# H09 从学习需求到完整课程、考核与试教迭代\n\n为虚构企业学院开发一门6周数据工程训练课程。24名学员有不同经验与四领域诊断成绩。需要从需求分析、能力目标、分层路径、每周完整教学材料和练习，到可执行数据实验、前后测与评分量规、试教及修订、教师交接全部交付。不能把课程大纲或幻灯片标题当作完整课程，也不能伪造真人试教。可使用明确标注的脚本化学员试运行。\n\n## 输入与计算合同\n\n每学员每主题一条诊断，score范围0..100，>=70判定该主题mastered。前12名novice，其余experienced；主题sql/pipelines/quality/governance。scores原值与阈值结果；mastery按主题已掌握人数；cohorts按唯一学员计数；support为每学员低于70的主题数。每周3小时课堂+2小时练习，合计30小时；至少6个可运行数据实验，并覆盖四领域。\n\n输入文件见inputs/。诊断表字段、键和数值容差见task.json与context.json。\n\n## 实质交付要求\n\n1. 需求分析依据真实诊断差异：量化两经验组和四领域差异并连接课程安排。\n2. 学习目标是可观察能力：每领域有可实际评估的能力目标并对应结课任务。\n3. 六周路径具有合理先修关系：30小时安排中先修知识支持后续实验且每周负荷可核对。\n4. 教学材料支持实际授课：六周均有概念说明、演示、练习及解释性答案。\n5. 数据实验实际可执行：至少六个实验在隔离环境运行且有明确可观察结果。\n6. 分层路径回应经验与能力差异：为novice和experienced提供基于诊断的不同支持及挑战。\n7. 前后测衡量同一能力构念：不同题面但同能力目标，难度与覆盖映射可审计。\n8. 开放任务评分量规可重复使用：评分项有证据锚点并用两份不同质量示例展示差异。\n9. 标准答案提供可核对推理：数值代码题答案实际运行，开放题标明可接受替代解。\n10. 试教记录来自真实执行：明确脚本化学员身份并记录实际实验和答题运行。\n11. 修订直接回应试教证据：记录发现、修改和再次执行结果的对应关系。\n12. 无障碍与语言支持可实际使用：提供文字版示例和键盘可用实验步骤并实际核对。\n13. 教师指南支持替代教师授课：逐周节奏、常见误解和评价步骤可以照做。\n14. 结课评估解释能力与局限：用明确标注的试运行样例说明学习判断和测量局限。\n15. 清洁复跑还原实验与评分：隔离环境运行六个实验及答案评分并对应交付材料。\n16. 成品材料达到直接交接质量：实际查看教师PDF与实验材料，导航标签版本清楚。\n\n主要输出：curriculum.md, lessons/, labs/, assessment/, teacher-guide.pdf, pilot-log.md, revision-log.md, reproduce.py\n请把实质交付放在outputs列出的相对路径；目录中的文件可按合理结构命名。另交diagnostics/下四张规定表，只是可审计的中间计算，合计20分，不能代替最终工作物。交reproduce.py，调用合同为python reproduce.py --inputs <目录> --output <新目录>；它必须从原始输入重建可执行结果，不能读取评分器、oracle或本次旧结果。定性评分80分，关键项必须满分且总分>=80才具备单次任务合格条件；清洁复跑与双人独立审查也必须完成。PDF/图表由审查者实际查看，不使用UI自动化。\n所有研究、组织、学习与业务记录为原创模拟资料；真实外部引用必须可核查，未知写明未知。不要发送外部邮件、实际下单、发布或使用私有凭据。可用本地通用编辑、终端、数据分析和制图工具；纯离线主赛道，真实方法来源可使用随包source-notes中的定位及有限原文事实，不要求联网；需扩大检索时另记开放检索赛道，不能混合成绩。不得调用外部模型。结果可用中文或英文，保留真实技术身份。\n每题统一预算100万总模型token、7200 CPU秒、16GiB内存、5GiB输出。闲置600秒由现有执行器按真实活动事实判断；预算耗尽与闲置失败分别记录，心跳不计活动。预算含模型重试及所有子任务。人类预计8–32小时仅是未校准估计。\n\n诊断完整列类型、键约定和单例键值见task.json.result_contract.diagnostic_schema；非键数值允许不同文本格式，身份键按规范字符串。\n",
+    "outputs": [
+      "curriculum.md",
+      "lessons/",
+      "labs/",
+      "assessment/",
+      "teacher-guide.pdf",
+      "pilot-log.md",
+      "revision-log.md",
+      "reproduce.py"
+    ],
+    "budget_historical_do_not_reuse": {
+      "total_model_tokens": 1000000,
+      "cpu_seconds": 7200,
+      "memory_gib": 16,
+      "disk_gib": 5,
+      "inactivity_seconds": 600,
+      "expert_hours_estimate": [
+        8,
+        32
+      ],
+      "estimate_status": "uncalibrated",
+      "external_model_calls": 0
+    },
+    "protocol": "每学员每主题一条诊断，score范围0..100，>=70判定该主题mastered。前12名novice，其余experienced；主题sql/pipelines/quality/governance。scores原值与阈值结果；mastery按主题已掌握人数；cohorts按唯一学员计数；support为每学员低于70的主题数。每周3小时课堂+2小时练习，合计30小时；至少6个可运行数据实验，并覆盖四领域。",
+    "plan_contract": null,
+    "rubric": [
+      {
+        "id": "H09-O01",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "scores.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/scores.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/scores.csv",
+          "expected": "oracle/H09/scores.csv",
+          "keys": [
+            "learner",
+            "topic"
+          ],
+          "columns": [
+            "score",
+            "mastered"
+          ],
+          "numeric": [
+            "score",
+            "mastered"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H09-O02",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "mastery.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/mastery.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/mastery.csv",
+          "expected": "oracle/H09/mastery.csv",
+          "keys": [
+            "topic"
+          ],
+          "columns": [
+            "count"
+          ],
+          "numeric": [
+            "count"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H09-O03",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "cohorts.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/cohorts.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/cohorts.csv",
+          "expected": "oracle/H09/cohorts.csv",
+          "keys": [
+            "cohort"
+          ],
+          "columns": [
+            "count"
+          ],
+          "numeric": [
+            "count"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H09-O04",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "support.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/support.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/support.csv",
+          "expected": "oracle/H09/support.csv",
+          "keys": [
+            "learner"
+          ],
+          "columns": [
+            "topics_below_70"
+          ],
+          "numeric": [
+            "topics_below_70"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H09-R01",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "需求分析依据真实诊断差异",
+        "evidence": "curriculum.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "量化两经验组和四领域差异并连接课程安排",
+        "half": "主要差异正确但一领域教学对应未清",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H09-R02",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "学习目标是可观察能力",
+        "evidence": "curriculum.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "每领域有可实际评估的能力目标并对应结课任务",
+        "half": "目标可评估但一项任务映射不完整",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H09-R03",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "六周路径具有合理先修关系",
+        "evidence": "curriculum.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "30小时安排中先修知识支持后续实验且每周负荷可核对",
+        "half": "主路径合理但一周负荷解释不足",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H09-R04",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "教学材料支持实际授课",
+        "evidence": "lessons/中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "六周均有概念说明、演示、练习及解释性答案",
+        "half": "主体六周完整但一周答案解释不足",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H09-R05",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "数据实验实际可执行",
+        "evidence": "labs/中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "至少六个实验在隔离环境运行且有明确可观察结果",
+        "half": "四个以上实验执行成功且剩余缺口明确",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H09-R06",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "分层路径回应经验与能力差异",
+        "evidence": "curriculum.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "为novice和experienced提供基于诊断的不同支持及挑战",
+        "half": "分层可用但一种支持触发条件不明",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H09-R07",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "前后测衡量同一能力构念",
+        "evidence": "assessment/中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "不同题面但同能力目标，难度与覆盖映射可审计",
+        "half": "构念映射合理但一领域后测覆盖较弱",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H09-R08",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "开放任务评分量规可重复使用",
+        "evidence": "assessment/rubric.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "评分项有证据锚点并用两份不同质量示例展示差异",
+        "half": "量规可用但只标定一种质量示例",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H09-R09",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "标准答案提供可核对推理",
+        "evidence": "assessment/中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "数值代码题答案实际运行，开放题标明可接受替代解",
+        "half": "主要答案正确但一种替代解边界未说明",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H09-R10",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "试教记录来自真实执行",
+        "evidence": "pilot-log.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "明确脚本化学员身份并记录实际实验和答题运行",
+        "half": "执行真实但一种试教情境覆盖有限",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H09-R11",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "修订直接回应试教证据",
+        "evidence": "revision-log.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "记录发现、修改和再次执行结果的对应关系",
+        "half": "修改回应发现但一项复测证据不足",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H09-R12",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "无障碍与语言支持可实际使用",
+        "evidence": "teacher-guide.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "提供文字版示例和键盘可用实验步骤并实际核对",
+        "half": "主要支持可用但一种辅助材料不完整",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H09-R13",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "教师指南支持替代教师授课",
+        "evidence": "teacher-guide.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "逐周节奏、常见误解和评价步骤可以照做",
+        "half": "授课可行但一周误解处置不足",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H09-R14",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "结课评估解释能力与局限",
+        "evidence": "pilot-log.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "用明确标注的试运行样例说明学习判断和测量局限",
+        "half": "判断可核对但一种测量局限未交代",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H09-R15",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "清洁复跑还原实验与评分",
+        "evidence": "reproduce.py中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "隔离环境运行六个实验及答案评分并对应交付材料",
+        "half": "主体实验可复跑但一项评分需手工",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H09-R16",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "成品材料达到直接交接质量",
+        "evidence": "teacher-guide.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "实际查看教师PDF与实验材料，导航标签版本清楚",
+        "half": "材料可直接用但一处排版或导航需修",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      }
+    ],
+    "oracle_tables": {
+      "cohorts.csv": {
+        "rows": 2,
+        "columns": [
+          "cohort",
+          "count"
+        ]
+      },
+      "mastery.csv": {
+        "rows": 4,
+        "columns": [
+          "topic",
+          "count"
+        ]
+      },
+      "scores.csv": {
+        "rows": 96,
+        "columns": [
+          "learner",
+          "topic",
+          "score",
+          "mastered"
+        ]
+      },
+      "support.csv": {
+        "rows": 24,
+        "columns": [
+          "learner",
+          "topics_below_70"
+        ]
+      }
+    }
+  },
+  {
+    "case": "H10",
+    "title": "从负载资料到可验证的储能设计与投资决策包",
+    "rows": 2160,
+    "columns": [
+      "site",
+      "day",
+      "hour",
+      "kwh",
+      "tariff"
+    ],
+    "distinct_values": {
+      "site": 3,
+      "day": 30,
+      "hour": 24,
+      "kwh": 2105,
+      "tariff": 3
+    },
+    "first_record": {
+      "site": "A",
+      "day": "1",
+      "hour": "0",
+      "kwh": "33.849",
+      "tariff": "0.3"
+    },
+    "last_record": {
+      "site": "C",
+      "day": "30",
+      "hour": "23",
+      "kwh": "56.868",
+      "tariff": "0.3"
+    },
+    "prompt": "# H10 从负载资料到可验证的储能设计与投资决策包\n\n为虚构园区三个站点完成储能设计及运行方案。分析30天逐时负荷和分时价，选型、容量与调度，验证能量守恒和经济性，做价格/效率压力情景，交付技术设计、决策模型和运维方案。只做模拟概念设计，不能声称经过真实工程认证、并网审批或给出无依据安全承诺。\n\n## 输入与计算合同\n\n每小时kwh数值也对应该小时平均kW；电价CNY/kWh，忽略需量费。每站候选容量0/50/100 kWh，功率上限25 kW；充放电效率各0.95，小时末SOC范围0..容量，起止SOC均为0；禁止同小时同时充放电，禁止向电网售电。电池采购1000 CNY/kWh，寿命5年，每年固定运维为投资1%，一年按此30天重复12次。贴现率8%。另做电价整体+20%及单程效率0.9压力情景。baseline无电池，peak取最大逐时负荷，stress诊断只算无电池电价+20%。\n\n输入文件见inputs/。诊断表字段、键和数值容差见task.json与context.json。\n\n## 实质交付要求\n\n1. 负载分析定位设计驱动：量化三站峰谷用能和价格暴露并对应容量理由。\n2. 选型限定在给定候选方案：三个候选含至少一个非零容量的实际可行调度或经验证成本界，比较完整并给出选型理由；选择0容量可满分。\n3. 调度模型守恒且物理量明确：定义输入输出、损耗及SOC递推，单位一致。\n4. 实际调度满足容量与功率约束：逐小时独立核对SOC和25kW上限以及禁止同时充放电。\n5. 电网购电符合能量供需合同：逐小时购电非负且满足负荷及电池能量平衡。\n6. 经济模型采用完整现金流：购电节省投资运维寿命和8%贴现共同计算净现值。\n7. 设计决策允许选择零容量：以完整净现值及敏感性支持投资或零容量结论。\n8. 价格压力情景实际重新计算：电价+20%后重算调度现金流并解释选择变化。\n9. 效率压力情景保持物理可行：效率0.9重新求解并核对SOC终点与购电成本。\n10. 最优性与计算边界诚实：给出求解证书或明确可行启发式与已知界限。\n11. 工作簿可重算投资判断：价格成本或效率变化能真实更新净现值和选择比较。\n12. 运维说明覆盖监测与异常处置：SOC/效率偏差阈值及停用检查步骤明确可演练。\n13. 安全边界区分概念与工程认证：明确本模拟不能证明的电气安全和并网事项及所需后续工作。\n14. 技术图表能支撑评审决策：实际查看负荷SOC和现金流图，图文数字对应。\n15. 清洁复跑恢复调度与经济结果：隔离环境重建基础及压力方案并独立检查能量和现金流。\n16. 交接定义数据更新适用范围：负荷电价变化后的重算入口和设计失效条件清楚。\n\n主要输出：design.pdf, dispatch.csv, stress-dispatch.csv, economics.xlsx, solver.py, operations.md, reproduce.py\n请把实质交付放在outputs列出的相对路径；目录中的文件可按合理结构命名。另交diagnostics/下四张规定表，只是可审计的中间计算，合计20分，不能代替最终工作物。交reproduce.py，调用合同为python reproduce.py --inputs <目录> --output <新目录>；它必须从原始输入重建可执行结果，不能读取评分器、oracle或本次旧结果。定性评分80分，关键项必须满分且总分>=80才具备单次任务合格条件；清洁复跑与双人独立审查也必须完成。PDF/图表由审查者实际查看，不使用UI自动化。\n所有研究、组织、学习与业务记录为原创模拟资料；真实外部引用必须可核查，未知写明未知。不要发送外部邮件、实际下单、发布或使用私有凭据。可用本地通用编辑、终端、数据分析和制图工具；纯离线主赛道，真实方法来源可使用随包source-notes中的定位及有限原文事实，不要求联网；需扩大检索时另记开放检索赛道，不能混合成绩。不得调用外部模型。结果可用中文或英文，保留真实技术身份。\n每题统一预算100万总模型token、7200 CPU秒、16GiB内存、5GiB输出。闲置600秒由现有执行器按真实活动事实判断；预算耗尽与闲置失败分别记录，心跳不计活动。预算含模型重试及所有子任务。人类预计8–32小时仅是未校准估计。\n\n诊断完整列类型、键约定和单例键值见task.json.result_contract.diagnostic_schema；非键数值允许不同文本格式，身份键按规范字符串。\n\n计划CSV的键、字段、单位和情景以task.json.result_contract.plan_contract为准；可运行独立verify-plan检查约束。H10需分别保存price/efficiency情景，至少一个非零候选的实际调度或有效成本界用于比较。诊断正确不能替代计划可行。\n",
+    "outputs": [
+      "design.pdf",
+      "dispatch.csv",
+      "stress-dispatch.csv",
+      "economics.xlsx",
+      "solver.py",
+      "operations.md",
+      "reproduce.py"
+    ],
+    "budget_historical_do_not_reuse": {
+      "total_model_tokens": 1000000,
+      "cpu_seconds": 7200,
+      "memory_gib": 16,
+      "disk_gib": 5,
+      "inactivity_seconds": 600,
+      "expert_hours_estimate": [
+        8,
+        32
+      ],
+      "estimate_status": "uncalibrated",
+      "external_model_calls": 0
+    },
+    "protocol": "每小时kwh数值也对应该小时平均kW；电价CNY/kWh，忽略需量费。每站候选容量0/50/100 kWh，功率上限25 kW；充放电效率各0.95，小时末SOC范围0..容量，起止SOC均为0；禁止同小时同时充放电，禁止向电网售电。电池采购1000 CNY/kWh，寿命5年，每年固定运维为投资1%，一年按此30天重复12次。贴现率8%。另做电价整体+20%及单程效率0.9压力情景。baseline无电池，peak取最大逐时负荷，stress诊断只算无电池电价+20%。",
+    "plan_contract": {
+      "keys": [
+        "site",
+        "day",
+        "hour"
+      ],
+      "columns": [
+        "capacity_kwh",
+        "charge_kwh",
+        "discharge_kwh",
+        "soc_kwh",
+        "grid_kwh"
+      ],
+      "capacities_kwh": [
+        0,
+        50,
+        100
+      ],
+      "power_kw": 25,
+      "efficiency": 0.95,
+      "stress_efficiency": 0.9,
+      "stress_price_factor": 1.2,
+      "scenarios": [
+        "base",
+        "price",
+        "efficiency"
+      ],
+      "units": "所有能量为该小时kWh；day=1..30/hour=0..23规范整数键；每站capacity全时段固定，soc为小时末，起止为0"
+    },
+    "rubric": [
+      {
+        "id": "H10-O01",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "daily.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/daily.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/daily.csv",
+          "expected": "oracle/H10/daily.csv",
+          "keys": [
+            "site",
+            "day"
+          ],
+          "columns": [
+            "kwh"
+          ],
+          "numeric": [
+            "kwh"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H10-O02",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "baseline.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/baseline.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/baseline.csv",
+          "expected": "oracle/H10/baseline.csv",
+          "keys": [
+            "site"
+          ],
+          "columns": [
+            "cost"
+          ],
+          "numeric": [
+            "cost"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H10-O03",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "peak.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/peak.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/peak.csv",
+          "expected": "oracle/H10/peak.csv",
+          "keys": [
+            "site"
+          ],
+          "columns": [
+            "kw"
+          ],
+          "numeric": [
+            "kw"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H10-O04",
+        "weight": 5,
+        "mode": "objective",
+        "critical": false,
+        "requirement": "stress.csv 的完整诊断记录符合公开计算口径",
+        "evidence": "diagnostics/stress.csv；必须由独立清洁复跑生成后交给checker",
+        "full": "全部业务身份与数值符合公开口径；abs tolerance=1e-6，relative tolerance=1e-7；行序和数值格式不限",
+        "half": "客观叶项为二元判定；此项不授半分，局部完成由其他叶项分别计分",
+        "zero": "身份或数值违反公开口径，或有效产物缺失/无法解析",
+        "check": {
+          "artifact": "diagnostics/stress.csv",
+          "expected": "oracle/H10/stress.csv",
+          "keys": [
+            "site"
+          ],
+          "columns": [
+            "cost_plus20"
+          ],
+          "numeric": [
+            "cost_plus20"
+          ],
+          "atol": 1e-06,
+          "rtol": 1e-07
+        }
+      },
+      {
+        "id": "H10-R01",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "负载分析定位设计驱动",
+        "evidence": "design.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "量化三站峰谷用能和价格暴露并对应容量理由",
+        "half": "主要负载特征正确但一站设计联系不清",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H10-R02",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "选型限定在给定候选方案",
+        "evidence": "design.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "三个候选含至少一个非零容量的实际可行调度或经验证成本界，比较完整并给出选型理由；选择0容量可满分",
+        "half": "候选比较实际完成但一种成本依据未说明",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H10-R03",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "调度模型守恒且物理量明确",
+        "evidence": "solver.py中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "定义输入输出、损耗及SOC递推，单位一致",
+        "half": "守恒正确但一种变量测量边界未解释",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H10-R04",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "实际调度满足容量与功率约束",
+        "evidence": "dispatch.csv中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "逐小时独立核对SOC和25kW上限以及禁止同时充放电",
+        "half": "主物理约束满足但一种审计展示不足",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H10-R05",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "电网购电符合能量供需合同",
+        "evidence": "dispatch.csv中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "逐小时购电非负且满足负荷及电池能量平衡",
+        "half": "能量平衡正确但一个输出变量标注不足",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H10-R06",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "经济模型采用完整现金流",
+        "evidence": "economics.xlsx中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "购电节省投资运维寿命和8%贴现共同计算净现值",
+        "half": "现金流主体正确但一种年化解释不足",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H10-R07",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "设计决策允许选择零容量",
+        "evidence": "design.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "以完整净现值及敏感性支持投资或零容量结论",
+        "half": "决策有依据但一种替代选择比较不充分",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H10-R08",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "价格压力情景实际重新计算",
+        "evidence": "stress-dispatch.csv中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "电价+20%后重算调度现金流并解释选择变化",
+        "half": "重算完成但一种决策变化未解释",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H10-R09",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "效率压力情景保持物理可行",
+        "evidence": "stress-dispatch.csv中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "效率0.9重新求解并核对SOC终点与购电成本",
+        "half": "重新求解有效但一种核对未展示",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H10-R10",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "最优性与计算边界诚实",
+        "evidence": "design.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "给出求解证书或明确可行启发式与已知界限",
+        "half": "明确启发式但量化界限尚不完整",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H10-R11",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "工作簿可重算投资判断",
+        "evidence": "economics.xlsx中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "价格成本或效率变化能真实更新净现值和选择比较",
+        "half": "主要公式有效但一种敏感性需手算",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H10-R12",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "运维说明覆盖监测与异常处置",
+        "evidence": "operations.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "SOC/效率偏差阈值及停用检查步骤明确可演练",
+        "half": "正常监测可做但一种异常责任不清",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H10-R13",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "安全边界区分概念与工程认证",
+        "evidence": "design.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "明确本模拟不能证明的电气安全和并网事项及所需后续工作",
+        "half": "概念边界清楚但一种后续工程验证未列出",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H10-R14",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "技术图表能支撑评审决策",
+        "evidence": "design.pdf中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "实际查看负荷SOC和现金流图，图文数字对应",
+        "half": "图准确可读但一处标签或排版需修",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H10-R15",
+        "weight": 5,
+        "mode": "review",
+        "critical": true,
+        "requirement": "清洁复跑恢复调度与经济结果",
+        "evidence": "reproduce.py中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "隔离环境重建基础及压力方案并独立检查能量和现金流",
+        "half": "基础可重建但一种压力情景需手动一步",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      },
+      {
+        "id": "H10-R16",
+        "weight": 5,
+        "mode": "review",
+        "critical": false,
+        "requirement": "交接定义数据更新适用范围",
+        "evidence": "operations.md中的页/行/表/运行定位，加上审查者实际观察",
+        "full": "负荷电价变化后的重算入口和设计失效条件清楚",
+        "half": "重算可做但一种失效边界未写清",
+        "zero": "未达到半分锚点；缺实质产物、事实矛盾或仅自述而无可核验证据"
+      }
+    ],
+    "oracle_tables": {
+      "baseline.csv": {
+        "rows": 3,
+        "columns": [
+          "site",
+          "cost"
+        ]
+      },
+      "daily.csv": {
+        "rows": 90,
+        "columns": [
+          "site",
+          "day",
+          "kwh"
+        ]
+      },
+      "peak.csv": {
+        "rows": 3,
+        "columns": [
+          "site",
+          "kw"
+        ]
+      },
+      "stress.csv": {
+        "rows": 3,
+        "columns": [
+          "site",
+          "cost_plus20"
+        ]
+      }
+    }
+  }
+]

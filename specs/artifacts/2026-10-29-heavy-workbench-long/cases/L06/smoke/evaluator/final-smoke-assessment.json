@@ -1,0 +1,72 @@
+{
+  "benchmark": "HeavyWorkBench-Smoke/0.1.0-dev",
+  "case": "S06",
+  "status": "smoke_pass",
+  "scope": "nonblind micro pipeline only; not one of ten heavy cases",
+  "checks": [
+    {
+      "id": "native-completion",
+      "passed": true,
+      "evidence": [
+        "independent-post-review/api-terminal-observation.json",
+        "independent-post-review/provider-independent-verification.json",
+        "independent-post-review/inspect-independent-header.json"
+      ],
+      "native_seconds": 650.922
+    },
+    {
+      "id": "sealed-business-feasibility",
+      "passed": true,
+      "evidence": [
+        "independent-post-review/business-checks/sealed-base.json",
+        "independent-post-review/business-checks/sealed-price-change.json",
+        "independent-post-review/independent-artifact-checks.json"
+      ]
+    },
+    {
+      "id": "known-small-optima",
+      "passed": true,
+      "exact_costs": {
+        "base": "9/2",
+        "price-change": "11/2"
+      },
+      "evidence": [
+        "independent-post-review/independent-optima/base.json",
+        "independent-post-review/independent-optima/price-change.json",
+        "independent-post-review/independent-artifact-checks.json"
+      ]
+    },
+    {
+      "id": "full-clean-source-replay",
+      "passed": true,
+      "evidence": [
+        "independent-post-review/cold-replay-initial-inventory.json",
+        "independent-post-review/commands/solve-base.json",
+        "independent-post-review/commands/solve-price-change.json",
+        "independent-post-review/replay-assessment.json"
+      ]
+    }
+  ],
+  "business_expected_costs_exact": {
+    "base": "9/2",
+    "price-change": "11/2"
+  },
+  "native_seconds": 650.922,
+  "main_solve_and_checker_seconds": 0.8182369000278413,
+  "independent_solve_and_checker_seconds": 0.923327500000596,
+  "native_actor_kinds": [
+    "orchestrator",
+    "base-tester delegated-worker"
+  ],
+  "model": "openai/gpt-6.1-sol",
+  "taskID": "tsk_g00VZR9KuE00aKSMSF10",
+  "independent_review": "independent-post-review/stage-assessment.json",
+  "native_and_main_evidence": "actual-run/",
+  "comparable": false,
+  "numeric_difficulty_score": null,
+  "heavy_case_count_increment": 0,
+  "hours_validated": false,
+  "L06_heavy_pass": false,
+  "suite_complete": false,
+  "assessment_utc": "2026-10-29T11:59:47.453441+00:00"
+}

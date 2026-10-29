@@ -1,0 +1,5841 @@
+{
+  "scope": "v2 full independent prefix/physical-stage/financial arithmetic, not global optimization",
+  "all_checks_passed": true,
+  "checks": [
+    {
+      "where": "base.order_lots",
+      "contract": "common_prefix",
+      "passed": true
+    },
+    {
+      "where": "base.truck_on",
+      "contract": "common_prefix",
+      "passed": true
+    },
+    {
+      "where": "base.production",
+      "contract": "common_prefix",
+      "passed": true
+    },
+    {
+      "where": "base.week0.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week0.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week0.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week0.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week0.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week0.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week0.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week0.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week0.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week0.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week0.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week0",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "base.week0",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week0",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week0.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week0.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week0.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week0.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week0.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week1.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week1.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week1.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week1.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week1.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week1.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week1.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week1.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week1.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week1.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week1.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week1",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "base.week1",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week1",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week1.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week1.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week1.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week1.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week1.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week2.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week2.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week2.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week2.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week2.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week2.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week2.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week2.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week2.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week2.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week2.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week2",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "base.week2",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week2",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week2.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week2.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week2.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week2.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week2.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week3.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week3.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week3.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week3.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week3.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week3.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week3.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week3.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week3.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week3.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week3.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week3",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "base.week3",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week3",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week3.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week3.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week3.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week3.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week3.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week4.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week4.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week4.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week4.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week4.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week4.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week4.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week4.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week4.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week4.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week4.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week4",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "base.week4",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week4",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week4.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week4.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week4.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week4.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week4.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week5.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week5.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week5.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week5.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week5.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week5.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week5.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week5.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week5.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week5.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week5.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week5",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "base.week5",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week5",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week5.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week5.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week5.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week5.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week5.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week6.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week6.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week6.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week6.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week6.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week6.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week6.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week6.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week6.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week6.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week6.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week6",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "base.week6",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week6",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week6.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week6.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week6.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week6.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week6.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week7.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week7.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week7.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week7.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week7.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week7.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week7.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week7.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week7.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week7.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week7.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week7",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "base.week7",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week7",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week7.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week7.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week7.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week7.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week7.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week8.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week8.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week8.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week8.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week8.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week8.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week8.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week8.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week8.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week8.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week8.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week8",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "base.week8",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week8",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week8.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week8.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week8.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week8.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week8.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week9.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week9.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week9.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week9.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week9.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week9.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week9.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week9.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week9.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week9.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week9.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week9",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "base.week9",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week9",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week9.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week9.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week9.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week9.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week9.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week10.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week10.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week10.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week10.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week10.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week10.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week10.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week10.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week10.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week10.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week10.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week10",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "base.week10",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week10",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week10.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week10.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week10.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week10.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week10.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week11.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week11.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week11.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week11.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week11.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week11.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week11.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week11.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week11.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week11.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week11.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week11",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "base.week11",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week11",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week11.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week11.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week11.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week11.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week11.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week12.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week12.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week12.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week12.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week12.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week12.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week12.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week12.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week12.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week12.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week12.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week12",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "base.week12",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week12",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week12.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week12.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week12.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week12.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week12.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week13.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week13.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week13.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week13.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week13.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week13.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week13.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week13.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week13.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week13.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week13.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week13",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "base.week13",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week13",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week13.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week13.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week13.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week13.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week13.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week14.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week14.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week14.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week14.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week14.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week14.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week14.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week14.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week14.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week14.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week14.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week14",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "base.week14",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week14",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week14.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week14.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week14.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week14.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week14.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week15.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week15.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week15.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week15.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week15.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week15.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week15.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week15.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week15.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week15.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week15.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "base.week15",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "base.week15",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week15",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "base.week15.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week15.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week15.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "base.week15.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base.week15.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "base",
+      "contract": "terminal_goods_cash_ar",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.order_lots",
+      "contract": "common_prefix",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.truck_on",
+      "contract": "common_prefix",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.production",
+      "contract": "common_prefix",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week0.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week0.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week0.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week0.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week0.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week0.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week0.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week0.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week0.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week0.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week0.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week0",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week0",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week0",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week0.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week0.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week0.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week0.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week0.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week1.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week1.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week1.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week1.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week1.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week1.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week1.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week1.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week1.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week1.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week1.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week1",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week1",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week1",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week1.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week1.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week1.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week1.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week1.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week2.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week2.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week2.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week2.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week2.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week2.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week2.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week2.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week2.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week2.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week2.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week2",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week2",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week2",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week2.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week2.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week2.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week2.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week2.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week3.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week3.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week3.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week3.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week3.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week3.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week3.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week3.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week3.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week3.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week3.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week3",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week3",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week3",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week3.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week3.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week3.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week3.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week3.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week4.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week4.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week4.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week4.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week4.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week4.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week4.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week4.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week4.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week4.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week4.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week4",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week4",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week4",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week4.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week4.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week4.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week4.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week4.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week5.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week5.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week5.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week5.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week5.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week5.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week5.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week5.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week5.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week5.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week5.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week5",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week5",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week5",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week5.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week5.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week5.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week5.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week5.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week6.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week6.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week6.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week6.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week6.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week6.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week6.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week6.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week6.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week6.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week6.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week6",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week6",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week6",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week6.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week6.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week6.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week6.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week6.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week7.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week7.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week7.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week7.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week7.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week7.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week7.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week7.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week7.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week7.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week7.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week7",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week7",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week7",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week7.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week7.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week7.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week7.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week7.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week8.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week8.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week8.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week8.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week8.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week8.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week8.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week8.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week8.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week8.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week8.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week8",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week8",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week8",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week8.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week8.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week8.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week8.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week8.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week9.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week9.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week9.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week9.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week9.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week9.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week9.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week9.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week9.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week9.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week9.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week9",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week9",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week9",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week9.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week9.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week9.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week9.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week9.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week10.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week10.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week10.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week10.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week10.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week10.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week10.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week10.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week10.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week10.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week10.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week10",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week10",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week10",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week10.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week10.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week10.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week10.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week10.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week11.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week11.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week11.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week11.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week11.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week11.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week11.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week11.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week11.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week11.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week11.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week11",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week11",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week11",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week11.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week11.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week11.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week11.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week11.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week12.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week12.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week12.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week12.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week12.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week12.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week12.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week12.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week12.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week12.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week12.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week12",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week12",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week12",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week12.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week12.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week12.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week12.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week12.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week13.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week13.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week13.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week13.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week13.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week13.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week13.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week13.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week13.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week13.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week13.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week13",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week13",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week13",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week13.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week13.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week13.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week13.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week13.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week14.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week14.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week14.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week14.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week14.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week14.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week14.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week14.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week14.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week14.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week14.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week14",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week14",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week14",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week14.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week14.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week14.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week14.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week14.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week15.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week15.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week15.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week15.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week15.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week15.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week15.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week15.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week15.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week15.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week15.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week15",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week15",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week15",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week15.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week15.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week15.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week15.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption.week15.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "supplier_disruption",
+      "contract": "terminal_goods_cash_ar",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.order_lots",
+      "contract": "common_prefix",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.truck_on",
+      "contract": "common_prefix",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.production",
+      "contract": "common_prefix",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week0.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week0.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week0.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week0.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week0.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week0.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week0.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week0.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week0.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week0.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week0.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week0",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week0",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week0",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week0.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week0.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week0.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week0.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week0.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week1.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week1.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week1.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week1.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week1.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week1.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week1.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week1.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week1.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week1.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week1.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week1",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week1",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week1",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week1.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week1.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week1.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week1.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week1.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week2.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week2.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week2.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week2.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week2.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week2.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week2.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week2.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week2.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week2.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week2.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week2",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week2",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week2",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week2.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week2.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week2.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week2.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week2.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week3.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week3.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week3.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week3.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week3.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week3.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week3.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week3.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week3.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week3.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week3.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week3",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week3",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week3",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week3.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week3.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week3.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week3.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week3.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week4.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week4.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week4.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week4.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week4.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week4.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week4.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week4.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week4.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week4.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week4.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week4",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week4",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week4",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week4.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week4.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week4.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week4.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week4.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week5.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week5.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week5.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week5.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week5.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week5.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week5.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week5.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week5.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week5.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week5.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week5",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week5",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week5",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week5.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week5.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week5.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week5.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week5.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week6.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week6.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week6.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week6.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week6.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week6.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week6.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week6.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week6.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week6.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week6.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week6",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week6",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week6",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week6.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week6.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week6.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week6.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week6.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week7.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week7.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week7.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week7.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week7.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week7.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week7.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week7.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week7.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week7.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week7.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week7",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week7",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week7",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week7.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week7.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week7.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week7.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week7.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week8.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week8.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week8.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week8.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week8.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week8.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week8.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week8.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week8.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week8.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week8.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week8",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week8",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week8",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week8.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week8.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week8.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week8.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week8.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week9.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week9.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week9.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week9.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week9.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week9.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week9.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week9.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week9.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week9.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week9.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week9",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week9",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week9",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week9.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week9.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week9.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week9.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week9.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week10.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week10.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week10.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week10.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week10.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week10.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week10.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week10.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week10.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week10.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week10.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week10",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week10",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week10",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week10.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week10.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week10.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week10.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week10.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week11.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week11.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week11.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week11.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week11.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week11.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week11.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week11.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week11.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week11.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week11.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week11",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week11",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week11",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week11.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week11.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week11.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week11.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week11.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week12.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week12.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week12.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week12.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week12.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week12.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week12.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week12.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week12.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week12.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week12.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week12",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week12",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week12",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week12.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week12.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week12.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week12.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week12.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week13.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week13.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week13.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week13.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week13.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week13.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week13.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week13.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week13.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week13.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week13.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week13",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week13",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week13",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week13.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week13.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week13.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week13.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week13.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week14.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week14.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week14.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week14.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week14.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week14.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week14.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week14.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week14.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week14.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week14.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week14",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week14",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week14",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week14.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week14.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week14.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week14.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week14.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week15.raw_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week15.finished_inventory",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week15.cash",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week15.cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week15.purchase_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week15.freight_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week15.production_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week15.holding_cost",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week15.receipts",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week15.raw_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week15.product_stage_peak_volume",
+      "contract": "independent_prefix_arithmetic",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week15",
+      "contract": "inventory_credit",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week15",
+      "contract": "raw_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week15",
+      "contract": "finished_stage_capacity",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week15.supplier0",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week15.supplier1",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week15.supplier2",
+      "contract": "shipment_capacity_moq_terminal",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week15.plant0",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift.week15.plant1",
+      "contract": "plant_capacity_assignment",
+      "passed": true
+    },
+    {
+      "where": "demand_shift",
+      "contract": "terminal_goods_cash_ar",
+      "passed": true
+    },
+    {
+      "where": "objective",
+      "contract": "rational_cost",
+      "passed": true
+    }
+  ],
+  "check_count": 925,
+  "seconds": 0.010583699680864811,
+  "expected_cost_exact": "51263",
+  "caps": {
+    "raw": 240,
+    "finished": 100
+  },
+  "credit5369_is_only_feasible_upper_bound": true,
+  "scenarios": {
+    "base": {
+      "total_cost_minor": 50929,
+      "minimum_cash_minor": -5369,
+      "terminal_cash_minor": 28421,
+      "terminal_receivable_minor": 24150,
+      "raw_peak": [
+        227,
+        14
+      ],
+      "finished_peak": [
+        94,
+        10
+      ],
+      "weeks": [
+        {
+          "week": 0,
+          "raw_inventory": [
+            1,
+            13,
+            0,
+            5
+          ],
+          "finished_inventory": [
+            1,
+            0,
+            2,
+            0
+          ],
+          "cash": 2894,
+          "cost": 4106,
+          "purchase_cost": 3265,
+          "freight_cost": 420,
+          "production_cost": 386,
+          "holding_cost": 35,
+          "receipts": 0,
+          "raw_stage_peak_volume": 170,
+          "product_stage_peak_volume": 67
+        },
+        {
+          "week": 1,
+          "raw_inventory": [
+            1,
+            2,
+            3,
+            0
+          ],
+          "finished_inventory": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "cash": -495,
+          "cost": 3389,
+          "purchase_cost": 2570,
+          "freight_cost": 480,
+          "production_cost": 330,
+          "holding_cost": 9,
+          "receipts": 0,
+          "raw_stage_peak_volume": 121,
+          "product_stage_peak_volume": 63
+        },
+        {
+          "week": 2,
+          "raw_inventory": [
+            6,
+            0,
+            2,
+            0
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            2,
+            0
+          ],
+          "cash": -3389,
+          "cost": 2894,
+          "purchase_cost": 2080,
+          "freight_cost": 420,
+          "production_cost": 378,
+          "holding_cost": 16,
+          "receipts": 0,
+          "raw_stage_peak_volume": 138,
+          "product_stage_peak_volume": 67
+        },
+        {
+          "week": 3,
+          "raw_inventory": [
+            3,
+            1,
+            0,
+            3
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "cash": -5369,
+          "cost": 1980,
+          "purchase_cost": 1400,
+          "freight_cost": 180,
+          "production_cost": 380,
+          "holding_cost": 20,
+          "receipts": 0,
+          "raw_stage_peak_volume": 138,
+          "product_stage_peak_volume": 68
+        },
+        {
+          "week": 4,
+          "raw_inventory": [
+            0,
+            28,
+            0,
+            3
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            0,
+            3
+          ],
+          "cash": -4394,
+          "cost": 4875,
+          "purchase_cost": 3968,
+          "freight_cost": 480,
+          "production_cost": 378,
+          "holding_cost": 49,
+          "receipts": 5850,
+          "raw_stage_peak_volume": 191,
+          "product_stage_peak_volume": 70
+        },
+        {
+          "week": 5,
+          "raw_inventory": [
+            5,
+            2,
+            4,
+            0
+          ],
+          "finished_inventory": [
+            10,
+            1,
+            0,
+            2
+          ],
+          "cash": -3218,
+          "cost": 4874,
+          "purchase_cost": 3858,
+          "freight_cost": 480,
+          "production_cost": 481,
+          "holding_cost": 55,
+          "receipts": 6050,
+          "raw_stage_peak_volume": 171,
+          "product_stage_peak_volume": 87
+        },
+        {
+          "week": 6,
+          "raw_inventory": [
+            0,
+            18,
+            17,
+            1
+          ],
+          "finished_inventory": [
+            0,
+            1,
+            0,
+            0
+          ],
+          "cash": -988,
+          "cost": 3870,
+          "purchase_cost": 3130,
+          "freight_cost": 480,
+          "production_cost": 219,
+          "holding_cost": 41,
+          "receipts": 6100,
+          "raw_stage_peak_volume": 127,
+          "product_stage_peak_volume": 63
+        },
+        {
+          "week": 7,
+          "raw_inventory": [
+            17,
+            10,
+            9,
+            3
+          ],
+          "finished_inventory": [
+            0,
+            1,
+            6,
+            1
+          ],
+          "cash": 942,
+          "cost": 4220,
+          "purchase_cost": 3195,
+          "freight_cost": 480,
+          "production_cost": 470,
+          "holding_cost": 75,
+          "receipts": 6150,
+          "raw_stage_peak_volume": 211,
+          "product_stage_peak_volume": 84
+        },
+        {
+          "week": 8,
+          "raw_inventory": [
+            0,
+            5,
+            14,
+            20
+          ],
+          "finished_inventory": [
+            2,
+            4,
+            4,
+            1
+          ],
+          "cash": 4652,
+          "cost": 2340,
+          "purchase_cost": 1640,
+          "freight_cost": 180,
+          "production_cost": 418,
+          "holding_cost": 102,
+          "receipts": 6050,
+          "raw_stage_peak_volume": 202,
+          "product_stage_peak_volume": 89
+        },
+        {
+          "week": 9,
+          "raw_inventory": [
+            22,
+            8,
+            18,
+            23
+          ],
+          "finished_inventory": [
+            3,
+            2,
+            5,
+            0
+          ],
+          "cash": 6989,
+          "cost": 3513,
+          "purchase_cost": 2625,
+          "freight_cost": 420,
+          "production_cost": 337,
+          "holding_cost": 131,
+          "receipts": 5850,
+          "raw_stage_peak_volume": 214,
+          "product_stage_peak_volume": 84
+        },
+        {
+          "week": 10,
+          "raw_inventory": [
+            2,
+            6,
+            0,
+            6
+          ],
+          "finished_inventory": [
+            2,
+            3,
+            5,
+            2
+          ],
+          "cash": 9338,
+          "cost": 3751,
+          "purchase_cost": 2840,
+          "freight_cost": 420,
+          "production_cost": 423,
+          "holding_cost": 68,
+          "receipts": 6100,
+          "raw_stage_peak_volume": 167,
+          "product_stage_peak_volume": 94
+        },
+        {
+          "week": 11,
+          "raw_inventory": [
+            44,
+            11,
+            16,
+            0
+          ],
+          "finished_inventory": [
+            6,
+            1,
+            0,
+            1
+          ],
+          "cash": 13456,
+          "cost": 1932,
+          "purchase_cost": 1310,
+          "freight_cost": 240,
+          "production_cost": 284,
+          "holding_cost": 98,
+          "receipts": 6050,
+          "raw_stage_peak_volume": 176,
+          "product_stage_peak_volume": 76
+        },
+        {
+          "week": 12,
+          "raw_inventory": [
+            12,
+            0,
+            19,
+            3
+          ],
+          "finished_inventory": [
+            14,
+            0,
+            1,
+            0
+          ],
+          "cash": 15034,
+          "cost": 4572,
+          "purchase_cost": 3585,
+          "freight_cost": 480,
+          "production_cost": 424,
+          "holding_cost": 83,
+          "receipts": 6150,
+          "raw_stage_peak_volume": 182,
+          "product_stage_peak_volume": 90
+        },
+        {
+          "week": 13,
+          "raw_inventory": [
+            18,
+            18,
+            15,
+            9
+          ],
+          "finished_inventory": [
+            8,
+            0,
+            0,
+            0
+          ],
+          "cash": 17270,
+          "cost": 3614,
+          "purchase_cost": 2800,
+          "freight_cost": 420,
+          "production_cost": 301,
+          "holding_cost": 93,
+          "receipts": 5850,
+          "raw_stage_peak_volume": 187,
+          "product_stage_peak_volume": 80
+        },
+        {
+          "week": 14,
+          "raw_inventory": [
+            5,
+            23,
+            13,
+            10
+          ],
+          "finished_inventory": [
+            6,
+            1,
+            2,
+            2
+          ],
+          "cash": 23018,
+          "cost": 552,
+          "purchase_cost": 0,
+          "freight_cost": 0,
+          "production_cost": 451,
+          "holding_cost": 101,
+          "receipts": 6300,
+          "raw_stage_peak_volume": 227,
+          "product_stage_peak_volume": 87
+        },
+        {
+          "week": 15,
+          "raw_inventory": [
+            4,
+            28,
+            22,
+            4
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "cash": 28421,
+          "cost": 447,
+          "purchase_cost": 120,
+          "freight_cost": 60,
+          "production_cost": 205,
+          "holding_cost": 62,
+          "receipts": 5850,
+          "raw_stage_peak_volume": 158,
+          "product_stage_peak_volume": 59
+        }
+      ]
+    },
+    "supplier_disruption": {
+      "total_cost_minor": 51557,
+      "minimum_cash_minor": -5369,
+      "terminal_cash_minor": 27793,
+      "terminal_receivable_minor": 24150,
+      "raw_peak": [
+        223,
+        7
+      ],
+      "finished_peak": [
+        96,
+        13
+      ],
+      "weeks": [
+        {
+          "week": 0,
+          "raw_inventory": [
+            1,
+            13,
+            0,
+            5
+          ],
+          "finished_inventory": [
+            1,
+            0,
+            2,
+            0
+          ],
+          "cash": 2894,
+          "cost": 4106,
+          "purchase_cost": 3265,
+          "freight_cost": 420,
+          "production_cost": 386,
+          "holding_cost": 35,
+          "receipts": 0,
+          "raw_stage_peak_volume": 170,
+          "product_stage_peak_volume": 67
+        },
+        {
+          "week": 1,
+          "raw_inventory": [
+            1,
+            2,
+            3,
+            0
+          ],
+          "finished_inventory": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "cash": -495,
+          "cost": 3389,
+          "purchase_cost": 2570,
+          "freight_cost": 480,
+          "production_cost": 330,
+          "holding_cost": 9,
+          "receipts": 0,
+          "raw_stage_peak_volume": 121,
+          "product_stage_peak_volume": 63
+        },
+        {
+          "week": 2,
+          "raw_inventory": [
+            6,
+            0,
+            2,
+            0
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            2,
+            0
+          ],
+          "cash": -3389,
+          "cost": 2894,
+          "purchase_cost": 2080,
+          "freight_cost": 420,
+          "production_cost": 378,
+          "holding_cost": 16,
+          "receipts": 0,
+          "raw_stage_peak_volume": 138,
+          "product_stage_peak_volume": 67
+        },
+        {
+          "week": 3,
+          "raw_inventory": [
+            3,
+            1,
+            0,
+            3
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "cash": -5369,
+          "cost": 1980,
+          "purchase_cost": 1400,
+          "freight_cost": 180,
+          "production_cost": 380,
+          "holding_cost": 20,
+          "receipts": 0,
+          "raw_stage_peak_volume": 138,
+          "product_stage_peak_volume": 68
+        },
+        {
+          "week": 4,
+          "raw_inventory": [
+            0,
+            27,
+            0,
+            1
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            0,
+            4
+          ],
+          "cash": -5289,
+          "cost": 5770,
+          "purchase_cost": 4833,
+          "freight_cost": 480,
+          "production_cost": 408,
+          "holding_cost": 49,
+          "receipts": 5850,
+          "raw_stage_peak_volume": 191,
+          "product_stage_peak_volume": 73
+        },
+        {
+          "week": 5,
+          "raw_inventory": [
+            0,
+            1,
+            0,
+            0
+          ],
+          "finished_inventory": [
+            11,
+            1,
+            4,
+            0
+          ],
+          "cash": -3946,
+          "cost": 4707,
+          "purchase_cost": 3670,
+          "freight_cost": 480,
+          "production_cost": 503,
+          "holding_cost": 54,
+          "receipts": 6050,
+          "raw_stage_peak_volume": 166,
+          "product_stage_peak_volume": 95
+        },
+        {
+          "week": 6,
+          "raw_inventory": [
+            20,
+            28,
+            17,
+            15
+          ],
+          "finished_inventory": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "cash": -832,
+          "cost": 2986,
+          "purchase_cost": 2415,
+          "freight_cost": 300,
+          "production_cost": 173,
+          "holding_cost": 98,
+          "receipts": 6100,
+          "raw_stage_peak_volume": 182,
+          "product_stage_peak_volume": 63
+        },
+        {
+          "week": 7,
+          "raw_inventory": [
+            15,
+            25,
+            0,
+            4
+          ],
+          "finished_inventory": [
+            5,
+            1,
+            0,
+            1
+          ],
+          "cash": 2253,
+          "cost": 3065,
+          "purchase_cost": 2235,
+          "freight_cost": 300,
+          "production_cost": 458,
+          "holding_cost": 72,
+          "receipts": 6150,
+          "raw_stage_peak_volume": 223,
+          "product_stage_peak_volume": 76
+        },
+        {
+          "week": 8,
+          "raw_inventory": [
+            0,
+            12,
+            6,
+            0
+          ],
+          "finished_inventory": [
+            3,
+            1,
+            4,
+            2
+          ],
+          "cash": 5256,
+          "cost": 3047,
+          "purchase_cost": 2270,
+          "freight_cost": 300,
+          "production_cost": 420,
+          "holding_cost": 57,
+          "receipts": 6050,
+          "raw_stage_peak_volume": 173,
+          "product_stage_peak_volume": 88
+        },
+        {
+          "week": 9,
+          "raw_inventory": [
+            0,
+            0,
+            7,
+            2
+          ],
+          "finished_inventory": [
+            2,
+            0,
+            1,
+            1
+          ],
+          "cash": 7290,
+          "cost": 3816,
+          "purchase_cost": 3100,
+          "freight_cost": 420,
+          "production_cost": 270,
+          "holding_cost": 26,
+          "receipts": 5850,
+          "raw_stage_peak_volume": 100,
+          "product_stage_peak_volume": 69
+        },
+        {
+          "week": 10,
+          "raw_inventory": [
+            0,
+            12,
+            7,
+            2
+          ],
+          "finished_inventory": [
+            0,
+            3,
+            1,
+            2
+          ],
+          "cash": 9947,
+          "cost": 3443,
+          "purchase_cost": 2480,
+          "freight_cost": 480,
+          "production_cost": 434,
+          "holding_cost": 49,
+          "receipts": 6100,
+          "raw_stage_peak_volume": 176,
+          "product_stage_peak_volume": 78
+        },
+        {
+          "week": 11,
+          "raw_inventory": [
+            34,
+            0,
+            13,
+            2
+          ],
+          "finished_inventory": [
+            3,
+            1,
+            6,
+            0
+          ],
+          "cash": 12143,
+          "cost": 3854,
+          "purchase_cost": 2890,
+          "freight_cost": 480,
+          "production_cost": 396,
+          "holding_cost": 88,
+          "receipts": 6050,
+          "raw_stage_peak_volume": 185,
+          "product_stage_peak_volume": 85
+        },
+        {
+          "week": 12,
+          "raw_inventory": [
+            0,
+            11,
+            4,
+            1
+          ],
+          "finished_inventory": [
+            12,
+            2,
+            2,
+            1
+          ],
+          "cash": 14610,
+          "cost": 3683,
+          "purchase_cost": 2695,
+          "freight_cost": 480,
+          "production_cost": 434,
+          "holding_cost": 74,
+          "receipts": 6150,
+          "raw_stage_peak_volume": 174,
+          "product_stage_peak_volume": 96
+        },
+        {
+          "week": 13,
+          "raw_inventory": [
+            4,
+            4,
+            7,
+            7
+          ],
+          "finished_inventory": [
+            7,
+            0,
+            6,
+            0
+          ],
+          "cash": 18112,
+          "cost": 2348,
+          "purchase_cost": 1640,
+          "freight_cost": 300,
+          "production_cost": 334,
+          "holding_cost": 74,
+          "receipts": 5850,
+          "raw_stage_peak_volume": 146,
+          "product_stage_peak_volume": 96
+        },
+        {
+          "week": 14,
+          "raw_inventory": [
+            0,
+            11,
+            10,
+            1
+          ],
+          "finished_inventory": [
+            1,
+            0,
+            1,
+            4
+          ],
+          "cash": 22218,
+          "cost": 2194,
+          "purchase_cost": 1600,
+          "freight_cost": 240,
+          "production_cost": 304,
+          "holding_cost": 50,
+          "receipts": 6300,
+          "raw_stage_peak_volume": 133,
+          "product_stage_peak_volume": 78
+        },
+        {
+          "week": 15,
+          "raw_inventory": [
+            3,
+            0,
+            6,
+            2
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "cash": 27793,
+          "cost": 275,
+          "purchase_cost": 0,
+          "freight_cost": 0,
+          "production_cost": 262,
+          "holding_cost": 13,
+          "receipts": 5850,
+          "raw_stage_peak_volume": 99,
+          "product_stage_peak_volume": 59
+        }
+      ]
+    },
+    "demand_shift": {
+      "total_cost_minor": 51657,
+      "minimum_cash_minor": -5369,
+      "terminal_cash_minor": 29853,
+      "terminal_receivable_minor": 25230,
+      "raw_peak": [
+        230,
+        11
+      ],
+      "finished_peak": [
+        91,
+        5
+      ],
+      "weeks": [
+        {
+          "week": 0,
+          "raw_inventory": [
+            1,
+            13,
+            0,
+            5
+          ],
+          "finished_inventory": [
+            1,
+            0,
+            2,
+            0
+          ],
+          "cash": 2894,
+          "cost": 4106,
+          "purchase_cost": 3265,
+          "freight_cost": 420,
+          "production_cost": 386,
+          "holding_cost": 35,
+          "receipts": 0,
+          "raw_stage_peak_volume": 170,
+          "product_stage_peak_volume": 67
+        },
+        {
+          "week": 1,
+          "raw_inventory": [
+            1,
+            2,
+            3,
+            0
+          ],
+          "finished_inventory": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "cash": -495,
+          "cost": 3389,
+          "purchase_cost": 2570,
+          "freight_cost": 480,
+          "production_cost": 330,
+          "holding_cost": 9,
+          "receipts": 0,
+          "raw_stage_peak_volume": 121,
+          "product_stage_peak_volume": 63
+        },
+        {
+          "week": 2,
+          "raw_inventory": [
+            6,
+            0,
+            2,
+            0
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            2,
+            0
+          ],
+          "cash": -3389,
+          "cost": 2894,
+          "purchase_cost": 2080,
+          "freight_cost": 420,
+          "production_cost": 378,
+          "holding_cost": 16,
+          "receipts": 0,
+          "raw_stage_peak_volume": 138,
+          "product_stage_peak_volume": 67
+        },
+        {
+          "week": 3,
+          "raw_inventory": [
+            3,
+            1,
+            0,
+            3
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "cash": -5369,
+          "cost": 1980,
+          "purchase_cost": 1400,
+          "freight_cost": 180,
+          "production_cost": 380,
+          "holding_cost": 20,
+          "receipts": 0,
+          "raw_stage_peak_volume": 138,
+          "product_stage_peak_volume": 68
+        },
+        {
+          "week": 4,
+          "raw_inventory": [
+            1,
+            25,
+            0,
+            0
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            0,
+            4
+          ],
+          "cash": -4780,
+          "cost": 5261,
+          "purchase_cost": 4317,
+          "freight_cost": 480,
+          "production_cost": 418,
+          "holding_cost": 46,
+          "receipts": 5850,
+          "raw_stage_peak_volume": 191,
+          "product_stage_peak_volume": 75
+        },
+        {
+          "week": 5,
+          "raw_inventory": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "finished_inventory": [
+            11,
+            1,
+            0,
+            2
+          ],
+          "cash": -2673,
+          "cost": 3943,
+          "purchase_cost": 2930,
+          "freight_cost": 480,
+          "production_cost": 486,
+          "holding_cost": 47,
+          "receipts": 6050,
+          "raw_stage_peak_volume": 161,
+          "product_stage_peak_volume": 91
+        },
+        {
+          "week": 6,
+          "raw_inventory": [
+            27,
+            5,
+            0,
+            4
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "cash": 474,
+          "cost": 2953,
+          "purchase_cost": 2467,
+          "freight_cost": 240,
+          "production_cost": 206,
+          "holding_cost": 40,
+          "receipts": 6100,
+          "raw_stage_peak_volume": 113,
+          "product_stage_peak_volume": 63
+        },
+        {
+          "week": 7,
+          "raw_inventory": [
+            26,
+            24,
+            3,
+            2
+          ],
+          "finished_inventory": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "cash": 1652,
+          "cost": 4972,
+          "purchase_cost": 3975,
+          "freight_cost": 480,
+          "production_cost": 447,
+          "holding_cost": 70,
+          "receipts": 6150,
+          "raw_stage_peak_volume": 225,
+          "product_stage_peak_volume": 71
+        },
+        {
+          "week": 8,
+          "raw_inventory": [
+            0,
+            0,
+            0,
+            7
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            1,
+            3
+          ],
+          "cash": 4614,
+          "cost": 3358,
+          "purchase_cost": 2490,
+          "freight_cost": 420,
+          "production_cost": 415,
+          "holding_cost": 33,
+          "receipts": 6320,
+          "raw_stage_peak_volume": 151,
+          "product_stage_peak_volume": 76
+        },
+        {
+          "week": 9,
+          "raw_inventory": [
+            35,
+            8,
+            2,
+            12
+          ],
+          "finished_inventory": [
+            0,
+            1,
+            0,
+            0
+          ],
+          "cash": 6183,
+          "cost": 4551,
+          "purchase_cost": 3680,
+          "freight_cost": 480,
+          "production_cost": 318,
+          "holding_cost": 73,
+          "receipts": 6120,
+          "raw_stage_peak_volume": 183,
+          "product_stage_peak_volume": 63
+        },
+        {
+          "week": 10,
+          "raw_inventory": [
+            5,
+            24,
+            11,
+            8
+          ],
+          "finished_inventory": [
+            1,
+            2,
+            0,
+            0
+          ],
+          "cash": 10206,
+          "cost": 2347,
+          "purchase_cost": 1680,
+          "freight_cost": 180,
+          "production_cost": 420,
+          "holding_cost": 67,
+          "receipts": 6370,
+          "raw_stage_peak_volume": 222,
+          "product_stage_peak_volume": 71
+        },
+        {
+          "week": 11,
+          "raw_inventory": [
+            38,
+            5,
+            13,
+            9
+          ],
+          "finished_inventory": [
+            5,
+            0,
+            3,
+            1
+          ],
+          "cash": 13129,
+          "cost": 3397,
+          "purchase_cost": 2400,
+          "freight_cost": 420,
+          "production_cost": 471,
+          "holding_cost": 106,
+          "receipts": 6320,
+          "raw_stage_peak_volume": 230,
+          "product_stage_peak_volume": 83
+        },
+        {
+          "week": 12,
+          "raw_inventory": [
+            3,
+            10,
+            4,
+            0
+          ],
+          "finished_inventory": [
+            11,
+            1,
+            0,
+            0
+          ],
+          "cash": 15760,
+          "cost": 3789,
+          "purchase_cost": 2920,
+          "freight_cost": 420,
+          "production_cost": 395,
+          "holding_cost": 54,
+          "receipts": 6420,
+          "raw_stage_peak_volume": 159,
+          "product_stage_peak_volume": 85
+        },
+        {
+          "week": 13,
+          "raw_inventory": [
+            7,
+            19,
+            25,
+            1
+          ],
+          "finished_inventory": [
+            5,
+            1,
+            0,
+            0
+          ],
+          "cash": 20566,
+          "cost": 1314,
+          "purchase_cost": 845,
+          "freight_cost": 60,
+          "production_cost": 337,
+          "holding_cost": 72,
+          "receipts": 6120,
+          "raw_stage_peak_volume": 182,
+          "product_stage_peak_volume": 78
+        },
+        {
+          "week": 14,
+          "raw_inventory": [
+            3,
+            0,
+            7,
+            5
+          ],
+          "finished_inventory": [
+            8,
+            0,
+            2,
+            0
+          ],
+          "cash": 24360,
+          "cost": 2776,
+          "purchase_cost": 2030,
+          "freight_cost": 240,
+          "production_cost": 454,
+          "holding_cost": 52,
+          "receipts": 6570,
+          "raw_stage_peak_volume": 166,
+          "product_stage_peak_volume": 85
+        },
+        {
+          "week": 15,
+          "raw_inventory": [
+            5,
+            0,
+            8,
+            2
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "cash": 29853,
+          "cost": 627,
+          "purchase_cost": 308,
+          "freight_cost": 60,
+          "production_cost": 242,
+          "holding_cost": 17,
+          "receipts": 6120,
+          "raw_stage_peak_volume": 99,
+          "product_stage_peak_volume": 61
+        }
+      ]
+    }
+  }
+}

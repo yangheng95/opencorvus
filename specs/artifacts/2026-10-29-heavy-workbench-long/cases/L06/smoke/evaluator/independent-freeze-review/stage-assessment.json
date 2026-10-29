@@ -1,0 +1,111 @@
+{
+  "assessment": "S06_smoke_definition_freeze_review",
+  "completed_utc": "2026-10-29T11:19:03.235681+00:00",
+  "reviewer": "/root/benchmark_review",
+  "smoke_definition_freeze_approved": true,
+  "remaining_definition_blockers": [],
+  "report": "REVIEW.md",
+  "read_scope": "only the five requested files, copied exactly; no candidate/reference implementation read",
+  "source_identity_scope_only": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\smoke\\public\\TASK.md",
+      "copy": "source-snapshot\\public\\TASK.md",
+      "byte_equal_at_final_check": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\smoke\\public\\inputs\\base.json",
+      "copy": "source-snapshot\\public\\inputs\\base.json",
+      "byte_equal_at_final_check": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\smoke\\public\\inputs\\price-change.json",
+      "copy": "source-snapshot\\public\\inputs\\price-change.json",
+      "byte_equal_at_final_check": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\smoke\\profile.json",
+      "copy": "source-snapshot\\profile.json",
+      "byte_equal_at_final_check": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\smoke\\evaluator\\contract.json",
+      "copy": "source-snapshot\\evaluator\\contract.json",
+      "byte_equal_at_final_check": true
+    }
+  ],
+  "actual_independent_arithmetic": {
+    "method": "standard-library scalar exhaustive oracle, no evaluator or solver imported",
+    "base": {
+      "tested": 648,
+      "feasible": 12,
+      "best_exact": "9/2"
+    },
+    "price_change": {
+      "tested": 648,
+      "feasible": 12,
+      "best_exact": "11/2"
+    },
+    "expected_reference_match": true,
+    "seconds": 0.001091300044208765,
+    "semantic_input_differences": [
+      {
+        "path": "$.suppliers[0].price_minor[0]",
+        "base": 1,
+        "changed": 3
+      }
+    ],
+    "base_optimum_strategy_at_changed_price": "17/2"
+  },
+  "actual_smoke_checks": [
+    {
+      "id": "native-completion",
+      "definition_reviewed": true,
+      "actual_run_result": null
+    },
+    {
+      "id": "sealed-business-feasibility",
+      "definition_reviewed": true,
+      "actual_run_result": null
+    },
+    {
+      "id": "known-small-optima",
+      "definition_reviewed": true,
+      "actual_run_result": null
+    },
+    {
+      "id": "full-clean-source-replay",
+      "definition_reviewed": true,
+      "actual_run_result": null
+    }
+  ],
+  "smoke_executed": false,
+  "smoke_pass": null,
+  "native_lifecycle_verified": false,
+  "actual_model_binding_verified": false,
+  "candidate_source_clean_replay_verified": false,
+  "candidate_export": {
+    "allowed": "public/ only",
+    "evaluator_or_review_answer_export": false,
+    "sandbox_or_blind_certification": false
+  },
+  "nonblocking_interpretations": [
+    "expected cost can be rational despite integer input monetary units",
+    "summary field names are not frozen; no unpublished key requirements",
+    "public requirement to compute from input needs source data-flow review; two outputs do not certify generalization"
+  ],
+  "constraints": {
+    "repo_writes": false,
+    "extra_delegation": false,
+    "provider_or_native_task": false,
+    "milp_or_gpu": false,
+    "container_or_user_process_actions": false
+  },
+  "claims": {
+    "heavy_case_count_increment": 0,
+    "L06_heavy_case_freeze_approved": false,
+    "hours_qualified": false,
+    "difficulty_score": null,
+    "comparable": false,
+    "entire_benchmark_approved": false
+  }
+}

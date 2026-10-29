@@ -1,0 +1,449 @@
+{
+  "tiny": {
+    "scope": "all 324 joint purchase choices under the supplied tiny instance; scalar closed oracle independent of checker",
+    "enumerated": 324,
+    "feasible": 22,
+    "best_exact": "9/2",
+    "clairvoyant_without_common_constraint_best": "4",
+    "disagreements": [],
+    "domain_completeness": "zero finished-goods capacity fixes production to weekly demand; all trucks determined by positive shipment MOQ; late A orders forbidden; q bounds force A0 in0..1/B0,B1 in0..2"
+  },
+  "full": {
+    "all_checks_passed": true,
+    "checks": 733,
+    "expected_cost_exact": "51263",
+    "seconds": 0.007213999982923269,
+    "scenarios": {
+      "base": {
+        "total_cost_minor": 50929,
+        "minimum_cash_minor": -5369,
+        "minimum_cash_weeks": [
+          3
+        ],
+        "terminal_cash_minor": 28421,
+        "terminal_receivable_minor": 24150,
+        "raw_transient_peak": [
+          227,
+          14
+        ],
+        "finished_transient_peak": [
+          94,
+          10
+        ]
+      },
+      "supplier_disruption": {
+        "total_cost_minor": 51557,
+        "minimum_cash_minor": -5369,
+        "minimum_cash_weeks": [
+          3
+        ],
+        "terminal_cash_minor": 27793,
+        "terminal_receivable_minor": 24150,
+        "raw_transient_peak": [
+          223,
+          7
+        ],
+        "finished_transient_peak": [
+          96,
+          13
+        ]
+      },
+      "demand_shift": {
+        "total_cost_minor": 51657,
+        "minimum_cash_minor": -5369,
+        "minimum_cash_weeks": [
+          3
+        ],
+        "terminal_cash_minor": 29853,
+        "terminal_receivable_minor": 25230,
+        "raw_transient_peak": [
+          230,
+          11
+        ],
+        "finished_transient_peak": [
+          91,
+          5
+        ]
+      }
+    }
+  },
+  "reader_boundaries": [
+    {
+      "label": "top-level-array-plan",
+      "result": null,
+      "exit_code": 1,
+      "stderr_last_line": "AttributeError: 'list' object has no attribute 'get'"
+    },
+    {
+      "label": "malformed-json-plan",
+      "result": null,
+      "exit_code": 1,
+      "stderr_last_line": "json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"
+    },
+    {
+      "label": "negative-probability",
+      "result": {
+        "business_feasible": true,
+        "scope": "exact finite instance plan recurrence only; not execution attestation or optimality certificate",
+        "expected_cost_minor": 5.5,
+        "expected_cost_exact": {
+          "numerator": 11,
+          "denominator": 2
+        },
+        "scenarios": {
+          "one": {
+            "total_cost_minor": 5,
+            "final_cash_minor": 100,
+            "final_receivable_minor": 5,
+            "minimum_cash_minor": 96,
+            "active_constraints": {
+              "supplier_capacity": 1,
+              "shipment_minimum": 1,
+              "plant_capacity": 0,
+              "raw_storage": 0,
+              "product_storage": 2,
+              "credit_limit": 0
+            },
+            "weeks": [
+              {
+                "week": 0,
+                "raw_inventory": [
+                  0
+                ],
+                "finished_inventory": [
+                  0
+                ],
+                "arrivals": [
+                  0
+                ],
+                "consumption": [
+                  1
+                ],
+                "made": [
+                  1
+                ],
+                "hours": [
+                  1
+                ],
+                "supplier_volume": [
+                  2,
+                  0
+                ],
+                "purchase_cost": 2,
+                "freight_cost": 2,
+                "production_cost": 0,
+                "holding_cost": 0,
+                "cost": 4,
+                "receipts": 0,
+                "cash": 96
+              },
+              {
+                "week": 1,
+                "raw_inventory": [
+                  1
+                ],
+                "finished_inventory": [
+                  0
+                ],
+                "arrivals": [
+                  2
+                ],
+                "consumption": [
+                  1
+                ],
+                "made": [
+                  1
+                ],
+                "hours": [
+                  1
+                ],
+                "supplier_volume": [
+                  0,
+                  0
+                ],
+                "purchase_cost": 0,
+                "freight_cost": 0,
+                "production_cost": 0,
+                "holding_cost": 1,
+                "cost": 1,
+                "receipts": 5,
+                "cash": 100
+              }
+            ]
+          },
+          "two": {
+            "total_cost_minor": 4,
+            "final_cash_minor": 101,
+            "final_receivable_minor": 10,
+            "minimum_cash_minor": 96,
+            "active_constraints": {
+              "supplier_capacity": 1,
+              "shipment_minimum": 1,
+              "plant_capacity": 1,
+              "raw_storage": 0,
+              "product_storage": 2,
+              "credit_limit": 0
+            },
+            "weeks": [
+              {
+                "week": 0,
+                "raw_inventory": [
+                  0
+                ],
+                "finished_inventory": [
+                  0
+                ],
+                "arrivals": [
+                  0
+                ],
+                "consumption": [
+                  1
+                ],
+                "made": [
+                  1
+                ],
+                "hours": [
+                  1
+                ],
+                "supplier_volume": [
+                  2,
+                  0
+                ],
+                "purchase_cost": 2,
+                "freight_cost": 2,
+                "production_cost": 0,
+                "holding_cost": 0,
+                "cost": 4,
+                "receipts": 0,
+                "cash": 96
+              },
+              {
+                "week": 1,
+                "raw_inventory": [
+                  0
+                ],
+                "finished_inventory": [
+                  0
+                ],
+                "arrivals": [
+                  2
+                ],
+                "consumption": [
+                  2
+                ],
+                "made": [
+                  2
+                ],
+                "hours": [
+                  2
+                ],
+                "supplier_volume": [
+                  0,
+                  0
+                ],
+                "purchase_cost": 0,
+                "freight_cost": 0,
+                "production_cost": 0,
+                "holding_cost": 0,
+                "cost": 0,
+                "receipts": 5,
+                "cash": 101
+              }
+            ]
+          }
+        }
+      },
+      "exit_code": 0,
+      "stderr_last_line": null
+    },
+    {
+      "label": "missing-holding-vector",
+      "result": {
+        "business_feasible": true,
+        "scope": "exact finite instance plan recurrence only; not execution attestation or optimality certificate",
+        "expected_cost_minor": 4.0,
+        "expected_cost_exact": {
+          "numerator": 4,
+          "denominator": 1
+        },
+        "scenarios": {
+          "one": {
+            "total_cost_minor": 4,
+            "final_cash_minor": 101,
+            "final_receivable_minor": 5,
+            "minimum_cash_minor": 96,
+            "active_constraints": {
+              "supplier_capacity": 1,
+              "shipment_minimum": 1,
+              "plant_capacity": 0,
+              "raw_storage": 0,
+              "product_storage": 2,
+              "credit_limit": 0
+            },
+            "weeks": [
+              {
+                "week": 0,
+                "raw_inventory": [
+                  0
+                ],
+                "finished_inventory": [
+                  0
+                ],
+                "arrivals": [
+                  0
+                ],
+                "consumption": [
+                  1
+                ],
+                "made": [
+                  1
+                ],
+                "hours": [
+                  1
+                ],
+                "supplier_volume": [
+                  2,
+                  0
+                ],
+                "purchase_cost": 2,
+                "freight_cost": 2,
+                "production_cost": 0,
+                "holding_cost": 0,
+                "cost": 4,
+                "receipts": 0,
+                "cash": 96
+              },
+              {
+                "week": 1,
+                "raw_inventory": [
+                  1
+                ],
+                "finished_inventory": [
+                  0
+                ],
+                "arrivals": [
+                  2
+                ],
+                "consumption": [
+                  1
+                ],
+                "made": [
+                  1
+                ],
+                "hours": [
+                  1
+                ],
+                "supplier_volume": [
+                  0,
+                  0
+                ],
+                "purchase_cost": 0,
+                "freight_cost": 0,
+                "production_cost": 0,
+                "holding_cost": 0,
+                "cost": 0,
+                "receipts": 5,
+                "cash": 101
+              }
+            ]
+          },
+          "two": {
+            "total_cost_minor": 4,
+            "final_cash_minor": 101,
+            "final_receivable_minor": 10,
+            "minimum_cash_minor": 96,
+            "active_constraints": {
+              "supplier_capacity": 1,
+              "shipment_minimum": 1,
+              "plant_capacity": 1,
+              "raw_storage": 0,
+              "product_storage": 2,
+              "credit_limit": 0
+            },
+            "weeks": [
+              {
+                "week": 0,
+                "raw_inventory": [
+                  0
+                ],
+                "finished_inventory": [
+                  0
+                ],
+                "arrivals": [
+                  0
+                ],
+                "consumption": [
+                  1
+                ],
+                "made": [
+                  1
+                ],
+                "hours": [
+                  1
+                ],
+                "supplier_volume": [
+                  2,
+                  0
+                ],
+                "purchase_cost": 2,
+                "freight_cost": 2,
+                "production_cost": 0,
+                "holding_cost": 0,
+                "cost": 4,
+                "receipts": 0,
+                "cash": 96
+              },
+              {
+                "week": 1,
+                "raw_inventory": [
+                  0
+                ],
+                "finished_inventory": [
+                  0
+                ],
+                "arrivals": [
+                  2
+                ],
+                "consumption": [
+                  2
+                ],
+                "made": [
+                  2
+                ],
+                "hours": [
+                  2
+                ],
+                "supplier_volume": [
+                  0,
+                  0
+                ],
+                "purchase_cost": 0,
+                "freight_cost": 0,
+                "production_cost": 0,
+                "holding_cost": 0,
+                "cost": 0,
+                "receipts": 5,
+                "cash": 101
+              }
+            ]
+          }
+        }
+      },
+      "exit_code": 0,
+      "stderr_last_line": null
+    },
+    {
+      "label": "inconsistent-pre-reveal-demand",
+      "result": {
+        "business_feasible": false,
+        "error": "instance_information",
+        "where": "two.demand",
+        "actual": null,
+        "required": null
+      },
+      "exit_code": 2,
+      "stderr_last_line": null
+    }
+  ],
+  "scope": "cheap stdlib actual observations only; no freeze/1percent/hours approval"
+}

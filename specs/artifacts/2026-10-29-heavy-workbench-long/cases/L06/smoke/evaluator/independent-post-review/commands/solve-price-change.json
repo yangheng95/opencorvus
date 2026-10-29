@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-B",
+    "solve.py",
+    "--input",
+    "inputs/price-change.json",
+    "--output",
+    "results/price-change"
+  ],
+  "cwd": "D:\\opencorvus-benchmark-runs\\s06-smoke-post-review-20261029\\cold-replay",
+  "started_utc": "2026-10-29T11:52:38.812834+00:00",
+  "seconds": 0.1410032999701798,
+  "exit_code": 0,
+  "stdout": "commands\\solve-price-change.stdout.txt",
+  "stderr": "commands\\solve-price-change.stderr.txt"
+}

@@ -1,0 +1,126 @@
+{
+  "scope": "S06 native pipeline smoke only; not heavy difficulty, hours, or suite completion",
+  "taskID": "tsk_g00VZR9KuE00aKSMSF10",
+  "native_lifecycle": "completed",
+  "native_seconds": 650.922,
+  "checks": {
+    "sealed-base": {
+      "business_feasible": true,
+      "independent_expected_cost_minor": 4.5
+    },
+    "replay-base": {
+      "business_feasible": true,
+      "independent_expected_cost_minor": 4.5
+    },
+    "sealed-price-change": {
+      "business_feasible": true,
+      "independent_expected_cost_minor": 5.5
+    },
+    "replay-price-change": {
+      "business_feasible": true,
+      "independent_expected_cost_minor": 5.5
+    }
+  },
+  "actual_clean_replay_and_checker_seconds": 0.8182369000278413,
+  "commands": [
+    {
+      "argv": [
+        "C:/Python314/python.exe",
+        "solve.py",
+        "--input",
+        "inputs/base.json",
+        "--output",
+        "results/base"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\clean-replay",
+      "exit_code": 0,
+      "seconds": 0.144713600166142
+    },
+    {
+      "argv": [
+        "C:/Python314/python.exe",
+        "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\qualification\\current-source\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\clean-replay\\inputs\\base.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\sealed\\original-results\\base\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\evaluator\\sealed-base-check.json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.14657370001077652
+    },
+    {
+      "argv": [
+        "C:/Python314/python.exe",
+        "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\qualification\\current-source\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\clean-replay\\inputs\\base.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\clean-replay\\results\\base\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\evaluator\\replay-base-check.json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.12798870028927922
+    },
+    {
+      "argv": [
+        "C:/Python314/python.exe",
+        "solve.py",
+        "--input",
+        "inputs/price-change.json",
+        "--output",
+        "results/price-change"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\clean-replay",
+      "exit_code": 0,
+      "seconds": 0.13075280003249645
+    },
+    {
+      "argv": [
+        "C:/Python314/python.exe",
+        "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\qualification\\current-source\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\clean-replay\\inputs\\price-change.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\sealed\\original-results\\price-change\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\evaluator\\sealed-price-change-check.json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.1355715999379754
+    },
+    {
+      "argv": [
+        "C:/Python314/python.exe",
+        "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\qualification\\current-source\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\clean-replay\\inputs\\price-change.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\clean-replay\\results\\price-change\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\evaluator\\replay-price-change-check.json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.13102969992905855
+    }
+  ],
+  "candidate_git": {
+    "head": "40487f33083e90d32816eec86368b13c2232b35b",
+    "status": []
+  },
+  "native_actor_kinds": [
+    {
+      "agent": "orchestrator",
+      "kind": "orchestrator"
+    },
+    {
+      "agent": "base-tester",
+      "kind": "delegated-worker"
+    }
+  ],
+  "checks_passed": true,
+  "comparable": false,
+  "independent_agent_post_review": "pending; no blind quality claim"
+}

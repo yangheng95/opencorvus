@@ -1,0 +1,179 @@
+{
+  "business_feasible": true,
+  "scope": "exact finite instance plan recurrence only; not execution attestation or optimality certificate",
+  "expected_cost_minor": 4.5,
+  "expected_cost_exact": {
+    "numerator": 9,
+    "denominator": 2
+  },
+  "scenarios": {
+    "one": {
+      "total_cost_minor": 5,
+      "final_cash_minor": 100,
+      "final_receivable_minor": 5,
+      "minimum_cash_minor": 96,
+      "active_constraints": {
+        "supplier_capacity": 1,
+        "shipment_minimum": 1,
+        "plant_capacity": 0,
+        "raw_storage": 1,
+        "product_storage": 0,
+        "credit_limit": 0
+      },
+      "weeks": [
+        {
+          "week": 0,
+          "raw_inventory": [
+            0
+          ],
+          "finished_inventory": [
+            0
+          ],
+          "arrivals": [
+            0
+          ],
+          "consumption": [
+            1
+          ],
+          "made": [
+            1
+          ],
+          "hours": [
+            1
+          ],
+          "raw_stage_peak_volume": 1,
+          "product_stage_peak_volume": 1,
+          "supplier_volume": [
+            2,
+            0
+          ],
+          "purchase_cost": 2,
+          "freight_cost": 2,
+          "production_cost": 0,
+          "holding_cost": 0,
+          "cost": 4,
+          "receipts": 0,
+          "cash": 96
+        },
+        {
+          "week": 1,
+          "raw_inventory": [
+            1
+          ],
+          "finished_inventory": [
+            0
+          ],
+          "arrivals": [
+            2
+          ],
+          "consumption": [
+            1
+          ],
+          "made": [
+            1
+          ],
+          "hours": [
+            1
+          ],
+          "raw_stage_peak_volume": 2,
+          "product_stage_peak_volume": 1,
+          "supplier_volume": [
+            0,
+            0
+          ],
+          "purchase_cost": 0,
+          "freight_cost": 0,
+          "production_cost": 0,
+          "holding_cost": 1,
+          "cost": 1,
+          "receipts": 5,
+          "cash": 100
+        }
+      ]
+    },
+    "two": {
+      "total_cost_minor": 4,
+      "final_cash_minor": 101,
+      "final_receivable_minor": 10,
+      "minimum_cash_minor": 96,
+      "active_constraints": {
+        "supplier_capacity": 1,
+        "shipment_minimum": 1,
+        "plant_capacity": 1,
+        "raw_storage": 1,
+        "product_storage": 1,
+        "credit_limit": 0
+      },
+      "weeks": [
+        {
+          "week": 0,
+          "raw_inventory": [
+            0
+          ],
+          "finished_inventory": [
+            0
+          ],
+          "arrivals": [
+            0
+          ],
+          "consumption": [
+            1
+          ],
+          "made": [
+            1
+          ],
+          "hours": [
+            1
+          ],
+          "raw_stage_peak_volume": 1,
+          "product_stage_peak_volume": 1,
+          "supplier_volume": [
+            2,
+            0
+          ],
+          "purchase_cost": 2,
+          "freight_cost": 2,
+          "production_cost": 0,
+          "holding_cost": 0,
+          "cost": 4,
+          "receipts": 0,
+          "cash": 96
+        },
+        {
+          "week": 1,
+          "raw_inventory": [
+            0
+          ],
+          "finished_inventory": [
+            0
+          ],
+          "arrivals": [
+            2
+          ],
+          "consumption": [
+            2
+          ],
+          "made": [
+            2
+          ],
+          "hours": [
+            2
+          ],
+          "raw_stage_peak_volume": 2,
+          "product_stage_peak_volume": 2,
+          "supplier_volume": [
+            0,
+            0
+          ],
+          "purchase_cost": 0,
+          "freight_cost": 0,
+          "production_cost": 0,
+          "holding_cost": 0,
+          "cost": 0,
+          "receipts": 5,
+          "cash": 101
+        }
+      ]
+    }
+  }
+}

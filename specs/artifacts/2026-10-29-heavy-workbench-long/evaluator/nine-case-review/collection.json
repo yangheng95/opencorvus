@@ -1,0 +1,30 @@
+{
+  "status": "completed",
+  "completed_utc": "2026-10-29T09:45:42.190528+00:00",
+  "python": "3.14.2 (tags/v3.14.2:df79316, Dec  5 2025, 17:18:21) [MSC v.1944 64 bit (AMD64)]",
+  "source_count": 88,
+  "cases": [
+    "H02",
+    "H03",
+    "H04",
+    "H05",
+    "H06",
+    "H07",
+    "H08",
+    "H09",
+    "H10"
+  ],
+  "objective_points": {
+    "H02": 20,
+    "H03": 20,
+    "H04": 20,
+    "H05": 20,
+    "H06": 20,
+    "H07": 20,
+    "H08": 20,
+    "H09": 20,
+    "H10": 20
+  },
+  "scope": "design audit and actual evaluator reference/diagnostic replay, NOT candidate performance",
+  "writes": "this external review directory only; main repo read-only"
+}

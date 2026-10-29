@@ -1,0 +1,3899 @@
+{
+  "scope": "all 324 joint purchase choices under the supplied tiny instance; scalar closed oracle independent of checker",
+  "enumerated": 324,
+  "feasible": 22,
+  "best_exact": "9/2",
+  "clairvoyant_without_common_constraint_best": "4",
+  "disagreements": [],
+  "all_choices": [
+    {
+      "choice": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "raw_availability"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "raw_availability"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "raw_availability"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "raw_availability"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "raw_availability"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        2
+      ],
+      "oracle": "11/2",
+      "checker_code": "business_feasible"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        1,
+        0,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        1,
+        0,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        1,
+        0,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        1,
+        0,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        1,
+        0,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        1,
+        1,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        1,
+        1,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        1,
+        1,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "raw_availability"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "raw_availability"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      "oracle": "15/2",
+      "checker_code": "business_feasible"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        2,
+        0,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        2,
+        0,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        2,
+        0,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        2,
+        1,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        2,
+        1,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        2,
+        1,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        2,
+        1,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        2,
+        1,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        2,
+        1,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        2,
+        1,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        2,
+        1,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        0,
+        2,
+        1,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "raw_availability"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        1
+      ],
+      "oracle": "7",
+      "checker_code": "business_feasible"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        2
+      ],
+      "oracle": "9",
+      "checker_code": "business_feasible"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        0,
+        0,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        0,
+        0,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        0,
+        0,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        0,
+        1,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        0,
+        1,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        0,
+        1,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        0,
+        1,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        0,
+        1,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        0,
+        1,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "raw_availability"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        1
+      ],
+      "oracle": "19/2",
+      "checker_code": "business_feasible"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        2
+      ],
+      "oracle": "23/2",
+      "checker_code": "business_feasible"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        1,
+        0,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        1,
+        0,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        1,
+        0,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        1,
+        1,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        1,
+        1,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        1,
+        1,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        2,
+        0,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        2,
+        0,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        2,
+        0,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        2,
+        0,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "raw_availability"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        2,
+        0,
+        1,
+        1
+      ],
+      "oracle": "23/2",
+      "checker_code": "business_feasible"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        2,
+        0,
+        1,
+        2
+      ],
+      "oracle": "27/2",
+      "checker_code": "business_feasible"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        2,
+        0,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        2,
+        0,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        2,
+        0,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        2,
+        1,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        2,
+        1,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        2,
+        1,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        2,
+        1,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        2,
+        1,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        2,
+        1,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        2,
+        1,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        2,
+        1,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        1,
+        2,
+        1,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        0,
+        0,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        0,
+        0,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        0,
+        0,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        0,
+        0,
+        2,
+        0
+      ],
+      "oracle": "19/2",
+      "checker_code": "business_feasible"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        0,
+        0,
+        2,
+        1
+      ],
+      "oracle": "12",
+      "checker_code": "business_feasible"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        0,
+        0,
+        2,
+        2
+      ],
+      "oracle": "14",
+      "checker_code": "business_feasible"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        0,
+        1,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        0,
+        1,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        0,
+        1,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        0,
+        1,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        0,
+        1,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        0,
+        1,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        0,
+        1,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        0,
+        1,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        0,
+        1,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        1,
+        0,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        1,
+        0,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        1,
+        0,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        1,
+        0,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        1,
+        0,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        1,
+        0,
+        2,
+        0
+      ],
+      "oracle": "12",
+      "checker_code": "business_feasible"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        1,
+        0,
+        2,
+        1
+      ],
+      "oracle": "29/2",
+      "checker_code": "business_feasible"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        1,
+        0,
+        2,
+        2
+      ],
+      "oracle": "33/2",
+      "checker_code": "business_feasible"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        1,
+        1,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        1,
+        1,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        1,
+        1,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        1,
+        1,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        1,
+        1,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        1,
+        1,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        1,
+        1,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        1,
+        1,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        2,
+        0,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        2,
+        0,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        2,
+        0,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        2,
+        0,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        2,
+        0,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        2,
+        0,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        2,
+        0,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "raw_storage"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        2,
+        0,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "raw_storage"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        2,
+        0,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "raw_storage"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        2,
+        1,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        2,
+        1,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        2,
+        1,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        2,
+        1,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        2,
+        1,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        2,
+        1,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        2,
+        1,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        0,
+        2,
+        2,
+        1,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        0,
+        0,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        0,
+        0,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "oracle": "9/2",
+      "checker_code": "business_feasible"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      "oracle": "7",
+      "checker_code": "business_feasible"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        2
+      ],
+      "oracle": "9",
+      "checker_code": "business_feasible"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        0,
+        1,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        0,
+        1,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        0,
+        1,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        0,
+        1,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        0,
+        1,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        1,
+        0,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        1,
+        0,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        1,
+        0,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        1,
+        1,
+        0,
+        0
+      ],
+      "oracle": "7",
+      "checker_code": "business_feasible"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        1,
+        1,
+        0,
+        1
+      ],
+      "oracle": "19/2",
+      "checker_code": "business_feasible"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        1,
+        1,
+        0,
+        2
+      ],
+      "oracle": "23/2",
+      "checker_code": "business_feasible"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        1,
+        1,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        1,
+        1,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        1,
+        1,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        1,
+        1,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        1,
+        1,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        1,
+        1,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        2,
+        0,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        2,
+        0,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        2,
+        0,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        2,
+        0,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        2,
+        0,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        2,
+        0,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        2,
+        1,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "raw_storage"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        2,
+        1,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "raw_storage"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        2,
+        1,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "raw_storage"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        2,
+        1,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        2,
+        1,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        2,
+        1,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        2,
+        1,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        2,
+        1,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        0,
+        2,
+        1,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        0,
+        0,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        0,
+        0,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        0,
+        0,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        0,
+        0,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        0,
+        0,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        0,
+        0,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        0,
+        1,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ],
+      "oracle": "21/2",
+      "checker_code": "business_feasible"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        1
+      ],
+      "oracle": "13",
+      "checker_code": "business_feasible"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "raw_storage"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        0,
+        1,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        0,
+        1,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        0,
+        1,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        1,
+        0,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        1,
+        0,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        1,
+        0,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "raw_storage"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "raw_storage"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "raw_storage"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        2,
+        0,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        2,
+        0,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        2,
+        0,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        2,
+        0,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        2,
+        0,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        2,
+        0,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        2,
+        0,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        2,
+        0,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        2,
+        0,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        2,
+        1,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        2,
+        1,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        2,
+        1,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        2,
+        1,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "raw_storage"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        2,
+        1,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "raw_storage"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        2,
+        1,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "raw_storage"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        2,
+        1,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        2,
+        1,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        1,
+        2,
+        1,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        0,
+        0,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        0,
+        0,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        0,
+        0,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        0,
+        0,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        0,
+        0,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        0,
+        0,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        0,
+        0,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        0,
+        0,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        0,
+        1,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        0,
+        1,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        0,
+        1,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        0,
+        1,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        0,
+        1,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        0,
+        1,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        0,
+        1,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "raw_storage"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        0,
+        1,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "raw_storage"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        0,
+        1,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "raw_storage"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        1,
+        0,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        1,
+        0,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        1,
+        0,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        1,
+        0,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        1,
+        0,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        1,
+        0,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        1,
+        0,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        1,
+        0,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        1,
+        1,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        1,
+        1,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        1,
+        1,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        1,
+        1,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        1,
+        1,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "raw_storage"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "raw_storage"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "raw_storage"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        2,
+        0,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        2,
+        0,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        2,
+        0,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        2,
+        0,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        2,
+        0,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        2,
+        0,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        2,
+        0,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        2,
+        0,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        2,
+        0,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        2,
+        1,
+        0,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        2,
+        1,
+        0,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        2,
+        1,
+        1,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        2,
+        1,
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        2,
+        1,
+        1,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "common_commitment"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        2,
+        1,
+        2,
+        0
+      ],
+      "oracle": null,
+      "checker_code": "raw_storage"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        2,
+        1,
+        2,
+        1
+      ],
+      "oracle": null,
+      "checker_code": "raw_storage"
+    },
+    {
+      "choice": [
+        1,
+        2,
+        2,
+        1,
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker_code": "raw_storage"
+    }
+  ],
+  "domain_completeness": "zero finished-goods capacity fixes production to weekly demand; all trucks determined by positive shipment MOQ; late A orders forbidden; q bounds force A0 in0..1/B0,B1 in0..2"
+}

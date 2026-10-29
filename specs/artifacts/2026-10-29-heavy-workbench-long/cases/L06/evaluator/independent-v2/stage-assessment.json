@@ -1,0 +1,137 @@
+{
+  "assessment": "independent_cheap_v2_local_review_final",
+  "completed_utc": "2026-10-29T11:05:08.712344+00:00",
+  "reviewer": "/root/benchmark_review",
+  "report": "REVIEW.md",
+  "initial_report_preserved": "REVIEW-INITIAL.md",
+  "constraints": {
+    "repo_writes": false,
+    "extra_delegation": false,
+    "scipy_or_milp_import_run": false,
+    "gpu_or_training": false,
+    "provider_or_credentials": false,
+    "ui_or_user_processes": false,
+    "container_or_paused_work_actions": false
+  },
+  "local_requested_repairs_accepted": true,
+  "remaining_confirmed_local_blockers": [],
+  "actual_original20_cli": {
+    "count": 20,
+    "all_passed": true
+  },
+  "independent_scalar_domain": {
+    "common": {
+      "tested": 648,
+      "feasible": 12,
+      "best_exact": "9/2",
+      "disagreements": 0
+    },
+    "clairvoyant": {
+      "tested": 1296,
+      "feasible": 54,
+      "best_exact": "4",
+      "disagreements": 0
+    },
+    "early_production_enumerated": true,
+    "new_solver_execution": false
+  },
+  "full_witness": {
+    "independent_arithmetic_passed": true,
+    "checked_conditions": 925,
+    "seconds": 0.010583699680864811,
+    "cost_exact": "51263",
+    "raw_cap": 240,
+    "finished_cap": 100,
+    "max_raw_peak": 230,
+    "max_finished_peak": 96,
+    "credit5369_feasible_upper_bound_only": true,
+    "v1_credit_lower_bound_transferred": false
+  },
+  "necessary_cut": {
+    "scope": "independent necessary physical-capacity inequality only; no optimization",
+    "maximum_mandatory_delivery_volume": 66,
+    "maximizers": [
+      {
+        "scenario": "demand_shift",
+        "week": 13,
+        "minimum_fg_stage_volume": 66
+      }
+    ],
+    "old_cap42_infeasible_under_stage_sequence": true,
+    "new_cap100_passes_necessary_condition_only": true
+  },
+  "reader_repairs": {
+    "overflow_exponent": "plan_json",
+    "input_precedence": "instance_invalid",
+    "actual_repaired_cli_count": 2,
+    "strict_result_and_stdout_json": true,
+    "all_passed": true,
+    "original_failures_preserved": true
+  },
+  "final_source": {
+    "identity": [
+      {
+        "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\l06_input.py",
+        "copy": "source-repaired\\l06_input.py",
+        "same_bytes_at_final_check": true
+      },
+      {
+        "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+        "copy": "source-repaired\\check_l06.py",
+        "same_bytes_at_final_check": true
+      },
+      {
+        "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\qualify_l06.py",
+        "copy": "source-repaired\\qualify_l06.py",
+        "same_bytes_at_final_check": true
+      },
+      {
+        "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\qualify_business_checks.py",
+        "copy": "source-repaired\\qualify_business_checks.py",
+        "same_bytes_at_final_check": true
+      },
+      {
+        "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\qualify_full_business_checks.py",
+        "copy": "source-repaired\\qualify_full_business_checks.py",
+        "same_bytes_at_final_check": true
+      },
+      {
+        "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\tiny-solver\\executed-source.py",
+        "copy": "supplementary-final\\v2\\tiny-solver\\executed-source.py",
+        "same_bytes_at_final_check": true
+      },
+      {
+        "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\cheap-necessary-cuts.json",
+        "copy": "supplementary-final\\v2\\cheap-necessary-cuts.json",
+        "same_bytes_at_final_check": true
+      },
+      {
+        "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\receipt.json",
+        "copy": "supplementary-final\\v2\\full-business-contracts-final\\receipt.json",
+        "same_bytes_at_final_check": true
+      }
+    ],
+    "body_identity_scope_only": {
+      "business_evaluate_function_text_equal": true,
+      "instance_validator_function_text_equal": true,
+      "model_solve_function_text_equal": true
+    },
+    "math_correctness_scope": "actual tiny oracle + full independent prefix/stage computation; model static review, no full new solve"
+  },
+  "main_final22_group": {
+    "read_original_receipt": true,
+    "repeated_full_group": false,
+    "scope": "source-side evidence, not another independent22 run"
+  },
+  "maturity": {
+    "frozen_public_case": false,
+    "cost_1percent_qualified": false,
+    "v2_operating_cost_bound_established": false,
+    "candidate_run_or_grade": false,
+    "hours_validated": false,
+    "expert_or_blind_calibration": false,
+    "freeze_approved": false,
+    "mature_benchmark_claim": false
+  },
+  "commands": "commands/ exact argv/cwd/exit/stdout/stderr; original20 cases have their nested real commands in replay/v2/full-business-contracts/receipt.json"
+}

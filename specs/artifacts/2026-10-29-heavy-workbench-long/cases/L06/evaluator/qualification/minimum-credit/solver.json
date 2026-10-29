@@ -1,0 +1,14 @@
+{
+  "objective_name": "minimum_credit_minor",
+  "status": 0,
+  "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+  "seconds": 35.10844600619748,
+  "objective": 5368.999999999995,
+  "dual_bound": 5368.999999999995,
+  "solver_gap_scaled_by_primal": 0.0,
+  "nodes": 3052,
+  "variables": 1489,
+  "constraints": 1096,
+  "maximum_rounding_difference": 4.547473508864641e-12,
+  "minimum_credit_limit_minor": 5369
+}

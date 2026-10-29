@@ -1,0 +1,100 @@
+{
+  "observed_at": "2026-10-29T11:14:49.163527+00:00",
+  "states": [
+    {
+      "name": "oc-pinn-convection-contract-20261029-a",
+      "id": "6145ba84963f22dbde7c3da722cc04f0896a0c1cd1e770fe27bbb10453dd69cd",
+      "paused": true,
+      "running": true,
+      "command": [
+        "python",
+        "-u",
+        "qualify_problem_convergence.py",
+        "--problem",
+        "convection",
+        "--output",
+        "/work/convection-contract-qualification"
+      ]
+    },
+    {
+      "name": "oc-pinn-reaction-convergence-20261029-a",
+      "id": "b815b942032a843f26403bf3b6398388d3f886d4bba4fab9496d6e89a65e9f1c",
+      "paused": true,
+      "running": true,
+      "command": [
+        "python",
+        "-u",
+        "qualify_problem_convergence.py",
+        "--problem",
+        "reaction",
+        "--output",
+        "/work/reaction-convergence-qualification"
+      ]
+    },
+    {
+      "name": "oc-pinn-wave-convergence-20261029-a",
+      "id": "70559a9efa3f161fbef1ca8d5825b4e8a704e6ae06ed22ca94abdd2f0220989e",
+      "paused": true,
+      "running": true,
+      "command": [
+        "python",
+        "-u",
+        "qualify_problem_convergence.py",
+        "--problem",
+        "wave",
+        "--output",
+        "/work/wave-convergence-qualification"
+      ]
+    },
+    {
+      "name": "oc-pinn-convection-lr003-20261029-a",
+      "id": "98aaf311ffb8f6227a28e4ff4abe579199a5b0d55e07893ad35ee8e11ff0df87",
+      "paused": true,
+      "running": true,
+      "command": [
+        "python",
+        "-u",
+        "qualify_convection_lr1e-03_executed.py",
+        "--profile",
+        "/work/qualification-profile-20261029.json",
+        "--config-id",
+        "convection-hybrid-s345-lr1e-03",
+        "--output",
+        "/work/convection-lr003-qualification"
+      ]
+    },
+    {
+      "name": "oc-pinn-convection-lr002-20261029-a",
+      "id": "0b4d747d62832ebf67fd71a9e29f478271c8024850b907ff4631ed771adc1245",
+      "paused": true,
+      "running": true,
+      "command": [
+        "python",
+        "-u",
+        "qualify_convection_lr1e-02_executed.py",
+        "--profile",
+        "/work/qualification-profile-20261029.json",
+        "--config-id",
+        "convection-hybrid-s345-lr1e-02",
+        "--output",
+        "/work/convection-lr002-qualification"
+      ]
+    },
+    {
+      "name": "oc-l06-cash-isolation-20261029-a",
+      "id": "2298fd8c88862450de55d3d3fe72863c05d100ab0b99170f1fbdc61703c9971e",
+      "paused": true,
+      "running": true,
+      "command": [
+        "python",
+        "-B",
+        "qualify_l06.py",
+        "--input",
+        "/work/cash-relaxed-input.json",
+        "--output",
+        "/work/cash-relaxed"
+      ]
+    }
+  ],
+  "timing_note": "Existing raw training seconds include any later pause intervals; never count paused time as effective training. Pause preserves memory, not a new durable optimizer checkpoint."
+}

@@ -1,0 +1,119 @@
+{
+  "id": "tsk_g00VZR9KuE00aKSMSF10",
+  "orderKey": "v1:0001793273138614:0000000000000010:0000000000000000:task:tsk_g00VZR9KuE00aKSMSF10",
+  "projectID": "prj_hIWXnbaElMMxM5I9YZF9",
+  "directory": "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\project",
+  "sessionID": "ses_-zUQYqepyzzt9GivN0pf",
+  "requestID": "inspect:iVWkLyS9y2EsaqAepzyzyF:1:1:64ef44af6a044ac3a4487f0972c49e2c",
+  "source": "inspect-ai",
+  "productPillar": "code",
+  "title": "Inspect sample S06-cheap-smoke-1",
+  "request": "# S06：两个微型情景采购问题的可执行解\n\n本任务只验证执行和复跑管线，是微型试验，不是小时级重型benchmark。只使用本项目文件和Python标准库，不需要GPU、联网、第三方包、其他agent或外部模型。\n\n为`inputs/base.json`和`inputs/price-change.json`分别求最小预期运营成本的完整采购/生产策略。输入字段为同一公开数学合同：周序0开始；`common_weeks`内所有场景的下单、装运、生产决策必须相同，之后场景揭示、决策可分开。不能各自提前知道未来再选择首周订单。\n\n每周顺序：先收到已下单且本周到达的原料（包括提前期0的当周单），再完成生产，再满足当周全部需求，计算期末库存及持有费。**原料到货后/生产前体积峰值、成品生产后/交付前体积峰值**均不得超过各自`storage_volume`，期末容量不能代替阶段峰值。\n\n下单量是非负整数包装数，件数=包装数×`pack_units`。每供应商每周一个0/1装运变量；体积是各原料件数×原料体积之和。未装运时数量0，装运时须在`minimum_volume`与该周共享供应容量之间，固定运费每供应商每周收一次。订单在下单周付全部采购费；提前期为`lead_weeks`。禁止期末后才到货的正订单。\n\n生产量为非负整数产品件数，须满足产线资格和共享工时容量；按BOM消耗原料。每周交付恰为需求量；不能欠交，允许提前生产并持有库存。期末成品必须0，原料可保留但没有残值收益。初始原料/成品库存给定，初始在途与应收为0。\n\n每周现金先收到`receipt_lag_weeks`周前交付的销售款，再支付本周订单、固定运费、生产费和两类期末持有费；余额不得低于信用额度负值，末周余额须非负。信用为自动借还、利息0。最后未收销售款只列应收，不当可用现金。成本与金额均为模拟整数最小单位。\n\n目标为`sum(场景概率 × 该场景全部采购、运费、生产、持有费)`；概率为`probability_numerator/probability_denominator`。完整履约后的收入是给定值，不在成本目标中扣除。所有场景都必须可行，不能用期望现金或期望履约掩盖单个场景失败。\n\n交付`solve.py`，调用合同为：\n\n```text\npython solve.py --input <实例JSON> --output <不存在的新目录>\n```\n\n必须从传入输入计算，生成该目录的`plan.json`和`summary.json`；不得读取旧输出充当重新求解。两份公开实例都实际运行一遍。可用穷举或任何正确的标准库算法，不要求特定最优策略轨迹。\n\n`plan.json`是一个对象：`format`为`l06-plan/1`，`decisions`按输入的场景ID索引。每个场景记录包含以下整数数组：\n\n- `order_lots[周][供应商][原料]`\n- `truck_on[周][供应商]`，值为0或1\n- `production[周][产线][产品]`\n\n可以另附`raw_inventory[周][原料]`和`finished_inventory[周][产品]`，若提供必须与真实递推一致。评估者会自行重算所有库存、峰值、成本和现金，不调用你提供的推理函数。\n\n输入金额为整数，但预期成本允许有理数（可用数值或分子/分母表示）。`summary.json`给出重新计算的预期成本、各场景总成本和现金最低值，字段可合理命名，评估不暗设未公布键；`README.md`说明如何运行、共同承诺和最优性依据。结果允许中文或英文。只操作自己的项目，不读取父目录、其他运行、评分器、参考答案或私有凭据；不操作用户应用/进程。完成即可交付，不等待凑时长。\n",
+  "status": "completed",
+  "executionLifecycle": {
+    "taskID": "tsk_g00VZR9KuE00aKSMSF10",
+    "epoch": 1,
+    "openedEventID": "pev_g0VZR9LAn00YgCkD60b2",
+    "openedAt": 1793273138614,
+    "status": "completed",
+    "terminalEventID": "pev_g0VZRC4ko00WymhMJVWK",
+    "terminalAt": 1793273789536
+  },
+  "terminalReason": "completed",
+  "priority": "normal",
+  "packageRevisionBinding": {
+    "scope": "built_in",
+    "project_id": null,
+    "namespace": "builtin",
+    "id": "base",
+    "version": "2026.10.14.1",
+    "package_digest": "83ea97ae6b85c404ff6ff75b43ab0d72fe907d3013a3dcd651b322c5a5579f4f"
+  },
+  "completionDecision": {
+    "artifactLocator": {
+      "source": "engine_artifact",
+      "artifact_id": "art_g0VZRC4FT00N0T6FWL4L",
+      "catalog_revision": 6,
+      "expected_sha256": "e4e7b463e914130c96dc0aac927be5071f4442352dc112458f5d62f091ca72d9"
+    },
+    "orchestratorSessionID": "ses_-zUQYqdUXzzzSdmeCJtp",
+    "orchestratorMessageID": "msg_h7hDJEsxbLIGejO2WmDC",
+    "toolCallID": "call_a067c03204a140a7baa79f6755e05bbe",
+    "toolPartID": "prt_g0VZRC2Ls003ik4FCD9H",
+    "evidenceLocators": [
+      {
+        "source": "session",
+        "session_id": "ses_-zUQYqdUXzzzSdmeCJtp"
+      },
+      {
+        "source": "session_message",
+        "session_id": "ses_hMoZi4X5qJZeqrz4TEnF",
+        "message_id": "msg_g0VZRBaZ900t3r64S2C5"
+      },
+      {
+        "source": "task_artifact_snapshot",
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hIWXnbaElMMxM5I9YZF9",
+          "task_id": "tsk_g00VZR9KuE00aKSMSF10",
+          "snapshot_id": "d1d865ec-103e-5fa4-a24d-c67043137a3e",
+          "manifest_sha256": "3b752a63598fff2f187ffef0e4da5b71e968c1641c6d96227a2a98c68bb27085"
+        }
+      }
+    ],
+    "deliverableArtifactLocators": [
+      {
+        "source": "task_artifact_snapshot",
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hIWXnbaElMMxM5I9YZF9",
+          "task_id": "tsk_g00VZR9KuE00aKSMSF10",
+          "snapshot_id": "d1d865ec-103e-5fa4-a24d-c67043137a3e",
+          "manifest_sha256": "3b752a63598fff2f187ffef0e4da5b71e968c1641c6d96227a2a98c68bb27085"
+        }
+      }
+    ],
+    "acceptedDeliverySliceRevisionIDs": [],
+    "workflowBinding": {
+      "kind": "direct",
+      "package_revision": {
+        "scope": "built_in",
+        "project_id": null,
+        "namespace": "builtin",
+        "id": "base",
+        "version": "2026.10.14.1",
+        "package_digest": "83ea97ae6b85c404ff6ff75b43ab0d72fe907d3013a3dcd651b322c5a5579f4f"
+      }
+    },
+    "timeRecorded": 1793273789536
+  },
+  "metadata": {
+    "inspect": {
+      "sample_id": "S06-cheap-smoke-1",
+      "sample_uuid": "iVWkLyS9y2EsaqAepzyzyF",
+      "epoch": 1
+    },
+    "actor": "user",
+    "checks": {
+      "artifact": {
+        "require_changed_files": true,
+        "require_diff": true,
+        "mode": "strict"
+      },
+      "judge": {
+        "enabled": true,
+        "mode": "strict"
+      },
+      "spec_check": {
+        "enabled": true,
+        "mode": "strict"
+      }
+    }
+  },
+  "time": {
+    "created": 1793273138614,
+    "updated": 1793273789536,
+    "started": 1793273138614,
+    "completed": 1793273789536
+  }
+}

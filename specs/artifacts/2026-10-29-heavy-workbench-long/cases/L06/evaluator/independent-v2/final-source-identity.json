@@ -1,0 +1,45 @@
+{
+  "scope": "source identity, not functional acceptance",
+  "sources": [
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\l06_input.py",
+      "copy": "source-repaired\\l06_input.py",
+      "same_bytes_at_final_check": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+      "copy": "source-repaired\\check_l06.py",
+      "same_bytes_at_final_check": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\qualify_l06.py",
+      "copy": "source-repaired\\qualify_l06.py",
+      "same_bytes_at_final_check": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\qualify_business_checks.py",
+      "copy": "source-repaired\\qualify_business_checks.py",
+      "same_bytes_at_final_check": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\qualify_full_business_checks.py",
+      "copy": "source-repaired\\qualify_full_business_checks.py",
+      "same_bytes_at_final_check": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\tiny-solver\\executed-source.py",
+      "copy": "supplementary-final\\v2\\tiny-solver\\executed-source.py",
+      "same_bytes_at_final_check": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\cheap-necessary-cuts.json",
+      "copy": "supplementary-final\\v2\\cheap-necessary-cuts.json",
+      "same_bytes_at_final_check": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\receipt.json",
+      "copy": "supplementary-final\\v2\\full-business-contracts-final\\receipt.json",
+      "same_bytes_at_final_check": true
+    }
+  ]
+}

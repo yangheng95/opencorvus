@@ -1,0 +1,251 @@
+{
+  "assessment": "independent_cheap_v1_qualification_review",
+  "completed_utc": "2026-10-29T10:45:52.964234+00:00",
+  "reviewer": "/root/benchmark_review",
+  "review_report": "REVIEW.md",
+  "writes": "new external review directory only; old count already12, old data/commands retained",
+  "scope_constraints": {
+    "additional_delegation": false,
+    "repo_changes": false,
+    "milp_or_scipy_execution": false,
+    "gpu_or_training": false,
+    "provider_or_credentials": false,
+    "ui_or_user_processes": false,
+    "container_actions": false,
+    "resume_paused_work": false
+  },
+  "native_count": {
+    "actual": 12,
+    "existing_report_correct": true,
+    "old_json_or_command_modified": false
+  },
+  "tiny_actual": {
+    "original_script_enumerated": 324,
+    "original_script_feasible": 22,
+    "original_nine_contracts_passed": 9,
+    "independent_scalar_enumerated": 324,
+    "independent_scalar_feasible": 22,
+    "independent_best_exact": "9/2",
+    "all_choice_results_agree": true,
+    "without_common_commitment_best": "4",
+    "limits": "v1 zero end-FG capacity fixes production; not transferable as full enumeration to v2"
+  },
+  "full_v1_actual": {
+    "end_of_week_abstraction_business_feasible": true,
+    "independent_prefix_conditions": 733,
+    "independent_prefix_seconds": 0.007213999982923269,
+    "credit_witness_minor": 5369,
+    "expected_operating_cost_exact": "51263",
+    "same_plan_original_credit_error": {
+      "business_feasible": false,
+      "error": "cash_limit",
+      "where": "base.week3",
+      "actual": -5369,
+      "required": -5000
+    },
+    "strict_stage_storage_feasible": false,
+    "scenarios": {
+      "base": {
+        "total_cost_minor": 50929,
+        "minimum_cash_minor": -5369,
+        "minimum_cash_weeks": [
+          3
+        ],
+        "terminal_cash_minor": 28421,
+        "terminal_receivable_minor": 24150,
+        "raw_transient_peak": [
+          227,
+          14
+        ],
+        "finished_transient_peak": [
+          94,
+          10
+        ]
+      },
+      "supplier_disruption": {
+        "total_cost_minor": 51557,
+        "minimum_cash_minor": -5369,
+        "minimum_cash_weeks": [
+          3
+        ],
+        "terminal_cash_minor": 27793,
+        "terminal_receivable_minor": 24150,
+        "raw_transient_peak": [
+          223,
+          7
+        ],
+        "finished_transient_peak": [
+          96,
+          13
+        ]
+      },
+      "demand_shift": {
+        "total_cost_minor": 51657,
+        "minimum_cash_minor": -5369,
+        "minimum_cash_weeks": [
+          3
+        ],
+        "terminal_cash_minor": 29853,
+        "terminal_receivable_minor": 25230,
+        "raw_transient_peak": [
+          230,
+          11
+        ],
+        "finished_transient_peak": [
+          91,
+          5
+        ]
+      }
+    }
+  },
+  "source_lineage": {
+    "original_to_minimum_credit": {
+      "credit_limit_minor": {
+        "original": 5000,
+        "minimum_credit": 1000000
+      },
+      "qualification_variant": {
+        "original": null,
+        "minimum_credit": "cash-only relaxation to isolate infeasibility; not candidate input"
+      }
+    },
+    "minimum_credit_to_witness": {
+      "credit_limit_minor": {
+        "minimum_credit": 1000000,
+        "witness": 5369
+      }
+    },
+    "current_model_source_equals_minimum_credit_executed_source": true
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "type": "business_contract_timing",
+      "status": "confirmed_v1_stage_peaks_exceed_capacities",
+      "fix_required": "v2 explicit event-stage storage, new input/caps, independent cheap replay; preserve v1"
+    },
+    {
+      "id": "F2",
+      "type": "instance_integrity",
+      "status": "negative_probability_and_empty_cost_vector_accepted",
+      "fix_required": "one strict instance schema, positive probabilities, exact vector/tensor dimensions/types/signs, instance_invalid"
+    },
+    {
+      "id": "F3",
+      "type": "artifact_reader_error_contract",
+      "status": "top_array_and_malformed_json_uncaught",
+      "fix_required": "typed plan_json/plan_contract outputs, distinguish candidate/instance/infrastructure errors"
+    },
+    {
+      "id": "C1",
+      "type": "public_time_index",
+      "status": "requires_explicit_t0_to3_common_reveal_before_t4",
+      "fix_required": "publish exact index/knowledge boundary"
+    }
+  ],
+  "reader_actual": [
+    {
+      "label": "top-level-array-plan",
+      "exit_code": 1,
+      "stderr_last_line": "AttributeError: 'list' object has no attribute 'get'",
+      "result": null
+    },
+    {
+      "label": "malformed-json-plan",
+      "exit_code": 1,
+      "stderr_last_line": "json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)",
+      "result": null
+    },
+    {
+      "label": "negative-probability",
+      "exit_code": 0,
+      "stderr_last_line": null,
+      "result": {
+        "business_feasible": true,
+        "scope": "exact finite instance plan recurrence only; not execution attestation or optimality certificate",
+        "expected_cost_minor": 5.5,
+        "expected_cost_exact": {
+          "numerator": 11,
+          "denominator": 2
+        }
+      }
+    },
+    {
+      "label": "missing-holding-vector",
+      "exit_code": 0,
+      "stderr_last_line": null,
+      "result": {
+        "business_feasible": true,
+        "scope": "exact finite instance plan recurrence only; not execution attestation or optimality certificate",
+        "expected_cost_minor": 4.0,
+        "expected_cost_exact": {
+          "numerator": 4,
+          "denominator": 1
+        }
+      }
+    },
+    {
+      "label": "inconsistent-pre-reveal-demand",
+      "exit_code": 2,
+      "stderr_last_line": null,
+      "result": {
+        "business_feasible": false,
+        "error": "instance_information",
+        "where": "two.demand",
+        "actual": null,
+        "required": null
+      }
+    }
+  ],
+  "minimum_credit_solver_evidence": {
+    "read_original_log_and_solver_report": true,
+    "source_matches_saved_execution": true,
+    "reviewer_resolved_global_problem": false,
+    "reviewer_machine_checked_global_proof": false,
+    "credit_lower_bound_is_operating_cost_lower_bound": false,
+    "global_infeasibility_at5000_from_same_plan_only": false
+  },
+  "supplementary_full12": {
+    "read_existing_script_and_receipt": true,
+    "repeated_group": false,
+    "known_feasible_upper_bound_minor": 51263,
+    "reported_dominated_feasible_cost_minor": 52201,
+    "known_upper_bound_proves_reference_one_percent_optimal": false
+  },
+  "next_version": {
+    "main_agent_proposed_stage_caps": {
+      "raw": 240,
+      "finished": 100
+    },
+    "main_agent_proposed_strict_schema_and_typed_errors": true,
+    "v2_implementation_reviewed": false,
+    "v1_bound_transfer_approved": false,
+    "new_tiny_domain_enumeration_required": true
+  },
+  "maturity": {
+    "full_v1_end_stock_reference_exists": true,
+    "strict_physical_v1_reference": false,
+    "operating_cost_1percent_qualified": false,
+    "freeze_approved": false,
+    "candidate_run_or_grade": false,
+    "hours_validated": false,
+    "professional_or_blind_calibration": false,
+    "mature_benchmark": false
+  },
+  "actual_subprocess_commands_excluding_git": 8,
+  "command_receipts": [
+    "commands/boundary-inconsistent-pre-reveal-demand.json",
+    "commands/boundary-malformed-json-plan.json",
+    "commands/boundary-missing-holding-vector.json",
+    "commands/boundary-negative-probability.json",
+    "commands/boundary-top-level-array-plan.json",
+    "commands/finalize-tool-receipt.json",
+    "commands/git-status-end.json",
+    "commands/git-status-start.json",
+    "commands/independent-checks-tool-receipt.json",
+    "commands/minimum-credit-business.json",
+    "commands/original-credit-same-plan.json",
+    "commands/prepare-tool-receipt.json",
+    "commands/tiny324-nine-contracts.json"
+  ]
+}

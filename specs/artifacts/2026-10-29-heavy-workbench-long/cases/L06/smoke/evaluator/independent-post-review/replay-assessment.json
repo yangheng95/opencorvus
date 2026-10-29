@@ -1,0 +1,128 @@
+{
+  "scope": "non-blind independent S06 source-only replay, not heavy-case/ranking",
+  "candidate_execution_runs": [
+    {
+      "argv": [
+        "C:/Python314/python.exe",
+        "-B",
+        "solve.py",
+        "--input",
+        "inputs/base.json",
+        "--output",
+        "results/base"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\s06-smoke-post-review-20261029\\cold-replay",
+      "started_utc": "2026-10-29T11:52:38.394408+00:00",
+      "seconds": 0.14323339983820915,
+      "exit_code": 0,
+      "stdout": "commands\\solve-base.stdout.txt",
+      "stderr": "commands\\solve-base.stderr.txt"
+    },
+    {
+      "argv": [
+        "C:/Python314/python.exe",
+        "-B",
+        "solve.py",
+        "--input",
+        "inputs/price-change.json",
+        "--output",
+        "results/price-change"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\s06-smoke-post-review-20261029\\cold-replay",
+      "started_utc": "2026-10-29T11:52:38.812834+00:00",
+      "seconds": 0.1410032999701798,
+      "exit_code": 0,
+      "stdout": "commands\\solve-price-change.stdout.txt",
+      "stderr": "commands\\solve-price-change.stderr.txt"
+    }
+  ],
+  "actual_checker_calls": 4,
+  "artifacts": [
+    {
+      "case": "base",
+      "kind": "sealed",
+      "plan": "source-snapshot\\original-results\\base\\plan.json",
+      "checker_exit_code": 0,
+      "business_feasible": true,
+      "checker_cost_exact": "9/2",
+      "independent_scalar_cost": "9/2",
+      "independent_full_domain_optimum": "9/2",
+      "canonical_two_week_abi": true,
+      "all_passed": true,
+      "scalar_scenario_costs": [
+        5,
+        4
+      ],
+      "scalar_minimum_cash": [
+        96,
+        96
+      ]
+    },
+    {
+      "case": "base",
+      "kind": "reviewer-cold-replay",
+      "plan": "cold-replay\\results\\base\\plan.json",
+      "checker_exit_code": 0,
+      "business_feasible": true,
+      "checker_cost_exact": "9/2",
+      "independent_scalar_cost": "9/2",
+      "independent_full_domain_optimum": "9/2",
+      "canonical_two_week_abi": true,
+      "all_passed": true,
+      "scalar_scenario_costs": [
+        5,
+        4
+      ],
+      "scalar_minimum_cash": [
+        96,
+        96
+      ]
+    },
+    {
+      "case": "price-change",
+      "kind": "sealed",
+      "plan": "source-snapshot\\original-results\\price-change\\plan.json",
+      "checker_exit_code": 0,
+      "business_feasible": true,
+      "checker_cost_exact": "11/2",
+      "independent_scalar_cost": "11/2",
+      "independent_full_domain_optimum": "11/2",
+      "canonical_two_week_abi": true,
+      "all_passed": true,
+      "scalar_scenario_costs": [
+        4,
+        7
+      ],
+      "scalar_minimum_cash": [
+        100,
+        98
+      ]
+    },
+    {
+      "case": "price-change",
+      "kind": "reviewer-cold-replay",
+      "plan": "cold-replay\\results\\price-change\\plan.json",
+      "checker_exit_code": 0,
+      "business_feasible": true,
+      "checker_cost_exact": "11/2",
+      "independent_scalar_cost": "11/2",
+      "independent_full_domain_optimum": "11/2",
+      "canonical_two_week_abi": true,
+      "all_passed": true,
+      "scalar_scenario_costs": [
+        4,
+        7
+      ],
+      "scalar_minimum_cash": [
+        100,
+        98
+      ]
+    }
+  ],
+  "all_replays_exit0": true,
+  "all_four_plan_audits_pass": true,
+  "sealed_source_reads": "reviewed input-only open(args.input); Path.exists on output; writes only newly created output files",
+  "summary_schema": "not imposed; candidate exact fractions accepted and outputs retained",
+  "source_snapshot_scope": "sealed source/code only in execution directory; original outputs kept outside for evaluation",
+  "native_condition_pending_model_stream_and_Inspect_terminal_supplement": true
+}

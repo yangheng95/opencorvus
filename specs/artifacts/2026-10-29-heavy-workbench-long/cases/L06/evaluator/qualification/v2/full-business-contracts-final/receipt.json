@@ -1,0 +1,451 @@
+{
+  "scope": "v2 stage-peak full finite-instance checker contracts; not candidate execution or cost-optimality certification",
+  "actual_cli_cases": 22,
+  "all_expected_contracts_passed": true,
+  "baseline_cost": 51263.0,
+  "dominated_feasible_cost": 52201.0,
+  "dominated_plan_above_one_percent_of_known_feasible_upper_bound": true,
+  "cost_optimum_claimed": false,
+  "executions": [
+    {
+      "case": "complete-feasible-credit-witness",
+      "expected": "business_feasible",
+      "actual": "business_feasible",
+      "exit_code": 0,
+      "seconds": 0.1261926000006497,
+      "command": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\complete-feasible-credit-witness\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\complete-feasible-credit-witness\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\complete-feasible-credit-witness\\result.json"
+      ],
+      "computed_expected_cost_minor": 51263.0,
+      "where": null
+    },
+    {
+      "case": "feasible-dominated-terminal-purchase",
+      "expected": "business_feasible",
+      "actual": "business_feasible",
+      "exit_code": 0,
+      "seconds": 0.12752609979361296,
+      "command": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\feasible-dominated-terminal-purchase\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\feasible-dominated-terminal-purchase\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\feasible-dominated-terminal-purchase\\result.json"
+      ],
+      "computed_expected_cost_minor": 52201.0,
+      "where": null
+    },
+    {
+      "case": "stale-demand-fulfilment",
+      "expected": "fulfilment",
+      "actual": "fulfilment",
+      "exit_code": 2,
+      "seconds": 0.13475550012663007,
+      "command": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\stale-demand-fulfilment\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\stale-demand-fulfilment\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\stale-demand-fulfilment\\result.json"
+      ],
+      "computed_expected_cost_minor": null,
+      "where": "base.week15"
+    },
+    {
+      "case": "original-insufficient-credit",
+      "expected": "cash_limit",
+      "actual": "cash_limit",
+      "exit_code": 2,
+      "seconds": 0.12346539972350001,
+      "command": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\original-insufficient-credit\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\original-insufficient-credit\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\original-insufficient-credit\\result.json"
+      ],
+      "computed_expected_cost_minor": null,
+      "where": "base.week3"
+    },
+    {
+      "case": "stale-bom-consumption",
+      "expected": "raw_availability",
+      "actual": "raw_availability",
+      "exit_code": 2,
+      "seconds": 0.12259999988600612,
+      "command": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\stale-bom-consumption\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\stale-bom-consumption\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\stale-bom-consumption\\result.json"
+      ],
+      "computed_expected_cost_minor": null,
+      "where": "base.week0"
+    },
+    {
+      "case": "shared-supplier-capacity",
+      "expected": "supplier_capacity",
+      "actual": "supplier_capacity",
+      "exit_code": 2,
+      "seconds": 0.1267880997620523,
+      "command": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\shared-supplier-capacity\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\shared-supplier-capacity\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\shared-supplier-capacity\\result.json"
+      ],
+      "computed_expected_cost_minor": null,
+      "where": "base.week4.A"
+    },
+    {
+      "case": "declared-stock-is-recomputed",
+      "expected": "declared_raw",
+      "actual": "declared_raw",
+      "exit_code": 2,
+      "seconds": 0.12441609986126423,
+      "command": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\declared-stock-is-recomputed\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\declared-stock-is-recomputed\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\declared-stock-is-recomputed\\result.json"
+      ],
+      "computed_expected_cost_minor": null,
+      "where": "base.week15"
+    },
+    {
+      "case": "terminal-in-transit-order",
+      "expected": "terminal_pipeline",
+      "actual": "terminal_pipeline",
+      "exit_code": 2,
+      "seconds": 0.11529769981279969,
+      "command": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\terminal-in-transit-order\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\terminal-in-transit-order\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\terminal-in-transit-order\\result.json"
+      ],
+      "computed_expected_cost_minor": null,
+      "where": "base.week15.A"
+    },
+    {
+      "case": "reported-zero-cost-is-recomputed",
+      "expected": "business_feasible",
+      "actual": "business_feasible",
+      "exit_code": 0,
+      "seconds": 0.1267105001024902,
+      "command": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\reported-zero-cost-is-recomputed\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\reported-zero-cost-is-recomputed\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\reported-zero-cost-is-recomputed\\result.json"
+      ],
+      "computed_expected_cost_minor": 51263.0,
+      "where": null
+    },
+    {
+      "case": "future-specific-early-order",
+      "expected": "common_commitment",
+      "actual": "common_commitment",
+      "exit_code": 2,
+      "seconds": 0.11312239989638329,
+      "command": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\future-specific-early-order\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\future-specific-early-order\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\future-specific-early-order\\result.json"
+      ],
+      "computed_expected_cost_minor": null,
+      "where": "supplier_disruption.order_lots"
+    },
+    {
+      "case": "unqualified-product-line",
+      "expected": "product_assignment",
+      "actual": "product_assignment",
+      "exit_code": 2,
+      "seconds": 0.13966120034456253,
+      "command": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\unqualified-product-line\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\unqualified-product-line\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\unqualified-product-line\\result.json"
+      ],
+      "computed_expected_cost_minor": null,
+      "where": "base.week15.0.3"
+    },
+    {
+      "case": "fractional-purchase-lots",
+      "expected": "decision_integer",
+      "actual": "decision_integer",
+      "exit_code": 2,
+      "seconds": 0.11283229989930987,
+      "command": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\fractional-purchase-lots\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\fractional-purchase-lots\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\fractional-purchase-lots\\result.json"
+      ],
+      "computed_expected_cost_minor": null,
+      "where": "base.order_lots[0][0][0]"
+    },
+    {
+      "case": "raw-stage-peak-cannot-use-end-stock",
+      "expected": "raw_storage_peak",
+      "actual": "raw_storage_peak",
+      "exit_code": 2,
+      "seconds": 0.11674899980425835,
+      "command": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\raw-stage-peak-cannot-use-end-stock\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\raw-stage-peak-cannot-use-end-stock\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\raw-stage-peak-cannot-use-end-stock\\result.json"
+      ],
+      "computed_expected_cost_minor": null,
+      "where": "base.week14"
+    },
+    {
+      "case": "product-stage-peak-cannot-use-end-stock",
+      "expected": "product_storage_peak",
+      "actual": "product_storage_peak",
+      "exit_code": 2,
+      "seconds": 0.12337209982797503,
+      "command": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\product-stage-peak-cannot-use-end-stock\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\product-stage-peak-cannot-use-end-stock\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\product-stage-peak-cannot-use-end-stock\\result.json"
+      ],
+      "computed_expected_cost_minor": null,
+      "where": "base.week0"
+    },
+    {
+      "case": "strict-positive-probability",
+      "expected": "instance_invalid",
+      "actual": "instance_invalid",
+      "exit_code": 2,
+      "seconds": 0.11417469987645745,
+      "command": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\strict-positive-probability\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\strict-positive-probability\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\strict-positive-probability\\result.json"
+      ],
+      "computed_expected_cost_minor": null,
+      "where": "scenarios[1].probability_numerator"
+    },
+    {
+      "case": "cost-vector-dimension",
+      "expected": "instance_invalid",
+      "actual": "instance_invalid",
+      "exit_code": 2,
+      "seconds": 0.1165268998593092,
+      "command": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\cost-vector-dimension\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\cost-vector-dimension\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\cost-vector-dimension\\result.json"
+      ],
+      "computed_expected_cost_minor": null,
+      "where": "raw_holding_minor"
+    },
+    {
+      "case": "top-level-plan-type",
+      "expected": "plan_contract",
+      "actual": "plan_contract",
+      "exit_code": 2,
+      "seconds": 0.10618759971112013,
+      "command": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\top-level-plan-type\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\top-level-plan-type\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\top-level-plan-type\\result.json"
+      ],
+      "computed_expected_cost_minor": null,
+      "where": "$"
+    },
+    {
+      "case": "malformed-plan-json",
+      "expected": "plan_json",
+      "actual": "plan_json",
+      "exit_code": 2,
+      "seconds": 0.11065640021115541,
+      "command": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\malformed-plan-json\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\malformed-plan-json\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\malformed-plan-json\\result.json"
+      ],
+      "computed_expected_cost_minor": null,
+      "where": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\malformed-plan-json\\plan.json"
+    },
+    {
+      "case": "malformed-instance-json",
+      "expected": "instance_invalid",
+      "actual": "instance_invalid",
+      "exit_code": 2,
+      "seconds": 0.10420119995251298,
+      "command": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\malformed-instance-json\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\malformed-instance-json\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\malformed-instance-json\\result.json"
+      ],
+      "computed_expected_cost_minor": null,
+      "where": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\malformed-instance-json\\input.json"
+    },
+    {
+      "case": "duplicate-plan-json-field",
+      "expected": "plan_json",
+      "actual": "plan_json",
+      "exit_code": 2,
+      "seconds": 0.12631010031327605,
+      "command": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\duplicate-plan-json-field\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\duplicate-plan-json-field\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\duplicate-plan-json-field\\result.json"
+      ],
+      "computed_expected_cost_minor": null,
+      "where": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\duplicate-plan-json-field\\plan.json"
+    },
+    {
+      "case": "unrepresentable-float-json",
+      "expected": "plan_json",
+      "actual": "plan_json",
+      "exit_code": 2,
+      "seconds": 0.11451039975509048,
+      "command": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\unrepresentable-float-json\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\unrepresentable-float-json\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\unrepresentable-float-json\\result.json"
+      ],
+      "computed_expected_cost_minor": null,
+      "where": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\unrepresentable-float-json\\plan.json"
+    },
+    {
+      "case": "instance-error-precedes-bad-plan",
+      "expected": "instance_invalid",
+      "actual": "instance_invalid",
+      "exit_code": 2,
+      "seconds": 0.11169270006939769,
+      "command": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\instance-error-precedes-bad-plan\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\instance-error-precedes-bad-plan\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\full-business-contracts-final\\instance-error-precedes-bad-plan\\result.json"
+      ],
+      "computed_expected_cost_minor": null,
+      "where": "raw_holding_minor"
+    }
+  ]
+}

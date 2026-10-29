@@ -1,0 +1,58 @@
+{
+  "scope": "independent NumPy full-grid endpoint and hand derivative; not candidate/reproducibility/quality success",
+  "before": {
+    "problem": "convection",
+    "residual_points": 10000,
+    "constraint_count": 358,
+    "evaluation_points": 8385,
+    "residual_loss": 0.0,
+    "constraint_loss": 0.17877094972067056,
+    "total_loss": 0.17877094972067056,
+    "residual_rmse": 0.0,
+    "evaluation_residual_loss": 0.0,
+    "evaluation_residual_rmse": 0.0,
+    "constraint_families": {
+      "initial_value": {
+        "count": 257,
+        "loss": 0.24902723735408583,
+        "rmse": 0.7057297462259697
+      },
+      "periodic_value": {
+        "count": 101,
+        "loss": 0.0,
+        "rmse": 0.0
+      }
+    },
+    "l2re": 1.0000000000140836,
+    "parameter_count": 20601
+  },
+  "after": {
+    "problem": "convection",
+    "residual_points": 10000,
+    "constraint_count": 358,
+    "evaluation_points": 8385,
+    "residual_loss": 0.0,
+    "constraint_loss": 0.17877094972067056,
+    "total_loss": 0.17877094972067056,
+    "residual_rmse": 0.0,
+    "evaluation_residual_loss": 0.0,
+    "evaluation_residual_rmse": 0.0,
+    "constraint_families": {
+      "initial_value": {
+        "count": 257,
+        "loss": 0.24902723735408583,
+        "rmse": 0.7057297462259697
+      },
+      "periodic_value": {
+        "count": 101,
+        "loss": 0.0,
+        "rmse": 0.0
+      }
+    },
+    "l2re": 1.0000000000140836,
+    "parameter_count": 20601
+  },
+  "expected_output_bias_gradient": 1.4357541939136466e-08,
+  "actual_parameter_difference_inf": 0.0,
+  "checks_passed": true
+}

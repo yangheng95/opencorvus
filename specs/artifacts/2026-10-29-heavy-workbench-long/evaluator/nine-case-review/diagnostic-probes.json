@@ -1,0 +1,619 @@
+[
+  {
+    "case": "H02",
+    "reference_compute_seconds": 0.016179100144654512,
+    "objective": 20,
+    "maximum": 20,
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+        "objective",
+        "H02",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-reference-replay\\H02",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-reference-replay\\H02\\objective.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+      "started_utc": "2026-10-29T09:45:31.267910+00:00",
+      "elapsed_seconds": 0.3256919998675585,
+      "exit_code": 0,
+      "stdout": "commands\\H02-objective.stdout.txt",
+      "stderr": "commands\\H02-objective.stderr.txt"
+    },
+    "scope": "author reference 20-point diagnostics only; no 80-point assessment",
+    "single_numeric_error_probe": {
+      "leaf": "H02-O01",
+      "column": "prediction",
+      "before": "104.19763",
+      "after": 1104.1976300000001,
+      "objective": 15,
+      "failed_leaf": {
+        "leaf": "H02-O01",
+        "weight": 5,
+        "earned": 0,
+        "critical": false,
+        "artifact": "diagnostics/forecasts.csv",
+        "passed": false,
+        "reason": "value_mismatch",
+        "checked_records": 336,
+        "mismatches": [
+          {
+            "key": [
+              "168",
+              "last",
+              "1"
+            ],
+            "column": "prediction"
+          }
+        ]
+      },
+      "receipt": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+          "objective",
+          "H02",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-error-probes\\H02",
+          "--out",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-error-probes\\H02\\objective.json"
+        ],
+        "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+        "started_utc": "2026-10-29T09:45:31.628106+00:00",
+        "elapsed_seconds": 0.3260943000204861,
+        "exit_code": 0,
+        "stdout": "commands\\H02-objective-error.stdout.txt",
+        "stderr": "commands\\H02-objective-error.stderr.txt"
+      }
+    }
+  },
+  {
+    "case": "H03",
+    "reference_compute_seconds": 0.008007500320672989,
+    "objective": 20,
+    "maximum": 20,
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+        "objective",
+        "H03",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-reference-replay\\H03",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-reference-replay\\H03\\objective.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+      "started_utc": "2026-10-29T09:45:31.987897+00:00",
+      "elapsed_seconds": 0.5065544000826776,
+      "exit_code": 0,
+      "stdout": "commands\\H03-objective.stdout.txt",
+      "stderr": "commands\\H03-objective.stderr.txt"
+    },
+    "scope": "author reference 20-point diagnostics only; no 80-point assessment",
+    "single_numeric_error_probe": {
+      "leaf": "H03-O01",
+      "column": "amount_cny",
+      "before": "301.0",
+      "after": 1301.0,
+      "objective": 15,
+      "failed_leaf": {
+        "leaf": "H03-O01",
+        "weight": 5,
+        "earned": 0,
+        "critical": false,
+        "artifact": "diagnostics/ledger.csv",
+        "passed": false,
+        "reason": "value_mismatch",
+        "checked_records": 689,
+        "mismatches": [
+          {
+            "key": [
+              "TX0001"
+            ],
+            "column": "amount_cny"
+          }
+        ]
+      },
+      "receipt": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+          "objective",
+          "H03",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-error-probes\\H03",
+          "--out",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-error-probes\\H03\\objective.json"
+        ],
+        "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+        "started_utc": "2026-10-29T09:45:32.544263+00:00",
+        "elapsed_seconds": 0.41360830003395677,
+        "exit_code": 0,
+        "stdout": "commands\\H03-objective-error.stdout.txt",
+        "stderr": "commands\\H03-objective-error.stderr.txt"
+      }
+    }
+  },
+  {
+    "case": "H04",
+    "reference_compute_seconds": 0.002133900299668312,
+    "objective": 20,
+    "maximum": 20,
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+        "objective",
+        "H04",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-reference-replay\\H04",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-reference-replay\\H04\\objective.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+      "started_utc": "2026-10-29T09:45:32.981071+00:00",
+      "elapsed_seconds": 0.41065269988030195,
+      "exit_code": 0,
+      "stdout": "commands\\H04-objective.stdout.txt",
+      "stderr": "commands\\H04-objective.stderr.txt"
+    },
+    "scope": "author reference 20-point diagnostics only; no 80-point assessment",
+    "single_numeric_error_probe": {
+      "leaf": "H04-O02",
+      "column": "customer_id",
+      "before": "1",
+      "after": 1001.0,
+      "objective": 15,
+      "failed_leaf": {
+        "leaf": "H04-O02",
+        "weight": 5,
+        "earned": 0,
+        "critical": false,
+        "artifact": "diagnostics/orders.csv",
+        "passed": false,
+        "reason": "value_mismatch",
+        "checked_records": 600,
+        "mismatches": [
+          {
+            "key": [
+              "O0000"
+            ],
+            "column": "customer_id"
+          }
+        ]
+      },
+      "receipt": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+          "objective",
+          "H04",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-error-probes\\H04",
+          "--out",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-error-probes\\H04\\objective.json"
+        ],
+        "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+        "started_utc": "2026-10-29T09:45:33.427150+00:00",
+        "elapsed_seconds": 0.4882686003111303,
+        "exit_code": 0,
+        "stdout": "commands\\H04-objective-error.stdout.txt",
+        "stderr": "commands\\H04-objective-error.stderr.txt"
+      }
+    }
+  },
+  {
+    "case": "H05",
+    "reference_compute_seconds": 0.0029683001339435577,
+    "objective": 20,
+    "maximum": 20,
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+        "objective",
+        "H05",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-reference-replay\\H05",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-reference-replay\\H05\\objective.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+      "started_utc": "2026-10-29T09:45:33.942426+00:00",
+      "elapsed_seconds": 0.3296350999735296,
+      "exit_code": 0,
+      "stdout": "commands\\H05-objective.stdout.txt",
+      "stderr": "commands\\H05-objective.stderr.txt"
+    },
+    "scope": "author reference 20-point diagnostics only; no 80-point assessment",
+    "single_numeric_error_probe": {
+      "leaf": "H05-O01",
+      "column": "amount",
+      "before": "100",
+      "after": 1100.0,
+      "objective": 15,
+      "failed_leaf": {
+        "leaf": "H05-O01",
+        "weight": 5,
+        "earned": 0,
+        "critical": false,
+        "artifact": "diagnostics/ledger.csv",
+        "passed": false,
+        "reason": "value_mismatch",
+        "checked_records": 720,
+        "mismatches": [
+          {
+            "key": [
+              "alpha",
+              "E0000"
+            ],
+            "column": "amount"
+          }
+        ]
+      },
+      "receipt": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+          "objective",
+          "H05",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-error-probes\\H05",
+          "--out",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-error-probes\\H05\\objective.json"
+        ],
+        "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+        "started_utc": "2026-10-29T09:45:34.311013+00:00",
+        "elapsed_seconds": 0.41905479971319437,
+        "exit_code": 0,
+        "stdout": "commands\\H05-objective-error.stdout.txt",
+        "stderr": "commands\\H05-objective-error.stderr.txt"
+      }
+    }
+  },
+  {
+    "case": "H06",
+    "reference_compute_seconds": 0.001080500427633524,
+    "objective": 20,
+    "maximum": 20,
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+        "objective",
+        "H06",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-reference-replay\\H06",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-reference-replay\\H06\\objective.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+      "started_utc": "2026-10-29T09:45:34.753885+00:00",
+      "elapsed_seconds": 0.33194460021331906,
+      "exit_code": 0,
+      "stdout": "commands\\H06-objective.stdout.txt",
+      "stderr": "commands\\H06-objective.stderr.txt"
+    },
+    "scope": "author reference 20-point diagnostics only; no 80-point assessment",
+    "single_numeric_error_probe": {
+      "leaf": "H06-O01",
+      "column": "units",
+      "before": "656",
+      "after": 1656.0,
+      "objective": 15,
+      "failed_leaf": {
+        "leaf": "H06-O01",
+        "weight": 5,
+        "earned": 0,
+        "critical": false,
+        "artifact": "diagnostics/demand.csv",
+        "passed": false,
+        "reason": "value_mismatch",
+        "checked_records": 6,
+        "mismatches": [
+          {
+            "key": [
+              "SKU0"
+            ],
+            "column": "units"
+          }
+        ]
+      },
+      "receipt": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+          "objective",
+          "H06",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-error-probes\\H06",
+          "--out",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-error-probes\\H06\\objective.json"
+        ],
+        "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+        "started_utc": "2026-10-29T09:45:35.105459+00:00",
+        "elapsed_seconds": 0.310939600225538,
+        "exit_code": 0,
+        "stdout": "commands\\H06-objective-error.stdout.txt",
+        "stderr": "commands\\H06-objective-error.stderr.txt"
+      }
+    }
+  },
+  {
+    "case": "H07",
+    "reference_compute_seconds": 0.00014100037515163422,
+    "objective": 20,
+    "maximum": 20,
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+        "objective",
+        "H07",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-reference-replay\\H07",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-reference-replay\\H07\\objective.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+      "started_utc": "2026-10-29T09:45:36.884574+00:00",
+      "elapsed_seconds": 0.43690149998292327,
+      "exit_code": 0,
+      "stdout": "commands\\H07-objective.stdout.txt",
+      "stderr": "commands\\H07-objective.stderr.txt"
+    },
+    "scope": "author reference 20-point diagnostics only; no 80-point assessment",
+    "single_numeric_error_probe": {
+      "leaf": "H07-O01",
+      "column": "included",
+      "before": "0",
+      "after": 1000.0,
+      "objective": 15,
+      "failed_leaf": {
+        "leaf": "H07-O01",
+        "weight": 5,
+        "earned": 0,
+        "critical": false,
+        "artifact": "diagnostics/screening.csv",
+        "passed": false,
+        "reason": "value_mismatch",
+        "checked_records": 30,
+        "mismatches": [
+          {
+            "key": [
+              "R00"
+            ],
+            "column": "included"
+          }
+        ]
+      },
+      "receipt": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+          "objective",
+          "H07",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-error-probes\\H07",
+          "--out",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-error-probes\\H07\\objective.json"
+        ],
+        "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+        "started_utc": "2026-10-29T09:45:37.343573+00:00",
+        "elapsed_seconds": 0.8480646000243723,
+        "exit_code": 0,
+        "stdout": "commands\\H07-objective-error.stdout.txt",
+        "stderr": "commands\\H07-objective-error.stderr.txt"
+      }
+    }
+  },
+  {
+    "case": "H08",
+    "reference_compute_seconds": 0.0007948996499180794,
+    "objective": 20,
+    "maximum": 20,
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+        "objective",
+        "H08",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-reference-replay\\H08",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-reference-replay\\H08\\objective.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+      "started_utc": "2026-10-29T09:45:38.356729+00:00",
+      "elapsed_seconds": 0.4142824001610279,
+      "exit_code": 0,
+      "stdout": "commands\\H08-objective.stdout.txt",
+      "stderr": "commands\\H08-objective.stderr.txt"
+    },
+    "scope": "author reference 20-point diagnostics only; no 80-point assessment",
+    "single_numeric_error_probe": {
+      "leaf": "H08-O01",
+      "column": "start",
+      "before": "0",
+      "after": 1000.0,
+      "objective": 15,
+      "failed_leaf": {
+        "leaf": "H08-O01",
+        "weight": 5,
+        "earned": 0,
+        "critical": false,
+        "artifact": "diagnostics/earliest.csv",
+        "passed": false,
+        "reason": "value_mismatch",
+        "checked_records": 24,
+        "mismatches": [
+          {
+            "key": [
+              "T00"
+            ],
+            "column": "start"
+          }
+        ]
+      },
+      "receipt": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+          "objective",
+          "H08",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-error-probes\\H08",
+          "--out",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-error-probes\\H08\\objective.json"
+        ],
+        "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+        "started_utc": "2026-10-29T09:45:38.793766+00:00",
+        "elapsed_seconds": 0.2978842998854816,
+        "exit_code": 0,
+        "stdout": "commands\\H08-objective-error.stdout.txt",
+        "stderr": "commands\\H08-objective-error.stderr.txt"
+      }
+    }
+  },
+  {
+    "case": "H09",
+    "reference_compute_seconds": 0.00037320004776120186,
+    "objective": 20,
+    "maximum": 20,
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+        "objective",
+        "H09",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-reference-replay\\H09",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-reference-replay\\H09\\objective.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+      "started_utc": "2026-10-29T09:45:39.768748+00:00",
+      "elapsed_seconds": 0.2612887998111546,
+      "exit_code": 0,
+      "stdout": "commands\\H09-objective.stdout.txt",
+      "stderr": "commands\\H09-objective.stderr.txt"
+    },
+    "scope": "author reference 20-point diagnostics only; no 80-point assessment",
+    "single_numeric_error_probe": {
+      "leaf": "H09-O01",
+      "column": "score",
+      "before": "35",
+      "after": 1035.0,
+      "objective": 15,
+      "failed_leaf": {
+        "leaf": "H09-O01",
+        "weight": 5,
+        "earned": 0,
+        "critical": false,
+        "artifact": "diagnostics/scores.csv",
+        "passed": false,
+        "reason": "value_mismatch",
+        "checked_records": 96,
+        "mismatches": [
+          {
+            "key": [
+              "L00",
+              "sql"
+            ],
+            "column": "score"
+          }
+        ]
+      },
+      "receipt": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+          "objective",
+          "H09",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-error-probes\\H09",
+          "--out",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-error-probes\\H09\\objective.json"
+        ],
+        "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+        "started_utc": "2026-10-29T09:45:40.046923+00:00",
+        "elapsed_seconds": 0.2693191999569535,
+        "exit_code": 0,
+        "stdout": "commands\\H09-objective-error.stdout.txt",
+        "stderr": "commands\\H09-objective-error.stderr.txt"
+      }
+    }
+  },
+  {
+    "case": "H10",
+    "reference_compute_seconds": 0.02517199981957674,
+    "objective": 20,
+    "maximum": 20,
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+        "objective",
+        "H10",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-reference-replay\\H10",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-reference-replay\\H10\\objective.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+      "started_utc": "2026-10-29T09:45:40.368140+00:00",
+      "elapsed_seconds": 0.26172999991104007,
+      "exit_code": 0,
+      "stdout": "commands\\H10-objective.stdout.txt",
+      "stderr": "commands\\H10-objective.stderr.txt"
+    },
+    "scope": "author reference 20-point diagnostics only; no 80-point assessment",
+    "single_numeric_error_probe": {
+      "leaf": "H10-O01",
+      "column": "kwh",
+      "before": "993.949",
+      "after": 1993.949,
+      "objective": 15,
+      "failed_leaf": {
+        "leaf": "H10-O01",
+        "weight": 5,
+        "earned": 0,
+        "critical": false,
+        "artifact": "diagnostics/daily.csv",
+        "passed": false,
+        "reason": "value_mismatch",
+        "checked_records": 90,
+        "mismatches": [
+          {
+            "key": [
+              "A",
+              "1"
+            ],
+            "column": "kwh"
+          }
+        ]
+      },
+      "receipt": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+          "objective",
+          "H10",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-error-probes\\H10",
+          "--out",
+          "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\diagnostic-error-probes\\H10\\objective.json"
+        ],
+        "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+        "started_utc": "2026-10-29T09:45:40.650248+00:00",
+        "elapsed_seconds": 0.30287590017542243,
+        "exit_code": 0,
+        "stdout": "commands\\H10-objective-error.stdout.txt",
+        "stderr": "commands\\H10-objective-error.stderr.txt"
+      }
+    }
+  }
+]

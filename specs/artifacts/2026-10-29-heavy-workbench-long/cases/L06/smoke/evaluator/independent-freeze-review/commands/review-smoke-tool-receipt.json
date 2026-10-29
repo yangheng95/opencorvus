@@ -1,0 +1,10 @@
+{
+  "invocation": "$env:PYTHONIOENCODING='utf-8'\npython -B D:/opencorvus-benchmark-runs/s06-smoke-freeze-review-20261029/review_smoke.py",
+  "tool_result": {
+    "chunk_id": "82e760",
+    "wall_time_seconds": 0.9396279,
+    "exit_code": 0,
+    "original_token_count": 324,
+    "output": "{\r\n  \"base\": {\r\n    \"tested\": 648,\r\n    \"feasible\": 12,\r\n    \"best_exact\": \"9/2\",\r\n    \"best\": {\r\n      \"purchase_tuple\": [\r\n        1,\r\n        0,\r\n        0,\r\n        1,\r\n        0,\r\n        0\r\n      ],\r\n      \"early_production\": [\r\n        1,\r\n        1\r\n      ],\r\n      \"scenario_costs\": [\r\n        5,\r\n        4\r\n      ],\r\n      \"minimum_cash\": [\r\n        96,\r\n        96\r\n      ]\r\n    }\r\n  },\r\n  \"price-change\": {\r\n    \"tested\": 648,\r\n    \"feasible\": 12,\r\n    \"best_exact\": \"11/2\",\r\n    \"best\": {\r\n      \"purchase_tuple\": [\r\n        0,\r\n        0,\r\n        1,\r\n        0,\r\n        0,\r\n        2\r\n      ],\r\n      \"early_production\": [\r\n        1,\r\n        1\r\n      ],\r\n      \"scenario_costs\": [\r\n        4,\r\n        7\r\n      ],\r\n      \"minimum_cash\": [\r\n        100,\r\n        98\r\n      ]\r\n    }\r\n  },\r\n  \"differences\": [\r\n    {\r\n      \"path\": \"$.status\",\r\n      \"base\": \"v2 tiny stage-peak case; early production permitted\",\r\n      \"changed\": \"second published smoke instance: changed supplier price\"\r\n    },\r\n    {\r\n      \"path\": \"$.suppliers[0].price_minor[0]\",\r\n      \"base\": 1,\r\n      \"changed\": 3\r\n    }\r\n  ],\r\n  \"base_strategy_on_price_change\": \"17/2\",\r\n  \"reference_match\": true,\r\n  \"seconds\": 0.001091300044208765,\r\n  \"scope\": \"tiny definition review only; no native Task run\"\r\n}\r\n"
+  }
+}

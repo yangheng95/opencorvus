@@ -1,0 +1,2411 @@
+{
+  "business_feasible": true,
+  "scope": "exact finite instance plan recurrence only; not execution attestation or optimality certificate",
+  "expected_cost_minor": 51263.0,
+  "expected_cost_exact": {
+    "numerator": 51263,
+    "denominator": 1
+  },
+  "scenarios": {
+    "base": {
+      "total_cost_minor": 50929,
+      "final_cash_minor": 28421,
+      "final_receivable_minor": 24150,
+      "minimum_cash_minor": -5369,
+      "active_constraints": {
+        "supplier_capacity": 10,
+        "shipment_minimum": 3,
+        "plant_capacity": 14,
+        "raw_storage": 0,
+        "product_storage": 0,
+        "credit_limit": 1
+      },
+      "weeks": [
+        {
+          "week": 0,
+          "raw_inventory": [
+            1,
+            13,
+            0,
+            5
+          ],
+          "finished_inventory": [
+            1,
+            0,
+            2,
+            0
+          ],
+          "arrivals": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "consumption": [
+            29,
+            27,
+            20,
+            15
+          ],
+          "made": [
+            11,
+            6,
+            7,
+            4
+          ],
+          "hours": [
+            18,
+            24
+          ],
+          "supplier_volume": [
+            80,
+            70,
+            0
+          ],
+          "purchase_cost": 3265,
+          "freight_cost": 420,
+          "production_cost": 386,
+          "holding_cost": 35,
+          "cost": 4106,
+          "receipts": 0,
+          "cash": 2894
+        },
+        {
+          "week": 1,
+          "raw_inventory": [
+            1,
+            2,
+            3,
+            0
+          ],
+          "finished_inventory": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "arrivals": [
+            25,
+            16,
+            15,
+            6
+          ],
+          "consumption": [
+            25,
+            27,
+            12,
+            11
+          ],
+          "made": [
+            11,
+            6,
+            3,
+            4
+          ],
+          "hours": [
+            14,
+            24
+          ],
+          "supplier_volume": [
+            60,
+            70,
+            4
+          ],
+          "purchase_cost": 2570,
+          "freight_cost": 480,
+          "production_cost": 330,
+          "holding_cost": 9,
+          "cost": 3389,
+          "receipts": 0,
+          "cash": -495
+        },
+        {
+          "week": 2,
+          "raw_inventory": [
+            6,
+            0,
+            2,
+            0
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            2,
+            0
+          ],
+          "arrivals": [
+            30,
+            25,
+            20,
+            15
+          ],
+          "consumption": [
+            25,
+            27,
+            21,
+            15
+          ],
+          "made": [
+            9,
+            7,
+            7,
+            4
+          ],
+          "hours": [
+            18,
+            24
+          ],
+          "supplier_volume": [
+            60,
+            70,
+            0
+          ],
+          "purchase_cost": 2080,
+          "freight_cost": 420,
+          "production_cost": 378,
+          "holding_cost": 16,
+          "cost": 2894,
+          "receipts": 0,
+          "cash": -3389
+        },
+        {
+          "week": 3,
+          "raw_inventory": [
+            3,
+            1,
+            0,
+            3
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "arrivals": [
+            20,
+            30,
+            10,
+            20
+          ],
+          "consumption": [
+            23,
+            29,
+            12,
+            17
+          ],
+          "made": [
+            10,
+            6,
+            3,
+            7
+          ],
+          "hours": [
+            21,
+            25
+          ],
+          "supplier_volume": [
+            80,
+            0,
+            0
+          ],
+          "purchase_cost": 1400,
+          "freight_cost": 180,
+          "production_cost": 380,
+          "holding_cost": 20,
+          "cost": 1980,
+          "receipts": 0,
+          "cash": -5369
+        },
+        {
+          "week": 4,
+          "raw_inventory": [
+            0,
+            28,
+            0,
+            3
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            0,
+            3
+          ],
+          "arrivals": [
+            24,
+            55,
+            16,
+            15
+          ],
+          "consumption": [
+            27,
+            28,
+            16,
+            15
+          ],
+          "made": [
+            11,
+            6,
+            5,
+            5
+          ],
+          "hours": [
+            18,
+            25
+          ],
+          "supplier_volume": [
+            80,
+            40,
+            30
+          ],
+          "purchase_cost": 3968,
+          "freight_cost": 480,
+          "production_cost": 378,
+          "holding_cost": 49,
+          "cost": 4875,
+          "receipts": 5850,
+          "cash": -4394
+        },
+        {
+          "week": 5,
+          "raw_inventory": [
+            5,
+            2,
+            4,
+            0
+          ],
+          "finished_inventory": [
+            10,
+            1,
+            0,
+            2
+          ],
+          "arrivals": [
+            50,
+            11,
+            21,
+            8
+          ],
+          "consumption": [
+            45,
+            37,
+            17,
+            11
+          ],
+          "made": [
+            20,
+            7,
+            5,
+            3
+          ],
+          "hours": [
+            24,
+            24
+          ],
+          "supplier_volume": [
+            70,
+            70,
+            29
+          ],
+          "purchase_cost": 3858,
+          "freight_cost": 480,
+          "production_cost": 481,
+          "holding_cost": 55,
+          "cost": 4874,
+          "receipts": 6050,
+          "cash": -3218
+        },
+        {
+          "week": 6,
+          "raw_inventory": [
+            0,
+            18,
+            17,
+            1
+          ],
+          "finished_inventory": [
+            0,
+            1,
+            0,
+            0
+          ],
+          "arrivals": [
+            0,
+            32,
+            30,
+            10
+          ],
+          "consumption": [
+            5,
+            16,
+            17,
+            9
+          ],
+          "made": [
+            0,
+            7,
+            5,
+            2
+          ],
+          "hours": [
+            0,
+            25
+          ],
+          "supplier_volume": [
+            75,
+            70,
+            4
+          ],
+          "purchase_cost": 3130,
+          "freight_cost": 480,
+          "production_cost": 219,
+          "holding_cost": 41,
+          "cost": 3870,
+          "receipts": 6100,
+          "cash": -988
+        },
+        {
+          "week": 7,
+          "raw_inventory": [
+            17,
+            10,
+            9,
+            3
+          ],
+          "finished_inventory": [
+            0,
+            1,
+            6,
+            1
+          ],
+          "arrivals": [
+            50,
+            20,
+            20,
+            23
+          ],
+          "consumption": [
+            33,
+            28,
+            28,
+            21
+          ],
+          "made": [
+            11,
+            6,
+            11,
+            5
+          ],
+          "hours": [
+            24,
+            25
+          ],
+          "supplier_volume": [
+            80,
+            70,
+            11
+          ],
+          "purchase_cost": 3195,
+          "freight_cost": 480,
+          "production_cost": 470,
+          "holding_cost": 75,
+          "cost": 4220,
+          "receipts": 6150,
+          "cash": 942
+        },
+        {
+          "week": 8,
+          "raw_inventory": [
+            0,
+            5,
+            14,
+            20
+          ],
+          "finished_inventory": [
+            2,
+            4,
+            4,
+            1
+          ],
+          "arrivals": [
+            10,
+            30,
+            20,
+            30
+          ],
+          "consumption": [
+            27,
+            35,
+            15,
+            13
+          ],
+          "made": [
+            12,
+            9,
+            3,
+            5
+          ],
+          "hours": [
+            23,
+            25
+          ],
+          "supplier_volume": [
+            80,
+            0,
+            0
+          ],
+          "purchase_cost": 1640,
+          "freight_cost": 180,
+          "production_cost": 418,
+          "holding_cost": 102,
+          "cost": 2340,
+          "receipts": 6050,
+          "cash": 4652
+        },
+        {
+          "week": 9,
+          "raw_inventory": [
+            22,
+            8,
+            18,
+            23
+          ],
+          "finished_inventory": [
+            3,
+            2,
+            5,
+            0
+          ],
+          "arrivals": [
+            50,
+            25,
+            20,
+            15
+          ],
+          "consumption": [
+            28,
+            22,
+            16,
+            12
+          ],
+          "made": [
+            11,
+            4,
+            6,
+            3
+          ],
+          "hours": [
+            24,
+            10
+          ],
+          "supplier_volume": [
+            65,
+            70,
+            0
+          ],
+          "purchase_cost": 2625,
+          "freight_cost": 420,
+          "production_cost": 337,
+          "holding_cost": 131,
+          "cost": 3513,
+          "receipts": 5850,
+          "cash": 6989
+        },
+        {
+          "week": 10,
+          "raw_inventory": [
+            2,
+            6,
+            0,
+            6
+          ],
+          "finished_inventory": [
+            2,
+            3,
+            5,
+            2
+          ],
+          "arrivals": [
+            5,
+            30,
+            0,
+            0
+          ],
+          "consumption": [
+            25,
+            32,
+            18,
+            17
+          ],
+          "made": [
+            10,
+            8,
+            5,
+            6
+          ],
+          "hours": [
+            24,
+            25
+          ],
+          "supplier_volume": [
+            80,
+            70,
+            0
+          ],
+          "purchase_cost": 2840,
+          "freight_cost": 420,
+          "production_cost": 423,
+          "holding_cost": 68,
+          "cost": 3751,
+          "receipts": 6100,
+          "cash": 9338
+        },
+        {
+          "week": 11,
+          "raw_inventory": [
+            44,
+            11,
+            16,
+            0
+          ],
+          "finished_inventory": [
+            6,
+            1,
+            0,
+            1
+          ],
+          "arrivals": [
+            70,
+            30,
+            20,
+            0
+          ],
+          "consumption": [
+            28,
+            25,
+            4,
+            6
+          ],
+          "made": [
+            14,
+            4,
+            0,
+            3
+          ],
+          "hours": [
+            20,
+            11
+          ],
+          "supplier_volume": [
+            0,
+            70,
+            0
+          ],
+          "purchase_cost": 1310,
+          "freight_cost": 240,
+          "production_cost": 284,
+          "holding_cost": 98,
+          "cost": 1932,
+          "receipts": 6050,
+          "cash": 13456
+        },
+        {
+          "week": 12,
+          "raw_inventory": [
+            12,
+            0,
+            19,
+            3
+          ],
+          "finished_inventory": [
+            14,
+            0,
+            1,
+            0
+          ],
+          "arrivals": [
+            10,
+            20,
+            20,
+            15
+          ],
+          "consumption": [
+            42,
+            31,
+            17,
+            12
+          ],
+          "made": [
+            18,
+            5,
+            6,
+            3
+          ],
+          "hours": [
+            24,
+            19
+          ],
+          "supplier_volume": [
+            80,
+            60,
+            30
+          ],
+          "purchase_cost": 3585,
+          "freight_cost": 480,
+          "production_cost": 424,
+          "holding_cost": 83,
+          "cost": 4572,
+          "receipts": 6150,
+          "cash": 15034
+        },
+        {
+          "week": 13,
+          "raw_inventory": [
+            18,
+            18,
+            15,
+            9
+          ],
+          "finished_inventory": [
+            8,
+            0,
+            0,
+            0
+          ],
+          "arrivals": [
+            20,
+            40,
+            10,
+            20
+          ],
+          "consumption": [
+            14,
+            22,
+            14,
+            14
+          ],
+          "made": [
+            5,
+            6,
+            4,
+            5
+          ],
+          "hours": [
+            16,
+            20
+          ],
+          "supplier_volume": [
+            80,
+            70,
+            0
+          ],
+          "purchase_cost": 2800,
+          "freight_cost": 420,
+          "production_cost": 301,
+          "holding_cost": 93,
+          "cost": 3614,
+          "receipts": 5850,
+          "cash": 17270
+        },
+        {
+          "week": 14,
+          "raw_inventory": [
+            5,
+            23,
+            13,
+            10
+          ],
+          "finished_inventory": [
+            6,
+            1,
+            2,
+            2
+          ],
+          "arrivals": [
+            10,
+            35,
+            20,
+            20
+          ],
+          "consumption": [
+            23,
+            30,
+            22,
+            19
+          ],
+          "made": [
+            8,
+            8,
+            7,
+            6
+          ],
+          "hours": [
+            24,
+            25
+          ],
+          "supplier_volume": [
+            0,
+            0,
+            0
+          ],
+          "purchase_cost": 0,
+          "freight_cost": 0,
+          "production_cost": 451,
+          "holding_cost": 101,
+          "cost": 552,
+          "receipts": 6300,
+          "cash": 23018
+        },
+        {
+          "week": 15,
+          "raw_inventory": [
+            4,
+            28,
+            22,
+            4
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "arrivals": [
+            10,
+            21,
+            20,
+            1
+          ],
+          "consumption": [
+            11,
+            16,
+            11,
+            7
+          ],
+          "made": [
+            4,
+            5,
+            3,
+            2
+          ],
+          "hours": [
+            4,
+            19
+          ],
+          "supplier_volume": [
+            0,
+            0,
+            4
+          ],
+          "purchase_cost": 120,
+          "freight_cost": 60,
+          "production_cost": 205,
+          "holding_cost": 62,
+          "cost": 447,
+          "receipts": 5850,
+          "cash": 28421
+        }
+      ]
+    },
+    "supplier_disruption": {
+      "total_cost_minor": 51557,
+      "final_cash_minor": 27793,
+      "final_receivable_minor": 24150,
+      "minimum_cash_minor": -5369,
+      "active_constraints": {
+        "supplier_capacity": 12,
+        "shipment_minimum": 1,
+        "plant_capacity": 8,
+        "raw_storage": 0,
+        "product_storage": 0,
+        "credit_limit": 1
+      },
+      "weeks": [
+        {
+          "week": 0,
+          "raw_inventory": [
+            1,
+            13,
+            0,
+            5
+          ],
+          "finished_inventory": [
+            1,
+            0,
+            2,
+            0
+          ],
+          "arrivals": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "consumption": [
+            29,
+            27,
+            20,
+            15
+          ],
+          "made": [
+            11,
+            6,
+            7,
+            4
+          ],
+          "hours": [
+            18,
+            24
+          ],
+          "supplier_volume": [
+            80,
+            70,
+            0
+          ],
+          "purchase_cost": 3265,
+          "freight_cost": 420,
+          "production_cost": 386,
+          "holding_cost": 35,
+          "cost": 4106,
+          "receipts": 0,
+          "cash": 2894
+        },
+        {
+          "week": 1,
+          "raw_inventory": [
+            1,
+            2,
+            3,
+            0
+          ],
+          "finished_inventory": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "arrivals": [
+            25,
+            16,
+            15,
+            6
+          ],
+          "consumption": [
+            25,
+            27,
+            12,
+            11
+          ],
+          "made": [
+            11,
+            6,
+            3,
+            4
+          ],
+          "hours": [
+            14,
+            24
+          ],
+          "supplier_volume": [
+            60,
+            70,
+            4
+          ],
+          "purchase_cost": 2570,
+          "freight_cost": 480,
+          "production_cost": 330,
+          "holding_cost": 9,
+          "cost": 3389,
+          "receipts": 0,
+          "cash": -495
+        },
+        {
+          "week": 2,
+          "raw_inventory": [
+            6,
+            0,
+            2,
+            0
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            2,
+            0
+          ],
+          "arrivals": [
+            30,
+            25,
+            20,
+            15
+          ],
+          "consumption": [
+            25,
+            27,
+            21,
+            15
+          ],
+          "made": [
+            9,
+            7,
+            7,
+            4
+          ],
+          "hours": [
+            18,
+            24
+          ],
+          "supplier_volume": [
+            60,
+            70,
+            0
+          ],
+          "purchase_cost": 2080,
+          "freight_cost": 420,
+          "production_cost": 378,
+          "holding_cost": 16,
+          "cost": 2894,
+          "receipts": 0,
+          "cash": -3389
+        },
+        {
+          "week": 3,
+          "raw_inventory": [
+            3,
+            1,
+            0,
+            3
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "arrivals": [
+            20,
+            30,
+            10,
+            20
+          ],
+          "consumption": [
+            23,
+            29,
+            12,
+            17
+          ],
+          "made": [
+            10,
+            6,
+            3,
+            7
+          ],
+          "hours": [
+            21,
+            25
+          ],
+          "supplier_volume": [
+            80,
+            0,
+            0
+          ],
+          "purchase_cost": 1400,
+          "freight_cost": 180,
+          "production_cost": 380,
+          "holding_cost": 20,
+          "cost": 1980,
+          "receipts": 0,
+          "cash": -5369
+        },
+        {
+          "week": 4,
+          "raw_inventory": [
+            0,
+            27,
+            0,
+            1
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            0,
+            4
+          ],
+          "arrivals": [
+            24,
+            55,
+            16,
+            15
+          ],
+          "consumption": [
+            27,
+            29,
+            16,
+            17
+          ],
+          "made": [
+            11,
+            6,
+            5,
+            6
+          ],
+          "hours": [
+            22,
+            24
+          ],
+          "supplier_volume": [
+            80,
+            70,
+            30
+          ],
+          "purchase_cost": 4833,
+          "freight_cost": 480,
+          "production_cost": 408,
+          "holding_cost": 49,
+          "cost": 5770,
+          "receipts": 5850,
+          "cash": -5289
+        },
+        {
+          "week": 5,
+          "raw_inventory": [
+            0,
+            1,
+            0,
+            0
+          ],
+          "finished_inventory": [
+            11,
+            1,
+            4,
+            0
+          ],
+          "arrivals": [
+            51,
+            9,
+            25,
+            8
+          ],
+          "consumption": [
+            51,
+            35,
+            25,
+            9
+          ],
+          "made": [
+            21,
+            7,
+            9,
+            0
+          ],
+          "hours": [
+            21,
+            23
+          ],
+          "supplier_volume": [
+            80,
+            70,
+            30
+          ],
+          "purchase_cost": 3670,
+          "freight_cost": 480,
+          "production_cost": 503,
+          "holding_cost": 54,
+          "cost": 4707,
+          "receipts": 6050,
+          "cash": -3946
+        },
+        {
+          "week": 6,
+          "raw_inventory": [
+            20,
+            28,
+            17,
+            15
+          ],
+          "finished_inventory": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "arrivals": [
+            21,
+            43,
+            25,
+            24
+          ],
+          "consumption": [
+            1,
+            16,
+            8,
+            9
+          ],
+          "made": [
+            0,
+            6,
+            1,
+            4
+          ],
+          "hours": [
+            0,
+            25
+          ],
+          "supplier_volume": [
+            0,
+            70,
+            30
+          ],
+          "purchase_cost": 2415,
+          "freight_cost": 300,
+          "production_cost": 173,
+          "holding_cost": 98,
+          "cost": 2986,
+          "receipts": 6100,
+          "cash": -832
+        },
+        {
+          "week": 7,
+          "raw_inventory": [
+            15,
+            25,
+            0,
+            4
+          ],
+          "finished_inventory": [
+            5,
+            1,
+            0,
+            1
+          ],
+          "arrivals": [
+            30,
+            31,
+            0,
+            4
+          ],
+          "consumption": [
+            35,
+            34,
+            17,
+            15
+          ],
+          "made": [
+            15,
+            7,
+            5,
+            5
+          ],
+          "hours": [
+            24,
+            25
+          ],
+          "supplier_volume": [
+            0,
+            70,
+            30
+          ],
+          "purchase_cost": 2235,
+          "freight_cost": 300,
+          "production_cost": 458,
+          "holding_cost": 72,
+          "cost": 3065,
+          "receipts": 6150,
+          "cash": 2253
+        },
+        {
+          "week": 8,
+          "raw_inventory": [
+            0,
+            12,
+            6,
+            0
+          ],
+          "finished_inventory": [
+            3,
+            1,
+            4,
+            2
+          ],
+          "arrivals": [
+            10,
+            13,
+            30,
+            17
+          ],
+          "consumption": [
+            25,
+            26,
+            24,
+            21
+          ],
+          "made": [
+            8,
+            6,
+            9,
+            6
+          ],
+          "hours": [
+            23,
+            24
+          ],
+          "supplier_volume": [
+            0,
+            70,
+            30
+          ],
+          "purchase_cost": 2270,
+          "freight_cost": 300,
+          "production_cost": 420,
+          "holding_cost": 57,
+          "cost": 3047,
+          "receipts": 6050,
+          "cash": 5256
+        },
+        {
+          "week": 9,
+          "raw_inventory": [
+            0,
+            0,
+            7,
+            2
+          ],
+          "finished_inventory": [
+            2,
+            0,
+            1,
+            1
+          ],
+          "arrivals": [
+            20,
+            10,
+            10,
+            10
+          ],
+          "consumption": [
+            20,
+            22,
+            9,
+            8
+          ],
+          "made": [
+            9,
+            5,
+            2,
+            3
+          ],
+          "hours": [
+            21,
+            9
+          ],
+          "supplier_volume": [
+            80,
+            70,
+            0
+          ],
+          "purchase_cost": 3100,
+          "freight_cost": 420,
+          "production_cost": 270,
+          "holding_cost": 26,
+          "cost": 3816,
+          "receipts": 5850,
+          "cash": 7290
+        },
+        {
+          "week": 10,
+          "raw_inventory": [
+            0,
+            12,
+            7,
+            2
+          ],
+          "finished_inventory": [
+            0,
+            3,
+            1,
+            2
+          ],
+          "arrivals": [
+            23,
+            46,
+            20,
+            15
+          ],
+          "consumption": [
+            23,
+            34,
+            20,
+            15
+          ],
+          "made": [
+            9,
+            10,
+            5,
+            5
+          ],
+          "hours": [
+            24,
+            25
+          ],
+          "supplier_volume": [
+            50,
+            40,
+            15
+          ],
+          "purchase_cost": 2480,
+          "freight_cost": 480,
+          "production_cost": 434,
+          "holding_cost": 49,
+          "cost": 3443,
+          "receipts": 6100,
+          "cash": 9947
+        },
+        {
+          "week": 11,
+          "raw_inventory": [
+            34,
+            0,
+            13,
+            2
+          ],
+          "finished_inventory": [
+            3,
+            1,
+            6,
+            0
+          ],
+          "arrivals": [
+            70,
+            11,
+            30,
+            14
+          ],
+          "consumption": [
+            36,
+            23,
+            24,
+            14
+          ],
+          "made": [
+            13,
+            4,
+            10,
+            2
+          ],
+          "hours": [
+            23,
+            14
+          ],
+          "supplier_volume": [
+            75,
+            40,
+            30
+          ],
+          "purchase_cost": 2890,
+          "freight_cost": 480,
+          "production_cost": 396,
+          "holding_cost": 88,
+          "cost": 3854,
+          "receipts": 6050,
+          "cash": 12143
+        },
+        {
+          "week": 12,
+          "raw_inventory": [
+            0,
+            11,
+            4,
+            1
+          ],
+          "finished_inventory": [
+            12,
+            2,
+            2,
+            1
+          ],
+          "arrivals": [
+            5,
+            49,
+            0,
+            10
+          ],
+          "consumption": [
+            39,
+            38,
+            9,
+            11
+          ],
+          "made": [
+            19,
+            7,
+            1,
+            5
+          ],
+          "hours": [
+            24,
+            25
+          ],
+          "supplier_volume": [
+            50,
+            70,
+            8
+          ],
+          "purchase_cost": 2695,
+          "freight_cost": 480,
+          "production_cost": 434,
+          "holding_cost": 74,
+          "cost": 3683,
+          "receipts": 6150,
+          "cash": 14610
+        },
+        {
+          "week": 13,
+          "raw_inventory": [
+            4,
+            4,
+            7,
+            7
+          ],
+          "finished_inventory": [
+            7,
+            0,
+            6,
+            0
+          ],
+          "arrivals": [
+            25,
+            11,
+            25,
+            23
+          ],
+          "consumption": [
+            21,
+            18,
+            22,
+            17
+          ],
+          "made": [
+            6,
+            4,
+            9,
+            4
+          ],
+          "hours": [
+            23,
+            12
+          ],
+          "supplier_volume": [
+            0,
+            40,
+            28
+          ],
+          "purchase_cost": 1640,
+          "freight_cost": 300,
+          "production_cost": 334,
+          "holding_cost": 74,
+          "cost": 2348,
+          "receipts": 5850,
+          "cash": 18112
+        },
+        {
+          "week": 14,
+          "raw_inventory": [
+            0,
+            11,
+            10,
+            1
+          ],
+          "finished_inventory": [
+            1,
+            0,
+            1,
+            4
+          ],
+          "arrivals": [
+            4,
+            33,
+            10,
+            10
+          ],
+          "consumption": [
+            8,
+            26,
+            7,
+            16
+          ],
+          "made": [
+            4,
+            7,
+            0,
+            8
+          ],
+          "hours": [
+            18,
+            24
+          ],
+          "supplier_volume": [
+            25,
+            0,
+            30
+          ],
+          "purchase_cost": 1600,
+          "freight_cost": 240,
+          "production_cost": 304,
+          "holding_cost": 50,
+          "cost": 2194,
+          "receipts": 6300,
+          "cash": 22218
+        },
+        {
+          "week": 15,
+          "raw_inventory": [
+            3,
+            0,
+            6,
+            2
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "arrivals": [
+            25,
+            10,
+            10,
+            5
+          ],
+          "consumption": [
+            22,
+            21,
+            14,
+            4
+          ],
+          "made": [
+            9,
+            6,
+            4,
+            0
+          ],
+          "hours": [
+            11,
+            14
+          ],
+          "supplier_volume": [
+            0,
+            0,
+            0
+          ],
+          "purchase_cost": 0,
+          "freight_cost": 0,
+          "production_cost": 262,
+          "holding_cost": 13,
+          "cost": 275,
+          "receipts": 5850,
+          "cash": 27793
+        }
+      ]
+    },
+    "demand_shift": {
+      "total_cost_minor": 51657,
+      "final_cash_minor": 29853,
+      "final_receivable_minor": 25230,
+      "minimum_cash_minor": -5369,
+      "active_constraints": {
+        "supplier_capacity": 10,
+        "shipment_minimum": 1,
+        "plant_capacity": 16,
+        "raw_storage": 0,
+        "product_storage": 0,
+        "credit_limit": 1
+      },
+      "weeks": [
+        {
+          "week": 0,
+          "raw_inventory": [
+            1,
+            13,
+            0,
+            5
+          ],
+          "finished_inventory": [
+            1,
+            0,
+            2,
+            0
+          ],
+          "arrivals": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "consumption": [
+            29,
+            27,
+            20,
+            15
+          ],
+          "made": [
+            11,
+            6,
+            7,
+            4
+          ],
+          "hours": [
+            18,
+            24
+          ],
+          "supplier_volume": [
+            80,
+            70,
+            0
+          ],
+          "purchase_cost": 3265,
+          "freight_cost": 420,
+          "production_cost": 386,
+          "holding_cost": 35,
+          "cost": 4106,
+          "receipts": 0,
+          "cash": 2894
+        },
+        {
+          "week": 1,
+          "raw_inventory": [
+            1,
+            2,
+            3,
+            0
+          ],
+          "finished_inventory": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "arrivals": [
+            25,
+            16,
+            15,
+            6
+          ],
+          "consumption": [
+            25,
+            27,
+            12,
+            11
+          ],
+          "made": [
+            11,
+            6,
+            3,
+            4
+          ],
+          "hours": [
+            14,
+            24
+          ],
+          "supplier_volume": [
+            60,
+            70,
+            4
+          ],
+          "purchase_cost": 2570,
+          "freight_cost": 480,
+          "production_cost": 330,
+          "holding_cost": 9,
+          "cost": 3389,
+          "receipts": 0,
+          "cash": -495
+        },
+        {
+          "week": 2,
+          "raw_inventory": [
+            6,
+            0,
+            2,
+            0
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            2,
+            0
+          ],
+          "arrivals": [
+            30,
+            25,
+            20,
+            15
+          ],
+          "consumption": [
+            25,
+            27,
+            21,
+            15
+          ],
+          "made": [
+            9,
+            7,
+            7,
+            4
+          ],
+          "hours": [
+            18,
+            24
+          ],
+          "supplier_volume": [
+            60,
+            70,
+            0
+          ],
+          "purchase_cost": 2080,
+          "freight_cost": 420,
+          "production_cost": 378,
+          "holding_cost": 16,
+          "cost": 2894,
+          "receipts": 0,
+          "cash": -3389
+        },
+        {
+          "week": 3,
+          "raw_inventory": [
+            3,
+            1,
+            0,
+            3
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "arrivals": [
+            20,
+            30,
+            10,
+            20
+          ],
+          "consumption": [
+            23,
+            29,
+            12,
+            17
+          ],
+          "made": [
+            10,
+            6,
+            3,
+            7
+          ],
+          "hours": [
+            21,
+            25
+          ],
+          "supplier_volume": [
+            80,
+            0,
+            0
+          ],
+          "purchase_cost": 1400,
+          "freight_cost": 180,
+          "production_cost": 380,
+          "holding_cost": 20,
+          "cost": 1980,
+          "receipts": 0,
+          "cash": -5369
+        },
+        {
+          "week": 4,
+          "raw_inventory": [
+            1,
+            25,
+            0,
+            0
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            0,
+            4
+          ],
+          "arrivals": [
+            26,
+            55,
+            14,
+            15
+          ],
+          "consumption": [
+            28,
+            31,
+            14,
+            18
+          ],
+          "made": [
+            12,
+            6,
+            4,
+            7
+          ],
+          "hours": [
+            24,
+            25
+          ],
+          "supplier_volume": [
+            80,
+            60,
+            30
+          ],
+          "purchase_cost": 4317,
+          "freight_cost": 480,
+          "production_cost": 418,
+          "holding_cost": 46,
+          "cost": 5261,
+          "receipts": 5850,
+          "cash": -4780
+        },
+        {
+          "week": 5,
+          "raw_inventory": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "finished_inventory": [
+            11,
+            1,
+            0,
+            2
+          ],
+          "arrivals": [
+            47,
+            14,
+            15,
+            10
+          ],
+          "consumption": [
+            48,
+            39,
+            15,
+            10
+          ],
+          "made": [
+            22,
+            7,
+            4,
+            3
+          ],
+          "hours": [
+            24,
+            25
+          ],
+          "supplier_volume": [
+            30,
+            70,
+            30
+          ],
+          "purchase_cost": 2930,
+          "freight_cost": 480,
+          "production_cost": 486,
+          "holding_cost": 47,
+          "cost": 3943,
+          "receipts": 6050,
+          "cash": -2673
+        },
+        {
+          "week": 6,
+          "raw_inventory": [
+            27,
+            5,
+            0,
+            4
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "arrivals": [
+            31,
+            20,
+            14,
+            14
+          ],
+          "consumption": [
+            4,
+            15,
+            14,
+            10
+          ],
+          "made": [
+            0,
+            6,
+            4,
+            3
+          ],
+          "hours": [
+            0,
+            25
+          ],
+          "supplier_volume": [
+            80,
+            0,
+            23
+          ],
+          "purchase_cost": 2467,
+          "freight_cost": 240,
+          "production_cost": 206,
+          "holding_cost": 40,
+          "cost": 2953,
+          "receipts": 6100,
+          "cash": 474
+        },
+        {
+          "week": 7,
+          "raw_inventory": [
+            26,
+            24,
+            3,
+            2
+          ],
+          "finished_inventory": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "arrivals": [
+            28,
+            51,
+            20,
+            15
+          ],
+          "consumption": [
+            29,
+            32,
+            17,
+            17
+          ],
+          "made": [
+            12,
+            7,
+            5,
+            6
+          ],
+          "hours": [
+            24,
+            25
+          ],
+          "supplier_volume": [
+            70,
+            70,
+            30
+          ],
+          "purchase_cost": 3975,
+          "freight_cost": 480,
+          "production_cost": 447,
+          "holding_cost": 70,
+          "cost": 4972,
+          "receipts": 6150,
+          "cash": 1652
+        },
+        {
+          "week": 8,
+          "raw_inventory": [
+            0,
+            0,
+            0,
+            7
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            1,
+            3
+          ],
+          "arrivals": [
+            0,
+            5,
+            10,
+            25
+          ],
+          "consumption": [
+            26,
+            29,
+            13,
+            20
+          ],
+          "made": [
+            11,
+            5,
+            4,
+            8
+          ],
+          "hours": [
+            24,
+            25
+          ],
+          "supplier_volume": [
+            75,
+            70,
+            0
+          ],
+          "purchase_cost": 2490,
+          "freight_cost": 420,
+          "production_cost": 415,
+          "holding_cost": 33,
+          "cost": 3358,
+          "receipts": 6320,
+          "cash": 4614
+        },
+        {
+          "week": 9,
+          "raw_inventory": [
+            35,
+            8,
+            2,
+            12
+          ],
+          "finished_inventory": [
+            0,
+            1,
+            0,
+            0
+          ],
+          "arrivals": [
+            60,
+            35,
+            15,
+            12
+          ],
+          "consumption": [
+            25,
+            27,
+            13,
+            7
+          ],
+          "made": [
+            11,
+            7,
+            3,
+            2
+          ],
+          "hours": [
+            24,
+            10
+          ],
+          "supplier_volume": [
+            75,
+            70,
+            24
+          ],
+          "purchase_cost": 3680,
+          "freight_cost": 480,
+          "production_cost": 318,
+          "holding_cost": 73,
+          "cost": 4551,
+          "receipts": 6120,
+          "cash": 6183
+        },
+        {
+          "week": 10,
+          "raw_inventory": [
+            5,
+            24,
+            11,
+            8
+          ],
+          "finished_inventory": [
+            1,
+            2,
+            0,
+            0
+          ],
+          "arrivals": [
+            0,
+            50,
+            25,
+            10
+          ],
+          "consumption": [
+            30,
+            34,
+            16,
+            14
+          ],
+          "made": [
+            13,
+            8,
+            4,
+            5
+          ],
+          "hours": [
+            23,
+            25
+          ],
+          "supplier_volume": [
+            80,
+            0,
+            0
+          ],
+          "purchase_cost": 1680,
+          "freight_cost": 180,
+          "production_cost": 420,
+          "holding_cost": 67,
+          "cost": 2347,
+          "receipts": 6370,
+          "cash": 10206
+        },
+        {
+          "week": 11,
+          "raw_inventory": [
+            38,
+            5,
+            13,
+            9
+          ],
+          "finished_inventory": [
+            5,
+            0,
+            3,
+            1
+          ],
+          "arrivals": [
+            70,
+            10,
+            20,
+            20
+          ],
+          "consumption": [
+            37,
+            29,
+            18,
+            19
+          ],
+          "made": [
+            15,
+            4,
+            7,
+            6
+          ],
+          "hours": [
+            23,
+            25
+          ],
+          "supplier_volume": [
+            80,
+            60,
+            0
+          ],
+          "purchase_cost": 2400,
+          "freight_cost": 420,
+          "production_cost": 471,
+          "holding_cost": 106,
+          "cost": 3397,
+          "receipts": 6320,
+          "cash": 13129
+        },
+        {
+          "week": 12,
+          "raw_inventory": [
+            3,
+            10,
+            4,
+            0
+          ],
+          "finished_inventory": [
+            11,
+            1,
+            0,
+            0
+          ],
+          "arrivals": [
+            0,
+            40,
+            0,
+            0
+          ],
+          "consumption": [
+            35,
+            35,
+            9,
+            9
+          ],
+          "made": [
+            17,
+            7,
+            1,
+            4
+          ],
+          "hours": [
+            21,
+            23
+          ],
+          "supplier_volume": [
+            65,
+            70,
+            0
+          ],
+          "purchase_cost": 2920,
+          "freight_cost": 420,
+          "production_cost": 395,
+          "holding_cost": 54,
+          "cost": 3789,
+          "receipts": 6420,
+          "cash": 15760
+        },
+        {
+          "week": 13,
+          "raw_inventory": [
+            7,
+            19,
+            25,
+            1
+          ],
+          "finished_inventory": [
+            5,
+            1,
+            0,
+            0
+          ],
+          "arrivals": [
+            20,
+            33,
+            35,
+            17
+          ],
+          "consumption": [
+            16,
+            24,
+            14,
+            16
+          ],
+          "made": [
+            6,
+            6,
+            4,
+            6
+          ],
+          "hours": [
+            15,
+            25
+          ],
+          "supplier_volume": [
+            0,
+            0,
+            30
+          ],
+          "purchase_cost": 845,
+          "freight_cost": 60,
+          "production_cost": 337,
+          "holding_cost": 72,
+          "cost": 1314,
+          "receipts": 6120,
+          "cash": 20566
+        },
+        {
+          "week": 14,
+          "raw_inventory": [
+            3,
+            0,
+            7,
+            5
+          ],
+          "finished_inventory": [
+            8,
+            0,
+            2,
+            0
+          ],
+          "arrivals": [
+            30,
+            12,
+            0,
+            20
+          ],
+          "consumption": [
+            34,
+            31,
+            18,
+            16
+          ],
+          "made": [
+            14,
+            6,
+            6,
+            5
+          ],
+          "hours": [
+            24,
+            23
+          ],
+          "supplier_volume": [
+            70,
+            0,
+            24
+          ],
+          "purchase_cost": 2030,
+          "freight_cost": 240,
+          "production_cost": 454,
+          "holding_cost": 52,
+          "cost": 2776,
+          "receipts": 6570,
+          "cash": 24360
+        },
+        {
+          "week": 15,
+          "raw_inventory": [
+            5,
+            0,
+            8,
+            2
+          ],
+          "finished_inventory": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "arrivals": [
+            10,
+            20,
+            11,
+            9
+          ],
+          "consumption": [
+            8,
+            20,
+            10,
+            12
+          ],
+          "made": [
+            3,
+            6,
+            2,
+            5
+          ],
+          "hours": [
+            9,
+            23
+          ],
+          "supplier_volume": [
+            0,
+            0,
+            9
+          ],
+          "purchase_cost": 308,
+          "freight_cost": 60,
+          "production_cost": 242,
+          "holding_cost": 17,
+          "cost": 627,
+          "receipts": 6120,
+          "cash": 29853
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "scope": "source version identity only, not functional acceptance",
+  "sources": [
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\qualify_l06.py",
+      "snapshot": "source-snapshot\\qualify_l06.py",
+      "current_origin_still_byte_equal": false
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+      "snapshot": "source-snapshot\\check_l06.py",
+      "current_origin_still_byte_equal": false
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\qualify_business_checks.py",
+      "snapshot": "source-snapshot\\qualify_business_checks.py",
+      "current_origin_still_byte_equal": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\full-v1\\instance.json",
+      "snapshot": "source-snapshot\\full-v1\\instance.json",
+      "current_origin_still_byte_equal": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\full-v1\\solver.json",
+      "snapshot": "source-snapshot\\full-v1\\solver.json",
+      "current_origin_still_byte_equal": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\full-v1.stdout.txt",
+      "snapshot": "source-snapshot\\full-v1.stdout.txt",
+      "current_origin_still_byte_equal": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\full-v1.stderr.txt",
+      "snapshot": "source-snapshot\\full-v1.stderr.txt",
+      "current_origin_still_byte_equal": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\full-v1-executed-source.py",
+      "snapshot": "source-snapshot\\full-v1-executed-source.py",
+      "current_origin_still_byte_equal": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\minimum-credit\\solver.json",
+      "snapshot": "source-snapshot\\minimum-credit\\solver.json",
+      "current_origin_still_byte_equal": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\minimum-credit\\plan.json",
+      "snapshot": "source-snapshot\\minimum-credit\\plan.json",
+      "current_origin_still_byte_equal": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\minimum-credit\\instance.json",
+      "snapshot": "source-snapshot\\minimum-credit\\instance.json",
+      "current_origin_still_byte_equal": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\minimum-credit\\witness-credit-input.json",
+      "snapshot": "source-snapshot\\minimum-credit\\witness-credit-input.json",
+      "current_origin_still_byte_equal": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\minimum-credit\\independent-business-check.json",
+      "snapshot": "source-snapshot\\minimum-credit\\independent-business-check.json",
+      "current_origin_still_byte_equal": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\minimum-credit-executed-source.py",
+      "snapshot": "source-snapshot\\minimum-credit-executed-source.py",
+      "current_origin_still_byte_equal": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\minimum-credit.stdout.txt",
+      "snapshot": "source-snapshot\\minimum-credit.stdout.txt",
+      "current_origin_still_byte_equal": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\minimum-credit.stderr.txt",
+      "snapshot": "source-snapshot\\minimum-credit.stderr.txt",
+      "current_origin_still_byte_equal": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\tiny-v1\\business-check.json",
+      "snapshot": "source-snapshot\\tiny-v1\\business-check.json",
+      "current_origin_still_byte_equal": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\tiny-v1\\enumerated-best-plan.json",
+      "snapshot": "source-snapshot\\tiny-v1\\enumerated-best-plan.json",
+      "current_origin_still_byte_equal": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\tiny-v1\\enumeration-and-probes.json",
+      "snapshot": "source-snapshot\\tiny-v1\\enumeration-and-probes.json",
+      "current_origin_still_byte_equal": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\tiny-v1\\executed-source.py",
+      "snapshot": "source-snapshot\\tiny-v1\\executed-source.py",
+      "current_origin_still_byte_equal": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\tiny-v1\\instance.json",
+      "snapshot": "source-snapshot\\tiny-v1\\instance.json",
+      "current_origin_still_byte_equal": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\tiny-v1\\plan.json",
+      "snapshot": "source-snapshot\\tiny-v1\\plan.json",
+      "current_origin_still_byte_equal": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\tiny-v1\\solver.json",
+      "snapshot": "source-snapshot\\tiny-v1\\solver.json",
+      "current_origin_still_byte_equal": true
+    }
+  ]
+}

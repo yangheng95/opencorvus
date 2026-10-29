@@ -1,0 +1,112 @@
+{
+  "source_files": [
+    "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\evaluator\\task-final.json",
+    "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\evaluator\\task-status-final.json"
+  ],
+  "task": {
+    "id": "tsk_g00VZR9KuE00aKSMSF10",
+    "status": "completed",
+    "executionLifecycle": {
+      "taskID": "tsk_g00VZR9KuE00aKSMSF10",
+      "epoch": 1,
+      "openedEventID": "pev_g0VZR9LAn00YgCkD60b2",
+      "openedAt": 1793273138614,
+      "status": "completed",
+      "terminalEventID": "pev_g0VZRC4ko00WymhMJVWK",
+      "terminalAt": 1793273789536
+    },
+    "terminalReason": "completed",
+    "packageRevisionBinding": {
+      "scope": "built_in",
+      "project_id": null,
+      "namespace": "builtin",
+      "id": "base",
+      "version": "2026.10.14.1",
+      "package_digest": "83ea97ae6b85c404ff6ff75b43ab0d72fe907d3013a3dcd651b322c5a5579f4f"
+    },
+    "time": {
+      "created": 1793273138614,
+      "updated": 1793273789536,
+      "started": 1793273138614,
+      "completed": 1793273789536
+    }
+  },
+  "inspect_metadata": {
+    "sample_id": "S06-cheap-smoke-1",
+    "sample_uuid": "iVWkLyS9y2EsaqAepzyzyF",
+    "epoch": 1
+  },
+  "status": {
+    "taskID": "tsk_g00VZR9KuE00aKSMSF10",
+    "status": "inactive",
+    "lifecycleStatus": "completed",
+    "activity": {
+      "total": 1,
+      "running": 0,
+      "inactive": 1
+    },
+    "time": {
+      "created": 1793273138614,
+      "updated": 1793273789536,
+      "started": 1793273138614,
+      "completed": 1793273789536
+    }
+  },
+  "actors": [
+    {
+      "sessionID": "ses_-zUQYqdUXzzzSdmeCJtp",
+      "agent": "orchestrator",
+      "kind": "orchestrator",
+      "parentSessionID": "ses_-zUQYqepyzzt9GivN0pf",
+      "time": {
+        "created": 1793273144766,
+        "updated": 1793273778282
+      }
+    },
+    {
+      "sessionID": "ses_hMoZi4X5qJZeqrz4TEnF",
+      "agent": "base-tester",
+      "kind": "delegated-worker",
+      "parentSessionID": "ses_-zUQYqdUXzzzSdmeCJtp",
+      "parentAgentSessionID": "ses_-zUQYqdUXzzzSdmeCJtp",
+      "time": {
+        "created": 1793273349835,
+        "updated": 1793273716107
+      }
+    }
+  ],
+  "occurrence_status_summaries": [
+    {
+      "sessionID": "ses_hMoZi4X5qJZeqrz4TEnF",
+      "agent": "base-tester",
+      "kind": "delegated-worker",
+      "event_status_counts": {
+        "streaming": 78,
+        "idle": 2,
+        "terminal": 1
+      }
+    },
+    {
+      "sessionID": "ses_-zUQYqdUXzzzSdmeCJtp",
+      "agent": "orchestrator",
+      "kind": "orchestrator",
+      "event_status_counts": {
+        "streaming": 42,
+        "idle": 1
+      }
+    },
+    {
+      "sessionID": "ses_-zUQYqdUXzzzSdmeCJtp",
+      "agent": "orchestrator",
+      "kind": "orchestrator",
+      "event_status_counts": {
+        "streaming": 20,
+        "idle": 1,
+        "terminal": 1
+      }
+    }
+  ],
+  "native_seconds_from_api_time": 650.922,
+  "single_agent_claim": false,
+  "actual_model_binding_and_inspect_terminal_receipt": "pending supplementary evidence"
+}

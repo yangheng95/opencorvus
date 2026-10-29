@@ -1,0 +1,20 @@
+{
+  "benchmark": "HeavyWorkBench-Smoke/0.1.0-dev",
+  "case": "S06",
+  "status": "frozen-smoke-only",
+  "scope": "pipeline smoke only; not one of the ten heavy tasks, not hours-qualified, no difficulty score",
+  "instances": [
+    "base",
+    "price-change"
+  ],
+  "model": "openai/gpt-6.1-sol",
+  "mode": "native Task/code/base; exact runtime binding recorded at launch",
+  "budget": {
+    "total_model_tokens": null,
+    "total_wall_seconds": null
+  },
+  "business_outcome": "all frozen checks verified after actual clean replay; independent of lifecycle completion",
+  "comparable": false,
+  "frozen_at_utc": "2026-10-29T11:23:24.747162+00:00",
+  "freeze_scope": "definition only; actual native execution/business/clean replay results pending"
+}

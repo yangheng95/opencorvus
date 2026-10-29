@@ -1,0 +1,44 @@
+[
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\registration.json",
+    "snapshot": "native-evidence\\registration.json",
+    "byte_equal_at_copy": true,
+    "scope": "metadata only, no prompts/reasoning/credentials"
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\runtime-source-worktree.json",
+    "snapshot": "native-evidence\\runtime-source-worktree.json",
+    "byte_equal_at_copy": true,
+    "scope": "metadata only, no prompts/reasoning/credentials"
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\evidence\\server-result.json",
+    "snapshot": "native-evidence\\evidence\\server-result.json",
+    "byte_equal_at_copy": true,
+    "scope": "metadata only, no prompts/reasoning/credentials"
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\evidence\\preflight.json",
+    "snapshot": "native-evidence\\evidence\\preflight.json",
+    "byte_equal_at_copy": true,
+    "scope": "metadata only, no prompts/reasoning/credentials"
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\evaluator\\provider-audit-summary.json",
+    "snapshot": "native-evidence\\evaluator\\provider-audit-summary.json",
+    "byte_equal_at_copy": true,
+    "scope": "metadata only, no prompts/reasoning/credentials"
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\evaluator\\inspect-terminal-summary.json",
+    "snapshot": "native-evidence\\evaluator\\inspect-terminal-summary.json",
+    "byte_equal_at_copy": true,
+    "scope": "metadata only, no prompts/reasoning/credentials"
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\evidence\\provider-audit\\provider-84392-78cad2e9-be00-4124-bb41-f982576a6159-293.json",
+    "snapshot": "native-evidence\\evidence\\provider-audit\\provider-84392-78cad2e9-be00-4124-bb41-f982576a6159-293.json",
+    "byte_equal_at_copy": true,
+    "scope": "metadata only, no prompts/reasoning/credentials"
+  }
+]

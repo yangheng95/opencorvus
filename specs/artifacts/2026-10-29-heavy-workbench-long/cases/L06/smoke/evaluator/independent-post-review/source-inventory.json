@@ -1,0 +1,98 @@
+[
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\sealed\\solve.py",
+    "snapshot": "source-snapshot\\sealed\\solve.py",
+    "bytes": 10678,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\sealed\\README.md",
+    "snapshot": "source-snapshot\\sealed\\README.md",
+    "bytes": 2755,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\smoke\\public\\inputs\\base.json",
+    "snapshot": "frozen-inputs\\base.json",
+    "bytes": 2177,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\sealed\\original-results\\base\\plan.json",
+    "snapshot": "source-snapshot\\original-results\\base\\plan.json",
+    "bytes": 1603,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\sealed\\original-results\\base\\summary.json",
+    "snapshot": "source-snapshot\\original-results\\base\\summary.json",
+    "bytes": 630,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\smoke\\public\\inputs\\price-change.json",
+    "snapshot": "frozen-inputs\\price-change.json",
+    "bytes": 2181,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\sealed\\original-results\\price-change\\plan.json",
+    "snapshot": "source-snapshot\\original-results\\price-change\\plan.json",
+    "bytes": 1603,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\sealed\\original-results\\price-change\\summary.json",
+    "snapshot": "source-snapshot\\original-results\\price-change\\summary.json",
+    "bytes": 632,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\smoke\\public\\TASK.md",
+    "snapshot": "source-snapshot\\smoke-contract\\public\\TASK.md",
+    "bytes": 3707,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\smoke\\profile.json",
+    "snapshot": "source-snapshot\\smoke-contract\\profile.json",
+    "bytes": 768,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\smoke\\evaluator\\contract.json",
+    "snapshot": "source-snapshot\\smoke-contract\\evaluator\\contract.json",
+    "bytes": 1462,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\qualification\\current-source\\check_l06.py",
+    "snapshot": "evaluator-tools\\check_l06.py",
+    "bytes": 10863,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\qualification\\current-source\\l06_input.py",
+    "snapshot": "evaluator-tools\\l06_input.py",
+    "bytes": 5968,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\s06-smoke-freeze-review-20261029\\review_smoke.py",
+    "snapshot": "evaluator-tools\\independent-freeze-oracle.py",
+    "bytes": 8377,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\evaluator\\main-smoke-assessment.json",
+    "snapshot": "original-evaluator\\main-smoke-assessment.json",
+    "bytes": 4648,
+    "byte_equal_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\evaluator\\candidate-git.json",
+    "snapshot": "original-evaluator\\candidate-git.json",
+    "bytes": 77,
+    "byte_equal_at_copy": true
+  }
+]

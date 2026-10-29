@@ -1,0 +1,148 @@
+{
+  "format": "l06-feasibility-instance/2",
+  "status": "v2 tiny stage-peak case; early production permitted",
+  "weeks": 2,
+  "common_weeks": 1,
+  "probability_denominator": 2,
+  "raw_materials": [
+    "R"
+  ],
+  "products": [
+    "P"
+  ],
+  "plants": [
+    "F"
+  ],
+  "suppliers": [
+    {
+      "id": "A",
+      "lead_weeks": 1,
+      "pack_units": [
+        2
+      ],
+      "price_minor": [
+        1
+      ],
+      "freight_minor": 2,
+      "minimum_volume": 2
+    },
+    {
+      "id": "B",
+      "lead_weeks": 0,
+      "pack_units": [
+        1
+      ],
+      "price_minor": [
+        3
+      ],
+      "freight_minor": 1,
+      "minimum_volume": 1
+    }
+  ],
+  "allowed": [
+    [
+      1
+    ]
+  ],
+  "production_hours": [
+    1
+  ],
+  "production_cost_minor": [
+    [
+      0
+    ]
+  ],
+  "bom": [
+    [
+      1
+    ]
+  ],
+  "raw_volume": [
+    1
+  ],
+  "product_volume": [
+    1
+  ],
+  "raw_holding_minor": [
+    1
+  ],
+  "product_holding_minor": [
+    0
+  ],
+  "raw_storage_volume": 2,
+  "product_storage_volume": 2,
+  "initial_raw": [
+    1
+  ],
+  "initial_products": [
+    0
+  ],
+  "initial_cash_minor": 100,
+  "credit_limit_minor": 0,
+  "sales_price_minor": [
+    5
+  ],
+  "receipt_lag_weeks": 1,
+  "scenarios": [
+    {
+      "id": "one",
+      "probability_numerator": 1,
+      "demand": [
+        [
+          1
+        ],
+        [
+          1
+        ]
+      ],
+      "supplier_capacity_volume": [
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "plant_capacity_hours": [
+        [
+          2
+        ],
+        [
+          2
+        ]
+      ]
+    },
+    {
+      "id": "two",
+      "probability_numerator": 1,
+      "demand": [
+        [
+          1
+        ],
+        [
+          2
+        ]
+      ],
+      "supplier_capacity_volume": [
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "plant_capacity_hours": [
+        [
+          2
+        ],
+        [
+          2
+        ]
+      ]
+    }
+  ]
+}

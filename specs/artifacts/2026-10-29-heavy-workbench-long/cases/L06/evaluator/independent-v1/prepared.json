@@ -1,0 +1,58 @@
+{
+  "scope": "source snapshot and original stdlib scripts only, no solver/GPU/Provider",
+  "source_files": 23,
+  "runs": [
+    {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\replay\\qualify_business_checks.py"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029",
+      "started_utc": "2026-10-29T10:34:13.124157+00:00",
+      "wall_seconds": 0.1217042999342084,
+      "exit_code": 0,
+      "stdout": "commands\\tiny324-nine-contracts.stdout.txt",
+      "stderr": "commands\\tiny324-nine-contracts.stderr.txt"
+    },
+    {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\source-snapshot\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\source-snapshot\\minimum-credit\\witness-credit-input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\source-snapshot\\minimum-credit\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\replay\\minimum-credit-business.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029",
+      "started_utc": "2026-10-29T10:34:13.246357+00:00",
+      "wall_seconds": 0.1407447000965476,
+      "exit_code": 0,
+      "stdout": "commands\\minimum-credit-business.stdout.txt",
+      "stderr": "commands\\minimum-credit-business.stderr.txt"
+    },
+    {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\source-snapshot\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\source-snapshot\\full-v1\\instance.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\source-snapshot\\minimum-credit\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029\\replay\\original-credit-same-plan.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\l06-cheap-independent-review-20261029",
+      "started_utc": "2026-10-29T10:34:13.387709+00:00",
+      "wall_seconds": 0.13886529998853803,
+      "exit_code": 2,
+      "stdout": "commands\\original-credit-same-plan.stdout.txt",
+      "stderr": "commands\\original-credit-same-plan.stderr.txt"
+    }
+  ],
+  "source_snapshot_utc": "2026-10-29T10:34:13.530285+00:00"
+}

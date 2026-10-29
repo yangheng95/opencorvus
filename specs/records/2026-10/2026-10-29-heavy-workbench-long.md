@@ -169,3 +169,51 @@ R9当前189叶总100分，其中14个critical质量叶共9分，阈值null；公
 两个新LR的真实start已投影同一public profile，.001/.01分别完成11000 Adam后切换；初始化与默认LR逐参数最大差0。当前私有资格入口未来使用--profile/--config-id，从唯一注册记录读problem/seed/LR/更新数，3个旧活跃命令使用各自已捕获旧源，不把新源码强行当旧执行身份。两新CID、源/profile/common源副本和原始活动分别在外部对应目录，启动/初始化证据在evaluator/learning-rate-selection/。这是补完整父选择缺口，不是候选或重复实验。
 
 下一轮：先检查本表五个events/trace和进程；代表配置自然终态后封存原件、逐尝试终态计数与独立完整网格指标/参数梯度，完成三LR父选择再做该真实父的晚期路径和谱比较。既有旧基点NN200/恢复只保留其限定资格，不冒充新父/完整研究。按新选择规则收集各PDE可达见证与受控退化、零/常数/解析初值延拓对照，制定有科学意义的质量目标，若协议不足以可达则调整研究范围，不能按当前误差倒填宽松阈值。清洁重训和独立复核仍必需，核准完整合同后冻结，再用已经修好的无总量截断Inspect薄启动运行真实长程OpenCorvus，候选只获public。之后同一冻结rubric实际评价和新鲜Codex对照，两方好则升级；其余九题升级与审查仍未完成，整个目标继续。
+
+## 09:37 UTC接续：终态实证与其余九题并行审查
+
+五个已登记资格仍推进，未重复启动。当前观察默认convection20900、reaction21000、wave17500、两新增LR各1300次L-BFGS接受；不是末态。上一轮提交2ac423edc已正常fetch/merge/全待推集合审查/push，完整pre-push现行检查和secret scan0通过；本任务无未提交文件，其他任务约190项修改保留。
+
+主agent可独立补足的真实边界是native L-BFGS零步：现有reader必要计数已修，但合成零步声明不是native方向导数保护的真实执行证据。影响只在评估者数值资格，不改候选要求/优化轨迹/生产调度。先用独立Torch checker现有objective和权威点，在实际四层100宽有限网络（全零权重、output bias=2e-8）上调用原生Torch2.7.1 LBFGS一次，完整保存前后8数组、真实closure、native n_iter/步长/方向导数、独立重算gradient与loss。预期小非零梯度高于1e-9而gᵀd保护触发零参数变化；若不触发就保留真实结果并调查，不编造stalled。只用自有无网络CPU容器，GPU五任务不受干预；该构造是具名边界资格，不是初始化合同参考解或候选成绩。独立NumPy从前后导出重算并核对实际终态语义，不让文件一致代替功能证据。
+
+另按用户十题目标，继续委托既有benchmark_review单层只读审查旧H02-H10全部公开输入/合同和旧诊断范围，输出可实施的九题升级缺口、依赖链、建设性/低质量见证及真实checker要求，禁止再委托。独立目录D:/opencorvus-benchmark-runs/heavy-long-nine-upgrade-review-20261029/。这是其余九题设计/证据审查，尚不是题目已升级或小时级通过；主agent仍负责后续输入、实现、实跑与复核。无新候选、Provider、UI或用户进程操作。
+
+## 用户纠正：便宜实验优先（10:23 UTC后优先于旧长跑接续）
+
+用户明确问“卡了吧”“gpu跑几个小时了，怎么这么久”，继而要求“从便宜的实验开始做”。已说明：GPU几小时是主agent资格实验，不是新的OpenCorvus正式评估；把5组完整训练并发当准备前置拖慢交付，不能包装成候选小时级证明。没有用户总量预算限制，但实验应按信息增益/实际成本排序。
+
+已逐一校验自有名称、Docker CID、科学镜像及D:/opencorvus-benchmark-runs挂载，**可逆暂停**5个GPU资格和L06的成本B&B容器，保留内存/现有文件；未杀进程、未重启Docker/WSL、未操作用户服务。原件D:/opencorvus-benchmark-runs/cheap-first-20261029/pause-receipt.json。不是数学失败、收敛或终态，不能因旧指令“继续长任务”自动恢复全部。自动化保持运行以推进便宜检查，整个用户目标未完成。
+
+新次序：秒级口径/契约和手算→可穷举的小闭环→分钟级代表验证与独占增量成本测量→有明确新假设/所需证据的必要长跑；每层结论不能越级代替最终业务。先用现有checkpoint便宜重算，复用已完成验证；不重复同一实验，不新加总token/总墙钟截断、不拖慢正确实现。若需恢复，只选信息收益明确、剩余增量便宜的一组并先测短段成本，不能同时恢复5组，也不能把全部注册配置的评估侧完整重训当所有pilot的先决条件。科学质量目标与完整合同仍须在正式评分前冻结，不能以“便宜”为由降低质量或用草案宣称完成。
+
+已立即完成低成本实证：三个已存accepted-120权重独立NumPy重算各约.3秒，结果原件cheap-first-20261029/pinn-early-120-endpoints.json；它们L2RE约convection.921/reaction.952/wave.592，说明早期低loss不等于解已复现，不能将partial当终态或给成功分。L06另一个最小信用问题实际CPU35.1秒自然完成，统一额度5369分/solver下界同值；不复用建模矩阵的整数业务递推约.011秒核对三场景完整可行，旧5000额度同计划在第3周触发cash_limit。运营成本51263分，未证明成本最优或1%目标。该问题便宜地解释了初始构造为何不可行，比先做十几分钟成本优化更有信息收益。
+
+五GPU暂停前最近接受数约26500/25700/22100/6900/6900，参考训练不是候选成绩。L06成本优化暂停时仍有真实进展，不能因暂停伪称求解结束。旧最新活跃表的“仍推进”已由本节暂停状态替代；下次先读取pause receipt及Docker State.Paused，保持本用户最新优先级。
+
+### 下一项便宜闭环：S06管线smoke，不冒充重型case
+
+在修后v2小例的完整穷举、模型/递推独立复核基础上，先冻结一个单独命名的HeavyWorkBench-Smoke/0.1.0-dev、S06。目的只验证公开输入→原生OpenCorvus流式Task→封存→完整清洁源码复跑→独立业务checker的管线，不能算十题之一、小时级资格、难度成绩或触发重型任务两方高分升级。它只含两个二周单原料实例，第二个改供应商A单位价以要求策略翻转；标准库即可，CPU毫秒级求解、无GPU。
+
+先补齐公开TASK/两份JSON、输出CLI和机器合同，评估端先用现有小模型/已独立验证checker核定两实例可达/目标，再经既有单层独立审查冻结。只导出public文件到新自有项目，数据/评估器/参考解/旧答案/凭据不进项目。不修改任何生产调度/LLM路由/工具白名单，复用现有Inspect opencorvus_benchmark及native Task；当前薄launcher已支持新身份/null总量，故不新增runner。仍成对暂存auth/models并核验真实Provider请求模型，保持全流式，计时/用量如实记录。没有新总量截断，不因小任务人为拖长。
+
+当前主仓工作区另有用户/并行改动，smoke只能报告实际运行源与dirty状态，不能把Git HEAD单独冒充完整runtime身份，comparable=false。Inspect lifecycle scorer只记执行事实，两个计划的真实业务由评估侧在冻结原始输入上重新运行候选solve.py并进入独立checker，不能自报成本或Task completed代替。若管线出现真实共享调度/终态问题，仍按AGENTS共性审计，不用“smoke太小”掩盖。
+
+S06已取得独立小合同冻结许可，独立标量穷举分别4.5/5.5、变价后沿用原最优为8.5，验证策略确须变化。已按审查澄清期望可有理数、summary不暗设字段键。仅定义冻结，四项实际结果均待执行；运行根`D:/opencorvus-benchmark-runs/smoke-S06-20261029-24ff4844`，只导出public三文件，评估器/参考/审查/凭据未进项目。默认旧data/auth没有匹配catalog不等于无凭据；按应用路径找到现成完整配对源并仅验证metadata：OAuth有效、完整catalog包含gpt-6.1-sol。随后由现有launcher验证真实流式请求，不输出凭据内容。
+
+## 便宜优先实施结果：实际S06闭环与成本分账
+
+原生Task `tsk_g00VZR9KuE00aKSMSF10`已自然completed/inactive，生命周期650.922秒；Inspect实际解析success、1/1完成，lifecycle accuracy1不能替代业务正确性。真实模式Task/code、builtin/base 2026.10.14.1、openai/gpt-6.1-sol，实际参与者为orchestrator和1个base-tester；不能声称无子agent。候选独立仓终态HEAD40487f33083e90d32816eec86368b13c2232b35b、status空；主运行源注册HEAD9c54d33aafcdbd330631ef2d3391de3f45960c86并有其他任务dirty状态，文件清单已保存，comparable=false。2ac423edc只是此前本任务提交，不是这次实际注册runtime身份。
+
+结束后封存solve.py/README/原始两份plan与summary，再在仅含源码和冻结输入的新目录执行两次Python、四次独立业务checker。主方完整复跑和检查合计.8182369秒，两实例可行、独立成本4.5/5.5；候选不是只读旧结果，真实源码路径已审读。原生约11分钟与本地不足1秒分别计量，前者不作数学难度、小时级有效工作或成熟benchmark证据。Inspect可选control surface因Windows缺AF_UNIX发warning，样本本身success；未冒称可选控制面已修复。
+
+实际Provider source-reader原件73次请求均gpt-6.1-sol、streaming=true、HTTP200、identity observed、settled/eof；293是递增快照文件数，不是请求数。内部usage共4,966,437 tokens，其中cache_read4,587,776/input358,609/output17,766/reasoning计数2,286；Task lineage4,933,220，预检其他33,217。内部cost=0不是外部免费凭据，真实货币账单未知。实际模型请求与用量计数原件只有元数据，不归档隐藏推理或凭据。运行根和已选择原件见`cases/L06/smoke/evaluator/actual-run/README.md`。
+
+已在Task终态后停止本次自有listener，server-result中runtimeDisposed/credentialsRemoved=true；原auth/models源未改变。六个昂贵容器最新观察仍Paused，没有再开GPU或成本长求解。暂停保留内存/已有文件，未新生成晚期checkpoint，未来测时必须扣除暂停区间。独立S06 post-review正在单层另目录核对源码、两次新复跑、独立枚举与实际stream/终态原件；最终四条件结论另记，不能由本段代签。
+
+L06 v1“5369完整可行”的早期描述仅指旧期末仓容模型；后续独立审查抓到周内峰值漏项，v1不是物理执行见证。当前v2逐阶段容量240/100的完整动作已独立验算，信用5369只是可达上界，未复用旧最优界；成本51263不是最优。修复后的22个真实完整实例错误/正确契约、微型648/12/4.5与clairvoyant1296/54/4、925前缀业务检查见L06记录及v2独立原件。新增9题审查只完成设计诊断，十题未成熟/未冻结。
+
+下一轮优先继续便宜工作：先用现有v2完整可行见证和严格checker完成各机制的活跃/决策翻转证据、质量分档和交付链设计；如需成本界，先规划并测完整模型连续松弛等秒级下界，不直接恢复整数成本搜索。L01先复用已存权重/已有方法证据，未获新假设和短段成本前保持GPU暂停。独立小闭环之后无需重复启动相同LLM smoke；仍缺重型L06完整合同/成本参考界、L01结果锚点与冻结、真正长程新pilot/同规则Codex对照及全部十题升级，持续目标与20分钟心跳保持ACTIVE，不报完成。
+
+独立post-review现已终态，四项smoke均通过，另目录两次真实执行及四次checker合计.9233275秒；各题独立完整枚举仍648组合/12可行，精确9/2、11/2。另从原始source-reader重算Task lineage71请求、preflight2请求，全部目标模型/stream/HTTP200；独立只读Inspect header success，没有读取隐藏推理或新调用模型。最终机器判定`cases/L06/smoke/evaluator/final-smoke-assessment.json`、报告和完整原件`independent-post-review/`；这是非盲管线通过，不是重型难度、小时级或套件成熟通过。原早期pending收据原样保留。
+
+本轮交付范围仅上述benchmark记录、资格/独立审查与S06公开输入/实际证据，生产源码无修改。当前`bun run docs:check`通过351 ops/26 groups；新增包131份JSON严格有限数解析、29份Python语法、30个相对链接通过，只属包装检查，不替代22个业务CLI、枚举、真实Task或两方冷复跑。原始求解/Inspect stdout保留zip内字节，不为diff格式检查重写原件；自有生成bytecode未交付。三个共享索引只暂存本任务精确hunk，其他用户差异保留；提交/push遵循当前主分支与完整待推集合审查。心跳已更新为便宜优先并保持ACTIVE。

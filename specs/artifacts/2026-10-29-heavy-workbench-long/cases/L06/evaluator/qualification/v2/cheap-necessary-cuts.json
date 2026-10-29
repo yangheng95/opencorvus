@@ -1,0 +1,32 @@
+{
+  "scope": "cheap algebraic physical cuts, no optimization/model/training",
+  "elapsed_seconds": 0.0014142999425530434,
+  "cases": [
+    {
+      "instance": "v1",
+      "physical_product_capacity": 42,
+      "maximum_mandatory_weekly_delivery_volume": {
+        "scenario": "demand_shift",
+        "week": 13,
+        "volume": 66
+      },
+      "initial_raw_volume": 170,
+      "raw_capacity": 220,
+      "necessary_conditions_hold": false,
+      "interpretation": "Only necessary conditions. Failure proves infeasibility under all-receive/produce-before-ship stage semantics; passing does not prove a feasible plan."
+    },
+    {
+      "instance": "v2",
+      "physical_product_capacity": 100,
+      "maximum_mandatory_weekly_delivery_volume": {
+        "scenario": "demand_shift",
+        "week": 13,
+        "volume": 66
+      },
+      "initial_raw_volume": 170,
+      "raw_capacity": 240,
+      "necessary_conditions_hold": true,
+      "interpretation": "Only necessary conditions. Failure proves infeasibility under all-receive/produce-before-ship stage semantics; passing does not prove a feasible plan."
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "invocation": "$env:PYTHONIOENCODING='utf-8'\npython -B D:/opencorvus-benchmark-runs/s06-smoke-freeze-review-20261029/finalize_review.py",
+  "tool_result": {
+    "chunk_id": "9b1bee",
+    "wall_time_seconds": 0.7207655,
+    "exit_code": 0,
+    "original_token_count": 50,
+    "output": "{'S06_definition_freeze_approved': True, 'base': '9/2', 'price_change': '11/2', 'actual_smoke_results': 'not run', 'heavy_case_increment': 0, 'comparable': False, 'source_changes_since_review': []}\r\n"
+  }
+}

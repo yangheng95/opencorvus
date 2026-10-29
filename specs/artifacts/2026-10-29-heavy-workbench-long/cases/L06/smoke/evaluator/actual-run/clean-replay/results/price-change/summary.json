@@ -1,0 +1,30 @@
+{
+  "expected_cost_minor": {
+    "numerator": 11,
+    "denominator": 2
+  },
+  "scenarios": {
+    "one": {
+      "total_cost_minor": 4,
+      "minimum_cash_minor": 100,
+      "weekly_cash_minor": [
+        100,
+        101
+      ],
+      "final_cash_minor": 101,
+      "final_receivables_minor": 5
+    },
+    "two": {
+      "total_cost_minor": 7,
+      "minimum_cash_minor": 98,
+      "weekly_cash_minor": [
+        100,
+        98
+      ],
+      "final_cash_minor": 98,
+      "final_receivables_minor": 10
+    }
+  },
+  "method": "exhaustive integer search with memoization",
+  "states_evaluated": 31
+}

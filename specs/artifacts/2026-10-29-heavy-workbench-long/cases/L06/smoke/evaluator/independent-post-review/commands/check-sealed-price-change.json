@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\s06-smoke-post-review-20261029\\evaluator-tools\\check_l06.py",
+    "--input",
+    "D:\\opencorvus-benchmark-runs\\s06-smoke-post-review-20261029\\frozen-inputs\\price-change.json",
+    "--plan",
+    "D:\\opencorvus-benchmark-runs\\s06-smoke-post-review-20261029\\source-snapshot\\original-results\\price-change\\plan.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\s06-smoke-post-review-20261029\\business-checks\\sealed-price-change.json"
+  ],
+  "cwd": "D:\\opencorvus-benchmark-runs\\s06-smoke-post-review-20261029",
+  "started_utc": "2026-10-29T11:52:38.956697+00:00",
+  "seconds": 0.22783470014110208,
+  "exit_code": 0,
+  "stdout": "commands\\check-sealed-price-change.stdout.txt",
+  "stderr": "commands\\check-sealed-price-change.stderr.txt"
+}

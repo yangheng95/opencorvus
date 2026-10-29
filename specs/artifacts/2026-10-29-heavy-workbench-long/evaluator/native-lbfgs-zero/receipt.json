@@ -1,0 +1,38 @@
+{
+  "scope": "constructed actual full-width PINN/native boundary only; not registered initialization or candidate result",
+  "created_at": "2026-10-29T09:40:36.467803+00:00",
+  "torch": "2.7.1+cu128",
+  "device": "cpu",
+  "problem": "convection",
+  "status": "optimizer_stalled",
+  "attempts": 1,
+  "accepted_updates": 0,
+  "native_iterations": 1,
+  "native_function_evaluations": 1,
+  "closure_calls": 1,
+  "closures": [
+    {
+      "call": 1,
+      "loss": 0.17877094972067056,
+      "gradient_inf": 1.4357541898667445e-08,
+      "trial_displacement_inf": 0.0
+    }
+  ],
+  "parameter_step_inf": 0.0,
+  "loss_before": 0.17877094972067056,
+  "loss_after": 0.17877094972067056,
+  "gradient_before_inf": 1.4357541898667445e-08,
+  "gradient_after_inf": 1.4357541898667445e-08,
+  "native_directional_derivative": -2.0613900937199117e-16,
+  "native_trial_step": 1.0,
+  "tolerance_grad": 1e-09,
+  "tolerance_change": 1e-15,
+  "step_seconds": 0.2857012809254229,
+  "checks": {
+    "stalled_state": true,
+    "gradient_exceeds_convergence": true,
+    "native_direction_guard": true,
+    "zero_step": true,
+    "one_attempt_zero_accepted_one_native_one_closure": true
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "scope": "current v2 snapshot; standard library replay only; no solver import/run",
+  "source_files": 118,
+  "runs": [
+    {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\replay\\qualify_business_checks.py"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029",
+      "started_utc": "2026-10-29T10:55:37.311678+00:00",
+      "seconds": 0.4338376997038722,
+      "exit_code": 0,
+      "stdout": "commands\\v2-tiny-enumeration.stdout.txt",
+      "stderr": "commands\\v2-tiny-enumeration.stderr.txt"
+    },
+    {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\replay\\qualify_full_business_checks.py"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029",
+      "started_utc": "2026-10-29T10:55:37.746106+00:00",
+      "seconds": 4.429346899967641,
+      "exit_code": 0,
+      "stdout": "commands\\v2-twenty-cli-contracts.stdout.txt",
+      "stderr": "commands\\v2-twenty-cli-contracts.stderr.txt"
+    }
+  ],
+  "original_tiny_solver_not_repeated": true,
+  "copied_solver_record_use": "compares existing tiny record to exhaustive result, not a new solver result"
+}

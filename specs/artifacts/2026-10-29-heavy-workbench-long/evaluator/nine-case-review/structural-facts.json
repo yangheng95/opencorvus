@@ -1,0 +1,121 @@
+{
+  "H03": {
+    "values": {
+      "currency": [
+        "CNY",
+        "USD"
+      ],
+      "fx": [
+        "1",
+        "7.1"
+      ],
+      "status": [
+        "paid",
+        "posted",
+        "void"
+      ]
+    },
+    "all_original_amounts_integral": true
+  },
+  "H04": {
+    "customers": 71,
+    "unique_orders": 600,
+    "fractional_total_examples": [
+      {
+        "id": "O0001",
+        "customer": "C001",
+        "currency": "CNY",
+        "total": "13.01"
+      },
+      {
+        "id": "O0002",
+        "customer": "C002",
+        "currency": "CNY",
+        "total": "14.02"
+      },
+      {
+        "id": "O0003",
+        "customer": "C003",
+        "currency": "CNY",
+        "total": "15.03"
+      },
+      {
+        "id": "O0004",
+        "customer": "C004",
+        "currency": "USD",
+        "total": "16.04"
+      }
+    ]
+  },
+  "H05": {
+    "distinct_joint_identities": 720,
+    "distinct_event_ids": 240,
+    "extra_transmissions": 103,
+    "payload_conflict_identities": 0
+  },
+  "H06": {
+    "sku_count": 6,
+    "unit_cost_constant_within_sku": true,
+    "source_columns": [
+      "sku",
+      "week",
+      "demand",
+      "capacity",
+      "unit_cost"
+    ],
+    "public_protocol": "unlimited same-week expedite, separate SKU capacities"
+  },
+  "H07": {
+    "appendices_parsed": 30,
+    "appendix_csv_different_studies": [],
+    "populations": [
+      "adult_training"
+    ],
+    "source_kinds": [
+      "fictional_study"
+    ]
+  },
+  "H08": {
+    "roles": [
+      {
+        "role": "analyst",
+        "person_days": 13
+      },
+      {
+        "role": "engineer",
+        "person_days": 38
+      },
+      {
+        "role": "trainer",
+        "person_days": 19
+      }
+    ],
+    "dependency_bounds": [
+      {
+        "id": "dependency_only",
+        "days": 26,
+        "cost": 67400
+      }
+    ]
+  },
+  "H10": {
+    "sites": [
+      "A",
+      "B",
+      "C"
+    ],
+    "tariffs": [
+      0.3,
+      0.62,
+      0.95
+    ],
+    "nonnegative_loads": true,
+    "observed_columns": [
+      "site",
+      "day",
+      "hour",
+      "kwh",
+      "tariff"
+    ]
+  }
+}

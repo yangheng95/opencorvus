@@ -4,7 +4,7 @@
 
 L01针对Rathore等ICML2024论文《Challenges in Training PINNs: A Loss Landscape Perspective》，包括独立实现、三方程比较、配对实验、优化器数值验证、真实训练、恢复、谱诊断、图表与可清洁复训的论文。工作量来自实际科学问题和依赖链，不设最少运行时长，不用sleep或空转达标；总模型token/总墙钟不设截止。
 
-拟公开合同见[public/TASK.md](public/TASK.md)，尚须根据真实收敛资格和独立审查收敛后冻结。当前只有L01在进行环境/数值资格；不能把原有其余九题或整个十题套件宣称为已完成小时级升级。
+拟公开合同见[public/TASK.md](public/TASK.md)，尚须根据真实收敛资格和独立审查收敛后冻结。L01仍未冻结；L06已有便宜数学/阶段物理资格，但尚无冻结重型公开合同。S06是另立身份的微型管线测试，不计十题。不能把旧题、资格或整个套件宣称为已完成小时级升级。
 
 [public/profile.json](public/profile.json)列出19基础配置、5续训分支及有效父状态选择规则；[rubric.draft.json](rubric.draft.json)含189个二元原子叶、100分组权重，**其中9分结果锚点待校准，禁止发布总成绩**。原子数量不是难度证据。公开论文、数据与各自许可在`public/`，评估侧原官方rubric、真实资格源码/导出/回执在[evaluator/](evaluator/README.md)，不进入候选项目。
 
@@ -29,3 +29,5 @@ L01针对Rathore等ICML2024论文《Challenges in Training PINNs: A Loss Landsca
 [新增质量指标独立复核](evaluator/quality-metrics-review/REVIEW.md)实际重跑18项测试、三份真实导出CLI与独立CPU自动微分；完整评价网格残差和逐条件族指标匹配，低质量网络/解析诊断分开保留。没有填写R9阈值或批准freeze。当前三代表资格及另两注册convection学习率仍按Recall继续，尚无新候选成绩。
 
 [机器交付独立审查](evaluator/manifest-review/REVIEW.md)实际找出并复核修复了项目/输出根混淆、未开始记录的非null引用、plateau/stalled声明计数矛盾；最终15项manifest测试与独立端点/两种tie探针通过。当前工具全范围[36项实跑](evaluator/artifact-contract-validation/README.md)仅证明数值与结构合同。R9已拆为14个pending关键质量叶、共9分，阈值仍null，完整选择可达性仍待终态证据。
+
+用户最新要求[便宜实验优先](evaluator/cheap-first/README.md)：六个自有昂贵容器已可逆暂停；先做必要条件/枚举/短程，而非同时完整训练。[九题独立审查](evaluator/nine-case-review/REVIEW.md)实跑28次旧checker并明确升级缺口。[L06](cases/L06/README.md)低成本审查发现并修正了期末/阶段仓容、输入维度/概率和严格JSON问题，仍未证明成本最优或小时级。[S06](cases/L06/smoke/README.md)真实原生完成、数学最优及两方清洁源码复跑均通过微型合同；它不计入十题，不证明重型难度。

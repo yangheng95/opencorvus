@@ -1,0 +1,15 @@
+{
+  "scope": "v2 bounded tiny exhaustive search, early production allowed; not full case optimality",
+  "enumeration": {
+    "tested": 648,
+    "feasible": 12,
+    "best_exact": "9/2"
+  },
+  "clairvoyant_control": {
+    "tested": 1296,
+    "feasible": 54,
+    "best_exact": "4"
+  },
+  "mip_objective_and_bound_match": true,
+  "completeness": "Demand at week0 forces early production>=1, line capacity forces<=2; common stage requires same early quantity; final-zero determines last production. All bounded purchases and their induced freight activations are enumerated."
+}

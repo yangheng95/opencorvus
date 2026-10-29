@@ -1,0 +1,41 @@
+{
+  "registration": {
+    "benchmark": "HeavyWorkBench-Smoke/0.1.0-dev",
+    "case": "S06",
+    "model": "openai/gpt-6.1-sol",
+    "inactivitySeconds": 600,
+    "tokenBudgetScope": "task-session-lineage",
+    "budget": {
+      "total_model_tokens": null,
+      "total_wall_seconds": null
+    },
+    "runRoot": "D:/opencorvus-benchmark-runs/smoke-S06-20261029-24ff4844",
+    "project": "D:/opencorvus-benchmark-runs/smoke-S06-20261029-24ff4844/project",
+    "runtimeSourceCommit": "9c54d33aafcdbd330631ef2d3391de3f45960c86",
+    "mode": "cheap-first-native-pipeline-smoke",
+    "scope": "not one of ten heavy tasks; no difficulty or hours claim",
+    "comparable": false,
+    "occurrence": "cheap-first-S06-1",
+    "registeredAt": "2026-10-29T11:23:25.075042+00:00"
+  },
+  "pid": 84392,
+  "startedAt": "2026-10-29T11:23:26.441Z",
+  "comparable": false,
+  "projection": {
+    "provider": "openai",
+    "model": "gpt-6.1-sol"
+  },
+  "preflight": {
+    "sessionID": "ses_hLeu98cbu7fIj3qfMkma",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "outcome": "owned_server_stop_requested_after_task_settlement",
+  "cleanup": {
+    "runtimeDisposed": true,
+    "credentialsRemoved": true
+  },
+  "endedAt": "2026-10-29T11:47:08.325Z"
+}

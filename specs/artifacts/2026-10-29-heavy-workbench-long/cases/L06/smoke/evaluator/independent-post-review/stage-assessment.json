@@ -1,0 +1,123 @@
+{
+  "assessment": "independent_nonblind_S06_smoke_post_review",
+  "completed_utc": "2026-10-29T11:59:47.453441+00:00",
+  "task_id": "tsk_g00VZR9KuE00aKSMSF10",
+  "checks": [
+    {
+      "id": "native-completion",
+      "passed": true,
+      "evidence": [
+        "api-terminal-observation.json",
+        "provider-independent-verification.json",
+        "inspect-independent-header.json"
+      ],
+      "native_seconds": 650.922
+    },
+    {
+      "id": "sealed-business-feasibility",
+      "passed": true,
+      "evidence": [
+        "business-checks/sealed-base.json",
+        "business-checks/sealed-price-change.json",
+        "independent-artifact-checks.json"
+      ]
+    },
+    {
+      "id": "known-small-optima",
+      "passed": true,
+      "exact_costs": {
+        "base": "9/2",
+        "price-change": "11/2"
+      },
+      "evidence": [
+        "independent-optima/base.json",
+        "independent-optima/price-change.json",
+        "independent-artifact-checks.json"
+      ]
+    },
+    {
+      "id": "full-clean-source-replay",
+      "passed": true,
+      "evidence": [
+        "cold-replay-initial-inventory.json",
+        "commands/solve-base.json",
+        "commands/solve-price-change.json",
+        "replay-assessment.json"
+      ]
+    }
+  ],
+  "smoke_pass": true,
+  "timing": {
+    "reviewer_candidate_runs_seconds": [
+      0.14323339983820915,
+      0.1410032999701798
+    ],
+    "reviewer_candidate_runs_total_seconds": 0.28423669980838895,
+    "reviewer_four_checker_runs_seconds": [
+      0.12850000010803342,
+      0.13978700013831258,
+      0.22783470014110208,
+      0.14296909980475903
+    ],
+    "reviewer_four_checker_runs_total_seconds": 0.6390908001922071,
+    "reviewer_solve_and_checker_total_seconds": 0.923327500000596,
+    "scope": "subprocess wall time on this host; does not include source inspection/metadata review; not a ranking"
+  },
+  "cost_scope": "synthetic expected operational minor units only: base4.5/price-change5.5; no LLM monetary cost ranking",
+  "native_actor_footprint": [
+    {
+      "agent": "orchestrator",
+      "kind": "orchestrator",
+      "sessionID": "ses_-zUQYqdUXzzzSdmeCJtp",
+      "parentSessionID": "ses_-zUQYqepyzzt9GivN0pf"
+    },
+    {
+      "agent": "base-tester",
+      "kind": "delegated-worker",
+      "sessionID": "ses_hMoZi4X5qJZeqrz4TEnF",
+      "parentSessionID": "ses_-zUQYqdUXzzzSdmeCJtp"
+    }
+  ],
+  "native_child_count": 1,
+  "single_agent_claim": false,
+  "reviewer_additional_delegation": false,
+  "source_read_review": "sealed solve.py uses supplied input data for finite exact search; reads no prior output; imports only stdlib; README and summary content were not new scoring keys",
+  "runtime_source_identity": {
+    "registered_commit": "9c54d33aafcdbd330631ef2d3391de3f45960c86",
+    "server_commit": "9c54d33aafcdbd330631ef2d3391de3f45960c86",
+    "worktree_head": "9c54d33aafcdbd330631ef2d3391de3f45960c86",
+    "dirty_file_count": 183,
+    "meaning": "runtime commit alone is not fully reconstructable executed source; dirty worktree retained; comparable false"
+  },
+  "candidate_git": {
+    "head": "40487f33083e90d32816eec86368b13c2232b35b",
+    "status": []
+  },
+  "cleanup_from_server_receipt": {
+    "outcome": "owned_server_stop_requested_after_task_settlement",
+    "cleanup": {
+      "runtimeDisposed": true,
+      "credentialsRemoved": true
+    },
+    "reviewer_live_service_or_credentials_access": false
+  },
+  "inspect_scope_note": "none/none is the adapter placeholder; actual provider model is the raw-audited openai/gpt-6.1-sol; lifecycle score is not business math score",
+  "warnings_from_main_receipt": "Windows optional AF_UNIX control-plane warning was reported by main evaluator; sample/header successful. Reviewer did not read reasoning-bearing stdout or claim warning repaired.",
+  "claims": {
+    "review_type": "non-blind development review",
+    "comparable": false,
+    "heavy_case_count_increment": 0,
+    "L06_heavy_case_passed": false,
+    "L06_one_percent_cost_approved": false,
+    "hours_validated": false,
+    "benchmark_mature": false,
+    "blind_or_single_agent_certification": false
+  },
+  "constraints": {
+    "new_provider_or_native_task": false,
+    "gpu_or_milp": false,
+    "container_or_user_process_action": false,
+    "repo_writes": false,
+    "credential_or_reasoning_body_read": false
+  }
+}

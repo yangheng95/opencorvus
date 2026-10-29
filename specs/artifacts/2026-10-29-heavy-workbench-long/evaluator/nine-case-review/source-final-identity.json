@@ -1,0 +1,357 @@
+{
+  "scope": "review source identity only, not functionality",
+  "sources": [
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/suite.json",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/reference_calculations.py",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "script/benchmark/heavy_workbench.py",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench-long/README.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/records/2026-10/2026-10-29-heavy-workbench-long.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/README.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/PROTOCOL.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/COMPARISON.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/REVIEW.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/RECORDS.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/VALIDATION.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/validation/checker-replay.json",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/cases/H02.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H02/context.json",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H02/records.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H02/source-notes.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H02/forecasts.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H02/leakage_probe.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H02/metrics.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H02/splits.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/cases/H03.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H03/context.json",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H03/records.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H03/source-notes.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H03/cash.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H03/ledger.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H03/status_audit.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H03/variance.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/cases/H04.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H04/context.json",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H04/legacy_reader.py",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H04/records.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H04/source-notes.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H04/audit.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H04/customers.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H04/orders.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H04/refunds.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/cases/H05.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H05/context.json",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H05/legacy_service.py",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H05/records.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H05/source-notes.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H05/duplicates.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H05/ledger.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H05/replay.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H05/totals.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/cases/H06.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H06/context.json",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H06/records.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H06/source-notes.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H06/baseline.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H06/capacity.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H06/demand.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H06/landed.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/cases/H07.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H07/context.json",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H07/records.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H07/source-notes.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H07/study-dossiers.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H07/bias.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H07/effects.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H07/pooled.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H07/screening.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/cases/H08.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H08/context.json",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H08/records.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H08/scope-brief.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H08/source-notes.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H08/bounds.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H08/costs.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H08/earliest.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H08/roles.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/cases/H09.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H09/context.json",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H09/records.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H09/source-notes.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H09/cohorts.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H09/mastery.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H09/scores.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H09/support.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/cases/H10.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H10/context.json",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H10/records.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/inputs/H10/source-notes.md",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H10/baseline.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H10/daily.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H10/peak.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    },
+    {
+      "repo_relative": "specs/artifacts/2026-10-29-heavy-workbench/oracle/H10/stress.csv",
+      "same_bytes_as_review_snapshot_at_final_check": true
+    }
+  ]
+}

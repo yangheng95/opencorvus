@@ -1,0 +1,138 @@
+{
+  "common": {
+    "scope": "independent scalar end-to-end tiny domain; no solver import/run",
+    "common_commitments": true,
+    "tested": 648,
+    "feasible": 12,
+    "best_exact": "9/2",
+    "disagreements": [],
+    "completeness": "qA0=0..1, qA1=0 terminal, qB0/qB1=0..2; week0 production1..2; terminal FG0 fixes week1 production; trucks determined by positive MOQ. Common stage also fixes week0 production. Every remaining bounded choice is covered."
+  },
+  "clairvoyant": {
+    "scope": "independent scalar end-to-end tiny domain; no solver import/run",
+    "common_commitments": false,
+    "tested": 1296,
+    "feasible": 54,
+    "best_exact": "4",
+    "disagreements": [],
+    "completeness": "qA0=0..1, qA1=0 terminal, qB0/qB1=0..2; week0 production1..2; terminal FG0 fixes week1 production; trucks determined by positive MOQ. Common stage also fixes week0 production. Every remaining bounded choice is covered."
+  },
+  "full": {
+    "scope": "v2 full independent prefix/physical-stage/financial arithmetic, not global optimization",
+    "all_checks_passed": true,
+    "check_count": 925,
+    "seconds": 0.010583699680864811,
+    "expected_cost_exact": "51263",
+    "caps": {
+      "raw": 240,
+      "finished": 100
+    },
+    "credit5369_is_only_feasible_upper_bound": true,
+    "scenarios": {
+      "base": {
+        "total_cost_minor": 50929,
+        "minimum_cash_minor": -5369,
+        "terminal_cash_minor": 28421,
+        "terminal_receivable_minor": 24150,
+        "raw_peak": [
+          227,
+          14
+        ],
+        "finished_peak": [
+          94,
+          10
+        ]
+      },
+      "supplier_disruption": {
+        "total_cost_minor": 51557,
+        "minimum_cash_minor": -5369,
+        "terminal_cash_minor": 27793,
+        "terminal_receivable_minor": 24150,
+        "raw_peak": [
+          223,
+          7
+        ],
+        "finished_peak": [
+          96,
+          13
+        ]
+      },
+      "demand_shift": {
+        "total_cost_minor": 51657,
+        "minimum_cash_minor": -5369,
+        "terminal_cash_minor": 29853,
+        "terminal_receivable_minor": 25230,
+        "raw_peak": [
+          230,
+          11
+        ],
+        "finished_peak": [
+          91,
+          5
+        ]
+      }
+    }
+  },
+  "boundaries": [
+    {
+      "label": "overflow-exponent-format",
+      "exit_code": 2,
+      "strict_json_result": false,
+      "strict_json_error": "nonfinite JSON token Infinity",
+      "result": null,
+      "raw_result": "{\n  \"business_feasible\": false,\n  \"error\": \"plan_contract\",\n  \"where\": \"format\",\n  \"actual\": Infinity,\n  \"required\": \"l06-plan/1\"\n}\n"
+    },
+    {
+      "label": "invalid-instance-plus-bad-plan",
+      "exit_code": 2,
+      "strict_json_result": true,
+      "strict_json_error": null,
+      "result": {
+        "business_feasible": false,
+        "error": "plan_json",
+        "where": "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\invalid-instance-plus-bad-plan\\plan.json",
+        "detail": "Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"
+      },
+      "raw_result": "{\n  \"business_feasible\": false,\n  \"error\": \"plan_json\",\n  \"where\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-cheap-v2-independent-review-20261029\\\\independent-boundaries\\\\invalid-instance-plus-bad-plan\\\\plan.json\",\n  \"detail\": \"Expecting property name enclosed in double quotes: line 1 column 2 (char 1)\"\n}\n"
+    },
+    {
+      "label": "explicit-nan-plan",
+      "exit_code": 2,
+      "strict_json_result": true,
+      "strict_json_error": null,
+      "result": {
+        "business_feasible": false,
+        "error": "plan_json",
+        "where": "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\explicit-nan-plan\\plan.json",
+        "detail": "non-JSON number NaN"
+      },
+      "raw_result": "{\n  \"business_feasible\": false,\n  \"error\": \"plan_json\",\n  \"where\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-cheap-v2-independent-review-20261029\\\\independent-boundaries\\\\explicit-nan-plan\\\\plan.json\",\n  \"detail\": \"non-JSON number NaN\"\n}\n"
+    },
+    {
+      "label": "bool-week-instance",
+      "exit_code": 2,
+      "strict_json_result": true,
+      "strict_json_error": null,
+      "result": {
+        "business_feasible": false,
+        "error": "instance_invalid",
+        "where": "weeks",
+        "detail": "integer in [1,None] required"
+      },
+      "raw_result": "{\n  \"business_feasible\": false,\n  \"error\": \"instance_invalid\",\n  \"where\": \"weeks\",\n  \"detail\": \"integer in [1,None] required\"\n}\n"
+    },
+    {
+      "label": "duplicate-instance-key",
+      "exit_code": 2,
+      "strict_json_result": true,
+      "strict_json_error": null,
+      "result": {
+        "business_feasible": false,
+        "error": "instance_invalid",
+        "where": "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\duplicate-instance-key\\input.json",
+        "detail": "duplicate key format"
+      },
+      "raw_result": "{\n  \"business_feasible\": false,\n  \"error\": \"instance_invalid\",\n  \"where\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-cheap-v2-independent-review-20261029\\\\independent-boundaries\\\\duplicate-instance-key\\\\input.json\",\n  \"detail\": \"duplicate key format\"\n}\n"
+    }
+  ]
+}

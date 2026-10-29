@@ -1,0 +1,157 @@
+[
+  {
+    "label": "overflow-exponent-format",
+    "exit_code": 2,
+    "strict_json_result": false,
+    "strict_json_error": "nonfinite JSON token Infinity",
+    "result": null,
+    "raw_result": "{\n  \"business_feasible\": false,\n  \"error\": \"plan_contract\",\n  \"where\": \"format\",\n  \"actual\": Infinity,\n  \"required\": \"l06-plan/1\"\n}\n",
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\source-snapshot\\v2\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\overflow-exponent-format\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\overflow-exponent-format\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\overflow-exponent-format\\result.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029",
+      "started_utc": "2026-10-29T10:57:18.246756+00:00",
+      "seconds": 0.16364159993827343,
+      "exit_code": 2,
+      "stdout": "commands\\independent-overflow-exponent-format.stdout.txt",
+      "stderr": "commands\\independent-overflow-exponent-format.stderr.txt"
+    }
+  },
+  {
+    "label": "invalid-instance-plus-bad-plan",
+    "exit_code": 2,
+    "strict_json_result": true,
+    "strict_json_error": null,
+    "result": {
+      "business_feasible": false,
+      "error": "plan_json",
+      "where": "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\invalid-instance-plus-bad-plan\\plan.json",
+      "detail": "Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"
+    },
+    "raw_result": "{\n  \"business_feasible\": false,\n  \"error\": \"plan_json\",\n  \"where\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-cheap-v2-independent-review-20261029\\\\independent-boundaries\\\\invalid-instance-plus-bad-plan\\\\plan.json\",\n  \"detail\": \"Expecting property name enclosed in double quotes: line 1 column 2 (char 1)\"\n}\n",
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\source-snapshot\\v2\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\invalid-instance-plus-bad-plan\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\invalid-instance-plus-bad-plan\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\invalid-instance-plus-bad-plan\\result.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029",
+      "started_utc": "2026-10-29T10:57:18.420572+00:00",
+      "seconds": 0.18458819994702935,
+      "exit_code": 2,
+      "stdout": "commands\\independent-invalid-instance-plus-bad-plan.stdout.txt",
+      "stderr": "commands\\independent-invalid-instance-plus-bad-plan.stderr.txt"
+    }
+  },
+  {
+    "label": "explicit-nan-plan",
+    "exit_code": 2,
+    "strict_json_result": true,
+    "strict_json_error": null,
+    "result": {
+      "business_feasible": false,
+      "error": "plan_json",
+      "where": "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\explicit-nan-plan\\plan.json",
+      "detail": "non-JSON number NaN"
+    },
+    "raw_result": "{\n  \"business_feasible\": false,\n  \"error\": \"plan_json\",\n  \"where\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-cheap-v2-independent-review-20261029\\\\independent-boundaries\\\\explicit-nan-plan\\\\plan.json\",\n  \"detail\": \"non-JSON number NaN\"\n}\n",
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\source-snapshot\\v2\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\explicit-nan-plan\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\explicit-nan-plan\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\explicit-nan-plan\\result.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029",
+      "started_utc": "2026-10-29T10:57:18.614213+00:00",
+      "seconds": 0.16834949981421232,
+      "exit_code": 2,
+      "stdout": "commands\\independent-explicit-nan-plan.stdout.txt",
+      "stderr": "commands\\independent-explicit-nan-plan.stderr.txt"
+    }
+  },
+  {
+    "label": "bool-week-instance",
+    "exit_code": 2,
+    "strict_json_result": true,
+    "strict_json_error": null,
+    "result": {
+      "business_feasible": false,
+      "error": "instance_invalid",
+      "where": "weeks",
+      "detail": "integer in [1,None] required"
+    },
+    "raw_result": "{\n  \"business_feasible\": false,\n  \"error\": \"instance_invalid\",\n  \"where\": \"weeks\",\n  \"detail\": \"integer in [1,None] required\"\n}\n",
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\source-snapshot\\v2\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\bool-week-instance\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\bool-week-instance\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\bool-week-instance\\result.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029",
+      "started_utc": "2026-10-29T10:57:18.791418+00:00",
+      "seconds": 0.2045796001330018,
+      "exit_code": 2,
+      "stdout": "commands\\independent-bool-week-instance.stdout.txt",
+      "stderr": "commands\\independent-bool-week-instance.stderr.txt"
+    }
+  },
+  {
+    "label": "duplicate-instance-key",
+    "exit_code": 2,
+    "strict_json_result": true,
+    "strict_json_error": null,
+    "result": {
+      "business_feasible": false,
+      "error": "instance_invalid",
+      "where": "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\duplicate-instance-key\\input.json",
+      "detail": "duplicate key format"
+    },
+    "raw_result": "{\n  \"business_feasible\": false,\n  \"error\": \"instance_invalid\",\n  \"where\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-cheap-v2-independent-review-20261029\\\\independent-boundaries\\\\duplicate-instance-key\\\\input.json\",\n  \"detail\": \"duplicate key format\"\n}\n",
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\source-snapshot\\v2\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\duplicate-instance-key\\input.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\duplicate-instance-key\\plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\duplicate-instance-key\\result.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029",
+      "started_utc": "2026-10-29T10:57:19.004317+00:00",
+      "seconds": 0.2627606000751257,
+      "exit_code": 2,
+      "stdout": "commands\\independent-duplicate-instance-key.stdout.txt",
+      "stderr": "commands\\independent-duplicate-instance-key.stderr.txt"
+    }
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "benchmark": "HeavyWorkBench-Smoke/0.1.0-dev",
+  "case": "S06",
+  "status": "review-before-freeze",
+  "scope": "native execution pipeline smoke only; no heavy benchmark score, no hours or comparative difficulty claim",
+  "checks": [
+    {
+      "id": "native-completion",
+      "criterion": "Real Inspect sample and original OpenCorvus native Task reach natural completed lifecycle; model binding and stream audit recorded, no infrastructure error disguised as business score"
+    },
+    {
+      "id": "sealed-business-feasibility",
+      "criterion": "Both sealed plans pass evaluator-owned v2 input integrity and exact business recurrence on frozen original inputs"
+    },
+    {
+      "id": "known-small-optima",
+      "criterion": "Independently computed expected cost base=4.5 and price-change=5.5 within abs1e-9; candidate summary alone is not evidence"
+    },
+    {
+      "id": "full-clean-source-replay",
+      "criterion": "From submitted executable source plus frozen public inputs only, actual new-directory calls regenerate both plans and again pass independent business/optimality checks"
+    }
+  ],
+  "aggregation": "all four verified -> smoke_pass; unmet/unknown -> not_passed, infrastructure errors separate; no numeric difficulty score",
+  "comparable": false
+}

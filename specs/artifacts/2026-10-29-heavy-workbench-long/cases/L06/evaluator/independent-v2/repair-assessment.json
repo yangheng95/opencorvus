@@ -1,0 +1,90 @@
+{
+  "scope": "two actual repaired CLI boundary cases plus explicit source identity; no new math/solver execution",
+  "source_identity_only_not_functional_proof": {
+    "business_evaluate_function_text_equal": true,
+    "instance_validator_function_text_equal": true,
+    "model_solve_function_text_equal": true
+  },
+  "cases": [
+    {
+      "case": "overflow-exponent-format",
+      "expected": "plan_json",
+      "actual": "plan_json",
+      "exit_code": 2,
+      "strict_result_and_stdout_json": true,
+      "passed": true,
+      "result": {
+        "business_feasible": false,
+        "error": "plan_json",
+        "where": "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\overflow-exponent-format\\plan.json",
+        "detail": "non-finite numeric literal 1e999"
+      },
+      "receipt": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\source-repaired\\check_l06.py",
+          "--input",
+          "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\overflow-exponent-format\\input.json",
+          "--plan",
+          "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\overflow-exponent-format\\plan.json",
+          "--out",
+          "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\repaired-replay\\overflow-exponent-format\\result.json"
+        ],
+        "cwd": "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029",
+        "started_utc": "2026-10-29T11:02:30.793501+00:00",
+        "seconds": 0.22882029972970486,
+        "exit_code": 2,
+        "stdout": "commands\\repaired-overflow-exponent-format.stdout.txt",
+        "stderr": "commands\\repaired-overflow-exponent-format.stderr.txt"
+      }
+    },
+    {
+      "case": "invalid-instance-plus-bad-plan",
+      "expected": "instance_invalid",
+      "actual": "instance_invalid",
+      "exit_code": 2,
+      "strict_result_and_stdout_json": true,
+      "passed": true,
+      "result": {
+        "business_feasible": false,
+        "error": "instance_invalid",
+        "where": "raw_holding_minor",
+        "detail": "exact shape [1] required"
+      },
+      "receipt": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\source-repaired\\check_l06.py",
+          "--input",
+          "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\invalid-instance-plus-bad-plan\\input.json",
+          "--plan",
+          "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent-boundaries\\invalid-instance-plus-bad-plan\\plan.json",
+          "--out",
+          "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\repaired-replay\\invalid-instance-plus-bad-plan\\result.json"
+        ],
+        "cwd": "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029",
+        "started_utc": "2026-10-29T11:02:31.040759+00:00",
+        "seconds": 0.20606969995424151,
+        "exit_code": 2,
+        "stdout": "commands\\repaired-invalid-instance-plus-bad-plan.stdout.txt",
+        "stderr": "commands\\repaired-invalid-instance-plus-bad-plan.stderr.txt"
+      }
+    }
+  ],
+  "all_repaired_cases_passed": true,
+  "original_failure_commands_and_results_preserved": true,
+  "main_final22_receipt_read_not_repeated": {
+    "scope": "v2 stage-peak full finite-instance checker contracts; not candidate execution or cost-optimality certification",
+    "actual_cli_cases": 22,
+    "all_expected_contracts_passed": true,
+    "baseline_cost": 51263.0,
+    "dominated_feasible_cost": 52201.0,
+    "dominated_plan_above_one_percent_of_known_feasible_upper_bound": true,
+    "cost_optimum_claimed": false
+  },
+  "freeze_approved": false,
+  "cost_1percent_approved": false,
+  "hours_validated": false
+}

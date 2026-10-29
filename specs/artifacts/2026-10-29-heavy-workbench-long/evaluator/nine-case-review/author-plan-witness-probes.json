@@ -1,0 +1,306 @@
+[
+  {
+    "case": "H06",
+    "scenario": "base",
+    "result": {
+      "case": "H06",
+      "scenario": "base",
+      "assessment": "plan_feasibility_only",
+      "passed": true,
+      "violations": [],
+      "metrics": {
+        "cost_cny": 123672.0,
+        "terminal_inventory": {
+          "SKU0": 0.0,
+          "SKU1": 0.0,
+          "SKU2": 0.0,
+          "SKU3": 0.0,
+          "SKU4": 0.0,
+          "SKU5": 0.0
+        }
+      },
+      "comparable": false
+    },
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+        "verify-plan",
+        "H06",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\specs\\artifacts\\2026-10-29-heavy-workbench\\inputs\\H06",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\author-plan-witness-replay\\H06\\base\\plan.csv",
+        "--scenario",
+        "base",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\author-plan-witness-replay\\H06\\base\\verification.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+      "started_utc": "2026-10-29T09:45:35.432010+00:00",
+      "elapsed_seconds": 0.5043730000033975,
+      "exit_code": 0,
+      "stdout": "commands\\H06-base-plan.stdout.txt",
+      "stderr": "commands\\H06-base-plan.stderr.txt"
+    },
+    "scope": "author constructive feasibility witness; not optimal/full deliverable"
+  },
+  {
+    "case": "H06",
+    "scenario": "stress",
+    "result": {
+      "case": "H06",
+      "scenario": "stress",
+      "assessment": "plan_feasibility_only",
+      "passed": true,
+      "violations": [],
+      "metrics": {
+        "cost_cny": 124802.0,
+        "terminal_inventory": {
+          "SKU0": 0.0,
+          "SKU1": 0.0,
+          "SKU2": 0.0,
+          "SKU3": 0.0,
+          "SKU4": 0.0,
+          "SKU5": 0.0
+        }
+      },
+      "comparable": false
+    },
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+        "verify-plan",
+        "H06",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\specs\\artifacts\\2026-10-29-heavy-workbench\\inputs\\H06",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\author-plan-witness-replay\\H06\\stress\\plan.csv",
+        "--scenario",
+        "stress",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\author-plan-witness-replay\\H06\\stress\\verification.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+      "started_utc": "2026-10-29T09:45:35.951508+00:00",
+      "elapsed_seconds": 0.9152095997706056,
+      "exit_code": 0,
+      "stdout": "commands\\H06-stress-plan.stdout.txt",
+      "stderr": "commands\\H06-stress-plan.stderr.txt"
+    },
+    "scope": "author constructive feasibility witness; not optimal/full deliverable"
+  },
+  {
+    "case": "H08",
+    "scenario": "base",
+    "result": {
+      "case": "H08",
+      "scenario": "base",
+      "assessment": "plan_feasibility_only",
+      "passed": true,
+      "violations": [],
+      "metrics": {
+        "cost_cny": 67400,
+        "makespan_days": 38.0
+      },
+      "comparable": false
+    },
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+        "verify-plan",
+        "H08",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\specs\\artifacts\\2026-10-29-heavy-workbench\\inputs\\H08",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\author-plan-witness-replay\\H08\\base\\plan.csv",
+        "--scenario",
+        "base",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\author-plan-witness-replay\\H08\\base\\verification.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+      "started_utc": "2026-10-29T09:45:39.107403+00:00",
+      "elapsed_seconds": 0.2657548999413848,
+      "exit_code": 0,
+      "stdout": "commands\\H08-base-plan.stdout.txt",
+      "stderr": "commands\\H08-base-plan.stderr.txt"
+    },
+    "scope": "author constructive feasibility witness; not optimal/full deliverable"
+  },
+  {
+    "case": "H08",
+    "scenario": "stress",
+    "result": {
+      "case": "H08",
+      "scenario": "stress",
+      "assessment": "plan_feasibility_only",
+      "passed": true,
+      "violations": [],
+      "metrics": {
+        "cost_cny": 69200,
+        "makespan_days": 38.0
+      },
+      "comparable": false
+    },
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+        "verify-plan",
+        "H08",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\specs\\artifacts\\2026-10-29-heavy-workbench\\inputs\\H08",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\author-plan-witness-replay\\H08\\stress\\plan.csv",
+        "--scenario",
+        "stress",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\author-plan-witness-replay\\H08\\stress\\verification.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+      "started_utc": "2026-10-29T09:45:39.383406+00:00",
+      "elapsed_seconds": 0.37059259973466396,
+      "exit_code": 0,
+      "stdout": "commands\\H08-stress-plan.stdout.txt",
+      "stderr": "commands\\H08-stress-plan.stderr.txt"
+    },
+    "scope": "author constructive feasibility witness; not optimal/full deliverable"
+  },
+  {
+    "case": "H10",
+    "scenario": "base",
+    "result": {
+      "case": "H10",
+      "scenario": "base",
+      "assessment": "plan_feasibility_only",
+      "passed": true,
+      "violations": [],
+      "metrics": {
+        "grid_cost_cny": {
+          "A": 18959.438079999985,
+          "B": 22956.968759999985,
+          "C": 26979.579719999998
+        },
+        "capacities_kwh": {
+          "A": 50.0,
+          "B": 0.0,
+          "C": 0.0
+        }
+      },
+      "comparable": false
+    },
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+        "verify-plan",
+        "H10",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\specs\\artifacts\\2026-10-29-heavy-workbench\\inputs\\H10",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\author-plan-witness-replay\\H10\\base\\plan.csv",
+        "--scenario",
+        "base",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\author-plan-witness-replay\\H10\\base\\verification.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+      "started_utc": "2026-10-29T09:45:40.987774+00:00",
+      "elapsed_seconds": 0.3754656999371946,
+      "exit_code": 0,
+      "stdout": "commands\\H10-base-plan.stdout.txt",
+      "stderr": "commands\\H10-base-plan.stderr.txt"
+    },
+    "scope": "author constructive feasibility witness; not optimal/full deliverable"
+  },
+  {
+    "case": "H10",
+    "scenario": "price",
+    "result": {
+      "case": "H10",
+      "scenario": "price",
+      "assessment": "plan_feasibility_only",
+      "passed": true,
+      "violations": [],
+      "metrics": {
+        "grid_cost_cny": {
+          "A": 22751.32569599999,
+          "B": 27548.362512000025,
+          "C": 32375.495664000005
+        },
+        "capacities_kwh": {
+          "A": 50.0,
+          "B": 0.0,
+          "C": 0.0
+        }
+      },
+      "comparable": false
+    },
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+        "verify-plan",
+        "H10",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\specs\\artifacts\\2026-10-29-heavy-workbench\\inputs\\H10",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\author-plan-witness-replay\\H10\\price\\plan.csv",
+        "--scenario",
+        "price",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\author-plan-witness-replay\\H10\\price\\verification.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+      "started_utc": "2026-10-29T09:45:41.389397+00:00",
+      "elapsed_seconds": 0.3304956001229584,
+      "exit_code": 0,
+      "stdout": "commands\\H10-price-plan.stdout.txt",
+      "stderr": "commands\\H10-price-plan.stderr.txt"
+    },
+    "scope": "author constructive feasibility witness; not optimal/full deliverable"
+  },
+  {
+    "case": "H10",
+    "scenario": "efficiency",
+    "result": {
+      "case": "H10",
+      "scenario": "efficiency",
+      "assessment": "plan_feasibility_only",
+      "passed": true,
+      "violations": [],
+      "metrics": {
+        "grid_cost_cny": {
+          "A": 18959.465829999986,
+          "B": 22956.968759999985,
+          "C": 26979.579719999998
+        },
+        "capacities_kwh": {
+          "A": 50.0,
+          "B": 0.0,
+          "C": 0.0
+        }
+      },
+      "comparable": false
+    },
+    "receipt": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\script\\benchmark\\heavy_workbench.py",
+        "verify-plan",
+        "H10",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\source-snapshot\\specs\\artifacts\\2026-10-29-heavy-workbench\\inputs\\H10",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\author-plan-witness-replay\\H10\\efficiency\\plan.csv",
+        "--scenario",
+        "efficiency",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029\\author-plan-witness-replay\\H10\\efficiency\\verification.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\heavy-long-nine-upgrade-review-20261029",
+      "started_utc": "2026-10-29T09:45:41.747492+00:00",
+      "elapsed_seconds": 0.4263523002155125,
+      "exit_code": 0,
+      "stdout": "commands\\H10-efficiency-plan.stdout.txt",
+      "stderr": "commands\\H10-efficiency-plan.stderr.txt"
+    },
+    "scope": "author constructive feasibility witness; not optimal/full deliverable"
+  }
+]

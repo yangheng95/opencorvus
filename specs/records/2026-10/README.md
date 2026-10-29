@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-29-heavy-workbench-l06-qualification.md](2026-10-29-heavy-workbench-l06-qualification.md)：便宜实验先行、现金/阶段仓容根因、完整动作与错误对照，未冻结新题。
+
 - [2026-10-29-memory-context-journey.md](2026-10-29-memory-context-journey.md)：项目MEMORY.MD可达性、语义检索与16张实页复核。
 
 - [2026-10-29-archive-goal-journey.md](2026-10-29-archive-goal-journey.md)：单代理在真实隔离开发页检查目标与归档完整流程。

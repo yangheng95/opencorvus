@@ -1,0 +1,10379 @@
+{
+  "scope": "independent scalar end-to-end tiny domain; no solver import/run",
+  "common_commitments": true,
+  "tested": 648,
+  "feasible": 12,
+  "best_exact": "9/2",
+  "disagreements": [],
+  "cases": [
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": "11/2",
+      "checker": "business_feasible"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": "15/2",
+      "checker": "business_feasible"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": "7",
+      "checker": "business_feasible"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": "6",
+      "checker": "business_feasible"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": "8",
+      "checker": "business_feasible"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": "19/2",
+      "checker": "business_feasible"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": "17/2",
+      "checker": "business_feasible"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": "21/2",
+      "checker": "business_feasible"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": "21/2",
+      "checker": "business_feasible"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": "25/2",
+      "checker": "business_feasible"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": "9/2",
+      "checker": "business_feasible"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_availability"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": "19/2",
+      "checker": "business_feasible"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "common_commitment"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        1,
+        1
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early_production": [
+        2,
+        2
+      ],
+      "oracle": null,
+      "checker": "raw_storage_peak"
+    }
+  ],
+  "completeness": "qA0=0..1, qA1=0 terminal, qB0/qB1=0..2; week0 production1..2; terminal FG0 fixes week1 production; trucks determined by positive MOQ. Common stage also fixes week0 production. Every remaining bounded choice is covered."
+}

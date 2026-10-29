@@ -1,0 +1,105 @@
+{
+  "scope": "cheap endpoint inference at saved checkpoints; no new training, no final quality score",
+  "results": {
+    "convection": {
+      "checkpoint": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\convection-contract-qualification\\accepted-120.npz",
+      "elapsed_seconds": 0.34560019988566637,
+      "metrics": {
+        "problem": "convection",
+        "residual_points": 10000,
+        "constraint_count": 358,
+        "evaluation_points": 8385,
+        "residual_loss": 0.00013485621634930873,
+        "constraint_loss": 0.006346438529990534,
+        "total_loss": 0.006481294746339843,
+        "residual_rmse": 0.016422923999660277,
+        "evaluation_residual_loss": 0.00017512535801347793,
+        "evaluation_residual_rmse": 0.018714986401997622,
+        "constraint_families": {
+          "initial_value": {
+            "count": 257,
+            "loss": 0.0005127384172127011,
+            "rmse": 0.032023067223884136
+          },
+          "periodic_value": {
+            "count": 101,
+            "loss": 0.021190606143692545,
+            "rmse": 0.2058669771658026
+          }
+        },
+        "l2re": 0.9206173506356081,
+        "parameter_count": 20601
+      }
+    },
+    "reaction": {
+      "checkpoint": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reaction-convergence-qualification\\accepted-120.npz",
+      "elapsed_seconds": 0.3017040998674929,
+      "metrics": {
+        "problem": "reaction",
+        "residual_points": 10000,
+        "constraint_count": 358,
+        "evaluation_points": 8385,
+        "residual_loss": 0.005650233068713521,
+        "constraint_loss": 0.06775053340066262,
+        "total_loss": 0.07340076646937614,
+        "residual_rmse": 0.1063036506307617,
+        "evaluation_residual_loss": 0.006489648337494399,
+        "evaluation_residual_rmse": 0.11392671624772127,
+        "constraint_families": {
+          "initial_value": {
+            "count": 257,
+            "loss": 0.09437079796754701,
+            "rmse": 0.4344440078250522
+          },
+          "periodic_value": {
+            "count": 101,
+            "loss": 1.3820591857808412e-05,
+            "rmse": 0.005257488346693393
+          }
+        },
+        "l2re": 0.9519795775170943,
+        "parameter_count": 20601
+      }
+    },
+    "wave": {
+      "checkpoint": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\wave-convergence-qualification\\accepted-120.npz",
+      "elapsed_seconds": 0.3034981000237167,
+      "metrics": {
+        "problem": "wave",
+        "residual_points": 10000,
+        "constraint_count": 716,
+        "evaluation_points": 8385,
+        "residual_loss": 0.0007492524405868528,
+        "constraint_loss": 0.01388206250659107,
+        "total_loss": 0.014631314947177922,
+        "residual_rmse": 0.038710526748853544,
+        "evaluation_residual_loss": 0.0008731476548218046,
+        "evaluation_residual_rmse": 0.041788698348280834,
+        "constraint_families": {
+          "initial_value": {
+            "count": 257,
+            "loss": 0.029403038649809116,
+            "rmse": 0.2424996439164772
+          },
+          "initial_velocity": {
+            "count": 257,
+            "loss": 0.0007503589497612823,
+            "rmse": 0.03873910039640266
+          },
+          "boundary_left": {
+            "count": 101,
+            "loss": 0.010181899290589243,
+            "rmse": 0.14270178198319208
+          },
+          "boundary_right": {
+            "count": 101,
+            "loss": 0.01150259151762476,
+            "rmse": 0.15167459587963147
+          }
+        },
+        "l2re": 0.5920739775021819,
+        "parameter_count": 20601
+      }
+    }
+  }
+}

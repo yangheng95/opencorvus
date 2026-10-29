@@ -1,0 +1,13 @@
+{
+  "objective_name": "expected_operating_cost_minor",
+  "status": 0,
+  "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+  "seconds": 0.01584936771541834,
+  "objective": 4.5,
+  "dual_bound": 4.5,
+  "solver_gap_scaled_by_primal": 0.0,
+  "nodes": 1,
+  "variables": 28,
+  "constraints": 45,
+  "maximum_rounding_difference": 0.0
+}

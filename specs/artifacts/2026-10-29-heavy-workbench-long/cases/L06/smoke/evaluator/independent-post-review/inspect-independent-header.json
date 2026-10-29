@@ -1,0 +1,37 @@
+{
+  "source_file": "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\inspect\\2026-10-29T11-25-32-00-00_opencorvus-benchmark_U6nESUTxbZnp4gaAofg2xK.eval",
+  "read_entry_only": "header.json",
+  "status": "success",
+  "results": {
+    "total_samples": 1,
+    "completed_samples": 1,
+    "scores": [
+      {
+        "name": "task_completed",
+        "scorer": "task_completed",
+        "scored_samples": 1,
+        "unscored_samples": 0,
+        "params": {},
+        "metrics": {
+          "accuracy": {
+            "name": "accuracy",
+            "value": 1.0,
+            "params": {}
+          },
+          "stderr": {
+            "name": "stderr",
+            "value": 0.0,
+            "params": {}
+          }
+        }
+      }
+    ]
+  },
+  "eval_id": "LSZsxLyqavbNAdnEnVNGWn",
+  "task": "opencorvus_inspect/opencorvus_benchmark",
+  "model_placeholder": "none/none",
+  "sample_metadata_id": "S06-cheap-smoke-1",
+  "named_sample_entry_present": true,
+  "sample_contents_read": false,
+  "score_scope": "task_completed is lifecycle only"
+}

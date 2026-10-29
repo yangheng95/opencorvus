@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "git",
+    "-C",
+    "D:\\myhexin-local\\opencorvus",
+    "status",
+    "--short"
+  ],
+  "cwd": "D:\\opencorvus-benchmark-runs\\s06-smoke-post-review-20261029",
+  "started_utc": "2026-10-29T11:59:47.454464+00:00",
+  "seconds": 0.31166640017181635,
+  "exit_code": 0,
+  "stdout": "commands\\git-status-final.stdout.txt",
+  "stderr": "commands\\git-status-final.stderr.txt"
+}

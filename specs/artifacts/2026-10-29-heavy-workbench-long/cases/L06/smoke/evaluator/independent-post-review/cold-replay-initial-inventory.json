@@ -1,0 +1,10 @@
+{
+  "cwd": "D:\\opencorvus-benchmark-runs\\s06-smoke-post-review-20261029\\cold-replay",
+  "files": [
+    "inputs\\base.json",
+    "inputs\\price-change.json",
+    "README.md",
+    "solve.py"
+  ],
+  "scope": "only solve.py, README and two public inputs before execution; no old outputs/DB/evaluator/oracle"
+}

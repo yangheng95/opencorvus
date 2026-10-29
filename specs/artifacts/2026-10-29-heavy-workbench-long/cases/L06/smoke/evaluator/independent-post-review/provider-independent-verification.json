@@ -1,0 +1,63 @@
+{
+  "authority": "independently recomputed from raw provider source-reader metadata audit",
+  "all": {
+    "requests": 73,
+    "models": {
+      "gpt-6.1-sol": 73
+    },
+    "streaming_true": 73,
+    "http200": 73,
+    "identity_observed": 73,
+    "settled_eof": 73,
+    "context_providers": {
+      "openai": 73
+    },
+    "context_api_models": {
+      "gpt-6.1-sol": 73
+    }
+  },
+  "task_session_lineage": {
+    "requests": 71,
+    "models": {
+      "gpt-6.1-sol": 71
+    },
+    "streaming_true": 71,
+    "http200": 71,
+    "identity_observed": 71,
+    "settled_eof": 71,
+    "context_providers": {
+      "openai": 71
+    },
+    "context_api_models": {
+      "gpt-6.1-sol": 71
+    }
+  },
+  "other_preflight": {
+    "requests": 2,
+    "models": {
+      "gpt-6.1-sol": 2
+    },
+    "streaming_true": 2,
+    "http200": 2,
+    "identity_observed": 2,
+    "settled_eof": 2,
+    "context_providers": {
+      "openai": 2
+    },
+    "context_api_models": {
+      "gpt-6.1-sol": 2
+    }
+  },
+  "session_counts": {
+    "ses_hLeu98cbu7fIj3qfMkma": 2,
+    "ses_-zUQYqepyzzt9GivN0pf": 1,
+    "ses_-zUQYqdUXzzzSdmeCJtp": 31,
+    "ses_hMoZi4X5qJZeqrz4TEnF": 39
+  },
+  "owned_session_ids": [
+    "ses_-zUQYqdUXzzzSdmeCJtp",
+    "ses_-zUQYqepyzzt9GivN0pf",
+    "ses_hMoZi4X5qJZeqrz4TEnF"
+  ],
+  "snapshot_file_count_is_not_request_count": true
+}

@@ -1,0 +1,9749 @@
+{
+  "tested": 648,
+  "feasible": 12,
+  "best_exact": "9/2",
+  "best": {
+    "purchase_tuple": [
+      1,
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    "early_production": [
+      1,
+      1
+    ],
+    "scenario_costs": [
+      5,
+      4
+    ],
+    "minimum_cash": [
+      96,
+      96
+    ]
+  },
+  "records": [
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": "11/2"
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": "15/2"
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        0,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": "7"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": "6"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": "8"
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": "19/2"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": "17/2"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": "21/2"
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": "21/2"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": "25/2"
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        1,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        0,
+        2,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": "9/2"
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        0,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": "19/2"
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        1,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        0,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        0,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        0,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        0,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        1,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        1,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        1,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        2,
+        0
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        2,
+        1
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        1,
+        1
+      ],
+      "expected_cost": null
+    },
+    {
+      "q": [
+        1,
+        2,
+        2,
+        1,
+        2,
+        2
+      ],
+      "early": [
+        2,
+        2
+      ],
+      "expected_cost": null
+    }
+  ]
+}

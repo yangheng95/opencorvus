@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [L06便宜实验与阶段仓容资格](records/2026-10/2026-10-29-heavy-workbench-l06-qualification.md)：真实不可行历史、独立枚举/动作账、严格输入与阶段峰值，未冻结重型题。
+
 - [项目记忆与检索体验](records/2026-10/2026-10-29-memory-context-journey.md)：修复Task必选错位，真实项目上下文、双语与原对话独立选择。
 
 - [归档与持续目标日常体验](records/2026-10/2026-10-29-archive-goal-journey.md)：首页目标表单与归档搜索/恢复的真实流程、身份和可达性检查。

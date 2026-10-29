@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\s06-smoke-post-review-20261029\\evaluator-tools\\check_l06.py",
+    "--input",
+    "D:\\opencorvus-benchmark-runs\\s06-smoke-post-review-20261029\\frozen-inputs\\price-change.json",
+    "--plan",
+    "D:\\opencorvus-benchmark-runs\\s06-smoke-post-review-20261029\\cold-replay\\results\\price-change\\plan.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\s06-smoke-post-review-20261029\\business-checks\\reviewer-cold-replay-price-change.json"
+  ],
+  "cwd": "D:\\opencorvus-benchmark-runs\\s06-smoke-post-review-20261029",
+  "started_utc": "2026-10-29T11:52:39.192915+00:00",
+  "seconds": 0.14296909980475903,
+  "exit_code": 0,
+  "stdout": "commands\\check-reviewer-cold-replay-price-change.stdout.txt",
+  "stderr": "commands\\check-reviewer-cold-replay-price-change.stderr.txt"
+}

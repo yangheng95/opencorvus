@@ -1,0 +1,82 @@
+[
+  {
+    "case": "base",
+    "kind": "sealed",
+    "plan": "source-snapshot\\original-results\\base\\plan.json",
+    "checker_exit_code": 0,
+    "business_feasible": true,
+    "checker_cost_exact": "9/2",
+    "independent_scalar_cost": "9/2",
+    "independent_full_domain_optimum": "9/2",
+    "canonical_two_week_abi": true,
+    "all_passed": true,
+    "scalar_scenario_costs": [
+      5,
+      4
+    ],
+    "scalar_minimum_cash": [
+      96,
+      96
+    ]
+  },
+  {
+    "case": "base",
+    "kind": "reviewer-cold-replay",
+    "plan": "cold-replay\\results\\base\\plan.json",
+    "checker_exit_code": 0,
+    "business_feasible": true,
+    "checker_cost_exact": "9/2",
+    "independent_scalar_cost": "9/2",
+    "independent_full_domain_optimum": "9/2",
+    "canonical_two_week_abi": true,
+    "all_passed": true,
+    "scalar_scenario_costs": [
+      5,
+      4
+    ],
+    "scalar_minimum_cash": [
+      96,
+      96
+    ]
+  },
+  {
+    "case": "price-change",
+    "kind": "sealed",
+    "plan": "source-snapshot\\original-results\\price-change\\plan.json",
+    "checker_exit_code": 0,
+    "business_feasible": true,
+    "checker_cost_exact": "11/2",
+    "independent_scalar_cost": "11/2",
+    "independent_full_domain_optimum": "11/2",
+    "canonical_two_week_abi": true,
+    "all_passed": true,
+    "scalar_scenario_costs": [
+      4,
+      7
+    ],
+    "scalar_minimum_cash": [
+      100,
+      98
+    ]
+  },
+  {
+    "case": "price-change",
+    "kind": "reviewer-cold-replay",
+    "plan": "cold-replay\\results\\price-change\\plan.json",
+    "checker_exit_code": 0,
+    "business_feasible": true,
+    "checker_cost_exact": "11/2",
+    "independent_scalar_cost": "11/2",
+    "independent_full_domain_optimum": "11/2",
+    "canonical_two_week_abi": true,
+    "all_passed": true,
+    "scalar_scenario_costs": [
+      4,
+      7
+    ],
+    "scalar_minimum_cash": [
+      100,
+      98
+    ]
+  }
+]

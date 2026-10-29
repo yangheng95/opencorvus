@@ -1,0 +1,44 @@
+{
+  "authority": "actual Inspect eval log parsed by inspect_ai.log.read_eval_log",
+  "source_file": "D:\\opencorvus-benchmark-runs\\smoke-S06-20261029-24ff4844\\inspect\\2026-10-29T11-25-32-00-00_opencorvus-benchmark_U6nESUTxbZnp4gaAofg2xK.eval",
+  "status": "success",
+  "eval_id": "LSZsxLyqavbNAdnEnVNGWn",
+  "task": "opencorvus_inspect/opencorvus_benchmark",
+  "model": "none/none",
+  "sample_count": 1,
+  "results": {
+    "total_samples": 1,
+    "completed_samples": 1,
+    "early_stopping": null,
+    "scores": [
+      {
+        "name": "task_completed",
+        "scorer": "task_completed",
+        "reducer": null,
+        "scored_samples": 1,
+        "unscored_samples": 0,
+        "params": {},
+        "metrics": {
+          "accuracy": {
+            "name": "accuracy",
+            "group": null,
+            "value": 1.0,
+            "params": {},
+            "metadata": null
+          },
+          "stderr": {
+            "name": "stderr",
+            "group": null,
+            "value": 0.0,
+            "params": {},
+            "metadata": null
+          }
+        },
+        "metadata": null
+      }
+    ],
+    "metadata": null
+  },
+  "error": null,
+  "score_scope": "Inspect task_completed is lifecycle only; mathematical correctness separately evaluated"
+}
