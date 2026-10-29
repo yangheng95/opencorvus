@@ -1,0 +1,28 @@
+{
+  "owner": {
+    "pid": 82316,
+    "processInstanceID": "win32:639288310492141493",
+    "occurrenceID": "58b068be-25ac-4263-b0fb-b6140369499b"
+  },
+  "parent": {
+    "pid": 64348,
+    "processInstanceID": "win32:639288310491963448",
+    "occurrenceID": "40a262cf-741e-4e72-b14b-675582d543f7"
+  },
+  "occurrence": "goal-owner-control-780-after2-f8838141-77d5-4060-8a44-d8148cacfe97",
+  "admission": {
+    "credential": "registered copied OAuth",
+    "projectedModel": "gpt-6.1-sol",
+    "model": "openai/gpt-6.1-sol",
+    "authority": "Paired credential, full catalog and exact streamed preflight before the independent SideChat goal journey"
+  },
+  "preflight": {
+    "sessionID": "ses_hRzqNQRAoydcuB2UdDcW",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "maxRequests": 8,
+  "observedAt": "2026-10-29T00:37:43.350Z"
+}

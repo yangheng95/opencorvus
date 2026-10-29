@@ -1,0 +1,189 @@
+{
+  "at": "2026-10-29T00:57:07.207Z",
+  "databases": [
+    {
+      "tag": "baseline",
+      "tables": 92,
+      "oldCount": 103724,
+      "exact": 103724,
+      "total": 103724,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "model-unavailable",
+      "tables": 92,
+      "oldCount": 103724,
+      "exact": 103724,
+      "total": 104444,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "qualified-goal",
+      "tables": 92,
+      "oldCount": 104444,
+      "exact": 104441,
+      "total": 106258,
+      "schema": 9,
+      "integrity": "ok"
+    }
+  ],
+  "sourceDatabases": "Every pre-copy row in each source database remains exact.",
+  "authorizedChanges": [
+    {
+      "stage": "qualified-goal",
+      "table": "runtime_execution_capacity_lease",
+      "id": 1,
+      "fields": [
+        "lease_id",
+        "owner_id",
+        "time_acquired",
+        "expires_at"
+      ],
+      "explanation": "Previously expired physical Provider capacity slots were acquired by this owned runtime and released after actual stream settlement."
+    },
+    {
+      "stage": "qualified-goal",
+      "table": "runtime_execution_capacity_lease",
+      "id": 2,
+      "fields": [
+        "lease_id",
+        "owner_id",
+        "time_acquired",
+        "expires_at"
+      ],
+      "explanation": "Previously expired physical Provider capacity slots were acquired by this owned runtime and released after actual stream settlement."
+    },
+    {
+      "stage": "qualified-goal",
+      "table": "session",
+      "id": "ses_-zUQbV4uvzzifa3LboUg",
+      "fields": [
+        "summary_additions",
+        "summary_deletions",
+        "summary_files",
+        "time_updated"
+      ],
+      "explanation": "The side Session created in this batch records its authorized new execution time and zero changed files."
+    }
+  ],
+  "addedRowsByStage": {
+    "model-unavailable": {
+      "bus_publication_delivery": 117,
+      "bus_publication_delivery_receipt": 117,
+      "bus_publication_outbox": 43,
+      "bus_publication_owner": 43,
+      "bus_publication_phase_receipt": 129,
+      "engine_control_activation_lease": 117,
+      "engine_control_activation_lease_grant": 117,
+      "message": 8,
+      "part": 19,
+      "session": 2,
+      "tool_part_outcome": 4,
+      "tool_part_request": 4
+    },
+    "qualified-goal": {
+      "bus_publication_delivery": 354,
+      "bus_publication_delivery_receipt": 354,
+      "bus_publication_outbox": 51,
+      "bus_publication_owner": 51,
+      "bus_publication_phase_receipt": 153,
+      "engine_control_activation_lease": 356,
+      "engine_control_activation_lease_grant": 356,
+      "event_occurrence": 51,
+      "global_creation_allocation": 1,
+      "memory_chunk": 1,
+      "memory_file": 1,
+      "message": 8,
+      "part": 18,
+      "permission_execution_result": 1,
+      "permission_ledger": 5,
+      "permission_policy": 1,
+      "project": 1,
+      "protocol_event": 24,
+      "provider_activity_outcome": 5,
+      "provider_activity_request": 5,
+      "provider_usage_event": 6,
+      "session": 1,
+      "session_control_event": 3,
+      "session_control_record": 3,
+      "tool_part_outcome": 2,
+      "tool_part_request": 2
+    }
+  },
+  "originalInputs": [
+    {
+      "filename": "test_invoice.py",
+      "bytes": 1520,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "invoice.py",
+      "bytes": 953,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "README.md",
+      "bytes": 191,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "mcp.ts",
+      "bytes": 5539,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "chat.ts",
+      "bytes": 14692,
+      "exactBytes": true,
+      "exactMetadata": true
+    }
+  ],
+  "attachmentNamespaces": [
+    {
+      "stage": "baseline",
+      "files": 13,
+      "exactBytes": true
+    },
+    {
+      "stage": "-after",
+      "files": 13,
+      "exactBytes": true
+    },
+    {
+      "stage": "-after2",
+      "files": 13,
+      "exactBytes": true
+    }
+  ],
+  "goalUsage": {
+    "goalID": "pev_g0VZOWogg00bOKmt616O",
+    "totalTokens": 124421,
+    "linkedRequests": [
+      {
+        "id": "pvu_g0VZOWpUM00h9Nej23Te",
+        "model": "gpt-6.1-sol",
+        "totalTokens": 41127,
+        "sessionID": "ses_-zUQbV4uvzzifa3LboUg"
+      },
+      {
+        "id": "pvu_g0VZOXJyq00zyzzZILX5",
+        "model": "gpt-6.1-sol",
+        "totalTokens": 41414,
+        "sessionID": "ses_-zUQbV4uvzzifa3LboUg"
+      },
+      {
+        "id": "pvu_g0VZOXLL000XoMV9XDhv",
+        "model": "gpt-6.1-sol",
+        "totalTokens": 41880,
+        "sessionID": "ses_-zUQbV4uvzzifa3LboUg"
+      }
+    ],
+    "requestStartAttribution": "The final response begins after completion and belongs to the Session, while the original three linked requests retain this Goal attribution."
+  }
+}

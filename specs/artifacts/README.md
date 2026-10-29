@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-29-goal-owner-control-journey](2026-10-29-goal-owner-control-journey/README.md)：23张实页原图、真实流式模型与Goal事实、数据及服务结算。
+
 - [2026-10-29-menu-escape-ownership](2026-10-29-menu-escape-ownership/README.md)：真实 Escape 事件轨迹、菜单与用量截图、数据和运行结算。
 
 - [2026-10-29-project-pin-continuity](2026-10-29-project-pin-continuity/README.md)：项目置顶跨分区、匿名分区与键盘焦点实页、数据和服务结算。

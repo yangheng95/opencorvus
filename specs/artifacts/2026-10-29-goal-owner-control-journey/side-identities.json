@@ -1,0 +1,90 @@
+{
+  "sides": [
+    {
+      "id": "ses_-zUQbVxDvzzEeU27TZ7x",
+      "projectID": "prj_hxPFNEIHsgSpkdiQcuZn",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\live-mission-blocked-741\\project",
+      "source": "ses_-zUQiMz5bzzMH5K9ooZ0",
+      "inheritedMessages": 0,
+      "model": "openai/gpt-6.1-sol"
+    },
+    {
+      "id": "ses_-zUQbV4uvzzifa3LboUg",
+      "projectID": "prj_hFmj1f6BXMBemXaPwm5n",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project",
+      "source": "ses_-zUQgm405zzb2xZnkVrc",
+      "inheritedMessages": 8
+    }
+  ],
+  "sourceMessages": [
+    {
+      "source": "ses_-zUQiMz5bzzMH5K9ooZ0",
+      "messages": []
+    },
+    {
+      "source": "ses_-zUQgm405zzb2xZnkVrc",
+      "messages": [
+        {
+          "id": "msg_c4afcfe4-6a5c-49f5-9fc4-56ffc7fc1bbd",
+          "role": "user",
+          "author": "user",
+          "agent": "chat"
+        },
+        {
+          "id": "msg_g0VZJDwNO00lyuk8rTAu",
+          "role": "assistant",
+          "author": "chat",
+          "agent": "chat",
+          "finish": "tool-calls",
+          "completed": 1793156034957
+        },
+        {
+          "id": "msg_g0VZJDyu300KPDa3yypS",
+          "role": "assistant",
+          "author": "chat",
+          "agent": "chat",
+          "finish": "tool-calls",
+          "completed": 1793156039389
+        },
+        {
+          "id": "msg_g0VZJE03X00STv1o3aeL",
+          "role": "assistant",
+          "author": "chat",
+          "agent": "chat",
+          "finish": "tool-calls",
+          "completed": 1793156043373
+        },
+        {
+          "id": "msg_g0VZJE15u00ox6VtJji3",
+          "role": "assistant",
+          "author": "chat",
+          "agent": "chat",
+          "finish": "tool-calls",
+          "completed": 1793156049691
+        },
+        {
+          "id": "msg_g0VZJE2jm00MLrGg0G5x",
+          "role": "assistant",
+          "author": "chat",
+          "agent": "chat",
+          "finish": "error",
+          "completed": 1793156068023
+        },
+        {
+          "id": "msg_6ec55843-41ab-4554-843e-fec4d71839d6",
+          "role": "user",
+          "author": "user",
+          "agent": "chat"
+        },
+        {
+          "id": "msg_g0VZJJQxc004YKzXZ36Q",
+          "role": "assistant",
+          "author": "chat",
+          "agent": "chat",
+          "finish": "stop",
+          "completed": 1793157340422
+        }
+      ]
+    }
+  ]
+}

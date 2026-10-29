@@ -1,5 +1,6 @@
 import { Hono } from "hono"
 import { listSideChats } from "@/chat/side-chat"
+import { SideChatSourceError } from "@/chat/side-chat-identity"
 import { streamGlobalSSE } from "../sse"
 import { describeRoute, resolver } from "hono-openapi"
 import { validator } from "@/server/validator"
@@ -40,7 +41,7 @@ import { TodoStore } from "../../session/todo-store"
 import { EngineService, SessionDeleteResult } from "@/task-api"
 import { Snapshot } from "@/snapshot"
 import { Log } from "../../util/log"
-import { AuthReadUnavailableResponse, badRequestBody, errors, namedErrorResponse } from "../error"
+import { AuthReadUnavailableResponse, BAD_REQUEST_SCHEMA, badRequestBody, errors, namedErrorResponse } from "../error"
 import { requestID as resolveRequestID } from "../error-handler"
 import { createExecutionCancellationOrigin, isExecutionCancellationError } from "@/session/prompt/cancellation"
 import { completedReplyToUserMessage, isCompletedReplyToUserMessage } from "@/session/completed-reply"
@@ -114,6 +115,12 @@ const MissionSessionAuthorityConflict = namedErrorResponse(
   "Mission execution and lifecycle are owned by the canonical Mission API",
   "MissionSessionAuthorityError",
 )
+const SessionCopyBadRequest = {
+  description: "Invalid copy request or archived/nested side conversation source",
+  content: {
+    "application/json": { schema: resolver(z.union([BAD_REQUEST_SCHEMA, SideChatSourceError.Schema])) },
+  },
+}
 
 type ActiveProjectSession = Awaited<ReturnType<typeof getActiveProjectSession>>
 
@@ -1644,10 +1651,12 @@ export const SessionRoutes = lazy(() =>
       "/:sessionID/fork",
       describeRoute({
         summary: "Fork session",
-        description: "Create a new session by forking an existing session at a specific message point.",
+        description:
+          "Create a new session by copying an existing session at a specific message point. Copying retained history does not require an available execution model; sending in the copy uses its normal runtime admission.",
         operationId: "session.fork",
         responses: {
           200: { description: "200", content: { "application/json": { schema: resolver(Session.Info) } } },
+          400: SessionCopyBadRequest,
           409: namedErrorResponse(
             "The source execution identity is owned by its Task or Mission",
             "MissionSessionAuthorityError",
@@ -1837,13 +1846,14 @@ export const SessionRoutes = lazy(() =>
         summary: "Open side conversation",
         operationId: "session.createSideChat",
         description:
-          "Create an independent assistant Session with completed source history as visible reference context. The source may continue running.",
+          "Create an independent assistant Session with completed source history as visible reference context. The source may continue running. Copying retained history does not require an available execution model; sending in the side conversation uses its normal runtime admission.",
         responses: {
           200: {
             description: "Created side conversation",
             content: { "application/json": { schema: resolver(Session.Info) } },
           },
           ...errors(400, 404),
+          400: SessionCopyBadRequest,
         },
       }),
       validator("param", z.object({ sessionID: Identifier.schema("session") })),

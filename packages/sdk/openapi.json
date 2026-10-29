@@ -18975,6 +18975,42 @@
           }
         ]
       },
+      "SideChatSourceError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "reason": {
+                "enum": [
+                  "nested",
+                  "archived"
+                ],
+                "type": "string"
+              },
+              "sessionID": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message",
+              "sessionID",
+              "reason"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "SideChatSourceError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "SignalChannelConfig": {
         "additionalProperties": false,
         "properties": {
@@ -107331,7 +107367,7 @@
     },
     "/session/{sessionID}/fork": {
       "post": {
-        "description": "Create a new session by forking an existing session at a specific message point.",
+        "description": "Create a new session by copying an existing session at a specific message point. Copying retained history does not require an available execution model; sending in the copy uses its normal runtime admission.",
         "operationId": "session.fork",
         "parameters": [
           {
@@ -107386,6 +107422,23 @@
               }
             },
             "description": "200"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SideChatSourceError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Invalid copy request or archived/nested side conversation source"
           },
           "409": {
             "content": {
@@ -109678,7 +109731,7 @@
         ]
       },
       "post": {
-        "description": "Create an independent assistant Session with completed source history as visible reference context. The source may continue running.",
+        "description": "Create an independent assistant Session with completed source history as visible reference context. The source may continue running. Copying retained history does not require an available execution model; sending in the side conversation uses its normal runtime admission.",
         "operationId": "session.createSideChat",
         "parameters": [
           {
@@ -109715,11 +109768,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SideChatSourceError"
+                    }
+                  ]
                 }
               }
             },
-            "description": "Bad request"
+            "description": "Invalid copy request or archived/nested side conversation source"
           },
           "404": {
             "content": {

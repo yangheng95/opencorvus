@@ -1,0 +1,106 @@
+{
+  "at": "2026-10-29T01:00:05.890Z",
+  "attempts": [
+    {
+      "label": "goal-owner-780-route-contract",
+      "startedAt": 1793233260447,
+      "closedAt": 1793233268370,
+      "code": 0,
+      "signal": null,
+      "childPID": 70860
+    },
+    {
+      "label": "goal-owner-780-side-contract-verified",
+      "startedAt": 1793233664133,
+      "closedAt": 1793233695346,
+      "code": 0,
+      "signal": null,
+      "childPID": 98268
+    },
+    {
+      "label": "goal-owner-780-boundary-errors",
+      "startedAt": 1793235084304,
+      "closedAt": 1793235105742,
+      "code": 0,
+      "signal": null,
+      "childPID": 80096
+    },
+    {
+      "label": "goal-owner-780-task-boundary",
+      "startedAt": 1793233543675,
+      "closedAt": 1793233572230,
+      "code": 0,
+      "signal": null,
+      "childPID": 80252
+    },
+    {
+      "label": "goal-owner-780-copy-artifacts-verified",
+      "startedAt": 1793234446514,
+      "closedAt": 1793234463119,
+      "code": 0,
+      "signal": null,
+      "childPID": 88888
+    },
+    {
+      "label": "goal-owner-780-backend-typecheck",
+      "startedAt": 1793233617981,
+      "closedAt": 1793233662586,
+      "code": 0,
+      "signal": null,
+      "childPID": 41860
+    },
+    {
+      "label": "goal-owner-780-final-build",
+      "startedAt": 1793233543677,
+      "closedAt": 1793233627668,
+      "code": 0,
+      "signal": null,
+      "childPID": 97272
+    },
+    {
+      "label": "goal-owner-780-sdk-final",
+      "startedAt": 1793235084304,
+      "closedAt": 1793235109899,
+      "code": 0,
+      "signal": null,
+      "childPID": 94740
+    },
+    {
+      "label": "goal-owner-780-docs-render",
+      "startedAt": 1793235283357,
+      "closedAt": 1793235292098,
+      "code": 0,
+      "signal": null,
+      "childPID": 95644
+    },
+    {
+      "label": "goal-owner-780-docs-final",
+      "startedAt": 1793235510479,
+      "closedAt": 1793235518755,
+      "code": 0,
+      "signal": null,
+      "childPID": 13108
+    }
+  ],
+  "ui": "23 raw screenshots rendered and manually reviewed on real development /ui pages. No UI automation tests.",
+  "provider": "Exact paired qualification and 6 streaming gpt-6.1-sol requests, each HTTP 200 with source-reader EOF; actual Goal budget-limited, paused and complete states retained in live snapshots.",
+  "verified": [
+    "Mission and Task /goal entry retains the exact owner; invalid objective and collapsed invalid budgets return localized native validation and field focus.",
+    "With a missing model, first SideChat creation succeeds through Project identity and copies actual completed Chat history; its Goal belongs to the independent Side Session.",
+    "Ordinary fork and side copy preserve source configuration and complete bounded history with remapped identities through real routes.",
+    "Foreign sources return exact NotFoundError; nested and archived sources return canonical SideChatSourceError, declared from its source schema in OpenAPI and generated SDK.",
+    "Task-bound ordinary forks retain their 409 identity contract for root and worker sources with and without checkpoints.",
+    "Independent SideChat Goal reaches one-turn limit, increases to two without resuming, then explicitly resumes and completes the second real turn.",
+    "Completion retains the same Goal, actual controller authors and 124421 linked tokens for two accepted continuations; a new draft survives guide return and cancellation.",
+    "English/Chinese goal forms, validation and completed details manually reviewed; English restored.",
+    "Original Task/Mission/messages, source database rows, inputs and attachment bytes retain their original facts; only authorized capacity leases and this batch Side Session summary advance.",
+    "All three owned native services publicly shut down and physically settle; credential and catalog copies retired."
+  ],
+  "limits": [
+    "Not every owner/platform, in-flight cancellation or restart-recovery path was exercised.",
+    "Ordinary fork received real server route and data-contract verification; its complete browser-entry journey was not performed.",
+    "Early raw captures clipped part of the Dock; later actual full-Dock and Goal modal images were reviewed without any viewport override. The host-size/capture transition cause remains unproven.",
+    "Historical UI-generated pause-reason prose across locale changes remains a follow-up lead, not a diagnosed product failure."
+  ],
+  "failures": "See toolchain.json and spec for preserved fixture/observation/command failures and the successful original checker reruns."
+}

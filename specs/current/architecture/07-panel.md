@@ -1092,9 +1092,12 @@ the original payload is still available; missing payloads remain explicit errors
 Listing retained Side chats uses Project identity admission independently of
 execution-model bootstrap. The addressed source must belong to the current
 Project; the list reads that source's nonarchived retained side Sessions through
-the existing metadata relation. Creating a side Session keeps its runtime
-admission, canonical fork and configuration contract. An unavailable current
-model can block creation or sending while the historical list remains readable.
+the existing metadata relation. Creating a side Session and making an ordinary
+Session fork use that same Project identity admission and the canonical atomic
+history-copy transaction. They retain source configuration and permission facts
+without resolving an execution model. Source lineage, Task/Mission operation
+authority, archive/nesting and deletion admission still apply. Sending in a copy
+and admitting Goal continuation keep their original runtime and model checks.
 
 The panel uses the canonical Session prompt, abort and event contracts with its
 own exact target and stream lifetime. Connection snapshots and the shared

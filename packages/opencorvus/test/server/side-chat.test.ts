@@ -4,6 +4,7 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import { ConfigPaths } from "../../src/config/paths"
 import { Session } from "../../src/session"
+import type { Message } from "../../src/session/message"
 import { SessionStatus } from "../../src/session/status"
 import { Identifier } from "../../src/id/id"
 import { Server } from "../../src/server/server"
@@ -111,19 +112,25 @@ describe("source-scoped side conversations", () => {
       },
     })
   })
-  test("cold side-history list retains persisted references with missing current model and exact Project authority", async () => {
+  test("cold history copies retain their source and configuration with a missing current model and exact Project authority", async () => {
     await using project = await memoryProject("cold-side-history")
     await using other = await memoryProject("cold-side-history-other")
     const saved = await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const source = await Session.create({ kind: "root", title: "Persisted main task" })
+        const source = await Session.create({ kind: "assistant", title: "Persisted main conversation" })
+        await Session.mergeMetadata({
+          sessionID: source.id,
+          patch: {
+            configOverlay: { model: "missing-side-provider/missing-side-model" },
+          },
+        })
         const request = await input(source.id, "Original complete source question")
-        await reply(source.id, request, "Original complete source answer")
+        const response = await reply(source.id, request, "Original complete source answer")
         const first = await Session.fork({ sessionID: source.id, purpose: "side-chat" })
         const second = await Session.fork({ sessionID: source.id, purpose: "side-chat" })
         const emptySource = await Session.create({ kind: "assistant", title: "Empty side list source" })
-        return { source, first, second, emptySource }
+        return { source, first, second, emptySource, sourceMessageIDs: [request, response] }
       },
     })
     const configPath = ConfigPaths.projectFile(project.path)
@@ -191,12 +198,89 @@ describe("source-scoped side conversations", () => {
     const create = await runOutsideInstanceContext(() =>
       Server.App().request(`/session/${saved.source.id}/side-chat`, { method: "POST", headers }),
     )
-    expect({ status: create.status, body: await create.json() }).toMatchObject({
-      status: 400,
+    const created = (await create.json()) as Session.Info
+    expect({ status: create.status, body: created }).toMatchObject({
+      status: 200,
       body: {
-        name: "ProviderModelNotFoundError",
-        data: { providerID: "missing-side-provider", modelID: "missing-side-model" },
+        projectID: saved.source.projectID,
+        kind: "assistant",
+        metadata: {
+          configOverlay: { model: "missing-side-provider/missing-side-model" },
+          sideChat: { sourceSessionID: saved.source.id },
+        },
       },
+    })
+    await Instance.disposeAll()
+    const fork = await runOutsideInstanceContext(() =>
+      Server.App().request(`/session/${saved.source.id}/fork`, {
+        method: "POST",
+        headers: { ...headers, "content-type": "application/json" },
+        body: "{}",
+      }),
+    )
+    const forked = (await fork.json()) as Session.Info
+    expect({ status: fork.status, projectID: forked.projectID, parentID: forked.parentID }).toEqual({
+      status: 200,
+      projectID: saved.source.projectID,
+      parentID: saved.source.id,
+    })
+    for (const target of [created, forked]) {
+      await Instance.disposeAll()
+      const copy = await runOutsideInstanceContext(() =>
+        Server.App().request(`/session/${target.id}/conversation`, { headers }),
+      )
+      const body = (await copy.json()) as { transcript: Message.VisibleWithParts[] }
+      expect({ targetKind: target.kind, status: copy.status, body }).toMatchObject({ status: 200 })
+      expect({
+        status: copy.status,
+        text: body.transcript.map((message) =>
+          message.parts.filter((part) => part.type === "text").map((part) => part.text),
+        ),
+      }).toEqual({
+        status: 200,
+        text: [["Original complete source question"], ["Original complete source answer"]],
+      })
+      expect(new Set([...saved.sourceMessageIDs, ...body.transcript.map((message) => message.info.id)]).size).toBe(4)
+    }
+    const sourceAfter = await runOutsideInstanceContext(() =>
+      Server.App().request(`/session/${saved.source.id}/message`, { headers }),
+    )
+    expect((await sourceAfter.json()).map((message: Message.VisibleWithParts) => message.info.id)).toEqual(
+      saved.sourceMessageIDs,
+    )
+    for (const operation of ["side-chat", "fork"]) {
+      await Instance.disposeAll()
+      const foreignCopy = await runOutsideInstanceContext(() =>
+        Server.App().request(`/session/${saved.source.id}/${operation}`, {
+          method: "POST",
+          headers: { "x-opencorvus-directory": other.path, "content-type": "application/json" },
+          body: "{}",
+        }),
+      )
+      expect({ status: foreignCopy.status, body: await foreignCopy.json() }).toMatchObject({
+        status: 404,
+        body: { name: "NotFoundError", data: { message: `Session not found: ${saved.source.id}` } },
+      })
+    }
+    await Instance.disposeAll()
+    const nested = await runOutsideInstanceContext(() =>
+      Server.App().request(`/session/${created.id}/side-chat`, { method: "POST", headers }),
+    )
+    expect({ status: nested.status, body: await nested.json() }).toMatchObject({
+      status: 400,
+      body: { name: "SideChatSourceError", data: { sessionID: created.id, reason: "nested" } },
+    })
+    await Instance.provideProjectIdentity({
+      directory: project.path,
+      fn: () => Session.setArchived({ sessionID: saved.source.id, time: Date.now() }),
+    })
+    await Instance.disposeAll()
+    const archived = await runOutsideInstanceContext(() =>
+      Server.App().request(`/session/${saved.source.id}/side-chat`, { method: "POST", headers }),
+    )
+    expect({ status: archived.status, body: await archived.json() }).toMatchObject({
+      status: 400,
+      body: { name: "SideChatSourceError", data: { sessionID: saved.source.id, reason: "archived" } },
     })
   }, 60_000)
 

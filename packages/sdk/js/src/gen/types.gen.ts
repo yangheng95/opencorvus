@@ -5401,6 +5401,15 @@ export type SessionStatus =
 
 export type SessionStreamEvent = SessionConnectedEvent | SessionProtocolEvent
 
+export type SideChatSourceError = {
+  data: {
+    message: string
+    reason: "nested" | "archived"
+    sessionID: string
+  }
+  name: "SideChatSourceError"
+}
+
 export type SignalChannelConfig = {
   /**
    * Signal sender account or number
@@ -30605,6 +30614,10 @@ export type SessionForkData = {
 
 export type SessionForkErrors = {
   /**
+   * Invalid copy request or archived/nested side conversation source
+   */
+  400: BadRequestError | SideChatSourceError
+  /**
    * The source execution identity is owned by its Task or Mission
    */
   409:
@@ -31529,9 +31542,9 @@ export type SessionCreateSideChatData = {
 
 export type SessionCreateSideChatErrors = {
   /**
-   * Bad request
+   * Invalid copy request or archived/nested side conversation source
    */
-  400: BadRequestError
+  400: BadRequestError | SideChatSourceError
   /**
    * Not found
    */

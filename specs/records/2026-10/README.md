@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-29-goal-owner-control-journey.md](2026-10-29-goal-owner-control-journey.md)：Task/Mission入口、历史复制准入、OpenAPI错误声明与真实侧聊Goal闭环。
+
 - [2026-10-29-menu-escape-ownership.md](2026-10-29-menu-escape-ownership.md)：共享选择与菜单关闭合同、用量设置层级及实页证据。
 
 - [2026-10-29-project-pin-continuity.md](2026-10-29-project-pin-continuity.md)：成功Pin焦点交接、匿名项目分区根因及真实页面验收。

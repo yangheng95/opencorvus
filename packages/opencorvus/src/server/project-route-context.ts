@@ -108,7 +108,8 @@ const PROJECT_IDENTITY_CONVERSATION_ROUTE_PATTERNS = [
   /^GET \/session\/[^/]+\/message\/[^/]+$/,
   /^GET \/session\/[^/]+\/message\/[^/]+\/part\/[^/]+$/,
   /^GET \/session\/[^/]+\/events$/,
-  /^GET \/session\/[^/]+\/side-chat$/,
+  /^(?:GET|POST) \/session\/[^/]+\/side-chat$/,
+  /^POST \/session\/[^/]+\/fork$/,
   /^GET \/export\/session\/[^/]+$/,
 ]
 

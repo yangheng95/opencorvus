@@ -12870,7 +12870,7 @@ export class Session4 extends HeyApiClient {
   /**
    * Fork session
    *
-   * Create a new session by forking an existing session at a specific message point.
+   * Create a new session by copying an existing session at a specific message point. Copying retained history does not require an available execution model; sending in the copy uses its normal runtime admission.
    */
   public fork<ThrowOnError extends boolean = false>(
     parameters: {
@@ -13208,7 +13208,7 @@ export class Session4 extends HeyApiClient {
   /**
    * Open side conversation
    *
-   * Create an independent assistant Session with completed source history as visible reference context. The source may continue running.
+   * Create an independent assistant Session with completed source history as visible reference context. The source may continue running. Copying retained history does not require an available execution model; sending in the side conversation uses its normal runtime admission.
    */
   public createSideChat<ThrowOnError extends boolean = false>(
     parameters: {

@@ -1,5 +1,13 @@
 # 07-panel-reactivity — Overlay Reactive Projection
 
+Opening Side chat first reads its source-owned retained list. When that list is
+empty, creating the first independent copy uses Project identity admission,
+as does an ordinary Session fork. Both call the one atomic transcript-copy
+primitive and retain the original completed context and configuration. Current
+model availability belongs to subsequent execution; it cannot prevent preparing
+or reading that copy. The panel keeps its existing exact source, selection and
+connection lifetimes, including the independent continuous-goal owner.
+
 Selectable collections consume Escape only when their current, nonempty
 selection can actually be cleared under both collection and manager policy.
 Empty menu collections and required selections leave dismissal to the current

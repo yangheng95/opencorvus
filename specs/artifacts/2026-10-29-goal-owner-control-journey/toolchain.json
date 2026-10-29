@@ -1,0 +1,132 @@
+{
+  "at": "2026-10-29T00:57:07.223Z",
+  "attempts": [
+    {
+      "label": "goal-owner-780-copy-contract",
+      "startedAt": 1793233260447,
+      "closedAt": 1793233278034,
+      "code": 1,
+      "signal": null,
+      "childPID": 69616
+    },
+    {
+      "label": "goal-owner-780-route-contract",
+      "startedAt": 1793233260447,
+      "closedAt": 1793233268370,
+      "code": 0,
+      "signal": null,
+      "childPID": 70860
+    },
+    {
+      "label": "goal-owner-780-copy-contract-detail",
+      "startedAt": 1793233342294,
+      "closedAt": 1793233358030,
+      "code": 1,
+      "signal": null,
+      "childPID": 31424
+    },
+    {
+      "label": "goal-owner-780-sdk",
+      "startedAt": 1793233393668,
+      "closedAt": 1793233415244,
+      "code": 0,
+      "signal": null,
+      "childPID": 86692
+    },
+    {
+      "label": "goal-owner-780-copy-diagnostic",
+      "startedAt": 1793233473754,
+      "closedAt": 1793233487774,
+      "code": 1,
+      "signal": null,
+      "childPID": 94580
+    },
+    {
+      "label": "goal-owner-780-side-contract-final",
+      "startedAt": 1793233543675,
+      "closedAt": 1793233583528,
+      "code": 1,
+      "signal": null,
+      "childPID": 59976
+    },
+    {
+      "label": "goal-owner-780-task-boundary",
+      "startedAt": 1793233543675,
+      "closedAt": 1793233572230,
+      "code": 0,
+      "signal": null,
+      "childPID": 80252
+    },
+    {
+      "label": "goal-owner-780-final-build",
+      "startedAt": 1793233543677,
+      "closedAt": 1793233627668,
+      "code": 0,
+      "signal": null,
+      "childPID": 97272
+    },
+    {
+      "label": "goal-owner-780-backend-typecheck",
+      "startedAt": 1793233617981,
+      "closedAt": 1793233662586,
+      "code": 0,
+      "signal": null,
+      "childPID": 41860
+    },
+    {
+      "label": "goal-owner-780-side-contract-verified",
+      "startedAt": 1793233664133,
+      "closedAt": 1793233695346,
+      "code": 0,
+      "signal": null,
+      "childPID": 98268
+    },
+    {
+      "label": "goal-owner-780-copy-artifacts-verified",
+      "startedAt": 1793234446514,
+      "closedAt": 1793234463119,
+      "code": 0,
+      "signal": null,
+      "childPID": 88888
+    },
+    {
+      "label": "goal-owner-780-boundary-errors",
+      "startedAt": 1793235084304,
+      "closedAt": 1793235105742,
+      "code": 0,
+      "signal": null,
+      "childPID": 80096
+    },
+    {
+      "label": "goal-owner-780-sdk-final",
+      "startedAt": 1793235084304,
+      "closedAt": 1793235109899,
+      "code": 0,
+      "signal": null,
+      "childPID": 94740
+    },
+    {
+      "label": "goal-owner-780-docs-render",
+      "startedAt": 1793235283357,
+      "closedAt": 1793235292098,
+      "code": 0,
+      "signal": null,
+      "childPID": 95644
+    },
+    {
+      "label": "goal-owner-780-docs-final",
+      "startedAt": 1793235510479,
+      "closedAt": 1793235518755,
+      "code": 0,
+      "signal": null,
+      "childPID": 13108
+    }
+  ],
+  "failuresRetained": [
+    "Initial ordinary-fork read used the old side-only unbound root fixture; the bridge rejected a root child. Passive diagnostics proved the exact error; the valid ordinary Chat source uses kind assistant.",
+    "The source conversation tree includes the new ordinary fork child. Exact Session preservation is checked through /message rather than the tree projection.",
+    "The first artifact checker command left a PowerShell alternation unquoted. The checker log was absent, and a properly quoted fresh invocation then completed the original selected cases.",
+    "A proposed browser-region screenshot method was unavailable; no image was produced by that attempt, and no viewport override was applied."
+  ],
+  "finalUI": "23 raw captures rendered and manually reviewed across three real /ui services; no UI automation tests or DOM/pixel/text assertions."
+}
