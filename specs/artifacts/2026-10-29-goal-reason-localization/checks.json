@@ -1,0 +1,55 @@
+{
+  "at": "2026-10-29T01:24:50.621Z",
+  "checks": [
+    {
+      "label": "goal-reason-781-build",
+      "startedAt": 1793236387579,
+      "closedAt": 1793236477956,
+      "code": 0,
+      "signal": null,
+      "childPID": 71356
+    },
+    {
+      "label": "goal-reason-781-i18n",
+      "startedAt": 1793236387579,
+      "closedAt": 1793236389970,
+      "code": 0,
+      "signal": null,
+      "childPID": 31928
+    },
+    {
+      "label": "goal-reason-781-typecheck",
+      "startedAt": 1793236387645,
+      "closedAt": 1793236418777,
+      "code": 0,
+      "signal": null,
+      "childPID": 89360
+    },
+    {
+      "label": "goal-reason-781-docs",
+      "startedAt": 1793236453830,
+      "closedAt": 1793236463360,
+      "code": 0,
+      "signal": null,
+      "childPID": 11520
+    },
+    {
+      "label": "goal-reason-781-architecture",
+      "startedAt": 1793237023741,
+      "closedAt": 1793237025835,
+      "code": 0,
+      "signal": null,
+      "childPID": 10764
+    },
+    {
+      "label": "goal-reason-781-docs-final",
+      "startedAt": 1793237023741,
+      "closedAt": 1793237032072,
+      "code": 0,
+      "signal": null,
+      "childPID": 75416
+    }
+  ],
+  "ui": "15 raw screenshots rendered and manually reviewed; real development serve /ui and exact streamed Provider requests. No UI automation or DOM/text/pixel assertions.",
+  "toolingObservation": "The combined accessibility label for the budget disclosure was not its DOM role name. One semantic locator found no match; a fresh AX identity then opened the actual control. No product failure was inferred."
+}

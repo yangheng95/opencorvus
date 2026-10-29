@@ -1,0 +1,196 @@
+{
+  "at": "2026-10-29T01:22:26.738Z",
+  "databases": [
+    {
+      "tag": "baseline",
+      "tables": 92,
+      "oldCount": 106258,
+      "exact": 106258,
+      "total": 106258,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "qualified-goal",
+      "tables": 92,
+      "oldCount": 106258,
+      "exact": 106256,
+      "total": 109155,
+      "schema": 9,
+      "integrity": "ok"
+    }
+  ],
+  "sourceDatabases": "Every source pre-copy row remains exact.",
+  "authorizedChanges": [
+    {
+      "stage": "qualified-goal",
+      "table": "runtime_execution_capacity_lease",
+      "id": 1,
+      "fields": [
+        "lease_id",
+        "owner_id",
+        "time_acquired",
+        "expires_at"
+      ],
+      "explanation": "The previously expired physical Provider capacity slot was acquired by this exact owned runtime and released after original stream settlement."
+    },
+    {
+      "stage": "qualified-goal",
+      "table": "runtime_execution_capacity_lease",
+      "id": 2,
+      "fields": [
+        "lease_id",
+        "owner_id",
+        "time_acquired",
+        "expires_at"
+      ],
+      "explanation": "The previously expired physical Provider capacity slot was acquired by this exact owned runtime and released after original stream settlement."
+    }
+  ],
+  "addedRowsByStage": {
+    "qualified-goal": {
+      "bus_publication_delivery": 580,
+      "bus_publication_delivery_receipt": 580,
+      "bus_publication_outbox": 80,
+      "bus_publication_owner": 80,
+      "bus_publication_phase_receipt": 240,
+      "engine_control_activation_lease": 581,
+      "engine_control_activation_lease_grant": 581,
+      "event_occurrence": 80,
+      "global_creation_allocation": 1,
+      "memory_chunk": 1,
+      "memory_file": 1,
+      "message": 14,
+      "part": 31,
+      "project": 1,
+      "protocol_event": 20,
+      "provider_activity_outcome": 3,
+      "provider_activity_request": 3,
+      "provider_usage_event": 4,
+      "session": 2,
+      "session_control_event": 3,
+      "session_control_record": 3,
+      "tool_part_outcome": 4,
+      "tool_part_request": 4
+    }
+  },
+  "originalInputs": [
+    {
+      "filename": "test_invoice.py",
+      "bytes": 1520,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "invoice.py",
+      "bytes": 953,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "README.md",
+      "bytes": 191,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "mcp.ts",
+      "bytes": 5539,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "chat.ts",
+      "bytes": 14692,
+      "exactBytes": true,
+      "exactMetadata": true
+    }
+  ],
+  "attachmentNamespaces": [
+    {
+      "stage": "baseline",
+      "files": 15,
+      "exactBytes": true
+    },
+    {
+      "stage": "-after",
+      "files": 15,
+      "exactBytes": true
+    }
+  ],
+  "goalUsage": {
+    "goalID": "pev_g0VZOg42Z00cEBscvE8p",
+    "totalTokens": 82528,
+    "linkedRequests": [
+      {
+        "id": "pvu_g0VZOg590003sptgBQ0u",
+        "model": "gpt-6.1-sol",
+        "totalTokens": 41136,
+        "sessionID": "ses_-zUQbK7OOzze47C6Of9C"
+      },
+      {
+        "id": "pvu_g0VZOgTMA00ZHnFhUCDW",
+        "model": "gpt-6.1-sol",
+        "totalTokens": 41392,
+        "sessionID": "ses_-zUQbK7OOzze47C6Of9C"
+      }
+    ]
+  },
+  "controlDecisions": [
+    {
+      "eventID": "pev_g0VZOgBrn00Uk9MFcXYC",
+      "goal_id": "pev_g0VZOg42Z00cEBscvE8p",
+      "request_id": "4e253611-ed28-4ff9-abaf-88975aac4736",
+      "input": {
+        "turnBudget": 2,
+        "requestID": "4e253611-ed28-4ff9-abaf-88975aac4736",
+        "goalID": "pev_g0VZOg42Z00cEBscvE8p",
+        "expectedRevision": "pev_g0VZOg42Z00cEBscvE8p",
+        "status": "paused",
+        "reason": "user_paused"
+      },
+      "author": "user"
+    },
+    {
+      "eventID": "pev_g0VZOgNLt00lOWl8SrMN",
+      "goal_id": "pev_g0VZOg42Z00cEBscvE8p",
+      "request_id": "0ccc4637-d8f3-4903-966f-8fcbb384c1ec",
+      "input": {
+        "tokenBudget": 100000,
+        "turnBudget": 2,
+        "requestID": "0ccc4637-d8f3-4903-966f-8fcbb384c1ec",
+        "goalID": "pev_g0VZOg42Z00cEBscvE8p",
+        "expectedRevision": "pev_g0VZOgBrn00Uk9MFcXYC",
+        "status": "paused",
+        "reason": "user_paused"
+      },
+      "author": "user"
+    },
+    {
+      "eventID": "pev_g0VZOgRjR00g39wqHTNZ",
+      "goal_id": "pev_g0VZOg42Z00cEBscvE8p",
+      "request_id": "5af2030e-a2c7-48bd-baa2-9c6ada95f6db",
+      "input": {
+        "requestID": "5af2030e-a2c7-48bd-baa2-9c6ada95f6db",
+        "goalID": "pev_g0VZOg42Z00cEBscvE8p",
+        "expectedRevision": "pev_g0VZOgNLt00lOWl8SrMN",
+        "status": "active",
+        "reason": "user_resumed"
+      },
+      "author": "user"
+    },
+    {
+      "eventID": "pev_g0VZOgfA800w05qbRm7j",
+      "goal_id": "pev_g0VZOg42Z00cEBscvE8p",
+      "request_id": "699db8bf-8842-4aa2-a6a3-f45bb99b4b51",
+      "input": {
+        "requestID": "699db8bf-8842-4aa2-a6a3-f45bb99b4b51",
+        "goalID": "pev_g0VZOg42Z00cEBscvE8p",
+        "expectedRevision": "pev_g0VZOgRjR00g39wqHTNZ",
+        "status": "complete",
+        "reason": "已在本侧聊实际看到“语言核对阶段一”和“语言核对阶段二”两条回复；暂停原因已在英文、中文摘要与详情逐项核对，预算保存保持原原因和累计用量。Manual review complete — 原始证据保持原文。"
+      },
+      "author": "user"
+    }
+  ]
+}

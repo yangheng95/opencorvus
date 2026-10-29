@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [持续目标控制原因的语言身份](records/2026-10/2026-10-29-goal-reason-localization.md)：稳定控制原因、原始证据保留及中英文实页复核。
+
 - [持续目标作用域与历史复制](records/2026-10/2026-10-29-goal-owner-control-journey.md)：模型不可用时准备侧聊/副本、规范错误与独立侧聊两轮实际目标验收。
 
 - [菜单与提示层的 Escape 归属](records/2026-10/2026-10-29-menu-escape-ownership.md)：空选择抢占、设置页事件阶段根因与真实键盘复核。

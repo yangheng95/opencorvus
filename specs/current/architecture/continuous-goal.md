@@ -31,8 +31,14 @@ protocol_event stores continuous_goal.created, continuous_goal.updated and
 continuous_goal.continuation_requested on the existing owner aggregate. The latest
 definition and decisions project active, paused, blocked or complete. Owner cancellation,
 archive/deletion and exhausted explicit budgets project paused or budget_limited.
-Completion remains an agent-authored evidence judgment; completing a Task or Mission
-alone does not complete its goal.
+Completion records an evidence judgment by the owner agent or an explicit operator
+action; completing a Task or Mission alone does not complete its goal.
+The existing reason string carries stable system identifiers or original free text.
+UI controls write user_paused, user_resumed, budget_updated or
+budget_updated_and_resumed, and render these through the current locale alongside
+the existing owner, budget and model reasons. Ordinary paused/blocked budget saves
+retain the prior reason. Completion evidence and unclassified historical free text
+retain their original content; locale changes do not mutate durable decisions.
 Explicit paused/blocked intent takes precedence over exhausted budgets; budget_limited
 is derived only for active intent. Resuming preserves all usage and rechecks the limit.
 

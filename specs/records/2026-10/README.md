@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-29-goal-reason-localization.md](2026-10-29-goal-reason-localization.md)：持续目标控制原因跨语言呈现与真实模型验收。
+
 - [2026-10-29-goal-owner-control-journey.md](2026-10-29-goal-owner-control-journey.md)：Task/Mission入口、历史复制准入、OpenAPI错误声明与真实侧聊Goal闭环。
 
 - [2026-10-29-menu-escape-ownership.md](2026-10-29-menu-escape-ownership.md)：共享选择与菜单关闭合同、用量设置层级及实页证据。

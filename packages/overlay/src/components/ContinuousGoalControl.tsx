@@ -86,6 +86,10 @@ const systemReasons = new Set([
   "turn_budget",
   "model_not_configured",
   "model_unavailable",
+  "user_paused",
+  "user_resumed",
+  "budget_updated",
+  "budget_updated_and_resumed",
 ])
 
 function needsBudgetIncrease(goal: ContinuousGoal): boolean {
@@ -429,7 +433,7 @@ export function ContinuousGoalControl(props: {
       goalID: current.id,
       expectedRevision: current.revision,
       status,
-      reason: t(status === "active" ? "continuous_goal.intent.resume" : "continuous_goal.intent.pause"),
+      reason: status === "active" ? "user_resumed" : "user_paused",
     })
   }
   function budget(value: string, previous?: number): number | undefined {
@@ -486,9 +490,9 @@ export function ContinuousGoalControl(props: {
         reason:
           status === existing.status && (status === "paused" || status === "blocked")
             ? existing.reason
-            : t(status === "paused"
-              ? "continuous_goal.intent.pause"
-              : resume() ? "continuous_goal.intent.budget_resume" : "continuous_goal.intent.budget"),
+            : status === "paused"
+              ? "user_paused"
+              : resume() ? "budget_updated_and_resumed" : "budget_updated",
         ...(tokenBudget !== undefined ? { tokenBudget } : {}),
         ...(turnBudget !== undefined ? { turnBudget } : {}),
       })

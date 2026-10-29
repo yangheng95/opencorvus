@@ -1,0 +1,28 @@
+{
+  "owner": {
+    "pid": 92268,
+    "processInstanceID": "win32:639288333036073345",
+    "occurrenceID": "1f6845f6-c22f-49e9-8072-239130b2ec35"
+  },
+  "parent": {
+    "pid": 77552,
+    "processInstanceID": "win32:639288333035891021",
+    "occurrenceID": "3137fddd-9f15-4285-bd63-17106d669ea9"
+  },
+  "occurrence": "goal-reason-localization-781-d49e18ea-b6ee-43b7-9642-425a6b32f385",
+  "admission": {
+    "credential": "registered copied OAuth",
+    "projectedModel": "gpt-6.1-sol",
+    "model": "openai/gpt-6.1-sol",
+    "authority": "Paired credential, full catalog and exact streamed preflight before the continuous-goal reason language journey"
+  },
+  "preflight": {
+    "sessionID": "ses_hVUj3BewNhmcnfhgJxAP",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "maxRequests": 8,
+  "observedAt": "2026-10-29T01:15:13.236Z"
+}

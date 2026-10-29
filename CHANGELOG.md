@@ -6,6 +6,7 @@
 
 ### zh-CN
 
+- 持续目标的界面暂停、恢复与预算调整原因随当前语言显示；保留用户及模型原始证据和既有历史原因。
 - 当前模型不可用时仍可打开首个侧聊或复制已有对话，保留原历史、配置与权限；实际发送和持续目标续跑继续校验执行模型。
 - 修复组织与排序菜单中的说明提示拦住 Escape 的问题；提示先关闭并保留键盘焦点，随后可关闭菜单。用量图表同样保留所选区间，设置页在当前弹层处理完成后再响应退出。
 - 项目置顶或取消置顶后，键盘焦点交接到新位置的可见入口；支持单列表与渐进折叠的当前控件。匿名项目按真实置顶状态进入置顶区，保留匿名名称与命名入口。
@@ -18,6 +19,7 @@
 
 ### en-US
 
+- Show continuous-goal control reasons in the current language while preserving original user/model evidence and historical free-text reasons.
 - Open the first side chat or fork retained conversation history when the current model is unavailable, preserving its original context, configuration and permissions. Sending and goal continuation retain their execution-model checks.
 - Fix Escape ownership in organization and sorting menus: dismiss the current tooltip while retaining keyboard focus, then close its menu. Usage keeps its selected interval; settings handles page dismissal after the current popup.
 - Keep keyboard continuity after project pin changes across sidebar sections, including one-list and progressive collections. Show pinned anonymous projects in the Pinned section with their existing names and conversion action.
