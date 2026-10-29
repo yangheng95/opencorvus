@@ -1,0 +1,41 @@
+{
+  "status": "reference_construction_completed_independent_full_replay_pending",
+  "candidate_score": null,
+  "total_score": null,
+  "external_container_seconds": 427.946551,
+  "main_seconds": 425.52391331037506,
+  "solver_seconds": 423.6764296,
+  "timings_overlap_do_not_add": true,
+  "reference_expected_cost_exact": {
+    "numerator": 238731,
+    "denominator": 5
+  },
+  "baseline_cost_exact": {
+    "numerator": 494017,
+    "denominator": 10
+  },
+  "alternative_cost_exact": {
+    "numerator": 477477,
+    "denominator": 10
+  },
+  "registered_reference_changed": false,
+  "numeric_findings": {
+    "verified_pass": 30,
+    "unassessed": 17
+  },
+  "actual_pngs_viewed": [
+    "cash.png",
+    "cost.png",
+    "storage.png"
+  ],
+  "visual_observations": "Full 16-week three-scenario curves, units, legends and capacity/credit floors are readable; 0-based weeks and plotted ledger quantities align. This is a manual view, not UI automation.",
+  "remaining": [
+    "independent full replay and professional/review-leaf assessment",
+    "numerical variant references",
+    "47-leaf aggregation and multi-quality review calibration",
+    "final freeze",
+    "fresh OpenCorvus and Codex candidates",
+    "observed useful-work duration",
+    "other nine cases"
+  ]
+}

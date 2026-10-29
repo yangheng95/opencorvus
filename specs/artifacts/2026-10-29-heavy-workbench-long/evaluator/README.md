@@ -40,3 +40,5 @@ python -m unittest discover -s script/benchmark -p test_pinn_torch_check.py
 当前便宜接续：[L06严格下界独立审查](../cases/L06/evaluator/independent-relaxation/REVIEW.md)另从原输入重建1488变量/1096行，精确下界约46220.2662、可行上界51263，仍不能认证1%；[L04独立最终审查](../cases/L04/evaluator/independent-review/repair-review/REVIEW.md)冷跑实际迁移/epoch/进程恢复，抓到并复核共享NULL身份修复，最终4升级+2明确中止，原数据保存。两者都是局部资格，未批准重型冻结/候选分/小时级。
 
 后续[L06原生整数/CP-SAT独立审查](../cases/L06/evaluator/independent-cpsat/REVIEW.md)记录阶段上界49032.9与终态来源修复。更新的[质量追加审查](../cases/L06/evaluator/independent-public-contract/quality-addendum/REVIEW.md)已独立确认最终成本47808/native界47380、基例1%可达，私有参考已预注册；严格LP与native信任口径分列。[公开合同/47叶rubric](../cases/L06/README.md)仍未冻结，独立只认可设计及10叶输出primitive，完整参考/其他37叶/变体/校准和长程候选继续待完成。当前无新增活跃长计算，active-quality只是历史快照。不得把本评估目录交给候选。
+
+L06现有[30数值叶与完整源码参考](../cases/L06/README.md)：新精确谓词采集器只用一个业务递推，独立输入漂移/负gap漏洞已关闭；主方只读raw/source的新完整交付已真实约7分钟。参考资格不是受测agent成绩，独立完整复跑及17叶/变体/聚合/冻结仍pending。不得将其评估侧代码/答案投给候选。

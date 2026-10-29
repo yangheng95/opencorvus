@@ -1,0 +1,14 @@
+{
+  "status": "cancelled_own_download_build",
+  "exec_session": 91050,
+  "cancel_tool_exit_code": 1,
+  "last_observation": "pip downloading SciPy 37.7 MB without a new output line; not a solver/candidate timeout",
+  "network_cause": "unknown",
+  "base_runtime_inspection": {
+    "numpy": "1.26.4",
+    "scipy": "1.15.3",
+    "matplotlib": "3.10.3",
+    "site_packages": "/opt/conda/lib/python3.11/site-packages"
+  },
+  "decision": "reuse already installed exact SciPy/Matplotlib through the standard venv system-site-packages setting; keep venv NumPy2.4.6/OR-Tools precedence; no global changes"
+}

@@ -37,3 +37,5 @@ L01针对Rathore等ICML2024论文《Challenges in Training PINNs: A Loss Landsca
 最新[L06完整公开合同与rubric稿](cases/L06/README.md)含11CSV/设施原材料、5CLI事实映射及47叶100分草案，质量/逐叶grader/完整参考/变体尚未就绪。[不同整数搜索](cases/L06/evaluator/qualification/v2/integer-search/README.md)与独立业务复核取得新可行上界49032.9，仍未认证1%。只新增一个CPU参考界资格，真实活跃路径以长程Recall末节为准；六旧昂贵容器仍Paused。局部资格/草案不构成十题、候选分或小时级证明。
 
 该单个CPU参考任务已自然结束，独立核验成本47808/native界47380，基例1%比例约0.9033%，[终态/独立范围/基例预注册](cases/L06/README.md)单列；完整参考交付与冻结仍pending。独立完整合同审查认可设计/10叶primitive，本轮具体漏洞已修，未批准其余37叶/职业参考/变体/小时级。当前不留新增活跃长计算，不重复求解凑时长。
+
+最新[L06数值与源码交付资格](cases/L06/README.md)：30数值叶独立复核关闭输入漂移/负gap漏洞；主方真正raw-source全链约7分钟、成本47746.2，仍不发布候选总分。唯一完整独立复跑使用同源/全部CSV反转，末态以Recall为准；17执行/审查叶、变体/聚合/校准及十题长程验证仍待完成。

@@ -1,0 +1,51 @@
+{
+  "format": "l06-run/1",
+  "input_path": "/input",
+  "command": [
+    "/opt/cpsat/bin/python",
+    "reproduce.py",
+    "--input",
+    "/input",
+    "--output",
+    "/results/delivery"
+  ],
+  "dependencies": {
+    "python": "3.11.13",
+    "numpy": "2.4.6",
+    "scipy": "1.15.3",
+    "matplotlib": "3.10.3",
+    "ortools": "9.15.6755"
+  },
+  "parameters": {
+    "workers": 8,
+    "seed": 20261029,
+    "relative_gap": 0.009,
+    "solver_seconds": null,
+    "warm_start": null
+  },
+  "algorithm": {
+    "name": "CP-SAT plus explicitly validated local comparison",
+    "termination_kind": "completed",
+    "termination_detail": "optimal_within_requested_gap"
+  },
+  "native_solver": {
+    "name": "OR-Tools CP-SAT",
+    "version": "9.15.6755",
+    "status": "OPTIMAL",
+    "objective_minor": 47746.2,
+    "best_bound_minor": 47323.7
+  },
+  "feasibility": "feasible",
+  "delivered_cost_minor": 47746.2,
+  "started_utc": "2026-10-29T16:59:11.752270+00:00",
+  "finished_utc": "2026-10-29T17:06:17.256647+00:00",
+  "elapsed_seconds": 425.52391331037506,
+  "source_only_inputs": "supplied raw packet plus declared source/dependencies; no prior matrix/plan/reference/rubric",
+  "execution_evidence": [
+    "solver/response-stats.txt",
+    "solver-result.json",
+    "solver/events.jsonl"
+  ],
+  "alternative_complete": true,
+  "timing_definition": "inside main after module imports; external runner separately measures complete process/container wall time"
+}

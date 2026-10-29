@@ -1,0 +1,276 @@
+{
+  "status": "passed",
+  "actual_cli_commands": 11,
+  "seconds": 1.9332887004129589,
+  "hand_values": {
+    "receivable": [
+      10,
+      0
+    ],
+    "receipts": [
+      0,
+      10
+    ],
+    "cash": [
+      -5,
+      4
+    ],
+    "cost": 7
+  },
+  "scope": "derived-output projection only; no full rubric score, replay attestation or quality qualification",
+  "executions": [
+    {
+      "name": "full-valid",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\full-valid.json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.20940499985590577,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"assessed\", \"findings\": [{\"id\": \"C01\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C07\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C08\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C09\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C10\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C11\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"D03\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D04\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D05\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D06\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}], \"counts\": {\"verified_pass\": 10, \"verified_fail\": 0, \"candidate_incomplete\": 0, \"blocked_candidate\": 0}}\n",
+      "stderr": "",
+      "out": "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\full-valid.json"
+    },
+    {
+      "name": "exact-decimal-and-unreduced",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\decimal-summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\exact-decimal-and-unreduced.json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.18400210002437234,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"assessed\", \"findings\": [{\"id\": \"C01\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C07\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C08\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C09\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C10\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C11\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"D03\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D04\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D05\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D06\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}], \"counts\": {\"verified_pass\": 10, \"verified_fail\": 0, \"candidate_incomplete\": 0, \"blocked_candidate\": 0}}\n",
+      "stderr": "",
+      "out": "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\exact-decimal-and-unreduced.json"
+    },
+    {
+      "name": "changed-minimum-cash",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\bad-minimum-summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\changed-minimum-cash.json"
+      ],
+      "exit_code": 2,
+      "seconds": 0.17424280010163784,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"assessed\", \"findings\": [{\"id\": \"C01\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C07\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C08\", \"status\": \"verified_fail\", \"where\": \"summary.scenarios.base.minimum_cash_minor\", \"detail\": \"reported summary differs from exact business recurrence\"}, {\"id\": \"C09\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C10\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C11\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"D03\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D04\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D05\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D06\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}], \"counts\": {\"verified_pass\": 9, \"verified_fail\": 1, \"candidate_incomplete\": 0, \"blocked_candidate\": 0}}\n",
+      "stderr": "",
+      "out": "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\changed-minimum-cash.json"
+    },
+    {
+      "name": "changed-cost-ledger",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\bad-cost-ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\changed-cost-ledger.json"
+      ],
+      "exit_code": 2,
+      "seconds": 0.169989800080657,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"assessed\", \"findings\": [{\"id\": \"C01\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C07\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C08\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C09\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C10\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C11\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"D03\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D04\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D05\", \"status\": \"verified_fail\", \"where\": \"ledger.base.week0.cost\", \"detail\": \"reported ledger differs from exact business recurrence\"}, {\"id\": \"D06\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}], \"counts\": {\"verified_pass\": 9, \"verified_fail\": 1, \"candidate_incomplete\": 0, \"blocked_candidate\": 0}}\n",
+      "stderr": "",
+      "out": "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\changed-cost-ledger.json"
+    },
+    {
+      "name": "changed-optional-inventory",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\bad-inventory-plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\changed-optional-inventory.json"
+      ],
+      "exit_code": 2,
+      "seconds": 0.17861730000004172,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"assessed\", \"findings\": [{\"id\": \"C01\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C07\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C08\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C09\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C10\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C11\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"D03\", \"status\": \"verified_fail\", \"where\": \"plan.base.raw_inventory\", \"detail\": \"optional inventory declaration differs from actual recurrence\"}, {\"id\": \"D04\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D05\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D06\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}], \"counts\": {\"verified_pass\": 9, \"verified_fail\": 1, \"candidate_incomplete\": 0, \"blocked_candidate\": 0}}\n",
+      "stderr": "",
+      "out": "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\changed-optional-inventory.json"
+    },
+    {
+      "name": "optional-inventory-shape-contract",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\bad-inventory-shape-plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\optional-inventory-shape-contract.json"
+      ],
+      "exit_code": 2,
+      "seconds": 0.1679104999639094,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"assessed\", \"findings\": [{\"id\": \"C01\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C07\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C08\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C09\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C10\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C11\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"D03\", \"status\": \"candidate_incomplete\", \"where\": \"plan.base.finished_inventory\", \"detail\": \"inventory declaration integer shape\"}, {\"id\": \"D04\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D05\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D06\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}], \"counts\": {\"verified_pass\": 9, \"verified_fail\": 0, \"candidate_incomplete\": 1, \"blocked_candidate\": 0}}\n",
+      "stderr": "",
+      "out": "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\optional-inventory-shape-contract.json"
+    },
+    {
+      "name": "missing-ledger",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\candidate-omitted-ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\missing-ledger.json"
+      ],
+      "exit_code": 2,
+      "seconds": 0.154819100163877,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"assessed\", \"findings\": [{\"id\": \"C01\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C07\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C08\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C09\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C10\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C11\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"D03\", \"status\": \"candidate_incomplete\", \"where\": \"ledger\", \"detail\": {\"code\": \"ledger_json\", \"where\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-numeric-adapter-20261029\\\\legacy-regression\\\\delivery-regression\\\\candidate-omitted-ledger.json\", \"detail\": \"[Errno 2] No such file or directory: 'D:\\\\\\\\opencorvus-benchmark-runs\\\\\\\\l06-numeric-adapter-20261029\\\\\\\\legacy-regression\\\\\\\\delivery-regression\\\\\\\\candidate-omitted-ledger.json'\"}}, {\"id\": \"D04\", \"status\": \"candidate_incomplete\", \"where\": \"ledger\", \"detail\": {\"code\": \"ledger_json\", \"where\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-numeric-adapter-20261029\\\\legacy-regression\\\\delivery-regression\\\\candidate-omitted-ledger.json\", \"detail\": \"[Errno 2] No such file or directory: 'D:\\\\\\\\opencorvus-benchmark-runs\\\\\\\\l06-numeric-adapter-20261029\\\\\\\\legacy-regression\\\\\\\\delivery-regression\\\\\\\\candidate-omitted-ledger.json'\"}}, {\"id\": \"D05\", \"status\": \"candidate_incomplete\", \"where\": \"ledger\", \"detail\": {\"code\": \"ledger_json\", \"where\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-numeric-adapter-20261029\\\\legacy-regression\\\\delivery-regression\\\\candidate-omitted-ledger.json\", \"detail\": \"[Errno 2] No such file or directory: 'D:\\\\\\\\opencorvus-benchmark-runs\\\\\\\\l06-numeric-adapter-20261029\\\\\\\\legacy-regression\\\\\\\\delivery-regression\\\\\\\\candidate-omitted-ledger.json'\"}}, {\"id\": \"D06\", \"status\": \"candidate_incomplete\", \"where\": \"ledger\", \"detail\": {\"code\": \"ledger_json\", \"where\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-numeric-adapter-20261029\\\\legacy-regression\\\\delivery-regression\\\\candidate-omitted-ledger.json\", \"detail\": \"[Errno 2] No such file or directory: 'D:\\\\\\\\opencorvus-benchmark-runs\\\\\\\\l06-numeric-adapter-20261029\\\\\\\\legacy-regression\\\\\\\\delivery-regression\\\\\\\\candidate-omitted-ledger.json'\"}}], \"counts\": {\"verified_pass\": 6, \"verified_fail\": 0, \"candidate_incomplete\": 4, \"blocked_candidate\": 0}}\n",
+      "stderr": "",
+      "out": "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\missing-ledger.json"
+    },
+    {
+      "name": "probability-type-contract",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\bad-probability-summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\probability-type-contract.json"
+      ],
+      "exit_code": 2,
+      "seconds": 0.16864529997110367,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"assessed\", \"findings\": [{\"id\": \"C01\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C07\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C08\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C09\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C10\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C11\", \"status\": \"candidate_incomplete\", \"where\": \"summary.scenarios.base.probability\", \"detail\": \"finite decimal number or integer numerator/positive denominator required\"}, {\"id\": \"D03\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D04\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D05\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D06\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}], \"counts\": {\"verified_pass\": 9, \"verified_fail\": 0, \"candidate_incomplete\": 1, \"blocked_candidate\": 0}}\n",
+      "stderr": "",
+      "out": "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\probability-type-contract.json"
+    },
+    {
+      "name": "candidate-dependency-blocked",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\incomplete-plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\candidate-dependency-blocked.json"
+      ],
+      "exit_code": 2,
+      "seconds": 0.15780400019139051,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"candidate_blocked\", \"findings\": [{\"id\": \"C01\", \"status\": \"blocked_candidate\", \"where\": \"plan\", \"detail\": {\"code\": \"scenario_coverage\", \"where\": \"decisions\"}}, {\"id\": \"C07\", \"status\": \"blocked_candidate\", \"where\": \"plan\", \"detail\": {\"code\": \"scenario_coverage\", \"where\": \"decisions\"}}, {\"id\": \"C08\", \"status\": \"blocked_candidate\", \"where\": \"plan\", \"detail\": {\"code\": \"scenario_coverage\", \"where\": \"decisions\"}}, {\"id\": \"C09\", \"status\": \"blocked_candidate\", \"where\": \"plan\", \"detail\": {\"code\": \"scenario_coverage\", \"where\": \"decisions\"}}, {\"id\": \"C10\", \"status\": \"blocked_candidate\", \"where\": \"plan\", \"detail\": {\"code\": \"scenario_coverage\", \"where\": \"decisions\"}}, {\"id\": \"C11\", \"status\": \"blocked_candidate\", \"where\": \"plan\", \"detail\": {\"code\": \"scenario_coverage\", \"where\": \"decisions\"}}, {\"id\": \"D03\", \"status\": \"blocked_candidate\", \"where\": \"plan\", \"detail\": {\"code\": \"scenario_coverage\", \"where\": \"decisions\"}}, {\"id\": \"D04\", \"status\": \"blocked_candidate\", \"where\": \"plan\", \"detail\": {\"code\": \"scenario_coverage\", \"where\": \"decisions\"}}, {\"id\": \"D05\", \"status\": \"blocked_candidate\", \"where\": \"plan\", \"detail\": {\"code\": \"scenario_coverage\", \"where\": \"decisions\"}}, {\"id\": \"D06\", \"status\": \"blocked_candidate\", \"where\": \"plan\", \"detail\": {\"code\": \"scenario_coverage\", \"where\": \"decisions\"}}], \"counts\": {\"verified_pass\": 0, \"verified_fail\": 0, \"candidate_incomplete\": 0, \"blocked_candidate\": 10}}\n",
+      "stderr": "",
+      "out": "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\candidate-dependency-blocked.json"
+    },
+    {
+      "name": "evaluation-input-error",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\broken-frozen-packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\evaluation-input-error.json"
+      ],
+      "exit_code": 3,
+      "seconds": 0.15073229977861047,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"run_invalid\", \"findings\": [], \"infrastructure_error\": {\"code\": \"packet_invalid\", \"where\": \"supplier_quotes\", \"detail\": \"duplicate business key ('A', 'R0')\"}, \"counts\": {\"verified_pass\": 0, \"verified_fail\": 0, \"candidate_incomplete\": 0, \"blocked_candidate\": 0}}\n",
+      "stderr": "",
+      "out": "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\evaluation-input-error.json"
+    },
+    {
+      "name": "hand-receivable-and-cash",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\credit-packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\credit-plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\credit-ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\credit-summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\hand-receivable-and-cash.json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.1566337998956442,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"assessed\", \"findings\": [{\"id\": \"C01\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C07\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C08\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C09\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C10\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C11\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"D03\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D04\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D05\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D06\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}], \"counts\": {\"verified_pass\": 10, \"verified_fail\": 0, \"candidate_incomplete\": 0, \"blocked_candidate\": 0}}\n",
+      "stderr": "",
+      "out": "D:\\opencorvus-benchmark-runs\\l06-numeric-adapter-20261029\\legacy-regression\\delivery-regression\\hand-receivable-and-cash.json"
+    }
+  ]
+}

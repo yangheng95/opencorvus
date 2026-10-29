@@ -1,0 +1,12 @@
+{
+  "scope": "reference identity, contradicted lower bound, shared decoder and affected normal paths",
+  "actual_cli_calls": 10,
+  "all_cli_passed": true,
+  "reader_contract_count": 4,
+  "all_reader_contracts_passed": true,
+  "source_initial_and_original_false_passes_preserved": true,
+  "full_grader_or_freeze_approved": false,
+  "solver_calls": 0,
+  "Provider_calls": 0,
+  "GPU_work": false
+}

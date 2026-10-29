@@ -22,7 +22,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "A02",
@@ -35,7 +35,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "A03",
@@ -48,7 +48,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "A04",
@@ -61,7 +61,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         }
       ]
     },
@@ -80,7 +80,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "B02",
@@ -93,7 +93,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "B03",
@@ -106,7 +106,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "B04",
@@ -119,7 +119,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "B05",
@@ -132,7 +132,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "B06",
@@ -145,7 +145,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "B07",
@@ -158,7 +158,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "B08",
@@ -171,7 +171,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "B09",
@@ -184,7 +184,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "B10",
@@ -197,7 +197,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "B11",
@@ -210,7 +210,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         }
       ]
     },
@@ -229,7 +229,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "C02",
@@ -242,7 +242,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "C03",
@@ -255,7 +255,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "C04",
@@ -268,7 +268,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "C05",
@@ -281,7 +281,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "C06",
@@ -294,7 +294,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "calibration_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "C07",
@@ -307,7 +307,7 @@
             "full": "每个场景本字段按公开精确数值合同正确",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "C08",
@@ -320,7 +320,7 @@
             "full": "每个场景本字段按公开精确数值合同正确",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "C09",
@@ -333,7 +333,7 @@
             "full": "每个场景本字段按公开精确数值合同正确",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "C10",
@@ -346,7 +346,7 @@
             "full": "每个场景本字段按公开精确数值合同正确",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "C11",
@@ -359,7 +359,7 @@
             "full": "每个场景本字段按公开精确数值合同正确",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         }
       ]
     },
@@ -404,7 +404,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "D04",
@@ -417,7 +417,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "D05",
@@ -430,7 +430,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "D06",
@@ -443,7 +443,7 @@
             "full": "真实检查满足本条完整结论",
             "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
           },
-          "readiness": "primitive_qualified_full_grader_pending"
+          "readiness": "numeric_adapter_locally_qualified_full_case_pending"
         },
         {
           "id": "D07",
@@ -672,7 +672,7 @@
     "review": "Review leaves use explicit full/half/zero anchors; later blind multi-quality calibration is required before formal claims.",
     "critical": "business_success只在全部critical为verified_pass且参考资格关闭时为true。任何failed/candidate_incomplete/blocked_candidate关键叶均不通过；run_invalid没有候选成功判定。",
     "score_publication": "冻结资格全部关闭后，有效运行按固定100分权重求和，候选缺交仍保留固定分母和真实0分原因；总分与business_success分开。当前未冻结/完整参考/变体/逐叶适配器pending，禁止发布总分。",
-    "primitive_limit": "Existing business checker stops at first semantic error; full success verifies all primitive families, but missing family findings cannot be silently awarded. Per-leaf grading/error adapter remains to implement.",
+    "primitive_limit": "当前inspect_plan以唯一精确递推收集全部可计算谓词，30数值叶已局部独立资格；其余17执行/审查叶和完整聚合仍待完成。未知/未计算不得奖励通过。",
     "visual": "F04 requires viewing actual rendered figures; source strings, file existence or UI automation do not substitute.",
     "dependency_status": "候选缺必需文件/坏schema→candidate_incomplete；因该缺陷无法继续的叶→blocked_candidate；评估器、冻结输入或设施无法执行→run_invalid，整次不发布总分，不计候选失败，不从分母删叶重标100。"
   },
@@ -695,6 +695,10 @@
     "fresh_Codex_comparison": false,
     "hours_validated": false,
     "ten_case_suite_complete": false,
-    "one_percent_quality_scope": "base only under registered native solver trust; variants pending"
+    "one_percent_quality_scope": "base only under registered native solver trust; variants pending",
+    "numeric_30_leaf_adapter": true,
+    "full_reference_source_execution": true,
+    "independent_micro_source_replay": true,
+    "independent_full_source_replay": false
   }
 }

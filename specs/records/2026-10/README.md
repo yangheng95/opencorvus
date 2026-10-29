@@ -14,7 +14,7 @@
 
 - [2026-10-29-task-terminal-checkpoint-recovery.md](2026-10-29-task-terminal-checkpoint-recovery.md)：原Task Git终态、55条预算失败与续跑原文身份错误的共享机制后续方案。
 
-- [2026-10-29-heavy-workbench-l06-qualification.md](2026-10-29-heavy-workbench-l06-qualification.md)：完整原材料/原子rubric稿、独立输出primitive审查与单CPU参考自然终态，完整参考/冻结待完成。
+- [2026-10-29-heavy-workbench-l06-qualification.md](2026-10-29-heavy-workbench-l06-qualification.md)：30数值叶/原参考漏洞修复、真实完整源码交付与独立冷复跑；17叶/变体/聚合/冻结待完成。
 
 - [2026-10-29-memory-context-journey.md](2026-10-29-memory-context-journey.md)：项目MEMORY.MD可达性、语义检索与16张实页复核。
 

@@ -11,28 +11,44 @@ class InputError(ValueError):
         super().__init__(f'{code}: {path}: {detail}')
 
 
-def read_json(path, code, *, decimal_numbers=False):
+def diagnostic_value(value):
+    """Render invalid evidence safely; exact integers still drive all predicates."""
+    if type(value) is int and value.bit_length()>1024:
+        return {'kind':'large_exact_integer','bit_length':value.bit_length(),'sign':-1 if value<0 else 1,
+                'exact_value_location':'submitted input or exact derived constraint at the reported where'}
+    if isinstance(value,list):return [diagnostic_value(item) for item in value]
+    if isinstance(value,dict):return {key:diagnostic_value(item) for key,item in value.items()}
+    return value
+
+
+def decode_json(raw,code,*,source='<json>',decimal_numbers=False):
     def pairs(values):
         result={}
         for key,value in values:
-            if key in result:raise InputError(code,str(path),f'duplicate key {key}')
+            if key in result:raise InputError(code,str(source),f'duplicate key {key}')
             result[key]=value
         return result
-    def constant(value):raise InputError(code,str(path),f'non-JSON number {value}')
+    def constant(value):raise InputError(code,str(source),f'non-JSON number {value}')
     def finite_float(value):
         if decimal_numbers:
             number=Decimal(value)
-            if not number.is_finite():raise InputError(code,str(path),f'non-finite numeric literal {value}')
+            if not number.is_finite():raise InputError(code,str(source),f'non-finite numeric literal {value}')
             return number
         number=float(value)
-        if not math.isfinite(number):raise InputError(code,str(path),f'non-finite numeric literal {value}')
+        if not math.isfinite(number):raise InputError(code,str(source),f'non-finite numeric literal {value}')
         return number
     try:
-        return json.loads(Path(path).read_text(encoding='utf8'),object_pairs_hook=pairs,parse_constant=constant,parse_float=finite_float)
+        return json.loads(raw,object_pairs_hook=pairs,parse_constant=constant,parse_float=finite_float)
     except InputError:
         raise
-    except (OSError,UnicodeError,ValueError,DecimalException) as error:
-        raise InputError(code,str(path),str(error)) from error
+    except (UnicodeError,ValueError,DecimalException) as error:
+        raise InputError(code,str(source),str(error)) from error
+
+
+def read_json(path,code,*,decimal_numbers=False):
+    try:raw=Path(path).read_text(encoding='utf8')
+    except (OSError,UnicodeError) as error:raise InputError(code,str(path),str(error)) from error
+    return decode_json(raw,code,source=str(path),decimal_numbers=decimal_numbers)
 
 
 def validate_instance(data):

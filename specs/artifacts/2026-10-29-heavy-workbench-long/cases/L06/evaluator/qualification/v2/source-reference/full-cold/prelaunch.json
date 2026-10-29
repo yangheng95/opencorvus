@@ -1,0 +1,42 @@
+{
+  "purpose": "first complete 16-week raw/source-only reference delivery and later independent cold replay, not repeating a numerical research run",
+  "project_files": [
+    "check_l06.py",
+    "DATA.md",
+    "l06_bound_certificate.py",
+    "l06_delivery.py",
+    "l06_input.py",
+    "l06_integer.py",
+    "l06_packet.py",
+    "l06_plan.py",
+    "qualify_l06.py",
+    "README.md",
+    "reproduce.py"
+  ],
+  "input_files": [
+    "bom.csv",
+    "demand.csv",
+    "facility.json",
+    "plants.csv",
+    "plant_capacity.csv",
+    "products.csv",
+    "raw_materials.csv",
+    "routes.csv",
+    "scenarios.csv",
+    "supplier_capacity.csv",
+    "supplier_quotes.csv",
+    "supplier_terms.csv"
+  ],
+  "initial_output_state": "new empty results parent; delivery root does not yet exist",
+  "source_mount": "read-only /project",
+  "input_mount": "read-only /input",
+  "output_mount": "/results",
+  "network": "none",
+  "solver_seconds": null,
+  "workers": 8,
+  "random_seed": 20261029,
+  "relative_gap": 0.009,
+  "warm_start_plan": null,
+  "candidate_run": false,
+  "old_six_containers": "remain paused"
+}

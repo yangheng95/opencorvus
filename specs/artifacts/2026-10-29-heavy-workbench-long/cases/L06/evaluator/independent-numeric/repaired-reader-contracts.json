@@ -1,0 +1,50 @@
+[
+  {
+    "name": "decimal-bytes",
+    "actual": [
+      "Decimal",
+      "1.25"
+    ],
+    "expected": [
+      "Decimal",
+      "1.25"
+    ],
+    "passed": true
+  },
+  {
+    "name": "default-bytes",
+    "actual": [
+      "float",
+      "1.25"
+    ],
+    "expected": [
+      "float",
+      "1.25"
+    ],
+    "passed": true
+  },
+  {
+    "name": "overflow-default-bytes",
+    "actual": [
+      "InputError",
+      "probe_json"
+    ],
+    "expected": [
+      "InputError",
+      "probe_json"
+    ],
+    "passed": true
+  },
+  {
+    "name": "duplicate-bytes",
+    "actual": [
+      "InputError",
+      "probe_json"
+    ],
+    "expected": [
+      "InputError",
+      "probe_json"
+    ],
+    "passed": true
+  }
+]

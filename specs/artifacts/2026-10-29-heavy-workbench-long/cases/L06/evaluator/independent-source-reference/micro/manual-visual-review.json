@@ -1,0 +1,16 @@
+{
+  "method": "three generated PNGs actually opened through view_image and manually inspected after this cold run",
+  "cash": {
+    "observed": "only scenario at week0 cash94; credit floor0; readable title/units/week/legend",
+    "matches_independent_data": true
+  },
+  "cost": {
+    "observed": "stack total6 with purchase2/freight2/production1/holding1; legend outside, zero baseline",
+    "matches_independent_data": true
+  },
+  "storage": {
+    "observed": "raw peak2 vs cap4; finished peak1 equals cap1; both axes start0 and outside legends readable",
+    "matches_independent_data": true
+  },
+  "scope": "only the one-week tiny figures; no16-week/multi-scenario visual qualification"
+}

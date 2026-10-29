@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "hand_integer": 6,
+  "hand_continuous": 3,
+  "hand_exact_certificate": "3",
+  "inexact_dual_example_true_optimum": 2,
+  "inexact_dual_certified_lower_bound": "0",
+  "registered_tiny_integer": 4.5,
+  "hand_minimum_credit_integer": 5,
+  "hand_minimum_credit_continuous": 2,
+  "certificate_integer_error": "certificate_integer_model",
+  "seconds": 0.18629646860063076,
+  "scope": "local numeric/build regression, not heavy-case completion or cost certificate for the full instance"
+}

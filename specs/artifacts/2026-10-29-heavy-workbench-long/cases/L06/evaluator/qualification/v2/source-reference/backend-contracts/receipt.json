@@ -1,0 +1,44 @@
+{
+  "status": "passed",
+  "full_compiled_model_equals_registered": true,
+  "model_variables": 1488,
+  "model_rows": 1096,
+  "actual_cli_commands": 2,
+  "executions": [
+    {
+      "case": "warm",
+      "argv": [
+        "/opt/cpsat/bin/python",
+        "-B",
+        "/work/backend-contracts/source/qualify_l06.py",
+        "--input",
+        "/work/integer-qualification/results/hand-input.json",
+        "--output",
+        "/work/backend-contracts/warm",
+        "--warm-start-plan",
+        "/work/backend-contracts/warm-plan.json",
+        "--relative-gap",
+        "0"
+      ],
+      "exit_code": 0,
+      "seconds": 1.1567018781788647,
+      "native_status": "OPTIMAL"
+    },
+    {
+      "case": "infeasible",
+      "argv": [
+        "/opt/cpsat/bin/python",
+        "-B",
+        "/work/backend-contracts/source/qualify_l06.py",
+        "--input",
+        "/work/backend-contracts/infeasible-input.json",
+        "--output",
+        "/work/backend-contracts/infeasible"
+      ],
+      "exit_code": 0,
+      "seconds": 0.9616234651766717,
+      "native_status": "INFEASIBLE"
+    }
+  ],
+  "scope": "backend/identity qualification only; no full optimization or candidate score"
+}

@@ -1,0 +1,2 @@
+FROM opencorvus-benchmark-cpsat:20261029
+RUN /opt/cpsat/bin/python -m pip install --no-cache-dir --only-binary=:all: scipy==1.15.3 matplotlib==3.10.3

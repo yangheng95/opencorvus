@@ -258,3 +258,20 @@ L04独立初审实际抓到v1/v2共享NULL op身份漏洞，已横向修全部�
 下一接续优先完成完整源码交付链和其余37叶/依赖聚合，复用同一业务递推/现有Inspect，不再写第二业务模型/队列，不为了完整原子打分假定首错之后都通过；再补变体质量范围及独立冷复跑/人评校准。必要完整参考重跑属于全链路验收，须与重复数值诊断区分、一次一组并说明目的。L04应用现场、L05外部副作用及其余八题升级持续未完成。保持20分钟心跳ACTIVE，六旧昂贵容器Paused，当前无新增活跃长任务，终态原容器不重启。
 
 本轮最终docs:check通过351 ops/26 groups；L06区域208份有限数/唯一键JSON、50份Python语法和46相对链接通过，均仅包装检查，不替代真实CLI/CP-SAT/925业务独立核算。新基例reference配置已实际加载原始公开材料和三完整计划核验正确质量状态。三个共享索引只暂存本任务hunk；Windows首次git add一次参数过长已改20路径分批正常暂存，未绕hook/新建worktree。未修改生产代码，保留其他任务改动；范围提交后正常fetch/merge/审查全部待推集合/push。
+
+
+## 15:40接续至17:55 UTC：30数值叶、真实源码交付与独立完整复跑
+
+先按Recall检查Git/当前AGENTS，保留所有用户/并行改动，六旧昂贵容器仍Paused，既有quality任务自然exited0。没有Provider/候选/UI/用户进程操作。详细改前分析、唯一数据/数学路径、失败和修复见[L06记录](2026-10-29-heavy-workbench-l06-qualification.md)。
+
+L06现有30数值叶适配：唯一inspect_plan收集可计算谓词，财务/质量依赖明确；normalized只作为被核对事实，不控制业务状态。主方28真实CLI约7.24秒，原22业务/11输出回归。独立初13CLI实际发现public/currentraw共同漂移套旧界、C<伪下界按负gap通过，两真实P1原件保留；共享ZIP解析读取原注册业务身份和reference_bound_contradicted/run_invalid修后10必要CLI/4decoder合同通过。巨大合法整数诊断崩溃已修，不改变精确业务运算。30叶不是47叶，总分仍null。
+
+当前整数后端完整替换为唯一CP-SAT，共用原build_model；原Highs/SciPy整数执行仅在历史快照，连续LP没有重复。实际新image NumPy2.4.6/SciPy1.15.3/Matplotlib3.10.3/ORTools9.15.6755导入及手算/终态通过，原环境未动。初冗余依赖下载构建取消且原配方保留，环境准备不计候选时间。
+
+私有reproduce.py真正从11CSV+facility源码编译模型、求解、核验与生成全机器账/基线/替代/运营表/来源映射/报告/三图；无旧矩阵/plan/hint/L/rubric挂载，networknone/只读源和raw/新输出。主方完整16周自然exit0，容器墙钟约428秒、main425.52秒、solver423.68秒，123真实改进，成本47746.2/基线49401.7/替代47747.7。保持原注册L而非换solver本次弱界，真实30数值叶通过，其余17未评。三实际PNG已人工查看。参考不是受测agent，7分钟不是小时级难度证明。
+
+独立微型source-only5.92秒/21核对/12穷举/实际三图已通过且归档；唯一完整独立复跑oc-l06-review-full-c64dbeffe256（CIDd7015f68ddd337d5e40a821bb3603bd4462781a74fd74a5c4f8052b22c58cdc5）17:43:27Z启动，用同一源、全部11CSV数据行反转、新输出、networknone、8worker/固定seed/gap.009无时间cap。外部原件在l06-reference-independent-review-20261029/full-cold-replay/；自然终态后保存inspect/logs/实际新输出并独立925业务/1488坐标/1096行、固定C06及图形，不能据OPTIMAL代签。主方source-cold及旧quality均已终态，不重启；其他六旧任务保持Paused。
+
+当前待办：17执行/审查叶和固定分母/critical聚合，输入数值变体的明确范围/预注册参考，多质量评分校准/最终冻结，随后fresh重型OpenCorvus/同冻结rubric清洁执行与独立审查/freshCodex、有效活动时长；两方都好则另升版本。L01结果阈值仍null，L04仍局部迁移资格，L05及其余任务完整新版未完成。十题目标未达成，不用本题局部通过冒充套件；保持心跳ACTIVE。
+
+本轮docs:check退出0/351 ops/26 groups，L06包装231 JSON/54 Python/66相对链接通过；不当功能/时长验收。新增源及原件仅属benchmark路径，生产代码无本任务修改；三个共享索引只暂存本任务目标行，保留其他任务的重排/删除。范围提交后正常fetch/merge、检查全部待推集合、push。

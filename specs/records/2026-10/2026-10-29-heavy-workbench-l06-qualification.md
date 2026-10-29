@@ -140,3 +140,42 @@ raw包已实际5条CLI资格1.42秒：全字段还原同一实例、A/R0报价25
 15:08 UTC最新：单CPU参考界在15:02:04Z自然终态exit0、1332.55秒/161次真实incumbent，完整业务CLI可行成本47808，native界47380，gap相对L为107/11845≈0.9033347%。OPTIMAL来自预设非零gap.009，不是精确最优；严格LP格点仍46220.3。当前无新增活跃长计算，六旧容器仍Paused。固定源/全输入/原始日志/inspect/plan/vector/events已封存quality-reference，原单层reviewer正在廉价独立重算，不启动solver。公开L仍null，待当前终态审查及正式注册，不自动冻结/评分。完整合同独立报告已终态，认可557事实/5packet及10叶primitive、具体P1修复，拒绝其余37叶/完整职业参考/变体/小时级；报告在independent-public-contract。后续优先交付链和完整grader，不再重复成本搜索或小资格。
 
 独立质量追加审查已终态：925业务/1488坐标/1096行及16本地终态检查全部通过，确认161事件/最终向量和成本47808，native界47380，相对LB差0.9033347%。选择固定成熟CP-SAT native bound作为本基例参考信任口径，在独立核验同一整数模型/输入/导入和真实终态基础上，正式预注册L=47380；不声称独立search proof或严格有理dual，旧LP只能支持本解3.435%区间。1%阈值在本次搜索之前已写明且不变，没有根据观察误差放宽。注册只覆盖基例，不批准数值变体/全题冻结；还没有新候选。实施限一个私有registered-reference.json保存唯一L，rubric用相对引用消费，不散落复制下界；public只更新资格状态/剩余阻断，不交候选参考计划或权重。此处“一个CPU任务”有8worker且未设单核quota/cpuset，不作为单核性能或候选耗时。
+
+## 15:40 UTC接续 Recall：完整数值叶与依赖合同
+
+用户仍要求十题重型全链路、独立审查/真实两系统比较和有效小时级；便宜优先、无用户总token/总墙钟限制。本轮先查Git和长程/L06/L04/横向Recall；4192ad7e7已push，五GPU/旧CPU仍Paused、最新CP参考exited，不恢复或重复求解。本轮影响仅L06评估侧，不涉及产品Task/Mission/Session调度、Provider、持久数据格式、用户进程/UI/发布。
+
+可观察缺口：现有10输出叶以外还无A/B/C逐叶适配，check_l06.evaluate在第一条语义need失败就抛PlanError，不能据此声称后续约束通过。直接触发是fail-fast调用控制流；根因是原资格只需整体可行判断，而正式rubric需要各独立物理谓词与明确财务依赖。新normalized错误还须逐字段分组对权威raw核对，不能让候选事实替代评估数据。已有10叶primitive/完整可行见证不能根治这两个新要求。全仓当前源搜索确认唯一check_l06.py递推，调用者为l06_delivery、qualify_l06、业务/松弛/输出资格和已执行历史；specs无子AGENTS覆盖。旧源完整保存外部l06-numeric-adapter-20261029/source-before，原终态/容器源不动。
+
+实施方案：将现有算式保留在唯一inspect_plan，严格形状/非负整数先验证，再收集全部可计算语义约束残差；evaluate及现有CLI从同一结果仍返回第一条具名错误/完整可行账，保持当前消费者合同，不写第二业务模型。cash_limit用结构化terminal/week上下文区分期中/期末，不靠解析where文案。不可行策略的财务/总成本不作为已可信业务输出，避免从负库存产生负持有费、再伪造现金/低成本。新l06_numeric只读适配A4/B11/C02–06，复用原10叶输出投影；所有控制约束按自身代数谓词检查，资金叶须完整物理可执行、解质量须整体业务可行。候选normalized只用于A组，不进入真实业务递推。唯一L从rubric相对注册引用加载，语义对象须等于注册基例；合法但尚未注册的数值变体是评估参考缺失/run_invalid，不误打候选0分。
+
+先执行秒级真实CLI：完整已得47808及低质量可行对照、错误normalized属性、同时多物理违例、cash期中/期末明确映射、声明库存独立落点、缺交/坏shape/非法原材料、未注册变体、极大合法整数等新路径；重放原22CLI和既有输出合同因为共享递推确有改动，绝不重跑LP/MIP/GPU或旧LLM smoke。输出30个数值叶、其余执行/人评17叶明确unassessed，当前不发布47叶总成绩/不称完整grader。需要独立单层另目录复核新收集器/依赖及真实错误后再收敛。其后优先完整raw→源码→报告图形的参考链与其他题，而非继续数学搜索。
+
+新适配器首轮19个CLI后资格脚本读中文rubric被Windows cp1252解码中断，属于资格脚本错误非候选；改显式UTF-8后24个真实CLI约5.49秒通过。随后对精确大整数做具名错误边界：2**2048和4300位但系数1的原件都正常返回exit2；选择公开包装×体积20、4300位输入后，两个真实入口均exit1：numeric输出JSON格式化溢出、原business入口PlanError.__repr__已先溢出。源/原输入/stdout/stderr保留large-number-scaled-initial。根因是Python整数解析4300位内合法，但精确乘法所得诊断数位更多，错误呈现先于typed机器收据失败；不是新模型无解/候选物理0分。修复限共享诊断投影：仍以原精确整数计算/比较，只有超大错误actual/required映成位数和原件定位元数据，统一供PlanError及inspect收据使用；不提高全局解析限额、不舍入业务量、不改物理阈值或另加fallback。补两个同源真实CLI和正常精确错误/可行输出，重新进入原验收。
+
+30数值叶26真实CLI约6.89秒通过，改动后的唯一递推又进入原22个business CLI及11输出CLI，均保持明确合同。独立review已委托原单层agent，新目录l06-numeric-independent-review-20261029，不运行solver/Provider/GPU或再委托。其间开始下一依赖：完整参考必须从raw源码生成机器交付/报告/图形，不能加载旧矩阵/计划伪装cold run。
+
+完整参考设计前分析：当前唯一build_model已提供整数payload，旧native HiGHS和只作研究对照的CP-SAT都读同一模型；真正取得1%可达的是CP-SAT。若参考再保留另一套整数执行器会形成双源，故将当前整数后端整体选为已实测CP-SAT，移除current-source highspy执行/节点参数，只保留原已执行源/报告为历史。连续linprog/精确证书不变，模型构造/BOM/现金等算式不动；温启动仅显式参数可用，完整参考不读旧计划/hint。新增一个l06_integer封装已资格的整数payload→CP-SAT与真实incumbent事件，qualify_l06和reference统一调用，默认无solver总时间限，终态由数学gap决定；诊断时间参数仍是显式局部实验选项而非候选总额度。回归手算6/3、4.5、融资5/2及真实native终态，防止改变目标缩放/未知可行性。
+
+已查固定SciPy1.15.3官方pyproject依赖numpy>=1.23.5,<2.5及OR-Tools v9.15官方参数合同，现CP venv的NumPy2.4.6满足其声明范围；还须实际import/小例资格。自有cpsat镜像另建reference层，在原隔离venv只加固定SciPy1.15.3/Matplotlib3.10.3，不变动L01 science环境或用户全局依赖。程序从raw唯一loader→同一build_model/新统一整数后端→真实ledger/summary→源数据图形/报告/manifest，不读取注册L、旧报告、旧向量或评估器权重。先秒级手算raw包的完整新source-only管线和实际图形人工查看，之后必要完整参考冷跑一次一组；数学研究的旧1332秒不能冒充这次完整链或候选作答。若仍达不到基例注册成本/全合同就如实失败，不加睡眠/复制旧答案或放宽质量线。
+
+独立13个CLI抓到两个真实P1参考漏洞：当前public和args原料一起25→24、保留原封存ZIP，仍C0647729/旧L通过；以及只把L改100000后对可行47808给负gap通过。根因分别是load_reference未消费既有captured_input语义基准、quality未检查可行C<L与下界性质矛盾。两原失败在独立runs/source-initial保留。修复前方案：从注册的ZIP/member通过同一共享JSON解析器读取原规范输入，validate_instance后仅去已声明构造metadata，逐业务值对照当前public和本次args输入；不以可变源码hash替代身份。read_json抽出唯一decode_json支撑ZIP字节，原reader/default有限数/Decimal异常合同保持。对完整可行C<L直接reference_bound_contradicted/run_invalid且不出总分，不倒调下界/阈值或奖励负gap。局部hand现金fixture同步带有自己的明确输入封存，非正式候选/基例参考冒用。只重验两个反例与必要正常/reader路径，再交独立原反例确认。
+
+参考环境准备的初Docker构建停留在37.7MB SciPy下载、未终态；网络根因未知，不叫候选卡死。实际基镜像系统Python已含精确SciPy1.15.3/Matplotlib3.10.3，故取消自己exec session91050的冗余下载构建（不动Docker服务/其他进程），保存原配方/收据。新当前配方用标准venv --system-site-packages继承既有固定库，venv NumPy2.4.6/OR-Tools优先，实际四版本导入断言后才使用；不新增失败fallback路径，不改全局/旧science环境。这是依赖准备优化，不计候选活动或数学资格。
+
+完整参考新管线的手算预飞已实际自然完成：容器完整调用约4.57秒，main内约.993秒，成本6/替代10，首个真实incumbent为基线；三张实际图已人工查看，仓容图从0起/图例移轴外后用同一已验账单独重画并再次查看。新后端真实warm OPTIMAL6、INFEASIBLE具名状态和默认无限时间政策通过；新SciPy2环境编译的1488/1096 payload逐业务对象等同原封存矩阵。没有重跑完整LP/研究模型。独立后端/微型source-only审查已另目录开始，不重复16周求解。
+
+现在才启动唯一一次完整raw-source参考执行：外部l06-reference-chain-20261029/full-cold，project仅9个声明源模块+README/DATA、input仅公开11CSV+facility，分别只读挂载/project、/input，/results为新空输出父目录，networknone；没有旧矩阵/计划/hint、注册L、rubric或评估侧参考挂载。新统一CP-SAT、8worker/seed20261029、relativegap.009，默认不设solver总时间限。目的是真正从原材料执行到完整策略/账/真实图形/报告与交接，不把旧1332秒或微型通过充作这次交付，也不把本参考耗时算DUT小时。先按真实incumbent/进程活动定时查看，stdout可能缓冲，不因报告未生成就报卡住。自然终态后用原30数值叶/独立业务/图形与完整合同审查，若输出成本未达当前固定L则只根据同一模型新的真实下界证据审查最强有效L，不能看候选分倒改1%阈值；尚未启动任何新候选。六旧昂贵任务仍Paused、不自动恢复。
+
+
+### 17:55 UTC资格结果与当前活跃清单
+
+主方新完整source-only运行已16:59:09Z→17:06:17Z自然exit0，容器oc-l06-reference-source-cold-20261029-a不再运行、不得重启。原始只读project/raw、新results/networknone身份和原件在evaluator/qualification/v2/source-reference/originals.zip:full-cold/。完整容器427.946551秒，main425.523913、solver423.676430秒互相重叠；123真实改进。成本47746.2、首可行基线49401.7、实际另策略47747.7；原生界47323.7不替代唯一已注册L。对固定L真实numeric CLI为30pass/17unassessed、总分null，未给候选打分。主方已view_image真实三PNG，16周/三场景/单位/信用和周内仓容底线可读、与账同值；原图和观察均保留。该参考约7分钟，不证明候选数小时。
+
+独立30叶审查终态已完成：初13CLI抓到的两个P1保留原错误通过，修后10必要CLI及4共享decoder合同通过。主方最终28CLI约7.24秒、旧22业务/11输出回归通过。归档numeric-findings/与independent-numeric/；归档副本不覆盖执行源。新后端手算/终态资格和微型source-only独立5.92秒/21项/实际三图通过，只在其范围有效。
+
+唯一新增完整复跑由原单层reviewer执行，容器oc-l06-review-full-c64dbeffe256，CIDd7015f68ddd337d5e40a821bb3603bd4462781a74fd74a5c4f8052b22c58cdc5，17:43:27Z启动。外部根D:/opencorvus-benchmark-runs/l06-reference-independent-review-20261029/full-cold-replay/；同一9源码+README/DATA、11CSV全部反转数据行、readonlyproject/raw、新results、networknone、无旧计划/矩阵/hint/注册L/rubric，默认8worker/seed20261029/gap.009/未设时间cap。自然终态后独立精确业务/新模型与固定注册参考/实际图形核验，不能用native状态自行判C06；结果可与主方动作不同。当前六旧昂贵任务仍Paused，原22分钟CPU参考exited0；不自动恢复、重启或并发另开完整求解。
+
+仍缺全47叶聚合/17执行审查叶、公开数值变体参考、职业报告多质量校准/最终冻结，以及真正fresh OpenCorvus/Codex重型比较与有效活动时长。下一步优先用已产原件构造固定分母/critical聚合和真实审查证据，不继续整数成本研究；变体先明确独立参考合同/可达性，不用基例旧L套任意报价。还须推进L04完整现场、L05外部副作用和其余案例，不能用L06单题资格替代十题。全部未完成项保留，心跳ACTIVE。
+
+本轮包装检查：L06区域231份唯一键/有限数JSON、54份Python语法、66个相对链接通过；docs:check真实退出0，351 ops/26 groups。它们只验证包装，功能证据是28CLI/原22与11回归/两处独立P1原反例修复及真实完整源码执行。原始ZIP不重写stdout或已执行源来凑检查。共享README写入首次OSError22已保留外部包装命令记录，精确patch完成三目标行；其他共享差异未覆盖。

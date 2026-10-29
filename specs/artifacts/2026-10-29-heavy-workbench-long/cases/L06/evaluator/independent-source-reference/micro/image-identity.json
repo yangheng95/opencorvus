@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "docker",
+    "image",
+    "inspect",
+    "opencorvus-benchmark-reference:20261029",
+    "--format",
+    "{{.Id}}"
+  ],
+  "exit_code": 0,
+  "image_id": "sha256:23ff8bfbf8055caa0b9fa5745ddb27cceea2f31d7d15b7a900c81112cdfe8ddf",
+  "stderr": ""
+}

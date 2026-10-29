@@ -1,0 +1,107 @@
+[
+  {
+    "contract": "input_is_declared_one_week_one_scenario_micro",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "independent_normalization_matches_generated",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "complete_primary_ledger_matches_independent_physical_and_financial_math",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "complete_summary_matches_independent",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "primary_cost6_AR10_cash94",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "actual_baseline_cost6_first_incumbent",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "alternative_real_feasible_cost10",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "alternative_has_different_control_actions",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "alternative_business_record_is_cost10",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "complete_micro_enumeration_optimum6_alternative10",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "actual_versions_in_declared_reference_environment",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "default_no_time_cap_and_no_supplied_hint",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "native_status_and_cost_scaling",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "run_native_and_delivered_truth",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "manifest_declared_relative_outputs_resolve_within_new_output",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "actual_cli_matches_run_argv",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "new_model5_columns8_rows_and_exact_objective6",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "build_model_unchanged_from_previously_exactly_audited_constructor",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "LinearModel_payload_unchanged",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "real_first_incumbent_records_this_run",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "report_comparison_and_cash_numbers_have_actual_evidence",
+    "passed": true,
+    "detail": null
+  }
+]

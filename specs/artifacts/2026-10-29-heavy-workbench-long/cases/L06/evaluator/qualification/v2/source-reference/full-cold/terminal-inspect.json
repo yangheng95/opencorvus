@@ -1,0 +1,257 @@
+[
+    {
+        "Id": "904f9fa9c7a84bd5e6e94b27fef22a13abea608270ef8c85d292ad76c2601ab9",
+        "Created": "2026-10-29T16:59:09.433920342Z",
+        "Path": "/opt/cpsat/bin/python",
+        "Args": [
+            "-B",
+            "reproduce.py",
+            "--input",
+            "/input",
+            "--output",
+            "/results/delivery"
+        ],
+        "State": {
+            "Status": "exited",
+            "Running": false,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 0,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-10-29T16:59:09.575076587Z",
+            "FinishedAt": "2026-10-29T17:06:17.521627769Z"
+        },
+        "Image": "sha256:23ff8bfbf8055caa0b9fa5745ddb27cceea2f31d7d15b7a900c81112cdfe8ddf",
+        "ResolvConfPath": "/var/lib/docker/containers/904f9fa9c7a84bd5e6e94b27fef22a13abea608270ef8c85d292ad76c2601ab9/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/904f9fa9c7a84bd5e6e94b27fef22a13abea608270ef8c85d292ad76c2601ab9/hostname",
+        "HostsPath": "/var/lib/docker/containers/904f9fa9c7a84bd5e6e94b27fef22a13abea608270ef8c85d292ad76c2601ab9/hosts",
+        "LogPath": "/var/lib/docker/containers/904f9fa9c7a84bd5e6e94b27fef22a13abea608270ef8c85d292ad76c2601ab9/904f9fa9c7a84bd5e6e94b27fef22a13abea608270ef8c85d292ad76c2601ab9-json.log",
+        "Name": "/oc-l06-reference-source-cold-20261029-a",
+        "RestartCount": 0,
+        "Driver": "overlayfs",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": null,
+            "ContainerIDFile": "D:/opencorvus-benchmark-runs/l06-reference-chain-20261029/full-cold/container.cid",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "none",
+            "PortBindings": {},
+            "RestartPolicy": {
+                "Name": "no",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "CapAdd": null,
+            "CapDrop": null,
+            "CgroupnsMode": "private",
+            "Dns": null,
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": null,
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 0,
+            "NanoCpus": 0,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": [],
+            "BlkioDeviceReadBps": [],
+            "BlkioDeviceWriteBps": [],
+            "BlkioDeviceReadIOps": [],
+            "BlkioDeviceWriteIOps": [],
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": [],
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "MemoryReservation": 0,
+            "MemorySwap": 0,
+            "MemorySwappiness": null,
+            "OomKillDisable": null,
+            "PidsLimit": null,
+            "Ulimits": [],
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "Mounts": [
+                {
+                    "Type": "bind",
+                    "Source": "D:/opencorvus-benchmark-runs/l06-reference-chain-20261029/full-cold/project",
+                    "Target": "/project",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "D:/opencorvus-benchmark-runs/l06-reference-chain-20261029/full-cold/input",
+                    "Target": "/input",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "D:/opencorvus-benchmark-runs/l06-reference-chain-20261029/full-cold/results",
+                    "Target": "/results"
+                }
+            ],
+            "MaskedPaths": [
+                "/proc/acpi",
+                "/proc/asound",
+                "/proc/interrupts",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/sys/devices/virtual/powercap",
+                "/sys/firmware"
+            ],
+            "ReadonlyPaths": [
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ]
+        },
+        "Storage": {
+            "RootFS": {
+                "Snapshot": {
+                    "Name": "overlayfs"
+                }
+            }
+        },
+        "Mounts": [
+            {
+                "Type": "bind",
+                "Source": "D:/opencorvus-benchmark-runs/l06-reference-chain-20261029/full-cold/project",
+                "Destination": "/project",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "D:/opencorvus-benchmark-runs/l06-reference-chain-20261029/full-cold/input",
+                "Destination": "/input",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "D:/opencorvus-benchmark-runs/l06-reference-chain-20261029/full-cold/results",
+                "Destination": "/results",
+                "Mode": "",
+                "RW": true,
+                "Propagation": "rprivate"
+            }
+        ],
+        "Config": {
+            "Hostname": "904f9fa9c7a8",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PYTHONDONTWRITEBYTECODE=1",
+                "PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "NVIDIA_VISIBLE_DEVICES=all",
+                "NVIDIA_DRIVER_CAPABILITIES=compute,utility",
+                "LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64",
+                "PYTORCH_VERSION=2.7.1",
+                "MPLBACKEND=Agg"
+            ],
+            "Cmd": [
+                "/opt/cpsat/bin/python",
+                "-B",
+                "reproduce.py",
+                "--input",
+                "/input",
+                "--output",
+                "/results/delivery"
+            ],
+            "Image": "opencorvus-benchmark-reference:20261029",
+            "Volumes": null,
+            "WorkingDir": "/project",
+            "Entrypoint": null,
+            "Labels": {
+                "com.nvidia.volumes.needed": "nvidia_driver",
+                "org.opencontainers.image.ref.name": "ubuntu",
+                "org.opencontainers.image.version": "22.04"
+            }
+        },
+        "NetworkSettings": {
+            "SandboxID": "",
+            "SandboxKey": "",
+            "Ports": {},
+            "Networks": {
+                "none": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "DriverOpts": null,
+                    "GwPriority": 0,
+                    "NetworkID": "02757b3301b8b799bf59c93f48337e4fbcc3c9ec79963f9466f2477265ef9702",
+                    "EndpointID": "",
+                    "Gateway": "",
+                    "IPAddress": "",
+                    "MacAddress": "",
+                    "IPPrefixLen": 0,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DNSNames": null
+                }
+            }
+        },
+        "ImageManifestDescriptor": {
+            "mediaType": "application/vnd.oci.image.manifest.v1+json",
+            "digest": "sha256:5b3862c6cf08b0b4ee155b4714ce3ca08b493214cfe45b753313f6a12fc71150",
+            "size": 2198,
+            "platform": {
+                "architecture": "amd64",
+                "os": "linux"
+            }
+        }
+    }
+]

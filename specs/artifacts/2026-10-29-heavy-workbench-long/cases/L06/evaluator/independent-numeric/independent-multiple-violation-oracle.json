@@ -1,0 +1,51 @@
+{
+  "physical_statuses": {
+    "B02": "verified_pass",
+    "B03": "verified_fail",
+    "B04": "blocked_candidate",
+    "B05": "blocked_candidate",
+    "B06": "verified_fail",
+    "B07": "verified_fail",
+    "B08": "verified_fail",
+    "B09": "verified_pass",
+    "B10": "verified_fail",
+    "B11": "verified_fail",
+    "C04": "verified_pass",
+    "C05": "verified_fail",
+    "C02": "blocked_candidate",
+    "C03": "blocked_candidate"
+  },
+  "violations": {
+    "B02": 0,
+    "B03": 1,
+    "B04": 1,
+    "B05": 1,
+    "C04": 0,
+    "B06": 1,
+    "B07": 1,
+    "B10": 1,
+    "B11": 1,
+    "B08": 1,
+    "B09": 0,
+    "C02": 0,
+    "C03": 1,
+    "C05": 1
+  },
+  "predicate_counts": {
+    "B02": 9,
+    "B03": 144,
+    "B04": 144,
+    "B05": 144,
+    "C04": 144,
+    "B06": 384,
+    "B07": 96,
+    "B10": 48,
+    "B11": 48,
+    "B08": 48,
+    "B09": 48,
+    "C02": 45,
+    "C03": 3,
+    "C05": 3
+  },
+  "business_feasible": false
+}

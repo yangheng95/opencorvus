@@ -1,0 +1,13 @@
+{
+  "cmd": "$r='D:/opencorvus-benchmark-runs/l06-reference-chain-20261029/full-cold';docker run -d --name oc-l06-reference-source-cold-20261029-a --cidfile \"$r/container.cid\" --network none --mount \"type=bind,source=$r/project,target=/project,readonly\" --mount \"type=bind,source=$r/input,target=/input,readonly\" --mount \"type=bind,source=$r/results,target=/results\" -w /project -e PYTHONDONTWRITEBYTECODE=1 opencorvus-benchmark-reference:20261029 /opt/cpsat/bin/python -B reproduce.py --input /input --output /results/delivery",
+  "start": {
+    "current_time": "2026-10-29 16:59:08 UTC"
+  },
+  "chunk_id": "220a54",
+  "wall_time_seconds": 0.9173381,
+  "exit_code": 0,
+  "original_token_count": 17,
+  "output": "904f9fa9c7a84bd5e6e94b27fef22a13abea608270ef8c85d292ad76c2601ab9\n",
+  "image": "sha256:23ff8bfbf8055caa0b9fa5745ddb27cceea2f31d7d15b7a900c81112cdfe8ddf",
+  "scope": "evaluator complete source-only reference; no candidate/benchmark-hour score"
+}

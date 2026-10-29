@@ -1,0 +1,106 @@
+{
+  "all_joint_choices": [
+    {
+      "q": 0,
+      "truck": 0,
+      "production": 0,
+      "business_feasible": false,
+      "cost_exact": null
+    },
+    {
+      "q": 0,
+      "truck": 0,
+      "production": 1,
+      "business_feasible": false,
+      "cost_exact": null
+    },
+    {
+      "q": 0,
+      "truck": 1,
+      "production": 0,
+      "business_feasible": false,
+      "cost_exact": null
+    },
+    {
+      "q": 0,
+      "truck": 1,
+      "production": 1,
+      "business_feasible": false,
+      "cost_exact": null
+    },
+    {
+      "q": 1,
+      "truck": 0,
+      "production": 0,
+      "business_feasible": false,
+      "cost_exact": null
+    },
+    {
+      "q": 1,
+      "truck": 0,
+      "production": 1,
+      "business_feasible": false,
+      "cost_exact": null
+    },
+    {
+      "q": 1,
+      "truck": 1,
+      "production": 0,
+      "business_feasible": false,
+      "cost_exact": null
+    },
+    {
+      "q": 1,
+      "truck": 1,
+      "production": 1,
+      "business_feasible": true,
+      "cost_exact": "6"
+    },
+    {
+      "q": 2,
+      "truck": 0,
+      "production": 0,
+      "business_feasible": false,
+      "cost_exact": null
+    },
+    {
+      "q": 2,
+      "truck": 0,
+      "production": 1,
+      "business_feasible": false,
+      "cost_exact": null
+    },
+    {
+      "q": 2,
+      "truck": 1,
+      "production": 0,
+      "business_feasible": false,
+      "cost_exact": null
+    },
+    {
+      "q": 2,
+      "truck": 1,
+      "production": 1,
+      "business_feasible": true,
+      "cost_exact": "10"
+    }
+  ],
+  "feasible": [
+    {
+      "q": 1,
+      "truck": 1,
+      "production": 1,
+      "business_feasible": true,
+      "cost_exact": "6"
+    },
+    {
+      "q": 2,
+      "truck": 1,
+      "production": 1,
+      "business_feasible": true,
+      "cost_exact": "10"
+    }
+  ],
+  "completeness": "one week, all one-dimensional integer lots0..2, binary shipment0..1, production0..1; inventories derived, not independently free variables",
+  "no_solver_used_by_this_audit": true
+}
