@@ -242,3 +242,13 @@ D02尚有真实执行缺口：同一冻结源码未从变价raw新生成全交�
 最终包装285份唯一键/有限JSON、56份Python语法、94相对链接及32个不可变ZIP成员完整性通过；这只是包装/原件完整性，不替代业务或难度验收。docs:check实际351 ops/26 groups退出0。原始执行文档的相对路径跟随原目录，原字节保留ZIP；两份新可读重复副本经与ZIP原件逐字节身份核对后移除，不重写执行源。无生产代码修改，其他任务视频/旧图删除和共享索引差异完整保留。接下来只提交本任务case/记录和三个共享索引目标hunk，正常fetch/merge/待推全集审查/push后才启动真实pilot。
 
 162c3c8c1已范围提交冻结合同。随后将3份冗长的原始rubric/合成叶结果可读重复件收拢为ZIP-only；逐字节验证其与原始ZIP同一，Git文本换行规范化另按实际文本同一核对，不用此当功能验收。原执行证据不删不改，规范rubric.json是唯一当前配置，最终包装现282 JSON/56 Python/94链接/32 ZIP。该包装整理不改冻结public/权重/原始数据/评分器，后续独立冷跑与新候选要求保持。
+
+
+## 20:12 UTC fresh实际pilot Recall
+
+冻结提交162c3c8c1与2e6ffc7ce均已正常push。先于候选注册双系统顺序OpenCorvus→Codex（>=90且28critical全过；两好另升版本），精确18 public来自Git树2e6ffc7ce，没有传入评估器/参考/控制值/凭据。根D:/opencorvus-benchmark-runs/L06-paired-20261029-be2a55d1，动态定位L06-current-pair-20261029.json。完整auth/models实际preflight credential usable/catalog projected/actualgpt-6.1-sol/streamingtrue；launcher77600、Inspect94656、server127.0.0.1:59471。Task tsk_g00VZTFvzf0073YLIAGl在20:04:23.819Z开始，code/builtin/base2026.10.14.1，实际orchestrator+base-developer、当前active，已产源码。totaltoken/wall均null，3600只为事实无活动观察，Inspect停止观察不cancel有效Task。
+
+初始metadata和后续status仅真实元数据；50条实际请求时快照模型gpt-6.1-sol/exhaustedfalse，不据此打分/证明小时。完整运行原件留外部，暂存凭据不可归档/提交。原生资源隔离和Codex具体model/usage未资格，comparablefalse，只有开发产品难度比较。完成版本封存后实际source-only基例/控制清洁执行、看图和同冻结rubric独立审查，再fresh Codex；不修改当前冻结线。其他九题同步推进，完整计划见L05新资格记录，旧六容器仍暂停。
+
+
+20:42UTC补充实际活动：Task仍active；最近reader20:24:47 EOF之后原生bash tool part明确running。真实命令的自有容器l06-refined-main/CID59907a5e8513...在20:24:48启动，只挂候选project/networknone/已验依赖镜像，20:42:32 CPU799.83%/275.8MiB，正在有效CPU优化。不是模型继续思考16分钟或调度已挂；不取消/重启。此容器由候选--rm运行，终态自动清理后以原生tool exit/output封存，不重复启动。无新分数/小时；八核累计CPU不算数小时候选墙钟。六旧昂贵容器仍Paused。完整动态状态与L05独立mini关闭见长程Recall末节。

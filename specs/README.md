@@ -2,6 +2,8 @@
 
 - [批准后的代码提交验收](records/2026-10/2026-10-30-approved-code-workflow.md)：完整真实改码、测试、批准和范围Git提交的当前版本验收。
 
+- [L05跨系统副作用资格](records/2026-10/2026-10-30-heavy-workbench-l05-qualification.md)：真实HTTP/两个库、未知ACK与进程恢复、两错误控制独立复核通过；尚非完整重型题。
+
 - [Mission 创建选择旅程](records/2026-10/2026-10-30-mission-selection-journey.md)：真实搜索、保留选择、类型切换及取消状态调查。
 
 - [Sources 与默认桌面看板](records/2026-10/2026-10-30-source-and-board-desktop.md)：真实来源操作复核及默认展开侧栏时的五列可读性。

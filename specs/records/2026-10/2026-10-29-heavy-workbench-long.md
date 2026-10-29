@@ -305,3 +305,32 @@ L06现有30数值叶适配：唯一inspect_plan收集可计算谓词，财务/�
 最终包装285份唯一键/有限JSON、56份Python语法、94相对链接及32个不可变ZIP成员完整性通过；这只是包装/原件完整性，不替代业务或难度验收。docs:check实际351 ops/26 groups退出0。原始执行文档的相对路径跟随原目录，原字节保留ZIP；两份新可读重复副本经与ZIP原件逐字节身份核对后移除，不重写执行源。无生产代码修改，其他任务视频/旧图删除和共享索引差异完整保留。接下来只提交本任务case/记录和三个共享索引目标hunk，正常fetch/merge/待推全集审查/push后才启动真实pilot。
 
 162c3c8c1已范围提交冻结合同。随后将3份冗长的原始rubric/合成叶结果可读重复件收拢为ZIP-only；逐字节验证其与原始ZIP同一，Git文本换行规范化另按实际文本同一核对，不用此当功能验收。原执行证据不删不改，规范rubric.json是唯一当前配置，最终包装现282 JSON/56 Python/94链接/32 ZIP。该包装整理不改冻结public/权重/原始数据/评分器，后续独立冷跑与新候选要求保持。
+
+## 19:58–20:12 UTC Recall：冻结版本真实双系统注册，OpenCorvus已执行
+
+冻结及原件整理已正常提交/push为162c3c8c1、2e6ffc7ce，启动前当前运行时相关源码tracked清洁；整个仓库仍有其他任务改动，原生OS/资源隔离未资格，因此comparable=false，不作同模型因果排名。单题合同冻结1/10、候选有效小时0/10不变。没有恢复六个旧昂贵容器。
+
+双系统先于候选注册于`D:/opencorvus-benchmark-runs/L06-paired-20261029-be2a55d1/paired-registration.json`；定位入口`D:/opencorvus-benchmark-runs/L06-current-pair-20261029.json`。从不可变Git树2e6ffc7ce导出相同18个public文件，分别放入该根的`opencorvus/project`、`codex/project`，没有复制评估器、参考、权重、具体私有控制值或凭据。>=90且全部critical通过才判好，两方好则另升版本；顺序OpenCorvus→fresh Codex，避免不必要CPU争抢。Codex尚未启动，接口若不暴露实际model/usage则明确unknown。
+
+复用serve_heavy_workbench.ts与Inspect现有入口。完整auth/models成对暂存，源内容未输出；实际preflight分别验证credential usable、catalog projected、actualModel=gpt-6.1-sol、streaming=true。自有launcher PID77600、Inspect observer PID94656，监听`http://127.0.0.1:59471/`；均隐藏进程，无用户窗口/进程操作。证据/注册/Inspect日志在pair根的opencorvus目录，运行时私有凭据不得归档或提交。
+
+真实Task `tsk_g00VZTFvzf0073YLIAGl`，2026-10-29T20:04:23.819Z开始，来源inspect-ai、productPillar=code、原生package builtin/base2026.10.14.1。20:12快照active/running，实际编排器与base-developer执行，已有l06_data.py/l06_optimize.py/l06_simulate.py；这只证明真实活动，不是通过或小时证据。保存元数据initial-task-metadata/status-latest，完整原始运行记录保留外部，不持续监听日志。
+
+未设总token/总墙钟截断；3600秒仅真实无活动观察窗，Inspect超时停止观察但不cancel Task。自然终态后先封存完成源码/产物/真实模型请求和活动、检查子进程实际终态，再评估侧source-only清洁执行基例/已声明控制、实际看图并用同一冻结rubric作单层独立审查。只有自有Task及实际子工作收敛后才正常stop listener并清除暂存凭据，源凭据不改。后续再启动已注册fresh Codex。任何候选结果不得反改当前冻结线。
+
+运行期间补L05真实HTTP副作用/脏现场的廉价可达性，随后L04完整应用现场与其余题；不重复L06资格、小solver或S06。根目录case矩阵误带逐行补丁加号是本任务排版缺陷，将仅删除行首多余标记；不改冻结业务合同。剩余九题、真正双系统评分/小时与套件成熟度尚未达成，心跳保持ACTIVE。
+
+
+主方新mini状态checker已实际读取原始服务/业务库：A/B完整分区三身份business_success；两种独立新服务错误控制都真实exit2/business_mismatch。全局event_id漏B/E1账与效果；提前sent在HTTP前握手中断、重启already_sent，服务GET unknown且三效果缺交。原源码/命令/库/响应打包L05/evaluator/qualification/main/originals.zip，未重跑原40资格。单层独立冷跑/SQL/边界和两控制审查仍进行中；没有全L05/候选分/小时结论。新判定器主动检查重复实际身份，避免dict折叠遮住重复行；不是完整候选grader。L06在20:24:51Z仍真实active，60次gpt-6.1-sol流式请求且有新源码/报告链，不作评分，后续按外部动态定位接续。
+
+
+## 20:42 UTC接续状态：L05 mini独立关闭，L06继续真实CPU工作
+
+L05单层独立审查最终mini_protocol_locally_qualified_no_current_substantive_blocker、blocking=[]。唯一source-only冷复跑整体6.194199秒/内部5.754852秒；独立24项SQL逐身份/载荷/receipt/真实首次POST失ACK顺序通过。另两错误控制真实5.116847秒、五个checker CLI错误（同总额错身份/缺项+多项/重复身份/交换receipt/expected重复）和14项新HTTP边界均按明确错误/状态通过。数量分属重叠层，不能相加称统计样本、专业校准或难度。全部自有服务/worker已终态，不重复原40。计划/执行原件、原库和源封存L05/evaluator/independent-review/originals.zip，当前六执行源与原快照同一；只认可明确合成USD mini，完整L05/正式rubric/候选/小时仍未完成。
+
+L06 Task在20:40:39仍active。最近60真实模型HTTP请求全部streaming、gpt-6.1-sol，最后reader在20:24:47已EOF但原生tool part仍running；这不能当模型挂起或有效LLM思考16分钟。独立读取真实tool part和自有PID链，正在执行其自然生成的docker run CPU优化命令；容器l06-refined-main、CID59907a5e8513aa2c8c53bed2eb10b11eeb397814575789408a112bde1efbed27，20:24:48.321Z启动，精确绑定本候选project、networknone/已验依赖镜像。20:42:32真实CPU799.83%、275.8MiB，仍有有效计算；尚无异常/终态或候选成绩，不取消/重启。--rm自然退出自动清理后以原生工具exit/output及候选结果封存，不能因容器不存在重跑。八核CPU时间不得换算成数小时候选墙钟，当前小时资格仍0/10。
+
+六旧昂贵容器重新inspect仍Paused，未恢复/重启；当前只这一组候选CPU工作。listener/Inspect继续存在，3600只观察无活动，若观察器停止而此类真实CPU仍有效必须调查/接续观察，不能cancel。下一轮先按动态定位看Task及该实际子工作终态；封存后同冻结rubric清洁执行/实际图/独立评分，再顺序fresh Codex。其他九题按完整现场预案推进，合同冻结1/10不等于十题完成，心跳ACTIVE。
+
+
+本阶段最终docs:check通过351 ops/26 groups，新增L05六Python语法、五JSON、两个ZIP原件完整性及11相对链接通过，仅包装检查。功能以真实HTTP/两个库/自有进程/独立冷复跑与错误控制为依据；没有生产代码修改、没有新Provider/LLM smoke或GPU恢复。三个共享索引只暂存本任务hunk，其他视频/旧图删除、CSS和其他架构改动完整保留。本范围提交后正常fetch/merge、审查完整待推集合并push；目标未全成、心跳继续ACTIVE。

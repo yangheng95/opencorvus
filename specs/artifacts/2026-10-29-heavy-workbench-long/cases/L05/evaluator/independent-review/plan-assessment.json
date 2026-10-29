@@ -1,0 +1,33 @@
+{
+  "status": "READY_FOR_MINI_PROTOCOL_QUALIFICATION_AFTER_RECORDED_CLARIFICATIONS",
+  "scope": "One cooperative HTTP receiver plus a tiny local worker witness, not full L05",
+  "original_plan_blockers": [
+    {
+      "id": "P1-01",
+      "issue": "Static schema, known-key replay/conflict and dynamic reversal validation precedence; non-reservation of rejected effect keys; concurrent remaining-credit check",
+      "design_state": "addressed in current public protocol and read source, empirical verification next"
+    },
+    {
+      "id": "P1-02",
+      "issue": "Unknown ACK must originate from a real first POST commit, not preseeded effect replay",
+      "design_state": "addressed in current public protocol and read harness, independent cold replay next"
+    }
+  ],
+  "remaining_design_blockers_for_this_declared_mini": [],
+  "implementation_already_reported_by_author": true,
+  "author_result_is_not_independent_execution": true,
+  "protocol_boundary_notes": [
+    "Immutable tenant/event_id effect identity; no revision or old operation_id compatibility",
+    "GET or same-key POST recovery can both be correct; no mandated internal architecture",
+    "requests captures validated business decisions, not proof of client acknowledgement or all malformed HTTP traffic",
+    "Namespace isolation is not authentication/authorization certification",
+    "Worker ingest is a harness-trusted mini input, not a general candidate business API"
+  ],
+  "full_revision_migration_epoch_monitoring_required_now": false,
+  "full_L05_freeze_approved": false,
+  "candidate_score": null,
+  "hours_or_ten_case_completion_approved": false,
+  "models_solvers_Docker_GPU_UI_runs_in_plan_review": 0,
+  "delegations": 0,
+  "repo_modified_or_committed_by_reviewer": false
+}

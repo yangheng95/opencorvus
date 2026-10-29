@@ -1,0 +1,11 @@
+{
+  "status": "business_success",
+  "scope": "mini_complete_declared_tenant_partition",
+  "tenants": [
+    "A",
+    "B"
+  ],
+  "expected_identities": 3,
+  "findings": [],
+  "candidate_score": null
+}

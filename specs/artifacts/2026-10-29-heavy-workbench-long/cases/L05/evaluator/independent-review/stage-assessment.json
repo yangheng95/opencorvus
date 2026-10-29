@@ -1,0 +1,97 @@
+{
+  "reviewer": "/root/benchmark_review",
+  "stage": "L05 mini cooperative external-effect protocol qualification",
+  "conclusion": "mini_protocol_locally_qualified_no_current_substantive_blocker",
+  "blocking_findings": [],
+  "plan_initial_P1": [
+    {
+      "id": "P1-01",
+      "issue": "static schema, immutable-key replay/conflict, then dynamic reversal ordering",
+      "status": "resolved_in_public_contract_source_and_real_boundaries"
+    },
+    {
+      "id": "P1-02",
+      "issue": "true first POST commit with lost ACK, rather than preloaded/replayed effect",
+      "status": "resolved_in_real_cold_HTTP_SQL_and_worker_crash_evidence"
+    }
+  ],
+  "completed_evidence": {
+    "source_only_cold_replays": 1,
+    "cold": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l05-independent-qualification-20261030\\source-a\\qualify_l05.py",
+        "--source",
+        "D:\\opencorvus-benchmark-runs\\l05-independent-qualification-20261030\\source-a",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l05-independent-qualification-20261030\\cold-a"
+      ],
+      "harness_pid": 58244,
+      "exit_code": 0,
+      "complete_harness_seconds": 6.19419900001958,
+      "started_utc": "2026-10-29T20:28:12.050759+00:00",
+      "finished_utc": "2026-10-29T20:28:18.245153+00:00",
+      "scope": "one source-only local mini protocol replay, not full L05"
+    },
+    "harness_contracts": 40,
+    "independent_readonly_SQL_checks": 24,
+    "real_wrong_controls": 2,
+    "control_command": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l05-independent-qualification-20261030\\counterexample-source\\qualify_counterexamples.py",
+        "--source",
+        "D:\\opencorvus-benchmark-runs\\l05-independent-qualification-20261030\\counterexample-source",
+        "--events",
+        "D:\\opencorvus-benchmark-runs\\l05-independent-qualification-20261030\\cold-a\\accepted-events.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l05-independent-qualification-20261030\\counterexamples-independent"
+      ],
+      "pid": 43276,
+      "started_utc": "2026-10-29T20:36:21.239376+00:00",
+      "ended_utc": "2026-10-29T20:36:26.356361+00:00",
+      "elapsed_seconds": 5.116847000084817,
+      "returncode": 0
+    },
+    "checker_positive_error_contracts": 5,
+    "additional_real_HTTP_boundaries": 14,
+    "additional_HTTP_command": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l05-independent-qualification-20261030\\source-a\\l05_effects.py",
+        "--db",
+        "D:\\opencorvus-benchmark-runs\\l05-independent-qualification-20261030\\http-boundaries\\remote.sqlite"
+      ],
+      "pid": 98584,
+      "returncode": 0,
+      "elapsed_seconds": 1.2143087997101247,
+      "started_utc": "2026-10-29T20:37:05.812018+00:00",
+      "ended_utc": "2026-10-29T20:37:07.026365+00:00"
+    },
+    "all_reviewed_current_execution_sources_match_snapshots": true
+  },
+  "limits": [
+    "worker ingest is only the trusted accepted-event witness, not a complete generic business ingress",
+    "checker scope is the complete declared A/B tenant partition; separate T/X probes are not core accepted events",
+    "SQL service decisions are not proof a client received an ACK; malformed HTTP is captured outside the request table",
+    "two intentionally bad implementations and five checker probes are not exhaustive adversarial or scientific calibration",
+    "no changed-key wrong worker, arbitrary dirty-database repair, revision/multicurrency, monitoring, full grader, or full candidate run was qualified",
+    "one local host/process-crash run does not establish power-loss durability, authentication isolation, statistical reliability, or long-horizon difficulty"
+  ],
+  "qualification_approved": "only this explicitly synthetic, cooperative loopback HTTP/SQLite mini and the tested evidence/error contracts",
+  "full_L05_frozen": false,
+  "hours_validated": false,
+  "candidate_score": null,
+  "benchmark_ten_cases_complete": false,
+  "remaining_own_active_experiments": 0,
+  "process_scope": "only owned Popen handles; no user services, L06 candidate, credentials, Provider, GPU, solver, Docker, UI or delegation accessed"
+}

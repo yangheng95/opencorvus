@@ -1,0 +1,74 @@
+{
+  "controls": [
+    {
+      "fault": "global_event_id",
+      "actual_assessment": {
+        "status": "business_mismatch",
+        "scope": "mini_complete_declared_tenant_partition",
+        "tenants": [
+          "A",
+          "B"
+        ],
+        "expected_identities": 3,
+        "findings": [
+          {
+            "identity": [
+              "B",
+              "E1"
+            ],
+            "error": "local_entry_missing"
+          },
+          {
+            "identity": [
+              "B",
+              "E1"
+            ],
+            "error": "remote_effect_missing"
+          }
+        ],
+        "candidate_score": null
+      },
+      "positive_error_contract": "passed"
+    },
+    {
+      "fault": "early_sent",
+      "actual_assessment": {
+        "status": "business_mismatch",
+        "scope": "mini_complete_declared_tenant_partition",
+        "tenants": [
+          "A",
+          "B"
+        ],
+        "expected_identities": 3,
+        "findings": [
+          {
+            "identity": [
+              "A",
+              "E1"
+            ],
+            "error": "remote_effect_missing"
+          },
+          {
+            "identity": [
+              "A",
+              "R1"
+            ],
+            "error": "remote_effect_missing"
+          },
+          {
+            "identity": [
+              "B",
+              "E1"
+            ],
+            "error": "remote_effect_missing"
+          }
+        ],
+        "candidate_score": null
+      },
+      "positive_error_contract": "passed"
+    }
+  ],
+  "seconds": 4.029392400290817,
+  "scope": "two_real_wrong_controls_only",
+  "candidate_score": null
+}
