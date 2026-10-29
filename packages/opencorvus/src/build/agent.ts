@@ -563,11 +563,11 @@ export namespace BuildAgent {
   }
 
   /**
-   * Run the build agent against a target. Normal stream termination returns
-   * the physical session facts and stable Host-observation references.
+   * Run the build agent against a target. Normal termination and coordination
+   * handoff return the required physical-session publication receipt.
    * Business acceptance is intentionally left to the Orchestrator.
    */
-  export async function run(input: RunInput): Promise<RunOutput | AgentCoordinationHandoffResult> {
+  export async function run(input: RunInput): Promise<RunOutput | (RunOutput & AgentCoordinationHandoffResult)> {
     const task = requireTask(input.taskID)
     {
       // ── Worktree acquisition ─────────────────────────────────────────────
@@ -988,11 +988,6 @@ export namespace BuildAgent {
         observationErrors.push(`Build Turn failed: ${runError instanceof Error ? runError.message : String(runError)}`)
       }
       const coordinationHandoff = out ? agentCoordinationHandoffResult(out) : undefined
-      if (coordinationHandoff) {
-        const cleanup = input.terminalFactCleanup ?? settleBuildObservationCleanup
-        await cleanup({ observationID, activation: cleanupActivation })
-        return coordinationHandoff
-      }
       let provenance = { observedArtifactLocators: [], sourceArtifactLocators: [], selections: [] } as ReturnType<
         typeof artifactProvenanceForSession
       >
@@ -1060,6 +1055,7 @@ export namespace BuildAgent {
         merged: Boolean(mergedHead),
       })
       return {
+        ...coordinationHandoff,
         sessionID,
         finalMessageID: out.finalMessage.info.id,
         terminalFactPublication,

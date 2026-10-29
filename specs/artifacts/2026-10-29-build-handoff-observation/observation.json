@@ -1,0 +1,83 @@
+{
+  "at": "2026-10-29T12:47:58.139Z",
+  "task": {
+    "id": "tsk_g00VZRQQAP00yaqEnUZF",
+    "project_id": "prj_h5W7734ywOJ64549AGYm",
+    "session_id": "ses_-zUQYZZZfzzZxyo2Fspx",
+    "title": "协调差异验收793 限定代码修复"
+  },
+  "artifactID": "art_hV82RiBkTPWCx2iDmjdP",
+  "publishedAt": 1793277382481,
+  "immutableAfterRestart": true,
+  "observation": {
+    "task_id": "tsk_g00VZRQQAP00yaqEnUZF",
+    "session_id": "ses_hqAWulrYXGNRzSZruMte",
+    "final_message_id": "msg_g0VZRR3iY00B5GkepNMA",
+    "execution_mode": "current_project",
+    "contribution_commit_ref": null,
+    "published_commit_ref": null,
+    "primary_base_commit_ref": "4c086d24dfd1",
+    "primary_terminal_commit_ref": "4c086d24dfd1",
+    "diff_base_ref": "0a0c6cdf5800153e209c4b55e2e7cef1e1d53a13",
+    "diff_head_ref": "d47c59fa4ee80ef624e60b1e27cc408e102cee38",
+    "diffs": [
+      {
+        "file": "counter.py",
+        "additions": 1,
+        "deletions": 1,
+        "status": "modified",
+        "is_binary": false,
+        "before": {
+          "oid": "68f42d73365ea83036d5da9552275d9d1036b12f",
+          "bytes": 41
+        },
+        "after": {
+          "oid": "a52633cf67ffa237e67c09f5e405f4f67f6746c1",
+          "bytes": 45
+        }
+      },
+      {
+        "file": "test_counter.py",
+        "additions": 15,
+        "deletions": 0,
+        "status": "added",
+        "is_binary": false,
+        "before": null,
+        "after": {
+          "oid": "054550501612906845de0919009c62534bb4a6fc",
+          "bytes": 318
+        }
+      }
+    ],
+    "observed_artifact_locators": [],
+    "source_artifact_locators": []
+  },
+  "blobReads": [
+    {
+      "file": "counter.py",
+      "before": "def next_serial(value):\n    return value\n",
+      "after": "def next_serial(value):\n    return value + 1\n",
+      "beforeBytes": 41,
+      "afterBytes": 45
+    },
+    {
+      "file": "test_counter.py",
+      "before": null,
+      "after": "import unittest\n\nfrom counter import next_serial\n\n\nclass NextSerialTests(unittest.TestCase):\n    def test_zero_returns_one(self):\n        self.assertEqual(next_serial(0), 1)\n\n    def test_forty_one_returns_forty_two(self):\n        self.assertEqual(next_serial(41), 42)\n\n\nif __name__ == \"__main__\":\n    unittest.main()\n",
+      "beforeBytes": 0,
+      "afterBytes": 318
+    }
+  ],
+  "cleanup": [
+    {
+      "observation_id": "art_hV82RiBkTPWCx2iDmjdP",
+      "time_created": 1793277290983,
+      "outcome": "retained",
+      "receipt_at": 1793277382481
+    }
+  ],
+  "acceptance": {
+    "qualified": "Real file writes, tests, coordination Tool and retained canonical Host diff before operator confirmation; same original diffs manually readable after interruption and restart.",
+    "notQualified": "No operator commit confirmation or successful same-implementer completion. The initial checker request budget exhausted; terminal checkpoint committed without that confirmation, and continuation encountered a CompactionUserTextIntegrityError."
+  }
+}

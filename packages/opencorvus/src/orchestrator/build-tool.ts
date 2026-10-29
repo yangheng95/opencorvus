@@ -160,11 +160,9 @@ export function createBuildTool(dependencies: BuildToolDependencies) {
             terminalFactProvenance: dependencies.terminalFactProvenance,
           })
 
-          if (isAgentCoordinationHandoffResult(result)) {
-            return DispatchOutcome.coordination(result)
-          }
           const { sessionID, finalMessageID, terminalFactPublication } = result
           if (terminalFactPublication.kind === "terminal_success") {
+            if (isAgentCoordinationHandoffResult(result)) return DispatchOutcome.coordination(result)
             return DispatchOutcome.terminal({ sessionID, finalMessageID })
           }
           return DispatchOutcome.partial({

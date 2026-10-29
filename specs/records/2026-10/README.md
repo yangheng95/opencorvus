@@ -1,5 +1,9 @@
 # 2026-10 Records
 
+- [2026-10-29-build-handoff-observation.md](2026-10-29-build-handoff-observation.md)：协调前保留实际文件观测、失败回执与续跑Review。
+
+- [2026-10-29-task-terminal-checkpoint-recovery.md](2026-10-29-task-terminal-checkpoint-recovery.md)：原Task Git终态、55条预算失败与续跑原文身份错误的共享机制后续方案。
+
 - [2026-10-29-heavy-workbench-l06-qualification.md](2026-10-29-heavy-workbench-l06-qualification.md)：便宜实验先行、现金/阶段仓容根因、完整动作与错误对照，未冻结新题。
 
 - [2026-10-29-memory-context-journey.md](2026-10-29-memory-context-journey.md)：项目MEMORY.MD可达性、语义检索与16张实页复核。

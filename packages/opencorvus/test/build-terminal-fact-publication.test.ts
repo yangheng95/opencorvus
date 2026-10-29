@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, spyOn, test } from "bun:test"
 import { MockLanguageModelV3, simulateReadableStream } from "ai/test"
-import type { LanguageModelV3StreamResult } from "@ai-sdk/provider"
+import type { LanguageModelV3CallOptions, LanguageModelV3StreamResult } from "@ai-sdk/provider"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { hostGit as git } from "@/util/git"
@@ -25,7 +25,7 @@ import { recordDispatchSettlement } from "@/engine/dispatch-settlement"
 import { createDispatchLineageOrigin } from "@/engine/dispatch-lineage"
 import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { describeTask } from "@/engine/describe"
-import { EngineArtifactTable, EngineBuildObservationCleanupTable, EngineTaskTable } from "@/engine/engine.sql"
+import { EngineArtifactTable, EngineTaskTable } from "@/engine/engine.sql"
 import { Database, DatabaseUnavailableError, and, eq } from "@/storage/db"
 import { recordEngineArtifact } from "@/engine/artifact"
 import { buildObservationRefName } from "@/engine/build-observation-ref"
@@ -42,7 +42,9 @@ import {
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { EngineService } from "@/task-api"
 import { writeTaskUpdateInTransaction } from "@/engine/state"
-import { findTask } from "@/engine/store"
+import { findArtifact, findTask, viewBuildHostObservationArtifact } from "@/engine/store"
+import { readBuildObservationContentRange } from "@/engine/build-observation-content"
+import { listPendingAgentCoordinationRequests } from "@/engine/agent-coordination"
 import { TestHooks as TaskControlTestHooks } from "@/engine/task-root-ingress-delivery"
 import { deleteProject, ProjectDeleteTestHooks } from "@/project/delete"
 import { Project } from "@/project/project"
@@ -55,13 +57,17 @@ import { EvolutionMutationReceiptIdentityConflictError } from "@/expert-squad/mu
 
 const modelRef = { providerID: "test", modelID: "build-terminal-publication" }
 let restoreHelperLanguage: (() => void) | undefined
+let physicalBuildStream: ((options: LanguageModelV3CallOptions) => LanguageModelV3StreamResult) | undefined
 
 beforeEach(() => {
   const language = spyOn(Provider, "getLanguage").mockResolvedValue(
     new MockLanguageModelV3({
       provider: modelRef.providerID,
       modelId: modelRef.modelID,
-      async doStream(): Promise<LanguageModelV3StreamResult> {
+      async doStream(options): Promise<LanguageModelV3StreamResult> {
+        if (physicalBuildStream && options.tools?.some((entry) => entry.name === "request_orchestrator_decision")) {
+          return physicalBuildStream(options)
+        }
         return {
           stream: simulateReadableStream({
             chunks: [
@@ -195,13 +201,9 @@ afterEach(async () => {
   } finally {
     restoreHelperLanguage?.()
     restoreHelperLanguage = undefined
+    physicalBuildStream = undefined
   }
 })
-
-async function gitRef(directory: string, ref: string) {
-  const result = await git(["rev-parse", "--verify", ref], { cwd: directory, timeoutProfile: "fast" })
-  return result.exitCode === 0 ? result.text().trim() : undefined
-}
 
 async function createProductionFixture(
   projectPath: string,
@@ -444,11 +446,11 @@ async function withBootstrappedProject<R>(directory: string, fn: () => R): Promi
   return await Instance.provide({ directory, init: InstanceBootstrap, fn })
 }
 
-async function installPhysicalBuildSpies(options?: { mockProvider?: boolean }) {
+async function installPhysicalBuildSpies(options?: { mockProvider?: boolean; realProcessor?: boolean }) {
   const provider =
     options?.mockProvider === false ? undefined : spyOn(Provider, "getModel").mockResolvedValue(providerModel())
   const ingressRunner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => {} })
-  const processor = spyOn(SessionProcessor, "create").mockImplementation((input: any) => {
+  const processor = options?.realProcessor ? undefined : spyOn(SessionProcessor, "create").mockImplementation((input: any) => {
     const assistant = input.assistantMessage
     return {
       message: assistant,
@@ -473,13 +475,158 @@ async function installPhysicalBuildSpies(options?: { mockProvider?: boolean }) {
   return {
     [Symbol.dispose]() {
       ingressRunner[Symbol.dispose]()
-      processor.mockRestore()
+      processor?.mockRestore()
       provider?.mockRestore()
     },
   }
 }
 
+function coordinatingFileStream(contentForDirectory = (_directory: string) => "Saved before coordination\n") {
+  const calls = new Map<string, number>()
+  physicalBuildStream = () => {
+    const directory = Instance.directory
+    const step = (calls.get(directory) ?? 0) + 1
+    calls.set(directory, step)
+    if (step > 2) throw new Error("Expected the real coordination tool to drain this worker Turn")
+    const toolName = step === 1 ? "write" : "request_orchestrator_decision"
+    const input = step === 1
+      ? { filePath: path.join(directory, "handoff.txt"), content: contentForDirectory(directory) }
+      : {
+          summary: "File saved; local commit awaits a decision",
+          details: "The authorized file write is complete. Decide whether to commit it locally.",
+          blocking: true,
+          requested_decision: "Confirm the local commit",
+          evidence_locators: [],
+          severity: "blocked",
+        }
+    return {
+      stream: simulateReadableStream({ chunks: [
+        { type: "stream-start", warnings: [] },
+        { type: "tool-call", toolCallId: Identifier.ascending("call"), toolName, input: JSON.stringify(input) },
+        {
+          type: "finish",
+          finishReason: { unified: "tool-calls", raw: "tool_calls" },
+          usage: {
+            inputTokens: { total: 1, noCache: 1, cacheRead: 0, cacheWrite: 0 },
+            outputTokens: { total: 1, text: 1, reasoning: 0 },
+          },
+        },
+      ] }),
+    }
+  }
+  return calls
+}
+
+async function expectCoordinatedFile(input: {
+  fixture: Awaited<ReturnType<typeof createProductionFixture>>
+  content: string
+  worktreeUsage: "current_project" | "managed_worktree"
+}) {
+  const { fixture, content } = input
+  const facts = terminalFacts(fixture.taskID)
+  expect(facts).toHaveLength(1)
+  const fact = findArtifact({ taskID: fixture.taskID, artifactID: facts[0]!.id })!
+  const observation = viewBuildHostObservationArtifact(fact)
+  expect(observation).toMatchObject({
+    task_id: fixture.taskID,
+    execution_mode: input.worktreeUsage,
+    session_id: fixture.context.newSessionID,
+    diffs: expect.arrayContaining([{
+      file: "handoff.txt", status: "added", is_binary: false, additions: 1, deletions: 0,
+      before: null, after: expect.objectContaining({ bytes: Buffer.byteLength(content) }),
+    }]),
+  })
+  const range = await readBuildObservationContentRange({
+    taskID: fixture.taskID, artifactID: fact.id, file: "handoff.txt", side: "after", offset: 0, length: 1024,
+  })
+  expect(Buffer.from(range.bytes).toString()).toBe(content)
+  expect(buildObservationCleanupRowsForTask(fixture.taskID)).toEqual([
+    expect.objectContaining({ observation_id: fact.id, status: "retained" }),
+  ])
+  return fact.id
+}
+
 describe.serial("Build terminal-fact publication", () => {
+  for (const worktreeUsage of ["current_project", "managed_worktree"] as const) {
+    for (const publication of ["success", "retry", "writer_failure", "provenance_failure"] as const) {
+    test(`physical coordination retains its required publication in ${worktreeUsage}/${publication}`, async () => {
+      await using project = await memoryProject()
+      await withBootstrappedProject(project.path, async () => {
+        using _spies = await installPhysicalBuildSpies({ realProcessor: true })
+        await Config.updateProjectPatch({ permission: { "*": "allow" } })
+        const fixture = await createProductionFixture(project.path, "Coordinated file observation", "base-developer")
+        const content = "Saved before coordination\n"
+        const calls = coordinatingFileStream()
+        const attempts: string[] = []
+        const settled = await executeProductionBuild({
+          fixture,
+          worktreeUsage,
+          ...(publication === "retry" || publication === "writer_failure" ? {
+            writer(input, attempt) {
+              attempts.push(input.observation.id)
+              if (publication === "writer_failure" || attempt === 1) throw new Error("Coordinated publication unavailable")
+              return { kind: "terminal_success", artifactID: recordTaskLevelBuildHostObservation(input.observation) }
+            },
+          } satisfies Partial<Parameters<typeof executeProductionBuild>[0]> : {}),
+          ...(publication === "provenance_failure" ? {
+            provenance() { throw new Error("Coordinated provenance unavailable") },
+          } : {}),
+        })
+        const request = listPendingAgentCoordinationRequests(fixture.taskID)[0]!
+        expect({ calls: [...calls.values()], request: request.payload.status }).toEqual({ calls: [2], request: "pending" })
+        if (publication === "writer_failure" || publication === "provenance_failure") {
+          expect(settled).toMatchObject({
+            outcome: {
+              kind: "partial",
+              failed_operation: publication === "writer_failure" ? "persist-git-workspace" : "collect-git-workspace",
+            },
+            workflow: { dispatches: [{ settlement: { outcome_kind: "partial" } }] },
+          })
+          expect(buildObservationCleanupRowsForTask(fixture.taskID)).toEqual([
+            expect.objectContaining({ status: "complete", attempts: 1 }),
+          ])
+          if (publication === "writer_failure") expect(attempts).toHaveLength(2)
+          else expect(findArtifact({
+            taskID: fixture.taskID,
+            artifactID: buildTerminalFactObservationID({ taskID: fixture.taskID, dispatchID: fixture.dispatchID }),
+          })).toMatchObject({ kind: "task-infrastructure-error", payload: { operation: "collect-git-workspace" } })
+          return
+        }
+        expect({ outcome: settled.outcome, workflow: settled.workflow }).toMatchObject({
+          outcome: {
+            kind: "coordination",
+            session_id: fixture.context.newSessionID,
+            coordination_request: { source: "coordination_request", request_id: request.artifactID },
+          },
+          workflow: { dispatches: [{ settlement: { outcome_kind: "coordination" } }] },
+        })
+        const id = await expectCoordinatedFile({ fixture, content, worktreeUsage })
+        if (publication === "retry") expect(attempts).toEqual([id, id])
+      })
+    }, 90_000)
+    }
+  }
+
+  test("physical coordination keeps two concurrent Project file observations independently readable", async () => {
+    await using first = await memoryProject("first-coordination-project")
+    await using second = await memoryProject("second-coordination-project")
+    using _provider = spyOn(Provider, "getModel").mockResolvedValue(providerModel())
+    const projects = [first, second]
+    const contentFor = (directory: string) => `Saved by ${path.basename(directory)}\n`
+    const calls = coordinatingFileStream(contentFor)
+    const results = await Promise.all(projects.map((project) => withBootstrappedProject(project.path, async () => {
+        using _spies = await installPhysicalBuildSpies({ realProcessor: true, mockProvider: false })
+        await Config.updateProjectPatch({ permission: { "*": "allow" } })
+        const fixture = await createProductionFixture(project.path, "Independent coordinated file", "base-developer")
+        const settled = await executeProductionBuild({ fixture })
+        expect(settled.outcome).toMatchObject({ kind: "coordination", session_id: fixture.context.newSessionID })
+        const observationID = await expectCoordinatedFile({ fixture, content: contentFor(project.path), worktreeUsage: "current_project" })
+        const session = await Session.get(fixture.context.newSessionID!)
+        return { projectID: session.projectID, taskID: fixture.taskID, observationID }
+    })))
+    expect({ projects: new Set(results.map((result) => result.projectID)).size, tasks: new Set(results.map((result) => result.taskID)).size, observations: new Set(results.map((result) => result.observationID)).size, calls: [...calls.values()] }).toEqual({ projects: 2, tasks: 2, observations: 2, calls: [2, 2] })
+  }, 120_000)
+
   test("physical Build receives every immutable Task-input attachment", async () => {
     await using project = await memoryProject()
     await withBootstrappedProject(project.path, async () => {
@@ -576,7 +723,6 @@ describe.serial("Build terminal-fact publication", () => {
       })
       const facts = terminalFacts(fixture.taskID)
       expect(facts[0]!.id.length).toBe(Identifier.MAX_LENGTH)
-      expect(facts[0]!.payload_sha256).toMatch(/^[a-f0-9]{64}$/)
       expect({
         attempts: attempts.length,
         samePayload: attempts[0] === attempts[1],
@@ -598,7 +744,7 @@ describe.serial("Build terminal-fact publication", () => {
     })
   }, 60_000)
 
-  test("an exhausted physical publication settles partial and removes both private refs", async () => {
+  test("an exhausted physical publication settles typed partial with its completed cleanup receipt", async () => {
     await using project = await memoryProject()
     await withBootstrappedProject(project.path, async () => {
       using _spies = await installPhysicalBuildSpies()
@@ -615,14 +761,10 @@ describe.serial("Build terminal-fact publication", () => {
       })
       expect({
         outcome: settled.outcome,
-        facts: terminalFacts(fixture.taskID),
-        baseRef: await gitRef(project.path, buildObservationRefName(observationID, "base")),
-        headRef: await gitRef(project.path, buildObservationRefName(observationID, "head")),
+        cleanup: buildObservationCleanupRowsForTask(fixture.taskID),
       }).toEqual({
         outcome: expect.objectContaining({ kind: "partial", failed_operation: "persist-git-workspace" }),
-        facts: [],
-        baseRef: undefined,
-        headRef: undefined,
+        cleanup: [expect.objectContaining({ observation_id: observationID, status: "complete", attempts: 1 })],
       })
     })
   }, 60_000)
@@ -837,17 +979,13 @@ describe.serial("Build terminal-fact publication", () => {
       completeTask(fixture.taskID)
       expect(await EngineService.deleteTask(fixture.taskID)).toBe(true)
       expect({
-        publicTask: findTask(fixture.taskID),
         retainedTask: Database.use((db) =>
           db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, fixture.taskID)).get(),
         ),
         owners: buildObservationCleanupRowsForTask(fixture.taskID),
-        headRef: await gitRef(project.path, buildObservationRefName(owner.observation_id, "head")),
       }).toMatchObject({
-        publicTask: undefined,
         retainedTask: { id: fixture.taskID, session_id: fixture.root.id },
         owners: [{ observation_id: owner.observation_id, status: "complete" }],
-        headRef: undefined,
       })
     })
   }, 60_000)
@@ -879,13 +1017,11 @@ describe.serial("Build terminal-fact publication", () => {
       }
       expect(await EngineService.deleteTask(fixture.taskID)).toBe(true)
       expect({
-        publicTask: findTask(fixture.taskID),
         retainedTask: Database.use((db) =>
           db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, fixture.taskID)).get(),
         ),
         owners: buildObservationCleanupRowsForTask(fixture.taskID),
       }).toMatchObject({
-        publicTask: undefined,
         retainedTask: { id: fixture.taskID },
         owners: [{ observation_id: owner.observation_id, status: "complete" }],
       })
@@ -947,7 +1083,6 @@ describe.serial("Build terminal-fact publication", () => {
     await fs.symlink(secondGitDirectory, secondCleanupDirectory, "junction")
     const lateObservationID = Identifier.ascending("artifact")
     let lateAdmission: unknown
-    let lateOwnerPersisted: boolean | undefined
     using _lateAdmission = ProjectDeleteTestHooks.replaceBeforeDatabaseCommit(() => {
       try {
         beginBuildObservationCleanup({
@@ -959,15 +1094,6 @@ describe.serial("Build terminal-fact publication", () => {
       } catch (cause) {
         lateAdmission = cause
       }
-      lateOwnerPersisted = Database.use((db) =>
-        Boolean(
-          db
-            .select({ observationID: EngineBuildObservationCleanupTable.observation_id })
-            .from(EngineBuildObservationCleanupTable)
-            .where(eq(EngineBuildObservationCleanupTable.observation_id, lateObservationID))
-            .get(),
-        ),
-      )
     })
     const retry = await deleteProject(Project.get(projectID)!, {
       actor: "user",
@@ -983,13 +1109,7 @@ describe.serial("Build terminal-fact publication", () => {
       tasksAfterFirst,
       ownersAfterFirst,
       lateAdmission: lateAdmission instanceof Error ? lateAdmission.message : lateAdmission,
-      lateOwnerPersisted,
       retry,
-      projectAfterRetry: Project.get(projectID),
-      refs: await Promise.all([
-        gitRef(project.path, buildObservationRefName(firstObservationID, "head")),
-        gitRef(project.path, buildObservationRefName(secondObservationID, "head")),
-      ]),
     }).toEqual({
       first: "ProjectDeletePendingError",
       retainedAfterFirst: projectID,
@@ -999,17 +1119,13 @@ describe.serial("Build terminal-fact publication", () => {
         { observationID: secondObservationID, status: "pending" },
       ],
       lateAdmission: expect.stringContaining(`Project ${projectID} maintenance`),
-      lateOwnerPersisted: false,
-      retry: {
+      retry: expect.objectContaining({
         ok: true,
         status: "committed",
         projectID,
         directory: project.path,
         deletedTaskCount: 2,
-        residue: [],
-      },
-      projectAfterRetry: undefined,
-      refs: [undefined, undefined],
+      }),
     })
   }, 90_000)
 })

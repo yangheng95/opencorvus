@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+- [协调阶段文件差异](records/2026-10/2026-10-29-build-handoff-observation.md)：Build共享物理终态发布缺口、两模式与多项目正向回归及真实Review验收。
+
+- [终态检查点与协调恢复](records/2026-10/2026-10-29-task-terminal-checkpoint-recovery.md)：真实验收暴露的失败自动提交、重复失败唤醒和压缩来源身份调查，未宣称完整流程通过。
+
 - [L06便宜实验与阶段仓容资格](records/2026-10/2026-10-29-heavy-workbench-l06-qualification.md)：真实不可行历史、独立枚举/动作账、严格输入与阶段峰值，未冻结重型题。
 
 - [项目记忆与检索体验](records/2026-10/2026-10-29-memory-context-journey.md)：修复Task必选错位，真实项目上下文、双语与原对话独立选择。

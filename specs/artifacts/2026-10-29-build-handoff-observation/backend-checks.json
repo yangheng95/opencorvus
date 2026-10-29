@@ -1,0 +1,103 @@
+{
+  "at": "2026-10-29T12:36:03.478Z",
+  "scope": "Focused backend contract: real Git/SQLite, SessionProcessor, write and coordination tools, Build and adapter; scripted streaming model network, not Provider/UI acceptance.",
+  "red": {
+    "label": "red2",
+    "startedAt": 1793275761648,
+    "closedAt": 1793275792208,
+    "code": 1,
+    "signal": null,
+    "childPID": 45264,
+    "pass": 0,
+    "fail": 2,
+    "trigger": "Both physical coordination modes reached the real request, then expected one retained Host observation and received zero."
+  },
+  "green": {
+    "label": "green3",
+    "startedAt": 1793276032992,
+    "closedAt": 1793276061805,
+    "code": 0,
+    "signal": null,
+    "childPID": 78432,
+    "pass": 2,
+    "fail": 0
+  },
+  "regression": {
+    "label": "full2",
+    "startedAt": 1793276820208,
+    "closedAt": 1793277022282,
+    "code": 0,
+    "signal": null,
+    "childPID": 98216,
+    "pass": 25,
+    "fail": 0,
+    "expectations": 90,
+    "cases": [
+      "(pass) startup reports the typed migration contract for legacy build terminal identity",
+      "(pass) startup reports the typed migration contract for legacy partial terminal identity",
+      "(pass) startup reports the typed migration contract for legacy cleanup terminal identity",
+      "(pass) the current writer reports the typed error for an invalid legacy mutation receipt",
+      "(pass) Build terminal-fact publication > physical coordination retains its required publication in current_project/success",
+      "(pass) Build terminal-fact publication > physical coordination retains its required publication in current_project/retry",
+      "(pass) Build terminal-fact publication > physical coordination retains its required publication in current_project/writer_failure",
+      "(pass) Build terminal-fact publication > physical coordination retains its required publication in current_project/provenance_failure",
+      "(pass) Build terminal-fact publication > physical coordination retains its required publication in managed_worktree/success",
+      "(pass) Build terminal-fact publication > physical coordination retains its required publication in managed_worktree/retry",
+      "(pass) Build terminal-fact publication > physical coordination retains its required publication in managed_worktree/writer_failure",
+      "(pass) Build terminal-fact publication > physical coordination retains its required publication in managed_worktree/provenance_failure",
+      "(pass) Build terminal-fact publication > physical coordination keeps two concurrent Project file observations independently readable",
+      "(pass) Build terminal-fact publication > physical Build receives every immutable Task-input attachment",
+      "(pass) Build terminal-fact publication > fresh managed-worktree Build preserves the preallocated Session identity",
+      "(pass) Build terminal-fact publication > the physical Build retries its exact publication before final settlement",
+      "(pass) Build terminal-fact publication > an exhausted physical publication settles typed partial with its completed cleanup receipt",
+      "(pass) Build terminal-fact publication > the canonical exact identity rejects payload drift after production publication",
+      "(pass) Build terminal-fact publication > cleanup failure retains one durable owner and recovery deletes its exact refs before settlement retry",
+      "(pass) Build terminal-fact publication > lease-renewal loss aborts the stale cleanup executor and lets one successor settle",
+      "(pass) Build terminal-fact publication > production provenance failure publishes one typed partial only after private refs are cleaned",
+      "(pass) Build terminal-fact publication > project bootstrap resumes the same pending cleanup owner after project close and reopen",
+      "(pass) Build terminal-fact publication > Task deletion settles retained observation refs before appending its audit-preserving tombstone",
+      "(pass) Build terminal-fact publication > Task deletion preserves its Task and owner when Git metadata is missing, then retries the same owner",
+      "(pass) Build terminal-fact publication > Project deletion settles Build observation refs before deleting the aggregate"
+    ]
+  },
+  "checks": [
+    {
+      "label": "types2",
+      "startedAt": 1793277177780,
+      "closedAt": 1793277219633,
+      "code": 0,
+      "signal": null,
+      "childPID": 80408
+    },
+    {
+      "label": "docs1",
+      "startedAt": 1793277145382,
+      "closedAt": 1793277155480,
+      "code": 0,
+      "signal": null,
+      "childPID": 72116
+    },
+    {
+      "label": "architecture1",
+      "startedAt": 1793277177809,
+      "closedAt": 1793277179668,
+      "code": 0,
+      "signal": null,
+      "childPID": 80692
+    }
+  ],
+  "checkerRepairs": [
+    {
+      "failure": "Initial Windows TEMP root exceeded supported worktree/cwd length",
+      "repair": "Use a fresh owned short TEMP root with the unchanged formal runner."
+    },
+    {
+      "failure": "Concurrent fixture installed an instance-owned runner outside Project context",
+      "repair": "Install each Project runner under its own bootstrapped Instance, retaining shared real processor and concurrent production calls."
+    },
+    {
+      "failure": "Exact deletion success object omitted its actual residue field",
+      "repair": "Match the explicit committed deletion receipt contract while retaining cleanup owners and maintenance error."
+    }
+  ]
+}

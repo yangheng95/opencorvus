@@ -1,0 +1,79 @@
+{
+  "at": "2026-10-29T12:46:18.436Z",
+  "taskID": "tsk_g00VZRQQAP00yaqEnUZF",
+  "errors": [
+    {
+      "error": "Error: E2E_REQUEST_BUDGET_EXHAUSTED",
+      "count": 55,
+      "first": 1793277542154,
+      "last": 1793277598744,
+      "sessionIDs": [
+        "ses_hCGgj9Sda13EGbu4wzfp",
+        "ses_-zUQYZYLhzz8tokz8EUs",
+        "ses_-zUQYZsqLzz6t3a5Qq9O"
+      ]
+    },
+    {
+      "error": "Server shutdown source=http-client reason=http.shutdown",
+      "count": 2,
+      "first": 1793277599775,
+      "last": 1793277881652,
+      "sessionIDs": [
+        "ses_-zUQYZsqLzz6t3a5Qq9O"
+      ]
+    },
+    {
+      "error": "CompactionUserTextIntegrityError: Retained user source prt_task-root-control_art_h2ha9iFjsVuwA50xxr6P_art_h2ha9iFjsVuwA50xxr6P no longer matches its exact original identity and range.",
+      "count": 1,
+      "first": 1793277844172,
+      "last": 1793277844172,
+      "sessionIDs": [
+        "ses_-zUQYZYLhzz8tokz8EUs"
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "art_h7uVQH9X2QdYDoaprPz7",
+      "stage": "baseline",
+      "operationKey": "baseline:1",
+      "at": 1793277213206,
+      "resultAt": 1793277216103,
+      "mode": "created_commit",
+      "commit": "4c086d24dfd17868d215924f1eb16e070e6cf143",
+      "headBefore": "5e96c8f377b7f0523ca9ab8e87c6424b3a74c4c7"
+    },
+    {
+      "id": "art_hau038CY1PiEXv4nsYGW",
+      "stage": "result",
+      "operationKey": "result:1",
+      "at": 1793277544219,
+      "resultAt": 1793277546298,
+      "mode": "created_commit",
+      "commit": "1b6ae6e649db0022aa197592e5a7c8f24d264ef8",
+      "headBefore": "4c086d24dfd17868d215924f1eb16e070e6cf143"
+    },
+    {
+      "id": "art_h1i1AQiTDIpWo80gOcUe",
+      "stage": "baseline",
+      "operationKey": "baseline:2",
+      "at": 1793277788725,
+      "resultAt": 1793277791597,
+      "mode": "recorded_head",
+      "commit": "1b6ae6e649db0022aa197592e5a7c8f24d264ef8",
+      "headBefore": "1b6ae6e649db0022aa197592e5a7c8f24d264ef8"
+    },
+    {
+      "id": "art_h9S2wPiyvAATLrToGCeX",
+      "stage": "result",
+      "operationKey": "result:2",
+      "at": 1793277851516,
+      "resultAt": 1793277853808,
+      "mode": "recorded_head",
+      "commit": "1b6ae6e649db0022aa197592e5a7c8f24d264ef8",
+      "headBefore": "1b6ae6e649db0022aa197592e5a7c8f24d264ef8"
+    }
+  ],
+  "gitLog": "1b6ae6e649db0022aa197592e5a7c8f24d264ef8\nOpenCorvus <opencorvus@local>\n2026-10-29T20:39:06+08:00\n协调差异验收793 限定代码修复\n\n counter.py      |  2 +-\n test_counter.py | 15 +++++++++++++++\n 2 files changed, 16 insertions(+), 1 deletion(-)\n4c086d24dfd17868d215924f1eb16e070e6cf143\nOpenCorvus <opencorvus@local>\n2026-10-29T20:33:35+08:00\nCheckpoint before 协调差异验收793 限定代码修复\n\n .gitattributes               | 11 ++++++++++\n .gitignore                   |  1 +\n .opencorvus/opencorvus.jsonc | 52 ++++++++++++++++++++++++++++++++++++++++++++\n 3 files changed, 64 insertions(+)\n5e96c8f377b7f0523ca9ab8e87c6424b3a74c4c7\nOpenCorvus QA <opencorvus-qa@example.invalid>\n2026-10-29T20:21:47+08:00\nInitial counter coordination input\n\n README.md  | 3 +++\n counter.py | 2 ++\n 2 files changed, 5 insertions(+)\n",
+  "scope": "Observed facts for the next shared terminal/checkpoint/recovery audit; no automatic commit is accepted as operator confirmation."
+}

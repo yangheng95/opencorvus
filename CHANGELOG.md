@@ -6,6 +6,8 @@
 
 ### zh-CN
 
+- 修复执行者修改文件后请求协调时漏存差异的问题；Review 在续跑后保留原执行轮次的文件变化，必需观测失败仍返回明确的部分完成状态。
+
 - 记忆与上下文按项目选择，支持直接阅读真实的项目 MEMORY.MD、版本及更新时间；仅有 Chat 的项目也可使用，并保留当前对话和项目知识检索。
 
 - 归档、设置和其他可清空搜索框按 Escape 先清空查询并保持焦点；查询为空后继续原退出操作，保留特殊控件已有的键盘行为。
@@ -34,6 +36,8 @@
 - 修复 Windows 检查器并发准备原生辅助程序时，编译产物与运行文件互相冲突导致的拒绝访问。
 
 ### en-US
+
+- Preserve file changes when a Build worker requests coordination after editing. Review retains the original physical-turn diff across continuation; required observation failures keep their typed partial outcome.
 
 - Memory & Context selects projects and displays their actual read-only MEMORY.MD, revision, and update time. Chat-only projects are available, while the current conversation and project knowledge search remain scoped independently.
 

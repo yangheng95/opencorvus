@@ -1,0 +1,65 @@
+# Build协调返回与真实文件观测
+
+## Recall
+
+用户要求单agent持续自主体验、调查和修复整个当前版本，分析与方案先落盘，再实现、聚焦正向非UI（User Interface，用户界面）合同、真实开发页交互/截图人工复核、必要且已授权GPT-6.1 Sol端到端、范围提交、fresh fetch/merge与正常push。后续单agent要求覆盖旧Goal的Astra描述，不委托，不新建交付branch/worktree，不把已修好的Rendering当新问题。792为progress：07cd897023ae170fd64175c08166799590ab6336按Project开放实际MEMORY.MD，16张真实截图、普通构建/类型/双语/docs/架构及正常push全通过，11:39:14Z推送0、11:41:28Z fresh上游0/0；所有自有原exec/native/launcher结清0、公开shutdown200、auth/models副本清退，累计模型793。整体Goal仍active。
+
+本轮开始状态与792完全相同：171个其他旧媒体删除、6个共享/外部文档修改、2缓存目录，均保留，只在实际冲突等待。用户18571/窗口/进程/数据库不操作，不重开已关闭792实例或复用其截止。唯一新scratch为review-handoff-793。已读792 Recall/原图05、原持久两份build_host_observation、734代码Task与737提交边界Recall及相关结果、当前07-panel比较合同、BuildAgent.run完整物理结束与比较路径、唯一createBuildTool调用、runner的协调控制校验、terminal-fact-publication、persist、cleanup与原测试；全仓搜索定义、调用及同语义handoff。沿用已读benchmark-debug-template技能的真实输入输出、活动超时、根因和复测纪律；人工UI规则优先，不建/改/跑UI自动化。
+
+## 已证明事实与根因
+
+实际旧Task tsk_g00VZH4Swp00oZbphtIe在734隔离项目完成两个文件，当前Git原提交2a6fdd5f8200→7ec5560fb0fb仍可读，真实numstat为invoice.py +19/-1、test_invoice.py +62/-0。旧持久Host观测primary refs也记录这两个提交，却用相同f0ff403f…树作为diff base/head，diffs=[]。直接ls-tree确认该树已经包含完成的源码和测试，不是Git空树、丢失文件、Provider或当前UI解码失败。
+
+原规范tool_part_request/message关联证明同一Builder Session ses_hr5JEZ6FJGeIXCiZK9Cr于2026-10-27T18:06:13Z真实apply_patch修改文件、18:06:24Z执行Python测试、18:07:20Z调用request_orchestrator_decision；原用户补充提交授权后18:10:52Z才本地提交。该输入与原Git对象相互印证，不以标题/最终报告推测修改。
+
+共享BuildAgent在每物理执行前后已采集树和diff；但agent.ts协调handoff分支在公共publishBuildTerminalFact之前调用settleBuildObservationCleanup并直接返回。最先写文件的执行因此清掉引用、跳过Host事实；续跑重新取已改完的工作树为基线，仅提交已有变化，新的完整观测自然为0。旧终态测试把SessionProcessor固定为stop文本，永远不产生真实协调结果，因而漏掉这一生产出口。核心问题是物理文件观测在成功协调出口被绕过，不能用UI从交付附件猜diff、切换到当前磁盘、重写旧观测或改模型提示掩盖。
+
+## 共享机制横向审计与实施前边界
+
+这属于物理执行终态的共同事实发布缺口，按共享机制立即横查，不能降为Dynamic包问题。已经确认Build的唯一生产入口是createBuildTool→BuildAgent.run，协调识别由通用runner验证当前真实Tool/result和原durable request；所有其它角色的同名handoff出口需逐个核对是否也拥有尚未发布的Host观测/cleanup，不能只凭同名一并修改。审计矩阵必须覆盖Task直接/由Mission产生的Task、Session物理轮次、current_project/managed_worktree、正常/协调/异常/取消、同Session续跑、写入重试、关闭与重启恢复、串并行及多Project隔离。尚未验证项保持未知，完成代码/持久事实和真实运行检查后才可排除。
+
+预期唯一修复：所有完成的Build物理结果，包括协调handoff，都沿现同一provenance→publishBuildTerminalFact→cleanup所有者边界，再返回实际协调或普通结果。Build的协调返回同时携带同一必需发布回执及原finalMessageID；唯一adapter先判断事实发布结果，再投影原coordination/terminal/partial结果，保持真实request与原Session/dispatch身份。发布错误仍进入现typed partial合同，不能把失败回执忽略后返回正常协调；此耦合必须核对请求交付与结算控制流并测试。底层原capture错误/运行异常已有typed infrastructure事实与cleanup归属，尚未完成的异常路径审计不先改其数据模型。Host仅保持数据完整性，不新增关键词、流程gate、隐式自动提交、路由旁路或模型工具白名单。
+
+接口影响限定BuildAgent的内部返回交叉类型及其唯一adapter、对应后端测试/文档。不新增HTTP（Hypertext Transfer Protocol，超文本传输协议）接口、SDK（Software Development Kit，软件开发工具包）生成合同或数据库结构；旧迁移和持久观测不改写，当前schema9数据保留。原734首轮观测已经被清理，不能把后续提交差异冒充原物理工作树端点；新修复证明未来真实handoff及续跑保留完整证据，不伪称旧零观测已被补回。
+
+## 验收定义与环境
+
+先补能触发该生产出口的聚焦后端red/green验收，真实Git/SQLite/原Build与adapter/协调Tool路径，网络参与者可用脚本流代替以定位机制，但必须明确只证明局部合同，不能冒称真实Provider或网页端到端。优先用已有成熟fixture和正式runner，不绕类型或直接伪造最终Build结果。覆盖两worktree模式的协调写文件、原协调request/Session/dispatch、canonical Host diff及不可变blob、writer重试/typed partial/cleanup、串并行和两Project；现恢复/删除合同按直接关联范围检查。触及测试中的仅哈希形状验收及以空facts/不存在refs为核心的断言要移除或改为当前明确输出/receipt，不保留旧负向门槛。不运行全量bun test，不新增/运行UI自动化。
+
+必要真实Provider复测以新自有QA项目的counter.py最小错误与README作为实际输入，不制造Task/Message/产物。通过当前Code/Mission真实创建一个有限任务：修正next_serial(41)=42、添加并执行正向Python测试，保存修改后请用户确认本地提交，确认前不commit；真实界面在协调阶段查看Review，再以实际Task输入批准项目内提交，完成后再次查看同一差异。保持README，不联网/推送/发布，不改用户项目。使用已授权的现OpenAI auth与完整models.json成对副本；启动前分别验证凭据可用、gpt-6.1-sol已投影及实际流式请求模型一致，原凭据不入prompt/log/spec/提交。单个自然场景最多64次实际请求，含预检、标题、整理等全部调用，不以额外重启重置额度；是否需要该场景及实际输入在启动前完成最后核对。
+
+新长阶段首次启动前固定其自己的绝对截止；原生执行30min物理保护，3min无真实活动为调查触发，20min内完成实际观察并正常关闭、至少5min结算余量；同阶段所有重试沿同一截止。长运行只按已确认存活的原handle/实际状态定时检查，不持续刷日志，不因观察超时重启。模型运行结束及时关闭，完整UI阅读可在同数据无新请求实例继续，但总额度和截止不重置。普通现有前端由项目开发serve /ui提供，不单起Vite。结束公开shutdown、原exec/native/launcher与精确出生身份、物理/输出/请求均结清后才退auth/models副本；数据逐行/原件与变化归属核对。
+
+成功指标是规范非空Host文件事实在真实协调前已持久可读，续跑后仍保留该原发生轮次及真实文件内容、Task/Mission正常收敛、实际Review能读完整原差异。类型/build/docs只能辅助，后态真实页面截图人工复核必须完成；未达项和真实Provider请求结果分别记录。同步当前架构、双语Unreleased、各级索引，当前docs检查及正常hooks，范围提交并fresh合并upstream、审查完整待推集和正常push；无Release/tag/force/rebase。当前仍处调查/测试准备，生产源码尚未修改。
+
+## 横查收敛与red资格
+
+原SQLite还原出首发生轮次cleanup art_hc4ZX0QCYXRVnSJzzmZp于18:04:22Z创建、18:07:24Z写complete；续跑art_hPF39FfllWLBYj3NLmsh于18:09:53Z创建、18:11:56Z retained。前者对应已经改文件的协调返回，后者对应仅提交，排除当前UI缓存/克隆/权限/文件丢失。原Git差异、工具时间线、cleanup receipt和当前早退代码交叉支持同一根因。
+
+全生产入口为dispatch-agent-tool投影worktreeUsage→tools.ts唯一build factory→createBuildTool→BuildAgent.run；Task直接入口与Mission产生Task最终共享这个物理消费者。current_project捕获物理前后树；managed_worktree按其贡献基线/终态树采集，原branch保留由Task拥有。11个其它角色handoff wrapper没有创建Build observation/cleanup所有者，按原Tool/领域产物合同产生已持久事实，不能因相同return文字改成Build发布。普通结束已进入writer；异常/取消会留下现typed infrastructure事实并由adapter报告非成功，不属于“正常协调却静默丢事实”的同一出口。writer最多两次只重试同一原物理输入，失败cleanup按原lease/receipt完成或pending恢复；bootstrap仅按Project筛选过期/待重试owner，retained正常保留，删除合同明确先结算，既有实现不重写。新协调成功亦应retained，失败仍沿同一partial/cleanup合同。Session/Task/Project的现目录、项目、dispatch及精确租约校验保持，不新增协调状态机或恢复权威。
+
+协调请求在原Tool自身事务中已写独立agent_coordination_request及AgentCoordinationRequested事件，不依赖Build adapter的成功结果才存在。adapter的typed partial可以保留该真实pending请求并记录同一已接受轮次；不能假称协调正常而忽略必需事实失败，也不能删除真实请求。recordDispatchSettlement按原Session/lineage归属接收两种终态，重复结算有精确身份检查。实际失败组合和两Project并发仍须由下述聚焦正向合同补足，不把静态横查当成运行证明。
+
+新测试用原正式runner、真实SessionProcessor/写文件工具/协调工具/Git/SQLite与adapter，只把模型网络替成脚本流，两个工具真实顺序执行。current_project首轮red在成功coordination及2次流调用之后，明确因期望1条Host观测却得到0而失败。managed首轮被私有TEMP根过长造成的Windows cwd/Worktree准备失败阻挡，保留该工具链失败；修正私有运行根为自有短路径D:/oc793-mvti3594，保持原正式runner/测试preload及两种模式，没有改产品路径或缩小矩阵。red2两模式均到达相同Host观测缺失（各前置协调状态/调用数检查通过），原runner物理/输出结清true。该脚本流资格只证明机制，模型实际请求仍0、累计793，不冒称Sol或UI端到端。
+
+当前测试文件发现一条仅检验payload摘要形状的无效验收和3组以空facts/不存在refs等为核心的旧断言；已按用户全局测试合同移除，保留原typed partial、cleanup complete/pending/retained、原Task审计行、删除committed及明确维护错误等正向状态验收。无关测试和UI未扩展。代码修复将在此完整分析基础上实施，再重跑同一red用例、publication/provenance失败、重试、恢复与多Project正向路径。
+
+## 实施与回归进展
+
+最小生产修复已落地：删除协调分支的提前cleanup/return，所有物理结果统一发布；内部返回携带原协调身份和同一receipt，唯一adapter先判发布再返回协调。原两个模式red2均明确缺失Host事实；相同green3两个通过，backend typecheck通过。扩展正式回归full1为23通过2失败：并发测试在Project上下文外安装了实例级runner替身，尚未到达生产Build；删除测试因新正向断言漏掉实际成功receipt的residue字段导致整对象不匹配。仅修测试作用域与成功receipt匹配，不改变产品边界。full2正在原正式checker重跑，前8种协调成功/重试/写失败/采集失败和两Project并发已全部通过，恢复/删除余项待原进程结算。真实Provider请求仍0。
+
+## 真实Provider首阶段与有界续验
+
+正式回归full2最终25通过0失败90个正向断言，原exec退出0；types2/docs1/architecture1均退出0。真实独立开发页38359通过可见普通对话预检，精确Sol流式200/EOF；随后从真实Code/Mission输入创建唯一Task tsk_g00VZRQQAP00yaqEnUZF、Project prj_h5W7734ywOJ64549AGYm。Builder ses_hqAWulrYXGNRzSZruMte真实改两文件、跑2项Python正向测试、实际request_orchestrator_decision。首Host事实art_hV82RiBkTPWCx2iDmjdP已retained，Review确认前真实显示源码+1/-1与新增测试+15/-0，截图04/05已人工查看。
+
+首阶段在独立审阅进行时耗尽私有checker预设64次请求，不能声称Task/Mission完成或确认续跑已通过。原公开shutdown200、原exec/native/launcher全部0，物理/输出/请求结清；64实际请求全部精确Sol流式200/EOF，累计857，auth与全catalog副本清退，原source字节/元数据不变。该有限checker额度低估了协调和独立审阅所需调用，保留真实exhausted结果；在原30min绝对截止内仅准入一次32次续验，整场总上限96，不重置原Task/Session/数据库/截止，不重做预检或创建第二Task。续验仍需真实操作者确认、同Task续跑、原差异再读及完整结算，未满足前保持未知。
+
+页面还暴露同一文件同时出现在Tool edits与Build comparison时的计数口径差异（摘要2文件、筛选All4）与聚合Lines unknown；本轮先收敛物理观测根因，后续独立分析该呈现合同，不以隐藏来源或删除证据修饰截图。
+
+## 本轮收敛与未满足项
+
+实际80次模型请求（首阶段64、一次续验16），79次精确Sol流式200/EOF，1次在主动公开shutdown请求/响应时间内abort；累计873。原双服务shutdown200，原exec/native/launcher0及物理/输出/请求true，四份阶段auth/catalog副本均清退，源凭据/目录元数据与目录原字节保持。续验最初私有retire检查器只准EOF而在保存结算、清退副本后拒绝主动abort；后续只读检查保留原结果并用实际shutdown到达、abort、响应时间验证该明确取消分支，不重跑已经清退的副作用。
+
+7张真实原图均人工查看：确认前同一Host观测的两个文件差异可读，中断和服务重启后同一原事实、Git blobs与实际文件字节一致；独立Python复跑两项通过。完整确认提交工作流未通过，不能把Task实际failed或Host自动提交当成功。原场景有55条本地预算失败，失败终态Host checkpoint产生1b6ae6e…提交，续验遇到CompactionUserTextIntegrityError；已立即按共享机制创建[后续调查方案](2026-10-29-task-terminal-checkpoint-recovery.md)，该Goal继续active，后续必须落实根因修复。
+
+数据：源库92表116096行逐行不变；QA最终schema9、92表146855行、integrity ok，原件17+10份全部字节相同；只有两个运行容量lease更新旧行的进程运行字段，其余新增归属本次Task、六个新Session及真实运行/消息/权限事实，无原消息或原Task改写。证据分别见artifact目录的backend-checks、observation、runtime、data-review及followup-facts，凭据与整库原件不提交。
