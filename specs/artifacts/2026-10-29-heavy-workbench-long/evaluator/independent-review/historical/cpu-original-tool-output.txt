@@ -1,0 +1,7 @@
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.017s
+
+OK
+{"probe": "native_lbfgs_finite_zero_step", "parameter": 1e-08, "change": 0.0, "gradient_inf": 1e-08, "calls": 1, "native_n_iter": 1}
+{"probe": "residual_component_gradient", "error_type": "RuntimeError", "error": "One of the differentiated Tensors appears to not have been used in the graph. Set allow_unused=True if this is the desired behavior."}

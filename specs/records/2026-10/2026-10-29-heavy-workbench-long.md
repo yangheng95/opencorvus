@@ -42,6 +42,8 @@
 - `pinn_torch_check.py`不导入候选代码，独立读取数值权重/权威数据，检查参数梯度、HVP中心差分与显式Ritz残差；已知SPD全谱、闭式参数梯度、残差对输出bias的严格零导数3项正向测试实跑通过。三问题×total/residual/constraint共9份真实GPU交叉验证通过，HVP差分相对误差1.89e-11～4.22e-10。新CLI增加明确数值接受条件，退出0不能只表示“写了JSON”；完整参数图仍非训练真实性证明。
 - 独立审查者额外实际复跑NumPy测试与Torch已知例；发现并关闭候选自选评分点漏洞、L-BFGS零步无法合法终止的合同冲突、残差分量输出bias未参与造成unused-tensor错误。数学上零导数/零Hessian按零填充并验证，没有增加正则或改变目标。
 - 独立审查原件已归档`specs/artifacts/2026-10-29-heavy-workbench-long/evaluator/independent-review/stage-assessment.json`及同目录精确命令/输出/源副本：另起15 NumPy+3 Torch/边界复跑通过，审核9组GPU差分。它明确`formal_freeze_approved=false`，不冒称批准完整新题。源码提交前docs:check通过（351路由/26组），真实新CLI退出0且三个数值接受条件全部为true。
+- 数值工具/审查稿/原件提交`c376b9fe9`已正常push，现行pre-push检查与秘密扫描通过；未发布新冻结benchmark或候选成绩。完整独立`REVIEW.md`及历史命令/原输出在审查目录，历史UTC未知保留null。
+- 按用户仓库“长时间benchmark使用定时唤醒”要求，本聊天已创建20分钟心跳`benchmark`（名称“长程 benchmark 迭代与真实验收”，ACTIVE），用于继续本未完成目标，状态不变保持安静；有可执行工作继续推进，只在重要新结果/完成/失败/确需选择时通知。不会用关闭本轮对话冒充整个目标完成。必要的一层独立review/Codex仍为用户既有授权，被委托者不得再委托。
 - 63配置未采用；独立按真实稳态粗推19配置达到全上限也约11.14小时，合法共用prefix约省.46h，未含NNCG/复训，不是已验证最终时长。当前审查稿为19基础配置+4续训分支，范围见`specs/artifacts/2026-10-29-heavy-workbench-long/public/TASK.md`和唯一注册表`public/profile.json`。174原子叶100分草案`rubric.draft.json`，其中R9结果锚点明确calibration-pending，**禁止发布总成绩/称冻结**。原论文及PDF/15图、许可和官方原rubric已按各自归属保存，不让候选读评估侧。
 - 代表性真实收敛资格仍运行：自有容器`oc-pinn-convergence-20261029-a`，启动命令会话5652，外部`qualify_convergence.py`；只在自有cache工作，网络关闭。实时事实读`D:/opencorvus-benchmark-runs/paperbench-discovery-20261029/convergence-qualification/events.json`；PowerShell stdout重定向存在缓冲，不能把stdout文件暂空当无活动。该probe的`step`为native step尝试索引，遇零步后的25次plateau只能作原始资格观测，不能按最终新合同当25次有效更新；正式候选按最新attempt/native/nonzero/closure分计。末态才生成`convection-checkpoint.npz`，不得把资格当候选成绩。
 

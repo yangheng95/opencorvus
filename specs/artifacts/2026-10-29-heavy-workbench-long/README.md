@@ -16,4 +16,4 @@ L01针对Rathore等ICML2024论文《Challenges in Training PINNs: A Loss Landsca
 
 独立审查发现并关闭评分数据控制漏洞：正式数值CLI自行生成权威网格，不能读取候选提供的点文件。常数模型在完整权威网格上有明确非零误差。数值primitive不证明训练真实发生，仍需源码、实际完整执行和清洁复训证据。
 
-最新[独立阶段审查](evaluator/independent-review/stage-assessment.json)实际另起环境重跑15项NumPy、3项Torch测试及边界见证，核对9组真实GPU收据；认可已关闭上述点控制、native零步、分量零导数与合同冲突，**未批准正式冻结**。其自有源码副本、精确命令/输出与历史/新复跑身份都保存在该目录。仍缺晚期NNCG、R9锚点、完整候选长跑和清洁复训，不能把工具资格通过写成成熟benchmark已完成。
+最新[独立阶段审查](evaluator/independent-review/REVIEW.md)及[机器可读结论](evaluator/independent-review/stage-assessment.json)实际另起环境重跑15项NumPy、3项Torch测试及边界见证，核对9组真实GPU收据；认可已关闭上述点控制、native零步、分量零导数与合同冲突，**未批准正式冻结**。其自有源码副本、精确命令/输出与历史/新复跑身份都保存在该目录。仍缺晚期NNCG、R9锚点、完整候选长跑和清洁复训，不能把工具资格通过写成成熟benchmark已完成。

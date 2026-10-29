@@ -1,0 +1,14 @@
+{
+  "provenance": "Verbatim transcription of this independent reviewer's earlier real functions.exec/exec_command command and returned combined output, retained from conversation history.",
+  "original_tool_chunk_id": "3dd260",
+  "original_exit_code": 0,
+  "original_reported_wall_time_seconds": 4.5117866,
+  "original_execution_time_utc": null,
+  "original_execution_time_note": "The original tool receipt did not include a UTC timestamp; none has been invented.",
+  "command": "cpu-original-command.ps1",
+  "combined_output": "cpu-original-tool-output.txt",
+  "historical_source_snapshot_available": false,
+  "scope": "The original command read the then-current checker. The component derivative bug has since been fixed; rerunning this historical command against current repository files will not reproduce the old exception. Current source snapshots and fresh receipts are stored separately.",
+  "native_lbfgs_observation_independently_repeated_in_current_receipts": true,
+  "not_candidate_execution": true
+}
