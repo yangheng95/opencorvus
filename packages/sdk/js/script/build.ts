@@ -304,39 +304,6 @@ const transactionPlatformArtifactToolIDs = path.join(transactionSrc, "platform-a
 const transactionTsconfig = path.join(transactionRoot, "tsconfig.json")
 const transactionDist = path.join(transactionRoot, "dist")
 
-await rmWithinPackage(transactionRelative, { recursive: true })
-try {
-  await fs.cp(path.join(dir, "src"), transactionSrc, { recursive: true, force: true })
-  await fs.copyFile(path.join(dir, "tsconfig.json"), transactionTsconfig)
-  await writeFileWithRetry(transactionDefaults, generatedDefaults)
-  await writeFileWithRetry(transactionRoutePolicy, generatedRoutePolicy)
-  await writeFileWithRetry(transactionPlatformArtifactToolIDs, generatedPlatformArtifactToolIDs)
-  await writeFileWithRetry(transactionOpenapi, generatedOpenapi)
-  await generate(transactionOpenapi, transactionGen)
-  await waitForGeneratedClient(transactionGen)
-  await joinGeneratedStreamCancellation(transactionGen)
-
-  const prettierBin = await Bun.resolve("prettier/bin/prettier.cjs", dir)
-  for (let attempt = 1; attempt <= 5; attempt++) {
-    try {
-      await $`bun ${prettierBin} --write ${transactionSrc}`
-      break
-    } catch (error) {
-      if (attempt === 5) throw error
-      Bun.gc(true)
-      await Bun.sleep(500 * attempt)
-    }
-  }
-  await requireFlatSdkBodyFieldsFromOpenApi({
-    openapiPath: transactionOpenapi,
-    sdkPath: path.join(transactionGen, "sdk.gen.ts"),
-  })
-  await $`bun tsc --project ${transactionTsconfig}`
-} catch (error) {
-  await rmWithinPackage(transactionRelative, { recursive: true }).catch(() => undefined)
-  throw error
-}
-
 await replaceGeneratedArtifactsAfterSuccessfulBuild({
   packageRoot: sdkRoot,
   stagingRelative: "js/.tmp-sdk-artifacts",
@@ -353,15 +320,49 @@ await replaceGeneratedArtifactsAfterSuccessfulBuild({
     { stagingRelative: "openapi.json", targetRelative: "openapi.json", kind: "file" },
   ],
   build: async (stagingRoot) => {
-    await fs.cp(transactionDist, path.join(stagingRoot, "dist"), { recursive: true, force: true })
-    await fs.cp(transactionGen, path.join(stagingRoot, "gen"), { recursive: true, force: true })
-    await writeFileWithRetry(path.join(stagingRoot, "defaults.ts"), generatedDefaults)
-    await writeFileWithRetry(path.join(stagingRoot, "route-policy.ts"), generatedRoutePolicy)
-    await writeFileWithRetry(
-      path.join(stagingRoot, "platform-artifact-tool-ids.ts"),
-      generatedPlatformArtifactToolIDs,
-    )
-    await writeFileWithRetry(path.join(stagingRoot, "openapi.json"), generatedOpenapi)
+    // The existing generation lock must own shared compilation scratch as well
+    // as publication: another build's cleanup otherwise deletes this one's dist.
+    await rmWithinPackage(transactionRelative, { recursive: true })
+    try {
+      await fs.cp(path.join(dir, "src"), transactionSrc, { recursive: true, force: true })
+      await fs.copyFile(path.join(dir, "tsconfig.json"), transactionTsconfig)
+      await writeFileWithRetry(transactionDefaults, generatedDefaults)
+      await writeFileWithRetry(transactionRoutePolicy, generatedRoutePolicy)
+      await writeFileWithRetry(transactionPlatformArtifactToolIDs, generatedPlatformArtifactToolIDs)
+      await writeFileWithRetry(transactionOpenapi, generatedOpenapi)
+      await generate(transactionOpenapi, transactionGen)
+      await waitForGeneratedClient(transactionGen)
+      await joinGeneratedStreamCancellation(transactionGen)
+
+      const prettierBin = await Bun.resolve("prettier/bin/prettier.cjs", dir)
+      for (let attempt = 1; attempt <= 5; attempt++) {
+        try {
+          await $`bun ${prettierBin} --write ${transactionSrc}`
+          break
+        } catch (error) {
+          if (attempt === 5) throw error
+          Bun.gc(true)
+          await Bun.sleep(500 * attempt)
+        }
+      }
+      await requireFlatSdkBodyFieldsFromOpenApi({
+        openapiPath: transactionOpenapi,
+        sdkPath: path.join(transactionGen, "sdk.gen.ts"),
+      })
+      await $`bun tsc --project ${transactionTsconfig}`
+      await fs.cp(transactionDist, path.join(stagingRoot, "dist"), { recursive: true, force: true })
+      await fs.cp(transactionGen, path.join(stagingRoot, "gen"), { recursive: true, force: true })
+      await writeFileWithRetry(path.join(stagingRoot, "defaults.ts"), generatedDefaults)
+      await writeFileWithRetry(path.join(stagingRoot, "route-policy.ts"), generatedRoutePolicy)
+      await writeFileWithRetry(
+        path.join(stagingRoot, "platform-artifact-tool-ids.ts"),
+        generatedPlatformArtifactToolIDs,
+      )
+      await writeFileWithRetry(path.join(stagingRoot, "openapi.json"), generatedOpenapi)
+    } catch (error) {
+      await rmWithinPackage(transactionRelative, { recursive: true }).catch(() => undefined)
+      throw error
+    }
+    await rmWithinPackage(transactionRelative, { recursive: true })
   },
 })
-await rmWithinPackage(transactionRelative, { recursive: true })

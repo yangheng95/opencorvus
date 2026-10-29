@@ -1,0 +1,4 @@
+{
+  "encoding": "UTF-8",
+  "output": "bun test v1.4.0 (34cbb9a40)\n\ntest\\generation-transaction.test.ts:\n(pass) a generation publishes all of its outputs or none > equivalent package-root spellings serialize two process publishers onto one generation lock [3002.50ms]\n(pass) a generation publishes all of its outputs or none > a completed generation replaces every target and settles its occurrence [1168.36ms]\n\n 2 pass\n 4 filtered out\n 0 fail\n 4 expect() calls\nRan 2 tests across 1 file. [4.65s]\n"
+}

@@ -51,3 +51,29 @@
 首个自有scope按原失败exit1保留，原运行器物理/输出settlement、精确host/target/launcher链死亡与端口关闭已复核；Provider0，所以没有未结模型请求。未产生正常native graceful回执，不称该scope shutdown200。新candidate实际持续约470秒、公开shutdown200、原exec82003/native/launcher0，物理/输出/请求三项完成及精确出生链死亡；结清距原同一截止564824毫秒，未续期。两套配对复制均退休，源auth metadata和catalog metadata/完整字节保持。Provider合计0，累计1083，未做真实凭据请求或模型续跑，只有本地注册/目录投影。
 
 正式build（含renderer surface）、overlay typecheck、2语言2629键、docs:check351操作/26组通过；无UI自动化。只有统一控件、两语言和当前Goal展示合同有产品修改，未修改SDK/OpenAPI、schema或执行链。范围提交和正常hook/push结果以最终Git交付回执为准，保留全部无关工作区改动。长期Goal保持active，下一批继续调查真实归档Chat空视图。
+
+## 推送检查冲突与实施前同步方案
+
+本批UI及证据已范围提交8bea17e720124f0257b99b3836bf19051e596dd3，fresh fetch/merge后待推仅该提交。正常pre-push全仓类型检查通过，实际api:routes-check因另一任务正在编辑的assistant.activity.session_tool_idle_ms说明而失败：源为“Max Tool handoff idle without committed progress or a trusted executor deadline, ms”，跟踪OpenAPI仍为旧说明。未绕hook、回退它的源码或用额外branch/worktree遮蔽工作区；只读核对“构建并打磨重型任务基准”当前交付和原独立审查，不向该会话发送消息或委托。
+
+该任务随后已提交bcc14ace8（有限真实执行期限、取消传递），其最终固定源53项/7文件/146断言及类型通过，独立审查原件随提交；因此现在源定义已收敛，可以安全同步该已提交契约。全仓检查定义、SDK脚本和调用：唯一OpenAPI来自packages/sdk/js/script/build.ts调用generate-openapi，先在自身事务目录生成、校验后替换；routes checker重新生成再与跟踪规范比较。决定使用正式SDK build，不手改生成文本、不改当前运行行为；启动前SDK路径无本地差异，短命命令在新隔离OPENCORVUS_HOME/临时目录运行，不接入用户数据库。
+
+只接受与该已提交说明对应的生成差异，复核全部生成文件和当前HEAD；运行原api:routes-check、SDK类型与文档检查。该变化是公开描述同步，不是数据库schema变更，不增加迁移或改用户数据。生成产物和本节另做清晰同步提交；新fresh fetch/merge后复核完整待推集合（本批UI、已授权且有53项证据的runtime交付、此次SDK同步），正常hooks通过后推送，再fresh fetch验证。若远端并发变化，按原同步流程重试，不因本地可解决分歧停在记录。
+
+## SDK 实际并发故障：分析与实施前方案
+
+本轮正式SDK命令sdk-sync原exec23023/原runner34516于22:13:38.894Z启动，22:14:21.620Z exit1，明确ENOENT .tmp-sdk-build/dist；另一会话的同一正式命令22:13:50.564Z→22:14:21.432Z exit0，两个真实区间重叠。对方随后单独提交c357af62e，准确同步OpenAPI和types.gen.ts中的同一处注释；当前生成文件已干净，不把它的成功记作本轮失败命令成功。原SDK错误、原物理/输出settlement和两个时间回执均保留。
+
+共享直接根因：build.ts在固定.tmp-sdk-build执行清理、生成、编译，之后才进入replaceGeneratedArtifactsAfterSuccessfulBuild。该helper已经使用DurablePublicationStore的sdk-generation/packageRoot subject lock，保护.tmp-sdk-artifacts、备份、恢复和最终替换；但锁没有覆盖前面的共同编译目录，某个成功调用的锁外最终清理可以删除另一个调用尚要复制的dist。这是生成工具链的共享并发问题，不能称应用Task失败或以产物已出现冒充完整build通过。
+
+横向审计已覆盖唯一build.ts生产实现及根script/generate.ts、package-build-environment、CI setup/build/deploy的调用；全部汇入同一入口。helper的直接生产调用只有build.ts，其余是非UI事务/跨进程测试；正常/编译失败/发布失败回滚/进程死亡后convergeUnsettled及等价packageRoot拼写同锁均已阅读。SDK构建不具有Task/Mission/Session业务轮次、Provider调用、应用重试队列或多Project执行准入，明确不适用；隔离测试/SDK package journal不是用户数据库。当前真实异常限于锁外构建共享目录，最终发布锁和恢复意图无需另一份实现。
+
+决定把共享编译目录的清理、生成、格式化、tsc、转存staging和清理整体移到现有helper的build回调内；沿同一现成subject lock，不添加第二把锁、另一套目录/配置或SDK writer。旧事务意图/备份格式和最终目标不变，已有进程中断恢复先于下一轮编译。保持原失败时清理及错误传播。用现有正向跨进程串行与完整发布测试验证锁合同，再真实同时启动两个正式SDK build并检查两者exit0及完整原路由checker/SDK类型。它们是构建命令，不运行任何UI自动化或LLM，不操作别的会话/用户进程。源脚本开始前无其他修改；本节落盘后才实施，更新当前server-runtime-readiness合同并范围提交推送。
+
+## SDK 修复实际复验
+
+原非UI generation-transaction 中两个正向用例（等价packageRoot跨进程串行、完整产物发布）2pass/4断言。两个真实正式SDK build分别于1793312417245/1793312417240启动，相隔5毫秒；原exec93576/98808均join0，完成于1793312459285/1793312481418，实际调用区间重叠但同一编译/发布临界区由原subject lock串行，两个命令都完成真实生成、prettier、tsc、产物替换与临时目录清理。没有使用第二实现、额外锁、源码哈希或虚假进度。
+
+重新运行最初失败的api:routes-check后exit0（6规则/36文件），docs:check再次351操作/26组通过。生成的OpenAPI和SDK树相对已提交c357af62e干净；本轮额外产品改动只有build.ts的锁边界和当前架构说明。初始SDK失败仍为exit1，不替换其日志/回执；对方同窗口生成的exit0回执仅用于辨别竞争，不冒充本轮命令成功。所有新检查均在独立测试运行时内，模型请求仍0，未复活任何已结束native或接入用户数据。
+
+本轮第二范围提交包含生成工具根因修复、方案及实际命令原件；待推全集包含已授权并验证的8bea17e72、bcc14ace8、c357af62e及当前修复。最终正常hooks、fresh fetch/merge和push成功仍以交付回执核对。归档Chat空视图继续为下一批未完成项，长期Goal active。

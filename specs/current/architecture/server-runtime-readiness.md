@@ -14,6 +14,14 @@ definitions were consumed by an earlier conversion.
 The CLI subsequently adds SDK usage examples through its existing `x-codeSamples`
 presentation extension; that enrichment does not define another wire schema.
 
+The SDK build's existing durable generation subject lock owns shared compilation
+scratch, formatting, type emission, transfer into publication staging, and scratch
+cleanup as well as final artifact replacement. These steps run inside the same
+generation build callback. Concurrent build, packaging and CI callers therefore
+wait for the current complete generation before using `.tmp-sdk-build`; a
+caller's cleanup cannot remove another caller's compiler output. Interrupted
+publication still converges its original journal before the next locked compilation.
+
 Managed SDK startup accepts only the occurrence-bound readiness receipt. On
 timeout, abort, failed receipt or early exit, it settles the owned process and
 drains its pipes before attaching the byte-bounded diagnostic tail to the

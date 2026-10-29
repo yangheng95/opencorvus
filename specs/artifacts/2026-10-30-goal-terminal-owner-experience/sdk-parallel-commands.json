@@ -1,0 +1,42 @@
+{
+  "cwd": "D:\\myhexin-local\\opencorvus",
+  "argv": [
+    "bun",
+    "run",
+    "--cwd",
+    "packages/sdk/js",
+    "build"
+  ],
+  "bunVersion": "1.4.0",
+  "actualRequests": 0,
+  "first": {
+    "label": "sdk-parallel-a",
+    "startedAt": 1793312417245,
+    "closedAt": 1793312459285,
+    "code": 0,
+    "signal": null,
+    "childPID": 94352
+  },
+  "second": {
+    "label": "sdk-parallel-b",
+    "startedAt": 1793312417240,
+    "closedAt": 1793312481418,
+    "code": 0,
+    "signal": null,
+    "childPID": 89076
+  },
+  "generatedArtifacts": "Working tree clean relative to c357af62e",
+  "focusedTests": {
+    "argv": [
+      "bun",
+      "test",
+      "--timeout=0",
+      "./test/generation-transaction.test.ts",
+      "-t",
+      "equivalent package-root|a completed generation"
+    ],
+    "cwd": "D:\\myhexin-local\\opencorvus\\packages\\sdk\\js",
+    "pass": 2,
+    "assertions": 4
+  }
+}
