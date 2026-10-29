@@ -1,0 +1,100 @@
+{
+  "purpose": "qualification only, not candidate evaluation",
+  "initial": {
+    "problem": "convection",
+    "residual_points": 10000,
+    "constraint_count": 358,
+    "evaluation_points": 8385,
+    "residual_loss": 0.0001073362885215253,
+    "constraint_loss": 0.0006829139527880523,
+    "total_loss": 0.0007902502413095776,
+    "l2re": 0.3681550337788411,
+    "parameter_count": 20601
+  },
+  "branches": [
+    {
+      "method": "gd",
+      "parameter": 0.0001,
+      "status": "max_updates",
+      "accepted_updates": 200,
+      "attempts": 200,
+      "max_updates": 200,
+      "seconds": 8.758977625984699,
+      "hvp_calls": 0,
+      "independent_terminal": {
+        "problem": "convection",
+        "residual_points": 10000,
+        "constraint_count": 358,
+        "evaluation_points": 8385,
+        "residual_loss": 0.0005894983961936596,
+        "constraint_loss": 0.0010211037684064227,
+        "total_loss": 0.0016106021646000823,
+        "l2re": 0.36968602844560655,
+        "parameter_count": 20601
+      }
+    },
+    {
+      "method": "gd",
+      "parameter": 0.001,
+      "status": "max_updates",
+      "accepted_updates": 200,
+      "attempts": 200,
+      "max_updates": 200,
+      "seconds": 8.592337945010513,
+      "hvp_calls": 0,
+      "independent_terminal": {
+        "problem": "convection",
+        "residual_points": 10000,
+        "constraint_count": 358,
+        "evaluation_points": 8385,
+        "residual_loss": 0.00034062122648950385,
+        "constraint_loss": 0.17862591220557342,
+        "total_loss": 0.17896653343206292,
+        "l2re": 1.0000003947620062,
+        "parameter_count": 20601
+      }
+    },
+    {
+      "method": "nncg",
+      "parameter": 0.01,
+      "status": "pcg_nonpositive_curvature",
+      "accepted_updates": 0,
+      "attempts": 1,
+      "max_updates": 21,
+      "seconds": 4.535467904992402,
+      "hvp_calls": 78,
+      "independent_terminal": {
+        "problem": "convection",
+        "residual_points": 10000,
+        "constraint_count": 358,
+        "evaluation_points": 8385,
+        "residual_loss": 0.0001073362885215253,
+        "constraint_loss": 0.0006829139527880523,
+        "total_loss": 0.0007902502413095776,
+        "l2re": 0.3681550337788411,
+        "parameter_count": 20601
+      }
+    },
+    {
+      "method": "nncg",
+      "parameter": 0.1,
+      "status": "pcg_nonpositive_curvature",
+      "accepted_updates": 0,
+      "attempts": 1,
+      "max_updates": 21,
+      "seconds": 5.609783974010497,
+      "hvp_calls": 100,
+      "independent_terminal": {
+        "problem": "convection",
+        "residual_points": 10000,
+        "constraint_count": 358,
+        "evaluation_points": 8385,
+        "residual_loss": 0.0001073362885215253,
+        "constraint_loss": 0.0006829139527880523,
+        "total_loss": 0.0007902502413095776,
+        "l2re": 0.3681550337788411,
+        "parameter_count": 20601
+      }
+    }
+  ]
+}

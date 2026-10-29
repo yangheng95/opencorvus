@@ -6,7 +6,7 @@ L01针对Rathore等ICML2024论文《Challenges in Training PINNs: A Loss Landsca
 
 拟公开合同见[public/TASK.md](public/TASK.md)，尚须根据真实收敛资格和独立审查收敛后冻结。当前只有L01在进行环境/数值资格；不能把原有其余九题或整个十题套件宣称为已完成小时级升级。
 
-[public/profile.json](public/profile.json)列出19基础配置、4续训分支及有效父状态选择规则；[rubric.draft.json](rubric.draft.json)含174个二元原子叶、100分组权重，**其中9分结果锚点待校准，禁止发布总成绩**。原子数量不是难度证据。公开论文、数据与各自许可在`public/`，评估侧原官方rubric、真实资格源码/导出/回执在[evaluator/](evaluator/README.md)，不进入候选项目。
+[public/profile.json](public/profile.json)列出19基础配置、5续训分支及有效父状态选择规则；[rubric.draft.json](rubric.draft.json)含178个二元原子叶、100分组权重，**其中9分结果锚点待校准，禁止发布总成绩**。原子数量不是难度证据。公开论文、数据与各自许可在`public/`，评估侧原官方rubric、真实资格源码/导出/回执在[evaluator/](evaluator/README.md)，不进入候选项目。
 
 ## 数值资格
 
@@ -17,3 +17,5 @@ L01针对Rathore等ICML2024论文《Challenges in Training PINNs: A Loss Landsca
 独立审查发现并关闭评分数据控制漏洞：正式数值CLI自行生成权威网格，不能读取候选提供的点文件。常数模型在完整权威网格上有明确非零误差。数值primitive不证明训练真实发生，仍需源码、实际完整执行和清洁复训证据。
 
 最新[独立阶段审查](evaluator/independent-review/REVIEW.md)及[机器可读结论](evaluator/independent-review/stage-assessment.json)实际另起环境重跑15项NumPy、3项Torch测试及边界见证，核对9组真实GPU收据；认可已关闭上述点控制、native零步、分量零导数与合同冲突，**未批准正式冻结**。其自有源码副本、精确命令/输出与历史/新复跑身份都保存在该目录。仍缺晚期NNCG、R9锚点、完整候选长跑和清洁复训，不能把工具资格通过写成成熟benchmark已完成。
+
+后续[晚期资格](evaluator/late-qualification/README.md)已取得真实60分钟代表训练、非正曲率失败与21步低秩刷新路径。原小阻尼两分支失败保留，新增μ=1为冻结前派生阻尼敏感性；μ=10仅为资格探索。21步与单一代表配置不能证明完整200步、选优父配置或整个19-run研究已通过。R9及正式候选长跑继续待完成。

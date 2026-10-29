@@ -1,0 +1,300 @@
+{
+  "method": "nncg",
+  "parameter": 0.1,
+  "status": "pcg_nonpositive_curvature",
+  "accepted_updates": 0,
+  "attempts": 1,
+  "max_updates": 21,
+  "seconds": 7.718767475802451,
+  "hvp_calls": 101,
+  "independent_terminal": {
+    "problem": "convection",
+    "residual_points": 10000,
+    "constraint_count": 358,
+    "evaluation_points": 8385,
+    "residual_loss": 0.0001073362885215253,
+    "constraint_loss": 0.0006829139527880523,
+    "total_loss": 0.0007902502413095776,
+    "l2re": 0.3681550337788411,
+    "parameter_count": 20601
+  },
+  "rows": [
+    {
+      "attempt": 1,
+      "accepted_before": 0,
+      "loss_before": 0.000790250241309588,
+      "gradient_inf": 0.03390854545951728,
+      "sketch_refresh": {
+        "seed": 20262029,
+        "rank": 20,
+        "shift": 2.9292384818315494e-11,
+        "nu": 2.9292384818315494e-11,
+        "approx_eigenvalues": [
+          26217.784687298416,
+          6736.489856824702,
+          3073.391170929612,
+          1309.8954872517256,
+          996.4373188219599,
+          746.1760542556738,
+          618.4218770641072,
+          564.2627236202687,
+          471.0761389481661,
+          410.18954428596743,
+          249.365394155713,
+          157.43431627304906,
+          145.01940592037312,
+          117.86459153355594,
+          81.90663242927847,
+          68.55343936204414,
+          48.35104303338446,
+          33.84192357282189,
+          28.446572118492345,
+          16.65852480294394
+        ]
+      },
+      "pcg": {
+        "status": "pcg_nonpositive_curvature",
+        "iterations": 39,
+        "curvature": -0.0009794478684667534,
+        "explicit_relative_residual": 0.9956039985286933,
+        "recursive_relative_residual": 0.9956039985285968,
+        "history": [
+          {
+            "iteration": 1,
+            "recursive_relative_residual": 0.5029723641462042,
+            "explicit_relative_residual": 0.5029723641462038,
+            "curvature": 0.004764972357232149
+          },
+          {
+            "iteration": 2,
+            "recursive_relative_residual": 0.3131420797780086,
+            "explicit_relative_residual": 0.3131420797780063,
+            "curvature": 0.010830393481096285
+          },
+          {
+            "iteration": 3,
+            "recursive_relative_residual": 0.6158186404019905,
+            "explicit_relative_residual": 0.6158186404019861,
+            "curvature": 0.0011303741505669742
+          },
+          {
+            "iteration": 4,
+            "recursive_relative_residual": 0.3158133640118919,
+            "explicit_relative_residual": 0.31581336401189275,
+            "curvature": 0.001083885386357581
+          },
+          {
+            "iteration": 5,
+            "recursive_relative_residual": 0.3029891801412068,
+            "explicit_relative_residual": 0.30298918014120035,
+            "curvature": 0.0028182808564712813
+          },
+          {
+            "iteration": 6,
+            "recursive_relative_residual": 0.4393748848196248,
+            "explicit_relative_residual": 0.4393748848196174,
+            "curvature": 0.0013771235767226586
+          },
+          {
+            "iteration": 7,
+            "recursive_relative_residual": 0.34007392243834245,
+            "explicit_relative_residual": 0.3400739224383384,
+            "curvature": 0.0014570540114176185
+          },
+          {
+            "iteration": 8,
+            "recursive_relative_residual": 0.2287693601016771,
+            "explicit_relative_residual": 0.22876936010168586,
+            "curvature": 0.0012664187636749046
+          },
+          {
+            "iteration": 9,
+            "recursive_relative_residual": 0.279096905012241,
+            "explicit_relative_residual": 0.27909690501224893,
+            "curvature": 0.0006675175774565505
+          },
+          {
+            "iteration": 10,
+            "recursive_relative_residual": 0.3394300070875815,
+            "explicit_relative_residual": 0.3394300070875745,
+            "curvature": 0.0005982789391381102
+          },
+          {
+            "iteration": 11,
+            "recursive_relative_residual": 0.1647191427995457,
+            "explicit_relative_residual": 0.16471914279952138,
+            "curvature": 0.0007684734529007638
+          },
+          {
+            "iteration": 12,
+            "recursive_relative_residual": 0.2010036053796359,
+            "explicit_relative_residual": 0.20100360537968795,
+            "curvature": 0.00019143550955027123
+          },
+          {
+            "iteration": 13,
+            "recursive_relative_residual": 0.21616045526738814,
+            "explicit_relative_residual": 0.21616045526741554,
+            "curvature": 0.0001920965004544948
+          },
+          {
+            "iteration": 14,
+            "recursive_relative_residual": 0.12918744532402274,
+            "explicit_relative_residual": 0.12918744532396562,
+            "curvature": 0.00022171938882001158
+          },
+          {
+            "iteration": 15,
+            "recursive_relative_residual": 0.15627495135376,
+            "explicit_relative_residual": 0.15627495135369854,
+            "curvature": 8.432755166420119e-05
+          },
+          {
+            "iteration": 16,
+            "recursive_relative_residual": 0.19085262083500018,
+            "explicit_relative_residual": 0.1908526208351136,
+            "curvature": 9.214002456365446e-05
+          },
+          {
+            "iteration": 17,
+            "recursive_relative_residual": 0.13898798416743682,
+            "explicit_relative_residual": 0.13898798416732483,
+            "curvature": 6.1755157804842e-05
+          },
+          {
+            "iteration": 18,
+            "recursive_relative_residual": 0.23029670893103368,
+            "explicit_relative_residual": 0.2302967089310011,
+            "curvature": 8.988654444936019e-05
+          },
+          {
+            "iteration": 19,
+            "recursive_relative_residual": 0.13368333813572836,
+            "explicit_relative_residual": 0.1336833381356957,
+            "curvature": 0.0019774226034962217
+          },
+          {
+            "iteration": 20,
+            "recursive_relative_residual": 0.17977502862628672,
+            "explicit_relative_residual": 0.17977502862642514,
+            "curvature": 0.00019303633965756564
+          },
+          {
+            "iteration": 21,
+            "recursive_relative_residual": 0.13524375336253686,
+            "explicit_relative_residual": 0.13524375336238614,
+            "curvature": 5.879734784157649e-05
+          },
+          {
+            "iteration": 22,
+            "recursive_relative_residual": 0.158260258446663,
+            "explicit_relative_residual": 0.15826025844671565,
+            "curvature": 3.494974472939236e-05
+          },
+          {
+            "iteration": 23,
+            "recursive_relative_residual": 0.09388882936225151,
+            "explicit_relative_residual": 0.09388882936238847,
+            "curvature": 7.797051109059374e-05
+          },
+          {
+            "iteration": 24,
+            "recursive_relative_residual": 0.1618411307087087,
+            "explicit_relative_residual": 0.16184113070853517,
+            "curvature": 3.4984917616093105e-05
+          },
+          {
+            "iteration": 25,
+            "recursive_relative_residual": 0.09079615139416414,
+            "explicit_relative_residual": 0.09079615139407027,
+            "curvature": 7.941836095532476e-05
+          },
+          {
+            "iteration": 26,
+            "recursive_relative_residual": 0.05254575859702036,
+            "explicit_relative_residual": 0.05254575859714074,
+            "curvature": 0.0005875976905817476
+          },
+          {
+            "iteration": 27,
+            "recursive_relative_residual": 0.09323840953575394,
+            "explicit_relative_residual": 0.0932384095358819,
+            "curvature": 2.3136078015803704e-05
+          },
+          {
+            "iteration": 28,
+            "recursive_relative_residual": 0.10815467054887695,
+            "explicit_relative_residual": 0.10815467054867853,
+            "curvature": 3.521811679709296e-05
+          },
+          {
+            "iteration": 29,
+            "recursive_relative_residual": 0.08184206906087911,
+            "explicit_relative_residual": 0.08184206906107075,
+            "curvature": 2.985456877136896e-05
+          },
+          {
+            "iteration": 30,
+            "recursive_relative_residual": 0.08213648145418424,
+            "explicit_relative_residual": 0.08213648145422511,
+            "curvature": 4.309271716844163e-05
+          },
+          {
+            "iteration": 31,
+            "recursive_relative_residual": 0.13563799807864435,
+            "explicit_relative_residual": 0.13563799807851723,
+            "curvature": 2.7325047777725542e-05
+          },
+          {
+            "iteration": 32,
+            "recursive_relative_residual": 0.1635037942533897,
+            "explicit_relative_residual": 0.16350379425323733,
+            "curvature": 0.0002649154219860658
+          },
+          {
+            "iteration": 33,
+            "recursive_relative_residual": 0.07853441901533816,
+            "explicit_relative_residual": 0.07853441901555233,
+            "curvature": 0.000262327360138754
+          },
+          {
+            "iteration": 34,
+            "recursive_relative_residual": 0.08858975882489947,
+            "explicit_relative_residual": 0.08858975882503393,
+            "curvature": 0.00042747760655188256
+          },
+          {
+            "iteration": 35,
+            "recursive_relative_residual": 0.3501810215361581,
+            "explicit_relative_residual": 0.3501810215359198,
+            "curvature": 3.699958491706995e-05
+          },
+          {
+            "iteration": 36,
+            "recursive_relative_residual": 0.3479229230357449,
+            "explicit_relative_residual": 0.3479229230360123,
+            "curvature": 9.853710925142856e-05
+          },
+          {
+            "iteration": 37,
+            "recursive_relative_residual": 0.20329561322107986,
+            "explicit_relative_residual": 0.20329561322100934,
+            "curvature": 4.599094236866702e-05
+          },
+          {
+            "iteration": 38,
+            "recursive_relative_residual": 0.2424078925757404,
+            "explicit_relative_residual": 0.24240789257563025,
+            "curvature": 0.0011079046623347262
+          },
+          {
+            "iteration": 39,
+            "recursive_relative_residual": 0.9956039985285968,
+            "explicit_relative_residual": 0.9956039985286933,
+            "curvature": 0.00013688389318613326
+          }
+        ]
+      }
+    }
+  ]
+}

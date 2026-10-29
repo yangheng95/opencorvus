@@ -1,0 +1,33 @@
+{
+  "reviewer": "/root/benchmark_review",
+  "created_at_utc": "2026-10-29T07:26:27.781474+00:00",
+  "formal_freeze_approved": false,
+  "candidate_execution": false,
+  "main_repository_modified_by_reviewer": false,
+  "prior_three_qualification_tool_findings_resolved_in_reviewed_scope": true,
+  "independent_cpu_exit_code": 0,
+  "observed_gpu_receipts_independently_audited": "observed-run-b-independent-audit.json",
+  "mu1_twenty_first_update_refresh_verified": true,
+  "mu1_addition_scientifically_reasonable_before_freeze": true,
+  "mu1_conditions": [
+    "retain all low-damping failures and mu10 exploratory evidence",
+    "disclose development-calibrated change before candidate rollout",
+    "synchronize five-branch TASK/profile/rubric and stable branch seed index",
+    "do not infer 200-step success or global positive definiteness",
+    "requalify as needed if current-stop/selection changes the parent checkpoint"
+  ],
+  "c_group_proposed_points": {
+    "known_matrix_solver": 4,
+    "selection": 1,
+    "metering": 1,
+    "five_branch_common_start": 2,
+    "five_branch_independent_terminal": 3,
+    "five_branch_real_execution_terminal_contract": 2.5,
+    "global_actual_armijo_path": 0.75,
+    "global_actual_refresh_path": 0.75
+  },
+  "old_convection_trace_qualifies_as_current_stop_R9_anchor": false,
+  "old_trace_limitation": "100-attempt delta sampling cannot exclude instantaneous intervening zero parameter updates; final weights do not reconstruct missing stop history",
+  "required_next": "current-stop representative qualification with per-attempt receipts before normative R9 anchors",
+  "scope": "qualification repair review; no external model or author implementation; no delegate"
+}

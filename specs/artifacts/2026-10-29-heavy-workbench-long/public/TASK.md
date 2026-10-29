@@ -42,17 +42,17 @@ Adam必须实际完成11000步才可进入固定切换分支；若此前非有�
 
 ## 二阶方法、消融与故障恢复
 
-按**训练损失**从convection seed345的三个混合学习率配置选基点，ties按较小学习率；不能按评价网格误差选优。候选限已完整到达`max_updates/gradient_converged/finite_plateau/optimizer_stalled`且终值有限的配置，排除`numerical_failure/incomplete`的中途checkpoint。三配置都无合格基点时，四个续训分支明确记`dependency_incomplete`，不能偷换其他seed/方法或把中途checkpoint称为已选最优。用同一合格基点进行2个GD分支（lr=1e-4、1e-3）及2个NNCG分支（阻尼μ=.01、.1），各最多200次实际续训更新。
+按**训练损失**从convection seed345的三个混合学习率配置选基点，ties按较小学习率；不能按评价网格误差选优。候选限已完整到达`max_updates/gradient_converged/finite_plateau/optimizer_stalled`且终值有限的配置，排除`numerical_failure/incomplete`的中途checkpoint。三配置都无合格基点时，五个续训分支明确记`dependency_incomplete`，不能偷换其他seed/方法或把中途checkpoint称为已选最优。用同一合格基点进行2个GD分支（lr=1e-4、1e-3）及3个NNCG分支（阻尼μ=.01、.1、1），各最多200次实际续训更新。μ=1为本派生研究的额外阻尼敏感性设置，不能称作原论文同参数复现。
 
 NNCG用真实全批Hessian-vector product，Nyström sketch rank20，每20更新刷新；PCG（Preconditioned Conjugate Gradient，预条件共轭梯度）每次初始解为0，最大200次，停止条件为`||b−(H+μI)x||₂/max(||b||₂,1e-30)≤1e-8`，其中b=−g。递推残差与显式残差分别保存，不能只信递推值。Armijo从步长1开始，c=.1、缩减因子.5，最多30次减半，验证`L(w+αd)≤L(w)+.1α gᵀd`。每步保存显式线性系统残差、方向与梯度内积、线搜索充分下降量、实际sketch刷新/向量乘计数。原PDF算法6的`v0`未定义，本题明确PCG分母为当前`pᵀ(H+μI)p`。非正曲率、非下降方向、达到PCG上限、线搜索失败均须具名记录，不得静默换成GD或另一优化器来充当NNCG。零梯度可作为`gradient_converged`终态，不产生伪更新。
 
-Nyström合同：对高斯p×20矩阵做thin QR得Q，Y=HQ；ν=√p·eps64·||Y||₂，δ=max(0,−λmin(sym(QᵀY)))+ν，Ys=Y+δQ。以`C Cᵀ=sym(QᵀYs)`的下三角Cholesky构造`B=Ys C^(−T)`，thin SVD得U,σ，λ=max(σ²−δ,0)。`P⁻¹v=(λmin+μ)U diag(λ+μ)⁻¹Uᵀv+(I−UUᵀ)v`。这是本派生任务明确的稳定化约定，记录δ及采样种子；Cholesky/SVD真实失败就具名失败，不能静默切换预条件器。sketch采样种子分别为20261029+分支索引×1000+刷新索引，分支μ=.01索引0、μ=.1索引1，刷新索引从0开始。
+Nyström合同：在CUDA上以float64和单独`torch.Generator(device="cuda").manual_seed(sketch_seed)`抽取标准高斯p×20矩阵，做thin QR得Q，Y=HQ；ν=√p·eps64·||Y||₂，δ=max(0,−λmin(sym(QᵀY)))+ν，Ys=Y+δQ。以`C Cᵀ=sym(QᵀYs)`的下三角Cholesky构造`B=Ys C^(−T)`，thin SVD得U,σ，λ=max(σ²−δ,0)。`P⁻¹v=(λmin+μ)U diag(λ+μ)⁻¹Uᵀv+(I−UUᵀ)v`。这是本派生任务明确的稳定化约定，记录δ及采样种子；Cholesky/SVD真实失败就具名失败，不能静默切换预条件器。sketch采样种子分别为20261029+分支索引×1000+刷新索引，分支μ=.01索引0、μ=.1索引1、μ=1索引2，刷新索引从0开始。
 
 δ只用于投影/低秩近似的稳定化，不保证整个`H+μI`正定；实际PCG的曲率/方向仍须检查。预条件与原系统比较须用同一基点、同一右端项b=−g、同一μ、零起点和1e-8显式相对残差，比较中计入sketch成本。若做谱比较，采用对称变换`P^(−1/2)(H+μI)P^(−1/2)`，不能把非对称`P⁻¹H`交给对称Lanczos。
 
 不能靠自称“NNCG”获得方法分。必须在已知正定二次问题上验算PCG解与显式残差，并用有限差分与独立自动微分交叉核对网络一/二阶输入导数、Hessian向量乘及预条件器。谱估计、NNCG晚期路径与最终结果锚点仍待评估侧资格，当前题面仍是审查稿。
 
-续训遇到PCG非正曲率、迭代上限仍不满足显式残差、非下降方向、Armijo失败或非有限值时立即终止当前分支，分别标记具名算法失败，继续其他注册分支。一次失败是一次真实尝试，完整保留当次向量乘/closure成本，但不算接受的参数更新；不自动换阻尼、加rank或重试并隐藏失败。GD按固定学习率更新，若新状态非有限，保留此前有限状态并终止为`numerical_failure`。零梯度可正常终止，不凑200步。谱/论文中的失败分析可以得方法与诚实分析分，失败不能冒充已复现的结果。
+续训遇到PCG非正曲率、迭代上限仍不满足显式残差、非下降方向、Armijo失败或非有限值时立即终止当前分支，分别标记具名算法失败，继续其他注册分支。一次失败是一次真实尝试，完整保留当次向量乘/closure成本，但不算接受的参数更新；不自动换阻尼、加rank或重试并隐藏失败。GD按固定学习率更新，若新状态非有限，保留此前有限状态并终止为`numerical_failure`。所有方法都须核对真实逐参数变化；有限但舍入成零变化的尝试记`optimizer_stalled`，不得增加接受更新数。零梯度可正常终止，不凑200步。谱/论文中的失败分析可以得方法与诚实分析分，失败不能冒充已复现的结果。
 
 在被选混合基点，以可重跑Lanczos或其他明确Hessian向量方法估计至少5个极端特征值，给出Ritz残差；比较预条件前后的谱或可验证线性系统收敛，不把有限rank估计当整个Hessian严格条件数。
 
@@ -64,7 +64,7 @@ Nyström合同：对高斯p×20矩阵做thin QR得Q，Y=HQ；ν=√p·eps64·||Y
 
 - `plan.md`：执行前形成研究问题、预注册矩阵、选优规则、失败判据和分析范围；偏离逐条记录。不得事后伪造注册时间。
 - `src/`、锁定依赖、实际数值单测及命令；提交`run_study.py --output <新目录> --device cuda`，能够只用公共输入从头完成全部注册实验；支持`--only <config-id>`清洁重训、`--resume`实际恢复。全量复跑不读取本次旧训练结果或评估器。
-- `results/manifest.json`列出全部19基础配置和4续训分支的参数、初始checkpoint、父分支、实际更新、closure、梯度/Hessian向量乘、状态、停止理由、路径和开始/结束时间；真实进度与命令收据对应提交版本。保存init、11k分叉、final及关键续训checkpoint与实际训练轨迹，避免大量重复完整权重。
+- `results/manifest.json`列出全部19基础配置和5续训分支的参数、初始checkpoint、父分支、实际更新、closure、梯度/Hessian向量乘、状态、停止理由、路径和开始/结束时间；真实进度与命令收据对应提交版本。保存init、11k分叉、final及关键续训checkpoint与实际训练轨迹，避免大量重复完整权重。
 - 每个待评价checkpoint同时导出纯NumPy NPZ，仅`weight_0,bias_0,…,weight_3,bias_3`8数组，shape依次100×2、100×100、100×100、1×100与对应bias，全部float64、finite。评估者独立重算前向、PDE导数、损失、L2RE，候选推理函数和自报指标不能充当评分器。
 - `paper.md`、`paper.pdf`、`figures/`、`references.json`：完整引言/方法/结果/讨论/局限；所有图由实际数据生成并实际查看，曲线标明更新/closure/秒单位、失败/停止状态、配对关系和本派生范围。报告原文Table2 convection NNCG为3.63e-7（Markdown抽取丢指数），不要照抄错误OCR。不得用论文数值充当本次结果。
 - `reproduction.md`：环境、命令、源码版本、未决失败与恢复、重新训练和仅重新评价的区别。清洁环境评估实际重训与独立数值重算，不能只重新绘图/读取已交结果称作复现。

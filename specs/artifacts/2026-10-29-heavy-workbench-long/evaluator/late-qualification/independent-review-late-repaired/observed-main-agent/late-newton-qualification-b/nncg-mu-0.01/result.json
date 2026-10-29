@@ -1,0 +1,234 @@
+{
+  "method": "nncg",
+  "parameter": 0.01,
+  "status": "pcg_nonpositive_curvature",
+  "accepted_updates": 0,
+  "attempts": 1,
+  "max_updates": 21,
+  "seconds": 6.4159390539862216,
+  "hvp_calls": 79,
+  "independent_terminal": {
+    "problem": "convection",
+    "residual_points": 10000,
+    "constraint_count": 358,
+    "evaluation_points": 8385,
+    "residual_loss": 0.0001073362885215253,
+    "constraint_loss": 0.0006829139527880523,
+    "total_loss": 0.0007902502413095776,
+    "l2re": 0.3681550337788411,
+    "parameter_count": 20601
+  },
+  "rows": [
+    {
+      "attempt": 1,
+      "accepted_before": 0,
+      "loss_before": 0.000790250241309588,
+      "gradient_inf": 0.03390854545951728,
+      "sketch_refresh": {
+        "seed": 20261029,
+        "rank": 20,
+        "shift": 2.5601417980716683e-11,
+        "nu": 2.5601417980716683e-11,
+        "approx_eigenvalues": [
+          26191.51436222611,
+          6726.146081240569,
+          3110.606364596287,
+          1443.8333600120634,
+          1020.0985210877409,
+          706.0805036226299,
+          601.06304344589,
+          547.7598916771395,
+          463.59987782730326,
+          410.94358719241364,
+          215.73228623565478,
+          163.9763181524963,
+          125.63972825941062,
+          114.04008893247007,
+          81.13792809211364,
+          51.878175208699965,
+          43.67536114277489,
+          40.15568410723126,
+          29.96872540124757,
+          24.753773227213667
+        ]
+      },
+      "pcg": {
+        "status": "pcg_nonpositive_curvature",
+        "iterations": 28,
+        "curvature": -0.370336612465176,
+        "explicit_relative_residual": 5.2964332094861595,
+        "recursive_relative_residual": 5.296433209486359,
+        "history": [
+          {
+            "iteration": 1,
+            "recursive_relative_residual": 0.37354062984177855,
+            "explicit_relative_residual": 0.37354062984177755,
+            "curvature": 0.009587943715862987
+          },
+          {
+            "iteration": 2,
+            "recursive_relative_residual": 0.3628995926506539,
+            "explicit_relative_residual": 0.36289959265065475,
+            "curvature": 0.006216937852880363
+          },
+          {
+            "iteration": 3,
+            "recursive_relative_residual": 0.6236621350456898,
+            "explicit_relative_residual": 0.6236621350456895,
+            "curvature": 0.0027023353488475153
+          },
+          {
+            "iteration": 4,
+            "recursive_relative_residual": 0.49358479206237177,
+            "explicit_relative_residual": 0.4935847920623716,
+            "curvature": 0.003334938318607759
+          },
+          {
+            "iteration": 5,
+            "recursive_relative_residual": 0.24275731371399864,
+            "explicit_relative_residual": 0.24275731371399967,
+            "curvature": 0.0037756576565440856
+          },
+          {
+            "iteration": 6,
+            "recursive_relative_residual": 0.6053334802851214,
+            "explicit_relative_residual": 0.6053334802851151,
+            "curvature": 0.001250136428291907
+          },
+          {
+            "iteration": 7,
+            "recursive_relative_residual": 0.3915962438661105,
+            "explicit_relative_residual": 0.39159624386610925,
+            "curvature": 0.0013628015098365606
+          },
+          {
+            "iteration": 8,
+            "recursive_relative_residual": 0.4615545995731481,
+            "explicit_relative_residual": 0.4615545995731557,
+            "curvature": 0.002604477132176167
+          },
+          {
+            "iteration": 9,
+            "recursive_relative_residual": 0.16375489604961402,
+            "explicit_relative_residual": 0.16375489604961624,
+            "curvature": 0.0015857717309669633
+          },
+          {
+            "iteration": 10,
+            "recursive_relative_residual": 0.525966008697854,
+            "explicit_relative_residual": 0.5259660086978603,
+            "curvature": 0.0009710633053199673
+          },
+          {
+            "iteration": 11,
+            "recursive_relative_residual": 0.3291448717009442,
+            "explicit_relative_residual": 0.32914487170094137,
+            "curvature": 0.0017389181610706472
+          },
+          {
+            "iteration": 12,
+            "recursive_relative_residual": 0.36546066099855323,
+            "explicit_relative_residual": 0.365460660998503,
+            "curvature": 0.003649628944356882
+          },
+          {
+            "iteration": 13,
+            "recursive_relative_residual": 0.22130204417839325,
+            "explicit_relative_residual": 0.22130204417840446,
+            "curvature": 0.0010091170758749434
+          },
+          {
+            "iteration": 14,
+            "recursive_relative_residual": 0.32342829121150257,
+            "explicit_relative_residual": 0.3234282912115866,
+            "curvature": 0.0006390375017461085
+          },
+          {
+            "iteration": 15,
+            "recursive_relative_residual": 0.3335926292165692,
+            "explicit_relative_residual": 0.3335926292165137,
+            "curvature": 0.0007956612765560331
+          },
+          {
+            "iteration": 16,
+            "recursive_relative_residual": 0.20365319173272697,
+            "explicit_relative_residual": 0.20365319173269597,
+            "curvature": 0.0007061584752406587
+          },
+          {
+            "iteration": 17,
+            "recursive_relative_residual": 0.3021856961256407,
+            "explicit_relative_residual": 0.30218569612572466,
+            "curvature": 0.0003441530886919684
+          },
+          {
+            "iteration": 18,
+            "recursive_relative_residual": 0.4884477411534429,
+            "explicit_relative_residual": 0.48844774115339545,
+            "curvature": 0.0005121744516951726
+          },
+          {
+            "iteration": 19,
+            "recursive_relative_residual": 0.41468162302564643,
+            "explicit_relative_residual": 0.4146816230256436,
+            "curvature": 0.0007757683937546138
+          },
+          {
+            "iteration": 20,
+            "recursive_relative_residual": 0.5165597366469481,
+            "explicit_relative_residual": 0.5165597366470639,
+            "curvature": 0.000455054550049386
+          },
+          {
+            "iteration": 21,
+            "recursive_relative_residual": 0.668560000836142,
+            "explicit_relative_residual": 0.668560000836009,
+            "curvature": 0.0015940117901916268
+          },
+          {
+            "iteration": 22,
+            "recursive_relative_residual": 0.7640695367633001,
+            "explicit_relative_residual": 0.7640695367631309,
+            "curvature": 0.02069230039494372
+          },
+          {
+            "iteration": 23,
+            "recursive_relative_residual": 0.36091687999316435,
+            "explicit_relative_residual": 0.3609168799930988,
+            "curvature": 0.004719651638398721
+          },
+          {
+            "iteration": 24,
+            "recursive_relative_residual": 0.9116127705456871,
+            "explicit_relative_residual": 0.9116127705459759,
+            "curvature": 0.0017797660558865743
+          },
+          {
+            "iteration": 25,
+            "recursive_relative_residual": 1.7487615282774622,
+            "explicit_relative_residual": 1.7487615282773494,
+            "curvature": 0.0019106977558640392
+          },
+          {
+            "iteration": 26,
+            "recursive_relative_residual": 1.1688718478875704,
+            "explicit_relative_residual": 1.16887184788759,
+            "curvature": 0.014770950860534206
+          },
+          {
+            "iteration": 27,
+            "recursive_relative_residual": 1.3373839001070638,
+            "explicit_relative_residual": 1.3373839001071215,
+            "curvature": 0.12172678324541078
+          },
+          {
+            "iteration": 28,
+            "recursive_relative_residual": 5.296433209486359,
+            "explicit_relative_residual": 5.2964332094861595,
+            "curvature": 0.00465328122669125
+          }
+        ]
+      }
+    }
+  ]
+}

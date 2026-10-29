@@ -1,0 +1,77 @@
+{
+  "reviewer": "/root/benchmark_review",
+  "created_at_utc": "2026-10-29T07:13:52.038288+00:00",
+  "reviewed_source": "reviewed-source/qualify_late_newton.py",
+  "candidate_execution": false,
+  "formal_freeze_approved": false,
+  "delegation_performed": false,
+  "main_repo_modified_by_reviewer": false,
+  "cpu_probe_exit_code": 0,
+  "mathematical_main_path": "Cholesky orientation, PCG explicit successful residual, descent and Armijo signs match public contract",
+  "stale_graph_finding": "No stale-parameter Hessian graph found in captured loop; actual 21-step refresh qualification still pending",
+  "actual_findings": [
+    {
+      "id": "LATE-01",
+      "issue": "zero parameter changes counted as accepted updates",
+      "evidence": "probe-results.json:actual_neural_gd_zero_update_count",
+      "accepted_reported": 2,
+      "actual_parameter_change_inf": 0.0
+    },
+    {
+      "id": "LATE-02",
+      "issue": "Nyström Cholesky/SVD exceptions escape branch without named terminal/continuation",
+      "evidence": "zero_hessian_nystrom plus captured source control flow"
+    },
+    {
+      "id": "LATE-03",
+      "issue": "failure explicit residual omitted and NaN curvature misclassified nonpositive",
+      "evidence": "nonpositive_curvature_receipt/nonfinite_operator_classification"
+    }
+  ],
+  "outstanding_beyond_this_review": [
+    "R9 anchors",
+    "late actual checkpoint NNCG/refresh/Armijo/spectrum qualification",
+    "complete candidate rollout and clean re-training",
+    "hours-scale useful work observed in actual case"
+  ],
+  "probe_results": [
+    {
+      "probe": "known_spd_cpu",
+      "status": "passed",
+      "solution_relative_error": 6.136152590699198e-09,
+      "lowrank_error": 7.00669439434925e-15,
+      "inverse_error": 6.997976229045544e-15
+    },
+    {
+      "probe": "zero_hessian_nystrom",
+      "outcome": "uncaught_exception_from_nystrom",
+      "error_type": "_LinAlgError",
+      "error": "linalg.cholesky: The factorization could not be completed because the input is not positive-definite (the leading minor of order 1 is not positive-definite)."
+    },
+    {
+      "probe": "nonpositive_curvature_receipt",
+      "returned": {
+        "status": "pcg_nonpositive_curvature",
+        "iterations": 0,
+        "curvature": -1.0,
+        "history": []
+      },
+      "independently_recomputed_explicit_relative_residual": 1.0,
+      "terminal_has_explicit_residual": false
+    },
+    {
+      "probe": "nonfinite_operator_classification",
+      "returned_status": "pcg_nonpositive_curvature",
+      "curvature_is_finite": false,
+      "terminal_has_explicit_residual": false
+    },
+    {
+      "probe": "actual_neural_gd_zero_update_count",
+      "status": "max_updates",
+      "reported_accepted_updates": 2,
+      "reported_attempts": 2,
+      "actual_parameter_change_inf": 0.0,
+      "scope": "finite architecture/data and real objective, no mocked model/objective/Hessian"
+    }
+  ]
+}

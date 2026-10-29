@@ -11,7 +11,7 @@
 - 来源：`openai/frontier-evals`固定`b78dab1da774a6456b1ed9c48c9ff194ee3ff36d`，缓存`D:/opencorvus-benchmark-runs/paperbench-discovery-20261029/`。Git-LFS对象按发布者不可变object ID验证真实文件身份，不把源代码摘要作为功能门槛。上游MIT与论文CC BY4.0分别保留，不统一重许可。
 - 独立审查：`benchmark_review`只读且禁止再委托；已确认研究难度本质提升，但完整矩阵1260训练/5166万名义迭代+谱/NNCG可能远超过数小时。1963叶不是权重；按已核对上游递归聚合，Code Development41.77045%、Code Execution14.16117%、Result Analysis44.06838%。任何自拟权重或裁剪均另立派生版本，不冒称官方分。
 - 输入修正：已取回原PDF33页及15张原始图，渲染并实际查看PDF第8/18/21页。Table2 convection NNCG loss原值3.63e-7，Markdown丢指数；Table3波方程NNCG原硬件29秒/步。算法6未定义v0问题仍需自洽公开数学合同，不能偷看黑名单作者代码填缺口。已提供补充材料有明确不复现的章节/图，需保留其范围。
-- 实际环境：RTX5090 32GiB，AMD5500六核十二线程，D盘约1.7TiB可用。Docker29.7.2已运行。PyTorch2.7.1+CUDA12.8镜像`pytorch/pytorch@sha256:c16f4c749e2d9e96878875cdf6cc45cddda1d1a36fddd371dd6f2360f1b6e2a2`已拉取。新建无网络、无宿主卷容器真实float64二阶参数导数通过，GPU sm_120；scipy/matplotlib尚缺。该预检只证明设备/核心导数可用，不证明完整PINN/PCG、精度或小时级时长。独立Ubuntu WSL诊断出现HCS超时，没有重启用户环境；Docker CUDA实际路径已通过，不依赖该诊断。
+- 实际环境：RTX5090 32GiB，AMD5500六核十二线程，D盘约1.7TiB可用。Docker29.7.2已运行。PyTorch2.7.1+CUDA12.8镜像`pytorch/pytorch@sha256:c16f4c749e2d9e96878875cdf6cc45cddda1d1a36fddd371dd6f2360f1b6e2a2`已拉取。新建无网络、无宿主卷容器真实float64二阶参数导数通过，GPU sm_120；当前科学镜像已补齐NumPy/SciPy/Matplotlib等固定依赖，见下节实证。该预检只证明设备/核心导数可用，不证明完整PINN/PCG、精度或小时级时长。独立Ubuntu WSL诊断出现HCS超时，没有重启用户环境；Docker CUDA实际路径已通过，不依赖该诊断。
 - 硬约束：只操作自有新项目/容器，不碰用户窗口或重启/杀用户进程；不新建源仓库branch/worktree，保护并行修改。所有LLM走现有流式Task/原生Codex，Inspect负责执行观察；不新增私有LLM调度器或隐藏消息。无UI自动化、无外部业务发布，不向任务传递凭据/评分器/历史答案。完成修改须范围提交并按fetch/merge/检查待推集合/push规则交付。
 
 ## 分析与影响面
@@ -20,7 +20,7 @@
 
 本次只改benchmark资料、case-specific数值检查器及必要薄启动元数据；生产Task/Mission/Session调度、数据库schema、UI和发布均不适用。Task可以长跑，不以切换模式名代替难度。科学研究设计专家团的selector仅覆盖早期研究设计，不能因为名称更专业就把编码实验任务交给一个范围不符的专家团。
 
-## 当前下一步（未冻结）
+## 初始待测方案（已由下文19配置审查稿替代，未冻结）
 
 1. 完成固定科学依赖镜像及全批量float64资格：输入一/二阶导数、参数梯度/Hessian-vector product（海森矩阵向量积）、L-BFGS真实多closure、Nyström/PCG（预条件共轭梯度）和实际稳态测时。不用矩阵乘法或GPU型号推断最终工作量。
 2. 拟评估范围：三个方程设置、固定宽度100、配对种子345/456/567、Adam学习率1e-4/1e-3/1e-2，Adam/L-BFGS/11k切换混合，共63基础配置；41k为最大优化更新，真实零步/早停须有明确状态及梯度证据。NNCG/GD有限续训与阻尼搜索的具体规模由真实路径校准后冻结，不强制复制原2000步。这里只是待测方案，不是已验证时长。
@@ -55,3 +55,21 @@
 4. 把薄启动器的历史专用benchmark/case元数据限制合理参数化（先全仓检索及聚焦正向测试），复用现有Inspect/真实流式Task；不新建私有LLM调用器/队列/隐消息。不设token/总墙钟截断，真实长训练必须有实际工具/进度事实。只移交公开文件，评估器、资格权重、原官方rubric和旧答案不得进入候选项目。既有授权Provider staging必须成对移交auth+models且不输出内容。
 5. 启动真正长程OpenCorvus开发pilot，记录实际Task绑定/模型/用量/活动。用定时唤醒观察真实进度，完成后封存原件、评估侧完整清洁重训、同一冻结规则独立审查；必要时新鲜Codex对照并按用户两方都好则升级。新题未跑不能报“已经小时级”。
 6. 原始十题其余九题尚未完成小时级升级/校准。先完成一题实证，再以真实重型工作依赖和可执行评分升级其余九题、独立挑战与闭环；不能用研究草案、原子叶数量或单题通过冒充十题达到成熟经验标准。
+
+## 06:55 UTC定时接续：晚期方法资格
+
+先重读两份Recall、公开合同和评估源，再检查状态。convection真实训练持续推进至最后阶段，梯度/参数仍变化，未把最大更新终态称为收敛。该probe旧`step`计尝试的局限保留；后续新增代表资格分别记录attempt/native/nonzero/closure与真实optimizer_stalled，不凑零步。
+
+本阶段新增自有外部`qualify_late_newton.py`，按公开Nyström/PCG/Armijo合同进行数值资格；同一固定科学镜像、无网络、不读候选/作者实现。已知64维SPD实际求解相对误差6.42e-9；已知精确rank4矩阵的Nyström近似相对误差1.24e-14，逆预条件器相对误差8.14e-15；非正曲率映射到具名状态的正向错误合同也实跑。`late-known-qualification-b/known-spd.json`是本版原始收据，初版known-only资料仍保留外部目录，不把它当晚期真实PINN证明。
+
+随后convection已自然达到30000次L-BFGS native尝试上限，训练3604.738秒；独立loss=.0007902502413、L2RE=.368155。未称梯度收敛，也不是候选工作。最初probe没有逐attempt的first-zero-stop证据，独立审查明确不能作当前合同R9锚点。
+
+晚期A轮2个GD×200与2个小阻尼NNCG×21上限资格已结束：GD指标退化，小阻尼两者第一attempt遇PCG非正曲率、0接受。晚期HVP差分相对误差4.39e-11，负Rayleigh Ritz约−.143（小特征值估计未充分收敛，不当精确最小值）。这是实际数学系统的失败，不是Task调度/队列问题；投影δ没有使H+μI正定，原失败完整保留。
+
+独立reviewer实际发现私有资格工具3项问题：浮点零变化误计更新、分解异常退出整个运行、非有限曲率/显式失败残差语义缺失。已修真实代码，4项聚焦错误/零步合同实跑通过；其中LinAlgError envelope明确为局部注入，不冒充端到端。B轮保留原失败，新探索μ=1/10都21/21接受、覆盖第21更新刷新；逐步PCG≤1e-8、gtd<0、Armijo、parameter_step_inf>0由主评估者和独立审查另行核算通过。μ=1第三分支seed20263029/20263030；μ10探索原件保留，不进公开矩阵。
+
+在候选尚未开始/题面未冻结阶段，独立审查认可保留两小阻尼失败并增μ=1作派生敏感性。公开profile改为19基础+5续训，178叶；C组仍15、总分100，R9仍pending。21步不是200步证明，代表基点也不是已完成三学习率选优。已启动μ1×200完整资格自有容器`oc-pinn-late-newton-200-20261029-a`，会话87691，实时`late-newton-200-qualification/nncg-mu-1.0/progress.json`；CLI`--branch-index-offset 2`保持第三分支正确sketch种子。最新原件与资格源归档`specs/artifacts/2026-10-29-heavy-workbench-long/evaluator/late-qualification/README.md`。
+
+另外两问题用新`qualify_problem_convergence.py`按最终更新/终态合同作单一代表资格，不是候选提交；reaction容器`oc-pinn-reaction-convergence-20261029-a`，会话6261，实时`reaction-convergence-qualification/events.json`；wave容器`oc-pinn-wave-convergence-20261029-a`，会话60677，实时`wave-convergence-qualification/events.json`。初始化、11000切换、后续真实计数、first-zero-stop、保存100/120更新状态均按当前合同，两个已执行源副本分别留在目录`executed-source.py`。为补旧convection终态证据，已用当前合同重新执行convection：容器`oc-pinn-convection-contract-20261029-a`，会话22932，实时`convection-contract-qualification/events.json`，新增完整`lbfgs-attempts.jsonl`逐次记录。该必要复验修补明确合同证据缺口，不是凑时长。三个GPU资格并发，记录实际耗时但不当独占GPU速度排名。先检查上述自有事实再推进，不能重复启动已有资格或打断用户进程。
+
+薄启动元数据已先搜索：生产唯一匹配为`script/benchmark/serve_heavy_workbench.ts`第16行固定旧benchmark身份、17行仅Hxx；当前代码尚未修改。其他native-run-contract处理通用native完成/批次，不含本launcher注册身份；不存在第二个HeavyWorkBench启动路径。未来更改仅扩大注册身份合同并正向测试，不改变Task、Provider、队列、LLM工具或终态归属。

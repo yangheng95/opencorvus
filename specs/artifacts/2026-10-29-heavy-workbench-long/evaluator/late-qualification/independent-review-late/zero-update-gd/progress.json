@@ -1,0 +1,16 @@
+{
+  "method": "gd",
+  "parameter": 0.0001,
+  "accepted": 2,
+  "last": {
+    "attempt": 2,
+    "accepted_before": 1,
+    "loss_before": 0.1787709497206704,
+    "gradient_inf": 1.0202958613538477e-14,
+    "step_size": 0.0001,
+    "loss_after": 0.1787709497206704,
+    "accepted_after": 2,
+    "hvp_calls_total": 0,
+    "elapsed_seconds": 0.8660169527865946
+  }
+}

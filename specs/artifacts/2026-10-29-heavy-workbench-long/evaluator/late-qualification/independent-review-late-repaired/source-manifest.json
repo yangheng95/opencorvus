@@ -1,0 +1,41 @@
+{
+  "captured_at_utc": "2026-10-29T07:23:57.719600+00:00",
+  "source_snapshots": [
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\qualify_late_newton.py",
+      "snapshot": "snapshot\\qualify_late_newton.py",
+      "byte_equal_at_capture": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\qualify_late_boundaries.py",
+      "snapshot": "snapshot\\qualify_late_boundaries.py",
+      "byte_equal_at_capture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\public\\TASK.md",
+      "snapshot": "snapshot\\TASK.md",
+      "byte_equal_at_capture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\public\\profile.json",
+      "snapshot": "snapshot\\profile.json",
+      "byte_equal_at_capture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\rubric.draft.json",
+      "snapshot": "snapshot\\rubric.draft.json",
+      "byte_equal_at_capture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\script\\benchmark\\pinn_numeric_check.py",
+      "snapshot": "snapshot\\evaluator-tools\\pinn_numeric_check.py",
+      "byte_equal_at_capture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\script\\benchmark\\pinn_torch_check.py",
+      "snapshot": "snapshot\\evaluator-tools\\pinn_torch_check.py",
+      "byte_equal_at_capture": true
+    }
+  ],
+  "observed_receipts_note": "main-agent qualification artifacts copied read-only; not reviewer-executed candidate results"
+}

@@ -1,0 +1,27 @@
+{
+  "status": "passed",
+  "scope": "local contracts only",
+  "rows": [
+    {
+      "contract": "negative_curvature",
+      "status": "pcg_nonpositive_curvature",
+      "explicit_relative_residual": 1.0
+    },
+    {
+      "contract": "nonfinite_curvature",
+      "status": "pcg_nonfinite"
+    },
+    {
+      "contract": "real_neural_zero_update",
+      "status": "optimizer_stalled",
+      "accepted_updates": 0,
+      "attempts": 1
+    },
+    {
+      "contract": "factorization_error_envelope",
+      "status": "factorization_failure",
+      "accepted_updates": 0,
+      "evidence_scope": "local error injection using real Cholesky failure; not an end-to-end pass"
+    }
+  ]
+}

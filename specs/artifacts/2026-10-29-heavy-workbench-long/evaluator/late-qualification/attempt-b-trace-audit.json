@@ -1,0 +1,106 @@
+{
+  "status": "passed for recorded contracts",
+  "scope": "independent arithmetic over evaluator qualification receipts; not candidate authentication",
+  "branches": [
+    {
+      "mu": 0.01,
+      "status": "pcg_nonpositive_curvature",
+      "accepted_updates": 0,
+      "declared_updates": 0,
+      "refreshes": [
+        {
+          "attempt": 1,
+          "seed": 20261029
+        }
+      ],
+      "independent_terminal": {
+        "problem": "convection",
+        "residual_points": 10000,
+        "constraint_count": 358,
+        "evaluation_points": 8385,
+        "residual_loss": 0.0001073362885215253,
+        "constraint_loss": 0.0006829139527880523,
+        "total_loss": 0.0007902502413095776,
+        "l2re": 0.3681550337788411,
+        "parameter_count": 20601
+      }
+    },
+    {
+      "mu": 0.1,
+      "status": "pcg_nonpositive_curvature",
+      "accepted_updates": 0,
+      "declared_updates": 0,
+      "refreshes": [
+        {
+          "attempt": 1,
+          "seed": 20262029
+        }
+      ],
+      "independent_terminal": {
+        "problem": "convection",
+        "residual_points": 10000,
+        "constraint_count": 358,
+        "evaluation_points": 8385,
+        "residual_loss": 0.0001073362885215253,
+        "constraint_loss": 0.0006829139527880523,
+        "total_loss": 0.0007902502413095776,
+        "l2re": 0.3681550337788411,
+        "parameter_count": 20601
+      }
+    },
+    {
+      "mu": 1.0,
+      "status": "max_updates",
+      "accepted_updates": 21,
+      "declared_updates": 21,
+      "refreshes": [
+        {
+          "attempt": 1,
+          "seed": 20263029
+        },
+        {
+          "attempt": 21,
+          "seed": 20263030
+        }
+      ],
+      "independent_terminal": {
+        "problem": "convection",
+        "residual_points": 10000,
+        "constraint_count": 358,
+        "evaluation_points": 8385,
+        "residual_loss": 5.0413459254473616e-05,
+        "constraint_loss": 0.0006367990676404233,
+        "total_loss": 0.0006872125268948969,
+        "l2re": 0.35396467010911975,
+        "parameter_count": 20601
+      }
+    },
+    {
+      "mu": 10.0,
+      "status": "max_updates",
+      "accepted_updates": 21,
+      "declared_updates": 21,
+      "refreshes": [
+        {
+          "attempt": 1,
+          "seed": 20264029
+        },
+        {
+          "attempt": 21,
+          "seed": 20264030
+        }
+      ],
+      "independent_terminal": {
+        "problem": "convection",
+        "residual_points": 10000,
+        "constraint_count": 358,
+        "evaluation_points": 8385,
+        "residual_loss": 8.493179654926087e-05,
+        "constraint_loss": 0.0006713964757916759,
+        "total_loss": 0.0007563282723409368,
+        "l2re": 0.36597116831136983,
+        "parameter_count": 20601
+      }
+    }
+  ]
+}

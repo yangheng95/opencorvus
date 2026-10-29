@@ -1,0 +1,40 @@
+[
+  {
+    "probe": "known_spd_cpu",
+    "status": "passed",
+    "solution_relative_error": 6.136152590699198e-09,
+    "lowrank_error": 7.00669439434925e-15,
+    "inverse_error": 6.997976229045544e-15
+  },
+  {
+    "probe": "zero_hessian_nystrom",
+    "outcome": "uncaught_exception_from_nystrom",
+    "error_type": "_LinAlgError",
+    "error": "linalg.cholesky: The factorization could not be completed because the input is not positive-definite (the leading minor of order 1 is not positive-definite)."
+  },
+  {
+    "probe": "nonpositive_curvature_receipt",
+    "returned": {
+      "status": "pcg_nonpositive_curvature",
+      "iterations": 0,
+      "curvature": -1.0,
+      "history": []
+    },
+    "independently_recomputed_explicit_relative_residual": 1.0,
+    "terminal_has_explicit_residual": false
+  },
+  {
+    "probe": "nonfinite_operator_classification",
+    "returned_status": "pcg_nonpositive_curvature",
+    "curvature_is_finite": false,
+    "terminal_has_explicit_residual": false
+  },
+  {
+    "probe": "actual_neural_gd_zero_update_count",
+    "status": "max_updates",
+    "reported_accepted_updates": 2,
+    "reported_attempts": 2,
+    "actual_parameter_change_inf": 0.0,
+    "scope": "finite architecture/data and real objective, no mocked model/objective/Hessian"
+  }
+]

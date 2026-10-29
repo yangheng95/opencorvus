@@ -1,0 +1,43 @@
+{
+  "device": "cpu",
+  "torch": "2.7.1+cu128",
+  "numpy": "2.2.6",
+  "candidate_execution": false,
+  "rows": [
+    {
+      "contract": "known_spd",
+      "status": "passed",
+      "solution_relative_error": 6.136152590699198e-09
+    },
+    {
+      "contract": "negative_curvature",
+      "status": "pcg_nonpositive_curvature",
+      "explicit_relative_residual": 1.0,
+      "recursive_relative_residual": 1.0
+    },
+    {
+      "contract": "nonfinite_curvature",
+      "status": "pcg_nonfinite",
+      "explicit_residual_present": true
+    },
+    {
+      "contract": "real_neural_zero_step",
+      "status": "optimizer_stalled",
+      "accepted_updates": 0,
+      "attempts": 1,
+      "actual_parameter_change_inf": 0.0,
+      "scope": "real neural objective; no mocked objective"
+    },
+    {
+      "contract": "factorization_failure_envelope",
+      "status": "factorization_failure",
+      "accepted_updates": 0,
+      "scope": "explicit local injection of actual Cholesky error; not full PINN path"
+    },
+    {
+      "contract": "subsequent_branch_can_run",
+      "status": "optimizer_stalled",
+      "scope": "local branch-call continuation after named factorization failure"
+    }
+  ]
+}

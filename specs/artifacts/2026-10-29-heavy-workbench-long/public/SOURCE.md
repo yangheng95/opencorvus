@@ -6,7 +6,7 @@
 
 [上游PaperBench](https://github.com/openai/frontier-evals/tree/b78dab1da774a6456b1ed9c48c9ff194ee3ff36d/project/paperbench)代码/基准资料MIT许可文本保留于UPSTREAM-LICENSE.md；论文第三方版权单独保留。[PaperBench官方说明](https://openai.com/index/paperbench/)描述了作者共建的层级rubric与实际代码/实验复现。**本题没有取得原作者对派生范围和新权重的背书。**
 
-本任务公开改动：固定width100；19个注册基础run和4续训分支；固定采样种子与统一数据；明确拼接条件损失；129×65公开评价网格；特定早停、优化器计数、GD/NNCG范围和恢复试验。原论文及原addendum供阅读；本题合同不同处以本题最终冻结profile/TASK为准，必须在报告对照表列出差别。没有复现的原文部分明确排除，不能按原文全研究或官方原rubric声称完成。
+本任务公开改动：固定width100；19个注册基础run和5续训分支；固定采样种子与统一数据；明确拼接条件损失；129×65公开评价网格；特定早停、优化器计数、GD/NNCG范围和恢复试验，包含派生μ=1阻尼敏感性。原论文及原addendum供阅读；本题合同不同处以本题最终冻结profile/TASK为准，必须在报告对照表列出差别。没有复现的原文部分明确排除，不能按原文全研究或官方原rubric声称完成。
 
 禁止使用作者实现，具体仓库见paper/blacklist.txt。可读随包论文、已有通用库文档和标准科学依赖；不得读取原作者黑名单代码或通过其他镜像获得它。
 

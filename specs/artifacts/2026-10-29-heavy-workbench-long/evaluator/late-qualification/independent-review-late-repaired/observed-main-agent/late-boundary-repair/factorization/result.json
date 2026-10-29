@@ -1,0 +1,32 @@
+{
+  "method": "nncg",
+  "parameter": 0.1,
+  "status": "factorization_failure",
+  "accepted_updates": 0,
+  "attempts": 1,
+  "max_updates": 2,
+  "seconds": 4.073528073728085,
+  "hvp_calls": 0,
+  "independent_terminal": {
+    "problem": "convection",
+    "residual_points": 10000,
+    "constraint_count": 358,
+    "evaluation_points": 8385,
+    "residual_loss": 0.0,
+    "constraint_loss": 0.1787709497206704,
+    "total_loss": 0.1787709497206704,
+    "l2re": 1.0,
+    "parameter_count": 20601
+  },
+  "rows": [
+    {
+      "attempt": 1,
+      "accepted_before": 0,
+      "loss_before": 0.1787709497206704,
+      "gradient_inf": 1.0202958613538477e-14,
+      "error_type": "_LinAlgError",
+      "error": "linalg.cholesky: The factorization could not be completed because the input is not positive-definite (the leading minor of order 1 is not positive-definite).",
+      "hvp_calls_total": 0
+    }
+  ]
+}

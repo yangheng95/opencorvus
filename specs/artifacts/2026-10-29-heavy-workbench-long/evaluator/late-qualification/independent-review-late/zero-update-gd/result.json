@@ -1,0 +1,45 @@
+{
+  "method": "gd",
+  "parameter": 0.0001,
+  "status": "max_updates",
+  "accepted_updates": 2,
+  "attempts": 2,
+  "max_updates": 2,
+  "seconds": 3.874865736812353,
+  "hvp_calls": 0,
+  "independent_terminal": {
+    "problem": "convection",
+    "residual_points": 10000,
+    "constraint_count": 358,
+    "evaluation_points": 8385,
+    "residual_loss": 0.0,
+    "constraint_loss": 0.1787709497206704,
+    "total_loss": 0.1787709497206704,
+    "l2re": 1.0,
+    "parameter_count": 20601
+  },
+  "rows": [
+    {
+      "attempt": 1,
+      "accepted_before": 0,
+      "loss_before": 0.1787709497206704,
+      "gradient_inf": 1.0202958613538477e-14,
+      "step_size": 0.0001,
+      "loss_after": 0.1787709497206704,
+      "accepted_after": 1,
+      "hvp_calls_total": 0,
+      "elapsed_seconds": 0.49069128604605794
+    },
+    {
+      "attempt": 2,
+      "accepted_before": 1,
+      "loss_before": 0.1787709497206704,
+      "gradient_inf": 1.0202958613538477e-14,
+      "step_size": 0.0001,
+      "loss_after": 0.1787709497206704,
+      "accepted_after": 2,
+      "hvp_calls_total": 0,
+      "elapsed_seconds": 0.8660169527865946
+    }
+  ]
+}

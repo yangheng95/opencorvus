@@ -1,0 +1,23 @@
+{
+  "started_at_utc": "2026-10-29T07:11:26.026146+00:00",
+  "elapsed_seconds": 6.982920800335705,
+  "command_argv": [
+    "docker",
+    "run",
+    "--rm",
+    "--network",
+    "none",
+    "--cpus",
+    "1",
+    "-e",
+    "PYTHONDONTWRITEBYTECODE=1",
+    "--mount",
+    "type=bind,source=D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\independent-review-late,target=/review",
+    "pytorch/pytorch@sha256:c16f4c749e2d9e96878875cdf6cc45cddda1d1a36fddd371dd6f2360f1b6e2a2",
+    "python",
+    "-B",
+    "/review/probe_cpu.py"
+  ],
+  "exit_code": 0,
+  "scope": "one independent CPU container; no GPU requested; only this authorized external directory mounted writable"
+}

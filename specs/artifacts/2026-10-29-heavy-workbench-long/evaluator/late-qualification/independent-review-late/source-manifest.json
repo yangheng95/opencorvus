@@ -1,0 +1,41 @@
+{
+  "captured_at_utc": "2026-10-29T07:11:25.392538+00:00",
+  "files": [
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\qualify_late_newton.py",
+      "snapshot": "reviewed-source\\qualify_late_newton.py",
+      "bytes": 11900,
+      "byte_equal_at_capture": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\qualify_problem_convergence.py",
+      "snapshot": "reviewed-source\\qualify_problem_convergence.py",
+      "bytes": 4124,
+      "byte_equal_at_capture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\public\\TASK.md",
+      "snapshot": "reviewed-source\\TASK.md",
+      "bytes": 14453,
+      "byte_equal_at_capture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\script\\benchmark\\pinn_torch_check.py",
+      "snapshot": "reviewed-source\\evaluator-tools\\pinn_torch_check.py",
+      "bytes": 9567,
+      "byte_equal_at_capture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\script\\benchmark\\pinn_numeric_check.py",
+      "snapshot": "reviewed-source\\evaluator-tools\\pinn_numeric_check.py",
+      "bytes": 8603,
+      "byte_equal_at_capture": true
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\late-known-qualification-b\\known-spd.json",
+      "snapshot": "reviewed-source\\known-spd-observed.json",
+      "bytes": 16764,
+      "byte_equal_at_capture": true
+    }
+  ]
+}

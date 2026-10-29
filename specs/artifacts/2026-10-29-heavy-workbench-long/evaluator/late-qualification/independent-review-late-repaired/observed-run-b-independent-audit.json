@@ -1,0 +1,122 @@
+[
+  {
+    "parameter": 0.01,
+    "status": "pcg_nonpositive_curvature",
+    "attempts": 1,
+    "accepted_updates": 0,
+    "independent_numpy_recomputed": {
+      "problem": "convection",
+      "residual_points": 10000,
+      "constraint_count": 358,
+      "evaluation_points": 8385,
+      "residual_loss": 0.00010733628852152528,
+      "constraint_loss": 0.0006829139527880485,
+      "total_loss": 0.0007902502413095738,
+      "l2re": 0.3681550337788411,
+      "parameter_count": 20601
+    },
+    "hvp_count": 79,
+    "hvp_count_reconstructed_from_actual_receipts": 79,
+    "refresh_attempts_and_seeds": [
+      [
+        1,
+        20261029
+      ]
+    ],
+    "source": "main-agent GPU qualification receipts; not reviewer GPU execution",
+    "terminal_parameters_equal_original_base": true,
+    "failure_curvature": -0.370336612465176,
+    "explicit_relative_residual": 5.2964332094861595
+  },
+  {
+    "parameter": 0.1,
+    "status": "pcg_nonpositive_curvature",
+    "attempts": 1,
+    "accepted_updates": 0,
+    "independent_numpy_recomputed": {
+      "problem": "convection",
+      "residual_points": 10000,
+      "constraint_count": 358,
+      "evaluation_points": 8385,
+      "residual_loss": 0.00010733628852152528,
+      "constraint_loss": 0.0006829139527880485,
+      "total_loss": 0.0007902502413095738,
+      "l2re": 0.3681550337788411,
+      "parameter_count": 20601
+    },
+    "hvp_count": 101,
+    "hvp_count_reconstructed_from_actual_receipts": 101,
+    "refresh_attempts_and_seeds": [
+      [
+        1,
+        20262029
+      ]
+    ],
+    "source": "main-agent GPU qualification receipts; not reviewer GPU execution",
+    "terminal_parameters_equal_original_base": true,
+    "failure_curvature": -0.0009794478684667534,
+    "explicit_relative_residual": 0.9956039985286933
+  },
+  {
+    "parameter": 1.0,
+    "status": "max_updates",
+    "attempts": 21,
+    "accepted_updates": 21,
+    "independent_numpy_recomputed": {
+      "problem": "convection",
+      "residual_points": 10000,
+      "constraint_count": 358,
+      "evaluation_points": 8385,
+      "residual_loss": 5.0413459254473616e-05,
+      "constraint_loss": 0.000636799067640419,
+      "total_loss": 0.0006872125268948927,
+      "l2re": 0.35396467010911975,
+      "parameter_count": 20601
+    },
+    "hvp_count": 2303,
+    "hvp_count_reconstructed_from_actual_receipts": 2303,
+    "refresh_attempts_and_seeds": [
+      [
+        1,
+        20263029
+      ],
+      [
+        21,
+        20263030
+      ]
+    ],
+    "source": "main-agent GPU qualification receipts; not reviewer GPU execution",
+    "all_positive_steps_and_armijo_and_explicit_pcg_verified": true
+  },
+  {
+    "parameter": 10.0,
+    "status": "max_updates",
+    "attempts": 21,
+    "accepted_updates": 21,
+    "independent_numpy_recomputed": {
+      "problem": "convection",
+      "residual_points": 10000,
+      "constraint_count": 358,
+      "evaluation_points": 8385,
+      "residual_loss": 8.493179654926081e-05,
+      "constraint_loss": 0.0006713964757916699,
+      "total_loss": 0.0007563282723409307,
+      "l2re": 0.3659711683113698,
+      "parameter_count": 20601
+    },
+    "hvp_count": 915,
+    "hvp_count_reconstructed_from_actual_receipts": 915,
+    "refresh_attempts_and_seeds": [
+      [
+        1,
+        20264029
+      ],
+      [
+        21,
+        20264030
+      ]
+    ],
+    "source": "main-agent GPU qualification receipts; not reviewer GPU execution",
+    "all_positive_steps_and_armijo_and_explicit_pcg_verified": true
+  }
+]

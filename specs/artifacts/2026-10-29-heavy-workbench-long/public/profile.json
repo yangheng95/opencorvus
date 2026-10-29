@@ -227,6 +227,15 @@
       "parameter": "damping",
       "value": 0.1,
       "parent": "profile.selection"
+    },
+    {
+      "id": "convection-nncg-continuation-1.0",
+      "method": "nncg",
+      "updates": 200,
+      "parameter": "damping",
+      "value": 1.0,
+      "parent": "profile.selection",
+      "provenance": "additional damping sensitivity from pre-freeze feasibility; not an original-paper parameter or candidate result"
     }
   ],
   "dataset": "public/data; evaluator regenerates canonical arrays",

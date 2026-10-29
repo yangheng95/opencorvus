@@ -1,0 +1,3073 @@
+[
+  {
+    "event": "adam_progress",
+    "step": 1000,
+    "loss": 0.1723435231872894,
+    "seconds": 17.315796998795122
+  },
+  {
+    "event": "adam_progress",
+    "step": 2000,
+    "loss": 0.15877485976217592,
+    "seconds": 33.9498638487421
+  },
+  {
+    "event": "adam_progress",
+    "step": 3000,
+    "loss": 0.14528001813493444,
+    "seconds": 50.80098791606724
+  },
+  {
+    "event": "adam_progress",
+    "step": 4000,
+    "loss": 0.10168255858467908,
+    "seconds": 67.40794943878427
+  },
+  {
+    "event": "adam_progress",
+    "step": 5000,
+    "loss": 0.07742559251301087,
+    "seconds": 84.03221943974495
+  },
+  {
+    "event": "adam_progress",
+    "step": 6000,
+    "loss": 0.03072668317314186,
+    "seconds": 101.05995959788561
+  },
+  {
+    "event": "adam_progress",
+    "step": 7000,
+    "loss": 0.017803760177273045,
+    "seconds": 117.73775410093367
+  },
+  {
+    "event": "adam_progress",
+    "step": 8000,
+    "loss": 0.013251294788636894,
+    "seconds": 134.40471583697945
+  },
+  {
+    "event": "adam_progress",
+    "step": 9000,
+    "loss": 0.009709492836093599,
+    "seconds": 151.06234753783792
+  },
+  {
+    "event": "adam_progress",
+    "step": 10000,
+    "loss": 0.008057813884003945,
+    "seconds": 167.7158627831377
+  },
+  {
+    "event": "adam_progress",
+    "step": 11000,
+    "loss": 0.007216749197542553,
+    "seconds": 184.58300228603184
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 100,
+    "loss": 0.006611533961817827,
+    "gradient_inf": 0.018580279501105523,
+    "step_inf": 0.0027846811673274408,
+    "plateau": 0,
+    "closure_calls": 201,
+    "seconds": 246.10573293175548
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 200,
+    "loss": 0.005995282920464112,
+    "gradient_inf": 0.009148805748092726,
+    "step_inf": 0.0038194234802733096,
+    "plateau": 0,
+    "closure_calls": 410,
+    "seconds": 256.2766217091121
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 300,
+    "loss": 0.005686097098488912,
+    "gradient_inf": 0.050672797871725316,
+    "step_inf": 0.004895897108432967,
+    "plateau": 0,
+    "closure_calls": 615,
+    "seconds": 266.4107239549048
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 400,
+    "loss": 0.005451473769379002,
+    "gradient_inf": 0.02640297644860965,
+    "step_inf": 0.003228288543177582,
+    "plateau": 0,
+    "closure_calls": 826,
+    "seconds": 276.80522691179067
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 500,
+    "loss": 0.0052810559166549375,
+    "gradient_inf": 0.025957959807695073,
+    "step_inf": 0.0022419510669826614,
+    "plateau": 0,
+    "closure_calls": 1037,
+    "seconds": 287.03549301205203
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 600,
+    "loss": 0.005152564165548477,
+    "gradient_inf": 0.0016731260239181475,
+    "step_inf": 0.0019852977285733653,
+    "plateau": 0,
+    "closure_calls": 1247,
+    "seconds": 297.21178939798847
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 700,
+    "loss": 0.005013521114374934,
+    "gradient_inf": 0.011413494278510062,
+    "step_inf": 0.0010235804551497196,
+    "plateau": 0,
+    "closure_calls": 1462,
+    "seconds": 307.55132698779926
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 800,
+    "loss": 0.004834247174298427,
+    "gradient_inf": 0.003948527474453169,
+    "step_inf": 0.0012966331016128207,
+    "plateau": 0,
+    "closure_calls": 1669,
+    "seconds": 317.6762061137706
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 900,
+    "loss": 0.004689754177378834,
+    "gradient_inf": 0.004883262476510747,
+    "step_inf": 0.002249415742887173,
+    "plateau": 0,
+    "closure_calls": 1882,
+    "seconds": 327.92139953002334
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 1000,
+    "loss": 0.004618783646310858,
+    "gradient_inf": 0.0024110328888840554,
+    "step_inf": 0.0007716471594994001,
+    "plateau": 0,
+    "closure_calls": 2089,
+    "seconds": 338.0008127288893
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 1100,
+    "loss": 0.004505664472943581,
+    "gradient_inf": 0.01931380346039446,
+    "step_inf": 0.002946918606833826,
+    "plateau": 0,
+    "closure_calls": 2302,
+    "seconds": 348.37777701579034
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 1200,
+    "loss": 0.00440256881787277,
+    "gradient_inf": 0.012311228917011637,
+    "step_inf": 0.00131809517503019,
+    "plateau": 0,
+    "closure_calls": 2512,
+    "seconds": 358.6420644368045
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 1300,
+    "loss": 0.004304981494289459,
+    "gradient_inf": 0.012084233585052671,
+    "step_inf": 0.0013235596286787499,
+    "plateau": 0,
+    "closure_calls": 2724,
+    "seconds": 369.08672655094415
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 1400,
+    "loss": 0.0041781974183582715,
+    "gradient_inf": 0.002016525753199404,
+    "step_inf": 0.002488630468462927,
+    "plateau": 0,
+    "closure_calls": 2937,
+    "seconds": 379.17475796397775
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 1500,
+    "loss": 0.0040682853080110356,
+    "gradient_inf": 0.01328418495567087,
+    "step_inf": 0.0056188526991240995,
+    "plateau": 0,
+    "closure_calls": 3147,
+    "seconds": 390.8260566308163
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 1600,
+    "loss": 0.003935332655832322,
+    "gradient_inf": 0.008030262883481527,
+    "step_inf": 0.0015041164540472926,
+    "plateau": 0,
+    "closure_calls": 3355,
+    "seconds": 401.12327829608694
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 1700,
+    "loss": 0.0038185593623019775,
+    "gradient_inf": 0.009231545717727978,
+    "step_inf": 0.003504394158571955,
+    "plateau": 0,
+    "closure_calls": 3568,
+    "seconds": 411.24293120997027
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 1800,
+    "loss": 0.003713762078583251,
+    "gradient_inf": 0.006888843616115881,
+    "step_inf": 0.0010676114043406404,
+    "plateau": 0,
+    "closure_calls": 3780,
+    "seconds": 423.1467069168575
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 1900,
+    "loss": 0.0035918048719713854,
+    "gradient_inf": 0.008547411937351132,
+    "step_inf": 0.001703396828833026,
+    "plateau": 0,
+    "closure_calls": 3994,
+    "seconds": 438.5328470040113
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 2000,
+    "loss": 0.0035043292708421595,
+    "gradient_inf": 0.006556150684419669,
+    "step_inf": 0.001221652771016074,
+    "plateau": 0,
+    "closure_calls": 4203,
+    "seconds": 448.6890825787559
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 2100,
+    "loss": 0.003422722959973585,
+    "gradient_inf": 0.02572030150476915,
+    "step_inf": 0.004511919214835292,
+    "plateau": 0,
+    "closure_calls": 4415,
+    "seconds": 458.802782217972
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 2200,
+    "loss": 0.003365641332739113,
+    "gradient_inf": 0.010035037458821054,
+    "step_inf": 0.000895305691687237,
+    "plateau": 0,
+    "closure_calls": 4630,
+    "seconds": 468.93641796987504
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 2300,
+    "loss": 0.0032986900145533823,
+    "gradient_inf": 0.01561923630130866,
+    "step_inf": 0.0008391358191994873,
+    "plateau": 0,
+    "closure_calls": 4839,
+    "seconds": 480.3994919960387
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 2400,
+    "loss": 0.003242402009874503,
+    "gradient_inf": 0.011011446784868158,
+    "step_inf": 0.003382523760944167,
+    "plateau": 0,
+    "closure_calls": 5047,
+    "seconds": 491.24772274075076
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 2500,
+    "loss": 0.0031937010182198915,
+    "gradient_inf": 0.0011549627012633684,
+    "step_inf": 0.0009713751944783189,
+    "plateau": 0,
+    "closure_calls": 5255,
+    "seconds": 501.0209972630255
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 2600,
+    "loss": 0.003160083777469826,
+    "gradient_inf": 0.020041793768992934,
+    "step_inf": 0.0036423378196559497,
+    "plateau": 0,
+    "closure_calls": 5464,
+    "seconds": 511.1810051170178
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 2700,
+    "loss": 0.0031240981694267,
+    "gradient_inf": 0.0015160152379422012,
+    "step_inf": 0.0017332153246949478,
+    "plateau": 0,
+    "closure_calls": 5676,
+    "seconds": 522.7568647270091
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 2800,
+    "loss": 0.003103610338905525,
+    "gradient_inf": 0.004614988360970856,
+    "step_inf": 0.0009820861742393105,
+    "plateau": 0,
+    "closure_calls": 5889,
+    "seconds": 532.7999618160538
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 2900,
+    "loss": 0.003079632524644162,
+    "gradient_inf": 0.02581499496375482,
+    "step_inf": 0.0037043327161079276,
+    "plateau": 0,
+    "closure_calls": 6105,
+    "seconds": 542.7024126388133
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 3000,
+    "loss": 0.0030579559665798507,
+    "gradient_inf": 0.00117404901842937,
+    "step_inf": 0.0009309419395842067,
+    "plateau": 0,
+    "closure_calls": 6320,
+    "seconds": 552.5640281671658
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 3100,
+    "loss": 0.003031893897657047,
+    "gradient_inf": 0.0005559826397522943,
+    "step_inf": 0.00046407050652128023,
+    "plateau": 0,
+    "closure_calls": 6534,
+    "seconds": 562.5775334411301
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 3200,
+    "loss": 0.0030106774211631007,
+    "gradient_inf": 0.005688643516415793,
+    "step_inf": 0.00035930276559681396,
+    "plateau": 0,
+    "closure_calls": 6744,
+    "seconds": 572.4331102198921
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 3300,
+    "loss": 0.002995966116618182,
+    "gradient_inf": 0.003277930582490131,
+    "step_inf": 0.000573701557163464,
+    "plateau": 0,
+    "closure_calls": 6956,
+    "seconds": 582.2714612470008
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 3400,
+    "loss": 0.0029706479924884767,
+    "gradient_inf": 0.007988643436753701,
+    "step_inf": 0.001245101044234788,
+    "plateau": 0,
+    "closure_calls": 7171,
+    "seconds": 593.9176375521347
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 3500,
+    "loss": 0.0029555304567613076,
+    "gradient_inf": 0.0008188117490725414,
+    "step_inf": 0.000545761757272209,
+    "plateau": 0,
+    "closure_calls": 7379,
+    "seconds": 603.8350767241791
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 3600,
+    "loss": 0.0029354851101047637,
+    "gradient_inf": 0.002675393700781669,
+    "step_inf": 0.0005130109482853092,
+    "plateau": 0,
+    "closure_calls": 7587,
+    "seconds": 613.642654182855
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 3700,
+    "loss": 0.0029051905634277925,
+    "gradient_inf": 0.0039822047824021765,
+    "step_inf": 0.0009519166432386816,
+    "plateau": 0,
+    "closure_calls": 7799,
+    "seconds": 623.4917235290632
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 3800,
+    "loss": 0.002874045706372452,
+    "gradient_inf": 0.0020282298734149396,
+    "step_inf": 0.0027459313195352664,
+    "plateau": 0,
+    "closure_calls": 8008,
+    "seconds": 633.2274468350224
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 3900,
+    "loss": 0.0028323780555541836,
+    "gradient_inf": 0.0024012319463862196,
+    "step_inf": 0.0018281783010669628,
+    "plateau": 0,
+    "closure_calls": 8220,
+    "seconds": 645.2799514001235
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 4000,
+    "loss": 0.0028029132783210777,
+    "gradient_inf": 0.004242520355650042,
+    "step_inf": 0.0011081141869953015,
+    "plateau": 0,
+    "closure_calls": 8430,
+    "seconds": 656.3171013789251
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 4100,
+    "loss": 0.002768690023319527,
+    "gradient_inf": 0.0025276939201070675,
+    "step_inf": 0.000736117344410453,
+    "plateau": 0,
+    "closure_calls": 8637,
+    "seconds": 666.3358528288081
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 4200,
+    "loss": 0.0027076277585237167,
+    "gradient_inf": 0.004875213811565849,
+    "step_inf": 0.0017808850612643923,
+    "plateau": 0,
+    "closure_calls": 8854,
+    "seconds": 676.6188137871213
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 4300,
+    "loss": 0.0026663240281830374,
+    "gradient_inf": 0.002984009914224872,
+    "step_inf": 0.0021467633026746036,
+    "plateau": 0,
+    "closure_calls": 9062,
+    "seconds": 686.6136528789066
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 4400,
+    "loss": 0.0026422174575195098,
+    "gradient_inf": 0.009175586426272869,
+    "step_inf": 0.0016494703416433804,
+    "plateau": 0,
+    "closure_calls": 9270,
+    "seconds": 696.6456184461713
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 4500,
+    "loss": 0.002603293967340049,
+    "gradient_inf": 0.005029923335217394,
+    "step_inf": 0.00038479520478817975,
+    "plateau": 0,
+    "closure_calls": 9480,
+    "seconds": 706.6830225749873
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 4600,
+    "loss": 0.0025620660167264267,
+    "gradient_inf": 0.0024298376296686677,
+    "step_inf": 0.0005227476966039799,
+    "plateau": 0,
+    "closure_calls": 9690,
+    "seconds": 716.7382935127243
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 4700,
+    "loss": 0.002535282812982293,
+    "gradient_inf": 0.0014327682830988318,
+    "step_inf": 0.0005760756558035318,
+    "plateau": 0,
+    "closure_calls": 9898,
+    "seconds": 726.770534502808
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 4800,
+    "loss": 0.002510190167886201,
+    "gradient_inf": 0.0014582442181341904,
+    "step_inf": 0.0017890241081439662,
+    "plateau": 0,
+    "closure_calls": 10109,
+    "seconds": 737.1288737361319
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 4900,
+    "loss": 0.002490826646140643,
+    "gradient_inf": 0.002257099612703704,
+    "step_inf": 0.001211547594167417,
+    "plateau": 0,
+    "closure_calls": 10313,
+    "seconds": 747.1097889449447
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 5000,
+    "loss": 0.0024784094735102267,
+    "gradient_inf": 0.003915030694847295,
+    "step_inf": 0.002333379205454733,
+    "plateau": 0,
+    "closure_calls": 10521,
+    "seconds": 757.1589015941136
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 5100,
+    "loss": 0.0024626793123309213,
+    "gradient_inf": 0.004664667117847618,
+    "step_inf": 0.0015606088713467567,
+    "plateau": 0,
+    "closure_calls": 10728,
+    "seconds": 772.8128828457557
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 5200,
+    "loss": 0.002447201352254369,
+    "gradient_inf": 0.0010249172750280465,
+    "step_inf": 0.0011281413592212353,
+    "plateau": 0,
+    "closure_calls": 10936,
+    "seconds": 784.6768245068379
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 5300,
+    "loss": 0.00243566406677326,
+    "gradient_inf": 0.0011769013469343805,
+    "step_inf": 0.0008463605444939404,
+    "plateau": 0,
+    "closure_calls": 11145,
+    "seconds": 797.220062633045
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 5400,
+    "loss": 0.002430320631723058,
+    "gradient_inf": 0.0017823342125567491,
+    "step_inf": 0.0014827084705228977,
+    "plateau": 0,
+    "closure_calls": 11358,
+    "seconds": 807.3674118770286
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 5500,
+    "loss": 0.002422699932941326,
+    "gradient_inf": 0.0013611215617469973,
+    "step_inf": 0.00011620630335062998,
+    "plateau": 0,
+    "closure_calls": 11564,
+    "seconds": 817.3046935838647
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 5600,
+    "loss": 0.002415713343490078,
+    "gradient_inf": 0.0010931192579074806,
+    "step_inf": 0.0006040576335948344,
+    "plateau": 0,
+    "closure_calls": 11774,
+    "seconds": 827.6342485700734
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 5700,
+    "loss": 0.0023998920354498074,
+    "gradient_inf": 0.0025610970583981197,
+    "step_inf": 0.0007428918082177383,
+    "plateau": 0,
+    "closure_calls": 11981,
+    "seconds": 837.5354796969332
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 5800,
+    "loss": 0.002349870470510246,
+    "gradient_inf": 0.008529932509790556,
+    "step_inf": 0.004045165246424176,
+    "plateau": 0,
+    "closure_calls": 12193,
+    "seconds": 854.1836783690378
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 5900,
+    "loss": 0.002289714104363334,
+    "gradient_inf": 0.006283056113166796,
+    "step_inf": 0.0019145945036322942,
+    "plateau": 0,
+    "closure_calls": 12403,
+    "seconds": 875.3411849881522
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 6000,
+    "loss": 0.002272755753364105,
+    "gradient_inf": 0.005451617119807892,
+    "step_inf": 0.0008684566063925647,
+    "plateau": 0,
+    "closure_calls": 12613,
+    "seconds": 885.1656861989759
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 6100,
+    "loss": 0.0022631838089660823,
+    "gradient_inf": 0.00481598398602048,
+    "step_inf": 0.0014793762359137652,
+    "plateau": 0,
+    "closure_calls": 12818,
+    "seconds": 895.1590546690859
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 6200,
+    "loss": 0.002253254120335611,
+    "gradient_inf": 0.006275715458161061,
+    "step_inf": 0.0009849279342044603,
+    "plateau": 0,
+    "closure_calls": 13025,
+    "seconds": 906.9329932900146
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 6300,
+    "loss": 0.002244599160104134,
+    "gradient_inf": 0.0019816759290290776,
+    "step_inf": 0.0005566366194971195,
+    "plateau": 0,
+    "closure_calls": 13233,
+    "seconds": 916.7554846429266
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 6400,
+    "loss": 0.0022364861150059446,
+    "gradient_inf": 0.0009561669219117021,
+    "step_inf": 0.0006463062832269273,
+    "plateau": 0,
+    "closure_calls": 13438,
+    "seconds": 926.4378690090962
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 6500,
+    "loss": 0.0022303065154820464,
+    "gradient_inf": 0.001087744094439941,
+    "step_inf": 0.0009641090746175252,
+    "plateau": 0,
+    "closure_calls": 13646,
+    "seconds": 936.2023855037987
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 6600,
+    "loss": 0.002225484250843275,
+    "gradient_inf": 0.00503153254288762,
+    "step_inf": 0.0005185392205748762,
+    "plateau": 0,
+    "closure_calls": 13855,
+    "seconds": 945.9241491518915
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 6700,
+    "loss": 0.0022187094320149964,
+    "gradient_inf": 0.0019504204991446072,
+    "step_inf": 0.0014292462328828748,
+    "plateau": 0,
+    "closure_calls": 14063,
+    "seconds": 955.5444370149635
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 6800,
+    "loss": 0.0022144354407875456,
+    "gradient_inf": 0.0038387635268549497,
+    "step_inf": 0.0006098265131219242,
+    "plateau": 0,
+    "closure_calls": 14271,
+    "seconds": 965.1618245909922
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 6900,
+    "loss": 0.002208520719278923,
+    "gradient_inf": 0.0007217634100677561,
+    "step_inf": 0.000408121377550863,
+    "plateau": 0,
+    "closure_calls": 14477,
+    "seconds": 975.7170227579772
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 7000,
+    "loss": 0.002201100604373828,
+    "gradient_inf": 0.0012169752234307387,
+    "step_inf": 0.0003953970805063989,
+    "plateau": 0,
+    "closure_calls": 14682,
+    "seconds": 986.2501843008213
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 7100,
+    "loss": 0.002194355195614667,
+    "gradient_inf": 0.004442081387833203,
+    "step_inf": 0.00037506498494451965,
+    "plateau": 0,
+    "closure_calls": 14891,
+    "seconds": 996.2794049298391
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 7200,
+    "loss": 0.0021894983155584416,
+    "gradient_inf": 0.002720918267465422,
+    "step_inf": 0.0004370329001800177,
+    "plateau": 0,
+    "closure_calls": 15098,
+    "seconds": 1008.4693693039007
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 7300,
+    "loss": 0.002183012798557201,
+    "gradient_inf": 0.0004932952470041124,
+    "step_inf": 0.0022058158152438168,
+    "plateau": 0,
+    "closure_calls": 15304,
+    "seconds": 1018.1386284879409
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 7400,
+    "loss": 0.0021721161066036213,
+    "gradient_inf": 0.004163819062113575,
+    "step_inf": 0.003472693166911789,
+    "plateau": 0,
+    "closure_calls": 15512,
+    "seconds": 1027.838700758759
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 7500,
+    "loss": 0.0021399778086644244,
+    "gradient_inf": 0.0056850386495647985,
+    "step_inf": 0.0004683114610965766,
+    "plateau": 0,
+    "closure_calls": 15716,
+    "seconds": 1037.4105824148282
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 7600,
+    "loss": 0.0021201651094435513,
+    "gradient_inf": 0.007278512016415919,
+    "step_inf": 0.0008520770142061637,
+    "plateau": 0,
+    "closure_calls": 15921,
+    "seconds": 1047.1256019277498
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 7700,
+    "loss": 0.002105649936601203,
+    "gradient_inf": 0.0043057596044813375,
+    "step_inf": 0.0007389443855146879,
+    "plateau": 0,
+    "closure_calls": 16124,
+    "seconds": 1056.9741832069121
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 7800,
+    "loss": 0.002092379836509168,
+    "gradient_inf": 0.0037993498163774167,
+    "step_inf": 0.002077698269302708,
+    "plateau": 0,
+    "closure_calls": 16329,
+    "seconds": 1066.6070590438321
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 7900,
+    "loss": 0.0020576920662974097,
+    "gradient_inf": 0.0031647802432449813,
+    "step_inf": 0.0009322624696261883,
+    "plateau": 0,
+    "closure_calls": 16539,
+    "seconds": 1076.363163576927
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 8000,
+    "loss": 0.002043714853991835,
+    "gradient_inf": 0.0022835131833780727,
+    "step_inf": 0.0004662856289510339,
+    "plateau": 0,
+    "closure_calls": 16743,
+    "seconds": 1085.9540739031509
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 8100,
+    "loss": 0.002033832369930963,
+    "gradient_inf": 0.0022799468908471176,
+    "step_inf": 0.0008164932200447339,
+    "plateau": 0,
+    "closure_calls": 16947,
+    "seconds": 1098.1843034359626
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 8200,
+    "loss": 0.002027657285750116,
+    "gradient_inf": 0.0011547893371763522,
+    "step_inf": 0.0006707113899304673,
+    "plateau": 0,
+    "closure_calls": 17154,
+    "seconds": 1112.0745413149707
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 8300,
+    "loss": 0.0020206905614850858,
+    "gradient_inf": 0.00248526063511956,
+    "step_inf": 0.00024902662429804323,
+    "plateau": 0,
+    "closure_calls": 17356,
+    "seconds": 1126.3154444270767
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 8400,
+    "loss": 0.0020142195756455614,
+    "gradient_inf": 0.0010077930090534818,
+    "step_inf": 0.0004704472027459161,
+    "plateau": 0,
+    "closure_calls": 17560,
+    "seconds": 1138.5108641618863
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 8500,
+    "loss": 0.0020100902841922903,
+    "gradient_inf": 0.0018150444836359612,
+    "step_inf": 0.0008932934144896265,
+    "plateau": 0,
+    "closure_calls": 17764,
+    "seconds": 1149.2066072970629
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 8600,
+    "loss": 0.0020069146949771503,
+    "gradient_inf": 0.0008984761126478577,
+    "step_inf": 0.0010180876418015572,
+    "plateau": 0,
+    "closure_calls": 17973,
+    "seconds": 1159.2189164389856
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 8700,
+    "loss": 0.0020027381733674667,
+    "gradient_inf": 0.0016336638221583098,
+    "step_inf": 0.0003689945126764023,
+    "plateau": 0,
+    "closure_calls": 18180,
+    "seconds": 1172.1179372747429
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 8800,
+    "loss": 0.0020004796958739707,
+    "gradient_inf": 0.001253137539905868,
+    "step_inf": 0.0007379492219490302,
+    "plateau": 0,
+    "closure_calls": 18383,
+    "seconds": 1186.7466721991077
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 8900,
+    "loss": 0.0019978444315929475,
+    "gradient_inf": 0.0013342046713890488,
+    "step_inf": 0.00014685297971876125,
+    "plateau": 0,
+    "closure_calls": 18589,
+    "seconds": 1201.9694554940797
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 9000,
+    "loss": 0.001995514255904108,
+    "gradient_inf": 0.0008383935745727242,
+    "step_inf": 0.0011252903710614603,
+    "plateau": 0,
+    "closure_calls": 18793,
+    "seconds": 1217.2772578960285
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 9100,
+    "loss": 0.0019935931941953084,
+    "gradient_inf": 0.002054021315349222,
+    "step_inf": 0.0009295870483745361,
+    "plateau": 0,
+    "closure_calls": 18999,
+    "seconds": 1230.1133912699297
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 9200,
+    "loss": 0.0019915322299273934,
+    "gradient_inf": 0.0014354106891860943,
+    "step_inf": 0.0016390535769650327,
+    "plateau": 0,
+    "closure_calls": 19206,
+    "seconds": 1242.0534545648843
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 9300,
+    "loss": 0.0019899702945076537,
+    "gradient_inf": 0.0009725686618699677,
+    "step_inf": 0.00023223563990076856,
+    "plateau": 0,
+    "closure_calls": 19415,
+    "seconds": 1257.2958452641033
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 9400,
+    "loss": 0.001988320683643344,
+    "gradient_inf": 0.0008048101305652032,
+    "step_inf": 0.002617542089203617,
+    "plateau": 0,
+    "closure_calls": 19618,
+    "seconds": 1267.6901423428208
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 9500,
+    "loss": 0.001986570670665289,
+    "gradient_inf": 0.0008777939578135784,
+    "step_inf": 0.0002449276705962511,
+    "plateau": 0,
+    "closure_calls": 19823,
+    "seconds": 1278.1477845967747
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 9600,
+    "loss": 0.001985286332604886,
+    "gradient_inf": 0.0009725628612585599,
+    "step_inf": 0.0005256364282386627,
+    "plateau": 0,
+    "closure_calls": 20029,
+    "seconds": 1290.9402842288837
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 9700,
+    "loss": 0.0019831101819982187,
+    "gradient_inf": 0.0004095324609453225,
+    "step_inf": 0.00019841907515404794,
+    "plateau": 0,
+    "closure_calls": 20232,
+    "seconds": 1301.04014831502
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 9800,
+    "loss": 0.001981119212035169,
+    "gradient_inf": 0.00039854780041153823,
+    "step_inf": 0.0008281959363234392,
+    "plateau": 0,
+    "closure_calls": 20446,
+    "seconds": 1311.1704904288054
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 9900,
+    "loss": 0.0019800165385381284,
+    "gradient_inf": 0.0009181788835033351,
+    "step_inf": 0.0009431357813491914,
+    "plateau": 0,
+    "closure_calls": 20650,
+    "seconds": 1323.050495444797
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 10000,
+    "loss": 0.0019787591399636497,
+    "gradient_inf": 0.0005659023998903076,
+    "step_inf": 0.00021896823861311532,
+    "plateau": 0,
+    "closure_calls": 20853,
+    "seconds": 1336.4831321849488
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 10100,
+    "loss": 0.0019777921563708246,
+    "gradient_inf": 0.00043728328773134494,
+    "step_inf": 0.00019948785904944089,
+    "plateau": 0,
+    "closure_calls": 21061,
+    "seconds": 1346.5490158130415
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 10200,
+    "loss": 0.0019769665374870338,
+    "gradient_inf": 0.0018188457449663728,
+    "step_inf": 0.0013167000019000952,
+    "plateau": 0,
+    "closure_calls": 21266,
+    "seconds": 1356.6021506707184
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 10300,
+    "loss": 0.0019759528696641168,
+    "gradient_inf": 0.00023314269113159595,
+    "step_inf": 0.0002390131072450563,
+    "plateau": 0,
+    "closure_calls": 21468,
+    "seconds": 1366.5485687311739
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 10400,
+    "loss": 0.001975248105288909,
+    "gradient_inf": 0.0003603030772666375,
+    "step_inf": 0.000944788780105732,
+    "plateau": 0,
+    "closure_calls": 21678,
+    "seconds": 1376.5621031899936
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 10500,
+    "loss": 0.001974368782254064,
+    "gradient_inf": 0.00013437355165122895,
+    "step_inf": 0.0004957019115643391,
+    "plateau": 0,
+    "closure_calls": 21888,
+    "seconds": 1389.8020521337166
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 10600,
+    "loss": 0.0019738661612515797,
+    "gradient_inf": 0.0004433604826698631,
+    "step_inf": 0.0005931257245883614,
+    "plateau": 0,
+    "closure_calls": 22095,
+    "seconds": 1401.0449994611554
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 10700,
+    "loss": 0.001973374267627496,
+    "gradient_inf": 0.0003493992505940761,
+    "step_inf": 0.0005134686160745972,
+    "plateau": 0,
+    "closure_calls": 22298,
+    "seconds": 1411.3070806311443
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 10800,
+    "loss": 0.0019727906933859497,
+    "gradient_inf": 0.00025870478965720704,
+    "step_inf": 0.00039705620209713917,
+    "plateau": 0,
+    "closure_calls": 22504,
+    "seconds": 1423.7791302837431
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 10900,
+    "loss": 0.00197248296056878,
+    "gradient_inf": 0.0006252493008795873,
+    "step_inf": 0.0018982025104676836,
+    "plateau": 0,
+    "closure_calls": 22714,
+    "seconds": 1433.6007740721107
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 11000,
+    "loss": 0.0019721656540718125,
+    "gradient_inf": 0.0005023932111976109,
+    "step_inf": 0.0005081517969074412,
+    "plateau": 0,
+    "closure_calls": 22918,
+    "seconds": 1443.286952054128
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 11100,
+    "loss": 0.00197184870244768,
+    "gradient_inf": 0.0006899966924333962,
+    "step_inf": 0.00020511626987573806,
+    "plateau": 0,
+    "closure_calls": 23121,
+    "seconds": 1453.0136177977547
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 11200,
+    "loss": 0.001971349244500531,
+    "gradient_inf": 0.0011660617604946216,
+    "step_inf": 0.0005056359445401171,
+    "plateau": 0,
+    "closure_calls": 23329,
+    "seconds": 1466.1293287207372
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 11300,
+    "loss": 0.0019706909103976676,
+    "gradient_inf": 0.00032661286042890217,
+    "step_inf": 0.00026061880172445484,
+    "plateau": 0,
+    "closure_calls": 23532,
+    "seconds": 1476.8434758507647
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 11400,
+    "loss": 0.0019696615088634554,
+    "gradient_inf": 0.0005488123806454276,
+    "step_inf": 0.00040474192617774227,
+    "plateau": 0,
+    "closure_calls": 23739,
+    "seconds": 1486.8429855881259
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 11500,
+    "loss": 0.0019688794456074613,
+    "gradient_inf": 0.0006657576308410169,
+    "step_inf": 0.00018876899131803349,
+    "plateau": 0,
+    "closure_calls": 23942,
+    "seconds": 1497.1092299888842
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 11600,
+    "loss": 0.0019656471583120827,
+    "gradient_inf": 0.0018929716912047955,
+    "step_inf": 0.002198944870808184,
+    "plateau": 0,
+    "closure_calls": 24146,
+    "seconds": 1510.2679072180763
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 11700,
+    "loss": 0.0019489554299571973,
+    "gradient_inf": 0.002635954800058973,
+    "step_inf": 0.0017265447741516837,
+    "plateau": 0,
+    "closure_calls": 24355,
+    "seconds": 1523.2067735968158
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 11800,
+    "loss": 0.0019211280159351493,
+    "gradient_inf": 0.010916414356351297,
+    "step_inf": 0.0014417818690519724,
+    "plateau": 0,
+    "closure_calls": 24563,
+    "seconds": 1534.6733096358366
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 11900,
+    "loss": 0.0018928479887246588,
+    "gradient_inf": 0.006037287798840643,
+    "step_inf": 0.0034949686937473246,
+    "plateau": 0,
+    "closure_calls": 24772,
+    "seconds": 1547.6555391428992
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 12000,
+    "loss": 0.0018795736920451615,
+    "gradient_inf": 0.003529259274659336,
+    "step_inf": 0.000414464284124531,
+    "plateau": 0,
+    "closure_calls": 24976,
+    "seconds": 1557.6730903629214
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 12100,
+    "loss": 0.0018696869376755763,
+    "gradient_inf": 0.0012519375826838988,
+    "step_inf": 0.00199059838895721,
+    "plateau": 0,
+    "closure_calls": 25182,
+    "seconds": 1571.3031042357907
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 12200,
+    "loss": 0.0018605353495597832,
+    "gradient_inf": 0.0015127949380751406,
+    "step_inf": 0.000767815300902086,
+    "plateau": 0,
+    "closure_calls": 25386,
+    "seconds": 1584.1903422260657
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 12300,
+    "loss": 0.001854503934429662,
+    "gradient_inf": 0.003783510386474319,
+    "step_inf": 0.001039073802747481,
+    "plateau": 0,
+    "closure_calls": 25591,
+    "seconds": 1598.0261688050814
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 12400,
+    "loss": 0.0018493924036490277,
+    "gradient_inf": 0.0015270483196472198,
+    "step_inf": 0.00025689095772030157,
+    "plateau": 0,
+    "closure_calls": 25792,
+    "seconds": 1612.0059363660403
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 12500,
+    "loss": 0.0018461159028608895,
+    "gradient_inf": 0.0005042669445983219,
+    "step_inf": 0.0003568273948512113,
+    "plateau": 0,
+    "closure_calls": 25998,
+    "seconds": 1622.9344055769034
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 12600,
+    "loss": 0.001841792715482024,
+    "gradient_inf": 0.0020452217033774985,
+    "step_inf": 0.0005556968999685941,
+    "plateau": 0,
+    "closure_calls": 26204,
+    "seconds": 1638.3027159380727
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 12700,
+    "loss": 0.001838251117571398,
+    "gradient_inf": 0.0022120997268445294,
+    "step_inf": 0.000581403611489506,
+    "plateau": 0,
+    "closure_calls": 26406,
+    "seconds": 1648.7902209958993
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 12800,
+    "loss": 0.0018343002502792638,
+    "gradient_inf": 0.0011727608946842088,
+    "step_inf": 0.001700692259297476,
+    "plateau": 0,
+    "closure_calls": 26609,
+    "seconds": 1659.2271585040726
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 12900,
+    "loss": 0.0018314257263885483,
+    "gradient_inf": 0.002451638258326088,
+    "step_inf": 0.0003284405448795713,
+    "plateau": 0,
+    "closure_calls": 26813,
+    "seconds": 1669.219752640929
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 13000,
+    "loss": 0.0018296580626171613,
+    "gradient_inf": 0.00040823510037509036,
+    "step_inf": 0.00014865710030065316,
+    "plateau": 0,
+    "closure_calls": 27014,
+    "seconds": 1679.0835277917795
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 13100,
+    "loss": 0.0018276515593838502,
+    "gradient_inf": 0.0006329323142028162,
+    "step_inf": 0.0002000258602583571,
+    "plateau": 0,
+    "closure_calls": 27225,
+    "seconds": 1689.1702011241578
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 13200,
+    "loss": 0.0018251311040324008,
+    "gradient_inf": 0.004293463475857873,
+    "step_inf": 0.0018250444150851308,
+    "plateau": 0,
+    "closure_calls": 27430,
+    "seconds": 1698.9151212978177
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 13300,
+    "loss": 0.0018237926073832746,
+    "gradient_inf": 0.000526955969857525,
+    "step_inf": 0.00015708380773182123,
+    "plateau": 0,
+    "closure_calls": 27631,
+    "seconds": 1709.6400708830915
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 13400,
+    "loss": 0.0018223641749955095,
+    "gradient_inf": 0.000518627732914544,
+    "step_inf": 0.0003723083377683012,
+    "plateau": 0,
+    "closure_calls": 27840,
+    "seconds": 1719.3548413980752
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 13500,
+    "loss": 0.001821234729025305,
+    "gradient_inf": 0.0010771158495882108,
+    "step_inf": 0.001332806522483132,
+    "plateau": 0,
+    "closure_calls": 28047,
+    "seconds": 1729.0520031801425
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 13600,
+    "loss": 0.0018203275234604846,
+    "gradient_inf": 0.0007277374455112919,
+    "step_inf": 0.00018799781514911018,
+    "plateau": 0,
+    "closure_calls": 28255,
+    "seconds": 1738.7512563150376
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 13700,
+    "loss": 0.0018192286366115326,
+    "gradient_inf": 0.0005351696664952655,
+    "step_inf": 0.000908861311081699,
+    "plateau": 0,
+    "closure_calls": 28460,
+    "seconds": 1748.3103415607475
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 13800,
+    "loss": 0.0018178567262883256,
+    "gradient_inf": 0.0008498408281532605,
+    "step_inf": 0.00022318863100734276,
+    "plateau": 0,
+    "closure_calls": 28665,
+    "seconds": 1757.8694891459309
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 13900,
+    "loss": 0.001816779274471977,
+    "gradient_inf": 0.0012310433366230856,
+    "step_inf": 0.0018642876478116577,
+    "plateau": 0,
+    "closure_calls": 28874,
+    "seconds": 1767.5897442419082
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 14000,
+    "loss": 0.0018158299635776085,
+    "gradient_inf": 0.00033311737675289013,
+    "step_inf": 0.00026516998551051607,
+    "plateau": 0,
+    "closure_calls": 29079,
+    "seconds": 1777.1816017301753
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 14100,
+    "loss": 0.0018148583849969687,
+    "gradient_inf": 0.00037903126579918187,
+    "step_inf": 0.000397728943771547,
+    "plateau": 0,
+    "closure_calls": 29286,
+    "seconds": 1786.8392917020246
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 14200,
+    "loss": 0.0018136533715430593,
+    "gradient_inf": 0.0006761323163375228,
+    "step_inf": 0.0007137040904035483,
+    "plateau": 0,
+    "closure_calls": 29493,
+    "seconds": 1798.4725370300002
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 14300,
+    "loss": 0.0018129041727823103,
+    "gradient_inf": 0.00023993007047139452,
+    "step_inf": 0.00013196611743993003,
+    "plateau": 0,
+    "closure_calls": 29699,
+    "seconds": 1809.296267556958
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 14400,
+    "loss": 0.0018119175545882142,
+    "gradient_inf": 0.0025751601468704498,
+    "step_inf": 0.0025250490990913477,
+    "plateau": 0,
+    "closure_calls": 29904,
+    "seconds": 1818.9892589198425
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 14500,
+    "loss": 0.001811135653676104,
+    "gradient_inf": 0.0005572091287878913,
+    "step_inf": 0.0007488134213229358,
+    "plateau": 0,
+    "closure_calls": 30111,
+    "seconds": 1828.6762830740772
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 14600,
+    "loss": 0.0018101103463165783,
+    "gradient_inf": 0.0011665118804919548,
+    "step_inf": 0.0002616429592006142,
+    "plateau": 0,
+    "closure_calls": 30319,
+    "seconds": 1839.350357871037
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 14700,
+    "loss": 0.0018093975425807164,
+    "gradient_inf": 0.0005247950281010525,
+    "step_inf": 0.0005997305726133106,
+    "plateau": 0,
+    "closure_calls": 30523,
+    "seconds": 1853.288514654152
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 14800,
+    "loss": 0.0018085898466760812,
+    "gradient_inf": 0.0009799126978865345,
+    "step_inf": 0.00016684755613827207,
+    "plateau": 0,
+    "closure_calls": 30726,
+    "seconds": 1864.6900081187487
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 14900,
+    "loss": 0.0018076404708372588,
+    "gradient_inf": 0.0010809590814061434,
+    "step_inf": 0.00022917291988133748,
+    "plateau": 0,
+    "closure_calls": 30931,
+    "seconds": 1880.1744012017734
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 15000,
+    "loss": 0.0018070830965837403,
+    "gradient_inf": 0.00017930153057645754,
+    "step_inf": 0.0003226974245649217,
+    "plateau": 0,
+    "closure_calls": 31136,
+    "seconds": 1892.6898621548899
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 15100,
+    "loss": 0.001806754282778614,
+    "gradient_inf": 0.00018452570210365608,
+    "step_inf": 0.0005392781529218738,
+    "plateau": 0,
+    "closure_calls": 31344,
+    "seconds": 1906.2012720429339
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 15200,
+    "loss": 0.0018062782504136368,
+    "gradient_inf": 0.0004780057336294429,
+    "step_inf": 0.0003177872932476067,
+    "plateau": 0,
+    "closure_calls": 31553,
+    "seconds": 1920.674708600156
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 15300,
+    "loss": 0.0018057175635188976,
+    "gradient_inf": 0.0007197473858834465,
+    "step_inf": 0.0004614921126977478,
+    "plateau": 0,
+    "closure_calls": 31756,
+    "seconds": 1931.4661352927797
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 15400,
+    "loss": 0.0018050672399078118,
+    "gradient_inf": 0.0004830119391041601,
+    "step_inf": 0.00040178859012610004,
+    "plateau": 0,
+    "closure_calls": 31964,
+    "seconds": 1941.8400597968139
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 15500,
+    "loss": 0.0018047893131907507,
+    "gradient_inf": 0.0005710065926737926,
+    "step_inf": 0.00032504009332284117,
+    "plateau": 0,
+    "closure_calls": 32170,
+    "seconds": 1952.2288891538046
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 15600,
+    "loss": 0.0018045137703545859,
+    "gradient_inf": 0.000239145983253637,
+    "step_inf": 0.0009106037155852675,
+    "plateau": 0,
+    "closure_calls": 32375,
+    "seconds": 1962.5542218689807
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 15700,
+    "loss": 0.0018039622032229206,
+    "gradient_inf": 0.0005334484246429273,
+    "step_inf": 0.00017145268462037677,
+    "plateau": 0,
+    "closure_calls": 32581,
+    "seconds": 1973.8675825800747
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 15800,
+    "loss": 0.0018037478439545862,
+    "gradient_inf": 0.00011739954457722144,
+    "step_inf": 0.000545637569363322,
+    "plateau": 0,
+    "closure_calls": 32783,
+    "seconds": 1984.0462450287305
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 15900,
+    "loss": 0.0018033524055190333,
+    "gradient_inf": 0.00038152400732869435,
+    "step_inf": 6.943080907745314e-05,
+    "plateau": 0,
+    "closure_calls": 32989,
+    "seconds": 1997.8136872327887
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 16000,
+    "loss": 0.0018031131131477566,
+    "gradient_inf": 0.0005723709218091403,
+    "step_inf": 0.0016210570357761966,
+    "plateau": 0,
+    "closure_calls": 33199,
+    "seconds": 2007.596663000062
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 16100,
+    "loss": 0.0018028363984553108,
+    "gradient_inf": 0.0005091720875513963,
+    "step_inf": 0.00022834205923394357,
+    "plateau": 0,
+    "closure_calls": 33401,
+    "seconds": 2017.1597424889915
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 16200,
+    "loss": 0.00180259926135331,
+    "gradient_inf": 0.0001254868154622734,
+    "step_inf": 4.6683790073737824e-05,
+    "plateau": 0,
+    "closure_calls": 33604,
+    "seconds": 2026.8081954880618
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 16300,
+    "loss": 0.001802473201669926,
+    "gradient_inf": 0.00036209514698275387,
+    "step_inf": 0.00024809161982641825,
+    "plateau": 0,
+    "closure_calls": 33815,
+    "seconds": 2036.556642248761
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 16400,
+    "loss": 0.001802339368913718,
+    "gradient_inf": 0.00019844989475249243,
+    "step_inf": 0.00011901912715212362,
+    "plateau": 0,
+    "closure_calls": 34021,
+    "seconds": 2046.2111741681583
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 16500,
+    "loss": 0.0018022332418070218,
+    "gradient_inf": 0.000558890252167819,
+    "step_inf": 0.000508294798272857,
+    "plateau": 0,
+    "closure_calls": 34226,
+    "seconds": 2055.833900307771
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 16600,
+    "loss": 0.0018021328253800303,
+    "gradient_inf": 0.00013852901291440053,
+    "step_inf": 0.0003291404337284476,
+    "plateau": 0,
+    "closure_calls": 34436,
+    "seconds": 2065.53854403086
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 16700,
+    "loss": 0.0018020239865523676,
+    "gradient_inf": 0.00014164850481304322,
+    "step_inf": 8.171490042939119e-05,
+    "plateau": 0,
+    "closure_calls": 34644,
+    "seconds": 2075.2066398710012
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 16800,
+    "loss": 0.0018019014894369687,
+    "gradient_inf": 0.00016473986652196584,
+    "step_inf": 0.0003765812807063895,
+    "plateau": 0,
+    "closure_calls": 34851,
+    "seconds": 2084.798271031119
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 16900,
+    "loss": 0.0018018216021519378,
+    "gradient_inf": 0.00012091121671134117,
+    "step_inf": 0.0006757706084883353,
+    "plateau": 0,
+    "closure_calls": 35057,
+    "seconds": 2094.3389185369015
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 17000,
+    "loss": 0.00180175493623507,
+    "gradient_inf": 0.00027464275480013674,
+    "step_inf": 0.00019960671126328933,
+    "plateau": 0,
+    "closure_calls": 35263,
+    "seconds": 2103.910548612941
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 17100,
+    "loss": 0.0018016351926246614,
+    "gradient_inf": 0.00022292288539993953,
+    "step_inf": 0.00027139325184188934,
+    "plateau": 0,
+    "closure_calls": 35470,
+    "seconds": 2113.5793940830044
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 17200,
+    "loss": 0.0018015242285491897,
+    "gradient_inf": 7.306996165280192e-05,
+    "step_inf": 4.9486269553855426e-05,
+    "plateau": 0,
+    "closure_calls": 35680,
+    "seconds": 2123.2629031878896
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 17300,
+    "loss": 0.0018014460131071802,
+    "gradient_inf": 0.0007827795478472445,
+    "step_inf": 0.0004798226272200168,
+    "plateau": 0,
+    "closure_calls": 35887,
+    "seconds": 2132.8850443698466
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 17400,
+    "loss": 0.0018013516669537295,
+    "gradient_inf": 9.205949240308209e-05,
+    "step_inf": 0.0003214687450778797,
+    "plateau": 0,
+    "closure_calls": 36095,
+    "seconds": 2142.5792405731045
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 17500,
+    "loss": 0.001801177544470731,
+    "gradient_inf": 8.076113015612974e-05,
+    "step_inf": 0.00015122412998369583,
+    "plateau": 0,
+    "closure_calls": 36304,
+    "seconds": 2152.3078461908735
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 17600,
+    "loss": 0.0018011110628012275,
+    "gradient_inf": 0.00023053509466228542,
+    "step_inf": 0.0003332567873943759,
+    "plateau": 0,
+    "closure_calls": 36514,
+    "seconds": 2161.972781676799
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 17700,
+    "loss": 0.0018010379085092786,
+    "gradient_inf": 7.145623593536425e-05,
+    "step_inf": 2.838966333437807e-05,
+    "plateau": 0,
+    "closure_calls": 36716,
+    "seconds": 2171.451722103171
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 17800,
+    "loss": 0.0018009556586657568,
+    "gradient_inf": 0.0003417487659612972,
+    "step_inf": 0.0005390715910271737,
+    "plateau": 0,
+    "closure_calls": 36925,
+    "seconds": 2181.200200105086
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 17900,
+    "loss": 0.0018008589517358629,
+    "gradient_inf": 0.00016763268966222059,
+    "step_inf": 0.00025300145308171373,
+    "plateau": 0,
+    "closure_calls": 37135,
+    "seconds": 2190.9550196831115
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 18000,
+    "loss": 0.001800751735010307,
+    "gradient_inf": 0.0002647000800735859,
+    "step_inf": 0.0003626990007159492,
+    "plateau": 0,
+    "closure_calls": 37339,
+    "seconds": 2200.489820324816
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 18100,
+    "loss": 0.001800515936294888,
+    "gradient_inf": 0.0006799820691590574,
+    "step_inf": 0.0006779226704898278,
+    "plateau": 0,
+    "closure_calls": 37545,
+    "seconds": 2210.0510481828824
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 18200,
+    "loss": 0.0018002440217200983,
+    "gradient_inf": 0.00016479917993695312,
+    "step_inf": 0.00015121641417836784,
+    "plateau": 0,
+    "closure_calls": 37750,
+    "seconds": 2219.5914498781785
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 18300,
+    "loss": 0.0017999118911426343,
+    "gradient_inf": 0.0008014388964264923,
+    "step_inf": 0.00023265820816841323,
+    "plateau": 0,
+    "closure_calls": 37956,
+    "seconds": 2229.2243323400617
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 18400,
+    "loss": 0.00179916637167303,
+    "gradient_inf": 0.0009632037646638524,
+    "step_inf": 0.0002511692555157506,
+    "plateau": 0,
+    "closure_calls": 38162,
+    "seconds": 2239.4449754967354
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 18500,
+    "loss": 0.0017963323996230405,
+    "gradient_inf": 0.003984121487349784,
+    "step_inf": 0.000753366934234112,
+    "plateau": 0,
+    "closure_calls": 38367,
+    "seconds": 2249.271524298005
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 18600,
+    "loss": 0.0017854014252254365,
+    "gradient_inf": 0.011618364334973628,
+    "step_inf": 0.00040939964070427215,
+    "plateau": 0,
+    "closure_calls": 38576,
+    "seconds": 2259.143596271053
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 18700,
+    "loss": 0.0017656474031356947,
+    "gradient_inf": 0.004634414676450869,
+    "step_inf": 0.0005521894389337589,
+    "plateau": 0,
+    "closure_calls": 38779,
+    "seconds": 2268.9201406198554
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 18800,
+    "loss": 0.0017520813511376738,
+    "gradient_inf": 0.007951623051096065,
+    "step_inf": 0.0005397490396481658,
+    "plateau": 0,
+    "closure_calls": 38987,
+    "seconds": 2278.8283103327267
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 18900,
+    "loss": 0.0017418140672688263,
+    "gradient_inf": 0.0013201061722759623,
+    "step_inf": 0.0011961222775553892,
+    "plateau": 0,
+    "closure_calls": 39193,
+    "seconds": 2288.670057991054
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 19000,
+    "loss": 0.001735270675215159,
+    "gradient_inf": 0.0010033328927482807,
+    "step_inf": 0.00325961944094022,
+    "plateau": 0,
+    "closure_calls": 39400,
+    "seconds": 2298.5547805568203
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 19100,
+    "loss": 0.0017245462094723208,
+    "gradient_inf": 0.0012763671420136262,
+    "step_inf": 0.001336517104060242,
+    "plateau": 0,
+    "closure_calls": 39605,
+    "seconds": 2308.420788079966
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 19200,
+    "loss": 0.0017149946354300552,
+    "gradient_inf": 0.00307746636714414,
+    "step_inf": 0.0005289675169866115,
+    "plateau": 0,
+    "closure_calls": 39809,
+    "seconds": 2318.278677735012
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 19300,
+    "loss": 0.0017069910600933029,
+    "gradient_inf": 0.0017644927409799927,
+    "step_inf": 0.0005130412797402784,
+    "plateau": 0,
+    "closure_calls": 40014,
+    "seconds": 2328.14231242612
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 19400,
+    "loss": 0.0016991208581260836,
+    "gradient_inf": 0.0036399762248599497,
+    "step_inf": 0.001009815685078408,
+    "plateau": 0,
+    "closure_calls": 40221,
+    "seconds": 2338.0483261197805
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 19500,
+    "loss": 0.0016943682748804553,
+    "gradient_inf": 0.0019261270078405218,
+    "step_inf": 0.001914855094975465,
+    "plateau": 0,
+    "closure_calls": 40427,
+    "seconds": 2347.929405717179
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 19600,
+    "loss": 0.0016902183251798386,
+    "gradient_inf": 0.0034106703845344015,
+    "step_inf": 0.0005017601231696034,
+    "plateau": 0,
+    "closure_calls": 40636,
+    "seconds": 2357.855028904043
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 19700,
+    "loss": 0.0016873854478920128,
+    "gradient_inf": 0.0003764883950711339,
+    "step_inf": 0.0001241627196106876,
+    "plateau": 0,
+    "closure_calls": 40842,
+    "seconds": 2367.686348443851
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 19800,
+    "loss": 0.001683458801667883,
+    "gradient_inf": 0.0005944136578292991,
+    "step_inf": 0.0003935838505224609,
+    "plateau": 0,
+    "closure_calls": 41052,
+    "seconds": 2377.5632671667263
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 19900,
+    "loss": 0.0016804258194062672,
+    "gradient_inf": 0.0008102993432611255,
+    "step_inf": 0.00025550204141163574,
+    "plateau": 0,
+    "closure_calls": 41258,
+    "seconds": 2387.361751453951
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 20000,
+    "loss": 0.0016780755872210999,
+    "gradient_inf": 0.0013316953868418224,
+    "step_inf": 0.0007259830912148216,
+    "plateau": 0,
+    "closure_calls": 41461,
+    "seconds": 2397.126126334071
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 20100,
+    "loss": 0.0016759842566583753,
+    "gradient_inf": 0.0017783014402214057,
+    "step_inf": 0.00019381965973097126,
+    "plateau": 0,
+    "closure_calls": 41665,
+    "seconds": 2409.099219873082
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 20200,
+    "loss": 0.0016746825479293929,
+    "gradient_inf": 0.0017506569861515976,
+    "step_inf": 0.00033364114642869336,
+    "plateau": 0,
+    "closure_calls": 41875,
+    "seconds": 2418.848386914935
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 20300,
+    "loss": 0.0016732038477097724,
+    "gradient_inf": 0.0009387261200276033,
+    "step_inf": 0.0001339188114018149,
+    "plateau": 0,
+    "closure_calls": 42081,
+    "seconds": 2428.3840098669752
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 20400,
+    "loss": 0.0016721162255607857,
+    "gradient_inf": 0.0012090266053209316,
+    "step_inf": 0.00042746909340185546,
+    "plateau": 0,
+    "closure_calls": 42288,
+    "seconds": 2438.024830199778
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 20500,
+    "loss": 0.0016713836341283623,
+    "gradient_inf": 0.0007958512320000387,
+    "step_inf": 0.0007550396504116819,
+    "plateau": 0,
+    "closure_calls": 42496,
+    "seconds": 2447.6625681617297
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 20600,
+    "loss": 0.0016708333719584782,
+    "gradient_inf": 0.0003716314749378346,
+    "step_inf": 0.000666665544617473,
+    "plateau": 0,
+    "closure_calls": 42704,
+    "seconds": 2457.3255273471586
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 20700,
+    "loss": 0.0016702585012963512,
+    "gradient_inf": 0.0007035930990802151,
+    "step_inf": 0.00021444756877733034,
+    "plateau": 0,
+    "closure_calls": 42909,
+    "seconds": 2466.9502256177366
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 20800,
+    "loss": 0.0016698732011201354,
+    "gradient_inf": 0.0004077239032107675,
+    "step_inf": 0.00037137587432578556,
+    "plateau": 0,
+    "closure_calls": 43120,
+    "seconds": 2476.661863276735
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 20900,
+    "loss": 0.001669400936060451,
+    "gradient_inf": 0.0010927325034531393,
+    "step_inf": 0.0005108449626707312,
+    "plateau": 0,
+    "closure_calls": 43330,
+    "seconds": 2486.627546640113
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 21000,
+    "loss": 0.0016691803749633246,
+    "gradient_inf": 0.00015718295420679215,
+    "step_inf": 0.00016496885905842133,
+    "plateau": 0,
+    "closure_calls": 43534,
+    "seconds": 2496.1491051339544
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 21100,
+    "loss": 0.0016690094266691173,
+    "gradient_inf": 0.0004801274672919147,
+    "step_inf": 0.00018746910905864667,
+    "plateau": 0,
+    "closure_calls": 43740,
+    "seconds": 2506.601542292163
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 21200,
+    "loss": 0.001668838012779157,
+    "gradient_inf": 0.0003064559122152172,
+    "step_inf": 0.00016466646626334125,
+    "plateau": 0,
+    "closure_calls": 43951,
+    "seconds": 2518.113141391892
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 21300,
+    "loss": 0.0016682041365294277,
+    "gradient_inf": 0.0002696271493421009,
+    "step_inf": 0.00015286916057899447,
+    "plateau": 0,
+    "closure_calls": 44156,
+    "seconds": 2530.107830754947
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 21400,
+    "loss": 0.0016678261271908066,
+    "gradient_inf": 0.000446092980265626,
+    "step_inf": 0.0003143643300993586,
+    "plateau": 0,
+    "closure_calls": 44361,
+    "seconds": 2544.2191659947857
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 21500,
+    "loss": 0.001667412341037437,
+    "gradient_inf": 0.0013014080994817913,
+    "step_inf": 0.00017745716148098722,
+    "plateau": 0,
+    "closure_calls": 44566,
+    "seconds": 2557.22098554112
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 21600,
+    "loss": 0.0016671207148349558,
+    "gradient_inf": 0.0007317944918354864,
+    "step_inf": 0.00012360581350326014,
+    "plateau": 0,
+    "closure_calls": 44771,
+    "seconds": 2567.0311954868957
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 21700,
+    "loss": 0.0016667428548564544,
+    "gradient_inf": 0.0005252976261548399,
+    "step_inf": 7.653935342410989e-05,
+    "plateau": 0,
+    "closure_calls": 44980,
+    "seconds": 2576.9292019261047
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 21800,
+    "loss": 0.0016665519184996835,
+    "gradient_inf": 0.0006012007572387037,
+    "step_inf": 0.00024903487314152477,
+    "plateau": 0,
+    "closure_calls": 45190,
+    "seconds": 2586.838742522057
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 21900,
+    "loss": 0.0016661205333905432,
+    "gradient_inf": 0.0002992793017843392,
+    "step_inf": 0.0001375172015531407,
+    "plateau": 0,
+    "closure_calls": 45399,
+    "seconds": 2596.6711524319835
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 22000,
+    "loss": 0.0016658995279696788,
+    "gradient_inf": 0.0002484485271252116,
+    "step_inf": 4.8447933192613535e-05,
+    "plateau": 0,
+    "closure_calls": 45605,
+    "seconds": 2606.3661065939814
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 22100,
+    "loss": 0.0016654879815874097,
+    "gradient_inf": 0.001490817830588428,
+    "step_inf": 0.00046618807409010143,
+    "plateau": 0,
+    "closure_calls": 45808,
+    "seconds": 2616.051196952816
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 22200,
+    "loss": 0.0016652483586781857,
+    "gradient_inf": 0.0002924232257219845,
+    "step_inf": 0.00027374900570098504,
+    "plateau": 0,
+    "closure_calls": 46017,
+    "seconds": 2625.852803017944
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 22300,
+    "loss": 0.0016650547420259108,
+    "gradient_inf": 0.0007523315572720984,
+    "step_inf": 0.00012382055493026511,
+    "plateau": 0,
+    "closure_calls": 46226,
+    "seconds": 2637.1659120609984
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 22400,
+    "loss": 0.0016647776742582385,
+    "gradient_inf": 0.0007519435584086107,
+    "step_inf": 0.00041181468982287583,
+    "plateau": 0,
+    "closure_calls": 46430,
+    "seconds": 2647.236889366992
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 22500,
+    "loss": 0.0016644884176982015,
+    "gradient_inf": 0.00029235167463217623,
+    "step_inf": 0.00047246382873122883,
+    "plateau": 0,
+    "closure_calls": 46637,
+    "seconds": 2657.052264122758
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 22600,
+    "loss": 0.0016642292718736977,
+    "gradient_inf": 0.00015890435023694152,
+    "step_inf": 0.000310692678593405,
+    "plateau": 0,
+    "closure_calls": 46843,
+    "seconds": 2667.25110273296
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 22700,
+    "loss": 0.0016640007931112144,
+    "gradient_inf": 0.0006132582928512452,
+    "step_inf": 0.0005800419170709503,
+    "plateau": 0,
+    "closure_calls": 47049,
+    "seconds": 2678.4281926681288
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 22800,
+    "loss": 0.001663718386589913,
+    "gradient_inf": 0.0003753789086512957,
+    "step_inf": 0.00022479426050026063,
+    "plateau": 0,
+    "closure_calls": 47254,
+    "seconds": 2689.5040646591224
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 22900,
+    "loss": 0.0016635008721826215,
+    "gradient_inf": 0.0002816519933080096,
+    "step_inf": 0.00021020555532957896,
+    "plateau": 0,
+    "closure_calls": 47460,
+    "seconds": 2700.089092759881
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 23000,
+    "loss": 0.0016631617613173135,
+    "gradient_inf": 0.000694023077496355,
+    "step_inf": 0.00010729478208681975,
+    "plateau": 0,
+    "closure_calls": 47664,
+    "seconds": 2710.019968289882
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 23100,
+    "loss": 0.001662898798459203,
+    "gradient_inf": 0.0006349221472416915,
+    "step_inf": 0.00014874951298260441,
+    "plateau": 0,
+    "closure_calls": 47873,
+    "seconds": 2720.0480899089016
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 23200,
+    "loss": 0.0016625233196921002,
+    "gradient_inf": 0.0012433372302982117,
+    "step_inf": 0.00012288551824823912,
+    "plateau": 0,
+    "closure_calls": 48081,
+    "seconds": 2730.01333828317
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 23300,
+    "loss": 0.0016623198908404687,
+    "gradient_inf": 0.0006912794599135928,
+    "step_inf": 0.0005758815446927912,
+    "plateau": 0,
+    "closure_calls": 48288,
+    "seconds": 2740.03142506117
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 23400,
+    "loss": 0.0016621294418497849,
+    "gradient_inf": 0.0002331389039040392,
+    "step_inf": 0.0004573833394756477,
+    "plateau": 0,
+    "closure_calls": 48497,
+    "seconds": 2750.022349578794
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 23500,
+    "loss": 0.0016618254844441122,
+    "gradient_inf": 0.0006220374063530846,
+    "step_inf": 0.00038103133323819094,
+    "plateau": 0,
+    "closure_calls": 48703,
+    "seconds": 2760.6850986229256
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 23600,
+    "loss": 0.0016615821642557654,
+    "gradient_inf": 0.0001966306945994107,
+    "step_inf": 0.00014497615860431523,
+    "plateau": 0,
+    "closure_calls": 48912,
+    "seconds": 2772.0713524688035
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 23700,
+    "loss": 0.001661393428679312,
+    "gradient_inf": 0.00021549292669193788,
+    "step_inf": 0.00021750508959339498,
+    "plateau": 0,
+    "closure_calls": 49120,
+    "seconds": 2782.105560455937
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 23800,
+    "loss": 0.0016611619179700949,
+    "gradient_inf": 0.0004071048851467876,
+    "step_inf": 0.0006408112070790395,
+    "plateau": 0,
+    "closure_calls": 49327,
+    "seconds": 2792.078722340986
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 23900,
+    "loss": 0.0016608242197148264,
+    "gradient_inf": 0.0003239060731795376,
+    "step_inf": 0.00012964115839331214,
+    "plateau": 0,
+    "closure_calls": 49529,
+    "seconds": 2801.9179446119815
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 24000,
+    "loss": 0.001660617229039603,
+    "gradient_inf": 0.00019168672345801913,
+    "step_inf": 0.0001270420821084528,
+    "plateau": 0,
+    "closure_calls": 49733,
+    "seconds": 2811.7756122071296
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 24100,
+    "loss": 0.0016604670837924984,
+    "gradient_inf": 0.00015131523544027747,
+    "step_inf": 0.00021064679343074655,
+    "plateau": 0,
+    "closure_calls": 49940,
+    "seconds": 2821.729452984873
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 24200,
+    "loss": 0.001660154298393078,
+    "gradient_inf": 0.00044964879864095066,
+    "step_inf": 0.0005470814093175846,
+    "plateau": 0,
+    "closure_calls": 50143,
+    "seconds": 2831.772487556096
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 24300,
+    "loss": 0.0016600091814198915,
+    "gradient_inf": 0.00022721768275926757,
+    "step_inf": 0.00031829521135851024,
+    "plateau": 0,
+    "closure_calls": 50351,
+    "seconds": 2841.9528715061024
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 24400,
+    "loss": 0.0016597464195507664,
+    "gradient_inf": 0.0004264865042714226,
+    "step_inf": 0.000142427542000223,
+    "plateau": 0,
+    "closure_calls": 50556,
+    "seconds": 2851.861941564828
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 24500,
+    "loss": 0.001659315526191928,
+    "gradient_inf": 0.000616710947978466,
+    "step_inf": 0.0004336217189884195,
+    "plateau": 0,
+    "closure_calls": 50763,
+    "seconds": 2862.209213732742
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 24600,
+    "loss": 0.0016590144167573492,
+    "gradient_inf": 0.0003068078619714344,
+    "step_inf": 0.00010532382424910391,
+    "plateau": 0,
+    "closure_calls": 50966,
+    "seconds": 2871.989421264734
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 24700,
+    "loss": 0.0016588671351651688,
+    "gradient_inf": 0.0003584126311203151,
+    "step_inf": 0.0002470218058316931,
+    "plateau": 0,
+    "closure_calls": 51172,
+    "seconds": 2885.8993029799312
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 24800,
+    "loss": 0.0016586395859124927,
+    "gradient_inf": 0.0009555826726409958,
+    "step_inf": 0.0008164282175928683,
+    "plateau": 0,
+    "closure_calls": 51378,
+    "seconds": 2902.149390119128
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 24900,
+    "loss": 0.0016584504306019568,
+    "gradient_inf": 0.0003652454913763495,
+    "step_inf": 0.00017727126501387858,
+    "plateau": 0,
+    "closure_calls": 51589,
+    "seconds": 2918.035529284738
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 25000,
+    "loss": 0.001658258951175472,
+    "gradient_inf": 0.0005976844658201717,
+    "step_inf": 0.0005753107541717206,
+    "plateau": 0,
+    "closure_calls": 51794,
+    "seconds": 2934.534202680923
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 25100,
+    "loss": 0.0016580385984163197,
+    "gradient_inf": 0.0003655904635638759,
+    "step_inf": 0.00041047868817845057,
+    "plateau": 0,
+    "closure_calls": 52002,
+    "seconds": 2946.2357828319073
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 25200,
+    "loss": 0.0016577508228834618,
+    "gradient_inf": 0.000662715621485949,
+    "step_inf": 0.0006536599201583115,
+    "plateau": 0,
+    "closure_calls": 52213,
+    "seconds": 2962.849162708968
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 25300,
+    "loss": 0.0016574641869112913,
+    "gradient_inf": 0.00037774998367654227,
+    "step_inf": 0.00028340600456022713,
+    "plateau": 0,
+    "closure_calls": 52417,
+    "seconds": 2981.9093641010113
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 25400,
+    "loss": 0.0016572023930087208,
+    "gradient_inf": 0.000412124921384302,
+    "step_inf": 0.0010306204739043423,
+    "plateau": 0,
+    "closure_calls": 52628,
+    "seconds": 2995.638256548904
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 25500,
+    "loss": 0.001656973631759464,
+    "gradient_inf": 0.00020077926702206884,
+    "step_inf": 0.00011813770743997892,
+    "plateau": 0,
+    "closure_calls": 52835,
+    "seconds": 3010.7662122440524
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 25600,
+    "loss": 0.0016567880023220002,
+    "gradient_inf": 5.597919104547225e-05,
+    "step_inf": 9.894422568557104e-05,
+    "plateau": 0,
+    "closure_calls": 53040,
+    "seconds": 3024.277821830008
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 25700,
+    "loss": 0.0016566536281923433,
+    "gradient_inf": 0.00029754028476917764,
+    "step_inf": 0.00017712668690084143,
+    "plateau": 0,
+    "closure_calls": 53248,
+    "seconds": 3037.8933079768904
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 25800,
+    "loss": 0.0016565193335756577,
+    "gradient_inf": 0.00024603850173185405,
+    "step_inf": 0.0008550105114801809,
+    "plateau": 0,
+    "closure_calls": 53454,
+    "seconds": 3052.3444738080725
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 25900,
+    "loss": 0.0016562442219617104,
+    "gradient_inf": 0.00030026787431259444,
+    "step_inf": 0.00018509495433227663,
+    "plateau": 0,
+    "closure_calls": 53662,
+    "seconds": 3063.141709539108
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 26000,
+    "loss": 0.001656094781655581,
+    "gradient_inf": 0.00032006234771359866,
+    "step_inf": 0.0010525735480158005,
+    "plateau": 0,
+    "closure_calls": 53870,
+    "seconds": 3073.7102087549865
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 26100,
+    "loss": 0.0016558678525156656,
+    "gradient_inf": 0.00019937124443085517,
+    "step_inf": 0.00035103779352807507,
+    "plateau": 0,
+    "closure_calls": 54078,
+    "seconds": 3083.9047247497365
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 26200,
+    "loss": 0.0016556367813581995,
+    "gradient_inf": 0.0013189861187704556,
+    "step_inf": 0.0005420697978477662,
+    "plateau": 0,
+    "closure_calls": 54284,
+    "seconds": 3100.423652344849
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 26300,
+    "loss": 0.0016553507326096662,
+    "gradient_inf": 0.0006599832913886192,
+    "step_inf": 0.0007117518147845558,
+    "plateau": 0,
+    "closure_calls": 54495,
+    "seconds": 3112.1170952380635
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 26400,
+    "loss": 0.0016551418639400718,
+    "gradient_inf": 0.00021023546243692688,
+    "step_inf": 0.00033285795742388213,
+    "plateau": 0,
+    "closure_calls": 54701,
+    "seconds": 3122.171861048788
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 26500,
+    "loss": 0.0016548943536402684,
+    "gradient_inf": 0.0008944604763249549,
+    "step_inf": 0.0001434678016218882,
+    "plateau": 0,
+    "closure_calls": 54910,
+    "seconds": 3133.335957295727
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 26600,
+    "loss": 0.0016546948380213897,
+    "gradient_inf": 7.845450832089703e-05,
+    "step_inf": 7.437996397996471e-05,
+    "plateau": 0,
+    "closure_calls": 55116,
+    "seconds": 3143.618376573082
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 26700,
+    "loss": 0.0016545095135749336,
+    "gradient_inf": 0.0005939426036772506,
+    "step_inf": 0.00013300621891176867,
+    "plateau": 0,
+    "closure_calls": 55321,
+    "seconds": 3154.7685597450472
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 26800,
+    "loss": 0.0016543086161445754,
+    "gradient_inf": 0.00028045802240562676,
+    "step_inf": 4.886839630247053e-05,
+    "plateau": 0,
+    "closure_calls": 55528,
+    "seconds": 3165.978605309967
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 26900,
+    "loss": 0.001654186660221345,
+    "gradient_inf": 0.00017882766117472597,
+    "step_inf": 0.00024996239062824444,
+    "plateau": 0,
+    "closure_calls": 55735,
+    "seconds": 3175.840357408859
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 27000,
+    "loss": 0.0016540263240757437,
+    "gradient_inf": 0.0005919570535929111,
+    "step_inf": 0.0008513414563098287,
+    "plateau": 0,
+    "closure_calls": 55940,
+    "seconds": 3185.890531667974
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 27100,
+    "loss": 0.0016538543520296523,
+    "gradient_inf": 0.00019743813245579837,
+    "step_inf": 6.42879615107006e-05,
+    "plateau": 0,
+    "closure_calls": 56144,
+    "seconds": 3195.7915921937674
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 27200,
+    "loss": 0.0016537467792698257,
+    "gradient_inf": 0.00019350479318569046,
+    "step_inf": 0.0004947188571806649,
+    "plateau": 0,
+    "closure_calls": 56349,
+    "seconds": 3205.5952026909217
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 27300,
+    "loss": 0.0016535254332269906,
+    "gradient_inf": 0.0002582383578406157,
+    "step_inf": 0.0003174202652438396,
+    "plateau": 0,
+    "closure_calls": 56557,
+    "seconds": 3215.4690431528725
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 27400,
+    "loss": 0.001653238543832846,
+    "gradient_inf": 0.0002259984014235314,
+    "step_inf": 0.0005581384027566472,
+    "plateau": 0,
+    "closure_calls": 56767,
+    "seconds": 3227.136608948931
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 27500,
+    "loss": 0.001653060342727202,
+    "gradient_inf": 0.0004913231358117049,
+    "step_inf": 0.0005583753473255015,
+    "plateau": 0,
+    "closure_calls": 56978,
+    "seconds": 3237.180289175827
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 27600,
+    "loss": 0.0016528909575585326,
+    "gradient_inf": 0.00018995756574743516,
+    "step_inf": 0.0005864707313696371,
+    "plateau": 0,
+    "closure_calls": 57185,
+    "seconds": 3247.1132246847264
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 27700,
+    "loss": 0.001652718968499893,
+    "gradient_inf": 0.00019243103504500462,
+    "step_inf": 0.00013995819775226934,
+    "plateau": 0,
+    "closure_calls": 57393,
+    "seconds": 3257.102124169003
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 27800,
+    "loss": 0.0016525299156728123,
+    "gradient_inf": 0.0002862042526294113,
+    "step_inf": 0.0005844615817292009,
+    "plateau": 0,
+    "closure_calls": 57601,
+    "seconds": 3267.0654468219727
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 27900,
+    "loss": 0.0016523517633128813,
+    "gradient_inf": 0.000499369828149859,
+    "step_inf": 5.362131223487533e-05,
+    "plateau": 0,
+    "closure_calls": 57806,
+    "seconds": 3276.8146524298936
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 28000,
+    "loss": 0.0016521557150717518,
+    "gradient_inf": 0.00032629439021998087,
+    "step_inf": 0.0002184652642744922,
+    "plateau": 0,
+    "closure_calls": 58012,
+    "seconds": 3286.7126391781494
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 28100,
+    "loss": 0.001651938558317905,
+    "gradient_inf": 0.0004301707912192634,
+    "step_inf": 0.0006921276233082807,
+    "plateau": 0,
+    "closure_calls": 58222,
+    "seconds": 3297.0283624427393
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 28200,
+    "loss": 0.0016515097709646116,
+    "gradient_inf": 0.00043084728012389873,
+    "step_inf": 0.00313065641462984,
+    "plateau": 0,
+    "closure_calls": 58427,
+    "seconds": 3308.8299983888865
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 28300,
+    "loss": 0.0016511513591084789,
+    "gradient_inf": 0.0013016835084198796,
+    "step_inf": 0.0013359715098477665,
+    "plateau": 0,
+    "closure_calls": 58635,
+    "seconds": 3318.9698508228175
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 28400,
+    "loss": 0.0016506752260092917,
+    "gradient_inf": 0.0014168799074980414,
+    "step_inf": 0.0007696655541398201,
+    "plateau": 0,
+    "closure_calls": 58845,
+    "seconds": 3329.0175457079895
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 28500,
+    "loss": 0.0016502831687771286,
+    "gradient_inf": 0.00038976932190415946,
+    "step_inf": 0.00039315581858279103,
+    "plateau": 0,
+    "closure_calls": 59055,
+    "seconds": 3338.985031140037
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 28600,
+    "loss": 0.001649940355633099,
+    "gradient_inf": 0.0012554316339104324,
+    "step_inf": 0.0018881725980677277,
+    "plateau": 0,
+    "closure_calls": 59269,
+    "seconds": 3349.100682886783
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 28700,
+    "loss": 0.0016495055212952575,
+    "gradient_inf": 0.00047980055713065265,
+    "step_inf": 0.0007253380009153432,
+    "plateau": 0,
+    "closure_calls": 59474,
+    "seconds": 3358.8944606441073
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 28800,
+    "loss": 0.0016491371401784393,
+    "gradient_inf": 0.0005633420162151209,
+    "step_inf": 0.001371488035367907,
+    "plateau": 0,
+    "closure_calls": 59682,
+    "seconds": 3368.8186660478823
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 28900,
+    "loss": 0.0016486096386577444,
+    "gradient_inf": 0.002073524723075735,
+    "step_inf": 0.0008851222065859865,
+    "plateau": 0,
+    "closure_calls": 59891,
+    "seconds": 3379.23625242291
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 29000,
+    "loss": 0.0016470521830776158,
+    "gradient_inf": 0.001788919917696672,
+    "step_inf": 0.0003374889448697349,
+    "plateau": 0,
+    "closure_calls": 60099,
+    "seconds": 3390.33103972394
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 29100,
+    "loss": 0.0016448037344475922,
+    "gradient_inf": 0.0031609287846617005,
+    "step_inf": 0.002653529461142057,
+    "plateau": 0,
+    "closure_calls": 60308,
+    "seconds": 3400.62199527584
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 29200,
+    "loss": 0.001642445344061118,
+    "gradient_inf": 0.002297711432559456,
+    "step_inf": 0.00016158802449183982,
+    "plateau": 0,
+    "closure_calls": 60518,
+    "seconds": 3422.998577508144
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 29300,
+    "loss": 0.0016368793105582867,
+    "gradient_inf": 0.0035252633916703835,
+    "step_inf": 0.00023269584135788288,
+    "plateau": 0,
+    "closure_calls": 60728,
+    "seconds": 3445.590234403964
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 29400,
+    "loss": 0.0016075375335691982,
+    "gradient_inf": 0.004951512024018222,
+    "step_inf": 0.0007774507671713948,
+    "plateau": 0,
+    "closure_calls": 60939,
+    "seconds": 3468.1984780319035
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 29500,
+    "loss": 0.0015522806299476655,
+    "gradient_inf": 0.012858906601935107,
+    "step_inf": 0.0009444060279439892,
+    "plateau": 0,
+    "closure_calls": 61145,
+    "seconds": 3491.141366514843
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 29600,
+    "loss": 0.0014596382124099844,
+    "gradient_inf": 0.012284391726687277,
+    "step_inf": 0.002123059716579334,
+    "plateau": 0,
+    "closure_calls": 61351,
+    "seconds": 3513.4772502910346
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 29700,
+    "loss": 0.0012363178268044314,
+    "gradient_inf": 0.022183267870412002,
+    "step_inf": 0.003204321849803904,
+    "plateau": 0,
+    "closure_calls": 61568,
+    "seconds": 3536.3888721517287
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 29800,
+    "loss": 0.001100770429564004,
+    "gradient_inf": 0.012499949342800163,
+    "step_inf": 0.002917418005520034,
+    "plateau": 0,
+    "closure_calls": 61769,
+    "seconds": 3559.6097356211394
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 29900,
+    "loss": 0.0009690526187106315,
+    "gradient_inf": 0.013826105486369537,
+    "step_inf": 0.0016626719505108412,
+    "plateau": 0,
+    "closure_calls": 61975,
+    "seconds": 3582.154206083156
+  },
+  {
+    "event": "lbfgs_progress",
+    "step": 30000,
+    "loss": 0.000790250241309588,
+    "gradient_inf": 0.03390854545951728,
+    "step_inf": 0.0008550049791690162,
+    "plateau": 0,
+    "closure_calls": 62185,
+    "seconds": 3604.7146177669056
+  },
+  {
+    "event": "complete",
+    "loss": 0.000790250241309588,
+    "seconds": 3604.737804724835
+  }
+]

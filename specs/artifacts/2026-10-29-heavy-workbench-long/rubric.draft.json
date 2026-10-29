@@ -1399,7 +1399,7 @@
     {
       "id": "L01-C-convection-gd-continuation-0.0001-common-start",
       "group": "C",
-      "weight": 0.5,
+      "weight": 0.4,
       "requirement": "Exact selected common finite parent numeric state verified for convection-gd-continuation-0.0001",
       "critical": true,
       "rating": "binary: verified=1, unmet/unknown=0",
@@ -1409,7 +1409,7 @@
     {
       "id": "L01-C-convection-gd-continuation-0.0001-independent-terminal",
       "group": "C",
-      "weight": 0.75,
+      "weight": 0.6,
       "requirement": "Independent terminal network metrics and finite gradients verified for convection-gd-continuation-0.0001",
       "critical": false,
       "rating": "binary: verified=1, unmet/unknown=0",
@@ -1429,7 +1429,7 @@
     {
       "id": "L01-C-convection-gd-continuation-0.001-common-start",
       "group": "C",
-      "weight": 0.5,
+      "weight": 0.4,
       "requirement": "Exact selected common finite parent numeric state verified for convection-gd-continuation-0.001",
       "critical": true,
       "rating": "binary: verified=1, unmet/unknown=0",
@@ -1439,7 +1439,7 @@
     {
       "id": "L01-C-convection-gd-continuation-0.001-independent-terminal",
       "group": "C",
-      "weight": 0.75,
+      "weight": 0.6,
       "requirement": "Independent terminal network metrics and finite gradients verified for convection-gd-continuation-0.001",
       "critical": false,
       "rating": "binary: verified=1, unmet/unknown=0",
@@ -1459,7 +1459,7 @@
     {
       "id": "L01-C-convection-nncg-continuation-0.01-common-start",
       "group": "C",
-      "weight": 0.5,
+      "weight": 0.4,
       "requirement": "Exact selected common finite parent numeric state verified for convection-nncg-continuation-0.01",
       "critical": true,
       "rating": "binary: verified=1, unmet/unknown=0",
@@ -1469,7 +1469,7 @@
     {
       "id": "L01-C-convection-nncg-continuation-0.01-independent-terminal",
       "group": "C",
-      "weight": 0.75,
+      "weight": 0.6,
       "requirement": "Independent terminal network metrics and finite gradients verified for convection-nncg-continuation-0.01",
       "critical": false,
       "rating": "binary: verified=1, unmet/unknown=0",
@@ -1479,7 +1479,7 @@
     {
       "id": "L01-C-convection-nncg-continuation-0.01-armijo",
       "group": "C",
-      "weight": 0.5,
+      "weight": 0.3333333333333333,
       "requirement": "Actual sufficient decrease and step-size trials; algorithm failure is recorded as such",
       "critical": false,
       "rating": "binary: verified=1, unmet/unknown=0",
@@ -1489,7 +1489,7 @@
     {
       "id": "L01-C-convection-nncg-continuation-0.01-real-updates",
       "group": "C",
-      "weight": 1,
+      "weight": 0.6666666666666666,
       "requirement": "Registered damping, rank, refresh, PCG and actual accepted NNCG updates with real execution",
       "critical": false,
       "rating": "binary: verified=1, unmet/unknown=0",
@@ -1499,7 +1499,7 @@
     {
       "id": "L01-C-convection-nncg-continuation-0.1-common-start",
       "group": "C",
-      "weight": 0.5,
+      "weight": 0.4,
       "requirement": "Exact selected common finite parent numeric state verified for convection-nncg-continuation-0.1",
       "critical": true,
       "rating": "binary: verified=1, unmet/unknown=0",
@@ -1509,7 +1509,7 @@
     {
       "id": "L01-C-convection-nncg-continuation-0.1-independent-terminal",
       "group": "C",
-      "weight": 0.75,
+      "weight": 0.6,
       "requirement": "Independent terminal network metrics and finite gradients verified for convection-nncg-continuation-0.1",
       "critical": false,
       "rating": "binary: verified=1, unmet/unknown=0",
@@ -1519,7 +1519,7 @@
     {
       "id": "L01-C-convection-nncg-continuation-0.1-armijo",
       "group": "C",
-      "weight": 0.5,
+      "weight": 0.3333333333333333,
       "requirement": "Actual sufficient decrease and step-size trials; algorithm failure is recorded as such",
       "critical": false,
       "rating": "binary: verified=1, unmet/unknown=0",
@@ -1529,7 +1529,7 @@
     {
       "id": "L01-C-convection-nncg-continuation-0.1-real-updates",
       "group": "C",
-      "weight": 1,
+      "weight": 0.6666666666666666,
       "requirement": "Registered damping, rank, refresh, PCG and actual accepted NNCG updates with real execution",
       "critical": false,
       "rating": "binary: verified=1, unmet/unknown=0",
@@ -1751,6 +1751,46 @@
       "group": "E",
       "weight": 1,
       "requirement": "Environment/model-tool/valid training/idle time reported separately with overlap handled",
+      "critical": false,
+      "rating": "binary: verified=1, unmet/unknown=0",
+      "status": "review-draft",
+      "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
+    },
+    {
+      "id": "L01-C-convection-nncg-continuation-1.0-common-start",
+      "group": "C",
+      "weight": 0.4,
+      "requirement": "Exact selected common finite parent numeric state verified for convection-nncg-continuation-1.0",
+      "critical": true,
+      "rating": "binary: verified=1, unmet/unknown=0",
+      "status": "review-draft",
+      "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
+    },
+    {
+      "id": "L01-C-convection-nncg-continuation-1.0-independent-terminal",
+      "group": "C",
+      "weight": 0.6,
+      "requirement": "Independent terminal network metrics and finite gradients verified for convection-nncg-continuation-1.0",
+      "critical": false,
+      "rating": "binary: verified=1, unmet/unknown=0",
+      "status": "review-draft",
+      "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
+    },
+    {
+      "id": "L01-C-convection-nncg-continuation-1.0-armijo",
+      "group": "C",
+      "weight": 0.3333333333333333,
+      "requirement": "Actual sufficient decrease and step-size trials; algorithm failure is recorded as such",
+      "critical": false,
+      "rating": "binary: verified=1, unmet/unknown=0",
+      "status": "review-draft",
+      "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
+    },
+    {
+      "id": "L01-C-convection-nncg-continuation-1.0-real-updates",
+      "group": "C",
+      "weight": 0.6666666666666666,
+      "requirement": "Registered damping, rank, refresh, PCG and actual accepted NNCG updates with real execution",
       "critical": false,
       "rating": "binary: verified=1, unmet/unknown=0",
       "status": "review-draft",
