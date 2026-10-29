@@ -1,0 +1,80 @@
+[
+  {
+    "label": "focused-tests",
+    "started_at_utc": "2026-10-29T07:54:57.089024+00:00",
+    "elapsed_seconds": 0.09188419999554753,
+    "command_argv": [
+      "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "test",
+      "D:\\myhexin-local\\opencorvus\\script\\benchmark\\heavy-workbench-registration.test.ts"
+    ],
+    "cwd": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\registration-review",
+    "exit_code": 0,
+    "stdout": "focused-tests.stdout.txt",
+    "stderr": "focused-tests.stderr.txt",
+    "scope": "read-only focused non-UI checks; no launcher/service/model or credentials"
+  },
+  {
+    "label": "pure-metadata-probe",
+    "started_at_utc": "2026-10-29T07:54:57.181490+00:00",
+    "elapsed_seconds": 0.08761160029098392,
+    "command_argv": [
+      "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\registration-review\\metadata-probe.ts"
+    ],
+    "cwd": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\registration-review",
+    "exit_code": 0,
+    "stdout": "pure-metadata-probe.stdout.txt",
+    "stderr": "pure-metadata-probe.stderr.txt",
+    "scope": "read-only focused non-UI checks; no launcher/service/model or credentials"
+  },
+  {
+    "label": "targeted-strict-null-types",
+    "started_at_utc": "2026-10-29T07:54:57.270562+00:00",
+    "elapsed_seconds": 1.3588466998189688,
+    "command_argv": [
+      "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "D:\\myhexin-local\\opencorvus\\node_modules\\typescript\\bin\\tsc",
+      "--noEmit",
+      "--skipLibCheck",
+      "--strictNullChecks",
+      "--target",
+      "ESNext",
+      "--module",
+      "ESNext",
+      "--moduleResolution",
+      "bundler",
+      "--allowImportingTsExtensions",
+      "--typeRoots",
+      "packages/opencorvus/node_modules/@types",
+      "--types",
+      "bun",
+      "script/benchmark/heavy-workbench-registration.ts",
+      "script/benchmark/heavy-workbench-registration.test.ts",
+      "script/benchmark/serve_heavy_workbench.ts"
+    ],
+    "cwd": "D:\\myhexin-local\\opencorvus",
+    "exit_code": 0,
+    "stdout": "targeted-strict-null-types.stdout.txt",
+    "stderr": "targeted-strict-null-types.stderr.txt",
+    "scope": "read-only focused non-UI checks; no launcher/service/model or credentials"
+  },
+  {
+    "label": "targeted-prettier",
+    "started_at_utc": "2026-10-29T07:54:58.630165+00:00",
+    "elapsed_seconds": 0.42138700000941753,
+    "command_argv": [
+      "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "D:\\myhexin-local\\opencorvus\\node_modules\\prettier\\bin\\prettier.cjs",
+      "--check",
+      "script/benchmark/heavy-workbench-registration.ts",
+      "script/benchmark/heavy-workbench-registration.test.ts",
+      "script/benchmark/serve_heavy_workbench.ts"
+    ],
+    "cwd": "D:\\myhexin-local\\opencorvus",
+    "exit_code": 0,
+    "stdout": "targeted-prettier.stdout.txt",
+    "stderr": "targeted-prettier.stderr.txt",
+    "scope": "read-only focused non-UI checks; no launcher/service/model or credentials"
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "captured_at_utc": "2026-10-29T08:11:45.653895+00:00",
+  "snapshots": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\rubric.draft.json",
+      "snapshot": "snapshot\\rubric.draft.json",
+      "byte_equal_at_capture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\public\\TASK.md",
+      "snapshot": "snapshot\\TASK.md",
+      "byte_equal_at_capture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\public\\profile.json",
+      "snapshot": "snapshot\\profile.json",
+      "byte_equal_at_capture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\script\\benchmark\\pinn_numeric_check.py",
+      "snapshot": "snapshot\\pinn_numeric_check.py",
+      "byte_equal_at_capture": true
+    }
+  ],
+  "observed_receipts": "main-agent qualification; not reviewer GPU/candidate execution"
+}

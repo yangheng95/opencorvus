@@ -1,0 +1,62 @@
+[
+  {
+    "mode": "producer",
+    "command": [
+      "docker",
+      "run",
+      "--rm",
+      "--name",
+      "oc-pinn-adam-producer-20261029-a",
+      "--cidfile",
+      "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\adam-producer.cid",
+      "--gpus",
+      "all",
+      "--network",
+      "none",
+      "--env",
+      "CUDA_CACHE_PATH=/work/cuda-cache",
+      "--mount",
+      "type=bind,source=D:/opencorvus-benchmark-runs/paperbench-discovery-20261029,target=/work",
+      "--workdir",
+      "/work",
+      "opencorvus-benchmark-science:20261029",
+      "python",
+      "-u",
+      "qualify_adam_restore.py",
+      "producer"
+    ],
+    "started_at": "2026-10-29T07:57:38.544983+00:00",
+    "seconds": 28.96698379982263,
+    "exit_code": 0
+  },
+  {
+    "mode": "consumer",
+    "command": [
+      "docker",
+      "run",
+      "--rm",
+      "--name",
+      "oc-pinn-adam-consumer-20261029-a",
+      "--cidfile",
+      "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\adam-consumer.cid",
+      "--gpus",
+      "all",
+      "--network",
+      "none",
+      "--env",
+      "CUDA_CACHE_PATH=/work/cuda-cache",
+      "--mount",
+      "type=bind,source=D:/opencorvus-benchmark-runs/paperbench-discovery-20261029,target=/work",
+      "--workdir",
+      "/work",
+      "opencorvus-benchmark-science:20261029",
+      "python",
+      "-u",
+      "qualify_adam_restore.py",
+      "consumer"
+    ],
+    "started_at": "2026-10-29T07:58:07.514177+00:00",
+    "seconds": 10.070247999858111,
+    "exit_code": 0
+  }
+]

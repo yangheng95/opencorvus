@@ -1,0 +1,21 @@
+{
+  "reviewer": "/root/benchmark_review",
+  "created_at_utc": "2026-10-29T08:32:02.753385+00:00",
+  "local_uncapped_registration_policy_accepted": true,
+  "substantive_blockers_in_reviewed_scope": [],
+  "token_policy": "explicit null only; no current executable positive-budget compatibility branch",
+  "focused_tests": "4 pass, 0 fail, 5 expect",
+  "all_targeted_commands_exit_zero": true,
+  "case_lineage_usage_recording_retained_in_source": true,
+  "provider_projection_stream_audit_preflight_chain_retained_in_source": true,
+  "owned_runtime_finally_cleanup_retained_in_source": true,
+  "natural_task_completion_or_provider_E2E_executed": false,
+  "credentials_read": false,
+  "model_or_service_started": false,
+  "main_repository_modified_by_reviewer": false,
+  "delegation_performed": false,
+  "L01_freeze_or_candidate_score": false,
+  "previous_registration_review_preserved": true,
+  "source_identity": "source-identity-after-checks.json",
+  "executions": "executions.json"
+}

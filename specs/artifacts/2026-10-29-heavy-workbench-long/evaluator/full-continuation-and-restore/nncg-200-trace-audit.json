@@ -1,0 +1,50 @@
+{
+  "status": "passed recorded contracts",
+  "accepted_updates": 200,
+  "refreshes": [
+    {
+      "attempt": 1,
+      "seed": 20263029
+    },
+    {
+      "attempt": 21,
+      "seed": 20263030
+    },
+    {
+      "attempt": 41,
+      "seed": 20263031
+    },
+    {
+      "attempt": 61,
+      "seed": 20263032
+    },
+    {
+      "attempt": 81,
+      "seed": 20263033
+    },
+    {
+      "attempt": 101,
+      "seed": 20263034
+    },
+    {
+      "attempt": 121,
+      "seed": 20263035
+    },
+    {
+      "attempt": 141,
+      "seed": 20263036
+    },
+    {
+      "attempt": 161,
+      "seed": 20263037
+    },
+    {
+      "attempt": 181,
+      "seed": 20263038
+    }
+  ],
+  "maximum_explicit_relative_residual": 9.975771066742248e-09,
+  "maximum_armijo_gap": -7.206386278970993e-07,
+  "minimum_parameter_step_inf": 0.0003616751219271963,
+  "scope": "arithmetic audit of evaluator-owned full continuation, not candidate evidence"
+}

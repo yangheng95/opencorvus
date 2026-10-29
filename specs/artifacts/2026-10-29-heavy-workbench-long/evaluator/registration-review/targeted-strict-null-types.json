@@ -1,0 +1,31 @@
+{
+  "label": "targeted-strict-null-types",
+  "started_at_utc": "2026-10-29T07:54:57.270562+00:00",
+  "elapsed_seconds": 1.3588466998189688,
+  "command_argv": [
+    "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "D:\\myhexin-local\\opencorvus\\node_modules\\typescript\\bin\\tsc",
+    "--noEmit",
+    "--skipLibCheck",
+    "--strictNullChecks",
+    "--target",
+    "ESNext",
+    "--module",
+    "ESNext",
+    "--moduleResolution",
+    "bundler",
+    "--allowImportingTsExtensions",
+    "--typeRoots",
+    "packages/opencorvus/node_modules/@types",
+    "--types",
+    "bun",
+    "script/benchmark/heavy-workbench-registration.ts",
+    "script/benchmark/heavy-workbench-registration.test.ts",
+    "script/benchmark/serve_heavy_workbench.ts"
+  ],
+  "cwd": "D:\\myhexin-local\\opencorvus",
+  "exit_code": 0,
+  "stdout": "targeted-strict-null-types.stdout.txt",
+  "stderr": "targeted-strict-null-types.stderr.txt",
+  "scope": "read-only focused non-UI checks; no launcher/service/model or credentials"
+}

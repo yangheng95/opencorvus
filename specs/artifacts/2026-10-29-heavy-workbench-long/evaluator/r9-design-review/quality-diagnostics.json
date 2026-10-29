@@ -1,0 +1,197 @@
+{
+  "scope": "reviewer CPU inference/analytic controls only; thresholds remain unfrozen",
+  "scoring_structure": {
+    "quality_leaf_weight": 9,
+    "quality_leaves_critical": false,
+    "conditional_score_if_these_unmet_and_all_other_leaves_full": 91,
+    "acceptance_observed": "score >=80, every critical full, actual full independent clean retraining, two independent assessments; not yet empirically validated",
+    "interpretation": "logical scoring structure, not a measured candidate score or claim that zero networks actually earned execution credit"
+  },
+  "diagnostics": [
+    {
+      "kind": "untrained_control_network",
+      "problem": "convection",
+      "constant": 0.0,
+      "quality": {
+        "existing_independent_metrics": {
+          "problem": "convection",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 0.0,
+          "constraint_loss": 0.1787709497206704,
+          "total_loss": 0.1787709497206704,
+          "l2re": 1.0,
+          "parameter_count": 20601
+        },
+        "evaluation_residual_rmse_full_public_grid": 0.0,
+        "constraint_pool_rmse": {
+          "initial_value_rmse": 0.7057297462259694,
+          "periodic_boundary_rmse": 0.0
+        }
+      }
+    },
+    {
+      "kind": "untrained_control_network",
+      "problem": "convection",
+      "constant": 1.0,
+      "quality": {
+        "existing_independent_metrics": {
+          "problem": "convection",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 0.0,
+          "constraint_loss": 0.5377094972067039,
+          "total_loss": 0.5377094972067039,
+          "l2re": 1.7324405110192516,
+          "parameter_count": 20601
+        },
+        "evaluation_residual_rmse_full_public_grid": 0.0,
+        "constraint_pool_rmse": {
+          "initial_value_rmse": 1.2239503563086909,
+          "periodic_boundary_rmse": 0.0
+        }
+      }
+    },
+    {
+      "kind": "analytic_initial_extension_control_not_submitted_network",
+      "problem": "convection",
+      "l2re": 1.3971150787213324,
+      "evaluation_residual_rmse_full_public_grid": 28.393688566080964,
+      "initial_and_boundary_constraints": "satisfies this problem initial data and value boundaries; wave initial velocity is also zero"
+    },
+    {
+      "kind": "untrained_control_network",
+      "problem": "reaction",
+      "constant": 0.0,
+      "quality": {
+        "existing_independent_metrics": {
+          "problem": "reaction",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 0.0,
+          "constraint_loss": 0.07921581349494837,
+          "total_loss": 0.07921581349494837,
+          "l2re": 1.0,
+          "parameter_count": 20601
+        },
+        "evaluation_residual_rmse_full_public_grid": 0.0,
+        "constraint_pool_rmse": {
+          "initial_value_rmse": 0.4697814810435289,
+          "periodic_boundary_rmse": 0.0
+        }
+      }
+    },
+    {
+      "kind": "untrained_control_network",
+      "problem": "reaction",
+      "constant": 1.0,
+      "quality": {
+        "existing_independent_metrics": {
+          "problem": "reaction",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 0.0,
+          "constraint_loss": 0.21411147709953987,
+          "total_loss": 0.21411147709953987,
+          "l2re": 0.8879416037696533,
+          "parameter_count": 20601
+        },
+        "evaluation_residual_rmse_full_public_grid": 0.0,
+        "constraint_pool_rmse": {
+          "initial_value_rmse": 0.7723424816505577,
+          "periodic_boundary_rmse": 0.0
+        }
+      }
+    },
+    {
+      "kind": "analytic_initial_extension_control_not_submitted_network",
+      "problem": "reaction",
+      "l2re": 0.5034390291630245,
+      "evaluation_residual_rmse_full_public_grid": 0.6382217279389134,
+      "initial_and_boundary_constraints": "satisfies this problem initial data and value boundaries; wave initial velocity is also zero"
+    },
+    {
+      "kind": "untrained_control_network",
+      "problem": "wave",
+      "constant": 0.0,
+      "quality": {
+        "existing_independent_metrics": {
+          "problem": "wave",
+          "residual_points": 10000,
+          "constraint_count": 716,
+          "evaluation_points": 8385,
+          "residual_loss": 0.0,
+          "constraint_loss": 0.11173184357541899,
+          "total_loss": 0.11173184357541899,
+          "l2re": 1.0,
+          "parameter_count": 20601
+        },
+        "evaluation_residual_rmse_full_public_grid": 0.0,
+        "constraint_pool_rmse": {
+          "initial_value_rmse": 0.7890298431524716,
+          "initial_velocity_rmse": 0.0,
+          "left_boundary_rmse": 0.0,
+          "right_boundary_rmse": 0.0
+        }
+      }
+    },
+    {
+      "kind": "untrained_control_network",
+      "problem": "wave",
+      "constant": 1.0,
+      "quality": {
+        "existing_independent_metrics": {
+          "problem": "wave",
+          "residual_points": 10000,
+          "constraint_count": 716,
+          "evaluation_points": 8385,
+          "residual_loss": 0.0,
+          "constraint_loss": 0.1818925014026753,
+          "total_loss": 0.1818925014026753,
+          "l2re": 2.0268796468683097,
+          "parameter_count": 20601
+        },
+        "evaluation_residual_rmse_full_public_grid": 0.0,
+        "constraint_pool_rmse": {
+          "initial_value_rmse": 0.4769800508461324,
+          "initial_velocity_rmse": 0.0,
+          "left_boundary_rmse": 1.0,
+          "right_boundary_rmse": 1.0
+        }
+      }
+    },
+    {
+      "kind": "analytic_initial_extension_control_not_submitted_network",
+      "problem": "wave",
+      "l2re": 1.7056057308448835,
+      "evaluation_residual_rmse_full_public_grid": 348.69859349570845,
+      "initial_and_boundary_constraints": "satisfies this problem initial data and value boundaries; wave initial velocity is also zero"
+    },
+    {
+      "kind": "nonselected_old_parent_mu1_200step_qualification_only",
+      "problem": "convection",
+      "quality": {
+        "existing_independent_metrics": {
+          "problem": "convection",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 1.609028363879394e-05,
+          "constraint_loss": 0.0004546940816584617,
+          "total_loss": 0.00047078436529725563,
+          "l2re": 0.2879769300480318,
+          "parameter_count": 20601
+        },
+        "evaluation_residual_rmse_full_public_grid": 0.007631052528103561,
+        "constraint_pool_rmse": {
+          "initial_value_rmse": 0.004079262298009799,
+          "periodic_boundary_rmse": 0.05640065168653023
+        }
+      }
+    }
+  ]
+}

@@ -4,6 +4,7 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import { parseArgs } from "node:util"
 import { pathToFileURL } from "node:url"
+import { parseHeavyWorkbenchRegistration } from "./heavy-workbench-registration"
 
 const { values } = parseArgs({
   options: {
@@ -12,16 +13,8 @@ const { values } = parseArgs({
   },
 })
 assert(values.registration && values["auth-source"], "registration and authorized auth source required")
-const registration = JSON.parse(await fs.readFile(path.resolve(values.registration), "utf8"))
-assert.equal(registration.benchmark, "HeavyWorkBench-10/0.1.0-dev")
-assert.match(registration.case, /^H\d\d$/)
-assert.match(registration.model, /^openai\/.+$/)
-assert.equal(registration.inactivitySeconds, 600)
-assert.equal(registration.tokenBudgetScope, "task-session-lineage")
-assert(
-  registration.budget?.total_model_tokens === null ||
-    (Number.isSafeInteger(registration.budget?.total_model_tokens) && registration.budget.total_model_tokens > 0),
-  "total_model_tokens must explicitly be null (no cutoff) or a positive integer",
+const registration = parseHeavyWorkbenchRegistration(
+  JSON.parse(await fs.readFile(path.resolve(values.registration), "utf8")),
 )
 const root = path.resolve(registration.runRoot)
 const project = path.resolve(registration.project)
@@ -155,10 +148,11 @@ try {
     })
     Database.close()
   }
-  server = await Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true, mdns: false, cors: [] })
-  process.env.OPENCORVUS_SERVER_URL = server.url.toString()
+  const listener = await Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true, mdns: false, cors: [] })
+  server = listener
+  process.env.OPENCORVUS_SERVER_URL = listener.url.toString()
   const { audit } = requireProcessProviderAudit()
-  audit.localOrigins.add(server.url.origin)
+  audit.localOrigins.add(listener.url.origin)
   await Instance.provide({
     directory: project,
     fn: async () => {
@@ -168,58 +162,28 @@ try {
     },
   })
   result.preflight = await audit.preflight({
-    serverURL: server.url,
+    serverURL: listener.url,
     model: registration.model,
     inactivityMs: registration.inactivitySeconds * 1000,
     pollIntervalMs: 1000,
     activity: SessionStatus.getActivity,
   })
   await write("preflight.json", result.preflight)
-  await write("ready.json", { url: server.url.toString(), pid: process.pid, registration, preflight: result.preflight })
+  await write("ready.json", {
+    url: listener.url.toString(),
+    pid: process.pid,
+    registration,
+    preflight: result.preflight,
+  })
   console.log(
-    JSON.stringify({ status: "ready", url: server.url.toString(), model: registration.model, case: registration.case }),
+    JSON.stringify({
+      status: "ready",
+      url: listener.url.toString(),
+      model: registration.model,
+      case: registration.case,
+    }),
   )
-  let budgetCancelled = false
   while (!(await fs.stat(path.join(root, "stop")).catch(() => null))) {
-    if (registration.budget.total_model_tokens !== null && !budgetCancelled) {
-      const usage = Database.use((db: any) => db.select().from(ProviderUsageEventTable).all())
-      const accounting = measureCaseUsage(usage)
-      const tokens = accounting.taskRecordedTokens
-      if (tokens >= registration.budget.total_model_tokens) {
-        const tasks = Database.use((db: any) => db.select({ id: EngineTaskTable.id }).from(EngineTaskTable).all())
-        const cancellations = []
-        for (const task of tasks) {
-          const url = new URL(`/task/${task.id}/status`, server.url)
-          url.searchParams.set("directory", project)
-          const stateResponse = await audit.nativeFetch(url)
-          assert(stateResponse.ok, `Budget status HTTP ${stateResponse.status}`)
-          const state = (await stateResponse.json()) as { lifecycleStatus: string }
-          if (state.lifecycleStatus !== "active") continue
-          url.pathname = `/task/${task.id}/cancel`
-          const response = await audit.nativeFetch(url, {
-            method: "POST",
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify({
-              surface: "api",
-              reason: `HeavyWorkBench total_model_tokens budget ${registration.budget.total_model_tokens} exhausted`,
-            }),
-          })
-          assert(response.status === 202, `Budget cancellation HTTP ${response.status}`)
-          cancellations.push({ taskID: task.id, status: response.status, response: await response.json() })
-        }
-        budgetCancelled = true
-        await write("budget-enforcement.json", {
-          observedAt: new Date().toISOString(),
-          threshold: registration.budget.total_model_tokens,
-          settledTokensAtTrigger: tokens,
-          accounting:
-            "provider_usage_event.total_tokens bound by sessionBelongsToTask; includes task children/cache, excludes standalone preflight",
-          caseAccounting: accounting,
-          cancellations,
-          limitation: "settled usage; the final in-flight request may cross the threshold",
-        })
-      }
-    }
     await Bun.sleep(1000)
   }
   result.outcome = "owned_server_stop_requested_after_task_settlement"

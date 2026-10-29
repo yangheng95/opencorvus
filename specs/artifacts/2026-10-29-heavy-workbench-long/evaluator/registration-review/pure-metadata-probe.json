@@ -1,0 +1,14 @@
+{
+  "label": "pure-metadata-probe",
+  "started_at_utc": "2026-10-29T07:54:57.181490+00:00",
+  "elapsed_seconds": 0.08761160029098392,
+  "command_argv": [
+    "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\registration-review\\metadata-probe.ts"
+  ],
+  "cwd": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\registration-review",
+  "exit_code": 0,
+  "stdout": "pure-metadata-probe.stdout.txt",
+  "stderr": "pure-metadata-probe.stderr.txt",
+  "scope": "read-only focused non-UI checks; no launcher/service/model or credentials"
+}

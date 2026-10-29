@@ -1,0 +1,84 @@
+{
+  "newton_200": {
+    "accepted_updates": 200,
+    "sketch_refreshes": [
+      [
+        1,
+        20263029
+      ],
+      [
+        21,
+        20263030
+      ],
+      [
+        41,
+        20263031
+      ],
+      [
+        61,
+        20263032
+      ],
+      [
+        81,
+        20263033
+      ],
+      [
+        101,
+        20263034
+      ],
+      [
+        121,
+        20263035
+      ],
+      [
+        141,
+        20263036
+      ],
+      [
+        161,
+        20263037
+      ],
+      [
+        181,
+        20263038
+      ]
+    ],
+    "max_pcg_explicit_relative_residual": 9.975771066742248e-09,
+    "hvp_calls_reconstructed": 17614,
+    "all_nonzero_descent_armijo_verified": true,
+    "independent_numpy_terminal_recomputed": {
+      "problem": "convection",
+      "residual_points": 10000,
+      "constraint_count": 358,
+      "evaluation_points": 8385,
+      "residual_loss": 1.609028363879394e-05,
+      "constraint_loss": 0.0004546940816584617,
+      "total_loss": 0.00047078436529725563,
+      "l2re": 0.2879769300480318,
+      "parameter_count": 20601
+    },
+    "scope": "read-only audit of main-agent qualification, not candidate run"
+  },
+  "restoration_numeric_exports": [
+    {
+      "method": "lbfgs",
+      "problem": "reaction",
+      "actual_parameter_difference_to_uninterrupted_120": 0.0,
+      "restored": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\optimizer-restore-qualification\\reaction\\reaction-checkpoint.npz",
+      "uninterrupted": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reaction-convergence-qualification\\accepted-120.npz"
+    },
+    {
+      "method": "lbfgs",
+      "problem": "wave",
+      "actual_parameter_difference_to_uninterrupted_120": 0.0,
+      "restored": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\optimizer-restore-qualification\\wave\\wave-checkpoint.npz",
+      "uninterrupted": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\wave-convergence-qualification\\accepted-120.npz"
+    },
+    {
+      "method": "adam",
+      "problem": "convection",
+      "actual_parameter_difference_to_uninterrupted_600": 0.0
+    }
+  ],
+  "scope": "parameter equality and receipt audit; no restoration process or GPU training launched"
+}

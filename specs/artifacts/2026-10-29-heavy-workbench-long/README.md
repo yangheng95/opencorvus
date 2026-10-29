@@ -19,3 +19,7 @@ L01针对Rathore等ICML2024论文《Challenges in Training PINNs: A Loss Landsca
 最新[独立阶段审查](evaluator/independent-review/REVIEW.md)及[机器可读结论](evaluator/independent-review/stage-assessment.json)实际另起环境重跑15项NumPy、3项Torch测试及边界见证，核对9组真实GPU收据；认可已关闭上述点控制、native零步、分量零导数与合同冲突，**未批准正式冻结**。其自有源码副本、精确命令/输出与历史/新复跑身份都保存在该目录。仍缺晚期NNCG、R9锚点、完整候选长跑和清洁复训，不能把工具资格通过写成成熟benchmark已完成。
 
 后续[晚期资格](evaluator/late-qualification/README.md)已取得真实60分钟代表训练、非正曲率失败与21步低秩刷新路径。原小阻尼两分支失败保留，新增μ=1为冻结前派生阻尼敏感性；μ=10仅为资格探索。21步与单一代表配置不能证明完整200步、选优父配置或整个19-run研究已通过。R9及正式候选长跑继续待完成。
+
+最新[完整续训和恢复资格](evaluator/full-continuation-and-restore/README.md)已取得μ1×200实际接受、10刷新与Adam/L-BFGS真实新进程恢复，后者逐参数最大差0。[R9独立设计审查](evaluator/r9-design-review/REVIEW.md)同时指出原非关键9分的加权通过漏洞；当前待校准PDE质量叶均为关键项，公开区分研究完成与解复现成功。阈值、每族条件指标、选优和原子化继续待证据，不能由91分方法成绩代替物理解质量。
+
+[最终注册工具审查](evaluator/registration-review-uncapped/REVIEW.md)实际通过4项元数据合同测试与定向类型/格式检查。当前薄启动只接受显式null token政策，已删除原总量阈值取消路径；真实模型/Provider/Task端到端仍待冻结后的pilot。科学资格、注册检查和候选成绩分别记录。

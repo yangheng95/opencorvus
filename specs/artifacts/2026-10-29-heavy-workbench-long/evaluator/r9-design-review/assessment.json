@@ -1,0 +1,30 @@
+{
+  "reviewer": "/root/benchmark_review",
+  "created_at_utc": "2026-10-29T08:14:29.410219+00:00",
+  "status": "unfrozen design review",
+  "candidate_score": null,
+  "numeric_quality_thresholds_assigned": false,
+  "formal_freeze_approved": false,
+  "current_structural_issue": "R9 noncritical nine points allows conditional 91 when every PDE quality leaf unmet; >=80 alone mislabels study delivery as solution reproduction",
+  "recommended_outcomes": [
+    "study_complete",
+    "solution_reproduced per PDE with joint solution/physics/condition quality"
+  ],
+  "split_into_nine_leaves_alone_fixes_acceptance": false,
+  "weighted_only_exclusion_requires_quality_weight_strictly_over_20": true,
+  "single_PDE_failure_can_still_be_compensated_without_per_PDE_quality_condition": true,
+  "diagnostic_execution_exit_code": 0,
+  "newton_200_and_restore_receipt_audit": "qualification-receipt-audit.json",
+  "counterexample_diagnostics": "quality-diagnostics.json",
+  "main_repo_modified_by_reviewer": false,
+  "training_model_service_or_GPU_started": false,
+  "delegation_performed": false,
+  "remaining": [
+    "define target quality/label semantics",
+    "freeze eligible same-checkpoint selection per PDE",
+    "add public evaluation residual and per-constraint pools",
+    "current-contract three-PDE reachable clean witnesses",
+    "separate floating verification tolerance from scientific quality thresholds",
+    "calibrate with valid/degraded/trivial examples before candidate rollout"
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "observed_at": "2026-10-29T08:46:30.444629+00:00",
+  "scope": "live evaluator qualification; not model candidate progress",
+  "runs": [
+    {
+      "run": "convection-contract-qualification",
+      "source": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\convection-contract-qualification\\events.json",
+      "latest": {
+        "event": "lbfgs_progress",
+        "attempt": 13100,
+        "accepted_updates": 13100,
+        "native_iterations": 13100,
+        "loss": 0.0018276515593838502,
+        "gradient_inf": 0.0006329323142028162,
+        "step_inf": 0.0002000258602583571,
+        "plateau": 0,
+        "closure_calls": 27225,
+        "status": "max_updates",
+        "seconds": 5120.470627492759
+      },
+      "events": 143
+    },
+    {
+      "run": "reaction-convergence-qualification",
+      "source": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reaction-convergence-qualification\\events.json",
+      "latest": {
+        "event": "lbfgs_progress",
+        "attempt": 14300,
+        "accepted_updates": 14300,
+        "native_iterations": 14300,
+        "loss": 1.8945426336919368e-06,
+        "gradient_inf": 7.087204445140527e-06,
+        "step_inf": 6.702918613821218e-06,
+        "plateau": 0,
+        "closure_calls": 38638,
+        "status": "max_updates",
+        "seconds": 6158.788610424846
+      },
+      "events": 155
+    },
+    {
+      "run": "wave-convergence-qualification",
+      "source": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\wave-convergence-qualification\\events.json",
+      "latest": {
+        "event": "lbfgs_progress",
+        "attempt": 11100,
+        "accepted_updates": 11100,
+        "native_iterations": 11100,
+        "loss": 0.002227225872855534,
+        "gradient_inf": 0.004106547553148853,
+        "step_inf": 0.00010805534953028939,
+        "plateau": 0,
+        "closure_calls": 22832,
+        "status": "max_updates",
+        "seconds": 5800.864251866937
+      },
+      "events": 123
+    }
+  ]
+}

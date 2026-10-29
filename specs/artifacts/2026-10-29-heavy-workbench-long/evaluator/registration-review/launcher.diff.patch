@@ -1,0 +1,88 @@
+diff --git a/script/benchmark/serve_heavy_workbench.ts b/script/benchmark/serve_heavy_workbench.ts
+index 5549012d3..aa8730d28 100644
+--- a/script/benchmark/serve_heavy_workbench.ts
++++ b/script/benchmark/serve_heavy_workbench.ts
+@@ -4,6 +4,7 @@ import fs from "node:fs/promises"
+ import path from "node:path"
+ import { parseArgs } from "node:util"
+ import { pathToFileURL } from "node:url"
++import { parseHeavyWorkbenchRegistration } from "./heavy-workbench-registration"
+ 
+ const { values } = parseArgs({
+   options: {
+@@ -12,16 +13,8 @@ const { values } = parseArgs({
+   },
+ })
+ assert(values.registration && values["auth-source"], "registration and authorized auth source required")
+-const registration = JSON.parse(await fs.readFile(path.resolve(values.registration), "utf8"))
+-assert.equal(registration.benchmark, "HeavyWorkBench-10/0.1.0-dev")
+-assert.match(registration.case, /^H\d\d$/)
+-assert.match(registration.model, /^openai\/.+$/)
+-assert.equal(registration.inactivitySeconds, 600)
+-assert.equal(registration.tokenBudgetScope, "task-session-lineage")
+-assert(
+-  registration.budget?.total_model_tokens === null ||
+-    (Number.isSafeInteger(registration.budget?.total_model_tokens) && registration.budget.total_model_tokens > 0),
+-  "total_model_tokens must explicitly be null (no cutoff) or a positive integer",
++const registration = parseHeavyWorkbenchRegistration(
++  JSON.parse(await fs.readFile(path.resolve(values.registration), "utf8")),
+ )
+ const root = path.resolve(registration.runRoot)
+ const project = path.resolve(registration.project)
+@@ -155,10 +148,11 @@ try {
+     })
+     Database.close()
+   }
+-  server = await Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true, mdns: false, cors: [] })
+-  process.env.OPENCORVUS_SERVER_URL = server.url.toString()
++  const listener = await Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true, mdns: false, cors: [] })
++  server = listener
++  process.env.OPENCORVUS_SERVER_URL = listener.url.toString()
+   const { audit } = requireProcessProviderAudit()
+-  audit.localOrigins.add(server.url.origin)
++  audit.localOrigins.add(listener.url.origin)
+   await Instance.provide({
+     directory: project,
+     fn: async () => {
+@@ -168,16 +162,26 @@ try {
+     },
+   })
+   result.preflight = await audit.preflight({
+-    serverURL: server.url,
++    serverURL: listener.url,
+     model: registration.model,
+     inactivityMs: registration.inactivitySeconds * 1000,
+     pollIntervalMs: 1000,
+     activity: SessionStatus.getActivity,
+   })
+   await write("preflight.json", result.preflight)
+-  await write("ready.json", { url: server.url.toString(), pid: process.pid, registration, preflight: result.preflight })
++  await write("ready.json", {
++    url: listener.url.toString(),
++    pid: process.pid,
++    registration,
++    preflight: result.preflight,
++  })
+   console.log(
+-    JSON.stringify({ status: "ready", url: server.url.toString(), model: registration.model, case: registration.case }),
++    JSON.stringify({
++      status: "ready",
++      url: listener.url.toString(),
++      model: registration.model,
++      case: registration.case,
++    }),
+   )
+   let budgetCancelled = false
+   while (!(await fs.stat(path.join(root, "stop")).catch(() => null))) {
+@@ -187,9 +191,9 @@ try {
+       const tokens = accounting.taskRecordedTokens
+       if (tokens >= registration.budget.total_model_tokens) {
+         const tasks = Database.use((db: any) => db.select({ id: EngineTaskTable.id }).from(EngineTaskTable).all())
+-        const cancellations = []
++        const cancellations: Array<{ taskID: string; status: number; response: unknown }> = []
+         for (const task of tasks) {
+-          const url = new URL(`/task/${task.id}/status`, server.url)
++          const url = new URL(`/task/${task.id}/status`, listener.url)
+           url.searchParams.set("directory", project)
+           const stateResponse = await audit.nativeFetch(url)
+           assert(stateResponse.ok, `Budget status HTTP ${stateResponse.status}`)

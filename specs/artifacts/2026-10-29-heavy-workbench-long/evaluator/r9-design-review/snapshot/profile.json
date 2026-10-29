@@ -1,0 +1,261 @@
+{
+  "benchmark": "HeavyWorkBench-Long/0.2.0-dev",
+  "case": "L01",
+  "status": "unfrozen-review-draft",
+  "official_paperbench": false,
+  "base_configurations": [
+    {
+      "id": "convection-adam-s345-lr1e-04",
+      "problem": "convection",
+      "seed": 345,
+      "method": "adam",
+      "adam_learning_rate": 0.0001,
+      "max_updates": 41000,
+      "adam_updates_before_switch": null,
+      "stratum": "cross_problem"
+    },
+    {
+      "id": "convection-lbfgs-s345-lrnone",
+      "problem": "convection",
+      "seed": 345,
+      "method": "lbfgs",
+      "adam_learning_rate": null,
+      "max_updates": 41000,
+      "adam_updates_before_switch": null,
+      "stratum": "cross_problem"
+    },
+    {
+      "id": "convection-hybrid-s345-lr1e-04",
+      "problem": "convection",
+      "seed": 345,
+      "method": "hybrid",
+      "adam_learning_rate": 0.0001,
+      "max_updates": 41000,
+      "adam_updates_before_switch": 11000,
+      "stratum": "cross_problem"
+    },
+    {
+      "id": "reaction-adam-s345-lr1e-03",
+      "problem": "reaction",
+      "seed": 345,
+      "method": "adam",
+      "adam_learning_rate": 0.001,
+      "max_updates": 41000,
+      "adam_updates_before_switch": null,
+      "stratum": "cross_problem"
+    },
+    {
+      "id": "reaction-lbfgs-s345-lrnone",
+      "problem": "reaction",
+      "seed": 345,
+      "method": "lbfgs",
+      "adam_learning_rate": null,
+      "max_updates": 41000,
+      "adam_updates_before_switch": null,
+      "stratum": "cross_problem"
+    },
+    {
+      "id": "reaction-hybrid-s345-lr1e-03",
+      "problem": "reaction",
+      "seed": 345,
+      "method": "hybrid",
+      "adam_learning_rate": 0.001,
+      "max_updates": 41000,
+      "adam_updates_before_switch": 11000,
+      "stratum": "cross_problem"
+    },
+    {
+      "id": "wave-adam-s345-lr1e-03",
+      "problem": "wave",
+      "seed": 345,
+      "method": "adam",
+      "adam_learning_rate": 0.001,
+      "max_updates": 41000,
+      "adam_updates_before_switch": null,
+      "stratum": "cross_problem"
+    },
+    {
+      "id": "wave-lbfgs-s345-lrnone",
+      "problem": "wave",
+      "seed": 345,
+      "method": "lbfgs",
+      "adam_learning_rate": null,
+      "max_updates": 41000,
+      "adam_updates_before_switch": null,
+      "stratum": "cross_problem"
+    },
+    {
+      "id": "wave-hybrid-s345-lr1e-03",
+      "problem": "wave",
+      "seed": 345,
+      "method": "hybrid",
+      "adam_learning_rate": 0.001,
+      "max_updates": 41000,
+      "adam_updates_before_switch": 11000,
+      "stratum": "cross_problem"
+    },
+    {
+      "id": "convection-adam-s456-lr1e-04",
+      "problem": "convection",
+      "seed": 456,
+      "method": "adam",
+      "adam_learning_rate": 0.0001,
+      "max_updates": 41000,
+      "adam_updates_before_switch": null,
+      "stratum": "seed_replication"
+    },
+    {
+      "id": "convection-lbfgs-s456-lrnone",
+      "problem": "convection",
+      "seed": 456,
+      "method": "lbfgs",
+      "adam_learning_rate": null,
+      "max_updates": 41000,
+      "adam_updates_before_switch": null,
+      "stratum": "seed_replication"
+    },
+    {
+      "id": "convection-hybrid-s456-lr1e-04",
+      "problem": "convection",
+      "seed": 456,
+      "method": "hybrid",
+      "adam_learning_rate": 0.0001,
+      "max_updates": 41000,
+      "adam_updates_before_switch": 11000,
+      "stratum": "seed_replication"
+    },
+    {
+      "id": "convection-adam-s567-lr1e-04",
+      "problem": "convection",
+      "seed": 567,
+      "method": "adam",
+      "adam_learning_rate": 0.0001,
+      "max_updates": 41000,
+      "adam_updates_before_switch": null,
+      "stratum": "seed_replication"
+    },
+    {
+      "id": "convection-lbfgs-s567-lrnone",
+      "problem": "convection",
+      "seed": 567,
+      "method": "lbfgs",
+      "adam_learning_rate": null,
+      "max_updates": 41000,
+      "adam_updates_before_switch": null,
+      "stratum": "seed_replication"
+    },
+    {
+      "id": "convection-hybrid-s567-lr1e-04",
+      "problem": "convection",
+      "seed": 567,
+      "method": "hybrid",
+      "adam_learning_rate": 0.0001,
+      "max_updates": 41000,
+      "adam_updates_before_switch": 11000,
+      "stratum": "seed_replication"
+    },
+    {
+      "id": "convection-adam-s345-lr1e-03",
+      "problem": "convection",
+      "seed": 345,
+      "method": "adam",
+      "adam_learning_rate": 0.001,
+      "max_updates": 41000,
+      "adam_updates_before_switch": null,
+      "stratum": "learning_rate_sensitivity"
+    },
+    {
+      "id": "convection-hybrid-s345-lr1e-03",
+      "problem": "convection",
+      "seed": 345,
+      "method": "hybrid",
+      "adam_learning_rate": 0.001,
+      "max_updates": 41000,
+      "adam_updates_before_switch": 11000,
+      "stratum": "learning_rate_sensitivity"
+    },
+    {
+      "id": "convection-adam-s345-lr1e-02",
+      "problem": "convection",
+      "seed": 345,
+      "method": "adam",
+      "adam_learning_rate": 0.01,
+      "max_updates": 41000,
+      "adam_updates_before_switch": null,
+      "stratum": "learning_rate_sensitivity"
+    },
+    {
+      "id": "convection-hybrid-s345-lr1e-02",
+      "problem": "convection",
+      "seed": 345,
+      "method": "hybrid",
+      "adam_learning_rate": 0.01,
+      "max_updates": 41000,
+      "adam_updates_before_switch": 11000,
+      "stratum": "learning_rate_sensitivity"
+    }
+  ],
+  "continuations": [
+    {
+      "id": "convection-gd-continuation-0.0001",
+      "method": "gd",
+      "updates": 200,
+      "parameter": "learning_rate",
+      "value": 0.0001,
+      "parent": "profile.selection"
+    },
+    {
+      "id": "convection-gd-continuation-0.001",
+      "method": "gd",
+      "updates": 200,
+      "parameter": "learning_rate",
+      "value": 0.001,
+      "parent": "profile.selection"
+    },
+    {
+      "id": "convection-nncg-continuation-0.01",
+      "method": "nncg",
+      "updates": 200,
+      "parameter": "damping",
+      "value": 0.01,
+      "parent": "profile.selection"
+    },
+    {
+      "id": "convection-nncg-continuation-0.1",
+      "method": "nncg",
+      "updates": 200,
+      "parameter": "damping",
+      "value": 0.1,
+      "parent": "profile.selection"
+    },
+    {
+      "id": "convection-nncg-continuation-1.0",
+      "method": "nncg",
+      "updates": 200,
+      "parameter": "damping",
+      "value": 1.0,
+      "parent": "profile.selection",
+      "provenance": "additional damping sensitivity from pre-freeze feasibility; not an original-paper parameter or candidate result"
+    }
+  ],
+  "dataset": "public/data; evaluator regenerates canonical arrays",
+  "budget": {
+    "total_model_tokens": null,
+    "total_wall_seconds": null
+  },
+  "scope": "derived bounded scientific study; not the full original paper; not hours-qualified yet",
+  "selection": {
+    "problem": "convection",
+    "seed": 345,
+    "method": "hybrid",
+    "metric": "terminal train total loss",
+    "ties": "smaller Adam learning rate",
+    "eligible_terminal_states": [
+      "max_updates",
+      "gradient_converged",
+      "finite_plateau",
+      "optimizer_stalled"
+    ],
+    "all_ineligible": "dependency_incomplete; no alternate parent"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "label": "targeted-prettier",
+  "started_at_utc": "2026-10-29T07:54:58.630165+00:00",
+  "elapsed_seconds": 0.42138700000941753,
+  "command_argv": [
+    "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "D:\\myhexin-local\\opencorvus\\node_modules\\prettier\\bin\\prettier.cjs",
+    "--check",
+    "script/benchmark/heavy-workbench-registration.ts",
+    "script/benchmark/heavy-workbench-registration.test.ts",
+    "script/benchmark/serve_heavy_workbench.ts"
+  ],
+  "cwd": "D:\\myhexin-local\\opencorvus",
+  "exit_code": 0,
+  "stdout": "targeted-prettier.stdout.txt",
+  "stderr": "targeted-prettier.stderr.txt",
+  "scope": "read-only focused non-UI checks; no launcher/service/model or credentials"
+}

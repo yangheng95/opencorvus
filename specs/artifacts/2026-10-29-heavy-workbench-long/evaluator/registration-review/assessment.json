@@ -1,0 +1,32 @@
+{
+  "reviewer": "/root/benchmark_review",
+  "created_at_utc": "2026-10-29T07:56:09.858302+00:00",
+  "scope": [
+    "heavy-workbench-registration.ts",
+    "heavy-workbench-registration.test.ts",
+    "serve_heavy_workbench.ts current diff"
+  ],
+  "substantive_blockers_in_reviewed_diff": [],
+  "local_registration_change_accepted": true,
+  "all_final_targeted_commands_exit_zero": true,
+  "focused_test_observed": "3 pass, 0 fail, 4 expect",
+  "preserved_nested_metadata": true,
+  "explicit_null_token_policy_preserved": true,
+  "explicit_positive_token_policy_preserved": true,
+  "explicit_inactivity_seconds_preserved": true,
+  "new_token_or_wall_cutoff_introduced": false,
+  "second_runtime_listener_or_parser_route_introduced": false,
+  "services_or_models_started_by_reviewer": false,
+  "credentials_read_by_reviewer": false,
+  "main_repository_modified_by_reviewer": false,
+  "delegation_performed": false,
+  "L01_freeze_or_provider_E2E_certification": false,
+  "command_discovery_failures_retained": "attempt-1-command-discovery/",
+  "execution_receipts": "executions.json",
+  "reviewed_source_identity": "source-identity-after-checks.json",
+  "limitations": [
+    "pure registration and targeted compilation/format checks only",
+    "no service/model/provider/Task/cleanup execution",
+    "long case remains separately subject to scientific freeze and empirical acceptance"
+  ]
+}

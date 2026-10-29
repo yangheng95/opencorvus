@@ -22,3 +22,5 @@ python -m unittest discover -s script/benchmark -p test_pinn_torch_check.py
 这些检查不能认证训练来源/优化器/配置归属，完整验收仍需从公开输入执行实际候选源码、完整清洁复训和独立审查。晚期NNCG小阻尼、全注册矩阵、R9结果锚点和小时级行为尚未资格，不能用本目录的通过结论代替它们。
 
 后续晚期原件与预冻结修订在[late-qualification/](late-qualification/README.md)：两小阻尼的真实失败、私有工具修复、已知矩阵与21步刷新资格分别保留。完整200步、当前终态合同及其他问题的代表运行仍以实际后续末态为准，不从局部通过推导整题通过。
+
+[full-continuation-and-restore/](full-continuation-and-restore/README.md)补充完整μ1×200、真实Adam/L-BFGS新进程恢复与独立逐参数重算；依然不能替代完整候选验收。[registration-review-uncapped/](registration-review-uncapped/REVIEW.md)是最终无总量截断注册/启动工具独立审查，[registration-review/](registration-review/REVIEW.md)保留更早参数化初稿历史。[r9-design-review/](r9-design-review/REVIEW.md)指出不能让高方法分补偿全部PDE解质量失败，数值底线尚未冻结。

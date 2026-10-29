@@ -1,0 +1,17 @@
+{
+  "restored_container_id": "92485bb35274e54c17587c6a76d3f6d31a3f5edd383c24b32f7cafeec2a80f2b",
+  "originals": {
+    "reaction": {
+      "container_name": "oc-pinn-reaction-convergence-20261029-a",
+      "container_id": "b815b942032a843f26403bf3b6398388d3f886d4bba4fab9496d6e89a65e9f1c",
+      "pid_namespace": "pid:[4026532619]"
+    },
+    "wave": {
+      "container_name": "oc-pinn-wave-convergence-20261029-a",
+      "container_id": "70559a9efa3f161fbef1ca8d5825b4e8a704e6ae06ed22ca94abdd2f0220989e",
+      "pid_namespace": "pid:[4026532209]"
+    }
+  },
+  "restored_pid_namespace": "pid:[4026532769]",
+  "scope": "new PID namespace and real restored state; all in-container PID values are 1 and not by themselves identity evidence"
+}

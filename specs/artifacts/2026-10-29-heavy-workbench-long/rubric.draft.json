@@ -13,7 +13,7 @@
     "E": 10
   },
   "aggregation": "sum weight*binary rating; unknown/unexecuted=0; no prose substitution",
-  "acceptance": "score >=80, every critical full, actual full independent clean retraining, two independent assessments; not yet empirically validated",
+  "acceptance": "score>=80, all critical leaves full including every PDE quality floor, solution_reproduced=true, actual full independent clean retraining and two independent assessments; study_complete alone is not acceptance; not yet empirically validated",
   "pendingResultPoints": 9,
   "leaves": [
     {
@@ -1610,8 +1610,8 @@
       "id": "L01-R-convection-result",
       "group": "R",
       "weight": 3,
-      "requirement": "PENDING: finite achievable numeric reproduction anchors must be frozen from independent feasibility witnesses before scored candidate execution",
-      "critical": false,
+      "requirement": "PENDING: one eligible checkpoint for this PDE simultaneously meets calibrated solution L2RE, independent evaluation residual and each initial/boundary family quality floor; thresholds and atomic split require constructive and low-quality witnesses before scored execution",
+      "critical": true,
       "rating": "binary: verified=1, unmet/unknown=0",
       "status": "calibration-pending",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
@@ -1620,8 +1620,8 @@
       "id": "L01-R-reaction-result",
       "group": "R",
       "weight": 3,
-      "requirement": "PENDING: finite achievable numeric reproduction anchors must be frozen from independent feasibility witnesses before scored candidate execution",
-      "critical": false,
+      "requirement": "PENDING: one eligible checkpoint for this PDE simultaneously meets calibrated solution L2RE, independent evaluation residual and each initial/boundary family quality floor; thresholds and atomic split require constructive and low-quality witnesses before scored execution",
+      "critical": true,
       "rating": "binary: verified=1, unmet/unknown=0",
       "status": "calibration-pending",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
@@ -1630,8 +1630,8 @@
       "id": "L01-R-wave-result",
       "group": "R",
       "weight": 3,
-      "requirement": "PENDING: finite achievable numeric reproduction anchors must be frozen from independent feasibility witnesses before scored candidate execution",
-      "critical": false,
+      "requirement": "PENDING: one eligible checkpoint for this PDE simultaneously meets calibrated solution L2RE, independent evaluation residual and each initial/boundary family quality floor; thresholds and atomic split require constructive and low-quality witnesses before scored execution",
+      "critical": true,
       "rating": "binary: verified=1, unmet/unknown=0",
       "status": "calibration-pending",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
@@ -1796,5 +1796,10 @@
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     }
-  ]
+  ],
+  "outcomes": {
+    "study_complete": "protocol, truthful terminals and research artifacts independently verified; honest negative findings can qualify as a completed study",
+    "solution_reproduced": "all PDE quality floors simultaneously met by each PDE selected eligible checkpoint; no score compensation",
+    "qualification_status": "unfrozen; outcome thresholds and selection/atomic details still pending; no published candidate score"
+  }
 }

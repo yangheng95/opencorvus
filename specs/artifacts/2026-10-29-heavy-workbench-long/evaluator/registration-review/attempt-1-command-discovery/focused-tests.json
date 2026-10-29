@@ -1,0 +1,17 @@
+{
+  "label": "focused-tests",
+  "started_at_utc": "2026-10-29T07:53:48.633612+00:00",
+  "elapsed_seconds": 0.03766619972884655,
+  "command_argv": [
+    "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "--config",
+    "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\registration-review\\bunfig.toml",
+    "test",
+    "D:\\myhexin-local\\opencorvus\\script\\benchmark\\heavy-workbench-registration.test.ts"
+  ],
+  "cwd": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\registration-review",
+  "exit_code": 0,
+  "stdout": "focused-tests.stdout.txt",
+  "stderr": "focused-tests.stderr.txt",
+  "scope": "read-only focused non-UI checks; no launcher/service/model or credentials"
+}

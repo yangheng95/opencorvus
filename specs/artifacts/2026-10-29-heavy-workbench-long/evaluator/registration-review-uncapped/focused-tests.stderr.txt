@@ -1,0 +1,11 @@
+
+..\..\..\myhexin-local\opencorvus\script\benchmark\heavy-workbench-registration.test.ts:
+(pass) completed H05 registration preserves execution and provenance metadata [3.90ms]
+(pass) long-study profile enters the same registration contract with an explicit uncapped budget [0.40ms]
+(pass) a missing total-token policy yields the precise registration field error [0.85ms]
+(pass) a numeric cutoff receives the explicit uncapped-policy field error [0.23ms]
+
+ 4 pass
+ 0 fail
+ 5 expect() calls
+Ran 4 tests across 1 file. [49.00ms]

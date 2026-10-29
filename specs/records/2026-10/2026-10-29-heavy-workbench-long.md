@@ -44,8 +44,8 @@
 - 独立审查原件已归档`specs/artifacts/2026-10-29-heavy-workbench-long/evaluator/independent-review/stage-assessment.json`及同目录精确命令/输出/源副本：另起15 NumPy+3 Torch/边界复跑通过，审核9组GPU差分。它明确`formal_freeze_approved=false`，不冒称批准完整新题。源码提交前docs:check通过（351路由/26组），真实新CLI退出0且三个数值接受条件全部为true。
 - 数值工具/审查稿/原件提交`c376b9fe9`已正常push，现行pre-push检查与秘密扫描通过；未发布新冻结benchmark或候选成绩。完整独立`REVIEW.md`及历史命令/原输出在审查目录，历史UTC未知保留null。
 - 按用户仓库“长时间benchmark使用定时唤醒”要求，本聊天已创建20分钟心跳`benchmark`（名称“长程 benchmark 迭代与真实验收”，ACTIVE），用于继续本未完成目标，状态不变保持安静；有可执行工作继续推进，只在重要新结果/完成/失败/确需选择时通知。不会用关闭本轮对话冒充整个目标完成。必要的一层独立review/Codex仍为用户既有授权，被委托者不得再委托。
-- 63配置未采用；独立按真实稳态粗推19配置达到全上限也约11.14小时，合法共用prefix约省.46h，未含NNCG/复训，不是已验证最终时长。当前审查稿为19基础配置+4续训分支，范围见`specs/artifacts/2026-10-29-heavy-workbench-long/public/TASK.md`和唯一注册表`public/profile.json`。174原子叶100分草案`rubric.draft.json`，其中R9结果锚点明确calibration-pending，**禁止发布总成绩/称冻结**。原论文及PDF/15图、许可和官方原rubric已按各自归属保存，不让候选读评估侧。
-- 代表性真实收敛资格仍运行：自有容器`oc-pinn-convergence-20261029-a`，启动命令会话5652，外部`qualify_convergence.py`；只在自有cache工作，网络关闭。实时事实读`D:/opencorvus-benchmark-runs/paperbench-discovery-20261029/convergence-qualification/events.json`；PowerShell stdout重定向存在缓冲，不能把stdout文件暂空当无活动。该probe的`step`为native step尝试索引，遇零步后的25次plateau只能作原始资格观测，不能按最终新合同当25次有效更新；正式候选按最新attempt/native/nonzero/closure分计。末态才生成`convection-checkpoint.npz`，不得把资格当候选成绩。
+- 63配置未采用；独立按真实稳态粗推19配置达到全上限也约11.14小时，合法共用prefix约省.46h，未含NNCG/复训，不是已验证最终时长。首轮审查稿为19基础配置+4续训分支、174叶，后续未冻结修改见本记录后节及唯一当前`public/profile.json`。R9结果锚点明确calibration-pending，**禁止发布总成绩/称冻结**。原论文及PDF/15图、许可和官方原rubric已按各自归属保存，不让候选读评估侧。
+- 最初代表性真实收敛资格当时运行于自有容器`oc-pinn-convergence-20261029-a`、会话5652；现已终态，见后节与封存原件，不再检查其已自动清理的容器。原始实时事实为`D:/opencorvus-benchmark-runs/paperbench-discovery-20261029/convergence-qualification/events.json`；PowerShell stdout重定向存在缓冲，不能把stdout文件暂空当无活动。该probe的`step`计尝试的局限保留，不能用它认证当前first-zero-stop合同或候选成绩。
 
 ### 下次唤醒的必要工作（不是已完成）
 
@@ -73,3 +73,45 @@
 另外两问题用新`qualify_problem_convergence.py`按最终更新/终态合同作单一代表资格，不是候选提交；reaction容器`oc-pinn-reaction-convergence-20261029-a`，会话6261，实时`reaction-convergence-qualification/events.json`；wave容器`oc-pinn-wave-convergence-20261029-a`，会话60677，实时`wave-convergence-qualification/events.json`。初始化、11000切换、后续真实计数、first-zero-stop、保存100/120更新状态均按当前合同，两个已执行源副本分别留在目录`executed-source.py`。为补旧convection终态证据，已用当前合同重新执行convection：容器`oc-pinn-convection-contract-20261029-a`，会话22932，实时`convection-contract-qualification/events.json`，新增完整`lbfgs-attempts.jsonl`逐次记录。该必要复验修补明确合同证据缺口，不是凑时长。三个GPU资格并发，记录实际耗时但不当独占GPU速度排名。先检查上述自有事实再推进，不能重复启动已有资格或打断用户进程。
 
 薄启动元数据已先搜索：生产唯一匹配为`script/benchmark/serve_heavy_workbench.ts`第16行固定旧benchmark身份、17行仅Hxx；当前代码尚未修改。其他native-run-contract处理通用native完成/批次，不含本launcher注册身份；不存在第二个HeavyWorkBench启动路径。未来更改仅扩大注册身份合同并正向测试，不改变Task、Provider、队列、LLM工具或终态归属。
+
+## 07:32 UTC接续：启动注册合同分析与实施方案
+
+GPU代表资格仍有效推进；本轮先完成可独立推进的薄启动准备。可观察问题：旧launcher在任何环境/Provider操作之前硬拒绝新`HeavyWorkBench-Long/0.2.0-dev`与L01。直接触发是16/17行字面值限制；根因是首个H05试验将试验身份当成了通用入口合同。旧路径只服务一次H05，尚无第二身份，因此此前没有抽象；现在新题已有公开profile且确实需要复用同一执行入口。
+
+全仓搜索只有该launcher匹配旧身份，未发现同语义注册解析入口；native-run-contract负责native操作/终态/批次，不应与此混合。影响面限注册文件解析及调用launcher，保留原有项目路径包含校验、真实流式Provider预检、成对auth/models暂存、原生Task执行与cleanup。Task/Mission/Session调度、数据库、UI与发布不适用。metadata身份校验不向LLM选择工具或流程；不新增私有路由。风险是丢失额外试验元数据、null额度被错误默认化、非法模型/路径在启动后才发现；使用单一纯数据解析合同保留额外字段，明确null/正整数和调用方原路径校验，错误在暂存凭据之前呈现。
+
+实施：提取一个当前注册解析实现，用已有Zod库验证versioned benchmark身份、case ID、精确OpenAI模型、正整数真实闲置秒数、lineage口径、显式null或正整数token字段与非空运行路径；删除launcher旧重复断言。旧H05及新L01都走这一实现，不加兼容分支。聚焦正向测试覆盖旧已交付注册、新长程profile身份且null保持原值，以及明确字段错误契约。此局部解析测试不证明真实Provider/Task端到端；新题冻结后仍须原生Inspect实际预检与长跑。当前工具清单未提供独立Inspect连接器，下一步按仓库既有Inspect CLI/HTTP入口操作，不另造LLM执行器。
+
+注册解析3项聚焦正向测试已通过，旧项读取实际归档的H05 registration；新项读取当前公开L01 profile并保持null额度。启用strictNullChecks的定向检查发现原launcher的可选server在异步闭包中丢失类型收窄及空取消列表推断never[]，已以同一已建立listener的const引用和显式回执数组类型修复，不改变运行对象/清理归属。最初测试fixture字面量类型与格式问题也已修正，聚焦测试、strictNullChecks定向类型检查和Prettier通过。
+
+继续可独立推进的恢复资格：reaction/wave已实际存下第100次接受更新的完整模型、L-BFGS history、CPU/CUDA随机状态及第120次未中断权重。将在新自有容器进程仅加载该可信快照并执行20更新，与原120权重按既定atol1e-10/rtol1e-8逐参数比较；不得重跑11k/100前缀。容器内PID通常均为1，因此同时记录真实PID namespace和外部新容器身份，与两个仍运行的原生产容器区分，不能只凭“PID1”声称新进程。只读自有科学资格数据，不涉及产品Task/Mission/Session恢复、用户窗口、Provider或凭据。该20更新复验只证明科学优化器恢复局部合同，不替代完整候选清洁复训。
+
+上述L-BFGS恢复已实跑通过：reaction和wave各新执行20非零更新、native100→120、history99→100，与未中断第120权重最大差均0，真实新进程namespace与两个仍存活原进程不同，外部Docker CID及原始命令保留。Inspect现成环境可用：`packages/inspect-benchmark/.venv`，inspect-ai0.3.259、opencorvus-inspect0.3.4；仍只计划复用其Task API solver，没有新增Inspect替代实现。
+
+Adam恢复尚未资格，现按同一公开容差补充500+100未中断producer与仅100恢复consumer：两个独立Docker创建/退出、新容器ID为引擎真实身份。producer保存模型/Adam/CPU-CUDA RNG；consumer只读自有可信500快照，不训练前缀，再与600未中断逐参数比较。依赖原进程已退出时PID namespace inode可能复用，不能以namespace不同当唯一新进程证明；本补充以实际不同Docker容器身份与命令收据证明执行轮次，不做自算源码摘要门槛。仅为恢复合同局部资格，不计候选运行时间或论文成绩。
+
+Adam补充已实际完成：producer600更新并保存500状态，另一真实Docker容器只恢复后100更新；逐参数最大差0，无前缀重跑，原始执行0/0退出。μ1完整NNCG200也已自然终态：200接受、10次刷新、17614次HVP，耗时1256.165秒（共享GPU），最大显式PCG相对残差9.98e-9，Armijo及逐参数非零均核验；独立终值loss=.0004707843653、L2RE=.28797693。这是非选优代表基点的资格，不是完整19-run候选成绩，旧小阻尼失败继续保留。
+
+独立R9设计审查明确指出：原3个PDE结果叶共9分、非critical、加权>=80的草案可让所有解质量失败仍91分过关，拆叶本身也不能补救。现先将待校准PDE质量叶标为critical，公开区分study_complete和solution_reproduced；后者同一合格checkpoint必须同时满足每PDE解误差、独立评价残差、每族初边值底线，不能由高分补偿。此为评估侧业务标准，不修改Task状态机或host工具流程。具体阈值、选优与原子化仍须三问题当前合同的可达见证、零/常数/初值拟合等低质量对照、数值重放容差，不能按当前.288误差倒填宽松线，更不能用非凸精确轨迹当金标准。来源`r9-design-review/REVIEW.md`已独立落盘。R9继续pending，不发布总成绩。
+
+### 当前注册资源政策收敛（实施前更正方案）
+
+参数化初稿沿用了原工具的null/正整数双值，但再次核对用户“我限制你预算了？”及已落盘无截断要求：当前任务没有正整数额度授权，保留该开关会保留此前误取消的执行路径，不应仅靠每次填null避免。全仓相关当前实现仍仅此launcher；前三轮带cap注册/取消属于冻结历史，不需要保留可执行旧路径。本次在授权benchmark范围内删除该本地工具的总token取消分支，只接受显式null，保留完整lineage用量记录和真实闲置预检。`tokenBudgetScope`既有字段仅标识用量归属，不触发取消。不会改变历史原件、产品Task控制、Provider或用户服务，也不扩大为全仓清理。
+
+相应聚焦合同增加正整数配置映射到明确null政策字段错误；旧H05无截断注册与L01仍使用同一解析实现。此前正整数支持的方案文本保留为本轮分析历史，以本节单一当前政策为准。真实Provider/Task验收仍待新题冻结后进行，局部4项注册测试不能冒充该端到端验收。
+
+## 08:46 UTC最新接续状态与下一轮优先项
+
+本轮注册/无截断合同4测试、strictNullChecks定向类型检查、Prettier通过；独立`registration-review-uncapped/`实际另起检查认可，未调用Provider或启动服务。此前3测试初稿保留为历史，不把它当最终源。Inspect入口已确认是`packages/inspect-benchmark`唯一Python集成；使用既有`opencorvus_benchmark`/`opencorvus_task`及公开Task API，`--model none`避免Inspect另发模型请求。当前没有新候选Task，L01仍未冻结，不能把lifecycle scorer当业务成绩。
+
+| 当前自有活跃容器 | 外部cache实时事实 | 08:46观察 |
+| --- | --- | --- |
+| oc-pinn-convection-contract-20261029-a | convection-contract-qualification/events.json、lbfgs-attempts.jsonl | L-BFGS13100尝试/13100接受，仍推进 |
+| oc-pinn-reaction-convergence-20261029-a | reaction-convergence-qualification/events.json | L-BFGS14300尝试/14300接受，仍推进 |
+| oc-pinn-wave-convergence-20261029-a | wave-convergence-qualification/events.json | L-BFGS11100尝试/11100接受，仍推进 |
+
+`late-newton-200-qualification`、`optimizer-restore-qualification`、`adam-restore-qualification`已终态，不重复启动；原件与回执在`evaluator/full-continuation-and-restore/`。此处已执行source并非完整研究源码包；两个大L-BFGS optimizer状态保留外部cache，原件位置/大小明确，未谎称小zip包含它们。Adam小状态已随包。原论文第20页已实际渲染查看，确认算法6 v0符号问题，公开使用自洽PCG定义而不猜作者实现。
+
+下一轮先读取本表实际活跃事实，完成末态后独立重算/审查，停止把旧已移除容器当失败。可独立推进：扩展NumPy检查器报告独立评价网格残差与各初边值族量；用手算函数和真实导出正向验证。按R9独立报告准备零/常数/仅初值拟合等低质量见证，与三问题可达见证一起校准，不能只拆叶或按当前误差倒填阈值；确定同一checkpoint的公开选择规则及原子质量合同，明确study_complete与solution_reproduced。
+
+同时补齐候选manifest明确I/O与逐配置独立检查边界（元数据不能证明训练来源，仍需受控清洁重训/源码/真实执行），再经既有独立agent审查冻结。启动工具已准备，无须重复做注册实现；冻结后才生成只含public文件的新项目和真实Inspect单样本，成对暂存auth/models并核验实际模型，保持无总token/总墙钟截断。环境可准备样本自有科学容器并提供真实工作路径/CID，闲置环境不计工作量；不引入替代LLM调用器或隐藏工具。完成后完整原件封存、独立清洁重训与同一冻结rubric审查，必要时新鲜Codex对照；按用户条件再升级。其余九题仍须实质升级与验证，不能忘记整个十题目标。

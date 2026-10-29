@@ -1,0 +1,17 @@
+{
+  "purpose": "raw large L-BFGS optimizer states remain in the original private run store; not silently included in the small receipt archive",
+  "states": [
+    {
+      "problem": "reaction",
+      "path": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reaction-convergence-qualification\\state-100.pt",
+      "bytes": 33242507,
+      "source": "actual own representative, accepted update100; producer source snapshot remains with the run"
+    },
+    {
+      "problem": "wave",
+      "path": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\wave-convergence-qualification\\state-100.pt",
+      "bytes": 33242507,
+      "source": "actual own representative, accepted update100; producer source snapshot remains with the run"
+    }
+  ]
+}
