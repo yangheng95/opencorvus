@@ -6,6 +6,8 @@
 
 ### zh-CN
 
+- 文本附件预览识别 UTF-16 字节序标记，正确显示中文与表情；无法解码时显示明确提示，待发送核对窗口支持下载原件。
+
 - 已发送的文本、代码和 JSON 附件支持在消息中折叠查看完整原文，按需加载共享只读阅读器并保留原件下载。
 
 - 待发送文本与代码附件的核对窗口使用可用阅读高度，减少长文件滚动；保留完整原文、只读操作和始终可见的关闭入口。
@@ -25,6 +27,8 @@
 - 修复 Windows 检查器并发准备原生辅助程序时，编译产物与运行文件互相冲突导致的拒绝访问。
 
 ### en-US
+
+- Decode BOM-marked UTF-16 text attachments correctly, show explicit encoding errors, and offer original downloads while reviewing pending text.
 
 - Review sent text, code and JSON attachments in a compact message disclosure, loading the shared read-only viewer on demand with original downloads.
 

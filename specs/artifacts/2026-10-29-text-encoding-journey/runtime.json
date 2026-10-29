@@ -1,0 +1,199 @@
+{
+  "at": "2026-10-29T07:10:42.852Z",
+  "deadlineAt": 1793260134997,
+  "stages": [
+    {
+      "stage": "original",
+      "port": 38353,
+      "uiEntry": "main-Byhuis9j.js",
+      "originalExecSession": 64019,
+      "originalExecExitCode": 0,
+      "at": "2026-10-29T06:55:17.939Z",
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "requests": 5,
+      "previousRequests": 788,
+      "cumulativeRequests": 793,
+      "maximumRequests": 6,
+      "exhausted": false,
+      "model": "gpt-6.1-sol",
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "reserveMs": 3266240,
+      "physical": {
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-29T06:54:28.8123052Z"
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 78688,
+              "processInstanceID": "win32:639288533354415296",
+              "occurrenceID": "bc00b861-db5e-4e06-9289-a86217305f0d"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 26540,
+              "processInstanceID": "win32:639288533363299037",
+              "occurrenceID": "325ef9bf-7d6d-4ae8-a7a7-6e836baab2c7"
+            }
+          }
+        ],
+        "native": {
+          "occurrence": "text-encoding-788-925df0d2-615b-4d40-8021-a5ea4eafdb1d",
+          "outcome": "settled",
+          "host": {
+            "pid": 78688,
+            "processInstanceID": "win32:639288533354415296",
+            "occurrenceID": "bc00b861-db5e-4e06-9289-a86217305f0d"
+          },
+          "target": {
+            "pid": 26540,
+            "processInstanceID": "win32:639288533363299037",
+            "occurrenceID": "325ef9bf-7d6d-4ae8-a7a7-6e836baab2c7"
+          },
+          "observedAtUtc": "2026-10-29T06:54:28.757Z",
+          "deadlineAt": 1793260134997,
+          "terminal": {
+            "occurrenceID": "text-encoding-788-925df0d2-615b-4d40-8021-a5ea4eafdb1d",
+            "pid": 26540,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-29T06:55:17.6664074Z"
+      }
+    },
+    {
+      "stage": "authenticated-readback",
+      "port": 38354,
+      "uiEntry": "main-D7log08P.js",
+      "originalExecSession": 78362,
+      "originalExecExitCode": 0,
+      "at": "2026-10-29T07:06:32.578Z",
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "previousRequests": 793,
+      "cumulativeRequests": 793,
+      "maximumRequests": 0,
+      "exhausted": false,
+      "model": "gpt-6.1-sol",
+      "requestOutcomes": [],
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "reserveMs": 2570498,
+      "physical": {
+        "chain": [
+          {
+            "identity": {
+              "pid": 68748,
+              "processInstanceID": "win32:639288539372288026",
+              "occurrenceID": "89eae802-6b32-4bd3-b709-264098b7e16d"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 93104,
+              "processInstanceID": "win32:639288539380968911",
+              "occurrenceID": "8fd0f93f-44ab-48f7-b1f7-7d2bc8485784"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "launcher": {
+          "observedAtUtc": "2026-10-29T07:06:04.535028Z",
+          "originalChildExit": 0
+        },
+        "native": {
+          "occurrence": "text-encoding-788-after-fa5f71da-8fb5-452e-a52b-98da35cec18a",
+          "outcome": "settled",
+          "host": {
+            "pid": 68748,
+            "processInstanceID": "win32:639288539372288026",
+            "occurrenceID": "89eae802-6b32-4bd3-b709-264098b7e16d"
+          },
+          "target": {
+            "pid": 93104,
+            "processInstanceID": "win32:639288539380968911",
+            "occurrenceID": "8fd0f93f-44ab-48f7-b1f7-7d2bc8485784"
+          },
+          "observedAtUtc": "2026-10-29T07:06:04.499Z",
+          "deadlineAt": 1793260134997,
+          "terminal": {
+            "occurrenceID": "text-encoding-788-after-fa5f71da-8fb5-452e-a52b-98da35cec18a",
+            "pid": 93104,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-29T07:06:32.4726807Z"
+      }
+    }
+  ],
+  "requests": 5,
+  "maximumRequests": 6,
+  "previousRequests": 788,
+  "cumulativeRequests": 793,
+  "qualification": "Original paired credentials/full catalog/exact-model streaming preflight and actual JSON read total five physical HTTP200/stream/eof requests. Unused allowance retired. Authenticated readback has max0 and zero model requests; no repeated preflight."
+}

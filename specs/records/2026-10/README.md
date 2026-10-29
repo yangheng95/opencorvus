@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-29-text-encoding-journey.md](2026-10-29-text-encoding-journey.md)：文本原文编码、结构化附件真实历史与下载核验。
+
 - [2026-10-29-text-attachment-history.md](2026-10-29-text-attachment-history.md)：真实文本附件发送、历史阅读入口与原件身份验证。
 
 - [2026-10-29-heavy-workbench-cross-system.md](2026-10-29-heavy-workbench-cross-system.md)：同一H05旧题两方真实业务交付、清洁复跑、升级触发及小时级要求。

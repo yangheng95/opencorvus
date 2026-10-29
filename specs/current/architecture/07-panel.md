@@ -247,6 +247,13 @@ keeps the current button focused, allowing native Tab navigation to continue.
 Nonimage file chips open an existing Dialog for review before submission. Stored
 text MIME types and JSON use the same ResourceTextPreview as File preview
 artifacts; other formats retain FilePart media or original-download presentation.
+The shared text reader decodes original bytes strictly: a UTF-16 BOM selects
+little or big endian, otherwise UTF-8 applies (including a UTF-8 BOM). Malformed
+input shows localized encoding feedback instead of replacement text. Pending
+text review also offers the shared authorized original download in its footer;
+history and file artifacts retain their original download/export actions.
+This read-only decoding contract does not change storage, model read tools or
+file editing and saving encodings.
 FilePart's PDF content loads the same PdfPreview on demand, including canonical
 attachments; they do not depend on a host PDF plugin. The composer's constrained
 body scrolls independently of its header and footer, keeping Close visible.

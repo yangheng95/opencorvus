@@ -11,6 +11,7 @@ import { PreviewableImage } from "./ImagePreview"
 import { attachmentImagePreviewUrl } from "../utils/attachment-resource"
 import { Disclosure } from "./ui/Disclosure"
 import { ResourceTextPreview } from "./ResourceTextPreview"
+import { DownloadLink, OriginalFileDownload } from "./OriginalFileDownload"
 
 const LazyPdfPreview = lazy(async () => ({ default: (await import("./PdfPreview")).PdfPreview }))
 
@@ -108,9 +109,9 @@ export function FilePart(props: { part: MessageFilePart; presentation?: FilePart
   const composerThumbnail = () => props.presentation === "composer-thumbnail"
 
   return (
-    <Switch fallback={<FallbackDownload url={url()} name={name()} mime={mimeOf(props.part)} authed={authed()} />}>
+    <Switch fallback={<FallbackDownload url={url()} name={name()} mime={mimeOf(props.part)} />}>
       <Match when={props.presentation === "thumbnail" && url() && (mimeOf(props.part).startsWith("text/") || mimeOf(props.part) === "application/json")}>
-        <TextAttachment url={url()} name={name()} mime={mimeOf(props.part)} authed={authed()} />
+        <TextAttachment url={url()} name={name()} mime={mimeOf(props.part)} />
       </Match>
       <Match when={kind() === "image" && url() && authed()}>
         <AuthedImage url={url()} alt={alt()} presentation={props.presentation ?? "content"} />
@@ -152,7 +153,7 @@ export function FilePart(props: { part: MessageFilePart; presentation?: FilePart
   )
 }
 
-function TextAttachment(props: { url: string; name: string; mime: string; authed: boolean }) {
+function TextAttachment(props: { url: string; name: string; mime: string }) {
   const [expanded, setExpanded] = createSignal(false)
   return (
     <Disclosure.Root class="msg-text-attachment" variant="surface" open={expanded()} onOpenChange={setExpanded}>
@@ -168,7 +169,7 @@ function TextAttachment(props: { url: string; name: string; mime: string; authed
         <Show when={expanded()}>
           <ResourceTextPreview url={props.url} filename={props.name} label={props.name} />
           <div class="msg-text-attachment__actions">
-            <OriginalFileDownload url={props.url} name={props.name} authed={props.authed} />
+            <OriginalFileDownload url={props.url} name={props.name} />
           </div>
         </Show>
       </Disclosure.Content>
@@ -316,7 +317,7 @@ function AuthedPdf(props: { url: string; name: string }) {
 
 // ── Fallback + helpers ──
 
-function FallbackDownload(props: { url: string; name: string; mime: string; authed: boolean }) {
+function FallbackDownload(props: { url: string; name: string; mime: string }) {
   return (
     <div class="msg-file-chip">
       <span class="msg-file-chip__name">{props.name}</span>
@@ -325,39 +326,8 @@ function FallbackDownload(props: { url: string; name: string; mime: string; auth
           {compactFileType(props.name, props.mime)}
         </span>
       </Show>
-      <OriginalFileDownload url={props.url} name={props.name} authed={props.authed} />
+      <OriginalFileDownload url={props.url} name={props.name} />
     </div>
-  )
-}
-
-function OriginalFileDownload(props: { url: string; name: string; authed: boolean }) {
-  // For server-relative URLs we can't put them on <a href> directly (auth
-  // header won't propagate on the resulting navigation). Fetch through the
-  // authed proxy so the download link points at a blob URL the browser can
-  // open inline or save.
-  const [objectUrl] = createResource(
-    () => (props.authed && props.url ? { url: props.url, authority: captureApiAuthority() } : null),
-    (source) => fetchResourceAsObjectUrl(source.url, { authority: source.authority }),
-    { initialValue: props.authed ? peekResourceObjectUrl(props.url) : null },
-  )
-  const href = () => {
-    if (!props.url) return ""
-    if (props.authed) return (!objectUrl.loading && objectUrl()) || ""
-    return props.url
-  }
-
-  return <Show when={href()}><DownloadLink href={href()} name={props.name} /></Show>
-}
-
-function DownloadLink(props: { href: string; name: string }) {
-  // `download` attribute asks the browser to save under this filename rather
-  // than navigate. Under WebView2 the blob URL flow works; under a browser
-  // deployment with Basic Auth the blob URL was already fetched with auth
-  // so no credentials are needed at click time.
-  return (
-    <a class="msg-file-download" href={props.href} download={props.name} target="_blank" rel="noopener noreferrer">
-      {t("file.download")}
-    </a>
   )
 }
 

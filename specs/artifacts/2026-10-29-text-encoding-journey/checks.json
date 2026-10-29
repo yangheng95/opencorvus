@@ -1,0 +1,74 @@
+{
+  "at": "2026-10-29T07:10:42.861Z",
+  "checks": [
+    {
+      "label": "text-encoding-788-util-test",
+      "startedAt": 1793256888942,
+      "closedAt": 1793256891607,
+      "code": 0,
+      "signal": null,
+      "childPID": 100000
+    },
+    {
+      "label": "text-encoding-788-util-type",
+      "startedAt": 1793256938847,
+      "closedAt": 1793256945168,
+      "code": 0,
+      "signal": null,
+      "childPID": 73668
+    },
+    {
+      "label": "text-encoding-788-overlay-type-2",
+      "startedAt": 1793256961259,
+      "closedAt": 1793256999975,
+      "code": 0,
+      "signal": null,
+      "childPID": 96492
+    },
+    {
+      "label": "text-encoding-788-build-2",
+      "startedAt": 1793257039874,
+      "closedAt": 1793257110672,
+      "code": 0,
+      "signal": null,
+      "childPID": 70908
+    },
+    {
+      "label": "text-encoding-788-i18n",
+      "startedAt": 1793256961309,
+      "closedAt": 1793256964286,
+      "code": 0,
+      "signal": null,
+      "childPID": 88332
+    },
+    {
+      "label": "text-encoding-788-docs",
+      "startedAt": 1793257011004,
+      "closedAt": 1793257021028,
+      "code": 0,
+      "signal": null,
+      "childPID": 96988
+    },
+    {
+      "label": "text-encoding-788-architecture",
+      "startedAt": 1793257021231,
+      "closedAt": 1793257023504,
+      "code": 0,
+      "signal": null,
+      "childPID": 56024
+    }
+  ],
+  "visual": "16 unedited actual-page screenshots rendered and manually reviewed; real chooser, initial LE/BE and malformed-byte failures, corrected Unicode and explicit bilingual error, five real downloads with exact bytes, actual JSON send/read/Sources/history, project return, existing PDF and image.",
+  "initialFailures": [
+    {
+      "label": "text-encoding-788-overlay-type",
+      "startedAt": 1793256888954,
+      "closedAt": 1793256922539,
+      "code": 2,
+      "signal": null,
+      "childPID": 71284
+    }
+  ],
+  "qualification": "Initial typecheck caught three Authed media consumers of extracted DownloadLink. They now import the same shared renderer; final typecheck and a fresh build after the fix passed. First build is not the publication used for final UI. No UI automation tests, fixtures, source-text checks or pixel assertions were added/run.",
+  "limitations": "Copy/archive workflow, FilePreviewArtifact with encoded payload, malformed UTF16 in page, UTF8 BOM in page, Office/native picker and shorter viewport were not independently exercised. Pure-byte tests cover BOM and malformed UTF16. Backend read tools and editor save encodings unchanged; unknown legacy encodings require an explicit UTF8 copy."
+}

@@ -1,0 +1,312 @@
+{
+  "at": "2026-10-29T07:10:42.853Z",
+  "reports": [
+    {
+      "stage": "original",
+      "tables": 92,
+      "oldCount": 114655,
+      "exact": 114651,
+      "total": 116026,
+      "schema": 9,
+      "integrity": "ok",
+      "sourceRowsExact": true
+    },
+    {
+      "stage": "-after",
+      "tables": 92,
+      "oldCount": 116026,
+      "exact": 116026,
+      "total": 116028,
+      "schema": 9,
+      "integrity": "ok",
+      "sourceRowsExact": true
+    }
+  ],
+  "mutations": [
+    {
+      "table": "memory_chunk",
+      "id": "mck_h494mq4eEhZcCQ6lF2Yr",
+      "fromRevision": 2,
+      "toRevision": 3,
+      "coveredOccurrence": "msg_3b69e5f1-7882-4b51-8a4b-65c17f8fe20d"
+    },
+    {
+      "table": "memory_file",
+      "id": "mem_hToIKQudXZDIB5Pz1aau",
+      "qualification": "Existing project memory update time advances for the natural JSON request."
+    },
+    {
+      "table": "runtime_execution_capacity_lease",
+      "slot": 0,
+      "qualification": "Expired shared capacity slot reused by this exact owned model process and normally released."
+    },
+    {
+      "table": "runtime_execution_capacity_lease",
+      "slot": 1,
+      "qualification": "Expired shared capacity slot reused by this exact owned model process and normally released."
+    }
+  ],
+  "readbackActivation": {
+    "owner": {
+      "pid": 93104,
+      "processInstanceID": "win32:639288539380968911",
+      "occurrenceID": "acdf03e0-2b7f-44b7-a98b-dc2764f35293"
+    },
+    "target": "runtime_process",
+    "leaseID": "act_g0VZQ4Gp800FErAzwn1f",
+    "grantOrdinal": 1,
+    "physicalProcessRetired": true,
+    "qualification": "Append-only runtime process activation and its grant belong to the exact admitted process occurrence. Their lifetime fact is retained after normal physical retirement."
+  },
+  "session": {
+    "id": "ses_-zUQZxfS4zzCqp9pVfVD",
+    "projectID": "prj_hI8KlTauJPN4k6J7iYKT",
+    "experience": "chat",
+    "userMessageID": "msg_3b69e5f1-7882-4b51-8a4b-65c17f8fe20d"
+  },
+  "downloads": [
+    {
+      "filename": "session-data-788.json",
+      "bytes": 70,
+      "exactOriginalBytes": true
+    },
+    {
+      "filename": "unicode-le-788.txt",
+      "bytes": 46,
+      "exactOriginalBytes": true
+    },
+    {
+      "filename": "unicode-be-788.txt",
+      "bytes": 46,
+      "exactOriginalBytes": true
+    },
+    {
+      "filename": "legacy-invalid-788.txt",
+      "bytes": 6,
+      "exactOriginalBytes": true
+    },
+    {
+      "filename": "readback-original.txt.gz",
+      "bytes": 84,
+      "exactOriginalBytes": true
+    }
+  ],
+  "files": [
+    {
+      "id": "prt_g0VZQ2L2O01SCRehrMSo",
+      "filename": "session-data-788.json",
+      "mime": "application/json",
+      "url": "/attachment/prj_hI8KlTauJPN4k6J7iYKT/06876581bb271cdd5f82bec1f38a7f3343c2200de7814913df30ef0178bd1433.json",
+      "bytes": 70
+    }
+  ],
+  "reads": [
+    {
+      "id": "prt_g0VZQ2MA700gu89P0dhl",
+      "tool": "read",
+      "filePath": "/attachment/prj_hI8KlTauJPN4k6J7iYKT/06876581bb271cdd5f82bec1f38a7f3343c2200de7814913df30ef0178bd1433.json",
+      "outcome": "completed",
+      "lines": 5,
+      "totalLines": 5
+    }
+  ],
+  "sources": [
+    {
+      "id": "prt_g0VZQ2MMu00nZu2Q76ym",
+      "title": "session-data-788.json",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project\\.opencorvus\\.r\\project\\attachments\\13ddc417d608ac11b757d6484c99178602e1d19fc64885508d977965f890d1d8\\06876581bb271cdd5f82bec1f38a7f3343c2200de7814913df30ef0178bd1433.json",
+      "origin": "attachment",
+      "toolPartID": "prt_g0VZQ2MA700gu89P0dhl",
+      "exactOriginalBytes": true
+    }
+  ],
+  "persistedFiles": [
+    {
+      "sessionID": "ses_-zUQePN8bzzO0tkLjwWg",
+      "filename": "opencorvus-logo-dark.svg",
+      "mime": "image/svg+xml",
+      "bytes": 6426
+    },
+    {
+      "sessionID": "ses_-zUQePN8bzzO0tkLjwWg",
+      "filename": "opencorvus-case-brief-en-zh.pdf",
+      "mime": "application/pdf",
+      "bytes": 111015
+    },
+    {
+      "sessionID": "ses_-zUQePN8bzzO0tkLjwWg",
+      "filename": "12-after-chinese-home-hint.jpg",
+      "mime": "image/jpeg",
+      "bytes": 47688
+    },
+    {
+      "sessionID": "ses_-zUQaHDCDzzrQyVxXODH",
+      "filename": "README.md",
+      "mime": "text/markdown",
+      "bytes": 176
+    },
+    {
+      "sessionID": "ses_-zUQaHDCDzzrQyVxXODH",
+      "filename": "invoice.py",
+      "mime": "text/x-python",
+      "bytes": 953
+    },
+    {
+      "sessionID": "ses_-zUQZxfS4zzCqp9pVfVD",
+      "filename": "session-data-788.json",
+      "mime": "application/json",
+      "bytes": 70
+    }
+  ],
+  "priorInputs": [
+    {
+      "filename": "test_invoice.py",
+      "bytes": 1520,
+      "exactOriginalBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "invoice.py",
+      "bytes": 953,
+      "exactOriginalBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "README.md",
+      "bytes": 191,
+      "exactOriginalBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "mcp.ts",
+      "bytes": 5539,
+      "exactOriginalBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "chat.ts",
+      "bytes": 14692,
+      "exactOriginalBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "mcp.ts",
+      "bytes": 5539,
+      "exactOriginalBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "chat.ts",
+      "bytes": 14692,
+      "exactOriginalBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "README.md",
+      "bytes": 176,
+      "exactOriginalBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "invoice.py",
+      "bytes": 953,
+      "exactOriginalBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "test_invoice.py",
+      "bytes": 1520,
+      "exactOriginalBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "readback-original.txt.gz",
+      "bytes": 84,
+      "exactOriginalBytes": true,
+      "exactMetadata": true
+    }
+  ],
+  "newInputs": [
+    {
+      "name": "legacy-invalid-788.txt",
+      "bytes": 6,
+      "exactKnownInputBytes": true
+    },
+    {
+      "name": "session-data-788.json",
+      "bytes": 70,
+      "exactKnownInputBytes": true
+    },
+    {
+      "name": "unicode-be-788.txt",
+      "bytes": 46,
+      "exactKnownInputBytes": true
+    },
+    {
+      "name": "unicode-le-788.txt",
+      "bytes": 46,
+      "exactKnownInputBytes": true
+    }
+  ],
+  "namespaces": [
+    {
+      "stage": "original",
+      "namespace": "namespace-copy",
+      "files": 17,
+      "exactFiles": 17,
+      "reclaimed": []
+    },
+    {
+      "stage": "original",
+      "namespace": "namespace-copy-a",
+      "files": 8,
+      "exactFiles": 6,
+      "reclaimed": [
+        {
+          "path": "9927664ee5884d7e69e46a11b0f248ebc59f731829a50cbbf2ad187d44a3177a.gz",
+          "filename": "readback-original.txt.gz",
+          "qualification": "Copied prior-batch uncommitted QA upload; the original namespace and QA input remain byte exact. Current bootstrap invokes AttachmentStore.sweep with 60s grace and durable-reference ownership. Exact collection time is not available in the retained initial dev.log; this is an inference from the lifecycle code and persisted/uncommitted identity, not a claimed sweep-log observation."
+        },
+        {
+          "path": "9927664ee5884d7e69e46a11b0f248ebc59f731829a50cbbf2ad187d44a3177a.gz.metadata.json",
+          "filename": "readback-original.txt.gz",
+          "qualification": "Copied prior-batch uncommitted QA upload; the original namespace and QA input remain byte exact. Current bootstrap invokes AttachmentStore.sweep with 60s grace and durable-reference ownership. Exact collection time is not available in the retained initial dev.log; this is an inference from the lifecycle code and persisted/uncommitted identity, not a claimed sweep-log observation."
+        }
+      ]
+    },
+    {
+      "stage": "-after",
+      "namespace": "namespace-copy",
+      "files": 17,
+      "exactFiles": 17,
+      "reclaimed": []
+    },
+    {
+      "stage": "-after",
+      "namespace": "namespace-copy-a",
+      "files": 16,
+      "exactFiles": 16,
+      "reclaimed": []
+    }
+  ],
+  "observedSweeps": [
+    {
+      "stage": "-after",
+      "level": "info",
+      "time": "2026-10-29T07:04:18.613Z",
+      "service": "attachment-store",
+      "logDomain": "non-session",
+      "data": {
+        "projectID": "prj_hFmj1f6BXMBemXaPwm5n",
+        "deleted": 0,
+        "bytesFreed": 0,
+        "skippedYoung": 0,
+        "kept": 7,
+        "retries": [],
+        "failures": []
+      },
+      "message": "AttachmentStore.sweep"
+    }
+  ],
+  "qualification": "Initial old rows 114651/114655 exact; the four normal memory/capacity mutations are individually verified. Readback retains all116026 old rows and appends only the exact owned process activation/grant. Six persistent FilePart originals remain accessible; preview-only files are not fabricated into messages. New UTF16 preview decoding does not change backend model read or file save contracts."
+}

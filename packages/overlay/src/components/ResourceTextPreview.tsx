@@ -1,4 +1,5 @@
 import { Show, createResource } from "solid-js"
+import { decodeUnicodeText, TextDecodingError } from "@opencorvus-ai/util/text-decoding"
 import {
   assertApiAuthorityCurrent,
   captureApiAuthority,
@@ -13,7 +14,7 @@ async function loadText(source: { url: string; authority?: ApiAuthority }): Prom
   const objectUrl = await fetchResourceAsObjectUrl(source.url, { authority: source.authority })
   const response = await fetch(objectUrl)
   if (!response.ok) throw new Error(`Text preview failed with HTTP ${response.status}`)
-  const text = await response.text()
+  const text = decodeUnicodeText(new Uint8Array(await response.arrayBuffer()))
   if (source.authority) assertApiAuthorityCurrent(source.authority)
   return text
 }
@@ -26,10 +27,17 @@ export function ResourceTextPreview(props: { url: string; filename: string; labe
     }),
     loadText,
   )
+  const decodingError = () => (text.error instanceof TextDecodingError ? text.error : undefined)
   return (
     <Show
       when={!text.error}
-      fallback={<Feedback tone="error" details={String(text.error)}>{t("file.load_failed", { name: props.label })}</Feedback>}
+      fallback={
+        <Feedback tone="error" details={decodingError() ? undefined : String(text.error)}>
+          {decodingError()
+            ? t("file.text_encoding_failed", { name: props.label, encoding: decodingError()!.encoding.toUpperCase() })
+            : t("file.load_failed", { name: props.label })}
+        </Feedback>
+      }
     >
       <Show
         when={text.state === "ready"}

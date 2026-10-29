@@ -5,6 +5,7 @@ import { boardStore } from "../store/board"
 import { t } from "../utils/i18n"
 import { FilePart } from "./FilePart"
 import { ResourceTextPreview } from "./ResourceTextPreview"
+import { OriginalFileDownload } from "./OriginalFileDownload"
 import { Button } from "./ui/Button"
 import { Dialog } from "./ui/Dialog"
 
@@ -47,24 +48,35 @@ export function ComposerAttachmentPreview(props: { attachment: StoredAttachmentR
         class="composer-attachment-dialog"
         formClass="composer-attachment-dialog__frame"
         title={props.attachment.filename}
-        returnFocusTarget={() => (current() ? trigger ?? null : null)}
+        returnFocusTarget={() => (current() ? (trigger ?? null) : null)}
         onClose={() => setOpen(false)}
         footer={
-          <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => setOpen(false)}>
-            {t("common.close")}
-          </Button>
+          <>
+            <Show when={text()}>
+              <OriginalFileDownload
+                url={props.attachment.url}
+                name={props.attachment.filename}
+                authority={context()?.authority}
+              />
+            </Show>
+            <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => setOpen(false)}>
+              {t("common.close")}
+            </Button>
+          </>
         }
       >
-        <div class="composer-attachment-dialog__body"><Show when={open()}>
-          <Show when={text()} fallback={<FilePart part={{ type: "file", ...props.attachment }} />}>
-            <ResourceTextPreview
-              url={props.attachment.url}
-              filename={props.attachment.filename}
-              label={props.attachment.filename}
-              authority={context()?.authority}
-            />
+        <div class="composer-attachment-dialog__body">
+          <Show when={open()}>
+            <Show when={text()} fallback={<FilePart part={{ type: "file", ...props.attachment }} />}>
+              <ResourceTextPreview
+                url={props.attachment.url}
+                filename={props.attachment.filename}
+                label={props.attachment.filename}
+                authority={context()?.authority}
+              />
+            </Show>
           </Show>
-        </Show></div>
+        </div>
       </Dialog>
     </>
   )

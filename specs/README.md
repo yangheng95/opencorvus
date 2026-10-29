@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文本编码与结构化附件体验](records/2026-10/2026-10-29-text-encoding-journey.md)：Unicode 原文、JSON 真实发送与侧栏身份调查。
+
 - [已发送文本附件的原文回看](records/2026-10/2026-10-29-text-attachment-history.md)：真实附件发送、历史下载与只读回看能力调查。
 
 - [H05横向对照与难度升级](records/2026-10/2026-10-29-heavy-workbench-cross-system.md)：两方旧标准100开发点、独立清洁复跑及天花板证据。
