@@ -1,0 +1,95 @@
+{
+  "at": "2026-10-29T07:21:37.573Z",
+  "authorization": "User explicitly allowed read-only use of existing local GitHub login. No alert dismissal or external mutation.",
+  "alerts": [
+    {
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "number": 31,
+      "package": "zip",
+      "patched": "9.0.5",
+      "severity": "critical",
+      "state": "open",
+      "summary": "zip: Critical Parser Differential & Security Control Bypass via Dual-Header Inconsistencies (Zip Cloaking) Leading to Arbitrary File Overwrite & RCE",
+      "url": "https://github.com/yangheng95/opencorvus/security/dependabot/31",
+      "vulnerable": "<= 9.0.4"
+    },
+    {
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "number": 30,
+      "package": "rustls",
+      "patched": "0.23.46",
+      "severity": "low",
+      "state": "open",
+      "summary": "rustls: ECH rejection can expose buffered application data to authenticated outer server before `ech_required` alert",
+      "url": "https://github.com/yangheng95/opencorvus/security/dependabot/30",
+      "vulnerable": ">= 0.23.44, < 0.23.46"
+    },
+    {
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "number": 29,
+      "package": "rustls",
+      "patched": "0.23.46",
+      "severity": "low",
+      "state": "open",
+      "summary": "rustls: An unauthenticated ServerHello poisons the per-name key-exchange record, so later ClientHellos carry only a classical X25519 share",
+      "url": "https://github.com/yangheng95/opencorvus/security/dependabot/29",
+      "vulnerable": "< 0.23.46"
+    },
+    {
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "number": 28,
+      "package": "rustls",
+      "patched": "0.23.46",
+      "severity": "medium",
+      "state": "open",
+      "summary": "Rustls: Session Debug formatting exposes TLS master secrets and resumption PSKs",
+      "url": "https://github.com/yangheng95/opencorvus/security/dependabot/28",
+      "vulnerable": "< 0.23.46"
+    },
+    {
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "number": 27,
+      "package": "rustls",
+      "patched": "0.23.46",
+      "severity": "low",
+      "state": "open",
+      "summary": "Rustls: Brotli certificate decompression can allocate an attacker-controlled amount of memory up to 1 GiB before authentication.",
+      "url": "https://github.com/yangheng95/opencorvus/security/dependabot/27",
+      "vulnerable": "< 0.23.46"
+    },
+    {
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "number": 14,
+      "package": "rand",
+      "patched": "0.8.6",
+      "severity": "low",
+      "state": "open",
+      "summary": "Rand is unsound with a custom logger using rand::rng()",
+      "url": "https://github.com/yangheng95/opencorvus/security/dependabot/14",
+      "vulnerable": ">= 0.7.0, < 0.8.6"
+    },
+    {
+      "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "number": 13,
+      "package": "glib",
+      "patched": "0.20.0",
+      "severity": "medium",
+      "state": "open",
+      "summary": "Unsoundness in `Iterator` and `DoubleEndedIterator` impls for `glib::VariantStrIter`",
+      "url": "https://github.com/yangheng95/opencorvus/security/dependabot/13",
+      "vulnerable": ">= 0.15.0, < 0.20.0"
+    },
+    {
+      "manifest": "packages/overlay/src-tauri/Cargo.lock",
+      "number": 5,
+      "package": "glib",
+      "patched": "0.20.0",
+      "severity": "medium",
+      "state": "open",
+      "summary": "Unsoundness in `Iterator` and `DoubleEndedIterator` impls for `glib::VariantStrIter`",
+      "url": "https://github.com/yangheng95/opencorvus/security/dependabot/5",
+      "vulnerable": ">= 0.15.0, < 0.20.0"
+    }
+  ],
+  "next": "Analyze current production glib/Tauri GTK3 constraints separately from seven findings in the archived before/Cargo.lock. Preserve historical evidence bytes and identity; do not rewrite old evidence to appear patched or dismiss alerts. Read existing dependency-remediation records, all manifest consumers and authoritative advisories before choosing a fix."
+}

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-29-native-advisory-evidence.md](2026-10-29-native-advisory-evidence.md)：当前GLib父链、Linux验证环境与历史依赖证据身份。
+
 - [2026-10-29-text-encoding-journey.md](2026-10-29-text-encoding-journey.md)：文本原文编码、结构化附件真实历史与下载核验。
 
 - [2026-10-29-text-attachment-history.md](2026-10-29-text-attachment-history.md)：真实文本附件发送、历史阅读入口与原件身份验证。

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-29-native-advisory-evidence](2026-10-29-native-advisory-evidence/README.md)：只读告警、历史原件字节归档与Linux修复验证前提。
+
 - [2026-10-29-text-encoding-journey](2026-10-29-text-encoding-journey/README.md)：Unicode原文乱码修复、双语错误、真实JSON和五份下载核验。
 
 - [长程论文复现资格与审查稿](2026-10-29-heavy-workbench-long/README.md)：真实GPU/独立数值资格、论文原件、19配置合同和未冻结rubric，未取得候选小时级成绩。

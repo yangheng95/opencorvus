@@ -1,0 +1,30 @@
+{
+  "at": "2026-10-29T07:37:37.992Z",
+  "entries": [
+    {
+      "original": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "target": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock.txt",
+      "originalCommit": "c59cf33bc765d17f079d1d4c5665a4f5e9df4a01",
+      "originalBlob": "b44272db79012d21315ef7f29626c08448007746",
+      "bytes": 160323,
+      "exactOriginalBytes": true
+    },
+    {
+      "original": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/check-rust-dependencies.ts",
+      "target": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/check-rust-dependencies.ts.txt",
+      "originalCommit": "c59cf33bc765d17f079d1d4c5665a4f5e9df4a01",
+      "originalBlob": "56cdac59006a59f3191fe3ca07ddaacefbb63284",
+      "bytes": 20698,
+      "exactOriginalBytes": true
+    },
+    {
+      "original": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/rust-dependency-contract.rs",
+      "target": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/rust-dependency-contract.rs.txt",
+      "originalCommit": "c59cf33bc765d17f079d1d4c5665a4f5e9df4a01",
+      "originalBlob": "f67d6fa48fb3c3493c78a24a1bc581c40a72bf29",
+      "bytes": 13282,
+      "exactOriginalBytes": true
+    }
+  ],
+  "qualification": "Each new text evidence file equals both the first committed original Git blob and the pre-move HEAD blob, and the saved original worktree bytes. Original facts/versions are preserved."
+}

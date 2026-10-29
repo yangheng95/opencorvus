@@ -1,0 +1,33 @@
+{
+  "at": "2026-10-29T07:39:45.180Z",
+  "checks": [
+    {
+      "original": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "target": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock.txt",
+      "originalCommit": "c59cf33bc765d17f079d1d4c5665a4f5e9df4a01",
+      "originalBlob": "b44272db79012d21315ef7f29626c08448007746",
+      "exportedBytes": 160323,
+      "exactOriginalBytes": true,
+      "gitTextAttribute": "unset"
+    },
+    {
+      "original": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/check-rust-dependencies.ts",
+      "target": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/check-rust-dependencies.ts.txt",
+      "originalCommit": "c59cf33bc765d17f079d1d4c5665a4f5e9df4a01",
+      "originalBlob": "56cdac59006a59f3191fe3ca07ddaacefbb63284",
+      "exportedBytes": 20698,
+      "exactOriginalBytes": true,
+      "gitTextAttribute": "unset"
+    },
+    {
+      "original": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/rust-dependency-contract.rs",
+      "target": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/rust-dependency-contract.rs.txt",
+      "originalCommit": "c59cf33bc765d17f079d1d4c5665a4f5e9df4a01",
+      "originalBlob": "f67d6fa48fb3c3493c78a24a1bc581c40a72bf29",
+      "exportedBytes": 13282,
+      "exactOriginalBytes": true,
+      "gitTextAttribute": "unset"
+    }
+  ],
+  "qualification": "Actual Git add/write-tree/archive and tar byte outputs match each immutable first-commit source. This is original evidence identity, not a mutable source hash acceptance gate."
+}

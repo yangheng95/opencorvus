@@ -1,5 +1,7 @@
 # Dependency remediation evidence
 
+- [Original native inputs](quickxml-parent-preparation/before/README.md): historical lock, checker and contract retained byte for byte as explicit text evidence; current-name mapping and immutable Git source are recorded. The 2026-10-29 archival identity correction does not change historical versions or claim a native security repair.
+
 - [Compatible QuickXML parent repair](quick-xml-compatible-parent-plan.md): exact published notification0.7.3/plist1.10 offline lock resolution with full node/edge reconciliation.
 - [Actual canonical native03](quickxml-native-03/README.md): full Windows build,12 linked production plus2 separate event contracts pass; [original MSVC failure](quickxml-native-01/README.md) remains preserved. Native Toast/macOS/Linux/24-bit stay unqualified.
 - [Complete corrected advisory audit](quickxml-rustsec-audit-02/README.md): four QuickXML vulnerability occurrences resolve;7maintenance/2unsound/1yank retained. [Original quiet coverage limitation](quickxml-rustsec-audit-01/README.md) and [independent source review](quickxml-rustsec-yanked-boundary-review.md) explain the tool-environment repair without claiming a guessed old init error.
