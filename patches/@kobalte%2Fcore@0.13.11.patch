@@ -470,3 +470,108 @@ index 02672fa3904984be01c5c5f3b0f172812e38f84e..5851ec96343a68cf0891620cbee18efc
  			focusWithoutScrolling(context.triggerRef());
  		}
  
+diff --git a/dist/chunk/46NU5BYI.js b/dist/chunk/46NU5BYI.js
+index 4ecdbc7c34b278c6b242c51cf575c8b0d0cf9b72..6c9996b12981c90eb7bec48472fd7831b5172457 100644
+--- a/dist/chunk/46NU5BYI.js
++++ b/dist/chunk/46NU5BYI.js
+@@ -474,6 +474,8 @@ function MenuContentBase(props) {
+   };
+   const onEscapeKeyDown = (e) => {
+     local.onEscapeKeyDown?.(e);
++    if (e.defaultPrevented) return;
++    e.preventDefault();
+     optionalMenubarContext?.setAutoFocusMenu(false);
+     context.close(true);
+   };
+diff --git a/dist/chunk/H6DSIDEC.js b/dist/chunk/H6DSIDEC.js
+index 938fb65e7b65282f490603f0edc790954e30d757..1ad671d071124cb1e8e995ad8e047da72a360108 100644
+--- a/dist/chunk/H6DSIDEC.js
++++ b/dist/chunk/H6DSIDEC.js
+@@ -323,11 +323,9 @@ function createSelectableCollection(props, ref, scrollRef) {
+         }
+         break;
+       case "Escape":
+-        if (!e.defaultPrevented) {
++        if (!e.defaultPrevented && !access(mergedProps.disallowEmptySelection) && !manager.disallowEmptySelection() && !manager.isEmpty()) {
+           e.preventDefault();
+-          if (!access(mergedProps.disallowEmptySelection)) {
+-            manager.clearSelection();
+-          }
++          manager.clearSelection();
+         }
+         break;
+       case "Tab": {
+diff --git a/dist/chunk/LEK3K6R3.jsx b/dist/chunk/LEK3K6R3.jsx
+index b7a0e8beebc5288364a478a6c1a39f1ad9cf14dd..20a0b852173187bf753e0a08fa18f90ba07bb6df 100644
+--- a/dist/chunk/LEK3K6R3.jsx
++++ b/dist/chunk/LEK3K6R3.jsx
+@@ -620,6 +620,8 @@ function MenuContentBase(props) {
+   };
+   const onEscapeKeyDown = (e) => {
+     local.onEscapeKeyDown?.(e);
++    if (e.defaultPrevented) return;
++    e.preventDefault();
+     optionalMenubarContext?.setAutoFocusMenu(false);
+     context.close(true);
+   };
+diff --git a/dist/chunk/QZDH5R5B.jsx b/dist/chunk/QZDH5R5B.jsx
+index c0c1a1e261d5c74d2664c8ea8f4d56a4e5001356..d01e397468c3bf52b8840fb28bc1fd21eea779c7 100644
+--- a/dist/chunk/QZDH5R5B.jsx
++++ b/dist/chunk/QZDH5R5B.jsx
+@@ -355,11 +355,9 @@ function createSelectableCollection(props, ref, scrollRef) {
+         }
+         break;
+       case "Escape":
+-        if (!e.defaultPrevented) {
++        if (!e.defaultPrevented && !access3(mergedProps.disallowEmptySelection) && !manager.disallowEmptySelection() && !manager.isEmpty()) {
+           e.preventDefault();
+-          if (!access3(mergedProps.disallowEmptySelection)) {
+-            manager.clearSelection();
+-          }
++          manager.clearSelection();
+         }
+         break;
+       case "Tab": {
+diff --git a/src/menu/menu-content-base.tsx b/src/menu/menu-content-base.tsx
+index a6005673e00e5f608dcf8b65af271eec2a2d74db..7d763d982d630031a39be300e17aa49c31ea5904 100644
+--- a/src/menu/menu-content-base.tsx
++++ b/src/menu/menu-content-base.tsx
+@@ -227,12 +227,11 @@ export function MenuContentBase<T extends ValidComponent = "div">(
+ 
+ 	const onEscapeKeyDown = (e: KeyboardEvent) => {
+ 		local.onEscapeKeyDown?.(e);
++		if (e.defaultPrevented) return;
+ 
++		// Own recursive menu dismissal once, after honoring cancellation.
++		e.preventDefault();
+ 		optionalMenubarContext?.setAutoFocusMenu(false);
+-
+-		// `createSelectableList` prevent escape key down,
+-		// which prevent our `onDismiss` in `DismissableLayer` to run,
+-		// so we force "close on escape" here.
+ 		context.close(true);
+ 	};
+ 
+diff --git a/src/selection/create-selectable-collection.ts b/src/selection/create-selectable-collection.ts
+index afc6293cc70e9243ee8a5cb832b69d468eef2b00..78457e10be7f5e1eb5990e02195ae2010bf15b24 100644
+--- a/src/selection/create-selectable-collection.ts
++++ b/src/selection/create-selectable-collection.ts
+@@ -318,11 +318,14 @@ export function createSelectableCollection<
+ 				}
+ 				break;
+ 			case "Escape":
+-				if (!e.defaultPrevented) {
++				if (
++					!e.defaultPrevented &&
++					!access(mergedProps.disallowEmptySelection) &&
++					!manager.disallowEmptySelection() &&
++					!manager.isEmpty()
++				) {
+ 					e.preventDefault();
+-					if (!access(mergedProps.disallowEmptySelection)) {
+-						manager.clearSelection();
+-					}
++					manager.clearSelection();
+ 				}
+ 				break;
+ 			case "Tab": {

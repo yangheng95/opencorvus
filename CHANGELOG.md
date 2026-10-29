@@ -6,6 +6,7 @@
 
 ### zh-CN
 
+- 修复组织与排序菜单中的说明提示拦住 Escape 的问题；提示先关闭并保留键盘焦点，随后可关闭菜单。用量图表同样保留所选区间，设置页在当前弹层处理完成后再响应退出。
 - 项目置顶或取消置顶后，键盘焦点交接到新位置的可见入口；支持单列表与渐进折叠的当前控件。匿名项目按真实置顶状态进入置顶区，保留匿名名称与命名入口。
 - 项目重命名、匿名项目命名与移除确认关闭后返回可见的项目入口；项目置顶等操作失败显示当前语言提示与原始详情，避免异常被上层回调吞掉。
 - 标题栏和侧栏操作失败时显示原记录名称与技术详情；修复菜单启动弹窗时的焦点争抢，以及弹窗内部焦点范围重建时过早清理返回入口的问题。
@@ -16,6 +17,7 @@
 
 ### en-US
 
+- Fix Escape ownership in organization and sorting menus: dismiss the current tooltip while retaining keyboard focus, then close its menu. Usage keeps its selected interval; settings handles page dismissal after the current popup.
 - Keep keyboard continuity after project pin changes across sidebar sections, including one-list and progressive collections. Show pinned anonymous projects in the Pinned section with their existing names and conversion action.
 - Return project rename, anonymous naming and removal confirmations to the visible project entry. Show localized project-action failures with original diagnostics instead of consuming their promises in entry wrappers.
 - Show the original record and diagnostics when header or sidebar actions fail. Fix menu-to-dialog focus conflicts and retain the return target when a dialog's internal focus scope remounts.

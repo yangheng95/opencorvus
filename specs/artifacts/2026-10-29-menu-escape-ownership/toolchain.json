@@ -1,0 +1,142 @@
+{
+  "at": "2026-10-29T00:01:39.764Z",
+  "bun": "1.4.0 (34cbb9a40)",
+  "package": "@kobalte/core@0.13.11",
+  "canonicalPatch": "patches/@kobalte%2Fcore@0.13.11.patch",
+  "previousPatchBytesRetained": 25083,
+  "generatedNewSections": 6,
+  "rootPackageAndLockExact": true,
+  "attempts": [
+    {
+      "label": "menu-escape-779-diagnostic-build",
+      "startedAt": 1793229921432,
+      "closedAt": 1793229981939,
+      "code": 0,
+      "signal": null,
+      "childPID": 93100
+    },
+    {
+      "label": "menu-escape-779-patch-install",
+      "startedAt": 1793230580768,
+      "closedAt": 1793230589275,
+      "code": 0,
+      "signal": null,
+      "childPID": 75724
+    },
+    {
+      "label": "menu-escape-779-patch-prepare",
+      "startedAt": 1793230600945,
+      "closedAt": 1793230603123,
+      "code": 1,
+      "signal": null,
+      "childPID": 83832
+    },
+    {
+      "label": "menu-escape-779-patch-reinstall",
+      "startedAt": 1793230684747,
+      "closedAt": 1793230689504,
+      "code": 0,
+      "signal": null,
+      "childPID": 89224
+    },
+    {
+      "label": "menu-escape-779-patch-prepare-hoisted",
+      "startedAt": 1793230689676,
+      "closedAt": 1793230691764,
+      "code": 1,
+      "signal": null,
+      "childPID": 76180
+    },
+    {
+      "label": "menu-escape-779-patch-cache-install",
+      "startedAt": 1793230762139,
+      "closedAt": 1793230766118,
+      "code": 0,
+      "signal": null,
+      "childPID": 78780
+    },
+    {
+      "label": "menu-escape-779-patch-cache-prepare",
+      "startedAt": 1793230766322,
+      "closedAt": 1793230769044,
+      "code": 0,
+      "signal": null,
+      "childPID": 76124
+    },
+    {
+      "label": "menu-escape-779-patch-commit",
+      "startedAt": 1793230833718,
+      "closedAt": 1793230837919,
+      "code": 0,
+      "signal": null,
+      "childPID": 58388
+    },
+    {
+      "label": "menu-escape-779-patch-prepare-complete",
+      "startedAt": 1793230880681,
+      "closedAt": 1793230882766,
+      "code": 0,
+      "signal": null,
+      "childPID": 75324
+    },
+    {
+      "label": "menu-escape-779-patch-commit-complete",
+      "startedAt": 1793230927842,
+      "closedAt": 1793230931968,
+      "code": 0,
+      "signal": null,
+      "childPID": 50568
+    },
+    {
+      "label": "menu-escape-779-root-install",
+      "startedAt": 1793230985329,
+      "closedAt": 1793230990620,
+      "code": 0,
+      "signal": null,
+      "childPID": 74784
+    },
+    {
+      "label": "menu-escape-779-typecheck",
+      "startedAt": 1793231022536,
+      "closedAt": 1793231047393,
+      "code": 0,
+      "signal": null,
+      "childPID": 97500
+    },
+    {
+      "label": "menu-escape-779-final-build",
+      "startedAt": 1793231022554,
+      "closedAt": 1793231085693,
+      "code": 0,
+      "signal": null,
+      "childPID": 97404
+    },
+    {
+      "label": "menu-escape-779-i18n",
+      "startedAt": 1793231022560,
+      "closedAt": 1793231025226,
+      "code": 0,
+      "signal": null,
+      "childPID": 98732
+    },
+    {
+      "label": "menu-escape-779-final2-build",
+      "startedAt": 1793231805199,
+      "closedAt": 1793231875112,
+      "code": 0,
+      "signal": null,
+      "childPID": 63808
+    },
+    {
+      "label": "menu-escape-779-final2-typecheck",
+      "startedAt": 1793231824260,
+      "closedAt": 1793231849320,
+      "code": 0,
+      "signal": null,
+      "childPID": 74720
+    }
+  ],
+  "repair": "Owned copyfile/hoisted package and explicit shared task cache keep install and Bun patch preparation continuous across isolated runner HOME directories.",
+  "intermediate": "Initial generator missed the JSX access3 alias. Only the private two-file intermediate patch was committed. The completed six-file official patch was reviewed before appending to the canonical patch and applying a frozen root install.",
+  "ui": "Actual screenshots and keyboard/pointer interactions; no UI automation tests."
+}

@@ -1202,6 +1202,9 @@ open config tab or primary surface; Chats/Mission Board navigation closes the
 config page through its existing native-surface reveal lifecycle before opening
 the selected primary surface. Settings owns search focus, scoped Escape/Back
 and focus restoration; nested action dialogs keep the shared modal primitive.
+The current popup receives Escape before the settings page. Closing a Tooltip
+preserves its trigger focus and any required activity selection; another Escape
+can dismiss its enclosing menu or settings page through that owner's lifecycle.
 Its navigation uses the shared Tabs rail layout and allows destination labels
 to wrap within the measured sidebar. Settings owns compact row density and
 selection colors; the shared primitive owns vertical layout and tab semantics.

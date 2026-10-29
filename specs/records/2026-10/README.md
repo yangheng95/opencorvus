@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-29-menu-escape-ownership.md](2026-10-29-menu-escape-ownership.md)：共享选择与菜单关闭合同、用量设置层级及实页证据。
+
 - [2026-10-29-project-pin-continuity.md](2026-10-29-project-pin-continuity.md)：成功Pin焦点交接、匿名项目分区根因及真实页面验收。
 
 - [2026-10-29-project-action-focus.md](2026-10-29-project-action-focus.md)：项目主按钮归还、置顶错误穿透、三种确认与双语实页证据。

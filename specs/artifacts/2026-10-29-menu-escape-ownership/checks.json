@@ -1,0 +1,64 @@
+{
+  "at": "2026-10-29T00:02:46.770Z",
+  "attempts": [
+    {
+      "label": "menu-escape-779-root-install",
+      "startedAt": 1793230985329,
+      "closedAt": 1793230990620,
+      "code": 0,
+      "signal": null,
+      "childPID": 74784
+    },
+    {
+      "label": "menu-escape-779-final2-typecheck",
+      "startedAt": 1793231824260,
+      "closedAt": 1793231849320,
+      "code": 0,
+      "signal": null,
+      "childPID": 74720
+    },
+    {
+      "label": "menu-escape-779-i18n",
+      "startedAt": 1793231022560,
+      "closedAt": 1793231025226,
+      "code": 0,
+      "signal": null,
+      "childPID": 98732
+    },
+    {
+      "label": "menu-escape-779-final2-build",
+      "startedAt": 1793231805199,
+      "closedAt": 1793231875112,
+      "code": 0,
+      "signal": null,
+      "childPID": 63808
+    },
+    {
+      "label": "menu-escape-779-docs-final",
+      "startedAt": 1793232137738,
+      "closedAt": 1793232146160,
+      "code": 0,
+      "signal": null,
+      "childPID": 74884
+    }
+  ],
+  "ui": "29 original JPEG captures rendered and manually reviewed on four real isolated development /ui pages. Final ordinary main-I1f_al31.js verifies Usage, Settings Select and Chinese menus. No UI automation tests.",
+  "verified": [
+    "Organization Tooltip first Escape retains its checkbox focus; second Escape closes the menu and returns its trigger.",
+    "All five organization/sort options exercised and restored to By project/Last updated; Priority and Manual order selected.",
+    "Plain header and Project menus close; nested Composer Parallel menu closes its full chain while retaining slider value 5.",
+    "Ordinary Settings navigation Tooltip closes with its trigger focus preserved.",
+    "Usage first Escape preserves the exact selected Oct28 bucket, current focus and settings page; second Escape closes settings and returns Settings trigger.",
+    "Theme Select closes while Appearance stays open and Theme System receives focus.",
+    "Chinese menu layering and original English restoration verified; outside pointer dismissal works.",
+    "All four databases retain their 103724 original rows exactly; all source rows, five original inputs and copied attachment namespaces verified.",
+    "All four owned native services publicly shut down and physically settled before catalog retirement."
+  ],
+  "limits": [
+    "Not all 95 Tooltip uses or every native desktop window were exercised.",
+    "Custom Menu onEscape cancellation matrix and composing-input cases were reviewed in code, not exhaustively exercised in the UI.",
+    "Settings Select right-side control exceeds the IAB raw capture width; its keyboard return was observed in the native accessibility tree, not claimed as a full control visual screenshot.",
+    "No real Provider call was needed in this UI event ownership batch; request count remains 0, cumulative 767."
+  ],
+  "toolchain": "See toolchain.json for original failed attempts and their successful repairs; those failures are retained separately from final acceptance."
+}

@@ -1,5 +1,18 @@
 # 07-panel-reactivity — Overlay Reactive Projection
 
+Selectable collections consume Escape only when their current, nonempty
+selection can actually be cleared under both collection and manager policy.
+Empty menu collections and required selections leave dismissal to the current
+layer. The canonical Kobalte patch applies this to source and both distributions.
+Menu Escape calls the public cancellation hook first, then owns one recursive
+menu-chain close; a prevented hook preserves the caller's ownership.
+Tooltip Escape uses the shared dismissable layer, preserving trigger focus.
+Usage activity buckets keep their required selection and share that same default
+Tooltip behavior. Settings handles page Escape on window bubbling, after
+document dismissable layers, only for events originating inside its current
+page. An already-consumed event belongs to its popup; an unconsumed page event
+uses the existing settings close transaction and focus restoration.
+
 Chat and Work find-in-conversation reads the same complete project-scoped
 Session snapshot as downloads and shares its identity/structure validator.
 Search matches original message text and structured error reasons, in producer

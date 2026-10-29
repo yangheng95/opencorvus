@@ -50,6 +50,7 @@ import {
 import { OVERLAY_VERSION } from "../utils/version"
 import brandLogoUrl from "../opencorvus-logo-dark.svg"
 import { currentUIScale } from "../utils/layout-tokens"
+import { useHotkey } from "../solid/hotkey"
 import { createAnimationFrameScheduler } from "../utils/animation-frame"
 import { Icon, type IconName } from "./ui/Icon"
 import {
@@ -355,6 +356,17 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
   const activeConfigTitle = createMemo(() => t(CONFIG_TAB_BY_ID.get(activeConfigTab())!.labelKey))
   const closeSettings = closeConfigDialog
   let page: HTMLElement | undefined
+  useHotkey({
+    key: "Escape",
+    target: "window",
+    when: () => dialogStore.config.open,
+    run: (event) => {
+      // Dismissable layers on document own the first Escape inside a popup.
+      if (event.defaultPrevented || !(event.target instanceof Node) || !page?.contains(event.target)) return
+      event.preventDefault()
+      void closeSettings()
+    },
+  })
   let returnFocus: HTMLElement | undefined
   createEffect(
     on(
@@ -566,12 +578,6 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
         id="configDialog"
         class="config-page"
         aria-label={activeConfigTitle()}
-        onKeyDown={(event) => {
-          if (event.key !== "Escape" || event.defaultPrevented) return
-          event.preventDefault()
-          event.stopPropagation()
-          void closeSettings()
-        }}
       >
         <Tabs
           value={activeConfigTab()}

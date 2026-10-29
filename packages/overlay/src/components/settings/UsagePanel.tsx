@@ -5,7 +5,6 @@ import { For, Show, createEffect, createMemo, createSignal, onCleanup } from "so
 import type { OfficialUsageSource, UsagePeriod, UsageStatistics } from "@opencorvus-ai/sdk"
 import type { KeyboardDelegate } from "@kobalte/core"
 import { createListState } from "@kobalte/core"
-import { useTooltipContext } from "@kobalte/core/tooltip"
 
 import { UsageServerVersionError, loadUsageStatistics, userTimeZone } from "../../services/usage"
 import { formatCostUSD, formatDetailedCostUSD, formatTokenCount } from "../../utils/format-usage"
@@ -55,16 +54,11 @@ function bucketLabel(data: UsageStatistics, value: number): string {
 }
 
 function UsageBucketDetails(props: { tokens: number; interval: string }) {
-  const tooltip = useTooltipContext()
   return (
     <Tooltip.Portal>
       <Tooltip.Content
         as={ListboxItemDescription}
         class="usage-activity__detail"
-        onEscapeKeyDown={(event) => {
-          event.preventDefault()
-          tooltip.hideTooltip(true)
-        }}
       >
         <strong>
           {exactNumber(props.tokens)} {t("usage.table_tokens")}

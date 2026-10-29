@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [菜单与提示层的 Escape 归属](records/2026-10/2026-10-29-menu-escape-ownership.md)：空选择抢占、设置页事件阶段根因与真实键盘复核。
+
 - [项目置顶与键盘连续性](records/2026-10/2026-10-29-project-pin-continuity.md)：跨分区呈现owner、匿名项目真实置顶与单列表/渐进目标规则。
 
 - [项目菜单反馈与可见焦点](records/2026-10/2026-10-29-project-action-focus.md)：隐藏触发器根因、项目Promise错误归属、双语真实失败与确认取消。
