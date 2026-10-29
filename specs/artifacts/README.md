@@ -26,7 +26,7 @@
 
 - [2026-10-29-completed-goal-return](2026-10-29-completed-goal-return/README.md)：28张实页原图、Goal草稿/原预算、两次真实保存与全数据/原生结算。
 
-- [H05 OpenCorvus真实试跑](2026-10-29-heavy-workbench-h05-opencorvus/README.md)：三轮原始Task/用量/流式审计与Inspect记录；第三轮按Case血缘预算取消，业务交付未完成。
+- [H05 OpenCorvus真实试跑](2026-10-29-heavy-workbench-h05-opencorvus/README.md)：保留三轮自设限取消；第4轮自然完成、20/20诊断和非盲业务复核、完整复跑证据。
 
 - [2026-10-29-release-0.1.35](2026-10-29-release-0.1.35/README.md)：35官网日志预备原图，明确已公开安装包但联合发布超时的边界。
 

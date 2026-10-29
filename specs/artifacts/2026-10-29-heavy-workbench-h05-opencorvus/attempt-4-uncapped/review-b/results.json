@@ -1,0 +1,836 @@
+{
+  "archive": {
+    "members": 140,
+    "primary_byte_differences": [],
+    "visual_resources": []
+  },
+  "source": {
+    "transmissions": 823,
+    "identities": 720,
+    "per_tenant": {
+      "gamma": 240,
+      "beta": 240,
+      "alpha": 240
+    },
+    "duplicated_identities": 103,
+    "extra_duplicates": 103,
+    "totals": {
+      "gamma": 52680,
+      "beta": 52680,
+      "alpha": 52680
+    },
+    "legacy_first": {
+      "gamma": 15691,
+      "beta": 15755,
+      "alpha": 21234
+    },
+    "first_delta": {
+      "gamma": -36989,
+      "beta": -36925,
+      "alpha": -31446
+    },
+    "legacy_restart": {
+      "gamma": 31382,
+      "beta": 31510,
+      "alpha": 42468
+    },
+    "restart_delta": {
+      "gamma": -21298,
+      "beta": -21170,
+      "alpha": -10212
+    },
+    "received_min": "2026-10-01T00:00:00Z",
+    "received_max": "2026-10-01T03:59:00Z",
+    "adjacent_inversions": 410,
+    "collision_examples": [
+      {
+        "event_id": "E0026",
+        "winner_line": "7",
+        "winner_tenant": "gamma",
+        "suppressed_line": "14",
+        "suppressed_tenant": "alpha",
+        "amount": "126"
+      },
+      {
+        "event_id": "E0028",
+        "winner_line": "3",
+        "winner_tenant": "beta",
+        "suppressed_line": "15",
+        "suppressed_tenant": "alpha",
+        "amount": "128"
+      },
+      {
+        "event_id": "E0194",
+        "winner_line": "18",
+        "winner_tenant": "alpha",
+        "suppressed_line": "28",
+        "suppressed_tenant": "beta",
+        "amount": "294"
+      },
+      {
+        "event_id": "E0026",
+        "winner_line": "7",
+        "winner_tenant": "gamma",
+        "suppressed_line": "30",
+        "suppressed_tenant": "beta",
+        "amount": "126"
+      },
+      {
+        "event_id": "E0193",
+        "winner_line": "11",
+        "winner_tenant": "alpha",
+        "suppressed_line": "42",
+        "suppressed_tenant": "gamma",
+        "amount": "293"
+      }
+    ],
+    "suppressed_transmissions": 538,
+    "suppressed_business_identities": 480
+  },
+  "source_rows_exact": true,
+  "database_checks": [
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\databases\\fixed-v2.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\databases\\restart.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\databases\\reordered.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\databases\\concurrent.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\databases\\monitor-rebuilt.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\databases\\crash-after-ledger.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\databases\\crash-after-total.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\databases\\crash-before-commit.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\databases\\crash-after-commit.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\published\\verification\\databases\\fixed-v2.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\published\\verification\\databases\\restart.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\published\\verification\\databases\\reordered.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\published\\verification\\databases\\concurrent.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\published\\verification\\databases\\monitor-rebuilt.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\published\\verification\\databases\\crash-after-ledger.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\published\\verification\\databases\\crash-after-total.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\published\\verification\\databases\\crash-before-commit.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\published\\verification\\databases\\crash-after-commit.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\databases\\fixed-v2.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\databases\\restart.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\databases\\reordered.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\databases\\concurrent.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\databases\\monitor-rebuilt.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\databases\\crash-after-ledger.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\databases\\crash-after-total.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\databases\\crash-before-commit.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\databases\\crash-after-commit.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\experiments-v2\\after-ledger.sqlite",
+      "identities": 47,
+      "totals": {
+        "gamma": 2471,
+        "beta": 3048,
+        "alpha": 4795
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\experiments-v2\\after-ledger.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\experiments-v2\\after-total.sqlite",
+      "identities": 47,
+      "totals": {
+        "gamma": 2471,
+        "beta": 3048,
+        "alpha": 4795
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\experiments-v2\\after-total.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\experiments-v2\\before-commit.sqlite",
+      "identities": 47,
+      "totals": {
+        "gamma": 2471,
+        "beta": 3048,
+        "alpha": 4795
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\experiments-v2\\before-commit.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\experiments-v2\\after-commit.sqlite",
+      "identities": 48,
+      "totals": {
+        "gamma": 2471,
+        "beta": 3249,
+        "alpha": 4795
+      }
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\experiments-v2\\after-commit.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    }
+  ],
+  "route": [
+    {
+      "write_enabled": true,
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\experiments-v2\\route.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "write_enabled": false,
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\experiments-v2\\route.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    },
+    {
+      "write_enabled": true,
+      "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\experiments-v2\\route.sqlite",
+      "identities": 720,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      }
+    }
+  ],
+  "balanced_identity_alarm": {
+    "pid": 98052,
+    "release": "fixed-v2",
+    "transmissions": 720,
+    "extra_duplicates": 0,
+    "duplicate_rate": 0.0,
+    "duplicate_threshold": 0.1,
+    "reconciliation_threshold": 0,
+    "tenants": [
+      {
+        "tenant": "alpha",
+        "source_total": 52680,
+        "ledger_total": 52680,
+        "stored_total": 52680,
+        "identity_mismatches": 0,
+        "source_ledger_delta": 0,
+        "ledger_totals_delta": 0
+      },
+      {
+        "tenant": "beta",
+        "source_total": 52680,
+        "ledger_total": 52680,
+        "stored_total": 52680,
+        "identity_mismatches": 0,
+        "source_ledger_delta": 0,
+        "ledger_totals_delta": 0
+      },
+      {
+        "tenant": "gamma",
+        "source_total": 52680,
+        "ledger_total": 52680,
+        "stored_total": 52680,
+        "identity_mismatches": 2,
+        "source_ledger_delta": 0,
+        "ledger_totals_delta": 0
+      }
+    ],
+    "alerts": [
+      "ledger_reconciliation_failed"
+    ]
+  },
+  "recovered_monitor": {
+    "pid": 14344,
+    "release": "fixed-v2",
+    "transmissions": 720,
+    "extra_duplicates": 0,
+    "duplicate_rate": 0.0,
+    "duplicate_threshold": 0.1,
+    "reconciliation_threshold": 0,
+    "tenants": [
+      {
+        "tenant": "alpha",
+        "source_total": 52680,
+        "ledger_total": 52680,
+        "stored_total": 52680,
+        "identity_mismatches": 0,
+        "source_ledger_delta": 0,
+        "ledger_totals_delta": 0
+      },
+      {
+        "tenant": "beta",
+        "source_total": 52680,
+        "ledger_total": 52680,
+        "stored_total": 52680,
+        "identity_mismatches": 0,
+        "source_ledger_delta": 0,
+        "ledger_totals_delta": 0
+      },
+      {
+        "tenant": "gamma",
+        "source_total": 52680,
+        "ledger_total": 52680,
+        "stored_total": 52680,
+        "identity_mismatches": 0,
+        "source_ledger_delta": 0,
+        "ledger_totals_delta": 0
+      }
+    ],
+    "alerts": []
+  },
+  "clean_summary": {
+    "started_at": "2026-10-29T01:08:41.887137+00:00",
+    "finished_at": "2026-10-29T01:08:59.971599+00:00",
+    "wall_seconds": 18.08398969983682,
+    "parent_cpu_seconds": 0.6875,
+    "resource_measurement_scope": "parent CPU only; wall includes children; no memory claim",
+    "python": "3.14.2",
+    "sqlite": "3.50.4",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "transmissions": 823,
+    "distinct": 720,
+    "extra_duplicates": 103,
+    "duplicated_identities": 103,
+    "totals": {
+      "alpha": 52680,
+      "beta": 52680,
+      "gamma": 52680
+    },
+    "replay": [
+      [
+        "1",
+        720,
+        158040
+      ],
+      [
+        "2",
+        720,
+        158040
+      ]
+    ],
+    "comparisons": [
+      {
+        "scenario": "full-pass-1",
+        "checked_at": "2026-10-29T01:08:45.231442+00:00",
+        "identities": 720,
+        "mismatches": 0,
+        "expected_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "actual_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "totals_equal": true
+      },
+      {
+        "scenario": "full-pass-2",
+        "checked_at": "2026-10-29T01:08:45.502266+00:00",
+        "identities": 720,
+        "mismatches": 0,
+        "expected_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "actual_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "totals_equal": true
+      },
+      {
+        "scenario": "restart-prefix",
+        "checked_at": "2026-10-29T01:08:46.153235+00:00",
+        "identities": 301,
+        "mismatches": 0,
+        "expected_totals": {
+          "alpha": 22895,
+          "beta": 20845,
+          "gamma": 23203
+        },
+        "actual_totals": {
+          "alpha": 22895,
+          "beta": 20845,
+          "gamma": 23203
+        },
+        "totals_equal": true
+      },
+      {
+        "scenario": "restart",
+        "checked_at": "2026-10-29T01:08:46.895236+00:00",
+        "identities": 720,
+        "mismatches": 0,
+        "expected_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "actual_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "totals_equal": true
+      },
+      {
+        "scenario": "crash-after-ledger-before-resume",
+        "checked_at": "2026-10-29T01:08:47.175652+00:00",
+        "identities": 0,
+        "mismatches": 0,
+        "expected_totals": {},
+        "actual_totals": {},
+        "totals_equal": true
+      },
+      {
+        "scenario": "crash-after-ledger",
+        "checked_at": "2026-10-29T01:08:48.248630+00:00",
+        "identities": 720,
+        "mismatches": 0,
+        "expected_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "actual_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "totals_equal": true
+      },
+      {
+        "scenario": "crash-after-total-before-resume",
+        "checked_at": "2026-10-29T01:08:48.531590+00:00",
+        "identities": 0,
+        "mismatches": 0,
+        "expected_totals": {},
+        "actual_totals": {},
+        "totals_equal": true
+      },
+      {
+        "scenario": "crash-after-total",
+        "checked_at": "2026-10-29T01:08:49.615513+00:00",
+        "identities": 720,
+        "mismatches": 0,
+        "expected_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "actual_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "totals_equal": true
+      },
+      {
+        "scenario": "crash-before-commit-before-resume",
+        "checked_at": "2026-10-29T01:08:49.904881+00:00",
+        "identities": 0,
+        "mismatches": 0,
+        "expected_totals": {},
+        "actual_totals": {},
+        "totals_equal": true
+      },
+      {
+        "scenario": "crash-before-commit",
+        "checked_at": "2026-10-29T01:08:50.982761+00:00",
+        "identities": 720,
+        "mismatches": 0,
+        "expected_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "actual_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "totals_equal": true
+      },
+      {
+        "scenario": "crash-after-commit-before-resume",
+        "checked_at": "2026-10-29T01:08:51.261871+00:00",
+        "identities": 1,
+        "mismatches": 0,
+        "expected_totals": {
+          "gamma": 232
+        },
+        "actual_totals": {
+          "gamma": 232
+        },
+        "totals_equal": true
+      },
+      {
+        "scenario": "crash-after-commit",
+        "checked_at": "2026-10-29T01:08:52.335383+00:00",
+        "identities": 720,
+        "mismatches": 0,
+        "expected_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "actual_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "totals_equal": true
+      },
+      {
+        "scenario": "reordered",
+        "checked_at": "2026-10-29T01:08:53.437737+00:00",
+        "identities": 720,
+        "mismatches": 0,
+        "expected_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "actual_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "totals_equal": true
+      },
+      {
+        "scenario": "concurrent",
+        "checked_at": "2026-10-29T01:08:54.952145+00:00",
+        "identities": 720,
+        "mismatches": 0,
+        "expected_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "actual_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "totals_equal": true
+      },
+      {
+        "scenario": "monitor-rebuilt",
+        "checked_at": "2026-10-29T01:08:58.755132+00:00",
+        "identities": 720,
+        "mismatches": 0,
+        "expected_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "actual_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "totals_equal": true
+      },
+      {
+        "scenario": "cutover",
+        "checked_at": "2026-10-29T01:08:59.162548+00:00",
+        "identities": 720,
+        "mismatches": 0,
+        "expected_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "actual_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "totals_equal": true
+      },
+      {
+        "scenario": "rollback-read-only",
+        "checked_at": "2026-10-29T01:08:59.551388+00:00",
+        "identities": 720,
+        "mismatches": 0,
+        "expected_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "actual_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "totals_equal": true
+      },
+      {
+        "scenario": "resumed",
+        "checked_at": "2026-10-29T01:08:59.934989+00:00",
+        "identities": 720,
+        "mismatches": 0,
+        "expected_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "actual_totals": {
+          "alpha": 52680,
+          "beta": 52680,
+          "gamma": 52680
+        },
+        "totals_equal": true
+      }
+    ],
+    "command_count": 50,
+    "independent_reviews": "pending: coordinator assigns two reviewers",
+    "resource_policy": "record only; no CPU, memory or aggregate output cutoff"
+  },
+  "command_count": 22,
+  "status": "independent-checks-passed"
+}

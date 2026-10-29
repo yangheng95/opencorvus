@@ -1,0 +1,42 @@
+{
+  "checkpoint": "0959146ce2660adf3455c3a26db54b2e1f7ef6fc",
+  "finalCommit": "0666fb641747b8bc9bafc23c46f698393b6ba443",
+  "files": [
+    {
+      "file": "service.py",
+      "checkpointBytes": 8934,
+      "finalBytes": 8934,
+      "exactBytesMatch": true,
+      "sameAfterCRLFNormalization": true
+    },
+    {
+      "file": "reproduce.py",
+      "checkpointBytes": 37451,
+      "finalBytes": 37451,
+      "exactBytesMatch": true,
+      "sameAfterCRLFNormalization": true
+    },
+    {
+      "file": "verify_delivery.py",
+      "checkpointBytes": 10398,
+      "finalBytes": 10398,
+      "exactBytesMatch": true,
+      "sameAfterCRLFNormalization": true
+    },
+    {
+      "file": "incident.md",
+      "checkpointBytes": 7881,
+      "finalBytes": 7962,
+      "exactBytesMatch": false,
+      "sameAfterCRLFNormalization": true
+    },
+    {
+      "file": "runbook.md",
+      "checkpointBytes": 4825,
+      "finalBytes": 4872,
+      "exactBytesMatch": false,
+      "sameAfterCRLFNormalization": true
+    }
+  ],
+  "purpose": "Identify the exact business implementation evaluated; no digest or newline condition substitutes for actual replay and DB verification"
+}

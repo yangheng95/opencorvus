@@ -1,0 +1,57 @@
+{
+  "registration": {
+    "benchmark": "HeavyWorkBench-10/0.1.0-dev",
+    "case": "H05",
+    "model": "openai/gpt-6.1-sol",
+    "runRoot": "D:/opencorvus-benchmark-runs/heavywork-H05-uncapped-20261029-a1f97cf8",
+    "project": "D:/opencorvus-benchmark-runs/heavywork-H05-uncapped-20261029-a1f97cf8/project",
+    "inactivitySeconds": 600,
+    "runtimeSourceCommit": "61aba46fefa5f7993fa2714c6b5cc4800983c384",
+    "mode": "user-corrected-development-no-token-cutoff",
+    "comparable": false,
+    "budget": {
+      "total_model_tokens": null,
+      "cpu_seconds": null,
+      "memory_gib": null,
+      "disk_gib": null,
+      "inactivity_seconds": 600,
+      "expert_hours_estimate": [
+        8,
+        32
+      ],
+      "estimate_status": "uncalibrated",
+      "external_model_calls": 0,
+      "policy": "user-corrected-development-no-resource-cutoff"
+    },
+    "occurrence": "user-corrected-uncapped-4",
+    "tokenBudgetScope": "task-session-lineage",
+    "guardPolicy": "record-only-no-token-cancellation",
+    "registeredAt": "2026-10-29T00:44:39.322220+00:00",
+    "reason": "User never set a token cap; retain three prematurely cancelled runs and continue the same business case with no artificial total resource cutoff",
+    "priorEvidence": "specs/artifacts/2026-10-29-heavy-workbench-h05-opencorvus",
+    "inputOverride": {
+      "scope": "resource-policy paragraph and task.json budget only",
+      "businessContract": "unchanged"
+    }
+  },
+  "pid": 62036,
+  "startedAt": "2026-10-29T00:44:52.540Z",
+  "comparable": false,
+  "projection": {
+    "provider": "openai",
+    "model": "gpt-6.1-sol"
+  },
+  "preflight": {
+    "sessionID": "ses_hxB5AOtRfhIH6QZOSNcq",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "outcome": "owned_server_stop_requested_after_task_settlement",
+  "cleanup": {
+    "runtimeDisposed": true,
+    "credentialsRemoved": true
+  },
+  "endedAt": "2026-10-29T01:21:03.635Z"
+}

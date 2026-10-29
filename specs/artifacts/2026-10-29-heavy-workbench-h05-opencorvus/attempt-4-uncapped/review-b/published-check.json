@@ -1,0 +1,70 @@
+{
+  "checked_at": "2026-10-29T01:09:37.119097+00:00",
+  "delivery": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\published",
+  "checker": "raw CSV grouping and direct read-only SQL; does not import service",
+  "status": "passed",
+  "transmissions": 823,
+  "distinct": 720,
+  "totals": {
+    "alpha": 52680,
+    "beta": 52680,
+    "gamma": 52680
+  },
+  "database_checks": [
+    {
+      "database": "fixed-v2",
+      "identities": 720,
+      "integrity": "ok"
+    },
+    {
+      "database": "restart",
+      "identities": 720,
+      "integrity": "ok"
+    },
+    {
+      "database": "reordered",
+      "identities": 720,
+      "integrity": "ok"
+    },
+    {
+      "database": "concurrent",
+      "identities": 720,
+      "integrity": "ok"
+    },
+    {
+      "database": "monitor-rebuilt",
+      "identities": 720,
+      "integrity": "ok"
+    },
+    {
+      "database": "crash-after-ledger",
+      "identities": 720,
+      "integrity": "ok"
+    },
+    {
+      "database": "crash-after-total",
+      "identities": 720,
+      "integrity": "ok"
+    },
+    {
+      "database": "crash-before-commit",
+      "identities": 720,
+      "integrity": "ok"
+    },
+    {
+      "database": "crash-after-commit",
+      "identities": 720,
+      "integrity": "ok"
+    }
+  ],
+  "comparison_scenarios": 18,
+  "command_receipts": 50,
+  "independent_human_review": "not performed",
+  "invocation": [
+    "C:\\Python314\\python.exe",
+    "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\published\\verify_delivery.py",
+    "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\published",
+    "--record",
+    "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\published-check.json"
+  ]
+}

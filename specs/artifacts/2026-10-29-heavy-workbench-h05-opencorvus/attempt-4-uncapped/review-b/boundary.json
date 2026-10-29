@@ -1,0 +1,43 @@
+{
+  "reviewer": "base-tester / independent review B",
+  "producer_report_anchor": {
+    "session_id": "ses_hyZWT3SbRWI8AyiyIUT2",
+    "message_id": "msg_g0VZOcpIt00OjwLvK7CT"
+  },
+  "delivery": {
+    "artifact_id": "art_hEF4DJlel2lOk5h6v49Q",
+    "catalog_revision": 5,
+    "snapshot_id": "3fb4ef12-3908-552f-a8c7-b9fb1002182d"
+  },
+  "input_snapshot_id": "19a7efca-28cd-5828-a274-226e3e1174d9",
+  "allowed_write_scope": "verification/review-b/",
+  "product_mutations": false,
+  "first_reviewer_conclusions_consulted": false,
+  "offline": true,
+  "external_model_calls": 0,
+  "grader_or_oracle_reads": false,
+  "human_signature_claim": false,
+  "acceptance_scope": "16 substantive obligations in the supplied isolated service; not task terminal decision or scoring",
+  "reviewer_checker_failure": {
+    "operation": "first review_checks.py invocation, extra crash after 47 transmissions",
+    "observed_error": "sqlite3.OperationalError: no such table: ledger",
+    "cause": "reviewer's immutable=1 read incorrectly ignored WAL in an uncheckpointed private crash database",
+    "correction": "private experiments-v2 uses mode=ro WAL-aware reads; primary and frozen publication remain immutable read-only",
+    "preserved_failed_directory": "experiments/",
+    "product_changed": false,
+    "outer_exit_codes": [1, 0],
+    "failure_record_source": "transcription of actual Host-recorded terminal failure in this review Session; not producer evidence"
+  },
+  "actual_verification_commands": [
+    "python -B verification/review-b/review_checks.py",
+    "python -B verification/review-b/review_checks.py",
+    "python -B verification/review-b/audit_receipts.py",
+    "python -B verification/review-b/concurrent_probe.py"
+  ],
+  "limitations": [
+    "No real power loss or disk damage test",
+    "No cross-node release or capacity validation",
+    "Historical business/processing times and actual production authority unknown",
+    "First review and task final acceptance are coordinator-owned"
+  ]
+}

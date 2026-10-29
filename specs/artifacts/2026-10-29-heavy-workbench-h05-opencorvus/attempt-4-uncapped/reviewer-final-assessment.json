@@ -1,0 +1,95 @@
+{
+  "reviewer": "benchmark_review",
+  "assessment": "final_nonblind_development_review_addendum",
+  "observedAt": "2026-10-29T01:25:03.223411+00:00",
+  "case": "H05",
+  "taskID": "tsk_g00VZOYBUC00Kv0WzDFa",
+  "priorReview": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\reviewer-assessment.json",
+  "priorReviewRetainsThenPendingState": true,
+  "reviewedCheckpoint": "0959146ce2660adf3455c3a26db54b2e1f7ef6fc",
+  "finalCandidateCommit": "0666fb641747b8bc9bafc23c46f698393b6ba443",
+  "finalTask": {
+    "lifecycleStatus": "completed",
+    "status": "inactive",
+    "activity": {
+      "total": 1,
+      "running": 0,
+      "inactive": 1
+    },
+    "terminalReason": "completed",
+    "terminalEventID": "pev_g0VZOgoM500usWoMfBzl"
+  },
+  "inspect": {
+    "status": "success",
+    "startedAt": "2026-10-29T00:45:26+00:00",
+    "completedAt": "2026-10-29T01:19:51+00:00",
+    "elapsedSeconds": 2065,
+    "taskCompletedAccuracy": 1.0
+  },
+  "independentUsageAccounting": {
+    "authority": "Reviewer independently traverses durable session.parent_id to engine_task.session_id; no agent-name or time-window filtering",
+    "databaseUsageRows": 195,
+    "taskUsageRows": 193,
+    "taskRecordedTokens": 20901186,
+    "otherSessionTokens": 33190,
+    "unattributedTokens": 0,
+    "instanceRecordedTokens": 20934376,
+    "exactTaskUsageIDSetMatchesFinalExport": true,
+    "usageRowIDSetMatchesDatabase": true,
+    "registeredTokenCap": null
+  },
+  "providerAudit": {
+    "requestAttempts": 195,
+    "allObservedModelIDsAreTarget": true,
+    "allRequestsStreaming": true,
+    "allReadersEOF": true,
+    "externalInvoice": "unknown; recorded usage/catalog cost is not a bill"
+  },
+  "cleanup": {
+    "runtimeDisposed": true,
+    "credentialsRemoved": true
+  },
+  "sourceAndReportIdentity": [
+    {
+      "file": "service.py",
+      "finalBytesMatchIndependentlyReplayedSource": true
+    },
+    {
+      "file": "reproduce.py",
+      "finalBytesMatchIndependentlyReplayedSource": true
+    },
+    {
+      "file": "verify_delivery.py",
+      "finalBytesMatchIndependentlyReplayedSource": true
+    },
+    {
+      "file": "incident.md",
+      "sameContentAsReviewedCheckpointAfterLineEndingNormalization": true
+    },
+    {
+      "file": "runbook.md",
+      "sameContentAsReviewedCheckpointAfterLineEndingNormalization": true
+    }
+  ],
+  "developmentBusinessReview": {
+    "reviewPoints": 80,
+    "reviewMaximum": 80,
+    "objectivePoints": 20,
+    "objectiveMaximum": 20,
+    "total": 100,
+    "sixteenRatingsRemainApplicable": true,
+    "blockingBusinessFindings": [],
+    "businessDeliveryStatus": "passed local nonblind development review and independent clean replay"
+  },
+  "blind": false,
+  "comparable": false,
+  "formalBenchmarkQualified": false,
+  "remainingQualificationLimits": [
+    "Known model/system identity and prior task context: this is nonblind AI development review, not professional human blind grading or grader calibration",
+    "No OS security isolation, production deployment, power-loss/media-corruption or high-load qualification is claimed",
+    "The 10% duplicate threshold is explicitly an exercise policy, not a calibrated real-world SLA",
+    "Rollback is fixed-ledger write pause/read-only mode in a local CLI demonstration, not rollback to defective legacy code or live multi-node deployment",
+    "The default 1m-token comparison condition does not apply to this user-corrected uncapped run; grade CLI was not used and no budget/blind facts were fabricated"
+  ],
+  "finalConclusion": "No substantive business-delivery blocker remains within the frozen H05 functional scope; final code is exactly the independently replayed code. This is not professional human blind scoring, mature-grader calibration, or qualification for a fixed-budget isolated comparison."
+}

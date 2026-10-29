@@ -1,0 +1,37 @@
+{
+  "reviewer": "benchmark_review",
+  "assessment": "independent_nonblind_development_replay",
+  "candidateCommit": "0959146ce2660adf3455c3a26db54b2e1f7ef6fc",
+  "sourceCheckpointMatches": {
+    "service.py": true,
+    "reproduce.py": true,
+    "verify_delivery.py": true
+  },
+  "frozenInputMatches": {
+    "records.csv": true,
+    "legacy_service.py": true,
+    "source-notes.md": true,
+    "context.json": true
+  },
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "-X",
+    "utf8",
+    "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\reviewer-replay\\source\\reproduce.py",
+    "--inputs",
+    "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\reviewer-replay\\raw-inputs",
+    "--output",
+    "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\reviewer-replay\\output"
+  ],
+  "cwd": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\reviewer-replay\\source",
+  "startedAt": "2026-10-29T01:11:15.760865+00:00",
+  "endedAt": "2026-10-29T01:11:35.467543+00:00",
+  "wallSeconds": 19.706169800367206,
+  "exitCode": 0,
+  "stdout": "{\"output\": \"D:\\\\opencorvus-benchmark-runs\\\\heavywork-H05-uncapped-20261029-a1f97cf8\\\\reviewer-replay\\\\output\", \"commands\": 50, \"comparisons\": 18, \"distinct\": 720, \"totals\": {\"alpha\": 52680, \"beta\": 52680, \"gamma\": 52680}, \"status\": \"self-check-passed\"}\n",
+  "stderr": "",
+  "onlyFreshSourcesAndInputsSupplied": true,
+  "comparable": false,
+  "blind": false
+}

@@ -1,0 +1,128 @@
+{
+  "authority": "primary evaluator independently groups frozen raw CSV and queries fresh SQLite directly; does not import candidate code",
+  "observedAt": "2026-10-29T01:09:30.726864+00:00",
+  "transmissions": 823,
+  "identities": 720,
+  "extraTransmissions": 103,
+  "expectedTotals": {
+    "alpha": 52680,
+    "beta": 52680,
+    "gamma": 52680
+  },
+  "databases": [
+    {
+      "scenario": "fixed-v2",
+      "actualDistinct": 720,
+      "perIdentityAmountMatch": true,
+      "actualTotals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      },
+      "path": "verification\\databases\\fixed-v2.sqlite"
+    },
+    {
+      "scenario": "restart",
+      "actualDistinct": 720,
+      "perIdentityAmountMatch": true,
+      "actualTotals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      },
+      "path": "verification\\databases\\restart.sqlite"
+    },
+    {
+      "scenario": "reordered",
+      "actualDistinct": 720,
+      "perIdentityAmountMatch": true,
+      "actualTotals": {
+        "beta": 52680,
+        "gamma": 52680,
+        "alpha": 52680
+      },
+      "path": "verification\\databases\\reordered.sqlite"
+    },
+    {
+      "scenario": "concurrent",
+      "actualDistinct": 720,
+      "perIdentityAmountMatch": true,
+      "actualTotals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      },
+      "path": "verification\\databases\\concurrent.sqlite"
+    },
+    {
+      "scenario": "monitor-rebuilt",
+      "actualDistinct": 720,
+      "perIdentityAmountMatch": true,
+      "actualTotals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      },
+      "path": "verification\\databases\\monitor-rebuilt.sqlite"
+    },
+    {
+      "scenario": "crash-after-ledger",
+      "actualDistinct": 720,
+      "perIdentityAmountMatch": true,
+      "actualTotals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      },
+      "path": "verification\\databases\\crash-after-ledger.sqlite"
+    },
+    {
+      "scenario": "crash-after-total",
+      "actualDistinct": 720,
+      "perIdentityAmountMatch": true,
+      "actualTotals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      },
+      "path": "verification\\databases\\crash-after-total.sqlite"
+    },
+    {
+      "scenario": "crash-before-commit",
+      "actualDistinct": 720,
+      "perIdentityAmountMatch": true,
+      "actualTotals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      },
+      "path": "verification\\databases\\crash-before-commit.sqlite"
+    },
+    {
+      "scenario": "crash-after-commit",
+      "actualDistinct": 720,
+      "perIdentityAmountMatch": true,
+      "actualTotals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      },
+      "path": "verification\\databases\\crash-after-commit.sqlite"
+    }
+  ],
+  "restartPIDs": {
+    "prefix_pid": 89556,
+    "resume_pid": 98964,
+    "prefix_stop": 317,
+    "resume_start": 280
+  },
+  "concurrentPIDs": [
+    25332,
+    68572,
+    4144,
+    82340
+  ],
+  "concurrentAccepted": 720,
+  "concurrentDuplicates": 2572,
+  "status": "passed"
+}

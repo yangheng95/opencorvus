@@ -1,0 +1,42 @@
+{
+  "workers": [
+    {
+      "pid": 98316,
+      "accepted": 175,
+      "attempts": 823,
+      "started_at": "2026-10-29T01:11:29.651003+00:00",
+      "finished_at": "2026-10-29T01:12:04.520618+00:00"
+    },
+    {
+      "pid": 99212,
+      "accepted": 180,
+      "attempts": 823,
+      "started_at": "2026-10-29T01:11:29.909070+00:00",
+      "finished_at": "2026-10-29T01:12:04.534740+00:00"
+    },
+    {
+      "pid": 79104,
+      "accepted": 192,
+      "attempts": 823,
+      "started_at": "2026-10-29T01:11:29.740923+00:00",
+      "finished_at": "2026-10-29T01:12:04.549931+00:00"
+    },
+    {
+      "pid": 87596,
+      "accepted": 173,
+      "attempts": 823,
+      "started_at": "2026-10-29T01:11:29.822560+00:00",
+      "finished_at": "2026-10-29T01:12:04.570014+00:00"
+    }
+  ],
+  "barrier_rounds": 823,
+  "total_attempts": 3292,
+  "new_postings": 720,
+  "identities": 720,
+  "totals": {
+    "gamma": 52680,
+    "beta": 52680,
+    "alpha": 52680
+  },
+  "status": "passed"
+}

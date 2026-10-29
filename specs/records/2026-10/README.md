@@ -24,7 +24,7 @@
 
 - [2026-10-29-completed-goal-return.md](2026-10-29-completed-goal-return.md)：创建草稿独立权威、详情/指南/双入口/中文与首页真实验收。
 
-- [2026-10-29-heavy-workbench-h05-opencorvus.md](2026-10-29-heavy-workbench-h05-opencorvus.md)：H05单题真实开发运行、用量血缘、预算取消与独立证据复核。
+- [2026-10-29-heavy-workbench-h05-opencorvus.md](2026-10-29-heavy-workbench-h05-opencorvus.md)：用户未限额的纠正、无截断真实完成、两次评估侧清洁复跑及开发业务验收。
 
 - [2026-10-29-release-0.1.36.md](2026-10-29-release-0.1.36.md)：官网辅助准备超时根因、稀疏输入合同与36正式交付。
 

@@ -1,0 +1,707 @@
+{
+  "primary_commit": "0959146ce2660adf3455c3a26db54b2e1f7ef6fc",
+  "published_primary": [
+    {
+      "path": "service.py",
+      "published_equals_primary": true
+    },
+    {
+      "path": "reproduce.py",
+      "published_equals_primary": true
+    },
+    {
+      "path": "verify_delivery.py",
+      "published_equals_primary": true
+    },
+    {
+      "path": "incident.md",
+      "published_equals_primary": true
+    },
+    {
+      "path": "runbook.md",
+      "published_equals_primary": true
+    },
+    {
+      "path": "ledger.csv",
+      "published_equals_primary": true
+    },
+    {
+      "path": "duplicates.csv",
+      "published_equals_primary": true
+    },
+    {
+      "path": "totals.csv",
+      "published_equals_primary": true
+    },
+    {
+      "path": "replay.csv",
+      "published_equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun.json",
+      "published_equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/delivery-check.json",
+      "published_equals_primary": true
+    },
+    {
+      "path": "verification/comparisons.json",
+      "published_equals_primary": true
+    },
+    {
+      "path": "verification/cutover.json",
+      "published_equals_primary": true
+    },
+    {
+      "path": "verification/entrypoints.json",
+      "published_equals_primary": true
+    },
+    {
+      "path": "verification/impact.csv",
+      "published_equals_primary": true
+    },
+    {
+      "path": "verification/legacy.json",
+      "published_equals_primary": true
+    },
+    {
+      "path": "verification/monitor.json",
+      "published_equals_primary": true
+    },
+    {
+      "path": "verification/package-manifest.json",
+      "published_equals_primary": true
+    },
+    {
+      "path": "verification/primary-check.json",
+      "published_equals_primary": true
+    },
+    {
+      "path": "verification/storage.json",
+      "published_equals_primary": true
+    },
+    {
+      "path": "verification/summary.json",
+      "published_equals_primary": true
+    },
+    {
+      "path": "verification/timeline.json",
+      "published_equals_primary": true
+    },
+    {
+      "path": "TASK.md",
+      "published_equals_primary": true
+    },
+    {
+      "path": "task.json",
+      "published_equals_primary": true
+    },
+    {
+      "path": "inputs/records.csv",
+      "published_equals_primary": true
+    },
+    {
+      "path": "inputs/context.json",
+      "published_equals_primary": true
+    },
+    {
+      "path": "inputs/legacy_service.py",
+      "published_equals_primary": true
+    },
+    {
+      "path": "inputs/source-notes.md",
+      "published_equals_primary": true
+    },
+    {
+      "path": "diagnostics/ledger.csv",
+      "published_equals_primary": true
+    },
+    {
+      "path": "diagnostics/duplicates.csv",
+      "published_equals_primary": true
+    },
+    {
+      "path": "diagnostics/totals.csv",
+      "published_equals_primary": true
+    },
+    {
+      "path": "diagnostics/replay.csv",
+      "published_equals_primary": true
+    }
+  ],
+  "archive_primary": [
+    {
+      "path": "TASK.md",
+      "equals_primary": true
+    },
+    {
+      "path": "diagnostics/duplicates.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "diagnostics/ledger.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "diagnostics/replay.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "diagnostics/totals.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "duplicates.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "incident.md",
+      "equals_primary": true
+    },
+    {
+      "path": "inputs/context.json",
+      "equals_primary": true
+    },
+    {
+      "path": "inputs/legacy_service.py",
+      "equals_primary": true
+    },
+    {
+      "path": "inputs/records.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "inputs/source-notes.md",
+      "equals_primary": true
+    },
+    {
+      "path": "ledger.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "replay.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "reproduce.py",
+      "equals_primary": true
+    },
+    {
+      "path": "runbook.md",
+      "equals_primary": true
+    },
+    {
+      "path": "service.py",
+      "equals_primary": true
+    },
+    {
+      "path": "task.json",
+      "equals_primary": true
+    },
+    {
+      "path": "totals.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/collisions.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/commands.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/comparisons.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/comparisons/concurrent.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/comparisons/crash-after-commit-before-resume.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/comparisons/crash-after-commit.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/comparisons/crash-after-ledger-before-resume.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/comparisons/crash-after-ledger.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/comparisons/crash-after-total-before-resume.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/comparisons/crash-after-total.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/comparisons/crash-before-commit-before-resume.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/comparisons/crash-before-commit.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/comparisons/cutover.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/comparisons/full-pass-1.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/comparisons/full-pass-2.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/comparisons/monitor-rebuilt.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/comparisons/reordered.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/comparisons/restart-prefix.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/comparisons/restart.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/comparisons/resumed.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/comparisons/rollback-read-only.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/concurrent.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/concurrent.start",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/contract.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/cutover.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/databases/concurrent.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/databases/contract.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/databases/crash-after-commit.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/databases/crash-after-ledger.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/databases/crash-after-total.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/databases/crash-before-commit.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/databases/fixed-v2.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/databases/legacy-first.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/databases/legacy-v1.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/databases/monitor-balanced-fault.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/databases/monitor-fault.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/databases/monitor-rebuilt.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/databases/reordered.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/databases/restart.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/databases/threshold.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/delivery-check.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/duplicates.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/entrypoints.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/historical-rebuild.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/impact.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/incident.md",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/ledger.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/legacy.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/monitor.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/paused-probe.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/reordered.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/replay.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/restart.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/route.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/runbook.md",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/source_rows.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/storage.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/summary.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/threshold.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/timeline.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/totals.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/clean-rerun/unique.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/collisions.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/commands.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/comparisons.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/comparisons/concurrent.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/comparisons/crash-after-commit-before-resume.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/comparisons/crash-after-commit.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/comparisons/crash-after-ledger-before-resume.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/comparisons/crash-after-ledger.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/comparisons/crash-after-total-before-resume.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/comparisons/crash-after-total.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/comparisons/crash-before-commit-before-resume.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/comparisons/crash-before-commit.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/comparisons/cutover.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/comparisons/full-pass-1.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/comparisons/full-pass-2.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/comparisons/monitor-rebuilt.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/comparisons/reordered.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/comparisons/restart-prefix.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/comparisons/restart.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/comparisons/resumed.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/comparisons/rollback-read-only.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/concurrent.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/concurrent.start",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/contract.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/cutover.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/databases/concurrent.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/databases/contract.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/databases/crash-after-commit.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/databases/crash-after-ledger.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/databases/crash-after-total.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/databases/crash-before-commit.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/databases/fixed-v2.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/databases/legacy-first.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/databases/legacy-v1.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/databases/monitor-balanced-fault.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/databases/monitor-fault.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/databases/monitor-rebuilt.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/databases/reordered.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/databases/restart.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/databases/threshold.sqlite",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/delivery-check.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/entrypoints.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/historical-rebuild.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/impact.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/legacy.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/monitor.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/package-manifest.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/paused-probe.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/primary-check.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/reordered.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/restart.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/route.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/source_rows.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/storage.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/summary.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/threshold.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/timeline.json",
+      "equals_primary": true
+    },
+    {
+      "path": "verification/unique.csv",
+      "equals_primary": true
+    },
+    {
+      "path": "verify_delivery.py",
+      "equals_primary": true
+    }
+  ],
+  "archive_files": 140,
+  "records": 823,
+  "identities": 720,
+  "duplicate_identities": 103,
+  "extra_duplicates": 103,
+  "totals": {
+    "gamma": 52680,
+    "beta": 52680,
+    "alpha": 52680
+  },
+  "shared_ids": 240,
+  "media_requiring_view": []
+}

@@ -19,8 +19,9 @@ assert.match(registration.model, /^openai\/.+$/)
 assert.equal(registration.inactivitySeconds, 600)
 assert.equal(registration.tokenBudgetScope, "task-session-lineage")
 assert(
-  Number.isSafeInteger(registration.budget?.total_model_tokens) && registration.budget.total_model_tokens > 0,
-  "an explicit positive total token budget is required",
+  registration.budget?.total_model_tokens === null ||
+    (Number.isSafeInteger(registration.budget?.total_model_tokens) && registration.budget.total_model_tokens > 0),
+  "total_model_tokens must explicitly be null (no cutoff) or a positive integer",
 )
 const root = path.resolve(registration.runRoot)
 const project = path.resolve(registration.project)
@@ -154,7 +155,7 @@ try {
     })
     Database.close()
   }
-  server = await Server.listen({ hostname: "127.0.0.1", port: 0, mdns: false, cors: [] })
+  server = await Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true, mdns: false, cors: [] })
   process.env.OPENCORVUS_SERVER_URL = server.url.toString()
   const { audit } = requireProcessProviderAudit()
   audit.localOrigins.add(server.url.origin)
@@ -180,7 +181,7 @@ try {
   )
   let budgetCancelled = false
   while (!(await fs.stat(path.join(root, "stop")).catch(() => null))) {
-    if (!budgetCancelled) {
+    if (registration.budget.total_model_tokens !== null && !budgetCancelled) {
       const usage = Database.use((db: any) => db.select().from(ProviderUsageEventTable).all())
       const accounting = measureCaseUsage(usage)
       const tokens = accounting.taskRecordedTokens

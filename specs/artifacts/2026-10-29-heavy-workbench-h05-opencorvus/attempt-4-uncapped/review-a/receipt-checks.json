@@ -1,0 +1,237 @@
+{
+  "comparisons": [
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\copy",
+      "scenario": "full-pass-1",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\copy",
+      "scenario": "full-pass-2",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\copy",
+      "scenario": "restart-prefix",
+      "keys": 301,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\copy",
+      "scenario": "restart",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\copy",
+      "scenario": "crash-after-ledger-before-resume",
+      "keys": 0,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\copy",
+      "scenario": "crash-after-ledger",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\copy",
+      "scenario": "crash-after-total-before-resume",
+      "keys": 0,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\copy",
+      "scenario": "crash-after-total",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\copy",
+      "scenario": "crash-before-commit-before-resume",
+      "keys": 0,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\copy",
+      "scenario": "crash-before-commit",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\copy",
+      "scenario": "crash-after-commit-before-resume",
+      "keys": 1,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\copy",
+      "scenario": "crash-after-commit",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\copy",
+      "scenario": "reordered",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\copy",
+      "scenario": "concurrent",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\copy",
+      "scenario": "monitor-rebuilt",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\copy",
+      "scenario": "cutover",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\copy",
+      "scenario": "rollback-read-only",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\copy",
+      "scenario": "resumed",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\fresh",
+      "scenario": "full-pass-1",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\fresh",
+      "scenario": "full-pass-2",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\fresh",
+      "scenario": "restart-prefix",
+      "keys": 301,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\fresh",
+      "scenario": "restart",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\fresh",
+      "scenario": "crash-after-ledger-before-resume",
+      "keys": 0,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\fresh",
+      "scenario": "crash-after-ledger",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\fresh",
+      "scenario": "crash-after-total-before-resume",
+      "keys": 0,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\fresh",
+      "scenario": "crash-after-total",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\fresh",
+      "scenario": "crash-before-commit-before-resume",
+      "keys": 0,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\fresh",
+      "scenario": "crash-before-commit",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\fresh",
+      "scenario": "crash-after-commit-before-resume",
+      "keys": 1,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\fresh",
+      "scenario": "crash-after-commit",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\fresh",
+      "scenario": "reordered",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\fresh",
+      "scenario": "concurrent",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\fresh",
+      "scenario": "monitor-rebuilt",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\fresh",
+      "scenario": "cutover",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\fresh",
+      "scenario": "rollback-read-only",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\fresh",
+      "scenario": "resumed",
+      "keys": 720,
+      "actual_matches_raw_source": true
+    }
+  ],
+  "clean_rerun_invocation": {
+    "command": "python reproduce.py --inputs \"../../../inputs\" --output \"../fresh\"",
+    "cwd": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-a\\copy",
+    "output_existed_before": false,
+    "exit_code": 0,
+    "stdout": {
+      "commands": 50,
+      "comparisons": 18,
+      "distinct": 720,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      }
+    },
+    "proof_scope": "Tool execution and full source audit: reproduction creates output with exist_ok=False; copies raw inputs, executes original legacy first; result reads only newly generated files; no grader/oracle, old output dependency or network code."
+  }
+}

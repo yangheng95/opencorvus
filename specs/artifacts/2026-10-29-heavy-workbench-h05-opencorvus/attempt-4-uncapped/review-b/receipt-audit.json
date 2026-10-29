@@ -1,0 +1,728 @@
+[
+  {
+    "surface": "published",
+    "exit_codes": {
+      "0": 40,
+      "2": 4,
+      "3": 2,
+      "86": 4
+    },
+    "scenarios": [
+      {
+        "name": "full-pass-1",
+        "identities": 720
+      },
+      {
+        "name": "full-pass-2",
+        "identities": 720
+      },
+      {
+        "name": "restart-prefix",
+        "identities": 301
+      },
+      {
+        "name": "restart",
+        "identities": 720
+      },
+      {
+        "name": "crash-after-ledger-before-resume",
+        "identities": 0
+      },
+      {
+        "name": "crash-after-ledger",
+        "identities": 720
+      },
+      {
+        "name": "crash-after-total-before-resume",
+        "identities": 0
+      },
+      {
+        "name": "crash-after-total",
+        "identities": 720
+      },
+      {
+        "name": "crash-before-commit-before-resume",
+        "identities": 0
+      },
+      {
+        "name": "crash-before-commit",
+        "identities": 720
+      },
+      {
+        "name": "crash-after-commit-before-resume",
+        "identities": 1
+      },
+      {
+        "name": "crash-after-commit",
+        "identities": 720
+      },
+      {
+        "name": "reordered",
+        "identities": 720
+      },
+      {
+        "name": "concurrent",
+        "identities": 720
+      },
+      {
+        "name": "monitor-rebuilt",
+        "identities": 720
+      },
+      {
+        "name": "cutover",
+        "identities": 720
+      },
+      {
+        "name": "rollback-read-only",
+        "identities": 720
+      },
+      {
+        "name": "resumed",
+        "identities": 720
+      }
+    ],
+    "legacy": {
+      "same_process": {
+        "pid": 55648,
+        "first": {
+          "alpha": 21234,
+          "beta": 15755,
+          "gamma": 15691
+        },
+        "second": {
+          "alpha": 21234,
+          "beta": 15755,
+          "gamma": 15691
+        }
+      },
+      "new_process": {
+        "pid": 76180,
+        "first": {
+          "alpha": 42468,
+          "beta": 31510,
+          "gamma": 31382
+        },
+        "second": null
+      }
+    },
+    "concurrent_pids": [
+      78312,
+      81260,
+      93884,
+      100044
+    ],
+    "concurrent_accepted": [
+      720,
+      0,
+      0,
+      0
+    ],
+    "selected_receipts": [
+      {
+        "index": 0,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\reproduce.py",
+          "--legacy-worker",
+          "same-process",
+          "--inputs",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\inputs",
+          "--legacy-database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\databases\\legacy-v1.sqlite"
+        ],
+        "exit_code": 0,
+        "pid": 55648
+      },
+      {
+        "index": 1,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\reproduce.py",
+          "--legacy-worker",
+          "restart",
+          "--inputs",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\inputs",
+          "--legacy-database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\databases\\legacy-v1.sqlite"
+        ],
+        "exit_code": 0,
+        "pid": 76180
+      },
+      {
+        "index": 10,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\service.py",
+          "ingest",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\databases\\crash-after-ledger.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\inputs\\records.csv",
+          "--crash-at",
+          "after-ledger"
+        ],
+        "exit_code": 86,
+        "pid": null
+      },
+      {
+        "index": 14,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\service.py",
+          "ingest",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\databases\\crash-after-total.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\inputs\\records.csv",
+          "--crash-at",
+          "after-total"
+        ],
+        "exit_code": 86,
+        "pid": null
+      },
+      {
+        "index": 18,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\service.py",
+          "ingest",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\databases\\crash-before-commit.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\inputs\\records.csv",
+          "--crash-at",
+          "before-commit"
+        ],
+        "exit_code": 86,
+        "pid": null
+      },
+      {
+        "index": 22,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\service.py",
+          "ingest",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\databases\\crash-after-commit.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\inputs\\records.csv",
+          "--crash-at",
+          "after-commit"
+        ],
+        "exit_code": 86,
+        "pid": null
+      },
+      {
+        "index": 28,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\service.py",
+          "ingest",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\databases\\concurrent.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\inputs\\records.csv",
+          "--start-gate",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\concurrent.start"
+        ],
+        "exit_code": 0,
+        "pid": 78312
+      },
+      {
+        "index": 29,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\service.py",
+          "ingest",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\databases\\concurrent.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\inputs\\records.csv",
+          "--start-gate",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\concurrent.start"
+        ],
+        "exit_code": 0,
+        "pid": 81260
+      },
+      {
+        "index": 30,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\service.py",
+          "ingest",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\databases\\concurrent.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\inputs\\records.csv",
+          "--start-gate",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\concurrent.start"
+        ],
+        "exit_code": 0,
+        "pid": 93884
+      },
+      {
+        "index": 31,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\service.py",
+          "ingest",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\databases\\concurrent.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\inputs\\records.csv",
+          "--start-gate",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\concurrent.start"
+        ],
+        "exit_code": 0,
+        "pid": 100044
+      },
+      {
+        "index": 33,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\service.py",
+          "monitor",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\databases\\fixed-v2.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\inputs\\records.csv"
+        ],
+        "exit_code": 2,
+        "pid": 72708
+      },
+      {
+        "index": 36,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\service.py",
+          "monitor",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\databases\\monitor-fault.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\unique.csv"
+        ],
+        "exit_code": 2,
+        "pid": 91204
+      },
+      {
+        "index": 37,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\service.py",
+          "monitor",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\databases\\monitor-fault.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\unique.csv"
+        ],
+        "exit_code": 2,
+        "pid": 99740
+      },
+      {
+        "index": 39,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\service.py",
+          "monitor",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\databases\\monitor-balanced-fault.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\unique.csv"
+        ],
+        "exit_code": 2,
+        "pid": 93104
+      },
+      {
+        "index": 45,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\service.py",
+          "ingest",
+          "--route",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\route.json",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\inputs\\records.csv"
+        ],
+        "exit_code": 3,
+        "pid": 91376
+      },
+      {
+        "index": 46,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\service.py",
+          "ingest",
+          "--route",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\route.json",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\runs\\portable\\verification\\paused-probe.csv"
+        ],
+        "exit_code": 3,
+        "pid": 78216
+      }
+    ]
+  },
+  {
+    "surface": "clean",
+    "exit_codes": {
+      "0": 40,
+      "2": 4,
+      "3": 2,
+      "86": 4
+    },
+    "scenarios": [
+      {
+        "name": "full-pass-1",
+        "identities": 720
+      },
+      {
+        "name": "full-pass-2",
+        "identities": 720
+      },
+      {
+        "name": "restart-prefix",
+        "identities": 301
+      },
+      {
+        "name": "restart",
+        "identities": 720
+      },
+      {
+        "name": "crash-after-ledger-before-resume",
+        "identities": 0
+      },
+      {
+        "name": "crash-after-ledger",
+        "identities": 720
+      },
+      {
+        "name": "crash-after-total-before-resume",
+        "identities": 0
+      },
+      {
+        "name": "crash-after-total",
+        "identities": 720
+      },
+      {
+        "name": "crash-before-commit-before-resume",
+        "identities": 0
+      },
+      {
+        "name": "crash-before-commit",
+        "identities": 720
+      },
+      {
+        "name": "crash-after-commit-before-resume",
+        "identities": 1
+      },
+      {
+        "name": "crash-after-commit",
+        "identities": 720
+      },
+      {
+        "name": "reordered",
+        "identities": 720
+      },
+      {
+        "name": "concurrent",
+        "identities": 720
+      },
+      {
+        "name": "monitor-rebuilt",
+        "identities": 720
+      },
+      {
+        "name": "cutover",
+        "identities": 720
+      },
+      {
+        "name": "rollback-read-only",
+        "identities": 720
+      },
+      {
+        "name": "resumed",
+        "identities": 720
+      }
+    ],
+    "legacy": {
+      "same_process": {
+        "pid": 77980,
+        "first": {
+          "alpha": 21234,
+          "beta": 15755,
+          "gamma": 15691
+        },
+        "second": {
+          "alpha": 21234,
+          "beta": 15755,
+          "gamma": 15691
+        }
+      },
+      "new_process": {
+        "pid": 76316,
+        "first": {
+          "alpha": 42468,
+          "beta": 31510,
+          "gamma": 31382
+        },
+        "second": null
+      }
+    },
+    "concurrent_pids": [
+      71568,
+      81968,
+      25416,
+      49784
+    ],
+    "concurrent_accepted": [
+      720,
+      0,
+      0,
+      0
+    ],
+    "selected_receipts": [
+      {
+        "index": 0,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\reproduce.py",
+          "--legacy-worker",
+          "same-process",
+          "--inputs",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\inputs",
+          "--legacy-database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\databases\\legacy-v1.sqlite"
+        ],
+        "exit_code": 0,
+        "pid": 77980
+      },
+      {
+        "index": 1,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\reproduce.py",
+          "--legacy-worker",
+          "restart",
+          "--inputs",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\inputs",
+          "--legacy-database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\databases\\legacy-v1.sqlite"
+        ],
+        "exit_code": 0,
+        "pid": 76316
+      },
+      {
+        "index": 10,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\service.py",
+          "ingest",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\databases\\crash-after-ledger.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\inputs\\records.csv",
+          "--crash-at",
+          "after-ledger"
+        ],
+        "exit_code": 86,
+        "pid": null
+      },
+      {
+        "index": 14,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\service.py",
+          "ingest",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\databases\\crash-after-total.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\inputs\\records.csv",
+          "--crash-at",
+          "after-total"
+        ],
+        "exit_code": 86,
+        "pid": null
+      },
+      {
+        "index": 18,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\service.py",
+          "ingest",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\databases\\crash-before-commit.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\inputs\\records.csv",
+          "--crash-at",
+          "before-commit"
+        ],
+        "exit_code": 86,
+        "pid": null
+      },
+      {
+        "index": 22,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\service.py",
+          "ingest",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\databases\\crash-after-commit.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\inputs\\records.csv",
+          "--crash-at",
+          "after-commit"
+        ],
+        "exit_code": 86,
+        "pid": null
+      },
+      {
+        "index": 28,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\service.py",
+          "ingest",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\databases\\concurrent.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\inputs\\records.csv",
+          "--start-gate",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\concurrent.start"
+        ],
+        "exit_code": 0,
+        "pid": 71568
+      },
+      {
+        "index": 29,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\service.py",
+          "ingest",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\databases\\concurrent.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\inputs\\records.csv",
+          "--start-gate",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\concurrent.start"
+        ],
+        "exit_code": 0,
+        "pid": 81968
+      },
+      {
+        "index": 30,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\service.py",
+          "ingest",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\databases\\concurrent.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\inputs\\records.csv",
+          "--start-gate",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\concurrent.start"
+        ],
+        "exit_code": 0,
+        "pid": 25416
+      },
+      {
+        "index": 31,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\service.py",
+          "ingest",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\databases\\concurrent.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\inputs\\records.csv",
+          "--start-gate",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\concurrent.start"
+        ],
+        "exit_code": 0,
+        "pid": 49784
+      },
+      {
+        "index": 33,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\service.py",
+          "monitor",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\databases\\fixed-v2.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\inputs\\records.csv"
+        ],
+        "exit_code": 2,
+        "pid": 94668
+      },
+      {
+        "index": 36,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\service.py",
+          "monitor",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\databases\\monitor-fault.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\unique.csv"
+        ],
+        "exit_code": 2,
+        "pid": 82432
+      },
+      {
+        "index": 37,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\service.py",
+          "monitor",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\databases\\monitor-fault.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\unique.csv"
+        ],
+        "exit_code": 2,
+        "pid": 66224
+      },
+      {
+        "index": 39,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\service.py",
+          "monitor",
+          "--database",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\databases\\monitor-balanced-fault.sqlite",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\unique.csv"
+        ],
+        "exit_code": 2,
+        "pid": 88768
+      },
+      {
+        "index": 45,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\service.py",
+          "ingest",
+          "--route",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\route.json",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\inputs\\records.csv"
+        ],
+        "exit_code": 3,
+        "pid": 95040
+      },
+      {
+        "index": 46,
+        "command": [
+          "C:\\Python314\\python.exe",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\service.py",
+          "ingest",
+          "--route",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\route.json",
+          "--events",
+          "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\project\\verification\\review-b\\clean\\verification\\paused-probe.csv"
+        ],
+        "exit_code": 3,
+        "pid": 87144
+      }
+    ]
+  }
+]

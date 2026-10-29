@@ -1,0 +1,249 @@
+{
+  "reviewer": "benchmark_review",
+  "assessment": "independent_raw_data_and_sql_inspection",
+  "candidateCommit": "0959146ce2660adf3455c3a26db54b2e1f7ef6fc",
+  "observedAt": "2026-10-29T01:13:47.270153+00:00",
+  "transmissions": 823,
+  "identities": 720,
+  "extraTransmissions": 103,
+  "totals": {
+    "alpha": 52680,
+    "beta": 52680,
+    "gamma": 52680
+  },
+  "databases": [
+    {
+      "scenario": "fixed-v2",
+      "identities": 720,
+      "perIdentityAmountMatch": true,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      },
+      "integrity": "ok",
+      "primaryKey": [
+        "tenant",
+        "event_id"
+      ]
+    },
+    {
+      "scenario": "restart",
+      "identities": 720,
+      "perIdentityAmountMatch": true,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      },
+      "integrity": "ok",
+      "primaryKey": [
+        "tenant",
+        "event_id"
+      ]
+    },
+    {
+      "scenario": "reordered",
+      "identities": 720,
+      "perIdentityAmountMatch": true,
+      "totals": {
+        "beta": 52680,
+        "gamma": 52680,
+        "alpha": 52680
+      },
+      "integrity": "ok",
+      "primaryKey": [
+        "tenant",
+        "event_id"
+      ]
+    },
+    {
+      "scenario": "concurrent",
+      "identities": 720,
+      "perIdentityAmountMatch": true,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      },
+      "integrity": "ok",
+      "primaryKey": [
+        "tenant",
+        "event_id"
+      ]
+    },
+    {
+      "scenario": "monitor-rebuilt",
+      "identities": 720,
+      "perIdentityAmountMatch": true,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      },
+      "integrity": "ok",
+      "primaryKey": [
+        "tenant",
+        "event_id"
+      ]
+    },
+    {
+      "scenario": "crash-after-ledger",
+      "identities": 720,
+      "perIdentityAmountMatch": true,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      },
+      "integrity": "ok",
+      "primaryKey": [
+        "tenant",
+        "event_id"
+      ]
+    },
+    {
+      "scenario": "crash-after-total",
+      "identities": 720,
+      "perIdentityAmountMatch": true,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      },
+      "integrity": "ok",
+      "primaryKey": [
+        "tenant",
+        "event_id"
+      ]
+    },
+    {
+      "scenario": "crash-before-commit",
+      "identities": 720,
+      "perIdentityAmountMatch": true,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      },
+      "integrity": "ok",
+      "primaryKey": [
+        "tenant",
+        "event_id"
+      ]
+    },
+    {
+      "scenario": "crash-after-commit",
+      "identities": 720,
+      "perIdentityAmountMatch": true,
+      "totals": {
+        "gamma": 52680,
+        "beta": 52680,
+        "alpha": 52680
+      },
+      "integrity": "ok",
+      "primaryKey": [
+        "tenant",
+        "event_id"
+      ]
+    }
+  ],
+  "commandExitCounts": {
+    "0": 40,
+    "86": 4,
+    "2": 4,
+    "3": 2
+  },
+  "actualConcurrentPIDs": [
+    97208,
+    72568,
+    87252,
+    38700
+  ],
+  "concurrentAccepted": 720,
+  "concurrentDuplicateDeliveries": 2572,
+  "restart": {
+    "prefix_pid": 86688,
+    "resume_pid": 100332,
+    "prefix_stop": 317,
+    "resume_start": 280
+  },
+  "legacy": {
+    "same_process": {
+      "pid": 69396,
+      "first": {
+        "alpha": 21234,
+        "beta": 15755,
+        "gamma": 15691
+      },
+      "second": {
+        "alpha": 21234,
+        "beta": 15755,
+        "gamma": 15691
+      }
+    },
+    "new_process": {
+      "pid": 77344,
+      "first": {
+        "alpha": 42468,
+        "beta": 31510,
+        "gamma": 31382
+      },
+      "second": null
+    }
+  },
+  "monitoredAlerts": {
+    "raw_window": [
+      "duplicate_rate_high"
+    ],
+    "unique_window": [],
+    "totals_fault": [
+      "ledger_reconciliation_failed"
+    ],
+    "missing_identity": [
+      "ledger_reconciliation_failed"
+    ],
+    "balanced_wrong_identity": [
+      "ledger_reconciliation_failed"
+    ]
+  },
+  "thresholdCases": {
+    "at_threshold": {
+      "rate": 0.1,
+      "alerts": []
+    },
+    "above_threshold": {
+      "rate": 0.18181818181818182,
+      "alerts": [
+        "duplicate_rate_high"
+      ]
+    }
+  },
+  "cutoverTransitions": [
+    {
+      "at": "2026-10-29T01:11:34.185188+00:00",
+      "release": "fixed-v2-cutover",
+      "write_enabled": true,
+      "database": "databases/fixed-v2.sqlite"
+    },
+    {
+      "at": "2026-10-29T01:11:34.440568+00:00",
+      "release": "fixed-v2-rollback-read-only",
+      "write_enabled": false,
+      "database": "databases/fixed-v2.sqlite"
+    },
+    {
+      "at": "2026-10-29T01:11:34.897232+00:00",
+      "release": "fixed-v2-resumed",
+      "write_enabled": true,
+      "database": "databases/fixed-v2.sqlite"
+    }
+  ],
+  "blind": false,
+  "comparable": false,
+  "limits": [
+    "Local clean Python processes and fresh filesystem data are verified; OS security isolation is not qualified",
+    "Candidate checker was supplementary; raw grouping and direct SQL were independently implemented by this reviewer",
+    "No human reviewer or professional calibration is claimed"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "authority": "primary evaluator actual subprocess execution from immutable candidate Git checkpoint",
+  "candidateCommit": "0959146ce2660adf3455c3a26db54b2e1f7ef6fc",
+  "sourceFiles": [
+    "service.py",
+    "reproduce.py",
+    "verify_delivery.py"
+  ],
+  "inputSource": "frozen H05 four public inputs; candidate prior outputs/SQLite not supplied",
+  "cwd": "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\evaluator\\source",
+  "command": [
+    "python",
+    "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\evaluator\\source\\reproduce.py",
+    "--inputs",
+    "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\evaluator\\raw-inputs",
+    "--output",
+    "D:\\opencorvus-benchmark-runs\\heavywork-H05-uncapped-20261029-a1f97cf8\\evaluator\\output"
+  ],
+  "startedAt": "2026-10-29T01:08:07.794003+00:00",
+  "endedAt": "2026-10-29T01:08:29.443861+00:00",
+  "wallSeconds": 21.64929090021178,
+  "returncode": 0,
+  "stdout": "{\"output\": \"D:\\\\opencorvus-benchmark-runs\\\\heavywork-H05-uncapped-20261029-a1f97cf8\\\\evaluator\\\\output\", \"commands\": 50, \"comparisons\": 18, \"distinct\": 720, \"totals\": {\"alpha\": 52680, \"beta\": 52680, \"gamma\": 52680}, \"status\": \"self-check-passed\"}\n",
+  "stderr": "",
+  "comparable": false
+}
