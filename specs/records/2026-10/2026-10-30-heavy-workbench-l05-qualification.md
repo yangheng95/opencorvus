@@ -70,3 +70,26 @@ L06 Task在20:40:39仍active。最近60真实模型HTTP请求全部streaming、g
 epoch只在本地事务阻止旧generation新登记，不能撤回已飞行HTTP。合作旧程序所有wire动作必须先以唯一载荷持久登记，暂停线性化取得有限完整key集合；通过查询/同键POST让每项达到确定原receipt，再按固定accepted前缀与旧真实effects前向补偿。包括晚到旧请求及ACK未知；缺键/身份不确定明确保留中止，不猜新key。原parent须同租户正post、累计旧reversal合法且可拓扑执行，故障最终解除。新旧接受与修复前缀分开，已接受重试可查询原结果，不能由stale推断从未接受。
 
 后续先做真实旧程序生成的完整小现场、source-only可达参考及独立逐业务/调整来源checker；两种正确即时/延迟posting图均须通过，冲突先到先得/失ACK换key/回备份漏accepted作为三个真实错误控制。不能匹配参考ID/路径/中间动作数。再补完整职业交付与原子rubric/审查冻结，当前尚未实施。其间L06真实试跑暴露共享运行时问题，已按全入口审计并修复，[独立资格](2026-10-30-heavy-workbench-tool-liveness.md)不改变本mini或完整题完成度。
+
+
+## 完整现场第一闭环：修改前Recall与实施计划
+
+本轮已先查Git并重读长程/L06/L04/横向/工具活动Recall、L05完整计划审查及当前effects/worker/checker。原L06仍有效冷求解，不重启/取消；不并发新昂贵任务。已有mini只按不可修订effect身份正确投递，不能表达accepted传输与可修订业务的区别；完整现场审查指出最高版冲突、负调整资金域和旧HTTP切换三个构造条件，已选定闭合语义，尚未真实实现。搜索L05全部Python/文档，仅mini service/worker/checker与历史证据，没有当前revision/opening/adjustment/epoch业务实现。原H05历史旧稿不复活；本轮只新增benchmark私有整链资格与明确draft合同，不改生产Task/Mission/Session/UI/凭据/数据库协议或冻结L06。
+
+唯一当前接收方仍为public/l05_effects.py，真实HTTP请求复用现有l05_worker.request，不复制另一个网络协议。新author scene程序为资格参考/可运行旧现场制造器，旧错误入口显式只用于生成不可变原现场，不是生产fallback。旧账schema从一开始保存完整accepted journal、opening/approved adjustments/notes、不可变posting载荷/来源和稳定receipt身份；原错误projection/全局business去重是调查对象，不能覆盖accepted事实。新参考在原库上暂停旧generation、结清全部旧intent原键receipt、按独立定义的最高版折叠逐来源补偿，然后恢复高generation；先只认证顺序无进程故障闭环，后续受控HTTP在途/epoch并发/真实中断另取证，不能拿本轮顺序执行认证全部并发。
+
+第一原始实例明示合成：A/B复用业务X；A/X有最高版冲突，B/Y撤销，A/Z已接受而未投递；A负调整/B正调整与注释保留；两个opening真实post。旧程序实际投递A/X首次commit丢ACK，原receipt/请求事实由服务SQLite保留；不预灌假effect。后续解除冲突、迟到低版、新撤销、新调整和新注释走正确接口。参考接受两种合法posting资金分配/中间更新策略，checker独立用SQL分组重建业务目标、逐来源归属/实际receipt/冲正parent余量/原事实保留，不要求参考ID、posting数量或精确轨迹。先用确定小实例手算、真实HTTP与source-only冷执行证明基本可达，再加入三错误控制及单层独立审查；无小时/全L05/候选分声明。
+
+
+### 首轮顺序闭环及独立真实反例（修复前）
+
+主方先真实生成原库0.9367秒；同一原现场两正确源码冷执行1.3642/3.2783秒，14/19 postings、最终A1130/B510；三个真实错误控制及独立checker CLI分别得到最高版冲突错误、换键产生未登记远端effect、恢复备份丢accepted/绑定/来源（后者总额仍正确）。11实际CLI预期exit均对，所有自有服务自然stop。原远端A1100/B570，1015/710是修复目标，不能混同。单层reviewer仅一次newest/deferred冷复跑1.621727秒/17postings通过、158独立SQL/手算核对，确认epoch2/active1、NUL全文、旧receipt及跨source资金parent，仍发现两真实checker错误通过，不能因正确参考通过就批准。
+
+反例1：只删新posting本地payload的kind/reverses，checker仍success；根因逐payload已有键与receipt比较，未验证字段全集。同语义横查scene deliver_one也有此subset比较，若GET已有收据会接受不完整local wire。原mini checker先用完整可信expected、entry payload整体相等比较，不走本地任意subset，本缺口属于新scene两消费点；生产Task/Session/共享调度无此路径，原service.decode已完整字段/类型/唯一键验证。修复复用唯一public effects.decode，并核row tenant/event_id与wire一致，checker具名posting_wire_invalid而非崩溃/假pass，deliver返回明确本地wire错误。
+
+反例2：新posting boundary_seq=-1/epoch=-1仍success；当前只检原行不可变，漏新行治理字段。修复认证本顺序资格的公开合法范围及business来源在boundary之前已接受：epoch1原切片内、epoch2从原切片到最终切片，非负整数。不能一律要求所有新post epoch2（repair暂停期仍epoch1），不能匹配参考posting时点/ID/数量。调整approval完整因果日志与真正并发栅栏仍待完整现场，不据此宣称全时序证明。保留两原失败与当前executed-source-a，修后仅必要checker/损坏wire真实消费复验，不重复完整冷跑或旧40mini。
+
+
+修后producer/checker复用public完整wire解码、联合身份绑定及本顺序范围的epoch/接受切片检查。单层独立复验两原坏库得到posting_wire_invalid/epoch_boundary_invalid；三正确14/19/17图继续成功，另唯一自有接收方实际合法consumer confirmed、缺字段/联合身份错位均具名ValueError，正常exit0。主方只补五次既有结果checker CLI，未重跑完整HTTP/cold或原40。独立最终author_schema_sequential_constructive_qualification_accepted_after_checker_repairs、blocking=[]，五执行源直接与最终快照一致；全部原失败/旧源/修后原件归档evaluator/scene-independent-review及qualification/scene-main。只认证顺序作者schema，完整L05/并发在途/进程中断/全因果/逻辑导出自由/监测/职业交付/全rubric/冻结/小时均未完成。
+
+下一最便宜有增量的实验是合作接收方真实HTTP before-apply握手：旧已登记wire实际在途，暂停/截取完整旧集合后，同键恢复可先拿确定receipt；随后释放旧HTTP应原键replayed。必须实际证明本地epoch不撤销旧socket、暂停只禁止新登记及原facts保留，之后再做修复前缀/进程中断。现有service只有drop-once，尚无该握手；需要修改唯一service并审全入口/必要正向回归，不能用mock/文本替代或宣称已通过。本轮先封存当前顺序版本，L06已自然终态进入唯一基例评估侧CPU冷复跑，不并发新长求解。

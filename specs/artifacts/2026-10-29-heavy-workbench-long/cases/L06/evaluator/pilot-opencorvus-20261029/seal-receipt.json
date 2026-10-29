@@ -1,0 +1,23 @@
+{
+  "task_id": "tsk_g00VZTFvzf0073YLIAGl",
+  "terminal_at_utc": "2026-10-29T22:34:59.758000+00:00",
+  "sealed_at": "2026-10-29T22:42:25.412945+00:00",
+  "project_files": 669,
+  "project_bytes": 31147927,
+  "archive": "completed-project.zip",
+  "full_project_and_git_sealed": true,
+  "direct_member_byte_identity": true,
+  "candidate_HEAD": "b4ae96c73ae82b8fcf626737db68d24012beb667",
+  "candidate_git_status": "?? .gitattributes\n?? .gitignore\n?? .opencorvus/\n?? DATA.md\n?? ENVIRONMENT.md\n?? OUTPUTS.md\n?? SOURCE.md\n?? TASK.md\n?? inputs/\n?? profile.json\n?? verification/independent-delivery.zip\n?? verification/independent/__pycache__/\n?? verification/independent/cold/\n?? verification/independent/delivered/\n?? verification/independent/frozen-inputs/\n?? verification/initial-output/\n?? verification/interrupted-output/\n",
+  "actors": [
+    "orchestrator",
+    "base-developer",
+    "base-tester"
+  ],
+  "Inspect_task_completed_accuracy": 1.0,
+  "Inspect_metric_scope": "Task completion only, not frozen business rubric",
+  "business_score": null,
+  "runtime_interference_preserved": true,
+  "old_runtime_not_hot_fixed": true,
+  "comparable": false
+}

@@ -1,0 +1,15 @@
+# 事故现场的业务合同草案
+
+此为完整L05建设中的第一闭环，未冻结、不是候选题面或正式评分。数据明示合成，USD整数minor units；沿用唯一[接收方协议](PROTOCOL.draft.md)。当前资格仅涵盖顺序修复与后续接受，进程/在途HTTP/多写者切换和职业交付仍需另证，不能由本草案推断已完成。
+
+已登记租户有一份不可修订的批准opening事实及真实post/receipt。业务接受请求恰有tenant、request_id、event_id、revision、kind、amount_minor；三身份使用接收方的非空身份语法，revision为1至10^6的整数，金额为0至10^9整数，bool不是整数。kind为settle或cancel；cancel金额必须0。tenant/request_id是稳定传输身份：同载荷返回原accepted seq的duplicate，不同载荷transport_conflict，不占第二个接受事实。旧epoch下已接受请求的原载荷重试也返回原结果；新请求在不匹配epoch时stale_epoch，在同epoch暂停时paused，不生成接受事实。未登记租户unknown_tenant。
+
+tenant/event_id是业务身份。同业务取最高revision，该版本的语义载荷仅为kind/amount_minor；多个传输请求的相同语义载荷是同一个版本，不按重复数叠加。最高版有两个不同语义载荷时quarantined、贡献0；更高唯一版本可解除。最高唯一settle贡献其金额，cancel贡献0。迟到低版保留accepted事实但不覆盖最高版。序号表示真实接受顺序，不是业务版本优先级。接受成功只承诺持久保存请求，不承诺该版本永久有效。
+
+批准人工调整按tenant/adjustment_id保存不可变金额及approval；同身份同载荷duplicate、换载荷adjustment_conflict。调整进入本地与外部目标，用户notes只保留原身份和全文（包括Unicode/空字符），不参与金额。每租户全部已允许负调整必须满足opening+Σmin(0, adjustment)>=0；新调整破坏该下界时adjustment_out_of_domain，不得当成功接受。该条件涵盖所有允许前缀/乱序，不能只检查最终和。完整场景冻结时还须固定全部允许注入范围。
+
+每租户目标为opening、当前业务贡献和批准调整之和。业务来源的贡献与物理资金parent分开：负调整可以引用同租户opening或其他正post做reversal；原opening事实/receipt仍保留，不要求其物理可冲正余量永远不变。每个正post的累计reversal绝对额不得超过该post。候选可选择不同资金parent、稳定posting ID、延迟或即时对账及不同合法中间轨迹；不能匹配参考的post数、命名、ACK顺序或物理schema。
+
+每个外发posting必须先持久登记稳定联合身份/不可变wire载荷/逻辑来源/接受边界。失去HTTP确认是unknown，沿原键查询/重试直至取得匹配原receipt，不另造键。历史真实effects及其来源不能删除/改写或重新贴另一业务标签；修复只能新增可追溯前向动作。单看账户总额不够，还需逐business、adjustment、opening来源和真实服务receipt核对。
+
+暂停只在本地事务禁止旧generation新接受/新登记，不能撤回已飞行HTTP。完整切换需取得有限完整旧intent目录并逐键确定匹配receipt，再对固定accepted前缀补偿，恢复更高generation。缺身份/载荷歧义应保留中止待对账。此条是完整目标；当前顺序参考没有认证并发在途、进程崩溃和监测。公开完整旧应用/现场/证据范围及实现自由的逻辑导出接口尚未交付，不能把私有参考schema checker直接发布为正式候选grader。

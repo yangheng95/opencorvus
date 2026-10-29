@@ -1,6 +1,6 @@
 # L05评估侧局部工具
 
-当前仅mini协议可达性，不能评估完整L05或发布总分。合作HTTP服务源码在`../public/l05_effects.py`；`current-source/l05_worker.py`是只接受执行器已验证accepted events的小参考，不能视为通用ingest验收实现。
+当前包括mini协议和[顺序事故现场](scene-source/README.md)建设性资格，不能评估完整L05或发布总分。合作HTTP服务源码在`../public/l05_effects.py`；`current-source/l05_worker.py`是只接受执行器已验证accepted events的小参考，不能视为通用ingest验收实现。
 
 首次冷跑把该服务、worker、`current-source/qualify_l05.py`复制到一个只含源码的新FLAT_SOURCE目录，运行`python qualify_l05.py --source FLAT_SOURCE --out NEW_OUTPUT`。输入是公开协议的明示三事件及T/X边界探针，不读取旧数据库或答案；输出真实库/命令/HTTP/进程和检查收据。可复跑性只为这个小能力，不算候选小时。
 

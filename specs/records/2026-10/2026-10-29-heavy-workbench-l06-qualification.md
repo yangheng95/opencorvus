@@ -259,3 +259,10 @@ D02尚有真实执行缺口：同一冻结源码未从变价raw新生成全交�
 原Task发生共享父暂停guard提前中断（35分钟Tool在约20分钟结束）与180秒错误归因，副作用后unsafe-retry保护仍正确。Task自然恢复；完整根因/45源横审/有限真实executor deadline修复/最终53项及单层独立批准见[工具活动记录](2026-10-30-heavy-workbench-tool-liveness.md)。当前冻结public/rubric/1%/90+critical规则未改；运行时修复不热改旧PID，不伪称候选无故障。
 
 22:06原Task仍active，developer已自然交接tester，其已有独立冷求解正在等待真实终态。l06-refined-main自动清理，l06-final-main于21:16:58Z自然exit0。保持原Task与动态定位，不重建/重启；自然终态封存完成版后才评估侧source-only执行/实际图形与同冻结rubric独立评价，顺序fresh Codex尚未启动。无最终新分数/有效小时/完整十题通过；八核累计CPU与运行时受干扰墙钟均不替代小时级题目证据。
+
+
+## 原OpenCorvus自然完成与评估侧顺序执行计划
+
+原Task在2026-10-29T22:34:59.758Z自然completed，启动20:04:23.819Z；Inspect显示2:30:45、task_completed accuracy1.000只表示Task完成，不是冻结业务分数。实际orchestrator/base-developer/base-tester，保留20分钟pause故障、后续自动续跑和Provider overloaded错误；不能把整个墙钟当题目有效工作。候选HEAD b4ae96c73ae82b8fcf626737db68d24012beb667，public/验证文件有未跟踪内容；完整669文件/约31MB含Git与原workspace已封存外部completed/completed-project.zip，不能只按HEAD丢未跟踪原件。22:42:26Z在真实Task及子计算终态后正常stop自有listener，runtimeDisposed/credentialsRemoved均true；源凭据未操作。六旧昂贵容器仍Paused。
+
+下一便宜检查先按冻结raw/唯一30数值checker重算已交付计划，不读候选normalized为业务权威；完整47叶与真正source-only复建仍需执行，暂不评分。基例冷执行只给封存根源码/README/声明依赖和18冻结public中的raw、新results、只读source/raw/networknone，单一8CPU容器、无旧plan/权重/评估器/参考/凭据。按候选README原命令默认内部solver1800秒/8worker执行，最多约30分钟是候选自设单次数学搜索参数，不是用户总墙钟/token额度，不改其源码或人为放慢。明确新假设是从原输入重建而非重放旧结果；终态后独立重算/实际图形，再顺序声明报价/行序控制，不能用参考资格或旧输入界套未知变体。只开这一组，不并发Codex/其他完整求解，正常source运行不机械取消。D02完整实际控制/单层独立17叶仍待完成，之后才fresh Codex。

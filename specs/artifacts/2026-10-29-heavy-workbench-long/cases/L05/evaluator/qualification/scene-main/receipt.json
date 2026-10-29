@@ -1,0 +1,89 @@
+{
+  "status": "main_sequential_author_scene_qualified_independent_review_pending",
+  "created_at": "2026-10-29T22:37:03.943951+00:00",
+  "actual_cli_commands": 11,
+  "all_expected_exitcodes": true,
+  "original_effects_real_http": 4,
+  "original_first_post_ack_loss": [
+    [
+      "POST",
+      "applied",
+      1
+    ]
+  ],
+  "note_null_character_preserved": true,
+  "runs": {
+    "original-input": {
+      "status": "original_scene_created_by_real_http",
+      "elapsed_seconds": 0.9366525998339057,
+      "accounts": null,
+      "posting_count": null
+    },
+    "deferred-oldest": {
+      "status": "business_success",
+      "elapsed_seconds": 1.3642021003179252,
+      "accounts": {
+        "A": 1130,
+        "B": 510
+      },
+      "posting_count": 14
+    },
+    "incremental-newest": {
+      "status": "business_success",
+      "elapsed_seconds": 3.2782712997868657,
+      "accounts": {
+        "A": 1130,
+        "B": 510
+      },
+      "posting_count": 19
+    },
+    "wrong-conflict": {
+      "status": "business_mismatch",
+      "elapsed_seconds": 0.9825720000080764,
+      "accounts": {
+        "A": 1135,
+        "B": 710
+      },
+      "posting_count": 10
+    },
+    "wrong-new-key": {
+      "status": "business_mismatch",
+      "elapsed_seconds": 0.9827479002997279,
+      "accounts": {
+        "A": 1115,
+        "B": 710
+      },
+      "posting_count": 10
+    },
+    "wrong-restore": {
+      "status": "business_mismatch",
+      "elapsed_seconds": 1.3655915996059775,
+      "accounts": {
+        "A": 1130,
+        "B": 510
+      },
+      "posting_count": 5
+    }
+  },
+  "two_correct_paths_have_different_posting_counts": true,
+  "bad_control_findings": {
+    "wrong-conflict": [
+      "account_mismatch",
+      "business_projection_mismatch",
+      "source_contribution_mismatch"
+    ],
+    "wrong-new-key": [
+      "account_mismatch",
+      "remote_effect_unaccounted"
+    ],
+    "wrong-restore": [
+      "accepted_fact_mismatch",
+      "business_projection_mismatch",
+      "receipt_binding_mismatch",
+      "remote_effect_unaccounted",
+      "source_contribution_mismatch"
+    ]
+  },
+  "scope": "source-only same accident snapshot sequential business/receipt/reference-schema checker; not concurrent/physical-failure/full-rubric/freeze/hour/candidate qualification",
+  "candidate_score": null
+}

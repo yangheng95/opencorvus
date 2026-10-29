@@ -1,0 +1,412 @@
+{
+  "status": "passed",
+  "readonly_checker_contracts": [
+    {
+      "name": "partial_wire_payload",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\source-repaired\\evaluator\\scene-source\\check_scene.py",
+        "--authority",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\independent-expected-authority.json",
+        "--original-local",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\inputs\\original-local.sqlite",
+        "--original-remote",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\inputs\\original-remote.sqlite",
+        "--local",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\checker-probes\\partial_wire_payload\\local.sqlite",
+        "--remote",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\newest-deferred\\remote.sqlite",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\repair-checks\\partial_wire_payload\\assessment.json"
+      ],
+      "started_utc": "2026-10-29T22:45:05.945656+00:00",
+      "elapsed_seconds": 0.2291999999433756,
+      "returncode": 2,
+      "expected_error": "posting_wire_invalid",
+      "actual": {
+        "status": "business_mismatch",
+        "scope": "author_scene_schema_sequential_qualification",
+        "candidate_score": null,
+        "epoch_evidence_scope": "one sequential cut and accepted business boundary ranges; not concurrent fencing or approval-time causality",
+        "accounts": {
+          "A": 1130,
+          "B": 510
+        },
+        "business": [
+          {
+            "tenant": "A",
+            "event_id": "X",
+            "revision": 5,
+            "status": "settle",
+            "amount_minor": 110
+          },
+          {
+            "tenant": "A",
+            "event_id": "Z",
+            "revision": 2,
+            "status": "settle",
+            "amount_minor": 50
+          },
+          {
+            "tenant": "B",
+            "event_id": "X",
+            "revision": 2,
+            "status": "cancel",
+            "amount_minor": 0
+          },
+          {
+            "tenant": "B",
+            "event_id": "Y",
+            "revision": 2,
+            "status": "cancel",
+            "amount_minor": 0
+          }
+        ],
+        "posting_count": 17,
+        "findings": [
+          {
+            "error": "posting_wire_invalid",
+            "identity": [
+              "B",
+              "pf5b79153a41149b3ba8bbd7a97ccd25a"
+            ],
+            "field": "fields"
+          },
+          {
+            "error": "source_contribution_mismatch",
+            "source": [
+              "B",
+              "adjustment",
+              "approved-1"
+            ],
+            "expected": 10,
+            "actual": 0
+          }
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "invalid_boundary_epoch",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\source-repaired\\evaluator\\scene-source\\check_scene.py",
+        "--authority",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\independent-expected-authority.json",
+        "--original-local",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\inputs\\original-local.sqlite",
+        "--original-remote",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\inputs\\original-remote.sqlite",
+        "--local",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\checker-probes\\invalid_boundary_epoch\\local.sqlite",
+        "--remote",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\newest-deferred\\remote.sqlite",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\repair-checks\\invalid_boundary_epoch\\assessment.json"
+      ],
+      "started_utc": "2026-10-29T22:45:06.175703+00:00",
+      "elapsed_seconds": 0.22894190018996596,
+      "returncode": 2,
+      "expected_error": "posting_epoch_boundary_invalid",
+      "actual": {
+        "status": "business_mismatch",
+        "scope": "author_scene_schema_sequential_qualification",
+        "candidate_score": null,
+        "epoch_evidence_scope": "one sequential cut and accepted business boundary ranges; not concurrent fencing or approval-time causality",
+        "accounts": {
+          "A": 1130,
+          "B": 510
+        },
+        "business": [
+          {
+            "tenant": "A",
+            "event_id": "X",
+            "revision": 5,
+            "status": "settle",
+            "amount_minor": 110
+          },
+          {
+            "tenant": "A",
+            "event_id": "Z",
+            "revision": 2,
+            "status": "settle",
+            "amount_minor": 50
+          },
+          {
+            "tenant": "B",
+            "event_id": "X",
+            "revision": 2,
+            "status": "cancel",
+            "amount_minor": 0
+          },
+          {
+            "tenant": "B",
+            "event_id": "Y",
+            "revision": 2,
+            "status": "cancel",
+            "amount_minor": 0
+          }
+        ],
+        "posting_count": 17,
+        "findings": [
+          {
+            "error": "posting_epoch_boundary_invalid",
+            "identity": [
+              "B",
+              "pf5b79153a41149b3ba8bbd7a97ccd25a"
+            ],
+            "epoch": -1,
+            "boundary_seq": -1
+          }
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "correct_oldest_deferred",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\source-repaired\\evaluator\\scene-source\\check_scene.py",
+        "--authority",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\independent-expected-authority.json",
+        "--original-local",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\inputs\\original-local.sqlite",
+        "--original-remote",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\inputs\\original-remote.sqlite",
+        "--local",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-qualification-20261030\\deferred-oldest\\local.sqlite",
+        "--remote",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-qualification-20261030\\deferred-oldest\\remote.sqlite",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\repair-checks\\correct_oldest_deferred\\assessment.json"
+      ],
+      "started_utc": "2026-10-29T22:45:06.405403+00:00",
+      "elapsed_seconds": 0.24350239988416433,
+      "returncode": 0,
+      "expected_error": null,
+      "actual": {
+        "status": "business_success",
+        "scope": "author_scene_schema_sequential_qualification",
+        "candidate_score": null,
+        "epoch_evidence_scope": "one sequential cut and accepted business boundary ranges; not concurrent fencing or approval-time causality",
+        "accounts": {
+          "A": 1130,
+          "B": 510
+        },
+        "business": [
+          {
+            "tenant": "A",
+            "event_id": "X",
+            "revision": 5,
+            "status": "settle",
+            "amount_minor": 110
+          },
+          {
+            "tenant": "A",
+            "event_id": "Z",
+            "revision": 2,
+            "status": "settle",
+            "amount_minor": 50
+          },
+          {
+            "tenant": "B",
+            "event_id": "X",
+            "revision": 2,
+            "status": "cancel",
+            "amount_minor": 0
+          },
+          {
+            "tenant": "B",
+            "event_id": "Y",
+            "revision": 2,
+            "status": "cancel",
+            "amount_minor": 0
+          }
+        ],
+        "posting_count": 14,
+        "findings": []
+      },
+      "passed": true
+    },
+    {
+      "name": "correct_newest_incremental",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\source-repaired\\evaluator\\scene-source\\check_scene.py",
+        "--authority",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\independent-expected-authority.json",
+        "--original-local",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\inputs\\original-local.sqlite",
+        "--original-remote",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\inputs\\original-remote.sqlite",
+        "--local",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-qualification-20261030\\incremental-newest\\local.sqlite",
+        "--remote",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-qualification-20261030\\incremental-newest\\remote.sqlite",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\repair-checks\\correct_newest_incremental\\assessment.json"
+      ],
+      "started_utc": "2026-10-29T22:45:06.649632+00:00",
+      "elapsed_seconds": 0.24765879986807704,
+      "returncode": 0,
+      "expected_error": null,
+      "actual": {
+        "status": "business_success",
+        "scope": "author_scene_schema_sequential_qualification",
+        "candidate_score": null,
+        "epoch_evidence_scope": "one sequential cut and accepted business boundary ranges; not concurrent fencing or approval-time causality",
+        "accounts": {
+          "A": 1130,
+          "B": 510
+        },
+        "business": [
+          {
+            "tenant": "A",
+            "event_id": "X",
+            "revision": 5,
+            "status": "settle",
+            "amount_minor": 110
+          },
+          {
+            "tenant": "A",
+            "event_id": "Z",
+            "revision": 2,
+            "status": "settle",
+            "amount_minor": 50
+          },
+          {
+            "tenant": "B",
+            "event_id": "X",
+            "revision": 2,
+            "status": "cancel",
+            "amount_minor": 0
+          },
+          {
+            "tenant": "B",
+            "event_id": "Y",
+            "revision": 2,
+            "status": "cancel",
+            "amount_minor": 0
+          }
+        ],
+        "posting_count": 19,
+        "findings": []
+      },
+      "passed": true
+    },
+    {
+      "name": "correct_newest_deferred",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\source-repaired\\evaluator\\scene-source\\check_scene.py",
+        "--authority",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\independent-expected-authority.json",
+        "--original-local",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\inputs\\original-local.sqlite",
+        "--original-remote",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\inputs\\original-remote.sqlite",
+        "--local",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\newest-deferred\\local.sqlite",
+        "--remote",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\newest-deferred\\remote.sqlite",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\repair-checks\\correct_newest_deferred\\assessment.json"
+      ],
+      "started_utc": "2026-10-29T22:45:06.898134+00:00",
+      "elapsed_seconds": 0.22193210013210773,
+      "returncode": 0,
+      "expected_error": null,
+      "actual": {
+        "status": "business_success",
+        "scope": "author_scene_schema_sequential_qualification",
+        "candidate_score": null,
+        "epoch_evidence_scope": "one sequential cut and accepted business boundary ranges; not concurrent fencing or approval-time causality",
+        "accounts": {
+          "A": 1130,
+          "B": 510
+        },
+        "business": [
+          {
+            "tenant": "A",
+            "event_id": "X",
+            "revision": 5,
+            "status": "settle",
+            "amount_minor": 110
+          },
+          {
+            "tenant": "A",
+            "event_id": "Z",
+            "revision": 2,
+            "status": "settle",
+            "amount_minor": 50
+          },
+          {
+            "tenant": "B",
+            "event_id": "X",
+            "revision": 2,
+            "status": "cancel",
+            "amount_minor": 0
+          },
+          {
+            "tenant": "B",
+            "event_id": "Y",
+            "revision": 2,
+            "status": "cancel",
+            "amount_minor": 0
+          }
+        ],
+        "posting_count": 17,
+        "findings": []
+      },
+      "passed": true
+    }
+  ],
+  "real_consumer_cases": [
+    {
+      "case": "valid_full_wire",
+      "actual": {
+        "status": "confirmed",
+        "event_id": "pf5b79153a41149b3ba8bbd7a97ccd25a",
+        "receipt": {
+          "receipt_id": "d7d0f9bd-5674-436a-b203-22223e8457aa",
+          "tenant": "B",
+          "event_id": "pf5b79153a41149b3ba8bbd7a97ccd25a",
+          "kind": "post",
+          "amount_minor": 10,
+          "reverses": null
+        }
+      },
+      "passed": true
+    },
+    {
+      "case": "missing_wire_fields",
+      "error_type": "ValueError",
+      "message": "local_posting_wire_invalid:fields",
+      "passed": true
+    },
+    {
+      "case": "local_joint_identity",
+      "error_type": "ValueError",
+      "message": "local_posting_identity_mismatch",
+      "passed": true
+    }
+  ],
+  "owned_receiver_exitcode": 0,
+  "complete_cold_replays_added": 0,
+  "candidate_score": null
+}

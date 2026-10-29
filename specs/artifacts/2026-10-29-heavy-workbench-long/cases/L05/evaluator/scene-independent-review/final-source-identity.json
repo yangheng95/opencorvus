@@ -1,0 +1,41 @@
+{
+  "checked_utc": "2026-10-29T22:47:59.067007+00:00",
+  "files": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L05\\evaluator\\scene-source\\scene_app.py",
+      "snapshot": "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\source-repaired\\evaluator\\scene-source\\scene_app.py",
+      "byte_equal_at_capture": true,
+      "same_as_initial": false,
+      "current_still_equals_repaired_snapshot": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L05\\evaluator\\scene-source\\check_scene.py",
+      "snapshot": "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\source-repaired\\evaluator\\scene-source\\check_scene.py",
+      "byte_equal_at_capture": true,
+      "same_as_initial": false,
+      "current_still_equals_repaired_snapshot": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L05\\evaluator\\scene-source\\run_scene.py",
+      "snapshot": "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\source-repaired\\evaluator\\scene-source\\run_scene.py",
+      "byte_equal_at_capture": true,
+      "same_as_initial": true,
+      "current_still_equals_repaired_snapshot": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L05\\evaluator\\current-source\\l05_worker.py",
+      "snapshot": "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\source-repaired\\evaluator\\current-source\\l05_worker.py",
+      "byte_equal_at_capture": true,
+      "same_as_initial": true,
+      "current_still_equals_repaired_snapshot": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L05\\public\\l05_effects.py",
+      "snapshot": "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\source-repaired\\public\\l05_effects.py",
+      "byte_equal_at_capture": true,
+      "same_as_initial": true,
+      "current_still_equals_repaired_snapshot": true
+    }
+  ],
+  "method": "direct object identity record, not a correctness hash gate"
+}

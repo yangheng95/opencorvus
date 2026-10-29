@@ -47,3 +47,6 @@ PINN完整官方rubric本地递归统计1963叶（1815执行、126代码、22分
 ## L06冻结新对照接续：保留原运行时干扰
 
 新L06/0.2.0已按唯一18public预注册顺序OpenCorvus→fresh Codex，定位D:/opencorvus-benchmark-runs/L06-current-pair-20261029.json。≥90且critical全过为作者预注册good，两good另升新版本；实际模型/资源不同的comparable=false限制保留。22:06UTC原OpenCorvus仍active，已自然进入base-tester验收，fresh Codex未启动。原候选在35分钟Tool自身期限前被20分钟共享暂停guard干扰且误报180秒，随后自然续跑；这是真实运行时失败，原件不能删，也不能判业务0或据此声称任务本身需要数小时。共享机制修复/真实资格及独立结论见[专门记录](2026-10-30-heavy-workbench-tool-liveness.md)，旧PID未热修。待自然终态封存、同合同独立业务评估后再fresh Codex，当前无新版成对成绩。
+
+
+原L06 OpenCorvus在22:34:59.758Z自然完成，Inspect2:30:45/task_completed accuracy1仅生命周期指标。完整版本/错误/自动恢复封存，listener正常退休，原API关闭不当失败。30冻结数值叶主方通过，真正评估侧单一8CPU源码冷执行已启动（动态定位active_evaluation）；17独立人工/执行及输入控制仍待。当前无完整业务分数/good，fresh Codex未启动。独立reviewer正按同冻结rubric审查已封存程序/报告/真实图，明确熟悉参考/非盲；未实测叶unassessed。原运行时干扰和native资源/模型限制保留，不拿墙钟、cache tokens或内部cost0作难度/费用排名。完成真正同合同评价后才启动只含同18public的fresh Codex（fork none/禁止再委托），两好另升版本，不改当前线。

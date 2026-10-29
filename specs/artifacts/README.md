@@ -34,7 +34,7 @@
 
 - [2026-10-29-text-encoding-journey](2026-10-29-text-encoding-journey/README.md)：Unicode原文乱码修复、双语错误、真实JSON和五份下载核验。
 
-- [长程任务资格与便宜实验](2026-10-29-heavy-workbench-long/README.md)：L06/0.2.0已冻结并执行真实OpenCorvus；L05开始HTTP副作用协议资格，其他题继续建设，候选小时资格0/10。
+- [长程任务资格与便宜实验](2026-10-29-heavy-workbench-long/README.md)：L06真实Task自然完成、30数值叶通过并进入清洁评估；L05顺序事故现场独立资格通过，候选小时仍0/10。
 
 - [2026-10-29-text-attachment-history](2026-10-29-text-attachment-history/README.md)：23张真实发送/历史回看原图、指定模型流式请求、原件下载与数据/运行结算。
 

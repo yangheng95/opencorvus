@@ -1,0 +1,156 @@
+{
+  "reviewer": "/root/benchmark_review",
+  "status": "author_schema_sequential_constructive_qualification_accepted_after_checker_repairs",
+  "substantive_blockers_current": [],
+  "original_findings": [
+    {
+      "id": "SCENE-CHECK-01",
+      "issue": "partial local wire payload accepted by checker; same partial comparison existed in deliver_one",
+      "initial_actual": "exit0 business_success after removing kind and reverses from a new local posting payload",
+      "fixed_actual": "exit2 business_mismatch posting_wire_invalid(fields); consumer ValueError local_posting_wire_invalid:fields"
+    },
+    {
+      "id": "SCENE-CHECK-02",
+      "issue": "negative posting boundary and epoch accepted",
+      "initial_actual": "exit0 business_success with boundary_seq=-1 and epoch=-1",
+      "fixed_actual": "exit2 business_mismatch posting_epoch_boundary_invalid; one sequential control/source boundary range only"
+    }
+  ],
+  "independent_cold_replay": {
+    "runs": 1,
+    "policy": "newest",
+    "style": "deferred",
+    "command": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\source-initial\\evaluator\\scene-source\\run_scene.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\inputs",
+        "--output",
+        "D:\\opencorvus-benchmark-runs\\l05-scene-independent-review-20261030\\newest-deferred",
+        "--policy",
+        "newest",
+        "--style",
+        "deferred",
+        "--control",
+        "correct"
+      ],
+      "pid": 88528,
+      "returncode": 0,
+      "started_utc": "2026-10-29T22:37:23.438374+00:00",
+      "ended_utc": "2026-10-29T22:37:25.060144+00:00",
+      "elapsed_seconds": 1.6217269003391266,
+      "input_bytes_unchanged": {
+        "original-local.sqlite": true,
+        "original-remote.sqlite": true,
+        "initial-authority.json": true,
+        "future-events.json": true,
+        "legacy-delivery.json": true
+      },
+      "scope": "exactly one newest+deferred source-only replay of existing synthetic accident inputs",
+      "candidate_score": null
+    },
+    "result": {
+      "status": "business_success",
+      "scope": "author_scene_schema_sequential_qualification",
+      "candidate_score": null,
+      "accounts": {
+        "A": 1130,
+        "B": 510
+      },
+      "business": [
+        {
+          "tenant": "A",
+          "event_id": "X",
+          "revision": 5,
+          "status": "settle",
+          "amount_minor": 110
+        },
+        {
+          "tenant": "A",
+          "event_id": "Z",
+          "revision": 2,
+          "status": "settle",
+          "amount_minor": 50
+        },
+        {
+          "tenant": "B",
+          "event_id": "X",
+          "revision": 2,
+          "status": "cancel",
+          "amount_minor": 0
+        },
+        {
+          "tenant": "B",
+          "event_id": "Y",
+          "revision": 2,
+          "status": "cancel",
+          "amount_minor": 0
+        }
+      ],
+      "posting_count": 17,
+      "findings": [],
+      "elapsed_seconds": 1.4028424001298845
+    },
+    "no_repair_full_cold_added": true
+  },
+  "independent_SQL": {
+    "checks": 158,
+    "correct_graphs": 3,
+    "postings": [
+      14,
+      19,
+      17
+    ],
+    "all_current_sources_match_repaired_snapshot": true
+  },
+  "arithmetic": {
+    "actual_original_remote": {
+      "A": 1100,
+      "B": 570
+    },
+    "initial_authority_repaired_target": {
+      "A": 1015,
+      "B": 710
+    },
+    "final_issued_target": {
+      "A": 1130,
+      "B": 510
+    },
+    "raw_and_target_are_not_equated": true
+  },
+  "verified_facts": [
+    "issued injection authority independent from repaired candidate state",
+    "original and future accepted facts",
+    "Unicode and embedded NUL notes",
+    "original postings and known receipts immutable",
+    "unknown ACK resolved with original identity",
+    "control epoch2 active1 in all three actual correct results",
+    "per-business/opening/adjustment contributions",
+    "same-tenant funding capacity independent from logical business source",
+    "three real wrong controls detected even when account total is correct"
+  ],
+  "repair_rechecks": {
+    "checker_CLIs": 5,
+    "real_consumer_cases": 3,
+    "owned_receiver_exitcode": 0,
+    "whole_cold_replays_added": 0
+  },
+  "limits": [
+    "only author schema and a sequential source-only construction",
+    "no full public raw packet, logical export/schema-independent grader or rubric",
+    "no certification of concurrent writers, in-flight old HTTP switching or real process crashes during repair",
+    "range tags do not establish full posting-time or approval-time causality",
+    "no monitoring or professional complete deliverable",
+    "not a model candidate score, L05 freeze, hours validation or mature ten-case benchmark"
+  ],
+  "old_failure_evidence_preserved": true,
+  "L06_candidate_Task_or_container_accessed": false,
+  "Provider_GPU_solver_UI_or_redelegation": false,
+  "repository_modified_or_committed": false,
+  "full_L05_frozen": false,
+  "candidate_score": null
+}
