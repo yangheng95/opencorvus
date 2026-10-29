@@ -1,0 +1,40 @@
+{
+  "at": "2026-10-29T04:49:51.682Z",
+  "checks": [
+    {
+      "label": "quotation-composer-785-types",
+      "startedAt": 1793248848993,
+      "closedAt": 1793248876599,
+      "code": 0,
+      "signal": null,
+      "childPID": 98796
+    },
+    {
+      "label": "quotation-composer-785-build",
+      "startedAt": 1793248849039,
+      "closedAt": 1793248926344,
+      "code": 0,
+      "signal": null,
+      "childPID": 97788
+    },
+    {
+      "label": "quotation-composer-785-architecture",
+      "startedAt": 1793249330782,
+      "closedAt": 1793249332934,
+      "code": 0,
+      "signal": null,
+      "childPID": 94960
+    },
+    {
+      "label": "quotation-composer-785-docs",
+      "startedAt": 1793249330782,
+      "closedAt": 1793249340082,
+      "code": 0,
+      "signal": null,
+      "childPID": 95704
+    }
+  ],
+  "ui": "12 real unedited captures rendered and manually reviewed, including two original keyboard focus failures, current main/side focus and direct continued typing, language return and retained side-panel draft. No UI automation or DOM/text/pixel assertions.",
+  "qualification": "Pure UI callbacks only. Ordinary build/renderer, Overlay typecheck, docs and architecture are auxiliary; actual keyboard interaction and inspected images provide the visual evidence.",
+  "limitations": "No new Provider requests, Task/Mission page qualification, in-flight authority matrix or cross-project attachment qualification."
+}

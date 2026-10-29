@@ -1157,6 +1157,11 @@ card is presentation of that draft. Submission serializes the quotation as a
 visible Markdown blockquote in the real user Message, using the same text for
 storage, rendering and model input. Side replies can be quoted back into the
 main composer for the user to review and send.
+Removing a quotation returns keyboard focus to that same composer's existing
+enabled, connected and visible textarea while retaining its draft text. Main
+and Side inputs own this synchronous handoff; hidden or inert controls and a
+reserved file navigation cannot receive it. The handoff prevents scrolling and
+adds no global focus listener or deferred owner state.
 Side submissions retain their caller-minted Message identity with the scoped
 draft across transport retries and reloads.
 During a connected, healthy running Side response, the unchanged submitted

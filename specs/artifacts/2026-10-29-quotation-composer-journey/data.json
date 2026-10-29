@@ -1,0 +1,151 @@
+{
+  "at": "2026-10-29T04:47:35.182Z",
+  "reports": [
+    {
+      "tag": "before",
+      "tables": 92,
+      "oldCount": 112184,
+      "exact": 112184,
+      "total": 112575,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "fixed",
+      "tables": 92,
+      "oldCount": 112575,
+      "exact": 112575,
+      "total": 112966,
+      "schema": 9,
+      "integrity": "ok"
+    }
+  ],
+  "oldRows": "Every old row in both isolated and source databases remains exact.",
+  "addedByStage": {
+    "before": {
+      "bus_publication_delivery": 64,
+      "bus_publication_delivery_receipt": 64,
+      "bus_publication_outbox": 23,
+      "bus_publication_owner": 23,
+      "bus_publication_phase_receipt": 69,
+      "engine_control_activation_lease": 64,
+      "engine_control_activation_lease_grant": 64,
+      "message": 3,
+      "part": 14,
+      "session": 1,
+      "tool_part_outcome": 1,
+      "tool_part_request": 1
+    },
+    "fixed": {
+      "bus_publication_delivery": 64,
+      "bus_publication_delivery_receipt": 64,
+      "bus_publication_outbox": 23,
+      "bus_publication_owner": 23,
+      "bus_publication_phase_receipt": 69,
+      "engine_control_activation_lease": 64,
+      "engine_control_activation_lease_grant": 64,
+      "message": 3,
+      "part": 14,
+      "session": 1,
+      "tool_part_outcome": 1,
+      "tool_part_request": 1
+    }
+  },
+  "copies": [
+    {
+      "stage": "before",
+      "sessionID": "ses_-zUQaVeRPzzJXG32tprf",
+      "sourceSessionID": "ses_-zUQb23QSzzjAhs9qntn",
+      "inheritedMessageIDs": [
+        "msg_g0VZPULYg00VAnsR1RKJ",
+        "msg_g0VZPULYg011GRkzjuFH",
+        "msg_g0VZPULYg024EQxEupmn"
+      ]
+    },
+    {
+      "stage": "fixed",
+      "sessionID": "ses_-zUQaTgFYzzjTTPIZjWB",
+      "sourceSessionID": "ses_-zUQb23QSzzjAhs9qntn",
+      "inheritedMessageIDs": [
+        "msg_g0VZPWJkX009cS8Q6Wh4",
+        "msg_g0VZPWJkX01uRYiMVXB8",
+        "msg_g0VZPWJkX02q27NFqPv7"
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "filename": "test_invoice.py",
+      "bytes": 1520,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "invoice.py",
+      "bytes": 953,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "README.md",
+      "bytes": 191,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "mcp.ts",
+      "bytes": 5539,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "chat.ts",
+      "bytes": 14692,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "mcp.ts",
+      "bytes": 5539,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "chat.ts",
+      "bytes": 14692,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "README.md",
+      "bytes": 176,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "invoice.py",
+      "bytes": 953,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "test_invoice.py",
+      "bytes": 1520,
+      "exactBytes": true,
+      "exactMetadata": true
+    }
+  ],
+  "namespaces": [
+    {
+      "stage": "before",
+      "files": 17,
+      "exactBytes": true
+    },
+    {
+      "stage": "-after",
+      "files": 17,
+      "exactBytes": true
+    }
+  ],
+  "qualification": "Two real Side Chat copies inherit three existing completed messages each. Quotation and draft interactions are local UI state, never fabricated server Messages. No new Provider activity or usage."
+}

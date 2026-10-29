@@ -1533,7 +1533,15 @@ export function ChatComposer(props: ChatComposerProps) {
       </Show>
       <Show when={composerQuotation(props.draftKey)}>
         {(quote) => (
-          <QuotationChip quotation={quote()} onRemove={() => setComposerQuotation(props.draftKey, undefined)} />
+          <QuotationChip
+            quotation={quote()}
+            onRemove={() => {
+              if (fileEditorReserved()) return
+              setComposerQuotation(props.draftKey, undefined)
+              if (textareaRef?.isConnected && !textareaRef.disabled && textareaRef.getClientRects().length &&
+                !textareaRef.closest('[inert], [hidden], [aria-hidden="true"]')) textareaRef.focus({ preventScroll: true })
+            }}
+          />
         )}
       </Show>
       <Show when={submissionError()}>

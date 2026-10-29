@@ -6,6 +6,7 @@
 
 ### zh-CN
 
+- 使用键盘移除主对话或侧聊中的引用卡片后，焦点回到当前输入框，保留草稿并可直接继续输入。
 - 修复 Windows 资源管理器仅修改文件、目录或 junction 名称大小写时误报“目标已存在”；保留不同目录项之间的覆盖保护。
 - 修复持续目标的完成依据恰好等于系统原因代码时被误译的问题；已完成目标始终显示原始证据文本。
 - 持续目标的界面暂停、恢复与预算调整原因随当前语言显示；保留用户及模型原始证据和既有历史原因。
@@ -21,6 +22,7 @@
 
 ### en-US
 
+- Return keyboard focus to the current main or side-chat composer after removing a quotation, preserving its draft for continued typing.
 - Fix case-only file, directory and junction renames in the Windows explorer while preserving destination conflict protection for distinct entries.
 - Preserve completed-goal evidence verbatim when it matches a system reason identifier, instead of replacing it with a status explanation.
 - Show continuous-goal control reasons in the current language while preserving original user/model evidence and historical free-text reasons.

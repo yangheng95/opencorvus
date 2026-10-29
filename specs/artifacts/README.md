@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-29-quotation-composer-journey](2026-10-29-quotation-composer-journey/README.md)：十二张引用与草稿实页、前后焦点、数据和运行结算。
+
 - [2026-10-29-source-file-recovery-journey](2026-10-29-source-file-recovery-journey/README.md)：十七张实页原图、真实模型来源、改名根因与修复后证据。
 
 - [2026-10-29-inherited-sources-journey](2026-10-29-inherited-sources-journey/README.md)：十六张来源实页原图、复制身份与数据/运行结算。

@@ -598,7 +598,10 @@ export function SideChatPanel(props: {
                 <QuotationChip
                   quotation={value()}
                   onRemove={() => {
-                    if (!fileEditorReserved()) setComposerQuotation(key(), undefined)
+                    if (fileEditorReserved()) return
+                    setComposerQuotation(key(), undefined)
+                    if (textarea?.isConnected && !textarea.disabled && textarea.getClientRects().length &&
+                      !textarea.closest('[inert], [hidden], [aria-hidden="true"]')) textarea.focus({ preventScroll: true })
                   }}
                 />
               )}
