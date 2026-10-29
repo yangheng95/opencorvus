@@ -1,0 +1,28 @@
+{
+  "result": "single_monotone_price_reference_and_reader_qualified",
+  "initial_cli": {
+    "commands": 12,
+    "passed_expected_contract": 11,
+    "actual_P2": "empty base reference_id accepted; initial source/output preserved"
+  },
+  "repaired_cli": {
+    "commands": 5,
+    "passed": 5
+  },
+  "independent_fact_differences": 1,
+  "independent_prefix_checks": 48,
+  "variant_cost_exact": "238818/5",
+  "fixed_lower_bound": 47380,
+  "relative_gap_exact": "959/118450",
+  "relative_gap_percent": 0.809624314056564,
+  "reuses_identical_business_controls": true,
+  "mincash": -5369,
+  "formal_candidate_grade": null,
+  "full_case_freeze": false,
+  "hours_claim": false,
+  "solver_runs": 0,
+  "Docker_runs": 0,
+  "Provider_calls": 0,
+  "GPU_work": false,
+  "delegations": 0
+}

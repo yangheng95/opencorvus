@@ -1,0 +1,263 @@
+{
+  "status": "initial_comparison_only",
+  "exact_agreement": 36,
+  "total": 36,
+  "fraction": 1.0,
+  "threshold_registered_before_ratings": "33/36",
+  "freeze_approved": false,
+  "reason": "Shared-format ambiguity in F01/F02 requires adjudication and equivalent-format controls despite perfect initial agreement.",
+  "comparisons": [
+    {
+      "packet": "packet-97ad1f63e52c",
+      "leaf": "D07",
+      "author": "half",
+      "independent": "half",
+      "equal": true
+    },
+    {
+      "packet": "packet-97ad1f63e52c",
+      "leaf": "E01",
+      "author": "full",
+      "independent": "full",
+      "equal": true
+    },
+    {
+      "packet": "packet-97ad1f63e52c",
+      "leaf": "E02",
+      "author": "half",
+      "independent": "half",
+      "equal": true
+    },
+    {
+      "packet": "packet-97ad1f63e52c",
+      "leaf": "E03",
+      "author": "half",
+      "independent": "half",
+      "equal": true
+    },
+    {
+      "packet": "packet-97ad1f63e52c",
+      "leaf": "E04",
+      "author": "half",
+      "independent": "half",
+      "equal": true
+    },
+    {
+      "packet": "packet-97ad1f63e52c",
+      "leaf": "E05",
+      "author": "half",
+      "independent": "half",
+      "equal": true
+    },
+    {
+      "packet": "packet-97ad1f63e52c",
+      "leaf": "E06",
+      "author": "half",
+      "independent": "half",
+      "equal": true
+    },
+    {
+      "packet": "packet-97ad1f63e52c",
+      "leaf": "F01",
+      "author": "half",
+      "independent": "half",
+      "equal": true
+    },
+    {
+      "packet": "packet-97ad1f63e52c",
+      "leaf": "F02",
+      "author": "half",
+      "independent": "half",
+      "equal": true
+    },
+    {
+      "packet": "packet-97ad1f63e52c",
+      "leaf": "F03",
+      "author": "half",
+      "independent": "half",
+      "equal": true
+    },
+    {
+      "packet": "packet-97ad1f63e52c",
+      "leaf": "F04",
+      "author": "full",
+      "independent": "full",
+      "equal": true
+    },
+    {
+      "packet": "packet-97ad1f63e52c",
+      "leaf": "F05",
+      "author": "full",
+      "independent": "full",
+      "equal": true
+    },
+    {
+      "packet": "packet-e6e65912d893",
+      "leaf": "D07",
+      "author": "zero",
+      "independent": "zero",
+      "equal": true
+    },
+    {
+      "packet": "packet-e6e65912d893",
+      "leaf": "E01",
+      "author": "zero",
+      "independent": "zero",
+      "equal": true
+    },
+    {
+      "packet": "packet-e6e65912d893",
+      "leaf": "E02",
+      "author": "zero",
+      "independent": "zero",
+      "equal": true
+    },
+    {
+      "packet": "packet-e6e65912d893",
+      "leaf": "E03",
+      "author": "zero",
+      "independent": "zero",
+      "equal": true
+    },
+    {
+      "packet": "packet-e6e65912d893",
+      "leaf": "E04",
+      "author": "zero",
+      "independent": "zero",
+      "equal": true
+    },
+    {
+      "packet": "packet-e6e65912d893",
+      "leaf": "E05",
+      "author": "zero",
+      "independent": "zero",
+      "equal": true
+    },
+    {
+      "packet": "packet-e6e65912d893",
+      "leaf": "E06",
+      "author": "zero",
+      "independent": "zero",
+      "equal": true
+    },
+    {
+      "packet": "packet-e6e65912d893",
+      "leaf": "F01",
+      "author": "zero",
+      "independent": "zero",
+      "equal": true
+    },
+    {
+      "packet": "packet-e6e65912d893",
+      "leaf": "F02",
+      "author": "zero",
+      "independent": "zero",
+      "equal": true
+    },
+    {
+      "packet": "packet-e6e65912d893",
+      "leaf": "F03",
+      "author": "zero",
+      "independent": "zero",
+      "equal": true
+    },
+    {
+      "packet": "packet-e6e65912d893",
+      "leaf": "F04",
+      "author": "zero",
+      "independent": "zero",
+      "equal": true
+    },
+    {
+      "packet": "packet-e6e65912d893",
+      "leaf": "F05",
+      "author": "full",
+      "independent": "full",
+      "equal": true
+    },
+    {
+      "packet": "packet-ec4f68ffa499",
+      "leaf": "D07",
+      "author": "full",
+      "independent": "full",
+      "equal": true
+    },
+    {
+      "packet": "packet-ec4f68ffa499",
+      "leaf": "E01",
+      "author": "full",
+      "independent": "full",
+      "equal": true
+    },
+    {
+      "packet": "packet-ec4f68ffa499",
+      "leaf": "E02",
+      "author": "full",
+      "independent": "full",
+      "equal": true
+    },
+    {
+      "packet": "packet-ec4f68ffa499",
+      "leaf": "E03",
+      "author": "full",
+      "independent": "full",
+      "equal": true
+    },
+    {
+      "packet": "packet-ec4f68ffa499",
+      "leaf": "E04",
+      "author": "full",
+      "independent": "full",
+      "equal": true
+    },
+    {
+      "packet": "packet-ec4f68ffa499",
+      "leaf": "E05",
+      "author": "full",
+      "independent": "full",
+      "equal": true
+    },
+    {
+      "packet": "packet-ec4f68ffa499",
+      "leaf": "E06",
+      "author": "full",
+      "independent": "full",
+      "equal": true
+    },
+    {
+      "packet": "packet-ec4f68ffa499",
+      "leaf": "F01",
+      "author": "full",
+      "independent": "full",
+      "equal": true
+    },
+    {
+      "packet": "packet-ec4f68ffa499",
+      "leaf": "F02",
+      "author": "full",
+      "independent": "full",
+      "equal": true
+    },
+    {
+      "packet": "packet-ec4f68ffa499",
+      "leaf": "F03",
+      "author": "full",
+      "independent": "full",
+      "equal": true
+    },
+    {
+      "packet": "packet-ec4f68ffa499",
+      "leaf": "F04",
+      "author": "full",
+      "independent": "full",
+      "equal": true
+    },
+    {
+      "packet": "packet-ec4f68ffa499",
+      "leaf": "F05",
+      "author": "full",
+      "independent": "full",
+      "equal": true
+    }
+  ]
+}

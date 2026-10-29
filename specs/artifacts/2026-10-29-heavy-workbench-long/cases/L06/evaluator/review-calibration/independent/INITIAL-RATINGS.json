@@ -1,0 +1,687 @@
+{
+  "format": "l06-label-masked-initial-review/1",
+  "sealed_utc": "2026-10-29T18:42:58.956246+00:00",
+  "rater": "independent-agent-benchmark_review",
+  "prior_familiarity": "Previously audited original reference/source/full execution; this is label masking only, not novel content or human double-blind.",
+  "author_key_read": false,
+  "author_construction_script_read": false,
+  "scope": "36 original independent first judgements on controlled components; not candidate grades, overall47 score, expert consensus or benchmark maturity",
+  "underlying_execution_interpretation": "Per supplied scope, baseline/plan/business/real underlying execution are shared unchanged facts; report/maps/operations/PNG are edited components. Non-F05 judgements evaluate packet content against those facts; F05 separately evaluates the common real cold-rebuild card.",
+  "ratings": [
+    {
+      "packet_id": "packet-97ad1f63e52c",
+      "leaf": "D07",
+      "judgement": "half",
+      "observation": "来源表准确完成目录与供应两类身份/单位映射，另外BOM/产线及情景/设施两类明确待补；符合2至3类完整的半分锚点。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-97ad1f63e52c/source-map.md",
+          "locator": "lines3–5",
+          "observation": "A01/A02给出index、联合ID、每件价格/包装/提前期单位，其他两类未提供。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-97ad1f63e52c",
+      "leaf": "E01",
+      "judgement": "full",
+      "observation": "包内基线定义为本次首个真实incumbent，完整策略/业务结果可执行，重新计价241299/5=48259.8与报告相同。本轮明确底层真实执行/账未编辑，未把校准报告改写称新执行。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-97ad1f63e52c/report.md",
+          "locator": "lines13–19",
+          "observation": "准确的基线定义和精确费用。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-97ad1f63e52c/baseline-plan.json",
+          "locator": "decisions all3 scenarios/16weeks",
+          "observation": "完整可执行基线控制。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-97ad1f63e52c/baseline-business.json",
+          "locator": "expected_cost_exact/scenarios",
+          "observation": "与本次标准库业务回放全对象一致；事实收据见factual-audit.json。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-97ad1f63e52c/run.json",
+          "locator": "algorithm/command/execution_evidence",
+          "observation": "包内保留的真实底层运行元数据。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-97ad1f63e52c",
+      "leaf": "E02",
+      "judgement": "half",
+      "observation": "周/产品/需求/同周上界正确，但没有写必需预存数量；能由读者相减不等于交付已明确给出。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-97ad1f63e52c/report.md",
+          "locator": "lines37–42",
+          "observation": "例如P0周6需求10、上界0，但删去了至少10件预存结论。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-97ad1f63e52c",
+      "leaf": "E03",
+      "judgement": "half",
+      "observation": "正确定位A周6–8容量15<MOQ20、开关0及真实流量；但仍只是指向其他供方/早期承诺，没有具体命名提前期替代或保持策略的依据。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-97ad1f63e52c/report.md",
+          "locator": "lines44–48",
+          "observation": "约束正确，替代解释不完整。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-97ad1f63e52c/plan.json",
+          "locator": "decisions.supplier_disruption.truck_on[6:9][0]",
+          "observation": "真实开关均0，非错误分析。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-97ad1f63e52c",
+      "leaf": "E04",
+      "judgement": "half",
+      "observation": "三场景最紧周3和现金−5369正确，但表中只剩末余额，没有对应开周现金/回款/支出分解。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-97ad1f63e52c/report.md",
+          "locator": "lines26–32",
+          "observation": "省略实际−3389+0−1980来源。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-97ad1f63e52c/ledger.json",
+          "locator": "scenarios.*.weeks[3]",
+          "observation": "底层账可以验证，但说明没有完成解释分解。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-97ad1f63e52c",
+      "leaf": "E05",
+      "judgement": "half",
+      "observation": "最大分量材料采购362509/10正确；表中没有比例和具体采购动作来源解释，符合部分锚点。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-97ad1f63e52c/report.md",
+          "locator": "lines50–57",
+          "observation": "金额正确但比例未给出。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-97ad1f63e52c",
+      "leaf": "E06",
+      "judgement": "half",
+      "observation": "另一个完整真实可行策略及费用477391/10成立，描述了调线动作，但没有说明1.5增量和产线费用/工时权衡。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-97ad1f63e52c/report.md",
+          "locator": "lines15–19",
+          "observation": "只有策略成本对照和泛化声明。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-97ad1f63e52c/alternative-search.json",
+          "locator": "change/scenarios/week",
+          "observation": "base周15一件P2 F0→F1。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-97ad1f63e52c/alternative-business.json",
+          "locator": "expected_cost_exact",
+          "observation": "本次回放确认真实合法替代，但分析不足。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-97ad1f63e52c",
+      "leaf": "F01",
+      "judgement": "half",
+      "observation": "运营表完整提供周0共同动作23行，全部数量正确；共同周1–3缺失，不能用机器plan已完整替代运营交接缺口。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-97ad1f63e52c/operations.csv",
+          "locator": "all_scenarios week0,23rows",
+          "observation": "无错误动作，但共同后3周共69行未交接。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-97ad1f63e52c/report.md",
+          "locator": "line72",
+          "observation": "作者明确其余共同周待整理。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-97ad1f63e52c",
+      "leaf": "F02",
+      "judgement": "half",
+      "observation": "base揭示后周4–15的276行动行完整正确；另两分支交接缺失。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-97ad1f63e52c/operations.csv",
+          "locator": "base weeks4–15",
+          "observation": "实际只有base分支。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-97ad1f63e52c/report.md",
+          "locator": "line72",
+          "observation": "明确另两分支待整理。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-97ad1f63e52c",
+      "leaf": "F03",
+      "judgement": "half",
+      "observation": "真实可行/非零gap与不是精确最优的措辞正确，但没有说明合成情景/新中断/信用等运营限制与应对影响。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-97ad1f63e52c/report.md",
+          "locator": "lines7–9,72",
+          "observation": "保留数学终态限定，未保留运营局限段。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-97ad1f63e52c",
+      "leaf": "F04",
+      "judgement": "full",
+      "observation": "已实际打开三张PNG；16周三场景的现金−5369信用线、费用堆叠和周内仓容240/100均与包内真实账一致，单位/图例可读。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-97ad1f63e52c/figures/cash.png",
+          "locator": "entire rendered PNG",
+          "observation": "三曲线和正确信用底线。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-97ad1f63e52c/figures/cost.png",
+          "locator": "entire rendered PNG",
+          "observation": "三场景总费用与四分量。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-97ad1f63e52c/figures/storage.png",
+          "locator": "both rendered panels",
+          "observation": "阶段口径、零起点、仓容与图例准确。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-97ad1f63e52c",
+      "leaf": "F05",
+      "judgement": "full",
+      "observation": "按本轮明确隔离合同，只评共同未编辑README/raw/source与真实完整独立冷复建卡。声明依赖/命令已由另一执行者（即此前此独立审查者）实际照说明重建成功，无缺失步骤；不声称任一编辑报告由该源码新执行产生。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/common/source/README.md",
+          "locator": "dependency paragraph/command/defaults",
+          "observation": "声明环境与真实调用一致。"
+        },
+        {
+          "path": "allowed-source-snapshot/common/terminal-inspect.json",
+          "locator": "Config.Cmd/Mounts/State",
+          "observation": "readonly原输入源码、新结果、自然exit0。"
+        },
+        {
+          "path": "allowed-source-snapshot/common/REVIEW.md",
+          "locator": "实际执行与输入身份/独立结果",
+          "observation": "真实完整1253.251231s冷复建卡，非此轮新运行。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-e6e65912d893",
+      "leaf": "D07",
+      "judgement": "zero",
+      "observation": "来源表把R0错误定位到supplier_terms.supplier_id，又把pack_units称卡车开关，属于明确身份/单位错误。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-e6e65912d893/source-map.md",
+          "locator": "line2",
+          "observation": "R0应为raw_id，pack_units为每包件数。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-e6e65912d893",
+      "leaf": "E01",
+      "judgement": "zero",
+      "observation": "报告声称已验证基线成本1，实际完整基线业务为241299/5=48259.8；已有正确附件不补偿明确错误结论。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-e6e65912d893/report.md",
+          "locator": "line4",
+          "observation": "基线成本1错误。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-e6e65912d893/baseline-business.json",
+          "locator": "expected_cost_exact",
+          "observation": "numerator241299/denominator5。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-e6e65912d893",
+      "leaf": "E02",
+      "judgement": "zero",
+      "observation": "报告称P0周6无须预存且同周能力足够；公开产能上界0而需求10，必要预存10，结论相反。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-e6e65912d893/report.md",
+          "locator": "line5",
+          "observation": "错误否认必需预存。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-e6e65912d893/normalized.json",
+          "locator": "scenarios.base.plant_capacity_hours[6]/demand[6][0]",
+          "observation": "资格/工时计算同周P0上界0。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-e6e65912d893",
+      "leaf": "E03",
+      "judgement": "zero",
+      "observation": "把容量15下的MOQ20解释为可启运并要求A开关1，与约束及实际策略开关0相反。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-e6e65912d893/report.md",
+          "locator": "line6",
+          "observation": "不可执行的供应建议。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-e6e65912d893/operations.csv",
+          "locator": "line416",
+          "observation": "同时把该中断场景周6A开关改为1，真实plan为0。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-e6e65912d893",
+      "leaf": "E04",
+      "judgement": "zero",
+      "observation": "把应收24150加入现金，得到18781而否认实际−5369；回款未到账，不能补周3信用。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-e6e65912d893/report.md",
+          "locator": "line7",
+          "observation": "AR当现金的明确错误。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-e6e65912d893/ledger.json",
+          "locator": "scenarios.*.weeks[3].cash/receipts",
+          "observation": "实际cash−5369、receipts0。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-e6e65912d893",
+      "leaf": "E05",
+      "judgement": "zero",
+      "observation": "声称生产为最大费用来源；实际材料采购36250.9远高于生产5800.8。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-e6e65912d893/report.md",
+          "locator": "line8",
+          "observation": "主导费用结论错误。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-e6e65912d893/ledger.json",
+          "locator": "all scenario purchase_cost/production_cost weighted totals",
+          "observation": "公开概率加权可直接重算。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-e6e65912d893",
+      "leaf": "E06",
+      "judgement": "zero",
+      "observation": "称替代比主方案便宜1.5；实际替代47739.1比主47737.6贵1.5，经济结论方向相反。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-e6e65912d893/report.md",
+          "locator": "line4",
+          "observation": "错误成本权衡。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-e6e65912d893/alternative-business.json",
+          "locator": "expected_cost_exact",
+          "observation": "477391/10，主方案238688/5。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-e6e65912d893",
+      "leaf": "F01",
+      "judgement": "zero",
+      "observation": "共同动作表周0A/R0订单给6包而真实策略5包，运营者将执行错误承诺；不能因其余行完整给半分。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-e6e65912d893/operations.csv",
+          "locator": "line3",
+          "observation": "all_scenarios,0,order,A,R0,6应为5。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-e6e65912d893/plan.json",
+          "locator": "decisions.base.order_lots[0][0][0]",
+          "observation": "真实5包。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-e6e65912d893",
+      "leaf": "F02",
+      "judgement": "zero",
+      "observation": "后续分支交接把supplier_disruption周6A开关设1，与实际条件策略0及容量/MOQ不符。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-e6e65912d893/operations.csv",
+          "locator": "line416",
+          "observation": "错误条件行动。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-e6e65912d893/report.md",
+          "locator": "lines6,10",
+          "observation": "明确要求立即按错误行动执行。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-e6e65912d893",
+      "leaf": "F03",
+      "judgement": "zero",
+      "observation": "断言精确全局最优且保证所有未给中断履约，超出非零gap与有限场景的可核验结果。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-e6e65912d893/report.md",
+          "locator": "line3",
+          "observation": "两项明确过度结论。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-e6e65912d893/solver-result.json",
+          "locator": "termination/solver_gap_scaled_by_primal",
+          "observation": "非零gap，不是全局精确或未列情景保证。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-e6e65912d893",
+      "leaf": "F04",
+      "judgement": "zero",
+      "observation": "已实际打开三张PNG：只有only一个场景/单周点，cash约94与floor0、cost6、仓容4/1。它们不是本16周三场景和cap240/100的数据，核心对象错误而非仅缺图例。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-e6e65912d893/figures/cash.png",
+          "locator": "actual rendered image",
+          "observation": "only/一周与94现金错误对象。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-e6e65912d893/figures/cost.png",
+          "locator": "actual rendered image",
+          "observation": "单场景总6不是约4.8万。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-e6e65912d893/figures/storage.png",
+          "locator": "actual rendered image",
+          "observation": "cap4/1不是240/100。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-e6e65912d893/report.md",
+          "locator": "line10",
+          "observation": "明确声称图代表本16周三场景。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-e6e65912d893",
+      "leaf": "F05",
+      "judgement": "full",
+      "observation": "按本轮明确隔离合同，只评共同未编辑README/raw/source与真实完整独立冷复建卡。声明依赖/命令已由另一执行者（即此前此独立审查者）实际照说明重建成功，无缺失步骤；不声称任一编辑报告由该源码新执行产生。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/common/source/README.md",
+          "locator": "dependency paragraph/command/defaults",
+          "observation": "声明环境与真实调用一致。"
+        },
+        {
+          "path": "allowed-source-snapshot/common/terminal-inspect.json",
+          "locator": "Config.Cmd/Mounts/State",
+          "observation": "readonly原输入源码、新结果、自然exit0。"
+        },
+        {
+          "path": "allowed-source-snapshot/common/REVIEW.md",
+          "locator": "实际执行与输入身份/独立结果",
+          "observation": "真实完整1253.251231s冷复建卡，非此轮新运行。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-ec4f68ffa499",
+      "leaf": "D07",
+      "judgement": "full",
+      "observation": "四类事实的文件、显式index、联合身份和单位均准确定位，涵盖全部目录/供应/BOM产线/情景设施。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-ec4f68ffa499/source-map.md",
+          "locator": "lines3–19",
+          "observation": "11CSV和facility完整映射。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-ec4f68ffa499",
+      "leaf": "E01",
+      "judgement": "full",
+      "observation": "完整基线为本次首incumbent，241299/5与真实业务回放相同，定义和验证一致；本轮底层真实执行未编辑。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-ec4f68ffa499/report.md",
+          "locator": "lines13–19",
+          "observation": "正确基线定义与结果。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-ec4f68ffa499/baseline-plan.json",
+          "locator": "all controls",
+          "observation": "实际可执行全期基线。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-ec4f68ffa499/baseline-business.json",
+          "locator": "expected_cost_exact/scenarios",
+          "observation": "与本次标准库回放完整一致。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-ec4f68ffa499/run.json",
+          "locator": "algorithm/command/execution_evidence",
+          "observation": "保留真实底层运行元数据。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-ec4f68ffa499",
+      "leaf": "E02",
+      "judgement": "full",
+      "observation": "给出六处正确周/产品、同周能力和最低预存量，并核对实际前周库存。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-ec4f68ffa499/report.md",
+          "locator": "lines38–43",
+          "observation": "例如P0周6上界0/需求10→最低库存10；P3周9上界3/需求4→1。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-ec4f68ffa499",
+      "leaf": "E03",
+      "judgement": "full",
+      "observation": "准确说明A中断排除当周正装运而不抹掉在途；按A一周/B两周/C当周提前期列出实际来源和真实基线替代，解释可行选择集及不强迫翻转。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-ec4f68ffa499/report.md",
+          "locator": "lines76–87",
+          "observation": "具体主方案/基线订单周与到货件数，与包内真实计划一致。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-ec4f68ffa499/plan.json",
+          "locator": "supplier_disruption orders weeks4–6/truck_on[6]",
+          "observation": "表内真实流量可重算，开关0。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-ec4f68ffa499/baseline-plan.json",
+          "locator": "supplier_disruption orders weeks4–6",
+          "observation": "替代完整基线真实可行。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-ec4f68ffa499",
+      "leaf": "E04",
+      "judgement": "full",
+      "observation": "明确定位三场景周3资金瓶颈，开周−3389/收款0/支出1980→−5369，并明确AR24150不是现金。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-ec4f68ffa499/report.md",
+          "locator": "lines28–34",
+          "observation": "实际来源分解完整准确。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-ec4f68ffa499/ledger.json",
+          "locator": "scenarios.*.weeks[3]",
+          "observation": "数值与真实账一致。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-ec4f68ffa499",
+      "leaf": "E05",
+      "judgement": "full",
+      "observation": "最大采购362509/10与75.94%正确，四费用和比例准确，可追溯到采购/装运/生产/库存动作。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-ec4f68ffa499/report.md",
+          "locator": "lines53–58,68",
+          "observation": "量化费用及运营账定位。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-ec4f68ffa499/ledger.json",
+          "locator": "per-week order_lots/purchase_cost",
+          "observation": "概率加权采购构成可重算。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-ec4f68ffa499",
+      "leaf": "E06",
+      "judgement": "full",
+      "observation": "另一完整可行策略使base周15P2 F0→F1：每件成本14→17，概率1/2故总增1.5；说明工时转移、库存不变及无模型外收益，权衡与事实相符。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-ec4f68ffa499/report.md",
+          "locator": "line89",
+          "observation": "明确增量费用与产能含义。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-ec4f68ffa499/alternative-business.json",
+          "locator": "expected_cost_exact/scenarios",
+          "observation": "完整合法策略验证477391/10。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-ec4f68ffa499/normalized.json",
+          "locator": "production_cost_minor[*][2]/production_hours[2]",
+          "observation": "成本14/17，工时1。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-ec4f68ffa499",
+      "leaf": "F01",
+      "judgement": "full",
+      "observation": "共同周0–3共92条采购/装运/生产动作齐全准确，身份/数量/单位可直接操作。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-ec4f68ffa499/operations.csv",
+          "locator": "all_scenarios weeks0–3",
+          "observation": "本次逐条比较92行无错误/缺漏。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-ec4f68ffa499",
+      "leaf": "F02",
+      "judgement": "full",
+      "observation": "三个揭示后分支周4–15各276条动作完整准确，分支ID与信息边界清楚，不改已承诺动作。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-ec4f68ffa499/operations.csv",
+          "locator": "base/supplier_disruption/demand_shift weeks4–15",
+          "observation": "本次逐条比较828行正确。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-ec4f68ffa499/report.md",
+          "locator": "lines24,68",
+          "observation": "说明共同前缀与后续场景定位。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-ec4f68ffa499",
+      "leaf": "F03",
+      "judgement": "full",
+      "observation": "限制科学措辞准确，并说明有限情景/信用/新中断下需重建复核的运营影响，不将5369当最小信用或非零gap当精确最优。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-ec4f68ffa499/report.md",
+          "locator": "lines7–9,72,91",
+          "observation": "未知边界与具体决策影响清楚。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-ec4f68ffa499",
+      "leaf": "F04",
+      "judgement": "full",
+      "observation": "已实际打开三张真实PNG，16周三场景/正确现金与费用/仓容阶段数据和图例单位准确可读；与包内账一致。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/packet-ec4f68ffa499/figures/cash.png",
+          "locator": "entire rendered image",
+          "observation": "正确3场景/信用−5369/周0–15。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-ec4f68ffa499/figures/cost.png",
+          "locator": "entire rendered image",
+          "observation": "总费用47142/48040/48773与四分量。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/packet-ec4f68ffa499/figures/storage.png",
+          "locator": "both rendered panels",
+          "observation": "raw cap240、FGcap100、阶段口径和零起点准确。"
+        }
+      ]
+    },
+    {
+      "packet_id": "packet-ec4f68ffa499",
+      "leaf": "F05",
+      "judgement": "full",
+      "observation": "按本轮明确隔离合同，只评共同未编辑README/raw/source与真实完整独立冷复建卡。声明依赖/命令已由另一执行者（即此前此独立审查者）实际照说明重建成功，无缺失步骤；不声称任一编辑报告由该源码新执行产生。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/common/source/README.md",
+          "locator": "dependency paragraph/command/defaults",
+          "observation": "声明环境与真实调用一致。"
+        },
+        {
+          "path": "allowed-source-snapshot/common/terminal-inspect.json",
+          "locator": "Config.Cmd/Mounts/State",
+          "observation": "readonly原输入源码、新结果、自然exit0。"
+        },
+        {
+          "path": "allowed-source-snapshot/common/REVIEW.md",
+          "locator": "实际执行与输入身份/独立结果",
+          "observation": "真实完整1253.251231s冷复建卡，非此轮新运行。"
+        }
+      ]
+    }
+  ],
+  "candidate_total_score": null,
+  "maturity_approved": false
+}

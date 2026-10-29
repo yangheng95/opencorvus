@@ -1,0 +1,96 @@
+{
+  "status": "development_component_calibration_closed_after_adjudication",
+  "initial_label_masked_agreement": {
+    "exact": 36,
+    "total": 36,
+    "registered_minimum": 33
+  },
+  "new_equivalent_format_control_agreement": {
+    "exact": 8,
+    "total": 8
+  },
+  "shared_bias_detected_despite_initial_agreement": true,
+  "adjudications": [
+    {
+      "packet": "packet-97ad1f63e52c",
+      "leaves": [
+        "F01",
+        "F02",
+        "E04",
+        "E05"
+      ],
+      "original": "half",
+      "adjudicated": "full",
+      "reason": "Complete alternative-format actions and closed mathematical information cannot be rejected for CSV gaps, repeated numbers or printed percentages."
+    }
+  ],
+  "original_keys_and_initial_ratings_preserved": true,
+  "specified_disputes_resolved": true,
+  "limits": [
+    "Three related component packets and two focused controls, not five candidates.",
+    "One independent AI agent familiar with the reference, not professional human double-blind.",
+    "Agreement is not statistical reliability or benchmark difficulty.",
+    "Fresh candidate outputs, actual source-only evaluation and hours evidence remain required."
+  ],
+  "candidate_score": null,
+  "professional_certification": false,
+  "benchmark_maturity_achieved": false,
+  "new_control_comparisons": [
+    {
+      "packet": "material-ae256af46be0",
+      "leaf": "E04",
+      "author": "half",
+      "independent": "half",
+      "equal": true
+    },
+    {
+      "packet": "material-ae256af46be0",
+      "leaf": "E05",
+      "author": "half",
+      "independent": "half",
+      "equal": true
+    },
+    {
+      "packet": "material-ae256af46be0",
+      "leaf": "F01",
+      "author": "half",
+      "independent": "half",
+      "equal": true
+    },
+    {
+      "packet": "material-ae256af46be0",
+      "leaf": "F02",
+      "author": "half",
+      "independent": "half",
+      "equal": true
+    },
+    {
+      "packet": "material-ee7b28ad5ec8",
+      "leaf": "E04",
+      "author": "full",
+      "independent": "full",
+      "equal": true
+    },
+    {
+      "packet": "material-ee7b28ad5ec8",
+      "leaf": "E05",
+      "author": "full",
+      "independent": "full",
+      "equal": true
+    },
+    {
+      "packet": "material-ee7b28ad5ec8",
+      "leaf": "F01",
+      "author": "full",
+      "independent": "full",
+      "equal": true
+    },
+    {
+      "packet": "material-ee7b28ad5ec8",
+      "leaf": "F02",
+      "author": "full",
+      "independent": "full",
+      "equal": true
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "argv": [
+    "docker",
+    "run",
+    "--detach",
+    "--name",
+    "oc-l06-source-price-20261029-a",
+    "--cidfile",
+    "D:\\opencorvus-benchmark-runs\\l06-source-price-control-20261029\\container.cid",
+    "--network",
+    "none",
+    "--mount",
+    "type=bind,source=D:\\opencorvus-benchmark-runs\\l06-source-price-control-20261029\\project,target=/project,readonly",
+    "--mount",
+    "type=bind,source=D:\\opencorvus-benchmark-runs\\l06-source-price-control-20261029\\input,target=/input,readonly",
+    "--mount",
+    "type=bind,source=D:\\opencorvus-benchmark-runs\\l06-source-price-control-20261029\\results,target=/results",
+    "--workdir",
+    "/project",
+    "opencorvus-benchmark-reference:20261029",
+    "/opt/cpsat/bin/python",
+    "-B",
+    "reproduce.py",
+    "--input",
+    "/input",
+    "--output",
+    "/results/delivery"
+  ],
+  "exit_code": 0,
+  "stdout": "2e09ae3f0a13ce0331ed67aec39ecb687953aed155f793e41570a7b03cced6fd\n",
+  "stderr": "",
+  "observed_utc": "2026-10-29T18:17:49.423998+00:00"
+}

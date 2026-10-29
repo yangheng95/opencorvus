@@ -1,10 +1,13 @@
 {
-  "format": "l06-quality-reference/1",
+  "format": "l06-quality-reference/2",
   "reference_id": "L06-v2-base-native-cpsat-20261029",
   "case_version": "HeavyWorkBench-Long/0.2.0-dev",
-  "status": "base_registered_before_fresh_candidate",
-  "scope": "base public packet only; not numerical variants or full-case freeze",
-  "lower_bound_minor": {"numerator": 47380, "denominator": 1},
+  "status": "registered_before_fresh_candidate",
+  "scope": "base plus the exact registered monotone supplier-price control; no full-case freeze",
+  "lower_bound_minor": {
+    "numerator": 47380,
+    "denominator": 1
+  },
   "bound_source": {
     "kind": "trusted_native_integer_search_bound",
     "solver": "OR-Tools CP-SAT",
@@ -25,14 +28,47 @@
   "quality_rule": "Use maximum_relative_gap and (C-L)/L from the rubric, with C independently recomputed from a business-feasible plan; use exact rational arithmetic.",
   "reachability_witness": {
     "exact_cost_minor": 47808,
-    "gap_relative_to_bound": {"numerator": 107, "denominator": 11845},
+    "gap_relative_to_bound": {
+      "numerator": 107,
+      "denominator": 11845
+    },
     "plan": "originals.zip:quality-proof/plan.json",
     "independent_review": "../../../../independent-public-contract/quality-addendum/REVIEW.md"
   },
   "native_termination": "OPTIMAL within the requested nonzero primal-relative gap 0.009; exact optimum is not proven.",
   "independent_search_or_dual_proof": false,
   "fresh_candidate_started": false,
-  "variant_reference_registered": false,
+  "variant_reference_registered": true,
   "full_case_frozen": false,
-  "hours_validated": false
+  "hours_validated": false,
+  "derived_variants": [
+    {
+      "reference_id": "L06-v2-price-C-R0-plus1-20261029",
+      "transformation": {
+        "kind": "monotone_supplier_price_increase",
+        "supplier_id": "C",
+        "raw_id": "R0",
+        "delta_minor": 1
+      },
+      "input_identity": {
+        "captured_input": "price-control.zip:normalized.json"
+      },
+      "bound_derivation": {
+        "kind": "monotone_cost_and_feasible_set_inclusion",
+        "source_reference_id": "L06-v2-base-native-cpsat-20261029",
+        "proof": "price-control.zip:monotone-proof.json"
+      },
+      "reachability_witness": {
+        "plan": "price-control.zip:plan.json",
+        "cost_exact": {
+          "numerator": 238818,
+          "denominator": 5
+        },
+        "business": "price-control.zip:business.json"
+      },
+      "qualification_status": "independently_qualified",
+      "independent_review": "../../../../independent-variant/REVIEW.md"
+    }
+  ],
+  "case_version_provenance": "Earlier suite-dev construction label retained. Frozen contract L06/0.2.0 is identified by rubric/profile/FREEZE and exact registered raw; original native receipts unchanged."
 }

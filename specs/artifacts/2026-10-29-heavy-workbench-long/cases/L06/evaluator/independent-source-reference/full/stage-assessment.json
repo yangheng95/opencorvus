@@ -1,0 +1,103 @@
+{
+  "result": "complete_independent_raw_source_replay_numeric_and_report_passed",
+  "checks": 31,
+  "all_passed": true,
+  "failed_checks": [],
+  "terminal_exit": 0,
+  "complete_container_seconds": 1253.251231,
+  "main_seconds": 1250.6060640648939,
+  "solver_seconds": 1249.5317429150455,
+  "cost_exact": "238688/5",
+  "native_cost_exact": "238688/5",
+  "native_bound": 47371.0,
+  "fixed_registered_L": 47380,
+  "gap_relative_to_fixed_L_exact": "447/59225",
+  "gap_relative_to_fixed_L_percent": 0.7547488391726467,
+  "baseline_cost_exact": "241299/5",
+  "alternative_cost_exact": "477391/10",
+  "independent_prefix925": {
+    "scope": "v2 full independent prefix/physical-stage/financial arithmetic, not global optimization",
+    "all_checks_passed": true,
+    "check_count": 925,
+    "seconds": 0.007088600192219019,
+    "expected_cost_exact": "238688/5",
+    "caps": {
+      "raw": 240,
+      "finished": 100
+    },
+    "credit5369_is_only_feasible_upper_bound": true,
+    "scenarios": {
+      "base": {
+        "total_cost_minor": 47142,
+        "minimum_cash_minor": -5369,
+        "terminal_cash_minor": 32208,
+        "terminal_receivable_minor": 24150,
+        "raw_peak": [
+          191,
+          4
+        ],
+        "finished_peak": [
+          85,
+          5
+        ]
+      },
+      "supplier_disruption": {
+        "total_cost_minor": 48040,
+        "minimum_cash_minor": -5369,
+        "terminal_cash_minor": 31310,
+        "terminal_receivable_minor": 24150,
+        "raw_peak": [
+          191,
+          4
+        ],
+        "finished_peak": [
+          85,
+          5
+        ]
+      },
+      "demand_shift": {
+        "total_cost_minor": 48773,
+        "minimum_cash_minor": -5369,
+        "terminal_cash_minor": 32737,
+        "terminal_receivable_minor": 25230,
+        "raw_peak": [
+          191,
+          4
+        ],
+        "finished_peak": [
+          91,
+          5
+        ]
+      }
+    }
+  },
+  "numeric30": {
+    "status": "partially_assessed",
+    "counts": {
+      "verified_pass": 30,
+      "verified_fail": 0,
+      "candidate_incomplete": 0,
+      "blocked_candidate": 0,
+      "unassessed": 17
+    },
+    "total_score": null,
+    "business_success": null
+  },
+  "manual_figures_review": "actually_viewed_and_checked_all_three",
+  "remaining17_leaves_scored": false,
+  "DUT_hour_claim": false,
+  "full47_grader_approved": false,
+  "heavy_freeze_approved": false,
+  "full16week_optimization_runs_by_reviewer": 1,
+  "Provider_calls": 0,
+  "GPU_work": false,
+  "delegations": 0,
+  "report_interruption_prose_checks": 3,
+  "remaining17_observation_file": "remaining17-observations.json",
+  "current_substantive_full_reference_replay_blocker": null,
+  "open_narrative_improvements": [
+    "E03 named alternative-supplier/lead-time explanation",
+    "E06 explicit incremental-cost explanation"
+  ],
+  "full_reference_qualification_scope": "independent full base replay, business/30numeric/report facts/actual figures; not full47 formal scoring or rater calibration"
+}

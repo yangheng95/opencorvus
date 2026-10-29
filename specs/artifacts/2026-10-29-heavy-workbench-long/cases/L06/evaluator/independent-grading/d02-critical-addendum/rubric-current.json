@@ -383,7 +383,7 @@
         {
           "id": "D02",
           "weight": 4,
-          "critical": false,
+          "critical": true,
           "criterion": "同一程序正确处理预先公开类别的输入数值变体",
           "evidence": "冻结变体原材料、真实新运行与独立参考",
           "method": "input_variation",
@@ -699,6 +699,23 @@
     "numeric_30_leaf_adapter": true,
     "full_reference_source_execution": true,
     "independent_micro_source_replay": true,
-    "independent_full_source_replay": false
+    "independent_full_source_replay": false,
+    "review_calibration": false
+  },
+  "publication": {
+    "requires_readiness": [
+      "normalized_packet_local_contract",
+      "base_full_plan_feasible",
+      "one_percent_quality_qualification",
+      "full_reference_report_and_ledgers",
+      "variant_quality_reference",
+      "per_leaf_evaluation_adapter",
+      "review_calibration",
+      "independent_full_case_freeze"
+    ],
+    "good_score_at_least": 90,
+    "comparison_rule": "Both fresh systems good under one frozen contract -> upgrade a new version; retain the current version/results. This is a preregistered author rule, not a universal benchmark standard.",
+    "denominator": 100,
+    "time_rule": "Observe real task wall, model requests, tool/subprocess activity separately; union overlapping intervals, exclude setup/pauses and label unobserved gaps unknown. Efficient correct completion is accepted."
   }
 }

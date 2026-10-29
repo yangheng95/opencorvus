@@ -25,3 +25,5 @@ python current-source/check_l06.py --input v2/inputs/full.json --plan v2/full-wi
 [10叶summary/ledger primitive](v2/delivery-projection/README.md)已实际11CLI验证精确金额、分场景最低现金、可选库存、缺交/候选阻断/评估侧故障，以及手算应收/现金。它不评其余37叶，不认证源码执行或质量，不出总分；完整逐叶adapter仍待完成。
 
 [30数值叶局部资格](v2/numeric-findings/README.md)和[真正source-only完整参考链](v2/source-reference/README.md)分别保留新谓词采集/参考完整性修复与从raw运行到报告三图的证据。旧10叶/Highs描述是历史阶段，当前路径以current-source及这两份记录为准；全47叶/变体/冻结和候选小时级仍未完成。
+
+L06/0.2.0已完成[最终独立合同审查](../independent-freeze-review/REVIEW.md)并冻结，规范rubric.json/public文件名不再有.draft。历史原件不改；合同资格不是新候选或小时级结果。

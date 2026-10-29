@@ -1,0 +1,19 @@
+{
+  "status": "actually_viewed_and_manually_checked",
+  "method": "view_image of all three actual completed full-replay PNGs; no UI automation",
+  "viewed_utc": "2026-10-29T18:08:04.507125+00:00",
+  "cash": {
+    "path": "D:\\opencorvus-benchmark-runs\\l06-reference-independent-review-20261029\\full-cold-replay\\results\\delivery\\figures\\cash.png",
+    "observations": "Three scenario identities, zero-based weeks 0..15, minor-unit cash axis and dashed credit floor are readable. All curves meet the -5369 floor at week3, recover after lagged receipts, and end base32208/disruption31310/shift32737, consistent with independent ledger."
+  },
+  "cost": {
+    "path": "D:\\opencorvus-benchmark-runs\\l06-reference-independent-review-20261029\\full-cold-replay\\results\\delivery\\figures\\cost.png",
+    "observations": "Stacked scenario totals47142/48040/48773; purchases dominate, with freight/production/holding separately legended. Axis starts0, units and outside legend readable, no clipping."
+  },
+  "storage": {
+    "path": "D:\\opencorvus-benchmark-runs\\l06-reference-independent-review-20261029\\full-cold-replay\\results\\delivery\\figures\\storage.png",
+    "observations": "Raw after-arrival/before-production and FG after-production/before-delivery are separate. Both axes start0; dashed caps240/100, three scenario legends outside axes; raw max191 and FG maxima85/85/91 agree with independent ledger. Common-prefix overlaps are legitimate."
+  },
+  "all_three_readable_and_data_faithful": true,
+  "formal_F04_score": null
+}

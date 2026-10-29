@@ -1,0 +1,32 @@
+{
+  "status": "D02_required_input_behavior_contract_qualified",
+  "criterion_change": [
+    {
+      "leaf": "D02",
+      "field": "critical",
+      "old": false,
+      "new": true
+    }
+  ],
+  "criterion_count": 47,
+  "total_weight": 100,
+  "D02_weight": 4,
+  "synthetic_failed_D02_score": 96,
+  "synthetic_business_success": false,
+  "synthetic_good": false,
+  "actual_D02_status": "unassessed",
+  "actual_assessment_status": "assessment_incomplete",
+  "actual_total_score": null,
+  "fixed_L": 47380,
+  "maximum_relative_gap": 0.01,
+  "new_aggregate_calls": 1,
+  "previous13CLI_repeated": false,
+  "solver_runs": 0,
+  "full_execution_runs": 0,
+  "Provider_calls": 0,
+  "Docker_runs": 0,
+  "GPU_work": false,
+  "delegations": 0,
+  "freeze_approved": false,
+  "observed_utc": "2026-10-29T18:26:45.376218+00:00"
+}

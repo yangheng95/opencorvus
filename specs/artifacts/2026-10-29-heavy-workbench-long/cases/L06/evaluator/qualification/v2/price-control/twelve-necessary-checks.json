@@ -1,0 +1,92 @@
+[
+  {
+    "supplier": "A",
+    "raw": "R0",
+    "status": "typed_plan_failure",
+    "code": "cash_limit",
+    "where": "base.week3"
+  },
+  {
+    "supplier": "A",
+    "raw": "R1",
+    "status": "typed_plan_failure",
+    "code": "cash_limit",
+    "where": "base.week3"
+  },
+  {
+    "supplier": "A",
+    "raw": "R2",
+    "status": "typed_plan_failure",
+    "code": "cash_limit",
+    "where": "base.week3"
+  },
+  {
+    "supplier": "A",
+    "raw": "R3",
+    "status": "typed_plan_failure",
+    "code": "cash_limit",
+    "where": "base.week3"
+  },
+  {
+    "supplier": "B",
+    "raw": "R0",
+    "status": "typed_plan_failure",
+    "code": "cash_limit",
+    "where": "base.week3"
+  },
+  {
+    "supplier": "B",
+    "raw": "R1",
+    "status": "typed_plan_failure",
+    "code": "cash_limit",
+    "where": "base.week3"
+  },
+  {
+    "supplier": "B",
+    "raw": "R2",
+    "status": "typed_plan_failure",
+    "code": "cash_limit",
+    "where": "base.week3"
+  },
+  {
+    "supplier": "B",
+    "raw": "R3",
+    "status": "typed_plan_failure",
+    "code": "cash_limit",
+    "where": "base.week3"
+  },
+  {
+    "supplier": "C",
+    "raw": "R0",
+    "cost_exact": {
+      "numerator": 238818,
+      "denominator": 5
+    },
+    "minimum_cash": -5369,
+    "status": "business_feasible"
+  },
+  {
+    "supplier": "C",
+    "raw": "R1",
+    "status": "typed_plan_failure",
+    "code": "cash_limit",
+    "where": "base.week3"
+  },
+  {
+    "supplier": "C",
+    "raw": "R2",
+    "cost_exact": {
+      "numerator": 95529,
+      "denominator": 2
+    },
+    "minimum_cash": -5369,
+    "status": "business_feasible"
+  },
+  {
+    "supplier": "C",
+    "raw": "R3",
+    "status": "typed_plan_failure",
+    "code": "cash_limit",
+    "where": "base.week3"
+  }
+]

@@ -1,0 +1,173 @@
+{
+  "format": "l06-equivalent-format-label-masked-initial/1",
+  "sealed_utc": "2026-10-29T18:54:55.647025+00:00",
+  "rater": "independent-agent-benchmark_review",
+  "author_key_read": false,
+  "construction_script_read": false,
+  "prior_reference_familiarity": true,
+  "context_oracle_used_to_fill_candidate_material": false,
+  "scope": "Controlled format/information calibration only, not candidates or total scores. Initial8 sealed before old-packet adjudication.",
+  "ratings": [
+    {
+      "packet_id": "material-ae256af46be0",
+      "leaf": "E04",
+      "judgement": "half",
+      "observation": "base周3现金−5369正确，但只交结论，未给回款/支出来源或对应公式和字段；公共现金定义和评估oracle不能替候选写出解释。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/material-ae256af46be0/EXPLANATIONS.json",
+          "locator": "cash_conclusion",
+          "observation": "仅scenario/week/cash，无来源解释。"
+        }
+      ]
+    },
+    {
+      "packet_id": "material-ae256af46be0",
+      "leaf": "E05",
+      "judgement": "half",
+      "observation": "最大采购分量362509/10正确，但只交金额，缺份额表达式/可定位分子分母和采购动作解释。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/material-ae256af46be0/EXPLANATIONS.json",
+          "locator": "major_cost_conclusion",
+          "observation": "component与amount_exact正确，未交份额/动作。"
+        }
+      ]
+    },
+    {
+      "packet_id": "material-ae256af46be0",
+      "leaf": "F01",
+      "judgement": "half",
+      "observation": "包内JSON确实只提供周0完整共同动作；其他共同周不存在于任何已交动作材料。现有动作与目录/单位正确，不因JSON而扣分，不用评估oracle补周1–3。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/material-ae256af46be0/handoff.json",
+          "locator": "common keys=[0]",
+          "observation": "周0三类动作完整准确。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/material-ae256af46be0/HANDOFF.md",
+          "locator": "entire text",
+          "observation": "明确其他共同周未提供，且包内无完整plan。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/material-ae256af46be0/operator-context.json",
+          "locator": "timing/catalogs/units/pack_units",
+          "observation": "索引和包装/件数/0/1说明充分。"
+        }
+      ]
+    },
+    {
+      "packet_id": "material-ae256af46be0",
+      "leaf": "F02",
+      "judgement": "half",
+      "observation": "JSON只交base条件分支first_week4的完整12周动作，另两分支在已交材料中均无动作；半分原因是真实缺信息，不是表格格式。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/material-ae256af46be0/handoff.json",
+          "locator": "conditional.base.when_scenario/first_week/actions",
+          "observation": "base完整且数值正确，其他分支未交。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/material-ae256af46be0/HANDOFF.md",
+          "locator": "entire text",
+          "observation": "说明另两分支无动作，不得读oracle代用。"
+        }
+      ]
+    },
+    {
+      "packet_id": "material-ee7b28ad5ec8",
+      "leaf": "E04",
+      "judgement": "full",
+      "observation": "JSON按三个场景定位真实最紧周3、现金−5369，明确opening−3389+receipts0−spending1980及恒等式/实际账字段和四周回款/AR边界；无需换成固定表或再抄账。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/material-ee7b28ad5ec8/EXPLANATIONS.json",
+          "locator": "cash.*",
+          "observation": "实际字段与公式经独立数值核对。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/material-ee7b28ad5ec8/ledger.json",
+          "locator": "scenarios.*.weeks[2:4]",
+          "observation": "所有引用真实提供，来源数值和最紧周正确。"
+        }
+      ]
+    },
+    {
+      "packet_id": "material-ee7b28ad5ec8",
+      "leaf": "E05",
+      "judgement": "full",
+      "observation": "JSON给采购362509/10、期望总成本238688/5、份额362509/477376及采购包装×件数×单价×概率公式；引用本包计划/规范事实/账/汇总真实齐全，比例与动作可追溯，未打印百分数不影响满分。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/material-ee7b28ad5ec8/EXPLANATIONS.json",
+          "locator": "major_cost",
+          "observation": "明确份额公式、精确分子分母与action_trace/locators。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/material-ee7b28ad5ec8/plan.json",
+          "locator": "decisions.*.order_lots",
+          "observation": "已交真实全量采购动作。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/material-ee7b28ad5ec8/normalized.json",
+          "locator": "suppliers/scenarios",
+          "observation": "包装/单价/概率已交。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/material-ee7b28ad5ec8/summary.json",
+          "locator": "expected_cost_minor",
+          "observation": "精确分母已交。"
+        }
+      ]
+    },
+    {
+      "packet_id": "material-ee7b28ad5ec8",
+      "leaf": "F01",
+      "judgement": "full",
+      "observation": "完整JSON实际覆盖全部场景16周三动作，前0–3周相同；HANDOFF明确采用base共同前缀，有序身份/单位/周序/信息集齐备，不需要CSV或程序才能定位执行。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/material-ee7b28ad5ec8/plan.json",
+          "locator": "decisions.*.{order_lots,truck_on,production}[0:4]",
+          "observation": "全共同周动作真实齐全且一致。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/material-ee7b28ad5ec8/HANDOFF.md",
+          "locator": "entire text",
+          "observation": "明确共同动作路径与数组索引。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/material-ee7b28ad5ec8/operator-context.json",
+          "locator": "timing/catalogs/units/pack_units",
+          "observation": "完整索引/单位与公开事实相符。"
+        }
+      ]
+    },
+    {
+      "packet_id": "material-ee7b28ad5ec8",
+      "leaf": "F02",
+      "judgement": "full",
+      "observation": "同一JSON完整提供三条观测scenario ID对应周4–15的动作，HANDOFF说明揭示后选分支且不重写前缀，身份/单位和所有动作可直接定位。",
+      "evidence": [
+        {
+          "path": "allowed-source-snapshot/packets/material-ee7b28ad5ec8/plan.json",
+          "locator": "decisions.{base,supplier_disruption,demand_shift} controls[4:16]",
+          "observation": "实际每分支每周数组完整，与oracle仅作验证比对一致。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/material-ee7b28ad5ec8/HANDOFF.md",
+          "locator": "entire text",
+          "observation": "明确观测ID触发与三动作数组使用。"
+        },
+        {
+          "path": "allowed-source-snapshot/packets/material-ee7b28ad5ec8/operator-context.json",
+          "locator": "reveal_before_week/week_index_origin/catalogs",
+          "observation": "信息边界、周序、索引正确。"
+        }
+      ]
+    }
+  ],
+  "candidate_score": null,
+  "professional_maturity_approved": false
+}

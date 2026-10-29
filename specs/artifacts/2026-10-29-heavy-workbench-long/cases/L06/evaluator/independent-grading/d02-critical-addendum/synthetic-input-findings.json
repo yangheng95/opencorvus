@@ -1,0 +1,1002 @@
+{
+  "scope": "aggregation algebra only; not actual reference/candidate findings",
+  "findings": [
+    {
+      "id": "A01",
+      "status": "verified_pass",
+      "where": "normalized",
+      "detail": {
+        "fields_mismatched": []
+      }
+    },
+    {
+      "id": "A02",
+      "status": "verified_pass",
+      "where": "normalized",
+      "detail": {
+        "fields_mismatched": []
+      }
+    },
+    {
+      "id": "A03",
+      "status": "verified_pass",
+      "where": "normalized",
+      "detail": {
+        "fields_mismatched": []
+      }
+    },
+    {
+      "id": "A04",
+      "status": "verified_pass",
+      "where": "normalized",
+      "detail": {
+        "fields_mismatched": []
+      }
+    },
+    {
+      "id": "B01",
+      "status": "verified_pass",
+      "where": "plan.control_schema",
+      "detail": null
+    },
+    {
+      "id": "B02",
+      "status": "verified_pass",
+      "where": "common_commitment",
+      "detail": {
+        "executed_predicates": 9,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B03",
+      "status": "verified_pass",
+      "where": "shipment_binary",
+      "detail": {
+        "executed_predicates": 144,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B04",
+      "status": "verified_pass",
+      "where": "shipment_minimum",
+      "detail": {
+        "executed_predicates": 144,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B05",
+      "status": "verified_pass",
+      "where": "supplier_capacity",
+      "detail": {
+        "executed_predicates": 144,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B06",
+      "status": "verified_pass",
+      "where": "product_assignment",
+      "detail": {
+        "executed_predicates": 384,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B07",
+      "status": "verified_pass",
+      "where": "plant_capacity",
+      "detail": {
+        "executed_predicates": 96,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B08",
+      "status": "verified_pass",
+      "where": "raw_availability",
+      "detail": {
+        "executed_predicates": 48,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B09",
+      "status": "verified_pass",
+      "where": "fulfilment",
+      "detail": {
+        "executed_predicates": 48,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B10",
+      "status": "verified_pass",
+      "where": "raw_storage_peak",
+      "detail": {
+        "executed_predicates": 48,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B11",
+      "status": "verified_pass",
+      "where": "product_storage_peak",
+      "detail": {
+        "executed_predicates": 48,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "C01",
+      "status": "verified_pass",
+      "where": "summary",
+      "detail": null
+    },
+    {
+      "id": "C02",
+      "status": "verified_pass",
+      "where": "cash_intermediate",
+      "detail": {
+        "executed_predicates": 45,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "C03",
+      "status": "verified_pass",
+      "where": "cash_terminal",
+      "detail": {
+        "executed_predicates": 3,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "C04",
+      "status": "verified_pass",
+      "where": "terminal_pipeline",
+      "detail": {
+        "executed_predicates": 144,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "C05",
+      "status": "verified_pass",
+      "where": "terminal_finished",
+      "detail": {
+        "executed_predicates": 3,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "C06",
+      "status": "verified_pass",
+      "where": "registered_reference",
+      "detail": {
+        "reference_id": "L06-v2-base-native-cpsat-20261029",
+        "trust_kind": "trusted_native_integer_search_bound",
+        "cost_exact": "238688/5",
+        "relative_gap_exact": "447/59225"
+      }
+    },
+    {
+      "id": "C07",
+      "status": "verified_pass",
+      "where": "summary",
+      "detail": null
+    },
+    {
+      "id": "C08",
+      "status": "verified_pass",
+      "where": "summary",
+      "detail": null
+    },
+    {
+      "id": "C09",
+      "status": "verified_pass",
+      "where": "summary",
+      "detail": null
+    },
+    {
+      "id": "C10",
+      "status": "verified_pass",
+      "where": "summary",
+      "detail": null
+    },
+    {
+      "id": "C11",
+      "status": "verified_pass",
+      "where": "summary",
+      "detail": null
+    },
+    {
+      "id": "D01",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "Synthetic full-anchor rating to exercise the parser; not an independent assessment.",
+        "evidence": [
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "process_receipt",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "source_audit",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "business_oracle",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "rendered_figure",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "report_or_table",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          }
+        ],
+        "rater": "synthetic-protocol-fixture",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "D02",
+      "status": "verified_fail",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "Synthetic full-anchor rating to exercise the parser; not an independent assessment.",
+        "evidence": [
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "process_receipt",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "source_audit",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "business_oracle",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "rendered_figure",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "report_or_table",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          }
+        ],
+        "rater": "synthetic-protocol-fixture",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "D03",
+      "status": "verified_pass",
+      "where": "ledger",
+      "detail": null
+    },
+    {
+      "id": "D04",
+      "status": "verified_pass",
+      "where": "ledger",
+      "detail": null
+    },
+    {
+      "id": "D05",
+      "status": "verified_pass",
+      "where": "ledger",
+      "detail": null
+    },
+    {
+      "id": "D06",
+      "status": "verified_pass",
+      "where": "ledger",
+      "detail": null
+    },
+    {
+      "id": "D07",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "Synthetic full-anchor rating to exercise the parser; not an independent assessment.",
+        "evidence": [
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "process_receipt",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "source_audit",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "business_oracle",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "rendered_figure",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "report_or_table",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          }
+        ],
+        "rater": "synthetic-protocol-fixture",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "D08",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "Synthetic full-anchor rating to exercise the parser; not an independent assessment.",
+        "evidence": [
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "process_receipt",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "source_audit",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "business_oracle",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "rendered_figure",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "report_or_table",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          }
+        ],
+        "rater": "synthetic-protocol-fixture",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "D09",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "Synthetic full-anchor rating to exercise the parser; not an independent assessment.",
+        "evidence": [
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "process_receipt",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "source_audit",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "business_oracle",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "rendered_figure",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "report_or_table",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          }
+        ],
+        "rater": "synthetic-protocol-fixture",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "D10",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "Synthetic full-anchor rating to exercise the parser; not an independent assessment.",
+        "evidence": [
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "process_receipt",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "source_audit",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "business_oracle",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "rendered_figure",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "report_or_table",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          }
+        ],
+        "rater": "synthetic-protocol-fixture",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "E01",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "Synthetic full-anchor rating to exercise the parser; not an independent assessment.",
+        "evidence": [
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "process_receipt",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "source_audit",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "business_oracle",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "rendered_figure",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "report_or_table",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          }
+        ],
+        "rater": "synthetic-protocol-fixture",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "E02",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "Synthetic full-anchor rating to exercise the parser; not an independent assessment.",
+        "evidence": [
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "process_receipt",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "source_audit",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "business_oracle",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "rendered_figure",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "report_or_table",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          }
+        ],
+        "rater": "synthetic-protocol-fixture",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "E03",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "Synthetic full-anchor rating to exercise the parser; not an independent assessment.",
+        "evidence": [
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "process_receipt",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "source_audit",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "business_oracle",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "rendered_figure",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "report_or_table",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          }
+        ],
+        "rater": "synthetic-protocol-fixture",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "E04",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "Synthetic full-anchor rating to exercise the parser; not an independent assessment.",
+        "evidence": [
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "process_receipt",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "source_audit",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "business_oracle",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "rendered_figure",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "report_or_table",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          }
+        ],
+        "rater": "synthetic-protocol-fixture",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "E05",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "Synthetic full-anchor rating to exercise the parser; not an independent assessment.",
+        "evidence": [
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "process_receipt",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "source_audit",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "business_oracle",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "rendered_figure",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "report_or_table",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          }
+        ],
+        "rater": "synthetic-protocol-fixture",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "E06",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "Synthetic full-anchor rating to exercise the parser; not an independent assessment.",
+        "evidence": [
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "process_receipt",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "source_audit",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "business_oracle",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "rendered_figure",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "report_or_table",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          }
+        ],
+        "rater": "synthetic-protocol-fixture",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "F01",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "Synthetic full-anchor rating to exercise the parser; not an independent assessment.",
+        "evidence": [
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "process_receipt",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "source_audit",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "business_oracle",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "rendered_figure",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "report_or_table",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          }
+        ],
+        "rater": "synthetic-protocol-fixture",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "F02",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "Synthetic full-anchor rating to exercise the parser; not an independent assessment.",
+        "evidence": [
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "process_receipt",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "source_audit",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "business_oracle",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "rendered_figure",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "report_or_table",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          }
+        ],
+        "rater": "synthetic-protocol-fixture",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "F03",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "Synthetic full-anchor rating to exercise the parser; not an independent assessment.",
+        "evidence": [
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "process_receipt",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "source_audit",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "business_oracle",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "rendered_figure",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "report_or_table",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          }
+        ],
+        "rater": "synthetic-protocol-fixture",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "F04",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "Synthetic full-anchor rating to exercise the parser; not an independent assessment.",
+        "evidence": [
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "process_receipt",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "source_audit",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "business_oracle",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "rendered_figure",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "report_or_table",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          }
+        ],
+        "rater": "synthetic-protocol-fixture",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "F05",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "Synthetic full-anchor rating to exercise the parser; not an independent assessment.",
+        "evidence": [
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "process_receipt",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "source_audit",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "business_oracle",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "rendered_figure",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          },
+          {
+            "path": "evidence/protocol-fixture.json",
+            "kind": "report_or_table",
+            "locator": "scope",
+            "observation": "Explicitly synthetic fixture for evidence-reference validation."
+          }
+        ],
+        "rater": "synthetic-protocol-fixture",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    }
+  ]
+}

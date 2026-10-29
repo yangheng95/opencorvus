@@ -1,0 +1,113 @@
+[
+  {
+    "file": "bom.csv",
+    "rows_reversed": 16,
+    "header": [
+      "product_id",
+      "raw_id",
+      "units"
+    ]
+  },
+  {
+    "file": "demand.csv",
+    "rows_reversed": 192,
+    "header": [
+      "scenario_id",
+      "week",
+      "product_id",
+      "units"
+    ]
+  },
+  {
+    "file": "plant_capacity.csv",
+    "rows_reversed": 96,
+    "header": [
+      "scenario_id",
+      "week",
+      "plant_id",
+      "hours"
+    ]
+  },
+  {
+    "file": "plants.csv",
+    "rows_reversed": 2,
+    "header": [
+      "plant_index",
+      "plant_id"
+    ]
+  },
+  {
+    "file": "products.csv",
+    "rows_reversed": 4,
+    "header": [
+      "product_index",
+      "product_id",
+      "volume",
+      "holding_minor",
+      "initial_units",
+      "hours",
+      "sales_price_minor"
+    ]
+  },
+  {
+    "file": "raw_materials.csv",
+    "rows_reversed": 4,
+    "header": [
+      "raw_index",
+      "raw_id",
+      "volume",
+      "holding_minor",
+      "initial_units"
+    ]
+  },
+  {
+    "file": "routes.csv",
+    "rows_reversed": 8,
+    "header": [
+      "plant_id",
+      "product_id",
+      "allowed",
+      "production_cost_minor"
+    ]
+  },
+  {
+    "file": "scenarios.csv",
+    "rows_reversed": 3,
+    "header": [
+      "scenario_index",
+      "scenario_id",
+      "probability_numerator"
+    ]
+  },
+  {
+    "file": "supplier_capacity.csv",
+    "rows_reversed": 144,
+    "header": [
+      "scenario_id",
+      "week",
+      "supplier_id",
+      "volume"
+    ]
+  },
+  {
+    "file": "supplier_quotes.csv",
+    "rows_reversed": 12,
+    "header": [
+      "supplier_id",
+      "raw_id",
+      "pack_units",
+      "unit_price_minor"
+    ]
+  },
+  {
+    "file": "supplier_terms.csv",
+    "rows_reversed": 3,
+    "header": [
+      "supplier_index",
+      "supplier_id",
+      "lead_weeks",
+      "freight_minor",
+      "minimum_volume"
+    ]
+  }
+]

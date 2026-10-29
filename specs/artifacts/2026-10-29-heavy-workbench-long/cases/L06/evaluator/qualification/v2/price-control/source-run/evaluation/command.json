@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l06-source-price-control-20261029\\evaluation\\source\\l06_numeric.py",
+    "--case-root",
+    "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06",
+    "--input",
+    "D:\\opencorvus-benchmark-runs\\l06-source-price-control-20261029\\input",
+    "--normalized",
+    "D:\\opencorvus-benchmark-runs\\l06-source-price-control-20261029\\results\\delivery\\normalized.json",
+    "--plan",
+    "D:\\opencorvus-benchmark-runs\\l06-source-price-control-20261029\\results\\delivery\\plan.json",
+    "--summary",
+    "D:\\opencorvus-benchmark-runs\\l06-source-price-control-20261029\\results\\delivery\\summary.json",
+    "--ledger",
+    "D:\\opencorvus-benchmark-runs\\l06-source-price-control-20261029\\results\\delivery\\ledger.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-source-price-control-20261029\\evaluation\\numeric.json"
+  ],
+  "exit_code": 0,
+  "stdout": "{\"format\": \"l06-numeric-findings/1\", \"status\": \"partially_assessed\", \"scope\": \"30 numeric leaves only; execution/review and complete case grade pending\", \"total_score\": null, \"business_success\": null, \"numeric_leaf_count\": 30, \"counts\": {\"verified_pass\": 30, \"verified_fail\": 0, \"candidate_incomplete\": 0, \"blocked_candidate\": 0, \"unassessed\": 17}, \"known_critical_failures\": []}\n",
+  "stderr": ""
+}

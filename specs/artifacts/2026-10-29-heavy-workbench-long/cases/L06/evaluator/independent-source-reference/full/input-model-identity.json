@@ -1,0 +1,26 @@
+{
+  "same_complete_business_facts_as_registered_capture": true,
+  "row_counts": {
+    "raw_materials": 4,
+    "products": 4,
+    "plants": 2,
+    "supplier_terms": 3,
+    "scenarios": 3,
+    "supplier_quotes": 12,
+    "routes": 8,
+    "bom": 16,
+    "demand": 192,
+    "supplier_capacity": 144,
+    "plant_capacity": 96
+  },
+  "all11_tables_reversed": true,
+  "same_original_facility": true,
+  "frozen_reference_lower": 47380,
+  "evaluation_paths_are_not_program_mounts": [
+    "evaluation-case",
+    "evaluation-source",
+    "audit-tools"
+  ],
+  "scope": "identity/assessment setup only; active output is not graded",
+  "new_model_same_as_frozen_registered": true
+}

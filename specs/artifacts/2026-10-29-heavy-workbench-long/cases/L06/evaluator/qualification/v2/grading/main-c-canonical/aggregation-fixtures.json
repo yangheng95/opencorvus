@@ -1,0 +1,43 @@
+{
+  "scope": "synthetic protocol fixtures only",
+  "checks": [
+    {
+      "fixture": "full",
+      "exact_points": 100,
+      "critical_success": true,
+      "good": true,
+      "scope": "aggregation algebra only, not a case score"
+    },
+    {
+      "fixture": "missing-critical-keeps-denominator",
+      "exact_points": 93,
+      "critical_success": false,
+      "good": false,
+      "scope": "aggregation algebra only, not a case score"
+    },
+    {
+      "fixture": "input-variation-failure-is-critical",
+      "exact_points": 96,
+      "critical_success": false,
+      "good": false,
+      "scope": "aggregation algebra only, not a case score"
+    },
+    {
+      "fixture": "all-human-half",
+      "exact_points": 88,
+      "critical_success": true,
+      "good": false,
+      "scope": "aggregation algebra only, not a case score"
+    },
+    {
+      "fixture": "quality-failure-cannot-be-compensated",
+      "exact_points": 92,
+      "critical_success": false,
+      "good": false,
+      "scope": "aggregation algebra only, not a case score"
+    }
+  ],
+  "readiness_pending_observation": [
+    "readiness:review_calibration"
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "benchmark": "HeavyWorkBench-Long/0.2.0-dev",
+  "case": "L06",
+  "case_version": "L06/0.2.0",
+  "public_task": "TASK.md",
+  "output_contract": "OUTPUTS.md",
+  "facts_dictionary": "DATA.md",
+  "authoritative_inputs": "inputs/",
+  "data_provenance": "original synthetic numerical business packet; no real enterprise records",
+  "normalized_format": "l06-feasibility-instance/2",
+  "plan_format": "l06-plan/1",
+  "instance": {
+    "weeks": 16,
+    "common_weeks": 4,
+    "raw_materials": 4,
+    "products": 4,
+    "suppliers": 3,
+    "plants": 2,
+    "joint_scenarios": 3
+  },
+  "budget": {
+    "total_model_tokens": null,
+    "total_wall_seconds": null
+  },
+  "minimum_runtime_seconds": null,
+  "requested_OpenCorvus_mode": "Task/code/base; actual package/model/actor binding to be captured when run",
+  "comparison_policy": {
+    "good_score_at_least": 90,
+    "all_critical_pass_required": true,
+    "source_rebuild_and_declared_input_controls_required": true,
+    "both_good": "upgrade a new version, retain old results",
+    "scope": "author preregistration, not a universal mature-benchmark threshold"
+  },
+  "status": "frozen",
+  "perturbation_contract": {
+    "classes": [
+      "one pre-registered supplier-price increase with unchanged business semantics",
+      "CSV row reorder with explicit indices"
+    ],
+    "policy_flip_required": false,
+    "same_submitted_source_required": true,
+    "new_business_semantics_introduced": false
+  },
+  "evaluation_policy": {
+    "source_only_rebuild": true,
+    "fixed_score_denominator": 100,
+    "critical_failures_not_compensated": true,
+    "infrastructure_failure": "run_invalid_without_candidate_score",
+    "no_minimum_runtime": true
+  },
+  "freeze_id": "L06-0.2.0-20261029"
+}

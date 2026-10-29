@@ -1,0 +1,11 @@
+# D02必需输入行为的合同追加复核
+
+认可本次尚未冻结、尚无新候选时的合同完整性修正：公开任务原已要求同一源码处理传入raw及预注册数值变体，D02明确失败而仍判好会违背这项必需交付。将D02设critical是使成功判定与公开要求一致；它不增加业务约束、计算时长或难度实证，也不靠critical数量证明更难。
+
+独立逐叶对照原快照与当前rubric：47叶中只有D02.critical从false变true；D02仍4分、总100，固定L47380及1%不变。读取最新Recall确认先记录原因；GRADING中的D09仍是取得/未得可行解与界的真实报告口径，与原rubric一致，不是manifest完整性，也不要求成功程序额外跑失败分支。
+
+只执行一次真实aggregate代码调用，使用明确synthetic的冻结协议投影关闭发布前置以核验代数：其余full、D02 verified_fail，结果96分、known_critical_failures=[D02]、business_success=false、good=false。该96仅为代数夹具，绝非当前未冻结参考或候选成绩；没有重复13CLI、求解或新完整执行。精确输入/结果/执行命令与源码在本追加目录。
+
+既有真实参考的D02仍unassessed；原实际44pass/2partial/1unassessed与assessment_incomplete、total/business_success/good=null不改写。评估侧尚未提供并审查变价源码实跑，不能据此把候选D02判失败或0分。新运行终态另待主方封存，本轮没有访问或干预。旧REVIEW/实际评级/原失败和所有源码快照保持不变。
+
+只认可本条局部合同和聚合代数。匿名多质量校准、最终冻结、fresh候选与十题有效小时资格仍未完成。

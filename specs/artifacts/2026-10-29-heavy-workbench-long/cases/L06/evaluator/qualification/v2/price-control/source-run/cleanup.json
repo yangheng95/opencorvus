@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "docker",
+    "rm",
+    "2e09ae3f0a13ce0331ed67aec39ecb687953aed155f793e41570a7b03cced6fd"
+  ],
+  "exit_code": 0,
+  "stdout": "2e09ae3f0a13ce0331ed67aec39ecb687953aed155f793e41570a7b03cced6fd\n",
+  "stderr": "",
+  "scope": "exact owned exited container after terminal/log and independent evidence capture"
+}

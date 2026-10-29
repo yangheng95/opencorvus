@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "docker",
+    "rm",
+    "d7015f68ddd337d5e40a821bb3603bd4462781a74fd74a5c4f8052b22c58cdc5"
+  ],
+  "exit_code": 0,
+  "stdout": "d7015f68ddd337d5e40a821bb3603bd4462781a74fd74a5c4f8052b22c58cdc5\n",
+  "stderr": "",
+  "only_owned_exited_container": true,
+  "observed_utc": "2026-10-29T18:08:04.948860+00:00"
+}

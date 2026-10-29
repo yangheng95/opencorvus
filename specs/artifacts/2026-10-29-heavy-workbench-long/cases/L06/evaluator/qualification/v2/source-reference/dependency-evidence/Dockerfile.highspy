@@ -1,0 +1,2 @@
+FROM opencorvus-benchmark-science:20261029
+RUN python -m pip install --no-cache-dir --only-binary=:all: --no-deps highspy==1.8.0

@@ -1,5 +1,5 @@
 """Thirty numeric findings using one business recurrence. Not a complete case grade."""
-import argparse
+import argparse,copy
 from decimal import Decimal
 from fractions import Fraction
 import json
@@ -74,22 +74,42 @@ def load_reference(case_root,rubric,data):
         spec=rubric['quality_reference'];filename=(case_root/spec['registration_file']).resolve()
         if not filename.is_relative_to(case_root):raise EvaluationError('reference_config_invalid','registration file must be in the evaluator case root')
         reference=read_json(filename,'reference_config_invalid')
-        if reference['status']!='base_registered_before_fresh_candidate':raise EvaluationError('reference_unregistered','base reference is not registered')
+        if reference['format']!='l06-quality-reference/2' or reference['status']!='registered_before_fresh_candidate':raise EvaluationError('reference_unregistered','current reference contract is not registered')
+        if type(reference['reference_id']) is not str or not reference['reference_id'].strip():raise EvaluationError('reference_config_invalid','nonempty base reference identity required')
+        if type(reference['bound_source']['kind']) is not str or not reference['bound_source']['kind'].strip():raise EvaluationError('reference_config_invalid','nonempty bound-source kind required')
         packet=(filename.parent/reference['input_identity']['public']).resolve()
         if not packet.is_relative_to(case_root/'public'):raise EvaluationError('reference_config_invalid','registered packet must be public input')
         registered=read_packet(packet)
-        locator=reference['input_identity']['captured_input']
-        if not isinstance(locator,str):raise EvaluationError('reference_config_invalid','captured input locator must be a string')
-        archive_name,separator,member=locator.partition(':')
-        archive_path=(filename.parent/archive_name).resolve()
-        if not separator or not member or not archive_path.is_relative_to(case_root):raise EvaluationError('reference_config_invalid','captured input must identify a case-local archive/member')
-        try:
-            with zipfile.ZipFile(archive_path) as archive:raw=archive.read(member)
-        except (OSError,zipfile.BadZipFile,KeyError) as error:raise EvaluationError('reference_evidence_invalid',str(error)) from error
-        captured=validate_instance(decode_json(raw,'reference_evidence_invalid',source=str(archive_path)+':'+member))
-        captured={key:value for key,value in captured.items() if key not in ('status','qualification_variant')}
+        def capture(locator):
+            if not isinstance(locator,str):raise EvaluationError('reference_config_invalid','captured input locator must be a string')
+            archive_name,separator,member=locator.partition(':');archive_path=(filename.parent/archive_name).resolve()
+            if not separator or not member or not archive_path.is_relative_to(case_root):raise EvaluationError('reference_config_invalid','captured input must identify a case-local archive/member')
+            try:
+                with zipfile.ZipFile(archive_path) as archive:raw=archive.read(member)
+            except (OSError,zipfile.BadZipFile,KeyError) as error:raise EvaluationError('reference_evidence_invalid',str(error)) from error
+            value=validate_instance(decode_json(raw,'reference_evidence_invalid',source=str(archive_path)+':'+member))
+            return {key:item for key,item in value.items() if key not in ('status','qualification_variant')}
+        captured=capture(reference['input_identity']['captured_input'])
         if not same_value(registered,captured):raise EvaluationError('reference_public_input_drift','current public facts differ from the archived registered input')
-        if not same_value(data,captured):raise EvaluationError('reference_input_unregistered','semantic input differs from the archived base; numerical variants need their own reference')
+        matched=reference['reference_id'] if same_value(data,captured) else None
+        identifiers={reference['reference_id']};variants=reference['derived_variants']
+        if not isinstance(variants,list):raise EvaluationError('reference_config_invalid','explicit derived variant list required')
+        for variant in variants:
+            identifier=variant['reference_id'];change=variant['transformation']
+            if type(identifier) is not str or not identifier.strip() or identifier in identifiers:raise EvaluationError('reference_config_invalid','unique nonempty reference IDs required')
+            identifiers.add(identifier)
+            if change['kind']!='monotone_supplier_price_increase' or type(change['delta_minor']) is not int or change['delta_minor']<=0:raise EvaluationError('reference_config_invalid','only the proved positive supplier-price transformation is registered')
+            expected=copy.deepcopy(captured)
+            suppliers=[i for i,rule in enumerate(expected['suppliers']) if rule['id']==change['supplier_id']]
+            materials=[i for i,name in enumerate(expected['raw_materials']) if name==change['raw_id']]
+            if len(suppliers)!=1 or len(materials)!=1:raise EvaluationError('reference_config_invalid','derived transformation identities must resolve uniquely')
+            expected['suppliers'][suppliers[0]]['price_minor'][materials[0]]+=change['delta_minor']
+            actual=capture(variant['input_identity']['captured_input'])
+            if not same_value(actual,expected):raise EvaluationError('reference_variant_drift','derived captured facts differ from the exact registered transformation')
+            if same_value(data,actual):
+                if matched is not None:raise EvaluationError('reference_config_invalid','input matches more than one registration')
+                matched=identifier
+        if matched is None:raise EvaluationError('reference_input_unregistered','semantic input matches neither the archived base nor an explicitly registered derived variant')
         value=reference['lower_bound_minor']
         if type(value['numerator']) is not int or type(value['denominator']) is not int or value['denominator']<=0:
             raise EvaluationError('reference_config_invalid','positive rational lower bound required')
@@ -98,7 +118,7 @@ def load_reference(case_root,rubric,data):
         if type(maximum) not in (int,Decimal):raise EvaluationError('reference_config_invalid','exact relative-gap value required')
         maximum=Fraction(maximum)
         if lower<=0 or maximum<0 or spec['relative_gap_definition']!='(C-L)/L':raise EvaluationError('reference_config_invalid','positive L and registered gap definition required')
-        return {'id':reference['reference_id'],'lower':lower,'maximum':maximum,'kind':reference['bound_source']['kind']}
+        return {'id':matched,'lower':lower,'maximum':maximum,'kind':reference['bound_source']['kind']}
     except (KeyError,TypeError,ValueError) as error:
         if isinstance(error,(EvaluationError,InputError)):raise
         raise EvaluationError('reference_config_invalid',str(error)) from error
@@ -167,7 +187,7 @@ def assess(args):
     root=args.case_root.resolve()
     result={'format':'l06-numeric-findings/1','status':'partially_assessed','scope':'30 numeric leaves only; execution/review and complete case grade pending','total_score':None,'business_success':None,'findings':[]}
     try:
-        rubric,criteria=load_rubric(root/'rubric.draft.json')
+        rubric,criteria=load_rubric(root/'rubric.json')
         data=read_packet(args.input);reference=load_reference(root,rubric,data)
         findings=facts_findings(data,args.normalized)
         try:plan=read_json(args.plan,'plan_json')

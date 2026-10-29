@@ -1,0 +1,26 @@
+{
+  "format": "l06-monotone-reference-proof/1",
+  "status": "main_verified_independent_review_pending",
+  "transformation": {
+    "kind": "monotone_supplier_price_increase",
+    "supplier_id": "C",
+    "raw_id": "R0",
+    "delta_minor": 1
+  },
+  "derivation": [
+    "All actions are nonnegative integers and probabilities are nonnegative.",
+    "For a fixed action sequence, every changed purchase payment and every cumulative expenditure is at least the base value.",
+    "Physical/information/terminal inventory constraints are identical. Changed weekly cash is never greater, so each variant-feasible policy is base-feasible, including terminal nonnegative cash.",
+    "Variant objective is at least its base objective. The registered base lower bound therefore remains a valid lower bound for the variant."
+  ],
+  "trust": "Inherits the original trusted-native integer bound; this proof does not independently certify that original bound.",
+  "source_reference": "registered-reference.json",
+  "witness_cost_exact": {
+    "numerator": 238818,
+    "denominator": 5
+  },
+  "witness_relative_gap_exact": "959/118450",
+  "unchanged_policy_is_allowed": true,
+  "solver_executions_for_this_derivation": 0,
+  "current_candidate_score": null
+}

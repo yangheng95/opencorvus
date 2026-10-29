@@ -42,3 +42,7 @@ python -m unittest discover -s script/benchmark -p test_pinn_torch_check.py
 后续[L06原生整数/CP-SAT独立审查](../cases/L06/evaluator/independent-cpsat/REVIEW.md)记录阶段上界49032.9与终态来源修复。更新的[质量追加审查](../cases/L06/evaluator/independent-public-contract/quality-addendum/REVIEW.md)已独立确认最终成本47808/native界47380、基例1%可达，私有参考已预注册；严格LP与native信任口径分列。[公开合同/47叶rubric](../cases/L06/README.md)仍未冻结，独立只认可设计及10叶输出primitive，完整参考/其他37叶/变体/校准和长程候选继续待完成。当前无新增活跃长计算，active-quality只是历史快照。不得把本评估目录交给候选。
 
 L06现有[30数值叶与完整源码参考](../cases/L06/README.md)：新精确谓词采集器只用一个业务递推，独立输入漂移/负gap漏洞已关闭；主方只读raw/source的新完整交付已真实约7分钟。参考资格不是受测agent成绩，独立完整复跑及17叶/变体/聚合/冻结仍pending。不得将其评估侧代码/答案投给候选。
+
+L06后续[完整独立复建、变价参考和47叶聚合](../cases/L06/README.md)已获相应局部资格；真实参考44pass/2partial/1unassessed、总分null，D02实际数值控制/校准/冻结仍未关闭，禁止将私有评分/参考投给候选。
+
+L06/0.2.0[最终独立合同审查](../cases/L06/evaluator/independent-freeze-review/REVIEW.md)现已批准冻结；当前规范路径rubric.json/public TASK.md、OUTPUTS.md、profile.json。参考正向98分不作候选分，实际新两系统/有效小时仍未完成；私有资格/控制/key不得进入候选项目。

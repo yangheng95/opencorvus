@@ -1,0 +1,73 @@
+{
+  "Id": "d7015f68ddd337d5e40a821bb3603bd4462781a74fd74a5c4f8052b22c58cdc5",
+  "Name": "/oc-l06-review-full-c64dbeffe256",
+  "State": {
+    "Dead": false,
+    "Error": "",
+    "ExitCode": 0,
+    "FinishedAt": "2026-10-29T18:04:20.299524696Z",
+    "OOMKilled": false,
+    "Paused": false,
+    "Pid": 0,
+    "Restarting": false,
+    "Running": false,
+    "StartedAt": "2026-10-29T17:43:27.048293392Z",
+    "Status": "exited"
+  },
+  "Path": "/opt/cpsat/bin/python",
+  "Args": [
+    "-B",
+    "reproduce.py",
+    "--input",
+    "/input",
+    "--output",
+    "/results/delivery"
+  ],
+  "Image": "sha256:23ff8bfbf8055caa0b9fa5745ddb27cceea2f31d7d15b7a900c81112cdfe8ddf",
+  "Mounts": [
+    {
+      "Destination": "/project",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "D:\\opencorvus-benchmark-runs\\l06-reference-independent-review-20261029\\full-cold-replay\\project",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/input",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "D:\\opencorvus-benchmark-runs\\l06-reference-independent-review-20261029\\full-cold-replay\\input",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/results",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": true,
+      "Source": "D:\\opencorvus-benchmark-runs\\l06-reference-independent-review-20261029\\full-cold-replay\\results",
+      "Type": "bind"
+    }
+  ],
+  "Config": {
+    "Cmd": [
+      "/opt/cpsat/bin/python",
+      "-B",
+      "reproduce.py",
+      "--input",
+      "/input",
+      "--output",
+      "/results/delivery"
+    ],
+    "Image": "opencorvus-benchmark-reference:20261029",
+    "WorkingDir": "/project"
+  },
+  "HostConfig": {
+    "NetworkMode": "none",
+    "NanoCpus": 0,
+    "CpusetCpus": "",
+    "DeviceRequests": null,
+    "Runtime": "runc"
+  }
+}

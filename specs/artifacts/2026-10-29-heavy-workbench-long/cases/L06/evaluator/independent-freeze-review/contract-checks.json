@@ -1,0 +1,141 @@
+{
+  "public_files": [
+    "public/DATA.md",
+    "public/ENVIRONMENT.md",
+    "public/OUTPUTS.md",
+    "public/SOURCE.md",
+    "public/TASK.md",
+    "public/inputs/bom.csv",
+    "public/inputs/demand.csv",
+    "public/inputs/facility.json",
+    "public/inputs/plant_capacity.csv",
+    "public/inputs/plants.csv",
+    "public/inputs/products.csv",
+    "public/inputs/raw_materials.csv",
+    "public/inputs/routes.csv",
+    "public/inputs/scenarios.csv",
+    "public/inputs/supplier_capacity.csv",
+    "public/inputs/supplier_quotes.csv",
+    "public/inputs/supplier_terms.csv",
+    "public/profile.json"
+  ],
+  "public_local_links": [
+    {
+      "source": "TASK.md",
+      "target": "DATA.md",
+      "exists": true,
+      "inside_candidate_public": true
+    },
+    {
+      "source": "TASK.md",
+      "target": "OUTPUTS.md",
+      "exists": true,
+      "inside_candidate_public": true
+    },
+    {
+      "source": "ENVIRONMENT.md",
+      "target": "https://raw.githubusercontent.com/scipy/scipy/v1.15.3/pyproject.toml",
+      "external": true
+    },
+    {
+      "source": "ENVIRONMENT.md",
+      "target": "https://raw.githubusercontent.com/google/or-tools/v9.15/ortools/sat/sat_parameters.proto",
+      "external": true
+    }
+  ],
+  "case_version": "L06/0.2.0",
+  "benchmark": "HeavyWorkBench-Long/0.2.0-dev",
+  "row_counts": {
+    "raw_materials": 4,
+    "products": 4,
+    "plants": 2,
+    "supplier_terms": 3,
+    "scenarios": 3,
+    "supplier_quotes": 12,
+    "routes": 8,
+    "bom": 16,
+    "demand": 192,
+    "supplier_capacity": 144,
+    "plant_capacity": 96
+  },
+  "all_raw_business_facts_equal_archived_registration": true,
+  "control_exact_positive_single_price_change": true,
+  "monotone_proof_captured": {
+    "format": "l06-monotone-reference-proof/1",
+    "status": "main_verified_independent_review_pending",
+    "transformation": {
+      "kind": "monotone_supplier_price_increase",
+      "supplier_id": "C",
+      "raw_id": "R0",
+      "delta_minor": 1
+    },
+    "derivation": [
+      "All actions are nonnegative integers and probabilities are nonnegative.",
+      "For a fixed action sequence, every changed purchase payment and every cumulative expenditure is at least the base value.",
+      "Physical/information/terminal inventory constraints are identical. Changed weekly cash is never greater, so each variant-feasible policy is base-feasible, including terminal nonnegative cash.",
+      "Variant objective is at least its base objective. The registered base lower bound therefore remains a valid lower bound for the variant."
+    ],
+    "trust": "Inherits the original trusted-native integer bound; this proof does not independently certify that original bound.",
+    "source_reference": "registered-reference.json",
+    "witness_cost_exact": {
+      "numerator": 238818,
+      "denominator": 5
+    },
+    "witness_relative_gap_exact": "959/118450",
+    "unchanged_policy_is_allowed": true,
+    "solver_executions_for_this_derivation": 0,
+    "current_candidate_score": null
+  },
+  "criterion_count": 47,
+  "weight_sum": 100,
+  "critical_count": 28,
+  "critical_weight": 69,
+  "half_anchors": [
+    "D07",
+    "E01",
+    "E02",
+    "E03",
+    "E04",
+    "E05",
+    "E06",
+    "F01",
+    "F02",
+    "F03",
+    "F04",
+    "F05"
+  ],
+  "only_pending_publication_readiness": "independent_full_case_freeze",
+  "image_ID_matches_actual_base_and_price_execution": "sha256:23ff8bfbf8055caa0b9fa5745ddb27cceea2f31d7d15b7a900c81112cdfe8ddf",
+  "canonical_cli": {
+    "base": {
+      "verified_pass": 30,
+      "verified_fail": 0,
+      "candidate_incomplete": 0,
+      "blocked_candidate": 0,
+      "unassessed": 17
+    },
+    "price": {
+      "verified_pass": 30,
+      "verified_fail": 0,
+      "candidate_incomplete": 0,
+      "blocked_candidate": 0,
+      "unassessed": 17
+    },
+    "complete_grade": {
+      "verified_pass": 45,
+      "verified_partial": 2,
+      "verified_fail": 0,
+      "candidate_incomplete": 0,
+      "blocked_candidate": 0,
+      "unassessed": 0
+    },
+    "current_publication_blockers": [
+      "rubric_not_frozen",
+      "readiness:independent_full_case_freeze"
+    ]
+  },
+  "future_pilot_hours_nine_cases_are_freeze_preconditions": false,
+  "candidate_total_score": null,
+  "solver_Docker_Provider_GPU_UI_runs": 0,
+  "delegations": 0
+}

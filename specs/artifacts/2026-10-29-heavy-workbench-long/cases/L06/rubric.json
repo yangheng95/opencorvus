@@ -1,0 +1,727 @@
+{
+  "format": "heavyworkbench-rubric/2",
+  "benchmark": "HeavyWorkBench-Long/0.2.0-dev",
+  "case": "L06",
+  "status": "frozen",
+  "total_weight": 100,
+  "criterion_count": 47,
+  "scope": "Frozen L06/0.2.0 executable contract; actual candidate assessments are separate per-run artifacts. No suite maturity or hours claim inferred.",
+  "groups": [
+    {
+      "id": "A",
+      "title": "原始事实投影",
+      "criteria": [
+        {
+          "id": "A01",
+          "weight": 2,
+          "critical": true,
+          "criterion": "原料/产品/产线目录的身份、index及全部数值属性准确投影",
+          "evidence": "normalized.json的实体目录、raw_volume/raw_holding_minor/initial_raw、product_volume/product_holding_minor/initial_products/production_hours/sales_price_minor + 冻结原始目录",
+          "method": "packet_projection",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "A02",
+          "weight": 2,
+          "critical": true,
+          "criterion": "供应条款与逐原料报价的规范对象准确",
+          "evidence": "normalized.json + supplier_terms/quotes",
+          "method": "packet_projection",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "A03",
+          "weight": 2,
+          "critical": true,
+          "criterion": "物料清单与产线资格/费用的规范对象准确",
+          "evidence": "normalized.json + bom/routes",
+          "method": "packet_projection",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "A04",
+          "weight": 2,
+          "critical": true,
+          "criterion": "情景、逐周需求/容量与全局设施事实的规范对象准确",
+          "evidence": "normalized.json + scenarios/demand/capacity/facility",
+          "method": "packet_projection",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "title": "物理与信息可行性",
+      "criteria": [
+        {
+          "id": "B01",
+          "weight": 3,
+          "critical": true,
+          "criterion": "决策张量维度/场景覆盖及整数域合法",
+          "evidence": "plan.json",
+          "method": "business_primitive",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "B02",
+          "weight": 5,
+          "critical": true,
+          "criterion": "全部共同前缀动作满足非预见性",
+          "evidence": "所有场景order_lots/truck_on/production",
+          "method": "business_primitive",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "B03",
+          "weight": 2,
+          "critical": true,
+          "criterion": "装运开关严格为0或1",
+          "evidence": "全部场景truck_on与shipment_binary检查",
+          "method": "business_primitive",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "B04",
+          "weight": 2,
+          "critical": true,
+          "criterion": "每个正装运满足最低装运体积",
+          "evidence": "truck_on + 单周供应商合单体积",
+          "method": "business_primitive",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "B05",
+          "weight": 3,
+          "critical": true,
+          "criterion": "全部供应商单周共享体积上限成立",
+          "evidence": "全部情景采购/装运及供应容量",
+          "method": "business_primitive",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "B06",
+          "weight": 2,
+          "critical": true,
+          "criterion": "生产动作符合产线—产品资格",
+          "evidence": "production + routes",
+          "method": "business_primitive",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "B07",
+          "weight": 2,
+          "critical": true,
+          "criterion": "产线单周共享工时上限成立",
+          "evidence": "production + hours/capacity",
+          "method": "business_primitive",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "B08",
+          "weight": 2,
+          "critical": true,
+          "criterion": "BOM耗料后原料始终非负",
+          "evidence": "订单提前期到货与BOM独立递推",
+          "method": "business_primitive",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "B09",
+          "weight": 2,
+          "critical": true,
+          "criterion": "每个场景每周需求均完整履约",
+          "evidence": "成品独立递推与需求",
+          "method": "business_primitive",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "B10",
+          "weight": 1,
+          "critical": true,
+          "criterion": "原料到货后/生产前阶段体积不超仓容",
+          "evidence": "独立逐周原料峰值",
+          "method": "business_primitive",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "B11",
+          "weight": 1,
+          "critical": true,
+          "criterion": "成品生产后/交付前阶段体积不超仓容",
+          "evidence": "独立逐周成品峰值",
+          "method": "business_primitive",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "title": "资金、终期与成本质量",
+      "criteria": [
+        {
+          "id": "C01",
+          "weight": 1,
+          "critical": true,
+          "criterion": "提交的期望运营成本与概率加权独立完整计价完全一致",
+          "evidence": "独立费用账、概率、summary与plan",
+          "method": "summary_cost_projection",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "C02",
+          "weight": 4,
+          "critical": true,
+          "criterion": "各场景末周之前的现金不低于负信用额度",
+          "evidence": "独立现金流及回款滞后",
+          "method": "business_primitive",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "C03",
+          "weight": 3,
+          "critical": true,
+          "criterion": "各场景末周现金非负",
+          "evidence": "独立末周现金",
+          "method": "business_primitive",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "C04",
+          "weight": 2,
+          "critical": true,
+          "criterion": "没有周期结束后才到货的正订单",
+          "evidence": "订单/提前期与horizon",
+          "method": "business_primitive",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "C05",
+          "weight": 2,
+          "critical": true,
+          "criterion": "各场景末周期末成品为0",
+          "evidence": "独立成品终态",
+          "method": "business_primitive",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "C06",
+          "weight": 8,
+          "critical": true,
+          "criterion": "C相对预先注册有效正下界L的gap不超过1%",
+          "evidence": "独立实际C与冻结前合格参考L",
+          "method": "cost_reference",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "C07",
+          "weight": 1,
+          "critical": true,
+          "criterion": "各场景summary总运营成本与独立计价一致",
+          "evidence": "summary.json.scenarios[scenario].total_cost_minor + 独立业务账",
+          "method": "summary_projection",
+          "anchors": {
+            "full": "每个场景本字段按公开精确数值合同正确",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "C08",
+          "weight": 1,
+          "critical": true,
+          "criterion": "各场景summary最低现金与完整周序现金最小值一致",
+          "evidence": "summary.json.scenarios[scenario].minimum_cash_minor + 独立业务账",
+          "method": "summary_projection",
+          "anchors": {
+            "full": "每个场景本字段按公开精确数值合同正确",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "C09",
+          "weight": 1,
+          "critical": true,
+          "criterion": "各场景summary末周现金与实际末周余额一致",
+          "evidence": "summary.json.scenarios[scenario].final_cash_minor + 独立业务账",
+          "method": "summary_projection",
+          "anchors": {
+            "full": "每个场景本字段按公开精确数值合同正确",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "C10",
+          "weight": 1,
+          "critical": true,
+          "criterion": "各场景summary期末应收与未收销售款一致",
+          "evidence": "summary.json.scenarios[scenario].final_receivable_minor + 独立业务账",
+          "method": "summary_projection",
+          "anchors": {
+            "full": "每个场景本字段按公开精确数值合同正确",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "C11",
+          "weight": 1,
+          "critical": true,
+          "criterion": "summary各场景概率与公开概率一致",
+          "evidence": "summary.json.scenarios[scenario].probability + 独立业务账",
+          "method": "summary_projection",
+          "anchors": {
+            "full": "每个场景本字段按公开精确数值合同正确",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        }
+      ]
+    },
+    {
+      "id": "D",
+      "title": "可执行复跑与机器交付",
+      "criteria": [
+        {
+          "id": "D01",
+          "weight": 7,
+          "critical": true,
+          "criterion": "仅源码/声明依赖/冻结原材料的新目录完整运行产生可评估交付",
+          "evidence": "实际reproduce.py执行/进程/输出，不带旧结果",
+          "method": "source_only_replay",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "D02",
+          "weight": 4,
+          "critical": true,
+          "criterion": "同一程序正确处理预先公开类别的输入数值变体",
+          "evidence": "冻结变体原材料、真实新运行与独立参考",
+          "method": "input_variation",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "D03",
+          "weight": 1,
+          "critical": false,
+          "criterion": "物料/库存ledger及plan可选库存声明与实际策略的独立递推一致",
+          "evidence": "ledger.json公开固定字段 + 独立业务账",
+          "method": "ledger_projection",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "D04",
+          "weight": 1,
+          "critical": false,
+          "criterion": "生产/装运ledger与实际决策一致",
+          "evidence": "ledger.json公开固定字段 + 独立业务账",
+          "method": "ledger_projection",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "D05",
+          "weight": 1,
+          "critical": false,
+          "criterion": "费用ledger与实际决策的完整计价一致",
+          "evidence": "ledger.json公开固定字段 + 独立业务账",
+          "method": "ledger_projection",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "D06",
+          "weight": 1,
+          "critical": false,
+          "criterion": "现金/应收ledger与真实时序一致",
+          "evidence": "ledger.json公开固定字段 + 独立业务账",
+          "method": "ledger_projection",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "D07",
+          "weight": 2,
+          "critical": false,
+          "criterion": "来源映射使规范事实能够追溯到对应原材料对象",
+          "evidence": "normalized/provenance与真实文件",
+          "method": "independent_review",
+          "anchors": {
+            "full": "目录、供应、BOM/产线、情景/设施四类事实（A01–04）均有准确原始文件、联合身份与单位定位，不要求固定措辞",
+            "half": "上述四类中2至3类完整准确定位，其他类缺定位；任何已定位身份/单位错误得0",
+            "zero": "结论错误、未提供或证据与真实执行不一致"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "D08",
+          "weight": 1,
+          "critical": false,
+          "criterion": "报告的算法终态与实际观察到的终态一致",
+          "evidence": "run.json.algorithm及真实进程/工具终态；使用库时另有native_solver，无外部solver可为null",
+          "method": "execution_evidence",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "D09",
+          "weight": 1,
+          "critical": false,
+          "criterion": "未得到的可行解/界以真实未知状态报告",
+          "evidence": "run.json/report与真实执行",
+          "method": "execution_evidence",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "D10",
+          "weight": 1,
+          "critical": false,
+          "criterion": "运行记录准确定位本次输入、源码入口与实际参数",
+          "evidence": "manifest/run与真实调用",
+          "method": "execution_evidence",
+          "anchors": {
+            "full": "真实检查满足本条完整结论",
+            "zero": "已验证错误为failed；候选缺交为candidate_incomplete、候选造成依赖阻断为blocked_candidate，均0分；评估器故障为run_invalid且不出总分"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        }
+      ]
+    },
+    {
+      "id": "E",
+      "title": "业务分析",
+      "criteria": [
+        {
+          "id": "E01",
+          "weight": 2,
+          "critical": false,
+          "criterion": "基线的实际可行性与结果得到验证",
+          "evidence": "基线程序/计划/真实检查或准确失败位置",
+          "method": "independent_review",
+          "anchors": {
+            "full": "基线定义可执行，实际结果与独立验证相同；不可行基线准确定位原因",
+            "half": "完整可执行基线及正确业务结论可独立验证，但缺候选本次真实执行收据",
+            "zero": "结论错误、未提供或证据与真实执行不一致"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "E02",
+          "weight": 2,
+          "critical": false,
+          "criterion": "解释一个必须提前生产的实际约束及所需库存",
+          "evidence": "公开产能/需求、策略与报告",
+          "method": "independent_review",
+          "anchors": {
+            "full": "给出正确周/产品、同周生产上限和必须预存的数量及依据",
+            "half": "周/产品及同周产能不足的证据正确，但未给出必需预存量；错误数量或错误必要性得0",
+            "zero": "结论错误、未提供或证据与真实执行不一致"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "E03",
+          "weight": 2,
+          "critical": false,
+          "criterion": "情景揭示后的供应决策解释与公开中断约束一致",
+          "evidence": "逐场景决策和报告",
+          "method": "independent_review",
+          "anchors": {
+            "full": "准确说明至少一个中断对可行选择集的影响，结合实际策略解释采用动作或策略可保持的原因，以及可执行替代或确无替代的依据；不强迫动作翻转",
+            "half": "中断和至少一个实际动作正确，但full所需的选择集影响、采用动作/保持策略原因、可执行替代或无替代依据中至少一项未交付；错误解释得0",
+            "zero": "结论错误、未提供或证据与真实执行不一致"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "E04",
+          "weight": 2,
+          "critical": false,
+          "criterion": "现金瓶颈解释与回款/支出时序一致",
+          "evidence": "逐周现金及报告",
+          "method": "independent_review",
+          "anchors": {
+            "full": "定位实际最紧周/场景及现金，准确解释对应回款/支出时序来源；公式、实际周和已明确公共字段可闭合定位即可，不要求逐字JSONPath、复写数值或固定措辞",
+            "half": "最紧场景/周和现金准确，但未交付对应来源解释或明确公式/字段定位；原始账可供自行分析本身不算解释",
+            "zero": "结论错误、未提供或证据与真实执行不一致"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "E05",
+          "weight": 2,
+          "critical": false,
+          "criterion": "主要费用来源的量化解释正确",
+          "evidence": "独立费用分解、图表与报告",
+          "method": "independent_review",
+          "anchors": {
+            "full": "量化实际最大费用分量的准确金额/份额并可追溯动作；清楚标定的同口径分量及总额本身就是精确份额表达，或给可定位计算式，不要求打印百分数或特定公式字符串",
+            "half": "最大费用分量及金额正确，但未交付份额或其可定位计算式，或未给动作来源定位；底层账能供读者自行计算不自动补齐解释",
+            "zero": "结论错误、未提供或证据与真实执行不一致"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "E06",
+          "weight": 2,
+          "critical": false,
+          "criterion": "另一合法策略的经济权衡得到真实验证",
+          "evidence": "另一计划、独立可行性/费用与报告",
+          "method": "independent_review",
+          "anchors": {
+            "full": "另一个完整可行策略及费用被实测，经济取舍与证据相符",
+            "half": "另一份完整可行策略和费用已实际验证，但未解释其经济取舍；同一动作重复不算另一策略",
+            "zero": "结论错误、未提供或证据与真实执行不一致"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        }
+      ]
+    },
+    {
+      "id": "F",
+      "title": "运营交接与可阅读证据",
+      "criteria": [
+        {
+          "id": "F01",
+          "weight": 2,
+          "critical": false,
+          "criterion": "运营者能准确识别现在应共同承诺的动作",
+          "evidence": "交接表/报告与共同前缀",
+          "method": "independent_review",
+          "anchors": {
+            "full": "全部共同周的采购/装运/生产动作可由已交材料准确定位并执行；JSON/表/文字均可，需身份/索引/单位/周序与共同信息集说明，不必CSV",
+            "half": "至少一周完整共同动作可操作，其他共同周在所有已交材料中无法完整定位；不得仅因某张CSV缺行忽略完整可操作机器计划；出现错误动作得0",
+            "zero": "结论错误、未提供或证据与真实执行不一致"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "F02",
+          "weight": 2,
+          "critical": false,
+          "criterion": "情景后行动交接与对应条件政策一致",
+          "evidence": "场景行动表与plan",
+          "method": "independent_review",
+          "anchors": {
+            "full": "全部揭示后分支的触发条件和准确后续动作可由已交材料定位；完整机器政策配套身份/单位/信息集说明等价，不提前重写承诺，不必逐行CSV",
+            "half": "至少一分支完整条件/动作可定位，其他分支在所有已交材料中缺可操作定位；不得只看一张表缺行；错误重写承诺或动作得0",
+            "zero": "结论错误、未提供或证据与真实执行不一致"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "F03",
+          "weight": 2,
+          "critical": false,
+          "criterion": "局限/最优性措辞与可核验结果一致",
+          "evidence": "报告、run及独立质量结论",
+          "method": "independent_review",
+          "anchors": {
+            "full": "没有夸大未证的最优/回款/恢复；未知边界准确且影响清楚",
+            "half": "已得可行性/界/终态措辞准确，但没有解释这些限制对运营决策的影响",
+            "zero": "结论错误、未提供或证据与真实执行不一致"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "F04",
+          "weight": 2,
+          "critical": false,
+          "criterion": "实际图形忠实表达交付数据",
+          "evidence": "打开真实PNG/SVG/PDF并核对数据",
+          "method": "independent_review",
+          "anchors": {
+            "full": "实际呈现的费用/现金等图形数值、单位、场景和图例准确可读",
+            "half": "已实际呈现的图形数值准确可读，但单位、场景名或图例至少一类缺失；核心数据错误得0",
+            "zero": "结论错误、未提供或证据与真实执行不一致"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        },
+        {
+          "id": "F05",
+          "weight": 2,
+          "critical": false,
+          "criterion": "交接运行说明足以让另一个执行者成功重建交付",
+          "evidence": "README/manifest及另起进程实跑",
+          "method": "independent_review",
+          "anchors": {
+            "full": "实际照说明从原材料和源码成功运行，文件定位/依赖/参数清楚",
+            "half": "另一个执行者在补充一次未写清的依赖或命令说明后真实复建成功；不能复建得0",
+            "zero": "结论错误、未提供或证据与真实执行不一致"
+          },
+          "readiness": "qualified_for_frozen_case_with_documented_scope"
+        }
+      ]
+    }
+  ],
+  "grading_contract": {
+    "binary": "机器叶满分/0分。verified_pass与verified_fail据真实证据；candidate_incomplete和blocked_candidate均0分并保留准确原因，不把未计算约束声称为数值违例。",
+    "review": "Semantic full/half/zero anchors consider all provided materials; local AI-agent component calibration and adjudication are recorded with explicit limits. Fresh candidate grading remains independent.",
+    "critical": "business_success只在全部critical为verified_pass且参考资格关闭时为true。任何failed/candidate_incomplete/blocked_candidate关键叶均不通过；run_invalid没有候选成功判定。",
+    "score_publication": "Fully assessed valid frozen-case runs publish the fixed-100 score and separate critical business_success. Candidate omissions keep real zero reasons; incomplete evaluator work or infrastructure failure has no score. Reference qualification is labelled separately from candidates.",
+    "primitive_limit": "One exact recurrence supplies30 numeric leaves; other17 use private independent execution/source/business/visual observations. Review references and schema are not proof of truth.",
+    "visual": "F04 requires viewing actual rendered figures; source strings, file existence or UI automation do not substitute.",
+    "dependency_status": "候选缺必需文件/坏schema→candidate_incomplete；因该缺陷无法继续的叶→blocked_candidate；评估器、冻结输入或设施无法执行→run_invalid，整次不发布总分，不计候选失败，不从分母删叶重标100。"
+  },
+  "quality_reference": {
+    "relative_gap_definition": "(C-L)/L",
+    "maximum_relative_gap": 0.01,
+    "registration_status": "base_and_one_monotone_price_control_registered",
+    "native_bounds_are_not_rational_certificates": true,
+    "registration_file": "evaluator/qualification/v2/integer-search/quality-reference/registered-reference.json"
+  },
+  "readiness": {
+    "normalized_packet_local_contract": true,
+    "base_full_plan_feasible": true,
+    "one_percent_quality_qualification": true,
+    "full_reference_report_and_ledgers": true,
+    "variant_quality_reference": true,
+    "per_leaf_evaluation_adapter": true,
+    "independent_full_case_freeze": true,
+    "fresh_OpenCorvus_heavy_pilot": false,
+    "fresh_Codex_comparison": false,
+    "hours_validated": false,
+    "ten_case_suite_complete": false,
+    "one_percent_quality_scope": "base and exact C/R0 positive-price control under registered native trust plus monotonicity proof",
+    "numeric_30_leaf_adapter": true,
+    "full_reference_source_execution": true,
+    "independent_micro_source_replay": true,
+    "independent_full_source_replay": true,
+    "review_calibration": true,
+    "same_source_numerical_control": true,
+    "review_calibration_scope": "Label-masked AI-agent development component calibration: 36 initial plus 8 format controls, four shared-bias corrections; not expert certification or statistical reliability."
+  },
+  "publication": {
+    "requires_readiness": [
+      "normalized_packet_local_contract",
+      "base_full_plan_feasible",
+      "one_percent_quality_qualification",
+      "full_reference_report_and_ledgers",
+      "variant_quality_reference",
+      "per_leaf_evaluation_adapter",
+      "review_calibration",
+      "same_source_numerical_control",
+      "independent_full_case_freeze"
+    ],
+    "good_score_at_least": 90,
+    "comparison_rule": "Both fresh systems good under one frozen contract -> upgrade a new version; retain the current version/results. This is a preregistered author rule, not a universal benchmark standard.",
+    "denominator": 100,
+    "time_rule": "Observe real task wall, model requests, tool/subprocess activity separately; union overlapping intervals, exclude setup/pauses and label unobserved gaps unknown. Efficient correct completion is accepted."
+  },
+  "case_version": "L06/0.2.0",
+  "freeze_review_status": "approved_development_case_freeze",
+  "readiness_snapshot_scope": "At case freeze: pre-freeze qualification closed; future candidate/hours/suite fields are the freeze-time snapshot, not live validation state. See run records."
+}

@@ -1,0 +1,66 @@
+{
+  "format": "l06-freeze-record/1",
+  "case_version": "L06/0.2.0",
+  "benchmark": "HeavyWorkBench-Long/0.2.0-dev",
+  "status": "frozen_for_development_pilots",
+  "canonical_public": "public/",
+  "public_files": [
+    "public/DATA.md",
+    "public/ENVIRONMENT.md",
+    "public/inputs/bom.csv",
+    "public/inputs/demand.csv",
+    "public/inputs/facility.json",
+    "public/inputs/plant_capacity.csv",
+    "public/inputs/plants.csv",
+    "public/inputs/products.csv",
+    "public/inputs/raw_materials.csv",
+    "public/inputs/routes.csv",
+    "public/inputs/scenarios.csv",
+    "public/inputs/supplier_capacity.csv",
+    "public/inputs/supplier_quotes.csv",
+    "public/inputs/supplier_terms.csv",
+    "public/OUTPUTS.md",
+    "public/profile.json",
+    "public/SOURCE.md",
+    "public/TASK.md"
+  ],
+  "rubric": "rubric.json",
+  "grader": "evaluator/qualification/current-source/l06_grade.py",
+  "grading_protocol": "evaluator/GRADING.md",
+  "reference_registration": "evaluator/qualification/v2/integer-search/quality-reference/registered-reference.json",
+  "frozen_scope": "L06 executable contract for fresh development pilots; no claim that ten cases or hours are achieved",
+  "post_freeze_required": [
+    "fresh OpenCorvus native Task",
+    "actual candidate source-only evaluator execution and same frozen rubric independent review",
+    "fresh Codex comparison",
+    "observed useful-work time",
+    "new version upgrade if both good",
+    "remaining nine case upgrades"
+  ],
+  "identity_policy": "Actual frozen files/version/Git source identity recorded at run registration. No mutable source digest substitutes for functional correctness.",
+  "limitations": [
+    "trusted native integer bound, not independent search proof",
+    "AI agent component calibration with prior reference familiarity and small related samples",
+    "runtime/resource/isolation/model comparability must be recorded per actual pilot; no causal ranking inferred"
+  ],
+  "pre_freeze_evidence": {
+    "full_reference": "qualification/v2/source-reference/README.md",
+    "independent_full_reference": "independent-source-reference/full/REVIEW.md",
+    "numeric_and_typed_contracts": "qualification/v2/numeric-findings/README.md",
+    "registered_control_bound": "qualification/v2/price-control/README.md",
+    "actual_same_source_control": "independent-price-source/REVIEW.md",
+    "complete_aggregation": "independent-grading/REVIEW.md",
+    "development_component_calibration": "review-calibration/README.md"
+  },
+  "required_final_audit": "Independent approval of the exact public contract, rubric, canonical grader paths, references and scoped calibration; subsequent fresh pilots are not preconditions for freezing.",
+  "freeze_id": "L06-0.2.0-20261029",
+  "frozen_at_utc": "2026-10-29T19:38:27.627000+00:00",
+  "independent_approval": "independent-freeze-review/stage-assessment.json",
+  "approval_scope": "APPROVE_L06_0_2_0_DEVELOPMENT_CASE_FREEZE",
+  "post_freeze_evidence_at_freeze": {
+    "fresh_OpenCorvus": false,
+    "fresh_Codex": false,
+    "hours": false,
+    "suite_complete": false
+  }
+}

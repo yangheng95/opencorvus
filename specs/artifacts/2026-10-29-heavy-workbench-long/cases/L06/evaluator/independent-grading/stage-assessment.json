@@ -1,0 +1,44 @@
+{
+  "result": "aggregation_local_contract_and_actual_reference_partial_review_qualified",
+  "protocol_cli_count": 13,
+  "protocol_exit": 0,
+  "independent_extra_cli_count": 2,
+  "actual_reference_status": "assessment_incomplete",
+  "actual_reference_counts": {
+    "verified_pass": 44,
+    "verified_partial": 2,
+    "verified_fail": 0,
+    "candidate_incomplete": 0,
+    "blocked_candidate": 0,
+    "unassessed": 1
+  },
+  "actual_reference_total_score": null,
+  "D02_unassessed": true,
+  "actual_half_leaves": [
+    "E03",
+    "E06"
+  ],
+  "empty_submission_identity_rejected": true,
+  "full47_frozen": false,
+  "candidate_grade": null,
+  "blind_calibration": false,
+  "solver_runs": 0,
+  "Docker_runs": 0,
+  "Provider_calls": 0,
+  "GPU_work": false,
+  "delegations": 0,
+  "identity_gap_closed": true,
+  "repair_cli_count": 3,
+  "repair_passed": 3,
+  "actual_reference_complete": false,
+  "total_score": null,
+  "business_success": null,
+  "good": null,
+  "remaining_open": [
+    "D02 same sealed source actual price execution not reviewed in this stage",
+    "multi-quality anonymous calibration",
+    "final case freeze",
+    "fresh candidate and ten-case hours qualification"
+  ],
+  "initial_empty_submission_identity_rejected": false
+}

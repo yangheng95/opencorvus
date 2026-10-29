@@ -1,0 +1,379 @@
+{
+  "format": "l06-review-evidence/1",
+  "case": "L06",
+  "submission_id": "anonymous-reference-development-01",
+  "rater": {
+    "id": "independent-agent-benchmark_review",
+    "role": "independent_evaluator",
+    "assignment": "Authorized parent task in this conversation: one-layer independent full cold replay and subsequent actual17-leaf reference-evidence review; no redelegation."
+  },
+  "artifact_bindings": {
+    "input": "D:\\opencorvus-benchmark-runs\\l06-reference-independent-review-20261029\\full-cold-replay\\input",
+    "normalized": "D:\\opencorvus-benchmark-runs\\l06-reference-independent-review-20261029\\full-cold-replay\\results\\delivery\\normalized.json",
+    "plan": "D:\\opencorvus-benchmark-runs\\l06-reference-independent-review-20261029\\full-cold-replay\\results\\delivery\\plan.json",
+    "summary": "D:\\opencorvus-benchmark-runs\\l06-reference-independent-review-20261029\\full-cold-replay\\results\\delivery\\summary.json",
+    "ledger": "D:\\opencorvus-benchmark-runs\\l06-reference-independent-review-20261029\\full-cold-replay\\results\\delivery\\ledger.json"
+  },
+  "findings": [
+    {
+      "id": "D01",
+      "judgement": "full",
+      "observation": "Actual complete16-week independent source-only cold rebuild naturally exited0 and produced freshly evaluated delivery; no prior plan/model/hint/reference/rubric supplied.",
+      "evidence": [
+        {
+          "path": "actual-evidence/terminal-inspect.json",
+          "kind": "process_receipt",
+          "locator": "State/Config.Cmd/Mounts/HostConfig.NetworkMode",
+          "observation": "Actual owned independent container naturally exited0; readonly source/raw and fresh results, no network."
+        },
+        {
+          "path": "actual-evidence/project/reproduce.py",
+          "kind": "source_audit",
+          "locator": "main, read_packet/build_model/solve_integer and alternative_policy",
+          "observation": "I read the actual source-only input/data flow and this run’s fresh-search route; no archived answer or supplied hint read."
+        },
+        {
+          "path": "actual-evidence/assessment/prefix/independent-full-audit.json",
+          "kind": "business_oracle",
+          "locator": "925 checks/scenarios/objective",
+          "observation": "Independent cumulative physical and financial arithmetic passed all925 checks."
+        }
+      ]
+    },
+    {
+      "id": "D02",
+      "judgement": "unassessed",
+      "observation": "I observed real semantic CSV-row reversal, but this same sealed source was not actually cold-run on the registered numeric price control. A feasible variant witness cannot replace that execution.",
+      "evidence": [
+        {
+          "path": "actual-evidence/input-model-identity.json",
+          "kind": "business_oracle",
+          "locator": "same_complete_business_facts_as_registered_capture/new_model_same_as_frozen_registered",
+          "observation": "Actual CSV-row reversal preserved all business facts; this is not a numerical variant source execution."
+        }
+      ]
+    },
+    {
+      "id": "D07",
+      "judgement": "full",
+      "observation": "I checked all11 raw source families, joint identities, explicit index mapping and units; source-map and DATA correctly trace complete normalized business facts.",
+      "evidence": [
+        {
+          "path": "actual-evidence/results/delivery/source-map.md",
+          "kind": "source_audit",
+          "locator": "all listed raw filenames/keys/units and facility mapping",
+          "observation": "Located source identities and units checked against raw packet and independent projection."
+        },
+        {
+          "path": "actual-evidence/input-model-identity.json",
+          "kind": "business_oracle",
+          "locator": "same_complete_business_facts_as_registered_capture/new_model_same_as_frozen_registered",
+          "observation": "Actual CSV-row reversal preserved all business facts; this is not a numerical variant source execution."
+        }
+      ]
+    },
+    {
+      "id": "D08",
+      "judgement": "full",
+      "observation": "Run/native report and actual exit agree: OPTIMAL means within requested gap. Saved native/API/response stats consistent; no exact-optimum claim.",
+      "evidence": [
+        {
+          "path": "actual-evidence/terminal-inspect.json",
+          "kind": "process_receipt",
+          "locator": "State/Config.Cmd/Mounts/HostConfig.NetworkMode",
+          "observation": "Actual owned independent container naturally exited0; readonly source/raw and fresh results, no network."
+        },
+        {
+          "path": "actual-evidence/results/delivery/solver-result.json",
+          "kind": "process_receipt",
+          "locator": "status/termination/objective/options",
+          "observation": "Actual solver reported OPTIMAL within requested nonzero gap; main and native costs47737.6 agree."
+        }
+      ]
+    },
+    {
+      "id": "D09",
+      "judgement": "full",
+      "observation": "This successful run really obtained a feasible plan and native bound47371. Report preserves their trust limits and does not fabricate unknown results; contract does not require extra failure executions.",
+      "evidence": [
+        {
+          "path": "actual-evidence/terminal-inspect.json",
+          "kind": "process_receipt",
+          "locator": "State/Config.Cmd/Mounts/HostConfig.NetworkMode",
+          "observation": "Actual owned independent container naturally exited0; readonly source/raw and fresh results, no network."
+        },
+        {
+          "path": "actual-evidence/results/delivery/report.md",
+          "kind": "report_or_table",
+          "locator": "actual report tables and limitations",
+          "observation": "I read the generated report and compared all numeric claims with the independent business oracle."
+        }
+      ]
+    },
+    {
+      "id": "D10",
+      "judgement": "full",
+      "observation": "Actual readonly input/source paths, image, command and8workers/seed20261029/.009/no time limit/no hint match run metadata and launch.",
+      "evidence": [
+        {
+          "path": "actual-evidence/terminal-inspect.json",
+          "kind": "process_receipt",
+          "locator": "State/Config.Cmd/Mounts/HostConfig.NetworkMode",
+          "observation": "Actual owned independent container naturally exited0; readonly source/raw and fresh results, no network."
+        },
+        {
+          "path": "actual-evidence/launch.json",
+          "kind": "process_receipt",
+          "locator": "argv/container identity/solver_time_cap",
+          "observation": "Exact actual launch preserved."
+        },
+        {
+          "path": "actual-evidence/results/delivery/run.json",
+          "kind": "process_receipt",
+          "locator": "command/dependencies/parameters",
+          "observation": "Metadata matches observed invocation and declared image."
+        }
+      ]
+    },
+    {
+      "id": "E01",
+      "judgement": "full",
+      "observation": "This run’s first actual incumbent is a real feasible baseline:48259.8. It equals saved first-plan and independent business/matrix checks; no invented baseline.",
+      "evidence": [
+        {
+          "path": "actual-evidence/assessment/checks.json",
+          "kind": "business_oracle",
+          "locator": "actual_first_incumbent_baseline/baseline checks",
+          "observation": "Baseline equality, business feasibility and full1488/1096 integer checks passed."
+        },
+        {
+          "path": "actual-evidence/results/delivery/report.md",
+          "kind": "report_or_table",
+          "locator": "actual report tables and limitations",
+          "observation": "I read the generated report and compared all numeric claims with the independent business oracle."
+        }
+      ]
+    },
+    {
+      "id": "E02",
+      "judgement": "full",
+      "observation": "Six necessary prebuild witnesses correctly identify weeks/products, independent same-week upper bounds and necessary prior stock, matching actual inventory.",
+      "evidence": [
+        {
+          "path": "actual-evidence/assessment/report-prebuild-claims.json",
+          "kind": "business_oracle",
+          "locator": "all six passed entries",
+          "observation": "Independent demand/capacity arithmetic and actual prior inventories agree."
+        },
+        {
+          "path": "actual-evidence/results/delivery/report.md",
+          "kind": "report_or_table",
+          "locator": "actual report tables and limitations",
+          "observation": "I read the generated report and compared all numeric claims with the independent business oracle."
+        }
+      ]
+    },
+    {
+      "id": "E03",
+      "judgement": "half",
+      "observation": "The report correctly identifies supplierA capacity15<MOQ20 in disruption weeks6..8, switch0, actual arrivals/consumption and the infeasible choice. It points generically to other suppliers/early commitments but does not name and quantify a concrete supplier/lead-time substitute or clearly explain the strategy’s retained sourcing choice. This meets the partial anchor; actual constraint facts are not wrong.",
+      "evidence": [
+        {
+          "path": "actual-evidence/assessment/report-interruption-checks.json",
+          "kind": "business_oracle",
+          "locator": "three passed interruption entries",
+          "observation": "Actual supplier capacity, MOQ, switch, arrivals and consumption independently match."
+        },
+        {
+          "path": "actual-evidence/results/delivery/report.md",
+          "kind": "report_or_table",
+          "locator": "actual report tables and limitations",
+          "observation": "I read the generated report and compared all numeric claims with the independent business oracle."
+        }
+      ]
+    },
+    {
+      "id": "E04",
+      "judgement": "full",
+      "observation": "All scenarios’ tightest week3: opening-3389 + receipts0 - spending1980 = -5369. Report gives actual cash/AR24150, four-week lag and clear future-AR warning; detailed costs are located in ledger.",
+      "evidence": [
+        {
+          "path": "actual-evidence/assessment/prefix/independent-full-audit.json",
+          "kind": "business_oracle",
+          "locator": "925 checks/scenarios/objective",
+          "observation": "Independent cumulative physical and financial arithmetic passed all925 checks."
+        },
+        {
+          "path": "actual-evidence/results/delivery/report.md",
+          "kind": "report_or_table",
+          "locator": "actual report tables and limitations",
+          "observation": "I read the generated report and compared all numeric claims with the independent business oracle."
+        }
+      ]
+    },
+    {
+      "id": "E05",
+      "judgement": "full",
+      "observation": "Actual largest cost purchase36250.9 and75.94% are accurate, all expected components/proportions checked, and quantities are traceable through the operational ledger/actions.",
+      "evidence": [
+        {
+          "path": "actual-evidence/assessment/checks.json",
+          "kind": "business_oracle",
+          "locator": "report_component_cost_and_display_ratio_truth",
+          "observation": "Exact cost components and rounded display ratios independently recomputed."
+        },
+        {
+          "path": "actual-evidence/results/delivery/report.md",
+          "kind": "report_or_table",
+          "locator": "actual report tables and limitations",
+          "observation": "I read the generated report and compared all numeric claims with the independent business oracle."
+        }
+      ]
+    },
+    {
+      "id": "E06",
+      "judgement": "half",
+      "observation": "Actual second full feasible policy/cost verified: base week15 transfer1P2 F0→F1, cost47739.1 versus47737.6. Report lists actions and costs but does not explain the incremental1.5 and production-line cost/capacity tradeoff, so the explicit partial economic-explanation anchor applies.",
+      "evidence": [
+        {
+          "path": "actual-evidence/results/delivery/alternative-search.json",
+          "kind": "report_or_table",
+          "locator": "production_transfer/scenarios/week/attempts",
+          "observation": "Actual distinct controls were independently verified feasible."
+        },
+        {
+          "path": "actual-evidence/assessment/checks.json",
+          "kind": "business_oracle",
+          "locator": "alternative business/model checks and report_cost_comparison_truth",
+          "observation": "Alternative47739.1 is feasible and exact; it is not counted as better."
+        },
+        {
+          "path": "actual-evidence/results/delivery/report.md",
+          "kind": "report_or_table",
+          "locator": "actual report tables and limitations",
+          "observation": "I read the generated report and compared all numeric claims with the independent business oracle."
+        }
+      ]
+    },
+    {
+      "id": "F01",
+      "judgement": "full",
+      "observation": "All92 common shipment/order/production actions for weeks0..3, with identity/quantity/units, match actual plan; includes zeroes and no scenario-specific early rewrite.",
+      "evidence": [
+        {
+          "path": "actual-evidence/results/delivery/operations.csv",
+          "kind": "report_or_table",
+          "locator": "all_scenarios week0..3",
+          "observation": "Complete actionable common handoff compared row by row."
+        },
+        {
+          "path": "actual-evidence/assessment/checks.json",
+          "kind": "business_oracle",
+          "locator": "complete_handoff_all_common_and_recourse_actions",
+          "observation": "All920 handoff rows match controls exactly."
+        }
+      ]
+    },
+    {
+      "id": "F02",
+      "judgement": "full",
+      "observation": "All828 recourse action rows for actual three scenario branches and weeks4..15 match the observed policy and declared revelation boundary.",
+      "evidence": [
+        {
+          "path": "actual-evidence/results/delivery/operations.csv",
+          "kind": "report_or_table",
+          "locator": "scenario-specific weeks4..15",
+          "observation": "Branches accurately locate actions, without rewriting committed prefix."
+        },
+        {
+          "path": "actual-evidence/input-model-identity.json",
+          "kind": "business_oracle",
+          "locator": "same_complete_business_facts_as_registered_capture/new_model_same_as_frozen_registered",
+          "observation": "Actual CSV-row reversal preserved all business facts; this is not a numerical variant source execution."
+        }
+      ]
+    },
+    {
+      "id": "F03",
+      "judgement": "full",
+      "observation": "Report accurately qualifies native gap/trust, feasibility, synthetic scenarios, no-interest credit and ungiven futures; it does not use AR as cash or claim exact optimum, live-world validity or hours.",
+      "evidence": [
+        {
+          "path": "actual-evidence/results/delivery/report.md",
+          "kind": "report_or_table",
+          "locator": "actual report tables and limitations",
+          "observation": "I read the generated report and compared all numeric claims with the independent business oracle."
+        },
+        {
+          "path": "actual-evidence/terminal-inspect.json",
+          "kind": "process_receipt",
+          "locator": "State/Config.Cmd/Mounts/HostConfig.NetworkMode",
+          "observation": "Actual owned independent container naturally exited0; readonly source/raw and fresh results, no network."
+        },
+        {
+          "path": "actual-evidence/assessment/prefix/independent-full-audit.json",
+          "kind": "business_oracle",
+          "locator": "925 checks/scenarios/objective",
+          "observation": "Independent cumulative physical and financial arithmetic passed all925 checks."
+        }
+      ]
+    },
+    {
+      "id": "F04",
+      "judgement": "full",
+      "observation": "I actually opened all three full-run PNGs with view_image and compared them with independent ledger. Cash floor/scenarios, stacked cost components and two physical storage stages are readable and faithful; storage axes start0.",
+      "evidence": [
+        {
+          "path": "actual-evidence/results/delivery/figures/cash.png",
+          "kind": "rendered_figure",
+          "locator": "complete displayed image",
+          "observation": "Actual image viewed; cashfloor-5369 and final32208/31310/32737 match."
+        },
+        {
+          "path": "actual-evidence/results/delivery/figures/cost.png",
+          "kind": "rendered_figure",
+          "locator": "complete displayed image",
+          "observation": "Actual image viewed; total47142/48040/48773, components/units/legend readable."
+        },
+        {
+          "path": "actual-evidence/results/delivery/figures/storage.png",
+          "kind": "rendered_figure",
+          "locator": "both displayed panels",
+          "observation": "Actual image viewed; caps240/100, raw peak191, FG85/85/91 match."
+        },
+        {
+          "path": "actual-evidence/manual-visual-review.json",
+          "kind": "report_or_table",
+          "locator": "all three detailed observations",
+          "observation": "Contemporaneous manual visualization review retained, not an image-existence test."
+        }
+      ]
+    },
+    {
+      "id": "F05",
+      "judgement": "full",
+      "observation": "As another executor I followed the README declared image/dependencies and command from new source/raw directories. Actual complete rebuild succeeded without supplied old results or additional missing setup.",
+      "evidence": [
+        {
+          "path": "actual-evidence/terminal-inspect.json",
+          "kind": "process_receipt",
+          "locator": "State/Config.Cmd/Mounts/HostConfig.NetworkMode",
+          "observation": "Actual owned independent container naturally exited0; readonly source/raw and fresh results, no network."
+        },
+        {
+          "path": "actual-evidence/project/README.md",
+          "kind": "source_audit",
+          "locator": "command/dependencies/defaults",
+          "observation": "Instructions matched actual successful execution."
+        }
+      ]
+    }
+  ],
+  "review_disclosure": {
+    "non_blind_development_reference": true,
+    "previously_familiar_with_reference": true,
+    "human_professional_certification": false,
+    "candidate_score": false,
+    "schema_and_references_do_not_prove_rating_truth": true
+  }
+}

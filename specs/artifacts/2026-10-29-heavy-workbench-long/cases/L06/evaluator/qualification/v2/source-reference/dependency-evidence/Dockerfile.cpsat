@@ -1,0 +1,2 @@
+FROM opencorvus-benchmark-operations:20261029
+RUN python -m venv /opt/cpsat && /opt/cpsat/bin/python -m pip install --no-cache-dir --only-binary=:all: ortools==9.15.6755

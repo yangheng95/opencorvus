@@ -1,0 +1,116 @@
+{
+  "result": "completed_price_source_run_read_only_independent_audit_passed",
+  "checks": 31,
+  "all_passed": true,
+  "failed_checks": [],
+  "terminal_exit": 0,
+  "complete_container_seconds": 679.90635,
+  "main_seconds": 677.3659805841744,
+  "solver_seconds": 675.8345846971497,
+  "cost_exact": "477733/10",
+  "native_cost_exact": "477733/10",
+  "native_bound": 47362.0,
+  "fixed_registered_L": 47380,
+  "gap_relative_to_fixed_L_exact": "171/20600",
+  "gap_relative_to_fixed_L_percent": 0.8300970873786407,
+  "baseline_cost_exact": "241622/5",
+  "alternative_cost_exact": "238874/5",
+  "independent_prefix925": {
+    "scope": "v2 full independent prefix/physical-stage/financial arithmetic, not global optimization",
+    "all_checks_passed": true,
+    "check_count": 925,
+    "seconds": 0.006842699833214283,
+    "expected_cost_exact": "477733/10",
+    "caps": {
+      "raw": 240,
+      "finished": 100
+    },
+    "credit5369_is_only_feasible_upper_bound": true,
+    "scenarios": {
+      "base": {
+        "total_cost_minor": 47261,
+        "minimum_cash_minor": -5369,
+        "terminal_cash_minor": 32089,
+        "terminal_receivable_minor": 24150,
+        "raw_peak": [
+          192,
+          8
+        ],
+        "finished_peak": [
+          85,
+          5
+        ]
+      },
+      "supplier_disruption": {
+        "total_cost_minor": 48052,
+        "minimum_cash_minor": -5369,
+        "terminal_cash_minor": 31298,
+        "terminal_receivable_minor": 24150,
+        "raw_peak": [
+          191,
+          4
+        ],
+        "finished_peak": [
+          85,
+          5
+        ]
+      },
+      "demand_shift": {
+        "total_cost_minor": 48636,
+        "minimum_cash_minor": -5369,
+        "terminal_cash_minor": 32874,
+        "terminal_receivable_minor": 25230,
+        "raw_peak": [
+          205,
+          10
+        ],
+        "finished_peak": [
+          91,
+          5
+        ]
+      }
+    }
+  },
+  "numeric30": {
+    "status": "partially_assessed",
+    "counts": {
+      "verified_pass": 30,
+      "verified_fail": 0,
+      "candidate_incomplete": 0,
+      "blocked_candidate": 0,
+      "unassessed": 17
+    },
+    "total_score": null,
+    "business_success": null
+  },
+  "manual_figures_review": "actual_three_completed_price_PNGs_viewed_and_manually_checked",
+  "DUT_hour_claim": false,
+  "full47_grader_approved": false,
+  "heavy_freeze_approved": false,
+  "Provider_calls": 0,
+  "GPU_work": false,
+  "delegations": 0,
+  "new_optimizer_runs_by_reviewer_this_stage": 0,
+  "parent_price_source_runs_observed": 1,
+  "prior_independent_row_source_runs": 1,
+  "container_operations_by_reviewer_this_stage": 0,
+  "report_interruption_prose_checks": 3,
+  "metadata_scope_note": "Reusable audit preliminary inherited cumulative prior-row reviewer run count1. This stage only reads the parent price run; no new optimization or container command was executed.",
+  "D02_current_judgement": "full",
+  "base_artifact_bindings_retained": true,
+  "other16_review_judgements_unchanged": true,
+  "actual_current_draft_assessment_status": "draft_assessment_complete",
+  "actual_current_draft_counts": {
+    "verified_pass": 45,
+    "verified_partial": 2,
+    "verified_fail": 0,
+    "candidate_incomplete": 0,
+    "blocked_candidate": 0,
+    "unassessed": 0
+  },
+  "actual_total_score": null,
+  "actual_business_success": null,
+  "actual_good": null,
+  "private_reference_review_ratings_assigned": 17,
+  "formal_frozen_grade_published": false
+}

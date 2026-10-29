@@ -14,10 +14,11 @@ def main():
     for name in ['check_l06.py','l06_input.py','l06_packet.py','l06_delivery.py','l06_numeric.py','qualify_numeric.py']:
         shutil.copy2(Path(__file__).parent/name,source/name)
     original=args.case_root;case=root/'case';case.mkdir();shutil.copytree(original/'public',case/'public')
-    shutil.copy2(original/'rubric.draft.json',case/'rubric.draft.json')
+    shutil.copy2(original/'rubric.json',case/'rubric.json')
     relative='evaluator/qualification/v2/integer-search/quality-reference/registered-reference.json'
     (case/relative).parent.mkdir(parents=True);shutil.copy2(original/relative,case/relative)
     shutil.copy2((original/relative).parent/'originals.zip',(case/relative).parent/'originals.zip')
+    shutil.copy2((original/relative).parent/'price-control.zip',(case/relative).parent/'price-control.zip')
     data=read_packet(case/'public/inputs')
     with zipfile.ZipFile((original/relative).parent/'originals.zip') as archive:plan=json.loads(archive.read('quality-proof/plan.json'))
     ledger,summary=expected_delivery(data,plan,evaluate(data,plan))
@@ -84,6 +85,15 @@ def main():
         with file.open(newline='',encoding='utf-8') as f:reader=csv.reader(f);header=next(reader);rows=list(reader)
         with file.open('w',newline='',encoding='utf-8') as f:writer=csv.writer(f);writer.writerow(header);writer.writerows(reversed(rows))
     reordered_result=run('semantic-row-order',input=reordered);assert reordered_result['counts']['verified_pass']==30
+    control=root/'registered-price'
+    with zipfile.ZipFile((case/relative).parent/'price-control.zip') as archive:
+        instance=json.loads(archive.read('normalized.json'));control_plan=json.loads(archive.read('plan.json'))
+    write_packet(instance,control)
+    control_ledger,control_summary=expected_delivery(instance,control_plan,evaluate(instance,control_plan))
+    registered=run('registered-monotone-price',input=control,normalized=write('control-normalized.json',instance),plan=write('control-plan.json',control_plan),ledger=write('control-ledger.json',control_ledger),summary=write('control-summary.json',control_summary))
+    assert registered['counts']['verified_pass']==30
+    cached=read_packet(case/'public/inputs');cached_ledger,cached_summary=expected_delivery(cached,control_plan,evaluate(cached,control_plan))
+    run('cached-ledger-on-price-control',{'A02':'verified_fail','C01':'verified_fail','D05':'verified_fail','D06':'verified_fail','C06':'verified_pass'},2,input=control,normalized=write('cached-normalized.json',cached),plan=write('cached-plan.json',control_plan),ledger=write('cached-ledger.json',cached_ledger),summary=write('cached-summary.json',cached_summary))
     changed=root/'changed-price';shutil.copytree(defaults['input'],changed);file=changed/'supplier_quotes.csv'
     with file.open(newline='',encoding='utf-8') as f:reader=csv.DictReader(f);columns=reader.fieldnames;rows=list(reader)
     rows[0]['unit_price_minor']=str(int(rows[0]['unit_price_minor'])-1)
@@ -95,7 +105,7 @@ def main():
     contradicted=root/'contradicted-reference';shutil.copytree(case,contradicted)
     policy=json.loads((contradicted/relative).read_text());policy['lower_bound_minor']={'numerator':100000,'denominator':1};(contradicted/relative).write_text(json.dumps(policy))
     run('feasible-cost-contradicts-bound',exit_code=3,infra='reference_bound_contradicted',case_root=contradicted)
-    badcase=root/'bad-rubric';shutil.copytree(case,badcase);rubric=json.loads((badcase/'rubric.draft.json').read_text(encoding='utf-8'));rubric['groups'][0]['criteria'][1]['id']=rubric['groups'][0]['criteria'][0]['id'];(badcase/'rubric.draft.json').write_text(json.dumps(rubric))
+    badcase=root/'bad-rubric';shutil.copytree(case,badcase);rubric=json.loads((badcase/'rubric.json').read_text(encoding='utf-8'));rubric['groups'][0]['criteria'][1]['id']=rubric['groups'][0]['criteria'][0]['id'];(badcase/'rubric.json').write_text(json.dumps(rubric))
     run('duplicate-rubric-identity',exit_code=3,infra='rubric_invalid',case_root=badcase)
     broken=root/'broken-packet';shutil.copytree(defaults['input'],broken);file=broken/'supplier_quotes.csv'
     with file.open('a') as f:f.write(file.read_text().splitlines()[1]+'\n')
@@ -126,9 +136,9 @@ def main():
     handplan={'format':'l06-plan/1','decisions':{s:{'order_lots':[[[1]],[[0]]],'truck_on':[[1],[0]],'production':[[[1]],[[0]]]} for s in ['a','b']}}
     def hand_case(label,instance):
         c=root/label;c.mkdir();(c/'public').mkdir();write_packet(instance,c/'public/inputs')
-        r=json.loads((case/'rubric.draft.json').read_text(encoding='utf-8'));r['quality_reference']['registration_file']='reference.json';(c/'rubric.draft.json').write_text(json.dumps(r))
+        r=json.loads((case/'rubric.json').read_text(encoding='utf-8'));r['quality_reference']['registration_file']='reference.json';(c/'rubric.json').write_text(json.dumps(r))
         with zipfile.ZipFile(c/'input-capture.zip','w',zipfile.ZIP_DEFLATED) as archive:archive.writestr('input.json',json.dumps(instance))
-        (c/'reference.json').write_text(json.dumps({'status':'base_registered_before_fresh_candidate','input_identity':{'public':'public/inputs','captured_input':'input-capture.zip:input.json'},'lower_bound_minor':{'numerator':7,'denominator':1},'reference_id':'known-hand-fixture-not-benchmark','bound_source':{'kind':'analytical_hand_fixture'}}))
+        (c/'reference.json').write_text(json.dumps({'format':'l06-quality-reference/2','status':'registered_before_fresh_candidate','derived_variants':[],'input_identity':{'public':'public/inputs','captured_input':'input-capture.zip:input.json'},'lower_bound_minor':{'numerator':7,'denominator':1},'reference_id':'known-hand-fixture-not-benchmark','bound_source':{'kind':'analytical_hand_fixture'}}))
         return c
     handroot=hand_case('hand-feasible',hand);hledger,hsummary=expected_delivery(hand,handplan,evaluate(hand,handplan));assert hsummary['expected_cost_minor']=={'numerator':7,'denominator':1}
     hargs={'case_root':handroot,'input':handroot/'public/inputs','normalized':write('hand-normalized.json',hand),'plan':write('hand-plan.json',handplan),'ledger':write('hand-ledger.json',hledger),'summary':write('hand-summary.json',hsummary)}

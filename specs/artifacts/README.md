@@ -26,7 +26,7 @@
 
 - [2026-10-29-text-encoding-journey](2026-10-29-text-encoding-journey/README.md)：Unicode原文乱码修复、双语错误、真实JSON和五份下载核验。
 
-- [长程任务资格与便宜实验](2026-10-29-heavy-workbench-long/README.md)：L01未冻结、L06的30数值叶/真实源码参考与完整独立复跑、L04迁移构造及九题审查；没有十题完成或候选小时级成绩。
+- [长程任务资格与便宜实验](2026-10-29-heavy-workbench-long/README.md)：L06/0.2.0开发合同独立批准冻结，L01/L04及其余题继续建设；合同冻结1/10、候选小时资格0/10。
 
 - [2026-10-29-text-attachment-history](2026-10-29-text-attachment-history/README.md)：23张真实发送/历史回看原图、指定模型流式请求、原件下载与数据/运行结算。
 

@@ -8,7 +8,7 @@
 
 实际从raw编译新模型并搜索，123次真实改进incumbent；交付成本47746.2，第一可行基线49401.7，另一完整可行策略47747.7。native OPTIMAL是非零gap.009内，native界47323.7；它与预注册L是不同对象，不能替换注册参考或声称精确最优。按保持不变的注册参考实际进入[30叶numeric CLI](full-cold/evaluation/first-numeric.json)，30pass/17unassessed，无候选总分。
 
-完整机器计划、ledger/summary、operations.csv、manifest/run、source-map、报告与PNG/SVG都在originals.zip:full-cold/results/delivery/；实际执行项目、原输入、模型、事件、原生日志亦同存ZIP。可解包到新目录查看，不覆盖原件。独立微型source-only冷跑5.92秒及完整小域枚举见[独立报告](../../../independent-source-reference/micro/REVIEW.md)，只认可微型范围。完整重排CSV后的独立源码复跑正在另一自有容器执行，当前不代签。
+完整机器计划、ledger/summary、operations.csv、manifest/run、source-map、报告与PNG/SVG都在originals.zip:full-cold/results/delivery/；实际执行项目、原输入、模型、事件、原生日志亦同存ZIP。可解包到新目录查看，不覆盖原件。独立微型source-only冷跑5.92秒及完整小域枚举见[独立报告](../../../independent-source-reference/micro/REVIEW.md)，只认可微型范围。[完整重排CSV独立复跑](../../../independent-source-reference/full/REVIEW.md)已自然exit0、1253.251秒，成本47737.6/固定参考30数值通过；完整原件另保留，不重启已清理容器。
 
 主方已真实打开三张16周PNG，核对现金曲线/信用底线、四费用构成、两类周内仓容、周序/单位/图例，没有UI自动化。原图可直接查看：[cash](full-cold/figures/cash.png)、[cost](full-cold/figures/cost.png)、[storage](full-cold/figures/storage.png)。
 

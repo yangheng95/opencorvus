@@ -1,0 +1,230 @@
+{
+  "argv": [
+    "docker",
+    "history",
+    "--no-trunc",
+    "--format",
+    "{{json .}}",
+    "opencorvus-benchmark-reference:20261029"
+  ],
+  "exit_code": 0,
+  "scope": "existing immutable dependency image build history, no image build/container/solver execution",
+  "layers": [
+    {
+      "Comment": "buildkit.dockerfile.v0",
+      "CreatedAt": "2026-10-30T00:23:23+08:00",
+      "CreatedBy": "RUN /bin/sh -c /opt/cpsat/bin/python -c \"import numpy,scipy,matplotlib,ortools; print(numpy.__version__,scipy.__version__,matplotlib.__version__,ortools.__version__); assert (numpy.__version__,scipy.__version__,matplotlib.__version__,ortools.__version__)==('2.4.6','1.15.3','3.10.3','9.15.6755')\" # buildkit",
+      "CreatedSince": "3 hours ago",
+      "ID": "sha256:23ff8bfbf8055caa0b9fa5745ddb27cceea2f31d7d15b7a900c81112cdfe8ddf",
+      "Size": "16.4kB"
+    },
+    {
+      "Comment": "buildkit.dockerfile.v0",
+      "CreatedAt": "2026-10-30T00:23:23+08:00",
+      "CreatedBy": "RUN /bin/sh -c python -m venv --system-site-packages /opt/cpsat # buildkit",
+      "CreatedSince": "3 hours ago",
+      "ID": "<missing>",
+      "Size": "45.1kB"
+    },
+    {
+      "Comment": "buildkit.dockerfile.v0",
+      "CreatedAt": "2026-10-29T21:51:33+08:00",
+      "CreatedBy": "RUN /bin/sh -c python -m venv /opt/cpsat && /opt/cpsat/bin/python -m pip install --no-cache-dir --only-binary=:all: ortools==9.15.6755 # buildkit",
+      "CreatedSince": "5 hours ago",
+      "ID": "<missing>",
+      "Size": "284MB"
+    },
+    {
+      "Comment": "buildkit.dockerfile.v0",
+      "CreatedAt": "2026-10-29T21:32:57+08:00",
+      "CreatedBy": "RUN /bin/sh -c python -m pip install --no-cache-dir --only-binary=:all: --no-deps highspy==1.8.0 # buildkit",
+      "CreatedSince": "6 hours ago",
+      "ID": "<missing>",
+      "Size": "5.58MB"
+    },
+    {
+      "Comment": "buildkit.dockerfile.v0",
+      "CreatedAt": "2026-10-29T13:45:39+08:00",
+      "CreatedBy": "ENV PYTHONDONTWRITEBYTECODE=1 MPLBACKEND=Agg",
+      "CreatedSince": "14 hours ago",
+      "ID": "<missing>",
+      "Size": "0B"
+    },
+    {
+      "Comment": "buildkit.dockerfile.v0",
+      "CreatedAt": "2026-10-29T13:45:39+08:00",
+      "CreatedBy": "RUN /bin/sh -c python -m pip install --no-cache-dir numpy==1.26.4 scipy==1.15.3 matplotlib==3.10.3 reportlab==4.4.0 pypdf==5.5.0 # buildkit",
+      "CreatedSince": "14 hours ago",
+      "ID": "<missing>",
+      "Size": "326MB"
+    },
+    {
+      "Comment": "buildkit.dockerfile.v0",
+      "CreatedAt": "2025-06-05T02:24:02+08:00",
+      "CreatedBy": "WORKDIR /workspace",
+      "CreatedSince": "17 months ago",
+      "ID": "<missing>",
+      "Size": "8.19kB"
+    },
+    {
+      "Comment": "buildkit.dockerfile.v0",
+      "CreatedAt": "2025-06-05T02:24:02+08:00",
+      "CreatedBy": "ENV PYTORCH_VERSION=2.7.1",
+      "CreatedSince": "17 months ago",
+      "ID": "<missing>",
+      "Size": "0B"
+    },
+    {
+      "Comment": "buildkit.dockerfile.v0",
+      "CreatedAt": "2025-06-05T02:24:02+08:00",
+      "CreatedBy": "ENV PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+      "CreatedSince": "17 months ago",
+      "ID": "<missing>",
+      "Size": "0B"
+    },
+    {
+      "Comment": "buildkit.dockerfile.v0",
+      "CreatedAt": "2025-06-05T02:24:02+08:00",
+      "CreatedBy": "ENV LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64",
+      "CreatedSince": "17 months ago",
+      "ID": "<missing>",
+      "Size": "0B"
+    },
+    {
+      "Comment": "buildkit.dockerfile.v0",
+      "CreatedAt": "2025-06-05T02:24:02+08:00",
+      "CreatedBy": "ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility",
+      "CreatedSince": "17 months ago",
+      "ID": "<missing>",
+      "Size": "0B"
+    },
+    {
+      "Comment": "buildkit.dockerfile.v0",
+      "CreatedAt": "2025-06-05T02:24:02+08:00",
+      "CreatedBy": "ENV NVIDIA_VISIBLE_DEVICES=all",
+      "CreatedSince": "17 months ago",
+      "ID": "<missing>",
+      "Size": "0B"
+    },
+    {
+      "Comment": "buildkit.dockerfile.v0",
+      "CreatedAt": "2025-06-05T02:24:02+08:00",
+      "CreatedBy": "ENV PATH=/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+      "CreatedSince": "17 months ago",
+      "ID": "<missing>",
+      "Size": "0B"
+    },
+    {
+      "Comment": "buildkit.dockerfile.v0",
+      "CreatedAt": "2025-06-05T02:24:02+08:00",
+      "CreatedBy": "RUN |4 PYTORCH_VERSION=2.7.1 TRITON_VERSION= TARGETPLATFORM=linux/amd64 CUDA_VERSION=12.8.0 /bin/sh -c if test -n \"${TRITON_VERSION}\" -a \"${TARGETPLATFORM}\" != \"linux/arm64\"; then         DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends gcc;         rm -rf /var/lib/apt/lists/*;     fi # buildkit",
+      "CreatedSince": "17 months ago",
+      "ID": "<missing>",
+      "Size": "4.1kB"
+    },
+    {
+      "Comment": "buildkit.dockerfile.v0",
+      "CreatedAt": "2025-06-05T02:24:01+08:00",
+      "CreatedBy": "COPY /opt/conda /opt/conda # buildkit",
+      "CreatedSince": "17 months ago",
+      "ID": "<missing>",
+      "Size": "7.65GB"
+    },
+    {
+      "Comment": "buildkit.dockerfile.v0",
+      "CreatedAt": "2025-06-05T02:19:30+08:00",
+      "CreatedBy": "RUN |4 PYTORCH_VERSION=2.7.1 TRITON_VERSION= TARGETPLATFORM=linux/amd64 CUDA_VERSION=12.8.0 /bin/sh -c apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends         ca-certificates         libjpeg-dev         libpng-dev         && rm -rf /var/lib/apt/lists/* # buildkit",
+      "CreatedSince": "17 months ago",
+      "ID": "<missing>",
+      "Size": "31.4MB"
+    },
+    {
+      "Comment": "buildkit.dockerfile.v0",
+      "CreatedAt": "2025-06-05T02:19:30+08:00",
+      "CreatedBy": "LABEL com.nvidia.volumes.needed=nvidia_driver",
+      "CreatedSince": "17 months ago",
+      "ID": "<missing>",
+      "Size": "0B"
+    },
+    {
+      "Comment": "buildkit.dockerfile.v0",
+      "CreatedAt": "2025-06-05T02:19:30+08:00",
+      "CreatedBy": "ARG CUDA_VERSION=12.8.0",
+      "CreatedSince": "17 months ago",
+      "ID": "<missing>",
+      "Size": "0B"
+    },
+    {
+      "Comment": "buildkit.dockerfile.v0",
+      "CreatedAt": "2025-06-05T02:19:30+08:00",
+      "CreatedBy": "ARG TARGETPLATFORM=linux/amd64",
+      "CreatedSince": "17 months ago",
+      "ID": "<missing>",
+      "Size": "0B"
+    },
+    {
+      "Comment": "buildkit.dockerfile.v0",
+      "CreatedAt": "2025-06-05T02:19:30+08:00",
+      "CreatedBy": "ARG TRITON_VERSION=",
+      "CreatedSince": "17 months ago",
+      "ID": "<missing>",
+      "Size": "0B"
+    },
+    {
+      "Comment": "buildkit.dockerfile.v0",
+      "CreatedAt": "2025-06-05T02:19:30+08:00",
+      "CreatedBy": "ARG PYTORCH_VERSION=2.7.1",
+      "CreatedSince": "17 months ago",
+      "ID": "<missing>",
+      "Size": "0B"
+    },
+    {
+      "Comment": "",
+      "CreatedAt": "2025-05-31T06:30:45+08:00",
+      "CreatedBy": "/bin/sh -c #(nop)  CMD [\"/bin/bash\"]",
+      "CreatedSince": "17 months ago",
+      "ID": "<missing>",
+      "Size": "0B"
+    },
+    {
+      "Comment": "",
+      "CreatedAt": "2025-05-31T06:30:45+08:00",
+      "CreatedBy": "/bin/sh -c #(nop) ADD file:82f38ebced7b2756311fb492d3d44cc131b22654e8620baa93883537a3e355aa in / ",
+      "CreatedSince": "17 months ago",
+      "ID": "<missing>",
+      "Size": "87.5MB"
+    },
+    {
+      "Comment": "",
+      "CreatedAt": "2025-05-31T06:30:42+08:00",
+      "CreatedBy": "/bin/sh -c #(nop)  LABEL org.opencontainers.image.version=22.04",
+      "CreatedSince": "17 months ago",
+      "ID": "<missing>",
+      "Size": "0B"
+    },
+    {
+      "Comment": "",
+      "CreatedAt": "2025-05-31T06:30:42+08:00",
+      "CreatedBy": "/bin/sh -c #(nop)  LABEL org.opencontainers.image.ref.name=ubuntu",
+      "CreatedSince": "17 months ago",
+      "ID": "<missing>",
+      "Size": "0B"
+    },
+    {
+      "Comment": "",
+      "CreatedAt": "2025-05-31T06:30:42+08:00",
+      "CreatedBy": "/bin/sh -c #(nop)  ARG LAUNCHPAD_BUILD_ARCH",
+      "CreatedSince": "17 months ago",
+      "ID": "<missing>",
+      "Size": "0B"
+    },
+    {
+      "Comment": "",
+      "CreatedAt": "2025-05-31T06:30:42+08:00",
+      "CreatedBy": "/bin/sh -c #(nop)  ARG RELEASE",
+      "CreatedSince": "17 months ago",
+      "ID": "<missing>",
+      "Size": "0B"
+    }
+  ]
+}

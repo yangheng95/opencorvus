@@ -1,0 +1,87 @@
+{
+  "status": "passed",
+  "actual_cli": 3,
+  "scope": "canonical current paths; no candidate grade or freeze",
+  "executions": [
+    {
+      "argv": [
+        "C:/Python314/python.exe",
+        "-B",
+        "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\qualification\\current-source\\l06_numeric.py",
+        "--case-root",
+        "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-reference-independent-review-20261029\\full-cold-replay\\input",
+        "--normalized",
+        "D:\\opencorvus-benchmark-runs\\l06-reference-independent-review-20261029\\full-cold-replay\\results\\delivery\\normalized.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-reference-independent-review-20261029\\full-cold-replay\\results\\delivery\\plan.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-reference-independent-review-20261029\\full-cold-replay\\results\\delivery\\summary.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-reference-independent-review-20261029\\full-cold-replay\\results\\delivery\\ledger.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-canonical-path-qualification-20261029\\base.json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"format\": \"l06-numeric-findings/1\", \"status\": \"partially_assessed\", \"scope\": \"30 numeric leaves only; execution/review and complete case grade pending\", \"total_score\": null, \"business_success\": null, \"numeric_leaf_count\": 30, \"counts\": {\"verified_pass\": 30, \"verified_fail\": 0, \"candidate_incomplete\": 0, \"blocked_candidate\": 0, \"unassessed\": 17}, \"known_critical_failures\": []}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "C:/Python314/python.exe",
+        "-B",
+        "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\qualification\\current-source\\l06_numeric.py",
+        "--case-root",
+        "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-source-price-control-20261029\\input",
+        "--normalized",
+        "D:\\opencorvus-benchmark-runs\\l06-source-price-control-20261029\\results\\delivery\\normalized.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-source-price-control-20261029\\results\\delivery\\plan.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-source-price-control-20261029\\results\\delivery\\summary.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-source-price-control-20261029\\results\\delivery\\ledger.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-canonical-path-qualification-20261029\\registered-price.json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"format\": \"l06-numeric-findings/1\", \"status\": \"partially_assessed\", \"scope\": \"30 numeric leaves only; execution/review and complete case grade pending\", \"total_score\": null, \"business_success\": null, \"numeric_leaf_count\": 30, \"counts\": {\"verified_pass\": 30, \"verified_fail\": 0, \"candidate_incomplete\": 0, \"blocked_candidate\": 0, \"unassessed\": 17}, \"known_critical_failures\": []}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "C:/Python314/python.exe",
+        "-B",
+        "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\qualification\\current-source\\l06_grade.py",
+        "--case-root",
+        "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06",
+        "--review",
+        "D:\\opencorvus-benchmark-runs\\l06-grading-independent-review-20261029\\actual-review-with-price-source.json",
+        "--evidence-root",
+        "D:\\opencorvus-benchmark-runs\\l06-grading-independent-review-20261029",
+        "--delivery-root",
+        "D:\\opencorvus-benchmark-runs\\l06-reference-independent-review-20261029\\full-cold-replay\\results\\delivery",
+        "--submission-id",
+        "anonymous-reference-development-01",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-reference-independent-review-20261029\\full-cold-replay\\input",
+        "--normalized",
+        "D:\\opencorvus-benchmark-runs\\l06-reference-independent-review-20261029\\full-cold-replay\\results\\delivery\\normalized.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-reference-independent-review-20261029\\full-cold-replay\\results\\delivery\\plan.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-reference-independent-review-20261029\\full-cold-replay\\results\\delivery\\summary.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-reference-independent-review-20261029\\full-cold-replay\\results\\delivery\\ledger.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-canonical-path-qualification-20261029\\complete-draft.json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"format\": \"l06-complete-assessment/1\", \"submission_id\": \"anonymous-reference-development-01\", \"total_score\": null, \"business_success\": null, \"good\": null, \"status\": \"draft_assessment_complete\", \"fixed_denominator\": 100, \"publication_blockers\": [\"rubric_not_frozen\", \"readiness:review_calibration\", \"readiness:independent_full_case_freeze\"], \"known_critical_failures\": [], \"unassessed\": [], \"counts\": {\"verified_pass\": 45, \"verified_partial\": 2, \"verified_fail\": 0, \"candidate_incomplete\": 0, \"blocked_candidate\": 0, \"unassessed\": 0}, \"review_trust\": \"Private evaluator ratings; structural validation does not independently prove the judgement. Candidate files never supply ratings.\"}\n",
+      "stderr": ""
+    }
+  ]
+}

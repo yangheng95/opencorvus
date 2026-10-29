@@ -275,3 +275,31 @@ L06现有30数值叶适配：唯一inspect_plan收集可计算谓词，财务/�
 当前待办：17执行/审查叶和固定分母/critical聚合，输入数值变体的明确范围/预注册参考，多质量评分校准/最终冻结，随后fresh重型OpenCorvus/同冻结rubric清洁执行与独立审查/freshCodex、有效活动时长；两方都好则另升版本。L01结果阈值仍null，L04仍局部迁移资格，L05及其余任务完整新版未完成。十题目标未达成，不用本题局部通过冒充套件；保持心跳ACTIVE。
 
 本轮docs:check退出0/351 ops/26 groups，L06包装231 JSON/54 Python/66相对链接通过；不当功能/时长验收。新增源及原件仅属benchmark路径，生产代码无本任务修改；三个共享索引只暂存本任务目标行，保留其他任务的重排/删除。范围提交后正常fetch/merge、检查全部待推集合、push。
+
+
+## 18:03–19:15 UTC接续 Recall：全交付/控制/47叶和格式公平性
+
+用户原十题/全链rubric/单层独立审查/真实OpenCorvus与fresh Codex/两好升级/有效小时目标不变；便宜优先，无总token/墙钟额度。开始查Git、当前AGENTS和长程/L06/L04/横向Recall；bedf88d33已push，后续其他授权任务提交已进入main，保留所有无关删除/共享索引改动。本轮没有Provider/候选/UI/用户进程操作，六旧昂贵任务仍Paused。详细分析/失败/修复/实际命令在L06资格记录末节。
+
+完整独立基例source-only已自然完成1253.251231秒：11CSV真实反转，1488变量/1096行逐值同一，925业务/三计划/全账/920动作与三实际图通过，C47737.6而非复用主方轨迹，固定L gap.7547488%。精确自有exited容器封存后清理，不重启。主方早7分钟和旧quality22分钟也已终态，不重复求解或称候选时间。
+
+先零solver用单调成本/现金/可行集包含证明注册单报价C/R0:45→46，完整可达见证47763.6/固定gap.8096243%；L仍唯一47380，1%不变，原trusted-native信任不改称有理dual/search proof。未知输入/ZIP漂移run_invalid。独立空基例ID真P2已修type/string/strip/kind，原例/必要5CLI留档。当前唯一注册format2在quality-reference，原基例/引用ZIP不覆盖。
+
+之后才做一次真正同源报价source执行补D02，18:17:49→18:29:08Z自然exit0、679.906350秒/92改善，C47773.3、native47362（不换注册L）；source/raw只读、新results/networknone，无旧plan/model/hint/L/rubric。独立再核新模型1488/1096、925业务/三计划/全账/30numeric及三实际PNG，gap.8300971%通过。末态/log先封存，再只清理精确自有exited CID2e09ae3f...；当前无新增活跃完整CPU任务。
+
+47叶薄聚合复用30数值+候选外17独立证据，固定100分母/half/critical/候选缺交与未审/设施无分清楚。独立空submission身份P2已修，原13协议/修后3CLI及主最终15CLI/独立Fraction代数通过。D02已设critical（仍4分）：否则变体失败96分能判好；现在96仍business_success/good false。真实参考原44/2/1保留，只有报价实际通过后才追加D02 full，当前45pass/2partial(E03/E06)/0未评，draft完整评价、总分/业务成功/good仍null，非候选成绩。
+
+人评开发校准没有被高一致率蒙混：3匿名组件包36初评与预存key36/36，但独立开放审查揭示共享格式偏差。新两匿名等价格式控制8初评8/8，JSON无CSV/闭合数学式可满分，真正只交一周/一分支及无来源结论半分；实际数据/操作/9原PNG均验证。旧97的F01/F02以及E04/E05四项最终从half改full，原36/key/原half/新8和分歧裁决均不改。任何格式可操作计划及已交闭合信息不能因CSV缺行、未复写数字/未打印%扣分。D07四组/E03必要成分/解释与原始数据边界已消歧。只有标签遮蔽AI-agent组件开发资格（已熟悉原参考、相关小样本），非职业真人/统计成熟，不能当5个候选或44独立任务。归档evaluator/review-calibration，review_calibration true仅此范围。
+
+为准备真正新试跑，活跃规范路径已单一化为cases/L06/rubric.json、public/TASK.md/OUTPUTS.md/profile.json，去掉.draft文件名，current-source四消费者同步，无fallback；历史源/旧名称只在Git/原始ZIP。当前状态仍pending，不提前冻结。规范路径3个真实CLI基例/报价30pass及完整45pass2partial/totalnull，main-c15协议CLI亦过（生成fixture自身draft，防冻结后把synthetic当正式成绩）。公共文档去掉动态进度，给可用依赖镜像ID/运行命令和任意格式公平性；只含依赖的镜像构建history27层/各recipes已只读导出供独立核对，没有新build或solver。
+
+当前唯一活跃工作是既有单层reviewer的最后case合同审查：外部l06-final-freeze-review-20261029，读规范public、rubric、GRADING和evaluator/FREEZE.json/全部资格与局部校准；尚未批准，public/rubric仍不冻结/总分不出。实际版本候选L06/0.2.0、套件Long/0.2.0-dev，不改应用版本，不Release/tag/PR。通过才仅切换审过状态/标题、做正式正向/文档/范围提交、正常fetch/merge/待推全集检查/push，并复用现有Inspect/serve_heavy_workbench.ts实际Task/code/base/gpt6.1sol。只给public；auth/models完整配对来源已只读验证存在/OAuth future/target catalog，实际投影/HTTP流式仍未开始，不泄漏密钥。3600秒只作无活动观察窗，Inspect超时停止观察不取消有效Task，不是用户总时限。
+
+随后仍须fresh OpenCorvus及fresh Codex、完成版本封存、评估侧真正源码冷复跑、同冻结rubric独立审查和真实有效活动时间；双方>=90且critical全过则另升版本，不事后改分线。冻结前资格与冻结后实证分开，不形成循环。L01质量阈值仍null，L04仍局部迁移，其他新版仍未落地，cases/README十题矩阵明确当前新合同冻结0/10、候选小时资格0/10。整个目标未达成，心跳ACTIVE。
+
+
+19:34 UTC独立最终审查已正式APPROVE_L06_0_2_0_DEVELOPMENT_CASE_FREEZE、blocking=[]，18public/47叶100分/28critical69分/唯一L47380/1%/90及控制不变。归档independent-freeze-review。主方仅切换批准状态/标题/readiness，原数据/锚点/权重/控制不改，早期注册suite-dev来源标签保留并说明。rubric/publicprofile/FREEZE现为冻结L06/0.2.0，套件仍0.2.0-dev，不改应用版本/不Release。
+
+冻结后唯一真实完整reference grade CLI已正向graded98/business_success=true/good=true，45pass2partial(E03/E06)、无未评；只标reference qualification，candidate_score null，不拿此分证明难度。docs:check351 ops/26 groups通过。规范路径替换无旧.draft fallback，过去执行源/失败全保留。接下来范围提交、fetch/merge/待推集合审查/push，再按冻结public开始实际OpenCorvus，顺序fresh Codex以免无谓并发资源争抢；使用原Inspect/native Task/base/streaming，不新增LLM路由或总量截断。所有新候选及小时、九题要求仍未完成，心跳ACTIVE。
+
+最终包装285份唯一键/有限JSON、56份Python语法、94相对链接及32个不可变ZIP成员完整性通过；这只是包装/原件完整性，不替代业务或难度验收。docs:check实际351 ops/26 groups退出0。原始执行文档的相对路径跟随原目录，原字节保留ZIP；两份新可读重复副本经与ZIP原件逐字节身份核对后移除，不重写执行源。无生产代码修改，其他任务视频/旧图删除和共享索引差异完整保留。接下来只提交本任务case/记录和三个共享索引目标hunk，正常fetch/merge/待推全集审查/push后才启动真实pilot。
