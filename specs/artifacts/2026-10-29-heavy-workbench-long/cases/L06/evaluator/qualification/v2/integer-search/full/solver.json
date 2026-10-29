@@ -1,0 +1,19 @@
+{
+  "objective_name": "expected_operating_cost_minor",
+  "status": 4,
+  "message": "The HiGHS status code was not recognized. (HiGHS Status 16: model_status is Solution limit reached; primal_status is None)",
+  "seconds": 2.972022351808846,
+  "objective": null,
+  "dual_bound": null,
+  "solver_gap_scaled_by_primal": null,
+  "nodes": null,
+  "variables": 1488,
+  "constraints": 1096,
+  "solver_options": {
+    "mip_rel_gap": 0.002,
+    "disp": true,
+    "node_limit": 1,
+    "time_limit": 30.0
+  },
+  "bound_scope": "native numeric MIP estimate; not an exact rational certificate"
+}

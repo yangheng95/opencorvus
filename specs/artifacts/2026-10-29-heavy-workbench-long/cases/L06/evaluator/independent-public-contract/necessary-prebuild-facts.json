@@ -1,0 +1,54 @@
+{
+  "no_solver_run": true,
+  "facts": [
+    {
+      "scenario": "base",
+      "week": 6,
+      "product": "P0",
+      "demand": 10,
+      "same_week_upper_even_ignoring_other_products": 0,
+      "necessary_prior_inventory_at_least": 10
+    },
+    {
+      "scenario": "base",
+      "week": 9,
+      "product": "P3",
+      "demand": 4,
+      "same_week_upper_even_ignoring_other_products": 3,
+      "necessary_prior_inventory_at_least": 1
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 6,
+      "product": "P0",
+      "demand": 10,
+      "same_week_upper_even_ignoring_other_products": 0,
+      "necessary_prior_inventory_at_least": 10
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 9,
+      "product": "P3",
+      "demand": 4,
+      "same_week_upper_even_ignoring_other_products": 3,
+      "necessary_prior_inventory_at_least": 1
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 6,
+      "product": "P0",
+      "demand": 11,
+      "same_week_upper_even_ignoring_other_products": 0,
+      "necessary_prior_inventory_at_least": 11
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 9,
+      "product": "P3",
+      "demand": 5,
+      "same_week_upper_even_ignoring_other_products": 3,
+      "necessary_prior_inventory_at_least": 2
+    }
+  ],
+  "scope": "necessary bounds, not complete optimal policy or arbitrary plan matching"
+}

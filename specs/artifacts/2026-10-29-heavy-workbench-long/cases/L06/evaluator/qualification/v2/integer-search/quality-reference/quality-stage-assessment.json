@@ -1,0 +1,17 @@
+{
+  "format": "l06-reference-quality-stage/1",
+  "observed_utc": "2026-10-29T15:08:10.785716+00:00",
+  "solver_status": "OPTIMAL",
+  "status_meaning": "native OPTIMAL within requested nonzero gap, not exact optimum proof",
+  "actual_seconds": 1332.54670931492,
+  "checked_cost_exact": "47808",
+  "native_bound_exact_representation": "47380",
+  "native_bound_scope": "trusted native CP-SAT integer-search bound; not independent rational dual/proof certificate",
+  "relative_to_bound_gap_exact": "107/11845",
+  "relative_to_bound_gap": 0.009033347403967919,
+  "meets_proposed_one_percent_using_native_bound": true,
+  "strict_rational_lp_lattice_lower": "462203/10",
+  "candidate_score": null,
+  "independent_current_terminal_review": "pending",
+  "freeze": "pending full reference, grader, variants and review"
+}

@@ -1,0 +1,19 @@
+{
+  "strict_lp_objective_lattice_lower_exact": "462203/10",
+  "strict_reference": "previously independently certified exact LP proof plus integral objective lattice; not a new solve",
+  "CP_numeric_bound": 47230.3,
+  "cross_HiGHS_numeric_bound": 47275.9,
+  "previous_HiGHS_numeric_bound": 47281,
+  "native_bounds_are_exact_certificates": false,
+  "new_independent_business_upper_exact": "490329/10",
+  "previous_upper": 51263,
+  "upper_improvement_exact": "22301/10",
+  "strict_gap_over_lower_percent": 6.085204985688106,
+  "strict_gap_over_upper_percent": 5.736148585949434,
+  "CP_numeric_gap_over_upper_percent": 3.6763071325579357,
+  "cross_numeric_gap_over_upper_percent": 3.5833083501077847,
+  "one_percent_certified": false,
+  "true_integer_optimum_known": false,
+  "cross_seed_actions_equal_CP": true,
+  "cross_seed_upper_improved": false
+}

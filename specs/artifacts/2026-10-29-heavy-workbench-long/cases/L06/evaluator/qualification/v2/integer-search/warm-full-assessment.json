@@ -1,0 +1,25 @@
+{
+  "scope": "30-second mathematical qualification, not candidate score or global budget",
+  "native_status_code": 13,
+  "termination": "limited",
+  "strict_lp_lower": 46220.3,
+  "native_numeric_lower": 47281.0,
+  "known_feasible_upper_before": 51263,
+  "has_feasible_incumbent": true,
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\check_l06.py",
+    "--input",
+    "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\inputs\\full.json",
+    "--plan",
+    "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\warm-full\\plan.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\warm-full\\business-check.json"
+  ],
+  "exit_code": 0,
+  "stdout": "{\"business_feasible\": true, \"scope\": \"exact finite instance plan recurrence only; not execution attestation or optimality certificate\", \"expected_cost_minor\": 51263.0, \"expected_cost_exact\": {\"numerator\": 51263, \"denominator\": 1}}\n",
+  "business_expected_cost": 51263.0,
+  "business_feasible": true,
+  "feasible_upper_improvement": 0.0
+}

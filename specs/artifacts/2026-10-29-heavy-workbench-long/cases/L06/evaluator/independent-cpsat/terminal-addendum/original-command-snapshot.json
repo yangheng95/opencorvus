@@ -1,0 +1,14 @@
+{
+  "cmd": "$r='D:/opencorvus-benchmark-runs/l06-procurement-qualification-20261029';docker run --rm --name oc-l06-cpsat-full-20261029-a --cidfile \"$r/v2/root-node-diagnostic-20261029/cpsat-full-container.cid\" --network none --mount \"type=bind,source=$r,target=/work\" -w /work -e PYTHONDONTWRITEBYTECODE=1 opencorvus-benchmark-cpsat:20261029 /opt/cpsat/bin/python -B qualify_cpsat_model.py --model /work/v2/root-node-diagnostic-20261029/cpsat-input/full-model.json --input /work/v2/inputs/full.json --hint /work/v2/root-node-diagnostic-20261029/cpsat-input/hint.json --seconds 30 --workers 8 --output /work/v2/root-node-diagnostic-20261029/cpsat-full *> \"$r/v2/root-node-diagnostic-20261029/cpsat-full-output.log\";exit $LASTEXITCODE",
+  "start": {
+    "current_time": "2026-10-29 13:53:44 UTC"
+  },
+  "chunk_id": "63a957",
+  "wall_time_seconds": 10.0075934,
+  "session_id": 87433,
+  "original_token_count": 0,
+  "output": "",
+  "end": {
+    "current_time": "2026-10-29 13:56:05 UTC"
+  }
+}

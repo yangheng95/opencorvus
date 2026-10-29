@@ -1,0 +1,58 @@
+{
+  "business_feasible": true,
+  "scope": "exact finite instance plan recurrence only; not execution attestation or optimality certificate",
+  "expected_cost_minor": 49032.9,
+  "expected_cost_exact": {
+    "numerator": 490329,
+    "denominator": 10
+  },
+  "scenarios": {
+    "base": {
+      "total_cost_minor": 48507,
+      "final_cash_minor": 30843,
+      "final_receivable_minor": 24150,
+      "minimum_cash_minor": -5369,
+      "active_constraints": {
+        "supplier_capacity": 7,
+        "shipment_minimum": 1,
+        "plant_capacity": 11,
+        "raw_storage": 0,
+        "product_storage": 0,
+        "credit_limit": 1
+      }
+    },
+    "supplier_disruption": {
+      "total_cost_minor": 49428,
+      "final_cash_minor": 29922,
+      "final_receivable_minor": 24150,
+      "minimum_cash_minor": -5369,
+      "active_constraints": {
+        "supplier_capacity": 11,
+        "shipment_minimum": 1,
+        "plant_capacity": 7,
+        "raw_storage": 0,
+        "product_storage": 0,
+        "credit_limit": 1
+      }
+    },
+    "demand_shift": {
+      "total_cost_minor": 49755,
+      "final_cash_minor": 31755,
+      "final_receivable_minor": 25230,
+      "minimum_cash_minor": -5369,
+      "active_constraints": {
+        "supplier_capacity": 8,
+        "shipment_minimum": 1,
+        "plant_capacity": 16,
+        "raw_storage": 0,
+        "product_storage": 0,
+        "credit_limit": 1
+      }
+    }
+  },
+  "projection_source": {
+    "archive": "originals.zip",
+    "member": "cross-seed/business-check.json",
+    "scope": "derived readable summary; full original byte-preserved inside archive"
+  }
+}

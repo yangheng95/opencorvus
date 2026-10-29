@@ -1,0 +1,107 @@
+{
+  "result": "local_qualification_passed",
+  "substantive_blockers_in_reviewed_scope": [],
+  "final_report": "REVIEW.md",
+  "full_l06_maturity_approved": false,
+  "scope": "native integer result adapter and warm-start/returned-plan qualification only",
+  "local_checks": 19,
+  "local_checks_passed": true,
+  "actual_business_checker_receipt": {
+    "argv": [
+      "C:/Python314/python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l06-native-integer-independent-review-20261029\\source-snapshot\\executed-source-warm\\check_l06.py",
+      "--input",
+      "D:\\opencorvus-benchmark-runs\\l06-native-integer-independent-review-20261029\\source-snapshot\\evidence\\warm-full\\instance.json",
+      "--plan",
+      "D:\\opencorvus-benchmark-runs\\l06-native-integer-independent-review-20261029\\source-snapshot\\evidence\\warm-full\\plan.json",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l06-native-integer-independent-review-20261029\\business-check\\result.json"
+    ],
+    "cwd": "D:\\opencorvus-benchmark-runs\\l06-native-integer-independent-review-20261029",
+    "started_utc": "2026-10-29T13:44:31.250480+00:00",
+    "seconds": 0.15230630012229085,
+    "exit_code": 0
+  },
+  "independent_prefix_arithmetic": {
+    "scope": "v2 full independent prefix/physical-stage/financial arithmetic, not global optimization",
+    "all_checks_passed": true,
+    "check_count": 925,
+    "seconds": 0.007890499662607908,
+    "expected_cost_exact": "51263",
+    "caps": {
+      "raw": 240,
+      "finished": 100
+    },
+    "credit5369_is_only_feasible_upper_bound": true,
+    "scenarios": {
+      "base": {
+        "total_cost_minor": 50929,
+        "minimum_cash_minor": -5369,
+        "terminal_cash_minor": 28421,
+        "terminal_receivable_minor": 24150,
+        "raw_peak": [
+          227,
+          14
+        ],
+        "finished_peak": [
+          94,
+          10
+        ]
+      },
+      "supplier_disruption": {
+        "total_cost_minor": 51557,
+        "minimum_cash_minor": -5369,
+        "terminal_cash_minor": 27793,
+        "terminal_receivable_minor": 24150,
+        "raw_peak": [
+          223,
+          7
+        ],
+        "finished_peak": [
+          96,
+          13
+        ]
+      },
+      "demand_shift": {
+        "total_cost_minor": 51657,
+        "minimum_cash_minor": -5369,
+        "terminal_cash_minor": 29853,
+        "terminal_receivable_minor": 25230,
+        "raw_peak": [
+          230,
+          11
+        ],
+        "finished_peak": [
+          91,
+          5
+        ]
+      }
+    }
+  },
+  "full_integer_vectors_and_1096_rows_passed": true,
+  "native_warm_seconds": 30.007902392651886,
+  "native_warm_nodes": 1713,
+  "bound_comparison": {
+    "strict_exact_lp_bound": "577753327609889925273/12500000000000000",
+    "strict_lp_objective_lattice_bound": "46220.3",
+    "strict_bound_previously_independently_certified_not_resolved": true,
+    "native_root_numeric_bound": 47039.5,
+    "native_warm_numeric_bound": 47281.0,
+    "native_numeric_bounds_are_exact_certificates": false,
+    "independent_business_feasible_upper": "51263",
+    "upper_improved": false,
+    "strict_gap_over_lower_percent": 10.910222300384905,
+    "native_numeric_gap_over_primal_percent": 7.767785732399586,
+    "native_numeric_gap_over_dual_percent": 8.42198769061568,
+    "one_percent_certified": false,
+    "true_integer_optimum_known": false
+  },
+  "mip_lp_runs_by_reviewer": 0,
+  "provider_calls": 0,
+  "gpu_work": false,
+  "paused_containers_resumed": false,
+  "freeze_approved": false,
+  "candidate_score_issued": false,
+  "hours_validated": false
+}

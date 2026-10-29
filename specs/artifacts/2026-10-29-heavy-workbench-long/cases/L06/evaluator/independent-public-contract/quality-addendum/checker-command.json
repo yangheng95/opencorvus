@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029\\quality-addendum\\snapshot\\source\\check_l06.py",
+    "--input",
+    "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029\\quality-addendum\\snapshot\\independent-public-normalized.json",
+    "--plan",
+    "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029\\quality-addendum\\snapshot\\quality-proof\\plan.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029\\quality-addendum\\independent-business-check.json"
+  ],
+  "exit_code": 0,
+  "seconds": 0.1274089002981782
+}

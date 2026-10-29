@@ -1,0 +1,32 @@
+{
+  "observed_utc": "2026-10-29T14:43:15.892498+00:00",
+  "container": {
+    "id": "56ea43a95c6cd59a4dd61b7cdee3553a5bafe4443c86c5a8eb0f53f43d68125a",
+    "name": "/oc-l06-cpsat-quality-20261029-a",
+    "image": "sha256:3c8d0d24b07246e24772630788b8c79ca6a8d080b5e43734c0b85778ed585f73",
+    "state": {
+      "Status": "running",
+      "Running": true,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 1726462,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-10-29T14:39:50.749349554Z",
+      "FinishedAt": "0001-01-01T00:00:00Z"
+    }
+  },
+  "actual_incumbent_progress": {
+    "event": "actual_incumbent",
+    "observed_utc": "2026-10-29T14:43:10.444981+00:00",
+    "seconds": 198.7448316900991,
+    "objective_scaled_exact": 480932,
+    "objective_minor_exact": "240466/5",
+    "native_best_bound_scaled": 472548.0,
+    "updates": 88,
+    "plan": "incumbent-plan.json"
+  },
+  "scope": "live observer snapshot; no terminal or independent business score"
+}

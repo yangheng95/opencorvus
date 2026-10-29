@@ -1,0 +1,8 @@
+{
+  "cmd": "docker run --rm --name oc-l06-quality-business-20261029-a --network none --mount type=bind,source=D:/opencorvus-benchmark-runs/l06-procurement-qualification-20261029,target=/work -w /work opencorvus-benchmark-science:20261029 python -B check_l06.py --input /work/v2/inputs/full.json --plan /work/v2/root-node-diagnostic-20261029/quality-proof/plan.json --out /work/v2/root-node-diagnostic-20261029/quality-proof/business-check.json",
+  "chunk_id": "45371d",
+  "wall_time_seconds": 0.9950447,
+  "exit_code": 0,
+  "original_token_count": 58,
+  "output": "{\"business_feasible\": true, \"scope\": \"exact finite instance plan recurrence only; not execution attestation or optimality certificate\", \"expected_cost_minor\": 47808.0, \"expected_cost_exact\": {\"numerator\": 47808, \"denominator\": 1}}\n"
+}

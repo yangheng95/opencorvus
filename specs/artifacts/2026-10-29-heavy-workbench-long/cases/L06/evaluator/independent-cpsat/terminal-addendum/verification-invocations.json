@@ -1,0 +1,19 @@
+{
+  "scope": "tool-excerpt comparison only",
+  "initial": {
+    "argv": ["C:/Python314/python.exe", "-B", "D:/opencorvus-benchmark-runs/l06-cpsat-independent-review-20261029/verify_terminal_source.py"],
+    "tool_chunk_id": "ddba84",
+    "exit_code": 0,
+    "tool_wall_time_seconds": 0.3182527,
+    "outcome": "original terminal object confirmed; independent session binding initially awaited original call"
+  },
+  "final": {
+    "argv": ["C:/Python314/python.exe", "-B", "D:/opencorvus-benchmark-runs/l06-cpsat-independent-review-20261029/verify_terminal_source.py", "--complete"],
+    "tool_chunk_id": "273ddd",
+    "exit_code": 0,
+    "tool_wall_time_seconds": 0.3195101,
+    "outcome": "9 checks passed; original call and response bind session87433 to chunk069218/exit0"
+  },
+  "new_solver_or_model_calls": 0,
+  "new_business_replays": 0
+}

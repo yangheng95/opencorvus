@@ -1,0 +1,13 @@
+{
+  "reviewed_utc_date": "2026-10-29",
+  "sources": [
+    {"url": "https://raw.githubusercontent.com/ERGO-Code/HiGHS/v1.8.0/src/lp_data/HConst.h", "facts": "fixed HighsModelStatus enumeration and primal feasible status"},
+    {"url": "https://raw.githubusercontent.com/ERGO-Code/HiGHS/v1.8.0/src/Highs.h", "facts": "public setSolution and native model API declarations"},
+    {"url": "https://raw.githubusercontent.com/ERGO-Code/HiGHS/v1.8.0/examples/call_highs_from_python.py", "facts": "official HighsLp/passModel/getInfo/getSolution/getModelStatus example"},
+    {"url": "https://raw.githubusercontent.com/scipy/scipy/v1.15.3/scipy/optimize/_linprog_highs.py", "facts": "fixed mapping table lacks kSolutionLimit; default maps to4"},
+    {"url": "https://raw.githubusercontent.com/scipy/scipy/v1.15.3/scipy/optimize/_highspy/_highs_wrapper.py", "facts": "fixed wrapper result filtering and later MIP bound/node result fields"},
+    {"url": "https://raw.githubusercontent.com/scipy/scipy/v1.15.3/scipy/optimize/_milp.py", "facts": "fixed options pop and milp wrapper route"}
+  ],
+  "execution_evidence": "local native original receipts/logs and actual reviewer stdlib checker; internet sources only explain API semantics",
+  "official_sources_are_not_expert_or_candidate_calibration": true
+}

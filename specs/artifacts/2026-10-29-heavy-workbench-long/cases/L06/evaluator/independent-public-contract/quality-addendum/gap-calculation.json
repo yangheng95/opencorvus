@@ -1,0 +1,17 @@
+{
+  "C_exact": "47808",
+  "native_L_exact_number_representation": "47380",
+  "difference_exact": "428",
+  "primal_relative_gap_exact": "107/11952",
+  "primal_relative_gap_percent": 0.8952476572958501,
+  "benchmark_relative_to_bound_exact": "107/11845",
+  "benchmark_relative_to_bound_percent": 0.9033347403967918,
+  "actual_primal_gap_within_requested_0_009": true,
+  "one_percent_reachability_using_trusted_native_bound": true,
+  "strict_rational_LP_lattice_lower": "462203/10",
+  "strict_LP_relative_to_bound_percent": 3.43507073731672,
+  "one_percent_from_strict_LP_proof": false,
+  "exact_integer_optimum_proven": false,
+  "independent_search_or_dual_certificate_provided": false,
+  "bound_trust_model": "fixed mature CP-SAT native lower bound, independently verified import/model identity; not independently replayed proof"
+}

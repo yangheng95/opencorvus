@@ -1,0 +1,276 @@
+{
+  "status": "passed",
+  "actual_cli_commands": 11,
+  "seconds": 3.036560300271958,
+  "hand_values": {
+    "receivable": [
+      10,
+      0
+    ],
+    "receipts": [
+      0,
+      10
+    ],
+    "cash": [
+      -5,
+      4
+    ],
+    "cost": 7
+  },
+  "scope": "derived-output projection only; no full rubric score, replay attestation or quality qualification",
+  "executions": [
+    {
+      "name": "full-valid",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\full-valid.json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.37152189994230866,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"assessed\", \"findings\": [{\"id\": \"C01\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C07\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C08\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C09\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C10\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C11\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"D03\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D04\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D05\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D06\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}], \"counts\": {\"verified_pass\": 10, \"verified_fail\": 0, \"candidate_incomplete\": 0, \"blocked_candidate\": 0}}\n",
+      "stderr": "",
+      "out": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\full-valid.json"
+    },
+    {
+      "name": "exact-decimal-and-unreduced",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\decimal-summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\exact-decimal-and-unreduced.json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.24738640012219548,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"assessed\", \"findings\": [{\"id\": \"C01\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C07\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C08\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C09\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C10\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C11\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"D03\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D04\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D05\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D06\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}], \"counts\": {\"verified_pass\": 10, \"verified_fail\": 0, \"candidate_incomplete\": 0, \"blocked_candidate\": 0}}\n",
+      "stderr": "",
+      "out": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\exact-decimal-and-unreduced.json"
+    },
+    {
+      "name": "changed-minimum-cash",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\bad-minimum-summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\changed-minimum-cash.json"
+      ],
+      "exit_code": 2,
+      "seconds": 0.24263270013034344,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"assessed\", \"findings\": [{\"id\": \"C01\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C07\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C08\", \"status\": \"verified_fail\", \"where\": \"summary.scenarios.base.minimum_cash_minor\", \"detail\": \"reported summary differs from exact business recurrence\"}, {\"id\": \"C09\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C10\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C11\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"D03\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D04\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D05\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D06\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}], \"counts\": {\"verified_pass\": 9, \"verified_fail\": 1, \"candidate_incomplete\": 0, \"blocked_candidate\": 0}}\n",
+      "stderr": "",
+      "out": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\changed-minimum-cash.json"
+    },
+    {
+      "name": "changed-cost-ledger",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\bad-cost-ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\changed-cost-ledger.json"
+      ],
+      "exit_code": 2,
+      "seconds": 0.2652942999266088,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"assessed\", \"findings\": [{\"id\": \"C01\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C07\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C08\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C09\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C10\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C11\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"D03\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D04\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D05\", \"status\": \"verified_fail\", \"where\": \"ledger.base.week0.cost\", \"detail\": \"reported ledger differs from exact business recurrence\"}, {\"id\": \"D06\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}], \"counts\": {\"verified_pass\": 9, \"verified_fail\": 1, \"candidate_incomplete\": 0, \"blocked_candidate\": 0}}\n",
+      "stderr": "",
+      "out": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\changed-cost-ledger.json"
+    },
+    {
+      "name": "changed-optional-inventory",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\bad-inventory-plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\changed-optional-inventory.json"
+      ],
+      "exit_code": 2,
+      "seconds": 0.27760929986834526,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"assessed\", \"findings\": [{\"id\": \"C01\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C07\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C08\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C09\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C10\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C11\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"D03\", \"status\": \"verified_fail\", \"where\": \"plan.base.raw_inventory\", \"detail\": \"optional inventory declaration differs from actual recurrence\"}, {\"id\": \"D04\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D05\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D06\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}], \"counts\": {\"verified_pass\": 9, \"verified_fail\": 1, \"candidate_incomplete\": 0, \"blocked_candidate\": 0}}\n",
+      "stderr": "",
+      "out": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\changed-optional-inventory.json"
+    },
+    {
+      "name": "optional-inventory-shape-contract",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\bad-inventory-shape-plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\optional-inventory-shape-contract.json"
+      ],
+      "exit_code": 2,
+      "seconds": 0.27130619995296,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"assessed\", \"findings\": [{\"id\": \"C01\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C07\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C08\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C09\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C10\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C11\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"D03\", \"status\": \"candidate_incomplete\", \"where\": \"plan.base.finished_inventory\", \"detail\": \"inventory declaration integer shape\"}, {\"id\": \"D04\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D05\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D06\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}], \"counts\": {\"verified_pass\": 9, \"verified_fail\": 0, \"candidate_incomplete\": 1, \"blocked_candidate\": 0}}\n",
+      "stderr": "",
+      "out": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\optional-inventory-shape-contract.json"
+    },
+    {
+      "name": "missing-ledger",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\candidate-omitted-ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\missing-ledger.json"
+      ],
+      "exit_code": 2,
+      "seconds": 0.2684175996109843,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"assessed\", \"findings\": [{\"id\": \"C01\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C07\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C08\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C09\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C10\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C11\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"D03\", \"status\": \"candidate_incomplete\", \"where\": \"ledger\", \"detail\": {\"code\": \"ledger_json\", \"where\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-procurement-qualification-20261029\\\\v2\\\\delivery-projection-final\\\\candidate-omitted-ledger.json\", \"detail\": \"[Errno 2] No such file or directory: 'D:\\\\\\\\opencorvus-benchmark-runs\\\\\\\\l06-procurement-qualification-20261029\\\\\\\\v2\\\\\\\\delivery-projection-final\\\\\\\\candidate-omitted-ledger.json'\"}}, {\"id\": \"D04\", \"status\": \"candidate_incomplete\", \"where\": \"ledger\", \"detail\": {\"code\": \"ledger_json\", \"where\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-procurement-qualification-20261029\\\\v2\\\\delivery-projection-final\\\\candidate-omitted-ledger.json\", \"detail\": \"[Errno 2] No such file or directory: 'D:\\\\\\\\opencorvus-benchmark-runs\\\\\\\\l06-procurement-qualification-20261029\\\\\\\\v2\\\\\\\\delivery-projection-final\\\\\\\\candidate-omitted-ledger.json'\"}}, {\"id\": \"D05\", \"status\": \"candidate_incomplete\", \"where\": \"ledger\", \"detail\": {\"code\": \"ledger_json\", \"where\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-procurement-qualification-20261029\\\\v2\\\\delivery-projection-final\\\\candidate-omitted-ledger.json\", \"detail\": \"[Errno 2] No such file or directory: 'D:\\\\\\\\opencorvus-benchmark-runs\\\\\\\\l06-procurement-qualification-20261029\\\\\\\\v2\\\\\\\\delivery-projection-final\\\\\\\\candidate-omitted-ledger.json'\"}}, {\"id\": \"D06\", \"status\": \"candidate_incomplete\", \"where\": \"ledger\", \"detail\": {\"code\": \"ledger_json\", \"where\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-procurement-qualification-20261029\\\\v2\\\\delivery-projection-final\\\\candidate-omitted-ledger.json\", \"detail\": \"[Errno 2] No such file or directory: 'D:\\\\\\\\opencorvus-benchmark-runs\\\\\\\\l06-procurement-qualification-20261029\\\\\\\\v2\\\\\\\\delivery-projection-final\\\\\\\\candidate-omitted-ledger.json'\"}}], \"counts\": {\"verified_pass\": 6, \"verified_fail\": 0, \"candidate_incomplete\": 4, \"blocked_candidate\": 0}}\n",
+      "stderr": "",
+      "out": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\missing-ledger.json"
+    },
+    {
+      "name": "probability-type-contract",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\bad-probability-summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\probability-type-contract.json"
+      ],
+      "exit_code": 2,
+      "seconds": 0.2548182997852564,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"assessed\", \"findings\": [{\"id\": \"C01\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C07\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C08\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C09\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C10\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C11\", \"status\": \"candidate_incomplete\", \"where\": \"summary.scenarios.base.probability\", \"detail\": \"finite decimal number or integer numerator/positive denominator required\"}, {\"id\": \"D03\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D04\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D05\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D06\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}], \"counts\": {\"verified_pass\": 9, \"verified_fail\": 0, \"candidate_incomplete\": 1, \"blocked_candidate\": 0}}\n",
+      "stderr": "",
+      "out": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\probability-type-contract.json"
+    },
+    {
+      "name": "candidate-dependency-blocked",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\incomplete-plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\candidate-dependency-blocked.json"
+      ],
+      "exit_code": 2,
+      "seconds": 0.27217600028961897,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"candidate_blocked\", \"findings\": [{\"id\": \"C01\", \"status\": \"blocked_candidate\", \"where\": \"plan\", \"detail\": {\"code\": \"scenario_coverage\", \"where\": \"decisions\"}}, {\"id\": \"C07\", \"status\": \"blocked_candidate\", \"where\": \"plan\", \"detail\": {\"code\": \"scenario_coverage\", \"where\": \"decisions\"}}, {\"id\": \"C08\", \"status\": \"blocked_candidate\", \"where\": \"plan\", \"detail\": {\"code\": \"scenario_coverage\", \"where\": \"decisions\"}}, {\"id\": \"C09\", \"status\": \"blocked_candidate\", \"where\": \"plan\", \"detail\": {\"code\": \"scenario_coverage\", \"where\": \"decisions\"}}, {\"id\": \"C10\", \"status\": \"blocked_candidate\", \"where\": \"plan\", \"detail\": {\"code\": \"scenario_coverage\", \"where\": \"decisions\"}}, {\"id\": \"C11\", \"status\": \"blocked_candidate\", \"where\": \"plan\", \"detail\": {\"code\": \"scenario_coverage\", \"where\": \"decisions\"}}, {\"id\": \"D03\", \"status\": \"blocked_candidate\", \"where\": \"plan\", \"detail\": {\"code\": \"scenario_coverage\", \"where\": \"decisions\"}}, {\"id\": \"D04\", \"status\": \"blocked_candidate\", \"where\": \"plan\", \"detail\": {\"code\": \"scenario_coverage\", \"where\": \"decisions\"}}, {\"id\": \"D05\", \"status\": \"blocked_candidate\", \"where\": \"plan\", \"detail\": {\"code\": \"scenario_coverage\", \"where\": \"decisions\"}}, {\"id\": \"D06\", \"status\": \"blocked_candidate\", \"where\": \"plan\", \"detail\": {\"code\": \"scenario_coverage\", \"where\": \"decisions\"}}], \"counts\": {\"verified_pass\": 0, \"verified_fail\": 0, \"candidate_incomplete\": 0, \"blocked_candidate\": 10}}\n",
+      "stderr": "",
+      "out": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\candidate-dependency-blocked.json"
+    },
+    {
+      "name": "evaluation-input-error",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\broken-frozen-packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\evaluation-input-error.json"
+      ],
+      "exit_code": 3,
+      "seconds": 0.2545896000228822,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"run_invalid\", \"findings\": [], \"infrastructure_error\": {\"code\": \"packet_invalid\", \"where\": \"supplier_quotes\", \"detail\": \"duplicate business key ('A', 'R0')\"}, \"counts\": {\"verified_pass\": 0, \"verified_fail\": 0, \"candidate_incomplete\": 0, \"blocked_candidate\": 0}}\n",
+      "stderr": "",
+      "out": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\evaluation-input-error.json"
+    },
+    {
+      "name": "hand-receivable-and-cash",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\credit-packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\credit-plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\credit-ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\credit-summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\hand-receivable-and-cash.json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.2566235000267625,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"assessed\", \"findings\": [{\"id\": \"C01\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C07\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C08\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C09\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C10\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C11\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"D03\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D04\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D05\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D06\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}], \"counts\": {\"verified_pass\": 10, \"verified_fail\": 0, \"candidate_incomplete\": 0, \"blocked_candidate\": 0}}\n",
+      "stderr": "",
+      "out": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\hand-receivable-and-cash.json"
+    }
+  ]
+}

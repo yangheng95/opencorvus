@@ -1,0 +1,14 @@
+{
+  "argv": ["C:/Python314/python.exe", "-X", "utf8", "-B", "D:/opencorvus-benchmark-runs/l06-public-contract-independent-review-20261029/quality-addendum/review_quality.py"],
+  "source": "actual exec_command receipt and stage-assessment.json output",
+  "tool_chunk_id": "3f49d2",
+  "exit_code": 0,
+  "tool_wall_time_seconds": 0.7063387,
+  "local_checks": 16,
+  "all_passed": true,
+  "independent_prefix_checks": 925,
+  "integer_columns": 1488,
+  "rows": 1096,
+  "reviewer_solver_calls": 0,
+  "official_parameter_source": "https://raw.githubusercontent.com/google/or-tools/v9.15/ortools/sat/sat_parameters.proto"
+}

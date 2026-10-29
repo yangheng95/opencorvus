@@ -1,0 +1,14 @@
+{
+  "session_id": 87433,
+  "observed_tool_record_timestamp": "2026-10-29T13:54:50.425Z",
+  "terminal_tool_receipt": {
+    "chunk_id": "069218",
+    "wall_time_seconds": 7e-06,
+    "exit_code": 0,
+    "original_token_count": 0,
+    "output": ""
+  },
+  "original_response": "cpsat-terminal-original-response.json",
+  "origin": "cpsat-terminal-origin.json",
+  "statement": "Recovered original persisted tool response; original command snapshot remains unchanged; no inferred or rerun terminal code"
+}

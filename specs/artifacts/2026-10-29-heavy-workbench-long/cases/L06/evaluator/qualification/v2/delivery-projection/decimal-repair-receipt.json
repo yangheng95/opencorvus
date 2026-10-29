@@ -1,0 +1,67 @@
+{
+  "status": "passed",
+  "actual_cli_commands": 3,
+  "executions": [
+    {
+      "case": "extreme-exponent",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-decimal-repair\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-decimal-repair\\boundary-summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-decimal-repair\\extreme-exponent.json"
+      ],
+      "exit_code": 2,
+      "seconds": 0.26769710006192327,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"assessed\", \"findings\": [{\"id\": \"C01\", \"status\": \"candidate_incomplete\", \"where\": \"summary\", \"detail\": {\"code\": \"summary_json\", \"where\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-procurement-qualification-20261029\\\\v2\\\\delivery-decimal-repair\\\\boundary-summary.json\", \"detail\": \"[<class 'decimal.InvalidOperation'>]\"}}, {\"id\": \"C07\", \"status\": \"candidate_incomplete\", \"where\": \"summary\", \"detail\": {\"code\": \"summary_json\", \"where\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-procurement-qualification-20261029\\\\v2\\\\delivery-decimal-repair\\\\boundary-summary.json\", \"detail\": \"[<class 'decimal.InvalidOperation'>]\"}}, {\"id\": \"C08\", \"status\": \"candidate_incomplete\", \"where\": \"summary\", \"detail\": {\"code\": \"summary_json\", \"where\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-procurement-qualification-20261029\\\\v2\\\\delivery-decimal-repair\\\\boundary-summary.json\", \"detail\": \"[<class 'decimal.InvalidOperation'>]\"}}, {\"id\": \"C09\", \"status\": \"candidate_incomplete\", \"where\": \"summary\", \"detail\": {\"code\": \"summary_json\", \"where\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-procurement-qualification-20261029\\\\v2\\\\delivery-decimal-repair\\\\boundary-summary.json\", \"detail\": \"[<class 'decimal.InvalidOperation'>]\"}}, {\"id\": \"C10\", \"status\": \"candidate_incomplete\", \"where\": \"summary\", \"detail\": {\"code\": \"summary_json\", \"where\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-procurement-qualification-20261029\\\\v2\\\\delivery-decimal-repair\\\\boundary-summary.json\", \"detail\": \"[<class 'decimal.InvalidOperation'>]\"}}, {\"id\": \"C11\", \"status\": \"candidate_incomplete\", \"where\": \"summary\", \"detail\": {\"code\": \"summary_json\", \"where\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-procurement-qualification-20261029\\\\v2\\\\delivery-decimal-repair\\\\boundary-summary.json\", \"detail\": \"[<class 'decimal.InvalidOperation'>]\"}}, {\"id\": \"D03\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D04\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D05\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D06\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}], \"counts\": {\"verified_pass\": 4, \"verified_fail\": 0, \"candidate_incomplete\": 6, \"blocked_candidate\": 0}}\n",
+      "stderr": ""
+    },
+    {
+      "case": "normal-exact-decimal",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-decimal-repair\\executed-source\\l06_delivery.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\packet",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\plan.json",
+        "--ledger",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\ledger.json",
+        "--summary",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-projection-final\\decimal-summary.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-decimal-repair\\normal-exact-decimal.json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.17525190021842718,
+      "stdout": "{\"format\": \"l06-derived-output-findings/1\", \"scope\": \"10 output projection leaves only; full rubric, execution, quality and total score unassessed\", \"status\": \"assessed\", \"findings\": [{\"id\": \"C01\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C07\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C08\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C09\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C10\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"C11\", \"status\": \"verified_pass\", \"where\": \"summary\", \"detail\": null}, {\"id\": \"D03\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D04\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D05\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}, {\"id\": \"D06\", \"status\": \"verified_pass\", \"where\": \"ledger\", \"detail\": null}], \"counts\": {\"verified_pass\": 10, \"verified_fail\": 0, \"candidate_incomplete\": 0, \"blocked_candidate\": 0}}\n",
+      "stderr": ""
+    },
+    {
+      "case": "default-finite-number-contract",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-decimal-repair\\executed-source\\check_l06.py",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\inputs\\full.json",
+        "--plan",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-decimal-repair\\default-plan.json",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\delivery-decimal-repair\\default-reader.json"
+      ],
+      "exit_code": 2,
+      "stdout": "{\"business_feasible\": false, \"error\": \"plan_json\", \"where\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-procurement-qualification-20261029\\\\v2\\\\delivery-decimal-repair\\\\default-plan.json\", \"detail\": \"non-finite numeric literal 1e999\"}\n",
+      "stderr": ""
+    }
+  ]
+}

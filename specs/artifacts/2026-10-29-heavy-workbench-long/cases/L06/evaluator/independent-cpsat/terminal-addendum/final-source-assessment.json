@@ -1,0 +1,31 @@
+{
+  "scope": "only original persisted call/response and session binding",
+  "result": "provenance_gap_resolved",
+  "all_checks_passed": true,
+  "checks": {
+    "initial_original_response_fields_all_match": true,
+    "original_call_type_and_status": true,
+    "original_call_and_response_same_call_id": true,
+    "original_call_has_exactly_one_recorded_target_wait": true,
+    "original_code_target_equals_original_command_session": true,
+    "sequential_original_call_prints_target_wait_last": true,
+    "last_original_output_terminal_exit_zero": true,
+    "original_call_line_and_order": true,
+    "original_command_still_unchanged": true
+  },
+  "original_session_id": 87433,
+  "original_call_id": "call_054ff60e55964000a816f7f83d0922de",
+  "call_timestamp": "2026-10-29T13:54:47.923Z",
+  "call_source_line": 7405,
+  "response_timestamp": "2026-10-29T13:54:50.425Z",
+  "response_source_line": 7410,
+  "terminal_chunk_id": "069218",
+  "terminal_exit_code": 0,
+  "new_receipt_session_annotation_used_as_binding_evidence": false,
+  "original_command_and_historical_gap_snapshot_preserved": true,
+  "reviewer_solver_calls": 0,
+  "reviewer_new_business_replays": 0,
+  "reviewer_model_calls": 0,
+  "reasoning_records_read": false,
+  "scope_does_not_certify_heavy_freeze_hours_or_one_percent": true
+}

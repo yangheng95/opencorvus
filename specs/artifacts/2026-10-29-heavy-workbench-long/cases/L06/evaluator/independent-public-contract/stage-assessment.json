@@ -1,0 +1,42 @@
+{
+  "result": "local_design_and_10_leaf_primitive_qualification_passed",
+  "scope": "public L06 draft contract, raw-fact projection, and derived-output subset; no candidate score",
+  "substantive_unrepaired_blockers_in_this_local_scope": [],
+  "initial_rubric": {"leaves": 42, "weight": 100, "critical_leaves": 22, "critical_weight": 65},
+  "final_rubric": {"leaves": 47, "weight": 100, "critical_leaves": 27, "critical_weight": 65, "human_leaves": 12, "human_weight": 24},
+  "public_fact_projection": {"csv_tables": 11, "facility_json": 1, "normalized_scalar_facts_including_ids_and_format": 557, "differences": 0, "actual_packet_cli_contracts_passed": 5},
+  "constant_policy_lower_price_control": {"business_feasible": true, "cost_exact": "244642/5", "cost_quality_assessed": false, "policy_flip_claimed": false},
+  "AR_formula_checks_passed": 51,
+  "derived_output_primitive": {
+    "leaf_ids": ["C01", "C07", "C08", "C09", "C10", "C11", "D03", "D04", "D05", "D06"],
+    "independent_initial_cli_calls": 9,
+    "ordinary_contracts_passed": 8,
+    "actual_initial_failure": "decimal-exponent-boundary: uncaught Decimal.InvalidOperation, exit1, no machine result",
+    "independent_default_reader_checks_passed": 5,
+    "necessary_repaired_cli_checks_passed": 3,
+    "original_failure_and_initial_source_preserved": true,
+    "remaining_37_leaves_graded": false,
+    "total_score_issued": false
+  },
+  "freeze_blockers": [
+    "C06 base and variant bound validity/reachability/registration still not approved in this contract review",
+    "complete source-only public raw-input reference deliverable and independent cold replay",
+    "remaining 37 leaves, dependency/error mapping and full aggregation implementation",
+    "variant decision/quality qualification and exact declared scope",
+    "multi-quality independent human calibration and actual figure review",
+    "frozen execution registration, fresh heavy candidate pilots/comparison and observed active work duration"
+  ],
+  "reviewer_solver_calls": 0,
+  "reviewer_model_calls": 0,
+  "GPU_work": false,
+  "containers_started_or_resumed": false,
+  "delegations": 0,
+  "repo_modified_by_reviewer": false,
+  "full_47_leaf_grader_approved": false,
+  "one_percent_quality_approved": false,
+  "heavy_freeze_approved": false,
+  "hours_validated": false,
+  "mature_benchmark_certified": false,
+  "final_report": "REVIEW.md",
+  "final_leaf_matrix": "LEAF-REVIEW-FINAL.md"
+}

@@ -227,3 +227,34 @@ L06 v1“5369完整可行”的早期描述仅指旧期末仓容模型；后续�
 L04独立初审实际抓到v1/v2共享NULL op身份漏洞，已横向修全部两写入口的唯一请求合同与v2持久身份约束，旧库/迁移史不改、原失败保留；新增空/NULL旧身份应中止并全库保存的边界。最终主方核心7.18秒、独立冷跑11.09秒，均4成功升级+2按合同中止/53进程/245事实；另112独立SQL与27修复检查通过。queued不冒称观测了SQLite内部等待队列。新四源、输入、真实数据库/原件与最终报告在cases/L04；无新LLM候选/重型评分。六昂贵容器仍Paused，后续优先完整L04/L06材料/checker/参考质量与原子rubric，再做必要分钟级验证；不要重复S06、小资格或自动恢复所有GPU。L01阈值/三方程当前完整选择可达性仍未冻结，十题、长程新pilot及同规则Codex对照继续未完成，心跳保持ACTIVE。
 
 本轮最终docs:check通过351 ops/26 groups；新增case区域149份JSON严格有限数解析、33份Python语法、33个相对链接通过，仅为包装检查。源码功能证据是上述真实HiGHS/精确证书、已知锚点、SQLite/子进程/独立SQL与原失败，不用包装检查或计数替代。心跳已同步L04记录、已完成LP和最终修复，继续便宜优先。只提交本任务源/产物/记录及三个共享索引精确hunk；生产代码无本任务修改，用户/并行工作保留。
+
+## 13:23 UTC接续 Recall：先廉价整数诊断，再完整公开合同
+
+开始检查Git、长程/L06/L04/横向Recall与六自有容器；全部旧昂贵任务仍Paused，fc1632ce4已正常push。用户没有设置总token/总墙钟额度，便宜实验优先继续有效。本轮主方未修改生产代码、未操作用户进程/UI、未调用Provider或运行新候选。详细预案/真实历史见[L06资格记录](2026-10-29-heavy-workbench-l06-qualification.md)。
+
+1. 不重跑完整LP，先一节点30秒cap的整数诊断。固定SciPy1.15.3会原地pop options字段、native status16映射错误并丢bound/nodes；分别保存真实原失败，当前整数执行整体替换为唯一native highspy1.8.0，仍共用一个build_model。LP继续linprog，不是失败fallback。手算成本6/旧tiny4.5/融资5以及LP3/2真实通过。
+2. native根节点4.08秒无incumbent、数值界47039.5；旧见证warm30.01秒仍51263/界47281；不同CP-SAT同一独立验证矩阵30.02秒取得**49032.9**完整可行计划；native交叉seed60.01秒保持该动作/界47275.9。每份计划进入真实业务CLI，独立agent另925业务+各1488坐标/1096行重算通过。严格有理LP/格点下界46220.3与所有native数值界分列，**仍不能认证拟1%**，不按现有误差放宽目标。
+3. 研究CP-SAT入口只导入同一整数矩阵，不成为产品路由/第二业务模型或失败后自动换算法。自有operations镜像只加highspy1.8.0；CP-SAT9.15.6755在独立venv中用NumPy2，原science/operations环境不变。实际依赖/镜像身份、原执行源/命令/日志/计划/矩阵完整保留于`cases/L06/evaluator/qualification/v2/integer-search/`。终态命令初快照缺口从原可见工具调用/同call_id响应补齐session87433→chunk069218/exit0，独立9项来源核对通过；没有重跑或复制隐藏推理。
+4. L06公开包现有11CSV+facility原始业务事实及TASK/DATA/OUTPUTS/ENVIRONMENT/SOURCE/profile完整草案，仍**未冻结**。私有唯一packet loader实际5CLI、1.42秒验证全字段投影、报价变化、index重排、重复键具名错误。`rubric.draft.json`修后47叶/100分，关键物理、现金、质量与清洁执行不可由文书补偿；逐叶grader、质量阈值/完整参考、变体政策与成本参考、独立完整合同挑战仍pending，不发布总成绩。已继续委托原单层reviewer独立CSV事实/逐叶公开可追溯性审查，禁止再委托/solver/Provider/GPU。叶数不作难度证据。
+
+### 本轮新增参考运行与自然终态（代替旧活跃表）
+
+便宜诊断已回答、仍缺1%参考界，启动前已写明下一假设与增量成本：**仅一个CPU参考界资格**。自有容器`oc-l06-cpsat-quality-20261029-a`，CID`56ea43a95c6cd59a4dd61b7cdee3553a5bafe4443c86c5a8eb0f53f43d68125a`，2026-10-29T14:39:50Z启动。固定捕获源`D:/opencorvus-benchmark-runs/l06-procurement-qualification-20261029/v2/root-node-diagnostic-20261029/executed-source-quality/`；同目录`quality-launch.json`有真实命令/原生cid/镜像身份，输出`quality-proof/`。同1488变量/1096整数行、最好49032.9 hint、8worker/seed20261029、relative_gap_limit=.009、最多3600秒，达目标即自然终态，不自动续时。这是评估侧单次参考证明努力，**不是候选时长、用户总额度或小时级难度证据**；六个旧昂贵容器继续Paused。
+
+新原生solution callback实际手算6通过，保存更优incumbent的原子计划/向量与progress/events，允许后续心跳按真实活动检查，不持续监听。主方一条checker命令误用`--output`（实际合同`--out`）得到argparse exit1，随后按现有接口纠正，真实精确成本6通过；该命令错误不算候选失败。14:43Z容器仍running，88次真实incumbent事件、最新48093.2/原生数值界47254.8，**只属未独立业务复核的实时快照**，不替换上一阶段独立认可49032.9终态上界或宣布1%通过。候选/清洁复跑与参考准备计时继续分开。
+
+下一轮先按此表检查单一CPU运行（不是恢复六旧任务），自然终态后封存docker inspect/logs/完整结果/固定源，逐动作进入独立业务checker并重算native bound/1%口径，委托既有单层review审查；未达到就保留未知，不倒填阈值。完整公开合同review修复后继续逐叶适配器、完整职业参考交付/错误与变体参考，并推进L04完整应用现场、L05外部副作用与其他题材料，不能持续重复小资格或把L06局部通过充作十题。
+
+仍缺L01的critical结果锚点/当前完整选择合同可达性与冻结，L04全任务、L05及其余题新版完整合同/真实材料/参考/checker，真正冻结的新重型OpenCorvus pilot、同冻结rubric清洁复跑和fresh Codex对照、实际活动时长与专业多质量评分校准。旧H05两系统100仍只触发升级，S06微型650.922秒仍不计十题。目标未达成，心跳保持ACTIVE。
+
+### 15:08 UTC最新状态：当前无新增活跃长计算
+
+上述单CPU参考运行已在15:02:04Z自然终态exit0、1332.55秒，161个真实更优incumbent，未用满3600秒；不要按前面启动/快照段重启。最终完整计划进入真实业务CLI，**成本47808、可行**；native CP-SAT整数搜索界47380，(C−L)/L=107/11845≈0.9033347%，满足拟1%比例。native OPTIMAL是在预设非零gap .009内的终态，**不是精确最优**；严格有理LP格点下界仍46220.3，不能将native界改称有理dual/形式化证书。完整inspect/logs/固定源/输入/计划/向量/事件与主方阶段判定封存`cases/L06/evaluator/qualification/v2/integer-search/quality-reference/`，既有单层reviewer正在不跑solver的独立终态/业务/向量/界来源追加审查；公开rubric L仍null，完整冻结仍pending。
+
+独立完整合同审查已终态：557个业务事实差异0、5实际packet CLI、10叶输出primitive独立8正常CLI+原Decimal超大指数真实exit1、修后必要3CLI和默认reader5合同通过。初42叶修后47叶仍100分/critical权重65；summary逐场景遗漏、账schema/精度、错误/依赖状态、无solver算法公平性、目录属性、可选库存、输出根和12个人评half已收敛。新共享reader漏捕DecimalException已真正修复，原失败/固定源保留。主方11CLI约3.04秒另有手算AR[10,0]/cash[−5,4]/成本7。独立只认可本地合同及10叶primitive，**未批准其余37叶、完整参考/变体/全grader/小时级**。后续不重复小资格或新开成本搜索，优先把现成质量见证接入完整源代码职业交付/冷复跑、逐叶聚合器和可控变体，再进入冻结的新pilot；继续推进其余任务，不以单题替代十题。
+
+最终独立质量追加已完成：925业务/1488坐标/1096行及16项终态检查通过，认可固定CP-SAT native信任口径下基例1%可达；没有独立search proof，不能声称精确最优或LP证书已支持1%。主方据此在私有quality-reference/registered-reference.json预注册唯一L=47380，rubric仅相对引用，1%阈值从搜索前起保持不变；尚无新候选，变体未注册。实际从注册文件/公开raw包/三份完整计划进入精确业务递推验证：47808为quality_met，旧49032.9/51263为quality_below_target，均仍物理可行；不是给候选打分。公开profile明确把冻结前完整参考/全grader/变体与冻结后的pilot/对照/时长验证分开，避免“等pilot才能冻结、又先冻结才pilot”的循环。
+
+下一接续优先完成完整源码交付链和其余37叶/依赖聚合，复用同一业务递推/现有Inspect，不再写第二业务模型/队列，不为了完整原子打分假定首错之后都通过；再补变体质量范围及独立冷复跑/人评校准。必要完整参考重跑属于全链路验收，须与重复数值诊断区分、一次一组并说明目的。L04应用现场、L05外部副作用及其余八题升级持续未完成。保持20分钟心跳ACTIVE，六旧昂贵容器Paused，当前无新增活跃长任务，终态原容器不重启。
+
+本轮最终docs:check通过351 ops/26 groups；L06区域208份有限数/唯一键JSON、50份Python语法和46相对链接通过，均仅包装检查，不替代真实CLI/CP-SAT/925业务独立核算。新基例reference配置已实际加载原始公开材料和三完整计划核验正确质量状态。三个共享索引只暂存本任务hunk；Windows首次git add一次参数过长已改20路径分批正常暂存，未绕hook/新建worktree。未修改生产代码，保留其他任务改动；范围提交后正常fetch/merge/审查全部待推集合/push。

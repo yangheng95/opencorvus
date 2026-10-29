@@ -1,0 +1,24 @@
+{
+  "all_business_fields_equal": true,
+  "differences": [],
+  "scalar_business_facts": 557,
+  "table_rows": {
+    "raw_materials": 4,
+    "products": 4,
+    "plants": 2,
+    "supplier_terms": 3,
+    "scenarios": 3,
+    "supplier_quotes": 12,
+    "routes": 8,
+    "bom": 16,
+    "demand": 192,
+    "supplier_capacity": 144,
+    "plant_capacity": 96
+  },
+  "independent_formula_source": "manual mapping from public DATA semantics; did not import l06_packet or use its expected output",
+  "excluded_original_keys": [
+    "qualification_variant",
+    "status"
+  ],
+  "excluded_keys_are_qualification_metadata": true
+}

@@ -1,0 +1,320 @@
+[
+  {
+    "source": "D:\\myhexin-local\\opencorvus\\specs\\records\\2026-10\\2026-10-29-heavy-workbench-l06-qualification.md",
+    "copy": "Recall-source.md",
+    "bytes": 27897,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\executed-source-cpsat\\check_l06.py",
+    "copy": "source-snapshot\\executed-source-cpsat\\check_l06.py",
+    "bytes": 10863,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\executed-source-cpsat\\l06_bound_certificate.py",
+    "copy": "source-snapshot\\executed-source-cpsat\\l06_bound_certificate.py",
+    "bytes": 2993,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\executed-source-cpsat\\l06_input.py",
+    "copy": "source-snapshot\\executed-source-cpsat\\l06_input.py",
+    "bytes": 5968,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\executed-source-cpsat\\l06_plan.py",
+    "copy": "source-snapshot\\executed-source-cpsat\\l06_plan.py",
+    "bytes": 1303,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\executed-source-cpsat\\qualify_cpsat_model.py",
+    "copy": "source-snapshot\\executed-source-cpsat\\qualify_cpsat_model.py",
+    "bytes": 5142,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\executed-source-cpsat\\qualify_l06.py",
+    "copy": "source-snapshot\\executed-source-cpsat\\qualify_l06.py",
+    "bytes": 19545,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\executed-source-cross-seed\\check_l06.py",
+    "copy": "source-snapshot\\executed-source-cross-seed\\check_l06.py",
+    "bytes": 10863,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\executed-source-cross-seed\\l06_bound_certificate.py",
+    "copy": "source-snapshot\\executed-source-cross-seed\\l06_bound_certificate.py",
+    "bytes": 2993,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\executed-source-cross-seed\\l06_input.py",
+    "copy": "source-snapshot\\executed-source-cross-seed\\l06_input.py",
+    "bytes": 5968,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\executed-source-cross-seed\\l06_plan.py",
+    "copy": "source-snapshot\\executed-source-cross-seed\\l06_plan.py",
+    "bytes": 1303,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\executed-source-cross-seed\\qualify_l06.py",
+    "copy": "source-snapshot\\executed-source-cross-seed\\qualify_l06.py",
+    "bytes": 19545,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cpsat-input\\full-model.json",
+    "copy": "source-snapshot\\cpsat-input\\full-model.json",
+    "bytes": 1138190,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cpsat-input\\hand-model.json",
+    "copy": "source-snapshot\\cpsat-input\\hand-model.json",
+    "bytes": 2168,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cpsat-input\\hint.json",
+    "copy": "source-snapshot\\cpsat-input\\hint.json",
+    "bytes": 127856,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cpsat-full\\business-check.json",
+    "copy": "source-snapshot\\cpsat-full\\business-check.json",
+    "bytes": 51280,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cpsat-full\\plan.json",
+    "copy": "source-snapshot\\cpsat-full\\plan.json",
+    "bytes": 32527,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cpsat-full\\response-stats.txt",
+    "copy": "source-snapshot\\cpsat-full\\response-stats.txt",
+    "bytes": 325,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cpsat-full\\solver.json",
+    "copy": "source-snapshot\\cpsat-full\\solver.json",
+    "bytes": 781,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cpsat-full\\values.json",
+    "copy": "source-snapshot\\cpsat-full\\values.json",
+    "bytes": 116457,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cross-seed\\business-check.json",
+    "copy": "source-snapshot\\cross-seed\\business-check.json",
+    "bytes": 51280,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cross-seed\\instance.json",
+    "copy": "source-snapshot\\cross-seed\\instance.json",
+    "bytes": 11693,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cross-seed\\plan.json",
+    "copy": "source-snapshot\\cross-seed\\plan.json",
+    "bytes": 32527,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cross-seed\\solver.json",
+    "copy": "source-snapshot\\cross-seed\\solver.json",
+    "bytes": 1035,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cpsat-known\\business-check.json",
+    "copy": "source-snapshot\\cpsat-known\\business-check.json",
+    "bytes": 1395,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cpsat-known\\plan.json",
+    "copy": "source-snapshot\\cpsat-known\\plan.json",
+    "bytes": 446,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cpsat-known\\response-stats.txt",
+    "copy": "source-snapshot\\cpsat-known\\response-stats.txt",
+    "bytes": 309,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cpsat-known\\solver.json",
+    "copy": "source-snapshot\\cpsat-known\\solver.json",
+    "bytes": 747,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cpsat-known\\values.json",
+    "copy": "source-snapshot\\cpsat-known\\values.json",
+    "bytes": 387,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\projection-known\\certificate-integer-contract.json",
+    "copy": "source-snapshot\\projection-known\\certificate-integer-contract.json",
+    "bytes": 113,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\projection-known\\credit-input.json",
+    "copy": "source-snapshot\\projection-known\\credit-input.json",
+    "bytes": 1718,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\projection-known\\credit-integer.json",
+    "copy": "source-snapshot\\projection-known\\credit-integer.json",
+    "bytes": 6525,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\projection-known\\credit-relaxation.json",
+    "copy": "source-snapshot\\projection-known\\credit-relaxation.json",
+    "bytes": 17990,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\projection-known\\hand-input.json",
+    "copy": "source-snapshot\\projection-known\\hand-input.json",
+    "bytes": 1252,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\projection-known\\hand-integer.json",
+    "copy": "source-snapshot\\projection-known\\hand-integer.json",
+    "bytes": 2876,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\projection-known\\hand-relaxation.json",
+    "copy": "source-snapshot\\projection-known\\hand-relaxation.json",
+    "bytes": 4784,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\projection-known\\known-inexact-dual-correction.json",
+    "copy": "source-snapshot\\projection-known\\known-inexact-dual-correction.json",
+    "bytes": 379,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\projection-known\\receipt.json",
+    "copy": "source-snapshot\\projection-known\\receipt.json",
+    "bytes": 507,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\projection-known\\registered-tiny-integer.json",
+    "copy": "source-snapshot\\projection-known\\registered-tiny-integer.json",
+    "bytes": 6820,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cpsat-full-command.json",
+    "copy": "source-snapshot\\execution\\cpsat-full-command.json",
+    "bytes": 995,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cpsat-known-command.json",
+    "copy": "source-snapshot\\execution\\cpsat-known-command.json",
+    "bytes": 8823,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cross-seed-command.json",
+    "copy": "source-snapshot\\execution\\cross-seed-command.json",
+    "bytes": 1397,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cpsat-full-container.cid",
+    "copy": "source-snapshot\\execution\\cpsat-full-container.cid",
+    "bytes": 64,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cpsat-known-container.cid",
+    "copy": "source-snapshot\\execution\\cpsat-known-container.cid",
+    "bytes": 64,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cross-seed-container.cid",
+    "copy": "source-snapshot\\execution\\cross-seed-container.cid",
+    "bytes": 64,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cpsat-full-output.log",
+    "copy": "source-snapshot\\execution\\cpsat-full-output.log",
+    "bytes": 39387,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\cross-seed-output.log",
+    "copy": "source-snapshot\\execution\\cross-seed-output.log",
+    "bytes": 5705,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\requirements-cpsat-observed.txt",
+    "copy": "source-snapshot\\execution\\requirements-cpsat-observed.txt",
+    "bytes": 175,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\root-node-diagnostic-20261029\\Dockerfile.cpsat",
+    "copy": "source-snapshot\\execution\\Dockerfile.cpsat",
+    "bytes": 170,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\inputs\\full.json",
+    "copy": "source-snapshot\\frozen-input.json",
+    "bytes": 12632,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-native-integer-independent-review-20261029\\source-snapshot\\exact-lp\\model.json",
+    "copy": "source-snapshot\\previous-audited-model.json",
+    "bytes": 1138190,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\independent_checks.py",
+    "copy": "source-snapshot\\reviewer-tools\\independent_checks.py",
+    "bytes": 11724,
+    "byte_identity_at_copy": true
+  },
+  {
+    "source": "D:\\opencorvus-benchmark-runs\\l06-cheap-v2-independent-review-20261029\\prepare_and_replay.py",
+    "copy": "source-snapshot\\reviewer-tools\\prepare_and_replay.py",
+    "bytes": 4161,
+    "byte_identity_at_copy": true
+  }
+]

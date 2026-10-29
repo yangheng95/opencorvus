@@ -10,7 +10,7 @@
 
 - [终态检查点与协调恢复](records/2026-10/2026-10-29-task-terminal-checkpoint-recovery.md)：真实验收暴露的失败自动提交、重复失败唤醒和压缩来源身份调查，未宣称完整流程通过。
 
-- [L06便宜实验与阶段仓容资格](records/2026-10/2026-10-29-heavy-workbench-l06-qualification.md)：真实不可行历史、独立枚举/动作账、严格输入与阶段峰值，未冻结重型题。
+- [L06完整合同稿与成本参考资格](records/2026-10/2026-10-29-heavy-workbench-l06-qualification.md)：公开原材料/原子rubric、独立10叶交付检查与基例1%见证预注册，完整参考/全grader/变体仍待完成。
 
 - [项目记忆与检索体验](records/2026-10/2026-10-29-memory-context-journey.md)：修复Task必选错位，真实项目上下文、双语与原对话独立选择。
 

@@ -1,0 +1,137 @@
+{
+  "actual_packet_cli_commands": 5,
+  "commands": [
+    {
+      "argv": [
+        "C:/Python314/python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029\\snapshot\\source\\l06_packet.py",
+        "--mode",
+        "read",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029\\snapshot\\public\\inputs",
+        "--output",
+        "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029\\cli-output\\base-public-read.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029",
+      "started_utc": "2026-10-29T14:45:28.425548+00:00",
+      "seconds": 0.3239712999202311,
+      "exit_code": 0,
+      "expected_exit_code": 0
+    },
+    {
+      "argv": [
+        "C:/Python314/python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029\\snapshot\\source\\l06_packet.py",
+        "--mode",
+        "read",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029\\controls\\all-rows-reordered",
+        "--output",
+        "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029\\cli-output\\all-csv-rows-reordered.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029",
+      "started_utc": "2026-10-29T14:45:28.815981+00:00",
+      "seconds": 0.6931154001504183,
+      "exit_code": 0,
+      "expected_exit_code": 0
+    },
+    {
+      "argv": [
+        "C:/Python314/python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029\\snapshot\\source\\l06_packet.py",
+        "--mode",
+        "read",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029\\controls\\price-change",
+        "--output",
+        "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029\\cli-output\\single-price-change.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029",
+      "started_utc": "2026-10-29T14:45:29.544502+00:00",
+      "seconds": 0.5442261998541653,
+      "exit_code": 0,
+      "expected_exit_code": 0
+    },
+    {
+      "argv": [
+        "C:/Python314/python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029\\snapshot\\source\\l06_packet.py",
+        "--mode",
+        "read",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029\\controls\\duplicate-quote",
+        "--output",
+        "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029\\cli-output\\duplicate-key.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029",
+      "started_utc": "2026-10-29T14:45:30.120907+00:00",
+      "seconds": 0.4992523998953402,
+      "exit_code": 2,
+      "expected_exit_code": 2
+    },
+    {
+      "argv": [
+        "C:/Python314/python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029\\snapshot\\source\\l06_packet.py",
+        "--mode",
+        "read",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029\\controls\\missing-demand",
+        "--output",
+        "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029\\cli-output\\missing-demand.json"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\l06-public-contract-independent-review-20261029",
+      "started_utc": "2026-10-29T14:45:30.634322+00:00",
+      "seconds": 0.42998919961974025,
+      "exit_code": 2,
+      "expected_exit_code": 2
+    }
+  ],
+  "independent_public_projection_equal": true,
+  "all_rows_reorder_equal": true,
+  "price_change_exact_differences": [
+    {
+      "path": "$.suppliers[0].price_minor[0]",
+      "actual": 24,
+      "expected": 25
+    }
+  ],
+  "duplicate_error": {
+    "status": "invalid",
+    "error": "packet_invalid",
+    "where": "supplier_quotes",
+    "detail": "duplicate business key ('A', 'R0')"
+  },
+  "missing_error": {
+    "status": "invalid",
+    "error": "packet_invalid",
+    "where": "demand",
+    "detail": "complete exact business-key coverage required"
+  },
+  "constant_policy_cheaper_price": {
+    "business_feasible": true,
+    "expected_cost_exact": {
+      "numerator": 244642,
+      "denominator": 5
+    },
+    "same_action_file_as_base_49032_9_witness": true,
+    "quality_assessed": false,
+    "interpretation": "frozen qualified price decrease preserves feasibility of unchanged actions; does not prove variant quality or policy flip"
+  },
+  "scope": "input factual qualification and one fixed action feasibility control; no optimization or candidate grade"
+}

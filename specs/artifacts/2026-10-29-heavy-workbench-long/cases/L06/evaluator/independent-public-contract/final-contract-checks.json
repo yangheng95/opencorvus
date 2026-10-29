@@ -1,0 +1,31 @@
+{
+  "leaf_count": 47,
+  "unique_ids": 47,
+  "total_weight": 100,
+  "critical_count": 27,
+  "critical_weight": 65,
+  "human_leaves": 12,
+  "human_weight": 24,
+  "all_human_have_item_specific_half": true,
+  "public_inputs_unchanged": true,
+  "receivable_formula_checks": 51,
+  "receivable_formula_all_passed": true,
+  "quality_reference": {
+    "relative_gap_definition": "(C-L)/L",
+    "maximum_relative_gap": 0.01,
+    "lower_bound": null,
+    "registration_status": "pending",
+    "native_bounds_are_not_rational_certificates": true
+  },
+  "full_47_leaf_grader_implemented": false,
+  "reference_full_chain_verified": false,
+  "freeze_approved": false,
+  "solver_calls": 0,
+  "model_calls": 0,
+  "new_candidate_scores": 0,
+  "D03_optional_inventory_declared": true,
+  "output_projection_primitive_implemented": true,
+  "only_10_output_leaves_locally_qualified": true,
+  "remaining_37_leaves_graded": false,
+  "decimal_repair_independently_passed": true
+}

@@ -1,0 +1,30 @@
+{
+  "status": "passed",
+  "reference_id": "L06-v2-base-native-cpsat-20261029",
+  "semantic_input_identity": "equal",
+  "bound_trust": "trusted_native_integer_search_bound",
+  "outcomes": [
+    {
+      "name": "registered-witness",
+      "business_feasible": true,
+      "cost_exact": "47808",
+      "relative_gap_exact": "107/11845",
+      "reference_quality_status": "quality_met"
+    },
+    {
+      "name": "previous-incumbent",
+      "business_feasible": true,
+      "cost_exact": "490329/10",
+      "relative_gap_exact": "16529/473800",
+      "reference_quality_status": "quality_below_target"
+    },
+    {
+      "name": "early-witness",
+      "business_feasible": true,
+      "cost_exact": "51263",
+      "relative_gap_exact": "3883/47380",
+      "reference_quality_status": "quality_below_target"
+    }
+  ],
+  "scope": "base reference mathematical/configuration qualification only; full grader/candidate/hours unassessed"
+}

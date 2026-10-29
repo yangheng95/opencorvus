@@ -1,0 +1,17 @@
+{
+  "cmd": "$r='D:/opencorvus-benchmark-runs/l06-procurement-qualification-20261029';$p=\"$r/v2/root-node-diagnostic-20261029\";docker run -d --name oc-l06-cpsat-quality-20261029-a --cidfile \"$p/quality-container.cid\" --network none --mount \"type=bind,source=$r,target=/work\" -w /work -e PYTHONDONTWRITEBYTECODE=1 opencorvus-benchmark-cpsat:20261029 /opt/cpsat/bin/python -B /work/v2/root-node-diagnostic-20261029/executed-source-quality/qualify_cpsat_model.py --model /work/v2/root-node-diagnostic-20261029/cpsat-input/full-model.json --input /work/v2/inputs/full.json --hint /work/v2/root-node-diagnostic-20261029/cpsat-full/values.json --seconds 3600 --workers 8 --relative-gap .009 --output /work/v2/root-node-diagnostic-20261029/quality-proof",
+  "start": {
+    "current_time": "2026-10-29 14:39:50 UTC"
+  },
+  "end": {
+    "current_time": "2026-10-29 14:39:51 UTC"
+  },
+  "chunk_id": "ff5b10",
+  "wall_time_seconds": 0.8540405,
+  "exit_code": 0,
+  "original_token_count": 17,
+  "output": "56ea43a95c6cd59a4dd61b7cdee3553a5bafe4443c86c5a8eb0f53f43d68125a\n",
+  "scope": "single CPU evaluator reference qualification, not candidate duration/global budget",
+  "old_six_containers": "remain paused",
+  "expected_image_id": "sha256:3c8d0d24b07246e24772630788b8c79ca6a8d080b5e43734c0b85778ed585f73"
+}

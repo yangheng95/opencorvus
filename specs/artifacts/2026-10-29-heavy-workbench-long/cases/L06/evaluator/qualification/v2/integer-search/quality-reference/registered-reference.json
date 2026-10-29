@@ -1,0 +1,38 @@
+{
+  "format": "l06-quality-reference/1",
+  "reference_id": "L06-v2-base-native-cpsat-20261029",
+  "case_version": "HeavyWorkBench-Long/0.2.0-dev",
+  "status": "base_registered_before_fresh_candidate",
+  "scope": "base public packet only; not numerical variants or full-case freeze",
+  "lower_bound_minor": {"numerator": 47380, "denominator": 1},
+  "bound_source": {
+    "kind": "trusted_native_integer_search_bound",
+    "solver": "OR-Tools CP-SAT",
+    "version": "9.15.6755",
+    "observed_scaled_bound": 473800,
+    "objective_denominator": 10,
+    "model_variables": 1488,
+    "model_rows": 1096,
+    "evidence": "originals.zip:quality-proof/solver.json and quality-native-stdout.log"
+  },
+  "trust_policy": "Accept the fixed mature solver's native lower bound after independent equality checks of the imported integer model and business input, and raw terminal/API evidence. This is not an independently replayed search proof or rational dual certificate.",
+  "input_identity": {
+    "public": "../../../../../public/inputs/",
+    "captured_input": "originals.zip:input/full.json",
+    "captured_model": "originals.zip:input/full-model.json",
+    "independent_fact_projection": "557 scalar facts equal to independently projected public packet"
+  },
+  "quality_rule": "Use maximum_relative_gap and (C-L)/L from the rubric, with C independently recomputed from a business-feasible plan; use exact rational arithmetic.",
+  "reachability_witness": {
+    "exact_cost_minor": 47808,
+    "gap_relative_to_bound": {"numerator": 107, "denominator": 11845},
+    "plan": "originals.zip:quality-proof/plan.json",
+    "independent_review": "../../../../independent-public-contract/quality-addendum/REVIEW.md"
+  },
+  "native_termination": "OPTIMAL within the requested nonzero primal-relative gap 0.009; exact optimum is not proven.",
+  "independent_search_or_dual_proof": false,
+  "fresh_candidate_started": false,
+  "variant_reference_registered": false,
+  "full_case_frozen": false,
+  "hours_validated": false
+}

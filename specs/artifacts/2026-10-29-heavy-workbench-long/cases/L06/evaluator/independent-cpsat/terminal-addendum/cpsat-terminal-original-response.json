@@ -1,0 +1,40 @@
+{
+  "timestamp": "2026-10-29T13:54:50.425Z",
+  "ordinal": 7409,
+  "type": "response_item",
+  "payload": {
+    "type": "custom_tool_call_output",
+    "id": "ctco_01a187f1-25b9-7402-a552-3f6fa7be9e02",
+    "call_id": "call_054ff60e55964000a816f7f83d0922de",
+    "output": [
+      {
+        "type": "input_text",
+        "text": "Script completed\nWall time 2.5 seconds\nOutput:\n"
+      },
+      {
+        "type": "input_text",
+        "text": "{}"
+      },
+      {
+        "type": "input_text",
+        "text": "{\"chunk_id\":\"93b305\",\"wall_time_seconds\":1.4965724,\"exit_code\":0,\"original_token_count\":44,\"output\":\"absl-py==2.5.1\\nimmutabledict==4.3.1\\nnumpy==2.4.6\\nortools==9.15.6755\\npandas==3.1.0\\nprotobuf==6.33.6\\npython-dateutil==3.0.0\\nsix==1.17.0\\ntyping_extensions==4.16.0\\ntzdata==2026.6\\n\"}"
+      },
+      {
+        "type": "input_text",
+        "text": "{\"chunk_id\":\"2849cc\",\"wall_time_seconds\":0.6230854,\"exit_code\":0,\"original_token_count\":220,\"output\":\"sha256:3c8d0d24b07246e24772630788b8c79ca6a8d080b5e43734c0b85778ed585f73\\n{\\r\\n  \\\"format\\\": \\\"l06-cpsat-fixed-model-comparison/1\\\",\\r\\n  \\\"scope\\\": \\\"oracle research comparison, not candidate result or fallback\\\",\\r\\n  \\\"solver_version\\\": \\\"9.15.6755\\\",\\r\\n  \\\"status\\\": \\\"FEASIBLE\\\",\\r\\n  \\\"native_status_code\\\": 2,\\r\\n  \\\"seconds\\\": 30.01821606233716,\\r\\n  \\\"workers\\\": 8,\\r\\n  \\\"requested_seconds\\\": 30.0,\\r\\n  \\\"random_seed\\\": 20261029,\\r\\n  \\\"model_variables\\\": 1488,\\r\\n  \\\"source_rows\\\": 1096,\\r\\n  \\\"objective_denominator\\\": 10,\\r\\n  \\\"has_feasible_incumbent\\\": true,\\r\\n  \\\"hint_cost_exact\\\": \\\"51263\\\",\\r\\n  \\\"native_best_bound_scaled\\\": 472303.0,\\r\\n  \\\"native_numeric_bound_minor\\\": 47230.3,\\r\\n  \\\"native_bound_scope\\\": \\\"native CP-SAT integer-search bound; distinct from rational LP certificate\\\",\\r\\n  \\\"native_objective_scaled\\\": 490329.0,\\r\\n  \\\"branches\\\": 0,\\r\\n  \\\"conflicts\\\": 0,\\r\\n  \\\"objective_exact\\\": \\\"490329/10\\\",\\r\\n  \\\"objective_minor\\\": 49032.9\\r\\n}\\r\\n\"}"
+      },
+      {
+        "type": "input_text",
+        "text": "{\"chunk_id\":\"069218\",\"wall_time_seconds\":0.000007,\"exit_code\":0,\"original_token_count\":0,\"output\":\"\"}"
+      }
+    ],
+    "internal_chat_message_metadata_passthrough": {
+      "turn_id": "01a187d4-1fed-7ae3-8343-37d4273063a4",
+      "create_time": 1793282090.4254086
+    }
+  },
+  "metadata": {
+    "client_authored": false,
+    "fallback_token_limit_override": 12000
+  }
+}

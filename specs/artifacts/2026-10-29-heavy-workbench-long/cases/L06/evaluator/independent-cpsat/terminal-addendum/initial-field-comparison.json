@@ -1,0 +1,28 @@
+{
+  "scope": "terminal provenance only, no solver/business execution",
+  "checks": {
+    "original_record_is_tool_output": true,
+    "original_terminal_exit_zero": true,
+    "extracted_terminal_entire_object_matches_original": true,
+    "origin_timestamp_and_call_id_match_original": true,
+    "source_line_and_ordinal_agree": true,
+    "receipt_timestamp_matches_original": true,
+    "annotated_receipt_session_matches_original_command": true,
+    "old_command_snapshot_remains_same": true
+  },
+  "all_compared_fields_match": true,
+  "original_call_id": "call_054ff60e55964000a816f7f83d0922de",
+  "original_terminal": {
+    "chunk_id": "069218",
+    "wall_time_seconds": 7e-06,
+    "exit_code": 0,
+    "original_token_count": 0,
+    "output": ""
+  },
+  "original_tool_response_contains_session_identity": false,
+  "session_binding_requires_original_call_input": true,
+  "session_binding_independently_confirmed": false,
+  "reviewer_solver_calls": 0,
+  "reviewer_new_business_replays": 0,
+  "historical_gap_report_preserved": true
+}

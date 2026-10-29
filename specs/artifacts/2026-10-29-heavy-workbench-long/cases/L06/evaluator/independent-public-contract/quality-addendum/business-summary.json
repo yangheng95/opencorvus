@@ -1,0 +1,58 @@
+{
+  "business_feasible": true,
+  "scope": "exact finite instance plan recurrence only; not execution attestation or optimality certificate",
+  "expected_cost_minor": 47808.0,
+  "expected_cost_exact": {
+    "numerator": 47808,
+    "denominator": 1
+  },
+  "scenarios": {
+    "base": {
+      "total_cost_minor": 47126,
+      "final_cash_minor": 32224,
+      "final_receivable_minor": 24150,
+      "minimum_cash_minor": -5369,
+      "active_constraints": {
+        "supplier_capacity": 10,
+        "shipment_minimum": 1,
+        "plant_capacity": 5,
+        "raw_storage": 1,
+        "product_storage": 0,
+        "credit_limit": 1
+      }
+    },
+    "supplier_disruption": {
+      "total_cost_minor": 48116,
+      "final_cash_minor": 31234,
+      "final_receivable_minor": 24150,
+      "minimum_cash_minor": -5369,
+      "active_constraints": {
+        "supplier_capacity": 13,
+        "shipment_minimum": 1,
+        "plant_capacity": 9,
+        "raw_storage": 0,
+        "product_storage": 0,
+        "credit_limit": 1
+      }
+    },
+    "demand_shift": {
+      "total_cost_minor": 49051,
+      "final_cash_minor": 32459,
+      "final_receivable_minor": 25230,
+      "minimum_cash_minor": -5369,
+      "active_constraints": {
+        "supplier_capacity": 13,
+        "shipment_minimum": 4,
+        "plant_capacity": 17,
+        "raw_storage": 0,
+        "product_storage": 0,
+        "credit_limit": 1
+      }
+    }
+  },
+  "projection_source": {
+    "archive": "originals.zip",
+    "member": "independent-business-check.json",
+    "scope": "derived readable summary; full original byte-preserved inside archive"
+  }
+}

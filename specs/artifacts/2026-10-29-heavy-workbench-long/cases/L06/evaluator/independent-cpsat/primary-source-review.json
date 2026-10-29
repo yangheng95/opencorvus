@@ -1,0 +1,10 @@
+{
+  "reviewed_utc_date": "2026-10-29",
+  "sources": [
+    {"url": "https://developers.google.com/optimization/cp/cp_solver", "facts": "CP-SAT integer model contract and feasible/optimal distinction"},
+    {"url": "https://raw.githubusercontent.com/google/or-tools/v9.15/ortools/sat/cp_model.proto", "facts": "status2 FEASIBLE; multithread statistics describe first subsolver"},
+    {"url": "https://raw.githubusercontent.com/google/or-tools/v9.15/ortools/sat/python/cp_model.py", "facts": "new_int_var, add_linear_constraint, add_hint, solve, value, objective_value and best_objective_bound API"},
+    {"url": "https://raw.githubusercontent.com/google/or-tools/v9.15/ortools/sat/sat_parameters.proto", "facts": "worker count and parameter semantics; num_search_workers supported when num_workers is zero"}
+  ],
+  "role": "explain API contract; local original traces and independent arithmetic establish this occurrence facts"
+}

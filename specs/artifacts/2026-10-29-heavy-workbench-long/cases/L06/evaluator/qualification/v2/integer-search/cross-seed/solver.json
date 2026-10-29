@@ -1,0 +1,35 @@
+{
+  "format": "l06-native-highs-integer/1",
+  "solver": "highspy",
+  "solver_version": "1.8.0",
+  "objective_name": "expected_operating_cost_minor",
+  "status": "Time limit reached",
+  "native_status_code": 13,
+  "native_run_status_code": 1,
+  "termination": "limited",
+  "seconds": 60.009352726861835,
+  "native_info_valid": true,
+  "native_primal_solution_status": 2,
+  "has_feasible_incumbent": true,
+  "objective": 49032.9,
+  "dual_bound": 47275.9,
+  "solver_gap_scaled_by_primal": 0.03583308350107785,
+  "nodes": 7252,
+  "variables": 1488,
+  "constraints": 1096,
+  "solver_options": {
+    "mip_rel_gap": 0.002,
+    "output_flag": true,
+    "time_limit": 60.0
+  },
+  "native_nonfinite_fields": {},
+  "warm_start": {
+    "business_feasible": true,
+    "business_expected_cost_minor": 49032.9,
+    "model_objective": 49032.899999999994,
+    "variables_projected": 1488,
+    "native_readback_matches": true
+  },
+  "bound_scope": "native numeric MIP estimate; not an exact rational certificate",
+  "maximum_rounding_difference": 0.0
+}

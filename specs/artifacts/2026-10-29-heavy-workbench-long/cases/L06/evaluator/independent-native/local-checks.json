@@ -1,0 +1,190 @@
+[
+  {
+    "contract": "same_frozen_v2_input",
+    "actual": "compared complete structured content / AST",
+    "expected": "same semantic structure",
+    "passed": true
+  },
+  {
+    "contract": "same_model_input_as_strict_lp",
+    "actual": "compared complete structured content / AST",
+    "expected": "same semantic structure",
+    "passed": true
+  },
+  {
+    "contract": "build_model_semantics_match_previously_exactly_audited_model",
+    "actual": "compared complete structured content / AST",
+    "expected": "same semantic structure",
+    "passed": true
+  },
+  {
+    "contract": "independent_prefix_physical_financial_all_passed",
+    "actual": true,
+    "expected": true,
+    "passed": true
+  },
+  {
+    "contract": "native-final.exact_key_vector_box_and_all_rows",
+    "actual": true,
+    "expected": true,
+    "passed": true
+  },
+  {
+    "contract": "warm-start.exact_key_vector_box_and_all_rows",
+    "actual": true,
+    "expected": true,
+    "passed": true
+  },
+  {
+    "contract": "native_root_status16_limited_no_incumbent",
+    "actual": [
+      16,
+      "limited",
+      false,
+      null,
+      1
+    ],
+    "expected": [
+      16,
+      "limited",
+      false,
+      null,
+      1
+    ],
+    "passed": true
+  },
+  {
+    "contract": "native_root_retains_numeric_dual",
+    "actual": 47039.5,
+    "expected": 47039.5,
+    "passed": true
+  },
+  {
+    "contract": "native_root_projects_options",
+    "actual": {
+      "mip_rel_gap": 0.002,
+      "output_flag": true,
+      "mip_max_nodes": 1,
+      "time_limit": 30.0
+    },
+    "expected": {
+      "mip_rel_gap": 0.002,
+      "output_flag": true,
+      "mip_max_nodes": 1,
+      "time_limit": 30.0
+    },
+    "passed": true
+  },
+  {
+    "contract": "warm_final_status13_limited_with_incumbent",
+    "actual": [
+      13,
+      "limited",
+      true,
+      2
+    ],
+    "expected": [
+      13,
+      "limited",
+      true,
+      2
+    ],
+    "passed": true
+  },
+  {
+    "contract": "warm_final_options",
+    "actual": {
+      "mip_rel_gap": 0.002,
+      "output_flag": true,
+      "time_limit": 30.0
+    },
+    "expected": {
+      "mip_rel_gap": 0.002,
+      "output_flag": true,
+      "time_limit": 30.0
+    },
+    "passed": true
+  },
+  {
+    "contract": "warm_final_objective_matches_independent_exact",
+    "actual": "51263",
+    "expected": "51263",
+    "passed": true
+  },
+  {
+    "contract": "known_native_warm_actual_projection",
+    "actual": {
+      "business_feasible": true,
+      "business_expected_cost_minor": 6.0,
+      "model_objective": 6.0,
+      "variables_projected": 5,
+      "native_readback_matches": true
+    },
+    "expected": {
+      "business_feasible": true,
+      "business_expected_cost_minor": 6.0,
+      "model_objective": 6.0,
+      "variables_projected": 5,
+      "native_readback_matches": true
+    },
+    "passed": true
+  },
+  {
+    "contract": "warm_full_actual_projection_report",
+    "actual": {
+      "business_feasible": true,
+      "business_expected_cost_minor": 51263.0,
+      "model_objective": 51263.0,
+      "variables_projected": 1488,
+      "native_readback_matches": true
+    },
+    "expected": {
+      "business_feasible": true,
+      "business_expected_cost_minor": 51263.0,
+      "model_objective": 51263.0,
+      "variables_projected": 1488,
+      "native_readback_matches": true
+    },
+    "passed": true
+  },
+  {
+    "contract": "warm_solver_gap_arithmetic",
+    "actual": 0.07767785732399586,
+    "expected": 0.07767785732399586,
+    "passed": true
+  },
+  {
+    "contract": "old_scipy_adapter_loss_is_preserved",
+    "actual": [
+      4,
+      null,
+      null,
+      null
+    ],
+    "expected": [
+      4,
+      null,
+      null,
+      null
+    ],
+    "passed": true
+  },
+  {
+    "contract": "mip_start_feasible_objective_line",
+    "actual": true,
+    "expected": true,
+    "passed": true
+  },
+  {
+    "contract": "native_time_limit_line",
+    "actual": true,
+    "expected": true,
+    "passed": true
+  },
+  {
+    "contract": "final_native_report_matches_json",
+    "actual": true,
+    "expected": true,
+    "passed": true
+  }
+]

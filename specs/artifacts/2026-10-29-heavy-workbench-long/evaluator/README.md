@@ -38,3 +38,5 @@ python -m unittest discover -s script/benchmark -p test_pinn_torch_check.py
 [S06最终微型判定](../cases/L06/smoke/evaluator/final-smoke-assessment.json)四项通过：原生650.922秒，两方独立源码复跑/业务checker分别.818秒和.923秒，两值4.5/5.5；实际流式模型/子角色与dirty runtime如实保留，comparable=false。不是重型case、小时级或整个套件通过。
 
 当前便宜接续：[L06严格下界独立审查](../cases/L06/evaluator/independent-relaxation/REVIEW.md)另从原输入重建1488变量/1096行，精确下界约46220.2662、可行上界51263，仍不能认证1%；[L04独立最终审查](../cases/L04/evaluator/independent-review/repair-review/REVIEW.md)冷跑实际迁移/epoch/进程恢复，抓到并复核共享NULL身份修复，最终4升级+2明确中止，原数据保存。两者都是局部资格，未批准重型冻结/候选分/小时级。
+
+后续[L06原生整数/CP-SAT独立审查](../cases/L06/evaluator/independent-cpsat/REVIEW.md)记录阶段上界49032.9与终态来源修复。更新的[质量追加审查](../cases/L06/evaluator/independent-public-contract/quality-addendum/REVIEW.md)已独立确认最终成本47808/native界47380、基例1%可达，私有参考已预注册；严格LP与native信任口径分列。[公开合同/47叶rubric](../cases/L06/README.md)仍未冻结，独立只认可设计及10叶输出primitive，完整参考/其他37叶/变体/校准和长程候选继续待完成。当前无新增活跃长计算，active-quality只是历史快照。不得把本评估目录交给候选。

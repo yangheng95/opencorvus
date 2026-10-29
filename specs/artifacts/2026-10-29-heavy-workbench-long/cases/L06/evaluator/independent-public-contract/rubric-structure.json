@@ -1,0 +1,37 @@
+{
+  "leaf_count": 42,
+  "unique_ids": 42,
+  "weight_total": 100,
+  "critical_count": 22,
+  "critical_weight": 65,
+  "human_review_count": 12,
+  "human_review_weight": 24,
+  "group_weights": {
+    "A": 8,
+    "B": 25,
+    "C": 25,
+    "D": 20,
+    "E": 12,
+    "F": 10
+  },
+  "quality_reference": {
+    "relative_gap_definition": "(C-L)/L",
+    "maximum_relative_gap": 0.01,
+    "lower_bound": null,
+    "registration_status": "pending",
+    "native_bounds_are_not_rational_certificates": true
+  },
+  "readiness": {
+    "normalized_packet_local_contract": true,
+    "base_full_plan_feasible": true,
+    "one_percent_quality_qualification": false,
+    "full_reference_report_and_ledgers": false,
+    "variant_quality_reference": false,
+    "per_leaf_evaluation_adapter": false,
+    "independent_full_case_freeze": false,
+    "fresh_OpenCorvus_heavy_pilot": false,
+    "fresh_Codex_comparison": false,
+    "hours_validated": false,
+    "ten_case_suite_complete": false
+  }
+}

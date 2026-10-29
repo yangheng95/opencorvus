@@ -1,0 +1,30 @@
+{
+  "format": "l06-native-highs-integer/1",
+  "solver": "highspy",
+  "solver_version": "1.8.0",
+  "objective_name": "expected_operating_cost_minor",
+  "status": "Solution limit reached",
+  "native_status_code": 16,
+  "native_run_status_code": 1,
+  "termination": "limited",
+  "seconds": 4.08404965698719,
+  "native_info_valid": true,
+  "native_primal_solution_status": 0,
+  "has_feasible_incumbent": false,
+  "objective": null,
+  "dual_bound": 47039.5,
+  "solver_gap_scaled_by_primal": null,
+  "nodes": 1,
+  "variables": 1488,
+  "constraints": 1096,
+  "solver_options": {
+    "mip_rel_gap": 0.002,
+    "output_flag": true,
+    "mip_max_nodes": 1,
+    "time_limit": 30.0
+  },
+  "native_nonfinite_fields": {
+    "gap": "inf"
+  },
+  "bound_scope": "native numeric MIP estimate; not an exact rational certificate"
+}

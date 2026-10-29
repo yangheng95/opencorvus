@@ -1,0 +1,754 @@
+[
+  {
+    "id": "A01",
+    "weight": 2,
+    "critical": true,
+    "criterion": "原料/产品/产线目录的身份、index及全部数值属性准确投影",
+    "public_source": {
+      "file": "DATA.md",
+      "line": 7,
+      "phrase": "raw_materials.csv"
+    },
+    "observation": "修后显式覆盖目录全部数值属性，初轮字段归属问题已在文案关闭。",
+    "required": "按A01列明的全部raw/product属性实现比较；需正向错误映射实例验证。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "A02",
+    "weight": 2,
+    "critical": true,
+    "criterion": "供应条款与逐原料报价的规范对象准确",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 15,
+      "phrase": "订单为非负整数包装数"
+    },
+    "observation": "报价、整包和条款全字段对照通过；已有事实证据。",
+    "required": "定义本叶准确比较的属性集合，不将A01同一index错误重复计为属性错。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "A03",
+    "weight": 2,
+    "critical": true,
+    "criterion": "物料清单与产线资格/费用的规范对象准确",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 17,
+      "phrase": "生产为非负整数件数"
+    },
+    "observation": "BOM、allowed、费用全部对照通过；同一叶含两类关系对象。",
+    "required": "明确两子对象全真才满分，或者分叶；无需逐数据格膨胀评分叶。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "A04",
+    "weight": 2,
+    "critical": true,
+    "criterion": "情景、逐周需求/容量与全局设施事实的规范对象准确",
+    "public_source": {
+      "file": "DATA.md",
+      "line": 15,
+      "phrase": "demand.csv"
+    },
+    "observation": "原始情景/需求/容量/设施事实独立投影准确；原料/产品属性现归A01。",
+    "required": "需要逐叶投影grader，不能因全实例loader返回成功替候选normalized打分。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "B01",
+    "weight": 3,
+    "critical": true,
+    "criterion": "决策张量维度/场景覆盖及整数域合法",
+    "public_source": {
+      "file": "OUTPUTS.draft.md",
+      "line": 15,
+      "phrase": "每场景记录包含非负整数数组"
+    },
+    "observation": "计划域/覆盖primitive已有；不是完整逐叶适配。",
+    "required": "定义必需决策张量的缺字段/额外场景/非整数为明确candidate错误，原始optional库存域另处理。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "B02",
+    "weight": 5,
+    "critical": true,
+    "criterion": "全部共同前缀动作满足非预见性",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 11,
+      "phrase": "前`common_weeks`周"
+    },
+    "observation": "语义清楚，独立见证满足共同前缀。",
+    "required": "单独检查三个动作前缀；不可因别的业务先报错就推定本叶通过。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "B03",
+    "weight": 2,
+    "critical": true,
+    "criterion": "装运开关严格为0或1",
+    "public_source": {
+      "file": "OUTPUTS.draft.md",
+      "line": 19,
+      "phrase": "每个值0或1"
+    },
+    "observation": "装运binary语义清楚；比整数包装格式恒真叶更实质。",
+    "required": "B01只验整数/维度，本叶验0/1，避免重复同一域结果。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "B04",
+    "weight": 2,
+    "critical": true,
+    "criterion": "每个正装运满足最低装运体积",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 15,
+      "phrase": "最低装运量"
+    },
+    "observation": "MOQ时序及单位公开，primitive可独立计算。",
+    "required": "明确按供应商周合单、truck=1时下界，支持所有合法策略。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "B05",
+    "weight": 3,
+    "critical": true,
+    "criterion": "全部供应商单周共享体积上限成立",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 15,
+      "phrase": "不能每种原料各自占用"
+    },
+    "observation": "共享volume语义公开且有真实绑定见证。",
+    "required": "供应体积行独立评分，不能用候选自报体积替代采购包装重算。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "B06",
+    "weight": 2,
+    "critical": true,
+    "criterion": "生产动作符合产线—产品资格",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 17,
+      "phrase": "产线—产品资格"
+    },
+    "observation": "语义和输入齐全。",
+    "required": "逐生产坐标核对allowed；不要把总产量正确当资格正确。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "B07",
+    "weight": 2,
+    "critical": true,
+    "criterion": "产线单周共享工时上限成立",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 17,
+      "phrase": "全线共享工时约束"
+    },
+    "observation": "共享hours输入/约束齐全。",
+    "required": "逐场景周产线检查；与B06分开。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "B08",
+    "weight": 2,
+    "critical": true,
+    "criterion": "BOM耗料后原料始终非负",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 13,
+      "phrase": "禁止欠交"
+    },
+    "observation": "到货/BOM非负primitive已有，提前期参与该独立递推。",
+    "required": "将所有原料及周纳入，写明对optional声明库存不一致的判定归属。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "B09",
+    "weight": 2,
+    "critical": true,
+    "criterion": "每个场景每周需求均完整履约",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 13,
+      "phrase": "交付当周全部需求"
+    },
+    "observation": "履约谓词公开可计算。",
+    "required": "期初+累计生产-累计需求非负逐周检查，不只看总产量。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "B10",
+    "weight": 1,
+    "critical": true,
+    "criterion": "原料到货后/生产前阶段体积不超仓容",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 13,
+      "phrase": "原料到货后/生产前"
+    },
+    "observation": "v2阶段峰已明确定义，旧漏项得到实质修复。",
+    "required": "按阶段峰，不按期末库存；与B08不混同。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "B11",
+    "weight": 1,
+    "critical": true,
+    "criterion": "成品生产后/交付前阶段体积不超仓容",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 13,
+      "phrase": "成品生产后/交付前"
+    },
+    "observation": "v2阶段峰明确定义。",
+    "required": "覆盖每场景每周；无需强迫该约束在每份好计划都绑定。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "C01",
+    "weight": 1,
+    "critical": true,
+    "criterion": "提交的期望运营成本与概率加权独立完整计价完全一致",
+    "public_source": {
+      "file": "OUTPUTS.draft.md",
+      "line": 44,
+      "phrase": "JSON小数字面量"
+    },
+    "observation": "十进制精确值/有理对象合同已明确，接受数值与有理等价，避免binary float假错。",
+    "required": "用Decimal读JSON数字到Fraction；实际reader/grade尚未实现。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "C02",
+    "weight": 4,
+    "critical": true,
+    "criterion": "各场景末周之前的现金不低于负信用额度",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 21,
+      "phrase": "每周都不得低于负信用额度"
+    },
+    "observation": "非末周信用与回款支出时序公开。",
+    "required": "不与C03末周双计；独立实际每场景现金，不能期望现金替代。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "C03",
+    "weight": 3,
+    "critical": true,
+    "criterion": "各场景末周现金非负",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 21,
+      "phrase": "末周余额须非负"
+    },
+    "observation": "终期还清与期中信用已分叶。",
+    "required": "末周现金实际检查；AR不提前收回。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "C04",
+    "weight": 2,
+    "critical": true,
+    "criterion": "没有周期结束后才到货的正订单",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 17,
+      "phrase": "禁止下达计划周期之后"
+    },
+    "observation": "终期在途规则完整。",
+    "required": "按正订单+lead逐供应商周判定，不因最后库存非负而放过未来到货。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "C05",
+    "weight": 2,
+    "critical": true,
+    "criterion": "各场景末周期末成品为0",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 17,
+      "phrase": "最后一周期末成品必须0"
+    },
+    "observation": "终期成品语义清楚。",
+    "required": "与逐周履约独立，允许原料剩余但无残值。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "C06",
+    "weight": 8,
+    "critical": true,
+    "criterion": "C相对预先注册有效正下界L的gap不超过1%",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 25,
+      "phrase": "本稿拟以"
+    },
+    "observation": "硬freeze阻塞：L=null/资格pending，尚无已认证1%可达交付。",
+    "required": "预注册有效正L、可达C<=1.01L、参考证据种类/数值容差与资格；不能用实时incumbent或native数值界直接代签。",
+    "readiness": "calibration_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "C07",
+    "weight": 1,
+    "critical": true,
+    "criterion": "各场景summary总运营成本与独立计价一致",
+    "public_source": {
+      "file": "OUTPUTS.draft.md",
+      "line": 42,
+      "phrase": "total_cost_minor"
+    },
+    "observation": "新增明确核对summary逐场景总成本，初轮缺口已在文案关闭。",
+    "required": "必须逐场景独立核算、固定概率/整数金额/精确数值；本轮未实现正式评分器。",
+    "readiness": "full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "C08",
+    "weight": 1,
+    "critical": true,
+    "criterion": "各场景summary最低现金与完整周序现金最小值一致",
+    "public_source": {
+      "file": "OUTPUTS.draft.md",
+      "line": 42,
+      "phrase": "minimum_cash_minor"
+    },
+    "observation": "新增明确核对summary逐场景最低现金，初轮缺口已在文案关闭。",
+    "required": "必须逐场景独立核算、固定概率/整数金额/精确数值；本轮未实现正式评分器。",
+    "readiness": "full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "C09",
+    "weight": 1,
+    "critical": true,
+    "criterion": "各场景summary末周现金与实际末周余额一致",
+    "public_source": {
+      "file": "OUTPUTS.draft.md",
+      "line": 42,
+      "phrase": "final_cash_minor"
+    },
+    "observation": "新增明确核对summary逐场景末周现金，初轮缺口已在文案关闭。",
+    "required": "必须逐场景独立核算、固定概率/整数金额/精确数值；本轮未实现正式评分器。",
+    "readiness": "full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "C10",
+    "weight": 1,
+    "critical": true,
+    "criterion": "各场景summary期末应收与未收销售款一致",
+    "public_source": {
+      "file": "OUTPUTS.draft.md",
+      "line": 42,
+      "phrase": "final_receivable_minor"
+    },
+    "observation": "新增明确核对summary逐场景期末应收，初轮缺口已在文案关闭。",
+    "required": "必须逐场景独立核算、固定概率/整数金额/精确数值；本轮未实现正式评分器。",
+    "readiness": "full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "C11",
+    "weight": 1,
+    "critical": true,
+    "criterion": "summary各场景概率与公开概率一致",
+    "public_source": {
+      "file": "OUTPUTS.draft.md",
+      "line": 42,
+      "phrase": "probability"
+    },
+    "observation": "新增明确核对summary逐场景概率，初轮缺口已在文案关闭。",
+    "required": "必须逐场景独立核算、固定概率/整数金额/精确数值；本轮未实现正式评分器。",
+    "readiness": "full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "D01",
+    "weight": 7,
+    "critical": true,
+    "criterion": "仅源码/声明依赖/冻结原材料的新目录完整运行产生可评估交付",
+    "public_source": {
+      "file": "OUTPUTS.draft.md",
+      "line": 54,
+      "phrase": "候选缺交"
+    },
+    "observation": "candidate_incomplete/blocked_candidate0与run_invalid不出分、固定100和critical均明确。",
+    "required": "仍需真实完整L06源码→原资料→全部交付冷跑；为候选/设施失败分支建立适配。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "D02",
+    "weight": 4,
+    "critical": false,
+    "criterion": "同一程序正确处理预先公开类别的输入数值变体",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 33,
+      "phrase": "将来输入变体"
+    },
+    "observation": "硬freeze阻塞：变体范围/成本资格未冻结；当前降价仅事实映射资格。",
+    "required": "声明按每变体判可行或还判质量；预注册参考。用失效/遗憾能区分缓存策略的变体，而不强迫正确策略无意义翻转。",
+    "readiness": "variant_and_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "D03",
+    "weight": 1,
+    "critical": false,
+    "criterion": "物料/库存ledger及plan可选库存声明与实际策略的独立递推一致",
+    "public_source": {
+      "file": "OUTPUTS.draft.md",
+      "line": 9,
+      "phrase": "ledger.json"
+    },
+    "observation": "固定l06-ledger/1并纳入plan可选库存声明；原值/shape反例已独立真实CLI落D03，其余9叶保持。",
+    "required": "完整47叶grader仍缺，当前仅10叶输出projection已局部实跑；不把声明错误归缺料。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "D04",
+    "weight": 1,
+    "critical": false,
+    "criterion": "生产/装运ledger与实际决策一致",
+    "public_source": {
+      "file": "OUTPUTS.draft.md",
+      "line": 31,
+      "phrase": "order_lots、truck_on、production"
+    },
+    "observation": "固定账字段与维度公开，机械决策投影不再猜CSV列名。",
+    "required": "实现逐字段账比较，含hours/supplier_volume，明确每字段归属。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "D05",
+    "weight": 1,
+    "critical": false,
+    "criterion": "费用ledger与实际决策的完整计价一致",
+    "public_source": {
+      "file": "OUTPUTS.draft.md",
+      "line": 37,
+      "phrase": "purchase_cost、freight_cost"
+    },
+    "observation": "费用最小schema已公开。",
+    "required": "需要实际reader/聚合与错误判定，schema文案不是grader资格。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "D06",
+    "weight": 1,
+    "critical": false,
+    "criterion": "现金/应收ledger与真实时序一致",
+    "public_source": {
+      "file": "OUTPUTS.draft.md",
+      "line": 40,
+      "phrase": "周t的receivable"
+    },
+    "observation": "现金/收款/每周AR字段及公式已公开；summary财务现独立C07-11。",
+    "required": "真实lag4公式48行独立核算见receivable-schema-check；需实现projection。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "D07",
+    "weight": 2,
+    "critical": false,
+    "criterion": "来源映射使规范事实能够追溯到对应原材料对象",
+    "public_source": {
+      "file": "DATA.md",
+      "line": 26,
+      "phrase": "提供人读的来源映射"
+    },
+    "observation": "公开要求可追溯，不是隐藏要求；评分待完整参考和人评校准。 人评half已改为此叶具体部分条件；仍无真实多质量双评分校准。",
+    "required": "full已有文件+联合身份+单位，half应具体界定何种缺漏/错误仍得1分。",
+    "readiness": "full_reference_and_rater_calibration_pending",
+    "half_anchor": "四类事实中有2至3类完整准确定位，其他类缺定位；任何已定位的身份/单位错误得0",
+    "candidate_score": null
+  },
+  {
+    "id": "D08",
+    "weight": 1,
+    "critical": false,
+    "criterion": "报告的算法终态与实际观察到的终态一致",
+    "public_source": {
+      "file": "OUTPUTS.draft.md",
+      "line": 50,
+      "phrase": "无外部solver的合法算法"
+    },
+    "observation": "algorithm终态和可空native_solver已修，不强迫某库。",
+    "required": "真实日志/进程与run字段逐项对照；自写合法算法应能满分。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "D09",
+    "weight": 1,
+    "critical": false,
+    "criterion": "未得到的可行解/界以真实未知状态报告",
+    "public_source": {
+      "file": "OUTPUTS.draft.md",
+      "line": 11,
+      "phrase": "未知值明确null/unknown"
+    },
+    "observation": "未知状态要求公开，但全已知时是否自动满足及与D08/F03范围不明。",
+    "required": "按可行/界每个声明的证据归属评分；无未知事项无需虚构unknown。避免同一假最优错误重复惩罚。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "D10",
+    "weight": 1,
+    "critical": false,
+    "criterion": "运行记录准确定位本次输入、源码入口与实际参数",
+    "public_source": {
+      "file": "OUTPUTS.draft.md",
+      "line": 52,
+      "phrase": "manifest.json放在本次新输出根"
+    },
+    "observation": "outputs相对新输出根与README相对源码项目根已区分。",
+    "required": "实现解析与真实命令定位；勿假设输出必须在源码项目下。",
+    "readiness": "primitive_qualified_full_grader_pending",
+    "half_anchor": null,
+    "candidate_score": null
+  },
+  {
+    "id": "E01",
+    "weight": 2,
+    "critical": false,
+    "criterion": "基线的实际可行性与结果得到验证",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 31,
+      "phrase": "基线若不可行"
+    },
+    "observation": "可执行且真实检查基线的要求公开；零动作等弱基线也可能满足当前full字面。 人评half已改为此叶具体部分条件；仍无真实多质量双评分校准。",
+    "required": "若要经济意义需在公开稿定义比较目的；否则不得暗扣合理但不可行基线。half与补救要求需对齐。",
+    "readiness": "full_reference_and_rater_calibration_pending",
+    "half_anchor": "完整可执行基线及正确业务结论可独立验证，但缺候选本次真实执行收据",
+    "candidate_score": null
+  },
+  {
+    "id": "E02",
+    "weight": 2,
+    "critical": false,
+    "criterion": "解释一个必须提前生产的实际约束及所需库存",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 31,
+      "phrase": "为什么某些周必须提前生产"
+    },
+    "observation": "已有真实停产/需求必要事实，目标可达，无需要求复现特定计划。 人评half已改为此叶具体部分条件；仍无真实多质量双评分校准。",
+    "required": "使用具体产品/周/同周上限和必要库存四项校准full/half；不要把“实际提前”误当“必须”。",
+    "readiness": "full_reference_and_rater_calibration_pending",
+    "half_anchor": "周/产品及同周产能不足的证据正确，但未给出必需预存量；错误数量或错误必要性得0",
+    "candidate_score": null
+  },
+  {
+    "id": "E03",
+    "weight": 2,
+    "critical": false,
+    "criterion": "情景揭示后的供应动作与公开中断事实相符",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 31,
+      "phrase": "供应中断时的动作改变"
+    },
+    "observation": "要求有来源，但最优策略未必表现为预设动作变化，因果措辞易强迫故事。 人评half已改为此叶具体部分条件；仍无真实多质量双评分校准。",
+    "required": "接受正确说明约束改变但动作无需变的情况；若坚持实际flip，须先证明该要求对合格策略可达。",
+    "readiness": "full_reference_and_rater_calibration_pending",
+    "half_anchor": "正确指明中断及一个实际可行动作，但未说明与未中断情景的动作区别或可执行替代",
+    "candidate_score": null
+  },
+  {
+    "id": "E04",
+    "weight": 2,
+    "critical": false,
+    "criterion": "现金瓶颈解释与回款/支出时序一致",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 31,
+      "phrase": "现金瓶颈"
+    },
+    "observation": "有实际账可判断；不是仅靠关键词。 人评half已改为此叶具体部分条件；仍无真实多质量双评分校准。",
+    "required": "给实际最紧周/场景/金额与时序来源的具体partial anchors。",
+    "readiness": "full_reference_and_rater_calibration_pending",
+    "half_anchor": "最紧场景/周和现金数值准确，但未分解对应回款/支出来源",
+    "candidate_score": null
+  },
+  {
+    "id": "E05",
+    "weight": 2,
+    "critical": false,
+    "criterion": "主要费用来源的量化解释正确",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 31,
+      "phrase": "主要费用来源"
+    },
+    "observation": "有完整四分费用账可判断。 人评half已改为此叶具体部分条件；仍无真实多质量双评分校准。",
+    "required": "注册“主要”与比例/舍入尺度；不得要求报告使用参考特定叙述。",
+    "readiness": "full_reference_and_rater_calibration_pending",
+    "half_anchor": "最大费用分量及金额正确，但未给出比例或其动作来源定位",
+    "candidate_score": null
+  },
+  {
+    "id": "E06",
+    "weight": 2,
+    "critical": false,
+    "criterion": "另一合法策略的经济权衡得到真实验证",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 31,
+      "phrase": "完整可行替代策略"
+    },
+    "observation": "可实测替代计划要求公开。 人评half已改为此叶具体部分条件；仍无真实多质量双评分校准。",
+    "required": "明确替代相对主方案需不同动作与精确费用；不暗加必须Pareto最优、必须第三份独立策略或特定风险目标。",
+    "readiness": "full_reference_and_rater_calibration_pending",
+    "half_anchor": "另一份完整可行策略和费用已实际验证，但未解释其经济取舍；同一动作重复不算另一策略",
+    "candidate_score": null
+  },
+  {
+    "id": "F01",
+    "weight": 2,
+    "critical": false,
+    "criterion": "运营者能准确识别现在应共同承诺的动作",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 31,
+      "phrase": "共同承诺与情景后动作分开"
+    },
+    "observation": "交接准确性有公开依据。 人评half已改为此叶具体部分条件；仍无真实多质量双评分校准。",
+    "required": "以运营者能定位共同周/对象/数量/生产作full锚点；half须具体。",
+    "readiness": "full_reference_and_rater_calibration_pending",
+    "half_anchor": "至少一周完整共同采购/装运/生产动作可准确操作，其余共同周交接缺失；出现错误动作得0",
+    "candidate_score": null
+  },
+  {
+    "id": "F02",
+    "weight": 2,
+    "critical": false,
+    "criterion": "情景后行动交接与对应条件政策一致",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 5,
+      "phrase": "情景揭示后怎样行动"
+    },
+    "observation": "完全揭示scenario的条件政策有输入支持。 人评half已改为此叶具体部分条件；仍无真实多质量双评分校准。",
+    "required": "按对应分支真实动作检查；不要暗加未建模的预测/传感规则。",
+    "readiness": "full_reference_and_rater_calibration_pending",
+    "half_anchor": "至少一个揭示后分支的触发条件和完整动作定位正确，其他分支交接缺失；错误重写承诺得0",
+    "candidate_score": null
+  },
+  {
+    "id": "F03",
+    "weight": 2,
+    "critical": false,
+    "criterion": "局限/最优性措辞与可核验结果一致",
+    "public_source": {
+      "file": "TASK.draft.md",
+      "line": 25,
+      "phrase": "诚实的方法研究不等于"
+    },
+    "observation": "真实限制要求公开；与D08/D09有部分重叠。 人评half已改为此叶具体部分条件；仍无真实多质量双评分校准。",
+    "required": "保留业务含义/影响解释，原生事实归D08/D09；不新增采购稿没有的恢复交付要求。",
+    "readiness": "full_reference_and_rater_calibration_pending",
+    "half_anchor": "已得可行性/界/终态措辞准确，但没有解释这些限制对运营决策的影响",
+    "candidate_score": null
+  },
+  {
+    "id": "F04",
+    "weight": 2,
+    "critical": false,
+    "criterion": "实际图形忠实表达交付数据",
+    "public_source": {
+      "file": "OUTPUTS.draft.md",
+      "line": 12,
+      "phrase": "实际查看图形"
+    },
+    "observation": "真实图形查看是明确公开要求；尚无完整参考图/人评。 人评half已改为此叶具体部分条件；仍无真实多质量双评分校准。",
+    "required": "规定可接受语义覆盖/数据连接与half示例，不以文件存在/代码字串/自动UI断言打分。",
+    "readiness": "full_reference_and_rater_calibration_pending",
+    "half_anchor": "已实际呈现的图形数值准确可读，但单位、场景名或图例至少一类缺失；核心数据错误得0",
+    "candidate_score": null
+  },
+  {
+    "id": "F05",
+    "weight": 2,
+    "critical": false,
+    "criterion": "交接运行说明足以让另一个执行者成功重建交付",
+    "public_source": {
+      "file": "OUTPUTS.draft.md",
+      "line": 3,
+      "phrase": "依赖/构建说明"
+    },
+    "observation": "有明确交接复跑依据；D01同跑可以同时支持不同结论。 人评half已改为此叶具体部分条件；仍无真实多质量双评分校准。",
+    "required": "D01判实际计算结果，F05判按文档独立执行的可操作性；不强迫无增益重复跑两次。",
+    "readiness": "full_reference_and_rater_calibration_pending",
+    "half_anchor": "另一个执行者在补充一次未写清的依赖或命令说明后真实复建成功；不能复建得0",
+    "candidate_score": null
+  }
+]

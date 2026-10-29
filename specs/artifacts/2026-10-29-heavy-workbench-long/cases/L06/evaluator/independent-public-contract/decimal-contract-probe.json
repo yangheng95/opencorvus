@@ -1,0 +1,9 @@
+{
+  "publicly_allowed_json_number_literal": "49032.9",
+  "intended_exact_cost": "490329/10",
+  "binary_float_as_fraction": "6739030461697229/137438953472",
+  "binary_float_fraction_equals_exact": false,
+  "decimal_lexeme_as_fraction": "490329/10",
+  "decimal_lexeme_fraction_equals_exact": true,
+  "scope": "illustrates needed future JSON numeric parser semantics; no current grader bug asserted"
+}

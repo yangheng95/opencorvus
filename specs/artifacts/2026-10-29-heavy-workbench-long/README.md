@@ -33,3 +33,7 @@ L01针对Rathore等ICML2024论文《Challenges in Training PINNs: A Loss Landsca
 用户最新要求[便宜实验优先](evaluator/cheap-first/README.md)：六个自有昂贵容器已可逆暂停；先做必要条件/枚举/短程，而非同时完整训练。[九题独立审查](evaluator/nine-case-review/REVIEW.md)实跑28次旧checker并明确升级缺口。[L06](cases/L06/README.md)低成本审查发现并修正了期末/阶段仓容、输入维度/概率和严格JSON问题，仍未证明成本最优或小时级。[S06](cases/L06/smoke/README.md)真实原生完成、数学最优及两方清洁源码复跑均通过微型合同；它不计入十题，不证明重型难度。
 
 便宜接续新增[L06严格下界](cases/L06/evaluator/independent-relaxation/REVIEW.md)：完整LP .047秒，独立从输入重建1488变量/1096行并精确核算下界约46220.2662；与51263上界仍不能认证1%。[L04合成旧库迁移能力](cases/L04/README.md)已实际独立冷跑，修复共享NULL身份漏洞，4升级+2按合同中止/原库保留通过当前局部协议；两者均非冻结重型题、候选分或小时级成绩。
+
+最新[L06完整公开合同与rubric稿](cases/L06/README.md)含11CSV/设施原材料、5CLI事实映射及47叶100分草案，质量/逐叶grader/完整参考/变体尚未就绪。[不同整数搜索](cases/L06/evaluator/qualification/v2/integer-search/README.md)与独立业务复核取得新可行上界49032.9，仍未认证1%。只新增一个CPU参考界资格，真实活跃路径以长程Recall末节为准；六旧昂贵容器仍Paused。局部资格/草案不构成十题、候选分或小时级证明。
+
+该单个CPU参考任务已自然结束，独立核验成本47808/native界47380，基例1%比例约0.9033%，[终态/独立范围/基例预注册](cases/L06/README.md)单列；完整参考交付与冻结仍pending。独立完整合同审查认可设计/10叶primitive，本轮具体漏洞已修，未批准其余37叶/职业参考/变体/小时级。当前不留新增活跃长计算，不重复求解凑时长。

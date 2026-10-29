@@ -7,11 +7,14 @@ from dataclasses import dataclass
 from fractions import Fraction
 
 import numpy as np
-from scipy.optimize import milp, linprog, Bounds, LinearConstraint
+import highspy
+from scipy.optimize import linprog
 from scipy.sparse import coo_matrix, vstack
 
 from l06_input import InputError, read_json, validate_instance
 from l06_bound_certificate import evaluate_certificate
+from check_l06 import evaluate as evaluate_business
+from l06_plan import plan_from_vector
 
 
 @dataclass
@@ -151,38 +154,89 @@ def build_model(data, minimum_credit=False):
     return LinearModel(keys,upper,objective,1 if minimum_credit else data['probability_denominator'],matrix,lower_rows,upper_rows,credit_index)
 
 
-def solve(data, minimum_credit=False):
+def solve(data, minimum_credit=False, *, node_limit=None, solver_seconds=None,warm_start_plan=None):
     model=build_model(data,minimum_credit)
     keys,upper,matrix,lower_rows,upper_rows=model.keys,model.upper,model.matrix,model.lower_rows,model.upper_rows
-    index={key:i for i,key in enumerate(keys)}
     credit_index=model.credit_index
-    T,M,J,S,P=data['weeks'],len(data['raw_materials']),len(data['products']),len(data['suppliers']),len(data['plants'])
-    print(json.dumps({'event':'solving','variables':len(keys),'integer_variables':len(keys),'constraints':len(lower_rows),'nonzero_coefficients':matrix.nnz}),flush=True)
+    engine=highspy.Highs()
+    print(json.dumps({'event':'solving','solver':'highspy','version':engine.version(),'variables':len(keys),'integer_variables':len(keys),'constraints':len(lower_rows),'nonzero_coefficients':matrix.nnz}),flush=True)
+    options={'mip_rel_gap':0.0 if minimum_credit else 0.002,'output_flag':True}
+    if node_limit is not None:options['mip_max_nodes']=node_limit
+    if solver_seconds is not None:options['time_limit']=solver_seconds
+    effective={}
+    for name,value in options.items():
+        if engine.setOptionValue(name,value)!=highspy.HighsStatus.kOk:raise ValueError('native_option:'+name)
+        status,actual=engine.getOptionValue(name)
+        if status!=highspy.HighsStatus.kOk or actual!=value:raise ValueError('native_option_projection:'+name)
+        effective[name]=actual
+    lp=highspy.HighsLp()
+    lp.num_col_=len(keys);lp.num_row_=len(lower_rows)
+    lp.col_cost_=model.objective;lp.col_lower_=np.zeros(len(keys));lp.col_upper_=np.asarray(upper,dtype=float)
+    lp.row_lower_=np.asarray(lower_rows,dtype=float);lp.row_upper_=np.asarray(upper_rows,dtype=float)
+    lp.a_matrix_.format_=highspy.MatrixFormat.kColwise
+    lp.a_matrix_.start_=matrix.indptr;lp.a_matrix_.index_=matrix.indices;lp.a_matrix_.value_=matrix.data
+    lp.integrality_=[highspy.HighsVarType.kInteger]*len(keys)
+    if engine.passModel(lp)!=highspy.HighsStatus.kOk:raise ValueError('native_model_load')
+    warm_start=None
+    if warm_start_plan is not None:
+        business=evaluate_business(data,warm_start_plan)
+        vector=[]
+        fields={'q':'order_lots','truck':'truck_on','produce':'production'}
+        for key in keys:
+            kind=key[0]
+            if kind=='credit_limit':value=data['credit_limit_minor']
+            elif kind in fields:
+                value=warm_start_plan['decisions'][key[1]][fields[kind]]
+                for index_part in key[2:]:value=value[index_part]
+            else:
+                field='raw_inventory' if kind=='raw' else 'finished_inventory'
+                value=business['scenarios'][key[1]]['weeks'][key[2]][field][key[3]]
+            vector.append(value)
+        values=np.asarray(vector,dtype=float)
+        product=matrix@values
+        if any(v<0 or v>bound for v,bound in zip(vector,upper)) or any(v<lo or v>hi for v,lo,hi in zip(product,lower_rows,upper_rows)):
+            raise ValueError('warm_start_model_feasibility')
+        seed=highspy.HighsSolution();seed.col_value=values;seed.value_valid=True
+        if engine.setSolution(seed)!=highspy.HighsStatus.kOk:raise ValueError('native_warm_start')
+        actual=engine.getSolution()
+        if not actual.value_valid or list(actual.col_value)!=vector:raise ValueError('native_warm_start_projection')
+        warm_start={'business_feasible':business['business_feasible'],'business_expected_cost_minor':business['expected_cost_minor'],
+                    'model_objective':float(model.objective@values),'variables_projected':len(vector),'native_readback_matches':True}
     start = time.perf_counter()
-    result = milp(model.objective,integrality=np.ones(len(keys)),bounds=Bounds(np.zeros(len(keys)),upper),
-                  constraints=LinearConstraint(matrix,lower_rows,upper_rows),options={'mip_rel_gap':0.0 if minimum_credit else 0.002,'disp':True})
-    report = {'objective_name':'minimum_credit_minor' if minimum_credit else 'expected_operating_cost_minor','status':int(result.status),'message':result.message,'seconds':time.perf_counter()-start,
-              'objective':None if result.fun is None else float(result.fun),
-              'dual_bound':None if getattr(result,'mip_dual_bound',None) is None else float(result.mip_dual_bound),
-              'solver_gap_scaled_by_primal':None if getattr(result,'mip_gap',None) is None else float(result.mip_gap),
-              'nodes':None if getattr(result,'mip_node_count',None) is None else int(result.mip_node_count),
-              'variables':len(keys),'constraints':len(lower_rows)}
-    if result.x is None:
+    run_status=engine.run()
+    native_status=engine.getModelStatus();info=engine.getInfo();solution=engine.getSolution()
+    feasible=bool(info.primal_solution_status==highspy.kSolutionStatusFeasible and solution.value_valid)
+    nonfinite={}
+    def number(value,field):
+        if np.isfinite(value):return float(value)
+        nonfinite[field]=str(float(value));return None
+    status_enum=highspy.HighsModelStatus
+    if native_status==status_enum.kOptimal:termination='optimal_within_requested_gap'
+    elif native_status in (status_enum.kTimeLimit,status_enum.kIterationLimit,status_enum.kSolutionLimit,status_enum.kObjectiveBound,status_enum.kObjectiveTarget):termination='limited'
+    elif native_status==status_enum.kInfeasible:termination='infeasible'
+    elif native_status==status_enum.kUnbounded:termination='unbounded'
+    elif native_status==status_enum.kUnboundedOrInfeasible:termination='unbounded_or_infeasible'
+    elif native_status==status_enum.kInterrupt:termination='interrupted'
+    else:termination='solver_error_or_unknown'
+    report = {'format':'l06-native-highs-integer/1','solver':'highspy','solver_version':engine.version(),
+              'objective_name':'minimum_credit_minor' if minimum_credit else 'expected_operating_cost_minor',
+              'status':engine.modelStatusToString(native_status),'native_status_code':int(native_status),'native_run_status_code':int(run_status),
+              'termination':termination,'seconds':time.perf_counter()-start,'native_info_valid':bool(info.valid),
+              'native_primal_solution_status':int(info.primal_solution_status),'has_feasible_incumbent':feasible,
+              'objective':number(info.objective_function_value,'objective') if feasible else None,
+              'dual_bound':number(info.mip_dual_bound,'dual_bound') if info.valid else None,
+              'solver_gap_scaled_by_primal':number(info.mip_gap,'gap') if info.valid else None,
+              'nodes':int(info.mip_node_count) if info.valid else None,
+              'variables':len(keys),'constraints':len(lower_rows),'solver_options':effective,'native_nonfinite_fields':nonfinite,'warm_start':warm_start,
+              'bound_scope':'native numeric MIP estimate; not an exact rational certificate'}
+    if not feasible:
         return report,None
-    rounded = np.rint(result.x)
-    report['maximum_rounding_difference'] = float(np.max(np.abs(rounded-result.x)))
+    values=np.asarray(solution.col_value)
+    rounded = np.rint(values)
+    report['maximum_rounding_difference'] = float(np.max(np.abs(rounded-values)))
     assert report['maximum_rounding_difference']<=1e-5, report
     if minimum_credit: report['minimum_credit_limit_minor'] = int(rounded[credit_index])
-    decisions = {}
-    for scenario in data['scenarios']:
-        s = scenario['id']
-        get = lambda key: int(rounded[index[key]])
-        decisions[s] = {'order_lots':[[[get(('q',s,t,k,m)) for m in range(M)] for k in range(S)] for t in range(T)],
-                        'truck_on':[[get(('truck',s,t,k)) for k in range(S)] for t in range(T)],
-                        'production':[[[get(('produce',s,t,p,j)) for j in range(J)] for p in range(P)] for t in range(T)],
-                        'raw_inventory':[[get(('raw',s,t,m)) for m in range(M)] for t in range(T)],
-                        'finished_inventory':[[get(('fg',s,t,j)) for j in range(J)] for t in range(T)]}
-    return report,{'format':'l06-plan/1','decisions':decisions}
+    return report,plan_from_vector(data,keys,rounded)
 
 
 def solve_relaxation(data,minimum_credit=False):
@@ -223,7 +277,22 @@ def solve_relaxation(data,minimum_credit=False):
 
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,required=True);parser.add_argument('--input',type=Path,required=True);parser.add_argument('--minimum-credit',action='store_true');parser.add_argument('--mode',choices=['integer','relaxation'],default='integer');args=parser.parse_args()
+    def positive_integer(text):
+        value=int(text)
+        if value<1:raise argparse.ArgumentTypeError('positive integer required')
+        return value
+    def positive_seconds(text):
+        value=float(text)
+        if not np.isfinite(value) or value<=0:raise argparse.ArgumentTypeError('finite positive seconds required')
+        return value
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--output',type=Path,required=True);parser.add_argument('--input',type=Path,required=True)
+    parser.add_argument('--minimum-credit',action='store_true');parser.add_argument('--mode',choices=['integer','relaxation'],default='integer')
+    parser.add_argument('--node-limit',type=positive_integer);parser.add_argument('--solver-seconds',type=positive_seconds)
+    parser.add_argument('--warm-start-plan',type=Path)
+    args=parser.parse_args()
+    if args.mode!='integer' and (args.node_limit is not None or args.solver_seconds is not None or args.warm_start_plan is not None):
+        parser.error('integer solver diagnostics require --mode integer')
     args.output.mkdir(parents=True,exist_ok=False)
     try:
         data=validate_instance(read_json(args.input,'instance_invalid'))
@@ -237,7 +306,8 @@ def main():
             for name,value in proof.items():(args.output/(name+'.json')).write_text(json.dumps(value,indent=2,allow_nan=False)+'\n')
         plan=None
     else:
-        report,plan=solve(data, minimum_credit=args.minimum_credit)
+        warm=None if args.warm_start_plan is None else read_json(args.warm_start_plan,'warm_start_plan')
+        report,plan=solve(data,minimum_credit=args.minimum_credit,node_limit=args.node_limit,solver_seconds=args.solver_seconds,warm_start_plan=warm)
     (args.output/'solver.json').write_text(json.dumps(report,indent=2,allow_nan=False)+'\n')
     if plan is not None:
         (args.output/'plan.json').write_text(json.dumps(plan,indent=2)+'\n')

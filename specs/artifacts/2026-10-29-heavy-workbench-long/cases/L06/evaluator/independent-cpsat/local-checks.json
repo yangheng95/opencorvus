@@ -1,0 +1,111 @@
+[
+  {
+    "contract": "same_complete_previously_audited_integer_model",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "same_build_model_semantic_ast",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "shared_projection_source_same_in_both_snapshots",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "hint_exact_integer_box_rows_and_objective",
+    "passed": true,
+    "detail": {
+      "objective": "51263"
+    }
+  },
+  {
+    "contract": "cp_saved_vector_exact_integer_box_rows_objective",
+    "passed": true,
+    "detail": {
+      "objective": "490329/10"
+    }
+  },
+  {
+    "contract": "actual_shared_projection_of_saved_cp_vector_matches_plan",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "cpsat-full.independent_prefix_business",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "cpsat-full.independent_key_vector_box_all_rows_and_cost",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "saved_cp_vector_matches_independently_derived_complete_vector",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "cross-seed.independent_prefix_business",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "cross-seed.independent_key_vector_box_all_rows_and_cost",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "CP_integer_denominator_and_status",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "CP_report_objective_matches_exact_vector",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "CP_numeric_bound_scaling",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "CP_declared_parameters",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "actual_native_CP_parameter_log",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "CP_native_response_corresponds_to_result",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "cross_seed_limited_feasible_status",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "cross_seed_requested_options",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "cross_seed_objective_and_numeric_bound",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "contract": "cross_seed_warm_projected_1488",
+    "passed": true,
+    "detail": null
+  }
+]

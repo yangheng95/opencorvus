@@ -1,6 +1,7 @@
 """Single input-integrity contract; contains no optimization/plan equations."""
 import json
 import math
+from decimal import Decimal,DecimalException
 from pathlib import Path
 
 
@@ -10,7 +11,7 @@ class InputError(ValueError):
         super().__init__(f'{code}: {path}: {detail}')
 
 
-def read_json(path, code):
+def read_json(path, code, *, decimal_numbers=False):
     def pairs(values):
         result={}
         for key,value in values:
@@ -19,6 +20,10 @@ def read_json(path, code):
         return result
     def constant(value):raise InputError(code,str(path),f'non-JSON number {value}')
     def finite_float(value):
+        if decimal_numbers:
+            number=Decimal(value)
+            if not number.is_finite():raise InputError(code,str(path),f'non-finite numeric literal {value}')
+            return number
         number=float(value)
         if not math.isfinite(number):raise InputError(code,str(path),f'non-finite numeric literal {value}')
         return number
@@ -26,7 +31,7 @@ def read_json(path, code):
         return json.loads(Path(path).read_text(encoding='utf8'),object_pairs_hook=pairs,parse_constant=constant,parse_float=finite_float)
     except InputError:
         raise
-    except (OSError,UnicodeError,ValueError) as error:
+    except (OSError,UnicodeError,ValueError,DecimalException) as error:
         raise InputError(code,str(path),str(error)) from error
 
 

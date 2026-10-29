@@ -1,0 +1,201 @@
+{
+  "result": "local_qualification_passed",
+  "final_report": "REVIEW.md",
+  "execution_receipt_gap": "captured cpsat-full-command.json has start/end/session_id but no completion/exit_code; do not infer or backfill terminal process status",
+  "scope": "fixed-model CP-SAT/cross-seed oracle research qualification only",
+  "substantive_blockers_in_reviewed_scope": [],
+  "checks": 21,
+  "all_checks_passed": true,
+  "branches": {
+    "cpsat-full": {
+      "actual_checker_receipt": {
+        "argv": [
+          "C:/Python314/python.exe",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\l06-cpsat-independent-review-20261029\\source-snapshot\\executed-source-cpsat\\check_l06.py",
+          "--input",
+          "D:\\opencorvus-benchmark-runs\\l06-cpsat-independent-review-20261029\\source-snapshot\\frozen-input.json",
+          "--plan",
+          "D:\\opencorvus-benchmark-runs\\l06-cpsat-independent-review-20261029\\source-snapshot\\cpsat-full\\plan.json",
+          "--out",
+          "D:\\opencorvus-benchmark-runs\\l06-cpsat-independent-review-20261029\\cpsat-full\\business-check.json"
+        ],
+        "cwd": "D:\\opencorvus-benchmark-runs\\l06-cpsat-independent-review-20261029",
+        "started_utc": "2026-10-29T14:08:57.643471+00:00",
+        "seconds": 0.14301800029352307,
+        "exit_code": 0
+      },
+      "independent_prefix": {
+        "scope": "v2 full independent prefix/physical-stage/financial arithmetic, not global optimization",
+        "all_checks_passed": true,
+        "check_count": 925,
+        "seconds": 0.006991800386458635,
+        "expected_cost_exact": "490329/10",
+        "caps": {
+          "raw": 240,
+          "finished": 100
+        },
+        "credit5369_is_only_feasible_upper_bound": true,
+        "scenarios": {
+          "base": {
+            "total_cost_minor": 48507,
+            "minimum_cash_minor": -5369,
+            "terminal_cash_minor": 30843,
+            "terminal_receivable_minor": 24150,
+            "raw_peak": [
+              214,
+              9
+            ],
+            "finished_peak": [
+              92,
+              10
+            ]
+          },
+          "supplier_disruption": {
+            "total_cost_minor": 49428,
+            "minimum_cash_minor": -5369,
+            "terminal_cash_minor": 29922,
+            "terminal_receivable_minor": 24150,
+            "raw_peak": [
+              215,
+              7
+            ],
+            "finished_peak": [
+              95,
+              5
+            ]
+          },
+          "demand_shift": {
+            "total_cost_minor": 49755,
+            "minimum_cash_minor": -5369,
+            "terminal_cash_minor": 31755,
+            "terminal_receivable_minor": 25230,
+            "raw_peak": [
+              207,
+              7
+            ],
+            "finished_peak": [
+              91,
+              5
+            ]
+          }
+        }
+      },
+      "mapped_columns": 1488,
+      "mapped_rows": 1096,
+      "objective_exact": "490329/10"
+    },
+    "cross-seed": {
+      "actual_checker_receipt": {
+        "argv": [
+          "C:/Python314/python.exe",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\l06-cpsat-independent-review-20261029\\source-snapshot\\executed-source-cross-seed\\check_l06.py",
+          "--input",
+          "D:\\opencorvus-benchmark-runs\\l06-cpsat-independent-review-20261029\\source-snapshot\\frozen-input.json",
+          "--plan",
+          "D:\\opencorvus-benchmark-runs\\l06-cpsat-independent-review-20261029\\source-snapshot\\cross-seed\\plan.json",
+          "--out",
+          "D:\\opencorvus-benchmark-runs\\l06-cpsat-independent-review-20261029\\cross-seed\\business-check.json"
+        ],
+        "cwd": "D:\\opencorvus-benchmark-runs\\l06-cpsat-independent-review-20261029",
+        "started_utc": "2026-10-29T14:08:57.840928+00:00",
+        "seconds": 0.14300249982625246,
+        "exit_code": 0
+      },
+      "independent_prefix": {
+        "scope": "v2 full independent prefix/physical-stage/financial arithmetic, not global optimization",
+        "all_checks_passed": true,
+        "check_count": 925,
+        "seconds": 0.006977099925279617,
+        "expected_cost_exact": "490329/10",
+        "caps": {
+          "raw": 240,
+          "finished": 100
+        },
+        "credit5369_is_only_feasible_upper_bound": true,
+        "scenarios": {
+          "base": {
+            "total_cost_minor": 48507,
+            "minimum_cash_minor": -5369,
+            "terminal_cash_minor": 30843,
+            "terminal_receivable_minor": 24150,
+            "raw_peak": [
+              214,
+              9
+            ],
+            "finished_peak": [
+              92,
+              10
+            ]
+          },
+          "supplier_disruption": {
+            "total_cost_minor": 49428,
+            "minimum_cash_minor": -5369,
+            "terminal_cash_minor": 29922,
+            "terminal_receivable_minor": 24150,
+            "raw_peak": [
+              215,
+              7
+            ],
+            "finished_peak": [
+              95,
+              5
+            ]
+          },
+          "demand_shift": {
+            "total_cost_minor": 49755,
+            "minimum_cash_minor": -5369,
+            "terminal_cash_minor": 31755,
+            "terminal_receivable_minor": 25230,
+            "raw_peak": [
+              207,
+              7
+            ],
+            "finished_peak": [
+              91,
+              5
+            ]
+          }
+        }
+      },
+      "mapped_columns": 1488,
+      "mapped_rows": 1096,
+      "objective_exact": "490329/10"
+    }
+  },
+  "bounds": {
+    "strict_lp_objective_lattice_lower_exact": "462203/10",
+    "strict_reference": "previously independently certified exact LP proof plus integral objective lattice; not a new solve",
+    "CP_numeric_bound": 47230.3,
+    "cross_HiGHS_numeric_bound": 47275.9,
+    "previous_HiGHS_numeric_bound": 47281,
+    "native_bounds_are_exact_certificates": false,
+    "new_independent_business_upper_exact": "490329/10",
+    "previous_upper": 51263,
+    "upper_improvement_exact": "22301/10",
+    "strict_gap_over_lower_percent": 6.085204985688106,
+    "strict_gap_over_upper_percent": 5.736148585949434,
+    "CP_numeric_gap_over_upper_percent": 3.6763071325579357,
+    "cross_numeric_gap_over_upper_percent": 3.5833083501077847,
+    "one_percent_certified": false,
+    "true_integer_optimum_known": false,
+    "cross_seed_actions_equal_CP": true,
+    "cross_seed_upper_improved": false
+  },
+  "CP_native_seconds": 30.01821606233716,
+  "CP_workers": 8,
+  "cross_HiGHS_native_seconds": 60.009352726861835,
+  "cross_HiGHS_nodes": 7252,
+  "solver_calls_by_reviewer": 0,
+  "Provider_calls": 0,
+  "GPU_work": false,
+  "containers_started_or_resumed": false,
+  "delegations": 0,
+  "heavy_freeze_approved": false,
+  "hours_validated": false,
+  "candidate_score_issued": false,
+  "execution_receipt_gap_status": "resolved_from_original_persisted_call_and_response",
+  "execution_receipt_gap_addendum": "terminal-addendum/ADDENDUM.md",
+  "CP_original_command_exit_code": 0
+}

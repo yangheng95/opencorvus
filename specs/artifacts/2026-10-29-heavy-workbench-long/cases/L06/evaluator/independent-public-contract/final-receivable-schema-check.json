@@ -1,0 +1,363 @@
+{
+  "checks": [
+    {
+      "scenario": "base",
+      "week": 0,
+      "formula_receivable": 5850,
+      "delivered_less_actual_collections": 5850,
+      "passed": true
+    },
+    {
+      "scenario": "base",
+      "week": 1,
+      "formula_receivable": 11900,
+      "delivered_less_actual_collections": 11900,
+      "passed": true
+    },
+    {
+      "scenario": "base",
+      "week": 2,
+      "formula_receivable": 18000,
+      "delivered_less_actual_collections": 18000,
+      "passed": true
+    },
+    {
+      "scenario": "base",
+      "week": 3,
+      "formula_receivable": 24150,
+      "delivered_less_actual_collections": 24150,
+      "passed": true
+    },
+    {
+      "scenario": "base",
+      "week": 4,
+      "formula_receivable": 24350,
+      "delivered_less_actual_collections": 24350,
+      "passed": true
+    },
+    {
+      "scenario": "base",
+      "week": 5,
+      "formula_receivable": 24150,
+      "delivered_less_actual_collections": 24150,
+      "passed": true
+    },
+    {
+      "scenario": "base",
+      "week": 6,
+      "formula_receivable": 24150,
+      "delivered_less_actual_collections": 24150,
+      "passed": true
+    },
+    {
+      "scenario": "base",
+      "week": 7,
+      "formula_receivable": 24050,
+      "delivered_less_actual_collections": 24050,
+      "passed": true
+    },
+    {
+      "scenario": "base",
+      "week": 8,
+      "formula_receivable": 24150,
+      "delivered_less_actual_collections": 24150,
+      "passed": true
+    },
+    {
+      "scenario": "base",
+      "week": 9,
+      "formula_receivable": 24150,
+      "delivered_less_actual_collections": 24150,
+      "passed": true
+    },
+    {
+      "scenario": "base",
+      "week": 10,
+      "formula_receivable": 24350,
+      "delivered_less_actual_collections": 24350,
+      "passed": true
+    },
+    {
+      "scenario": "base",
+      "week": 11,
+      "formula_receivable": 24150,
+      "delivered_less_actual_collections": 24150,
+      "passed": true
+    },
+    {
+      "scenario": "base",
+      "week": 12,
+      "formula_receivable": 23850,
+      "delivered_less_actual_collections": 23850,
+      "passed": true
+    },
+    {
+      "scenario": "base",
+      "week": 13,
+      "formula_receivable": 24350,
+      "delivered_less_actual_collections": 24350,
+      "passed": true
+    },
+    {
+      "scenario": "base",
+      "week": 14,
+      "formula_receivable": 24150,
+      "delivered_less_actual_collections": 24150,
+      "passed": true
+    },
+    {
+      "scenario": "base",
+      "week": 15,
+      "formula_receivable": 24150,
+      "delivered_less_actual_collections": 24150,
+      "passed": true
+    },
+    {
+      "scenario": "base",
+      "field": "final_receivable",
+      "formula": 24150,
+      "actual_previous_independently_checked_summary": 24150,
+      "passed": true
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 0,
+      "formula_receivable": 5850,
+      "delivered_less_actual_collections": 5850,
+      "passed": true
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 1,
+      "formula_receivable": 11900,
+      "delivered_less_actual_collections": 11900,
+      "passed": true
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 2,
+      "formula_receivable": 18000,
+      "delivered_less_actual_collections": 18000,
+      "passed": true
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 3,
+      "formula_receivable": 24150,
+      "delivered_less_actual_collections": 24150,
+      "passed": true
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 4,
+      "formula_receivable": 24350,
+      "delivered_less_actual_collections": 24350,
+      "passed": true
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 5,
+      "formula_receivable": 24150,
+      "delivered_less_actual_collections": 24150,
+      "passed": true
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 6,
+      "formula_receivable": 24150,
+      "delivered_less_actual_collections": 24150,
+      "passed": true
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 7,
+      "formula_receivable": 24050,
+      "delivered_less_actual_collections": 24050,
+      "passed": true
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 8,
+      "formula_receivable": 24150,
+      "delivered_less_actual_collections": 24150,
+      "passed": true
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 9,
+      "formula_receivable": 24150,
+      "delivered_less_actual_collections": 24150,
+      "passed": true
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 10,
+      "formula_receivable": 24350,
+      "delivered_less_actual_collections": 24350,
+      "passed": true
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 11,
+      "formula_receivable": 24150,
+      "delivered_less_actual_collections": 24150,
+      "passed": true
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 12,
+      "formula_receivable": 23850,
+      "delivered_less_actual_collections": 23850,
+      "passed": true
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 13,
+      "formula_receivable": 24350,
+      "delivered_less_actual_collections": 24350,
+      "passed": true
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 14,
+      "formula_receivable": 24150,
+      "delivered_less_actual_collections": 24150,
+      "passed": true
+    },
+    {
+      "scenario": "supplier_disruption",
+      "week": 15,
+      "formula_receivable": 24150,
+      "delivered_less_actual_collections": 24150,
+      "passed": true
+    },
+    {
+      "scenario": "supplier_disruption",
+      "field": "final_receivable",
+      "formula": 24150,
+      "actual_previous_independently_checked_summary": 24150,
+      "passed": true
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 0,
+      "formula_receivable": 5850,
+      "delivered_less_actual_collections": 5850,
+      "passed": true
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 1,
+      "formula_receivable": 11900,
+      "delivered_less_actual_collections": 11900,
+      "passed": true
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 2,
+      "formula_receivable": 18000,
+      "delivered_less_actual_collections": 18000,
+      "passed": true
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 3,
+      "formula_receivable": 24150,
+      "delivered_less_actual_collections": 24150,
+      "passed": true
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 4,
+      "formula_receivable": 24620,
+      "delivered_less_actual_collections": 24620,
+      "passed": true
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 5,
+      "formula_receivable": 24690,
+      "delivered_less_actual_collections": 24690,
+      "passed": true
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 6,
+      "formula_receivable": 24960,
+      "delivered_less_actual_collections": 24960,
+      "passed": true
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 7,
+      "formula_receivable": 25130,
+      "delivered_less_actual_collections": 25130,
+      "passed": true
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 8,
+      "formula_receivable": 25230,
+      "delivered_less_actual_collections": 25230,
+      "passed": true
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 9,
+      "formula_receivable": 25230,
+      "delivered_less_actual_collections": 25230,
+      "passed": true
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 10,
+      "formula_receivable": 25430,
+      "delivered_less_actual_collections": 25430,
+      "passed": true
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 11,
+      "formula_receivable": 25230,
+      "delivered_less_actual_collections": 25230,
+      "passed": true
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 12,
+      "formula_receivable": 24930,
+      "delivered_less_actual_collections": 24930,
+      "passed": true
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 13,
+      "formula_receivable": 25430,
+      "delivered_less_actual_collections": 25430,
+      "passed": true
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 14,
+      "formula_receivable": 25230,
+      "delivered_less_actual_collections": 25230,
+      "passed": true
+    },
+    {
+      "scenario": "demand_shift",
+      "week": 15,
+      "formula_receivable": 25230,
+      "delivered_less_actual_collections": 25230,
+      "passed": true
+    },
+    {
+      "scenario": "demand_shift",
+      "field": "final_receivable",
+      "formula": 25230,
+      "actual_previous_independently_checked_summary": 25230,
+      "passed": true
+    }
+  ],
+  "all_passed": true,
+  "scope": "new public formula reviewed against demand minus real collections; no new solver/candidate run"
+}

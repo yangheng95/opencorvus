@@ -1,0 +1,46 @@
+{
+  "scope": "bounded evaluator mathematical diagnostics, no candidate scores",
+  "strict_rational_lp_lower": "577753327609889925273/12500000000000000",
+  "integer_objective_lattice_lower": "462203/10",
+  "best_independently_checked_upper_main": "490329/10",
+  "one_percent_qualified": false,
+  "experiments": [
+    {
+      "case": "native-full",
+      "native_status": "Solution limit reached",
+      "seconds": 4.08404965698719,
+      "has_feasible_incumbent": false,
+      "business_feasible": null,
+      "exact_feasible_cost": null,
+      "native_numeric_lower": 47039.5
+    },
+    {
+      "case": "warm-full",
+      "native_status": "Time limit reached",
+      "seconds": 30.007902392651886,
+      "has_feasible_incumbent": true,
+      "business_feasible": true,
+      "exact_feasible_cost": "51263",
+      "native_numeric_lower": 47281.0
+    },
+    {
+      "case": "cpsat-full",
+      "native_status": "FEASIBLE",
+      "seconds": 30.01821606233716,
+      "has_feasible_incumbent": true,
+      "business_feasible": true,
+      "exact_feasible_cost": "490329/10",
+      "native_numeric_lower": 47230.3
+    },
+    {
+      "case": "cross-seed",
+      "native_status": "Time limit reached",
+      "seconds": 60.009352726861835,
+      "has_feasible_incumbent": true,
+      "business_feasible": true,
+      "exact_feasible_cost": "490329/10",
+      "native_numeric_lower": 47275.9
+    }
+  ],
+  "further_search_automatically_extended": false
+}

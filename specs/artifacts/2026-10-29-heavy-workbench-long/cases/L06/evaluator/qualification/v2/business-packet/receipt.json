@@ -1,0 +1,107 @@
+{
+  "status": "passed",
+  "actual_cli_commands": 5,
+  "full_business_projection_equal": true,
+  "changed_price": {
+    "supplier": "A",
+    "raw": "R0",
+    "before": 25,
+    "after": 24
+  },
+  "reordered_catalog_projection": true,
+  "duplicate_key_error": {
+    "status": "invalid",
+    "error": "packet_invalid",
+    "where": "supplier_quotes",
+    "detail": "duplicate business key ('A', 'R0')"
+  },
+  "seconds": 1.4209229000844061,
+  "scope": "input-fact qualification only; no perturbation cost optimum, formal benchmark score or hours claimed",
+  "executions": [
+    {
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\l06_packet.py",
+        "--mode",
+        "export",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\inputs\\full.json",
+        "--output",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\business-packet-qualification\\packet"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"status\": \"completed\", \"mode\": \"export\", \"output\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-procurement-qualification-20261029\\\\v2\\\\business-packet-qualification\\\\packet\"}\n",
+      "stderr": "",
+      "seconds": 0.20182120008394122
+    },
+    {
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\l06_packet.py",
+        "--mode",
+        "read",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\business-packet-qualification\\packet",
+        "--output",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\business-packet-qualification\\normalized.json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"status\": \"completed\", \"mode\": \"read\", \"output\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-procurement-qualification-20261029\\\\v2\\\\business-packet-qualification\\\\normalized.json\"}\n",
+      "stderr": "",
+      "seconds": 0.2990084998309612
+    },
+    {
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\l06_packet.py",
+        "--mode",
+        "read",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\business-packet-qualification\\quote-change",
+        "--output",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\business-packet-qualification\\quote-change-normalized.json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"status\": \"completed\", \"mode\": \"read\", \"output\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-procurement-qualification-20261029\\\\v2\\\\business-packet-qualification\\\\quote-change-normalized.json\"}\n",
+      "stderr": "",
+      "seconds": 0.40069109993055463
+    },
+    {
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\l06_packet.py",
+        "--mode",
+        "read",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\business-packet-qualification\\index-order",
+        "--output",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\business-packet-qualification\\index-order-normalized.json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"status\": \"completed\", \"mode\": \"read\", \"output\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-procurement-qualification-20261029\\\\v2\\\\business-packet-qualification\\\\index-order-normalized.json\"}\n",
+      "stderr": "",
+      "seconds": 0.2050448996014893
+    },
+    {
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\l06_packet.py",
+        "--mode",
+        "read",
+        "--input",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\business-packet-qualification\\duplicate-quote",
+        "--output",
+        "D:\\opencorvus-benchmark-runs\\l06-procurement-qualification-20261029\\v2\\business-packet-qualification\\duplicate-normalized.json"
+      ],
+      "exit_code": 2,
+      "stdout": "{\"status\": \"invalid\", \"error\": \"packet_invalid\", \"where\": \"supplier_quotes\", \"detail\": \"duplicate business key ('A', 'R0')\"}\n",
+      "stderr": "",
+      "seconds": 0.2538963998667896
+    }
+  ]
+}

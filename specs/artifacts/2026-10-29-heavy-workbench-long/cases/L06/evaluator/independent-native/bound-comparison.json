@@ -1,0 +1,15 @@
+{
+  "strict_exact_lp_bound": "577753327609889925273/12500000000000000",
+  "strict_lp_objective_lattice_bound": "46220.3",
+  "strict_bound_previously_independently_certified_not_resolved": true,
+  "native_root_numeric_bound": 47039.5,
+  "native_warm_numeric_bound": 47281.0,
+  "native_numeric_bounds_are_exact_certificates": false,
+  "independent_business_feasible_upper": "51263",
+  "upper_improved": false,
+  "strict_gap_over_lower_percent": 10.910222300384905,
+  "native_numeric_gap_over_primal_percent": 7.767785732399586,
+  "native_numeric_gap_over_dual_percent": 8.42198769061568,
+  "one_percent_certified": false,
+  "true_integer_optimum_known": false
+}
