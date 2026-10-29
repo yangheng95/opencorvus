@@ -1,0 +1,21 @@
+{
+  "purpose": "evaluator numeric and environment qualification only; not a candidate run",
+  "status": "passed local numerical paths; long case not frozen",
+  "numpyFocusedTests": 15,
+  "torchFocusedTests": 3,
+  "actualGpuProblems": [
+    "convection",
+    "reaction",
+    "wave"
+  ],
+  "components": [
+    "total",
+    "residual",
+    "constraint"
+  ],
+  "scienceImageId": "sha256:366454c0a7b7f023131af29ec68696859c8d39f1a1b2a3a61e32c35ff03ae9dc",
+  "cudaDevice": "RTX5090",
+  "candidateHoursValidated": false,
+  "nncgLateSmallDampingValidated": false,
+  "originalPaperReplicationValidated": false
+}

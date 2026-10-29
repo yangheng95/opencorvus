@@ -1,0 +1,15 @@
+{
+  "label": "numpy-boundaries-and-deep-jets",
+  "started_at_utc": "2026-10-29T06:30:24.021127+00:00",
+  "elapsed_seconds": 0.841004999820143,
+  "command_argv": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\independent-review\\reproduce_numpy_boundaries.py"
+  ],
+  "cwd": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\independent-review",
+  "exit_code": 0,
+  "stdout": "receipts/numpy-boundaries-and-deep-jets.stdout.txt",
+  "stderr": "receipts/numpy-boundaries-and-deep-jets.stderr.txt",
+  "provenance": "fresh execution by independent reviewer, not candidate execution"
+}

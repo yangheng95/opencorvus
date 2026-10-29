@@ -1,0 +1,15 @@
+{
+  "label": "numpy-tests",
+  "started_at_utc": "2026-10-29T06:30:17.972496+00:00",
+  "elapsed_seconds": 1.6230415999889374,
+  "command_argv": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\independent-review\\reviewed-source\\script\\benchmark\\test_pinn_numeric_check.py"
+  ],
+  "cwd": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\independent-review",
+  "exit_code": 0,
+  "stdout": "receipts/numpy-tests.stdout.txt",
+  "stderr": "receipts/numpy-tests.stderr.txt",
+  "provenance": "fresh execution by independent reviewer, not candidate execution"
+}

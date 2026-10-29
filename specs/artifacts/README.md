@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [长程论文复现资格与审查稿](2026-10-29-heavy-workbench-long/README.md)：真实GPU/独立数值资格、论文原件、19配置合同和未冻结rubric，未取得候选小时级成绩。
+
 - [2026-10-29-text-attachment-history](2026-10-29-text-attachment-history/README.md)：23张真实发送/历史回看原图、指定模型流式请求、原件下载与数据/运行结算。
 
 - [H05横向对照原件](2026-10-29-heavy-workbench-cross-system/README.md)：Codex源码/报告、两份真实复跑、16叶独立审查及CLI基础设施错误原件。

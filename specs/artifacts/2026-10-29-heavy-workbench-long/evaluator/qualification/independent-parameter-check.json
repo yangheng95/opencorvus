@@ -1,0 +1,212 @@
+[
+  {
+    "problem": "convection",
+    "device": "cuda",
+    "torch": "2.7.1+cu128",
+    "independent_numpy": {
+      "problem": "convection",
+      "residual_points": 10000,
+      "constraint_count": 358,
+      "evaluation_points": 8385,
+      "residual_loss": 0.00554806096186333,
+      "constraint_loss": 0.16397101229950836,
+      "total_loss": 0.1695190732613717,
+      "l2re": 1.2488920889301904,
+      "parameter_count": 20601
+    },
+    "gradient_inf": 0.09566835328853912,
+    "gradient_l2": 0.39953262440695436,
+    "directional_gradient": 0.0016571230708313407,
+    "finite_difference_directional_gradient": 0.0016571230720963113,
+    "hvp_l2": 9.583920289508342,
+    "finite_difference_hvp_relative_error": 3.9554540231735323e-10,
+    "spectrum": {
+      "steps": 30,
+      "dimension": 20601,
+      "pairs": [
+        {
+          "value": -1.4019421163233725,
+          "explicit_ritz_residual": 1.2800508786852134e-07
+        },
+        {
+          "value": -1.2290593487341515,
+          "explicit_ritz_residual": 5.8411952860088826e-05
+        },
+        {
+          "value": -1.0503104630970168,
+          "explicit_ritz_residual": 0.0022047495218854374
+        },
+        {
+          "value": -0.9686846947134451,
+          "explicit_ritz_residual": 0.043325529459113214
+        },
+        {
+          "value": -0.8922528507130477,
+          "explicit_ritz_residual": 0.07053526001971167
+        },
+        {
+          "value": 5.410559938796299,
+          "explicit_ritz_residual": 6.277295260232846e-13
+        },
+        {
+          "value": 10.289925924556842,
+          "explicit_ritz_residual": 1.4707626827086474e-12
+        },
+        {
+          "value": 19.845709027278165,
+          "explicit_ritz_residual": 1.5330409524456464e-12
+        },
+        {
+          "value": 483.729955405801,
+          "explicit_ritz_residual": 1.8755215378476394e-12
+        },
+        {
+          "value": 5146.359964868651,
+          "explicit_ritz_residual": 1.8611835170895916e-11
+        }
+      ],
+      "interpretation": "finite Krylov Ritz estimates; not the full spectrum or a certified condition number"
+    },
+    "elapsed_seconds": 3.5209910650737584
+  },
+  {
+    "problem": "reaction",
+    "device": "cuda",
+    "torch": "2.7.1+cu128",
+    "independent_numpy": {
+      "problem": "reaction",
+      "residual_points": 10000,
+      "constraint_count": 358,
+      "evaluation_points": 8385,
+      "residual_loss": 0.0038011700828309556,
+      "constraint_loss": 0.07211454704755108,
+      "total_loss": 0.07591571713038203,
+      "l2re": 0.9933269695894871,
+      "parameter_count": 20601
+    },
+    "gradient_inf": 0.0417088850188142,
+    "gradient_l2": 0.24286205256888543,
+    "directional_gradient": 0.001095583581396044,
+    "finite_difference_directional_gradient": 0.0010955835821890858,
+    "hvp_l2": 1.4846979122159154,
+    "finite_difference_hvp_relative_error": 3.93277788475787e-10,
+    "spectrum": {
+      "steps": 30,
+      "dimension": 20601,
+      "pairs": [
+        {
+          "value": -0.6609972656218056,
+          "explicit_ritz_residual": 3.424291160967351e-07
+        },
+        {
+          "value": -0.5744091766453944,
+          "explicit_ritz_residual": 9.495493498117726e-05
+        },
+        {
+          "value": -0.5169866293949219,
+          "explicit_ritz_residual": 0.00748216660859433
+        },
+        {
+          "value": -0.5029388929462181,
+          "explicit_ritz_residual": 0.00780223932244636
+        },
+        {
+          "value": -0.45426830430899473,
+          "explicit_ritz_residual": 0.024704324153381283
+        },
+        {
+          "value": 0.6859111005949129,
+          "explicit_ritz_residual": 8.119142972292333e-07
+        },
+        {
+          "value": 3.069580427906853,
+          "explicit_ritz_residual": 1.4495800664500795e-13
+        },
+        {
+          "value": 9.497669993903827,
+          "explicit_ritz_residual": 1.7494697357480175e-13
+        },
+        {
+          "value": 34.924327126522975,
+          "explicit_ritz_residual": 2.597983559404814e-13
+        },
+        {
+          "value": 894.7051752725041,
+          "explicit_ritz_residual": 2.822829346620183e-12
+        }
+      ],
+      "interpretation": "finite Krylov Ritz estimates; not the full spectrum or a certified condition number"
+    },
+    "elapsed_seconds": 2.5552551317960024
+  },
+  {
+    "problem": "wave",
+    "device": "cuda",
+    "torch": "2.7.1+cu128",
+    "independent_numpy": {
+      "problem": "wave",
+      "residual_points": 10000,
+      "constraint_count": 716,
+      "evaluation_points": 8385,
+      "residual_loss": 0.0003632017014719291,
+      "constraint_loss": 0.03461609399562278,
+      "total_loss": 0.03497929569709471,
+      "l2re": 1.096395094356832,
+      "parameter_count": 20601
+    },
+    "gradient_inf": 0.008882231741885762,
+    "gradient_l2": 0.0590951823211775,
+    "directional_gradient": 0.0004698900101675206,
+    "finite_difference_directional_gradient": 0.00046989001058206353,
+    "hvp_l2": 2.6608543668823947,
+    "finite_difference_hvp_relative_error": 4.0755637197042686e-11,
+    "spectrum": {
+      "steps": 30,
+      "dimension": 20601,
+      "pairs": [
+        {
+          "value": -0.06718684413574917,
+          "explicit_ritz_residual": 0.002610073375894882
+        },
+        {
+          "value": -0.05913886839135779,
+          "explicit_ritz_residual": 0.005476067560227136
+        },
+        {
+          "value": -0.05070087744210203,
+          "explicit_ritz_residual": 0.005257908998474832
+        },
+        {
+          "value": -0.0390664639185496,
+          "explicit_ritz_residual": 0.008874984233741187
+        },
+        {
+          "value": -0.026590119601246395,
+          "explicit_ritz_residual": 0.010254410396131201
+        },
+        {
+          "value": 9.141807805400566,
+          "explicit_ritz_residual": 1.6685854073827357e-14
+        },
+        {
+          "value": 19.09040209181126,
+          "explicit_ritz_residual": 1.267188535954305e-13
+        },
+        {
+          "value": 35.70935994584805,
+          "explicit_ritz_residual": 9.364010276942433e-14
+        },
+        {
+          "value": 79.01913032150813,
+          "explicit_ritz_residual": 2.517622731329079e-13
+        },
+        {
+          "value": 228.56735708296497,
+          "explicit_ritz_residual": 6.986323441024507e-13
+        }
+      ],
+      "interpretation": "finite Krylov Ritz estimates; not the full spectrum or a certified condition number"
+    },
+    "elapsed_seconds": 5.3367719440720975
+  }
+]

@@ -1,0 +1,48 @@
+{
+  "captured_at_utc": "2026-10-29T06:30:17.971498+00:00",
+  "purpose": "auditable reviewed-source snapshot; no digest used as a functional correctness gate",
+  "files": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\script\\benchmark\\pinn_numeric_check.py",
+      "snapshot": "reviewed-source\\script\\benchmark\\pinn_numeric_check.py",
+      "bytes": 8603,
+      "copy_is_byte_equal_at_capture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\script\\benchmark\\test_pinn_numeric_check.py",
+      "snapshot": "reviewed-source\\script\\benchmark\\test_pinn_numeric_check.py",
+      "bytes": 8263,
+      "copy_is_byte_equal_at_capture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\script\\benchmark\\pinn_torch_check.py",
+      "snapshot": "reviewed-source\\script\\benchmark\\pinn_torch_check.py",
+      "bytes": 9567,
+      "copy_is_byte_equal_at_capture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\script\\benchmark\\test_pinn_torch_check.py",
+      "snapshot": "reviewed-source\\script\\benchmark\\test_pinn_torch_check.py",
+      "bytes": 2803,
+      "copy_is_byte_equal_at_capture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\public\\TASK.md",
+      "snapshot": "reviewed-source\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\public\\TASK.md",
+      "bytes": 14355,
+      "copy_is_byte_equal_at_capture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\public\\profile.json",
+      "snapshot": "reviewed-source\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\public\\profile.json",
+      "bytes": 7036,
+      "copy_is_byte_equal_at_capture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\records\\2026-10\\2026-10-29-heavy-workbench-long.md",
+      "snapshot": "reviewed-source\\specs\\records\\2026-10\\2026-10-29-heavy-workbench-long.md",
+      "bytes": 12259,
+      "copy_is_byte_equal_at_capture": true
+    }
+  ]
+}

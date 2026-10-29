@@ -1,0 +1,35 @@
+{
+  "upstreamCommit": "b78dab1da774a6456b1ed9c48c9ff194ee3ff36d",
+  "files": [
+    {
+      "file": "config.yaml",
+      "url": "https://raw.githubusercontent.com/openai/frontier-evals/b78dab1da774a6456b1ed9c48c9ff194ee3ff36d/project/paperbench/data/papers/pinn/config.yaml",
+      "bytes": 77,
+      "gitLfsIdentity": null
+    },
+    {
+      "file": "addendum.md",
+      "url": "https://media.githubusercontent.com/media/openai/frontier-evals/b78dab1da774a6456b1ed9c48c9ff194ee3ff36d/project/paperbench/data/papers/pinn/addendum.md",
+      "bytes": 1481,
+      "gitLfsIdentity": "76fcd5372f61bf1bb038d8d944119d1817a416d6579ebfc27a64626d6b628d96"
+    },
+    {
+      "file": "blacklist.txt",
+      "url": "https://raw.githubusercontent.com/openai/frontier-evals/b78dab1da774a6456b1ed9c48c9ff194ee3ff36d/project/paperbench/data/papers/pinn/blacklist.txt",
+      "bytes": 48,
+      "gitLfsIdentity": null
+    },
+    {
+      "file": "paper.md",
+      "url": "https://media.githubusercontent.com/media/openai/frontier-evals/b78dab1da774a6456b1ed9c48c9ff194ee3ff36d/project/paperbench/data/papers/pinn/paper.md",
+      "bytes": 124207,
+      "gitLfsIdentity": "19a1ad906356e3efaa6bf82be11668c27af9ea376b5fbfa5945283fa188f4741"
+    },
+    {
+      "file": "rubric.json",
+      "url": "https://raw.githubusercontent.com/openai/frontier-evals/b78dab1da774a6456b1ed9c48c9ff194ee3ff36d/project/paperbench/data/papers/pinn/rubric.json",
+      "bytes": 2351012,
+      "gitLfsIdentity": null
+    }
+  ]
+}

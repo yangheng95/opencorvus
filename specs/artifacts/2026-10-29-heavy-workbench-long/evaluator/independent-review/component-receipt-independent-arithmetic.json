@@ -1,0 +1,303 @@
+{
+  "provenance": "reviewer rechecked arithmetic of main-agent GPU receipt; reviewer did not rerun GPU or claim authorship of those executions",
+  "source": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\qualification\\independent-component-check.json",
+  "cases": [
+    {
+      "problem": "convection",
+      "component": "total",
+      "directional_error": 1.264970550182709e-12,
+      "directional_limit": 1e-07,
+      "directional_check_pass": true,
+      "hvp_absolute_error": 3.7908755989477e-09,
+      "hvp_limit": 0.0009584920289508342,
+      "hvp_check_pass": true,
+      "largest_five_ritz_count_passing_1e_3": 5,
+      "largest_five_ritz_observed": [
+        {
+          "value": 5.41055993879619,
+          "explicit_ritz_residual": 7.601728978450469e-13
+        },
+        {
+          "value": 10.289925924557782,
+          "explicit_ritz_residual": 9.970222906730023e-13
+        },
+        {
+          "value": 19.8457090272784,
+          "explicit_ritz_residual": 1.239494496538501e-12
+        },
+        {
+          "value": 483.7299554058022,
+          "explicit_ritz_residual": 2.1167608041291225e-12
+        },
+        {
+          "value": 5146.359964868648,
+          "explicit_ritz_residual": 1.9499856730384672e-11
+        }
+      ]
+    },
+    {
+      "problem": "convection",
+      "component": "residual",
+      "directional_error": 8.045317884119996e-13,
+      "directional_limit": 1e-07,
+      "directional_check_pass": true,
+      "hvp_absolute_error": 3.7413686899143906e-09,
+      "hvp_limit": 0.0009424392631971787,
+      "hvp_check_pass": true,
+      "largest_five_ritz_count_passing_1e_3": 5,
+      "largest_five_ritz_observed": [
+        {
+          "value": 2.1018331293292745,
+          "explicit_ritz_residual": 1.1656062077134541e-12
+        },
+        {
+          "value": 10.133666924577051,
+          "explicit_ritz_residual": 2.4034579201606533e-12
+        },
+        {
+          "value": 19.456389395115224,
+          "explicit_ritz_residual": 9.544007383274418e-13
+        },
+        {
+          "value": 482.9749942214304,
+          "explicit_ritz_residual": 1.990032185435933e-12
+        },
+        {
+          "value": 5076.331367038079,
+          "explicit_ritz_residual": 2.1114534114483153e-11
+        }
+      ]
+    },
+    {
+      "problem": "convection",
+      "component": "constraint",
+      "directional_error": 1.9008405960363461e-13,
+      "directional_limit": 1e-07,
+      "directional_check_pass": true,
+      "hvp_absolute_error": 6.161145377578117e-11,
+      "hvp_limit": 1.9622218385045632e-05,
+      "hvp_check_pass": true,
+      "largest_five_ritz_count_passing_1e_3": 3,
+      "largest_five_ritz_observed": [
+        {
+          "value": 1.6635687351733368,
+          "explicit_ritz_residual": 0.030387498456851843
+        },
+        {
+          "value": 1.7205041474639733,
+          "explicit_ritz_residual": 0.002508535422701604
+        },
+        {
+          "value": 2.155227744298064,
+          "explicit_ritz_residual": 6.002771679170632e-08
+        },
+        {
+          "value": 3.7236191777985685,
+          "explicit_ritz_residual": 1.1642517545483534e-14
+        },
+        {
+          "value": 72.62893522579331,
+          "explicit_ritz_residual": 5.464708026886733e-14
+        }
+      ]
+    },
+    {
+      "problem": "reaction",
+      "component": "total",
+      "directional_error": 7.930418474688672e-13,
+      "directional_limit": 1e-07,
+      "directional_check_pass": true,
+      "hvp_absolute_error": 5.838983199041836e-10,
+      "hvp_limit": 0.0001485697912215915,
+      "hvp_check_pass": true,
+      "largest_five_ritz_count_passing_1e_3": 5,
+      "largest_five_ritz_observed": [
+        {
+          "value": 0.6859111005949141,
+          "explicit_ritz_residual": 8.119142972139743e-07
+        },
+        {
+          "value": 3.0695804279068546,
+          "explicit_ritz_residual": 2.5770267549272765e-13
+        },
+        {
+          "value": 9.497669993903903,
+          "explicit_ritz_residual": 1.7316389905347339e-13
+        },
+        {
+          "value": 34.92432712652294,
+          "explicit_ritz_residual": 2.6676616294918935e-13
+        },
+        {
+          "value": 894.7051752725041,
+          "explicit_ritz_residual": 2.8127621089398924e-12
+        }
+      ]
+    },
+    {
+      "problem": "reaction",
+      "component": "residual",
+      "directional_error": 9.76597275270663e-13,
+      "directional_limit": 1e-07,
+      "directional_check_pass": true,
+      "hvp_absolute_error": 5.658413728985692e-10,
+      "hvp_limit": 0.00013427868081413976,
+      "hvp_check_pass": true,
+      "largest_five_ritz_count_passing_1e_3": 5,
+      "largest_five_ritz_observed": [
+        {
+          "value": 3.2297628715594047,
+          "explicit_ritz_residual": 0.0002906144804825919
+        },
+        {
+          "value": 3.73936394645458,
+          "explicit_ritz_residual": 2.391052925471128e-06
+        },
+        {
+          "value": 9.510145914058347,
+          "explicit_ritz_residual": 1.444260817676226e-13
+        },
+        {
+          "value": 30.912587066704056,
+          "explicit_ritz_residual": 2.3359443208133156e-13
+        },
+        {
+          "value": 854.6819900154297,
+          "explicit_ritz_residual": 2.855407391453479e-12
+        }
+      ]
+    },
+    {
+      "problem": "reaction",
+      "component": "constraint",
+      "directional_error": 1.5311172468779333e-12,
+      "directional_limit": 1e-07,
+      "directional_check_pass": true,
+      "hvp_absolute_error": 4.356530361719777e-11,
+      "hvp_limit": 2.3395370207058455e-05,
+      "hvp_check_pass": true,
+      "largest_five_ritz_count_passing_1e_3": 3,
+      "largest_five_ritz_observed": [
+        {
+          "value": 2.3130886177003998,
+          "explicit_ritz_residual": 0.0646802763410509
+        },
+        {
+          "value": 2.4933613052331016,
+          "explicit_ritz_residual": 0.003154287699651575
+        },
+        {
+          "value": 2.7260855017139014,
+          "explicit_ritz_residual": 0.00012512630059266795
+        },
+        {
+          "value": 3.105084299763763,
+          "explicit_ritz_residual": 1.3286178360359e-07
+        },
+        {
+          "value": 41.790403807729255,
+          "explicit_ritz_residual": 1.929733258866399e-14
+        }
+      ]
+    },
+    {
+      "problem": "wave",
+      "component": "total",
+      "directional_error": 4.14542911716248e-13,
+      "directional_limit": 1e-07,
+      "directional_check_pass": true,
+      "hvp_absolute_error": 1.0845430240749824e-10,
+      "hvp_limit": 0.0002661854366882395,
+      "hvp_check_pass": true,
+      "largest_five_ritz_count_passing_1e_3": 5,
+      "largest_five_ritz_observed": [
+        {
+          "value": 9.141807805400559,
+          "explicit_ritz_residual": 1.3743631226166361e-14
+        },
+        {
+          "value": 19.09040209181125,
+          "explicit_ritz_residual": 1.1599109178013217e-13
+        },
+        {
+          "value": 35.70935994584809,
+          "explicit_ritz_residual": 1.0465400514056115e-13
+        },
+        {
+          "value": 79.01913032150813,
+          "explicit_ritz_residual": 2.525562128384466e-13
+        },
+        {
+          "value": 228.56735708296497,
+          "explicit_ritz_residual": 7.059613157879884e-13
+        }
+      ]
+    },
+    {
+      "problem": "wave",
+      "component": "residual",
+      "directional_error": 2.0089973521569826e-13,
+      "directional_limit": 1e-07,
+      "directional_check_pass": true,
+      "hvp_absolute_error": 1.0802750841716743e-10,
+      "hvp_limit": 0.00026712214440695266,
+      "hvp_check_pass": true,
+      "largest_five_ritz_count_passing_1e_3": 5,
+      "largest_five_ritz_observed": [
+        {
+          "value": 1.985837045221756,
+          "explicit_ritz_residual": 3.452011177262166e-14
+        },
+        {
+          "value": 6.455916341166594,
+          "explicit_ritz_residual": 4.3221411692824426e-14
+        },
+        {
+          "value": 18.52229468005448,
+          "explicit_ritz_residual": 1.147058234434258e-13
+        },
+        {
+          "value": 73.81906755987217,
+          "explicit_ritz_residual": 2.586570306909586e-13
+        },
+        {
+          "value": 226.3520076978928,
+          "explicit_ritz_residual": 5.719571706760125e-13
+        }
+      ]
+    },
+    {
+      "problem": "wave",
+      "component": "constraint",
+      "directional_error": 1.5672272507538665e-13,
+      "directional_limit": 1e-07,
+      "directional_check_pass": true,
+      "hvp_absolute_error": 7.049801547358706e-12,
+      "hvp_limit": 3.745101952295131e-05,
+      "hvp_check_pass": true,
+      "largest_five_ritz_count_passing_1e_3": 5,
+      "largest_five_ritz_observed": [
+        {
+          "value": 0.8407308017168142,
+          "explicit_ritz_residual": 3.901405347873305e-15
+        },
+        {
+          "value": 1.6123711640037302,
+          "explicit_ritz_residual": 1.1758968836215268e-14
+        },
+        {
+          "value": 1.8112149741340624,
+          "explicit_ritz_residual": 1.757213445324102e-14
+        },
+        {
+          "value": 10.067465280076764,
+          "explicit_ritz_residual": 4.407937914890104e-15
+        },
+        {
+          "value": 42.09338005918505,
+          "explicit_ritz_residual": 2.6794553353102348e-14
+        }
+      ]
+    }
+  ]
+}

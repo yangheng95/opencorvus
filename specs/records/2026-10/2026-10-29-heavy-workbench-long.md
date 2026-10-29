@@ -32,3 +32,24 @@
 ## 当前未达成
 
 未冻结长程任务/评分、未完成真实完整数值路径资格与时间校准、未开始长程候选运行，未取得其清洁复训或专业专家校准。当前不能报告小时级benchmark已完成。
+
+## 2026-10-29 本轮实证与接续位置
+
+- H05横向比较、原件、两份清洁复跑与100/100开发分已提交`d1ea6db42`并正常push；全量pre-push现行检查通过、秘密扫描0。其他任务继续修改共享main及界面文件，必须保留它们的改动。
+- 本地科学依赖镜像构建完成：`opencorvus-benchmark-science:20261029`，基础镜像固定如Recall；额外numpy1.26.4/scipy1.15.3/matplotlib3.10.3/reportlab4.4.0/pypdf5.5.0。构建文件、日志与真实数值资格在外部cache，准备时间不计入候选工作。
+- 真实10000残差点、width100、float64资格完成：三问题各264 Adam+16 L-BFGS，真实closure共33–36。稳态Adam分别.01722/.01751/.04664秒，L-BFGS16步1.093/.863/2.211秒；HVP每次.0324/.0308/.0861秒。已知SPD PCG显式残差7.62e-10；实际高阻尼1e4/rank8的PINN PCG7.24e-10，仅证明路径，不证明论文小阻尼成功。
+- `script/benchmark/pinn_numeric_check.py`由评估侧生成权威全数据、仅从NPZ读取数值权重并独立前向/导数/损失；15个聚焦正向测试通过，包括完整四层导出→加载→真实CLI。三问题GPU导出的实际权重与独立NumPy全评价网格标量一致，一/二阶输入导数最大差5.33e-15。
+- `pinn_torch_check.py`不导入候选代码，独立读取数值权重/权威数据，检查参数梯度、HVP中心差分与显式Ritz残差；已知SPD全谱、闭式参数梯度、残差对输出bias的严格零导数3项正向测试实跑通过。三问题×total/residual/constraint共9份真实GPU交叉验证通过，HVP差分相对误差1.89e-11～4.22e-10。新CLI增加明确数值接受条件，退出0不能只表示“写了JSON”；完整参数图仍非训练真实性证明。
+- 独立审查者额外实际复跑NumPy测试与Torch已知例；发现并关闭候选自选评分点漏洞、L-BFGS零步无法合法终止的合同冲突、残差分量输出bias未参与造成unused-tensor错误。数学上零导数/零Hessian按零填充并验证，没有增加正则或改变目标。
+- 独立审查原件已归档`specs/artifacts/2026-10-29-heavy-workbench-long/evaluator/independent-review/stage-assessment.json`及同目录精确命令/输出/源副本：另起15 NumPy+3 Torch/边界复跑通过，审核9组GPU差分。它明确`formal_freeze_approved=false`，不冒称批准完整新题。源码提交前docs:check通过（351路由/26组），真实新CLI退出0且三个数值接受条件全部为true。
+- 63配置未采用；独立按真实稳态粗推19配置达到全上限也约11.14小时，合法共用prefix约省.46h，未含NNCG/复训，不是已验证最终时长。当前审查稿为19基础配置+4续训分支，范围见`specs/artifacts/2026-10-29-heavy-workbench-long/public/TASK.md`和唯一注册表`public/profile.json`。174原子叶100分草案`rubric.draft.json`，其中R9结果锚点明确calibration-pending，**禁止发布总成绩/称冻结**。原论文及PDF/15图、许可和官方原rubric已按各自归属保存，不让候选读评估侧。
+- 代表性真实收敛资格仍运行：自有容器`oc-pinn-convergence-20261029-a`，启动命令会话5652，外部`qualify_convergence.py`；只在自有cache工作，网络关闭。实时事实读`D:/opencorvus-benchmark-runs/paperbench-discovery-20261029/convergence-qualification/events.json`；PowerShell stdout重定向存在缓冲，不能把stdout文件暂空当无活动。该probe的`step`为native step尝试索引，遇零步后的25次plateau只能作原始资格观测，不能按最终新合同当25次有效更新；正式候选按最新attempt/native/nonzero/closure分计。末态才生成`convection-checkpoint.npz`，不得把资格当候选成绩。
+
+### 下次唤醒的必要工作（不是已完成）
+
+1. 重读本Recall，检查git状态、实际自有容器/实时events；只收敛自有运行，不重启用户Docker/WSL。代表配置自然终态后，独立重算终态loss/gradient/L2RE，记录真实尝试与有效更新，保留失败原件。
+2. 用该晚期真实checkpoint资格小阻尼.01/.1、rank20、PCG显式残差、Armijo和谱；按公开Nyström稳定化公式实现已知矩阵与真实Hessian。δ只稳定投影，不能假定H+μI正定；算法错误须修真实根因，不静默换优化器。不能靠早期高阻尼4步资格跳过。
+3. 其余两方程代表配置与结果锚点仍无资格。完成三问题可达性与最终contract（含初始化/Adam参数/终态/续训失败/选优资格/谱和恢复容差）审查后冻结新版本；旧草稿不能直接计分。失败续训不凑200，三混合无有效父状态则dependency_incomplete。
+4. 把薄启动器的历史专用benchmark/case元数据限制合理参数化（先全仓检索及聚焦正向测试），复用现有Inspect/真实流式Task；不新建私有LLM调用器/队列/隐消息。不设token/总墙钟截断，真实长训练必须有实际工具/进度事实。只移交公开文件，评估器、资格权重、原官方rubric和旧答案不得进入候选项目。既有授权Provider staging必须成对移交auth+models且不输出内容。
+5. 启动真正长程OpenCorvus开发pilot，记录实际Task绑定/模型/用量/活动。用定时唤醒观察真实进度，完成后封存原件、评估侧完整清洁重训、同一冻结规则独立审查；必要时新鲜Codex对照并按用户两方都好则升级。新题未跑不能报“已经小时级”。
+6. 原始十题其余九题尚未完成小时级升级/校准。先完成一题实证，再以真实重型工作依赖和可执行评分升级其余九题、独立挑战与闭环；不能用研究草案、原子叶数量或单题通过冒充十题达到成熟经验标准。

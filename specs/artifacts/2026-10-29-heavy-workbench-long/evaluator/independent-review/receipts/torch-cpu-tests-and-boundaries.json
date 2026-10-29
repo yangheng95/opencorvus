@@ -1,0 +1,27 @@
+{
+  "label": "torch-cpu-tests-and-boundaries",
+  "started_at_utc": "2026-10-29T06:30:19.598045+00:00",
+  "elapsed_seconds": 4.4202764998190105,
+  "command_argv": [
+    "docker",
+    "run",
+    "--rm",
+    "--network",
+    "none",
+    "--cpus",
+    "1",
+    "-e",
+    "PYTHONDONTWRITEBYTECODE=1",
+    "--mount",
+    "type=bind,source=D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\independent-review,target=/review,readonly",
+    "pytorch/pytorch@sha256:c16f4c749e2d9e96878875cdf6cc45cddda1d1a36fddd371dd6f2360f1b6e2a2",
+    "python",
+    "-B",
+    "/review/reproduce_torch_cpu.py"
+  ],
+  "cwd": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\independent-review",
+  "exit_code": 0,
+  "stdout": "receipts/torch-cpu-tests-and-boundaries.stdout.txt",
+  "stderr": "receipts/torch-cpu-tests-and-boundaries.stderr.txt",
+  "provenance": "fresh execution by independent reviewer, not candidate execution"
+}

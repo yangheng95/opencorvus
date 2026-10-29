@@ -1,0 +1,90 @@
+{
+  "status": "passed",
+  "scope": "actual GPU-generated numeric exports, pure NumPy full evaluator data; short qualification training only",
+  "receipts": [
+    {
+      "problem": "convection",
+      "jet_max_absolute_error": {
+        "u": 2.220446049250313e-16,
+        "ux": 3.3306690738754696e-16,
+        "ut": 6.661338147750939e-16,
+        "uxx": 2.200930410145574e-17,
+        "utt": 1.942890293094024e-16
+      },
+      "independent_metrics": {
+        "problem": "convection",
+        "residual_points": 10000,
+        "constraint_count": 358,
+        "evaluation_points": 8385,
+        "residual_loss": 0.005548060961863331,
+        "constraint_loss": 0.16397101229950833,
+        "total_loss": 0.16951907326137167,
+        "l2re": 1.2488920889301904,
+        "parameter_count": 20601
+      },
+      "torch_metrics": {
+        "event": "torch_final_metrics",
+        "problem": "convection",
+        "total_loss": 0.16951907326137167,
+        "l2re": 1.2488920889301904
+      },
+      "checker_exit": 0
+    },
+    {
+      "problem": "reaction",
+      "jet_max_absolute_error": {
+        "u": 1.3183898417423734e-16,
+        "ux": 3.0270924655795284e-16,
+        "ut": 2.706168622523819e-16,
+        "uxx": 1.734723475976807e-17,
+        "utt": 3.642919299551295e-17
+      },
+      "independent_metrics": {
+        "problem": "reaction",
+        "residual_points": 10000,
+        "constraint_count": 358,
+        "evaluation_points": 8385,
+        "residual_loss": 0.0038011700828309556,
+        "constraint_loss": 0.07211454704755108,
+        "total_loss": 0.07591571713038203,
+        "l2re": 0.9933269695894872,
+        "parameter_count": 20601
+      },
+      "torch_metrics": {
+        "event": "torch_final_metrics",
+        "problem": "reaction",
+        "total_loss": 0.07591571713038203,
+        "l2re": 0.993326969589487
+      },
+      "checker_exit": 0
+    },
+    {
+      "problem": "wave",
+      "jet_max_absolute_error": {
+        "u": 5.551115123125783e-16,
+        "ux": 1.1102230246251565e-15,
+        "ut": 2.220446049250313e-15,
+        "uxx": 1.3322676295501878e-15,
+        "utt": 5.329070518200751e-15
+      },
+      "independent_metrics": {
+        "problem": "wave",
+        "residual_points": 10000,
+        "constraint_count": 716,
+        "evaluation_points": 8385,
+        "residual_loss": 0.00036320170147192916,
+        "constraint_loss": 0.03461609399562277,
+        "total_loss": 0.0349792956970947,
+        "l2re": 1.096395094356832,
+        "parameter_count": 20601
+      },
+      "torch_metrics": {
+        "event": "torch_final_metrics",
+        "problem": "wave",
+        "total_loss": 0.03497929569709471,
+        "l2re": 1.096395094356832
+      },
+      "checker_exit": 0
+    }
+  ]
+}
