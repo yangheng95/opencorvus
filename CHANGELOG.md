@@ -6,6 +6,8 @@
 
 ### zh-CN
 
+- 归档、设置和其他可清空搜索框按 Escape 先清空查询并保持焦点；查询为空后继续原退出操作，保留特殊控件已有的键盘行为。
+
 - Linux 原生构建使用保留上游许可证的 GLib 0.18.5 源码，合入官方字符串迭代器指针修复；Docker 构建读取根配置的 Bun 版本并校验当前构建输入。
 - 修复全新源码构建时 SDK 尚未生成导致的资源生成失败；工具运行时闭包按真实 SDK 文件类型编译，支持源码条件下的 TypeScript 模块。
 
@@ -30,6 +32,8 @@
 - 修复 Windows 检查器并发准备原生辅助程序时，编译产物与运行文件互相冲突导致的拒绝访问。
 
 ### en-US
+
+- Escape clears a nonempty clearable search while retaining focus before the surrounding page or popup handles a later Escape. Explicit control-specific keyboard behavior remains authoritative.
 
 - Linux native builds use the licensed GLib 0.18.5 source with the official string-iterator out-pointer fix. Docker builds use the root Bun version and evaluate current build inputs through Docker's layer cache.
 - Fix resource generation before the first SDK build. Tool runtime closures compile the actual SDK file type, including TypeScript modules selected by the source condition.

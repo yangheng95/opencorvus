@@ -1,0 +1,108 @@
+[
+  {
+    "file": "packages/overlay/src/components/ComposerModelSelector.tsx",
+    "line": 448,
+    "clearable": true
+  },
+  {
+    "file": "packages/overlay/src/components/ComposerReferenceSelector.tsx",
+    "line": 402,
+    "clearable": true,
+    "onKeyDown": "{(event) => {\n                  if (handleReferenceEscape(event)) return\n                  if (event.key !== \"ArrowDown\" && event.key !== \"ArrowUp\") return\n                  const options = listboxElement?.querySelectorAll<HTMLElement>(\n                    '[role=\"option\"]:not([aria-disabled=\"true\"])',\n                  )\n                  const target = event.key === \"ArrowDown\" ? options?.[0] : options?.[options.length - 1]\n                  if (!target) return\n                  event.preventDefault()\n                  target.focus()\n                }}"
+  },
+  {
+    "file": "packages/overlay/src/components/ConfigDialogHost.tsx",
+    "line": 601,
+    "clearable": true
+  },
+  {
+    "file": "packages/overlay/src/components/ConversationArtifactInspector.tsx",
+    "line": 352,
+    "clearable": true
+  },
+  {
+    "file": "packages/overlay/src/components/FileChangesView.tsx",
+    "line": 454,
+    "clearable": true,
+    "onKeyDown": "{onFilterKeyDown}"
+  },
+  {
+    "file": "packages/overlay/src/components/FileExplorerPanel.tsx",
+    "line": 2026,
+    "clearable": true
+  },
+  {
+    "file": "packages/overlay/src/components/LogViewer.tsx",
+    "line": 494,
+    "clearable": true,
+    "onKeyDown": "{(event) => {\n          if (event.key === \"Enter\") event.preventDefault()\n        }}"
+  },
+  {
+    "file": "packages/overlay/src/components/MailboxPanel.tsx",
+    "line": 561,
+    "clearable": false,
+    "onKeyDown": "{(event) => {\n                    if (event.key !== \"Escape\") return\n                    event.preventDefault()\n                    closeSearch()\n                  }}"
+  },
+  {
+    "file": "packages/overlay/src/components/MemoryPanel.tsx",
+    "line": 443,
+    "clearable": true,
+    "onSubmit": "{() => void doSearch(searchQuery())}",
+    "onClear": "{handleSearchClear}"
+  },
+  {
+    "file": "packages/overlay/src/components/MissionBoard.tsx",
+    "line": 337,
+    "clearable": true
+  },
+  {
+    "file": "packages/overlay/src/components/MissionCreateDialog.tsx",
+    "line": 653,
+    "clearable": true
+  },
+  {
+    "file": "packages/overlay/src/components/interactive-artifact/NetworkArtifact.tsx",
+    "line": 143,
+    "clearable": true
+  },
+  {
+    "file": "packages/overlay/src/components/interactive-artifact/TableArtifact.tsx",
+    "line": 83,
+    "clearable": true
+  },
+  {
+    "file": "packages/overlay/src/components/interactive-artifact/TerminalArtifact.tsx",
+    "line": 129,
+    "clearable": true
+  },
+  {
+    "file": "packages/overlay/src/components/interactive-artifact/TreeArtifact.tsx",
+    "line": 90,
+    "clearable": true
+  },
+  {
+    "file": "packages/overlay/src/components/settings/ArchivePanel.tsx",
+    "line": 333,
+    "clearable": true
+  },
+  {
+    "file": "packages/overlay/src/components/settings/MissionSkillPanel.tsx",
+    "line": 279,
+    "clearable": true
+  },
+  {
+    "file": "packages/overlay/src/components/settings/ProvidersPanel.tsx",
+    "line": 1199,
+    "clearable": true
+  },
+  {
+    "file": "packages/overlay/src/components/settings/ReleaseNotesPanel.tsx",
+    "line": 50,
+    "clearable": true
+  },
+  {
+    "file": "packages/overlay/src/components/settings/ScheduledAutomationsPanel.tsx",
+    "line": 820,
+    "clearable": true
+  }
+]

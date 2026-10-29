@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-29-archive-goal-journey](2026-10-29-archive-goal-journey/README.md)：18张真实目标/归档/搜索原图、Esc根因修复与数据/资源结算。
+
 - [2026-10-29-glib-production-repair/告警收敛](2026-10-29-glib-production-repair/github-after.json)：8项fixed、零开放Dependabot与官方单次重扫截图。
 
 - [2026-10-29-glib-production-repair](2026-10-29-glib-production-repair/README.md)：生产GLib修复、全新源码构建合同与GitHub图只读证据。

@@ -21,6 +21,14 @@ document dismissable layers, only for events originating inside its current
 page. An already-consumed event belongs to its popup; an unconsumed page event
 uses the existing settings close transaction and focus restoration.
 
+Clearable SearchField inputs own an unhandled Escape while their value is
+nonempty: they run the same controlled clear operation and optional onClear
+callback as the visible Clear button, retaining input focus. Their explicit
+caller key handler runs first, including Solid's bound-handler form; a consumed
+event retains that caller's policy. Empty queries leave Escape to the surrounding
+popup or page. Settings therefore clears the current search before its later
+Escape can close the page, without introducing a page-specific keyboard path.
+
 Chat and Work find-in-conversation reads the same complete project-scoped
 Session snapshot as downloads and shares its identity/structure validator.
 Search matches original message text and structured error reasons, in producer

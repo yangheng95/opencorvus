@@ -43,11 +43,19 @@ export function SearchField(props: SearchFieldProps): JSX.Element {
   }
   const submit = () => props.onSubmit?.()
   const handleKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (event) => {
+    const handler = props.onKeyDown
+    if (typeof handler === "function") handler(event)
+    else if (handler) handler[0](handler[1], event)
+    if (event.defaultPrevented) return
+    if (event.key === "Escape" && props.clearable && props.value && !props.disabled) {
+      event.preventDefault()
+      clear()
+      return
+    }
     if (event.key === "Enter" && props.onSubmit) {
       event.preventDefault()
       submit()
     }
-    if (typeof props.onKeyDown === "function") props.onKeyDown(event)
   }
 
   return (

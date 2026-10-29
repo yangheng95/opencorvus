@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-29-archive-goal-journey.md](2026-10-29-archive-goal-journey.md)：单代理在真实隔离开发页检查目标与归档完整流程。
+
 - [GitHub零开放告警回读](../../artifacts/2026-10-29-glib-production-repair/github-after.json)：生产修复推送后的实际fixed状态与单次官方重扫。
 
 - [GLib生产验收数据](../../artifacts/2026-10-29-glib-production-repair/README.md)：唯一Cargo图、源码生成和正式原生构建的实际输出。

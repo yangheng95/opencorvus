@@ -1,0 +1,46 @@
+{
+  "at": "2026-10-29T10:51:24.769Z",
+  "runs": [
+    {
+      "label": "archive791-ui-baseline",
+      "startedAt": 1793269531779,
+      "closedAt": 1793269625268,
+      "code": 0,
+      "signal": null,
+      "childPID": 95072
+    },
+    {
+      "label": "archive791-overlay-types",
+      "startedAt": 1793270244963,
+      "closedAt": 1793270271252,
+      "code": 2,
+      "signal": null,
+      "childPID": 36464
+    },
+    {
+      "label": "archive791-ui-after",
+      "startedAt": 1793270244963,
+      "closedAt": 1793270311210,
+      "code": 0,
+      "signal": null,
+      "childPID": 80464
+    },
+    {
+      "label": "archive791-overlay-types-final",
+      "startedAt": 1793270360274,
+      "closedAt": 1793270385530,
+      "code": 0,
+      "signal": null,
+      "childPID": 100248
+    },
+    {
+      "label": "archive791-ui-after-final",
+      "startedAt": 1793270360312,
+      "closedAt": 1793270424653,
+      "code": 0,
+      "signal": null,
+      "childPID": 31376
+    }
+  ],
+  "scope": "First typecheck failed on Solid bound handler narrowing and was repaired. First candidate build was never published. The final typecheck and final ordinary Vite output were used for the actual candidate /ui. No UI automated tests were created or run."
+}

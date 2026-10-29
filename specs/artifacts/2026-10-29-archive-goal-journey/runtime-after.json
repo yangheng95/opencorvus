@@ -1,0 +1,78 @@
+{
+  "at": "2026-10-29T10:49:15.776Z",
+  "credentialCopyRetired": true,
+  "modelCatalogCopyRetired": true,
+  "requests": 0,
+  "previousRequests": 793,
+  "cumulativeRequests": 793,
+  "maximumRequests": 0,
+  "exhausted": false,
+  "model": "gpt-6.1-sol",
+  "requestOutcomes": [],
+  "source": {
+    "catalogSameBytes": true,
+    "catalogSameMetadata": true,
+    "authSameMetadata": true
+  },
+  "publicShutdown": 200,
+  "reserveMs": 2324285,
+  "physical": {
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 93556,
+          "processInstanceID": "win32:639288672966643755",
+          "occurrenceID": "f14c45b7-557c-4dde-9ee3-d683c0747184"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 24080,
+          "processInstanceID": "win32:639288672973885908",
+          "occurrenceID": "c9a8ac84-6b90-4ef0-86ab-cd2cecc09bfb"
+        }
+      }
+    ],
+    "observedAtUtc": "2026-10-29T10:49:15.6902030Z",
+    "native": {
+      "occurrence": "archive-goal-791-after-e64df658-dfcf-49ec-aec9-8ebe4dcb0dd6",
+      "outcome": "settled",
+      "host": {
+        "pid": 93556,
+        "processInstanceID": "win32:639288672966643755",
+        "occurrenceID": "f14c45b7-557c-4dde-9ee3-d683c0747184"
+      },
+      "target": {
+        "pid": 24080,
+        "processInstanceID": "win32:639288672973885908",
+        "occurrenceID": "c9a8ac84-6b90-4ef0-86ab-cd2cecc09bfb"
+      },
+      "observedAtUtc": "2026-10-29T10:49:06.668Z",
+      "deadlineAt": 1793273270953,
+      "terminal": {
+        "occurrenceID": "archive-goal-791-after-e64df658-dfcf-49ec-aec9-8ebe4dcb0dd6",
+        "pid": 24080,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "launcher": {
+      "originalChildExit": 0,
+      "observedAtUtc": "2026-10-29T10:49:06.7077713Z"
+    }
+  },
+  "scope": "candidate",
+  "port": 38356,
+  "uiEntry": "main-BeI-kx44.js",
+  "deadline": {
+    "startedAt": 1793269670951,
+    "deadlineAt": 1793273270953
+  }
+}

@@ -1,0 +1,276 @@
+{
+  "at": "2026-10-29T10:51:24.764Z",
+  "comparison": "Actual ordered rows using each table primary key/rowid, compared with the pre-launch consistent backup; byte comparison for each copied attachment. No source digest used as functional acceptance.",
+  "databases": [
+    {
+      "tables": 92,
+      "rows": 116028,
+      "schema": 9,
+      "integrity": "ok",
+      "changed": [],
+      "messageRows": 387,
+      "partRows": 1161,
+      "goalRows": 0,
+      "scope": "original QA source",
+      "session": {
+        "id": "ses_-zUQZxfS4zzCqp9pVfVD",
+        "time_archived": null,
+        "time_updated": 1793256706273
+      },
+      "newOutbox": 0
+    },
+    {
+      "tables": 92,
+      "rows": 116060,
+      "schema": 9,
+      "integrity": "ok",
+      "changed": [
+        {
+          "table": "bus_publication_delivery",
+          "before": 22669,
+          "after": 22675,
+          "added": 6,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 22669,
+          "after": 22675,
+          "added": 6,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 3039,
+          "after": 3040,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 3039,
+          "after": 3040,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 9117,
+          "after": 9120,
+          "added": 3,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 23549,
+          "after": 23556,
+          "added": 7,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 23570,
+          "after": 23577,
+          "added": 7,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "event_occurrence",
+          "before": 2854,
+          "after": 2855,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "session",
+          "before": 61,
+          "after": 61,
+          "added": 0,
+          "removed": 0,
+          "updated": [
+            {
+              "key": "61",
+              "columns": [
+                "time_updated",
+                "time_archived"
+              ]
+            }
+          ]
+        }
+      ],
+      "messageRows": 387,
+      "partRows": 1161,
+      "goalRows": 0,
+      "scope": "baseline archived copy",
+      "session": {
+        "id": "ses_-zUQZxfS4zzCqp9pVfVD",
+        "time_archived": 1793269860483,
+        "time_updated": 1793269860485
+      },
+      "newOutbox": 1
+    },
+    {
+      "tables": 92,
+      "rows": 116092,
+      "schema": 9,
+      "integrity": "ok",
+      "changed": [
+        {
+          "table": "bus_publication_delivery",
+          "before": 22675,
+          "after": 22681,
+          "added": 6,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 22675,
+          "after": 22681,
+          "added": 6,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 3040,
+          "after": 3041,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 3040,
+          "after": 3041,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 9120,
+          "after": 9123,
+          "added": 3,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 23556,
+          "after": 23563,
+          "added": 7,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 23577,
+          "after": 23584,
+          "added": 7,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "event_occurrence",
+          "before": 2855,
+          "after": 2856,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "session",
+          "before": 61,
+          "after": 61,
+          "added": 0,
+          "removed": 0,
+          "updated": [
+            {
+              "key": "61",
+              "columns": [
+                "time_updated",
+                "time_archived"
+              ]
+            }
+          ]
+        }
+      ],
+      "messageRows": 387,
+      "partRows": 1161,
+      "goalRows": 0,
+      "scope": "restored candidate copy",
+      "session": {
+        "id": "ses_-zUQZxfS4zzCqp9pVfVD",
+        "time_archived": null,
+        "time_updated": 1793270616343
+      },
+      "newOutbox": 1
+    }
+  ],
+  "attachments": [
+    {
+      "phase": "baseline",
+      "copiedFiles": 17,
+      "currentExactBytePairs": 17,
+      "originalFilesPresent": 17,
+      "targetFilesPresent": 17
+    },
+    {
+      "phase": "baseline",
+      "copiedFiles": 18,
+      "currentExactBytePairs": 10,
+      "originalFilesPresent": 18,
+      "targetFilesPresent": 10
+    },
+    {
+      "phase": "-after",
+      "copiedFiles": 17,
+      "currentExactBytePairs": 17,
+      "originalFilesPresent": 17,
+      "targetFilesPresent": 17
+    },
+    {
+      "phase": "-after",
+      "copiedFiles": 10,
+      "currentExactBytePairs": 10,
+      "originalFilesPresent": 10,
+      "targetFilesPresent": 10
+    }
+  ],
+  "collectedOrphans": [
+    {
+      "filename": "legacy-invalid-788.txt",
+      "bytes": 6,
+      "originalPresent": true,
+      "persistedReferences": []
+    },
+    {
+      "filename": "unicode-be-788.txt",
+      "bytes": 46,
+      "originalPresent": true,
+      "persistedReferences": []
+    },
+    {
+      "filename": "unicode-le-788.txt",
+      "bytes": 46,
+      "originalPresent": true,
+      "persistedReferences": []
+    },
+    {
+      "filename": "readback-original.txt.gz",
+      "bytes": 84,
+      "originalPresent": true,
+      "persistedReferences": []
+    }
+  ],
+  "collectionAttribution": "Four previously unreferenced temporary uploads and their metadata are absent only in the baseline copy. Original source files remain. Current AttachmentStore.sweep uses persisted references and a 60-second age grace, called by Instance initialization. The candidate was copied after that sweep; all 27 remaining files match byte-for-byte. No persisted file-part row changed; the six actual file references remain identical."
+}
