@@ -1,0 +1,219 @@
+{
+  "at": "2026-10-29T09:16:12.382Z",
+  "head": {
+    "name": "main",
+    "target": {
+      "oid": "a9f28c5dca688a659d73b8a1ba8a6044c65a4384"
+    }
+  },
+  "manifests": [
+    {
+      "filename": "packages/overlay/src-tauri/Cargo.lock",
+      "parseable": true,
+      "exceedsMaxSize": false,
+      "dependenciesCount": 0
+    },
+    {
+      "filename": "packages/overlay/src-tauri/Cargo.toml",
+      "parseable": true,
+      "exceedsMaxSize": false,
+      "dependenciesCount": 0
+    },
+    {
+      "filename": "packages/opencorvus/native/process-supervisor/Cargo.lock",
+      "parseable": true,
+      "exceedsMaxSize": false,
+      "dependenciesCount": 0
+    },
+    {
+      "filename": "packages/opencorvus/native/process-supervisor/Cargo.toml",
+      "parseable": true,
+      "exceedsMaxSize": false,
+      "dependenciesCount": 0
+    },
+    {
+      "filename": "specs/artifacts/2026-10-22-native-query-stream/Cargo.lock",
+      "parseable": true,
+      "exceedsMaxSize": false,
+      "dependenciesCount": 0
+    },
+    {
+      "filename": "specs/artifacts/2026-10-22-native-query-stream/Cargo.toml",
+      "parseable": true,
+      "exceedsMaxSize": false,
+      "dependenciesCount": 0
+    },
+    {
+      "filename": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+      "parseable": true,
+      "exceedsMaxSize": false,
+      "dependenciesCount": 0
+    }
+  ],
+  "sbomCreated": {
+    "creators": [
+      "Tool: protobom-v0.0.0-20261027212701-c97783990bff+dirty",
+      "Tool: GitHub.com-Dependency-Graph",
+      "Tool: dependabot"
+    ],
+    "created": "2026-10-29T09:16:14Z"
+  },
+  "packages": [
+    {
+      "name": "zip",
+      "SPDXID": "SPDXRef-cargo-zip-4.6.1-b1ee0d",
+      "versionInfo": "4.6.1",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "copyrightText": "Copyright (c) 2014 Mathijs van de Nes",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/zip@4.6.1"
+        }
+      ]
+    },
+    {
+      "name": "rand",
+      "SPDXID": "SPDXRef-cargo-rand-0.7.3-fb3d22",
+      "versionInfo": "0.7.3",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "copyrightText": "Copyright (c) 2014 The Rust Project, Copyright (c) 2014 The Rust Project Developers, Copyright 2013 The Rust Project, Copyright 2013 The Rust Project Developers, Copyright 2013-2017 The Rust Project, Copyright 2013-2017 The Rust Project Developers, Copyright 2013-2018 The Rust Project, Copyright 2013-2018 The Rust Project Developers, Copyright 2016-2017 The Rust Project, Copyright 2016-2017 The Rust Project Developers, Copyright 2017 The Rust Project, Copyright 2017 The Rust Project Developers, Copyright 2018, Copyright 2018 Developers of the Rand project, Copyright 2019, Copyright 2019 Developers of the Rand project",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/rand@0.7.3"
+        }
+      ]
+    },
+    {
+      "name": "rand",
+      "SPDXID": "SPDXRef-cargo-rand-0.8.6-4645bc",
+      "versionInfo": "0.8.6",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "copyrightText": "Copyright (c) 2014 The Rust Project Developers, Copyright 2013 The Rust Project Developers, Copyright 2013-2017 The Rust Project Developers, Copyright 2017 The Rust Project Developers, Copyright 2018 Developers of the Rand project, Copyright 2018-2020 Developers of the Rand project, Copyright 2021 Developers of the Rand project, COPYRIGHT package.metadata.docs.rs",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/rand@0.8.6"
+        }
+      ]
+    },
+    {
+      "name": "rustls-webpki",
+      "SPDXID": "SPDXRef-cargo-rustls-webpki-0.103.14-ad1285",
+      "versionInfo": "0.103.14",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "ISC",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/rustls-webpki@0.103.14"
+        }
+      ]
+    },
+    {
+      "name": "rustls",
+      "SPDXID": "SPDXRef-cargo-rustls-0.23.45-56f693",
+      "versionInfo": "0.23.45",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "Apache-2.0 OR ISC OR MIT",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/rustls@0.23.45"
+        }
+      ]
+    },
+    {
+      "name": "rustls",
+      "SPDXID": "SPDXRef-cargo-rustls-0.23.46-ff5e35",
+      "versionInfo": "0.23.46",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "Apache-2.0 OR ISC OR MIT",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/rustls@0.23.46"
+        }
+      ]
+    },
+    {
+      "name": "rand",
+      "SPDXID": "SPDXRef-cargo-rand-0.9.4-79ed8d",
+      "versionInfo": "0.9.4",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "copyrightText": "Copyright (c) 2014 The Rust Project Developers, COPYRIGHT (https://github.com/rust-random/rand/blob/master/COPYRIGHT), Copyright 2013 The Rust Project Developers, Copyright 2013-2017 The Rust Project Developers, Copyright 2017 The Rust Project Developers, Copyright 2018 Developers of the Rand project, Copyright 2018-2020 Developers of the Rand project, Copyright 2018-2023 Developers of the Rand project, Copyright 2018-2024 Developers of the Rand project, Copyright 2021 Developers of the Rand project, COPYRIGHT package.metadata.docs.rs",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/rand@0.9.4"
+        }
+      ]
+    },
+    {
+      "name": "zip",
+      "SPDXID": "SPDXRef-cargo-zip-9.1.2-aa180c",
+      "versionInfo": "9.1.2",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/zip@9.1.2"
+        }
+      ]
+    },
+    {
+      "name": "glib",
+      "SPDXID": "SPDXRef-cargo-glib-0.18.5-a67b96",
+      "versionInfo": "0.18.5",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "copyrightText": "Copyright (c) 2020 Igor Aleksanov",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/glib@0.18.5"
+        }
+      ]
+    },
+    {
+      "name": "rustls-webpki",
+      "SPDXID": "SPDXRef-cargo-rustls-webpki-0.103.16-185b95",
+      "versionInfo": "0.103.16",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "ISC",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:cargo/rustls-webpki@0.103.16"
+        }
+      ]
+    }
+  ],
+  "qualification": "Read-only API evidence. The retired historical manifest still appears in the remote dependency graph; no alert state has been changed."
+}

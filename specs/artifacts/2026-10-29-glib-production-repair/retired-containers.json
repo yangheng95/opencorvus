@@ -1,0 +1,125 @@
+{
+  "retired": [
+    {
+      "id": "de4f4cae03494b56606cd57d81554ff8644d63702eba90e37eecbff2162985c5",
+      "name": "/oc-native790-prepare",
+      "image": "sha256:2ca68e13c8babd56a227b888f6fe6dfe092a5d875bb061986c51382ee3a66ddd",
+      "scope": "native-advisory-790",
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-29T09:15:43.475772897Z",
+        "FinishedAt": "2026-10-29T09:18:49.02515802Z"
+      },
+      "removedAt": "2026-10-29T09:58:03.122Z"
+    },
+    {
+      "id": "fd429e50190f142dea57eaa021fb19c64808f28d423f88215d5ec7dbbd08585e",
+      "name": "/oc-native790-production-01",
+      "image": "sha256:2ca68e13c8babd56a227b888f6fe6dfe092a5d875bb061986c51382ee3a66ddd",
+      "scope": "native-advisory-790",
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 1,
+        "Error": "",
+        "StartedAt": "2026-10-29T09:19:15.288492807Z",
+        "FinishedAt": "2026-10-29T09:19:19.765663078Z"
+      },
+      "removedAt": "2026-10-29T09:58:03.627Z"
+    },
+    {
+      "id": "db9a1a4ce93fd98c604e78948adaa9e7a030341c7a34701796b8dc2ccfdbcb77",
+      "name": "/oc-native790-production-02",
+      "image": "sha256:43fb719000213f116c9e185f1022f3218e0e1155448ad74042a86fe84f6b51bb",
+      "scope": "native-advisory-790",
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 1,
+        "Error": "",
+        "StartedAt": "2026-10-29T09:26:54.343706502Z",
+        "FinishedAt": "2026-10-29T09:28:13.257504686Z"
+      },
+      "removedAt": "2026-10-29T09:58:04.062Z"
+    },
+    {
+      "id": "18487ac283aa8f01ffa80eb0552f504ebd0a377421565b7265ff795feb5722b1",
+      "name": "/oc-native790-production-03",
+      "image": "sha256:43fb719000213f116c9e185f1022f3218e0e1155448ad74042a86fe84f6b51bb",
+      "scope": "native-advisory-790",
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 1,
+        "Error": "",
+        "StartedAt": "2026-10-29T09:32:23.988441769Z",
+        "FinishedAt": "2026-10-29T09:34:48.282364022Z"
+      },
+      "removedAt": "2026-10-29T09:58:04.487Z"
+    },
+    {
+      "id": "5611cf08aa8351aa3ef645e71608ebda74cf21445bce111ac7b42208563859b9",
+      "name": "/oc-native790-production-04",
+      "image": "sha256:43fb719000213f116c9e185f1022f3218e0e1155448ad74042a86fe84f6b51bb",
+      "scope": "native-advisory-790",
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-29T09:38:49.780026017Z",
+        "FinishedAt": "2026-10-29T09:53:41.568698573Z"
+      },
+      "removedAt": "2026-10-29T09:58:04.888Z"
+    },
+    {
+      "id": "7ad54757a27d898c168247b5ed2488a405c6320497e3d5f621a7760dd45d7aa2",
+      "name": "/oc-native790-docker-layout",
+      "image": "sha256:43fb719000213f116c9e185f1022f3218e0e1155448ad74042a86fe84f6b51bb",
+      "scope": "native-advisory-790",
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-29T09:54:33.230446048Z",
+        "FinishedAt": "2026-10-29T09:56:34.138338706Z"
+      },
+      "removedAt": "2026-10-29T09:58:05.507Z"
+    }
+  ],
+  "qualification": "Only exact exited containers bearing this owned scope label were removed. Source/public-cache volumes and image retained. User daemon/processes/windows and databases untouched."
+}

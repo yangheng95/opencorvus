@@ -52,3 +52,7 @@ specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/be
 # Raw native qualification output retains its producer's exact whitespace and bytes.
 specs/artifacts/2026-10-29-native-advisory-evidence/glib-candidate/*.log -text -whitespace
 specs/artifacts/2026-10-29-native-advisory-evidence/glib-candidate/upstream-*.txt -text -whitespace
+
+# Preserve the exact upstream permission notice and native command output.
+patches/rust/glib-0.18.5/LICENSE -text -whitespace
+specs/artifacts/2026-10-29-glib-production-repair/*.log -text -whitespace

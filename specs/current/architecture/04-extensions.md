@@ -253,6 +253,13 @@ payload，只进入 Squad Market，不由项目 bootstrap 写入安装目录。�
 `packages/opencorvus/script/generate-expert-squad-payload.ts` 在构建前从仓库作者源
 `expert-squads/<namespace>/<id>/` 明文包生成，禁止手写平行清单。运行时安装包仍只存在于
 项目或用户全局 `.opencorvus/expert-squads/<namespace>/<id>/`，运行时 resolver 不扫描仓库作者源。
+
+构建资源生成器的公共入口统一在继承当前隔离环境的源码条件子进程中运行唯一生成实现，
+供 Overlay、普通 backend、本地 backend 和根生成命令共用；首次生成不依赖尚未存在的
+SDK 发布目录。逐行日志和原始失败保留。工具运行时闭包将 SDK project-path 导入解析到
+真实文件，由现有 bundler 按扩展名处理 TypeScript 或 JavaScript，不再通过固定 JavaScript
+loader 的虚拟模块包装真实源码。工具文件沙箱和闭包完整性仍由现有所有者负责。
+
 当前仓库源分区包括 `builtin/<id>`、`mirror/prism`、`tanzeqi/mirror-watch` 和 `wujiang/opentest`。`namespace` 是来源和安装分区，
 不是 active identity；manifest `name` 是可选的中文或英文人类可读名称，缺省时 Registry 使用必填 `label` 作为 catalog、Market 与 UI 展示名；`prompt_profile.active` 仍然使用 manifest `id`：
 

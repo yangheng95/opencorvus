@@ -1,0 +1,9 @@
+
+running 4 tests
+test glib_contracts::actual_borrow_survives_its_iterator_while_the_variant_is_alive ... ok
+test glib_contracts::actual_forward_reverse_and_last_preserve_the_unicode_array ... ok
+test glib_contracts::actual_mixed_front_back_iteration_returns_exact_borrowed_strings ... ok
+test glib_contracts::actual_skips_return_exact_values_and_remaining_sizes ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

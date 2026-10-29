@@ -1,0 +1,487 @@
+        Info Looking up installed tauri packages to check mismatched versions...
+warning: unnecessary parentheses around type
+  --> /repo/patches/rust/glib-0.18.5/src/value_array.rs:90:42
+   |
+90 |             let func = func as *mut &mut (dyn FnMut(&Value, &Value) -> Ordering);
+   |                                          ^                                     ^
+   |
+   = note: `#[warn(unused_parens)]` (part of `#[warn(unused)]`) on by default
+help: remove these parentheses
+   |
+90 -             let func = func as *mut &mut (dyn FnMut(&Value, &Value) -> Ordering);
+90 +             let func = func as *mut &mut dyn FnMut(&Value, &Value) -> Ordering;
+   |
+
+warning: unnecessary parentheses around type
+  --> /repo/patches/rust/glib-0.18.5/src/value_array.rs:99:32
+   |
+99 |             let func_obj: &mut (dyn FnMut(&Value, &Value) -> Ordering) = &mut func;
+   |                                ^                                     ^
+   |
+help: remove these parentheses
+   |
+99 -             let func_obj: &mut (dyn FnMut(&Value, &Value) -> Ordering) = &mut func;
+99 +             let func_obj: &mut dyn FnMut(&Value, &Value) -> Ordering = &mut func;
+   |
+
+warning: unnecessary parentheses around type
+   --> /repo/patches/rust/glib-0.18.5/src/value_array.rs:101:42
+    |
+101 |                 &func_obj as *const &mut (dyn FnMut(&Value, &Value) -> Ordering) as ffi::gpointer;
+    |                                          ^                                     ^
+    |
+help: remove these parentheses
+    |
+101 -                 &func_obj as *const &mut (dyn FnMut(&Value, &Value) -> Ordering) as ffi::gpointer;
+101 +                 &func_obj as *const &mut dyn FnMut(&Value, &Value) -> Ordering as ffi::gpointer;
+    |
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+    --> /repo/patches/rust/glib-0.18.5/src/object.rs:1606:34
+     |
+1606 |     fn interface<T: IsInterface>(&self) -> Option<InterfaceRef<T>>;
+     |                                  ^^^^^            ^^^^^^^^^^^^^^^ the same lifetime is hidden here
+     |                                  |
+     |                                  the lifetime is elided here
+     |
+     = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+     = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+     |
+1606 |     fn interface<T: IsInterface>(&self) -> Option<InterfaceRef<'_, T>>;
+     |                                                                +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+    --> /repo/patches/rust/glib-0.18.5/src/object.rs:2223:34
+     |
+2223 |     fn interface<U: IsInterface>(&self) -> Option<InterfaceRef<U>> {
+     |                                  ^^^^^            ^^^^^^^^^^^^^^^ the same lifetime is hidden here
+     |                                  |
+     |                                  the lifetime is elided here
+     |
+     = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+     |
+2223 |     fn interface<U: IsInterface>(&self) -> Option<InterfaceRef<'_, U>> {
+     |                                                                +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+    --> /repo/patches/rust/glib-0.18.5/src/object.rs:3961:19
+     |
+3961 |     pub fn parent(&self) -> Option<ClassRef<T>> {
+     |                   ^^^^^            ^^^^^^^^^^^ the same lifetime is hidden here
+     |                   |
+     |                   the lifetime is elided here
+     |
+     = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+     |
+3961 |     pub fn parent(&self) -> Option<ClassRef<'_, T>> {
+     |                                             +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+    --> /repo/patches/rust/glib-0.18.5/src/object.rs:4100:42
+     |
+4100 |     pub fn from_class<U: IsClass>(klass: &Class<U>) -> Option<InterfaceRef<T>> {
+     |                                          ^^^^^^^^^            ^^^^^^^^^^^^^^^ the same lifetime is hidden here
+     |                                          |
+     |                                          the lifetime is elided here
+     |
+     = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+     |
+4100 |     pub fn from_class<U: IsClass>(klass: &Class<U>) -> Option<InterfaceRef<'_, T>> {
+     |                                                                            +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+    --> /repo/patches/rust/glib-0.18.5/src/object.rs:4170:19
+     |
+4170 |     pub fn parent(&self) -> Option<InterfaceRef<T>> {
+     |                   ^^^^^            ^^^^^^^^^^^^^^^ the same lifetime is hidden here
+     |                   |
+     |                   the lifetime is elided here
+     |
+     = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+     |
+4170 |     pub fn parent(&self) -> Option<InterfaceRef<'_, T>> {
+     |                                                 +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> /repo/patches/rust/glib-0.18.5/src/collections/list.rs:104:17
+    |
+104 |     pub fn iter(&self) -> Iter<T> {
+    |                 ^^^^^     ^^^^^^^ the same lifetime is hidden here
+    |                 |
+    |                 the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+104 |     pub fn iter(&self) -> Iter<'_, T> {
+    |                                +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> /repo/patches/rust/glib-0.18.5/src/collections/list.rs:111:21
+    |
+111 |     pub fn iter_mut(&mut self) -> IterMut<T> {
+    |                     ^^^^^^^^^     ^^^^^^^^^^ the same lifetime is hidden here
+    |                     |
+    |                     the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+111 |     pub fn iter_mut(&mut self) -> IterMut<'_, T> {
+    |                                           +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> /repo/patches/rust/glib-0.18.5/src/collections/slist.rs:104:17
+    |
+104 |     pub fn iter(&self) -> Iter<T> {
+    |                 ^^^^^     ^^^^^^^ the same lifetime is hidden here
+    |                 |
+    |                 the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+104 |     pub fn iter(&self) -> Iter<'_, T> {
+    |                                +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> /repo/patches/rust/glib-0.18.5/src/collections/slist.rs:111:21
+    |
+111 |     pub fn iter_mut(&mut self) -> IterMut<T> {
+    |                     ^^^^^^^^^     ^^^^^^^^^^ the same lifetime is hidden here
+    |                     |
+    |                     the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+111 |     pub fn iter_mut(&mut self) -> IterMut<'_, T> {
+    |                                           +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> /repo/patches/rust/glib-0.18.5/src/enums.rs:682:20
+    |
+682 |     pub fn builder(&self) -> FlagsBuilder {
+    |                    ^^^^^     ^^^^^^^^^^^^ the same lifetime is hidden here
+    |                    |
+    |                    the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+682 |     pub fn builder(&self) -> FlagsBuilder<'_> {
+    |                                          ++++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> /repo/patches/rust/glib-0.18.5/src/enums.rs:689:31
+    |
+689 |     pub fn builder_with_value(&self, value: Value) -> Option<FlagsBuilder> {
+    |                               ^^^^^                          ^^^^^^^^^^^^ the same lifetime is hidden here
+    |                               |
+    |                               the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+689 |     pub fn builder_with_value(&self, value: Value) -> Option<FlagsBuilder<'_>> {
+    |                                                                          ++++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> /repo/patches/rust/glib-0.18.5/src/enums.rs:830:25
+    |
+830 |     fn new(flags_class: &FlagsClass) -> FlagsBuilder {
+    |                         ^^^^^^^^^^^     ^^^^^^^^^^^^ the same lifetime is hidden here
+    |                         |
+    |                         the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+830 |     fn new(flags_class: &FlagsClass) -> FlagsBuilder<'_> {
+    |                                                     ++++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> /repo/patches/rust/glib-0.18.5/src/enums.rs:835:32
+    |
+835 |     fn with_value(flags_class: &FlagsClass, value: Value) -> FlagsBuilder {
+    |                                ^^^^^^^^^^^                   ^^^^^^^^^^^^ the same lifetime is hidden here
+    |                                |
+    |                                the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+835 |     fn with_value(flags_class: &FlagsClass, value: Value) -> FlagsBuilder<'_> {
+    |                                                                          ++++
+
+warning: hiding a lifetime that's named elsewhere is confusing
+   --> /repo/patches/rust/glib-0.18.5/src/translate.rs:467:42
+    |
+467 |     fn to_glib_none_mut(&'a mut self) -> StashMut<P, Self>;
+    |                          --              ^^^^^^^^^^^^^^^^^ the same lifetime is hidden here
+    |                          |
+    |                          the lifetime is named here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: consistently use `'a`
+    |
+467 |     fn to_glib_none_mut(&'a mut self) -> StashMut<'a, P, Self>;
+    |                                                   +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> /repo/patches/rust/glib-0.18.5/src/main_context.rs:164:20
+    |
+164 |     pub fn acquire(&self) -> Result<MainContextAcquireGuard, crate::BoolError> {
+    |                    ^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^ the same lifetime is hidden here
+    |                    |
+    |                    the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+164 |     pub fn acquire(&self) -> Result<MainContextAcquireGuard<'_>, crate::BoolError> {
+    |                                                            ++++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> /repo/patches/rust/glib-0.18.5/src/main_context.rs:192:17
+    |
+192 |     fn new(ctx: &MainContext) -> ThreadDefaultContext {
+    |                 ^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^ the same lifetime is hidden here
+    |                 |
+    |                 the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+192 |     fn new(ctx: &MainContext) -> ThreadDefaultContext<'_> {
+    |                                                      ++++
+
+warning: hiding a lifetime that's named elsewhere is confusing
+   --> /repo/patches/rust/glib-0.18.5/src/value.rs:545:47
+    |
+545 |     pub fn get<'a, T>(&'a self) -> Result<T, <<T as FromValue>::Checker as ValueTypeChecker>::Error>
+    |                        --                     ^^^^^^^^^^^^^^^^^^^^^^^^^ the same lifetime is hidden here
+    |                        |
+    |                        the lifetime is named here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: consistently use `'a`
+    |
+545 |     pub fn get<'a, T>(&'a self) -> Result<T, <<T as FromValue<'a>>::Checker as ValueTypeChecker>::Error>
+    |                                                              ++++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> /repo/patches/rust/glib-0.18.5/src/value.rs:558:25
+    |
+558 |     pub fn get_owned<T>(&self) -> Result<T, <<T as FromValue>::Checker as ValueTypeChecker>::Error>
+    |                         ^^^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^ the same lifetime is hidden here
+    |                         |
+    |                         the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+558 |     pub fn get_owned<T>(&self) -> Result<T, <<T as FromValue<'_>>::Checker as ValueTypeChecker>::Error>
+    |                                                             ++++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> /repo/patches/rust/glib-0.18.5/src/variant.rs:843:27
+    |
+843 |     pub fn array_iter_str(&self) -> Result<VariantStrIter, VariantTypeMismatchError> {
+    |                           ^^^^^            ^^^^^^^^^^^^^^ the same lifetime is hidden here
+    |                           |
+    |                           the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+843 |     pub fn array_iter_str(&self) -> Result<VariantStrIter<'_>, VariantTypeMismatchError> {
+    |                                                          ++++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> /repo/patches/rust/glib-0.18.5/src/variant_type.rs:592:24
+    |
+592 |     pub fn tuple_types(&self) -> VariantTyIterator {
+    |                        ^^^^^     ^^^^^^^^^^^^^^^^^ the same lifetime is hidden here
+    |                        |
+    |                        the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+592 |     pub fn tuple_types(&self) -> VariantTyIterator<'_> {
+    |                                                   ++++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+    --> /repo/patches/rust/glib-0.18.5/src/param_spec.rs:1060:15
+     |
+1060 |         name: &str,
+     |               ^^^^ the lifetime is elided here
+1061 |         default_value: T,
+1062 |     ) -> ParamSpecEnumBuilder<T> {
+     |          ^^^^^^^^^^^^^^^^^^^^^^^ the same lifetime is hidden here
+     |
+     = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+     |
+1062 |     ) -> ParamSpecEnumBuilder<'_, T> {
+     |                               +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+    --> /repo/patches/rust/glib-0.18.5/src/param_spec.rs:1067:15
+     |
+1067 |         name: &str,
+     |               ^^^^ the lifetime is elided here
+1068 |     ) -> ParamSpecEnumBuilder<T> {
+     |          ^^^^^^^^^^^^^^^^^^^^^^^ the same lifetime is hidden here
+     |
+     = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+     |
+1068 |     ) -> ParamSpecEnumBuilder<'_, T> {
+     |                               +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+    --> /repo/patches/rust/glib-0.18.5/src/param_spec.rs:1208:15
+     |
+1208 |         name: &str,
+     |               ^^^^ the lifetime is elided here
+1209 |     ) -> ParamSpecFlagsBuilder<T> {
+     |          ^^^^^^^^^^^^^^^^^^^^^^^^ the same lifetime is hidden here
+     |
+     = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+     |
+1209 |     ) -> ParamSpecFlagsBuilder<'_, T> {
+     |                                +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+    --> /repo/patches/rust/glib-0.18.5/src/param_spec.rs:1350:26
+     |
+1350 |     pub fn builder(name: &str) -> ParamSpecStringBuilder {
+     |                          ^^^^     ^^^^^^^^^^^^^^^^^^^^^^ the same lifetime is hidden here
+     |                          |
+     |                          the lifetime is elided here
+     |
+     = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+     |
+1350 |     pub fn builder(name: &str) -> ParamSpecStringBuilder<'_> {
+     |                                                         ++++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+    --> /repo/patches/rust/glib-0.18.5/src/param_spec.rs:1492:41
+     |
+1492 |     pub fn builder<T: StaticType>(name: &str) -> ParamSpecBoxedBuilder<T> {
+     |                                         ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^ the same lifetime is hidden here
+     |                                         |
+     |                                         the lifetime is elided here
+     |
+     = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+     |
+1492 |     pub fn builder<T: StaticType>(name: &str) -> ParamSpecBoxedBuilder<'_, T> {
+     |                                                                        +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+    --> /repo/patches/rust/glib-0.18.5/src/param_spec.rs:1645:26
+     |
+1645 |     pub fn builder(name: &str) -> ParamSpecValueArrayBuilder {
+     |                          ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^ the same lifetime is hidden here
+     |                          |
+     |                          the lifetime is elided here
+     |
+     = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+     |
+1645 |     pub fn builder(name: &str) -> ParamSpecValueArrayBuilder<'_> {
+     |                                                             ++++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+    --> /repo/patches/rust/glib-0.18.5/src/param_spec.rs:1743:55
+     |
+1743 |     pub fn builder<T: StaticType + IsA<Object>>(name: &str) -> ParamSpecObjectBuilder<T> {
+     |                                                       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^ the same lifetime is hidden here
+     |                                                       |
+     |                                                       the lifetime is elided here
+     |
+     = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+     |
+1743 |     pub fn builder<T: StaticType + IsA<Object>>(name: &str) -> ParamSpecObjectBuilder<'_, T> {
+     |                                                                                       +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> /repo/patches/rust/glib-0.18.5/src/subclass/types.rs:710:17
+    |
+710 |     fn instance(&self) -> crate::BorrowedObject<Self::Type>;
+    |                 ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the same lifetime is hidden here
+    |                 |
+    |                 the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+710 |     fn instance(&self) -> crate::BorrowedObject<'_, Self::Type>;
+    |                                                 +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> /repo/patches/rust/glib-0.18.5/src/subclass/types.rs:722:12
+    |
+722 |     fn obj(&self) -> crate::BorrowedObject<Self::Type>;
+    |            ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the same lifetime is hidden here
+    |            |
+    |            the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+722 |     fn obj(&self) -> crate::BorrowedObject<'_, Self::Type>;
+    |                                            +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> /repo/patches/rust/glib-0.18.5/src/subclass/types.rs:744:17
+    |
+744 |     fn instance(&self) -> crate::BorrowedObject<Self::Type> {
+    |                 ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the same lifetime is hidden here
+    |                 |
+    |                 the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+744 |     fn instance(&self) -> crate::BorrowedObject<'_, Self::Type> {
+    |                                                 +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> /repo/patches/rust/glib-0.18.5/src/subclass/types.rs:754:12
+    |
+754 |     fn obj(&self) -> crate::BorrowedObject<Self::Type> {
+    |            ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the same lifetime is hidden here
+    |            |
+    |            the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+754 |     fn obj(&self) -> crate::BorrowedObject<'_, Self::Type> {
+    |                                            +++
+
+warning: `glib` (lib) generated 34 warnings (run `cargo fix --lib -p glib` to apply 34 suggestions)
+   Compiling opencorvus-overlay v0.1.38 (/repo/packages/overlay/src-tauri)
+warning: function `overlay_min_aspect_ratio` is never used
+   --> src/main.rs:815:4
+    |
+815 | fn overlay_min_aspect_ratio(constraints: OverlayWindowConstraints) -> f64 {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `opencorvus-overlay` (bin "opencorvus-overlay") generated 1 warning
+    Finished `release` profile [optimized] target(s) in 1m 59s
+       Built application at: /target-s/release/opencorvus-overlay

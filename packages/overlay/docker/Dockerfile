@@ -1,5 +1,8 @@
-ARG BUN_VERSION=1.3.14
+ARG BUN_VERSION
+ARG NODE_VERSION
 FROM oven/bun:${BUN_VERSION} AS bun-runtime
+
+FROM node:${NODE_VERSION}-bookworm-slim AS node-runtime
 
 FROM rust:1-bookworm
 
@@ -22,13 +25,13 @@ RUN sed -i \
     libgtk-3-dev \
     libayatana-appindicator3-dev \
     librsvg2-dev \
-    nodejs \
     pkg-config \
     ripgrep \
     xdg-utils \
   && rm -rf /var/lib/apt/lists/*
 
 COPY --from=bun-runtime /usr/local/bin/bun /usr/local/bin/bun
+COPY --from=node-runtime /usr/local/bin/node /usr/local/bin/node
 ENV BUN_CONFIG_REGISTRY=${NPM_REGISTRY}
 ENV PATH="/root/.bun/bin:$PATH"
 

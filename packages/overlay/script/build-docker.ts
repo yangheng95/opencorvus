@@ -25,6 +25,13 @@ const dockerDir = path.join(dir, "docker")
 const stagedResources = path.join(tauriDir, "resources")
 
 const IMAGE_NAME = "opencorvus-overlay-builder"
+const { packageManager, engines } = await Bun.file(path.join(repo, "package.json")).json()
+const bunVersion = /^bun@([^+]+)$/.exec(packageManager)?.[1]
+if (!bunVersion) throw new Error("Root packageManager must declare an exact Bun version")
+const nodeVersion = engines?.node
+if (typeof nodeVersion !== "string" || !/^\d+$/.test(nodeVersion)) {
+  throw new Error("Root engines.node must declare the build Node.js major version")
+}
 
 type Target = "linux-x64" | "linux-arm64"
 
@@ -54,7 +61,7 @@ async function cleanupStaging(serverFile: string) {
 }
 
 function tauriArgs() {
-  return ["--config", JSON.stringify({ bundle: { resources: [] } })]
+  return ["--config", JSON.stringify({ build: { beforeBuildCommand: "" }, bundle: { resources: [] } })]
 }
 
 /** Convert Windows path to Docker-compatible path (for -v mounts in Git Bash/MINGW). */
@@ -67,14 +74,15 @@ function toDockerPath(p: string): string {
 
 async function ensureDockerImage(platform: "linux/amd64" | "linux/arm64") {
   const platformTag = platform.replace("/", "-")
-  const tag = `${IMAGE_NAME}:${platformTag}`
-  const inspect = await $`docker image inspect ${tag}`.nothrow().quiet()
-  if (inspect.exitCode !== 0) {
-    console.log(`Building Docker image ${tag} (first time, may take a few minutes)...`)
-    await $`docker buildx build --platform ${platform} -t ${tag} ${dockerDir}`
-  }
+  const tag = `${IMAGE_NAME}:${platformTag}-bun-${bunVersion}-node-${nodeVersion}`
+  console.log(`Building current Docker inputs for ${tag} (cached layers are reused)...`)
+  await $`docker buildx build --load --platform ${platform} --build-arg BUN_VERSION=${bunVersion} --build-arg NODE_VERSION=${nodeVersion} -t ${tag} ${dockerDir}`
   return tag
 }
+
+// Frontend dependencies belong to the host workspace. Mount the completed
+// frontend rather than asking the native builder to use host node_modules.
+await $`bun run build:vite`.cwd(dir)
 
 for (const target of targets) {
   const [, arch] = target.split("-") as [string, "x64" | "arm64"]
@@ -100,27 +108,30 @@ for (const target of targets) {
     await $`docker run --privileged --rm tonistiigi/binfmt --install arm64`.nothrow().quiet()
   }
 
-  // Build Docker image if needed
+  // Let Docker validate current inputs and reuse its layer cache.
   const image = await ensureDockerImage(dockerPlatform as "linux/amd64" | "linux/arm64")
   await cleanupStaging("opencorvus")
 
   // Named volumes for Cargo and build cache (avoids recompiling on every run)
-  const cargoVol = `opencorvus-cargo-cache-${arch}`
+  const cargoVol = `opencorvus-cargo-home-${arch}`
   const targetVol = `opencorvus-overlay-target-${arch}`
 
   // Run tauri build inside Docker
   await $`docker run --rm
     --platform ${dockerPlatform}
-    -v ${toDockerPath(path.join(dir, "src"))}:/overlay/src:ro
-    -v ${toDockerPath(tauriDir)}:/overlay/src-tauri
-    -v ${toDockerPath(serverDir)}:/overlay/embedded/opencorvus:ro
-    -v ${cargoVol}:/root/.cargo/registry
-    -v ${targetVol}:/overlay/src-tauri/target
-    -w /overlay/src-tauri
-    -e CARGO_TARGET_DIR=/overlay/src-tauri/target
-    -e OPENCORVUS_EMBED_PATH=/overlay/embedded/opencorvus
+    -v ${toDockerPath(path.join(dir, "src"))}:/repo/packages/overlay/src:ro
+    -v ${toDockerPath(tauriDir)}:/repo/packages/overlay/src-tauri
+    -v ${toDockerPath(path.join(dir, "dist-vite"))}:/repo/packages/overlay/dist-vite:ro
+    -v ${toDockerPath(path.join(repo, "patches/rust"))}:/repo/patches/rust:ro
+    -v ${toDockerPath(path.join(opencorvus, "server-defaults.json"))}:/repo/packages/opencorvus/server-defaults.json:ro
+    -v ${toDockerPath(serverDir)}:/repo/embedded/opencorvus:ro
+    -v ${cargoVol}:/root/.cargo
+    -v ${targetVol}:/repo/packages/overlay/src-tauri/target
+    -w /repo/packages/overlay/src-tauri
+    -e CARGO_TARGET_DIR=/repo/packages/overlay/src-tauri/target
+    -e OPENCORVUS_EMBED_PATH=/repo/embedded/opencorvus
     ${image}
-    tauri build --no-bundle ${tauriArgs()}`
+    tauri build --no-bundle ${tauriArgs()} -- --locked`
 
   // Collect artifacts into a flat portable package directory
   const outDir = path.join(dir, "dist", packageName)
@@ -128,9 +139,9 @@ for (const target of targets) {
   await fs.mkdir(outDir, { recursive: true })
 
   // The target volume is a named Docker volume — copy artifacts out of it
-  const releaseInVol = `/overlay/src-tauri/target/release`
+  const releaseInVol = `/repo/packages/overlay/src-tauri/target/release`
   await $`docker run --rm
-    -v ${targetVol}:/overlay/src-tauri/target:ro
+    -v ${targetVol}:/repo/packages/overlay/src-tauri/target:ro
     -v ${toDockerPath(outDir)}:/out
     --platform ${dockerPlatform}
     ${image}

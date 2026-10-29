@@ -4049,3 +4049,29 @@ and a Project with no rendered representation uses its organization control.
 The browser reveals the newly focused control without selecting a record or
 expanding the list. New focus, superseding action, layout/API retirement and
 failed reads retire the intent; no old-component retry timer reclaims focus.
+
+## Native dependency source and qualification
+
+The Overlay's root Cargo manifest owns one crates.io patch for GLib 0.18.5 in
+`patches/rust/glib-0.18.5`. This licensed production source retains the GTK 0.18
+interface and features and incorporates the official RUSTSEC-2024-0429
+`VariantStrIter` mutable out-pointer correction. Upstream test-only declarations
+and standalone test/benchmark targets are omitted. The lock retains real
+version 0.18.5 and records the path dependency; no registry or newer-version
+fallback owns the same capability.
+
+The existing Rust dependency checker dispatches by its actual compiler host.
+Windows retains its current production and event-listener contracts. Linux
+qualifies GLib using the canonical complete `build:overlay` invocation's exact
+library artifact, application profile, features and dependency-owned native
+search paths. A separate opt-level=3 library run shares that manifest and lock
+and is recorded separately from the production application. Neither compilation
+nor these data contracts establishes native GUI acceptance.
+
+Root `packageManager` and `engines.node` own the Bun and Node.js build runtimes.
+CI reads the same package file. The Docker builder receives those declarations
+as build arguments, evaluates current inputs through Docker's layer cache, and
+mounts only the required sources, host-built frontend, root Rust patch and server
+defaults at their canonical `/repo/packages/...` and `/repo/patches/rust` paths.
+Its Tauri build uses the current lock and consumes that completed frontend.
+The dedicated Cargo home volume owns both registry and public Git cache entries.

@@ -1,0 +1,22 @@
+{
+  "url": "https://static.crates.io/crates/glib/glib-0.18.5.crate",
+  "registryChecksum": "233daaf6e83ae6a12a52055f568f9d7cf4671dabb78ff9560ab6da230ce00ee5",
+  "bytes": 267679,
+  "officialFix": "https://github.com/gtk-rs/gtk-rs-core/commit/b5a4071e439bef2b5eea76c3aa25e5ae84839e34",
+  "files": [
+    ".cargo_vcs_info.json",
+    "benches",
+    "Cargo.toml",
+    "Cargo.toml.orig",
+    "COPYRIGHT",
+    "Gir.toml",
+    "Gir_GObject.toml",
+    "LICENSE",
+    "README.md",
+    "src",
+    "tests"
+  ],
+  "qualification": "Published crate identity and official runtime fix; test-only declaration omissions were parsed by syn. Runtime correctness is established by real contracts, not a source digest.",
+  "source": "patches/rust/glib-0.18.5",
+  "sourceFiles": 94
+}

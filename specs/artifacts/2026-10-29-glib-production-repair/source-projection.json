@@ -1,0 +1,253 @@
+{
+  "omissions": [
+    {
+      "file": "src/bytes.rs",
+      "originalBytes": 7205,
+      "productionBytes": 5868,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/byte_array.rs",
+      "originalBytes": 3991,
+      "productionBytes": 3465,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/char.rs",
+      "originalBytes": 5624,
+      "productionBytes": 4298,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/checksum.rs",
+      "originalBytes": 1987,
+      "productionBytes": 1034,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/closure.rs",
+      "originalBytes": 14750,
+      "productionBytes": 13152,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/collections/list.rs",
+      "originalBytes": 27224,
+      "productionBytes": 20631,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/collections/ptr_slice.rs",
+      "originalBytes": 41267,
+      "productionBytes": 34166,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/collections/slice.rs",
+      "originalBytes": 27475,
+      "productionBytes": 23968,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/collections/slist.rs",
+      "originalBytes": 27177,
+      "productionBytes": 20565,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/collections/strv.rs",
+      "originalBytes": 44165,
+      "productionBytes": 38087,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/convert.rs",
+      "originalBytes": 13755,
+      "productionBytes": 12421,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/date.rs",
+      "originalBytes": 13749,
+      "productionBytes": 13449,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/date_time.rs",
+      "originalBytes": 366,
+      "productionBytes": 82,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/enums.rs",
+      "originalBytes": 30879,
+      "productionBytes": 30242,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/error.rs",
+      "originalBytes": 9227,
+      "productionBytes": 6542,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/future_with_timeout.rs",
+      "originalBytes": 2950,
+      "productionBytes": 1509,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/gobject/binding.rs",
+      "originalBytes": 9508,
+      "productionBytes": 376,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/gobject/binding_group.rs",
+      "originalBytes": 16670,
+      "productionBytes": 9521,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/gobject/signal_group.rs",
+      "originalBytes": 8181,
+      "productionBytes": 5746,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/gstring.rs",
+      "originalBytes": 73945,
+      "productionBytes": 69271,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/gstring_builder.rs",
+      "originalBytes": 9407,
+      "productionBytes": 8101,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/main_context.rs",
+      "originalBytes": 9513,
+      "productionBytes": 7698,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/main_context_channel.rs",
+      "originalBytes": 30419,
+      "productionBytes": 20728,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/main_context_futures.rs",
+      "originalBytes": 26537,
+      "productionBytes": 23667,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/object.rs",
+      "originalBytes": 160705,
+      "productionBytes": 157819,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/param_spec.rs",
+      "originalBytes": 69707,
+      "productionBytes": 66718,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/quark.rs",
+      "originalBytes": 2514,
+      "productionBytes": 2245,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/source_futures.rs",
+      "originalBytes": 15661,
+      "productionBytes": 14065,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/subclass/boxed.rs",
+      "originalBytes": 3346,
+      "productionBytes": 2030,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/subclass/object.rs",
+      "originalBytes": 24414,
+      "productionBytes": 10790,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/subclass/shared.rs",
+      "originalBytes": 9284,
+      "productionBytes": 4660,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/thread_pool.rs",
+      "originalBytes": 7750,
+      "productionBytes": 7024,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/translate.rs",
+      "originalBytes": 94681,
+      "productionBytes": 83693,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/types.rs",
+      "originalBytes": 18400,
+      "productionBytes": 17038,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/unicollate.rs",
+      "originalBytes": 2752,
+      "productionBytes": 1748,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/utils.rs",
+      "originalBytes": 8574,
+      "productionBytes": 5933,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/value.rs",
+      "originalBytes": 45287,
+      "productionBytes": 39084,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/variant.rs",
+      "originalBytes": 77401,
+      "productionBytes": 66960,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/variant_dict.rs",
+      "originalBytes": 10269,
+      "productionBytes": 8614,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/variant_iter.rs",
+      "originalBytes": 9874,
+      "productionBytes": 4985,
+      "testOnlyDeclarations": 1
+    },
+    {
+      "file": "src/variant_type.rs",
+      "originalBytes": 33192,
+      "productionBytes": 30433,
+      "testOnlyDeclarations": 1
+    }
+  ],
+  "parser": "syn 2.0.117",
+  "runtimeFix": "gtk-rs-core b5a4071e439bef2b5eea76c3aa25e5ae84839e34",
+  "test": false
+}

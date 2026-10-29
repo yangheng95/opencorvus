@@ -1,0 +1,75 @@
+use std::{fs, path::Path};
+use syn::{visit::Visit, spanned::Spanned, Attribute, Meta, Item, Token, punctuated::Punctuated, parse::Parser};
+
+// Three-valued evaluation: only remove declarations certainly disabled when test=false.
+fn cfg(meta: &Meta) -> Option<bool> {
+    match meta {
+        Meta::Path(p) if p.is_ident("test") => Some(false),
+        Meta::List(l) => {
+            let values: Vec<_> = Punctuated::<Meta, Token![,]>::parse_terminated.parse2(l.tokens.clone()).unwrap().iter().map(cfg).collect();
+            if l.path.is_ident("not") { assert_eq!(values.len(), 1); values[0].map(|x| !x) }
+            else if l.path.is_ident("all") { if values.contains(&Some(false)) {Some(false)} else if values.iter().all(|x| *x == Some(true)) {Some(true)} else {None} }
+            else if l.path.is_ident("any") { if values.contains(&Some(true)) {Some(true)} else if values.iter().all(|x| *x == Some(false)) {Some(false)} else {None} }
+            else {None}
+        },
+        _ => None,
+    }
+}
+fn test_only(attrs: &[Attribute]) -> bool {
+    attrs.iter().any(|a| a.path().is_ident("test") || (a.path().is_ident("cfg") && cfg(&a.parse_args::<Meta>().unwrap()) == Some(false)))
+}
+struct Projection { ranges: Vec<std::ops::Range<usize>> }
+impl<'a> Visit<'a> for Projection {
+    fn visit_item(&mut self, i: &'a Item) {
+        let attrs = match i {
+            Item::Const(x)=>&x.attrs, Item::Enum(x)=>&x.attrs, Item::ExternCrate(x)=>&x.attrs,
+            Item::Fn(x)=>&x.attrs, Item::ForeignMod(x)=>&x.attrs, Item::Impl(x)=>&x.attrs,
+            Item::Macro(x)=>&x.attrs, Item::Mod(x)=>&x.attrs, Item::Static(x)=>&x.attrs,
+            Item::Struct(x)=>&x.attrs, Item::Trait(x)=>&x.attrs, Item::TraitAlias(x)=>&x.attrs,
+            Item::Type(x)=>&x.attrs, Item::Union(x)=>&x.attrs, Item::Use(x)=>&x.attrs,
+            Item::Verbatim(_) => return,
+            _ => panic!("Unsupported source declaration"),
+        };
+        if test_only(attrs) {
+            let mut r = i.span().byte_range();
+            for a in attrs { r.start = r.start.min(a.span().byte_range().start); }
+            self.ranges.push(r);
+        } else { syn::visit::visit_item(self, i); }
+    }
+}
+fn project(src: &Path, dst: &Path, report: &mut Vec<serde_json::Value>) {
+    fs::create_dir_all(dst).unwrap();
+    for entry in fs::read_dir(src).unwrap() {
+        let entry=entry.unwrap(); let p=entry.path(); let q=dst.join(entry.file_name());
+        if p.is_dir() { project(&p,&q,report); continue; }
+        let mut text=fs::read_to_string(&p).unwrap();
+        if p.extension().is_some_and(|x| x == "rs") {
+            let ast=syn::parse_file(&text).unwrap(); let mut projection=Projection{ranges:vec![]}; projection.visit_file(&ast);
+            projection.ranges.sort_by_key(|x| x.start);
+            let original_len=text.len();
+            for r in projection.ranges.iter().rev() { text.replace_range(r.clone(), ""); }
+            syn::parse_file(&text).unwrap();
+            if !projection.ranges.is_empty() { report.push(serde_json::json!({"file":p.to_string_lossy(),"testOnlyDeclarations":projection.ranges.len(),"originalBytes":original_len,"productionBytes":text.len()})); }
+            text = text.trim_end().to_owned()+"\n";
+        }
+        fs::write(q,text).unwrap();
+    }
+}
+fn main() {
+    let args:Vec<_>=std::env::args().collect(); let src=Path::new(&args[1]); let dst=Path::new(&args[2]);
+    assert!(!dst.exists()); fs::create_dir_all(dst).unwrap();
+    for name in ["LICENSE","COPYRIGHT","README.md"] {fs::copy(src.join(name),dst.join(name)).unwrap();}
+    let mut manifest=fs::read_to_string(src.join("Cargo.toml")).unwrap().parse::<toml_edit::Document>().unwrap();
+    for key in ["test","bench","dev-dependencies"] {manifest.remove(key);}
+    for key in ["autotests","autobenches"] {manifest["package"][key]=toml_edit::value(false);}
+    for key in ["test","doctest","bench"] {manifest["lib"][key]=toml_edit::value(false);}
+    fs::write(dst.join("Cargo.toml"),manifest.to_string()).unwrap();
+    let mut report=vec![]; project(&src.join("src"),&dst.join("src"),&mut report);
+    let p=dst.join("src/variant_iter.rs"); let text=fs::read_to_string(&p).unwrap();
+    let old="let p: *mut libc::c_char = std::ptr::null_mut();"; assert_eq!(text.matches(old).count(),1);
+    let text=text.replacen(old,"let mut p: *mut libc::c_char = std::ptr::null_mut();",1);
+    let old="                &p,"; assert_eq!(text.matches(old).count(),1);
+    fs::write(p,text.replacen(old,"                &mut p,",1)).unwrap();
+    let result=serde_json::to_string_pretty(&serde_json::json!({"parser":"syn 2.0.117","test":false,"omissions":report,"runtimeFix":"gtk-rs-core b5a4071e439bef2b5eea76c3aa25e5ae84839e34"})).unwrap();
+    if args.len()>3 {fs::write(&args[3],result+"\n").unwrap();} else {println!("{}",result);}
+}

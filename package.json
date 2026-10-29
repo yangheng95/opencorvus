@@ -5,6 +5,9 @@
   "private": true,
   "type": "module",
   "packageManager": "bun@1.4.0",
+  "engines": {
+    "node": "22"
+  },
   "scripts": {
     "dev": "bun run --cwd packages/opencorvus dev",
     "dev:overlay": "cd packages/overlay/src-tauri && cargo run --release",

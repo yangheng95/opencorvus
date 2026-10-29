@@ -1,0 +1,23 @@
+$ bun run script/build-overlay.ts --cargo-message-format-json
+$ node --max-old-space-size=8192 ./node_modules/vite/bin/vite.js build --config vite.config.ts
+✗ Build failed in 2.62s
+error during build:
+[vite:css] [postcss] [postcss] [postcss] require() of ES Module /repo/node_modules/.bun/nanoid@5.1.16/node_modules/nanoid/non-secure/index.js from /repo/node_modules/.bun/postcss@8.5.23/node_modules/postcss/lib/input.js not supported.
+Instead change the require of index.js in /repo/node_modules/.bun/postcss@8.5.23/node_modules/postcss/lib/input.js to a dynamic import() which is available in all CommonJS modules.
+file: /repo/node_modules/.bun/@fontsource-variable+jetbrains-mono@5.2.8/node_modules/@fontsource-variable/jetbrains-mono/index.css:undefined:NaN
+Error [ERR_REQUIRE_ESM]: require() of ES Module /repo/node_modules/.bun/nanoid@5.1.16/node_modules/nanoid/non-secure/index.js from /repo/node_modules/.bun/postcss@8.5.23/node_modules/postcss/lib/input.js not supported.
+Instead change the require of index.js in /repo/node_modules/.bun/postcss@8.5.23/node_modules/postcss/lib/input.js to a dynamic import() which is available in all CommonJS modules.
+    at Object.<anonymous> (/repo/node_modules/.bun/postcss@8.5.23/node_modules/postcss/lib/input.js:3:18)
+    at Object.<anonymous> (/repo/node_modules/.bun/postcss@8.5.23/node_modules/postcss/lib/fromJSON.js:6:13)
+    at Object.<anonymous> (/repo/node_modules/.bun/postcss@8.5.23/node_modules/postcss/lib/postcss.js:9:16)
+error: script "build:vite" exited with code 1
+ShellError: Failed with exit code 1
+ exitCode: 1,
+   stdout: "vite v6.4.4 building for production...\ntransforming...\n✓ 78 modules transformed.\n",
+   stderr: "$ node --max-old-space-size=8192 ./node_modules/vite/bin/vite.js build --config vite.config.ts\n✗ Build failed in 2.62s\nerror during build:\n[vite:css] [postcss] [postcss] [postcss] require() of ES Module /repo/node_modules/.bun/nanoid@5.1.16/node_modules/nanoid/non-secure/index.js from /repo/node_modules/.bun/postcss@8.5.23/node_modules/postcss/lib/input.js not supported.\nInstead change the require of index.js in /repo/node_modules/.bun/postcss@8.5.23/node_modules/postcss/lib/input.js to a dynamic import() which is available in all CommonJS modules.\nfile: /repo/node_modules/.bun/@fontsource-variable+jetbrains-mono@5.2.8/node_modules/@fontsource-variable/jetbrains-mono/index.css:undefined:NaN\nError [ERR_REQUIRE_ESM]: require() of ES Module /repo/node_modules/.bun/nanoid@5.1.16/node_modules/nanoid/non-secure/index.js from /repo/node_modules/.bun/postcss@8.5.23/node_modules/postcss/lib/input.js not supported.\nInstead change the require of index.js in /repo/node_modules/.bun/postcss@8.5.23/node_modules/postcss/lib/input.js to a dynamic import() which is available in all CommonJS modules.\n    at Object.<anonymous> (/repo/node_modules/.bun/postcss@8.5.23/node_modules/postcss/lib/input.js:3:18)\n    at Object.<anonymous> (/repo/node_modules/.bun/postcss@8.5.23/node_modules/postcss/lib/fromJSON.js:6:13)\n    at Object.<anonymous> (/repo/node_modules/.bun/postcss@8.5.23/node_modules/postcss/lib/postcss.js:9:16)\nerror: script \"build:vite\" exited with code 1\n",
+
+      at ShellPromise (unknown:75:16)
+      at BunShell2 (unknown:191:36)
+
+Bun v1.4.0 (Linux x64)
+error: script "build:overlay" exited with code 1

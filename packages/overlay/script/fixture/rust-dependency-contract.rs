@@ -1,4 +1,4 @@
-#[cfg(not(event_listener_contract))]
+#[cfg(not(any(event_listener_contract, glib_contract)))]
 mod production {
     use serde::Serialize;
     use serde_with::{serde_as, KeyValueMap};
@@ -550,5 +550,59 @@ mod event_contracts {
             .wait_timeout(Duration::from_secs(5))
             .expect("reused listener tag");
         assert_eq!([forwarded, second], [17, 29]);
+    }
+}
+
+#[cfg(glib_contract)]
+mod glib_contracts {
+    use glib::variant::ToVariant;
+    const WORDS: [&str; 6] = ["0", "é", "two", "三", "four", "last"];
+
+    #[test]
+    fn actual_mixed_front_back_iteration_returns_exact_borrowed_strings() {
+        let value = WORDS.as_slice().to_variant();
+        let mut iter = value.array_iter_str().unwrap();
+        assert_eq!(iter.len(), 6);
+        assert_eq!(iter.next().unwrap(), "0");
+        assert_eq!(iter.len(), 5);
+        assert_eq!(iter.next_back().unwrap(), "last");
+        assert_eq!(iter.len(), 4);
+        assert_eq!(iter.nth(1).unwrap(), "two");
+        assert_eq!(iter.len(), 2);
+        assert_eq!(iter.nth_back(0).unwrap(), "four");
+        assert_eq!(iter.len(), 1);
+        assert_eq!(iter.last().unwrap(), "三");
+    }
+
+    #[test]
+    fn actual_forward_reverse_and_last_preserve_the_unicode_array() {
+        let value = WORDS.as_slice().to_variant();
+        assert_eq!(value.array_iter_str().unwrap().collect::<Vec<_>>(), WORDS);
+        assert_eq!(value.array_iter_str().unwrap().rev().collect::<Vec<_>>(), ["last", "four", "三", "two", "é", "0"]);
+        assert_eq!(value.array_iter_str().unwrap().last().unwrap(), "last");
+    }
+
+    #[test]
+    fn actual_skips_return_exact_values_and_remaining_sizes() {
+        let value = WORDS.as_slice().to_variant();
+        let mut iter = value.array_iter_str().unwrap();
+        assert_eq!(iter.nth(1).unwrap(), "é");
+        assert_eq!(iter.size_hint(), (4, Some(4)));
+        assert_eq!(iter.next().unwrap(), "two");
+        assert_eq!(iter.nth_back(2).unwrap(), "三");
+        assert_eq!(iter.size_hint(), (0, Some(0)));
+        assert_eq!(iter.count(), 0);
+    }
+
+    #[test]
+    fn actual_borrow_survives_its_iterator_while_the_variant_is_alive() {
+        let value = WORDS.as_slice().to_variant();
+        let borrowed = {
+            let mut iter = value.array_iter_str().unwrap();
+            iter.nth(1).unwrap()
+        };
+        assert_eq!(borrowed, "é");
+        assert_eq!(borrowed.as_bytes(), [0xc3, 0xa9]);
+        assert_eq!(value.array_iter_str().unwrap().count(), 6);
     }
 }

@@ -1,0 +1,21 @@
+{
+  "at": "2026-10-29T09:25:43.720Z",
+  "query": "query { repository(owner:\"yangheng95\",name:\"opencorvus\") { defaultBranchRef { name target { oid } } original:object(expression:\"main:specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock\") { __typename oid } archived:object(expression:\"main:specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock.txt\") { __typename oid } } }",
+  "result": {
+    "data": {
+      "repository": {
+        "defaultBranchRef": {
+          "name": "main",
+          "target": {
+            "oid": "a9f28c5dca688a659d73b8a1ba8a6044c65a4384"
+          }
+        },
+        "original": null,
+        "archived": {
+          "__typename": "Blob",
+          "oid": "b44272db79012d21315ef7f29626c08448007746"
+        }
+      }
+    }
+  }
+}

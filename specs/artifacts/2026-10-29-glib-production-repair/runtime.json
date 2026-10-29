@@ -1,0 +1,278 @@
+{
+  "status": "passed",
+  "productionTerminal": {
+    "cid": "5611cf08aa8351aa3ef645e71608ebda74cf21445bce111ac7b42208563859b9",
+    "at": "2026-10-29T09:53:42.145Z",
+    "exitCode": 0,
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-10-29T09:38:49.780026017Z",
+      "FinishedAt": "2026-10-29T09:53:41.568698573Z"
+    }
+  },
+  "deadline": {
+    "startedAt": 1793265554957,
+    "deadlineAt": 1793269154957
+  },
+  "image": {
+    "id": "sha256:43fb719000213f116c9e185f1022f3218e0e1155448ad74042a86fe84f6b51bb",
+    "repoTags": [
+      "opencorvus-overlay-builder:linux-amd64-bun-1.4.0-node-22"
+    ],
+    "created": "2026-10-29T09:25:51.258289523Z"
+  },
+  "source": {
+    "base": "a9f28c5dca688a659d73b8a1ba8a6044c65a4384",
+    "tree": "bc2408ba723dc7e8e3a02294f4a598cb4e1aa296",
+    "files": [
+      "package.json",
+      ".github/actions/setup-bun/action.yml",
+      "packages/overlay/src-tauri/Cargo.toml",
+      "packages/overlay/src-tauri/Cargo.lock",
+      "packages/overlay/script/check-rust-dependencies.ts",
+      "packages/overlay/script/fixture/rust-dependency-contract.rs",
+      "packages/overlay/script/build-docker.ts",
+      "packages/overlay/docker/Dockerfile",
+      "patches/rust/glib-0.18.5",
+      "packages/opencorvus/script/generate-build-artifacts.ts",
+      "packages/opencorvus/src/expert-squad/package-tool-bundle.ts",
+      "packages/opencorvus/test/script/package-tool-source-closure.test.ts"
+    ]
+  },
+  "failures": [
+    {
+      "label": "production-01",
+      "status": "failed",
+      "error": {
+        "name": "AssertionError",
+        "message": "AssertionError [ERR_ASSERTION]: canonical-build failed; exact stdout/stderr retained in /evidence/production-01\n\n1 !== 0\n"
+      },
+      "commands": [
+        {
+          "label": "rustc-version",
+          "executable": "rustc",
+          "args": [
+            "-vV"
+          ],
+          "cwd": "/repo/packages/overlay/src-tauri",
+          "exitCode": 0
+        },
+        {
+          "label": "cargo-version",
+          "executable": "cargo",
+          "args": [
+            "--version"
+          ],
+          "cwd": "/repo/packages/overlay/src-tauri",
+          "exitCode": 0
+        },
+        {
+          "label": "metadata",
+          "executable": "cargo",
+          "args": [
+            "metadata",
+            "--manifest-path",
+            "/repo/packages/overlay/src-tauri/Cargo.toml",
+            "--locked",
+            "--format-version",
+            "1",
+            "--filter-platform",
+            "x86_64-unknown-linux-gnu"
+          ],
+          "cwd": "/repo/packages/overlay/src-tauri",
+          "exitCode": 0
+        },
+        {
+          "label": "canonical-build",
+          "executable": "/usr/local/bin/bun",
+          "args": [
+            "run",
+            "build:overlay",
+            "--cargo-message-format-json"
+          ],
+          "cwd": "/repo/packages/overlay",
+          "exitCode": 1
+        }
+      ],
+      "terminal": {
+        "cid": "fd429e50190f142dea57eaa021fb19c64808f28d423f88215d5ec7dbbd08585e",
+        "at": "2026-10-29T09:19:20.178Z",
+        "exitCode": 1,
+        "state": {
+          "Status": "exited",
+          "Running": false,
+          "Paused": false,
+          "Restarting": false,
+          "OOMKilled": false,
+          "Dead": false,
+          "Pid": 0,
+          "ExitCode": 1,
+          "Error": "",
+          "StartedAt": "2026-10-29T09:19:15.288492807Z",
+          "FinishedAt": "2026-10-29T09:19:19.765663078Z"
+        }
+      }
+    },
+    {
+      "label": "production-02",
+      "status": "failed",
+      "error": {
+        "name": "AssertionError",
+        "message": "AssertionError [ERR_ASSERTION]: canonical-build failed; exact stdout/stderr retained in /evidence/production-02\n\n1 !== 0\n"
+      },
+      "commands": [
+        {
+          "label": "rustc-version",
+          "executable": "rustc",
+          "args": [
+            "-vV"
+          ],
+          "cwd": "/repo/packages/overlay/src-tauri",
+          "exitCode": 0
+        },
+        {
+          "label": "cargo-version",
+          "executable": "cargo",
+          "args": [
+            "--version"
+          ],
+          "cwd": "/repo/packages/overlay/src-tauri",
+          "exitCode": 0
+        },
+        {
+          "label": "metadata",
+          "executable": "cargo",
+          "args": [
+            "metadata",
+            "--manifest-path",
+            "/repo/packages/overlay/src-tauri/Cargo.toml",
+            "--locked",
+            "--format-version",
+            "1",
+            "--filter-platform",
+            "x86_64-unknown-linux-gnu"
+          ],
+          "cwd": "/repo/packages/overlay/src-tauri",
+          "exitCode": 0
+        },
+        {
+          "label": "canonical-build",
+          "executable": "/usr/local/bin/bun",
+          "args": [
+            "run",
+            "build:overlay",
+            "--cargo-message-format-json"
+          ],
+          "cwd": "/repo/packages/overlay",
+          "exitCode": 1
+        }
+      ],
+      "terminal": {
+        "cid": "db9a1a4ce93fd98c604e78948adaa9e7a030341c7a34701796b8dc2ccfdbcb77",
+        "at": "2026-10-29T09:28:13.744Z",
+        "exitCode": 1,
+        "state": {
+          "Status": "exited",
+          "Running": false,
+          "Paused": false,
+          "Restarting": false,
+          "OOMKilled": false,
+          "Dead": false,
+          "Pid": 0,
+          "ExitCode": 1,
+          "Error": "",
+          "StartedAt": "2026-10-29T09:26:54.343706502Z",
+          "FinishedAt": "2026-10-29T09:28:13.257504686Z"
+        }
+      }
+    },
+    {
+      "label": "production-03",
+      "status": "failed",
+      "error": {
+        "name": "AssertionError",
+        "message": "AssertionError [ERR_ASSERTION]: canonical-build failed; exact stdout/stderr retained in /evidence/production-03\n\n1 !== 0\n"
+      },
+      "commands": [
+        {
+          "label": "rustc-version",
+          "executable": "rustc",
+          "args": [
+            "-vV"
+          ],
+          "cwd": "/repo/packages/overlay/src-tauri",
+          "exitCode": 0
+        },
+        {
+          "label": "cargo-version",
+          "executable": "cargo",
+          "args": [
+            "--version"
+          ],
+          "cwd": "/repo/packages/overlay/src-tauri",
+          "exitCode": 0
+        },
+        {
+          "label": "metadata",
+          "executable": "cargo",
+          "args": [
+            "metadata",
+            "--manifest-path",
+            "/repo/packages/overlay/src-tauri/Cargo.toml",
+            "--locked",
+            "--format-version",
+            "1",
+            "--filter-platform",
+            "x86_64-unknown-linux-gnu"
+          ],
+          "cwd": "/repo/packages/overlay/src-tauri",
+          "exitCode": 0
+        },
+        {
+          "label": "canonical-build",
+          "executable": "/usr/local/bin/bun",
+          "args": [
+            "run",
+            "build:overlay",
+            "--cargo-message-format-json"
+          ],
+          "cwd": "/repo/packages/overlay",
+          "exitCode": 1
+        }
+      ],
+      "terminal": {
+        "cid": "18487ac283aa8f01ffa80eb0552f504ebd0a377421565b7265ff795feb5722b1",
+        "at": "2026-10-29T09:34:49.152Z",
+        "exitCode": 1,
+        "state": {
+          "Status": "exited",
+          "Running": false,
+          "Paused": false,
+          "Restarting": false,
+          "OOMKilled": false,
+          "Dead": false,
+          "Pid": 0,
+          "ExitCode": 1,
+          "Error": "",
+          "StartedAt": "2026-10-29T09:32:23.988441769Z",
+          "FinishedAt": "2026-10-29T09:34:48.282364022Z"
+        }
+      }
+    }
+  ],
+  "firstRun": {
+    "passed": true,
+    "sessionsCreated": 4,
+    "persistedAcrossRestart": 2,
+    "realProvider": false
+  },
+  "qualification": "Actual complete canonical Linux Tauri release build, four tests linked to its precise production GLib artifact and four separate opt3 library tests; Docker selective-mount qualification is separate. No GUI, ARM, macOS or real model acceptance."
+}

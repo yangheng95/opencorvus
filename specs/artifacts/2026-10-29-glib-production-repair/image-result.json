@@ -1,0 +1,26 @@
+{
+  "args": [
+    "--config",
+    "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\native-advisory-790/docker-config",
+    "--host",
+    "npipe:////./pipe/dockerDesktopLinuxEngine",
+    "buildx",
+    "build",
+    "--load",
+    "--progress=plain",
+    "--platform",
+    "linux/amd64",
+    "--build-arg",
+    "BUN_VERSION=1.4.0",
+    "--build-arg",
+    "NODE_VERSION=22",
+    "-t",
+    "opencorvus-overlay-builder:linux-amd64-bun-1.4.0-node-22",
+    "packages/overlay/docker"
+  ],
+  "startedAt": 1793265703552,
+  "closedAt": 1793265993247,
+  "tag": "opencorvus-overlay-builder:linux-amd64-bun-1.4.0-node-22",
+  "code": 0,
+  "signal": null
+}

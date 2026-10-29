@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-29-glib-production-repair](2026-10-29-glib-production-repair/README.md)：生产GLib修复、全新源码构建合同与GitHub图只读证据。
+
 - [2026-10-29-native-advisory-evidence](2026-10-29-native-advisory-evidence/README.md)：只读告警、历史原件字节归档与Linux修复验证前提。
 
 - [2026-10-29-text-encoding-journey](2026-10-29-text-encoding-journey/README.md)：Unicode原文乱码修复、双语错误、真实JSON和五份下载核验。

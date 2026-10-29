@@ -6,6 +6,9 @@
 
 ### zh-CN
 
+- Linux 原生构建使用保留上游许可证的 GLib 0.18.5 源码，合入官方字符串迭代器指针修复；Docker 构建读取根配置的 Bun 版本并校验当前构建输入。
+- 修复全新源码构建时 SDK 尚未生成导致的资源生成失败；工具运行时闭包按真实 SDK 文件类型编译，支持源码条件下的 TypeScript 模块。
+
 - 文本附件预览识别 UTF-16 字节序标记，正确显示中文与表情；无法解码时显示明确提示，待发送核对窗口支持下载原件。
 
 - 已发送的文本、代码和 JSON 附件支持在消息中折叠查看完整原文，按需加载共享只读阅读器并保留原件下载。
@@ -27,6 +30,9 @@
 - 修复 Windows 检查器并发准备原生辅助程序时，编译产物与运行文件互相冲突导致的拒绝访问。
 
 ### en-US
+
+- Linux native builds use the licensed GLib 0.18.5 source with the official string-iterator out-pointer fix. Docker builds use the root Bun version and evaluate current build inputs through Docker's layer cache.
+- Fix resource generation before the first SDK build. Tool runtime closures compile the actual SDK file type, including TypeScript modules selected by the source condition.
 
 - Decode BOM-marked UTF-16 text attachments correctly, show explicit encoding errors, and offer original downloads while reviewing pending text.
 

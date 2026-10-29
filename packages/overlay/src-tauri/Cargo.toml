@@ -42,6 +42,11 @@ winrt-toast-reborn = "0.3.8"
 [target.'cfg(target_os = "macos")'.dependencies]
 objc2 = "0.6.4"
 
+[patch.crates-io]
+# GTK 0.18 requires GLib 0.18. The local source carries the official
+# VariantStrIter out-pointer correction (RUSTSEC-2024-0429).
+glib = { path = "../../../patches/rust/glib-0.18.5" }
+
 [profile.release]
 strip = true
 lto = false

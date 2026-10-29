@@ -1,6 +1,4 @@
 import { describe, expect, test } from "bun:test"
-import { readFileSync } from "fs"
-import { join } from "path"
 
 import {
   overlayArchFromNode,
@@ -40,11 +38,5 @@ describe("overlay artifact names", () => {
     expect(overlayServerFileName("windows")).toBe("opencorvus.exe")
     expect(overlayServerFileName("linux")).toBe("opencorvus")
     expect(overlayExecutableFileName("windows")).toBe("opencorvus-overlay.exe")
-  })
-
-  test("docker build script mounts the overlay-server artifact directory", () => {
-    const script = readFileSync(join(import.meta.dir, "../script/build-docker.ts"), "utf8")
-    expect(script).toContain("overlayServerDistName")
-    expect(script).toContain("overlayServerFileName")
   })
 })

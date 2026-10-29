@@ -1,4 +1,6 @@
 import path from "path"
+import { fileURLToPath } from "node:url"
+import { $ } from "bun"
 
 export async function generateOpencorvusGeneratedBuildArtifacts(
   input: {
@@ -11,6 +13,18 @@ export async function generateOpencorvusGeneratedBuildArtifacts(
   const repoRoot = input.repoRoot ?? path.resolve(packageRoot, "../..")
   const log = input.log ?? (() => {})
 
+  // Generators consume the SDK's authoring source before its first dist exists.
+  // Keep source resolution at this common boundary for every build entry.
+  const script = fileURLToPath(import.meta.url)
+  for await (const line of $`${process.execPath} --conditions=source ${script} ${packageRoot} ${repoRoot}`
+    .cwd(repoRoot)
+    .lines()) {
+    log(line)
+  }
+}
+
+async function generate(packageRoot: string, repoRoot: string) {
+  const log = console.log
   // The build entry binds its validation environment before runtime-backed
   // generators evaluate Global and initialize application directories.
   const { generateExpertSquadPayloadModule } = await import("./generate-expert-squad-payload")
@@ -29,4 +43,10 @@ export async function generateOpencorvusGeneratedBuildArtifacts(
   log("Generated built-in Mission Skill payload module")
   await generateWorkArtifactQualificationMatrix(packageRoot)
   log("Generated Work Artifact qualification matrix")
+}
+
+if (import.meta.main) {
+  const [packageRoot, repoRoot] = process.argv.slice(2)
+  if (!packageRoot || !repoRoot) throw new Error("Usage: generate-build-artifacts.ts <package-root> <repo-root>")
+  await generate(path.resolve(packageRoot), path.resolve(repoRoot))
 }

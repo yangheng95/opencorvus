@@ -27,7 +27,7 @@ type Artifact = {
   fresh: boolean
 }
 type Metadata = {
-  packages: Array<{ id: string; name: string; version: string }>
+  packages: Array<{ id: string; name: string; version: string; manifest_path: string; source: string | null }>
   resolve: { nodes: Array<{ id: string; features: string[]; deps: Array<{ name: string; pkg: string }> }> }
   target_directory: string
 }
@@ -53,7 +53,7 @@ const receipt: Record<string, unknown> = {
   startedAt: new Date().toISOString(),
   commands,
   qualification:
-    "Canonical Windows Tauri/PHF/serde/TLS13/Anyhow data contracts plus separately recorded event-listener library-only contracts; no GUI, model or Linux D-Bus execution.",
+    "Host-specific canonical production library contracts and explicitly separate optimized library qualifications; no GUI or model execution.",
 }
 
 async function run(
@@ -181,10 +181,7 @@ async function publicTestPki() {
   return directory
 }
 
-try {
-  const compiler = await run("rustc-version", "rustc", ["-vV"])
-  const host = /^host: (.+)$/m.exec(compiler)?.[1]?.trim()
-  assert.equal(host, "x86_64-pc-windows-msvc", "This qualification targets the current native Windows production build")
+async function qualifyWindows(compiler: string, host: string) {
   const cargoVersion = await run("cargo-version", "cargo", ["--version"])
   const metadata = JSON.parse(
     await run("metadata", "cargo", [
@@ -227,18 +224,19 @@ try {
   }
   receipt.selectedGraph = metadata.resolve.nodes.filter((node) => Object.values(patched).includes(node.id))
   // Cargo's filtered package set omits Linux-only glib. The cross-target lock,
-  // rather than Windows compiler metadata, owns the unresolved version facts.
+  // rather than Windows compiler metadata, owns the locally patched source identity.
   const lock = Bun.TOML.parse(await fs.readFile(path.join(tauri, "Cargo.lock"), "utf8")) as {
     package: Array<{ name: string; version: string; source?: string }>
   }
-  receipt.residuals = [
+  receipt.platformSources = [
     { name: "glib", version: "0.18.5" },
   ].map((expected) => {
     const locked = lock.package.filter((entry) => entry.name === expected.name && entry.version === expected.version)
-    assert.equal(locked.length, 1, `Expected retained lock finding ${expected.name}@${expected.version}`)
+    assert.equal(locked.length, 1, `Expected patched lock package ${expected.name}@${expected.version}`)
     return {
       ...expected,
-      source: locked[0]!.source,
+      source: "../../../patches/rust/glib-0.18.5",
+      qualification: "Local official out-pointer fix; Linux execution is qualified on the Linux host",
       windowsResolved: metadata.packages.some(
         (entry) => entry.name === expected.name && entry.version === expected.version,
       ),
@@ -613,6 +611,105 @@ try {
     qualification:
       "Separate Windows library-only Send-tag/cancel-forward/reuse contracts; Linux cross-compiled units only activate the real dependency branch and are not linked or executed here; no application or Linux D-Bus execution claim",
   }
+}
+
+async function qualifyLinux(host: string) {
+  receipt.qualification = "Canonical Linux Tauri build and four contracts linked to its actual GLib library; four additional opt-level=3 library-only contracts. No GUI execution."
+  receipt.cargo = (await run("cargo-version", "cargo", ["--version"])).trim()
+  const metadata = JSON.parse(await run("metadata", "cargo", [
+    "metadata", "--manifest-path", path.join(tauri, "Cargo.toml"), "--locked",
+    "--format-version", "1", "--filter-platform", host,
+  ])) as Metadata
+  const selected = metadata.packages.filter((entry) => entry.name === "glib")
+  assert.equal(selected.length, 1, "The entire GTK graph must resolve one GLib source")
+  const glib = selected[0]!
+  assert.equal(glib.version, "0.18.5")
+  assert.equal(await fs.realpath(glib.manifest_path), await fs.realpath(path.resolve(tauri, "../../../patches/rust/glib-0.18.5/Cargo.toml")))
+  assert.equal(glib.source, null, "GLib must resolve the production path source")
+  const glibNode = metadata.resolve.nodes.find((entry) => entry.id === glib.id)
+  assert(glibNode)
+  const parents = metadata.resolve.nodes.filter((node) => node.deps.some((dep) => dep.pkg === glib.id))
+  assert(parents.length > 0)
+  receipt.glib = { package: glib, features: glibNode.features, parents }
+  const uniqueUnit = (name: string, candidates: Artifact[]) => {
+    const unique = [...new Map(candidates.map((unit) => [JSON.stringify(unit.filenames), unit])).values()]
+    assert.equal(unique.length, 1, `${name}: ambiguous/missing compiler unit`)
+    return unique[0]!
+  }
+  const production = cargoOutput()
+  await run("canonical-build", process.execPath, ["run", "build:overlay", "--cargo-message-format-json"], {
+    cwd: overlay, onLine: production.onLine,
+  })
+  assert.deepEqual(production.completions, [{ reason: "build-finished", success: true }])
+  await fs.writeFile(path.join(output, "compiler-artifacts.json"), JSON.stringify(production, null, 2))
+  const application = metadata.packages.find((entry) => entry.name === "opencorvus-overlay")
+  assert(application)
+  const applicationUnit = uniqueUnit("application", production.artifacts.filter(
+    (unit) => unit.package_id === application.id && unit.target.kind.includes("bin"),
+  ))
+  const unit = uniqueUnit("production GLib", production.artifacts.filter(
+    (unit) => unit.package_id === glib.id && unit.target.kind.includes("lib") &&
+      profileKey(unit.profile) === profileKey(applicationUnit.profile) &&
+      featureKey(unit.features) === featureKey(glibNode.features),
+  ))
+  receipt.application = applicationUnit
+
+  // Limit native search paths to the selected library's real dependency closure.
+  const closure = new Set<string>()
+  const visit = (id: string) => {
+    if (closure.has(id)) return
+    closure.add(id)
+    for (const dep of metadata.resolve.nodes.find((node) => node.id === id)?.deps ?? []) visit(dep.pkg)
+  }
+  visit(glib.id)
+  async function contracts(label: string, compilation: ReturnType<typeof cargoOutput>, selectedUnit: Artifact) {
+    const libraries = selectedUnit.filenames.filter((name) => name.endsWith(".rlib"))
+    assert.equal(libraries.length, 1)
+    const directories = [...new Set(compilation.artifacts.flatMap((entry) => entry.filenames.map((name) => path.dirname(name))))]
+    const nativePaths = [...new Set(compilation.buildScripts.filter((entry) => closure.has(entry.package_id)).flatMap((entry) => entry.linked_paths))]
+    const binary = path.join(output, `glib-contract-${label}`)
+    await run(`compile-glib-${label}`, "rustc", [
+      "--test", "--edition=2021", "--cfg", "glib_contract", "-C", `opt-level=${selectedUnit.profile.opt_level}`,
+      path.join(overlay, "script/fixture/rust-dependency-contract.rs"),
+      "--extern", `glib=${libraries[0]}`,
+      ...directories.flatMap((directory) => ["-L", `dependency=${directory}`]),
+      ...nativePaths.flatMap((nativePath) => ["-L", nativePath]), "-o", binary,
+    ])
+    const tests = await run(`glib-contracts-${label}`, binary, ["--test-threads=1", "--nocapture"])
+    assert.match(tests, /test result: ok\. 4 passed; 0 failed;/)
+    return { passed: 4, artifact: selectedUnit, dependencyDirectories: directories, nativeSearchPaths: nativePaths }
+  }
+  receipt.productionGlibContracts = await contracts("production", production, unit)
+
+  // This rebuild shares the production manifest and lock, but has a distinct
+  // target directory and optimization profile. It is not an application build.
+  const optimized = cargoOutput()
+  await run("glib-opt3-build", "cargo", [
+    "build", "--locked", "--manifest-path", path.join(tauri, "Cargo.toml"),
+    "-p", "glib@0.18.5", "--lib", "--release", "--message-format=json-render-diagnostics",
+  ], { onLine: optimized.onLine, env: {
+    CARGO_TARGET_DIR: path.join(output, "glib-opt3-target"), CARGO_PROFILE_RELEASE_OPT_LEVEL: "3",
+  } })
+  assert.deepEqual(optimized.completions, [{ reason: "build-finished", success: true }])
+  const optimizedUnit = uniqueUnit("opt3 library GLib", optimized.artifacts.filter(
+    (entry) => entry.package_id === glib.id && entry.target.kind.includes("lib") && entry.profile.opt_level === "3" &&
+      featureKey(entry.features) === featureKey(unit.features),
+  ))
+  await fs.writeFile(path.join(output, "glib-opt3-artifacts.json"), JSON.stringify(optimized, null, 2))
+  receipt.optimizedLibraryContracts = {
+    ...await contracts("opt3", optimized, optimizedUnit), qualification: "Separate optimized library, not the production application artifact",
+  }
+}
+
+
+try {
+  const compiler = await run("rustc-version", "rustc", ["-vV"])
+  const host = /^host: (.+)$/m.exec(compiler)?.[1]?.trim()
+  receipt.compiler = compiler.trim()
+  receipt.host = host
+  if (host === "x86_64-pc-windows-msvc") await qualifyWindows(compiler, host)
+  else if (host === "x86_64-unknown-linux-gnu") await qualifyLinux(host)
+  else throw new Error(`Native qualification is not implemented for ${host}`)
   receipt.status = "passed"
 } catch (error) {
   receipt.status = "failed"

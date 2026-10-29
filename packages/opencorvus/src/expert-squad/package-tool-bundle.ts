@@ -45,7 +45,6 @@ export default fileSystemFacade;
 `
 const SDK_PROJECT_PATH_IMPORT = "@opencorvus-ai/sdk/project-path"
 const PLUGIN_RUNTIME_NAMESPACE = "opencorvus-expert-squad-plugin-runtime"
-const SDK_PROJECT_PATH_NAMESPACE = "opencorvus-sdk-project-path-runtime"
 export const PACKAGE_TOOL_ALLOWED_PACKAGE_IMPORTS = ["typescript"] as const
 const ALLOWED_PACKAGE_IMPORTS = new Set<string>(PACKAGE_TOOL_ALLOWED_PACKAGE_IMPORTS)
 const ALLOWED_LIBRARY_EXTENSIONS = new Set([".ts", ".js", ".json"])
@@ -220,7 +219,6 @@ export namespace PackageToolBundle {
     const zodEntry = pluginRequire.resolve("zod")
     const propertyInformationEntry = pluginRequire.resolve("property-information")
     const sdkProjectPathEntry = pluginRequire.resolve(SDK_PROJECT_PATH_IMPORT)
-    const sdkProjectPathSource = await readFile(sdkProjectPathEntry, "utf8")
     const result = await Bun.build({
       entrypoints: [normalizeBundlerPath(entry)],
       target: "node",
@@ -237,13 +235,7 @@ export namespace PackageToolBundle {
               path: normalizeBundlerPath(propertyInformationEntry),
             }))
             build.onResolve({ filter: exactSpecifierFilter(SDK_PROJECT_PATH_IMPORT) }, () => ({
-              path: SDK_PROJECT_PATH_IMPORT,
-              namespace: SDK_PROJECT_PATH_NAMESPACE,
-            }))
-            build.onLoad({ filter: /.*/, namespace: SDK_PROJECT_PATH_NAMESPACE }, () => ({
-              contents: sdkProjectPathSource,
-              loader: "js",
-              resolveDir: path.dirname(sdkProjectPathEntry),
+              path: normalizeBundlerPath(sdkProjectPathEntry),
             }))
           },
         },

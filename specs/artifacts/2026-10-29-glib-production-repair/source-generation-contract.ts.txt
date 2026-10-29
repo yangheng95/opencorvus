@@ -1,0 +1,17 @@
+import assert from "node:assert/strict"
+import fs from "node:fs"
+import { preparePackageBuildEnvironment } from "/repo/script/package-build-environment"
+import { generateOpencorvusGeneratedBuildArtifacts } from "/repo/packages/opencorvus/script/generate-build-artifacts"
+Object.assign(process.env,await preparePackageBuildEnvironment("/repo",process.env))
+const logs:string[]=[]
+await generateOpencorvusGeneratedBuildArtifacts({repoRoot:"/repo",packageRoot:"/repo/packages/opencorvus",log:line=>{logs.push(line);console.log(line)}})
+const {payloadPackageSources}=await import("/repo/packages/opencorvus/generated/expert-squad-payload.ts")
+const {expertSquadSearchLocalizations}=await import("/repo/packages/opencorvus/generated/expert-squad-search-localization.ts")
+const {builtinSkillSources}=await import("/repo/packages/opencorvus/src/skill/builtin-payload.ts")
+const {builtinMissionSkillSources}=await import("/repo/packages/opencorvus/src/mission-skill/builtin-payload.ts")
+const academic=payloadPackageSources.find(p=>p.id==="academic-paper-review");assert(academic);assert.equal(academic.namespace,"builtin");assert(Object.keys(academic.files).length>0)
+assert(builtinSkillSources.some(s=>s.name==="browser-use"&&s.skill.length>0))
+assert.deepEqual(builtinMissionSkillSources.map(s=>s.name),["general"])
+assert(Object.keys(expertSquadSearchLocalizations).length>0)
+const result={status:"passed",at:new Date().toISOString(),qualification:"Actual public generation boundary in the same isolated fresh production source before the first SDK build; source outputs are imported as data and checked for concrete authoring identities",packages:payloadPackageSources.length,localizations:Object.keys(expertSquadSearchLocalizations).length,skills:builtinSkillSources.length,missions:builtinMissionSkillSources.map(s=>s.name),logs}
+fs.writeFileSync("/evidence/source-generation-result.json",JSON.stringify(result,null,2)+"\n",{flag:"wx"});console.log(JSON.stringify(result))

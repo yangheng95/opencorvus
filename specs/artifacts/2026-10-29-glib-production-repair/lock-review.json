@@ -1,0 +1,5 @@
+{
+  "packages": 580,
+  "delta": "GLib 0.18.5 resolves the sole production path source; its former registry source/checksum retire; all package versions, dependency edges and other records retained",
+  "producer": "Actual Linux Cargo 1.99.1 cargo update --offline -p glib@0.18.5 against the canonical production manifest"
+}

@@ -36,6 +36,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
+## GLib Rust bindings
+
+The Linux GTK dependency graph uses the MIT-licensed `glib` 0.18.5 source in
+`patches/rust/glib-0.18.5/`. Its `LICENSE` and `COPYRIGHT` retain the upstream
+permission and attribution. The production source incorporates gtk-rs-core's
+official `VariantStrIter` out-pointer correction from commit
+`b5a4071e439bef2b5eea76c3aa25e5ae84839e34` (RUSTSEC-2024-0429).
+Upstream test-only declarations and standalone tests/benchmarks are omitted;
+production interfaces and features retain the published 0.18.5 contract.
+
+Upstream: <https://github.com/gtk-rs/gtk-rs-core>
+
 ## Built-in capability payloads
 
 Adapted built-in Skills retain their own license and provenance files:

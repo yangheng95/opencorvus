@@ -1,0 +1,201 @@
+{
+  "at": "2026-10-29T09:25:02.284Z",
+  "query": "query { repository(owner:\"yangheng95\",name:\"opencorvus\") { dependencyGraphManifests(first:16) { nodes { filename dependencies(first:1) { totalCount nodes { packageName requirements } } } } } }",
+  "result": {
+    "data": {
+      "repository": {
+        "dependencyGraphManifests": {
+          "nodes": [
+            {
+              "filename": "packages/inspect-benchmark/pyproject.toml",
+              "dependencies": {
+                "totalCount": 1,
+                "nodes": [
+                  {
+                    "packageName": "httpx",
+                    "requirements": ""
+                  }
+                ]
+              }
+            },
+            {
+              "filename": "script/video/minimax-h3-mission-promo/requirements.txt",
+              "dependencies": {
+                "totalCount": 1,
+                "nodes": [
+                  {
+                    "packageName": "edge-tts",
+                    "requirements": ""
+                  }
+                ]
+              }
+            },
+            {
+              "filename": ".github/workflows/build-overlays.yml",
+              "dependencies": {
+                "totalCount": 1,
+                "nodes": [
+                  {
+                    "packageName": "actions/checkout",
+                    "requirements": "= 6.*.*"
+                  }
+                ]
+              }
+            },
+            {
+              "filename": ".github/workflows/build.yml",
+              "dependencies": {
+                "totalCount": 1,
+                "nodes": [
+                  {
+                    "packageName": "actions/checkout",
+                    "requirements": "= 6.*.*"
+                  }
+                ]
+              }
+            },
+            {
+              "filename": ".github/workflows/codeql.yml",
+              "dependencies": {
+                "totalCount": 1,
+                "nodes": [
+                  {
+                    "packageName": "actions/checkout",
+                    "requirements": "= 6.*.*"
+                  }
+                ]
+              }
+            },
+            {
+              "filename": ".github/workflows/deploy-opencorvus-com.yml",
+              "dependencies": {
+                "totalCount": 1,
+                "nodes": [
+                  {
+                    "packageName": "actions/checkout",
+                    "requirements": "= d23441a48e516b6c34aea4fa41551a30e30af803"
+                  }
+                ]
+              }
+            },
+            {
+              "filename": ".github/workflows/package-overlay.yml",
+              "dependencies": {
+                "totalCount": 1,
+                "nodes": [
+                  {
+                    "packageName": "actions/cache/restore",
+                    "requirements": "= 6.*.*"
+                  }
+                ]
+              }
+            },
+            {
+              "filename": ".github/workflows/test.yml",
+              "dependencies": {
+                "totalCount": 1,
+                "nodes": [
+                  {
+                    "packageName": "actions/checkout",
+                    "requirements": "= 6.*.*"
+                  }
+                ]
+              }
+            },
+            {
+              "filename": "packages/overlay/src-tauri/Cargo.lock",
+              "dependencies": {
+                "totalCount": 1,
+                "nodes": [
+                  {
+                    "packageName": "glib",
+                    "requirements": "= 0.18.5"
+                  }
+                ]
+              }
+            },
+            {
+              "filename": "packages/overlay/src-tauri/Cargo.toml",
+              "dependencies": {
+                "totalCount": 1,
+                "nodes": [
+                  {
+                    "packageName": "base64",
+                    "requirements": ">= 0.22.0,< 0.23.0"
+                  }
+                ]
+              }
+            },
+            {
+              "filename": "packages/opencorvus/src/prompt/core/requirements-core.txt",
+              "dependencies": {
+                "totalCount": 0,
+                "nodes": []
+              }
+            },
+            {
+              "filename": "packages/opencorvus/native/process-supervisor/Cargo.lock",
+              "dependencies": {
+                "totalCount": 1,
+                "nodes": [
+                  {
+                    "packageName": "itoa",
+                    "requirements": "= 1.0.18"
+                  }
+                ]
+              }
+            },
+            {
+              "filename": "packages/opencorvus/native/process-supervisor/Cargo.toml",
+              "dependencies": {
+                "totalCount": 1,
+                "nodes": [
+                  {
+                    "packageName": "serde",
+                    "requirements": ">= 1.0.0,< 2.0.0"
+                  }
+                ]
+              }
+            },
+            {
+              "filename": "specs/artifacts/2026-10-22-native-query-stream/Cargo.lock",
+              "dependencies": {
+                "totalCount": 1,
+                "nodes": [
+                  {
+                    "packageName": "itoa",
+                    "requirements": "= 1.0.18"
+                  }
+                ]
+              }
+            },
+            {
+              "filename": "specs/artifacts/2026-10-22-native-query-stream/Cargo.toml",
+              "dependencies": {
+                "totalCount": 1,
+                "nodes": [
+                  {
+                    "packageName": "serde",
+                    "requirements": ">= 1.0.0,< 2.0.0"
+                  }
+                ]
+              }
+            },
+            {
+              "filename": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+              "dependencies": {
+                "totalCount": 1,
+                "nodes": [
+                  {
+                    "packageName": "glib",
+                    "requirements": "= 0.18.5"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

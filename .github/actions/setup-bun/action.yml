@@ -19,7 +19,7 @@ runs:
     - name: Setup Node.js
       uses: actions/setup-node@v6
       with:
-        node-version: 22
+        node-version-file: package.json
 
     - name: Restore Bun dependencies
       # Native jobs may use almost their full budget before post-run actions.

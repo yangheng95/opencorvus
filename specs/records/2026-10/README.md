@@ -1,5 +1,9 @@
 # 2026-10 Records
 
+- [GLib生产验收数据](../../artifacts/2026-10-29-glib-production-repair/README.md)：唯一Cargo图、源码生成和正式原生构建的实际输出。
+
+- [2026-10-29-glib-production-repair.md](2026-10-29-glib-production-repair.md)：已验证候选进入生产Cargo图与正式Linux构建的方案和验收。
+
 - [2026-10-29-native-advisory-evidence.md](2026-10-29-native-advisory-evidence.md)：当前GLib父链、Linux验证环境与历史依赖证据身份。
 
 - [2026-10-29-text-encoding-journey.md](2026-10-29-text-encoding-journey.md)：文本原文编码、结构化附件真实历史与下载核验。
