@@ -1,0 +1,27 @@
+{
+  "at": "2026-10-29T17:04:49.264Z",
+  "originalRetirementPreserved": true,
+  "physicalAndReaderQualification": "passed",
+  "qualified": [
+    {
+      "index": 3,
+      "httpResponseAt": 1793292810317,
+      "kind": "owned_shutdown_abort",
+      "occurrence": "mission-closure-797-22b086fd-797f-45af-b815-9c360bd2dd63",
+      "millisecondsAfterArrival": 31,
+      "millisecondsBeforeSettlement": 432
+    },
+    {
+      "index": 5,
+      "httpResponseAt": 1793292810317,
+      "kind": "owned_shutdown_abort",
+      "occurrence": "mission-closure-797-22b086fd-797f-45af-b815-9c360bd2dd63",
+      "millisecondsAfterArrival": 309,
+      "millisecondsBeforeSettlement": 154
+    }
+  ],
+  "requests": 6,
+  "cumulativeRequests": 976,
+  "copiesRetired": 2,
+  "unusedAllowanceRetired": 42
+}

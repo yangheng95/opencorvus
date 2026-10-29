@@ -1,0 +1,35 @@
+{
+  "at": "2026-10-29T17:22:29.528Z",
+  "mission": {
+    "id": "251041406c937351",
+    "sessionID": "ses_-zUQY3tNGzzGR1Ji7uTq",
+    "projectID": "prj_hTDwH9KALYhkylMawJZp"
+  },
+  "tasks": [
+    {
+      "id": "tsk_g00VZRwPYV00d8tnhr0L",
+      "status": "completed",
+      "rootSessionID": "ses_-zUQY3a6czzyGqRB2WmK"
+    }
+  ],
+  "board": {
+    "lane": "completed",
+    "pendingInteractions": 0,
+    "outcome": {
+      "messageID": "msg_g0VZSZ7AQ00BneiPm2lc",
+      "toolCallID": "call_5926121f2a394a1ba4440b430bae7936",
+      "toolPartID": "prt_g0VZSZ96m00VYGLVLVWV",
+      "summary": "检查点保全795原 Mission 已逐项验收：唯一原任务的两文件精确修复、两个正向 unittest 及指定命令真实通过、独立审阅和全部原件/Git 保全证据一致，无未决缺口。已展示完整本地验收摘要；保留原失败和环境中断历史，未新增 Task、功能或项目文件，未重复实施/测试，未暂存、提交、推送、外部发布或改动分支与暂存区。",
+      "timeRecorded": 1793294070618,
+      "kind": "accepted"
+    }
+  },
+  "delivery": {
+    "passed": true,
+    "pendingInboxIDs": [],
+    "leasedInboxIDs": [],
+    "unansweredInboxIDs": [],
+    "deadLetterInboxIDs": [],
+    "invalidTerminalInboxIDs": []
+  }
+}

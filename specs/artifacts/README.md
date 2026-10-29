@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-30-mission-acceptance-closure](2026-10-30-mission-acceptance-closure/README.md)：修正诊断关闭计时、保留原中断、同一Task/Mission真实完整收口与八张实页。
+
 - [2026-10-29-artifact-selection-purpose](2026-10-29-artifact-selection-purpose/README.md)：来源语义澄清、原Task独立审阅完成及恢复轮次证据读取的真实red/green。
 
 - [2026-10-29-checkpoint-ownership](2026-10-29-checkpoint-ownership/README.md)：三阶段快照、真实Git状态保全、故障恢复与独立代码Task页面。

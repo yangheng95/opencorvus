@@ -1,0 +1,6 @@
+{
+  "command": "node .tmp-product-iteration/mission-closure-797/retire.mjs",
+  "observedError": "AssertionError: assert(at<=Date.parse(shutdown.observedAtUtc))",
+  "provenance": "Original exec tool output; no raw stderr file was captured. Original retirement JSON was written after both credential copies were removed, before this postcondition failed.",
+  "correction": "Exact source 797-retirement-qualified.json replays both real cancellations against original native settlement; original receipt is retained."
+}

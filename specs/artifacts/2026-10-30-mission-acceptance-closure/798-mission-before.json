@@ -1,0 +1,27 @@
+{
+  "at": "2026-10-29T17:07:38.745Z",
+  "mission": {
+    "id": "251041406c937351",
+    "sessionID": "ses_-zUQY3tNGzzGR1Ji7uTq",
+    "projectID": "prj_hTDwH9KALYhkylMawJZp"
+  },
+  "tasks": [
+    {
+      "id": "tsk_g00VZRwPYV00d8tnhr0L",
+      "status": "completed",
+      "rootSessionID": "ses_-zUQY3a6czzyGqRB2WmK"
+    }
+  ],
+  "board": {
+    "lane": "review",
+    "pendingInteractions": 0
+  },
+  "delivery": {
+    "passed": true,
+    "pendingInboxIDs": [],
+    "leasedInboxIDs": [],
+    "unansweredInboxIDs": [],
+    "deadLetterInboxIDs": [],
+    "invalidTerminalInboxIDs": []
+  }
+}

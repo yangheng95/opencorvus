@@ -1,0 +1,69 @@
+{
+  "at": "2026-10-29T17:31:48.188Z",
+  "source": {
+    "tables": 92,
+    "rows": 173994,
+    "allRowsUnchanged": true,
+    "schema": 9
+  },
+  "current": {
+    "tables": 92,
+    "rows": 178180,
+    "originalIdentitiesRetained": 173992,
+    "consumedMemoryInputRows": [
+      {
+        "table": "memory_chunk",
+        "id": "mck_hOkzMAwbT5oibj5KNBiq"
+      },
+      {
+        "table": "memory_file",
+        "id": "mem_hwaLW52yAn7lchMr7of6"
+      }
+    ],
+    "memoryInputQualification": [
+      {
+        "fileID": "mem_hwaLW52yAn7lchMr7of6",
+        "chunkID": "mck_hOkzMAwbT5oibj5KNBiq",
+        "projectID": "prj_hTDwH9KALYhkylMawJZp",
+        "sourceMessageID": "msg_hI9k1gZvabOR0D5cMoYx",
+        "sourceSessionID": "ses_-zUQY3tNGzzGR1Ji7uTq",
+        "sourceMessageDataPreserved": true,
+        "sourcePartDataPreserved": [
+          "prt_hOhQBLkXKNunP9hR8MEN"
+        ],
+        "projectDocumentRevision": 8,
+        "coverage": "exact source occurrence retained in current project document",
+        "consumedRows": 2
+      }
+    ],
+    "schema": 9,
+    "integrity": "ok"
+  },
+  "project": {
+    "head": "4f0111e3bcf3dea3571f5db546086ec724b0d79f",
+    "ref": "refs/heads/main",
+    "indexBytesPreserved": true,
+    "stageEntriesPreserved": true,
+    "filesPreserved": [
+      ".gitattributes",
+      ".gitignore",
+      ".opencorvus/opencorvus.jsonc",
+      "README.md",
+      "counter.py",
+      "operator-note.txt",
+      "test_counter.py"
+    ],
+    "noteStaged": "OPERATOR_STAGED_795\n",
+    "noteWorking": "OPERATOR_WORKING_795\n"
+  },
+  "attachmentCopies": {
+    "namespaces": 4,
+    "counts": [
+      17,
+      10,
+      16,
+      20
+    ],
+    "bytesEqualAcrossOriginalAndCopy": true
+  }
+}

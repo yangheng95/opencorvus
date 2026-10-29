@@ -1,5 +1,16 @@
 # Inspect benchmark boundary
 
+Owned loopback UI diagnostics use `packages/opencorvus/script/owned-diagnostic-shutdown.ts`
+for their final admission-budget shutdown. The launch admission's physical deadline
+is the sole budget clock; the owner reserves five minutes for process, output and
+request settlement. A second timer from startup must not interrupt useful execution.
+Provider and command inactivity remain with their existing execution owners.
+The diagnostic verifies its own process instance, admission occurrence and port
+before public shutdown. A reader cancellation is qualified from that shutdown's
+actual arrival through its exact native settlement; the HTTP response can precede
+the reader's asynchronous drain. Historical diagnostic artifacts retain the code
+and timing that their original runs actually used.
+
 `packages/inspect-benchmark` is the sole Inspect integration. Inspect owns dataset
 execution, concurrency, epochs, retries, logs, scoring and viewing. The registered
 OpenCorvus solver delegates one sample occurrence to the public Task API. It does

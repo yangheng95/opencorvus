@@ -1,0 +1,57 @@
+# 原代码 Mission 的验收收口
+
+## Recall
+
+用户持续要求单 agent 自主体验、修复、实际验证并提交推送；后续单 agent 指令覆盖旧 Goal 的三 Astra 文案。已解决的 Rendering 闪烁不再作为当前缺陷。796 是 progress：e05035928bb1769080823f084dac7ca9903f46a8 已正常推送，16:24:48Z fresh fetch/merge 确认 main=origin/main、0/0、自有修改已提交；首次传输 TLS 断开后完成上游复核和正常重试，没有绕过 hook。所有正常检查通过。当前171项他人删除、7项他人修改及两个缓存目录保留，不混入本轮，不开 branch/worktree、不委托。
+
+原有限代码请求的唯一 Task tsk_g00VZRwPYV00d8tnhr0L 已在第二轮真实完成，原失败历史仍在；同一独立 Tester ses_hjxFfWbP1lTq5eyMCMaB 已真实运行两个 Python 正向测试和逐字节原件比较。Task已完成而所属Mission尚未关闭，不能把局部成功等同完整流程通过。796实际40次请求，累计970，固定40上限耗尽，依据原retirement回执保留。原服务、原exec60539/native/launcher均已退出，物理/输出/请求结清，凭据/完整模型目录副本已清退。不得复开其额度。
+
+## 实施前分析
+
+已读796 Recall/原库reader red→green、真实Task和Mission工具输入输出、正常push/fresh上游回读；当前mission/completion、mission/board、panel/capability、artifact-read-facts与provenance-facts、Mission核心提示及routine-tools的可调用工具说明，并搜索全部Mission completion和panel消费者。routineToolPrompt仅向系统说明已可调用能力，并不覆盖实际Tool description；不能凭精简概述推断上一轮完整工具说明被丢弃。来源调用成本尚未有同工作量对照，13次真实审阅声明仍保留，不作已修复声明。
+
+Mission上次现象：观察Task active后，Task在下一条通知前真实completed，通知得到精确权限拒绝；下一个恢复请求被自有QA范围上限拒绝。真实Mission投递audit已passed，因此未发现未结算队列或丢失状态。终态发送权限仍保持原唯一事务校验，不放宽为自动重开或重复执行。Task公共证据collector另有跨轮次错误相等约束，已在796删除；同一关闭真实完成数据正式读取通过，两个Project两轮与重建的正向回归通过，首次执行创建身份仍由EngineGit.prepare唯一校验。源码和schema当前9未改历史数据。
+
+当前关闭合同：panel_query_task读取当前terminal occurrence；完成Task先完整读取其Completion Decision，再按其中精确Orchestrator/审阅Message身份批量读取正文及实际要求的Artifact。MissionCompletionInput要求所有child Task的完整evidence_read_refs集合；Host恢复canonical locators和当前terminal lifecycle。核心提示要求可见完整结论、原生interactive outcome及panel_complete_mission持久回执。model自述、Task completed、普通scheduler notification、board颜色均不能单独证明Mission已完成。原请求只要求本地两文件修复、实际测试、原件保全和Mission结束，不允许新增Task/功能/对外发布或源目录额外文件；内部UI结论不冒充外部发布。
+
+影响面：本轮先验证上述当前公共合同，不预设新bug或修改权限、schema、调度、消息/Tool协议。若发现调度、恢复、终态异常，立即横审全部生产入口、Task/Mission/Session occurrence、串并行、重试/重启与Project隔离，再落盘具体修复裁决。若发现UI问题，先真实截图和源数据定位，不增加UI自动化测试，不把DOM文本或source字符串当视觉验收。
+
+## 固定验收计划
+
+1. 新有限阶段mission-closure-797完整复制关闭796库（92表172843行）、durable publications、package revisions和全部四处实际附件namespace。继续原Mission ses_-zUQY3tNGzzGR1Ji7uTq及唯一已完成Task，不创建替代；源库逐行保留。自有QA原项目HEAD/index、七份文件先保存，全部原文件和分支/暂存保持原件。
+2. 新运行固定最多48次实际gpt-6.1-sol流式请求，包含可见预检、辅助及恢复，累计从970继续；首次启动前固定25min绝对截止，15min公开正常shutdown，至少5min结算余量；3min无真实活动先查原handle，不因观察超时重启、不扩同范围额度。成对复制授权auth和完整models目录，启动前本地投影、预检实际请求模型分别验证，凭据不入prompt/日志/spec/提交。
+3. 复用当前未改的普通前端产物，通过开发serve的/ui实际打开原Mission并发送自然的有限验收续跑要求；不注入Tool序列、成功回执或SQL种消息。不重复修改counter或创建新Task。查看原Task证据、最终interactive outcome及Mission状态，保存真实截图并人工复核。
+4. 接受标准逐项取证：原Task仍为同一completed轮次；Mission真实持久panel_complete_mission输入/回执、原完整来源读取与当前child集合相符，board与visible结论正确；原Task不被无理由重开，项目原文件/index、源库和原附件一致。未知或失败如实保留，不增加额度刷通过。
+5. 结束公开shutdown、结清原exec/native/launcher及物理/输出/请求后清退两份凭据副本。若有本地可修复问题，完成分析/实现/聚焦正向后端测试或真实UI视觉验收。所有本轮文件修改范围提交；fresh fetch/merge，审查全部待推送集合并正常push。Goal继续active，未验证的来源成本仍保留，不为本批完成而标记整体目标完成。
+
+## 结果
+
+待实际验收。
+
+### 797 原始范围中断与检查器裁决
+
+正式复制前board checker确认原Mission lane=review、唯一Task仍completed，投递audit.passed=true。新库来源172843行、四处附件17/10/16/16份均完成复制；可见预检两请求均为精确Sol流式HTTP200/EOF。原Mission通过真实UI收到有限续跑输入，未制造Task或成功消息。
+
+16:53:30.317Z验收器从启动计算的15min timer主动POST /shutdown，原Mission刚发出mission_state snapshot即被Server shutdown取消，原exec50608/native/launcher退出0，物理/输出/请求均结清，绝对期限仍余593241ms。原件实际6次模型请求、累计976、48上限未耗尽，未使用的42次退休；两次EOF预检之外含真实ECONNRESET、EOF和取消，不能报告全部200/EOF或把中断包装为业务失败。原Task仍是同一completed事件，Mission正式关闭未达成；离线页面最后Running只是已断开实时数据的旧视图，不能据其判定仍有进程。
+
+根因是自有验收器的双计时：launch-admission持有25min物理预算，历史owned-ui-shutdown helper又接受独立delayMs=15min，后者在真实Provider/Tool仍推进时提前10min关闭。它不是产品的无活动超时。skill要求真实无活动超时，已有Provider/命令活动超时仍由其原owner管理；验收预算只应由单一admission deadline决定最终关闭。所有应用/窗口控制继续使用真实浏览器，不能以新增UI自动化测试替代。本轮修复范围是诊断工具链，历史artifact helper作为原运行证据保留，不把它改成新版本伪造旧验收。
+
+另外retire已先完成凭据/model副本清退并写出retirement原件，随后其取消时间资格化失败：它要求reader cancel早于HTTP shutdown response，但原生异步drain允许cancel在HTTP response之后、physical/output/request settlement之前完成。原记录保留。新的资格检查只认可同一shutdown到达之后、精确原生settled之前的真实reader cancel，不放宽EOF、源身份、模型、请求、进程或期限合同；当前797原件先进入该检查，不能再运行会重删副本的旧retire。
+
+实施前决定：新增当前唯一script级owned shutdown owner，删除独立delay输入，严格从launch-admission.deadlineAt减5min结算余量计算最终预算关闭；实际工作完成仍立即公开关闭。保留原PID/instance/occurrence、loopback端口和HOME校验，不改生产Host，不增加自动工具决策或重试协议。聚焦正向后端测试验证具体deadline/身份错误及取消结算窗口，并用797真实输入重放。原历史脚本不改写、当前新范围只导入新script，不保留后备路径。
+
+工具链通过后以新范围mission-closure-798重跑同一个Mission验收，完整复制已关闭797原库及实际附件；797失败和所有原任务证据保留，不能重新启动797或恢复其42次余量。798最多32次真实Sol流式请求，累计从976继续；单一物理预算45min，5min结算余量，3min无真实活动先查同一handle。所有准备、inspector、cleanup及浏览器步骤在首次启动前完成，以减少模型验收预算中的无用准备。最终只以原Mission真实完成回执、完整证据、实页人工查看及所有源数据/Git保全作为通过依据，若失败如实保留，不调整同范围预算。
+
+### 798 实际收口与数据复核
+
+新script的4项正向合同及core types通过；797两次reader cancel实际在HTTP response之后、原生完整settlement之前，均经新资格函数通过，原retirement不改写。原生supervisor和runtime各自产生不同occurrence UUID，真实PID与processInstanceID一致；helper只按各自事实域验证原scope/进程，不能将不同owner的UUID强制相等。
+
+798已通过真实UI继续原Mission，完整读取原Completion Decision、精确交付者/独立Tester消息、两份快照及13份文件资源。Mission状态批量commit、原生document交付、panel_complete_mission均真实成功；其Tool part=prt_g0VZSZ96m00VYGLVLVWV、Message=msg_g0VZSZ7AQ00BneiPm2lc，timeRecorded=1793294070618。完成会话、展开产物和看板截图均实际查看；1280宽带侧栏的看板需横向滚动，使用其真实收起侧栏控件后完整五列可见。未修改UI源码，不宣称做了新的视觉修复。原Task依旧同一completed轮次，未创建替代或重开。正式关闭库复制checker的mission-after退出0、board.lane=completed/outcome.kind=accepted、唯一原Task completed、delivery audit.passed=true。
+
+17次实际Sol流式请求全部HTTP200/EOF，累计976→993，未用15次额度退休；手动public shutdown200、原exec1510/native/launcher0、物理/输出/请求结清，留1982956ms绝对期限余量，凭据/catalog副本清退且来源metadata/catalog字节一致。没有再次使用797额度或改写旧中断。
+
+数据检查器首次以“所有表的原行ID必须仍存在”失败。精确只涉及一个memory_file/user_message和其一个memory_chunk。它不是泛称的检索cache重建：原条目为message:msg_hI9k1gZvabOR0D5cMoYx，项目记忆commitOrganization按原revision和精确pending前缀把已组织输入写入Project MEMORY.MD并消费输入行。源库原件仍逐行保留。修复检查器前已读取project-memory架构、MemoryFile/Chunk schema及project-memory.ts的commitOrganization事务；新复核必须同时证明两行属于同一已组织user_message、项目正文的recentCoveredOccurrenceIDs覆盖精确原消息、原Message及每个原Part内容完整保留，其余原行身份仍全部存在。没有证据前不能统称派生缓存，也不能把真实用户消息删除当正常索引变化；结果随后记录。
+
+上述精确复核已通过：原Message data与原文Part prt_hOhQBLkXKNunP9hR8MEN完整保留；Project MEMORY.MD revision8覆盖原msg_hI9k1gZvabOR0D5cMoYx。其余173992个原行身份仍在，只有该两行已组织输入按唯一事务消费；源92表173994行全部原样保留，新库178180行、schema9、integrity_check=ok。原7文件、分支、完整index以及63份附件来源/副本一致，无数据升级。新检查器不豁免其他缺行，也不根据摘要或单纯标题判断保全。
+
+新增身份错误的正向合同后，shutdown-final为5项全部通过；core types、现有文档检查及正式Mission-before/after均通过，普通hook/交付复核随后收敛。当前目标继续active：795原本地代码闭环完整通过，不代表所有产品功能完成，也不替代更早793尚未完成的真实提交审批流程或来源调用成本验证。原始范围和截图见[完整证据包](../../artifacts/2026-10-30-mission-acceptance-closure/README.md)。

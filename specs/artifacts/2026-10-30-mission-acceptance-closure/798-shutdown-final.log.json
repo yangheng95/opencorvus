@@ -1,0 +1,4 @@
+{
+  "encoding": "raw UTF-8, lossless JSON string",
+  "raw_utf8": "[1/1] START test/owned-diagnostic-shutdown.test.ts\nbun test v1.4.0 (34cbb9a40) 1x PARALLEL\n\ntest\\isolated-test-entry.test.ts:\n(pass) derives shutdown and its complete settlement reserve from one admission deadline [0.17ms]\n(pass) an exhausted admission maps to its explicit timing error [0.10ms]\n(pass) qualifies a reader cancellation that drains after the shutdown HTTP response [0.18ms]\n(pass) a cancellation after settlement maps to its explicit timing error [0.06ms]\n(pass) a foreign shutdown occurrence maps to its explicit identity error [1.26ms]\n\n 5 pass\n 0 fail\n 5 expect() calls\nRan 5 tests across 1 file. [2.36s]\n[1/1] DONE test/owned-diagnostic-shutdown.test.ts exit=0 duration=3.67s\n"
+}

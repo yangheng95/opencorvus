@@ -1,0 +1,112 @@
+[
+  {
+    "scope": "797",
+    "label": "docs",
+    "startedAt": 1793291809090,
+    "closedAt": 1793291816686,
+    "code": 0,
+    "signal": null,
+    "childPID": 86876,
+    "output": "797-docs.log.json"
+  },
+  {
+    "scope": "797",
+    "label": "mission-before",
+    "startedAt": 1793291867685,
+    "closedAt": 1793291873195,
+    "code": 0,
+    "signal": null,
+    "childPID": 82500,
+    "output": "797-mission-before.log.json"
+  },
+  {
+    "scope": "797",
+    "label": "shutdown-contracts",
+    "startedAt": 1793293332721,
+    "closedAt": 1793293342356,
+    "code": 0,
+    "signal": null,
+    "childPID": 82512,
+    "output": "797-shutdown-contracts.log.json"
+  },
+  {
+    "scope": "798",
+    "label": "shutdown-contracts",
+    "startedAt": 1793293611147,
+    "closedAt": 1793293615616,
+    "code": 0,
+    "signal": null,
+    "childPID": 91036,
+    "output": "798-shutdown-contracts.log.json"
+  },
+  {
+    "scope": "798",
+    "label": "shutdown-final",
+    "startedAt": 1793295181121,
+    "closedAt": 1793295186249,
+    "code": 0,
+    "signal": null,
+    "childPID": 3772,
+    "output": "798-shutdown-final.log.json"
+  },
+  {
+    "scope": "798",
+    "label": "types",
+    "startedAt": 1793293648582,
+    "closedAt": 1793293698486,
+    "code": 0,
+    "signal": null,
+    "childPID": 96804,
+    "output": "798-types.log.json"
+  },
+  {
+    "scope": "798",
+    "label": "docs",
+    "startedAt": 1793293648599,
+    "closedAt": 1793293659531,
+    "code": 0,
+    "signal": null,
+    "childPID": 65752,
+    "output": "798-docs.log.json"
+  },
+  {
+    "scope": "798",
+    "label": "mission-before",
+    "startedAt": 1793293648582,
+    "closedAt": 1793293658986,
+    "code": 0,
+    "signal": null,
+    "childPID": 21412,
+    "output": "798-mission-before.log.json"
+  },
+  {
+    "scope": "798",
+    "label": "mission-after",
+    "startedAt": 1793294542865,
+    "closedAt": 1793294549844,
+    "code": 0,
+    "signal": null,
+    "childPID": 73572,
+    "output": "798-mission-after.log.json"
+  },
+  {
+    "scope": "798",
+    "label": "docs-final",
+    "startedAt": 1793295384183,
+    "closedAt": 1793295392248,
+    "code": 0,
+    "signal": null,
+    "childPID": 91468,
+    "output": "798-docs-final.log.json"
+  },
+  {
+    "scope": "798",
+    "label": "architecture-final",
+    "startedAt": 1793295384183,
+    "closedAt": 1793295386397,
+    "code": 0,
+    "signal": null,
+    "childPID": 93348,
+    "output": "798-architecture-final.log.json"
+  }
+]
