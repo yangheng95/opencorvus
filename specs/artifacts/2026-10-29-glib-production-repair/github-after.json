@@ -1,0 +1,892 @@
+{
+  "push": {
+    "commit": "29bafc25f6c2cdcc62f1fd706f1afdf265366f48",
+    "finishedAt": "2026-10-29T10:05:34.5195485Z",
+    "exitCode": 0,
+    "upstream": "origin/main"
+  },
+  "initial": {
+    "at": "2026-10-29T10:05:44.727Z",
+    "method": "Read-only alert GET and GraphQL query using the previously authorized local GitHub login",
+    "alerts": [
+      {
+        "dismissedReason": null,
+        "fixedAt": null,
+        "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+        "number": 31,
+        "package": "zip",
+        "severity": "critical",
+        "state": "open"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": null,
+        "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+        "number": 30,
+        "package": "rustls",
+        "severity": "low",
+        "state": "open"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": null,
+        "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+        "number": 29,
+        "package": "rustls",
+        "severity": "low",
+        "state": "open"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": null,
+        "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+        "number": 28,
+        "package": "rustls",
+        "severity": "medium",
+        "state": "open"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": null,
+        "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+        "number": 27,
+        "package": "rustls",
+        "severity": "low",
+        "state": "open"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-27T23:22:23Z",
+        "manifest": "packages/overlay/src-tauri/Cargo.lock",
+        "number": 26,
+        "package": "rustls",
+        "severity": "low",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-27T23:22:23Z",
+        "manifest": "packages/overlay/src-tauri/Cargo.lock",
+        "number": 25,
+        "package": "rustls",
+        "severity": "low",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-27T23:22:22Z",
+        "manifest": "packages/overlay/src-tauri/Cargo.lock",
+        "number": 24,
+        "package": "rustls",
+        "severity": "medium",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-27T23:22:22Z",
+        "manifest": "packages/overlay/src-tauri/Cargo.lock",
+        "number": 23,
+        "package": "rustls",
+        "severity": "low",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-25T05:55:39Z",
+        "manifest": "packages/opencorvus/package.json",
+        "number": 22,
+        "package": "undici",
+        "severity": "high",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-25T05:55:38Z",
+        "manifest": "packages/opencorvus/package.json",
+        "number": 21,
+        "package": "undici",
+        "severity": "medium",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-25T05:55:40Z",
+        "manifest": "packages/web/package.json",
+        "number": 20,
+        "package": "zod",
+        "severity": "high",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-25T05:55:39Z",
+        "manifest": "packages/web/package.json",
+        "number": 19,
+        "package": "astro",
+        "severity": "medium",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-25T05:55:39Z",
+        "manifest": "packages/web/package.json",
+        "number": 18,
+        "package": "astro",
+        "severity": "low",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-07T03:52:58Z",
+        "manifest": "packages/overlay/package.json",
+        "number": 17,
+        "package": "@modelcontextprotocol/sdk",
+        "severity": "high",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-07T03:52:58Z",
+        "manifest": "packages/opencorvus/package.json",
+        "number": 16,
+        "package": "@modelcontextprotocol/sdk",
+        "severity": "high",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-07T06:30:46Z",
+        "manifest": "package.json",
+        "number": 15,
+        "package": "sharp",
+        "severity": "high",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": null,
+        "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+        "number": 14,
+        "package": "rand",
+        "severity": "low",
+        "state": "open"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": null,
+        "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+        "number": 13,
+        "package": "glib",
+        "severity": "medium",
+        "state": "open"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-05T05:51:56Z",
+        "manifest": "packages/opencorvus/package.json",
+        "number": 12,
+        "package": "undici",
+        "severity": "low",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-05T05:51:56Z",
+        "manifest": "packages/opencorvus/package.json",
+        "number": 11,
+        "package": "undici",
+        "severity": "high",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-05T05:51:56Z",
+        "manifest": "packages/opencorvus/package.json",
+        "number": 10,
+        "package": "undici",
+        "severity": "medium",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-09-09T17:56:54Z",
+        "manifest": "packages/web/package.json",
+        "number": 9,
+        "package": "astro",
+        "severity": "critical",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-09-09T17:56:54Z",
+        "manifest": "packages/web/package.json",
+        "number": 8,
+        "package": "astro",
+        "severity": "medium",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-05T08:44:20Z",
+        "manifest": "packages/overlay/src-tauri/Cargo.lock",
+        "number": 7,
+        "package": "serde_with",
+        "severity": "medium",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-28T05:54:23Z",
+        "manifest": "packages/overlay/src-tauri/Cargo.lock",
+        "number": 6,
+        "package": "rand",
+        "severity": "low",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": null,
+        "manifest": "packages/overlay/src-tauri/Cargo.lock",
+        "number": 5,
+        "package": "glib",
+        "severity": "medium",
+        "state": "open"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-09-09T18:21:16Z",
+        "manifest": "packages/opencorvus/package.json",
+        "number": 4,
+        "package": "js-yaml",
+        "severity": "high",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-09-11T01:23:41Z",
+        "manifest": "packages/opencorvus/package.json",
+        "number": 3,
+        "package": "@ai-sdk/provider-utils",
+        "severity": "low",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-05T07:20:52Z",
+        "manifest": "packages/opencorvus/package.json",
+        "number": 2,
+        "package": "drizzle-orm",
+        "severity": "high",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-09-09T17:56:53Z",
+        "manifest": "package.json",
+        "number": 1,
+        "package": "sharp",
+        "severity": "high",
+        "state": "fixed"
+      }
+    ],
+    "graph": {
+      "data": {
+        "repository": {
+          "defaultBranchRef": {
+            "name": "main",
+            "target": {
+              "oid": "29bafc25f6c2cdcc62f1fd706f1afdf265366f48"
+            }
+          },
+          "dependencyGraphManifests": {
+            "nodes": [
+              {
+                "filename": "packages/inspect-benchmark/pyproject.toml",
+                "parseable": true
+              },
+              {
+                "filename": "script/video/minimax-h3-mission-promo/requirements.txt",
+                "parseable": true
+              },
+              {
+                "filename": ".github/workflows/build-overlays.yml",
+                "parseable": true
+              },
+              {
+                "filename": ".github/workflows/build.yml",
+                "parseable": true
+              },
+              {
+                "filename": ".github/workflows/codeql.yml",
+                "parseable": true
+              },
+              {
+                "filename": ".github/workflows/deploy-opencorvus-com.yml",
+                "parseable": true
+              },
+              {
+                "filename": ".github/workflows/package-overlay.yml",
+                "parseable": true
+              },
+              {
+                "filename": ".github/workflows/test.yml",
+                "parseable": true
+              },
+              {
+                "filename": "patches/rust/glib-0.18.5/Cargo.toml",
+                "parseable": true
+              },
+              {
+                "filename": "packages/overlay/src-tauri/Cargo.lock",
+                "parseable": true
+              },
+              {
+                "filename": "packages/overlay/src-tauri/Cargo.toml",
+                "parseable": true
+              },
+              {
+                "filename": "packages/opencorvus/src/prompt/core/requirements-core.txt",
+                "parseable": true
+              },
+              {
+                "filename": "packages/opencorvus/native/process-supervisor/Cargo.lock",
+                "parseable": true
+              },
+              {
+                "filename": "packages/opencorvus/native/process-supervisor/Cargo.toml",
+                "parseable": true
+              },
+              {
+                "filename": "specs/artifacts/2026-10-22-native-query-stream/Cargo.lock",
+                "parseable": true
+              },
+              {
+                "filename": "specs/artifacts/2026-10-22-native-query-stream/Cargo.toml",
+                "parseable": true
+              },
+              {
+                "filename": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+                "parseable": true
+              },
+              {
+                "filename": "specs/artifacts/2026-10-29-heavy-workbench-h05-opencorvus/attempt-4-uncapped/review-a/setup.py",
+                "parseable": true
+              },
+              {
+                "filename": "package.json",
+                "parseable": true
+              },
+              {
+                "filename": "examples/parcel-notes/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "packages/channel-config/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "packages/channel-runtime/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "packages/opencorvus/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "packages/overlay/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "packages/plugin/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "packages/script/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "packages/sdk/js/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "packages/transport-protocol/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "packages/util/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "packages/web/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "specs/artifacts/2026-08-09-backend-algorithm-test-loop/fixtures/case-01-interval-windows/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "specs/artifacts/2026-08-09-backend-algorithm-test-loop/fixtures/case-02-dependency-waves/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "specs/artifacts/2026-09-09-first-result-media/accepted-result/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "specs/artifacts/2026-10-24-expert-squad-mechanism-cases/inputs/review-debug/package.json",
+                "parseable": true
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "refreshed": {
+    "at": "2026-10-29T10:10:20.575Z",
+    "method": "Read-only alert GET and GraphQL query using the previously authorized local GitHub login",
+    "alerts": [
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-29T10:05:48Z",
+        "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+        "number": 31,
+        "package": "zip",
+        "severity": "critical",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-29T10:05:47Z",
+        "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+        "number": 30,
+        "package": "rustls",
+        "severity": "low",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-29T10:05:47Z",
+        "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+        "number": 29,
+        "package": "rustls",
+        "severity": "low",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-29T10:05:47Z",
+        "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+        "number": 28,
+        "package": "rustls",
+        "severity": "medium",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-29T10:05:47Z",
+        "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+        "number": 27,
+        "package": "rustls",
+        "severity": "low",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-27T23:22:23Z",
+        "manifest": "packages/overlay/src-tauri/Cargo.lock",
+        "number": 26,
+        "package": "rustls",
+        "severity": "low",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-27T23:22:23Z",
+        "manifest": "packages/overlay/src-tauri/Cargo.lock",
+        "number": 25,
+        "package": "rustls",
+        "severity": "low",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-27T23:22:22Z",
+        "manifest": "packages/overlay/src-tauri/Cargo.lock",
+        "number": 24,
+        "package": "rustls",
+        "severity": "medium",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-27T23:22:22Z",
+        "manifest": "packages/overlay/src-tauri/Cargo.lock",
+        "number": 23,
+        "package": "rustls",
+        "severity": "low",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-25T05:55:39Z",
+        "manifest": "packages/opencorvus/package.json",
+        "number": 22,
+        "package": "undici",
+        "severity": "high",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-25T05:55:38Z",
+        "manifest": "packages/opencorvus/package.json",
+        "number": 21,
+        "package": "undici",
+        "severity": "medium",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-25T05:55:40Z",
+        "manifest": "packages/web/package.json",
+        "number": 20,
+        "package": "zod",
+        "severity": "high",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-25T05:55:39Z",
+        "manifest": "packages/web/package.json",
+        "number": 19,
+        "package": "astro",
+        "severity": "medium",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-25T05:55:39Z",
+        "manifest": "packages/web/package.json",
+        "number": 18,
+        "package": "astro",
+        "severity": "low",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-07T03:52:58Z",
+        "manifest": "packages/overlay/package.json",
+        "number": 17,
+        "package": "@modelcontextprotocol/sdk",
+        "severity": "high",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-07T03:52:58Z",
+        "manifest": "packages/opencorvus/package.json",
+        "number": 16,
+        "package": "@modelcontextprotocol/sdk",
+        "severity": "high",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-07T06:30:46Z",
+        "manifest": "package.json",
+        "number": 15,
+        "package": "sharp",
+        "severity": "high",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-29T10:05:47Z",
+        "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+        "number": 14,
+        "package": "rand",
+        "severity": "low",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-29T10:05:46Z",
+        "manifest": "specs/artifacts/2026-10-05-dependency-remediation/quickxml-parent-preparation/before/Cargo.lock",
+        "number": 13,
+        "package": "glib",
+        "severity": "medium",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-05T05:51:56Z",
+        "manifest": "packages/opencorvus/package.json",
+        "number": 12,
+        "package": "undici",
+        "severity": "low",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-05T05:51:56Z",
+        "manifest": "packages/opencorvus/package.json",
+        "number": 11,
+        "package": "undici",
+        "severity": "high",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-05T05:51:56Z",
+        "manifest": "packages/opencorvus/package.json",
+        "number": 10,
+        "package": "undici",
+        "severity": "medium",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-09-09T17:56:54Z",
+        "manifest": "packages/web/package.json",
+        "number": 9,
+        "package": "astro",
+        "severity": "critical",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-09-09T17:56:54Z",
+        "manifest": "packages/web/package.json",
+        "number": 8,
+        "package": "astro",
+        "severity": "medium",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-05T08:44:20Z",
+        "manifest": "packages/overlay/src-tauri/Cargo.lock",
+        "number": 7,
+        "package": "serde_with",
+        "severity": "medium",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-28T05:54:23Z",
+        "manifest": "packages/overlay/src-tauri/Cargo.lock",
+        "number": 6,
+        "package": "rand",
+        "severity": "low",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-29T10:05:48Z",
+        "manifest": "packages/overlay/src-tauri/Cargo.lock",
+        "number": 5,
+        "package": "glib",
+        "severity": "medium",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-09-09T18:21:16Z",
+        "manifest": "packages/opencorvus/package.json",
+        "number": 4,
+        "package": "js-yaml",
+        "severity": "high",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-09-11T01:23:41Z",
+        "manifest": "packages/opencorvus/package.json",
+        "number": 3,
+        "package": "@ai-sdk/provider-utils",
+        "severity": "low",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-10-05T07:20:52Z",
+        "manifest": "packages/opencorvus/package.json",
+        "number": 2,
+        "package": "drizzle-orm",
+        "severity": "high",
+        "state": "fixed"
+      },
+      {
+        "dismissedReason": null,
+        "fixedAt": "2026-09-09T17:56:53Z",
+        "manifest": "package.json",
+        "number": 1,
+        "package": "sharp",
+        "severity": "high",
+        "state": "fixed"
+      }
+    ],
+    "graph": {
+      "data": {
+        "repository": {
+          "defaultBranchRef": {
+            "name": "main",
+            "target": {
+              "oid": "29bafc25f6c2cdcc62f1fd706f1afdf265366f48"
+            }
+          },
+          "dependencyGraphManifests": {
+            "nodes": [
+              {
+                "filename": ".github/workflows/build-overlays.yml",
+                "parseable": true
+              },
+              {
+                "filename": ".github/workflows/build.yml",
+                "parseable": true
+              },
+              {
+                "filename": ".github/workflows/codeql.yml",
+                "parseable": true
+              },
+              {
+                "filename": ".github/workflows/deploy-opencorvus-com.yml",
+                "parseable": true
+              },
+              {
+                "filename": ".github/workflows/package-overlay.yml",
+                "parseable": true
+              },
+              {
+                "filename": ".github/workflows/test.yml",
+                "parseable": true
+              },
+              {
+                "filename": "patches/rust/glib-0.18.5/Cargo.toml",
+                "parseable": true
+              },
+              {
+                "filename": "packages/inspect-benchmark/pyproject.toml",
+                "parseable": true
+              },
+              {
+                "filename": "packages/overlay/src-tauri/Cargo.lock",
+                "parseable": true
+              },
+              {
+                "filename": "packages/overlay/src-tauri/Cargo.toml",
+                "parseable": true
+              },
+              {
+                "filename": "packages/opencorvus/src/prompt/core/requirements-core.txt",
+                "parseable": true
+              },
+              {
+                "filename": "script/video/minimax-h3-mission-promo/requirements.txt",
+                "parseable": true
+              },
+              {
+                "filename": "packages/opencorvus/native/process-supervisor/Cargo.lock",
+                "parseable": true
+              },
+              {
+                "filename": "packages/opencorvus/native/process-supervisor/Cargo.toml",
+                "parseable": true
+              },
+              {
+                "filename": "specs/artifacts/2026-10-22-native-query-stream/Cargo.lock",
+                "parseable": true
+              },
+              {
+                "filename": "specs/artifacts/2026-10-22-native-query-stream/Cargo.toml",
+                "parseable": true
+              },
+              {
+                "filename": "specs/artifacts/2026-10-29-heavy-workbench-h05-opencorvus/attempt-4-uncapped/review-a/setup.py",
+                "parseable": true
+              },
+              {
+                "filename": "package.json",
+                "parseable": true
+              },
+              {
+                "filename": "examples/parcel-notes/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "packages/channel-config/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "packages/channel-runtime/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "packages/opencorvus/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "packages/overlay/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "packages/plugin/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "packages/script/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "packages/sdk/js/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "packages/transport-protocol/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "packages/util/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "packages/web/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "specs/artifacts/2026-08-09-backend-algorithm-test-loop/fixtures/case-01-interval-windows/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "specs/artifacts/2026-08-09-backend-algorithm-test-loop/fixtures/case-02-dependency-waves/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "specs/artifacts/2026-09-09-first-result-media/accepted-result/package.json",
+                "parseable": true
+              },
+              {
+                "filename": "specs/artifacts/2026-10-24-expert-squad-mechanism-cases/inputs/review-debug/package.json",
+                "parseable": true
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "refresh": {
+    "authorizedBy": "User explicitly approved one Refresh Dependabot alerts action in this chat",
+    "executions": 1,
+    "browser": "Existing Chrome profile, independent agent-created page",
+    "page": "https://github.com/yangheng95/opencorvus/security/dependabot",
+    "observedBeforeAction": "Open (0), Closed (31): automatic scan had already resolved the findings after the code push",
+    "observedAfterAction": [
+      "Refresh queued, it may take several minutes to see changes reflected in your alerts.",
+      "Next available refresh in 59 minutes",
+      "Open (0), Closed (31)"
+    ],
+    "qualification": "The eight findings became fixed at 10:05:46Z–10:05:48Z after the 10:05:34Z push, before the authorized manual refresh. No causal credit is assigned to the later manual action. No alert was dismissed; no security setting or rule was changed."
+  },
+  "limits": "Dependabot only: Code scanning is a separate surface and is not included in the zero-open claim. Native GUI/ARM/macOS/Windows payload transfer/installers remain unqualified."
+}

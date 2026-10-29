@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [GitHub零开放告警回读](../../artifacts/2026-10-29-glib-production-repair/github-after.json)：生产修复推送后的实际fixed状态与单次官方重扫。
+
 - [GLib生产验收数据](../../artifacts/2026-10-29-glib-production-repair/README.md)：唯一Cargo图、源码生成和正式原生构建的实际输出。
 
 - [2026-10-29-glib-production-repair.md](2026-10-29-glib-production-repair.md)：已验证候选进入生产Cargo图与正式Linux构建的方案和验收。

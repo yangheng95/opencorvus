@@ -41,3 +41,11 @@ Docker完整消费者复核继续发现flatten布局不符合build.rs的server-d
 既有Docker源码文案断言仅检查函数名是否出现，不能覆盖缺失挂载的真实错误，已删除该失效块与专用导入；保留实际artifact命名函数合同。Docker选择挂载Tauri资格、最终scope提交/fetch merge/push及GitHub回读继续收敛，不将该阶段的应用资格冒称ARM/macOS/Windows跨平台传输、installer或GUI验收。
 
 09:56:34Z Docker精确选择挂载资格实际退出0：只挂载当前入口所需src/src-tauri/dist-vite/patch/server-defaults/prebuilt-server，未挂整个源仓库/Node依赖/Git，真实Tauri locked release构建成功（原生cache复用，1m59s）。实际metadata12父节点仍选择唯一生产源，原参数/返回artifact/终态已记录。全部6个确切scope容器仅在确认真实exited后正常rm；自有公开cache/source卷和镜像保留，不操作用户daemon。当前证据明确区分该真实Linux布局构建与尚未实测的Windows payload传输/其他平台/安装器/GUI。
+
+## 交付与告警收敛
+
+`29bafc25f`已正常提交并于10:05:34Z推送main；fresh fetch/merge确认仅该已验收提交待推，全部类型、SDK/OpenAPI、schema9内存校验、文档、路由、架构、包/模块/lease归属、发布修改拓扑和密钥检查通过。10:05:44Z第一次API读取仍8open；其后10:05:46Z–10:05:48Z GitHub自动将全部8条标记fixed。
+
+用户明确授权一次官方“Refresh Dependabot alerts”。内置浏览器未登录GitHub，因此在已有Chrome登录环境新建独立管理页；该页在点击之前已经Open0/Closed31。只点击一次官方菜单，随后看到Refresh queued与Next available refresh in59minutes。10:10:20Z只读API确认0open、8条均fixed、旧manifest已从依赖图移除。未dismiss、未改安全设置/规则、未自动操作登录认证，不将后续人工重扫冒称为此前自动收敛的原因。该零告警结论仅限Dependabot，未将页面中的Code scanning计入。本轮依旧单agent、0模型调用；后续持续目标保持active，其他产品体验工作继续分批进行。
+
+实际代码、生产artifact、三次原始失败、Docker终态、normal push日志、API回读及官方管理页截图均进入同一[证据入口](../../artifacts/2026-10-29-glib-production-repair/README.md)。保留他人171媒体删除、基准工作和共享索引改动；不声称整个工作区干净，也不进行Release/tag/发布。

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [GitHub依赖告警收敛](artifacts/2026-10-29-glib-production-repair/github-after.json)：正常推送、8项fixed、零开放告警与已授权单次重扫回执。
+
 - [GLib生产修复证据](artifacts/2026-10-29-glib-production-repair/README.md)：源码身份、首次构建正向合同与GitHub依赖图只读回读。
 
 - [GLib生产修复与正式构建](records/2026-10/2026-10-29-glib-production-repair.md)：唯一源码回移、Linux实际应用合同和构建入口整合。

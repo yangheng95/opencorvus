@@ -2,7 +2,9 @@
 
 The complete canonical Linux Tauri release build passed. Four tests linked to
 its precise production GLib library and four separate opt-level=3 library tests
-passed. No GUI acceptance is claimed.
+passed. The repair was normally pushed as `29bafc25f`; GitHub now reports zero
+open Dependabot alerts, with all eight previous findings `fixed`.
+No GUI acceptance is claimed.
 
 - [Published source provenance](provenance.json), [production-only projection](source-projection.json),
   [one-time syn preparation source](projection-tool.rs.txt) and
@@ -42,6 +44,16 @@ frontend, canonical source/defaults and production patch without surrounding
 workspace dependencies. All six exact owned containers have [retired](retired-containers.json).
 Its terminal receipt is recorded separately; Windows
 payload transfer, ARM, macOS, installers and native GUI remain outside this run.
+
+[Delivery and GitHub readback](github-after.json), [normal push checks](push-validation.stdout.log)
+and [the management-page screenshot](github-refresh-queued.png) show the final state.
+The automatic scan marked the eight alerts fixed at 10:05:46Z–10:05:48Z after
+the 10:05:34Z push. The management page already showed Open (0) before the
+separately authorized one-time manual refresh. That later action was accepted:
+the page displayed “Refresh queued” and a 59-minute cooldown. The read-only API
+also reports zero open alerts and the retired manifest has left the dependency
+graph. No finding was dismissed and no security policy changed. This result is
+specific to Dependabot; the separate Code scanning surface is not a zero claim.
 
 Focused Windows positive checks cover the real prepared plugin closure under
 both source and published-JavaScript resolution, executing ordinary and Unicode
