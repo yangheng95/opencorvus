@@ -303,3 +303,5 @@ L06现有30数值叶适配：唯一inspect_plan收集可计算谓词，财务/�
 冻结后唯一真实完整reference grade CLI已正向graded98/business_success=true/good=true，45pass2partial(E03/E06)、无未评；只标reference qualification，candidate_score null，不拿此分证明难度。docs:check351 ops/26 groups通过。规范路径替换无旧.draft fallback，过去执行源/失败全保留。接下来范围提交、fetch/merge/待推集合审查/push，再按冻结public开始实际OpenCorvus，顺序fresh Codex以免无谓并发资源争抢；使用原Inspect/native Task/base/streaming，不新增LLM路由或总量截断。所有新候选及小时、九题要求仍未完成，心跳ACTIVE。
 
 最终包装285份唯一键/有限JSON、56份Python语法、94相对链接及32个不可变ZIP成员完整性通过；这只是包装/原件完整性，不替代业务或难度验收。docs:check实际351 ops/26 groups退出0。原始执行文档的相对路径跟随原目录，原字节保留ZIP；两份新可读重复副本经与ZIP原件逐字节身份核对后移除，不重写执行源。无生产代码修改，其他任务视频/旧图删除和共享索引差异完整保留。接下来只提交本任务case/记录和三个共享索引目标hunk，正常fetch/merge/待推全集审查/push后才启动真实pilot。
+
+162c3c8c1已范围提交冻结合同。随后将3份冗长的原始rubric/合成叶结果可读重复件收拢为ZIP-only；逐字节验证其与原始ZIP同一，Git文本换行规范化另按实际文本同一核对，不用此当功能验收。原执行证据不删不改，规范rubric.json是唯一当前配置，最终包装现282 JSON/56 Python/94链接/32 ZIP。该包装整理不改冻结public/权重/原始数据/评分器，后续独立冷跑与新候选要求保持。
