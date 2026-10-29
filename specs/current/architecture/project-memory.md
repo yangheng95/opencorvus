@@ -319,6 +319,19 @@ Project memory has three explicitly scoped authorities:
 2. Project `MEMORY.MD` is a read-only Project context maintained exclusively by the fixed hidden `memory` helper agent.
 3. Semantic memory (`note`, `episode`, `fact`, `lesson`, `profile`) is reusable main-agent-managed Project knowledge.
 
+Memory & Context settings select the Project directory from the complete Work
+Ledger project inventory, initially using the actual open Project. Selection is
+independent of the open conversation and does not require a Task. The settings
+read the protected Project document through the existing Project-memory service
+and public `experimental.projectMemory.get` contract, displaying its original
+content, revision, counts and localized update time as a read-only document.
+Document loading retires its previous selection and API authority; old responses
+cannot replace another Project's view. The separate notes-and-facts surface uses
+the existing project-scoped semantic list, search, detail and delete operations.
+It neither copies the protected document into semantic memory nor exposes it to
+generic deletion. Search preserves the actual source and Project scope; dates
+and numeric metadata follow the current interface language.
+
 Both named documents use all caps. API and tool responses distinguish them with `scope=session` and `scope=project`; filename case is not a semantic discriminator.
 
 ## Pending user-input evidence

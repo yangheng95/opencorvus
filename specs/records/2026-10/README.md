@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-29-memory-context-journey.md](2026-10-29-memory-context-journey.md)：项目MEMORY.MD可达性、语义检索与16张实页复核。
+
 - [2026-10-29-archive-goal-journey.md](2026-10-29-archive-goal-journey.md)：单代理在真实隔离开发页检查目标与归档完整流程。
 
 - [GitHub零开放告警回读](../../artifacts/2026-10-29-glib-production-repair/github-after.json)：生产修复推送后的实际fixed状态与单次官方重扫。

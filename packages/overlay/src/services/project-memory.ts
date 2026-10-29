@@ -2,6 +2,7 @@ import { setAppStore } from "../store/app"
 import { apiJson, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { activeProjectDirectory, projectScopedPath } from "./project-directory"
 import { settingsStore } from "../store/settings"
+import type { ExperimentalProjectMemoryGetResponse } from "@opencorvus-ai/sdk"
 
 export interface ProjectMemoryOptions { authority?: ApiAuthority; directory?: string }
 function memoryScope(options: ProjectMemoryOptions) {
@@ -12,10 +13,7 @@ function memoryScope(options: ProjectMemoryOptions) {
   return { authority, directory, owns: () => isApiAuthorityCurrent(authority) && epoch === settingsStore.directoryEpoch && directory === activeProjectDirectory() }
 }
 
-type ProjectMemoryDocument = {
-  status: string
-  pendingCount: number
-  tokenCount: number
+export type ProjectMemoryDocument = Omit<ExperimentalProjectMemoryGetResponse, "notice"> & {
   notice?: { status: string; message: string; generation: string; acknowledged: boolean }
 }
 

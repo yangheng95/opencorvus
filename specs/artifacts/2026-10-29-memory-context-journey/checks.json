@@ -1,0 +1,54 @@
+{
+  "at": "2026-10-29T11:29:03.681Z",
+  "runs": [
+    {
+      "label": "memory792-ui-baseline",
+      "startedAt": 1793271725700,
+      "closedAt": 1793271788633,
+      "code": 0,
+      "signal": null,
+      "childPID": 92116
+    },
+    {
+      "label": "memory792-overlay-types",
+      "startedAt": 1793272597671,
+      "closedAt": 1793272625787,
+      "code": 0,
+      "signal": null,
+      "childPID": 87108
+    },
+    {
+      "label": "memory792-ui-after-final",
+      "startedAt": 1793272597681,
+      "closedAt": 1793272661757,
+      "code": 0,
+      "signal": null,
+      "childPID": 91360
+    },
+    {
+      "label": "memory792-i18n",
+      "startedAt": 1793272597681,
+      "closedAt": 1793272600225,
+      "code": 0,
+      "signal": null,
+      "childPID": 91420
+    },
+    {
+      "label": "memory792-docs",
+      "startedAt": 1793273581943,
+      "closedAt": 1793273591502,
+      "code": 0,
+      "signal": null,
+      "childPID": 61484
+    },
+    {
+      "label": "memory792-architecture",
+      "startedAt": 1793273581976,
+      "closedAt": 1793273583966,
+      "code": 0,
+      "signal": null,
+      "childPID": 42836
+    }
+  ],
+  "scope": "Ordinary private-output Vite build, typecheck and locale-key checker. These support the manual real-page verification; no UI automated tests were created, edited or run. Only a comment and unreleased documentation were changed after the qualified UI build."
+}

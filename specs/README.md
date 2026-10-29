@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [项目记忆与检索体验](records/2026-10/2026-10-29-memory-context-journey.md)：修复Task必选错位，真实项目上下文、双语与原对话独立选择。
+
 - [归档与持续目标日常体验](records/2026-10/2026-10-29-archive-goal-journey.md)：首页目标表单与归档搜索/恢复的真实流程、身份和可达性检查。
 
 - [GitHub依赖告警收敛](artifacts/2026-10-29-glib-production-repair/github-after.json)：正常推送、8项fixed、零开放告警与已授权单次重扫回执。

@@ -1,0 +1,78 @@
+{
+  "at": "2026-10-29T11:09:59.570Z",
+  "credentialCopyRetired": true,
+  "modelCatalogCopyRetired": true,
+  "requests": 0,
+  "previousRequests": 793,
+  "cumulativeRequests": 793,
+  "maximumRequests": 0,
+  "exhausted": false,
+  "model": "gpt-6.1-sol",
+  "requestOutcomes": [],
+  "source": {
+    "catalogSameBytes": true,
+    "catalogSameMetadata": true,
+    "authSameMetadata": true
+  },
+  "publicShutdown": 200,
+  "reserveMs": 3228089,
+  "physical": {
+    "observedAtUtc": "2026-10-29T11:09:59.4785504Z",
+    "native": {
+      "occurrence": "memory-context-792-6560d89c-0a29-477b-a6c0-22c56dd15e05",
+      "outcome": "settled",
+      "host": {
+        "pid": 84020,
+        "processInstanceID": "win32:639288686066348871",
+        "occurrenceID": "dbf280b9-3c9e-4111-97d4-f804f6dfa6d7"
+      },
+      "target": {
+        "pid": 61832,
+        "processInstanceID": "win32:639288686074032597",
+        "occurrenceID": "253c188f-e15e-46d7-91e0-2e06bac70cfa"
+      },
+      "observedAtUtc": "2026-10-29T11:09:37.95Z",
+      "deadlineAt": 1793275406039,
+      "terminal": {
+        "occurrenceID": "memory-context-792-6560d89c-0a29-477b-a6c0-22c56dd15e05",
+        "pid": 61832,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 84020,
+          "processInstanceID": "win32:639288686066348871",
+          "occurrenceID": "dbf280b9-3c9e-4111-97d4-f804f6dfa6d7"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 61832,
+          "processInstanceID": "win32:639288686074032597",
+          "occurrenceID": "253c188f-e15e-46d7-91e0-2e06bac70cfa"
+        }
+      }
+    ],
+    "launcher": {
+      "observedAtUtc": "2026-10-29T11:09:37.984607Z",
+      "originalChildExit": 0
+    }
+  },
+  "scope": "baseline",
+  "port": 38357,
+  "uiEntry": "main-CNl0qeoM.js",
+  "deadline": {
+    "startedAt": 1793271806037,
+    "deadlineAt": 1793275406039
+  }
+}

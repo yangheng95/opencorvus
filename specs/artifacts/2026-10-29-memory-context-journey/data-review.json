@@ -1,0 +1,122 @@
+{
+  "at": "2026-10-29T11:29:03.674Z",
+  "method": "Actual ordered row comparison for all 92 tables against consistent pre-launch backups; direct bytes for every copied attachment, without source digest acceptance.",
+  "databases": [
+    {
+      "tables": 92,
+      "rows": 116092,
+      "schema": 9,
+      "integrity": "ok",
+      "changed": [],
+      "messageRows": 387,
+      "partRows": 1161,
+      "goalRows": 0,
+      "scope": "settled 791 QA source",
+      "originalSession": {
+        "id": "ses_-zUQZxfS4zzCqp9pVfVD",
+        "time_archived": null,
+        "time_updated": 1793270616343
+      },
+      "newOutbox": 0
+    },
+    {
+      "tables": 92,
+      "rows": 116094,
+      "schema": 9,
+      "integrity": "ok",
+      "changed": [
+        {
+          "table": "engine_control_activation_lease",
+          "before": 23563,
+          "after": 23564,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 23584,
+          "after": 23585,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        }
+      ],
+      "messageRows": 387,
+      "partRows": 1161,
+      "goalRows": 0,
+      "scope": "baseline memory reading copy",
+      "originalSession": {
+        "id": "ses_-zUQZxfS4zzCqp9pVfVD",
+        "time_archived": null,
+        "time_updated": 1793270616343
+      },
+      "newOutbox": 0
+    },
+    {
+      "tables": 92,
+      "rows": 116096,
+      "schema": 9,
+      "integrity": "ok",
+      "changed": [
+        {
+          "table": "engine_control_activation_lease",
+          "before": 23564,
+          "after": 23565,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 23585,
+          "after": 23586,
+          "added": 1,
+          "removed": 0,
+          "updated": []
+        }
+      ],
+      "messageRows": 387,
+      "partRows": 1161,
+      "goalRows": 0,
+      "scope": "candidate project reading copy",
+      "originalSession": {
+        "id": "ses_-zUQZxfS4zzCqp9pVfVD",
+        "time_archived": null,
+        "time_updated": 1793270616343
+      },
+      "newOutbox": 0
+    }
+  ],
+  "attachments": [
+    {
+      "phase": "baseline",
+      "files": 17,
+      "sourcePresent": 17,
+      "targetPresent": 17,
+      "byteExact": 17
+    },
+    {
+      "phase": "baseline",
+      "files": 10,
+      "sourcePresent": 10,
+      "targetPresent": 10,
+      "byteExact": 10
+    },
+    {
+      "phase": "candidate",
+      "files": 17,
+      "sourcePresent": 17,
+      "targetPresent": 17,
+      "byteExact": 17
+    },
+    {
+      "phase": "candidate",
+      "files": 10,
+      "sourcePresent": 10,
+      "targetPresent": 10,
+      "byteExact": 10
+    }
+  ],
+  "interpretation": "Each run added exactly one runtime activation lease and one grant. All existing rows, including every project memory file/chunk, 61 Sessions, 387 Messages, 1161 Parts and 5 Tasks, remain identical. Six persistent file references and both copied attachment namespaces retain their actual bytes."
+}

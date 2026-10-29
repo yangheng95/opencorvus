@@ -1,0 +1,31 @@
+{
+  "at": "2026-10-29T11:29:03.676Z",
+  "method": "Actual public GET /experimental/project-memory on the isolated development server, compared directly with original persisted envelope markdown.",
+  "documents": [
+    {
+      "projectID": "prj_hI8KlTauJPN4k6J7iYKT",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project",
+      "httpStatus": 200,
+      "filename": "MEMORY.MD",
+      "scope": "project",
+      "revision": 3,
+      "contentCharacters": 2091,
+      "tokenCount": 523,
+      "contentMatchesPersisted": true,
+      "empty": false
+    },
+    {
+      "projectID": "prj_hJdoxVnJqyVZSpiLlYXE",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\code-task-delivery-734\\project",
+      "httpStatus": 200,
+      "filename": "MEMORY.MD",
+      "scope": "project",
+      "revision": 3,
+      "contentCharacters": 1926,
+      "tokenCount": 482,
+      "contentMatchesPersisted": true,
+      "empty": false
+    }
+  ],
+  "visual": "Original content was manually read in the actual page at the start and end, including two different Project documents. No DOM text or screenshot assertion was used as an automated test."
+}

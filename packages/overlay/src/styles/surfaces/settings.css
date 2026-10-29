@@ -552,19 +552,50 @@ button.s-row:focus-visible {
   overflow: hidden;
 }
 
-.memory-task-picker {
+.memory-project-picker {
   display: grid;
   gap: var(--ui-gap-sm);
   min-width: 0;
 }
 
-.memory-task-picker .oc-select,
-.memory-task-picker .oc-select-trigger {
+.memory-project-picker .oc-select,
+.memory-project-picker .oc-select-trigger {
   width: 100%;
 }
 
-.memory-task-picker .oc-feedback {
+.memory-project-picker .oc-feedback {
   margin: 0;
+}
+
+.memory-project-directory {
+  color: var(--text-soft);
+  font-size: var(--ui-font-caption);
+  overflow-wrap: anywhere;
+}
+
+.memory-project-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ui-gap-sm) var(--ui-gap-lg);
+  margin-bottom: var(--ui-gap-md);
+  color: var(--text-soft);
+  font-size: var(--ui-font-caption);
+}
+
+.memory-project-content {
+  margin: 0;
+  max-height: calc(280px * var(--ui-scale));
+  overflow: auto;
+  padding: var(--ui-gap-md) var(--ui-gap-lg);
+  border: var(--oc-border-width) solid var(--divider-soft);
+  border-radius: var(--oc-radius-soft);
+  color: var(--text);
+  background: var(--surface-inset);
+  font-family: inherit;
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-reading);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 /* Toolbar above the knowledge list. Settings uses a flat toolbar:

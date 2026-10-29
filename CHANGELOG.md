@@ -6,6 +6,8 @@
 
 ### zh-CN
 
+- 记忆与上下文按项目选择，支持直接阅读真实的项目 MEMORY.MD、版本及更新时间；仅有 Chat 的项目也可使用，并保留当前对话和项目知识检索。
+
 - 归档、设置和其他可清空搜索框按 Escape 先清空查询并保持焦点；查询为空后继续原退出操作，保留特殊控件已有的键盘行为。
 
 - Linux 原生构建使用保留上游许可证的 GLib 0.18.5 源码，合入官方字符串迭代器指针修复；Docker 构建读取根配置的 Bun 版本并校验当前构建输入。
@@ -32,6 +34,8 @@
 - 修复 Windows 检查器并发准备原生辅助程序时，编译产物与运行文件互相冲突导致的拒绝访问。
 
 ### en-US
+
+- Memory & Context selects projects and displays their actual read-only MEMORY.MD, revision, and update time. Chat-only projects are available, while the current conversation and project knowledge search remain scoped independently.
 
 - Escape clears a nonempty clearable search while retaining focus before the surrounding page or popup handles a later Escape. Explicit control-specific keyboard behavior remains authoritative.
 

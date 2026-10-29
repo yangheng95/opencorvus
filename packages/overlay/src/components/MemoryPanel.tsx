@@ -1,13 +1,11 @@
 import { Feedback } from "./ui/Feedback"
 // ── MemoryPanel Component ──
-// Knowledge/memory panel that lists memory files for the current task, supports
-// search, inline detail expansion, and deletion.
-// Ports renderMemory ( 10549–10582), loadMemory (10487–10509),
-// searchMemory (10511–10540), openMemoryDetail (10586–10610), deleteMemory
-// (10612–10621), and knowledgeScopeLabel (10542–10547).
+// Project semantic knowledge: search, inline original content, and deletion.
+// The protected Project MEMORY.MD is read separately by MemoryContextPanel.
 
 import { createSignal, createMemo, createEffect, onCleanup, untrack, For, Show } from "solid-js"
-import { t } from "../utils/i18n"
+import { localeTag, t } from "../utils/i18n"
+import type { PanelKnowledgeMemoryListResponse, PanelKnowledgeMemorySearchResponse } from "@opencorvus-ai/sdk"
 import { apiJson, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import { nativeMessage } from "../services/app-dialog"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
@@ -21,14 +19,10 @@ import { SettingsEmpty } from "./settings/layout"
 
 // ── Types ──
 
-export interface MemoryFile {
-  id: string
-  title: string
-  scope: string
-  source: string
+type MemoryFile = Pick<PanelKnowledgeMemoryListResponse[number], "id" | "title" | "scope" | "source"> & {
   score?: number
   snippet?: string
-  timeUpdated: number
+  timeUpdated?: number
 }
 
 interface MemoryDetail {
@@ -47,7 +41,6 @@ interface MemoryDetailState {
 }
 
 interface MemoryFilesSource {
-  taskID: string | undefined
   directory: string
   authority: ApiAuthority
   generation: number
@@ -56,9 +49,7 @@ interface MemoryFilesSource {
 // ── Helpers ──
 
 function knowledgeScopeLabel(scope: string): string {
-  if (scope === "session") return t("memory.scope.session")
-  if (scope === "cwd") return t("memory.scope.cwd")
-  if (scope === "global") return t("memory.scope.global")
+  if (scope === "project") return t("memory.scope.project")
   return scope || ""
 }
 
@@ -86,20 +77,19 @@ async function showMemoryMessage(
   }
 }
 
-function formatDate(ts: number): string {
+function formatDate(ts: number | undefined): string {
   if (!ts) return ""
-  return new Date(ts).toLocaleDateString()
+  return new Date(ts).toLocaleDateString(localeTag())
 }
 
 function formatDateTime(ts: number): string {
   if (!ts) return ""
-  return new Date(ts).toLocaleString()
+  return new Date(ts).toLocaleString(localeTag())
 }
 
 // ── MemoryPanel ──
 
 export interface MemoryPanelProps {
-  taskID?: string | (() => string | undefined)
   directory?: string | (() => string | undefined)
   active?: boolean
   compact?: boolean
@@ -115,7 +105,6 @@ export function MemoryPanel(props: MemoryPanelProps) {
   const [detailStates, setDetailStates] = createSignal<Record<string, MemoryDetailState>>({})
   const [filesSource, setFilesSource] = createSignal<MemoryFilesSource | null>(null)
   const [deletingKeys, setDeletingKeys] = createSignal<ReadonlySet<string>>(new Set())
-  const currentTaskID = () => (typeof props.taskID === "function" ? props.taskID() : props.taskID)
   const isActive = () => props.active ?? true
   const currentDirectory = () => {
     if (props.directory !== undefined) {
@@ -130,7 +119,6 @@ export function MemoryPanel(props: MemoryPanelProps) {
 
   function captureSource(): MemoryFilesSource {
     return {
-      taskID: currentTaskID(),
       directory: currentDirectory(),
       authority: captureApiAuthority(),
       generation: sourceGeneration,
@@ -142,23 +130,19 @@ export function MemoryPanel(props: MemoryPanelProps) {
       isActive() &&
       source.generation === sourceGeneration &&
       isApiAuthorityCurrent(source.authority) &&
-      String(currentTaskID() || "") === String(source.taskID || "") &&
       currentDirectory() === source.directory
     )
   }
 
   function deleteKey(fileID: string, source = filesSource()): string {
     return source
-      ? `${source.authority.revision}\u0000${source.generation}\u0000${source.taskID ?? ""}\u0000${source.directory}\u0000${fileID}`
+      ? `${source.authority.revision}\u0000${source.generation}\u0000${source.directory}\u0000${fileID}`
       : ""
   }
 
-  function memoryPath(path: string, directory: string, params: Record<string, string> = {}): string {
+  function memoryPath(path: string, directory: string): string {
     const query = new URLSearchParams()
     if (directory) query.set("directory", directory)
-    for (const [key, value] of Object.entries(params)) {
-      if (value) query.set(key, value)
-    }
     const suffix = query.toString()
     return suffix ? `${path}?${suffix}` : path
   }
@@ -167,11 +151,11 @@ export function MemoryPanel(props: MemoryPanelProps) {
 
   const loadMemory = async (source = captureSource()) => {
     if (!sourceMatches(source)) return
-    const { taskID, directory, authority } = source
+    const { directory, authority } = source
     const token = Symbol("memory-load")
     memoryLoadOwner = token
     const ownsLoad = () => memoryLoadOwner === token && sourceMatches(source)
-    if (!taskID || !directory) {
+    if (!directory) {
       setFiles([])
       setFilesSource(null)
       setSearchMode(false)
@@ -183,7 +167,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
     }
     setLoading(true)
     try {
-      const data = await apiJson(memoryPath("panel/knowledge/memory", directory, { taskID }), { authority })
+      const data = await apiJson<PanelKnowledgeMemoryListResponse>(memoryPath("panel/knowledge/memory", directory), { authority })
       if (!ownsLoad()) return
       setFiles(Array.isArray(data) ? data : [])
       setFilesSource(source)
@@ -215,10 +199,9 @@ export function MemoryPanel(props: MemoryPanelProps) {
       return loadMemory()
     }
     const directory = currentDirectory()
-    if (!currentTaskID() || !directory) {
+    if (!directory) {
       return loadMemory(source)
     }
-    const taskID = currentTaskID()
     const query = q.trim()
     const token = Symbol("memory-search")
     memoryLoadOwner = token
@@ -227,25 +210,23 @@ export function MemoryPanel(props: MemoryPanelProps) {
     try {
       // Body-only branch — no implicit fallback to old results, every search
       // call either succeeds or surfaces the error to the operator below.
-      const results = await apiJson(memoryPath("panel/knowledge/memory/search", directory), {
+      const results = await apiJson<PanelKnowledgeMemorySearchResponse>(memoryPath("panel/knowledge/memory/search", directory), {
         authority: source.authority,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           query: q.trim(),
-          taskID: taskID || undefined,
           limit: 20,
         }),
       })
       if (!ownsSearch()) return
-      const mapped: MemoryFile[] = (Array.isArray(results) ? results : []).map((r: any) => ({
+      const mapped: MemoryFile[] = (Array.isArray(results) ? results : []).map((r) => ({
         id: r.fileId,
         title: r.fileTitle,
-        scope: r.scope || "global",
-        source: t("memory.search_source"),
+        scope: r.scope,
+        source: r.source,
         score: r.score,
         snippet: r.content ? r.content.slice(0, 200) : "",
-        timeUpdated: r.timeCreated || 0,
       }))
       setFiles(mapped)
       setFilesSource(source)
@@ -379,7 +360,6 @@ export function MemoryPanel(props: MemoryPanelProps) {
   // The retained panel retires its source even while inactive.
   createEffect(() => {
     const active = isActive()
-    currentTaskID()
     currentDirectory()
     captureApiAuthority()
     sourceGeneration += 1
@@ -414,8 +394,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
     if (loading()) return t("common.loading")
     if (errorMessage()) return errorMessage()
     if (searchMode()) return t("memory.no_results")
-    if (!currentTaskID()) return t("memory.none_unselected")
-    if (!currentDirectory()) return t("memory.scope_unavailable")
+    if (!currentDirectory()) return t("memory.none_unselected")
     return t("memory.none")
   })
 
@@ -423,11 +402,11 @@ export function MemoryPanel(props: MemoryPanelProps) {
     if (props.compact) return <div class="empty-hint">{emptyHint()}</div>
     if (errorMessage()) return <Feedback tone="error">{emptyHint()}</Feedback>
     if (loading()) return <Feedback>{emptyHint()}</Feedback>
-    if (!currentDirectory() || !currentTaskID()) {
+    if (!currentDirectory()) {
       return (
         <Feedback
-          tone={currentTaskID() ? "warning" : "neutral"}
-          title={currentTaskID() ? t("memory.scope_unavailable_title") : t("memory.task_required_title")}
+          tone="neutral"
+          title={t("memory.project_required_title")}
         >
           {emptyHint()}
         </Feedback>
@@ -447,7 +426,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
           size={props.compact ? "sm" : "md"}
           value={searchQuery()}
           placeholder={t("memory.search_placeholder")}
-          disabled={loading() || !currentTaskID() || !currentDirectory()}
+          disabled={loading() || !currentDirectory()}
           onValueChange={setSearchQuery}
           onClear={handleSearchClear}
           clearDataUI="memory-search-clear"
@@ -463,7 +442,9 @@ export function MemoryPanel(props: MemoryPanelProps) {
             {(f) => {
               const time = formatDate(f.timeUpdated)
               const mode = searchMode() ? "search" : "list"
-              const scoreHint = f.score != null ? ` · ${t("memory.score", { value: f.score.toFixed(2) })}` : ""
+              const scoreHint = f.score != null
+                ? ` · ${t("memory.score", { value: new Intl.NumberFormat(localeTag(), { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(f.score) })}`
+                : ""
               const meta = `${f.source}${scoreHint}${time ? ` · ${time}` : ""}`
               const detailState = () => detailStates()[f.id]
               const detail = () => detailState()?.detail ?? null
