@@ -1,0 +1,210 @@
+{
+  "at": "2026-10-29T21:07:37.655Z",
+  "databases": [
+    {
+      "label": "source",
+      "schema": 9,
+      "integrity": "ok",
+      "foreignKeys": "ok",
+      "rowCount": 203936,
+      "preserved": 203936,
+      "changed": [],
+      "added": []
+    },
+    {
+      "label": "before",
+      "schema": 9,
+      "integrity": "ok",
+      "foreignKeys": "ok",
+      "rowCount": 203938,
+      "preserved": 203936,
+      "changed": [],
+      "added": [
+        {
+          "table": "engine_control_activation_lease",
+          "count": 1
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "label": "after",
+      "schema": 9,
+      "integrity": "ok",
+      "foreignKeys": "ok",
+      "rowCount": 203938,
+      "preserved": 203936,
+      "changed": [],
+      "added": [
+        {
+          "table": "engine_control_activation_lease",
+          "count": 1
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "attachments": [
+    {
+      "phase": "before",
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project\\.opencorvus\\.r\\project\\attachments\\3f6c46b6425196d430e41c4487d7326b1c6c1f335042e09ed7d3e962f02dcb76",
+      "target": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project\\.opencorvus\\.r\\project\\attachments\\be4c8e40b18f6651927e92a5b6815800787f0b527d240304a0601259dedff868",
+      "files": 17,
+      "byteIdentity": "exact"
+    },
+    {
+      "phase": "before",
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project\\.opencorvus\\.r\\project\\attachments\\3f6c46b6425196d430e41c4487d7326b1c6c1f335042e09ed7d3e962f02dcb76",
+      "target": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project\\.opencorvus\\.r\\project\\attachments\\be4c8e40b18f6651927e92a5b6815800787f0b527d240304a0601259dedff868",
+      "files": 10,
+      "byteIdentity": "exact"
+    },
+    {
+      "phase": "before",
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\review-handoff-793\\project\\.opencorvus\\.r\\project\\attachments\\3f6c46b6425196d430e41c4487d7326b1c6c1f335042e09ed7d3e962f02dcb76",
+      "target": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\review-handoff-793\\project\\.opencorvus\\.r\\project\\attachments\\be4c8e40b18f6651927e92a5b6815800787f0b527d240304a0601259dedff868",
+      "files": 16,
+      "byteIdentity": "exact"
+    },
+    {
+      "phase": "before",
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\checkpoint-ownership-795\\checkpoint-qa-795\\.opencorvus\\.r\\project\\attachments\\3f6c46b6425196d430e41c4487d7326b1c6c1f335042e09ed7d3e962f02dcb76",
+      "target": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\checkpoint-ownership-795\\checkpoint-qa-795\\.opencorvus\\.r\\project\\attachments\\be4c8e40b18f6651927e92a5b6815800787f0b527d240304a0601259dedff868",
+      "files": 24,
+      "byteIdentity": "exact"
+    },
+    {
+      "phase": "before",
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project\\.opencorvus\\.r\\project\\attachments\\3f6c46b6425196d430e41c4487d7326b1c6c1f335042e09ed7d3e962f02dcb76",
+      "target": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project\\.opencorvus\\.r\\project\\attachments\\be4c8e40b18f6651927e92a5b6815800787f0b527d240304a0601259dedff868",
+      "files": 6,
+      "byteIdentity": "exact"
+    },
+    {
+      "phase": "before",
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801-ui\\runtime\\data\\projects\\2026\\10\\30\\c900ac28-28a2-4617-adf1-e98b21463cfe\\.opencorvus\\.r\\project\\attachments\\3f6c46b6425196d430e41c4487d7326b1c6c1f335042e09ed7d3e962f02dcb76",
+      "target": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801-ui\\runtime\\data\\projects\\2026\\10\\30\\c900ac28-28a2-4617-adf1-e98b21463cfe\\.opencorvus\\.r\\project\\attachments\\be4c8e40b18f6651927e92a5b6815800787f0b527d240304a0601259dedff868",
+      "files": 2,
+      "byteIdentity": "exact"
+    },
+    {
+      "phase": "after",
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project\\.opencorvus\\.r\\project\\attachments\\3f6c46b6425196d430e41c4487d7326b1c6c1f335042e09ed7d3e962f02dcb76",
+      "target": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project\\.opencorvus\\.r\\project\\attachments\\0d51cce98f6aa73a40e5374497ee302e527a79f63086dcae79cf719496aa6fd7",
+      "files": 17,
+      "byteIdentity": "exact"
+    },
+    {
+      "phase": "after",
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project\\.opencorvus\\.r\\project\\attachments\\3f6c46b6425196d430e41c4487d7326b1c6c1f335042e09ed7d3e962f02dcb76",
+      "target": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project\\.opencorvus\\.r\\project\\attachments\\0d51cce98f6aa73a40e5374497ee302e527a79f63086dcae79cf719496aa6fd7",
+      "files": 10,
+      "byteIdentity": "exact"
+    },
+    {
+      "phase": "after",
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\review-handoff-793\\project\\.opencorvus\\.r\\project\\attachments\\3f6c46b6425196d430e41c4487d7326b1c6c1f335042e09ed7d3e962f02dcb76",
+      "target": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\review-handoff-793\\project\\.opencorvus\\.r\\project\\attachments\\0d51cce98f6aa73a40e5374497ee302e527a79f63086dcae79cf719496aa6fd7",
+      "files": 16,
+      "byteIdentity": "exact"
+    },
+    {
+      "phase": "after",
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\checkpoint-ownership-795\\checkpoint-qa-795\\.opencorvus\\.r\\project\\attachments\\3f6c46b6425196d430e41c4487d7326b1c6c1f335042e09ed7d3e962f02dcb76",
+      "target": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\checkpoint-ownership-795\\checkpoint-qa-795\\.opencorvus\\.r\\project\\attachments\\0d51cce98f6aa73a40e5374497ee302e527a79f63086dcae79cf719496aa6fd7",
+      "files": 24,
+      "byteIdentity": "exact"
+    },
+    {
+      "phase": "after",
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project\\.opencorvus\\.r\\project\\attachments\\3f6c46b6425196d430e41c4487d7326b1c6c1f335042e09ed7d3e962f02dcb76",
+      "target": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project\\.opencorvus\\.r\\project\\attachments\\0d51cce98f6aa73a40e5374497ee302e527a79f63086dcae79cf719496aa6fd7",
+      "files": 6,
+      "byteIdentity": "exact"
+    },
+    {
+      "phase": "after",
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801-ui\\runtime\\data\\projects\\2026\\10\\30\\c900ac28-28a2-4617-adf1-e98b21463cfe\\.opencorvus\\.r\\project\\attachments\\3f6c46b6425196d430e41c4487d7326b1c6c1f335042e09ed7d3e962f02dcb76",
+      "target": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801-ui\\runtime\\data\\projects\\2026\\10\\30\\c900ac28-28a2-4617-adf1-e98b21463cfe\\.opencorvus\\.r\\project\\attachments\\0d51cce98f6aa73a40e5374497ee302e527a79f63086dcae79cf719496aa6fd7",
+      "files": 2,
+      "byteIdentity": "exact"
+    }
+  ],
+  "protectedOriginalFiles": 75,
+  "projects": [
+    {
+      "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-29/source-file-recovery-784/project",
+      "head": "545fce2642894d41513fb05c88f5e0dc3cad9d27",
+      "files": 3,
+      "stageEntries": "exact",
+      "workingBytes": "exact"
+    },
+    {
+      "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-30/approved-code-801/project",
+      "head": "a6d424e29eca2edbc2fc027d51d102a106c55d2c",
+      "files": 7,
+      "stageEntries": "exact",
+      "workingBytes": "exact"
+    },
+    {
+      "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-29/review-handoff-793/project",
+      "head": "1b6ae6e649db0022aa197592e5a7c8f24d264ef8",
+      "files": 6,
+      "stageEntries": "exact",
+      "workingBytes": "exact"
+    }
+  ],
+  "staged": [
+    {
+      "file": "staged-preview-802.txt",
+      "bytes": 35,
+      "present": true,
+      "byteIdentity": "Exact chooser original",
+      "metadata": true
+    },
+    {
+      "file": "staged-binary-802.bin",
+      "bytes": 4,
+      "present": true,
+      "byteIdentity": "Exact chooser original",
+      "metadata": true
+    },
+    {
+      "file": "staged-preview-zh-802.txt",
+      "bytes": 35,
+      "present": true,
+      "byteIdentity": "Exact chooser original",
+      "metadata": true
+    }
+  ],
+  "downloads": [
+    {
+      "at": "2026-10-29T20:54:59.539Z",
+      "file": "session-data-788.json",
+      "downloadPath": "C:\\Users\\hengu\\Downloads\\session-data-788 (1).json",
+      "bytes": 70,
+      "originalByteIdentity": "Exact restored original",
+      "sourceURL": "/attachment/prj_hI8KlTauJPN4k6J7iYKT/06876581bb271cdd5f82bec1f38a7f3343c2200de7814913df30ef0178bd1433.json"
+    },
+    {
+      "at": "2026-10-29T20:57:51.272Z",
+      "file": "staged-preview-802.txt",
+      "downloadPath": "C:\\Users\\hengu\\Downloads\\staged-preview-802.txt",
+      "bytes": 35,
+      "byteIdentity": "Exact original chooser input"
+    },
+    {
+      "at": "2026-10-29T20:58:38.020Z",
+      "file": "staged-binary-802.bin",
+      "downloadPath": "C:\\Users\\hengu\\Downloads\\staged-binary-802.bin",
+      "bytes": 4,
+      "byteIdentity": "Exact original chooser binary input"
+    }
+  ]
+}

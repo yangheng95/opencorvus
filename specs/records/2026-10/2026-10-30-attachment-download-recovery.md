@@ -1,0 +1,42 @@
+# 附件原件读取失败与恢复
+
+## Recall
+
+用户要求单agent持续自主体验当前产品、修复真实UI（User Interface，用户界面）与功能问题，先分析落spec，再实页操作/截图人工复核及必要正向检查，范围提交、fresh fetch/merge和正常push。后续单agent要求覆盖旧Goal中的三个Astra；不委托、不创建branch/worktree、不操作用户18571/窗口/进程/真实数据库，保留并行工作。上轮801是progress：8665e764d502adc1b54cb451280fca8e84ec48ab已推送，2026-10-29T20:27:02Z fresh0/0、自有源干净；长表单键盘根因修复及完整真实批准后提交闭环通过。三个原scope全部原exec/native/launcher结算，自有认证/目录副本退休；累计1083真实Sol请求。单次Dependabot重扫790已消耗，不重复。
+
+已重读AGENTS、801 Recall/数据/交付、当前continuous-goal与07-panel、近期Goal/归档/下载记录。Goal创建/预算/暂停恢复/侧聊执行已有近期完整证据，不把同一路径再做一遍当作新进展。当前全仓搜索OriginalFileDownload的定义/全部调用、FilePart所有媒体分支、ComposerAttachmentPreview、ResourceTextPreview、授权objectURL缓存与失败处理。OriginalFileDownload目前在resource loading结束后直接读取objectUrl()，没有像其他媒体/文本消费者先判断resource.error；Solid资源异常是否导致整个表面出错，必须实际复现后才下结论。当前相关检索未发现仓库自有UI自动化，不增加/运行UI测试。file-download-authority为纯服务原始Blob/authority合同，不冒称组件验收。
+
+当前开始保留181行其他工作区状态，包括旧媒体删除、并行benchmark文档暂存及共享索引行、两个缓存目录；本轮生产文件尚未修改。本方案只提出调查，尚无已证产品根因/候选；实现前补齐完整影响分析。
+
+## 调查与实际验收方案
+
+复制已关闭801-final的schema9/92表/203936行全库、durable publications/package revisions及六处真实附件namespace（17/10/16/24/6/2）到新自有runtime。使用当前普通main-BXyKvkH6.js，经真实开发serve /ui，baseline38372，必要候选38373；不单开Vite、不刷新用户页面。新批次attachment-download-802首次启动前固定45min admission，共享唯一绝对截止、唯一当前诊断shutdown从截止减5min；真实无活动180s，scope原handle继续观察，不因观察超时重启/延长。全过程Provider最大0、累计1083保持；按已有授权配对认证与完整目录以呈现正常已配置页面，验证本地OAuth有效/目标Sol投影，但没有实际请求时不冒称新的模型资格预检。
+
+使用原真实Chat ses_-zUQZxfS4zzCqp9pVfVD、User File Part prt_g0VZQ2L2O01SCRehrMSo（session-data-788.json）。原URL与原消息/目录不变，不SQL制造消息、附件或模型回复。基线先启动真实服务，确保实际复制namespace和文件字节身份，再仅将该scope的06876581bb271cdd5f82bec1f38a7f3343c2200de7814913df30ef0178bd1433.json原件移入自有run/evidence/held-original，保留metadata与原消息引用；原namespace及用户文件不移动。启动后移出避免把初始化GC的动作混为页面失败。只在界面首次加载前做这项可逆故障构造，防止objectURL成功缓存掩盖缺失。记录真实HTTP响应和读文件控制流，实页展开该原附件，看错误边界、剩余对话、下载/关闭/折叠和恢复操作。
+
+恢复时把同一原字节移回同一scope文件路径，再以真实已有/候选控件重试，下载原文件并核对下载原字节。不能仅刷新页面来宣称局部重试完成，亦不替换资源身份或添加原始URL绕行。若发生错误，在改生产前落可观察现象、直接触发、数据流/共享源根因、旧路径遗漏、全部调用、公共合同、数据/测试/文档/交付与风险；纯UI按实际截图验收，不用mock/DOM断言/类型/build替代。调度/恢复/终态异常若出现，立即按共享机制全部入口/轮次/多项目横审；当前不触发任何业务执行。
+
+关闭前必须归还被持有的原件且逐字核验；只正常公开shutdown精确自有服务、join原exec和原native/launcher、验证物理/输出/请求全部settled/出生身份退休，再删除自有auth/models副本并核对原件metadata/模型目录字节。源库逐行不变，目标已有行逐条核证，附件原件与QA Git/文件保全；不改schema、不重写迁移。更新各级spec索引和当前docs checker；所有本轮文件范围提交并正常同步推送。整体Goal继续active，不把此批次当作全产品完成。
+
+准备器首次在未启动任何服务/认证复制前，把原文件大小误填91；实际原件70字节导致明确AssertionError。此为本轮checker前置值错误，不是产品bug。保留原before整库/项目快照，重读源库全部203936行、原项目/Git及六附件目录逐字验证，续接已经完成的before副本，不删除或重录原快照，再准备after；原件身份以真实消息引用和源/副本字节为准，不以猜测大小作验收门。
+
+准备器大差异问题已证：memory_fts_data.block真实SQLite返回Uint8Array，保存JSON后是Object，序列化实际内容相等。整库assert.deepEqual将这种类型差异作为失败并展开巨大上下文；精确自有Node72924已停止/原14340退出1，未启动服务或auth复制。改逐表原值序列化比较并只报具体表，全部源/副本203936行通过，原快照未重录。现真实before38372已启动；70字节复制原件可逆移出后，真实GET404 Not found。首个手写定位URL错误使用experience=code，明确WorkspaceLocationError；按当前唯一parser合同改为experience=chat，未把验证链接错误当成产品缺陷。
+
+## 真实发现与实施前完整分析
+38372/current main-BXyKvkH6已实页复现：图01原User全文、附件及模型真实回复可见；展开附件触发真实404后，图02整张User卡片被Conversation.tsx的ErrorBoundary替成Card render failed，原文/折叠/下载入口消失，模型回复仍可读。将同一70字节原件恢复、真实GET200逐字相同后，图03仍停留卡片失败且没有局部恢复控件。故障不是全应用崩溃、调度或模型问题，不作扩大结论。原User/模型/URL/Part未改。
+直接路径：TextAttachment同时挂ResourceTextPreview与OriginalFileDownload，共享授权Blob缓存。前者先检查resource.error，后者在loading=false直接调用resource accessor；本地Solid1.9.13 read()在error存在且无in-flight promise时抛原异常，外层用户卡片ErrorBoundary正确接住后替换整个卡片。已有媒体Image/Audio/Video/PDF和文本分支都有error guard，遗漏只在OriginalFileDownload；给外层加reset或刷新页面会掩盖其根因。官方createResource合同（https://docs.solidjs.com/reference/basic-reactivity/create-resource）明确error状态与refetch对当前source重读；本地load()的Promise失败分支调用loadEnd记录error，返回已处理的结果，显式refetch无需新增吞错状态。
+全仓调用覆盖：FilePart的TextAttachment/未知类型下载chip、ComposerAttachmentPreview文本预览footer；DownloadLink仍只呈现实际成功字节。ResourceTextPreview当前有局部诊断，但无重读；若只重试下载，兄弟文本resource仍旧失败，所以两消费者各使用其当前resource的显式refetch，底层仍同一现有Blob缓存/authority/in-flight去重。没有新服务、备用URL、第二错误状态、数据迁移、接口/SDK/执行/工具变更；既有捕获authority和cache生命周期不动。API404与源文件身份均保留原诊断。
+候选：OriginalFileDownload在读取value前先检error，失败用现有Feedback显示本地化下载错误、原完整Details与显式Retry download；点击只refetch当前授权source并以既有loading禁重入。ResourceTextPreview既有Feedback加入同样明确Retry preview动作，保留编码诊断及原data流。两个可访问名称带原文件名，en/zh新增同一键；重试中使用现有本地化文案。无需JS卡片reset、新缓存事件或页面自动重载。其余媒体未出现同根throw，不扩大为无证重构；没有死代码删除。
+风险/验收：同scope缺失时重试仍404应只留局部错误；恢复同一文件后下载/预览各实点击恢复，真实下载逐字与源原件一致，原消息/模型回复始终可见；文本disclosure折叠/重开、Composer文本footer/Close焦点、未知MIME chip消费者与中英控件/诊断长路径布局需要实际查看，未实测项明确保留。任何候选必须新构建加载后截图，不用baseline截图或类型检查冒充。baseline现已恢复原件、公开shutdown200、原15198/native/launcher0及物理/输出/请求结清，0请求、配对副本退休、原件保全。
+
+候选构建期间补充实际覆盖：在改后同一0模型scope，通过真实文件选择器暂存两个本轮自有无敏感测试输入（纯文本、4字节bin），不发送消息、不建Task。只对其本scope真实上传原件做同样可逆hold/restore，以覆盖Composer文本footer与未知类型chip；验证诊断、重试、关闭焦点/原草稿和移除操作。新暂存上传事实与已有原件分别记录，最后仍保全全部原75附件，不把新上传当成旧消息/模型证据。
+
+## 候选实际验证进展
+main-DIncBPIS真实User历史404时图04局部预览/下载Feedback保留原User全文/附件；图05在仍404下实际Retry download保持局部错误，后续真实Tab落到Copy message，未因仅activeElement=BODY就误判键盘导航失败。恢复同一70字节原件后，原页分别重试下载/预览，图06完整JSON恢复；真实下载落盘70字节与原件逐字一致。两个真实文件选择器暂存原件35字节文本/4字节bin，均实际hold→404局部错误（07/09）、restore→200并按钮重试成功（08/10），两份真实下载逐字一致。Escape正确归还各附件trigger，按真实Remove去掉两个草稿，图11焦点回chatTextarea；没有发送/创建消息或调用模型。
+中文切换已通过真实Appearance选择器。新tab23模块缓存虽冷，HTTP内容寻址资源已有浏览器缓存，图12实际命中旧成功bytes，未展示错误；此图仅为中文成功阅读，不称为中文错误验收。70字节原件已再次恢复。增加一个仅用于本scope的新自有中文暂存文本，保持原固定截止和0Provider，先hold其新资源再首次打开以补齐真实中文错误/恢复；不修改旧消息或资源URL来绕过缓存。
+
+## 最终真实结果与交付
+中文新暂存35字节原件在实际404下图13显示本地化加载/下载错误、两个重试、详细信息与关闭；恢复后真实点击两个重试，图14中文正文/下载恢复，Escape回原trigger，Remove回输入框。原70字节JSON及35字节英文文本、4字节bin共三份真实浏览器下载落盘，均与各自原字节逐项相同；中文只验证恢复后的下载入口，不冒称第四次落盘。所有被hold的原件均归还。14张原图均已人工查看，没有UI自动化。
+两原服务38372/38373均公开shutdown200并join原15198/96524，native/launcher0，物理/输出/请求结算、精确进程出生身份退休；两对auth/models副本已清退，原件metadata/目录字节保持，实际Provider0、累计1083。改后关闭距原固定截止1126410ms，未延期。
+完整92表核验：source203936原行精确，before/after各203938且203936原行全部精确；各新增仅runtime_process身份activation lease及ordinal1 grant。已核对joinProcessLiveness唯一writer/PROCESS_RECEIPT_END合同、authority-ready真实runtime occurrence、lease/grant键、native目标PID/出生实例和当前OS dead_or_reused；MAX_SAFE_INTEGER是保留物理身份的存储表示，不是仍有等待任务。没有业务队列/调度异常证据。六附件namespace的17/10/16/24/6/2共75文件在两个副本及源逐字保持，三个QA仓库16份tracked文件、HEAD/ref/index/working均精确保持；3个本轮暂存原件恢复且保留，3个草稿均通过UI移除。无schema变化/迁移真实用户数据。
+候选普通构建main-DIncBPIS、overlay typecheck、2语言2627keys、CSS8937引用/2文档/268tokens及当前docs351ops/26groups均通过。纯UI修改OriginalFileDownload错误读取边界及下载重试、ResourceTextPreview现有resource显式重试，复用当前Feedback/Button/cache/authority；两新增语言键，同步当前panel合同。没有后端/SDK/工具/模型/配置/数据库变化。原准备器两次失败及12号缓存命中保留，不包装为产品成功。证据见artifact入口，接下来范围提交、fresh fetch/merge/完整待推集审查与正常钩子push；持续Goal保持active。

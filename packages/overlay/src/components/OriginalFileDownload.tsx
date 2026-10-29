@@ -6,24 +6,51 @@ import {
   type ApiAuthority,
 } from "../services/api"
 import { t } from "../utils/i18n"
+import { Button } from "./ui/Button"
+import { Feedback } from "./ui/Feedback"
 
 /** Download the original bytes through the same authorized resource cache as previews. */
 export function OriginalFileDownload(props: { url: string; name: string; authority?: ApiAuthority }) {
   const authed = () => props.url.startsWith("/")
-  const [objectUrl] = createResource(
+  const [objectUrl, { refetch }] = createResource(
     () => (authed() && props.url ? { url: props.url, authority: props.authority ?? captureApiAuthority() } : null),
     (source) => fetchResourceAsObjectUrl(source.url, { authority: source.authority }),
     { initialValue: authed() ? peekResourceObjectUrl(props.url) : null },
   )
   const href = () => {
     if (!props.url) return ""
-    if (authed()) return (!objectUrl.loading && objectUrl()) || ""
+    if (authed()) return (!objectUrl.error && !objectUrl.loading && objectUrl()) || ""
     return props.url
   }
 
   return (
-    <Show when={href()}>
-      <DownloadLink href={href()} name={props.name} />
+    <Show
+      when={!objectUrl.error}
+      fallback={
+        <Feedback
+          tone="error"
+          details={String(objectUrl.error)}
+          actions={
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              tone="neutral"
+              disabled={objectUrl.loading}
+              aria-label={`${t("file.retry_download")}: ${props.name}`}
+              onClick={() => void refetch()}
+            >
+              {t(objectUrl.loading ? "common.retrying" : "file.retry_download")}
+            </Button>
+          }
+        >
+          {t("file.download_failed")}
+        </Feedback>
+      }
+    >
+      <Show when={href()}>
+        <DownloadLink href={href()} name={props.name} />
+      </Show>
     </Show>
   )
 }

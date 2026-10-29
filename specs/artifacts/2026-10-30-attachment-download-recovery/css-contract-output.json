@@ -1,0 +1,4 @@
+{
+  "encoding": "UTF-8",
+  "output": "$ bun run script/check-css-token-usage.ts\nCSS token entry graphs valid: 8937 references across 2 documents; 268 global tokens have an acyclic dependency graph; 60 application stylesheets and 396 application TS/TSX files conform to the bounded design-language roles; 2 Interactive Artifact stylesheets are content-owned and exempt. Selector inheritance is intentionally outside this static check.\n"
+}

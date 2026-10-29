@@ -244,6 +244,13 @@ User-message text MIME and JSON attachments also keep a compact, initially
 collapsed filename disclosure. Expanding loads the shared ResourceTextPreview
 with its complete read-only document and original download. Collapsing releases
 the reader; reopening uses the same canonical resource and authorized cache.
+Original-download errors remain within the attachment's Feedback rather than
+replacing the owning message card. OriginalFileDownload checks the current
+resource error before reading its value. Its explicit retry and the text reader's
+preview retry each refetch their existing source and captured authority, using
+the same shared Blob cache. Loading guards repeated retries; complete diagnostics
+and localized controls remain visible until that resource recovers. Restoring
+the original bytes requires neither a new attachment identity nor a page reload.
 Short documents use their natural reading height; the editor's internal
 scroller bounds longer documents to the viewport. Other
 file presentations and unknown binary formats retain their current behavior.

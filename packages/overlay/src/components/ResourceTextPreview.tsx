@@ -9,6 +9,7 @@ import {
 import { t } from "../utils/i18n"
 import { CodeEditor } from "./ui/CodeEditor"
 import { Feedback } from "./ui/Feedback"
+import { Button } from "./ui/Button"
 
 async function loadText(source: { url: string; authority?: ApiAuthority }): Promise<string> {
   const objectUrl = await fetchResourceAsObjectUrl(source.url, { authority: source.authority })
@@ -20,7 +21,7 @@ async function loadText(source: { url: string; authority?: ApiAuthority }): Prom
 }
 
 export function ResourceTextPreview(props: { url: string; filename: string; label: string; authority?: ApiAuthority }) {
-  const [text] = createResource(
+  const [text, { refetch }] = createResource(
     () => ({
       url: props.url,
       authority: props.url.startsWith("/") ? (props.authority ?? captureApiAuthority()) : undefined,
@@ -32,7 +33,23 @@ export function ResourceTextPreview(props: { url: string; filename: string; labe
     <Show
       when={!text.error}
       fallback={
-        <Feedback tone="error" details={decodingError() ? undefined : String(text.error)}>
+        <Feedback
+          tone="error"
+          details={decodingError() ? undefined : String(text.error)}
+          actions={
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              tone="neutral"
+              disabled={text.loading}
+              aria-label={`${t("file.retry_preview")}: ${props.label}`}
+              onClick={() => void refetch()}
+            >
+              {t(text.loading ? "common.retrying" : "file.retry_preview")}
+            </Button>
+          }
+        >
           {decodingError()
             ? t("file.text_encoding_failed", { name: props.label, encoding: decodingError()!.encoding.toUpperCase() })
             : t("file.load_failed", { name: props.label })}

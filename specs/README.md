@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [附件原件失败恢复](records/2026-10/2026-10-30-attachment-download-recovery.md)：真实缺失原件、错误边界与下载恢复调查。
+
 - [批准后的代码提交验收](records/2026-10/2026-10-30-approved-code-workflow.md)：完整真实改码、测试、批准和范围Git提交的当前版本验收。
 
 - [L05跨系统副作用资格](records/2026-10/2026-10-30-heavy-workbench-l05-qualification.md)：真实HTTP/两个库、未知ACK与进程恢复、两错误控制独立复核通过；尚非完整重型题。

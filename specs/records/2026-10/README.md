@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-30-attachment-download-recovery.md](2026-10-30-attachment-download-recovery.md)：原文件下载失败及实际局部恢复验收。
+
 - [2026-10-30-approved-code-workflow.md](2026-10-30-approved-code-workflow.md)：独立QA的真实审批后提交全流程，保留旧793失败历史。
 
 - [2026-10-30-heavy-workbench-l05-qualification.md](2026-10-30-heavy-workbench-l05-qualification.md)：真实HTTP/持久收据/未知ACK和两错误控制独立复核的局部资格。

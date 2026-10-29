@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-30-attachment-download-recovery](2026-10-30-attachment-download-recovery/README.md)：原件错误局部化、预览/下载重试、14张实页及原数据完整核证。
+
 - [2026-10-30-approved-code-workflow](2026-10-30-approved-code-workflow/README.md)：真实批准后提交全流程、选择控件焦点根因修复、最终搜索视觉及原数据保全。
 
 - [2026-10-30-mission-selection-journey](2026-10-30-mission-selection-journey/README.md)：匹配结果与保留选择的根因修复、真实草稿持久选择及16张实页。

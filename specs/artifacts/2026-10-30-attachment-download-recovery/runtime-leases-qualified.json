@@ -1,0 +1,69 @@
+{
+  "qualifications": [
+    {
+      "phase": "before",
+      "lease": {
+        "rowid": 41821,
+        "id": "act_g0VZTP6K300vXl6xdlvU",
+        "target": "runtime_process",
+        "target_id": "f566bcb5-5768-4d84-97dc-6c97dedf270e",
+        "owner_occurrence_id": "{\"pid\":28188,\"processInstanceID\":\"win32:639289031664219665\",\"occurrenceID\":\"f566bcb5-5768-4d84-97dc-6c97dedf270e\"}",
+        "time_activated": 1793306448473,
+        "expires_at": 9007199254740991
+      },
+      "grant": {
+        "rowid": 41879,
+        "lease_id": "act_g0VZTP6K300vXl6xdlvU",
+        "ordinal": 1,
+        "expires_at": 9007199254740991,
+        "time_created": 1793306448473
+      },
+      "owner": {
+        "pid": 28188,
+        "processInstanceID": "win32:639289031664219665",
+        "occurrenceID": "f566bcb5-5768-4d84-97dc-6c97dedf270e"
+      },
+      "physicalMain": {
+        "pid": 28188,
+        "processInstanceID": "win32:639289031664219665",
+        "occurrenceID": "31e04401-1054-43e9-8853-87dc8e3b8954"
+      },
+      "physicalSettled": true,
+      "contract": "joinProcessLiveness retains one runtime_process identity receipt and ordinal-1 grant; its MAX_SAFE_INTEGER end is storage representation; OS identity owns liveness.",
+      "currentNativeState": "dead_or_reused"
+    },
+    {
+      "phase": "after",
+      "lease": {
+        "rowid": 41821,
+        "id": "act_g0VZTRaB500csgsSB0lp",
+        "target": "runtime_process",
+        "target_id": "06286e82-3e86-47a0-9bc8-75062ab3b522",
+        "owner_occurrence_id": "{\"pid\":84036,\"processInstanceID\":\"win32:639289037692435961\",\"occurrenceID\":\"06286e82-3e86-47a0-9bc8-75062ab3b522\"}",
+        "time_activated": 1793307039894,
+        "expires_at": 9007199254740991
+      },
+      "grant": {
+        "rowid": 41879,
+        "lease_id": "act_g0VZTRaB500csgsSB0lp",
+        "ordinal": 1,
+        "expires_at": 9007199254740991,
+        "time_created": 1793307039894
+      },
+      "owner": {
+        "pid": 84036,
+        "processInstanceID": "win32:639289037692435961",
+        "occurrenceID": "06286e82-3e86-47a0-9bc8-75062ab3b522"
+      },
+      "physicalMain": {
+        "pid": 84036,
+        "processInstanceID": "win32:639289037692435961",
+        "occurrenceID": "1119e4e1-fca4-4ff4-b731-fda4e2eea5e3"
+      },
+      "physicalSettled": true,
+      "contract": "joinProcessLiveness retains one runtime_process identity receipt and ordinal-1 grant; its MAX_SAFE_INTEGER end is storage representation; OS identity owns liveness.",
+      "currentNativeState": "dead_or_reused"
+    }
+  ],
+  "observedAt": "2026-10-29T21:12:11.2527095Z"
+}
