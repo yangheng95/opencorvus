@@ -1,0 +1,32 @@
+{
+  "benchmark": "HeavyWorkBench-10/0.1.0-dev",
+  "case": "H05",
+  "harness": "Codex app independent agent",
+  "history": "fork_turns=none; no comparison answers supplied",
+  "model": "inherits configured Codex model; provider identity not exposed by collaboration tool",
+  "runRoot": "D:/opencorvus-benchmark-runs/heavywork-H05-codex-agent-20261029-4b158784",
+  "project": "D:/opencorvus-benchmark-runs/heavywork-H05-codex-agent-20261029-4b158784/project",
+  "registeredAt": "2026-10-29T04:25:22.220969+00:00",
+  "budget": {
+    "total_model_tokens": null,
+    "cpu_seconds": null,
+    "memory_gib": null,
+    "disk_gib": null,
+    "inactivity_seconds": 600,
+    "expert_hours_estimate": [
+      8,
+      32
+    ],
+    "estimate_status": "uncalibrated",
+    "external_model_calls": 0,
+    "policy": "user-corrected-development-no-resource-cutoff"
+  },
+  "inputEquality": {
+    "TASK.md": true,
+    "task.json": true
+  },
+  "previousCLIInfrastructureFailure": "D:/opencorvus-benchmark-runs/heavywork-H05-codex-20261029-1e289e37/execution.json",
+  "upgradeTrigger": "both development scores>=80 with all critical leaves full and actual independent replay",
+  "scope": "development difficulty ceiling probe; no exact-model or statistically controlled ranking",
+  "comparable": false
+}

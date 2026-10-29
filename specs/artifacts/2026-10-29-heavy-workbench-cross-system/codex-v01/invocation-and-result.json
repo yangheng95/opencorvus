@@ -1,0 +1,15 @@
+{
+  "agent": "/root/codex_h05_baseline",
+  "fork_turns": "none",
+  "delegation": "one independent Codex app agent, further delegation forbidden",
+  "provider_model_identity": "not exposed by collaboration runtime; unknown",
+  "usage": "not exposed; unknown",
+  "publicInputs": "TASK/task.json exact bytes equal to prior uncapped OpenCorvus occurrence; four frozen inputs",
+  "candidateCommit": "5977e59b483fca22ae59a8a1c6da302fac948291",
+  "candidateCommitTime": "2026-10-29T12:42:54+08:00",
+  "finalObservedAt": "2026-10-29T05:18:37.930035+00:00",
+  "status": "completed",
+  "business_points": 100,
+  "assessment": "nonblind development review, not formal model-controlled ranking",
+  "comparable": false
+}

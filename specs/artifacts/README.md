@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [H05横向对照原件](2026-10-29-heavy-workbench-cross-system/README.md)：Codex源码/报告、两份真实复跑、16叶独立审查及CLI基础设施错误原件。
+
 - [2026-10-29-attachment-workspace-journey](2026-10-29-attachment-workspace-journey/README.md)：十六张真实文件核对/跨项目草稿原图、阅读布局改进与数据/运行结算。
 
 - [2026-10-29-quotation-composer-journey](2026-10-29-quotation-composer-journey/README.md)：十二张引用与草稿实页、前后焦点、数据和运行结算。

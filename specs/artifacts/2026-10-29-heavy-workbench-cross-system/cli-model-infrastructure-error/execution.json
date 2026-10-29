@@ -1,0 +1,42 @@
+{
+  "command": [
+    "node",
+    "C:\\Users\\hengu\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\bin\\codex.js",
+    "exec",
+    "--ignore-user-config",
+    "--ignore-rules",
+    "--model",
+    "gpt-6.1-sol",
+    "--sandbox",
+    "danger-full-access",
+    "--config",
+    "approval_policy=\"never\"",
+    "--cd",
+    "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-20261029-1e289e37\\project",
+    "--json",
+    "--color",
+    "never",
+    "--output-last-message",
+    "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-20261029-1e289e37\\final-message.md",
+    "-"
+  ],
+  "cwd": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-20261029-1e289e37\\project",
+  "startedAt": "2026-10-29T04:23:04.739077+00:00",
+  "requestedModel": "gpt-6.1-sol",
+  "tokenCap": null,
+  "threadID": "01a185e5-b527-71e3-ab88-3ff816cafc01",
+  "events": 5,
+  "reasoningItemsOmitted": 0,
+  "pid": 65316,
+  "lastEventAt": "2026-10-29T04:23:08.857320+00:00",
+  "lastEventType": "turn.failed",
+  "terminalError": {
+    "type": "turn.failed",
+    "error": {
+      "message": "{\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_error\",\"message\":\"The 'gpt-6.1-sol' model is not supported when using Codex with a ChatGPT account.\",\"code\":\"model_not_found\"}}"
+    }
+  },
+  "exitCode": 1,
+  "endedAt": "2026-10-29T04:23:09.304051+00:00",
+  "wallSeconds": 4.564121900126338
+}

@@ -1,0 +1,129 @@
+{
+  "authority": "primary evaluator groups frozen raw CSV and queries fresh SQLite directly, without importing candidate service/checker",
+  "observedAt": "2026-10-29T04:46:00.804007+00:00",
+  "inputTransmissions": 823,
+  "identities": 720,
+  "databases": [
+    {
+      "database": "verification\\databases\\concurrent.sqlite",
+      "identities": 720,
+      "perIdentityAndAmountMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      }
+    },
+    {
+      "database": "verification\\databases\\crash-after.sqlite",
+      "identities": 720,
+      "perIdentityAndAmountMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      }
+    },
+    {
+      "database": "verification\\databases\\crash-before.sqlite",
+      "identities": 720,
+      "perIdentityAndAmountMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      }
+    },
+    {
+      "database": "verification\\databases\\ledger.sqlite",
+      "identities": 720,
+      "perIdentityAndAmountMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      }
+    },
+    {
+      "database": "verification\\databases\\migrated.sqlite",
+      "identities": 720,
+      "perIdentityAndAmountMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      }
+    },
+    {
+      "database": "verification\\databases\\received-order.sqlite",
+      "identities": 720,
+      "perIdentityAndAmountMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      }
+    },
+    {
+      "database": "verification\\databases\\replay.sqlite",
+      "identities": 720,
+      "perIdentityAndAmountMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      }
+    },
+    {
+      "database": "verification\\databases\\restart.sqlite",
+      "identities": 720,
+      "perIdentityAndAmountMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      }
+    },
+    {
+      "database": "verification\\databases\\reversed.sqlite",
+      "identities": 720,
+      "perIdentityAndAmountMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      }
+    },
+    {
+      "database": "verification\\databases\\rollout-candidate.sqlite",
+      "identities": 720,
+      "perIdentityAndAmountMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      }
+    },
+    {
+      "database": "verification\\databases\\rollout-restored.sqlite",
+      "identities": 720,
+      "perIdentityAndAmountMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      }
+    },
+    {
+      "database": "verification\\databases\\unique.sqlite",
+      "identities": 720,
+      "perIdentityAndAmountMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      }
+    }
+  ],
+  "status": "passed"
+}

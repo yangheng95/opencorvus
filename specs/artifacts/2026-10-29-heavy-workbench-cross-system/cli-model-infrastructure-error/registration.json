@@ -1,0 +1,40 @@
+{
+  "benchmark": "HeavyWorkBench-10/0.1.0-dev",
+  "case": "H05",
+  "harness": "codex-cli",
+  "cliVersion": "0.148.0",
+  "model": "gpt-6.1-sol",
+  "runRoot": "D:/opencorvus-benchmark-runs/heavywork-H05-codex-20261029-1e289e37",
+  "project": "D:/opencorvus-benchmark-runs/heavywork-H05-codex-20261029-1e289e37/project",
+  "registeredAt": "2026-10-29T04:22:31.304069+00:00",
+  "sourceCommit": "3fafac1da9ffbcc849cc95d74a7747f92aa30438",
+  "budget": {
+    "total_model_tokens": null,
+    "cpu_seconds": null,
+    "memory_gib": null,
+    "disk_gib": null,
+    "inactivity_seconds": 600,
+    "expert_hours_estimate": [
+      8,
+      32
+    ],
+    "estimate_status": "uncalibrated",
+    "external_model_calls": 0,
+    "policy": "user-corrected-development-no-resource-cutoff"
+  },
+  "policy": "same public business request; no token/CPU/memory/wall-clock cutoff",
+  "inputEquality": {
+    "TASK.md": true,
+    "task.json": true
+  },
+  "frozenInputs": {
+    "context.json": true,
+    "legacy_service.py": true,
+    "records.csv": true,
+    "source-notes.md": true
+  },
+  "comparison": "development ceiling probe; prior OpenCorvus full reasoning option identity unavailable; not a ranking",
+  "codexConfig": "ignore-user-config; ignore-rules; native openai auth; full access; approval never; no prior history; no external models",
+  "upgradeTrigger": "both score>=80 with all critical leaves full and actual independent replay",
+  "comparable": false
+}

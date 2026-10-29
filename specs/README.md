@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+- [H05横向对照与难度升级](records/2026-10/2026-10-29-heavy-workbench-cross-system.md)：两方旧标准100开发点、独立清洁复跑及天花板证据。
+
+- [数小时长程任务资格](records/2026-10/2026-10-29-heavy-workbench-long.md)：论文复现范围、真实GPU测时与独立评分防投机审查，尚未长跑验证。
+
 - [文件附件与跨项目输入体验](records/2026-10/2026-10-29-attachment-workspace-journey.md)：真实文件选择、核对与暂存附件/独立草稿的归属调查。
 
 - [引用卡片与输入焦点](records/2026-10/2026-10-29-quotation-composer-journey.md)：主对话/侧聊引用移除、键盘续写与独立草稿保留。

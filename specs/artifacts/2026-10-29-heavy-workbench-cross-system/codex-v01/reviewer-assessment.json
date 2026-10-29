@@ -1,0 +1,413 @@
+{
+  "reviewer": "benchmark_review",
+  "assessment": "independent_nonblind_development_business_review",
+  "harness": "Codex app independent agent",
+  "case": "H05",
+  "benchmarkVersion": "0.1.0-dev",
+  "candidateCommit": "5977e59b483fca22ae59a8a1c6da302fac948291",
+  "observedAt": "2026-10-29T04:54:07.137585+00:00",
+  "blind": false,
+  "independentFromCandidateImplementation": true,
+  "comparable": false,
+  "modelIdentity": null,
+  "totalModelTokens": null,
+  "modelAndUsageMetadata": "Not exposed by the app collaboration interface; no identity or efficiency ranking is inferred",
+  "resourcePolicy": "user-corrected-development-no-resource-cutoff",
+  "scoredObject": "Committed original H05 business implementation and independent clean replay, judged only against the unchanged 4 objective + 16 business leaves",
+  "marks": [
+    {
+      "leaf": "H05-R01",
+      "rating": 2,
+      "earned": 5,
+      "rationale": "接收时间、CSV顺序、本次处理时刻及未知历史时间分开；账本记录实际first_processed_at，未用模拟clock填造历史。",
+      "evidence": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\incident.md",
+          "locator": "line 22, 时间线与证据含义",
+          "observation": "含实际接收范围、410次顺序回退、本次演练与处理时间"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\verification\\source-timeline.csv",
+          "locator": "csv_line / received_at / business_time / original_processing_time",
+          "observation": "逐原始行保留身份，未知字段明确unknown"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\verification\\commands.json",
+          "locator": "started_at / finished_at / pid",
+          "observation": "本次审查者真实复跑产生的命令时刻"
+        }
+      ]
+    },
+    {
+      "leaf": "H05-R02",
+      "rating": 2,
+      "earned": 5,
+      "rationale": "由原始代码和E0028等具体跨租户行号解释全局event_id抢占，真实旧金额与归因吻合。",
+      "evidence": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\incident.md",
+          "locator": "line 35, 根因与为什么旧重放没有根治",
+          "observation": "明确beta/alpha/gamma的E0028行号和被抑制收入"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\verification\\legacy\\legacy-omission-attribution.json",
+          "locator": "winner_line / csv_line / winner_tenant",
+          "observation": "逐记录连接原始首次获胜者和被漏记租户"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\independent-observations.json",
+          "locator": "legacyTotals",
+          "observation": "独立按原始顺序计算旧首次各租户金额"
+        }
+      ]
+    },
+    {
+      "leaf": "H05-R03",
+      "rating": 2,
+      "earned": 5,
+      "rationale": "实际运行原始Service并关闭重开，证明易失seen重置而持久金额保留；另用真实SQL触发器复现失败后同对象重试漏记。旧Service关闭重开在同一worker内完成，不冒称该部分为OS进程重启。",
+      "evidence": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\source\\exercise_worker.py",
+          "locator": "line 32, legacy_exercise",
+          "observation": "原始代码直接加载；同对象重放、关闭重开、注入写入错误"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\verification\\legacy\\observations.json",
+          "locator": "first / same_process_replay / restart_once / restart_twice / write_failure",
+          "observation": "实际观察合计1x/1x/2x/3x及触发器错误后重试漏记"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\verification\\commands\\legacy-original.stdout.txt",
+          "locator": "original worker output",
+          "observation": "本次独立复跑的真实子进程输出；旧叶项未要求原旧服务必须使用独立OS进程"
+        }
+      ]
+    },
+    {
+      "leaf": "H05-R04",
+      "rating": 2,
+      "earned": 5,
+      "rationale": "三租户首次/关闭重开后/修复值与调整逐项明确；还指出旧三次会话总额恰好正确但租户错误抵消。",
+      "evidence": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\incident.md",
+          "locator": "line 7, 业务影响与修复口径",
+          "observation": "每租户52680；金额单位和真实资金损失未知"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\verification\\impact.csv",
+          "locator": "all tenant rows",
+          "observation": "首次差额和两次重开差额可重算"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\independent-observations.json",
+          "locator": "totals / legacyTotals",
+          "observation": "与冻结raw分组和实际旧库查询一致"
+        }
+      ]
+    },
+    {
+      "leaf": "H05-R05",
+      "rating": 2,
+      "earned": 5,
+      "rationale": "非空联合主键持久保存tenant/event_id；totals是ledger视图，共同金额事实唯一，真实重开和并发后身份完整。",
+      "evidence": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\source\\service.py",
+          "locator": "line 73, Service.__init__; line 106, ingest",
+          "observation": "持久联合主键、整数约束及derived totals view"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\independent-observations.json",
+          "locator": "databases[*].primaryKey / amountsAndAttemptCountsMatch",
+          "observation": "独立直接SQL核对14个新数据库的身份、金额、attempts"
+        }
+      ]
+    },
+    {
+      "leaf": "H05-R06",
+      "rating": 2,
+      "earned": 5,
+      "rationale": "BEGIN IMMEDIATE内持久发布身份和金额，totals视图随同一提交可见；真实提交前/提交后进程退出及SQL错误回滚均符合合同。",
+      "evidence": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\source\\service.py",
+          "locator": "line 106, ingest",
+          "observation": "插入身份/金额或更新重复attempts后共同COMMIT，异常ROLLBACK"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\source\\exercise_worker.py",
+          "locator": "line 94, crash modes",
+          "observation": "COMMIT trace执行前os._exit(73)，ingest提交后无响应os._exit(74)"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\verification\\checks.json",
+          "locator": "crash-before-durable-checkpoint / crash-after-durable-checkpoint / *-recovered",
+          "observation": "恢复前0身份/0金额与1身份/232，重投后720/158040"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\verification\\commands\\unit-contracts.stderr.txt",
+          "locator": "test_transaction_retry_after_storage_abort",
+          "observation": "真实触发器中断后的明确重试输出合同"
+        }
+      ]
+    },
+    {
+      "leaf": "H05-R07",
+      "rating": 2,
+      "earned": 5,
+      "rationale": "修复服务前缀和后缀由不同真实CLI进程执行，同一持久库最终完整；另有异常退出后恢复。",
+      "evidence": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\source\\reproduce.py",
+          "locator": "line 222, restart scenario",
+          "observation": "411条前缀与412条后缀分开进程"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\verification\\commands.json",
+          "locator": "labels restart-before / restart-after",
+          "observation": "实际PID不同且均退出0"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\independent-observations.json",
+          "locator": "databases[scenario=restart]",
+          "observation": "720身份、158040金额、823尝试逐项正确"
+        }
+      ]
+    },
+    {
+      "leaf": "H05-R08",
+      "rating": 2,
+      "earned": 5,
+      "rationale": "四个已到readiness barrier的独立进程各投递全部823条，真实数据库最终业务金额和逐身份attempts均正确。",
+      "evidence": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\source\\reproduce.py",
+          "locator": "line 110, parallel_replays",
+          "observation": "等待4份ready标记，再释放共同barrier"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\verification\\barriers\\fixed-concurrency\\release",
+          "locator": "ready[*].pid / ready_at",
+          "observation": "四进程真实就绪记录"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\independent-observations.json",
+          "locator": "fixedConcurrentPIDs / databases[scenario=concurrent]",
+          "observation": "PID98252/68248/96764/81872；720身份/158040、3292尝试，各身份次数4倍"
+        }
+      ]
+    },
+    {
+      "leaf": "H05-R09",
+      "rating": 2,
+      "earned": 5,
+      "rationale": "原序、全反序和按接收时间排序各自执行服务，独立SQL验证同一业务账本与输入尝试次数。",
+      "evidence": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\verification\\checks.json",
+          "locator": "reversed-state / received-order-state",
+          "observation": "真实排序输入运行后逐身份结果与raw一致"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\independent-observations.json",
+          "locator": "databases[scenario=reversed|received-order|ledger]",
+          "observation": "各720身份、金额158040、823次尝试"
+        }
+      ]
+    },
+    {
+      "leaf": "H05-R10",
+      "rating": 2,
+      "earned": 5,
+      "rationale": "自动备份原旧库全部schema与数据，再从完整档案建新版本；历史调整、原件与备份保留。",
+      "evidence": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\source\\service.py",
+          "locator": "line 226, backup_database; line 244, migrate",
+          "observation": "SQLite backup保全旧库；新路径重建并逐身份核对"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\verification\\migration.json",
+          "locator": "source_version / target_version / old_totals / new_totals / adjustments",
+          "observation": "新旧版本和业务调整明确"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\verification\\checks.json",
+          "locator": "legacy-archive-preserves-schema-and-all-data",
+          "observation": "真实旧首次库与备份的SQL schema/数据逐句一致"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\independent-observations.json",
+          "locator": "databases[scenario=migrated]",
+          "observation": "独立核验迁移新库的完整身份、金额及attempts"
+        }
+      ]
+    },
+    {
+      "leaf": "H05-R11",
+      "rating": 2,
+      "earned": 5,
+      "rationale": "单一操作policy定义重复率warning和身份/金额critical；真实CLI覆盖warning、critical、healthy，并含金额抵消但身份错误的契约。",
+      "evidence": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\source\\monitor-policy.json",
+          "locator": "all four policy fields",
+          "observation": "重复率>0.10、金额/身份/冲突差>0阈值"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\source\\service.py",
+          "locator": "line 180, monitor",
+          "observation": "持久attempts计算lifetime rate，并逐身份核对原档案"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\verification\\monitoring.json",
+          "locator": "warning / critical / healthy",
+          "observation": "实际CLI分别返回warning/critical/healthy，退出2/2/0"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\verification\\commands\\unit-contracts.stderr.txt",
+          "locator": "test_identity_reconciliation_detects_cancelling_money",
+          "observation": "零总额差但一缺一多产生LEDGER_RECONCILIATION"
+        }
+      ]
+    },
+    {
+      "leaf": "H05-R12",
+      "rating": 2,
+      "earned": 5,
+      "rationale": "主要根因、影响和演练主张有代码/日志/库定位；实际生产时间、资金动作、档案完整性、硬件故障和外部签字明确未知。",
+      "evidence": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\incident.md",
+          "locator": "lines 22,35,68 sections",
+          "observation": "关闭重开与实际独立进程演练分开叙述；未把模拟差额等同客户损失"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\verification\\summary.json",
+          "locator": "limitations / independent_review",
+          "observation": "外部评审pending，真实生产范围未实测"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\runbook.md",
+          "locator": "line 87, 审核、交付与证据保留",
+          "observation": "执行者没有代签外部审查结论"
+        }
+      ]
+    },
+    {
+      "leaf": "H05-R13",
+      "rating": 2,
+      "earned": 5,
+      "rationale": "审计了可用导入、直接ingest、重放、重启、失败终态、并发和独立数据库范围；写入统一回到Service.ingest。",
+      "evidence": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\incident.md",
+          "locator": "line 51, 共享入口审计与实测",
+          "observation": "逐入口到实现、实际输出和证据的映射"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\source\\service.py",
+          "locator": "ingest / replay / migrate / main",
+          "observation": "没有平行入账或内存去重后备实现"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\verification\\checks.json",
+          "locator": "all 26 actual integration checks",
+          "observation": "终态、并发、迁移、切换等实际事实一致"
+        }
+      ]
+    },
+    {
+      "leaf": "H05-R14",
+      "rating": 2,
+      "earned": 5,
+      "rationale": "实际客户端切换到候选库并接收后缀新业务；恢复旧快照后先追平再切换，账本保持完整。",
+      "evidence": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\source\\reproduce.py",
+          "locator": "line 276, rollout scenario",
+          "observation": "真实备份、恢复、指针原子替换和active-client子进程"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\verification\\rollout\\observations.json",
+          "locator": "before_switch / after_switch / after_rollback",
+          "observation": "383身份/85194 → 720/158040 → 720/158040"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\independent-observations.json",
+          "locator": "databases[scenario=rollout-candidate|rollout-restored]",
+          "observation": "独立SQL确认切换后业务在恢复追平后全部保留"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\runbook.md",
+          "locator": "line 54, 回滚与恢复",
+          "observation": "明确不回退缺陷v0，不能直接启用未追平快照，限定本地指针演练"
+        }
+      ]
+    },
+    {
+      "leaf": "H05-R15",
+      "rating": 2,
+      "earned": 5,
+      "rationale": "审查者只复制提交中7个源码/策略依赖与冻结四输入，在全新目录实际重建旧故障、修复与全部数据库；旧表/库/报告未供程序使用。2分只确认本地清洁复跑业务行为，不授予OS隔离资格。",
+      "evidence": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\execution.json",
+          "locator": "candidateCommit / command / sourceFiles / frozenInputMatches / exitCode",
+          "observation": "实际独立复跑62.364秒退出0；源与冻结输入身份核验成立"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\objective.json",
+          "locator": "points / leaves",
+          "observation": "真实原H05 checker诊断20/20"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\independent-observations.json",
+          "locator": "databases / commandExitCounts",
+          "observation": "独立raw分组+直接SQL验证14库；38实际命令含崩溃/监控预期退出"
+        }
+      ]
+    },
+    {
+      "leaf": "H05-R16",
+      "rating": 2,
+      "earned": 5,
+      "rationale": "报告给出三租户影响、修复结果、职责动作和风险；手册含可执行迁移/恢复/监控命令，适用范围和待签字清楚。",
+      "evidence": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\incident.md",
+          "locator": "line 68, 监测、责任动作与残余风险",
+          "observation": "角色责任、三租户差额及未知真实生产事实完整"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\output\\runbook.md",
+          "locator": "lines 21,37,54,70,76,87 sections",
+          "observation": "具体命令、错误码、保全、追平与停止处置可照做"
+        }
+      ]
+    }
+  ],
+  "objectivePoints": 20,
+  "objectiveMaximum": 20,
+  "reviewPoints": 80,
+  "reviewMaximum": 80,
+  "developmentBusinessPoints": 100,
+  "allCriticalBusinessLeavesFull": true,
+  "actualIndependentReplaySucceeded": true,
+  "meetsPreregisteredDevelopmentBusinessQualification": true,
+  "formalBenchmarkQualified": false,
+  "blockingBusinessFindings": [],
+  "observedScopeLimits": [
+    "Legacy reopen demonstration uses new Service instances inside one worker; repaired-service restart and fault tests use actual independent OS processes. The old rubric requires executable causal evidence, not a newly added legacy-process protocol",
+    "Duplicate threshold is an exercise policy; no real-world SLA or human calibration is established. Runtime warning/critical/healthy branches were executed; exact equality-at-10-percent boundary is not separately claimed",
+    "Cutover/restore is an isolated local pointer and SQLite exercise, not live production routing, external settlement, power failure, network filesystem or high-load qualification",
+    "Full source/CSV availability and empty-target rebuild are permitted by old H05; future dirty-state or external-effect requirements were not applied retroactively",
+    "Local clean process/directory separation is verified; OS security isolation and human blind grading remain unqualified",
+    "Independent replay duration is not Codex task completion time or a controlled model/harness speed comparison"
+  ],
+  "independentExecutionEvidence": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\execution.json",
+  "independentDataEvidence": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\reviewer-replay\\independent-observations.json",
+  "difficultyConclusion": "This baseline meets the pre-registered old-H05 business pass trigger. Together with the separately reviewed OpenCorvus pass, it supports upgrading H05 difficulty; it does not establish equal systems, same-model performance, or low difficulty of the entire ten-case suite."
+}

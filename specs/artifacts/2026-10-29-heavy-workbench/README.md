@@ -32,4 +32,6 @@ python -m unittest discover -s script/benchmark -p test_heavy_workbench.py
 
 `verify-plan` 独立验算H06的逐周物料守恒/采购约束、H08的工期/依赖/角色重叠/预算、H10逐时功率/SOC（荷电状态）/电网能量守恒，允许任意满足公开合同的正确计划。它只检查可行性，不证明最优性、经济建议正确或完整工作物通过。`python script/benchmark/verify_heavy_workbench.py --out <回执路径>` 可重跑全部诊断与七组基础/压力可行见证。
 
-本包没有运行被测模型、没有职业专家完整交付、没有职业专家双盲校准，预算与 8–32 小时估计尚未实测。不得用“200 项通过”“独立 agent 看过”或诊断 20/20 宣称完整任务已通过、达到专家水平、或与成熟 benchmark 等效。所有缺口保留至真实证据取得，不能补造分数。
+构建时本包没有运行被测模型，预算与8–32小时只是未校准估计。后续[H05 OpenCorvus真实运行](../2026-10-29-heavy-workbench-h05-opencorvus/README.md)及[独立Codex横向对照](../2026-10-29-heavy-workbench-cross-system/README.md)均通过旧标准，各得100非盲开发点，实际清洁复跑成立；**这揭示旧H05天花板，不能证明小时级难度**。用户未限制总token，原冻结版本额度文字不再作为后续试跑截止规则；旧输入/成绩保留为历史证据，升级另立版本。
+
+尚无职业专家完整交付、职业专家双盲校准或其余九题的真实横向结果。不得用“200项通过”“独立agent看过”或诊断20/20宣称整套任务通过、达到专家水平、或与成熟benchmark等效。真实长程版本的准备与未满足项见[长程Recall](../../records/2026-10/2026-10-29-heavy-workbench-long.md)，不能用设计目标冒充实测成果。

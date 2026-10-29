@@ -1,0 +1,339 @@
+{
+  "reviewer": "benchmark_review",
+  "candidateCommit": "5977e59b483fca22ae59a8a1c6da302fac948291",
+  "assessment": "independent_raw_grouping_and_sql_inspection_after_own_execution",
+  "observedAt": "2026-10-29T04:51:22.389058+00:00",
+  "transmissions": 823,
+  "identities": 720,
+  "extraTransmissions": 103,
+  "totals": {
+    "alpha": 52680,
+    "beta": 52680,
+    "gamma": 52680
+  },
+  "databases": [
+    {
+      "scenario": "ledger",
+      "identities": 720,
+      "amountsAndAttemptCountsMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      },
+      "attempts": 823,
+      "primaryKey": [
+        "tenant",
+        "event_id"
+      ],
+      "totalsObject": "view",
+      "integrity": "ok"
+    },
+    {
+      "scenario": "replay",
+      "identities": 720,
+      "amountsAndAttemptCountsMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      },
+      "attempts": 1646,
+      "primaryKey": [
+        "tenant",
+        "event_id"
+      ],
+      "totalsObject": "view",
+      "integrity": "ok"
+    },
+    {
+      "scenario": "restart",
+      "identities": 720,
+      "amountsAndAttemptCountsMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      },
+      "attempts": 823,
+      "primaryKey": [
+        "tenant",
+        "event_id"
+      ],
+      "totalsObject": "view",
+      "integrity": "ok"
+    },
+    {
+      "scenario": "reversed",
+      "identities": 720,
+      "amountsAndAttemptCountsMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      },
+      "attempts": 823,
+      "primaryKey": [
+        "tenant",
+        "event_id"
+      ],
+      "totalsObject": "view",
+      "integrity": "ok"
+    },
+    {
+      "scenario": "received-order",
+      "identities": 720,
+      "amountsAndAttemptCountsMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      },
+      "attempts": 823,
+      "primaryKey": [
+        "tenant",
+        "event_id"
+      ],
+      "totalsObject": "view",
+      "integrity": "ok"
+    },
+    {
+      "scenario": "concurrent",
+      "identities": 720,
+      "amountsAndAttemptCountsMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      },
+      "attempts": 3292,
+      "primaryKey": [
+        "tenant",
+        "event_id"
+      ],
+      "totalsObject": "view",
+      "integrity": "ok"
+    },
+    {
+      "scenario": "crash-before",
+      "identities": 720,
+      "amountsAndAttemptCountsMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      },
+      "attempts": 823,
+      "primaryKey": [
+        "tenant",
+        "event_id"
+      ],
+      "totalsObject": "view",
+      "integrity": "ok"
+    },
+    {
+      "scenario": "crash-after",
+      "identities": 720,
+      "amountsAndAttemptCountsMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      },
+      "attempts": 824,
+      "primaryKey": [
+        "tenant",
+        "event_id"
+      ],
+      "totalsObject": "view",
+      "integrity": "ok"
+    },
+    {
+      "scenario": "migrated",
+      "identities": 720,
+      "amountsAndAttemptCountsMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      },
+      "attempts": 823,
+      "primaryKey": [
+        "tenant",
+        "event_id"
+      ],
+      "totalsObject": "view",
+      "integrity": "ok"
+    },
+    {
+      "scenario": "rollout-candidate",
+      "identities": 720,
+      "amountsAndAttemptCountsMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      },
+      "attempts": 823,
+      "primaryKey": [
+        "tenant",
+        "event_id"
+      ],
+      "totalsObject": "view",
+      "integrity": "ok"
+    },
+    {
+      "scenario": "rollout-restored",
+      "identities": 720,
+      "amountsAndAttemptCountsMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      },
+      "attempts": 823,
+      "primaryKey": [
+        "tenant",
+        "event_id"
+      ],
+      "totalsObject": "view",
+      "integrity": "ok"
+    },
+    {
+      "scenario": "unique",
+      "identities": 720,
+      "amountsAndAttemptCountsMatch": true,
+      "totals": {
+        "alpha": 52680,
+        "beta": 52680,
+        "gamma": 52680
+      },
+      "attempts": 720,
+      "primaryKey": [
+        "tenant",
+        "event_id"
+      ],
+      "totalsObject": "view",
+      "integrity": "ok"
+    },
+    {
+      "scenario": "rollout-pre-switch",
+      "identities": 383,
+      "amountsAndAttemptCountsMatch": true,
+      "totals": {
+        "alpha": 29161,
+        "beta": 28157,
+        "gamma": 27876
+      },
+      "attempts": 411,
+      "primaryKey": [
+        "tenant",
+        "event_id"
+      ],
+      "totalsObject": "view",
+      "integrity": "ok"
+    },
+    {
+      "scenario": "rollout-snapshot",
+      "identities": 383,
+      "amountsAndAttemptCountsMatch": true,
+      "totals": {
+        "alpha": 29161,
+        "beta": 28157,
+        "gamma": 27876
+      },
+      "attempts": 411,
+      "primaryKey": [
+        "tenant",
+        "event_id"
+      ],
+      "totalsObject": "view",
+      "integrity": "ok"
+    }
+  ],
+  "commandCount": 38,
+  "commandExitCounts": {
+    "0": 34,
+    "73": 1,
+    "74": 1,
+    "2": 2
+  },
+  "fixedConcurrentPIDs": [
+    98252,
+    68248,
+    96764,
+    81872
+  ],
+  "readinessBarrier": {
+    "released_at": "2026-10-29T04:48:08.100384+00:00",
+    "ready": [
+      {
+        "pid": 98252,
+        "ready_at": "2026-10-29T04:48:08.056260+00:00"
+      },
+      {
+        "pid": 68248,
+        "ready_at": "2026-10-29T04:48:08.065326+00:00"
+      },
+      {
+        "pid": 96764,
+        "ready_at": "2026-10-29T04:48:08.073435+00:00"
+      },
+      {
+        "pid": 81872,
+        "ready_at": "2026-10-29T04:48:08.081076+00:00"
+      }
+    ]
+  },
+  "integrationChecks": 26,
+  "allIntegrationChecksPassed": true,
+  "monitorStatuses": {
+    "warning": "warning",
+    "critical": "critical",
+    "healthy": "healthy"
+  },
+  "rollbackStates": {
+    "before_switch": {
+      "distinct": 383,
+      "total": 85194
+    },
+    "after_switch": {
+      "distinct": 720,
+      "total": 158040
+    },
+    "after_rollback": {
+      "distinct": 720,
+      "total": 158040
+    }
+  },
+  "legacyTotals": {
+    "first": {
+      "alpha": 21234,
+      "beta": 15755,
+      "gamma": 15691
+    },
+    "same_process_replay": {
+      "alpha": 21234,
+      "beta": 15755,
+      "gamma": 15691
+    },
+    "restart_once": {
+      "alpha": 42468,
+      "beta": 31510,
+      "gamma": 31382
+    },
+    "restart_twice": {
+      "alpha": 63702,
+      "beta": 47265,
+      "gamma": 47073
+    }
+  },
+  "blind": false,
+  "comparable": false,
+  "limits": [
+    "Local clean-process execution is verified; OS security isolation is not qualified",
+    "Original legacy reopen demonstration resets Service instances within one worker process; repaired-service restart and crash are actual OS-process exercises",
+    "Known model/system identity: this is not blind human evaluation or grader calibration",
+    "Underlying Codex app model, total model usage and comparable system-run timing are not exposed and are not inferred from replay duration"
+  ]
+}

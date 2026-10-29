@@ -1,0 +1,173 @@
+{
+  "id": "H05",
+  "title": "从事故证据到跨租户幂等修复与恢复演练",
+  "outputs": [
+    "service.py",
+    "incident.md",
+    "ledger.csv",
+    "duplicates.csv",
+    "totals.csv",
+    "replay.csv",
+    "verification/",
+    "runbook.md",
+    "reproduce.py"
+  ],
+  "budget": {
+    "total_model_tokens": null,
+    "cpu_seconds": null,
+    "memory_gib": null,
+    "disk_gib": null,
+    "inactivity_seconds": 600,
+    "expert_hours_estimate": [
+      8,
+      32
+    ],
+    "estimate_status": "uncalibrated",
+    "external_model_calls": 0,
+    "policy": "user-corrected-development-no-resource-cutoff"
+  },
+  "result_contract": {
+    "diagnostics": [
+      {
+        "name": "ledger",
+        "keys": [
+          "tenant",
+          "event_id"
+        ],
+        "columns": [
+          "amount"
+        ],
+        "numeric": [
+          "amount"
+        ]
+      },
+      {
+        "name": "duplicates",
+        "keys": [
+          "tenant",
+          "event_id"
+        ],
+        "columns": [
+          "attempts"
+        ],
+        "numeric": [
+          "attempts"
+        ]
+      },
+      {
+        "name": "totals",
+        "keys": [
+          "tenant"
+        ],
+        "columns": [
+          "total"
+        ],
+        "numeric": [
+          "total"
+        ]
+      },
+      {
+        "name": "replay",
+        "keys": [
+          "pass"
+        ],
+        "columns": [
+          "distinct",
+          "total"
+        ],
+        "numeric": [
+          "distinct",
+          "total"
+        ]
+      }
+    ],
+    "reproduction": "python reproduce.py --inputs INPUT --output NEW_OUTPUT",
+    "qualifying_score": 80,
+    "diagnostic_schema": [
+      {
+        "artifact": "diagnostics/ledger.csv",
+        "keys": [
+          "tenant",
+          "event_id"
+        ],
+        "columns": [
+          "amount"
+        ],
+        "field_types": {
+          "tenant": "canonical-string",
+          "event_id": "canonical-string",
+          "amount": "number"
+        },
+        "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+        "record_keys": null
+      },
+      {
+        "artifact": "diagnostics/duplicates.csv",
+        "keys": [
+          "tenant",
+          "event_id"
+        ],
+        "columns": [
+          "attempts"
+        ],
+        "field_types": {
+          "tenant": "canonical-string",
+          "event_id": "canonical-string",
+          "attempts": "number"
+        },
+        "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+        "record_keys": null
+      },
+      {
+        "artifact": "diagnostics/totals.csv",
+        "keys": [
+          "tenant"
+        ],
+        "columns": [
+          "total"
+        ],
+        "field_types": {
+          "tenant": "canonical-string",
+          "total": "number"
+        },
+        "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+        "record_keys": [
+          {
+            "tenant": "alpha"
+          },
+          {
+            "tenant": "beta"
+          },
+          {
+            "tenant": "gamma"
+          }
+        ]
+      },
+      {
+        "artifact": "diagnostics/replay.csv",
+        "keys": [
+          "pass"
+        ],
+        "columns": [
+          "distinct",
+          "total"
+        ],
+        "field_types": {
+          "pass": "canonical-string",
+          "distinct": "number",
+          "total": "number"
+        },
+        "identity_policy": "业务身份采用公开输入的规范字符串；整数键十进制无前导零（输入自带前导零身份保留）；数值格式宽容仅适用于非键数值列",
+        "record_keys": [
+          {
+            "pass": "1"
+          },
+          {
+            "pass": "2"
+          }
+        ],
+        "pass": "规范字符串1和2"
+      }
+    ]
+  }
+}

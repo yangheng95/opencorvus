@@ -1,0 +1,55 @@
+{
+  "case": "H05",
+  "version": "0.1.0-dev",
+  "assessment": "objective_only",
+  "points": 20,
+  "maximum": 20,
+  "leaves": [
+    {
+      "leaf": "H05-O01",
+      "weight": 5,
+      "earned": 5,
+      "critical": false,
+      "artifact": "diagnostics/ledger.csv",
+      "passed": true,
+      "reason": "records_match",
+      "checked_records": 720,
+      "mismatches": []
+    },
+    {
+      "leaf": "H05-O02",
+      "weight": 5,
+      "earned": 5,
+      "critical": false,
+      "artifact": "diagnostics/duplicates.csv",
+      "passed": true,
+      "reason": "records_match",
+      "checked_records": 103,
+      "mismatches": []
+    },
+    {
+      "leaf": "H05-O03",
+      "weight": 5,
+      "earned": 5,
+      "critical": false,
+      "artifact": "diagnostics/totals.csv",
+      "passed": true,
+      "reason": "records_match",
+      "checked_records": 3,
+      "mismatches": []
+    },
+    {
+      "leaf": "H05-O04",
+      "weight": 5,
+      "earned": 5,
+      "critical": false,
+      "artifact": "diagnostics/replay.csv",
+      "passed": true,
+      "reason": "records_match",
+      "checked_records": 2,
+      "mismatches": []
+    }
+  ],
+  "replay_verified": false,
+  "comparable": false
+}

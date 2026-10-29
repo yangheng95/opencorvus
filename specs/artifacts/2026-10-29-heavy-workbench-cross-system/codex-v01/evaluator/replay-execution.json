@@ -1,0 +1,30 @@
+{
+  "candidateCommit": "5977e59b483fca22ae59a8a1c6da302fac948291",
+  "sourceFiles": [
+    "exercise_worker.py",
+    "monitor-policy.json",
+    "reporting.py",
+    "reproduce.py",
+    "service.py",
+    "test_service.py",
+    "verify_delivery.py"
+  ],
+  "onlyCodeAndFrozenInputs": true,
+  "command": [
+    "python",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\evaluator\\source\\reproduce.py",
+    "--inputs",
+    "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\evaluator\\raw-inputs",
+    "--output",
+    "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\evaluator\\output"
+  ],
+  "cwd": "D:\\opencorvus-benchmark-runs\\heavywork-H05-codex-agent-20261029-4b158784\\evaluator\\source",
+  "startedAt": "2026-10-29T04:44:03.583248+00:00",
+  "endedAt": "2026-10-29T04:45:09.023390+00:00",
+  "wallSeconds": 65.43843590002507,
+  "returncode": 0,
+  "stdout": "unit-contracts: exit=0\nlegacy-original: exit=0\nfixed-pass1: exit=0\nexport-business-tables: exit=0\nreplay-persistent-copy: exit=0\nfixed-pass2-new-process: exit=0\nrestart-before: exit=0\nrestart-after: exit=0\nreversed: exit=0\nreceived-order: exit=0\nconcurrency-initialize: exit=0\nfixed-concurrency-0: exit=0\nfixed-concurrency-1: exit=0\nfixed-concurrency-2: exit=0\nfixed-concurrency-3: exit=0\nlegacy-concurrency-0: exit=0\nlegacy-concurrency-1: exit=0\nlegacy-concurrency-2: exit=0\nlegacy-concurrency-3: exit=0\ncrash-before: exit=73\ncrash-before-reopen: exit=0\ncrash-before-resume: exit=0\ncrash-after: exit=74\ncrash-after-reopen: exit=0\ncrash-after-resume: exit=0\nautomatic-migration: exit=0\nrollout-prefix: exit=0\nactive-before-switch: exit=0\nrollout-snapshot: exit=0\nrollout-candidate: exit=0\nactive-after-switch: exit=0\nrollback-restore: exit=0\nrollback-catch-up: exit=0\nactive-after-rollback: exit=0\nmonitor-duplicate-warning: exit=2\nmonitor-incomplete-critical: exit=2\nhealthy-import: exit=0\nmonitor-healthy: exit=0\n{\"output\": \"D:\\\\opencorvus-benchmark-runs\\\\heavywork-H05-codex-agent-20261029-4b158784\\\\evaluator\\\\output\", \"checks_passed\": 26, \"commands_executed\": 38, \"business_distinct\": 720, \"business_total\": 158040}\n",
+  "stderr": "",
+  "comparable": false
+}
