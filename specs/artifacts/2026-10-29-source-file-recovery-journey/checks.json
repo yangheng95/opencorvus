@@ -1,0 +1,73 @@
+{
+  "at": "2026-10-29T04:22:23.577Z",
+  "checks": [
+    {
+      "label": "source-recovery-784-case-probe",
+      "startedAt": 1793241463261,
+      "closedAt": 1793241465001,
+      "code": 0,
+      "signal": null,
+      "childPID": 93884
+    },
+    {
+      "label": "source-recovery-784-before-contract",
+      "startedAt": 1793241784827,
+      "closedAt": 1793241827660,
+      "code": 1,
+      "signal": null,
+      "childPID": 85732
+    },
+    {
+      "label": "source-recovery-784-before-selected",
+      "startedAt": 1793241857973,
+      "closedAt": 1793241881294,
+      "code": 1,
+      "signal": null,
+      "childPID": 80100
+    },
+    {
+      "label": "source-recovery-784-after-contract",
+      "startedAt": 1793241943504,
+      "closedAt": 1793241983894,
+      "code": 0,
+      "signal": null,
+      "childPID": 75712
+    },
+    {
+      "label": "source-recovery-784-types",
+      "startedAt": 1793242064441,
+      "closedAt": 1793242105873,
+      "code": 0,
+      "signal": null,
+      "childPID": 8252
+    },
+    {
+      "label": "source-recovery-784-root-contract",
+      "startedAt": 1793247423222,
+      "closedAt": 1793247459878,
+      "code": 0,
+      "signal": null,
+      "childPID": 81824
+    },
+    {
+      "label": "source-recovery-784-docs",
+      "startedAt": 1793247701444,
+      "closedAt": 1793247710680,
+      "code": 0,
+      "signal": null,
+      "childPID": 91580
+    },
+    {
+      "label": "source-recovery-784-architecture",
+      "startedAt": 1793247741196,
+      "closedAt": 1793247742750,
+      "code": 0,
+      "signal": null,
+      "childPID": 68976
+    }
+  ],
+  "qualification": "Current behavior: 11 real route cases/85 assertions plus five root/link move cases/85 assertions; all passed. Old selected run: three valid conflict cases passed and three case-only success cases failed. Initial invocation error is retained separately. Native primitive, backend types, docs and architecture checks passed.",
+  "ui": "17 actual unedited screenshots rendered and manually reviewed. No UI automation, DOM/source text, fixture or pixel assertions.",
+  "frontend": "No frontend implementation changed. Both development instances used the same current ordinary frontend bundle; the new process loaded the updated backend.",
+  "limitations": "Windows only for the new case-only contracts; file-only visual coverage; no new macOS/Linux qualification or external-retarget atomicity guarantee."
+}

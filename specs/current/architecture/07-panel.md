@@ -853,7 +853,11 @@ Move verifies that the destination parent's actual access chain remains
 independent of the source entry being retired before native publication. A
 dependency returns HTTP 400/FileInvalidPathError with the original destination
 path; an existing destination entry, including a dangling link, takes precedence
-as HTTP 409/FileConflictError. Independently addressable aliases to the same
+as HTTP 409/FileConflictError. A different filename spelling that resolves to
+the exact same directory entry may proceed through that same native no-replace
+rename, allowing Windows case-only renames. Identical names and distinct entries,
+including separate hard links to the same inode, retain the conflict response.
+Independently addressable aliases to the same
 target remain valid. Entry identity combines its exact address with BigInt
 filesystem identity; Windows observes the terminal reparse entry through one
 non-following handle and preserves junction versus symbolic access namespaces.

@@ -1,0 +1,193 @@
+{
+  "at": "2026-10-29T04:20:01.751Z",
+  "deadlineAt": 1793244418040,
+  "stages": [
+    {
+      "stage": "before",
+      "port": 38343,
+      "uiEntry": "main-D3yYQ3l6.js",
+      "originalExecSession": 8032,
+      "originalExecExitCode": 0,
+      "at": "2026-10-29T02:39:00.449Z",
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "requests": 5,
+      "previousRequests": 777,
+      "cumulativeRequests": 782,
+      "maximumRequests": 6,
+      "exhausted": false,
+      "model": "gpt-6.1-sol",
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "reserveMs": 2897373,
+      "physical": {
+        "native": {
+          "occurrence": "source-file-recovery-784-041eca6d-7b95-428f-bdf9-67ff74007892",
+          "outcome": "settled",
+          "host": {
+            "pid": 93152,
+            "processInstanceID": "win32:639288376184377578",
+            "occurrenceID": "f27eaf1b-6d7e-4f26-9537-29d656fe4306"
+          },
+          "target": {
+            "pid": 89612,
+            "processInstanceID": "win32:639288376191747549",
+            "occurrenceID": "09761375-e318-4c8f-bff1-3fe94a25acff"
+          },
+          "observedAtUtc": "2026-10-29T02:38:40.667Z",
+          "deadlineAt": 1793244418040,
+          "terminal": {
+            "occurrenceID": "source-file-recovery-784-041eca6d-7b95-428f-bdf9-67ff74007892",
+            "pid": 89612,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 93152,
+              "processInstanceID": "win32:639288376184377578",
+              "occurrenceID": "f27eaf1b-6d7e-4f26-9537-29d656fe4306"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 89612,
+              "processInstanceID": "win32:639288376191747549",
+              "occurrenceID": "09761375-e318-4c8f-bff1-3fe94a25acff"
+            }
+          }
+        ],
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-29T02:38:40.7187872Z"
+        },
+        "observedAtUtc": "2026-10-29T02:39:00.3627622Z"
+      }
+    },
+    {
+      "stage": "-after",
+      "port": 38344,
+      "uiEntry": "main-D3yYQ3l6.js",
+      "originalExecSession": 11198,
+      "originalExecExitCode": 0,
+      "at": "2026-10-29T02:53:06.750Z",
+      "credentialCopyCreated": false,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 782,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 2049437,
+      "publicShutdown": 200,
+      "physical": {
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 80644,
+              "processInstanceID": "win32:639288388385798293",
+              "occurrenceID": "7f5027ce-2286-4f6a-a7dd-57b0d55fc634"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 71316,
+              "processInstanceID": "win32:639288388394307025",
+              "occurrenceID": "78ce882e-e82f-4a27-971d-94c896bbfed4"
+            }
+          }
+        ],
+        "native": {
+          "occurrence": "source-file-recovery-784-after-bfa86fbb-cd5d-45aa-8725-9b3a5c84976c",
+          "outcome": "settled",
+          "host": {
+            "pid": 80644,
+            "processInstanceID": "win32:639288388385798293",
+            "occurrenceID": "7f5027ce-2286-4f6a-a7dd-57b0d55fc634"
+          },
+          "target": {
+            "pid": 71316,
+            "processInstanceID": "win32:639288388394307025",
+            "occurrenceID": "78ce882e-e82f-4a27-971d-94c896bbfed4"
+          },
+          "observedAtUtc": "2026-10-29T02:52:48.603Z",
+          "deadlineAt": 1793244418040,
+          "terminal": {
+            "occurrenceID": "source-file-recovery-784-after-bfa86fbb-cd5d-45aa-8725-9b3a5c84976c",
+            "pid": 71316,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "launcher": {
+          "observedAtUtc": "2026-10-29T02:52:48.6462781Z",
+          "originalChildExit": 0
+        },
+        "observedAtUtc": "2026-10-29T02:53:06.6474081Z"
+      }
+    }
+  ],
+  "requests": 5,
+  "cumulativeRequests": 782,
+  "unusedFirstScopeAllowanceRetired": 1,
+  "secondScope": "No credential copy or Provider request; the same fixed deadline was retained."
+}

@@ -6,6 +6,7 @@
 
 ### zh-CN
 
+- 修复 Windows 资源管理器仅修改文件、目录或 junction 名称大小写时误报“目标已存在”；保留不同目录项之间的覆盖保护。
 - 修复持续目标的完成依据恰好等于系统原因代码时被误译的问题；已完成目标始终显示原始证据文本。
 - 持续目标的界面暂停、恢复与预算调整原因随当前语言显示；保留用户及模型原始证据和既有历史原因。
 - 当前模型不可用时仍可打开首个侧聊或复制已有对话，保留原历史、配置与权限；实际发送和持续目标续跑继续校验执行模型。
@@ -20,6 +21,7 @@
 
 ### en-US
 
+- Fix case-only file, directory and junction renames in the Windows explorer while preserving destination conflict protection for distinct entries.
 - Preserve completed-goal evidence verbatim when it matches a system reason identifier, instead of replacing it with a status explanation.
 - Show continuous-goal control reasons in the current language while preserving original user/model evidence and historical free-text reasons.
 - Open the first side chat or fork retained conversation history when the current model is unavailable, preserving its original context, configuration and permissions. Sending and goal continuation retain their execution-model checks.

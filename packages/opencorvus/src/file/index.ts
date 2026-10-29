@@ -1471,12 +1471,19 @@ export namespace File {
       target: { file: target, fullPath: targetFull },
     })
 
-    const destination = await fs.promises.lstat(targetFull).catch((error) => {
+    const destination = await fs.promises.lstat(targetFull, { bigint: true }).catch((error) => {
       if (isMissingPathError(error)) return undefined
       throw error
     })
     if (destination) {
-      throw fileConflict({ path: target })
+      const [sourceAddress, destinationAddress] = await Promise.all([
+        readFileEntry(sourceFull, sourceEntry),
+        readFileEntry(targetFull, destination),
+      ])
+      // Case aliases of one directory entry still use the native no-replace rename.
+      if (path.basename(sourceFull) === path.basename(targetFull) || !sameFileEntry(sourceAddress, destinationAddress)) {
+        throw fileConflict({ path: target })
+      }
     }
     await assertMoveDestinationIndependent({
       sourceFile: source,

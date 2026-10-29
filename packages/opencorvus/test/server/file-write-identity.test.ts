@@ -43,6 +43,60 @@ async function read(directory: string, filename: string) {
   return request(directory, "GET", `/file/content?${new URLSearchParams({ path: filename })}`)
 }
 
+test.skipIf(process.platform !== "win32").each(["file", "directory", "junction"] as const)(
+  "case-only %s rename returns the current entry name and retains its physical identity",
+  async (kind) => {
+    await using project = await memoryProject(`file-case-${kind}`)
+    await configure(project.path)
+    const original = kind === "file" ? "note.txt" : kind === "directory" ? "folder" : "linked"
+    const renamed = kind === "file" ? "Note.txt" : kind === "directory" ? "Folder" : "Linked"
+    const marker = `Exact ${kind} bytes — 资料\r\n`
+    if (kind === "file") await fs.writeFile(path.join(project.path, original), marker)
+    else {
+      const directory = kind === "junction" ? "target" : original
+      await fs.mkdir(path.join(project.path, directory))
+      await fs.writeFile(path.join(project.path, directory, "note.txt"), marker)
+      if (kind === "junction")
+        await fs.symlink(path.join(project.path, directory), path.join(project.path, original), "junction")
+    }
+    const before = await fs.lstat(path.join(project.path, original), { bigint: true })
+    const identity = (stat: typeof before) => [stat.dev, stat.ino, stat.birthtimeNs, stat.mode & 0o170000n]
+    for (const [from, to] of [[original, renamed], [renamed, original]] as const) {
+      expect(await request(project.path, "PATCH", "/file/item", { path: from, newPath: to })).toMatchObject({
+        status: 200,
+        body: { previousPath: from, path: to, node: { name: to, path: to } },
+      })
+      expect(await fs.readdir(project.path)).toContain(to)
+      expect(identity(await fs.lstat(path.join(project.path, to), { bigint: true }))).toEqual(identity(before))
+      const file = kind === "file" ? to : `${to}/note.txt`
+      expect(await read(project.path, file)).toMatchObject({ status: 200, body: { content: marker } })
+      expect(await fs.readFile(path.join(project.path, file), "utf8")).toBe(marker)
+    }
+  },
+  60_000,
+)
+
+test.each(["distinct", "hardlink", "same-name"] as const)(
+  "%s rename destination returns the exact entry conflict and retained contents",
+  async (kind) => {
+    await using project = await memoryProject(`file-rename-conflict-${kind}`)
+    await configure(project.path)
+    await fs.writeFile(path.join(project.path, "source.txt"), "source bytes\n")
+    const target = kind === "same-name" ? "source.txt" : "destination.txt"
+    if (kind === "hardlink") await fs.link(path.join(project.path, "source.txt"), path.join(project.path, target))
+    if (kind === "distinct") await fs.writeFile(path.join(project.path, target), "destination bytes\n")
+    expect(await request(project.path, "PATCH", "/file/item", { path: "source.txt", newPath: target })).toEqual({
+      status: 409,
+      body: { name: "FileConflictError", data: { path: target, message: `File destination already exists: ${target}` } },
+    })
+    expect(await fs.readFile(path.join(project.path, "source.txt"), "utf8")).toBe("source bytes\n")
+    expect(await fs.readFile(path.join(project.path, target), "utf8")).toBe(
+      kind === "distinct" ? "destination bytes\n" : "source bytes\n",
+    )
+  },
+  60_000,
+)
+
 test("cold file mutation routes commit exact Project-local bytes with unavailable execution models", async () => {
   await using first = await memoryProject("file-writer-first")
   await using second = await memoryProject("file-writer-second")

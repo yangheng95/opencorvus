@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [来源失效恢复与大小写改名](records/2026-10/2026-10-29-source-file-recovery-journey.md)：真实文件恢复体验及Windows同目录项改名冲突修复。
+
 - [侧聊继承历史中的代码来源阅读](records/2026-10/2026-10-29-inherited-sources-journey.md)：完整文件、八处行列引用、Dock与双语真实页面复核。
 
 - [持续目标完成依据的原文边界](records/2026-10/2026-10-29-goal-completion-evidence-text.md)：系统代码碰撞的真实误译与完成证据原文复核。

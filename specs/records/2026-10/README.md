@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-29-source-file-recovery-journey.md](2026-10-29-source-file-recovery-journey.md)：失效引用重试、同目录项大小写改名与覆盖保护合同。
+
 - [2026-10-29-inherited-sources-journey.md](2026-10-29-inherited-sources-journey.md)：继承来源身份、真实文件/列号与侧聊阅读连续性验收。
 
 - [2026-10-29-goal-completion-evidence-text.md](2026-10-29-goal-completion-evidence-text.md)：完成依据按真实状态保留原文，现系统原因继续本地化。

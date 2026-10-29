@@ -1,0 +1,290 @@
+{
+  "at": "2026-10-29T04:20:01.747Z",
+  "reports": [
+    {
+      "tag": "before",
+      "tables": 92,
+      "oldCount": 110245,
+      "exact": 110243,
+      "total": 112116,
+      "schema": 9,
+      "integrity": "ok"
+    },
+    {
+      "tag": "fixed",
+      "tables": 92,
+      "oldCount": 112116,
+      "exact": 112116,
+      "total": 112184,
+      "schema": 9,
+      "integrity": "ok"
+    }
+  ],
+  "oldRows": "All original business rows and source databases remain exact. Two expired physical execution-capacity slots were normally reused by the real Provider runtime; their new leases expired before retirement. The fixed instance retains all 112116 prior rows exactly.",
+  "capacitySlotChanges": [
+    {
+      "stage": "before",
+      "table": "runtime_execution_capacity_lease",
+      "slot": 0,
+      "changedFields": [
+        "lease_id",
+        "owner_id",
+        "time_acquired",
+        "expires_at"
+      ],
+      "originalExpiredAt": 1793236706913,
+      "acquiredAt": 1793240872239,
+      "releasedAt": 1793240877710,
+      "ownerPID": 89612,
+      "otherFieldsExact": true
+    },
+    {
+      "stage": "before",
+      "table": "runtime_execution_capacity_lease",
+      "slot": 1,
+      "changedFields": [
+        "lease_id",
+        "owner_id",
+        "time_acquired",
+        "expires_at"
+      ],
+      "originalExpiredAt": 1793236513077,
+      "acquiredAt": 1793240876919,
+      "releasedAt": 1793240884978,
+      "ownerPID": 89612,
+      "otherFieldsExact": true
+    }
+  ],
+  "addedByStage": {
+    "before": {
+      "bus_publication_delivery": 372,
+      "bus_publication_delivery_receipt": 372,
+      "bus_publication_outbox": 54,
+      "bus_publication_owner": 54,
+      "bus_publication_phase_receipt": 162,
+      "engine_control_activation_lease": 373,
+      "engine_control_activation_lease_grant": 373,
+      "event_occurrence": 54,
+      "global_creation_allocation": 1,
+      "memory_chunk": 2,
+      "memory_file": 2,
+      "message": 5,
+      "part": 18,
+      "project": 2,
+      "protocol_event": 10,
+      "provider_activity_outcome": 3,
+      "provider_activity_request": 3,
+      "provider_usage_event": 5,
+      "session": 2,
+      "session_control_event": 1,
+      "session_control_record": 1,
+      "tool_part_outcome": 1,
+      "tool_part_request": 1
+    },
+    "fixed": {
+      "bus_publication_delivery": 12,
+      "bus_publication_delivery_receipt": 12,
+      "bus_publication_outbox": 4,
+      "bus_publication_owner": 4,
+      "bus_publication_phase_receipt": 12,
+      "engine_control_activation_lease": 12,
+      "engine_control_activation_lease_grant": 12
+    }
+  },
+  "inputs": [
+    {
+      "filename": "test_invoice.py",
+      "bytes": 1520,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "invoice.py",
+      "bytes": 953,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "README.md",
+      "bytes": 191,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "mcp.ts",
+      "bytes": 5539,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "chat.ts",
+      "bytes": 14692,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "mcp.ts",
+      "bytes": 5539,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "chat.ts",
+      "bytes": 14692,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "README.md",
+      "bytes": 176,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "invoice.py",
+      "bytes": 953,
+      "exactBytes": true,
+      "exactMetadata": true
+    },
+    {
+      "filename": "test_invoice.py",
+      "bytes": 1520,
+      "exactBytes": true,
+      "exactMetadata": true
+    }
+  ],
+  "namespaces": [
+    {
+      "stage": "before",
+      "files": 17,
+      "exactBytes": true
+    },
+    {
+      "stage": "-after",
+      "files": 17,
+      "exactBytes": true
+    }
+  ],
+  "realSearch": {
+    "sessionID": "ses_-zUQb23QSzzjAhs9qntn",
+    "messages": [
+      {
+        "id": "msg_511af504-f1b2-40a6-a931-a6170679616c",
+        "role": "user",
+        "finish": null,
+        "completed": null
+      },
+      {
+        "id": "msg_g0VZOxwwp00aLsb6u7z2",
+        "role": "assistant",
+        "finish": "tool-calls",
+        "completed": 1793240876440
+      },
+      {
+        "id": "msg_g0VZOxy3d007FU35mHWO",
+        "role": "assistant",
+        "finish": "stop",
+        "completed": 1793240885007
+      }
+    ],
+    "sources": [
+      {
+        "partID": "prt_g0VZOxy1V006x3JuNgt2",
+        "messageID": "msg_g0VZOxwwp00aLsb6u7z2",
+        "sourceId": "5238e8db1f644fe9db28ea0e1c5cfd4d3413173dbacbaf688d3a0605a14a6c2f",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project\\test_invoice.py",
+        "range": {
+          "startLine": 4,
+          "endLine": 4,
+          "startColumn": 21
+        },
+        "toolPartID": "prt_g0VZOxxoh00l3sM46yiZ"
+      },
+      {
+        "partID": "prt_g0VZOxy1Y00qMrBAjXN9",
+        "messageID": "msg_g0VZOxwwp00aLsb6u7z2",
+        "sourceId": "c4f13efd6b4ec05da748d84ae8eb0a4eecdb6a5e05f6227857c886cef684240e",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project\\test_invoice.py",
+        "range": {
+          "startLine": 17,
+          "endLine": 17,
+          "startColumn": 34
+        },
+        "toolPartID": "prt_g0VZOxxoh00l3sM46yiZ"
+      },
+      {
+        "partID": "prt_g0VZOxy1Z00G2q5b0HBx",
+        "messageID": "msg_g0VZOxwwp00aLsb6u7z2",
+        "sourceId": "90814cf505eced9d49e098eaa013d6297e6a0d65c873c85d93bf740ea9879a40",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project\\test_invoice.py",
+        "range": {
+          "startLine": 20,
+          "endLine": 20,
+          "startColumn": 26
+        },
+        "toolPartID": "prt_g0VZOxxoh00l3sM46yiZ"
+      },
+      {
+        "partID": "prt_g0VZOxy1b00lwnD6UFLY",
+        "messageID": "msg_g0VZOxwwp00aLsb6u7z2",
+        "sourceId": "7a15f1d18c0dcc59eca3e340bebbb7acfe913e531a5054fe9a462c7c0461d5ba",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project\\test_invoice.py",
+        "range": {
+          "startLine": 24,
+          "endLine": 24,
+          "startColumn": 13
+        },
+        "toolPartID": "prt_g0VZOxxoh00l3sM46yiZ"
+      },
+      {
+        "partID": "prt_g0VZOxy1d00jQ6NAjSz0",
+        "messageID": "msg_g0VZOxwwp00aLsb6u7z2",
+        "sourceId": "39fbd716b8d133b95de54557d01ceaf7aa9d3e272633d58abeddcb5b05c6cc3e",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project\\test_invoice.py",
+        "range": {
+          "startLine": 30,
+          "endLine": 30,
+          "startColumn": 13
+        },
+        "toolPartID": "prt_g0VZOxxoh00l3sM46yiZ"
+      },
+      {
+        "partID": "prt_g0VZOxy1e00lm7KovZG7",
+        "messageID": "msg_g0VZOxwwp00aLsb6u7z2",
+        "sourceId": "2708c50567c034d60a5fbbc3f6e45508beda33842e3ed1ac632f6f2b6e7e6196",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project\\test_invoice.py",
+        "range": {
+          "startLine": 38,
+          "endLine": 38,
+          "startColumn": 17
+        },
+        "toolPartID": "prt_g0VZOxxoh00l3sM46yiZ"
+      },
+      {
+        "partID": "prt_g0VZOxy1f00mqxXlgOf6",
+        "messageID": "msg_g0VZOxwwp00aLsb6u7z2",
+        "sourceId": "a95f067f07c508e1b57729ef5e76e1b4d5f3b4712bf27f1528ffcf36a2fdf08f",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project\\test_invoice.py",
+        "range": {
+          "startLine": 44,
+          "endLine": 44,
+          "startColumn": 26
+        },
+        "toolPartID": "prt_g0VZOxxoh00l3sM46yiZ"
+      },
+      {
+        "partID": "prt_g0VZOxy1h00YJbAR664u",
+        "messageID": "msg_g0VZOxwwp00aLsb6u7z2",
+        "sourceId": "9e318afae427847f2f7cdae197d83afe8a8d292d12119dbfefa46ad044fd2ea7",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project\\invoice.py",
+        "range": {
+          "startLine": 4,
+          "endLine": 4,
+          "startColumn": 5
+        },
+        "toolPartID": "prt_g0VZOxxoh00l3sM46yiZ"
+      }
+    ]
+  },
+  "qualification": "Fresh real Code Chat uses search_code and returns eight file references. File renames and failures are actual UI actions against new QA copies; original source Parts keep their creation-time paths. No manufactured Messages or Tool results."
+}

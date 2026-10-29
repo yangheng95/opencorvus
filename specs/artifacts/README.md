@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-29-source-file-recovery-journey](2026-10-29-source-file-recovery-journey/README.md)：十七张实页原图、真实模型来源、改名根因与修复后证据。
+
 - [2026-10-29-inherited-sources-journey](2026-10-29-inherited-sources-journey/README.md)：十六张来源实页原图、复制身份与数据/运行结算。
 
 - [2026-10-29-goal-completion-evidence-text](2026-10-29-goal-completion-evidence-text/README.md)：原文输入、代码碰撞误译、修复后实页与元数据核验。
