@@ -465,3 +465,25 @@ L06/0.3完整权威业务/信息/承诺/物理现金续接和其余L01/L04/L05/L
 原716c包/原formal/38/原24/原grade仍完全不改，原真实grade66pass且draft/null/exit4。仅对原实际66 findings调用同一聚合器作明确reference_qualification publication投影100，不是新source-bound grade、native或候选成绩。当前唯一public16/规范JSON+Markdown，旧draft磁盘入口已移除，archive固定内部旧键仍单一格式。当前实现仅selection类型边界增量，12原accepted均实际回验正确，不声称旧121执行过修后源。
 
 全套开发合同冻结2/10（旧L06和新L02），有效候选小时0/10。L02尚无fresh OpenCorvus/Codex，下一先同一16public/无参考权重/完整规范依赖准备和预注册真实Task，再顺序fresh Codex；两好另版升级。保模型/资源/非盲AI限制，无总token/墙钟额度，不凑时间。L06/0.3完整权威状态/信息/承诺/online和其他八题继续，不能把当前两题开发资格称成熟suite。全部本轮native终态，六旧昂贵任务最新仍Paused，不恢复/重启/重矩阵。心跳ACTIVE，只有全用户目标实际达成才停用。
+
+## 首个L02冻结后双系统pilot：实施前Recall与预注册方案
+
+用户十题/重型有效工作/单层独立审查/真实OpenCorvus和fresh Codex两好另版目标不变，cheap-first、无用户总token/墙钟额度。441aa82c9已推送冻结L02/0.2.0开发合同；原121/716c/66pass draft-null原件不动。当前没有新L02候选Task或评估侧矩阵，先核唯一locator存在与否再建立一对新候选，不能重旧数据集Task。其他用户overlay改动/视频删除/索引重排保护。
+
+已重读现有serve_heavy_workbench注册/Provider staging、Inspect task/solver/adapter、L06原Inspect argv及冻结public接口。全仓搜索定位唯一parseHeavyWorkbenchRegistration、stageDiagnosticProvider成对auth/models及actual流式预检；复用其实现，不新增路由/消息/队列/LLM接口。Inspect仍为原生Task观察，3600s是实际进展闲置观察窗，不是总时长或自动cancel；原Task终态和工具/容器事实独立决定是否清理。已有deadline修复随当前后端源码新进程加载，不把旧L06 PID说成已热修。UI相关源与测试不触及/不运行。
+
+1. 在D:/opencorvus-benchmark-runs新建L02-paired-20261030唯一pair，并写L02-current-pair-20261030.json定位。两project从冻结Git441aa82c9导出相同16public，private preregistration/registration/dataset/Provider/evidence在project之外。只这些public和相同任务环境说明进入候选；不传权重、外部参考、作者源码/旧报告/私有raw/本Recall或凭据。候选完成的是事前冻结predict/select/report和公开开发验证，真正私有12outer在其自然交付封存后由评估侧执行，不要求候选伪称已见私有真值或已完成私有研究。
+2. 候选前固定good为原rubric>=90且全部critical通过、study/quality分别报告。顺序OpenCorvus code/base/指定gpt-6.1-sol后fresh Codex（fork none、无model override、禁止再委托）；只注册比较流程，不事后按候选结果换阈值/池。实际profile/package/actors/模型/流式/usage和限制由真实响应归档，不猜Codex模型/费用。现native OS/资源隔离未经资格，runtime主仓dirty且Codex模型usage未暴露，comparable=false，不能同模型同资源因果速度/费用排行。
+3. 实际Inspect/.venv、现有科学镜像及16对象身份先做只读便宜确认。现有launcher新home和成对模型/凭据staging，分别核usable/projected/actual准确模型及streaming，再用原Inspect启动唯一新Task。原始敏感日志只外部，spec只安全白名单。只在Task与所有其绑定物理工作终态后正常stop/移除暂存auth/models；源凭据不改，用户进程不碰，六旧任务不恢复。
+4. 实际计时分LLM研究/实现/开发实验/复核、空闲排队/故障、并发墙钟、评估侧计算；不把作者24min、评估reader、cache或多核CPU计有效候选小时。有效工作不设总量截断/最低时长；快而正确允许，未来两good按另版升级。Inspect观察超时保原收据并接续原Task，不能重建/给业务0/取消有效工具。
+5. 自然终态保存整个workspace/Git/未跟踪程序及产物/真实失败，再依固定合同真正运行sealed程序→原授权packet/inner selection→外层→冻结report（可渲染等价机器内容），主方和单层reviewer实际看新图并以同rubric执行真实l02_grade。研究与质量不足如实打叶，设施错误先修根因/原验收，不宽线/删格。之后才顺序fresh Codex同样封存/执行/独评。原publication投影不作为任何新候选成绩。
+
+本方案不改冻结public/rubric/数据/评分器/数据库，未发生调度异常，不引入自动业务工作流教模型选工具；现Task自然专家角色是OpenCorvus被测系统行为，外部评审仅一层。初始化候选project自己的Git是提交材料身份，非另建源仓branch/worktree。当前尚未启动新Task，不把准备当候选进展或小时证明。
+
+## 最新活跃Recall：唯一新L02原生候选已启动
+
+实际Task tsk_g00VZXAOwk00L22TkNKL于2026-10-30T12:07:30.490000+00:00启动，pair=D:\opencorvus-benchmark-runs\L02-paired-20261030-cb3a704d，唯一L02-current-pair-20261030.json定位。自有launcher44076、observer owner94300、Inspect87556、server http://127.0.0.1:56591/；与退休59471不同，禁止重新请求旧API。实际code/builtin/base2026.10.14.1/gpt-6.1-sol streaming，最新观察35请求（包含2个preflight）全指定模型/全streaming，root orchestrator active。是模型活动事实，不是业务分数/小时。
+
+16public从441aa82c9导出两份原字节同一，全部preregistration在首次Task前写；good原90+全critical，顺序OC后fresh Codex。Provider原staging已成对复制auth/models，分别usable/projected/actual HTTP200流式确认；无凭据进入spec/提交/提示。候选只公开开发和事前programme，私有12outer将自然交付封存后由评估侧执行，不把未来私有研究自述当已完成。runtime源主仓dirty/原生隔离未资格/Codex未知，comparable=false；raw敏感日志只外部。
+
+下一按真实原Task/status/tool/绑定容器看自然进展，不重启/重开候选或因stdout暂空/Inspect观察先终态而cancel有效工作。Task+子计算终态后封整个workspace/Git/未跟踪程序/产物/失败，真正sealed全12和report→新图→同冻结rubric单层评分，再顺序fresh Codex（fork none/无override/禁再委托/仅同public）。候选评分与有效小时仍null/0，suite2/10。六旧任务不恢复，其他案例建设继续。

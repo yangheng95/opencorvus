@@ -474,3 +474,5 @@ L06新0.3 S1单一物理递推/旧collector真实全等已独立限定批准。�
 原716c包/原formal/38/原24/原grade仍完全不改，原真实grade66pass且draft/null/exit4。仅对原实际66 findings调用同一聚合器作明确reference_qualification publication投影100，不是新source-bound grade、native或候选成绩。当前唯一public16/规范JSON+Markdown，旧draft磁盘入口已移除，archive固定内部旧键仍单一格式。当前实现仅selection类型边界增量，12原accepted均实际回验正确，不声称旧121执行过修后源。
 
 全套开发合同冻结2/10（旧L06和新L02），有效候选小时0/10。L02尚无fresh OpenCorvus/Codex，下一先同一16public/无参考权重/完整规范依赖准备和预注册真实Task，再顺序fresh Codex；两好另版升级。保模型/资源/非盲AI限制，无总token/墙钟额度，不凑时间。L06/0.3完整权威状态/信息/承诺/online和其他八题继续，不能把当前两题开发资格称成熟suite。全部本轮native终态，六旧昂贵任务最新仍Paused，不恢复/重启/重矩阵。心跳ACTIVE，只有全用户目标实际达成才停用。
+
+最新真实活跃为L02/0.2.0新OpenCorvus Task tsk_g00VZXAOwk00L22TkNKL（12:07:30.490Z），code/builtin/base2026.10.14.1/gpt-6.1-sol streaming。唯一外部locator L02-current-pair-20261030.json，launcher44076/Inspect87556/server56591；不要按旧formal121或退休L06接口表重跑。仅同16public与真实成对Provider资格，候选自然交付后才sealed私有研究/同rubric独评、再顺序fresh Codex。当前无候选业务分/有效小时；suite2/10，其他案例继续。

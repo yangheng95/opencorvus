@@ -1,0 +1,272 @@
+{
+  "format": "l02-paired-pilot-preregistration/1",
+  "registered_at": "2026-10-30T12:05:49.525637+00:00",
+  "case": "L02/0.2.0",
+  "frozen_git": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2",
+  "public_inputs": [
+    "ASOF-CONTRACT.md",
+    "ENVIRONMENT.md",
+    "EXECUTION-CONTRACT.md",
+    "INTERFACES.md",
+    "MATERIALS.md",
+    "PROVENANCE.md",
+    "QUALITY-CONTRACT.md",
+    "RESEARCH-DELIVERY.md",
+    "REVIEW-ANCHORS.md",
+    "STUDY-CONTRACT.md",
+    "TASK.md",
+    "development-materials.zip",
+    "material-contract.json",
+    "quality-policy.json",
+    "study-contract.json",
+    "profile.json"
+  ],
+  "input_identity": "exact frozen Git objects and same bytes for both projects",
+  "exports": [
+    {
+      "side": "opencorvus",
+      "file": "ASOF-CONTRACT.md",
+      "bytes": 2648,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/ASOF-CONTRACT.md"
+    },
+    {
+      "side": "opencorvus",
+      "file": "ENVIRONMENT.md",
+      "bytes": 1936,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/ENVIRONMENT.md"
+    },
+    {
+      "side": "opencorvus",
+      "file": "EXECUTION-CONTRACT.md",
+      "bytes": 8436,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/EXECUTION-CONTRACT.md"
+    },
+    {
+      "side": "opencorvus",
+      "file": "INTERFACES.md",
+      "bytes": 9602,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/INTERFACES.md"
+    },
+    {
+      "side": "opencorvus",
+      "file": "MATERIALS.md",
+      "bytes": 4792,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/MATERIALS.md"
+    },
+    {
+      "side": "opencorvus",
+      "file": "PROVENANCE.md",
+      "bytes": 1655,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/PROVENANCE.md"
+    },
+    {
+      "side": "opencorvus",
+      "file": "QUALITY-CONTRACT.md",
+      "bytes": 4045,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/QUALITY-CONTRACT.md"
+    },
+    {
+      "side": "opencorvus",
+      "file": "RESEARCH-DELIVERY.md",
+      "bytes": 3168,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/RESEARCH-DELIVERY.md"
+    },
+    {
+      "side": "opencorvus",
+      "file": "REVIEW-ANCHORS.md",
+      "bytes": 8210,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/REVIEW-ANCHORS.md"
+    },
+    {
+      "side": "opencorvus",
+      "file": "STUDY-CONTRACT.md",
+      "bytes": 3997,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/STUDY-CONTRACT.md"
+    },
+    {
+      "side": "opencorvus",
+      "file": "TASK.md",
+      "bytes": 5614,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/TASK.md"
+    },
+    {
+      "side": "opencorvus",
+      "file": "development-materials.zip",
+      "bytes": 175793,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/development-materials.zip"
+    },
+    {
+      "side": "opencorvus",
+      "file": "material-contract.json",
+      "bytes": 1137,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/material-contract.json"
+    },
+    {
+      "side": "opencorvus",
+      "file": "quality-policy.json",
+      "bytes": 1016,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/quality-policy.json"
+    },
+    {
+      "side": "opencorvus",
+      "file": "study-contract.json",
+      "bytes": 1472,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/study-contract.json"
+    },
+    {
+      "side": "opencorvus",
+      "file": "profile.json",
+      "bytes": 1831,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/profile.json"
+    },
+    {
+      "side": "codex",
+      "file": "ASOF-CONTRACT.md",
+      "bytes": 2648,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/ASOF-CONTRACT.md"
+    },
+    {
+      "side": "codex",
+      "file": "ENVIRONMENT.md",
+      "bytes": 1936,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/ENVIRONMENT.md"
+    },
+    {
+      "side": "codex",
+      "file": "EXECUTION-CONTRACT.md",
+      "bytes": 8436,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/EXECUTION-CONTRACT.md"
+    },
+    {
+      "side": "codex",
+      "file": "INTERFACES.md",
+      "bytes": 9602,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/INTERFACES.md"
+    },
+    {
+      "side": "codex",
+      "file": "MATERIALS.md",
+      "bytes": 4792,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/MATERIALS.md"
+    },
+    {
+      "side": "codex",
+      "file": "PROVENANCE.md",
+      "bytes": 1655,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/PROVENANCE.md"
+    },
+    {
+      "side": "codex",
+      "file": "QUALITY-CONTRACT.md",
+      "bytes": 4045,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/QUALITY-CONTRACT.md"
+    },
+    {
+      "side": "codex",
+      "file": "RESEARCH-DELIVERY.md",
+      "bytes": 3168,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/RESEARCH-DELIVERY.md"
+    },
+    {
+      "side": "codex",
+      "file": "REVIEW-ANCHORS.md",
+      "bytes": 8210,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/REVIEW-ANCHORS.md"
+    },
+    {
+      "side": "codex",
+      "file": "STUDY-CONTRACT.md",
+      "bytes": 3997,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/STUDY-CONTRACT.md"
+    },
+    {
+      "side": "codex",
+      "file": "TASK.md",
+      "bytes": 5614,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/TASK.md"
+    },
+    {
+      "side": "codex",
+      "file": "development-materials.zip",
+      "bytes": 175793,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/development-materials.zip"
+    },
+    {
+      "side": "codex",
+      "file": "material-contract.json",
+      "bytes": 1137,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/material-contract.json"
+    },
+    {
+      "side": "codex",
+      "file": "quality-policy.json",
+      "bytes": 1016,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/quality-policy.json"
+    },
+    {
+      "side": "codex",
+      "file": "study-contract.json",
+      "bytes": 1472,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/study-contract.json"
+    },
+    {
+      "side": "codex",
+      "file": "profile.json",
+      "bytes": 1831,
+      "git_object": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2:specs/artifacts/2026-10-29-heavy-workbench-long/cases/L02/public/profile.json"
+    }
+  ],
+  "comparison_rule": {
+    "good_score_at_least": 90,
+    "all_critical_required": true,
+    "critical_count": 51,
+    "two_good_action": "new version, retain frozen current contract"
+  },
+  "order": [
+    "OpenCorvus native Task via Inspect",
+    "seal and independently evaluate",
+    "fresh Codex fork none",
+    "seal and independently evaluate"
+  ],
+  "mode": {
+    "OpenCorvus": {
+      "product_pillar": "code",
+      "prompt_profile": "base",
+      "requested_model": "openai/gpt-6.1-sol",
+      "actual_profile_package_actors": "record native facts after start"
+    },
+    "Codex": {
+      "fork_turns": "none",
+      "model_override": null,
+      "re_delegation": false,
+      "actual_model_usage": "unknown unless interface exposes"
+    }
+  },
+  "time_policy": {
+    "user_total_wall_limit": null,
+    "user_total_token_limit": null,
+    "minimum_runtime": null,
+    "inactivity_observer_seconds": 3600,
+    "observer_timeout_cancels_native_task": false,
+    "candidate_effective_time": "actual research, implementation, development experiments and review; overlapping wall intervals counted once",
+    "separate": [
+      "preparation",
+      "queue/idle",
+      "runtime/provider faults",
+      "evaluator computation",
+      "cache tokens",
+      "multi-core CPU totals"
+    ]
+  },
+  "source_seal": "whole completed workspace including Git, untracked code and outputs, and actual failure history",
+  "evaluation": "same frozen raw and contracts, true source-only declared programs through private assignment and report, real new image viewing and one-layer independent source-bound rubric",
+  "comparable": false,
+  "limitations": [
+    "native host filesystem/resource isolation not qualified; authorized public-only scope enforced as task instructions and audited after completion",
+    "runtime source working tree has unrelated user modifications",
+    "Codex actual model/usage not exposed",
+    "familiar-reference nonblind AI reviewer, not professional/statistical maturity"
+  ],
+  "candidate_scores": null,
+  "hours_qualified": false
+}

@@ -26,7 +26,7 @@
 
 - [2026-10-30-approved-code-workflow.md](2026-10-30-approved-code-workflow.md)：独立QA的真实审批后提交全流程，保留旧793失败历史。
 
-- [2026-10-30-heavy-workbench-l02-qualification.md](2026-10-30-heavy-workbench-l02-qualification.md)：L02/0.2.0开发合同独立冻结；原正式121/66与六叶格式校准保留，真实新候选仍待。
+- [2026-10-30-heavy-workbench-l02-qualification.md](2026-10-30-heavy-workbench-l02-qualification.md)：冻结后首个新OpenCorvus Task真实活动中；只16public/成对Provider资格，候选业务分与小时仍待。
 - [2026-10-30-heavy-workbench-l05-qualification.md](2026-10-30-heavy-workbench-l05-qualification.md)：真实旧现场/补偿/在途HTTP、不同正确图与错误对照；checker及EOF收尾缺口修后独立资格通过。
 
 - [2026-10-30-mission-selection-journey.md](2026-10-30-mission-selection-journey.md)：创建表单专家团搜索与选择的实际体验。

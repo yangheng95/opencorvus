@@ -13,3 +13,5 @@ L02/0.2.0开发合同已完成独立冻结批准；[FREEZE](evaluator/FREEZE.jso
 [冻结收敛方案](evaluator/FREEZE-PLAN.md)和[独立方案审查](evaluator/freeze-plan-review/PLAN-REVIEW.md)明确：公开规范路径只有一份，历史capsule/旧716c包/grade原件不回写；新registry只派生声明metadata，原forecast/native/科学规则不改。[最终独立审查](evaluator/independent-freeze-review/REVIEW.md)已批准开发pilot合同，七readiness只指各明示的开发资格。最终frozen元数据另新派生登记并经同一实际loader完整12/1008通过，4.975秒/0native；所有数值/权重/关键规则不变。原真实66 findings的publication算术投影为100，仅是reference资格投影，不是新source-bound grade或候选成绩。下一fresh公开输入OpenCorvus/Codex，同合同两好另升版本。
 
 整套开发冻结2/10、候选有效小时0/10；AI审查非盲且熟悉参考，不是职业真人/统计成熟。完整十题、真实新区分度和有效小时均待；必要后台工作由本聊天心跳接续，不重复已终态矩阵/旧工具测试凑时长。
+
+[首个冻结后OpenCorvus pilot](evaluator/pilot-opencorvus-20261030/README.md)已真实启动；仅同16public，code/base/gpt-6.1-sol全流式。当前active/无候选成绩，后续自然封存→真实私有执行/独评→顺序fresh Codex，不拿原作者reference投影冒充新分。

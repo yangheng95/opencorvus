@@ -1,0 +1,35 @@
+{
+  "format": "l02-opencorvus-native-launch/1",
+  "task_id": "tsk_g00VZXAOwk00L22TkNKL",
+  "native_started_at": "2026-10-30T12:07:30.490000+00:00",
+  "pair_root": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d",
+  "locator": "D:\\opencorvus-benchmark-runs\\L02-current-pair-20261030.json",
+  "frozen_public_git": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2",
+  "lifecycle_at_observation": "active",
+  "runtime_mode": {
+    "product_pillar": "code",
+    "package_revision_binding": {
+      "scope": "built_in",
+      "project_id": null,
+      "namespace": "builtin",
+      "id": "base",
+      "version": "2026.10.14.1",
+      "package_digest": "83ea97ae6b85c404ff6ff75b43ab0d72fe907d3013a3dcd651b322c5a5579f4f"
+    }
+  },
+  "launcher_pid": 44076,
+  "observer_owner_pid": 94300,
+  "inspect_pid": 87556,
+  "server_url": "http://127.0.0.1:56591/",
+  "credentials": "paired staging; usable, projected and actual streaming model qualified; source content not copied into specs",
+  "private_originals_excluded": [
+    "runtime/auth/models",
+    "full original provider/session logs",
+    "launcher stdout/stderr",
+    "complete host source status"
+  ],
+  "comparable": false,
+  "business_score": null,
+  "effective_hours_qualified": false,
+  "fresh_codex_started": false
+}

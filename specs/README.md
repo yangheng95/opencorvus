@@ -26,7 +26,7 @@
 
 - [批准后的代码提交验收](records/2026-10/2026-10-30-approved-code-workflow.md)：完整真实改码、测试、批准和范围Git提交的当前版本验收。
 
-- [L02发布时间输入资格](records/2026-10/2026-10-30-heavy-workbench-l02-qualification.md)：正式121/原66通过，L02/0.2.0开发合同独立冻结；下一fresh双系统，候选小时仍待。
+- [L02发布时间输入资格](records/2026-10/2026-10-30-heavy-workbench-l02-qualification.md)：L02/0.2.0独立冻结后，首个public-only真实OpenCorvus Task已启动；成绩和有效小时仍待。
 - [L05跨系统副作用资格](records/2026-10/2026-10-30-heavy-workbench-l05-qualification.md)：真实事故现场/逐来源补偿及一次在途HTTP交错；checker与EOF收尾实质漏洞修后独立通过，完整题未冻结。
 
 - [Mission 创建选择旅程](records/2026-10/2026-10-30-mission-selection-journey.md)：真实搜索、保留选择、类型切换及取消状态调查。

@@ -1,0 +1,83 @@
+{
+  "observed_at": "2026-10-30T12:10:17.433888+00:00",
+  "task_id": "tsk_g00VZXAOwk00L22TkNKL",
+  "status": "active",
+  "lifecycle": "active",
+  "native_time": {
+    "created": 1793362050490,
+    "updated": 1793362050490,
+    "started": 1793362050490
+  },
+  "product_pillar": "code",
+  "package_revision_binding": {
+    "scope": "built_in",
+    "project_id": null,
+    "namespace": "builtin",
+    "id": "base",
+    "version": "2026.10.14.1",
+    "package_digest": "83ea97ae6b85c404ff6ff75b43ab0d72fe907d3013a3dcd651b322c5a5579f4f"
+  },
+  "actor_nodes": [
+    {
+      "sessionID": "ses_-zUQSpZblzzEGDn0jYPe",
+      "orderKey": "v1:0001793362056039:0000000000000050:0000000000000000:session:ses_-zUQSpZblzzEGDn0jYPe",
+      "agent": "orchestrator",
+      "kind": "orchestrator",
+      "title": "Agent: L02 发布时间层级预测研究与交接",
+      "parentSessionID": "ses_-zUQSpajTzzL7SO7go0q",
+      "time": {
+        "created": 1793362056039,
+        "updated": 1793362212554
+      }
+    }
+  ],
+  "actual_model_requests": {
+    "snapshot": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evidence\\provider-audit\\provider-44076-ddf811e4-aa56-4fbd-b17c-24c05958a99a-140.json",
+    "count_including_preflight": 35,
+    "models": [
+      "gpt-6.1-sol"
+    ],
+    "all_streaming": true,
+    "http_statuses": [
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200
+    ]
+  },
+  "inspect_terminal_exists": false,
+  "candidate_business_score": null,
+  "effective_hours_qualified": false,
+  "comparable": false
+}
