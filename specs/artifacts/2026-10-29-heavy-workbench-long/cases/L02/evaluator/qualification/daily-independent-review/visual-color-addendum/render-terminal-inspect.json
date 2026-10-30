@@ -1,0 +1,54 @@
+{
+  "Id": "83742d5cabb3a59623cc926e6da581800494d66b90c05d7b4b7c0aea15128743",
+  "Image": "sha256:23ff8bfbf8055caa0b9fa5745ddb27cceea2f31d7d15b7a900c81112cdfe8ddf",
+  "Mounts": [
+    {
+      "Type": "bind",
+      "Source": "D:\\opencorvus-benchmark-runs\\l02-daily-loop-qualification-20261030\\main\\full-reference-summary\\render-color-repair\\source",
+      "Destination": "/project",
+      "Mode": "",
+      "RW": false,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "D:\\opencorvus-benchmark-runs\\l02-daily-loop-qualification-20261030\\main\\full-reference-summary\\render-color-repair\\input",
+      "Destination": "/input",
+      "Mode": "",
+      "RW": false,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "D:\\opencorvus-benchmark-runs\\l02-daily-loop-qualification-20261030\\main\\full-reference-summary\\render-color-repair\\output",
+      "Destination": "/output",
+      "Mode": "",
+      "RW": true,
+      "Propagation": "rprivate"
+    }
+  ],
+  "Args": [
+    "plot_l02_study.py",
+    "--input",
+    "/input/plot-input.json",
+    "--out",
+    "/output/figures"
+  ],
+  "HostConfig": {
+    "NanoCpus": 1000000000,
+    "NetworkMode": "none"
+  },
+  "State": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-30T04:17:57.094610191Z",
+    "FinishedAt": "2026-10-30T04:17:58.977112786Z"
+  }
+}

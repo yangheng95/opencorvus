@@ -40,7 +40,7 @@
 
 - [2026-10-29-text-encoding-journey](2026-10-29-text-encoding-journey/README.md)：Unicode原文乱码修复、双语错误、真实JSON和五份下载核验。
 
-- [长程任务资格与便宜实验](2026-10-29-heavy-workbench-long/README.md)：L06真实两方100已触发新版；L02公开信息边界/精确指标局部资格，整体冻结1/10、小时资格0/10。
+- [长程任务资格与便宜实验](2026-10-29-heavy-workbench-long/README.md)：L06两方100触发新版；L02完整每日数值参考/独立核验及真实失败边界，套件冻结1/10、小时0/10。
 
 - [2026-10-29-text-attachment-history](2026-10-29-text-attachment-history/README.md)：23张真实发送/历史回看原图、指定模型流式请求、原件下载与数据/运行结算。
 

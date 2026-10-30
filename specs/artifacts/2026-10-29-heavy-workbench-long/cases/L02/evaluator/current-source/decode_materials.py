@@ -32,6 +32,12 @@ def integer(text,field,minimum=0,maximum=10**6):
     return value
 
 
+def hour_tick(text,epoch):
+    seconds=int((utc(text)-epoch).total_seconds())
+    if seconds<0 or seconds%3600 or seconds//3600>10**6:raise InputError("tick_range")
+    return seconds//3600
+
+
 def rows(path,fields):
     with path.open(newline="",encoding="utf-8") as f:
         reader=csv.DictReader(f)
@@ -52,32 +58,13 @@ def quantity(text,quality,multiplier):
     return number.numerator
 
 
-def decode(root,role,contract):
-    if role not in ["archive","development"]:raise InputError("assigned_archive_role")
-    clock=read_json(root/"time-axis.json")
-    if clock!=contract["clock"]:raise InputError("registered_clock_mismatch")
-    epoch=utc(clock["epoch_utc"]);development_cutoff=utc(clock["development_cutoff_utc"])
-    def tick(text):
-        seconds=int((utc(text)-epoch).total_seconds())
-        if seconds<0 or seconds%3600 or seconds//3600>10**6:raise InputError("tick_range")
-        return seconds//3600
-    catalogue=rows(root/"series.csv",{"series_id","parent_zone","kind","canonical_unit"})
-    ids=[r["series_id"] for r in catalogue]
-    if not catalogue or len(set(ids))!=len(ids) or any(not r["series_id"].strip() or r["kind"] not in ["leaf","aggregate"] or r["canonical_unit"]!="L" for r in catalogue):raise InputError("series_registry")
-    leaves={r["series_id"] for r in catalogue if r["kind"]=="leaf"};aggregates={r["series_id"] for r in catalogue if r["kind"]=="aggregate"}
-    hierarchy=rows(root/"hierarchy.csv",{"parent","child","weight"})
-    if len({(r["parent"],r["child"]) for r in hierarchy})!=len(hierarchy):raise InputError("hierarchy_duplicate")
-    if {r["child"] for r in hierarchy}!=leaves or len(hierarchy)!=len(leaves):raise InputError("hierarchy_leaf_coverage")
-    for r in hierarchy:
-        if r["parent"] not in aggregates or integer(r["weight"],"hierarchy_weight",1,1)!=1 or next(s for s in catalogue if s["series_id"]==r["child"])["parent_zone"]!=r["parent"]:raise InputError("hierarchy_parent")
-    if {r["parent"] for r in hierarchy}!=aggregates:raise InputError("hierarchy_aggregate_coverage")
-    units=read_json(root/"units.json")
-    if type(units) is not dict or not units:raise InputError("unit_registry")
-    for key,value in units.items():
-        if type(key) is not str or not key or type(value) is not dict or set(value)!={"canonical_unit","multiplier"} or value["canonical_unit"]!="L" or type(value["multiplier"]) is not int or not 1<=value["multiplier"]<=10**6:raise InputError("unit_definition")
-    if units!=contract["units"]:raise InputError("registered_units_mismatch")
+def read_fact_tables(root,clock,units,catalogue,variables):
+    """The sole CSV/UTC/quantity decoder, shared by full archives and permitted packets."""
+    epoch=utc(clock["epoch_utc"])
+    def tick(text):return hour_tick(text,epoch)
+    leaves={r["series_id"] for r in catalogue if r["kind"]=="leaf"}
     raw={"format":"l02-vintages/1","series":{r["series_id"]:{"unit":r["canonical_unit"]} for r in catalogue},
-        "variables":read_json(root/"availability.json"),"observations":[],"covariates":[]}
+        "variables":variables,"observations":[],"covariates":[]}
     for filename,table,identity,date_key,end_key,canonical_tick in [
         ("observations.csv","observations","series_id","event_date","event_end_utc","event_tick"),
         ("covariate-vintages.csv","covariates","variable_id","valid_date","valid_end_utc","valid_tick")]:
@@ -91,13 +78,48 @@ def decode(root,role,contract):
                 value=quantity(r["value"],r["quality_flag"],units[r["unit"]]["multiplier"])
             else:
                 if r[identity] not in raw["variables"] or r["unit"]!=raw["variables"][r[identity]]["unit"]:raise InputError("covariate_identity_unit")
-                # Temperatures can be negative; use the core's signed integer value contract.
                 if r["quality_flag"]=="missing" and r["value"]=="":value=None
                 elif r["quality_flag"]=="valid":value=integer(r["value"],"covariate_integer",-10**9,10**9)
                 else:raise InputError("covariate_quality")
             raw[table].append({identity:r[identity],canonical_tick:tick(r[end_key]),"release_tick":tick(r["release_time_utc"]),
                 "revision_id":integer(r["revision_id"],"revision_id"),"value":value,"quality_flag":r["quality_flag"]})
-    validate(raw)
+    return validate(raw)
+
+
+def validate_catalogue(catalogue,hierarchy):
+    if type(catalogue) is not list or type(hierarchy) is not list:raise InputError("series_registry")
+    for row in catalogue:
+        if type(row) is not dict or set(row)!={"series_id","parent_zone","kind","canonical_unit"} or any(type(v) is not str for v in row.values()):raise InputError("series_registry")
+    for row in hierarchy:
+        if type(row) is not dict or set(row)!={"parent","child","weight"} or any(type(v) is not str for v in row.values()):raise InputError("hierarchy_parent")
+    ids=[r["series_id"] for r in catalogue]
+    if not catalogue or len(set(ids))!=len(ids) or any(not r["series_id"].strip() or r["kind"] not in ["leaf","aggregate"] or r["canonical_unit"]!="L" for r in catalogue):raise InputError("series_registry")
+    leaves={r["series_id"] for r in catalogue if r["kind"]=="leaf"};aggregates={r["series_id"] for r in catalogue if r["kind"]=="aggregate"}
+    if len({(r["parent"],r["child"]) for r in hierarchy})!=len(hierarchy):raise InputError("hierarchy_duplicate")
+    if {r["child"] for r in hierarchy}!=leaves or len(hierarchy)!=len(leaves):raise InputError("hierarchy_leaf_coverage")
+    for r in hierarchy:
+        if r["parent"] not in aggregates or integer(r["weight"],"hierarchy_weight",1,1)!=1 or next(s for s in catalogue if s["series_id"]==r["child"])["parent_zone"]!=r["parent"]:raise InputError("hierarchy_parent")
+    if {r["parent"] for r in hierarchy}!=aggregates:raise InputError("hierarchy_aggregate_coverage")
+
+
+def validate_units(units):
+    if type(units) is not dict or not units:raise InputError("unit_registry")
+    for key,value in units.items():
+        if type(key) is not str or not key or type(value) is not dict or set(value)!={"canonical_unit","multiplier"} or value["canonical_unit"]!="L" or type(value["multiplier"]) is not int or not 1<=value["multiplier"]<=10**6:raise InputError("unit_definition")
+
+
+def decode(root,role,contract):
+    if role not in ["archive","development"]:raise InputError("assigned_archive_role")
+    clock=read_json(root/"time-axis.json")
+    if clock!=contract["clock"]:raise InputError("registered_clock_mismatch")
+    epoch=utc(clock["epoch_utc"]);development_cutoff=utc(clock["development_cutoff_utc"])
+    def tick(text):return hour_tick(text,epoch)
+    catalogue=rows(root/"series.csv",{"series_id","parent_zone","kind","canonical_unit"})
+    hierarchy=rows(root/"hierarchy.csv",{"parent","child","weight"});validate_catalogue(catalogue,hierarchy)
+    leaves={r["series_id"] for r in catalogue if r["kind"]=="leaf"}
+    units=read_json(root/"units.json");validate_units(units)
+    if units!=contract["units"]:raise InputError("registered_units_mismatch")
+    raw=read_fact_tables(root,clock,units,catalogue,read_json(root/"availability.json"))
     if role=="development" and any(r["release_tick"]>tick(clock["development_cutoff_utc"]) for table in ["observations","covariates"] for r in raw[table]):
         raise InputError("development_unpublished_fact")
     declared_origins=rows(root/"origins.csv",ORIGIN)

@@ -1,0 +1,20 @@
+{
+  "checks": [
+    {
+      "name": "existing_directory_maps_explicit_output_ownership_error_and_retains_original",
+      "passed": true
+    },
+    {
+      "name": "new_directory_owns_its_invalid_outer_receipt",
+      "passed": true
+    }
+  ],
+  "all_passed": true,
+  "actual_local_CLI": 2,
+  "new_forecast_Docker_solver_Provider_calls": 0,
+  "new_sentinel_is_synthetic_owned_directory": true,
+  "source_same_current": false,
+  "executed_June_driver_preserved_unchanged": true,
+  "candidate_score": null,
+  "completed_utc": "2026-10-30T03:58:41.759716+00:00"
+}

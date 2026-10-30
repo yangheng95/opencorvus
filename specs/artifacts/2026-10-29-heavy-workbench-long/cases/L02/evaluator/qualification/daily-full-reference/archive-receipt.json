@@ -1,0 +1,16 @@
+{
+  "status": "complete_numerical_reference_archived",
+  "recorded_at": "2026-10-30T04:04:35.249432+00:00",
+  "outer": 12,
+  "inner": 36,
+  "forecast_processes": 108,
+  "selector_processes": 12,
+  "raw_packet_deduplication": "Every omitted duplicate packet file was directly compared to the stored original packet member; mapping in archive. Original full per-process ZIPs remain external.",
+  "duplicate_bindings": 324,
+  "archive_bytes": 18163279,
+  "full_case_frozen": false,
+  "candidate_score": null,
+  "quality_floor": null,
+  "hours_qualified": false,
+  "render_color_addendum": "same plot input, interval shade bound to selected mean, fresh real render and root/independent actual view"
+}

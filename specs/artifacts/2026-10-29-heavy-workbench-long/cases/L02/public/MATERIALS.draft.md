@@ -18,4 +18,4 @@
 
 评估侧唯一`decode_materials.py`要求调用者明确指定`--role archive`或`--role development`及评估侧分配的`--contract`。输入clock/cutoff/units/grid声明须与该唯一注册合同匹配，不能由被核包自报授权截止。前者核完整目标终审存在及实际发布边界；后者核每条事实的开发截断和开发标签。role不从输入文件自报推断。输出canonical事实只能交唯一asof投影；完整canonical档案不能挂到预测worker。材料缺失/身份或单位错误、未发布开发事实、终审缺失/真实发布超界，均为具名input_invalid，不能计成候选预测失败。
 
-当前整数原语的`forecast_reference.py`仍仅用于此前7时点解析资格。每日目标必须用明确target_ticks，不能使用`range(origin, origin+horizon)`把小时和日混在一起；正式研究接口、选模/点区间指标、完整参考/坏对照和评分合同仍待建设。未来拟采用滚动预测与WIS，方法依据[滚动origin说明](https://otext.robjhyndman.com/hyndsight/tscv/)和[加权区间评分论文](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618)，不强求显著性或固定提升。
+早期7时点OLS入口已归档退役，不作为每日预测fallback。当前每日worker使用明确target_ticks和[研究合同](STUDY-CONTRACT.draft.md)的均值/区间输出；完整原材料→隔离预测→真实选择正在资格验证，完整研究交付/质量底线/原子rubric与冻结仍待。方法依据[滚动origin说明](https://otext.robjhyndman.com/hyndsight/tscv/)和[加权区间评分论文](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618)，不强求显著性或固定提升。

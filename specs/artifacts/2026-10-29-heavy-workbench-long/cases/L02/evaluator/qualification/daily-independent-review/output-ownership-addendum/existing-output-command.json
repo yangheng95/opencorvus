@@ -1,0 +1,29 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l02-daily-loop-independent-review-20261030\\output-ownership-addendum\\source\\run_l02_study.py",
+    "--raw",
+    "D:\\opencorvus-benchmark-runs\\l02-daily-loop-independent-review-20261030\\cold-june20\\raw",
+    "--material-contract",
+    "D:\\opencorvus-benchmark-runs\\l02-daily-loop-independent-review-20261030\\output-ownership-addendum\\source\\material-contract.json",
+    "--study",
+    "D:\\opencorvus-benchmark-runs\\l02-daily-loop-independent-review-20261030\\output-ownership-addendum\\source\\study-contract.draft.json",
+    "--pool",
+    "D:\\opencorvus-benchmark-runs\\l02-daily-loop-independent-review-20261030\\output-ownership-addendum\\source\\reference-pool.json",
+    "--image",
+    "sha256:23ff8bfbf8055caa0b9fa5745ddb27cceea2f31d7d15b7a900c81112cdfe8ddf",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l02-daily-loop-independent-review-20261030\\output-ownership-addendum\\owned-existing-sentinel"
+  ],
+  "exit_code": 3,
+  "seconds": 0.1928360997699201,
+  "actual": {
+    "status": "run_invalid",
+    "error": "output_directory_unavailable",
+    "detail": "[WinError 183] Cannot create a file when that file already exists: 'D:\\\\opencorvus-benchmark-runs\\\\l02-daily-loop-independent-review-20261030\\\\output-ownership-addendum\\\\owned-existing-sentinel'",
+    "candidate_score": null
+  }
+}

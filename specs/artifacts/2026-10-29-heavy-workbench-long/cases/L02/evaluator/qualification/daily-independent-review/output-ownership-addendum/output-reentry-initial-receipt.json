@@ -1,0 +1,35 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l02-daily-loop-qualification-20261030\\main\\source\\run_l02_study.py",
+    "--raw",
+    "D:\\opencorvus-benchmark-runs\\l02-daily-loop-qualification-20261030\\main\\raw",
+    "--material-contract",
+    "D:\\opencorvus-benchmark-runs\\l02-daily-loop-qualification-20261030\\main\\source\\material-contract.json",
+    "--study",
+    "D:\\opencorvus-benchmark-runs\\l02-daily-loop-qualification-20261030\\main\\source\\study-contract.draft.json",
+    "--pool",
+    "D:\\opencorvus-benchmark-runs\\l02-daily-loop-qualification-20261030\\main\\source\\reference-pool.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l02-daily-loop-qualification-20261030\\output-reentry-initial",
+    "--image",
+    "sha256:23ff8bfbf8055caa0b9fa5745ddb27cceea2f31d7d15b7a900c81112cdfe8ddf"
+  ],
+  "exitcode": 3,
+  "stdout": "{\"status\": \"run_invalid\", \"error\": \"facility_study_execution_invalid\", \"detail\": \"[WinError 183] Cannot create a file when that file already exists: 'D:\\\\\\\\opencorvus-benchmark-runs\\\\\\\\l02-daily-loop-qualification-20261030\\\\\\\\output-reentry-initial'\", \"candidate_score\": null}\n",
+  "stderr": "",
+  "before": {
+    "status": "previous_completed_original",
+    "source": "copied sentinel to test preservation, not actual existing study"
+  },
+  "after": {
+    "status": "run_invalid",
+    "error": "facility_study_execution_invalid",
+    "detail": "[WinError 183] Cannot create a file when that file already exists: 'D:\\\\opencorvus-benchmark-runs\\\\l02-daily-loop-qualification-20261030\\\\output-reentry-initial'",
+    "candidate_score": null
+  },
+  "original_preserved": false
+}

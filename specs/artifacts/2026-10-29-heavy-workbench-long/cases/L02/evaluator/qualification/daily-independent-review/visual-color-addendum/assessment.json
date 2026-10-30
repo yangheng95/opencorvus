@@ -1,0 +1,22 @@
+{
+  "all_passed": true,
+  "checks": {
+    "only_two_line_color_binding": true,
+    "rendered_source_equals_current": true,
+    "same_original_plot_input": true,
+    "published_PNG_equals_new_render": true,
+    "new_render_natural_exit0": true
+  },
+  "actually_viewed": true,
+  "view_image_original_size": [
+    2240,
+    1190
+  ],
+  "observations": "Orange central80 band now matches orange selected weather mean in all six panels. Dates/units/legend and A1/ZA underprediction remain visible.",
+  "nonblocking_color_suggestion": "resolved",
+  "previous_report_and_blue_PNG_preserved": true,
+  "new_forecast_numeric_Docker_Provider_solver_calls_by_reviewer": 0,
+  "candidate_score": null,
+  "full_L02_frozen": false,
+  "hours_qualified": false
+}

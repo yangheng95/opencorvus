@@ -1,0 +1,13 @@
+{
+  "format": "l02-method-pool/1",
+  "status": "author-reference-before-any-daily-prediction",
+  "selection_ids": ["seasonal-weekday", "ridge-weather-operations"],
+  "outer_ids": ["seasonal-weekday", "ridge-weather-operations", "ridge-no-weather"],
+  "failure_policy": "all declared cells mandatory; any candidate cell failure is selection_incomplete, no dropped-cell averages; facility failure is run_invalid",
+  "methods": [
+    {"method_id": "seasonal-weekday", "role": "baseline", "configuration": {"algorithm": "seasonal_weekday", "weekday_repeats": 8, "train_window_days": 365, "minimum_training_rows": 56, "calibration_days_before": [56, 84, 112], "minimum_calibration_rows": 14}},
+    {"method_id": "ridge-weather-operations", "role": "extension", "configuration": {"algorithm": "ridge", "use_weather": true, "use_operations": true, "ridge_alpha": "1", "train_window_days": 365, "minimum_training_rows": 56, "calibration_days_before": [56, 84, 112], "minimum_calibration_rows": 14}},
+    {"method_id": "ridge-no-weather", "role": "ablation", "configuration": {"algorithm": "ridge", "use_weather": false, "use_operations": true, "ridge_alpha": "1", "train_window_days": 365, "minimum_training_rows": 56, "calibration_days_before": [56, 84, 112], "minimum_calibration_rows": 14}}
+  ],
+  "scope": "author reachability reference only, not mandated candidate algorithms or a frozen L02 quality threshold"
+}

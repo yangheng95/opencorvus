@@ -139,3 +139,55 @@ L06已于00:27UTC取得实际完整OpenCorvus100/100后才启动fresh Codex /roo
 下一代表闭环应包含一个完整registered outer及三个inner、两科学配置真实隔离worker→实际selector只选既有ID→outer，私有outer标签不反馈后续改参。固定缺失/失败分母/配置资格规则须先注册，均值MSE与边际WIS/质量critical分开。之后完整矩阵参考/坏对照/研究决策交付/全rubric/独立冻结，尚无完整L02或候选小时。L06现在真实两100已触发另升0.3，旧冻结不改；整套仍1/10、小时0/10，心跳ACTIVE。
 
 最终增量独立L02材料35项2.079秒通过，仅6新开发origin的core/SQL，未新build/decode/旧48矩阵/forecast；8个public ZIP成员与实际开发一致、9个当前源/尺度/发布事实核同。首validator assert只有主方当时工具输出，未捕获原生terminal文件，后补observer收据明示来源，独立审查不称已读该原生文件。L06/0.3计划和17项小机制也无当前数学阻断，完整新业务/冻结/小时仍未批准。全部候选/本轮评估完整求解已终态，六旧昂贵容器刚实际再次inspect均Paused。
+
+## 2026-10-30 03:13 UTC 实施前Recall：每日隔离执行/真实选择
+
+继续十题/严格rubric/单层独立审查/双系统两好升级，cheap-first，无用户总token/墙钟额度；8a5f4c07b已push，本任务工作区清洁，保护用户视频删除/共享索引重排。L06真实两100已触发0.3建设，不重跑旧solver；六旧昂贵容器不恢复。重读本记录及L06/长程/L05/L04/工具/横向末节、AGENTS和benchmark-debug-template；再次搜索L02 current-source/public的daily/worker/selector/forecast/study定义，只有原7点整数OLS和当前metric，无每日worker/真实选择。旧OLS的range(origin,origin+h)是小时路径，不适用日grid，不能包装成全研究。
+
+### 现象、直接缺口、影响面与决定
+
+已有材料/许可和metric分别通过，但它们之间没有真实数值进程边界。直接缺口是原始CSV许可映射、daily target、固定配置池与独立selector尚未连接；继续添加手算/叶数不能补齐。完整canonical在评估侧，若直接给worker会同时泄漏未发布修订/outer标签；给selector旧完整目录又会让其读outer答案。新实现必须以真实只读挂载/新输出和原始行的业务键证明权限，而非文件名或自报PASS。
+
+受影响定义：唯一decode_materials目前内联解析两事实表；新增packet reader与参考worker也需要相同UTC/单位语义。先将原两表解析原样提为该模块唯一read_fact_tables，archive/development decoder与packet reader共同调用，不能复制单位/缺测解析；唯一期限投影仍asof_input.project，SQL checker独立。改动无产品Task/Mission/Session/并发调度、LLM/Provider、UI、凭据或数据库迁移。当前材料/单位/日程均不变，无需重生成/旧54重跑；必须实际重验原材料两role decoder与代表packet的SQL/错误契约。旧7点forecast_reference/qualify_l02仅为历史局部资格；新每日入口实闭环后从current-source退役这两个旧入口，源码与原收据仍在既有历史ZIP，不保留forecast fallback。
+
+### 本轮事前固定执行合同（先于任何预测成绩）
+
+- 一个代表outer选注册outer-20250115及其三个inner；实际同一封存代码完成全部inner、独立selector、outer后，立即用同注册其余outer做完整参考矩阵，不反复同一toy。每阶段1CPU/netnone、只读最小source/本次packet/config/全新output，新进程，必要线性代数单线程；无总模型/墙钟上限。预备依赖沿用已资格的NumPy镜像，真实inspect记录，不挂full archive/评估器/labels/旧output/别的worker。
+- 原始packet仅manifest（clock公开坐标/节点层级/单位/变量身份、assigned origin与target_ticks）及两原CSV授权行。出口只使用唯一project返回的业务键选择原行，不再写第二个release谓词；worker不收到canonical答案、role、outer ID、评分尺度或真值。packet重新用唯一decoder解析后进入独立SQL assess，核恰等授权集合/原值，并绑定注册origin/grid。
+- 参考方法池与有效源码/配置在运行前封存。两个选择配置为seasonal-weekday（最近8个同weekday合法有效量）与ridge-weather-operations（过去365日、ridge alpha1、weekday/年季节/已发布温度及运营状态）；另有同ridge去天气的真正消融，outer必跑。ID只是稳定身份，算法/特征确实不同，允许实际预测/分数相同。池只为作者可达参考，不强迫未来候选复刻特定算法或ID。
+- 本轮所有声明的inner选择配置与全部outer方法均为必交；任一候选配置/单元执行或输出错误，整组selection_incomplete，不能删除后拿较小均值，也不能换方法继续伪成功。设施/原材料/参考矛盾则run_invalid，无候选分。选择必须在两个完整合法配置之间按3inner平均scaled_mse、同分ID字典序；selector仅可返回既有ID，不能生成参数/fit文件给outer。完整matrix与本轮所有参数先于结果固定；这里没有任务质量阈值或总分。
+- 参考worker每次重新从合法历史拟合。最高已发布revision为权威，最新missing不用旧值回填；数据缺测可用明确模型估计，不复制旧协议路径。ridge用成熟最小二乘增广正则化，不显式求逆；数值前的标准化仅本次训练样本。未来天气末日缺测用该origin已发布实测月气候均值作为明确特征估计；运营关闭为明示模型假设，不能把未宣布变化写死。过去56/84/112日的三个伪origin以同唯一project重建当时训练/未来天气，预测14日，残差标签只取当前实际origin已发布最高有效量。共同合法日期的leaf残差成组，非负未来样本产生均值/分位点，zone用同组leaf样本相加；不强求分位点相加，也不声称有限样本覆盖或联合路径校准已获认证。
+- selector是独立真实进程，仅挂该outer已发布的三个inner预测/终审标签、固定2023尺度和公开metric定义/封存池。外层label不挂入；host之后独立用同已资格metric重算完整格子并核selected ID，不能信selector自报分。outer程序只拿原冻结配置与自己的合法packet。全部outer完成前封存池不更改/不给后续私有标签反馈修改代码；正常历史数据晚于先前outer时按真实发布可见，不删已知事实。
+
+### 验证与交付范围
+
+首个真实闭环需完整84行每forecast、3inner×2方法、独立selector与3outer方法，共10个数值进程及真实挂载/终态/版本；独立agent禁止再委托，只核数据/数学/权限/当前事实，禁止另开模型候选/GPU/完整solver。必要错误对照进入同checker：未发布事实具名availability_violation、漏一row→prediction_incomplete、错选择/注入新ID→selection_invalid；不靠mock或静态文案验收。然后同源完整12outer矩阵与baseline/扩展/消融对照、实际研究图/报告再讨论质量可达和原子rubric。完整任务冻结/职业审查与数小时候选证据仍未有，不能把本次数值worker计算算候选小时。全部原失败/修后源/执行收据保留；新文档同步索引、docs，范围commit/fetch/merge/待推审查/push，不动用户改动。
+
+独立实施前提示已采纳（尚未预测）：本轮强制完整参考仅36个2024+inner及12个2025outer，不把2023公开探索声称为已执行。seasonal取up-to8同weekday有效历史，至少1个且整体训练>=56；若额外探索调用导致历史/月气候不足，具名insufficient_history/climatology，不能看分后删本轮任何必交单元。最高revision含missing先选再按valid使用；校准只调用base_predict拟合/点预测而不递归完整校准。停用假设作用于加残差后的整组未来样本；去天气消融的拟合、未来预测与校准均真正移除天气有效特征。原材料/配置池/当前数学指标不变。
+
+首代表真实10进程49.250秒自然完成，actual NumPy2.4.6、全部84格/独立选择正确；这是数值参考闭环，不计候选小时。随后新合同CLI探针发现null inner context实际AttributeError/exit1/traceback：choose在确认dict之前调用.get；漏行/漏origin/晚发布探针各具名过。初source/main/source与contracts-initial保留。影响面审计覆盖choose→selector CLI、host assess_selection，以及host对数值进程失败的分类；旧metric输入设施错误已ProtocolError，不能让新selector把设施坏包混成候选缺交。拟在唯一choose类型边界拒绝坏context；CLI对facility_错误具名run_invalid/exit3，真正缺行仍selection_incomplete/exit2；作者参考runner保存原件后传播typed设施失败，未知非结构化程序失败不伪报业务通过。无产品Task/Mission/Session/队列/恢复或LLM/UI变化，不改模型/参数/预测质量线。只重放原坏context/晚发布和原合法选择输入（不重跑10forecast）；随后完整矩阵保留旧代表来源并明示仅错误边界变化。未来候选grader仍须独立判断设施证据，不能盲信任意候选自报run_invalid。
+
+完整矩阵有效运行期间，主方对隔离sentinel目录实测重入，发现CLI在run.mkdir拒绝旧目录后被通用except捕获，又write_json覆盖旧assessment：真实exit3但原sentinel变run_invalid。未操作真实历史/活跃目录，output-reentry-initial及before/after/原命令保留。根因是“取得新输出所有权”与“本次执行失败写收据”共用异常路径；不是数值模型或候选恢复失败。
+
+修改前横审全部L02入口/调用与持久产物：study runner唯一会在初始化失败后写旧assessment；selector/worker/decoder目录均先mkdir再写、catch只stdout，summary也不写旧目录；packet producer同样新建目录。asof/metric单文件out是显式输出接口，不承担study目录恢复。Task/Mission/普通Session/occurrence、重试/重启/多项目入口无本数值runner导入或调用，未发现产品共享调度/queue根因，本问题限作者study CLI的输出所有权。修复在唯一CLI顶层先成功新建目录，失败仅具名output_directory_unavailable/stdout+exit3；取得所有权后才允许本次失败assessment。数学/worker/selector/方法池不变，当前活跃旧进程不热改，只增加该边界的真正旧目录/新建目录正向测试，不重跑已过forecast或完整矩阵。
+
+完整36inner/12outer数值矩阵现已自然终态。原选择池在全部12outer都选weather，去天气消融全期MSE/WIS略优，不能事后把消融纳入池。该模式本身不是错误，不能强迫正确选择翻转；但仅这些自然结果也不能排除返回固定weather的错误selector。下一必要且事前明示的数值接口控制：同合法inner标签/身份/网格，构造某已声明method的预测恰等该时点已发布truth（含完整层级和退化合法分位点），独立MSE=0应选该ID；再两方法同为0核字典序tie。它只检验选择器通用最小值/同分规则，不把合成perfect预测当模型可达、候选成绩或数据生成质量；不重跑forecast/完整矩阵或强迫原自然策略变化。
+
+
+## 最新接续Recall：完整每日数值参考已独立资格，尚未冻结L02
+
+本轮先读Git/AGENTS/全部相关Recall和benchmark-debug-template，保护其他任务176条视频/图片删除、索引排序与Bun未跟踪目录。L06旧真实两100/0.3建设不变，无重复候选或旧solver。L02方法池先于预测注册，只有seasonal与weather作选择、no-weather是outer必交消融，所有格必交，不按outer结果换池/调参。
+
+当前唯一每日入口run_l02_study.py；原CSV packet按唯一asof_input.project许可业务键选行，full/packet共用decode_materials.read_fact_tables。共享解析重构实际两role decoder4.459/3.258秒与原canonical/grid同一，无重生成/54重跑。原7点OLS/专属qualify从current-source退役，原源码/收据在既有ZIP和source-before，不保留forecast fallback。新daily_data、daily_reference、selection、study_data/runner、summary/plot与reference-pool都在当前L02源/合同。
+
+主方outer-Jan15+三个inner真实10进程49.250秒；单层独立June20新目录冷复建10进程49.775秒；随后只运行其余10outer，100进程481.212秒自然终态。全部1CPU/netnone/只读最小source与本次input/new output，均先封存完整原件后精确rm自有CID。总计108forecast/12selector、84格每forecast、实际NumPy2.4.6/42配对残差；它们是作者数值参考，不是模型候选或小时。当前这些组全部终态，无活跃完整数值任务；不要重跑Jan/June/其余10或恢复六旧Paused任务。
+
+独立Jan/June各148、额外隔离/decoder51、其余10各168及全期172语义/最后12连接核验分别覆盖真实CSV/SQL、Fraction逐节点/总指标、所有拟合来源/参数继承、当前完整mean/分位点、实际选择最小ID、120终态。不是独立统计样本数，也未独立重拟合每一系数。审查器末print Decimal导致exit1与72个初false（Decimal图示比较float/CSV选中标记1/0被假定True/False）全部保留，100精确计算原过，另0.139秒只修72展示绑定，不重预测/1680。最终限定scope blocking=[]，独立agent实际查看新PNG，普通专业人类/统计成熟未认证。
+
+科学结果：全期scaled MSE baseline.0255107819、weather/selected.0049044870、no-weather.0044366055；WIS .0716160899/.0268860019/.0251600710。全部12inner合法选weather；no-weather更优的外层事实保留，不事后换选择池。June图真实显示A2关闭后两个ridge全样本0，而A1/ZA在Jul1–4真值均13751.75L、预测9341.10L、中央80%命中0/4。图色建议已只改区间颜色绑定selected均线，另新目录实际重绘并主/独立view；旧图/新图/同input/实际终态保留，不重预测。最初生成修图helper的PowerShell引号SyntaxError/随后缺文件ENOENT仅启动包装失败，观察者说明在ZIP，正确新wrapper实际exit0后才更新图。
+
+新工具原错误与根治均保存：null inner context初AttributeError→当前facility_selection_packet_invalid/exit3，缺row/origin仍selection_incomplete/exit2，原合法选择同一；隔离sentinel重入初exit3覆盖旧assessment，当前CLI先取得新out所有权，旧目录仅stdout具名拒绝、原数据保留，新owned非法origin仍写本次run_invalid。最后wrapper边界修改没热改已跑旧PID，不冒称旧冷跑逐字节执行最终wrapper。完整source/version差异、原失败与修后必要CLI都保留。两真实selector数值控制仅改变合法inner预测以产生0损最小值/同分，正确选baseline/字典序；合成perfect预测不当真实可达或成绩。
+
+核心证据：cases/L02/evaluator/qualification/daily-full-reference的REPORT、精确assessment/CSV/图/数值原件；daily-independent-review的PLAN/COLD/FULL报告、机器结论/实际新图追加及完整原件。外部D:/opencorvus-benchmark-runs/l02-daily-loop-qualification-20261030和l02-daily-loop-independent-review-20261030保留全部原per-process ZIP。repo压缩包对324重复packet成员逐字节核同后去重并留mapping，只证明归档身份，功能来自独立实际核验，不使用无效source摘要门。全部full raw仍只评估侧，候选未来只拿public。
+
+下一步须直接推进通用候选数值执行/完整研究与运营交付、预先质量目标/低质量对照、原子rubric/人评锚点/完整聚合与独立冻结；不能继续重做本轮toy/54投影/120进程凑工作量，也不能按A1现误差填宽线。质量底线仍null、完整L02未冻结；L06新0.3完整业务/多阶段可见信息/承诺续接与其余L01/L03/L04/L05/L07-L10仍待。整套冻结1/10、候选有效小时0/10、目标未达成，心跳ACTIVE；无总token/总墙钟限制，cheap-first继续。所有本任务改动范围commit、正常fetch/merge/检查待推/hook/push，结束git status保留用户改动。

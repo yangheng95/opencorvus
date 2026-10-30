@@ -1,0 +1,63 @@
+{
+  "stage": "L02 daily-loop implementation plan and moving-source static review only",
+  "blocking_after_accepted_clarifications": [],
+  "clarifications": [
+    "max published revision includes missing, then validity check",
+    "point-only nonrecursive calibration",
+    "mandatory reference only36inner2024+ and12outer2025; explicit insufficient early-history errors",
+    "post-residual whole-sample operations closure",
+    "weather ablation affects train/future/calibration"
+  ],
+  "mathematical_permission_inclusion": "Complete authorized vintages at currentO contain all needed vintages for earlierP; sole project must reproject, not latest-only export.",
+  "mandatory_process_unit": {
+    "inner_forecasts": 6,
+    "selectors": 1,
+    "outer_methods": 3,
+    "total": 10,
+    "forecast_rows_each": 84
+  },
+  "pending_real_checks": [
+    "Refactored two-role decoder and raw packet permission/value equality",
+    "Real isolated representative loop with physical source/data/label boundaries",
+    "Independent actual complete score and selected-ID verification/error controls",
+    "Full registered reference/quality/report/rubric/freeze"
+  ],
+  "static_source_snapshot_identity": [
+    {
+      "file": "decode_materials.py",
+      "same_current_bytes_when_copied": true
+    },
+    {
+      "file": "asof_input.py",
+      "same_current_bytes_when_copied": true
+    },
+    {
+      "file": "check_projection.py",
+      "same_current_bytes_when_copied": true
+    },
+    {
+      "file": "material_contract.py",
+      "same_current_bytes_when_copied": true
+    },
+    {
+      "file": "l02_scoring.py",
+      "same_current_bytes_when_copied": true
+    },
+    {
+      "file": "daily_data.py",
+      "same_current_bytes_when_copied": true
+    },
+    {
+      "file": "l02_daily_reference.py",
+      "same_current_bytes_when_copied": true
+    }
+  ],
+  "source_in_progress_not_final_qualification": true,
+  "new_forecast_or_fit_executions": 0,
+  "new_Docker_solver_Provider_GPU_UI_user_process_calls": 0,
+  "new_delegations": 0,
+  "repository_edits": 0,
+  "candidate_score": null,
+  "full_L02_freeze_or_hours_approved": false,
+  "completed_utc": "2026-10-30T03:32:32.194853+00:00"
+}

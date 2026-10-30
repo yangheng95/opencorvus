@@ -416,3 +416,22 @@ Codex注册quote/row已先后自然exit0，C47646.7/47658.4，各30numeric过，
 L02按独立已审方案前移公开截止2024Aug1、探索2023Jun–Nov；新开发6823obs/21934cov，全部36inner后于截止。新build/两role解码和6探索projection/SQL已过，full数值事实/48内外grid同一；旧素材/失败留档。主首delta脚本误迭代aggregate为有观测leaf，assert原件保留，随后只补catalogue四leaf+层级核算/6增量，没有重生成/原54重跑。MSE/WIS精确指标初20断言、巨大指数构造异常及独立声明P2修复/非unit锚点均有原件。下一最便宜实质闭环是一个registered outer及三个inner、两个有效科学配置真实隔离预测→实际selector→outer，随后完整参考矩阵；不是再重复toy/生成或仅写更多叶。完整L02及其余研究/决策/教学题仍未冻结。
 
 最终增量独立L02材料35项2.079秒通过，仅6新开发origin的core/SQL，未新build/decode/旧48矩阵/forecast；8个public ZIP成员与实际开发一致、9个当前源/尺度/发布事实核同。首validator assert只有主方当时工具输出，未捕获原生terminal文件，后补observer收据明示来源，独立审查不称已读该原生文件。L06/0.3计划和17项小机制也无当前数学阻断，完整新业务/冻结/小时仍未批准。全部候选/本轮评估完整求解已终态，六旧昂贵容器刚实际再次inspect均Paused。
+
+
+## 最新接续Recall：完整每日数值参考已独立资格，尚未冻结L02
+
+本轮先读Git/AGENTS/全部相关Recall和benchmark-debug-template，保护其他任务176条视频/图片删除、索引排序与Bun未跟踪目录。L06旧真实两100/0.3建设不变，无重复候选或旧solver。L02方法池先于预测注册，只有seasonal与weather作选择、no-weather是outer必交消融，所有格必交，不按outer结果换池/调参。
+
+当前唯一每日入口run_l02_study.py；原CSV packet按唯一asof_input.project许可业务键选行，full/packet共用decode_materials.read_fact_tables。共享解析重构实际两role decoder4.459/3.258秒与原canonical/grid同一，无重生成/54重跑。原7点OLS/专属qualify从current-source退役，原源码/收据在既有ZIP和source-before，不保留forecast fallback。新daily_data、daily_reference、selection、study_data/runner、summary/plot与reference-pool都在当前L02源/合同。
+
+主方outer-Jan15+三个inner真实10进程49.250秒；单层独立June20新目录冷复建10进程49.775秒；随后只运行其余10outer，100进程481.212秒自然终态。全部1CPU/netnone/只读最小source与本次input/new output，均先封存完整原件后精确rm自有CID。总计108forecast/12selector、84格每forecast、实际NumPy2.4.6/42配对残差；它们是作者数值参考，不是模型候选或小时。当前这些组全部终态，无活跃完整数值任务；不要重跑Jan/June/其余10或恢复六旧Paused任务。
+
+独立Jan/June各148、额外隔离/decoder51、其余10各168及全期172语义/最后12连接核验分别覆盖真实CSV/SQL、Fraction逐节点/总指标、所有拟合来源/参数继承、当前完整mean/分位点、实际选择最小ID、120终态。不是独立统计样本数，也未独立重拟合每一系数。审查器末print Decimal导致exit1与72个初false（Decimal图示比较float/CSV选中标记1/0被假定True/False）全部保留，100精确计算原过，另0.139秒只修72展示绑定，不重预测/1680。最终限定scope blocking=[]，独立agent实际查看新PNG，普通专业人类/统计成熟未认证。
+
+科学结果：全期scaled MSE baseline.0255107819、weather/selected.0049044870、no-weather.0044366055；WIS .0716160899/.0268860019/.0251600710。全部12inner合法选weather；no-weather更优的外层事实保留，不事后换选择池。June图真实显示A2关闭后两个ridge全样本0，而A1/ZA在Jul1–4真值均13751.75L、预测9341.10L、中央80%命中0/4。图色建议已只改区间颜色绑定selected均线，另新目录实际重绘并主/独立view；旧图/新图/同input/实际终态保留，不重预测。最初生成修图helper的PowerShell引号SyntaxError/随后缺文件ENOENT仅启动包装失败，观察者说明在ZIP，正确新wrapper实际exit0后才更新图。
+
+新工具原错误与根治均保存：null inner context初AttributeError→当前facility_selection_packet_invalid/exit3，缺row/origin仍selection_incomplete/exit2，原合法选择同一；隔离sentinel重入初exit3覆盖旧assessment，当前CLI先取得新out所有权，旧目录仅stdout具名拒绝、原数据保留，新owned非法origin仍写本次run_invalid。最后wrapper边界修改没热改已跑旧PID，不冒称旧冷跑逐字节执行最终wrapper。完整source/version差异、原失败与修后必要CLI都保留。两真实selector数值控制仅改变合法inner预测以产生0损最小值/同分，正确选baseline/字典序；合成perfect预测不当真实可达或成绩。
+
+核心证据：cases/L02/evaluator/qualification/daily-full-reference的REPORT、精确assessment/CSV/图/数值原件；daily-independent-review的PLAN/COLD/FULL报告、机器结论/实际新图追加及完整原件。外部D:/opencorvus-benchmark-runs/l02-daily-loop-qualification-20261030和l02-daily-loop-independent-review-20261030保留全部原per-process ZIP。repo压缩包对324重复packet成员逐字节核同后去重并留mapping，只证明归档身份，功能来自独立实际核验，不使用无效source摘要门。全部full raw仍只评估侧，候选未来只拿public。
+
+下一步须直接推进通用候选数值执行/完整研究与运营交付、预先质量目标/低质量对照、原子rubric/人评锚点/完整聚合与独立冻结；不能继续重做本轮toy/54投影/120进程凑工作量，也不能按A1现误差填宽线。质量底线仍null、完整L02未冻结；L06新0.3完整业务/多阶段可见信息/承诺续接与其余L01/L03/L04/L05/L07-L10仍待。整套冻结1/10、候选有效小时0/10、目标未达成，心跳ACTIVE；无总token/总墙钟限制，cheap-first继续。所有本任务改动范围commit、正常fetch/merge/检查待推/hook/push，结束git status保留用户改动。
