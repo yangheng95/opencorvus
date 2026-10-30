@@ -12,8 +12,8 @@
     "R": 15,
     "E": 10
   },
-  "aggregation": "sum weight*binary rating; unknown/unexecuted=0; no prose substitution",
-  "acceptance": "score>=80, all critical leaves full including every PDE quality floor, solution_reproduced=true, actual full independent clean retraining and two independent assessments; study_complete alone is not acceptance; not yet empirically validated",
+  "aggregation": "fixed denominator100; binary verified_pass/verified_fail; blocked or unassessed keeps total null; a known critical failure already precludes good. No half/N/A or missing-cell denominator deletion.",
+  "acceptance": "score>=80, study_complete=true, solution_reproduced=true and every critical leaf verified_pass; controlled complete source-only execution plus the one user-authorized independent whole-case review. Unfrozen case has no publishable score.",
   "pendingResultPoints": 9,
   "leaves": [
     {
@@ -22,7 +22,7 @@
       "weight": 1,
       "requirement": "Correct exact operator, verified on analytic solution and hand-calculated non-solution",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -32,7 +32,7 @@
       "weight": 1,
       "requirement": "Correct exact operator, verified on analytic solution and hand-calculated non-solution",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -42,7 +42,7 @@
       "weight": 1,
       "requirement": "Correct exact operator, verified on analytic solution and hand-calculated non-solution",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -52,7 +52,7 @@
       "weight": 0.5,
       "requirement": "Correct convection-initial and its contribution to pooled constraint loss",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -62,7 +62,7 @@
       "weight": 0.5,
       "requirement": "Correct convection-periodic and its contribution to pooled constraint loss",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -72,7 +72,7 @@
       "weight": 0.5,
       "requirement": "Correct reaction-initial and its contribution to pooled constraint loss",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -82,7 +82,7 @@
       "weight": 0.5,
       "requirement": "Correct reaction-periodic and its contribution to pooled constraint loss",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -92,7 +92,7 @@
       "weight": 0.5,
       "requirement": "Correct wave-initial and its contribution to pooled constraint loss",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -102,7 +102,7 @@
       "weight": 0.5,
       "requirement": "Correct wave-velocity and its contribution to pooled constraint loss",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -112,7 +112,7 @@
       "weight": 0.5,
       "requirement": "Correct wave-left and its contribution to pooled constraint loss",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -122,7 +122,7 @@
       "weight": 0.5,
       "requirement": "Correct wave-right and its contribution to pooled constraint loss",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -132,7 +132,7 @@
       "weight": 1,
       "requirement": "Exact public architecture",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -142,7 +142,7 @@
       "weight": 1,
       "requirement": "Exact public xavier-paired-initialization",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -152,7 +152,7 @@
       "weight": 1,
       "requirement": "Exact public float64",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -162,7 +162,7 @@
       "weight": 1,
       "requirement": "Independent nontrivial function and numeric derivative verification of input-first-derivatives",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -172,7 +172,7 @@
       "weight": 1,
       "requirement": "Independent nontrivial function and numeric derivative verification of input-second-derivatives",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -182,7 +182,7 @@
       "weight": 2,
       "requirement": "Independently verified parameter-gradient under the public contract",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -192,7 +192,7 @@
       "weight": 2,
       "requirement": "Independently verified hessian-vector-product under the public contract",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -202,7 +202,7 @@
       "weight": 2,
       "requirement": "Independently verified authoritative-grid under the public contract",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -212,7 +212,7 @@
       "weight": 2,
       "requirement": "Independently verified fixed-shared-sampling under the public contract",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -222,7 +222,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For convection-adam-s345-lr1e-04: independently verified real-execution bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -232,7 +232,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For convection-adam-s345-lr1e-04: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -242,7 +242,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For convection-adam-s345-lr1e-04: independently verified residual-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -252,7 +252,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For convection-adam-s345-lr1e-04: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -262,7 +262,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For convection-adam-s345-lr1e-04: independently verified l2re bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -272,7 +272,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For convection-adam-s345-lr1e-04: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -282,7 +282,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For convection-lbfgs-s345-lrnone: independently verified real-execution bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -292,7 +292,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For convection-lbfgs-s345-lrnone: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -302,7 +302,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For convection-lbfgs-s345-lrnone: independently verified residual-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -312,7 +312,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For convection-lbfgs-s345-lrnone: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -322,7 +322,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For convection-lbfgs-s345-lrnone: independently verified l2re bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -332,7 +332,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For convection-lbfgs-s345-lrnone: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -342,7 +342,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For convection-hybrid-s345-lr1e-04: independently verified real-execution bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -352,7 +352,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For convection-hybrid-s345-lr1e-04: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -362,7 +362,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For convection-hybrid-s345-lr1e-04: independently verified residual-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -372,7 +372,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For convection-hybrid-s345-lr1e-04: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -382,7 +382,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For convection-hybrid-s345-lr1e-04: independently verified l2re bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -392,7 +392,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For convection-hybrid-s345-lr1e-04: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -402,7 +402,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For reaction-adam-s345-lr1e-03: independently verified real-execution bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -412,7 +412,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For reaction-adam-s345-lr1e-03: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -422,7 +422,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For reaction-adam-s345-lr1e-03: independently verified residual-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -432,7 +432,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For reaction-adam-s345-lr1e-03: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -442,7 +442,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For reaction-adam-s345-lr1e-03: independently verified l2re bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -452,7 +452,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For reaction-adam-s345-lr1e-03: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -462,7 +462,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For reaction-lbfgs-s345-lrnone: independently verified real-execution bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -472,7 +472,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For reaction-lbfgs-s345-lrnone: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -482,7 +482,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For reaction-lbfgs-s345-lrnone: independently verified residual-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -492,7 +492,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For reaction-lbfgs-s345-lrnone: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -502,7 +502,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For reaction-lbfgs-s345-lrnone: independently verified l2re bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -512,7 +512,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For reaction-lbfgs-s345-lrnone: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -522,7 +522,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For reaction-hybrid-s345-lr1e-03: independently verified real-execution bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -532,7 +532,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For reaction-hybrid-s345-lr1e-03: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -542,7 +542,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For reaction-hybrid-s345-lr1e-03: independently verified residual-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -552,7 +552,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For reaction-hybrid-s345-lr1e-03: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -562,7 +562,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For reaction-hybrid-s345-lr1e-03: independently verified l2re bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -572,7 +572,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For reaction-hybrid-s345-lr1e-03: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -582,7 +582,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For wave-adam-s345-lr1e-03: independently verified real-execution bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -592,7 +592,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For wave-adam-s345-lr1e-03: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -602,7 +602,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For wave-adam-s345-lr1e-03: independently verified residual-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -612,7 +612,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For wave-adam-s345-lr1e-03: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -622,7 +622,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For wave-adam-s345-lr1e-03: independently verified l2re bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -632,7 +632,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For wave-adam-s345-lr1e-03: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -642,7 +642,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For wave-lbfgs-s345-lrnone: independently verified real-execution bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -652,7 +652,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For wave-lbfgs-s345-lrnone: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -662,7 +662,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For wave-lbfgs-s345-lrnone: independently verified residual-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -672,7 +672,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For wave-lbfgs-s345-lrnone: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -682,7 +682,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For wave-lbfgs-s345-lrnone: independently verified l2re bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -692,7 +692,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For wave-lbfgs-s345-lrnone: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -702,7 +702,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For wave-hybrid-s345-lr1e-03: independently verified real-execution bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -712,7 +712,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For wave-hybrid-s345-lr1e-03: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -722,7 +722,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For wave-hybrid-s345-lr1e-03: independently verified residual-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -732,7 +732,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For wave-hybrid-s345-lr1e-03: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -742,7 +742,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For wave-hybrid-s345-lr1e-03: independently verified l2re bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -752,7 +752,7 @@
       "weight": 0.3333333333333333,
       "requirement": "For wave-hybrid-s345-lr1e-03: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -762,7 +762,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-adam-s456-lr1e-04: independently verified real-execution bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -772,7 +772,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-adam-s456-lr1e-04: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -782,7 +782,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-adam-s456-lr1e-04: independently verified residual-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -792,7 +792,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-adam-s456-lr1e-04: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -802,7 +802,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-adam-s456-lr1e-04: independently verified l2re bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -812,7 +812,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-adam-s456-lr1e-04: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -822,7 +822,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-lbfgs-s456-lrnone: independently verified real-execution bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -832,7 +832,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-lbfgs-s456-lrnone: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -842,7 +842,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-lbfgs-s456-lrnone: independently verified residual-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -852,7 +852,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-lbfgs-s456-lrnone: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -862,7 +862,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-lbfgs-s456-lrnone: independently verified l2re bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -872,7 +872,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-lbfgs-s456-lrnone: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -882,7 +882,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-hybrid-s456-lr1e-04: independently verified real-execution bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -892,7 +892,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-hybrid-s456-lr1e-04: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -902,7 +902,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-hybrid-s456-lr1e-04: independently verified residual-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -912,7 +912,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-hybrid-s456-lr1e-04: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -922,7 +922,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-hybrid-s456-lr1e-04: independently verified l2re bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -932,7 +932,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-hybrid-s456-lr1e-04: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -942,7 +942,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-adam-s567-lr1e-04: independently verified real-execution bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -952,7 +952,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-adam-s567-lr1e-04: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -962,7 +962,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-adam-s567-lr1e-04: independently verified residual-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -972,7 +972,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-adam-s567-lr1e-04: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -982,7 +982,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-adam-s567-lr1e-04: independently verified l2re bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -992,7 +992,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-adam-s567-lr1e-04: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1002,7 +1002,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-lbfgs-s567-lrnone: independently verified real-execution bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1012,7 +1012,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-lbfgs-s567-lrnone: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1022,7 +1022,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-lbfgs-s567-lrnone: independently verified residual-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1032,7 +1032,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-lbfgs-s567-lrnone: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1042,7 +1042,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-lbfgs-s567-lrnone: independently verified l2re bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1052,7 +1052,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-lbfgs-s567-lrnone: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1062,7 +1062,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-hybrid-s567-lr1e-04: independently verified real-execution bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1072,7 +1072,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-hybrid-s567-lr1e-04: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1082,7 +1082,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-hybrid-s567-lr1e-04: independently verified residual-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1092,7 +1092,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-hybrid-s567-lr1e-04: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1102,7 +1102,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-hybrid-s567-lr1e-04: independently verified l2re bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1112,7 +1112,7 @@
       "weight": 0.2222222222222222,
       "requirement": "For convection-hybrid-s567-lr1e-04: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1122,7 +1122,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-adam-s345-lr1e-03: independently verified real-execution bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1132,7 +1132,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-adam-s345-lr1e-03: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1142,7 +1142,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-adam-s345-lr1e-03: independently verified residual-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1152,7 +1152,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-adam-s345-lr1e-03: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1162,7 +1162,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-adam-s345-lr1e-03: independently verified l2re bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1172,7 +1172,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-adam-s345-lr1e-03: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1182,7 +1182,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-hybrid-s345-lr1e-03: independently verified real-execution bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1192,7 +1192,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-hybrid-s345-lr1e-03: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1202,7 +1202,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-hybrid-s345-lr1e-03: independently verified residual-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1212,7 +1212,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-hybrid-s345-lr1e-03: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1222,7 +1222,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-hybrid-s345-lr1e-03: independently verified l2re bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1232,7 +1232,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-hybrid-s345-lr1e-03: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1242,7 +1242,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-adam-s345-lr1e-02: independently verified real-execution bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1252,7 +1252,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-adam-s345-lr1e-02: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1262,7 +1262,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-adam-s345-lr1e-02: independently verified residual-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1272,7 +1272,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-adam-s345-lr1e-02: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1282,7 +1282,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-adam-s345-lr1e-02: independently verified l2re bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1292,7 +1292,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-adam-s345-lr1e-02: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1302,7 +1302,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-hybrid-s345-lr1e-02: independently verified real-execution bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1312,7 +1312,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-hybrid-s345-lr1e-02: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1322,7 +1322,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-hybrid-s345-lr1e-02: independently verified residual-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1332,7 +1332,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-hybrid-s345-lr1e-02: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1342,7 +1342,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-hybrid-s345-lr1e-02: independently verified l2re bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1352,7 +1352,7 @@
       "weight": 0.16666666666666666,
       "requirement": "For convection-hybrid-s345-lr1e-02: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1362,7 +1362,7 @@
       "weight": 1,
       "requirement": "Known SPD matrix approximation and stable shift",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1372,7 +1372,7 @@
       "weight": 1,
       "requirement": "Known matrix inverse-preconditioner action",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1382,7 +1382,7 @@
       "weight": 1,
       "requirement": "Known SPD solution matches direct solve",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1392,7 +1392,7 @@
       "weight": 1,
       "requirement": "Explicit residual proves the registered tolerance",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1402,7 +1402,7 @@
       "weight": 0.4,
       "requirement": "Exact selected common finite parent numeric state verified for convection-gd-continuation-0.0001",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1412,7 +1412,7 @@
       "weight": 0.6,
       "requirement": "Independent terminal network metrics and finite gradients verified for convection-gd-continuation-0.0001",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1422,7 +1422,7 @@
       "weight": 0.5,
       "requirement": "Actual fixed-learning-rate GD updates and truthful terminal state",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1432,7 +1432,7 @@
       "weight": 0.4,
       "requirement": "Exact selected common finite parent numeric state verified for convection-gd-continuation-0.001",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1442,7 +1442,7 @@
       "weight": 0.6,
       "requirement": "Independent terminal network metrics and finite gradients verified for convection-gd-continuation-0.001",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1452,7 +1452,7 @@
       "weight": 0.5,
       "requirement": "Actual fixed-learning-rate GD updates and truthful terminal state",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1462,7 +1462,7 @@
       "weight": 0.4,
       "requirement": "Exact selected common finite parent numeric state verified for convection-nncg-continuation-0.01",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1472,7 +1472,7 @@
       "weight": 0.6,
       "requirement": "Independent terminal network metrics and finite gradients verified for convection-nncg-continuation-0.01",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1482,7 +1482,7 @@
       "weight": 0.3333333333333333,
       "requirement": "Actual sufficient decrease and step-size trials; algorithm failure is recorded as such",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1492,7 +1492,7 @@
       "weight": 0.6666666666666666,
       "requirement": "Registered damping, rank, refresh, PCG and actual accepted NNCG updates with real execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1502,7 +1502,7 @@
       "weight": 0.4,
       "requirement": "Exact selected common finite parent numeric state verified for convection-nncg-continuation-0.1",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1512,7 +1512,7 @@
       "weight": 0.6,
       "requirement": "Independent terminal network metrics and finite gradients verified for convection-nncg-continuation-0.1",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1522,7 +1522,7 @@
       "weight": 0.3333333333333333,
       "requirement": "Actual sufficient decrease and step-size trials; algorithm failure is recorded as such",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1532,7 +1532,7 @@
       "weight": 0.6666666666666666,
       "requirement": "Registered damping, rank, refresh, PCG and actual accepted NNCG updates with real execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1542,7 +1542,7 @@
       "weight": 1,
       "requirement": "Only eligible seed345 hybrid terminal train loss selects the parent; ties and missing-parent cases follow profile",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1552,7 +1552,7 @@
       "weight": 1,
       "requirement": "Actual closures, gradient/Hessian vector products, attempts, accepted updates and timing for all branches",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1562,7 +1562,7 @@
       "weight": 2,
       "requirement": "Known small SPD full spectrum and explicit Ritz residuals",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1572,7 +1572,7 @@
       "weight": 3,
       "requirement": "Real selected full-loss Hessian extreme Ritz estimates with explicit residuals",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1582,7 +1582,7 @@
       "weight": 1.5,
       "requirement": "Real PDE-residual component spectrum, including exact zero parameter derivatives",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1592,7 +1592,7 @@
       "weight": 1.5,
       "requirement": "Real constraint component spectrum and its relation to residual conditioning",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1602,7 +1602,7 @@
       "weight": 2,
       "requirement": "Symmetric preconditioned operator or explicit independently checked PCG convergence comparison",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1612,7 +1612,7 @@
       "weight": 1.0,
       "requirement": "PENDING: independently measured l2re of the single convection final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "calibration-pending",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient",
       "metric": "l2re",
@@ -1626,7 +1626,7 @@
       "weight": 1.0,
       "requirement": "PENDING: independently measured evaluation_residual_rmse of the single convection final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "calibration-pending",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient",
       "metric": "evaluation_residual_rmse",
@@ -1640,7 +1640,7 @@
       "weight": 0.5,
       "requirement": "PENDING: independently measured constraint_families.initial_value.rmse of the single convection final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "calibration-pending",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient",
       "metric": "constraint_families.initial_value.rmse",
@@ -1654,7 +1654,7 @@
       "weight": 0.5,
       "requirement": "PENDING: independently measured constraint_families.periodic_value.rmse of the single convection final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "calibration-pending",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient",
       "metric": "constraint_families.periodic_value.rmse",
@@ -1668,7 +1668,7 @@
       "weight": 1.0,
       "requirement": "PENDING: independently measured l2re of the single reaction final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "calibration-pending",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient",
       "metric": "l2re",
@@ -1682,7 +1682,7 @@
       "weight": 1.0,
       "requirement": "PENDING: independently measured evaluation_residual_rmse of the single reaction final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "calibration-pending",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient",
       "metric": "evaluation_residual_rmse",
@@ -1696,7 +1696,7 @@
       "weight": 0.5,
       "requirement": "PENDING: independently measured constraint_families.initial_value.rmse of the single reaction final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "calibration-pending",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient",
       "metric": "constraint_families.initial_value.rmse",
@@ -1710,7 +1710,7 @@
       "weight": 0.5,
       "requirement": "PENDING: independently measured constraint_families.periodic_value.rmse of the single reaction final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "calibration-pending",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient",
       "metric": "constraint_families.periodic_value.rmse",
@@ -1724,7 +1724,7 @@
       "weight": 1.0,
       "requirement": "PENDING: independently measured l2re of the single wave final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "calibration-pending",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient",
       "metric": "l2re",
@@ -1738,7 +1738,7 @@
       "weight": 1.0,
       "requirement": "PENDING: independently measured evaluation_residual_rmse of the single wave final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "calibration-pending",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient",
       "metric": "evaluation_residual_rmse",
@@ -1752,7 +1752,7 @@
       "weight": 0.25,
       "requirement": "PENDING: independently measured constraint_families.initial_value.rmse of the single wave final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "calibration-pending",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient",
       "metric": "constraint_families.initial_value.rmse",
@@ -1766,7 +1766,7 @@
       "weight": 0.25,
       "requirement": "PENDING: independently measured constraint_families.initial_velocity.rmse of the single wave final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "calibration-pending",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient",
       "metric": "constraint_families.initial_velocity.rmse",
@@ -1780,7 +1780,7 @@
       "weight": 0.25,
       "requirement": "PENDING: independently measured constraint_families.boundary_left.rmse of the single wave final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "calibration-pending",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient",
       "metric": "constraint_families.boundary_left.rmse",
@@ -1794,7 +1794,7 @@
       "weight": 0.25,
       "requirement": "PENDING: independently measured constraint_families.boundary_right.rmse of the single wave final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "calibration-pending",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient",
       "metric": "constraint_families.boundary_right.rmse",
@@ -1808,7 +1808,7 @@
       "weight": 1,
       "requirement": "Claims match actual cross-problem-transfer observations and their limited inferential scope",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1818,7 +1818,7 @@
       "weight": 1,
       "requirement": "Claims match actual paired-convection-seeds observations and their limited inferential scope",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1828,7 +1828,7 @@
       "weight": 1,
       "requirement": "Claims match actual single-seed-learning-rate observations and their limited inferential scope",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1838,7 +1838,7 @@
       "weight": 1,
       "requirement": "Plot coordinates and units map to actual registered trajectory data",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1848,7 +1848,7 @@
       "weight": 1,
       "requirement": "Actually rendered and inspected paper/plots have readable axes, units, captions and complete layout",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1858,7 +1858,7 @@
       "weight": 1,
       "requirement": "Original-vs-derived contracts, GPU timing, negative results and unknowns stated correctly",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1868,7 +1868,7 @@
       "weight": 2,
       "requirement": "Clean environment rebuild from committed source and public dependencies",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1878,7 +1878,7 @@
       "weight": 3,
       "requirement": "Independent full registered retraining; re-evaluation of old checkpoints is distinguished",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1888,7 +1888,7 @@
       "weight": 3,
       "requirement": "Independent scalar, derivative and final numeric result crosschecks agree within public tolerance",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1898,7 +1898,7 @@
       "weight": 0.5,
       "requirement": "New PID restores real Adam state and matches uninterrupted 100-update branch",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1908,7 +1908,7 @@
       "weight": 0.5,
       "requirement": "New PID restores L-BFGS history/counts and matches uninterrupted branch",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1918,7 +1918,7 @@
       "weight": 1,
       "requirement": "Environment/model-tool/valid training/idle time reported separately with overlap handled",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1928,7 +1928,7 @@
       "weight": 0.4,
       "requirement": "Exact selected common finite parent numeric state verified for convection-nncg-continuation-1.0",
       "critical": true,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1938,7 +1938,7 @@
       "weight": 0.6,
       "requirement": "Independent terminal network metrics and finite gradients verified for convection-nncg-continuation-1.0",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1948,7 +1948,7 @@
       "weight": 0.3333333333333333,
       "requirement": "Actual sufficient decrease and step-size trials; algorithm failure is recorded as such",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     },
@@ -1958,7 +1958,7 @@
       "weight": 0.6666666666666666,
       "requirement": "Registered damping, rank, refresh, PCG and actual accepted NNCG updates with real execution",
       "critical": false,
-      "rating": "binary: verified=1, unmet/unknown=0",
+      "rating": "binary verified_pass=1/verified_fail=0; blocked/unassessed unresolved and no final total",
       "status": "review-draft",
       "evidence": "actual committed implementation + executed receipts + independent numeric/clean replay; candidate prose alone insufficient"
     }
@@ -1967,5 +1967,21 @@
     "study_complete": "protocol, truthful terminals and research artifacts independently verified; honest negative findings can qualify as a completed study",
     "solution_reproduced": "all PDE quality floors simultaneously met by each PDE selected eligible checkpoint; no score compensation",
     "qualification_status": "unfrozen; selection and atomic metrics defined, numeric thresholds and full constructive qualification still pending; no candidate score"
+  },
+  "outcome_contract": {
+    "minimum_score": 80,
+    "fixed_denominator": 100,
+    "independent_review_count": 1,
+    "study_delivery_ids": [
+      "L01-R-cross-problem-transfer",
+      "L01-R-paired-convection-seeds",
+      "L01-R-single-seed-learning-rate",
+      "L01-R-figures-data",
+      "L01-R-figures-visual",
+      "L01-R-scope-and-hardware"
+    ],
+    "quality_source": "profile.solution_selection",
+    "unknown_or_unexecuted": "unresolved, total null; not fabricated pass/fail",
+    "state_precedence": "verified failure is preserved over blocked/unassessed; external review cannot overwrite machine prerequisites or14numeric quality judgments"
   }
 }

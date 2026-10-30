@@ -70,3 +70,5 @@
 从同一个选定checkpoint报告L2RE、全部8385公开评价点的PDE残差、每个初边值族质量，不拼不同模型的各项最小值。指标定义：`evaluation_residual_loss=.5 mean(r²)`，`evaluation_residual_rmse=sqrt(mean(r²))`；训练`residual_loss`保留原定义。`constraint_families`逐族给`count/loss/rmse`，其中loss同为半均方、rmse为均方根；convection/reaction是`initial_value/periodic_value`，wave是`initial_value/initial_velocity/boundary_left/boundary_right`。训练constraint_loss为按各族count加权的loss，不能改成无权族均值。
 
 独立权重检查只能证明离散公开网格上的这些量。数值实现的1e-10/1e-9一致容差与物理解质量阈值分开；当前后者仍pending。结构/端点检查返回`artifact_contract_checked`仅表示注册覆盖、声明计数、文件/权重合同、配对及选优的检查，不认证逐尝试日志内容、训练来源、科学结论、恢复、完整复训或论文。`study_complete/solution_reproduced`必须经相应实际执行与独立审查后另行判断。
+
+当前逐行字段和前置依赖按[TRACE-CONTRACT.draft.md](TRACE-CONTRACT.draft.md)明确；无更新的梯度终态检查不伪算attempt，shared prefix须提供完整可验证逻辑轨迹。科学结果与固定分母聚合按[OUTCOMES.draft.md](OUTCOMES.draft.md)，未评/未执行不再混称已失败或已有0分；原权重100/19+5及单final选择不变。

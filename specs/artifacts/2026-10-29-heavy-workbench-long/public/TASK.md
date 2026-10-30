@@ -74,3 +74,5 @@ Nyström合同：在CUDA上以float64和单独`torch.Generator(device="cuda").ma
 使用已准备本地Docker科学镜像和GPU（Graphics Processing Unit，图形处理器），在自己的运行目录创建自有容器；不要重启Docker或Windows Subsystem for Linux（WSL，适用于Linux的Windows子系统）、关闭用户进程或修改宿主全局依赖。只读取本项目公开输入和系统工具/已准备依赖，不读取仓库评分器、其他运行根、旧答案或私有凭据。禁止作者代码（随包blacklist）与外部模型；无须外部数据集或账号。原论文/图的许可与来源见随包SOURCE.md。
 
 没有总模型token或总墙钟截断。环境准备、有效模型/工具工作、有效训练/复训和无活动等待分别记录；重叠时间不相加。不要等待凑时长，完成即交付；单次训练耗时长时保存真实进度与可复核状态，不能用心跳文字冒充工作。没有完成的配置如实报告，最终分数以实际执行与交付证据为准。
+
+当前整题机读澄清见[TRACE-CONTRACT.draft.md](TRACE-CONTRACT.draft.md)和[OUTCOMES.draft.md](OUTCOMES.draft.md)。quality-policy.draft.json把已先行登记的1%/独立物理目标写成公开机器字段，仍待原注册优化合同可达及一次整题独审，未冻结/未发布分数。固定原19+5、输入/损失/初始化/方法/选择与权重不因本澄清变化；结构容量对照不入原合法选择。

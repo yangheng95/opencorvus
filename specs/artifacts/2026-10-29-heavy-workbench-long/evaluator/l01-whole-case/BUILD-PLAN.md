@@ -52,3 +52,15 @@ assess_existing.py本轮6.5秒完成7个真实既有导出与6个实际常数网
 完整软件覆盖19基础+5续训的唯一profile、逐attempt/真实closure点与计数、同初始化/合法Adam前缀共享、保存模型/optimizer/RNG、显式--resume新进程分叉、实际new-PID恢复比较、Hessian/各组件谱与同系统PCG、科学分析/原图/PDF/复建。官方旧解选择仍只从原24轨迹，结构控制分列不洗掉优化失败。完整grader/合同冻结还须实际整份数据与一次集中整审，当前仍9/10，不能把源码或正向小测当第十题。
 
 正式作者项目D:/opencorvus-benchmark-runs/l01-full-case-20261031/author-project在首个私有更新前封完整源/inputs/plan/requirements。先执行注册纯convection L-BFGS（seed345、原41000上限/真实自然早停），从随机初始化验证完整入口/原输出/实际论文图；这是正式矩阵的一格，不是缩小参数toy。该自然段完成并通过同一artifact reader后，用同一只读封存源对同一原输出--continue-study执行尚未执行的原注册格，不重首格或旧24训练。该选项只接受自然完成的前段，显式已中断阶段仍用保存状态分叉，不包装掉电/任意并发恢复。所有实际段/partial分析/PID/源不覆盖；最终参考只计真实完整原对象。只有一组新GPU活动，其他旧任务继续暂停，真实有效训练没有机械总墙钟截断。
+
+## 整题checker实施前分析
+
+可观察缺口：pinn_submission_check只是形状/独立端点和选择，不检查逐attempt/closure真实计数，也不接原native与175研究判断、14质量叶或固定分母聚合。其exit0明确不认证科学；不能拿它当已冻整题。已搜索全部check_submission/select_minimum调用和公开OUTPUTS、189叶及其他整题review绑定模式，保留这一个当前reader和NumPy指标，不复制推理/选择，不改正在运行的source/profile。生产模型路由/调度/UI/schema不涉及。
+
+新增仅L01的check_l01.py：prepare/grade均从已闭合source ZIP与原native ZIP只读重建，原native必须真实terminal；public profile/rubric/目标先校验，设施无效优先。标准ZIP安全相对成员写入全新目录；不执行candidate pickle。source/execution闭合对象SHA256只证明独评绑定到同一不可变原件，绝不作为方法/结果正确性门，不比较可变工作目录源码hash/换行。真实功能仍靠已捕获源码运行、数值权重/轨迹、原native与独立研究判断。
+
+维持原24注册与选择。逐trace按phase记录连续attempt/accepted、零步/失败、实际closure数量及cost、终态必要条件；这些只是可核的必要条件，不能从自报轨迹认定真实优化，175研究叶仍需一次整题独审。机读前置失败不能被review覆盖；14R质量只由同一独立选择final及事前目标产生，不接受review替写机器项。未开始/依赖未执行/设施与已观察失败分开，不首错后把全部判过或全部判失败。需要新增公开精确trace/执行形状时只补未冻合同文案；训练源保持原已封版本，不热修PID。
+
+prepare写绑定原capsule/合同语义的assignment和真实metrics/trace事实，grade重新由原capsule计算并接精确175独评；未知/未评总分null、分母100不变。study_complete是完整真实协议/研究交付，solution_reproduced要求14质量及来源资格；任一PDE失败不可补分。原draft状态继续阻止分数发布，只有完整可达/整题校准/一层独审后FREEZE才允许正式分数；不因写了checker宣布第十题。当前原要求“两独评”按用户明确只授权一层独评收敛，不再额外委托。实际正错programme在原真实运行可封末态后进入同一个checker，不造全矩阵执行成绩；活跃矩阵不重跑。
+
+整题合同澄清只替换未冻rubric的unknown=0/两独评旧文字为四状态、固定分母和用户授权的一次整题独评；189ID/权重/critical/80线、原24配置/输入/方法/选择完全不变。14threshold仍null，新的公开quality-policy.draft只序列化先行目标并明确不证明原优化器可达，不提前冻结。原TASK/OUTPUTS/profile/rubric先封pre-checker-draft-contract.zip。新文案未被当前已封训练项目读取，不冒称当前source用过后增文案；它与实际既有trace字段一致，不热改source或PID。

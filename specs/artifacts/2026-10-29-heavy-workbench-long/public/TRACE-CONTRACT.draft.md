@@ -1,0 +1,13 @@
+# L01逐尝试机读字段（未冻结澄清）
+
+研究逻辑轨迹仍是原19基础/5续训，不增加实验或更新数。每个manifest.record.trace定位UTF-8 JSONL；完整逻辑轨迹包括合法共享Adam前缀的真实逐尝试行，可加shared_prefix_source作来源标记，物理成本不能重复相加。文件名、字典键序或额外诊断字段不作评分门；规定字段用于验证实际计数/状态，报告可用等价完整JSON/表/公式，不要求复制数字或特定措辞。
+
+普通尝试行：phase为adam/lbfgs/gd/nncg；attempt从1按阶段连续；accepted_before/accepted_after为真实非负整数，布尔不是整数；loss_before/loss_after、gradient_inf_before、step_inf是该实际点的有限非负值，已记录数值失败的非有限量用null附具名原因。非零、有限、真正接受的更新才增加accepted。status=max_updates在中途只是正常分支类别，**不是每行都已终态**；只有原execution receipt与实际计数能认定最终到限。gradient_converged/finite_plateau/optimizer_stalled/numerical_failure/algorithm_failure首次出现后不继续该阶段。L-BFGS finite_plateau必须真实连续25接受步同时满足原tiny判据，零变化尝试不算接受。
+
+costs_total/costs_increment至少有closure_calls/gradient_calls/hvp_calls/lbfgs_native_iterations四非负整数；累计差与增量一致，跨合法共享阶段继承。L-BFGS closures是全部真实回调试探的数组，每项trial从0连续，loss、alpha、delta_inf、gradient_dot_direction、direction_consistency_inf标明实际点/方向与线搜索；闭包次数不冒充更新。不能由最后标签、文件存在或自报日志推定真实训练，评估还将核受控源码执行和独立数值。
+
+NNCG接受更新必须附pcg.status=converged、显式相对残差<=1e-8、gtd<0和armijo_trials；每项alpha/loss/bound满足bound=L_before+.1*alpha*gtd，最后真实接受点满足充分下降且与loss_after相同。失败尝试保PCG/曲率/试探与成本，接受数不增，具名原因不静默换算法。sketch_refresh保存实际seed/delta/rank/特征值并满足原20步刷新。GD step_size为对应固定原学习率。
+
+无更新的梯度终态检查独立标terminal_check=true，phase/attempt/accepted_after指向此前实际计数，step_inf=0、gradient_inf_after给出实际梯度；它不增加optimizer attempt。L-BFGS需<=1e-9，GD/NNCG为精确零梯度。终态检查发生的一次实际梯度求值仍计入最终gradient_calls，不冒充已接受更新。普通L-BFGS接受后gradient_converged也须给fresh gradient_inf_after。
+
+trace字段只是必要一致性条件。最终loss必须与同一真实final八数组在权威点重算一致；真实初始化/方法/中间状态来源仍由受控完整源码执行与一次整题独审判断，不能靠编造同形日志获得方法分。原公开数据/初始化/19+5/单final选择/训练失败语义不变。本澄清晚于首份作者source封存，当前原源码已产生这些字段；不声称原source读取过此后增文案。

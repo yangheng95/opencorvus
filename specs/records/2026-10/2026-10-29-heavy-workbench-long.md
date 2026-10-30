@@ -626,3 +626,15 @@ L02当前版本对这两个系统未拉开区分度，不能拿两100说难度�
 本轮静止原件evaluator/l01-whole-case/first-scientific-results，实际图/命令/原错误与新增数值封ZIP；不封活跃matrix伪完成。原reaction32MB完整capsule和大型旧optimizer状态明确保外部。其余五旧任务实际Paused（四GPU+旧L06），reaction/移植已经自然终态。L02/L06双100升级义务仍保留，退休API/旧矩阵不重。
 
 完整L01当前合同的全矩阵/质量可达、正式全checker/真实坏programme/原子锚点/整审/冻结仍未完成，套件9/10、有效候选小时0/10、专业统计成熟未认证；不拿本阶段代替第十题。后续接续原owner/真实末态，普通工具/科学问题据实际根因解决，禁止恢复全部GPU或重复旧测试凑量。本轮范围commit/fetch-merge/审待推/必要检查/push，Git及publish-delivery才是收据，保foreign所有改动。
+
+## 最新L01 Recall：整题checker已接真实错误programme，原正式训练继续
+
+用户先交十题成品/真实测试、不扩框架的纠偏保持。仅新增L01的check_l01.py与review_anchors.py，复用原唯一pinn_submission_check/NumPy/选择，不触生产runtime、UI、LLM路由/凭据或数据库。已闭合source/native对象经prepare/grade绑定；175研究判断使用逐叶明确pass/fail/实际依赖和等价完整格式，14质量只来自同一合法选择final及独立全点计算。机器失败不能被人工包覆盖；未执行依赖blocked、未评unassessed；固定100分母、任何未知/未冻总分null。study_complete与solution_reproduced及good分开，质量失败不能被高方法分补偿。闭合ZIP摘要只证原对象身份，不当源码/科学正确性验收。
+
+原未冻rubric189ID/权重/critical/80线/14null阈值不变，仅把unknown=0/两个独评旧稿澄清为四状态与用户授权的一次集中独评。原稿先封pre-checker-draft-contract.zip；新增公开TRACE/OUTCOMES/quality-policy.draft序列化实际trace与先前事前1%目标，文档创建时点明确晚于目标登记。原作者项目已在首更新前封源，没有热改，也不假说原PID读过后来文案。当前profile合法优化轨迹的质量可达仍未知，结构控制不能替它成功。
+
+实际新错误programme在1CPU/netnone/source只读的原convection/width100/float64上做1次真实非零L-BFGS更新，却把manifest写为stalled/accepted0；实际21:58:44.310848634→21:58:50.100598785Z自然native0，先封inspect/log/source/results再清理精确CID。真正check_l01 prepare exit4：薄artifact核通过、trace_manifest_counts:lbfgs失败、原计数叶与E-full-clean-retraining关键失败、goodfalse/总分null；其余原格仍未执行，不伪造完整矩阵或研究评级。源/输入/实际argv/原inspect/退出/trace/评分及两原ZIP在evaluator/l01-whole-case/checker-construction，3,977,971bytes/45成员originals保原对象，外部完整路径l01-full-case-20261031/counting-error-native。
+
+只读已封reaction NNCG真实200步trace过当前collector，真实writer的5错误输出按attempt/bool cost/PCG精确残差/Armijo/终态继续具名拒绝；没有重200训练。合成研究pass/解fail的算术包仅协议控制，不当175独评/参考/候选分；原坏越权包保留并具名设施错误。上述是完整case必需的一部分，不叫第十题完成或成熟。未开始新独审，待完整原研究/论文图和可达证据齐后才一次集中整审。
+
+22:01:28.957500Z原author owner54408仍在同一first-registered-cell/CID314b41…，真实attempt/accepted28000、loss.0019921，原41000上限不改；真实持续更新不是卡住/空等。唯一locator与active.json优先于这里旧计数；原段自然0/artifact检查后由原owner自动继续remaining，不另开矩阵/热改源/恢复其他GPU。当前仍9/10开发合同、有效候选小时0/10；缺完整矩阵/当前选择质量可达、整题正向验收/实际研究独评/冻结与后续fresh测试。L02/L06两good升级义务不取消，旧线只读。只余原五旧任务Paused，reaction已自然终态AutoRemove，禁止按旧六表重启。

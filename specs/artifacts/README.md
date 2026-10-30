@@ -78,7 +78,7 @@
 
 - [2026-10-29-text-encoding-journey](2026-10-29-text-encoding-journey/README.md)：Unicode原文乱码修复、双语错误、真实JSON和五份下载核验。
 
-- [长程任务资格与便宜实验](2026-10-29-heavy-workbench-long/README.md)：9/10开发成品；L01完整研究源/首份真实矩阵进行中，真实解质量失败不放宽目标，结构对照不充旧优化器成功。
+- [长程任务资格与便宜实验](2026-10-29-heavy-workbench-long/README.md)：9/10开发成品；L01完整矩阵继续，整题checker实际拒计数错误，14同final质量与研究独评分开，未冻结/未报小时。
 
 - [2026-10-29-text-attachment-history](2026-10-29-text-attachment-history/README.md)：23张真实发送/历史回看原图、指定模型流式请求、原件下载与数据/运行结算。
 

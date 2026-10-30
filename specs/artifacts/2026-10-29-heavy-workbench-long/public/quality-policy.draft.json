@@ -1,0 +1,33 @@
+{
+  "format": "l01-quality-targets/1",
+  "case": "L01",
+  "status": "proposed_unfrozen_registered_optimizer_reachability_pending",
+  "document_created_at": "2026-10-30T21:44:45.007800+00:00",
+  "basis": "Prospective target was written in evaluator/l01-whole-case/BUILD-PLAN before the first new existing-weight evaluation; this JSON representation was created later, not backdated. Nonblind author development; no candidate result used.",
+  "comparison": "<=",
+  "targets": {
+    "convection": {
+      "l2re": 0.01,
+      "evaluation_residual_rmse": 0.01,
+      "constraint_families.initial_value.rmse": 0.01,
+      "constraint_families.periodic_value.rmse": 0.01
+    },
+    "reaction": {
+      "l2re": 0.01,
+      "evaluation_residual_rmse": 0.01,
+      "constraint_families.initial_value.rmse": 0.01,
+      "constraint_families.periodic_value.rmse": 0.01
+    },
+    "wave": {
+      "l2re": 0.01,
+      "evaluation_residual_rmse": 0.01,
+      "constraint_families.initial_value.rmse": 0.01,
+      "constraint_families.initial_velocity.rmse": 0.01,
+      "constraint_families.boundary_left.rmse": 0.01,
+      "constraint_families.boundary_right.rmse": 0.01
+    }
+  },
+  "selection": "public/profile.json:solution_selection; one same eligible registered final per PDE, no cross-checkpoint mixing",
+  "meaning": "dimensionless solution/physics targets, separate from floating agreement tolerances and original-paper precision",
+  "qualification_limit": "structured representation controls meet these numbers but are not eligible old randomized optimizer trajectories; full registered current-contract reachability remains pending"
+}

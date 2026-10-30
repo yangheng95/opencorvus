@@ -1,0 +1,14 @@
+{
+  "actual_positive_trace_rows": 200,
+  "actual_trace_errors": {
+    "duplicate_attempt": "line2:trace_attempt_sequence",
+    "boolean_cost": "line1:trace_cost_type",
+    "accepted_bad_pcg": "line1:trace_pcg_explicit_residual",
+    "invented_armijo_bound": "line1:trace_armijo_bound",
+    "continue_after_zero": "line2:trace_after_terminal"
+  },
+  "typed_target_error": "facility_quality_target",
+  "machine_override_error": "facility_review_leaf_coverage",
+  "outcome_split": "synthetic study true/solution false/good false/total null",
+  "scope": "new focused case-checker contracts; no registered full study/independent whole-case review/freeze/score certification"
+}

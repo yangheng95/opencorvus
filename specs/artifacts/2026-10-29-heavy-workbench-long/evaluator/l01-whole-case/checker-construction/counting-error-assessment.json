@@ -1,0 +1,3341 @@
+{
+  "status": "assessment_incomplete",
+  "subject_role": "error_control",
+  "binding": {
+    "format": "l01-review-binding/1",
+    "subject_id": "L01-real-counting-error-20261031",
+    "subject_role": "error_control",
+    "source_object": {
+      "sha256": "6c3a8bbe7b9fbb49a6dd1d1ee0829cefdc25fe711270b5eecc6fdda56af9251b",
+      "bytes": 2500703,
+      "meaning": "identity of the entire closed evidence object, not correctness of mutable source"
+    },
+    "execution_object": {
+      "sha256": "c75f4e7ae52ffad558ae130002abb4d37216a7060e82117ae0d2ddf50748105d",
+      "bytes": 320861,
+      "meaning": "identity of the entire closed evidence object, not correctness of mutable source"
+    },
+    "previous_execution_objects": [],
+    "contract": {
+      "profile": {
+        "benchmark": "HeavyWorkBench-Long/0.2.0-dev",
+        "case": "L01",
+        "base_configurations": [
+          {
+            "id": "convection-adam-s345-lr1e-04",
+            "problem": "convection",
+            "seed": 345,
+            "method": "adam",
+            "adam_learning_rate": 0.0001,
+            "max_updates": 41000,
+            "adam_updates_before_switch": null,
+            "stratum": "cross_problem"
+          },
+          {
+            "id": "convection-lbfgs-s345-lrnone",
+            "problem": "convection",
+            "seed": 345,
+            "method": "lbfgs",
+            "adam_learning_rate": null,
+            "max_updates": 41000,
+            "adam_updates_before_switch": null,
+            "stratum": "cross_problem"
+          },
+          {
+            "id": "convection-hybrid-s345-lr1e-04",
+            "problem": "convection",
+            "seed": 345,
+            "method": "hybrid",
+            "adam_learning_rate": 0.0001,
+            "max_updates": 41000,
+            "adam_updates_before_switch": 11000,
+            "stratum": "cross_problem"
+          },
+          {
+            "id": "reaction-adam-s345-lr1e-03",
+            "problem": "reaction",
+            "seed": 345,
+            "method": "adam",
+            "adam_learning_rate": 0.001,
+            "max_updates": 41000,
+            "adam_updates_before_switch": null,
+            "stratum": "cross_problem"
+          },
+          {
+            "id": "reaction-lbfgs-s345-lrnone",
+            "problem": "reaction",
+            "seed": 345,
+            "method": "lbfgs",
+            "adam_learning_rate": null,
+            "max_updates": 41000,
+            "adam_updates_before_switch": null,
+            "stratum": "cross_problem"
+          },
+          {
+            "id": "reaction-hybrid-s345-lr1e-03",
+            "problem": "reaction",
+            "seed": 345,
+            "method": "hybrid",
+            "adam_learning_rate": 0.001,
+            "max_updates": 41000,
+            "adam_updates_before_switch": 11000,
+            "stratum": "cross_problem"
+          },
+          {
+            "id": "wave-adam-s345-lr1e-03",
+            "problem": "wave",
+            "seed": 345,
+            "method": "adam",
+            "adam_learning_rate": 0.001,
+            "max_updates": 41000,
+            "adam_updates_before_switch": null,
+            "stratum": "cross_problem"
+          },
+          {
+            "id": "wave-lbfgs-s345-lrnone",
+            "problem": "wave",
+            "seed": 345,
+            "method": "lbfgs",
+            "adam_learning_rate": null,
+            "max_updates": 41000,
+            "adam_updates_before_switch": null,
+            "stratum": "cross_problem"
+          },
+          {
+            "id": "wave-hybrid-s345-lr1e-03",
+            "problem": "wave",
+            "seed": 345,
+            "method": "hybrid",
+            "adam_learning_rate": 0.001,
+            "max_updates": 41000,
+            "adam_updates_before_switch": 11000,
+            "stratum": "cross_problem"
+          },
+          {
+            "id": "convection-adam-s456-lr1e-04",
+            "problem": "convection",
+            "seed": 456,
+            "method": "adam",
+            "adam_learning_rate": 0.0001,
+            "max_updates": 41000,
+            "adam_updates_before_switch": null,
+            "stratum": "seed_replication"
+          },
+          {
+            "id": "convection-lbfgs-s456-lrnone",
+            "problem": "convection",
+            "seed": 456,
+            "method": "lbfgs",
+            "adam_learning_rate": null,
+            "max_updates": 41000,
+            "adam_updates_before_switch": null,
+            "stratum": "seed_replication"
+          },
+          {
+            "id": "convection-hybrid-s456-lr1e-04",
+            "problem": "convection",
+            "seed": 456,
+            "method": "hybrid",
+            "adam_learning_rate": 0.0001,
+            "max_updates": 41000,
+            "adam_updates_before_switch": 11000,
+            "stratum": "seed_replication"
+          },
+          {
+            "id": "convection-adam-s567-lr1e-04",
+            "problem": "convection",
+            "seed": 567,
+            "method": "adam",
+            "adam_learning_rate": 0.0001,
+            "max_updates": 41000,
+            "adam_updates_before_switch": null,
+            "stratum": "seed_replication"
+          },
+          {
+            "id": "convection-lbfgs-s567-lrnone",
+            "problem": "convection",
+            "seed": 567,
+            "method": "lbfgs",
+            "adam_learning_rate": null,
+            "max_updates": 41000,
+            "adam_updates_before_switch": null,
+            "stratum": "seed_replication"
+          },
+          {
+            "id": "convection-hybrid-s567-lr1e-04",
+            "problem": "convection",
+            "seed": 567,
+            "method": "hybrid",
+            "adam_learning_rate": 0.0001,
+            "max_updates": 41000,
+            "adam_updates_before_switch": 11000,
+            "stratum": "seed_replication"
+          },
+          {
+            "id": "convection-adam-s345-lr1e-03",
+            "problem": "convection",
+            "seed": 345,
+            "method": "adam",
+            "adam_learning_rate": 0.001,
+            "max_updates": 41000,
+            "adam_updates_before_switch": null,
+            "stratum": "learning_rate_sensitivity"
+          },
+          {
+            "id": "convection-hybrid-s345-lr1e-03",
+            "problem": "convection",
+            "seed": 345,
+            "method": "hybrid",
+            "adam_learning_rate": 0.001,
+            "max_updates": 41000,
+            "adam_updates_before_switch": 11000,
+            "stratum": "learning_rate_sensitivity"
+          },
+          {
+            "id": "convection-adam-s345-lr1e-02",
+            "problem": "convection",
+            "seed": 345,
+            "method": "adam",
+            "adam_learning_rate": 0.01,
+            "max_updates": 41000,
+            "adam_updates_before_switch": null,
+            "stratum": "learning_rate_sensitivity"
+          },
+          {
+            "id": "convection-hybrid-s345-lr1e-02",
+            "problem": "convection",
+            "seed": 345,
+            "method": "hybrid",
+            "adam_learning_rate": 0.01,
+            "max_updates": 41000,
+            "adam_updates_before_switch": 11000,
+            "stratum": "learning_rate_sensitivity"
+          }
+        ],
+        "continuations": [
+          {
+            "id": "convection-gd-continuation-0.0001",
+            "method": "gd",
+            "updates": 200,
+            "parameter": "learning_rate",
+            "value": 0.0001,
+            "parent": "profile.selection"
+          },
+          {
+            "id": "convection-gd-continuation-0.001",
+            "method": "gd",
+            "updates": 200,
+            "parameter": "learning_rate",
+            "value": 0.001,
+            "parent": "profile.selection"
+          },
+          {
+            "id": "convection-nncg-continuation-0.01",
+            "method": "nncg",
+            "updates": 200,
+            "parameter": "damping",
+            "value": 0.01,
+            "parent": "profile.selection"
+          },
+          {
+            "id": "convection-nncg-continuation-0.1",
+            "method": "nncg",
+            "updates": 200,
+            "parameter": "damping",
+            "value": 0.1,
+            "parent": "profile.selection"
+          },
+          {
+            "id": "convection-nncg-continuation-1.0",
+            "method": "nncg",
+            "updates": 200,
+            "parameter": "damping",
+            "value": 1.0,
+            "parent": "profile.selection",
+            "provenance": "additional damping sensitivity from pre-freeze feasibility; not an original-paper parameter or candidate result"
+          }
+        ],
+        "selection": {
+          "problem": "convection",
+          "seed": 345,
+          "method": "hybrid",
+          "metric": "terminal train total loss",
+          "ties": "smaller Adam learning rate",
+          "eligible_terminal_states": [
+            "max_updates",
+            "gradient_converged",
+            "finite_plateau",
+            "optimizer_stalled"
+          ],
+          "all_ineligible": "dependency_incomplete; no alternate parent"
+        },
+        "solution_selection": {
+          "seed": 345,
+          "candidates": "eligible terminal base configurations for each PDE at seed345, plus registered convection continuations",
+          "metric": "independently recomputed terminal train total loss",
+          "ties": "lexicographically smallest config ID, exact loss ties only",
+          "eligible_terminal_states": [
+            "max_updates",
+            "gradient_converged",
+            "finite_plateau",
+            "optimizer_stalled"
+          ],
+          "all_ineligible": "null; solution_reproduced cannot be true",
+          "same_checkpoint": "all quality components for one PDE use the single selected final numeric export"
+        }
+      },
+      "leaves": [
+        {
+          "id": "L01-A-architecture",
+          "group": "A",
+          "weight": 1,
+          "critical": true,
+          "requirement": "Exact public architecture"
+        },
+        {
+          "id": "L01-A-authoritative-grid",
+          "group": "A",
+          "weight": 2,
+          "critical": true,
+          "requirement": "Independently verified authoritative-grid under the public contract"
+        },
+        {
+          "id": "L01-A-convection-initial",
+          "group": "A",
+          "weight": 0.5,
+          "critical": true,
+          "requirement": "Correct convection-initial and its contribution to pooled constraint loss"
+        },
+        {
+          "id": "L01-A-convection-operator",
+          "group": "A",
+          "weight": 1,
+          "critical": true,
+          "requirement": "Correct exact operator, verified on analytic solution and hand-calculated non-solution"
+        },
+        {
+          "id": "L01-A-convection-periodic",
+          "group": "A",
+          "weight": 0.5,
+          "critical": true,
+          "requirement": "Correct convection-periodic and its contribution to pooled constraint loss"
+        },
+        {
+          "id": "L01-A-fixed-shared-sampling",
+          "group": "A",
+          "weight": 2,
+          "critical": true,
+          "requirement": "Independently verified fixed-shared-sampling under the public contract"
+        },
+        {
+          "id": "L01-A-float64",
+          "group": "A",
+          "weight": 1,
+          "critical": true,
+          "requirement": "Exact public float64"
+        },
+        {
+          "id": "L01-A-hessian-vector-product",
+          "group": "A",
+          "weight": 2,
+          "critical": true,
+          "requirement": "Independently verified hessian-vector-product under the public contract"
+        },
+        {
+          "id": "L01-A-input-first-derivatives",
+          "group": "A",
+          "weight": 1,
+          "critical": true,
+          "requirement": "Independent nontrivial function and numeric derivative verification of input-first-derivatives"
+        },
+        {
+          "id": "L01-A-input-second-derivatives",
+          "group": "A",
+          "weight": 1,
+          "critical": true,
+          "requirement": "Independent nontrivial function and numeric derivative verification of input-second-derivatives"
+        },
+        {
+          "id": "L01-A-parameter-gradient",
+          "group": "A",
+          "weight": 2,
+          "critical": true,
+          "requirement": "Independently verified parameter-gradient under the public contract"
+        },
+        {
+          "id": "L01-A-reaction-initial",
+          "group": "A",
+          "weight": 0.5,
+          "critical": true,
+          "requirement": "Correct reaction-initial and its contribution to pooled constraint loss"
+        },
+        {
+          "id": "L01-A-reaction-operator",
+          "group": "A",
+          "weight": 1,
+          "critical": true,
+          "requirement": "Correct exact operator, verified on analytic solution and hand-calculated non-solution"
+        },
+        {
+          "id": "L01-A-reaction-periodic",
+          "group": "A",
+          "weight": 0.5,
+          "critical": true,
+          "requirement": "Correct reaction-periodic and its contribution to pooled constraint loss"
+        },
+        {
+          "id": "L01-A-wave-initial",
+          "group": "A",
+          "weight": 0.5,
+          "critical": true,
+          "requirement": "Correct wave-initial and its contribution to pooled constraint loss"
+        },
+        {
+          "id": "L01-A-wave-left",
+          "group": "A",
+          "weight": 0.5,
+          "critical": true,
+          "requirement": "Correct wave-left and its contribution to pooled constraint loss"
+        },
+        {
+          "id": "L01-A-wave-operator",
+          "group": "A",
+          "weight": 1,
+          "critical": true,
+          "requirement": "Correct exact operator, verified on analytic solution and hand-calculated non-solution"
+        },
+        {
+          "id": "L01-A-wave-right",
+          "group": "A",
+          "weight": 0.5,
+          "critical": true,
+          "requirement": "Correct wave-right and its contribution to pooled constraint loss"
+        },
+        {
+          "id": "L01-A-wave-velocity",
+          "group": "A",
+          "weight": 0.5,
+          "critical": true,
+          "requirement": "Correct wave-velocity and its contribution to pooled constraint loss"
+        },
+        {
+          "id": "L01-A-xavier-paired-initialization",
+          "group": "A",
+          "weight": 1,
+          "critical": true,
+          "requirement": "Exact public xavier-paired-initialization"
+        },
+        {
+          "id": "L01-B-convection-adam-s345-lr1e-02-constraint-loss",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-adam-s345-lr1e-02: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s345-lr1e-02-gradient-inf",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-adam-s345-lr1e-02: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s345-lr1e-02-l2re",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-adam-s345-lr1e-02: independently verified l2re bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s345-lr1e-02-real-execution",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-adam-s345-lr1e-02: independently verified real-execution bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s345-lr1e-02-residual-loss",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-adam-s345-lr1e-02: independently verified residual-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s345-lr1e-02-terminal-state-and-counts",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-adam-s345-lr1e-02: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s345-lr1e-03-constraint-loss",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-adam-s345-lr1e-03: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s345-lr1e-03-gradient-inf",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-adam-s345-lr1e-03: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s345-lr1e-03-l2re",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-adam-s345-lr1e-03: independently verified l2re bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s345-lr1e-03-real-execution",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-adam-s345-lr1e-03: independently verified real-execution bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s345-lr1e-03-residual-loss",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-adam-s345-lr1e-03: independently verified residual-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s345-lr1e-03-terminal-state-and-counts",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-adam-s345-lr1e-03: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s345-lr1e-04-constraint-loss",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For convection-adam-s345-lr1e-04: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s345-lr1e-04-gradient-inf",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For convection-adam-s345-lr1e-04: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s345-lr1e-04-l2re",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For convection-adam-s345-lr1e-04: independently verified l2re bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s345-lr1e-04-real-execution",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For convection-adam-s345-lr1e-04: independently verified real-execution bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s345-lr1e-04-residual-loss",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For convection-adam-s345-lr1e-04: independently verified residual-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s345-lr1e-04-terminal-state-and-counts",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For convection-adam-s345-lr1e-04: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s456-lr1e-04-constraint-loss",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-adam-s456-lr1e-04: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s456-lr1e-04-gradient-inf",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-adam-s456-lr1e-04: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s456-lr1e-04-l2re",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-adam-s456-lr1e-04: independently verified l2re bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s456-lr1e-04-real-execution",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-adam-s456-lr1e-04: independently verified real-execution bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s456-lr1e-04-residual-loss",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-adam-s456-lr1e-04: independently verified residual-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s456-lr1e-04-terminal-state-and-counts",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-adam-s456-lr1e-04: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s567-lr1e-04-constraint-loss",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-adam-s567-lr1e-04: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s567-lr1e-04-gradient-inf",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-adam-s567-lr1e-04: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s567-lr1e-04-l2re",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-adam-s567-lr1e-04: independently verified l2re bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s567-lr1e-04-real-execution",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-adam-s567-lr1e-04: independently verified real-execution bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s567-lr1e-04-residual-loss",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-adam-s567-lr1e-04: independently verified residual-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-adam-s567-lr1e-04-terminal-state-and-counts",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-adam-s567-lr1e-04: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s345-lr1e-02-constraint-loss",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-hybrid-s345-lr1e-02: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s345-lr1e-02-gradient-inf",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-hybrid-s345-lr1e-02: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s345-lr1e-02-l2re",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-hybrid-s345-lr1e-02: independently verified l2re bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s345-lr1e-02-real-execution",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-hybrid-s345-lr1e-02: independently verified real-execution bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s345-lr1e-02-residual-loss",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-hybrid-s345-lr1e-02: independently verified residual-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s345-lr1e-02-terminal-state-and-counts",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-hybrid-s345-lr1e-02: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s345-lr1e-03-constraint-loss",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-hybrid-s345-lr1e-03: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s345-lr1e-03-gradient-inf",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-hybrid-s345-lr1e-03: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s345-lr1e-03-l2re",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-hybrid-s345-lr1e-03: independently verified l2re bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s345-lr1e-03-real-execution",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-hybrid-s345-lr1e-03: independently verified real-execution bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s345-lr1e-03-residual-loss",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-hybrid-s345-lr1e-03: independently verified residual-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s345-lr1e-03-terminal-state-and-counts",
+          "group": "B",
+          "weight": 0.16666666666666666,
+          "critical": false,
+          "requirement": "For convection-hybrid-s345-lr1e-03: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s345-lr1e-04-constraint-loss",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For convection-hybrid-s345-lr1e-04: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s345-lr1e-04-gradient-inf",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For convection-hybrid-s345-lr1e-04: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s345-lr1e-04-l2re",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For convection-hybrid-s345-lr1e-04: independently verified l2re bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s345-lr1e-04-real-execution",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For convection-hybrid-s345-lr1e-04: independently verified real-execution bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s345-lr1e-04-residual-loss",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For convection-hybrid-s345-lr1e-04: independently verified residual-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s345-lr1e-04-terminal-state-and-counts",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For convection-hybrid-s345-lr1e-04: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s456-lr1e-04-constraint-loss",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-hybrid-s456-lr1e-04: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s456-lr1e-04-gradient-inf",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-hybrid-s456-lr1e-04: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s456-lr1e-04-l2re",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-hybrid-s456-lr1e-04: independently verified l2re bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s456-lr1e-04-real-execution",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-hybrid-s456-lr1e-04: independently verified real-execution bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s456-lr1e-04-residual-loss",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-hybrid-s456-lr1e-04: independently verified residual-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s456-lr1e-04-terminal-state-and-counts",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-hybrid-s456-lr1e-04: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s567-lr1e-04-constraint-loss",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-hybrid-s567-lr1e-04: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s567-lr1e-04-gradient-inf",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-hybrid-s567-lr1e-04: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s567-lr1e-04-l2re",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-hybrid-s567-lr1e-04: independently verified l2re bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s567-lr1e-04-real-execution",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-hybrid-s567-lr1e-04: independently verified real-execution bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s567-lr1e-04-residual-loss",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-hybrid-s567-lr1e-04: independently verified residual-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-hybrid-s567-lr1e-04-terminal-state-and-counts",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-hybrid-s567-lr1e-04: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-lbfgs-s345-lrnone-constraint-loss",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For convection-lbfgs-s345-lrnone: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-lbfgs-s345-lrnone-gradient-inf",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For convection-lbfgs-s345-lrnone: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-lbfgs-s345-lrnone-l2re",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For convection-lbfgs-s345-lrnone: independently verified l2re bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-lbfgs-s345-lrnone-real-execution",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For convection-lbfgs-s345-lrnone: independently verified real-execution bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-lbfgs-s345-lrnone-residual-loss",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For convection-lbfgs-s345-lrnone: independently verified residual-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-lbfgs-s345-lrnone-terminal-state-and-counts",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For convection-lbfgs-s345-lrnone: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-lbfgs-s456-lrnone-constraint-loss",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-lbfgs-s456-lrnone: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-lbfgs-s456-lrnone-gradient-inf",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-lbfgs-s456-lrnone: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-lbfgs-s456-lrnone-l2re",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-lbfgs-s456-lrnone: independently verified l2re bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-lbfgs-s456-lrnone-real-execution",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-lbfgs-s456-lrnone: independently verified real-execution bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-lbfgs-s456-lrnone-residual-loss",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-lbfgs-s456-lrnone: independently verified residual-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-lbfgs-s456-lrnone-terminal-state-and-counts",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-lbfgs-s456-lrnone: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-lbfgs-s567-lrnone-constraint-loss",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-lbfgs-s567-lrnone: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-lbfgs-s567-lrnone-gradient-inf",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-lbfgs-s567-lrnone: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-lbfgs-s567-lrnone-l2re",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-lbfgs-s567-lrnone: independently verified l2re bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-lbfgs-s567-lrnone-real-execution",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-lbfgs-s567-lrnone: independently verified real-execution bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-lbfgs-s567-lrnone-residual-loss",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-lbfgs-s567-lrnone: independently verified residual-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-convection-lbfgs-s567-lrnone-terminal-state-and-counts",
+          "group": "B",
+          "weight": 0.2222222222222222,
+          "critical": false,
+          "requirement": "For convection-lbfgs-s567-lrnone: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-reaction-adam-s345-lr1e-03-constraint-loss",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For reaction-adam-s345-lr1e-03: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-reaction-adam-s345-lr1e-03-gradient-inf",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For reaction-adam-s345-lr1e-03: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-reaction-adam-s345-lr1e-03-l2re",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For reaction-adam-s345-lr1e-03: independently verified l2re bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-reaction-adam-s345-lr1e-03-real-execution",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For reaction-adam-s345-lr1e-03: independently verified real-execution bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-reaction-adam-s345-lr1e-03-residual-loss",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For reaction-adam-s345-lr1e-03: independently verified residual-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-reaction-adam-s345-lr1e-03-terminal-state-and-counts",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For reaction-adam-s345-lr1e-03: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-reaction-hybrid-s345-lr1e-03-constraint-loss",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For reaction-hybrid-s345-lr1e-03: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-reaction-hybrid-s345-lr1e-03-gradient-inf",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For reaction-hybrid-s345-lr1e-03: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-reaction-hybrid-s345-lr1e-03-l2re",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For reaction-hybrid-s345-lr1e-03: independently verified l2re bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-reaction-hybrid-s345-lr1e-03-real-execution",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For reaction-hybrid-s345-lr1e-03: independently verified real-execution bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-reaction-hybrid-s345-lr1e-03-residual-loss",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For reaction-hybrid-s345-lr1e-03: independently verified residual-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-reaction-hybrid-s345-lr1e-03-terminal-state-and-counts",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For reaction-hybrid-s345-lr1e-03: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-reaction-lbfgs-s345-lrnone-constraint-loss",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For reaction-lbfgs-s345-lrnone: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-reaction-lbfgs-s345-lrnone-gradient-inf",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For reaction-lbfgs-s345-lrnone: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-reaction-lbfgs-s345-lrnone-l2re",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For reaction-lbfgs-s345-lrnone: independently verified l2re bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-reaction-lbfgs-s345-lrnone-real-execution",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For reaction-lbfgs-s345-lrnone: independently verified real-execution bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-reaction-lbfgs-s345-lrnone-residual-loss",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For reaction-lbfgs-s345-lrnone: independently verified residual-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-reaction-lbfgs-s345-lrnone-terminal-state-and-counts",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For reaction-lbfgs-s345-lrnone: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-wave-adam-s345-lr1e-03-constraint-loss",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For wave-adam-s345-lr1e-03: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-wave-adam-s345-lr1e-03-gradient-inf",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For wave-adam-s345-lr1e-03: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-wave-adam-s345-lr1e-03-l2re",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For wave-adam-s345-lr1e-03: independently verified l2re bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-wave-adam-s345-lr1e-03-real-execution",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For wave-adam-s345-lr1e-03: independently verified real-execution bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-wave-adam-s345-lr1e-03-residual-loss",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For wave-adam-s345-lr1e-03: independently verified residual-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-wave-adam-s345-lr1e-03-terminal-state-and-counts",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For wave-adam-s345-lr1e-03: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-wave-hybrid-s345-lr1e-03-constraint-loss",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For wave-hybrid-s345-lr1e-03: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-wave-hybrid-s345-lr1e-03-gradient-inf",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For wave-hybrid-s345-lr1e-03: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-wave-hybrid-s345-lr1e-03-l2re",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For wave-hybrid-s345-lr1e-03: independently verified l2re bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-wave-hybrid-s345-lr1e-03-real-execution",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For wave-hybrid-s345-lr1e-03: independently verified real-execution bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-wave-hybrid-s345-lr1e-03-residual-loss",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For wave-hybrid-s345-lr1e-03: independently verified residual-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-wave-hybrid-s345-lr1e-03-terminal-state-and-counts",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For wave-hybrid-s345-lr1e-03: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-wave-lbfgs-s345-lrnone-constraint-loss",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For wave-lbfgs-s345-lrnone: independently verified constraint-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-wave-lbfgs-s345-lrnone-gradient-inf",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For wave-lbfgs-s345-lrnone: independently verified gradient-inf bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-wave-lbfgs-s345-lrnone-l2re",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For wave-lbfgs-s345-lrnone: independently verified l2re bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-wave-lbfgs-s345-lrnone-real-execution",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For wave-lbfgs-s345-lrnone: independently verified real-execution bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-wave-lbfgs-s345-lrnone-residual-loss",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For wave-lbfgs-s345-lrnone: independently verified residual-loss bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-B-wave-lbfgs-s345-lrnone-terminal-state-and-counts",
+          "group": "B",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "For wave-lbfgs-s345-lrnone: independently verified terminal-state-and-counts bound to this input/init/config/version and actual controlled execution"
+        },
+        {
+          "id": "L01-C-convection-gd-continuation-0.0001-common-start",
+          "group": "C",
+          "weight": 0.4,
+          "critical": true,
+          "requirement": "Exact selected common finite parent numeric state verified for convection-gd-continuation-0.0001"
+        },
+        {
+          "id": "L01-C-convection-gd-continuation-0.0001-independent-terminal",
+          "group": "C",
+          "weight": 0.6,
+          "critical": false,
+          "requirement": "Independent terminal network metrics and finite gradients verified for convection-gd-continuation-0.0001"
+        },
+        {
+          "id": "L01-C-convection-gd-continuation-0.0001-real-updates",
+          "group": "C",
+          "weight": 0.5,
+          "critical": false,
+          "requirement": "Actual fixed-learning-rate GD updates and truthful terminal state"
+        },
+        {
+          "id": "L01-C-convection-gd-continuation-0.001-common-start",
+          "group": "C",
+          "weight": 0.4,
+          "critical": true,
+          "requirement": "Exact selected common finite parent numeric state verified for convection-gd-continuation-0.001"
+        },
+        {
+          "id": "L01-C-convection-gd-continuation-0.001-independent-terminal",
+          "group": "C",
+          "weight": 0.6,
+          "critical": false,
+          "requirement": "Independent terminal network metrics and finite gradients verified for convection-gd-continuation-0.001"
+        },
+        {
+          "id": "L01-C-convection-gd-continuation-0.001-real-updates",
+          "group": "C",
+          "weight": 0.5,
+          "critical": false,
+          "requirement": "Actual fixed-learning-rate GD updates and truthful terminal state"
+        },
+        {
+          "id": "L01-C-convection-nncg-continuation-0.01-armijo",
+          "group": "C",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "Actual sufficient decrease and step-size trials; algorithm failure is recorded as such"
+        },
+        {
+          "id": "L01-C-convection-nncg-continuation-0.01-common-start",
+          "group": "C",
+          "weight": 0.4,
+          "critical": true,
+          "requirement": "Exact selected common finite parent numeric state verified for convection-nncg-continuation-0.01"
+        },
+        {
+          "id": "L01-C-convection-nncg-continuation-0.01-independent-terminal",
+          "group": "C",
+          "weight": 0.6,
+          "critical": false,
+          "requirement": "Independent terminal network metrics and finite gradients verified for convection-nncg-continuation-0.01"
+        },
+        {
+          "id": "L01-C-convection-nncg-continuation-0.01-real-updates",
+          "group": "C",
+          "weight": 0.6666666666666666,
+          "critical": false,
+          "requirement": "Registered damping, rank, refresh, PCG and actual accepted NNCG updates with real execution"
+        },
+        {
+          "id": "L01-C-convection-nncg-continuation-0.1-armijo",
+          "group": "C",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "Actual sufficient decrease and step-size trials; algorithm failure is recorded as such"
+        },
+        {
+          "id": "L01-C-convection-nncg-continuation-0.1-common-start",
+          "group": "C",
+          "weight": 0.4,
+          "critical": true,
+          "requirement": "Exact selected common finite parent numeric state verified for convection-nncg-continuation-0.1"
+        },
+        {
+          "id": "L01-C-convection-nncg-continuation-0.1-independent-terminal",
+          "group": "C",
+          "weight": 0.6,
+          "critical": false,
+          "requirement": "Independent terminal network metrics and finite gradients verified for convection-nncg-continuation-0.1"
+        },
+        {
+          "id": "L01-C-convection-nncg-continuation-0.1-real-updates",
+          "group": "C",
+          "weight": 0.6666666666666666,
+          "critical": false,
+          "requirement": "Registered damping, rank, refresh, PCG and actual accepted NNCG updates with real execution"
+        },
+        {
+          "id": "L01-C-convection-nncg-continuation-1.0-armijo",
+          "group": "C",
+          "weight": 0.3333333333333333,
+          "critical": false,
+          "requirement": "Actual sufficient decrease and step-size trials; algorithm failure is recorded as such"
+        },
+        {
+          "id": "L01-C-convection-nncg-continuation-1.0-common-start",
+          "group": "C",
+          "weight": 0.4,
+          "critical": true,
+          "requirement": "Exact selected common finite parent numeric state verified for convection-nncg-continuation-1.0"
+        },
+        {
+          "id": "L01-C-convection-nncg-continuation-1.0-independent-terminal",
+          "group": "C",
+          "weight": 0.6,
+          "critical": false,
+          "requirement": "Independent terminal network metrics and finite gradients verified for convection-nncg-continuation-1.0"
+        },
+        {
+          "id": "L01-C-convection-nncg-continuation-1.0-real-updates",
+          "group": "C",
+          "weight": 0.6666666666666666,
+          "critical": false,
+          "requirement": "Registered damping, rank, refresh, PCG and actual accepted NNCG updates with real execution"
+        },
+        {
+          "id": "L01-C-metering",
+          "group": "C",
+          "weight": 1,
+          "critical": false,
+          "requirement": "Actual closures, gradient/Hessian vector products, attempts, accepted updates and timing for all branches"
+        },
+        {
+          "id": "L01-C-nystrom-known-matrix",
+          "group": "C",
+          "weight": 1,
+          "critical": true,
+          "requirement": "Known SPD matrix approximation and stable shift"
+        },
+        {
+          "id": "L01-C-nystrom-preconditioner",
+          "group": "C",
+          "weight": 1,
+          "critical": true,
+          "requirement": "Known matrix inverse-preconditioner action"
+        },
+        {
+          "id": "L01-C-pcg-explicit-residual",
+          "group": "C",
+          "weight": 1,
+          "critical": true,
+          "requirement": "Explicit residual proves the registered tolerance"
+        },
+        {
+          "id": "L01-C-pcg-solution",
+          "group": "C",
+          "weight": 1,
+          "critical": true,
+          "requirement": "Known SPD solution matches direct solve"
+        },
+        {
+          "id": "L01-C-selection",
+          "group": "C",
+          "weight": 1,
+          "critical": true,
+          "requirement": "Only eligible seed345 hybrid terminal train loss selects the parent; ties and missing-parent cases follow profile"
+        },
+        {
+          "id": "L01-D-constraint-component",
+          "group": "D",
+          "weight": 1.5,
+          "critical": false,
+          "requirement": "Real constraint component spectrum and its relation to residual conditioning"
+        },
+        {
+          "id": "L01-D-known-spectrum",
+          "group": "D",
+          "weight": 2,
+          "critical": false,
+          "requirement": "Known small SPD full spectrum and explicit Ritz residuals"
+        },
+        {
+          "id": "L01-D-preconditioned-spectrum",
+          "group": "D",
+          "weight": 2,
+          "critical": false,
+          "requirement": "Symmetric preconditioned operator or explicit independently checked PCG convergence comparison"
+        },
+        {
+          "id": "L01-D-residual-component",
+          "group": "D",
+          "weight": 1.5,
+          "critical": false,
+          "requirement": "Real PDE-residual component spectrum, including exact zero parameter derivatives"
+        },
+        {
+          "id": "L01-D-total-loss-spectrum",
+          "group": "D",
+          "weight": 3,
+          "critical": false,
+          "requirement": "Real selected full-loss Hessian extreme Ritz estimates with explicit residuals"
+        },
+        {
+          "id": "L01-E-adam-recovery",
+          "group": "E",
+          "weight": 0.5,
+          "critical": true,
+          "requirement": "New PID restores real Adam state and matches uninterrupted 100-update branch"
+        },
+        {
+          "id": "L01-E-full-clean-retraining",
+          "group": "E",
+          "weight": 3,
+          "critical": true,
+          "requirement": "Independent full registered retraining; re-evaluation of old checkpoints is distinguished"
+        },
+        {
+          "id": "L01-E-independent-metrics",
+          "group": "E",
+          "weight": 3,
+          "critical": true,
+          "requirement": "Independent scalar, derivative and final numeric result crosschecks agree within public tolerance"
+        },
+        {
+          "id": "L01-E-lbfgs-recovery",
+          "group": "E",
+          "weight": 0.5,
+          "critical": true,
+          "requirement": "New PID restores L-BFGS history/counts and matches uninterrupted branch"
+        },
+        {
+          "id": "L01-E-source-environment",
+          "group": "E",
+          "weight": 2,
+          "critical": true,
+          "requirement": "Clean environment rebuild from committed source and public dependencies"
+        },
+        {
+          "id": "L01-E-time-accounting",
+          "group": "E",
+          "weight": 1,
+          "critical": false,
+          "requirement": "Environment/model-tool/valid training/idle time reported separately with overlap handled"
+        },
+        {
+          "id": "L01-R-convection-evaluation-physics",
+          "group": "R",
+          "weight": 1.0,
+          "critical": true,
+          "requirement": "PENDING: independently measured evaluation_residual_rmse of the single convection final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation"
+        },
+        {
+          "id": "L01-R-convection-initial_value",
+          "group": "R",
+          "weight": 0.5,
+          "critical": true,
+          "requirement": "PENDING: independently measured constraint_families.initial_value.rmse of the single convection final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation"
+        },
+        {
+          "id": "L01-R-convection-periodic_value",
+          "group": "R",
+          "weight": 0.5,
+          "critical": true,
+          "requirement": "PENDING: independently measured constraint_families.periodic_value.rmse of the single convection final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation"
+        },
+        {
+          "id": "L01-R-convection-solution-error",
+          "group": "R",
+          "weight": 1.0,
+          "critical": true,
+          "requirement": "PENDING: independently measured l2re of the single convection final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation"
+        },
+        {
+          "id": "L01-R-cross-problem-transfer",
+          "group": "R",
+          "weight": 1,
+          "critical": false,
+          "requirement": "Claims match actual cross-problem-transfer observations and their limited inferential scope"
+        },
+        {
+          "id": "L01-R-figures-data",
+          "group": "R",
+          "weight": 1,
+          "critical": false,
+          "requirement": "Plot coordinates and units map to actual registered trajectory data"
+        },
+        {
+          "id": "L01-R-figures-visual",
+          "group": "R",
+          "weight": 1,
+          "critical": false,
+          "requirement": "Actually rendered and inspected paper/plots have readable axes, units, captions and complete layout"
+        },
+        {
+          "id": "L01-R-paired-convection-seeds",
+          "group": "R",
+          "weight": 1,
+          "critical": false,
+          "requirement": "Claims match actual paired-convection-seeds observations and their limited inferential scope"
+        },
+        {
+          "id": "L01-R-reaction-evaluation-physics",
+          "group": "R",
+          "weight": 1.0,
+          "critical": true,
+          "requirement": "PENDING: independently measured evaluation_residual_rmse of the single reaction final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation"
+        },
+        {
+          "id": "L01-R-reaction-initial_value",
+          "group": "R",
+          "weight": 0.5,
+          "critical": true,
+          "requirement": "PENDING: independently measured constraint_families.initial_value.rmse of the single reaction final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation"
+        },
+        {
+          "id": "L01-R-reaction-periodic_value",
+          "group": "R",
+          "weight": 0.5,
+          "critical": true,
+          "requirement": "PENDING: independently measured constraint_families.periodic_value.rmse of the single reaction final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation"
+        },
+        {
+          "id": "L01-R-reaction-solution-error",
+          "group": "R",
+          "weight": 1.0,
+          "critical": true,
+          "requirement": "PENDING: independently measured l2re of the single reaction final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation"
+        },
+        {
+          "id": "L01-R-scope-and-hardware",
+          "group": "R",
+          "weight": 1,
+          "critical": false,
+          "requirement": "Original-vs-derived contracts, GPU timing, negative results and unknowns stated correctly"
+        },
+        {
+          "id": "L01-R-single-seed-learning-rate",
+          "group": "R",
+          "weight": 1,
+          "critical": false,
+          "requirement": "Claims match actual single-seed-learning-rate observations and their limited inferential scope"
+        },
+        {
+          "id": "L01-R-wave-boundary_left",
+          "group": "R",
+          "weight": 0.25,
+          "critical": true,
+          "requirement": "PENDING: independently measured constraint_families.boundary_left.rmse of the single wave final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation"
+        },
+        {
+          "id": "L01-R-wave-boundary_right",
+          "group": "R",
+          "weight": 0.25,
+          "critical": true,
+          "requirement": "PENDING: independently measured constraint_families.boundary_right.rmse of the single wave final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation"
+        },
+        {
+          "id": "L01-R-wave-evaluation-physics",
+          "group": "R",
+          "weight": 1.0,
+          "critical": true,
+          "requirement": "PENDING: independently measured evaluation_residual_rmse of the single wave final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation"
+        },
+        {
+          "id": "L01-R-wave-initial_value",
+          "group": "R",
+          "weight": 0.25,
+          "critical": true,
+          "requirement": "PENDING: independently measured constraint_families.initial_value.rmse of the single wave final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation"
+        },
+        {
+          "id": "L01-R-wave-initial_velocity",
+          "group": "R",
+          "weight": 0.25,
+          "critical": true,
+          "requirement": "PENDING: independently measured constraint_families.initial_velocity.rmse of the single wave final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation"
+        },
+        {
+          "id": "L01-R-wave-solution-error",
+          "group": "R",
+          "weight": 1.0,
+          "critical": true,
+          "requirement": "PENDING: independently measured l2re of the single wave final selected by public profile.solution_selection meets a scientifically calibrated floor; no cross-checkpoint mixing or score compensation"
+        }
+      ],
+      "quality_targets": {
+        "convection": {
+          "l2re": 0.01,
+          "evaluation_residual_rmse": 0.01,
+          "constraint_families.initial_value.rmse": 0.01,
+          "constraint_families.periodic_value.rmse": 0.01
+        },
+        "reaction": {
+          "l2re": 0.01,
+          "evaluation_residual_rmse": 0.01,
+          "constraint_families.initial_value.rmse": 0.01,
+          "constraint_families.periodic_value.rmse": 0.01
+        },
+        "wave": {
+          "l2re": 0.01,
+          "evaluation_residual_rmse": 0.01,
+          "constraint_families.initial_value.rmse": 0.01,
+          "constraint_families.initial_velocity.rmse": 0.01,
+          "constraint_families.boundary_left.rmse": 0.01,
+          "constraint_families.boundary_right.rmse": 0.01
+        }
+      },
+      "outcome_contract": {
+        "minimum_score": 80,
+        "fixed_denominator": 100,
+        "independent_review_count": 1,
+        "study_delivery_ids": [
+          "L01-R-cross-problem-transfer",
+          "L01-R-paired-convection-seeds",
+          "L01-R-single-seed-learning-rate",
+          "L01-R-figures-data",
+          "L01-R-figures-visual",
+          "L01-R-scope-and-hardware"
+        ],
+        "quality_source": "profile.solution_selection",
+        "unknown_or_unexecuted": "unresolved, total null; not fabricated pass/fail",
+        "state_precedence": "verified failure is preserved over blocked/unassessed; external review cannot overwrite machine prerequisites or14numeric quality judgments"
+      },
+      "anchor_contract_version": 1
+    },
+    "output_root": "work/results",
+    "expected_scope": "partial"
+  },
+  "fixed_denominator": 100,
+  "total": null,
+  "study_complete": false,
+  "solution_reproduced": false,
+  "good": false,
+  "critical_failed": [
+    "L01-E-full-clean-retraining"
+  ],
+  "critical_unresolved": [
+    "L01-A-convection-operator",
+    "L01-A-reaction-operator",
+    "L01-A-wave-operator",
+    "L01-A-convection-initial",
+    "L01-A-convection-periodic",
+    "L01-A-reaction-initial",
+    "L01-A-reaction-periodic",
+    "L01-A-wave-initial",
+    "L01-A-wave-velocity",
+    "L01-A-wave-left",
+    "L01-A-wave-right",
+    "L01-A-architecture",
+    "L01-A-xavier-paired-initialization",
+    "L01-A-float64",
+    "L01-A-input-first-derivatives",
+    "L01-A-input-second-derivatives",
+    "L01-A-parameter-gradient",
+    "L01-A-hessian-vector-product",
+    "L01-A-authoritative-grid",
+    "L01-A-fixed-shared-sampling",
+    "L01-C-nystrom-known-matrix",
+    "L01-C-nystrom-preconditioner",
+    "L01-C-pcg-solution",
+    "L01-C-pcg-explicit-residual",
+    "L01-C-convection-gd-continuation-0.0001-common-start",
+    "L01-C-convection-gd-continuation-0.001-common-start",
+    "L01-C-convection-nncg-continuation-0.01-common-start",
+    "L01-C-convection-nncg-continuation-0.1-common-start",
+    "L01-C-selection",
+    "L01-R-convection-solution-error",
+    "L01-R-convection-evaluation-physics",
+    "L01-R-convection-initial_value",
+    "L01-R-convection-periodic_value",
+    "L01-R-reaction-solution-error",
+    "L01-R-reaction-evaluation-physics",
+    "L01-R-reaction-initial_value",
+    "L01-R-reaction-periodic_value",
+    "L01-R-wave-solution-error",
+    "L01-R-wave-evaluation-physics",
+    "L01-R-wave-initial_value",
+    "L01-R-wave-initial_velocity",
+    "L01-R-wave-boundary_left",
+    "L01-R-wave-boundary_right",
+    "L01-E-source-environment",
+    "L01-E-independent-metrics",
+    "L01-E-adam-recovery",
+    "L01-E-lbfgs-recovery",
+    "L01-C-convection-nncg-continuation-1.0-common-start"
+  ],
+  "failed": [
+    "L01-B-convection-lbfgs-s345-lrnone-terminal-state-and-counts",
+    "L01-E-full-clean-retraining"
+  ],
+  "unresolved": [
+    "L01-A-convection-operator",
+    "L01-A-reaction-operator",
+    "L01-A-wave-operator",
+    "L01-A-convection-initial",
+    "L01-A-convection-periodic",
+    "L01-A-reaction-initial",
+    "L01-A-reaction-periodic",
+    "L01-A-wave-initial",
+    "L01-A-wave-velocity",
+    "L01-A-wave-left",
+    "L01-A-wave-right",
+    "L01-A-architecture",
+    "L01-A-xavier-paired-initialization",
+    "L01-A-float64",
+    "L01-A-input-first-derivatives",
+    "L01-A-input-second-derivatives",
+    "L01-A-parameter-gradient",
+    "L01-A-hessian-vector-product",
+    "L01-A-authoritative-grid",
+    "L01-A-fixed-shared-sampling",
+    "L01-B-convection-adam-s345-lr1e-04-real-execution",
+    "L01-B-convection-adam-s345-lr1e-04-terminal-state-and-counts",
+    "L01-B-convection-adam-s345-lr1e-04-residual-loss",
+    "L01-B-convection-adam-s345-lr1e-04-constraint-loss",
+    "L01-B-convection-adam-s345-lr1e-04-l2re",
+    "L01-B-convection-adam-s345-lr1e-04-gradient-inf",
+    "L01-B-convection-lbfgs-s345-lrnone-real-execution",
+    "L01-B-convection-lbfgs-s345-lrnone-residual-loss",
+    "L01-B-convection-lbfgs-s345-lrnone-constraint-loss",
+    "L01-B-convection-lbfgs-s345-lrnone-l2re",
+    "L01-B-convection-lbfgs-s345-lrnone-gradient-inf",
+    "L01-B-convection-hybrid-s345-lr1e-04-real-execution",
+    "L01-B-convection-hybrid-s345-lr1e-04-terminal-state-and-counts",
+    "L01-B-convection-hybrid-s345-lr1e-04-residual-loss",
+    "L01-B-convection-hybrid-s345-lr1e-04-constraint-loss",
+    "L01-B-convection-hybrid-s345-lr1e-04-l2re",
+    "L01-B-convection-hybrid-s345-lr1e-04-gradient-inf",
+    "L01-B-reaction-adam-s345-lr1e-03-real-execution",
+    "L01-B-reaction-adam-s345-lr1e-03-terminal-state-and-counts",
+    "L01-B-reaction-adam-s345-lr1e-03-residual-loss",
+    "L01-B-reaction-adam-s345-lr1e-03-constraint-loss",
+    "L01-B-reaction-adam-s345-lr1e-03-l2re",
+    "L01-B-reaction-adam-s345-lr1e-03-gradient-inf",
+    "L01-B-reaction-lbfgs-s345-lrnone-real-execution",
+    "L01-B-reaction-lbfgs-s345-lrnone-terminal-state-and-counts",
+    "L01-B-reaction-lbfgs-s345-lrnone-residual-loss",
+    "L01-B-reaction-lbfgs-s345-lrnone-constraint-loss",
+    "L01-B-reaction-lbfgs-s345-lrnone-l2re",
+    "L01-B-reaction-lbfgs-s345-lrnone-gradient-inf",
+    "L01-B-reaction-hybrid-s345-lr1e-03-real-execution",
+    "L01-B-reaction-hybrid-s345-lr1e-03-terminal-state-and-counts",
+    "L01-B-reaction-hybrid-s345-lr1e-03-residual-loss",
+    "L01-B-reaction-hybrid-s345-lr1e-03-constraint-loss",
+    "L01-B-reaction-hybrid-s345-lr1e-03-l2re",
+    "L01-B-reaction-hybrid-s345-lr1e-03-gradient-inf",
+    "L01-B-wave-adam-s345-lr1e-03-real-execution",
+    "L01-B-wave-adam-s345-lr1e-03-terminal-state-and-counts",
+    "L01-B-wave-adam-s345-lr1e-03-residual-loss",
+    "L01-B-wave-adam-s345-lr1e-03-constraint-loss",
+    "L01-B-wave-adam-s345-lr1e-03-l2re",
+    "L01-B-wave-adam-s345-lr1e-03-gradient-inf",
+    "L01-B-wave-lbfgs-s345-lrnone-real-execution",
+    "L01-B-wave-lbfgs-s345-lrnone-terminal-state-and-counts",
+    "L01-B-wave-lbfgs-s345-lrnone-residual-loss",
+    "L01-B-wave-lbfgs-s345-lrnone-constraint-loss",
+    "L01-B-wave-lbfgs-s345-lrnone-l2re",
+    "L01-B-wave-lbfgs-s345-lrnone-gradient-inf",
+    "L01-B-wave-hybrid-s345-lr1e-03-real-execution",
+    "L01-B-wave-hybrid-s345-lr1e-03-terminal-state-and-counts",
+    "L01-B-wave-hybrid-s345-lr1e-03-residual-loss",
+    "L01-B-wave-hybrid-s345-lr1e-03-constraint-loss",
+    "L01-B-wave-hybrid-s345-lr1e-03-l2re",
+    "L01-B-wave-hybrid-s345-lr1e-03-gradient-inf",
+    "L01-B-convection-adam-s456-lr1e-04-real-execution",
+    "L01-B-convection-adam-s456-lr1e-04-terminal-state-and-counts",
+    "L01-B-convection-adam-s456-lr1e-04-residual-loss",
+    "L01-B-convection-adam-s456-lr1e-04-constraint-loss",
+    "L01-B-convection-adam-s456-lr1e-04-l2re",
+    "L01-B-convection-adam-s456-lr1e-04-gradient-inf",
+    "L01-B-convection-lbfgs-s456-lrnone-real-execution",
+    "L01-B-convection-lbfgs-s456-lrnone-terminal-state-and-counts",
+    "L01-B-convection-lbfgs-s456-lrnone-residual-loss",
+    "L01-B-convection-lbfgs-s456-lrnone-constraint-loss",
+    "L01-B-convection-lbfgs-s456-lrnone-l2re",
+    "L01-B-convection-lbfgs-s456-lrnone-gradient-inf",
+    "L01-B-convection-hybrid-s456-lr1e-04-real-execution",
+    "L01-B-convection-hybrid-s456-lr1e-04-terminal-state-and-counts",
+    "L01-B-convection-hybrid-s456-lr1e-04-residual-loss",
+    "L01-B-convection-hybrid-s456-lr1e-04-constraint-loss",
+    "L01-B-convection-hybrid-s456-lr1e-04-l2re",
+    "L01-B-convection-hybrid-s456-lr1e-04-gradient-inf",
+    "L01-B-convection-adam-s567-lr1e-04-real-execution",
+    "L01-B-convection-adam-s567-lr1e-04-terminal-state-and-counts",
+    "L01-B-convection-adam-s567-lr1e-04-residual-loss",
+    "L01-B-convection-adam-s567-lr1e-04-constraint-loss",
+    "L01-B-convection-adam-s567-lr1e-04-l2re",
+    "L01-B-convection-adam-s567-lr1e-04-gradient-inf",
+    "L01-B-convection-lbfgs-s567-lrnone-real-execution",
+    "L01-B-convection-lbfgs-s567-lrnone-terminal-state-and-counts",
+    "L01-B-convection-lbfgs-s567-lrnone-residual-loss",
+    "L01-B-convection-lbfgs-s567-lrnone-constraint-loss",
+    "L01-B-convection-lbfgs-s567-lrnone-l2re",
+    "L01-B-convection-lbfgs-s567-lrnone-gradient-inf",
+    "L01-B-convection-hybrid-s567-lr1e-04-real-execution",
+    "L01-B-convection-hybrid-s567-lr1e-04-terminal-state-and-counts",
+    "L01-B-convection-hybrid-s567-lr1e-04-residual-loss",
+    "L01-B-convection-hybrid-s567-lr1e-04-constraint-loss",
+    "L01-B-convection-hybrid-s567-lr1e-04-l2re",
+    "L01-B-convection-hybrid-s567-lr1e-04-gradient-inf",
+    "L01-B-convection-adam-s345-lr1e-03-real-execution",
+    "L01-B-convection-adam-s345-lr1e-03-terminal-state-and-counts",
+    "L01-B-convection-adam-s345-lr1e-03-residual-loss",
+    "L01-B-convection-adam-s345-lr1e-03-constraint-loss",
+    "L01-B-convection-adam-s345-lr1e-03-l2re",
+    "L01-B-convection-adam-s345-lr1e-03-gradient-inf",
+    "L01-B-convection-hybrid-s345-lr1e-03-real-execution",
+    "L01-B-convection-hybrid-s345-lr1e-03-terminal-state-and-counts",
+    "L01-B-convection-hybrid-s345-lr1e-03-residual-loss",
+    "L01-B-convection-hybrid-s345-lr1e-03-constraint-loss",
+    "L01-B-convection-hybrid-s345-lr1e-03-l2re",
+    "L01-B-convection-hybrid-s345-lr1e-03-gradient-inf",
+    "L01-B-convection-adam-s345-lr1e-02-real-execution",
+    "L01-B-convection-adam-s345-lr1e-02-terminal-state-and-counts",
+    "L01-B-convection-adam-s345-lr1e-02-residual-loss",
+    "L01-B-convection-adam-s345-lr1e-02-constraint-loss",
+    "L01-B-convection-adam-s345-lr1e-02-l2re",
+    "L01-B-convection-adam-s345-lr1e-02-gradient-inf",
+    "L01-B-convection-hybrid-s345-lr1e-02-real-execution",
+    "L01-B-convection-hybrid-s345-lr1e-02-terminal-state-and-counts",
+    "L01-B-convection-hybrid-s345-lr1e-02-residual-loss",
+    "L01-B-convection-hybrid-s345-lr1e-02-constraint-loss",
+    "L01-B-convection-hybrid-s345-lr1e-02-l2re",
+    "L01-B-convection-hybrid-s345-lr1e-02-gradient-inf",
+    "L01-C-nystrom-known-matrix",
+    "L01-C-nystrom-preconditioner",
+    "L01-C-pcg-solution",
+    "L01-C-pcg-explicit-residual",
+    "L01-C-convection-gd-continuation-0.0001-common-start",
+    "L01-C-convection-gd-continuation-0.0001-independent-terminal",
+    "L01-C-convection-gd-continuation-0.0001-real-updates",
+    "L01-C-convection-gd-continuation-0.001-common-start",
+    "L01-C-convection-gd-continuation-0.001-independent-terminal",
+    "L01-C-convection-gd-continuation-0.001-real-updates",
+    "L01-C-convection-nncg-continuation-0.01-common-start",
+    "L01-C-convection-nncg-continuation-0.01-independent-terminal",
+    "L01-C-convection-nncg-continuation-0.01-armijo",
+    "L01-C-convection-nncg-continuation-0.01-real-updates",
+    "L01-C-convection-nncg-continuation-0.1-common-start",
+    "L01-C-convection-nncg-continuation-0.1-independent-terminal",
+    "L01-C-convection-nncg-continuation-0.1-armijo",
+    "L01-C-convection-nncg-continuation-0.1-real-updates",
+    "L01-C-selection",
+    "L01-C-metering",
+    "L01-D-known-spectrum",
+    "L01-D-total-loss-spectrum",
+    "L01-D-residual-component",
+    "L01-D-constraint-component",
+    "L01-D-preconditioned-spectrum",
+    "L01-R-convection-solution-error",
+    "L01-R-convection-evaluation-physics",
+    "L01-R-convection-initial_value",
+    "L01-R-convection-periodic_value",
+    "L01-R-reaction-solution-error",
+    "L01-R-reaction-evaluation-physics",
+    "L01-R-reaction-initial_value",
+    "L01-R-reaction-periodic_value",
+    "L01-R-wave-solution-error",
+    "L01-R-wave-evaluation-physics",
+    "L01-R-wave-initial_value",
+    "L01-R-wave-initial_velocity",
+    "L01-R-wave-boundary_left",
+    "L01-R-wave-boundary_right",
+    "L01-R-cross-problem-transfer",
+    "L01-R-paired-convection-seeds",
+    "L01-R-single-seed-learning-rate",
+    "L01-R-figures-data",
+    "L01-R-figures-visual",
+    "L01-R-scope-and-hardware",
+    "L01-E-source-environment",
+    "L01-E-independent-metrics",
+    "L01-E-adam-recovery",
+    "L01-E-lbfgs-recovery",
+    "L01-E-time-accounting",
+    "L01-C-convection-nncg-continuation-1.0-common-start",
+    "L01-C-convection-nncg-continuation-1.0-independent-terminal",
+    "L01-C-convection-nncg-continuation-1.0-armijo",
+    "L01-C-convection-nncg-continuation-1.0-real-updates"
+  ],
+  "findings": [
+    {
+      "id": "L01-A-convection-operator",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-A-reaction-operator",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-A-wave-operator",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-A-convection-initial",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-A-convection-periodic",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-A-reaction-initial",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-A-reaction-periodic",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-A-wave-initial",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-A-wave-velocity",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-A-wave-left",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-A-wave-right",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-A-architecture",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-A-xavier-paired-initialization",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-A-float64",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-A-input-first-derivatives",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-A-input-second-derivatives",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-A-parameter-gradient",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-A-hessian-vector-product",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-A-authoritative-grid",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-A-fixed-shared-sampling",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-B-convection-adam-s345-lr1e-04-real-execution",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s345-lr1e-04-terminal-state-and-counts",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s345-lr1e-04-residual-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s345-lr1e-04-constraint-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s345-lr1e-04-l2re",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s345-lr1e-04-gradient-inf",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-lbfgs-s345-lrnone-real-execution",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-B-convection-lbfgs-s345-lrnone-terminal-state-and-counts",
+      "status": "verified_fail",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "trace_manifest_counts:lbfgs"
+    },
+    {
+      "id": "L01-B-convection-lbfgs-s345-lrnone-residual-loss",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-B-convection-lbfgs-s345-lrnone-constraint-loss",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-B-convection-lbfgs-s345-lrnone-l2re",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-B-convection-lbfgs-s345-lrnone-gradient-inf",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s345-lr1e-04-real-execution",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s345-lr1e-04-terminal-state-and-counts",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s345-lr1e-04-residual-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s345-lr1e-04-constraint-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s345-lr1e-04-l2re",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s345-lr1e-04-gradient-inf",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-reaction-adam-s345-lr1e-03-real-execution",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-reaction-adam-s345-lr1e-03-terminal-state-and-counts",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-reaction-adam-s345-lr1e-03-residual-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-reaction-adam-s345-lr1e-03-constraint-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-reaction-adam-s345-lr1e-03-l2re",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-reaction-adam-s345-lr1e-03-gradient-inf",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-reaction-lbfgs-s345-lrnone-real-execution",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-reaction-lbfgs-s345-lrnone-terminal-state-and-counts",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-reaction-lbfgs-s345-lrnone-residual-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-reaction-lbfgs-s345-lrnone-constraint-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-reaction-lbfgs-s345-lrnone-l2re",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-reaction-lbfgs-s345-lrnone-gradient-inf",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-reaction-hybrid-s345-lr1e-03-real-execution",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-reaction-hybrid-s345-lr1e-03-terminal-state-and-counts",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-reaction-hybrid-s345-lr1e-03-residual-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-reaction-hybrid-s345-lr1e-03-constraint-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-reaction-hybrid-s345-lr1e-03-l2re",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-reaction-hybrid-s345-lr1e-03-gradient-inf",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-wave-adam-s345-lr1e-03-real-execution",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-wave-adam-s345-lr1e-03-terminal-state-and-counts",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-wave-adam-s345-lr1e-03-residual-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-wave-adam-s345-lr1e-03-constraint-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-wave-adam-s345-lr1e-03-l2re",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-wave-adam-s345-lr1e-03-gradient-inf",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-wave-lbfgs-s345-lrnone-real-execution",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-wave-lbfgs-s345-lrnone-terminal-state-and-counts",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-wave-lbfgs-s345-lrnone-residual-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-wave-lbfgs-s345-lrnone-constraint-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-wave-lbfgs-s345-lrnone-l2re",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-wave-lbfgs-s345-lrnone-gradient-inf",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-wave-hybrid-s345-lr1e-03-real-execution",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-wave-hybrid-s345-lr1e-03-terminal-state-and-counts",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-wave-hybrid-s345-lr1e-03-residual-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-wave-hybrid-s345-lr1e-03-constraint-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-wave-hybrid-s345-lr1e-03-l2re",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-wave-hybrid-s345-lr1e-03-gradient-inf",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s456-lr1e-04-real-execution",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s456-lr1e-04-terminal-state-and-counts",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s456-lr1e-04-residual-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s456-lr1e-04-constraint-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s456-lr1e-04-l2re",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s456-lr1e-04-gradient-inf",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-lbfgs-s456-lrnone-real-execution",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-lbfgs-s456-lrnone-terminal-state-and-counts",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-lbfgs-s456-lrnone-residual-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-lbfgs-s456-lrnone-constraint-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-lbfgs-s456-lrnone-l2re",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-lbfgs-s456-lrnone-gradient-inf",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s456-lr1e-04-real-execution",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s456-lr1e-04-terminal-state-and-counts",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s456-lr1e-04-residual-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s456-lr1e-04-constraint-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s456-lr1e-04-l2re",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s456-lr1e-04-gradient-inf",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s567-lr1e-04-real-execution",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s567-lr1e-04-terminal-state-and-counts",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s567-lr1e-04-residual-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s567-lr1e-04-constraint-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s567-lr1e-04-l2re",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s567-lr1e-04-gradient-inf",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-lbfgs-s567-lrnone-real-execution",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-lbfgs-s567-lrnone-terminal-state-and-counts",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-lbfgs-s567-lrnone-residual-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-lbfgs-s567-lrnone-constraint-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-lbfgs-s567-lrnone-l2re",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-lbfgs-s567-lrnone-gradient-inf",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s567-lr1e-04-real-execution",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s567-lr1e-04-terminal-state-and-counts",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s567-lr1e-04-residual-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s567-lr1e-04-constraint-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s567-lr1e-04-l2re",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s567-lr1e-04-gradient-inf",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s345-lr1e-03-real-execution",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s345-lr1e-03-terminal-state-and-counts",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s345-lr1e-03-residual-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s345-lr1e-03-constraint-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s345-lr1e-03-l2re",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s345-lr1e-03-gradient-inf",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s345-lr1e-03-real-execution",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s345-lr1e-03-terminal-state-and-counts",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s345-lr1e-03-residual-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s345-lr1e-03-constraint-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s345-lr1e-03-l2re",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s345-lr1e-03-gradient-inf",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s345-lr1e-02-real-execution",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s345-lr1e-02-terminal-state-and-counts",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s345-lr1e-02-residual-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s345-lr1e-02-constraint-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s345-lr1e-02-l2re",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-adam-s345-lr1e-02-gradient-inf",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s345-lr1e-02-real-execution",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s345-lr1e-02-terminal-state-and-counts",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s345-lr1e-02-residual-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s345-lr1e-02-constraint-loss",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s345-lr1e-02-l2re",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-B-convection-hybrid-s345-lr1e-02-gradient-inf",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-C-nystrom-known-matrix",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-C-nystrom-preconditioner",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-C-pcg-solution",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-C-pcg-explicit-residual",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-C-convection-gd-continuation-0.0001-common-start",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-C-convection-gd-continuation-0.0001-independent-terminal",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-C-convection-gd-continuation-0.0001-real-updates",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-C-convection-gd-continuation-0.001-common-start",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-C-convection-gd-continuation-0.001-independent-terminal",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-C-convection-gd-continuation-0.001-real-updates",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-C-convection-nncg-continuation-0.01-common-start",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-C-convection-nncg-continuation-0.01-independent-terminal",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-C-convection-nncg-continuation-0.01-armijo",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-C-convection-nncg-continuation-0.01-real-updates",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-C-convection-nncg-continuation-0.1-common-start",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-C-convection-nncg-continuation-0.1-independent-terminal",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-C-convection-nncg-continuation-0.1-armijo",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-C-convection-nncg-continuation-0.1-real-updates",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-C-selection",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-C-metering",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-D-known-spectrum",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-D-total-loss-spectrum",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-D-residual-component",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-D-constraint-component",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-D-preconditioned-spectrum",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-R-convection-solution-error",
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": "convection-lbfgs-s345-lrnone",
+      "evidence": [
+        "same independent selected numeric export, evaluator-owned canonical points and target policy"
+      ]
+    },
+    {
+      "id": "L01-R-convection-evaluation-physics",
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": "convection-lbfgs-s345-lrnone",
+      "evidence": [
+        "same independent selected numeric export, evaluator-owned canonical points and target policy"
+      ]
+    },
+    {
+      "id": "L01-R-convection-initial_value",
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": "convection-lbfgs-s345-lrnone",
+      "evidence": [
+        "same independent selected numeric export, evaluator-owned canonical points and target policy"
+      ]
+    },
+    {
+      "id": "L01-R-convection-periodic_value",
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": "convection-lbfgs-s345-lrnone",
+      "evidence": [
+        "same independent selected numeric export, evaluator-owned canonical points and target policy"
+      ]
+    },
+    {
+      "id": "L01-R-reaction-solution-error",
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": null,
+      "evidence": [
+        "same independent selected numeric export, evaluator-owned canonical points and target policy"
+      ]
+    },
+    {
+      "id": "L01-R-reaction-evaluation-physics",
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": null,
+      "evidence": [
+        "same independent selected numeric export, evaluator-owned canonical points and target policy"
+      ]
+    },
+    {
+      "id": "L01-R-reaction-initial_value",
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": null,
+      "evidence": [
+        "same independent selected numeric export, evaluator-owned canonical points and target policy"
+      ]
+    },
+    {
+      "id": "L01-R-reaction-periodic_value",
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": null,
+      "evidence": [
+        "same independent selected numeric export, evaluator-owned canonical points and target policy"
+      ]
+    },
+    {
+      "id": "L01-R-wave-solution-error",
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": null,
+      "evidence": [
+        "same independent selected numeric export, evaluator-owned canonical points and target policy"
+      ]
+    },
+    {
+      "id": "L01-R-wave-evaluation-physics",
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": null,
+      "evidence": [
+        "same independent selected numeric export, evaluator-owned canonical points and target policy"
+      ]
+    },
+    {
+      "id": "L01-R-wave-initial_value",
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": null,
+      "evidence": [
+        "same independent selected numeric export, evaluator-owned canonical points and target policy"
+      ]
+    },
+    {
+      "id": "L01-R-wave-initial_velocity",
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": null,
+      "evidence": [
+        "same independent selected numeric export, evaluator-owned canonical points and target policy"
+      ]
+    },
+    {
+      "id": "L01-R-wave-boundary_left",
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": null,
+      "evidence": [
+        "same independent selected numeric export, evaluator-owned canonical points and target policy"
+      ]
+    },
+    {
+      "id": "L01-R-wave-boundary_right",
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": null,
+      "evidence": [
+        "same independent selected numeric export, evaluator-owned canonical points and target policy"
+      ]
+    },
+    {
+      "id": "L01-R-cross-problem-transfer",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-R-paired-convection-seeds",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-R-single-seed-learning-rate",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-R-figures-data",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-R-figures-visual",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-R-scope-and-hardware",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-E-source-environment",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-E-full-clean-retraining",
+      "status": "verified_fail",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "original native, full registry and trace consistency; actual algorithms require independent source review"
+    },
+    {
+      "id": "L01-E-independent-metrics",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-E-adam-recovery",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-E-lbfgs-recovery",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-E-time-accounting",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent whole-case review not supplied"
+    },
+    {
+      "id": "L01-C-convection-nncg-continuation-1.0-common-start",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-C-convection-nncg-continuation-1.0-independent-terminal",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-C-convection-nncg-continuation-1.0-armijo",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    },
+    {
+      "id": "L01-C-convection-nncg-continuation-1.0-real-updates",
+      "status": "blocked",
+      "evidence": [
+        "captured native and independently read actual trace"
+      ],
+      "reason": "configuration or original parent not executed"
+    }
+  ],
+  "limits": "single familiar nonblind AI review when supplied; no professional/statistical/hour certification; capsule identity is not functional correctness"
+}

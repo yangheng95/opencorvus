@@ -1,0 +1,32 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\evaluator\\l01-whole-case\\check_l01.py",
+    "prepare",
+    "--source",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\counting-error-native\\source.zip",
+    "--execution",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\counting-error-native\\execution.zip",
+    "--profile",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\public\\profile.json",
+    "--rubric",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\rubric.draft.json",
+    "--targets",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\public\\quality-policy.draft.json",
+    "--subject-id",
+    "L01-real-counting-error-20261031",
+    "--role",
+    "error_control",
+    "--scope",
+    "partial",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\counting-error-native\\whole-checker-prepare"
+  ],
+  "exit_code": 4,
+  "stdout": "{\"status\": \"assessment_incomplete\", \"subject_role\": \"error_control\", \"fixed_denominator\": 100, \"total\": null, \"study_complete\": false, \"solution_reproduced\": false, \"good\": false, \"critical_failed\": [\"L01-E-full-clean-retraining\"]}\n",
+  "stderr": "",
+  "seconds": 1.269857899285853
+}

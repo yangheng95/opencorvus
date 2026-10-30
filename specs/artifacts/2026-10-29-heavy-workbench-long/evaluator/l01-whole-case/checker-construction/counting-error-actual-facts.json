@@ -1,0 +1,850 @@
+{
+  "native": {
+    "cid": "3a79005b93248e9fedc19efe9b8c39c6f172ff304c6c93d52a60c8e8c54e7d9c",
+    "exit_code": 0,
+    "started_at": "2026-10-30T21:58:44.310848634Z",
+    "finished_at": "2026-10-30T21:58:50.100598785Z",
+    "cmd": [
+      "python",
+      "-u",
+      "-B",
+      "/project/run_study.py",
+      "--inputs",
+      "/project/inputs",
+      "--output",
+      "/project/work/results",
+      "--device",
+      "cpu",
+      "--only",
+      "convection-lbfgs-s345-lrnone"
+    ],
+    "scope": "partial"
+  },
+  "previous_native": [],
+  "artifact": {
+    "format": "heavy-pinn-artifact-check/1",
+    "artifact_contract_checked": true,
+    "training_attestation": "not_performed; requires controlled full clean retraining and independent source/trace review",
+    "study_complete": "unassessed",
+    "solution_reproduced": "unassessed",
+    "registered_runs": 24,
+    "continuation_parent": null,
+    "solution_checkpoints": {
+      "convection": "convection-lbfgs-s345-lrnone",
+      "reaction": null,
+      "wave": null
+    },
+    "observations": {
+      "convection-adam-s345-lr1e-04": {
+        "status": "incomplete",
+        "metrics": null
+      },
+      "convection-lbfgs-s345-lrnone": {
+        "status": "optimizer_stalled",
+        "metrics": {
+          "problem": "convection",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 0.8771905184911473,
+          "constraint_loss": 0.17017943521620932,
+          "total_loss": 1.0473699537073566,
+          "residual_rmse": 1.3245304968109624,
+          "evaluation_residual_loss": 0.8901390947209318,
+          "evaluation_residual_rmse": 1.3342706582406223,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 0.23397768879210756,
+              "rmse": 0.6840726405757032
+            },
+            "periodic_value": {
+              "count": 101,
+              "loss": 0.007841304830012805,
+              "rmse": 0.12523022662291086
+            }
+          },
+          "l2re": 1.021619934565514,
+          "parameter_count": 20601
+        }
+      },
+      "convection-hybrid-s345-lr1e-04": {
+        "status": "incomplete",
+        "metrics": null
+      },
+      "reaction-adam-s345-lr1e-03": {
+        "status": "incomplete",
+        "metrics": null
+      },
+      "reaction-lbfgs-s345-lrnone": {
+        "status": "incomplete",
+        "metrics": null
+      },
+      "reaction-hybrid-s345-lr1e-03": {
+        "status": "incomplete",
+        "metrics": null
+      },
+      "wave-adam-s345-lr1e-03": {
+        "status": "incomplete",
+        "metrics": null
+      },
+      "wave-lbfgs-s345-lrnone": {
+        "status": "incomplete",
+        "metrics": null
+      },
+      "wave-hybrid-s345-lr1e-03": {
+        "status": "incomplete",
+        "metrics": null
+      },
+      "convection-adam-s456-lr1e-04": {
+        "status": "incomplete",
+        "metrics": null
+      },
+      "convection-lbfgs-s456-lrnone": {
+        "status": "incomplete",
+        "metrics": null
+      },
+      "convection-hybrid-s456-lr1e-04": {
+        "status": "incomplete",
+        "metrics": null
+      },
+      "convection-adam-s567-lr1e-04": {
+        "status": "incomplete",
+        "metrics": null
+      },
+      "convection-lbfgs-s567-lrnone": {
+        "status": "incomplete",
+        "metrics": null
+      },
+      "convection-hybrid-s567-lr1e-04": {
+        "status": "incomplete",
+        "metrics": null
+      },
+      "convection-adam-s345-lr1e-03": {
+        "status": "incomplete",
+        "metrics": null
+      },
+      "convection-hybrid-s345-lr1e-03": {
+        "status": "incomplete",
+        "metrics": null
+      },
+      "convection-adam-s345-lr1e-02": {
+        "status": "incomplete",
+        "metrics": null
+      },
+      "convection-hybrid-s345-lr1e-02": {
+        "status": "incomplete",
+        "metrics": null
+      },
+      "convection-gd-continuation-0.0001": {
+        "status": "dependency_incomplete",
+        "metrics": null
+      },
+      "convection-gd-continuation-0.001": {
+        "status": "dependency_incomplete",
+        "metrics": null
+      },
+      "convection-nncg-continuation-0.01": {
+        "status": "dependency_incomplete",
+        "metrics": null
+      },
+      "convection-nncg-continuation-0.1": {
+        "status": "dependency_incomplete",
+        "metrics": null
+      },
+      "convection-nncg-continuation-1.0": {
+        "status": "dependency_incomplete",
+        "metrics": null
+      }
+    }
+  },
+  "trace": {
+    "convection-adam-s345-lr1e-04": {
+      "status": "blocked",
+      "reason": "incomplete"
+    },
+    "convection-lbfgs-s345-lrnone": {
+      "status": "verified_fail",
+      "error": "trace_manifest_counts:lbfgs"
+    },
+    "convection-hybrid-s345-lr1e-04": {
+      "status": "blocked",
+      "reason": "incomplete"
+    },
+    "reaction-adam-s345-lr1e-03": {
+      "status": "blocked",
+      "reason": "incomplete"
+    },
+    "reaction-lbfgs-s345-lrnone": {
+      "status": "blocked",
+      "reason": "incomplete"
+    },
+    "reaction-hybrid-s345-lr1e-03": {
+      "status": "blocked",
+      "reason": "incomplete"
+    },
+    "wave-adam-s345-lr1e-03": {
+      "status": "blocked",
+      "reason": "incomplete"
+    },
+    "wave-lbfgs-s345-lrnone": {
+      "status": "blocked",
+      "reason": "incomplete"
+    },
+    "wave-hybrid-s345-lr1e-03": {
+      "status": "blocked",
+      "reason": "incomplete"
+    },
+    "convection-adam-s456-lr1e-04": {
+      "status": "blocked",
+      "reason": "incomplete"
+    },
+    "convection-lbfgs-s456-lrnone": {
+      "status": "blocked",
+      "reason": "incomplete"
+    },
+    "convection-hybrid-s456-lr1e-04": {
+      "status": "blocked",
+      "reason": "incomplete"
+    },
+    "convection-adam-s567-lr1e-04": {
+      "status": "blocked",
+      "reason": "incomplete"
+    },
+    "convection-lbfgs-s567-lrnone": {
+      "status": "blocked",
+      "reason": "incomplete"
+    },
+    "convection-hybrid-s567-lr1e-04": {
+      "status": "blocked",
+      "reason": "incomplete"
+    },
+    "convection-adam-s345-lr1e-03": {
+      "status": "blocked",
+      "reason": "incomplete"
+    },
+    "convection-hybrid-s345-lr1e-03": {
+      "status": "blocked",
+      "reason": "incomplete"
+    },
+    "convection-adam-s345-lr1e-02": {
+      "status": "blocked",
+      "reason": "incomplete"
+    },
+    "convection-hybrid-s345-lr1e-02": {
+      "status": "blocked",
+      "reason": "incomplete"
+    },
+    "convection-gd-continuation-0.0001": {
+      "status": "blocked",
+      "reason": "dependency_incomplete"
+    },
+    "convection-gd-continuation-0.001": {
+      "status": "blocked",
+      "reason": "dependency_incomplete"
+    },
+    "convection-nncg-continuation-0.01": {
+      "status": "blocked",
+      "reason": "dependency_incomplete"
+    },
+    "convection-nncg-continuation-0.1": {
+      "status": "blocked",
+      "reason": "dependency_incomplete"
+    },
+    "convection-nncg-continuation-1.0": {
+      "status": "blocked",
+      "reason": "dependency_incomplete"
+    }
+  },
+  "quality": {
+    "L01-R-convection-solution-error": {
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": "convection-lbfgs-s345-lrnone"
+    },
+    "L01-R-convection-evaluation-physics": {
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": "convection-lbfgs-s345-lrnone"
+    },
+    "L01-R-convection-initial_value": {
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": "convection-lbfgs-s345-lrnone"
+    },
+    "L01-R-convection-periodic_value": {
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": "convection-lbfgs-s345-lrnone"
+    },
+    "L01-R-reaction-solution-error": {
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": null
+    },
+    "L01-R-reaction-evaluation-physics": {
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": null
+    },
+    "L01-R-reaction-initial_value": {
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": null
+    },
+    "L01-R-reaction-periodic_value": {
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": null
+    },
+    "L01-R-wave-solution-error": {
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": null
+    },
+    "L01-R-wave-evaluation-physics": {
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": null
+    },
+    "L01-R-wave-initial_value": {
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": null
+    },
+    "L01-R-wave-initial_velocity": {
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": null
+    },
+    "L01-R-wave-boundary_left": {
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": null
+    },
+    "L01-R-wave-boundary_right": {
+      "status": "blocked",
+      "reason": "final selection dependency not terminal",
+      "selected_id": null
+    }
+  },
+  "prerequisites": {
+    "L01-B-convection-adam-s345-lr1e-04-real-execution": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s345-lr1e-04-terminal-state-and-counts": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s345-lr1e-04-residual-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s345-lr1e-04-constraint-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s345-lr1e-04-l2re": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s345-lr1e-04-gradient-inf": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-lbfgs-s345-lrnone-terminal-state-and-counts": {
+      "status": "verified_fail",
+      "detail": "trace_manifest_counts:lbfgs"
+    },
+    "L01-B-convection-hybrid-s345-lr1e-04-real-execution": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s345-lr1e-04-terminal-state-and-counts": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s345-lr1e-04-residual-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s345-lr1e-04-constraint-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s345-lr1e-04-l2re": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s345-lr1e-04-gradient-inf": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-reaction-adam-s345-lr1e-03-real-execution": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-reaction-adam-s345-lr1e-03-terminal-state-and-counts": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-reaction-adam-s345-lr1e-03-residual-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-reaction-adam-s345-lr1e-03-constraint-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-reaction-adam-s345-lr1e-03-l2re": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-reaction-adam-s345-lr1e-03-gradient-inf": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-reaction-lbfgs-s345-lrnone-real-execution": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-reaction-lbfgs-s345-lrnone-terminal-state-and-counts": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-reaction-lbfgs-s345-lrnone-residual-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-reaction-lbfgs-s345-lrnone-constraint-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-reaction-lbfgs-s345-lrnone-l2re": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-reaction-lbfgs-s345-lrnone-gradient-inf": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-reaction-hybrid-s345-lr1e-03-real-execution": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-reaction-hybrid-s345-lr1e-03-terminal-state-and-counts": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-reaction-hybrid-s345-lr1e-03-residual-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-reaction-hybrid-s345-lr1e-03-constraint-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-reaction-hybrid-s345-lr1e-03-l2re": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-reaction-hybrid-s345-lr1e-03-gradient-inf": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-wave-adam-s345-lr1e-03-real-execution": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-wave-adam-s345-lr1e-03-terminal-state-and-counts": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-wave-adam-s345-lr1e-03-residual-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-wave-adam-s345-lr1e-03-constraint-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-wave-adam-s345-lr1e-03-l2re": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-wave-adam-s345-lr1e-03-gradient-inf": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-wave-lbfgs-s345-lrnone-real-execution": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-wave-lbfgs-s345-lrnone-terminal-state-and-counts": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-wave-lbfgs-s345-lrnone-residual-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-wave-lbfgs-s345-lrnone-constraint-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-wave-lbfgs-s345-lrnone-l2re": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-wave-lbfgs-s345-lrnone-gradient-inf": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-wave-hybrid-s345-lr1e-03-real-execution": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-wave-hybrid-s345-lr1e-03-terminal-state-and-counts": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-wave-hybrid-s345-lr1e-03-residual-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-wave-hybrid-s345-lr1e-03-constraint-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-wave-hybrid-s345-lr1e-03-l2re": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-wave-hybrid-s345-lr1e-03-gradient-inf": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s456-lr1e-04-real-execution": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s456-lr1e-04-terminal-state-and-counts": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s456-lr1e-04-residual-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s456-lr1e-04-constraint-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s456-lr1e-04-l2re": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s456-lr1e-04-gradient-inf": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-lbfgs-s456-lrnone-real-execution": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-lbfgs-s456-lrnone-terminal-state-and-counts": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-lbfgs-s456-lrnone-residual-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-lbfgs-s456-lrnone-constraint-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-lbfgs-s456-lrnone-l2re": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-lbfgs-s456-lrnone-gradient-inf": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s456-lr1e-04-real-execution": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s456-lr1e-04-terminal-state-and-counts": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s456-lr1e-04-residual-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s456-lr1e-04-constraint-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s456-lr1e-04-l2re": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s456-lr1e-04-gradient-inf": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s567-lr1e-04-real-execution": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s567-lr1e-04-terminal-state-and-counts": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s567-lr1e-04-residual-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s567-lr1e-04-constraint-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s567-lr1e-04-l2re": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s567-lr1e-04-gradient-inf": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-lbfgs-s567-lrnone-real-execution": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-lbfgs-s567-lrnone-terminal-state-and-counts": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-lbfgs-s567-lrnone-residual-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-lbfgs-s567-lrnone-constraint-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-lbfgs-s567-lrnone-l2re": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-lbfgs-s567-lrnone-gradient-inf": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s567-lr1e-04-real-execution": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s567-lr1e-04-terminal-state-and-counts": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s567-lr1e-04-residual-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s567-lr1e-04-constraint-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s567-lr1e-04-l2re": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s567-lr1e-04-gradient-inf": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s345-lr1e-03-real-execution": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s345-lr1e-03-terminal-state-and-counts": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s345-lr1e-03-residual-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s345-lr1e-03-constraint-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s345-lr1e-03-l2re": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s345-lr1e-03-gradient-inf": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s345-lr1e-03-real-execution": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s345-lr1e-03-terminal-state-and-counts": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s345-lr1e-03-residual-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s345-lr1e-03-constraint-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s345-lr1e-03-l2re": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s345-lr1e-03-gradient-inf": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s345-lr1e-02-real-execution": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s345-lr1e-02-terminal-state-and-counts": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s345-lr1e-02-residual-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s345-lr1e-02-constraint-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s345-lr1e-02-l2re": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-adam-s345-lr1e-02-gradient-inf": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s345-lr1e-02-real-execution": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s345-lr1e-02-terminal-state-and-counts": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s345-lr1e-02-residual-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s345-lr1e-02-constraint-loss": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s345-lr1e-02-l2re": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-B-convection-hybrid-s345-lr1e-02-gradient-inf": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-C-convection-gd-continuation-0.0001-common-start": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-C-convection-gd-continuation-0.0001-independent-terminal": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-C-convection-gd-continuation-0.0001-real-updates": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-C-convection-gd-continuation-0.001-common-start": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-C-convection-gd-continuation-0.001-independent-terminal": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-C-convection-gd-continuation-0.001-real-updates": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-C-convection-nncg-continuation-0.01-common-start": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-C-convection-nncg-continuation-0.01-independent-terminal": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-C-convection-nncg-continuation-0.01-armijo": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-C-convection-nncg-continuation-0.01-real-updates": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-C-convection-nncg-continuation-0.1-common-start": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-C-convection-nncg-continuation-0.1-independent-terminal": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-C-convection-nncg-continuation-0.1-armijo": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-C-convection-nncg-continuation-0.1-real-updates": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-C-convection-nncg-continuation-1.0-common-start": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-C-convection-nncg-continuation-1.0-independent-terminal": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-C-convection-nncg-continuation-1.0-armijo": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-C-convection-nncg-continuation-1.0-real-updates": {
+      "status": "blocked",
+      "detail": "configuration or original parent not executed"
+    },
+    "L01-E-full-clean-retraining": {
+      "status": "verified_fail",
+      "detail": "original native, full registry and trace consistency; actual algorithms require independent source review"
+    },
+    "L01-A-authoritative-grid": {
+      "status": "ready_for_review",
+      "detail": "captured public data independently matches exact registered arrays; candidate data use still needs source review"
+    }
+  },
+  "source_training_attestation": "requires the single independent whole-case review; self traces alone do not attest optimization"
+}

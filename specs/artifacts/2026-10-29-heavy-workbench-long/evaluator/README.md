@@ -48,3 +48,5 @@ L06后续[完整独立复建、变价参考和47叶聚合](../cases/L06/README.m
 L06/0.2.0[最终独立合同审查](../cases/L06/evaluator/independent-freeze-review/REVIEW.md)现已批准冻结；当前规范路径rubric.json/public TASK.md、OUTPUTS.md、profile.json。参考正向98分不作候选分，实际新两系统/有效小时仍未完成；私有资格/控制/key不得进入候选项目。
 
 当前L01整题建设入口为[l01-whole-case](l01-whole-case/README.md)：实际自然reaction终态与新NNCG诊断失败、同架构结构控制/原图、完整研究源码及唯一正在执行的作者矩阵。上文旧组件/活跃表仅历史，不当重启依据。未有完整L01评分或冻结。
+
+当前case-only checker已连接真实native/逐attempt/closure与独立最终质量、单次研究审查原子锚点；[实际错误programme](l01-whole-case/checker-construction/REPORT.md)在同入口失败，完整原矩阵正向/科学可达和整审仍待。14质量不能被175研究评级或方法分覆盖。

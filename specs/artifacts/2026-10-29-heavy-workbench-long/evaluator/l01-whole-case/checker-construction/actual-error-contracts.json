@@ -1,0 +1,7 @@
+{
+  "duplicate_attempt": "line2:trace_attempt_sequence",
+  "boolean_cost": "line1:trace_cost_type",
+  "accepted_bad_pcg": "line1:trace_pcg_explicit_residual",
+  "invented_armijo_bound": "line1:trace_armijo_bound",
+  "continue_after_zero": "line2:trace_after_terminal"
+}
