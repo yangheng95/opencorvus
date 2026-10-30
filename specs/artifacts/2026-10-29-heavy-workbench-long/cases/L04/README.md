@@ -1,11 +1,13 @@
-# L04已有持久数据迁移：便宜资格中
+# L04：已有应用版本演进、真实切换与恢复
 
-本项按[九题独立建议](../../evaluator/nine-case-review/H04.md)先构造真实旧库/写者和进程恢复，**尚不是冻结重型任务，不证明小时级，不增加十题完成数**。[Recall与边界](../../../../records/2026-10/2026-10-29-heavy-workbench-l04-qualification.md)记录修改前分析与当前范围。
+当前完整成品已通过一次集中整题独审并限定[开发冻结](FREEZE.json)，不证明候选小时。题包包括[完整公开任务](public/TASK.md)、真实原库/已交付SQL/旧应用、权威身份、[业务合同](public/DATA.md)、[执行与公开演练器](public/EXECUTION.md)、[交付合同](public/OUTPUTS.md)、环境和业务来信；数据是明示原创合成，不含真实用户。
 
-[公开微型协议](public/PROTOCOL.draft.md)、真实v1.sqlite、权威客户映射和独立旧写者在public；数据明示合成。升级涉及别名与同邮箱不同身份、精确金额/退款、隔离raw、历史ACK/audit、schema/epoch共同提交，以及新v2不可降级fee字段。原始输入与私有参考/执行器分开。
+完整链：原v1实际读取/用户批注/写入ACK→SQLite备份→迁移提交前/后进程故障→两个旧写者跨切换→v2费用/退款/新写失ACK→同键恢复→拒绝丢新ACK的旧备份回卷/前向修复→继续营业→逐身份真实数据库/导出/分币种账、实际图和替班说明。数据/schema版本/epoch同事务，未知稳定身份明确保留中止。无任意无损降级/物理掉电/零停机承诺。
 
-[主方实际资格](evaluator/qualification/README.md)从相同关闭的原库四个新副本启动真实进程：正常升级、提交前中断、提交后响应丢失及旧写者跨切换。第一轮5.86秒；修正输入生成耦合后、必需--input版本6.15秒，均43子进程/217事实与具名错误核对。实际数据库和PID/控制事件保留，不能以数量替代结果；独立初审与修后复核另记。
+[参考软件](evaluator/app.py)、报告/自含reproduce入口、公开exercise_app.py与[独立检查器](evaluator/check_l04.py)走真实程序/进程/SQLite；[rubric](rubric.json)为16机器+5独立内容叶、固定100分/关键叶不补偿。[完整实测/原件](evaluator/whole-case-tests/README.md)中真实参考100、假保证报告96/H02关键失败；外部原根`D:/opencorvus-benchmark-runs/l04-full-case-20261031`。机器从实际live.sqlite取事实，原request独立递推每笔新写，report实际无特权只读原事实，不能用内部互相一致洗掉错误。
 
-独立初审已另冷跑并抓到两写者共用的NULL op身份缺陷，原通过不能掩盖它。当前四源修复为共享严格请求合同及v2主键/收据约束自动迁移，保留原输入/失败；主方修后7.18秒通过4个升级及2个应中止保留原库场景，245项事实/53进程。[独立最终复核](evaluator/independent-review/repair-review/REVIEW.md)另目录真实冷跑11.09秒，并加112项独立SQL和27项修复核对通过。queued只证明进程进入/跨切换stale，不夸大为观测到SQLite内核等待队列。
+基例、金额及权威身份变化从同封存程序新执行；按邮箱合并、金额截断、错连退款、版本早提交、恢复旧备份、缓存旧authority及错误保证报告均有真实错误程序/同checker结果。未完整评审的错误对象分数仍null，不手填总分。集中审查三项实质阻断及原反例保留于[建设与修复方案](evaluator/BUILD-PLAN.md)。参考秒级和场景数不是agent小时或职业统计成熟。
 
-仍缺完整重型现场/应用回归、完整恢复/运营决策、原子rubric和错误实现对照、候选/对照实跑及小时级证据。当前没有新模型/Provider/GPU或用户进程操作；测试中终止的仅为有PID及故障阶段握手的自有子进程。
+旧微型资格和NULL身份原失败保存在[历史资格](evaluator/qualification/README.md)、[原独立复核](evaluator/independent-review/repair-review/REVIEW.md)及evaluator/historical-micro-input.zip；其current-source命名是当时封存源，已退役，不是当前完整任务入口/协议fallback，不重复旧112/27。完整任务的旧应用输入与其已发布version1历史另列于public，不能由候选改写。
+
+[持续Recall](../../../../records/2026-10/2026-10-29-heavy-workbench-l04-qualification.md)和[整题升级建议](../../evaluator/nine-case-review/H04.md)记录先前边界；十题、fresh区分度/有效小时目标均尚未完成。

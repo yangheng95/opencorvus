@@ -1,0 +1,393 @@
+{
+  "status": "assessment_incomplete",
+  "subject_role": "author_reference_or_error_control",
+  "run_roots": [
+    "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run"
+  ],
+  "fixed_denominator": 100,
+  "total": null,
+  "business_success": null,
+  "good": null,
+  "failed": [
+    "M05",
+    "M08"
+  ],
+  "unresolved": [
+    "M16",
+    "H01",
+    "H02",
+    "H03",
+    "H04",
+    "H05"
+  ],
+  "critical_unmet": [
+    "M05",
+    "M08",
+    "M16",
+    "H01",
+    "H02",
+    "H03",
+    "H05"
+  ],
+  "findings": {
+    "M01": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\run.json",
+          "actual": null
+        }
+      ]
+    },
+    "M02": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        }
+      ]
+    },
+    "M03": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        }
+      ]
+    },
+    "M04": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        }
+      ]
+    },
+    "M05": {
+      "status": "verified_fail",
+      "findings": [
+        {
+          "status": "verified_fail",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_fail",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_fail",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_fail",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        }
+      ]
+    },
+    "M06": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        }
+      ]
+    },
+    "M07": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        }
+      ]
+    },
+    "M08": {
+      "status": "verified_fail",
+      "findings": [
+        {
+          "status": "verified_fail",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_fail",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_fail",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_fail",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        }
+      ]
+    },
+    "M09": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\clean\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\before\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\after\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\cutover\\events.json",
+          "actual": null
+        }
+      ]
+    },
+    "M10": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\before\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\after\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\ambiguous_entry\\scenario.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\ambiguous_receipt\\scenario.json",
+          "actual": null
+        }
+      ]
+    },
+    "M11": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\cutover\\events.json",
+          "actual": null
+        }
+      ]
+    },
+    "M12": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\clean\\constraint-probes.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\before\\constraint-probes.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\after\\constraint-probes.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\cutover\\constraint-probes.json",
+          "actual": null
+        }
+      ]
+    },
+    "M13": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\clean\\events.json",
+          "actual": null
+        }
+      ]
+    },
+    "M14": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\clean\\recovered-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\before\\recovered-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\after\\recovered-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\cutover\\recovered-sql.json",
+          "actual": null
+        }
+      ]
+    },
+    "M15": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\clean\\export.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\before\\export.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\after\\export.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\cutover\\export.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\wrong_refund-base\\results\\run\\delivery\\reconciliation.csv",
+          "actual": null
+        }
+      ]
+    },
+    "M16": {
+      "status": "unassessed",
+      "findings": []
+    },
+    "H01": {
+      "status": "unassessed",
+      "evidence": "independent whole-case review pending"
+    },
+    "H02": {
+      "status": "unassessed",
+      "evidence": "independent whole-case review pending"
+    },
+    "H03": {
+      "status": "unassessed",
+      "evidence": "independent whole-case review pending"
+    },
+    "H04": {
+      "status": "unassessed",
+      "evidence": "independent whole-case review pending"
+    },
+    "H05": {
+      "status": "unassessed",
+      "evidence": "independent whole-case review pending"
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "observed_at": "2026-10-30T18:57:16.473834+00:00",
+  "action": "read-only inspect of exact six owned IDs; no resume/restart",
+  "containers": [
+    {
+      "id": "6145ba84963f22dbde7c3da722cc04f0896a0c1cd1e770fe27bbb10453dd69cd",
+      "name": "/oc-pinn-convection-contract-20261029-a",
+      "paused": true,
+      "status": "paused",
+      "running": true
+    },
+    {
+      "id": "b815b942032a843f26403bf3b6398388d3f886d4bba4fab9496d6e89a65e9f1c",
+      "name": "/oc-pinn-reaction-convergence-20261029-a",
+      "paused": true,
+      "status": "paused",
+      "running": true
+    },
+    {
+      "id": "70559a9efa3f161fbef1ca8d5825b4e8a704e6ae06ed22ca94abdd2f0220989e",
+      "name": "/oc-pinn-wave-convergence-20261029-a",
+      "paused": true,
+      "status": "paused",
+      "running": true
+    },
+    {
+      "id": "98aaf311ffb8f6227a28e4ff4abe579199a5b0d55e07893ad35ee8e11ff0df87",
+      "name": "/oc-pinn-convection-lr003-20261029-a",
+      "paused": true,
+      "status": "paused",
+      "running": true
+    },
+    {
+      "id": "0b4d747d62832ebf67fd71a9e29f478271c8024850b907ff4631ed771adc1245",
+      "name": "/oc-pinn-convection-lr002-20261029-a",
+      "paused": true,
+      "status": "paused",
+      "running": true
+    },
+    {
+      "id": "2298fd8c88862450de55d3d3fe72863c05d100ab0b99170f1fbdc61703c9971e",
+      "name": "/oc-l06-cash-isolation-20261029-a",
+      "paused": true,
+      "status": "paused",
+      "running": true
+    }
+  ]
+}

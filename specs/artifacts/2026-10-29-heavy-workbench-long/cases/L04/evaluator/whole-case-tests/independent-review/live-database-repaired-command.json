@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l04-whole-case-independent-review-20261031\\case-final\\evaluator\\check_l04.py",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\l04-whole-case-independent-review-20261031\\live-database-mutation",
+    "--raw",
+    "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\raw-base",
+    "--registered-inputs",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L04\\evaluator\\registered-inputs.json",
+    "--rubric",
+    "D:\\opencorvus-benchmark-runs\\l04-whole-case-independent-review-20261031\\case-final\\rubric.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l04-whole-case-independent-review-20261031\\live-database-repaired-result"
+  ],
+  "exit_code": 4,
+  "seconds": 0.38160420022904873,
+  "stdout": "{\"status\": \"assessment_incomplete\", \"subject_role\": \"author_reference_or_error_control\", \"run_roots\": [\"D:\\\\opencorvus-benchmark-runs\\\\l04-whole-case-independent-review-20261031\\\\live-database-mutation\"], \"fixed_denominator\": 100, \"total\": null, \"business_success\": null, \"good\": null, \"failed\": [\"M02\", \"M04\", \"M08\", \"M15\"], \"unresolved\": [\"M16\", \"H01\", \"H02\", \"H03\", \"H04\", \"H05\"], \"critical_unmet\": [\"M02\", \"M04\", \"M08\", \"M15\", \"M16\", \"H01\", \"H02\", \"H03\", \"H05\"]}\n",
+  "stderr": "",
+  "scope": "Same isolated persistent mutation, original historical time defect/old isolation absence retained, zero new app native."
+}

@@ -1,0 +1,104 @@
+{
+  "seconds": 0.15696809999644756,
+  "source": "Independent actual readonly SQLite, Decimal/Fraction, raw authority and original request math; no author business imports",
+  "checks": {
+    "actual_DB_integrity": 4,
+    "actual_DB_snapshot_full_tables": 4,
+    "version_epoch": 4,
+    "published_version_history": 4,
+    "every_legacy_identity_raw_minor_parent": 4,
+    "every_alias_and_raw": 4,
+    "authority_display_identity": 4,
+    "all_quarantine_reasons_original_raw": 4,
+    "all_original_notes_bytes": 4,
+    "new_note_full_NUL": 4,
+    "all_old_audit_exact": 4,
+    "accepted_receipt_request_identity": 18,
+    "every_new_request_actual_fields": 4,
+    "all_original_new_ack": 4,
+    "new_exact_once_audit": 4,
+    "original_receipt_API": 16,
+    "owned_fault_PID_handshake": 4,
+    "fault_original_SQL_no_unfinished_effect": 4,
+    "write_real_entry_receipt_atomic": 2,
+    "recovery_real_complete_ack_difference": 4,
+    "recovery_preserves_every_table": 4,
+    "continued_new_write": 4,
+    "nine_table_API_export_actual_DB": 4,
+    "actual_migration_UTC_time": 4,
+    "upgrade_real_commit_side": 2,
+    "two_distinct_old_writer_real_cutover": 1,
+    "stale_effects_not_authorized": 1,
+    "ambiguous_actual_DB_preserved": 2,
+    "report_true_actual_minor_currency": 8
+  },
+  "failures": [],
+  "results": {
+    "base": {
+      "summaries": [
+        {
+          "scenario": "clean",
+          "currency": "USD",
+          "amount_minor": 28808,
+          "fee_minor": 47
+        },
+        {
+          "scenario": "clean",
+          "currency": "CNY",
+          "amount_minor": 19042,
+          "fee_minor": 0
+        },
+        {
+          "scenario": "before",
+          "currency": "USD",
+          "amount_minor": 27394,
+          "fee_minor": 25
+        },
+        {
+          "scenario": "before",
+          "currency": "CNY",
+          "amount_minor": 19042,
+          "fee_minor": 0
+        },
+        {
+          "scenario": "after",
+          "currency": "USD",
+          "amount_minor": 27394,
+          "fee_minor": 25
+        },
+        {
+          "scenario": "after",
+          "currency": "CNY",
+          "amount_minor": 19042,
+          "fee_minor": 0
+        },
+        {
+          "scenario": "cutover",
+          "currency": "USD",
+          "amount_minor": 27394,
+          "fee_minor": 25
+        },
+        {
+          "scenario": "cutover",
+          "currency": "CNY",
+          "amount_minor": 19042,
+          "fee_minor": 0
+        }
+      ],
+      "quarantine": {
+        "('entry', 'O_SCALE')": "amount_scale",
+        "('entry', 'O_TEXT')": "amount_scale",
+        "('entry', 'O_UNKNOWN')": "unmapped_customer",
+        "('entry', 'O_ORPHAN')": "unmapped_customer",
+        "('entry', 'R_BAD')": "invalid_reversal",
+        "('entry', 'CAP-R1')": "refund_group_exceeds",
+        "('entry', 'CAP-R2')": "refund_group_exceeds",
+        "('entry', 'BAD-CUR')": "unsupported_currency",
+        "('entry', 'BAD-PARENT')": "invalid_reversal",
+        "('customer', '11')": "unmapped_customer"
+      },
+      "valid_old_count": 34,
+      "quarantine_count": 10
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "run_roots": [
+    "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\final-weak-base\\results\\run",
+    "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\final-weak-money\\results\\run",
+    "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\final-weak-identity\\results\\run"
+  ],
+  "ratings": {
+    "H01": {
+      "status": "verified_pass",
+      "evidence": "Read full actual app/legacy/report and raw SQLite/authority. Independent Decimal/readonly-SQL reconstruction verifies each original identity, currency/minor value, refund parent, whole excessive-refund group, quarantine reason/raw, aliases and original Unicode/NUL notes across base/money/identity and four completed business scenarios. Actual final reports describe these same rules and reference complete export/final SQL for row-level provenance. Sources: source-initial/app.py; public-initial/DATA.md; raw-*/app-v1.sqlite; final-*/results/run/{scenario}/live.sqlite; whole-sql-audit.json."
+    },
+    "H02": {
+      "status": "verified_fail",
+      "evidence": "Actual final-weak-base/money/identity delivery REPORT.md appends: all real concurrency and power loss have zero loss and arbitrary-version lossless downgrade is certified. These are unsupported and contradict both the simulation contract and v2 fee/ACK migration boundary. Correct raw/SQL totals cannot compensate. Other leaves retain their own actual basis, including the separate missing self-contained rebuild H05."
+    },
+    "H03": {
+      "status": "verified_pass",
+      "evidence": "Actual operations.md provides manifest app invocation with db/authority/request, expected already_current2/epoch4, stale_epoch not ACK, original-key receipt lookup, before/after fault checks, backup ACK set and fee condition, retain_v2/forward_repaired/integrity and explicit preservation/stop rule for unknown identities/integrity. Public EXECUTION defines full request fields. The incomplete clean full-rebuild helper is separately H05, not grounds to deny these actual operational steps."
+    },
+    "H04": {
+      "status": "verified_pass",
+      "evidence": "Actually opened final-base/results/run/delivery/migration.png via view_image. Four panels separate USD/CNY and principal/fees, label all four scenarios and minor units; fees47 clean versus25 other scenarios, CNY fee0 clearly annotated. Independently queried actual live SQLite and reconciliation.csv match amounts28808/27394USD and19042CNY (money control adds317USD) with per-currency accounting. Sources: actual PNG, reconciliation.csv, whole-sql-audit.json."
+    },
+    "H05": {
+      "status": "verified_fail",
+      "evidence": "Actual final-submission manifest declares only app.py, legacy_app.py, report.py. Its reproduce.md requires python run_l04.py for the complete clean input→fault/retry→report rebuild, but that file is private evaluator code outside the handed programme/public materials. This violates the explicit no-evaluator-dependency anchor. The three correct application runs establish reachability, not a self-contained substitute-operator rebuild. No candidate code/report is repaired by this review."
+    }
+  },
+  "reviewer": "/root/benchmark_review",
+  "disclosure": "Nonblind one-level AI, familiar with earlier L04 prototype/reference, not professional human/statistical maturity or effective-hour certification."
+}

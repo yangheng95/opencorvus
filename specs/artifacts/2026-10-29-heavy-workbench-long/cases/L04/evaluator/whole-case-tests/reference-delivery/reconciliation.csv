@@ -1,0 +1,5 @@
+scenario,schema_version,epoch,entries,quarantine,receipts,notes,amount_minor_USD,amount_minor_CNY,fee_minor_USD,fee_minor_CNY
+clean,2,4,39,10,9,19,28808,19042,47,0
+before,2,4,37,10,7,19,27394,19042,25,0
+after,2,4,37,10,7,19,27394,19042,25,0
+cutover,2,4,37,10,7,19,27394,19042,25,0

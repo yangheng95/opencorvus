@@ -1,4 +1,4 @@
-# L04已有数据库迁移与切换：便宜资格
+# L04已有应用迁移与恢复：完整成品及历史资格
 
 ## Recall
 
@@ -41,3 +41,25 @@ queued控制只独立观察到进程在紧邻BEGIN之前发出write_attempt、�
 最终独立复核已完成：只带修后四源和冻结三输入的新目录实跑核心11.0913秒（外部调用11.2479秒），6场景/53进程/245项通过；另从原库/authority独立构造112项SQL及27项修复检查通过。真实重放旧NULL原请求6次都为invalid_request/op_key，两个应中止场景完整sqlite_master和所有原表逐行保持，8条实际SQLite身份约束错误合同通过。审查只终止其原始Popen句柄的自有PID，原失败不覆盖，不运行Provider/GPU/solver/UI，也不再委托。完整报告/机器结论在cases/L04/evaluator/independent-review，认可范围仅本微型协议和当前已知构造。
 
 下一步不能重复本小资格凑工作量：补完整重型场景的既有应用/迁移史、原始数据/权威判据、版本与业务回归、恢复/前向修复的真实决策和交付链，先让完整参考和具名错误实现进入同一独立checker，再写原子rubric并冻结。当前未有正式候选/对照/小时级，无专家盲评或成熟认证；新长任务的无活动设置要按实际活动定义，不能搬用这个小资格的单子进程超时作为总任务额度。
+
+## 最新完整成品Recall：2026-10-30 UTC / 本地10-31
+
+用户纠偏“题没开发完，测试也没测试，跑题”最高优先：本轮直接补L04整题，不再重旧微型/通用框架。实施前读取AGENTS/本记录/长程最新Recall/H04整题建议、全旧schema/四源及消费者搜索，并落cases/L04/evaluator/BUILD-PLAN。仅本case输入/软件/检查器/报告和spec索引；未触生产调度/数据库/Provider/UI/发布，也未操作用户进程。旧公开微型七文件和已确认NULL缺陷原件保historical-micro-input.zip/旧qualification，不作当前fallback。
+
+当前L04/0.2.0-dev完整13public：实际app-v1.sqlite、权威身份、已交付schema/历史、真实旧应用、完整数据/执行/输出/环境/业务来信和唯一公开exercise_app.py。源→原应用读写/ACK/用户NUL批注→备份→commit前/后真实进程中断/原请求恢复→两个旧写者跨切换→新费用/退款/新写失ACK→拒旧备份数据回卷/前向修复→继续write/get→真实SQL/分币种账/实际四面板图/运维与自含reproduce全部完成。
+
+主根D:/opencorvus-benchmark-runs/l04-full-case-20261031，唯一最终handover-submission与handover-base/money/identity（weak为handover-weak相应三输入）。各正式新输入实际native0、四营业链+两明确身份中止完成；金额控制O1+317最小单位，身份控制legacy12→C-GAMMA，同总额不能掩盖逐客户错映射。原v1历史/audit/notes/ACK逐原文保留，原退款按父/客户/币种与整组上限分类，不猜邮箱。新费用独立于本金，恢复旧备份会丢新ACK/fee，实际仅retain_v2前向修复并继续营业，不伪无损降级。
+
+真实错误programme按邮箱合并、截断金额、错退款链接、版本先提交、旧备份覆盖，均入同checker。缓存authority三输入真实native0，base正确但身份控制M03/M04关键失败。它们未有全控制/独立内容评级者总分保持null；没有把检查数当样本。主/weak原三输入都真实出图并由主方/独审view，弱报告虽然数值正确却伪保证所有现实并发/掉电/任意降级。
+
+一次集中独审D:/opencorvus-benchmark-runs/l04-whole-case-independent-review-20261031独立原SQLite/Decimal逐行、新请求/完整ACK、notes/audit/版本/实际PID/恢复核算；最多另一次真实自含reproduce基例19.3405秒自然0，原inspect/log/exit/SQL/源输入先ZIP后精确cleanup。初评H05实际fail、主其它Hpass；弱额外H02fail，不连坐。原source-initial/check_l04.py在真实探针前已捕获，初评/失败保留。
+
+三实质阻断集中修闭合：新写901→902并改audit/export原M04/M09假通过，现从原request独立递推每笔实际DB字段、明确M04fail；只改真实DB O1原JSON不动旧M02/M04/M15假通过，现同一snapshot只读SQLite URI核实际库并绑快照/导出，同探针明确M04fail；复建命令依赖private run_l04，现唯一执行器移public、参考交付reproduce.py只消费public+本submission，无私有评估挂载。report真实降uid/gid65534，只读555/444副本；原事实留容器内部700区，report终态后才导出，保存真实首行UID/权限/原DB。不扩通用调度/评估框架或任意OS安全平台。
+
+另保两真实作者构造错误：首entry歧义NULL被旧audit NOT NULL触发器拒绝（未调用候选），修为空身份后首完整基例重跑，原native/trace保；published SQL先INDEX后TABLE且含内部表导致真实executescript错误，候选前改table→index→trigger/滤sqlite_，实际新DB/合法写/trigger通过，原SQL/失败保留。old cold使用旧SQL文档不冒称新SQL执行；原app-v1和version1历史未改。最初图fee同本金同轴不可读及v2构造日期均已改为分面板/真实native窗口UTC，旧源/图/原执行均保留。DATA最后只把既已审查/实测的实际UTC窗口说清，不改行为/数据/权重或阈值。
+
+18:57:54Z单层整题最终无阻断，允许仅开发metadata冻结；最终主H01–05pass，weak仅H02fail。随后主方真实check_l04 CLI接registered-inputs/rubric及原三run_roots+独立五评级：主exit0/100/21pass/allcritical/goodtrue；weakexit2/96/H02criticalfail/goodfalse。不是人工手填/Inspect完成分/LLM成绩。FREEZE/status/输入名metadata定稿，21叶100/critical/90线不变。
+
+Git内whole-case-tests保完整可读成品/源码/原命令/实际评分/独审；originals.zip约21.5MB含所有主/独立原件、原capture与数据库，不用hash/叶数/文件数作功能门。操作命令见外部register-and-grade.py及Git中的handover-reviewed-command.json、handover-weak-reviewed-command.json。自含复建：Linux owner容器、readonly完整public与submission、新out，python /source/reproduce.py --input /raw --output /results/run。当前所有新增L04进程/容器均自然终态/封存清理；六旧昂贵资格真实仍Paused，不恢复。结束范围提交、正常fetch/merge/审全待推/必要check/push，保护用户overlay/视频图片删除/索引排序/Bun。
+
+套件现8/10开发合同、候选有效小时0/10，非职业真人/统计成熟；剩完整L05/L01和已触发L02/L06新版本必须继续。当前L02/L06双100终态旧线不改，不重API/旧矩阵/旧资格/旧solver。下一直接L05完整现场/多sender/持久恢复/自由逻辑导出/监测/运营交付/同checker错误程序/一次整审，不再重L04或旧L05小例凑量。只有全目标真实达成才停心跳。

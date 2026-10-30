@@ -1,11 +1,8 @@
 {
-  "synthetic": true,
-  "sqlite_version": "3.50.4",
-  "schema_version": 1,
-  "epoch": 3,
-  "customers": 4,
-  "entries": 10,
-  "journal_mode": "delete",
-  "synchronous": "FULL",
-  "history_timestamp": "synthetic fixture date, not a real deployment claim"
+  "kind": "original_explicitly_synthetic_application_archive",
+  "construction": "build_materials.py plus actual published v1 writes",
+  "published_migration_history": "schema_migrations is immutable input history; maximum version is schema truth",
+  "live_input": "app-v1.sqlite",
+  "historical_micro": "private historical-micro-input.zip preserves all seven old files",
+  "notes": "fictional users; no personal data or actual production data"
 }

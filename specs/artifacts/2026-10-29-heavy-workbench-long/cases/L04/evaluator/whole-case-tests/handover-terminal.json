@@ -1,0 +1,41 @@
+{
+  "finished_at": "2026-10-30T18:52:39.491973+00:00",
+  "jobs": [
+    {
+      "subject": "handover",
+      "role": "base",
+      "exit_code": 0,
+      "finished_at": "2026-10-30T18:51:02.757796+00:00"
+    },
+    {
+      "subject": "handover",
+      "role": "money",
+      "exit_code": 0,
+      "finished_at": "2026-10-30T18:51:17.134162+00:00"
+    },
+    {
+      "subject": "handover",
+      "role": "identity",
+      "exit_code": 0,
+      "finished_at": "2026-10-30T18:51:33.720278+00:00"
+    },
+    {
+      "subject": "handover-weak",
+      "role": "base",
+      "exit_code": 0,
+      "finished_at": "2026-10-30T18:52:01.485497+00:00"
+    },
+    {
+      "subject": "handover-weak",
+      "role": "money",
+      "exit_code": 0,
+      "finished_at": "2026-10-30T18:52:20.788815+00:00"
+    },
+    {
+      "subject": "handover-weak",
+      "role": "identity",
+      "exit_code": 0,
+      "finished_at": "2026-10-30T18:52:39.491414+00:00"
+    }
+  ]
+}

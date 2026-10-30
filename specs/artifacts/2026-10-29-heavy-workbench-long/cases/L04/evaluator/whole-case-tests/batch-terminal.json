@@ -1,0 +1,65 @@
+{
+  "completed_at": "2026-10-30T18:41:41.725905+00:00",
+  "jobs": [
+    {
+      "subject": "closed",
+      "variant": "money",
+      "exit_code": 0,
+      "completed_at": "2026-10-30T18:39:05.632752+00:00"
+    },
+    {
+      "subject": "closed",
+      "variant": "identity",
+      "exit_code": 0,
+      "completed_at": "2026-10-30T18:39:26.343442+00:00"
+    },
+    {
+      "subject": "email_merge",
+      "variant": "base",
+      "exit_code": 0,
+      "completed_at": "2026-10-30T18:39:47.956553+00:00"
+    },
+    {
+      "subject": "truncate_money",
+      "variant": "base",
+      "exit_code": 0,
+      "completed_at": "2026-10-30T18:40:04.698304+00:00"
+    },
+    {
+      "subject": "wrong_refund",
+      "variant": "base",
+      "exit_code": 0,
+      "completed_at": "2026-10-30T18:40:21.334371+00:00"
+    },
+    {
+      "subject": "early_version",
+      "variant": "base",
+      "exit_code": 0,
+      "completed_at": "2026-10-30T18:40:35.645928+00:00"
+    },
+    {
+      "subject": "restore_backup",
+      "variant": "base",
+      "exit_code": 0,
+      "completed_at": "2026-10-30T18:40:50.758223+00:00"
+    },
+    {
+      "subject": "weak_report",
+      "variant": "base",
+      "exit_code": 0,
+      "completed_at": "2026-10-30T18:41:08.406486+00:00"
+    },
+    {
+      "subject": "weak_report",
+      "variant": "money",
+      "exit_code": 0,
+      "completed_at": "2026-10-30T18:41:25.116326+00:00"
+    },
+    {
+      "subject": "weak_report",
+      "variant": "identity",
+      "exit_code": 0,
+      "completed_at": "2026-10-30T18:41:41.725558+00:00"
+    }
+  ]
+}

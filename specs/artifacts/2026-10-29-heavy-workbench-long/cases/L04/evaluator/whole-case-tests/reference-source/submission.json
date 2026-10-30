@@ -1,0 +1,18 @@
+{
+  "files": [
+    "app.py",
+    "report.py",
+    "reproduce.py",
+    "legacy_app.py"
+  ],
+  "app_argv": [
+    "python",
+    "-B",
+    "app.py"
+  ],
+  "report_argv": [
+    "python",
+    "-B",
+    "report.py"
+  ]
+}

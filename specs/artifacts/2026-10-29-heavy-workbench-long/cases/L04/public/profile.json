@@ -1,0 +1,23 @@
+{
+  "case_id": "L04",
+  "version": "0.2.0-dev",
+  "status": "frozen_development_pilot",
+  "inputs": [
+    "DATA.md",
+    "ENVIRONMENT.md",
+    "EXECUTION.md",
+    "OUTPUTS.md",
+    "TASK.md",
+    "app-v1.sqlite",
+    "exercise_app.py",
+    "identity-authority.json",
+    "legacy_app.py",
+    "operations-letter.txt",
+    "profile.json",
+    "provenance.json",
+    "published-v1.sql"
+  ],
+  "native_dependency": "standard SQLite locally, declared runtime and plot dependency",
+  "good_comparison_rule": "score >=90 and every critical leaf passes, fixed before fresh candidates",
+  "limits": "not arbitrary downgrade, physical power loss or unrestricted concurrency; no minimum duration"
+}

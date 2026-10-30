@@ -1,0 +1,41 @@
+{
+  "case": "L04/0.2.0-dev",
+  "at": "2026-10-30T18:57:54.233724+00:00",
+  "reviewer": "/root/benchmark_review",
+  "complete_development_case": true,
+  "development_pilot_freeze_allowed": true,
+  "remaining_substantive_blockers": [],
+  "resolved": [
+    "B01_self_contained_operator_rebuild",
+    "B02_new_request_receipt_actual_entry_binding",
+    "B03_actual_DB_and_readonly_report_evidence"
+  ],
+  "main_review": "main-review.json",
+  "weak_review": "weak-review.json",
+  "initial_preserved": [
+    "REVIEW-INITIAL.md",
+    "main-review-initial.json",
+    "weak-review-initial.json",
+    "INITIAL-SEAL.json",
+    "source-initial/check_l04.py",
+    "new-write-command.json",
+    "live-database-command.json"
+  ],
+  "aggregate_authored": false,
+  "approved_metadata_scope": "Only development freeze status/README/profile metadata, preserving L04/0.2.0-dev identity, raw operational data, 21 leaves/100, original weights/critical flags and90 rule. Current runnable public SQL repair is separately documented, not retroactively assigned to old runs.",
+  "cold": {
+    "only_additional_full_base": true,
+    "seconds": 19.340503299608827,
+    "native_exit": 0,
+    "cid": "80dfaa8ee7f0667034ff017bf0ae8ef165b910794819a992887fa89e42e08208",
+    "originals": "own-cold-originals.zip",
+    "cleanup": "cold-native/cleanup.json"
+  },
+  "limitations": [
+    "familiar nonblind one-level AI reviewer, not professional human certification",
+    "synthetic original local SQLite/controlled process fault, not arbitrary concurrency, physical power loss or lossless version downgrade guarantee",
+    "no fresh model/usage-controlled comparison in this review",
+    "reference seconds/business scenario count do not certify useful several-hour candidate work",
+    "no statistical maturity or completion of ten mature heavy cases"
+  ]
+}

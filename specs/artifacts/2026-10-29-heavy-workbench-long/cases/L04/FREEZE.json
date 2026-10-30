@@ -1,0 +1,41 @@
+{
+  "case_id": "L04",
+  "version": "0.2.0-dev",
+  "frozen_at": "2026-10-30T18:59:46.041580+00:00",
+  "status": "development_pilot_frozen",
+  "public_inputs": [
+    "DATA.md",
+    "ENVIRONMENT.md",
+    "EXECUTION.md",
+    "OUTPUTS.md",
+    "TASK.md",
+    "app-v1.sqlite",
+    "exercise_app.py",
+    "identity-authority.json",
+    "legacy_app.py",
+    "operations-letter.txt",
+    "profile.json",
+    "provenance.json",
+    "published-v1.sql"
+  ],
+  "rubric": "rubric.json",
+  "weights_fixed": 100,
+  "good_rule": {
+    "minimum_score": 90,
+    "all_critical": "verified_pass"
+  },
+  "review": "evaluator/whole-case-tests/independent-review/REVIEW-FINAL.md",
+  "review_scope": "one nonblind familiar AI whole-case review, one actual extra source-only base replay",
+  "reference_assessment": "evaluator/whole-case-tests/main-assessment.json",
+  "weak_assessment": "evaluator/whole-case-tests/weak-assessment.json",
+  "late_public_clarifications": [
+    "runnable standalone published-v1.sql repaired before freeze, original SQL/actual error retained; DB/history unchanged",
+    "DATA applied_at wording explicitly matches already reviewed actual UTC native window; no behavior/weight/threshold change"
+  ],
+  "limitations": [
+    "author reference/error programmes, not model candidate scores",
+    "reference seconds not meaningful multi-hour candidate qualification",
+    "no physical power loss/arbitrary concurrency/lossless downgrade/security or professional statistical certification",
+    "suite 8/10 development contracts, genuine candidate-hour qualification 0/10; L05/L01 and triggered L02/L06 upgrades still required"
+  ]
+}

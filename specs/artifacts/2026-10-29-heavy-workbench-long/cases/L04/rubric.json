@@ -1,0 +1,234 @@
+{
+  "case_id": "L04",
+  "version": "0.2.0-dev",
+  "status": "frozen_development_pilot",
+  "fixed_denominator": 100,
+  "good_rule": {
+    "minimum_score": 90,
+    "all_critical": "verified_pass"
+  },
+  "states": [
+    "verified_pass",
+    "verified_fail",
+    "blocked",
+    "unassessed"
+  ],
+  "half_or_na": false,
+  "leaves": [
+    {
+      "id": "M01",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "title": "真实完整应用执行",
+      "pass": "四营业链与两明确中止均完成，报告native0；不是自报通过",
+      "fail": "任一所需真实事实不成立；缺依赖为blocked，未评为unassessed，不改分母",
+      "evidence": "run/scenario/native"
+    },
+    {
+      "id": "M02",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "title": "逐来源存量与可用数据库",
+      "pass": "从原SQLite/authority分类的正确原entry集合、integrity和FK均成立；不靠总额抵消",
+      "fail": "任一所需真实事实不成立；缺依赖为blocked，未评为unassessed，不改分母",
+      "evidence": "raw→final SQL"
+    },
+    {
+      "id": "M03",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "title": "权威客户与别名",
+      "pass": "每原customer按authority精确映射/展示字段，完整alias raw；同邮箱不同法人不合并",
+      "fail": "任一所需真实事实不成立；缺依赖为blocked，未评为unassessed，不改分母",
+      "evidence": "authority/customer_aliases/customers"
+    },
+    {
+      "id": "M04",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "title": "精确币种金额",
+      "pass": "逐业务customer/currency/minor/fee严格整数与原十进制相同，零额合法",
+      "fail": "任一所需真实事实不成立；缺依赖为blocked，未评为unassessed，不改分母",
+      "evidence": "raw/entries"
+    },
+    {
+      "id": "M05",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "title": "退款链接与本金",
+      "pass": "每原退款链接准确，超额组按合同隔离；不能同总额换父单",
+      "fail": "任一所需真实事实不成立；缺依赖为blocked，未评为unassessed，不改分母",
+      "evidence": "raw/entries"
+    },
+    {
+      "id": "M06",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "title": "原文隔离与追踪",
+      "pass": "每类异常原因/原表主键/完整raw及成功原entry/alias原文一致，不能静默丢行",
+      "fail": "任一所需真实事实不成立；缺依赖为blocked，未评为unassessed，不改分母",
+      "evidence": "quarantine/legacy_raw_json"
+    },
+    {
+      "id": "M07",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "title": "用户批注与读取",
+      "pass": "原NUL/Unicode/换行逐字保留，新note也持久且真实notes API读到",
+      "fail": "任一所需真实事实不成立；缺依赖为blocked，未评为unassessed，不改分母",
+      "evidence": "notes/request/native"
+    },
+    {
+      "id": "M08",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "title": "不可改迁移史与持续审计",
+      "pass": "原version1每字段/原audit事件全保，恰一次version2，新业务恰一次审计",
+      "fail": "任一所需真实事实不成立；缺依赖为blocked，未评为unassessed，不改分母",
+      "evidence": "schema_migrations/audit_events"
+    },
+    {
+      "id": "M09",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "title": "完整ACK与幂等收据",
+      "pass": "全部原/新成功操作逐键逐payload/receipt保存，真实旧receipt查询相符，重试没有新身份",
+      "fail": "任一所需真实事实不成立；缺依赖为blocked，未评为unassessed，不改分母",
+      "evidence": "receipts/native"
+    },
+    {
+      "id": "M10",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "title": "原子切换与明确中止",
+      "pass": "真实前/后提交故障另一连接分别v1/3与v2/4；稳定身份歧义保原全库并明确中止",
+      "fail": "任一所需真实事实不成立；缺依赖为blocked，未评为unassessed，不改分母",
+      "evidence": "checkpoint SQL/exit/retry/ambiguous SQL"
+    },
+    {
+      "id": "M11",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "title": "两个旧写者跨切换",
+      "pass": "两个独立原PID实际before_begin跨切换后均stale_epoch4，历史没有其写",
+      "fail": "任一所需真实事实不成立；缺依赖为blocked，未评为unassessed，不改分母",
+      "evidence": "native/SQL"
+    },
+    {
+      "id": "M12",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "title": "新版写语义与真实约束",
+      "pass": "fee/退款预算/冲突/非法类型/旧epoch/外键等真实响应正确，SQLite合法插入与六具名约束probe成立",
+      "fail": "任一所需真实事实不成立；缺依赖为blocked，未评为unassessed，不改分母",
+      "evidence": "requests/constraint-probes"
+    },
+    {
+      "id": "M13",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "title": "新写进程故障恢复",
+      "pass": "真实commit前无entry/receipt、后两者均有；原键重试后各恰一次",
+      "fail": "任一所需真实事实不成立；缺依赖为blocked，未评为unassessed，不改分母",
+      "evidence": "native/checkpoint/final SQL"
+    },
+    {
+      "id": "M14",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "title": "恢复决策与继续营业",
+      "pass": "不把缺新ACK/fee的旧备份覆盖活库；retain_v2完整差集/fee/integrity、保所有表并继续write/get",
+      "fail": "任一所需真实事实不成立；缺依赖为blocked，未评为unassessed，不改分母",
+      "evidence": "pre-recover/recovered/final/native"
+    },
+    {
+      "id": "M15",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "title": "完整读导出与重算交付",
+      "pass": "实际API余额/九表导出与SQL一致，四场景reconciliation CSV逐字段/分币种对账",
+      "fail": "任一所需真实事实不成立；缺依赖为blocked，未评为unassessed，不改分母",
+      "evidence": "API/export/CSV"
+    },
+    {
+      "id": "M16",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "title": "原输入变化真实执行",
+      "pass": "同封存programme对base/money/identity三份输入完成真实整链，机器各叶仍按各自raw核算，不能缓存旧答案",
+      "fail": "任一所需真实事实不成立；缺依赖为blocked，未评为unassessed，不改分母",
+      "evidence": "registration/raw/three native"
+    },
+    {
+      "id": "H01",
+      "weight": 4,
+      "critical": true,
+      "assessment": "independent",
+      "title": "调查与实现解释",
+      "anchors": "完整：以当前原对象解释权威身份/异常/精度/批注/退款组的实际处理、逐原行追踪和版本唯一事实；源码与正文一致。失败：只有通用口号、解释与实际程序冲突或漏核心数据语义。",
+      "evidence": "REPORT.md + actual source/raw/SQL",
+      "formats": "等价完整表/JSON/公式/文字可；不按字数/相同参考措辞/行序判定"
+    },
+    {
+      "id": "H02",
+      "weight": 4,
+      "critical": true,
+      "assessment": "independent",
+      "title": "故障与回退证据边界",
+      "anchors": "完整：按实际原PID/native/另一连接SQL解释前后故障、幂等和栅栏；明确v1不能表达fee、旧备份缺新ACK、实际前向恢复；声明仅受控进程故障。失败：无证据的全部并发/掉电/任意无损降级/认证保证，或把中止称成功。正确底表不能洗掉错误强结论。",
+      "evidence": "REPORT.md + original events/SQL/recover",
+      "formats": "等价完整表/JSON/公式/文字可；不按字数/相同参考措辞/行序判定"
+    },
+    {
+      "id": "H03",
+      "weight": 4,
+      "critical": true,
+      "assessment": "independent",
+      "title": "替班运营可执行性",
+      "anchors": "完整：给新维护者具体命令、核对/继续条件与停手条件、未知身份/旧epoch处理、备份与前向修复、收据查证和继续业务。失败：只说安全升级/备份恢复，或命令/顺序会丢已ACK数据。",
+      "evidence": "operations.md + public CLI and actual requests",
+      "formats": "等价完整表/JSON/公式/文字可；不按字数/相同参考措辞/行序判定"
+    },
+    {
+      "id": "H04",
+      "weight": 4,
+      "critical": false,
+      "assessment": "independent",
+      "title": "实际图与可读对账",
+      "anchors": "完整：实际打开图，轴/币种/最小单位/本金与fee/场景可辨，和原CSV/SQL相符；文字正确说明图范围。完整等价表图形式不按美术风格扣分。失败：缺真实图/错数/单位混币/无法读。",
+      "evidence": "migration.png actual visual + reconciliation CSV",
+      "formats": "等价完整表/JSON/公式/文字可；不按字数/相同参考措辞/行序判定"
+    },
+    {
+      "id": "H05",
+      "weight": 4,
+      "critical": true,
+      "assessment": "independent",
+      "title": "可复建软件与移交",
+      "anchors": "完整：全部源码/依赖/输入/命令/原执行与错误处理定位，操作者能在新环境运行v1→v2→故障重试→报告；不靠评估器或宿主旧答案。失败：缺声明依赖/关键步骤或仅交结果截图。",
+      "evidence": "submission/source/reproduce.md + native",
+      "formats": "等价完整表/JSON/公式/文字可；不按字数/相同参考措辞/行序判定"
+    }
+  ],
+  "limitations": [
+    "author development pilot, not professional/statistical maturity",
+    "no hour qualification from reference wall time",
+    "independent human leaves require external actual-object review; candidate cannot override machine leaves"
+  ]
+}

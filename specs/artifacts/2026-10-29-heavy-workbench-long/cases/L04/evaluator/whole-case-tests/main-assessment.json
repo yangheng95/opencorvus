@@ -1,0 +1,918 @@
+{
+  "status": "graded",
+  "subject_role": "author_reference_or_error_control",
+  "run_roots": [
+    "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run",
+    "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run",
+    "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run"
+  ],
+  "fixed_denominator": 100,
+  "total": 100,
+  "business_success": true,
+  "good": true,
+  "failed": [],
+  "unresolved": [],
+  "critical_unmet": [],
+  "findings": {
+    "M01": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\run.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\run.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\run.json",
+          "actual": null
+        }
+      ]
+    },
+    "M02": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\clean\\live.sqlite",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\before\\live.sqlite",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\after\\live.sqlite",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\cutover\\live.sqlite",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\clean\\live.sqlite",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\before\\live.sqlite",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\after\\live.sqlite",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\cutover\\live.sqlite",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\clean\\live.sqlite",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\before\\live.sqlite",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\after\\live.sqlite",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\cutover\\live.sqlite",
+          "actual": null
+        }
+      ]
+    },
+    "M03": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        }
+      ]
+    },
+    "M04": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        }
+      ]
+    },
+    "M05": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        }
+      ]
+    },
+    "M06": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        }
+      ]
+    },
+    "M07": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        }
+      ]
+    },
+    "M08": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\clean\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\before\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\after\\final-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\cutover\\final-sql.json",
+          "actual": null
+        }
+      ]
+    },
+    "M09": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\clean\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\before\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\after\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\cutover\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\clean\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\before\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\after\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\cutover\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\clean\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\before\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\after\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\cutover\\events.json",
+          "actual": null
+        }
+      ]
+    },
+    "M10": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\before\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\after\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\ambiguous_entry\\scenario.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\ambiguous_receipt\\scenario.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\before\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\after\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\ambiguous_entry\\scenario.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\ambiguous_receipt\\scenario.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\before\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\after\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\ambiguous_entry\\scenario.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\ambiguous_receipt\\scenario.json",
+          "actual": null
+        }
+      ]
+    },
+    "M11": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\cutover\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\cutover\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\cutover\\events.json",
+          "actual": null
+        }
+      ]
+    },
+    "M12": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\clean\\constraint-probes.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\before\\constraint-probes.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\after\\constraint-probes.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\cutover\\constraint-probes.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\clean\\constraint-probes.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\before\\constraint-probes.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\after\\constraint-probes.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\cutover\\constraint-probes.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\clean\\constraint-probes.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\before\\constraint-probes.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\after\\constraint-probes.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\cutover\\constraint-probes.json",
+          "actual": null
+        }
+      ]
+    },
+    "M13": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\clean\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\clean\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\clean\\events.json",
+          "actual": null
+        }
+      ]
+    },
+    "M14": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\clean\\recovered-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\before\\recovered-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\after\\recovered-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\cutover\\recovered-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\clean\\recovered-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\before\\recovered-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\after\\recovered-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\cutover\\recovered-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\clean\\recovered-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\before\\recovered-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\after\\recovered-sql.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\cutover\\recovered-sql.json",
+          "actual": null
+        }
+      ]
+    },
+    "M15": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\clean\\export.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\before\\export.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\after\\export.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\cutover\\export.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\report-isolation.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\results\\run\\delivery\\reconciliation.csv",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\clean\\export.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\before\\export.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\after\\export.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\cutover\\export.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\report-isolation.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\results\\run\\delivery\\reconciliation.csv",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\clean\\export.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\before\\export.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\after\\export.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\cutover\\export.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\report-isolation.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\results\\run\\delivery\\reconciliation.csv",
+          "actual": null
+        }
+      ]
+    },
+    "M16": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "same immutable programme across base/money/identity controls",
+          "actual": null
+        }
+      ]
+    },
+    "H01": {
+      "status": "verified_pass",
+      "evidence": "Read full actual app/legacy/report and raw SQLite/authority. Independent Decimal/readonly-SQL reconstruction verifies each original identity, currency/minor value, refund parent, whole excessive-refund group, quarantine reason/raw, aliases and original Unicode/NUL notes across base/money/identity and four completed business scenarios. Actual final reports describe these same rules and reference complete export/final SQL for row-level provenance. Sources: case-final app source (same business implementation); public-initial/DATA.md; raw-*/app-v1.sqlite; handover-*/results/run/{scenario}/live.sqlite; handover-sql-audit.json."
+    },
+    "H02": {
+      "status": "verified_pass",
+      "evidence": "Actual original checkpoint PID/native plus independent connection SQL show before upgrade v1/epoch3 versus after v2/epoch4; two distinct old PIDs are held before_begin across actual upgrade and then return stale_epoch4. New write before/after fault affects entry and receipt atomically and original-key retry is once. Backup lacks real later ACK/fee; actual forward repair preserves all tables and continues. Main report expressly limits this to controlled process faults, not physical power loss/arbitrary concurrency/lossless downgrade. Sources: handover-*/results/run/{before,after,cutover,clean}/events.json, backup.sqlite, pre-recover/recovered/final SQL; handover-sql-audit.json."
+    },
+    "H03": {
+      "status": "verified_pass",
+      "evidence": "Actual operations.md provides manifest app invocation with db/authority/request, expected already_current2/epoch4, stale_epoch not ACK, original-key receipt lookup, before/after fault checks, backup ACK set and fee condition, retain_v2/forward_repaired/integrity and explicit preservation/stop rule for unknown identities/integrity. Public EXECUTION defines full request fields. The incomplete clean full-rebuild helper is separately H05, not grounds to deny these actual operational steps."
+    },
+    "H04": {
+      "status": "verified_pass",
+      "evidence": "Actually opened handover-base/results/run/delivery/migration.png via view_image. Four panels separate USD/CNY and principal/fees, label all four scenarios and minor units; fees47 clean versus25 other scenarios, CNY fee0 clearly annotated. Independently queried actual live SQLite and reconciliation.csv match amounts28808/27394USD and19042CNY (money control adds317USD) with per-currency accounting. Sources: actual PNG, reconciliation.csv, handover-sql-audit.json."
+    },
+    "H05": {
+      "status": "verified_pass",
+      "evidence": "The final actual programme now delivers app.py/legacy_app.py/report.py/reproduce.py plus manifest and consumes the complete public RAW including the sole public exercise_app.py. Read actual final reproduce.md/operations.md and executed SOURCE/reproduce.py --input RAW --output NEW_OUT in an independent new1CPU/networknone container with only readonly SOURCE/RAW and new output, no evaluator mount. Native0 in19.3405033s, all six scenarios and actual report exit0; original PID/checkpoint/SQL/receipt/fault/retry/continued operation preserved and independently SQL-rechecked. Actual report ran uid/gid65534 over root-owned readonly facts, original owner evidence was exported after report exit. Sources: handover-*/results/run/delivery/reproduce.md; handover-submission; raw-handover-base/exercise_app.py; cold-native/{create-command.json,inspect-terminal.json,terminal-command.json,results/run}; own-cold-originals.zip; cold-sql-audit.json; final-confirmation.json."
+    }
+  }
+}

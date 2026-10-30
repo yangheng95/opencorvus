@@ -1,0 +1,8 @@
+{
+  "archive": "originals.zip",
+  "size_bytes": 21467703,
+  "contains": "complete pre-push main/reviewer folders, source-initial captured by reviewer, native DB/requests/PIDs/logs/inspect/inputs, original failures and final case source",
+  "original_source": "reviewer source-initial/check_l04.py was captured before original real counterexamples; no reconstructed-source claim",
+  "late_publish_receipt": "external publish-delivery.json generated after push, not retroactively inside this archive",
+  "checks_not_used_as_functional_gate": "no source hash or mutable checksum acceptance"
+}

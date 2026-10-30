@@ -1,0 +1,11 @@
+# 原始档案与业务语义
+
+app-v1.sqlite是关闭连接后的原始活库副本。published-v1.sql是其已交付schema，schema_migrations原有每一行和audit_events原有每一行都必须保留。legacy_app.py是实际旧应用，命令见EXECUTION。版本事实只有schema_migrations最大值；control.epoch是写者generation。原version1/epoch3。notes是用户原文（含换行、引号、Unicode和NUL），迁移不得改写或按显示宽度截断。原authority由identity-authority.json给出，邮箱不是身份。同一canonical客户的多个legacy ID为别名；不同canonical即使邮箱相同也分开。
+
+v2持久表：customers(customer_key,display_name,email)、customer_aliases(legacy_id,customer_key,raw_json)、entries(entry_id,customer_key,currency,amount_minor,reversal_of,fee_minor,legacy_raw_json)、quarantine(kind,legacy_key,reason,raw_json)，以及原write_receipts、notes、schema_migrations、audit_events、control。逻辑字段名称用于真实SQL/导出核对，额外索引和元数据允许。身份TEXT主键必须非NULL/非空；entries客户、退款父单有外键，币种USD/CNY，amount/fee为严格64位整数（布尔不是整数），fee>=0。原write_receipts内容逐操作保留；新收据command_json是完整write对象，result_json是原accepted。
+
+金额文本只接受十进制plain string、可负、最多两位小数，按1元=100最小单位精确换算，禁止float截断。分类优先：客户未映射→unmapped_customer；币种不支持→unsupported_currency；格式/小数位非法→amount_scale；64位范围→amount_range；非退款为负、退款非负/缺父/父不是正原单/客户或币种不同/父已坏→invalid_reversal；同一有效父单的全部原退款合计超本金→该组全部退款refund_group_exceeds，不任意挑一条。客户未映射本身也隔离kind customer。其余原行进入entries，fee=0并保完整legacy_raw_json；每条原数据必须可定位到原表主键和完整raw。
+
+新v2退款必须关联同客户同币种的正原单，且该父已提交退款加本笔不得超本金；拒绝refund_exceeds不提交。新fee单独加总，不能从amount减掉、不能强制为0。迁移需保旧触发器已生成审计并为后续插入继续生成source_schema2审计；旧行不需补造第二份“原审计”。notes不要求entry外键，因为历史隔离行的批注也须保存。
+
+迁移固定追加version2/name canonical_money_fee，applied_at为该次真实升级事务的UTC时间，位于该次upgrade调用开始/结束之间；epoch3→4，重试already_current且epoch不再变。stable身份缺NULL/空白（entry或receipt）是无法恢复的原身份，必须unresolved_entry_identity或unresolved_receipt_identity中止并保原全库，不能猜新ID。已发布version1历史不可改。

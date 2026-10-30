@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "legacy_app.py",
+    "--db",
+    "app-v1.sqlite",
+    "--request",
+    "1.json"
+  ],
+  "exit_code": 0,
+  "stdout": "{\"entry_id\": \"ACK-1\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}\n",
+  "stderr": ""
+}

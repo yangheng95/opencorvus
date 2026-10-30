@@ -1,0 +1,18 @@
+{
+  "source": "current public/published-v1.sql",
+  "status": "executed",
+  "entry": [
+    "REAL-POSITIVE",
+    7,
+    "USD",
+    "12.34",
+    null
+  ],
+  "actual_trigger_audit": [
+    "REAL-POSITIVE",
+    1,
+    "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12.34\",\"reversal_of\":null}"
+  ],
+  "input_app_v1": "unchanged, original rows/history preserved",
+  "scope": "one standalone published SQL construction/actual v1 insert; zero application matrix reruns"
+}

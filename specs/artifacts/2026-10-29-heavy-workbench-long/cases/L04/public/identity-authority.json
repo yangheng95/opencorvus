@@ -1,0 +1,34 @@
+{
+  "source": "explicit synthetic authoritative identity map; email equality is not identity",
+  "legacy_to_customer": {
+    "7": "C-ALPHA",
+    "9": "C-ALPHA",
+    "12": "C-BETA",
+    "21": "C-CLINIC",
+    "23": "C-CLINIC",
+    "40": "C-MULLER",
+    "41": "C-MULLER"
+  },
+  "customers": {
+    "C-ALPHA": {
+      "display_name": "甲客户",
+      "email": "same@example.test"
+    },
+    "C-BETA": {
+      "display_name": "乙客户",
+      "email": "same@example.test"
+    },
+    "C-CLINIC": {
+      "display_name": "北区诊所",
+      "email": "clinic@example.test"
+    },
+    "C-MULLER": {
+      "display_name": "Müller & Co",
+      "email": "muller@example.test"
+    },
+    "C-GAMMA": {
+      "display_name": "第三法人",
+      "email": "same@example.test"
+    }
+  }
+}

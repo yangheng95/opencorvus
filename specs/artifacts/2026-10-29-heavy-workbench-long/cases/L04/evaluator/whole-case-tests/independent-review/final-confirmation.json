@@ -1,0 +1,99 @@
+{
+  "checks": {
+    "new-write_actual_amount_rejected": true,
+    "live-database_actual_amount_rejected": true,
+    "handoverbase_native_permissions": true,
+    "handoverbase_actual_report_identity": true,
+    "handoverbase_immutable_declared_source": true,
+    "handoverbase_original_raw_data": true,
+    "handovermoney_native_permissions": true,
+    "handovermoney_actual_report_identity": true,
+    "handovermoney_immutable_declared_source": true,
+    "handovermoney_original_raw_data": true,
+    "handoveridentity_native_permissions": true,
+    "handoveridentity_actual_report_identity": true,
+    "handoveridentity_immutable_declared_source": true,
+    "handoveridentity_original_raw_data": true,
+    "handover-weakbase_native_permissions": true,
+    "handover-weakbase_actual_report_identity": true,
+    "handover-weakbase_immutable_declared_source": true,
+    "handover-weakbase_original_raw_data": true,
+    "handover-weakmoney_native_permissions": true,
+    "handover-weakmoney_actual_report_identity": true,
+    "handover-weakmoney_immutable_declared_source": true,
+    "handover-weakmoney_original_raw_data": true,
+    "handover-weakidentity_native_permissions": true,
+    "handover-weakidentity_actual_report_identity": true,
+    "handover-weakidentity_immutable_declared_source": true,
+    "handover-weakidentity_original_raw_data": true,
+    "independent_cold_report_uid": true,
+    "independent_cold_native": true,
+    "independent_cold_actual_app_source": true,
+    "independent_cold_unique_public_exerciser": true,
+    "unique_current_exerciser": true,
+    "actual_published_SQL_positive_object": true,
+    "new_SQL_correct_dependency_order": true
+  },
+  "failures": [],
+  "original_native": [
+    {
+      "kind": "handover",
+      "role": "base",
+      "terminal": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-base\\native-terminal.json",
+      "cid": "6bf4b508e20dc45dbb467a8e006ab9ec052fa7f19916a6623ec8fd5d080341a9",
+      "seconds": 15.876334800384939,
+      "report_pid": 142,
+      "report_uid": 65534
+    },
+    {
+      "kind": "handover",
+      "role": "money",
+      "terminal": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-money\\native-terminal.json",
+      "cid": "0e2e8d92ed463f49b278157a5811be66008a56bc6b156181ed3c12f889302a1e",
+      "seconds": 13.644584099762142,
+      "report_pid": 142,
+      "report_uid": 65534
+    },
+    {
+      "kind": "handover",
+      "role": "identity",
+      "terminal": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-identity\\native-terminal.json",
+      "cid": "eb5e3f1763d94d5e85a98d9261b7bbaeba104d3e37c9377737117bf74db64ee7",
+      "seconds": 15.541884600184858,
+      "report_pid": 143,
+      "report_uid": 65534
+    },
+    {
+      "kind": "handover-weak",
+      "role": "base",
+      "terminal": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-weak-base\\native-terminal.json",
+      "cid": "3cfd3fd850080404a613c35948f4de1c69d95e904091d9c5102810fe823350e5",
+      "seconds": 26.396113499999046,
+      "report_pid": 142,
+      "report_uid": 65534
+    },
+    {
+      "kind": "handover-weak",
+      "role": "money",
+      "terminal": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-weak-money\\native-terminal.json",
+      "cid": "63394639ac99dbc430bd38ab535b22abc4a7f0eec96198fbcb42c60a7f25c449",
+      "seconds": 18.436873800121248,
+      "report_pid": 142,
+      "report_uid": 65534
+    },
+    {
+      "kind": "handover-weak",
+      "role": "identity",
+      "terminal": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-weak-identity\\native-terminal.json",
+      "cid": "e885c3961d224c15ff214a48ef7fd1c704dec6e52818f0b2787ec95807b66146",
+      "seconds": 17.889854700304568,
+      "report_pid": 142,
+      "report_uid": 65534
+    }
+  ],
+  "published_SQL": {
+    "cold_raw_old_SQL": true,
+    "scope": "Cold already executed only prebuilt original DB; standalone published SQL construction is a later author repair, read source/actual positive DB and receipt independently; no retrospective byte claim or new app replay."
+  },
+  "permissions_scope": "Real preexec setgroups/setgid/setuid plus original pid/uid stderr and Unix modes; not an adversarial OS certification."
+}

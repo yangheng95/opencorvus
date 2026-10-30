@@ -1,0 +1,11 @@
+{
+  "action": "write",
+  "write": {
+    "op_key": "published-ack-1",
+    "entry_id": "ACK-1",
+    "customer_id": 12,
+    "currency": "USD",
+    "amount": "30.31",
+    "epoch": 3
+  }
+}

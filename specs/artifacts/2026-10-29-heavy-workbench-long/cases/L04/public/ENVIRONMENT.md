@@ -1,0 +1,7 @@
+# 环境
+
+Python 3/SQLite标准库可在本地运行公开旧应用；完整exercise_app.py演练使用Linux容器owner(root)，以便内核实际隔离报告。候选可用其它语言但须提供该环境可复建依赖。参考验收环境Python/SQLite、Matplotlib已离线安装；1CPU、无网络、源码和原料只读、新输出。SQLite单机本地文件/DELETE journal/synchronous FULL；不承诺网络盘或物理掉电。无凭据需求。候选提交/源码不得引用宿主其它项目或旧答案。
+
+执行器先把本次原request/native/数据库事实保存在容器内部owner-only工作区；数值结束后给report一份root拥有的只读副本，report实际uid/gid65534、只能写自己的新delivery。原事实在report退出后才导出到用户新输出。保存真实uid首行与权限证据；这是本次report边界，不是任意恶意OS子进程/跨容器侧信道安全认证。
+
+应用不是LLM调用端：数据库语句锁超时10秒，故障握手由运行器在真实checkpoint后释放或终止自己子进程。没有整个agent任务token/墙钟额度和最低工作时长。准备/评估耗时与模拟业务不计有效候选小时。

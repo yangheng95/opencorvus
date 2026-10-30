@@ -576,3 +576,17 @@ L02 fresh Codex原144predict+12select+report157已17:01:15Z自然0，原prepare1
 L02当前版本对这两个系统未拉开区分度，不能拿两100说难度足够。升级必须另版本并增加真实内在科学/运营难点，不能补字数/文件/慢算法或按新结果改旧线；尤其旧June条件失效不能用宏平均或事后宽阈值掩盖，新要求要先有同信息可达/不可识别性论证。先交完L04/L05/L01完整成品，再落实L02/L06已触发新版本义务，不能回到工具/组件磨蹭。当前开发完整7/10、有效候选小时0/10、真人专业/统计成熟未获，全部目标未完成，心跳ACTIVE。
 
 所有新CPU工作/独审已自然终态；不把作者/evaluator耗时或OC7291秒生命周期/unknown Codex观察窗/cache/多核CPU当有效小时。仅已授权一层review和fresh候选，未再委托。结束前范围commit/正常fetch merge审全部待推/必要check/push，保用户删除/overlay/索引排序/Bun。
+
+## 最新整题成品Recall：L04完整交付，当前8/10开发合同
+
+用户“题没开发完/测试没测试/跑题”纠偏继续最高优先。本轮直接补L04全应用而非框架：13公开原料/任务与执行器、实际旧应用/SQLite/不可改version1/audit/notes/ACK、完整v2费用退款、真实前后commit故障与两个旧写者跨切换、备份后新ACK的前向恢复/继续营业、逐身份机器账/实际图、自含reproduce与运营移交、21叶100rubric、同checker真实正错程序。原微型输入/失败完整转历史，不重旧112/27。
+
+最终原件D:/opencorvus-benchmark-runs/l04-full-case-20261031：handover-submission/handover-base,money,identity与handover-weak对应三输入，所有native0/各六scenario完成；source/raw只读、networknone/1CPU，无LLM候选/总额度。金额控制O1+317，权威映射legacy12→C-GAMMA。按邮箱合并、截断、错退款、版本早提交、恢复旧备份、缓存旧authority和弱保证均实际执行并入同checker，未全评错误对象总分null，不造分。
+
+唯一整题独审l04-whole-case-independent-review-20261031逐原SQL/Decimal/请求/ACK/notes/audit/版本/窗口/恢复实核，另一次自含基例19.3405秒自然0，图真实view。原初评H05fail与两个金额假通过源/反例均封存。三阻断集中修：新请求→真实entry逐字段与收据绑定；grader只读真实live.sqlite而非仅信JSON；自含复建公开唯一执行器+reproduce，report uid/gid65534/只读555-444副本、原事实700私有区终态后导出。原两个持久金额探针修后均明确M04fail，无泛化平台/重复组件阶段。首NULL夹具触发器错误、旧SQL导出不能执行、初图fee不可读/构造时间错误也全保，必要修后实跑而不冒称旧执行用了新字节。
+
+18:57:54Z独审允许限定devmetadata冻，主五H全pass；weak仅H02fail。主方真实同grader CLI接原三run/registered-inputs/21叶与真实独评，主100/allcritical/goodtrue，weak96/H02criticalfail/goodfalse。FREEZE L04/0.2.0-dev保原数据/权重/critical/90线；原件/可读完整产品及21.5MB完整ZIP在cases/L04/evaluator/whole-case-tests。参考分不是模型分或小时证明，非盲熟悉参考AI不代签职业真人/统计成熟。
+
+当前没有新增活跃候选/评价/solver/独审；L02/L06原双系统各100与upgraderequired保持，退休API/原矩阵绝不重开。六旧昂贵资格精确ID再次inspect全Paused，不恢复。下一直接补完整L05（真实事故/多sender与在途/持久恢复/自由导出/监测/职业交付）再L01质量及已触发L02/L06新版；L03/L07/L08/L09/L10/L04已交整题不重资格。全目标/十题/小时尚未达、当前8/10开发合同与有效小时0/10，心跳ACTIVE。
+
+本轮仍须范围commit、正常fetch/merge upstream、审全部待推/必要check及push；保护用户overlay/视频图片删除/索引重排/Bun。此段先记真实交付，Git/外部publish-delivery.json才是最终推送收据，不提前伪称push完成。

@@ -1,0 +1,8 @@
+from pathlib import Path
+import shutil,sqlite3,subprocess,json,time
+R=Path(__file__).parent;X=Path('D:/opencorvus-benchmark-runs/l04-full-case-20261031');C=Path('D:/myhexin-local/opencorvus/specs/artifacts/2026-10-29-heavy-workbench-long/cases/L04')
+target=R/'live-database-mutation';shutil.copytree(X/'closed-base/results/run',target)
+db=sqlite3.connect(target/'clean/live.sqlite');before=db.execute('select amount_minor from entries where entry_id=?',('O1',)).fetchone()[0];db.execute('update entries set amount_minor=amount_minor+1 where entry_id=?',('O1',));db.commit();actual=db.execute('select amount_minor from entries where entry_id=?',('O1',)).fetchone()[0];db.close()
+argv=['C:/Python314/python.exe','-X','utf8','-B',str(R/'source-initial/check_l04.py'),'--run',str(target),'--raw',str(X/'raw-base'),'--registered-inputs',str(C/'evaluator/registered-inputs.json'),'--rubric',str(R/'source-initial/rubric.json'),'--out',str(R/'live-database-checker-result')]
+st=time.monotonic();p=subprocess.run(argv,capture_output=True,text=True,encoding='utf-8');receipt=dict(argv=argv,exit_code=p.returncode,seconds=time.monotonic()-st,stdout=p.stdout,stderr=p.stderr,mutation=dict(object='clean/live.sqlite entries O1',original=before,actual=actual,all_json_original=True),scope='Own copied original DB only; original JSON/native and root originals untouched. No new app/native. Demonstrates stale snapshot accepted over current persisted product.')
+(R/'live-database-command.json').write_text(json.dumps(receipt,indent=2),encoding='utf-8');a=json.loads((R/'live-database-checker-result/assessment.json').read_text());print(json.dumps(dict(exit=p.returncode,mutation=receipt['mutation'],findings={k:v['status'] for k,v in a['findings'].items()}),indent=2))

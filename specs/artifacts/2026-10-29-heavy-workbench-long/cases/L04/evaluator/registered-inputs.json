@@ -1,0 +1,2261 @@
+{
+  "kind": "immutable raw business identities for three registered test controls",
+  "inputs": {
+    "base": {
+      "tables": {
+        "control": [
+          {
+            "singleton": 1,
+            "epoch": 3
+          }
+        ],
+        "schema_migrations": [
+          {
+            "version": 1,
+            "name": "synthetic_legacy_v1",
+            "applied_at": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "legacy_customers": [
+          {
+            "customer_id": 7,
+            "display_name": "张三",
+            "email": "same@example.test"
+          },
+          {
+            "customer_id": 9,
+            "display_name": "张三旧别名",
+            "email": "alias@example.test"
+          },
+          {
+            "customer_id": 11,
+            "display_name": "未核实",
+            "email": "unknown@example.test"
+          },
+          {
+            "customer_id": 12,
+            "display_name": "另一个同名客户",
+            "email": "same@example.test"
+          },
+          {
+            "customer_id": 21,
+            "display_name": "诊所 北区",
+            "email": "clinic@example.test"
+          },
+          {
+            "customer_id": 23,
+            "display_name": "诊所旧ID",
+            "email": "clinic-old@example.test"
+          },
+          {
+            "customer_id": 40,
+            "display_name": "Müller & Co",
+            "email": "muller@example.test"
+          },
+          {
+            "customer_id": 41,
+            "display_name": "Müller 财务别名",
+            "email": "finance@example.test"
+          }
+        ],
+        "legacy_entries": [
+          {
+            "entry_id": "O1",
+            "customer_id": 7,
+            "currency": "USD",
+            "amount": "12.34",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "R1",
+            "customer_id": 9,
+            "currency": "USD",
+            "amount": "-2.34",
+            "reversal_of": "O1"
+          },
+          {
+            "entry_id": "O_ALIAS",
+            "customer_id": 9,
+            "currency": "CNY",
+            "amount": "2.50",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "O_BETA",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "7.00",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "O_ZERO",
+            "customer_id": 7,
+            "currency": "CNY",
+            "amount": "0.00",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "O_SCALE",
+            "customer_id": 7,
+            "currency": "USD",
+            "amount": "1.005",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "O_TEXT",
+            "customer_id": 7,
+            "currency": "USD",
+            "amount": "12O.00",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "O_UNKNOWN",
+            "customer_id": 11,
+            "currency": "USD",
+            "amount": "3.00",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "O_ORPHAN",
+            "customer_id": 999,
+            "currency": "CNY",
+            "amount": "8.00",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "R_BAD",
+            "customer_id": 7,
+            "currency": "USD",
+            "amount": "-1.00",
+            "reversal_of": "MISSING"
+          },
+          {
+            "entry_id": "INV-001",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "11.17",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-002",
+            "customer_id": 21,
+            "currency": "CNY",
+            "amount": "12.34",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-003",
+            "customer_id": 40,
+            "currency": "USD",
+            "amount": "13.51",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "REF-003",
+            "customer_id": 40,
+            "currency": "USD",
+            "amount": "-1.17",
+            "reversal_of": "INV-003"
+          },
+          {
+            "entry_id": "INV-004",
+            "customer_id": 7,
+            "currency": "CNY",
+            "amount": "14.68",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-005",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "15.85",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-006",
+            "customer_id": 21,
+            "currency": "CNY",
+            "amount": "16.02",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "REF-006",
+            "customer_id": 23,
+            "currency": "CNY",
+            "amount": "-1.17",
+            "reversal_of": "INV-006"
+          },
+          {
+            "entry_id": "INV-007",
+            "customer_id": 40,
+            "currency": "USD",
+            "amount": "17.19",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-008",
+            "customer_id": 7,
+            "currency": "CNY",
+            "amount": "18.36",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-009",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "19.53",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "REF-009",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "-1.17",
+            "reversal_of": "INV-009"
+          },
+          {
+            "entry_id": "INV-010",
+            "customer_id": 21,
+            "currency": "CNY",
+            "amount": "20.70",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-011",
+            "customer_id": 40,
+            "currency": "USD",
+            "amount": "21.87",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-012",
+            "customer_id": 7,
+            "currency": "CNY",
+            "amount": "22.04",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "REF-012",
+            "customer_id": 7,
+            "currency": "CNY",
+            "amount": "-1.17",
+            "reversal_of": "INV-012"
+          },
+          {
+            "entry_id": "INV-013",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "23.21",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-014",
+            "customer_id": 21,
+            "currency": "CNY",
+            "amount": "24.38",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-015",
+            "customer_id": 40,
+            "currency": "USD",
+            "amount": "25.55",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "REF-015",
+            "customer_id": 40,
+            "currency": "USD",
+            "amount": "-1.17",
+            "reversal_of": "INV-015"
+          },
+          {
+            "entry_id": "INV-016",
+            "customer_id": 7,
+            "currency": "CNY",
+            "amount": "26.72",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-017",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "27.89",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-018",
+            "customer_id": 21,
+            "currency": "CNY",
+            "amount": "28.06",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "REF-018",
+            "customer_id": 23,
+            "currency": "CNY",
+            "amount": "-1.17",
+            "reversal_of": "INV-018"
+          },
+          {
+            "entry_id": "CAP",
+            "customer_id": 7,
+            "currency": "USD",
+            "amount": "5.00",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "CAP-R1",
+            "customer_id": 7,
+            "currency": "USD",
+            "amount": "-3.00",
+            "reversal_of": "CAP"
+          },
+          {
+            "entry_id": "CAP-R2",
+            "customer_id": 9,
+            "currency": "USD",
+            "amount": "-3.00",
+            "reversal_of": "CAP"
+          },
+          {
+            "entry_id": "BAD-CUR",
+            "customer_id": 7,
+            "currency": "EUR",
+            "amount": "2.00",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "BAD-PARENT",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "-0.50",
+            "reversal_of": "O1"
+          },
+          {
+            "entry_id": "ACK-0",
+            "customer_id": 7,
+            "currency": "USD",
+            "amount": "21.09",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "ACK-1",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "30.31",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "ACK-2",
+            "customer_id": 23,
+            "currency": "USD",
+            "amount": "15.27",
+            "reversal_of": null
+          }
+        ],
+        "write_receipts": [
+          {
+            "op_key": "published-ack-0",
+            "command_json": "{\"amount\": \"21.09\", \"currency\": \"USD\", \"customer_id\": 7, \"entry_id\": \"ACK-0\", \"epoch\": 3, \"op_key\": \"published-ack-0\"}",
+            "result_json": "{\"entry_id\": \"ACK-0\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}"
+          },
+          {
+            "op_key": "published-ack-1",
+            "command_json": "{\"amount\": \"30.31\", \"currency\": \"USD\", \"customer_id\": 12, \"entry_id\": \"ACK-1\", \"epoch\": 3, \"op_key\": \"published-ack-1\"}",
+            "result_json": "{\"entry_id\": \"ACK-1\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}"
+          },
+          {
+            "op_key": "published-ack-2",
+            "command_json": "{\"amount\": \"15.27\", \"currency\": \"USD\", \"customer_id\": 23, \"entry_id\": \"ACK-2\", \"epoch\": 3, \"op_key\": \"published-ack-2\"}",
+            "result_json": "{\"entry_id\": \"ACK-2\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}"
+          }
+        ],
+        "audit_events": [
+          {
+            "event_id": 1,
+            "entry_id": "O1",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12.34\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 2,
+            "entry_id": "R1",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":9,\"currency\":\"USD\",\"amount\":\"-2.34\",\"reversal_of\":\"O1\"}"
+          },
+          {
+            "event_id": 3,
+            "entry_id": "O_ALIAS",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":9,\"currency\":\"CNY\",\"amount\":\"2.50\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 4,
+            "entry_id": "O_BETA",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"7.00\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 5,
+            "entry_id": "O_ZERO",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"0.00\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 6,
+            "entry_id": "O_SCALE",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"1.005\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 7,
+            "entry_id": "O_TEXT",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12O.00\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 8,
+            "entry_id": "O_UNKNOWN",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":11,\"currency\":\"USD\",\"amount\":\"3.00\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 9,
+            "entry_id": "O_ORPHAN",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":999,\"currency\":\"CNY\",\"amount\":\"8.00\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 10,
+            "entry_id": "R_BAD",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"-1.00\",\"reversal_of\":\"MISSING\"}"
+          },
+          {
+            "event_id": 11,
+            "entry_id": "INV-001",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"11.17\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 12,
+            "entry_id": "INV-002",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":21,\"currency\":\"CNY\",\"amount\":\"12.34\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 13,
+            "entry_id": "INV-003",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":40,\"currency\":\"USD\",\"amount\":\"13.51\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 14,
+            "entry_id": "REF-003",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":40,\"currency\":\"USD\",\"amount\":\"-1.17\",\"reversal_of\":\"INV-003\"}"
+          },
+          {
+            "event_id": 15,
+            "entry_id": "INV-004",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"14.68\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 16,
+            "entry_id": "INV-005",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"15.85\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 17,
+            "entry_id": "INV-006",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":21,\"currency\":\"CNY\",\"amount\":\"16.02\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 18,
+            "entry_id": "REF-006",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":23,\"currency\":\"CNY\",\"amount\":\"-1.17\",\"reversal_of\":\"INV-006\"}"
+          },
+          {
+            "event_id": 19,
+            "entry_id": "INV-007",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":40,\"currency\":\"USD\",\"amount\":\"17.19\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 20,
+            "entry_id": "INV-008",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"18.36\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 21,
+            "entry_id": "INV-009",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"19.53\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 22,
+            "entry_id": "REF-009",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"-1.17\",\"reversal_of\":\"INV-009\"}"
+          },
+          {
+            "event_id": 23,
+            "entry_id": "INV-010",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":21,\"currency\":\"CNY\",\"amount\":\"20.70\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 24,
+            "entry_id": "INV-011",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":40,\"currency\":\"USD\",\"amount\":\"21.87\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 25,
+            "entry_id": "INV-012",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"22.04\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 26,
+            "entry_id": "REF-012",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"-1.17\",\"reversal_of\":\"INV-012\"}"
+          },
+          {
+            "event_id": 27,
+            "entry_id": "INV-013",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"23.21\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 28,
+            "entry_id": "INV-014",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":21,\"currency\":\"CNY\",\"amount\":\"24.38\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 29,
+            "entry_id": "INV-015",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":40,\"currency\":\"USD\",\"amount\":\"25.55\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 30,
+            "entry_id": "REF-015",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":40,\"currency\":\"USD\",\"amount\":\"-1.17\",\"reversal_of\":\"INV-015\"}"
+          },
+          {
+            "event_id": 31,
+            "entry_id": "INV-016",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"26.72\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 32,
+            "entry_id": "INV-017",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"27.89\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 33,
+            "entry_id": "INV-018",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":21,\"currency\":\"CNY\",\"amount\":\"28.06\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 34,
+            "entry_id": "REF-018",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":23,\"currency\":\"CNY\",\"amount\":\"-1.17\",\"reversal_of\":\"INV-018\"}"
+          },
+          {
+            "event_id": 35,
+            "entry_id": "CAP",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"5.00\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 36,
+            "entry_id": "CAP-R1",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"-3.00\",\"reversal_of\":\"CAP\"}"
+          },
+          {
+            "event_id": 37,
+            "entry_id": "CAP-R2",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":9,\"currency\":\"USD\",\"amount\":\"-3.00\",\"reversal_of\":\"CAP\"}"
+          },
+          {
+            "event_id": 38,
+            "entry_id": "BAD-CUR",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"EUR\",\"amount\":\"2.00\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 39,
+            "entry_id": "BAD-PARENT",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"-0.50\",\"reversal_of\":\"O1\"}"
+          },
+          {
+            "event_id": 40,
+            "entry_id": "ACK-0",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"21.09\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 41,
+            "entry_id": "ACK-1",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"30.31\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 42,
+            "entry_id": "ACK-2",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":23,\"currency\":\"USD\",\"amount\":\"15.27\",\"reversal_of\":null}"
+          }
+        ],
+        "notes": [
+          {
+            "note_id": "N-001",
+            "entry_id": "INV-001",
+            "text": "客户原批注 1: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-002",
+            "entry_id": "INV-002",
+            "text": "客户原批注 2: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-003",
+            "entry_id": "INV-003",
+            "text": "客户原批注 3: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-004",
+            "entry_id": "INV-004",
+            "text": "客户原批注 4: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-005",
+            "entry_id": "INV-005",
+            "text": "客户原批注 5: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-006",
+            "entry_id": "INV-006",
+            "text": "客户原批注 6: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-007",
+            "entry_id": "INV-007",
+            "text": "客户原批注 7: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-008",
+            "entry_id": "INV-008",
+            "text": "客户原批注 8: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-009",
+            "entry_id": "INV-009",
+            "text": "客户原批注 9: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-010",
+            "entry_id": "INV-010",
+            "text": "客户原批注 10: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-011",
+            "entry_id": "INV-011",
+            "text": "客户原批注 11: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-012",
+            "entry_id": "INV-012",
+            "text": "客户原批注 12: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-013",
+            "entry_id": "INV-013",
+            "text": "客户原批注 13: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-014",
+            "entry_id": "INV-014",
+            "text": "客户原批注 14: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-015",
+            "entry_id": "INV-015",
+            "text": "客户原批注 15: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-016",
+            "entry_id": "INV-016",
+            "text": "客户原批注 16: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-017",
+            "entry_id": "INV-017",
+            "text": "客户原批注 17: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-018",
+            "entry_id": "INV-018",
+            "text": "客户原批注 18: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          }
+        ]
+      },
+      "authority": {
+        "source": "explicit synthetic authoritative identity map; email equality is not identity",
+        "legacy_to_customer": {
+          "7": "C-ALPHA",
+          "9": "C-ALPHA",
+          "12": "C-BETA",
+          "21": "C-CLINIC",
+          "23": "C-CLINIC",
+          "40": "C-MULLER",
+          "41": "C-MULLER"
+        },
+        "customers": {
+          "C-ALPHA": {
+            "display_name": "甲客户",
+            "email": "same@example.test"
+          },
+          "C-BETA": {
+            "display_name": "乙客户",
+            "email": "same@example.test"
+          },
+          "C-CLINIC": {
+            "display_name": "北区诊所",
+            "email": "clinic@example.test"
+          },
+          "C-MULLER": {
+            "display_name": "Müller & Co",
+            "email": "muller@example.test"
+          },
+          "C-GAMMA": {
+            "display_name": "第三法人",
+            "email": "same@example.test"
+          }
+        }
+      }
+    },
+    "money": {
+      "tables": {
+        "control": [
+          {
+            "singleton": 1,
+            "epoch": 3
+          }
+        ],
+        "schema_migrations": [
+          {
+            "version": 1,
+            "name": "synthetic_legacy_v1",
+            "applied_at": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "legacy_customers": [
+          {
+            "customer_id": 7,
+            "display_name": "张三",
+            "email": "same@example.test"
+          },
+          {
+            "customer_id": 9,
+            "display_name": "张三旧别名",
+            "email": "alias@example.test"
+          },
+          {
+            "customer_id": 11,
+            "display_name": "未核实",
+            "email": "unknown@example.test"
+          },
+          {
+            "customer_id": 12,
+            "display_name": "另一个同名客户",
+            "email": "same@example.test"
+          },
+          {
+            "customer_id": 21,
+            "display_name": "诊所 北区",
+            "email": "clinic@example.test"
+          },
+          {
+            "customer_id": 23,
+            "display_name": "诊所旧ID",
+            "email": "clinic-old@example.test"
+          },
+          {
+            "customer_id": 40,
+            "display_name": "Müller & Co",
+            "email": "muller@example.test"
+          },
+          {
+            "customer_id": 41,
+            "display_name": "Müller 财务别名",
+            "email": "finance@example.test"
+          }
+        ],
+        "legacy_entries": [
+          {
+            "entry_id": "O1",
+            "customer_id": 7,
+            "currency": "USD",
+            "amount": "15.51",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "R1",
+            "customer_id": 9,
+            "currency": "USD",
+            "amount": "-2.34",
+            "reversal_of": "O1"
+          },
+          {
+            "entry_id": "O_ALIAS",
+            "customer_id": 9,
+            "currency": "CNY",
+            "amount": "2.50",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "O_BETA",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "7.00",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "O_ZERO",
+            "customer_id": 7,
+            "currency": "CNY",
+            "amount": "0.00",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "O_SCALE",
+            "customer_id": 7,
+            "currency": "USD",
+            "amount": "1.005",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "O_TEXT",
+            "customer_id": 7,
+            "currency": "USD",
+            "amount": "12O.00",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "O_UNKNOWN",
+            "customer_id": 11,
+            "currency": "USD",
+            "amount": "3.00",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "O_ORPHAN",
+            "customer_id": 999,
+            "currency": "CNY",
+            "amount": "8.00",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "R_BAD",
+            "customer_id": 7,
+            "currency": "USD",
+            "amount": "-1.00",
+            "reversal_of": "MISSING"
+          },
+          {
+            "entry_id": "INV-001",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "11.17",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-002",
+            "customer_id": 21,
+            "currency": "CNY",
+            "amount": "12.34",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-003",
+            "customer_id": 40,
+            "currency": "USD",
+            "amount": "13.51",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "REF-003",
+            "customer_id": 40,
+            "currency": "USD",
+            "amount": "-1.17",
+            "reversal_of": "INV-003"
+          },
+          {
+            "entry_id": "INV-004",
+            "customer_id": 7,
+            "currency": "CNY",
+            "amount": "14.68",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-005",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "15.85",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-006",
+            "customer_id": 21,
+            "currency": "CNY",
+            "amount": "16.02",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "REF-006",
+            "customer_id": 23,
+            "currency": "CNY",
+            "amount": "-1.17",
+            "reversal_of": "INV-006"
+          },
+          {
+            "entry_id": "INV-007",
+            "customer_id": 40,
+            "currency": "USD",
+            "amount": "17.19",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-008",
+            "customer_id": 7,
+            "currency": "CNY",
+            "amount": "18.36",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-009",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "19.53",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "REF-009",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "-1.17",
+            "reversal_of": "INV-009"
+          },
+          {
+            "entry_id": "INV-010",
+            "customer_id": 21,
+            "currency": "CNY",
+            "amount": "20.70",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-011",
+            "customer_id": 40,
+            "currency": "USD",
+            "amount": "21.87",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-012",
+            "customer_id": 7,
+            "currency": "CNY",
+            "amount": "22.04",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "REF-012",
+            "customer_id": 7,
+            "currency": "CNY",
+            "amount": "-1.17",
+            "reversal_of": "INV-012"
+          },
+          {
+            "entry_id": "INV-013",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "23.21",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-014",
+            "customer_id": 21,
+            "currency": "CNY",
+            "amount": "24.38",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-015",
+            "customer_id": 40,
+            "currency": "USD",
+            "amount": "25.55",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "REF-015",
+            "customer_id": 40,
+            "currency": "USD",
+            "amount": "-1.17",
+            "reversal_of": "INV-015"
+          },
+          {
+            "entry_id": "INV-016",
+            "customer_id": 7,
+            "currency": "CNY",
+            "amount": "26.72",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-017",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "27.89",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-018",
+            "customer_id": 21,
+            "currency": "CNY",
+            "amount": "28.06",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "REF-018",
+            "customer_id": 23,
+            "currency": "CNY",
+            "amount": "-1.17",
+            "reversal_of": "INV-018"
+          },
+          {
+            "entry_id": "CAP",
+            "customer_id": 7,
+            "currency": "USD",
+            "amount": "5.00",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "CAP-R1",
+            "customer_id": 7,
+            "currency": "USD",
+            "amount": "-3.00",
+            "reversal_of": "CAP"
+          },
+          {
+            "entry_id": "CAP-R2",
+            "customer_id": 9,
+            "currency": "USD",
+            "amount": "-3.00",
+            "reversal_of": "CAP"
+          },
+          {
+            "entry_id": "BAD-CUR",
+            "customer_id": 7,
+            "currency": "EUR",
+            "amount": "2.00",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "BAD-PARENT",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "-0.50",
+            "reversal_of": "O1"
+          },
+          {
+            "entry_id": "ACK-0",
+            "customer_id": 7,
+            "currency": "USD",
+            "amount": "21.09",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "ACK-1",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "30.31",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "ACK-2",
+            "customer_id": 23,
+            "currency": "USD",
+            "amount": "15.27",
+            "reversal_of": null
+          }
+        ],
+        "write_receipts": [
+          {
+            "op_key": "published-ack-0",
+            "command_json": "{\"amount\": \"21.09\", \"currency\": \"USD\", \"customer_id\": 7, \"entry_id\": \"ACK-0\", \"epoch\": 3, \"op_key\": \"published-ack-0\"}",
+            "result_json": "{\"entry_id\": \"ACK-0\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}"
+          },
+          {
+            "op_key": "published-ack-1",
+            "command_json": "{\"amount\": \"30.31\", \"currency\": \"USD\", \"customer_id\": 12, \"entry_id\": \"ACK-1\", \"epoch\": 3, \"op_key\": \"published-ack-1\"}",
+            "result_json": "{\"entry_id\": \"ACK-1\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}"
+          },
+          {
+            "op_key": "published-ack-2",
+            "command_json": "{\"amount\": \"15.27\", \"currency\": \"USD\", \"customer_id\": 23, \"entry_id\": \"ACK-2\", \"epoch\": 3, \"op_key\": \"published-ack-2\"}",
+            "result_json": "{\"entry_id\": \"ACK-2\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}"
+          }
+        ],
+        "audit_events": [
+          {
+            "event_id": 1,
+            "entry_id": "O1",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"15.51\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 2,
+            "entry_id": "R1",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":9,\"currency\":\"USD\",\"amount\":\"-2.34\",\"reversal_of\":\"O1\"}"
+          },
+          {
+            "event_id": 3,
+            "entry_id": "O_ALIAS",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":9,\"currency\":\"CNY\",\"amount\":\"2.50\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 4,
+            "entry_id": "O_BETA",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"7.00\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 5,
+            "entry_id": "O_ZERO",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"0.00\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 6,
+            "entry_id": "O_SCALE",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"1.005\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 7,
+            "entry_id": "O_TEXT",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12O.00\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 8,
+            "entry_id": "O_UNKNOWN",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":11,\"currency\":\"USD\",\"amount\":\"3.00\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 9,
+            "entry_id": "O_ORPHAN",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":999,\"currency\":\"CNY\",\"amount\":\"8.00\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 10,
+            "entry_id": "R_BAD",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"-1.00\",\"reversal_of\":\"MISSING\"}"
+          },
+          {
+            "event_id": 11,
+            "entry_id": "INV-001",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"11.17\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 12,
+            "entry_id": "INV-002",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":21,\"currency\":\"CNY\",\"amount\":\"12.34\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 13,
+            "entry_id": "INV-003",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":40,\"currency\":\"USD\",\"amount\":\"13.51\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 14,
+            "entry_id": "REF-003",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":40,\"currency\":\"USD\",\"amount\":\"-1.17\",\"reversal_of\":\"INV-003\"}"
+          },
+          {
+            "event_id": 15,
+            "entry_id": "INV-004",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"14.68\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 16,
+            "entry_id": "INV-005",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"15.85\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 17,
+            "entry_id": "INV-006",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":21,\"currency\":\"CNY\",\"amount\":\"16.02\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 18,
+            "entry_id": "REF-006",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":23,\"currency\":\"CNY\",\"amount\":\"-1.17\",\"reversal_of\":\"INV-006\"}"
+          },
+          {
+            "event_id": 19,
+            "entry_id": "INV-007",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":40,\"currency\":\"USD\",\"amount\":\"17.19\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 20,
+            "entry_id": "INV-008",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"18.36\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 21,
+            "entry_id": "INV-009",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"19.53\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 22,
+            "entry_id": "REF-009",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"-1.17\",\"reversal_of\":\"INV-009\"}"
+          },
+          {
+            "event_id": 23,
+            "entry_id": "INV-010",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":21,\"currency\":\"CNY\",\"amount\":\"20.70\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 24,
+            "entry_id": "INV-011",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":40,\"currency\":\"USD\",\"amount\":\"21.87\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 25,
+            "entry_id": "INV-012",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"22.04\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 26,
+            "entry_id": "REF-012",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"-1.17\",\"reversal_of\":\"INV-012\"}"
+          },
+          {
+            "event_id": 27,
+            "entry_id": "INV-013",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"23.21\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 28,
+            "entry_id": "INV-014",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":21,\"currency\":\"CNY\",\"amount\":\"24.38\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 29,
+            "entry_id": "INV-015",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":40,\"currency\":\"USD\",\"amount\":\"25.55\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 30,
+            "entry_id": "REF-015",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":40,\"currency\":\"USD\",\"amount\":\"-1.17\",\"reversal_of\":\"INV-015\"}"
+          },
+          {
+            "event_id": 31,
+            "entry_id": "INV-016",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"26.72\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 32,
+            "entry_id": "INV-017",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"27.89\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 33,
+            "entry_id": "INV-018",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":21,\"currency\":\"CNY\",\"amount\":\"28.06\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 34,
+            "entry_id": "REF-018",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":23,\"currency\":\"CNY\",\"amount\":\"-1.17\",\"reversal_of\":\"INV-018\"}"
+          },
+          {
+            "event_id": 35,
+            "entry_id": "CAP",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"5.00\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 36,
+            "entry_id": "CAP-R1",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"-3.00\",\"reversal_of\":\"CAP\"}"
+          },
+          {
+            "event_id": 37,
+            "entry_id": "CAP-R2",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":9,\"currency\":\"USD\",\"amount\":\"-3.00\",\"reversal_of\":\"CAP\"}"
+          },
+          {
+            "event_id": 38,
+            "entry_id": "BAD-CUR",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"EUR\",\"amount\":\"2.00\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 39,
+            "entry_id": "BAD-PARENT",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"-0.50\",\"reversal_of\":\"O1\"}"
+          },
+          {
+            "event_id": 40,
+            "entry_id": "ACK-0",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"21.09\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 41,
+            "entry_id": "ACK-1",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"30.31\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 42,
+            "entry_id": "ACK-2",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":23,\"currency\":\"USD\",\"amount\":\"15.27\",\"reversal_of\":null}"
+          }
+        ],
+        "notes": [
+          {
+            "note_id": "N-001",
+            "entry_id": "INV-001",
+            "text": "客户原批注 1: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-002",
+            "entry_id": "INV-002",
+            "text": "客户原批注 2: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-003",
+            "entry_id": "INV-003",
+            "text": "客户原批注 3: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-004",
+            "entry_id": "INV-004",
+            "text": "客户原批注 4: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-005",
+            "entry_id": "INV-005",
+            "text": "客户原批注 5: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-006",
+            "entry_id": "INV-006",
+            "text": "客户原批注 6: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-007",
+            "entry_id": "INV-007",
+            "text": "客户原批注 7: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-008",
+            "entry_id": "INV-008",
+            "text": "客户原批注 8: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-009",
+            "entry_id": "INV-009",
+            "text": "客户原批注 9: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-010",
+            "entry_id": "INV-010",
+            "text": "客户原批注 10: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-011",
+            "entry_id": "INV-011",
+            "text": "客户原批注 11: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-012",
+            "entry_id": "INV-012",
+            "text": "客户原批注 12: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-013",
+            "entry_id": "INV-013",
+            "text": "客户原批注 13: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-014",
+            "entry_id": "INV-014",
+            "text": "客户原批注 14: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-015",
+            "entry_id": "INV-015",
+            "text": "客户原批注 15: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-016",
+            "entry_id": "INV-016",
+            "text": "客户原批注 16: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-017",
+            "entry_id": "INV-017",
+            "text": "客户原批注 17: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-018",
+            "entry_id": "INV-018",
+            "text": "客户原批注 18: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          }
+        ]
+      },
+      "authority": {
+        "source": "explicit synthetic authoritative identity map; email equality is not identity",
+        "legacy_to_customer": {
+          "7": "C-ALPHA",
+          "9": "C-ALPHA",
+          "12": "C-BETA",
+          "21": "C-CLINIC",
+          "23": "C-CLINIC",
+          "40": "C-MULLER",
+          "41": "C-MULLER"
+        },
+        "customers": {
+          "C-ALPHA": {
+            "display_name": "甲客户",
+            "email": "same@example.test"
+          },
+          "C-BETA": {
+            "display_name": "乙客户",
+            "email": "same@example.test"
+          },
+          "C-CLINIC": {
+            "display_name": "北区诊所",
+            "email": "clinic@example.test"
+          },
+          "C-MULLER": {
+            "display_name": "Müller & Co",
+            "email": "muller@example.test"
+          },
+          "C-GAMMA": {
+            "display_name": "第三法人",
+            "email": "same@example.test"
+          }
+        }
+      }
+    },
+    "identity": {
+      "tables": {
+        "control": [
+          {
+            "singleton": 1,
+            "epoch": 3
+          }
+        ],
+        "schema_migrations": [
+          {
+            "version": 1,
+            "name": "synthetic_legacy_v1",
+            "applied_at": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "legacy_customers": [
+          {
+            "customer_id": 7,
+            "display_name": "张三",
+            "email": "same@example.test"
+          },
+          {
+            "customer_id": 9,
+            "display_name": "张三旧别名",
+            "email": "alias@example.test"
+          },
+          {
+            "customer_id": 11,
+            "display_name": "未核实",
+            "email": "unknown@example.test"
+          },
+          {
+            "customer_id": 12,
+            "display_name": "另一个同名客户",
+            "email": "same@example.test"
+          },
+          {
+            "customer_id": 21,
+            "display_name": "诊所 北区",
+            "email": "clinic@example.test"
+          },
+          {
+            "customer_id": 23,
+            "display_name": "诊所旧ID",
+            "email": "clinic-old@example.test"
+          },
+          {
+            "customer_id": 40,
+            "display_name": "Müller & Co",
+            "email": "muller@example.test"
+          },
+          {
+            "customer_id": 41,
+            "display_name": "Müller 财务别名",
+            "email": "finance@example.test"
+          }
+        ],
+        "legacy_entries": [
+          {
+            "entry_id": "O1",
+            "customer_id": 7,
+            "currency": "USD",
+            "amount": "12.34",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "R1",
+            "customer_id": 9,
+            "currency": "USD",
+            "amount": "-2.34",
+            "reversal_of": "O1"
+          },
+          {
+            "entry_id": "O_ALIAS",
+            "customer_id": 9,
+            "currency": "CNY",
+            "amount": "2.50",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "O_BETA",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "7.00",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "O_ZERO",
+            "customer_id": 7,
+            "currency": "CNY",
+            "amount": "0.00",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "O_SCALE",
+            "customer_id": 7,
+            "currency": "USD",
+            "amount": "1.005",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "O_TEXT",
+            "customer_id": 7,
+            "currency": "USD",
+            "amount": "12O.00",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "O_UNKNOWN",
+            "customer_id": 11,
+            "currency": "USD",
+            "amount": "3.00",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "O_ORPHAN",
+            "customer_id": 999,
+            "currency": "CNY",
+            "amount": "8.00",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "R_BAD",
+            "customer_id": 7,
+            "currency": "USD",
+            "amount": "-1.00",
+            "reversal_of": "MISSING"
+          },
+          {
+            "entry_id": "INV-001",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "11.17",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-002",
+            "customer_id": 21,
+            "currency": "CNY",
+            "amount": "12.34",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-003",
+            "customer_id": 40,
+            "currency": "USD",
+            "amount": "13.51",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "REF-003",
+            "customer_id": 40,
+            "currency": "USD",
+            "amount": "-1.17",
+            "reversal_of": "INV-003"
+          },
+          {
+            "entry_id": "INV-004",
+            "customer_id": 7,
+            "currency": "CNY",
+            "amount": "14.68",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-005",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "15.85",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-006",
+            "customer_id": 21,
+            "currency": "CNY",
+            "amount": "16.02",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "REF-006",
+            "customer_id": 23,
+            "currency": "CNY",
+            "amount": "-1.17",
+            "reversal_of": "INV-006"
+          },
+          {
+            "entry_id": "INV-007",
+            "customer_id": 40,
+            "currency": "USD",
+            "amount": "17.19",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-008",
+            "customer_id": 7,
+            "currency": "CNY",
+            "amount": "18.36",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-009",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "19.53",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "REF-009",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "-1.17",
+            "reversal_of": "INV-009"
+          },
+          {
+            "entry_id": "INV-010",
+            "customer_id": 21,
+            "currency": "CNY",
+            "amount": "20.70",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-011",
+            "customer_id": 40,
+            "currency": "USD",
+            "amount": "21.87",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-012",
+            "customer_id": 7,
+            "currency": "CNY",
+            "amount": "22.04",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "REF-012",
+            "customer_id": 7,
+            "currency": "CNY",
+            "amount": "-1.17",
+            "reversal_of": "INV-012"
+          },
+          {
+            "entry_id": "INV-013",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "23.21",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-014",
+            "customer_id": 21,
+            "currency": "CNY",
+            "amount": "24.38",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-015",
+            "customer_id": 40,
+            "currency": "USD",
+            "amount": "25.55",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "REF-015",
+            "customer_id": 40,
+            "currency": "USD",
+            "amount": "-1.17",
+            "reversal_of": "INV-015"
+          },
+          {
+            "entry_id": "INV-016",
+            "customer_id": 7,
+            "currency": "CNY",
+            "amount": "26.72",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-017",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "27.89",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "INV-018",
+            "customer_id": 21,
+            "currency": "CNY",
+            "amount": "28.06",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "REF-018",
+            "customer_id": 23,
+            "currency": "CNY",
+            "amount": "-1.17",
+            "reversal_of": "INV-018"
+          },
+          {
+            "entry_id": "CAP",
+            "customer_id": 7,
+            "currency": "USD",
+            "amount": "5.00",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "CAP-R1",
+            "customer_id": 7,
+            "currency": "USD",
+            "amount": "-3.00",
+            "reversal_of": "CAP"
+          },
+          {
+            "entry_id": "CAP-R2",
+            "customer_id": 9,
+            "currency": "USD",
+            "amount": "-3.00",
+            "reversal_of": "CAP"
+          },
+          {
+            "entry_id": "BAD-CUR",
+            "customer_id": 7,
+            "currency": "EUR",
+            "amount": "2.00",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "BAD-PARENT",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "-0.50",
+            "reversal_of": "O1"
+          },
+          {
+            "entry_id": "ACK-0",
+            "customer_id": 7,
+            "currency": "USD",
+            "amount": "21.09",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "ACK-1",
+            "customer_id": 12,
+            "currency": "USD",
+            "amount": "30.31",
+            "reversal_of": null
+          },
+          {
+            "entry_id": "ACK-2",
+            "customer_id": 23,
+            "currency": "USD",
+            "amount": "15.27",
+            "reversal_of": null
+          }
+        ],
+        "write_receipts": [
+          {
+            "op_key": "published-ack-0",
+            "command_json": "{\"amount\": \"21.09\", \"currency\": \"USD\", \"customer_id\": 7, \"entry_id\": \"ACK-0\", \"epoch\": 3, \"op_key\": \"published-ack-0\"}",
+            "result_json": "{\"entry_id\": \"ACK-0\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}"
+          },
+          {
+            "op_key": "published-ack-1",
+            "command_json": "{\"amount\": \"30.31\", \"currency\": \"USD\", \"customer_id\": 12, \"entry_id\": \"ACK-1\", \"epoch\": 3, \"op_key\": \"published-ack-1\"}",
+            "result_json": "{\"entry_id\": \"ACK-1\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}"
+          },
+          {
+            "op_key": "published-ack-2",
+            "command_json": "{\"amount\": \"15.27\", \"currency\": \"USD\", \"customer_id\": 23, \"entry_id\": \"ACK-2\", \"epoch\": 3, \"op_key\": \"published-ack-2\"}",
+            "result_json": "{\"entry_id\": \"ACK-2\", \"epoch\": 3, \"source_schema\": 1, \"status\": \"accepted\"}"
+          }
+        ],
+        "audit_events": [
+          {
+            "event_id": 1,
+            "entry_id": "O1",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12.34\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 2,
+            "entry_id": "R1",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":9,\"currency\":\"USD\",\"amount\":\"-2.34\",\"reversal_of\":\"O1\"}"
+          },
+          {
+            "event_id": 3,
+            "entry_id": "O_ALIAS",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":9,\"currency\":\"CNY\",\"amount\":\"2.50\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 4,
+            "entry_id": "O_BETA",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"7.00\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 5,
+            "entry_id": "O_ZERO",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"0.00\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 6,
+            "entry_id": "O_SCALE",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"1.005\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 7,
+            "entry_id": "O_TEXT",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"12O.00\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 8,
+            "entry_id": "O_UNKNOWN",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":11,\"currency\":\"USD\",\"amount\":\"3.00\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 9,
+            "entry_id": "O_ORPHAN",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":999,\"currency\":\"CNY\",\"amount\":\"8.00\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 10,
+            "entry_id": "R_BAD",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"-1.00\",\"reversal_of\":\"MISSING\"}"
+          },
+          {
+            "event_id": 11,
+            "entry_id": "INV-001",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"11.17\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 12,
+            "entry_id": "INV-002",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":21,\"currency\":\"CNY\",\"amount\":\"12.34\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 13,
+            "entry_id": "INV-003",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":40,\"currency\":\"USD\",\"amount\":\"13.51\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 14,
+            "entry_id": "REF-003",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":40,\"currency\":\"USD\",\"amount\":\"-1.17\",\"reversal_of\":\"INV-003\"}"
+          },
+          {
+            "event_id": 15,
+            "entry_id": "INV-004",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"14.68\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 16,
+            "entry_id": "INV-005",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"15.85\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 17,
+            "entry_id": "INV-006",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":21,\"currency\":\"CNY\",\"amount\":\"16.02\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 18,
+            "entry_id": "REF-006",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":23,\"currency\":\"CNY\",\"amount\":\"-1.17\",\"reversal_of\":\"INV-006\"}"
+          },
+          {
+            "event_id": 19,
+            "entry_id": "INV-007",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":40,\"currency\":\"USD\",\"amount\":\"17.19\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 20,
+            "entry_id": "INV-008",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"18.36\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 21,
+            "entry_id": "INV-009",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"19.53\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 22,
+            "entry_id": "REF-009",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"-1.17\",\"reversal_of\":\"INV-009\"}"
+          },
+          {
+            "event_id": 23,
+            "entry_id": "INV-010",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":21,\"currency\":\"CNY\",\"amount\":\"20.70\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 24,
+            "entry_id": "INV-011",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":40,\"currency\":\"USD\",\"amount\":\"21.87\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 25,
+            "entry_id": "INV-012",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"22.04\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 26,
+            "entry_id": "REF-012",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"-1.17\",\"reversal_of\":\"INV-012\"}"
+          },
+          {
+            "event_id": 27,
+            "entry_id": "INV-013",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"23.21\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 28,
+            "entry_id": "INV-014",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":21,\"currency\":\"CNY\",\"amount\":\"24.38\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 29,
+            "entry_id": "INV-015",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":40,\"currency\":\"USD\",\"amount\":\"25.55\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 30,
+            "entry_id": "REF-015",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":40,\"currency\":\"USD\",\"amount\":\"-1.17\",\"reversal_of\":\"INV-015\"}"
+          },
+          {
+            "event_id": 31,
+            "entry_id": "INV-016",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"CNY\",\"amount\":\"26.72\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 32,
+            "entry_id": "INV-017",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"27.89\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 33,
+            "entry_id": "INV-018",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":21,\"currency\":\"CNY\",\"amount\":\"28.06\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 34,
+            "entry_id": "REF-018",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":23,\"currency\":\"CNY\",\"amount\":\"-1.17\",\"reversal_of\":\"INV-018\"}"
+          },
+          {
+            "event_id": 35,
+            "entry_id": "CAP",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"5.00\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 36,
+            "entry_id": "CAP-R1",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"-3.00\",\"reversal_of\":\"CAP\"}"
+          },
+          {
+            "event_id": 37,
+            "entry_id": "CAP-R2",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":9,\"currency\":\"USD\",\"amount\":\"-3.00\",\"reversal_of\":\"CAP\"}"
+          },
+          {
+            "event_id": 38,
+            "entry_id": "BAD-CUR",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"EUR\",\"amount\":\"2.00\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 39,
+            "entry_id": "BAD-PARENT",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"-0.50\",\"reversal_of\":\"O1\"}"
+          },
+          {
+            "event_id": 40,
+            "entry_id": "ACK-0",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":7,\"currency\":\"USD\",\"amount\":\"21.09\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 41,
+            "entry_id": "ACK-1",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":12,\"currency\":\"USD\",\"amount\":\"30.31\",\"reversal_of\":null}"
+          },
+          {
+            "event_id": 42,
+            "entry_id": "ACK-2",
+            "source_schema": 1,
+            "payload": "{\"customer_id\":23,\"currency\":\"USD\",\"amount\":\"15.27\",\"reversal_of\":null}"
+          }
+        ],
+        "notes": [
+          {
+            "note_id": "N-001",
+            "entry_id": "INV-001",
+            "text": "客户原批注 1: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-002",
+            "entry_id": "INV-002",
+            "text": "客户原批注 2: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-003",
+            "entry_id": "INV-003",
+            "text": "客户原批注 3: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-004",
+            "entry_id": "INV-004",
+            "text": "客户原批注 4: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-005",
+            "entry_id": "INV-005",
+            "text": "客户原批注 5: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-006",
+            "entry_id": "INV-006",
+            "text": "客户原批注 6: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-007",
+            "entry_id": "INV-007",
+            "text": "客户原批注 7: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-008",
+            "entry_id": "INV-008",
+            "text": "客户原批注 8: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-009",
+            "entry_id": "INV-009",
+            "text": "客户原批注 9: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-010",
+            "entry_id": "INV-010",
+            "text": "客户原批注 10: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-011",
+            "entry_id": "INV-011",
+            "text": "客户原批注 11: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-012",
+            "entry_id": "INV-012",
+            "text": "客户原批注 12: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-013",
+            "entry_id": "INV-013",
+            "text": "客户原批注 13: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-014",
+            "entry_id": "INV-014",
+            "text": "客户原批注 14: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-015",
+            "entry_id": "INV-015",
+            "text": "客户原批注 15: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-016",
+            "entry_id": "INV-016",
+            "text": "客户原批注 16: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-017",
+            "entry_id": "INV-017",
+            "text": "客户原批注 17: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          },
+          {
+            "note_id": "N-018",
+            "entry_id": "INV-018",
+            "text": "客户原批注 18: 保留换行\n含逗号,\"原文\"及NUL\u0000尾 / café"
+          }
+        ]
+      },
+      "authority": {
+        "source": "explicit synthetic authoritative identity map; email equality is not identity",
+        "legacy_to_customer": {
+          "7": "C-ALPHA",
+          "9": "C-ALPHA",
+          "12": "C-GAMMA",
+          "21": "C-CLINIC",
+          "23": "C-CLINIC",
+          "40": "C-MULLER",
+          "41": "C-MULLER"
+        },
+        "customers": {
+          "C-ALPHA": {
+            "display_name": "甲客户",
+            "email": "same@example.test"
+          },
+          "C-BETA": {
+            "display_name": "乙客户",
+            "email": "same@example.test"
+          },
+          "C-CLINIC": {
+            "display_name": "北区诊所",
+            "email": "clinic@example.test"
+          },
+          "C-MULLER": {
+            "display_name": "Müller & Co",
+            "email": "muller@example.test"
+          },
+          "C-GAMMA": {
+            "display_name": "第三法人",
+            "email": "same@example.test"
+          }
+        }
+      }
+    }
+  }
+}

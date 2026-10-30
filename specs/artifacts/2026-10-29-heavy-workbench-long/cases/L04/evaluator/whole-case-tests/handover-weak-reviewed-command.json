@@ -1,0 +1,32 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L04\\evaluator\\check_l04.py",
+    "--rubric",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L04\\rubric.json",
+    "--registered-inputs",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L04\\evaluator\\registered-inputs.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-weak-reviewed-assessment",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-weak-base\\results\\run",
+    "--raw",
+    "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\raw-handover-base",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-weak-money\\results\\run",
+    "--raw",
+    "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\raw-handover-money",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\handover-weak-identity\\results\\run",
+    "--raw",
+    "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\raw-handover-identity",
+    "--review",
+    "D:\\opencorvus-benchmark-runs\\l04-whole-case-independent-review-20261031\\weak-review.json"
+  ],
+  "exit_code": 2,
+  "stdout": "{\"status\": \"graded\", \"subject_role\": \"author_reference_or_error_control\", \"run_roots\": [\"D:\\\\opencorvus-benchmark-runs\\\\l04-full-case-20261031\\\\handover-weak-base\\\\results\\\\run\", \"D:\\\\opencorvus-benchmark-runs\\\\l04-full-case-20261031\\\\handover-weak-money\\\\results\\\\run\", \"D:\\\\opencorvus-benchmark-runs\\\\l04-full-case-20261031\\\\handover-weak-identity\\\\results\\\\run\"], \"fixed_denominator\": 100, \"total\": 96, \"business_success\": false, \"good\": false, \"failed\": [\"H02\"], \"unresolved\": [], \"critical_unmet\": [\"H02\"]}\n",
+  "stderr": ""
+}

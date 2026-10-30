@@ -1,0 +1,383 @@
+{
+  "status": "assessment_incomplete",
+  "subject_role": "author_reference_or_error_control",
+  "run_roots": [
+    "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run"
+  ],
+  "fixed_denominator": 100,
+  "total": null,
+  "business_success": null,
+  "good": null,
+  "failed": [
+    "M01",
+    "M14",
+    "M15"
+  ],
+  "unresolved": [
+    "M02",
+    "M03",
+    "M04",
+    "M05",
+    "M06",
+    "M07",
+    "M08",
+    "M09",
+    "M11",
+    "M12",
+    "M13",
+    "M16",
+    "H01",
+    "H02",
+    "H03",
+    "H04",
+    "H05"
+  ],
+  "critical_unmet": [
+    "M01",
+    "M02",
+    "M03",
+    "M04",
+    "M05",
+    "M06",
+    "M07",
+    "M08",
+    "M09",
+    "M11",
+    "M12",
+    "M13",
+    "M14",
+    "M15",
+    "M16",
+    "H01",
+    "H02",
+    "H03",
+    "H05"
+  ],
+  "findings": {
+    "M01": {
+      "status": "verified_fail",
+      "findings": [
+        {
+          "status": "verified_fail",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\run.json",
+          "actual": null
+        }
+      ]
+    },
+    "M02": {
+      "status": "blocked",
+      "findings": [
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\clean\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\before\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\after\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\cutover\\scenario.json"
+        }
+      ]
+    },
+    "M03": {
+      "status": "blocked",
+      "findings": [
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\clean\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\before\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\after\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\cutover\\scenario.json"
+        }
+      ]
+    },
+    "M04": {
+      "status": "blocked",
+      "findings": [
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\clean\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\before\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\after\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\cutover\\scenario.json"
+        }
+      ]
+    },
+    "M05": {
+      "status": "blocked",
+      "findings": [
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\clean\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\before\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\after\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\cutover\\scenario.json"
+        }
+      ]
+    },
+    "M06": {
+      "status": "blocked",
+      "findings": [
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\clean\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\before\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\after\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\cutover\\scenario.json"
+        }
+      ]
+    },
+    "M07": {
+      "status": "blocked",
+      "findings": [
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\clean\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\before\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\after\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\cutover\\scenario.json"
+        }
+      ]
+    },
+    "M08": {
+      "status": "blocked",
+      "findings": [
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\clean\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\before\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\after\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\cutover\\scenario.json"
+        }
+      ]
+    },
+    "M09": {
+      "status": "blocked",
+      "findings": [
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\clean\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\before\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\after\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\cutover\\scenario.json"
+        }
+      ]
+    },
+    "M10": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\before\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\after\\events.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\ambiguous_entry\\scenario.json",
+          "actual": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\ambiguous_receipt\\scenario.json",
+          "actual": null
+        }
+      ]
+    },
+    "M11": {
+      "status": "blocked",
+      "findings": [
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\cutover\\scenario.json"
+        }
+      ]
+    },
+    "M12": {
+      "status": "blocked",
+      "findings": [
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\clean\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\before\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\after\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\cutover\\scenario.json"
+        }
+      ]
+    },
+    "M13": {
+      "status": "blocked",
+      "findings": [
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\clean\\scenario.json"
+        }
+      ]
+    },
+    "M14": {
+      "status": "verified_fail",
+      "findings": [
+        {
+          "status": "verified_fail",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\clean\\events.json",
+          "actual": {
+            "status": "restored_backup"
+          }
+        },
+        {
+          "status": "verified_fail",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\before\\events.json",
+          "actual": {
+            "status": "restored_backup"
+          }
+        },
+        {
+          "status": "verified_fail",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\after\\events.json",
+          "actual": {
+            "status": "restored_backup"
+          }
+        },
+        {
+          "status": "verified_fail",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\cutover\\events.json",
+          "actual": {
+            "status": "restored_backup"
+          }
+        }
+      ]
+    },
+    "M15": {
+      "status": "verified_fail",
+      "findings": [
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\clean\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\before\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\after\\scenario.json"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\cutover\\scenario.json"
+        },
+        {
+          "status": "verified_fail",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\restore_backup-base\\results\\run\\delivery\\reconciliation.csv",
+          "actual": "candidate_reconciliation_invalid"
+        }
+      ]
+    },
+    "M16": {
+      "status": "unassessed",
+      "findings": []
+    },
+    "H01": {
+      "status": "unassessed",
+      "evidence": "independent whole-case review pending"
+    },
+    "H02": {
+      "status": "unassessed",
+      "evidence": "independent whole-case review pending"
+    },
+    "H03": {
+      "status": "unassessed",
+      "evidence": "independent whole-case review pending"
+    },
+    "H04": {
+      "status": "unassessed",
+      "evidence": "independent whole-case review pending"
+    },
+    "H05": {
+      "status": "unassessed",
+      "evidence": "independent whole-case review pending"
+    }
+  }
+}

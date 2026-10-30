@@ -70,7 +70,7 @@
 
 - [2026-10-29-text-encoding-journey](2026-10-29-text-encoding-journey/README.md)：Unicode原文乱码修复、双语错误、真实JSON和五份下载核验。
 
-- [长程任务资格与便宜实验](2026-10-29-heavy-workbench-long/README.md)：7/10开发成品；L10因果物理/月账/恢复/NPV整审，参考100、弱96/idle85关键区分；L02真实双100必须升级，非小时/成熟证明。
+- [长程任务资格与便宜实验](2026-10-29-heavy-workbench-long/README.md)：8/10开发成品；L04真实应用/切换/ACK/恢复/自含移交整审，参考100、弱96关键失败；L02真实双100必须升级，非小时/成熟证明。
 
 - [2026-10-29-text-attachment-history](2026-10-29-text-attachment-history/README.md)：23张真实发送/历史回看原图、指定模型流式请求、原件下载与数据/运行结算。
 

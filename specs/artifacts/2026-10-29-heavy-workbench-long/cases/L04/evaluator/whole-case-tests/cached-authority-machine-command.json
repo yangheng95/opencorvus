@@ -1,0 +1,30 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L04\\evaluator\\check_l04.py",
+    "--rubric",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L04\\rubric.json",
+    "--registered-inputs",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L04\\evaluator\\registered-inputs.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\cached-authority-machine-assessment",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\cached-authority-base\\results\\run",
+    "--raw",
+    "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\raw-base",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\cached-authority-money\\results\\run",
+    "--raw",
+    "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\raw-money",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\cached-authority-identity\\results\\run",
+    "--raw",
+    "D:\\opencorvus-benchmark-runs\\l04-full-case-20261031\\raw-identity"
+  ],
+  "exit_code": 4,
+  "stdout": "{\"status\": \"assessment_incomplete\", \"subject_role\": \"author_reference_or_error_control\", \"run_roots\": [\"D:\\\\opencorvus-benchmark-runs\\\\l04-full-case-20261031\\\\cached-authority-base\\\\results\\\\run\", \"D:\\\\opencorvus-benchmark-runs\\\\l04-full-case-20261031\\\\cached-authority-money\\\\results\\\\run\", \"D:\\\\opencorvus-benchmark-runs\\\\l04-full-case-20261031\\\\cached-authority-identity\\\\results\\\\run\"], \"fixed_denominator\": 100, \"total\": null, \"business_success\": null, \"good\": null, \"failed\": [\"M03\", \"M04\"], \"unresolved\": [\"M15\", \"H01\", \"H02\", \"H03\", \"H04\", \"H05\"], \"critical_unmet\": [\"M03\", \"M04\", \"M15\", \"H01\", \"H02\", \"H03\", \"H05\"]}\n",
+  "stderr": ""
+}
