@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-30-conversation-navigation-lifetime.md](2026-10-30-conversation-navigation-lifetime.md)：原消息定位进行中操作归属与跨来源收尾。
+
 - [2026-10-30-task-mission-conversation-find.md](2026-10-30-task-mission-conversation-find.md)：Task/Mission完整原消息查找、身份归属与实际定位。
 
 - [2026-10-30-release-0.1.39.md](2026-10-30-release-0.1.39.md)：新版本原生与官网交付、失败候选精确归属清退与公开回读。

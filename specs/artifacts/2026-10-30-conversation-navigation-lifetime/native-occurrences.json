@@ -1,0 +1,78 @@
+[
+  {
+    "phase": "before",
+    "publication": "main-CLa0Hodj.js",
+    "launcher": {
+      "label": "native-before",
+      "startedAt": 1793338474042,
+      "closedAt": 1793338590780,
+      "code": 0,
+      "signal": null,
+      "childPID": 94704
+    },
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "conversation-navigation-808-before-3f065440-931e-454e-9cdd-40d1f129a5ba",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:38394",
+      "pid": 79428
+    },
+    "retirement": {
+      "phase": "before",
+      "providerRequests": 0,
+      "cumulativeRequests": 1083,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "reserveMs": 3486613,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0
+    }
+  },
+  {
+    "phase": "after",
+    "publication": "main-frUcynBE.js",
+    "launcher": {
+      "label": "native-after",
+      "startedAt": 1793338700972,
+      "closedAt": 1793339250614,
+      "code": 0,
+      "signal": null,
+      "childPID": 13264
+    },
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "conversation-navigation-808-after-1bcea37e-ad7b-4bc8-8c11-8ad6d1ad7a04",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:38395",
+      "pid": 86504
+    },
+    "retirement": {
+      "phase": "after",
+      "providerRequests": 0,
+      "cumulativeRequests": 1083,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "reserveMs": 2826795,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0
+    }
+  }
+]

@@ -372,6 +372,7 @@ export function SubagentConversationPanel(props: {
   let navigateMessage: ((request: ConversationCardScrollRequest) => Promise<boolean>) | undefined
   const [navigation, setNavigation] = createSignal<{
     request: ConversationCardScrollRequest; target: string; resolve: (found: boolean) => void
+    landing?: Promise<boolean>
   }>()
   const finishNavigation = (found: boolean) => {
     const pending = navigation()
@@ -380,10 +381,13 @@ export function SubagentConversationPanel(props: {
   }
   const navigationOnFrame = createAnimationFrameScheduler(() => {
     const pending = navigation()
-    if (!pending) return
+    if (!pending || pending.landing) return
     if (requestKey() !== pending.target || !navigateMessage) { finishNavigation(false); return }
-    void navigateMessage(pending.request).then(found => {
+    pending.landing = navigateMessage(pending.request)
+    void pending.landing.then(found => {
       if (navigation() === pending) finishNavigation(found && requestKey() === pending.target)
+    }, () => {
+      if (navigation() === pending) finishNavigation(false)
     })
   })
   const stopMessageNavigation = listenConversationCardScroll((request) => {

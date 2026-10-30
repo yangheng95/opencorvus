@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [原消息定位请求归属验收](2026-10-30-conversation-navigation-lifetime/README.md)：原会话和参与者定位、关闭/重开及数据保全。
+
 - [Task/Mission 原消息查找实页证据](2026-10-30-task-mission-conversation-find/README.md)：完整原历史、参与者原文定位、停止消息身份、中文界面与数据保全。
 
 - [2026-10-30-release-0.1.39](2026-10-30-release-0.1.39/README.md)：11个未公开失败候选精确清退、原生预检及新版本正式公开回读。

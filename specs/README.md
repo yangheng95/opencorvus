@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [对话原消息定位的请求归属](records/2026-10/2026-10-30-conversation-navigation-lifetime.md)：实时更新中的单次定位交接、来源退休与实页复核。
+
 - [Task/Mission 原消息查找](records/2026-10/2026-10-30-task-mission-conversation-find.md)：完整历史接口、真实参与者定位、统一查找入口与实页验证。
 
 - [0.1.39发布与失败候选清退](records/2026-10/2026-10-30-release-0.1.39.md)：冻结已提交增量、完整原生与官网发布，精确清理未公开失败草稿和标签。

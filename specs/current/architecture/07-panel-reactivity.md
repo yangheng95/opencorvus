@@ -43,6 +43,9 @@ and locates the original message run. Participant messages pass that same reques
 to the selected subagent transcript reader, which waits for its owned resource,
 releases follow and locates the actual message instead of accepting its summary
 card as completion. Source changes and failed reads retire that navigation.
+The member navigation owner retains its first landing Promise until settlement;
+subsequent transcript revisions update the displayed content while that same
+operation completes. Rejection settles the original request under its owner.
 Dialog lifetime, selection epoch, authority and source/directory ownership retire
 stale reads and navigation. The conversation
 shortcut respects other dialogs and editor-handled keyboard events.
