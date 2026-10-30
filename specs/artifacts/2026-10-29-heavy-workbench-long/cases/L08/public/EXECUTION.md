@@ -1,0 +1,7 @@
+# Clean execution interface
+
+submission.json = {"files":[relative source/asset paths],"programme_argv":[executable,...],"component_argv":[executable,...]}. List each source/asset used. Paths must be regular, within the submission; no outside links. Any installed language/method is permitted. Both commands run in /program and receive appended --source /raw --out /results/result. Treat result as a new directory. Component command writes manifest.json only; programme command writes the complete delivery described in OUTPUTS. The raw source directory contains the source archive files, not a parent source/ folder.
+
+Programme and component are evaluated independently from the same pre-execution sealed source on base and declared input controls. Each gets readonly source and raw input, a fresh writable output and networknone, one CPU. No private answer, old result, solver hint, provider secret or evaluator library is mounted. You may include your own implementation and public libraries. Source files/argv are sealed before evaluation; no code adaptation using private feedback. Actual native exit and substantive output are checked separately.
+
+All project business days are integer indices0..60. Simulate immediately; no real waiting. No total agent token/wall budget is set by this benchmark author. Individual algorithms may choose legitimate search limits and report resulting bounds, but must still meet business obligations. The original raw paid history and event facts stay immutable. No production deployment, email or external approval is requested.

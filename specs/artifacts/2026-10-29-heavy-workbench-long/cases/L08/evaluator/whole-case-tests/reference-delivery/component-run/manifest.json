@@ -1,0 +1,79 @@
+{
+  "states": [
+    {
+      "tenant": "North",
+      "item": "alpha",
+      "revision": 2,
+      "status": "ready",
+      "units": 12,
+      "source_ids": [
+        "S03",
+        "S04"
+      ]
+    },
+    {
+      "tenant": "North",
+      "item": "beta",
+      "revision": 2,
+      "status": "withdrawn",
+      "units": 0,
+      "source_ids": [
+        "S06"
+      ]
+    },
+    {
+      "tenant": "North",
+      "item": "fraction",
+      "revision": 1,
+      "status": "invalid_units",
+      "units": null,
+      "source_ids": [
+        "S09"
+      ]
+    },
+    {
+      "tenant": "South",
+      "item": "alpha",
+      "revision": 1,
+      "status": "ready",
+      "units": 7,
+      "source_ids": [
+        "S02"
+      ]
+    },
+    {
+      "tenant": "South",
+      "item": "delta",
+      "revision": 1,
+      "status": "ready",
+      "units": 0,
+      "source_ids": [
+        "S12"
+      ]
+    },
+    {
+      "tenant": "South",
+      "item": "gamma",
+      "revision": 1,
+      "status": "conflict",
+      "units": null,
+      "source_ids": [
+        "S07",
+        "S08"
+      ]
+    }
+  ],
+  "invalid_rows": [
+    {
+      "source_id": "S11",
+      "code": "identity"
+    }
+  ],
+  "excluded_future": [
+    "S10"
+  ],
+  "totals_by_tenant": {
+    "North": 12,
+    "South": 7
+  }
+}

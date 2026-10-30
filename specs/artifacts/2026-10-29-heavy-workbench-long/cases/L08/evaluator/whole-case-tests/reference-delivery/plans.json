@@ -1,0 +1,486 @@
+{
+  "base": {
+    "tasks": [
+      {
+        "task": "R01",
+        "mode": "repair",
+        "start": 12,
+        "end": 15
+      },
+      {
+        "task": "R02",
+        "mode": "regress",
+        "start": 18,
+        "end": 20
+      },
+      {
+        "task": "A01",
+        "mode": "map",
+        "start": 12,
+        "end": 14
+      },
+      {
+        "task": "A02",
+        "mode": "ada",
+        "start": 15,
+        "end": 18
+      },
+      {
+        "task": "A03",
+        "mode": "internal",
+        "start": 17,
+        "end": 20
+      },
+      {
+        "task": "A04",
+        "mode": "catalogue",
+        "start": 19,
+        "end": 21
+      },
+      {
+        "task": "A05",
+        "mode": "auth",
+        "start": 14,
+        "end": 16
+      },
+      {
+        "task": "A06",
+        "mode": "integrate",
+        "start": 21,
+        "end": 23
+      },
+      {
+        "task": "A07",
+        "mode": "cy",
+        "start": 21,
+        "end": 23
+      },
+      {
+        "task": "A08",
+        "mode": "reserved",
+        "start": 21,
+        "end": 23
+      },
+      {
+        "task": "A09",
+        "mode": "replay",
+        "start": 23,
+        "end": 25
+      },
+      {
+        "task": "A10",
+        "mode": "security",
+        "start": 23,
+        "end": 25
+      },
+      {
+        "task": "A11",
+        "mode": "guide",
+        "start": 23,
+        "end": 25
+      },
+      {
+        "task": "A12",
+        "mode": "train",
+        "start": 25,
+        "end": 27
+      },
+      {
+        "task": "A13",
+        "mode": "monitor",
+        "start": 23,
+        "end": 25
+      },
+      {
+        "task": "A14",
+        "mode": "smoke",
+        "start": 25,
+        "end": 27
+      },
+      {
+        "task": "C00",
+        "mode": "package",
+        "start": 27,
+        "end": 28
+      },
+      {
+        "task": "CERT",
+        "mode": "certify",
+        "start": 28,
+        "end": 32
+      },
+      {
+        "task": "HANDOFF",
+        "mode": "handover",
+        "start": 32,
+        "end": 33
+      },
+      {
+        "task": "F01",
+        "mode": "ben",
+        "start": 25,
+        "end": 27
+      }
+    ]
+  },
+  "supplier_delay": {
+    "tasks": [
+      {
+        "task": "R01",
+        "mode": "repair",
+        "start": 12,
+        "end": 15
+      },
+      {
+        "task": "R02",
+        "mode": "regress",
+        "start": 15,
+        "end": 17
+      },
+      {
+        "task": "A01",
+        "mode": "map",
+        "start": 12,
+        "end": 14
+      },
+      {
+        "task": "A02",
+        "mode": "ada",
+        "start": 19,
+        "end": 22
+      },
+      {
+        "task": "A03",
+        "mode": "internal",
+        "start": 17,
+        "end": 20
+      },
+      {
+        "task": "A04",
+        "mode": "catalogue",
+        "start": 15,
+        "end": 17
+      },
+      {
+        "task": "A05",
+        "mode": "auth",
+        "start": 22,
+        "end": 24
+      },
+      {
+        "task": "A06",
+        "mode": "integrate",
+        "start": 24,
+        "end": 26
+      },
+      {
+        "task": "A07",
+        "mode": "cy",
+        "start": 24,
+        "end": 26
+      },
+      {
+        "task": "A08",
+        "mode": "reserved",
+        "start": 24,
+        "end": 26
+      },
+      {
+        "task": "A09",
+        "mode": "replay",
+        "start": 26,
+        "end": 28
+      },
+      {
+        "task": "A10",
+        "mode": "security",
+        "start": 26,
+        "end": 28
+      },
+      {
+        "task": "A11",
+        "mode": "guide",
+        "start": 26,
+        "end": 28
+      },
+      {
+        "task": "A12",
+        "mode": "train",
+        "start": 28,
+        "end": 30
+      },
+      {
+        "task": "A13",
+        "mode": "monitor",
+        "start": 26,
+        "end": 28
+      },
+      {
+        "task": "A14",
+        "mode": "smoke",
+        "start": 28,
+        "end": 30
+      },
+      {
+        "task": "C00",
+        "mode": "package",
+        "start": 30,
+        "end": 31
+      },
+      {
+        "task": "CERT",
+        "mode": "certify",
+        "start": 31,
+        "end": 35
+      },
+      {
+        "task": "HANDOFF",
+        "mode": "handover",
+        "start": 35,
+        "end": 36
+      },
+      {
+        "task": "F01",
+        "mode": "ben",
+        "start": 28,
+        "end": 30
+      }
+    ]
+  },
+  "certification_hold": {
+    "tasks": [
+      {
+        "task": "R01",
+        "mode": "repair",
+        "start": 12,
+        "end": 15
+      },
+      {
+        "task": "R02",
+        "mode": "regress",
+        "start": 15,
+        "end": 17
+      },
+      {
+        "task": "A01",
+        "mode": "map",
+        "start": 12,
+        "end": 14
+      },
+      {
+        "task": "A02",
+        "mode": "ada",
+        "start": 15,
+        "end": 18
+      },
+      {
+        "task": "A03",
+        "mode": "internal",
+        "start": 17,
+        "end": 20
+      },
+      {
+        "task": "A04",
+        "mode": "catalogue",
+        "start": 19,
+        "end": 21
+      },
+      {
+        "task": "A05",
+        "mode": "auth",
+        "start": 14,
+        "end": 16
+      },
+      {
+        "task": "A06",
+        "mode": "integrate",
+        "start": 21,
+        "end": 23
+      },
+      {
+        "task": "A07",
+        "mode": "ada",
+        "start": 23,
+        "end": 25
+      },
+      {
+        "task": "A08",
+        "mode": "reserved",
+        "start": 25,
+        "end": 27
+      },
+      {
+        "task": "A09",
+        "mode": "replay",
+        "start": 27,
+        "end": 29
+      },
+      {
+        "task": "A10",
+        "mode": "security",
+        "start": 23,
+        "end": 25
+      },
+      {
+        "task": "A11",
+        "mode": "guide",
+        "start": 27,
+        "end": 29
+      },
+      {
+        "task": "A12",
+        "mode": "train",
+        "start": 29,
+        "end": 31
+      },
+      {
+        "task": "A13",
+        "mode": "monitor",
+        "start": 27,
+        "end": 29
+      },
+      {
+        "task": "A14",
+        "mode": "smoke",
+        "start": 29,
+        "end": 31
+      },
+      {
+        "task": "C00",
+        "mode": "package",
+        "start": 31,
+        "end": 32
+      },
+      {
+        "task": "CERT",
+        "mode": "certify",
+        "start": 32,
+        "end": 36
+      },
+      {
+        "task": "HANDOFF",
+        "mode": "handover",
+        "start": 36,
+        "end": 37
+      }
+    ]
+  },
+  "trainer_loss": {
+    "tasks": [
+      {
+        "task": "R01",
+        "mode": "repair",
+        "start": 15,
+        "end": 18
+      },
+      {
+        "task": "R02",
+        "mode": "regress",
+        "start": 18,
+        "end": 20
+      },
+      {
+        "task": "A01",
+        "mode": "map",
+        "start": 12,
+        "end": 14
+      },
+      {
+        "task": "A02",
+        "mode": "ben",
+        "start": 14,
+        "end": 17
+      },
+      {
+        "task": "A03",
+        "mode": "internal",
+        "start": 17,
+        "end": 20
+      },
+      {
+        "task": "A04",
+        "mode": "catalogue",
+        "start": 20,
+        "end": 22
+      },
+      {
+        "task": "A05",
+        "mode": "auth",
+        "start": 22,
+        "end": 24
+      },
+      {
+        "task": "A06",
+        "mode": "integrate",
+        "start": 24,
+        "end": 26
+      },
+      {
+        "task": "A07",
+        "mode": "cy",
+        "start": 23,
+        "end": 25
+      },
+      {
+        "task": "A08",
+        "mode": "reserved",
+        "start": 24,
+        "end": 26
+      },
+      {
+        "task": "A09",
+        "mode": "replay",
+        "start": 28,
+        "end": 30
+      },
+      {
+        "task": "A10",
+        "mode": "security",
+        "start": 26,
+        "end": 28
+      },
+      {
+        "task": "A11",
+        "mode": "guide",
+        "start": 28,
+        "end": 30
+      },
+      {
+        "task": "A12",
+        "mode": "train",
+        "start": 30,
+        "end": 32
+      },
+      {
+        "task": "A13",
+        "mode": "monitor",
+        "start": 28,
+        "end": 30
+      },
+      {
+        "task": "A14",
+        "mode": "smoke",
+        "start": 30,
+        "end": 32
+      },
+      {
+        "task": "C00",
+        "mode": "package",
+        "start": 32,
+        "end": 33
+      },
+      {
+        "task": "CERT",
+        "mode": "certify",
+        "start": 33,
+        "end": 37
+      },
+      {
+        "task": "HANDOFF",
+        "mode": "handover",
+        "start": 37,
+        "end": 38
+      }
+    ]
+  }
+}

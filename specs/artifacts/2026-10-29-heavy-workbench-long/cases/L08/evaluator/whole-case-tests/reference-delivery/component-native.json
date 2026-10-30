@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "/opt/cpsat/bin/python",
+    "-B",
+    "/program/l08_reference.py",
+    "--source",
+    "/raw",
+    "--out",
+    "/results/result/component-run",
+    "--component-only"
+  ],
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": ""
+}

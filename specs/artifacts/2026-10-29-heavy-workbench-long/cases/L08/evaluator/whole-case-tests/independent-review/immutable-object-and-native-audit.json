@@ -1,0 +1,1307 @@
+{
+  "checks": [
+    {
+      "name": "base/component-native-binding",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "base/component-exited",
+      "pass": true,
+      "actual": "exited",
+      "expected": "exited"
+    },
+    {
+      "name": "base/component-cleanup",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "base/component/source/l08_core.py",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/component/source/l08_reference.py",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/component/source/submission.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/component/raw/01-client-brief.md",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/component/raw/02-commercial-terms.md",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/component/raw/03-control-correspondence.eml",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/component/raw/calendar.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/component/raw/events.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/component/raw/legacy_manifest.py",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/component/raw/paid-ledger.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/component/raw/progress.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/component/raw/quotes.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/component/raw/rates.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/component/raw/release-clock.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/component/raw/release-lines.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/component/raw/scope.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/component/raw/treasury.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/component/result/manifest.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme-native-binding",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "base/programme-exited",
+      "pass": true,
+      "actual": "exited",
+      "expected": "exited"
+    },
+    {
+      "name": "base/programme-cleanup",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "base/programme/source/l08_core.py",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/source/l08_reference.py",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/source/submission.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/raw/01-client-brief.md",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/raw/02-commercial-terms.md",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/raw/03-control-correspondence.eml",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/raw/calendar.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/raw/events.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/raw/legacy_manifest.py",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/raw/paid-ledger.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/raw/progress.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/raw/quotes.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/raw/rates.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/raw/release-clock.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/raw/release-lines.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/raw/scope.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/raw/treasury.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/result/bounds.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/result/cash-ledger.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/result/cash.png",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/result/component-native.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/result/execution.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/result/gantt.png",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/result/history.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/result/manifest.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/result/paid-ledger.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/result/plans.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/result/REPORT.md",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/result/schedule.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/result/solver-runs.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "base/programme/result/component-run/manifest.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/component-native-binding",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "future_quote/component-exited",
+      "pass": true,
+      "actual": "exited",
+      "expected": "exited"
+    },
+    {
+      "name": "future_quote/component-cleanup",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "future_quote/component/source/l08_core.py",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/component/source/l08_reference.py",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/component/source/submission.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/component/raw/01-client-brief.md",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/component/raw/02-commercial-terms.md",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/component/raw/03-control-correspondence.eml",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/component/raw/calendar.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/component/raw/events.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/component/raw/legacy_manifest.py",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/component/raw/paid-ledger.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/component/raw/progress.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/component/raw/quotes.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/component/raw/rates.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/component/raw/release-clock.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/component/raw/release-lines.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/component/raw/scope.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/component/raw/treasury.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/component/result/manifest.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme-native-binding",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "future_quote/programme-exited",
+      "pass": true,
+      "actual": "exited",
+      "expected": "exited"
+    },
+    {
+      "name": "future_quote/programme-cleanup",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "future_quote/programme/source/l08_core.py",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/source/l08_reference.py",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/source/submission.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/raw/01-client-brief.md",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/raw/02-commercial-terms.md",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/raw/03-control-correspondence.eml",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/raw/calendar.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/raw/events.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/raw/legacy_manifest.py",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/raw/paid-ledger.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/raw/progress.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/raw/quotes.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/raw/rates.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/raw/release-clock.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/raw/release-lines.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/raw/scope.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/raw/treasury.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/result/bounds.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/result/cash-ledger.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/result/cash.png",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/result/component-native.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/result/execution.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/result/gantt.png",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/result/history.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/result/manifest.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/result/paid-ledger.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/result/plans.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/result/REPORT.md",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/result/schedule.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/result/solver-runs.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "future_quote/programme/result/component-run/manifest.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/component-native-binding",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "new_scope/component-exited",
+      "pass": true,
+      "actual": "exited",
+      "expected": "exited"
+    },
+    {
+      "name": "new_scope/component-cleanup",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "new_scope/component/source/l08_core.py",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/component/source/l08_reference.py",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/component/source/submission.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/component/raw/01-client-brief.md",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/component/raw/02-commercial-terms.md",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/component/raw/03-control-correspondence.eml",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/component/raw/calendar.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/component/raw/events.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/component/raw/legacy_manifest.py",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/component/raw/paid-ledger.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/component/raw/progress.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/component/raw/quotes.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/component/raw/rates.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/component/raw/release-clock.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/component/raw/release-lines.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/component/raw/scope.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/component/raw/treasury.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/component/result/manifest.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme-native-binding",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "new_scope/programme-exited",
+      "pass": true,
+      "actual": "exited",
+      "expected": "exited"
+    },
+    {
+      "name": "new_scope/programme-cleanup",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "new_scope/programme/source/l08_core.py",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/source/l08_reference.py",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/source/submission.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/raw/01-client-brief.md",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/raw/02-commercial-terms.md",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/raw/03-control-correspondence.eml",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/raw/calendar.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/raw/events.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/raw/legacy_manifest.py",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/raw/paid-ledger.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/raw/progress.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/raw/quotes.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/raw/rates.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/raw/release-clock.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/raw/release-lines.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/raw/scope.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/raw/treasury.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/result/bounds.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/result/cash-ledger.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/result/cash.png",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/result/component-native.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/result/execution.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/result/gantt.png",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/result/history.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/result/manifest.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/result/paid-ledger.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/result/plans.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/result/REPORT.md",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/result/schedule.csv",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/result/solver-runs.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "new_scope/programme/result/component-run/manifest.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "submission-to-sealed/l08_core.py",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "submission-to-sealed/l08_reference.py",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "submission-to-sealed/submission.json",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "main-run/base/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "main-run/base/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "main-run/future_quote/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "main-run/future_quote/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "main-run/new_scope/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "main-run/new_scope/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "weak_report-run/base/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "weak_report-run/base/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "weak_report-run/future_quote/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "weak_report-run/future_quote/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "weak_report-run/new_scope/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "weak_report-run/new_scope/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "legacy_component-run/base/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "legacy_component-run/base/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "legacy_component-run/future_quote/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "legacy_component-run/future_quote/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "legacy_component-run/new_scope/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "legacy_component-run/new_scope/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "changed_history-run/base/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "changed_history-run/base/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "changed_history-run/future_quote/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "changed_history-run/future_quote/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "changed_history-run/new_scope/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "changed_history-run/new_scope/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "refund_sunk-run/base/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "refund_sunk-run/base/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "refund_sunk-run/future_quote/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "refund_sunk-run/future_quote/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "refund_sunk-run/new_scope/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "refund_sunk-run/new_scope/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "resource_overlap-run/base/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "resource_overlap-run/base/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "resource_overlap-run/future_quote/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "resource_overlap-run/future_quote/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "resource_overlap-run/new_scope/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "resource_overlap-run/new_scope/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "false_approval-run/base/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "false_approval-run/base/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "false_approval-run/future_quote/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "false_approval-run/future_quote/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "false_approval-run/new_scope/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "false_approval-run/new_scope/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "cached-run/base/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "cached-run/base/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "cached-run/future_quote/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "cached-run/future_quote/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "cached-run/new_scope/component actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "cached-run/new_scope/programme actual exit",
+      "pass": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "all identities",
+      "pass": true,
+      "actual": true,
+      "expected": true
+    }
+  ],
+  "scope": "direct immutable ZIP member identities, native originals, mounts and cleanup; no content hash correctness gate"
+}

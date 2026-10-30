@@ -1,0 +1,222 @@
+{
+  "base": {
+    "finish_lower_bound": 33,
+    "minimum_fixed_cost": 33550,
+    "relaxed_earliest_ends": {
+      "H01": 2,
+      "H02": 5,
+      "H03": 5,
+      "H04": 9,
+      "H05": 11,
+      "H06": 12,
+      "A01": 14,
+      "A08": 19,
+      "R01": 15,
+      "A02": 16,
+      "A03": 17,
+      "A04": 16,
+      "A05": 16,
+      "R02": 17,
+      "A06": 23,
+      "A07": 19,
+      "A09": 25,
+      "A10": 25,
+      "A11": 25,
+      "A13": 25,
+      "A12": 27,
+      "A14": 27,
+      "C00": 28,
+      "CERT": 32,
+      "HANDOFF": 33
+    },
+    "removed_modes": [
+      {
+        "task": "A03",
+        "mode": "expedite",
+        "conditional_cost_lower_bound": 37250,
+        "finish_lower_bound": 29
+      },
+      {
+        "task": "A08",
+        "mode": "cancel_internal",
+        "conditional_cost_lower_bound": 37350,
+        "finish_lower_bound": 29
+      },
+      {
+        "task": "F01",
+        "mode": "vendor",
+        "conditional_cost_lower_bound": 37250,
+        "finish_lower_bound": 29
+      }
+    ],
+    "optional_possible": true
+  },
+  "supplier_delay": {
+    "finish_lower_bound": 36,
+    "minimum_fixed_cost": 33550,
+    "relaxed_earliest_ends": {
+      "H01": 2,
+      "H02": 5,
+      "H03": 5,
+      "H04": 9,
+      "H05": 11,
+      "H06": 12,
+      "A01": 14,
+      "A08": 26,
+      "R01": 15,
+      "A02": 16,
+      "A03": 17,
+      "A04": 16,
+      "A05": 16,
+      "R02": 17,
+      "A06": 23,
+      "A07": 19,
+      "A09": 28,
+      "A10": 25,
+      "A11": 25,
+      "A13": 25,
+      "A12": 27,
+      "A14": 30,
+      "C00": 31,
+      "CERT": 35,
+      "HANDOFF": 36
+    },
+    "removed_modes": [
+      {
+        "task": "A03",
+        "mode": "expedite",
+        "conditional_cost_lower_bound": 37250,
+        "finish_lower_bound": 29
+      },
+      {
+        "task": "A08",
+        "mode": "cancel_internal",
+        "conditional_cost_lower_bound": 37350,
+        "finish_lower_bound": 29
+      },
+      {
+        "task": "F01",
+        "mode": "vendor",
+        "conditional_cost_lower_bound": 37250,
+        "finish_lower_bound": 29
+      }
+    ],
+    "optional_possible": true
+  },
+  "certification_hold": {
+    "finish_lower_bound": 37,
+    "minimum_fixed_cost": 33550,
+    "relaxed_earliest_ends": {
+      "H01": 2,
+      "H02": 5,
+      "H03": 5,
+      "H04": 9,
+      "H05": 11,
+      "H06": 12,
+      "A01": 14,
+      "A08": 26,
+      "R01": 15,
+      "A02": 16,
+      "A03": 17,
+      "A04": 16,
+      "A05": 16,
+      "R02": 17,
+      "A06": 23,
+      "A07": 19,
+      "A09": 28,
+      "A10": 25,
+      "A11": 25,
+      "A13": 25,
+      "A12": 27,
+      "A14": 30,
+      "C00": 31,
+      "CERT": 36,
+      "HANDOFF": 37
+    },
+    "removed_modes": [
+      {
+        "task": "A03",
+        "mode": "expedite",
+        "conditional_cost_lower_bound": 38050,
+        "finish_lower_bound": 37
+      },
+      {
+        "task": "A08",
+        "mode": "cancel_internal",
+        "conditional_cost_lower_bound": 38150,
+        "finish_lower_bound": 37
+      },
+      {
+        "task": "F01",
+        "mode": "vendor",
+        "conditional_cost_lower_bound": 38050,
+        "finish_lower_bound": 37
+      },
+      {
+        "task": "F01",
+        "mode": "ben",
+        "conditional_cost_lower_bound": 37050,
+        "finish_lower_bound": 37
+      }
+    ],
+    "optional_possible": false
+  },
+  "trainer_loss": {
+    "finish_lower_bound": 38,
+    "minimum_fixed_cost": 33550,
+    "relaxed_earliest_ends": {
+      "H01": 2,
+      "H02": 5,
+      "H03": 5,
+      "H04": 9,
+      "H05": 11,
+      "H06": 12,
+      "A01": 14,
+      "A08": 26,
+      "R01": 15,
+      "A02": 16,
+      "A03": 17,
+      "A04": 16,
+      "A05": 16,
+      "R02": 17,
+      "A06": 23,
+      "A07": 19,
+      "A09": 28,
+      "A10": 25,
+      "A11": 25,
+      "A13": 25,
+      "A12": 27,
+      "A14": 30,
+      "C00": 31,
+      "CERT": 36,
+      "HANDOFF": 38
+    },
+    "removed_modes": [
+      {
+        "task": "A03",
+        "mode": "expedite",
+        "conditional_cost_lower_bound": 38150,
+        "finish_lower_bound": 38
+      },
+      {
+        "task": "A08",
+        "mode": "cancel_internal",
+        "conditional_cost_lower_bound": 38250,
+        "finish_lower_bound": 38
+      },
+      {
+        "task": "F01",
+        "mode": "vendor",
+        "conditional_cost_lower_bound": 38150,
+        "finish_lower_bound": 38
+      },
+      {
+        "task": "F01",
+        "mode": "ben",
+        "conditional_cost_lower_bound": 37150,
+        "finish_lower_bound": 38
+      }
+    ],
+    "optional_possible": false
+  }
+}

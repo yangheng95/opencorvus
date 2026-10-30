@@ -1,0 +1,15 @@
+{
+  "case": "L08/0.2.0-dev",
+  "frozen_at": "2026-10-30T14:58:58.859622+00:00",
+  "status": "frozen_development_pilot",
+  "whole_case_review": "evaluator/whole-case-tests/independent-review/REVIEW.md",
+  "public_input": "public/",
+  "rubric": "rubric.json",
+  "invariants": "Original raw semantics,20 leaves/100 weight,all15 machine critical,H01/H02/H05 critical,good at least90 plus allcritical. Any future upgrade is a new version; old scores and inputs retained.",
+  "evidence_scope": "Actual source-only base/future quote/newscope, wrong programmes and weak-report control, one independent base cold, raw-source independent business reconstruction and actual charts.",
+  "limitations": [
+    "No fresh LLM candidate score or effective-hour qualification.",
+    "Nonblind familiar AI-agent review; no professional human/statistical maturity certification.",
+    "Known scenarios are offline reconstruction, not unseen online causal evaluation."
+  ]
+}

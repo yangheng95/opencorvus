@@ -1,0 +1,63 @@
+[
+  {
+    "task": "H01",
+    "start": 0,
+    "end": 2,
+    "resources": [
+      "Ada",
+      "Di"
+    ],
+    "cost": 1400,
+    "status": "completed"
+  },
+  {
+    "task": "H02",
+    "start": 2,
+    "end": 5,
+    "resources": [
+      "Ben"
+    ],
+    "cost": 1500,
+    "status": "completed"
+  },
+  {
+    "task": "H03",
+    "start": 2,
+    "end": 5,
+    "resources": [
+      "Ada"
+    ],
+    "cost": 1200,
+    "status": "completed"
+  },
+  {
+    "task": "H04",
+    "start": 5,
+    "end": 9,
+    "resources": [
+      "Vendor"
+    ],
+    "cost": 7000,
+    "status": "delivered_not_quality_accepted"
+  },
+  {
+    "task": "H05",
+    "start": 9,
+    "end": 11,
+    "resources": [
+      "Cy"
+    ],
+    "cost": 700,
+    "status": "completed"
+  },
+  {
+    "task": "H06",
+    "start": 11,
+    "end": 12,
+    "resources": [
+      "Di"
+    ],
+    "cost": 300,
+    "status": "completed"
+  }
+]

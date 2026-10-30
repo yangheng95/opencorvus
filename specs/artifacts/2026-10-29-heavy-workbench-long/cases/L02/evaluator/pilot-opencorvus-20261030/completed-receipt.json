@@ -1,0 +1,36 @@
+{
+  "archived_at": "2026-10-30T14:39:38.437179+00:00",
+  "archive_started_at": "2026-10-30T14:39:04.240519+00:00",
+  "archive_elapsed_seconds": 34.196659199893475,
+  "project": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\project",
+  "head": "0b93788d6c569efc88eadb7532261271129e097f",
+  "full_archive": "completed-project.zip",
+  "regular_files": 13315,
+  "links": 0,
+  "uncompressed_bytes": 4043939087,
+  "archive_bytes": 1255561939,
+  "declared_programme_files": [
+    "METHODS.md",
+    "USAGE.md",
+    "l02_common.py",
+    "l02_predict.py",
+    "l02_report.py",
+    "l02_select.py",
+    "references/claims.json",
+    "references/gneiting.pdf",
+    "references/wis-correction.html",
+    "references/wis.html",
+    "submission.json"
+  ],
+  "task_time": {
+    "created": 1793362050490,
+    "updated": 1793369341817,
+    "started": 1793362050490,
+    "completed": 1793369341817
+  },
+  "task_lifecycle_wall_seconds": 7291.327,
+  "effective_hours_qualified": false,
+  "candidate_score": null,
+  "comparable": false,
+  "scope": "full real workspace including Git/untracked/failures, and original programme closure; no evaluation results yet"
+}

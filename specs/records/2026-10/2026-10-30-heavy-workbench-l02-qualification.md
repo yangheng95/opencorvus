@@ -487,3 +487,18 @@ L06/0.3完整权威业务/信息/承诺/物理现金续接和其余L01/L04/L05/L
 16public从441aa82c9导出两份原字节同一，全部preregistration在首次Task前写；good原90+全critical，顺序OC后fresh Codex。Provider原staging已成对复制auth/models，分别usable/projected/actual HTTP200流式确认；无凭据进入spec/提交/提示。候选只公开开发和事前programme，私有12outer将自然交付封存后由评估侧执行，不把未来私有研究自述当已完成。runtime源主仓dirty/原生隔离未资格/Codex未知，comparable=false；raw敏感日志只外部。
 
 下一按真实原Task/status/tool/绑定容器看自然进展，不重启/重开候选或因stdout暂空/Inspect观察先终态而cancel有效工作。Task+子计算终态后封整个workspace/Git/未跟踪程序/产物/失败，真正sealed全12和report→新图→同冻结rubric单层评分，再顺序fresh Codex（fork none/无override/禁再委托/仅同public）。候选评分与有效小时仍null/0，suite2/10。六旧任务不恢复，其他案例建设继续。
+
+## 原真实Task自然终态：封存与正式私有评价实施Recall
+
+14:32:56Z真实API已completed、activity.running=0；原Inspect观察者14:09:51Z自然exit0。Task精确start/finish以原task.json为准，不用最后观察时刻代替。380真实模型请求含两preflight，实际模型仍gpt-6.1-sol/流式，orchestrator+developer+tester；这些不是业务分或有效小时。Docker当前只有六旧Paused及用户长期build容器，无活跃候选容器；不操作用户容器。源project有约13315文件/4.04GB，包括Git和全部未跟踪开发/审查/交付原件，必须整份封存，不能只取HEAD或扔掉失败。
+
+依原预注册先核Task/子工作真终态、按完整原文件归档（含Git/失败/交付ZIP），声明programme用唯一validate_submission读取原字节封到单独submission，不带旧预测/报告或私有答案入worker。root/submission.json是实际自然交付入口，delivery ZIP仅原副本不作fallback。完整capsule仅外部，不将原Provider日志/敏感原件进入spec/Git。完成封存后以原stop文件正常dispose自有listener，核runtime/data暂存auth/models已清，源凭据不动。
+
+随后用当前唯一run_l02_study.py和冻结public material-contract/study，原评估侧raw，全新formal-run真正108predict+12select+report，1CPU/netnone/只本程序闭包及授权packet；全部源码/池/静态报告资产首私有预测前封存。不得author-diagnostic缩小正式评估，不看私有结果回送候选改代码。执行/质量/科学分开，原输入/源码/SQLite/cells/native/报告原件保留。所有后续reader/grader及独审仍依同冻结66叶，未实际发生不提前填分。新工具只封存和薄启动，不改框架/配置/协议或凭空预算；4GB归档计算和评估侧时间均不计候选小时。L08建设遇此实际终态先处理封存/评价，未完成L08不报整题已交。
+
+
+## 最新真实终态与私有整题执行Recall
+
+原Task真实12:07:30.490→14:09:01.817Z自然completed，原Inspect14:09:51自然exit0；14:32真实API/running0和只读Docker绑定核均已终态。14:39:38完整13315文件/4043939087原字节（含Git/全部未跟踪开发失败与交付）封存1255561939字节ZIP，HEAD0b93788d6c569efc88eadb7532261271129e097f。唯一validate_submission从实际根submission.json封存11个programme/资产/声明，没取deliveryZIP作fallback。14:39:39原stop正常dispose listener，成对暂存auth/models移除、源凭据不改；旧56591接口退休，不再请求/重开。安全收据cases/L02/evaluator/pilot-opencorvus-20261030，完整敏感原trace和capsule仅外部。
+
+14:43:06.866Z唯一真正候选私有整题执行已启动：pair/opencorvus/evaluation，launcher95380/driver79496，封存候选原11文件、冻结material/study、原raw、108forecast+12selector+report，1CPU/netnone/readonlysource/raw/newoutputs，无author-diagnostic/总截断。唯一动态locator L02-current-pair-20261030.json已更新active_evaluation；任务与评估侧耗时分开，原7291.327秒未按真实活动完整归因，不认证有效小时。当前owner仍活动、native未全部完成，候选score/study/quality/good均null；等真实终态再原对象封存/新图/同66叶独评与l02_grade，不用旧publication投影。之后才fresh Codex。自有观察SQL最初误写cells及PowerShell引号SyntaxError原tool trace保留，修读取cell后得真实进度，不当候选或产品失败。

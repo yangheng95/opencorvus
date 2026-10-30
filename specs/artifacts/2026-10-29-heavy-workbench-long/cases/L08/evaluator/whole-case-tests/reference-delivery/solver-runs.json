@@ -1,0 +1,22 @@
+{
+  "base": {
+    "status": "OPTIMAL",
+    "wall_seconds": 0.036785558,
+    "objective": "feasibility at independently relaxed date bound; not exact cost optimization"
+  },
+  "supplier_delay": {
+    "status": "OPTIMAL",
+    "wall_seconds": 0.023463621,
+    "objective": "feasibility at independently relaxed date bound; not exact cost optimization"
+  },
+  "certification_hold": {
+    "status": "OPTIMAL",
+    "wall_seconds": 0.029697511000000003,
+    "objective": "feasibility at independently relaxed date bound; not exact cost optimization"
+  },
+  "trainer_loss": {
+    "status": "OPTIMAL",
+    "wall_seconds": 0.038680659,
+    "objective": "feasibility at independently relaxed date bound; not exact cost optimization"
+  }
+}

@@ -1,0 +1,44 @@
+[
+  {
+    "payment_id": "P01",
+    "day": 0,
+    "source": "H01",
+    "amount": 1400
+  },
+  {
+    "payment_id": "P02",
+    "day": 2,
+    "source": "H02",
+    "amount": 1500
+  },
+  {
+    "payment_id": "P03",
+    "day": 2,
+    "source": "H03",
+    "amount": 1200
+  },
+  {
+    "payment_id": "P04",
+    "day": 3,
+    "source": "H04",
+    "amount": 7000
+  },
+  {
+    "payment_id": "P05",
+    "day": 9,
+    "source": "H05",
+    "amount": 700
+  },
+  {
+    "payment_id": "P06",
+    "day": 11,
+    "source": "H06",
+    "amount": 300
+  },
+  {
+    "payment_id": "P07",
+    "day": 10,
+    "source": "A08_DEPOSIT",
+    "amount": 1500
+  }
+]

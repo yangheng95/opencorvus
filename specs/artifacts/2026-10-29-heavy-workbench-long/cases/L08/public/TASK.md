@@ -1,0 +1,11 @@
+# L08 / 0.2.0-dev — project recovery and controlled handover
+
+You inherit an original fictional project at business day12. Audit the original scope, quotes, personnel/equipment calendars, actual progress, paid invoices and pending change notices. Repair and actually run the supplied limited release-manifest component. Preserve past work and sunk payments. Build feasible resource/cash/budget plans for all four known scenarios; certify minimum required deadline relaxation and retain optional F01 at that minimum date whenever feasible. Produce an executable update model, actual execution accounts, decision/approval drafts, handover package and meaningful figures.
+
+The known scenarios reconstruct the same recorded checkpoint independently. This is an offline control task, not an unseen online policy test. Future forecast commitments may differ; recorded actuals and payments cannot. Extension requests have not been approved. Do not contact external parties or fabricate signatures. The requested software slice is the release manifest, not a complete platform.
+
+First minimize finish subject to mandatory scope, approved modes, capacity/calendar, cash and total budget. At that finish retain F01 if possible. Any correct schedule and method/language are allowed; cost need only remain within budget. When the original day33 is unattainable, provide a verifiable lower-bound proof and feasible minimum-relaxation witness. Native solver status alone is insufficient proof.
+
+Read OUTPUTS.md, EXECUTION.md and COMPONENT.md. The source archive and commercial terms supply all numerical facts. Source remains mutable for evaluation: a future uncommitted package fee can change and a new mandatory tenant handover task plus release row can be appended. Recompute all dependent plans, money, manifest, reports and figures; cached baseline artifacts do not satisfy this contract. Historical contracts and invoices are never silently changed.
+
+Submit frozen source and the declared entry points. Evaluation executes on clean input/output mounts with network disabled. Do not require previous output, private reference plans or credentials. Fast correct execution is valid. Simulated project days and solver CPU do not count as hours of agent work.

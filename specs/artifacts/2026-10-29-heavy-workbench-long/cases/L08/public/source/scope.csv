@@ -1,0 +1,21 @@
+task,title,dependencies,mandatory
+R01,Repair manifest,H04;H05,1
+R02,Real regression,R01,1
+A01,Map release,H02;H03,1
+A02,Adapter alpha,A01,1
+A03,Adapter beta,A01,1
+A04,Catalogue,A01,1
+A05,Authorization service,A01,1
+A06,Integration,A02;A03;A04;A05,1
+A07,Row audit,A02;R02,1
+A08,Reserved export,H04,1
+A09,Backup replay,A06;A08,1
+A10,Security review,A05;A06,1
+A11,User guide,A06,1
+A12,Training preparation,A07;A11,1
+A13,Monitoring,A06,1
+A14,Smoke rehearsal,A09;A10;A13,1
+C00,Acceptance package,A07;A08;A10;A11;A12;A14,1
+CERT,Certification,C00,1
+HANDOFF,Handover,CERT,1
+F01,Optional diagnostic panel,A13,0

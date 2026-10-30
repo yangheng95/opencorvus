@@ -1,0 +1,27 @@
+{
+  "role": "independent_evaluator",
+  "run_root": "D:\\opencorvus-benchmark-runs\\l08-full-case-20261030\\main-run",
+  "ratings": {
+    "H01": {
+      "status": "pass",
+      "evidence": "pass — Independently reconstructed raw quotes/rates/precedence/calendars and valid budget pruning. Base lower dates33/36/37/38 match actual feasible full resource/cash witnesses. Supplier A08≥24→26→A09≥28→A14≥30→C00≥31→CERT≥35→handoff≥36; cert release32 changes37, Di slot36 changes38. Base shared resource relaxations remain optimistic and feasible witness matches33. No reliance on solver OPTIMAL as proof. Evidence: public/source CSV+events/treasury; main-run/base/programme/result/{bounds,plans,execution}.json; independent-business-audit.json."
+    },
+    "H02": {
+      "status": "pass",
+      "evidence": "pass — Report explicitly preserves defective H04 invoice/status, pending rather than approved extension, limited manifest acceptance and quarantines, conditional receipt. Independently parsed release rows yield North12/South7, S07/S08 conflict, S09 fractional invalid, S11 identity error, S10 future; source errors remain visible. Evidence: COMPONENT.md, raw/release-lines.csv, manifest.json, REPORT.md Actual limited acceptance and draft decision."
+    },
+    "H03": {
+      "status": "pass",
+      "evidence": "pass — Sunk13600/checkpoint7000 independently reconcile all seven payments including P07 deposit1500; reserved start1500 and cancellation balance1500 plus internal100 follow original terms. Actual base scenario costs36650/36950/36150/36450 and mincash1500/2550/1550/2600. F01 retained at33/36; minimum cost with F01 at37≥37050 and38≥37150 exceeds37000. Changed quote/new scope truly flip supplier F01 to false; full machine accounts/formulas close the decisions. Evidence: commercial terms, paid ledger, quotes, execution.json, independent-business-audit.json."
+    },
+    "H04": {
+      "status": "pass",
+      "evidence": "pass — Supplier slot24, certification release32 and sole Di absence36 cause distinct33→36→37→38 date impacts; report ties pending-date escalation to client sponsor, supplier balance/slot to procurement, fix Ada, regression/certification Cy, handover Di, data steward for quarantine. Cash actual minima and day16/conditional receipt are identifiable; report orders recomputation if receipts/slot change. Evidence: correspondence.eml, events.json, REPORT.md date decisions/draft/handover; execution cash ledger."
+    },
+    "H05": {
+      "status": "pass",
+      "evidence": "pass — Actually viewed original gantt.png and cash.png: four labeled scenarios, business-day axes, readable task IDs, due33 line, truthful finishes/cost/F01; cash end-of-day axis/units, zero line and legend readable. Sealed declared two sources and raw-only readonly mounts checked against original ZIP members/native0. One independent new base programme/actual child component completed native0 in3.8630978s (4.1679 incl seal/cleanup); immutable objects sealed before exact own cleanup. Evidence: cold-base/{review-command.json,programme/inspect.json,originals.zip,cleanup.json}, actual report and charts. Alternative correct method/format is allowed; no reference-Gantt matching requirement."
+    }
+  },
+  "disclosure": "Nonblind AI-agent reviewer familiar with prior reference design. Direct raw/math/native-object/image review; not professional human validation, model comparison or effective-hour evidence."
+}

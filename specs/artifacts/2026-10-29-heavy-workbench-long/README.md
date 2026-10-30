@@ -70,3 +70,12 @@ L02新增[报告实际来源与原输入恢复](cases/L02/evaluator/qualificatio
 
 
 L02新增[partial归因与私有grader/stage绑定](cases/L02/evaluator/qualification/grade-protocol/README.md)，独立真实反例关闭host误归因、原因/native矛盾及旧stage套评；40具体研究锚点已落，完整成功/38科学校准/新formal参考仍未通过。下一步转真实研究成品，不以接口或协议控制凑成熟；套件仍1/10旧开发冻结、0/10候选有效小时。
+
+
+## 最新成品与真实候选终态（以本节优先）
+
+[L08整题](cases/L08/README.md)已从原创原档/真实旧组件到修复验收、资源日历/全部历史付款/四情景逐日现金/预算/最小延期/F01决策、完整源交付/报告/真实图，完成同源三输入和真实错误programme实跑及一次集中整题独审。真实checker参考100；数值图正确却假审批/全平台通过/回款保证的弱programme98仍H02critical失败。缺CSV误扣其它已验事实的真实评分错误已集中修/必要CLI复验，原件保留，未扩通用框架。
+
+[L02真实OpenCorvus终态](cases/L02/evaluator/pilot-opencorvus-20261030/README.md)：原Task14:09:01.817Z自然completed，完整13315文件/4.04GB封存，原listener及暂存auth/models正常清理。已14:43:06.866Z启动封存programme的真正私有121格评价；原Task生命周期7291.327秒不是业务分/有效小时。不可重开原Task或退休API。候选正式分/独评尚待，之后才顺序fresh Codex。
+
+当前开发合同5/10（旧L06、L02、L03、L07、L08），有效候选小时资格0/10；十题与成熟实证仍未完成。下一直接补L09/L10，再现L04/L05/L01/L06缺口，不重复已有题的组件资格或旧矩阵。

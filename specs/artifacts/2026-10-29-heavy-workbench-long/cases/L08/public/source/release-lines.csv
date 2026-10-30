@@ -1,0 +1,13 @@
+source_id,tenant,item,revision,released_at,status,units
+S01,North,alpha,1,2026-01-01T00:00:00Z,active,10
+S02,South,alpha,1,2026-01-01T00:00:00Z,active,7
+S03,North,alpha,2,2026-01-02T00:00:00Z,active,12
+S04,North,alpha,2,2026-01-02T00:00:00Z,active,12.0
+S05,North,beta,1,2026-01-01T00:00:00Z,active,8
+S06,North,beta,2,2026-01-02T00:00:00Z,withdrawn,0
+S07,South,gamma,1,2026-01-01T00:00:00Z,active,4
+S08,South,gamma,1,2026-01-01T00:00:00Z,active,5
+S09,North,fraction,1,2026-01-01T00:00:00Z,active,1.5
+S10,North,future,1,2026-02-01T00:00:00Z,active,99
+S11,,orphan,1,2026-01-01T00:00:00Z,active,3
+S12,South,delta,1,2026-01-01T00:00:00Z,active,0

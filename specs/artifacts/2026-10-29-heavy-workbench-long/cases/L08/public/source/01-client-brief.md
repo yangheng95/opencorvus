@@ -1,0 +1,5 @@
+# Archive CB-12 / fictional client scope
+This is an original synthetic project archive. All amounts are abstract cost units, all days business-day indices. No real clients, signatures or external messages are needed.
+Deliver a controlled offline reconstruction at handover day12. The six historical tasks and seven paid invoices are actual immutable facts; delivered H04 has a real defective manifest program, not a quality signoff. Repair this limited component and run it. Do not build an entire product.
+Plan four independent known scenarios from the same checkpoint. They are not unseen online events. You may revise forecasts, never recorded actuals. Client deadline33 remains unapproved for extension. First minimize finish/extension while keeping mandatory scope, physical resources, daily cash and total budget. At that minimum finish retain F01 if possible. Cost need only respect budget, not globally minimize. Any legal schedule/team/method is acceptable.
+An extension request is not approval. If impossible on original terms, provide a verifiable lower-bound argument and feasible minimum-relaxation plan, responsibilities and a draft decision for the client.

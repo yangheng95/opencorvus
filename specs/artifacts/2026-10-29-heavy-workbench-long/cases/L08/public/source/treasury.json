@@ -1,0 +1,20 @@
+{
+  "handover_day": 12,
+  "horizon": 61,
+  "initial_cash": 20600,
+  "budget_total": 37000,
+  "original_due": 33,
+  "overhead_per_day": 100,
+  "funding": {
+    "day": 16,
+    "amount": 4000
+  },
+  "client_milestone": {
+    "task": "R02",
+    "delay": 1,
+    "amount": 15000,
+    "requires": "actual manifest acceptance"
+  },
+  "past_cost_treatment": "all paid amounts are sunk and remain in total cost",
+  "reserved_export": "P07 is a sunk 1500 deposit; reserved start pays remaining1500; cancel pays remaining1500 at handover plus internal start100"
+}

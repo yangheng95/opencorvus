@@ -32,7 +32,7 @@
 
 - [2026-10-30-approved-code-workflow.md](2026-10-30-approved-code-workflow.md)：独立QA的真实审批后提交全流程，保留旧793失败历史。
 
-- [2026-10-30-heavy-workbench-l02-qualification.md](2026-10-30-heavy-workbench-l02-qualification.md)：首个新OpenCorvus Task继续；[L03/L07整题建设与用户纠偏](2026-10-29-heavy-workbench-long.md)记录完整题/真实重算/独审和剩余缺题，不以组件检查代替十题交付。
+- [2026-10-30-heavy-workbench-l02-qualification.md](2026-10-30-heavy-workbench-l02-qualification.md)：原OpenCorvus自然封存，唯一私有121整题评价运行；[L03/L07/L08完整成品与纠偏](2026-10-29-heavy-workbench-long.md)保真重算/错误程序/整题审查及剩余缺口。
 - [2026-10-30-heavy-workbench-l05-qualification.md](2026-10-30-heavy-workbench-l05-qualification.md)：真实旧现场/补偿/在途HTTP、不同正确图与错误对照；checker及EOF收尾缺口修后独立资格通过。
 
 - [2026-10-30-mission-selection-journey.md](2026-10-30-mission-selection-journey.md)：创建表单专家团搜索与选择的实际体验。

@@ -1,0 +1,39 @@
+[
+  {
+    "id": "base",
+    "revealed_day": 12,
+    "supplier_earliest": 17,
+    "cert_release": 19,
+    "extra_absence": [],
+    "extension_approved": false
+  },
+  {
+    "id": "supplier_delay",
+    "revealed_day": 12,
+    "supplier_earliest": 24,
+    "cert_release": 19,
+    "extra_absence": [],
+    "extension_approved": false
+  },
+  {
+    "id": "certification_hold",
+    "revealed_day": 12,
+    "supplier_earliest": 24,
+    "cert_release": 32,
+    "extra_absence": [],
+    "extension_approved": false
+  },
+  {
+    "id": "trainer_loss",
+    "revealed_day": 12,
+    "supplier_earliest": 24,
+    "cert_release": 32,
+    "extra_absence": [
+      [
+        "Di",
+        36
+      ]
+    ],
+    "extension_approved": false
+  }
+]

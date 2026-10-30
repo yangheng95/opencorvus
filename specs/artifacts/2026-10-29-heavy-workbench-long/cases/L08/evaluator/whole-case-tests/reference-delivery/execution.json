@@ -1,0 +1,1966 @@
+{
+  "base": {
+    "scenario": "base",
+    "errors": [],
+    "tasks": [
+      {
+        "task": "A01",
+        "mode": "map",
+        "start": 12,
+        "end": 14,
+        "resources": [
+          "Ben"
+        ],
+        "mode_cost": 1000
+      },
+      {
+        "task": "A02",
+        "mode": "ada",
+        "start": 15,
+        "end": 18,
+        "resources": [
+          "Ada"
+        ],
+        "mode_cost": 1200
+      },
+      {
+        "task": "A03",
+        "mode": "internal",
+        "start": 17,
+        "end": 20,
+        "resources": [
+          "Ben"
+        ],
+        "mode_cost": 1500
+      },
+      {
+        "task": "A04",
+        "mode": "catalogue",
+        "start": 19,
+        "end": 21,
+        "resources": [
+          "Ada"
+        ],
+        "mode_cost": 800
+      },
+      {
+        "task": "A05",
+        "mode": "auth",
+        "start": 14,
+        "end": 16,
+        "resources": [
+          "Ben"
+        ],
+        "mode_cost": 1000
+      },
+      {
+        "task": "A06",
+        "mode": "integrate",
+        "start": 21,
+        "end": 23,
+        "resources": [
+          "Ada",
+          "Ben"
+        ],
+        "mode_cost": 1800
+      },
+      {
+        "task": "A07",
+        "mode": "cy",
+        "start": 21,
+        "end": 23,
+        "resources": [
+          "Cy",
+          "test_rig"
+        ],
+        "mode_cost": 900
+      },
+      {
+        "task": "A08",
+        "mode": "reserved",
+        "start": 21,
+        "end": 23,
+        "resources": [
+          "Vendor"
+        ],
+        "mode_cost": 1500
+      },
+      {
+        "task": "A09",
+        "mode": "replay",
+        "start": 23,
+        "end": 25,
+        "resources": [
+          "Ada"
+        ],
+        "mode_cost": 800
+      },
+      {
+        "task": "A10",
+        "mode": "security",
+        "start": 23,
+        "end": 25,
+        "resources": [
+          "Cy"
+        ],
+        "mode_cost": 700
+      },
+      {
+        "task": "A11",
+        "mode": "guide",
+        "start": 23,
+        "end": 25,
+        "resources": [
+          "Di"
+        ],
+        "mode_cost": 600
+      },
+      {
+        "task": "A12",
+        "mode": "train",
+        "start": 25,
+        "end": 27,
+        "resources": [
+          "Di"
+        ],
+        "mode_cost": 600
+      },
+      {
+        "task": "A13",
+        "mode": "monitor",
+        "start": 23,
+        "end": 25,
+        "resources": [
+          "Ben"
+        ],
+        "mode_cost": 1000
+      },
+      {
+        "task": "A14",
+        "mode": "smoke",
+        "start": 25,
+        "end": 27,
+        "resources": [
+          "Cy",
+          "test_rig"
+        ],
+        "mode_cost": 900
+      },
+      {
+        "task": "C00",
+        "mode": "package",
+        "start": 27,
+        "end": 28,
+        "resources": [
+          "Ada"
+        ],
+        "mode_cost": 400
+      },
+      {
+        "task": "CERT",
+        "mode": "certify",
+        "start": 28,
+        "end": 32,
+        "resources": [
+          "Cy",
+          "cert_rig"
+        ],
+        "mode_cost": 1800
+      },
+      {
+        "task": "F01",
+        "mode": "ben",
+        "start": 25,
+        "end": 27,
+        "resources": [
+          "Ben"
+        ],
+        "mode_cost": 1000
+      },
+      {
+        "task": "HANDOFF",
+        "mode": "handover",
+        "start": 32,
+        "end": 33,
+        "resources": [
+          "Di",
+          "room"
+        ],
+        "mode_cost": 350
+      },
+      {
+        "task": "R01",
+        "mode": "repair",
+        "start": 12,
+        "end": 15,
+        "resources": [
+          "Ada"
+        ],
+        "mode_cost": 2200
+      },
+      {
+        "task": "R02",
+        "mode": "regress",
+        "start": 18,
+        "end": 20,
+        "resources": [
+          "Cy",
+          "test_rig"
+        ],
+        "mode_cost": 900
+      }
+    ],
+    "cash_ledger": [
+      {
+        "day": 12,
+        "inflow": 0,
+        "expense": 2000,
+        "cash_end": 5000,
+        "cumulative_cost": 15600
+      },
+      {
+        "day": 13,
+        "inflow": 0,
+        "expense": 1000,
+        "cash_end": 4000,
+        "cumulative_cost": 16600
+      },
+      {
+        "day": 14,
+        "inflow": 0,
+        "expense": 1000,
+        "cash_end": 3000,
+        "cumulative_cost": 17600
+      },
+      {
+        "day": 15,
+        "inflow": 0,
+        "expense": 1000,
+        "cash_end": 2000,
+        "cumulative_cost": 18600
+      },
+      {
+        "day": 16,
+        "inflow": 4000,
+        "expense": 500,
+        "cash_end": 5500,
+        "cumulative_cost": 19100
+      },
+      {
+        "day": 17,
+        "inflow": 0,
+        "expense": 1000,
+        "cash_end": 4500,
+        "cumulative_cost": 20100
+      },
+      {
+        "day": 18,
+        "inflow": 0,
+        "expense": 1050,
+        "cash_end": 3450,
+        "cumulative_cost": 21150
+      },
+      {
+        "day": 19,
+        "inflow": 0,
+        "expense": 1450,
+        "cash_end": 2000,
+        "cumulative_cost": 22600
+      },
+      {
+        "day": 20,
+        "inflow": 0,
+        "expense": 500,
+        "cash_end": 1500,
+        "cumulative_cost": 23100
+      },
+      {
+        "day": 21,
+        "inflow": 15000,
+        "expense": 2950,
+        "cash_end": 13550,
+        "cumulative_cost": 26050
+      },
+      {
+        "day": 22,
+        "inflow": 0,
+        "expense": 1450,
+        "cash_end": 12100,
+        "cumulative_cost": 27500
+      },
+      {
+        "day": 23,
+        "inflow": 0,
+        "expense": 1650,
+        "cash_end": 10450,
+        "cumulative_cost": 29150
+      },
+      {
+        "day": 24,
+        "inflow": 0,
+        "expense": 1650,
+        "cash_end": 8800,
+        "cumulative_cost": 30800
+      },
+      {
+        "day": 25,
+        "inflow": 0,
+        "expense": 1350,
+        "cash_end": 7450,
+        "cumulative_cost": 32150
+      },
+      {
+        "day": 26,
+        "inflow": 0,
+        "expense": 1350,
+        "cash_end": 6100,
+        "cumulative_cost": 33500
+      },
+      {
+        "day": 27,
+        "inflow": 0,
+        "expense": 500,
+        "cash_end": 5600,
+        "cumulative_cost": 34000
+      },
+      {
+        "day": 28,
+        "inflow": 0,
+        "expense": 550,
+        "cash_end": 5050,
+        "cumulative_cost": 34550
+      },
+      {
+        "day": 29,
+        "inflow": 0,
+        "expense": 550,
+        "cash_end": 4500,
+        "cumulative_cost": 35100
+      },
+      {
+        "day": 30,
+        "inflow": 0,
+        "expense": 550,
+        "cash_end": 3950,
+        "cumulative_cost": 35650
+      },
+      {
+        "day": 31,
+        "inflow": 0,
+        "expense": 550,
+        "cash_end": 3400,
+        "cumulative_cost": 36200
+      },
+      {
+        "day": 32,
+        "inflow": 0,
+        "expense": 450,
+        "cash_end": 2950,
+        "cumulative_cost": 36650
+      }
+    ],
+    "finish": 33,
+    "extension_requested": 0,
+    "extension_approved": false,
+    "optional_retained": true,
+    "total_cost": 36650,
+    "history": [
+      {
+        "task": "H01",
+        "start": 0,
+        "end": 2,
+        "resources": [
+          "Ada",
+          "Di"
+        ],
+        "cost": 1400,
+        "status": "completed"
+      },
+      {
+        "task": "H02",
+        "start": 2,
+        "end": 5,
+        "resources": [
+          "Ben"
+        ],
+        "cost": 1500,
+        "status": "completed"
+      },
+      {
+        "task": "H03",
+        "start": 2,
+        "end": 5,
+        "resources": [
+          "Ada"
+        ],
+        "cost": 1200,
+        "status": "completed"
+      },
+      {
+        "task": "H04",
+        "start": 5,
+        "end": 9,
+        "resources": [
+          "Vendor"
+        ],
+        "cost": 7000,
+        "status": "delivered_not_quality_accepted"
+      },
+      {
+        "task": "H05",
+        "start": 9,
+        "end": 11,
+        "resources": [
+          "Cy"
+        ],
+        "cost": 700,
+        "status": "completed"
+      },
+      {
+        "task": "H06",
+        "start": 11,
+        "end": 12,
+        "resources": [
+          "Di"
+        ],
+        "cost": 300,
+        "status": "completed"
+      }
+    ],
+    "paid_ledger": [
+      {
+        "payment_id": "P01",
+        "day": 0,
+        "source": "H01",
+        "amount": 1400
+      },
+      {
+        "payment_id": "P02",
+        "day": 2,
+        "source": "H02",
+        "amount": 1500
+      },
+      {
+        "payment_id": "P03",
+        "day": 2,
+        "source": "H03",
+        "amount": 1200
+      },
+      {
+        "payment_id": "P04",
+        "day": 3,
+        "source": "H04",
+        "amount": 7000
+      },
+      {
+        "payment_id": "P05",
+        "day": 9,
+        "source": "H05",
+        "amount": 700
+      },
+      {
+        "payment_id": "P06",
+        "day": 11,
+        "source": "H06",
+        "amount": 300
+      },
+      {
+        "payment_id": "P07",
+        "day": 10,
+        "source": "A08_DEPOSIT",
+        "amount": 1500
+      }
+    ],
+    "checkpoint_cash": 7000,
+    "component_accepted": true
+  },
+  "supplier_delay": {
+    "scenario": "supplier_delay",
+    "errors": [],
+    "tasks": [
+      {
+        "task": "A01",
+        "mode": "map",
+        "start": 12,
+        "end": 14,
+        "resources": [
+          "Ben"
+        ],
+        "mode_cost": 1000
+      },
+      {
+        "task": "A02",
+        "mode": "ada",
+        "start": 19,
+        "end": 22,
+        "resources": [
+          "Ada"
+        ],
+        "mode_cost": 1200
+      },
+      {
+        "task": "A03",
+        "mode": "internal",
+        "start": 17,
+        "end": 20,
+        "resources": [
+          "Ben"
+        ],
+        "mode_cost": 1500
+      },
+      {
+        "task": "A04",
+        "mode": "catalogue",
+        "start": 15,
+        "end": 17,
+        "resources": [
+          "Ada"
+        ],
+        "mode_cost": 800
+      },
+      {
+        "task": "A05",
+        "mode": "auth",
+        "start": 22,
+        "end": 24,
+        "resources": [
+          "Ben"
+        ],
+        "mode_cost": 1000
+      },
+      {
+        "task": "A06",
+        "mode": "integrate",
+        "start": 24,
+        "end": 26,
+        "resources": [
+          "Ada",
+          "Ben"
+        ],
+        "mode_cost": 1800
+      },
+      {
+        "task": "A07",
+        "mode": "cy",
+        "start": 24,
+        "end": 26,
+        "resources": [
+          "Cy",
+          "test_rig"
+        ],
+        "mode_cost": 900
+      },
+      {
+        "task": "A08",
+        "mode": "reserved",
+        "start": 24,
+        "end": 26,
+        "resources": [
+          "Vendor"
+        ],
+        "mode_cost": 1500
+      },
+      {
+        "task": "A09",
+        "mode": "replay",
+        "start": 26,
+        "end": 28,
+        "resources": [
+          "Ada"
+        ],
+        "mode_cost": 800
+      },
+      {
+        "task": "A10",
+        "mode": "security",
+        "start": 26,
+        "end": 28,
+        "resources": [
+          "Cy"
+        ],
+        "mode_cost": 700
+      },
+      {
+        "task": "A11",
+        "mode": "guide",
+        "start": 26,
+        "end": 28,
+        "resources": [
+          "Di"
+        ],
+        "mode_cost": 600
+      },
+      {
+        "task": "A12",
+        "mode": "train",
+        "start": 28,
+        "end": 30,
+        "resources": [
+          "Di"
+        ],
+        "mode_cost": 600
+      },
+      {
+        "task": "A13",
+        "mode": "monitor",
+        "start": 26,
+        "end": 28,
+        "resources": [
+          "Ben"
+        ],
+        "mode_cost": 1000
+      },
+      {
+        "task": "A14",
+        "mode": "smoke",
+        "start": 28,
+        "end": 30,
+        "resources": [
+          "Cy",
+          "test_rig"
+        ],
+        "mode_cost": 900
+      },
+      {
+        "task": "C00",
+        "mode": "package",
+        "start": 30,
+        "end": 31,
+        "resources": [
+          "Ada"
+        ],
+        "mode_cost": 400
+      },
+      {
+        "task": "CERT",
+        "mode": "certify",
+        "start": 31,
+        "end": 35,
+        "resources": [
+          "Cy",
+          "cert_rig"
+        ],
+        "mode_cost": 1800
+      },
+      {
+        "task": "F01",
+        "mode": "ben",
+        "start": 28,
+        "end": 30,
+        "resources": [
+          "Ben"
+        ],
+        "mode_cost": 1000
+      },
+      {
+        "task": "HANDOFF",
+        "mode": "handover",
+        "start": 35,
+        "end": 36,
+        "resources": [
+          "Di",
+          "room"
+        ],
+        "mode_cost": 350
+      },
+      {
+        "task": "R01",
+        "mode": "repair",
+        "start": 12,
+        "end": 15,
+        "resources": [
+          "Ada"
+        ],
+        "mode_cost": 2200
+      },
+      {
+        "task": "R02",
+        "mode": "regress",
+        "start": 15,
+        "end": 17,
+        "resources": [
+          "Cy",
+          "test_rig"
+        ],
+        "mode_cost": 900
+      }
+    ],
+    "cash_ledger": [
+      {
+        "day": 12,
+        "inflow": 0,
+        "expense": 2000,
+        "cash_end": 5000,
+        "cumulative_cost": 15600
+      },
+      {
+        "day": 13,
+        "inflow": 0,
+        "expense": 1000,
+        "cash_end": 4000,
+        "cumulative_cost": 16600
+      },
+      {
+        "day": 14,
+        "inflow": 0,
+        "expense": 500,
+        "cash_end": 3500,
+        "cumulative_cost": 17100
+      },
+      {
+        "day": 15,
+        "inflow": 0,
+        "expense": 950,
+        "cash_end": 2550,
+        "cumulative_cost": 18050
+      },
+      {
+        "day": 16,
+        "inflow": 4000,
+        "expense": 950,
+        "cash_end": 5600,
+        "cumulative_cost": 19000
+      },
+      {
+        "day": 17,
+        "inflow": 0,
+        "expense": 600,
+        "cash_end": 5000,
+        "cumulative_cost": 19600
+      },
+      {
+        "day": 18,
+        "inflow": 15000,
+        "expense": 600,
+        "cash_end": 19400,
+        "cumulative_cost": 20200
+      },
+      {
+        "day": 19,
+        "inflow": 0,
+        "expense": 1000,
+        "cash_end": 18400,
+        "cumulative_cost": 21200
+      },
+      {
+        "day": 20,
+        "inflow": 0,
+        "expense": 500,
+        "cash_end": 17900,
+        "cumulative_cost": 21700
+      },
+      {
+        "day": 21,
+        "inflow": 0,
+        "expense": 500,
+        "cash_end": 17400,
+        "cumulative_cost": 22200
+      },
+      {
+        "day": 22,
+        "inflow": 0,
+        "expense": 600,
+        "cash_end": 16800,
+        "cumulative_cost": 22800
+      },
+      {
+        "day": 23,
+        "inflow": 0,
+        "expense": 600,
+        "cash_end": 16200,
+        "cumulative_cost": 23400
+      },
+      {
+        "day": 24,
+        "inflow": 0,
+        "expense": 2950,
+        "cash_end": 13250,
+        "cumulative_cost": 26350
+      },
+      {
+        "day": 25,
+        "inflow": 0,
+        "expense": 1450,
+        "cash_end": 11800,
+        "cumulative_cost": 27800
+      },
+      {
+        "day": 26,
+        "inflow": 0,
+        "expense": 1650,
+        "cash_end": 10150,
+        "cumulative_cost": 29450
+      },
+      {
+        "day": 27,
+        "inflow": 0,
+        "expense": 1650,
+        "cash_end": 8500,
+        "cumulative_cost": 31100
+      },
+      {
+        "day": 28,
+        "inflow": 0,
+        "expense": 1350,
+        "cash_end": 7150,
+        "cumulative_cost": 32450
+      },
+      {
+        "day": 29,
+        "inflow": 0,
+        "expense": 1350,
+        "cash_end": 5800,
+        "cumulative_cost": 33800
+      },
+      {
+        "day": 30,
+        "inflow": 0,
+        "expense": 500,
+        "cash_end": 5300,
+        "cumulative_cost": 34300
+      },
+      {
+        "day": 31,
+        "inflow": 0,
+        "expense": 550,
+        "cash_end": 4750,
+        "cumulative_cost": 34850
+      },
+      {
+        "day": 32,
+        "inflow": 0,
+        "expense": 550,
+        "cash_end": 4200,
+        "cumulative_cost": 35400
+      },
+      {
+        "day": 33,
+        "inflow": 0,
+        "expense": 550,
+        "cash_end": 3650,
+        "cumulative_cost": 35950
+      },
+      {
+        "day": 34,
+        "inflow": 0,
+        "expense": 550,
+        "cash_end": 3100,
+        "cumulative_cost": 36500
+      },
+      {
+        "day": 35,
+        "inflow": 0,
+        "expense": 450,
+        "cash_end": 2650,
+        "cumulative_cost": 36950
+      }
+    ],
+    "finish": 36,
+    "extension_requested": 3,
+    "extension_approved": false,
+    "optional_retained": true,
+    "total_cost": 36950,
+    "history": [
+      {
+        "task": "H01",
+        "start": 0,
+        "end": 2,
+        "resources": [
+          "Ada",
+          "Di"
+        ],
+        "cost": 1400,
+        "status": "completed"
+      },
+      {
+        "task": "H02",
+        "start": 2,
+        "end": 5,
+        "resources": [
+          "Ben"
+        ],
+        "cost": 1500,
+        "status": "completed"
+      },
+      {
+        "task": "H03",
+        "start": 2,
+        "end": 5,
+        "resources": [
+          "Ada"
+        ],
+        "cost": 1200,
+        "status": "completed"
+      },
+      {
+        "task": "H04",
+        "start": 5,
+        "end": 9,
+        "resources": [
+          "Vendor"
+        ],
+        "cost": 7000,
+        "status": "delivered_not_quality_accepted"
+      },
+      {
+        "task": "H05",
+        "start": 9,
+        "end": 11,
+        "resources": [
+          "Cy"
+        ],
+        "cost": 700,
+        "status": "completed"
+      },
+      {
+        "task": "H06",
+        "start": 11,
+        "end": 12,
+        "resources": [
+          "Di"
+        ],
+        "cost": 300,
+        "status": "completed"
+      }
+    ],
+    "paid_ledger": [
+      {
+        "payment_id": "P01",
+        "day": 0,
+        "source": "H01",
+        "amount": 1400
+      },
+      {
+        "payment_id": "P02",
+        "day": 2,
+        "source": "H02",
+        "amount": 1500
+      },
+      {
+        "payment_id": "P03",
+        "day": 2,
+        "source": "H03",
+        "amount": 1200
+      },
+      {
+        "payment_id": "P04",
+        "day": 3,
+        "source": "H04",
+        "amount": 7000
+      },
+      {
+        "payment_id": "P05",
+        "day": 9,
+        "source": "H05",
+        "amount": 700
+      },
+      {
+        "payment_id": "P06",
+        "day": 11,
+        "source": "H06",
+        "amount": 300
+      },
+      {
+        "payment_id": "P07",
+        "day": 10,
+        "source": "A08_DEPOSIT",
+        "amount": 1500
+      }
+    ],
+    "checkpoint_cash": 7000,
+    "component_accepted": true
+  },
+  "certification_hold": {
+    "scenario": "certification_hold",
+    "errors": [],
+    "tasks": [
+      {
+        "task": "A01",
+        "mode": "map",
+        "start": 12,
+        "end": 14,
+        "resources": [
+          "Ben"
+        ],
+        "mode_cost": 1000
+      },
+      {
+        "task": "A02",
+        "mode": "ada",
+        "start": 15,
+        "end": 18,
+        "resources": [
+          "Ada"
+        ],
+        "mode_cost": 1200
+      },
+      {
+        "task": "A03",
+        "mode": "internal",
+        "start": 17,
+        "end": 20,
+        "resources": [
+          "Ben"
+        ],
+        "mode_cost": 1500
+      },
+      {
+        "task": "A04",
+        "mode": "catalogue",
+        "start": 19,
+        "end": 21,
+        "resources": [
+          "Ada"
+        ],
+        "mode_cost": 800
+      },
+      {
+        "task": "A05",
+        "mode": "auth",
+        "start": 14,
+        "end": 16,
+        "resources": [
+          "Ben"
+        ],
+        "mode_cost": 1000
+      },
+      {
+        "task": "A06",
+        "mode": "integrate",
+        "start": 21,
+        "end": 23,
+        "resources": [
+          "Ada",
+          "Ben"
+        ],
+        "mode_cost": 1800
+      },
+      {
+        "task": "A07",
+        "mode": "ada",
+        "start": 23,
+        "end": 25,
+        "resources": [
+          "Ada",
+          "test_rig"
+        ],
+        "mode_cost": 1000
+      },
+      {
+        "task": "A08",
+        "mode": "reserved",
+        "start": 25,
+        "end": 27,
+        "resources": [
+          "Vendor"
+        ],
+        "mode_cost": 1500
+      },
+      {
+        "task": "A09",
+        "mode": "replay",
+        "start": 27,
+        "end": 29,
+        "resources": [
+          "Ada"
+        ],
+        "mode_cost": 800
+      },
+      {
+        "task": "A10",
+        "mode": "security",
+        "start": 23,
+        "end": 25,
+        "resources": [
+          "Cy"
+        ],
+        "mode_cost": 700
+      },
+      {
+        "task": "A11",
+        "mode": "guide",
+        "start": 27,
+        "end": 29,
+        "resources": [
+          "Di"
+        ],
+        "mode_cost": 600
+      },
+      {
+        "task": "A12",
+        "mode": "train",
+        "start": 29,
+        "end": 31,
+        "resources": [
+          "Di"
+        ],
+        "mode_cost": 600
+      },
+      {
+        "task": "A13",
+        "mode": "monitor",
+        "start": 27,
+        "end": 29,
+        "resources": [
+          "Ben"
+        ],
+        "mode_cost": 1000
+      },
+      {
+        "task": "A14",
+        "mode": "smoke",
+        "start": 29,
+        "end": 31,
+        "resources": [
+          "Cy",
+          "test_rig"
+        ],
+        "mode_cost": 900
+      },
+      {
+        "task": "C00",
+        "mode": "package",
+        "start": 31,
+        "end": 32,
+        "resources": [
+          "Ada"
+        ],
+        "mode_cost": 400
+      },
+      {
+        "task": "CERT",
+        "mode": "certify",
+        "start": 32,
+        "end": 36,
+        "resources": [
+          "Cy",
+          "cert_rig"
+        ],
+        "mode_cost": 1800
+      },
+      {
+        "task": "HANDOFF",
+        "mode": "handover",
+        "start": 36,
+        "end": 37,
+        "resources": [
+          "Di",
+          "room"
+        ],
+        "mode_cost": 350
+      },
+      {
+        "task": "R01",
+        "mode": "repair",
+        "start": 12,
+        "end": 15,
+        "resources": [
+          "Ada"
+        ],
+        "mode_cost": 2200
+      },
+      {
+        "task": "R02",
+        "mode": "regress",
+        "start": 15,
+        "end": 17,
+        "resources": [
+          "Cy",
+          "test_rig"
+        ],
+        "mode_cost": 900
+      }
+    ],
+    "cash_ledger": [
+      {
+        "day": 12,
+        "inflow": 0,
+        "expense": 2000,
+        "cash_end": 5000,
+        "cumulative_cost": 15600
+      },
+      {
+        "day": 13,
+        "inflow": 0,
+        "expense": 1000,
+        "cash_end": 4000,
+        "cumulative_cost": 16600
+      },
+      {
+        "day": 14,
+        "inflow": 0,
+        "expense": 1000,
+        "cash_end": 3000,
+        "cumulative_cost": 17600
+      },
+      {
+        "day": 15,
+        "inflow": 0,
+        "expense": 1450,
+        "cash_end": 1550,
+        "cumulative_cost": 19050
+      },
+      {
+        "day": 16,
+        "inflow": 4000,
+        "expense": 950,
+        "cash_end": 4600,
+        "cumulative_cost": 20000
+      },
+      {
+        "day": 17,
+        "inflow": 0,
+        "expense": 1000,
+        "cash_end": 3600,
+        "cumulative_cost": 21000
+      },
+      {
+        "day": 18,
+        "inflow": 15000,
+        "expense": 600,
+        "cash_end": 18000,
+        "cumulative_cost": 21600
+      },
+      {
+        "day": 19,
+        "inflow": 0,
+        "expense": 1000,
+        "cash_end": 17000,
+        "cumulative_cost": 22600
+      },
+      {
+        "day": 20,
+        "inflow": 0,
+        "expense": 500,
+        "cash_end": 16500,
+        "cumulative_cost": 23100
+      },
+      {
+        "day": 21,
+        "inflow": 0,
+        "expense": 1000,
+        "cash_end": 15500,
+        "cumulative_cost": 24100
+      },
+      {
+        "day": 22,
+        "inflow": 0,
+        "expense": 1000,
+        "cash_end": 14500,
+        "cumulative_cost": 25100
+      },
+      {
+        "day": 23,
+        "inflow": 0,
+        "expense": 950,
+        "cash_end": 13550,
+        "cumulative_cost": 26050
+      },
+      {
+        "day": 24,
+        "inflow": 0,
+        "expense": 950,
+        "cash_end": 12600,
+        "cumulative_cost": 27000
+      },
+      {
+        "day": 25,
+        "inflow": 0,
+        "expense": 1600,
+        "cash_end": 11000,
+        "cumulative_cost": 28600
+      },
+      {
+        "day": 26,
+        "inflow": 0,
+        "expense": 100,
+        "cash_end": 10900,
+        "cumulative_cost": 28700
+      },
+      {
+        "day": 27,
+        "inflow": 0,
+        "expense": 1300,
+        "cash_end": 9600,
+        "cumulative_cost": 30000
+      },
+      {
+        "day": 28,
+        "inflow": 0,
+        "expense": 1300,
+        "cash_end": 8300,
+        "cumulative_cost": 31300
+      },
+      {
+        "day": 29,
+        "inflow": 0,
+        "expense": 850,
+        "cash_end": 7450,
+        "cumulative_cost": 32150
+      },
+      {
+        "day": 30,
+        "inflow": 0,
+        "expense": 850,
+        "cash_end": 6600,
+        "cumulative_cost": 33000
+      },
+      {
+        "day": 31,
+        "inflow": 0,
+        "expense": 500,
+        "cash_end": 6100,
+        "cumulative_cost": 33500
+      },
+      {
+        "day": 32,
+        "inflow": 0,
+        "expense": 550,
+        "cash_end": 5550,
+        "cumulative_cost": 34050
+      },
+      {
+        "day": 33,
+        "inflow": 0,
+        "expense": 550,
+        "cash_end": 5000,
+        "cumulative_cost": 34600
+      },
+      {
+        "day": 34,
+        "inflow": 0,
+        "expense": 550,
+        "cash_end": 4450,
+        "cumulative_cost": 35150
+      },
+      {
+        "day": 35,
+        "inflow": 0,
+        "expense": 550,
+        "cash_end": 3900,
+        "cumulative_cost": 35700
+      },
+      {
+        "day": 36,
+        "inflow": 0,
+        "expense": 450,
+        "cash_end": 3450,
+        "cumulative_cost": 36150
+      }
+    ],
+    "finish": 37,
+    "extension_requested": 4,
+    "extension_approved": false,
+    "optional_retained": false,
+    "total_cost": 36150,
+    "history": [
+      {
+        "task": "H01",
+        "start": 0,
+        "end": 2,
+        "resources": [
+          "Ada",
+          "Di"
+        ],
+        "cost": 1400,
+        "status": "completed"
+      },
+      {
+        "task": "H02",
+        "start": 2,
+        "end": 5,
+        "resources": [
+          "Ben"
+        ],
+        "cost": 1500,
+        "status": "completed"
+      },
+      {
+        "task": "H03",
+        "start": 2,
+        "end": 5,
+        "resources": [
+          "Ada"
+        ],
+        "cost": 1200,
+        "status": "completed"
+      },
+      {
+        "task": "H04",
+        "start": 5,
+        "end": 9,
+        "resources": [
+          "Vendor"
+        ],
+        "cost": 7000,
+        "status": "delivered_not_quality_accepted"
+      },
+      {
+        "task": "H05",
+        "start": 9,
+        "end": 11,
+        "resources": [
+          "Cy"
+        ],
+        "cost": 700,
+        "status": "completed"
+      },
+      {
+        "task": "H06",
+        "start": 11,
+        "end": 12,
+        "resources": [
+          "Di"
+        ],
+        "cost": 300,
+        "status": "completed"
+      }
+    ],
+    "paid_ledger": [
+      {
+        "payment_id": "P01",
+        "day": 0,
+        "source": "H01",
+        "amount": 1400
+      },
+      {
+        "payment_id": "P02",
+        "day": 2,
+        "source": "H02",
+        "amount": 1500
+      },
+      {
+        "payment_id": "P03",
+        "day": 2,
+        "source": "H03",
+        "amount": 1200
+      },
+      {
+        "payment_id": "P04",
+        "day": 3,
+        "source": "H04",
+        "amount": 7000
+      },
+      {
+        "payment_id": "P05",
+        "day": 9,
+        "source": "H05",
+        "amount": 700
+      },
+      {
+        "payment_id": "P06",
+        "day": 11,
+        "source": "H06",
+        "amount": 300
+      },
+      {
+        "payment_id": "P07",
+        "day": 10,
+        "source": "A08_DEPOSIT",
+        "amount": 1500
+      }
+    ],
+    "checkpoint_cash": 7000,
+    "component_accepted": true
+  },
+  "trainer_loss": {
+    "scenario": "trainer_loss",
+    "errors": [],
+    "tasks": [
+      {
+        "task": "A01",
+        "mode": "map",
+        "start": 12,
+        "end": 14,
+        "resources": [
+          "Ben"
+        ],
+        "mode_cost": 1000
+      },
+      {
+        "task": "A02",
+        "mode": "ben",
+        "start": 14,
+        "end": 17,
+        "resources": [
+          "Ben"
+        ],
+        "mode_cost": 1500
+      },
+      {
+        "task": "A03",
+        "mode": "internal",
+        "start": 17,
+        "end": 20,
+        "resources": [
+          "Ben"
+        ],
+        "mode_cost": 1500
+      },
+      {
+        "task": "A04",
+        "mode": "catalogue",
+        "start": 20,
+        "end": 22,
+        "resources": [
+          "Ada"
+        ],
+        "mode_cost": 800
+      },
+      {
+        "task": "A05",
+        "mode": "auth",
+        "start": 22,
+        "end": 24,
+        "resources": [
+          "Ben"
+        ],
+        "mode_cost": 1000
+      },
+      {
+        "task": "A06",
+        "mode": "integrate",
+        "start": 24,
+        "end": 26,
+        "resources": [
+          "Ada",
+          "Ben"
+        ],
+        "mode_cost": 1800
+      },
+      {
+        "task": "A07",
+        "mode": "cy",
+        "start": 23,
+        "end": 25,
+        "resources": [
+          "Cy",
+          "test_rig"
+        ],
+        "mode_cost": 900
+      },
+      {
+        "task": "A08",
+        "mode": "reserved",
+        "start": 24,
+        "end": 26,
+        "resources": [
+          "Vendor"
+        ],
+        "mode_cost": 1500
+      },
+      {
+        "task": "A09",
+        "mode": "replay",
+        "start": 28,
+        "end": 30,
+        "resources": [
+          "Ada"
+        ],
+        "mode_cost": 800
+      },
+      {
+        "task": "A10",
+        "mode": "security",
+        "start": 26,
+        "end": 28,
+        "resources": [
+          "Cy"
+        ],
+        "mode_cost": 700
+      },
+      {
+        "task": "A11",
+        "mode": "guide",
+        "start": 28,
+        "end": 30,
+        "resources": [
+          "Di"
+        ],
+        "mode_cost": 600
+      },
+      {
+        "task": "A12",
+        "mode": "train",
+        "start": 30,
+        "end": 32,
+        "resources": [
+          "Di"
+        ],
+        "mode_cost": 600
+      },
+      {
+        "task": "A13",
+        "mode": "monitor",
+        "start": 28,
+        "end": 30,
+        "resources": [
+          "Ben"
+        ],
+        "mode_cost": 1000
+      },
+      {
+        "task": "A14",
+        "mode": "smoke",
+        "start": 30,
+        "end": 32,
+        "resources": [
+          "Cy",
+          "test_rig"
+        ],
+        "mode_cost": 900
+      },
+      {
+        "task": "C00",
+        "mode": "package",
+        "start": 32,
+        "end": 33,
+        "resources": [
+          "Ada"
+        ],
+        "mode_cost": 400
+      },
+      {
+        "task": "CERT",
+        "mode": "certify",
+        "start": 33,
+        "end": 37,
+        "resources": [
+          "Cy",
+          "cert_rig"
+        ],
+        "mode_cost": 1800
+      },
+      {
+        "task": "HANDOFF",
+        "mode": "handover",
+        "start": 37,
+        "end": 38,
+        "resources": [
+          "Di",
+          "room"
+        ],
+        "mode_cost": 350
+      },
+      {
+        "task": "R01",
+        "mode": "repair",
+        "start": 15,
+        "end": 18,
+        "resources": [
+          "Ada"
+        ],
+        "mode_cost": 2200
+      },
+      {
+        "task": "R02",
+        "mode": "regress",
+        "start": 18,
+        "end": 20,
+        "resources": [
+          "Cy",
+          "test_rig"
+        ],
+        "mode_cost": 900
+      }
+    ],
+    "cash_ledger": [
+      {
+        "day": 12,
+        "inflow": 0,
+        "expense": 600,
+        "cash_end": 6400,
+        "cumulative_cost": 14200
+      },
+      {
+        "day": 13,
+        "inflow": 0,
+        "expense": 600,
+        "cash_end": 5800,
+        "cumulative_cost": 14800
+      },
+      {
+        "day": 14,
+        "inflow": 0,
+        "expense": 600,
+        "cash_end": 5200,
+        "cumulative_cost": 15400
+      },
+      {
+        "day": 15,
+        "inflow": 0,
+        "expense": 2000,
+        "cash_end": 3200,
+        "cumulative_cost": 17400
+      },
+      {
+        "day": 16,
+        "inflow": 4000,
+        "expense": 1000,
+        "cash_end": 6200,
+        "cumulative_cost": 18400
+      },
+      {
+        "day": 17,
+        "inflow": 0,
+        "expense": 1000,
+        "cash_end": 5200,
+        "cumulative_cost": 19400
+      },
+      {
+        "day": 18,
+        "inflow": 0,
+        "expense": 1050,
+        "cash_end": 4150,
+        "cumulative_cost": 20450
+      },
+      {
+        "day": 19,
+        "inflow": 0,
+        "expense": 1050,
+        "cash_end": 3100,
+        "cumulative_cost": 21500
+      },
+      {
+        "day": 20,
+        "inflow": 0,
+        "expense": 500,
+        "cash_end": 2600,
+        "cumulative_cost": 22000
+      },
+      {
+        "day": 21,
+        "inflow": 15000,
+        "expense": 500,
+        "cash_end": 17100,
+        "cumulative_cost": 22500
+      },
+      {
+        "day": 22,
+        "inflow": 0,
+        "expense": 600,
+        "cash_end": 16500,
+        "cumulative_cost": 23100
+      },
+      {
+        "day": 23,
+        "inflow": 0,
+        "expense": 1050,
+        "cash_end": 15450,
+        "cumulative_cost": 24150
+      },
+      {
+        "day": 24,
+        "inflow": 0,
+        "expense": 2950,
+        "cash_end": 12500,
+        "cumulative_cost": 27100
+      },
+      {
+        "day": 25,
+        "inflow": 0,
+        "expense": 1000,
+        "cash_end": 11500,
+        "cumulative_cost": 28100
+      },
+      {
+        "day": 26,
+        "inflow": 0,
+        "expense": 450,
+        "cash_end": 11050,
+        "cumulative_cost": 28550
+      },
+      {
+        "day": 27,
+        "inflow": 0,
+        "expense": 450,
+        "cash_end": 10600,
+        "cumulative_cost": 29000
+      },
+      {
+        "day": 28,
+        "inflow": 0,
+        "expense": 1300,
+        "cash_end": 9300,
+        "cumulative_cost": 30300
+      },
+      {
+        "day": 29,
+        "inflow": 0,
+        "expense": 1300,
+        "cash_end": 8000,
+        "cumulative_cost": 31600
+      },
+      {
+        "day": 30,
+        "inflow": 0,
+        "expense": 850,
+        "cash_end": 7150,
+        "cumulative_cost": 32450
+      },
+      {
+        "day": 31,
+        "inflow": 0,
+        "expense": 850,
+        "cash_end": 6300,
+        "cumulative_cost": 33300
+      },
+      {
+        "day": 32,
+        "inflow": 0,
+        "expense": 500,
+        "cash_end": 5800,
+        "cumulative_cost": 33800
+      },
+      {
+        "day": 33,
+        "inflow": 0,
+        "expense": 550,
+        "cash_end": 5250,
+        "cumulative_cost": 34350
+      },
+      {
+        "day": 34,
+        "inflow": 0,
+        "expense": 550,
+        "cash_end": 4700,
+        "cumulative_cost": 34900
+      },
+      {
+        "day": 35,
+        "inflow": 0,
+        "expense": 550,
+        "cash_end": 4150,
+        "cumulative_cost": 35450
+      },
+      {
+        "day": 36,
+        "inflow": 0,
+        "expense": 550,
+        "cash_end": 3600,
+        "cumulative_cost": 36000
+      },
+      {
+        "day": 37,
+        "inflow": 0,
+        "expense": 450,
+        "cash_end": 3150,
+        "cumulative_cost": 36450
+      }
+    ],
+    "finish": 38,
+    "extension_requested": 5,
+    "extension_approved": false,
+    "optional_retained": false,
+    "total_cost": 36450,
+    "history": [
+      {
+        "task": "H01",
+        "start": 0,
+        "end": 2,
+        "resources": [
+          "Ada",
+          "Di"
+        ],
+        "cost": 1400,
+        "status": "completed"
+      },
+      {
+        "task": "H02",
+        "start": 2,
+        "end": 5,
+        "resources": [
+          "Ben"
+        ],
+        "cost": 1500,
+        "status": "completed"
+      },
+      {
+        "task": "H03",
+        "start": 2,
+        "end": 5,
+        "resources": [
+          "Ada"
+        ],
+        "cost": 1200,
+        "status": "completed"
+      },
+      {
+        "task": "H04",
+        "start": 5,
+        "end": 9,
+        "resources": [
+          "Vendor"
+        ],
+        "cost": 7000,
+        "status": "delivered_not_quality_accepted"
+      },
+      {
+        "task": "H05",
+        "start": 9,
+        "end": 11,
+        "resources": [
+          "Cy"
+        ],
+        "cost": 700,
+        "status": "completed"
+      },
+      {
+        "task": "H06",
+        "start": 11,
+        "end": 12,
+        "resources": [
+          "Di"
+        ],
+        "cost": 300,
+        "status": "completed"
+      }
+    ],
+    "paid_ledger": [
+      {
+        "payment_id": "P01",
+        "day": 0,
+        "source": "H01",
+        "amount": 1400
+      },
+      {
+        "payment_id": "P02",
+        "day": 2,
+        "source": "H02",
+        "amount": 1500
+      },
+      {
+        "payment_id": "P03",
+        "day": 2,
+        "source": "H03",
+        "amount": 1200
+      },
+      {
+        "payment_id": "P04",
+        "day": 3,
+        "source": "H04",
+        "amount": 7000
+      },
+      {
+        "payment_id": "P05",
+        "day": 9,
+        "source": "H05",
+        "amount": 700
+      },
+      {
+        "payment_id": "P06",
+        "day": 11,
+        "source": "H06",
+        "amount": 300
+      },
+      {
+        "payment_id": "P07",
+        "day": 10,
+        "source": "A08_DEPOSIT",
+        "amount": 1500
+      }
+    ],
+    "checkpoint_cash": 7000,
+    "component_accepted": true
+  }
+}

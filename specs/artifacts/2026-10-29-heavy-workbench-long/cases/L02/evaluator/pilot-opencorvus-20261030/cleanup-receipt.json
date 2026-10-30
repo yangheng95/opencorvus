@@ -1,0 +1,14 @@
+{
+  "observed_at": "2026-10-30T14:39:39.441327+00:00",
+  "outcome": "owned_server_stop_requested_after_task_settlement",
+  "cleanup": {
+    "runtimeDisposed": true,
+    "credentialsRemoved": true
+  },
+  "staged_files_removed": {
+    "auth.json": true,
+    "models.json": true
+  },
+  "source_credentials_modified_by_this_script": false,
+  "action": "normal existing stop-file settlement; no user processes operated"
+}

@@ -1,0 +1,52 @@
+{
+  "observed_at": "2026-10-30T14:53:15.946927+00:00",
+  "native_task": "tsk_g00VZXAOwk00L22TkNKL",
+  "candidate_head": "0b93788d6c569efc88eadb7532261271129e097f",
+  "lifecycle_status": "completed",
+  "model": "gpt-6.1-sol",
+  "streaming": true,
+  "mode": "code",
+  "package": "builtin/base2026.10.14.1",
+  "actors": [
+    "orchestrator",
+    "base-developer",
+    "base-tester"
+  ],
+  "request_count_including_two_preflights": 380,
+  "listener_retired": true,
+  "evaluation_owner_started": {
+    "started_at": "2026-10-30T14:43:06.865748+00:00",
+    "pid": 79496,
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\evaluator-source\\run_l02_study.py",
+      "--submission",
+      "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\completed\\submission",
+      "--raw",
+      "D:/opencorvus-benchmark-runs/l02-daily-loop-qualification-20261030/main/raw",
+      "--material-contract",
+      "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\material-contract.json",
+      "--study",
+      "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\study-contract.json",
+      "--image",
+      "sha256:23ff8bfbf8055caa0b9fa5745ddb27cceea2f31d7d15b7a900c81112cdfe8ddf",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\formal-run"
+    ],
+    "subject_role": "candidate_evaluation",
+    "total_time_cap": null,
+    "scope": "frozen candidate private full 12 outer,36 inner,report; not candidate effective wall time"
+  },
+  "evaluation_phases": {
+    "prepared": 1,
+    "verified": 52
+  },
+  "candidate_score": null,
+  "effective_hours_qualified": false,
+  "comparability": false,
+  "complete_original_capsule": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\completed\\completed-project.zip",
+  "limitations": "Task lifecycle is not score; evaluation-side processing is not candidate effective time; no controlled same-model resource/cost ranking."
+}

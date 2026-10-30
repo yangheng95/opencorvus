@@ -516,3 +516,16 @@ L02原唯一Task tsk_g00VZXAOwk00L22TkNKL在12:58:21Z真实API仍active、orches
 当前四个开发pilot合同（旧L06/L02/L03/L07）、候选有效小时仍0/10；L07结构化固定合成原文和秒级参考未证明fresh区分度/数小时，非盲熟悉作者材料AI不代签真人/统计成熟。下一补完整L08/L09/L10，然后现L04/L05/L01/L06缺口；不重L07/L03矩阵或另开组件资格。L06旧两good升级义务不变。
 
 L02唯一原Task tsk_g00VZXAOwk00L22TkNKL在13:55:38Z真实API仍active，orchestrator+base-developer+base-tester、332请求含preflight均gpt-6.1-sol streaming；未自然交付/评分，不能把这些计数当有效小时。继续原L02-current-pair定位，Task/绑定工作终态才封存和正常cleanup，真正私有执行/同rubric独评后才fresh Codex。全十题未达，心跳ACTIVE，无用户总token/墙钟限，六旧昂贵任务保持Paused。
+
+
+## 最新成品Recall：L08完整项目控制与真实切片验收
+
+用户纠偏仍最高优先，本轮直接新L08整题，没有扩通用平台。公开原范围/模式报价/人员设备日历/已完进展/七原付款/商业条款/变更往来与真实legacy source、原CSV，完整源修复manifest→真实组件执行→四已知情景资源/现金/预算/最小延期/可选范围→原机器账/报告/真实图/移交。原13600已付款/成本及7000交接现金不可改，H04交付不等于验收，P07不可退，延期申请未批准。离线同checkpoint重建，不伪在线未见未来；业务日非agent墙钟。
+
+主同封存programme三input（base/未承诺C00费+100/新N01及West租户）全部component/programme真实native0，15机器叶过；独立原料另写解析/逐日数学重算全部12情景，与日历/每资源/现金/预算/旧账/manifest一致，未用作者core作业务oracle。有效条件成本剪枝+放松关键链得最低33/36/37/38并有可行整计划见证，非精确成本最优。F01基例前两保、后两弃；变价与新scope真实改变供应情景F01。只另一次基例cold native0/3.863秒，先封存后精确cleanup，主/独立实际view甘特和现金图。外部l08-full-case-20261030和l08-whole-case-independent-review-20261030；repo cases/L08/evaluator/whole-case-tests有完整成品/原明文源输入/native/错误/独审ZIP。
+
+七个真实错误/弱programme同runner/checker：旧组件exit0仍数据错并无权取回款；改历史、退已付、资源冲突、假批准、缓存旧成品均关键失败。另数值/图正确但最后实作“延期已批准、全平台通过、回款保证”强声明，独审真实读后H02fail；真实最终check_l08主exit0/参考100、弱exit2/98/goodfalse。非模型成绩，不以目录名或检查数验收。20叶100分，15机器及H01/H02/H05critical，>=90且全部critical才good；M14必交导出现在critical，合成其它19pass的算术控制96仍false，不冒充实际候选。
+
+原缺现金CSV被整assess异常误扣M01–14，独审实证后一次集中修：按原输出依赖逐叶判，缺CSV仅M14fail，原native/历史/付款继续真pass；缺plans仅源叶fail、真实下游blocked，不假造未读结果。原主/错误native不重跑，只必要CLI13项加M14聚合合同复验；原反例/旧源/初判全部保留。初checker tuple比较键写JSON TypeError是工具错误，改证据投影并重原CLI；外部启动引号错误亦留trace，不当候选错。最初供应28的素材口算漏A08→A09→A14造成shock同40，原材料留construction-initial，冻结前/任何候选前将原创供应事实设24，保完整依赖，使三个机制各活跃；不是按候选结果松线。
+
+14:57:46Z独立整题允许仅metadata开发pilot冻结，L08/0.2.0-dev/原源/权重/90保留。最终FREEZE已落，作者参考角色明确。现在完整开发合同5/10（旧L06/L02/L03/L07/L08）、有效候选小时0/10；L06旧两100触发0.3未完，其余L01/L04/L05/L09/L10仍有完整缺口，职业真人/统计成熟未认证。下一直接补L09/L10及现题缺口，不重旧资格。L02原Task已自然完成/全版本封存/56591正常退休，唯一私有候选121评价活动中，按最新locator/原SQL/owner真实终态接续，别重开Task/旧121；之后同冻结独评再fresh Codex。心跳ACTIVE，只有全目标实际达成才停用。

@@ -1,0 +1,190 @@
+{
+  "case": "L08/0.2.0-dev",
+  "status": "frozen_development_pilot",
+  "good_minimum": 90,
+  "fixed_denominator": 100,
+  "partial_credit": false,
+  "leaves": [
+    {
+      "id": "M01",
+      "weight": 8,
+      "critical": true,
+      "criterion": "actual clean native programme and component",
+      "pass": "All registered clean inputs satisfy the named raw-source business predicate; exact nonnegative integer money/time and true native facts, not self-status.",
+      "fail": "A concrete source-bound violation or missing required delivery, identified with scenario/day/task/source.",
+      "dependency": "Real captured native outputs; missing independent execution is unassessed, not assumed success."
+    },
+    {
+      "id": "M02",
+      "weight": 8,
+      "critical": true,
+      "criterion": "joint identity/version/withdrawal/error manifest",
+      "pass": "All registered clean inputs satisfy the named raw-source business predicate; exact nonnegative integer money/time and true native facts, not self-status.",
+      "fail": "A concrete source-bound violation or missing required delivery, identified with scenario/day/task/source.",
+      "dependency": "Real captured native outputs; missing independent execution is unassessed, not assumed success."
+    },
+    {
+      "id": "M03",
+      "weight": 6,
+      "critical": true,
+      "criterion": "immutable historical progress",
+      "pass": "All registered clean inputs satisfy the named raw-source business predicate; exact nonnegative integer money/time and true native facts, not self-status.",
+      "fail": "A concrete source-bound violation or missing required delivery, identified with scenario/day/task/source.",
+      "dependency": "Real captured native outputs; missing independent execution is unassessed, not assumed success."
+    },
+    {
+      "id": "M04",
+      "weight": 6,
+      "critical": true,
+      "criterion": "sunk payment identities and amounts",
+      "pass": "All registered clean inputs satisfy the named raw-source business predicate; exact nonnegative integer money/time and true native facts, not self-status.",
+      "fail": "A concrete source-bound violation or missing required delivery, identified with scenario/day/task/source.",
+      "dependency": "Real captured native outputs; missing independent execution is unassessed, not assumed success."
+    },
+    {
+      "id": "M05",
+      "weight": 8,
+      "critical": true,
+      "criterion": "mandatory task/mode/duration and final scope",
+      "pass": "All registered clean inputs satisfy the named raw-source business predicate; exact nonnegative integer money/time and true native facts, not self-status.",
+      "fail": "A concrete source-bound violation or missing required delivery, identified with scenario/day/task/source.",
+      "dependency": "Real captured native outputs; missing independent execution is unassessed, not assumed success."
+    },
+    {
+      "id": "M06",
+      "weight": 6,
+      "critical": true,
+      "criterion": "calendar/release/lead constraints",
+      "pass": "All registered clean inputs satisfy the named raw-source business predicate; exact nonnegative integer money/time and true native facts, not self-status.",
+      "fail": "A concrete source-bound violation or missing required delivery, identified with scenario/day/task/source.",
+      "dependency": "Real captured native outputs; missing independent execution is unassessed, not assumed success."
+    },
+    {
+      "id": "M07",
+      "weight": 6,
+      "critical": true,
+      "criterion": "precedence and optional handoff dependency",
+      "pass": "All registered clean inputs satisfy the named raw-source business predicate; exact nonnegative integer money/time and true native facts, not self-status.",
+      "fail": "A concrete source-bound violation or missing required delivery, identified with scenario/day/task/source.",
+      "dependency": "Real captured native outputs; missing independent execution is unassessed, not assumed success."
+    },
+    {
+      "id": "M08",
+      "weight": 7,
+      "critical": true,
+      "criterion": "people/equipment capacity",
+      "pass": "All registered clean inputs satisfy the named raw-source business predicate; exact nonnegative integer money/time and true native facts, not self-status.",
+      "fail": "A concrete source-bound violation or missing required delivery, identified with scenario/day/task/source.",
+      "dependency": "Real captured native outputs; missing independent execution is unassessed, not assumed success."
+    },
+    {
+      "id": "M09",
+      "weight": 7,
+      "critical": true,
+      "criterion": "daily cash and conditional collection",
+      "pass": "All registered clean inputs satisfy the named raw-source business predicate; exact nonnegative integer money/time and true native facts, not self-status.",
+      "fail": "A concrete source-bound violation or missing required delivery, identified with scenario/day/task/source.",
+      "dependency": "Real captured native outputs; missing independent execution is unassessed, not assumed success."
+    },
+    {
+      "id": "M10",
+      "weight": 6,
+      "critical": true,
+      "criterion": "total project budget",
+      "pass": "All registered clean inputs satisfy the named raw-source business predicate; exact nonnegative integer money/time and true native facts, not self-status.",
+      "fail": "A concrete source-bound violation or missing required delivery, identified with scenario/day/task/source.",
+      "dependency": "Real captured native outputs; missing independent execution is unassessed, not assumed success."
+    },
+    {
+      "id": "M11",
+      "weight": 6,
+      "critical": true,
+      "criterion": "minimum finish and minimum deadline extension",
+      "pass": "All registered clean inputs satisfy the named raw-source business predicate; exact nonnegative integer money/time and true native facts, not self-status.",
+      "fail": "A concrete source-bound violation or missing required delivery, identified with scenario/day/task/source.",
+      "dependency": "Real captured native outputs; missing independent execution is unassessed, not assumed success."
+    },
+    {
+      "id": "M12",
+      "weight": 4,
+      "critical": true,
+      "criterion": "optional scope at the minimum feasible finish",
+      "pass": "All registered clean inputs satisfy the named raw-source business predicate; exact nonnegative integer money/time and true native facts, not self-status.",
+      "fail": "A concrete source-bound violation or missing required delivery, identified with scenario/day/task/source.",
+      "dependency": "Real captured native outputs; missing independent execution is unassessed, not assumed success."
+    },
+    {
+      "id": "M13",
+      "weight": 4,
+      "critical": true,
+      "criterion": "complete truthful derived execution and approval state",
+      "pass": "All registered clean inputs satisfy the named raw-source business predicate; exact nonnegative integer money/time and true native facts, not self-status.",
+      "fail": "A concrete source-bound violation or missing required delivery, identified with scenario/day/task/source.",
+      "dependency": "Real captured native outputs; missing independent execution is unassessed, not assumed success."
+    },
+    {
+      "id": "M14",
+      "weight": 4,
+      "critical": true,
+      "criterion": "complete schedule and cash exports",
+      "pass": "All registered clean inputs satisfy the named raw-source business predicate; exact nonnegative integer money/time and true native facts, not self-status.",
+      "fail": "A concrete source-bound violation or missing required delivery, identified with scenario/day/task/source.",
+      "dependency": "Real captured native outputs; missing independent execution is unassessed, not assumed success."
+    },
+    {
+      "id": "M15",
+      "weight": 4,
+      "critical": true,
+      "criterion": "same source recomputes changed quote and new tenant/scope",
+      "pass": "All registered clean inputs satisfy the named raw-source business predicate; exact nonnegative integer money/time and true native facts, not self-status.",
+      "fail": "A concrete source-bound violation or missing required delivery, identified with scenario/day/task/source.",
+      "dependency": "Real captured native outputs; missing independent execution is unassessed, not assumed success."
+    },
+    {
+      "id": "H01",
+      "weight": 2,
+      "critical": true,
+      "criterion": "Minimum-relaxation proof with actual feasible witness",
+      "pass": "Valid cost/resource/calendar lower-bound or equally strong argument, source trace and matching feasible actual plan. No requirement to repeat every complete machine value in prose.",
+      "fail": "Solver status alone, unjustified optimum or a proof using altered history/ignored cash.",
+      "dependency": "Trusted independent review of actual original delivery and native run; candidate supplied ratings never accepted."
+    },
+    {
+      "id": "H02",
+      "weight": 2,
+      "critical": true,
+      "criterion": "Truthful scope, approval and acceptance boundary",
+      "pass": "Correct original/requested/approved distinction; manifest limited acceptance with actual quarantines; no unsupported service/payment/quality guarantee.",
+      "fail": "False approved extension, blanket platform certification or guaranteed collection, even when underlying tables are correct.",
+      "dependency": "Trusted independent review of actual original delivery and native run; candidate supplied ratings never accepted."
+    },
+    {
+      "id": "H03",
+      "weight": 2,
+      "critical": false,
+      "criterion": "Quantified money and optional-scope decision",
+      "pass": "Sunk payments/cancellation/conditional receipt and scenario F01 changes reconcile with executable accounts; actionable decision draft.",
+      "fail": "Missing causal comparison or contradictory cost/refund claims; complete indexed machine tables/formulas accepted.",
+      "dependency": "Trusted independent review of actual original delivery and native run; candidate supplied ratings never accepted."
+    },
+    {
+      "id": "H04",
+      "weight": 2,
+      "critical": false,
+      "criterion": "Risk trigger, owner and response",
+      "pass": "Specific supplier, certification, trainer, data exception and cash triggers linked to actual consequences and feasible escalation/action owners.",
+      "fail": "Generic risk list with no real constraint consequences or invented authorization.",
+      "dependency": "Trusted independent review of actual original delivery and native run; candidate supplied ratings never accepted."
+    },
+    {
+      "id": "H05",
+      "weight": 2,
+      "critical": true,
+      "criterion": "Operator handover and actual readable figures",
+      "pass": "Original input→declared frozen programme→full accounts/report/actual rendered schedule and cash graphs can be followed and interpreted with units/scenarios.",
+      "fail": "Unexecuted build instructions or misleading/unreadable graphs; equal complete representations accepted.",
+      "dependency": "Trusted independent review of actual original delivery and native run; candidate supplied ratings never accepted."
+    }
+  ],
+  "limitations": "Development-pilot case; no LLM candidate, effective-hour or professional/statistical maturity certification."
+}

@@ -1,0 +1,65 @@
+{
+  "case": "L08/0.2.0-dev",
+  "stage": "whole-case independent review",
+  "status": "development_pilot_contract_freeze_permitted",
+  "remaining_substantive_blockers": [],
+  "resolved_findings": [
+    {
+      "id": "B01",
+      "description": "One missing cash CSV originally erased all independent M01–M14 facts.",
+      "original_evidence": "partial-cash-export/command.json; partial-cash-export/assessment.json; case-initial/evaluator/check_l08.py",
+      "repair_evidence": "case-final/evaluator/check_l08.py; partial-repair/reviewer-repair-assessment.json",
+      "verified_result": "Original identical partial copy now only M14 fail, M01–13/M15 pass; unchanged complete original has15 machine pass. Both real checker CLI exit4 because no human review was supplied, not because business failed."
+    }
+  ],
+  "allowed_closure": "Only metadata/README development-pilot frozen status; preserve L08/0.2.0-dev, raw source, exact business semantics,20 leaves/100 weights, critical flags,good90,final native objects. Do not rewrite original failures or label author reference as fresh candidate performance.",
+  "findings_human": {
+    "main": {
+      "H01": "pass",
+      "H02": "pass",
+      "H03": "pass",
+      "H04": "pass",
+      "H05": "pass"
+    },
+    "weak": {
+      "H01": "pass",
+      "H02": "fail",
+      "H03": "pass",
+      "H04": "pass",
+      "H05": "pass"
+    }
+  },
+  "independent_reconstruction": "Raw CSV/JSON reconstruction of all12 scenario ledgers across3 existing inputs, all task/calendar/capacity/daily cash/cost/history/payment/manifest facts; valid relaxed lower bound plus complete feasible witnesses. Author core was not imported as business oracle.",
+  "own_native_execution": {
+    "count": 1,
+    "type": "new source-only base programme, actual child component",
+    "native_exit": 0,
+    "wall_seconds_before_seal_cleanup": 3.8630977999418974,
+    "review_elapsed_including_seal_cleanup": 4.167899999767542,
+    "cid": "474cca68cf2c6339b017e56fdae8b0dba6fb0a95539eaef3e607b89c44489747",
+    "seal": "cold-base/programme/originals.zip",
+    "cleanup": "cold-base/programme/cleanup.json"
+  },
+  "visual_observation": [
+    "Actually opened main-run/base/programme/result/gantt.png",
+    "Actually opened main-run/base/programme/result/cash.png"
+  ],
+  "limits": [
+    "Nonblind AI reviewer familiar with author design, not finance/project-management professional validation.",
+    "No fresh OpenCorvus/Codex candidate or comparable model measurement in this review.",
+    "Hours of effective agent work not established; project days and small solver/replay runtime do not establish it.",
+    "Adversarial programmes/weak report are controlled development evidence, not broad reliability statistics.",
+    "This approval applies to one development contract, not ten completed heavy cases or mature benchmark certification."
+  ],
+  "review_files": [
+    "review.json",
+    "review-weak.json"
+  ],
+  "no_handwritten_total": true,
+  "finalized_at": "2026-10-30T14:57:46.923790+00:00",
+  "pre_freeze_public_delivery_consistency": {
+    "change": "M14 critical false→true, weight4 unchanged; declared complete CSV output already mandatory",
+    "review": "Approved before candidate/freeze, to prevent compensation for required export. No numerical/business difficulty increase claimed.",
+    "evidence": "critical-export-final/command.json; assessment.json; current-identity-and-contract.json"
+  }
+}
