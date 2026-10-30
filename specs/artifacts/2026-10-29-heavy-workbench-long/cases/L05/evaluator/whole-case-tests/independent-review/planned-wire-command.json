@@ -1,0 +1,31 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l05-whole-case-independent-review-20261031\\case-initial\\evaluator\\check_l05.py",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\l05-whole-case-independent-review-20261031\\planned-wire-mutation",
+    "--raw",
+    "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\raw-closed-base",
+    "--registered",
+    "D:\\opencorvus-benchmark-runs\\l05-whole-case-independent-review-20261031\\case-initial\\evaluator\\registered-inputs.json",
+    "--rubric",
+    "D:\\opencorvus-benchmark-runs\\l05-whole-case-independent-review-20261031\\case-initial\\rubric.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l05-whole-case-independent-review-20261031\\planned-wire-checker-result"
+  ],
+  "exit_code": 4,
+  "seconds": 0.29217940010130405,
+  "stdout": "{\"status\": \"assessment_incomplete\", \"subject_role\": \"author_reference_or_error_control\", \"run_roots\": [\"D:\\\\opencorvus-benchmark-runs\\\\l05-whole-case-independent-review-20261031\\\\planned-wire-mutation\"], \"fixed_denominator\": 100, \"total\": null, \"business_success\": null, \"good\": null, \"failed\": [], \"unresolved\": [\"M15\", \"H01\", \"H02\", \"H03\", \"H04\", \"H05\"], \"critical_unmet\": [\"M15\", \"H01\", \"H02\", \"H03\", \"H05\"]}\n",
+  "stderr": "",
+  "mutation": {
+    "tenant": "B",
+    "key": "p841e8fa73e09491389a96d24ed84c5c9",
+    "original": 10,
+    "planned_wire": 11,
+    "final_wire_still_original": true,
+    "scope": "Persistent-plan checkpoint capture versus final real object; not a new programme/native. Same key, altered planned payload violates immutable registered intent across recovery."
+  }
+}

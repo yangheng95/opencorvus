@@ -1,0 +1,43 @@
+{
+  "case": "L05/0.2.0-dev",
+  "reviewer": "/root/benchmark_review",
+  "at": "2026-10-30T20:14:53.625694+00:00",
+  "complete_development_case": true,
+  "development_pilot_freeze_allowed": true,
+  "remaining_substantive_blockers": [],
+  "closed": [
+    "B01_active_JSON_array",
+    "B02_actual_native_identity_facility_priority",
+    "B03_full_persistent_plan_wire",
+    "B04_cut_epoch_boundary",
+    "B05_required_three_exports",
+    "B06_real_schema_freedom",
+    "B07_owner_held_sender_timing_conflict"
+  ],
+  "approved_scope": "Only development freeze metadata/README; preserve case dev identity, original operational facts, 15M/5H weights75+25=100, all critical flags and90 rule.",
+  "main_review": "main-review.json",
+  "weak_review": "weak-review.json",
+  "aggregate_authored": false,
+  "independent_cold": {
+    "count": 1,
+    "exit": 0,
+    "seconds": 11.199279999360442,
+    "cid": "6df7c97d43c71015a9290f6eb85d53b060bf646ebcbb038cf70fcd5b4050f522",
+    "scope": "Original canonical helper/source actually executed; ZIP sealed before exact owned cleanup; no claim it executed later helper fixes."
+  },
+  "last_author_base": {
+    "root": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-main-final-base",
+    "native_seconds": 11.301369400694966,
+    "exit": 0,
+    "source_only": true,
+    "scope": "Current frozen sender/helper normal-path execution, not an empirical greater-than20s slow-candidate proof."
+  },
+  "source_originals": "case-initial/evaluator/check_l05.py and original five protocol commands/results plus schema and timing observations preserved",
+  "limits": [
+    "one familiar nonblind AI reviewer, no professional human or statistical maturity certification",
+    "original synthetic local cooperative effects, finite controlled processes/schedules, not arbitrary networks/OS/infinite failures/financial production certification",
+    "no fresh model candidate or model/usage-controlled ranking in this review",
+    "reference seconds/logical windows are not useful candidate hours",
+    "no certification that ten mature heavy cases or several-hour difficulty are complete"
+  ]
+}

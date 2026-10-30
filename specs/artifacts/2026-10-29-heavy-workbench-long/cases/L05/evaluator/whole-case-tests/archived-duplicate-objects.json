@@ -1,0 +1,1209 @@
+{
+  "reason": "Complete raw/case snapshots stay once in originals.zip; readable review, scripts, findings and actual product remain plain. This removes only new identical copies, no original execution or historical file.",
+  "objects": [
+    {
+      "path": "independent-review/case-final/rubric.json",
+      "archive_member": "independent/case-final/rubric.json"
+    },
+    {
+      "path": "independent-review/case-final/evaluator/check_l05.py",
+      "archive_member": "independent/case-final/evaluator/check_l05.py"
+    },
+    {
+      "path": "independent-review/case-final/evaluator/registered-inputs.json",
+      "archive_member": "independent/case-final/evaluator/registered-inputs.json"
+    },
+    {
+      "path": "independent-review/case-final/public/BUSINESS.md",
+      "archive_member": "independent/case-final/public/BUSINESS.md"
+    },
+    {
+      "path": "independent-review/case-final/public/ENVIRONMENT.md",
+      "archive_member": "independent/case-final/public/ENVIRONMENT.md"
+    },
+    {
+      "path": "independent-review/case-final/public/EXECUTION.md",
+      "archive_member": "independent/case-final/public/EXECUTION.md"
+    },
+    {
+      "path": "independent-review/case-final/public/exercise.py",
+      "archive_member": "independent/case-final/public/exercise.py"
+    },
+    {
+      "path": "independent-review/case-final/public/frozen_sender.py",
+      "archive_member": "independent/case-final/public/frozen_sender.py"
+    },
+    {
+      "path": "independent-review/case-final/public/incoming-operations.json",
+      "archive_member": "independent/case-final/public/incoming-operations.json"
+    },
+    {
+      "path": "independent-review/case-final/public/l05_effects.py",
+      "archive_member": "independent/case-final/public/l05_effects.py"
+    },
+    {
+      "path": "independent-review/case-final/public/l05_transport.py",
+      "archive_member": "independent/case-final/public/l05_transport.py"
+    },
+    {
+      "path": "independent-review/case-final/public/legacy-delivery.json",
+      "archive_member": "independent/case-final/public/legacy-delivery.json"
+    },
+    {
+      "path": "independent-review/case-final/public/legacy_app.py",
+      "archive_member": "independent/case-final/public/legacy_app.py"
+    },
+    {
+      "path": "independent-review/case-final/public/logical_store.py",
+      "archive_member": "independent/case-final/public/logical_store.py"
+    },
+    {
+      "path": "independent-review/case-final/public/original-local.sqlite",
+      "archive_member": "independent/case-final/public/original-local.sqlite"
+    },
+    {
+      "path": "independent-review/case-final/public/original-remote.sqlite",
+      "archive_member": "independent/case-final/public/original-remote.sqlite"
+    },
+    {
+      "path": "independent-review/case-final/public/OUTPUTS.md",
+      "archive_member": "independent/case-final/public/OUTPUTS.md"
+    },
+    {
+      "path": "independent-review/case-final/public/provenance.json",
+      "archive_member": "independent/case-final/public/provenance.json"
+    },
+    {
+      "path": "independent-review/case-final/public/receiver-exit.json",
+      "archive_member": "independent/case-final/public/receiver-exit.json"
+    },
+    {
+      "path": "independent-review/case-final/public/receiver-start.json",
+      "archive_member": "independent/case-final/public/receiver-start.json"
+    },
+    {
+      "path": "independent-review/case-final/public/RECEIVER.md",
+      "archive_member": "independent/case-final/public/RECEIVER.md"
+    },
+    {
+      "path": "independent-review/case-final/public/TASK.md",
+      "archive_member": "independent/case-final/public/TASK.md"
+    },
+    {
+      "path": "independent-review/case-initial/rubric.json",
+      "archive_member": "independent/case-initial/rubric.json"
+    },
+    {
+      "path": "independent-review/case-initial/evaluator/app.py",
+      "archive_member": "independent/case-initial/evaluator/app.py"
+    },
+    {
+      "path": "independent-review/case-initial/evaluator/check_l05.py",
+      "archive_member": "independent/case-initial/evaluator/check_l05.py"
+    },
+    {
+      "path": "independent-review/case-initial/evaluator/registered-inputs.json",
+      "archive_member": "independent/case-initial/evaluator/registered-inputs.json"
+    },
+    {
+      "path": "independent-review/case-initial/evaluator/report.py",
+      "archive_member": "independent/case-initial/evaluator/report.py"
+    },
+    {
+      "path": "independent-review/case-initial/public/BUSINESS.md",
+      "archive_member": "independent/case-initial/public/BUSINESS.md"
+    },
+    {
+      "path": "independent-review/case-initial/public/ENVIRONMENT.md",
+      "archive_member": "independent/case-initial/public/ENVIRONMENT.md"
+    },
+    {
+      "path": "independent-review/case-initial/public/EXECUTION.md",
+      "archive_member": "independent/case-initial/public/EXECUTION.md"
+    },
+    {
+      "path": "independent-review/case-initial/public/exercise.py",
+      "archive_member": "independent/case-initial/public/exercise.py"
+    },
+    {
+      "path": "independent-review/case-initial/public/incoming-operations.json",
+      "archive_member": "independent/case-initial/public/incoming-operations.json"
+    },
+    {
+      "path": "independent-review/case-initial/public/l05_effects.py",
+      "archive_member": "independent/case-initial/public/l05_effects.py"
+    },
+    {
+      "path": "independent-review/case-initial/public/l05_transport.py",
+      "archive_member": "independent/case-initial/public/l05_transport.py"
+    },
+    {
+      "path": "independent-review/case-initial/public/legacy-delivery.json",
+      "archive_member": "independent/case-initial/public/legacy-delivery.json"
+    },
+    {
+      "path": "independent-review/case-initial/public/legacy_app.py",
+      "archive_member": "independent/case-initial/public/legacy_app.py"
+    },
+    {
+      "path": "independent-review/case-initial/public/logical_store.py",
+      "archive_member": "independent/case-initial/public/logical_store.py"
+    },
+    {
+      "path": "independent-review/case-initial/public/original-local.sqlite",
+      "archive_member": "independent/case-initial/public/original-local.sqlite"
+    },
+    {
+      "path": "independent-review/case-initial/public/original-remote.sqlite",
+      "archive_member": "independent/case-initial/public/original-remote.sqlite"
+    },
+    {
+      "path": "independent-review/case-initial/public/OUTPUTS.md",
+      "archive_member": "independent/case-initial/public/OUTPUTS.md"
+    },
+    {
+      "path": "independent-review/case-initial/public/provenance.json",
+      "archive_member": "independent/case-initial/public/provenance.json"
+    },
+    {
+      "path": "independent-review/case-initial/public/receiver-exit.json",
+      "archive_member": "independent/case-initial/public/receiver-exit.json"
+    },
+    {
+      "path": "independent-review/case-initial/public/receiver-start.json",
+      "archive_member": "independent/case-initial/public/receiver-start.json"
+    },
+    {
+      "path": "independent-review/case-initial/public/RECEIVER.md",
+      "archive_member": "independent/case-initial/public/RECEIVER.md"
+    },
+    {
+      "path": "independent-review/case-initial/public/TASK.md",
+      "archive_member": "independent/case-initial/public/TASK.md"
+    },
+    {
+      "path": "independent-review/case-repaired/rubric.json",
+      "archive_member": "independent/case-repaired/rubric.json"
+    },
+    {
+      "path": "independent-review/case-repaired/evaluator/check_l05.py",
+      "archive_member": "independent/case-repaired/evaluator/check_l05.py"
+    },
+    {
+      "path": "independent-review/case-repaired/evaluator/registered-inputs.json",
+      "archive_member": "independent/case-repaired/evaluator/registered-inputs.json"
+    },
+    {
+      "path": "independent-review/case-repaired/public/l05_effects.py",
+      "archive_member": "independent/case-repaired/public/l05_effects.py"
+    },
+    {
+      "path": "independent-review/case-repaired/public/l05_transport.py",
+      "archive_member": "independent/case-repaired/public/l05_transport.py"
+    },
+    {
+      "path": "independent-review/case-repaired/public/logical_store.py",
+      "archive_member": "independent/case-repaired/public/logical_store.py"
+    },
+    {
+      "path": "independent-review/cold-native/cleanup.json",
+      "archive_member": "independent/cold-native/cleanup.json"
+    },
+    {
+      "path": "independent-review/cold-native/create-command.json",
+      "archive_member": "independent/cold-native/create-command.json"
+    },
+    {
+      "path": "independent-review/cold-native/inspect-terminal.json",
+      "archive_member": "independent/cold-native/inspect-terminal.json"
+    },
+    {
+      "path": "independent-review/cold-native/stderr.txt",
+      "archive_member": "independent/cold-native/stderr.txt"
+    },
+    {
+      "path": "independent-review/cold-native/stdout.txt",
+      "archive_member": "independent/cold-native/stdout.txt"
+    },
+    {
+      "path": "independent-review/cold-native/terminal-command.json",
+      "archive_member": "independent/cold-native/terminal-command.json"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/empty-monitor.sqlite",
+      "archive_member": "independent/cold-native/results/run/empty-monitor.sqlite"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/events.json",
+      "archive_member": "independent/cold-native/results/run/events.json"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/isolation.json",
+      "archive_member": "independent/cold-native/results/run/isolation.json"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/local.sqlite",
+      "archive_member": "independent/cold-native/results/run/local.sqlite"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/original-facts.json",
+      "archive_member": "independent/cold-native/results/run/original-facts.json"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/post-report-actual.json",
+      "archive_member": "independent/cold-native/results/run/post-report-actual.json"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/registration.json",
+      "archive_member": "independent/cold-native/results/run/registration.json"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/remote.sqlite",
+      "archive_member": "independent/cold-native/results/run/remote.sqlite"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/report-native.json",
+      "archive_member": "independent/cold-native/results/run/report-native.json"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/run.json",
+      "archive_member": "independent/cold-native/results/run/run.json"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/service-0.stderr.txt",
+      "archive_member": "independent/cold-native/results/run/service-0.stderr.txt"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/service-1.stderr.txt",
+      "archive_member": "independent/cold-native/results/run/service-1.stderr.txt"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/service-2.stderr.txt",
+      "archive_member": "independent/cold-native/results/run/service-2.stderr.txt"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/delivery/business.csv",
+      "archive_member": "independent/cold-native/results/run/delivery/business.csv"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/delivery/monitor.csv",
+      "archive_member": "independent/cold-native/results/run/delivery/monitor.csv"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/delivery/operations.md",
+      "archive_member": "independent/cold-native/results/run/delivery/operations.md"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/delivery/reconciliation.csv",
+      "archive_member": "independent/cold-native/results/run/delivery/reconciliation.csv"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/delivery/recovery.png",
+      "archive_member": "independent/cold-native/results/run/delivery/recovery.png"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/delivery/REPORT.md",
+      "archive_member": "independent/cold-native/results/run/delivery/REPORT.md"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/delivery/reproduce.md",
+      "archive_member": "independent/cold-native/results/run/delivery/reproduce.md"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/final/facts.json",
+      "archive_member": "independent/cold-native/results/run/final/facts.json"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/final/local.sqlite",
+      "archive_member": "independent/cold-native/results/run/final/local.sqlite"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/final/remote.sqlite",
+      "archive_member": "independent/cold-native/results/run/final/remote.sqlite"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/repaired-current/facts.json",
+      "archive_member": "independent/cold-native/results/run/repaired-current/facts.json"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/repaired-current/local.sqlite",
+      "archive_member": "independent/cold-native/results/run/repaired-current/local.sqlite"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/repaired-current/remote.sqlite",
+      "archive_member": "independent/cold-native/results/run/repaired-current/remote.sqlite"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/repaired-incident/facts.json",
+      "archive_member": "independent/cold-native/results/run/repaired-incident/facts.json"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/repaired-incident/local.sqlite",
+      "archive_member": "independent/cold-native/results/run/repaired-incident/local.sqlite"
+    },
+    {
+      "path": "independent-review/cold-native/results/run/repaired-incident/remote.sqlite",
+      "archive_member": "independent/cold-native/results/run/repaired-incident/remote.sqlite"
+    },
+    {
+      "path": "independent-review/cold-raw/BUSINESS.md",
+      "archive_member": "independent/cold-raw/BUSINESS.md"
+    },
+    {
+      "path": "independent-review/cold-raw/ENVIRONMENT.md",
+      "archive_member": "independent/cold-raw/ENVIRONMENT.md"
+    },
+    {
+      "path": "independent-review/cold-raw/EXECUTION.md",
+      "archive_member": "independent/cold-raw/EXECUTION.md"
+    },
+    {
+      "path": "independent-review/cold-raw/exercise.py",
+      "archive_member": "independent/cold-raw/exercise.py"
+    },
+    {
+      "path": "independent-review/cold-raw/incoming-operations.json",
+      "archive_member": "independent/cold-raw/incoming-operations.json"
+    },
+    {
+      "path": "independent-review/cold-raw/l05_effects.py",
+      "archive_member": "independent/cold-raw/l05_effects.py"
+    },
+    {
+      "path": "independent-review/cold-raw/l05_transport.py",
+      "archive_member": "independent/cold-raw/l05_transport.py"
+    },
+    {
+      "path": "independent-review/cold-raw/legacy-delivery.json",
+      "archive_member": "independent/cold-raw/legacy-delivery.json"
+    },
+    {
+      "path": "independent-review/cold-raw/legacy_app.py",
+      "archive_member": "independent/cold-raw/legacy_app.py"
+    },
+    {
+      "path": "independent-review/cold-raw/logical_store.py",
+      "archive_member": "independent/cold-raw/logical_store.py"
+    },
+    {
+      "path": "independent-review/cold-raw/original-local.sqlite",
+      "archive_member": "independent/cold-raw/original-local.sqlite"
+    },
+    {
+      "path": "independent-review/cold-raw/original-remote.sqlite",
+      "archive_member": "independent/cold-raw/original-remote.sqlite"
+    },
+    {
+      "path": "independent-review/cold-raw/OUTPUTS.md",
+      "archive_member": "independent/cold-raw/OUTPUTS.md"
+    },
+    {
+      "path": "independent-review/cold-raw/provenance.json",
+      "archive_member": "independent/cold-raw/provenance.json"
+    },
+    {
+      "path": "independent-review/cold-raw/receiver-exit.json",
+      "archive_member": "independent/cold-raw/receiver-exit.json"
+    },
+    {
+      "path": "independent-review/cold-raw/receiver-start.json",
+      "archive_member": "independent/cold-raw/receiver-start.json"
+    },
+    {
+      "path": "independent-review/cold-raw/RECEIVER.md",
+      "archive_member": "independent/cold-raw/RECEIVER.md"
+    },
+    {
+      "path": "independent-review/cold-raw/TASK.md",
+      "archive_member": "independent/cold-raw/TASK.md"
+    },
+    {
+      "path": "independent-review/cold-source/app.py",
+      "archive_member": "independent/cold-source/app.py"
+    },
+    {
+      "path": "independent-review/cold-source/l05_effects.py",
+      "archive_member": "independent/cold-source/l05_effects.py"
+    },
+    {
+      "path": "independent-review/cold-source/l05_transport.py",
+      "archive_member": "independent/cold-source/l05_transport.py"
+    },
+    {
+      "path": "independent-review/cold-source/logical-map.json",
+      "archive_member": "independent/cold-source/logical-map.json"
+    },
+    {
+      "path": "independent-review/cold-source/report.py",
+      "archive_member": "independent/cold-source/report.py"
+    },
+    {
+      "path": "independent-review/cold-source/reproduce.py",
+      "archive_member": "independent/cold-source/reproduce.py"
+    },
+    {
+      "path": "independent-review/cold-source/settings.json",
+      "archive_member": "independent/cold-source/settings.json"
+    },
+    {
+      "path": "independent-review/cold-source/submission.json",
+      "archive_member": "independent/cold-source/submission.json"
+    },
+    {
+      "path": "independent-review/exports-checker-result/assessment.json",
+      "archive_member": "independent/exports-checker-result/assessment.json"
+    },
+    {
+      "path": "independent-review/exports-mutation/empty-monitor.sqlite",
+      "archive_member": "independent/exports-mutation/empty-monitor.sqlite"
+    },
+    {
+      "path": "independent-review/exports-mutation/events.json",
+      "archive_member": "independent/exports-mutation/events.json"
+    },
+    {
+      "path": "independent-review/exports-mutation/isolation.json",
+      "archive_member": "independent/exports-mutation/isolation.json"
+    },
+    {
+      "path": "independent-review/exports-mutation/local.sqlite",
+      "archive_member": "independent/exports-mutation/local.sqlite"
+    },
+    {
+      "path": "independent-review/exports-mutation/original-facts.json",
+      "archive_member": "independent/exports-mutation/original-facts.json"
+    },
+    {
+      "path": "independent-review/exports-mutation/post-report-actual.json",
+      "archive_member": "independent/exports-mutation/post-report-actual.json"
+    },
+    {
+      "path": "independent-review/exports-mutation/registration.json",
+      "archive_member": "independent/exports-mutation/registration.json"
+    },
+    {
+      "path": "independent-review/exports-mutation/remote.sqlite",
+      "archive_member": "independent/exports-mutation/remote.sqlite"
+    },
+    {
+      "path": "independent-review/exports-mutation/report-native.json",
+      "archive_member": "independent/exports-mutation/report-native.json"
+    },
+    {
+      "path": "independent-review/exports-mutation/run.json",
+      "archive_member": "independent/exports-mutation/run.json"
+    },
+    {
+      "path": "independent-review/exports-mutation/service-0.stderr.txt",
+      "archive_member": "independent/exports-mutation/service-0.stderr.txt"
+    },
+    {
+      "path": "independent-review/exports-mutation/service-1.stderr.txt",
+      "archive_member": "independent/exports-mutation/service-1.stderr.txt"
+    },
+    {
+      "path": "independent-review/exports-mutation/service-2.stderr.txt",
+      "archive_member": "independent/exports-mutation/service-2.stderr.txt"
+    },
+    {
+      "path": "independent-review/exports-mutation/delivery/business.csv",
+      "archive_member": "independent/exports-mutation/delivery/business.csv"
+    },
+    {
+      "path": "independent-review/exports-mutation/delivery/monitor.csv",
+      "archive_member": "independent/exports-mutation/delivery/monitor.csv"
+    },
+    {
+      "path": "independent-review/exports-mutation/delivery/operations.md",
+      "archive_member": "independent/exports-mutation/delivery/operations.md"
+    },
+    {
+      "path": "independent-review/exports-mutation/delivery/reconciliation.csv",
+      "archive_member": "independent/exports-mutation/delivery/reconciliation.csv"
+    },
+    {
+      "path": "independent-review/exports-mutation/delivery/recovery.png",
+      "archive_member": "independent/exports-mutation/delivery/recovery.png"
+    },
+    {
+      "path": "independent-review/exports-mutation/delivery/REPORT.md",
+      "archive_member": "independent/exports-mutation/delivery/REPORT.md"
+    },
+    {
+      "path": "independent-review/exports-mutation/delivery/reproduce.md",
+      "archive_member": "independent/exports-mutation/delivery/reproduce.md"
+    },
+    {
+      "path": "independent-review/exports-mutation/final/facts.json",
+      "archive_member": "independent/exports-mutation/final/facts.json"
+    },
+    {
+      "path": "independent-review/exports-mutation/final/local.sqlite",
+      "archive_member": "independent/exports-mutation/final/local.sqlite"
+    },
+    {
+      "path": "independent-review/exports-mutation/final/remote.sqlite",
+      "archive_member": "independent/exports-mutation/final/remote.sqlite"
+    },
+    {
+      "path": "independent-review/exports-mutation/repaired-current/facts.json",
+      "archive_member": "independent/exports-mutation/repaired-current/facts.json"
+    },
+    {
+      "path": "independent-review/exports-mutation/repaired-current/local.sqlite",
+      "archive_member": "independent/exports-mutation/repaired-current/local.sqlite"
+    },
+    {
+      "path": "independent-review/exports-mutation/repaired-current/remote.sqlite",
+      "archive_member": "independent/exports-mutation/repaired-current/remote.sqlite"
+    },
+    {
+      "path": "independent-review/exports-mutation/repaired-incident/facts.json",
+      "archive_member": "independent/exports-mutation/repaired-incident/facts.json"
+    },
+    {
+      "path": "independent-review/exports-mutation/repaired-incident/local.sqlite",
+      "archive_member": "independent/exports-mutation/repaired-incident/local.sqlite"
+    },
+    {
+      "path": "independent-review/exports-mutation/repaired-incident/remote.sqlite",
+      "archive_member": "independent/exports-mutation/repaired-incident/remote.sqlite"
+    },
+    {
+      "path": "independent-review/exports-repaired-result/assessment.json",
+      "archive_member": "independent/exports-repaired-result/assessment.json"
+    },
+    {
+      "path": "independent-review/monitor-object-checker-result/assessment.json",
+      "archive_member": "independent/monitor-object-checker-result/assessment.json"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/empty-monitor.sqlite",
+      "archive_member": "independent/monitor-object-mutation/empty-monitor.sqlite"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/events.json",
+      "archive_member": "independent/monitor-object-mutation/events.json"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/isolation.json",
+      "archive_member": "independent/monitor-object-mutation/isolation.json"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/local.sqlite",
+      "archive_member": "independent/monitor-object-mutation/local.sqlite"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/original-facts.json",
+      "archive_member": "independent/monitor-object-mutation/original-facts.json"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/post-report-actual.json",
+      "archive_member": "independent/monitor-object-mutation/post-report-actual.json"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/registration.json",
+      "archive_member": "independent/monitor-object-mutation/registration.json"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/remote.sqlite",
+      "archive_member": "independent/monitor-object-mutation/remote.sqlite"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/report-native.json",
+      "archive_member": "independent/monitor-object-mutation/report-native.json"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/run.json",
+      "archive_member": "independent/monitor-object-mutation/run.json"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/service-0.stderr.txt",
+      "archive_member": "independent/monitor-object-mutation/service-0.stderr.txt"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/service-1.stderr.txt",
+      "archive_member": "independent/monitor-object-mutation/service-1.stderr.txt"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/service-2.stderr.txt",
+      "archive_member": "independent/monitor-object-mutation/service-2.stderr.txt"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/delivery/business.csv",
+      "archive_member": "independent/monitor-object-mutation/delivery/business.csv"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/delivery/monitor.csv",
+      "archive_member": "independent/monitor-object-mutation/delivery/monitor.csv"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/delivery/operations.md",
+      "archive_member": "independent/monitor-object-mutation/delivery/operations.md"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/delivery/reconciliation.csv",
+      "archive_member": "independent/monitor-object-mutation/delivery/reconciliation.csv"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/delivery/recovery.png",
+      "archive_member": "independent/monitor-object-mutation/delivery/recovery.png"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/delivery/REPORT.md",
+      "archive_member": "independent/monitor-object-mutation/delivery/REPORT.md"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/delivery/reproduce.md",
+      "archive_member": "independent/monitor-object-mutation/delivery/reproduce.md"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/final/facts.json",
+      "archive_member": "independent/monitor-object-mutation/final/facts.json"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/final/local.sqlite",
+      "archive_member": "independent/monitor-object-mutation/final/local.sqlite"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/final/remote.sqlite",
+      "archive_member": "independent/monitor-object-mutation/final/remote.sqlite"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/repaired-current/facts.json",
+      "archive_member": "independent/monitor-object-mutation/repaired-current/facts.json"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/repaired-current/local.sqlite",
+      "archive_member": "independent/monitor-object-mutation/repaired-current/local.sqlite"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/repaired-current/remote.sqlite",
+      "archive_member": "independent/monitor-object-mutation/repaired-current/remote.sqlite"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/repaired-incident/facts.json",
+      "archive_member": "independent/monitor-object-mutation/repaired-incident/facts.json"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/repaired-incident/local.sqlite",
+      "archive_member": "independent/monitor-object-mutation/repaired-incident/local.sqlite"
+    },
+    {
+      "path": "independent-review/monitor-object-mutation/repaired-incident/remote.sqlite",
+      "archive_member": "independent/monitor-object-mutation/repaired-incident/remote.sqlite"
+    },
+    {
+      "path": "independent-review/monitor-object-repaired-result/assessment.json",
+      "archive_member": "independent/monitor-object-repaired-result/assessment.json"
+    },
+    {
+      "path": "independent-review/native-identity-checker-result/assessment.json",
+      "archive_member": "independent/native-identity-checker-result/assessment.json"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/empty-monitor.sqlite",
+      "archive_member": "independent/native-identity-mutation/empty-monitor.sqlite"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/events.json",
+      "archive_member": "independent/native-identity-mutation/events.json"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/isolation.json",
+      "archive_member": "independent/native-identity-mutation/isolation.json"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/local.sqlite",
+      "archive_member": "independent/native-identity-mutation/local.sqlite"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/original-facts.json",
+      "archive_member": "independent/native-identity-mutation/original-facts.json"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/post-report-actual.json",
+      "archive_member": "independent/native-identity-mutation/post-report-actual.json"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/registration.json",
+      "archive_member": "independent/native-identity-mutation/registration.json"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/remote.sqlite",
+      "archive_member": "independent/native-identity-mutation/remote.sqlite"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/report-native.json",
+      "archive_member": "independent/native-identity-mutation/report-native.json"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/run.json",
+      "archive_member": "independent/native-identity-mutation/run.json"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/service-0.stderr.txt",
+      "archive_member": "independent/native-identity-mutation/service-0.stderr.txt"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/service-1.stderr.txt",
+      "archive_member": "independent/native-identity-mutation/service-1.stderr.txt"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/service-2.stderr.txt",
+      "archive_member": "independent/native-identity-mutation/service-2.stderr.txt"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/delivery/business.csv",
+      "archive_member": "independent/native-identity-mutation/delivery/business.csv"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/delivery/monitor.csv",
+      "archive_member": "independent/native-identity-mutation/delivery/monitor.csv"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/delivery/operations.md",
+      "archive_member": "independent/native-identity-mutation/delivery/operations.md"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/delivery/reconciliation.csv",
+      "archive_member": "independent/native-identity-mutation/delivery/reconciliation.csv"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/delivery/recovery.png",
+      "archive_member": "independent/native-identity-mutation/delivery/recovery.png"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/delivery/REPORT.md",
+      "archive_member": "independent/native-identity-mutation/delivery/REPORT.md"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/delivery/reproduce.md",
+      "archive_member": "independent/native-identity-mutation/delivery/reproduce.md"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/final/facts.json",
+      "archive_member": "independent/native-identity-mutation/final/facts.json"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/final/local.sqlite",
+      "archive_member": "independent/native-identity-mutation/final/local.sqlite"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/final/remote.sqlite",
+      "archive_member": "independent/native-identity-mutation/final/remote.sqlite"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/repaired-current/facts.json",
+      "archive_member": "independent/native-identity-mutation/repaired-current/facts.json"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/repaired-current/local.sqlite",
+      "archive_member": "independent/native-identity-mutation/repaired-current/local.sqlite"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/repaired-current/remote.sqlite",
+      "archive_member": "independent/native-identity-mutation/repaired-current/remote.sqlite"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/repaired-incident/facts.json",
+      "archive_member": "independent/native-identity-mutation/repaired-incident/facts.json"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/repaired-incident/local.sqlite",
+      "archive_member": "independent/native-identity-mutation/repaired-incident/local.sqlite"
+    },
+    {
+      "path": "independent-review/native-identity-mutation/repaired-incident/remote.sqlite",
+      "archive_member": "independent/native-identity-mutation/repaired-incident/remote.sqlite"
+    },
+    {
+      "path": "independent-review/native-identity-repaired-result/assessment.json",
+      "archive_member": "independent/native-identity-repaired-result/assessment.json"
+    },
+    {
+      "path": "independent-review/new-epoch-checker-result/assessment.json",
+      "archive_member": "independent/new-epoch-checker-result/assessment.json"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/empty-monitor.sqlite",
+      "archive_member": "independent/new-epoch-mutation/empty-monitor.sqlite"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/events.json",
+      "archive_member": "independent/new-epoch-mutation/events.json"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/isolation.json",
+      "archive_member": "independent/new-epoch-mutation/isolation.json"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/local.sqlite",
+      "archive_member": "independent/new-epoch-mutation/local.sqlite"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/original-facts.json",
+      "archive_member": "independent/new-epoch-mutation/original-facts.json"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/post-report-actual.json",
+      "archive_member": "independent/new-epoch-mutation/post-report-actual.json"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/registration.json",
+      "archive_member": "independent/new-epoch-mutation/registration.json"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/remote.sqlite",
+      "archive_member": "independent/new-epoch-mutation/remote.sqlite"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/report-native.json",
+      "archive_member": "independent/new-epoch-mutation/report-native.json"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/run.json",
+      "archive_member": "independent/new-epoch-mutation/run.json"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/service-0.stderr.txt",
+      "archive_member": "independent/new-epoch-mutation/service-0.stderr.txt"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/service-1.stderr.txt",
+      "archive_member": "independent/new-epoch-mutation/service-1.stderr.txt"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/service-2.stderr.txt",
+      "archive_member": "independent/new-epoch-mutation/service-2.stderr.txt"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/delivery/business.csv",
+      "archive_member": "independent/new-epoch-mutation/delivery/business.csv"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/delivery/monitor.csv",
+      "archive_member": "independent/new-epoch-mutation/delivery/monitor.csv"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/delivery/operations.md",
+      "archive_member": "independent/new-epoch-mutation/delivery/operations.md"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/delivery/reconciliation.csv",
+      "archive_member": "independent/new-epoch-mutation/delivery/reconciliation.csv"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/delivery/recovery.png",
+      "archive_member": "independent/new-epoch-mutation/delivery/recovery.png"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/delivery/REPORT.md",
+      "archive_member": "independent/new-epoch-mutation/delivery/REPORT.md"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/delivery/reproduce.md",
+      "archive_member": "independent/new-epoch-mutation/delivery/reproduce.md"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/final/facts.json",
+      "archive_member": "independent/new-epoch-mutation/final/facts.json"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/final/local.sqlite",
+      "archive_member": "independent/new-epoch-mutation/final/local.sqlite"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/final/remote.sqlite",
+      "archive_member": "independent/new-epoch-mutation/final/remote.sqlite"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/repaired-current/facts.json",
+      "archive_member": "independent/new-epoch-mutation/repaired-current/facts.json"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/repaired-current/local.sqlite",
+      "archive_member": "independent/new-epoch-mutation/repaired-current/local.sqlite"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/repaired-current/remote.sqlite",
+      "archive_member": "independent/new-epoch-mutation/repaired-current/remote.sqlite"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/repaired-incident/facts.json",
+      "archive_member": "independent/new-epoch-mutation/repaired-incident/facts.json"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/repaired-incident/local.sqlite",
+      "archive_member": "independent/new-epoch-mutation/repaired-incident/local.sqlite"
+    },
+    {
+      "path": "independent-review/new-epoch-mutation/repaired-incident/remote.sqlite",
+      "archive_member": "independent/new-epoch-mutation/repaired-incident/remote.sqlite"
+    },
+    {
+      "path": "independent-review/new-epoch-repaired-result/assessment.json",
+      "archive_member": "independent/new-epoch-repaired-result/assessment.json"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/empty-monitor.sqlite",
+      "archive_member": "independent/plan-wire-equivalent/empty-monitor.sqlite"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/events.json",
+      "archive_member": "independent/plan-wire-equivalent/events.json"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/isolation.json",
+      "archive_member": "independent/plan-wire-equivalent/isolation.json"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/local.sqlite",
+      "archive_member": "independent/plan-wire-equivalent/local.sqlite"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/original-facts.json",
+      "archive_member": "independent/plan-wire-equivalent/original-facts.json"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/post-report-actual.json",
+      "archive_member": "independent/plan-wire-equivalent/post-report-actual.json"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/registration.json",
+      "archive_member": "independent/plan-wire-equivalent/registration.json"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/remote.sqlite",
+      "archive_member": "independent/plan-wire-equivalent/remote.sqlite"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/report-native.json",
+      "archive_member": "independent/plan-wire-equivalent/report-native.json"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/run.json",
+      "archive_member": "independent/plan-wire-equivalent/run.json"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/service-0.stderr.txt",
+      "archive_member": "independent/plan-wire-equivalent/service-0.stderr.txt"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/service-1.stderr.txt",
+      "archive_member": "independent/plan-wire-equivalent/service-1.stderr.txt"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/service-2.stderr.txt",
+      "archive_member": "independent/plan-wire-equivalent/service-2.stderr.txt"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/delivery/business.csv",
+      "archive_member": "independent/plan-wire-equivalent/delivery/business.csv"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/delivery/monitor.csv",
+      "archive_member": "independent/plan-wire-equivalent/delivery/monitor.csv"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/delivery/operations.md",
+      "archive_member": "independent/plan-wire-equivalent/delivery/operations.md"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/delivery/reconciliation.csv",
+      "archive_member": "independent/plan-wire-equivalent/delivery/reconciliation.csv"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/delivery/recovery.png",
+      "archive_member": "independent/plan-wire-equivalent/delivery/recovery.png"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/delivery/REPORT.md",
+      "archive_member": "independent/plan-wire-equivalent/delivery/REPORT.md"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/delivery/reproduce.md",
+      "archive_member": "independent/plan-wire-equivalent/delivery/reproduce.md"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/final/facts.json",
+      "archive_member": "independent/plan-wire-equivalent/final/facts.json"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/final/local.sqlite",
+      "archive_member": "independent/plan-wire-equivalent/final/local.sqlite"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/final/remote.sqlite",
+      "archive_member": "independent/plan-wire-equivalent/final/remote.sqlite"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/repaired-current/facts.json",
+      "archive_member": "independent/plan-wire-equivalent/repaired-current/facts.json"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/repaired-current/local.sqlite",
+      "archive_member": "independent/plan-wire-equivalent/repaired-current/local.sqlite"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/repaired-current/remote.sqlite",
+      "archive_member": "independent/plan-wire-equivalent/repaired-current/remote.sqlite"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/repaired-incident/facts.json",
+      "archive_member": "independent/plan-wire-equivalent/repaired-incident/facts.json"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/repaired-incident/local.sqlite",
+      "archive_member": "independent/plan-wire-equivalent/repaired-incident/local.sqlite"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent/repaired-incident/remote.sqlite",
+      "archive_member": "independent/plan-wire-equivalent/repaired-incident/remote.sqlite"
+    },
+    {
+      "path": "independent-review/plan-wire-equivalent-repaired-result/assessment.json",
+      "archive_member": "independent/plan-wire-equivalent-repaired-result/assessment.json"
+    },
+    {
+      "path": "independent-review/planned-wire-checker-result/assessment.json",
+      "archive_member": "independent/planned-wire-checker-result/assessment.json"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/empty-monitor.sqlite",
+      "archive_member": "independent/planned-wire-mutation/empty-monitor.sqlite"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/events.json",
+      "archive_member": "independent/planned-wire-mutation/events.json"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/isolation.json",
+      "archive_member": "independent/planned-wire-mutation/isolation.json"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/local.sqlite",
+      "archive_member": "independent/planned-wire-mutation/local.sqlite"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/original-facts.json",
+      "archive_member": "independent/planned-wire-mutation/original-facts.json"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/post-report-actual.json",
+      "archive_member": "independent/planned-wire-mutation/post-report-actual.json"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/registration.json",
+      "archive_member": "independent/planned-wire-mutation/registration.json"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/remote.sqlite",
+      "archive_member": "independent/planned-wire-mutation/remote.sqlite"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/report-native.json",
+      "archive_member": "independent/planned-wire-mutation/report-native.json"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/run.json",
+      "archive_member": "independent/planned-wire-mutation/run.json"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/service-0.stderr.txt",
+      "archive_member": "independent/planned-wire-mutation/service-0.stderr.txt"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/service-1.stderr.txt",
+      "archive_member": "independent/planned-wire-mutation/service-1.stderr.txt"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/service-2.stderr.txt",
+      "archive_member": "independent/planned-wire-mutation/service-2.stderr.txt"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/delivery/business.csv",
+      "archive_member": "independent/planned-wire-mutation/delivery/business.csv"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/delivery/monitor.csv",
+      "archive_member": "independent/planned-wire-mutation/delivery/monitor.csv"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/delivery/operations.md",
+      "archive_member": "independent/planned-wire-mutation/delivery/operations.md"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/delivery/reconciliation.csv",
+      "archive_member": "independent/planned-wire-mutation/delivery/reconciliation.csv"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/delivery/recovery.png",
+      "archive_member": "independent/planned-wire-mutation/delivery/recovery.png"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/delivery/REPORT.md",
+      "archive_member": "independent/planned-wire-mutation/delivery/REPORT.md"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/delivery/reproduce.md",
+      "archive_member": "independent/planned-wire-mutation/delivery/reproduce.md"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/final/facts.json",
+      "archive_member": "independent/planned-wire-mutation/final/facts.json"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/final/local.sqlite",
+      "archive_member": "independent/planned-wire-mutation/final/local.sqlite"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/final/remote.sqlite",
+      "archive_member": "independent/planned-wire-mutation/final/remote.sqlite"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/repaired-current/facts.json",
+      "archive_member": "independent/planned-wire-mutation/repaired-current/facts.json"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/repaired-current/local.sqlite",
+      "archive_member": "independent/planned-wire-mutation/repaired-current/local.sqlite"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/repaired-current/remote.sqlite",
+      "archive_member": "independent/planned-wire-mutation/repaired-current/remote.sqlite"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/repaired-incident/facts.json",
+      "archive_member": "independent/planned-wire-mutation/repaired-incident/facts.json"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/repaired-incident/local.sqlite",
+      "archive_member": "independent/planned-wire-mutation/repaired-incident/local.sqlite"
+    },
+    {
+      "path": "independent-review/planned-wire-mutation/repaired-incident/remote.sqlite",
+      "archive_member": "independent/planned-wire-mutation/repaired-incident/remote.sqlite"
+    },
+    {
+      "path": "independent-review/planned-wire-repaired-result/assessment.json",
+      "archive_member": "independent/planned-wire-repaired-result/assessment.json"
+    },
+    {
+      "path": "independent-review/restore-backup-current-repaired-result/assessment.json",
+      "archive_member": "independent/restore-backup-current-repaired-result/assessment.json"
+    },
+    {
+      "path": "independent-review/timing-source-original/exercise.py",
+      "archive_member": "independent/timing-source-original/exercise.py"
+    },
+    {
+      "path": "independent-review/timing-source-original/frozen_sender.py",
+      "archive_member": "independent/timing-source-original/frozen_sender.py"
+    },
+    {
+      "path": "independent-review/timing-source-original/l05_transport.py",
+      "archive_member": "independent/timing-source-original/l05_transport.py"
+    }
+  ]
+}

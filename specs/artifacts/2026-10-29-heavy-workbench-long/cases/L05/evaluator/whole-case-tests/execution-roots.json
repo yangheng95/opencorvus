@@ -1,0 +1,26 @@
+{
+  "role": "author_reference_or_error_control",
+  "main": [
+    "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-main-final-base\\results\\run",
+    "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-main-amount\\results\\run",
+    "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-main-tenant\\results\\run"
+  ],
+  "weak": [
+    "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run",
+    "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run",
+    "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run"
+  ],
+  "originals_root": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031",
+  "review_root": "D:\\opencorvus-benchmark-runs\\l05-whole-case-independent-review-20261031",
+  "correct_other_funding": "closed-alternative-base",
+  "correct_schema": "closed-schema-compat",
+  "errors": [
+    "closed-conflict_first",
+    "closed-ack_new_key",
+    "closed-early_sent",
+    "closed-restore_backup",
+    "closed-global_transport",
+    "closed-monitor_fake"
+  ],
+  "native_lineage": "original capsules and commands in originals.zip; exact per-run source/raw/inspect retained, not relabeled as latest helper bytes"
+}

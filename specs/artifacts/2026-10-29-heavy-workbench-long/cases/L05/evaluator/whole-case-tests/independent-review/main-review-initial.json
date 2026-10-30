@@ -1,0 +1,31 @@
+{
+  "run_roots": [
+    "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-main-base\\results\\run",
+    "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-main-amount\\results\\run",
+    "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-main-tenant\\results\\run"
+  ],
+  "ratings": {
+    "H01": {
+      "status": "verified_pass",
+      "evidence": "Read the original local/receiver SQLite, faithful old entry, full actual app and report. Independently reconstructed highest-revision unique semantics and source-level external balances; original global event_id seen explains B/X missing, stale A/X100 despite rev2 conflict and B/Y70 despite cancel. Original A/X applied receipt existed while local was NULL; Z was registered but initially absent remotely. Current app uses tenant/request identity, immutable wire key, persistent cut/phase and separate source/funding semantics; it matches the actual report. Sources: case-initial/public original DBs/legacy_app.py; closed-main-*/results/run stage/live SQL/events; whole-sql-audit.json."
+    },
+    "H02": {
+      "status": "verified_pass",
+      "evidence": "Actual main report accurately limits convergence to a cooperative idempotent/queryable local receiver and finite controlled faults that stop. It excludes arbitrary OS, physical power loss, infinite partitions and real finance certification. Original records show actual old held HTTP, confirm-before-kill, planned-state kill, acceptance commit-before-ACK, same-key sender stale interleaving and three service lifecycles. Scope is those actual controlled schedules, not all concurrency. Sources: actual closed-main reports, original events/PIDs/SQL, whole-sql-audit.json."
+    },
+    "H03": {
+      "status": "verified_pass",
+      "evidence": "Actual operations.md gives app argv with db/url/request/public raw, preserve-original instructions, current epoch/stable repair_id and original key GET/retry, no new keys/cut deletion, complete prefix and receipt/source checks before resume, stale versus duplicate/conflict handling, adjustment bound and notes preservation, pending/conflict/source alarm distinctions and stop/manual reconciliation rules. Public wire supplies action fields and the self-contained entry executes them. No destructive restore command is proposed."
+    },
+    "H04": {
+      "status": "verified_pass",
+      "evidence": "Actually opened closed-main-base and closed-weak-base recovery.png with view_image. The three readable panels show final business versus actual HTTP USD minor totals(A1130/B545), pending counts and per-source mismatch/highest-version conflicts across six labeled discrete windows including the separate empty-catalogue sample. Initial conflict remains after first financial repair and later clears only after higher unique revision, as actual SQL/alerts show. Independently checked source and sample data; no latency or learning claim is inferred. Sources: actual PNGs, whole-sql-audit.json, actual stage SQL and monitoring events."
+    },
+    "H05": {
+      "status": "verified_pass",
+      "evidence": "The handed immutable seven-file programme/manifest/map plus complete public raw actually rebuild through reproduce.py without grader/reference mounts. One independent fresh1CPU/networknone SOURCE/RAW/newresults cold ran actual HTTP and process faults, exited0 in11.1992800s and was ZIP-sealed before exact ownCID cleanup. Original argv/PIDs/native/local and remote SQLite are retained. The separate benchmark schema-freedom defect is recorded as an infrastructure freeze blocker, not a fault of this correct canonical-schema programme. Sources: cold-native original capsule and own-cold-originals.zip, public EXECUTION/ENVIRONMENT, programme manifest/reproduce/map."
+    }
+  },
+  "reviewer": "/root/benchmark_review",
+  "disclosure": "One-level familiar nonblind AI reviewer; not professional/statistical certification, fresh model ranking or effective-hour qualification."
+}

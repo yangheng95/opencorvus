@@ -1,0 +1,49 @@
+{
+  "case_id": "L05",
+  "version": "0.2.0-dev",
+  "frozen_at": "2026-10-30T20:17:31.635575+00:00",
+  "status": "development_pilot_frozen",
+  "public_inputs": [
+    "BUSINESS.md",
+    "ENVIRONMENT.md",
+    "EXECUTION.md",
+    "OUTPUTS.md",
+    "RECEIVER.md",
+    "TASK.md",
+    "exercise.py",
+    "frozen_sender.py",
+    "incoming-operations.json",
+    "l05_effects.py",
+    "l05_transport.py",
+    "legacy-delivery.json",
+    "legacy_app.py",
+    "logical_store.py",
+    "original-local.sqlite",
+    "original-remote.sqlite",
+    "profile.json",
+    "provenance.json",
+    "receiver-exit.json",
+    "receiver-start.json"
+  ],
+  "rubric": "rubric.json",
+  "weights_fixed": 100,
+  "good_rule": {
+    "minimum_score": 90,
+    "all_critical": "verified_pass"
+  },
+  "review": "evaluator/whole-case-tests/independent-review/REVIEW-FINAL.md",
+  "reference_assessment": "evaluator/whole-case-tests/main-assessment.json",
+  "weak_assessment": "evaluator/whole-case-tests/weak-assessment.json",
+  "execution_lineage": [
+    "final main base uses final owner-held sender/helper bytes; amount/tenant and weak retain original actually executed helper bytes",
+    "one independent original-helper cold 11.1992800s; subsequent new-helper compatibility/schema/final base are separate necessary increments",
+    "final author base native 11.3013694s, wrapper/archive/cleanup 11.6293706s; no >20s slow probe",
+    "author app and receiver operational implementation unchanged across concentrated collector/helper repairs"
+  ],
+  "limitations": [
+    "author references and purposeful errors, not fresh LLM scores",
+    "one familiar nonblind AI reviewer; no professional or statistical maturity certification",
+    "controlled finite processes/receipt semantics, not arbitrary faults, OS security, power loss or financial certification",
+    "suite 9/10 development contracts; L01, triggered L02/L06 upgrades, fresh distinction and effective candidate-hour evidence remain incomplete"
+  ]
+}

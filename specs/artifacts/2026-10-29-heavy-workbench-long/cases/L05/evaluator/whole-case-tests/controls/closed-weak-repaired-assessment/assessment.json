@@ -1,0 +1,1824 @@
+{
+  "status": "assessment_incomplete",
+  "subject_role": "author_reference_or_error_control",
+  "run_roots": [
+    "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run",
+    "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run",
+    "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run"
+  ],
+  "fixed_denominator": 100,
+  "total": null,
+  "business_success": null,
+  "good": null,
+  "failed": [],
+  "unresolved": [
+    "H01",
+    "H02",
+    "H03",
+    "H04",
+    "H05"
+  ],
+  "critical_unmet": [
+    "H01",
+    "H02",
+    "H03",
+    "H05"
+  ],
+  "findings": {
+    "M01": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\run.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\run.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\run.json",
+          "details": null
+        }
+      ]
+    },
+    "M02": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\repaired-incident",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\repaired-current",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\final",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\local.sqlite",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\repaired-incident",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\repaired-current",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\final",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\local.sqlite",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\repaired-incident",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\repaired-current",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\final",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\local.sqlite",
+          "details": null
+        }
+      ]
+    },
+    "M03": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\events.json",
+          "details": null
+        }
+      ]
+    },
+    "M04": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\repaired-incident",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\repaired-current",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\final",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\local.sqlite",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\repaired-incident",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\repaired-current",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\final",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\local.sqlite",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\repaired-incident",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\repaired-current",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\final",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\local.sqlite",
+          "details": null
+        }
+      ]
+    },
+    "M05": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\repaired-incident",
+          "details": {
+            "desired": [
+              [
+                "A",
+                "adjustment",
+                "approved-1",
+                -25
+              ],
+              [
+                "A",
+                "business",
+                "X",
+                0
+              ],
+              [
+                "A",
+                "business",
+                "Z",
+                40
+              ],
+              [
+                "A",
+                "opening",
+                "opening",
+                1000
+              ],
+              [
+                "B",
+                "adjustment",
+                "approved-1",
+                10
+              ],
+              [
+                "B",
+                "business",
+                "X",
+                200
+              ],
+              [
+                "B",
+                "business",
+                "Y",
+                0
+              ],
+              [
+                "B",
+                "opening",
+                "opening",
+                500
+              ]
+            ]
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\repaired-current",
+          "details": {
+            "desired": [
+              [
+                "A",
+                "adjustment",
+                "approved-1",
+                -25
+              ],
+              [
+                "A",
+                "adjustment",
+                "approved-2",
+                -5
+              ],
+              [
+                "A",
+                "business",
+                "X",
+                110
+              ],
+              [
+                "A",
+                "business",
+                "Z",
+                50
+              ],
+              [
+                "A",
+                "opening",
+                "opening",
+                1000
+              ],
+              [
+                "B",
+                "adjustment",
+                "approved-1",
+                10
+              ],
+              [
+                "B",
+                "business",
+                "W",
+                35
+              ],
+              [
+                "B",
+                "business",
+                "X",
+                0
+              ],
+              [
+                "B",
+                "business",
+                "Y",
+                0
+              ],
+              [
+                "B",
+                "opening",
+                "opening",
+                500
+              ]
+            ]
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\final",
+          "details": {
+            "desired": [
+              [
+                "A",
+                "adjustment",
+                "approved-1",
+                -25
+              ],
+              [
+                "A",
+                "adjustment",
+                "approved-2",
+                -5
+              ],
+              [
+                "A",
+                "business",
+                "X",
+                110
+              ],
+              [
+                "A",
+                "business",
+                "Z",
+                50
+              ],
+              [
+                "A",
+                "opening",
+                "opening",
+                1000
+              ],
+              [
+                "B",
+                "adjustment",
+                "approved-1",
+                10
+              ],
+              [
+                "B",
+                "business",
+                "W",
+                35
+              ],
+              [
+                "B",
+                "business",
+                "X",
+                0
+              ],
+              [
+                "B",
+                "business",
+                "Y",
+                0
+              ],
+              [
+                "B",
+                "opening",
+                "opening",
+                500
+              ]
+            ]
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\local.sqlite",
+          "details": {
+            "desired": [
+              [
+                "A",
+                "adjustment",
+                "approved-1",
+                -25
+              ],
+              [
+                "A",
+                "adjustment",
+                "approved-2",
+                -5
+              ],
+              [
+                "A",
+                "business",
+                "X",
+                110
+              ],
+              [
+                "A",
+                "business",
+                "Z",
+                50
+              ],
+              [
+                "A",
+                "opening",
+                "opening",
+                1000
+              ],
+              [
+                "B",
+                "adjustment",
+                "approved-1",
+                10
+              ],
+              [
+                "B",
+                "business",
+                "W",
+                35
+              ],
+              [
+                "B",
+                "business",
+                "X",
+                0
+              ],
+              [
+                "B",
+                "business",
+                "Y",
+                0
+              ],
+              [
+                "B",
+                "opening",
+                "opening",
+                500
+              ]
+            ]
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\repaired-incident",
+          "details": {
+            "desired": [
+              [
+                "A",
+                "adjustment",
+                "approved-1",
+                -25
+              ],
+              [
+                "A",
+                "business",
+                "X",
+                0
+              ],
+              [
+                "A",
+                "business",
+                "Z",
+                40
+              ],
+              [
+                "A",
+                "opening",
+                "opening",
+                1000
+              ],
+              [
+                "B",
+                "adjustment",
+                "approved-1",
+                10
+              ],
+              [
+                "B",
+                "business",
+                "X",
+                200
+              ],
+              [
+                "B",
+                "business",
+                "Y",
+                0
+              ],
+              [
+                "B",
+                "opening",
+                "opening",
+                500
+              ]
+            ]
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\repaired-current",
+          "details": {
+            "desired": [
+              [
+                "A",
+                "adjustment",
+                "approved-1",
+                -25
+              ],
+              [
+                "A",
+                "adjustment",
+                "approved-2",
+                -7
+              ],
+              [
+                "A",
+                "business",
+                "X",
+                135
+              ],
+              [
+                "A",
+                "business",
+                "Z",
+                50
+              ],
+              [
+                "A",
+                "opening",
+                "opening",
+                1000
+              ],
+              [
+                "B",
+                "adjustment",
+                "approved-1",
+                10
+              ],
+              [
+                "B",
+                "business",
+                "W",
+                35
+              ],
+              [
+                "B",
+                "business",
+                "X",
+                0
+              ],
+              [
+                "B",
+                "business",
+                "Y",
+                0
+              ],
+              [
+                "B",
+                "opening",
+                "opening",
+                500
+              ]
+            ]
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\final",
+          "details": {
+            "desired": [
+              [
+                "A",
+                "adjustment",
+                "approved-1",
+                -25
+              ],
+              [
+                "A",
+                "adjustment",
+                "approved-2",
+                -7
+              ],
+              [
+                "A",
+                "business",
+                "X",
+                135
+              ],
+              [
+                "A",
+                "business",
+                "Z",
+                50
+              ],
+              [
+                "A",
+                "opening",
+                "opening",
+                1000
+              ],
+              [
+                "B",
+                "adjustment",
+                "approved-1",
+                10
+              ],
+              [
+                "B",
+                "business",
+                "W",
+                35
+              ],
+              [
+                "B",
+                "business",
+                "X",
+                0
+              ],
+              [
+                "B",
+                "business",
+                "Y",
+                0
+              ],
+              [
+                "B",
+                "opening",
+                "opening",
+                500
+              ]
+            ]
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\local.sqlite",
+          "details": {
+            "desired": [
+              [
+                "A",
+                "adjustment",
+                "approved-1",
+                -25
+              ],
+              [
+                "A",
+                "adjustment",
+                "approved-2",
+                -7
+              ],
+              [
+                "A",
+                "business",
+                "X",
+                135
+              ],
+              [
+                "A",
+                "business",
+                "Z",
+                50
+              ],
+              [
+                "A",
+                "opening",
+                "opening",
+                1000
+              ],
+              [
+                "B",
+                "adjustment",
+                "approved-1",
+                10
+              ],
+              [
+                "B",
+                "business",
+                "W",
+                35
+              ],
+              [
+                "B",
+                "business",
+                "X",
+                0
+              ],
+              [
+                "B",
+                "business",
+                "Y",
+                0
+              ],
+              [
+                "B",
+                "opening",
+                "opening",
+                500
+              ]
+            ]
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\repaired-incident",
+          "details": {
+            "desired": [
+              [
+                "A",
+                "adjustment",
+                "approved-1",
+                -25
+              ],
+              [
+                "A",
+                "business",
+                "X",
+                0
+              ],
+              [
+                "A",
+                "business",
+                "Z",
+                40
+              ],
+              [
+                "A",
+                "opening",
+                "opening",
+                1000
+              ],
+              [
+                "B",
+                "adjustment",
+                "approved-1",
+                10
+              ],
+              [
+                "B",
+                "business",
+                "X",
+                200
+              ],
+              [
+                "B",
+                "business",
+                "Y",
+                0
+              ],
+              [
+                "B",
+                "opening",
+                "opening",
+                500
+              ],
+              [
+                "C",
+                "business",
+                "X",
+                60
+              ],
+              [
+                "C",
+                "opening",
+                "opening",
+                300
+              ]
+            ]
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\repaired-current",
+          "details": {
+            "desired": [
+              [
+                "A",
+                "adjustment",
+                "approved-1",
+                -25
+              ],
+              [
+                "A",
+                "adjustment",
+                "approved-2",
+                -5
+              ],
+              [
+                "A",
+                "business",
+                "X",
+                110
+              ],
+              [
+                "A",
+                "business",
+                "Z",
+                50
+              ],
+              [
+                "A",
+                "opening",
+                "opening",
+                1000
+              ],
+              [
+                "B",
+                "adjustment",
+                "approved-1",
+                10
+              ],
+              [
+                "B",
+                "business",
+                "W",
+                35
+              ],
+              [
+                "B",
+                "business",
+                "X",
+                0
+              ],
+              [
+                "B",
+                "business",
+                "Y",
+                0
+              ],
+              [
+                "B",
+                "opening",
+                "opening",
+                500
+              ],
+              [
+                "C",
+                "business",
+                "X",
+                60
+              ],
+              [
+                "C",
+                "opening",
+                "opening",
+                300
+              ]
+            ]
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\final",
+          "details": {
+            "desired": [
+              [
+                "A",
+                "adjustment",
+                "approved-1",
+                -25
+              ],
+              [
+                "A",
+                "adjustment",
+                "approved-2",
+                -5
+              ],
+              [
+                "A",
+                "business",
+                "X",
+                110
+              ],
+              [
+                "A",
+                "business",
+                "Z",
+                50
+              ],
+              [
+                "A",
+                "opening",
+                "opening",
+                1000
+              ],
+              [
+                "B",
+                "adjustment",
+                "approved-1",
+                10
+              ],
+              [
+                "B",
+                "business",
+                "W",
+                35
+              ],
+              [
+                "B",
+                "business",
+                "X",
+                0
+              ],
+              [
+                "B",
+                "business",
+                "Y",
+                0
+              ],
+              [
+                "B",
+                "opening",
+                "opening",
+                500
+              ],
+              [
+                "C",
+                "business",
+                "X",
+                60
+              ],
+              [
+                "C",
+                "opening",
+                "opening",
+                300
+              ]
+            ]
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\local.sqlite",
+          "details": {
+            "desired": [
+              [
+                "A",
+                "adjustment",
+                "approved-1",
+                -25
+              ],
+              [
+                "A",
+                "adjustment",
+                "approved-2",
+                -5
+              ],
+              [
+                "A",
+                "business",
+                "X",
+                110
+              ],
+              [
+                "A",
+                "business",
+                "Z",
+                50
+              ],
+              [
+                "A",
+                "opening",
+                "opening",
+                1000
+              ],
+              [
+                "B",
+                "adjustment",
+                "approved-1",
+                10
+              ],
+              [
+                "B",
+                "business",
+                "W",
+                35
+              ],
+              [
+                "B",
+                "business",
+                "X",
+                0
+              ],
+              [
+                "B",
+                "business",
+                "Y",
+                0
+              ],
+              [
+                "B",
+                "opening",
+                "opening",
+                500
+              ],
+              [
+                "C",
+                "business",
+                "X",
+                60
+              ],
+              [
+                "C",
+                "opening",
+                "opening",
+                300
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "M06": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\repaired-incident",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\repaired-current",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\final",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\local.sqlite",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\repaired-incident",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\repaired-current",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\final",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\local.sqlite",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\repaired-incident",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\repaired-current",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\final",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\local.sqlite",
+          "details": null
+        }
+      ]
+    },
+    "M07": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\repaired-incident",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\repaired-current",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\final",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\local.sqlite",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\repaired-incident",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\repaired-current",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\final",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\local.sqlite",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\repaired-incident",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\repaired-current",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\final",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\local.sqlite",
+          "details": null
+        }
+      ]
+    },
+    "M08": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\repaired-incident",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\repaired-current",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\final",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\local.sqlite",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\repaired-incident",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\repaired-current",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\final",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\local.sqlite",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\repaired-incident",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\repaired-current",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\final",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\local.sqlite",
+          "details": null
+        }
+      ]
+    },
+    "M09": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\local.sqlite",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\local.sqlite",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\local.sqlite",
+          "details": null
+        }
+      ]
+    },
+    "M10": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\events.json",
+          "details": null
+        }
+      ]
+    },
+    "M11": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\events.json",
+          "details": null
+        }
+      ]
+    },
+    "M12": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\events.json",
+          "details": {
+            "window": "incident",
+            "expected": {
+              "window_id": "incident",
+              "pending": 2,
+              "total": 5,
+              "conflicts": 1,
+              "mismatched_sources": 6
+            }
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\events.json",
+          "details": {
+            "window": "repaired",
+            "expected": {
+              "window_id": "repaired",
+              "pending": 0,
+              "total": 10,
+              "conflicts": 1,
+              "mismatched_sources": 0
+            }
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\events.json",
+          "details": {
+            "window": "changed",
+            "expected": {
+              "window_id": "changed",
+              "pending": 0,
+              "total": 10,
+              "conflicts": 0,
+              "mismatched_sources": 5
+            }
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\events.json",
+          "details": {
+            "window": "current",
+            "expected": {
+              "window_id": "current",
+              "pending": 0,
+              "total": 15,
+              "conflicts": 0,
+              "mismatched_sources": 0
+            }
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\events.json",
+          "details": {
+            "window": "after-restart",
+            "expected": {
+              "window_id": "after-restart",
+              "pending": 0,
+              "total": 15,
+              "conflicts": 0,
+              "mismatched_sources": 0
+            }
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\events.json",
+          "details": {
+            "window": "empty",
+            "expected": {
+              "window_id": "empty",
+              "pending": 0,
+              "total": 0,
+              "conflicts": 0,
+              "mismatched_sources": 0
+            }
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\events.json",
+          "details": {
+            "window": "incident",
+            "expected": {
+              "window_id": "incident",
+              "pending": 2,
+              "total": 5,
+              "conflicts": 1,
+              "mismatched_sources": 6
+            }
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\events.json",
+          "details": {
+            "window": "repaired",
+            "expected": {
+              "window_id": "repaired",
+              "pending": 0,
+              "total": 10,
+              "conflicts": 1,
+              "mismatched_sources": 0
+            }
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\events.json",
+          "details": {
+            "window": "changed",
+            "expected": {
+              "window_id": "changed",
+              "pending": 0,
+              "total": 10,
+              "conflicts": 0,
+              "mismatched_sources": 5
+            }
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\events.json",
+          "details": {
+            "window": "current",
+            "expected": {
+              "window_id": "current",
+              "pending": 0,
+              "total": 15,
+              "conflicts": 0,
+              "mismatched_sources": 0
+            }
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\events.json",
+          "details": {
+            "window": "after-restart",
+            "expected": {
+              "window_id": "after-restart",
+              "pending": 0,
+              "total": 15,
+              "conflicts": 0,
+              "mismatched_sources": 0
+            }
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\events.json",
+          "details": {
+            "window": "empty",
+            "expected": {
+              "window_id": "empty",
+              "pending": 0,
+              "total": 0,
+              "conflicts": 0,
+              "mismatched_sources": 0
+            }
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\events.json",
+          "details": {
+            "window": "incident",
+            "expected": {
+              "window_id": "incident",
+              "pending": 2,
+              "total": 6,
+              "conflicts": 1,
+              "mismatched_sources": 7
+            }
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\events.json",
+          "details": {
+            "window": "repaired",
+            "expected": {
+              "window_id": "repaired",
+              "pending": 0,
+              "total": 12,
+              "conflicts": 1,
+              "mismatched_sources": 0
+            }
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\events.json",
+          "details": {
+            "window": "changed",
+            "expected": {
+              "window_id": "changed",
+              "pending": 0,
+              "total": 12,
+              "conflicts": 0,
+              "mismatched_sources": 5
+            }
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\events.json",
+          "details": {
+            "window": "current",
+            "expected": {
+              "window_id": "current",
+              "pending": 0,
+              "total": 17,
+              "conflicts": 0,
+              "mismatched_sources": 0
+            }
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\events.json",
+          "details": {
+            "window": "after-restart",
+            "expected": {
+              "window_id": "after-restart",
+              "pending": 0,
+              "total": 17,
+              "conflicts": 0,
+              "mismatched_sources": 0
+            }
+          }
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\events.json",
+          "details": {
+            "window": "empty",
+            "expected": {
+              "window_id": "empty",
+              "pending": 0,
+              "total": 0,
+              "conflicts": 0,
+              "mismatched_sources": 0
+            }
+          }
+        }
+      ]
+    },
+    "M13": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\events.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\events.json",
+          "details": null
+        }
+      ]
+    },
+    "M14": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\isolation.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\delivery\\reconciliation.csv",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\delivery\\business.csv",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base\\results\\run\\delivery\\monitor.csv",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\isolation.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\delivery\\reconciliation.csv",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\delivery\\business.csv",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount\\results\\run\\delivery\\monitor.csv",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\isolation.json",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\delivery\\reconciliation.csv",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\delivery\\business.csv",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant\\results\\run\\delivery\\monitor.csv",
+          "details": null
+        }
+      ]
+    },
+    "M15": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "same immutable submission over all registered inputs",
+          "details": null
+        }
+      ]
+    },
+    "H01": {
+      "status": "unassessed",
+      "evidence": "whole-case independent review pending"
+    },
+    "H02": {
+      "status": "unassessed",
+      "evidence": "whole-case independent review pending"
+    },
+    "H03": {
+      "status": "unassessed",
+      "evidence": "whole-case independent review pending"
+    },
+    "H04": {
+      "status": "unassessed",
+      "evidence": "whole-case independent review pending"
+    },
+    "H05": {
+      "status": "unassessed",
+      "evidence": "whole-case independent review pending"
+    }
+  }
+}

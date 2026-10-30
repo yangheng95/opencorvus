@@ -1,0 +1,932 @@
+{
+  "base": {
+    "local": {
+      "journal": [
+        {
+          "seq": 1,
+          "tenant": "A",
+          "request_id": "q1",
+          "event_id": "X",
+          "revision": 1,
+          "kind": "settle",
+          "amount_minor": 100,
+          "payload": "{\"amount_minor\":100,\"event_id\":\"X\",\"kind\":\"settle\",\"request_id\":\"q1\",\"revision\":1,\"tenant\":\"A\"}"
+        },
+        {
+          "seq": 2,
+          "tenant": "B",
+          "request_id": "q2",
+          "event_id": "X",
+          "revision": 1,
+          "kind": "settle",
+          "amount_minor": 200,
+          "payload": "{\"amount_minor\":200,\"event_id\":\"X\",\"kind\":\"settle\",\"request_id\":\"q2\",\"revision\":1,\"tenant\":\"B\"}"
+        },
+        {
+          "seq": 3,
+          "tenant": "A",
+          "request_id": "q3",
+          "event_id": "X",
+          "revision": 2,
+          "kind": "settle",
+          "amount_minor": 120,
+          "payload": "{\"amount_minor\":120,\"event_id\":\"X\",\"kind\":\"settle\",\"request_id\":\"q3\",\"revision\":2,\"tenant\":\"A\"}"
+        },
+        {
+          "seq": 4,
+          "tenant": "A",
+          "request_id": "q4",
+          "event_id": "X",
+          "revision": 2,
+          "kind": "settle",
+          "amount_minor": 90,
+          "payload": "{\"amount_minor\":90,\"event_id\":\"X\",\"kind\":\"settle\",\"request_id\":\"q4\",\"revision\":2,\"tenant\":\"A\"}"
+        },
+        {
+          "seq": 5,
+          "tenant": "B",
+          "request_id": "q5",
+          "event_id": "Y",
+          "revision": 1,
+          "kind": "settle",
+          "amount_minor": 70,
+          "payload": "{\"amount_minor\":70,\"event_id\":\"Y\",\"kind\":\"settle\",\"request_id\":\"q5\",\"revision\":1,\"tenant\":\"B\"}"
+        },
+        {
+          "seq": 6,
+          "tenant": "B",
+          "request_id": "q6",
+          "event_id": "Y",
+          "revision": 2,
+          "kind": "cancel",
+          "amount_minor": 0,
+          "payload": "{\"amount_minor\":0,\"event_id\":\"Y\",\"kind\":\"cancel\",\"request_id\":\"q6\",\"revision\":2,\"tenant\":\"B\"}"
+        },
+        {
+          "seq": 7,
+          "tenant": "A",
+          "request_id": "q7",
+          "event_id": "Z",
+          "revision": 1,
+          "kind": "settle",
+          "amount_minor": 40,
+          "payload": "{\"amount_minor\":40,\"event_id\":\"Z\",\"kind\":\"settle\",\"request_id\":\"q7\",\"revision\":1,\"tenant\":\"A\"}"
+        }
+      ],
+      "opening": [
+        {
+          "tenant": "A",
+          "amount_minor": 1000
+        },
+        {
+          "tenant": "B",
+          "amount_minor": 500
+        }
+      ],
+      "adjustments": [
+        {
+          "tenant": "A",
+          "adjustment_id": "approved-1",
+          "amount_minor": -25,
+          "approval": "approval-A1"
+        },
+        {
+          "tenant": "B",
+          "adjustment_id": "approved-1",
+          "amount_minor": 10,
+          "approval": "approval-B1"
+        }
+      ],
+      "notes": [
+        {
+          "tenant": "A",
+          "note_id": "original-note",
+          "body": "核对原收据\u0000保留原文"
+        }
+      ],
+      "projection": [
+        {
+          "tenant": "A",
+          "event_id": "X",
+          "revision": 1,
+          "status": "settle",
+          "amount_minor": 100
+        },
+        {
+          "tenant": "B",
+          "event_id": "Y",
+          "revision": 1,
+          "status": "settle",
+          "amount_minor": 70
+        },
+        {
+          "tenant": "A",
+          "event_id": "Z",
+          "revision": 1,
+          "status": "settle",
+          "amount_minor": 40
+        }
+      ],
+      "postings": [
+        {
+          "seq": 1,
+          "tenant": "A",
+          "event_id": "pa50af9d9d22d4f32bddad16e7e3121cf",
+          "payload": "{\"amount_minor\":1000,\"event_id\":\"pa50af9d9d22d4f32bddad16e7e3121cf\",\"kind\":\"post\",\"reverses\":null,\"tenant\":\"A\"}",
+          "source_kind": "opening",
+          "source_id": "opening",
+          "boundary_seq": 0,
+          "epoch": 1,
+          "receipt_id": "a16aad7e-3b47-46e8-a9a0-0b037587b462"
+        },
+        {
+          "seq": 2,
+          "tenant": "B",
+          "event_id": "p8648b2b1bbf3409999de37037c54aaea",
+          "payload": "{\"amount_minor\":500,\"event_id\":\"p8648b2b1bbf3409999de37037c54aaea\",\"kind\":\"post\",\"reverses\":null,\"tenant\":\"B\"}",
+          "source_kind": "opening",
+          "source_id": "opening",
+          "boundary_seq": 0,
+          "epoch": 1,
+          "receipt_id": "0137682f-2a53-421d-a7ff-300dfca9d0e1"
+        },
+        {
+          "seq": 3,
+          "tenant": "A",
+          "event_id": "pb857063c973a40f3857dec52b5158245",
+          "payload": "{\"amount_minor\":100,\"event_id\":\"pb857063c973a40f3857dec52b5158245\",\"kind\":\"post\",\"reverses\":null,\"tenant\":\"A\"}",
+          "source_kind": "business",
+          "source_id": "X",
+          "boundary_seq": 1,
+          "epoch": 1,
+          "receipt_id": null
+        },
+        {
+          "seq": 4,
+          "tenant": "B",
+          "event_id": "pf8f50853752b49be9ff0a600c913b4de",
+          "payload": "{\"amount_minor\":70,\"event_id\":\"pf8f50853752b49be9ff0a600c913b4de\",\"kind\":\"post\",\"reverses\":null,\"tenant\":\"B\"}",
+          "source_kind": "business",
+          "source_id": "Y",
+          "boundary_seq": 5,
+          "epoch": 1,
+          "receipt_id": "77bb2b12-b302-4f9d-a2e7-633064a8dc23"
+        },
+        {
+          "seq": 5,
+          "tenant": "A",
+          "event_id": "p5c40fa240c904c2f8128e65328059900",
+          "payload": "{\"amount_minor\":40,\"event_id\":\"p5c40fa240c904c2f8128e65328059900\",\"kind\":\"post\",\"reverses\":null,\"tenant\":\"A\"}",
+          "source_kind": "business",
+          "source_id": "Z",
+          "boundary_seq": 7,
+          "epoch": 1,
+          "receipt_id": null
+        }
+      ],
+      "control": [
+        {
+          "id": 1,
+          "epoch": 1,
+          "active": 1
+        }
+      ]
+    },
+    "remote_effects": [
+      {
+        "tenant": "A",
+        "event_id": "pa50af9d9d22d4f32bddad16e7e3121cf",
+        "kind": "post",
+        "amount_minor": 1000,
+        "reverses": null,
+        "receipt_id": "a16aad7e-3b47-46e8-a9a0-0b037587b462"
+      },
+      {
+        "tenant": "B",
+        "event_id": "p8648b2b1bbf3409999de37037c54aaea",
+        "kind": "post",
+        "amount_minor": 500,
+        "reverses": null,
+        "receipt_id": "0137682f-2a53-421d-a7ff-300dfca9d0e1"
+      },
+      {
+        "tenant": "A",
+        "event_id": "pb857063c973a40f3857dec52b5158245",
+        "kind": "post",
+        "amount_minor": 100,
+        "reverses": null,
+        "receipt_id": "f2565600-69b2-4401-a38a-e21c02ba146d"
+      },
+      {
+        "tenant": "B",
+        "event_id": "pf8f50853752b49be9ff0a600c913b4de",
+        "kind": "post",
+        "amount_minor": 70,
+        "reverses": null,
+        "receipt_id": "77bb2b12-b302-4f9d-a2e7-633064a8dc23"
+      }
+    ],
+    "incoming": {
+      "events": [
+        {
+          "tenant": "A",
+          "request_id": "q8",
+          "event_id": "X",
+          "revision": 3,
+          "kind": "settle",
+          "amount_minor": 110
+        },
+        {
+          "tenant": "A",
+          "request_id": "q9",
+          "event_id": "X",
+          "revision": 4,
+          "kind": "settle",
+          "amount_minor": 140
+        },
+        {
+          "tenant": "A",
+          "request_id": "q10",
+          "event_id": "X",
+          "revision": 5,
+          "kind": "settle",
+          "amount_minor": 110
+        },
+        {
+          "tenant": "A",
+          "request_id": "q11",
+          "event_id": "X",
+          "revision": 1,
+          "kind": "settle",
+          "amount_minor": 100
+        },
+        {
+          "tenant": "B",
+          "request_id": "q12",
+          "event_id": "X",
+          "revision": 2,
+          "kind": "cancel",
+          "amount_minor": 0
+        },
+        {
+          "tenant": "A",
+          "request_id": "q13",
+          "event_id": "Z",
+          "revision": 2,
+          "kind": "settle",
+          "amount_minor": 50
+        },
+        {
+          "tenant": "B",
+          "request_id": "q1",
+          "event_id": "W",
+          "revision": 1,
+          "kind": "settle",
+          "amount_minor": 35
+        }
+      ],
+      "adjustment": {
+        "tenant": "A",
+        "adjustment_id": "approved-2",
+        "amount_minor": -5,
+        "approval": "approval-A2"
+      },
+      "note": {
+        "tenant": "B",
+        "note_id": "new-note",
+        "body": "After repair: retain evidence\n\u0000尾部"
+      }
+    }
+  },
+  "amount": {
+    "local": {
+      "journal": [
+        {
+          "seq": 1,
+          "tenant": "A",
+          "request_id": "q1",
+          "event_id": "X",
+          "revision": 1,
+          "kind": "settle",
+          "amount_minor": 100,
+          "payload": "{\"amount_minor\":100,\"event_id\":\"X\",\"kind\":\"settle\",\"request_id\":\"q1\",\"revision\":1,\"tenant\":\"A\"}"
+        },
+        {
+          "seq": 2,
+          "tenant": "B",
+          "request_id": "q2",
+          "event_id": "X",
+          "revision": 1,
+          "kind": "settle",
+          "amount_minor": 200,
+          "payload": "{\"amount_minor\":200,\"event_id\":\"X\",\"kind\":\"settle\",\"request_id\":\"q2\",\"revision\":1,\"tenant\":\"B\"}"
+        },
+        {
+          "seq": 3,
+          "tenant": "A",
+          "request_id": "q3",
+          "event_id": "X",
+          "revision": 2,
+          "kind": "settle",
+          "amount_minor": 120,
+          "payload": "{\"amount_minor\":120,\"event_id\":\"X\",\"kind\":\"settle\",\"request_id\":\"q3\",\"revision\":2,\"tenant\":\"A\"}"
+        },
+        {
+          "seq": 4,
+          "tenant": "A",
+          "request_id": "q4",
+          "event_id": "X",
+          "revision": 2,
+          "kind": "settle",
+          "amount_minor": 90,
+          "payload": "{\"amount_minor\":90,\"event_id\":\"X\",\"kind\":\"settle\",\"request_id\":\"q4\",\"revision\":2,\"tenant\":\"A\"}"
+        },
+        {
+          "seq": 5,
+          "tenant": "B",
+          "request_id": "q5",
+          "event_id": "Y",
+          "revision": 1,
+          "kind": "settle",
+          "amount_minor": 70,
+          "payload": "{\"amount_minor\":70,\"event_id\":\"Y\",\"kind\":\"settle\",\"request_id\":\"q5\",\"revision\":1,\"tenant\":\"B\"}"
+        },
+        {
+          "seq": 6,
+          "tenant": "B",
+          "request_id": "q6",
+          "event_id": "Y",
+          "revision": 2,
+          "kind": "cancel",
+          "amount_minor": 0,
+          "payload": "{\"amount_minor\":0,\"event_id\":\"Y\",\"kind\":\"cancel\",\"request_id\":\"q6\",\"revision\":2,\"tenant\":\"B\"}"
+        },
+        {
+          "seq": 7,
+          "tenant": "A",
+          "request_id": "q7",
+          "event_id": "Z",
+          "revision": 1,
+          "kind": "settle",
+          "amount_minor": 40,
+          "payload": "{\"amount_minor\":40,\"event_id\":\"Z\",\"kind\":\"settle\",\"request_id\":\"q7\",\"revision\":1,\"tenant\":\"A\"}"
+        }
+      ],
+      "opening": [
+        {
+          "tenant": "A",
+          "amount_minor": 1000
+        },
+        {
+          "tenant": "B",
+          "amount_minor": 500
+        }
+      ],
+      "adjustments": [
+        {
+          "tenant": "A",
+          "adjustment_id": "approved-1",
+          "amount_minor": -25,
+          "approval": "approval-A1"
+        },
+        {
+          "tenant": "B",
+          "adjustment_id": "approved-1",
+          "amount_minor": 10,
+          "approval": "approval-B1"
+        }
+      ],
+      "notes": [
+        {
+          "tenant": "A",
+          "note_id": "original-note",
+          "body": "核对原收据\u0000保留原文"
+        }
+      ],
+      "projection": [
+        {
+          "tenant": "A",
+          "event_id": "X",
+          "revision": 1,
+          "status": "settle",
+          "amount_minor": 100
+        },
+        {
+          "tenant": "B",
+          "event_id": "Y",
+          "revision": 1,
+          "status": "settle",
+          "amount_minor": 70
+        },
+        {
+          "tenant": "A",
+          "event_id": "Z",
+          "revision": 1,
+          "status": "settle",
+          "amount_minor": 40
+        }
+      ],
+      "postings": [
+        {
+          "seq": 1,
+          "tenant": "A",
+          "event_id": "pa50af9d9d22d4f32bddad16e7e3121cf",
+          "payload": "{\"amount_minor\":1000,\"event_id\":\"pa50af9d9d22d4f32bddad16e7e3121cf\",\"kind\":\"post\",\"reverses\":null,\"tenant\":\"A\"}",
+          "source_kind": "opening",
+          "source_id": "opening",
+          "boundary_seq": 0,
+          "epoch": 1,
+          "receipt_id": "a16aad7e-3b47-46e8-a9a0-0b037587b462"
+        },
+        {
+          "seq": 2,
+          "tenant": "B",
+          "event_id": "p8648b2b1bbf3409999de37037c54aaea",
+          "payload": "{\"amount_minor\":500,\"event_id\":\"p8648b2b1bbf3409999de37037c54aaea\",\"kind\":\"post\",\"reverses\":null,\"tenant\":\"B\"}",
+          "source_kind": "opening",
+          "source_id": "opening",
+          "boundary_seq": 0,
+          "epoch": 1,
+          "receipt_id": "0137682f-2a53-421d-a7ff-300dfca9d0e1"
+        },
+        {
+          "seq": 3,
+          "tenant": "A",
+          "event_id": "pb857063c973a40f3857dec52b5158245",
+          "payload": "{\"amount_minor\":100,\"event_id\":\"pb857063c973a40f3857dec52b5158245\",\"kind\":\"post\",\"reverses\":null,\"tenant\":\"A\"}",
+          "source_kind": "business",
+          "source_id": "X",
+          "boundary_seq": 1,
+          "epoch": 1,
+          "receipt_id": null
+        },
+        {
+          "seq": 4,
+          "tenant": "B",
+          "event_id": "pf8f50853752b49be9ff0a600c913b4de",
+          "payload": "{\"amount_minor\":70,\"event_id\":\"pf8f50853752b49be9ff0a600c913b4de\",\"kind\":\"post\",\"reverses\":null,\"tenant\":\"B\"}",
+          "source_kind": "business",
+          "source_id": "Y",
+          "boundary_seq": 5,
+          "epoch": 1,
+          "receipt_id": "77bb2b12-b302-4f9d-a2e7-633064a8dc23"
+        },
+        {
+          "seq": 5,
+          "tenant": "A",
+          "event_id": "p5c40fa240c904c2f8128e65328059900",
+          "payload": "{\"amount_minor\":40,\"event_id\":\"p5c40fa240c904c2f8128e65328059900\",\"kind\":\"post\",\"reverses\":null,\"tenant\":\"A\"}",
+          "source_kind": "business",
+          "source_id": "Z",
+          "boundary_seq": 7,
+          "epoch": 1,
+          "receipt_id": null
+        }
+      ],
+      "control": [
+        {
+          "id": 1,
+          "epoch": 1,
+          "active": 1
+        }
+      ]
+    },
+    "remote_effects": [
+      {
+        "tenant": "A",
+        "event_id": "pa50af9d9d22d4f32bddad16e7e3121cf",
+        "kind": "post",
+        "amount_minor": 1000,
+        "reverses": null,
+        "receipt_id": "a16aad7e-3b47-46e8-a9a0-0b037587b462"
+      },
+      {
+        "tenant": "B",
+        "event_id": "p8648b2b1bbf3409999de37037c54aaea",
+        "kind": "post",
+        "amount_minor": 500,
+        "reverses": null,
+        "receipt_id": "0137682f-2a53-421d-a7ff-300dfca9d0e1"
+      },
+      {
+        "tenant": "A",
+        "event_id": "pb857063c973a40f3857dec52b5158245",
+        "kind": "post",
+        "amount_minor": 100,
+        "reverses": null,
+        "receipt_id": "f2565600-69b2-4401-a38a-e21c02ba146d"
+      },
+      {
+        "tenant": "B",
+        "event_id": "pf8f50853752b49be9ff0a600c913b4de",
+        "kind": "post",
+        "amount_minor": 70,
+        "reverses": null,
+        "receipt_id": "77bb2b12-b302-4f9d-a2e7-633064a8dc23"
+      }
+    ],
+    "incoming": {
+      "events": [
+        {
+          "tenant": "A",
+          "request_id": "q8",
+          "event_id": "X",
+          "revision": 3,
+          "kind": "settle",
+          "amount_minor": 110
+        },
+        {
+          "tenant": "A",
+          "request_id": "q9",
+          "event_id": "X",
+          "revision": 4,
+          "kind": "settle",
+          "amount_minor": 140
+        },
+        {
+          "tenant": "A",
+          "request_id": "q10",
+          "event_id": "X",
+          "revision": 5,
+          "kind": "settle",
+          "amount_minor": 135
+        },
+        {
+          "tenant": "A",
+          "request_id": "q11",
+          "event_id": "X",
+          "revision": 1,
+          "kind": "settle",
+          "amount_minor": 100
+        },
+        {
+          "tenant": "B",
+          "request_id": "q12",
+          "event_id": "X",
+          "revision": 2,
+          "kind": "cancel",
+          "amount_minor": 0
+        },
+        {
+          "tenant": "A",
+          "request_id": "q13",
+          "event_id": "Z",
+          "revision": 2,
+          "kind": "settle",
+          "amount_minor": 50
+        },
+        {
+          "tenant": "B",
+          "request_id": "q1",
+          "event_id": "W",
+          "revision": 1,
+          "kind": "settle",
+          "amount_minor": 35
+        }
+      ],
+      "adjustment": {
+        "tenant": "A",
+        "adjustment_id": "approved-2",
+        "amount_minor": -7,
+        "approval": "approval-A2"
+      },
+      "note": {
+        "tenant": "B",
+        "note_id": "new-note",
+        "body": "After repair: retain evidence\n\u0000尾部"
+      }
+    }
+  },
+  "tenant": {
+    "local": {
+      "journal": [
+        {
+          "seq": 1,
+          "tenant": "A",
+          "request_id": "q1",
+          "event_id": "X",
+          "revision": 1,
+          "kind": "settle",
+          "amount_minor": 100,
+          "payload": "{\"amount_minor\":100,\"event_id\":\"X\",\"kind\":\"settle\",\"request_id\":\"q1\",\"revision\":1,\"tenant\":\"A\"}"
+        },
+        {
+          "seq": 2,
+          "tenant": "B",
+          "request_id": "q2",
+          "event_id": "X",
+          "revision": 1,
+          "kind": "settle",
+          "amount_minor": 200,
+          "payload": "{\"amount_minor\":200,\"event_id\":\"X\",\"kind\":\"settle\",\"request_id\":\"q2\",\"revision\":1,\"tenant\":\"B\"}"
+        },
+        {
+          "seq": 3,
+          "tenant": "A",
+          "request_id": "q3",
+          "event_id": "X",
+          "revision": 2,
+          "kind": "settle",
+          "amount_minor": 120,
+          "payload": "{\"amount_minor\":120,\"event_id\":\"X\",\"kind\":\"settle\",\"request_id\":\"q3\",\"revision\":2,\"tenant\":\"A\"}"
+        },
+        {
+          "seq": 4,
+          "tenant": "A",
+          "request_id": "q4",
+          "event_id": "X",
+          "revision": 2,
+          "kind": "settle",
+          "amount_minor": 90,
+          "payload": "{\"amount_minor\":90,\"event_id\":\"X\",\"kind\":\"settle\",\"request_id\":\"q4\",\"revision\":2,\"tenant\":\"A\"}"
+        },
+        {
+          "seq": 5,
+          "tenant": "B",
+          "request_id": "q5",
+          "event_id": "Y",
+          "revision": 1,
+          "kind": "settle",
+          "amount_minor": 70,
+          "payload": "{\"amount_minor\":70,\"event_id\":\"Y\",\"kind\":\"settle\",\"request_id\":\"q5\",\"revision\":1,\"tenant\":\"B\"}"
+        },
+        {
+          "seq": 6,
+          "tenant": "B",
+          "request_id": "q6",
+          "event_id": "Y",
+          "revision": 2,
+          "kind": "cancel",
+          "amount_minor": 0,
+          "payload": "{\"amount_minor\":0,\"event_id\":\"Y\",\"kind\":\"cancel\",\"request_id\":\"q6\",\"revision\":2,\"tenant\":\"B\"}"
+        },
+        {
+          "seq": 7,
+          "tenant": "A",
+          "request_id": "q7",
+          "event_id": "Z",
+          "revision": 1,
+          "kind": "settle",
+          "amount_minor": 40,
+          "payload": "{\"amount_minor\":40,\"event_id\":\"Z\",\"kind\":\"settle\",\"request_id\":\"q7\",\"revision\":1,\"tenant\":\"A\"}"
+        },
+        {
+          "seq": 8,
+          "tenant": "C",
+          "request_id": "q1",
+          "event_id": "X",
+          "revision": 1,
+          "kind": "settle",
+          "amount_minor": 60,
+          "payload": "{\"amount_minor\":60,\"event_id\":\"X\",\"kind\":\"settle\",\"request_id\":\"q1\",\"revision\":1,\"tenant\":\"C\"}"
+        }
+      ],
+      "opening": [
+        {
+          "tenant": "A",
+          "amount_minor": 1000
+        },
+        {
+          "tenant": "B",
+          "amount_minor": 500
+        },
+        {
+          "tenant": "C",
+          "amount_minor": 300
+        }
+      ],
+      "adjustments": [
+        {
+          "tenant": "A",
+          "adjustment_id": "approved-1",
+          "amount_minor": -25,
+          "approval": "approval-A1"
+        },
+        {
+          "tenant": "B",
+          "adjustment_id": "approved-1",
+          "amount_minor": 10,
+          "approval": "approval-B1"
+        }
+      ],
+      "notes": [
+        {
+          "tenant": "A",
+          "note_id": "original-note",
+          "body": "核对原收据\u0000保留原文"
+        }
+      ],
+      "projection": [
+        {
+          "tenant": "A",
+          "event_id": "X",
+          "revision": 1,
+          "status": "settle",
+          "amount_minor": 100
+        },
+        {
+          "tenant": "B",
+          "event_id": "Y",
+          "revision": 1,
+          "status": "settle",
+          "amount_minor": 70
+        },
+        {
+          "tenant": "A",
+          "event_id": "Z",
+          "revision": 1,
+          "status": "settle",
+          "amount_minor": 40
+        }
+      ],
+      "postings": [
+        {
+          "seq": 1,
+          "tenant": "A",
+          "event_id": "pa50af9d9d22d4f32bddad16e7e3121cf",
+          "payload": "{\"amount_minor\":1000,\"event_id\":\"pa50af9d9d22d4f32bddad16e7e3121cf\",\"kind\":\"post\",\"reverses\":null,\"tenant\":\"A\"}",
+          "source_kind": "opening",
+          "source_id": "opening",
+          "boundary_seq": 0,
+          "epoch": 1,
+          "receipt_id": "a16aad7e-3b47-46e8-a9a0-0b037587b462"
+        },
+        {
+          "seq": 2,
+          "tenant": "B",
+          "event_id": "p8648b2b1bbf3409999de37037c54aaea",
+          "payload": "{\"amount_minor\":500,\"event_id\":\"p8648b2b1bbf3409999de37037c54aaea\",\"kind\":\"post\",\"reverses\":null,\"tenant\":\"B\"}",
+          "source_kind": "opening",
+          "source_id": "opening",
+          "boundary_seq": 0,
+          "epoch": 1,
+          "receipt_id": "0137682f-2a53-421d-a7ff-300dfca9d0e1"
+        },
+        {
+          "seq": 3,
+          "tenant": "A",
+          "event_id": "pb857063c973a40f3857dec52b5158245",
+          "payload": "{\"amount_minor\":100,\"event_id\":\"pb857063c973a40f3857dec52b5158245\",\"kind\":\"post\",\"reverses\":null,\"tenant\":\"A\"}",
+          "source_kind": "business",
+          "source_id": "X",
+          "boundary_seq": 1,
+          "epoch": 1,
+          "receipt_id": null
+        },
+        {
+          "seq": 4,
+          "tenant": "B",
+          "event_id": "pf8f50853752b49be9ff0a600c913b4de",
+          "payload": "{\"amount_minor\":70,\"event_id\":\"pf8f50853752b49be9ff0a600c913b4de\",\"kind\":\"post\",\"reverses\":null,\"tenant\":\"B\"}",
+          "source_kind": "business",
+          "source_id": "Y",
+          "boundary_seq": 5,
+          "epoch": 1,
+          "receipt_id": "77bb2b12-b302-4f9d-a2e7-633064a8dc23"
+        },
+        {
+          "seq": 5,
+          "tenant": "A",
+          "event_id": "p5c40fa240c904c2f8128e65328059900",
+          "payload": "{\"amount_minor\":40,\"event_id\":\"p5c40fa240c904c2f8128e65328059900\",\"kind\":\"post\",\"reverses\":null,\"tenant\":\"A\"}",
+          "source_kind": "business",
+          "source_id": "Z",
+          "boundary_seq": 7,
+          "epoch": 1,
+          "receipt_id": null
+        },
+        {
+          "seq": 6,
+          "tenant": "C",
+          "event_id": "C-opening",
+          "payload": "{\"amount_minor\":300,\"event_id\":\"C-opening\",\"kind\":\"post\",\"reverses\":null,\"tenant\":\"C\"}",
+          "source_kind": "opening",
+          "source_id": "opening",
+          "boundary_seq": 7,
+          "epoch": 1,
+          "receipt_id": "71ae1b50-7bfc-4ae6-ad13-fa742c662059"
+        }
+      ],
+      "control": [
+        {
+          "id": 1,
+          "epoch": 1,
+          "active": 1
+        }
+      ]
+    },
+    "remote_effects": [
+      {
+        "tenant": "A",
+        "event_id": "pa50af9d9d22d4f32bddad16e7e3121cf",
+        "kind": "post",
+        "amount_minor": 1000,
+        "reverses": null,
+        "receipt_id": "a16aad7e-3b47-46e8-a9a0-0b037587b462"
+      },
+      {
+        "tenant": "B",
+        "event_id": "p8648b2b1bbf3409999de37037c54aaea",
+        "kind": "post",
+        "amount_minor": 500,
+        "reverses": null,
+        "receipt_id": "0137682f-2a53-421d-a7ff-300dfca9d0e1"
+      },
+      {
+        "tenant": "A",
+        "event_id": "pb857063c973a40f3857dec52b5158245",
+        "kind": "post",
+        "amount_minor": 100,
+        "reverses": null,
+        "receipt_id": "f2565600-69b2-4401-a38a-e21c02ba146d"
+      },
+      {
+        "tenant": "B",
+        "event_id": "pf8f50853752b49be9ff0a600c913b4de",
+        "kind": "post",
+        "amount_minor": 70,
+        "reverses": null,
+        "receipt_id": "77bb2b12-b302-4f9d-a2e7-633064a8dc23"
+      },
+      {
+        "tenant": "C",
+        "event_id": "C-opening",
+        "kind": "post",
+        "amount_minor": 300,
+        "reverses": null,
+        "receipt_id": "71ae1b50-7bfc-4ae6-ad13-fa742c662059"
+      }
+    ],
+    "incoming": {
+      "events": [
+        {
+          "tenant": "A",
+          "request_id": "q8",
+          "event_id": "X",
+          "revision": 3,
+          "kind": "settle",
+          "amount_minor": 110
+        },
+        {
+          "tenant": "A",
+          "request_id": "q9",
+          "event_id": "X",
+          "revision": 4,
+          "kind": "settle",
+          "amount_minor": 140
+        },
+        {
+          "tenant": "A",
+          "request_id": "q10",
+          "event_id": "X",
+          "revision": 5,
+          "kind": "settle",
+          "amount_minor": 110
+        },
+        {
+          "tenant": "A",
+          "request_id": "q11",
+          "event_id": "X",
+          "revision": 1,
+          "kind": "settle",
+          "amount_minor": 100
+        },
+        {
+          "tenant": "B",
+          "request_id": "q12",
+          "event_id": "X",
+          "revision": 2,
+          "kind": "cancel",
+          "amount_minor": 0
+        },
+        {
+          "tenant": "A",
+          "request_id": "q13",
+          "event_id": "Z",
+          "revision": 2,
+          "kind": "settle",
+          "amount_minor": 50
+        },
+        {
+          "tenant": "B",
+          "request_id": "q1",
+          "event_id": "W",
+          "revision": 1,
+          "kind": "settle",
+          "amount_minor": 35
+        }
+      ],
+      "adjustment": {
+        "tenant": "A",
+        "adjustment_id": "approved-2",
+        "amount_minor": -5,
+        "approval": "approval-A2"
+      },
+      "note": {
+        "tenant": "B",
+        "note_id": "new-note",
+        "body": "After repair: retain evidence\n\u0000尾部"
+      }
+    }
+  }
+}

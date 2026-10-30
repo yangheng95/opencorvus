@@ -1,0 +1,33 @@
+{
+  "checks": {
+    "monitor-object": true,
+    "native-identity": true,
+    "planned-wire": true,
+    "new-epoch": true,
+    "exports": true,
+    "equivalent_new_JSON_wire_accepted": true
+  },
+  "failures": [],
+  "restore_original_findings": {
+    "M01": "verified_fail",
+    "M02": "verified_fail",
+    "M03": "verified_pass",
+    "M04": "verified_fail",
+    "M05": "verified_fail",
+    "M06": "blocked",
+    "M07": "verified_fail",
+    "M08": "blocked",
+    "M09": "verified_fail",
+    "M10": "verified_pass",
+    "M11": "verified_fail",
+    "M12": "verified_fail",
+    "M13": "blocked",
+    "M14": "verified_fail",
+    "M15": "unassessed",
+    "H01": "unassessed",
+    "H02": "unassessed",
+    "H03": "unassessed",
+    "H04": "unassessed",
+    "H05": "unassessed"
+  }
+}

@@ -1,9 +1,11 @@
+> 历史阶段证据，已退役；当前整题见[当前说明](../README.md)，下文保持当时资格边界。
+
 # 原现场到前向补偿的顺序参考
 
 当前三个源码只作作者建设性资格，不提供给候选。`scene_app.py`的legacy_fixture入口实际制造旧应用现场，完整accepted事实保存，但错误projection/投递作为调查输入；它不是生产兼容路径。接收方仍为唯一public/l05_effects.py，HTTP复用current-source/l05_worker.py的request。`run_scene.py --prepare --output NEW`通过真实HTTP生成原两个数据库/首次丢ACK/原receipt；之后`--input INPUT --output NEW`只从相同原库和注入事件源码冷执行。
 
 `check_scene.py`用独立SQL最高版分组和实际两个库重算，对原事实/逐来源/服务receipt/parent余量/账户核对；只认证本作者schema的顺序场景，不是允许任意候选schema的全grader。`--policy oldest|newest`与`--style deferred|incremental`展示正确轨迹自由度；三个具名control是真实错误业务/HTTP/恢复操作，经同一checker判定，不能当候选样本或统计成熟校准。
 
-冻结、真实在途HTTP/epoch并发/进程故障、监测/职业交付、完整rubric和多质量审查仍未完成；不以本小闭环计小时。规范业务意图在public/SCENE-CONTRACT.draft.md，具体已运行状态以资格收据与独立审查为准。
+冻结、真实在途HTTP/epoch并发/进程故障、监测/职业交付、完整rubric和多质量审查仍未完成；不以本小闭环计小时。当时业务草案现封存于../historical-mini-contracts.zip内SCENE-CONTRACT.draft.md，具体已运行状态以资格收据与独立审查为准。
 
 新增`qualify_inflight.py --input 原现场 --output NEW`检验一个真实old HTTP before-apply停点跨越pause/同键reconcile/resume的受控时序。pause在单事务返回已接受切片/完整intent目录，重复pause是already_paused；resume对未确认intent返回unsettled_intents，正常修复复用同一primitive。脚本只控制自己启动的receiver/sender，不以本场景替代完整并发/进程恢复资格。[限定范围的真实执行与独立复核](../qualification/inflight-main/README.md)已取得；EOF未join请求的原失败及有限读取修复另存，不由脚本存在推定全部并发已通过。

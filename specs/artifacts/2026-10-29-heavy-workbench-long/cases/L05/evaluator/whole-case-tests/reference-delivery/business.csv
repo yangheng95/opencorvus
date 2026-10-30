@@ -1,0 +1,15 @@
+stage,tenant,event_id,revision,status,amount_minor
+repaired-incident,A,X,2,quarantined,0
+repaired-incident,A,Z,1,settle,40
+repaired-incident,B,X,1,settle,200
+repaired-incident,B,Y,2,cancel,0
+repaired-current,A,X,5,settle,110
+repaired-current,A,Z,2,settle,50
+repaired-current,B,W,1,settle,35
+repaired-current,B,X,2,cancel,0
+repaired-current,B,Y,2,cancel,0
+final,A,X,5,settle,110
+final,A,Z,2,settle,50
+final,B,W,1,settle,35
+final,B,X,2,cancel,0
+final,B,Y,2,cancel,0

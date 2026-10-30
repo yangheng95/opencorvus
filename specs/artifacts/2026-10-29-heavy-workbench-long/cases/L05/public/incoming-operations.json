@@ -1,0 +1,71 @@
+{
+  "events": [
+    {
+      "tenant": "A",
+      "request_id": "q8",
+      "event_id": "X",
+      "revision": 3,
+      "kind": "settle",
+      "amount_minor": 110
+    },
+    {
+      "tenant": "A",
+      "request_id": "q9",
+      "event_id": "X",
+      "revision": 4,
+      "kind": "settle",
+      "amount_minor": 140
+    },
+    {
+      "tenant": "A",
+      "request_id": "q10",
+      "event_id": "X",
+      "revision": 5,
+      "kind": "settle",
+      "amount_minor": 110
+    },
+    {
+      "tenant": "A",
+      "request_id": "q11",
+      "event_id": "X",
+      "revision": 1,
+      "kind": "settle",
+      "amount_minor": 100
+    },
+    {
+      "tenant": "B",
+      "request_id": "q12",
+      "event_id": "X",
+      "revision": 2,
+      "kind": "cancel",
+      "amount_minor": 0
+    },
+    {
+      "tenant": "A",
+      "request_id": "q13",
+      "event_id": "Z",
+      "revision": 2,
+      "kind": "settle",
+      "amount_minor": 50
+    },
+    {
+      "tenant": "B",
+      "request_id": "q1",
+      "event_id": "W",
+      "revision": 1,
+      "kind": "settle",
+      "amount_minor": 35
+    }
+  ],
+  "adjustment": {
+    "tenant": "A",
+    "adjustment_id": "approved-2",
+    "amount_minor": -5,
+    "approval": "approval-A2"
+  },
+  "note": {
+    "tenant": "B",
+    "note_id": "new-note",
+    "body": "After repair: retain evidence\n\u0000尾部"
+  }
+}

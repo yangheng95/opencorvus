@@ -48,8 +48,8 @@
 
 - [2026-10-30-approved-code-workflow.md](2026-10-30-approved-code-workflow.md)：独立QA的真实审批后提交全流程，保留旧793失败历史。
 
-- [2026-10-30-heavy-workbench-l02-qualification.md](2026-10-30-heavy-workbench-l02-qualification.md)：L02原157/38独评/Q26真实grade100，两方好触发升级；[L04完整成品及剩余缺口](2026-10-29-heavy-workbench-long.md)记录真实切换/恢复/移交与三集中阻断修复，8/10不是成熟十题。
-- [2026-10-30-heavy-workbench-l05-qualification.md](2026-10-30-heavy-workbench-l05-qualification.md)：真实旧现场/补偿/在途HTTP、不同正确图与错误对照；checker及EOF收尾缺口修后独立资格通过。
+- [2026-10-30-heavy-workbench-l02-qualification.md](2026-10-30-heavy-workbench-l02-qualification.md)：L02真实双100触发升级；[持续十题进度](2026-10-29-heavy-workbench-long.md)现9/10开发合同，有效小时未证。
+- [2026-10-30-heavy-workbench-l05-qualification.md](2026-10-30-heavy-workbench-l05-qualification.md)：完整两库事故/真实在途/持久恢复/双sender/监测交付及三输入/正错程序/整审开发冻，参考100、伪保证94关键失败。
 
 - [2026-10-30-mission-selection-journey.md](2026-10-30-mission-selection-journey.md)：创建表单专家团搜索与选择的实际体验。
 

@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L05\\evaluator\\check_l05.py",
+    "--registered",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L05\\evaluator\\registered-inputs.json",
+    "--rubric",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L05\\rubric.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-ack_new_key-repaired-assessment",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-ack_new_key-base\\results\\run",
+    "--raw",
+    "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\raw-closed-base"
+  ],
+  "exit_code": 4,
+  "stdout": "{\"status\": \"assessment_incomplete\", \"subject_role\": \"author_reference_or_error_control\", \"run_roots\": [\"D:\\\\opencorvus-benchmark-runs\\\\l05-full-case-20261031\\\\closed-ack_new_key-base\\\\results\\\\run\"], \"fixed_denominator\": 100, \"total\": null, \"business_success\": null, \"good\": null, \"failed\": [\"M07\", \"M10\"], \"unresolved\": [\"M15\", \"H01\", \"H02\", \"H03\", \"H04\", \"H05\"], \"critical_unmet\": [\"M07\", \"M10\", \"M15\", \"H01\", \"H02\", \"H03\", \"H05\"]}\n",
+  "stderr": ""
+}

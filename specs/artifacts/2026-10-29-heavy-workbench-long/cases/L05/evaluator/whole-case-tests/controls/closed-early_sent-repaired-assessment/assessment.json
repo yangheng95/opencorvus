@@ -1,0 +1,389 @@
+{
+  "status": "assessment_incomplete",
+  "subject_role": "author_reference_or_error_control",
+  "run_roots": [
+    "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run"
+  ],
+  "fixed_denominator": 100,
+  "total": null,
+  "business_success": null,
+  "good": null,
+  "failed": [
+    "M01",
+    "M07"
+  ],
+  "unresolved": [
+    "M02",
+    "M03",
+    "M04",
+    "M05",
+    "M06",
+    "M08",
+    "M10",
+    "M11",
+    "M12",
+    "M13",
+    "M14",
+    "M15",
+    "H01",
+    "H02",
+    "H03",
+    "H04",
+    "H05"
+  ],
+  "critical_unmet": [
+    "M01",
+    "M02",
+    "M03",
+    "M04",
+    "M05",
+    "M06",
+    "M07",
+    "M08",
+    "M10",
+    "M11",
+    "M12",
+    "M13",
+    "M14",
+    "M15",
+    "H01",
+    "H02",
+    "H03",
+    "H05"
+  ],
+  "findings": {
+    "M01": {
+      "status": "verified_fail",
+      "findings": [
+        {
+          "status": "verified_fail",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\run.json",
+          "details": null
+        }
+      ]
+    },
+    "M02": {
+      "status": "blocked",
+      "findings": [
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\repaired-incident"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\repaired-current"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\final"
+        }
+      ]
+    },
+    "M03": {
+      "status": "blocked",
+      "findings": [
+        {
+          "status": "blocked",
+          "evidence": "acceptance competition not reached"
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\events.json",
+          "details": null
+        }
+      ]
+    },
+    "M04": {
+      "status": "blocked",
+      "findings": [
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\repaired-incident"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\repaired-current"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\final"
+        }
+      ]
+    },
+    "M05": {
+      "status": "blocked",
+      "findings": [
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\repaired-incident"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\repaired-current"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\final"
+        }
+      ]
+    },
+    "M06": {
+      "status": "blocked",
+      "findings": [
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\repaired-incident"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\repaired-current"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\final"
+        }
+      ]
+    },
+    "M07": {
+      "status": "verified_fail",
+      "findings": [
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\repaired-incident"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\repaired-current"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\final"
+        },
+        {
+          "status": "verified_fail",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\local.sqlite",
+          "details": {
+            "error": "observed_confirmed_receipt_mismatch",
+            "identity": [
+              "A",
+              "pb857063c973a40f3857dec52b5158245"
+            ]
+          }
+        },
+        {
+          "status": "verified_fail",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\local.sqlite",
+          "details": {
+            "error": "observed_confirmed_receipt_mismatch",
+            "identity": [
+              "B",
+              "p2d23719f134c4cadb1279be6980d512d"
+            ]
+          }
+        },
+        {
+          "status": "verified_fail",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\local.sqlite",
+          "details": {
+            "error": "observed_confirmed_receipt_mismatch",
+            "identity": [
+              "B",
+              "p71b5ac283f68407685b49f16a193d33b"
+            ]
+          }
+        },
+        {
+          "status": "verified_fail",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\local.sqlite",
+          "details": {
+            "error": "observed_confirmed_receipt_mismatch",
+            "identity": [
+              "A",
+              "p6c4f39262fea4a8e9c8eb3e309e1fb77"
+            ]
+          }
+        },
+        {
+          "status": "verified_fail",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\local.sqlite",
+          "details": {
+            "error": "observed_confirmed_receipt_mismatch",
+            "identity": [
+              "A",
+              "p8bc1eebe447e4494b4609a92327878bc"
+            ]
+          }
+        },
+        {
+          "status": "verified_fail",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\local.sqlite",
+          "details": {
+            "error": "observed_confirmed_receipt_mismatch",
+            "identity": [
+              "B",
+              "pf179373af9b844039ccf2c774295996b"
+            ]
+          }
+        }
+      ]
+    },
+    "M08": {
+      "status": "blocked",
+      "findings": [
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\repaired-incident"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\repaired-current"
+        },
+        {
+          "status": "blocked",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\final"
+        }
+      ]
+    },
+    "M09": {
+      "status": "verified_pass",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\local.sqlite",
+          "details": null
+        }
+      ]
+    },
+    "M10": {
+      "status": "blocked",
+      "findings": [
+        {
+          "status": "blocked",
+          "evidence": "declared repair fault windows not reached"
+        }
+      ]
+    },
+    "M11": {
+      "status": "blocked",
+      "findings": [
+        {
+          "status": "blocked",
+          "evidence": "sender competition not reached"
+        }
+      ]
+    },
+    "M12": {
+      "status": "blocked",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\events.json",
+          "details": {
+            "window": "incident",
+            "expected": {
+              "window_id": "incident",
+              "pending": 2,
+              "total": 5,
+              "conflicts": 1,
+              "mismatched_sources": 6
+            }
+          }
+        },
+        {
+          "status": "blocked",
+          "evidence": "later monitoring windows not reached; observed samples retained"
+        }
+      ]
+    },
+    "M13": {
+      "status": "blocked",
+      "findings": [
+        {
+          "status": "blocked",
+          "evidence": "acceptance fault not reached"
+        },
+        {
+          "status": "blocked",
+          "evidence": "receiver restart not reached"
+        },
+        {
+          "status": "blocked",
+          "evidence": "late HTTP release test not completed"
+        }
+      ]
+    },
+    "M14": {
+      "status": "blocked",
+      "findings": [
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\isolation.json",
+          "details": null
+        },
+        {
+          "status": "blocked",
+          "evidence": "reconciliation depends on incomplete stage repaired-incident"
+        },
+        {
+          "status": "blocked",
+          "evidence": "reconciliation depends on incomplete stage repaired-current"
+        },
+        {
+          "status": "blocked",
+          "evidence": "reconciliation depends on incomplete stage final"
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\delivery\\reconciliation.csv",
+          "details": null
+        },
+        {
+          "status": "blocked",
+          "evidence": "business export depends on incomplete stage repaired-incident"
+        },
+        {
+          "status": "blocked",
+          "evidence": "business export depends on incomplete stage repaired-current"
+        },
+        {
+          "status": "blocked",
+          "evidence": "business export depends on incomplete stage final"
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\delivery\\business.csv",
+          "details": null
+        },
+        {
+          "status": "verified_pass",
+          "evidence": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-early_sent-base\\results\\run\\delivery\\monitor.csv",
+          "details": null
+        }
+      ]
+    },
+    "M15": {
+      "status": "unassessed",
+      "findings": []
+    },
+    "H01": {
+      "status": "unassessed",
+      "evidence": "whole-case independent review pending"
+    },
+    "H02": {
+      "status": "unassessed",
+      "evidence": "whole-case independent review pending"
+    },
+    "H03": {
+      "status": "unassessed",
+      "evidence": "whole-case independent review pending"
+    },
+    "H04": {
+      "status": "unassessed",
+      "evidence": "whole-case independent review pending"
+    },
+    "H05": {
+      "status": "unassessed",
+      "evidence": "whole-case independent review pending"
+    }
+  }
+}

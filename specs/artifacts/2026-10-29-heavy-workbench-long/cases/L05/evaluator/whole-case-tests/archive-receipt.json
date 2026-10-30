@@ -1,0 +1,5415 @@
+{
+  "at": "2026-10-30T20:17:31.635575+00:00",
+  "archive": "originals.zip",
+  "archive_bytes": 10192027,
+  "members": 1351,
+  "original_bytes": 50669900,
+  "inventory": [
+    {
+      "member": "main/ack_new_key-submission/app.py",
+      "bytes": 20985
+    },
+    {
+      "member": "main/ack_new_key-submission/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/ack_new_key-submission/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/ack_new_key-submission/logical-map.json",
+      "bytes": 2297
+    },
+    {
+      "member": "main/ack_new_key-submission/report.py",
+      "bytes": 8957
+    },
+    {
+      "member": "main/ack_new_key-submission/reproduce.py",
+      "bytes": 438
+    },
+    {
+      "member": "main/ack_new_key-submission/settings.json",
+      "bytes": 63
+    },
+    {
+      "member": "main/ack_new_key-submission/submission.json",
+      "bytes": 343
+    },
+    {
+      "member": "main/alternative-submission/app.py",
+      "bytes": 20985
+    },
+    {
+      "member": "main/alternative-submission/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/alternative-submission/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/alternative-submission/logical-map.json",
+      "bytes": 2297
+    },
+    {
+      "member": "main/alternative-submission/report.py",
+      "bytes": 8957
+    },
+    {
+      "member": "main/alternative-submission/reproduce.py",
+      "bytes": 438
+    },
+    {
+      "member": "main/alternative-submission/settings.json",
+      "bytes": 56
+    },
+    {
+      "member": "main/alternative-submission/submission.json",
+      "bytes": 343
+    },
+    {
+      "member": "main/batch-progress.json",
+      "bytes": 1880
+    },
+    {
+      "member": "main/batch-terminal.json",
+      "bytes": 2108
+    },
+    {
+      "member": "main/batch.py",
+      "bytes": 563
+    },
+    {
+      "member": "main/check-before-partial-stage-repair.py",
+      "bytes": 19281
+    },
+    {
+      "member": "main/close-sources.py",
+      "bytes": 878
+    },
+    {
+      "member": "main/close_delivery.py",
+      "bytes": 19676
+    },
+    {
+      "member": "main/closed-ack_new_key-base/cleanup.json",
+      "bytes": 202
+    },
+    {
+      "member": "main/closed-ack_new_key-base/completed-originals.zip",
+      "bytes": 268311
+    },
+    {
+      "member": "main/closed-ack_new_key-base/create-native.json",
+      "bytes": 981
+    },
+    {
+      "member": "main/closed-ack_new_key-base/inspect-terminal.json",
+      "bytes": 9402
+    },
+    {
+      "member": "main/closed-ack_new_key-base/launch.json",
+      "bytes": 395
+    },
+    {
+      "member": "main/closed-ack_new_key-base/native-terminal.json",
+      "bytes": 117
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/delivery/business.csv",
+      "bytes": 479
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/delivery/monitor.csv",
+      "bytes": 323
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/delivery/reconciliation.csv",
+      "bytes": 196
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/delivery/recovery.png",
+      "bytes": 111439
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/delivery/REPORT.md",
+      "bytes": 2611
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/empty-monitor.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/events.json",
+      "bytes": 844948
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/final/facts.json",
+      "bytes": 69641
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/final/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/final/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/original-facts.json",
+      "bytes": 8658
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/post-report-actual.json",
+      "bytes": 69641
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/registration.json",
+      "bytes": 50150
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/repaired-current/facts.json",
+      "bytes": 53426
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/repaired-current/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/repaired-current/remote.sqlite",
+      "bytes": 45056
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/repaired-incident/facts.json",
+      "bytes": 25631
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/repaired-incident/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/repaired-incident/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/report-native.json",
+      "bytes": 346
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/run.json",
+      "bytes": 80
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-ack_new_key-base/results/run/service-2.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-ack_new_key-base/stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-ack_new_key-base/stdout.txt",
+      "bytes": 42
+    },
+    {
+      "member": "main/closed-ack_new_key-machine-assessment/assessment.json",
+      "bytes": 17588
+    },
+    {
+      "member": "main/closed-ack_new_key-machine-command.json",
+      "bytes": 1383
+    },
+    {
+      "member": "main/closed-ack_new_key-repaired-assessment/assessment.json",
+      "bytes": 20469
+    },
+    {
+      "member": "main/closed-ack_new_key-repaired-command.json",
+      "bytes": 1384
+    },
+    {
+      "member": "main/closed-ack_new_key-submission/app.py",
+      "bytes": 20985
+    },
+    {
+      "member": "main/closed-ack_new_key-submission/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/closed-ack_new_key-submission/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/closed-ack_new_key-submission/logical-map.json",
+      "bytes": 2297
+    },
+    {
+      "member": "main/closed-ack_new_key-submission/report.py",
+      "bytes": 8957
+    },
+    {
+      "member": "main/closed-ack_new_key-submission/reproduce.py",
+      "bytes": 438
+    },
+    {
+      "member": "main/closed-ack_new_key-submission/settings.json",
+      "bytes": 63
+    },
+    {
+      "member": "main/closed-ack_new_key-submission/submission.json",
+      "bytes": 343
+    },
+    {
+      "member": "main/closed-alternative-base/cleanup.json",
+      "bytes": 202
+    },
+    {
+      "member": "main/closed-alternative-base/completed-originals.zip",
+      "bytes": 271917
+    },
+    {
+      "member": "main/closed-alternative-base/create-native.json",
+      "bytes": 981
+    },
+    {
+      "member": "main/closed-alternative-base/inspect-terminal.json",
+      "bytes": 9402
+    },
+    {
+      "member": "main/closed-alternative-base/launch.json",
+      "bytes": 395
+    },
+    {
+      "member": "main/closed-alternative-base/native-terminal.json",
+      "bytes": 117
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/delivery/business.csv",
+      "bytes": 479
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/delivery/monitor.csv",
+      "bytes": 323
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/delivery/reconciliation.csv",
+      "bytes": 196
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/delivery/recovery.png",
+      "bytes": 108700
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/delivery/REPORT.md",
+      "bytes": 2611
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/empty-monitor.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/events.json",
+      "bytes": 910861
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/final/facts.json",
+      "bytes": 80070
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/final/local.sqlite",
+      "bytes": 102400
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/final/remote.sqlite",
+      "bytes": 53248
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/local.sqlite",
+      "bytes": 102400
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/original-facts.json",
+      "bytes": 8658
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/post-report-actual.json",
+      "bytes": 80070
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/registration.json",
+      "bytes": 50143
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/remote.sqlite",
+      "bytes": 53248
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/repaired-current/facts.json",
+      "bytes": 59823
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/repaired-current/local.sqlite",
+      "bytes": 102400
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/repaired-current/remote.sqlite",
+      "bytes": 45056
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/repaired-incident/facts.json",
+      "bytes": 25847
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/repaired-incident/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/repaired-incident/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/report-native.json",
+      "bytes": 346
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/run.json",
+      "bytes": 80
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-alternative-base/results/run/service-2.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-alternative-base/stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-alternative-base/stdout.txt",
+      "bytes": 42
+    },
+    {
+      "member": "main/closed-alternative-machine-assessment/assessment.json",
+      "bytes": 17537
+    },
+    {
+      "member": "main/closed-alternative-machine-command.json",
+      "bytes": 1349
+    },
+    {
+      "member": "main/closed-alternative-repaired-assessment/assessment.json",
+      "bytes": 20418
+    },
+    {
+      "member": "main/closed-alternative-repaired-command.json",
+      "bytes": 1350
+    },
+    {
+      "member": "main/closed-alternative-submission/app.py",
+      "bytes": 20985
+    },
+    {
+      "member": "main/closed-alternative-submission/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/closed-alternative-submission/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/closed-alternative-submission/logical-map.json",
+      "bytes": 2297
+    },
+    {
+      "member": "main/closed-alternative-submission/report.py",
+      "bytes": 8957
+    },
+    {
+      "member": "main/closed-alternative-submission/reproduce.py",
+      "bytes": 438
+    },
+    {
+      "member": "main/closed-alternative-submission/settings.json",
+      "bytes": 56
+    },
+    {
+      "member": "main/closed-alternative-submission/submission.json",
+      "bytes": 343
+    },
+    {
+      "member": "main/closed-compatible-compat/cleanup.json",
+      "bytes": 202
+    },
+    {
+      "member": "main/closed-compatible-compat/completed-originals.zip",
+      "bytes": 262163
+    },
+    {
+      "member": "main/closed-compatible-compat/create-native.json",
+      "bytes": 984
+    },
+    {
+      "member": "main/closed-compatible-compat/inspect-terminal.json",
+      "bytes": 9407
+    },
+    {
+      "member": "main/closed-compatible-compat/launch.json",
+      "bytes": 396
+    },
+    {
+      "member": "main/closed-compatible-compat/native-terminal.json",
+      "bytes": 117
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/delivery/business.csv",
+      "bytes": 479
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/delivery/monitor.csv",
+      "bytes": 323
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/delivery/reconciliation.csv",
+      "bytes": 196
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/delivery/recovery.png",
+      "bytes": 108700
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/delivery/REPORT.md",
+      "bytes": 2611
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/empty-monitor.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/events.json",
+      "bytes": 822870
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/final/facts.json",
+      "bytes": 68141
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/final/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/final/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/original-facts.json",
+      "bytes": 8658
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/post-report-actual.json",
+      "bytes": 68141
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/registration.json",
+      "bytes": 50143
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/repaired-current/facts.json",
+      "bytes": 51926
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/repaired-current/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/repaired-current/remote.sqlite",
+      "bytes": 45056
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/repaired-incident/facts.json",
+      "bytes": 24633
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/repaired-incident/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/repaired-incident/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/report-native.json",
+      "bytes": 346
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/run.json",
+      "bytes": 80
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-compatible-compat/results/run/service-2.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-compatible-compat/stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-compatible-compat/stdout.txt",
+      "bytes": 42
+    },
+    {
+      "member": "main/closed-compatible-machine-assessment/assessment.json",
+      "bytes": 20470
+    },
+    {
+      "member": "main/closed-compatible-machine-command.json",
+      "bytes": 1352
+    },
+    {
+      "member": "main/closed-compatible-submission/app.py",
+      "bytes": 20985
+    },
+    {
+      "member": "main/closed-compatible-submission/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/closed-compatible-submission/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/closed-compatible-submission/logical-map.json",
+      "bytes": 2297
+    },
+    {
+      "member": "main/closed-compatible-submission/report.py",
+      "bytes": 8957
+    },
+    {
+      "member": "main/closed-compatible-submission/reproduce.py",
+      "bytes": 438
+    },
+    {
+      "member": "main/closed-compatible-submission/settings.json",
+      "bytes": 56
+    },
+    {
+      "member": "main/closed-compatible-submission/submission.json",
+      "bytes": 343
+    },
+    {
+      "member": "main/closed-conflict_first-base/cleanup.json",
+      "bytes": 202
+    },
+    {
+      "member": "main/closed-conflict_first-base/completed-originals.zip",
+      "bytes": 259037
+    },
+    {
+      "member": "main/closed-conflict_first-base/create-native.json",
+      "bytes": 990
+    },
+    {
+      "member": "main/closed-conflict_first-base/inspect-terminal.json",
+      "bytes": 9417
+    },
+    {
+      "member": "main/closed-conflict_first-base/launch.json",
+      "bytes": 398
+    },
+    {
+      "member": "main/closed-conflict_first-base/native-terminal.json",
+      "bytes": 117
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/delivery/business.csv",
+      "bytes": 479
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/delivery/monitor.csv",
+      "bytes": 278
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/delivery/reconciliation.csv",
+      "bytes": 196
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/delivery/recovery.png",
+      "bytes": 106548
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/delivery/REPORT.md",
+      "bytes": 2611
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/empty-monitor.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/events.json",
+      "bytes": 821911
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/final/facts.json",
+      "bytes": 68083
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/final/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/final/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/original-facts.json",
+      "bytes": 8658
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/post-report-actual.json",
+      "bytes": 68083
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/registration.json",
+      "bytes": 50153
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/repaired-current/facts.json",
+      "bytes": 51868
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/repaired-current/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/repaired-current/remote.sqlite",
+      "bytes": 45056
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/repaired-incident/facts.json",
+      "bytes": 24604
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/repaired-incident/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/repaired-incident/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/report-native.json",
+      "bytes": 346
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/run.json",
+      "bytes": 80
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-conflict_first-base/results/run/service-2.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-conflict_first-base/stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-conflict_first-base/stdout.txt",
+      "bytes": 42
+    },
+    {
+      "member": "main/closed-conflict_first-machine-assessment/assessment.json",
+      "bytes": 17729
+    },
+    {
+      "member": "main/closed-conflict_first-machine-command.json",
+      "bytes": 1410
+    },
+    {
+      "member": "main/closed-conflict_first-repaired-assessment/assessment.json",
+      "bytes": 20649
+    },
+    {
+      "member": "main/closed-conflict_first-repaired-command.json",
+      "bytes": 1411
+    },
+    {
+      "member": "main/closed-conflict_first-submission/app.py",
+      "bytes": 20985
+    },
+    {
+      "member": "main/closed-conflict_first-submission/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/closed-conflict_first-submission/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/closed-conflict_first-submission/logical-map.json",
+      "bytes": 2297
+    },
+    {
+      "member": "main/closed-conflict_first-submission/report.py",
+      "bytes": 8957
+    },
+    {
+      "member": "main/closed-conflict_first-submission/reproduce.py",
+      "bytes": 438
+    },
+    {
+      "member": "main/closed-conflict_first-submission/settings.json",
+      "bytes": 66
+    },
+    {
+      "member": "main/closed-conflict_first-submission/submission.json",
+      "bytes": 343
+    },
+    {
+      "member": "main/closed-early_sent-base/cleanup.json",
+      "bytes": 202
+    },
+    {
+      "member": "main/closed-early_sent-base/completed-originals.zip",
+      "bytes": 139034
+    },
+    {
+      "member": "main/closed-early_sent-base/create-native.json",
+      "bytes": 978
+    },
+    {
+      "member": "main/closed-early_sent-base/inspect-terminal.json",
+      "bytes": 9397
+    },
+    {
+      "member": "main/closed-early_sent-base/launch.json",
+      "bytes": 394
+    },
+    {
+      "member": "main/closed-early_sent-base/native-terminal.json",
+      "bytes": 116
+    },
+    {
+      "member": "main/closed-early_sent-base/results/run/delivery/business.csv",
+      "bytes": 52
+    },
+    {
+      "member": "main/closed-early_sent-base/results/run/delivery/monitor.csv",
+      "bytes": 160
+    },
+    {
+      "member": "main/closed-early_sent-base/results/run/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "main/closed-early_sent-base/results/run/delivery/reconciliation.csv",
+      "bytes": 42
+    },
+    {
+      "member": "main/closed-early_sent-base/results/run/delivery/recovery.png",
+      "bytes": 69017
+    },
+    {
+      "member": "main/closed-early_sent-base/results/run/delivery/REPORT.md",
+      "bytes": 2705
+    },
+    {
+      "member": "main/closed-early_sent-base/results/run/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "main/closed-early_sent-base/results/run/events.json",
+      "bytes": 41357
+    },
+    {
+      "member": "main/closed-early_sent-base/results/run/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "main/closed-early_sent-base/results/run/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-early_sent-base/results/run/original-facts.json",
+      "bytes": 8658
+    },
+    {
+      "member": "main/closed-early_sent-base/results/run/post-report-actual.json",
+      "bytes": 17318
+    },
+    {
+      "member": "main/closed-early_sent-base/results/run/registration.json",
+      "bytes": 50149
+    },
+    {
+      "member": "main/closed-early_sent-base/results/run/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/closed-early_sent-base/results/run/report-native.json",
+      "bytes": 345
+    },
+    {
+      "member": "main/closed-early_sent-base/results/run/run.json",
+      "bytes": 1046
+    },
+    {
+      "member": "main/closed-early_sent-base/results/run/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-early_sent-base/results/run/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-early_sent-base/stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-early_sent-base/stdout.txt",
+      "bytes": 1004
+    },
+    {
+      "member": "main/closed-early_sent-machine-assessment/assessment.json",
+      "bytes": 4227
+    },
+    {
+      "member": "main/closed-early_sent-machine-command.json",
+      "bytes": 1596
+    },
+    {
+      "member": "main/closed-early_sent-repaired-assessment/assessment.json",
+      "bytes": 12090
+    },
+    {
+      "member": "main/closed-early_sent-repaired-command.json",
+      "bytes": 1579
+    },
+    {
+      "member": "main/closed-early_sent-submission/app.py",
+      "bytes": 20985
+    },
+    {
+      "member": "main/closed-early_sent-submission/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/closed-early_sent-submission/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/closed-early_sent-submission/logical-map.json",
+      "bytes": 2297
+    },
+    {
+      "member": "main/closed-early_sent-submission/report.py",
+      "bytes": 8957
+    },
+    {
+      "member": "main/closed-early_sent-submission/reproduce.py",
+      "bytes": 438
+    },
+    {
+      "member": "main/closed-early_sent-submission/settings.json",
+      "bytes": 62
+    },
+    {
+      "member": "main/closed-early_sent-submission/submission.json",
+      "bytes": 343
+    },
+    {
+      "member": "main/closed-global_transport-base/cleanup.json",
+      "bytes": 202
+    },
+    {
+      "member": "main/closed-global_transport-base/completed-originals.zip",
+      "bytes": 188149
+    },
+    {
+      "member": "main/closed-global_transport-base/create-native.json",
+      "bytes": 996
+    },
+    {
+      "member": "main/closed-global_transport-base/inspect-terminal.json",
+      "bytes": 9427
+    },
+    {
+      "member": "main/closed-global_transport-base/launch.json",
+      "bytes": 400
+    },
+    {
+      "member": "main/closed-global_transport-base/native-terminal.json",
+      "bytes": 116
+    },
+    {
+      "member": "main/closed-global_transport-base/results/run/delivery/business.csv",
+      "bytes": 196
+    },
+    {
+      "member": "main/closed-global_transport-base/results/run/delivery/monitor.csv",
+      "bytes": 207
+    },
+    {
+      "member": "main/closed-global_transport-base/results/run/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "main/closed-global_transport-base/results/run/delivery/reconciliation.csv",
+      "bytes": 102
+    },
+    {
+      "member": "main/closed-global_transport-base/results/run/delivery/recovery.png",
+      "bytes": 94232
+    },
+    {
+      "member": "main/closed-global_transport-base/results/run/delivery/REPORT.md",
+      "bytes": 2611
+    },
+    {
+      "member": "main/closed-global_transport-base/results/run/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "main/closed-global_transport-base/results/run/events.json",
+      "bytes": 259607
+    },
+    {
+      "member": "main/closed-global_transport-base/results/run/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "main/closed-global_transport-base/results/run/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-global_transport-base/results/run/original-facts.json",
+      "bytes": 8658
+    },
+    {
+      "member": "main/closed-global_transport-base/results/run/post-report-actual.json",
+      "bytes": 29672
+    },
+    {
+      "member": "main/closed-global_transport-base/results/run/registration.json",
+      "bytes": 50155
+    },
+    {
+      "member": "main/closed-global_transport-base/results/run/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/closed-global_transport-base/results/run/repaired-incident/facts.json",
+      "bytes": 24633
+    },
+    {
+      "member": "main/closed-global_transport-base/results/run/repaired-incident/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-global_transport-base/results/run/repaired-incident/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/closed-global_transport-base/results/run/report-native.json",
+      "bytes": 346
+    },
+    {
+      "member": "main/closed-global_transport-base/results/run/run.json",
+      "bytes": 1086
+    },
+    {
+      "member": "main/closed-global_transport-base/results/run/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-global_transport-base/results/run/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-global_transport-base/stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-global_transport-base/stdout.txt",
+      "bytes": 1044
+    },
+    {
+      "member": "main/closed-global_transport-machine-assessment/assessment.json",
+      "bytes": 6770
+    },
+    {
+      "member": "main/closed-global_transport-machine-command.json",
+      "bytes": 1614
+    },
+    {
+      "member": "main/closed-global_transport-repaired-assessment/assessment.json",
+      "bytes": 13556
+    },
+    {
+      "member": "main/closed-global_transport-repaired-command.json",
+      "bytes": 1579
+    },
+    {
+      "member": "main/closed-global_transport-submission/app.py",
+      "bytes": 20985
+    },
+    {
+      "member": "main/closed-global_transport-submission/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/closed-global_transport-submission/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/closed-global_transport-submission/logical-map.json",
+      "bytes": 2297
+    },
+    {
+      "member": "main/closed-global_transport-submission/report.py",
+      "bytes": 8957
+    },
+    {
+      "member": "main/closed-global_transport-submission/reproduce.py",
+      "bytes": 438
+    },
+    {
+      "member": "main/closed-global_transport-submission/settings.json",
+      "bytes": 68
+    },
+    {
+      "member": "main/closed-global_transport-submission/submission.json",
+      "bytes": 343
+    },
+    {
+      "member": "main/closed-main-amount/cleanup.json",
+      "bytes": 202
+    },
+    {
+      "member": "main/closed-main-amount/completed-originals.zip",
+      "bytes": 262773
+    },
+    {
+      "member": "main/closed-main-amount/create-native.json",
+      "bytes": 966
+    },
+    {
+      "member": "main/closed-main-amount/inspect-terminal.json",
+      "bytes": 9377
+    },
+    {
+      "member": "main/closed-main-amount/launch.json",
+      "bytes": 390
+    },
+    {
+      "member": "main/closed-main-amount/native-terminal.json",
+      "bytes": 117
+    },
+    {
+      "member": "main/closed-main-amount/results/run/delivery/business.csv",
+      "bytes": 479
+    },
+    {
+      "member": "main/closed-main-amount/results/run/delivery/monitor.csv",
+      "bytes": 323
+    },
+    {
+      "member": "main/closed-main-amount/results/run/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "main/closed-main-amount/results/run/delivery/reconciliation.csv",
+      "bytes": 196
+    },
+    {
+      "member": "main/closed-main-amount/results/run/delivery/recovery.png",
+      "bytes": 109922
+    },
+    {
+      "member": "main/closed-main-amount/results/run/delivery/REPORT.md",
+      "bytes": 2611
+    },
+    {
+      "member": "main/closed-main-amount/results/run/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "main/closed-main-amount/results/run/empty-monitor.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-main-amount/results/run/events.json",
+      "bytes": 822805
+    },
+    {
+      "member": "main/closed-main-amount/results/run/final/facts.json",
+      "bytes": 68141
+    },
+    {
+      "member": "main/closed-main-amount/results/run/final/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-main-amount/results/run/final/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "main/closed-main-amount/results/run/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "main/closed-main-amount/results/run/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-main-amount/results/run/original-facts.json",
+      "bytes": 8658
+    },
+    {
+      "member": "main/closed-main-amount/results/run/post-report-actual.json",
+      "bytes": 68141
+    },
+    {
+      "member": "main/closed-main-amount/results/run/registration.json",
+      "bytes": 50143
+    },
+    {
+      "member": "main/closed-main-amount/results/run/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "main/closed-main-amount/results/run/repaired-current/facts.json",
+      "bytes": 51926
+    },
+    {
+      "member": "main/closed-main-amount/results/run/repaired-current/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-main-amount/results/run/repaired-current/remote.sqlite",
+      "bytes": 45056
+    },
+    {
+      "member": "main/closed-main-amount/results/run/repaired-incident/facts.json",
+      "bytes": 24633
+    },
+    {
+      "member": "main/closed-main-amount/results/run/repaired-incident/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-main-amount/results/run/repaired-incident/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/closed-main-amount/results/run/report-native.json",
+      "bytes": 346
+    },
+    {
+      "member": "main/closed-main-amount/results/run/run.json",
+      "bytes": 80
+    },
+    {
+      "member": "main/closed-main-amount/results/run/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-main-amount/results/run/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-main-amount/results/run/service-2.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-main-amount/stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-main-amount/stdout.txt",
+      "bytes": 42
+    },
+    {
+      "member": "main/closed-main-base/cleanup.json",
+      "bytes": 202
+    },
+    {
+      "member": "main/closed-main-base/completed-originals.zip",
+      "bytes": 261591
+    },
+    {
+      "member": "main/closed-main-base/create-native.json",
+      "bytes": 960
+    },
+    {
+      "member": "main/closed-main-base/inspect-terminal.json",
+      "bytes": 9366
+    },
+    {
+      "member": "main/closed-main-base/launch.json",
+      "bytes": 388
+    },
+    {
+      "member": "main/closed-main-base/native-terminal.json",
+      "bytes": 117
+    },
+    {
+      "member": "main/closed-main-base/results/run/delivery/business.csv",
+      "bytes": 479
+    },
+    {
+      "member": "main/closed-main-base/results/run/delivery/monitor.csv",
+      "bytes": 323
+    },
+    {
+      "member": "main/closed-main-base/results/run/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "main/closed-main-base/results/run/delivery/reconciliation.csv",
+      "bytes": 196
+    },
+    {
+      "member": "main/closed-main-base/results/run/delivery/recovery.png",
+      "bytes": 108700
+    },
+    {
+      "member": "main/closed-main-base/results/run/delivery/REPORT.md",
+      "bytes": 2611
+    },
+    {
+      "member": "main/closed-main-base/results/run/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "main/closed-main-base/results/run/empty-monitor.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-main-base/results/run/events.json",
+      "bytes": 822805
+    },
+    {
+      "member": "main/closed-main-base/results/run/final/facts.json",
+      "bytes": 68141
+    },
+    {
+      "member": "main/closed-main-base/results/run/final/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-main-base/results/run/final/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "main/closed-main-base/results/run/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "main/closed-main-base/results/run/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-main-base/results/run/original-facts.json",
+      "bytes": 8658
+    },
+    {
+      "member": "main/closed-main-base/results/run/post-report-actual.json",
+      "bytes": 68141
+    },
+    {
+      "member": "main/closed-main-base/results/run/registration.json",
+      "bytes": 50143
+    },
+    {
+      "member": "main/closed-main-base/results/run/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "main/closed-main-base/results/run/repaired-current/facts.json",
+      "bytes": 51926
+    },
+    {
+      "member": "main/closed-main-base/results/run/repaired-current/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-main-base/results/run/repaired-current/remote.sqlite",
+      "bytes": 45056
+    },
+    {
+      "member": "main/closed-main-base/results/run/repaired-incident/facts.json",
+      "bytes": 24633
+    },
+    {
+      "member": "main/closed-main-base/results/run/repaired-incident/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-main-base/results/run/repaired-incident/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/closed-main-base/results/run/report-native.json",
+      "bytes": 346
+    },
+    {
+      "member": "main/closed-main-base/results/run/run.json",
+      "bytes": 80
+    },
+    {
+      "member": "main/closed-main-base/results/run/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-main-base/results/run/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-main-base/results/run/service-2.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-main-base/stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-main-base/stdout.txt",
+      "bytes": 42
+    },
+    {
+      "member": "main/closed-main-final-base/cleanup.json",
+      "bytes": 202
+    },
+    {
+      "member": "main/closed-main-final-base/completed-originals.zip",
+      "bytes": 262500
+    },
+    {
+      "member": "main/closed-main-final-base/create-native.json",
+      "bytes": 978
+    },
+    {
+      "member": "main/closed-main-final-base/inspect-terminal.json",
+      "bytes": 9397
+    },
+    {
+      "member": "main/closed-main-final-base/launch.json",
+      "bytes": 394
+    },
+    {
+      "member": "main/closed-main-final-base/native-terminal.json",
+      "bytes": 117
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/delivery/business.csv",
+      "bytes": 479
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/delivery/monitor.csv",
+      "bytes": 323
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/delivery/reconciliation.csv",
+      "bytes": 196
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/delivery/recovery.png",
+      "bytes": 108700
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/delivery/REPORT.md",
+      "bytes": 2611
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/empty-monitor.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/events.json",
+      "bytes": 822870
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/final/facts.json",
+      "bytes": 68141
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/final/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/final/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/original-facts.json",
+      "bytes": 8658
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/post-report-actual.json",
+      "bytes": 68141
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/registration.json",
+      "bytes": 50143
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/repaired-current/facts.json",
+      "bytes": 51926
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/repaired-current/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/repaired-current/remote.sqlite",
+      "bytes": 45056
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/repaired-incident/facts.json",
+      "bytes": 24633
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/repaired-incident/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/repaired-incident/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/report-native.json",
+      "bytes": 346
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/run.json",
+      "bytes": 80
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-main-final-base/results/run/service-2.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-main-final-base/stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-main-final-base/stdout.txt",
+      "bytes": 42
+    },
+    {
+      "member": "main/closed-main-machine-assessment/assessment.json",
+      "bytes": 48623
+    },
+    {
+      "member": "main/closed-main-machine-command.json",
+      "bytes": 1926
+    },
+    {
+      "member": "main/closed-main-repaired-assessment/assessment.json",
+      "bytes": 57045
+    },
+    {
+      "member": "main/closed-main-repaired-command.json",
+      "bytes": 1927
+    },
+    {
+      "member": "main/closed-main-submission/app.py",
+      "bytes": 20985
+    },
+    {
+      "member": "main/closed-main-submission/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/closed-main-submission/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/closed-main-submission/logical-map.json",
+      "bytes": 2297
+    },
+    {
+      "member": "main/closed-main-submission/report.py",
+      "bytes": 8957
+    },
+    {
+      "member": "main/closed-main-submission/reproduce.py",
+      "bytes": 438
+    },
+    {
+      "member": "main/closed-main-submission/settings.json",
+      "bytes": 56
+    },
+    {
+      "member": "main/closed-main-submission/submission.json",
+      "bytes": 343
+    },
+    {
+      "member": "main/closed-main-tenant/cleanup.json",
+      "bytes": 202
+    },
+    {
+      "member": "main/closed-main-tenant/completed-originals.zip",
+      "bytes": 272288
+    },
+    {
+      "member": "main/closed-main-tenant/create-native.json",
+      "bytes": 966
+    },
+    {
+      "member": "main/closed-main-tenant/inspect-terminal.json",
+      "bytes": 9377
+    },
+    {
+      "member": "main/closed-main-tenant/launch.json",
+      "bytes": 390
+    },
+    {
+      "member": "main/closed-main-tenant/native-terminal.json",
+      "bytes": 117
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/delivery/business.csv",
+      "bytes": 571
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/delivery/monitor.csv",
+      "bytes": 323
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/delivery/reconciliation.csv",
+      "bytes": 270
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/delivery/recovery.png",
+      "bytes": 108692
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/delivery/REPORT.md",
+      "bytes": 2611
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/empty-monitor.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/events.json",
+      "bytes": 929643
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/final/facts.json",
+      "bytes": 76673
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/final/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/final/remote.sqlite",
+      "bytes": 53248
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/original-facts.json",
+      "bytes": 9882
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/post-report-actual.json",
+      "bytes": 76673
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/registration.json",
+      "bytes": 50143
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/remote.sqlite",
+      "bytes": 53248
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/repaired-current/facts.json",
+      "bytes": 58538
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/repaired-current/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/repaired-current/remote.sqlite",
+      "bytes": 45056
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/repaired-incident/facts.json",
+      "bytes": 28358
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/repaired-incident/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/repaired-incident/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/report-native.json",
+      "bytes": 346
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/run.json",
+      "bytes": 80
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-main-tenant/results/run/service-2.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-main-tenant/stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-main-tenant/stdout.txt",
+      "bytes": 42
+    },
+    {
+      "member": "main/closed-monitor_fake-base/cleanup.json",
+      "bytes": 202
+    },
+    {
+      "member": "main/closed-monitor_fake-base/completed-originals.zip",
+      "bytes": 228367
+    },
+    {
+      "member": "main/closed-monitor_fake-base/create-native.json",
+      "bytes": 984
+    },
+    {
+      "member": "main/closed-monitor_fake-base/inspect-terminal.json",
+      "bytes": 9406
+    },
+    {
+      "member": "main/closed-monitor_fake-base/launch.json",
+      "bytes": 396
+    },
+    {
+      "member": "main/closed-monitor_fake-base/native-terminal.json",
+      "bytes": 117
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/delivery/business.csv",
+      "bytes": 479
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/delivery/monitor.csv",
+      "bytes": 222
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/delivery/reconciliation.csv",
+      "bytes": 196
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/delivery/recovery.png",
+      "bytes": 78809
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/delivery/REPORT.md",
+      "bytes": 2611
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/empty-monitor.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/events.json",
+      "bytes": 821043
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/final/facts.json",
+      "bytes": 68023
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/final/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/final/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/original-facts.json",
+      "bytes": 8658
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/post-report-actual.json",
+      "bytes": 68023
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/registration.json",
+      "bytes": 50151
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/repaired-current/facts.json",
+      "bytes": 51811
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/repaired-current/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/repaired-current/remote.sqlite",
+      "bytes": 45056
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/repaired-incident/facts.json",
+      "bytes": 24575
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/repaired-incident/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/repaired-incident/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/report-native.json",
+      "bytes": 346
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/run.json",
+      "bytes": 80
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-monitor_fake-base/results/run/service-2.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-monitor_fake-base/stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-monitor_fake-base/stdout.txt",
+      "bytes": 42
+    },
+    {
+      "member": "main/closed-monitor_fake-machine-assessment/assessment.json",
+      "bytes": 17603
+    },
+    {
+      "member": "main/closed-monitor_fake-machine-command.json",
+      "bytes": 1368
+    },
+    {
+      "member": "main/closed-monitor_fake-repaired-assessment/assessment.json",
+      "bytes": 20497
+    },
+    {
+      "member": "main/closed-monitor_fake-repaired-command.json",
+      "bytes": 1369
+    },
+    {
+      "member": "main/closed-monitor_fake-submission/app.py",
+      "bytes": 20985
+    },
+    {
+      "member": "main/closed-monitor_fake-submission/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/closed-monitor_fake-submission/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/closed-monitor_fake-submission/logical-map.json",
+      "bytes": 2297
+    },
+    {
+      "member": "main/closed-monitor_fake-submission/report.py",
+      "bytes": 8957
+    },
+    {
+      "member": "main/closed-monitor_fake-submission/reproduce.py",
+      "bytes": 438
+    },
+    {
+      "member": "main/closed-monitor_fake-submission/settings.json",
+      "bytes": 64
+    },
+    {
+      "member": "main/closed-monitor_fake-submission/submission.json",
+      "bytes": 343
+    },
+    {
+      "member": "main/closed-restore_backup-base/cleanup.json",
+      "bytes": 202
+    },
+    {
+      "member": "main/closed-restore_backup-base/completed-originals.zip",
+      "bytes": 212897
+    },
+    {
+      "member": "main/closed-restore_backup-base/create-native.json",
+      "bytes": 990
+    },
+    {
+      "member": "main/closed-restore_backup-base/inspect-terminal.json",
+      "bytes": 9417
+    },
+    {
+      "member": "main/closed-restore_backup-base/launch.json",
+      "bytes": 398
+    },
+    {
+      "member": "main/closed-restore_backup-base/native-terminal.json",
+      "bytes": 117
+    },
+    {
+      "member": "main/closed-restore_backup-base/results/run/delivery/business.csv",
+      "bytes": 196
+    },
+    {
+      "member": "main/closed-restore_backup-base/results/run/delivery/monitor.csv",
+      "bytes": 251
+    },
+    {
+      "member": "main/closed-restore_backup-base/results/run/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "main/closed-restore_backup-base/results/run/delivery/reconciliation.csv",
+      "bytes": 102
+    },
+    {
+      "member": "main/closed-restore_backup-base/results/run/delivery/recovery.png",
+      "bytes": 103096
+    },
+    {
+      "member": "main/closed-restore_backup-base/results/run/delivery/REPORT.md",
+      "bytes": 2611
+    },
+    {
+      "member": "main/closed-restore_backup-base/results/run/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "main/closed-restore_backup-base/results/run/events.json",
+      "bytes": 432722
+    },
+    {
+      "member": "main/closed-restore_backup-base/results/run/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "main/closed-restore_backup-base/results/run/local.sqlite",
+      "bytes": 69632
+    },
+    {
+      "member": "main/closed-restore_backup-base/results/run/original-facts.json",
+      "bytes": 8658
+    },
+    {
+      "member": "main/closed-restore_backup-base/results/run/post-report-actual.json",
+      "bytes": 28434
+    },
+    {
+      "member": "main/closed-restore_backup-base/results/run/registration.json",
+      "bytes": 50153
+    },
+    {
+      "member": "main/closed-restore_backup-base/results/run/remote.sqlite",
+      "bytes": 45056
+    },
+    {
+      "member": "main/closed-restore_backup-base/results/run/repaired-current/local.sqlite",
+      "bytes": 69632
+    },
+    {
+      "member": "main/closed-restore_backup-base/results/run/repaired-current/remote.sqlite",
+      "bytes": 45056
+    },
+    {
+      "member": "main/closed-restore_backup-base/results/run/repaired-incident/facts.json",
+      "bytes": 24633
+    },
+    {
+      "member": "main/closed-restore_backup-base/results/run/repaired-incident/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-restore_backup-base/results/run/repaired-incident/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/closed-restore_backup-base/results/run/report-native.json",
+      "bytes": 346
+    },
+    {
+      "member": "main/closed-restore_backup-base/results/run/run.json",
+      "bytes": 1549
+    },
+    {
+      "member": "main/closed-restore_backup-base/results/run/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-restore_backup-base/results/run/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-restore_backup-base/stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-restore_backup-base/stdout.txt",
+      "bytes": 1507
+    },
+    {
+      "member": "main/closed-restore_backup-machine-assessment/assessment.json",
+      "bytes": 5466
+    },
+    {
+      "member": "main/closed-restore_backup-machine-command.json",
+      "bytes": 1500
+    },
+    {
+      "member": "main/closed-restore_backup-repaired-assessment/assessment.json",
+      "bytes": 15994
+    },
+    {
+      "member": "main/closed-restore_backup-repaired-command.json",
+      "bytes": 1573
+    },
+    {
+      "member": "main/closed-restore_backup-submission/app.py",
+      "bytes": 20985
+    },
+    {
+      "member": "main/closed-restore_backup-submission/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/closed-restore_backup-submission/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/closed-restore_backup-submission/logical-map.json",
+      "bytes": 2297
+    },
+    {
+      "member": "main/closed-restore_backup-submission/report.py",
+      "bytes": 8957
+    },
+    {
+      "member": "main/closed-restore_backup-submission/reproduce.py",
+      "bytes": 438
+    },
+    {
+      "member": "main/closed-restore_backup-submission/settings.json",
+      "bytes": 66
+    },
+    {
+      "member": "main/closed-restore_backup-submission/submission.json",
+      "bytes": 343
+    },
+    {
+      "member": "main/closed-schema-compat/cleanup.json",
+      "bytes": 202
+    },
+    {
+      "member": "main/closed-schema-compat/completed-originals.zip",
+      "bytes": 273952
+    },
+    {
+      "member": "main/closed-schema-compat/create-native.json",
+      "bytes": 972
+    },
+    {
+      "member": "main/closed-schema-compat/inspect-terminal.json",
+      "bytes": 9386
+    },
+    {
+      "member": "main/closed-schema-compat/launch.json",
+      "bytes": 392
+    },
+    {
+      "member": "main/closed-schema-compat/native-terminal.json",
+      "bytes": 117
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/delivery/business.csv",
+      "bytes": 479
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/delivery/monitor.csv",
+      "bytes": 323
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/delivery/reconciliation.csv",
+      "bytes": 196
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/delivery/recovery.png",
+      "bytes": 108700
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/delivery/REPORT.md",
+      "bytes": 2611
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/empty-monitor.sqlite",
+      "bytes": 98304
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/events.json",
+      "bytes": 910926
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/final/facts.json",
+      "bytes": 80070
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/final/local.sqlite",
+      "bytes": 106496
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/final/remote.sqlite",
+      "bytes": 53248
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/local.sqlite",
+      "bytes": 106496
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/original-facts.json",
+      "bytes": 8658
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/post-report-actual.json",
+      "bytes": 80070
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/registration.json",
+      "bytes": 50782
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/remote.sqlite",
+      "bytes": 53248
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/repaired-current/facts.json",
+      "bytes": 59823
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/repaired-current/local.sqlite",
+      "bytes": 106496
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/repaired-current/remote.sqlite",
+      "bytes": 45056
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/repaired-incident/facts.json",
+      "bytes": 25847
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/repaired-incident/local.sqlite",
+      "bytes": 98304
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/repaired-incident/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/report-native.json",
+      "bytes": 346
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/run.json",
+      "bytes": 80
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-schema-compat/results/run/service-2.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-schema-compat/stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-schema-compat/stdout.txt",
+      "bytes": 42
+    },
+    {
+      "member": "main/closed-schema-machine-assessment/assessment.json",
+      "bytes": 20262
+    },
+    {
+      "member": "main/closed-schema-machine-command.json",
+      "bytes": 1340
+    },
+    {
+      "member": "main/closed-schema-submission/app.py",
+      "bytes": 21610
+    },
+    {
+      "member": "main/closed-schema-submission/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/closed-schema-submission/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/closed-schema-submission/logical-map.json",
+      "bytes": 2302
+    },
+    {
+      "member": "main/closed-schema-submission/report.py",
+      "bytes": 8957
+    },
+    {
+      "member": "main/closed-schema-submission/reproduce.py",
+      "bytes": 438
+    },
+    {
+      "member": "main/closed-schema-submission/settings.json",
+      "bytes": 56
+    },
+    {
+      "member": "main/closed-schema-submission/submission.json",
+      "bytes": 343
+    },
+    {
+      "member": "main/closed-weak-amount/cleanup.json",
+      "bytes": 202
+    },
+    {
+      "member": "main/closed-weak-amount/completed-originals.zip",
+      "bytes": 262903
+    },
+    {
+      "member": "main/closed-weak-amount/create-native.json",
+      "bytes": 966
+    },
+    {
+      "member": "main/closed-weak-amount/inspect-terminal.json",
+      "bytes": 9377
+    },
+    {
+      "member": "main/closed-weak-amount/launch.json",
+      "bytes": 390
+    },
+    {
+      "member": "main/closed-weak-amount/native-terminal.json",
+      "bytes": 117
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/delivery/business.csv",
+      "bytes": 479
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/delivery/monitor.csv",
+      "bytes": 323
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/delivery/reconciliation.csv",
+      "bytes": 196
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/delivery/recovery.png",
+      "bytes": 109922
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/delivery/REPORT.md",
+      "bytes": 2731
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/empty-monitor.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/events.json",
+      "bytes": 822805
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/final/facts.json",
+      "bytes": 68141
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/final/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/final/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/original-facts.json",
+      "bytes": 8658
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/post-report-actual.json",
+      "bytes": 68141
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/registration.json",
+      "bytes": 50150
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/repaired-current/facts.json",
+      "bytes": 51926
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/repaired-current/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/repaired-current/remote.sqlite",
+      "bytes": 45056
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/repaired-incident/facts.json",
+      "bytes": 24633
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/repaired-incident/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/repaired-incident/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/report-native.json",
+      "bytes": 346
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/run.json",
+      "bytes": 80
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-weak-amount/results/run/service-2.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-weak-amount/stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-weak-amount/stdout.txt",
+      "bytes": 42
+    },
+    {
+      "member": "main/closed-weak-base/cleanup.json",
+      "bytes": 202
+    },
+    {
+      "member": "main/closed-weak-base/completed-originals.zip",
+      "bytes": 261624
+    },
+    {
+      "member": "main/closed-weak-base/create-native.json",
+      "bytes": 960
+    },
+    {
+      "member": "main/closed-weak-base/inspect-terminal.json",
+      "bytes": 9366
+    },
+    {
+      "member": "main/closed-weak-base/launch.json",
+      "bytes": 388
+    },
+    {
+      "member": "main/closed-weak-base/native-terminal.json",
+      "bytes": 116
+    },
+    {
+      "member": "main/closed-weak-base/results/run/delivery/business.csv",
+      "bytes": 479
+    },
+    {
+      "member": "main/closed-weak-base/results/run/delivery/monitor.csv",
+      "bytes": 323
+    },
+    {
+      "member": "main/closed-weak-base/results/run/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "main/closed-weak-base/results/run/delivery/reconciliation.csv",
+      "bytes": 196
+    },
+    {
+      "member": "main/closed-weak-base/results/run/delivery/recovery.png",
+      "bytes": 108700
+    },
+    {
+      "member": "main/closed-weak-base/results/run/delivery/REPORT.md",
+      "bytes": 2731
+    },
+    {
+      "member": "main/closed-weak-base/results/run/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "main/closed-weak-base/results/run/empty-monitor.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-weak-base/results/run/events.json",
+      "bytes": 822805
+    },
+    {
+      "member": "main/closed-weak-base/results/run/final/facts.json",
+      "bytes": 68141
+    },
+    {
+      "member": "main/closed-weak-base/results/run/final/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-weak-base/results/run/final/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "main/closed-weak-base/results/run/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "main/closed-weak-base/results/run/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-weak-base/results/run/original-facts.json",
+      "bytes": 8658
+    },
+    {
+      "member": "main/closed-weak-base/results/run/post-report-actual.json",
+      "bytes": 68141
+    },
+    {
+      "member": "main/closed-weak-base/results/run/registration.json",
+      "bytes": 50150
+    },
+    {
+      "member": "main/closed-weak-base/results/run/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "main/closed-weak-base/results/run/repaired-current/facts.json",
+      "bytes": 51926
+    },
+    {
+      "member": "main/closed-weak-base/results/run/repaired-current/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-weak-base/results/run/repaired-current/remote.sqlite",
+      "bytes": 45056
+    },
+    {
+      "member": "main/closed-weak-base/results/run/repaired-incident/facts.json",
+      "bytes": 24633
+    },
+    {
+      "member": "main/closed-weak-base/results/run/repaired-incident/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-weak-base/results/run/repaired-incident/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/closed-weak-base/results/run/report-native.json",
+      "bytes": 346
+    },
+    {
+      "member": "main/closed-weak-base/results/run/run.json",
+      "bytes": 80
+    },
+    {
+      "member": "main/closed-weak-base/results/run/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-weak-base/results/run/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-weak-base/results/run/service-2.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-weak-base/stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-weak-base/stdout.txt",
+      "bytes": 42
+    },
+    {
+      "member": "main/closed-weak-machine-assessment/assessment.json",
+      "bytes": 48623
+    },
+    {
+      "member": "main/closed-weak-machine-command.json",
+      "bytes": 1926
+    },
+    {
+      "member": "main/closed-weak-repaired-assessment/assessment.json",
+      "bytes": 57045
+    },
+    {
+      "member": "main/closed-weak-repaired-command.json",
+      "bytes": 1927
+    },
+    {
+      "member": "main/closed-weak-submission/app.py",
+      "bytes": 20985
+    },
+    {
+      "member": "main/closed-weak-submission/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/closed-weak-submission/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/closed-weak-submission/logical-map.json",
+      "bytes": 2297
+    },
+    {
+      "member": "main/closed-weak-submission/report.py",
+      "bytes": 8957
+    },
+    {
+      "member": "main/closed-weak-submission/reproduce.py",
+      "bytes": 438
+    },
+    {
+      "member": "main/closed-weak-submission/settings.json",
+      "bytes": 63
+    },
+    {
+      "member": "main/closed-weak-submission/submission.json",
+      "bytes": 343
+    },
+    {
+      "member": "main/closed-weak-tenant/cleanup.json",
+      "bytes": 202
+    },
+    {
+      "member": "main/closed-weak-tenant/completed-originals.zip",
+      "bytes": 272315
+    },
+    {
+      "member": "main/closed-weak-tenant/create-native.json",
+      "bytes": 966
+    },
+    {
+      "member": "main/closed-weak-tenant/inspect-terminal.json",
+      "bytes": 9375
+    },
+    {
+      "member": "main/closed-weak-tenant/launch.json",
+      "bytes": 390
+    },
+    {
+      "member": "main/closed-weak-tenant/native-terminal.json",
+      "bytes": 117
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/delivery/business.csv",
+      "bytes": 571
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/delivery/monitor.csv",
+      "bytes": 323
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/delivery/reconciliation.csv",
+      "bytes": 270
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/delivery/recovery.png",
+      "bytes": 108692
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/delivery/REPORT.md",
+      "bytes": 2731
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/empty-monitor.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/events.json",
+      "bytes": 929643
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/final/facts.json",
+      "bytes": 76673
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/final/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/final/remote.sqlite",
+      "bytes": 53248
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/original-facts.json",
+      "bytes": 9882
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/post-report-actual.json",
+      "bytes": 76673
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/registration.json",
+      "bytes": 50150
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/remote.sqlite",
+      "bytes": 53248
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/repaired-current/facts.json",
+      "bytes": 58538
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/repaired-current/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/repaired-current/remote.sqlite",
+      "bytes": 45056
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/repaired-incident/facts.json",
+      "bytes": 28358
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/repaired-incident/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/repaired-incident/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/report-native.json",
+      "bytes": 346
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/run.json",
+      "bytes": 80
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-weak-tenant/results/run/service-2.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-weak-tenant/stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/closed-weak-tenant/stdout.txt",
+      "bytes": 42
+    },
+    {
+      "member": "main/conflict_first-submission/app.py",
+      "bytes": 20985
+    },
+    {
+      "member": "main/conflict_first-submission/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/conflict_first-submission/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/conflict_first-submission/logical-map.json",
+      "bytes": 2297
+    },
+    {
+      "member": "main/conflict_first-submission/report.py",
+      "bytes": 8957
+    },
+    {
+      "member": "main/conflict_first-submission/reproduce.py",
+      "bytes": 438
+    },
+    {
+      "member": "main/conflict_first-submission/settings.json",
+      "bytes": 66
+    },
+    {
+      "member": "main/conflict_first-submission/submission.json",
+      "bytes": 343
+    },
+    {
+      "member": "main/early_sent-submission/app.py",
+      "bytes": 20985
+    },
+    {
+      "member": "main/early_sent-submission/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/early_sent-submission/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/early_sent-submission/logical-map.json",
+      "bytes": 2297
+    },
+    {
+      "member": "main/early_sent-submission/report.py",
+      "bytes": 8957
+    },
+    {
+      "member": "main/early_sent-submission/reproduce.py",
+      "bytes": 438
+    },
+    {
+      "member": "main/early_sent-submission/settings.json",
+      "bytes": 62
+    },
+    {
+      "member": "main/early_sent-submission/submission.json",
+      "bytes": 343
+    },
+    {
+      "member": "main/final-grades.py",
+      "bytes": 1419
+    },
+    {
+      "member": "main/final-main-machine-assessment/assessment.json",
+      "bytes": 57357
+    },
+    {
+      "member": "main/final-main-machine-command.json",
+      "bytes": 1943
+    },
+    {
+      "member": "main/final-main-reviewed-assessment/assessment.json",
+      "bytes": 60797
+    },
+    {
+      "member": "main/final-main-reviewed-command.json",
+      "bytes": 1968
+    },
+    {
+      "member": "main/final-weak-machine-assessment/assessment.json",
+      "bytes": 57045
+    },
+    {
+      "member": "main/final-weak-machine-command.json",
+      "bytes": 1925
+    },
+    {
+      "member": "main/final-weak-reviewed-assessment/assessment.json",
+      "bytes": 59761
+    },
+    {
+      "member": "main/final-weak-reviewed-command.json",
+      "bytes": 1965
+    },
+    {
+      "member": "main/global_transport-submission/app.py",
+      "bytes": 20985
+    },
+    {
+      "member": "main/global_transport-submission/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/global_transport-submission/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/global_transport-submission/logical-map.json",
+      "bytes": 2297
+    },
+    {
+      "member": "main/global_transport-submission/report.py",
+      "bytes": 8957
+    },
+    {
+      "member": "main/global_transport-submission/reproduce.py",
+      "bytes": 438
+    },
+    {
+      "member": "main/global_transport-submission/settings.json",
+      "bytes": 68
+    },
+    {
+      "member": "main/global_transport-submission/submission.json",
+      "bytes": 343
+    },
+    {
+      "member": "main/grade-controls.py",
+      "bytes": 217
+    },
+    {
+      "member": "main/grade.py",
+      "bytes": 1755
+    },
+    {
+      "member": "main/main-base/cleanup.json",
+      "bytes": 202
+    },
+    {
+      "member": "main/main-base/completed-originals.zip",
+      "bytes": 243733
+    },
+    {
+      "member": "main/main-base/create-native.json",
+      "bytes": 932
+    },
+    {
+      "member": "main/main-base/inspect-terminal.json",
+      "bytes": 9318
+    },
+    {
+      "member": "main/main-base/launch.json",
+      "bytes": 374
+    },
+    {
+      "member": "main/main-base/native-terminal.json",
+      "bytes": 117
+    },
+    {
+      "member": "main/main-base/results/run/delivery/business.csv",
+      "bytes": 479
+    },
+    {
+      "member": "main/main-base/results/run/delivery/monitor.csv",
+      "bytes": 323
+    },
+    {
+      "member": "main/main-base/results/run/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "main/main-base/results/run/delivery/reconciliation.csv",
+      "bytes": 196
+    },
+    {
+      "member": "main/main-base/results/run/delivery/recovery.png",
+      "bytes": 108700
+    },
+    {
+      "member": "main/main-base/results/run/delivery/REPORT.md",
+      "bytes": 2611
+    },
+    {
+      "member": "main/main-base/results/run/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "main/main-base/results/run/empty-monitor.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/main-base/results/run/events.json",
+      "bytes": 544879
+    },
+    {
+      "member": "main/main-base/results/run/final/facts.json",
+      "bytes": 68141
+    },
+    {
+      "member": "main/main-base/results/run/final/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/main-base/results/run/final/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "main/main-base/results/run/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "main/main-base/results/run/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/main-base/results/run/original-facts.json",
+      "bytes": 8658
+    },
+    {
+      "member": "main/main-base/results/run/post-report-actual.json",
+      "bytes": 68141
+    },
+    {
+      "member": "main/main-base/results/run/registration.json",
+      "bytes": 50143
+    },
+    {
+      "member": "main/main-base/results/run/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "main/main-base/results/run/repaired-current/facts.json",
+      "bytes": 51926
+    },
+    {
+      "member": "main/main-base/results/run/repaired-current/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/main-base/results/run/repaired-current/remote.sqlite",
+      "bytes": 45056
+    },
+    {
+      "member": "main/main-base/results/run/repaired-incident/facts.json",
+      "bytes": 24633
+    },
+    {
+      "member": "main/main-base/results/run/repaired-incident/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "main/main-base/results/run/repaired-incident/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/main-base/results/run/report-native.json",
+      "bytes": 346
+    },
+    {
+      "member": "main/main-base/results/run/run.json",
+      "bytes": 80
+    },
+    {
+      "member": "main/main-base/results/run/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/main-base/results/run/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/main-base/results/run/service-2.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/main-base/stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/main-base/stdout.txt",
+      "bytes": 42
+    },
+    {
+      "member": "main/main-machine-assessment/assessment.json",
+      "bytes": 17018
+    },
+    {
+      "member": "main/main-machine-command.json",
+      "bytes": 1316
+    },
+    {
+      "member": "main/main-submission/app.py",
+      "bytes": 20985
+    },
+    {
+      "member": "main/main-submission/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/main-submission/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/main-submission/logical-map.json",
+      "bytes": 2297
+    },
+    {
+      "member": "main/main-submission/report.py",
+      "bytes": 8957
+    },
+    {
+      "member": "main/main-submission/reproduce.py",
+      "bytes": 438
+    },
+    {
+      "member": "main/main-submission/settings.json",
+      "bytes": 56
+    },
+    {
+      "member": "main/main-submission/submission.json",
+      "bytes": 343
+    },
+    {
+      "member": "main/monitor_fake-submission/app.py",
+      "bytes": 20985
+    },
+    {
+      "member": "main/monitor_fake-submission/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/monitor_fake-submission/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/monitor_fake-submission/logical-map.json",
+      "bytes": 2297
+    },
+    {
+      "member": "main/monitor_fake-submission/report.py",
+      "bytes": 8957
+    },
+    {
+      "member": "main/monitor_fake-submission/reproduce.py",
+      "bytes": 438
+    },
+    {
+      "member": "main/monitor_fake-submission/settings.json",
+      "bytes": 64
+    },
+    {
+      "member": "main/monitor_fake-submission/submission.json",
+      "bytes": 343
+    },
+    {
+      "member": "main/native.py",
+      "bytes": 2741
+    },
+    {
+      "member": "main/partial-stage-repaired-findings.json",
+      "bytes": 6110
+    },
+    {
+      "member": "main/prepare.py",
+      "bytes": 3462
+    },
+    {
+      "member": "main/raw-amount/exercise.py",
+      "bytes": 12072
+    },
+    {
+      "member": "main/raw-amount/incoming-operations.json",
+      "bytes": 1422
+    },
+    {
+      "member": "main/raw-amount/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/raw-amount/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/raw-amount/legacy-delivery.json",
+      "bytes": 2898
+    },
+    {
+      "member": "main/raw-amount/legacy_app.py",
+      "bytes": 3131
+    },
+    {
+      "member": "main/raw-amount/logical_store.py",
+      "bytes": 2263
+    },
+    {
+      "member": "main/raw-amount/original-local.sqlite",
+      "bytes": 69632
+    },
+    {
+      "member": "main/raw-amount/original-remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/raw-amount/PROTOCOL.draft.md",
+      "bytes": 4941
+    },
+    {
+      "member": "main/raw-amount/provenance.json",
+      "bytes": 559
+    },
+    {
+      "member": "main/raw-amount/receiver-exit.json",
+      "bytes": 55
+    },
+    {
+      "member": "main/raw-amount/receiver-start.json",
+      "bytes": 482
+    },
+    {
+      "member": "main/raw-amount/SCENE-CONTRACT.draft.md",
+      "bytes": 3682
+    },
+    {
+      "member": "main/raw-base/exercise.py",
+      "bytes": 12072
+    },
+    {
+      "member": "main/raw-base/incoming-operations.json",
+      "bytes": 1422
+    },
+    {
+      "member": "main/raw-base/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/raw-base/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/raw-base/legacy-delivery.json",
+      "bytes": 2898
+    },
+    {
+      "member": "main/raw-base/legacy_app.py",
+      "bytes": 3131
+    },
+    {
+      "member": "main/raw-base/logical_store.py",
+      "bytes": 2263
+    },
+    {
+      "member": "main/raw-base/original-local.sqlite",
+      "bytes": 69632
+    },
+    {
+      "member": "main/raw-base/original-remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/raw-base/PROTOCOL.draft.md",
+      "bytes": 4941
+    },
+    {
+      "member": "main/raw-base/provenance.json",
+      "bytes": 559
+    },
+    {
+      "member": "main/raw-base/receiver-exit.json",
+      "bytes": 55
+    },
+    {
+      "member": "main/raw-base/receiver-start.json",
+      "bytes": 482
+    },
+    {
+      "member": "main/raw-base/SCENE-CONTRACT.draft.md",
+      "bytes": 3682
+    },
+    {
+      "member": "main/raw-closed-amount/BUSINESS.md",
+      "bytes": 3662
+    },
+    {
+      "member": "main/raw-closed-amount/ENVIRONMENT.md",
+      "bytes": 970
+    },
+    {
+      "member": "main/raw-closed-amount/EXECUTION.md",
+      "bytes": 3882
+    },
+    {
+      "member": "main/raw-closed-amount/exercise.py",
+      "bytes": 12313
+    },
+    {
+      "member": "main/raw-closed-amount/incoming-operations.json",
+      "bytes": 1422
+    },
+    {
+      "member": "main/raw-closed-amount/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/raw-closed-amount/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/raw-closed-amount/legacy-delivery.json",
+      "bytes": 2898
+    },
+    {
+      "member": "main/raw-closed-amount/legacy_app.py",
+      "bytes": 3131
+    },
+    {
+      "member": "main/raw-closed-amount/logical_store.py",
+      "bytes": 2263
+    },
+    {
+      "member": "main/raw-closed-amount/original-local.sqlite",
+      "bytes": 69632
+    },
+    {
+      "member": "main/raw-closed-amount/original-remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/raw-closed-amount/OUTPUTS.md",
+      "bytes": 1293
+    },
+    {
+      "member": "main/raw-closed-amount/provenance.json",
+      "bytes": 559
+    },
+    {
+      "member": "main/raw-closed-amount/receiver-exit.json",
+      "bytes": 55
+    },
+    {
+      "member": "main/raw-closed-amount/receiver-start.json",
+      "bytes": 482
+    },
+    {
+      "member": "main/raw-closed-amount/RECEIVER.md",
+      "bytes": 4099
+    },
+    {
+      "member": "main/raw-closed-amount/TASK.md",
+      "bytes": 1598
+    },
+    {
+      "member": "main/raw-closed-base/BUSINESS.md",
+      "bytes": 3662
+    },
+    {
+      "member": "main/raw-closed-base/ENVIRONMENT.md",
+      "bytes": 970
+    },
+    {
+      "member": "main/raw-closed-base/EXECUTION.md",
+      "bytes": 3882
+    },
+    {
+      "member": "main/raw-closed-base/exercise.py",
+      "bytes": 12313
+    },
+    {
+      "member": "main/raw-closed-base/incoming-operations.json",
+      "bytes": 1422
+    },
+    {
+      "member": "main/raw-closed-base/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/raw-closed-base/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/raw-closed-base/legacy-delivery.json",
+      "bytes": 2898
+    },
+    {
+      "member": "main/raw-closed-base/legacy_app.py",
+      "bytes": 3131
+    },
+    {
+      "member": "main/raw-closed-base/logical_store.py",
+      "bytes": 2263
+    },
+    {
+      "member": "main/raw-closed-base/original-local.sqlite",
+      "bytes": 69632
+    },
+    {
+      "member": "main/raw-closed-base/original-remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/raw-closed-base/OUTPUTS.md",
+      "bytes": 1293
+    },
+    {
+      "member": "main/raw-closed-base/provenance.json",
+      "bytes": 559
+    },
+    {
+      "member": "main/raw-closed-base/receiver-exit.json",
+      "bytes": 55
+    },
+    {
+      "member": "main/raw-closed-base/receiver-start.json",
+      "bytes": 482
+    },
+    {
+      "member": "main/raw-closed-base/RECEIVER.md",
+      "bytes": 4099
+    },
+    {
+      "member": "main/raw-closed-base/TASK.md",
+      "bytes": 1598
+    },
+    {
+      "member": "main/raw-closed-compat/BUSINESS.md",
+      "bytes": 3662
+    },
+    {
+      "member": "main/raw-closed-compat/ENVIRONMENT.md",
+      "bytes": 970
+    },
+    {
+      "member": "main/raw-closed-compat/EXECUTION.md",
+      "bytes": 3882
+    },
+    {
+      "member": "main/raw-closed-compat/exercise.py",
+      "bytes": 12413
+    },
+    {
+      "member": "main/raw-closed-compat/frozen_sender.py",
+      "bytes": 784
+    },
+    {
+      "member": "main/raw-closed-compat/incoming-operations.json",
+      "bytes": 1422
+    },
+    {
+      "member": "main/raw-closed-compat/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/raw-closed-compat/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/raw-closed-compat/legacy-delivery.json",
+      "bytes": 2898
+    },
+    {
+      "member": "main/raw-closed-compat/legacy_app.py",
+      "bytes": 3131
+    },
+    {
+      "member": "main/raw-closed-compat/logical_store.py",
+      "bytes": 2263
+    },
+    {
+      "member": "main/raw-closed-compat/original-local.sqlite",
+      "bytes": 69632
+    },
+    {
+      "member": "main/raw-closed-compat/original-remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/raw-closed-compat/OUTPUTS.md",
+      "bytes": 1293
+    },
+    {
+      "member": "main/raw-closed-compat/provenance.json",
+      "bytes": 559
+    },
+    {
+      "member": "main/raw-closed-compat/receiver-exit.json",
+      "bytes": 55
+    },
+    {
+      "member": "main/raw-closed-compat/receiver-start.json",
+      "bytes": 482
+    },
+    {
+      "member": "main/raw-closed-compat/RECEIVER.md",
+      "bytes": 4099
+    },
+    {
+      "member": "main/raw-closed-compat/TASK.md",
+      "bytes": 1598
+    },
+    {
+      "member": "main/raw-closed-final-base/BUSINESS.md",
+      "bytes": 3662
+    },
+    {
+      "member": "main/raw-closed-final-base/ENVIRONMENT.md",
+      "bytes": 970
+    },
+    {
+      "member": "main/raw-closed-final-base/EXECUTION.md",
+      "bytes": 4403
+    },
+    {
+      "member": "main/raw-closed-final-base/exercise.py",
+      "bytes": 12413
+    },
+    {
+      "member": "main/raw-closed-final-base/frozen_sender.py",
+      "bytes": 797
+    },
+    {
+      "member": "main/raw-closed-final-base/incoming-operations.json",
+      "bytes": 1422
+    },
+    {
+      "member": "main/raw-closed-final-base/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/raw-closed-final-base/l05_transport.py",
+      "bytes": 543
+    },
+    {
+      "member": "main/raw-closed-final-base/legacy-delivery.json",
+      "bytes": 2898
+    },
+    {
+      "member": "main/raw-closed-final-base/legacy_app.py",
+      "bytes": 3131
+    },
+    {
+      "member": "main/raw-closed-final-base/logical_store.py",
+      "bytes": 2263
+    },
+    {
+      "member": "main/raw-closed-final-base/original-local.sqlite",
+      "bytes": 69632
+    },
+    {
+      "member": "main/raw-closed-final-base/original-remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/raw-closed-final-base/OUTPUTS.md",
+      "bytes": 1293
+    },
+    {
+      "member": "main/raw-closed-final-base/provenance.json",
+      "bytes": 559
+    },
+    {
+      "member": "main/raw-closed-final-base/receiver-exit.json",
+      "bytes": 55
+    },
+    {
+      "member": "main/raw-closed-final-base/receiver-start.json",
+      "bytes": 482
+    },
+    {
+      "member": "main/raw-closed-final-base/RECEIVER.md",
+      "bytes": 4099
+    },
+    {
+      "member": "main/raw-closed-final-base/TASK.md",
+      "bytes": 1598
+    },
+    {
+      "member": "main/raw-closed-tenant/BUSINESS.md",
+      "bytes": 3662
+    },
+    {
+      "member": "main/raw-closed-tenant/ENVIRONMENT.md",
+      "bytes": 970
+    },
+    {
+      "member": "main/raw-closed-tenant/EXECUTION.md",
+      "bytes": 3882
+    },
+    {
+      "member": "main/raw-closed-tenant/exercise.py",
+      "bytes": 12313
+    },
+    {
+      "member": "main/raw-closed-tenant/incoming-operations.json",
+      "bytes": 1422
+    },
+    {
+      "member": "main/raw-closed-tenant/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/raw-closed-tenant/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/raw-closed-tenant/legacy-delivery.json",
+      "bytes": 2898
+    },
+    {
+      "member": "main/raw-closed-tenant/legacy_app.py",
+      "bytes": 3131
+    },
+    {
+      "member": "main/raw-closed-tenant/logical_store.py",
+      "bytes": 2263
+    },
+    {
+      "member": "main/raw-closed-tenant/original-local.sqlite",
+      "bytes": 69632
+    },
+    {
+      "member": "main/raw-closed-tenant/original-remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/raw-closed-tenant/OUTPUTS.md",
+      "bytes": 1293
+    },
+    {
+      "member": "main/raw-closed-tenant/provenance.json",
+      "bytes": 559
+    },
+    {
+      "member": "main/raw-closed-tenant/receiver-exit.json",
+      "bytes": 55
+    },
+    {
+      "member": "main/raw-closed-tenant/receiver-start.json",
+      "bytes": 482
+    },
+    {
+      "member": "main/raw-closed-tenant/RECEIVER.md",
+      "bytes": 4099
+    },
+    {
+      "member": "main/raw-closed-tenant/TASK.md",
+      "bytes": 1598
+    },
+    {
+      "member": "main/raw-tenant/exercise.py",
+      "bytes": 12072
+    },
+    {
+      "member": "main/raw-tenant/incoming-operations.json",
+      "bytes": 1422
+    },
+    {
+      "member": "main/raw-tenant/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/raw-tenant/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/raw-tenant/legacy-delivery.json",
+      "bytes": 2898
+    },
+    {
+      "member": "main/raw-tenant/legacy_app.py",
+      "bytes": 3131
+    },
+    {
+      "member": "main/raw-tenant/logical_store.py",
+      "bytes": 2263
+    },
+    {
+      "member": "main/raw-tenant/original-local.sqlite",
+      "bytes": 69632
+    },
+    {
+      "member": "main/raw-tenant/original-remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "main/raw-tenant/PROTOCOL.draft.md",
+      "bytes": 4941
+    },
+    {
+      "member": "main/raw-tenant/provenance.json",
+      "bytes": 559
+    },
+    {
+      "member": "main/raw-tenant/receiver-exit.json",
+      "bytes": 55
+    },
+    {
+      "member": "main/raw-tenant/receiver-start.json",
+      "bytes": 482
+    },
+    {
+      "member": "main/raw-tenant/SCENE-CONTRACT.draft.md",
+      "bytes": 3682
+    },
+    {
+      "member": "main/regrade.py",
+      "bytes": 787
+    },
+    {
+      "member": "main/restore_backup-submission/app.py",
+      "bytes": 20985
+    },
+    {
+      "member": "main/restore_backup-submission/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/restore_backup-submission/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/restore_backup-submission/logical-map.json",
+      "bytes": 2297
+    },
+    {
+      "member": "main/restore_backup-submission/report.py",
+      "bytes": 8957
+    },
+    {
+      "member": "main/restore_backup-submission/reproduce.py",
+      "bytes": 438
+    },
+    {
+      "member": "main/restore_backup-submission/settings.json",
+      "bytes": 66
+    },
+    {
+      "member": "main/restore_backup-submission/submission.json",
+      "bytes": 343
+    },
+    {
+      "member": "main/rubric.py",
+      "bytes": 5193
+    },
+    {
+      "member": "main/schema-compatibility.py",
+      "bytes": 1762
+    },
+    {
+      "member": "main/tenant-construction-0.json",
+      "bytes": 72
+    },
+    {
+      "member": "main/tenant-construction-1.json",
+      "bytes": 197
+    },
+    {
+      "member": "main/tenant-construction-native.json",
+      "bytes": 2041
+    },
+    {
+      "member": "main/tenant-construction.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "main/weak-submission/app.py",
+      "bytes": 20985
+    },
+    {
+      "member": "main/weak-submission/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "main/weak-submission/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "main/weak-submission/logical-map.json",
+      "bytes": 2297
+    },
+    {
+      "member": "main/weak-submission/report.py",
+      "bytes": 8957
+    },
+    {
+      "member": "main/weak-submission/reproduce.py",
+      "bytes": 438
+    },
+    {
+      "member": "main/weak-submission/settings.json",
+      "bytes": 63
+    },
+    {
+      "member": "main/weak-submission/submission.json",
+      "bytes": 343
+    },
+    {
+      "member": "independent/alternative-sql-audit.json",
+      "bytes": 6840
+    },
+    {
+      "member": "independent/audit_whole.py",
+      "bytes": 15308
+    },
+    {
+      "member": "independent/boundary-probe-summary.json",
+      "bytes": 352
+    },
+    {
+      "member": "independent/case-final/evaluator/check_l05.py",
+      "bytes": 27007
+    },
+    {
+      "member": "independent/case-final/evaluator/registered-inputs.json",
+      "bytes": 27904
+    },
+    {
+      "member": "independent/case-final/public/BUSINESS.md",
+      "bytes": 3662
+    },
+    {
+      "member": "independent/case-final/public/ENVIRONMENT.md",
+      "bytes": 970
+    },
+    {
+      "member": "independent/case-final/public/EXECUTION.md",
+      "bytes": 4859
+    },
+    {
+      "member": "independent/case-final/public/exercise.py",
+      "bytes": 12413
+    },
+    {
+      "member": "independent/case-final/public/frozen_sender.py",
+      "bytes": 797
+    },
+    {
+      "member": "independent/case-final/public/incoming-operations.json",
+      "bytes": 1422
+    },
+    {
+      "member": "independent/case-final/public/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "independent/case-final/public/l05_transport.py",
+      "bytes": 543
+    },
+    {
+      "member": "independent/case-final/public/legacy-delivery.json",
+      "bytes": 2898
+    },
+    {
+      "member": "independent/case-final/public/legacy_app.py",
+      "bytes": 3131
+    },
+    {
+      "member": "independent/case-final/public/logical_store.py",
+      "bytes": 2263
+    },
+    {
+      "member": "independent/case-final/public/original-local.sqlite",
+      "bytes": 69632
+    },
+    {
+      "member": "independent/case-final/public/original-remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "independent/case-final/public/OUTPUTS.md",
+      "bytes": 1293
+    },
+    {
+      "member": "independent/case-final/public/provenance.json",
+      "bytes": 559
+    },
+    {
+      "member": "independent/case-final/public/receiver-exit.json",
+      "bytes": 55
+    },
+    {
+      "member": "independent/case-final/public/receiver-start.json",
+      "bytes": 482
+    },
+    {
+      "member": "independent/case-final/public/RECEIVER.md",
+      "bytes": 4099
+    },
+    {
+      "member": "independent/case-final/public/TASK.md",
+      "bytes": 1598
+    },
+    {
+      "member": "independent/case-final/rubric.json",
+      "bytes": 10432
+    },
+    {
+      "member": "independent/case-initial/evaluator/app.py",
+      "bytes": 20985
+    },
+    {
+      "member": "independent/case-initial/evaluator/check_l05.py",
+      "bytes": 19281
+    },
+    {
+      "member": "independent/case-initial/evaluator/registered-inputs.json",
+      "bytes": 27904
+    },
+    {
+      "member": "independent/case-initial/evaluator/report.py",
+      "bytes": 8957
+    },
+    {
+      "member": "independent/case-initial/public/BUSINESS.md",
+      "bytes": 3662
+    },
+    {
+      "member": "independent/case-initial/public/ENVIRONMENT.md",
+      "bytes": 970
+    },
+    {
+      "member": "independent/case-initial/public/EXECUTION.md",
+      "bytes": 3882
+    },
+    {
+      "member": "independent/case-initial/public/exercise.py",
+      "bytes": 12313
+    },
+    {
+      "member": "independent/case-initial/public/incoming-operations.json",
+      "bytes": 1422
+    },
+    {
+      "member": "independent/case-initial/public/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "independent/case-initial/public/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "independent/case-initial/public/legacy-delivery.json",
+      "bytes": 2898
+    },
+    {
+      "member": "independent/case-initial/public/legacy_app.py",
+      "bytes": 3131
+    },
+    {
+      "member": "independent/case-initial/public/logical_store.py",
+      "bytes": 2263
+    },
+    {
+      "member": "independent/case-initial/public/original-local.sqlite",
+      "bytes": 69632
+    },
+    {
+      "member": "independent/case-initial/public/original-remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "independent/case-initial/public/OUTPUTS.md",
+      "bytes": 1293
+    },
+    {
+      "member": "independent/case-initial/public/provenance.json",
+      "bytes": 559
+    },
+    {
+      "member": "independent/case-initial/public/receiver-exit.json",
+      "bytes": 55
+    },
+    {
+      "member": "independent/case-initial/public/receiver-start.json",
+      "bytes": 482
+    },
+    {
+      "member": "independent/case-initial/public/RECEIVER.md",
+      "bytes": 4099
+    },
+    {
+      "member": "independent/case-initial/public/TASK.md",
+      "bytes": 1598
+    },
+    {
+      "member": "independent/case-initial/rubric.json",
+      "bytes": 10432
+    },
+    {
+      "member": "independent/case-repaired/evaluator/check_l05.py",
+      "bytes": 27007
+    },
+    {
+      "member": "independent/case-repaired/evaluator/registered-inputs.json",
+      "bytes": 27904
+    },
+    {
+      "member": "independent/case-repaired/public/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "independent/case-repaired/public/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "independent/case-repaired/public/logical_store.py",
+      "bytes": 2263
+    },
+    {
+      "member": "independent/case-repaired/rubric.json",
+      "bytes": 10432
+    },
+    {
+      "member": "independent/cold-native/cleanup.json",
+      "bytes": 239
+    },
+    {
+      "member": "independent/cold-native/create-command.json",
+      "bytes": 994
+    },
+    {
+      "member": "independent/cold-native/inspect-terminal.json",
+      "bytes": 9440
+    },
+    {
+      "member": "independent/cold-native/results/run/delivery/business.csv",
+      "bytes": 479
+    },
+    {
+      "member": "independent/cold-native/results/run/delivery/monitor.csv",
+      "bytes": 323
+    },
+    {
+      "member": "independent/cold-native/results/run/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "independent/cold-native/results/run/delivery/reconciliation.csv",
+      "bytes": 196
+    },
+    {
+      "member": "independent/cold-native/results/run/delivery/recovery.png",
+      "bytes": 108700
+    },
+    {
+      "member": "independent/cold-native/results/run/delivery/REPORT.md",
+      "bytes": 2611
+    },
+    {
+      "member": "independent/cold-native/results/run/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "independent/cold-native/results/run/empty-monitor.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/cold-native/results/run/events.json",
+      "bytes": 822805
+    },
+    {
+      "member": "independent/cold-native/results/run/final/facts.json",
+      "bytes": 68141
+    },
+    {
+      "member": "independent/cold-native/results/run/final/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/cold-native/results/run/final/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "independent/cold-native/results/run/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "independent/cold-native/results/run/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/cold-native/results/run/original-facts.json",
+      "bytes": 8658
+    },
+    {
+      "member": "independent/cold-native/results/run/post-report-actual.json",
+      "bytes": 68141
+    },
+    {
+      "member": "independent/cold-native/results/run/registration.json",
+      "bytes": 50143
+    },
+    {
+      "member": "independent/cold-native/results/run/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "independent/cold-native/results/run/repaired-current/facts.json",
+      "bytes": 51926
+    },
+    {
+      "member": "independent/cold-native/results/run/repaired-current/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/cold-native/results/run/repaired-current/remote.sqlite",
+      "bytes": 45056
+    },
+    {
+      "member": "independent/cold-native/results/run/repaired-incident/facts.json",
+      "bytes": 24633
+    },
+    {
+      "member": "independent/cold-native/results/run/repaired-incident/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/cold-native/results/run/repaired-incident/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "independent/cold-native/results/run/report-native.json",
+      "bytes": 346
+    },
+    {
+      "member": "independent/cold-native/results/run/run.json",
+      "bytes": 80
+    },
+    {
+      "member": "independent/cold-native/results/run/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "independent/cold-native/results/run/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "independent/cold-native/results/run/service-2.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "independent/cold-native/stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "independent/cold-native/stdout.txt",
+      "bytes": 42
+    },
+    {
+      "member": "independent/cold-native/terminal-command.json",
+      "bytes": 378
+    },
+    {
+      "member": "independent/cold-raw/BUSINESS.md",
+      "bytes": 3662
+    },
+    {
+      "member": "independent/cold-raw/ENVIRONMENT.md",
+      "bytes": 970
+    },
+    {
+      "member": "independent/cold-raw/EXECUTION.md",
+      "bytes": 3882
+    },
+    {
+      "member": "independent/cold-raw/exercise.py",
+      "bytes": 12313
+    },
+    {
+      "member": "independent/cold-raw/incoming-operations.json",
+      "bytes": 1422
+    },
+    {
+      "member": "independent/cold-raw/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "independent/cold-raw/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "independent/cold-raw/legacy-delivery.json",
+      "bytes": 2898
+    },
+    {
+      "member": "independent/cold-raw/legacy_app.py",
+      "bytes": 3131
+    },
+    {
+      "member": "independent/cold-raw/logical_store.py",
+      "bytes": 2263
+    },
+    {
+      "member": "independent/cold-raw/original-local.sqlite",
+      "bytes": 69632
+    },
+    {
+      "member": "independent/cold-raw/original-remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "independent/cold-raw/OUTPUTS.md",
+      "bytes": 1293
+    },
+    {
+      "member": "independent/cold-raw/provenance.json",
+      "bytes": 559
+    },
+    {
+      "member": "independent/cold-raw/receiver-exit.json",
+      "bytes": 55
+    },
+    {
+      "member": "independent/cold-raw/receiver-start.json",
+      "bytes": 482
+    },
+    {
+      "member": "independent/cold-raw/RECEIVER.md",
+      "bytes": 4099
+    },
+    {
+      "member": "independent/cold-raw/TASK.md",
+      "bytes": 1598
+    },
+    {
+      "member": "independent/cold-source/app.py",
+      "bytes": 20985
+    },
+    {
+      "member": "independent/cold-source/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "independent/cold-source/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "independent/cold-source/logical-map.json",
+      "bytes": 2297
+    },
+    {
+      "member": "independent/cold-source/report.py",
+      "bytes": 8957
+    },
+    {
+      "member": "independent/cold-source/reproduce.py",
+      "bytes": 438
+    },
+    {
+      "member": "independent/cold-source/settings.json",
+      "bytes": 56
+    },
+    {
+      "member": "independent/cold-source/submission.json",
+      "bytes": 343
+    },
+    {
+      "member": "independent/cold-sql-audit.json",
+      "bytes": 6840
+    },
+    {
+      "member": "independent/compatible-sql-audit.json",
+      "bytes": 6840
+    },
+    {
+      "member": "independent/confirm_repairs.py",
+      "bytes": 2608
+    },
+    {
+      "member": "independent/exports-checker-result/assessment.json",
+      "bytes": 17498
+    },
+    {
+      "member": "independent/exports-command.json",
+      "bytes": 1524
+    },
+    {
+      "member": "independent/exports-mutation/delivery/business.csv",
+      "bytes": 52
+    },
+    {
+      "member": "independent/exports-mutation/delivery/monitor.csv",
+      "bytes": 80
+    },
+    {
+      "member": "independent/exports-mutation/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "independent/exports-mutation/delivery/reconciliation.csv",
+      "bytes": 196
+    },
+    {
+      "member": "independent/exports-mutation/delivery/recovery.png",
+      "bytes": 108700
+    },
+    {
+      "member": "independent/exports-mutation/delivery/REPORT.md",
+      "bytes": 2611
+    },
+    {
+      "member": "independent/exports-mutation/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "independent/exports-mutation/empty-monitor.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/exports-mutation/events.json",
+      "bytes": 822805
+    },
+    {
+      "member": "independent/exports-mutation/final/facts.json",
+      "bytes": 68141
+    },
+    {
+      "member": "independent/exports-mutation/final/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/exports-mutation/final/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "independent/exports-mutation/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "independent/exports-mutation/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/exports-mutation/original-facts.json",
+      "bytes": 8658
+    },
+    {
+      "member": "independent/exports-mutation/post-report-actual.json",
+      "bytes": 68141
+    },
+    {
+      "member": "independent/exports-mutation/registration.json",
+      "bytes": 50143
+    },
+    {
+      "member": "independent/exports-mutation/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "independent/exports-mutation/repaired-current/facts.json",
+      "bytes": 51926
+    },
+    {
+      "member": "independent/exports-mutation/repaired-current/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/exports-mutation/repaired-current/remote.sqlite",
+      "bytes": 45056
+    },
+    {
+      "member": "independent/exports-mutation/repaired-incident/facts.json",
+      "bytes": 24633
+    },
+    {
+      "member": "independent/exports-mutation/repaired-incident/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/exports-mutation/repaired-incident/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "independent/exports-mutation/report-native.json",
+      "bytes": 346
+    },
+    {
+      "member": "independent/exports-mutation/run.json",
+      "bytes": 80
+    },
+    {
+      "member": "independent/exports-mutation/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "independent/exports-mutation/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "independent/exports-mutation/service-2.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "independent/exports-repaired-command.json",
+      "bytes": 1507
+    },
+    {
+      "member": "independent/exports-repaired-result/assessment.json",
+      "bytes": 20393
+    },
+    {
+      "member": "independent/final-base-sql-audit.json",
+      "bytes": 6839
+    },
+    {
+      "member": "independent/final-observations.json",
+      "bytes": 4264
+    },
+    {
+      "member": "independent/final_observations.py",
+      "bytes": 4780
+    },
+    {
+      "member": "independent/git-status-end.txt",
+      "bytes": 12316
+    },
+    {
+      "member": "independent/git-status-start.txt",
+      "bytes": 12316
+    },
+    {
+      "member": "independent/INITIAL-SEAL.json",
+      "bytes": 167
+    },
+    {
+      "member": "independent/main-review-initial.json",
+      "bytes": 4002
+    },
+    {
+      "member": "independent/main-review.json",
+      "bytes": 4953
+    },
+    {
+      "member": "independent/monitor-object-checker-result/assessment.json",
+      "bytes": 17771
+    },
+    {
+      "member": "independent/monitor-object-command.json",
+      "bytes": 1778
+    },
+    {
+      "member": "independent/monitor-object-mutation/delivery/business.csv",
+      "bytes": 479
+    },
+    {
+      "member": "independent/monitor-object-mutation/delivery/monitor.csv",
+      "bytes": 323
+    },
+    {
+      "member": "independent/monitor-object-mutation/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "independent/monitor-object-mutation/delivery/reconciliation.csv",
+      "bytes": 196
+    },
+    {
+      "member": "independent/monitor-object-mutation/delivery/recovery.png",
+      "bytes": 108700
+    },
+    {
+      "member": "independent/monitor-object-mutation/delivery/REPORT.md",
+      "bytes": 2611
+    },
+    {
+      "member": "independent/monitor-object-mutation/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "independent/monitor-object-mutation/empty-monitor.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/monitor-object-mutation/events.json",
+      "bytes": 846470
+    },
+    {
+      "member": "independent/monitor-object-mutation/final/facts.json",
+      "bytes": 68141
+    },
+    {
+      "member": "independent/monitor-object-mutation/final/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/monitor-object-mutation/final/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "independent/monitor-object-mutation/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "independent/monitor-object-mutation/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/monitor-object-mutation/original-facts.json",
+      "bytes": 8658
+    },
+    {
+      "member": "independent/monitor-object-mutation/post-report-actual.json",
+      "bytes": 68141
+    },
+    {
+      "member": "independent/monitor-object-mutation/registration.json",
+      "bytes": 50143
+    },
+    {
+      "member": "independent/monitor-object-mutation/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "independent/monitor-object-mutation/repaired-current/facts.json",
+      "bytes": 51926
+    },
+    {
+      "member": "independent/monitor-object-mutation/repaired-current/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/monitor-object-mutation/repaired-current/remote.sqlite",
+      "bytes": 45056
+    },
+    {
+      "member": "independent/monitor-object-mutation/repaired-incident/facts.json",
+      "bytes": 24633
+    },
+    {
+      "member": "independent/monitor-object-mutation/repaired-incident/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/monitor-object-mutation/repaired-incident/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "independent/monitor-object-mutation/report-native.json",
+      "bytes": 346
+    },
+    {
+      "member": "independent/monitor-object-mutation/run.json",
+      "bytes": 80
+    },
+    {
+      "member": "independent/monitor-object-mutation/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "independent/monitor-object-mutation/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "independent/monitor-object-mutation/service-2.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "independent/monitor-object-repaired-command.json",
+      "bytes": 1547
+    },
+    {
+      "member": "independent/monitor-object-repaired-result/assessment.json",
+      "bytes": 20799
+    },
+    {
+      "member": "independent/native-identity-checker-result/assessment.json",
+      "bytes": 17810
+    },
+    {
+      "member": "independent/native-identity-command.json",
+      "bytes": 1757
+    },
+    {
+      "member": "independent/native-identity-mutation/delivery/business.csv",
+      "bytes": 479
+    },
+    {
+      "member": "independent/native-identity-mutation/delivery/monitor.csv",
+      "bytes": 323
+    },
+    {
+      "member": "independent/native-identity-mutation/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "independent/native-identity-mutation/delivery/reconciliation.csv",
+      "bytes": 196
+    },
+    {
+      "member": "independent/native-identity-mutation/delivery/recovery.png",
+      "bytes": 108700
+    },
+    {
+      "member": "independent/native-identity-mutation/delivery/REPORT.md",
+      "bytes": 2611
+    },
+    {
+      "member": "independent/native-identity-mutation/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "independent/native-identity-mutation/empty-monitor.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/native-identity-mutation/events.json",
+      "bytes": 846446
+    },
+    {
+      "member": "independent/native-identity-mutation/final/facts.json",
+      "bytes": 68141
+    },
+    {
+      "member": "independent/native-identity-mutation/final/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/native-identity-mutation/final/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "independent/native-identity-mutation/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "independent/native-identity-mutation/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/native-identity-mutation/original-facts.json",
+      "bytes": 8658
+    },
+    {
+      "member": "independent/native-identity-mutation/post-report-actual.json",
+      "bytes": 68141
+    },
+    {
+      "member": "independent/native-identity-mutation/registration.json",
+      "bytes": 50143
+    },
+    {
+      "member": "independent/native-identity-mutation/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "independent/native-identity-mutation/repaired-current/facts.json",
+      "bytes": 51926
+    },
+    {
+      "member": "independent/native-identity-mutation/repaired-current/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/native-identity-mutation/repaired-current/remote.sqlite",
+      "bytes": 45056
+    },
+    {
+      "member": "independent/native-identity-mutation/repaired-incident/facts.json",
+      "bytes": 24633
+    },
+    {
+      "member": "independent/native-identity-mutation/repaired-incident/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/native-identity-mutation/repaired-incident/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "independent/native-identity-mutation/report-native.json",
+      "bytes": 355
+    },
+    {
+      "member": "independent/native-identity-mutation/run.json",
+      "bytes": 80
+    },
+    {
+      "member": "independent/native-identity-mutation/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "independent/native-identity-mutation/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "independent/native-identity-mutation/service-2.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "independent/native-identity-repaired-command.json",
+      "bytes": 1167
+    },
+    {
+      "member": "independent/native-identity-repaired-result/assessment.json",
+      "bytes": 124
+    },
+    {
+      "member": "independent/new-epoch-checker-result/assessment.json",
+      "bytes": 17576
+    },
+    {
+      "member": "independent/new-epoch-command.json",
+      "bytes": 1704
+    },
+    {
+      "member": "independent/new-epoch-mutation/delivery/business.csv",
+      "bytes": 479
+    },
+    {
+      "member": "independent/new-epoch-mutation/delivery/monitor.csv",
+      "bytes": 323
+    },
+    {
+      "member": "independent/new-epoch-mutation/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "independent/new-epoch-mutation/delivery/reconciliation.csv",
+      "bytes": 196
+    },
+    {
+      "member": "independent/new-epoch-mutation/delivery/recovery.png",
+      "bytes": 108700
+    },
+    {
+      "member": "independent/new-epoch-mutation/delivery/REPORT.md",
+      "bytes": 2611
+    },
+    {
+      "member": "independent/new-epoch-mutation/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "independent/new-epoch-mutation/empty-monitor.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/new-epoch-mutation/events.json",
+      "bytes": 822805
+    },
+    {
+      "member": "independent/new-epoch-mutation/final/facts.json",
+      "bytes": 68141
+    },
+    {
+      "member": "independent/new-epoch-mutation/final/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/new-epoch-mutation/final/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "independent/new-epoch-mutation/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "independent/new-epoch-mutation/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/new-epoch-mutation/original-facts.json",
+      "bytes": 8658
+    },
+    {
+      "member": "independent/new-epoch-mutation/post-report-actual.json",
+      "bytes": 68141
+    },
+    {
+      "member": "independent/new-epoch-mutation/registration.json",
+      "bytes": 50143
+    },
+    {
+      "member": "independent/new-epoch-mutation/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "independent/new-epoch-mutation/repaired-current/facts.json",
+      "bytes": 51926
+    },
+    {
+      "member": "independent/new-epoch-mutation/repaired-current/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/new-epoch-mutation/repaired-current/remote.sqlite",
+      "bytes": 45056
+    },
+    {
+      "member": "independent/new-epoch-mutation/repaired-incident/facts.json",
+      "bytes": 24633
+    },
+    {
+      "member": "independent/new-epoch-mutation/repaired-incident/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/new-epoch-mutation/repaired-incident/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "independent/new-epoch-mutation/report-native.json",
+      "bytes": 346
+    },
+    {
+      "member": "independent/new-epoch-mutation/run.json",
+      "bytes": 80
+    },
+    {
+      "member": "independent/new-epoch-mutation/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "independent/new-epoch-mutation/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "independent/new-epoch-mutation/service-2.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "independent/new-epoch-repaired-command.json",
+      "bytes": 1514
+    },
+    {
+      "member": "independent/new-epoch-repaired-result/assessment.json",
+      "bytes": 20497
+    },
+    {
+      "member": "independent/object-observations.json",
+      "bytes": 4548
+    },
+    {
+      "member": "independent/own-cold-originals.zip",
+      "bytes": 262515
+    },
+    {
+      "member": "independent/plan-wire-equivalent/delivery/business.csv",
+      "bytes": 479
+    },
+    {
+      "member": "independent/plan-wire-equivalent/delivery/monitor.csv",
+      "bytes": 323
+    },
+    {
+      "member": "independent/plan-wire-equivalent/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "independent/plan-wire-equivalent/delivery/reconciliation.csv",
+      "bytes": 196
+    },
+    {
+      "member": "independent/plan-wire-equivalent/delivery/recovery.png",
+      "bytes": 108700
+    },
+    {
+      "member": "independent/plan-wire-equivalent/delivery/REPORT.md",
+      "bytes": 2611
+    },
+    {
+      "member": "independent/plan-wire-equivalent/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "independent/plan-wire-equivalent/empty-monitor.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/plan-wire-equivalent/events.json",
+      "bytes": 846477
+    },
+    {
+      "member": "independent/plan-wire-equivalent/final/facts.json",
+      "bytes": 68141
+    },
+    {
+      "member": "independent/plan-wire-equivalent/final/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/plan-wire-equivalent/final/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "independent/plan-wire-equivalent/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "independent/plan-wire-equivalent/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/plan-wire-equivalent/original-facts.json",
+      "bytes": 8658
+    },
+    {
+      "member": "independent/plan-wire-equivalent/post-report-actual.json",
+      "bytes": 68141
+    },
+    {
+      "member": "independent/plan-wire-equivalent/registration.json",
+      "bytes": 50143
+    },
+    {
+      "member": "independent/plan-wire-equivalent/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "independent/plan-wire-equivalent/repaired-current/facts.json",
+      "bytes": 51926
+    },
+    {
+      "member": "independent/plan-wire-equivalent/repaired-current/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/plan-wire-equivalent/repaired-current/remote.sqlite",
+      "bytes": 45056
+    },
+    {
+      "member": "independent/plan-wire-equivalent/repaired-incident/facts.json",
+      "bytes": 24633
+    },
+    {
+      "member": "independent/plan-wire-equivalent/repaired-incident/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/plan-wire-equivalent/repaired-incident/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "independent/plan-wire-equivalent/report-native.json",
+      "bytes": 346
+    },
+    {
+      "member": "independent/plan-wire-equivalent/run.json",
+      "bytes": 80
+    },
+    {
+      "member": "independent/plan-wire-equivalent/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "independent/plan-wire-equivalent/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "independent/plan-wire-equivalent/service-2.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "independent/plan-wire-equivalent-repaired-command.json",
+      "bytes": 1512
+    },
+    {
+      "member": "independent/plan-wire-equivalent-repaired-result/assessment.json",
+      "bytes": 20574
+    },
+    {
+      "member": "independent/planned-wire-checker-result/assessment.json",
+      "bytes": 17693
+    },
+    {
+      "member": "independent/planned-wire-command.json",
+      "bytes": 1750
+    },
+    {
+      "member": "independent/planned-wire-mutation/delivery/business.csv",
+      "bytes": 479
+    },
+    {
+      "member": "independent/planned-wire-mutation/delivery/monitor.csv",
+      "bytes": 323
+    },
+    {
+      "member": "independent/planned-wire-mutation/delivery/operations.md",
+      "bytes": 1422
+    },
+    {
+      "member": "independent/planned-wire-mutation/delivery/reconciliation.csv",
+      "bytes": 196
+    },
+    {
+      "member": "independent/planned-wire-mutation/delivery/recovery.png",
+      "bytes": 108700
+    },
+    {
+      "member": "independent/planned-wire-mutation/delivery/REPORT.md",
+      "bytes": 2611
+    },
+    {
+      "member": "independent/planned-wire-mutation/delivery/reproduce.md",
+      "bytes": 843
+    },
+    {
+      "member": "independent/planned-wire-mutation/empty-monitor.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/planned-wire-mutation/events.json",
+      "bytes": 846450
+    },
+    {
+      "member": "independent/planned-wire-mutation/final/facts.json",
+      "bytes": 68141
+    },
+    {
+      "member": "independent/planned-wire-mutation/final/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/planned-wire-mutation/final/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "independent/planned-wire-mutation/isolation.json",
+      "bytes": 283
+    },
+    {
+      "member": "independent/planned-wire-mutation/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/planned-wire-mutation/original-facts.json",
+      "bytes": 8658
+    },
+    {
+      "member": "independent/planned-wire-mutation/post-report-actual.json",
+      "bytes": 68141
+    },
+    {
+      "member": "independent/planned-wire-mutation/registration.json",
+      "bytes": 50143
+    },
+    {
+      "member": "independent/planned-wire-mutation/remote.sqlite",
+      "bytes": 49152
+    },
+    {
+      "member": "independent/planned-wire-mutation/repaired-current/facts.json",
+      "bytes": 51926
+    },
+    {
+      "member": "independent/planned-wire-mutation/repaired-current/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/planned-wire-mutation/repaired-current/remote.sqlite",
+      "bytes": 45056
+    },
+    {
+      "member": "independent/planned-wire-mutation/repaired-incident/facts.json",
+      "bytes": 24633
+    },
+    {
+      "member": "independent/planned-wire-mutation/repaired-incident/local.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/planned-wire-mutation/repaired-incident/remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "independent/planned-wire-mutation/report-native.json",
+      "bytes": 346
+    },
+    {
+      "member": "independent/planned-wire-mutation/run.json",
+      "bytes": 80
+    },
+    {
+      "member": "independent/planned-wire-mutation/service-0.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "independent/planned-wire-mutation/service-1.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "independent/planned-wire-mutation/service-2.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "independent/planned-wire-repaired-command.json",
+      "bytes": 1522
+    },
+    {
+      "member": "independent/planned-wire-repaired-result/assessment.json",
+      "bytes": 20653
+    },
+    {
+      "member": "independent/probe_boundaries.py",
+      "bytes": 3398
+    },
+    {
+      "member": "independent/probe_schema_freedom.py",
+      "bytes": 1624
+    },
+    {
+      "member": "independent/probe_semantics.py",
+      "bytes": 3218
+    },
+    {
+      "member": "independent/repair-confirmation.json",
+      "bytes": 805
+    },
+    {
+      "member": "independent/restore-backup-current-repaired-command.json",
+      "bytes": 1733
+    },
+    {
+      "member": "independent/restore-backup-current-repaired-result/assessment.json",
+      "bytes": 15994
+    },
+    {
+      "member": "independent/REVIEW-FINAL.md",
+      "bytes": 9316
+    },
+    {
+      "member": "independent/REVIEW-INITIAL.md",
+      "bytes": 3639
+    },
+    {
+      "member": "independent/REVIEW.md",
+      "bytes": 9316
+    },
+    {
+      "member": "independent/run_cold.py",
+      "bytes": 2398
+    },
+    {
+      "member": "independent/save_final.py",
+      "bytes": 13867
+    },
+    {
+      "member": "independent/save_initial.py",
+      "bytes": 8402
+    },
+    {
+      "member": "independent/schema-freedom-probe.json",
+      "bytes": 849
+    },
+    {
+      "member": "independent/schema-sql-audit.json",
+      "bytes": 6840
+    },
+    {
+      "member": "independent/semantic-probe-summary.json",
+      "bytes": 478
+    },
+    {
+      "member": "independent/stage-assessment.json",
+      "bytes": 2167
+    },
+    {
+      "member": "independent/timing-observation.json",
+      "bytes": 745
+    },
+    {
+      "member": "independent/timing-source-original/exercise.py",
+      "bytes": 12413
+    },
+    {
+      "member": "independent/timing-source-original/frozen_sender.py",
+      "bytes": 784
+    },
+    {
+      "member": "independent/timing-source-original/l05_transport.py",
+      "bytes": 525
+    },
+    {
+      "member": "independent/view-alias-assessment.json",
+      "bytes": 608
+    },
+    {
+      "member": "independent/view-alias-map.json",
+      "bytes": 2361
+    },
+    {
+      "member": "independent/view-alias.sqlite",
+      "bytes": 94208
+    },
+    {
+      "member": "independent/view_and_objects.py",
+      "bytes": 3112
+    },
+    {
+      "member": "independent/weak-review-initial.json",
+      "bytes": 3907
+    },
+    {
+      "member": "independent/weak-review.json",
+      "bytes": 4192
+    },
+    {
+      "member": "independent/whole-sql-audit.json",
+      "bytes": 17808
+    },
+    {
+      "member": "final-case/evaluator/app.py",
+      "bytes": 20985
+    },
+    {
+      "member": "final-case/evaluator/BUILD-PLAN.md",
+      "bytes": 7466
+    },
+    {
+      "member": "final-case/evaluator/build_materials.py",
+      "bytes": 1638
+    },
+    {
+      "member": "final-case/evaluator/build_reference.py",
+      "bytes": 12759
+    },
+    {
+      "member": "final-case/evaluator/check_l05.py",
+      "bytes": 27007
+    },
+    {
+      "member": "final-case/evaluator/historical-mini-contracts.zip",
+      "bytes": 5589
+    },
+    {
+      "member": "final-case/evaluator/README.md",
+      "bytes": 1129
+    },
+    {
+      "member": "final-case/evaluator/registered-inputs.json",
+      "bytes": 27904
+    },
+    {
+      "member": "final-case/evaluator/report.py",
+      "bytes": 8957
+    },
+    {
+      "member": "final-case/evaluator/reproduce.py",
+      "bytes": 438
+    },
+    {
+      "member": "final-case/FREEZE.json",
+      "bytes": 2023
+    },
+    {
+      "member": "final-case/public/BUSINESS.md",
+      "bytes": 3662
+    },
+    {
+      "member": "final-case/public/ENVIRONMENT.md",
+      "bytes": 970
+    },
+    {
+      "member": "final-case/public/EXECUTION.md",
+      "bytes": 4859
+    },
+    {
+      "member": "final-case/public/exercise.py",
+      "bytes": 12413
+    },
+    {
+      "member": "final-case/public/frozen_sender.py",
+      "bytes": 797
+    },
+    {
+      "member": "final-case/public/incoming-operations.json",
+      "bytes": 1422
+    },
+    {
+      "member": "final-case/public/l05_effects.py",
+      "bytes": 12464
+    },
+    {
+      "member": "final-case/public/l05_transport.py",
+      "bytes": 543
+    },
+    {
+      "member": "final-case/public/legacy-delivery.json",
+      "bytes": 2898
+    },
+    {
+      "member": "final-case/public/legacy_app.py",
+      "bytes": 3131
+    },
+    {
+      "member": "final-case/public/logical_store.py",
+      "bytes": 2263
+    },
+    {
+      "member": "final-case/public/original-local.sqlite",
+      "bytes": 69632
+    },
+    {
+      "member": "final-case/public/original-remote.sqlite",
+      "bytes": 32768
+    },
+    {
+      "member": "final-case/public/OUTPUTS.md",
+      "bytes": 1293
+    },
+    {
+      "member": "final-case/public/profile.json",
+      "bytes": 957
+    },
+    {
+      "member": "final-case/public/provenance.json",
+      "bytes": 559
+    },
+    {
+      "member": "final-case/public/receiver-exit.json",
+      "bytes": 55
+    },
+    {
+      "member": "final-case/public/receiver-start.json",
+      "bytes": 482
+    },
+    {
+      "member": "final-case/public/RECEIVER.md",
+      "bytes": 4099
+    },
+    {
+      "member": "final-case/public/TASK.md",
+      "bytes": 1598
+    },
+    {
+      "member": "final-case/README.md",
+      "bytes": 2199
+    },
+    {
+      "member": "final-case/rubric.json",
+      "bytes": 10417
+    }
+  ],
+  "scope": "complete external main/review files at closure plus final normative case files; later Git/push receipts external, current review/case objects retained plain",
+  "excluded": "no original execution files excluded; no source digest used as functional acceptance"
+}

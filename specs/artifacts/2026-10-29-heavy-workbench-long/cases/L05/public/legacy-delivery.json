@@ -1,0 +1,136 @@
+{
+  "events": [
+    {
+      "tenant": "A",
+      "request_id": "q1",
+      "event_id": "X",
+      "revision": 1,
+      "kind": "settle",
+      "amount_minor": 100
+    },
+    {
+      "tenant": "B",
+      "request_id": "q2",
+      "event_id": "X",
+      "revision": 1,
+      "kind": "settle",
+      "amount_minor": 200
+    },
+    {
+      "tenant": "A",
+      "request_id": "q3",
+      "event_id": "X",
+      "revision": 2,
+      "kind": "settle",
+      "amount_minor": 120
+    },
+    {
+      "tenant": "A",
+      "request_id": "q4",
+      "event_id": "X",
+      "revision": 2,
+      "kind": "settle",
+      "amount_minor": 90
+    },
+    {
+      "tenant": "B",
+      "request_id": "q5",
+      "event_id": "Y",
+      "revision": 1,
+      "kind": "settle",
+      "amount_minor": 70
+    },
+    {
+      "tenant": "B",
+      "request_id": "q6",
+      "event_id": "Y",
+      "revision": 2,
+      "kind": "cancel",
+      "amount_minor": 0
+    },
+    {
+      "tenant": "A",
+      "request_id": "q7",
+      "event_id": "Z",
+      "revision": 1,
+      "kind": "settle",
+      "amount_minor": 40
+    }
+  ],
+  "acks": [
+    {
+      "status": "accepted",
+      "seq": 1
+    },
+    {
+      "status": "accepted",
+      "seq": 2
+    },
+    {
+      "status": "accepted",
+      "seq": 3
+    },
+    {
+      "status": "accepted",
+      "seq": 4
+    },
+    {
+      "status": "accepted",
+      "seq": 5
+    },
+    {
+      "status": "accepted",
+      "seq": 6
+    },
+    {
+      "status": "accepted",
+      "seq": 7
+    }
+  ],
+  "deliveries": [
+    {
+      "status": "confirmed",
+      "event_id": "pa50af9d9d22d4f32bddad16e7e3121cf",
+      "receipt": {
+        "receipt_id": "a16aad7e-3b47-46e8-a9a0-0b037587b462",
+        "tenant": "A",
+        "event_id": "pa50af9d9d22d4f32bddad16e7e3121cf",
+        "kind": "post",
+        "amount_minor": 1000,
+        "reverses": null
+      }
+    },
+    {
+      "status": "confirmed",
+      "event_id": "p8648b2b1bbf3409999de37037c54aaea",
+      "receipt": {
+        "receipt_id": "0137682f-2a53-421d-a7ff-300dfca9d0e1",
+        "tenant": "B",
+        "event_id": "p8648b2b1bbf3409999de37037c54aaea",
+        "kind": "post",
+        "amount_minor": 500,
+        "reverses": null
+      }
+    },
+    {
+      "status": "transport_unknown",
+      "event_id": "pb857063c973a40f3857dec52b5158245"
+    },
+    {
+      "status": "confirmed",
+      "event_id": "pf8f50853752b49be9ff0a600c913b4de",
+      "receipt": {
+        "receipt_id": "77bb2b12-b302-4f9d-a2e7-633064a8dc23",
+        "tenant": "B",
+        "event_id": "pf8f50853752b49be9ff0a600c913b4de",
+        "kind": "post",
+        "amount_minor": 70,
+        "reverses": null
+      }
+    }
+  ],
+  "accepted_undelivered": {
+    "tenant": "A",
+    "event_id": "p5c40fa240c904c2f8128e65328059900"
+  }
+}

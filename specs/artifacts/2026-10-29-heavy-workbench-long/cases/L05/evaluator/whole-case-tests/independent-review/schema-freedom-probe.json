@@ -1,0 +1,13 @@
+{
+  "actual_logical_projection_rows": 15,
+  "actual_declared_table": "real_outgoing",
+  "actual_fixture_type": "same persistent view/alias control extended by legal table rename; not a new programme/native",
+  "public_exercise_literal": "SELECT tenant,event_id FROM postings WHERE source_kind='business' AND source_id='Z'",
+  "literal_actual_error": {
+    "type": "OperationalError",
+    "message": "no such table: postings"
+  },
+  "legacy_send_source": "public/legacy_app.py also directly SELECTs and UPDATEs postings",
+  "issue": "Public promises internal table/column freedom through map, but exercise execute chooses old Z by hardcoded live postings and then old legacy send queries same candidate DB. Correct custom mapped storage requires an undocumented compatibility view/update trigger.",
+  "candidate_baseline_failure": false
+}

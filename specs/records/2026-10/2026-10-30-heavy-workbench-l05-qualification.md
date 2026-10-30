@@ -120,3 +120,19 @@ scene_app抽出唯一pause(db,epoch)/resume(db,epoch)共享业务primitive，原
 EOF修后独立原探针：receiver81088在持自有SQLite锁2秒观察期仍运行，解锁后旧HTTP真实201/applied/receipt与effect落库，随后自然exit0（2.154秒）；原0.548秒exit0/ConnectionReset/effects空的失败保留不覆盖。最终timer回调只set expired/SHUT_RD，不做输出I/O，避免日志背压卡住timer.join。真实半body用1秒诊断参数得到408/request_timeout，EOF短body422/invalid_request/body_length，随后合法完整POST201、idle连接EOF约1.023秒自然join；fresh首次commit/drop→GET→原receipt replay也通过。公共PROTOCOL已同步固定read窗口/<=60参数与边界，独立只读绑定，未新跑完整cold/旧40。主方同修后六源真实main兼容复验1.9762289秒exit0、原键late replay/逐来源通过，独立只读七项绑定。最终stage-assessment-repaired blocking=[]仅限一个受控在途交错和有限请求收尾，完整L05/任意并发/进程中断/持久恢复checkpoint/逻辑导出自由/监测/职业交付/全rubric/冻结/小时仍未认证。原/修后源码、真实失败、204SQL、冷跑及必要边界归档qualification/inflight-main与inflight-independent-review。
 
 最后将重复可执行默认20/上界60提取为同文件单源常量，serve/CLI/guard共同引用。独立只读内联完整AST与原fixed快照相同，并对最终字节另启动一个自有receiver：ready默认20、真实POST201/SQL effect及receipt对应、正常stop/exit0（0.946989秒）。原EOF/body测试仍绑定原执行源，当前常量重排关系单独说明，不伪称旧测试逐字节执行新文件。CONFIGURATION-FINAL-ADDENDUM及配置合同/源对象在inflight-independent-review及ZIP，未再跑旧套件。
+
+## 最新Recall：L05整题交付，开发合同9/10
+
+用户纠偏先交十题完整成品/真实测试最高优先。L05本轮由原真实旧事故两个SQLite/ACK/NUL notes到真实在途旧HTTP、固定accepted prefix/完整旧key目录、确定receipt处及计划提交后两次进程故障、原repair_id持久续接/前向补偿/epoch切换、迟到原receipt重放、新业务/两个接受者/双sender/服务重启、持久监测/零分母与三CSV/实际图/自含复建/运营移交全部真实运行。只操作自有进程、原料只读/networknone/1CPU，无Provider/凭据/UI/用户进程。跨系统副作用是本题主测，不重L04迁移。
+
+原件D:/opencorvus-benchmark-runs/l05-full-case-20261031；最终main绑定closed-main-final-base/results/run + closed-main-amount/tenant，weak绑定原三closed-weak；另一合法newest资金策略与真实保数据改名outgoing_live也实际native0，无兼容postings对象。三控制最终A/B1130/545、1153/545，新租户另C360；初修复1015/710，新增真实B/W35不能套旧B510。最高冲突0/高唯一解除，业务source与资金parent分离，不要求参考key/动作数。
+
+一次集中整审l05-whole-case-independent-review-20261031从原SQL/实际请求/完整wire/收据/切片/monitor独立重算，唯一额外cold11.1992800s；主/独立均实际看图。六真实缺口集中修：active_json数组；actual UID/PID隔离矛盾设施优先；完整自身持久plan/wire绑定；旧cut边界/计划key的epoch；三CSV完整语义；执行器不再直接依赖candidate.postings而用冻结原wire的sender。另静态20s旧sender对多个合法90s调用有时间区间冲突，只有owner-held sender显式None，普通app20不改；未复现实际超时/未做21s慢探针。当前最终base实际走None/held/release/replayed，native11.3013694s，wrapper11.6293706s另计。amount/tenant/weak/独立原cold保原helper字节，不回写成新源全矩阵。
+
+原五反例/旧checker/初评、schema原阻断、partial内层continue导致误读stage、首缺monitor_after判断均保留。只读原对象复验后，已观察失败/依赖未执行/设施错误明确分开，未交或未完总分null。JSON等价重排正向控制通过，不用词法/参考ID做门。六错误programme真实进同checker；最高冲突先到、换新key、提前确认、恢复备份、全局传输dedup、伪监测均具名关键失败。
+
+20:14:53Z单层独审允许仅devmetadata冻结，权重15M75+5H25=100/critical/90与原事实不改。主方实际check_l05 CLI接同三run和5真独评：reference100/20pass/allcritical/goodtrue，weak94/H02criticalfail/goodfalse；不是模型候选分。L05/0.2.0-dev FREEZE、规范public/完整软件/可读报告图/原件ZIP在cases/L05。旧mini/scene/current-source仅历史退役，不重旧40/204/EOF。
+
+当前9/10完整开发合同，有效候选小时0/10、真人专业/统计成熟未认证。无新增活跃LLM/solver/独审；六旧昂贵容器只读核Paused，不恢复。下一直接完整L01：先已有权重便宜重算独立PDE误差/残差/条件质量与合理可达，study_complete与solution_reproduced分开，方法分不补质量；不按现误差倒填宽线/匹配非凸精确轨迹，不自动恢复五GPU。之后履行L02/L06真实双100已触发的另版升级与必要fresh区分度/有效小时，旧public/rubric/分数及退休API只读不重开。所有未完要求保留，心跳ACTIVE。
+
+本轮范围commit/正常fetch merge/审全待推/必要验证/push；精确Git与外部publish-delivery.json才是推送收据。保用户overlay/删视频图片/索引排序/Bun等foreign改动。

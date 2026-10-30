@@ -1,0 +1,218 @@
+{
+  "case_id": "L05",
+  "version": "0.2.0-dev",
+  "status": "development_pilot_frozen",
+  "fixed_denominator": 100,
+  "good_rule": {
+    "minimum_score": 90,
+    "all_critical": "verified_pass"
+  },
+  "states": [
+    "verified_pass",
+    "verified_fail",
+    "blocked",
+    "unassessed"
+  ],
+  "leaves": [
+    {
+      "id": "M01",
+      "title": "完整真实执行",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "pass": "当前完整自含运行自然完成；actor/receiver/报告真实native和故障退出可核，不以自述通过",
+      "fail": "任一已运行事实不成立；依赖未执行blocked，未评unassessed，分母不变",
+      "evidence": "actual raw/request/native/SQLite/receiver/stage records"
+    },
+    {
+      "id": "M02",
+      "title": "全部承诺与原文",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "pass": "原accepted/批准调整/notes逐字段保留，新成功ACK逐原请求绑定实际SQLite；未知ACK不能被回卷抹掉",
+      "fail": "任一已运行事实不成立；依赖未执行blocked，未评unassessed，分母不变",
+      "evidence": "actual raw/request/native/SQLite/receiver/stage records"
+    },
+    {
+      "id": "M03",
+      "title": "跨租户运输身份与竞争接受",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "pass": "tenant/request_id同载荷重试同seq，两个真实竞争PID一accepted一duplicate，不能全局request_id去重",
+      "fail": "任一已运行事实不成立；依赖未执行blocked，未评unassessed，分母不变",
+      "evidence": "actual raw/request/native/SQLite/receiver/stage records"
+    },
+    {
+      "id": "M04",
+      "title": "业务版本与冲突",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "pass": "各指定修复cut逐tenant/business最高revision唯一语义；冲突0、cancel0、迟到保留、更高解除；不只最终碰巧正确",
+      "fail": "任一已运行事实不成立；依赖未执行blocked，未评unassessed，分母不变",
+      "evidence": "actual raw/request/native/SQLite/receiver/stage records"
+    },
+    {
+      "id": "M05",
+      "title": "逐来源外部目标",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "pass": "原opening/每business/每批准adjustment与实际receiver effect净额一致，不以账户总额互抵",
+      "fail": "任一已运行事实不成立；依赖未执行blocked，未评unassessed，分母不变",
+      "evidence": "actual raw/request/native/SQLite/receiver/stage records"
+    },
+    {
+      "id": "M06",
+      "title": "不可改旧动作与可追溯新登记",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "pass": "原wire/source/非空receipt保留；新posting来源/合法接受边界与epoch、实际唯一身份完整",
+      "fail": "任一已运行事实不成立；依赖未执行blocked，未评unassessed，分母不变",
+      "evidence": "actual raw/request/native/SQLite/receiver/stage records"
+    },
+    {
+      "id": "M07",
+      "title": "真实外部收据与完整wire",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "pass": "每本地登记对应实际receiver完整同payload/receipt，所有真实effect均有本地来源；sent标记不代替HTTP",
+      "fail": "任一已运行事实不成立；依赖未执行blocked，未评unassessed，分母不变",
+      "evidence": "actual raw/request/native/SQLite/receiver/stage records"
+    },
+    {
+      "id": "M08",
+      "title": "同租户资金与冲正上限",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "pass": "每reversal引用同tenant正post、累计不超原额；不要求同business parent/参考资金分配",
+      "fail": "任一已运行事实不成立；依赖未执行blocked，未评unassessed，分母不变",
+      "evidence": "actual raw/request/native/SQLite/receiver/stage records"
+    },
+    {
+      "id": "M09",
+      "title": "持久pause与切换",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "pass": "完整原事实prefix/有限旧key目录入cuts；暂停拒新接受但原accepted重试可查；完成cut与高epoch原子治理",
+      "fail": "任一已运行事实不成立；依赖未执行blocked，未评unassessed，分母不变",
+      "evidence": "actual raw/request/native/SQLite/receiver/stage records"
+    },
+    {
+      "id": "M10",
+      "title": "修复两窗口进程恢复",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "pass": "确认前真实中断保持未知→原键receipt；plan提交后真实中断的已登记完整键集合稳定、不重复计划",
+      "fail": "任一已运行事实不成立；依赖未执行blocked，未评unassessed，分母不变",
+      "evidence": "actual raw/request/native/SQLite/receiver/stage records"
+    },
+    {
+      "id": "M11",
+      "title": "双sender真实交错",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "pass": "两个独立PID同pending key在HTTP前握手，实际沿同键幂等收敛，不以串行自报并发",
+      "fail": "任一已运行事实不成立；依赖未执行blocked，未评unassessed，分母不变",
+      "evidence": "actual raw/request/native/SQLite/receiver/stage records"
+    },
+    {
+      "id": "M12",
+      "title": "监测、告警和零分母",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "pass": "实际离散快照pending比率/最高冲突/已登记外部逐来源差异、告警open/still/resolved/clear及实际持久样本；监测不改业务",
+      "fail": "任一已运行事实不成立；依赖未执行blocked，未评unassessed，分母不变",
+      "evidence": "actual raw/request/native/SQLite/receiver/stage records"
+    },
+    {
+      "id": "M13",
+      "title": "接受丢ACK与远端重启/晚HTTP",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "pass": "接受commit后进程退出原请求duplicate；旧HTTP跨切换late replay；真实receiver重启保原收据",
+      "fail": "任一已运行事实不成立；依赖未执行blocked，未评unassessed，分母不变",
+      "evidence": "actual raw/request/native/SQLite/receiver/stage records"
+    },
+    {
+      "id": "M14",
+      "title": "实际SQL、账和隔离交付",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "pass": "逻辑映射查真实数据库/报告逐stage分tenant账一致；actor仅本地可写、report只读原事实/新delivery及完整成品",
+      "fail": "任一已运行事实不成立；依赖未执行blocked，未评unassessed，分母不变",
+      "evidence": "actual raw/request/native/SQLite/receiver/stage records"
+    },
+    {
+      "id": "M15",
+      "title": "输入改变仍真正执行",
+      "weight": 5,
+      "critical": true,
+      "assessment": "machine",
+      "pass": "相同封存source对base/未来金额/新增tenant三注册输入实际运行，非缓存旧答案；各叶仍独立验收",
+      "fail": "任一已运行事实不成立；依赖未执行blocked，未评unassessed，分母不变",
+      "evidence": "actual raw/request/native/SQLite/receiver/stage records"
+    },
+    {
+      "id": "H01",
+      "title": "事故取证与实现解释",
+      "weight": 6,
+      "critical": true,
+      "assessment": "independent",
+      "anchors": "完整：以原journal/旧代码/receiver收据解释身份、版本、unknown ACK与根因；说明实际修复/不同事务域/持久cut/来源和资金parent。失败：只泛化口号、与真实代码/数据相悖或把旧标记当外部事实。",
+      "formats": "等价完整JSON/表/公式/文本可；无half/N/A/字数门"
+    },
+    {
+      "id": "H02",
+      "title": "正确结论与保证边界",
+      "weight": 6,
+      "critical": true,
+      "assessment": "independent",
+      "anchors": "完整：准确报告实际成功/失败和受控范围，讲清合作幂等服务前提、无限故障/真实金融/OS安全/物理掉电未证明。失败：无依据现实全网络exactly-once、无限故障保证或金融认证，正确底表不能洗掉错误强声明。",
+      "formats": "等价完整JSON/表/公式/文本可；无half/N/A/字数门"
+    },
+    {
+      "id": "H03",
+      "title": "可操作监测和运营交接",
+      "weight": 5,
+      "critical": true,
+      "assessment": "independent",
+      "anchors": "完整：替班者有具体命令、原键/repair_id恢复、epoch/冲突/告警开闭与停手条件、原库保留和对账步骤。失败：只说部署重试/监控正常，或步骤会丢accepted/另造副作用键。",
+      "formats": "等价完整JSON/表/公式/文本可；无half/N/A/字数门"
+    },
+    {
+      "id": "H04",
+      "title": "真实图与可读证据",
+      "weight": 4,
+      "critical": false,
+      "assessment": "independent",
+      "anchors": "完整：实际打开图，账户/币种单位/离散窗口/告警数据可读且与本次真实SQL相符；不是文件存在或字数。失败：缺图、错数、坐标或范围混淆。",
+      "formats": "等价完整JSON/表/公式/文本可；无half/N/A/字数门"
+    },
+    {
+      "id": "H05",
+      "title": "自含软件复建与实现自由",
+      "weight": 4,
+      "critical": true,
+      "assessment": "independent",
+      "anchors": "完整：本源码/依赖/map/完整public输入即可在声明环境真实reproduce，不靠私有checker/答案；清楚定位原native/数据库/错误。正确等价格式/资金策略/表名不按参考形式扣分。失败：缺关键程序/依赖/命令或仅截图。",
+      "formats": "等价完整JSON/表/公式/文本可；无half/N/A/字数门"
+    }
+  ],
+  "limitations": [
+    "author development reference and error controls, not model candidate score",
+    "one familiar nonblind AI whole-case review is not professional/statistical certification",
+    "reference time and logical windows are not agent effective hours"
+  ]
+}

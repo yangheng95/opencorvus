@@ -1,0 +1,18 @@
+# L05 complete-case independent initial review
+
+The actual full reference is reachable and correct on independent raw/SQLite/Fraction reconstruction; its five content leaves pass. The real weak report fails H02 only because its final paragraph guarantees all real payments under infinite partitions/failures and financial certification. No total is authored. Initial ratings bind the original closed-main/closed-weak three actual runs and are preserved before repair.
+
+Six concentrated benchmark blockers were captured against the original full checker/source; all controls are isolated real SQLite/captured-object mutations or direct SQL controls, zero new faulty native programmes:
+
+1. M12 accepts active_json object with correct keys rather than the required array. Actual persistent sample and original response were changed together, still pass.
+2. M14 trusts isolation constants even when captured actor/report actual first identity lines say UID0. This is an evaluator native-capture contradiction requiring facility classification, not a candidate penalty.
+3. M10 compares only planned key sets, allowing checkpoint planned wire amount to differ from final wire under the same immutable registered identity.
+4. M06 accepts any epoch1/2 rather than binding old-cut/planned keys and new accepted prefix; actual new boundary>7 epoch2 changed to1 still passes.
+5. M14 only requires business.csv/monitor.csv existence; both can be header-only and pass while required data is absent.
+6. Logical reader accepts actual renamed/mapped storage, but public exercise directly queries candidate live postings and legacy sender directly reads/updates that same canonical table. A correct custom physical schema therefore needs an undisclosed legacy compatibility view/trigger. Same owned SQL view/alias fixture successfully projects15 rows but exact exercise query fails no-such-table. Use frozen old sender facts/old snapshot, and map-aware candidate observation; do not force reference table names.
+
+Source case-initial contains original complete checker bytes, public executor, receiver, logical reader, app/report/rubric. boundary/semantic/schema-freedom probe receipts preserve concrete outcomes. Parent also found partial collector overreach; retain old failures and distinguish executed failures from unobserved dependencies rather than manufacturing pass or blanket blame. No old40/204/EOF qualification was rerun.
+
+Independent whole-sql-audit verifies every original/new tenant request and accepted sequence, highest conflicting revision0/higher release, old wire/receipt and raw notes, exact source contributions and funding capacity, immutable full plan fields, old HTTP late original receipt, persistent cut, actual actor PID/UID/native and three receiver exits, all real sample ratios and open/still/resolved/clear transitions. Original service request rows and consumed drop-once also survive exactly. First repaired account totalsA1015/B710; final baseA1130/B545; amountA1153/B545; added tenantC360. These are deterministic checks, not samples or evidence of work duration.
+
+One permitted self-contained source-only canonical base cold naturally completed in11.1992800s, actual1CPU/networknone/no evaluator mounts. Original source/raw/argv/PID/SQL/native/inspect/log were sealed before exact ownCID cleanup. It executed the then-current public helper; any subsequent schema-freedom helper fix must be a disclosed new object, not retroactively claimed as this cold. Final-case freeze remains blocked until the six concentrated defects close. No professional/statistical/hour/ten-case maturity conclusion is made.

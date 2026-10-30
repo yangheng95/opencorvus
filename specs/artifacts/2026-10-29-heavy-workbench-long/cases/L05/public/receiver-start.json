@@ -1,0 +1,17 @@
+{
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "D:\\opencorvus-benchmark-runs\\l05-scene-qualification-20261030\\source-cold-a\\public\\l05_effects.py",
+    "--db",
+    "D:\\opencorvus-benchmark-runs\\l05-scene-qualification-20261030\\original-input\\original-remote.sqlite",
+    "--drop-once",
+    "A/pb857063c973a40f3857dec52b5158245"
+  ],
+  "ready": {
+    "status": "ready",
+    "pid": 77816,
+    "url": "http://127.0.0.1:64892"
+  }
+}

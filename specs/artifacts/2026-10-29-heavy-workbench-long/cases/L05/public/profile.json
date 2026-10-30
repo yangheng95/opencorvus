@@ -1,0 +1,30 @@
+{
+  "case_id": "L05",
+  "version": "0.2.0-dev",
+  "status": "frozen_development_pilot",
+  "inputs": [
+    "BUSINESS.md",
+    "ENVIRONMENT.md",
+    "EXECUTION.md",
+    "OUTPUTS.md",
+    "RECEIVER.md",
+    "TASK.md",
+    "exercise.py",
+    "frozen_sender.py",
+    "incoming-operations.json",
+    "l05_effects.py",
+    "l05_transport.py",
+    "legacy-delivery.json",
+    "legacy_app.py",
+    "logical_store.py",
+    "original-local.sqlite",
+    "original-remote.sqlite",
+    "profile.json",
+    "provenance.json",
+    "receiver-exit.json",
+    "receiver-start.json"
+  ],
+  "environment": "declared offline Linux runtime, SQLite and actual local HTTP; no real financial service or credentials",
+  "comparison_rule": "score >=90 and every critical leaf verified_pass; no minimum duration",
+  "limits": "finite cooperative protocol and owned processes, not arbitrary network/physical power loss/production financial certification"
+}

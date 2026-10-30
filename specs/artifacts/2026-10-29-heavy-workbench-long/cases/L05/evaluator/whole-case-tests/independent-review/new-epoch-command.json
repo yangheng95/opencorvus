@@ -1,0 +1,31 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l05-whole-case-independent-review-20261031\\case-initial\\evaluator\\check_l05.py",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\l05-whole-case-independent-review-20261031\\new-epoch-mutation",
+    "--raw",
+    "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\raw-closed-base",
+    "--registered",
+    "D:\\opencorvus-benchmark-runs\\l05-whole-case-independent-review-20261031\\case-initial\\evaluator\\registered-inputs.json",
+    "--rubric",
+    "D:\\opencorvus-benchmark-runs\\l05-whole-case-independent-review-20261031\\case-initial\\rubric.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l05-whole-case-independent-review-20261031\\new-epoch-checker-result"
+  ],
+  "exit_code": 4,
+  "seconds": 0.2949289996176958,
+  "stdout": "{\"status\": \"assessment_incomplete\", \"subject_role\": \"author_reference_or_error_control\", \"run_roots\": [\"D:\\\\opencorvus-benchmark-runs\\\\l05-whole-case-independent-review-20261031\\\\new-epoch-mutation\"], \"fixed_denominator\": 100, \"total\": null, \"business_success\": null, \"good\": null, \"failed\": [], \"unresolved\": [\"M15\", \"H01\", \"H02\", \"H03\", \"H04\", \"H05\"], \"critical_unmet\": [\"M15\", \"H01\", \"H02\", \"H03\", \"H05\"]}\n",
+  "stderr": "",
+  "mutation": {
+    "tenant": "A",
+    "key": "pcd436db4e9544859beaf1ea07076c5c0",
+    "boundary": 14,
+    "original_epoch": 2,
+    "mutated_epoch": 1,
+    "scope": "Actual copied SQLite mutation after accepted prefix beyond the completed epoch1 cut. Remote wire/receipt and business amounts preserved, not a new native."
+  }
+}

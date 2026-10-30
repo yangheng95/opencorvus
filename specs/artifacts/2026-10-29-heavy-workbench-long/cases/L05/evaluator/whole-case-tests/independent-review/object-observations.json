@@ -1,0 +1,134 @@
+{
+  "view": {
+    "status": "actual_view_and_column_alias_query_passed",
+    "actual_object": "Journal presentation view",
+    "mapped_columns": {
+      "seq": "field seq",
+      "tenant": "field tenant",
+      "request_id": "field request_id",
+      "event_id": "field event_id",
+      "revision": "field revision",
+      "kind": "field kind",
+      "amount_minor": "field amount_minor",
+      "payload": "field payload"
+    },
+    "journal_rows": 14,
+    "scope": "One actual persistent SQLite view/column mapping control, production reader only; business mathematics independently checked elsewhere, not a new programme/native."
+  },
+  "runs": [
+    {
+      "role": "base",
+      "native_exit": 0,
+      "actual_CID": "d8e87043fa612844bf1aabd152fd578bfd7251daa9748e04bf14ffde6993aa20",
+      "CID_bound": true,
+      "mounts": {
+        "/source": {
+          "Type": "bind",
+          "Source": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-main-submission",
+          "Destination": "/source",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        },
+        "/raw": {
+          "Type": "bind",
+          "Source": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\raw-closed-base",
+          "Destination": "/raw",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        },
+        "/results": {
+          "Type": "bind",
+          "Source": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-main-base\\results",
+          "Destination": "/results",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        }
+      },
+      "source_raw_readonly": true,
+      "only_source_raw_new_results": true,
+      "cpus": 1000000000,
+      "network": "none",
+      "original_remote_request_rows_preserved": true,
+      "original_drop_consumption_preserved": true
+    },
+    {
+      "role": "amount",
+      "native_exit": 0,
+      "actual_CID": "00d7b9d609bf082da2122319ac6bac61ac2a2aa63a1491e7281b46ee82416255",
+      "CID_bound": true,
+      "mounts": {
+        "/source": {
+          "Type": "bind",
+          "Source": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-main-submission",
+          "Destination": "/source",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        },
+        "/raw": {
+          "Type": "bind",
+          "Source": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\raw-closed-amount",
+          "Destination": "/raw",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        },
+        "/results": {
+          "Type": "bind",
+          "Source": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-main-amount\\results",
+          "Destination": "/results",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        }
+      },
+      "source_raw_readonly": true,
+      "only_source_raw_new_results": true,
+      "cpus": 1000000000,
+      "network": "none",
+      "original_remote_request_rows_preserved": true,
+      "original_drop_consumption_preserved": true
+    },
+    {
+      "role": "tenant",
+      "native_exit": 0,
+      "actual_CID": "696a85548db81f934c9110a71f88f17bab7084e35428bb00dcda72be2df61291",
+      "CID_bound": true,
+      "mounts": {
+        "/source": {
+          "Type": "bind",
+          "Source": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-main-submission",
+          "Destination": "/source",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        },
+        "/raw": {
+          "Type": "bind",
+          "Source": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\raw-closed-tenant",
+          "Destination": "/raw",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        },
+        "/results": {
+          "Type": "bind",
+          "Source": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-main-tenant\\results",
+          "Destination": "/results",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        }
+      },
+      "source_raw_readonly": true,
+      "only_source_raw_new_results": true,
+      "cpus": 1000000000,
+      "network": "none",
+      "original_remote_request_rows_preserved": true,
+      "original_drop_consumption_preserved": true
+    }
+  ]
+}

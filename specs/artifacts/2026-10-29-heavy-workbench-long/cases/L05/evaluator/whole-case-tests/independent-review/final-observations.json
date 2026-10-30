@@ -1,0 +1,90 @@
+{
+  "checks": {
+    "closed-main-final-base_native": true,
+    "closed-main-final-base_actual_mounts": true,
+    "closed-main-final-base_report_real_identity": true,
+    "closed-main-final-base_actual_submission_binding": true,
+    "closed-main-amount_native": true,
+    "closed-main-amount_actual_mounts": true,
+    "closed-main-amount_report_real_identity": true,
+    "closed-main-amount_actual_submission_binding": true,
+    "closed-main-tenant_native": true,
+    "closed-main-tenant_actual_mounts": true,
+    "closed-main-tenant_report_real_identity": true,
+    "closed-main-tenant_actual_submission_binding": true,
+    "closed-weak-base_native": true,
+    "closed-weak-base_actual_mounts": true,
+    "closed-weak-base_report_real_identity": true,
+    "closed-weak-base_actual_submission_binding": true,
+    "closed-weak-amount_native": true,
+    "closed-weak-amount_actual_mounts": true,
+    "closed-weak-amount_report_real_identity": true,
+    "closed-weak-amount_actual_submission_binding": true,
+    "closed-weak-tenant_native": true,
+    "closed-weak-tenant_actual_mounts": true,
+    "closed-weak-tenant_report_real_identity": true,
+    "closed-weak-tenant_actual_submission_binding": true,
+    "closed-schema-compat_native": true,
+    "closed-schema-compat_actual_mounts": true,
+    "closed-schema-compat_report_real_identity": true,
+    "closed-schema-compat_actual_submission_binding": true,
+    "same_original_candidate_over_three_inputs": true,
+    "actual_new_frozen_sender_no_candidate_DB_arg": true,
+    "new_frozen_wire_original_receipt_late": true,
+    "final_published_helpers_exact_actual_bytes": true,
+    "actual_sender_timeout_owner_managed": true,
+    "private_checker_same_repair_replayed": true,
+    "actual_renamed_storage_contract": true
+  },
+  "failures": [],
+  "actual_runs": [
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-main-final-base",
+      "cid": "826eb658dd4080eeee3c61ae13cdb4299364db1b8b645557c010c66f69c259ae",
+      "native_seconds": 11.301369400694966,
+      "report_pid": 399
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-main-amount",
+      "cid": "00d7b9d609bf082da2122319ac6bac61ac2a2aa63a1491e7281b46ee82416255",
+      "native_seconds": 17.603430500254035,
+      "report_pid": 399
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-main-tenant",
+      "cid": "696a85548db81f934c9110a71f88f17bab7084e35428bb00dcda72be2df61291",
+      "native_seconds": 15.005423599854112,
+      "report_pid": 449
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-base",
+      "cid": "fd35bf170489b210a5893f47fb30aad903f0e6a1631a5d76127ac25456d7429e",
+      "native_seconds": 11.83684269990772,
+      "report_pid": 399
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-amount",
+      "cid": "a9bd935068e37fcd81f7b8f161e3b26c0c11a7cd0e814710a0d0a6fa829c6fb6",
+      "native_seconds": 13.403529500588775,
+      "report_pid": 399
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-weak-tenant",
+      "cid": "ae8ce196df52337fd5fdff9a40343f82bfa61b24c27f11dde717c41054fe4142",
+      "native_seconds": 11.591242499649525,
+      "report_pid": 449
+    },
+    {
+      "root": "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\closed-schema-compat",
+      "cid": "fd1467b5f3a38a6398ff572d72851f4a9adbdef4493f9757c2283a1e15e6607c",
+      "native_seconds": 14.167597699910402,
+      "report_pid": 471
+    }
+  ],
+  "schema_actual_table": [
+    "outgoing_live",
+    "table"
+  ],
+  "timing_scope": "Source-level20-vs90 conflict removed only for owner-held old sender; ordinary actor transport stays20. Final normal base exercised the actual None path/release/replayed. No21-second slow probe was run, so no empirical slow-duration guarantee is claimed.",
+  "source_lineage": "Own single cold and original amount/tenant/weak/alternative used their original helper bytes; new schema/frozen sender and timeout helper are separately observed actual base increments, not a retrospective full-matrix rerun."
+}

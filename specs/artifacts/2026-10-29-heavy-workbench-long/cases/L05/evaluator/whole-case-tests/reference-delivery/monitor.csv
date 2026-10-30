@@ -1,0 +1,7 @@
+window_id,pending,total,pending_ratio,conflicts,mismatched_sources,active_json
+incident,2,5,2/5,1,6,"[""business_conflict"",""pending"",""source_mismatch""]"
+repaired,0,10,0,1,0,"[""business_conflict""]"
+changed,0,10,0,0,5,"[""source_mismatch""]"
+current,0,15,0,0,0,[]
+after-restart,0,15,0,0,0,[]
+empty,0,0,0,0,0,[]

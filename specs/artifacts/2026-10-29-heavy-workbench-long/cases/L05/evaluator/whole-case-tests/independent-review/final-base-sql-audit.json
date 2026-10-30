@@ -1,0 +1,274 @@
+{
+  "source": "Independent readonly SQLite, Python integers/Fraction, original request/state and complete source ledger. No author app/fold/targets imports.",
+  "seconds": 0.1024766992777586,
+  "checks": {
+    "real_request_transport_and_epoch": 11,
+    "accepted_fault_actual_journal": 1,
+    "adjustment_real_domain": 1,
+    "adjustment_real_ACK": 1,
+    "new_note_real_ACK": 1,
+    "all_original_and_new_accepted_facts": 16,
+    "highest_revision_all_businesses": 4,
+    "complete_unique_effect_catalogue": 4,
+    "actual_immutable_wire_receipt": 55,
+    "posting_acceptance_boundary": 55,
+    "source_existed_before_registration": 36,
+    "same_tenant_funding_capacity": 37,
+    "reversal_real_parent": 18,
+    "every_logical_source_exact": 4,
+    "old_registration_full_fields": 20,
+    "old_remote_receipt_immutable": 16,
+    "stage_actual_SQL_capture": 3,
+    "durable_original_cut_prefix": 1,
+    "durable_full_planned_registration": 10,
+    "actual_actor_uid_PID_native": 32,
+    "actual_owned_checkpoint_PID": 7,
+    "remote_commit_before_local_confirm": 1,
+    "three_actual_receivers_natural_terminal": 1,
+    "real_late_HTTP_original_receipt": 1,
+    "real_monitor_counts_fraction_array": 6,
+    "real_alert_transition": 6,
+    "durable_sample_alerts": 6,
+    "monitor_only_observes_business_effects": 6
+  },
+  "failures": [],
+  "results": {
+    "base": {
+      "accounts": {
+        "repaired-incident": {
+          "A": 1015,
+          "B": 710
+        },
+        "repaired-current": {
+          "A": 1130,
+          "B": 545
+        },
+        "final": {
+          "A": 1130,
+          "B": 545
+        }
+      },
+      "postings": 15,
+      "receipts": 15,
+      "accepted": 14,
+      "samples": [
+        {
+          "window_id": "incident",
+          "pending": 2,
+          "total": 5,
+          "pending_ratio": "2/5",
+          "conflicts": 1,
+          "mismatched_sources": 6,
+          "active_json": "[\"business_conflict\",\"pending\",\"source_mismatch\"]"
+        },
+        {
+          "window_id": "repaired",
+          "pending": 0,
+          "total": 10,
+          "pending_ratio": "0",
+          "conflicts": 1,
+          "mismatched_sources": 0,
+          "active_json": "[\"business_conflict\"]"
+        },
+        {
+          "window_id": "changed",
+          "pending": 0,
+          "total": 10,
+          "pending_ratio": "0",
+          "conflicts": 0,
+          "mismatched_sources": 5,
+          "active_json": "[\"source_mismatch\"]"
+        },
+        {
+          "window_id": "current",
+          "pending": 0,
+          "total": 15,
+          "pending_ratio": "0",
+          "conflicts": 0,
+          "mismatched_sources": 0,
+          "active_json": "[]"
+        },
+        {
+          "window_id": "after-restart",
+          "pending": 0,
+          "total": 15,
+          "pending_ratio": "0",
+          "conflicts": 0,
+          "mismatched_sources": 0,
+          "active_json": "[]"
+        },
+        {
+          "window_id": "empty",
+          "pending": 0,
+          "total": 0,
+          "pending_ratio": "0",
+          "conflicts": 0,
+          "mismatched_sources": 0,
+          "active_json": "[]"
+        }
+      ],
+      "actor_identities": [
+        {
+          "event": "process_identity",
+          "pid": 11,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 12,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 26,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 30,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 31,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 32,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 33,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 34,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 42,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 56,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 87,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 90,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 111,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 112,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 114,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 115,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 117,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 119,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 120,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 121,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 122,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 123,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 124,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 125,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 126,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 147,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 189,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 271,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 305,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 366,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 397,
+          "uid": 10001
+        },
+        {
+          "event": "process_identity",
+          "pid": 398,
+          "uid": 10001
+        }
+      ]
+    }
+  }
+}

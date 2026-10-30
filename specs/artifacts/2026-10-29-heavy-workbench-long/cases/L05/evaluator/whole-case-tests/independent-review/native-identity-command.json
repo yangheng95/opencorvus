@@ -1,0 +1,30 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l05-whole-case-independent-review-20261031\\case-initial\\evaluator\\check_l05.py",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\l05-whole-case-independent-review-20261031\\native-identity-mutation",
+    "--raw",
+    "D:\\opencorvus-benchmark-runs\\l05-full-case-20261031\\raw-closed-base",
+    "--registered",
+    "D:\\opencorvus-benchmark-runs\\l05-whole-case-independent-review-20261031\\case-initial\\evaluator\\registered-inputs.json",
+    "--rubric",
+    "D:\\opencorvus-benchmark-runs\\l05-whole-case-independent-review-20261031\\case-initial\\rubric.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l05-whole-case-independent-review-20261031\\native-identity-checker-result"
+  ],
+  "exit_code": 4,
+  "seconds": 0.6095797000452876,
+  "stdout": "{\"status\": \"assessment_incomplete\", \"subject_role\": \"author_reference_or_error_control\", \"run_roots\": [\"D:\\\\opencorvus-benchmark-runs\\\\l05-whole-case-independent-review-20261031\\\\native-identity-mutation\"], \"fixed_denominator\": 100, \"total\": null, \"business_success\": null, \"good\": null, \"failed\": [], \"unresolved\": [\"M15\", \"H01\", \"H02\", \"H03\", \"H04\", \"H05\"], \"critical_unmet\": [\"M15\", \"H01\", \"H02\", \"H03\", \"H05\"]}\n",
+  "stderr": "",
+  "mutation": {
+    "app_pid": 11,
+    "actor_uid_in_original_capture": 0,
+    "report_uid_in_original_capture": 0,
+    "isolation_metadata": "unchanged10001/65534",
+    "scope": "Corrupted evaluator capture/protocol control, not real hostile actor execution. Should be facility identity contradiction rather than accepted isolation fact or candidate zero."
+  }
+}

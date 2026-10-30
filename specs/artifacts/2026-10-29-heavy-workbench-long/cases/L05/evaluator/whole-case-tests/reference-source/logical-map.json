@@ -1,0 +1,102 @@
+{
+  "journal": {
+    "table": "journal",
+    "columns": {
+      "seq": "seq",
+      "tenant": "tenant",
+      "request_id": "request_id",
+      "event_id": "event_id",
+      "revision": "revision",
+      "kind": "kind",
+      "amount_minor": "amount_minor",
+      "payload": "payload"
+    }
+  },
+  "opening": {
+    "table": "opening",
+    "columns": {
+      "tenant": "tenant",
+      "amount_minor": "amount_minor"
+    }
+  },
+  "adjustments": {
+    "table": "adjustments",
+    "columns": {
+      "tenant": "tenant",
+      "adjustment_id": "adjustment_id",
+      "amount_minor": "amount_minor",
+      "approval": "approval"
+    }
+  },
+  "notes": {
+    "table": "notes",
+    "columns": {
+      "tenant": "tenant",
+      "note_id": "note_id",
+      "body": "body"
+    }
+  },
+  "projection": {
+    "table": "projection",
+    "columns": {
+      "tenant": "tenant",
+      "event_id": "event_id",
+      "revision": "revision",
+      "status": "status",
+      "amount_minor": "amount_minor"
+    }
+  },
+  "postings": {
+    "table": "postings",
+    "columns": {
+      "seq": "seq",
+      "tenant": "tenant",
+      "event_id": "event_id",
+      "payload": "payload",
+      "source_kind": "source_kind",
+      "source_id": "source_id",
+      "boundary_seq": "boundary_seq",
+      "epoch": "epoch",
+      "receipt_id": "receipt_id"
+    }
+  },
+  "control": {
+    "table": "control",
+    "columns": {
+      "id": "id",
+      "epoch": "epoch",
+      "active": "active"
+    }
+  },
+  "repair_cuts": {
+    "table": "repair_cuts",
+    "columns": {
+      "repair_id": "repair_id",
+      "epoch": "epoch",
+      "boundary_seq": "boundary_seq",
+      "snapshot_json": "snapshot_json",
+      "phase": "phase",
+      "completed_epoch": "completed_epoch"
+    }
+  },
+  "samples": {
+    "table": "samples",
+    "columns": {
+      "window_id": "window_id",
+      "pending": "pending",
+      "total": "total",
+      "pending_ratio": "pending_ratio",
+      "conflicts": "conflicts",
+      "mismatched_sources": "mismatched_sources",
+      "active_json": "active_json"
+    }
+  },
+  "alerts": {
+    "table": "alerts",
+    "columns": {
+      "window_id": "window_id",
+      "alarm": "alarm",
+      "status": "status"
+    }
+  }
+}
