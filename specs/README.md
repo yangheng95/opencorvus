@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [0.1.39发布与失败候选清退](records/2026-10/2026-10-30-release-0.1.39.md)：冻结已提交增量、完整原生与官网发布，精确清理未公开失败草稿和标签。
+
 - [归档列表阅读入口](records/2026-10/2026-10-30-archive-library-reading.md)：从归档库直接打开原Chat、Work、Task和Mission，保留归档与原执行状态。
 
 - [已有Goal与终态所属对象归档](records/2026-10/2026-10-30-archived-goal-owner-controls.md)：真实暂停/完成目标及Task/Mission归档、只读详情和明确恢复体验。

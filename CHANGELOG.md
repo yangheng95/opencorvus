@@ -4,77 +4,78 @@
 
 ## 未发布
 
+## 0.1.39 - 2026-10-30
+
 ### zh-CN
 
-- Task 启动、正常完成、失败及验收轮次以私有 Git 引用保留真实快照，保持用户原分支、暂存内容和工作副本；后续快照继续保留验收轮次声明的忽略文件，终态证据按实际对象读取。
+#### 新增
 
-- 修复目录元数据补充后原 Task 续跑误报保留用户原文损坏的问题；从同一真实工具请求与结果核对原身份、作者、范围和原文，无需修改既有消息或清空数据库。
-- 已完成的业务错误结算原调度唤醒，保留可见失败；真正未完成或进程中断仍按原执行轮次恢复，避免同一投递持续产生失败回复。
+- 从归档库直接打开原 Chat、Work、Task 和 Mission，保留真实标题、历史消息、来源文件、完成事实及归档状态；明确恢复后才恢复原操作入口。
+- 在消息中折叠查看已发送的文本、代码和 JSON 附件，按需打开共享只读阅读器并下载原件。待发送长文本使用可用阅读高度，保留完整文档和关闭入口。
+- 全局搜索支持按名称、标识或目录打开已有项目，显示完整路径并支持键盘选择。记忆与上下文可直接选择只有 Chat 的项目，阅读真实 MEMORY.MD、版本及更新时间。
 
-- 修复执行者修改文件后请求协调时漏存差异的问题；Review 在续跑后保留原执行轮次的文件变化，必需观测失败仍返回明确的部分完成状态。
+#### 调整
 
-- 记忆与上下文按项目选择，支持直接阅读真实的项目 MEMORY.MD、版本及更新时间；仅有 Chat 的项目也可使用，并保留当前对话和项目知识检索。
+- Task 启动、完成、失败及验收快照使用私有 Git 引用，保留用户原分支、暂存和工作副本；后续快照保留明确声明的验收文件，终态证据读取实际对象。
+- 默认展开侧栏时，Mission 看板的五列仍可阅读；创建表单区分搜索命中的专家团与已保留选择，滚动表单中的选中项获得正确焦点。
+- 已归档对话按实际对象投影为只读阅读；原已完成持续目标保留完整证据和使用量，目标保存与后续读取错误分别反馈。
 
-- 归档、设置和其他可清空搜索框按 Escape 先清空查询并保持焦点；查询为空后继续原退出操作，保留特殊控件已有的键盘行为。
+#### 修复
 
-- Linux 原生构建使用保留上游许可证的 GLib 0.18.5 源码，合入官方字符串迭代器指针修复；Docker 构建读取根配置的 Bun 版本并校验当前构建输入。
-- 修复全新源码构建时 SDK 尚未生成导致的资源生成失败；工具运行时闭包按真实 SDK 文件类型编译，支持源码条件下的 TypeScript 模块。
+- 修复目录元数据补充后原 Task 续跑误报用户原文损坏；依据同一真实工具请求和结果核对身份、作者、范围及原文，保留既有消息和数据。
+- 已完成的业务错误结算原调度唤醒并保留可见失败；未完成或进程中断仍按原执行轮次恢复，避免同一投递持续产生失败回复。
+- 执行者改动文件后请求协调时保留真实差异，Review 续跑可读取原执行轮次的变化；必需观测失败保留明确的部分完成结果。
+- 长时间工具按实际已武装的执行期限保持活性，取消传递到真实工具请求和子进程，修复正常长任务被静默观察期限误停的问题。
+- 修复附件读取失败后丢失消息的问题，并保留原件下载恢复入口；UTF-16 文本正确显示中文和表情，无法解码时显示明确提示。
+- 项目、Chat、Work、Task 与 Mission 改名等待真实保存；失败保留输入、原名称和技术详情，超长及空标题显示对应提示。已确认的 Task 改名不被后续列表读取错误误报为写入失败。
+- 修复标题栏、侧栏及菜单启动弹窗时的焦点交接和错误反馈；项目置顶、匿名命名和移除后返回当前可见入口，匿名置顶项目进入正确分区。
+- Escape 先清空非空搜索或关闭当前提示与弹层，再响应外层退出；用量保留所选区间。键盘移除主对话或侧聊引用后返回原输入框，保留草稿。
+- 当前模型不可用时仍可打开首个侧聊或复制原对话历史，实际发送和持续目标续跑继续校验执行模型。
+- 持续目标的暂停、恢复和预算原因随当前语言显示；已完成目标的原始证据即使等于系统原因代码，也按原文展示。
+- Windows 文件、目录及 junction 仅改名称大小写时正确保存，保留不同目录项之间的覆盖保护；原生辅助程序并发准备使用安全发布，修复拒绝访问。
+- 修复全新源码的资源生成准备顺序，将软件开发工具包（Software Development Kit，SDK）编译纳入同一生成事务；工具运行时支持源码条件选中的 TypeScript 模块。
+- Linux 原生构建使用保留上游许可证的 GLib 0.18.5 源码，合入官方字符串迭代器指针修复；Docker 读取根配置的 Bun 版本并使用当前构建输入，统一实际生产依赖。
 
-- 文本附件预览识别 UTF-16 字节序标记，正确显示中文与表情；无法解码时显示明确提示，待发送核对窗口支持下载原件。
+#### 升级影响与已知限制
 
-- 已发送的文本、代码和 JSON 附件支持在消息中折叠查看完整原文，按需加载共享只读阅读器并保留原件下载。
-
-- 待发送文本与代码附件的核对窗口使用可用阅读高度，减少长文件滚动；保留完整原文、只读操作和始终可见的关闭入口。
-
-- 使用键盘移除主对话或侧聊中的引用卡片后，焦点回到当前输入框，保留草稿并可直接继续输入。
-- 修复 Windows 资源管理器仅修改文件、目录或 junction 名称大小写时误报“目标已存在”；保留不同目录项之间的覆盖保护。
-- 修复持续目标的完成依据恰好等于系统原因代码时被误译的问题；已完成目标始终显示原始证据文本。
-- 持续目标的界面暂停、恢复与预算调整原因随当前语言显示；保留用户及模型原始证据和既有历史原因。
-- 当前模型不可用时仍可打开首个侧聊或复制已有对话，保留原历史、配置与权限；实际发送和持续目标续跑继续校验执行模型。
-- 修复组织与排序菜单中的说明提示拦住 Escape 的问题；提示先关闭并保留键盘焦点，随后可关闭菜单。用量图表同样保留所选区间，设置页在当前弹层处理完成后再响应退出。
-- 项目置顶或取消置顶后，键盘焦点交接到新位置的可见入口；支持单列表与渐进折叠的当前控件。匿名项目按真实置顶状态进入置顶区，保留匿名名称与命名入口。
-- 项目重命名、匿名项目命名与移除确认关闭后返回可见的项目入口；项目置顶等操作失败显示当前语言提示与原始详情，避免异常被上层回调吞掉。
-- 标题栏和侧栏操作失败时显示原记录名称与技术详情；修复菜单启动弹窗时的焦点争抢，以及弹窗内部焦点范围重建时过早清理返回入口的问题。
-- 项目、对话、Work、Task 与 Mission 重命名等待实际保存完成；失败后原位保留输入和技术详情，超长或空标题显示对应校验提示，保存中防止重复提交。
-- Task 名称已保存后，后续列表读取失败保留读取错误，不再将已确认的改名误报为写入失败。
-- 全局搜索支持按项目名称、标识或目录打开既有项目；项目候选分行显示名称与完整目录，支持键盘选择并保留空查询的最近对话。
-- 修复 Windows 检查器并发准备原生辅助程序时，编译产物与运行文件互相冲突导致的拒绝访问。
+- 延续数据库9的版本化自动迁移，保留用户数据，无需清空数据库。本次清理未公开失败候选的 GitHub 草稿、标签及所属失败发布运行；已公开历史版本和历史更新日志保留。
+- macOS 仍为临时签名（ad hoc），未包含 Apple 公证。此前 GLib 通告已通过官方修复的生产回补处理；截至本次准备，GitHub 未关闭 Dependabot 告警为0，该快照不代表未来依赖不会出现新通告。
 
 ### en-US
 
-- Retain Task startup, completion, failure and acceptance snapshots through private Git refs while preserving the user's branch, staging and working files. Later snapshots retain explicitly declared acceptance artifacts, and terminal evidence reads the actual snapshot object.
+#### Added
 
-- Fix retained user-text integrity failures when resuming an original Task after catalog metadata is attached. Replay checks identity, author, range and verbatim text against the original Tool request and result, preserving existing messages and data.
-- Settle scheduler wakes after completed business errors while preserving the visible failure. Unfinished and process-interrupted replies retain occurrence-bound recovery, preventing repeated failed replies for the same delivery.
+- Open original Chat, Work, Task and Mission history directly from Archive, retaining real titles, Messages, source files, completion facts and archive state. Restore explicitly to regain the original controls.
+- Inspect sent text, code and JSON attachments through compact message disclosures, loading the shared read-only viewer on demand with original downloads. Pending long text uses the available reading height while retaining the full document and Close action.
+- Find existing Projects by name, identifier or directory with full paths and keyboard selection. Memory & Context includes Chat-only Projects and displays their actual MEMORY.MD, revision and update time.
 
-- Preserve file changes when a Build worker requests coordination after editing. Review retains the original physical-turn diff across continuation; required observation failures keep their typed partial outcome.
+#### Changed
 
-- Memory & Context selects projects and displays their actual read-only MEMORY.MD, revision, and update time. Chat-only projects are available, while the current conversation and project knowledge search remain scoped independently.
+- Retain Task startup, completion, failure and acceptance snapshots through private Git refs while preserving the user's branch, staging and working files. Later snapshots retain declared acceptance artifacts, and terminal evidence reads the actual snapshot object.
+- Keep all five Mission board lanes readable beside the default expanded sidebar. Creation forms distinguish matching Expert Squads from retained selections and focus the selected item correctly inside scrolling forms.
+- Project archived conversations as read-only views of their actual owner. Completed continuous goals retain original evidence and usage; saving a goal and subsequently reading its state report their own outcomes.
 
-- Escape clears a nonempty clearable search while retaining focus before the surrounding page or popup handles a later Escape. Explicit control-specific keyboard behavior remains authoritative.
+#### Fixed
 
-- Linux native builds use the licensed GLib 0.18.5 source with the official string-iterator out-pointer fix. Docker builds use the root Bun version and evaluate current build inputs through Docker's layer cache.
-- Fix resource generation before the first SDK build. Tool runtime closures compile the actual SDK file type, including TypeScript modules selected by the source condition.
+- Resume original Tasks after catalog metadata is attached without false retained-text integrity errors. Validate identity, author, range and verbatim text against the same original Tool request and result, preserving existing Messages and data.
+- Settle scheduler wakes after completed business errors while preserving visible failures. Unfinished and process-interrupted replies retain occurrence-bound recovery, preventing repeated failed replies for the same delivery.
+- Preserve file changes when a Build worker requests coordination after editing. Review retains the original physical-turn diff across continuation; required observation failures keep their explicit partial outcome.
+- Keep long-running Tools active under their actual armed execution deadline and propagate cancellation to the real Tool request and child process, fixing premature termination by a quiet-observation timeout.
+- Retain Messages when an attachment read fails and expose original-download recovery. Decode UTF-16 text with Chinese characters and emoji correctly and show explicit encoding errors.
+- Wait for actual Project, Chat, Work, Task and Mission rename saves. Retain input, original names and diagnostics on failure, validate empty or long titles, and preserve acknowledged Task renames when a later list refresh fails.
+- Fix focus handoffs and error feedback across header, sidebar, menu and dialog actions. Return pin, anonymous-name and removal actions to the visible Project entry; place pinned anonymous Projects in the correct section.
+- Escape clears a nonempty search or dismisses the current tooltip and popup before the surrounding surface closes, while Usage retains its selected interval. Removing a quotation by keyboard returns focus to its main or side-chat composer without losing the draft.
+- Open the first side chat or copy retained conversation history when the current model is unavailable. Sending and continuous-goal continuation retain their execution-model checks.
+- Localize continuous-goal pause, resume and budget reasons while preserving original user/model evidence. Completed evidence remains verbatim even when it matches a system reason identifier.
+- Save case-only Windows file, directory and junction renames while retaining conflicts between distinct entries. Publish concurrently prepared native helpers safely to avoid access-denied failures.
+- Fix fresh-source resource-generation ordering and compile the Software Development Kit (SDK) within the same generation transaction. Tool runtimes support TypeScript modules selected by the source condition.
+- Build Linux against the licensed GLib 0.18.5 source with the official string-iterator pointer fix. Docker uses the root Bun version and current build inputs through the same production dependency source.
 
-- Decode BOM-marked UTF-16 text attachments correctly, show explicit encoding errors, and offer original downloads while reviewing pending text.
+#### Upgrade impact and known limitations
 
-- Review sent text, code and JSON attachments in a compact message disclosure, loading the shared read-only viewer on demand with original downloads.
+- Retain the versioned automatic database migration to version 9 without resetting user data. Remove unpublished failed candidates' GitHub drafts, tags and their failed publication runs; retain published historical versions and their changelog.
+- macOS remains ad hoc signed without Apple notarization. The earlier GLib advisory is addressed by the production backport of its official fix. GitHub has zero open Dependabot alerts at preparation time; this snapshot does not predict future advisories.
 
-- Give pending text and code attachments a viewport-bounded reading area, retaining the complete read-only document and a visible Close action.
-
-- Return keyboard focus to the current main or side-chat composer after removing a quotation, preserving its draft for continued typing.
-- Fix case-only file, directory and junction renames in the Windows explorer while preserving destination conflict protection for distinct entries.
-- Preserve completed-goal evidence verbatim when it matches a system reason identifier, instead of replacing it with a status explanation.
-- Show continuous-goal control reasons in the current language while preserving original user/model evidence and historical free-text reasons.
-- Open the first side chat or fork retained conversation history when the current model is unavailable, preserving its original context, configuration and permissions. Sending and goal continuation retain their execution-model checks.
-- Fix Escape ownership in organization and sorting menus: dismiss the current tooltip while retaining keyboard focus, then close its menu. Usage keeps its selected interval; settings handles page dismissal after the current popup.
-- Keep keyboard continuity after project pin changes across sidebar sections, including one-list and progressive collections. Show pinned anonymous projects in the Pinned section with their existing names and conversion action.
-- Return project rename, anonymous naming and removal confirmations to the visible project entry. Show localized project-action failures with original diagnostics instead of consuming their promises in entry wrappers.
-- Show the original record and diagnostics when header or sidebar actions fail. Fix menu-to-dialog focus conflicts and retain the return target when a dialog's internal focus scope remounts.
-- Project, Chat, Work, Task and Mission rename dialogs wait for saving, retain input and diagnostics on failure, validate empty or long titles, and prevent duplicate submission while saving.
-- Preserve an acknowledged Task rename when a later list refresh fails, retaining the original read error instead of reporting a rejected write.
-- Global search can open existing projects by name, identifier or directory, with readable names, full paths and keyboard selection while retaining recent conversations for empty queries.
-- Fix access-denied failures when concurrent Windows checkers build and run the native helper.
 
 ## 0.1.38 - 2026-10-29
 
@@ -132,6 +133,8 @@
 
 #### 发布状态
 
+- 2026-10-30：该未公开候选的 GitHub 草稿、标签及所属失败发布运行已清理。以下保留原历史结果，草稿保留描述属于清理前状态。
+
 - 本候选未公开安装包，保留0资源草稿。Intel 原生预检与主分支依赖缓存保存成功；正式运行在复核 sudo 环境传递边界后主动取消，既有普通进程测试不足以证明该边界。不把取消记为原生编译失败或40分钟到期。
 
 #### 调整
@@ -156,6 +159,8 @@
 ### en-US
 
 #### Publication status
+
+- 2026-10-30: The unpublished candidate's GitHub draft, tag and failed publication run were removed. The original outcome remains below; references to retained drafts describe the state before cleanup.
 
 - No installers were published; the empty draft is retained. Intel native preflight and the main-branch dependency cache succeeded. The formal run was cancelled during review of the sudo environment boundary, which ordinary-process tests did not prove. This was neither a native compilation failure nor a 40-minute expiry.
 
@@ -184,6 +189,8 @@
 
 #### 发布状态
 
+- 2026-10-30：该未公开候选的 GitHub 草稿、标签及所属失败发布运行已清理。以下保留原历史结果，草稿保留描述属于清理前状态。
+
 - 本候选未公开。原生 x64 RPM 依赖安装遇到 IPv6 无路由错误；原运行完整失败集合重试仍触发最初40分钟截止，保留25资源草稿与原运行记录，不作为完整发布。
 
 #### 调整
@@ -204,6 +211,8 @@
 ### en-US
 
 #### Publication status
+
+- 2026-10-30: The unpublished candidate's GitHub draft, tag and failed publication run were removed. The original outcome remains below; references to retained drafts describe the state before cleanup.
 
 - This candidate was not published. Native x64 RPM dependency setup encountered an unreachable IPv6 route. A complete failed-job retry in the original run still reached its original 40-minute deadline. Its 25-asset draft and run records are retained; this was not a completed release.
 
@@ -299,6 +308,8 @@
 
 #### 发布状态
 
+- 2026-10-30：该未公开候选的 GitHub 草稿、标签及所属失败发布运行已清理。以下保留原历史结果，草稿保留描述属于清理前状态。
+
 - 本候选未公开：正式构建准备已通过，但同源 CI 发现过期的界面模拟测试合同，流水线随后主动取消。标签、草稿及历史日志保留；本候选未交付公开安装包。改进继续进入0.1.35。
 
 #### 新增
@@ -331,6 +342,8 @@
 ### en-US
 
 #### Publication status
+
+- 2026-10-30: The unpublished candidate's GitHub draft, tag and failed publication run were removed. The original outcome remains below; references to retained drafts describe the state before cleanup.
 
 - This candidate was not published. Native preparation passed, but CI for the same source exposed an obsolete UI simulation contract and the release run was deliberately cancelled. Its tag, draft and written history are retained; no public installers were delivered. The improvements continue in 0.1.35.
 
@@ -414,6 +427,8 @@
 
 #### 发布状态
 
+- 2026-10-30：该未公开候选的 GitHub 草稿、标签及所属失败发布运行已清理。以下保留原历史结果，草稿保留描述属于清理前状态。
+
 - 未公开候选。五平台原生构建与验收成功，但正式运行40387163641的上传规则遗漏连字符RPM，发布器按完整安装器契约拒绝，草稿保持未公开；原标签、空草稿和失败日志保留，后续由0.1.33修复。
 
 #### 调整
@@ -437,6 +452,8 @@
 ### en-US
 
 #### Publication status
+
+- 2026-10-30: The unpublished candidate's GitHub draft, tag and failed publication run were removed. The original outcome remains below; references to retained drafts describe the state before cleanup.
 
 - Unpublished candidate. All five native builds and acceptance checks succeeded, but canonical run 40387163641 omitted hyphenated RPM files during upload. The publication stager rejected the incomplete installer set, leaving the draft unpublished. The original tag, empty draft and failure logs remain; 0.1.33 carries the fix forward.
 
@@ -576,6 +593,8 @@
 
 #### 发布状态
 
+- 2026-10-30：该未公开候选的 GitHub 草稿、标签及所属失败发布运行已清理。以下保留原历史结果，草稿保留描述属于清理前状态。
+
 - 未公开候选。Linux双架构GUI预检及正式完整安装行通过，但40364673269的Linux x64 CLI第三方APT未继承来源配置，10分钟依赖安装超时；原运行取消，标签、草稿和成功产物保留，由0.1.31继续修复并交付。
 
 #### 新增
@@ -633,6 +652,8 @@
 ### en-US
 
 #### Publication status
+
+- 2026-10-30: The unpublished candidate's GitHub draft, tag and failed publication run were removed. The original outcome remains below; references to retained drafts describe the state before cleanup.
 
 - Unpublished candidate. Both Linux GUI preflights and canonical installer rows passed, but third-party APT in the Linux x64 CLI of run 40364673269 did not inherit the source configuration and exceeded its ten-minute dependency step. The run was cancelled; its tag, draft and successful artifacts remain, with 0.1.31 continuing the repair and delivery.
 
@@ -694,6 +715,8 @@
 
 #### 发布状态
 
+- 2026-10-30：该未公开候选的 GitHub 草稿、标签及所属失败发布运行已清理。以下保留原历史结果，草稿保留描述属于清理前状态。
+
 - 未公开候选。两Mac预检通过，但正式运行40324840467的Linux x64依赖下载触发15分钟准备超时；原运行取消，标签、草稿和成功产物保留，后续0.1.30继承以下产品改动。
 
 #### 新增
@@ -743,6 +766,8 @@
 ### en-US
 
 #### Publication status
+
+- 2026-10-30: The unpublished candidate's GitHub draft, tag and failed publication run were removed. The original outcome remains below; references to retained drafts describe the state before cleanup.
 
 - Unpublished candidate. Both Mac preflights passed, but Linux x64 prerequisite downloads exceeded the 15-minute preparation limit in canonical run 40324840467. The run was cancelled; its tag, draft and successful artifacts remain. Version 0.1.30 includes these product changes.
 
@@ -796,6 +821,8 @@
 
 #### 发布状态
 
+- 2026-10-30：该未公开候选的 GitHub 草稿、标签及所属失败发布运行已清理。以下保留原历史结果，草稿保留描述属于清理前状态。
+
 - 未公开候选。原生运行40280133409的工具预检将实际横幅输出误按纯版本解析，macOS ARM64在编译前失败；原标签、草稿和失败记录保留，后续0.1.29修正机器接口并继承以下产品改动。
 
 #### 新增
@@ -842,6 +869,8 @@
 ### en-US
 
 #### Publication status
+
+- 2026-10-30: The unpublished candidate's GitHub draft, tag and failed publication run were removed. The original outcome remains below; references to retained drafts describe the state before cleanup.
 
 - Unpublished candidate. Native run 40280133409 interpreted the tool banner as a pure version, failing macOS ARM64 before compilation. The original tag, draft and failure records remain; 0.1.29 corrects the machine interface and includes these product changes.
 
@@ -892,6 +921,8 @@
 
 #### 发布状态
 
+- 2026-10-30：该未公开候选的 GitHub 草稿、标签及所属失败发布运行已清理。以下保留原历史结果，草稿保留描述属于清理前状态。
+
 - 未公开候选。原生运行40272814683在macOS Intel创建DMG时失败，同运行重试未能在原40分钟截止完成；原标签、草稿和成功资源保留。后续0.1.28继承以下产品变更。
 
 #### 新增
@@ -934,6 +965,8 @@
 ### en-US
 
 #### Publication status
+
+- 2026-10-30: The unpublished candidate's GitHub draft, tag and failed publication run were removed. The original outcome remains below; references to retained drafts describe the state before cleanup.
 
 - Unpublished candidate. Native run 40272814683 failed while creating the macOS Intel DMG, and its retry did not complete within the original 40-minute deadline. The tag, draft and successful assets remain. Version 0.1.28 inherits the product changes below.
 
@@ -1442,6 +1475,10 @@ This release brings together product updates since the previous public stable re
 
 ### zh-CN
 
+#### 发布状态
+
+- 2026-10-30：该未公开候选的 GitHub 草稿、标签及所属失败发布运行已清理。以下保留原历史结果，草稿保留描述属于清理前状态。
+
 #### 新增
 
 - 来源条目新增独立复制按钮，可复制完整网页链接或文件路径与行号；代码搜索结果可直接定位到对应文件来源。
@@ -1474,6 +1511,10 @@ This release brings together product updates since the previous public stable re
 - Parallel Search仍由用户自行启用，匿名服务有较低限流；遇到限流应等待后重试，额度与认证方式以服务商说明为准。
 
 ### en-US
+
+#### Publication status
+
+- 2026-10-30: The unpublished candidate's GitHub draft, tag and failed publication run were removed. The original outcome remains below; references to retained drafts describe the state before cleanup.
 
 #### Added
 
@@ -1618,6 +1659,10 @@ This release brings together product updates since the previous public stable re
 
 ### zh-CN
 
+#### 发布状态
+
+- 2026-10-30：该未公开候选的 GitHub 草稿、标签及所属失败发布运行已清理。以下保留原历史结果，草稿保留描述属于清理前状态。
+
 #### 调整
 
 - 调整工作区导航和用量统计的信息布局，统一常用入口、选中状态与阅读层级。
@@ -1631,6 +1676,10 @@ This release brings together product updates since the previous public stable re
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/97a3a6807fe40fc045a354c17c99b256a2f0f2a8) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/386c280caffe4de04b38069ff0918d77ab6a5059...97a3a6807fe40fc045a354c17c99b256a2f0f2a8)。
 
 ### en-US
+
+#### Publication status
+
+- 2026-10-30: The unpublished candidate's GitHub draft, tag and failed publication run were removed. The original outcome remains below; references to retained drafts describe the state before cleanup.
 
 #### Changed
 
@@ -1646,6 +1695,10 @@ This release brings together product updates since the previous public stable re
 ## 0.1.19 - 2026-09-29
 
 ### zh-CN
+
+#### 发布状态
+
+- 2026-10-30：该未公开候选的 GitHub 草稿、标签及所属失败发布运行已清理。以下保留原历史结果，草稿保留描述属于清理前状态。
 
 #### 新增
 
@@ -1668,6 +1721,10 @@ This release brings together product updates since the previous public stable re
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/386c280caffe4de04b38069ff0918d77ab6a5059) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/cca50888d07198ba68e4493ed29821eef088d170...386c280caffe4de04b38069ff0918d77ab6a5059)。
 
 ### en-US
+
+#### Publication status
+
+- 2026-10-30: The unpublished candidate's GitHub draft, tag and failed publication run were removed. The original outcome remains below; references to retained drafts describe the state before cleanup.
 
 #### Added
 

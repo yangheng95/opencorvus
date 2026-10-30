@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-30-release-0.1.39.md](2026-10-30-release-0.1.39.md)：新版本原生与官网交付、失败候选精确归属清退与公开回读。
+
 - [2026-10-30-archive-library-reading.md](2026-10-30-archive-library-reading.md)：归档库原内容阅读入口、现有导航寿命与实页验证。
 
 - [2026-10-30-archived-goal-owner-controls.md](2026-10-30-archived-goal-owner-controls.md)：已有Goal详情和Task/Mission终态归档/恢复的真实体验与控制寿命调查。

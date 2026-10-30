@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-30-release-0.1.39](2026-10-30-release-0.1.39/README.md)：11个未公开失败候选精确清退、原生预检及新版本正式公开回读。
+
 - [2026-10-30-archive-library-reading](2026-10-30-archive-library-reading/README.md)：归档库直接打开原Chat/Work/Task/Mission，15张实页、中英文/键盘/同对象重开及完整数据保全。
 
 - [2026-10-30-archived-goal-owner-controls](2026-10-30-archived-goal-owner-controls/README.md)：已有Goal/Mission真实归档与恢复、归档Task原链接双根因修复，23张实页及完整数据保全。

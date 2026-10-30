@@ -1,0 +1,190 @@
+{
+  "observedAt": "2026-10-30T04:41:45.109Z",
+  "targets": [
+    {
+      "tag": "v0.1.37",
+      "releaseID": 427121940,
+      "assets": 0,
+      "runID": "40757718194",
+      "source": "a3b63d1fc0bb102a7659668efa57ae7cc44790a6",
+      "conclusion": "cancelled",
+      "publishedAt": null
+    },
+    {
+      "tag": "v0.1.36",
+      "releaseID": 427041038,
+      "assets": 25,
+      "runID": "40745044808",
+      "source": "9cf0ed178dc474aeabd6224d742f186fe61a7fdd",
+      "conclusion": "cancelled",
+      "publishedAt": null
+    },
+    {
+      "tag": "v0.1.34",
+      "releaseID": 426950408,
+      "assets": 0,
+      "runID": "40731245069",
+      "source": "159f2aa86ea047b8561c5aaefed8ffd1cc5d4283",
+      "conclusion": "cancelled",
+      "publishedAt": null
+    },
+    {
+      "tag": "v0.1.32",
+      "releaseID": 424674102,
+      "assets": 0,
+      "runID": "40387163641",
+      "source": "35115979828fdf5e80d900915fad5d300ec48b8f",
+      "conclusion": "failure",
+      "publishedAt": null
+    },
+    {
+      "tag": "v0.1.30",
+      "releaseID": 424531880,
+      "assets": 0,
+      "runID": "40364673269",
+      "source": "95d2b59a3c34f56d8f1caa63a43ea39f46f04d09",
+      "conclusion": "cancelled",
+      "publishedAt": null
+    },
+    {
+      "tag": "v0.1.29",
+      "releaseID": 424240876,
+      "assets": 0,
+      "runID": "40324840467",
+      "source": "4c3860bee9ec5de07e534881185a912bde61d487",
+      "conclusion": "cancelled",
+      "publishedAt": null
+    },
+    {
+      "tag": "v0.1.28",
+      "releaseID": 423920039,
+      "assets": 0,
+      "runID": "40280133409",
+      "source": "c27129a72342bed10bba7d3b0ac9f749c2f5512d",
+      "conclusion": "cancelled",
+      "publishedAt": null
+    },
+    {
+      "tag": "v0.1.27",
+      "releaseID": 423879374,
+      "assets": 26,
+      "runID": "40272814683",
+      "source": "cbf6570f1b5b636057c183624f4c382129df206f",
+      "conclusion": "cancelled",
+      "publishedAt": null
+    },
+    {
+      "tag": "v0.1.24",
+      "releaseID": 410471818,
+      "assets": 0,
+      "runID": "38234795902",
+      "source": "6c7f2f74e94369a6a11dbe1d3cf99d453d388103",
+      "conclusion": "cancelled",
+      "publishedAt": null
+    },
+    {
+      "tag": "v0.1.20",
+      "releaseID": 399254025,
+      "assets": 26,
+      "runID": "36586082538",
+      "source": "97a3a6807fe40fc045a354c17c99b256a2f0f2a8",
+      "conclusion": "cancelled",
+      "publishedAt": null
+    },
+    {
+      "tag": "v0.1.19",
+      "releaseID": 399212968,
+      "assets": 0,
+      "runID": "36580346474",
+      "source": "386c280caffe4de04b38069ff0918d77ab6a5059",
+      "conclusion": "cancelled",
+      "publishedAt": null
+    }
+  ],
+  "protectedPublished": [
+    {
+      "id": 427152317,
+      "tag": "v0.1.38",
+      "publishedAt": "2026-10-28T20:45:49Z",
+      "assets": 29
+    },
+    {
+      "id": 426980428,
+      "tag": "v0.1.35",
+      "publishedAt": "2026-10-28T17:57:46Z",
+      "assets": 29
+    },
+    {
+      "id": 424747814,
+      "tag": "v0.1.33",
+      "publishedAt": "2026-10-26T21:07:48Z",
+      "assets": 29
+    },
+    {
+      "id": 424572947,
+      "tag": "v0.1.31",
+      "publishedAt": "2026-10-26T18:20:57Z",
+      "assets": 29
+    },
+    {
+      "id": 412567115,
+      "tag": "v0.1.26",
+      "publishedAt": "2026-10-14T10:35:20Z",
+      "assets": 29
+    },
+    {
+      "id": 410489665,
+      "tag": "v0.1.25",
+      "publishedAt": "2026-10-12T11:07:15Z",
+      "assets": 29
+    },
+    {
+      "id": 399790092,
+      "tag": "v0.1.23",
+      "publishedAt": "2026-09-30T07:18:44Z",
+      "assets": 29
+    },
+    {
+      "id": 399686268,
+      "tag": "v0.1.22",
+      "publishedAt": "2026-09-30T03:33:08Z",
+      "assets": 29
+    },
+    {
+      "id": 399293192,
+      "tag": "v0.1.21",
+      "publishedAt": "2026-09-29T16:05:42Z",
+      "assets": 29
+    },
+    {
+      "id": 398929562,
+      "tag": "v0.1.18",
+      "publishedAt": "2026-09-29T08:23:09Z",
+      "assets": 29
+    },
+    {
+      "id": 398946877,
+      "tag": "desktop-update-stable",
+      "publishedAt": "2026-09-29T08:23:12Z",
+      "assets": 1
+    },
+    {
+      "id": 398184067,
+      "tag": "v0.1.17",
+      "publishedAt": "2026-09-28T11:43:59Z",
+      "assets": 29
+    },
+    {
+      "id": 394923990,
+      "tag": "v0.1.14",
+      "publishedAt": "2026-09-23T18:24:12Z",
+      "assets": 29
+    },
+    {
+      "id": 386746687,
+      "tag": "v0.0.64-beta",
+      "publishedAt": "2026-09-11T05:58:39Z",
+      "assets": 29
+    }
+  ]
+}
