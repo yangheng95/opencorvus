@@ -1,0 +1,119 @@
+[
+  {
+    "label": "build-before",
+    "startedAt": 1793340327970,
+    "closedAt": 1793340387326,
+    "code": 0,
+    "signal": null,
+    "childPID": 95960,
+    "output": "\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/hu-DVk7Y_ka-CCTZJfqn.js                               \u001b[39m\u001b[1m\u001b[33m  765.41 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   172.84 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/inline-vega-view-CicnizA3.js                          \u001b[39m\u001b[1m\u001b[33m  786.09 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   274.62 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/MapArtifact-bwpJn2cl.js                               \u001b[39m\u001b[1m\u001b[33m  957.17 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   251.72 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/Model3dArtifact-CNi1nTV6.js                           \u001b[39m\u001b[1m\u001b[33m1,072.74 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   300.33 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/main-frUcynBE.js                                      \u001b[39m\u001b[1m\u001b[33m2,285.03 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   681.10 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/SpreadsheetArtifact-Cb-U7v6_.js                       \u001b[39m\u001b[1m\u001b[33m6,142.24 kB\u001b[39m\u001b[22m\u001b[2m │ gzip: 1,704.65 kB\u001b[22m\n\u001b[33m\n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\u001b[39m\n\u001b[32m✓ built in 55.90s\u001b[39m\n$ bun run script/check-renderer-public-surface.ts\nrenderer public surface check passed (1 assignment, 1 declared global)\n"
+  },
+  {
+    "label": "build-after",
+    "startedAt": 1793340947244,
+    "closedAt": 1793341017743,
+    "code": 0,
+    "signal": null,
+    "childPID": 20160,
+    "output": "\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/hu-DVk7Y_ka-CCTZJfqn.js                               \u001b[39m\u001b[1m\u001b[33m  765.41 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   172.84 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/inline-vega-view-Cyt79pe8.js                          \u001b[39m\u001b[1m\u001b[33m  786.09 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   274.62 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/MapArtifact-WD95ogc8.js                               \u001b[39m\u001b[1m\u001b[33m  957.17 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   251.72 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/Model3dArtifact-B848teTC.js                           \u001b[39m\u001b[1m\u001b[33m1,072.74 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   300.33 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/main-DZXVSnh9.js                                      \u001b[39m\u001b[1m\u001b[33m2,285.28 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   681.08 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/SpreadsheetArtifact-C7mZh9Ji.js                       \u001b[39m\u001b[1m\u001b[33m6,142.24 kB\u001b[39m\u001b[22m\u001b[2m │ gzip: 1,704.65 kB\u001b[22m\n\u001b[33m\n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\u001b[39m\n\u001b[32m✓ built in 1m 6s\u001b[39m\n$ bun run script/check-renderer-public-surface.ts\nrenderer public surface check passed (1 assignment, 1 declared global)\n"
+  },
+  {
+    "label": "types-after",
+    "startedAt": 1793340947246,
+    "closedAt": 1793340974230,
+    "code": 0,
+    "signal": null,
+    "childPID": 39732,
+    "output": "$ tsc --noEmit\n"
+  },
+  {
+    "label": "i18n-after",
+    "startedAt": 1793340947266,
+    "closedAt": 1793340949580,
+    "code": 0,
+    "signal": null,
+    "childPID": 67008,
+    "output": "$ bun run script/check-i18n.ts\ncheck:i18n ok (2 locales, 2638 top-level keys)\n"
+  },
+  {
+    "label": "build-verified",
+    "startedAt": 1793341505743,
+    "closedAt": 1793341576454,
+    "code": 0,
+    "signal": null,
+    "childPID": 89548,
+    "output": "\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/hu-DVk7Y_ka-CCTZJfqn.js                               \u001b[39m\u001b[1m\u001b[33m  765.41 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   172.84 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/inline-vega-view-CeQVFM0m.js                          \u001b[39m\u001b[1m\u001b[33m  786.09 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   274.62 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/MapArtifact-DB3sH-Oh.js                               \u001b[39m\u001b[1m\u001b[33m  957.17 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   251.72 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/Model3dArtifact-Cg5f8BGu.js                           \u001b[39m\u001b[1m\u001b[33m1,072.74 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   300.33 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/main-COq4X2Oq.js                                      \u001b[39m\u001b[1m\u001b[33m2,285.75 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   681.18 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/SpreadsheetArtifact-uSJlCFye.js                       \u001b[39m\u001b[1m\u001b[33m6,142.24 kB\u001b[39m\u001b[22m\u001b[2m │ gzip: 1,704.65 kB\u001b[22m\n\u001b[33m\n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\u001b[39m\n\u001b[32m✓ built in 1m 6s\u001b[39m\n$ bun run script/check-renderer-public-surface.ts\nrenderer public surface check passed (1 assignment, 1 declared global)\n"
+  },
+  {
+    "label": "types-verified",
+    "startedAt": 1793341505743,
+    "closedAt": 1793341531425,
+    "code": 0,
+    "signal": null,
+    "childPID": 64948,
+    "output": "$ tsc --noEmit\n"
+  },
+  {
+    "label": "i18n-verified",
+    "startedAt": 1793341505743,
+    "closedAt": 1793341507915,
+    "code": 0,
+    "signal": null,
+    "childPID": 91536,
+    "output": "$ bun run script/check-i18n.ts\ncheck:i18n ok (2 locales, 2638 top-level keys)\n"
+  },
+  {
+    "label": "build-final",
+    "startedAt": 1793341965143,
+    "closedAt": 1793342048279,
+    "code": 0,
+    "signal": null,
+    "childPID": 8696,
+    "output": "\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/hu-DVk7Y_ka-CCTZJfqn.js                               \u001b[39m\u001b[1m\u001b[33m  765.41 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   172.84 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/inline-vega-view-DFm6IwXS.js                          \u001b[39m\u001b[1m\u001b[33m  786.09 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   274.62 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/MapArtifact-J4Op_lcb.js                               \u001b[39m\u001b[1m\u001b[33m  957.17 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   251.72 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/Model3dArtifact-DY9FFniA.js                           \u001b[39m\u001b[1m\u001b[33m1,072.74 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   300.33 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/main-C7JjON1J.js                                      \u001b[39m\u001b[1m\u001b[33m2,285.89 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   681.29 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/SpreadsheetArtifact-iWLhSmNA.js                       \u001b[39m\u001b[1m\u001b[33m6,142.24 kB\u001b[39m\u001b[22m\u001b[2m │ gzip: 1,704.65 kB\u001b[22m\n\u001b[33m\n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\u001b[39m\n\u001b[32m✓ built in 1m 18s\u001b[39m\n$ bun run script/check-renderer-public-surface.ts\nrenderer public surface check passed (1 assignment, 1 declared global)\n"
+  },
+  {
+    "label": "types-final",
+    "startedAt": 1793341965142,
+    "closedAt": 1793341995600,
+    "code": 0,
+    "signal": null,
+    "childPID": 40864,
+    "output": "$ tsc --noEmit\n"
+  },
+  {
+    "label": "i18n-final",
+    "startedAt": 1793341965139,
+    "closedAt": 1793341967478,
+    "code": 0,
+    "signal": null,
+    "childPID": 62404,
+    "output": "$ bun run script/check-i18n.ts\ncheck:i18n ok (2 locales, 2638 top-level keys)\n"
+  },
+  {
+    "label": "build-final-locale",
+    "startedAt": 1793342354233,
+    "closedAt": 1793342417277,
+    "code": 0,
+    "signal": null,
+    "childPID": 56440,
+    "output": "\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/hu-DVk7Y_ka-CCTZJfqn.js                               \u001b[39m\u001b[1m\u001b[33m  765.41 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   172.84 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/inline-vega-view-DFm6IwXS.js                          \u001b[39m\u001b[1m\u001b[33m  786.09 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   274.62 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/MapArtifact-J4Op_lcb.js                               \u001b[39m\u001b[1m\u001b[33m  957.17 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   251.72 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/Model3dArtifact-DY9FFniA.js                           \u001b[39m\u001b[1m\u001b[33m1,072.74 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   300.33 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/main-C7JjON1J.js                                      \u001b[39m\u001b[1m\u001b[33m2,285.89 kB\u001b[39m\u001b[22m\u001b[2m │ gzip:   681.29 kB\u001b[22m\n\u001b[2m../dist-vite/\u001b[22m\u001b[36massets/SpreadsheetArtifact-iWLhSmNA.js                       \u001b[39m\u001b[1m\u001b[33m6,142.24 kB\u001b[39m\u001b[22m\u001b[2m │ gzip: 1,704.65 kB\u001b[22m\n\u001b[33m\n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\u001b[39m\n\u001b[32m✓ built in 59.34s\u001b[39m\n$ bun run script/check-renderer-public-surface.ts\nrenderer public surface check passed (1 assignment, 1 declared global)\n"
+  },
+  {
+    "label": "i18n-final-locale",
+    "startedAt": 1793342354233,
+    "closedAt": 1793342356081,
+    "code": 0,
+    "signal": null,
+    "childPID": 90360,
+    "output": "$ bun run script/check-i18n.ts\ncheck:i18n ok (2 locales, 2638 top-level keys)\n"
+  },
+  {
+    "label": "data-qualify",
+    "startedAt": 1793343059654,
+    "closedAt": 1793343075850,
+    "code": 0,
+    "signal": null,
+    "childPID": 68804,
+    "output": "{\"databases\":[{\"phase\":\"source\",\"schema\":9,\"tables\":92,\"originalRows\":204867,\"rows\":204867,\"allOriginalValues\":\"exact native SQLite EXCEPT including TEXT/BLOB\",\"additions\":[]},{\"phase\":\"before\",\"schema\":9,\"tables\":92,\"originalRows\":204867,\"rows\":204869,\"allOriginalValues\":\"exact native SQLite EXCEPT including TEXT/BLOB\",\"additions\":[{\"table\":\"engine_control_activation_lease\",\"rows\":1},{\"table\":\"engine_control_activation_lease_grant\",\"rows\":1}]},{\"phase\":\"after\",\"schema\":9,\"tables\":92,\"originalRows\":204867,\"rows\":204869,\"allOriginalValues\":\"exact native SQLite EXCEPT including TEXT/BLOB\",\"additions\":[{\"table\":\"engine_control_activation_lease\",\"rows\":1},{\"table\":\"engine_control_activation_lease_grant\",\"rows\":1}]},{\"phase\":\"verified\",\"schema\":9,\"tables\":92,\"originalRows\":204867,\"rows\":204871,\"allOriginalValues\":\"exact native SQLite EXCEPT including TEXT/BLOB\",\"additions\":[{\"table\":\"engine_control_activation_lease\",\"rows\":2},{\"table\":\"engine_control_activation_lease_grant\",\"rows\":2}]},{\"phase\":\"final\",\"schema\":9,\"tables\":92,\"originalRows\":204867,\"rows\":204873,\"allOriginalValues\":\"exact native SQLite EXCEPT including TEXT/BLOB\",\"additions\":[{\"table\":\"engine_control_activation_lease\",\"rows\":3},{\"table\":\"engine_control_activation_lease_grant\",\"rows\":3}]},{\"phase\":\"locale\",\"schema\":9,\"tables\":92,\"originalRows\":204867,\"rows\":204873,\"allOriginalValues\":\"exact native SQLite EXCEPT including TEXT/BLOB\",\"additions\":[{\"table\":\"engine_control_activation_lease\",\"rows\":3},{\"table\":\"engine_control_activation_lease_grant\",\"rows\":3}]}],\"physicalScopes\":5,\"projects\":7,\"files\":25,\"providerRequests\":0}\n"
+  }
+]

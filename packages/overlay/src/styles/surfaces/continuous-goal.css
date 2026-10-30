@@ -206,9 +206,13 @@
   padding-block-start: var(--ui-gap-md);
 }
 .continuous-goal__budget-summary {
-  margin-inline-start: auto;
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: end;
+  overflow-wrap: anywhere;
   color: var(--text-muted);
   font-size: var(--ui-font-caption);
+  font-variant-numeric: tabular-nums;
 }
 .continuous-goal__secondary {
   display: flex;

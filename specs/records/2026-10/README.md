@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-30-home-goal-form-review.md](2026-10-30-home-goal-form-review.md)：首页和持续目标未提交表单、实际额度摘要与数据保全。
+
 - [2026-10-30-conversation-navigation-lifetime.md](2026-10-30-conversation-navigation-lifetime.md)：原消息定位进行中操作归属与跨来源收尾。
 
 - [2026-10-30-task-mission-conversation-find.md](2026-10-30-task-mission-conversation-find.md)：Task/Mission完整原消息查找、身份归属与实际定位。

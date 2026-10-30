@@ -181,9 +181,16 @@ export function ContinuousGoalControl(props: {
   let objectiveField: HTMLTextAreaElement | undefined
   let completionField: HTMLTextAreaElement | undefined
   let detailsObjective: HTMLParagraphElement | undefined
+  let validationFeedback: HTMLDivElement | undefined
   let closeControl: HTMLButtonElement | undefined
   let noticeState = ""
   const number = (value: number) => new Intl.NumberFormat(localeTag()).format(value)
+  const budgetSummaryValue = (input: string) => {
+    const value = input.trim()
+    if (!value) return t("continuous_goal.unlimited")
+    const parsed = Number(value)
+    return Number.isSafeInteger(parsed) ? number(parsed) : value
+  }
   const currentReason = () => {
     const current = goal()
     const value = current?.reason
@@ -442,11 +449,17 @@ export function ContinuousGoalControl(props: {
   }
   function budget(value: string, previous?: number): number | undefined {
     if (!value.trim()) {
-      if (previous !== undefined) throw new Error("continuous_goal.validation.keep_budget")
+      if (previous !== undefined) {
+        setBudgetOptionsOpen(true)
+        throw new Error("continuous_goal.validation.keep_budget")
+      }
       return undefined
     }
     const result = Number(value)
-    if (!Number.isSafeInteger(result) || result <= 0) throw new Error("continuous_goal.validation.budget")
+    if (!Number.isSafeInteger(result) || result <= 0) {
+      setBudgetOptionsOpen(true)
+      throw new Error("continuous_goal.validation.budget")
+    }
     return result
   }
   function save() {
@@ -485,8 +498,10 @@ export function ContinuousGoalControl(props: {
         status === "active" &&
         ((tokenBudget !== undefined && tokenBudget <= (goal()?.tokensUsed ?? existing.tokensUsed)) ||
           (turnBudget !== undefined && turnBudget <= (goal()?.turnsAccepted ?? existing.turnsAccepted)))
-      )
+      ) {
+        setBudgetOptionsOpen(true)
         throw new Error("continuous_goal.validation.remaining")
+      }
       void mutate({
         goalID: existing.id,
         expectedRevision: existing.revision,
@@ -501,7 +516,14 @@ export function ContinuousGoalControl(props: {
         ...(turnBudget !== undefined ? { turnBudget } : {}),
       })
     } catch (error) {
-      setValidation(error instanceof Error ? error.message : String(error))
+      const message = error instanceof Error ? error.message : String(error)
+      const failedMode = mode()
+      setValidation(message)
+      queueMicrotask(() => {
+        if (disposed || mode() !== failedMode || validation() !== message ||
+          !validationFeedback?.isConnected || !dialog?.contains(validationFeedback)) return
+        validationFeedback.focus()
+      })
     }
   }
   const error = () => projection.error ?? failure()
@@ -799,7 +821,12 @@ export function ContinuousGoalControl(props: {
                     <Disclosure.Trigger>
                       {t("continuous_goal.budget_options")}
                       <span class="continuous-goal__budget-summary">
-                        {t(tokens() || turns() ? "continuous_goal.budget_configured" : "continuous_goal.unlimited")}
+                        {tokens().trim() || turns().trim()
+                          ? t("continuous_goal.budget_summary", {
+                              tokens: budgetSummaryValue(tokens()),
+                              turns: budgetSummaryValue(turns()),
+                            })
+                          : t("continuous_goal.unlimited")}
                       </span>
                     </Disclosure.Trigger>
                     <Disclosure.Content>
@@ -809,12 +836,17 @@ export function ContinuousGoalControl(props: {
                           <TextField.Input
                             type="number"
                             min="1"
+                            max={Number.MAX_SAFE_INTEGER}
                             step="1"
+                            required={editing()?.tokenBudget !== undefined}
                             value={tokens()}
                             disabled={props.readOnly || busy() || editing()?.status === "complete"}
                             onInvalid={(e) => {
                               setBudgetOptionsOpen(true)
-                              e.currentTarget.setCustomValidity(t("continuous_goal.validation.budget"))
+                              e.currentTarget.setCustomValidity(t(
+                                e.currentTarget.validity.valueMissing ? "continuous_goal.validation.keep_budget" : "continuous_goal.validation.budget",
+                                { max: number(Number.MAX_SAFE_INTEGER) },
+                              ))
                             }}
                             onInput={(e) => {
                               e.currentTarget.setCustomValidity("")
@@ -830,12 +862,17 @@ export function ContinuousGoalControl(props: {
                           <TextField.Input
                             type="number"
                             min="1"
+                            max={Number.MAX_SAFE_INTEGER}
                             step="1"
+                            required={editing()?.turnBudget !== undefined}
                             value={turns()}
                             disabled={props.readOnly || busy() || editing()?.status === "complete"}
                             onInvalid={(e) => {
                               setBudgetOptionsOpen(true)
-                              e.currentTarget.setCustomValidity(t("continuous_goal.validation.budget"))
+                              e.currentTarget.setCustomValidity(t(
+                                e.currentTarget.validity.valueMissing ? "continuous_goal.validation.keep_budget" : "continuous_goal.validation.budget",
+                                { max: number(Number.MAX_SAFE_INTEGER) },
+                              ))
                             }}
                             onInput={(e) => {
                               e.currentTarget.setCustomValidity("")
@@ -897,8 +934,9 @@ export function ContinuousGoalControl(props: {
               </TextField.Root>
             </Show>
             <Show when={validation()}>
-              <Feedback tone="error" title={t("continuous_goal.validation.title")}>
-                {t(validation())}
+              <Feedback ref={(element) => { validationFeedback = element }} tabIndex={-1}
+                tone="error" title={t("continuous_goal.validation.title")}>
+                {t(validation(), { max: number(Number.MAX_SAFE_INTEGER) })}
               </Feedback>
             </Show>
             <Show when={error()}>

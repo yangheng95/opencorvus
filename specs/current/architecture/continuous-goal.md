@@ -249,8 +249,16 @@ initial owner projection before choosing creation or existing-goal details, and
 does not carry a goal value or mutation authority across a selection.
 The creation dialog uses a bounded 560px width, one concise execution explanation
 and the original objective field. Optional budgets use the shared native Disclosure;
-its summary states No limit or Custom limits. Existing draft values reopen expanded,
-and invalid budget fields reveal themselves. Detailed cost, pause and immutable
+its summary states No limit when both fields are empty; otherwise it shows both
+current limits, explicitly marking an empty field as unlimited. Safe integers use
+the current locale's number format; other unconfirmed input retains its field text.
+Long values wrap within the existing dialog. Existing draft values reopen expanded,
+and invalid budget fields reveal themselves. Native number constraints share the
+submission boundary's positive safe-integer range and preserve an existing limit
+as required input. Validation reveals the original fields and explains the current
+locale's supported range or required retained limit. Submission-only semantic
+errors focus their original inline feedback inside the current dialog so long
+objectives cannot leave the explanation below its scroll viewport. Detailed cost, pause and immutable
 objective guidance stays in that section and the existing guide. No disclosure
 changes the single form draft, unlimited default or execution contract.
 

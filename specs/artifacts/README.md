@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [首页与目标预算实页复核](2026-10-30-home-goal-form-review/README.md)：首页、草稿、预算校验及中英额度摘要。
+
 - [原消息定位请求归属验收](2026-10-30-conversation-navigation-lifetime/README.md)：原会话和参与者定位、关闭/重开及数据保全。
 
 - [Task/Mission 原消息查找实页证据](2026-10-30-task-mission-conversation-find/README.md)：完整原历史、参与者原文定位、停止消息身份、中文界面与数据保全。
