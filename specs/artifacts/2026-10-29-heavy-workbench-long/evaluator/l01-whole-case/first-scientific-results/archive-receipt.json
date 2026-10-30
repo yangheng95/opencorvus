@@ -1,0 +1,470 @@
+{
+  "at": "2026-10-30T21:07:08.478109+00:00",
+  "archive": "originals.zip",
+  "archive_bytes": 9738599,
+  "members": 114,
+  "original_bytes": 12765452,
+  "inventory": [
+    {
+      "member": "assess-existing.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "assess-existing.stdout.txt",
+      "bytes": 3166
+    },
+    {
+      "member": "assess_existing.py",
+      "bytes": 4481
+    },
+    {
+      "member": "author-owner-launch.json",
+      "bytes": 429
+    },
+    {
+      "member": "author-owner.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "author-owner.stdout.txt",
+      "bytes": 0
+    },
+    {
+      "member": "author-study/active.json",
+      "bytes": 1211
+    },
+    {
+      "member": "author-study/owner-started.json",
+      "bytes": 425
+    },
+    {
+      "member": "author-study/pre-execution-source.zip",
+      "bytes": 2494187
+    },
+    {
+      "member": "author_study_owner.py",
+      "bytes": 4625
+    },
+    {
+      "member": "check_engine.py",
+      "bytes": 1625
+    },
+    {
+      "member": "complete_reaction_owner.py",
+      "bytes": 4636
+    },
+    {
+      "member": "deliver_phase.py",
+      "bytes": 17260
+    },
+    {
+      "member": "engine-check/cleanup.json",
+      "bytes": 276
+    },
+    {
+      "member": "engine-check/create.json",
+      "bytes": 790
+    },
+    {
+      "member": "engine-check/inspect.json",
+      "bytes": 9547
+    },
+    {
+      "member": "engine-check/logs.json",
+      "bytes": 617
+    },
+    {
+      "member": "engine-check/run/adam/attempts.jsonl",
+      "bytes": 1171
+    },
+    {
+      "member": "engine-check/run/adam/execution.json",
+      "bytes": 485
+    },
+    {
+      "member": "engine-check/run/adam/final.npz",
+      "bytes": 166798
+    },
+    {
+      "member": "engine-check/run/assessment.json",
+      "bytes": 5079
+    },
+    {
+      "member": "engine-check/run/initial.npz",
+      "bytes": 166798
+    },
+    {
+      "member": "engine-check/run/lbfgs/attempts.jsonl",
+      "bytes": 2223
+    },
+    {
+      "member": "engine-check/run/lbfgs/execution.json",
+      "bytes": 488
+    },
+    {
+      "member": "engine-check/run/lbfgs/final.npz",
+      "bytes": 166798
+    },
+    {
+      "member": "engine-check/start.json",
+      "bytes": 628
+    },
+    {
+      "member": "engine-check/started.json",
+      "bytes": 195
+    },
+    {
+      "member": "engine-check/terminal.json",
+      "bytes": 73
+    },
+    {
+      "member": "existing-evaluation/actual-0-reaction.json",
+      "bytes": 1385
+    },
+    {
+      "member": "existing-evaluation/actual-1-wave.json",
+      "bytes": 1707
+    },
+    {
+      "member": "existing-evaluation/actual-2-convection.json",
+      "bytes": 1398
+    },
+    {
+      "member": "existing-evaluation/actual-3-convection.json",
+      "bytes": 1428
+    },
+    {
+      "member": "existing-evaluation/actual-4-convection.json",
+      "bytes": 1432
+    },
+    {
+      "member": "existing-evaluation/actual-5-convection.json",
+      "bytes": 1403
+    },
+    {
+      "member": "existing-evaluation/actual-6-convection.json",
+      "bytes": 1401
+    },
+    {
+      "member": "existing-evaluation/constant-convection-0.json",
+      "bytes": 1271
+    },
+    {
+      "member": "existing-evaluation/constant-convection-0.npz",
+      "bytes": 166798
+    },
+    {
+      "member": "existing-evaluation/constant-convection-1.json",
+      "bytes": 1286
+    },
+    {
+      "member": "existing-evaluation/constant-convection-1.npz",
+      "bytes": 166798
+    },
+    {
+      "member": "existing-evaluation/constant-reaction-0.json",
+      "bytes": 1266
+    },
+    {
+      "member": "existing-evaluation/constant-reaction-0.npz",
+      "bytes": 166798
+    },
+    {
+      "member": "existing-evaluation/constant-reaction-1.json",
+      "bytes": 1280
+    },
+    {
+      "member": "existing-evaluation/constant-reaction-1.npz",
+      "bytes": 166798
+    },
+    {
+      "member": "existing-evaluation/constant-wave-0.json",
+      "bytes": 1513
+    },
+    {
+      "member": "existing-evaluation/constant-wave-0.npz",
+      "bytes": 166798
+    },
+    {
+      "member": "existing-evaluation/constant-wave-1.json",
+      "bytes": 1530
+    },
+    {
+      "member": "existing-evaluation/constant-wave-1.npz",
+      "bytes": 166798
+    },
+    {
+      "member": "existing-evaluation/summary.json",
+      "bytes": 22525
+    },
+    {
+      "member": "existing-evaluation/target-policy.json",
+      "bytes": 292
+    },
+    {
+      "member": "finalize_reaction.py",
+      "bytes": 2164
+    },
+    {
+      "member": "improve_reaction.py",
+      "bytes": 2144
+    },
+    {
+      "member": "paused-observation-end.json",
+      "bytes": 3338
+    },
+    {
+      "member": "paused-start.json",
+      "bytes": 2978
+    },
+    {
+      "member": "plot_diagnostics.py",
+      "bytes": 2722
+    },
+    {
+      "member": "progress-observation-end.json",
+      "bytes": 10134
+    },
+    {
+      "member": "reaction-completion/closure-addendum.json",
+      "bytes": 2047
+    },
+    {
+      "member": "reaction-completion/events-before.json",
+      "bytes": 92470
+    },
+    {
+      "member": "reaction-completion/executed-source.py",
+      "bytes": 4124
+    },
+    {
+      "member": "reaction-completion/inspect-before.json",
+      "bytes": 9602
+    },
+    {
+      "member": "reaction-completion/inspect-terminal.json",
+      "bytes": 420
+    },
+    {
+      "member": "reaction-completion/native-log.json",
+      "bytes": 437
+    },
+    {
+      "member": "reaction-completion/originals/accepted-100.npz",
+      "bytes": 166798
+    },
+    {
+      "member": "reaction-completion/originals/accepted-120.npz",
+      "bytes": 166798
+    },
+    {
+      "member": "reaction-completion/originals/events.json",
+      "bytes": 107244
+    },
+    {
+      "member": "reaction-completion/originals/executed-source.py",
+      "bytes": 4124
+    },
+    {
+      "member": "reaction-completion/originals/init.npz",
+      "bytes": 166798
+    },
+    {
+      "member": "reaction-completion/originals/reaction-checkpoint.npz",
+      "bytes": 166798
+    },
+    {
+      "member": "reaction-completion/originals/reaction-data.npz",
+      "bytes": 302790
+    },
+    {
+      "member": "reaction-completion/originals/switch-11000.npz",
+      "bytes": 166798
+    },
+    {
+      "member": "reaction-completion/owner-error.json",
+      "bytes": 618
+    },
+    {
+      "member": "reaction-completion/owner-started.json",
+      "bytes": 347
+    },
+    {
+      "member": "reaction-completion/reaction-final-numpy.json",
+      "bytes": 753
+    },
+    {
+      "member": "reaction-completion/resume.json",
+      "bytes": 393
+    },
+    {
+      "member": "reaction-completion/wait.json",
+      "bytes": 324
+    },
+    {
+      "member": "reaction-owner-launch.json",
+      "bytes": 408
+    },
+    {
+      "member": "reaction-owner.stderr.txt",
+      "bytes": 332
+    },
+    {
+      "member": "reaction-owner.stdout.txt",
+      "bytes": 0
+    },
+    {
+      "member": "reaction-transfer/cleanup.json",
+      "bytes": 275
+    },
+    {
+      "member": "reaction-transfer/create.json",
+      "bytes": 1067
+    },
+    {
+      "member": "reaction-transfer/inspect.json",
+      "bytes": 10824
+    },
+    {
+      "member": "reaction-transfer/logs.json",
+      "bytes": 1524
+    },
+    {
+      "member": "reaction-transfer/native-originals.zip",
+      "bytes": 3638810
+    },
+    {
+      "member": "reaction-transfer/owner-started.json",
+      "bytes": 248
+    },
+    {
+      "member": "reaction-transfer/owner-terminal.json",
+      "bytes": 181
+    },
+    {
+      "member": "reaction-transfer/run/initial.npz",
+      "bytes": 166798
+    },
+    {
+      "member": "reaction-transfer/run/nncg/accepted-100.npz",
+      "bytes": 166798
+    },
+    {
+      "member": "reaction-transfer/run/nncg/accepted-120.npz",
+      "bytes": 166798
+    },
+    {
+      "member": "reaction-transfer/run/nncg/attempts.jsonl",
+      "bytes": 945139
+    },
+    {
+      "member": "reaction-transfer/run/nncg/execution.json",
+      "bytes": 496
+    },
+    {
+      "member": "reaction-transfer/run/nncg/final.npz",
+      "bytes": 166798
+    },
+    {
+      "member": "reaction-transfer/run/nncg/progress.json",
+      "bytes": 6388
+    },
+    {
+      "member": "reaction-transfer/run/nncg/state-100.pt",
+      "bytes": 174165
+    },
+    {
+      "member": "reaction-transfer/run/nncg/state-120.pt",
+      "bytes": 174165
+    },
+    {
+      "member": "reaction-transfer/run/result.json",
+      "bytes": 2380
+    },
+    {
+      "member": "reaction-transfer/run/started.json",
+      "bytes": 1349
+    },
+    {
+      "member": "reaction-transfer/start.json",
+      "bytes": 1536
+    },
+    {
+      "member": "render/plot-data.json",
+      "bytes": 443
+    },
+    {
+      "member": "render/reaction-distinct-methods.png",
+      "bytes": 74966
+    },
+    {
+      "member": "render/structure-neural-fields.png",
+      "bytes": 1057599
+    },
+    {
+      "member": "render.cleanup.txt",
+      "bytes": 25
+    },
+    {
+      "member": "render.inspect.json",
+      "bytes": 8746
+    },
+    {
+      "member": "render.logs.txt",
+      "bytes": 0
+    },
+    {
+      "member": "render.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "render.stdout.txt",
+      "bytes": 0
+    },
+    {
+      "member": "representability/assessment.json",
+      "bytes": 13716
+    },
+    {
+      "member": "representability/convection.npz",
+      "bytes": 166798
+    },
+    {
+      "member": "representability/reaction.npz",
+      "bytes": 166798
+    },
+    {
+      "member": "representability/wave.npz",
+      "bytes": 166798
+    },
+    {
+      "member": "representability.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "representability.stdout.txt",
+      "bytes": 1437
+    },
+    {
+      "member": "transfer-owner-launch.json",
+      "bytes": 233
+    },
+    {
+      "member": "transfer-owner.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "transfer-owner.stdout.txt",
+      "bytes": 0
+    },
+    {
+      "member": "transfer_owner.py",
+      "bytes": 2335
+    }
+  ],
+  "explicit_exclusions": [
+    "live author-project/work/results and live author-study attach streams, to be sealed only at true terminal",
+    "old reaction state-100.pt and duplicate full reaction originals.zip preserved externally, no loss of original"
+  ],
+  "scope": "first scientific results/current genuine activity, not a completed full case or score"
+}

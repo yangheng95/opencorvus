@@ -1,0 +1,14 @@
+{
+  "labels": [
+    "Actual old hybrid\n11000 +30000 updates",
+    "New NNCG transfer\n200 actual updates",
+    "Structured neural\ninitial-condition fit"
+  ],
+  "l2re": [
+    0.03565107352774151,
+    0.0330740872996077,
+    0.0005250303012369914
+  ],
+  "target": 0.01,
+  "scope": "postprocessing actual existing network exports and real new200-update transfer; no training, registered selection, formal score or optimizer success inferred"
+}

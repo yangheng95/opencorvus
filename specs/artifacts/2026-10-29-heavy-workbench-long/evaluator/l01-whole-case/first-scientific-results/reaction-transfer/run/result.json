@@ -1,0 +1,84 @@
+{
+  "initial": {
+    "problem": "reaction",
+    "residual_points": 10000,
+    "constraint_count": 358,
+    "evaluation_points": 8385,
+    "residual_loss": 1.0181560948202246e-06,
+    "constraint_loss": 8.604239567698549e-07,
+    "total_loss": 1.8785800515900794e-06,
+    "residual_rmse": 0.0014269941098828856,
+    "evaluation_residual_loss": 1.2180919493473114e-06,
+    "evaluation_residual_rmse": 0.001560827952945046,
+    "constraint_families": {
+      "initial_value": {
+        "count": 257,
+        "loss": 1.1805625831160423e-06,
+        "rmse": 0.0015365953163510829
+      },
+      "periodic_value": {
+        "count": 101,
+        "loss": 4.581378874044719e-08,
+        "rmse": 0.00030270047486070185
+      }
+    },
+    "l2re": 0.0356510735277415,
+    "parameter_count": 20601
+  },
+  "final": {
+    "problem": "reaction",
+    "residual_points": 10000,
+    "constraint_count": 358,
+    "evaluation_points": 8385,
+    "residual_loss": 7.417398419706357e-07,
+    "constraint_loss": 7.03786500599248e-07,
+    "total_loss": 1.4455263425698838e-06,
+    "residual_rmse": 0.0012179818077218032,
+    "evaluation_residual_loss": 8.628819297598e-07,
+    "evaluation_residual_rmse": 0.0013136833178203947,
+    "constraint_families": {
+      "initial_value": {
+        "count": 257,
+        "loss": 9.698088929465471e-07,
+        "rmse": 0.0013927016140915089
+      },
+      "periodic_value": {
+        "count": 101,
+        "loss": 2.6878036903644628e-08,
+        "rmse": 0.00023185356112703824
+      }
+    },
+    "l2re": 0.0330740872996077,
+    "parameter_count": 20601
+  },
+  "execution": {
+    "method": "nncg",
+    "status": "max_updates",
+    "reason": "registered update limit",
+    "failure_code": null,
+    "attempts": 200,
+    "accepted_updates": 200,
+    "costs": {
+      "closure_calls": 0,
+      "gradient_calls": 200,
+      "hvp_calls": 9912,
+      "lbfgs_native_iterations": 0,
+      "loss_calls": 600
+    },
+    "started_at": "2026-10-30T20:44:12.225082+00:00",
+    "finished_at": "2026-10-30T20:50:03.479500+00:00",
+    "native_pid": 1,
+    "seconds": 351.27277824422345,
+    "resume_from_saved_at": null
+  },
+  "target_components": {
+    "solution": false,
+    "residual": true,
+    "initial_value": true,
+    "periodic_value": true
+  },
+  "all_quality_components": false,
+  "old_profile_eligible": false,
+  "whole_case_complete": false,
+  "candidate_score": null
+}

@@ -1,0 +1,310 @@
+{
+  "at": "2026-10-30T21:07:08.478109+00:00",
+  "active_locator": {
+    "at": "2026-10-30T20:58:58.780429+00:00",
+    "stage": "first-registered-cell",
+    "cid": "314b41b67cf044698ab6e76ef84c63f07b83bf6f7c816ae972301d4b73c34c1e",
+    "project": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project",
+    "results": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results",
+    "owner_pid": 54408,
+    "actual_argv": [
+      "docker",
+      "create",
+      "--name",
+      "oc-l01-author-first-20261031-a",
+      "--network",
+      "none",
+      "--gpus",
+      "all",
+      "--cpus",
+      "4",
+      "--mount",
+      "type=bind,source=D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project,target=/project,readonly",
+      "--mount",
+      "type=bind,source=D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work,target=/project/work",
+      "sha256:366454c0a7b7f023131af29ec68696859c8d39f1a1b2a3a61e32c35ff03ae9dc",
+      "python",
+      "-u",
+      "-B",
+      "/project/run_study.py",
+      "--inputs",
+      "/project/inputs",
+      "--output",
+      "/project/work/results",
+      "--device",
+      "cuda",
+      "--only",
+      "convection-lbfgs-s345-lrnone"
+    ],
+    "meaning": "currently executing, not complete"
+  },
+  "inspect_exit": 0,
+  "inspect": [
+    {
+      "Id": "314b41b67cf044698ab6e76ef84c63f07b83bf6f7c816ae972301d4b73c34c1e",
+      "Created": "2026-10-30T20:58:58.583699078Z",
+      "Path": "python",
+      "Args": [
+        "-u",
+        "-B",
+        "/project/run_study.py",
+        "--inputs",
+        "/project/inputs",
+        "--output",
+        "/project/work/results",
+        "--device",
+        "cuda",
+        "--only",
+        "convection-lbfgs-s345-lrnone"
+      ],
+      "State": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 1859563,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-30T20:58:58.917559724Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "Image": "sha256:366454c0a7b7f023131af29ec68696859c8d39f1a1b2a3a61e32c35ff03ae9dc",
+      "ResolvConfPath": "/var/lib/docker/containers/314b41b67cf044698ab6e76ef84c63f07b83bf6f7c816ae972301d4b73c34c1e/resolv.conf",
+      "HostnamePath": "/var/lib/docker/containers/314b41b67cf044698ab6e76ef84c63f07b83bf6f7c816ae972301d4b73c34c1e/hostname",
+      "HostsPath": "/var/lib/docker/containers/314b41b67cf044698ab6e76ef84c63f07b83bf6f7c816ae972301d4b73c34c1e/hosts",
+      "LogPath": "/var/lib/docker/containers/314b41b67cf044698ab6e76ef84c63f07b83bf6f7c816ae972301d4b73c34c1e/314b41b67cf044698ab6e76ef84c63f07b83bf6f7c816ae972301d4b73c34c1e-json.log",
+      "Name": "/oc-l01-author-first-20261031-a",
+      "RestartCount": 0,
+      "Driver": "overlayfs",
+      "Platform": "linux",
+      "MountLabel": "",
+      "ProcessLabel": "",
+      "AppArmorProfile": "",
+      "ExecIDs": null,
+      "HostConfig": {
+        "Binds": null,
+        "ContainerIDFile": "",
+        "LogConfig": {
+          "Type": "json-file",
+          "Config": {}
+        },
+        "NetworkMode": "none",
+        "PortBindings": {},
+        "RestartPolicy": {
+          "Name": "no",
+          "MaximumRetryCount": 0
+        },
+        "AutoRemove": false,
+        "VolumeDriver": "",
+        "VolumesFrom": null,
+        "ConsoleSize": [
+          0,
+          0
+        ],
+        "CapAdd": null,
+        "CapDrop": null,
+        "CgroupnsMode": "private",
+        "Dns": null,
+        "DnsOptions": [],
+        "DnsSearch": [],
+        "ExtraHosts": null,
+        "GroupAdd": null,
+        "IpcMode": "private",
+        "Cgroup": "",
+        "Links": null,
+        "OomScoreAdj": 0,
+        "PidMode": "",
+        "Privileged": false,
+        "PublishAllPorts": false,
+        "ReadonlyRootfs": false,
+        "SecurityOpt": null,
+        "UTSMode": "",
+        "UsernsMode": "",
+        "ShmSize": 67108864,
+        "Runtime": "runc",
+        "Isolation": "",
+        "CpuShares": 0,
+        "Memory": 0,
+        "NanoCpus": 4000000000,
+        "CgroupParent": "",
+        "BlkioWeight": 0,
+        "BlkioWeightDevice": [],
+        "BlkioDeviceReadBps": [],
+        "BlkioDeviceWriteBps": [],
+        "BlkioDeviceReadIOps": [],
+        "BlkioDeviceWriteIOps": [],
+        "CpuPeriod": 0,
+        "CpuQuota": 0,
+        "CpuRealtimePeriod": 0,
+        "CpuRealtimeRuntime": 0,
+        "CpusetCpus": "",
+        "CpusetMems": "",
+        "Devices": [],
+        "DeviceCgroupRules": null,
+        "DeviceRequests": [
+          {
+            "Driver": "",
+            "Count": -1,
+            "DeviceIDs": null,
+            "Capabilities": [
+              [
+                "gpu"
+              ]
+            ],
+            "Options": {}
+          }
+        ],
+        "MemoryReservation": 0,
+        "MemorySwap": 0,
+        "MemorySwappiness": null,
+        "OomKillDisable": null,
+        "PidsLimit": null,
+        "Ulimits": [],
+        "CpuCount": 0,
+        "CpuPercent": 0,
+        "IOMaximumIOps": 0,
+        "IOMaximumBandwidth": 0,
+        "Mounts": [
+          {
+            "Type": "bind",
+            "Source": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project",
+            "Target": "/project",
+            "ReadOnly": true
+          },
+          {
+            "Type": "bind",
+            "Source": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work",
+            "Target": "/project/work"
+          }
+        ],
+        "MaskedPaths": [
+          "/proc/acpi",
+          "/proc/asound",
+          "/proc/interrupts",
+          "/proc/kcore",
+          "/proc/keys",
+          "/proc/latency_stats",
+          "/proc/sched_debug",
+          "/proc/scsi",
+          "/proc/timer_list",
+          "/proc/timer_stats",
+          "/sys/devices/virtual/powercap",
+          "/sys/firmware"
+        ],
+        "ReadonlyPaths": [
+          "/proc/bus",
+          "/proc/fs",
+          "/proc/irq",
+          "/proc/sys",
+          "/proc/sysrq-trigger"
+        ]
+      },
+      "Storage": {
+        "RootFS": {
+          "Snapshot": {
+            "Name": "overlayfs"
+          }
+        }
+      },
+      "Mounts": [
+        {
+          "Type": "bind",
+          "Source": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project",
+          "Destination": "/project",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "bind",
+          "Source": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work",
+          "Destination": "/project/work",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        }
+      ],
+      "Config": {
+        "Hostname": "314b41b67cf0",
+        "Domainname": "",
+        "User": "",
+        "AttachStdin": false,
+        "AttachStdout": true,
+        "AttachStderr": true,
+        "Tty": false,
+        "OpenStdin": false,
+        "StdinOnce": false,
+        "Env": [
+          "PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "NVIDIA_VISIBLE_DEVICES=all",
+          "NVIDIA_DRIVER_CAPABILITIES=compute,utility",
+          "LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64",
+          "PYTORCH_VERSION=2.7.1",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "MPLBACKEND=Agg"
+        ],
+        "Cmd": [
+          "python",
+          "-u",
+          "-B",
+          "/project/run_study.py",
+          "--inputs",
+          "/project/inputs",
+          "--output",
+          "/project/work/results",
+          "--device",
+          "cuda",
+          "--only",
+          "convection-lbfgs-s345-lrnone"
+        ],
+        "Image": "sha256:366454c0a7b7f023131af29ec68696859c8d39f1a1b2a3a61e32c35ff03ae9dc",
+        "Volumes": null,
+        "WorkingDir": "/workspace",
+        "Entrypoint": null,
+        "Labels": {
+          "com.nvidia.volumes.needed": "nvidia_driver",
+          "org.opencontainers.image.ref.name": "ubuntu",
+          "org.opencontainers.image.version": "22.04"
+        }
+      },
+      "NetworkSettings": {
+        "SandboxID": "3d7734116d866587a697d7445771f80c7687a5e7d359bbadf35383c38bfd3a04",
+        "SandboxKey": "/var/run/docker/netns/3d7734116d86",
+        "Ports": {},
+        "Networks": {
+          "none": {
+            "IPAMConfig": null,
+            "Links": null,
+            "Aliases": null,
+            "DriverOpts": null,
+            "GwPriority": 0,
+            "NetworkID": "02757b3301b8b799bf59c93f48337e4fbcc3c9ec79963f9466f2477265ef9702",
+            "EndpointID": "cdcf39af35d4e2043f386a7ded4890d7d1f353400aee263b6c28f690a625db28",
+            "Gateway": "",
+            "IPAddress": "",
+            "MacAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "DNSNames": null
+          }
+        }
+      },
+      "ImageManifestDescriptor": {
+        "mediaType": "application/vnd.oci.image.manifest.v1+json",
+        "digest": "sha256:15fb6120d8ed08d27226181b6da3a2a2965c3288f7596e5c7791e53e8feeca82",
+        "size": 1436,
+        "platform": {
+          "architecture": "amd64",
+          "os": "linux"
+        }
+      }
+    }
+  ],
+  "inspect_error": "",
+  "stats": "CONTAINER ID   NAME                             CPU %     MEM USAGE / LIMIT     MEM %     NET I/O   BLOCK I/O        PIDS\n314b41b67cf0   oc-l01-author-first-20261031-a   100.25%   979.1MiB / 31.28GiB   3.06%     0B / 0B   1.88MB / 4.1kB   16\n",
+  "scope": "actual observation only; naturally terminal/cleaned CID must be resolved through original owner receipts"
+}

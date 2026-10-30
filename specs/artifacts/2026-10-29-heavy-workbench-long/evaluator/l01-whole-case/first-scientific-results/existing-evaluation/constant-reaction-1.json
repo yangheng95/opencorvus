@@ -1,0 +1,44 @@
+{
+  "problem": "reaction",
+  "label": "constant-reaction-1",
+  "source": {
+    "path": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\existing-evaluation\\constant-reaction-1.npz",
+    "scope": "untrained actual width100 constant export, low-quality diagnostic only"
+  },
+  "metrics": {
+    "problem": "reaction",
+    "residual_points": 10000,
+    "constraint_count": 358,
+    "evaluation_points": 8385,
+    "residual_loss": 0.0,
+    "constraint_loss": 0.21411147709953987,
+    "total_loss": 0.21411147709953987,
+    "residual_rmse": 0.0,
+    "evaluation_residual_loss": 0.0,
+    "evaluation_residual_rmse": 0.0,
+    "constraint_families": {
+      "initial_value": {
+        "count": 257,
+        "loss": 0.2982564544810711,
+        "rmse": 0.7723424816505577
+      },
+      "periodic_value": {
+        "count": 101,
+        "loss": 0.0,
+        "rmse": 0.0
+      }
+    },
+    "l2re": 0.8879416037696533,
+    "parameter_count": 20601
+  },
+  "target_components": {
+    "relative_solution": false,
+    "independent_residual": true,
+    "initial_value": false,
+    "periodic_value": true
+  },
+  "all_target_components": false,
+  "recompute_seconds": 0.38802860025316477,
+  "training_certified": false,
+  "candidate_score": null
+}

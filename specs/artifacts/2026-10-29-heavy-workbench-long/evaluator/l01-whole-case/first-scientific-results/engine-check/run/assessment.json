@@ -1,0 +1,160 @@
+{
+  "checks": {
+    "known_spd_explicit_residual": true,
+    "known_spd_actual_solution": true,
+    "nonpositive_curvature_contract": true,
+    "actual_width100_objective": true,
+    "adam_actual_two_updates": true,
+    "adam_explicit_cost_deltas": true,
+    "adam_actual_final_loss": true,
+    "lbfgs_actual_two_updates": true,
+    "lbfgs_explicit_cost_deltas": true,
+    "lbfgs_actual_final_loss": true,
+    "native_closure_trials": true
+  },
+  "all": true,
+  "scope": "current new engine positive contracts only; not19+5/restore/report/fullcase/quality qualification",
+  "known_pcg": {
+    "status": "converged",
+    "iterations": 18,
+    "explicit_relative_residual": 4.740159424421135e-09,
+    "history": [
+      {
+        "iteration": 1,
+        "curvature": 23.641579316383957,
+        "recursive_relative_residual": 0.5620203143395738,
+        "explicit_relative_residual": 0.5620203143395739
+      },
+      {
+        "iteration": 2,
+        "curvature": 9.682935278043903,
+        "recursive_relative_residual": 0.2719306258359095,
+        "explicit_relative_residual": 0.27193062583590955
+      },
+      {
+        "iteration": 3,
+        "curvature": 2.1965071954929316,
+        "recursive_relative_residual": 0.12698677766431132,
+        "explicit_relative_residual": 0.12698677766431132
+      },
+      {
+        "iteration": 4,
+        "curvature": 0.35642247813084194,
+        "recursive_relative_residual": 0.05374834156647413,
+        "explicit_relative_residual": 0.05374834156647408
+      },
+      {
+        "iteration": 5,
+        "curvature": 0.07400333909084199,
+        "recursive_relative_residual": 0.026431903814838634,
+        "explicit_relative_residual": 0.026431903814838564
+      },
+      {
+        "iteration": 6,
+        "curvature": 0.01682279962364277,
+        "recursive_relative_residual": 0.011955942445419265,
+        "explicit_relative_residual": 0.011955942445419252
+      },
+      {
+        "iteration": 7,
+        "curvature": 0.005576658643506876,
+        "recursive_relative_residual": 0.0033890296944166184,
+        "explicit_relative_residual": 0.0033890296944166466
+      },
+      {
+        "iteration": 8,
+        "curvature": 0.00022532111869952656,
+        "recursive_relative_residual": 0.001638861117371454,
+        "explicit_relative_residual": 0.0016388611173714374
+      },
+      {
+        "iteration": 9,
+        "curvature": 7.590939510782534e-05,
+        "recursive_relative_residual": 0.0005196786746975392,
+        "explicit_relative_residual": 0.000519678674697514
+      },
+      {
+        "iteration": 10,
+        "curvature": 5.78473569322254e-06,
+        "recursive_relative_residual": 0.00015773551496556817,
+        "explicit_relative_residual": 0.00015773551496554088
+      },
+      {
+        "iteration": 11,
+        "curvature": 5.28028253946183e-07,
+        "recursive_relative_residual": 5.220601461864097e-05,
+        "explicit_relative_residual": 5.220601461872782e-05
+      },
+      {
+        "iteration": 12,
+        "curvature": 9.07861245046258e-08,
+        "recursive_relative_residual": 2.311762636409645e-05,
+        "explicit_relative_residual": 2.311762636406277e-05
+      },
+      {
+        "iteration": 13,
+        "curvature": 1.2117497876626923e-08,
+        "recursive_relative_residual": 7.069078642446649e-06,
+        "explicit_relative_residual": 7.069078642497266e-06
+      },
+      {
+        "iteration": 14,
+        "curvature": 1.417088397047188e-09,
+        "recursive_relative_residual": 2.1513575191415837e-06,
+        "explicit_relative_residual": 2.1513575191282806e-06
+      },
+      {
+        "iteration": 15,
+        "curvature": 9.809675648809254e-11,
+        "recursive_relative_residual": 5.893529501119679e-07,
+        "explicit_relative_residual": 5.893529500469649e-07
+      },
+      {
+        "iteration": 16,
+        "curvature": 1.1501279497297505e-11,
+        "recursive_relative_residual": 1.2078333641540955e-07,
+        "explicit_relative_residual": 1.2078333638074142e-07
+      },
+      {
+        "iteration": 17,
+        "curvature": 3.3736812863611657e-13,
+        "recursive_relative_residual": 3.82309321653486e-08,
+        "explicit_relative_residual": 3.823093219132022e-08
+      },
+      {
+        "iteration": 18,
+        "curvature": 3.7924979646142434e-14,
+        "recursive_relative_residual": 4.7401594011675275e-09,
+        "explicit_relative_residual": 4.740159424421135e-09
+      }
+    ]
+  },
+  "known_nystrom": {
+    "seed": 20261029,
+    "rank": 20,
+    "delta": 1.1745709224513094e-14,
+    "nu": 1.1745709224513094e-14,
+    "lambda": [
+      9.514342784995911,
+      8.985953836956678,
+      8.94492870840051,
+      8.628825667103085,
+      8.158748175486005,
+      7.864407333279223,
+      7.509040185362513,
+      6.872578759501294,
+      6.67543758523932,
+      6.187050975154862,
+      6.077841782245223,
+      5.825953538174434,
+      5.19445795575408,
+      5.004348640338023,
+      4.8375821671526555,
+      4.172426174737757,
+      3.969476451997095,
+      3.539286400425136,
+      3.1007147441397924,
+      2.664557741122421
+    ]
+  }
+}

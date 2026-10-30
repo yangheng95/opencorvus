@@ -1,0 +1,45 @@
+{
+  "problem": "reaction",
+  "label": "actual-0-reaction",
+  "source": {
+    "path": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\reaction-convergence-qualification\\accepted-120.npz",
+    "scope": "intermediate accepted120, not terminal",
+    "bytes": 166798
+  },
+  "metrics": {
+    "problem": "reaction",
+    "residual_points": 10000,
+    "constraint_count": 358,
+    "evaluation_points": 8385,
+    "residual_loss": 0.005650233068713521,
+    "constraint_loss": 0.06775053340066262,
+    "total_loss": 0.07340076646937614,
+    "residual_rmse": 0.1063036506307617,
+    "evaluation_residual_loss": 0.006489648337494399,
+    "evaluation_residual_rmse": 0.11392671624772127,
+    "constraint_families": {
+      "initial_value": {
+        "count": 257,
+        "loss": 0.09437079796754701,
+        "rmse": 0.4344440078250522
+      },
+      "periodic_value": {
+        "count": 101,
+        "loss": 1.3820591857808472e-05,
+        "rmse": 0.005257488346693404
+      }
+    },
+    "l2re": 0.9519795775170943,
+    "parameter_count": 20601
+  },
+  "target_components": {
+    "relative_solution": false,
+    "independent_residual": false,
+    "initial_value": false,
+    "periodic_value": true
+  },
+  "all_target_components": false,
+  "recompute_seconds": 0.3569189002737403,
+  "training_certified": false,
+  "candidate_score": null
+}

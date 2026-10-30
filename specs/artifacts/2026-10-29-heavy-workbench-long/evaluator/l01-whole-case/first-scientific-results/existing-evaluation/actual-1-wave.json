@@ -1,0 +1,57 @@
+{
+  "problem": "wave",
+  "label": "actual-1-wave",
+  "source": {
+    "path": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\wave-convergence-qualification\\accepted-120.npz",
+    "scope": "intermediate accepted120, not terminal",
+    "bytes": 166798
+  },
+  "metrics": {
+    "problem": "wave",
+    "residual_points": 10000,
+    "constraint_count": 716,
+    "evaluation_points": 8385,
+    "residual_loss": 0.0007492524405868543,
+    "constraint_loss": 0.01388206250659107,
+    "total_loss": 0.014631314947177924,
+    "residual_rmse": 0.03871052674885358,
+    "evaluation_residual_loss": 0.0008731476548218028,
+    "evaluation_residual_rmse": 0.04178869834828079,
+    "constraint_families": {
+      "initial_value": {
+        "count": 257,
+        "loss": 0.029403038649809116,
+        "rmse": 0.2424996439164772
+      },
+      "initial_velocity": {
+        "count": 257,
+        "loss": 0.0007503589497612824,
+        "rmse": 0.03873910039640266
+      },
+      "boundary_left": {
+        "count": 101,
+        "loss": 0.010181899290589241,
+        "rmse": 0.14270178198319208
+      },
+      "boundary_right": {
+        "count": 101,
+        "loss": 0.011502591517624764,
+        "rmse": 0.1516745958796315
+      }
+    },
+    "l2re": 0.5920739775021819,
+    "parameter_count": 20601
+  },
+  "target_components": {
+    "relative_solution": false,
+    "independent_residual": false,
+    "initial_value": false,
+    "initial_velocity": false,
+    "boundary_left": false,
+    "boundary_right": false
+  },
+  "all_target_components": false,
+  "recompute_seconds": 0.35609500017017126,
+  "training_certified": false,
+  "candidate_score": null
+}

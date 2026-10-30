@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-30T20:38:04.958527+00:00",
+  "type": "IndexError",
+  "error": "list index out of range",
+  "traceback": "Traceback (most recent call last):\n  File \"D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\complete_reaction_owner.py\", line 30, in <module>\n    q=json.loads(after['stdout'])[0];assert q['State']['Running'] is False and q['State']['Paused'] is False\n      ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^\nIndexError: list index out of range\n",
+  "cid": "b815b942032a843f26403bf3b6398388d3f886d4bba4fab9496d6e89a65e9f1c",
+  "action": "preserve original container; no retry/restart/cancel"
+}

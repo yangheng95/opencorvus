@@ -46,3 +46,5 @@ L06现有[30数值叶与完整源码参考](../cases/L06/README.md)：新精确�
 L06后续[完整独立复建、变价参考和47叶聚合](../cases/L06/README.md)已获相应局部资格；真实参考44pass/2partial/1unassessed、总分null，D02实际数值控制/校准/冻结仍未关闭，禁止将私有评分/参考投给候选。
 
 L06/0.2.0[最终独立合同审查](../cases/L06/evaluator/independent-freeze-review/REVIEW.md)现已批准冻结；当前规范路径rubric.json/public TASK.md、OUTPUTS.md、profile.json。参考正向98分不作候选分，实际新两系统/有效小时仍未完成；私有资格/控制/key不得进入候选项目。
+
+当前L01整题建设入口为[l01-whole-case](l01-whole-case/README.md)：实际自然reaction终态与新NNCG诊断失败、同架构结构控制/原图、完整研究源码及唯一正在执行的作者矩阵。上文旧组件/活跃表仅历史，不当重启依据。未有完整L01评分或冻结。

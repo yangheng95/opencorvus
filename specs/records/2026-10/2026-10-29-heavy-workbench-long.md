@@ -606,3 +606,23 @@ L02当前版本对这两个系统未拉开区分度，不能拿两100说难度�
 当前9/10完整开发合同，有效候选小时0/10、真人专业/统计成熟未认证。无新增活跃LLM/solver/独审；六旧昂贵容器只读核Paused，不恢复。下一直接完整L01：先已有权重便宜重算独立PDE误差/残差/条件质量与合理可达，study_complete与solution_reproduced分开，方法分不补质量；不按现误差倒填宽线/匹配非凸精确轨迹，不自动恢复五GPU。之后履行L02/L06真实双100已触发的另版升级与必要fresh区分度/有效小时，旧public/rubric/分数及退休API只读不重开。所有未完要求保留，心跳ACTIVE。
 
 本轮范围commit/正常fetch merge/审全待推/必要验证/push；精确Git与外部publish-delivery.json才是推送收据。保用户overlay/删视频图片/索引排序/Bun等foreign改动。
+
+## 最新L01 Recall（2026-10-30T21:07:08.478109+00:00）：完整研究源与第一份真实矩阵进行中，仍9/10
+
+本轮读当前AGENTS/长程L05/R9/原源码与公开profile，实施前方案evaluator/l01-whole-case/BUILD-PLAN。用户先交完整题与真实测试/cheap-first优先；不再扩平台或重复已有资格。根public仍未冻，189叶/14critical质量9分未填，未伪称十题或作者通过。
+
+先于本轮重算登记科学目标：相对L2<=.01、独立评价残差RMSE<=.01、每族条件RMSE<=.01，与浮点容差分开。唯一NumPy读7原权重+6常数实际导出约6.5秒，三原数据数组逐值相同，常数PDE残差0而解/初值失败。原convection NNCG200 L2.28798且周期.0564，不因残差.00763给成功。
+
+只恢复原reaction精确CID b815b942032a843f26403bf3b6398388d3f886d4bba4fab9496d6e89a65e9f1c，20:29:15Z→20:38:00Z自然完成11000+30000，docker wait0；原AutoRemove=true，随后owner.inspect空数组导致IndexError的真实工具错误保留。追加只用原wait/complete event/final NPZ封终态，不重训练/不伪造terminal inspect。旧perf135274秒含长暂停不计，新增wait529.321秒单列。独立final loss1.87858e-6、评价残差.001561、初值.001537/周期.000303，但L2RE.035651仍失败。该旧容器已自然清理，不按旧六Paused表恢复它。
+
+一个必要新移植分支reaction NNCG mu.01/rank20/200更新/20刷新/原PCG1e-8和Armijo，native0/200接受/357.532秒，L2RE.033074仍未过目标，不换阻尼/算法/隐藏失败；这是原terminal上的新科学诊断，不属旧convection续训或完整选择。新engine真实CPU13.349秒/11正向与实际width100两步Adam/L-BFGS和closure映射过，仅证明新源基本契约。
+
+另一次预登记便宜表示容量控制由原初边值与PDE特征线/奇反射/logit结构生成同八数组raw width100/tanh网络，独立全点L2RE convection.000234517/reaction.000525030/wave.002389601、残差/各条件全部过同目标。未来解析解未作为fit标签。源/全部真实NPZ及图保留；它违旧随机初始化/固定训练合同，明确不入旧解选择，不冒充优化器/候选成功。它提供容量与物理先验对照，不能从“能表示”推断“旧优化器能训练”。两张真实PNG已主方view_image。
+
+完整author源run_study/study_engine/finish_study已落evaluator/l01-whole-case/reference-source；从当前唯一科学primitive/public打包到D:/opencorvus-benchmark-runs/l01-full-case-20261031/author-project。逐attempt/closure/计数、共享前缀、显式状态分叉/newPID恢复、谱与PCG、论文PDF/图/复建均有代码，尚待全部实际验收，不能用源码替代完成。首私有更新前author-study/pre-execution-source.zip封37文件输入与programme。
+
+唯一新正式作者研究owner PID54408，20:58:58Z启动注册convection-lbfgs-s345-lrnone（原41000上限、真实合法早停），CID314b41b67cf044698ab6e76ef84c63f07b83bf6f7c816ae972301d4b73c34c1e；原阶段自然0+同artifact reader才顺序--continue-study对同一输出执行其余原注册格，首格不重跑。动态唯一入口D:/opencorvus-benchmark-runs/L01-current-reference-20261031.json及author-study/active.json，后者可能自动进入remaining；不可按此静态首CID重复启动。原public/profile/门槛未热改，只有一个新GPU组，无总量截断。stdout可缓冲，真实progress/trace/inspect优先；终态先封原native/全部结果，thin artifact退出不等科学或整题通过。还未开始新的独审，完整成品齐后复用唯一benchmark_review一次集中审。
+
+本轮静止原件evaluator/l01-whole-case/first-scientific-results，实际图/命令/原错误与新增数值封ZIP；不封活跃matrix伪完成。原reaction32MB完整capsule和大型旧optimizer状态明确保外部。其余五旧任务实际Paused（四GPU+旧L06），reaction/移植已经自然终态。L02/L06双100升级义务仍保留，退休API/旧矩阵不重。
+
+完整L01当前合同的全矩阵/质量可达、正式全checker/真实坏programme/原子锚点/整审/冻结仍未完成，套件9/10、有效候选小时0/10、专业统计成熟未认证；不拿本阶段代替第十题。后续接续原owner/真实末态，普通工具/科学问题据实际根因解决，禁止恢复全部GPU或重复旧测试凑量。本轮范围commit/fetch-merge/审待推/必要检查/push，Git及publish-delivery才是收据，保foreign所有改动。

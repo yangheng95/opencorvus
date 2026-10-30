@@ -1,0 +1,57 @@
+{
+  "at": "2026-10-30T20:43:18.537970+00:00",
+  "native_exit": 0,
+  "native_exit_evidence": "preserved docker wait exit0 and payload0, plus actual complete event and final numeric export",
+  "auto_removed": true,
+  "post_terminal_inspect": "unavailable after predeclared AutoRemove; original inspect error/index error preserved, not fabricated",
+  "actual_terminal_event": {
+    "event": "complete",
+    "problem": "reaction",
+    "status": "max_updates",
+    "adam_updates": 11000,
+    "lbfgs_attempts": 30000,
+    "lbfgs_accepted_updates": 30000,
+    "native_iterations": 30000,
+    "closure_calls": 85738,
+    "loss": 1.8785800515900383e-06,
+    "seconds": 135274.7981519797,
+    "completed_at": "2026-10-30T20:38:00.100781+00:00"
+  },
+  "metrics": {
+    "problem": "reaction",
+    "residual_points": 10000,
+    "constraint_count": 358,
+    "evaluation_points": 8385,
+    "residual_loss": 1.0181560948202246e-06,
+    "constraint_loss": 8.604239567698531e-07,
+    "total_loss": 1.8785800515900777e-06,
+    "residual_rmse": 0.0014269941098828856,
+    "evaluation_residual_loss": 1.2180919493473112e-06,
+    "evaluation_residual_rmse": 0.0015608279529450459,
+    "constraint_families": {
+      "initial_value": {
+        "count": 257,
+        "loss": 1.1805625831160396e-06,
+        "rmse": 0.0015365953163510812
+      },
+      "periodic_value": {
+        "count": 101,
+        "loss": 4.5813788740448026e-08,
+        "rmse": 0.0003027004748607046
+      }
+    },
+    "l2re": 0.03565107352774151,
+    "parameter_count": 20601
+  },
+  "target_components": {
+    "relative_solution": false,
+    "evaluation_residual": true,
+    "initial_value": true,
+    "periodic_value": true
+  },
+  "all_quality_components": false,
+  "resume_wait_seconds": 529.321217100136,
+  "time_scope": "explicit resumed wait interval only; old perf elapsed includes long pause, not candidate active hours",
+  "whole_case_complete": false,
+  "role": "one author hybrid representative, not full19+5 or candidate score"
+}

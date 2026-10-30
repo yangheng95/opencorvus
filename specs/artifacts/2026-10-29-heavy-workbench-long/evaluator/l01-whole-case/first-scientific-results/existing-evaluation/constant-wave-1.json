@@ -1,0 +1,56 @@
+{
+  "problem": "wave",
+  "label": "constant-wave-1",
+  "source": {
+    "path": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\existing-evaluation\\constant-wave-1.npz",
+    "scope": "untrained actual width100 constant export, low-quality diagnostic only"
+  },
+  "metrics": {
+    "problem": "wave",
+    "residual_points": 10000,
+    "constraint_count": 716,
+    "evaluation_points": 8385,
+    "residual_loss": 0.0,
+    "constraint_loss": 0.1818925014026753,
+    "total_loss": 0.1818925014026753,
+    "residual_rmse": 0.0,
+    "evaluation_residual_loss": 0.0,
+    "evaluation_residual_rmse": 0.0,
+    "constraint_families": {
+      "initial_value": {
+        "count": 257,
+        "loss": 0.11375498445258951,
+        "rmse": 0.4769800508461324
+      },
+      "initial_velocity": {
+        "count": 257,
+        "loss": 0.0,
+        "rmse": 0.0
+      },
+      "boundary_left": {
+        "count": 101,
+        "loss": 0.5,
+        "rmse": 1.0
+      },
+      "boundary_right": {
+        "count": 101,
+        "loss": 0.5,
+        "rmse": 1.0
+      }
+    },
+    "l2re": 2.0268796468683097,
+    "parameter_count": 20601
+  },
+  "target_components": {
+    "relative_solution": false,
+    "independent_residual": true,
+    "initial_value": false,
+    "initial_velocity": true,
+    "boundary_left": false,
+    "boundary_right": false
+  },
+  "all_target_components": false,
+  "recompute_seconds": 0.3496834998950362,
+  "training_certified": false,
+  "candidate_score": null
+}

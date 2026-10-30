@@ -1,0 +1,108 @@
+{
+  "at": "2026-10-30T21:07:08.478109+00:00",
+  "rows": [
+    {
+      "name": "oc-pinn-convection-contract-20261029-a",
+      "id": "6145ba84963f22dbde7c3da722cc04f0896a0c1cd1e770fe27bbb10453dd69cd",
+      "state": {
+        "Status": "paused",
+        "Running": true,
+        "Paused": true,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 1702433,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-29T07:20:54.927996848Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "inspect_exit": 0,
+      "terminal_reason": null
+    },
+    {
+      "name": "oc-pinn-reaction-convergence-20261029-a",
+      "id": "b815b942032a843f26403bf3b6398388d3f886d4bba4fab9496d6e89a65e9f1c",
+      "state": null,
+      "inspect_exit": 1,
+      "terminal_reason": "reaction naturally completed0 and AutoRemove; original wait/closure-addendum"
+    },
+    {
+      "name": "oc-pinn-wave-convergence-20261029-a",
+      "id": "70559a9efa3f161fbef1ca8d5825b4e8a704e6ae06ed22ca94abdd2f0220989e",
+      "state": {
+        "Status": "paused",
+        "Running": true,
+        "Paused": true,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 1701977,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-29T07:09:08.59973103Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "inspect_exit": 0,
+      "terminal_reason": null
+    },
+    {
+      "name": "oc-pinn-convection-lr003-20261029-a",
+      "id": "98aaf311ffb8f6227a28e4ff4abe579199a5b0d55e07893ad35ee8e11ff0df87",
+      "state": {
+        "Status": "paused",
+        "Running": true,
+        "Paused": true,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 1709559,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-29T09:14:12.857658496Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "inspect_exit": 0,
+      "terminal_reason": null
+    },
+    {
+      "name": "oc-pinn-convection-lr002-20261029-a",
+      "id": "0b4d747d62832ebf67fd71a9e29f478271c8024850b907ff4631ed771adc1245",
+      "state": {
+        "Status": "paused",
+        "Running": true,
+        "Paused": true,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 1709640,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-29T09:14:23.106593582Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "inspect_exit": 0,
+      "terminal_reason": null
+    },
+    {
+      "name": "oc-l06-cash-isolation-20261029-a",
+      "id": "2298fd8c88862450de55d3d3fe72863c05d100ab0b99170f1fbdc61703c9971e",
+      "state": {
+        "Status": "paused",
+        "Running": true,
+        "Paused": true,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 1723915,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-29T10:02:15.148471961Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "inspect_exit": 0,
+      "terminal_reason": null
+    }
+  ],
+  "meaning": "five old tasks remain paused; completed reaction is not a missing failure or restart target"
+}

@@ -1,0 +1,45 @@
+{
+  "problem": "convection",
+  "label": "actual-2-convection",
+  "source": {
+    "path": "D:\\opencorvus-benchmark-runs\\paperbench-discovery-20261029\\convection-contract-qualification\\accepted-120.npz",
+    "scope": "intermediate accepted120, not terminal",
+    "bytes": 166798
+  },
+  "metrics": {
+    "problem": "convection",
+    "residual_points": 10000,
+    "constraint_count": 358,
+    "evaluation_points": 8385,
+    "residual_loss": 0.00013485621634930862,
+    "constraint_loss": 0.006346438529990535,
+    "total_loss": 0.0064812947463398435,
+    "residual_rmse": 0.01642292399966027,
+    "evaluation_residual_loss": 0.000175125358013478,
+    "evaluation_residual_rmse": 0.018714986401997626,
+    "constraint_families": {
+      "initial_value": {
+        "count": 257,
+        "loss": 0.0005127384172127012,
+        "rmse": 0.032023067223884136
+      },
+      "periodic_value": {
+        "count": 101,
+        "loss": 0.02119060614369255,
+        "rmse": 0.20586697716580263
+      }
+    },
+    "l2re": 0.9206173506356081,
+    "parameter_count": 20601
+  },
+  "target_components": {
+    "relative_solution": false,
+    "independent_residual": false,
+    "initial_value": false,
+    "periodic_value": false
+  },
+  "all_target_components": false,
+  "recompute_seconds": 0.3497377997264266,
+  "training_certified": false,
+  "candidate_score": null
+}
