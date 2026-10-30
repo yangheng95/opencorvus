@@ -2637,7 +2637,7 @@
   "continuous_goal.reason.turn_budget": "The automatic turn budget has been reached.",
   "continuous_goal.reason.owner_cancelled": "The conversation was stopped. Reopen it before resuming the goal.",
   "continuous_goal.reason.mission_closed": "This Mission was closed. Reopen it before resuming the goal.",
-  "continuous_goal.reason.owner_archived": "The owner was archived. Restoring it keeps the goal paused until you explicitly resume.",
+  "continuous_goal.reason.owner_archived": "Archiving paused this goal. Restoring the conversation or task keeps it paused until you explicitly resume the goal.",
   "continuous_goal.reason.owner_unavailable": "The goal’s conversation is unavailable.",
   "continuous_goal.error.owner_unavailable": "Open or resume the owner before changing its goal.",
   "continuous_goal.error.owner_forbidden": "This session cannot own this goal.",

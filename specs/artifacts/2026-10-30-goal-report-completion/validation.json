@@ -1,0 +1,78 @@
+{
+  "at": "2026-10-30T12:32:48.591Z",
+  "checks": {
+    "build-after": {
+      "label": "build-after",
+      "startedAt": 1793360880395,
+      "closedAt": 1793360952112,
+      "code": 0,
+      "signal": null,
+      "childPID": 94936
+    },
+    "types-after": {
+      "label": "types-after",
+      "startedAt": 1793360880387,
+      "closedAt": 1793360908704,
+      "code": 0,
+      "signal": null,
+      "childPID": 19720
+    },
+    "build-final": {
+      "label": "build-final",
+      "startedAt": 1793362500146,
+      "closedAt": 1793362595922,
+      "code": 0,
+      "signal": null,
+      "childPID": 58668
+    },
+    "types-final": {
+      "label": "types-final",
+      "startedAt": 1793362500134,
+      "closedAt": 1793362535127,
+      "code": 0,
+      "signal": null,
+      "childPID": 81544
+    },
+    "i18n-final": {
+      "label": "i18n-final",
+      "startedAt": 1793362500173,
+      "closedAt": 1793362502875,
+      "code": 0,
+      "signal": null,
+      "childPID": 4996
+    },
+    "docs-final": {
+      "label": "docs-final",
+      "startedAt": 1793363568750,
+      "closedAt": 1793363576682,
+      "code": 0,
+      "signal": null,
+      "childPID": 100088
+    }
+  },
+  "uiAutomation": "none",
+  "manualVisual": {
+    "screenshots": 25,
+    "firstUI": "main-eayNVtDv.js",
+    "candidateAndFinalMain": "main-CDaz2L-E.js",
+    "finalLocales": "fresh frozen native scope, actual English and Chinese reason screenshots",
+    "goalFooter": "actual completed report Goal plus existing completed/paused Goals",
+    "draft": "open, keyboard About, return, close and reopen; no second Goal submitted"
+  },
+  "businessVerification": {
+    "actualModel": "gpt-6.1-sol",
+    "streamedRequests": 13,
+    "requestsAfterUIChanges": 0,
+    "positiveCSV": "P1 3/170; P2 3/115; P3 2/35; TOTAL 8/320",
+    "goalUsage": 380471,
+    "linkedUsageRows": 10,
+    "sessionUsage": 420939,
+    "inputBytes": "exact"
+  },
+  "scopeLimitations": [
+    "Task/Mission/SideChat button not separately visually exercised",
+    "No archived Session with Goal available for current readonly visual branch",
+    "Report file diff reviewed, not rendered Markdown preview",
+    "No native GUI/install/update/release"
+  ]
+}

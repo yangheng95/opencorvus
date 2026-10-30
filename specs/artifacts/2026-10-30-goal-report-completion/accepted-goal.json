@@ -1,0 +1,10 @@
+{
+  "objective": "审阅当前项目 support-tickets.csv，完成支持工单处理时长复核。只在当前会话工作，不创建Task或委派其他agent，不联网，不提交或推送Git，不改动README.md和输入CSV。只新增summary.csv和report.md。summary.csv固定列priority,tickets,minutes，包含P1、P2、P3和TOTAL四行，给出各级工单数与分钟合计；report.md用中文说明数据来源、总数/总分钟、按给定priority的处理优先建议，以及实际复核过程。必须实际读取输入、写入并重新读取两个输出，独立核对统计与报告；取得真实证据、全部要求满足后，使用当前持续目标工具标记完成，并在原会话简短列出产物位置和完成依据。",
+  "tokenBudget": 200000,
+  "turnBudget": 2,
+  "project": "support-report (isolated fictional QA inputs)",
+  "model": "openai/gpt-6.1-sol",
+  "requestAllowance": 16,
+  "actualRequests": 13,
+  "verification": "ordinary visible preflight, actual UI goal creation, natural model completion, independent raw-file calculation and ledger association"
+}

@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-30T11:55:21.593Z",
+  "changedPhysicalSlots": 2,
+  "nativePID": 98668,
+  "originalExpiredBeforeLaunch": true,
+  "sameResourceAndSlot": true,
+  "newOwnerMatchesOriginalNative": true,
+  "acquisitionAfterOriginalExpiry": true,
+  "releasedBeforeNativeSettlement": true,
+  "settledStreams": 13,
+  "nativeExit": 0,
+  "producer": "Provider fetch → DurableExecutionCapacity.acquire/renew/release",
+  "meaning": "Mutable physical admission slots retain their PK and are reused after expiry; business execution/occurrence/ordering/terminal facts remain in their original stores"
+}

@@ -1,0 +1,53 @@
+{
+  "rows": [
+    {
+      "priority": "P1",
+      "tickets": "3",
+      "minutes": "170"
+    },
+    {
+      "priority": "P2",
+      "tickets": "3",
+      "minutes": "115"
+    },
+    {
+      "priority": "P3",
+      "tickets": "2",
+      "minutes": "35"
+    },
+    {
+      "priority": "TOTAL",
+      "tickets": "8",
+      "minutes": "320"
+    }
+  ],
+  "independentInputTotals": {
+    "P1": [
+      3,
+      170
+    ],
+    "P2": [
+      3,
+      115
+    ],
+    "P3": [
+      2,
+      35
+    ],
+    "TOTAL": [
+      8,
+      320
+    ]
+  },
+  "reportBytes": 1920,
+  "inputs": "exact original bytes",
+  "reportReview": "pending actual file and rendered UI inspection",
+  "subsequentManualReview": {
+    "actualFilesRead": true,
+    "screenshots": [
+      "08-real-report-review.png",
+      "09-real-summary-review.png"
+    ],
+    "kind": "actual file diff, not Markdown rendered preview"
+  }
+}

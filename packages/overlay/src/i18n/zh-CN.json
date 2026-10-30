@@ -2636,7 +2636,7 @@
   "continuous_goal.reason.turn_budget": "自动轮次预算已达到上限。",
   "continuous_goal.reason.owner_cancelled": "所属会话已停止。重新开启会话后，再恢复目标。",
   "continuous_goal.reason.mission_closed": "此 Mission 已关闭。重新开启后，再恢复目标。",
-  "continuous_goal.reason.owner_archived": "所属会话已归档。恢复会话后，目标会保持暂停，直到你明确恢复。",
+  "continuous_goal.reason.owner_archived": "目标因归档而暂停。恢复对话或任务后，仍需手动恢复目标。",
   "continuous_goal.reason.owner_unavailable": "目标所属会话当前不可用。",
   "continuous_goal.error.owner_unavailable": "请先打开或恢复所属会话，再修改持续目标。",
   "continuous_goal.error.owner_forbidden": "当前会话不能持有此目标。",

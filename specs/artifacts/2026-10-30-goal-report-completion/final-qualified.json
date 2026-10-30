@@ -1,0 +1,854 @@
+{
+  "at": "2026-10-30T12:27:31.360Z",
+  "database": [
+    {
+      "at": "2026-10-30T11:56:34.250Z",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 204879,
+      "currentRows": 208561,
+      "originalValues": "exact native SQLite EXCEPT including TEXT/BLOB except two individually qualified mutable physical slots",
+      "qualifiedPhysicalSlots": {
+        "at": "2026-10-30T11:55:21.593Z",
+        "changedPhysicalSlots": 2,
+        "nativePID": 98668,
+        "originalExpiredBeforeLaunch": true,
+        "sameResourceAndSlot": true,
+        "newOwnerMatchesOriginalNative": true,
+        "acquisitionAfterOriginalExpiry": true,
+        "releasedBeforeNativeSettlement": true,
+        "settledStreams": 13,
+        "nativeExit": 0,
+        "producer": "Provider fetch → DurableExecutionCapacity.acquire/renew/release",
+        "meaning": "Mutable physical admission slots retain their PK and are reused after expiry; business execution/occurrence/ordering/terminal facts remain in their original stores"
+      },
+      "additions": [
+        {
+          "table": "bus_publication_delivery",
+          "old": 39939,
+          "now": 40661,
+          "added": 722
+        },
+        {
+          "table": "bus_publication_delivery_receipt",
+          "old": 39939,
+          "now": 40661,
+          "added": 722
+        },
+        {
+          "table": "bus_publication_outbox",
+          "old": 5227,
+          "now": 5326,
+          "added": 99
+        },
+        {
+          "table": "bus_publication_owner",
+          "old": 5227,
+          "now": 5326,
+          "added": 99
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "old": 15681,
+          "now": 15978,
+          "added": 297
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "old": 42025,
+          "now": 42752,
+          "added": 727
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "old": 42083,
+          "now": 42810,
+          "added": 727
+        },
+        {
+          "table": "event_occurrence",
+          "old": 5030,
+          "now": 5129,
+          "added": 99
+        },
+        {
+          "table": "global_creation_allocation",
+          "old": 20,
+          "now": 21,
+          "added": 1
+        },
+        {
+          "table": "memory_chunk",
+          "old": 38,
+          "now": 40,
+          "added": 2
+        },
+        {
+          "table": "memory_file",
+          "old": 38,
+          "now": 40,
+          "added": 2
+        },
+        {
+          "table": "message",
+          "old": 671,
+          "now": 685,
+          "added": 14
+        },
+        {
+          "table": "part",
+          "old": 1944,
+          "now": 1980,
+          "added": 36
+        },
+        {
+          "table": "permission_execution_result",
+          "old": 165,
+          "now": 169,
+          "added": 4
+        },
+        {
+          "table": "permission_ledger",
+          "old": 841,
+          "now": 861,
+          "added": 20
+        },
+        {
+          "table": "permission_policy",
+          "old": 33,
+          "now": 34,
+          "added": 1
+        },
+        {
+          "table": "project",
+          "old": 38,
+          "now": 40,
+          "added": 2
+        },
+        {
+          "table": "protocol_event",
+          "old": 2056,
+          "now": 2097,
+          "added": 41
+        },
+        {
+          "table": "provider_activity_outcome",
+          "old": 696,
+          "now": 708,
+          "added": 12
+        },
+        {
+          "table": "provider_activity_request",
+          "old": 696,
+          "now": 708,
+          "added": 12
+        },
+        {
+          "table": "provider_usage_event",
+          "old": 698,
+          "now": 711,
+          "added": 13
+        },
+        {
+          "table": "session",
+          "old": 82,
+          "now": 84,
+          "added": 2
+        },
+        {
+          "table": "session_control_event",
+          "old": 62,
+          "now": 64,
+          "added": 2
+        },
+        {
+          "table": "session_control_record",
+          "old": 61,
+          "now": 63,
+          "added": 2
+        },
+        {
+          "table": "tool_part_outcome",
+          "old": 570,
+          "now": 580,
+          "added": 10
+        },
+        {
+          "table": "tool_part_progress",
+          "old": 66,
+          "now": 70,
+          "added": 4
+        },
+        {
+          "table": "tool_part_request",
+          "old": 570,
+          "now": 580,
+          "added": 10
+        }
+      ],
+      "attachments": 75,
+      "projects": 8,
+      "trackedFiles": 28,
+      "physicalScopes": 1,
+      "requests": 13,
+      "cumulativeRequests": 1096,
+      "reserveMs": 2711794,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "at": "2026-10-30T12:17:54.383Z",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 204879,
+      "currentRows": 208563,
+      "originalValues": "exact native SQLite EXCEPT including TEXT/BLOB except two individually qualified mutable physical slots",
+      "qualifiedPhysicalSlots": {
+        "at": "2026-10-30T11:55:21.593Z",
+        "changedPhysicalSlots": 2,
+        "nativePID": 98668,
+        "originalExpiredBeforeLaunch": true,
+        "sameResourceAndSlot": true,
+        "newOwnerMatchesOriginalNative": true,
+        "acquisitionAfterOriginalExpiry": true,
+        "releasedBeforeNativeSettlement": true,
+        "settledStreams": 13,
+        "nativeExit": 0,
+        "producer": "Provider fetch → DurableExecutionCapacity.acquire/renew/release",
+        "meaning": "Mutable physical admission slots retain their PK and are reused after expiry; business execution/occurrence/ordering/terminal facts remain in their original stores"
+      },
+      "additions": [
+        {
+          "table": "bus_publication_delivery",
+          "old": 39939,
+          "now": 40661,
+          "added": 722
+        },
+        {
+          "table": "bus_publication_delivery_receipt",
+          "old": 39939,
+          "now": 40661,
+          "added": 722
+        },
+        {
+          "table": "bus_publication_outbox",
+          "old": 5227,
+          "now": 5326,
+          "added": 99
+        },
+        {
+          "table": "bus_publication_owner",
+          "old": 5227,
+          "now": 5326,
+          "added": 99
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "old": 15681,
+          "now": 15978,
+          "added": 297
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "old": 42025,
+          "now": 42753,
+          "added": 728
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "old": 42083,
+          "now": 42811,
+          "added": 728
+        },
+        {
+          "table": "event_occurrence",
+          "old": 5030,
+          "now": 5129,
+          "added": 99
+        },
+        {
+          "table": "global_creation_allocation",
+          "old": 20,
+          "now": 21,
+          "added": 1
+        },
+        {
+          "table": "memory_chunk",
+          "old": 38,
+          "now": 40,
+          "added": 2
+        },
+        {
+          "table": "memory_file",
+          "old": 38,
+          "now": 40,
+          "added": 2
+        },
+        {
+          "table": "message",
+          "old": 671,
+          "now": 685,
+          "added": 14
+        },
+        {
+          "table": "part",
+          "old": 1944,
+          "now": 1980,
+          "added": 36
+        },
+        {
+          "table": "permission_execution_result",
+          "old": 165,
+          "now": 169,
+          "added": 4
+        },
+        {
+          "table": "permission_ledger",
+          "old": 841,
+          "now": 861,
+          "added": 20
+        },
+        {
+          "table": "permission_policy",
+          "old": 33,
+          "now": 34,
+          "added": 1
+        },
+        {
+          "table": "project",
+          "old": 38,
+          "now": 40,
+          "added": 2
+        },
+        {
+          "table": "protocol_event",
+          "old": 2056,
+          "now": 2097,
+          "added": 41
+        },
+        {
+          "table": "provider_activity_outcome",
+          "old": 696,
+          "now": 708,
+          "added": 12
+        },
+        {
+          "table": "provider_activity_request",
+          "old": 696,
+          "now": 708,
+          "added": 12
+        },
+        {
+          "table": "provider_usage_event",
+          "old": 698,
+          "now": 711,
+          "added": 13
+        },
+        {
+          "table": "session",
+          "old": 82,
+          "now": 84,
+          "added": 2
+        },
+        {
+          "table": "session_control_event",
+          "old": 62,
+          "now": 64,
+          "added": 2
+        },
+        {
+          "table": "session_control_record",
+          "old": 61,
+          "now": 63,
+          "added": 2
+        },
+        {
+          "table": "tool_part_outcome",
+          "old": 570,
+          "now": 580,
+          "added": 10
+        },
+        {
+          "table": "tool_part_progress",
+          "old": 66,
+          "now": 70,
+          "added": 4
+        },
+        {
+          "table": "tool_part_request",
+          "old": 570,
+          "now": 580,
+          "added": 10
+        }
+      ],
+      "attachments": 75,
+      "projects": 8,
+      "trackedFiles": 28,
+      "physicalScopes": 1,
+      "requests": 0,
+      "cumulativeRequests": 1096,
+      "reserveMs": 1280960,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "at": "2026-10-30T12:25:39.864Z",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 204879,
+      "currentRows": 208565,
+      "originalValues": "exact native SQLite EXCEPT including TEXT/BLOB except two individually qualified mutable physical slots",
+      "qualifiedPhysicalSlots": {
+        "at": "2026-10-30T11:55:21.593Z",
+        "changedPhysicalSlots": 2,
+        "nativePID": 98668,
+        "originalExpiredBeforeLaunch": true,
+        "sameResourceAndSlot": true,
+        "newOwnerMatchesOriginalNative": true,
+        "acquisitionAfterOriginalExpiry": true,
+        "releasedBeforeNativeSettlement": true,
+        "settledStreams": 13,
+        "nativeExit": 0,
+        "producer": "Provider fetch → DurableExecutionCapacity.acquire/renew/release",
+        "meaning": "Mutable physical admission slots retain their PK and are reused after expiry; business execution/occurrence/ordering/terminal facts remain in their original stores"
+      },
+      "additions": [
+        {
+          "table": "bus_publication_delivery",
+          "old": 39939,
+          "now": 40661,
+          "added": 722
+        },
+        {
+          "table": "bus_publication_delivery_receipt",
+          "old": 39939,
+          "now": 40661,
+          "added": 722
+        },
+        {
+          "table": "bus_publication_outbox",
+          "old": 5227,
+          "now": 5326,
+          "added": 99
+        },
+        {
+          "table": "bus_publication_owner",
+          "old": 5227,
+          "now": 5326,
+          "added": 99
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "old": 15681,
+          "now": 15978,
+          "added": 297
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "old": 42025,
+          "now": 42754,
+          "added": 729
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "old": 42083,
+          "now": 42812,
+          "added": 729
+        },
+        {
+          "table": "event_occurrence",
+          "old": 5030,
+          "now": 5129,
+          "added": 99
+        },
+        {
+          "table": "global_creation_allocation",
+          "old": 20,
+          "now": 21,
+          "added": 1
+        },
+        {
+          "table": "memory_chunk",
+          "old": 38,
+          "now": 40,
+          "added": 2
+        },
+        {
+          "table": "memory_file",
+          "old": 38,
+          "now": 40,
+          "added": 2
+        },
+        {
+          "table": "message",
+          "old": 671,
+          "now": 685,
+          "added": 14
+        },
+        {
+          "table": "part",
+          "old": 1944,
+          "now": 1980,
+          "added": 36
+        },
+        {
+          "table": "permission_execution_result",
+          "old": 165,
+          "now": 169,
+          "added": 4
+        },
+        {
+          "table": "permission_ledger",
+          "old": 841,
+          "now": 861,
+          "added": 20
+        },
+        {
+          "table": "permission_policy",
+          "old": 33,
+          "now": 34,
+          "added": 1
+        },
+        {
+          "table": "project",
+          "old": 38,
+          "now": 40,
+          "added": 2
+        },
+        {
+          "table": "protocol_event",
+          "old": 2056,
+          "now": 2097,
+          "added": 41
+        },
+        {
+          "table": "provider_activity_outcome",
+          "old": 696,
+          "now": 708,
+          "added": 12
+        },
+        {
+          "table": "provider_activity_request",
+          "old": 696,
+          "now": 708,
+          "added": 12
+        },
+        {
+          "table": "provider_usage_event",
+          "old": 698,
+          "now": 711,
+          "added": 13
+        },
+        {
+          "table": "session",
+          "old": 82,
+          "now": 84,
+          "added": 2
+        },
+        {
+          "table": "session_control_event",
+          "old": 62,
+          "now": 64,
+          "added": 2
+        },
+        {
+          "table": "session_control_record",
+          "old": 61,
+          "now": 63,
+          "added": 2
+        },
+        {
+          "table": "tool_part_outcome",
+          "old": 570,
+          "now": 580,
+          "added": 10
+        },
+        {
+          "table": "tool_part_progress",
+          "old": 66,
+          "now": 70,
+          "added": 4
+        },
+        {
+          "table": "tool_part_request",
+          "old": 570,
+          "now": 580,
+          "added": 10
+        }
+      ],
+      "attachments": 75,
+      "projects": 8,
+      "trackedFiles": 28,
+      "physicalScopes": 1,
+      "requests": 0,
+      "cumulativeRequests": 1096,
+      "reserveMs": 844859,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    }
+  ],
+  "sequentialCopies": [
+    {
+      "phase": "after",
+      "tables": 92,
+      "precedingRows": 208561,
+      "allPrecedingValues": "exact native SQLite EXCEPT including all new Goal/stream facts and current capacity slots"
+    },
+    {
+      "phase": "final",
+      "tables": 92,
+      "precedingRows": 208563,
+      "allPrecedingValues": "exact native SQLite EXCEPT including all new Goal/stream facts and current capacity slots"
+    }
+  ],
+  "allOriginalHTTP": "Task/Mission/Chat/Work full selection/snapshot/hydration/Goal exact across three scopes",
+  "reportGoal": "exact full original Goal and 12 messages across three scopes",
+  "pausedGoal": "exact original reason/revision/usage/turnBudget and selection",
+  "inputFiles": "exact original README and CSV bytes",
+  "physical": [
+    {
+      "phase": "before",
+      "requests": 13,
+      "cumulativeRequests": 1096,
+      "unusedAllowanceRetired": 3,
+      "reserveMs": 2711794,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "phase": "after",
+      "requests": 0,
+      "cumulativeRequests": 1096,
+      "unusedAllowanceRetired": 0,
+      "reserveMs": 1280960,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "phase": "final",
+      "requests": 0,
+      "cumulativeRequests": 1096,
+      "unusedAllowanceRetired": 0,
+      "reserveMs": 844859,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    }
+  ],
+  "model": {
+    "id": "gpt-6.1-sol",
+    "requests": 13,
+    "totalRequestAllowance": 16,
+    "unusedRetired": 3,
+    "cumulativeRequests": 1096,
+    "streams": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      }
+    ]
+  },
+  "toolCounts": {
+    "read": 5,
+    "bash": 2,
+    "apply_patch": 1,
+    "get_continuous_goal": 1,
+    "update_continuous_goal": 1
+  },
+  "toolResults": [
+    {
+      "messageID": "msg_g0VZX3tJ000ElOwxcPNK",
+      "author": "work",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "messageID": "msg_g0VZX3ue300fRS2GqaLq",
+      "author": "work",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "messageID": "msg_g0VZX3vfc00yf4YcGfmK",
+      "author": "work",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "messageID": "msg_g0VZX3x3t00yWJ42mC80",
+      "author": "work",
+      "tool": "bash",
+      "status": "completed"
+    },
+    {
+      "messageID": "msg_g0VZX3zXZ00Lp9Yo3jzU",
+      "author": "work",
+      "tool": "apply_patch",
+      "status": "completed"
+    },
+    {
+      "messageID": "msg_g0VZX43El00YQalsECu5",
+      "author": "work",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "messageID": "msg_g0VZX44Lj004NUlcb6fb",
+      "author": "work",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "messageID": "msg_g0VZX45Oj004Sys1QaWT",
+      "author": "work",
+      "tool": "bash",
+      "status": "completed"
+    },
+    {
+      "messageID": "msg_g0VZX491m00knR1QwegN",
+      "author": "work",
+      "tool": "get_continuous_goal",
+      "status": "completed"
+    },
+    {
+      "messageID": "msg_g0VZX4AwP00xbgjVhkMk",
+      "author": "work",
+      "tool": "update_continuous_goal",
+      "status": "completed"
+    }
+  ]
+}

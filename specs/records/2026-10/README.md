@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-30-goal-report-completion.md](2026-10-30-goal-report-completion.md)：自然完成的真实报告、用量关联、下一目标入口与暂停原因实页复核。
+
 - [2026-10-30-source-search-unicode-offset.md](2026-10-30-source-search-unicode-offset.md)：来源检索位置单位错配的红灯复现、正向回归及交付。
 
 - [2026-10-30-source-conversation-find.md](2026-10-30-source-conversation-find.md)：已保存来源查找、主与参与者原来源定位和返工验收。

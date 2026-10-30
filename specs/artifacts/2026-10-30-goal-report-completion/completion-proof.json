@@ -1,0 +1,39 @@
+{
+  "at": "2026-10-30T11:51:10.966Z",
+  "sessionID": "ses_-zUQSw6zszzWdmEWv2Sz",
+  "goalID": "pev_g0VZX3t8300605DPZUd3",
+  "status": "complete",
+  "reason": "已在原会话实际读取 README.md 和 support-tickets.csv，仅新增 summary.csv 与 report.md，并用 read 重新读取两份输出。逐项加总与 Python 独立解析一致；最终独立校验命令退出码 0，确认汇总列名及 P1/P2/P3/TOTAL 行顺序、全部计数和分钟数、报告表格/总数/优先建议及对应工单编号。P1=3单170分钟，P2=3单115分钟，P3=2单35分钟，总计8单320分钟。输入记录与最初读取内容逐项一致；未修改README或输入，未联网、创建Task、委派或执行Git操作。全部要求已满足。",
+  "tokenBudget": 200000,
+  "tokensUsed": 380471,
+  "turnBudget": 2,
+  "turnsAccepted": 1,
+  "linkedUsageRows": 10,
+  "linkedUsageTotal": 380471,
+  "sessionUsageRows": 11,
+  "sessionUsageTotal": 420939,
+  "allNewRequests": [
+    {
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "requests": 13,
+      "tokens": 454132
+    }
+  ],
+  "modelCompletionTools": [
+    {
+      "messageID": "msg_g0VZX4AwP00xbgjVhkMk",
+      "author": "work",
+      "tool": "update_continuous_goal",
+      "status": "completed",
+      "decision": "complete"
+    }
+  ],
+  "messages": 12,
+  "authors": [
+    "goal-controller",
+    "work"
+  ],
+  "budgetContract": "Existing accepted turn may settle above its token budget; completion preserved; request-start usage links independently verified",
+  "output": "independent delivery-qualified.json and actual UI file review"
+}

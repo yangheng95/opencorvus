@@ -697,6 +697,12 @@ export function ContinuousGoalControl(props: {
             >
               {t("common.close")}
             </Button>
+            <Show when={!props.readOnly && hasForm() && mode() === "details" && editing()?.status === "complete"}>
+              <Button type="button" variant="solid" size="sm" tone="accent" disabled={busy()}
+                onClick={() => open("create")}>
+                {t("continuous_goal.new")}
+              </Button>
+            </Show>
             <Show when={!props.readOnly && hasForm() && (source() || props.home) && (editing()?.status !== "complete" || mode() === "create")}>
               <Button type="submit" form={formID} variant="solid" size="sm" tone="accent"
                 disabled={props.home ? busy() || props.starting || !appStore.connected || !ownsLaunch() : disabled()}>
@@ -896,7 +902,7 @@ export function ContinuousGoalControl(props: {
                       {t("continuous_goal.resume_on_save")}
                     </Checkbox>
                   </Show>
-                  <Show when={editing()}>
+                  <Show when={editing() && editing()!.status !== "complete"}>
                     <div class="continuous-goal__secondary" hidden={props.readOnly}>
                       <Button
                         type="button"
@@ -904,9 +910,9 @@ export function ContinuousGoalControl(props: {
                         size="sm"
                         tone="neutral"
                         disabled={busy()}
-                        onClick={() => open(editing()!.status === "complete" ? "create" : "complete")}
+                        onClick={() => open("complete")}
                       >
-                        {t(editing()!.status === "complete" ? "continuous_goal.new" : "continuous_goal.mark_complete")}
+                        {t("continuous_goal.mark_complete")}
                       </Button>
                     </div>
                   </Show>

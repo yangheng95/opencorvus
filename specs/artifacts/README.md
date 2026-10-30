@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [持续目标自然完成与后续动作](2026-10-30-goal-report-completion/README.md)：25张实页、真实输入/报告/汇总、13次Sol流与数据/物理回执。
+
 - [来源检索 Unicode 回归](2026-10-30-source-search-unicode-offset/README.md)：旧算法错归来源的真实输出、聚焦测试与保存原快照回归。
 
 - [对话原来源查找实页证据](2026-10-30-source-conversation-find/README.md)：原来源检索、预览边界、实际定位、中英界面与数据保全。

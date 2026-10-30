@@ -48,6 +48,8 @@ budget_updated_and_resumed, and render these through the current locale alongsid
 the existing owner, budget and model reasons. Ordinary paused/blocked budget saves
 retain the prior reason. Completion evidence and unclassified historical free text
 retain their original content; locale changes do not mutate durable decisions.
+The archive reason describes the event that paused the Goal; it does not assert
+that the conversation or Task remains archived after visibility is restored.
 For a complete goal, reason is always completion evidence and is displayed verbatim,
 even when its text exactly matches a known system reason identifier. Reason-code
 localization applies to unfinished status explanations, not completed evidence.
@@ -79,8 +81,10 @@ cumulative total, using the same localized explanation as the header usage
 tooltip. A completed Goal's total may differ from its conversation turn when
 another Provider request starts after completion. The UI reads the existing
 usage association and does not reassign or infer usage from message timestamps.
-Completed Goal details initially collapse their read-only budget section so the
-next-goal action stays visible. Operators can expand the existing values, and
+Completed Goal details keep the next-goal action in their fixed footer, using
+the same creation form and draft. Their read-only budget section initially
+collapses; long objectives and completion evidence remain readable in the body
+without displacing that action. Operators can expand the existing values, and
 returning from the guide preserves that explicit choice. Unfinished details and
 the creation draft retain their existing budget disclosure rules.
 
