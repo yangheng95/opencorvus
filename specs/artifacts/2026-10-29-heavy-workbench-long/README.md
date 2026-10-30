@@ -60,3 +60,6 @@ L06现已完成[最终独立合同审查并冻结0.2.0](cases/L06/README.md)，�
 [L02通用数值执行资格](cases/L02/evaluator/qualification/generic-execution/README.md)补齐候选自带files/argv/池、两语言原CSV全链、Windows锁与原CID五窗口恢复、封存产物重算及冻结report的数据释放；它不等同完整科学/运营grader。旧120组不重跑，所有新单outer均私有作者诊断，正式质量/冻结与有效小时仍待。
 
 [L02相对质量/研究稿](cases/L02/evaluator/qualification/quality-study/README.md)以事前固定外部参照政策只读重算旧真实预测：原inner选择通过26条件，基线自身、零预测、极宽区间和单叶退化对照被拒。66原子rubric及固定100聚合保持关键项非补偿，真实科学审查40项仍未评；新图保留June缺量，作者分析不冒充新正式清洁研究或职业参考。完整grader/报告来源接口/评审锚点/冻结仍待，套件1/10、有效小时0/10不变。
+
+
+L02新增[报告实际来源与原输入恢复](cases/L02/evaluator/qualification/report-provenance/README.md)：prepare-once保持原schema1数据、捕获packet/inner与原native绑定、唯一sealed reader和真实诊断报告组件。旧report未获得来源的事实不补造；本轮没有新预测或完整12outer研究，完整grader/职业审查/冻结仍待。

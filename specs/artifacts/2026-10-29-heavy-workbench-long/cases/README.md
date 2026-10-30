@@ -16,3 +16,6 @@
 | L10闭环能源与计费 | 旧题与独立升级设计审查 | 因果信息/物理/账单闭环、恢复参考 |
 
 [九题独立缺口审查](../evaluator/nine-case-review/REVIEW.md)是实施依据，不把建议自动当已升级。[L02](L02/README.md)及[L04](L04/README.md)仍仅局部资格；L06的[S06](L06/smoke/README.md)微型真实管线不计十题/小时。旧H05两方100只触发升级，不证明新版足够难。
+
+
+L02当前[报告来源组件](L02/evaluator/qualification/report-provenance/README.md)接通原数值输出/收窄native事实与实际图表、原prepared恢复及只读同矩阵重建。它不替代正式新12outer研究、全grader/多质量审查/冻结；套件仍冻结1/10、有效小时0/10。

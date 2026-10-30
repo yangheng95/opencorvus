@@ -284,3 +284,55 @@ L06已于00:27UTC取得实际完整OpenCorvus100/100后才启动fresh Codex /roo
 拟先设计报告侧最小来源包：仅原candidate数值输出的诊断/参数/图表输入及sanitized实际argv/时间/终态、逻辑origin/method关联，全部数值完成后才只读交冻结report。不得传私有grader/参考/权重、原始Provider日志、凭据、完整host环境或无关宿主路径。正式输出与每个原accepted对象绑定，不能信候选自报fit内容替代source/实际运行审计。需先全搜prepare/invoke/report及sealed registration/SQLite baseline1的恢复消费者，分析给输入加字段/sidecar对旧prepared/accepted对象的影响；若演进持久格式须保数据自动迁移、保原执行合同，不覆盖旧原件/伪造其已看见新数据，不留当前双协议fallback。先单层独立设计审查，尚未实施此来源通道或新完整12求解，不因草案批准就称已实现。
 
 其余L06/0.3完整多阶段业务、L01质量锚点、L04/L05全现场与L03/L07-L10材料/参考/坏对照/可执行rubric仍待，不可一直搁置。无用户总token/墙钟额度，cheap-first；本任务范围commit、正常fetch/merge/检查全部待推/hook/push，保用户视频/索引/release记录。
+
+## 2026-10-30 06:35 UTC 实施前Recall：报告来源与原输入恢复
+
+十题/严格rubric/单层独立review/真实双系统两好升级/cheap-first仍为目标，无总token或墙钟额度。97c4a35a4已正常push；当前本任务范围clean，用户overlay/Goal/视频删除/共享索引不碰、不运行UI测试。已重读AGENTS、相关Recall、02-data持久化架构、当前Executor/driver/summary/StudySource与全仓调用。六旧昂贵任务不恢复，旧预测/控制/窗口不重跑。
+
+独立report设计turn曾真实capacity失败，主方保存review-capacity-failure.json，仍在原授权reviewer接续；不是审查完成、预算或用例失败。后续已落l02-report-provenance-plan-review-20261030/PLAN-REVIEW与stage-plan，主方核读。建议保results.json/1、只新增来源sidecar与candidate output；改唯一invoke为首次factory、之后原prepared/accepted恢复。只新增任意输入文件map、不改表/phase/registration/results含义可保持SQLite baseline1。若新增持久profile/字段或重解释旧完成态才须v2自动迁移；本轮不做这些变更。
+
+### 影响与具体实现决定
+
+旧invoke每次重新构造inputs并与prepared整体比较，直接加sidecar会破坏已有prepared恢复；verified又在比较前直接返回，不能证明旧report看到新资料。根因为把准备时的数据事实与未来代码重新生成的期望混为同一物。全仓当前只有driver三个invoke生产入口；公共候选files/argv协议、三个角色和全部数据许可不改。Task/Mission/Session/occurrence/队列/Provider/LLM/UI均无本库调用，不改产品持久数据；这里只处理数值输入生命周期。
+
+统一invoke强制输入factory（不保dict兼容路径）。没有canonical prepared才调用factory并原子封存；已有prepared、即使DB still planned，也核冻结program/source并读原input map，绝不调用factory或补来源。原source/input实际物化仍核同；terminal/accepted的program/source/input与prepared闭合，原CID按真实状态恢复。旧verified/failed保持原原件/判定，不新跑旧report。添加prepared发布前/后的真实observer仅用于私有崩溃资格，不改变候选调度或增加LLM消息。
+
+原输入不重新生成后，driver/完整reader须从原captured input核assignment：forecast实际packet经唯一reader/独立SQL、origin/grid/原method对齐；selector实际inner事实和每个已验收forecast与权威生成payload对齐。共享JSON原类型等价函数从quality现有实现提取到唯一material_contract，不复制True==1漏洞。producer的packet metadata/验证共用StudySource helper，授权仍唯一asof.project，独立SQL不更换；read_packet原本已拒额外未发布行，不虚构其有已确认泄漏漏洞。
+
+report sidecar为provenance/manifest.json与不透明cell目录中的原output/*副本。只接受恰等注册numeric assignment且verified的对象，按原ZIP而非working读取；每项有逻辑身份、相对文件路径、实际native起止/exit、收窄argv。argv仅展示执行文件basename、明确声明的源码相对路径与规范sandbox路径，其他位置明确opaque；不靠秘密关键词猜测。不可传assessment/private grader/权重/固定外部参考、prepared/registration/SQLite/完整inspect、host env/mount/Provider日志或凭据。candidate自己输出的诊断标为自报内容；存在不证明训练真实。所有数值格式/选择验收后才给report，不要求先通过26质量，负研究也应能写报告。
+
+当前reference reporter只实现新来源协议，不加旧reporter fallback。旧run的冻结原程序经通用capsule照原输入恢复；summary从原report accepted input判断来源曾否提供，不从新外部索引补造。新报告消费原fit/诊断并生成实际完整表/可定位出处，科学真假仍需来源审计。新报告输入收窄后保持results格式与权限不变；新sidecar为原任意map中的新文件，prepared/accepted/SQLite schema与phase不变，因此无需迁移，也不改原基线SQL。
+
+### 本轮必要真实验收与后续边界
+
+先精确投影/typed边界、原capsule/program/input绑定及原状态一致性；用两个微型数值输出或已有真实baseline1 numeric原件生成新来源包，启动一个新提交的真实report消费诊断，不重forecast矩阵。对prepared原子发布前/后各一次自有owner退出，恢复证明factory与原input/CID正确；旧verified原report只读/同输入恢复并显示未获新来源，不改原历史。全部都为局部资格，不是新full12研究。若发现共享恢复/并发异常按全部数值入口、重试/终态、独立run隔离横审，再以代码排除产品入口根因。
+
+之后将summary重建逻辑收敛为单一sealed reader供summary/quality/完整grader，核真实原packet/inner/selection/版本与来源；再做可操作锚点/独立多质量审查。最终reference源定稿后才一次正式完整新冷执行/图与独立冻结，不能以历史adapter或新report组件冒充。当前仍1/10开发冻结、候选小时0/10，心跳ACTIVE。全部本任务修改范围commit/fetch/merge/审待推/验证/push，保护用户工作区。
+
+
+### 下一完整grader的已知边界（本阶段尚未实现）
+
+当前read_completed只重建完整verified请求矩阵，不能直接拿其缺件/未完成异常给候选零分。完整grader下一步必须在同一sealed reader内读取原phase/原失败native/已封存输出，区分真实candidate执行失败、依赖未执行、未评与设施损坏；保固定分母，不首错推断所有格状态，也不让candidate自报run_invalid免除原native失败。不要复制第二reader/工作流，旧完整重建仍为同一实现的完整路径。
+
+真正全grader须以正式全部12outer/权威日程、原封存提交及实际版本/输出闭合。26质量从该reader的真实selected预测＋原已注册外部参照计算，不能接受candidate弱baseline或手写质量pass。40研究叶须逐叶可操作边界/等价格式/依赖，可信独立证据必须绑定同一原提交/数值/报告对象，候选自评、后加外部fit或旧研究稿不能替代。完整语义与多质量校准完成前，readiness保持false、正式分数null。
+
+作者新reference reporter本阶段只是新来源协议组件，尚未在首预测前与其余程序一起冻结并跑正式全12outer。等程序/合同/grader和锚点定稿后只做必要的一次新完整清洁管线、实际新图和同单层独立审查；不重复旧120、11+11、54、335或本阶段报告/两发布窗口/20边界凑量。不把旧分数/原耗时或事后adapter冒充该新执行。
+
+L06/0.3完整权威观察/承诺/物理现金图与实际状态续接仍须推进，不能一直停留三期信息primitive；不改0.2.0两真实100原合同/成绩、不重启旧Task/API/solver。其余L01/L04/L05及L03/L07-L10完整材料/参考/checker/rubric亦未达成，十题/有效小时目标未完成。
+
+
+## 最新接续Recall：报告来源/原输入恢复已取得局部资格，完整grader与冻结未达
+
+本阶段主根D:/opencorvus-benchmark-runs/l02-report-provenance-qualification-20261030，独立根l02-report-provenance-independent-review-20261030，repo cases/L02/evaluator/qualification/report-provenance。已按事前方案实现prepare-once、原captured forecast packet/method与selector inner绑定、最小numeric output/native来源包；旧SQLite schema1/表/phase/registration/results含义保留，无需持久迁移，不留双执行协议。原quality typed比较现唯一在material_contract，语义未改。
+
+l02_pipeline统一数值组装/执行与审计；l02_sealed.read_completed是唯一完整请求只读重建，summary为薄CLI。实际原Python9forecast+1selector+1report重建20.265秒，原指标/选择闭合，历史report not_delivered；不补造旧报告看过新来源。原read_packet已拒未授权行，本阶段是captured assignment验证增强，不虚构旧数据泄漏。
+
+主方report-only4.797秒/27检查复用原10numeric、19原output，输出36fit/168行动/实际六panel图，无新预测。两prepare发布边界真实owner os._exit73后恢复6.646秒/32检查：发布前重准备、消费second；发布后继续原first；各一个真实create/start/rm。两个退出点均planned且CID=null，不冒称新运行中CID恢复。旧report仅原SQLite及report cell复制目录中恢复，原accepted不变/not_delivered，source改绑具名facility。原owner/resume argv回执只留common前缀，完整参数根据已执行harness、owner-exit/history与消费输出，不伪称当时完整argv收据。当前native名字/ledger exit/captured packet/selector/typed报告漂移6.636秒/20检查通过，不重旧五窗口或模型。
+
+主初report笼统说全部programme预测前冻结，超过新reporter消费历史numeric的证据范围；初源/原accepted保留，澄清后只陈述合同并要求独立registration审计。当前澄清版由独立唯一新report-only自然exit0、4.695843秒真实验证；22当前审计源与其host快照直接字节同一，但不以身份比较代替功能验收。75独立只读检查（36原fit、18节点损失/覆盖与168行动Fraction另算等）通过，主/独立实际view新PNG；不相加为样本或难度。独立reader成功后自身null系数表解析TypeError保留，修其解析后复用成功reader结果，只余纯只读约.538秒，不重开reader/预测/report。非盲AI熟悉作者参考，非职业真人/统计成熟。最终REVIEW/stage-assessment blocking=[]只限本组件。
+
+全部本轮自有report/record进程自然终态先封存再精确cleanup，没有活跃新长计算；六旧昂贵任务07:16UTC真实inspect仍全Paused，原身份cheap-first/pause-receipt不变，不恢复。docs:check352/26过，正常范围commit/fetch/merge/审待推/hook/push按Git及外部publish-delivery收据为准。首次shared-index text pipe补丁失败已保留，改raw bytes精确单行index patch通过，用户重排/视频删除/目录保留。
+
+下一步直接按前节完整grader边界实施：同一reader的partial/native失败/依赖状态、正式全12与外部reference/可信独立证据版本绑定、40研究叶可操作锚点与等价格式/多质量校准，再必要的一次新完整reference程序首预测前冻结→清洁研究→实际新图/独立冻结。不能拿此report adapter或旧120/事后研究稿当新完整参考；不重复旧26/335/120/54/11+11/五窗口/本report与32/20边界凑量。完整study/quality/score仍null，L02未冻，套件冻结1/10/有效候选小时0/10。
+
+L06/0.3完整权威图/可见状态/不可撤承诺/现金物理续接与L01/L04/L05、L03/L07-L10仍须推进；旧L06两100/旧合同只读，旧Task/API/solver不重启。用户无总token/墙钟额度，cheap-first/真实流式LLM/仅公开候选输入/单层review/noUI/保护其他任务仍硬约束；整个目标未达，heartbeat ACTIVE。

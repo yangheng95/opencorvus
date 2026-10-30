@@ -18,9 +18,13 @@
 |---|---|---|
 | predict | `/input/packet/packet.json`及原CSV授权行；`/input/method.json`仅本方法ID/冻结配置 | `/output/result/forecast.json`，完整已分配节点/14个未来UTC日/mean及注册分位点 |
 | select | `/input/inner.json`完整已发布inner预测/标签/尺度；`/input/study.json`指标定义 | `/output/result/selection.json`，原池中的既有ID；可附精确inner均值 |
-| report | `/input/results.json`已验收的完整冻结研究结果、外层终审及指标 | `/output/result/report.md`、配套图/表等；`report.json`含format=`l02-report-receipt/1`和原顺序`outer_ids` |
+| report | `/input/results.json`已验收的研究结果、外层终审及指标；`/input/provenance/manifest.json`及其指向的原数值程序输出副本 | `/output/result/report.md`、配套图/表等；`report.json`含format=`l02-report-receipt/1`和原顺序`outer_ids` |
 
 预测包的发布时间、单位、缺测、最高revision和目标日定义沿用[每日原材料合同](MATERIALS.draft.md)与[研究合同](STUDY-CONTRACT.draft.md)。预测进程得不到全档案、评分尺度、真值、别的进程或评估器。选择进程只能使用该outer之前已发布的inner终审；不能输出新参数让外层调参。报告程序与全部源代码/方法池在首预测前冻结，直到完整正式assignment所有数值单元验收后才得到外层结果；报告不能修改已执行程序/输出。
+
+报告来源包format为`l02-report-provenance/1`。`cells`每项包含不透明`cell_id`、实际完整逻辑`identity`、收窄的`execution`和`artifacts`索引。执行事实仅声明源码相对文件名、argv位置投影、原native起止时间/status/exit；argv只展示执行文件basename、声明的源码路径及规范sandbox路径，其他参数为`opaque`且value为null。每份artifact有原`output_member`、本包相对`input_path`、字节数与“候选程序自报输出”来源说明。报告应消费适用于本方法的真实诊断；经验残差、解析分布和Bayesian posterior可采用各自正确的来源形式，不强制任何候选输出作者参考的`fit.json`。
+
+来源包只复制已验收原对象中的数值`output/*`，不提供原accepted/prepared ZIP、评估器/权重/固定外部参照、评分assessment、SQLite、完整inspect、宿主路径/环境或Provider日志。提供文件和native事实不证明拟合声明真实，也不能单凭numeric sidecar证明report programme何时被冻结；科学来源与版本仍须独立审计。来源包在所有数值格式/选择验收后提供，不以通过质量条件为前提，失败的科学假设也应如实交付报告。
 
 正式assignment是合同注册的全部12个outer及其36个inner，不能扩展、替换或分批取得私有反馈后重提。评估侧的`--author-diagnostic-outer-id`仅用于私有作者工具资格，其结果不回送可重提候选，不计正式研究完成或候选成绩。它不是候选探索接口。
 
@@ -30,6 +34,8 @@
 
 恢复只指定原runroot，不能同时重新指定提交/材料/参数。create前持久化唯一名称，CID持久化后才start；即使host中断，也先核实际Docker状态。只有真实`created`可启动；`running`等待原进程，`exited`收集原终态，不能重新start同CID。原对象丢失或身份不明属设施调查，不静默重跑。
 
+输入在prepared原子发布时固定，只有原prepared尚未存在才调用唯一输入factory。已有原prepared，即使数据库仍为planned，也继续其原输入，不按新版host代码重造或追加sidecar。恢复仍核原程序/source与实际物化输入；forecast实际捕获的packet按独立许可集合与assignment核验，selector捕获的已发布inner事实/预测与原数值对象核验。当前只是任意输入文件map新增文件，表结构、phase、registration和results格式均未演进，故保留schema1；历史原report只得到results.json的事实如实记为`report_provenance.status=not_delivered`，不补造新材料、不给推测分数。
+
 成功和失败均先封存真实终态/输出。验收通过的accepted对象原子落盘后才提交verified，随后精确清理原容器；恢复从accepted对象读取，不用后来被编辑的working文件。退出非零或坏输出是候选执行失败，即使stdout自称`run_invalid`也不能免除。未执行的依赖单元保持未评，不按首错判整组通过或伪造它们已失败。归档/设施损坏具名`facility_*`，无候选分；失败单元不自动换程序或重试。
 
-数值`requested_execution_complete`只表示请求矩阵和报告传输已验收；`complete_assignment`区分完整研究与私有诊断。`study_complete`、`quality_success`、`candidate_score`仍须完整冻结rubric与科学/业务审查，当前为null。没有最低时长或用户总墙钟/token截断；进程崩溃资格不冒充掉电耐久、跨平台实跑、研究质量或有效小时认证。
+数值`requested_execution_complete`只表示请求矩阵和报告传输已验收；`complete_assignment`只表示网格覆盖，`formal_full_assignment`另核权威日程和正式注册身份，私有诊断即使覆盖全网格也不当正式候选。唯一只读sealed reader从原SQLite/registration/prepared/accepted重建同一数值矩阵及实际report来源覆盖，不从working或外部新索引补造。`study_complete`、`quality_success`、`candidate_score`仍须完整冻结rubric与科学/业务审查，当前为null。没有最低时长或用户总墙钟/token截断；进程崩溃资格不冒充掉电耐久、跨平台实跑、研究质量或有效小时认证。

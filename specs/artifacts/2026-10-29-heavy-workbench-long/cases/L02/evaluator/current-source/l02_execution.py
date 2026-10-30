@@ -17,7 +17,7 @@ import uuid
 import zipfile
 import zlib
 
-from material_contract import parse_json
+from material_contract import parse_json, same_json_value
 
 
 class ExecutionError(RuntimeError):
@@ -219,6 +219,50 @@ def resolve_image(image, receipt):
     return value[0]['Id']
 
 
+def validate_capsule(capsule, program, source):
+    try:
+        actual = archived_json(capsule, 'program.json', True)
+        if not same_json_value(actual, program) or {n[8:]: v for n, v in capsule.items() if n.startswith('project/')} != source:
+            raise ExecutionError('facility_program_identity_changed', 'capsule differs from frozen program/source')
+    except (KeyError, ValueError, TypeError) as e:
+        raise ExecutionError('facility_program_identity_changed', str(e)) from e
+
+
+def prepared_members(capsule):
+    return {name: value for name, value in capsule.items() if name == 'program.json' or name.startswith(('project/', 'input/'))}
+
+
+def sandbox_valid(native):
+    try:
+        host = native['HostConfig'];config = native['Config']
+        mounts = {(m['Destination'], m['RW']) for m in native['Mounts'] if m['Type'] == 'bind'}
+        required_env = {'PYTHONDONTWRITEBYTECODE=1', 'OPENBLAS_NUM_THREADS=1', 'OMP_NUM_THREADS=1', 'MPLCONFIGDIR=/tmp/matplotlib'}
+        return all([host['NetworkMode'] == 'none', host['NanoCpus'] == 10**9,
+            host['ReadonlyRootfs'] is True, host['Privileged'] is False,
+            host['RestartPolicy']['Name'] == 'no', type(native['RestartCount']) is int, native['RestartCount'] == 0,
+            set(host['CapDrop']) == {'ALL'}, 'no-new-privileges' in host['SecurityOpt'],
+            set(host['Tmpfs']) == {'/tmp'}, len(native['Mounts']) == 3,
+            mounts == {('/project', False), ('/input', False), ('/output', True)},
+            config['WorkingDir'] == '/project', required_env <= set(config['Env'])])
+    except (KeyError, TypeError):
+        return False
+
+
+def validate_terminal(native, cell, program, image, run_id):
+    try:
+        labels = native['Config'].get('Labels') or {}
+        checks = [native['Id'] == cell['cid'], native['Name'] == '/' + cell['name'], native['Image'] == image,
+                  native['Path'] == program['argv'][0], native['Args'] == program['argv'][1:],
+                  labels.get('oc.l02.run') == run_id, labels.get('oc.l02.cell') == str(cell['id']),
+                  native['State']['Status'] == 'exited', type(native['State']['ExitCode']) is int,
+                  native['State']['ExitCode'] == 0, type(cell['exitcode']) is int,
+                  cell['exitcode'] == 0, sandbox_valid(native)]
+        if not all(checks):
+            raise ExecutionError('facility_terminal_identity_changed', str(cell['id']))
+    except (KeyError, ValueError, TypeError) as e:
+        raise ExecutionError('facility_terminal_identity_changed', str(e)) from e
+
+
 class Executor:
     def __init__(self, ledger, image, observer=None):
         self.ledger = ledger
@@ -226,26 +270,44 @@ class Executor:
         self.image = image
         self.observer = observer or (lambda stage, cell: None)
 
-    def invoke(self, identity, program, files, inputs, validate):
+    def invoke(self, identity, program, files, input_factory, validate):
+        if not callable(input_factory):
+            raise ExecutionError('facility_input_factory_invalid', 'one prepare-once callable required')
         cell = self.ledger.allocate(identity)
         job = self.root / 'cells' / str(cell['id'])
         job.mkdir(parents=True, exist_ok=True)
+        archive = job / 'prepared.zip'
+        source = {'project/' + name: value for name, value in files.items()}
+        if archive.exists():
+            prepared = read_archive(archive)
+            validate_capsule(prepared, program, files)
+            if prepared_members(prepared) != prepared:
+                raise ExecutionError('facility_prepared_identity_changed', 'unknown prepared member')
+        else:
+            if cell['phase'] != 'planned':
+                raise ExecutionError('facility_archive_unavailable', str(archive))
+            inputs = input_factory()
+            if type(inputs) is not dict or any(type(n) is not str or type(v) is not bytes for n, v in inputs.items()):
+                raise ExecutionError('facility_input_factory_invalid', 'relative filename to original bytes required')
+            for name in inputs:
+                safe_relative(name)
+            prepared = {**source, **{'input/' + name: value for name, value in inputs.items()},
+                        'program.json': json_bytes(program)}
+            self.observer('before_prepared_publish', dict(cell))
+            atomic_bytes(archive, zip_bytes(prepared))
+            self.observer('prepared_published', dict(cell))
         if cell['phase'] == 'failed':
             self.cleanup(cell, job)
             failure = json.loads(cell['failure'])
             raise ExecutionError(failure['code'], failure['detail'], candidate=True)
         if cell['phase'] == 'verified':
+            accepted = read_archive(job / 'accepted.zip')
+            validate_capsule(accepted, program, files)
+            if prepared_members(accepted) != prepared:
+                raise ExecutionError('facility_accepted_identity_changed', str(cell['id']))
+            validate_terminal(archived_json(accepted, 'terminal-inspect.json'), cell, program, self.image, self.ledger.run_id)
             self.cleanup(cell, job)
-            return read_archive(job / 'accepted.zip')
-        prepared = {**{'project/' + name: value for name, value in files.items()},
-                    **{'input/' + name: value for name, value in inputs.items()},
-                    'program.json': json_bytes(program)}
-        archive = job / 'prepared.zip'
-        if archive.exists():
-            if read_archive(archive) != prepared:
-                raise ExecutionError('facility_prepared_identity_changed', str(cell['id']))
-        else:
-            atomic_bytes(archive, zip_bytes(prepared))
+            return accepted
         work = job / 'work'
         if not work.exists():
             stage = job / ('materialize-' + uuid.uuid4().hex)
@@ -370,20 +432,14 @@ class Executor:
         return objects[0]
 
     def bind(self, native, cell, work, program):
-        config = native['Config'];host = native['HostConfig']
+        config = native['Config']
         labels = config.get('Labels') or {}
         expected_mounts = {('/' + key, os.path.normcase(str((work / key).resolve())), key == 'output') for key in ('project', 'input', 'output')}
         mounts = {(m['Destination'], os.path.normcase(m['Source']), m['RW']) for m in native['Mounts'] if m['Type'] == 'bind'}
-        expected_env = {'PYTHONDONTWRITEBYTECODE=1', 'OPENBLAS_NUM_THREADS=1', 'OMP_NUM_THREADS=1', 'MPLCONFIGDIR=/tmp/matplotlib'}
         checks = [native['Name'] == '/' + cell['name'], native['Image'] == self.image,
                   labels.get('oc.l02.run') == self.ledger.run_id, labels.get('oc.l02.cell') == str(cell['id']),
                   native['Path'] == program['argv'][0], native['Args'] == program['argv'][1:],
-                  config['WorkingDir'] == '/project', expected_env <= set(config['Env']),
-                  host['NetworkMode'] == 'none', host['NanoCpus'] == 10**9, host['ReadonlyRootfs'] is True,
-                  host['RestartPolicy']['Name'] == 'no', native['RestartCount'] == 0,
-                  host['Privileged'] is False, set(host['CapDrop']) == {'ALL'},
-                  'no-new-privileges' in host['SecurityOpt'], mounts == expected_mounts,
-                  set(host['Tmpfs']) == {'/tmp'}, len(native['Mounts']) == 3]
+                  sandbox_valid(native), mounts == expected_mounts]
         if cell['cid']:
             checks.append(native['Id'] == cell['cid'])
         if not all(checks):

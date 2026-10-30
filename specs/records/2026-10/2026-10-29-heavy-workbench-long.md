@@ -435,3 +435,10 @@ L02按独立已审方案前移公开截止2024Aug1、探索2023Jun–Nov；新�
 核心证据：cases/L02/evaluator/qualification/daily-full-reference的REPORT、精确assessment/CSV/图/数值原件；daily-independent-review的PLAN/COLD/FULL报告、机器结论/实际新图追加及完整原件。外部D:/opencorvus-benchmark-runs/l02-daily-loop-qualification-20261030和l02-daily-loop-independent-review-20261030保留全部原per-process ZIP。repo压缩包对324重复packet成员逐字节核同后去重并留mapping，只证明归档身份，功能来自独立实际核验，不使用无效source摘要门。全部full raw仍只评估侧，候选未来只拿public。
 
 下一步须直接推进通用候选数值执行/完整研究与运营交付、预先质量目标/低质量对照、原子rubric/人评锚点/完整聚合与独立冻结；不能继续重做本轮toy/54投影/120进程凑工作量，也不能按A1现误差填宽线。质量底线仍null、完整L02未冻结；L06新0.3完整业务/多阶段可见信息/承诺续接与其余L01/L03/L04/L05/L07-L10仍待。整套冻结1/10、候选有效小时0/10、目标未达成，心跳ACTIVE；无总token/总墙钟限制，cheap-first继续。所有本任务改动范围commit、正常fetch/merge/检查待推/hook/push，结束git status保留用户改动。
+
+
+## 2026-10-30报告来源组件接续Recall
+
+L02已实现原prepared prepare-once、captured packet/inner与native身份绑定、最小报告来源包、同一矩阵组装及唯一只读sealed reader。主新report4.797秒、两prepare发布退出恢复6.646秒、current绑定6.636秒、独立澄清版report4.695843秒与75只读检查支持限定组件blocking=[]；零新forecast，所有本轮自有进程终态封存清理。历史report如实not_delivered，不改原schema1/输入，不凭source sidecar证明reporter预测前冻结。主初freeze表述过度和独立null系数审查脚本TypeError均保留/修正，不能当候选失败。
+
+详见L02资格记录最新Recall及cases/L02/evaluator/qualification/report-provenance（含真实源/终态/新图/独立报告/来源限制）。下一实质为完整evidence-bound grader与研究叶锚点/多质量校准，然后必要一次新正式12outer清洁研究与独立冻结，不重复本组件或旧120/54/11+11/335凑量。当前没有活跃新长计算；六旧任务仍Paused。L06/0.3与其它九题完整建设均未完成，冻结1/10、候选有效小时0/10，心跳ACTIVE，不虚报成熟或总预算不足。

@@ -24,6 +24,14 @@ def read_json(path,*,decimal_numbers=False):
     return parse_json(path.read_text(encoding="utf-8"),decimal_numbers=decimal_numbers)
 
 
+def same_json_value(left,right):
+    """JSON object identity preserves types while ignoring object-key order."""
+    if type(left) is not type(right):return False
+    if type(left) is dict:return set(left)==set(right) and all(same_json_value(left[k],right[k]) for k in left)
+    if type(left) is list:return len(left)==len(right) and all(same_json_value(a,b) for a,b in zip(left,right))
+    return left==right
+
+
 def load_contract(path):
     contract=read_json(path)
     if type(contract) is not dict or set(contract)!={"format","clock","units","grid","schedule"} or contract["format"]!="l02-material-contract/1":raise InputError("assigned_contract")

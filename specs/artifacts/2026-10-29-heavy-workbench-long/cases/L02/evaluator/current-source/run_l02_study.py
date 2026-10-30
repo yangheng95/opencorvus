@@ -1,6 +1,5 @@
 """Run a sealed candidate numerical submission, or resume its original ledger."""
 import argparse
-from fractions import Fraction
 import json
 import sqlite3
 from pathlib import Path
@@ -10,9 +9,10 @@ from asof_input import InputError
 from l02_execution import (ExecutionError, Executor, Ledger, archived_json, atomic_bytes,
     json_bytes, regular_bytes, resolve_image, run_lock, safe_relative, timestamp,
     read_archive, zip_bytes)
-from l02_scoring import ProtocolError, aggregate_study_metrics, load_study, score
-from l02_selection import assess_selection
-from l02_study_data import StudySource, validate_pool
+from l02_scoring import ProtocolError, load_study
+from l02_study_data import StudySource, validate_pool, validate_assignment, numeric_assignment, extract_data
+from l02_pipeline import assemble, forecast_inputs, assess_forecast, assess_selector, assess_report
+from l02_report import numeric_records, report_inputs, provenance_coverage
 from material_contract import read_json
 
 
@@ -72,23 +72,6 @@ def initialize(args):
     return args.out
 
 
-def inputs_for_forecast(data, origin_id, method):
-    with tempfile.TemporaryDirectory(prefix='l02-authorized-packet-') as tmp:
-        packet = Path(tmp) / 'packet'
-        verification = data.packet(origin_id, packet)
-        inputs = {'packet/' + n: v for n, v in regular_bytes(packet).items()}
-    inputs['method.json'] = json_bytes({k: method[k] for k in ('method_id', 'configuration')})
-    return inputs, verification
-
-
-def extract_data(files, root):
-    for name, value in files.items():
-        if name.startswith('raw/') or name in ('material-contract.json', 'study.json'):
-            target = root / safe_relative(name)
-            target.parent.mkdir(parents=True, exist_ok=True)
-            target.write_bytes(value)
-
-
 def execute(root, observer=None):
     with run_lock(root):
         ledger = Ledger(root)
@@ -105,68 +88,38 @@ def execute(root, observer=None):
                 extract_data(sealed, extracted)
                 study = load_study(extracted / 'study.json')
                 data = StudySource(extracted / 'raw', extracted / 'material-contract.json', study)
-                completed = []
+                formal = validate_assignment(data, registration)
 
                 def program(kind):
                     declaration = manifest['programs'][kind]
                     return declaration, {name: sealed['submission/' + name] for name in declaration['files']}
 
-                def predict(outer_id, origin_id, method_id, level):
-                    inputs, packet_receipt = inputs_for_forecast(data, origin_id, methods[method_id])
-                    context, labels, _ = data.context_and_labels(origin_id)
+                def predict(identity, method):
                     declaration, source = program('predict')
-                    def validate(files):
-                        return {'metric': score(archived_json(files, 'output/result/forecast.json', True), context, labels, method_id, study),
-                                'packet_verification': packet_receipt}
-                    accepted = executor.invoke({'kind': 'predict', 'outer_id': outer_id, 'origin_id': origin_id,
-                                                'method_id': method_id, 'level': level}, declaration, source, inputs, validate)
-                    return archived_json(accepted, 'output/result/forecast.json', True), archived_json(accepted, 'assessment.json')['metric']
+                    return executor.invoke(identity, declaration, source,
+                        lambda: forecast_inputs(data, identity['origin_id'], method),
+                        lambda files: assess_forecast(files, data, identity['origin_id'], method, study))
 
-                for outer_id in registration['outer_ids']:
-                    outer = data.origins[outer_id]
-                    inner = [g for g in data.grid['origins'] if g['role'] == 'inner' and g['outer_id'] == outer_id]
-                    if len(inner) != len(data.contract['schedule']['inner_days_before']) or outer['origin_tick'] < data.scale_release_tick:
-                        raise ExecutionError('facility_inner_registration_invalid', outer_id)
-                    frames = []
-                    for origin in inner:
-                        context, labels, released = data.context_and_labels(origin['origin_id'])
-                        if released > outer['origin_tick']:
-                            raise ExecutionError('facility_inner_label_unpublished', origin['origin_id'])
-                        forecasts = {method: predict(outer_id, origin['origin_id'], method, 'inner')[0] for method in pool['selection_ids']}
-                        frames.append({'origin_id': origin['origin_id'], 'context': context, 'labels': labels,
-                                       'labels_released_at': released, 'forecasts': forecasts})
-                    payload = {'format': 'l02-inner-selection-packet/1', 'outer_origin_tick': outer['origin_tick'],
-                               'inner_ids': [g['origin_id'] for g in inner], 'selection_ids': pool['selection_ids'], 'frames': frames}
+                def select(identity, payload):
                     declaration, source = program('select')
-                    inputs = {'inner.json': json_bytes(payload), 'study.json': sealed['study.json']}
-                    selected = executor.invoke({'kind': 'select', 'outer_id': outer_id}, declaration, source, inputs,
-                        lambda files: assess_selection(archived_json(files, 'output/result/selection.json'),
-                                                       archived_json(files, 'input/inner.json', True), study))
-                    selection = archived_json(selected, 'output/result/selection.json')
-                    metrics, forecasts = {}, {}
-                    for method in pool['outer_ids']:
-                        forecasts[method], metrics[method] = predict(outer_id, outer_id, method, 'outer')
-                    context, labels, released = data.context_and_labels(outer_id)
-                    completed.append({'outer_id': outer_id, 'selected_method_id': selection['selected_method_id'],
-                        'inner_selection': archived_json(selected, 'assessment.json'), 'metrics': metrics,
-                        'forecasts': forecasts, 'context': context, 'labels': labels, 'label_release_tick': released})
-                aggregate = aggregate_study_metrics(
-                    {(row['outer_id'], method): row['metrics'][method]['metrics_exact'] for row in completed for method in pool['outer_ids']},
-                    {row['outer_id']: row['selected_method_id'] for row in completed}, pool['outer_ids'])
-                numerical = {'format': 'l02-completed-numerical-results/1', 'outer_ids': registration['outer_ids'],
-                    'all_outer_ids': registration['all_outer_ids'], 'complete_assignment': set(registration['outer_ids']) == set(registration['all_outer_ids']),
-                    'pool': pool, 'aggregate_exact': aggregate, 'outer_results': completed, 'candidate_score': None,
-                    'quality_floor': study['quality_floor']}
+                    return executor.invoke(identity, declaration, source,
+                        lambda: {'inner.json': json_bytes(payload), 'study.json': sealed['study.json']},
+                        lambda files: assess_selector(files, payload, study))
+
+                numerical = assemble(data, registration, pool, methods, study, predict, select)
+                rows = [dict(row) for row in ledger.db.execute('SELECT * FROM cell ORDER BY id')]
+                records = numeric_records(root, rows, ledger.run_id, registration['image_id'], manifest,
+                    {n[11:]: v for n, v in sealed.items() if n.startswith('submission/')},
+                    numeric_assignment(data, pool, registration['outer_ids']))
+                expected_report_inputs = report_inputs(numerical, records)
                 declaration, source = program('report')
-                def validate_report(files):
-                    receipt = archived_json(files, 'output/result/report.json')
-                    report = files['output/result/report.md'].decode('utf-8')
-                    if type(receipt) is not dict or receipt.get('format') != 'l02-report-receipt/1' or receipt.get('outer_ids') != registration['outer_ids'] or not report.strip():
-                        raise ExecutionError('report_delivery_invalid', 'nonempty report and exact requested-origin receipt required')
-                    return {'status': 'report_protocol_verified', 'scientific_review': 'unassessed', 'candidate_score': None}
-                executor.invoke({'kind': 'report'}, declaration, source, {'results.json': json_bytes(numerical)}, validate_report)
+                reported = executor.invoke({'kind': 'report'}, declaration, source,
+                    lambda: expected_report_inputs, lambda files: assess_report(files, registration['outer_ids']))
+                assess_report(reported, registration['outer_ids'])
+                coverage = provenance_coverage(reported, expected_report_inputs)
                 result = {'status': 'requested_execution_complete', 'complete_assignment': numerical['complete_assignment'],
-                    'requested_outer_ids': registration['outer_ids'], 'aggregate_exact': aggregate,
+                    'formal_full_assignment': formal, 'report_provenance': coverage,
+                    'requested_outer_ids': registration['outer_ids'], 'aggregate_exact': numerical['aggregate_exact'],
                     'verified_cells': ledger.db.execute("SELECT count(*) FROM cell WHERE phase='verified'").fetchone()[0],
                     'study_complete': None, 'quality_success': None, 'candidate_score': None,
                     'scope': 'sealed numerical execution/report transport; full scientific/operational review and frozen rubric pending'}

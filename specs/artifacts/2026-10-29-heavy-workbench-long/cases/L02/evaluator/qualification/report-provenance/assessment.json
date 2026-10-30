@@ -1,0 +1,511 @@
+{
+  "status": "local_report_provenance_component_qualified",
+  "report": {
+    "status": "report_component_qualified",
+    "wall_seconds": 4.796848900150508,
+    "checks": [
+      {
+        "name": "historical_original_input_coverage",
+        "status": "passed"
+      },
+      {
+        "name": "narrow_argv_positive_projection",
+        "status": "passed"
+      },
+      {
+        "name": "logical_identities_exact",
+        "status": "passed"
+      },
+      {
+        "name": "native_execution_projection_1",
+        "status": "passed"
+      },
+      {
+        "name": "output_member_projection_1",
+        "status": "passed"
+      },
+      {
+        "name": "native_execution_projection_2",
+        "status": "passed"
+      },
+      {
+        "name": "output_member_projection_2",
+        "status": "passed"
+      },
+      {
+        "name": "native_execution_projection_3",
+        "status": "passed"
+      },
+      {
+        "name": "output_member_projection_3",
+        "status": "passed"
+      },
+      {
+        "name": "native_execution_projection_4",
+        "status": "passed"
+      },
+      {
+        "name": "output_member_projection_4",
+        "status": "passed"
+      },
+      {
+        "name": "native_execution_projection_5",
+        "status": "passed"
+      },
+      {
+        "name": "output_member_projection_5",
+        "status": "passed"
+      },
+      {
+        "name": "native_execution_projection_6",
+        "status": "passed"
+      },
+      {
+        "name": "output_member_projection_6",
+        "status": "passed"
+      },
+      {
+        "name": "native_execution_projection_7",
+        "status": "passed"
+      },
+      {
+        "name": "output_member_projection_7",
+        "status": "passed"
+      },
+      {
+        "name": "native_execution_projection_8",
+        "status": "passed"
+      },
+      {
+        "name": "output_member_projection_8",
+        "status": "passed"
+      },
+      {
+        "name": "native_execution_projection_9",
+        "status": "passed"
+      },
+      {
+        "name": "output_member_projection_9",
+        "status": "passed"
+      },
+      {
+        "name": "native_execution_projection_10",
+        "status": "passed"
+      },
+      {
+        "name": "output_member_projection_10",
+        "status": "passed"
+      },
+      {
+        "name": "new_actual_report_input_coverage",
+        "status": "passed"
+      },
+      {
+        "name": "actual_original_fit_rows",
+        "status": "passed"
+      },
+      {
+        "name": "actual_fitted_origin_and_rows",
+        "status": "passed"
+      },
+      {
+        "name": "fixed_operating_grid",
+        "status": "passed"
+      },
+      {
+        "name": "same_baseline_one_sql",
+        "status": "passed"
+      },
+      {
+        "name": "schema_version",
+        "status": "passed"
+      }
+    ],
+    "new_numeric_processes": 0,
+    "new_report_processes": 1,
+    "numeric_origin": "previous real baseline-one accepted objects",
+    "coverage": {
+      "status": "delivered",
+      "numeric_cells": 10,
+      "candidate_artifacts": 19,
+      "scientific_review": "unassessed",
+      "scope": "provided data only; use/truth require actual independent review"
+    },
+    "scope": "report component only; not a new complete twelve-outer study, candidate score or hours proof"
+  },
+  "preparation": {
+    "status": "qualified",
+    "wall_seconds": 6.646208900026977,
+    "checks": [
+      {
+        "name": "before_prepared_publish_real_owner_exit",
+        "status": "passed"
+      },
+      {
+        "name": "before_prepared_publish_original_planned_row",
+        "status": "passed"
+      },
+      {
+        "name": "before_prepared_publish_resume_exit",
+        "status": "passed"
+      },
+      {
+        "name": "before_prepared_publish_actual_program_consumed",
+        "status": "passed"
+      },
+      {
+        "name": "before_prepared_publish_recorded_input_preparations",
+        "status": "passed"
+      },
+      {
+        "name": "before_prepared_publish_native_verified_phase",
+        "status": "passed"
+      },
+      {
+        "name": "before_prepared_publish_create_one_real_operation",
+        "status": "passed"
+      },
+      {
+        "name": "before_prepared_publish_create_native_exit",
+        "status": "passed"
+      },
+      {
+        "name": "before_prepared_publish_start_one_real_operation",
+        "status": "passed"
+      },
+      {
+        "name": "before_prepared_publish_start_native_exit",
+        "status": "passed"
+      },
+      {
+        "name": "before_prepared_publish_cleanup_one_real_operation",
+        "status": "passed"
+      },
+      {
+        "name": "before_prepared_publish_cleanup_native_exit",
+        "status": "passed"
+      },
+      {
+        "name": "before_prepared_publish_same_cid",
+        "status": "passed"
+      },
+      {
+        "name": "before_prepared_publish_sealed_original_input",
+        "status": "passed"
+      },
+      {
+        "name": "prepared_published_real_owner_exit",
+        "status": "passed"
+      },
+      {
+        "name": "prepared_published_original_planned_row",
+        "status": "passed"
+      },
+      {
+        "name": "prepared_published_resume_exit",
+        "status": "passed"
+      },
+      {
+        "name": "prepared_published_actual_program_consumed",
+        "status": "passed"
+      },
+      {
+        "name": "prepared_published_recorded_input_preparations",
+        "status": "passed"
+      },
+      {
+        "name": "prepared_published_native_verified_phase",
+        "status": "passed"
+      },
+      {
+        "name": "prepared_published_create_one_real_operation",
+        "status": "passed"
+      },
+      {
+        "name": "prepared_published_create_native_exit",
+        "status": "passed"
+      },
+      {
+        "name": "prepared_published_start_one_real_operation",
+        "status": "passed"
+      },
+      {
+        "name": "prepared_published_start_native_exit",
+        "status": "passed"
+      },
+      {
+        "name": "prepared_published_cleanup_one_real_operation",
+        "status": "passed"
+      },
+      {
+        "name": "prepared_published_cleanup_native_exit",
+        "status": "passed"
+      },
+      {
+        "name": "prepared_published_same_cid",
+        "status": "passed"
+      },
+      {
+        "name": "prepared_published_sealed_original_input",
+        "status": "passed"
+      },
+      {
+        "name": "historical_report_original_capsule",
+        "status": "passed"
+      },
+      {
+        "name": "historical_report_original_input_fact",
+        "status": "passed"
+      },
+      {
+        "name": "historical_preserved_sql_version",
+        "status": "passed"
+      },
+      {
+        "name": "historical_source_rebind_named_facility",
+        "status": "passed"
+      }
+    ],
+    "new_native_record_processes": 2,
+    "new_forecast_processes": 0,
+    "scope": "two prepared publication crash boundaries and original verified report; not power-loss, full study or hours qualification"
+  },
+  "captured_bindings": {
+    "status": "qualified",
+    "wall_seconds": 6.635550899896771,
+    "checks": [
+      {
+        "name": "current_native_name_exit_binding_1",
+        "status": "passed"
+      },
+      {
+        "name": "current_native_name_exit_binding_2",
+        "status": "passed"
+      },
+      {
+        "name": "current_native_name_exit_binding_3",
+        "status": "passed"
+      },
+      {
+        "name": "current_native_name_exit_binding_4",
+        "status": "passed"
+      },
+      {
+        "name": "current_native_name_exit_binding_5",
+        "status": "passed"
+      },
+      {
+        "name": "current_native_name_exit_binding_6",
+        "status": "passed"
+      },
+      {
+        "name": "current_native_name_exit_binding_7",
+        "status": "passed"
+      },
+      {
+        "name": "current_native_name_exit_binding_8",
+        "status": "passed"
+      },
+      {
+        "name": "current_native_name_exit_binding_9",
+        "status": "passed"
+      },
+      {
+        "name": "current_native_name_exit_binding_10",
+        "status": "passed"
+      },
+      {
+        "name": "current_native_name_exit_binding_11",
+        "status": "passed"
+      },
+      {
+        "name": "actual_captured_packet_and_forecast",
+        "status": "passed"
+      },
+      {
+        "name": "wrong_captured_origin_named_facility",
+        "status": "passed"
+      },
+      {
+        "name": "wrong_captured_method_named_facility",
+        "status": "passed"
+      },
+      {
+        "name": "actual_captured_selector",
+        "status": "passed"
+      },
+      {
+        "name": "wrong_captured_selector_named_facility",
+        "status": "passed"
+      },
+      {
+        "name": "diagnostic_assignment_classification",
+        "status": "passed"
+      },
+      {
+        "name": "actual_contract_full_assignment",
+        "status": "passed"
+      },
+      {
+        "name": "report_result_drift_named_facility",
+        "status": "passed"
+      },
+      {
+        "name": "typed_provenance_drift_named_facility",
+        "status": "passed"
+      }
+    ],
+    "scope": "captured input/native/report identity boundaries on original real objects; no new numeric execution"
+  },
+  "legacy_readonly_reader": {
+    "status": "passed",
+    "seconds": 20.265444200020283,
+    "assessment": {
+      "status": "sealed_requested_matrix_recomputed",
+      "outer_ids": [
+        "outer-20250115"
+      ],
+      "complete_assignment": false,
+      "formal_full_assignment": false,
+      "forecast_cells": 9,
+      "verified_cells": 11,
+      "selected_methods": {
+        "outer-20250115": "ridge-weather-operations"
+      },
+      "aggregate_exact": {
+        "per_method": {
+          "seasonal-weekday": {
+            "scaled_mse": "54371510067460289243450418693167606174058883410221606249374371723293677889250691303284551783/8462433976289341551043420928924772751265882339967911892345205616232192000000000000000000000000",
+            "scaled_mae": "1063980971012884681780025281020182556135540743/13907805805201083182765036496419846400000000000",
+            "scaled_wis": "25839562586329917921946484337915408023/474074771794680400664686461443180851200"
+          },
+          "ridge-weather-operations": {
+            "scaled_mse": "55761321539251542859663170770132205834025853453532974060710063639649166088147143089087116073/67699471810314732408347367431398182010127058719743295138761644929857536000000000000000000000000",
+            "scaled_mae": "1985469747928016784414955515224957934483201109/84656209249050071547265439543425152000000000000",
+            "scaled_wis": "242022903075744376301948451109653149435639885323/19470928127281516455871051094987784960000000000000"
+          },
+          "ridge-no-weather": {
+            "scaled_mse": "3213995547672566369929596685111197663034088849536026913378807879131903996418380567884373851/6769947181031473240834736743139818201012705871974329513876164492985753600000000000000000000000",
+            "scaled_mae": "631901243718085662199995900952494498065416699/34769514513002707956912591241049616000000000000",
+            "scaled_wis": "277717537340889755587491455667580429045081880499/30288110420215692264688301703314332160000000000000"
+          }
+        },
+        "selected": {
+          "scaled_mse": "55761321539251542859663170770132205834025853453532974060710063639649166088147143089087116073/67699471810314732408347367431398182010127058719743295138761644929857536000000000000000000000000",
+          "scaled_mae": "1985469747928016784414955515224957934483201109/84656209249050071547265439543425152000000000000",
+          "scaled_wis": "242022903075744376301948451109653149435639885323/19470928127281516455871051094987784960000000000000"
+        }
+      },
+      "report_provenance": {
+        "status": "not_delivered",
+        "scientific_review": "unassessed",
+        "scope": "actual historical report input did not include provenance; no backfill or candidate failure inferred"
+      },
+      "study_complete": null,
+      "quality_success": null,
+      "candidate_score": null,
+      "scope": "original captured inputs, native executions and numerical recomputation; independent scientific review and full grader pending"
+    }
+  },
+  "original_report_clarification": {
+    "observation": "The first component report used a new reporter after historical numeric execution, so its blanket pre-prediction seal assertion overclaimed the component evidence.",
+    "change": "State the contract and require independent registration audit; do not claim sidecar numeric facts prove reporter freeze timing.",
+    "original": "new-report-only/cells/1/accepted.zip and source-current preserved",
+    "new_full_study": false
+  },
+  "candidate_score": null,
+  "study_complete": null,
+  "full12_executed": false,
+  "frozen_cases": 1,
+  "effective_candidate_hour_cases": 0,
+  "independent_review": {
+    "format": "independent-component-stage-assessment/1",
+    "reviewer": "/root/benchmark_review",
+    "review_mode": "non-blind AI-agent component development review; familiar with author reference and prior phases; no delegation",
+    "scope": "L02 report provenance projection, prepare-once original inputs, shared assembly and read-only sealed reconstruction",
+    "blocking_findings": [],
+    "component_qualification": "supported within the exercised one-outer historical reconstruction and one new report-only process",
+    "independent_checks": {
+      "checks": 75,
+      "all_passed": true,
+      "failed": [],
+      "readonly_old_reader_seconds": null,
+      "reader_result_reused_after_reviewer_null_coefficient_fix": true,
+      "reader_source_result": "audit/old-reader-summary.json from completed original read_completed call; wrapper later TypeError; exact standalone reader timing not saved",
+      "numeric10_reexecuted": false,
+      "new_report_processes_total": 1,
+      "new_forecasts_Docker_other_than_own_report": 0,
+      "actual_new_PNG_viewed": true,
+      "full12": false,
+      "candidate_score": null,
+      "L02_frozen": false
+    },
+    "own_new_report": {
+      "status": "own_clarified_report_cold_completed",
+      "source_report_matches_clarified_snapshot": true,
+      "numeric_processes_started": 0,
+      "report_processes_started": 1,
+      "candidate_score": null,
+      "full12_executed": false,
+      "cell": {
+        "id": 1,
+        "identity": "{\"kind\": \"report\"}",
+        "name": "oc-l02-cell-6c63c6723ad84b99a62fe9c9d8dd7cf7",
+        "phase": "verified",
+        "cid": "88aa3de03a35fab8d83c7577e2cf6c5a70b3b29aef92ee2950c188f670a65b10",
+        "exitcode": 0,
+        "failure": null
+      },
+      "image": "sha256:23ff8bfbf8055caa0b9fa5745ddb27cceea2f31d7d15b7a900c81112cdfe8ddf",
+      "actual_state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-30T07:15:28.129157645Z",
+        "FinishedAt": "2026-10-30T07:15:30.010666316Z"
+      },
+      "report_coverage": {
+        "status": "delivered",
+        "numeric_cells": 10,
+        "candidate_artifacts": 19,
+        "scientific_review": "unassessed",
+        "scope": "provided data only; use/truth require actual independent review"
+      },
+      "host_seconds": 4.695842799730599,
+      "scope": "one report-only component from original numeric projection; not a new forecasting study"
+    },
+    "source_identity": "source-identity.json",
+    "evidence_limitations": [
+      "The two new preparation crashes happen before a Docker CID exists, not while an original container is running.",
+      "Author owner/resume receipts retain the common argv prefix only; value and stop-stage arguments are established by executed harness, owner-exit and input-history evidence, not complete original argv receipts.",
+      "Fit diagnostics are original candidate outputs, not independently established training facts.",
+      "Standalone elapsed time of this reviewer historical read_completed call was not separately saved; its result was preserved before a later reviewer-only null-coefficient parsing error."
+    ],
+    "reviewer_tool_failure": {
+      "initial": "audit-command.json + audit.stderr.txt + audit-component-before-null-fix.py",
+      "cause": "reviewer assumed every fit coefficient was iterable; seasonal coefficient null is a valid output",
+      "repair": "audit-repaired-command.json; reuse the successfully saved reader result and perform only remaining read-only arithmetic/artifact checks",
+      "new_reader_or_forecast_run_after_repair": false
+    },
+    "still_unqualified": [
+      "fresh full12 execution with the new reporter",
+      "global programme/reporter pre-prediction freeze for the historical numbers",
+      "full candidate grader and complete scientific/operating review",
+      "independent professional-human or statistical calibration",
+      "L02 case freeze",
+      "candidate hours-level difficulty",
+      "completion of ten heavy cases"
+    ],
+    "candidate_score": null,
+    "study_complete": null,
+    "quality_success": null,
+    "L02_frozen": false
+  },
+  "scope": "one-outer historical reconstruction and report-only provenance components; full study/grader/freeze/hours remain unqualified"
+}

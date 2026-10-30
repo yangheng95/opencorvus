@@ -1,0 +1,137 @@
+{
+  "comparison": "direct source bytes for object identity; no hash used as a correctness gate",
+  "files": [
+    {
+      "file": "asof_input.py",
+      "bytes": 4610,
+      "equals_own_report_cold_host_source_snapshot": true,
+      "equals_parent_clarified_snapshot": true
+    },
+    {
+      "file": "audit_material_projection.py",
+      "bytes": 5674,
+      "equals_own_report_cold_host_source_snapshot": true,
+      "equals_parent_clarified_snapshot": true
+    },
+    {
+      "file": "build_materials.py",
+      "bytes": 7684,
+      "equals_own_report_cold_host_source_snapshot": true,
+      "equals_parent_clarified_snapshot": true
+    },
+    {
+      "file": "check_projection.py",
+      "bytes": 4005,
+      "equals_own_report_cold_host_source_snapshot": true,
+      "equals_parent_clarified_snapshot": true
+    },
+    {
+      "file": "daily_data.py",
+      "bytes": 2147,
+      "equals_own_report_cold_host_source_snapshot": true,
+      "equals_parent_clarified_snapshot": true
+    },
+    {
+      "file": "decode_materials.py",
+      "bytes": 11858,
+      "equals_own_report_cold_host_source_snapshot": true,
+      "equals_parent_clarified_snapshot": true
+    },
+    {
+      "file": "l02_daily_reference.py",
+      "bytes": 10774,
+      "equals_own_report_cold_host_source_snapshot": true,
+      "equals_parent_clarified_snapshot": true
+    },
+    {
+      "file": "l02_execution.py",
+      "bytes": 22714,
+      "equals_own_report_cold_host_source_snapshot": true,
+      "equals_parent_clarified_snapshot": false
+    },
+    {
+      "file": "l02_pipeline.py",
+      "bytes": 7001,
+      "equals_own_report_cold_host_source_snapshot": true,
+      "equals_parent_clarified_snapshot": true
+    },
+    {
+      "file": "l02_quality.py",
+      "bytes": 14131,
+      "equals_own_report_cold_host_source_snapshot": true,
+      "equals_parent_clarified_snapshot": true
+    },
+    {
+      "file": "l02_report.py",
+      "bytes": 6718,
+      "equals_own_report_cold_host_source_snapshot": true,
+      "equals_parent_clarified_snapshot": true
+    },
+    {
+      "file": "l02_rubric.py",
+      "bytes": 4669,
+      "equals_own_report_cold_host_source_snapshot": true,
+      "equals_parent_clarified_snapshot": true
+    },
+    {
+      "file": "l02_scoring.py",
+      "bytes": 13231,
+      "equals_own_report_cold_host_source_snapshot": true,
+      "equals_parent_clarified_snapshot": true
+    },
+    {
+      "file": "l02_sealed.py",
+      "bytes": 4403,
+      "equals_own_report_cold_host_source_snapshot": true,
+      "equals_parent_clarified_snapshot": true
+    },
+    {
+      "file": "l02_selection.py",
+      "bytes": 5314,
+      "equals_own_report_cold_host_source_snapshot": true,
+      "equals_parent_clarified_snapshot": true
+    },
+    {
+      "file": "l02_study_data.py",
+      "bytes": 9102,
+      "equals_own_report_cold_host_source_snapshot": true,
+      "equals_parent_clarified_snapshot": true
+    },
+    {
+      "file": "material_contract.py",
+      "bytes": 4886,
+      "equals_own_report_cold_host_source_snapshot": true,
+      "equals_parent_clarified_snapshot": true
+    },
+    {
+      "file": "package_l02_reference.py",
+      "bytes": 1532,
+      "equals_own_report_cold_host_source_snapshot": true,
+      "equals_parent_clarified_snapshot": true
+    },
+    {
+      "file": "plot_l02_study.py",
+      "bytes": 2491,
+      "equals_own_report_cold_host_source_snapshot": true,
+      "equals_parent_clarified_snapshot": true
+    },
+    {
+      "file": "report_l02_reference.py",
+      "bytes": 12270,
+      "equals_own_report_cold_host_source_snapshot": true,
+      "equals_parent_clarified_snapshot": true
+    },
+    {
+      "file": "run_l02_study.py",
+      "bytes": 10750,
+      "equals_own_report_cold_host_source_snapshot": true,
+      "equals_parent_clarified_snapshot": true
+    },
+    {
+      "file": "summarize_l02_study.py",
+      "bytes": 1052,
+      "equals_own_report_cold_host_source_snapshot": true,
+      "equals_parent_clarified_snapshot": true
+    }
+  ]
+}

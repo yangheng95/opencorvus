@@ -20,3 +20,5 @@ python current-source/summarize_l02_study.py --run <原运行目录> --out <全�
 [主方原执行](qualification/main/result.json)是两个真实微型worker与解析对照；[独立最终审查](qualification/independent-review/REVIEW.md)及[机器结论](qualification/independent-review/stage-assessment.json)记录三个假通过/修复与唯一新cold。两边originals.zip保留原字节、实际命令/退出/挂载和所有首失败；主方初checker执行不冒称修后执行。当前局部blocking=[]不代表全题批准，不重复秒级实验凑工作量。
 
 [质量/研究交付资格](qualification/quality-study/README.md)只读复用原真实数值：事前固定外部baseline政策、单期成本/分位策略、真实26条件和坏对照、原registry身份/同义行序与设施优先级。`l02_quality.py`是唯一loss/质量primitive，`l02_rubric.py`仅聚合可信评估状态，不接受candidate自评或代替完整grader。`quality-policy.draft.json`和`../rubric.draft.json`仍未冻结；实际研究分析、精确表和新图不是新正式清洁pipeline或候选分数。
+
+[报告来源与原输入恢复](qualification/report-provenance/README.md)新增prepare-once、原captured packet/inner绑定和`l02_report`最小来源包；`l02_pipeline`是执行/审计共用的唯一矩阵组装，`l02_sealed.read_completed`供只读summary及后续正式grader使用。原schema1对象保留原输入，历史report未见新来源包不会被补造为已见。新作者reporter消费原fit/诊断、产生逐节点/运营表和可定位来源；组件cold只复用原数值，无新预测。它不是完整新12outer研究、全grader或case冻结。

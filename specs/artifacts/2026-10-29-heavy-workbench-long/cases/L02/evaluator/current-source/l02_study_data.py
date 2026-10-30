@@ -9,7 +9,14 @@ from asof_input import InputError, project
 from check_projection import assess
 from daily_data import read_packet
 from decode_materials import OBS,COV,decode,hour_tick,rows,utc
-from material_contract import load_contract,read_json
+from material_contract import load_contract,read_json,same_json_value
+from l02_execution import safe_relative
+
+
+def extract_data(files,root):
+    for name,value in files.items():
+        if name.startswith('raw/') or name in ('material-contract.json','study.json'):
+            target=root/safe_relative(name);target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(value)
 
 
 def write_json(path,value):
@@ -58,23 +65,53 @@ class StudySource:
             'series_catalogue':[{k:node[k] for k in ['series_id','kind']} for node in self.grid['series_catalogue']],'hierarchy':hierarchy,'scales_litres':self.scales}
         return context,[{'series_id':name,'target_tick':target,'value':value} for (name,target),value in labels.items()],max(released)
 
+    def packet_metadata(self,origin_id):
+        origin=self.origins[origin_id]
+        return {'format':'l02-daily-worker-packet/1','clock':{k:self.grid['clock'][k] for k in ['epoch_utc','tick_unit','event_interval']},
+            'origin_tick':origin['origin_tick'],'target_ticks':origin['target_ticks'],'series_catalogue':self.grid['series_catalogue'],'hierarchy':self.grid['hierarchy'],
+            'units':self.contract['units'],'variables':self.raw['variables'],'quantiles':self.study['quantiles']}
+
+    def verify_packet(self,origin_id,root):
+        origin=self.origins[origin_id];actual,meta=read_packet(root)
+        if not same_json_value(meta,self.packet_metadata(origin_id)):raise InputError('packet_assignment_mismatch')
+        snapshot={'format':'l02-asof-snapshot/1','origin':origin['origin_tick'],'horizon':len(origin['target_ticks']),
+            **{key:actual[key] for key in ['series','variables','observations','covariates']}}
+        verification=assess(self.raw,snapshot,origin['origin_tick'],len(origin['target_ticks']))
+        if verification['status']!='projection_verified':raise InputError('packet_projection_invalid')
+        return {'origin_id':origin_id,'origin_tick':origin['origin_tick'],'target_ticks':origin['target_ticks'],'projection':verification,
+            'raw_rows':{table:len(actual[table]) for table in ['observations','covariates']},'scope':'authorized original CSV rows and registered target grid only'}
+
     def packet(self,origin_id,out):
         origin=self.origins[origin_id];out.mkdir(parents=True,exist_ok=False)
         snapshot=project(self.raw,origin['origin_tick'],len(origin['target_ticks']))
-        meta={'format':'l02-daily-worker-packet/1','clock':{k:self.grid['clock'][k] for k in ['epoch_utc','tick_unit','event_interval']},
-            'origin_tick':origin['origin_tick'],'target_ticks':origin['target_ticks'],'series_catalogue':self.grid['series_catalogue'],'hierarchy':self.grid['hierarchy'],
-            'units':self.contract['units'],'variables':self.raw['variables'],'quantiles':self.study['quantiles']}
-        write_json(out/'packet.json',meta)
+        write_json(out/'packet.json',self.packet_metadata(origin_id))
         for table,filename,fields,identity,tick in [('observations','observations.csv',OBS,'series_id','event_tick'),('covariates','covariate-vintages.csv',COV,'variable_id','valid_tick')]:
             permitted=[self.originals[table][row[identity],row[tick],row['revision_id']] for row in snapshot[table]]
             with (out/filename).open('w',newline='',encoding='utf-8') as f:
                 writer=csv.DictWriter(f,fieldnames=sorted(fields));writer.writeheader();writer.writerows(permitted)
-        actual,packet_meta=read_packet(out)
-        actual_snapshot=project(actual,origin['origin_tick'],len(origin['target_ticks']))
-        verification=assess(self.raw,actual_snapshot,origin['origin_tick'],len(origin['target_ticks']))
-        if verification['status']!='projection_verified' or packet_meta!=meta:raise InputError('packet_projection_invalid')
-        return {'origin_id':origin_id,'origin_tick':origin['origin_tick'],'target_ticks':origin['target_ticks'],'projection':verification,
-            'raw_rows':{table:len(snapshot[table]) for table in ['observations','covariates']},'scope':'authorized original CSV rows and registered target grid only'}
+        return self.verify_packet(origin_id,out)
+
+
+def numeric_assignment(data,pool,outer_ids):
+    result=[]
+    for outer in outer_ids:
+        inner=[g for g in data.grid['origins'] if g['role']=='inner' and g['outer_id']==outer]
+        for origin in inner:
+            for method in pool['selection_ids']:result.append({'kind':'predict','outer_id':outer,'origin_id':origin['origin_id'],'method_id':method,'level':'inner'})
+        result.append({'kind':'select','outer_id':outer})
+        for method in pool['outer_ids']:result.append({'kind':'predict','outer_id':outer,'origin_id':outer,'method_id':method,'level':'outer'})
+    return result
+
+
+def validate_assignment(data,registration):
+    all_outer={g['origin_id'] for g in data.grid['origins'] if g['role']=='outer'}
+    requested=registration.get('outer_ids');declared=registration.get('all_outer_ids')
+    for values in [requested,declared]:
+        if type(values) is not list or not values or any(type(v) is not str for v in values) or len(set(values))!=len(values):raise InputError('registered_outer_identity')
+    if set(declared)!=all_outer or not set(requested)<=all_outer:raise InputError('registered_outer_identity')
+    kind=registration.get('assignment_kind')
+    if kind not in ('formal_full_assignment','private_author_diagnostic') or kind=='formal_full_assignment' and set(requested)!=all_outer:raise InputError('registered_assignment_kind')
+    return set(requested)==all_outer and kind=='formal_full_assignment'
 
 
 def load_pool(path):

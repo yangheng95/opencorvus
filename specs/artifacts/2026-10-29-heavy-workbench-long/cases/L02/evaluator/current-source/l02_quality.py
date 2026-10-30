@@ -5,7 +5,7 @@ reference. This primitive is not an arbitrary-JSON candidate submission grader.
 """
 from fractions import Fraction
 from l02_scoring import ProtocolError, aggregate_study_metrics, number, score, validate_context
-from material_contract import read_json
+from material_contract import read_json, same_json_value
 from l02_execution import archived_json, read_archive
 from asof_input import validate as validate_vintages
 
@@ -45,16 +45,6 @@ def single_period_loss(action, truth, underage, overage):
             'loss': str(underage * shortage + overage * surplus)}
 
 
-def _typed_equal(left, right):
-    if type(left) is not type(right):
-        return False
-    if type(left) is dict:
-        return set(left) == set(right) and all(_typed_equal(left[k], right[k]) for k in left)
-    if type(left) is list:
-        return len(left) == len(right) and all(_typed_equal(a, b) for a, b in zip(left, right))
-    return left == right
-
-
 def _vintage_identity(raw):
     validate_vintages(raw)
     return {**raw,
@@ -81,12 +71,12 @@ def load_registered_reference(path, data, study, policy, expected_method):
     """
     files = read_archive(path)
     try:
-        if not _typed_equal(_vintage_identity(archived_json(files, 'facts/canonical.json')), _vintage_identity(data.raw)) or not _typed_equal(_grid_identity(archived_json(files, 'facts/grid.json')), _grid_identity(data.grid)):
+        if not same_json_value(_vintage_identity(archived_json(files, 'facts/canonical.json')), _vintage_identity(data.raw)) or not same_json_value(_grid_identity(archived_json(files, 'facts/grid.json')), _grid_identity(data.grid)):
             raise ProtocolError('facility_quality_binding_invalid', 'reference registered for different business facts or grid')
         pairs = [('facts/scales.json', data.scales), ('material-contract.json', data.contract),
                  ('study-contract.draft.json', study), ('policy-before-results.json', policy),
                  ('fixed-reference-method.json', expected_method)]
-        if any(not _typed_equal(archived_json(files, name, True), expected) for name, expected in pairs):
+        if any(not same_json_value(archived_json(files, name, True), expected) for name, expected in pairs):
             raise ProtocolError('facility_quality_binding_invalid', 'reference registered for different facts, grid, units, scales, metric or policy')
         source_files = {name for name in files if name.startswith('executed-fixed-reference-source/')}
         if not source_files:
