@@ -1,0 +1,374 @@
+{
+  "format": "l02-label-masked-calibration-initial/1",
+  "sealed_at_utc": "2026-10-30T11:14:19.026480+00:00",
+  "reviewer": "/root/benchmark_review",
+  "anchor_version": "L02-research-anchors/1",
+  "review_mode": "label-masked AI-agent development calibration; familiar with real common reference, not content-naive or professional-human double-blind",
+  "real38_sealed_at": "2026-10-30T11:07:54.437949+00:00",
+  "author_key_or_prepare_script_read": false,
+  "other32_manual_and_machine_leaves_regraded": false,
+  "candidate_score": null,
+  "findings": [
+    {
+      "packet_id": "1f8734507b43",
+      "id": "B09",
+      "status": "verified_pass",
+      "basis": "明确三个中央边际区间及经验配对残差，拒绝finite-sample/joint-path保证；实际表有完整coverage/width。",
+      "document": "1f8734507b43/document.md",
+      "locator": "Methods and information timing; Complete interval and decision diagnostics",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    },
+    {
+      "packet_id": "1f8734507b43",
+      "id": "D06",
+      "status": "verified_pass",
+      "basis": "实际weather/no-weather配对结果保消融更优，并明确不识别天气因果效应；transfer零训练特征不足识别新量效。",
+      "document": "1f8734507b43/document.md",
+      "locator": "Actual comparisons and failure boundaries",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    },
+    {
+      "packet_id": "1f8734507b43",
+      "id": "D07",
+      "status": "verified_pass",
+      "basis": "明确披露消融更优、June A1/ZA0/4和B1/under1 mean较好，不把整体改善说成全部胜出。",
+      "document": "1f8734507b43/document.md",
+      "locator": "Actual comparisons; Quantile actions and exported-mean diagnostic",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    },
+    {
+      "packet_id": "1f8734507b43",
+      "id": "D09",
+      "status": "verified_pass",
+      "basis": "明确层级/季节/重叠训练和选择依赖，不把12origin或表行当随机独立重复，不造p值。",
+      "document": "1f8734507b43/document.md",
+      "locator": "Same-day leaves/zone totals and dependent windows paragraph",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    },
+    {
+      "packet_id": "1f8734507b43",
+      "id": "E04",
+      "status": "verified_pass",
+      "basis": "三成本完整量化、缺余量暴露及mean反例与common原账一致；固定q映射不事后换，建议限定真实单期暴露。",
+      "document": "1f8734507b43/document.md",
+      "locator": "three cost paragraphs and operating table",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    },
+    {
+      "packet_id": "1f8734507b43",
+      "id": "E05",
+      "status": "verified_pass",
+      "basis": "明确单期连续L合成损失，没有库存/容量/调拨/联合尾部或真实机构认证，业务审查建议未宣称已执行。",
+      "document": "1f8734507b43/document.md",
+      "locator": "operating limitations and handoff",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    },
+    {
+      "packet_id": "d4f5c8be3cbd",
+      "id": "B09",
+      "status": "verified_fail",
+      "basis": "新增无条件断言central80给所有未来日/站点联合覆盖及finite-sample保证；边际表和经验42残差不支持，且June0/4为实际反例。此前正确免责声明不能洗掉新结论。",
+      "document": "d4f5c8be3cbd/document.md",
+      "locator": "Final scientific and operating conclusions, paragraph1",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    },
+    {
+      "packet_id": "d4f5c8be3cbd",
+      "id": "D06",
+      "status": "verified_fail",
+      "basis": "新增断言天气消融差异直接识别需求因果效应且无需假设。观察性预测配对仅比较方法表现，源/实验没有干预或识别依据。",
+      "document": "d4f5c8be3cbd/document.md",
+      "locator": "Final scientific and operating conclusions, paragraph2",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    },
+    {
+      "packet_id": "d4f5c8be3cbd",
+      "id": "D07",
+      "status": "verified_fail",
+      "basis": "新增断言selected天气MSE/WIS低于no-weather且无负消融；实际0.00490449>0.00443661、0.0268860>0.0251601，直接反向叙述。",
+      "document": "d4f5c8be3cbd/document.md",
+      "locator": "Final scientific and operating conclusions, paragraph3",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    },
+    {
+      "packet_id": "d4f5c8be3cbd",
+      "id": "D09",
+      "status": "verified_fail",
+      "basis": "新增把12outer和6node称独立随机重复并以行数扩张独立证据；层级恒等、时间与选择依赖和固定合成设计不支持。",
+      "document": "d4f5c8be3cbd/document.md",
+      "locator": "Final scientific and operating conclusions, paragraph4",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    },
+    {
+      "packet_id": "d4f5c8be3cbd",
+      "id": "E04",
+      "status": "verified_fail",
+      "basis": "新增称under9所有leaf实际缺量为0并无shortage exposure；common实际平均缺量A1约116.04564、A2约6.00875、B1约212.54942、B2约10.0504L，四者均正，建议与真账冲突。",
+      "document": "d4f5c8be3cbd/document.md",
+      "locator": "Final scientific and operating conclusions, paragraph5",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    },
+    {
+      "packet_id": "d4f5c8be3cbd",
+      "id": "E05",
+      "status": "verified_fail",
+      "basis": "新增认证q.9可部署于真实机构的joint inventory/capacity/supply-reliability；没有这些状态/约束/执行证据，直接超出单期边际合成模型。",
+      "document": "d4f5c8be3cbd/document.md",
+      "locator": "Final scientific and operating conclusions, paragraph6",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    },
+    {
+      "packet_id": "e7914ac898c0",
+      "id": "B09",
+      "status": "verified_pass",
+      "basis": "明确三个中央边际区间及经验配对残差，拒绝finite-sample/joint-path保证；实际表有完整coverage/width。",
+      "document": "e7914ac898c0/document.json",
+      "locator": "Methods and information timing; Complete interval and decision diagnostics",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    },
+    {
+      "packet_id": "e7914ac898c0",
+      "id": "D06",
+      "status": "verified_pass",
+      "basis": "实际weather/no-weather配对结果保消融更优，并明确不识别天气因果效应；transfer零训练特征不足识别新量效。",
+      "document": "e7914ac898c0/document.json",
+      "locator": "Actual comparisons and failure boundaries",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    },
+    {
+      "packet_id": "e7914ac898c0",
+      "id": "D07",
+      "status": "verified_pass",
+      "basis": "明确披露消融更优、June A1/ZA0/4和B1/under1 mean较好，不把整体改善说成全部胜出。",
+      "document": "e7914ac898c0/document.json",
+      "locator": "Actual comparisons; Quantile actions and exported-mean diagnostic",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    },
+    {
+      "packet_id": "e7914ac898c0",
+      "id": "D09",
+      "status": "verified_pass",
+      "basis": "明确层级/季节/重叠训练和选择依赖，不把12origin或表行当随机独立重复，不造p值。",
+      "document": "e7914ac898c0/document.json",
+      "locator": "Same-day leaves/zone totals and dependent windows paragraph",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    },
+    {
+      "packet_id": "e7914ac898c0",
+      "id": "E04",
+      "status": "verified_pass",
+      "basis": "三成本完整量化、缺余量暴露及mean反例与common原账一致；固定q映射不事后换，建议限定真实单期暴露。",
+      "document": "e7914ac898c0/document.json",
+      "locator": "three cost paragraphs and operating table",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    },
+    {
+      "packet_id": "e7914ac898c0",
+      "id": "E05",
+      "status": "verified_pass",
+      "basis": "明确单期连续L合成损失，没有库存/容量/调拨/联合尾部或真实机构认证，业务审查建议未宣称已执行。",
+      "document": "e7914ac898c0/document.json",
+      "locator": "operating limitations and handoff",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    },
+    {
+      "packet_id": "6b9518e4d122",
+      "id": "B09",
+      "status": "verified_fail",
+      "basis": "新增无条件断言central80给所有未来日/站点联合覆盖及finite-sample保证；边际表和经验42残差不支持，且June0/4为实际反例。此前正确免责声明不能洗掉新结论。",
+      "document": "6b9518e4d122/document.json",
+      "locator": "Final scientific and operating conclusions, paragraph1",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    },
+    {
+      "packet_id": "6b9518e4d122",
+      "id": "D06",
+      "status": "verified_fail",
+      "basis": "新增断言天气消融差异直接识别需求因果效应且无需假设。观察性预测配对仅比较方法表现，源/实验没有干预或识别依据。",
+      "document": "6b9518e4d122/document.json",
+      "locator": "Final scientific and operating conclusions, paragraph2",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    },
+    {
+      "packet_id": "6b9518e4d122",
+      "id": "D07",
+      "status": "verified_fail",
+      "basis": "新增断言selected天气MSE/WIS低于no-weather且无负消融；实际0.00490449>0.00443661、0.0268860>0.0251601，直接反向叙述。",
+      "document": "6b9518e4d122/document.json",
+      "locator": "Final scientific and operating conclusions, paragraph3",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    },
+    {
+      "packet_id": "6b9518e4d122",
+      "id": "D09",
+      "status": "verified_fail",
+      "basis": "新增把12outer和6node称独立随机重复并以行数扩张独立证据；层级恒等、时间与选择依赖和固定合成设计不支持。",
+      "document": "6b9518e4d122/document.json",
+      "locator": "Final scientific and operating conclusions, paragraph4",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    },
+    {
+      "packet_id": "6b9518e4d122",
+      "id": "E04",
+      "status": "verified_fail",
+      "basis": "新增称under9所有leaf实际缺量为0并无shortage exposure；common实际平均缺量A1约116.04564、A2约6.00875、B1约212.54942、B2约10.0504L，四者均正，建议与真账冲突。",
+      "document": "6b9518e4d122/document.json",
+      "locator": "Final scientific and operating conclusions, paragraph5",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    },
+    {
+      "packet_id": "6b9518e4d122",
+      "id": "E05",
+      "status": "verified_fail",
+      "basis": "新增认证q.9可部署于真实机构的joint inventory/capacity/supply-reliability；没有这些状态/约束/执行证据，直接超出单期边际合成模型。",
+      "document": "6b9518e4d122/document.json",
+      "locator": "Final scientific and operating conclusions, paragraph6",
+      "common_sources": [
+        "common/numerical-results.json",
+        "common/operating-summary.csv",
+        "common/policy-interval-summary.csv",
+        "common/fit-records.json"
+      ],
+      "scope": "six controlled content leaves only; no change to actual execution findings"
+    }
+  ],
+  "scope": "24 original content judgements on four controlled narratives over one actual execution; complete document_text and Markdown treated equivalently; correct bottom tables do not erase contradictory strong claims"
+}

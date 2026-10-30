@@ -1,0 +1,90 @@
+{
+  "scope": "complete legacy residual/first-error/family equivalence and same historical grading through current real CLI",
+  "checks": [
+    {
+      "case": "binary-truck",
+      "all_rows_violations_order_context_families_counts_mask_equal": true
+    },
+    {
+      "case": "both-stage-peaks",
+      "all_rows_violations_order_context_families_counts_mask_equal": true
+    },
+    {
+      "case": "later-order-before-earlier-physical-first-error",
+      "all_rows_violations_order_context_families_counts_mask_equal": true
+    },
+    {
+      "case": "MOQ-positive-empty-truck",
+      "all_rows_violations_order_context_families_counts_mask_equal": true
+    },
+    {
+      "case": "MOQ0-empty-truck-paid",
+      "all_rows_violations_order_context_families_counts_mask_equal": true
+    },
+    {
+      "case": "pack-units-not-lot-price",
+      "all_rows_violations_order_context_families_counts_mask_equal": true
+    },
+    {
+      "case": "post-horizon-AR-allowed-not-cash",
+      "all_rows_violations_order_context_families_counts_mask_equal": true
+    },
+    {
+      "case": "route-assignment",
+      "all_rows_violations_order_context_families_counts_mask_equal": true
+    },
+    {
+      "case": "signed-credit-and-receipts",
+      "all_rows_violations_order_context_families_counts_mask_equal": true
+    },
+    {
+      "case": "terminal-cash-not-credit-or-AR",
+      "all_rows_violations_order_context_families_counts_mask_equal": true
+    },
+    {
+      "case": "terminal-FG-rejected",
+      "all_rows_violations_order_context_families_counts_mask_equal": true
+    },
+    {
+      "case": "terminal-raw-allowed-with-holding",
+      "all_rows_violations_order_context_families_counts_mask_equal": true
+    },
+    {
+      "case": "terminal-raw-pipeline-rejected",
+      "all_rows_violations_order_context_families_counts_mask_equal": true
+    }
+  ],
+  "grades": [
+    {
+      "name": "opencorvus",
+      "passed": true,
+      "score": 100,
+      "counts": {
+        "verified_pass": 47,
+        "verified_partial": 0,
+        "verified_fail": 0,
+        "candidate_incomplete": 0,
+        "blocked_candidate": 0,
+        "unassessed": 0
+      },
+      "scope": "same historical sealed candidate/review, current checker refactor regression only; not a fresh candidate or03 score"
+    },
+    {
+      "name": "codex",
+      "passed": true,
+      "score": 100,
+      "counts": {
+        "verified_pass": 47,
+        "verified_partial": 0,
+        "verified_fail": 0,
+        "candidate_incomplete": 0,
+        "blocked_candidate": 0,
+        "unassessed": 0
+      },
+      "scope": "same historical sealed candidate/review, current checker refactor regression only; not a fresh candidate or03 score"
+    }
+  ],
+  "wall_seconds": 0.45328979985788465,
+  "new_solver_LLM_Docker_calls": 0,
+  "full03_qualified": false
+}

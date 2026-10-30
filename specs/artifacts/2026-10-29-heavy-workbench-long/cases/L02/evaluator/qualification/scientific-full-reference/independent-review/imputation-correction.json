@@ -1,0 +1,2122 @@
+{
+  "weather_cells_from_actual_ledger": 48,
+  "node_checks": 192,
+  "expected_node_checks_from_ledger": 192,
+  "all_passed": true,
+  "rows": [
+    {
+      "cell": 2,
+      "series": "A1",
+      "expected": [
+        24312
+      ],
+      "actual": [
+        24312
+      ],
+      "passed": true
+    },
+    {
+      "cell": 2,
+      "series": "A2",
+      "expected": [
+        24312
+      ],
+      "actual": [
+        24312
+      ],
+      "passed": true
+    },
+    {
+      "cell": 2,
+      "series": "B1",
+      "expected": [
+        24312
+      ],
+      "actual": [
+        24312
+      ],
+      "passed": true
+    },
+    {
+      "cell": 2,
+      "series": "B2",
+      "expected": [
+        24312
+      ],
+      "actual": [
+        24312
+      ],
+      "passed": true
+    },
+    {
+      "cell": 4,
+      "series": "A1",
+      "expected": [
+        24984
+      ],
+      "actual": [
+        24984
+      ],
+      "passed": true
+    },
+    {
+      "cell": 4,
+      "series": "A2",
+      "expected": [
+        24984
+      ],
+      "actual": [
+        24984
+      ],
+      "passed": true
+    },
+    {
+      "cell": 4,
+      "series": "B1",
+      "expected": [
+        24984
+      ],
+      "actual": [
+        24984
+      ],
+      "passed": true
+    },
+    {
+      "cell": 4,
+      "series": "B2",
+      "expected": [
+        24984
+      ],
+      "actual": [
+        24984
+      ],
+      "passed": true
+    },
+    {
+      "cell": 6,
+      "series": "A1",
+      "expected": [
+        25656
+      ],
+      "actual": [
+        25656
+      ],
+      "passed": true
+    },
+    {
+      "cell": 6,
+      "series": "A2",
+      "expected": [
+        25656
+      ],
+      "actual": [
+        25656
+      ],
+      "passed": true
+    },
+    {
+      "cell": 6,
+      "series": "B1",
+      "expected": [
+        25656
+      ],
+      "actual": [
+        25656
+      ],
+      "passed": true
+    },
+    {
+      "cell": 6,
+      "series": "B2",
+      "expected": [
+        25656
+      ],
+      "actual": [
+        25656
+      ],
+      "passed": true
+    },
+    {
+      "cell": 9,
+      "series": "A1",
+      "expected": [
+        27000
+      ],
+      "actual": [
+        27000
+      ],
+      "passed": true
+    },
+    {
+      "cell": 9,
+      "series": "A2",
+      "expected": [
+        27000
+      ],
+      "actual": [
+        27000
+      ],
+      "passed": true
+    },
+    {
+      "cell": 9,
+      "series": "B1",
+      "expected": [
+        27000
+      ],
+      "actual": [
+        27000
+      ],
+      "passed": true
+    },
+    {
+      "cell": 9,
+      "series": "B2",
+      "expected": [
+        27000
+      ],
+      "actual": [
+        27000
+      ],
+      "passed": true
+    },
+    {
+      "cell": 12,
+      "series": "A1",
+      "expected": [
+        25056
+      ],
+      "actual": [
+        25056
+      ],
+      "passed": true
+    },
+    {
+      "cell": 12,
+      "series": "A2",
+      "expected": [
+        25056
+      ],
+      "actual": [
+        25056
+      ],
+      "passed": true
+    },
+    {
+      "cell": 12,
+      "series": "B1",
+      "expected": [
+        25056
+      ],
+      "actual": [
+        25056
+      ],
+      "passed": true
+    },
+    {
+      "cell": 12,
+      "series": "B2",
+      "expected": [
+        25056
+      ],
+      "actual": [
+        25056
+      ],
+      "passed": true
+    },
+    {
+      "cell": 14,
+      "series": "A1",
+      "expected": [
+        25728
+      ],
+      "actual": [
+        25728
+      ],
+      "passed": true
+    },
+    {
+      "cell": 14,
+      "series": "A2",
+      "expected": [
+        25728
+      ],
+      "actual": [
+        25728
+      ],
+      "passed": true
+    },
+    {
+      "cell": 14,
+      "series": "B1",
+      "expected": [
+        25728
+      ],
+      "actual": [
+        25728
+      ],
+      "passed": true
+    },
+    {
+      "cell": 14,
+      "series": "B2",
+      "expected": [
+        25728
+      ],
+      "actual": [
+        25728
+      ],
+      "passed": true
+    },
+    {
+      "cell": 16,
+      "series": "A1",
+      "expected": [
+        26400
+      ],
+      "actual": [
+        26400
+      ],
+      "passed": true
+    },
+    {
+      "cell": 16,
+      "series": "A2",
+      "expected": [
+        26400
+      ],
+      "actual": [
+        26400
+      ],
+      "passed": true
+    },
+    {
+      "cell": 16,
+      "series": "B1",
+      "expected": [
+        26400
+      ],
+      "actual": [
+        26400
+      ],
+      "passed": true
+    },
+    {
+      "cell": 16,
+      "series": "B2",
+      "expected": [
+        26400
+      ],
+      "actual": [
+        26400
+      ],
+      "passed": true
+    },
+    {
+      "cell": 19,
+      "series": "A1",
+      "expected": [
+        27744
+      ],
+      "actual": [
+        27744
+      ],
+      "passed": true
+    },
+    {
+      "cell": 19,
+      "series": "A2",
+      "expected": [
+        27744
+      ],
+      "actual": [
+        27744
+      ],
+      "passed": true
+    },
+    {
+      "cell": 19,
+      "series": "B1",
+      "expected": [
+        27744
+      ],
+      "actual": [
+        27744
+      ],
+      "passed": true
+    },
+    {
+      "cell": 19,
+      "series": "B2",
+      "expected": [
+        27744
+      ],
+      "actual": [
+        27744
+      ],
+      "passed": true
+    },
+    {
+      "cell": 22,
+      "series": "A1",
+      "expected": [
+        25728
+      ],
+      "actual": [
+        25728
+      ],
+      "passed": true
+    },
+    {
+      "cell": 22,
+      "series": "A2",
+      "expected": [
+        25728
+      ],
+      "actual": [
+        25728
+      ],
+      "passed": true
+    },
+    {
+      "cell": 22,
+      "series": "B1",
+      "expected": [
+        25728
+      ],
+      "actual": [
+        25728
+      ],
+      "passed": true
+    },
+    {
+      "cell": 22,
+      "series": "B2",
+      "expected": [
+        25728
+      ],
+      "actual": [
+        25728
+      ],
+      "passed": true
+    },
+    {
+      "cell": 24,
+      "series": "A1",
+      "expected": [
+        26400
+      ],
+      "actual": [
+        26400
+      ],
+      "passed": true
+    },
+    {
+      "cell": 24,
+      "series": "A2",
+      "expected": [
+        26400
+      ],
+      "actual": [
+        26400
+      ],
+      "passed": true
+    },
+    {
+      "cell": 24,
+      "series": "B1",
+      "expected": [
+        26400
+      ],
+      "actual": [
+        26400
+      ],
+      "passed": true
+    },
+    {
+      "cell": 24,
+      "series": "B2",
+      "expected": [
+        26400
+      ],
+      "actual": [
+        26400
+      ],
+      "passed": true
+    },
+    {
+      "cell": 26,
+      "series": "A1",
+      "expected": [
+        27072
+      ],
+      "actual": [
+        27072
+      ],
+      "passed": true
+    },
+    {
+      "cell": 26,
+      "series": "A2",
+      "expected": [
+        27072
+      ],
+      "actual": [
+        27072
+      ],
+      "passed": true
+    },
+    {
+      "cell": 26,
+      "series": "B1",
+      "expected": [
+        27072
+      ],
+      "actual": [
+        27072
+      ],
+      "passed": true
+    },
+    {
+      "cell": 26,
+      "series": "B2",
+      "expected": [
+        27072
+      ],
+      "actual": [
+        27072
+      ],
+      "passed": true
+    },
+    {
+      "cell": 29,
+      "series": "A1",
+      "expected": [
+        28416
+      ],
+      "actual": [
+        28416
+      ],
+      "passed": true
+    },
+    {
+      "cell": 29,
+      "series": "A2",
+      "expected": [
+        28416
+      ],
+      "actual": [
+        28416
+      ],
+      "passed": true
+    },
+    {
+      "cell": 29,
+      "series": "B1",
+      "expected": [
+        28416
+      ],
+      "actual": [
+        28416
+      ],
+      "passed": true
+    },
+    {
+      "cell": 29,
+      "series": "B2",
+      "expected": [
+        28416
+      ],
+      "actual": [
+        28416
+      ],
+      "passed": true
+    },
+    {
+      "cell": 32,
+      "series": "A1",
+      "expected": [
+        26472
+      ],
+      "actual": [
+        26472
+      ],
+      "passed": true
+    },
+    {
+      "cell": 32,
+      "series": "A2",
+      "expected": [
+        26472
+      ],
+      "actual": [
+        26472
+      ],
+      "passed": true
+    },
+    {
+      "cell": 32,
+      "series": "B1",
+      "expected": [
+        26472
+      ],
+      "actual": [
+        26472
+      ],
+      "passed": true
+    },
+    {
+      "cell": 32,
+      "series": "B2",
+      "expected": [
+        26472
+      ],
+      "actual": [
+        26472
+      ],
+      "passed": true
+    },
+    {
+      "cell": 34,
+      "series": "A1",
+      "expected": [
+        27144
+      ],
+      "actual": [
+        27144
+      ],
+      "passed": true
+    },
+    {
+      "cell": 34,
+      "series": "A2",
+      "expected": [
+        27144
+      ],
+      "actual": [
+        27144
+      ],
+      "passed": true
+    },
+    {
+      "cell": 34,
+      "series": "B1",
+      "expected": [
+        27144
+      ],
+      "actual": [
+        27144
+      ],
+      "passed": true
+    },
+    {
+      "cell": 34,
+      "series": "B2",
+      "expected": [
+        27144
+      ],
+      "actual": [
+        27144
+      ],
+      "passed": true
+    },
+    {
+      "cell": 36,
+      "series": "A1",
+      "expected": [
+        27816
+      ],
+      "actual": [
+        27816
+      ],
+      "passed": true
+    },
+    {
+      "cell": 36,
+      "series": "A2",
+      "expected": [
+        27816
+      ],
+      "actual": [
+        27816
+      ],
+      "passed": true
+    },
+    {
+      "cell": 36,
+      "series": "B1",
+      "expected": [
+        27816
+      ],
+      "actual": [
+        27816
+      ],
+      "passed": true
+    },
+    {
+      "cell": 36,
+      "series": "B2",
+      "expected": [
+        27816
+      ],
+      "actual": [
+        27816
+      ],
+      "passed": true
+    },
+    {
+      "cell": 39,
+      "series": "A1",
+      "expected": [
+        29160
+      ],
+      "actual": [
+        29160
+      ],
+      "passed": true
+    },
+    {
+      "cell": 39,
+      "series": "A2",
+      "expected": [
+        29160
+      ],
+      "actual": [
+        29160
+      ],
+      "passed": true
+    },
+    {
+      "cell": 39,
+      "series": "B1",
+      "expected": [
+        29160
+      ],
+      "actual": [
+        29160
+      ],
+      "passed": true
+    },
+    {
+      "cell": 39,
+      "series": "B2",
+      "expected": [
+        29160
+      ],
+      "actual": [
+        29160
+      ],
+      "passed": true
+    },
+    {
+      "cell": 42,
+      "series": "A1",
+      "expected": [
+        27192
+      ],
+      "actual": [
+        27192
+      ],
+      "passed": true
+    },
+    {
+      "cell": 42,
+      "series": "A2",
+      "expected": [
+        27192
+      ],
+      "actual": [
+        27192
+      ],
+      "passed": true
+    },
+    {
+      "cell": 42,
+      "series": "B1",
+      "expected": [
+        27192
+      ],
+      "actual": [
+        27192
+      ],
+      "passed": true
+    },
+    {
+      "cell": 42,
+      "series": "B2",
+      "expected": [
+        27192
+      ],
+      "actual": [
+        27192
+      ],
+      "passed": true
+    },
+    {
+      "cell": 44,
+      "series": "A1",
+      "expected": [
+        27864
+      ],
+      "actual": [
+        27864
+      ],
+      "passed": true
+    },
+    {
+      "cell": 44,
+      "series": "A2",
+      "expected": [
+        27864
+      ],
+      "actual": [
+        27864
+      ],
+      "passed": true
+    },
+    {
+      "cell": 44,
+      "series": "B1",
+      "expected": [
+        27864
+      ],
+      "actual": [
+        27864
+      ],
+      "passed": true
+    },
+    {
+      "cell": 44,
+      "series": "B2",
+      "expected": [
+        27864
+      ],
+      "actual": [
+        27864
+      ],
+      "passed": true
+    },
+    {
+      "cell": 46,
+      "series": "A1",
+      "expected": [
+        28536
+      ],
+      "actual": [
+        28536
+      ],
+      "passed": true
+    },
+    {
+      "cell": 46,
+      "series": "A2",
+      "expected": [
+        28536
+      ],
+      "actual": [
+        28536
+      ],
+      "passed": true
+    },
+    {
+      "cell": 46,
+      "series": "B1",
+      "expected": [
+        28536
+      ],
+      "actual": [
+        28536
+      ],
+      "passed": true
+    },
+    {
+      "cell": 46,
+      "series": "B2",
+      "expected": [
+        28536
+      ],
+      "actual": [
+        28536
+      ],
+      "passed": true
+    },
+    {
+      "cell": 49,
+      "series": "A1",
+      "expected": [
+        29880
+      ],
+      "actual": [
+        29880
+      ],
+      "passed": true
+    },
+    {
+      "cell": 49,
+      "series": "A2",
+      "expected": [
+        29880
+      ],
+      "actual": [
+        29880
+      ],
+      "passed": true
+    },
+    {
+      "cell": 49,
+      "series": "B1",
+      "expected": [
+        29880
+      ],
+      "actual": [
+        29880
+      ],
+      "passed": true
+    },
+    {
+      "cell": 49,
+      "series": "B2",
+      "expected": [
+        29880
+      ],
+      "actual": [
+        29880
+      ],
+      "passed": true
+    },
+    {
+      "cell": 52,
+      "series": "A1",
+      "expected": [
+        28056
+      ],
+      "actual": [
+        28056
+      ],
+      "passed": true
+    },
+    {
+      "cell": 52,
+      "series": "A2",
+      "expected": [
+        28056
+      ],
+      "actual": [
+        28056
+      ],
+      "passed": true
+    },
+    {
+      "cell": 52,
+      "series": "B1",
+      "expected": [
+        28056
+      ],
+      "actual": [
+        28056
+      ],
+      "passed": true
+    },
+    {
+      "cell": 52,
+      "series": "B2",
+      "expected": [
+        28056
+      ],
+      "actual": [
+        28056
+      ],
+      "passed": true
+    },
+    {
+      "cell": 54,
+      "series": "A1",
+      "expected": [
+        28728
+      ],
+      "actual": [
+        28728
+      ],
+      "passed": true
+    },
+    {
+      "cell": 54,
+      "series": "A2",
+      "expected": [
+        28728
+      ],
+      "actual": [
+        28728
+      ],
+      "passed": true
+    },
+    {
+      "cell": 54,
+      "series": "B1",
+      "expected": [
+        28728
+      ],
+      "actual": [
+        28728
+      ],
+      "passed": true
+    },
+    {
+      "cell": 54,
+      "series": "B2",
+      "expected": [
+        28728
+      ],
+      "actual": [
+        28728
+      ],
+      "passed": true
+    },
+    {
+      "cell": 56,
+      "series": "A1",
+      "expected": [
+        29400
+      ],
+      "actual": [
+        29400
+      ],
+      "passed": true
+    },
+    {
+      "cell": 56,
+      "series": "A2",
+      "expected": [
+        29400
+      ],
+      "actual": [
+        29400
+      ],
+      "passed": true
+    },
+    {
+      "cell": 56,
+      "series": "B1",
+      "expected": [
+        29400
+      ],
+      "actual": [
+        29400
+      ],
+      "passed": true
+    },
+    {
+      "cell": 56,
+      "series": "B2",
+      "expected": [
+        29400
+      ],
+      "actual": [
+        29400
+      ],
+      "passed": true
+    },
+    {
+      "cell": 59,
+      "series": "A1",
+      "expected": [
+        30744
+      ],
+      "actual": [
+        30744
+      ],
+      "passed": true
+    },
+    {
+      "cell": 59,
+      "series": "A2",
+      "expected": [
+        30744
+      ],
+      "actual": [
+        30744
+      ],
+      "passed": true
+    },
+    {
+      "cell": 59,
+      "series": "B1",
+      "expected": [
+        30744
+      ],
+      "actual": [
+        30744
+      ],
+      "passed": true
+    },
+    {
+      "cell": 59,
+      "series": "B2",
+      "expected": [
+        30744
+      ],
+      "actual": [
+        30744
+      ],
+      "passed": true
+    },
+    {
+      "cell": 62,
+      "series": "A1",
+      "expected": [
+        28656
+      ],
+      "actual": [
+        28656
+      ],
+      "passed": true
+    },
+    {
+      "cell": 62,
+      "series": "A2",
+      "expected": [
+        28656
+      ],
+      "actual": [
+        28656
+      ],
+      "passed": true
+    },
+    {
+      "cell": 62,
+      "series": "B1",
+      "expected": [
+        28656
+      ],
+      "actual": [
+        28656
+      ],
+      "passed": true
+    },
+    {
+      "cell": 62,
+      "series": "B2",
+      "expected": [
+        28656
+      ],
+      "actual": [
+        28656
+      ],
+      "passed": true
+    },
+    {
+      "cell": 64,
+      "series": "A1",
+      "expected": [
+        29328
+      ],
+      "actual": [
+        29328
+      ],
+      "passed": true
+    },
+    {
+      "cell": 64,
+      "series": "A2",
+      "expected": [
+        29328
+      ],
+      "actual": [
+        29328
+      ],
+      "passed": true
+    },
+    {
+      "cell": 64,
+      "series": "B1",
+      "expected": [
+        29328
+      ],
+      "actual": [
+        29328
+      ],
+      "passed": true
+    },
+    {
+      "cell": 64,
+      "series": "B2",
+      "expected": [
+        29328
+      ],
+      "actual": [
+        29328
+      ],
+      "passed": true
+    },
+    {
+      "cell": 66,
+      "series": "A1",
+      "expected": [
+        30000
+      ],
+      "actual": [
+        30000
+      ],
+      "passed": true
+    },
+    {
+      "cell": 66,
+      "series": "A2",
+      "expected": [
+        30000
+      ],
+      "actual": [
+        30000
+      ],
+      "passed": true
+    },
+    {
+      "cell": 66,
+      "series": "B1",
+      "expected": [
+        30000
+      ],
+      "actual": [
+        30000
+      ],
+      "passed": true
+    },
+    {
+      "cell": 66,
+      "series": "B2",
+      "expected": [
+        30000
+      ],
+      "actual": [
+        30000
+      ],
+      "passed": true
+    },
+    {
+      "cell": 69,
+      "series": "A1",
+      "expected": [
+        31344
+      ],
+      "actual": [
+        31344
+      ],
+      "passed": true
+    },
+    {
+      "cell": 69,
+      "series": "A2",
+      "expected": [
+        31344
+      ],
+      "actual": [
+        31344
+      ],
+      "passed": true
+    },
+    {
+      "cell": 69,
+      "series": "B1",
+      "expected": [
+        31344
+      ],
+      "actual": [
+        31344
+      ],
+      "passed": true
+    },
+    {
+      "cell": 69,
+      "series": "B2",
+      "expected": [
+        31344
+      ],
+      "actual": [
+        31344
+      ],
+      "passed": true
+    },
+    {
+      "cell": 72,
+      "series": "A1",
+      "expected": [
+        29400
+      ],
+      "actual": [
+        29400
+      ],
+      "passed": true
+    },
+    {
+      "cell": 72,
+      "series": "A2",
+      "expected": [
+        29400
+      ],
+      "actual": [
+        29400
+      ],
+      "passed": true
+    },
+    {
+      "cell": 72,
+      "series": "B1",
+      "expected": [
+        29400
+      ],
+      "actual": [
+        29400
+      ],
+      "passed": true
+    },
+    {
+      "cell": 72,
+      "series": "B2",
+      "expected": [
+        29400
+      ],
+      "actual": [
+        29400
+      ],
+      "passed": true
+    },
+    {
+      "cell": 74,
+      "series": "A1",
+      "expected": [
+        30072
+      ],
+      "actual": [
+        30072
+      ],
+      "passed": true
+    },
+    {
+      "cell": 74,
+      "series": "A2",
+      "expected": [
+        30072
+      ],
+      "actual": [
+        30072
+      ],
+      "passed": true
+    },
+    {
+      "cell": 74,
+      "series": "B1",
+      "expected": [
+        30072
+      ],
+      "actual": [
+        30072
+      ],
+      "passed": true
+    },
+    {
+      "cell": 74,
+      "series": "B2",
+      "expected": [
+        30072
+      ],
+      "actual": [
+        30072
+      ],
+      "passed": true
+    },
+    {
+      "cell": 76,
+      "series": "A1",
+      "expected": [
+        30744
+      ],
+      "actual": [
+        30744
+      ],
+      "passed": true
+    },
+    {
+      "cell": 76,
+      "series": "A2",
+      "expected": [
+        30744
+      ],
+      "actual": [
+        30744
+      ],
+      "passed": true
+    },
+    {
+      "cell": 76,
+      "series": "B1",
+      "expected": [
+        30744
+      ],
+      "actual": [
+        30744
+      ],
+      "passed": true
+    },
+    {
+      "cell": 76,
+      "series": "B2",
+      "expected": [
+        30744
+      ],
+      "actual": [
+        30744
+      ],
+      "passed": true
+    },
+    {
+      "cell": 79,
+      "series": "A1",
+      "expected": [
+        32088
+      ],
+      "actual": [
+        32088
+      ],
+      "passed": true
+    },
+    {
+      "cell": 79,
+      "series": "A2",
+      "expected": [
+        32088
+      ],
+      "actual": [
+        32088
+      ],
+      "passed": true
+    },
+    {
+      "cell": 79,
+      "series": "B1",
+      "expected": [
+        32088
+      ],
+      "actual": [
+        32088
+      ],
+      "passed": true
+    },
+    {
+      "cell": 79,
+      "series": "B2",
+      "expected": [
+        32088
+      ],
+      "actual": [
+        32088
+      ],
+      "passed": true
+    },
+    {
+      "cell": 82,
+      "series": "A1",
+      "expected": [
+        30144
+      ],
+      "actual": [
+        30144
+      ],
+      "passed": true
+    },
+    {
+      "cell": 82,
+      "series": "A2",
+      "expected": [
+        30144
+      ],
+      "actual": [
+        30144
+      ],
+      "passed": true
+    },
+    {
+      "cell": 82,
+      "series": "B1",
+      "expected": [
+        30144
+      ],
+      "actual": [
+        30144
+      ],
+      "passed": true
+    },
+    {
+      "cell": 82,
+      "series": "B2",
+      "expected": [
+        30144
+      ],
+      "actual": [
+        30144
+      ],
+      "passed": true
+    },
+    {
+      "cell": 84,
+      "series": "A1",
+      "expected": [
+        30816
+      ],
+      "actual": [
+        30816
+      ],
+      "passed": true
+    },
+    {
+      "cell": 84,
+      "series": "A2",
+      "expected": [
+        30816
+      ],
+      "actual": [
+        30816
+      ],
+      "passed": true
+    },
+    {
+      "cell": 84,
+      "series": "B1",
+      "expected": [
+        30816
+      ],
+      "actual": [
+        30816
+      ],
+      "passed": true
+    },
+    {
+      "cell": 84,
+      "series": "B2",
+      "expected": [
+        30816
+      ],
+      "actual": [
+        30816
+      ],
+      "passed": true
+    },
+    {
+      "cell": 86,
+      "series": "A1",
+      "expected": [
+        31488
+      ],
+      "actual": [
+        31488
+      ],
+      "passed": true
+    },
+    {
+      "cell": 86,
+      "series": "A2",
+      "expected": [
+        31488
+      ],
+      "actual": [
+        31488
+      ],
+      "passed": true
+    },
+    {
+      "cell": 86,
+      "series": "B1",
+      "expected": [
+        31488
+      ],
+      "actual": [
+        31488
+      ],
+      "passed": true
+    },
+    {
+      "cell": 86,
+      "series": "B2",
+      "expected": [
+        31488
+      ],
+      "actual": [
+        31488
+      ],
+      "passed": true
+    },
+    {
+      "cell": 89,
+      "series": "A1",
+      "expected": [
+        32832
+      ],
+      "actual": [
+        32832
+      ],
+      "passed": true
+    },
+    {
+      "cell": 89,
+      "series": "A2",
+      "expected": [
+        32832
+      ],
+      "actual": [
+        32832
+      ],
+      "passed": true
+    },
+    {
+      "cell": 89,
+      "series": "B1",
+      "expected": [
+        32832
+      ],
+      "actual": [
+        32832
+      ],
+      "passed": true
+    },
+    {
+      "cell": 89,
+      "series": "B2",
+      "expected": [
+        32832
+      ],
+      "actual": [
+        32832
+      ],
+      "passed": true
+    },
+    {
+      "cell": 92,
+      "series": "A1",
+      "expected": [
+        30864
+      ],
+      "actual": [
+        30864
+      ],
+      "passed": true
+    },
+    {
+      "cell": 92,
+      "series": "A2",
+      "expected": [
+        30864
+      ],
+      "actual": [
+        30864
+      ],
+      "passed": true
+    },
+    {
+      "cell": 92,
+      "series": "B1",
+      "expected": [
+        30864
+      ],
+      "actual": [
+        30864
+      ],
+      "passed": true
+    },
+    {
+      "cell": 92,
+      "series": "B2",
+      "expected": [
+        30864
+      ],
+      "actual": [
+        30864
+      ],
+      "passed": true
+    },
+    {
+      "cell": 94,
+      "series": "A1",
+      "expected": [
+        31536
+      ],
+      "actual": [
+        31536
+      ],
+      "passed": true
+    },
+    {
+      "cell": 94,
+      "series": "A2",
+      "expected": [
+        31536
+      ],
+      "actual": [
+        31536
+      ],
+      "passed": true
+    },
+    {
+      "cell": 94,
+      "series": "B1",
+      "expected": [
+        31536
+      ],
+      "actual": [
+        31536
+      ],
+      "passed": true
+    },
+    {
+      "cell": 94,
+      "series": "B2",
+      "expected": [
+        31536
+      ],
+      "actual": [
+        31536
+      ],
+      "passed": true
+    },
+    {
+      "cell": 96,
+      "series": "A1",
+      "expected": [
+        32208
+      ],
+      "actual": [
+        32208
+      ],
+      "passed": true
+    },
+    {
+      "cell": 96,
+      "series": "A2",
+      "expected": [
+        32208
+      ],
+      "actual": [
+        32208
+      ],
+      "passed": true
+    },
+    {
+      "cell": 96,
+      "series": "B1",
+      "expected": [
+        32208
+      ],
+      "actual": [
+        32208
+      ],
+      "passed": true
+    },
+    {
+      "cell": 96,
+      "series": "B2",
+      "expected": [
+        32208
+      ],
+      "actual": [
+        32208
+      ],
+      "passed": true
+    },
+    {
+      "cell": 99,
+      "series": "A1",
+      "expected": [
+        33552
+      ],
+      "actual": [
+        33552
+      ],
+      "passed": true
+    },
+    {
+      "cell": 99,
+      "series": "A2",
+      "expected": [
+        33552
+      ],
+      "actual": [
+        33552
+      ],
+      "passed": true
+    },
+    {
+      "cell": 99,
+      "series": "B1",
+      "expected": [
+        33552
+      ],
+      "actual": [
+        33552
+      ],
+      "passed": true
+    },
+    {
+      "cell": 99,
+      "series": "B2",
+      "expected": [
+        33552
+      ],
+      "actual": [
+        33552
+      ],
+      "passed": true
+    },
+    {
+      "cell": 102,
+      "series": "A1",
+      "expected": [
+        31608
+      ],
+      "actual": [
+        31608
+      ],
+      "passed": true
+    },
+    {
+      "cell": 102,
+      "series": "A2",
+      "expected": [
+        31608
+      ],
+      "actual": [
+        31608
+      ],
+      "passed": true
+    },
+    {
+      "cell": 102,
+      "series": "B1",
+      "expected": [
+        31608
+      ],
+      "actual": [
+        31608
+      ],
+      "passed": true
+    },
+    {
+      "cell": 102,
+      "series": "B2",
+      "expected": [
+        31608
+      ],
+      "actual": [
+        31608
+      ],
+      "passed": true
+    },
+    {
+      "cell": 104,
+      "series": "A1",
+      "expected": [
+        32280
+      ],
+      "actual": [
+        32280
+      ],
+      "passed": true
+    },
+    {
+      "cell": 104,
+      "series": "A2",
+      "expected": [
+        32280
+      ],
+      "actual": [
+        32280
+      ],
+      "passed": true
+    },
+    {
+      "cell": 104,
+      "series": "B1",
+      "expected": [
+        32280
+      ],
+      "actual": [
+        32280
+      ],
+      "passed": true
+    },
+    {
+      "cell": 104,
+      "series": "B2",
+      "expected": [
+        32280
+      ],
+      "actual": [
+        32280
+      ],
+      "passed": true
+    },
+    {
+      "cell": 106,
+      "series": "A1",
+      "expected": [
+        32952
+      ],
+      "actual": [
+        32952
+      ],
+      "passed": true
+    },
+    {
+      "cell": 106,
+      "series": "A2",
+      "expected": [
+        32952
+      ],
+      "actual": [
+        32952
+      ],
+      "passed": true
+    },
+    {
+      "cell": 106,
+      "series": "B1",
+      "expected": [
+        32952
+      ],
+      "actual": [
+        32952
+      ],
+      "passed": true
+    },
+    {
+      "cell": 106,
+      "series": "B2",
+      "expected": [
+        32952
+      ],
+      "actual": [
+        32952
+      ],
+      "passed": true
+    },
+    {
+      "cell": 109,
+      "series": "A1",
+      "expected": [
+        34296
+      ],
+      "actual": [
+        34296
+      ],
+      "passed": true
+    },
+    {
+      "cell": 109,
+      "series": "A2",
+      "expected": [
+        34296
+      ],
+      "actual": [
+        34296
+      ],
+      "passed": true
+    },
+    {
+      "cell": 109,
+      "series": "B1",
+      "expected": [
+        34296
+      ],
+      "actual": [
+        34296
+      ],
+      "passed": true
+    },
+    {
+      "cell": 109,
+      "series": "B2",
+      "expected": [
+        34296
+      ],
+      "actual": [
+        34296
+      ],
+      "passed": true
+    },
+    {
+      "cell": 112,
+      "series": "A1",
+      "expected": [
+        32328
+      ],
+      "actual": [
+        32328
+      ],
+      "passed": true
+    },
+    {
+      "cell": 112,
+      "series": "A2",
+      "expected": [
+        32328
+      ],
+      "actual": [
+        32328
+      ],
+      "passed": true
+    },
+    {
+      "cell": 112,
+      "series": "B1",
+      "expected": [
+        32328
+      ],
+      "actual": [
+        32328
+      ],
+      "passed": true
+    },
+    {
+      "cell": 112,
+      "series": "B2",
+      "expected": [
+        32328
+      ],
+      "actual": [
+        32328
+      ],
+      "passed": true
+    },
+    {
+      "cell": 114,
+      "series": "A1",
+      "expected": [
+        33000
+      ],
+      "actual": [
+        33000
+      ],
+      "passed": true
+    },
+    {
+      "cell": 114,
+      "series": "A2",
+      "expected": [
+        33000
+      ],
+      "actual": [
+        33000
+      ],
+      "passed": true
+    },
+    {
+      "cell": 114,
+      "series": "B1",
+      "expected": [
+        33000
+      ],
+      "actual": [
+        33000
+      ],
+      "passed": true
+    },
+    {
+      "cell": 114,
+      "series": "B2",
+      "expected": [
+        33000
+      ],
+      "actual": [
+        33000
+      ],
+      "passed": true
+    },
+    {
+      "cell": 116,
+      "series": "A1",
+      "expected": [
+        33672
+      ],
+      "actual": [
+        33672
+      ],
+      "passed": true
+    },
+    {
+      "cell": 116,
+      "series": "A2",
+      "expected": [
+        33672
+      ],
+      "actual": [
+        33672
+      ],
+      "passed": true
+    },
+    {
+      "cell": 116,
+      "series": "B1",
+      "expected": [
+        33672
+      ],
+      "actual": [
+        33672
+      ],
+      "passed": true
+    },
+    {
+      "cell": 116,
+      "series": "B2",
+      "expected": [
+        33672
+      ],
+      "actual": [
+        33672
+      ],
+      "passed": true
+    },
+    {
+      "cell": 119,
+      "series": "A1",
+      "expected": [
+        35016
+      ],
+      "actual": [
+        35016
+      ],
+      "passed": true
+    },
+    {
+      "cell": 119,
+      "series": "A2",
+      "expected": [
+        35016
+      ],
+      "actual": [
+        35016
+      ],
+      "passed": true
+    },
+    {
+      "cell": 119,
+      "series": "B1",
+      "expected": [
+        35016
+      ],
+      "actual": [
+        35016
+      ],
+      "passed": true
+    },
+    {
+      "cell": 119,
+      "series": "B2",
+      "expected": [
+        35016
+      ],
+      "actual": [
+        35016
+      ],
+      "passed": true
+    }
+  ],
+  "correction": "reviewer initially assumed36 weather predictions; actual36 inner plus12 outer=48, hence192 node checks, not144. No reported imputation discrepancy was discovered.",
+  "new_reader_or_forecast_calls": 0
+}

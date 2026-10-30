@@ -1,0 +1,74 @@
+{
+  "format": "heavy-workbench-development-case-freeze/1",
+  "case": "L02",
+  "version": "L02/0.2.0",
+  "frozen_at": "2026-10-30T11:55:02.888667+00:00",
+  "status": "frozen",
+  "independent_approval": "approved_for_development_contract_freeze",
+  "scope": "Single executable development-case contract, not whole suite or maturity certification",
+  "public_input_files": [
+    "ASOF-CONTRACT.md",
+    "ENVIRONMENT.md",
+    "EXECUTION-CONTRACT.md",
+    "INTERFACES.md",
+    "MATERIALS.md",
+    "PROVENANCE.md",
+    "QUALITY-CONTRACT.md",
+    "RESEARCH-DELIVERY.md",
+    "REVIEW-ANCHORS.md",
+    "STUDY-CONTRACT.md",
+    "TASK.md",
+    "development-materials.zip",
+    "material-contract.json",
+    "quality-policy.json",
+    "study-contract.json",
+    "profile.json"
+  ],
+  "rubric": "../rubric.json",
+  "readiness_evidence": {
+    "registered_quality_reference": [
+      "registered-reference/derivation.json",
+      "registered-reference/registration-command.json",
+      "qualification/quality-study/README.md"
+    ],
+    "quality_controls_independent": [
+      "qualification/quality-study/README.md"
+    ],
+    "formal_full_assignment_cold": [
+      "qualification/scientific-full-reference/owner-terminal.json",
+      "qualification/scientific-full-reference/seal-assessment.json"
+    ],
+    "complete_scientific_reference": [
+      "qualification/scientific-full-reference/independent-review/REVIEW.md",
+      "qualification/scientific-full-reference/report-originals.zip"
+    ],
+    "complete_grader_evidence_binding": [
+      "qualification/scientific-full-reference/original-assessment.json",
+      "qualification/grade-protocol/README.md"
+    ],
+    "independent_rubric_review": [
+      "independent-freeze-review/REVIEW.md"
+    ],
+    "review_anchor_calibration": [
+      "review-calibration/adjudication-final.json",
+      "review-calibration/CLARIFICATION-PROBABILITY.md"
+    ]
+  },
+  "calibration_scope": "Six content leaves, two controlled qualities, two equivalent formats; other independent leaves audited on the common real run, no full-leaf negative-coverage or human/statistical reliability claim",
+  "original_reference_assessment": {
+    "status": "draft_assessment_complete",
+    "verified_pass": 66,
+    "score": null,
+    "cli_exit": 4
+  },
+  "publication_projection": "registered-reference/publication-projection.json",
+  "comparison": "Candidate good requires at least 90 and all critical pass; two good systems require a new version, preserve this one",
+  "candidate_results": null,
+  "effective_candidate_hours_qualified": false,
+  "limitations": [
+    "non-blind AI familiar with author materials/reference",
+    "no fresh L02 OpenCorvus/Codex pair yet",
+    "no same-model/resource causal speed/cost comparison",
+    "no professional-human/statistical maturity certification"
+  ]
+}

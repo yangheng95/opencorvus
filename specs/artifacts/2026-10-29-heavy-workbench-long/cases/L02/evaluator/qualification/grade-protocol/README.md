@@ -1,6 +1,6 @@
 # L02 来源/阶段/独立评审绑定及锚点结构资格
 
-[私有评估协议](../../EVALUATION-PROTOCOL.draft.md)、[主实际记录与初控制](assessment.json)、[独立最终报告](independent-review/REVIEW.md)及[原件](originals.zip)只资格化已行使的partial/绑定边界；正式完整成功路径、新全12研究、实际38科学判断/校准仍待。独立[实施前方案](design-review/PLAN-REVIEW.md)与源范围/时间顺序追加单列。
+[私有评估协议](../../EVALUATION-PROTOCOL.md)、[主实际记录与初控制](assessment.json)、[独立最终报告](independent-review/REVIEW.md)及[原件](originals.zip)只资格化已行使的partial/绑定边界；正式完整成功路径、新全12研究、实际38科学判断/校准仍待。独立[实施前方案](design-review/PLAN-REVIEW.md)与源范围/时间顺序追加单列。
 
 当前grader从唯一inspection原运行取C01/C02，26质量仅取原selector实际选中预测＋评估侧固定注册参照；38其它研究叶由私有assigned reviewer提供。40研究叶均有可操作二元规则/等价格式，66叶原权重/critical/26质量、85/15/100及90作者比较规则不改。锚点结构通过不等于实际38叶已真评。
 

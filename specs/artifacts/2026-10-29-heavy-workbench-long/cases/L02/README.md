@@ -1,15 +1,15 @@
-# L02 可按发布时间复建的层级预测研究（未冻结）
+# L02 可按发布时间复建的层级预测研究
 
-[任务草案](public/TASK.draft.md)、[原材料规则](public/MATERIALS.draft.md)和[研究接口](public/STUDY-CONTRACT.draft.md)定义原创UTC多系列数据、内外层许可、均值/边际区间、实际选模与科学交付。公开截止2024Aug1、六个2023公开探索切点不称盲评；36个inner均在公开截止后，外层12个2025切点含June20。完整private档案不能挂给预测worker。
+L02/0.2.0开发合同已完成独立冻结批准；[FREEZE](evaluator/FREEZE.json)限定证据与范围，实际新候选尚未启动。[公开profile](public/profile.json)列唯一16输入；[任务](public/TASK.md)、[精确程序接口](public/INTERFACES.md)和三个公开JSON闭合材料/度量/质量。权重、评估器、完整私有材料和参考预测留在评估侧；候选方法/语言自由。
 
-[完整每日数值参考](evaluator/qualification/daily-full-reference/README.md)已实际完成12outer/36inner、108forecast/12selector。原CSV通过唯一project选行，worker/selector分别只读最小输入、1CPU/netnone、新输出；每forecast84格、原始发布/校准/拟合/选择来源和精确指标均经[单层独立核验](evaluator/qualification/daily-independent-review/REVIEW-FULL-MATRIX.md)。原失败、修后边界与全部源码/终态/实际新图分别归档，没有用参考耗时冒充候选小时。
+[新正式科学参考](evaluator/qualification/scientific-full-reference/README.md)从Git5b445d92b在首预测前一起封存全部predict/select/report及静态资产，108forecast+12selector+1report自然完成121单元，1469.575秒。原SQL/所有prepared-terminal-accepted/native/源/命令在外部97.53MB原件，仓库存完整报告产物及明确定位，不声称所有capsule都在Git。主方和独立reviewer已实际查看本次新PNG。
 
-全期去天气消融优于天气扩展；June转移边界A1/ZA真值日均13751.75L、所选预测9341.10L，四天中央80%区间全失覆盖。这些负结果和未识别量效如实留在[研究记录](evaluator/qualification/daily-full-reference/REPORT.md)，没有看outer结果改池或倒填宽松质量线。旧7时点OLS/qualify入口已退役，原程序仍在历史ZIP，当前只有每日参考入口。
+[38叶真实独立初评](evaluator/qualification/scientific-full-reference/independent-review/README.md)在受控校准之前封存全pass，独立核原CSV/SQL许可/拟合时点、来源、指标/区间/单期两动作账/真实选择和native。真正原对象l02_grade将C01/C02、Q26和原38聚合为66pass、0失败/未评；旧draft/readiness正确保持total/study_complete/quality_success/good=null，原CLI exit4，不手写100。此为reference_qualification，非LLM候选成绩或有效小时。
 
-[通用数值执行合同](public/EXECUTION-CONTRACT.draft.md)另有[两语言/原CID恢复/封存重算局部资格](evaluator/qualification/generic-execution/README.md)：候选自带files/argv和池，预测/selector/report分开获得授权数据，SQLite为唯一cell状态来源。原作者硬编码执行及双格式summary不保留当前fallback。单outer私有诊断不是正式12outer候选研究。
+[受控内容校准](evaluator/review-calibration/README.md)为六叶×两质量×两等价格式，原作者key先封，实际24判断同key。主方仍发现B09概率理由过强，追加澄清：0/4只是局部暴露，不能逻辑反驳有假设的80%概率保证；失败基于无依据的联合/有限样本主张，原评级/key/初评均保留。其余32独评及C01/C02共同执行叶未做同样负例覆盖，不冒称全叶统计成熟。
 
-[相对质量政策与研究稿](evaluator/qualification/quality-study/README.md)新增事前固定的外部参照/单期损失条件，原真实选择26/26通过，基线自身、零预测、极宽区间与一致性联动单叶退化均被拒。新[66原子rubric稿](rubric.draft.json)和可信评估聚合明确关键项不能被高分补偿；作者研究分析保留June实际缺量，仍是事后分析稿。
+作者参考的no-weather消融更好、June A1/ZA真实13751.75L而所选9341.10L/80%0/4等失败边界均诚实保留；质量规则在候选前固定，不能按候选结果改线。完整执行/评分原件、先前工具错误与修复见各qualification历史；当前唯一实现位于[evaluator/current-source](evaluator/current-source)，旧7点OLS不保留fallback。
 
-[报告来源与原输入恢复](evaluator/qualification/report-provenance/README.md)已经接通最小来源sidecar、实际诊断报告及唯一sealed reader的局部链；原历史report仍如实记未获得来源。当前认可数值参考/通用执行和质量局部证据；完整正式清洁assignment、职业科学/运营参考、全grader绑定、人评锚点/独立冻结仍待。study中正式quality_floor仍null，建设期政策另立draft；候选成绩与小时证据不存在。整套合同冻结仍1/10、有效小时资格0/10。
+[冻结收敛方案](evaluator/FREEZE-PLAN.md)和[独立方案审查](evaluator/freeze-plan-review/PLAN-REVIEW.md)明确：公开规范路径只有一份，历史capsule/旧716c包/grade原件不回写；新registry只派生声明metadata，原forecast/native/科学规则不改。[最终独立审查](evaluator/independent-freeze-review/REVIEW.md)已批准开发pilot合同，七readiness只指各明示的开发资格。最终frozen元数据另新派生登记并经同一实际loader完整12/1008通过，4.975秒/0native；所有数值/权重/关键规则不变。原真实66 findings的publication算术投影为100，仅是reference资格投影，不是新source-bound grade或候选成绩。下一fresh公开输入OpenCorvus/Codex，同合同两好另升版本。
 
-新[状态归因](evaluator/qualification/grader-state/README.md)与[grader原对象/阶段绑定](evaluator/qualification/grade-protocol/README.md)已关闭受控host误归因、失败原因矛盾和旧stage套评三个实质问题，初失败全部保留。40研究叶具体锚点已落，C01/C02机器认证、38独立研究叶；完整成功、新正式12outer科学参考与多质量实际评审仍待，不因接口或绑定组件通过就冻结。
+整套开发冻结2/10、候选有效小时0/10；AI审查非盲且熟悉参考，不是职业真人/统计成熟。完整十题、真实新区分度和有效小时均待；必要后台工作由本聊天心跳接续，不重复已终态矩阵/旧工具测试凑时长。

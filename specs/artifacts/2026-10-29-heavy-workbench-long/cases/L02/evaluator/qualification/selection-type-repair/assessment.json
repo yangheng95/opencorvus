@@ -1,0 +1,123 @@
+{
+  "format": "l02-selection-type-repair/1",
+  "checks": [
+    {
+      "name": "original-bool",
+      "code": "selection_invalid",
+      "candidate": true,
+      "passed": true
+    },
+    {
+      "name": "rational-string",
+      "status": "selection_verified",
+      "passed": true
+    },
+    {
+      "name": "unreduced-equivalent",
+      "status": "selection_verified",
+      "passed": true
+    },
+    {
+      "name": "optional-omitted",
+      "status": "selection_verified",
+      "passed": true
+    },
+    {
+      "name": "original-bool-one",
+      "code": "selection_invalid",
+      "candidate": true,
+      "passed": true
+    },
+    {
+      "name": "rational-string-one",
+      "status": "selection_verified",
+      "passed": true
+    },
+    {
+      "name": "unreduced-equivalent-one",
+      "status": "selection_verified",
+      "passed": true
+    },
+    {
+      "name": "optional-omitted-one",
+      "status": "selection_verified",
+      "passed": true
+    },
+    {
+      "name": "original-accepted-7",
+      "outer_id": "outer-20250115",
+      "status": "selection_verified",
+      "passed": true
+    },
+    {
+      "name": "original-accepted-17",
+      "outer_id": "outer-20250215",
+      "status": "selection_verified",
+      "passed": true
+    },
+    {
+      "name": "original-accepted-27",
+      "outer_id": "outer-20250315",
+      "status": "selection_verified",
+      "passed": true
+    },
+    {
+      "name": "original-accepted-37",
+      "outer_id": "outer-20250415",
+      "status": "selection_verified",
+      "passed": true
+    },
+    {
+      "name": "original-accepted-47",
+      "outer_id": "outer-20250515",
+      "status": "selection_verified",
+      "passed": true
+    },
+    {
+      "name": "original-accepted-57",
+      "outer_id": "outer-20250620",
+      "status": "selection_verified",
+      "passed": true
+    },
+    {
+      "name": "original-accepted-67",
+      "outer_id": "outer-20250715",
+      "status": "selection_verified",
+      "passed": true
+    },
+    {
+      "name": "original-accepted-77",
+      "outer_id": "outer-20250815",
+      "status": "selection_verified",
+      "passed": true
+    },
+    {
+      "name": "original-accepted-87",
+      "outer_id": "outer-20250915",
+      "status": "selection_verified",
+      "passed": true
+    },
+    {
+      "name": "original-accepted-97",
+      "outer_id": "outer-20251015",
+      "status": "selection_verified",
+      "passed": true
+    },
+    {
+      "name": "original-accepted-107",
+      "outer_id": "outer-20251115",
+      "status": "selection_verified",
+      "passed": true
+    },
+    {
+      "name": "original-accepted-117",
+      "outer_id": "outer-20251215",
+      "status": "selection_verified",
+      "passed": true
+    }
+  ],
+  "all_passed": true,
+  "elapsed_seconds": 1.3552393997088075,
+  "native_executions": 0,
+  "scope": "Real selector output checker, original bool controls and all 12 original accepted selector cells. No new forecasts, full reader or source-bound assignment grade."
+}

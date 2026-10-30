@@ -1,0 +1,24 @@
+{
+  "pid": 85612,
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l02-scientific-reference-20261030\\frozen-source\\l02_grade.py",
+    "grade",
+    "--assignment",
+    "D:\\opencorvus-benchmark-runs\\l02-scientific-reference-20261030\\evaluation-assignment\\assignment.zip",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\l02-scientific-reference-20261030\\formal-run",
+    "--review",
+    "D:\\opencorvus-benchmark-runs\\l02-scientific-reference-20261030\\original-independent-review",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l02-scientific-reference-20261030\\original-full-assessment"
+  ],
+  "started_at": "2026-10-30T11:09:20.114912+00:00",
+  "finished_at": "2026-10-30T11:23:55.900205+00:00",
+  "exit_code": 4,
+  "wall_seconds": 875.7612829999998,
+  "exit_policy": "actual CLI code preserved; 4 may be declared draft/readiness incomplete, not normalized to0"
+}

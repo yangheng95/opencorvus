@@ -1,0 +1,26 @@
+{
+  "format": "l02-independent-review-clarification/1",
+  "observed_at_utc": "2026-10-30T11:16:58.314386+00:00",
+  "initial_review": "calibration-initial.json",
+  "affected_findings": [
+    {
+      "packet_id": "d4f5c8be3cbd",
+      "id": "B09",
+      "original_status": "verified_fail",
+      "current_status": "verified_fail",
+      "basis_correction": "0/4 is realized local exposure, not a logical disproof of a probabilistic 80% coverage guarantee. Failure is unsupported joint and finite-sample guarantee from marginal empirical intervals."
+    },
+    {
+      "packet_id": "6b9518e4d122",
+      "id": "B09",
+      "original_status": "verified_fail",
+      "current_status": "verified_fail",
+      "basis_correction": "0/4 is realized local exposure, not a logical disproof of a probabilistic 80% coverage guarantee. Failure is unsupported joint and finite-sample guarantee from marginal empirical intervals."
+    }
+  ],
+  "actual38_status_changed": false,
+  "other22_status_changed": false,
+  "originals_overwritten": false,
+  "author_key_read": false,
+  "total_score": null
+}

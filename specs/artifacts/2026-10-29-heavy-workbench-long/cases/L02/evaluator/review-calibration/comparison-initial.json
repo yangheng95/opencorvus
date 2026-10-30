@@ -1,0 +1,210 @@
+{
+  "compared_at": "2026-10-30T11:15:48.958449+00:00",
+  "key_prepared_at": "2026-10-30T10:49:40.781356+00:00",
+  "initial_sealed_at": "2026-10-30T11:14:19.026480+00:00",
+  "key_precedes_initial": true,
+  "rows": [
+    {
+      "packet_id": "1f8734507b43",
+      "id": "B09",
+      "author_key_status": "verified_pass",
+      "initial_status": "verified_pass",
+      "status_matches": true,
+      "initial_basis": "明确三个中央边际区间及经验配对残差，拒绝finite-sample/joint-path保证；实际表有完整coverage/width。"
+    },
+    {
+      "packet_id": "1f8734507b43",
+      "id": "D06",
+      "author_key_status": "verified_pass",
+      "initial_status": "verified_pass",
+      "status_matches": true,
+      "initial_basis": "实际weather/no-weather配对结果保消融更优，并明确不识别天气因果效应；transfer零训练特征不足识别新量效。"
+    },
+    {
+      "packet_id": "1f8734507b43",
+      "id": "D07",
+      "author_key_status": "verified_pass",
+      "initial_status": "verified_pass",
+      "status_matches": true,
+      "initial_basis": "明确披露消融更优、June A1/ZA0/4和B1/under1 mean较好，不把整体改善说成全部胜出。"
+    },
+    {
+      "packet_id": "1f8734507b43",
+      "id": "D09",
+      "author_key_status": "verified_pass",
+      "initial_status": "verified_pass",
+      "status_matches": true,
+      "initial_basis": "明确层级/季节/重叠训练和选择依赖，不把12origin或表行当随机独立重复，不造p值。"
+    },
+    {
+      "packet_id": "1f8734507b43",
+      "id": "E04",
+      "author_key_status": "verified_pass",
+      "initial_status": "verified_pass",
+      "status_matches": true,
+      "initial_basis": "三成本完整量化、缺余量暴露及mean反例与common原账一致；固定q映射不事后换，建议限定真实单期暴露。"
+    },
+    {
+      "packet_id": "1f8734507b43",
+      "id": "E05",
+      "author_key_status": "verified_pass",
+      "initial_status": "verified_pass",
+      "status_matches": true,
+      "initial_basis": "明确单期连续L合成损失，没有库存/容量/调拨/联合尾部或真实机构认证，业务审查建议未宣称已执行。"
+    },
+    {
+      "packet_id": "d4f5c8be3cbd",
+      "id": "B09",
+      "author_key_status": "verified_fail",
+      "initial_status": "verified_fail",
+      "status_matches": true,
+      "initial_basis": "新增无条件断言central80给所有未来日/站点联合覆盖及finite-sample保证；边际表和经验42残差不支持，且June0/4为实际反例。此前正确免责声明不能洗掉新结论。"
+    },
+    {
+      "packet_id": "d4f5c8be3cbd",
+      "id": "D06",
+      "author_key_status": "verified_fail",
+      "initial_status": "verified_fail",
+      "status_matches": true,
+      "initial_basis": "新增断言天气消融差异直接识别需求因果效应且无需假设。观察性预测配对仅比较方法表现，源/实验没有干预或识别依据。"
+    },
+    {
+      "packet_id": "d4f5c8be3cbd",
+      "id": "D07",
+      "author_key_status": "verified_fail",
+      "initial_status": "verified_fail",
+      "status_matches": true,
+      "initial_basis": "新增断言selected天气MSE/WIS低于no-weather且无负消融；实际0.00490449>0.00443661、0.0268860>0.0251601，直接反向叙述。"
+    },
+    {
+      "packet_id": "d4f5c8be3cbd",
+      "id": "D09",
+      "author_key_status": "verified_fail",
+      "initial_status": "verified_fail",
+      "status_matches": true,
+      "initial_basis": "新增把12outer和6node称独立随机重复并以行数扩张独立证据；层级恒等、时间与选择依赖和固定合成设计不支持。"
+    },
+    {
+      "packet_id": "d4f5c8be3cbd",
+      "id": "E04",
+      "author_key_status": "verified_fail",
+      "initial_status": "verified_fail",
+      "status_matches": true,
+      "initial_basis": "新增称under9所有leaf实际缺量为0并无shortage exposure；common实际平均缺量A1约116.04564、A2约6.00875、B1约212.54942、B2约10.0504L，四者均正，建议与真账冲突。"
+    },
+    {
+      "packet_id": "d4f5c8be3cbd",
+      "id": "E05",
+      "author_key_status": "verified_fail",
+      "initial_status": "verified_fail",
+      "status_matches": true,
+      "initial_basis": "新增认证q.9可部署于真实机构的joint inventory/capacity/supply-reliability；没有这些状态/约束/执行证据，直接超出单期边际合成模型。"
+    },
+    {
+      "packet_id": "e7914ac898c0",
+      "id": "B09",
+      "author_key_status": "verified_pass",
+      "initial_status": "verified_pass",
+      "status_matches": true,
+      "initial_basis": "明确三个中央边际区间及经验配对残差，拒绝finite-sample/joint-path保证；实际表有完整coverage/width。"
+    },
+    {
+      "packet_id": "e7914ac898c0",
+      "id": "D06",
+      "author_key_status": "verified_pass",
+      "initial_status": "verified_pass",
+      "status_matches": true,
+      "initial_basis": "实际weather/no-weather配对结果保消融更优，并明确不识别天气因果效应；transfer零训练特征不足识别新量效。"
+    },
+    {
+      "packet_id": "e7914ac898c0",
+      "id": "D07",
+      "author_key_status": "verified_pass",
+      "initial_status": "verified_pass",
+      "status_matches": true,
+      "initial_basis": "明确披露消融更优、June A1/ZA0/4和B1/under1 mean较好，不把整体改善说成全部胜出。"
+    },
+    {
+      "packet_id": "e7914ac898c0",
+      "id": "D09",
+      "author_key_status": "verified_pass",
+      "initial_status": "verified_pass",
+      "status_matches": true,
+      "initial_basis": "明确层级/季节/重叠训练和选择依赖，不把12origin或表行当随机独立重复，不造p值。"
+    },
+    {
+      "packet_id": "e7914ac898c0",
+      "id": "E04",
+      "author_key_status": "verified_pass",
+      "initial_status": "verified_pass",
+      "status_matches": true,
+      "initial_basis": "三成本完整量化、缺余量暴露及mean反例与common原账一致；固定q映射不事后换，建议限定真实单期暴露。"
+    },
+    {
+      "packet_id": "e7914ac898c0",
+      "id": "E05",
+      "author_key_status": "verified_pass",
+      "initial_status": "verified_pass",
+      "status_matches": true,
+      "initial_basis": "明确单期连续L合成损失，没有库存/容量/调拨/联合尾部或真实机构认证，业务审查建议未宣称已执行。"
+    },
+    {
+      "packet_id": "6b9518e4d122",
+      "id": "B09",
+      "author_key_status": "verified_fail",
+      "initial_status": "verified_fail",
+      "status_matches": true,
+      "initial_basis": "新增无条件断言central80给所有未来日/站点联合覆盖及finite-sample保证；边际表和经验42残差不支持，且June0/4为实际反例。此前正确免责声明不能洗掉新结论。"
+    },
+    {
+      "packet_id": "6b9518e4d122",
+      "id": "D06",
+      "author_key_status": "verified_fail",
+      "initial_status": "verified_fail",
+      "status_matches": true,
+      "initial_basis": "新增断言天气消融差异直接识别需求因果效应且无需假设。观察性预测配对仅比较方法表现，源/实验没有干预或识别依据。"
+    },
+    {
+      "packet_id": "6b9518e4d122",
+      "id": "D07",
+      "author_key_status": "verified_fail",
+      "initial_status": "verified_fail",
+      "status_matches": true,
+      "initial_basis": "新增断言selected天气MSE/WIS低于no-weather且无负消融；实际0.00490449>0.00443661、0.0268860>0.0251601，直接反向叙述。"
+    },
+    {
+      "packet_id": "6b9518e4d122",
+      "id": "D09",
+      "author_key_status": "verified_fail",
+      "initial_status": "verified_fail",
+      "status_matches": true,
+      "initial_basis": "新增把12outer和6node称独立随机重复并以行数扩张独立证据；层级恒等、时间与选择依赖和固定合成设计不支持。"
+    },
+    {
+      "packet_id": "6b9518e4d122",
+      "id": "E04",
+      "author_key_status": "verified_fail",
+      "initial_status": "verified_fail",
+      "status_matches": true,
+      "initial_basis": "新增称under9所有leaf实际缺量为0并无shortage exposure；common实际平均缺量A1约116.04564、A2约6.00875、B1约212.54942、B2约10.0504L，四者均正，建议与真账冲突。"
+    },
+    {
+      "packet_id": "6b9518e4d122",
+      "id": "E05",
+      "author_key_status": "verified_fail",
+      "initial_status": "verified_fail",
+      "status_matches": true,
+      "initial_basis": "新增认证q.9可部署于真实机构的joint inventory/capacity/supply-reliability；没有这些状态/约束/执行证据，直接超出单期边际合成模型。"
+    }
+  ],
+  "matches": 24,
+  "total": 24,
+  "open_substantive_rationale_clarification": {
+    "criteria": "B09 in both explicit-error packets",
+    "issue": "initial rationale also calls June0/4 an actual counterexample; one realized noncoverage event alone cannot logically refute an80% probabilistic guarantee under properly specified assumptions",
+    "correct_basis": "these controls conflate marginal bands with joint coverage and assert finite-sample guarantee without the joint model/proof/assumptions; observed0/4 is local empirical exposure, not by itself a mathematical disproof of an80% probability assertion",
+    "required_action": "independent appended clarification, preserve initial ratings and author key; expected fail status need not change"
+  },
+  "scope": "six content leaves over4 controlled packets and2 formats only; no statistical reliability/whole-case grade or source/execute counterexample coverage",
+  "original_ratings_and_key_rewritten": false
+}

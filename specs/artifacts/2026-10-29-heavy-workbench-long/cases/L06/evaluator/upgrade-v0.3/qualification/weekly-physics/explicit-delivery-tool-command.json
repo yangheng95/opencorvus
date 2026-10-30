@@ -1,0 +1,26 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\qualification\\current-source\\qualify_delivery.py",
+    "--reference-input",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-transition-qualification-20261030\\opencorvus\\business-input.json",
+    "--reference-plan",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-transition-qualification-20261030\\opencorvus\\operational-plan.json",
+    "--expected-cost-exact",
+    "476871/10",
+    "--credit-input",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-transition-qualification-20261030\\credit-input.json",
+    "--credit-plan",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-transition-qualification-20261030\\credit-plan.json",
+    "--output",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-transition-qualification-20261030\\explicit-delivery-tool"
+  ],
+  "exit_code": 0,
+  "stdout": "{\"status\": \"passed\", \"actual_cli_commands\": 11, \"seconds\": 2.2907900996506214, \"hand_values\": {\"receivable\": [10, 0], \"receipts\": [0, 10], \"cash\": [-5, 4], \"cost\": 7}, \"scope\": \"derived-output projection only; no full rubric score, replay attestation or quality qualification\"}\n",
+  "stderr": "",
+  "wall_seconds": 2.5608914997428656,
+  "scope": "focused source-dependency and explicit-input repair qualification; zero new optimization/model run, not case difficulty"
+}

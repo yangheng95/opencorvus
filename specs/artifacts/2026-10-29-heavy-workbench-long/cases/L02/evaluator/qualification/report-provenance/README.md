@@ -10,4 +10,4 @@
 
 新的作者reporter消费原fit/诊断，输出36行拟合来源、逐节点/逐origin损失、168行动账、相对路径来源副本及实际六panel图。候选方法/语言自由，不要求它们输出作者的fit格式，来源文件也不证明声明真实。主第一次组件报告笼统称全部programme预测前冻结，超过“新reporter消费历史numeric”的证据范围；初源/报告保留，当前文本改为陈述合同并要求独立registration审计。当前澄清文本的实际独立冷执行与单层审查在[independent-review](independent-review/README.md)单列，不拿旧执行冒称新源已运行。
 
-公开输入/持久合同见[EXECUTION-CONTRACT.draft](../../../public/EXECUTION-CONTRACT.draft.md)。完整质量政策和66叶仍是建设稿，报告来源组件不自动将任何研究叶改成pass；科学/运营真伪、固定分母依赖与可信独立证据版本绑定必须在完整grader中完成。
+公开输入/持久合同见[EXECUTION-CONTRACT.draft](../../../public/EXECUTION-CONTRACT.md)。完整质量政策和66叶仍是建设稿，报告来源组件不自动将任何研究叶改成pass；科学/运营真伪、固定分母依赖与可信独立证据版本绑定必须在完整grader中完成。

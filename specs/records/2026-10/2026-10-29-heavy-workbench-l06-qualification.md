@@ -310,3 +310,23 @@ Codex注册quote/row已先后自然exit0，C47646.7/47658.4，各30numeric过，
 唯一动态locator active_evaluation=null、fresh_codex.business_grade已写真实输出、upgrade_required=true。所有本轮候选和评估侧完整solver均终态，不再请求退休OC API/重启listener/重跑dataset或旧容器。六旧昂贵任务保持Paused。模型/usage未知、comparable=false及非盲AI审查限制保留；57分钟候选观察窗/并行自验/评估计算不当数小时有效工作。
 
 新L06/0.3建设计划在evaluator/upgrade-v0.3/PLAN.md，旧冻结public/rubric/FREEZE只读。新信息历史primitive+闭式枚举0.052秒证明合法9/2、提前知叶7/2且被具名nonanticipativity_violation拒绝；125完整政策/3125放宽政策不是难度或时长样本数。独立逆推亦9/2；首脚本在写metadata时复用了value变量而用了字面兜底，虽前置逆推assert真实通过，已保存qualify-initial/assessment-initial并改为直接引用真实backward映射，不能用常量冒充计算输出。本例只因果机制资格；完整新材料/参考/业务执行/报告/质量线/原子rubric/独立冻结及fresh候选区分度仍待。整套冻结1/10、小时资格0/10，其余九题继续，心跳ACTIVE。
+## 0.3完整业务设计与S1提取最新Recall（独立代码批准待）
+
+L02独立评审期间主方推进0.3完整业务，不恢复旧任务。新方案upgrade-v0.3/BUSINESS-CONSTRUCTION与同一reviewer设计原件business-design-review已存：先解决旧全残差/first-error与新非法不commit的边界，以及post_week唯一checkpoint/begin纯投影/advance原态一次/绝对due队列/合法负cash/期后AR。独立仅准S1，未实施实验，八组后续代表明确；完整tree材料、政策、online/恢复/新界/职业交付/rubric仍待。
+
+当前已提取唯一l06_physics.initial_state/begin_week/propose_week，旧check_l06薄collector直接调用，不保两份周内公式。旧order谓词全期先于physical的首次错误次序保留；invalid只收tentative代数诊断，cost/scenarios仍mask，不把负库存/phantom收入称online状态。新格式权威prefix/checkpoint decoder/持久恢复尚未实现，不能因内部state对象存在就宣称已可接任意candidate checkpoint。
+
+主方原件D:/opencorvus-benchmark-runs/l06-v03-transition-qualification-20261030：提取前两原真实sealed OC/Codex完整plan约.099秒重算并保存source-before/全账，提取后全部typed周账/exact cost/AR/min cash/active/family/count与原对象一致，成本仍476871/10、95283/2。41主检查/26真实旧新checker CLI约3.964秒，再13语义卡全残差/上下文/次序/family/count比对和同历史两真实l06_grade复验约.453秒，两旧100不变；不是新候选或03成绩。MOQ0空车收费、整包单价、双峰多错、晚order先于早physical首错、3周cash−1/−1/2、期后AR不算现金、raw可余/FG/inbound终期边界均取得主方限定正向证据，零solver/模型/native Docker。
+
+全仓搜索source封装消费者后补numeric/grading/delivery的physics依赖。发现qualify_delivery四个隐式旧work/v2输入实际缺失，原source-before/路径观察保留，不编造旧脚本实际red执行；当前改为显式reference-input/reference-plan/expected-cost-exact及credit-input/credit-plan，不留fallback。为此工具/新源依赖的必要实测11CLI约2.561秒，闭式AR[10,0]/receipts[0,10]/cash[−5,4]/cost7通过；没有重旧求解矩阵或凑时长。核四核心源与41执行快照同一，最终工具参数由其独立11CLI绑定，source-final分版，不假说旧快照执行过后改文本。
+
+本轮主方S1证据及原方案/状态卡/完整输出归档upgrade-v0.3/qualification/weekly-physics。独立reviewer正先完成L02原38及24内容校准，S1代码复核待，不报独立通过或完整0.3。后续先审该S1，再完整权威history/实际承诺材料→可行policy/独立账→online隔离续接/新界/低质量/报告；当前私有chosen leaf还须隔离诊断where/异常/收据出口，不能只核argv/env/packet。旧0.2public/rubric/FREEZE/两100原事实不变，1/10冻结/0小时、整个用户目标未完成。
+
+
+## 最新Recall：0.3 S1完成限定独立代码审查，精确数资格工具P2已修
+
+唯一l06_physics initial/begin/propose被旧check_l06 collector消费，保原阶段/物理全部残差/旧首错/财务mask和两完整真实sealed账，主41/26CLI及增量13全残差+两旧grade只是等价资格。独立另写整数/Fraction prefix账138观察全过，3week cash−1/−1/2、arrival/receipt消费一次；没有新solver/Docker/model。
+
+独立真实P2是qualify_delivery将合法1/3目标近似float后误期待checker pass：checker准确C01 fail，包装器AssertionError原exit1保留。改为未约分精确JSON分数；原1/3与另闭式0.5有限数两真实CLI主/独立分别通过，未重旧11。初review/source-final与最新rational-repair身份分开，不假称初执行跑了最终helper。
+
+最终independent-review/REVIEW无剩余S1阻断，仅可信内部tentative递推/旧0.2组合等价。week_admissible不是终期验收，caller须terminal规则；不可信checkpoint/权威prefix/持久online/恢复/chosen leaf诊断隔离/完整树与新界/rubric冻结待建，不沿旧L。旧0.2公开合同及两100不改，新题候选小时0，其他案例继续。

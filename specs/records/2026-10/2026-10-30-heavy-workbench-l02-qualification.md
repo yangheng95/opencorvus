@@ -427,3 +427,41 @@ L06/0.3完整权威业务/信息/承诺/物理现金续接和其余L01/L04/L05/L
 10:08:45UTC一次SQL实际18verified/last cell18、尚无owner-terminal。当前事实以主根launch/owner-started/owner-terminal（若已自然产生）及formal-run/runs.sqlite3为准；stdout暂空不是卡，不机械cancel/重开，不持续监听。每个自然终态原CID由既有executor封存后精确cleanup；不能因消失重跑。尚无新report/main/图/38科学真评/完整Q/冻结，suite1/10、小时0/10。repo qualification/scientific-full-reference只存启动证据，不冒充完整原件。
 
 自然完成先封存完整原registration/SQLite/capsules/报告和source/native，不只GitHEAD；实际view新PNG，再真实同一l02_grade prepare/grade绑定固定外部registry/method、原selected与38独评，按已审计划做受影响叶多质量/等价格式校准。未知设施/参考先调查，不调池/质量线/删格；旧120/历史事后稿/report adapter不替代本次。读最新动态末态后再推进，不能按旧“此刻尚未执行”描述重启。必要长任务由本聊天heartbeat接续，不暂停全用户目标。L06/0.3完整业务和其他八题仍待，不因L02进展声称十题成熟。
+## 新完整参考自然终态与实质审查/校准实施前Recall
+
+唯一formal owner于10:29:50.345UTC自然exit0，1469.574891秒，108predict/12select/1report全部121verified。completed/execution-originals.zip为97,527,195bytes/1720成员，保原SQL、全部prepared-terminal-accepted/native/命令收据、registration、提交源/原tar；显式排除重复可变work materialization，不声称全filesystem。report从原cell121 accepted提取，主方已实际view新forecast.png：六panel/单位/method/truth/80带清楚，A1/ZA末4日低估与0/4覆盖仍清楚，非新盲发现。24分30秒为作者计算，不是候选小时。Q26/38科学/完整分仍未评。
+
+冻结5b源的l02_grade prepare现只读重建原121和外部fixed registry/独立指定seasonal8方法，输出新evaluation-assignment，零新forecast/report/solver。必要38实质独评按该包/原stage展开；不要再重启动已完成的正式矩阵。当前L06单层reviewer先完成完整业务设计审查，之后复用同一人作38真评。
+
+下一校准具体方案在既有已审scientific PLAN第7节内：选只受研究叙述改变的B09/D06/D07/D09/E04/E05六叶，制作两质量×两等价格式共4中性ID packet。完整原report及其原数字为诚实组；另一组在同完整数字上加入明确未获支持的联合覆盖/因果/独立重复、隐瞒真实更优消融、误称under9零缺量与机构库存容量认证等错误结论。格式为完整Markdown或等价JSON内全文，底表/图/源/实际执行一律同一common原件。不能把改report当改真实执行，其他32研究叶为common/invariant或未覆盖，不虚称38都有反例。受控改写不进入正式source-bound grader，不冒充自然候选或新运行。
+
+作者key和具体真实原数字/来源先独立封存，再交标签遮蔽packet（不交key/生成脚本）给同reviewer；先保独立初评24项及其依据，再比较预key/裁决。如key错误或等价表达误扣，保原版本并按理由修正，不能逼judge命中答案。完整信息可来自JSON/表/公式，错误强声明不能由另一个正确表洗掉，底层数据+“可分析”不自动算已交解释。单层非盲熟悉作者的AI局限仍披露，不以一致率/检查数/表行数声称真人或统计成熟。此计划不是六叶已pass、校准完成或case冻结。
+
+
+## 最新Recall：正式参考/38真评/真实66聚合已终态，公开收敛审查中
+
+主SCI唯一formal已10:29:50.345Z exit0/121verified/1469.575s；真实prepare至10:46:37.957Z exit0/771.067s；原716c assignment的38实质独评于11:07:54Z先封全pass。独立核108原packet的SQL许可、current/pseudo训练时点/最高missing、原native/source/全部指标和账，并实际查看新PNG，未独立重拟合全部系数。审查者36inner漏算12outer的计数原false保留，实际48weather×4=192插补来源追加纠正，非产品回归。
+
+真正原l02_grade于11:23:55.900Z exit4/875.761s，C01/C02+原38+Q26=66pass，0fail/未评；旧draft/readiness正确阻止total/study_complete/quality_success/good，仍null。完整assessment原字节入scientific-full-reference，角色reference_qualification。不用手算100/Inspect完成分，不把作者/评估侧时间计候选有效小时。
+
+作者原key早于初评。4packet两质量×两格式的六叶独立24全同key；共同256文件和实际原run不变。主方未以24/24结案，发现B09将一次June0/4当概率保证逻辑反例措辞过强；独立追加澄清，0/4仅局部暴露，fail充分依据是无依据的边际→联合及有限样本保证。评级/原key/38/初24均未改，裁决独立追加。其余32独评/C01/C02未做负例全覆盖，熟悉参考的非盲AI/开发校准局限明示。
+
+冻结前方案先落evaluator/FREEZE-PLAN并独立审查：当前唯一规范public16，material/study/quality三JSON和8文档规范名、INTERFACES/ENVIRONMENT/PROVENANCE/profile；rubric唯一rubric.json仍draft/readiness false。无数据库/协议/数值算法变更，历史ZIP内部study-contract.draft.json只是format1固定member，不建fallback。study质量链接闭合公开policy；新registry按完整typed白名单仅metadata差异，原forecast/native/source和66规则/权重/critical/90不动，实际同loader12reference/1008格通过、零native。旧716c包/review/grade一字不动，冻结后如需正向publication只标实际findings算术投影，不冒充新source-bound grade。
+
+主新PROVENANCE初稿错猜WIS更正DOI1009770，被实际原文查证为另一论文，已纠正到原WIS页面明确关联的1010592；初稿/工具来源保留，不掩盖编辑错误。FPP旧地址实际重定向，改用已验证章节锚点。当前正在单层最终合同/metadata登记/readiness审查，尚未批准冻结。suite1/10、候选小时0/10、全用户目标未达，心跳ACTIVE。新L02完整运行全部终态，不重121/120/54/工具旧窗口。
+
+
+## 最终wire类型增量
+
+独立完整公开接口审查真实发现optional选择loss的bool→Fraction0/1假通过，已先写根因/调用面再修唯一assess_selection的string边界。两原反例/合法等价有理串/无optional及12原accepted selector共20检查实际通过，0新native；科学规则/池/质量线不变。原正式源5b和当前修后边界来源分开，原66 grade/38/rating不回写。最终独立补审后才可冻结。
+
+
+## 最新权威Recall：L02/0.2.0开发合同冻结2/10，原分数不倒写
+
+单层最终合同审查于11:54UTC实际批准；原两个发现（report嵌套wire未穷尽/optional loss bool→Fraction）均先保真实原源/失败再修，最终29对象+4边界增量过。允许的结案仅status/readiness/scope/文档状态和metadata登记，不动材料/日程/度量/选模义务/Q26/66权重critical/90。具体review、stage及原件在L02/evaluator/independent-freeze-review。
+
+精确frozen公开study/quality/profile及rubric七readiness已按明示范围闭合；新当前registered-reference在全新final-publication目录派生，真实唯一loader完整12reference/1008格exit0/4.974964秒，0新native/预测。95原证据成员逐字节不改、两metadata只完整白名单diff，原study/policy另保。FREEZE.json指各readiness证据，review_anchor_calibration只六内容叶开发校准，不偷换全38负例/真人/统计可靠性。原WIS错误DOI初稿和harness表名错误存在tool trace与更正脚本，未另存完整初字节快照，不假称有原文件。
+
+原716c包/原formal/38/原24/原grade仍完全不改，原真实grade66pass且draft/null/exit4。仅对原实际66 findings调用同一聚合器作明确reference_qualification publication投影100，不是新source-bound grade、native或候选成绩。当前唯一public16/规范JSON+Markdown，旧draft磁盘入口已移除，archive固定内部旧键仍单一格式。当前实现仅selection类型边界增量，12原accepted均实际回验正确，不声称旧121执行过修后源。
+
+全套开发合同冻结2/10（旧L06和新L02），有效候选小时0/10。L02尚无fresh OpenCorvus/Codex，下一先同一16public/无参考权重/完整规范依赖准备和预注册真实Task，再顺序fresh Codex；两好另版升级。保模型/资源/非盲AI限制，无总token/墙钟额度，不凑时间。L06/0.3完整权威状态/信息/承诺/online和其他八题继续，不能把当前两题开发资格称成熟suite。全部本轮native终态，六旧昂贵任务最新仍Paused，不恢复/重启/重矩阵。心跳ACTIVE，只有全用户目标实际达成才停用。

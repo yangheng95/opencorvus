@@ -11,7 +11,7 @@ from l06_packet import read_packet,write_packet
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--case-root',type=Path,required=True);parser.add_argument('--output',type=Path,required=True);args=parser.parse_args()
     root=args.output;root.mkdir(parents=True,exist_ok=False);source=root/'executed-source';source.mkdir()
-    for name in ['check_l06.py','l06_input.py','l06_packet.py','l06_delivery.py','l06_numeric.py','qualify_numeric.py']:
+    for name in ['check_l06.py','l06_input.py','l06_packet.py','l06_physics.py','l06_delivery.py','l06_numeric.py','qualify_numeric.py']:
         shutil.copy2(Path(__file__).parent/name,source/name)
     original=args.case_root;case=root/'case';case.mkdir();shutil.copytree(original/'public',case/'public')
     shutil.copy2(original/'rubric.json',case/'rubric.json')

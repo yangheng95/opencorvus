@@ -39,8 +39,9 @@ def assess_selection(actual,payload,study):
     if 'method_mean_inner_scaled_mse' in actual:
         if type(actual['method_mean_inner_scaled_mse']) is not dict or set(actual['method_mean_inner_scaled_mse'])!=set(expected['method_mean_inner_scaled_mse']):raise ProtocolError('selection_invalid','reported score grid must match actual complete inner grid')
         try:
+            if any(type(value) is not str for value in actual['method_mean_inner_scaled_mse'].values()):raise ValueError()
             if any(Fraction(actual['method_mean_inner_scaled_mse'][i])!=Fraction(value) for i,value in expected['method_mean_inner_scaled_mse'].items()):raise ValueError()
-        except (ValueError,TypeError,ZeroDivisionError) as e:raise ProtocolError('selection_invalid','reported losses contradict independent recomputation') from e
+        except (ValueError,TypeError,ZeroDivisionError) as e:raise ProtocolError('selection_invalid','reported losses must be exact rational strings matching independent recomputation') from e
     return {'status':'selection_verified','expected':expected,'scope':'complete assigned inner grids only; no outer quality or full task grade'}
 
 

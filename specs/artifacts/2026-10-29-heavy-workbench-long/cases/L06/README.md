@@ -24,3 +24,7 @@
 [正式成对结果](evaluator/pilot-codex-20261030/paired-comparison.json)两方均100/100、47pass、全部28critical过。fresh Codex同源码基例/报价/行序已自然完成并各30numeric通过；[完整17叶审查](evaluator/pilot-codex-20261030/independent-assessment/review-final.json)后，[真实grader](evaluator/pilot-codex-20261030/final-grade-command.json)exit0。原上文“待评价”为历史进度，当前以此结论为准。熟悉参考的非盲AI审查、Codex actual model/usage未知、comparable=false均保留。
 
 按候选前规则必须升级，现建设[独立L06/0.3](evaluator/upgrade-v0.3/PLAN.md)，旧冻结public/rubric/FREEZE与成绩不变。新信息机制已取得秒级可枚举见证，完整新业务/参考/逐叶grader/冻结和候选区分度仍待；没有数小时有效工作资格，不能靠本次评估复跑计时达标。
+0.3完整业务[具体建设方案](evaluator/upgrade-v0.3/BUSINESS-CONSTRUCTION.md)和[独立设计审查](evaluator/upgrade-v0.3/business-design-review/PLAN-REVIEW.md)已落实单一递推/权威history/承诺与post_week语义。[S1提取主方资格](evaluator/upgrade-v0.3/qualification/weekly-physics/README.md)保旧完整账/全残差/首错和两旧grade不变，当前check_l06唯一调用l06_physics，不留两份物理公式。它尚非完整0.3树/online/质量资格，独立代码审查仍待。
+
+
+S1独立实施已完成：[最终审查](evaluator/upgrade-v0.3/qualification/weekly-physics/independent-review/REVIEW.md)无剩余局部阻断。独立发现qualify_delivery将1/3转float却期待精确通过的真实P2，现以未约分精确JSON数修复，原1/3和真正有限0.5分别实际CLI复核；原失败/源/初评保留。周内kernel/旧collector仍等价；完整0.3权威信息/online/未来leaf诊断隔离、新树/界/rubric尚待，不能拿S1当新版冻结。

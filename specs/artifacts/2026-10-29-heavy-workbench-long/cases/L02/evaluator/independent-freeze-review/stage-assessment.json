@@ -1,0 +1,90 @@
+{
+  "format": "l02-final-contract-independent-review/1",
+  "observed_at_utc": "2026-10-30T11:54:14.907133+00:00",
+  "case_version": "L02/0.2.0",
+  "anchor_version": "L02-research-anchors/1",
+  "approved_for_development_contract_freeze": true,
+  "actual_state_at_review": "rubric draft, readiness all false; public freeze_review_candidate",
+  "current_substantive_blockers": [],
+  "resolved_findings": [
+    {
+      "id": "F1",
+      "issue": "report results nested wire incomplete",
+      "resolution": "actual score and inner selection nested schema published",
+      "evidence": "public-reviewed/INTERFACES.md"
+    },
+    {
+      "id": "F2",
+      "issue": "Fraction bool optional loss coerced0/1",
+      "original_reproduced": true,
+      "resolution": "type str before exact Fraction comparison",
+      "evidence": "type-repaired/assessment.json",
+      "originals_preserved": true
+    }
+  ],
+  "independent_increment": {
+    "registry_checks": 29,
+    "registry_all_passed": true,
+    "two_original_bool_cases_repaired": true,
+    "equivalent_rationals_passed": true,
+    "typed_repair_checks": 4,
+    "loader_matrix_repeated": false,
+    "new_prediction_Docker_solver_Provider_GPU_UI_calls": 0
+  },
+  "readiness_approval": {
+    "registered_quality_reference": {
+      "evidence": "registration-audit.json and registration-initial/",
+      "scope": "original fixed matrix + metadata-only derivation; final frozen derivation still required"
+    },
+    "quality_controls_independent": {
+      "evidence": "prior independent quality audit, original quality-study controls and Q26 real assessment",
+      "scope": "deterministic numerical controls, not candidate or human calibration"
+    },
+    "formal_full_assignment_cold": {
+      "evidence": "actual formal121 originals and assignment716c",
+      "scope": "full author reference execution, not candidate hours"
+    },
+    "complete_scientific_reference": {
+      "evidence": "original38 sealed review + actual image + actual66 grade",
+      "scope": "nonblind AI review; no complete coefficient refit or professional-human certification"
+    },
+    "complete_grader_evidence_binding": {
+      "evidence": "prior state/binding qualifications + original66 grade + selection-repaired-command.json",
+      "scope": "source-bound grader and explicit typed boundary"
+    },
+    "independent_rubric_review": {
+      "evidence": "current full contract review + registration-audit.json unchanged66",
+      "scope": "operational developer-contract review"
+    },
+    "review_anchor_calibration": {
+      "evidence": "original24 masked judgements + probability clarification/adjudication",
+      "scope": "six content leaves and two equivalent formats; not whole38 negative coverage"
+    }
+  },
+  "permitted_finalization": [
+    "study/policy/profile status frozen",
+    "rubric status frozen and the seven documented readiness true",
+    "descriptive scope/phase/status/README/index/link updates only",
+    "new frozen-metadata derived registry with actual current loader confirmation",
+    "clearly labelled publication projection from original actual66 findings, never new source-bound grade/native"
+  ],
+  "immutable_rules": [
+    "original material/grid/units/scales",
+    "metric/domain/formula/quantile/alpha",
+    "method/selection obligations",
+    "original fixed forecasts/configuration",
+    "Q26 comparison relations",
+    "66 criterion IDs/rules/anchors/weights/critical",
+    "good90 and noncompensation",
+    "old formal716c/review/grade null exit4"
+  ],
+  "final_derived_registry_confirmation": "publisher must complete on exact frozen metadata; current candidate registry is not mislabelled final",
+  "limitations": [
+    "one developer case, not completed ten-case suite",
+    "candidate discrimination and effective hours not yet established",
+    "nonblind AI familiar-reference review, not professional human/statistical maturity",
+    "no same-model resource-controlled causal ranking"
+  ],
+  "total_score_handwritten": false,
+  "original_records_modified": false
+}

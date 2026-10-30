@@ -1,0 +1,1190 @@
+{
+  "format": "l02-rubric/1",
+  "case": "L02",
+  "status": "frozen",
+  "total_weight": 100,
+  "criterion_count": 66,
+  "scope": "Frozen L02/0.2.0 development-case rubric; not a claim of whole-suite, professional-human, statistical or effective-hour maturity",
+  "groups": [
+    {
+      "id": "A",
+      "title": "原材料与可知信息",
+      "criteria": [
+        {
+          "id": "A01",
+          "weight": 3,
+          "critical": true,
+          "quality": false,
+          "criterion": "逐行单位精确换算为规范L",
+          "evidence": "原CSV值/单位、权威单位表与来源映射",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "实际用到的原值/单位按权威表精确为 L，任意等价内部表示可；用单位变更前系数处理后段是反例。无需强交一份作者 canonical。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "A02",
+          "weight": 3,
+          "critical": true,
+          "quality": false,
+          "criterion": "每个拟合/预测使用的事实满足当时发布时间许可",
+          "evidence": "原行release_time、assigned origin和完整SQL许可集合",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "每次实际 fit/predict 的事实满足真实 release cutoffs，合法 prefix 与内部伪时点均核；见过被合法输入但尚不能用于其伪时点的数据仍属违约。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "A03",
+          "weight": 3,
+          "critical": true,
+          "quality": false,
+          "criterion": "最高已发布revision含missing为权威",
+          "evidence": "同业务键各revision与实际取值/缺测路径",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "每业务键先选最高已发布 revision（含 missing），再作显式缺测处理；回退旧 valid 冒充当前观测为反例。合法估计不能冒充原事实。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "A04",
+          "weight": 2,
+          "critical": true,
+          "quality": false,
+          "criterion": "预测目标恰为注册的14个完整未来UTC日",
+          "evidence": "cutoff/target_ticks/原日区间和84格输出",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "全实际 forecast 是分配的 14 个完整 UTC 日、每节点完整格；使用 origin 起算滚动小时窗为反例。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "A05",
+          "weight": 2,
+          "critical": true,
+          "quality": false,
+          "criterion": "leaf与aggregate身份及均值相加关系正确",
+          "evidence": "series/hierarchy、实际forecast均值",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "注册 leaf/aggregate 身份、权重与实际 mean 相加闭合；不强迫边际 quantiles 相加。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "A06",
+          "weight": 2,
+          "critical": false,
+          "quality": false,
+          "criterion": "报告数字能定位到原行和来源身份",
+          "evidence": "完整来源映射、报告中实际数据引用",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "报告关键数字通过表/公式/索引能定位原输出与来源身份；只有“数据来自附件”而不能闭合为不足。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "title": "科学方法与事前选择池",
+      "criteria": [
+        {
+          "id": "B01",
+          "weight": 4,
+          "critical": true,
+          "quality": false,
+          "criterion": "基线与扩展具有真实科学机制区别",
+          "evidence": "冻结源/配置和实际特征/拟合行为",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "至少 baseline 与 extension 的实际科学机制不同，冻结代码/参数及真实使用一致；ID 改名或无作用 flag 不是不同机制。相同正确预测不构成反例。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "B02",
+          "weight": 3,
+          "critical": true,
+          "quality": false,
+          "criterion": "消融实际移除所声明机制",
+          "evidence": "消融源/配置及实际拟合/预测/校准路径",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "消融在实际训练、预测及不确定性路径上移除所声明机制；只改标签或预测阶段仍用该机制的校准为反例。不强迫消融变差。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "B03",
+          "weight": 3,
+          "critical": true,
+          "quality": false,
+          "criterion": "方法池和参数在首私有预测前冻结",
+          "evidence": "原注册、源/配置与实际启动记录",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "全部程序（含 reporter）、池/配置在首私有预测前已封存，实际使用等同原对象；事后 reporter 生成历史报告只能作为组件，不得给本叶 pass。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "B04",
+          "weight": 2,
+          "critical": true,
+          "quality": false,
+          "criterion": "拟合样本实际来自合法历史",
+          "evidence": "每origin拟合来源、样本时点和实际执行",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "实际拟合样本、窗口及版本来自该使用时点的合法历史；自报 training_rows 与事实不一致或未来观测入 fit 为反例。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "B05",
+          "weight": 3,
+          "critical": true,
+          "quality": false,
+          "criterion": "不确定性估计所用特征符合其实际声明时点的可知信息集",
+          "evidence": "实际不确定性程序/源/特征时点；若有伪origin校准，核各自当时许可；若解析或贝叶斯法，核其真实拟合/预测时点，不能强迫额外残差校准",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "不确定性特征符合其真实声明使用时点；经验法核伪origin特征，解析/Bayes 核真实 fit/predict，不能强迫后两者做经验残差校准。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "B06",
+          "weight": 2,
+          "critical": true,
+          "quality": false,
+          "criterion": "不确定性估计所用观测与参数来源满足其真实使用时点合同",
+          "evidence": "实际观测版本/release/参数来源；经验残差核真实origin已发布标签；解析参数或先验核冻结假设/来源与合法拟合数据",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "不确定性观测/参数来源闭合：经验校准核当前可发布标签，解析/Bayes 核冻结先验、模型假设、合法数据；不以一句 N/A 或私有原文补缺来源。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "B07",
+          "weight": 1,
+          "critical": false,
+          "quality": false,
+          "criterion": "最后一天天气缺测处理有可执行说明",
+          "evidence": "源/实际缺测目标/报告说明",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "实际末日天气缺测有可执行处理并准确说明；强行读取后 issue 或说全14日均有预报为反例。无需指定某种插补法。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "B08",
+          "weight": 1,
+          "critical": false,
+          "quality": false,
+          "criterion": "所报mean的估计目标与MSE解释一致",
+          "evidence": "方法定义/实际输出及结果解释",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "实际 mean 目标与 MSE 所估条件均值解释一致；拿 median 当 mean 而无正确理由或宣称 MSE 评中位数为反例。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "B09",
+          "weight": 1,
+          "critical": false,
+          "quality": false,
+          "criterion": "边际区间的解释与实际估计对象一致",
+          "evidence": "分位点构造/报告方法说明",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "所报边际分位点/区间对象和估计解释一致；把边际带称为联合路径保证为反例。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "title": "真实完整数值实验",
+      "criteria": [
+        {
+          "id": "C01",
+          "weight": 4,
+          "critical": true,
+          "quality": false,
+          "criterion": "全部声明inner/outer单元按固定网格完成",
+          "evidence": "正式assignment ledger/真实终态/全部完整预测",
+          "method": "registered_execution_checker",
+          "anchors": {
+            "pass": "全正式 expected numeric identities 实际执行且完整 checker 通过；诊断覆盖、缺格或仅 exit0 都不足。没有被 runner 调度的独立单元先未评，不伪造它失败。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。",
+          "source_rule": "full_numeric"
+        },
+        {
+          "id": "C02",
+          "weight": 3,
+          "critical": true,
+          "quality": false,
+          "criterion": "selector实际选完整已发布inner损失最小的原ID",
+          "evidence": "原inner输入、独立精确重算和实际选择输出",
+          "method": "registered_execution_checker",
+          "anchors": {
+            "pass": "实际 selector 输入许可且完整，原输出等于全 inner 精确损失最小 ID、同分 Unicode 排序；outer hindsight 选择或删 inner 为反例。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。",
+          "source_rule": "full_selection"
+        },
+        {
+          "id": "C03",
+          "weight": 3,
+          "critical": true,
+          "quality": false,
+          "criterion": "outer执行保持原冻结配置与信息边界",
+          "evidence": "原注册、真实outer挂载/源/配置/时间线",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "全 outer 实际 source/config/packet/mount 保持冻结与授权；复制最早的参数表而真实不同为反例。合法晚 origin 新发布观察可用。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "C04",
+          "weight": 2,
+          "critical": true,
+          "quality": false,
+          "criterion": "全部预测满足数值与均值一致性合同",
+          "evidence": "完整forecast经权威score的真实检查结果",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "全实际预测严格格式、finite/domain、quantile 顺序、grid、层级 mean 检查通过；不能仅核已选择方法或报告重写后的数值。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "C05",
+          "weight": 2,
+          "critical": true,
+          "quality": false,
+          "criterion": "声明程序与实际源/运行环境相符",
+          "evidence": "原执行源码、argv、镜像和真实终态",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "原提交声明与实际使用程序/argv/依赖镜像相符；以候选自述版本代替实际环境为不足。语言与任意合法 ID 自由。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "C06",
+          "weight": 1,
+          "critical": true,
+          "quality": false,
+          "criterion": "故障和已完成单元状态如实持久记录",
+          "evidence": "原错误/原CID/accepted对象/恢复与未评状态",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "已观察正常/故障单元状态与实际持久记录及报告相符；没有发生故障不强迫注入新故障。设施持久化错误归设施，不能作为候选错误扣本叶。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        }
+      ]
+    },
+    {
+      "id": "D",
+      "title": "研究结果与解释",
+      "criteria": [
+        {
+          "id": "D01",
+          "weight": 2,
+          "critical": false,
+          "quality": false,
+          "criterion": "点预测比较完整保留配对基线/扩展/消融结果",
+          "evidence": "全部origin/node实际MSE与配对表",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "全声明方法在相同 outer/node/grid 的 MSE 与配对比较均保留；可以由完整表加明确公式闭合，不要求固定表格样式。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "D02",
+          "weight": 2,
+          "critical": false,
+          "quality": false,
+          "criterion": "区间比较完整保留配对基线/扩展/消融结果",
+          "evidence": "全部origin/node实际WIS与配对表",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "同上，WIS/概率结果完整且方法和目标对应；不能只展示好的置信带/好节点。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "D03",
+          "weight": 2,
+          "critical": false,
+          "quality": false,
+          "criterion": "报告揭示逐节点和逐切点的失败分布",
+          "evidence": "原误差表、实际图与失败定位",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "提供足以识别节点和切点失败的实际误差/图及有内容的观察；只给总均值不足，不强迫复述作者 June 失败。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "D04",
+          "weight": 1,
+          "critical": false,
+          "quality": false,
+          "criterion": "覆盖率报告由实际目标/分位点计算",
+          "evidence": "实际覆盖/宽度表及分母",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "实际 coverage/width 的区间、目标、分母可定位并重算；不能用主观“多数落入”或删失败格。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "D05",
+          "weight": 1,
+          "critical": false,
+          "quality": false,
+          "criterion": "拟合和校准诊断与实际执行一致",
+          "evidence": "真实参数/样本/残差诊断与报告",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "报告拟合/校准诊断与自身真实方法及执行一致；不强交 fit.json，也不因作者文件存在认定训练真实。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "D06",
+          "weight": 2,
+          "critical": false,
+          "quality": false,
+          "criterion": "机制解释有与结论对应的实验证据",
+          "evidence": "源/配对实验/报告主张的逐项关联",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "机制主张有对应冻结配对实验或明确识别限制；诚实“无因果识别、仅描述”可正确闭合，无须虚构一个因果效应。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "D07",
+          "weight": 2,
+          "critical": true,
+          "quality": false,
+          "criterion": "负结果未被隐藏或反向叙述",
+          "evidence": "原消融/误差与报告结论一致性",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "所有实际反证/消融/局部失败与总结一致，无挑选隐藏；无实际负结果不强造负结果，可完整说明观察范围。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "D08",
+          "weight": 2,
+          "critical": true,
+          "quality": false,
+          "criterion": "区分已知运营公告与未识别量效",
+          "evidence": "当时原公告、合法历史与报告不确定性结论",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "明确区分已知公告、未识别量效及未宣布变化；不能把后见 transfer 量当预测前事实。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "D09",
+          "weight": 1,
+          "critical": true,
+          "quality": false,
+          "criterion": "统计结论遵守实际依赖结构",
+          "evidence": "采样单元/统计方法/局限，不把相邻单元伪当独立",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "统计结论尊重层级、重叠时窗等依赖；诚实描述性结果及未做显著性推断可 pass，不强迫 p 值或不适用的独立样本检验。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        }
+      ]
+    },
+    {
+      "id": "E",
+      "title": "合成运营损失与交接",
+      "criteria": [
+        {
+          "id": "E01",
+          "weight": 3,
+          "critical": true,
+          "quality": false,
+          "criterion": "成本场景对应策略在见结果前固定",
+          "evidence": "原成本合同、q.5/.75/.9映射及冻结预测",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "成本场景到 q=.5/.75/.9 的映射在 truth 前固定，action 来自原冻结 forecast；报告见 truth 后换 q/选 mean 为反例。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "E02",
+          "weight": 3,
+          "critical": true,
+          "quality": false,
+          "criterion": "完整行动和损失账与原预测/终审闭合",
+          "evidence": "四leaf/日期/成本的action、缺余量与损失分量",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "全四leaf×12outer×14日×3成本的实际 action/truth/缺余量/成本闭合，即 2016 行等价信息；公式加完整可定位表可，不要求重复打印。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "E03",
+          "weight": 1,
+          "critical": false,
+          "quality": false,
+          "criterion": "mean行动的诊断成本按同一口径计算",
+          "evidence": "冻结mean、相同truth/成本和完整分母",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "全 mean-action 诊断按同 truth/cost/grid 算；不能把其较好格混入正式 quantile 策略。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "E04",
+          "weight": 2,
+          "critical": false,
+          "quality": false,
+          "criterion": "成本敏感性结论忠实于完整实际结果",
+          "evidence": "三成本对照表、失败边界和运营建议",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "三成本的实际量化对照与建议、局部暴露相符；闭合量表/公式可，不强制打印份额或某个建议结论。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "E05",
+          "weight": 1,
+          "critical": true,
+          "quality": false,
+          "criterion": "运营适用性不超出实际单期边际模型",
+          "evidence": "报告的容量/库存/联合尾风险/真实机构适用性说明",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "声明真实单期连续 L/边际模型边界，未实测不扩称库存、容量、联合尾风险或机构可用性；没有这类更强主张也需公开模型范围。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        }
+      ]
+    },
+    {
+      "id": "F",
+      "title": "清洁复建与职业交付",
+      "criteria": [
+        {
+          "id": "F01",
+          "weight": 4,
+          "critical": true,
+          "quality": false,
+          "criterion": "新目录从源码/原材料完整复建到研究报告",
+          "evidence": "正式完整source-only新执行与独立结果核算",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "评估侧实际 fresh 全正式 assignment 从冻结源/raw 到 report 完成并独立核算；不用某次作者历史 ZIP 或仅新 report adapter 代替。无需第二次完整求解同一候选。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "F02",
+          "weight": 2,
+          "critical": false,
+          "quality": false,
+          "criterion": "实验来源可定位实际命令和产物",
+          "evidence": "完整来源索引、真实命令/终态/文件定位",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "源/实际命令终态/输入输出之间可定位；报告可消费窄 sidecar，完整 host 私有事实由评估包补核。不得因报告没有 credentials/host env 而扣分。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "F03",
+          "weight": 2,
+          "critical": false,
+          "quality": false,
+          "criterion": "实际图形清楚且与原数据一致",
+          "evidence": "真实呈现的图、数据绑定和独立视觉观察",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "实际呈现并人工查看图：必要轴/单位/方法/truth/区间清楚，数据与原输出一致；只看路径或自动像素/关键词不能 pass。图数和固定配色不是要求。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "F04",
+          "weight": 1,
+          "critical": true,
+          "quality": false,
+          "criterion": "关键方法/数据许可引用真实权威原文",
+          "evidence": "报告引用与评估者实际核对的原文/许可",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "实际采用的关键方法、评分及数据来源/许可引用可查原文且支持相关主张；不按引文数量或强迫作者参考相同文献。公开原创合成材料也须如实说明来源。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        },
+        {
+          "id": "F05",
+          "weight": 1,
+          "critical": false,
+          "quality": false,
+          "criterion": "交接说明明确复建条件及适用限制",
+          "evidence": "依赖/命令/数据域/当前失败与交接文档",
+          "method": "independent_evaluator_review",
+          "anchors": {
+            "pass": "依赖/argv/输入域/复建流程及适用限制能让新操作者实际执行；其他材料已完整提供的内容可以交叉引用，不能因 README 排版不同扣分。",
+            "fail": "本叶规则所列实质反例经实际原对象证实；有输出但错误用verified_fail。",
+            "candidate_incomplete": "公开必交的本叶实质信息确实缺交；允许完整可定位的等价表/JSON/CSV/代码/公式，不按排版或文件名判缺。",
+            "blocked_candidate": "本叶必需材料由已证候选错误直接阻断，必须引用真实依赖根因；独立未调度仍unassessed。",
+            "unassessed": "评估或独立审查尚未完成；不删除本叶、改变分母或发布总分。"
+          },
+          "truth_limit": "原对象/实际行为/独立内容审查共同支持本叶；来源schema、文件存在或候选自述本身不能认证科学真伪。",
+          "equivalent_formats": "全部已交材料合读；可定位的代码/表/JSON/CSV/公式/图可闭合，无作者文件名或方法ID要求。"
+        }
+      ]
+    },
+    {
+      "id": "Q",
+      "title": "非补偿预测/运营质量",
+      "criteria": [
+        {
+          "id": "Q.macro.scaled_mse",
+          "weight": "3/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "原既定层级宏平均scaled_mse严格低于固定外部参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.macro.scaled_wis",
+          "weight": "3/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "原既定层级宏平均scaled_wis严格低于固定外部参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.node.A1.scaled_mse",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "A1完整平均scaled_mse不劣于固定外部参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.node.A1.scaled_wis",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "A1完整平均scaled_wis不劣于固定外部参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.node.A2.scaled_mse",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "A2完整平均scaled_mse不劣于固定外部参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.node.A2.scaled_wis",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "A2完整平均scaled_wis不劣于固定外部参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.node.B1.scaled_mse",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "B1完整平均scaled_mse不劣于固定外部参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.node.B1.scaled_wis",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "B1完整平均scaled_wis不劣于固定外部参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.node.B2.scaled_mse",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "B2完整平均scaled_mse不劣于固定外部参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.node.B2.scaled_wis",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "B2完整平均scaled_wis不劣于固定外部参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.node.ZA.scaled_mse",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "ZA完整平均scaled_mse不劣于固定外部参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.node.ZA.scaled_wis",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "ZA完整平均scaled_wis不劣于固定外部参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.node.ZB.scaled_mse",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "ZB完整平均scaled_mse不劣于固定外部参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.node.ZB.scaled_wis",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "ZB完整平均scaled_wis不劣于固定外部参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.decision.A1.underage_1",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "A1缺量成本1/余量成本1的固定分位策略完整平均loss不劣于参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.decision.A1.underage_3",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "A1缺量成本3/余量成本1的固定分位策略完整平均loss不劣于参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.decision.A1.underage_9",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "A1缺量成本9/余量成本1的固定分位策略完整平均loss不劣于参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.decision.A2.underage_1",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "A2缺量成本1/余量成本1的固定分位策略完整平均loss不劣于参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.decision.A2.underage_3",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "A2缺量成本3/余量成本1的固定分位策略完整平均loss不劣于参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.decision.A2.underage_9",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "A2缺量成本9/余量成本1的固定分位策略完整平均loss不劣于参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.decision.B1.underage_1",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "B1缺量成本1/余量成本1的固定分位策略完整平均loss不劣于参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.decision.B1.underage_3",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "B1缺量成本3/余量成本1的固定分位策略完整平均loss不劣于参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.decision.B1.underage_9",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "B1缺量成本9/余量成本1的固定分位策略完整平均loss不劣于参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.decision.B2.underage_1",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "B2缺量成本1/余量成本1的固定分位策略完整平均loss不劣于参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.decision.B2.underage_3",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "B2缺量成本3/余量成本1的固定分位策略完整平均loss不劣于参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        },
+        {
+          "id": "Q.decision.B2.underage_9",
+          "weight": "1/2",
+          "critical": true,
+          "quality": true,
+          "criterion": "B2缺量成本9/余量成本1的固定分位策略完整平均loss不劣于参照",
+          "method": "registered_quality_checker",
+          "evidence": "权威完整网格/终审/尺度＋原真实选中预测＋私有固定参照注册",
+          "anchors": {
+            "pass": "同一固定分母下原始loss满足预先比较关系",
+            "fail": "实际loss不满足关系",
+            "unassessed": "设施/参照或输入未资格则不伪造通过"
+          },
+          "readiness": "fixed-reference/rule qualified for this frozen development contract; not a candidate result"
+        }
+      ]
+    }
+  ],
+  "readiness": {
+    "registered_quality_reference": true,
+    "quality_controls_independent": true,
+    "formal_full_assignment_cold": true,
+    "complete_scientific_reference": true,
+    "complete_grader_evidence_binding": true,
+    "independent_rubric_review": true,
+    "review_anchor_calibration": true
+  },
+  "publication": {
+    "requires_readiness": [
+      "registered_quality_reference",
+      "quality_controls_independent",
+      "formal_full_assignment_cold",
+      "complete_scientific_reference",
+      "complete_grader_evidence_binding",
+      "independent_rubric_review",
+      "review_anchor_calibration"
+    ],
+    "good_score_at_least": 90,
+    "threshold_origin": "author pre-candidate comparison rule, not a general mature-benchmark threshold",
+    "two_good_action": "new version; preserve this frozen line"
+  },
+  "scoring": "binary atomic leaves, fixed 100 denominator; quality/critical cannot be compensated; facility errors have no score; pending leaves block publication",
+  "version": "L02/0.2.0",
+  "anchor_version": "L02-research-anchors/1"
+}

@@ -9,7 +9,7 @@ from l06_grade import aggregate,REVIEW_IDS
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--case-root',type=Path,required=True);parser.add_argument('--reference-delivery',type=Path,required=True);parser.add_argument('--output',type=Path,required=True);args=parser.parse_args()
     root=args.output.resolve();root.mkdir(parents=True,exist_ok=False);source=root/'source';source.mkdir()
-    for name in ['l06_input.py','check_l06.py','l06_packet.py','l06_delivery.py','l06_numeric.py','l06_grade.py','qualify_grading.py']:shutil.copy2(Path(__file__).parent/name,source/name)
+    for name in ['l06_input.py','check_l06.py','l06_physics.py','l06_packet.py','l06_delivery.py','l06_numeric.py','l06_grade.py','qualify_grading.py']:shutil.copy2(Path(__file__).parent/name,source/name)
     case=root/'case';case.mkdir();shutil.copytree(args.case_root/'public',case/'public');shutil.copy2(args.case_root/'rubric.json',case/'rubric.json')
     fixture_rubric=json.loads((case/'rubric.json').read_text(encoding='utf8'))
     fixture_rubric['status']='draft_not_frozen'

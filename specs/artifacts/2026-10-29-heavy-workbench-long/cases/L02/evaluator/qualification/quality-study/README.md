@@ -4,4 +4,4 @@
 
 [作者研究分析](research-analysis/RESEARCH.md)及实际图/精确CSV来源于旧真实完整数值实验，包含改善、消融负结果和June明显缺量暴露。它是事后作者分析稿，不是新完整generic流水线、预先冻结的候选报告或职业参考批准。新的正式清洁执行与报告来源通道仍待。
 
-[公开质量政策](../../../public/QUALITY-CONTRACT.draft.md)、[研究交付](../../../public/RESEARCH-DELIVERY.draft.md)和[66项rubric稿](../../../rubric.draft.json)定义完整研究/质量目标；[单一质量primitive](../../current-source/l02_quality.py)及[可信评估结果聚合primitive](../../current-source/l02_rubric.py)已有局部执行证据，尚非完整候选grader。正式成绩null、L02未冻结，套件仍1/10/有效小时0/10。
+[公开质量政策](../../../public/QUALITY-CONTRACT.md)、[研究交付](../../../public/RESEARCH-DELIVERY.md)和[66项rubric稿](../../../rubric.json)定义完整研究/质量目标；[单一质量primitive](../../current-source/l02_quality.py)及[可信评估结果聚合primitive](../../current-source/l02_rubric.py)已有局部执行证据，尚非完整候选grader。正式成绩null、L02未冻结，套件仍1/10/有效小时0/10。

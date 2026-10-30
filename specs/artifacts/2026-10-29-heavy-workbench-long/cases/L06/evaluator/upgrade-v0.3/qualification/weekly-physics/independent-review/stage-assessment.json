@@ -1,0 +1,63 @@
+{
+  "format": "l06-s1-independent-stage/1",
+  "observed_at_utc": "2026-10-30T11:27:17.398753+00:00",
+  "core_stage": "S1 core extraction verified",
+  "implementation_scope": "internal tentative weekly recurrence and unchanged legacy offline collector",
+  "independent_run": {
+    "receipt": "audit-command.json",
+    "observations": 138,
+    "all_passed": true,
+    "elapsed_seconds": 0.2948111998848617,
+    "checker_cli_calls": 1
+  },
+  "source_snapshot": "source",
+  "full03_qualified": false,
+  "online_checkpoint_qualified": false,
+  "new_solver_Docker_LLM_calls": 0,
+  "case_freeze_approved": false,
+  "historical_candidate_grades_changed": false,
+  "report": "REVIEW.md",
+  "P0_P1_core_blockers": [],
+  "approved_scope": "S1 internal weekly recurrence + preserved old offline collector semantics, two original complete plans and independent hand card",
+  "tool_qualification_pending": null,
+  "additional_probe": {
+    "valid_rational_cost": "1/3",
+    "first_checker_result": "10 verified_pass",
+    "rounded_decimal_checker_result": "C01 verified_fail, exit2",
+    "helper_exit": 1,
+    "receipt": "fractional-reference-command.json"
+  },
+  "total_new_actual_checker_cli_calls": 5,
+  "current_source_correctness_not_inferred_from_test_counts": true,
+  "open_findings": [],
+  "resolved_findings": [
+    {
+      "id": "P2-qualified-decimal",
+      "file": "qualify_delivery.py",
+      "line": 44,
+      "status": "repaired_and_independently_verified",
+      "code": "qualification_fixture_rounded_expected_fraction",
+      "example": "exact1/3 becomes float0.3333333333333333",
+      "actual_helper_exit": 1,
+      "actual_checker_exit": 2,
+      "actual_leaf": "C01 verified_fail",
+      "evidence": "fractional-reference-command.json",
+      "core_math_affected": false,
+      "repair_evidence": "rational-repair-command.json and rational-repair/assessment.json"
+    }
+  ],
+  "current_stage": "S1 implementation review passed within stated internal/offline scope",
+  "repair_probes": {
+    "one_third_unreduced": {
+      "exit": 0,
+      "verified_pass": 10
+    },
+    "one_half_exact_decimal": {
+      "exit": 0,
+      "verified_pass": 10
+    },
+    "elapsed_seconds": 0.5287250000983477
+  },
+  "initial_report": "REVIEW-INITIAL.md",
+  "repair_addendum": "RATIONAL-REPAIR-ADDENDUM.md"
+}

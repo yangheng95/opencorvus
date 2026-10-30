@@ -1,0 +1,22 @@
+{
+  "core": [
+    {
+      "source": "check_l06.py",
+      "same_as_extracted_qualification": true
+    },
+    {
+      "source": "l06_physics.py",
+      "same_as_extracted_qualification": true
+    },
+    {
+      "source": "l06_input.py",
+      "same_as_extracted_qualification": true
+    },
+    {
+      "source": "l06_delivery.py",
+      "same_as_extracted_qualification": true
+    }
+  ],
+  "qualify_delivery_change": "explicit inputs instead of missing legacy v2 locations; its separate real11CLI receipt binds final source",
+  "identity_scope": "concrete executed objects only, not a hash or functional acceptance gate"
+}

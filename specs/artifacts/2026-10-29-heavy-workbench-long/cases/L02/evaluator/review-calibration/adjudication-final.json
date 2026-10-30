@@ -1,0 +1,33 @@
+{
+  "format": "l02-controlled-review-adjudication/1",
+  "written_at": "2026-10-30T11:42:40.476680+00:00",
+  "original_comparison": "comparison-initial.json",
+  "original_ratings": "D:\\opencorvus-benchmark-runs\\l02-scientific-reference-full-review-20261030\\calibration-initial.json",
+  "scope": {
+    "leaves": [
+      "B09",
+      "D06",
+      "D07",
+      "D09",
+      "E04",
+      "E05"
+    ],
+    "packets": 4,
+    "judgments": 24
+  },
+  "ratings_changed": 0,
+  "author_key_changed": false,
+  "rationale_correction": {
+    "leaves": [
+      "B09"
+    ],
+    "packets": [
+      "d4f5c8be3cbd",
+      "6b9518e4d122"
+    ],
+    "record": "D:\\opencorvus-benchmark-runs\\l02-scientific-reference-full-review-20261030\\CLARIFICATION-PROBABILITY.md",
+    "basis": "A realized 0/4 is a local exposure, not a logical refutation of an 80% probabilistic guarantee. Failure rests on unsupported marginal-to-joint and finite-sample claims."
+  },
+  "remaining_component_blockers": [],
+  "limitations": "Familiar non-blind AI reviewer; six content leaves, two controlled qualities and two equivalent formats. No whole-case counterfactual score, professional-human or statistical reliability certification."
+}

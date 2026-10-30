@@ -1,0 +1,5 @@
+# optional选择loss的严格类型修复
+
+独立实际发现False/True能在expected0/1时经Fraction通过，原源/回执在最终合同独立审查原件；问题是唯一assess_selection的可选候选字段未核字符串。当前在数值比较前type is str，仍报selection_invalid，允许未约分同义有理串及省略optional。
+
+主实际pipeline checker20检查/1.355秒：两原bool映射到明确candidate错误，合法/未约分/省略均通过；12原真实accepted selector全部重新验与原assessment同义。零新native/预测/reader。自有harness先把表cell误写cells的失败及引号探查错误保留，非产品/候选失败；初harness没有单独原字节快照，按真实来源披露，不补造。原121/38/66 grade未改，最终源仅边界增量，不假称原native执行了修后源。

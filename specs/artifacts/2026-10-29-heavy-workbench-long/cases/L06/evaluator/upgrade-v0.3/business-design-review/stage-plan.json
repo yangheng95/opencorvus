@@ -1,0 +1,52 @@
+{
+  "format": "independent-design-stage/1",
+  "case": "L06/0.3 construction",
+  "reviewer": "/root/benchmark_review",
+  "review_mode": "read-only non-blind AI-agent design review, familiar with frozen0.2 and prior information primitive; no redelegation",
+  "status": "proceed_with_first_cheap_extraction_slice_not_full03_approval",
+  "initial_design_issues": [
+    {
+      "id": "D01",
+      "issue": "old diagnostic continuation versus new no-invalid-commit must not produce two recurrences or fail-fast away old graded residuals",
+      "current_resolution": "parent chose one pure tentative kernel, legacy diagnostic continuation, online commit only with zero violations; requires implementation qualification"
+    },
+    {
+      "id": "D02",
+      "issue": "begin-week/restore phase and due queues could double-count receipts or arrivals or reject legal negative-credit state",
+      "current_resolution": "parent chose only post_week checkpoints, pure repeatable begin projection, advance from original post state, absolute due-week, signed cash; requires implementation qualification"
+    }
+  ],
+  "must_make_explicit_in_current_contract": [
+    "static first-version price/lead and positive receipt lag; no hidden demand backlogging or retroactive pipeline cancellation",
+    "preserve old legacy first-error/violation families/counts and infeasible financial masking",
+    "versioned state/action identities and one authoritative committed prefix; derived state cannot be a second writable source",
+    "complete published history including signals/future notices, not self-declared labels or only current state",
+    "new partial reveals must leave genuine positive-probability future uncertainty and prior lead-time commitments",
+    "deterministic policy realization versus legitimate randomized tie-breaking; input leakage checks must not demand identical outputs across independent randomized reruns"
+  ],
+  "minimum_slice": "one pure weekly physical/cash kernel plus old collector equivalence and post_week begin/advance state cards; no new solver",
+  "representative_groups": [
+    "two actual old sealed OC/Codex complete plans and original full ledgers/counters",
+    "multiple simultaneous stage-peak violations with no trusted financial output",
+    "package/shared supplier/MOQ/empty-truck/route/shared-hours boundaries",
+    "three-week signed cash and receipt/arrival replay state card",
+    "terminal FG/raw pipeline/AR/credit-floor distinctions",
+    "semantic complete-history and perfect-recall state groupings",
+    "complete positive-support multistage feasible factory policy",
+    "same-physics anticipatory relaxation and a feasible higher-cost legal alternative plus wrong-commitment controls"
+  ],
+  "parent_baseline_receipt_only": "baseline-observation.json; no independent rerun this turn",
+  "old_frozen02_inputs_rubric_freeze_scores_changed": false,
+  "old_solver_or_enumeration_repeated": false,
+  "active_L02_touched": false,
+  "new_experiments": 0,
+  "new_implementation": false,
+  "new_native_Docker_solver_Provider_GPU_UI_calls": 0,
+  "full03_materials_or_feasibility_qualified": false,
+  "online_isolation_or_restart_qualified": false,
+  "new_quality_bound_registered": false,
+  "full03_approved": false,
+  "case_frozen": false,
+  "hours_level_qualified": false,
+  "ten_heavy_cases_complete": false
+}

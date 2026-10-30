@@ -1,0 +1,215 @@
+{
+  "observed_at": "2026-10-30T10:45:39.353826+00:00",
+  "checks": [
+    {
+      "name": "opencorvus:all_old_rows_cost_AR_active_predicates_exact",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "codex:all_old_rows_cost_AR_active_predicates_exact",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "state_card_week0:admissible",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "post0_cash_minus1_due1_raw1",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "state_card_week1:admissible",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "post1_cash_minus1_due2_AR3",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "repeatable_begin_cash2_receipt3_from_post_cash_minus1",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "state_card_week2:admissible",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "post2_final_cash2_total_cost2_due2_settled",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "signed-credit-and-receipts:real_checker_cli_matches_prior_contract",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "signed-credit-and-receipts:explicit_business_outcome",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "both-stage-peaks:real_checker_cli_matches_prior_contract",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "both-stage-peaks:explicit_business_outcome",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "both_peaks_collected_and_finance_masked",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "later-order-before-earlier-physical-first-error:real_checker_cli_matches_prior_contract",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "later-order-before-earlier-physical-first-error:explicit_business_outcome",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "order_and_both_physical_residuals_retained",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "MOQ0-empty-truck-paid:real_checker_cli_matches_prior_contract",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "MOQ0-empty-truck-paid:explicit_business_outcome",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "empty_truck_cost3_final_cash0",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "pack-units-not-lot-price:real_checker_cli_matches_prior_contract",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "pack-units-not-lot-price:explicit_business_outcome",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "three_units_cost6",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "MOQ-positive-empty-truck:real_checker_cli_matches_prior_contract",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "MOQ-positive-empty-truck:explicit_business_outcome",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "binary-truck:real_checker_cli_matches_prior_contract",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "binary-truck:explicit_business_outcome",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "terminal-raw-allowed-with-holding:real_checker_cli_matches_prior_contract",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "terminal-raw-allowed-with-holding:explicit_business_outcome",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "raw1_holding1_total3",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "terminal-FG-rejected:real_checker_cli_matches_prior_contract",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "terminal-FG-rejected:explicit_business_outcome",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "terminal-raw-pipeline-rejected:real_checker_cli_matches_prior_contract",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "terminal-raw-pipeline-rejected:explicit_business_outcome",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "post-horizon-AR-allowed-not-cash:real_checker_cli_matches_prior_contract",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "post-horizon-AR-allowed-not-cash:explicit_business_outcome",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "post_horizon_AR3_cash0",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "terminal-cash-not-credit-or-AR:real_checker_cli_matches_prior_contract",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "terminal-cash-not-credit-or-AR:explicit_business_outcome",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "route-assignment:real_checker_cli_matches_prior_contract",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "route-assignment:explicit_business_outcome",
+      "passed": true,
+      "observed": null
+    }
+  ],
+  "checker_cli_calls": 26,
+  "wall_seconds": 3.9639246999286115,
+  "scope": "one shared tentative recurrence, two old full-plan exact regressions, real CLI/state cards; not full03 tree or online recovery",
+  "new_solver_LLM_Docker_calls": 0,
+  "full03_qualified": false
+}

@@ -1,5 +1,6 @@
 """Actual CLI qualification of the derived-output primitive only."""
 import argparse,copy,json,shutil,subprocess,sys,time
+from fractions import Fraction
 from pathlib import Path
 
 from check_l06 import evaluate
@@ -8,15 +9,34 @@ from l06_input import read_json,validate_instance
 from l06_packet import write_packet
 
 
+def unreduced_summary(summary):
+    """Exact allowed representation; works for every rational denominator."""
+    result=copy.deepcopy(summary)
+    for value in [result['expected_cost_minor'],*[row['probability'] for row in result['scenarios'].values()]]:
+        value['numerator']*=100;value['denominator']*=100
+    return result
+
+
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,required=True);args=parser.parse_args()
+    parser=argparse.ArgumentParser()
+    for name in ('output','reference-input','reference-plan','credit-input','credit-plan'):
+        parser.add_argument('--'+name,type=Path,required=True)
+    parser.add_argument('--expected-cost-exact',required=True)
+    args=parser.parse_args()
     root=args.output;root.mkdir(parents=True,exist_ok=False);source=root/'executed-source';source.mkdir()
-    for name in ['l06_delivery.py','l06_input.py','l06_packet.py','check_l06.py','qualify_delivery.py']:
+    for name in ['l06_delivery.py','l06_input.py','l06_packet.py','l06_physics.py','check_l06.py','qualify_delivery.py']:
         shutil.copy2(Path(__file__).parent/name,source/name)
-    work=Path(__file__).parent;events=[];start=time.perf_counter()
-    data=read_json(work/'v2/inputs/full.json','instance_invalid');plan=read_json(work/'v2/root-node-diagnostic-20261029/cpsat-full/plan.json','plan_json')
+    events=[];start=time.perf_counter()
+    data=read_json(args.reference_input,'instance_invalid');plan=read_json(args.reference_plan,'plan_json')
     packet=root/'packet';write_packet(data,packet)
-    ledger,summary=expected_delivery(data,plan,evaluate(data,plan));assert summary['expected_cost_minor']=={'numerator':490329,'denominator':10}
+    business=evaluate(data,plan);ledger,summary=expected_delivery(data,plan,business)
+    expected=Fraction(args.expected_cost_exact)
+    assert summary['expected_cost_minor']=={'numerator':expected.numerator,'denominator':expected.denominator}
+    # Optional output declarations are constructed for this explicit projection
+    # control; they do not supply physical state or alter the passed actions.
+    for name,record in plan['decisions'].items():
+        for field in ('raw_inventory','finished_inventory'):
+            record[field]=[row[field].copy() for row in business['scenarios'][name]['weeks']]
     def write(name,value):
         path=root/name;path.write_text(json.dumps(value,indent=2,allow_nan=False)+'\n');return path
     plan_path=write('plan.json',plan);ledger_path=write('ledger.json',ledger);summary_path=write('summary.json',summary)
@@ -29,11 +49,9 @@ def main():
         return result
     passed={identifier:'verified_pass' for identifier in ['C01','C07','C08','C09','C10','C11','D03','D04','D05','D06']}
     run('full-valid',passed)
-    decimal=copy.deepcopy(summary);decimal['expected_cost_minor']=49032.9
-    for record in decimal['scenarios'].values():
-        probability=record['probability'];record['probability']={'numerator':probability['numerator']*100,'denominator':probability['denominator']*100}
-    run('exact-decimal-and-unreduced',passed,summary_arg=write('decimal-summary.json',decimal))
-    bad=copy.deepcopy(summary);name=data['scenarios'][0]['id'];bad['scenarios'][name]['minimum_cash_minor']=5369
+    unreduced=unreduced_summary(summary)
+    run('exact-unreduced-rationals',passed,summary_arg=write('unreduced-summary.json',unreduced))
+    bad=copy.deepcopy(summary);name=data['scenarios'][0]['id'];bad['scenarios'][name]['minimum_cash_minor']+=1
     run('changed-minimum-cash',passed|{'C08':'verified_fail'},2,summary_arg=write('bad-minimum-summary.json',bad))
     bad=copy.deepcopy(ledger);bad['scenarios'][name]['weeks'][0]['cost']+=1
     run('changed-cost-ledger',passed|{'D05':'verified_fail'},2,ledger_arg=write('bad-cost-ledger.json',bad))
@@ -50,9 +68,8 @@ def main():
     quotes=broken/'supplier_quotes.csv'
     with quotes.open('a') as file:file.write(quotes.read_text().splitlines()[1]+'\n')
     invalid=run('evaluation-input-error',exit_code=3,packet_path=broken);assert invalid['status']=='run_invalid'
-    native=work/'v2/root-node-diagnostic-20261029/native-known'
-    credit=read_json(native/'credit-input.json','instance_invalid');credit['credit_limit_minor']=5
-    credit_plan=read_json(native/'credit-integer.json','record')['plan'];validate_instance(credit)
+    credit=read_json(args.credit_input,'instance_invalid')
+    credit_plan=read_json(args.credit_plan,'plan_json');validate_instance(credit)
     credit_ledger,credit_summary=expected_delivery(credit,credit_plan,evaluate(credit,credit_plan))
     for record in credit_ledger['scenarios'].values():
         assert [row['receivable'] for row in record['weeks']]==[10,0]

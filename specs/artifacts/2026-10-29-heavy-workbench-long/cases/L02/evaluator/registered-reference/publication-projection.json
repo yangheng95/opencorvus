@@ -1,0 +1,30 @@
+{
+  "format": "l02-real-findings-publication-projection/1",
+  "subject_role": "reference_qualification",
+  "original_assignment_id": "716c3d079e6e4118a0f66e8b1a5f9532",
+  "original_assessment": "D:\\opencorvus-benchmark-runs\\l02-scientific-reference-20261030\\original-full-assessment\\assessment.json",
+  "original_status": "draft_assessment_complete",
+  "original_cli_exit": 4,
+  "original_total_score": null,
+  "scope": "Arithmetic projection of the 66 genuinely source-bound original findings onto approved frozen publication metadata. This is NOT a new source-bound grade, assignment, review, native execution or candidate result.",
+  "projection": {
+    "status": "graded",
+    "fixed_denominator": 100,
+    "total_score": 100,
+    "study_complete": true,
+    "quality_success": true,
+    "good": true,
+    "known_critical_failures": [],
+    "unassessed": [],
+    "publication_blockers": [],
+    "counts": {
+      "blocked_candidate": 0,
+      "candidate_incomplete": 0,
+      "unassessed": 0,
+      "verified_fail": 0,
+      "verified_pass": 66
+    },
+    "total_score_exact": "100"
+  },
+  "native_executions": 0
+}

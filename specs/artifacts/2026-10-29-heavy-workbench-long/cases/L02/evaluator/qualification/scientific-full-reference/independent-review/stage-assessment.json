@@ -1,0 +1,51 @@
+{
+  "format": "l02-independent-scientific-review-stage/1",
+  "observed_at_utc": "2026-10-30T11:15:30.884784+00:00",
+  "assignment_id": "716c3d079e6e4118a0f66e8b1a5f9532",
+  "submission_id": "author-L02-5b445d92b-formal-20261030",
+  "scope": "actual 38 independent_evaluator_review leaves and 4x6 label-masked controlled narratives",
+  "actual_manual_review": {
+    "leaves": 38,
+    "states": {
+      "verified_pass": 38
+    },
+    "seal": "initial-review-seal.json",
+    "original_review_bytes_equal": true
+  },
+  "independent_artifact_audit": {
+    "primary_observations": 188,
+    "primary_all_passed": true,
+    "supplementary_initial_passed": 9,
+    "supplementary_initial_total": 10,
+    "reviewer_count_error_corrected": "48 weather cells / 192 leaf checks, imputation-correction.json",
+    "native_receipt_operations": 363,
+    "native_receipts_all_passed_after_reviewer_filename_selection_correction": true,
+    "original_false_receipts_preserved": true,
+    "coefficient_refitting_performed": false,
+    "actual_report_png_viewed": true
+  },
+  "calibration": {
+    "sealed_at_utc": "2026-10-30T11:14:19.026480+00:00",
+    "ratings": 24,
+    "states": {
+      "verified_pass": 12,
+      "verified_fail": 12
+    },
+    "common_files": 256,
+    "common_actual_original_bytes_same": true,
+    "author_key_or_preparation_script_read": false,
+    "other_manual_or_machine_leaves_regraded": false,
+    "author_comparison": "not performed by reviewer; parent may compare after this seal"
+  },
+  "blockers_found_in_this_actual_reference_scope": [],
+  "C01_C02_Q26_handgraded": false,
+  "total_score": null,
+  "case_freeze_approval": false,
+  "limits": [
+    "non-blind AI-agent familiar with original reference; labels masked for four controlled texts only",
+    "not professional human or statistical maturity validation",
+    "one author reference is not fresh candidate evidence or candidate-hours validation",
+    "no new native, reader, forecast, report, solver, Provider, GPU or UI run",
+    "not certification of entire ten-case suite"
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "format": "heavy-workbench-case-profile/1",
+  "id": "L02",
+  "version": "L02/0.2.0",
+  "status": "frozen",
+  "domain": "release-aware hierarchical forecasting research and synthetic operating decision",
+  "materials": "original synthetic UTC vintages; public development prefix, evaluator-controlled later packets",
+  "contracts": {
+    "materials": "material-contract.json",
+    "study": "study-contract.json",
+    "quality": "quality-policy.json",
+    "interfaces": "INTERFACES.md"
+  },
+  "assignment": {
+    "outer_origins": 12,
+    "inner_per_outer": 3,
+    "horizon_complete_utc_days": 14,
+    "leaf_nodes": 4,
+    "aggregate_nodes": 2,
+    "candidate_defined_method_pool": true
+  },
+  "programs": [
+    "predict",
+    "select",
+    "report"
+  ],
+  "language": "candidate choice, declared dependencies provisioned before sealing",
+  "resources": {
+    "worker_cpu": 1,
+    "network": "none",
+    "minimum_runtime": null,
+    "user_total_wall_limit": null,
+    "user_total_token_limit": null
+  },
+  "public_files": [
+    "ASOF-CONTRACT.md",
+    "ENVIRONMENT.md",
+    "EXECUTION-CONTRACT.md",
+    "INTERFACES.md",
+    "MATERIALS.md",
+    "PROVENANCE.md",
+    "QUALITY-CONTRACT.md",
+    "RESEARCH-DELIVERY.md",
+    "REVIEW-ANCHORS.md",
+    "STUDY-CONTRACT.md",
+    "TASK.md",
+    "development-materials.zip",
+    "material-contract.json",
+    "quality-policy.json",
+    "study-contract.json",
+    "profile.json"
+  ],
+  "measurement": "effective candidate research/implementation/experiment/review; preparation, faults and evaluator computation reported separately",
+  "limitations": [
+    "development-case contract, not professional-human or statistical maturity certification",
+    "candidate discrimination and hours not yet established"
+  ],
+  "two_good_action": "new version; retain this version and its observations"
+}
