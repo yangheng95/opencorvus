@@ -1,0 +1,377 @@
+{
+  "scope": "actual automatic Q26, research40 unassessed; no candidate score",
+  "assessment": {
+    "status": "assessment_incomplete",
+    "fixed_denominator": 100,
+    "total_score": null,
+    "study_complete": null,
+    "quality_success": null,
+    "good": null,
+    "known_critical_failures": [],
+    "unassessed": [
+      "A01",
+      "A02",
+      "A03",
+      "A04",
+      "A05",
+      "A06",
+      "B01",
+      "B02",
+      "B03",
+      "B04",
+      "B05",
+      "B06",
+      "B07",
+      "B08",
+      "B09",
+      "C01",
+      "C02",
+      "C03",
+      "C04",
+      "C05",
+      "C06",
+      "D01",
+      "D02",
+      "D03",
+      "D04",
+      "D05",
+      "D06",
+      "D07",
+      "D08",
+      "D09",
+      "E01",
+      "E02",
+      "E03",
+      "E04",
+      "E05",
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05"
+    ],
+    "publication_blockers": [
+      "rubric_not_frozen",
+      "readiness:registered_quality_reference",
+      "readiness:quality_controls_independent",
+      "readiness:formal_full_assignment_cold",
+      "readiness:complete_scientific_reference",
+      "readiness:complete_grader_evidence_binding",
+      "readiness:independent_rubric_review",
+      "readiness:review_anchor_calibration",
+      "unassessed:A01",
+      "unassessed:A02",
+      "unassessed:A03",
+      "unassessed:A04",
+      "unassessed:A05",
+      "unassessed:A06",
+      "unassessed:B01",
+      "unassessed:B02",
+      "unassessed:B03",
+      "unassessed:B04",
+      "unassessed:B05",
+      "unassessed:B06",
+      "unassessed:B07",
+      "unassessed:B08",
+      "unassessed:B09",
+      "unassessed:C01",
+      "unassessed:C02",
+      "unassessed:C03",
+      "unassessed:C04",
+      "unassessed:C05",
+      "unassessed:C06",
+      "unassessed:D01",
+      "unassessed:D02",
+      "unassessed:D03",
+      "unassessed:D04",
+      "unassessed:D05",
+      "unassessed:D06",
+      "unassessed:D07",
+      "unassessed:D08",
+      "unassessed:D09",
+      "unassessed:E01",
+      "unassessed:E02",
+      "unassessed:E03",
+      "unassessed:E04",
+      "unassessed:E05",
+      "unassessed:F01",
+      "unassessed:F02",
+      "unassessed:F03",
+      "unassessed:F04",
+      "unassessed:F05"
+    ],
+    "counts": {
+      "blocked_candidate": 0,
+      "candidate_incomplete": 0,
+      "unassessed": 40,
+      "verified_fail": 0,
+      "verified_pass": 26
+    }
+  },
+  "findings": [
+    {
+      "id": "A01",
+      "status": "unassessed"
+    },
+    {
+      "id": "A02",
+      "status": "unassessed"
+    },
+    {
+      "id": "A03",
+      "status": "unassessed"
+    },
+    {
+      "id": "A04",
+      "status": "unassessed"
+    },
+    {
+      "id": "A05",
+      "status": "unassessed"
+    },
+    {
+      "id": "A06",
+      "status": "unassessed"
+    },
+    {
+      "id": "B01",
+      "status": "unassessed"
+    },
+    {
+      "id": "B02",
+      "status": "unassessed"
+    },
+    {
+      "id": "B03",
+      "status": "unassessed"
+    },
+    {
+      "id": "B04",
+      "status": "unassessed"
+    },
+    {
+      "id": "B05",
+      "status": "unassessed"
+    },
+    {
+      "id": "B06",
+      "status": "unassessed"
+    },
+    {
+      "id": "B07",
+      "status": "unassessed"
+    },
+    {
+      "id": "B08",
+      "status": "unassessed"
+    },
+    {
+      "id": "B09",
+      "status": "unassessed"
+    },
+    {
+      "id": "C01",
+      "status": "unassessed"
+    },
+    {
+      "id": "C02",
+      "status": "unassessed"
+    },
+    {
+      "id": "C03",
+      "status": "unassessed"
+    },
+    {
+      "id": "C04",
+      "status": "unassessed"
+    },
+    {
+      "id": "C05",
+      "status": "unassessed"
+    },
+    {
+      "id": "C06",
+      "status": "unassessed"
+    },
+    {
+      "id": "D01",
+      "status": "unassessed"
+    },
+    {
+      "id": "D02",
+      "status": "unassessed"
+    },
+    {
+      "id": "D03",
+      "status": "unassessed"
+    },
+    {
+      "id": "D04",
+      "status": "unassessed"
+    },
+    {
+      "id": "D05",
+      "status": "unassessed"
+    },
+    {
+      "id": "D06",
+      "status": "unassessed"
+    },
+    {
+      "id": "D07",
+      "status": "unassessed"
+    },
+    {
+      "id": "D08",
+      "status": "unassessed"
+    },
+    {
+      "id": "D09",
+      "status": "unassessed"
+    },
+    {
+      "id": "E01",
+      "status": "unassessed"
+    },
+    {
+      "id": "E02",
+      "status": "unassessed"
+    },
+    {
+      "id": "E03",
+      "status": "unassessed"
+    },
+    {
+      "id": "E04",
+      "status": "unassessed"
+    },
+    {
+      "id": "E05",
+      "status": "unassessed"
+    },
+    {
+      "id": "F01",
+      "status": "unassessed"
+    },
+    {
+      "id": "F02",
+      "status": "unassessed"
+    },
+    {
+      "id": "F03",
+      "status": "unassessed"
+    },
+    {
+      "id": "F04",
+      "status": "unassessed"
+    },
+    {
+      "id": "F05",
+      "status": "unassessed"
+    },
+    {
+      "id": "Q.macro.scaled_mse",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.macro.scaled_wis",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.node.A1.scaled_mse",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.node.A1.scaled_wis",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.node.A2.scaled_mse",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.node.A2.scaled_wis",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.node.B1.scaled_mse",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.node.B1.scaled_wis",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.node.B2.scaled_mse",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.node.B2.scaled_wis",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.node.ZA.scaled_mse",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.node.ZA.scaled_wis",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.node.ZB.scaled_mse",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.node.ZB.scaled_wis",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.decision.A1.underage_1",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.decision.A1.underage_3",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.decision.A1.underage_9",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.decision.A2.underage_1",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.decision.A2.underage_3",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.decision.A2.underage_9",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.decision.B1.underage_1",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.decision.B1.underage_3",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.decision.B1.underage_9",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.decision.B2.underage_1",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.decision.B2.underage_3",
+      "status": "verified_pass"
+    },
+    {
+      "id": "Q.decision.B2.underage_9",
+      "status": "verified_pass"
+    }
+  ]
+}

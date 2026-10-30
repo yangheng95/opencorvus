@@ -18,3 +18,5 @@ python current-source/summarize_l02_study.py --run <原运行目录> --out <全�
 正式执行注册全部outer，不能在同run替换或扩展。仅私有作者资格可指定`--author-diagnostic-outer-id`，不会向可重提候选释放外层反馈。代码入口没有总墙钟/模型token限制；每个数值程序参数和资源在真实收据记录。中断后核原容器/原件，不自动重跑已验收cell。旧120组的作者专用runner/summary源码只在历史ZIP，不提供当前双格式fallback。新代码只执行数值程序，不添加LLM路由、隐藏消息或host工具选择流程。
 
 [主方原执行](qualification/main/result.json)是两个真实微型worker与解析对照；[独立最终审查](qualification/independent-review/REVIEW.md)及[机器结论](qualification/independent-review/stage-assessment.json)记录三个假通过/修复与唯一新cold。两边originals.zip保留原字节、实际命令/退出/挂载和所有首失败；主方初checker执行不冒称修后执行。当前局部blocking=[]不代表全题批准，不重复秒级实验凑工作量。
+
+[质量/研究交付资格](qualification/quality-study/README.md)只读复用原真实数值：事前固定外部baseline政策、单期成本/分位策略、真实26条件和坏对照、原registry身份/同义行序与设施优先级。`l02_quality.py`是唯一loss/质量primitive，`l02_rubric.py`仅聚合可信评估状态，不接受candidate自评或代替完整grader。`quality-policy.draft.json`和`../rubric.draft.json`仍未冻结；实际研究分析、精确表和新图不是新正式清洁pipeline或候选分数。

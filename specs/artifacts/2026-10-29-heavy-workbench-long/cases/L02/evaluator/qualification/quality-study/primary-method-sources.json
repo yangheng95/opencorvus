@@ -1,0 +1,21 @@
+{
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/0912.0902",
+      "used_for": "specified functional and corresponding scoring loss; not a benchmark passing threshold"
+    },
+    {
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618",
+      "used_for": "marginal weighted interval score and decomposition"
+    },
+    {
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1010592",
+      "used_for": "verified 2022 correction concerns example values; no example numbers copied"
+    },
+    {
+      "url": "https://www.lse.ac.uk/CATS/Assets/PDFs/Publications/Papers/2019/Interpreting-the-skill-score-form-of-forecast-performance-metrics.pdf",
+      "used_for": "limitations of transformed skill scores; original losses remain primary"
+    }
+  ],
+  "policy_origin": "author registered noncompensatory no-regression goal; references do not assert this as universal benchmark acceptance"
+}

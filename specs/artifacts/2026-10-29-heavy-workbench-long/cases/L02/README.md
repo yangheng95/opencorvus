@@ -8,4 +8,6 @@
 
 [通用数值执行合同](public/EXECUTION-CONTRACT.draft.md)另有[两语言/原CID恢复/封存重算局部资格](evaluator/qualification/generic-execution/README.md)：候选自带files/argv和池，预测/selector/report分开获得授权数据，SQLite为唯一cell状态来源。原作者硬编码执行及双格式summary不保留当前fallback。单outer私有诊断不是正式12outer候选研究。
 
-目前认可完整数值参考和通用执行局部资格；完整科学/运营决策交付、预先质量底线/低质量对照、原子rubric/人评校准、全grader与独立冻结仍待。quality_floor=null，候选成绩与小时证据不存在。整套合同冻结仍1/10、有效小时资格0/10。
+[相对质量政策与研究稿](evaluator/qualification/quality-study/README.md)新增事前固定的外部参照/单期损失条件，原真实选择26/26通过，基线自身、零预测、极宽区间与一致性联动单叶退化均被拒。新[66原子rubric稿](rubric.draft.json)和可信评估聚合明确关键项不能被高分补偿；作者研究分析保留June实际缺量，仍是事后分析稿。
+
+目前认可数值参考/通用执行和质量局部证据；完整正式清洁assignment、报告执行来源通道、职业科学/运营参考、全grader绑定、人评锚点/独立冻结仍待。study中正式quality_floor仍null，建设期政策另立draft；候选成绩与小时证据不存在。整套合同冻结仍1/10、有效小时资格0/10。

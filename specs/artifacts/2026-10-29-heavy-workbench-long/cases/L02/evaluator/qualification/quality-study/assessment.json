@@ -1,0 +1,774 @@
+{
+  "status": "quality_and_draft_rubric_components_independently_qualified",
+  "reference_quality": {
+    "status": "quality_policy_real_reference_and_controls_assessed",
+    "cases": [
+      {
+        "name": "selected-reference",
+        "quality_success": true,
+        "failed": [],
+        "pass_count": 26,
+        "condition_count": 26,
+        "source_scope": "real originally inner-selected forecasts"
+      },
+      {
+        "name": "baseline-self-control",
+        "quality_success": false,
+        "failed": [
+          "macro.scaled_mse",
+          "macro.scaled_wis"
+        ],
+        "pass_count": 24,
+        "condition_count": 26,
+        "source_scope": "deliberate qualification control, not candidate or reachability"
+      },
+      {
+        "name": "zero-control",
+        "quality_success": false,
+        "failed": [
+          "macro.scaled_mse",
+          "macro.scaled_wis",
+          "node.A1.scaled_mse",
+          "node.A1.scaled_wis",
+          "decision.A1.underage_1",
+          "decision.A1.underage_3",
+          "decision.A1.underage_9",
+          "node.A2.scaled_mse",
+          "node.A2.scaled_wis",
+          "decision.A2.underage_1",
+          "decision.A2.underage_3",
+          "decision.A2.underage_9",
+          "node.B1.scaled_mse",
+          "node.B1.scaled_wis",
+          "decision.B1.underage_1",
+          "decision.B1.underage_3",
+          "decision.B1.underage_9",
+          "node.B2.scaled_mse",
+          "node.B2.scaled_wis",
+          "decision.B2.underage_1",
+          "decision.B2.underage_3",
+          "decision.B2.underage_9",
+          "node.ZA.scaled_mse",
+          "node.ZA.scaled_wis",
+          "node.ZB.scaled_mse",
+          "node.ZB.scaled_wis"
+        ],
+        "pass_count": 0,
+        "condition_count": 26,
+        "source_scope": "deliberate qualification control, not candidate or reachability"
+      },
+      {
+        "name": "wide-interval-control",
+        "quality_success": false,
+        "failed": [
+          "macro.scaled_wis",
+          "node.A1.scaled_wis",
+          "decision.A1.underage_3",
+          "decision.A1.underage_9",
+          "node.A2.scaled_wis",
+          "decision.A2.underage_3",
+          "decision.A2.underage_9",
+          "node.B1.scaled_wis",
+          "decision.B1.underage_3",
+          "decision.B1.underage_9",
+          "node.B2.scaled_wis",
+          "decision.B2.underage_3",
+          "decision.B2.underage_9",
+          "node.ZA.scaled_wis",
+          "node.ZB.scaled_wis"
+        ],
+        "pass_count": 11,
+        "condition_count": 26,
+        "source_scope": "deliberate qualification control, not candidate or reachability"
+      },
+      {
+        "name": "coherent-one-leaf-mean-degradation",
+        "quality_success": false,
+        "failed": [
+          "macro.scaled_mse",
+          "node.A1.scaled_mse",
+          "node.ZA.scaled_mse"
+        ],
+        "pass_count": 23,
+        "condition_count": 26,
+        "source_scope": "deliberate qualification control, not candidate or reachability"
+      }
+    ],
+    "policy_unchanged": true,
+    "wall_seconds": 8.811652400065213,
+    "full_quality_reachability": true,
+    "candidate_score": null,
+    "L02_frozen": false,
+    "scope": "one-time old actual-prediction author qualification; no new forecast/solver/candidate, no live legacy input fallback"
+  },
+  "hand_loss": {
+    "checks": [
+      {
+        "input": [
+          "8",
+          "10",
+          "9",
+          "1"
+        ],
+        "output": {
+          "shortage_litres": "2",
+          "surplus_litres": "0",
+          "shortage_loss": "18",
+          "surplus_loss": "0",
+          "loss": "18"
+        }
+      },
+      {
+        "input": [
+          "12",
+          "10",
+          "9",
+          "1"
+        ],
+        "output": {
+          "shortage_litres": "0",
+          "surplus_litres": "2",
+          "shortage_loss": "0",
+          "surplus_loss": "2",
+          "loss": "2"
+        }
+      },
+      {
+        "input": [
+          "10",
+          "10",
+          "3",
+          "1"
+        ],
+        "output": {
+          "shortage_litres": "0",
+          "surplus_litres": "0",
+          "shortage_loss": "0",
+          "surplus_loss": "0",
+          "loss": "0"
+        }
+      },
+      {
+        "input": [
+          "7/2",
+          "4",
+          "3",
+          "1"
+        ],
+        "output": {
+          "shortage_litres": "1/2",
+          "surplus_litres": "0",
+          "shortage_loss": "3/2",
+          "surplus_loss": "0",
+          "loss": "3/2"
+        }
+      },
+      {
+        "invalid": [
+          "True",
+          "1",
+          "1",
+          "1"
+        ],
+        "error": "facility_decision_values_invalid"
+      },
+      {
+        "invalid": [
+          "1",
+          "1",
+          "0",
+          "1"
+        ],
+        "error": "facility_decision_values_invalid"
+      },
+      {
+        "invalid": [
+          "-1",
+          "1",
+          "1",
+          "1"
+        ],
+        "error": "facility_decision_values_invalid"
+      }
+    ],
+    "finite_distribution_optima": {
+      "1": {
+        "risk": "5",
+        "actions": [
+          0
+        ]
+      },
+      "3": {
+        "risk": "9",
+        "actions": [
+          10
+        ]
+      },
+      "9": {
+        "risk": "15",
+        "actions": [
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ]
+      }
+    },
+    "scope": "exact loss/quantile mathematics only; no reference or candidate quality"
+  },
+  "binding_and_arithmetic": {
+    "status": "binding_and_rubric_protocol_qualified",
+    "checks": [
+      {
+        "name": "registered_reference_loaded",
+        "origins": 12,
+        "forecast_rows": 1008
+      },
+      {
+        "name": "same_business_rows_reordered_reference_accepted",
+        "status": "verified"
+      },
+      {
+        "name": "changed_business_quantity",
+        "error": "facility_quality_binding_invalid"
+      },
+      {
+        "name": "duplicate_grid_identity",
+        "error": "facility_quality_binding_invalid"
+      },
+      {
+        "name": "missing_candidate_origin",
+        "error": "quality_incomplete"
+      },
+      {
+        "name": "missing_reference_origin",
+        "error": "facility_quality_registration_invalid"
+      },
+      {
+        "name": "bad_fixed_reference_forecast",
+        "error": "facility_quality_reference_invalid"
+      },
+      {
+        "name": "real_quality_pass_and_unassessed_research",
+        "result": {
+          "status": "assessment_incomplete",
+          "fixed_denominator": 100,
+          "total_score": null,
+          "study_complete": null,
+          "quality_success": null,
+          "good": null,
+          "known_critical_failures": [],
+          "unassessed": [
+            "A01",
+            "A02",
+            "A03",
+            "A04",
+            "A05",
+            "A06",
+            "B01",
+            "B02",
+            "B03",
+            "B04",
+            "B05",
+            "B06",
+            "B07",
+            "B08",
+            "B09",
+            "C01",
+            "C02",
+            "C03",
+            "C04",
+            "C05",
+            "C06",
+            "D01",
+            "D02",
+            "D03",
+            "D04",
+            "D05",
+            "D06",
+            "D07",
+            "D08",
+            "D09",
+            "E01",
+            "E02",
+            "E03",
+            "E04",
+            "E05",
+            "F01",
+            "F02",
+            "F03",
+            "F04",
+            "F05"
+          ],
+          "publication_blockers": [
+            "rubric_not_frozen",
+            "readiness:registered_quality_reference",
+            "readiness:quality_controls_independent",
+            "readiness:formal_full_assignment_cold",
+            "readiness:complete_scientific_reference",
+            "readiness:complete_grader_evidence_binding",
+            "readiness:independent_rubric_review",
+            "readiness:review_anchor_calibration",
+            "unassessed:A01",
+            "unassessed:A02",
+            "unassessed:A03",
+            "unassessed:A04",
+            "unassessed:A05",
+            "unassessed:A06",
+            "unassessed:B01",
+            "unassessed:B02",
+            "unassessed:B03",
+            "unassessed:B04",
+            "unassessed:B05",
+            "unassessed:B06",
+            "unassessed:B07",
+            "unassessed:B08",
+            "unassessed:B09",
+            "unassessed:C01",
+            "unassessed:C02",
+            "unassessed:C03",
+            "unassessed:C04",
+            "unassessed:C05",
+            "unassessed:C06",
+            "unassessed:D01",
+            "unassessed:D02",
+            "unassessed:D03",
+            "unassessed:D04",
+            "unassessed:D05",
+            "unassessed:D06",
+            "unassessed:D07",
+            "unassessed:D08",
+            "unassessed:D09",
+            "unassessed:E01",
+            "unassessed:E02",
+            "unassessed:E03",
+            "unassessed:E04",
+            "unassessed:E05",
+            "unassessed:F01",
+            "unassessed:F02",
+            "unassessed:F03",
+            "unassessed:F04",
+            "unassessed:F05"
+          ],
+          "counts": {
+            "blocked_candidate": 0,
+            "candidate_incomplete": 0,
+            "unassessed": 40,
+            "verified_fail": 0,
+            "verified_pass": 26
+          }
+        }
+      },
+      {
+        "name": "candidate_missing_fixed_denominator",
+        "result": {
+          "status": "graded",
+          "fixed_denominator": 100,
+          "total_score": 97,
+          "study_complete": false,
+          "quality_success": true,
+          "good": false,
+          "known_critical_failures": [
+            "A01"
+          ],
+          "unassessed": [],
+          "publication_blockers": [],
+          "counts": {
+            "blocked_candidate": 0,
+            "candidate_incomplete": 1,
+            "unassessed": 0,
+            "verified_fail": 0,
+            "verified_pass": 65
+          },
+          "total_score_exact": "97"
+        }
+      },
+      {
+        "name": "duplicate_rating_id",
+        "error": "facility_grade_mapping_invalid"
+      },
+      {
+        "name": "boolean_weight",
+        "error": "facility_rubric_invalid"
+      }
+    ],
+    "synthetic_rating_vector_protocol": [
+      {
+        "name": "selected-reference",
+        "synthetic_all_research_pass": true,
+        "total_score": 100,
+        "quality_success": true,
+        "good": true
+      },
+      {
+        "name": "baseline-self-control",
+        "synthetic_all_research_pass": true,
+        "total_score": 97,
+        "quality_success": false,
+        "good": false
+      },
+      {
+        "name": "zero-control",
+        "synthetic_all_research_pass": true,
+        "total_score": 85,
+        "quality_success": false,
+        "good": false
+      },
+      {
+        "name": "wide-interval-control",
+        "synthetic_all_research_pass": true,
+        "total_score": 91.5,
+        "quality_success": false,
+        "good": false
+      },
+      {
+        "name": "coherent-one-leaf-mean-degradation",
+        "synthetic_all_research_pass": true,
+        "total_score": 97.5,
+        "quality_success": false,
+        "good": false
+      }
+    ],
+    "wall_seconds": 2.781529000028968,
+    "actual_rubric_status": "draft",
+    "candidate_score": null,
+    "full_grader": false,
+    "scope": "reference identity and arithmetic/state contracts only, not truth of synthetic research ratings"
+  },
+  "priority_repair": {
+    "status": "facility_preflight_priority_repaired",
+    "checks": [
+      {
+        "name": "same_origin_both_incomplete",
+        "error": "facility_quality_reference_invalid"
+      },
+      {
+        "name": "early_candidate_late_reference_incomplete",
+        "error": "facility_quality_reference_invalid"
+      },
+      {
+        "name": "candidate_missing_reference_incomplete",
+        "error": "facility_quality_reference_invalid"
+      },
+      {
+        "name": "only_candidate_incomplete",
+        "error": "prediction_incomplete"
+      },
+      {
+        "name": "only_candidate_origin_missing",
+        "error": "quality_incomplete"
+      },
+      {
+        "name": "actual_selected_reference_same_original_26_outcomes",
+        "quality_success": true
+      }
+    ],
+    "wall_seconds": 1.6317503000609577,
+    "scope": "original matrix/library replay, no prediction or candidate execution"
+  },
+  "operations_required_repair": {
+    "status": "mandatory_deliverable_critical_repaired",
+    "synthetic_protocol_vectors": [
+      {
+        "version": "before",
+        "synthetic_rating_protocol_only": true,
+        "result": {
+          "status": "graded",
+          "fixed_denominator": 100,
+          "total_score": 97,
+          "study_complete": true,
+          "quality_success": true,
+          "good": true,
+          "known_critical_failures": [],
+          "unassessed": [],
+          "publication_blockers": [],
+          "counts": {
+            "blocked_candidate": 0,
+            "candidate_incomplete": 1,
+            "unassessed": 0,
+            "verified_fail": 0,
+            "verified_pass": 65
+          },
+          "total_score_exact": "97"
+        }
+      },
+      {
+        "version": "after",
+        "synthetic_rating_protocol_only": true,
+        "result": {
+          "status": "graded",
+          "fixed_denominator": 100,
+          "total_score": 97,
+          "study_complete": false,
+          "quality_success": true,
+          "good": false,
+          "known_critical_failures": [
+            "E02"
+          ],
+          "unassessed": [],
+          "publication_blockers": [],
+          "counts": {
+            "blocked_candidate": 0,
+            "candidate_incomplete": 1,
+            "unassessed": 0,
+            "verified_fail": 0,
+            "verified_pass": 65
+          },
+          "total_score_exact": "97"
+        }
+      }
+    ],
+    "candidate_score": null,
+    "actual_rubric_status": "draft"
+  },
+  "formal_assessment": {
+    "status": "assessment_incomplete",
+    "fixed_denominator": 100,
+    "total_score": null,
+    "study_complete": null,
+    "quality_success": null,
+    "good": null,
+    "known_critical_failures": [],
+    "unassessed": [
+      "A01",
+      "A02",
+      "A03",
+      "A04",
+      "A05",
+      "A06",
+      "B01",
+      "B02",
+      "B03",
+      "B04",
+      "B05",
+      "B06",
+      "B07",
+      "B08",
+      "B09",
+      "C01",
+      "C02",
+      "C03",
+      "C04",
+      "C05",
+      "C06",
+      "D01",
+      "D02",
+      "D03",
+      "D04",
+      "D05",
+      "D06",
+      "D07",
+      "D08",
+      "D09",
+      "E01",
+      "E02",
+      "E03",
+      "E04",
+      "E05",
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05"
+    ],
+    "publication_blockers": [
+      "rubric_not_frozen",
+      "readiness:registered_quality_reference",
+      "readiness:quality_controls_independent",
+      "readiness:formal_full_assignment_cold",
+      "readiness:complete_scientific_reference",
+      "readiness:complete_grader_evidence_binding",
+      "readiness:independent_rubric_review",
+      "readiness:review_anchor_calibration",
+      "unassessed:A01",
+      "unassessed:A02",
+      "unassessed:A03",
+      "unassessed:A04",
+      "unassessed:A05",
+      "unassessed:A06",
+      "unassessed:B01",
+      "unassessed:B02",
+      "unassessed:B03",
+      "unassessed:B04",
+      "unassessed:B05",
+      "unassessed:B06",
+      "unassessed:B07",
+      "unassessed:B08",
+      "unassessed:B09",
+      "unassessed:C01",
+      "unassessed:C02",
+      "unassessed:C03",
+      "unassessed:C04",
+      "unassessed:C05",
+      "unassessed:C06",
+      "unassessed:D01",
+      "unassessed:D02",
+      "unassessed:D03",
+      "unassessed:D04",
+      "unassessed:D05",
+      "unassessed:D06",
+      "unassessed:D07",
+      "unassessed:D08",
+      "unassessed:D09",
+      "unassessed:E01",
+      "unassessed:E02",
+      "unassessed:E03",
+      "unassessed:E04",
+      "unassessed:E05",
+      "unassessed:F01",
+      "unassessed:F02",
+      "unassessed:F03",
+      "unassessed:F04",
+      "unassessed:F05"
+    ],
+    "counts": {
+      "blocked_candidate": 0,
+      "candidate_incomplete": 0,
+      "unassessed": 40,
+      "verified_fail": 0,
+      "verified_pass": 26
+    }
+  },
+  "independent_final": {
+    "status": "incremental_binding_priority_and_rubric_components_qualified",
+    "reviewer": "/root/benchmark_review",
+    "mode": "one-level nonblind AI development review; no redelegation",
+    "current_source": "binding-rubric-review/source-priority-repaired",
+    "version_observation_correction": "source-repaired-binding was an earlier snapshot; initial suspicion of rollback was reviewer version-location error, not a product regression",
+    "checks": 16,
+    "all_passed": true,
+    "closed_findings": [
+      "original mixed-error facility precedence",
+      "B05/B06 method-neutral information/parameter provenance",
+      "mandatory E02 delivery noncompensation"
+    ],
+    "rubric": {
+      "status": "draft",
+      "criteria": 66,
+      "review_execution_operations_rebuild": 40,
+      "quality": 26,
+      "review_weight": 85,
+      "quality_weight": 15,
+      "fixed_total": 100,
+      "all_quality_critical": true
+    },
+    "synthetic_protocol_only": {
+      "E02_missing_old": {
+        "score": 97,
+        "good": true
+      },
+      "E02_missing_repaired": {
+        "score": 97,
+        "study_complete": false,
+        "good": false
+      },
+      "not_a_candidate_score": true
+    },
+    "actual_Q26_plus_unassessed40": {
+      "total_score": null,
+      "study_complete": null,
+      "quality_success": null,
+      "good": null
+    },
+    "actual_image_viewed": "binding-rubric-review/research-analysis-originals/quality-and-boundary.png",
+    "report_data_checked": {
+      "node_rows": 6,
+      "cost_rows": 12,
+      "original_source_bindings": 24,
+      "actual_fit_records": 48,
+      "June_q90_rows": 14
+    },
+    "new_Docker_forecast_solver_Provider_GPU_UI_calls": 0,
+    "numeric335_repeated": false,
+    "current_component_blockers": [],
+    "remaining": [
+      "formal full12 sealed reader",
+      "full report provenance transport and source-only reconstruction",
+      "complete evidence-bound grader",
+      "complete scientific reference",
+      "per-leaf usable anchors and multi-quality calibration"
+    ],
+    "professional_human_or_statistical_certification": false,
+    "candidate_score": null,
+    "L02_frozen": false,
+    "hours_qualified": false,
+    "ten_cases_complete": false
+  },
+  "L02_frozen": false,
+  "suite_frozen_cases": 1,
+  "effective_candidate_hours_qualified": 0,
+  "candidate_score": null,
+  "scope": "author old actual-prediction reference and deliberate controls; no fresh candidate/full formal generic execution/scientific reference approval",
+  "independent_numeric": {
+    "stage": "L02 historical fixed-reference quality primitive independent qualification",
+    "status": "historical_reference_numeric_qualification_passed_with_integration_boundary",
+    "reviewer": "/root/benchmark_review",
+    "conditions": "one-level nonblind AI development review; private results read only after new authorization",
+    "policy_unchanged_from_pre_results_copy": true,
+    "reference_binding": {
+      "outer": 12,
+      "actual_forecast_rows_each_role": 1008,
+      "original_role_origin_bindings": 24,
+      "original_reference_executed_sources": 5,
+      "actual_inner_selection_checked": 12
+    },
+    "independent_oracle": "original CSV, UTC/units, exact Fraction mean/WIS and single-period costs; author quality primitive not used as numeric oracle",
+    "numeric_audit": {
+      "original_checks": 335,
+      "original_passed": 333,
+      "original_false": 2,
+      "seconds": 5.978828299790621,
+      "false_cause": "reviewer strict-context fixture had extra raw catalogue fields; preserved"
+    },
+    "typed_repair": {
+      "checks": 3,
+      "all_passed": true,
+      "first_repair_own_TypeError_preserved": true
+    },
+    "results": {
+      "selected_reference": 26,
+      "baseline_self": 24,
+      "zero": 0,
+      "wide_intervals_same_mean": 11,
+      "coherent_leaf_parent_mean_degradation": 23
+    },
+    "quality_conditions_each": 26,
+    "historical_author_reference_quality_reachability": true,
+    "current_numeric_or_reference_identity_blockers": [],
+    "integration_boundary": {
+      "id": "reference_preflight_priority",
+      "actual_probe": "both candidate and reference missing row returns prediction_incomplete",
+      "required_before_total_grader": "all authoritative contexts/labels/reference must be prevalidated before classifying candidate failure, by unique entry or trusted registered reference boundary",
+      "original_evidence": "facility-priority-probe/result.json"
+    },
+    "source_and_evidence": [
+      "numeric-audit/source-quality",
+      "numeric-audit/registered-reference-originals.zip",
+      "numeric-audit/independent-quality-results.json",
+      "numeric-audit/selected-original-inner-bindings.json",
+      "numeric-audit/checks.json",
+      "typed-probe-repair-final/assessment.json"
+    ],
+    "actual_commands": [
+      "numeric-audit-command.json",
+      "typed-repair-command.json",
+      "typed-repair-final-command.json",
+      "priority-probe-command.json"
+    ],
+    "new_Docker_prediction_solver_Provider_GPU_UI_calls": 0,
+    "formal_full12_generic_reader_qualified": false,
+    "fresh_candidate_grade": null,
+    "study_complete": null,
+    "full_L02_rubric_grader_qualified": false,
+    "L02_frozen": false,
+    "hours_qualified": false,
+    "professional_human_or_statistical_validation_claimed": false
+  }
+}

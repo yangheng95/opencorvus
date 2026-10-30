@@ -236,3 +236,51 @@ L06已于00:27UTC取得实际完整OpenCorvus100/100后才启动fresh Codex /roo
 证据在cases/L02/evaluator/qualification/generic-execution（主报告/机器事实/原件/独立报告），外部l02-generic-execution-qualification-20261030与l02-generic-execution-review-20261030。正式入口默认全部12outer，只有author-diagnostic显式缩小私有工具资格，诊断不得向可重提候选反馈。report源码/池在预测前冻结，只有完整正式数值验收后才得外层标签；resume只原run，不重绑/扩展。当前没有活跃新数值任务，所有本轮自有计算自然终态/封存/精确清理；六旧昂贵容器再次真实inspect均Paused，不恢复。
 
 下一步直接构建科学/运营决策成品、合理事前质量目标与真正低质量对照、原子rubric/人评锚点/全固定分母critical聚合并独立冻结，不能再反复两语言/五窗口/旧120/54/toy凑量。full formal12新通用入口实跑仍未有，本轮不能补造；可复用旧真实预测作作者分析材料，candidate须冻结后真实新执行。L06/0.3完整业务及其余九题均未完成，套件冻结1/10、候选有效小时0/10，目标未达，心跳ACTIVE。无总token/墙钟额度、cheap-first继续。正常范围commit/fetch/merge/待推审查/hook/push，保留用户版本/overlay/视频删除/索引改动。
+
+## 2026-10-30 05:33 UTC 实施前Recall：质量政策与科学/运营交付
+
+继续十题/单层独立审查/真实两系统两好升级，cheap-first，无总token或墙钟额度；b1bc9713d已正常push，工作区本任务范围clean，用户视频删除/索引重排/0.1.39记录不动。重读AGENTS、长程/L06/L02/L05/L04/工具/横向末节及当前TASK/STUDY/MATERIALS/EXECUTION。所有新旧数值与候选均终态，六旧昂贵容器仍Paused，不启动旧120/54/11+11/恢复窗口。
+
+### 问题、影响面与事前选择
+
+当前数值执行/封存正确不能证明科学结论或预测可用。quality_floor仍null，只有熟悉作者参考的报告，没有独立固定质量目标/低质量对照；任何候选自带较弱baseline都可能伪造“提升”。全仓搜索quality_floor/study_complete/quality_success/baseline/decision：只本case的study/scoring、runner结果、summary和公开研究文档消费；未触及产品Task/Mission/Session、调度/恢复、Provider/凭据/UI，无产品持久迁移。现有唯一scoring不复制，质量政策和运营损失进入单一新模块；未覆盖完整科学评审前不得把数值pass升级研究完成。
+
+本轮先固定政策，再查看此前尚未逐节点核定的质量结果。已知参考全期宏分数及June失败，明确披露这些先验；不声称盲设计。依据评分理论先匹配目标：mean用MSE、边际分位点用WIS、预先给定不对称损失用相应quantile。比较原始完整平均loss，不把逐格比值优化或skill百分数当新的proper score，也不宣称12合成origin独立随机或给p值。方法依据Gneiting《Making and Evaluating Point Forecasts》(arxiv:0912.0902)、Bracher等WIS原论文(PLOS pcbi.1008618)及Wheatcroft2019对skill变换的限制；这是本作者接受政策，不是论文指定通用benchmark及格线。
+
+拟质量政策（可达资格和独立审查前不冻结、不发正式分）：固定外部seasonal-weekday-8参考，365日合法历史/最高已发布含missing、56/84/112日伪origin校准及42配对残差，正是原首预测前注册/真实完整运行的作者baseline。候选仍自由选择方法，不能把其自带baseline替代质量参照。全部12outer按同一既定网格/固定分母评分；六节点各自完整平均MSE与WIS均须不劣于该固定参考，两个原既定层级宏平均须严格更好。节点改善不能补偿另一节点退化；等同整份固定基线不满足严格宏提升。此规则来自公开比较对象与不回退服务单元的作者目标，未把已观察具体误差填成绝对阈值。baseline loss为0时直接比较loss，不除零、不引入任意epsilon。
+
+运营层限定为明确的合成单期损失练习，不虚构真实供水调度/库存/资金执行：余量成本1、缺量成本依次1/3/9，事前策略分别使用q0.5/q0.75/q0.9，连续L数量，无跨日库存、容量、联合尾风险或现实机构适用性主张。每个策略的action由已经冻结的forecast分位点唯一决定；报告见truth后不能挑日/改quantile。真实损失为c_under*max(y-a,0)+c_over*max(a-y,0)，按leaf/日期/outer完整均值，四leaf在三种公开成本下均不劣于固定参考策略，另报告mean策略/缺量/余量分量及实际风险边界。不强迫每个单日或每个候选扩展胜出。这个非补偿接受条件可能导致现有参考失败；失败保留，不能为了过关直接宽线。
+
+注册baseline必须绑定原材料完整业务事实、日程/尺度/指标语义与原实际baseline输出，不能给任意漂移输入套旧数值。不同输入需要新资格。候选质量只接受权威完整assigned grid与真实选模后的预测，候选自报truth/scale/baseline/loss都不是事实来源。本轮用已封存旧120的真实预测生成一个明确作者资格packet，经同一权威score/quality primitive验证；不为旧历史新增live fallback或重训矩阵。正式通用full12 reader/实际清洁执行在完整合同定稿后才做，不能用该packet冒充新候选。
+
+### 本轮实质交付与便宜验证
+
+先请唯一benchmark_review单层审查上述政策理由/可达风险/运营语义，不再委托；在其提出实质问题前不倒填质量结果。然后原始参考、零预测、极宽区间/相同mean、单节点退化及参照本身进入同一质量检查器，错误对照仅改预测而不改label/grid/参考。用有理数手算单期成本与完整分母、原始真实数值重算；不以synthetic perfect当可达模型，只允许用来核验checker接口。若真实参考未达，明确quality_success=false/未冻结及缺哪一项，不伪造达标或按误差改阈值；最便宜下一步先研究原因和合法可识别信息，再决定新模型/新材料。
+
+同时形成完整科学/运营交付机器表、可定位来源/实验/负结果/适用边界的参考报告与原子rubric稿。研究完成与质量成功分别聚合：固定100分母，critical不可补偿，候选缺交/依赖未评/设施无分区别；未评不手填总分。方法与科学真实性需要外部评审证据，不用关键词或字数判好。独立审查、原始来源、真正数值结果和实际图必须一并保留；本轮不会把新增叶数/表数/作者执行耗时当难度。原子rubric、参考完整职业交付/人评多质量校准与full12最终清洁资格若未完成，要逐项保留pending，不能提前冻结。正常文档索引/docs/范围提交/fetch-merge-审查-push，心跳ACTIVE。
+
+质量绑定实施中的真实输入反例：第一版registered-reference reader直接比较canonical/grid列表，语义相同的行序反转被facility_quality_binding_invalid拒绝。原canonical、source-binding-rubric、初错误收据留存，不算候选失败。影响面仅本case私有reference loader；既有材料decode明确行序自由，不能改公共原材料或让用户重排。修复在唯一loader内先用既有asof.validate核canonical原类型/联合身份，再按原业务键归一观察/协变量；grid按catalogue身份、hierarchy(parent,child)、origin_id归一且拒重复，不改target日内顺序。对象比较保持JSON原类型，不能让True==1等价掩盖输入漂移；不使用哈希或可变source摘要门。正向重验原注册、同义排序、真实值漂移与重复grid的具名边界，数值335项/旧预测不重跑。新质量/聚合源与实际执行版本继续分开封存。
+
+独立真实边界另暴露quality primitive的设施优先级问题：同origin candidate与reference各缺一row时先score(candidate)返回prediction_incomplete，遮住坏参照；单独坏参照已明确facility_quality_reference_invalid，历史真实参考有效故不改变26/26结论。修改前核所有quality调用仅本库和私有资格adapter；无产品调度/LLM/数据库变化。修复在唯一assess_quality入口先核全部权威context/labels/reference，再判候选覆盖/数值；不能依赖caller恰好先用registry loader。原双坏输入/首次错误保留，修后同原双坏与跨origin坏参照均设施优先，合法原reference数值保持；不重新预测/松政策，不把设施事故给候选0。
+
+独立原子rubric设计审查发现两处真实可比性缺口：原B05/B06以伪origin残差术语强迫方法，合法解析/贝叶斯分位点缺pass锚点；E02必交完整行动损失账却非critical，合成其余都过可97/good。保留原稿和协议向量，不当候选成绩。修复B05/B06为所有实际不确定性特征/观测/参数的信息时点与来源，经验校准核其伪origin/已发布标签，解析方法按真实模型/先验/拟合数据核，不强迫校准、不N/A删分母。E02改critical，权重仍3、总分母100不变；缺此必交账即便97也不能good。质量政策26数值条件/权重、原结果及全部未就绪标志不改。对应公开交付义务同步方法自由；本轮还没有完整人评校准或职业研究参考批准。
+
+## 最新接续Recall：质量政策可达/坏对照及原子稿已增量审查，未冻结
+
+原固定外部seasonal8政策先于本轮逐节点/运营结果封存，数值与政策原字段未改。旧原ZIP的真实inner选中outer预测26/26通过；baseline-self24/26只宏strict失败，zero0/26，wide11/26，coherent leaf+parent mean退化23/26。一次旧真预测重算约9秒，无新forecast/solver/GPU，不当新候选或小时。原参照registry完整绑定canonical/grid/尺度/单位/指标/原method、12原native终态/执行源及1008实际forecast；候选不能替换参考。唯一loader现在支持同义行序且严格类型/身份、拒重复grid/真实值漂移；唯一quality先全权威事实/reference预检再分类候选，原设施双坏反例已关闭。
+
+66原子rubric稿共固定100，40研究/执行/运营/复建85分，26质量15分全critical；可信评估状态聚合原语已实跑，未接成完整candidate grader。真实Q26+40未评时正式total/study_complete/quality_success/good全null。合成其余40全pass只是协议向量：baseline-self97/false、wide91.5/false、单叶均值退化97.5/false；原E02非critical缺交97/good漏洞现已修成97/false，不是候选分。B05/B06现方法自由信息来源锚点，无强迫经验校准/N/A删分母。其余多处研究叶仍需逐项可操作边界/依赖/等价格式及标签遮蔽多质量校准；generic pass文本本身不构成成熟评分器。
+
+独立原335数值中333初过，2个自有typed probe错用了raw catalogue上下文，修夹具后3项通过；第一次自有repair还漏layer weight而TypeError，原源/收据保留，不是质量函数失败。新增独立16项分别核最新priority-repaired、registered binding/行序、E02/method anchors/partial状态、报告6节点/12cost/24来源/48原fit/14June及实际view新图，不重335。审查者初读较早source-repaired-binding误称回退，核最新source-priority-repaired后纠正，记录保留不假报产品回归。单层非盲AI/熟悉参考，未再委托或启动新Docker/预测/Provider/solver/GPU/UI，不是专业真人/统计成熟。
+
+作者事后研究分析稿与精确表/实际图在quality-study/research-analysis，明确全期relative improvement不消除June A1 q.9明显缺量、A1/ZA80%0/4、量效未识别或no-weather消融更优。初图legend挡A1，保存原源/PNG/终态后只图后处理移上右再实际view，原数值不变；bundled Python缺matplotlib的探查错误保留，使用已有科学镜像7秒和图修后处理约4秒，不是新预测。它不是首私有预测前冻结的候选report programme，也未获完整职业参考批准。
+
+本轮主/独立原件在cases/L02/evaluator/qualification/quality-study与D:/opencorvus-benchmark-runs/l02-quality-study-qualification-20261030、l02-quality-study-independent-review-20261030。当前所有本轮自有数值/图后处理均终态封存、精确cleanup，无活跃新长计算；六旧昂贵任务不恢复。正式study.quality_floor仍null，建设政策另存quality-policy.draft；不得把组件26pass当正式case质量或分数。套件冻结1/10、有效候选小时0/10，目标未达，heartbeat ACTIVE。
+
+### 下一实质缺口与实施前调查范围
+
+下一步直接补完整report实际来源输入/索引、正式full12 sealed reader和evidence-bound grader、逐叶可操作锚点/多质量校准；再一次正式新清洁参考和独立冻结，之后fresh候选对照。不能重做26/335/旧120/54/11+11/五窗口凑量。现run_l02_study在数值验收后给report的results.json只有forecast/metrics/context/labels/pool，未传原fit等候选诊断和可定位实际过程事实；report_l02_reference只产输运级表/图，不足完整研究来源。缺口在私有数值数据流，不是LLM消息/工具调度，不新增路由、队列或隐藏消息。
+
+拟先设计报告侧最小来源包：仅原candidate数值输出的诊断/参数/图表输入及sanitized实际argv/时间/终态、逻辑origin/method关联，全部数值完成后才只读交冻结report。不得传私有grader/参考/权重、原始Provider日志、凭据、完整host环境或无关宿主路径。正式输出与每个原accepted对象绑定，不能信候选自报fit内容替代source/实际运行审计。需先全搜prepare/invoke/report及sealed registration/SQLite baseline1的恢复消费者，分析给输入加字段/sidecar对旧prepared/accepted对象的影响；若演进持久格式须保数据自动迁移、保原执行合同，不覆盖旧原件/伪造其已看见新数据，不留当前双协议fallback。先单层独立设计审查，尚未实施此来源通道或新完整12求解，不因草案批准就称已实现。
+
+其余L06/0.3完整多阶段业务、L01质量锚点、L04/L05全现场与L03/L07-L10材料/参考/坏对照/可执行rubric仍待，不可一直搁置。无用户总token/墙钟额度，cheap-first；本任务范围commit、正常fetch/merge/检查全部待推/hook/push，保用户视频/索引/release记录。

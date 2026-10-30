@@ -1,0 +1,33 @@
+{
+  "stage": "L02 fixed-reference quality and research delivery policy plan",
+  "status": "policy_mathematically_supported_for_reachability_qualification",
+  "reviewer": "/root/benchmark_review",
+  "conditions": "one-level nonblind AI review; prior macro metrics and June failure known; new per-node/operational results not read",
+  "policy_file": "policy-before-results.json",
+  "record_excerpt": "PLAN-05-33-observed.md",
+  "capture_receipt": "capture-receipt.json",
+  "mathematical_blockers": [],
+  "required_bindings_before_quality_acceptance": [
+    "External seasonal8 reference: original registered input/permission/grid/scale/metric and actual1008 baseline forecast rows, not candidate baseline or ID alone.",
+    "Quality consumes only full12 actual inner-selected outer forecasts with fixed denominator; unassessed/invalid inputs cannot pass.",
+    "Per cost action is frozen corresponding quantile;168cases per leaf/cost; reporting after truth cannot select day/method/q or replace with mean."
+  ],
+  "policy_constraints": {"per_node_no_regression":12,"strict_macro_improvement":2,"per_leaf_cost_no_regression":12,"total":26,"independent_statistical_tests":false},
+  "cost_to_quantile": {"1":"1/2","3":"3/4","9":"9/10"},
+  "identified_risks": [
+    "Finite-sample noncompensatory conjunction may be unreachable by current lawful reference; not yet tested.",
+    "Tiny strict improvement is not practical materiality or statistical significance.",
+    "Binary operational announcements do not identify exact future transfer magnitude.",
+    "WIS and operational quantile costs overlap; not independent evidence or joint/path certification."
+  ],
+  "new_private_quality_results_read": false,
+  "new_quality_source_or_seven_tests_reviewed": false,
+  "new_Docker_forecast_solver_Provider_GPU_UI_calls":0,
+  "reference_reachability_qualified":false,
+  "policy_frozen":false,
+  "full_L02_rubric_or_grader_qualified":false,
+  "L02_frozen":false,
+  "candidate_score":null,
+  "hours_qualified":false,
+  "professional_human_or_statistical_validation_claimed":false
+}

@@ -58,3 +58,5 @@ L06现已完成[最终独立合同审查并冻结0.2.0](cases/L06/README.md)，�
 [L02完整每日数值参考](cases/L02/evaluator/qualification/daily-full-reference/README.md)已真实完成12outer/36inner、108预测/12选择及单层独立核验，原CSV/只读1CPU/netnone权限、逐格指标/拟合来源和真实图均有原件。去天气消融更优、A1/ZA转移边界四天区间失效如实保留；研究质量线/通用候选grader/rubric与冻结仍待。不是新候选成绩，套件仍冻结1/10、有效小时0/10。
 
 [L02通用数值执行资格](cases/L02/evaluator/qualification/generic-execution/README.md)补齐候选自带files/argv/池、两语言原CSV全链、Windows锁与原CID五窗口恢复、封存产物重算及冻结report的数据释放；它不等同完整科学/运营grader。旧120组不重跑，所有新单outer均私有作者诊断，正式质量/冻结与有效小时仍待。
+
+[L02相对质量/研究稿](cases/L02/evaluator/qualification/quality-study/README.md)以事前固定外部参照政策只读重算旧真实预测：原inner选择通过26条件，基线自身、零预测、极宽区间和单叶退化对照被拒。66原子rubric及固定100聚合保持关键项非补偿，真实科学审查40项仍未评；新图保留June缺量，作者分析不冒充新正式清洁研究或职业参考。完整grader/报告来源接口/评审锚点/冻结仍待，套件1/10、有效小时0/10不变。

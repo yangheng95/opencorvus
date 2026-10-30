@@ -2,7 +2,7 @@
 
 你是一名负责从原始计量资料到研究报告和模型交接的研究者。为4个模拟站点、2个汇总区建立14个完整未来UTC日的均值及概率区间预测，区分可知信息、观测修订、模型选择和真正外层结果。资料为原创合成，不代表真实供水机构；不得从数据生成器或评估侧答案推导未来。
 
-当前任务建设中，质量底线及正式rubric未冻结，不能据此发布候选总分。格式/日程/权限以[材料](MATERIALS.draft.md)、[单一许可原语](ASOF-CONTRACT.draft.md)和[研究接口](STUDY-CONTRACT.draft.md)为准。没有最低运行时长、页数、字数、模型token或总墙钟要求；正确完成即可交付。
+当前任务建设中，质量底线及正式rubric未冻结，不能据此发布候选总分。格式/日程/权限以[材料](MATERIALS.draft.md)、[单一许可原语](ASOF-CONTRACT.draft.md)和[研究接口](STUDY-CONTRACT.draft.md)为准；[质量政策](QUALITY-CONTRACT.draft.md)及[研究/运营交付](RESEARCH-DELIVERY.draft.md)说明本轮建设目标。没有最低运行时长、页数、字数、模型token或总墙钟要求；正确完成即可交付。
 
 ## 从原始材料到可验证研究
 
