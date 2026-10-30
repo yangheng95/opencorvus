@@ -1,0 +1,18 @@
+{
+  "format": "l03-company/1",
+  "as_of": "2025-04-15T18:00:00Z",
+  "months": [
+    "2025-01",
+    "2025-02",
+    "2025-03"
+  ],
+  "base_currency": "CNY",
+  "opening_cash_minor": 2000000,
+  "departments": [
+    "Engineering",
+    "Operations",
+    "Marketing"
+  ],
+  "policy": "per-line conversion, final-month remainder, cumulative settlement book value; see POLICY.md",
+  "bank_overdraft_limit_minor": 600000
+}

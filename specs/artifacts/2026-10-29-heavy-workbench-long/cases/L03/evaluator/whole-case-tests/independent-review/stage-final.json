@@ -1,0 +1,37 @@
+{
+  "format": "l03-whole-case-independent-final/1",
+  "observed_at_utc": "2026-10-30T13:05:37.555856+00:00",
+  "case": "L03/0.2.0-dev",
+  "output_root": "D:/opencorvus-benchmark-runs/l03-full-case-20261030/review-final-run/base/output/result",
+  "complete_development_case": true,
+  "allow_development_pilot_freeze_metadata_and_README_only": true,
+  "identity_material_weights_threshold_final_execution_objects_preserved": true,
+  "remaining_substantive_blockers": [],
+  "resolved_findings": [
+    "invalid UTC dates",
+    "ordered service months",
+    "unordered economic pair fairness",
+    "actual management domain explanation",
+    "source ancestor escape"
+  ],
+  "independent_content_status": {
+    "H01": "pass",
+    "H02": "pass",
+    "H03": "pass",
+    "H04": "pass",
+    "H05": "pass"
+  },
+  "independent_whole_raw_book_equal": true,
+  "independent_base_cold_native_exit": 0,
+  "independent_base_cold_one_only": true,
+  "independent_base_wall_including_seal_cleanup_seconds": 2.7086021997965872,
+  "main_four_actual_runs_read_not_repeated": true,
+  "reference_PNG_actually_viewed": true,
+  "stale_program_M15_failure_read": true,
+  "total_handwritten": false,
+  "original_failures_and_reviewer_errors_preserved": true,
+  "new_LLM_Provider_GPU_solver_UI_calls": 0,
+  "hour_difficulty_validated": false,
+  "professional_or_statistical_maturity_certified": false,
+  "ten_case_complete": false
+}

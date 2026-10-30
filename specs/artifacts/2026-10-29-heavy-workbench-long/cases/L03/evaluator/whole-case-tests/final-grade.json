@@ -1,0 +1,150 @@
+{
+  "case": "L03/0.2.0-dev",
+  "status": "graded",
+  "findings": [
+    {
+      "id": "M01",
+      "weight": 6,
+      "critical": true,
+      "status": "pass",
+      "criterion": "原身份/最高发布版本与冲突状态"
+    },
+    {
+      "id": "M02",
+      "weight": 6,
+      "critical": true,
+      "status": "pass",
+      "criterion": "逐行原币/汇率/舍入"
+    },
+    {
+      "id": "M03",
+      "weight": 5,
+      "critical": true,
+      "status": "pass",
+      "criterion": "服务期与预付分摊"
+    },
+    {
+      "id": "M04",
+      "weight": 4,
+      "critical": true,
+      "status": "pass",
+      "criterion": "银行身份去重与现金"
+    },
+    {
+      "id": "M05",
+      "weight": 6,
+      "critical": true,
+      "status": "pass",
+      "criterion": "部分/合并结算累计账面价值"
+    },
+    {
+      "id": "M06",
+      "weight": 6,
+      "critical": true,
+      "status": "pass",
+      "criterion": "未决现金不猜配"
+    },
+    {
+      "id": "M07",
+      "weight": 6,
+      "critical": true,
+      "status": "pass",
+      "criterion": "逐来源分录与平衡"
+    },
+    {
+      "id": "M08",
+      "weight": 5,
+      "critical": true,
+      "status": "pass",
+      "criterion": "期间费用/资产负债闭合"
+    },
+    {
+      "id": "M09",
+      "weight": 4,
+      "critical": true,
+      "status": "pass",
+      "criterion": "应付与供应商预付分列"
+    },
+    {
+      "id": "M10",
+      "weight": 4,
+      "critical": false,
+      "status": "pass",
+      "criterion": "部门预算/承诺不混费用"
+    },
+    {
+      "id": "M11",
+      "weight": 5,
+      "critical": true,
+      "status": "pass",
+      "criterion": "方案成本/容量/现金与选择"
+    },
+    {
+      "id": "M12",
+      "weight": 3,
+      "critical": false,
+      "status": "pass",
+      "criterion": "两两量效交点"
+    },
+    {
+      "id": "M13",
+      "weight": 5,
+      "critical": true,
+      "status": "pass",
+      "criterion": "现金期初/变动/期末桥"
+    },
+    {
+      "id": "M14",
+      "weight": 4,
+      "critical": true,
+      "status": "pass",
+      "criterion": "有据未决且不漏确定业务"
+    },
+    {
+      "id": "M15",
+      "weight": 10,
+      "critical": true,
+      "status": "pass",
+      "criterion": "源码清洁执行和三类实际材料变化全链重算"
+    },
+    {
+      "id": "H01",
+      "weight": 3,
+      "critical": true,
+      "status": "pass",
+      "criterion": "来源审计与原行/版本定位"
+    },
+    {
+      "id": "H02",
+      "weight": 5,
+      "critical": true,
+      "status": "pass",
+      "criterion": "管理建议量化且不冒充因果/真实会计认证"
+    },
+    {
+      "id": "H03",
+      "weight": 4,
+      "critical": true,
+      "status": "pass",
+      "criterion": "逐未决项所缺证据与后续行动"
+    },
+    {
+      "id": "H04",
+      "weight": 4,
+      "critical": true,
+      "status": "pass",
+      "criterion": "真实图/单位/数据身份与局部风险"
+    },
+    {
+      "id": "H05",
+      "weight": 5,
+      "critical": true,
+      "status": "pass",
+      "criterion": "清洁重建和更新交接可用性"
+    }
+  ],
+  "total": 100,
+  "critical_failures": [],
+  "good": true,
+  "scope": "synthetic management close; not professional financial certification or candidate-hour evidence"
+}

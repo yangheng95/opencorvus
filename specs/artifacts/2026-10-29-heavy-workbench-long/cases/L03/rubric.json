@@ -1,0 +1,212 @@
+{
+  "format": "l03-rubric/1",
+  "version": "L03/0.2.0-dev",
+  "status": "development_pilot_frozen",
+  "leaves": [
+    {
+      "id": "M01",
+      "criterion": "原身份/最高发布版本与冲突状态",
+      "weight": 6,
+      "critical": true,
+      "source": "real_numeric_checker",
+      "pass": "对应公开字段按原材料/政策精确成立，接受声明的语义等价；不以文件存在或自报通过代替",
+      "fail": "实际交付字段/逐来源关系错误或缺交",
+      "evidence": "documents"
+    },
+    {
+      "id": "M02",
+      "criterion": "逐行原币/汇率/舍入",
+      "weight": 6,
+      "critical": true,
+      "source": "real_numeric_checker",
+      "pass": "对应公开字段按原材料/政策精确成立，接受声明的语义等价；不以文件存在或自报通过代替",
+      "fail": "实际交付字段/逐来源关系错误或缺交",
+      "evidence": "document_values"
+    },
+    {
+      "id": "M03",
+      "criterion": "服务期与预付分摊",
+      "weight": 5,
+      "critical": true,
+      "source": "real_numeric_checker",
+      "pass": "对应公开字段按原材料/政策精确成立，接受声明的语义等价；不以文件存在或自报通过代替",
+      "fail": "实际交付字段/逐来源关系错误或缺交",
+      "evidence": "allocations"
+    },
+    {
+      "id": "M04",
+      "criterion": "银行身份去重与现金",
+      "weight": 4,
+      "critical": true,
+      "source": "real_numeric_checker",
+      "pass": "对应公开字段按原材料/政策精确成立，接受声明的语义等价；不以文件存在或自报通过代替",
+      "fail": "实际交付字段/逐来源关系错误或缺交",
+      "evidence": "bank"
+    },
+    {
+      "id": "M05",
+      "criterion": "部分/合并结算累计账面价值",
+      "weight": 6,
+      "critical": true,
+      "source": "real_numeric_checker",
+      "pass": "对应公开字段按原材料/政策精确成立，接受声明的语义等价；不以文件存在或自报通过代替",
+      "fail": "实际交付字段/逐来源关系错误或缺交",
+      "evidence": "settlements"
+    },
+    {
+      "id": "M06",
+      "criterion": "未决现金不猜配",
+      "weight": 6,
+      "critical": true,
+      "source": "real_numeric_checker",
+      "pass": "对应公开字段按原材料/政策精确成立，接受声明的语义等价；不以文件存在或自报通过代替",
+      "fail": "实际交付字段/逐来源关系错误或缺交",
+      "evidence": "unallocated"
+    },
+    {
+      "id": "M07",
+      "criterion": "逐来源分录与平衡",
+      "weight": 6,
+      "critical": true,
+      "source": "real_numeric_checker",
+      "pass": "对应公开字段按原材料/政策精确成立，接受声明的语义等价；不以文件存在或自报通过代替",
+      "fail": "实际交付字段/逐来源关系错误或缺交",
+      "evidence": "journal"
+    },
+    {
+      "id": "M08",
+      "criterion": "期间费用/资产负债闭合",
+      "weight": 5,
+      "critical": true,
+      "source": "real_numeric_checker",
+      "pass": "对应公开字段按原材料/政策精确成立，接受声明的语义等价；不以文件存在或自报通过代替",
+      "fail": "实际交付字段/逐来源关系错误或缺交",
+      "evidence": "monthly"
+    },
+    {
+      "id": "M09",
+      "criterion": "应付与供应商预付分列",
+      "weight": 4,
+      "critical": true,
+      "source": "real_numeric_checker",
+      "pass": "对应公开字段按原材料/政策精确成立，接受声明的语义等价；不以文件存在或自报通过代替",
+      "fail": "实际交付字段/逐来源关系错误或缺交",
+      "evidence": "vendors"
+    },
+    {
+      "id": "M10",
+      "criterion": "部门预算/承诺不混费用",
+      "weight": 4,
+      "critical": false,
+      "source": "real_numeric_checker",
+      "pass": "对应公开字段按原材料/政策精确成立，接受声明的语义等价；不以文件存在或自报通过代替",
+      "fail": "实际交付字段/逐来源关系错误或缺交",
+      "evidence": "departments"
+    },
+    {
+      "id": "M11",
+      "criterion": "方案成本/容量/现金与选择",
+      "weight": 5,
+      "critical": true,
+      "source": "real_numeric_checker",
+      "pass": "对应公开字段按原材料/政策精确成立，接受声明的语义等价；不以文件存在或自报通过代替",
+      "fail": "实际交付字段/逐来源关系错误或缺交",
+      "evidence": "decision"
+    },
+    {
+      "id": "M12",
+      "criterion": "两两量效交点",
+      "weight": 3,
+      "critical": false,
+      "source": "real_numeric_checker",
+      "pass": "对应公开字段按原材料/政策精确成立，接受声明的语义等价；不以文件存在或自报通过代替",
+      "fail": "实际交付字段/逐来源关系错误或缺交",
+      "evidence": "break_even"
+    },
+    {
+      "id": "M13",
+      "criterion": "现金期初/变动/期末桥",
+      "weight": 5,
+      "critical": true,
+      "source": "real_numeric_checker",
+      "pass": "对应公开字段按原材料/政策精确成立，接受声明的语义等价；不以文件存在或自报通过代替",
+      "fail": "实际交付字段/逐来源关系错误或缺交",
+      "evidence": "cash"
+    },
+    {
+      "id": "M14",
+      "criterion": "有据未决且不漏确定业务",
+      "weight": 4,
+      "critical": true,
+      "source": "real_numeric_checker",
+      "pass": "对应公开字段按原材料/政策精确成立，接受声明的语义等价；不以文件存在或自报通过代替",
+      "fail": "实际交付字段/逐来源关系错误或缺交",
+      "evidence": "exceptions"
+    },
+    {
+      "id": "M15",
+      "criterion": "源码清洁执行和三类实际材料变化全链重算",
+      "weight": 10,
+      "critical": true,
+      "source": "evaluator_native_execution",
+      "pass": "base和三类变化使用同一封存源码，各真实native退出0且14数值叶通过；原输入/源码/命令/输出可核",
+      "fail": "已证候选程序错误/缺交，或变化后仍套旧输出；设施原因未明不算候选失败"
+    },
+    {
+      "id": "H01",
+      "criterion": "来源审计与原行/版本定位",
+      "weight": 3,
+      "critical": true,
+      "source": "independent_content_review",
+      "pass": "关键重述差额能定位原单/银行/汇率版本及当前来源；不以账平证明来源真实",
+      "fail": "有实际证据的实质错误或未交上述必要内容；完整JSON/CSV/公式/代码等价格式合读",
+      "evidence": "原参考/候选的源码、实际输入/输出、报告/图与原native记录；schema或自述不认证真实"
+    },
+    {
+      "id": "H02",
+      "criterion": "管理建议量化且不冒充因果/真实会计认证",
+      "weight": 5,
+      "critical": true,
+      "source": "independent_content_review",
+      "pass": "区分当前资金不足与附条件融资；给实际可行性/成本/交点适用域，不把报价记成到账或称真实因果/法定认证",
+      "fail": "有实际证据的实质错误或未交上述必要内容；完整JSON/CSV/公式/代码等价格式合读",
+      "evidence": "原参考/候选的源码、实际输入/输出、报告/图与原native记录；schema或自述不认证真实"
+    },
+    {
+      "id": "H03",
+      "criterion": "逐未决项所缺证据与后续行动",
+      "weight": 4,
+      "critical": true,
+      "source": "independent_content_review",
+      "pass": "逐条未决身份及金额/冲突状态，明确所缺证据和下一动作，不把猜配写成已确认",
+      "fail": "有实际证据的实质错误或未交上述必要内容；完整JSON/CSV/公式/代码等价格式合读",
+      "evidence": "原参考/候选的源码、实际输入/输出、报告/图与原native记录；schema或自述不认证真实"
+    },
+    {
+      "id": "H04",
+      "criterion": "真实图/单位/数据身份与局部风险",
+      "weight": 4,
+      "critical": true,
+      "source": "independent_content_review",
+      "pass": "审查者实际查看本次图，单位/系列/数值与本次表账一致，现金/透支风险可见，不能靠文件名/静态文案验收",
+      "fail": "有实际证据的实质错误或未交上述必要内容；完整JSON/CSV/公式/代码等价格式合读",
+      "evidence": "原参考/候选的源码、实际输入/输出、报告/图与原native记录；schema或自述不认证真实"
+    },
+    {
+      "id": "H05",
+      "criterion": "清洁重建和更新交接可用性",
+      "weight": 5,
+      "critical": true,
+      "source": "independent_content_review",
+      "pass": "另一执行者能按声明源/环境/命令从新目录重建并更新材料；报告索引/依赖/错误与未决交接可用，不强迫作者语言/版式",
+      "fail": "有实际证据的实质错误或未交上述必要内容；完整JSON/CSV/公式/代码等价格式合读",
+      "evidence": "原参考/候选的源码、实际输入/输出、报告/图与原native记录；schema或自述不认证真实"
+    }
+  ],
+  "denominator": 100,
+  "scoring": "binary; unassessed => total null, facility => no score",
+  "good_score_at_least": 90,
+  "all_critical_required": true,
+  "two_good_action": "new version, preserve current observations",
+  "scope": "development case; no claimed effective hours or professional certification"
+}

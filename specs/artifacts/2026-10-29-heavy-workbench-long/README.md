@@ -1,6 +1,8 @@
 # HeavyWorkBench-Long · 0.2.0-dev
 
-**状态：套件开发中，L06/0.2.0与L02/0.2.0两个开发合同已冻结（2/10），L06真实OpenCorvus与fresh Codex同合同各100/100，已触发另升L06/0.3建设；L02尚无新候选成绩；有效小时尚未证明。** 这是独立派生研究任务，不是官方PaperBench或完整原论文复现分数。[Recall与未满足项](../../records/2026-10/2026-10-29-heavy-workbench-long.md)是当前工作记录。旧H05两方100点与难度天花板见[横向证据](../2026-10-29-heavy-workbench-cross-system/README.md)。
+**状态：套件开发中，旧L06、L02与新L03共三个开发pilot合同（3/10），L06真实OpenCorvus与fresh Codex同合同各100/100，已触发另升L06/0.3建设；L02真实试跑活动中、尚无新成绩；L03完整题/真实整链测试与独审完成，有效小时仍未证明。** 这是独立派生研究任务，不是官方PaperBench或完整原论文复现分数。[Recall与未满足项](../../records/2026-10/2026-10-29-heavy-workbench-long.md)是当前工作记录。旧H05两方100点与难度天花板见[横向证据](../2026-10-29-heavy-workbench-cross-system/README.md)。
+
+用户纠偏后改为优先交完整题包和真实测试。[十题成品矩阵](cases/README.md)明确实际缺口。[新L03](cases/L03/README.md)已完成原材料→重述账→管理报告/图→同源码四种输入整链执行和错误程序实测；独审发现五项后集中修复，完整原账独立核算/一次冷跑一致，真实checker给参考100。这个分数不是模型成绩，不再以组件资格替代成品。L02原公开输入真实Task继续有效运行；其余缺题没有因历史检查数而变成完成。
 
 L01针对Rathore等ICML2024论文《Challenges in Training PINNs: A Loss Landscape Perspective》，包括独立实现、三方程比较、配对实验、优化器数值验证、真实训练、恢复、谱诊断、图表与可清洁复训的论文。工作量来自实际科学问题和依赖链，不设最少运行时长，不用sleep或空转达标；总模型token/总墙钟不设截止。
 

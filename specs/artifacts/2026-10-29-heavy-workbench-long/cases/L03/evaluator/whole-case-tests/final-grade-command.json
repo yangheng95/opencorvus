@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L03\\evaluator\\check.py",
+    "--input",
+    "D:\\opencorvus-benchmark-runs\\l03-full-case-20261030\\review-final-run\\base\\input",
+    "--output",
+    "D:\\opencorvus-benchmark-runs\\l03-full-case-20261030\\review-final-run\\base\\output\\result",
+    "--execution",
+    "D:\\opencorvus-benchmark-runs\\l03-full-case-20261030\\review-final-run\\execution.json",
+    "--review",
+    "D:\\opencorvus-benchmark-runs\\l03-whole-case-independent-review-20261030\\review.json",
+    "--assessment",
+    "D:\\opencorvus-benchmark-runs\\l03-full-case-20261030\\final-grade.json"
+  ],
+  "started_at": "2026-10-30T13:05:57.342995+00:00",
+  "finished_at": "2026-10-30T13:05:57.924528+00:00",
+  "elapsed_seconds": 0.5815139999613166,
+  "exit_code": 0,
+  "role": "author_reference_qualification"
+}

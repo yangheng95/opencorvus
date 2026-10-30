@@ -1,0 +1,21 @@
+{
+  "format": "l03-whole-case-independent-stage/1",
+  "observed_at_utc": "2026-10-30T12:53:45.252115+00:00",
+  "case": "L03/0.2.0-dev",
+  "whole_case_materials_and_reference_present": true,
+  "approve_pilot_freeze": false,
+  "blockers": [
+    "invalid_UTC_dates",
+    "ordered_service_months_canonicalization",
+    "equivalent_break_even_orientation",
+    "management_domain_explanation",
+    "source_ancestor_escape"
+  ],
+  "independent_whole_book": "all fields equal with allowed journal aggregation; original invalid dates separately block source validity",
+  "new_author_core_imports": 0,
+  "new_Docker_Provider_solver_GPU_UI_calls": 0,
+  "reference_png_actually_viewed": true,
+  "hour_difficulty_validated": false,
+  "ten_case_complete": false,
+  "review_status": "await one consolidated repaired delivery; no final content ratings prefilled"
+}

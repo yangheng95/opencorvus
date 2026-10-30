@@ -1,0 +1,20 @@
+{
+  "case": "L03/0.2.0-dev",
+  "status": "development_pilot_frozen",
+  "date": "2026-10-30",
+  "public_input": "public/ only: four contracts and nine original synthetic input files",
+  "rubric": "rubric.json",
+  "complete_reference_role": "author_reference_qualification",
+  "actual_grade": "evaluator/whole-case-tests/final-grade.json",
+  "actual_grade_command": "evaluator/whole-case-tests/final-grade-command.json",
+  "independent_approval": "evaluator/whole-case-tests/independent-review/stage-final.json",
+  "independent_content_review": "evaluator/whole-case-tests/independent-review/review.json",
+  "independent_report": "evaluator/whole-case-tests/independent-review/REVIEW-FINAL.md",
+  "final_actual_run": "D:/opencorvus-benchmark-runs/l03-full-case-20261030/review-final-run",
+  "material_weights_thresholds_preserved_after_approval": true,
+  "candidate_score": null,
+  "effective_hours_validated": false,
+  "professional_or_statistical_maturity_certified": false,
+  "two_good_action": "new version; preserve current observations and thresholds",
+  "scope": "complete development case and actual source-only tests; not ten-case completion"
+}

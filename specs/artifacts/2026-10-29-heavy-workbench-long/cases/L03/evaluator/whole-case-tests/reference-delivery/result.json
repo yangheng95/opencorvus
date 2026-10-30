@@ -1,0 +1,7614 @@
+{
+  "format": "l03-close-result/1",
+  "documents": [
+    {
+      "doc_id": "C-anchor",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "AnchorVendor",
+      "department": "Operations",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01"
+      ],
+      "currency": "CNY",
+      "native_minor": -1000,
+      "fx_revision": 0,
+      "gross_minor": -1000,
+      "lines": [
+        {
+          "line_id": "one",
+          "native_minor": 1000,
+          "base_minor": -1000
+        }
+      ]
+    },
+    {
+      "doc_id": "I-anchor",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "AnchorVendor",
+      "department": "Operations",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01"
+      ],
+      "currency": "CNY",
+      "native_minor": 10000,
+      "fx_revision": 0,
+      "gross_minor": 10000,
+      "lines": [
+        {
+          "line_id": "one",
+          "native_minor": 10000,
+          "base_minor": 10000
+        }
+      ]
+    },
+    {
+      "doc_id": "I-cancelled",
+      "revision": 1,
+      "status": "cancelled",
+      "gross_minor": 0
+    },
+    {
+      "doc_id": "I-conflict",
+      "revision": 1,
+      "status": "quarantined",
+      "gross_minor": null
+    },
+    {
+      "doc_id": "I-resolved",
+      "revision": 2,
+      "status": "posted",
+      "vendor": "ResolvedVendor",
+      "department": "Operations",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01"
+      ],
+      "currency": "CNY",
+      "native_minor": 17000,
+      "fx_revision": 0,
+      "gross_minor": 17000,
+      "lines": [
+        {
+          "line_id": "one",
+          "native_minor": 17000,
+          "base_minor": 17000
+        }
+      ]
+    },
+    {
+      "doc_id": "I-rounding",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "RoundingVendor",
+      "department": "Operations",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01"
+      ],
+      "currency": "USD",
+      "native_minor": 10,
+      "fx_revision": 1,
+      "gross_minor": 72,
+      "lines": [
+        {
+          "line_id": "x",
+          "native_minor": 5,
+          "base_minor": 36
+        },
+        {
+          "line_id": "y",
+          "native_minor": 5,
+          "base_minor": 36
+        }
+      ]
+    },
+    {
+      "doc_id": "I000",
+      "revision": 1,
+      "status": "posted",
+      "vendor": "V0",
+      "department": "Engineering",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01"
+      ],
+      "currency": "CNY",
+      "native_minor": 4555,
+      "fx_revision": 0,
+      "gross_minor": 4555,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 4055,
+          "base_minor": 4055
+        },
+        {
+          "line_id": "b",
+          "native_minor": 500,
+          "base_minor": 500
+        }
+      ]
+    },
+    {
+      "doc_id": "I001",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V1",
+      "department": "Engineering",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02",
+        "2025-03"
+      ],
+      "currency": "USD",
+      "native_minor": 3928,
+      "fx_revision": 0,
+      "gross_minor": 28164,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 3317,
+          "base_minor": 23783
+        },
+        {
+          "line_id": "b",
+          "native_minor": 611,
+          "base_minor": 4381
+        }
+      ]
+    },
+    {
+      "doc_id": "I002",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V2",
+      "department": "Engineering",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 4356,
+      "fx_revision": 0,
+      "gross_minor": 34021,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 3634,
+          "base_minor": 28382
+        },
+        {
+          "line_id": "b",
+          "native_minor": 722,
+          "base_minor": 5639
+        }
+      ]
+    },
+    {
+      "doc_id": "I003",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V3",
+      "department": "Operations",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01",
+        "2025-02"
+      ],
+      "currency": "CNY",
+      "native_minor": 4784,
+      "fx_revision": 0,
+      "gross_minor": 4784,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 3951,
+          "base_minor": 3951
+        },
+        {
+          "line_id": "b",
+          "native_minor": 833,
+          "base_minor": 833
+        }
+      ]
+    },
+    {
+      "doc_id": "I004",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V4",
+      "department": "Operations",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02"
+      ],
+      "currency": "USD",
+      "native_minor": 5212,
+      "fx_revision": 0,
+      "gross_minor": 37370,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 4268,
+          "base_minor": 30602
+        },
+        {
+          "line_id": "b",
+          "native_minor": 944,
+          "base_minor": 6768
+        }
+      ]
+    },
+    {
+      "doc_id": "I005",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V5",
+      "department": "Operations",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 5640,
+      "fx_revision": 0,
+      "gross_minor": 44049,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 4585,
+          "base_minor": 35809
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1055,
+          "base_minor": 8240
+        }
+      ]
+    },
+    {
+      "doc_id": "I006",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V6",
+      "department": "Marketing",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01"
+      ],
+      "currency": "CNY",
+      "native_minor": 5968,
+      "fx_revision": 0,
+      "gross_minor": 5968,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 4802,
+          "base_minor": 4802
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1166,
+          "base_minor": 1166
+        }
+      ]
+    },
+    {
+      "doc_id": "I007",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V7",
+      "department": "Marketing",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02",
+        "2025-03"
+      ],
+      "currency": "USD",
+      "native_minor": 6396,
+      "fx_revision": 0,
+      "gross_minor": 45859,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 5119,
+          "base_minor": 36703
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1277,
+          "base_minor": 9156
+        }
+      ]
+    },
+    {
+      "doc_id": "I008",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V0",
+      "department": "Marketing",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 6824,
+      "fx_revision": 0,
+      "gross_minor": 53295,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 5436,
+          "base_minor": 42455
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1388,
+          "base_minor": 10840
+        }
+      ]
+    },
+    {
+      "doc_id": "I009",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V1",
+      "department": "Engineering",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01",
+        "2025-02"
+      ],
+      "currency": "CNY",
+      "native_minor": 6352,
+      "fx_revision": 0,
+      "gross_minor": 6352,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 5753,
+          "base_minor": 5753
+        },
+        {
+          "line_id": "b",
+          "native_minor": 599,
+          "base_minor": 599
+        }
+      ]
+    },
+    {
+      "doc_id": "I010",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V2",
+      "department": "Engineering",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02"
+      ],
+      "currency": "USD",
+      "native_minor": 6680,
+      "fx_revision": 0,
+      "gross_minor": 47896,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 6070,
+          "base_minor": 43522
+        },
+        {
+          "line_id": "b",
+          "native_minor": 610,
+          "base_minor": 4374
+        }
+      ]
+    },
+    {
+      "doc_id": "I011",
+      "revision": 1,
+      "status": "posted",
+      "vendor": "V3",
+      "department": "Engineering",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 8076,
+      "fx_revision": 0,
+      "gross_minor": 63074,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 7355,
+          "base_minor": 57443
+        },
+        {
+          "line_id": "b",
+          "native_minor": 721,
+          "base_minor": 5631
+        }
+      ]
+    },
+    {
+      "doc_id": "I012",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V4",
+      "department": "Operations",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01"
+      ],
+      "currency": "CNY",
+      "native_minor": 7436,
+      "fx_revision": 0,
+      "gross_minor": 7436,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 6604,
+          "base_minor": 6604
+        },
+        {
+          "line_id": "b",
+          "native_minor": 832,
+          "base_minor": 832
+        }
+      ]
+    },
+    {
+      "doc_id": "I013",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V5",
+      "department": "Operations",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02",
+        "2025-03"
+      ],
+      "currency": "USD",
+      "native_minor": 7864,
+      "fx_revision": 0,
+      "gross_minor": 56385,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 6921,
+          "base_minor": 49624
+        },
+        {
+          "line_id": "b",
+          "native_minor": 943,
+          "base_minor": 6761
+        }
+      ]
+    },
+    {
+      "doc_id": "I014",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V6",
+      "department": "Operations",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 8292,
+      "fx_revision": 0,
+      "gross_minor": 64761,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 7238,
+          "base_minor": 56529
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1054,
+          "base_minor": 8232
+        }
+      ]
+    },
+    {
+      "doc_id": "I015",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V7",
+      "department": "Marketing",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01",
+        "2025-02"
+      ],
+      "currency": "CNY",
+      "native_minor": 8720,
+      "fx_revision": 0,
+      "gross_minor": 8720,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 7555,
+          "base_minor": 7555
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1165,
+          "base_minor": 1165
+        }
+      ]
+    },
+    {
+      "doc_id": "I016",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V0",
+      "department": "Marketing",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02"
+      ],
+      "currency": "USD",
+      "native_minor": 9148,
+      "fx_revision": 0,
+      "gross_minor": 65591,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 7872,
+          "base_minor": 56442
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1276,
+          "base_minor": 9149
+        }
+      ]
+    },
+    {
+      "doc_id": "I017",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V1",
+      "department": "Marketing",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 9576,
+      "fx_revision": 0,
+      "gross_minor": 74788,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 8189,
+          "base_minor": 63956
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1387,
+          "base_minor": 10832
+        }
+      ]
+    },
+    {
+      "doc_id": "I018",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V2",
+      "department": "Engineering",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01"
+      ],
+      "currency": "CNY",
+      "native_minor": 9004,
+      "fx_revision": 0,
+      "gross_minor": 9004,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 8406,
+          "base_minor": 8406
+        },
+        {
+          "line_id": "b",
+          "native_minor": 598,
+          "base_minor": 598
+        }
+      ]
+    },
+    {
+      "doc_id": "I019",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V3",
+      "department": "Engineering",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02",
+        "2025-03"
+      ],
+      "currency": "USD",
+      "native_minor": 9332,
+      "fx_revision": 0,
+      "gross_minor": 66911,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 8723,
+          "base_minor": 62544
+        },
+        {
+          "line_id": "b",
+          "native_minor": 609,
+          "base_minor": 4367
+        }
+      ]
+    },
+    {
+      "doc_id": "I020",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V4",
+      "department": "Engineering",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 9760,
+      "fx_revision": 0,
+      "gross_minor": 76225,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 9040,
+          "base_minor": 70602
+        },
+        {
+          "line_id": "b",
+          "native_minor": 720,
+          "base_minor": 5623
+        }
+      ]
+    },
+    {
+      "doc_id": "I021",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V5",
+      "department": "Operations",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01",
+        "2025-02"
+      ],
+      "currency": "CNY",
+      "native_minor": 10188,
+      "fx_revision": 0,
+      "gross_minor": 10188,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 9357,
+          "base_minor": 9357
+        },
+        {
+          "line_id": "b",
+          "native_minor": 831,
+          "base_minor": 831
+        }
+      ]
+    },
+    {
+      "doc_id": "I022",
+      "revision": 1,
+      "status": "posted",
+      "vendor": "V6",
+      "department": "Operations",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02"
+      ],
+      "currency": "USD",
+      "native_minor": 11597,
+      "fx_revision": 0,
+      "gross_minor": 83150,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 10655,
+          "base_minor": 76396
+        },
+        {
+          "line_id": "b",
+          "native_minor": 942,
+          "base_minor": 6754
+        }
+      ]
+    },
+    {
+      "doc_id": "I023",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V7",
+      "department": "Operations",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 11044,
+      "fx_revision": 0,
+      "gross_minor": 86254,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 9991,
+          "base_minor": 78030
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1053,
+          "base_minor": 8224
+        }
+      ]
+    },
+    {
+      "doc_id": "I024",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V0",
+      "department": "Marketing",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01"
+      ],
+      "currency": "CNY",
+      "native_minor": 11372,
+      "fx_revision": 0,
+      "gross_minor": 11372,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 10208,
+          "base_minor": 10208
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1164,
+          "base_minor": 1164
+        }
+      ]
+    },
+    {
+      "doc_id": "I025",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V1",
+      "department": "Marketing",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02",
+        "2025-03"
+      ],
+      "currency": "USD",
+      "native_minor": 11800,
+      "fx_revision": 0,
+      "gross_minor": 84606,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 10525,
+          "base_minor": 75464
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1275,
+          "base_minor": 9142
+        }
+      ]
+    },
+    {
+      "doc_id": "I026",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V2",
+      "department": "Marketing",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 12228,
+      "fx_revision": 0,
+      "gross_minor": 95501,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 10842,
+          "base_minor": 84676
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1386,
+          "base_minor": 10825
+        }
+      ]
+    },
+    {
+      "doc_id": "I027",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V3",
+      "department": "Engineering",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01",
+        "2025-02"
+      ],
+      "currency": "CNY",
+      "native_minor": 11756,
+      "fx_revision": 0,
+      "gross_minor": 11756,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 11159,
+          "base_minor": 11159
+        },
+        {
+          "line_id": "b",
+          "native_minor": 597,
+          "base_minor": 597
+        }
+      ]
+    },
+    {
+      "doc_id": "I028",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V4",
+      "department": "Engineering",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02"
+      ],
+      "currency": "USD",
+      "native_minor": 12084,
+      "fx_revision": 0,
+      "gross_minor": 86642,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 11476,
+          "base_minor": 82283
+        },
+        {
+          "line_id": "b",
+          "native_minor": 608,
+          "base_minor": 4359
+        }
+      ]
+    },
+    {
+      "doc_id": "I029",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V5",
+      "department": "Engineering",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 12512,
+      "fx_revision": 0,
+      "gross_minor": 97718,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 11793,
+          "base_minor": 92103
+        },
+        {
+          "line_id": "b",
+          "native_minor": 719,
+          "base_minor": 5615
+        }
+      ]
+    },
+    {
+      "doc_id": "I030",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V6",
+      "department": "Operations",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01"
+      ],
+      "currency": "CNY",
+      "native_minor": 12840,
+      "fx_revision": 0,
+      "gross_minor": 12840,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 12010,
+          "base_minor": 12010
+        },
+        {
+          "line_id": "b",
+          "native_minor": 830,
+          "base_minor": 830
+        }
+      ]
+    },
+    {
+      "doc_id": "I031",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V7",
+      "department": "Operations",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02",
+        "2025-03"
+      ],
+      "currency": "USD",
+      "native_minor": 13268,
+      "fx_revision": 0,
+      "gross_minor": 95132,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 12327,
+          "base_minor": 88385
+        },
+        {
+          "line_id": "b",
+          "native_minor": 941,
+          "base_minor": 6747
+        }
+      ]
+    },
+    {
+      "doc_id": "I032",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V0",
+      "department": "Operations",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 13696,
+      "fx_revision": 0,
+      "gross_minor": 106966,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 12644,
+          "base_minor": 98750
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1052,
+          "base_minor": 8216
+        }
+      ]
+    },
+    {
+      "doc_id": "I033",
+      "revision": 1,
+      "status": "posted",
+      "vendor": "V1",
+      "department": "Marketing",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01",
+        "2025-02"
+      ],
+      "currency": "CNY",
+      "native_minor": 15118,
+      "fx_revision": 0,
+      "gross_minor": 15118,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 13955,
+          "base_minor": 13955
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1163,
+          "base_minor": 1163
+        }
+      ]
+    },
+    {
+      "doc_id": "I034",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V2",
+      "department": "Marketing",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02"
+      ],
+      "currency": "USD",
+      "native_minor": 14552,
+      "fx_revision": 0,
+      "gross_minor": 104338,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 13278,
+          "base_minor": 95203
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1274,
+          "base_minor": 9135
+        }
+      ]
+    },
+    {
+      "doc_id": "I035",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V3",
+      "department": "Marketing",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 14980,
+      "fx_revision": 0,
+      "gross_minor": 116994,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 13595,
+          "base_minor": 106177
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1385,
+          "base_minor": 10817
+        }
+      ]
+    },
+    {
+      "doc_id": "I036",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V4",
+      "department": "Engineering",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01"
+      ],
+      "currency": "CNY",
+      "native_minor": 14408,
+      "fx_revision": 0,
+      "gross_minor": 14408,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 13812,
+          "base_minor": 13812
+        },
+        {
+          "line_id": "b",
+          "native_minor": 596,
+          "base_minor": 596
+        }
+      ]
+    },
+    {
+      "doc_id": "I037",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V5",
+      "department": "Engineering",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02",
+        "2025-03"
+      ],
+      "currency": "USD",
+      "native_minor": 14736,
+      "fx_revision": 0,
+      "gross_minor": 105657,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 14129,
+          "base_minor": 101305
+        },
+        {
+          "line_id": "b",
+          "native_minor": 607,
+          "base_minor": 4352
+        }
+      ]
+    },
+    {
+      "doc_id": "I038",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V6",
+      "department": "Engineering",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 15164,
+      "fx_revision": 0,
+      "gross_minor": 118431,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 14446,
+          "base_minor": 112823
+        },
+        {
+          "line_id": "b",
+          "native_minor": 718,
+          "base_minor": 5608
+        }
+      ]
+    },
+    {
+      "doc_id": "I039",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V7",
+      "department": "Operations",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01",
+        "2025-02"
+      ],
+      "currency": "CNY",
+      "native_minor": 15592,
+      "fx_revision": 0,
+      "gross_minor": 15592,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 14763,
+          "base_minor": 14763
+        },
+        {
+          "line_id": "b",
+          "native_minor": 829,
+          "base_minor": 829
+        }
+      ]
+    },
+    {
+      "doc_id": "I040",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V0",
+      "department": "Operations",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02"
+      ],
+      "currency": "USD",
+      "native_minor": 16020,
+      "fx_revision": 0,
+      "gross_minor": 114864,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 15080,
+          "base_minor": 108124
+        },
+        {
+          "line_id": "b",
+          "native_minor": 940,
+          "base_minor": 6740
+        }
+      ]
+    },
+    {
+      "doc_id": "I041",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V1",
+      "department": "Operations",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 16448,
+      "fx_revision": 0,
+      "gross_minor": 128459,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 15397,
+          "base_minor": 120251
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1051,
+          "base_minor": 8208
+        }
+      ]
+    },
+    {
+      "doc_id": "I042",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V2",
+      "department": "Marketing",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01"
+      ],
+      "currency": "CNY",
+      "native_minor": 16776,
+      "fx_revision": 0,
+      "gross_minor": 16776,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 15614,
+          "base_minor": 15614
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1162,
+          "base_minor": 1162
+        }
+      ]
+    },
+    {
+      "doc_id": "I043",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V3",
+      "department": "Marketing",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02",
+        "2025-03"
+      ],
+      "currency": "USD",
+      "native_minor": 17204,
+      "fx_revision": 0,
+      "gross_minor": 123352,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 15931,
+          "base_minor": 114225
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1273,
+          "base_minor": 9127
+        }
+      ]
+    },
+    {
+      "doc_id": "I044",
+      "revision": 1,
+      "status": "posted",
+      "vendor": "V4",
+      "department": "Marketing",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 18639,
+      "fx_revision": 0,
+      "gross_minor": 145571,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 17255,
+          "base_minor": 134762
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1384,
+          "base_minor": 10809
+        }
+      ]
+    },
+    {
+      "doc_id": "I045",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V5",
+      "department": "Engineering",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01",
+        "2025-02"
+      ],
+      "currency": "CNY",
+      "native_minor": 17160,
+      "fx_revision": 0,
+      "gross_minor": 17160,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 16565,
+          "base_minor": 16565
+        },
+        {
+          "line_id": "b",
+          "native_minor": 595,
+          "base_minor": 595
+        }
+      ]
+    },
+    {
+      "doc_id": "I046",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V6",
+      "department": "Engineering",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02"
+      ],
+      "currency": "USD",
+      "native_minor": 17488,
+      "fx_revision": 0,
+      "gross_minor": 125389,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 16882,
+          "base_minor": 121044
+        },
+        {
+          "line_id": "b",
+          "native_minor": 606,
+          "base_minor": 4345
+        }
+      ]
+    },
+    {
+      "doc_id": "I047",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V7",
+      "department": "Engineering",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 17916,
+      "fx_revision": 0,
+      "gross_minor": 139924,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 17199,
+          "base_minor": 134324
+        },
+        {
+          "line_id": "b",
+          "native_minor": 717,
+          "base_minor": 5600
+        }
+      ]
+    },
+    {
+      "doc_id": "I048",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V0",
+      "department": "Operations",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01"
+      ],
+      "currency": "CNY",
+      "native_minor": 18244,
+      "fx_revision": 0,
+      "gross_minor": 18244,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 17416,
+          "base_minor": 17416
+        },
+        {
+          "line_id": "b",
+          "native_minor": 828,
+          "base_minor": 828
+        }
+      ]
+    },
+    {
+      "doc_id": "I049",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V1",
+      "department": "Operations",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02",
+        "2025-03"
+      ],
+      "currency": "USD",
+      "native_minor": 18672,
+      "fx_revision": 0,
+      "gross_minor": 133879,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 17733,
+          "base_minor": 127146
+        },
+        {
+          "line_id": "b",
+          "native_minor": 939,
+          "base_minor": 6733
+        }
+      ]
+    },
+    {
+      "doc_id": "I050",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V2",
+      "department": "Operations",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 19100,
+      "fx_revision": 0,
+      "gross_minor": 149172,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 18050,
+          "base_minor": 140971
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1050,
+          "base_minor": 8201
+        }
+      ]
+    },
+    {
+      "doc_id": "I051",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V3",
+      "department": "Marketing",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01",
+        "2025-02"
+      ],
+      "currency": "CNY",
+      "native_minor": 19528,
+      "fx_revision": 0,
+      "gross_minor": 19528,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 18367,
+          "base_minor": 18367
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1161,
+          "base_minor": 1161
+        }
+      ]
+    },
+    {
+      "doc_id": "I052",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V4",
+      "department": "Marketing",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02"
+      ],
+      "currency": "USD",
+      "native_minor": 19956,
+      "fx_revision": 0,
+      "gross_minor": 143084,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 18684,
+          "base_minor": 133964
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1272,
+          "base_minor": 9120
+        }
+      ]
+    },
+    {
+      "doc_id": "I053",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V5",
+      "department": "Marketing",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 20284,
+      "fx_revision": 0,
+      "gross_minor": 158418,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 18901,
+          "base_minor": 147617
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1383,
+          "base_minor": 10801
+        }
+      ]
+    },
+    {
+      "doc_id": "I054",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V6",
+      "department": "Engineering",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01"
+      ],
+      "currency": "CNY",
+      "native_minor": 19812,
+      "fx_revision": 0,
+      "gross_minor": 19812,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 19218,
+          "base_minor": 19218
+        },
+        {
+          "line_id": "b",
+          "native_minor": 594,
+          "base_minor": 594
+        }
+      ]
+    },
+    {
+      "doc_id": "I055",
+      "revision": 1,
+      "status": "posted",
+      "vendor": "V7",
+      "department": "Engineering",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02",
+        "2025-03"
+      ],
+      "currency": "USD",
+      "native_minor": 21160,
+      "fx_revision": 0,
+      "gross_minor": 151717,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 20555,
+          "base_minor": 147379
+        },
+        {
+          "line_id": "b",
+          "native_minor": 605,
+          "base_minor": 4338
+        }
+      ]
+    },
+    {
+      "doc_id": "I056",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V0",
+      "department": "Engineering",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 20568,
+      "fx_revision": 0,
+      "gross_minor": 160636,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 19852,
+          "base_minor": 155044
+        },
+        {
+          "line_id": "b",
+          "native_minor": 716,
+          "base_minor": 5592
+        }
+      ]
+    },
+    {
+      "doc_id": "I057",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V1",
+      "department": "Operations",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01",
+        "2025-02"
+      ],
+      "currency": "CNY",
+      "native_minor": 20996,
+      "fx_revision": 0,
+      "gross_minor": 20996,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 20169,
+          "base_minor": 20169
+        },
+        {
+          "line_id": "b",
+          "native_minor": 827,
+          "base_minor": 827
+        }
+      ]
+    },
+    {
+      "doc_id": "I058",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V2",
+      "department": "Operations",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02"
+      ],
+      "currency": "USD",
+      "native_minor": 21424,
+      "fx_revision": 0,
+      "gross_minor": 153610,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 20486,
+          "base_minor": 146885
+        },
+        {
+          "line_id": "b",
+          "native_minor": 938,
+          "base_minor": 6725
+        }
+      ]
+    },
+    {
+      "doc_id": "I059",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V3",
+      "department": "Operations",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 21752,
+      "fx_revision": 0,
+      "gross_minor": 169883,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 20703,
+          "base_minor": 161690
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1049,
+          "base_minor": 8193
+        }
+      ]
+    },
+    {
+      "doc_id": "I060",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V4",
+      "department": "Marketing",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01"
+      ],
+      "currency": "CNY",
+      "native_minor": 22180,
+      "fx_revision": 0,
+      "gross_minor": 22180,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 21020,
+          "base_minor": 21020
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1160,
+          "base_minor": 1160
+        }
+      ]
+    },
+    {
+      "doc_id": "I061",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V5",
+      "department": "Marketing",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02",
+        "2025-03"
+      ],
+      "currency": "USD",
+      "native_minor": 22608,
+      "fx_revision": 0,
+      "gross_minor": 162099,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 21337,
+          "base_minor": 152986
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1271,
+          "base_minor": 9113
+        }
+      ]
+    },
+    {
+      "doc_id": "I062",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V6",
+      "department": "Marketing",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 23036,
+      "fx_revision": 0,
+      "gross_minor": 179911,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 21654,
+          "base_minor": 169118
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1382,
+          "base_minor": 10793
+        }
+      ]
+    },
+    {
+      "doc_id": "I063",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V7",
+      "department": "Engineering",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01",
+        "2025-02"
+      ],
+      "currency": "CNY",
+      "native_minor": 22564,
+      "fx_revision": 0,
+      "gross_minor": 22564,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 21971,
+          "base_minor": 21971
+        },
+        {
+          "line_id": "b",
+          "native_minor": 593,
+          "base_minor": 593
+        }
+      ]
+    },
+    {
+      "doc_id": "I064",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V0",
+      "department": "Engineering",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02"
+      ],
+      "currency": "USD",
+      "native_minor": 22892,
+      "fx_revision": 0,
+      "gross_minor": 164136,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 22288,
+          "base_minor": 159805
+        },
+        {
+          "line_id": "b",
+          "native_minor": 604,
+          "base_minor": 4331
+        }
+      ]
+    },
+    {
+      "doc_id": "I065",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V1",
+      "department": "Engineering",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 23220,
+      "fx_revision": 0,
+      "gross_minor": 181348,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 22505,
+          "base_minor": 175764
+        },
+        {
+          "line_id": "b",
+          "native_minor": 715,
+          "base_minor": 5584
+        }
+      ]
+    },
+    {
+      "doc_id": "I066",
+      "revision": 1,
+      "status": "posted",
+      "vendor": "V2",
+      "department": "Operations",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01"
+      ],
+      "currency": "CNY",
+      "native_minor": 24681,
+      "fx_revision": 0,
+      "gross_minor": 24681,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 23855,
+          "base_minor": 23855
+        },
+        {
+          "line_id": "b",
+          "native_minor": 826,
+          "base_minor": 826
+        }
+      ]
+    },
+    {
+      "doc_id": "I067",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V3",
+      "department": "Operations",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02",
+        "2025-03"
+      ],
+      "currency": "USD",
+      "native_minor": 24076,
+      "fx_revision": 0,
+      "gross_minor": 172625,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 23139,
+          "base_minor": 165907
+        },
+        {
+          "line_id": "b",
+          "native_minor": 937,
+          "base_minor": 6718
+        }
+      ]
+    },
+    {
+      "doc_id": "I068",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V4",
+      "department": "Operations",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 24504,
+      "fx_revision": 0,
+      "gross_minor": 191376,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 23456,
+          "base_minor": 183191
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1048,
+          "base_minor": 8185
+        }
+      ]
+    },
+    {
+      "doc_id": "I069",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V5",
+      "department": "Marketing",
+      "book_month": "2025-01",
+      "service_months": [
+        "2025-01",
+        "2025-02"
+      ],
+      "currency": "CNY",
+      "native_minor": 24932,
+      "fx_revision": 0,
+      "gross_minor": 24932,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 23773,
+          "base_minor": 23773
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1159,
+          "base_minor": 1159
+        }
+      ]
+    },
+    {
+      "doc_id": "I070",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V6",
+      "department": "Marketing",
+      "book_month": "2025-02",
+      "service_months": [
+        "2025-02"
+      ],
+      "currency": "USD",
+      "native_minor": 25360,
+      "fx_revision": 0,
+      "gross_minor": 181831,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 24090,
+          "base_minor": 172725
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1270,
+          "base_minor": 9106
+        }
+      ]
+    },
+    {
+      "doc_id": "I071",
+      "revision": 0,
+      "status": "posted",
+      "vendor": "V7",
+      "department": "Marketing",
+      "book_month": "2025-03",
+      "service_months": [
+        "2025-03"
+      ],
+      "currency": "EUR",
+      "native_minor": 25688,
+      "fx_revision": 0,
+      "gross_minor": 200624,
+      "lines": [
+        {
+          "line_id": "a",
+          "native_minor": 24307,
+          "base_minor": 189838
+        },
+        {
+          "line_id": "b",
+          "native_minor": 1381,
+          "base_minor": 10786
+        }
+      ]
+    }
+  ],
+  "bank": [
+    {
+      "bank_tx_id": "P-anchor-a",
+      "month": "2025-01",
+      "amount_minor": 4000,
+      "fee_minor": 0,
+      "allocated_minor": 4000,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P-unknown",
+      "month": "2025-01",
+      "amount_minor": 700,
+      "fee_minor": 0,
+      "allocated_minor": 0,
+      "unallocated_minor": 700,
+      "status": "unresolved"
+    },
+    {
+      "bank_tx_id": "P000a",
+      "month": "2025-01",
+      "amount_minor": 2736,
+      "fee_minor": 3,
+      "allocated_minor": 2733,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P003",
+      "month": "2025-01",
+      "amount_minor": 4787,
+      "fee_minor": 3,
+      "allocated_minor": 4784,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P006",
+      "month": "2025-01",
+      "amount_minor": 5971,
+      "fee_minor": 3,
+      "allocated_minor": 5968,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P009",
+      "month": "2025-01",
+      "amount_minor": 6355,
+      "fee_minor": 3,
+      "allocated_minor": 6352,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P012a",
+      "month": "2025-01",
+      "amount_minor": 4464,
+      "fee_minor": 3,
+      "allocated_minor": 4461,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P015",
+      "month": "2025-01",
+      "amount_minor": 8723,
+      "fee_minor": 3,
+      "allocated_minor": 8720,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P018",
+      "month": "2025-01",
+      "amount_minor": 9007,
+      "fee_minor": 3,
+      "allocated_minor": 9004,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P021",
+      "month": "2025-01",
+      "amount_minor": 10191,
+      "fee_minor": 3,
+      "allocated_minor": 10188,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P024a",
+      "month": "2025-01",
+      "amount_minor": 6826,
+      "fee_minor": 3,
+      "allocated_minor": 6823,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P027",
+      "month": "2025-01",
+      "amount_minor": 11759,
+      "fee_minor": 3,
+      "allocated_minor": 11756,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P030",
+      "month": "2025-01",
+      "amount_minor": 12843,
+      "fee_minor": 3,
+      "allocated_minor": 12840,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P033",
+      "month": "2025-01",
+      "amount_minor": 15121,
+      "fee_minor": 3,
+      "allocated_minor": 15118,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P036a",
+      "month": "2025-01",
+      "amount_minor": 8647,
+      "fee_minor": 3,
+      "allocated_minor": 8644,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P039",
+      "month": "2025-01",
+      "amount_minor": 15595,
+      "fee_minor": 3,
+      "allocated_minor": 15592,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P-anchor-b",
+      "month": "2025-02",
+      "amount_minor": 6000,
+      "fee_minor": 0,
+      "allocated_minor": 6000,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P000b",
+      "month": "2025-02",
+      "amount_minor": 1827,
+      "fee_minor": 3,
+      "allocated_minor": 1822,
+      "unallocated_minor": 2,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P001",
+      "month": "2025-02",
+      "amount_minor": 28010,
+      "fee_minor": 3,
+      "allocated_minor": 28007,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P004a",
+      "month": "2025-02",
+      "amount_minor": 22299,
+      "fee_minor": 3,
+      "allocated_minor": 22296,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P007",
+      "month": "2025-02",
+      "amount_minor": 45606,
+      "fee_minor": 3,
+      "allocated_minor": 0,
+      "unallocated_minor": 45603,
+      "status": "unresolved"
+    },
+    {
+      "bank_tx_id": "P010",
+      "month": "2025-02",
+      "amount_minor": 47631,
+      "fee_minor": 3,
+      "allocated_minor": 47628,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P012b",
+      "month": "2025-02",
+      "amount_minor": 2978,
+      "fee_minor": 3,
+      "allocated_minor": 2975,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P013",
+      "month": "2025-02",
+      "amount_minor": 56073,
+      "fee_minor": 3,
+      "allocated_minor": 56070,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P016a",
+      "month": "2025-02",
+      "amount_minor": 39132,
+      "fee_minor": 3,
+      "allocated_minor": 39129,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P019",
+      "month": "2025-02",
+      "amount_minor": 66540,
+      "fee_minor": 3,
+      "allocated_minor": 0,
+      "unallocated_minor": 66537,
+      "status": "unresolved"
+    },
+    {
+      "bank_tx_id": "P022",
+      "month": "2025-02",
+      "amount_minor": 82690,
+      "fee_minor": 3,
+      "allocated_minor": 82687,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P024b",
+      "month": "2025-02",
+      "amount_minor": 4554,
+      "fee_minor": 3,
+      "allocated_minor": 4549,
+      "unallocated_minor": 2,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P025",
+      "month": "2025-02",
+      "amount_minor": 84137,
+      "fee_minor": 3,
+      "allocated_minor": 84134,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P028a",
+      "month": "2025-02",
+      "amount_minor": 51696,
+      "fee_minor": 3,
+      "allocated_minor": 51693,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P031",
+      "month": "2025-02",
+      "amount_minor": 94604,
+      "fee_minor": 3,
+      "allocated_minor": 94601,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P034",
+      "month": "2025-02",
+      "amount_minor": 103759,
+      "fee_minor": 3,
+      "allocated_minor": 103756,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P036b",
+      "month": "2025-02",
+      "amount_minor": 5767,
+      "fee_minor": 3,
+      "allocated_minor": 5764,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P037",
+      "month": "2025-02",
+      "amount_minor": 105071,
+      "fee_minor": 3,
+      "allocated_minor": 105068,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P040a",
+      "month": "2025-02",
+      "amount_minor": 68537,
+      "fee_minor": 3,
+      "allocated_minor": 68534,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P-merged",
+      "month": "2025-03",
+      "amount_minor": 139444,
+      "fee_minor": 3,
+      "allocated_minor": 139441,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P002",
+      "month": "2025-03",
+      "amount_minor": 33849,
+      "fee_minor": 3,
+      "allocated_minor": 33846,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P004b",
+      "month": "2025-03",
+      "amount_minor": 14869,
+      "fee_minor": 3,
+      "allocated_minor": 14866,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P005",
+      "month": "2025-03",
+      "amount_minor": 43826,
+      "fee_minor": 3,
+      "allocated_minor": 43823,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P008a",
+      "month": "2025-03",
+      "amount_minor": 31813,
+      "fee_minor": 3,
+      "allocated_minor": 31810,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P008b",
+      "month": "2025-03",
+      "amount_minor": 21217,
+      "fee_minor": 3,
+      "allocated_minor": 21212,
+      "unallocated_minor": 2,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P011",
+      "month": "2025-03",
+      "amount_minor": 62754,
+      "fee_minor": 3,
+      "allocated_minor": 62751,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P014",
+      "month": "2025-03",
+      "amount_minor": 64432,
+      "fee_minor": 3,
+      "allocated_minor": 64429,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P016b",
+      "month": "2025-03",
+      "amount_minor": 26101,
+      "fee_minor": 3,
+      "allocated_minor": 26096,
+      "unallocated_minor": 2,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P017",
+      "month": "2025-03",
+      "amount_minor": 74409,
+      "fee_minor": 3,
+      "allocated_minor": 74406,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P020a",
+      "month": "2025-03",
+      "amount_minor": 45504,
+      "fee_minor": 3,
+      "allocated_minor": 45501,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P020b",
+      "month": "2025-03",
+      "amount_minor": 30337,
+      "fee_minor": 3,
+      "allocated_minor": 30334,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P023",
+      "month": "2025-03",
+      "amount_minor": 85815,
+      "fee_minor": 3,
+      "allocated_minor": 85812,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P026",
+      "month": "2025-03",
+      "amount_minor": 95015,
+      "fee_minor": 3,
+      "allocated_minor": 95012,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P028b",
+      "month": "2025-03",
+      "amount_minor": 34469,
+      "fee_minor": 3,
+      "allocated_minor": 34466,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P029",
+      "month": "2025-03",
+      "amount_minor": 97221,
+      "fee_minor": 3,
+      "allocated_minor": 97218,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P032a",
+      "month": "2025-03",
+      "amount_minor": 63849,
+      "fee_minor": 3,
+      "allocated_minor": 63846,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P032b",
+      "month": "2025-03",
+      "amount_minor": 42577,
+      "fee_minor": 3,
+      "allocated_minor": 42572,
+      "unallocated_minor": 2,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P035",
+      "month": "2025-03",
+      "amount_minor": 116398,
+      "fee_minor": 3,
+      "allocated_minor": 116395,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P038",
+      "month": "2025-03",
+      "amount_minor": 117827,
+      "fee_minor": 3,
+      "allocated_minor": 117824,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P040b",
+      "month": "2025-03",
+      "amount_minor": 45694,
+      "fee_minor": 3,
+      "allocated_minor": 45689,
+      "unallocated_minor": 2,
+      "status": "confirmed"
+    },
+    {
+      "bank_tx_id": "P041",
+      "month": "2025-03",
+      "amount_minor": 127804,
+      "fee_minor": 3,
+      "allocated_minor": 127801,
+      "unallocated_minor": 0,
+      "status": "confirmed"
+    }
+  ],
+  "settlements": [
+    {
+      "bank_tx_id": "P-anchor-a",
+      "doc_id": "I-anchor",
+      "month": "2025-01",
+      "native_minor": 4000,
+      "book_minor": 4000,
+      "cash_minor": 4000,
+      "fx_minor": 0
+    },
+    {
+      "bank_tx_id": "P000a",
+      "doc_id": "I000",
+      "month": "2025-01",
+      "native_minor": 2733,
+      "book_minor": 2733,
+      "cash_minor": 2733,
+      "fx_minor": 0
+    },
+    {
+      "bank_tx_id": "P003",
+      "doc_id": "I003",
+      "month": "2025-01",
+      "native_minor": 4784,
+      "book_minor": 4784,
+      "cash_minor": 4784,
+      "fx_minor": 0
+    },
+    {
+      "bank_tx_id": "P006",
+      "doc_id": "I006",
+      "month": "2025-01",
+      "native_minor": 5968,
+      "book_minor": 5968,
+      "cash_minor": 5968,
+      "fx_minor": 0
+    },
+    {
+      "bank_tx_id": "P009",
+      "doc_id": "I009",
+      "month": "2025-01",
+      "native_minor": 6352,
+      "book_minor": 6352,
+      "cash_minor": 6352,
+      "fx_minor": 0
+    },
+    {
+      "bank_tx_id": "P012a",
+      "doc_id": "I012",
+      "month": "2025-01",
+      "native_minor": 4461,
+      "book_minor": 4461,
+      "cash_minor": 4461,
+      "fx_minor": 0
+    },
+    {
+      "bank_tx_id": "P015",
+      "doc_id": "I015",
+      "month": "2025-01",
+      "native_minor": 8720,
+      "book_minor": 8720,
+      "cash_minor": 8720,
+      "fx_minor": 0
+    },
+    {
+      "bank_tx_id": "P018",
+      "doc_id": "I018",
+      "month": "2025-01",
+      "native_minor": 9004,
+      "book_minor": 9004,
+      "cash_minor": 9004,
+      "fx_minor": 0
+    },
+    {
+      "bank_tx_id": "P021",
+      "doc_id": "I021",
+      "month": "2025-01",
+      "native_minor": 10188,
+      "book_minor": 10188,
+      "cash_minor": 10188,
+      "fx_minor": 0
+    },
+    {
+      "bank_tx_id": "P024a",
+      "doc_id": "I024",
+      "month": "2025-01",
+      "native_minor": 6823,
+      "book_minor": 6823,
+      "cash_minor": 6823,
+      "fx_minor": 0
+    },
+    {
+      "bank_tx_id": "P027",
+      "doc_id": "I027",
+      "month": "2025-01",
+      "native_minor": 11756,
+      "book_minor": 11756,
+      "cash_minor": 11756,
+      "fx_minor": 0
+    },
+    {
+      "bank_tx_id": "P030",
+      "doc_id": "I030",
+      "month": "2025-01",
+      "native_minor": 12840,
+      "book_minor": 12840,
+      "cash_minor": 12840,
+      "fx_minor": 0
+    },
+    {
+      "bank_tx_id": "P033",
+      "doc_id": "I033",
+      "month": "2025-01",
+      "native_minor": 15118,
+      "book_minor": 15118,
+      "cash_minor": 15118,
+      "fx_minor": 0
+    },
+    {
+      "bank_tx_id": "P036a",
+      "doc_id": "I036",
+      "month": "2025-01",
+      "native_minor": 8644,
+      "book_minor": 8644,
+      "cash_minor": 8644,
+      "fx_minor": 0
+    },
+    {
+      "bank_tx_id": "P039",
+      "doc_id": "I039",
+      "month": "2025-01",
+      "native_minor": 15592,
+      "book_minor": 15592,
+      "cash_minor": 15592,
+      "fx_minor": 0
+    },
+    {
+      "bank_tx_id": "P-anchor-b",
+      "doc_id": "I-anchor",
+      "month": "2025-02",
+      "native_minor": 6000,
+      "book_minor": 6000,
+      "cash_minor": 6000,
+      "fx_minor": 0
+    },
+    {
+      "bank_tx_id": "P000b",
+      "doc_id": "I000",
+      "month": "2025-02",
+      "native_minor": 1822,
+      "book_minor": 1822,
+      "cash_minor": 1822,
+      "fx_minor": 0
+    },
+    {
+      "bank_tx_id": "P001",
+      "doc_id": "I001",
+      "month": "2025-02",
+      "native_minor": 3928,
+      "book_minor": 28164,
+      "cash_minor": 28007,
+      "fx_minor": -157
+    },
+    {
+      "bank_tx_id": "P004a",
+      "doc_id": "I004",
+      "month": "2025-02",
+      "native_minor": 3127,
+      "book_minor": 22421,
+      "cash_minor": 22296,
+      "fx_minor": -125
+    },
+    {
+      "bank_tx_id": "P010",
+      "doc_id": "I010",
+      "month": "2025-02",
+      "native_minor": 6680,
+      "book_minor": 47896,
+      "cash_minor": 47628,
+      "fx_minor": -268
+    },
+    {
+      "bank_tx_id": "P012b",
+      "doc_id": "I012",
+      "month": "2025-02",
+      "native_minor": 2975,
+      "book_minor": 2975,
+      "cash_minor": 2975,
+      "fx_minor": 0
+    },
+    {
+      "bank_tx_id": "P013",
+      "doc_id": "I013",
+      "month": "2025-02",
+      "native_minor": 7864,
+      "book_minor": 56385,
+      "cash_minor": 56070,
+      "fx_minor": -315
+    },
+    {
+      "bank_tx_id": "P016a",
+      "doc_id": "I016",
+      "month": "2025-02",
+      "native_minor": 5488,
+      "book_minor": 39349,
+      "cash_minor": 39129,
+      "fx_minor": -220
+    },
+    {
+      "bank_tx_id": "P022",
+      "doc_id": "I022",
+      "month": "2025-02",
+      "native_minor": 11597,
+      "book_minor": 83150,
+      "cash_minor": 82687,
+      "fx_minor": -463
+    },
+    {
+      "bank_tx_id": "P024b",
+      "doc_id": "I024",
+      "month": "2025-02",
+      "native_minor": 4549,
+      "book_minor": 4549,
+      "cash_minor": 4549,
+      "fx_minor": 0
+    },
+    {
+      "bank_tx_id": "P025",
+      "doc_id": "I025",
+      "month": "2025-02",
+      "native_minor": 11800,
+      "book_minor": 84606,
+      "cash_minor": 84134,
+      "fx_minor": -472
+    },
+    {
+      "bank_tx_id": "P028a",
+      "doc_id": "I028",
+      "month": "2025-02",
+      "native_minor": 7250,
+      "book_minor": 51982,
+      "cash_minor": 51693,
+      "fx_minor": -289
+    },
+    {
+      "bank_tx_id": "P031",
+      "doc_id": "I031",
+      "month": "2025-02",
+      "native_minor": 13268,
+      "book_minor": 95132,
+      "cash_minor": 94601,
+      "fx_minor": -531
+    },
+    {
+      "bank_tx_id": "P034",
+      "doc_id": "I034",
+      "month": "2025-02",
+      "native_minor": 14552,
+      "book_minor": 104338,
+      "cash_minor": 103756,
+      "fx_minor": -582
+    },
+    {
+      "bank_tx_id": "P036b",
+      "doc_id": "I036",
+      "month": "2025-02",
+      "native_minor": 5764,
+      "book_minor": 5764,
+      "cash_minor": 5764,
+      "fx_minor": 0
+    },
+    {
+      "bank_tx_id": "P037",
+      "doc_id": "I037",
+      "month": "2025-02",
+      "native_minor": 14736,
+      "book_minor": 105657,
+      "cash_minor": 105068,
+      "fx_minor": -589
+    },
+    {
+      "bank_tx_id": "P040a",
+      "doc_id": "I040",
+      "month": "2025-02",
+      "native_minor": 9612,
+      "book_minor": 68918,
+      "cash_minor": 68534,
+      "fx_minor": -384
+    },
+    {
+      "bank_tx_id": "P-merged",
+      "doc_id": "I042",
+      "month": "2025-03",
+      "native_minor": 16776,
+      "book_minor": 16776,
+      "cash_minor": 16776,
+      "fx_minor": 0
+    },
+    {
+      "bank_tx_id": "P-merged",
+      "doc_id": "I043",
+      "month": "2025-03",
+      "native_minor": 17204,
+      "book_minor": 123352,
+      "cash_minor": 122665,
+      "fx_minor": -687
+    },
+    {
+      "bank_tx_id": "P002",
+      "doc_id": "I002",
+      "month": "2025-03",
+      "native_minor": 4356,
+      "book_minor": 34021,
+      "cash_minor": 33846,
+      "fx_minor": -175
+    },
+    {
+      "bank_tx_id": "P004b",
+      "doc_id": "I004",
+      "month": "2025-03",
+      "native_minor": 2085,
+      "book_minor": 14949,
+      "cash_minor": 14866,
+      "fx_minor": -83
+    },
+    {
+      "bank_tx_id": "P005",
+      "doc_id": "I005",
+      "month": "2025-03",
+      "native_minor": 5640,
+      "book_minor": 44049,
+      "cash_minor": 43823,
+      "fx_minor": -226
+    },
+    {
+      "bank_tx_id": "P008a",
+      "doc_id": "I008",
+      "month": "2025-03",
+      "native_minor": 4094,
+      "book_minor": 31974,
+      "cash_minor": 31810,
+      "fx_minor": -164
+    },
+    {
+      "bank_tx_id": "P008b",
+      "doc_id": "I008",
+      "month": "2025-03",
+      "native_minor": 2730,
+      "book_minor": 21321,
+      "cash_minor": 21212,
+      "fx_minor": -109
+    },
+    {
+      "bank_tx_id": "P011",
+      "doc_id": "I011",
+      "month": "2025-03",
+      "native_minor": 8076,
+      "book_minor": 63074,
+      "cash_minor": 62751,
+      "fx_minor": -323
+    },
+    {
+      "bank_tx_id": "P014",
+      "doc_id": "I014",
+      "month": "2025-03",
+      "native_minor": 8292,
+      "book_minor": 64761,
+      "cash_minor": 64429,
+      "fx_minor": -332
+    },
+    {
+      "bank_tx_id": "P016b",
+      "doc_id": "I016",
+      "month": "2025-03",
+      "native_minor": 3660,
+      "book_minor": 26242,
+      "cash_minor": 26096,
+      "fx_minor": -146
+    },
+    {
+      "bank_tx_id": "P017",
+      "doc_id": "I017",
+      "month": "2025-03",
+      "native_minor": 9576,
+      "book_minor": 74788,
+      "cash_minor": 74406,
+      "fx_minor": -382
+    },
+    {
+      "bank_tx_id": "P020a",
+      "doc_id": "I020",
+      "month": "2025-03",
+      "native_minor": 5856,
+      "book_minor": 45735,
+      "cash_minor": 45501,
+      "fx_minor": -234
+    },
+    {
+      "bank_tx_id": "P020b",
+      "doc_id": "I020",
+      "month": "2025-03",
+      "native_minor": 3904,
+      "book_minor": 30490,
+      "cash_minor": 30334,
+      "fx_minor": -156
+    },
+    {
+      "bank_tx_id": "P023",
+      "doc_id": "I023",
+      "month": "2025-03",
+      "native_minor": 11044,
+      "book_minor": 86254,
+      "cash_minor": 85812,
+      "fx_minor": -442
+    },
+    {
+      "bank_tx_id": "P026",
+      "doc_id": "I026",
+      "month": "2025-03",
+      "native_minor": 12228,
+      "book_minor": 95501,
+      "cash_minor": 95012,
+      "fx_minor": -489
+    },
+    {
+      "bank_tx_id": "P028b",
+      "doc_id": "I028",
+      "month": "2025-03",
+      "native_minor": 4834,
+      "book_minor": 34660,
+      "cash_minor": 34466,
+      "fx_minor": -194
+    },
+    {
+      "bank_tx_id": "P029",
+      "doc_id": "I029",
+      "month": "2025-03",
+      "native_minor": 12512,
+      "book_minor": 97718,
+      "cash_minor": 97218,
+      "fx_minor": -500
+    },
+    {
+      "bank_tx_id": "P032a",
+      "doc_id": "I032",
+      "month": "2025-03",
+      "native_minor": 8217,
+      "book_minor": 64175,
+      "cash_minor": 63846,
+      "fx_minor": -329
+    },
+    {
+      "bank_tx_id": "P032b",
+      "doc_id": "I032",
+      "month": "2025-03",
+      "native_minor": 5479,
+      "book_minor": 42791,
+      "cash_minor": 42572,
+      "fx_minor": -219
+    },
+    {
+      "bank_tx_id": "P035",
+      "doc_id": "I035",
+      "month": "2025-03",
+      "native_minor": 14980,
+      "book_minor": 116994,
+      "cash_minor": 116395,
+      "fx_minor": -599
+    },
+    {
+      "bank_tx_id": "P038",
+      "doc_id": "I038",
+      "month": "2025-03",
+      "native_minor": 15164,
+      "book_minor": 118431,
+      "cash_minor": 117824,
+      "fx_minor": -607
+    },
+    {
+      "bank_tx_id": "P040b",
+      "doc_id": "I040",
+      "month": "2025-03",
+      "native_minor": 6408,
+      "book_minor": 45946,
+      "cash_minor": 45689,
+      "fx_minor": -257
+    },
+    {
+      "bank_tx_id": "P041",
+      "doc_id": "I041",
+      "month": "2025-03",
+      "native_minor": 16448,
+      "book_minor": 128459,
+      "cash_minor": 127801,
+      "fx_minor": -658
+    }
+  ],
+  "journal": [
+    {
+      "source_type": "opening",
+      "source_id": "opening",
+      "month": "2025-01",
+      "account": "Cash",
+      "amount_minor": 2000000
+    },
+    {
+      "source_type": "opening",
+      "source_id": "opening",
+      "month": "2025-01",
+      "account": "OpeningEquity",
+      "amount_minor": -2000000
+    },
+    {
+      "source_type": "doc",
+      "source_id": "C-anchor",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": -1000
+    },
+    {
+      "source_type": "doc",
+      "source_id": "C-anchor",
+      "month": "2025-01",
+      "account": "AP:AnchorVendor",
+      "amount_minor": 1000
+    },
+    {
+      "source_type": "doc",
+      "source_id": "C-anchor",
+      "month": "2025-01",
+      "account": "Expense:Operations",
+      "amount_minor": -1000
+    },
+    {
+      "source_type": "doc",
+      "source_id": "C-anchor",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": 1000
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I-anchor",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": 10000
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I-anchor",
+      "month": "2025-01",
+      "account": "AP:AnchorVendor",
+      "amount_minor": -10000
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I-anchor",
+      "month": "2025-01",
+      "account": "Expense:Operations",
+      "amount_minor": 10000
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I-anchor",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": -10000
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I-resolved",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": 17000
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I-resolved",
+      "month": "2025-01",
+      "account": "AP:ResolvedVendor",
+      "amount_minor": -17000
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I-resolved",
+      "month": "2025-01",
+      "account": "Expense:Operations",
+      "amount_minor": 17000
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I-resolved",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": -17000
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I-rounding",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": 72
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I-rounding",
+      "month": "2025-01",
+      "account": "AP:RoundingVendor",
+      "amount_minor": -72
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I-rounding",
+      "month": "2025-01",
+      "account": "Expense:Operations",
+      "amount_minor": 72
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I-rounding",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": -72
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I000",
+      "month": "2025-01",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 4555
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I000",
+      "month": "2025-01",
+      "account": "AP:V0",
+      "amount_minor": -4555
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I000",
+      "month": "2025-01",
+      "account": "Expense:Engineering",
+      "amount_minor": 4555
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I000",
+      "month": "2025-01",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -4555
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I001",
+      "month": "2025-02",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 28164
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I001",
+      "month": "2025-02",
+      "account": "AP:V1",
+      "amount_minor": -28164
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I001",
+      "month": "2025-02",
+      "account": "Expense:Engineering",
+      "amount_minor": 14082
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I001",
+      "month": "2025-02",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -14082
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I001",
+      "month": "2025-03",
+      "account": "Expense:Engineering",
+      "amount_minor": 14082
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I001",
+      "month": "2025-03",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -14082
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I002",
+      "month": "2025-03",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 34021
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I002",
+      "month": "2025-03",
+      "account": "AP:V2",
+      "amount_minor": -34021
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I002",
+      "month": "2025-03",
+      "account": "Expense:Engineering",
+      "amount_minor": 34021
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I002",
+      "month": "2025-03",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -34021
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I003",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": 4784
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I003",
+      "month": "2025-01",
+      "account": "AP:V3",
+      "amount_minor": -4784
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I003",
+      "month": "2025-01",
+      "account": "Expense:Operations",
+      "amount_minor": 2392
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I003",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": -2392
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I003",
+      "month": "2025-02",
+      "account": "Expense:Operations",
+      "amount_minor": 2392
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I003",
+      "month": "2025-02",
+      "account": "Prepaid:Operations",
+      "amount_minor": -2392
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I004",
+      "month": "2025-02",
+      "account": "Prepaid:Operations",
+      "amount_minor": 37370
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I004",
+      "month": "2025-02",
+      "account": "AP:V4",
+      "amount_minor": -37370
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I004",
+      "month": "2025-02",
+      "account": "Expense:Operations",
+      "amount_minor": 37370
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I004",
+      "month": "2025-02",
+      "account": "Prepaid:Operations",
+      "amount_minor": -37370
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I005",
+      "month": "2025-03",
+      "account": "Prepaid:Operations",
+      "amount_minor": 44049
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I005",
+      "month": "2025-03",
+      "account": "AP:V5",
+      "amount_minor": -44049
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I005",
+      "month": "2025-03",
+      "account": "Expense:Operations",
+      "amount_minor": 44049
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I005",
+      "month": "2025-03",
+      "account": "Prepaid:Operations",
+      "amount_minor": -44049
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I006",
+      "month": "2025-01",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 5968
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I006",
+      "month": "2025-01",
+      "account": "AP:V6",
+      "amount_minor": -5968
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I006",
+      "month": "2025-01",
+      "account": "Expense:Marketing",
+      "amount_minor": 5968
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I006",
+      "month": "2025-01",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -5968
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I007",
+      "month": "2025-02",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 45859
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I007",
+      "month": "2025-02",
+      "account": "AP:V7",
+      "amount_minor": -45859
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I007",
+      "month": "2025-02",
+      "account": "Expense:Marketing",
+      "amount_minor": 22929
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I007",
+      "month": "2025-02",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -22929
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I007",
+      "month": "2025-03",
+      "account": "Expense:Marketing",
+      "amount_minor": 22930
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I007",
+      "month": "2025-03",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -22930
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I008",
+      "month": "2025-03",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 53295
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I008",
+      "month": "2025-03",
+      "account": "AP:V0",
+      "amount_minor": -53295
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I008",
+      "month": "2025-03",
+      "account": "Expense:Marketing",
+      "amount_minor": 53295
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I008",
+      "month": "2025-03",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -53295
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I009",
+      "month": "2025-01",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 6352
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I009",
+      "month": "2025-01",
+      "account": "AP:V1",
+      "amount_minor": -6352
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I009",
+      "month": "2025-01",
+      "account": "Expense:Engineering",
+      "amount_minor": 3176
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I009",
+      "month": "2025-01",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -3176
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I009",
+      "month": "2025-02",
+      "account": "Expense:Engineering",
+      "amount_minor": 3176
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I009",
+      "month": "2025-02",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -3176
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I010",
+      "month": "2025-02",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 47896
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I010",
+      "month": "2025-02",
+      "account": "AP:V2",
+      "amount_minor": -47896
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I010",
+      "month": "2025-02",
+      "account": "Expense:Engineering",
+      "amount_minor": 47896
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I010",
+      "month": "2025-02",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -47896
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I011",
+      "month": "2025-03",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 63074
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I011",
+      "month": "2025-03",
+      "account": "AP:V3",
+      "amount_minor": -63074
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I011",
+      "month": "2025-03",
+      "account": "Expense:Engineering",
+      "amount_minor": 63074
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I011",
+      "month": "2025-03",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -63074
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I012",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": 7436
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I012",
+      "month": "2025-01",
+      "account": "AP:V4",
+      "amount_minor": -7436
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I012",
+      "month": "2025-01",
+      "account": "Expense:Operations",
+      "amount_minor": 7436
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I012",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": -7436
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I013",
+      "month": "2025-02",
+      "account": "Prepaid:Operations",
+      "amount_minor": 56385
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I013",
+      "month": "2025-02",
+      "account": "AP:V5",
+      "amount_minor": -56385
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I013",
+      "month": "2025-02",
+      "account": "Expense:Operations",
+      "amount_minor": 28192
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I013",
+      "month": "2025-02",
+      "account": "Prepaid:Operations",
+      "amount_minor": -28192
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I013",
+      "month": "2025-03",
+      "account": "Expense:Operations",
+      "amount_minor": 28193
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I013",
+      "month": "2025-03",
+      "account": "Prepaid:Operations",
+      "amount_minor": -28193
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I014",
+      "month": "2025-03",
+      "account": "Prepaid:Operations",
+      "amount_minor": 64761
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I014",
+      "month": "2025-03",
+      "account": "AP:V6",
+      "amount_minor": -64761
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I014",
+      "month": "2025-03",
+      "account": "Expense:Operations",
+      "amount_minor": 64761
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I014",
+      "month": "2025-03",
+      "account": "Prepaid:Operations",
+      "amount_minor": -64761
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I015",
+      "month": "2025-01",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 8720
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I015",
+      "month": "2025-01",
+      "account": "AP:V7",
+      "amount_minor": -8720
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I015",
+      "month": "2025-01",
+      "account": "Expense:Marketing",
+      "amount_minor": 4360
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I015",
+      "month": "2025-01",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -4360
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I015",
+      "month": "2025-02",
+      "account": "Expense:Marketing",
+      "amount_minor": 4360
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I015",
+      "month": "2025-02",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -4360
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I016",
+      "month": "2025-02",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 65591
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I016",
+      "month": "2025-02",
+      "account": "AP:V0",
+      "amount_minor": -65591
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I016",
+      "month": "2025-02",
+      "account": "Expense:Marketing",
+      "amount_minor": 65591
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I016",
+      "month": "2025-02",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -65591
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I017",
+      "month": "2025-03",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 74788
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I017",
+      "month": "2025-03",
+      "account": "AP:V1",
+      "amount_minor": -74788
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I017",
+      "month": "2025-03",
+      "account": "Expense:Marketing",
+      "amount_minor": 74788
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I017",
+      "month": "2025-03",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -74788
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I018",
+      "month": "2025-01",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 9004
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I018",
+      "month": "2025-01",
+      "account": "AP:V2",
+      "amount_minor": -9004
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I018",
+      "month": "2025-01",
+      "account": "Expense:Engineering",
+      "amount_minor": 9004
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I018",
+      "month": "2025-01",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -9004
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I019",
+      "month": "2025-02",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 66911
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I019",
+      "month": "2025-02",
+      "account": "AP:V3",
+      "amount_minor": -66911
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I019",
+      "month": "2025-02",
+      "account": "Expense:Engineering",
+      "amount_minor": 33455
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I019",
+      "month": "2025-02",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -33455
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I019",
+      "month": "2025-03",
+      "account": "Expense:Engineering",
+      "amount_minor": 33456
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I019",
+      "month": "2025-03",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -33456
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I020",
+      "month": "2025-03",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 76225
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I020",
+      "month": "2025-03",
+      "account": "AP:V4",
+      "amount_minor": -76225
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I020",
+      "month": "2025-03",
+      "account": "Expense:Engineering",
+      "amount_minor": 76225
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I020",
+      "month": "2025-03",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -76225
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I021",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": 10188
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I021",
+      "month": "2025-01",
+      "account": "AP:V5",
+      "amount_minor": -10188
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I021",
+      "month": "2025-01",
+      "account": "Expense:Operations",
+      "amount_minor": 5094
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I021",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": -5094
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I021",
+      "month": "2025-02",
+      "account": "Expense:Operations",
+      "amount_minor": 5094
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I021",
+      "month": "2025-02",
+      "account": "Prepaid:Operations",
+      "amount_minor": -5094
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I022",
+      "month": "2025-02",
+      "account": "Prepaid:Operations",
+      "amount_minor": 83150
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I022",
+      "month": "2025-02",
+      "account": "AP:V6",
+      "amount_minor": -83150
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I022",
+      "month": "2025-02",
+      "account": "Expense:Operations",
+      "amount_minor": 83150
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I022",
+      "month": "2025-02",
+      "account": "Prepaid:Operations",
+      "amount_minor": -83150
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I023",
+      "month": "2025-03",
+      "account": "Prepaid:Operations",
+      "amount_minor": 86254
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I023",
+      "month": "2025-03",
+      "account": "AP:V7",
+      "amount_minor": -86254
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I023",
+      "month": "2025-03",
+      "account": "Expense:Operations",
+      "amount_minor": 86254
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I023",
+      "month": "2025-03",
+      "account": "Prepaid:Operations",
+      "amount_minor": -86254
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I024",
+      "month": "2025-01",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 11372
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I024",
+      "month": "2025-01",
+      "account": "AP:V0",
+      "amount_minor": -11372
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I024",
+      "month": "2025-01",
+      "account": "Expense:Marketing",
+      "amount_minor": 11372
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I024",
+      "month": "2025-01",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -11372
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I025",
+      "month": "2025-02",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 84606
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I025",
+      "month": "2025-02",
+      "account": "AP:V1",
+      "amount_minor": -84606
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I025",
+      "month": "2025-02",
+      "account": "Expense:Marketing",
+      "amount_minor": 42303
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I025",
+      "month": "2025-02",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -42303
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I025",
+      "month": "2025-03",
+      "account": "Expense:Marketing",
+      "amount_minor": 42303
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I025",
+      "month": "2025-03",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -42303
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I026",
+      "month": "2025-03",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 95501
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I026",
+      "month": "2025-03",
+      "account": "AP:V2",
+      "amount_minor": -95501
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I026",
+      "month": "2025-03",
+      "account": "Expense:Marketing",
+      "amount_minor": 95501
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I026",
+      "month": "2025-03",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -95501
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I027",
+      "month": "2025-01",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 11756
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I027",
+      "month": "2025-01",
+      "account": "AP:V3",
+      "amount_minor": -11756
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I027",
+      "month": "2025-01",
+      "account": "Expense:Engineering",
+      "amount_minor": 5878
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I027",
+      "month": "2025-01",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -5878
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I027",
+      "month": "2025-02",
+      "account": "Expense:Engineering",
+      "amount_minor": 5878
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I027",
+      "month": "2025-02",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -5878
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I028",
+      "month": "2025-02",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 86642
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I028",
+      "month": "2025-02",
+      "account": "AP:V4",
+      "amount_minor": -86642
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I028",
+      "month": "2025-02",
+      "account": "Expense:Engineering",
+      "amount_minor": 86642
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I028",
+      "month": "2025-02",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -86642
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I029",
+      "month": "2025-03",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 97718
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I029",
+      "month": "2025-03",
+      "account": "AP:V5",
+      "amount_minor": -97718
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I029",
+      "month": "2025-03",
+      "account": "Expense:Engineering",
+      "amount_minor": 97718
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I029",
+      "month": "2025-03",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -97718
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I030",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": 12840
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I030",
+      "month": "2025-01",
+      "account": "AP:V6",
+      "amount_minor": -12840
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I030",
+      "month": "2025-01",
+      "account": "Expense:Operations",
+      "amount_minor": 12840
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I030",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": -12840
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I031",
+      "month": "2025-02",
+      "account": "Prepaid:Operations",
+      "amount_minor": 95132
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I031",
+      "month": "2025-02",
+      "account": "AP:V7",
+      "amount_minor": -95132
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I031",
+      "month": "2025-02",
+      "account": "Expense:Operations",
+      "amount_minor": 47566
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I031",
+      "month": "2025-02",
+      "account": "Prepaid:Operations",
+      "amount_minor": -47566
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I031",
+      "month": "2025-03",
+      "account": "Expense:Operations",
+      "amount_minor": 47566
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I031",
+      "month": "2025-03",
+      "account": "Prepaid:Operations",
+      "amount_minor": -47566
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I032",
+      "month": "2025-03",
+      "account": "Prepaid:Operations",
+      "amount_minor": 106966
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I032",
+      "month": "2025-03",
+      "account": "AP:V0",
+      "amount_minor": -106966
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I032",
+      "month": "2025-03",
+      "account": "Expense:Operations",
+      "amount_minor": 106966
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I032",
+      "month": "2025-03",
+      "account": "Prepaid:Operations",
+      "amount_minor": -106966
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I033",
+      "month": "2025-01",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 15118
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I033",
+      "month": "2025-01",
+      "account": "AP:V1",
+      "amount_minor": -15118
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I033",
+      "month": "2025-01",
+      "account": "Expense:Marketing",
+      "amount_minor": 7559
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I033",
+      "month": "2025-01",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -7559
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I033",
+      "month": "2025-02",
+      "account": "Expense:Marketing",
+      "amount_minor": 7559
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I033",
+      "month": "2025-02",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -7559
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I034",
+      "month": "2025-02",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 104338
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I034",
+      "month": "2025-02",
+      "account": "AP:V2",
+      "amount_minor": -104338
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I034",
+      "month": "2025-02",
+      "account": "Expense:Marketing",
+      "amount_minor": 104338
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I034",
+      "month": "2025-02",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -104338
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I035",
+      "month": "2025-03",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 116994
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I035",
+      "month": "2025-03",
+      "account": "AP:V3",
+      "amount_minor": -116994
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I035",
+      "month": "2025-03",
+      "account": "Expense:Marketing",
+      "amount_minor": 116994
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I035",
+      "month": "2025-03",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -116994
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I036",
+      "month": "2025-01",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 14408
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I036",
+      "month": "2025-01",
+      "account": "AP:V4",
+      "amount_minor": -14408
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I036",
+      "month": "2025-01",
+      "account": "Expense:Engineering",
+      "amount_minor": 14408
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I036",
+      "month": "2025-01",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -14408
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I037",
+      "month": "2025-02",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 105657
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I037",
+      "month": "2025-02",
+      "account": "AP:V5",
+      "amount_minor": -105657
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I037",
+      "month": "2025-02",
+      "account": "Expense:Engineering",
+      "amount_minor": 52828
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I037",
+      "month": "2025-02",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -52828
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I037",
+      "month": "2025-03",
+      "account": "Expense:Engineering",
+      "amount_minor": 52829
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I037",
+      "month": "2025-03",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -52829
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I038",
+      "month": "2025-03",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 118431
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I038",
+      "month": "2025-03",
+      "account": "AP:V6",
+      "amount_minor": -118431
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I038",
+      "month": "2025-03",
+      "account": "Expense:Engineering",
+      "amount_minor": 118431
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I038",
+      "month": "2025-03",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -118431
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I039",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": 15592
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I039",
+      "month": "2025-01",
+      "account": "AP:V7",
+      "amount_minor": -15592
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I039",
+      "month": "2025-01",
+      "account": "Expense:Operations",
+      "amount_minor": 7796
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I039",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": -7796
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I039",
+      "month": "2025-02",
+      "account": "Expense:Operations",
+      "amount_minor": 7796
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I039",
+      "month": "2025-02",
+      "account": "Prepaid:Operations",
+      "amount_minor": -7796
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I040",
+      "month": "2025-02",
+      "account": "Prepaid:Operations",
+      "amount_minor": 114864
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I040",
+      "month": "2025-02",
+      "account": "AP:V0",
+      "amount_minor": -114864
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I040",
+      "month": "2025-02",
+      "account": "Expense:Operations",
+      "amount_minor": 114864
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I040",
+      "month": "2025-02",
+      "account": "Prepaid:Operations",
+      "amount_minor": -114864
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I041",
+      "month": "2025-03",
+      "account": "Prepaid:Operations",
+      "amount_minor": 128459
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I041",
+      "month": "2025-03",
+      "account": "AP:V1",
+      "amount_minor": -128459
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I041",
+      "month": "2025-03",
+      "account": "Expense:Operations",
+      "amount_minor": 128459
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I041",
+      "month": "2025-03",
+      "account": "Prepaid:Operations",
+      "amount_minor": -128459
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I042",
+      "month": "2025-01",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 16776
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I042",
+      "month": "2025-01",
+      "account": "AP:V2",
+      "amount_minor": -16776
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I042",
+      "month": "2025-01",
+      "account": "Expense:Marketing",
+      "amount_minor": 16776
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I042",
+      "month": "2025-01",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -16776
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I043",
+      "month": "2025-02",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 123352
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I043",
+      "month": "2025-02",
+      "account": "AP:V3",
+      "amount_minor": -123352
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I043",
+      "month": "2025-02",
+      "account": "Expense:Marketing",
+      "amount_minor": 61676
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I043",
+      "month": "2025-02",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -61676
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I043",
+      "month": "2025-03",
+      "account": "Expense:Marketing",
+      "amount_minor": 61676
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I043",
+      "month": "2025-03",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -61676
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I044",
+      "month": "2025-03",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 145571
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I044",
+      "month": "2025-03",
+      "account": "AP:V4",
+      "amount_minor": -145571
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I044",
+      "month": "2025-03",
+      "account": "Expense:Marketing",
+      "amount_minor": 145571
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I044",
+      "month": "2025-03",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -145571
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I045",
+      "month": "2025-01",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 17160
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I045",
+      "month": "2025-01",
+      "account": "AP:V5",
+      "amount_minor": -17160
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I045",
+      "month": "2025-01",
+      "account": "Expense:Engineering",
+      "amount_minor": 8580
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I045",
+      "month": "2025-01",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -8580
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I045",
+      "month": "2025-02",
+      "account": "Expense:Engineering",
+      "amount_minor": 8580
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I045",
+      "month": "2025-02",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -8580
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I046",
+      "month": "2025-02",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 125389
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I046",
+      "month": "2025-02",
+      "account": "AP:V6",
+      "amount_minor": -125389
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I046",
+      "month": "2025-02",
+      "account": "Expense:Engineering",
+      "amount_minor": 125389
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I046",
+      "month": "2025-02",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -125389
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I047",
+      "month": "2025-03",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 139924
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I047",
+      "month": "2025-03",
+      "account": "AP:V7",
+      "amount_minor": -139924
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I047",
+      "month": "2025-03",
+      "account": "Expense:Engineering",
+      "amount_minor": 139924
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I047",
+      "month": "2025-03",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -139924
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I048",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": 18244
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I048",
+      "month": "2025-01",
+      "account": "AP:V0",
+      "amount_minor": -18244
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I048",
+      "month": "2025-01",
+      "account": "Expense:Operations",
+      "amount_minor": 18244
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I048",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": -18244
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I049",
+      "month": "2025-02",
+      "account": "Prepaid:Operations",
+      "amount_minor": 133879
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I049",
+      "month": "2025-02",
+      "account": "AP:V1",
+      "amount_minor": -133879
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I049",
+      "month": "2025-02",
+      "account": "Expense:Operations",
+      "amount_minor": 66939
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I049",
+      "month": "2025-02",
+      "account": "Prepaid:Operations",
+      "amount_minor": -66939
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I049",
+      "month": "2025-03",
+      "account": "Expense:Operations",
+      "amount_minor": 66940
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I049",
+      "month": "2025-03",
+      "account": "Prepaid:Operations",
+      "amount_minor": -66940
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I050",
+      "month": "2025-03",
+      "account": "Prepaid:Operations",
+      "amount_minor": 149172
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I050",
+      "month": "2025-03",
+      "account": "AP:V2",
+      "amount_minor": -149172
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I050",
+      "month": "2025-03",
+      "account": "Expense:Operations",
+      "amount_minor": 149172
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I050",
+      "month": "2025-03",
+      "account": "Prepaid:Operations",
+      "amount_minor": -149172
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I051",
+      "month": "2025-01",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 19528
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I051",
+      "month": "2025-01",
+      "account": "AP:V3",
+      "amount_minor": -19528
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I051",
+      "month": "2025-01",
+      "account": "Expense:Marketing",
+      "amount_minor": 9764
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I051",
+      "month": "2025-01",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -9764
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I051",
+      "month": "2025-02",
+      "account": "Expense:Marketing",
+      "amount_minor": 9764
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I051",
+      "month": "2025-02",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -9764
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I052",
+      "month": "2025-02",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 143084
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I052",
+      "month": "2025-02",
+      "account": "AP:V4",
+      "amount_minor": -143084
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I052",
+      "month": "2025-02",
+      "account": "Expense:Marketing",
+      "amount_minor": 143084
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I052",
+      "month": "2025-02",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -143084
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I053",
+      "month": "2025-03",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 158418
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I053",
+      "month": "2025-03",
+      "account": "AP:V5",
+      "amount_minor": -158418
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I053",
+      "month": "2025-03",
+      "account": "Expense:Marketing",
+      "amount_minor": 158418
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I053",
+      "month": "2025-03",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -158418
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I054",
+      "month": "2025-01",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 19812
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I054",
+      "month": "2025-01",
+      "account": "AP:V6",
+      "amount_minor": -19812
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I054",
+      "month": "2025-01",
+      "account": "Expense:Engineering",
+      "amount_minor": 19812
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I054",
+      "month": "2025-01",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -19812
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I055",
+      "month": "2025-02",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 151717
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I055",
+      "month": "2025-02",
+      "account": "AP:V7",
+      "amount_minor": -151717
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I055",
+      "month": "2025-02",
+      "account": "Expense:Engineering",
+      "amount_minor": 75858
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I055",
+      "month": "2025-02",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -75858
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I055",
+      "month": "2025-03",
+      "account": "Expense:Engineering",
+      "amount_minor": 75859
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I055",
+      "month": "2025-03",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -75859
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I056",
+      "month": "2025-03",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 160636
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I056",
+      "month": "2025-03",
+      "account": "AP:V0",
+      "amount_minor": -160636
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I056",
+      "month": "2025-03",
+      "account": "Expense:Engineering",
+      "amount_minor": 160636
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I056",
+      "month": "2025-03",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -160636
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I057",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": 20996
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I057",
+      "month": "2025-01",
+      "account": "AP:V1",
+      "amount_minor": -20996
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I057",
+      "month": "2025-01",
+      "account": "Expense:Operations",
+      "amount_minor": 10498
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I057",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": -10498
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I057",
+      "month": "2025-02",
+      "account": "Expense:Operations",
+      "amount_minor": 10498
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I057",
+      "month": "2025-02",
+      "account": "Prepaid:Operations",
+      "amount_minor": -10498
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I058",
+      "month": "2025-02",
+      "account": "Prepaid:Operations",
+      "amount_minor": 153610
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I058",
+      "month": "2025-02",
+      "account": "AP:V2",
+      "amount_minor": -153610
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I058",
+      "month": "2025-02",
+      "account": "Expense:Operations",
+      "amount_minor": 153610
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I058",
+      "month": "2025-02",
+      "account": "Prepaid:Operations",
+      "amount_minor": -153610
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I059",
+      "month": "2025-03",
+      "account": "Prepaid:Operations",
+      "amount_minor": 169883
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I059",
+      "month": "2025-03",
+      "account": "AP:V3",
+      "amount_minor": -169883
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I059",
+      "month": "2025-03",
+      "account": "Expense:Operations",
+      "amount_minor": 169883
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I059",
+      "month": "2025-03",
+      "account": "Prepaid:Operations",
+      "amount_minor": -169883
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I060",
+      "month": "2025-01",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 22180
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I060",
+      "month": "2025-01",
+      "account": "AP:V4",
+      "amount_minor": -22180
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I060",
+      "month": "2025-01",
+      "account": "Expense:Marketing",
+      "amount_minor": 22180
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I060",
+      "month": "2025-01",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -22180
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I061",
+      "month": "2025-02",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 162099
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I061",
+      "month": "2025-02",
+      "account": "AP:V5",
+      "amount_minor": -162099
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I061",
+      "month": "2025-02",
+      "account": "Expense:Marketing",
+      "amount_minor": 81049
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I061",
+      "month": "2025-02",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -81049
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I061",
+      "month": "2025-03",
+      "account": "Expense:Marketing",
+      "amount_minor": 81050
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I061",
+      "month": "2025-03",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -81050
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I062",
+      "month": "2025-03",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 179911
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I062",
+      "month": "2025-03",
+      "account": "AP:V6",
+      "amount_minor": -179911
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I062",
+      "month": "2025-03",
+      "account": "Expense:Marketing",
+      "amount_minor": 179911
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I062",
+      "month": "2025-03",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -179911
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I063",
+      "month": "2025-01",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 22564
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I063",
+      "month": "2025-01",
+      "account": "AP:V7",
+      "amount_minor": -22564
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I063",
+      "month": "2025-01",
+      "account": "Expense:Engineering",
+      "amount_minor": 11282
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I063",
+      "month": "2025-01",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -11282
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I063",
+      "month": "2025-02",
+      "account": "Expense:Engineering",
+      "amount_minor": 11282
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I063",
+      "month": "2025-02",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -11282
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I064",
+      "month": "2025-02",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 164136
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I064",
+      "month": "2025-02",
+      "account": "AP:V0",
+      "amount_minor": -164136
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I064",
+      "month": "2025-02",
+      "account": "Expense:Engineering",
+      "amount_minor": 164136
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I064",
+      "month": "2025-02",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -164136
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I065",
+      "month": "2025-03",
+      "account": "Prepaid:Engineering",
+      "amount_minor": 181348
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I065",
+      "month": "2025-03",
+      "account": "AP:V1",
+      "amount_minor": -181348
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I065",
+      "month": "2025-03",
+      "account": "Expense:Engineering",
+      "amount_minor": 181348
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I065",
+      "month": "2025-03",
+      "account": "Prepaid:Engineering",
+      "amount_minor": -181348
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I066",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": 24681
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I066",
+      "month": "2025-01",
+      "account": "AP:V2",
+      "amount_minor": -24681
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I066",
+      "month": "2025-01",
+      "account": "Expense:Operations",
+      "amount_minor": 24681
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I066",
+      "month": "2025-01",
+      "account": "Prepaid:Operations",
+      "amount_minor": -24681
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I067",
+      "month": "2025-02",
+      "account": "Prepaid:Operations",
+      "amount_minor": 172625
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I067",
+      "month": "2025-02",
+      "account": "AP:V3",
+      "amount_minor": -172625
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I067",
+      "month": "2025-02",
+      "account": "Expense:Operations",
+      "amount_minor": 86312
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I067",
+      "month": "2025-02",
+      "account": "Prepaid:Operations",
+      "amount_minor": -86312
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I067",
+      "month": "2025-03",
+      "account": "Expense:Operations",
+      "amount_minor": 86313
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I067",
+      "month": "2025-03",
+      "account": "Prepaid:Operations",
+      "amount_minor": -86313
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I068",
+      "month": "2025-03",
+      "account": "Prepaid:Operations",
+      "amount_minor": 191376
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I068",
+      "month": "2025-03",
+      "account": "AP:V4",
+      "amount_minor": -191376
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I068",
+      "month": "2025-03",
+      "account": "Expense:Operations",
+      "amount_minor": 191376
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I068",
+      "month": "2025-03",
+      "account": "Prepaid:Operations",
+      "amount_minor": -191376
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I069",
+      "month": "2025-01",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 24932
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I069",
+      "month": "2025-01",
+      "account": "AP:V5",
+      "amount_minor": -24932
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I069",
+      "month": "2025-01",
+      "account": "Expense:Marketing",
+      "amount_minor": 12466
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I069",
+      "month": "2025-01",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -12466
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I069",
+      "month": "2025-02",
+      "account": "Expense:Marketing",
+      "amount_minor": 12466
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I069",
+      "month": "2025-02",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -12466
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I070",
+      "month": "2025-02",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 181831
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I070",
+      "month": "2025-02",
+      "account": "AP:V6",
+      "amount_minor": -181831
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I070",
+      "month": "2025-02",
+      "account": "Expense:Marketing",
+      "amount_minor": 181831
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I070",
+      "month": "2025-02",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -181831
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I071",
+      "month": "2025-03",
+      "account": "Prepaid:Marketing",
+      "amount_minor": 200624
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I071",
+      "month": "2025-03",
+      "account": "AP:V7",
+      "amount_minor": -200624
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I071",
+      "month": "2025-03",
+      "account": "Expense:Marketing",
+      "amount_minor": 200624
+    },
+    {
+      "source_type": "doc",
+      "source_id": "I071",
+      "month": "2025-03",
+      "account": "Prepaid:Marketing",
+      "amount_minor": -200624
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P-anchor-a",
+      "month": "2025-01",
+      "account": "Cash",
+      "amount_minor": -4000
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P-anchor-a",
+      "month": "2025-01",
+      "account": "AP:AnchorVendor",
+      "amount_minor": 4000
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P-unknown",
+      "month": "2025-01",
+      "account": "Cash",
+      "amount_minor": -700
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P-unknown",
+      "month": "2025-01",
+      "account": "Suspense",
+      "amount_minor": 700
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P000a",
+      "month": "2025-01",
+      "account": "Cash",
+      "amount_minor": -2736
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P000a",
+      "month": "2025-01",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P000a",
+      "month": "2025-01",
+      "account": "AP:V0",
+      "amount_minor": 2733
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P003",
+      "month": "2025-01",
+      "account": "Cash",
+      "amount_minor": -4787
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P003",
+      "month": "2025-01",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P003",
+      "month": "2025-01",
+      "account": "AP:V3",
+      "amount_minor": 4784
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P006",
+      "month": "2025-01",
+      "account": "Cash",
+      "amount_minor": -5971
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P006",
+      "month": "2025-01",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P006",
+      "month": "2025-01",
+      "account": "AP:V6",
+      "amount_minor": 5968
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P009",
+      "month": "2025-01",
+      "account": "Cash",
+      "amount_minor": -6355
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P009",
+      "month": "2025-01",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P009",
+      "month": "2025-01",
+      "account": "AP:V1",
+      "amount_minor": 6352
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P012a",
+      "month": "2025-01",
+      "account": "Cash",
+      "amount_minor": -4464
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P012a",
+      "month": "2025-01",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P012a",
+      "month": "2025-01",
+      "account": "AP:V4",
+      "amount_minor": 4461
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P015",
+      "month": "2025-01",
+      "account": "Cash",
+      "amount_minor": -8723
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P015",
+      "month": "2025-01",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P015",
+      "month": "2025-01",
+      "account": "AP:V7",
+      "amount_minor": 8720
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P018",
+      "month": "2025-01",
+      "account": "Cash",
+      "amount_minor": -9007
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P018",
+      "month": "2025-01",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P018",
+      "month": "2025-01",
+      "account": "AP:V2",
+      "amount_minor": 9004
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P021",
+      "month": "2025-01",
+      "account": "Cash",
+      "amount_minor": -10191
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P021",
+      "month": "2025-01",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P021",
+      "month": "2025-01",
+      "account": "AP:V5",
+      "amount_minor": 10188
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P024a",
+      "month": "2025-01",
+      "account": "Cash",
+      "amount_minor": -6826
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P024a",
+      "month": "2025-01",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P024a",
+      "month": "2025-01",
+      "account": "AP:V0",
+      "amount_minor": 6823
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P027",
+      "month": "2025-01",
+      "account": "Cash",
+      "amount_minor": -11759
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P027",
+      "month": "2025-01",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P027",
+      "month": "2025-01",
+      "account": "AP:V3",
+      "amount_minor": 11756
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P030",
+      "month": "2025-01",
+      "account": "Cash",
+      "amount_minor": -12843
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P030",
+      "month": "2025-01",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P030",
+      "month": "2025-01",
+      "account": "AP:V6",
+      "amount_minor": 12840
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P033",
+      "month": "2025-01",
+      "account": "Cash",
+      "amount_minor": -15121
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P033",
+      "month": "2025-01",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P033",
+      "month": "2025-01",
+      "account": "AP:V1",
+      "amount_minor": 15118
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P036a",
+      "month": "2025-01",
+      "account": "Cash",
+      "amount_minor": -8647
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P036a",
+      "month": "2025-01",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P036a",
+      "month": "2025-01",
+      "account": "AP:V4",
+      "amount_minor": 8644
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P039",
+      "month": "2025-01",
+      "account": "Cash",
+      "amount_minor": -15595
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P039",
+      "month": "2025-01",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P039",
+      "month": "2025-01",
+      "account": "AP:V7",
+      "amount_minor": 15592
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P-anchor-b",
+      "month": "2025-02",
+      "account": "Cash",
+      "amount_minor": -6000
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P-anchor-b",
+      "month": "2025-02",
+      "account": "AP:AnchorVendor",
+      "amount_minor": 6000
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P000b",
+      "month": "2025-02",
+      "account": "Cash",
+      "amount_minor": -1827
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P000b",
+      "month": "2025-02",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P000b",
+      "month": "2025-02",
+      "account": "AP:V0",
+      "amount_minor": 1822
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P000b",
+      "month": "2025-02",
+      "account": "Suspense",
+      "amount_minor": 2
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P001",
+      "month": "2025-02",
+      "account": "Cash",
+      "amount_minor": -28010
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P001",
+      "month": "2025-02",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P001",
+      "month": "2025-02",
+      "account": "AP:V1",
+      "amount_minor": 28164
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P001",
+      "month": "2025-02",
+      "account": "FX:Engineering",
+      "amount_minor": -157
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P004a",
+      "month": "2025-02",
+      "account": "Cash",
+      "amount_minor": -22299
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P004a",
+      "month": "2025-02",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P004a",
+      "month": "2025-02",
+      "account": "AP:V4",
+      "amount_minor": 22421
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P004a",
+      "month": "2025-02",
+      "account": "FX:Operations",
+      "amount_minor": -125
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P007",
+      "month": "2025-02",
+      "account": "Cash",
+      "amount_minor": -45606
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P007",
+      "month": "2025-02",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P007",
+      "month": "2025-02",
+      "account": "Suspense",
+      "amount_minor": 45603
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P010",
+      "month": "2025-02",
+      "account": "Cash",
+      "amount_minor": -47631
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P010",
+      "month": "2025-02",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P010",
+      "month": "2025-02",
+      "account": "AP:V2",
+      "amount_minor": 47896
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P010",
+      "month": "2025-02",
+      "account": "FX:Engineering",
+      "amount_minor": -268
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P012b",
+      "month": "2025-02",
+      "account": "Cash",
+      "amount_minor": -2978
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P012b",
+      "month": "2025-02",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P012b",
+      "month": "2025-02",
+      "account": "AP:V4",
+      "amount_minor": 2975
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P013",
+      "month": "2025-02",
+      "account": "Cash",
+      "amount_minor": -56073
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P013",
+      "month": "2025-02",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P013",
+      "month": "2025-02",
+      "account": "AP:V5",
+      "amount_minor": 56385
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P013",
+      "month": "2025-02",
+      "account": "FX:Operations",
+      "amount_minor": -315
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P016a",
+      "month": "2025-02",
+      "account": "Cash",
+      "amount_minor": -39132
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P016a",
+      "month": "2025-02",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P016a",
+      "month": "2025-02",
+      "account": "AP:V0",
+      "amount_minor": 39349
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P016a",
+      "month": "2025-02",
+      "account": "FX:Marketing",
+      "amount_minor": -220
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P019",
+      "month": "2025-02",
+      "account": "Cash",
+      "amount_minor": -66540
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P019",
+      "month": "2025-02",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P019",
+      "month": "2025-02",
+      "account": "Suspense",
+      "amount_minor": 66537
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P022",
+      "month": "2025-02",
+      "account": "Cash",
+      "amount_minor": -82690
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P022",
+      "month": "2025-02",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P022",
+      "month": "2025-02",
+      "account": "AP:V6",
+      "amount_minor": 83150
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P022",
+      "month": "2025-02",
+      "account": "FX:Operations",
+      "amount_minor": -463
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P024b",
+      "month": "2025-02",
+      "account": "Cash",
+      "amount_minor": -4554
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P024b",
+      "month": "2025-02",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P024b",
+      "month": "2025-02",
+      "account": "AP:V0",
+      "amount_minor": 4549
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P024b",
+      "month": "2025-02",
+      "account": "Suspense",
+      "amount_minor": 2
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P025",
+      "month": "2025-02",
+      "account": "Cash",
+      "amount_minor": -84137
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P025",
+      "month": "2025-02",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P025",
+      "month": "2025-02",
+      "account": "AP:V1",
+      "amount_minor": 84606
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P025",
+      "month": "2025-02",
+      "account": "FX:Marketing",
+      "amount_minor": -472
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P028a",
+      "month": "2025-02",
+      "account": "Cash",
+      "amount_minor": -51696
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P028a",
+      "month": "2025-02",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P028a",
+      "month": "2025-02",
+      "account": "AP:V4",
+      "amount_minor": 51982
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P028a",
+      "month": "2025-02",
+      "account": "FX:Engineering",
+      "amount_minor": -289
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P031",
+      "month": "2025-02",
+      "account": "Cash",
+      "amount_minor": -94604
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P031",
+      "month": "2025-02",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P031",
+      "month": "2025-02",
+      "account": "AP:V7",
+      "amount_minor": 95132
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P031",
+      "month": "2025-02",
+      "account": "FX:Operations",
+      "amount_minor": -531
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P034",
+      "month": "2025-02",
+      "account": "Cash",
+      "amount_minor": -103759
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P034",
+      "month": "2025-02",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P034",
+      "month": "2025-02",
+      "account": "AP:V2",
+      "amount_minor": 104338
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P034",
+      "month": "2025-02",
+      "account": "FX:Marketing",
+      "amount_minor": -582
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P036b",
+      "month": "2025-02",
+      "account": "Cash",
+      "amount_minor": -5767
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P036b",
+      "month": "2025-02",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P036b",
+      "month": "2025-02",
+      "account": "AP:V4",
+      "amount_minor": 5764
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P037",
+      "month": "2025-02",
+      "account": "Cash",
+      "amount_minor": -105071
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P037",
+      "month": "2025-02",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P037",
+      "month": "2025-02",
+      "account": "AP:V5",
+      "amount_minor": 105657
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P037",
+      "month": "2025-02",
+      "account": "FX:Engineering",
+      "amount_minor": -589
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P040a",
+      "month": "2025-02",
+      "account": "Cash",
+      "amount_minor": -68537
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P040a",
+      "month": "2025-02",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P040a",
+      "month": "2025-02",
+      "account": "AP:V0",
+      "amount_minor": 68918
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P040a",
+      "month": "2025-02",
+      "account": "FX:Operations",
+      "amount_minor": -384
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P-merged",
+      "month": "2025-03",
+      "account": "Cash",
+      "amount_minor": -139444
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P-merged",
+      "month": "2025-03",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P-merged",
+      "month": "2025-03",
+      "account": "AP:V2",
+      "amount_minor": 16776
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P-merged",
+      "month": "2025-03",
+      "account": "AP:V3",
+      "amount_minor": 123352
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P-merged",
+      "month": "2025-03",
+      "account": "FX:Marketing",
+      "amount_minor": -687
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P002",
+      "month": "2025-03",
+      "account": "Cash",
+      "amount_minor": -33849
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P002",
+      "month": "2025-03",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P002",
+      "month": "2025-03",
+      "account": "AP:V2",
+      "amount_minor": 34021
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P002",
+      "month": "2025-03",
+      "account": "FX:Engineering",
+      "amount_minor": -175
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P004b",
+      "month": "2025-03",
+      "account": "Cash",
+      "amount_minor": -14869
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P004b",
+      "month": "2025-03",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P004b",
+      "month": "2025-03",
+      "account": "AP:V4",
+      "amount_minor": 14949
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P004b",
+      "month": "2025-03",
+      "account": "FX:Operations",
+      "amount_minor": -83
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P005",
+      "month": "2025-03",
+      "account": "Cash",
+      "amount_minor": -43826
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P005",
+      "month": "2025-03",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P005",
+      "month": "2025-03",
+      "account": "AP:V5",
+      "amount_minor": 44049
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P005",
+      "month": "2025-03",
+      "account": "FX:Operations",
+      "amount_minor": -226
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P008a",
+      "month": "2025-03",
+      "account": "Cash",
+      "amount_minor": -31813
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P008a",
+      "month": "2025-03",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P008a",
+      "month": "2025-03",
+      "account": "AP:V0",
+      "amount_minor": 31974
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P008a",
+      "month": "2025-03",
+      "account": "FX:Marketing",
+      "amount_minor": -164
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P008b",
+      "month": "2025-03",
+      "account": "Cash",
+      "amount_minor": -21217
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P008b",
+      "month": "2025-03",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P008b",
+      "month": "2025-03",
+      "account": "AP:V0",
+      "amount_minor": 21321
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P008b",
+      "month": "2025-03",
+      "account": "FX:Marketing",
+      "amount_minor": -109
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P008b",
+      "month": "2025-03",
+      "account": "Suspense",
+      "amount_minor": 2
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P011",
+      "month": "2025-03",
+      "account": "Cash",
+      "amount_minor": -62754
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P011",
+      "month": "2025-03",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P011",
+      "month": "2025-03",
+      "account": "AP:V3",
+      "amount_minor": 63074
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P011",
+      "month": "2025-03",
+      "account": "FX:Engineering",
+      "amount_minor": -323
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P014",
+      "month": "2025-03",
+      "account": "Cash",
+      "amount_minor": -64432
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P014",
+      "month": "2025-03",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P014",
+      "month": "2025-03",
+      "account": "AP:V6",
+      "amount_minor": 64761
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P014",
+      "month": "2025-03",
+      "account": "FX:Operations",
+      "amount_minor": -332
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P016b",
+      "month": "2025-03",
+      "account": "Cash",
+      "amount_minor": -26101
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P016b",
+      "month": "2025-03",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P016b",
+      "month": "2025-03",
+      "account": "AP:V0",
+      "amount_minor": 26242
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P016b",
+      "month": "2025-03",
+      "account": "FX:Marketing",
+      "amount_minor": -146
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P016b",
+      "month": "2025-03",
+      "account": "Suspense",
+      "amount_minor": 2
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P017",
+      "month": "2025-03",
+      "account": "Cash",
+      "amount_minor": -74409
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P017",
+      "month": "2025-03",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P017",
+      "month": "2025-03",
+      "account": "AP:V1",
+      "amount_minor": 74788
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P017",
+      "month": "2025-03",
+      "account": "FX:Marketing",
+      "amount_minor": -382
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P020a",
+      "month": "2025-03",
+      "account": "Cash",
+      "amount_minor": -45504
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P020a",
+      "month": "2025-03",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P020a",
+      "month": "2025-03",
+      "account": "AP:V4",
+      "amount_minor": 45735
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P020a",
+      "month": "2025-03",
+      "account": "FX:Engineering",
+      "amount_minor": -234
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P020b",
+      "month": "2025-03",
+      "account": "Cash",
+      "amount_minor": -30337
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P020b",
+      "month": "2025-03",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P020b",
+      "month": "2025-03",
+      "account": "AP:V4",
+      "amount_minor": 30490
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P020b",
+      "month": "2025-03",
+      "account": "FX:Engineering",
+      "amount_minor": -156
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P023",
+      "month": "2025-03",
+      "account": "Cash",
+      "amount_minor": -85815
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P023",
+      "month": "2025-03",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P023",
+      "month": "2025-03",
+      "account": "AP:V7",
+      "amount_minor": 86254
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P023",
+      "month": "2025-03",
+      "account": "FX:Operations",
+      "amount_minor": -442
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P026",
+      "month": "2025-03",
+      "account": "Cash",
+      "amount_minor": -95015
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P026",
+      "month": "2025-03",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P026",
+      "month": "2025-03",
+      "account": "AP:V2",
+      "amount_minor": 95501
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P026",
+      "month": "2025-03",
+      "account": "FX:Marketing",
+      "amount_minor": -489
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P028b",
+      "month": "2025-03",
+      "account": "Cash",
+      "amount_minor": -34469
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P028b",
+      "month": "2025-03",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P028b",
+      "month": "2025-03",
+      "account": "AP:V4",
+      "amount_minor": 34660
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P028b",
+      "month": "2025-03",
+      "account": "FX:Engineering",
+      "amount_minor": -194
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P029",
+      "month": "2025-03",
+      "account": "Cash",
+      "amount_minor": -97221
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P029",
+      "month": "2025-03",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P029",
+      "month": "2025-03",
+      "account": "AP:V5",
+      "amount_minor": 97718
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P029",
+      "month": "2025-03",
+      "account": "FX:Engineering",
+      "amount_minor": -500
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P032a",
+      "month": "2025-03",
+      "account": "Cash",
+      "amount_minor": -63849
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P032a",
+      "month": "2025-03",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P032a",
+      "month": "2025-03",
+      "account": "AP:V0",
+      "amount_minor": 64175
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P032a",
+      "month": "2025-03",
+      "account": "FX:Operations",
+      "amount_minor": -329
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P032b",
+      "month": "2025-03",
+      "account": "Cash",
+      "amount_minor": -42577
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P032b",
+      "month": "2025-03",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P032b",
+      "month": "2025-03",
+      "account": "AP:V0",
+      "amount_minor": 42791
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P032b",
+      "month": "2025-03",
+      "account": "FX:Operations",
+      "amount_minor": -219
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P032b",
+      "month": "2025-03",
+      "account": "Suspense",
+      "amount_minor": 2
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P035",
+      "month": "2025-03",
+      "account": "Cash",
+      "amount_minor": -116398
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P035",
+      "month": "2025-03",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P035",
+      "month": "2025-03",
+      "account": "AP:V3",
+      "amount_minor": 116994
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P035",
+      "month": "2025-03",
+      "account": "FX:Marketing",
+      "amount_minor": -599
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P038",
+      "month": "2025-03",
+      "account": "Cash",
+      "amount_minor": -117827
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P038",
+      "month": "2025-03",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P038",
+      "month": "2025-03",
+      "account": "AP:V6",
+      "amount_minor": 118431
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P038",
+      "month": "2025-03",
+      "account": "FX:Engineering",
+      "amount_minor": -607
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P040b",
+      "month": "2025-03",
+      "account": "Cash",
+      "amount_minor": -45694
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P040b",
+      "month": "2025-03",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P040b",
+      "month": "2025-03",
+      "account": "AP:V0",
+      "amount_minor": 45946
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P040b",
+      "month": "2025-03",
+      "account": "FX:Operations",
+      "amount_minor": -257
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P040b",
+      "month": "2025-03",
+      "account": "Suspense",
+      "amount_minor": 2
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P041",
+      "month": "2025-03",
+      "account": "Cash",
+      "amount_minor": -127804
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P041",
+      "month": "2025-03",
+      "account": "Expense:Finance",
+      "amount_minor": 3
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P041",
+      "month": "2025-03",
+      "account": "AP:V1",
+      "amount_minor": 128459
+    },
+    {
+      "source_type": "bank",
+      "source_id": "P041",
+      "month": "2025-03",
+      "account": "FX:Operations",
+      "amount_minor": -658
+    }
+  ],
+  "monthly": [
+    {
+      "month": "2025-01",
+      "cash_open_minor": 2000000,
+      "cash_out_minor": 127725,
+      "cash_close_minor": 1872275,
+      "service_expense_minor": 282193,
+      "fees_minor": 42,
+      "fx_minor": 0,
+      "expense_minor": 282235,
+      "prepaid_close_minor": 88845,
+      "ap_net_close_minor": 244055,
+      "ap_payable_close_minor": 244055,
+      "vendor_advance_close_minor": 0,
+      "suspense_close_minor": 700,
+      "budget_minor": 301500,
+      "variance_minor": 19265,
+      "open_commitments_minor": 42300,
+      "overdraft_used_minor": 0,
+      "overdraft_headroom_minor": 600000
+    },
+    {
+      "month": "2025-02",
+      "cash_open_minor": 1872275,
+      "cash_out_minor": 916911,
+      "cash_close_minor": 955364,
+      "service_expense_minor": 2009935,
+      "fees_minor": 54,
+      "fx_minor": -4395,
+      "expense_minor": 2005594,
+      "prepaid_close_minor": 613197,
+      "ap_net_close_minor": 1969234,
+      "ap_payable_close_minor": 1970234,
+      "vendor_advance_close_minor": 1000,
+      "suspense_close_minor": 112844,
+      "budget_minor": 301500,
+      "variance_minor": -1704094,
+      "open_commitments_minor": 31600,
+      "overdraft_used_minor": 0,
+      "overdraft_headroom_minor": 600000
+    },
+    {
+      "month": "2025-03",
+      "cash_open_minor": 955364,
+      "cash_out_minor": 1415224,
+      "cash_close_minor": -459860,
+      "service_expense_minor": 3450596,
+      "fees_minor": 66,
+      "fx_minor": -7311,
+      "expense_minor": 3443351,
+      "prepaid_close_minor": 0,
+      "ap_net_close_minor": 3384172,
+      "ap_payable_close_minor": 3385172,
+      "vendor_advance_close_minor": 1000,
+      "suspense_close_minor": 112852,
+      "budget_minor": 301500,
+      "variance_minor": -3141851,
+      "open_commitments_minor": 52500,
+      "overdraft_used_minor": 459860,
+      "overdraft_headroom_minor": 140140
+    }
+  ],
+  "vendors": [
+    {
+      "vendor": "AnchorVendor",
+      "month": "2025-01",
+      "net_ap_minor": 5000,
+      "payable_minor": 5000,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "ResolvedVendor",
+      "month": "2025-01",
+      "net_ap_minor": 17000,
+      "payable_minor": 17000,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "RoundingVendor",
+      "month": "2025-01",
+      "net_ap_minor": 72,
+      "payable_minor": 72,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V0",
+      "month": "2025-01",
+      "net_ap_minor": 24615,
+      "payable_minor": 24615,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V1",
+      "month": "2025-01",
+      "net_ap_minor": 20996,
+      "payable_minor": 20996,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V2",
+      "month": "2025-01",
+      "net_ap_minor": 41457,
+      "payable_minor": 41457,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V3",
+      "month": "2025-01",
+      "net_ap_minor": 19528,
+      "payable_minor": 19528,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V4",
+      "month": "2025-01",
+      "net_ap_minor": 30919,
+      "payable_minor": 30919,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V5",
+      "month": "2025-01",
+      "net_ap_minor": 42092,
+      "payable_minor": 42092,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V6",
+      "month": "2025-01",
+      "net_ap_minor": 19812,
+      "payable_minor": 19812,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V7",
+      "month": "2025-01",
+      "net_ap_minor": 22564,
+      "payable_minor": 22564,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "AnchorVendor",
+      "month": "2025-02",
+      "net_ap_minor": -1000,
+      "payable_minor": 0,
+      "advance_minor": 1000
+    },
+    {
+      "vendor": "ResolvedVendor",
+      "month": "2025-02",
+      "net_ap_minor": 17000,
+      "payable_minor": 17000,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "RoundingVendor",
+      "month": "2025-02",
+      "net_ap_minor": 72,
+      "payable_minor": 72,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V0",
+      "month": "2025-02",
+      "net_ap_minor": 254568,
+      "payable_minor": 254568,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V1",
+      "month": "2025-02",
+      "net_ap_minor": 154875,
+      "payable_minor": 154875,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V2",
+      "month": "2025-02",
+      "net_ap_minor": 195067,
+      "payable_minor": 195067,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V3",
+      "month": "2025-02",
+      "net_ap_minor": 382416,
+      "payable_minor": 382416,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V4",
+      "month": "2025-02",
+      "net_ap_minor": 214873,
+      "payable_minor": 214873,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V5",
+      "month": "2025-02",
+      "net_ap_minor": 204191,
+      "payable_minor": 204191,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V6",
+      "month": "2025-02",
+      "net_ap_minor": 327032,
+      "payable_minor": 327032,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V7",
+      "month": "2025-02",
+      "net_ap_minor": 220140,
+      "payable_minor": 220140,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "AnchorVendor",
+      "month": "2025-03",
+      "net_ap_minor": -1000,
+      "payable_minor": 0,
+      "advance_minor": 1000
+    },
+    {
+      "vendor": "ResolvedVendor",
+      "month": "2025-03",
+      "net_ap_minor": 17000,
+      "payable_minor": 17000,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "RoundingVendor",
+      "month": "2025-03",
+      "net_ap_minor": 72,
+      "payable_minor": 72,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V0",
+      "month": "2025-03",
+      "net_ap_minor": 343016,
+      "payable_minor": 343016,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V1",
+      "month": "2025-03",
+      "net_ap_minor": 336223,
+      "payable_minor": 336223,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V2",
+      "month": "2025-03",
+      "net_ap_minor": 327463,
+      "payable_minor": 327463,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V3",
+      "month": "2025-03",
+      "net_ap_minor": 428947,
+      "payable_minor": 428947,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V4",
+      "month": "2025-03",
+      "net_ap_minor": 502211,
+      "payable_minor": 502211,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V5",
+      "month": "2025-03",
+      "net_ap_minor": 362609,
+      "payable_minor": 362609,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V6",
+      "month": "2025-03",
+      "net_ap_minor": 506943,
+      "payable_minor": 506943,
+      "advance_minor": 0
+    },
+    {
+      "vendor": "V7",
+      "month": "2025-03",
+      "net_ap_minor": 560688,
+      "payable_minor": 560688,
+      "advance_minor": 0
+    }
+  ],
+  "departments": [
+    {
+      "department": "Engineering",
+      "month": "2025-01",
+      "expense_minor": 76695,
+      "budget_minor": 100000,
+      "variance_minor": 23305
+    },
+    {
+      "department": "Finance",
+      "month": "2025-01",
+      "expense_minor": 42,
+      "budget_minor": 1500,
+      "variance_minor": 1458
+    },
+    {
+      "department": "Marketing",
+      "month": "2025-01",
+      "expense_minor": 90445,
+      "budget_minor": 100000,
+      "variance_minor": 9555
+    },
+    {
+      "department": "Operations",
+      "month": "2025-01",
+      "expense_minor": 115053,
+      "budget_minor": 100000,
+      "variance_minor": -15053
+    },
+    {
+      "department": "Engineering",
+      "month": "2025-02",
+      "expense_minor": 627899,
+      "budget_minor": 100000,
+      "variance_minor": -527899
+    },
+    {
+      "department": "Finance",
+      "month": "2025-02",
+      "expense_minor": 54,
+      "budget_minor": 1500,
+      "variance_minor": 1446
+    },
+    {
+      "department": "Marketing",
+      "month": "2025-02",
+      "expense_minor": 735676,
+      "budget_minor": 100000,
+      "variance_minor": -635676
+    },
+    {
+      "department": "Operations",
+      "month": "2025-02",
+      "expense_minor": 641965,
+      "budget_minor": 100000,
+      "variance_minor": -541965
+    },
+    {
+      "department": "Engineering",
+      "month": "2025-03",
+      "expense_minor": 1045414,
+      "budget_minor": 100000,
+      "variance_minor": -945414
+    },
+    {
+      "department": "Finance",
+      "month": "2025-03",
+      "expense_minor": 66,
+      "budget_minor": 1500,
+      "variance_minor": 1434
+    },
+    {
+      "department": "Marketing",
+      "month": "2025-03",
+      "expense_minor": 1230485,
+      "budget_minor": 100000,
+      "variance_minor": -1130485
+    },
+    {
+      "department": "Operations",
+      "month": "2025-03",
+      "expense_minor": 1167386,
+      "budget_minor": 100000,
+      "variance_minor": -1067386
+    }
+  ],
+  "exceptions": [
+    {
+      "kind": "bank_unallocated",
+      "identity": "P-unknown",
+      "amount_minor": 700,
+      "status": "unresolved",
+      "evidence_status": null
+    },
+    {
+      "kind": "bank_unallocated",
+      "identity": "P000b",
+      "amount_minor": 2,
+      "status": "unresolved",
+      "evidence_status": "confirmed"
+    },
+    {
+      "kind": "bank_unallocated",
+      "identity": "P007",
+      "amount_minor": 45603,
+      "status": "unresolved",
+      "evidence_status": "ambiguous"
+    },
+    {
+      "kind": "bank_unallocated",
+      "identity": "P008b",
+      "amount_minor": 2,
+      "status": "unresolved",
+      "evidence_status": "confirmed"
+    },
+    {
+      "kind": "bank_unallocated",
+      "identity": "P016b",
+      "amount_minor": 2,
+      "status": "unresolved",
+      "evidence_status": "confirmed"
+    },
+    {
+      "kind": "bank_unallocated",
+      "identity": "P019",
+      "amount_minor": 66537,
+      "status": "unresolved",
+      "evidence_status": "ambiguous"
+    },
+    {
+      "kind": "bank_unallocated",
+      "identity": "P024b",
+      "amount_minor": 2,
+      "status": "unresolved",
+      "evidence_status": "confirmed"
+    },
+    {
+      "kind": "bank_unallocated",
+      "identity": "P032b",
+      "amount_minor": 2,
+      "status": "unresolved",
+      "evidence_status": "confirmed"
+    },
+    {
+      "kind": "bank_unallocated",
+      "identity": "P040b",
+      "amount_minor": 2,
+      "status": "unresolved",
+      "evidence_status": "confirmed"
+    },
+    {
+      "kind": "document_conflict",
+      "identity": "I-conflict",
+      "revision": 1,
+      "status": "unresolved"
+    }
+  ],
+  "decision": {
+    "available_cash_minor": -4345032,
+    "options": [
+      {
+        "id": "renew",
+        "capacity_ok": true,
+        "cash_ok": false,
+        "minimum_new_funding_minor": 4445032,
+        "expected_cost_exact": "192000"
+      },
+      {
+        "id": "switch",
+        "capacity_ok": false,
+        "cash_ok": false,
+        "minimum_new_funding_minor": 4365032,
+        "expected_cost_exact": "186000"
+      },
+      {
+        "id": "hybrid",
+        "capacity_ok": true,
+        "cash_ok": false,
+        "minimum_new_funding_minor": 4395032,
+        "expected_cost_exact": "176000"
+      },
+      {
+        "id": "bulk",
+        "capacity_ok": true,
+        "cash_ok": false,
+        "minimum_new_funding_minor": 5245032,
+        "expected_cost_exact": "162000"
+      }
+    ],
+    "selected": null,
+    "break_even": [
+      {
+        "left": "renew",
+        "right": "switch",
+        "volume_exact": "900/7"
+      },
+      {
+        "left": "renew",
+        "right": "hybrid",
+        "volume_exact": "200"
+      },
+      {
+        "left": "renew",
+        "right": "bulk",
+        "volume_exact": "60"
+      },
+      {
+        "left": "switch",
+        "right": "hybrid",
+        "volume_exact": "100"
+      },
+      {
+        "left": "switch",
+        "right": "bulk",
+        "volume_exact": "100"
+      },
+      {
+        "left": "hybrid",
+        "right": "bulk",
+        "volume_exact": "100"
+      }
+    ],
+    "funding_scenarios": [
+      {
+        "funding_id": "current",
+        "status": "current",
+        "additional_cash_minor": 0,
+        "funding_fee_minor": 0,
+        "available_cash_minor": -4345032,
+        "selected_plan": null,
+        "expected_total_cost_exact": null
+      },
+      {
+        "funding_id": "bridge",
+        "status": "offered_unaccepted",
+        "additional_cash_minor": 5000000,
+        "funding_fee_minor": 25000,
+        "available_cash_minor": 654968,
+        "selected_plan": "hybrid",
+        "expected_total_cost_exact": "201000"
+      },
+      {
+        "funding_id": "expanded",
+        "status": "offered_unaccepted",
+        "additional_cash_minor": 5500000,
+        "funding_fee_minor": 50000,
+        "available_cash_minor": 1154968,
+        "selected_plan": "bulk",
+        "expected_total_cost_exact": "212000"
+      }
+    ],
+    "conditional_recommendation": {
+      "funding_id": "bridge",
+      "plan_id": "hybrid",
+      "expected_total_cost_exact": "201000"
+    }
+  },
+  "legacy_bridge": [
+    {
+      "month": "2025-01",
+      "legacy_expense_minor": 395954,
+      "corrected_expense_minor": 282235,
+      "expense_adjustment_minor": -113719,
+      "legacy_cash_close_minor": 1855162,
+      "corrected_cash_close_minor": 1872275,
+      "cash_adjustment_minor": 17113
+    },
+    {
+      "month": "2025-02",
+      "legacy_expense_minor": 2519941,
+      "corrected_expense_minor": 2005594,
+      "expense_adjustment_minor": -514347,
+      "legacy_cash_close_minor": 662774,
+      "corrected_cash_close_minor": 955364,
+      "cash_adjustment_minor": 292590
+    },
+    {
+      "month": "2025-03",
+      "legacy_expense_minor": 2821973,
+      "corrected_expense_minor": 3443351,
+      "expense_adjustment_minor": 621378,
+      "legacy_cash_close_minor": -1352241,
+      "corrected_cash_close_minor": -459860,
+      "cash_adjustment_minor": 892381
+    }
+  ]
+}

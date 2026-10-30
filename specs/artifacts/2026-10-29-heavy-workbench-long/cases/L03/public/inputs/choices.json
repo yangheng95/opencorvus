@@ -1,0 +1,66 @@
+{
+  "format": "l03-management-choices/1",
+  "reserve_minor": 500000,
+  "scenarios": [
+    {
+      "id": "low",
+      "units": 80,
+      "probability": "1/2"
+    },
+    {
+      "id": "high",
+      "units": 160,
+      "probability": "1/2"
+    }
+  ],
+  "options": [
+    {
+      "id": "renew",
+      "fixed_minor": 120000,
+      "unit_minor": 600,
+      "capacity": 200,
+      "upfront_minor": 100000
+    },
+    {
+      "id": "switch",
+      "fixed_minor": 30000,
+      "unit_minor": 1300,
+      "capacity": 120,
+      "upfront_minor": 20000
+    },
+    {
+      "id": "hybrid",
+      "fixed_minor": 80000,
+      "unit_minor": 800,
+      "capacity": 200,
+      "upfront_minor": 50000
+    },
+    {
+      "id": "bulk",
+      "fixed_minor": 150000,
+      "unit_minor": 100,
+      "capacity": 200,
+      "upfront_minor": 900000
+    }
+  ],
+  "funding_offers": [
+    {
+      "id": "current",
+      "additional_cash_minor": 0,
+      "fee_minor": 0,
+      "status": "current"
+    },
+    {
+      "id": "bridge",
+      "additional_cash_minor": 5000000,
+      "fee_minor": 25000,
+      "status": "offered_unaccepted"
+    },
+    {
+      "id": "expanded",
+      "additional_cash_minor": 5500000,
+      "fee_minor": 50000,
+      "status": "offered_unaccepted"
+    }
+  ]
+}

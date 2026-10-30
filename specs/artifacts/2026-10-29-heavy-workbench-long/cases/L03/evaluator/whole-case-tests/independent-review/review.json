@@ -1,0 +1,120 @@
+{
+  "format": "l03-independent-content-review/1",
+  "case": "L03/0.2.0-dev",
+  "output_root": "D:/opencorvus-benchmark-runs/l03-full-case-20261030/review-final-run/base/output/result",
+  "reviewer": "/root/benchmark_review",
+  "subject_role": "author_reference_qualification",
+  "disclosure": "Non-blind AI agent familiar with author material and repairs; not professional human, statistical maturity or candidate-hour certification.",
+  "findings": {
+    "H01": {
+      "status": "pass",
+      "basis": "已独立从原资料核最高可用版本/撤销/冲突/逐行FX及逐来源账到月度和legacy桥，完整账相同；修后UTC有效，不以账平证明来源真实。",
+      "sources": [
+        {
+          "path": "D:/opencorvus-benchmark-runs/l03-full-case-20261030/review-final-run/base/output/result/REPORT.md",
+          "locator": "结账与现金；原管理账到重述结果"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l03-full-case-20261030/review-final-run/base/input/documents.jsonl",
+          "locator": "I-cancelled/I-conflict/I-resolved/I-rounding"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l03-full-case-20261030/review-final-run/base/input/fx.jsonl",
+          "locator": "FX-Jan-correction及未发布版本"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l03-whole-case-independent-review-20261030/independent-book-reviewed/receipt.json",
+          "locator": "全部field_comparisons"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l03-whole-case-independent-review-20261030/whole-case-evidence.json",
+          "locator": "calendar_invalid_rows_after_repair"
+        }
+      ]
+    },
+    "H02": {
+      "status": "pass",
+      "basis": "current无方案；available−4345032分，bridge/hybrid201000与expanded/bulk212000分为有条件融资选择。900/7超switch容量120及含融资费950/7交点有实际域解释，不声称因果/真实认证或全部未来偿付。",
+      "sources": [
+        {
+          "path": "D:/opencorvus-benchmark-runs/l03-full-case-20261030/review-final-run/base/output/result/REPORT.md",
+          "locator": "有条件的管理方案；资金缺口与附条件选择"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l03-full-case-20261030/review-final-run/base/input/choices.json",
+          "locator": "工作量/四方案/资金报价"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l03-full-case-20261030/review-final-run/base/output/result/result.json",
+          "locator": "decision及monthly"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l03-whole-case-independent-review-20261030/independent-book-reviewed/receipt.json",
+          "locator": "独立decision重算"
+        }
+      ]
+    },
+    "H03": {
+      "status": "pass",
+      "basis": "10条未决均有身份、金额或冲突及证据状态，逐项取证动作可定位；不猜配confirmed余2分/ambiguous/无通知，不把I-conflict责任当零。",
+      "sources": [
+        {
+          "path": "D:/opencorvus-benchmark-runs/l03-full-case-20261030/review-final-run/base/output/result/exceptions.csv",
+          "locator": "全部10行"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l03-full-case-20261030/review-final-run/base/output/result/REPORT.md",
+          "locator": "每项未决的后续动作；未决责任限制"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l03-full-case-20261030/review-final-run/base/input/advice.jsonl",
+          "locator": "对应bank_tx_id最高版本"
+        }
+      ]
+    },
+    "H04": {
+      "status": "pass",
+      "basis": "已实际view最终dashboard.png：CNY/月份/系列可读，费用预算/负现金/应付预付和未解释款与本次账相同；报告解释透支459860及余量140140分。",
+      "sources": [
+        {
+          "path": "D:/opencorvus-benchmark-runs/l03-full-case-20261030/review-final-run/base/output/result/dashboard.png",
+          "locator": "实际视觉查看三个panel"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l03-full-case-20261030/review-final-run/base/output/result/monthly.csv",
+          "locator": "2025-01..03"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l03-full-case-20261030/review-final-run/base/output/result/REPORT.md",
+          "locator": "金额单位及透支说明"
+        }
+      ]
+    },
+    "H05": {
+      "status": "pass",
+      "basis": "仅两声明源码/九原输入在独立新目录只读1CPU/netnone真实冷跑native0；同源主方三变体原执行另读，不重矩阵。命令/环境/机器账/未决与更新交接可用，无旧答案缓存。",
+      "sources": [
+        {
+          "path": "D:/opencorvus-benchmark-runs/l03-whole-case-independent-review-20261030/submission-reviewed/submission.json",
+          "locator": "files及argv"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l03-whole-case-independent-review-20261030/cold-base/run-receipt.json",
+          "locator": "唯一独立基例冷跑"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l03-whole-case-independent-review-20261030/cold-base/terminal-inspect.json",
+          "locator": "实际权限/挂载/终态"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l03-whole-case-independent-review-20261030/whole-case-evidence.json",
+          "locator": "四实际同源运行"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l03-full-case-20261030/review-final-run/base/output/result/REPORT.md",
+          "locator": "清洁复建和更新"
+        }
+      ]
+    }
+  }
+}
