@@ -697,6 +697,12 @@ navigation-reservation boundaries, mutation feedback, refresh and post-create
 editor admission remain owned by that existing operation.
 
 Markdown text files offer Source and Preview views of the same current draft.
+Explicit file links activated inside that Preview resolve relative paths from
+the current document's parent, using the existing server-path primitives and
+selectedFileTarget identity. Absolute paths keep their existing meaning. The
+same global click delegate and file-workbench admission retain the document's
+project scope, cited range, unsaved decision and read-only source authority.
+Chat and artifact project references continue to use their existing scope.
 Source is the default for each newly selected resource. The existing editor stays
 mounted while hidden, retaining its selection and undo history; Preview uses the
 same asynchronous Markdown renderer as Document artifacts. Unsaved preview text

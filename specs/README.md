@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Markdown相对导航](records/2026-10/2026-10-30-markdown-relative-navigation.md)：嵌套文档的真实链接与文件身份。
+
 - [Sources与文件创建入口](records/2026-10/2026-10-30-source-and-file-actions.md)：只读附件阅读与现有创建能力的可见入口。
 
 - [Markdown文件工作台预览](records/2026-10/2026-10-30-markdown-file-preview.md)：同一草稿的格式阅读与源码编辑。

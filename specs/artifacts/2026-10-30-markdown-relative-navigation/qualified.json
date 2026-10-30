@@ -1,0 +1,162 @@
+{
+  "at": "2026-10-30T15:55:00.168Z",
+  "schema": 9,
+  "tables": 92,
+  "startingRows": 208731,
+  "finalRows": 208795,
+  "allStartingValuesPreserved": true,
+  "attachments": 75,
+  "oldProjects": 8,
+  "trackedFiles": 28,
+  "originalReportFiles": 4,
+  "previousOperatorFiles": [
+    {
+      "file": "preview-note-814.md",
+      "bytes": 137
+    },
+    {
+      "file": "notes-815/workspace-note-815.md",
+      "bytes": 86
+    }
+  ],
+  "oldHTTPHistories": {
+    "task": 68,
+    "mission": 80,
+    "chat": 3,
+    "completedWork": 8
+  },
+  "originalReportAndGoalPreserved": true,
+  "readonlySource": {
+    "messages": 4,
+    "filename": "README.md",
+    "bytes": 176,
+    "fullOriginalHTTPPreserved": true
+  },
+  "guide": {
+    "at": "2026-10-30T15:44:59.225Z",
+    "file": "notes-815/reading-guide-816.md",
+    "bytes": 163,
+    "operatorText": "# 文档相对链接验证816\n\n[同目录笔记](workspace-note-815.md)\n\n[上级目录报告](../report.md)\n\n[同目录笔记第三行](./workspace-note-815.md#L3)",
+    "downloadEqualsDiskAndInput": true,
+    "postCancelUndoDownloadEqualsOriginal": true
+  },
+  "reportDownload": {
+    "bytes": 1920,
+    "equalsOriginal": true
+  },
+  "fileMutationEvidence": {
+    "events": [
+      {
+        "occurrenceID": "bus-occurrence:749cc060-1275-4a65-83e5-b9ea2db57a36",
+        "type": "file.edited",
+        "file": "notes-815/reading-guide-816.md",
+        "at": 1793374240091,
+        "phases": [
+          "exact",
+          "global",
+          "wildcard"
+        ]
+      },
+      {
+        "occurrenceID": "bus-occurrence:bdabe950-d20a-497c-8ed1-10da704231c1",
+        "type": "file.edited",
+        "file": "notes-815/reading-guide-816.md",
+        "at": 1793374230894,
+        "phases": [
+          "exact",
+          "global",
+          "wildcard"
+        ]
+      }
+    ],
+    "occurrences": 2,
+    "owners": 2,
+    "phaseReceipts": 6,
+    "deliveries": 12,
+    "deliveryReceipts": 12,
+    "busDeliveryLeases": 12,
+    "runtimeProcessLeases": 1,
+    "leaseGrants": 13,
+    "addedRows": 62,
+    "allOriginalValuesRetained": true,
+    "fileMutationRequests": [
+      {
+        "id": 106,
+        "at": "2026-10-30T15:30:30.884Z",
+        "method": "POST",
+        "path": "/file/item"
+      },
+      {
+        "id": 120,
+        "at": "2026-10-30T15:30:40.078Z",
+        "method": "PATCH",
+        "path": "/file/content"
+      }
+    ]
+  },
+  "deliveryReceiptEvidence": {
+    "at": "2026-10-30T15:54:13.672Z",
+    "deliveries": 12,
+    "eachHasOneCanonicalTerminalReceipt": true,
+    "outcomes": {
+      "succeeded": 12
+    }
+  },
+  "candidateDatabaseChanges": [
+    {
+      "table": "engine_control_activation_lease",
+      "old": 42805,
+      "now": 42806
+    },
+    {
+      "table": "engine_control_activation_lease_grant",
+      "old": 42863,
+      "now": 42864
+    }
+  ],
+  "screenshots": 12,
+  "newModelRequests": 0,
+  "cumulativeModelRequests": 1096,
+  "scopes": [
+    {
+      "phase": "before",
+      "requests": 0,
+      "exhausted": false,
+      "publicShutdown": 200,
+      "reserveMs": 3420637,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "pairedCopiesRetired": true,
+      "originalRows": 208731,
+      "currentRows": 208793,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "phase": "after",
+      "requests": 0,
+      "exhausted": false,
+      "publicShutdown": 200,
+      "reserveMs": 2142802,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "pairedCopiesRetired": true,
+      "originalRows": 208793,
+      "currentRows": 208795,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    }
+  ]
+}

@@ -73,6 +73,8 @@ import {
   fileEditorRevealRevision,
   fileWorkbenchOpen,
   fileEditorReserved,
+  openFileReference,
+  selectedFileTarget,
 } from "./services/file-workbench"
 import { initApp } from "./services/init"
 import {
@@ -110,9 +112,17 @@ import type { AutomationRunSession } from "./services/automations"
 import { t } from "./utils/i18n"
 import {
   elementFileReference,
+  fileReferenceRange,
   FILE_REFERENCE_PATH_ATTRIBUTE,
   PROJECT_FILE_REFERENCE_PATH_ATTRIBUTE,
 } from "./utils/file-reference"
+import {
+  isAbsoluteServerPath,
+  isWindowsPath,
+  normalizeProjectFilePath,
+  normalizeServerPath,
+  pathWithForwardSeparators,
+} from "./utils/server-path"
 import { applyTheme, applyZoom, handleZoomHotkey, installSystemThemeListener, toggleDevtools } from "./services/theme"
 import { bumpWorkspaceEpoch, settingsStore, setSettingsStore, saveSettings } from "./store/settings"
 import {
@@ -1939,8 +1949,24 @@ document.addEventListener(
     const projectFile = elementFileReference(projectFileLink, PROJECT_FILE_REFERENCE_PATH_ATTRIBUTE)
     if (!projectFile) return
     ev.preventDefault()
+    const documentTarget = projectFileLink.closest(".file-editor-markdown-preview") ? selectedFileTarget() : null
+    let documentPath = projectFile.path
+    if (documentTarget && !isAbsoluteServerPath(documentPath)) {
+      const source = documentTarget.sourceAbsolutePath ?? documentTarget.path
+      const file = pathWithForwardSeparators(source, documentTarget.sourceAbsolutePath ?? documentTarget.directory)
+      const relative = file.slice(0, file.lastIndexOf("/") + 1) + documentPath
+      documentPath = documentTarget.sourceAbsolutePath
+        ? normalizeServerPath(relative, isWindowsPath(source))
+        : normalizeProjectFilePath(relative, documentTarget.directory)
+    }
     runMainAsync("workspace.open-project-file", () =>
-      openRenderedFileLink(projectFileLink, () => openProjectFile(projectFile.path, projectFile)),
+      openRenderedFileLink(projectFileLink, async () => {
+        if (documentTarget) {
+          await openFileReference(documentPath, { directory: documentTarget.directory }, fileReferenceRange(projectFile))
+        } else {
+          await openProjectFile(projectFile.path, projectFile)
+        }
+      }),
     )
   },
   listenerOpts,

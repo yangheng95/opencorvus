@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Markdown相对导航](2026-10-30-markdown-relative-navigation/README.md)：真实嵌套文档链接、截图与回执。
+
 - [Sources与文件创建入口](2026-10-30-source-and-file-actions/README.md)：只读文件、创建操作与真实回执。
 
 - [Markdown文件工作台预览](2026-10-30-markdown-file-preview/README.md)：实际预览、草稿与下载回执。
