@@ -1,0 +1,21 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l02-full-materials-20261030\\main\\source-final\\decode_materials.py",
+    "--contract",
+    "D:\\opencorvus-benchmark-runs\\l02-full-materials-20261030\\main\\source-final\\material-contract.json",
+    "--input",
+    "D:\\opencorvus-benchmark-runs\\l02-full-materials-20261030\\main\\materials-final\\full-private",
+    "--role",
+    "archive",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l02-full-materials-20261030\\main\\decoded-final-archive"
+  ],
+  "exitcode": 0,
+  "stdout": "{\"status\": \"materials_decoded\", \"observations\": 13152, \"covariates\": 37632, \"origins\": 54, \"scope\": \"no full forecast executed\"}\n",
+  "stderr": "",
+  "seconds": 3.289832300040871
+}

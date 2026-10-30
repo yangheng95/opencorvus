@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l02-full-materials-20261030\\main\\source-final\\audit_material_projection.py",
+    "--decoded",
+    "D:\\opencorvus-benchmark-runs\\l02-full-materials-20261030\\main\\decoded-final-archive",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l02-full-materials-20261030\\main\\projection-final-delta",
+    "--origin-id",
+    "outer-20250620",
+    "--origin-id",
+    "outer-20250620-i1",
+    "--origin-id",
+    "outer-20250620-i2",
+    "--origin-id",
+    "outer-20250620-i3"
+  ],
+  "exitcode": 0,
+  "stdout": "{\"status\": \"material_projection_qualified\", \"origins_checked\": 4, \"operating_publication_values_before_after\": {\"A2.open\": [1, 0], \"A1.transfer_in\": [0, 1]}, \"leaky_actual_error\": {\"status\": \"availability_violation\", \"findings\": [{\"error\": \"availability_violation\", \"table\": \"covariates\", \"identity\": [\"ZA.temperature_actual\", 26688, 0], \"release_tick\": 26696, \"origin\": 26649}], \"scope\": \"exact published integer-tick rows and registered availability classes only\", \"candidate_score\": null}, \"leaky_revision_error\": {\"status\": \"availability_violation\", \"findings\": [{\"error\": \"availability_violation\", \"table\": \"observations\", \"identity\": [\"A1\", 26160, 2], \"release_tick\": 26670, \"origin\": 26649}], \"scope\": \"exact published integer-tick rows and registered availability classes only\", \"candidate_score\": null}, \"late_initial_before_release_error\": {\"status\": \"availability_violation\", \"findings\": [{\"error\": \"availability_violation\", \"table\": \"observations\", \"identity\": [\"A2\", 8832, 0], \"release_tick\": 8882, \"origin\": 8881}], \"scope\": \"exact published integer-tick rows and registered availability classes only\", \"candidate_score\": null}, \"late_initial_at_release\": \"projection_verified\", \"future_only_mutation_same_authorized_snapshot\": true, \"seconds\": 5.177551500033587, \"scope\": \"data publication/projection and complete-future grid only; no worker forecast/model selection/scientific quality or hours claim\", \"candidate_score\": null, \"frozen\": false}\n",
+  "stderr": ""
+}

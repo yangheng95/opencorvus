@@ -1,0 +1,25 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\qualification\\current-source\\l06_numeric.py",
+    "--case-root",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06",
+    "--input",
+    "D:\\opencorvus-benchmark-runs\\L06-paired-20261029-be2a55d1\\codex\\completed\\submission\\inputs",
+    "--normalized",
+    "D:\\opencorvus-benchmark-runs\\L06-paired-20261029-be2a55d1\\codex\\completed\\submission\\validation\\source-only-reordered\\result\\normalized.json",
+    "--plan",
+    "D:\\opencorvus-benchmark-runs\\L06-paired-20261029-be2a55d1\\codex\\completed\\submission\\validation\\source-only-reordered\\result\\plan.json",
+    "--summary",
+    "D:\\opencorvus-benchmark-runs\\L06-paired-20261029-be2a55d1\\codex\\completed\\submission\\validation\\source-only-reordered\\result\\summary.json",
+    "--ledger",
+    "D:\\opencorvus-benchmark-runs\\L06-paired-20261029-be2a55d1\\codex\\completed\\submission\\validation\\source-only-reordered\\result\\ledger.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\L06-paired-20261029-be2a55d1\\codex\\evaluation\\delivered-numeric\\assessment.json"
+  ],
+  "exitcode": 0,
+  "stdout": "{\"format\": \"l06-numeric-findings/1\", \"status\": \"partially_assessed\", \"scope\": \"30 numeric leaves only; execution/review and complete case grade pending\", \"total_score\": null, \"business_success\": null, \"numeric_leaf_count\": 30, \"counts\": {\"verified_pass\": 30, \"verified_fail\": 0, \"candidate_incomplete\": 0, \"blocked_candidate\": 0, \"unassessed\": 17}, \"known_critical_failures\": []}\n",
+  "stderr": ""
+}

@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l02-full-materials-20261030\\main\\source-final\\build_materials.py",
+    "--contract",
+    "D:\\opencorvus-benchmark-runs\\l02-full-materials-20261030\\main\\source-final\\material-contract.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l02-full-materials-20261030\\main\\materials-final"
+  ],
+  "exitcode": 0,
+  "stdout": "{\"format\": \"l02-material-construction/1\", \"source\": \"original synthetic author construction, not real utility records\", \"day_count\": 1096, \"leaf_count\": 4, \"aggregate_count\": 2, \"observations\": 13152, \"covariates\": 37632, \"origins\": 54, \"development_cutoff\": \"2025-01-01T09:00:00Z\", \"scope\": \"materials only; no full forecasting/research qualification or candidate score\", \"frozen\": false}\n",
+  "stderr": "",
+  "seconds": 1.055868100374937
+}

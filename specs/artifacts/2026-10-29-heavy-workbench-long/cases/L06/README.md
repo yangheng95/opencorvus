@@ -1,6 +1,6 @@
 # L06/0.2.0 · 可执行情景运营方案
 
-**开发合同已冻结；真实OpenCorvus同合同100/100，fresh Codex正在独立执行，有效小时尚未取得。** 整套十题仍在建设，当前是可执行合同冻结1/10、候选小时资格0/10；不宣称职业专家/统计成熟或同模型排行榜。原始要求、全部分析/失败和后续运行见[持续记录](../../../../records/2026-10/2026-10-29-heavy-workbench-l06-qualification.md)。
+**开发合同已冻结；真实OpenCorvus同合同100/100，fresh Codex已封存待完整评价，有效小时尚未取得。** 整套十题仍在建设，当前是可执行合同冻结1/10、候选小时资格0/10；不宣称职业专家/统计成熟或同模型排行榜。原始要求、全部分析/失败和后续运行见[持续记录](../../../../records/2026-10/2026-10-29-heavy-workbench-l06-qualification.md)。
 
 候选仅获得[public任务](public/TASK.md)、[数据字典](public/DATA.md)、[输出合同](public/OUTPUTS.md)、环境/来源/profile及11CSV+facility，共18文件。16周、4原料/4产品、3供应商/2产线、3情景，耦合提前期/包装/共享容量、固定运费、BOM、周内仓容、回款/信用和共同承诺。资料为原创合成；允许任何正确算法/语言，没有最低时长/字数或总token/墙钟截止。
 
@@ -14,6 +14,6 @@
 - [标签遮蔽组件校准](evaluator/review-calibration/README.md)保留原36、追加8和四项实质偏差修正；高一致率没有代替公平性裁决。只有熟悉参考的AI-agent开发样本，非职业真人或统计认证。
 - [最终独立批准](evaluator/independent-freeze-review/REVIEW.md)无实质阻断。[冻结记录](evaluator/FREEZE.json)明确只冻结本case可执行合同。[冻结后正向评估](evaluator/qualification/v2/frozen-grade-positive/receipt.json)真实参考98分，仅为参考资格，不是OpenCorvus/Codex成绩或难度证明。
 
-[真实OpenCorvus试跑](evaluator/pilot-opencorvus-20261029/README.md)已自然完成并封存，真正源码基例/两输入控制及17叶独立审查后，实际聚合100/100、47pass和全部critical通过。fresh Codex只得同18public，正在独立执行；其完成后也须封存/同合同冷评价，再决定是否升级和核实有效活动时长。其余九题继续升级，不能以本题代替整套。六旧昂贵容器保持Paused，新的三次参考运行均自然终态，已清理者不重启。
+[真实OpenCorvus试跑](evaluator/pilot-opencorvus-20261029/README.md)已自然完成并封存，真正源码基例/两输入控制及17叶独立审查后，实际聚合100/100、47pass和全部critical通过。fresh Codex只得同18public，现已自然交付并完整封存，30数值叶通过；评估侧源码冷复建与同合同17叶评价在执行，再决定是否升级和核实有效活动时长。其余九题继续升级，不能以本题代替整套。六旧昂贵容器保持Paused，新的三次参考运行均自然终态，已清理者不重启。
 
 [历史资格](evaluator/qualification/README.md)保存仓容共同漏项、不可行、工具/身份故障和修复原件；旧v1最小信用5369不当v2最优界，51263/52201只是旧可行成本。[严格LP](evaluator/independent-relaxation/REVIEW.md)格点46220.3与native界分开。[S06微型管线](smoke/README.md)不计十题或小时级。

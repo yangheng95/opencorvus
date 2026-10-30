@@ -60,3 +60,10 @@ PINN完整官方rubric本地递归统计1963叶（1815执行、126代码、22分
 ## 本轮最终接续Recall
 
 L06最新正式OpenCorvus成绩100/100、47pass/全部critical过；fresh /root/codex_l06_fresh已顺序启动，未取得Codex成绩。实际model/usage unknown、comparable=false；只给同18public，不给私有grader/参考/当前OC答案。完成后真正同合同冷评分，两good才另升新版本。原故障、评估计算和未知间隙不计内在有效小时。
+
+
+## 最新L06接续：fresh Codex自然交付、评估侧复建中
+
+Codex完整554文件/原Git/所有产物封存，HEAD eef74425dcd9b9d6e161c9aa303b38c90f400e25，原18public完整同一，01:25:16Z是观察封存收据。最终输出validation/source-only-reordered/result，独立30numeric全过/C47641.5，不据此提前给47叶总分或good。实际模型/usage仍unknown、comparablefalse；57分钟左右的候选观察窗口及并行验收耗时不当内在小时证明。
+
+01:26:50Z仅一组评估侧Codex source-only base启动b8af7d5f...，12封存源码/声明依赖/冻结raw/new results/networknone8CPU，保持原README阶段参数。单层reviewer只读阶段评价，private两控制及执行相关叶须实际冷执行后补；原OC100不改。完整同冻结l06_grade且Codex也good后才触发新版本，当前未触发。动态定位/未满足项见长程及L06/L02最新Recall。

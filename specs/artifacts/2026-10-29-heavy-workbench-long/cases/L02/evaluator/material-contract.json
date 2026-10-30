@@ -1,0 +1,57 @@
+{
+  "format": "l02-material-contract/1",
+  "clock": {
+    "format": "l02-clock/1",
+    "epoch_utc": "2022-01-01T00:00:00Z",
+    "tick_unit": "hour",
+    "event_interval": "[UTC date 00:00, next UTC date 00:00)",
+    "development_cutoff_utc": "2025-01-01T09:00:00Z"
+  },
+  "units": {
+    "L": {
+      "canonical_unit": "L",
+      "multiplier": 1
+    },
+    "m3": {
+      "canonical_unit": "L",
+      "multiplier": 1000
+    }
+  },
+  "grid": {
+    "cutoff_hour_utc": 9,
+    "horizon_days": 14,
+    "first_target_end_day_offset": 2,
+    "target_step_hours": 24,
+    "terminal_revision_id": 2,
+    "terminal_release_lag_hours": 510
+  },
+  "schedule": {
+    "development_dates": [
+      "2024-06-15",
+      "2024-07-15",
+      "2024-08-15",
+      "2024-09-15",
+      "2024-10-15",
+      "2024-11-15"
+    ],
+    "outer_dates": [
+      "2025-01-15",
+      "2025-02-15",
+      "2025-03-15",
+      "2025-04-15",
+      "2025-05-15",
+      "2025-06-20",
+      "2025-07-15",
+      "2025-08-15",
+      "2025-09-15",
+      "2025-10-15",
+      "2025-11-15",
+      "2025-12-15"
+    ],
+    "inner_days_before": [
+      112,
+      84,
+      56
+    ]
+  }
+}

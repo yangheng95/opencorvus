@@ -1,0 +1,55 @@
+{
+  "stage": "corrected_UTC_material_design_can_proceed_to_actual_qualification",
+  "blocking": [],
+  "initial_semantic_blockers": [
+    {
+      "id": "P1-grid",
+      "finding": "09:00 origin with next-midnight end includes9 elapsed hours, inconsistent with14 wholly future days",
+      "status": "closed_in_plan_and_static_plus2_grid_definitions",
+      "original_sources": "initial-grid-source"
+    },
+    {
+      "id": "P1-development-label-privacy",
+      "finding": "Jan1 publication-truncated dev archive necessarily contains terminal labels of declared2024Jun-Nov development targets",
+      "status": "closed_by_explicit_public_dev_backtest_vs_private2025outer_vs_per_origin_feature_split"
+    }
+  ],
+  "calendar_pairs_checked": 72,
+  "selected_grid": "14_wholly_future_UTC_days",
+  "minimum_fixed_rule_inner_label_margin_hours": 483,
+  "actual_material_generation_decoder_or_worker_run_by_reviewer": false,
+  "new_Provider_solver_GPU_Docker_UI_processes": 0,
+  "delegations": 0,
+  "source_grid_bindings": [
+    {
+      "file": "build_materials.py",
+      "snapshot": "D:\\opencorvus-benchmark-runs\\l02-full-material-plan-review-20261030\\source-current-grid\\build_materials.py",
+      "same_current_bytes": true,
+      "review_scope": "target +2 definition/diff only; not full implementation qualification"
+    },
+    {
+      "file": "decode_materials.py",
+      "snapshot": "D:\\opencorvus-benchmark-runs\\l02-full-material-plan-review-20261030\\source-current-grid\\decode_materials.py",
+      "same_current_bytes": false,
+      "review_scope": "target +2 definition/diff only; not full implementation qualification"
+    }
+  ],
+  "next_required_evidence": [
+    "actual source-only material generation/decoder CLI",
+    "independent raw UTC/Decimal/identity and latest-missing records",
+    "actual inner required-label release rows bound to outer rather than declared lag alone",
+    "full public-artifact as-of embargo incl operational metadata",
+    "issue/publication/revision semantics",
+    "complete truth/missing eligibility/hierarchy"
+  ],
+  "not_approved": [
+    "correctness of newly formed full decoder/builder",
+    "full research/reference/interval scoring pipeline",
+    "complete atomic rubric/freeze",
+    "quality threshold/professional-statistical maturity",
+    "hours or ten-task completion"
+  ],
+  "candidate_score": null,
+  "only_material_design_stage": true,
+  "no_Codex_project_read_or_message": true
+}

@@ -383,3 +383,14 @@ L05新增真实old HTTP before-apply跨pause/原键收据/更高epoch恢复/late
 ## 本轮最终接续Recall
 
 L06完整真实OpenCorvus100/100已取得，fresh /root/codex_l06_fresh正在唯一pair/codex/project独立执行，同18public/fork none/禁止再委托/不读旧答案。动态定位L06-current-pair-20261029.json，无活跃评估侧solver，不再请求退休API或重跑三已封存控制。L02独立修后15项/唯一微型cold4.483s通过、三个原bool/int假通过保留，仍仅信息边界资格。后续候选自然完成先封存，再同冻结源码/控制清洁评分，两good另升版本；其余九题完整建设与有效小时仍未达成，心跳ACTIVE。
+
+
+## 最新接续Recall：L02 UTC材料资格、Codex L06完成待正式评价
+
+L02已新增完整原创合成UTC多系列材料/注册合同/精确decoder，独立全量事实/原54+新4增量核验通过，两真实新P1（自报cutoff和Decimal先舍入）已根治，原假通过保留；实施前两个合同矛盾、主方lag漏洞/路径错误、独立UTC公式错误也不覆盖。六月outer在候选前注册改20日，使外层真实跨运营生效；13/14天气末日缺测明确公开。source-final8py/唯一合同/完整与开发8文件包及独立报告在cases/L02，见L02专门Recall。仅材料资格，不是全研究/预测/内外选模/区间质量/评分/冻结；不要重复本轮cold或原54。
+
+新Codex /root/codex_l06_fresh已自然交付，HEAD eef74425dcd9b9d6e161c9aa303b38c90f400e25，554文件完整含Git/所有原件封存pair/codex/completed/completed-project.zip并解只读submission。原18public逐原件核同一，无活跃project容器；01:25:16Z为观察封存收据，不伪称精确native终态。最终输出是validation/source-only-reordered/result，不能拿早期delivery-v1/v2评分。冻结raw已由真实30numeric主CLI全部通过，C47641.5；总分/business/good仍null，不能用自报冷跑+控制或成本预先升级。模型/usage unknown、comparable=false，候选自己的两个验收并行994.810/942.912秒不能相加。
+
+当前唯一评估侧长计算oc-l06-codex-eval-source-20261030-base/CIDb8af7d5f558d6c64923b19b4fd344df99cd6261e4795b3467c4b507cfcd80dbb，01:26:50Z启动；同sealed12源码/README依赖+冻结raw，只读/new results/networknone/8CPU/原默认CP-SAT初始化→HiGHS条件→全局阶段；不是用户总额度。locator active_evaluation=codex_base_source_cold。终态后先封存inspect/log/all新输出再真实30numeric和实际看图，再顺序两注册控制，不能重复开solver。原OC API早退休；其正式100保持。现有单层reviewer已转Codex封存版本阶段审查，不准另开solver，需先将未实际冷执行/私有控制的叶保留unassessed，之后真正完整聚合；两good才另升新版本。
+
+其余九题/完整十题/有效小时要求仍未完成，冻结1/10、小时资格0/10。六旧昂贵容器继续Paused，不恢复/重启，cheap-first与无用户总token/墙钟额度持续，心跳ACTIVE。

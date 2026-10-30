@@ -287,3 +287,10 @@ D02尚有真实执行缺口：同一冻结源码未从变价raw新生成全交�
 
 
 包装补充：新增Markdown链接检查先扫描整个共享索引，触发用户无关删除旧图的历史链接；该失败外部保留，不改用户删除。收窄到本次新增链接后，发现主方平铺的row原报告引用plan/ledger等已只在ZIP中，构成阅读上下文缺口，非候选原交付或数值失败。保留原numeric ZIP与外部全原件，另用complete-output-originals.zip完整封存报告及全部原相对目标并直接核原成员同一，移除本任务新加的孤立平铺报告。原执行/100成绩/冻结合同/候选输入不变；只修归档展示并重验新链接。
+
+
+## fresh Codex已自然交付，完整同合同评价尚未完成
+
+候选HEAD eef74425dcd9b9d6e161c9aa303b38c90f400e25、工作区clean，无remote/upstream；554文件/原Git/全部工作区封存pair/codex/completed/completed-project.zip，18public与冻结资源直接同一。01:25:16Z为观察封存时间，不能伪造接口未暴露的native精确终态/model/usage。最终路径validation/source-only-reordered/result，非early delivery-v1/v2。主方冻结raw真实30numeric全部过/C47641.5，total/business/good仍null。候选自己两完整验收994.810/942.912秒并行，不能相加冒充工作墙钟。主方已实际view_image交付cash/procurement/warehouse三图，不用它们替代新冷输出图。
+
+01:26:50Z才启动唯一评估侧oc-l06-codex-eval-source-20261030-base/CIDb8af7d5f558d6c64923b19b4fd344df99cd6261e4795b3467c4b507cfcd80dbb，同封存12源码/声明依赖/冻结raw、readonly source/raw、新results/networknone8CPU，保持原README默认阶段求解参数；没有旧plan/model/评估器/参考/凭据。先读动态locator及真实inspect/results，未终态不假判hang，不重启或机械取消。主方派现有单层reviewer只读同47叶阶段审查，不许另开solver，未实际base/私有控制的叶先unassessed。之后base终态封存/数值/实际新图，顺序注册报价和行序，同一冻结独立rating/真实l06_grade后如也good才升级新版本；当前未触发。安全原件cases/L06/evaluator/pilot-codex-20261030，原OC100/合同只读/所有比较限制不变。

@@ -39,3 +39,59 @@
 下一步须从完整多系列研究问题出发建设原始发布/修订/单位与实际时间资料，给出逐origin程序接口、外层预测与内层选模隔离、点/区间/聚合质量与决策/复跑交付，独立完整参考和具名错误对照进入全rubric后才冻结。当前信息边界原语不能证明完整L02可达、专业/统计可靠性、难度或数小时；不要重复这个小cold凑量。整体冻结1/10、候选小时资格0/10。
 
 L06已于00:27UTC取得实际完整OpenCorvus100/100后才启动fresh Codex /root/codex_l06_fresh（fork none、同18public、禁止再次委托），动态定位仍L06-current-pair-20261029.json；后续先看其真实状态，不启动重复候选或旧API。基例/报价/行序评估侧已全部自然终态封存，不再重复solver。
+
+
+## 本轮实施前方案：完整UTC原始材料与唯一解码（未冻结）
+
+### Recall与修改前分析
+
+用户仍要求十题/严rubric/独立审查/真实双系统，两good升级，cheap-first、无总token/墙钟额度。新鲜Codex L06仍独立运行；不得给其本文或任何答案。已重读所有相关Recall/根AGENTS、H02独立设计、L02四源及公开原语合同；全仓范围检索l02-vintages/asof_input/known_future未见另一L02材料或解码器，specs无嵌套AGENTS。当前只有7时点合成原语，缺真实UTC、完整研究材料及预测目标网格，不能冒充完整研究题。
+
+直接缺口是材料和任务规模/机制尚未实现，不是原投影数学失败。保留唯一asof_input/check_projection，不复制第二投影；新decoder只把严格UTC/单位CSV恢复为它们的整数事实（固定2022-01-01T00:00:00Z起的整数小时，绝不按全未来时间点排名）。这样未来发布日期改变不应改合法历史的坐标。core仍不解释每日目标网格，本轮只建设材料/解码/逐origin权限审计，不将原range(origin,origin+h)预测器用于这些按24小时步进的新目标，也不声称完整冷预测已通过。后续统一演进正式snapshot/target-grid及参考/选模接口，旧解析代码仅作已明示原语资格，不能成为全题fallback。
+
+影响限L02私有材料生成/解码与公开研究材料草案，无产品Task/Mission/Session/路由/队列/LLM/数据库迁移/UI/凭据变化。无新模型候选/GPU/完整solver；标准库生成、解码、独立CSV/Decimal/SQLite审计应秒级。原始材料/所有失败和实际字节封存外部新目录，不能覆盖之前微型资格。
+
+### 当前建设决定
+
+- 原创且明示合成的2023-01-01至2025-12-31日度计量需求，4leaf站点/2zone；zone真值为两leaf之和，层级关系固定公开。绝不伪称真实客户/公用事业数据。业务区间为UTC自然日[start,end)，event_end是次日00:00，发布时间均canonical UTC且整小时；origin是日09:00，预测未来14个完整UTC日，首个完整未来日是origin次日00:00起的日区间，目标end从后天00:00起逐24小时。
+- 每leaf事件有初报rev0（通常end+2h，部分迟报）、rev1（end+7d+4h）、终审rev2（end+21d+6h）。有可定位的迟报/缺测/修订；最高已发布版本为权威，最新missing不可回填旧有效值。隐藏评估真值是独立终审量，不按候选误差修改。原单位L/m3逐行明确、按Decimal精确转整L；部分站点发布格式在历史中改变，跨更改发布的同一事件各revision可有不同unit，不能把当前unit倒套全部过去。
+- 外生变量分known_future的日历/当时温度forecast/已宣布运营安排与observed的事后temperature_actual。天气forecast有每次issue和valid_end；未来实测留评估侧。站点A2停用及A1承接安排先在真实announce时刻发布、后生效，完整原始档案可含这些未来事实，但public开发包和逐origin快照只含当时已发布事实；静态catalogue不预告未宣布停用。另有未提前宣布的局部需求机制改变用于漂移研究，不要求猜隐含参数。
+- 公开开发截止2025-01-01T09:00:00Z，开发origin为2024年6至11月各15日；外层2025年1至12月各15日09:00，h14。每outer的inner origin为其前112/84/56天同一时刻，最后内层目标end+终审发布均早于outer；decoder须实际验证该许可，不能只说前缀。开发时点之后已经发布的开发标签允许在公开开发包内用于回测；外层2025受测标签只在评估侧。每个worker的特征仍严格按其origin投影，不能把开发包的最终修订带到较早origin。公开的是规则/日期/开发已发布资料，不含外层未来目标值或DGP参数。
+- 生成器是私有作者事实源，decoder是唯一公开格式→规范事实入口，既有asof是唯一投影。独立审查从CSV/单位/时点逐行计算规范值、SQL许可集合和开发截断；不能只调生成器的同一函数当oracle。机制作用至少有实际旧/新修订数值差、迟报在origin前后改变许可、跨单位同一事件换算一致、事后实测与当时forecast的发布差、宣布前后运营信息差。
+
+### 原则与后续完整合同（本轮不宣称已实现）
+
+滚动预测依据作者[时间序列交叉验证说明](https://otext.robjhyndman.com/hyndsight/tscv/)和[教材](https://otexts.com/fpp3/tscv.html)。区间拟采用Weighted Interval Score（WIS，加权区间评分），公式与恰当性依据[原论文及其更正](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618)，后续在完整评价器用独立手算和错误对照验证。选模须真正inner快照隔离，outer结果不能反选超参；研究零提升与预测质量分列。点/区间质量底线、站点权重/归一化、统计重采样/依赖、专业交付及全rubric均需完整参考/坏对照/单层独立审查后冻结，不预写任意提升阈值或以数据量/切点数当小时证明。
+
+验收先为材料/decoder实际CLI和逐origin独立许可/单位事实，再由已授权reviewer单层新目录一次必要冷生成/解析并挑战机制/数据身份，禁止再委托/新LLM/solver/UI/用户进程。完整研究pipeline/最终参考与评分类仍未完成，不重复旧微型cold。资料新增同步三索引/相关README/docs:check，范围提交/fetch/merge/待推全集检查/push。
+
+
+独立实施前审查发现两项真实合同矛盾，未执行原grid或据其给分：09:00的origin配次日00:00 target_end其实含已过去9小时，是nowcast而非完整未来日；开发公开release截止2025Jan1必然含Jun–Nov开发标签，不能同时把开发标签全称私有。修为首个完整未来日从次日00:00开始、首end为后天00:00，并明确开发标签公开回测/outer标签私有/每origin特征权限三层不同语义。旧计划矛盾与初两源保存独立计划审查目录initial-grid-source；无数据/候选成绩被覆盖。独立72个日历配对手算证明新grid内层终审到outer最近余量483小时，仍有可达性，不为修正而扩大网格或计算。
+
+
+首个完整材料实际生成/解码成功：1096业务日、4leaf/2aggregate、13152观测vintage、37632协变量vintage、54个origin；开发合法release截断得8660/26524行。生成+两解码合计约6秒，纯标准库，无forecast/solver；行数不当难度。封存源/argv/stdout在D:/opencorvus-benchmark-runs/l02-full-materials-20261030/main。
+
+主方主动实际挑战发现decoder把origins.csv提供的truth_lag_hours当事实：把一inner改到outer前20日并把lag写0，真实终审release仍晚于outer，但实际CLI exit0/materials_decoded。初源与反例raw/decoded/收据保留initial-probes/understated-inner-label，非候选错误。根因是只算元数据日期边界，未核权威原观察rev2的真实release，且调用端没有明确archive/development身份，无法正确区分开发有意缺outer标签和完整archive缺真值。
+
+修复前影响审计：新decoder唯一函数/CLI及本轮三收据是全部消费者，无产品/其他case导入；旧asof/check_projection/历史原语不变。增加评估侧必传role=archive或development，不从文件自报scope推断；development每事实须release<=开发cutoff、公开开发目标需实际终审。archive各开发/内外origin每leaf目标必须有rev2有效量，实际release不得超过声明上界，inner再逐原标签实际release<=父outer。规范值仍只从raw解码，标签核查不把它们写进worker快照；未知/缺失具名input_invalid。新接口替换原无role调用，不保留fallback。修后重放原失真lag应truth_release_bound错误，并实际跑新完整/开发解码、合法延迟与错误发布时间合同；独立新目录用CSV/Decimal/SQLite核验。
+
+
+独立唯一source-only cold后新增两个真实P1：完整archive只把输入time-axis的开发cutoff改为2026Feb1，以外部role=development仍exit0，根因为授权截止仍由被核输入自报；另一L值6236.0000000000000000000000000000001被Decimal默认28位上下文在乘单位时先舍成6236，再整数校验而假通过。原源与probes-initial/{self_declared_later_development_cutoff,inexact_decimal_litre}原执行保留，均非候选失败。
+
+修复影响分析/决定（实施前）：全部当前生产入口只有本轮材料builder/decoder/CLI，既有asof及其正确数学不变。新增唯一evaluator/material-contract.json作为评估侧注册的clock/cutoff/单位/grid/终审协议来源，builder和decoder必传--contract，public clock/units仅为从此导出的可读资料，decoder逐语义匹配注册值后才使用。不得从input clock更改授权，也不新增猜测/双读fallback；配置从builder重复字面值收拢到单一合同。数量用Fraction对已限制为plain decimal的字符串精确求值，换单位后分母必须1且范围合法；不使用可能已舍入的Decimal乘法，不用增大context掩盖精确性。注册合同与原允许语义保持相同，不改变现有材料或任何分数。实际复测原两个反例应registered_clock_mismatch/quantity_integer_range；再合法多尾0小数/元数据漂移/真实label晚发布等必要合同，不重复旧toy或全预测。原54投影与核心不变，用实际原材料身份绑定有效范围；新builder当前字节仍须实际生成/核同一，不能仅凭静态替换声称已执行。
+
+
+独立数据覆盖审计另观察到两项，当前未评分/未冻结，不掩盖为原先预期：移到完整未来日后，每origin/zone只有13/14个目标有当时已发布weather forecast，末日原lead14不存在。明确将末日预测协变量缺测保留为公开条件，允许合法外推/缺测策略，不能偷用次日issue或实测；不会对不存在的信号要求固定提升。原每月15日outer没有窗口跨7月1日，不能声称outer测了提前应对。现预先修材料采样合同，将6月outer换成6月20日（同日09:00），使合法已宣布计划到生效的跨期确实进入外层目标；其3inner随父日偏移，其余50origin不变，无候选结果用于此决定。
+
+日程也进入唯一注册material-contract.schedule，builder从唯一expected_origin_rows生成，decoder按身份/完整字段与外部注册日程核同义，CSV行序自由。不能允许输入自行移动outer或换role来改变实验；这是评估输入完整性，不是LLM流程门。新材料仅origins.csv四行变化，DGP观测/协变量/时轴/单位应与现有真实源同一；实际新生成及4增量投影/真实标签/跨生效运营事实须重验，原50输入/54旧检查保留而不冒称新54重跑。后续完整研究/预测质量及小时依旧未认证。
+
+
+## 本轮最终材料/decoder资格与接续Recall
+
+最终独立blocking=[]仅限材料/解码。唯一新目录初cold10.003s，独立从CSV/Fraction/UTC全量重算13152obs、37632cov及开发8660/26524，原54与独立SQL匹配。天气issue检查自身timedelta.days丢-6h产生首false，原件保留；局部按完整UTC比较后2192组过，不是材料/候选失败。两独立P1用原CLI实际具名拒绝，中间注册版9CLI15.781s属于其中间8源，不冒称最终字节。
+
+最后注册日程演进后，主方实际新builder/两role decoder exit0；新增4origin真实投影5.178s。独立复制最终源/原材料/收据，只做6必要decoder CLI和4实际core/独立SQL/真实label/运营跨生效，共23项11.535s通过，没有第二次生成或重跑原54。14个非schedule文件/full canonical同一、50grid继承；4新grid明确新验。当前最小inner终审余量483h；June20运营A2.open为10个1+4个0，A1.transfer_in相反；weather最后目标明确未知。全部源/失败/原收据在full-material-main、full-material-independent-review、full-material-plan-review及ZIP，当前源8py/唯一合同与执行快照直接身份绑定，不把它当正确性测试。
+
+当前只有原始材料、单源注册/精确解码及发布/完整未来日grid资格，不是全L02、研究模型或候选成绩。下一步应统一正式worker的daily target-grid、逐inner/outer物理输入及选择权限，完成baseline/扩展/真实消融、点/区间/层级指标与低质量对照、研究报告/决策交付及完整原子rubric，完整冷参考和独立审查后才冻结。旧toy预测器不适用新grid，不能改名当full参考；不要重跑本轮生成/54/微型cold凑量。整套冻结仍1/10，小时资格0/10。
+
+最新Codex L06已自然完成，完整554文件/Git/未跟踪原件封存，HEAD eef74425dcd9b9d6e161c9aa303b38c90f400e25；01:25:16Z是观察/封存收据时间，接口未给精确native终态时刻。主方冻结raw独立30numeric全部过，17执行/人工及实际私有两控制还待，不能预判good或触发升级。唯一评估侧Codex base源码冷执行oc-l06-codex-eval-source-20261030-base/CIDb8af7d5f558d6c64923b19b4fd344df99cd6261e4795b3467c4b507cfcd80dbb于01:26:50Z启动，无旧输出/参考/评估器/凭据，readonly12源/冻结raw/new results/networknone8CPU，同准备镜像和原README默认阶段参数。动态定位L06-current-pair-20261029.json；先读其真实终态，不重跑/取消有效计算。自然完成后封存/30numeric/新图，再顺序注册报价和行序；同冻结独立17叶与真正l06_grade之后，若也good才另升新版本。

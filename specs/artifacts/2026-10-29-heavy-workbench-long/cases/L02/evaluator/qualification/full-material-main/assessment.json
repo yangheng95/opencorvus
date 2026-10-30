@@ -1,0 +1,508 @@
+{
+  "status": "full_material_projection_qualified",
+  "origins_checked": 54,
+  "all_54_origin_findings": [
+    {
+      "origin_id": "dev-20240615",
+      "status": "projection_verified",
+      "observations": 6259,
+      "covariates": 20524,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "dev-20240715",
+      "status": "projection_verified",
+      "observations": 6619,
+      "covariates": 21424,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "dev-20240815",
+      "status": "projection_verified",
+      "observations": 6991,
+      "covariates": 22354,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "dev-20240915",
+      "status": "projection_verified",
+      "observations": 7363,
+      "covariates": 23284,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "dev-20241015",
+      "status": "projection_verified",
+      "observations": 7724,
+      "covariates": 24184,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "dev-20241115",
+      "status": "projection_verified",
+      "observations": 8096,
+      "covariates": 25114,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250115",
+      "status": "projection_verified",
+      "observations": 8828,
+      "covariates": 26944,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250115-i1",
+      "status": "projection_verified",
+      "observations": 7484,
+      "covariates": 23584,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250115-i2",
+      "status": "projection_verified",
+      "observations": 7819,
+      "covariates": 24424,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250115-i3",
+      "status": "projection_verified",
+      "observations": 8156,
+      "covariates": 25264,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250215",
+      "status": "projection_verified",
+      "observations": 9200,
+      "covariates": 27874,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250215-i1",
+      "status": "projection_verified",
+      "observations": 7856,
+      "covariates": 24514,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250215-i2",
+      "status": "projection_verified",
+      "observations": 8191,
+      "covariates": 25354,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250215-i3",
+      "status": "projection_verified",
+      "observations": 8528,
+      "covariates": 26194,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250315",
+      "status": "projection_verified",
+      "observations": 9536,
+      "covariates": 28714,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250315-i1",
+      "status": "projection_verified",
+      "observations": 8191,
+      "covariates": 25354,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250315-i2",
+      "status": "projection_verified",
+      "observations": 8528,
+      "covariates": 26194,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250315-i3",
+      "status": "projection_verified",
+      "observations": 8863,
+      "covariates": 27034,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250415",
+      "status": "projection_verified",
+      "observations": 9908,
+      "covariates": 29644,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250415-i1",
+      "status": "projection_verified",
+      "observations": 8563,
+      "covariates": 26284,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250415-i2",
+      "status": "projection_verified",
+      "observations": 8900,
+      "covariates": 27124,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250415-i3",
+      "status": "projection_verified",
+      "observations": 9235,
+      "covariates": 27964,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250515",
+      "status": "projection_verified",
+      "observations": 10267,
+      "covariates": 30544,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250515-i1",
+      "status": "projection_verified",
+      "observations": 8924,
+      "covariates": 27184,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250515-i2",
+      "status": "projection_verified",
+      "observations": 9260,
+      "covariates": 28024,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250515-i3",
+      "status": "projection_verified",
+      "observations": 9595,
+      "covariates": 28864,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250615",
+      "status": "projection_verified",
+      "observations": 10639,
+      "covariates": 31474,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250615-i1",
+      "status": "projection_verified",
+      "observations": 9296,
+      "covariates": 28114,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250615-i2",
+      "status": "projection_verified",
+      "observations": 9632,
+      "covariates": 28954,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250615-i3",
+      "status": "projection_verified",
+      "observations": 9967,
+      "covariates": 29794,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250715",
+      "status": "projection_verified",
+      "observations": 10999,
+      "covariates": 32742,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250715-i1",
+      "status": "projection_verified",
+      "observations": 9656,
+      "covariates": 29014,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250715-i2",
+      "status": "projection_verified",
+      "observations": 9992,
+      "covariates": 29854,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250715-i3",
+      "status": "projection_verified",
+      "observations": 10328,
+      "covariates": 30694,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250815",
+      "status": "projection_verified",
+      "observations": 11371,
+      "covariates": 33672,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250815-i1",
+      "status": "projection_verified",
+      "observations": 10028,
+      "covariates": 29944,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250815-i2",
+      "status": "projection_verified",
+      "observations": 10364,
+      "covariates": 30784,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250815-i3",
+      "status": "projection_verified",
+      "observations": 10700,
+      "covariates": 31992,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250915",
+      "status": "projection_verified",
+      "observations": 11743,
+      "covariates": 34602,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250915-i1",
+      "status": "projection_verified",
+      "observations": 10400,
+      "covariates": 30874,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250915-i2",
+      "status": "projection_verified",
+      "observations": 10736,
+      "covariates": 32082,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250915-i3",
+      "status": "projection_verified",
+      "observations": 11072,
+      "covariates": 32922,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20251015",
+      "status": "projection_verified",
+      "observations": 12104,
+      "covariates": 35502,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20251015-i1",
+      "status": "projection_verified",
+      "observations": 10760,
+      "covariates": 32142,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20251015-i2",
+      "status": "projection_verified",
+      "observations": 11095,
+      "covariates": 32982,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20251015-i3",
+      "status": "projection_verified",
+      "observations": 11432,
+      "covariates": 33822,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20251115",
+      "status": "projection_verified",
+      "observations": 12476,
+      "covariates": 36432,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20251115-i1",
+      "status": "projection_verified",
+      "observations": 11132,
+      "covariates": 33072,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20251115-i2",
+      "status": "projection_verified",
+      "observations": 11467,
+      "covariates": 33912,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20251115-i3",
+      "status": "projection_verified",
+      "observations": 11804,
+      "covariates": 34752,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20251215",
+      "status": "projection_verified",
+      "observations": 12836,
+      "covariates": 37332,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20251215-i1",
+      "status": "projection_verified",
+      "observations": 11492,
+      "covariates": 33972,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20251215-i2",
+      "status": "projection_verified",
+      "observations": 11827,
+      "covariates": 34812,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20251215-i3",
+      "status": "projection_verified",
+      "observations": 12164,
+      "covariates": 35652,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    }
+  ],
+  "operating_publication_values_before_after": {
+    "A2.open": [
+      1,
+      0
+    ],
+    "A1.transfer_in": [
+      0,
+      1
+    ]
+  },
+  "leaky_actual_error": {
+    "status": "availability_violation",
+    "findings": [
+      {
+        "error": "availability_violation",
+        "table": "covariates",
+        "identity": [
+          "ZA.temperature_actual",
+          26688,
+          0
+        ],
+        "release_tick": 26696,
+        "origin": 26649
+      }
+    ],
+    "scope": "exact published integer-tick rows and registered availability classes only",
+    "candidate_score": null
+  },
+  "leaky_revision_error": {
+    "status": "availability_violation",
+    "findings": [
+      {
+        "error": "availability_violation",
+        "table": "observations",
+        "identity": [
+          "A1",
+          26160,
+          2
+        ],
+        "release_tick": 26670,
+        "origin": 26649
+      }
+    ],
+    "scope": "exact published integer-tick rows and registered availability classes only",
+    "candidate_score": null
+  },
+  "late_initial_before_release_error": {
+    "status": "availability_violation",
+    "findings": [
+      {
+        "error": "availability_violation",
+        "table": "observations",
+        "identity": [
+          "A2",
+          8832,
+          0
+        ],
+        "release_tick": 8882,
+        "origin": 8881
+      }
+    ],
+    "scope": "exact published integer-tick rows and registered availability classes only",
+    "candidate_score": null
+  },
+  "late_initial_at_release": "projection_verified",
+  "future_only_mutation_same_authorized_snapshot": true,
+  "seconds": 29.56057980004698,
+  "scope": "data publication/projection and complete-future grid only; no worker forecast/model selection/scientific quality or hours claim",
+  "candidate_score": null,
+  "frozen": false
+}

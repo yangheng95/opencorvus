@@ -1,0 +1,108 @@
+{
+  "status": "material_projection_qualified",
+  "origins_checked": 4,
+  "origin_findings": [
+    {
+      "origin_id": "outer-20250620",
+      "status": "projection_verified",
+      "observations": 10700,
+      "covariates": 31992,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250620-i1",
+      "status": "projection_verified",
+      "observations": 9356,
+      "covariates": 28264,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250620-i2",
+      "status": "projection_verified",
+      "observations": 9691,
+      "covariates": 29104,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    },
+    {
+      "origin_id": "outer-20250620-i3",
+      "status": "projection_verified",
+      "observations": 10028,
+      "covariates": 29944,
+      "all_actual_findings": [],
+      "first_full_day_starts_hours_after_cutoff": 15
+    }
+  ],
+  "operating_publication_values_before_after": {
+    "A2.open": [
+      1,
+      0
+    ],
+    "A1.transfer_in": [
+      0,
+      1
+    ]
+  },
+  "leaky_actual_error": {
+    "status": "availability_violation",
+    "findings": [
+      {
+        "error": "availability_violation",
+        "table": "covariates",
+        "identity": [
+          "ZA.temperature_actual",
+          26688,
+          0
+        ],
+        "release_tick": 26696,
+        "origin": 26649
+      }
+    ],
+    "scope": "exact published integer-tick rows and registered availability classes only",
+    "candidate_score": null
+  },
+  "leaky_revision_error": {
+    "status": "availability_violation",
+    "findings": [
+      {
+        "error": "availability_violation",
+        "table": "observations",
+        "identity": [
+          "A1",
+          26160,
+          2
+        ],
+        "release_tick": 26670,
+        "origin": 26649
+      }
+    ],
+    "scope": "exact published integer-tick rows and registered availability classes only",
+    "candidate_score": null
+  },
+  "late_initial_before_release_error": {
+    "status": "availability_violation",
+    "findings": [
+      {
+        "error": "availability_violation",
+        "table": "observations",
+        "identity": [
+          "A2",
+          8832,
+          0
+        ],
+        "release_tick": 8882,
+        "origin": 8881
+      }
+    ],
+    "scope": "exact published integer-tick rows and registered availability classes only",
+    "candidate_score": null
+  },
+  "late_initial_at_release": "projection_verified",
+  "future_only_mutation_same_authorized_snapshot": true,
+  "seconds": 5.177551500033587,
+  "scope": "data publication/projection and complete-future grid only; no worker forecast/model selection/scientific quality or hours claim",
+  "candidate_score": null,
+  "frozen": false
+}
