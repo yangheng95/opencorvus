@@ -37,3 +37,5 @@
 - [19-verified-body-current-file.png](19-verified-body-current-file.png)
 - [20-verified-existing-folder-picker.png](20-verified-existing-folder-picker.png)
 - [21-verified-existing-project-opened.png](21-verified-existing-project-opened.png)
+
+旧journal案例已同步为明确的committed receipt正向身份合同，原隔离runner精确筛选1通过、16未运行，连同上述36项合计37项。主修复a83a610cb经完整正常push hooks推送后fresh fetch/merge确认origin/main与HEAD一致0/0（2026-10-30T21:57:15Z）；后续仅提交该测试和对应证据说明，不增加模型请求或运行数据变更。

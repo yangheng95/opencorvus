@@ -968,7 +968,7 @@ describe("anonymous Project promotion journal", () => {
     await PromotionJournal.settle(operationID, "rolled_back", { reason: "invalid path test cleanup" })
   }, 60_000)
 
-  test("a completed promotion leaves no journal entry", async () => {
+  test("a completed promotion retains its committed publication receipt", async () => {
     await using _anchor = await memoryProject()
     const anonymous = await ImplicitProject.create()
     const destinationParent = path.join(Global.Path.data, "promotion-recovery-destinations")
@@ -983,13 +983,22 @@ describe("anonymous Project promotion journal", () => {
         }),
     })
     const physicalDestination = await fs.realpath(path.join(destinationParent, "fully-promoted"))
+    const receipts = (await PromotionJournal.all())
+      .filter((entry) => entry.projectID === anonymous.project.id)
+      .map(({ projectID, source, destination, published, terminal }) => ({ projectID, source, destination, published, terminal }))
     expect({
       directory: promoted.directory,
-      journal: await PromotionJournal.get(anonymous.project.id),
+      receipts,
       worktree: Project.get(anonymous.project.id)?.worktree,
     }).toEqual({
       directory: physicalDestination,
-      journal: undefined,
+      receipts: [{
+        projectID: anonymous.project.id,
+        source: anonymous.directory,
+        destination: physicalDestination,
+        published: true,
+        terminal: "committed",
+      }],
       worktree: physicalDestination,
     })
   }, 60_000)

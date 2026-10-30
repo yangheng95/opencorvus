@@ -59,3 +59,11 @@ before/after/final/verified四scope数据为212537→212539→212541→214196→
 四scope全部public shutdown200，原exec/native/launcher0、物理/输出/请求与OS出生身份结清后才退休配对认证/模型目录副本；final留1233897ms、verified留886716ms，均为同一原deadline1793397820654，不扩时。batch只花6/10，累计1112；原auth元数据和models字节/元数据保持。一次误用Windows PowerShell5诊断脚本在取得目标前失败，改用现PowerShell7原脚本成功；两次准备脚本旧零请求断言/阶段标签错误均已在私有检查器修正并重跑，不接触真实用户数据。启动verified最初因准备未完成以64退出、未启动服务，后续fresh live occurrence正常0，未借此延长deadline。
 
 已知未达成项：合法standby owner存在时转换保护仍返回现409，普通用户缺少明确停止待机引导（未作为调度异常或已修复项）；中文旧“实名项目”菜单语义仍待改进；无输入Cancel、select初始焦点与原生Tauri分支本轮未实操。不增加后端自动停止/绕过guard。历史来源保留原绝对观察路径，故搬迁后标签仍可能较长，这是保留真实身份的现UI限制。本轮不升级版本/Release/tag/PR，不修改schema/已交付迁移，不动18571真实服务/数据库。后续单agent持续迭代，Goal保持active。
+
+## 提交复核发现的旧验收语义
+
+主修复已提交a83a610cb，fresh fetch/merge后完整待推集合仅该提交；正常hook类型/内存迁移/接口352操作/调度owner/架构与包/模块拓扑已通过，当前在正常secret scan，不绕过。复核检索到project-promotion-journal旧案例“a completed promotion leaves no journal entry”，其实只断言get（open occurrence查询）为空，无法证明本次Sources读取所依赖的committed receipt保留。这个过期命名/负向核心验证会掩盖真实公共合同。决定只改该案例为明确的已提交receipt正向合同：Project id、原source、完整destination、published与committed，加原当前worktree结果；不修改生产实现、其他case或旧journal格式。使用原隔离runner按精确新案例名执行，不运行该文件其他案例。其余本轮最终结果待push后补写，不以检索到的旧断言作为根因证据。
+
+主修复a83a610cb已正常推送；2026-10-30T21:57:15Z fresh fetch/普通merge确认origin/main与HEAD一致0/0，待推集合审查只有本轮该提交。完整正常hook通过：SDK导入、AI运行库、目标9的内存迁移、专家团及八workspace类型、36文件六规则路由、352操作/26组文档、18owner/25调用点、20架构文档、十package拓扑、五发布权威、1200模块/6167边/四clean imports与secret scan零命中；没有跳过hook。其他会话提交fafd8fec7c28ac0b14cb01257ba0cbea74251115已在上游，未混入本轮待推提交。
+
+旧验收案例已改为retains its committed publication receipt；原隔离runner精确名称筛选后1pass/16filtered/0fail，核对原Project/source、完整destination、published=true、terminal=committed与实际worktree。与此前36项合计37个聚焦正向合同完成。该后续提交只包含此测试及当前方案/证据说明，不修改生产运行代码；本轮三索引行在工作区与提交中各一次，原不相关索引重排和其他工作保留。后续同样正常fresh fetch/merge、待推集合审查与push，不另建发布物。
