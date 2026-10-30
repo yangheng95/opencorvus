@@ -1,0 +1,116 @@
+[
+  {
+    "phase": "before",
+    "runtimeOwner": {
+      "pid": 87060,
+      "processInstanceID": "win32:639289152945596773",
+      "occurrenceID": "6bc6982a-bc6b-4432-a9eb-af22f6d0d120"
+    },
+    "providerRequests": 0,
+    "cumulativeRequests": 1083,
+    "credentialCopyRetired": true,
+    "modelCatalogCopyRetired": true,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "publicShutdown": 200,
+    "reserveMs": 1766129,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "chain": [
+      {
+        "pid": 75456,
+        "processInstanceID": "win32:639289152928867556",
+        "occurrenceID": "a8ff16d2-ec17-42b5-b175-198f133a2b69",
+        "state": "dead_or_reused"
+      },
+      {
+        "pid": 87060,
+        "processInstanceID": "win32:639289152945596773",
+        "occurrenceID": "4f3e2575-546b-4471-89ed-49ce1f418083",
+        "state": "dead_or_reused"
+      }
+    ]
+  },
+  {
+    "phase": "after",
+    "runtimeOwner": {
+      "pid": 86728,
+      "processInstanceID": "win32:639289171922021149",
+      "occurrenceID": "adaf718f-fca7-4755-a22e-505286dbc9f5"
+    },
+    "providerRequests": 0,
+    "cumulativeRequests": 1083,
+    "credentialCopyRetired": true,
+    "modelCatalogCopyRetired": true,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "publicShutdown": 200,
+    "reserveMs": 1496837,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "chain": [
+      {
+        "pid": 82468,
+        "processInstanceID": "win32:639289171885801495",
+        "occurrenceID": "49e53ef7-f57e-4ba2-af87-a840629987d9",
+        "state": "dead_or_reused"
+      },
+      {
+        "pid": 86728,
+        "processInstanceID": "win32:639289171922021149",
+        "occurrenceID": "624723a8-1e2f-4b5c-a52c-636a01a2e76b",
+        "state": "dead_or_reused"
+      }
+    ]
+  },
+  {
+    "phase": "after2",
+    "runtimeOwner": {
+      "pid": 80748,
+      "processInstanceID": "win32:639289175122036635",
+      "occurrenceID": "68f56068-a020-4ecc-b97a-4409f865b9b4"
+    },
+    "providerRequests": 0,
+    "cumulativeRequests": 1083,
+    "credentialCopyRetired": true,
+    "modelCatalogCopyRetired": true,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "publicShutdown": 200,
+    "reserveMs": 1018915,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "chain": [
+      {
+        "pid": 80132,
+        "processInstanceID": "win32:639289175114533689",
+        "occurrenceID": "3feff737-e6df-4a4d-8fbd-b07dc303015c",
+        "state": "dead_or_reused"
+      },
+      {
+        "pid": 80748,
+        "processInstanceID": "win32:639289175122036635",
+        "occurrenceID": "40c2dd27-1efb-46d3-bce2-3241d0c55b35",
+        "state": "dead_or_reused"
+      }
+    ]
+  }
+]

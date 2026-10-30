@@ -1,0 +1,276 @@
+{
+  "at": "2026-10-30T00:44:56.289Z",
+  "database": [
+    {
+      "phase": "source",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 204326,
+      "rows": 204326,
+      "originalValues": "exact native SQLite EXCEPT, including TEXT/BLOB",
+      "allowedTargetFields": {},
+      "additions": []
+    },
+    {
+      "phase": "before",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 204326,
+      "rows": 204579,
+      "originalValues": "exact native SQLite EXCEPT, including TEXT/BLOB",
+      "allowedTargetFields": {
+        "session": [
+          "time_archived",
+          "time_updated"
+        ],
+        "engine_task": [
+          "time_archived"
+        ]
+      },
+      "additions": [
+        {
+          "table": "bus_publication_delivery",
+          "rows": 52
+        },
+        {
+          "table": "bus_publication_delivery_receipt",
+          "rows": 52
+        },
+        {
+          "table": "bus_publication_outbox",
+          "rows": 7
+        },
+        {
+          "table": "bus_publication_owner",
+          "rows": 7
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "rows": 21
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "rows": 53
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "rows": 53
+        },
+        {
+          "table": "event_occurrence",
+          "rows": 7
+        },
+        {
+          "table": "protocol_event",
+          "rows": 1
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 204326,
+      "rows": 204581,
+      "originalValues": "exact native SQLite EXCEPT, including TEXT/BLOB",
+      "allowedTargetFields": {
+        "session": [
+          "time_archived",
+          "time_updated"
+        ],
+        "engine_task": [
+          "time_archived"
+        ]
+      },
+      "additions": [
+        {
+          "table": "bus_publication_delivery",
+          "rows": 52
+        },
+        {
+          "table": "bus_publication_delivery_receipt",
+          "rows": 52
+        },
+        {
+          "table": "bus_publication_outbox",
+          "rows": 7
+        },
+        {
+          "table": "bus_publication_owner",
+          "rows": 7
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "rows": 21
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "rows": 54
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "rows": 54
+        },
+        {
+          "table": "event_occurrence",
+          "rows": 7
+        },
+        {
+          "table": "protocol_event",
+          "rows": 1
+        }
+      ]
+    },
+    {
+      "phase": "after2",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 204326,
+      "rows": 204673,
+      "originalValues": "exact native SQLite EXCEPT, including TEXT/BLOB",
+      "allowedTargetFields": {
+        "session": [
+          "time_archived",
+          "time_updated"
+        ],
+        "engine_task": [
+          "time_archived"
+        ]
+      },
+      "additions": [
+        {
+          "table": "bus_publication_delivery",
+          "rows": 70
+        },
+        {
+          "table": "bus_publication_delivery_receipt",
+          "rows": 70
+        },
+        {
+          "table": "bus_publication_outbox",
+          "rows": 10
+        },
+        {
+          "table": "bus_publication_owner",
+          "rows": 10
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "rows": 30
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "rows": 73
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "rows": 73
+        },
+        {
+          "table": "event_occurrence",
+          "rows": 10
+        },
+        {
+          "table": "protocol_event",
+          "rows": 1
+        }
+      ]
+    }
+  ],
+  "attachments": [
+    {
+      "phase": "before",
+      "files": 17,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "before",
+      "files": 10,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "before",
+      "files": 16,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "before",
+      "files": 24,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "before",
+      "files": 6,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "before",
+      "files": 2,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 17,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 10,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 16,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 24,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 6,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 2,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after2",
+      "files": 17,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after2",
+      "files": 10,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after2",
+      "files": 16,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after2",
+      "files": 24,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after2",
+      "files": 6,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after2",
+      "files": 2,
+      "sourceAndCopyBytes": "exact"
+    }
+  ],
+  "projects": 5,
+  "trackedProjectFiles": 12,
+  "gitAndFileBytes": "exact command code/stdout/stderr and original tracked bytes; unborn HEAD preserved",
+  "providerRequests": 0
+}

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-30-archived-goal-owner-controls.md](2026-10-30-archived-goal-owner-controls.md)：已有Goal详情和Task/Mission终态归档/恢复的真实体验与控制寿命调查。
+
 - [2026-10-30-archived-conversation-reading.md](2026-10-30-archived-conversation-reading.md)：真实归档历史的准确标题、只读输入、Sources原件与明确恢复，14张实页及数据保全。
 
 - [2026-10-30-heavy-workbench-tool-liveness.md](2026-10-30-heavy-workbench-tool-liveness.md)：L06真实运行的共享Tool暂停/取消问题、修复方案与有限执行治理资格。

@@ -80,12 +80,17 @@ pre-read epoch cannot suppress an error from that new owner. None of these reads
 creates a replacement conversation or changes durable execution recovery.
 
 Task refresh resolves `taskID` through the same global Task index reader's exact
-identity filter before publishing a selected source. That filter precedes the
-list limit and preserves the original Project directory; the first ten rows are
-not the resource authority. The shared selector requires a complete, consistent
+identity filter before publishing a selected source. An exact `taskID` reads the
+retained Task, including its archive metadata, while ordinary index queries keep
+their active-only visibility. Directory scope and deletion facts apply to both.
+That identity filter precedes the list limit and preserves the original Project
+directory; the first ten rows are not the resource authority. The shared selector requires a complete, consistent
 directory owner before reactive consumers can observe the Task. A paginated
-index publishes its `hasMore` alongside its rows and cannot classify an admitted
-Task as removed solely because that Task is outside the current partial page.
+index publishes its `hasMore` alongside its rows. Neither partial nor complete
+active lists classify a retained selected Task as removed. Its exact reader owns
+archive metadata and read failures. A committed local archive/delete leaves only
+the matching current Task through the ordinary selection cleanup; list refresh
+does not own that navigation.
 
 Locale catalogs resolve relative to the executing module, whose source `utils`
 and published `assets` directories both sit beside the `i18n` directory. The

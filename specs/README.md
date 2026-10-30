@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [已有Goal与终态所属对象归档](records/2026-10/2026-10-30-archived-goal-owner-controls.md)：真实暂停/完成目标及Task/Mission归档、只读详情和明确恢复体验。
+
 - [归档会话阅读与恢复](records/2026-10/2026-10-30-archived-conversation-reading.md)：精确选中投影、归档只读阅读与明确恢复，实页和数据保全验证。
 
 - [长程Tool活动所有权](records/2026-10/2026-10-30-heavy-workbench-tool-liveness.md)：真实benchmark揭示20分钟暂停误杀与错误归因、有限可信deadline/取消传播修复和独立审查。

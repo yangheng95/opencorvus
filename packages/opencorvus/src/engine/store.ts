@@ -1284,8 +1284,7 @@ export function listGlobalTasks(input?: {
       .from(EngineTaskTable)
       .leftJoin(SessionTable, eq(EngineTaskTable.session_id, SessionTable.id))
       .where(and(
-        isNull(EngineTaskTable.time_archived),
-        input?.taskID ? eq(EngineTaskTable.id, input.taskID) : undefined,
+        input?.taskID ? eq(EngineTaskTable.id, input.taskID) : isNull(EngineTaskTable.time_archived),
         sessionDirectoryFilterCondition(db, input?.directory),
       ))
       .all()

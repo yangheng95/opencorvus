@@ -7,6 +7,8 @@ import { Project } from "@/project/project"
 import { Session } from "@/session"
 import { ensureMissionSession, listGlobalMissionSessions, listMissionSessions } from "@/mission/session"
 import { findTask, listGlobalTasks, listProjectTasks } from "@/engine/store"
+import { setEngineTaskArchived } from "@/engine/task"
+import { Database } from "@/storage/db"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { Filesystem } from "@/util/filesystem"
 import { Server } from "@/server/server"
@@ -170,6 +172,41 @@ test("exact global Task identity resolves its owning directory before pagination
   expect({ status: peerResult.status, tasks: peerResult.body.tasks.map(({ task, project }: any) => ({
     id: task.id, directory: task.directory, projectID: project.id,
   })) }).toEqual({ status: 200, tasks: [{ id: peer.tasks[0], directory: peer.directory, projectID: peer.projectID }] })
+}, 90_000)
+
+test("exact global Task identity retains archived ownership while the ordinary board lists active records", async () => {
+  await using project = await memoryProject()
+  await using independent = await memoryProject()
+  const original = await records(project.path, "archived-original", 2)
+  const peer = await records(independent.path, "archived-peer", 1)
+  const targetID = original.tasks[0]
+  const archivedAt = Date.now()
+  Database.transaction((db) => setEngineTaskArchived(db, {
+    taskID: targetID, timeArchived: archivedAt, timeUpdated: archivedAt,
+  }))
+  const expected = { id: targetID, directory: original.directory, projectID: original.projectID, archived: archivedAt }
+  expect(listGlobalTasks({ taskID: targetID, limit: 1 }).map(({ task, directory }) => ({
+    id: task.id, directory, projectID: task.project_id, archived: task.time_archived,
+  }))).toEqual([expected])
+  const exact = await get("/global/tasks", undefined, { taskID: targetID, limit: "1" })
+  expect({ status: exact.status, tasks: exact.body.tasks.map(({ task, project }: any) => ({
+    id: task.id, directory: task.directory, projectID: project.id, archived: task.time.archived,
+  })) }).toEqual({ status: 200, tasks: [expected] })
+  const active = await get("/global/tasks")
+  expect({ status: active.status, ids: active.body.tasks.map(({ task }: any) => task.id) }).toEqual({
+    status: 200, ids: [peer.tasks[0], original.tasks[1]],
+  })
+  const independentTask = await get("/global/tasks", undefined, { taskID: peer.tasks[0], limit: "1" })
+  expect({ status: independentTask.status, tasks: independentTask.body.tasks.map(({ task, project }: any) => ({
+    id: task.id, directory: task.directory, projectID: project.id,
+  })) }).toEqual({ status: 200, tasks: [{ id: peer.tasks[0], directory: peer.directory, projectID: peer.projectID }] })
+  Database.transaction((db) => setEngineTaskArchived(db, {
+    taskID: targetID, timeArchived: null, timeUpdated: Date.now(),
+  }))
+  const restored = await get("/global/tasks")
+  expect({ status: restored.status, ids: restored.body.tasks.map(({ task }: any) => task.id) }).toEqual({
+    status: 200, ids: [peer.tasks[0], original.tasks[1], targetID],
+  })
 }, 90_000)
 
 test("invalid cross-platform directory filters preserve the named error and actual global route response", async () => {

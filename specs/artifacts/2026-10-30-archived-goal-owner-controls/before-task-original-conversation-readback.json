@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-30T00:13:38.626Z",
+  "endpoint": "GET /task/:taskID/conversation?tail_limit=2000",
+  "messages": 30,
+  "events": 139,
+  "history": {
+    "oldestTimestamp": 1793302258882,
+    "oldestOrderKey": "v1:0001793302258882:0000000000000030:0000000000000000:message:msg_g0VZT7WPy00MAPWaUozU",
+    "oldestMessageID": "msg_g0VZT7WPy00MAPWaUozU",
+    "hasMore": false,
+    "limit": 2000
+  },
+  "note": "The Task root Session message endpoint is empty; this is the actual Task view transcript, events and artifacts."
+}

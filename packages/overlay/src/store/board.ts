@@ -127,22 +127,12 @@ function invalidateTaskListPagination(): void {
   setBoardStore("tasksLoadingMore", false)
 }
 
-// Invariant handler: fires when the current task source no longer refers
-// to any task in the merged (tasks + pendingTasks) list. Registered by
-// services/task.ts so that board.ts doesn't need to import selectTask (which
-// would create a cycle). If not registered, the invariant silently degrades —
-// that's a setup bug the app owner is expected to catch in init.
-let _orphanedSelectionHandler: (() => void) | null = null
 // Board-derived goal evidence, interaction cards, and attachment controls are
 // projected by services/tree-writer.ts. Register a callback here so the
 // projection runs exactly once after each applied board delta instead of
 // relying on a shallow reactive read of `boardStore.board`.
 let _boardProjectionHandler: (() => void) | null = null
 let _taskListProjectionHandler: ((tasks: any[]) => void) | null = null
-
-export function setOrphanedSelectionHandler(handler: (() => void) | null): void {
-  _orphanedSelectionHandler = handler
-}
 
 export function setBoardProjectionHandler(handler: (() => void) | null): void {
   _boardProjectionHandler = handler
@@ -158,25 +148,6 @@ export function setTaskListProjectionHandler(handler: ((tasks: any[]) => void) |
 
 function notifyTaskListProjection(tasks: any[]): void {
   _taskListProjectionHandler?.(tasks)
-}
-
-function selectionIsOrphaned(tasks: any[], pending: any[]): boolean {
-  const id = activeTaskID()
-  if (!id) return false
-  // Stable-state guard: during selectTask()'s async phase a concurrent
-  // loadTasks() response may not yet include the freshly-created task, and
-  // firing the handler then would incorrectly reset a selection that is in
-  // the process of being loaded. Once taskSwitching has settled, the
-  // tasks/pending lists are the source of truth for whether the selection
-  // still exists; requiring a loaded board snapshot lets an invalid task ID
-  // survive forever after a failed task switch or cross-project mismatch.
-  if (boardStore.taskSwitching) return false
-  // A page is a projection, not proof that an admitted Task was removed.
-  if (boardStore.tasksHasMore) return false
-  const inTasks = Array.isArray(tasks) && tasks.some((item: any) => item?.task?.id === id)
-  if (inTasks) return false
-  const inPending = Array.isArray(pending) && pending.some((item: any) => item?.task?.id === id || item?.id === id)
-  return !inPending
 }
 
 function requireBoardSnapshotVersion(board: any): string {
@@ -464,18 +435,10 @@ export async function loadBoard(options: LoadBoardOptions = {}): Promise<void> {
 }
 
 /**
- * Canonical writer for `boardStore.tasks`. All paths that replace the task
- * list MUST go through here so that the selected task source always refers to an
- * existing task" invariant is enforced. After the list is applied, if the
- * current selection no longer exists (in tasks or pendingTasks), the
- * registered orphan handler is invoked to reset the selection — this is the
- * single choke point that keeps the conversation panel consistent with the
- * task list (e.g. after a task is deleted by another client or the last task
- * is removed locally).
- *
- * `nextPending` lets callers that already know the new pending list pass it
- * in atomically — the orphan check then considers the post-update state.
- * Omit to keep the current `pendingTasks`.
+ * Canonical writer for the active Task list and pending projection.
+ * Selected identity is read independently: an archived Task can remain open
+ * while it is outside this list. Explicit committed mutations own navigation.
+ * `nextPending` updates both projections atomically; omit it to retain pending.
  */
 export function applyTasks(tasks: any[], nextPending?: any[]): void {
   const list = reconcileTaskItems(Array.isArray(tasks) ? tasks : [], boardStore.tasks)
@@ -492,9 +455,6 @@ export function applyTasks(tasks: any[], nextPending?: any[]): void {
     }
   })
   visibleTaskProjectionCache = null
-  if (selectionIsOrphaned(list, pending) && _orphanedSelectionHandler) {
-    _orphanedSelectionHandler()
-  }
   notifyTaskListProjection(list)
 }
 

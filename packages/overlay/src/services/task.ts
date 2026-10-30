@@ -32,7 +32,6 @@ import {
   boardStore,
   setBoardStore,
   setSelectedSource,
-  setOrphanedSelectionHandler,
   taskByID,
   activeTaskID,
   rootTaskSessionID,
@@ -439,7 +438,7 @@ export async function setTaskArchived(
   )
   if (!isApiAuthorityCurrent(authority)) return true
   if (archived) {
-    reconcileRemovedTaskAfterCommit(taskID, "archive")
+    await reconcileRemovedTaskAfterCommit(taskID, "archive")
   } else {
     void loadTasks({ requireFresh: true, authority }).catch((error) => {
       if (!isApiAuthorityCurrent(authority)) return
@@ -461,9 +460,10 @@ function removeTaskProjection(taskID: string): void {
   applyTasks(boardStore.tasks.filter(keep), boardStore.pendingTasks.filter(keep))
 }
 
-function reconcileRemovedTaskAfterCommit(taskID: string, operation: "archive" | "delete"): void {
+async function reconcileRemovedTaskAfterCommit(taskID: string, operation: "archive" | "delete"): Promise<void> {
   try {
     removeTaskProjection(taskID)
+    if (activeTaskID() === taskID) await selectTask("", { selectionEpoch: beginWorkspaceSelection() })
   } catch (error) {
     AppLog.error("task", "failed to reconcile task projection after committed mutation", {
       taskID,
@@ -524,7 +524,7 @@ export async function deleteTask(taskID: string, provenance: TaskCancellationReq
       throw error
     }
   }
-  if (isApiAuthorityCurrent(authority)) reconcileRemovedTaskAfterCommit(taskID, "delete")
+  if (isApiAuthorityCurrent(authority)) await reconcileRemovedTaskAfterCommit(taskID, "delete")
   return true
 }
 
@@ -882,22 +882,3 @@ export async function interruptTask(taskID: string): Promise<boolean> {
     return false
   }
 }
-
-// ── Orphan-selection reconciliation ──
-// board.ts's applyTasks() is the single choke point for tasks-list writes.
-// When it detects that `selectedTaskID` points to a task no longer present in
-// the list (and not in pendingTasks), it calls this handler to fully reset
-// the selection — driving the same cleanup path (clearBoard / resetWriter /
-// stopSSE) that every intentional deselect uses. Registered at module load so
-// it's in place before any tasks fetch completes.
-setOrphanedSelectionHandler(() => {
-  void selectTask("", { selectionEpoch: beginWorkspaceSelection() }).catch((error) => {
-    AppLog.error("task", "failed to clear orphaned task selection", {
-      error: formatErrorDetails(error),
-      diagnosticID: "task:orphan-selection-clear-failed",
-      diagnosticTitle: error instanceof Error ? error.message : String(error),
-      diagnosticMessage: error instanceof Error ? error.message : String(error),
-      diagnosticDetails: formatErrorDetails(error),
-    })
-  })
-})

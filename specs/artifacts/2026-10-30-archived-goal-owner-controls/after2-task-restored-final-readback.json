@@ -1,0 +1,30 @@
+{
+  "at": "2026-10-30T00:41:55.875Z",
+  "phase": "after2",
+  "key": "task",
+  "state": "restored",
+  "targetID": "tsk_g00VZT7V7400TdQ2J6Sj",
+  "item": {
+    "kind": "task",
+    "title": "批准后提交801",
+    "archived": null,
+    "updated": 1793303085760,
+    "lifecycleStatus": "completed"
+  },
+  "goal": null,
+  "taskConversation": {
+    "messages": 30,
+    "events": 139,
+    "history": {
+      "oldestTimestamp": 1793302258882,
+      "oldestOrderKey": "v1:0001793302258882:0000000000000030:0000000000000000:message:msg_g0VZT7WPy00MAPWaUozU",
+      "oldestMessageID": "msg_g0VZT7WPy00MAPWaUozU",
+      "hasMore": false,
+      "limit": 2000
+    },
+    "originalTranscriptEventsAndArtifacts": "exact real HTTP values"
+  },
+  "messages": 0,
+  "history": "exact real HTTP values",
+  "providerRequests": 0
+}

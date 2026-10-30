@@ -1,0 +1,80 @@
+{
+  "publications": [
+    {
+      "eventType": "session.updated",
+      "targetID": "ses_-zUQi8aC3zzDyYDXPxXm",
+      "archived": 1793320162023,
+      "summary": null
+    },
+    {
+      "eventType": "task.updated",
+      "targetID": "tsk_g00VZT7V7400TdQ2J6Sj",
+      "archived": null,
+      "summary": "Task restored"
+    },
+    {
+      "eventType": "task.updated",
+      "targetID": "tsk_g00VZT7V7400TdQ2J6Sj",
+      "archived": null,
+      "summary": "Task restored"
+    },
+    {
+      "eventType": "session.updated",
+      "targetID": "ses_-zUQhR9QqzzzMZkMj093",
+      "archived": null,
+      "summary": null
+    },
+    {
+      "eventType": "session.updated",
+      "targetID": "ses_-zUQhUDWdzzX0g71aRx5",
+      "archived": 1793318716887,
+      "summary": null
+    },
+    {
+      "eventType": "task.updated",
+      "targetID": "tsk_g00VZT7V7400TdQ2J6Sj",
+      "archived": null,
+      "summary": "Task archived"
+    },
+    {
+      "eventType": "session.updated",
+      "targetID": "ses_-zUQi8aC3zzDyYDXPxXm",
+      "archived": null,
+      "summary": null
+    },
+    {
+      "eventType": "session.updated",
+      "targetID": "ses_-zUQhR9QqzzzMZkMj093",
+      "archived": 1793319086775,
+      "summary": null
+    },
+    {
+      "eventType": "session.updated",
+      "targetID": "ses_-zUQhUDWdzzX0g71aRx5",
+      "archived": null,
+      "summary": null
+    },
+    {
+      "eventType": "task.updated",
+      "targetID": "tsk_g00VZT7V7400TdQ2J6Sj",
+      "archived": null,
+      "summary": "Task archived"
+    }
+  ],
+  "deliveries": 70,
+  "succeeded": 70,
+  "phaseReceipts": 30,
+  "leases": {
+    "runtimeProcess": 3,
+    "busDelivery": 70
+  },
+  "goalRevision": {
+    "type": "continuous_goal.updated",
+    "sessionID": "ses_-zUQhUDWdzzX0g71aRx5",
+    "goalID": "pev_g0VZIVmpj00RsyHU58hy",
+    "status": "paused",
+    "reason": "owner_archived",
+    "author": "owner-control"
+  },
+  "runtimeProcessOwners": "Runtime UUID matches authority-ready; PID and OS birth match retired supervisor chain. Supervisor observation UUID belongs to a separate identity domain."
+}

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-30-archived-goal-owner-controls](2026-10-30-archived-goal-owner-controls/README.md)：已有Goal/Mission真实归档与恢复、归档Task原链接双根因修复，23张实页及完整数据保全。
+
 - [2026-10-30-archived-conversation-reading](2026-10-30-archived-conversation-reading/README.md)：归档会话准确标题、只读阅读、真实Sources原件和明确恢复，14张实页与数据保全。
 
 - [2026-10-30-heavy-workbench-tool-liveness](2026-10-30-heavy-workbench-tool-liveness/README.md)：共享超时/取消源审、固定执行期限和真实SDK/进程/MCP资格原件，不作候选成绩。
