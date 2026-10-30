@@ -1,0 +1,143 @@
+{
+  "at": "2026-10-30T14:08:39.221Z",
+  "schema": 9,
+  "tables": 92,
+  "startingRows": 208573,
+  "finalRows": 208637,
+  "allStartingValuesPreserved": true,
+  "attachments": 75,
+  "oldProjects": 8,
+  "trackedFiles": 28,
+  "reportFiles": 4,
+  "originalReportAndGoalPreserved": true,
+  "oldHTTPHistories": {
+    "task": 68,
+    "mission": 80,
+    "chat": 3,
+    "completedWork": 8
+  },
+  "deliveries": {
+    "at": "2026-10-30T13:53:46.209Z",
+    "originalReportBytes": 1920,
+    "undoDownloadBytes": 1920,
+    "undoDownloadEqualsOriginal": true,
+    "newFile": {
+      "filename": "preview-note-814.md",
+      "createdThroughUI": true,
+      "savedThroughPreviewShortcut": true,
+      "bytes": 137,
+      "operatorText": "# Markdown 预览体验814\n\n本文件由实际页面创建，用于核对源码、预览与保存。\n\n<strong>保留原始标记</strong>",
+      "downloadEqualsDiskAndInput": true
+    },
+    "draftDownload": {
+      "file": "report.md",
+      "originalBytes": 1920,
+      "draftBytes": 2001,
+      "operatorInput": "草稿复核814：[报告第9行](./report.md:9) · [汇总文件](./summary.csv)",
+      "downloadEqualsOriginalPlusInput": true,
+      "onDiskEqualsOriginal": true
+    }
+  },
+  "fileMutationEvidence": {
+    "events": [
+      {
+        "occurrenceID": "bus-occurrence:8c5670c5-6021-430c-8d31-f16bdb034d7a",
+        "type": "file.edited",
+        "file": "preview-note-814.md",
+        "at": 1793368362753,
+        "phases": [
+          "exact",
+          "global",
+          "wildcard"
+        ]
+      },
+      {
+        "occurrenceID": "bus-occurrence:b00d1219-1b60-4365-bc56-7ecc8f87fb57",
+        "type": "file.edited",
+        "file": "preview-note-814.md",
+        "at": 1793368244242,
+        "phases": [
+          "wildcard",
+          "global",
+          "exact"
+        ]
+      }
+    ],
+    "occurrences": 2,
+    "owners": 2,
+    "phaseReceipts": 6,
+    "deliveries": 12,
+    "deliveryReceipts": 12,
+    "busDeliveryLeases": 12,
+    "runtimeProcessLeases": 1,
+    "leaseGrants": 13,
+    "addedRows": 62,
+    "allOriginalValuesRetained": true,
+    "fileMutationRequests": [
+      {
+        "id": 282,
+        "at": "2026-10-30T13:50:44.231Z",
+        "method": "POST",
+        "path": "/file/item"
+      },
+      {
+        "id": 329,
+        "at": "2026-10-30T13:52:42.737Z",
+        "method": "PATCH",
+        "path": "/file/content"
+      }
+    ]
+  },
+  "deliveryReceiptEvidence": {
+    "at": "2026-10-30T14:07:27.954Z",
+    "deliveries": 12,
+    "eachHasOneCanonicalTerminalReceipt": true,
+    "outcomes": {
+      "succeeded": 12
+    }
+  },
+  "newModelRequests": 0,
+  "cumulativeModelRequests": 1096,
+  "scopes": [
+    {
+      "phase": "before",
+      "requests": 0,
+      "exhausted": false,
+      "publicShutdown": 200,
+      "reserveMs": 3318485,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "pairedCopiesRetired": true,
+      "originalRows": 208573,
+      "currentRows": 208575,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "phase": "after",
+      "requests": 0,
+      "exhausted": false,
+      "publicShutdown": 200,
+      "reserveMs": 1936805,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "pairedCopiesRetired": true,
+      "originalRows": 208575,
+      "currentRows": 208637,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    }
+  ]
+}

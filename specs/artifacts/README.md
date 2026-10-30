@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Markdown文件工作台预览](2026-10-30-markdown-file-preview/README.md)：实际预览、草稿与下载回执。
+
 - [已完成报告的文件阅读](2026-10-30-report-file-reading/README.md)：实际页面原图与数据保留回执。
 
 - [持续目标自然完成与后续动作](2026-10-30-goal-report-completion/README.md)：25张实页、真实输入/报告/汇总、13次Sol流与数据/物理回执。

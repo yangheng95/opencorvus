@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Markdown文件工作台预览](2026-10-30-markdown-file-preview.md)：渲染复用、编辑连续性与实页验收。
+
 - [已完成报告的文件阅读](2026-10-30-report-file-reading.md)：阅读路径根因调查与实页验收。
 
 - [2026-10-30-goal-report-completion.md](2026-10-30-goal-report-completion.md)：自然完成的真实报告、用量关联、下一目标入口与暂停原因实页复核。

@@ -688,6 +688,16 @@ nonshrinking horizontal metadata in the three existing shared consumers.
 
 ## File editor language support
 
+Markdown text files offer Source and Preview views of the same current draft.
+Source is the default for each newly selected resource. The existing editor stays
+mounted while hidden, retaining its selection and undo history; Preview uses the
+same asynchronous Markdown renderer as Document artifacts. Unsaved preview text
+is labelled and the original save/download/leave-draft authority remains in force.
+An explicit located file reveal returns to Source for its original range and
+keyboard handoff. Preview is a named keyboard-scrollable reading region; other
+file types retain their current presentation and no additional content store is
+introduced.
+
 The File editor's existing download action exports the current text draft or the
 complete loaded base64 image/PDF bytes with their MIME type and canonical file
 title. Binary preview downloads use the shared transport decoder and Blob

@@ -17,6 +17,8 @@ import { formatErrorDetails } from "../utils/error-details"
 import { restoreRightDockFocus } from "../utils/right-dock-focus"
 import { pathWithForwardSeparators } from "../utils/server-path"
 import { bytesToArrayBuffer } from "../utils/binary"
+import { extToLang } from "../utils/markdown"
+import { StaticTextPart } from "./TextPart"
 import { Icon } from "./ui/Icon"
 // CodeMirror and its Lezer grammars are only needed once a file is actually
 // open. This pane stays mounted to keep its state, so the editor itself is what
@@ -111,6 +113,7 @@ export function FileEditorPane() {
   const [saving, setSaving] = createSignal(false)
   const [reloading, setReloading] = createSignal(false)
   const [downloading, setDownloading] = createSignal(false)
+  const [textView, setTextView] = createSignal<"source" | "preview">("source")
   const [error, setError] = createSignal<FileEditorFailure | null>(null)
   const [loadFailure, setLoadFailure] = createSignal<{ error: unknown } | null>(null)
   const [leaveDialogOpen, setLeaveDialogOpen] = createSignal(false)
@@ -161,6 +164,12 @@ export function FileEditorPane() {
     path(), target()?.sourceAbsolutePath || target()?.directory || "",
   ).split("/").at(-1) ?? "")
   const textContent = createMemo(() => canEdit(content()))
+  const markdownFile = () => textContent() && extToLang(path()) === "markdown"
+  const previewVisible = () => markdownFile() && textView() === "preview"
+  createEffect(() => {
+    fileEditorRevealRevision()
+    if (target()?.range) setTextView("source")
+  })
   const imageSource = createMemo(() => {
     const file = content()
     return file?.encoding === "base64" && file.mimeType?.startsWith("image/")
@@ -286,6 +295,7 @@ export function FileEditorPane() {
       retireDownload()
       const identity = identityOf(file)
       const retainDraft = identity === activeTargetIdentity && dirty()
+      if (identity !== activeTargetIdentity) setTextView("source")
       activeTargetIdentity = identity
       const generation = ++loadGeneration
       saveGeneration += 1
@@ -569,6 +579,23 @@ export function FileEditorPane() {
             <Icon name="close" />
           </Button>
         </header>
+        <Show when={markdownFile()}>
+          <div class="file-editor-text-toolbar">
+            <SegmentedControl<"source" | "preview">
+              size="sm"
+              value={textView()}
+              ariaLabel={t("file_editor.view")}
+              options={[
+                { value: "source", label: t("file_editor.view_source") },
+                { value: "preview", label: t("file_editor.view_preview") },
+              ]}
+              onChange={setTextView}
+            />
+            <Show when={previewVisible() && dirty()}>
+              <span class="file-editor-preview-hint">{t("file_editor.preview_draft_hint")}</span>
+            </Show>
+          </div>
+        </Show>
         <div class="file-editor-body">
           <Show
             when={!loading()}
@@ -634,6 +661,7 @@ export function FileEditorPane() {
                 </Match>
                 <Match when={textContent()}>
                   <CodeEditor
+                    hidden={previewVisible()}
                     value={draft()}
                     path={path()}
                     lineRange={target()?.range}
@@ -643,6 +671,15 @@ export function FileEditorPane() {
                     onValueChange={updateDraft}
                     readOnly={!writable() || fileEditorReserved()}
                   />
+                  <Show when={previewVisible()}>
+                    <section
+                      class="file-editor-markdown-preview md-content"
+                      tabIndex={0}
+                      aria-label={`${fileTitle()} · ${t("file_editor.view_preview")}`}
+                    >
+                      <StaticTextPart text={draft()} />
+                    </section>
+                  </Show>
                 </Match>
               </Switch>
             </Show>
