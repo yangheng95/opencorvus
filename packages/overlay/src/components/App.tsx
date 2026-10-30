@@ -128,7 +128,7 @@ function ChatViewTitle(props: {
 
   useHotkey({
     key: "f", cmdOrCtrl: true, alt: false, shift: false, target: "window",
-    when: () => props.item()?.kind === "chat" && (searchOpen() || !document.querySelector(".dialog")),
+    when: () => !!props.item() && (searchOpen() || !document.querySelector(".dialog")),
     run: (event) => {
       if (event.defaultPrevented) return
       event.preventDefault()
@@ -280,11 +280,11 @@ function ChatViewTitle(props: {
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
               <DropdownMenu.Content class="chat-title-menu" data-ui="chat-title-menu">
+                <DropdownMenu.Item as="button" type="button" data-ui="chat-title-find" onSelect={() => openConversationSearch(searchMenuTrigger)}>
+                  <Icon name="search" size="medium" />
+                  <span>{t("chat.search_action")}</span>
+                </DropdownMenu.Item>
                 <Show when={item().kind === "chat"}>
-                  <DropdownMenu.Item as="button" type="button" data-ui="chat-title-find" onSelect={() => openConversationSearch(searchMenuTrigger)}>
-                    <Icon name="search" size="medium" />
-                    <span>{t("chat.search_action")}</span>
-                  </DropdownMenu.Item>
                   <For each={["markdown", "json"] as const}>
                     {(format) => (
                       <DropdownMenu.Item
@@ -347,7 +347,11 @@ function ChatViewTitle(props: {
       </Show>
       <ConversationSearchDialog open={searchOpen()} onClose={() => setSearchOpen(false)} returnFocusTarget={() => searchReturnFocus} target={() => {
         const row = props.item()
-        return row?.kind === "chat" ? { sessionID: row.sessionID, directory: row.directory } : null
+        return row ? {
+          kind: row.kind === "task" ? "task" : "session",
+          id: row.kind === "task" ? row.id : row.sessionID,
+          directory: row.directory,
+        } : null
       }} />
     </div>
   )

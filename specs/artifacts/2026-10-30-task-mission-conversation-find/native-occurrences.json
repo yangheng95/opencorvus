@@ -1,0 +1,268 @@
+[
+  {
+    "phase": "before",
+    "publication": "main-C9ybhFm-.js",
+    "launcher": {
+      "label": "native-before",
+      "startedAt": 1793333821332,
+      "closedAt": 1793333988281,
+      "code": 0,
+      "signal": null,
+      "childPID": 99636
+    },
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "conversation-find-all-807b-before-e726524f-bed7-49a7-abb4-fb04b904402b",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:38386",
+      "pid": 89920
+    },
+    "retirement": {
+      "phase": "before",
+      "providerRequests": 0,
+      "cumulativeRequests": 1083,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "reserveMs": 3436400,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0
+    }
+  },
+  {
+    "phase": "after",
+    "publication": "main-BwGMRdi4.js",
+    "launcher": {
+      "label": "native-after",
+      "startedAt": 1793334378763,
+      "closedAt": 1793334671036,
+      "code": 0,
+      "signal": null,
+      "childPID": 75624
+    },
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "conversation-find-all-807b-after-cbf01355-f501-4096-b76e-65fb81dcb170",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:38387",
+      "pid": 64220
+    },
+    "retirement": {
+      "phase": "after",
+      "providerRequests": 0,
+      "cumulativeRequests": 1083,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "reserveMs": 2753666,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0
+    }
+  },
+  {
+    "phase": "final",
+    "publication": "main-9Cs7FvWr.js",
+    "launcher": {
+      "label": "native-final",
+      "startedAt": 1793334784440,
+      "closedAt": 1793335005811,
+      "code": 0,
+      "signal": null,
+      "childPID": 78452
+    },
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "conversation-find-all-807b-final-79b0b0af-3e7f-4f4f-a196-1e8d082a9218",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:38388",
+      "pid": 62396
+    },
+    "retirement": {
+      "phase": "final",
+      "providerRequests": 0,
+      "cumulativeRequests": 1083,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "reserveMs": 2418902,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0
+    }
+  },
+  {
+    "phase": "stable",
+    "publication": "main-CFA14UAv.js",
+    "launcher": {
+      "label": "native-stable",
+      "startedAt": 1793335059940,
+      "closedAt": 1793335304825,
+      "code": 0,
+      "signal": null,
+      "childPID": 99120
+    },
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "conversation-find-all-807b-stable-92d0eeee-5369-4680-a5c3-067478caf0a1",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:38389",
+      "pid": 78368
+    },
+    "retirement": {
+      "phase": "stable",
+      "providerRequests": 0,
+      "cumulativeRequests": 1083,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "reserveMs": 2119928,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0
+    }
+  },
+  {
+    "phase": "qualified",
+    "publication": "main-lMrdy3BF.js",
+    "launcher": {
+      "label": "native-qualified",
+      "startedAt": 1793335326885,
+      "closedAt": 1793335760716,
+      "code": 0,
+      "signal": null,
+      "childPID": 25416
+    },
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "conversation-find-all-807b-qualified-4528fb64-47b1-4fef-85d3-f30a76f4ce02",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:38390",
+      "pid": 17540
+    },
+    "retirement": {
+      "phase": "qualified",
+      "providerRequests": 0,
+      "cumulativeRequests": 1083,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "reserveMs": 1664037,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0
+    }
+  },
+  {
+    "phase": "accepted",
+    "publication": "main-lMrdy3BF.js",
+    "launcher": {
+      "label": "native-accepted",
+      "startedAt": 1793335801015,
+      "closedAt": 1793335839100,
+      "code": 0,
+      "signal": null,
+      "childPID": 5020
+    },
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "conversation-find-all-807b-accepted-7a2c3c54-de2c-4e43-8c83-78a2ec76cf20",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:38391",
+      "pid": 72284
+    },
+    "retirement": {
+      "phase": "accepted",
+      "providerRequests": 0,
+      "cumulativeRequests": 1083,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "reserveMs": 1585690,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0
+    }
+  },
+  {
+    "phase": "verified",
+    "publication": "main-BUN5yVuf.js",
+    "launcher": {
+      "label": "native-verified",
+      "startedAt": 1793335877512,
+      "closedAt": 1793336223125,
+      "code": 0,
+      "signal": null,
+      "childPID": 33712
+    },
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "conversation-find-all-807b-verified-e4a1009a-75c6-4ea0-ba40-2869f4ac23e2",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:38392",
+      "pid": 75952
+    },
+    "retirement": {
+      "phase": "verified",
+      "providerRequests": 0,
+      "cumulativeRequests": 1083,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "reserveMs": 1201573,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0
+    }
+  }
+]

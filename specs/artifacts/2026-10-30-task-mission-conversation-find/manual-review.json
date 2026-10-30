@@ -1,0 +1,70 @@
+{
+  "at": "2026-10-30T05:00:27.575Z",
+  "finalPublication": "main-BUN5yVuf.js",
+  "screenshots": 28,
+  "manualEvidence": {
+    "task": {
+      "messages": 68,
+      "queries": {
+        "Decimal": 9,
+        "ROUND_HALF_UP": 8
+      },
+      "participants": [
+        "mission",
+        "orchestrator",
+        "dynamic-builder",
+        "dynamic-generalist"
+      ],
+      "builder": "27-verified-builder-original.png",
+      "generalist": "26-verified-generalist-original.png",
+      "originalRequest": "16-qualified-task-original-request.png"
+    },
+    "mission": {
+      "messages": 80,
+      "counterPy": 2,
+      "shutdownReasons": 2,
+      "originalRequest": "19-qualified-mission-original-request.png",
+      "exactStoppedMessages": [
+        "msg_g0VZRS3SR00u5mrSVwXH",
+        "msg_g0VZRTEmq00YPsVX5xmm"
+      ],
+      "screenshots": [
+        "21-verified-mission-stopped-message.png",
+        "22-verified-earlier-stop-original.png"
+      ]
+    },
+    "chat": {
+      "messages": 3,
+      "queryMatches": 1,
+      "screenshot": "23-verified-chat-original-answer.png"
+    },
+    "work": {
+      "messages": 8,
+      "queryMatches": 4,
+      "goalStatus": "complete",
+      "tokensUsed": 148493,
+      "turnsAccepted": 3,
+      "screenshot": "25-verified-work-final-delivery.png"
+    },
+    "locale": {
+      "english": true,
+      "chinese": true,
+      "screenshot": "28-verified-chinese-find.png"
+    },
+    "keyboard": {
+      "open": "Ctrl+F",
+      "select": "Enter",
+      "close": "Escape",
+      "refresh": "Actual button interaction preserves query and 8 matches; focus retained on Refresh"
+    }
+  },
+  "unverified": [
+    "more-than-80 actual pagination",
+    "real IME composition",
+    "in-flight read/source-switch race"
+  ],
+  "providerRequests": 0,
+  "cumulativeRequests": 1083,
+  "initialCandidateFailuresPreserved": true,
+  "oldBundleMislaunch": "accepted scope was closed with HTTP200/native0 and paired credential retirement; no browser opened; final acceptance is verified scope"
+}

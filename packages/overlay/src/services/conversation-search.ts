@@ -1,11 +1,11 @@
 import { normalizeSearchText } from "./text-search"
 import { assistantMessageFailure } from "../utils/message-part"
-import type { readConversationSnapshot } from "./conversation-snapshot"
+import type { ConversationSearchSnapshot } from "./conversation-snapshot"
 
 export type ConversationSearchHit = { id: string; author: string; created: number; preview: string }
 
 /** Search the complete captured snapshot in producer order, independently of mounted cards. */
-export function findConversationMessages(snapshot: ReturnType<typeof readConversationSnapshot>, query: string): ConversationSearchHit[] {
+export function findConversationMessages(snapshot: ConversationSearchSnapshot, query: string): ConversationSearchHit[] {
   const needle = normalizeSearchText(query)
   if (!needle) return []
   return snapshot.messages.flatMap((message) => {

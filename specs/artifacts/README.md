@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Task/Mission 原消息查找实页证据](2026-10-30-task-mission-conversation-find/README.md)：完整原历史、参与者原文定位、停止消息身份、中文界面与数据保全。
+
 - [2026-10-30-release-0.1.39](2026-10-30-release-0.1.39/README.md)：11个未公开失败候选精确清退、原生预检及新版本正式公开回读。
 
 - [2026-10-30-archive-library-reading](2026-10-30-archive-library-reading/README.md)：归档库直接打开原Chat/Work/Task/Mission，15张实页、中英文/键盘/同对象重开及完整数据保全。

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-30-task-mission-conversation-find.md](2026-10-30-task-mission-conversation-find.md)：Task/Mission完整原消息查找、身份归属与实际定位。
+
 - [2026-10-30-release-0.1.39.md](2026-10-30-release-0.1.39.md)：新版本原生与官网交付、失败候选精确归属清退与公开回读。
 
 - [2026-10-30-archive-library-reading.md](2026-10-30-archive-library-reading.md)：归档库原内容阅读入口、现有导航寿命与实页验证。

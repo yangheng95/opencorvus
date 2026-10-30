@@ -279,7 +279,7 @@ function VirtualizedConversationCards(props: {
     if (!target) return false
     const index = order().indexOf(target.itemID)
     if (index < 0) return false
-    if (target.transcriptTarget && target.sessionID) {
+    if ((target.transcriptTarget || request.messageID) && target.sessionID) {
       props.onOpenSubagentConversation(target.sessionID)
     }
     props.onCardScrollRequest(request)
@@ -290,14 +290,26 @@ function VirtualizedConversationCards(props: {
       align: request.block ?? "start",
       smooth: false,
     })
-    const element = await waitForScrollTargetElement(target.cardID)
+    const cardElement = await waitForScrollTargetElement(target.cardID)
+    if (!cardElement) return false
+    if (request.messageID && target.sessionID) {
+      return requestConversationCardScroll({ ...request, surface: "subagent", sessionID: target.sessionID })
+    }
+    const element = request.messageID
+      ? cardElement.querySelector<HTMLElement>(`[data-message-id="${CSS.escape(request.messageID)}"]`)
+      : cardElement
     if (!element) return false
     element.scrollIntoView({
       block: request.block ?? "start",
       inline: "nearest",
       behavior: "auto",
     })
-    if (request.highlight) highlightCard(target.cardID)
+    if (request.highlight) {
+      if (request.messageID) {
+        element.classList.add("conversation-agent-target--pulse")
+        window.setTimeout(() => element.classList.remove("conversation-agent-target--pulse"), 1400)
+      } else highlightCard(target.cardID)
+    }
     return true
   }
 

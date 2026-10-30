@@ -2917,6 +2917,7 @@ function projectedCardIsUnchanged(
     errorReason: string | undefined
     errorDetails: string | undefined
     collapsedContextMessageIDs: string[]
+    messageFailures: NonNullable<CardNode["messageFailures"]>
   },
   parts: readonly any[],
 ): boolean {
@@ -2944,6 +2945,12 @@ function projectedCardIsUnchanged(
   if (collapsed.length !== fields.collapsedContextMessageIDs.length) return false
   for (let index = 0; index < collapsed.length; index += 1) {
     if (collapsed[index] !== fields.collapsedContextMessageIDs[index]) return false
+  }
+  const failures = existing.messageFailures ?? []
+  if (failures.length !== fields.messageFailures.length) return false
+  for (let index = 0; index < failures.length; index += 1) {
+    const current = failures[index], next = fields.messageFailures[index]
+    if (current.messageID !== next.messageID || current.reason !== next.reason || current.details !== next.details || current.cancelled !== next.cancelled) return false
   }
   const currentParts = existing.parts ?? []
   if (currentParts.length !== parts.length) return false
@@ -3127,7 +3134,7 @@ function regroupTimelineSegments(opts: { deferHierarchy?: boolean } = {}): void 
 
   for (const segment of segments) {
     segment.messages.sort(messageTimeOrder)
-    const displayMessages = segment.messages.filter((message) => !message.metadataOnly)
+    const displayMessages = segment.messages.filter((message) => !message.metadataOnly || !!message.settlement?.errorReason)
     const first = displayMessages[0]
     if (!first) continue
     const existing = cardTreeStore.cards[segment.cardID]
@@ -3170,6 +3177,12 @@ function regroupTimelineSegments(opts: { deferHierarchy?: boolean } = {}): void 
       collapsedContextMessageIDs: displayMessages
         .filter((message) => message.delegatedContext)
         .map((message) => message.id),
+      messageFailures: displayMessages.flatMap(message => message.settlement?.errorReason ? [{
+        messageID: message.id,
+        reason: message.settlement.errorReason,
+        details: message.settlement.errorDetails,
+        cancelled: message.settlement.terminalReason === "aborted",
+      }] : []),
     }
 
     // The part index is authoritative for live updates and was just cleared for
@@ -3177,7 +3190,7 @@ function regroupTimelineSegments(opts: { deferHierarchy?: boolean } = {}): void 
     // changed. Only the store write below is conditional.
     const rebuiltParts: any[] = existing?.parts?.filter(isReviewStreamPart) ?? []
     for (const [index, message] of displayMessages.entries()) {
-      if (index > 0) {
+      if (index > 0 || message.settlement?.errorReason) {
         const boundaryKey = `__boundary__:${segment.session.sessionID}:${message.id}`
         const boundary = {
           type: "boundary",

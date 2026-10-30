@@ -66,7 +66,7 @@ function ChatBubbleIdentity(props: { node: CardNode; compact?: boolean; hideDura
 function ChatBubbleFailureState(props: { node: CardNode }) {
   const errorReason = () => props.node.errorReason?.trim() || ""
   return (
-    <Show when={(props.node.status === "error" || props.node.terminalReason === "aborted") && errorReason()}>
+    <Show when={!props.node.messageFailures?.length && (props.node.status === "error" || props.node.terminalReason === "aborted") && errorReason()}>
       <AssistantMessageFailure reason={errorReason()} details={props.node.errorDetails} cardID={props.node.id}
         cancelled={props.node.terminalReason === "aborted"}
         messageID={props.node.terminalReason === "aborted" ? props.node.messageID : undefined} />

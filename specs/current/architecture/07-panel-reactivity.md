@@ -29,14 +29,22 @@ event retains that caller's policy. Empty queries leave Escape to the surroundin
 popup or page. Settings therefore clears the current search before its later
 Escape can close the page, without introducing a page-specific keyboard path.
 
-Chat and Work find-in-conversation reads the same complete project-scoped
-Session snapshot as downloads and shares its identity/structure validator.
+Chat, Work and Mission find-in-conversation reads the complete project-scoped
+Session snapshot; Task reads its existing complete project-scoped transcript
+with every participant's original Session identity. One message-array validator
+preserves original records and producer order, with strict single-Session
+ownership retained for Session snapshots and downloads.
 Search matches original message text and structured error reasons, in producer
 order, independently of mounted cards. Refresh obtains a current snapshot.
 Navigation resolves the actual writer-owned message/card target, joins any
 same-source/authority older-page read, then uses the existing expansion and
-virtualized scroll mechanism. Dialog lifetime, selection epoch, authority and
-Session/directory ownership retire stale reads and navigation. The conversation
+virtualized scroll mechanism. A message request expands its delegated context
+and locates the original message run. Participant messages pass that same request
+to the selected subagent transcript reader, which waits for its owned resource,
+releases follow and locates the actual message instead of accepting its summary
+card as completion. Source changes and failed reads retire that navigation.
+Dialog lifetime, selection epoch, authority and source/directory ownership retire
+stale reads and navigation. The conversation
 shortcut respects other dialogs and editor-handled keyboard events.
 The search input owns Escape to close its dialog. Its inline result list
 preserves the query when Tab moves focus to Refresh or Close; other combobox
@@ -65,6 +73,11 @@ original reason and details alongside completed/aborted. Live lifecycle updates
 and complete transcript hydration consume that same settlement, so the existing
 neutral stopped-message disclosure remains available with the original output.
 Cancellation is classified from MessageAbortedError, never translated prose.
+Merged main cards project every original message failure through the same
+messageFailures/CardParts boundary contract as participant transcripts, including
+failures with no body. Each failure retains its actual message identity and
+location; the card-level lifecycle body is reserved for independent lifecycle
+errors. Stable regroup comparison includes those failure fields by value.
 
 Authored participants with user transport role retain their actual author and
 full original body. ChatBubble shares one participant classification between its

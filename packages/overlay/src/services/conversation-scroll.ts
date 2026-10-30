@@ -2,6 +2,9 @@ const CONVERSATION_CARD_SCROLL_EVENT = "opencorvus:conversation-card-scroll"
 
 export interface ConversationCardScrollRequest {
   cardID: string
+  messageID?: string
+  sessionID?: string
+  surface?: "main" | "subagent"
   block?: ScrollLogicalPosition
   highlight?: boolean
   readingRestore?: boolean
@@ -29,10 +32,12 @@ export function requestConversationCardScroll(request: ConversationCardScrollReq
 
 export function listenConversationCardScroll(
   handler: (request: ConversationCardScrollRequest) => boolean | Promise<boolean>,
+  surface: "main" | "subagent" = "main",
 ): () => void {
   const listener = (event: Event) => {
     const detail = (event as CustomEvent<ConversationCardScrollEventDetail>).detail
     if (!detail?.cardID || typeof detail.handle !== "function") return
+    if ((detail.surface ?? "main") !== surface) return
     detail.handle(handler(detail))
   }
   window.addEventListener(CONVERSATION_CARD_SCROLL_EVENT, listener)

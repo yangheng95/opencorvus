@@ -1,29 +1,30 @@
 import { createEffect, createMemo, createSignal, on, onCleanup, Show } from "solid-js"
-import type { ExportSessionResponse } from "@opencorvus-ai/sdk"
 import { Dialog } from "./ui/Dialog"
 import { ComboboxControl } from "./ui/ComboboxControl"
 import { Button } from "./ui/Button"
 import { Feedback } from "./ui/Feedback"
 import { apiJson, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
-import { directoryScopedPath } from "../services/task-path"
-import { readConversationSnapshot } from "../services/conversation-snapshot"
+import { directoryScopedPath, taskScopedPath } from "../services/task-path"
+import { readConversationSnapshot, readTaskConversationSnapshot, type ConversationSearchSnapshot } from "../services/conversation-snapshot"
 import { findConversationMessages, type ConversationSearchHit } from "../services/conversation-search"
 import { loadOlderConversationHistory, ownsConversationHistory } from "../services/conversation"
 import { renderedConversationCardTargetForMessage } from "../services/tree-writer"
 import { requestConversationCardScroll } from "../services/conversation-scroll"
 import { boardStore } from "../store/board"
-import { setCardExpanded } from "../store/conversation-ui"
+import { conversationAgentRecordsForSource } from "../store/conversation-agents"
+import { isSubagentActivityRecord, subagentProgressCardID } from "../utils/subagent-presentation"
+import { setCardExpanded, setConversationDisclosureExpanded } from "../store/conversation-ui"
 import { parentIDChainForCard } from "../utils/card-tree"
 import { getLocale, t } from "../utils/i18n"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 
 export function ConversationSearchDialog(props: {
   open: boolean
-  target: () => { sessionID: string; directory: string } | null
+  target: () => { kind: "session" | "task"; id: string; directory: string } | null
   onClose: () => void
   returnFocusTarget: () => HTMLElement | null
 }) {
-  const [snapshot, setSnapshot] = createSignal<ReturnType<typeof readConversationSnapshot>>()
+  const [snapshot, setSnapshot] = createSignal<ConversationSearchSnapshot>()
   const [query, setQuery] = createSignal("")
   const [loading, setLoading] = createSignal(false)
   const [locating, setLocating] = createSignal("")
@@ -43,16 +44,19 @@ export function ConversationSearchDialog(props: {
     const authority = captureApiAuthority(), epoch = boardStore.selectEpoch
     const owns = () => props.open && controller === request && !request.signal.aborted &&
       isApiAuthorityCurrent(authority) && boardStore.selectEpoch === epoch &&
-      props.target()?.sessionID === target.sessionID && props.target()?.directory === target.directory
+      props.target()?.kind === target.kind && props.target()?.id === target.id && props.target()?.directory === target.directory
     ownsSnapshot = owns
     setSnapshot(undefined)
     setLoading(true)
     setError("")
     try {
-      const exported = await apiJson<ExportSessionResponse>(directoryScopedPath(
-        `export/session/${encodeURIComponent(target.sessionID)}`, target.directory, "conversationSearch",
-      ), { authority, signal: request.signal })
-      if (owns()) setSnapshot(readConversationSnapshot(exported, target.sessionID))
+      const path = target.kind === "task"
+        ? taskScopedPath(target.id, target.directory, "/transcript")
+        : directoryScopedPath(`export/session/${encodeURIComponent(target.id)}`, target.directory, "conversationSearch")
+      const exported = await apiJson<unknown>(path, { authority, signal: request.signal })
+      if (owns()) setSnapshot(target.kind === "task"
+        ? readTaskConversationSnapshot(exported)
+        : readConversationSnapshot(exported, target.id))
     } catch (cause) {
       if (owns()) {
         setError(t("chat.search_failed"))
@@ -79,22 +83,33 @@ export function ConversationSearchDialog(props: {
   async function locate(hit: ConversationSearchHit | null): Promise<void> {
     if (!hit || locating() || !ownsSnapshot?.()) return
     const owns = ownsSnapshot, authority = captureApiAuthority(), source = boardStore.selectedSource
-    if (!source || source.kind !== "session" || source.id !== props.target()?.sessionID) return
+    const snapshotTarget = props.target()
+    if (!source || source.kind !== snapshotTarget?.kind || source.id !== snapshotTarget.id) return
     setLocating(hit.id)
     setError("")
     try {
       if (!ownsConversationHistory(source, authority)) throw new Error("Conversation history owner changed")
-      let target = renderedConversationCardTargetForMessage(hit.id)
+      const message = snapshot()?.messages.find(message => message.id === hit.id)
+      if (!message) throw new Error("Original message snapshot owner changed")
+      const resolveTarget = () => {
+        const participant = conversationAgentRecordsForSource(source).find(record =>
+          record.sessionID === message.info.sessionID && isSubagentActivityRecord(record))
+        return participant
+          ? { renderedCardID: subagentProgressCardID(participant.sessionID), sessionID: participant.sessionID }
+          : renderedConversationCardTargetForMessage(hit.id)
+      }
+      let target = resolveTarget()
       while (!target) {
         const loaded = await loadOlderConversationHistory(source, authority)
         if (!owns()) return
         if (!loaded) break
-        target = renderedConversationCardTargetForMessage(hit.id)
+        target = resolveTarget()
       }
       if (!owns()) return
       if (!target) throw new Error("Original message has no rendered target")
       for (const id of [...parentIDChainForCard(target.renderedCardID), target.renderedCardID]) setCardExpanded(id, true)
-      const found = await requestConversationCardScroll({ cardID: target.renderedCardID, block: "center", highlight: true })
+      setConversationDisclosureExpanded(`delegated-context:message:${hit.id}`, true)
+      const found = await requestConversationCardScroll({ cardID: target.renderedCardID, messageID: hit.id, sessionID: target.sessionID, block: "start", highlight: true })
       if (!owns()) return
       if (!found) throw new Error("Original message could not be located")
       props.onClose()

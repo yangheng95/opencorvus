@@ -30,6 +30,7 @@ import {
 import { captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { formatErrorDetails } from "../services/diagnostics"
 import { setupAutoScroll, type AutoScrollController } from "../utils/dom-utils"
+import { listenConversationCardScroll, type ConversationCardScrollRequest } from "../services/conversation-scroll"
 import { captureConversationReadingAnchor, resolveConversationReadingTop } from "../utils/conversation-reading-anchor"
 import type { ConversationReadingPosition } from "../store/conversation-ui"
 import { createAnimationFrameScheduler } from "../utils/animation-frame"
@@ -70,6 +71,7 @@ function SubagentConversationScroll(props: {
   readingPosition: Accessor<ConversationReadingPosition | undefined>
   saveReadingPosition: (position: ConversationReadingPosition) => void
   activity: Accessor<AgentActivityRecord | undefined>
+  registerNavigation: (navigate: ((request: ConversationCardScrollRequest) => Promise<boolean>) | undefined) => void
 }) {
   let scrollElement: HTMLDivElement | undefined
   let scrollController: AutoScrollController | undefined
@@ -103,13 +105,37 @@ function SubagentConversationScroll(props: {
     saveReadingPosition()
   }
 
+  const [navigationRevision, setNavigationRevision] = createSignal(0)
+  let requestedNavigation: { request: ConversationCardScrollRequest; resolve: (found: boolean) => void } | undefined
+
+  props.registerNavigation((request) => {
+    if (!props.active() || !scrollElement || !request.messageID || props.conversation().sessionID !== request.sessionID) return Promise.resolve(false)
+    const element = scrollElement.querySelector<HTMLElement>(`[data-message-id="${CSS.escape(request.messageID)}"]`)
+    if (!element || element.getBoundingClientRect().height <= 0) return Promise.resolve(false)
+    requestedNavigation?.resolve(false)
+    return new Promise<boolean>((resolve) => {
+      requestedNavigation = { request, resolve }
+      setNavigationRevision(value => value + 1)
+    })
+  })
+  onCleanup(() => props.registerNavigation(undefined))
+
   createEffect(
-    on(props.active, (active) => {
+    on(() => [props.active(), navigationRevision()] as const, ([active]) => {
       if (!active) return
       if (!scrollElement) throw new Error("Sub-agent conversation scroll container is missing")
       const layoutRoot = scrollElement.closest<HTMLElement>(".right-dock")
       if (!layoutRoot) throw new Error("Sub-agent conversation requires its right dock layout owner")
-      const position = props.readingPosition()
+      const navigation = requestedNavigation
+      requestedNavigation = undefined
+      const messageElement = () => navigation && scrollElement?.querySelector<HTMLElement>(`[data-message-id="${CSS.escape(navigation.request.messageID!)}"]`)
+      const messageTop = () => {
+        const element = messageElement()
+        return element && scrollElement && element.getBoundingClientRect().height > 0
+          ? Math.max(0, scrollElement.scrollTop + element.getBoundingClientRect().top - scrollElement.getBoundingClientRect().top - 16)
+          : null
+      }
+      const position = navigation ? { top: messageTop() ?? 0, following: false } : props.readingPosition()
       restoringPosition = Boolean(position && !position.following)
       setTracking(position?.following ?? true)
       const restorePosition = (position: ConversationReadingPosition) => {
@@ -118,10 +144,18 @@ function SubagentConversationScroll(props: {
           kind: "position" as const,
           top: position.top,
           layoutRoot,
-          resolveTop: position.anchor ? () => resolveConversationReadingTop(scrollElement!, position.anchor!) : undefined,
-          onRestoreSettled: () => {
+          resolveTop: navigation ? messageTop : position.anchor ? () => resolveConversationReadingTop(scrollElement!, position.anchor!) : undefined,
+          onRestoreSettled: (restored: boolean) => {
             restoringPosition = false
             saveReadingPosition()
+            if (navigation) {
+              const element = messageElement()
+              if (restored && element && navigation.request.highlight) {
+                element.classList.add("conversation-agent-target--pulse")
+                window.setTimeout(() => element.classList.remove("conversation-agent-target--pulse"), 1400)
+              }
+              navigation.resolve(restored && !!element && props.active())
+            }
           },
         }
       }
@@ -335,6 +369,46 @@ export function SubagentConversationPanel(props: {
       reconcileSubagentConversationLive(read.received, read.observedLive, pendingLiveProjection ?? flushedLive),
     )
   })
+  let navigateMessage: ((request: ConversationCardScrollRequest) => Promise<boolean>) | undefined
+  const [navigation, setNavigation] = createSignal<{
+    request: ConversationCardScrollRequest; target: string; resolve: (found: boolean) => void
+  }>()
+  const finishNavigation = (found: boolean) => {
+    const pending = navigation()
+    setNavigation(undefined)
+    pending?.resolve(found)
+  }
+  const navigationOnFrame = createAnimationFrameScheduler(() => {
+    const pending = navigation()
+    if (!pending) return
+    if (requestKey() !== pending.target || !navigateMessage) { finishNavigation(false); return }
+    void navigateMessage(pending.request).then(found => {
+      if (navigation() === pending) finishNavigation(found && requestKey() === pending.target)
+    })
+  })
+  const stopMessageNavigation = listenConversationCardScroll((request) => {
+    const target = requestKey()
+    if (!target || !request.messageID || request.sessionID !== props.sessionID()) return false
+    finishNavigation(false)
+    return new Promise<boolean>((resolve) => setNavigation({ request, target, resolve }))
+  }, "subagent")
+  createEffect(() => {
+    const pending = navigation()
+    if (!pending) return
+    if (requestKey() !== pending.target) { finishNavigation(false); return }
+    if (conversation.loading) return
+    const transcript = displayedConversation()
+    if (conversation.error || !transcript?.messages.some(message => message.messageID === pending.request.messageID)) {
+      finishNavigation(false)
+      return
+    }
+    navigationOnFrame.schedule()
+  })
+  onCleanup(() => {
+    stopMessageNavigation()
+    navigationOnFrame.cancel()
+    finishNavigation(false)
+  })
   createEffect(() => {
     const read = conversationStorage[0]()
     if (!read || read.transcript.targetKey !== targetKey()) return
@@ -446,6 +520,7 @@ export function SubagentConversationPanel(props: {
                 readingPosition={() => readingPositions.get(target)}
                 saveReadingPosition={(position) => saveReadingPosition(target, position)}
                 activity={selectedRecord}
+                registerNavigation={(navigate) => { navigateMessage = navigate }}
               />
             )}
           </Show>
