@@ -284,3 +284,6 @@ D02尚有真实执行缺口：同一冻结源码未从变价raw新生成全交�
 主方真实l06_grade CLI退出0：graded100/100、47 verified_pass、28critical全过、business_success=true、good=true，无未评。实际命令/完整findings在外部opencorvus/evaluation/final-grade-command.json及final-assessment.json，安全归档pilot-opencorvus-20261029。分数来自冻结47叶而非Inspect completion/参考98或手写相加；冻结线与输入/L/1%/权重均未改。原20分钟guard干扰、overload及自动续跑保留，2:30:45不直接当内在有效小时。
 
 此后才启动新agent /root/codex_l06_fresh，fork none、无model override、禁止再委托/读取主仓或其他项目，仅同Git2e6ffc7ce导出的18public与已准备依赖说明。00:27:31Z启动收据在pair/codex/launch.json，直接与frozen-public.zip逐字节核身份只证明同一公开输入，不当功能验收。实际Codex model/完整usage未暴露，记录unknown、comparable=false，不作同模型速度/费用因果排名。无总token/墙钟截断，也不提示凑时长。自然完成后同样封存全部文件，再真实源码/两控制冷执行与同冻结独立评价；若也good才升级另一个版本，保留当前100与旧线。当前新版成对结果/有效小时/其余九题仍未完成。
+
+
+包装补充：新增Markdown链接检查先扫描整个共享索引，触发用户无关删除旧图的历史链接；该失败外部保留，不改用户删除。收窄到本次新增链接后，发现主方平铺的row原报告引用plan/ledger等已只在ZIP中，构成阅读上下文缺口，非候选原交付或数值失败。保留原numeric ZIP与外部全原件，另用complete-output-originals.zip完整封存报告及全部原相对目标并直接核原成员同一，移除本任务新加的孤立平铺报告。原执行/100成绩/冻结合同/候选输入不变；只修归档展示并重验新链接。
