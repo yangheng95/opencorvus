@@ -1,0 +1,63 @@
+{
+  "at": "2026-10-30T17:25:44.940Z",
+  "schema": 9,
+  "tables": 92,
+  "startingRows": 208919,
+  "finalRows": 208923,
+  "allStartingValuesPreserved": true,
+  "attachments": 75,
+  "oldProjects": 8,
+  "trackedFiles": 28,
+  "protectedWorkspaceFiles": 10,
+  "originalFullHTTPAndGoalPreserved": true,
+  "oldHTTPHistories": {
+    "task": 68,
+    "mission": 80,
+    "chat": 3,
+    "completedWork": 8
+  },
+  "readonlySourceMessages": 4,
+  "screenshots": 10,
+  "newModelRequests": 0,
+  "cumulativeModelRequests": 1096,
+  "scopes": [
+    {
+      "phase": "before",
+      "originalRows": 208919,
+      "currentRows": 208921,
+      "runtimeLeaseAndGrantAdded": 2,
+      "publicShutdown": 200,
+      "reserveMs": 3480321,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "phase": "after",
+      "originalRows": 208921,
+      "currentRows": 208923,
+      "runtimeLeaseAndGrantAdded": 2,
+      "publicShutdown": 200,
+      "reserveMs": 1924829,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    }
+  ]
+}

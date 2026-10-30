@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [首页持续目标入口](records/2026-10/2026-10-31-home-goal-entry.md)：首次发现与同一目标表单的可见操作。
+
 - [Markdown本地图片](records/2026-10/2026-10-31-markdown-local-images.md)：文档图片读取及真实视觉验收。
 
 - [Markdown相对导航](records/2026-10/2026-10-30-markdown-relative-navigation.md)：嵌套文档的真实链接与文件身份。

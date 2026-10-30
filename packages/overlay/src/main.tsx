@@ -2732,12 +2732,13 @@ function OverlayRoot() {
         />
       )}
       mailbox={<MailboxPanel onSelectTask={selectTaskWithUILifecycle} />}
-      conversation={(container) => (
+      conversation={(container, onGoal) => (
         <QuotationSelection onQuote={quoteInMain} onSideChat={(quotation) => requestSideChat(quotation)}>
           <Conversation
             container={container}
             homeActive={homeActive()}
             launcherIntent={composerIntent()}
+            onGoal={onGoal}
             onOpenSubagentConversation={openSubagentConversation}
             onOpenMissionBoard={openMissionBoard}
           />

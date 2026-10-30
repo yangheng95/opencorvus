@@ -364,7 +364,7 @@ export interface AppProps {
   mailbox: JSX.Element
   primarySurface: () => "conversation" | "mission-board"
   missionBoard: JSX.Element
-  conversation: (container: HTMLDivElement) => JSX.Element
+  conversation: (container: HTMLDivElement, onGoal: () => void) => JSX.Element
   composer: (onGoal: () => void) => JSX.Element
   homeActive: boolean
   rightDock: JSX.Element
@@ -398,6 +398,7 @@ export interface AppProps {
 
 export function App(props: AppProps) {
   const [goalOpenRequest, setGoalOpenRequest] = createSignal(0)
+  const openGoalForm = () => setGoalOpenRequest((value) => value + 1)
   const [goalFormRequest, setGoalFormRequest] = createSignal<GoalFormRequest>()
   const [startingGoal, setStartingGoal] = createSignal(false)
   async function startGoal(input: ContinuousGoalCreateInput, context: GoalLaunchContext) {
@@ -774,12 +775,12 @@ export function App(props: AppProps) {
                                       tabIndex={0}
                                       ref={chatScroll}
                                     >
-                                      {props.conversation(chatScroll)}
+                                      {props.conversation(chatScroll, openGoalForm)}
                                     </div>
                                     <div class="chat-home-composition" id="chatHomeComposition">
                                       <div id="solidChatHomePromptMount" />
                                       <div id="solidChatComposer">
-                                        {props.composer(() => setGoalOpenRequest((value) => value + 1))}
+                                        {props.composer(openGoalForm)}
                                       </div>
                                       <div id="solidChatHomeAfterMount" />
                                       <Show when={props.homeActive}>

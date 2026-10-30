@@ -3901,7 +3901,10 @@ Manual interaction and screenshot review on the formal development `/ui` surface
 provide UI acceptance; API contract checks do not substitute for visual evidence.
 
 The launcher home keeps ordinary chat starters immediately after the real
-composer. Goal creation opens through the composer's + menu or the explicit
+composer. Its short localized subtitle includes a visible Continuous goal button
+that shares App's existing Goal-open request with the composer. It opens the same
+home form without creating an owner or changing the draft; it follows current
+connection availability. Goal creation also opens through the composer's + menu or the explicit
 `/goal` input command, with an optional objective after the command. Main and
 SideChat inputs share the command grammar and open the same owner-bound form;
 the command moves its objective into the existing composer draft and does not

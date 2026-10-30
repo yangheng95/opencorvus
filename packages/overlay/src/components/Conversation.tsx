@@ -4,6 +4,7 @@ import { Virtualizer, type CustomContainerComponentProps, type VirtualizerHandle
 import { cardTreeStore, publishedCardTreeVersion } from "../store/card-tree"
 import { boardStore, activeTaskID, type BoardSource } from "../store/board"
 import { settingsStore } from "../store/settings"
+import { appStore } from "../store/app"
 import { conversationSessionStore } from "../store/conversation-session"
 import { t } from "../utils/i18n"
 import { topLevelCardIDForCard } from "../utils/card-tree"
@@ -452,6 +453,7 @@ export function Conversation(props: {
   container: HTMLElement
   homeActive: boolean
   launcherIntent: ComposerIntent
+  onGoal: () => void
   onOpenSubagentConversation: (sessionID: string) => void
   onOpenMissionBoard: () => void
 }) {
@@ -1020,7 +1022,23 @@ export function Conversation(props: {
                   ? t("chat.home_prompt", { project: homeProjectName() })
                   : t("chat.home_prompt_global")}
               </h1>
-              <p class="chat-home-prompt__subtitle">{t("chat.home_subtitle", { goalLabel: t("continuous_goal.title") })}</p>
+              <p class="chat-home-prompt__subtitle">
+                <span>{t("chat.home_subtitle")}</span>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  tone="neutral"
+                  class="chat-home-goal"
+                  disabled={!appStore.connected}
+                  aria-label={t("continuous_goal.open")}
+                  title={t("continuous_goal.open")}
+                  onClick={props.onGoal}
+                >
+                  <Icon name="goals" size="compact" />
+                  {t("continuous_goal.title")}
+                </Button>
+              </p>
             </div>
           </Portal>
         )}

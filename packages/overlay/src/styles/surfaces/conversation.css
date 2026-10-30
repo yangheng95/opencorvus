@@ -176,6 +176,11 @@
 }
 
 .chat-home-prompt__subtitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--ui-gap-md);
   justify-self: center;
   text-align: center;
   margin: var(--ui-gap-md) 0 var(--ui-gap-md);
@@ -183,6 +188,10 @@
   font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-normal);
   color: var(--text-soft);
+}
+
+.chat-home-goal {
+  pointer-events: auto;
 }
 
 .chat-home-after {

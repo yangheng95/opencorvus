@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [首页持续目标入口](2026-10-31-home-goal-entry.md)：默认页、草稿与原入口的实页核对。
+
 - [Markdown本地图片](2026-10-31-markdown-local-images.md)：资源归属、图片展示与实页证据。
 
 - [Markdown相对导航](2026-10-30-markdown-relative-navigation.md)：文档目录、定位与既有导航合同。

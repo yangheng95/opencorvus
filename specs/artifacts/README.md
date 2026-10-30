@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [首页持续目标入口](2026-10-31-home-goal-entry/README.md)：首页发现、目标表单与真实回执。
+
 - [Markdown本地图片](2026-10-31-markdown-local-images/README.md)：本地图片、原图阅读及实际回执。
 
 - [Markdown相对导航](2026-10-30-markdown-relative-navigation/README.md)：真实嵌套文档链接、截图与回执。
