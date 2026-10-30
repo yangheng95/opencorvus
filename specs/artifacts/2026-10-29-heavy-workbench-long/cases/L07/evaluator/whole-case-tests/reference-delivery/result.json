@@ -1,0 +1,3654 @@
+{
+  "format": "l07-review-result/1",
+  "stages": {
+    "initial": {
+      "reports": [
+        {
+          "report_id": "R01-REG",
+          "registry": "R01",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R01-MAIN",
+          "registry": "R01",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R02-REG",
+          "registry": "R02",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R02-MAIN",
+          "registry": "R02",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R03-REG",
+          "registry": "R03",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R03-MAIN",
+          "registry": "R03",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R04-REG",
+          "registry": "R04",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R04-MAIN",
+          "registry": "R04",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R05-REG",
+          "registry": "R05",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R05-MAIN",
+          "registry": "R05",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R06-REG",
+          "registry": "R06",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R06-MAIN",
+          "registry": "R06",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R07-REG",
+          "registry": "R07",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R07-MAIN",
+          "registry": "R07",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R08-REG",
+          "registry": "R08",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R08-MAIN",
+          "registry": "R08",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R09-REG",
+          "registry": "R09",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R09-MAIN",
+          "registry": "R09",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R10-REG",
+          "registry": "R10",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R10-MAIN",
+          "registry": "R10",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R11-REG",
+          "registry": "R11",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R11-MAIN",
+          "registry": "R11",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R12-REG",
+          "registry": "R12",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R12-MAIN",
+          "registry": "R12",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R01-ABS",
+          "registry": "R01",
+          "kind": "abstract",
+          "revision": 0,
+          "released_at": "2024-03-01T10:00:00Z"
+        },
+        {
+          "report_id": "R02-APP",
+          "registry": "R02",
+          "kind": "appendix",
+          "revision": 0,
+          "released_at": "2024-07-01T10:00:00Z"
+        }
+      ],
+      "studies": [
+        {
+          "registry": "R01",
+          "report_ids": [
+            "R01-ABS",
+            "R01-MAIN",
+            "R01-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "individual lottery",
+          "cohort": "A",
+          "role": "primary",
+          "registered_on": "2023-01-10",
+          "status": "included",
+          "reason": "eligible registered comparison",
+          "selected_endpoint": "transfer_score",
+          "selected_week": 12,
+          "main_representative": "R01",
+          "groups": [
+            {
+              "arm": "C",
+              "n": 40,
+              "mean_points_exact": "60",
+              "sd2_points_exact": "100",
+              "source": {
+                "report_id": "R01-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R01-12-C"
+              }
+            },
+            {
+              "arm": "T",
+              "n": 40,
+              "mean_points_exact": "68",
+              "sd2_points_exact": "144",
+              "source": {
+                "report_id": "R01-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R01-12-T"
+              }
+            }
+          ],
+          "risk_facts": {
+            "randomized_n": 80,
+            "observed_n": 80,
+            "attrition_exact": "0",
+            "high_attrition": false,
+            "concealment": "sealed central assignment",
+            "assessor": "masked"
+          }
+        },
+        {
+          "registry": "R02",
+          "report_ids": [
+            "R02-APP",
+            "R02-MAIN",
+            "R02-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "individual lottery",
+          "cohort": "B",
+          "role": "primary",
+          "registered_on": "2023-02-15",
+          "status": "included",
+          "reason": "eligible registered comparison",
+          "selected_endpoint": "transfer_score",
+          "selected_week": 12,
+          "main_representative": "R02",
+          "groups": [
+            {
+              "arm": "C",
+              "n": 55,
+              "mean_points_exact": "60",
+              "sd2_points_exact": "121",
+              "source": {
+                "report_id": "R02-APP",
+                "table_id": "outcomes",
+                "row_id": "R02-app-12-C"
+              }
+            },
+            {
+              "arm": "T",
+              "n": 60,
+              "mean_points_exact": "67",
+              "sd2_points_exact": "100",
+              "source": {
+                "report_id": "R02-APP",
+                "table_id": "outcomes",
+                "row_id": "R02-app-12-T"
+              }
+            }
+          ],
+          "risk_facts": {
+            "randomized_n": 115,
+            "observed_n": 115,
+            "attrition_exact": "0",
+            "high_attrition": false,
+            "concealment": "sealed central assignment",
+            "assessor": "masked"
+          }
+        },
+        {
+          "registry": "R03",
+          "report_ids": [
+            "R03-MAIN",
+            "R03-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "classroom lottery",
+          "cohort": "C",
+          "role": "primary",
+          "registered_on": "2023-03-12",
+          "status": "included",
+          "reason": "eligible registered comparison",
+          "selected_endpoint": "transfer_score",
+          "selected_week": 12,
+          "main_representative": "R03",
+          "groups": [
+            {
+              "arm": "C",
+              "n": 80,
+              "mean_points_exact": "64",
+              "sd2_points_exact": "169",
+              "source": {
+                "report_id": "R03-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R03-12-C"
+              }
+            },
+            {
+              "arm": "T",
+              "n": 80,
+              "mean_points_exact": "72",
+              "sd2_points_exact": "196",
+              "source": {
+                "report_id": "R03-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R03-12-T"
+              }
+            }
+          ],
+          "risk_facts": {
+            "randomized_n": 160,
+            "observed_n": 160,
+            "attrition_exact": "0",
+            "high_attrition": false,
+            "concealment": "sealed central assignment",
+            "assessor": "masked"
+          }
+        },
+        {
+          "registry": "R04",
+          "report_ids": [
+            "R04-MAIN",
+            "R04-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "classroom lottery",
+          "cohort": "D",
+          "role": "primary",
+          "registered_on": "2023-04-03",
+          "status": "included",
+          "reason": "eligible registered comparison",
+          "selected_endpoint": "transfer_score",
+          "selected_week": 12,
+          "main_representative": "R04",
+          "groups": [
+            {
+              "arm": "C",
+              "n": 60,
+              "mean_points_exact": "60",
+              "sd2_points_exact": "100",
+              "source": {
+                "report_id": "R04-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R04-12-C"
+              }
+            },
+            {
+              "arm": "T",
+              "n": 60,
+              "mean_points_exact": "65",
+              "sd2_points_exact": "100",
+              "source": {
+                "report_id": "R04-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R04-12-T"
+              }
+            }
+          ],
+          "risk_facts": {
+            "randomized_n": 120,
+            "observed_n": 120,
+            "attrition_exact": "0",
+            "high_attrition": false,
+            "concealment": "not reported",
+            "assessor": "masked"
+          }
+        },
+        {
+          "registry": "R05",
+          "report_ids": [
+            "R05-MAIN",
+            "R05-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "individual lottery",
+          "cohort": "E",
+          "role": "primary",
+          "registered_on": "2023-04-20",
+          "status": "included",
+          "reason": "eligible registered comparison",
+          "selected_endpoint": "transfer_score",
+          "selected_week": 12,
+          "main_representative": "R05",
+          "groups": [
+            {
+              "arm": "C",
+              "n": 50,
+              "mean_points_exact": "60",
+              "sd2_points_exact": "121",
+              "source": {
+                "report_id": "R05-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R05-12-C"
+              }
+            },
+            {
+              "arm": "T1",
+              "n": 30,
+              "mean_points_exact": "64",
+              "sd2_points_exact": "81",
+              "source": {
+                "report_id": "R05-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R05-12-T1"
+              }
+            },
+            {
+              "arm": "T2",
+              "n": 40,
+              "mean_points_exact": "68",
+              "sd2_points_exact": "100",
+              "source": {
+                "report_id": "R05-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R05-12-T2"
+              }
+            }
+          ],
+          "risk_facts": {
+            "randomized_n": 120,
+            "observed_n": 120,
+            "attrition_exact": "0",
+            "high_attrition": false,
+            "concealment": "sealed central assignment",
+            "assessor": "masked"
+          }
+        },
+        {
+          "registry": "R06",
+          "report_ids": [
+            "R06-MAIN",
+            "R06-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "individual lottery",
+          "cohort": "A",
+          "role": "secondary",
+          "registered_on": "2023-03-01",
+          "status": "nonindependent",
+          "reason": "primary conservative cohort representative retained; possible is not proven overlap",
+          "selected_endpoint": "transfer_score",
+          "selected_week": 12,
+          "main_representative": "R01",
+          "groups": [
+            {
+              "arm": "C",
+              "n": 40,
+              "mean_points_exact": "60",
+              "sd2_points_exact": "100",
+              "source": {
+                "report_id": "R06-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R06-12-C"
+              }
+            },
+            {
+              "arm": "T",
+              "n": 40,
+              "mean_points_exact": "69",
+              "sd2_points_exact": "144",
+              "source": {
+                "report_id": "R06-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R06-12-T"
+              }
+            }
+          ],
+          "risk_facts": {
+            "randomized_n": 80,
+            "observed_n": 80,
+            "attrition_exact": "0",
+            "high_attrition": false,
+            "concealment": "sealed central assignment",
+            "assessor": "masked"
+          }
+        },
+        {
+          "registry": "R07",
+          "report_ids": [
+            "R07-MAIN",
+            "R07-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "alternating intake weeks",
+          "cohort": "G",
+          "role": "primary",
+          "registered_on": "2023-05-01",
+          "status": "excluded_design",
+          "reason": "registered eligibility boundary",
+          "selected_endpoint": null,
+          "selected_week": null,
+          "main_representative": null,
+          "groups": [],
+          "risk_facts": {
+            "randomized_n": 80,
+            "observed_n": null,
+            "attrition_exact": null,
+            "high_attrition": null,
+            "concealment": "sealed central assignment",
+            "assessor": "masked"
+          }
+        },
+        {
+          "registry": "R08",
+          "report_ids": [
+            "R08-MAIN",
+            "R08-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "individual lottery",
+          "cohort": "H",
+          "role": "primary",
+          "registered_on": "2023-05-10",
+          "status": "not_estimable",
+          "reason": "eligible groups lack dispersion; NR is not zero",
+          "selected_endpoint": "transfer_score",
+          "selected_week": 12,
+          "main_representative": null,
+          "groups": [
+            {
+              "arm": "C",
+              "n": 40,
+              "mean_points_exact": "62",
+              "sd2_points_exact": null,
+              "source": {
+                "report_id": "R08-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R08-12-C"
+              }
+            },
+            {
+              "arm": "T",
+              "n": 40,
+              "mean_points_exact": "66",
+              "sd2_points_exact": null,
+              "source": {
+                "report_id": "R08-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R08-12-T"
+              }
+            }
+          ],
+          "risk_facts": {
+            "randomized_n": 80,
+            "observed_n": 80,
+            "attrition_exact": "0",
+            "high_attrition": false,
+            "concealment": "not reported",
+            "assessor": "masked"
+          }
+        },
+        {
+          "registry": "R09",
+          "report_ids": [
+            "R09-MAIN",
+            "R09-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "individual lottery",
+          "cohort": "I",
+          "role": "primary",
+          "registered_on": "2023-05-18",
+          "status": "included",
+          "reason": "eligible registered comparison",
+          "selected_endpoint": "transfer_score",
+          "selected_week": 12,
+          "main_representative": "R09",
+          "groups": [
+            {
+              "arm": "C",
+              "n": 26,
+              "mean_points_exact": "62",
+              "sd2_points_exact": "121",
+              "source": {
+                "report_id": "R09-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R09-12-C"
+              }
+            },
+            {
+              "arm": "T",
+              "n": 25,
+              "mean_points_exact": "60",
+              "sd2_points_exact": "169",
+              "source": {
+                "report_id": "R09-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R09-12-T"
+              }
+            }
+          ],
+          "risk_facts": {
+            "randomized_n": 100,
+            "observed_n": 51,
+            "attrition_exact": "49/100",
+            "high_attrition": true,
+            "concealment": "sealed central assignment",
+            "assessor": "not masked"
+          }
+        },
+        {
+          "registry": "R10",
+          "report_ids": [
+            "R10-MAIN",
+            "R10-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "individual lottery",
+          "cohort": "J",
+          "role": "primary",
+          "registered_on": "2023-06-01",
+          "status": "included",
+          "reason": "eligible registered comparison",
+          "selected_endpoint": "transfer_errors",
+          "selected_week": 12,
+          "main_representative": "R10",
+          "groups": [
+            {
+              "arm": "C",
+              "n": 100,
+              "mean_points_exact": "-35",
+              "sd2_points_exact": "144",
+              "source": {
+                "report_id": "R10-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R10-12-C"
+              }
+            },
+            {
+              "arm": "T",
+              "n": 100,
+              "mean_points_exact": "-32",
+              "sd2_points_exact": "100",
+              "source": {
+                "report_id": "R10-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R10-12-T"
+              }
+            }
+          ],
+          "risk_facts": {
+            "randomized_n": 200,
+            "observed_n": 200,
+            "attrition_exact": "0",
+            "high_attrition": false,
+            "concealment": "sealed central assignment",
+            "assessor": "masked"
+          }
+        },
+        {
+          "registry": "R11",
+          "report_ids": [
+            "R11-MAIN",
+            "R11-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "individual lottery",
+          "cohort": "K",
+          "role": "primary",
+          "registered_on": "2023-06-10",
+          "status": "no_endpoint",
+          "reason": "no eligible registered construct/time",
+          "selected_endpoint": null,
+          "selected_week": null,
+          "main_representative": null,
+          "groups": [],
+          "risk_facts": {
+            "randomized_n": 60,
+            "observed_n": null,
+            "attrition_exact": null,
+            "high_attrition": null,
+            "concealment": "sealed central assignment",
+            "assessor": "masked"
+          }
+        },
+        {
+          "registry": "R12",
+          "report_ids": [
+            "R12-MAIN",
+            "R12-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "individual lottery",
+          "cohort": "L",
+          "role": "primary",
+          "registered_on": "2023-07-01",
+          "status": "nonindependent",
+          "reason": "primary conservative cohort representative retained; possible is not proven overlap",
+          "selected_endpoint": "transfer_score",
+          "selected_week": 12,
+          "main_representative": "R10",
+          "groups": [
+            {
+              "arm": "C",
+              "n": 45,
+              "mean_points_exact": "64",
+              "sd2_points_exact": "100",
+              "source": {
+                "report_id": "R12-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R12-12-C"
+              }
+            },
+            {
+              "arm": "T",
+              "n": 45,
+              "mean_points_exact": "70",
+              "sd2_points_exact": "144",
+              "source": {
+                "report_id": "R12-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R12-12-T"
+              }
+            }
+          ],
+          "risk_facts": {
+            "randomized_n": 90,
+            "observed_n": 90,
+            "attrition_exact": "0",
+            "high_attrition": false,
+            "concealment": "sealed central assignment",
+            "assessor": "masked"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "registry": "R01",
+          "md_exact": "8",
+          "variance_exact": "61/10",
+          "icc_exact": null,
+          "icc_status": "not_applicable",
+          "design_effect_exact": "1"
+        },
+        {
+          "registry": "R02",
+          "md_exact": "7",
+          "variance_exact": "58/15",
+          "icc_exact": null,
+          "icc_status": "not_applicable",
+          "design_effect_exact": "1"
+        },
+        {
+          "registry": "R03",
+          "md_exact": "8",
+          "variance_exact": "1241/200",
+          "icc_exact": "1/25",
+          "icc_status": "reported",
+          "design_effect_exact": "34/25"
+        },
+        {
+          "registry": "R04",
+          "md_exact": "5",
+          "variance_exact": "127/30",
+          "icc_exact": "3/100",
+          "icc_status": "imputed",
+          "design_effect_exact": "127/100"
+        },
+        {
+          "registry": "R05",
+          "md_exact": "44/7",
+          "variance_exact": "106236/28175",
+          "icc_exact": null,
+          "icc_status": "not_applicable",
+          "design_effect_exact": "1"
+        },
+        {
+          "registry": "R06",
+          "md_exact": "9",
+          "variance_exact": "61/10",
+          "icc_exact": null,
+          "icc_status": "not_applicable",
+          "design_effect_exact": "1"
+        },
+        {
+          "registry": "R09",
+          "md_exact": "-2",
+          "variance_exact": "7419/650",
+          "icc_exact": null,
+          "icc_status": "not_applicable",
+          "design_effect_exact": "1"
+        },
+        {
+          "registry": "R10",
+          "md_exact": "3",
+          "variance_exact": "61/25",
+          "icc_exact": null,
+          "icc_status": "not_applicable",
+          "design_effect_exact": "1"
+        },
+        {
+          "registry": "R12",
+          "md_exact": "6",
+          "variance_exact": "244/45",
+          "icc_exact": null,
+          "icc_status": "not_applicable",
+          "design_effect_exact": "1"
+        }
+      ],
+      "analyses": {
+        "main_fixed": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R02",
+            "R03",
+            "R04",
+            "R05",
+            "R09",
+            "R10"
+          ],
+          "k": 7,
+          "mean_exact": "121790855387255402/23184583934494399",
+          "variance_exact": "73248571927202724/115922919672471995",
+          "q_exact": "86805087496775819635/8485557720024950034",
+          "i2_exact": "35891741176626119431/86805087496775819635",
+          "tau2_exact": "0",
+          "lo": 3.6950837301356465,
+          "hi": 6.811109154874725,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "10/61",
+              "normalized_exact": "2401592522203368/23184583934494399"
+            },
+            {
+              "registry": "R02",
+              "weight_exact": "15/58",
+              "normalized_exact": "3788719237613934/23184583934494399"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "200/1241",
+              "normalized_exact": "2360953164454560/23184583934494399"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "30/127",
+              "normalized_exact": "3460562453253672/23184583934494399"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "28175/106236",
+              "normalized_exact": "3885271497512965/23184583934494399"
+            },
+            {
+              "registry": "R09",
+              "weight_exact": "650/7419",
+              "normalized_exact": "1283503753947480/23184583934494399"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "25/61",
+              "normalized_exact": "6003981305508420/23184583934494399"
+            }
+          ]
+        },
+        "random_DL": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R02",
+            "R03",
+            "R04",
+            "R05",
+            "R09",
+            "R10"
+          ],
+          "k": 7,
+          "mean_exact": "15528932251210305547209103475679765186636009756880929292724372503018183229927945730179786203865744398040945572044695945657998/2922673560462444582082442210632427426996214908429565483682120575731317701060703606781522962689273708039325805406788290924181",
+          "variance_exact": "197164157071851558207722495936962957077566247767583887769432464530143845998752182875113077841447002753706539883246585172218064566145047348759720/173012162299325851965556287235727848154476358553279865912498876601130865444127405849035992644673024800427179754733105293457712170774120549294547",
+          "q_exact": "86805087496775819635/8485557720024950034",
+          "i2_exact": "35891741176626119431/86805087496775819635",
+          "tau2_exact": "35891741176626119431/11169158488659559790",
+          "lo": 3.2209251504710776,
+          "hi": 7.405600138759797,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "1116915848865955979/10402360795744943415",
+              "normalized_exact": "18953789523672453769449045040983887811425107892670818660940591938583787059262647530536182850030444643920892535840533350460568/154901698704509562850369437163518653630799390146766970635152390513759838156217291159420717022531506526084267686559779418981593"
+            },
+            {
+              "registry": "R02",
+              "weight_exact": "33507475465978679370/237237461998329251857",
+              "normalized_exact": "24932507127382785296426261427012992548127166865257447979488812556648264158343005102204800053774636475864534710500099224858800/154901698704509562850369437163518653630799390146766970635152390513759838156217291159420717022531506526084267686559779418981593"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "223383169773191195800/2103927391975173758559",
+              "normalized_exact": "18742486820018367413576140886546658636021831256012499920147063474308496202035650668619644145722536853828137175552051985016000/154901698704509562850369437163518653630799390146766970635152390513759838156217291159420717022531506526084267686559779418981593"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "16753737732989339685/124761768167927383813",
+              "normalized_exact": "23704876898643143722662483784439314898439593502367837426555723449800330816045971326457740175910647443380416573054883107716600/154901698704509562850369437163518653630799390146766970635152390513759838156217291159420717022531506526084267686559779418981593"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "62938208083596619416650/439563305770535581763773",
+              "normalized_exact": "25275540758624361972536773834995459285794350705152628888359937508835634750234650497727184867436587590599991859839040463814000/154901698704509562850369437163518653630799390146766970635152390513759838156217291159420717022531506526084267686559779418981593"
+            },
+            {
+              "registry": "R09",
+              "weight_exact": "362997650881435693175/5309680929608612585608",
+              "normalized_exact": "12068211234883957972417662558962220890413014027487614225864896691629033263896582522898752474565863368889356308028078033513625/154901698704509562850369437163518653630799390146766970635152390513759838156217291159420717022531506526084267686559779418981593"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "55845792443297798950/315722439444777226593",
+              "normalized_exact": "31224286341284492703301069630578119560578325897818123533795364893954291906398783510976412455090790149600938523745093253602000/154901698704509562850369437163518653630799390146766970635152390513759838156217291159420717022531506526084267686559779418981593"
+            }
+          ]
+        },
+        "exclude_high_attrition": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R02",
+            "R03",
+            "R04",
+            "R05",
+            "R10"
+          ],
+          "k": 6,
+          "mean_exact": "50286236512394/8856077711503",
+          "variance_exact": "29619317398788/44280388557515",
+          "q_exact": "5780949735268865/1080441480803366",
+          "i2_exact": "75748466250407/1156189947053773",
+          "tau2_exact": "0",
+          "lo": 4.075145068402493,
+          "hi": 7.281177256339105,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "10/61",
+              "normalized_exact": "971125160616/8856077711503"
+            },
+            {
+              "registry": "R02",
+              "weight_exact": "15/58",
+              "normalized_exact": "1532033658558/8856077711503"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "200/1241",
+              "normalized_exact": "954691938720/8856077711503"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "30/127",
+              "normalized_exact": "1399337829864/8856077711503"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "28175/106236",
+              "normalized_exact": "1571076222205/8856077711503"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "25/61",
+              "normalized_exact": "2427812901540/8856077711503"
+            }
+          ]
+        },
+        "icc_zero": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R02",
+            "R03",
+            "R04",
+            "R05",
+            "R09",
+            "R10"
+          ],
+          "k": 7,
+          "mean_exact": "24894215491958240/4747822007258443",
+          "variance_exact": "2883802044378060/4747822007258443",
+          "q_exact": "8891540362194259190/868851427328295069",
+          "i2_exact": "1839215899112244388/4445770181097129595",
+          "tau2_exact": "0",
+          "lo": 3.7157552106606264,
+          "hi": 6.770828091704166,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "10/61",
+              "normalized_exact": "472754433504600/4747822007258443"
+            },
+            {
+              "registry": "R02",
+              "weight_exact": "15/58",
+              "normalized_exact": "745810873546050/4747822007258443"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "200/1241",
+              "normalized_exact": "464754559932000/4747822007258443"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "3/10",
+              "normalized_exact": "865140613313418/4747822007258443"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "28175/106236",
+              "normalized_exact": "764817223919875/4747822007258443"
+            },
+            {
+              "registry": "R09",
+              "weight_exact": "650/7419",
+              "normalized_exact": "252658219281000/4747822007258443"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "25/61",
+              "normalized_exact": "1181886083761500/4747822007258443"
+            }
+          ]
+        },
+        "icc_high": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R02",
+            "R03",
+            "R04",
+            "R05",
+            "R09",
+            "R10"
+          ],
+          "k": 7,
+          "mean_exact": "86811753349620550/16484470523617931",
+          "variance_exact": "10958447768636628/16484470523617931",
+          "q_exact": "61687435780813280285/6033316211644162746",
+          "i2_exact": "25487538510948303809/61687435780813280285",
+          "tau2_exact": "0",
+          "lo": 3.6682148622788215,
+          "hi": 6.864334936665832,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "10/61",
+              "normalized_exact": "1796466847317480/16484470523617931"
+            },
+            {
+              "registry": "R02",
+              "weight_exact": "15/58",
+              "normalized_exact": "2834081319474990/16484470523617931"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "200/1241",
+              "normalized_exact": "1766067327741600/16484470523617931"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "3/19",
+              "normalized_exact": "1730281226626836/16484470523617931"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "28175/106236",
+              "normalized_exact": "2906305450895525/16484470523617931"
+            },
+            {
+              "registry": "R09",
+              "weight_exact": "650/7419",
+              "normalized_exact": "960101233267800/16484470523617931"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "25/61",
+              "normalized_exact": "4491167118293700/16484470523617931"
+            }
+          ]
+        },
+        "assume_distinct": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R02",
+            "R03",
+            "R04",
+            "R05",
+            "R09",
+            "R10",
+            "R12"
+          ],
+          "k": 8,
+          "mean_exact": "34500401228032034/6471593880493297",
+          "variance_exact": "18312142981800681/32357969402466485",
+          "q_exact": "24448466211330087325/2368603360260546702",
+          "i2_exact": "1124034669929465773/3492638030190012475",
+          "tau2_exact": "0",
+          "lo": 3.856584752103758,
+          "hi": 6.805518545825141,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "10/61",
+              "normalized_exact": "600398130550842/6471593880493297"
+            },
+            {
+              "registry": "R02",
+              "weight_exact": "15/58",
+              "normalized_exact": "1894359618806967/12943187760986594"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "200/1241",
+              "normalized_exact": "590238291113640/6471593880493297"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "30/127",
+              "normalized_exact": "865140613313418/6471593880493297"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "28175/106236",
+              "normalized_exact": "3885271497512965/25886375521973188"
+            },
+            {
+              "registry": "R09",
+              "weight_exact": "650/7419",
+              "normalized_exact": "320875938486870/6471593880493297"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "25/61",
+              "normalized_exact": "1500995326377105/6471593880493297"
+            },
+            {
+              "registry": "R12",
+              "weight_exact": "45/244",
+              "normalized_exact": "2701791587478789/25886375521973188"
+            }
+          ]
+        }
+      },
+      "leave_one_out": {
+        "R01": {
+          "status": "estimated",
+          "studies": [
+            "R02",
+            "R03",
+            "R04",
+            "R05",
+            "R09",
+            "R10"
+          ],
+          "k": 6,
+          "mean_exact": "102578115209628458/20782991412291031",
+          "variance_exact": "73248571927202724/103914957061455155",
+          "q_exact": "1103557208068383415/124697948473746186",
+          "i2_exact": "96013493139930497/220711441613676683",
+          "tau2_exact": "0",
+          "lo": 3.2901051735360016,
+          "hi": 6.581247142855171,
+          "weights": [
+            {
+              "registry": "R02",
+              "weight_exact": "15/58",
+              "normalized_exact": "3788719237613934/20782991412291031"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "200/1241",
+              "normalized_exact": "2360953164454560/20782991412291031"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "30/127",
+              "normalized_exact": "3460562453253672/20782991412291031"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "28175/106236",
+              "normalized_exact": "555038785358995/2968998773184433"
+            },
+            {
+              "registry": "R09",
+              "weight_exact": "650/7419",
+              "normalized_exact": "1283503753947480/20782991412291031"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "25/61",
+              "normalized_exact": "6003981305508420/20782991412291031"
+            }
+          ]
+        },
+        "R02": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R03",
+            "R04",
+            "R05",
+            "R09",
+            "R10"
+          ],
+          "k": 6,
+          "mean_exact": "3285166231860616/668822920582085",
+          "variance_exact": "2525812825075956/3344114602910425",
+          "q_exact": "227319917987231957/24478918893304311",
+          "i2_exact": "104925323520710402/227319917987231957",
+          "tau2_exact": "0",
+          "lo": 3.20846473226758,
+          "hi": 6.615260294983265,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "10/61",
+              "normalized_exact": "82813535248392/668822920582085"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "200/1241",
+              "normalized_exact": "16282435616928/133764584116417"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "30/127",
+              "normalized_exact": "119329739767368/668822920582085"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "28175/106236",
+              "normalized_exact": "26794975844917/133764584116417"
+            },
+            {
+              "registry": "R09",
+              "weight_exact": "650/7419",
+              "normalized_exact": "8851750027224/133764584116417"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "25/61",
+              "normalized_exact": "41406767624196/133764584116417"
+            }
+          ]
+        },
+        "R03": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R02",
+            "R04",
+            "R05",
+            "R09",
+            "R10"
+          ],
+          "k": 6,
+          "mean_exact": "82919605214842/16779718589879",
+          "variance_exact": "59023829111364/83898592949395",
+          "q_exact": "54509882442469835/6141377003895714",
+          "i2_exact": "4760599484598253/10901976488493967",
+          "tau2_exact": "0",
+          "lo": 3.2976920328425994,
+          "hi": 6.58562094057717,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "10/61",
+              "normalized_exact": "1935207511848/16779718589879"
+            },
+            {
+              "registry": "R02",
+              "weight_exact": "15/58",
+              "normalized_exact": "3052956678174/16779718589879"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "30/127",
+              "normalized_exact": "2788527359592/16779718589879"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "28175/106236",
+              "normalized_exact": "447251237195/2397102655697"
+            },
+            {
+              "registry": "R09",
+              "weight_exact": "650/7419",
+              "normalized_exact": "1034249600280/16779718589879"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "25/61",
+              "normalized_exact": "4838018779620/16779718589879"
+            }
+          ]
+        },
+        "R04": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R02",
+            "R03",
+            "R05",
+            "R09",
+            "R10"
+          ],
+          "k": 6,
+          "mean_exact": "822740497015646/155307255757801",
+          "variance_exact": "576760408875612/776536278789005",
+          "q_exact": "580472762934138745/56842455607355166",
+          "i2_exact": "59252096979472583/116094552586827749",
+          "tau2_exact": "0",
+          "lo": 3.608333716362366,
+          "hi": 6.9866702710713655,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "10/61",
+              "normalized_exact": "18910177340184/155307255757801"
+            },
+            {
+              "registry": "R02",
+              "weight_exact": "15/58",
+              "normalized_exact": "29832434941842/155307255757801"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "200/1241",
+              "normalized_exact": "18590182397280/155307255757801"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "28175/106236",
+              "normalized_exact": "4370384136685/22186750822543"
+            },
+            {
+              "registry": "R09",
+              "weight_exact": "650/7419",
+              "normalized_exact": "10106328771240/155307255757801"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "25/61",
+              "normalized_exact": "47275443350460/155307255757801"
+            }
+          ]
+        },
+        "R05": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R02",
+            "R03",
+            "R04",
+            "R09",
+            "R10"
+          ],
+          "k": 6,
+          "mean_exact": "5499217713287/1089987147689",
+          "variance_exact": "4136935046154/5449935738445",
+          "q_exact": "657579569277360/66489216009029",
+          "i2_exact": "65026697846443/131515913855472",
+          "tau2_exact": "0",
+          "lo": 3.337559936237409,
+          "hi": 6.752866771905871,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "10/61",
+              "normalized_exact": "135637214628/1089987147689"
+            },
+            {
+              "registry": "R02",
+              "weight_exact": "15/58",
+              "normalized_exact": "213979398939/1089987147689"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "200/1241",
+              "normalized_exact": "133341983760/1089987147689"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "30/127",
+              "normalized_exact": "195445750212/1089987147689"
+            },
+            {
+              "registry": "R09",
+              "weight_exact": "650/7419",
+              "normalized_exact": "72489763580/1089987147689"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "25/61",
+              "normalized_exact": "339093036570/1089987147689"
+            }
+          ]
+        },
+        "R09": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R02",
+            "R03",
+            "R04",
+            "R05",
+            "R10"
+          ],
+          "k": 6,
+          "mean_exact": "50286236512394/8856077711503",
+          "variance_exact": "29619317398788/44280388557515",
+          "q_exact": "5780949735268865/1080441480803366",
+          "i2_exact": "75748466250407/1156189947053773",
+          "tau2_exact": "0",
+          "lo": 4.075145068402493,
+          "hi": 7.281177256339105,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "10/61",
+              "normalized_exact": "971125160616/8856077711503"
+            },
+            {
+              "registry": "R02",
+              "weight_exact": "15/58",
+              "normalized_exact": "1532033658558/8856077711503"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "200/1241",
+              "normalized_exact": "954691938720/8856077711503"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "30/127",
+              "normalized_exact": "1399337829864/8856077711503"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "28175/106236",
+              "normalized_exact": "1571076222205/8856077711503"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "25/61",
+              "normalized_exact": "2427812901540/8856077711503"
+            }
+          ]
+        },
+        "R10": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R02",
+            "R03",
+            "R04",
+            "R05",
+            "R09"
+          ],
+          "k": 6,
+          "mean_exact": "103778911470730142/17180602628985979",
+          "variance_exact": "73248571927202724/85903013144929895",
+          "q_exact": "765104546950170985/103083615773915874",
+          "i2_exact": "49937293616118323/153020909390034197",
+          "tau2_exact": "0",
+          "lo": 4.230582837545992,
+          "hi": 7.850356779279929,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "10/61",
+              "normalized_exact": "2401592522203368/17180602628985979"
+            },
+            {
+              "registry": "R02",
+              "weight_exact": "15/58",
+              "normalized_exact": "3788719237613934/17180602628985979"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "200/1241",
+              "normalized_exact": "2360953164454560/17180602628985979"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "30/127",
+              "normalized_exact": "3460562453253672/17180602628985979"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "28175/106236",
+              "normalized_exact": "3885271497512965/17180602628985979"
+            },
+            {
+              "registry": "R09",
+              "weight_exact": "650/7419",
+              "normalized_exact": "1283503753947480/17180602628985979"
+            }
+          ]
+        }
+      }
+    },
+    "updated": {
+      "reports": [
+        {
+          "report_id": "R01-REG",
+          "registry": "R01",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R01-MAIN",
+          "registry": "R01",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R02-REG",
+          "registry": "R02",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R02-MAIN",
+          "registry": "R02",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R03-REG",
+          "registry": "R03",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R03-MAIN",
+          "registry": "R03",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R04-REG",
+          "registry": "R04",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R04-MAIN",
+          "registry": "R04",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R05-REG",
+          "registry": "R05",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R05-MAIN",
+          "registry": "R05",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R06-REG",
+          "registry": "R06",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R06-MAIN",
+          "registry": "R06",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R07-REG",
+          "registry": "R07",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R07-MAIN",
+          "registry": "R07",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R08-REG",
+          "registry": "R08",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R08-MAIN",
+          "registry": "R08",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R09-REG",
+          "registry": "R09",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R09-MAIN",
+          "registry": "R09",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R10-REG",
+          "registry": "R10",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R10-MAIN",
+          "registry": "R10",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R11-REG",
+          "registry": "R11",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R11-MAIN",
+          "registry": "R11",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R12-REG",
+          "registry": "R12",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2023-08-01T10:00:00Z"
+        },
+        {
+          "report_id": "R12-MAIN",
+          "registry": "R12",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2024-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R01-ABS",
+          "registry": "R01",
+          "kind": "abstract",
+          "revision": 0,
+          "released_at": "2024-03-01T10:00:00Z"
+        },
+        {
+          "report_id": "R02-APP",
+          "registry": "R02",
+          "kind": "appendix",
+          "revision": 0,
+          "released_at": "2024-07-01T10:00:00Z"
+        },
+        {
+          "report_id": "R02-COR",
+          "registry": "R02",
+          "kind": "correction",
+          "revision": 1,
+          "released_at": "2025-06-01T10:00:00Z"
+        },
+        {
+          "report_id": "R13-REG",
+          "registry": "R13",
+          "kind": "registry",
+          "revision": 0,
+          "released_at": "2025-04-01T10:00:00Z"
+        },
+        {
+          "report_id": "R13-MAIN",
+          "registry": "R13",
+          "kind": "full_report",
+          "revision": 0,
+          "released_at": "2025-06-10T10:00:00Z"
+        }
+      ],
+      "studies": [
+        {
+          "registry": "R01",
+          "report_ids": [
+            "R01-ABS",
+            "R01-MAIN",
+            "R01-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "individual lottery",
+          "cohort": "A",
+          "role": "primary",
+          "registered_on": "2023-01-10",
+          "status": "included",
+          "reason": "eligible registered comparison",
+          "selected_endpoint": "transfer_score",
+          "selected_week": 12,
+          "main_representative": "R01",
+          "groups": [
+            {
+              "arm": "C",
+              "n": 40,
+              "mean_points_exact": "60",
+              "sd2_points_exact": "100",
+              "source": {
+                "report_id": "R01-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R01-12-C"
+              }
+            },
+            {
+              "arm": "T",
+              "n": 40,
+              "mean_points_exact": "68",
+              "sd2_points_exact": "144",
+              "source": {
+                "report_id": "R01-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R01-12-T"
+              }
+            }
+          ],
+          "risk_facts": {
+            "randomized_n": 80,
+            "observed_n": 80,
+            "attrition_exact": "0",
+            "high_attrition": false,
+            "concealment": "sealed central assignment",
+            "assessor": "masked"
+          }
+        },
+        {
+          "registry": "R02",
+          "report_ids": [
+            "R02-APP",
+            "R02-COR",
+            "R02-MAIN",
+            "R02-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "individual lottery",
+          "cohort": "B",
+          "role": "primary",
+          "registered_on": "2023-02-15",
+          "status": "included",
+          "reason": "eligible registered comparison",
+          "selected_endpoint": "transfer_score",
+          "selected_week": 12,
+          "main_representative": "R02",
+          "groups": [
+            {
+              "arm": "C",
+              "n": 55,
+              "mean_points_exact": "60",
+              "sd2_points_exact": "121",
+              "source": {
+                "report_id": "R02-COR",
+                "table_id": "outcomes",
+                "row_id": "R02-cor-12-C"
+              }
+            },
+            {
+              "arm": "T",
+              "n": 60,
+              "mean_points_exact": "56",
+              "sd2_points_exact": "100",
+              "source": {
+                "report_id": "R02-COR",
+                "table_id": "outcomes",
+                "row_id": "R02-cor-12-T"
+              }
+            }
+          ],
+          "risk_facts": {
+            "randomized_n": 115,
+            "observed_n": 115,
+            "attrition_exact": "0",
+            "high_attrition": false,
+            "concealment": "sealed central assignment",
+            "assessor": "masked"
+          }
+        },
+        {
+          "registry": "R03",
+          "report_ids": [
+            "R03-MAIN",
+            "R03-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "classroom lottery",
+          "cohort": "C",
+          "role": "primary",
+          "registered_on": "2023-03-12",
+          "status": "included",
+          "reason": "eligible registered comparison",
+          "selected_endpoint": "transfer_score",
+          "selected_week": 12,
+          "main_representative": "R03",
+          "groups": [
+            {
+              "arm": "C",
+              "n": 80,
+              "mean_points_exact": "64",
+              "sd2_points_exact": "169",
+              "source": {
+                "report_id": "R03-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R03-12-C"
+              }
+            },
+            {
+              "arm": "T",
+              "n": 80,
+              "mean_points_exact": "72",
+              "sd2_points_exact": "196",
+              "source": {
+                "report_id": "R03-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R03-12-T"
+              }
+            }
+          ],
+          "risk_facts": {
+            "randomized_n": 160,
+            "observed_n": 160,
+            "attrition_exact": "0",
+            "high_attrition": false,
+            "concealment": "sealed central assignment",
+            "assessor": "masked"
+          }
+        },
+        {
+          "registry": "R04",
+          "report_ids": [
+            "R04-MAIN",
+            "R04-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "classroom lottery",
+          "cohort": "D",
+          "role": "primary",
+          "registered_on": "2023-04-03",
+          "status": "included",
+          "reason": "eligible registered comparison",
+          "selected_endpoint": "transfer_score",
+          "selected_week": 12,
+          "main_representative": "R04",
+          "groups": [
+            {
+              "arm": "C",
+              "n": 60,
+              "mean_points_exact": "60",
+              "sd2_points_exact": "100",
+              "source": {
+                "report_id": "R04-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R04-12-C"
+              }
+            },
+            {
+              "arm": "T",
+              "n": 60,
+              "mean_points_exact": "65",
+              "sd2_points_exact": "100",
+              "source": {
+                "report_id": "R04-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R04-12-T"
+              }
+            }
+          ],
+          "risk_facts": {
+            "randomized_n": 120,
+            "observed_n": 120,
+            "attrition_exact": "0",
+            "high_attrition": false,
+            "concealment": "not reported",
+            "assessor": "masked"
+          }
+        },
+        {
+          "registry": "R05",
+          "report_ids": [
+            "R05-MAIN",
+            "R05-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "individual lottery",
+          "cohort": "E",
+          "role": "primary",
+          "registered_on": "2023-04-20",
+          "status": "included",
+          "reason": "eligible registered comparison",
+          "selected_endpoint": "transfer_score",
+          "selected_week": 12,
+          "main_representative": "R05",
+          "groups": [
+            {
+              "arm": "C",
+              "n": 50,
+              "mean_points_exact": "60",
+              "sd2_points_exact": "121",
+              "source": {
+                "report_id": "R05-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R05-12-C"
+              }
+            },
+            {
+              "arm": "T1",
+              "n": 30,
+              "mean_points_exact": "64",
+              "sd2_points_exact": "81",
+              "source": {
+                "report_id": "R05-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R05-12-T1"
+              }
+            },
+            {
+              "arm": "T2",
+              "n": 40,
+              "mean_points_exact": "68",
+              "sd2_points_exact": "100",
+              "source": {
+                "report_id": "R05-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R05-12-T2"
+              }
+            }
+          ],
+          "risk_facts": {
+            "randomized_n": 120,
+            "observed_n": 120,
+            "attrition_exact": "0",
+            "high_attrition": false,
+            "concealment": "sealed central assignment",
+            "assessor": "masked"
+          }
+        },
+        {
+          "registry": "R06",
+          "report_ids": [
+            "R06-MAIN",
+            "R06-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "individual lottery",
+          "cohort": "A",
+          "role": "secondary",
+          "registered_on": "2023-03-01",
+          "status": "nonindependent",
+          "reason": "primary conservative cohort representative retained; possible is not proven overlap",
+          "selected_endpoint": "transfer_score",
+          "selected_week": 12,
+          "main_representative": "R01",
+          "groups": [
+            {
+              "arm": "C",
+              "n": 40,
+              "mean_points_exact": "60",
+              "sd2_points_exact": "100",
+              "source": {
+                "report_id": "R06-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R06-12-C"
+              }
+            },
+            {
+              "arm": "T",
+              "n": 40,
+              "mean_points_exact": "69",
+              "sd2_points_exact": "144",
+              "source": {
+                "report_id": "R06-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R06-12-T"
+              }
+            }
+          ],
+          "risk_facts": {
+            "randomized_n": 80,
+            "observed_n": 80,
+            "attrition_exact": "0",
+            "high_attrition": false,
+            "concealment": "sealed central assignment",
+            "assessor": "masked"
+          }
+        },
+        {
+          "registry": "R07",
+          "report_ids": [
+            "R07-MAIN",
+            "R07-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "alternating intake weeks",
+          "cohort": "G",
+          "role": "primary",
+          "registered_on": "2023-05-01",
+          "status": "excluded_design",
+          "reason": "registered eligibility boundary",
+          "selected_endpoint": null,
+          "selected_week": null,
+          "main_representative": null,
+          "groups": [],
+          "risk_facts": {
+            "randomized_n": 80,
+            "observed_n": null,
+            "attrition_exact": null,
+            "high_attrition": null,
+            "concealment": "sealed central assignment",
+            "assessor": "masked"
+          }
+        },
+        {
+          "registry": "R08",
+          "report_ids": [
+            "R08-MAIN",
+            "R08-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "individual lottery",
+          "cohort": "H",
+          "role": "primary",
+          "registered_on": "2023-05-10",
+          "status": "not_estimable",
+          "reason": "eligible groups lack dispersion; NR is not zero",
+          "selected_endpoint": "transfer_score",
+          "selected_week": 12,
+          "main_representative": null,
+          "groups": [
+            {
+              "arm": "C",
+              "n": 40,
+              "mean_points_exact": "62",
+              "sd2_points_exact": null,
+              "source": {
+                "report_id": "R08-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R08-12-C"
+              }
+            },
+            {
+              "arm": "T",
+              "n": 40,
+              "mean_points_exact": "66",
+              "sd2_points_exact": null,
+              "source": {
+                "report_id": "R08-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R08-12-T"
+              }
+            }
+          ],
+          "risk_facts": {
+            "randomized_n": 80,
+            "observed_n": 80,
+            "attrition_exact": "0",
+            "high_attrition": false,
+            "concealment": "not reported",
+            "assessor": "masked"
+          }
+        },
+        {
+          "registry": "R09",
+          "report_ids": [
+            "R09-MAIN",
+            "R09-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "individual lottery",
+          "cohort": "I",
+          "role": "primary",
+          "registered_on": "2023-05-18",
+          "status": "included",
+          "reason": "eligible registered comparison",
+          "selected_endpoint": "transfer_score",
+          "selected_week": 12,
+          "main_representative": "R09",
+          "groups": [
+            {
+              "arm": "C",
+              "n": 26,
+              "mean_points_exact": "62",
+              "sd2_points_exact": "121",
+              "source": {
+                "report_id": "R09-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R09-12-C"
+              }
+            },
+            {
+              "arm": "T",
+              "n": 25,
+              "mean_points_exact": "60",
+              "sd2_points_exact": "169",
+              "source": {
+                "report_id": "R09-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R09-12-T"
+              }
+            }
+          ],
+          "risk_facts": {
+            "randomized_n": 100,
+            "observed_n": 51,
+            "attrition_exact": "49/100",
+            "high_attrition": true,
+            "concealment": "sealed central assignment",
+            "assessor": "not masked"
+          }
+        },
+        {
+          "registry": "R10",
+          "report_ids": [
+            "R10-MAIN",
+            "R10-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "individual lottery",
+          "cohort": "J",
+          "role": "primary",
+          "registered_on": "2023-06-01",
+          "status": "included",
+          "reason": "eligible registered comparison",
+          "selected_endpoint": "transfer_errors",
+          "selected_week": 12,
+          "main_representative": "R10",
+          "groups": [
+            {
+              "arm": "C",
+              "n": 100,
+              "mean_points_exact": "-35",
+              "sd2_points_exact": "144",
+              "source": {
+                "report_id": "R10-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R10-12-C"
+              }
+            },
+            {
+              "arm": "T",
+              "n": 100,
+              "mean_points_exact": "-32",
+              "sd2_points_exact": "100",
+              "source": {
+                "report_id": "R10-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R10-12-T"
+              }
+            }
+          ],
+          "risk_facts": {
+            "randomized_n": 200,
+            "observed_n": 200,
+            "attrition_exact": "0",
+            "high_attrition": false,
+            "concealment": "sealed central assignment",
+            "assessor": "masked"
+          }
+        },
+        {
+          "registry": "R11",
+          "report_ids": [
+            "R11-MAIN",
+            "R11-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "individual lottery",
+          "cohort": "K",
+          "role": "primary",
+          "registered_on": "2023-06-10",
+          "status": "no_endpoint",
+          "reason": "no eligible registered construct/time",
+          "selected_endpoint": null,
+          "selected_week": null,
+          "main_representative": null,
+          "groups": [],
+          "risk_facts": {
+            "randomized_n": 60,
+            "observed_n": null,
+            "attrition_exact": null,
+            "high_attrition": null,
+            "concealment": "sealed central assignment",
+            "assessor": "masked"
+          }
+        },
+        {
+          "registry": "R12",
+          "report_ids": [
+            "R12-MAIN",
+            "R12-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "individual lottery",
+          "cohort": "L",
+          "role": "primary",
+          "registered_on": "2023-07-01",
+          "status": "nonindependent",
+          "reason": "primary conservative cohort representative retained; possible is not proven overlap",
+          "selected_endpoint": "transfer_score",
+          "selected_week": 12,
+          "main_representative": "R10",
+          "groups": [
+            {
+              "arm": "C",
+              "n": 45,
+              "mean_points_exact": "64",
+              "sd2_points_exact": "100",
+              "source": {
+                "report_id": "R12-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R12-12-C"
+              }
+            },
+            {
+              "arm": "T",
+              "n": 45,
+              "mean_points_exact": "70",
+              "sd2_points_exact": "144",
+              "source": {
+                "report_id": "R12-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R12-12-T"
+              }
+            }
+          ],
+          "risk_facts": {
+            "randomized_n": 90,
+            "observed_n": 90,
+            "attrition_exact": "0",
+            "high_attrition": false,
+            "concealment": "sealed central assignment",
+            "assessor": "masked"
+          }
+        },
+        {
+          "registry": "R13",
+          "report_ids": [
+            "R13-MAIN",
+            "R13-REG"
+          ],
+          "population": "adult workers",
+          "allocation": "individual lottery",
+          "cohort": "M",
+          "role": "primary",
+          "registered_on": "2024-01-10",
+          "status": "included",
+          "reason": "eligible registered comparison",
+          "selected_endpoint": "transfer_score",
+          "selected_week": 12,
+          "main_representative": "R13",
+          "groups": [
+            {
+              "arm": "C",
+              "n": 90,
+              "mean_points_exact": "63",
+              "sd2_points_exact": "144",
+              "source": {
+                "report_id": "R13-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R13-12-C"
+              }
+            },
+            {
+              "arm": "T",
+              "n": 90,
+              "mean_points_exact": "58",
+              "sd2_points_exact": "144",
+              "source": {
+                "report_id": "R13-MAIN",
+                "table_id": "outcomes",
+                "row_id": "R13-12-T"
+              }
+            }
+          ],
+          "risk_facts": {
+            "randomized_n": 180,
+            "observed_n": 180,
+            "attrition_exact": "0",
+            "high_attrition": false,
+            "concealment": "sealed central assignment",
+            "assessor": "masked"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "registry": "R01",
+          "md_exact": "8",
+          "variance_exact": "61/10",
+          "icc_exact": null,
+          "icc_status": "not_applicable",
+          "design_effect_exact": "1"
+        },
+        {
+          "registry": "R02",
+          "md_exact": "-4",
+          "variance_exact": "58/15",
+          "icc_exact": null,
+          "icc_status": "not_applicable",
+          "design_effect_exact": "1"
+        },
+        {
+          "registry": "R03",
+          "md_exact": "8",
+          "variance_exact": "1241/200",
+          "icc_exact": "1/25",
+          "icc_status": "reported",
+          "design_effect_exact": "34/25"
+        },
+        {
+          "registry": "R04",
+          "md_exact": "5",
+          "variance_exact": "127/30",
+          "icc_exact": "3/100",
+          "icc_status": "imputed",
+          "design_effect_exact": "127/100"
+        },
+        {
+          "registry": "R05",
+          "md_exact": "44/7",
+          "variance_exact": "106236/28175",
+          "icc_exact": null,
+          "icc_status": "not_applicable",
+          "design_effect_exact": "1"
+        },
+        {
+          "registry": "R06",
+          "md_exact": "9",
+          "variance_exact": "61/10",
+          "icc_exact": null,
+          "icc_status": "not_applicable",
+          "design_effect_exact": "1"
+        },
+        {
+          "registry": "R09",
+          "md_exact": "-2",
+          "variance_exact": "7419/650",
+          "icc_exact": null,
+          "icc_status": "not_applicable",
+          "design_effect_exact": "1"
+        },
+        {
+          "registry": "R10",
+          "md_exact": "3",
+          "variance_exact": "61/25",
+          "icc_exact": null,
+          "icc_status": "not_applicable",
+          "design_effect_exact": "1"
+        },
+        {
+          "registry": "R12",
+          "md_exact": "6",
+          "variance_exact": "244/45",
+          "icc_exact": null,
+          "icc_status": "not_applicable",
+          "design_effect_exact": "1"
+        },
+        {
+          "registry": "R13",
+          "md_exact": "-5",
+          "variance_exact": "16/5",
+          "icc_exact": null,
+          "icc_status": "not_applicable",
+          "design_effect_exact": "1"
+        }
+      ],
+      "analyses": {
+        "main_fixed": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R02",
+            "R03",
+            "R04",
+            "R05",
+            "R09",
+            "R10",
+            "R13"
+          ],
+          "k": 8,
+          "mean_exact": "228899060185005107/111050478719778277",
+          "variance_exact": "292994287708810896/555252393598891385",
+          "q_exact": "3668408710658277769865/81288950422877698764",
+          "i2_exact": "3099386057698133878517/3668408710658277769865",
+          "tau2_exact": "0",
+          "lo": 0.6374443938675678,
+          "hi": 3.4849882660150198,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "10/61",
+              "normalized_exact": "9606370088813472/111050478719778277"
+            },
+            {
+              "registry": "R02",
+              "weight_exact": "15/58",
+              "normalized_exact": "15154876950455736/111050478719778277"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "200/1241",
+              "normalized_exact": "9443812657818240/111050478719778277"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "30/127",
+              "normalized_exact": "13842249813014688/111050478719778277"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "28175/106236",
+              "normalized_exact": "15541085990051860/111050478719778277"
+            },
+            {
+              "registry": "R09",
+              "weight_exact": "650/7419",
+              "normalized_exact": "5134015015789920/111050478719778277"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "25/61",
+              "normalized_exact": "24015925222033680/111050478719778277"
+            },
+            {
+              "registry": "R13",
+              "weight_exact": "5/16",
+              "normalized_exact": "18312142981800681/111050478719778277"
+            }
+          ]
+        },
+        "random_DL": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R02",
+            "R03",
+            "R04",
+            "R05",
+            "R09",
+            "R10",
+            "R13"
+          ],
+          "k": 8,
+          "mean_exact": "7702402968132515693179406062236491253722141240565747294268647944097785044558223659832423401760753811955989547608156536111544882192767748599160710644138956686/3209125688704516045886687240542021678714152840663505334512893640611605483275172249479506707153237941896908543390519996219828928403589241246678254593552507693",
+          "variance_exact": "150407625948703232393284318045951411077066531532275968142472851957544490503551748531657205979196687458517169455740092628796141802518925511014521729266852471152175297898390234152/42290197372894096470078989128594932086435776009323801422735521368601827271365292574989773682895392950549532926698899842727242021866439662815463089898008227695629686013437577357",
+          "q_exact": "3668408710658277769865/81288950422877698764",
+          "i2_exact": "3099386057698133878517/3668408710658277769865",
+          "tau2_exact": "3099386057698133878517/131781056509401228490",
+          "lo": -1.2961772434001309,
+          "hi": 6.096489674442294,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "65890528254700614245/1951625251202740686153",
+              "normalized_exact": "385339413537538916001669591728724118186076777964938704831613779828868354024470500994689764634436145344398492802301150497966754368098473708004874626876470920/3209125688704516045886687240542021678714152840663505334512893640611605483275172249479506707153237941896908543390519996219828928403589241246678254593552507693"
+            },
+            {
+              "registry": "R02",
+              "weight_exact": "79068633905640737094/2165363685720691177207",
+              "normalized_exact": "416764057531453989965568512717098481142811506355105098039949560188845850240584077288337766247792276807184382746064220438983749023628612607635002753191772816/3209125688704516045886687240542021678714152840663505334512893640611605483275172249479506707153237941896908543390519996219828928403589241246678254593552507693"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "2635621130188024569800/78341750266779370025949",
+              "normalized_exact": "383978211966201686669282543781709232509489346431481730895766140098687508803882000483031147334399069269209529028156998345889312045553570029763566346068289600/3209125688704516045886687240542021678714152840663505334512893640611605483275172249479506707153237941896908543390519996219828928403589241246678254593552507693"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "197671584764101842735/5485888795381898618687",
+              "normalized_exact": "411257769411909800084921272581173679598823427784067530073938163436942680854771896580165005319164162383250195040190342400218139461134120032327337575243670440/3209125688704516045886687240542021678714152840663505334512893640611605483275172249479506707153237941896908543390519996219828928403589241246678254593552507693"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "742586253430475922541150/20265018898995534187416023",
+              "normalized_exact": "418231523220021591599946879634481544194334652126094620899164092796507751043649887150821428308641206393799949531128117698929870118195064740574389984172872400/3209125688704516045886687240542021678714152840663505334512893640611605483275172249479506707153237941896908543390519996219828928403589241246678254593552507693"
+            },
+            {
+              "registry": "R09",
+              "weight_exact": "4282884336555539925925/149614229787351736760168",
+              "normalized_exact": "326723457406462783018800680822504997667232098803493932864799349374586306453074618923790763191601163859126167840486675125398471197556162557332504528656208925/3209125688704516045886687240542021678714152840663505334512893640611605483275172249479506707153237941896908543390519996219828928403589241246678254593552507693"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "658905282547006142450/17104659177905364380163",
+              "normalized_exact": "439668584987035508923913661876397655990574798301845494356967362267585184458526559503440749536469340528852607066223019441909660462531847945807458988473225200/3209125688704516045886687240542021678714152840663505334512893640611605483275172249479506707153237941896908543390519996219828928403589241246678254593552507693"
+            },
+            {
+              "registry": "R13",
+              "weight_exact": "26356211301880245698/704217087705643561937",
+              "normalized_exact": "427162670643891769622584097399931969424810232896478222550695192619581847396212708555230082580734577311087219335969472270532971726891389625233119790869997392/3209125688704516045886687240542021678714152840663505334512893640611605483275172249479506707153237941896908543390519996219828928403589241246678254593552507693"
+            }
+          ]
+        },
+        "exclude_high_attrition": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R02",
+            "R03",
+            "R04",
+            "R05",
+            "R10",
+            "R13"
+          ],
+          "k": 7,
+          "mean_exact": "96711318324539/42829140195709",
+          "variance_exact": "118477269595152/214145700978545",
+          "q_exact": "455768606515454835/10450310207752996",
+          "i2_exact": "131022248422978953/151922868838484945",
+          "tau2_exact": "0",
+          "lo": 0.800202470951658,
+          "hi": 3.715943213160319,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "10/61",
+              "normalized_exact": "3884500642464/42829140195709"
+            },
+            {
+              "registry": "R02",
+              "weight_exact": "15/58",
+              "normalized_exact": "6128134634232/42829140195709"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "200/1241",
+              "normalized_exact": "3818767754880/42829140195709"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "30/127",
+              "normalized_exact": "5597351319456/42829140195709"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "28175/106236",
+              "normalized_exact": "897757841260/6118448599387"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "25/61",
+              "normalized_exact": "9711251606160/42829140195709"
+            },
+            {
+              "registry": "R13",
+              "weight_exact": "5/16",
+              "normalized_exact": "7404829349697/42829140195709"
+            }
+          ]
+        },
+        "icc_zero": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R02",
+            "R03",
+            "R04",
+            "R05",
+            "R09",
+            "R10",
+            "R13"
+          ],
+          "k": 8,
+          "mean_exact": "48737420754443885/22596040584506347",
+          "variance_exact": "11535208177512240/22596040584506347",
+          "q_exact": "755245159152374173055/16540301707858646004",
+          "i2_exact": "639463047197363651027/755245159152374173055",
+          "tau2_exact": "0",
+          "lo": 0.7564992620609909,
+          "hi": 3.55730258053812,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "10/61",
+              "normalized_exact": "1891017734018400/22596040584506347"
+            },
+            {
+              "registry": "R02",
+              "weight_exact": "15/58",
+              "normalized_exact": "2983243494184200/22596040584506347"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "200/1241",
+              "normalized_exact": "1859018239728000/22596040584506347"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "3/10",
+              "normalized_exact": "3460562453253672/22596040584506347"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "28175/106236",
+              "normalized_exact": "437038413668500/3228005797786621"
+            },
+            {
+              "registry": "R09",
+              "weight_exact": "650/7419",
+              "normalized_exact": "1010632877124000/22596040584506347"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "25/61",
+              "normalized_exact": "4727544335046000/22596040584506347"
+            },
+            {
+              "registry": "R13",
+              "weight_exact": "5/16",
+              "normalized_exact": "3604752555472575/22596040584506347"
+            }
+          ]
+        },
+        "icc_high": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R02",
+            "R03",
+            "R04",
+            "R05",
+            "R09",
+            "R10",
+            "R13"
+          ],
+          "k": 8,
+          "mean_exact": "154057136787603715/79635941805267509",
+          "variance_exact": "43833791074546512/79635941805267509",
+          "q_exact": "2589537108386050142185/58293509401455816588",
+          "i2_exact": "2181482542575859426069/2589537108386050142185",
+          "tau2_exact": "0",
+          "lo": 0.4803783197118645,
+          "hi": 3.3886570252663404,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "10/61",
+              "normalized_exact": "7185867389269920/79635941805267509"
+            },
+            {
+              "registry": "R02",
+              "weight_exact": "15/58",
+              "normalized_exact": "11336325277899960/79635941805267509"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "200/1241",
+              "normalized_exact": "7064269310966400/79635941805267509"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "3/19",
+              "normalized_exact": "6921124906507344/79635941805267509"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "28175/106236",
+              "normalized_exact": "11625221803582100/79635941805267509"
+            },
+            {
+              "registry": "R09",
+              "weight_exact": "650/7419",
+              "normalized_exact": "3840404933071200/79635941805267509"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "25/61",
+              "normalized_exact": "17964668473174800/79635941805267509"
+            },
+            {
+              "registry": "R13",
+              "weight_exact": "5/16",
+              "normalized_exact": "13698059710795785/79635941805267509"
+            }
+          ]
+        },
+        "assume_distinct": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R02",
+            "R03",
+            "R04",
+            "R05",
+            "R09",
+            "R10",
+            "R12",
+            "R13"
+          ],
+          "k": 9,
+          "mean_exact": "293742058284496043/121857645069693433",
+          "variance_exact": "292994287708810896/609288225348467165",
+          "q_exact": "1064498178874297260740/22299949047753898239",
+          "i2_exact": "221524646623066518707/266124544718574315185",
+          "tau2_exact": "0",
+          "lo": 1.0513630188550434,
+          "hi": 3.769705993540488,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "10/61",
+              "normalized_exact": "9606370088813472/121857645069693433"
+            },
+            {
+              "registry": "R02",
+              "weight_exact": "15/58",
+              "normalized_exact": "15154876950455736/121857645069693433"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "200/1241",
+              "normalized_exact": "9443812657818240/121857645069693433"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "30/127",
+              "normalized_exact": "13842249813014688/121857645069693433"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "28175/106236",
+              "normalized_exact": "15541085990051860/121857645069693433"
+            },
+            {
+              "registry": "R09",
+              "weight_exact": "650/7419",
+              "normalized_exact": "5134015015789920/121857645069693433"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "25/61",
+              "normalized_exact": "24015925222033680/121857645069693433"
+            },
+            {
+              "registry": "R12",
+              "weight_exact": "45/244",
+              "normalized_exact": "10807166349915156/121857645069693433"
+            },
+            {
+              "registry": "R13",
+              "weight_exact": "5/16",
+              "normalized_exact": "18312142981800681/121857645069693433"
+            }
+          ]
+        }
+      },
+      "leave_one_out": {
+        "R01": {
+          "status": "estimated",
+          "studies": [
+            "R02",
+            "R03",
+            "R04",
+            "R05",
+            "R09",
+            "R10",
+            "R13"
+          ],
+          "k": 7,
+          "mean_exact": "152048099474497331/101444108630964805",
+          "variance_exact": "292994287708810896/507220543154824025",
+          "q_exact": "9446150754362964193/243465860714315532",
+          "i2_exact": "7985355590077071001/9446150754362964193",
+          "tau2_exact": "0",
+          "lo": 0.009175917433147829,
+          "hi": 2.9884964270027545,
+          "weights": [
+            {
+              "registry": "R02",
+              "weight_exact": "15/58",
+              "normalized_exact": "15154876950455736/101444108630964805"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "200/1241",
+              "normalized_exact": "1888762531563648/20288821726192961"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "30/127",
+              "normalized_exact": "13842249813014688/101444108630964805"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "28175/106236",
+              "normalized_exact": "3108217198010372/20288821726192961"
+            },
+            {
+              "registry": "R09",
+              "weight_exact": "650/7419",
+              "normalized_exact": "1026803003157984/20288821726192961"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "25/61",
+              "normalized_exact": "4803185044406736/20288821726192961"
+            },
+            {
+              "registry": "R13",
+              "weight_exact": "5/16",
+              "normalized_exact": "18312142981800681/101444108630964805"
+            }
+          ]
+        },
+        "R02": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R03",
+            "R04",
+            "R05",
+            "R09",
+            "R10",
+            "R13"
+          ],
+          "k": 7,
+          "mean_exact": "9983398896097519/3306744888597329",
+          "variance_exact": "10103251300303824/16533724442986645",
+          "q_exact": "82601262981481281355/2420537258453244828",
+          "i2_exact": "68078039430761812387/82601262981481281355",
+          "tau2_exact": "0",
+          "lo": 1.486951577731219,
+          "hi": 4.5512516900946975,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "10/61",
+              "normalized_exact": "331254140993568/3306744888597329"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "200/1241",
+              "normalized_exact": "325648712338560/3306744888597329"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "30/127",
+              "normalized_exact": "477318959069472/3306744888597329"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "28175/106236",
+              "normalized_exact": "535899516898340/3306744888597329"
+            },
+            {
+              "registry": "R09",
+              "weight_exact": "650/7419",
+              "normalized_exact": "177035000544480/3306744888597329"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "25/61",
+              "normalized_exact": "828135352483920/3306744888597329"
+            },
+            {
+              "registry": "R13",
+              "weight_exact": "5/16",
+              "normalized_exact": "631453206268989/3306744888597329"
+            }
+          ]
+        },
+        "R03": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R02",
+            "R04",
+            "R05",
+            "R09",
+            "R10",
+            "R13"
+          ],
+          "k": 7,
+          "mean_exact": "123568540630507/81874831637357",
+          "variance_exact": "236095316445456/409374158186785",
+          "q_exact": "2332311922958781265/59932376758545324",
+          "i2_exact": "1972717662407509321/2332311922958781265",
+          "tau2_exact": "0",
+          "lo": 0.02076904093495857,
+          "hi": 2.9977053341409206,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "10/61",
+              "normalized_exact": "7740830047392/81874831637357"
+            },
+            {
+              "registry": "R02",
+              "weight_exact": "15/58",
+              "normalized_exact": "12211826712696/81874831637357"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "30/127",
+              "normalized_exact": "11154109438368/81874831637357"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "28175/106236",
+              "normalized_exact": "12523034641460/81874831637357"
+            },
+            {
+              "registry": "R09",
+              "weight_exact": "650/7419",
+              "normalized_exact": "4136998401120/81874831637357"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "25/61",
+              "normalized_exact": "19352075118480/81874831637357"
+            },
+            {
+              "registry": "R13",
+              "weight_exact": "5/16",
+              "normalized_exact": "14755957277841/81874831637357"
+            }
+          ]
+        },
+        "R04": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R02",
+            "R03",
+            "R05",
+            "R09",
+            "R10",
+            "R13"
+          ],
+          "k": 7,
+          "mean_exact": "1257384339527021/765419125250107",
+          "variance_exact": "2307041635502448/3827095626250535",
+          "q_exact": "23978817557362262135/560286799683078324",
+          "i2_exact": "20617096759263792191/23978817557362262135",
+          "tau2_exact": "0",
+          "lo": 0.12096924793344832,
+          "hi": 3.164510035370742,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "10/61",
+              "normalized_exact": "75640709360736/765419125250107"
+            },
+            {
+              "registry": "R02",
+              "weight_exact": "15/58",
+              "normalized_exact": "119329739767368/765419125250107"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "200/1241",
+              "normalized_exact": "74360729589120/765419125250107"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "28175/106236",
+              "normalized_exact": "122370755827180/765419125250107"
+            },
+            {
+              "registry": "R09",
+              "weight_exact": "650/7419",
+              "normalized_exact": "40425315084960/765419125250107"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "25/61",
+              "normalized_exact": "189101773401840/765419125250107"
+            },
+            {
+              "registry": "R13",
+              "weight_exact": "5/16",
+              "normalized_exact": "144190102218903/765419125250107"
+            }
+          ]
+        },
+        "R05": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R02",
+            "R03",
+            "R04",
+            "R09",
+            "R10",
+            "R13"
+          ],
+          "k": 7,
+          "mean_exact": "14821216984279/10788364704589",
+          "variance_exact": "33095480369232/53941823522945",
+          "q_exact": "52153379666629755/1316180493959858",
+          "i2_exact": "14752098900956869/17384459888876585",
+          "tau2_exact": "0",
+          "lo": -0.161429715367855,
+          "hi": 2.9090596648771747,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "10/61",
+              "normalized_exact": "1085097717024/10788364704589"
+            },
+            {
+              "registry": "R02",
+              "weight_exact": "15/58",
+              "normalized_exact": "1711835191512/10788364704589"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "200/1241",
+              "normalized_exact": "1066735870080/10788364704589"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "30/127",
+              "normalized_exact": "1563566001696/10788364704589"
+            },
+            {
+              "registry": "R09",
+              "weight_exact": "650/7419",
+              "normalized_exact": "579918108640/10788364704589"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "25/61",
+              "normalized_exact": "2712744292560/10788364704589"
+            },
+            {
+              "registry": "R13",
+              "weight_exact": "5/16",
+              "normalized_exact": "2068467523077/10788364704589"
+            }
+          ]
+        },
+        "R09": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R02",
+            "R03",
+            "R04",
+            "R05",
+            "R10",
+            "R13"
+          ],
+          "k": 7,
+          "mean_exact": "96711318324539/42829140195709",
+          "variance_exact": "118477269595152/214145700978545",
+          "q_exact": "455768606515454835/10450310207752996",
+          "i2_exact": "131022248422978953/151922868838484945",
+          "tau2_exact": "0",
+          "lo": 0.800202470951658,
+          "hi": 3.715943213160319,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "10/61",
+              "normalized_exact": "3884500642464/42829140195709"
+            },
+            {
+              "registry": "R02",
+              "weight_exact": "15/58",
+              "normalized_exact": "6128134634232/42829140195709"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "200/1241",
+              "normalized_exact": "3818767754880/42829140195709"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "30/127",
+              "normalized_exact": "5597351319456/42829140195709"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "28175/106236",
+              "normalized_exact": "897757841260/6118448599387"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "25/61",
+              "normalized_exact": "9711251606160/42829140195709"
+            },
+            {
+              "registry": "R13",
+              "weight_exact": "5/16",
+              "normalized_exact": "7404829349697/42829140195709"
+            }
+          ]
+        },
+        "R10": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R02",
+            "R03",
+            "R04",
+            "R05",
+            "R09",
+            "R13"
+          ],
+          "k": 7,
+          "mean_exact": "156851284518904067/87034553497744597",
+          "variance_exact": "292994287708810896/435172767488722985",
+          "q_exact": "46651026271076553965/1044414641972935164",
+          "i2_exact": "40384538419238942981/46651026271076553965",
+          "tau2_exact": "0",
+          "lo": 0.19391799919989827,
+          "hi": 3.410427130759749,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "10/61",
+              "normalized_exact": "9606370088813472/87034553497744597"
+            },
+            {
+              "registry": "R02",
+              "weight_exact": "15/58",
+              "normalized_exact": "15154876950455736/87034553497744597"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "200/1241",
+              "normalized_exact": "9443812657818240/87034553497744597"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "30/127",
+              "normalized_exact": "13842249813014688/87034553497744597"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "28175/106236",
+              "normalized_exact": "15541085990051860/87034553497744597"
+            },
+            {
+              "registry": "R09",
+              "weight_exact": "650/7419",
+              "normalized_exact": "5134015015789920/87034553497744597"
+            },
+            {
+              "registry": "R13",
+              "weight_exact": "5/16",
+              "normalized_exact": "18312142981800681/87034553497744597"
+            }
+          ]
+        },
+        "R13": {
+          "status": "estimated",
+          "studies": [
+            "R01",
+            "R02",
+            "R03",
+            "R04",
+            "R05",
+            "R09",
+            "R10"
+          ],
+          "k": 7,
+          "mean_exact": "80114943773502128/23184583934494399",
+          "variance_exact": "73248571927202724/115922919672471995",
+          "q_exact": "112305475988955125075/4242778860012475017",
+          "i2_exact": "86848802828880274973/112305475988955125075",
+          "tau2_exact": "0",
+          "lo": 1.8975137702215856,
+          "hi": 5.013539194960664,
+          "weights": [
+            {
+              "registry": "R01",
+              "weight_exact": "10/61",
+              "normalized_exact": "2401592522203368/23184583934494399"
+            },
+            {
+              "registry": "R02",
+              "weight_exact": "15/58",
+              "normalized_exact": "3788719237613934/23184583934494399"
+            },
+            {
+              "registry": "R03",
+              "weight_exact": "200/1241",
+              "normalized_exact": "2360953164454560/23184583934494399"
+            },
+            {
+              "registry": "R04",
+              "weight_exact": "30/127",
+              "normalized_exact": "3460562453253672/23184583934494399"
+            },
+            {
+              "registry": "R05",
+              "weight_exact": "28175/106236",
+              "normalized_exact": "3885271497512965/23184583934494399"
+            },
+            {
+              "registry": "R09",
+              "weight_exact": "650/7419",
+              "normalized_exact": "1283503753947480/23184583934494399"
+            },
+            {
+              "registry": "R10",
+              "weight_exact": "25/61",
+              "normalized_exact": "6003981305508420/23184583934494399"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "changes": [
+    {
+      "from": "initial",
+      "to": "updated",
+      "studies": [
+        {
+          "registry": "R01",
+          "before_status": "included",
+          "before_md_exact": "8",
+          "before_variance_exact": "61/10",
+          "before_sources": [
+            {
+              "report_id": "R01-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R01-12-C"
+            },
+            {
+              "report_id": "R01-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R01-12-T"
+            }
+          ],
+          "after_status": "included",
+          "after_md_exact": "8",
+          "after_variance_exact": "61/10",
+          "after_sources": [
+            {
+              "report_id": "R01-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R01-12-C"
+            },
+            {
+              "report_id": "R01-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R01-12-T"
+            }
+          ]
+        },
+        {
+          "registry": "R02",
+          "before_status": "included",
+          "before_md_exact": "7",
+          "before_variance_exact": "58/15",
+          "before_sources": [
+            {
+              "report_id": "R02-APP",
+              "table_id": "outcomes",
+              "row_id": "R02-app-12-C"
+            },
+            {
+              "report_id": "R02-APP",
+              "table_id": "outcomes",
+              "row_id": "R02-app-12-T"
+            }
+          ],
+          "after_status": "included",
+          "after_md_exact": "-4",
+          "after_variance_exact": "58/15",
+          "after_sources": [
+            {
+              "report_id": "R02-COR",
+              "table_id": "outcomes",
+              "row_id": "R02-cor-12-C"
+            },
+            {
+              "report_id": "R02-COR",
+              "table_id": "outcomes",
+              "row_id": "R02-cor-12-T"
+            }
+          ]
+        },
+        {
+          "registry": "R03",
+          "before_status": "included",
+          "before_md_exact": "8",
+          "before_variance_exact": "1241/200",
+          "before_sources": [
+            {
+              "report_id": "R03-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R03-12-C"
+            },
+            {
+              "report_id": "R03-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R03-12-T"
+            }
+          ],
+          "after_status": "included",
+          "after_md_exact": "8",
+          "after_variance_exact": "1241/200",
+          "after_sources": [
+            {
+              "report_id": "R03-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R03-12-C"
+            },
+            {
+              "report_id": "R03-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R03-12-T"
+            }
+          ]
+        },
+        {
+          "registry": "R04",
+          "before_status": "included",
+          "before_md_exact": "5",
+          "before_variance_exact": "127/30",
+          "before_sources": [
+            {
+              "report_id": "R04-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R04-12-C"
+            },
+            {
+              "report_id": "R04-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R04-12-T"
+            }
+          ],
+          "after_status": "included",
+          "after_md_exact": "5",
+          "after_variance_exact": "127/30",
+          "after_sources": [
+            {
+              "report_id": "R04-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R04-12-C"
+            },
+            {
+              "report_id": "R04-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R04-12-T"
+            }
+          ]
+        },
+        {
+          "registry": "R05",
+          "before_status": "included",
+          "before_md_exact": "44/7",
+          "before_variance_exact": "106236/28175",
+          "before_sources": [
+            {
+              "report_id": "R05-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R05-12-C"
+            },
+            {
+              "report_id": "R05-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R05-12-T1"
+            },
+            {
+              "report_id": "R05-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R05-12-T2"
+            }
+          ],
+          "after_status": "included",
+          "after_md_exact": "44/7",
+          "after_variance_exact": "106236/28175",
+          "after_sources": [
+            {
+              "report_id": "R05-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R05-12-C"
+            },
+            {
+              "report_id": "R05-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R05-12-T1"
+            },
+            {
+              "report_id": "R05-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R05-12-T2"
+            }
+          ]
+        },
+        {
+          "registry": "R06",
+          "before_status": "nonindependent",
+          "before_md_exact": "9",
+          "before_variance_exact": "61/10",
+          "before_sources": [
+            {
+              "report_id": "R06-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R06-12-C"
+            },
+            {
+              "report_id": "R06-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R06-12-T"
+            }
+          ],
+          "after_status": "nonindependent",
+          "after_md_exact": "9",
+          "after_variance_exact": "61/10",
+          "after_sources": [
+            {
+              "report_id": "R06-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R06-12-C"
+            },
+            {
+              "report_id": "R06-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R06-12-T"
+            }
+          ]
+        },
+        {
+          "registry": "R07",
+          "before_status": "excluded_design",
+          "before_md_exact": null,
+          "before_variance_exact": null,
+          "before_sources": [],
+          "after_status": "excluded_design",
+          "after_md_exact": null,
+          "after_variance_exact": null,
+          "after_sources": []
+        },
+        {
+          "registry": "R08",
+          "before_status": "not_estimable",
+          "before_md_exact": null,
+          "before_variance_exact": null,
+          "before_sources": [
+            {
+              "report_id": "R08-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R08-12-C"
+            },
+            {
+              "report_id": "R08-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R08-12-T"
+            }
+          ],
+          "after_status": "not_estimable",
+          "after_md_exact": null,
+          "after_variance_exact": null,
+          "after_sources": [
+            {
+              "report_id": "R08-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R08-12-C"
+            },
+            {
+              "report_id": "R08-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R08-12-T"
+            }
+          ]
+        },
+        {
+          "registry": "R09",
+          "before_status": "included",
+          "before_md_exact": "-2",
+          "before_variance_exact": "7419/650",
+          "before_sources": [
+            {
+              "report_id": "R09-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R09-12-C"
+            },
+            {
+              "report_id": "R09-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R09-12-T"
+            }
+          ],
+          "after_status": "included",
+          "after_md_exact": "-2",
+          "after_variance_exact": "7419/650",
+          "after_sources": [
+            {
+              "report_id": "R09-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R09-12-C"
+            },
+            {
+              "report_id": "R09-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R09-12-T"
+            }
+          ]
+        },
+        {
+          "registry": "R10",
+          "before_status": "included",
+          "before_md_exact": "3",
+          "before_variance_exact": "61/25",
+          "before_sources": [
+            {
+              "report_id": "R10-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R10-12-C"
+            },
+            {
+              "report_id": "R10-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R10-12-T"
+            }
+          ],
+          "after_status": "included",
+          "after_md_exact": "3",
+          "after_variance_exact": "61/25",
+          "after_sources": [
+            {
+              "report_id": "R10-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R10-12-C"
+            },
+            {
+              "report_id": "R10-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R10-12-T"
+            }
+          ]
+        },
+        {
+          "registry": "R11",
+          "before_status": "no_endpoint",
+          "before_md_exact": null,
+          "before_variance_exact": null,
+          "before_sources": [],
+          "after_status": "no_endpoint",
+          "after_md_exact": null,
+          "after_variance_exact": null,
+          "after_sources": []
+        },
+        {
+          "registry": "R12",
+          "before_status": "nonindependent",
+          "before_md_exact": "6",
+          "before_variance_exact": "244/45",
+          "before_sources": [
+            {
+              "report_id": "R12-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R12-12-C"
+            },
+            {
+              "report_id": "R12-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R12-12-T"
+            }
+          ],
+          "after_status": "nonindependent",
+          "after_md_exact": "6",
+          "after_variance_exact": "244/45",
+          "after_sources": [
+            {
+              "report_id": "R12-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R12-12-C"
+            },
+            {
+              "report_id": "R12-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R12-12-T"
+            }
+          ]
+        },
+        {
+          "registry": "R13",
+          "before_status": null,
+          "before_md_exact": null,
+          "before_variance_exact": null,
+          "before_sources": [],
+          "after_status": "included",
+          "after_md_exact": "-5",
+          "after_variance_exact": "16/5",
+          "after_sources": [
+            {
+              "report_id": "R13-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R13-12-C"
+            },
+            {
+              "report_id": "R13-MAIN",
+              "table_id": "outcomes",
+              "row_id": "R13-12-T"
+            }
+          ]
+        }
+      ],
+      "before_main_exact": "121790855387255402/23184583934494399",
+      "after_main_exact": "228899060185005107/111050478719778277",
+      "delta_main_exact": "-8218003321059863607260459732606661/2574659144844483574604981378370523"
+    }
+  ]
+}

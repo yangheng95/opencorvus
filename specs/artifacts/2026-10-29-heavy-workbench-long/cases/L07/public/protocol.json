@@ -1,0 +1,17 @@
+{
+  "format": "l07-protocol/1",
+  "case": "L07/0.2.0-dev",
+  "stages": [{"id":"initial","cutoff":"2025-03-01T00:00:00Z"},{"id":"updated","cutoff":"2025-07-01T00:00:00Z"}],
+  "week_min":8,"week_max":16,"week_target":12,
+  "endpoint_priority":["transfer_score","transfer_errors"],
+  "endpoint_direction":{"transfer_score":1,"transfer_errors":-1},
+  "unit_factor":{"points":"1","proportion":"100"},
+  "source_priority":{"abstract":0,"full_report":1,"appendix":2,"correction":3},
+  "icc_missing_main":"3/100","icc_missing_low":"0","icc_missing_high":"1/10",
+  "observed_fraction_high_risk_below":"4/5",
+  "normal_critical":"49/25",
+  "numeric_absolute_tolerance":1e-7,"numeric_relative_tolerance":1e-8,
+  "analyses":["main_fixed","random_DL","exclude_high_attrition","icc_zero","icc_high","assume_distinct"],
+  "two_good_action":"new version; preserve observations",
+  "scope":"original simulated adult training; no population, clinical or professional certainty claim"
+}

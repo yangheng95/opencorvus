@@ -1,0 +1,26 @@
+{
+  "format":"l07-rubric/1","version":"L07/0.2.0-dev","status":"development_pilot_frozen",
+  "denominator":100,"good_score_at_least":90,"all_critical_required":true,
+  "unassessed":"total/good null; facility produces no candidate score",
+  "two_good_action":"new version; preserve current observations",
+  "leaves":[
+    {"id":"M01","weight":6,"critical":true,"source":"numeric","criterion":"两截止的全部原来源及发布时间身份","evidence":"stages.reports"},
+    {"id":"M02","weight":8,"critical":true,"source":"numeric","criterion":"注册族/筛选/结局随访/保守独立人群","evidence":"stages.studies"},
+    {"id":"M03","weight":8,"critical":true,"source":"numeric","criterion":"原组n/单位/SD或SE及实际原文定位","evidence":"studies.groups"},
+    {"id":"M04","weight":4,"critical":true,"source":"numeric","criterion":"观察/随机数及失访/隐藏/评估者原事实","evidence":"studies.risk_facts"},
+    {"id":"M05","weight":8,"critical":true,"source":"numeric","criterion":"一次共享对照的MD和方差","evidence":"effects.md_exact/variance_exact"},
+    {"id":"M06","weight":7,"critical":true,"source":"numeric","criterion":"聚类DE/ICC及未知的约定状态","evidence":"effects.icc_exact/icc_status/design_effect_exact"},
+    {"id":"M07","weight":7,"critical":true,"source":"numeric","criterion":"独立人群固定主合成/权重/区间/异质性","evidence":"analyses.main_fixed"},
+    {"id":"M08","weight":7,"critical":true,"source":"numeric","criterion":"全部规定敏感性在各自假设下重算","evidence":"analyses except main_fixed"},
+    {"id":"M09","weight":4,"critical":false,"source":"numeric","criterion":"逐主研究留一的完整结果","evidence":"leave_one_out"},
+    {"id":"M10","weight":4,"critical":true,"source":"numeric","criterion":"更正/新研究的真实前后来源/状态/效应差额","evidence":"changes"},
+    {"id":"M11","weight":12,"critical":true,"source":"native_execution","criterion":"同封存源从原档清洁执行及两类实际数据变化","pass":"base/mean-change/new-report均同声明源码真实native0且十数值叶通过，原源/输入/命令/输出可核","fail":"已证程序错误/缺交或套旧结果；设施原因未知时不判候选0"},
+    {"id":"H01","weight":5,"critical":true,"source":"independent_review","criterion":"报告族与来源审计可实际复核","pass":"原文定位支持数字/选择，更正与主代表可追溯，报告数/研究数/独立单位分清","fail":"实质来源/选择/独立性错误或缺必要审计；等价完整表/JSON/公式/叙述合读"},
+    {"id":"H02","weight":5,"critical":true,"source":"independent_review","criterion":"主敏感性/留一/更新与结论及不确定性相符","pass":"实际量化主/敏感性/更新，不将显著/随机模型或模拟数据当现实因果/个体保证；不隐瞒相反或未明证据","fail":"有据的错误强声明、主要结论不受实际结果支持或缺实质解释"},
+    {"id":"H03","weight":5,"critical":false,"source":"independent_review","criterion":"缺失/重叠/风险的可行动核证交接","pass":"逐关键未知说明所缺证据及取证动作；ICC约定和未核重叠、失访不能写成已解决","fail":"把未知当低风险/已确定，或缺可定位后续动作"},
+    {"id":"H04","weight":5,"critical":true,"source":"independent_review","criterion":"真实森林图与本次阶段/单位/区间一致","pass":"实际查看本次图，每独立研究/合成、点单位和方向/零线/阶段可读并与本次账一致","fail":"图来自别次、数值/身份/方向错误或无实际图；文件存在不代替视觉核验"},
+    {"id":"H05","weight":5,"critical":false,"source":"independent_review","criterion":"完整方法/依赖/源程序与更新复建交接","pass":"另一执行者能从原档/声明依赖和命令清洁重建，逻辑输出索引清楚，限制/错误与更新说明可用","fail":"执行或更新说明实质缺失/错误，不要求作者语言或版式"}
+  ],
+  "numeric_anchor":"按public协议从原HTML/往来重建的对应结论精确成立；真实缺交/实质错失败，声明语义同义不扣分。不是有文件即通过。",
+  "scope":"complete development pilot case; no candidate-hour or professional/statistical certification"
+}

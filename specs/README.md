@@ -30,7 +30,7 @@
 
 - [批准后的代码提交验收](records/2026-10/2026-10-30-approved-code-workflow.md)：完整真实改码、测试、批准和范围Git提交的当前版本验收。
 
-- [L02发布时间输入资格](records/2026-10/2026-10-30-heavy-workbench-l02-qualification.md)：真实OpenCorvus试跑继续；[L03完整题包](artifacts/2026-10-29-heavy-workbench-long/cases/L03/README.md)已完成整链/错误程序实测与集中整题独审；十题与有效小时未达。
+- [L02发布时间输入资格](records/2026-10/2026-10-30-heavy-workbench-l02-qualification.md)：真实OpenCorvus试跑继续；[L03](artifacts/2026-10-29-heavy-workbench-long/cases/L03/README.md)/[L07完整题包](artifacts/2026-10-29-heavy-workbench-long/cases/L07/README.md)已整链实测/独审，L07错误强结论90仍不合格；十题/有效小时未达。
 - [L05跨系统副作用资格](records/2026-10/2026-10-30-heavy-workbench-l05-qualification.md)：真实事故现场/逐来源补偿及一次在途HTTP交错；checker与EOF收尾实质漏洞修后独立通过，完整题未冻结。
 
 - [Mission 创建选择旅程](records/2026-10/2026-10-30-mission-selection-journey.md)：真实搜索、保留选择、类型切换及取消状态调查。

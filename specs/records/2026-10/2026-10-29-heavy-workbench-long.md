@@ -500,3 +500,19 @@ L03此前没有新版目录，本轮直接建完整public四合同/九份多源�
 L02原唯一Task tsk_g00VZXAOwk00L22TkNKL在12:58:21Z真实API仍active、orchestrator+base-developer、136请求含preflight均gpt-6.1-sol streaming；未自然交付/评分。外部观察包装器读取尚未落status的inflight请求曾KeyError，已保旧脚本并将此状态报告为pending，原Task/status已真实读取，不是Task故障；另一个外部PowerShell引号SyntaxError未修改/重启候选。继续原locator，不重开/不因观察器先停判业务0。
 
 下一优先完整L07/L08/L09/L10及现L04/L05/L01/L06缺口，按完整成品/整题真实测试集中审查推进；不重L03旧矩阵或组件资格凑量。L02真实候选自然终态后封存→真正私有评价→单层独评，再按原顺序fresh Codex。两good另版保旧线。用户纠偏继续最高优先，套件目标未达、心跳ACTIVE，六旧昂贵任务不恢复。
+
+## 最新成品Recall：L07整题、真实错误程序与完整独审已交
+
+本轮直接新建cases/L07完整公开任务/协议/原始29 HTML注册报告附录更正/原始往来/输出与环境，完整研究programme→提取/依赖/主敏感性/留一/更正→报告/真实森林图、16叶100分和实际checker。不是旧30行cleaned effect表；引用Cochrane官方6/10/23仅作方法来源，原档全部原创模拟，不作现实人群或专业认证。最终public支持标准有限数或有理串，未用百位分数/语言制造难度。
+
+唯一外部主根D:/opencorvus-benchmark-runs/l07-full-case-20261030；最后consolidated-submission/consolidated-run及consolidated-weak-submission/consolidated-weak-run。各同封存programme真实base/原均值变动/新研究三native0、1CPU/netnone/只读源原档/新输出、机器11pass；父exit4只表示内容未评。主和独立实际view当前森林图。initial26报告/12注册/7独立，updated29/13/8；主MD5.2530964425→2.06121632994，updated DL区间跨0，负结果、NR分散度、未知ICC/重叠及49%失访保留。
+
+六真实错误programme各native0，但重复人群、SE当SD、8周择大、忽略cluster、反方向、未来更正各关键失败；实际缓存完整旧成品程序基例数值正确但M11失败。弱报告真实programme用同正确计算/图，最后附现实每个体100%获益及随机效应消除全部偏倚。独审按实际文字判H02/H03fail，没用目录名或以CI跨0逻辑反驳概率保证。
+
+一次集中整题审查从原HTML另写解析/Fraction矩计算，原组/风险/单位/共享对照/ICC、全部六分析/权重/留一和更新一致，未导入作者core作oracle。只另一次独立基例source-only，native0，含封存精确清理2.975秒。13:58:35Z最终stage允许保持L07/0.2.0-dev材料/模型/参数/权重/90线及执行对象，仅metadata开发pilot冻结。真正check CLI合并同一原执行/独立评级：作者参考100/goodtrue/exit0；实际弱控制90/H02criticalfail/goodfalse/exit2。未手写总分，非LLM成绩。完整source/input/native/log/错误/修后/独审与成品在L07/evaluator/whole-case-tests，外部原件保留。
+
+实质问题及原件全留并集中修复：追加R14素材克隆遗漏正文队列M→N，原矛盾raw/run保留，仅补受影响new-report，最后三矩阵一致；同rank冲突旧循环提前拒绝被更高权威解除的历史分歧，修单一core仅判最高rank，独审原合法反例实际native通过，最高仍冲突具名facility/exit3；CI abs+rel旧math.isclose取max误拒合法1.2e−7差，修统一合计容差后原probe通过，超限仍M07fail。冻结前去掉人为精确有理输出限制，浮点/行序实际通过、DE=True冒充1仍M06fail、六原计算错产物当前checker仍拒绝，0新native。最后表示/容差只改checker和文案，不声称旧native执行了最后host checker。独审首tr属性/row_id探针夹具错误也保留，合法修正后原实质缺陷仍复现，不当候选失败。
+
+当前四个开发pilot合同（旧L06/L02/L03/L07）、候选有效小时仍0/10；L07结构化固定合成原文和秒级参考未证明fresh区分度/数小时，非盲熟悉作者材料AI不代签真人/统计成熟。下一补完整L08/L09/L10，然后现L04/L05/L01/L06缺口；不重L07/L03矩阵或另开组件资格。L06旧两good升级义务不变。
+
+L02唯一原Task tsk_g00VZXAOwk00L22TkNKL在13:55:38Z真实API仍active，orchestrator+base-developer+base-tester、332请求含preflight均gpt-6.1-sol streaming；未自然交付/评分，不能把这些计数当有效小时。继续原L02-current-pair定位，Task/绑定工作终态才封存和正常cleanup，真正私有执行/同rubric独评后才fresh Codex。全十题未达，心跳ACTIVE，无用户总token/墙钟限，六旧昂贵任务保持Paused。

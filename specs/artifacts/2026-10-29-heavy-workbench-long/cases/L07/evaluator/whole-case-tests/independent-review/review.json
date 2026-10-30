@@ -1,0 +1,116 @@
+{
+  "format": "l07-independent-content-review/1",
+  "case": "L07/0.2.0-dev",
+  "output_root": "D:/opencorvus-benchmark-runs/l07-full-case-20261030/consolidated-run/base/output/result",
+  "reviewer": "/root/benchmark_review",
+  "subject_role": "author_reference",
+  "disclosure": "Non-blind AI independent reviewer, familiar with author materials and control roles; not a professional human, anonymous-model comparison or statistical calibration.",
+  "findings": {
+    "H01": {
+      "status": "pass",
+      "basis": "原报告/注册/独立队列分清，截止、rank、选中原组和更正来源可核；独立HTML/Fraction全题重建一致。",
+      "sources": [
+        {
+          "path": "D:/opencorvus-benchmark-runs/l07-full-case-20261030/consolidated-run/base/output/result/REVIEW.md",
+          "locator": "方法和来源；两阶段研究表；追加来源与更正"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l07-full-case-20261030/consolidated-run/base/input/archive/index.csv",
+          "locator": "阶段来源身份/发布时间"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l07-full-case-20261030/consolidated-run/base/input/correspondence.md",
+          "locator": "M01确定同人/M02未核possible"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l07-whole-case-independent-review-20261030/independent-synthesis.json",
+          "locator": "全原组/风险/分析与更新相符"
+        }
+      ]
+    },
+    "H02": {
+      "status": "pass",
+      "basis": "正常报告量化主/敏感性/留一/更新及DL跨零与解释限制，不将合成数据外推现实。",
+      "sources": [
+        {
+          "path": "D:/opencorvus-benchmark-runs/l07-full-case-20261030/consolidated-run/base/output/result/REVIEW.md",
+          "locator": "两阶段主敏感性/留一；结论边界；弱版末段若存在"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l07-full-case-20261030/consolidated-run/base/output/result/result.json",
+          "locator": "updated analyses：fixed/DL及各敏感性"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l07-whole-case-independent-review-20261030/independent-synthesis.json",
+          "locator": "独立效应/方差/异质性/更新核算"
+        }
+      ]
+    },
+    "H03": {
+      "status": "pass",
+      "basis": "明确R10/R12重叠、R04 ICC、R08分散度及R09失访机制的未知和具体核证动作。",
+      "sources": [
+        {
+          "path": "D:/opencorvus-benchmark-runs/l07-full-case-20261030/consolidated-run/base/output/result/REVIEW.md",
+          "locator": "结论边界与下一步；最后强声明"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l07-full-case-20261030/consolidated-run/base/input/archive/R04-REG.html",
+          "locator": "ICC not reported"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l07-full-case-20261030/consolidated-run/base/input/archive/R09-REG.html",
+          "locator": "随机人数"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l07-full-case-20261030/consolidated-run/base/input/correspondence.md",
+          "locator": "M02 possible未证实"
+        }
+      ]
+    },
+    "H04": {
+      "status": "pass",
+      "basis": "实际查看当前1950x900森林图；两个阶段/每独立研究/合成/点单位方向/零线清楚，与本次结果相同。好弱PNG同一实际内容，未因弱标签扣图。",
+      "sources": [
+        {
+          "path": "D:/opencorvus-benchmark-runs/l07-full-case-20261030/consolidated-run/base/output/result/forest.png",
+          "locator": "实际view_image森林图"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l07-full-case-20261030/consolidated-run/base/output/result/result.json",
+          "locator": "main_fixed及逐研究effects"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l07-whole-case-independent-review-20261030/whole-case-evidence.json",
+          "locator": "两实际图内容同一及数值对象身份"
+        }
+      ]
+    },
+    "H05": {
+      "status": "pass",
+      "basis": "源码/原档/依赖/直接argv与成品索引闭合；正常源实际独立一次新目录基例native0；两programme各三输入原native同源verified，弱版实际追加错误解释不改变技术可复建事实。",
+      "sources": [
+        {
+          "path": "D:/opencorvus-benchmark-runs/l07-full-case-20261030/consolidated-run/base/output/result/REVIEW.md",
+          "locator": "复建与交接"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l07-full-case-20261030/consolidated-run/source-declaration.json",
+          "locator": "冻结files/argv"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l07-full-case-20261030/consolidated-run/execution.json",
+          "locator": "三实际原生执行"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l07-whole-case-independent-review-20261030/cold-base/run-receipt.json",
+          "locator": "唯一独立基例冷跑"
+        },
+        {
+          "path": "D:/opencorvus-benchmark-runs/l07-whole-case-independent-review-20261030/whole-case-evidence.json",
+          "locator": "当前programme物理原件及同完整数值对象"
+        }
+      ]
+    }
+  }
+}

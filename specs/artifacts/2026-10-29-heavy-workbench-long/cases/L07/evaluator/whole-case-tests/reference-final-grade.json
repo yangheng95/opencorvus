@@ -1,0 +1,122 @@
+{
+  "case": "L07/0.2.0-dev",
+  "status": "graded",
+  "findings": [
+    {
+      "id": "M01",
+      "status": "pass",
+      "weight": 6,
+      "critical": true,
+      "criterion": "两截止的全部原来源及发布时间身份"
+    },
+    {
+      "id": "M02",
+      "status": "pass",
+      "weight": 8,
+      "critical": true,
+      "criterion": "注册族/筛选/结局随访/保守独立人群"
+    },
+    {
+      "id": "M03",
+      "status": "pass",
+      "weight": 8,
+      "critical": true,
+      "criterion": "原组n/单位/SD或SE及实际原文定位"
+    },
+    {
+      "id": "M04",
+      "status": "pass",
+      "weight": 4,
+      "critical": true,
+      "criterion": "观察/随机数及失访/隐藏/评估者原事实"
+    },
+    {
+      "id": "M05",
+      "status": "pass",
+      "weight": 8,
+      "critical": true,
+      "criterion": "一次共享对照的MD和方差"
+    },
+    {
+      "id": "M06",
+      "status": "pass",
+      "weight": 7,
+      "critical": true,
+      "criterion": "聚类DE/ICC及未知的约定状态"
+    },
+    {
+      "id": "M07",
+      "status": "pass",
+      "weight": 7,
+      "critical": true,
+      "criterion": "独立人群固定主合成/权重/区间/异质性"
+    },
+    {
+      "id": "M08",
+      "status": "pass",
+      "weight": 7,
+      "critical": true,
+      "criterion": "全部规定敏感性在各自假设下重算"
+    },
+    {
+      "id": "M09",
+      "status": "pass",
+      "weight": 4,
+      "critical": false,
+      "criterion": "逐主研究留一的完整结果"
+    },
+    {
+      "id": "M10",
+      "status": "pass",
+      "weight": 4,
+      "critical": true,
+      "criterion": "更正/新研究的真实前后来源/状态/效应差额"
+    },
+    {
+      "id": "M11",
+      "status": "pass",
+      "weight": 12,
+      "critical": true,
+      "criterion": "同封存源从原档清洁执行及两类实际数据变化"
+    },
+    {
+      "id": "H01",
+      "status": "pass",
+      "weight": 5,
+      "critical": true,
+      "criterion": "报告族与来源审计可实际复核"
+    },
+    {
+      "id": "H02",
+      "status": "pass",
+      "weight": 5,
+      "critical": true,
+      "criterion": "主敏感性/留一/更新与结论及不确定性相符"
+    },
+    {
+      "id": "H03",
+      "status": "pass",
+      "weight": 5,
+      "critical": false,
+      "criterion": "缺失/重叠/风险的可行动核证交接"
+    },
+    {
+      "id": "H04",
+      "status": "pass",
+      "weight": 5,
+      "critical": true,
+      "criterion": "真实森林图与本次阶段/单位/区间一致"
+    },
+    {
+      "id": "H05",
+      "status": "pass",
+      "weight": 5,
+      "critical": false,
+      "criterion": "完整方法/依赖/源程序与更新复建交接"
+    }
+  ],
+  "total": 100,
+  "critical_failures": [],
+  "good": true,
+  "scope": "original simulated review; no real population or candidate-hour certification"
+}

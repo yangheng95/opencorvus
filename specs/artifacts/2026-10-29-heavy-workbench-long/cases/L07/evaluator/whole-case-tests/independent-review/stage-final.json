@@ -1,0 +1,42 @@
+{
+  "format": "l07-whole-case-independent-final/1",
+  "observed_at_utc": "2026-10-30T13:58:35.282533+00:00",
+  "case": "L07/0.2.0-dev",
+  "complete_development_case": true,
+  "allow_development_pilot_freeze_metadata_README_only": true,
+  "preserve_identity_material_model_parameters_weights_critical90_final_objects": true,
+  "remaining_substantive_blockers": [],
+  "resolved_findings": [
+    "only maximum-rank statistical conflicts are facility conflicts",
+    "registered abs+rel tolerance matches actual checker"
+  ],
+  "author_self_repairs_confirmed": [
+    "new R14 cohort N narrative and registration agree",
+    "finite standard quantities accepted with strict nonquantity fields"
+  ],
+  "independent_raw_synthesis_agrees": true,
+  "good_H01_H05": {
+    "H01": "pass",
+    "H02": "pass",
+    "H03": "pass",
+    "H04": "pass",
+    "H05": "pass"
+  },
+  "weak_H01_H05": {
+    "H01": "pass",
+    "H02": "fail",
+    "H03": "fail",
+    "H04": "pass",
+    "H05": "pass"
+  },
+  "native_cold_base_one_only": true,
+  "native_exit": 0,
+  "cold_wall_including_seal_cleanup_seconds": 2.974497300107032,
+  "main_three_input_and_wrong_programme_matrices_not_repeated": true,
+  "actual_images_viewed": true,
+  "score_handwritten": false,
+  "new_LLM_Provider_GPU_solver_UI_calls": 0,
+  "candidate_hour_difficulty_validated": false,
+  "professional_statistical_maturity_certified": false,
+  "ten_case_complete": false
+}

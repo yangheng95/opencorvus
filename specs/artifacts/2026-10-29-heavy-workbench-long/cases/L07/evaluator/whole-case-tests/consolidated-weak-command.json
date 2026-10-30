@@ -1,0 +1,21 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L07\\evaluator\\run_case.py",
+    "--submission",
+    "D:\\opencorvus-benchmark-runs\\l07-full-case-20261030\\consolidated-weak-submission",
+    "--input",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L07\\public",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\l07-full-case-20261030\\consolidated-weak-run",
+    "--image",
+    "sha256:23ff8bfbf8055caa0b9fa5745ddb27cceea2f31d7d15b7a900c81112cdfe8ddf"
+  ],
+  "started_at": "2026-10-30T13:41:15.273107+00:00",
+  "finished_at": "2026-10-30T13:41:26.080850+00:00",
+  "elapsed_seconds": 10.807743599638343,
+  "exit_code": 4
+}

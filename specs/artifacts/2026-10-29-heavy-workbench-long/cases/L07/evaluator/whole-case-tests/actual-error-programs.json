@@ -1,0 +1,105 @@
+{
+  "faults": [
+    {
+      "name": "duplicate-persons",
+      "native_exit": 0,
+      "actual_failed": [
+        "M07",
+        "M08",
+        "M09",
+        "M10"
+      ],
+      "expected": [
+        "M07"
+      ]
+    },
+    {
+      "name": "se-as-sd",
+      "native_exit": 0,
+      "actual_failed": [
+        "M03",
+        "M05",
+        "M07",
+        "M08",
+        "M09",
+        "M10"
+      ],
+      "expected": [
+        "M03",
+        "M05"
+      ]
+    },
+    {
+      "name": "select-eight-week",
+      "native_exit": 0,
+      "actual_failed": [
+        "M02",
+        "M03",
+        "M05",
+        "M07",
+        "M08",
+        "M09",
+        "M10"
+      ],
+      "expected": [
+        "M02",
+        "M05"
+      ]
+    },
+    {
+      "name": "ignore-cluster",
+      "native_exit": 0,
+      "actual_failed": [
+        "M05",
+        "M06",
+        "M07",
+        "M08",
+        "M09",
+        "M10"
+      ],
+      "expected": [
+        "M05",
+        "M06"
+      ]
+    },
+    {
+      "name": "reverse-errors-direction",
+      "native_exit": 0,
+      "actual_failed": [
+        "M03",
+        "M05",
+        "M07",
+        "M08",
+        "M09",
+        "M10"
+      ],
+      "expected": [
+        "M03",
+        "M05"
+      ]
+    },
+    {
+      "name": "future-correction",
+      "native_exit": 0,
+      "actual_failed": [
+        "M01",
+        "M02",
+        "M03",
+        "M04",
+        "M05",
+        "M06",
+        "M07",
+        "M08",
+        "M09",
+        "M10"
+      ],
+      "expected": [
+        "M01",
+        "M05"
+      ]
+    }
+  ],
+  "stale_actual_M11": "fail",
+  "weak_report_numeric_native": "11pass; independent content rating pending",
+  "candidate_score": null
+}
