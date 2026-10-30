@@ -1,0 +1,285 @@
+{
+  "scopes": [
+    {
+      "phase": "before",
+      "events": [
+        {
+          "occurrenceID": "bus-occurrence:a9d93e63-9617-402a-87f6-57c0de046232",
+          "at": 1793383790237,
+          "file": "notes-815/conflict-recovery-820-before.md",
+          "deliveries": 6,
+          "schedulerAccepted": true
+        },
+        {
+          "occurrenceID": "bus-occurrence:5cc7eb67-2269-4618-9b1a-938c8d162fae",
+          "at": 1793383827802,
+          "file": "notes-815/conflict-recovery-820-before.md",
+          "deliveries": 6,
+          "schedulerAccepted": true
+        },
+        {
+          "occurrenceID": "bus-occurrence:0b7b224c-2945-4ba4-8399-541cd27dfde4",
+          "at": 1793383880056,
+          "file": "notes-815/conflict-recovery-820-before.md",
+          "deliveries": 6,
+          "schedulerAccepted": true
+        },
+        {
+          "occurrenceID": "bus-occurrence:8e38a510-2260-4ebf-8fcb-78877bf0f170",
+          "at": 1793383948274,
+          "file": "notes-815/conflict-recovery-820-before.md",
+          "deliveries": 7,
+          "schedulerAccepted": true
+        }
+      ],
+      "project": "support-report",
+      "projectEventDefinitionRows": 0,
+      "owners": 4,
+      "phaseReceipts": 12,
+      "deliveries": 25,
+      "canonicalTerminalReceipts": 25,
+      "outcomes": {
+        "succeeded": 25
+      },
+      "eventOccurrences": 4,
+      "allRegisteredSchedulerDeliveriesAccepted": true,
+      "busDeliveryLeases": 25,
+      "runtimeProcessLeases": 1,
+      "leaseGrants": 26,
+      "addedRows": 126,
+      "fileMutationRequests": [
+        {
+          "id": 131,
+          "at": "2026-10-30T18:09:50.227Z",
+          "method": "POST",
+          "path": "/file/item"
+        },
+        {
+          "id": 156,
+          "at": "2026-10-30T18:10:27.772Z",
+          "method": "PATCH",
+          "path": "/file/content"
+        },
+        {
+          "id": 183,
+          "at": "2026-10-30T18:11:20.041Z",
+          "method": "PATCH",
+          "path": "/file/content"
+        },
+        {
+          "id": 297,
+          "at": "2026-10-30T18:12:28.262Z",
+          "method": "PATCH",
+          "path": "/file/content"
+        },
+        {
+          "id": 308,
+          "at": "2026-10-30T18:12:36.140Z",
+          "method": "PATCH",
+          "path": "/file/content"
+        },
+        {
+          "id": 344,
+          "at": "2026-10-30T18:13:18.375Z",
+          "method": "PATCH",
+          "path": "/file/content"
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "events": [
+        {
+          "occurrenceID": "bus-occurrence:5ef1323a-b231-413f-9b83-53bdf74edaf5",
+          "at": 1793384441492,
+          "file": "notes-815/conflict-recovery-820-after.md",
+          "deliveries": 6,
+          "schedulerAccepted": true
+        },
+        {
+          "occurrenceID": "bus-occurrence:3d391850-1f8e-4734-9817-3a2fdc903591",
+          "at": 1793384454657,
+          "file": "notes-815/conflict-recovery-820-after.md",
+          "deliveries": 6,
+          "schedulerAccepted": true
+        },
+        {
+          "occurrenceID": "bus-occurrence:f1355112-4661-4316-9eb4-c4b27292d313",
+          "at": 1793384537513,
+          "file": "notes-815/conflict-recovery-820-after.md",
+          "deliveries": 7,
+          "schedulerAccepted": true
+        },
+        {
+          "occurrenceID": "bus-occurrence:2cba375d-1634-4d68-a138-6a7b3db6d550",
+          "at": 1793384594975,
+          "file": "notes-815/conflict-recovery-820-after.md",
+          "deliveries": 7,
+          "schedulerAccepted": true
+        },
+        {
+          "occurrenceID": "bus-occurrence:c1235a70-5bd5-48ef-a2f3-5b0a22147866",
+          "at": 1793384813147,
+          "file": "notes-815/conflict-recovery-820-after.md",
+          "deliveries": 7,
+          "schedulerAccepted": true
+        }
+      ],
+      "project": "support-report",
+      "projectEventDefinitionRows": 0,
+      "owners": 5,
+      "phaseReceipts": 15,
+      "deliveries": 33,
+      "canonicalTerminalReceipts": 33,
+      "outcomes": {
+        "succeeded": 33
+      },
+      "eventOccurrences": 5,
+      "allRegisteredSchedulerDeliveriesAccepted": true,
+      "busDeliveryLeases": 33,
+      "runtimeProcessLeases": 1,
+      "leaseGrants": 34,
+      "addedRows": 164,
+      "fileMutationRequests": [
+        {
+          "id": 116,
+          "at": "2026-10-30T18:20:41.485Z",
+          "method": "POST",
+          "path": "/file/item"
+        },
+        {
+          "id": 132,
+          "at": "2026-10-30T18:20:54.642Z",
+          "method": "PATCH",
+          "path": "/file/content"
+        },
+        {
+          "id": 275,
+          "at": "2026-10-30T18:22:17.501Z",
+          "method": "PATCH",
+          "path": "/file/content"
+        },
+        {
+          "id": 276,
+          "at": "2026-10-30T18:22:17.902Z",
+          "method": "PATCH",
+          "path": "/file/content"
+        },
+        {
+          "id": 329,
+          "at": "2026-10-30T18:23:14.950Z",
+          "method": "PATCH",
+          "path": "/file/content"
+        },
+        {
+          "id": 479,
+          "at": "2026-10-30T18:26:04.808Z",
+          "method": "PATCH",
+          "path": "/file/content"
+        },
+        {
+          "id": 524,
+          "at": "2026-10-30T18:26:53.136Z",
+          "method": "PATCH",
+          "path": "/file/content"
+        }
+      ]
+    },
+    {
+      "phase": "final",
+      "events": [
+        {
+          "occurrenceID": "bus-occurrence:d86592ec-ce9a-4b99-a754-5347128510b7",
+          "at": 1793384983362,
+          "file": "notes-815/conflict-recovery-820-final.md",
+          "deliveries": 2,
+          "schedulerAccepted": false
+        },
+        {
+          "occurrenceID": "bus-occurrence:535dd992-9522-4e2a-899c-750feeccfec9",
+          "at": 1793385103572,
+          "file": "notes-815/conflict-recovery-820-final.md",
+          "deliveries": 7,
+          "schedulerAccepted": true
+        },
+        {
+          "occurrenceID": "bus-occurrence:bbad1ecb-c00a-4bc6-9f16-9e419f83a1f3",
+          "at": 1793385215555,
+          "file": "notes-815/conflict-recovery-820-final.md",
+          "deliveries": 7,
+          "schedulerAccepted": true
+        },
+        {
+          "occurrenceID": "bus-occurrence:ee24e7b0-79f1-485e-bf87-e111cb3e7030",
+          "at": 1793385445778,
+          "file": "notes-815/conflict-recovery-820-final.md",
+          "deliveries": 7,
+          "schedulerAccepted": true
+        }
+      ],
+      "project": "support-report",
+      "projectEventDefinitionRows": 0,
+      "owners": 4,
+      "phaseReceipts": 12,
+      "deliveries": 23,
+      "canonicalTerminalReceipts": 23,
+      "outcomes": {
+        "succeeded": 23
+      },
+      "eventOccurrences": 3,
+      "allRegisteredSchedulerDeliveriesAccepted": true,
+      "busDeliveryLeases": 23,
+      "runtimeProcessLeases": 1,
+      "leaseGrants": 24,
+      "addedRows": 117,
+      "fileMutationRequests": [
+        {
+          "id": 4,
+          "at": "2026-10-30T18:29:43.225Z",
+          "method": "POST",
+          "path": "/file/item"
+        },
+        {
+          "id": 255,
+          "at": "2026-10-30T18:31:43.556Z",
+          "method": "PATCH",
+          "path": "/file/content"
+        },
+        {
+          "id": 256,
+          "at": "2026-10-30T18:31:43.929Z",
+          "method": "PATCH",
+          "path": "/file/content"
+        },
+        {
+          "id": 354,
+          "at": "2026-10-30T18:33:35.542Z",
+          "method": "PATCH",
+          "path": "/file/content"
+        },
+        {
+          "id": 482,
+          "at": "2026-10-30T18:35:54.616Z",
+          "method": "PATCH",
+          "path": "/file/content"
+        },
+        {
+          "id": 563,
+          "at": "2026-10-30T18:37:25.768Z",
+          "method": "PATCH",
+          "path": "/file/content"
+        }
+      ]
+    }
+  ],
+  "totalEvents": 13,
+  "totalDeliveries": 81,
+  "coldIdentityPublication": {
+    "at": 1793384983362,
+    "projectBootstrapAt": "2026-10-30T18:30:06.772Z",
+    "registeredDeliveries": 2,
+    "allRegisteredDeliveriesSucceeded": true,
+    "projectEventDefinitionRows": 0,
+    "contract": "File mutation routes use Project identity; Bus snapshots currently registered phase targets. EventService registers in InstanceBootstrap."
+  }
+}

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件冲突恢复](records/2026-10/2026-10-31-file-conflict-recovery.md)：双页面编辑与有修订保护的恢复。
+
 - [网页来源摘录阅读](records/2026-10/2026-10-31-source-excerpt-reading.md)：真实来源的长摘录和现有阅读动作。
 
 - [首页持续目标入口](records/2026-10/2026-10-31-home-goal-entry.md)：首次发现与同一目标表单的可见操作。

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件冲突恢复](2026-10-31-file-conflict-recovery/README.md)：双页面实际冲突及恢复证据。
+
 - [网页来源摘录阅读](2026-10-31-source-excerpt-reading/README.md)：真实截图及来源完整性回执。
 
 - [首页持续目标入口](2026-10-31-home-goal-entry/README.md)：首页发现、目标表单与真实回执。

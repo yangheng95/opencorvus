@@ -234,6 +234,27 @@ export function FileEditorPane() {
     comparison()?.controller.abort()
     setComparison(null)
   }
+  const comparedDiskForBase = () => {
+    const read = comparison()
+    const disk = read?.status === "loaded" ? read.content : null
+    if (
+      !read || !canEdit(disk) || !disk?.revision || !writable() || !dirty() ||
+      isBusy() || fileEditorReserved() || read.controller.signal.aborted ||
+      !ownsFileTarget(read.target) || !isApiAuthorityCurrent(read.authority) ||
+      disk.revision === savedBaseline()?.revision
+    ) return null
+    return disk
+  }
+  const adoptComparedDiskBase = () => {
+    const disk = comparedDiskForBase()
+    const revision = disk?.revision
+    if (!disk || !revision) return
+    batch(() => {
+      setContent(disk)
+      setSavedBaseline({ content: disk.content, revision })
+      retireComparison()
+    })
+  }
   const compareWithDisk = async (resetMode = true) => {
     const file = target()
     if (!file || !writable() || !savedBaseline() || isBusy() || fileEditorReserved()) return
@@ -799,6 +820,11 @@ export function FileEditorPane() {
                 onClick={() => void compareWithDisk(false)}>
               {t("file_editor.compare_refresh")}
             </Button>
+            <Show when={comparedDiskForBase()}>
+              <Button type="button" variant="outline" size="md" tone="accent" onClick={adoptComparedDiskBase}>
+                {t("file_editor.compare_adopt_disk")}
+              </Button>
+            </Show>
             <Button type="button" variant="solid" size="md" tone="neutral" onClick={retireComparison}>
               {t("common.close")}
             </Button>
@@ -810,6 +836,9 @@ export function FileEditorPane() {
             <div class="file-comparison-content">
               <p class="file-comparison-path">{read().target.path}</p>
               <p class="file-comparison-hint">{t("file_editor.compare_hint")}</p>
+              <Show when={comparedDiskForBase()}>
+                <Feedback tone="warning">{t("file_editor.compare_adopt_hint")}</Feedback>
+              </Show>
               <SegmentedControl<ComparisonMode>
                 value={comparisonMode()} onChange={setComparisonMode} ariaLabel={t("file_editor.compare_versions")}
                 options={[

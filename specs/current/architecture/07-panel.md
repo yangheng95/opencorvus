@@ -872,12 +872,22 @@ The same file owner offers a read-only disk comparison in its header and named
 save-conflict feedback, including its unsaved decision. One cancellable read of
 the existing file-content route owns the disk snapshot; the loaded baseline and
 authored draft remain in their existing signals. The base is the most recently
-loaded or successfully saved text. Closing, replacing the read,
+loaded, successfully saved or explicitly adopted disk text. Closing, replacing the read,
 changing resource or API authority and unmounting retire that read. Three pair
 views compare disk/draft, base/disk and base/draft through the shared text
 diff renderer. Refresh updates only the disk snapshot. Non-text and failed reads
-retain explicit current-language feedback and original diagnostics. Comparison
-does not admit navigation, change the draft/baseline, save, reload or merge.
+retain explicit current-language feedback and original diagnostics. Reading,
+refreshing and closing a comparison preserve the draft and editing base.
+For a dirty writable text file, a different current disk snapshot with a revision
+offers an explicit Keep draft and use this disk base action. It asks the operator
+to review and merge the wanted changes first. This same file owner updates its
+existing content/base to that displayed snapshot and closes the comparison;
+the authored draft and pending leave decision remain owned by their existing
+signals. It writes no file or navigation approval. A later explicit Save still
+uses the unchanged conditional writer with that snapshot's revision, so a newer
+disk change produces the ordinary FileWriteConflictError. Source-only resources,
+failed/non-text reads, retired reads/authorities and reserved navigation cannot
+provide this action. No automatic merge, forced write or second draft is added.
 Tool and VCS diffs retain their original FileChange evidence contract before
 delegating valid text endpoints to the same presentation; editor comparisons
 never synthesize change receipts or Artifacts.

@@ -1,0 +1,136 @@
+{
+  "at": "2026-10-30T18:51:26.054Z",
+  "schema": 9,
+  "tables": 92,
+  "startingRows": 208927,
+  "finalRows": 209334,
+  "allStartingValuesPreserved": true,
+  "attachments": 75,
+  "oldProjects": 8,
+  "trackedFiles": 28,
+  "protectedWorkspaceFiles": 10,
+  "ownedNewFiles": 3,
+  "originalFullHTTPAndGoalPreserved": true,
+  "oldHTTPHistories": {
+    "task": 68,
+    "mission": 80,
+    "chat": 3,
+    "completedWork": 8
+  },
+  "readonlySourceMessages": 4,
+  "readonlySourceBytes": 176,
+  "webSourceMessages": 4,
+  "webSources": 2,
+  "fileSourceMessages": 3,
+  "fileSources": 8,
+  "screenshots": 18,
+  "downloadAndDiskSamples": [
+    {
+      "file": "before-merged-draft.md",
+      "text": "M",
+      "bytes": 131
+    },
+    {
+      "file": "before-disk-version.md",
+      "text": "B",
+      "bytes": 116
+    },
+    {
+      "file": "after-merged-download.md",
+      "text": "MC",
+      "bytes": 155
+    },
+    {
+      "file": "after-disk-version.md",
+      "text": "MC",
+      "bytes": 155
+    },
+    {
+      "file": "final-kept-draft.md",
+      "text": "M",
+      "bytes": 131
+    },
+    {
+      "file": "final-merged-download.md",
+      "text": "MC",
+      "bytes": 155
+    }
+  ],
+  "exactCandidateConditionalWrites": 11,
+  "finalKeptDraftBytes": 131,
+  "finalSavedMergedBytes": 155,
+  "registeredDeliveriesSucceeded": 81,
+  "newFileEvents": 13,
+  "schedulerAcceptances": 12,
+  "newModelRequests": 0,
+  "cumulativeModelRequests": 1096,
+  "originalDeadlineAt": 1793387294608,
+  "scopes": [
+    {
+      "phase": "before",
+      "originalRows": 208927,
+      "currentRows": 209053,
+      "addedRows": 126,
+      "fileEvents": 4,
+      "deliveries": 25,
+      "eventOccurrences": 4,
+      "publicShutdown": 200,
+      "reserveMs": 3230035,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "phase": "after",
+      "originalRows": 209053,
+      "currentRows": 209217,
+      "addedRows": 164,
+      "fileEvents": 5,
+      "deliveries": 33,
+      "eventOccurrences": 5,
+      "publicShutdown": 200,
+      "reserveMs": 2433198,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "phase": "final",
+      "originalRows": 209217,
+      "currentRows": 209334,
+      "addedRows": 117,
+      "fileEvents": 4,
+      "deliveries": 23,
+      "eventOccurrences": 3,
+      "publicShutdown": 200,
+      "reserveMs": 1727941,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    }
+  ]
+}

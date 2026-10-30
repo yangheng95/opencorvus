@@ -1,0 +1,111 @@
+{
+  "scopes": [
+    {
+      "phase": "after",
+      "requests": [
+        {
+          "requestID": 132,
+          "at": "2026-10-30T18:20:54.642Z",
+          "file": "notes-815/conflict-recovery-820-after.md",
+          "submittedText": "A",
+          "bytes": 83,
+          "expectedRevisionReadFrom": "initial empty file read by the editor"
+        },
+        {
+          "requestID": 275,
+          "at": "2026-10-30T18:22:17.501Z",
+          "file": "notes-815/conflict-recovery-820-after.md",
+          "submittedText": "B",
+          "bytes": 116,
+          "expectedRevisionReadFrom": "after-a"
+        },
+        {
+          "requestID": 276,
+          "at": "2026-10-30T18:22:17.902Z",
+          "file": "notes-815/conflict-recovery-820-after.md",
+          "submittedText": "D",
+          "bytes": 98,
+          "expectedRevisionReadFrom": "after-a"
+        },
+        {
+          "requestID": 329,
+          "at": "2026-10-30T18:23:14.950Z",
+          "file": "notes-815/conflict-recovery-820-after.md",
+          "submittedText": "C",
+          "bytes": 140,
+          "expectedRevisionReadFrom": "after-b"
+        },
+        {
+          "requestID": 479,
+          "at": "2026-10-30T18:26:04.808Z",
+          "file": "notes-815/conflict-recovery-820-after.md",
+          "submittedText": "M",
+          "bytes": 131,
+          "expectedRevisionReadFrom": "after-b"
+        },
+        {
+          "requestID": 524,
+          "at": "2026-10-30T18:26:53.136Z",
+          "file": "notes-815/conflict-recovery-820-after.md",
+          "submittedText": "MC",
+          "bytes": 155,
+          "expectedRevisionReadFrom": "after-c"
+        }
+      ],
+      "typedConflictRetainsActualC": true,
+      "actualSavedMergedBytes": 155,
+      "expectedRevisionBoundToExactRead": true
+    },
+    {
+      "phase": "final",
+      "requests": [
+        {
+          "requestID": 255,
+          "at": "2026-10-30T18:31:43.556Z",
+          "file": "notes-815/conflict-recovery-820-final.md",
+          "submittedText": "B",
+          "bytes": 116,
+          "expectedRevisionReadFrom": "final-a"
+        },
+        {
+          "requestID": 256,
+          "at": "2026-10-30T18:31:43.929Z",
+          "file": "notes-815/conflict-recovery-820-final.md",
+          "submittedText": "D",
+          "bytes": 98,
+          "expectedRevisionReadFrom": "final-a"
+        },
+        {
+          "requestID": 354,
+          "at": "2026-10-30T18:33:35.542Z",
+          "file": "notes-815/conflict-recovery-820-final.md",
+          "submittedText": "C",
+          "bytes": 140,
+          "expectedRevisionReadFrom": "final-b"
+        },
+        {
+          "requestID": 482,
+          "at": "2026-10-30T18:35:54.616Z",
+          "file": "notes-815/conflict-recovery-820-final.md",
+          "submittedText": "M",
+          "bytes": 131,
+          "expectedRevisionReadFrom": "final-b"
+        },
+        {
+          "requestID": 563,
+          "at": "2026-10-30T18:37:25.768Z",
+          "file": "notes-815/conflict-recovery-820-final.md",
+          "submittedText": "MC",
+          "bytes": 155,
+          "expectedRevisionReadFrom": "final-c"
+        }
+      ],
+      "typedConflictRetainsActualC": true,
+      "actualSavedMergedBytes": 155,
+      "expectedRevisionBoundToExactRead": true
+    }
+  ],
+  "finalKeptDraftBytes": 131,
+  "finalSavedBytes": 155,
+  "mutationScope": "Only the two explicitly named QA files in these candidate phases; the baseline has its separate owned input."
+}
