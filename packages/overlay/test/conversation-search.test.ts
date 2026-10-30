@@ -82,6 +82,22 @@ test("a source result preview belongs to its matching saved source", () => {
       preview: "İ 中文🙂 https://example.test/first Proposal Documents" }])
 })
 
+test("case-folded source offsets retain the matching source across Unicode expansions", () => {
+  const sources = [
+    { type: "source-url", sourceId: "source_expanded", url: "https://example.test/first", title: "İ".repeat(12), snippet: "needle" },
+    { type: "source-file", sourceId: "source_following", path: "report.txt", snippet: "second target" },
+  ]
+  const original = { ...message("m_expansions", ""), parts: sources }
+  const snapshot = readConversationSnapshot({ session, messages: [original] }, session.id)
+  expect(findConversationMessages(snapshot, "needle")).toEqual([
+    { id: "m_expansions", author: "user", created: time, sourceId: "source_expanded",
+      preview: "İ".repeat(12) + " https://example.test/first needle" },
+  ])
+  expect(findConversationMessages(snapshot, "second target")).toEqual([
+    { id: "m_expansions", author: "user", created: time, sourceId: "source_following", preview: "report.txt second target" },
+  ])
+})
+
 test("the shared source location retains the exact path, range and parent identity", () => {
   const source = { type: "source-file" as const, sourceId: "original_source", sessionID: session.id, messageID: "m_original",
     path: "C:\\项目\\说明 文档.py", range: { startLine: 4, endLine: 8 } }

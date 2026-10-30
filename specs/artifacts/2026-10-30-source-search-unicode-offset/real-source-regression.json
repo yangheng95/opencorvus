@@ -1,0 +1,52 @@
+{
+  "at": "2026-10-30T11:23:31.243Z",
+  "cases": [
+    {
+      "key": "file",
+      "messages": 3,
+      "query": "999.999",
+      "hits": [
+        {
+          "id": "msg_g0VZIlgSB00a4GFj0lX4",
+          "author": "chat",
+          "created": 1793149290884,
+          "preview": "…e.py:44:26 self.assertEqual(sum_due([(1, \"999.999\"), (1, \"0.001\")]), \"1000.00\")",
+          "sourceId": "3ba24d0dad863280477db5e8d092f9d1d2885c20981c4bb018aef2f3ff6a6acf"
+        }
+      ],
+      "origin": "810 actual complete HTTP snapshot; current production parser/search, offline replay"
+    },
+    {
+      "key": "web",
+      "messages": 4,
+      "query": "Proposal Documents",
+      "hits": [
+        {
+          "id": "msg_g0VZIfEN0003l06fuqXL",
+          "author": "chat",
+          "created": 1793147752962,
+          "preview": "…et, such as document type and size, for example, ‘Proposal Documents (RTF, 20MB)’. Write meaningful text alternatives for images For every image, write alternative te…",
+          "sourceId": "141e55538fffe596710ea7d1fc07b41230c4ce70e0ee60e08bf3678bae384698"
+        }
+      ],
+      "origin": "810 actual complete HTTP snapshot; current production parser/search, offline replay"
+    },
+    {
+      "key": "taskSource",
+      "messages": 68,
+      "query": "invoice.py:1:5",
+      "hits": [
+        {
+          "id": "msg_g0VZH4wwO00JByRtLgon",
+          "author": "dynamic-builder",
+          "created": 1793124329820,
+          "preview": "…eration\\2026-10-28\\code-task-delivery-734\\project\\invoice.py:1:5 def sum_due(rows):",
+          "sourceId": "e3476188b9f2d21a00c9998dbc36632454fc22c5800d7b6ad5af40cf515d9783"
+        }
+      ],
+      "origin": "810 actual complete HTTP snapshot; current production parser/search, offline replay"
+    }
+  ],
+  "modelRequests": 0,
+  "newHTTPRequests": 0
+}

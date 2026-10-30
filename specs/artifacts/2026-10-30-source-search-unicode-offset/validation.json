@@ -1,0 +1,65 @@
+{
+  "at": "2026-10-30T11:25:03.249Z",
+  "before": {
+    "label": "tests-before",
+    "startedAt": 1793359364408,
+    "closedAt": 1793359368695,
+    "code": 1,
+    "signal": null,
+    "childPID": 88460
+  },
+  "checks": {
+    "tests-after": {
+      "label": "tests-after",
+      "startedAt": 1793359408379,
+      "closedAt": 1793359414462,
+      "code": 0,
+      "signal": null,
+      "childPID": 59832
+    },
+    "types-after": {
+      "label": "types-after",
+      "startedAt": 1793359408394,
+      "closedAt": 1793359432745,
+      "code": 0,
+      "signal": null,
+      "childPID": 95896
+    },
+    "build-after": {
+      "label": "build-after",
+      "startedAt": 1793359408394,
+      "closedAt": 1793359475081,
+      "code": 0,
+      "signal": null,
+      "childPID": 6756
+    },
+    "real-sources": {
+      "label": "real-sources",
+      "startedAt": 1793359408432,
+      "closedAt": 1793359411335,
+      "code": 0,
+      "signal": null,
+      "childPID": 96904
+    },
+    "docs-final": {
+      "label": "docs-final",
+      "startedAt": 1793359503401,
+      "closedAt": 1793359511021,
+      "code": 0,
+      "signal": null,
+      "childPID": 99260
+    }
+  },
+  "focusedTests": {
+    "pass": 23,
+    "fail": 0,
+    "assertions": 49,
+    "files": 3
+  },
+  "change": "case-folded segment membership and preview offsets share one code-unit coordinate system",
+  "uiChange": false,
+  "newVisualValidation": false,
+  "previousVisualEvidence": "../2026-10-30-source-conversation-find/README.md",
+  "providerRequests": 0,
+  "newHTTPRequests": 0
+}

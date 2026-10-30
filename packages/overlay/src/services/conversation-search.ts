@@ -24,12 +24,13 @@ export function findConversationMessages(snapshot: ConversationSearchSnapshot, q
     if (index < 0) return []
     let offset = 0, sourceId: string | undefined, previewBody = body, previewIndex = index
     for (const segment of segments) {
-      if (index < offset + segment.text.length) {
+      const foldedLength = segment.text.toLowerCase().length
+      if (index < offset + foldedLength) {
         sourceId = segment.sourceId
         if (sourceId) { previewBody = segment.text; previewIndex = index - offset }
         break
       }
-      offset += segment.text.length + 2
+      offset += foldedLength + 2
     }
     const points = Array.from(previewBody)
     let folded = 0, position = 0

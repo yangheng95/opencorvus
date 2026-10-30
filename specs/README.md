@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [来源查找的 Unicode 位置单位](records/2026-10/2026-10-30-source-search-unicode-offset.md)：大小写转换扩长后的原来源身份和预览修复。
+
 - [对话原来源查找](records/2026-10/2026-10-30-source-conversation-find.md)：来源标题、位置和摘录检索，原来源展开与定位及真实页面验证。
 
 - [首页与持续目标表单体验复核](records/2026-10/2026-10-30-home-goal-form-review.md)：真实入口、草稿和校验复核，以及可直接核对的预算摘要。

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [来源检索 Unicode 回归](2026-10-30-source-search-unicode-offset/README.md)：旧算法错归来源的真实输出、聚焦测试与保存原快照回归。
+
 - [对话原来源查找实页证据](2026-10-30-source-conversation-find/README.md)：原来源检索、预览边界、实际定位、中英界面与数据保全。
 
 - [首页与目标预算实页复核](2026-10-30-home-goal-form-review/README.md)：首页、草稿、预算校验及中英额度摘要。

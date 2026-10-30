@@ -1,0 +1,48 @@
+bun test v1.4.0 (34cbb9a40)
+
+packages\overlay\test\conversation-search.test.ts:
+(pass) complete snapshot search returns actual message identities, authors and Unicode text in producer order [1.55ms]
+(pass) a match beyond the initial history window retains its exact source message [1.21ms]
+(pass) structured stop reason is searchable as its original error text [0.44ms]
+(pass) case folding before a Unicode match keeps readable context intact [0.09ms]
+(pass) saved file-source locations and excerpts return their original message and source identities [0.54ms]
+(pass) web and document source text keeps producer message order and readable Unicode previews [0.44ms]
+(pass) a source result preview belongs to its matching saved source [0.21ms]
+87 |     { type: "source-url", sourceId: "source_expanded", url: "https://example.test/first", title: "İ".repeat(12), snippet: "needle" },
+88 |     { type: "source-file", sourceId: "source_following", path: "report.txt", snippet: "second target" },
+89 |   ]
+90 |   const original = { ...message("m_expansions", ""), parts: sources }
+91 |   const snapshot = readConversationSnapshot({ session, messages: [original] }, session.id)
+92 |   expect(findConversationMessages(snapshot, "needle")).toEqual([
+                                                            ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+      "author": "user",
+      "created": 1793167200000,
+      "id": "m_expansions",
+-     "preview": "İİİİİİİİİİİİ https://example.test/first needle",
+-     "sourceId": "source_expanded",
++     "preview": "report.txt second target",
++     "sourceId": "source_following",
+    },
+  ]
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\conversation-search.test.ts:92:56)
+(fail) case-folded source offsets retain the matching source across Unicode expansions [0.76ms]
+(pass) the shared source location retains the exact path, range and parent identity [0.19ms]
+(pass) invalid source identity, address and line range return precise snapshot field errors [0.64ms]
+(pass) scroll and explicit navigation receive the same source-owned page promise [0.32ms]
+(pass) completion of an earlier source preserves the current source page owner [0.22ms]
+(pass) a failed page retains its original error and the same scope can read a new page [0.21ms]
+
+ 12 pass
+ 1 fail
+ 27 expect() calls
+Ran 13 tests across 1 file. [3.37s]
+Test runtime retained after unsuccessful run: D:\oc810-B4kn64\tests-before\tmp\opencorvus-test-run-yEw17Z
+Physical/output settlement confirmed: true

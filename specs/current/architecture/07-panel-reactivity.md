@@ -40,6 +40,8 @@ cards. Source identity, address, optional text and line-range validation belongs
 to that same snapshot reader. A hit retains its original Message and, when the
 match starts in a Source, that Source ID. Source previews use only that saved
 Source's context. Refresh obtains a current snapshot.
+Match membership and Source preview offsets use the same case-folded code-unit
+positions, including characters whose lowercase representation expands.
 Navigation resolves the actual writer-owned message/card target, joins any
 same-source/authority older-page read, then uses the existing expansion and
 virtualized scroll mechanism. A message request expands its delegated context

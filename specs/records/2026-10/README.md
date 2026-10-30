@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [2026-10-30-source-search-unicode-offset.md](2026-10-30-source-search-unicode-offset.md)：来源检索位置单位错配的红灯复现、正向回归及交付。
+
 - [2026-10-30-source-conversation-find.md](2026-10-30-source-conversation-find.md)：已保存来源查找、主与参与者原来源定位和返工验收。
 
 - [2026-10-30-home-goal-form-review.md](2026-10-30-home-goal-form-review.md)：首页和持续目标未提交表单、实际额度摘要与数据保全。
