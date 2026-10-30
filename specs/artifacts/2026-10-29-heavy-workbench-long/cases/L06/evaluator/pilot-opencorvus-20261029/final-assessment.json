@@ -1,0 +1,810 @@
+{
+  "format": "l06-complete-assessment/1",
+  "submission_id": "opencorvus-L06-b4ae96c73ae82-phase1",
+  "total_score": 100,
+  "business_success": true,
+  "good": true,
+  "findings": [
+    {
+      "id": "A01",
+      "status": "verified_pass",
+      "where": "normalized",
+      "detail": {
+        "fields_mismatched": []
+      }
+    },
+    {
+      "id": "A02",
+      "status": "verified_pass",
+      "where": "normalized",
+      "detail": {
+        "fields_mismatched": []
+      }
+    },
+    {
+      "id": "A03",
+      "status": "verified_pass",
+      "where": "normalized",
+      "detail": {
+        "fields_mismatched": []
+      }
+    },
+    {
+      "id": "A04",
+      "status": "verified_pass",
+      "where": "normalized",
+      "detail": {
+        "fields_mismatched": []
+      }
+    },
+    {
+      "id": "B01",
+      "status": "verified_pass",
+      "where": "plan.control_schema",
+      "detail": null
+    },
+    {
+      "id": "B02",
+      "status": "verified_pass",
+      "where": "common_commitment",
+      "detail": {
+        "executed_predicates": 9,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B03",
+      "status": "verified_pass",
+      "where": "shipment_binary",
+      "detail": {
+        "executed_predicates": 144,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B04",
+      "status": "verified_pass",
+      "where": "shipment_minimum",
+      "detail": {
+        "executed_predicates": 144,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B05",
+      "status": "verified_pass",
+      "where": "supplier_capacity",
+      "detail": {
+        "executed_predicates": 144,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B06",
+      "status": "verified_pass",
+      "where": "product_assignment",
+      "detail": {
+        "executed_predicates": 384,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B07",
+      "status": "verified_pass",
+      "where": "plant_capacity",
+      "detail": {
+        "executed_predicates": 96,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B08",
+      "status": "verified_pass",
+      "where": "raw_availability",
+      "detail": {
+        "executed_predicates": 48,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B09",
+      "status": "verified_pass",
+      "where": "fulfilment",
+      "detail": {
+        "executed_predicates": 48,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B10",
+      "status": "verified_pass",
+      "where": "raw_storage_peak",
+      "detail": {
+        "executed_predicates": 48,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "B11",
+      "status": "verified_pass",
+      "where": "product_storage_peak",
+      "detail": {
+        "executed_predicates": 48,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "C01",
+      "status": "verified_pass",
+      "where": "summary",
+      "detail": null
+    },
+    {
+      "id": "C02",
+      "status": "verified_pass",
+      "where": "cash_intermediate",
+      "detail": {
+        "executed_predicates": 45,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "C03",
+      "status": "verified_pass",
+      "where": "cash_terminal",
+      "detail": {
+        "executed_predicates": 3,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "C04",
+      "status": "verified_pass",
+      "where": "terminal_pipeline",
+      "detail": {
+        "executed_predicates": 144,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "C05",
+      "status": "verified_pass",
+      "where": "terminal_finished",
+      "detail": {
+        "executed_predicates": 3,
+        "violation_count": 0,
+        "first_violation": null
+      }
+    },
+    {
+      "id": "C06",
+      "status": "verified_pass",
+      "where": "registered_reference",
+      "detail": {
+        "reference_id": "L06-v2-base-native-cpsat-20261029",
+        "trust_kind": "trusted_native_integer_search_bound",
+        "cost_exact": "476871/10",
+        "relative_gap_exact": "3071/473800"
+      }
+    },
+    {
+      "id": "C07",
+      "status": "verified_pass",
+      "where": "summary",
+      "detail": null
+    },
+    {
+      "id": "C08",
+      "status": "verified_pass",
+      "where": "summary",
+      "detail": null
+    },
+    {
+      "id": "C09",
+      "status": "verified_pass",
+      "where": "summary",
+      "detail": null
+    },
+    {
+      "id": "C10",
+      "status": "verified_pass",
+      "where": "summary",
+      "detail": null
+    },
+    {
+      "id": "C11",
+      "status": "verified_pass",
+      "where": "summary",
+      "detail": null
+    },
+    {
+      "id": "D01",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "A different executor actually completed the sealed nine-source program from only source/declared dependencies/frozen raw in a new output mount. Natural exit0, actual numeric30 pass and independent full business ledger/summary pass. New strategy need not match original decisions. C47648.2 passes fixed47380 quality. No old answer/model/hint is available through mounts or source inventory.",
+        "evidence": [
+          {
+            "path": "base-cold-addendum/receipts/terminal-inspect.json",
+            "kind": "process_receipt",
+            "locator": "Id/State/Args/Mounts/Config/HostConfig",
+            "observation": "Exact owned evaluator CID3338994... naturally exited0 after readonly source/raw and new results/networknone execution; source9py+README+requirements match sealed bytes."
+          },
+          {
+            "path": "SOURCE-AUDIT.md",
+            "kind": "source_audit",
+            "locator": "five actually read execution modules; base-cold-addendum/checks.json source identity predicate",
+            "observation": "Main reads supplied raw and builds CP-SAT anew; no old plan/model/hint mount or program read; all9py exact sealed bytes."
+          },
+          {
+            "path": "base-cold-addendum/checks.json",
+            "kind": "business_oracle",
+            "locator": "24 real identity/physical/financial/native/report checks all passed",
+            "observation": "No optimizer was run by this reviewer; separate stdlib ledger/summary and actual saved stdout were checked."
+          }
+        ],
+        "rater": "independent-agent-/root/benchmark_review",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "D02",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "Both required input controls actually completed with the same sealed nine-source program/defaults in new outputs and isolated readonly raw/source mounts. Registered C/R0 price45\u219246 exactly matches captured control; complete quote policy ledger/summary independently correct C47761.2, fixedL47380 gap953/118450. All11 CSV data rows are actually reversed with unchanged complete semantic facts; new row policy correct C47643.2, gap329/59225. Both actual numeric30 pass. Correct differing strategies are allowed; the original47687.1 delivery and each replay remain distinct observations. This binary leaf is full only now both controls are closed.",
+        "evidence": [
+          {
+            "path": "quote-cold-addendum/receipts/terminal-inspect.json",
+            "kind": "process_receipt",
+            "locator": "Exact retired CID f956306.../State/Args/Mounts",
+            "observation": "Real quote execution naturally exited0 with original documented defaults and no old answer mount."
+          },
+          {
+            "path": "row-cold-addendum/receipts/terminal-inspect.json",
+            "kind": "process_receipt",
+            "locator": "Exact retired CID b6754c.../State/Args/Mounts",
+            "observation": "Real row-order execution naturally exited0 using the same sealed source and new output."
+          },
+          {
+            "path": "quote-cold-addendum/checks.json",
+            "kind": "business_oracle",
+            "locator": "15 actual input/source/account/reference/native predicates all pass",
+            "observation": "Only one actual registered price change; full independent quote business/quality and actual numeric30 verified."
+          },
+          {
+            "path": "row-cold-addendum/checks.json",
+            "kind": "business_oracle",
+            "locator": "First15 business predicates pass; last archival locator assumption corrected separately",
+            "observation": "All11 physical reversals and complete unchanged raw semantics; full independent new accounts/quality and actual numeric30 verified."
+          },
+          {
+            "path": "row-cold-addendum/archive-binding-correction.json",
+            "kind": "artifact_review",
+            "locator": "32 actual result member byte comparisons",
+            "observation": "Both snapshot/results and results archive namespaces match; initial reviewer suffix-uniqueness assumption was not a content error."
+          },
+          {
+            "path": "SOURCE-AUDIT.md",
+            "kind": "source_audit",
+            "locator": "Actually inspected data-loading/model/account/report path",
+            "observation": "Source consumes supplied raw and creates model/output anew; both control inventories directly match original sealed bytes."
+          }
+        ],
+        "rater": "independent-agent-/root/benchmark_review",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "D03",
+      "status": "verified_pass",
+      "where": "ledger",
+      "detail": null
+    },
+    {
+      "id": "D04",
+      "status": "verified_pass",
+      "where": "ledger",
+      "detail": null
+    },
+    {
+      "id": "D05",
+      "status": "verified_pass",
+      "where": "ledger",
+      "detail": null
+    },
+    {
+      "id": "D06",
+      "status": "verified_pass",
+      "where": "ledger",
+      "detail": null
+    },
+    {
+      "id": "D07",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "All four fact categories are traceable across source-map, README mapping table, DATA and original input. Explicit identities/index, pack-vs-piece, per-piece price/cost, shared volume/hours and facility same-name fields are located. The source-map numeric_fields values are declared minimum domains, not claimed business values; the actual values reside in normalized/raw.",
+        "evidence": [
+          {
+            "path": "snapshot-current/delivery/source-map.json",
+            "kind": "artifact_review",
+            "locator": "11 file names; identity/numeric_fields/rows",
+            "observation": "Keys match raw catalog/relation joint identities."
+          },
+          {
+            "path": "snapshot-current/candidate-source/README.md",
+            "kind": "document_review",
+            "locator": "\u6570\u636e\u6620\u5c04\u4e0e\u4e25\u683c\u6821\u9a8c table and following unit paragraph",
+            "observation": "All four categories including facility fields and units are mapped."
+          },
+          {
+            "path": "checks-initial.json",
+            "kind": "business_oracle",
+            "locator": "20 named checks; all passed",
+            "observation": "Independent stdlib projection and cumulative physical/financial arithmetic; does not import candidate or solver code."
+          }
+        ],
+        "rater": "independent-agent-/root/benchmark_review",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "D08",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "The independent real base run reports native FEASIBLE and resource_limit at its actual internal1800s timeout, consistent with saved native response/stdout. Original report also identifies FEASIBLE rather than exact optimum; do not substitute this new primal value for its separately retained original47687.1. This closes the previously pending execution observation with actual replay evidence.",
+        "evidence": [
+          {
+            "path": "base-cold-addendum/receipts/terminal-inspect.json",
+            "kind": "process_receipt",
+            "locator": "Id/State/Args/Mounts/Config/HostConfig",
+            "observation": "Exact owned evaluator CID3338994... naturally exited0 after readonly source/raw and new results/networknone execution; source9py+README+requirements match sealed bytes."
+          },
+          {
+            "path": "base-cold-addendum/receipts/container.stdout.txt",
+            "kind": "process_receipt",
+            "locator": "last actual native result; scaled CpSolverResponse",
+            "observation": "Actual FEASIBLE objective476482/bound473605 over denominator10; matches run and independently reconstructed cost47648.2."
+          },
+          {
+            "path": "base-cold-addendum/checks.json",
+            "kind": "business_oracle",
+            "locator": "24 real identity/physical/financial/native/report checks all passed",
+            "observation": "No optimizer was run by this reviewer; separate stdlib ledger/summary and actual saved stdout were checked."
+          }
+        ],
+        "rater": "independent-agent-/root/benchmark_review",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "D09",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "The actually obtained feasible policy and numerical bound are correctly recorded as known. No exact optimum is claimed; the positive gap and finite search are explained. No failed branch had to be manufactured for a successful submission. Actual new result47648.2/bound47360.5 is distinct from registered47380 and from original run; no unknown result is fabricated.",
+        "evidence": [
+          {
+            "path": "base-cold-addendum/receipts/terminal-inspect.json",
+            "kind": "process_receipt",
+            "locator": "Id/State/Args/Mounts/Config/HostConfig",
+            "observation": "Exact owned evaluator CID3338994... naturally exited0 after readonly source/raw and new results/networknone execution; source9py+README+requirements match sealed bytes."
+          },
+          {
+            "path": "base-cold-addendum/receipts/container.stdout.txt",
+            "kind": "process_receipt",
+            "locator": "last actual native result; scaled CpSolverResponse",
+            "observation": "Actual FEASIBLE objective476482/bound473605 over denominator10; matches run and independently reconstructed cost47648.2."
+          },
+          {
+            "path": "base-cold-addendum/snapshot/results/base/report.md",
+            "kind": "document_review",
+            "locator": "\u6267\u884c\u6458\u8981 and \u6a21\u578b/\u5c40\u9650",
+            "observation": "Actual report clearly separates feasible, native numerical bound, evaluator quality and exact optimality."
+          }
+        ],
+        "rater": "independent-agent-/root/benchmark_review",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "D10",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "Captured actual /opt/cpsat/bin/python reproduce.py --input /raw --output /results/base agrees with new run/manifest. Original README defaults1800s/8workers/seed20261029/gap.001, exact dependencies and source9py are preserved. External input/output paths are supported by README; no code/parameter correction was required. Actual source/input/output identity is recorded, not inferred from a checksum.",
+        "evidence": [
+          {
+            "path": "base-cold-addendum/receipts/terminal-inspect.json",
+            "kind": "process_receipt",
+            "locator": "Id/State/Args/Mounts/Config/HostConfig",
+            "observation": "Exact owned evaluator CID3338994... naturally exited0 after readonly source/raw and new results/networknone execution; source9py+README+requirements match sealed bytes."
+          },
+          {
+            "path": "base-cold-addendum/receipts/container.stdout.txt",
+            "kind": "process_receipt",
+            "locator": "last actual native result; scaled CpSolverResponse",
+            "observation": "Actual FEASIBLE objective476482/bound473605 over denominator10; matches run and independently reconstructed cost47648.2."
+          },
+          {
+            "path": "base-cold-addendum/checks.json",
+            "kind": "business_oracle",
+            "locator": "24 real identity/physical/financial/native/report checks all passed",
+            "observation": "No optimizer was run by this reviewer; separate stdlib ledger/summary and actual saved stdout were checked."
+          }
+        ],
+        "rater": "independent-agent-/root/benchmark_review",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "E01",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "The baseline is a complete, executable declared policy: keep procurement/trucks, use cheapest allowed route for net current demand, no prebuild. I reconstructed every control from raw and main plan and obtained the exact baseline plan. Independent arithmetic finds33 shared-line-hours violations; first base/week2/F1 is26>25. The actual original main process exit0 and retained baseline-check corroborate the delivered calculation; it does not invent a feasible baseline cost.",
+        "evidence": [
+          {
+            "path": "snapshot-current/delivery/report.md",
+            "kind": "document_review",
+            "locator": "\u57fa\u7ebf\u4e0e\u5b8c\u6574\u53ef\u884c\u66ff\u4ee3",
+            "observation": "Declared algorithm, first actual violation and corrective preproduction are explicit."
+          },
+          {
+            "path": "baseline-independent.json",
+            "kind": "business_oracle",
+            "locator": "violations.B07=33; physical_statuses",
+            "observation": "Only shared-line capacity fails; financial ledger is not published as trusted feasible cost."
+          },
+          {
+            "path": "checks-initial.json",
+            "kind": "business_oracle",
+            "locator": "20 named checks; all passed",
+            "observation": "Independent stdlib projection and cumulative physical/financial arithmetic; does not import candidate or solver code."
+          },
+          {
+            "path": "snapshot-current/external-receipts/l06-final-main-inspect.json",
+            "kind": "process_receipt",
+            "locator": "State.ExitCode=0; Args",
+            "observation": "The actual candidate main invocation completed and produced this retained baseline evidence."
+          }
+        ],
+        "rater": "independent-agent-/root/benchmark_review",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "E02",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "All six pre-stock claims are correct: week6/P0 has same-week upper0 and requires10/10/11 units; week9/P3 upper3 requires1/1/2. Previous ending inventories exactly meet these minima. These are independent generous capacity bounds, not trajectory matching.",
+        "evidence": [
+          {
+            "path": "snapshot-current/delivery/report.md",
+            "kind": "document_review",
+            "locator": "\u4e3a\u4ec0\u4e48\u5fc5\u987b\u63d0\u524d\u751f\u4ea7 table",
+            "observation": "Week, identity, demand, upper, minimum and actual pre-stock are all given."
+          },
+          {
+            "path": "checks-initial.json",
+            "kind": "business_oracle",
+            "locator": "20 named checks; all passed",
+            "observation": "Independent stdlib projection and cumulative physical/financial arithmetic; does not import candidate or solver code."
+          }
+        ],
+        "rater": "independent-agent-/root/benchmark_review",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "E03",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "The interruption changes supplier A feasibility: weeks6\u20138 capacity15<minimum20 forces switch0. Report shows base\u2192disrupted volumes80\u21920,80\u21920,0\u21920, names the selected replacement mechanism through earlier/other-supplier arrivals and stocks, and quantifies B/C branch volumes610\u2192700 and50\u2192129 while A640\u2192470. The complete identified/dated branch controls and ledger expose the executable replacement policy; an additional artificially different sourcing trajectory is not required. The supplied complete feasible alternative preserves this valid response. This is more than a generic suggestion to use another supplier.",
+        "evidence": [
+          {
+            "path": "snapshot-current/delivery/report.md",
+            "kind": "document_review",
+            "locator": "\u4f9b\u5e94\u4e2d\u65ad\u53ca\u60c5\u666f\u540e\u5e94\u5bf9; \u64cd\u4f5c\u4ea4\u63a5\u4e0e\u8eab\u4efd; \u57fa\u7ebf\u4e0e\u5b8c\u6574\u53ef\u884c\u66ff\u4ee3",
+            "observation": "A choice-set exclusion plus actual quantified sourcing substitutions, dates/units/identities and complete executable policies are supplied."
+          },
+          {
+            "path": "checks-initial.json",
+            "kind": "business_oracle",
+            "locator": "20 named checks; all passed",
+            "observation": "Independent stdlib projection and cumulative physical/financial arithmetic; does not import candidate or solver code."
+          }
+        ],
+        "rater": "independent-agent-/root/benchmark_review",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "E04",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "Each scenario minimum is week3 cash\u22125369, receipts0, spend1980, exactly reaching credit floor. Report supplies cash recurrence, initial7000, sales lag4 and cost components tied to real plan/normalized fields. It distinguishes receivables from available cash and scenario-specific constraints. This is closed explanatory information, not merely an unanalyzed ledger.",
+        "evidence": [
+          {
+            "path": "snapshot-current/delivery/report.md",
+            "kind": "document_review",
+            "locator": "\u73b0\u91d1\u74f6\u9888\u3001\u8d39\u7528\u4e0e\u4ed3\u5bb9 equations/table and following paragraph",
+            "observation": "Tight week/scenario/value and payment-versus-collection timing are explicit."
+          },
+          {
+            "path": "checks-initial.json",
+            "kind": "business_oracle",
+            "locator": "20 named checks; all passed",
+            "observation": "Independent stdlib projection and cumulative physical/financial arithmetic; does not import candidate or solver code."
+          }
+        ],
+        "rater": "independent-agent-/root/benchmark_review",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "E05",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "Expected purchase36181.6 is the largest component; freight5298, production5801.4, holding406.1 sum exactly to47687.1. The same-scope component table and total yield exact share361816/476871 without requiring a printed percentage. Formula pack lots\u00d7pack units\u00d7unit quote and plan/normalized identities trace expenditure to actions.",
+        "evidence": [
+          {
+            "path": "snapshot-current/delivery/report.md",
+            "kind": "document_review",
+            "locator": "\u73b0\u91d1\u74f6\u9888\u3001\u8d39\u7528\u4e0e\u4ed3\u5bb9 component table/formulas; \u6267\u884c\u6458\u8981",
+            "observation": "Exact component, total, procurement action formula and price/pack mapping are present."
+          },
+          {
+            "path": "checks-initial.json",
+            "kind": "business_oracle",
+            "locator": "20 named checks; all passed",
+            "observation": "Independent stdlib projection and cumulative physical/financial arithmetic; does not import candidate or solver code."
+          }
+        ],
+        "rater": "independent-agent-/root/benchmark_review",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "E06",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "A second complete feasible policy is independently verified. Only base/week15/P2 shifts one unit F0\u2192F1; it frees F0 hours and costs3 more in that scenario, hence expected increase3/2. Alternate ledger/summary exactly match independent arithmetic and report correctly explains the economic tradeoff.",
+        "evidence": [
+          {
+            "path": "snapshot-current/delivery/report.md",
+            "kind": "document_review",
+            "locator": "\u57fa\u7ebf\u4e0e\u5b8c\u6574\u53ef\u884c\u66ff\u4ee3 last paragraph",
+            "observation": "Correct explicit one-unit route change and economic price."
+          },
+          {
+            "path": "alternative-independent.json",
+            "kind": "business_oracle",
+            "locator": "business_feasible/ledger/summary/cost",
+            "observation": "Full alternate policy physically/informationally/financially feasible."
+          },
+          {
+            "path": "checks-initial.json",
+            "kind": "business_oracle",
+            "locator": "20 named checks; all passed",
+            "observation": "Independent stdlib projection and cumulative physical/financial arithmetic; does not import candidate or solver code."
+          }
+        ],
+        "rater": "independent-agent-/root/benchmark_review",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "F01",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "All common weeks0\u20133 orders/trucks/production are explicitly tabulated and agree with the full plan. Catalog indexes, unit conventions, zero-based time, common information set and carry-over arrivals are explained. No CSV-specific format requirement is imposed.",
+        "evidence": [
+          {
+            "path": "snapshot-current/delivery/report.md",
+            "kind": "document_review",
+            "locator": "\u64cd\u4f5c\u4ea4\u63a5\u4e0e\u8eab\u4efd and \u5171\u540c\u627f\u8bfa table",
+            "observation": "Complete executable common commitments with identities and units."
+          },
+          {
+            "path": "checks-initial.json",
+            "kind": "business_oracle",
+            "locator": "20 named checks; all passed",
+            "observation": "Independent stdlib projection and cumulative physical/financial arithmetic; does not import candidate or solver code."
+          }
+        ],
+        "rater": "independent-agent-/root/benchmark_review",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "F02",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "All three revealed branches are locatable in complete decisions[scenarioID] using the supplied identities, array axes, units and week4 reveal rule. Existing orders retain original arrival timing and no common prefix is rewritten. Complete JSON is an operational handoff, not penalized for lacking a separate per-action CSV.",
+        "evidence": [
+          {
+            "path": "snapshot-current/delivery/report.md",
+            "kind": "document_review",
+            "locator": "\u64cd\u4f5c\u4ea4\u63a5\u4e0e\u8eab\u4efd; \u60c5\u666f\u540e\u5e94\u5bf9",
+            "observation": "Complete policy reference, trigger, axes, units and chronology are explicit."
+          },
+          {
+            "path": "checks-initial.json",
+            "kind": "business_oracle",
+            "locator": "20 named checks; all passed",
+            "observation": "Independent stdlib projection and cumulative physical/financial arithmetic; does not import candidate or solver code."
+          }
+        ],
+        "rater": "independent-agent-/root/benchmark_review",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "F03",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "The report/README accurately call results FEASIBLE with1800s internal solver limit and a nonzero numerical gap; distinguish native numerical bound from evaluator reference and rational proof; do not claim exact optimum, automatic formal business success, real purchasing authority or universal validity. They explain limited-resource feasible-only outcomes, per-scenario liquidity and that AR cannot fund orders. The runtime/provider incident is evaluator history, not relabelled a candidate mathematical error.",
+        "evidence": [
+          {
+            "path": "snapshot-current/delivery/report.md",
+            "kind": "document_review",
+            "locator": "\u6267\u884c\u6458\u8981; \u73b0\u91d1\u74f6\u9888; \u6a21\u578b\u3001\u590d\u8dd1\u3001\u8f93\u5165\u63a7\u5236\u4e0e\u5c40\u9650",
+            "observation": "Unknown optimum, finite search, numerical-bound trust and operational implications are accurately limited."
+          },
+          {
+            "path": "snapshot-current/candidate-source/README.md",
+            "kind": "document_review",
+            "locator": "\u5df2\u5b8c\u6210\u7684\u51b7\u590d\u8dd1\u7ed3\u679c and final paragraph",
+            "observation": "Candidate notes row-order own-bound gap>1% and does not replace registered evaluator quality with it."
+          },
+          {
+            "path": "checks-initial.json",
+            "kind": "business_oracle",
+            "locator": "20 named checks; all passed",
+            "observation": "Independent stdlib projection and cumulative physical/financial arithmetic; does not import candidate or solver code."
+          }
+        ],
+        "rater": "independent-agent-/root/benchmark_review",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "F04",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "I actually opened both delivered PNGs with view_image. Operations has readable zero-based weeks, scenario names/legends, cash minor units and floor\u22125369, inventory pieces and stage volume axes; costs shows all four correctly weighted expenditure categories in minor units. Values agree with48 independently reconstructed weekly rows and exact component totals. The stage chart y-axis starts around50, which is visually apparent and not an accuracy failure under this criterion.",
+        "evidence": [
+          {
+            "path": "snapshot-current/delivery/operations.png",
+            "kind": "rendered_figure",
+            "locator": "Actually viewed via tools.view_image in this review turn, all3 panels",
+            "observation": "Scenario curves/credit floor/storage caps and data/units are readable."
+          },
+          {
+            "path": "snapshot-current/delivery/costs.png",
+            "kind": "rendered_figure",
+            "locator": "Actually viewed via tools.view_image in this review turn",
+            "observation": "Four bars and expected-expenditure unit match independent36181.6/5298/5801.4/406.1."
+          },
+          {
+            "path": "checks-initial.json",
+            "kind": "business_oracle",
+            "locator": "20 named checks; all passed",
+            "observation": "Independent stdlib projection and cumulative physical/financial arithmetic; does not import candidate or solver code."
+          }
+        ],
+        "rater": "independent-agent-/root/benchmark_review",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    },
+    {
+      "id": "F05",
+      "status": "verified_pass",
+      "where": "independent_evaluator",
+      "detail": {
+        "judgement": "full",
+        "fraction_exact": "1",
+        "observation": "Another executor successfully followed the declared Python entry/dependency image/default parameters with frozen raw and a new output root. Full artifacts, semantic ledger/summary, report and two real PNGs were generated and independently inspected. No missing-dependency or command repair was needed, so this is full rather than half.",
+        "evidence": [
+          {
+            "path": "base-cold-addendum/receipts/terminal-inspect.json",
+            "kind": "process_receipt",
+            "locator": "Id/State/Args/Mounts/Config/HostConfig",
+            "observation": "Exact owned evaluator CID3338994... naturally exited0 after readonly source/raw and new results/networknone execution; source9py+README+requirements match sealed bytes."
+          },
+          {
+            "path": "SOURCE-AUDIT.md",
+            "kind": "source_audit",
+            "locator": "five actually read execution modules; base-cold-addendum/checks.json source identity predicate",
+            "observation": "Main reads supplied raw and builds CP-SAT anew; no old plan/model/hint mount or program read; all9py exact sealed bytes."
+          },
+          {
+            "path": "base-cold-addendum/checks.json",
+            "kind": "business_oracle",
+            "locator": "24 real identity/physical/financial/native/report checks all passed",
+            "observation": "No optimizer was run by this reviewer; separate stdlib ledger/summary and actual saved stdout were checked."
+          },
+          {
+            "path": "base-cold-addendum/snapshot/source/README.md",
+            "kind": "document_review",
+            "locator": "\u4f9d\u8d56\u4e0e\u6784\u5efa; \u6807\u51c6\u5165\u53e3 and output outside project allowed",
+            "observation": "Successful actual command uses the documented interface and declared dependency environment."
+          }
+        ],
+        "rater": "independent-agent-/root/benchmark_review",
+        "truth_scope": "rating by the assigned independent evaluator; reference existence alone is not a functional or visual pass"
+      }
+    }
+  ],
+  "status": "graded",
+  "fixed_denominator": 100,
+  "publication_blockers": [],
+  "known_critical_failures": [],
+  "unassessed": [],
+  "counts": {
+    "verified_pass": 47,
+    "verified_partial": 0,
+    "verified_fail": 0,
+    "candidate_incomplete": 0,
+    "blocked_candidate": 0,
+    "unassessed": 0
+  },
+  "review_trust": "Private evaluator ratings; structural validation does not independently prove the judgement. Candidate files never supply ratings."
+}

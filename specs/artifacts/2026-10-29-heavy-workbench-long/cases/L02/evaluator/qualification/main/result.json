@@ -1,0 +1,20 @@
+{
+  "status": "local_asof_qualification_passed",
+  "at": "2026-10-30T00:18:53.540016+00:00",
+  "worker_executions": 2,
+  "exact_predictions": [
+    24,
+    26
+  ],
+  "base_mae": 0,
+  "last_value_mae": 3,
+  "controlled_errors": [
+    "late_revision",
+    "ex_post_covariate",
+    "forged_origin"
+  ],
+  "late_revision_available_at_origin9": true,
+  "candidate_score": null,
+  "frozen": false,
+  "limitations": "single synthetic integer-tick series, point reference, not full L02 or hours or statistical reliability"
+}

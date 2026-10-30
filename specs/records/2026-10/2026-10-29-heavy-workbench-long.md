@@ -355,6 +355,18 @@ L05新顺序场景真实旧程序/HTTP生成原库、首次丢ACK，两个正确
 
 当前开发合同冻结仍1/10、有效候选小时资格0/10，fresh Codex未启动；六旧昂贵容器仍Paused，不操作用户进程/重启环境/UI自动化，心跳ACTIVE。
 
+## 2026-10-30 00:27 UTC 接续Recall：L06首个新候选100与独立fresh Codex
+
+唯一行序控制00:22:08.013Z自然exit0/C47643.2，主30numeric与独立15业务/输入/过程核对通过，两新PNG双方实际view_image；原件先封存再精确清理CID。独立额外归档检查首个suffix唯一定位假设失败已保留，两个实际namespace的32原成员直接同一验证关闭该工具定位问题。基例C47648.2/报价C47761.2/行序C47643.2均为实际评估侧同封存源码新执行，不计候选小时。
+
+独立review-final.json补齐D02并保留原全部17叶判断/原五路径。主方真正l06_grade CLI退出0，冻结L06/0.2.0的正式OpenCorvus开发成绩100/100、47项pass、28critical全过/business_success/good均true。原Task/错误/恢复/actor用量事实不改，不用2:30:45或缓存token证明内在数小时。当前单系统高分不能证明足够难。
+
+完成此评分后才启动新 /root/codex_l06_fresh（fork none，禁止再委托/读其他项目，无model override），唯一项目pair/codex/project，18public逐字节同冻结资源；只给公开题和ENVIRONMENT依赖说明，不给评分器/参考/控制值/OC答案/凭据。receipt pair/codex/launch.json为00:27:31Z，模型/usage接口未暴露=unknown/comparablefalse。动态唯一定位L06-current-pair-20261029.json现有business_grade及fresh_codex；旧API已退休不能请求。fresh自然完成封存→实际源码/控制新执行→同冻结独立评分；两good才另升版本，不能改当前线。
+
+其余九题本轮推进[L02](2026-10-30-heavy-workbench-l02-qualification.md)：按发布时间投影、严格指定origin和真实1CPU快照worker/SQL独立许可核对。独立实测bool/int类型等值导致三个checker假通过，原件保留，已复用唯一schema修根因并在复核。当前只是合成整数tick信息边界，不是完整L02/统计可靠性或小时；下一仍需多序列/真实时点原材料、嵌套选模/区间、完整交付/rubric与独立冻结。L05/L04/L01及L03/L07–10未完成项保持；六旧昂贵容器不得自动恢复。
+
+十题冻结仍1/10，有效候选小时资格仍0/10。没有用户总token/墙钟额度；最新cheap-first持续生效。心跳保持ACTIVE，仅意义新结果通知，继续实际工作而不轮询或重复资格。
+
 
 ## 本轮接续：基例冷复建通过，报价控制在运行；L05在途EOF实质漏洞修后关闭
 
@@ -366,3 +378,8 @@ L05新增真实old HTTP before-apply跨pause/原键收据/更高epoch恢复/late
 
 
 报价控制23:50:40.685Z自然exit0，C47761.2、固定L47380/1%原注册不变，主方30numeric全过；先封存inspect/log/全部新输出再精确清理exited CID。此是D02一半，未提前给叶分。23:52:05.833Z才顺序启动唯一行序控制oc-l06-eval-source-20261030-row/CIDb6754c2763c623da0ac1e6c176d7fabd8c269c60e1dd2d5020ea1c5d66998b17，11CSV数据行反转、业务语义已独立核同，仍同sealed source/README1800秒/8CPU、readonly raw/source/new results/networknone。动态定位active_evaluation=row_reversed_source_cold、pending列表已空但行序并未完成；必须看真实末态，不重复旧base/quote。独立reviewer只读核报价半段，无新solver。row完成/同冻结独立D02与真正聚合后才fresh Codex。
+
+
+## 本轮最终接续Recall
+
+L06完整真实OpenCorvus100/100已取得，fresh /root/codex_l06_fresh正在唯一pair/codex/project独立执行，同18public/fork none/禁止再委托/不读旧答案。动态定位L06-current-pair-20261029.json，无活跃评估侧solver，不再请求退休API或重跑三已封存控制。L02独立修后15项/唯一微型cold4.483s通过、三个原bool/int假通过保留，仍仅信息边界资格。后续候选自然完成先封存，再同冻结源码/控制清洁评分，两good另升版本；其余九题完整建设与有效小时仍未达成，心跳ACTIVE。

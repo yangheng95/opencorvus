@@ -5,3 +5,5 @@
 [报价追加](QUOTE-COLD-ADDENDUM.md)/[D02报价成分](D02-quote-component-evidence.json)核注册45→46、同封存源码/真实退出和全账，C47761.2、固定L47380不变。行序控制尚未完成，D02整体unassessed，total/good仍null。所有旧阶段不改，[原件](originals.zip)保留对应固定源/命令/反例/实际图形观察。
 
 此为熟悉参考的非盲AI-agent评审，不冒称职业人类认证或统计成熟；无新solver/Docker/Provider/委托及容器操作。主方封存/执行与独立评价职责分开，只有实际同冻结聚合可形成最终分数。
+
+[行序最终补审](ROW-COLD-ADDENDUM.md)补全两真实控制的D02，[最终17叶](review-final.json)及[阶段终结论](stage-assessment-final-review.json)不手写总分。初suffix唯一定位工具错误和32原成员的独立直接比较均保存在新final-review-originals.zip，旧originals.zip不覆盖。完整评分由主方真实聚合另给。

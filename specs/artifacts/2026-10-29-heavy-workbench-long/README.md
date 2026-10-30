@@ -1,6 +1,6 @@
 # HeavyWorkBench-Long · 0.2.0-dev
 
-**状态：套件开发中，L06/0.2.0单题合同已冻结，真实OpenCorvus执行中；尚无新版候选评分或有效小时证明。** 这是独立派生研究任务，不是官方PaperBench或完整原论文复现分数。[Recall与未满足项](../../records/2026-10/2026-10-29-heavy-workbench-long.md)是当前工作记录。旧H05两方100点与难度天花板见[横向证据](../2026-10-29-heavy-workbench-cross-system/README.md)。
+**状态：套件开发中，L06/0.2.0单题合同已冻结，真实OpenCorvus同合同100/100，fresh Codex独立执行中；有效小时尚未证明。** 这是独立派生研究任务，不是官方PaperBench或完整原论文复现分数。[Recall与未满足项](../../records/2026-10/2026-10-29-heavy-workbench-long.md)是当前工作记录。旧H05两方100点与难度天花板见[横向证据](../2026-10-29-heavy-workbench-cross-system/README.md)。
 
 L01针对Rathore等ICML2024论文《Challenges in Training PINNs: A Loss Landscape Perspective》，包括独立实现、三方程比较、配对实验、优化器数值验证、真实训练、恢复、谱诊断、图表与可清洁复训的论文。工作量来自实际科学问题和依赖链，不设最少运行时长，不用sleep或空转达标；总模型token/总墙钟不设截止。
 
@@ -42,7 +42,7 @@ L01针对Rathore等ICML2024论文《Challenges in Training PINNs: A Loss Landsca
 
 L06现有[完整独立基例复建与证据聚合](cases/L06/README.md)：固定L下不同正确计划47737.6通过，唯一报价控制无需再求界即可证明1%可达；新聚合器不以94/96高分补偿关键输入失败。报价source实际执行、多质量校准/冻结和fresh双系统仍待完成，整套十题新版小时级仍0/10。
 
-L06现已完成[最终独立合同审查并冻结0.2.0](cases/L06/README.md)，真实参考完整评价98仅为资格锚点。冻结Git树2e6ffc7ce的18个public已用于预注册双系统顺序试跑，OpenCorvus真实Task tsk_g00VZTFvzf0073YLIAGl在执行，fresh Codex待顺序启动；[Recall](../../records/2026-10/2026-10-29-heavy-workbench-long.md)及外部定位保存实况。开发合同冻结1/10、候选小时资格0/10，不能以单题代替十题。后续[逐题矩阵](cases/README.md)区分局部资格与未实施项；L05的真实合作副作用协议及两个错误控制已通过局部独立资格，完整现场/正式rubric仍待，尚未冻结。
+L06现已完成[最终独立合同审查并冻结0.2.0](cases/L06/README.md)，真实参考完整评价98仅为资格锚点。冻结Git树2e6ffc7ce的18个public已用于预注册双系统顺序试跑，OpenCorvus真实Task tsk_g00VZTFvzf0073YLIAGl已自然完成，OpenCorvus实际清洁完整评价100，fresh Codex已顺序启动；[Recall](../../records/2026-10/2026-10-29-heavy-workbench-long.md)及外部定位保存实况。开发合同冻结1/10、候选小时资格0/10，不能以单题代替十题。后续[逐题矩阵](cases/README.md)区分局部资格与未实施项；L05的真实现场/在途/EOF局部资格及L02发布时间隔离原语均不当完整题冻结。
 
 
 最新[真实OpenCorvus试跑收据](cases/L06/evaluator/pilot-opencorvus-20261029/README.md)：原Task自然完成、完整版本封存/正常cleanup，30数值叶通过；真正基例源码冷执行与同冻结独立评价正在进行，尚无总分或小时认证。L05新增[顺序事故现场](cases/L05/README.md)经独立真实反例修复后取得限定范围资格，完整题与其余九题仍需继续建设。

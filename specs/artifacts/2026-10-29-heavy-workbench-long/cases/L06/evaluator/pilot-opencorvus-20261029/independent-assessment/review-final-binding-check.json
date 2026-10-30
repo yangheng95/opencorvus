@@ -1,0 +1,309 @@
+{
+  "submission_id": "opencorvus-L06-b4ae96c73ae82-phase1",
+  "exact_original_artifact_bindings": true,
+  "17_exact_canonical_review_leaves": true,
+  "required_actual_evidence_kinds_present": true,
+  "located_evidence": [
+    {
+      "leaf": "D01",
+      "path": "base-cold-addendum/receipts/terminal-inspect.json",
+      "kind": "process_receipt",
+      "file_exists": true
+    },
+    {
+      "leaf": "D01",
+      "path": "SOURCE-AUDIT.md",
+      "kind": "source_audit",
+      "file_exists": true
+    },
+    {
+      "leaf": "D01",
+      "path": "base-cold-addendum/checks.json",
+      "kind": "business_oracle",
+      "file_exists": true
+    },
+    {
+      "leaf": "D02",
+      "path": "quote-cold-addendum/receipts/terminal-inspect.json",
+      "kind": "process_receipt",
+      "file_exists": true
+    },
+    {
+      "leaf": "D02",
+      "path": "row-cold-addendum/receipts/terminal-inspect.json",
+      "kind": "process_receipt",
+      "file_exists": true
+    },
+    {
+      "leaf": "D02",
+      "path": "quote-cold-addendum/checks.json",
+      "kind": "business_oracle",
+      "file_exists": true
+    },
+    {
+      "leaf": "D02",
+      "path": "row-cold-addendum/checks.json",
+      "kind": "business_oracle",
+      "file_exists": true
+    },
+    {
+      "leaf": "D02",
+      "path": "row-cold-addendum/archive-binding-correction.json",
+      "kind": "artifact_review",
+      "file_exists": true
+    },
+    {
+      "leaf": "D02",
+      "path": "SOURCE-AUDIT.md",
+      "kind": "source_audit",
+      "file_exists": true
+    },
+    {
+      "leaf": "D07",
+      "path": "snapshot-current/delivery/source-map.json",
+      "kind": "artifact_review",
+      "file_exists": true
+    },
+    {
+      "leaf": "D07",
+      "path": "snapshot-current/candidate-source/README.md",
+      "kind": "document_review",
+      "file_exists": true
+    },
+    {
+      "leaf": "D07",
+      "path": "checks-initial.json",
+      "kind": "business_oracle",
+      "file_exists": true
+    },
+    {
+      "leaf": "D08",
+      "path": "base-cold-addendum/receipts/terminal-inspect.json",
+      "kind": "process_receipt",
+      "file_exists": true
+    },
+    {
+      "leaf": "D08",
+      "path": "base-cold-addendum/receipts/container.stdout.txt",
+      "kind": "process_receipt",
+      "file_exists": true
+    },
+    {
+      "leaf": "D08",
+      "path": "base-cold-addendum/checks.json",
+      "kind": "business_oracle",
+      "file_exists": true
+    },
+    {
+      "leaf": "D09",
+      "path": "base-cold-addendum/receipts/terminal-inspect.json",
+      "kind": "process_receipt",
+      "file_exists": true
+    },
+    {
+      "leaf": "D09",
+      "path": "base-cold-addendum/receipts/container.stdout.txt",
+      "kind": "process_receipt",
+      "file_exists": true
+    },
+    {
+      "leaf": "D09",
+      "path": "base-cold-addendum/snapshot/results/base/report.md",
+      "kind": "document_review",
+      "file_exists": true
+    },
+    {
+      "leaf": "D10",
+      "path": "base-cold-addendum/receipts/terminal-inspect.json",
+      "kind": "process_receipt",
+      "file_exists": true
+    },
+    {
+      "leaf": "D10",
+      "path": "base-cold-addendum/receipts/container.stdout.txt",
+      "kind": "process_receipt",
+      "file_exists": true
+    },
+    {
+      "leaf": "D10",
+      "path": "base-cold-addendum/checks.json",
+      "kind": "business_oracle",
+      "file_exists": true
+    },
+    {
+      "leaf": "E01",
+      "path": "snapshot-current/delivery/report.md",
+      "kind": "document_review",
+      "file_exists": true
+    },
+    {
+      "leaf": "E01",
+      "path": "baseline-independent.json",
+      "kind": "business_oracle",
+      "file_exists": true
+    },
+    {
+      "leaf": "E01",
+      "path": "checks-initial.json",
+      "kind": "business_oracle",
+      "file_exists": true
+    },
+    {
+      "leaf": "E01",
+      "path": "snapshot-current/external-receipts/l06-final-main-inspect.json",
+      "kind": "process_receipt",
+      "file_exists": true
+    },
+    {
+      "leaf": "E02",
+      "path": "snapshot-current/delivery/report.md",
+      "kind": "document_review",
+      "file_exists": true
+    },
+    {
+      "leaf": "E02",
+      "path": "checks-initial.json",
+      "kind": "business_oracle",
+      "file_exists": true
+    },
+    {
+      "leaf": "E03",
+      "path": "snapshot-current/delivery/report.md",
+      "kind": "document_review",
+      "file_exists": true
+    },
+    {
+      "leaf": "E03",
+      "path": "checks-initial.json",
+      "kind": "business_oracle",
+      "file_exists": true
+    },
+    {
+      "leaf": "E04",
+      "path": "snapshot-current/delivery/report.md",
+      "kind": "document_review",
+      "file_exists": true
+    },
+    {
+      "leaf": "E04",
+      "path": "checks-initial.json",
+      "kind": "business_oracle",
+      "file_exists": true
+    },
+    {
+      "leaf": "E05",
+      "path": "snapshot-current/delivery/report.md",
+      "kind": "document_review",
+      "file_exists": true
+    },
+    {
+      "leaf": "E05",
+      "path": "checks-initial.json",
+      "kind": "business_oracle",
+      "file_exists": true
+    },
+    {
+      "leaf": "E06",
+      "path": "snapshot-current/delivery/report.md",
+      "kind": "document_review",
+      "file_exists": true
+    },
+    {
+      "leaf": "E06",
+      "path": "alternative-independent.json",
+      "kind": "business_oracle",
+      "file_exists": true
+    },
+    {
+      "leaf": "E06",
+      "path": "checks-initial.json",
+      "kind": "business_oracle",
+      "file_exists": true
+    },
+    {
+      "leaf": "F01",
+      "path": "snapshot-current/delivery/report.md",
+      "kind": "document_review",
+      "file_exists": true
+    },
+    {
+      "leaf": "F01",
+      "path": "checks-initial.json",
+      "kind": "business_oracle",
+      "file_exists": true
+    },
+    {
+      "leaf": "F02",
+      "path": "snapshot-current/delivery/report.md",
+      "kind": "document_review",
+      "file_exists": true
+    },
+    {
+      "leaf": "F02",
+      "path": "checks-initial.json",
+      "kind": "business_oracle",
+      "file_exists": true
+    },
+    {
+      "leaf": "F03",
+      "path": "snapshot-current/delivery/report.md",
+      "kind": "document_review",
+      "file_exists": true
+    },
+    {
+      "leaf": "F03",
+      "path": "snapshot-current/candidate-source/README.md",
+      "kind": "document_review",
+      "file_exists": true
+    },
+    {
+      "leaf": "F03",
+      "path": "checks-initial.json",
+      "kind": "business_oracle",
+      "file_exists": true
+    },
+    {
+      "leaf": "F04",
+      "path": "snapshot-current/delivery/operations.png",
+      "kind": "rendered_figure",
+      "file_exists": true
+    },
+    {
+      "leaf": "F04",
+      "path": "snapshot-current/delivery/costs.png",
+      "kind": "rendered_figure",
+      "file_exists": true
+    },
+    {
+      "leaf": "F04",
+      "path": "checks-initial.json",
+      "kind": "business_oracle",
+      "file_exists": true
+    },
+    {
+      "leaf": "F05",
+      "path": "base-cold-addendum/receipts/terminal-inspect.json",
+      "kind": "process_receipt",
+      "file_exists": true
+    },
+    {
+      "leaf": "F05",
+      "path": "SOURCE-AUDIT.md",
+      "kind": "source_audit",
+      "file_exists": true
+    },
+    {
+      "leaf": "F05",
+      "path": "base-cold-addendum/checks.json",
+      "kind": "business_oracle",
+      "file_exists": true
+    },
+    {
+      "leaf": "F05",
+      "path": "base-cold-addendum/snapshot/source/README.md",
+      "kind": "document_review",
+      "file_exists": true
+    }
+  ],
+  "note": "File/schema checks only confirm this review file structure. Judgements are based on actual prior views/source/accounts/process evidence; structure is not correctness."
+}

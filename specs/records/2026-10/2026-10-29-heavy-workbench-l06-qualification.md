@@ -274,3 +274,13 @@ D02尚有真实执行缺口：同一冻结源码未从变价raw新生成全交�
 
 
 报价控制23:50:40.685Z自然exit0，C47761.2、固定L47380/1%原注册不变，主方30numeric全过；先封存inspect/log/全部新输出再精确清理exited CID。此是D02一半，未提前给叶分。23:52:05.833Z才顺序启动唯一行序控制oc-l06-eval-source-20261030-row/CIDb6754c2763c623da0ac1e6c176d7fabd8c269c60e1dd2d5020ea1c5d66998b17，11CSV数据行反转、业务语义已独立核同，仍同sealed source/README1800秒/8CPU、readonly raw/source/new results/networknone。动态定位active_evaluation=row_reversed_source_cold、pending列表已空但行序并未完成；必须看真实末态，不重复旧base/quote。独立reviewer只读核报价半段，无新solver。row完成/同冻结独立D02与真正聚合后才fresh Codex。
+
+## 2026-10-30 00:27 UTC：首次新版候选完整评分与fresh对照
+
+行序控制00:22:08.013Z自然exit0（启动23:52:06.091Z），C47643.2、native FEASIBLE/bound47375；固定L47380的gap329/59225约0.555509%，30数值叶全过。按原README内部1800秒/8worker，没有改程序或重开求解；新计划可以不同。完整inspect/log/source/raw/results先封存row-cold/completed-originals.zip，再精确清理已终态CID，locator active_evaluation=null。主方与独立agent均实际打开两新PNG。
+
+独立15个输入/业务/过程/native谓词全部通过；附加归档检查初次误要求suffix唯一，ZIP实际同时有results/row/name和snapshot/results/row/name，初false与源码/收据保留。另按两个精确namespace直接比较32个原结果成员全部相同，是归档定位修正，不是候选业务错误，未重复优化。最终review-final.json合并原17叶真实判断，绑定原completed/submission五路径，仍披露熟悉参考的非盲AI-agent，非职业真人或统计成熟认证。
+
+主方真实l06_grade CLI退出0：graded100/100、47 verified_pass、28critical全过、business_success=true、good=true，无未评。实际命令/完整findings在外部opencorvus/evaluation/final-grade-command.json及final-assessment.json，安全归档pilot-opencorvus-20261029。分数来自冻结47叶而非Inspect completion/参考98或手写相加；冻结线与输入/L/1%/权重均未改。原20分钟guard干扰、overload及自动续跑保留，2:30:45不直接当内在有效小时。
+
+此后才启动新agent /root/codex_l06_fresh，fork none、无model override、禁止再委托/读取主仓或其他项目，仅同Git2e6ffc7ce导出的18public与已准备依赖说明。00:27:31Z启动收据在pair/codex/launch.json，直接与frozen-public.zip逐字节核身份只证明同一公开输入，不当功能验收。实际Codex model/完整usage未暴露，记录unknown、comparable=false，不作同模型速度/费用因果排名。无总token/墙钟截断，也不提示凑时长。自然完成后同样封存全部文件，再真实源码/两控制冷执行与同冻结独立评价；若也good才升级另一个版本，保留当前100与旧线。当前新版成对结果/有效小时/其余九题仍未完成。

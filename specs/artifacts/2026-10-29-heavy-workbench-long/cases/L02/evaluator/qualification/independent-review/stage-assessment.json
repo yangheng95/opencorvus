@@ -1,0 +1,28 @@
+{
+  "stage": "local_asof_primitive_repaired_and_independently_qualified",
+  "checks": 15,
+  "all_passed": true,
+  "failed": [],
+  "new_independent_micro_worker_executions": 1,
+  "new_Provider_solver_GPU_or_UI": 0,
+  "exact_OLS": [
+    24,
+    26
+  ],
+  "MAE": 0,
+  "last_value_MAE": 3,
+  "highest_missing_forecasts": [
+    18,
+    20
+  ],
+  "all_own_containers_naturally_terminal_then_exact_removed": true,
+  "seconds": 4.48345150006935,
+  "full_L02_frozen": false,
+  "candidate_score": null,
+  "hours_or_statistical_maturity": false,
+  "original_bool_bypass_preserved": true,
+  "blocking": [],
+  "repaired_blocker": "snapshot bool/int false-pass preserved in initial-probes; fixed by sole validate reuse",
+  "current_source_binding": true,
+  "note": "local primitive only; all broader limitations in REVIEW.md; no original source/result overwritten"
+}
