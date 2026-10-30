@@ -1138,6 +1138,9 @@
   "diff.non_text_short": "Non-text",
   "diff.empty_unchanged": "No text differences in this recorded comparison.",
   "diff.select_file": "Select a file to view its diff.",
+  "diff.open_current_file": "Open current file",
+  "diff.open_current_file_hint": "Read, edit, or download the current file in the file workbench. The recorded comparison stays here.",
+  "diff.open_current_file_failed": "The current file could not be opened.",
   "diff.show_unchanged": {
     "one": "Show {{count}} unchanged line",
     "other": "Show {{count}} unchanged lines"

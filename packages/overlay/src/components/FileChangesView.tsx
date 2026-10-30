@@ -26,6 +26,7 @@ import {
 
 export interface FileChangesViewProps {
   groups: ChangeGroup[]
+  directory: string
   hasSelectedTask?: boolean
   showHeading?: boolean
   focusEvent?: string
@@ -445,7 +446,7 @@ export function FileChangesView(props: FileChangesViewProps) {
 
         <div class="changes-review-workspace">
           <section class="changes-diff-pane" aria-label={t("workspace.diff")}>
-            <DiffPreviewPanel target={selectedDiffTarget()} scopeKey={props.scopeKey || ""} groups={groups()} />
+            <DiffPreviewPanel target={selectedDiffTarget()} scopeKey={props.scopeKey || ""} groups={groups()} directory={props.directory} />
           </section>
 
           <aside class="changes-file-pane" aria-label={t("section.files")}>

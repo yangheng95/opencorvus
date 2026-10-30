@@ -1138,6 +1138,9 @@
   "diff.non_text_short": "非文本",
   "diff.empty_unchanged": "此项比较的文本内容没有差异。",
   "diff.select_file": "选择文件查看差异。",
+  "diff.open_current_file": "打开当前文件",
+  "diff.open_current_file_hint": "在文件工作台阅读、编辑或下载磁盘上的当前文件；原变更比较保留在此处。",
+  "diff.open_current_file_failed": "无法打开当前文件。",
   "diff.show_unchanged": {
     "one": "显示 {{count}} 行未改动内容",
     "other": "显示 {{count}} 行未改动内容"

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [已完成报告的文件阅读](records/2026-10/2026-10-30-report-file-reading.md)：真实报告阅读、文件工作台与交付入口核对。
+
 - [持续目标自然完成与报告阅读](records/2026-10/2026-10-30-goal-report-completion.md)：真实Sol报告闭环、固定下一目标动作、历史暂停原因及完整数据保全。
 
 - [来源查找的 Unicode 位置单位](records/2026-10/2026-10-30-source-search-unicode-offset.md)：大小写转换扩长后的原来源身份和预览修复。

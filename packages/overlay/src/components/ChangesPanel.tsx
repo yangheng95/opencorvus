@@ -4,7 +4,7 @@
 // result inline below the row.
 
 import { createMemo, createResource } from "solid-js"
-import { activeTaskID } from "../store/board"
+import { activeTaskID, boardStore, selectedTaskDirectory } from "../store/board"
 import {
   changeGroupsRevisionKey,
   currentChangeGroups,
@@ -58,6 +58,7 @@ export function ChangesPanel(props: ChangesPanelProps) {
   return (
     <FileChangesView
       groups={groups()}
+      directory={boardStore.selectedSource?.directory?.trim() || selectedTaskDirectory().trim()}
       scopeKey={activeTaskID()}
       hasSelectedTask={props.hasSelectedTask}
       focusEvent="acceptance:focus-changes"

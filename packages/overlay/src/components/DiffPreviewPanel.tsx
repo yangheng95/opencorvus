@@ -4,7 +4,7 @@
 // (which lazy-loads from the acceptance API when necessary) and renders it
 // through the shared DiffView component.
 
-import { createResource, createMemo, Show } from "solid-js"
+import { createResource, createMemo, createEffect, createSignal, on, Show } from "solid-js"
 import { ChangeLineStats, DiffView, changeStatusLabel, type FileChange } from "./DiffView"
 import {
   changeGroupsRevisionKey,
@@ -14,9 +14,15 @@ import {
   type ChangeGroup,
   type DiffTarget,
 } from "../services/diff"
-import { captureApiAuthority } from "../services/api"
+import { captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
+import { fileEditorReserved, openFileReference } from "../services/file-workbench"
+import { boardStore } from "../store/board"
 import { Panel } from "./ui/Panel"
+import { Button } from "./ui/Button"
+import { Icon } from "./ui/Icon"
+import { Feedback } from "./ui/Feedback"
 import { t } from "../utils/i18n"
+import { formatErrorDetails } from "../utils/error-details"
 import type { JSX } from "solid-js"
 
 export interface DiffPreviewPanelProps {
@@ -26,6 +32,8 @@ export interface DiffPreviewPanelProps {
   scopeKey: string
   /** Exact visible collection that owns the target. */
   groups?: readonly ChangeGroup[]
+  /** Owning project of the visible comparison, also used for current-file reads. */
+  directory: string
 }
 
 type DiffPreviewRequest = { scopeKey: string; target: DiffTarget; groups?: readonly ChangeGroup[] }
@@ -71,6 +79,32 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
   const item = createMemo(() => (change.loading || change.error ? null : (change() ?? null)))
   const loading = () => change.loading
   const errorMessage = () => (change.error instanceof Error ? change.error.message : t("diff.load_failed"))
+  const [opening, setOpening] = createSignal(false)
+  const [openFailure, setOpenFailure] = createSignal<{ error: unknown } | null>(null)
+  createEffect(on(
+    () => [request()?.key, props.directory, boardStore.selectEpoch],
+    () => { setOpening(false); setOpenFailure(null) },
+  ))
+
+  const openCurrentFile = async () => {
+    const path = props.target?.filePath
+    const directory = props.directory.trim()
+    if (!path || !directory || opening() || fileEditorReserved()) return
+    const authority = captureApiAuthority()
+    const key = request()?.key
+    const epoch = boardStore.selectEpoch
+    const current = () => isApiAuthorityCurrent(authority) && boardStore.selectEpoch === epoch &&
+      props.directory.trim() === directory && request()?.key === key
+    setOpening(true)
+    setOpenFailure(null)
+    try {
+      await openFileReference(path, { directory, authority })
+    } catch (error) {
+      if (current()) setOpenFailure({ error })
+    } finally {
+      if (current()) setOpening(false)
+    }
+  }
 
   // Compute header content in a memo so Panel's Show reads a stable reference,
   // avoiding double-creation of DOM nodes from the ternary getter.
@@ -94,12 +128,32 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
             <ChangeLineStats additions={item()!.additions} deletions={item()!.deletions} isText={item()!.isText} />
           </span>
         </Show>
+        <Button
+          class="diff-preview-open-file"
+          type="button"
+          variant="ghost"
+          size="sm"
+          tone="accent"
+          disabled={!props.directory.trim() || opening() || fileEditorReserved()}
+          aria-busy={opening() || undefined}
+          aria-label={`${t("diff.open_current_file")}: ${props.target!.filePath}`}
+          title={t("diff.open_current_file_hint")}
+          onClick={() => void openCurrentFile()}
+        >
+          <Icon name={opening() ? "loading" : "file-document"} />
+          {t("diff.open_current_file")}
+        </Button>
       </>
     )
   })
 
   return (
     <Panel class="diff-preview-panel" header={headerContent()}>
+      <Show when={openFailure()}>
+        <Feedback tone="error" details={formatErrorDetails(openFailure()!.error)}>
+          {t("diff.open_current_file_failed")}
+        </Feedback>
+      </Show>
       <Show
         when={props.target?.filePath}
         fallback={

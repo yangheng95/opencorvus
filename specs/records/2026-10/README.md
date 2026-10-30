@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [已完成报告的文件阅读](2026-10-30-report-file-reading.md)：阅读路径根因调查与实页验收。
+
 - [2026-10-30-goal-report-completion.md](2026-10-30-goal-report-completion.md)：自然完成的真实报告、用量关联、下一目标入口与暂停原因实页复核。
 
 - [2026-10-30-source-search-unicode-offset.md](2026-10-30-source-search-unicode-offset.md)：来源检索位置单位错配的红灯复现、正向回归及交付。

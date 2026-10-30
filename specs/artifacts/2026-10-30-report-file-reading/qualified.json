@@ -1,0 +1,115 @@
+{
+  "at": "2026-10-30T13:18:19.444Z",
+  "schema": 9,
+  "tables": 92,
+  "startingRows": 208565,
+  "finalRows": 208573,
+  "allStartingValuesPreserved": true,
+  "attachments": 75,
+  "oldProjects": 8,
+  "trackedFiles": 28,
+  "reportFiles": 4,
+  "fullOriginalReportAndGoalPreserved": true,
+  "oldHTTPHistories": {
+    "task": 68,
+    "mission": 80,
+    "chat": 3,
+    "completedWork": 8
+  },
+  "downloads": [
+    {
+      "file": "report.md",
+      "phase": "after",
+      "bytes": 1920,
+      "equalsOriginalModelDelivery": true
+    },
+    {
+      "file": "report.md",
+      "phase": "final",
+      "bytes": 1920,
+      "equalsOriginalModelDelivery": true
+    },
+    {
+      "file": "summary.csv",
+      "phase": "final",
+      "bytes": 63,
+      "equalsOriginalModelDelivery": true
+    }
+  ],
+  "newModelRequests": 0,
+  "cumulativeModelRequests": 1096,
+  "scopes": [
+    {
+      "phase": "before",
+      "requests": 0,
+      "exhausted": false,
+      "publicShutdown": 200,
+      "reserveMs": 3279483,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": true,
+      "originalRows": 208565,
+      "currentRows": 208567,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "phase": "after",
+      "requests": 0,
+      "exhausted": false,
+      "publicShutdown": 200,
+      "reserveMs": 2963682,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": true,
+      "originalRows": 208567,
+      "currentRows": 208569,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "phase": "verified",
+      "requests": 0,
+      "exhausted": false,
+      "publicShutdown": 200,
+      "reserveMs": 2721158,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": true,
+      "originalRows": 208569,
+      "currentRows": 208571,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "phase": "final",
+      "requests": 0,
+      "exhausted": false,
+      "publicShutdown": 200,
+      "reserveMs": 2009246,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": true,
+      "originalRows": 208571,
+      "currentRows": 208573,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    }
+  ]
+}

@@ -629,6 +629,16 @@ numbers as the surrounding comparison. Collapsed runs defer their row DOM until
 opened. This presentation does not reload current files or alter historical
 comparison endpoints.
 
+Review offers an explicit current-file action using the comparison owner's project
+directory and the shared file-workbench navigation authority. Reading, editing or
+downloading the current disk file leaves the recorded comparison intact. Existing
+dirty-draft confirmation applies before changing files. The action and its error
+feedback stay bound to the visible source, comparison and API authority; missing
+current files retain the workbench's normal read-error contract.
+An open Review tab retains its mounted owner while other dock tools are selected,
+like the existing file explorer. The original selection, filter and reading state
+stay in that component; closing its tab releases the mount normally.
+
 Review layout follows its actual panel width through the existing CSS container
 primitive. Narrow panels place the file scope above a full-width wrapping diff,
 retaining independently scrollable panes and original keyboard selection. Wider

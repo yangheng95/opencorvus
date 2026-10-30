@@ -14,10 +14,16 @@
 /* diff-preview-head replaced by oc-panel__header override below */
 .diff-preview-panel > .oc-panel__header {
   align-items: flex-start;
+  flex-wrap: wrap;
   gap: var(--ui-gap-lg);
   padding: var(--ui-gap-md) var(--ui-gap-lg);
   border-bottom: var(--oc-border-width) solid var(--border);
   background: var(--surface-strong);
+}
+
+.diff-preview-open-file {
+  flex-basis: 100%;
+  justify-content: flex-start;
 }
 
 .diff-preview-panel > .oc-panel__body {

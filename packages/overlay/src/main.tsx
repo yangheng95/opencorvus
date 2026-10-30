@@ -3004,6 +3004,7 @@ function OverlayRoot() {
           </TabPanel>
           <TabPanel
             value="diff"
+            forceMount={isCenterWorkbenchPanelOpen("diff")}
             class="center-workbench-view"
             id="centerWorkbenchDiff"
             data-workbench-view="diff"
