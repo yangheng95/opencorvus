@@ -6,4 +6,6 @@
 
 全期去天气消融优于天气扩展；June转移边界A1/ZA真值日均13751.75L、所选预测9341.10L，四天中央80%区间全失覆盖。这些负结果和未识别量效如实留在[研究记录](evaluator/qualification/daily-full-reference/REPORT.md)，没有看outer结果改池或倒填宽松质量线。旧7时点OLS/qualify入口已退役，原程序仍在历史ZIP，当前只有每日参考入口。
 
-目前认可完整数值参考及其权限/选择/报告数字；通用候选执行、完整研究/运营决策交付、预先质量底线/低质量对照、原子rubric/人评校准和独立冻结仍待。quality_floor=null，候选成绩与小时证据不存在。整套合同冻结仍1/10、有效小时资格0/10。
+[通用数值执行合同](public/EXECUTION-CONTRACT.draft.md)另有[两语言/原CID恢复/封存重算局部资格](evaluator/qualification/generic-execution/README.md)：候选自带files/argv和池，预测/selector/report分开获得授权数据，SQLite为唯一cell状态来源。原作者硬编码执行及双格式summary不保留当前fallback。单outer私有诊断不是正式12outer候选研究。
+
+目前认可完整数值参考和通用执行局部资格；完整科学/运营决策交付、预先质量底线/低质量对照、原子rubric/人评校准、全grader与独立冻结仍待。quality_floor=null，候选成绩与小时证据不存在。整套合同冻结仍1/10、有效小时资格0/10。

@@ -1,79 +1,103 @@
-"""Recompute the fixed complete reference matrix and prepare scientific plot data."""
+"""Read-only recomputation from version-one accepted execution objects."""
 import argparse
-import csv
 from fractions import Fraction
 import json
 from pathlib import Path
-
-from l02_scoring import load_study,score
+import sqlite3
+import tempfile
+from l02_execution import ExecutionError, archived_json, read_archive
+from l02_scoring import aggregate_study_metrics, load_study, score
 from l02_selection import assess_selection
-from l02_study_data import StudySource,load_pool,write_json
-from material_contract import read_json
+from l02_study_data import StudySource, validate_pool, write_json
+from run_l02_study import extract_data
 
 
-def bound_context(value):
-    return {**value,'series_catalogue':sorted(value['series_catalogue'],key=lambda row:row['series_id']),
-        'hierarchy':sorted(value['hierarchy'],key=lambda row:(row['parent'],row['child']))}
+def summarize(root):
+    with sqlite3.connect((root / 'runs.sqlite3').as_uri() + '?mode=ro', uri=True) as db:
+        if db.execute('PRAGMA user_version').fetchone()[0] != 1:
+            raise ValueError('run_format_invalid')
+        rows = db.execute('SELECT id,identity,phase FROM cell ORDER BY id').fetchall()
+    if any(phase != 'verified' for _, _, phase in rows):
+        raise ValueError('requested_execution_incomplete')
+    sealed = read_archive(root / 'registration.zip')
+    reg = archived_json(sealed, 'registration.json')
+    manifest = archived_json(sealed, 'submission/submission.json', True)
+    pool, methods = validate_pool(manifest['pool'])
+    objects = [(json.loads(identity), read_archive(root / 'cells' / str(i) / 'accepted.zip')) for i, identity, _ in rows]
+    metrics, choices, count = {}, {}, 0
+    with tempfile.TemporaryDirectory(prefix='l02-summary-') as tmp:
+        extract_data(sealed, Path(tmp))
+        study = load_study(Path(tmp) / 'study.json')
+        data = StudySource(Path(tmp) / 'raw', Path(tmp) / 'material-contract.json', study)
+        expected = set()
+        for outer in reg['outer_ids']:
+            inner = [g['origin_id'] for g in data.grid['origins'] if g['role'] == 'inner' and g['outer_id'] == outer]
+            expected |= {('predict', outer, origin, method) for origin in inner for method in pool['selection_ids']}
+            expected |= {('predict', outer, outer, method) for method in pool['outer_ids']}
+            expected.add(('select', outer, '', ''))
+        expected.add(('report', '', '', ''))
+        seen = set()
+        for identity, files in objects:
+            key = tuple(identity.get(k, '') for k in ('kind', 'outer_id', 'origin_id', 'method_id'))
+            if key in seen or key not in expected:
+                raise ValueError('cell_assignment_invalid')
+            seen.add(key)
+            kind = identity['kind']
+            declaration = manifest['programs'][{'predict': 'predict', 'select': 'select', 'report': 'report'}[kind]]
+            if archived_json(files, 'program.json') != declaration:
+                raise ValueError('program_identity_invalid')
+            if {n[8:]: v for n, v in files.items() if n.startswith('project/')} != {n: sealed['submission/' + n] for n in declaration['files']}:
+                raise ValueError('program_files_invalid')
+            if kind == 'predict':
+                method, origin = identity['method_id'], identity['origin_id']
+                if archived_json(files, 'input/method.json', True) != {k: methods[method][k] for k in ('method_id', 'configuration')}:
+                    raise ValueError('method_configuration_invalid')
+                context, labels, _ = data.context_and_labels(origin)
+                value = score(archived_json(files, 'output/result/forecast.json', True), context, labels, method, study)
+                if value != archived_json(files, 'assessment.json')['metric']:
+                    raise ValueError('metric_assessment_invalid')
+                if origin == identity['outer_id']:
+                    metrics[identity['outer_id'], method] = value['metrics_exact']
+                count += 1
+            elif kind == 'select':
+                payload = archived_json(files, 'input/inner.json', True)
+                expected_inner = [g['origin_id'] for g in data.grid['origins'] if g['role'] == 'inner' and g['outer_id'] == identity['outer_id']]
+                if payload['inner_ids'] != expected_inner or payload['selection_ids'] != pool['selection_ids'] or payload['outer_origin_tick'] != data.origins[identity['outer_id']]['origin_tick']:
+                    raise ValueError('selection_assignment_invalid')
+                for frame in payload['frames']:
+                    context, labels, released = data.context_and_labels(frame['origin_id'])
+                    if (frame['context'], frame['labels'], frame['labels_released_at']) != (context, labels, released):
+                        raise ValueError('selection_facts_invalid')
+                    for method in pool['selection_ids']:
+                        original = next(v for ident, v in objects if ident.get('kind') == 'predict' and ident.get('outer_id') == identity['outer_id'] and ident.get('origin_id') == frame['origin_id'] and ident.get('method_id') == method)
+                        if frame['forecasts'][method] != archived_json(original, 'output/result/forecast.json', True):
+                            raise ValueError('selection_prediction_binding_invalid')
+                selection = archived_json(files, 'output/result/selection.json')
+                assess_selection(selection, payload, study)
+                choices[identity['outer_id']] = selection['selected_method_id']
+            else:
+                reported = archived_json(files, 'output/result/report.json')
+                if reported['outer_ids'] != reg['outer_ids'] or not files['output/result/report.md'].strip():
+                    raise ValueError('report_binding_invalid')
+        if seen != expected:
+            raise ValueError('requested_execution_incomplete')
+        aggregate = aggregate_study_metrics(metrics, choices, pool['outer_ids'])
+        return {'status': 'sealed_requested_matrix_recomputed', 'outer_ids': reg['outer_ids'],
+                'complete_assignment': set(reg['outer_ids']) == set(reg['all_outer_ids']), 'forecast_cells': count,
+                'verified_cells': len(rows), 'selected_methods': choices, 'aggregate_exact': aggregate,
+                'study_complete': None, 'quality_success': None, 'candidate_score': None}
 
 
-def bound_labels(value):return sorted(value,key=lambda row:(row['series_id'],row['target_tick']))
-
-
-def summarize(a):
-    study=load_study(a.study);pool,methods=load_pool(a.pool);data=StudySource(a.raw,a.material_contract,study)
-    expected={name for name,g in data.origins.items() if g['role']=='outer'};found={}
-    for run in a.run:
-        result=read_json(run/'assessment.json');registration=read_json(run/'registration.json')
-        if result.get('status')!='requested_reference_matrix_complete' or registration['pool']!=pool:raise ValueError('incomplete_or_changed_reference_run')
-        for outer_id in registration['outer_ids']:
-            if outer_id in found or outer_id not in expected:raise ValueError('duplicate_or_unknown_outer')
-            found[outer_id]=run/'outer'/outer_id
-    if set(found)!=expected:raise ValueError('incomplete_registered_outer_matrix')
-    result_rows=[];plot={'origins':[],'nodes':data.grid['series_catalogue'],'methods':pool['outer_ids'],'clock':data.grid['clock']}
-    for outer_id in sorted(expected):
-        root=found[outer_id];outer=data.origins[outer_id];payload=read_json(root/'selector/input/inner.json',decimal_numbers=True)
-        required_inner={g['origin_id'] for g in data.grid['origins'] if g['role']=='inner' and g['outer_id']==outer_id}
-        if set(payload['inner_ids'])!=required_inner or payload['selection_ids']!=pool['selection_ids'] or payload['outer_origin_tick']!=outer['origin_tick']:raise ValueError('selection_registration_drift')
-        for frame in payload['frames']:
-            context,labels,released=data.context_and_labels(frame['origin_id'])
-            if bound_context(frame['context'])!=bound_context(context) or bound_labels(frame['labels'])!=bound_labels(labels) or frame['labels_released_at']!=released or released>outer['origin_tick']:raise ValueError('selector_source_fact_drift')
-        actual=read_json(root/'selector/output/result/selection.json');selection=assess_selection(actual,payload,study);selected=actual['selected_method_id']
-        context,labels,_=data.context_and_labels(outer_id);metrics={};curves={}
-        for method_id in pool['outer_ids']:
-            directory=root/'outer'/method_id
-            actual_config=read_json(directory/'input/method.json')
-            if actual_config!={k:methods[method_id][k] for k in ['method_id','configuration']}:raise ValueError('outer_configuration_drift')
-            forecast=read_json(directory/'output/result/forecast.json',decimal_numbers=True)
-            metrics[method_id]=score(forecast,context,labels,method_id,study)
-            # Only plot values are converted to floating point; the metrics retain exact fractions.
-            curves[method_id]=[{'series_id':r['series_id'],'target_tick':r['target_tick'],'mean':float(r['mean']),
-                'lower80':float(r['quantiles']['0.1']),'upper80':float(r['quantiles']['0.9'])} for r in forecast['forecasts']]
-        result_rows.append({'outer_id':outer_id,'selected_method_id':selected,'selection':selection,'metrics':metrics,'selected_metrics':metrics[selected]})
-        plot['origins'].append({'outer_id':outer_id,'cutoff_utc':outer['cutoff_utc'],'target_ticks':outer['target_ticks'],'labels':labels,'selected_method_id':selected,'curves':curves})
-    aggregate={}
-    for method in [*pool['outer_ids'],'selected']:
-        aggregate[method]={}
-        for metric in ['scaled_mse','scaled_mae','scaled_wis']:
-            values=[Fraction(row['selected_metrics']['metrics_exact'][metric] if method=='selected' else row['metrics'][method]['metrics_exact'][metric]) for row in result_rows]
-            aggregate[method][metric]=str(sum(values)/len(expected))
-    a.out.mkdir(parents=True,exist_ok=False)
-    result={'status':'complete_reference_matrix_recomputed','registered_outer_count':len(expected),'registered_inner_count':sum(g['role']=='inner' for g in data.grid['origins']),
-        'outer_forecasts':len(expected)*len(pool['outer_ids']),'rows_per_forecast':len(data.grid['series_catalogue'])*data.contract['grid']['horizon_days'],
-        'aggregate_exact':aggregate,'rows':result_rows,'quality_floor':study['quality_floor'],'candidate_score':None,
-        'scope':'complete numerical author reference; no complete scientific delivery/rubric/freeze/candidate hours or statistical certification'}
-    write_json(a.out/'assessment.json',result);write_json(a.out/'plot-input.json',plot)
-    with (a.out/'outer-metrics.csv').open('w',newline='',encoding='utf-8') as f:
-        writer=csv.DictWriter(f,fieldnames=['outer_id','method_id','selected','scaled_mse','scaled_mae','scaled_wis']);writer.writeheader()
-        for row in result_rows:
-            for method,value in row['metrics'].items():writer.writerow({'outer_id':row['outer_id'],'method_id':method,'selected':int(method==row['selected_method_id']),**{k:format(float(Fraction(v)),'.12g') for k,v in value['metrics_exact'].items()}})
-    return result
-
-
-if __name__=='__main__':
-    p=argparse.ArgumentParser()
-    for name in ['raw','material-contract','study','pool','out']:p.add_argument('--'+name,type=Path,required=True)
-    p.add_argument('--run',type=Path,action='append',required=True);a=p.parse_args()
+if __name__ == '__main__':
+    p = argparse.ArgumentParser()
+    p.add_argument('--run', type=Path, required=True)
+    p.add_argument('--out', type=Path, required=True)
+    a = p.parse_args()
     try:
-        value=summarize(a);print(json.dumps({'status':value['status'],'registered_outer_count':value['registered_outer_count'],'aggregate':{m:{k:float(Fraction(v)) for k,v in values.items()} for m,values in value['aggregate_exact'].items()}}),flush=True)
-    except (OSError,ValueError,KeyError,TypeError) as e:
-        print(json.dumps({'status':'run_invalid','error':'reference_matrix_invalid','detail':str(e),'candidate_score':None}),flush=True);raise SystemExit(3)
+        value = summarize(a.run.resolve())
+        a.out.mkdir(parents=True, exist_ok=False)
+        write_json(a.out / 'assessment.json', value)
+        print(json.dumps(value), flush=True)
+    except (ExecutionError, OSError, ValueError, KeyError, TypeError, sqlite3.Error) as e:
+        print(json.dumps({'status': 'run_invalid', 'error': 'sealed_matrix_invalid', 'detail': str(e), 'candidate_score': None}), flush=True)
+        raise SystemExit(3)

@@ -5,7 +5,7 @@ from decimal import Decimal, InvalidOperation
 from asof_input import InputError
 
 
-def read_json(path,*,decimal_numbers=False):
+def parse_json(text,*,decimal_numbers=False):
     def pairs(rows):
         result={}
         for key,value in rows:
@@ -16,8 +16,12 @@ def read_json(path,*,decimal_numbers=False):
     def precise(value):
         try:return Decimal(value)
         except InvalidOperation as e:raise InputError("numeric_json") from e
-    return json.loads(path.read_text(encoding="utf-8"),object_pairs_hook=pairs,parse_constant=constant,
+    return json.loads(text,object_pairs_hook=pairs,parse_constant=constant,
                       parse_float=precise if decimal_numbers else float)
+
+
+def read_json(path,*,decimal_numbers=False):
+    return parse_json(path.read_text(encoding="utf-8"),decimal_numbers=decimal_numbers)
 
 
 def load_contract(path):

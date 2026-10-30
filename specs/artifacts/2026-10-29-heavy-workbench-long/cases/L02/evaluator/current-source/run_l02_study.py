@@ -1,153 +1,216 @@
-"""Actual isolated daily reference processes. No LLM routing or candidate score."""
+"""Run a sealed candidate numerical submission, or resume its original ledger."""
 import argparse
-from datetime import datetime,timezone
+from fractions import Fraction
 import json
+import sqlite3
 from pathlib import Path
-import shutil
-import subprocess
-import time
-import uuid
-import zipfile
+import tempfile
 
 from asof_input import InputError
-from l02_scoring import ProtocolError,load_study,score
+from l02_execution import (ExecutionError, Executor, Ledger, archived_json, atomic_bytes,
+    json_bytes, regular_bytes, resolve_image, run_lock, safe_relative, timestamp,
+    read_archive, zip_bytes)
+from l02_scoring import ProtocolError, aggregate_study_metrics, load_study, score
 from l02_selection import assess_selection
-from l02_study_data import StudySource,load_pool,write_json
+from l02_study_data import StudySource, validate_pool
 from material_contract import read_json
 
-WORKER_FILES=['l02_daily_reference.py','daily_data.py','decode_materials.py','material_contract.py','asof_input.py']
-SELECTOR_FILES=['l02_selection.py','l02_scoring.py','material_contract.py','asof_input.py']
+
+def validate_submission(root):
+    manifest = read_json(root / 'submission.json', decimal_numbers=True)
+    if type(manifest) is not dict or set(manifest) != {'format', 'pool', 'programs'} or manifest['format'] != 'l02-numerical-submission/1':
+        raise ExecutionError('submission_manifest_invalid', 'format, pool and programs required')
+    pool, methods = validate_pool(manifest['pool'])
+    if set(pool['outer_ids']) != set(methods) or not {'baseline', 'extension', 'ablation'} <= {m['role'] for m in methods.values()}:
+        raise ExecutionError('submission_pool_invalid', 'every declared method is mandatory; baseline, extension and ablation required')
+    if any(m['role'] not in {'baseline', 'extension', 'ablation'} for m in methods.values()):
+        raise ExecutionError('submission_pool_invalid', 'unknown method role')
+    if not {'baseline', 'extension'} <= {methods[m]['role'] for m in pool['selection_ids']}:
+        raise ExecutionError('submission_pool_invalid', 'selection must compare baseline and extension')
+    programs = manifest['programs']
+    if type(programs) is not dict or set(programs) != {'predict', 'select', 'report'}:
+        raise ExecutionError('submission_program_invalid', 'predict/select/report required')
+    all_files = {'submission.json': (root / 'submission.json').read_bytes()}
+    for program in programs.values():
+        if type(program) is not dict or set(program) != {'files', 'argv'}:
+            raise ExecutionError('submission_program_invalid', 'files and argv required')
+        files, argv = program['files'], program['argv']
+        if type(files) is not list or not files or any(type(n) is not str for n in files) or len(set(files)) != len(files):
+            raise ExecutionError('submission_program_invalid', 'unique declared files required')
+        if type(argv) is not list or not argv or any(type(s) is not str or not s or '\x00' in s for s in argv):
+            raise ExecutionError('submission_program_invalid', 'nonempty argument vector required')
+        all_files.update(regular_bytes(root, files))
+    return manifest, all_files
 
 
-class ExecutionError(RuntimeError):
-    def __init__(self,code,detail):self.code=code;super().__init__(code+':'+detail)
-
-
-def timestamp():return datetime.now(timezone.utc).isoformat()
-
-
-def command(argv,receipt):
-    start=time.perf_counter();p=subprocess.run(list(map(str,argv)),capture_output=True,text=True,encoding='utf-8')
-    write_json(receipt,{'argv':list(map(str,argv)),'exitcode':p.returncode,'stdout':p.stdout,'stderr':p.stderr,'wall_seconds':time.perf_counter()-start})
-    return p
-
-
-def run_numeric(source,input_root,output,script,args,image,events):
-    job=output.parent;output.mkdir();cid=None;name='oc-l02-ref-'+uuid.uuid4().hex[:14]
-    argv=['docker','create','--name',name,'--network','none','--cpus','1','--env','PYTHONDONTWRITEBYTECODE=1','--env','OPENBLAS_NUM_THREADS=1','--env','OMP_NUM_THREADS=1',
-        '--mount',f'type=bind,source={source.resolve()},target=/project,readonly',
-        '--mount',f'type=bind,source={input_root.resolve()},target=/input,readonly',
-        '--mount',f'type=bind,source={output.resolve()},target=/output','--workdir','/project',image,'/opt/cpsat/bin/python',script,*args]
-    created=command(argv,job/'create-command.json')
-    if created.returncode:raise ExecutionError('facility_executor_create_failed',created.stderr)
-    cid=created.stdout.strip();events('numeric_started',{'container_id':cid,'name':name,'script':script,'job':str(job)})
-    initial=command(['docker','inspect',cid],job/'initial-inspect-command.json')
-    if initial.returncode:raise ExecutionError('facility_executor_inspect_failed',initial.stderr)
-    obj=json.loads(initial.stdout)[0]
-    write_json(job/'initial-inspect.json',{'Id':obj['Id'],'Image':obj['Image'],'Mounts':obj['Mounts'],'Args':obj['Args'],
-        'HostConfig':{k:obj['HostConfig'][k] for k in ['NanoCpus','NetworkMode']},'State':obj['State']})
-    attached=command(['docker','start','-a',cid],job/'execution-command.json')
-    terminal=command(['docker','inspect',cid],job/'terminal-inspect-command.json')
-    if terminal.returncode:raise ExecutionError('facility_executor_inspect_failed',terminal.stderr)
-    final=json.loads(terminal.stdout)[0]
-    write_json(job/'terminal-inspect.json',{'Id':final['Id'],'Image':final['Image'],'Mounts':final['Mounts'],'Args':final['Args'],
-        'HostConfig':{k:final['HostConfig'][k] for k in ['NanoCpus','NetworkMode']},'State':final['State']})
-    if final['State']['Status']!='exited':raise ExecutionError('facility_executor_not_terminal','original container retained: '+cid)
-    archive=job/'completed-originals.zip'
-    with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as z:
-        for file in sorted(job.rglob('*')):
-            if file.is_file() and file!=archive:z.write(file,file.relative_to(job).as_posix())
-        for file in sorted(source.rglob('*')):
-            if file.is_file():z.write(file,'executed-source/'+file.relative_to(source).as_posix())
-    with zipfile.ZipFile(archive) as z:
-        if z.testzip() is not None:raise ExecutionError('facility_archive_invalid',str(archive))
-    cleanup=command(['docker','rm',cid],job/'cleanup-command.json')
-    if cleanup.returncode:raise ExecutionError('facility_executor_cleanup_failed',cleanup.stderr)
-    events('numeric_terminal',{'container_id':cid,'exitcode':final['State']['ExitCode'],'job':str(job),'archive':str(archive)})
-    if attached.returncode or final['State']['ExitCode']:
-        # This runner executes sealed author reference programs, not arbitrary candidate self-ratings.
-        try:failure=json.loads(attached.stdout)
-        except (ValueError,TypeError):failure={}
-        if type(failure) is dict and failure.get('status')=='run_invalid':raise ExecutionError('facility_numeric_input_invalid',attached.stdout)
-        raise ExecutionError('candidate_cell_execution_failed',attached.stdout+attached.stderr)
-
-
-def run(a):
-    started=time.perf_counter()
-    def event(kind,detail):
-        row={'at':timestamp(),'kind':kind,**detail}
-        with (a.out/'events.jsonl').open('a',encoding='utf-8') as f:f.write(json.dumps(row)+'\n')
-        write_json(a.out/'status.json',row)
-    source=Path(__file__).resolve().parent
-    frozen=a.out/'source';frozen.mkdir()
-    for file in source.glob('*.py'):shutil.copyfile(file,frozen/file.name)
-    for path,name in [(a.material_contract,'material-contract.json'),(a.study,'study-contract.draft.json'),(a.pool,'reference-pool.json')]:shutil.copyfile(path,frozen/name)
-    worker=a.out/'worker-source';selector=a.out/'selector-source';worker.mkdir();selector.mkdir()
-    for name in WORKER_FILES:shutil.copyfile(frozen/name,worker/name)
-    for name in SELECTOR_FILES:shutil.copyfile(frozen/name,selector/name)
-    study=load_study(frozen/'study-contract.draft.json');pool,methods=load_pool(frozen/'reference-pool.json')
-    data=StudySource(a.raw,frozen/'material-contract.json',study)
-    all_outer=[g['origin_id'] for g in data.grid['origins'] if g['role']=='outer'];requested=a.outer_id or all_outer
-    if len(set(requested))!=len(requested) or not set(requested)<=set(all_outer):raise InputError('registered_outer_identity')
-    write_json(a.out/'registration.json',{'at':timestamp(),'outer_ids':requested,'all_registered_outer_ids':all_outer,'pool':pool,
-        'mandatory_inner_ids':pool['selection_ids'],'mandatory_outer_ids':pool['outer_ids'],'scale_litres':data.scales,'image':a.image,
-        'total_wall_seconds':None,'candidate_grade':None,'scope':'author reference; requested fixed outer/inner matrix, no full L02 freeze or candidate hours'})
-    event('study_registered',{'outer_ids':requested,'requested_outer_count':len(requested)})
-    assessed=[]
-    for outer_id in requested:
-        outer=data.origins[outer_id];root=a.out/'outer'/outer_id;root.mkdir(parents=True)
-        inner=[g for g in data.grid['origins'] if g['role']=='inner' and g['outer_id']==outer_id]
-        if len(inner)!=len(data.contract['schedule']['inner_days_before']):raise InputError('registered_inner_coverage')
-        if outer['origin_tick']<data.scale_release_tick:raise InputError('selector_scale_unpublished')
-        frames=[]
-        for origin in inner:
-            origin_id=origin['origin_id'];packet=root/'packets'/origin_id
-            verification=data.packet(origin_id,packet);write_json(root/'packet-receipts'/(origin_id+'.json'),verification)
-            context,labels,released=data.context_and_labels(origin_id)
-            if released>outer['origin_tick']:raise InputError('inner_actual_label_unpublished')
-            forecasts={}
-            for method_id in pool['selection_ids']:
-                job=root/'inner'/origin_id/method_id;input_root=job/'input';input_root.mkdir(parents=True)
-                shutil.copytree(packet,input_root/'packet')
-                write_json(input_root/'method.json',{k:methods[method_id][k] for k in ['method_id','configuration']})
-                run_numeric(worker,input_root,job/'output','l02_daily_reference.py',['--input','/input/packet','--config','/input/method.json','--output','/output/result'],a.image,event)
-                value=read_json(job/'output/result/forecast.json',decimal_numbers=True)
-                assessment=score(value,context,labels,method_id,study);write_json(job/'metric-assessment.json',assessment)
-                forecasts[method_id]=read_json(job/'output/result/forecast.json')
-            frames.append({'origin_id':origin_id,'context':context,'labels':labels,'labels_released_at':released,'forecasts':forecasts})
-        selection_job=root/'selector';selection_input=selection_job/'input';selection_input.mkdir(parents=True)
-        payload={'format':'l02-inner-selection-packet/1','outer_origin_tick':outer['origin_tick'],'inner_ids':[g['origin_id'] for g in inner],
-            'selection_ids':pool['selection_ids'],'frames':frames}
-        write_json(selection_input/'inner.json',payload);write_json(selection_input/'study.json',study)
-        run_numeric(selector,selection_input,selection_job/'output','l02_selection.py',['--input','/input/inner.json','--study','/input/study.json','--output','/output/result'],a.image,event)
-        actual=read_json(selection_job/'output/result/selection.json');verified=assess_selection(actual,read_json(selection_input/'inner.json',decimal_numbers=True),study)
-        write_json(selection_job/'assessment.json',verified);selected=actual['selected_method_id']
-        packet=root/'packets'/outer_id;write_json(root/'packet-receipts'/(outer_id+'.json'),data.packet(outer_id,packet))
-        context,labels,released=data.context_and_labels(outer_id);outer_scores={}
-        for method_id in pool['outer_ids']:
-            job=root/'outer'/method_id;input_root=job/'input';input_root.mkdir(parents=True);shutil.copytree(packet,input_root/'packet')
-            write_json(input_root/'method.json',{k:methods[method_id][k] for k in ['method_id','configuration']})
-            run_numeric(worker,input_root,job/'output','l02_daily_reference.py',['--input','/input/packet','--config','/input/method.json','--output','/output/result'],a.image,event)
-            outer_scores[method_id]=score(read_json(job/'output/result/forecast.json',decimal_numbers=True),context,labels,method_id,study)
-            write_json(job/'metric-assessment.json',outer_scores[method_id])
-        record={'outer_id':outer_id,'selected_method_id':selected,'inner_selection':verified,'outer_metrics':outer_scores,'selected_metrics':outer_scores[selected],
-            'outer_label_release_tick':released,'mandatory_cells_complete':True,'candidate_score':None}
-        write_json(root/'assessment.json',record);assessed.append(record);event('outer_completed',{'outer_id':outer_id,'selected_method_id':selected})
-    result={'status':'requested_reference_matrix_complete','outer_count':len(assessed),'assessments':assessed,'wall_seconds':time.perf_counter()-started,
-        'candidate_score':None,'quality_threshold':study['quality_floor'],'scope':'daily numerical reference/method selection only; not full research delivery/rubric/freeze/candidate hours'}
-    write_json(a.out/'assessment.json',result);event('study_completed',{'outer_count':len(assessed),'wall_seconds':result['wall_seconds']});print(json.dumps({'status':result['status'],'outer_count':len(assessed),'wall_seconds':result['wall_seconds']}),flush=True)
-
-
-if __name__=='__main__':
-    p=argparse.ArgumentParser()
-    for name in ['raw','material-contract','study','pool','out']:p.add_argument('--'+name,type=Path,required=True)
-    p.add_argument('--image',required=True);p.add_argument('--outer-id',action='append');a=p.parse_args()
-    try:a.out.mkdir(parents=True,exist_ok=False)
+def initialize(args):
+    try:
+        args.out.mkdir(parents=True, exist_ok=False)
     except OSError as e:
-        print(json.dumps({'status':'run_invalid','error':'output_directory_unavailable','detail':str(e),'candidate_score':None}),flush=True);raise SystemExit(3)
-    try:run(a)
-    except (InputError,ProtocolError,ExecutionError,OSError,ValueError,KeyError,TypeError) as e:
-        code=getattr(e,'code','facility_study_execution_invalid')
-        facility=code.startswith('facility_') or isinstance(e,(InputError,OSError))
-        result={'status':'run_invalid' if facility else 'selection_incomplete','error':code,'detail':str(e),'candidate_score':None}
-        write_json(a.out/'assessment.json',result);print(json.dumps(result),flush=True);raise SystemExit(3 if facility else 2)
+        raise ExecutionError('output_directory_unavailable', str(e)) from e
+    with run_lock(args.out):
+        manifest, submitted = validate_submission(args.submission)
+        study = load_study(args.study)
+        data = StudySource(args.raw, args.material_contract, study)
+        all_outer = [g['origin_id'] for g in data.grid['origins'] if g['role'] == 'outer']
+        requested = args.outer_id or all_outer
+        if len(set(requested)) != len(requested) or not set(requested) <= set(all_outer):
+            raise ExecutionError('registered_outer_identity', 'unique registered outer IDs required')
+        image = resolve_image(args.image, args.out / 'image-preflight.json')
+        registration = {'format': 'l02-execution-registration/1', 'created_at': timestamp(),
+            'outer_ids': requested, 'all_outer_ids': all_outer, 'image_id': image,
+            'assignment_kind': 'private_author_diagnostic' if args.outer_id else 'formal_full_assignment',
+            'execution_profile': {'cpus': 1, 'network': 'none', 'readonly_root': True},
+            'candidate_score': None, 'scope': 'numerical execution protocol; full L02 quality and rubric remain unqualified'}
+        files = {**{'submission/' + n: v for n, v in submitted.items()},
+                 **{'raw/' + n: v for n, v in regular_bytes(args.raw).items()},
+                 'material-contract.json': args.material_contract.read_bytes(),
+                 'study.json': args.study.read_bytes(), 'registration.json': json_bytes(registration)}
+        atomic_bytes(args.out / 'registration.zip', zip_bytes(files))
+        ledger = Ledger(args.out, create=True)
+        ledger.close()
+    return args.out
+
+
+def inputs_for_forecast(data, origin_id, method):
+    with tempfile.TemporaryDirectory(prefix='l02-authorized-packet-') as tmp:
+        packet = Path(tmp) / 'packet'
+        verification = data.packet(origin_id, packet)
+        inputs = {'packet/' + n: v for n, v in regular_bytes(packet).items()}
+    inputs['method.json'] = json_bytes({k: method[k] for k in ('method_id', 'configuration')})
+    return inputs, verification
+
+
+def extract_data(files, root):
+    for name, value in files.items():
+        if name.startswith('raw/') or name in ('material-contract.json', 'study.json'):
+            target = root / safe_relative(name)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(value)
+
+
+def execute(root, observer=None):
+    with run_lock(root):
+        ledger = Ledger(root)
+        try:
+            sealed = read_archive(root / 'registration.zip')
+            registration = archived_json(sealed, 'registration.json')
+            if registration.get('format') != 'l02-execution-registration/1':
+                raise ExecutionError('run_format_invalid', 'unknown registration')
+            manifest = archived_json(sealed, 'submission/submission.json', True)
+            pool, methods = validate_pool(manifest['pool'])
+            executor = Executor(ledger, registration['image_id'], observer)
+            with tempfile.TemporaryDirectory(prefix='l02-evaluator-registration-') as tmp:
+                extracted = Path(tmp)
+                extract_data(sealed, extracted)
+                study = load_study(extracted / 'study.json')
+                data = StudySource(extracted / 'raw', extracted / 'material-contract.json', study)
+                completed = []
+
+                def program(kind):
+                    declaration = manifest['programs'][kind]
+                    return declaration, {name: sealed['submission/' + name] for name in declaration['files']}
+
+                def predict(outer_id, origin_id, method_id, level):
+                    inputs, packet_receipt = inputs_for_forecast(data, origin_id, methods[method_id])
+                    context, labels, _ = data.context_and_labels(origin_id)
+                    declaration, source = program('predict')
+                    def validate(files):
+                        return {'metric': score(archived_json(files, 'output/result/forecast.json', True), context, labels, method_id, study),
+                                'packet_verification': packet_receipt}
+                    accepted = executor.invoke({'kind': 'predict', 'outer_id': outer_id, 'origin_id': origin_id,
+                                                'method_id': method_id, 'level': level}, declaration, source, inputs, validate)
+                    return archived_json(accepted, 'output/result/forecast.json', True), archived_json(accepted, 'assessment.json')['metric']
+
+                for outer_id in registration['outer_ids']:
+                    outer = data.origins[outer_id]
+                    inner = [g for g in data.grid['origins'] if g['role'] == 'inner' and g['outer_id'] == outer_id]
+                    if len(inner) != len(data.contract['schedule']['inner_days_before']) or outer['origin_tick'] < data.scale_release_tick:
+                        raise ExecutionError('facility_inner_registration_invalid', outer_id)
+                    frames = []
+                    for origin in inner:
+                        context, labels, released = data.context_and_labels(origin['origin_id'])
+                        if released > outer['origin_tick']:
+                            raise ExecutionError('facility_inner_label_unpublished', origin['origin_id'])
+                        forecasts = {method: predict(outer_id, origin['origin_id'], method, 'inner')[0] for method in pool['selection_ids']}
+                        frames.append({'origin_id': origin['origin_id'], 'context': context, 'labels': labels,
+                                       'labels_released_at': released, 'forecasts': forecasts})
+                    payload = {'format': 'l02-inner-selection-packet/1', 'outer_origin_tick': outer['origin_tick'],
+                               'inner_ids': [g['origin_id'] for g in inner], 'selection_ids': pool['selection_ids'], 'frames': frames}
+                    declaration, source = program('select')
+                    inputs = {'inner.json': json_bytes(payload), 'study.json': sealed['study.json']}
+                    selected = executor.invoke({'kind': 'select', 'outer_id': outer_id}, declaration, source, inputs,
+                        lambda files: assess_selection(archived_json(files, 'output/result/selection.json'),
+                                                       archived_json(files, 'input/inner.json', True), study))
+                    selection = archived_json(selected, 'output/result/selection.json')
+                    metrics, forecasts = {}, {}
+                    for method in pool['outer_ids']:
+                        forecasts[method], metrics[method] = predict(outer_id, outer_id, method, 'outer')
+                    context, labels, released = data.context_and_labels(outer_id)
+                    completed.append({'outer_id': outer_id, 'selected_method_id': selection['selected_method_id'],
+                        'inner_selection': archived_json(selected, 'assessment.json'), 'metrics': metrics,
+                        'forecasts': forecasts, 'context': context, 'labels': labels, 'label_release_tick': released})
+                aggregate = aggregate_study_metrics(
+                    {(row['outer_id'], method): row['metrics'][method]['metrics_exact'] for row in completed for method in pool['outer_ids']},
+                    {row['outer_id']: row['selected_method_id'] for row in completed}, pool['outer_ids'])
+                numerical = {'format': 'l02-completed-numerical-results/1', 'outer_ids': registration['outer_ids'],
+                    'all_outer_ids': registration['all_outer_ids'], 'complete_assignment': set(registration['outer_ids']) == set(registration['all_outer_ids']),
+                    'pool': pool, 'aggregate_exact': aggregate, 'outer_results': completed, 'candidate_score': None,
+                    'quality_floor': study['quality_floor']}
+                declaration, source = program('report')
+                def validate_report(files):
+                    receipt = archived_json(files, 'output/result/report.json')
+                    report = files['output/result/report.md'].decode('utf-8')
+                    if type(receipt) is not dict or receipt.get('format') != 'l02-report-receipt/1' or receipt.get('outer_ids') != registration['outer_ids'] or not report.strip():
+                        raise ExecutionError('report_delivery_invalid', 'nonempty report and exact requested-origin receipt required')
+                    return {'status': 'report_protocol_verified', 'scientific_review': 'unassessed', 'candidate_score': None}
+                executor.invoke({'kind': 'report'}, declaration, source, {'results.json': json_bytes(numerical)}, validate_report)
+                result = {'status': 'requested_execution_complete', 'complete_assignment': numerical['complete_assignment'],
+                    'requested_outer_ids': registration['outer_ids'], 'aggregate_exact': aggregate,
+                    'verified_cells': ledger.db.execute("SELECT count(*) FROM cell WHERE phase='verified'").fetchone()[0],
+                    'study_complete': None, 'quality_success': None, 'candidate_score': None,
+                    'scope': 'sealed numerical execution/report transport; full scientific/operational review and frozen rubric pending'}
+                with ledger.db:
+                    ledger.event(None, 'requested_execution_complete', result)
+                return result
+        except Exception as e:
+            with ledger.db:
+                ledger.event(None, 'execution_interrupted', {'code': getattr(e, 'code', 'facility_execution_invalid'), 'detail': str(e)})
+            raise
+        finally:
+            ledger.close()
+
+
+def main(argv=None, observer=None):
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--resume', type=Path)
+    for name in ('out', 'submission', 'raw', 'material-contract', 'study'):
+        parser.add_argument('--' + name, type=Path)
+    parser.add_argument('--image')
+    parser.add_argument('--author-diagnostic-outer-id', dest='outer_id', action='append')
+    args = parser.parse_args(argv)
+    fresh = ('out', 'submission', 'raw', 'material_contract', 'study', 'image')
+    try:
+        if args.resume:
+            if any(getattr(args, name) is not None for name in fresh) or args.outer_id:
+                raise ExecutionError('resume_arguments_invalid', 'resume accepts only its original run root')
+            if not args.resume.is_dir():
+                raise ExecutionError('run_format_invalid', 'original run directory required')
+            root = args.resume
+        else:
+            if any(getattr(args, name) is None for name in fresh):
+                raise ExecutionError('fresh_arguments_invalid', 'all fresh registration arguments required')
+            root = initialize(args)
+        result = execute(root, observer)
+        print(json.dumps(result, ensure_ascii=False), flush=True)
+        return 0
+    except (ExecutionError, InputError, ProtocolError, OSError, ValueError, KeyError, TypeError, sqlite3.Error) as e:
+        code = getattr(e, 'code', 'facility_storage_invalid' if isinstance(e, sqlite3.Error) else 'facility_execution_invalid')
+        candidate = getattr(e, 'candidate', False) or isinstance(e, ProtocolError) and not code.startswith('facility_')
+        print(json.dumps({'status': 'candidate_execution_failed' if candidate else 'run_invalid', 'error': code,
+                          'detail': str(e), 'candidate_score': None}, ensure_ascii=False), flush=True)
+        return 2 if candidate else 3
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

@@ -1,0 +1,28 @@
+{
+  "stage": "L02 generic executor preimplementation plan",
+  "reviewer": "/root/benchmark_review",
+  "status": "direction_supported_with_required_contract_clarifications",
+  "review_mode": "one-level independent read-only plan/source audit; no redelegation",
+  "source_record": "source-plan/PLAN-04-35.md",
+  "source_snapshot_receipt": "capture-receipt.json",
+  "findings_are": "preimplementation contract gaps and logical crash traces, not newly executed failures",
+  "required_before_implementation_qualification": [
+    {"id":"P1-R1","requirement":"Inspect actual Docker State/StartedAt before any start; created ledger cannot restart a previously executed/exited same CID.","minimal_future_evidence":"One tiny process terminal before ledger commit, resumed without another start."},
+    {"id":"P1-R2","requirement":"Keep arbitrary candidate IDs/output/archive paths inside owned roots, enforce ordinary-file/member identity and actual read-only rootfs/tmp isolation.","minimal_future_evidence":"Explicit identity/output error contracts and actual containment/mount inspect; no old matrix rerun."},
+    {"id":"P1-R3","requirement":"Seal success and candidate-failure terminal evidence atomically before durable classification/cleanup; resume each commit gap from original execution.","minimal_future_evidence":"Tiny sealed-before-commit and committed-before-cleanup recovery, plus exit2 self-run_invalid classified as candidate failure."}
+  ],
+  "public_ABI_decisions": [
+    "Formal report must bind immutable full_assignment; diagnostic label release cannot become iterative candidate feedback.",
+    "Publish language-neutral mounts, input/output schemas, literal argv/entrypoint semantics, stable ID tie and frozen pool rules."
+  ],
+  "existing_production_lock_scope": "process-lock.ts uses proper-lockfile renewal; it is not a kernel-owner lock and need not be changed for this benchmark executor.",
+  "overengineering_to_avoid": ["No distributed scheduler/daemon/automatic retry", "No old-format fallback", "No rerun of existing120/54 or complete study for each recovery window", "No quality claim based on second-language smoke"],
+  "new_model_forecast_Docker_HTTP_solver_Provider_GPU_UI_executions": 0,
+  "repo_modified_by_reviewer": false,
+  "new_executor_implementation_qualified": false,
+  "L02_frozen": false,
+  "quality_floor": null,
+  "candidate_score": null,
+  "hours_qualified": false,
+  "awaiting": "parent current implementation and explicitly scoped real evidence review"
+}

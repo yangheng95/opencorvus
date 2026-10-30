@@ -52,7 +52,9 @@ L06现已完成[最终独立合同审查并冻结0.2.0](cases/L06/README.md)，�
 
 [L06/0.2.0真实成对结果](cases/L06/evaluator/pilot-codex-20261030/paired-comparison.json)：两方各100/47pass/28critical通过，均经评估侧源码基例、注册报价和行序控制以及同冻结单层独立17叶审查，再由真实grader聚合。不是参考分或Inspect完成分；旧public/rubric/FREEZE与两结果保留。非盲AI审查/模型未知和资源隔离限制仍在，不作同模型速度/费用因果排名。
 
-两good已触发[新L06/0.3计划与机制](cases/L06/evaluator/upgrade-v0.3/PLAN.md)：分阶段信息/历史承诺/执行政策。闭式9/2合法与7/2提前知叶的枚举只证明机制活跃，不是新题冻结或数小时难度。[L02](cases/L02/README.md)已前移公开截止以隔离全部inner，新增非单位MSE/WIS手算与实际metric CLI，保留真实极大指数/声明矛盾失败和修复；完整每日worker/真实选模/研究交付仍未实现。当前套件冻结1/10、候选有效小时资格0/10，十题目标未完成。
+两good已触发[新L06/0.3计划与机制](cases/L06/evaluator/upgrade-v0.3/PLAN.md)：分阶段信息/历史承诺/执行政策。闭式9/2合法与7/2提前知叶的枚举只证明机制活跃，不是新题冻结或数小时难度。[L02](cases/L02/README.md)已隔离全部inner并完成每日数值参考与真实选择；完整科学/运营交付、质量线/rubric与冻结仍未实现。当前套件冻结1/10、候选有效小时资格0/10，十题目标未完成。
 
 
 [L02完整每日数值参考](cases/L02/evaluator/qualification/daily-full-reference/README.md)已真实完成12outer/36inner、108预测/12选择及单层独立核验，原CSV/只读1CPU/netnone权限、逐格指标/拟合来源和真实图均有原件。去天气消融更优、A1/ZA转移边界四天区间失效如实保留；研究质量线/通用候选grader/rubric与冻结仍待。不是新候选成绩，套件仍冻结1/10、有效小时0/10。
+
+[L02通用数值执行资格](cases/L02/evaluator/qualification/generic-execution/README.md)补齐候选自带files/argv/池、两语言原CSV全链、Windows锁与原CID五窗口恢复、封存产物重算及冻结report的数据释放；它不等同完整科学/运营grader。旧120组不重跑，所有新单outer均私有作者诊断，正式质量/冻结与有效小时仍待。

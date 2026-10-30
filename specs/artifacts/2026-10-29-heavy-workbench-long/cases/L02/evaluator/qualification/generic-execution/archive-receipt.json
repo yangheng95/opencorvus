@@ -1,0 +1,26 @@
+{
+  "object": "originals.zip",
+  "file_members": 785,
+  "link_objects": [],
+  "bytes": 20369484,
+  "scope": "original regular objects and explicit Windows reparse metadata, no target dereference; archive identity is not functional/source-hash acceptance",
+  "nonregular_objects": {
+    "nonregular_filesystem_objects": [
+      {
+        "path": "output-link-run/cells/1/work/output/link.txt",
+        "is_symlink": false,
+        "stat": {
+          "st_mode": 33206,
+          "st_size": 0,
+          "st_file_attributes": 3104,
+          "st_reparse_tag": 2684354589
+        },
+        "readlink_error": {
+          "type": "ValueError",
+          "detail": "not a symbolic link"
+        }
+      }
+    ],
+    "scope": "original Windows-visible object metadata; Linux symlink creation source/native exit is in terminal.zip; no target dereference"
+  }
+}

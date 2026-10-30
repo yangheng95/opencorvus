@@ -191,3 +191,48 @@ L06已于00:27UTC取得实际完整OpenCorvus100/100后才启动fresh Codex /roo
 核心证据：cases/L02/evaluator/qualification/daily-full-reference的REPORT、精确assessment/CSV/图/数值原件；daily-independent-review的PLAN/COLD/FULL报告、机器结论/实际新图追加及完整原件。外部D:/opencorvus-benchmark-runs/l02-daily-loop-qualification-20261030和l02-daily-loop-independent-review-20261030保留全部原per-process ZIP。repo压缩包对324重复packet成员逐字节核同后去重并留mapping，只证明归档身份，功能来自独立实际核验，不使用无效source摘要门。全部full raw仍只评估侧，候选未来只拿public。
 
 下一步须直接推进通用候选数值执行/完整研究与运营交付、预先质量目标/低质量对照、原子rubric/人评锚点/完整聚合与独立冻结；不能继续重做本轮toy/54投影/120进程凑工作量，也不能按A1现误差填宽线。质量底线仍null、完整L02未冻结；L06新0.3完整业务/多阶段可见信息/承诺续接与其余L01/L03/L04/L05/L07-L10仍待。整套冻结1/10、候选有效小时0/10、目标未达成，心跳ACTIVE；无总token/总墙钟限制，cheap-first继续。所有本任务改动范围commit、正常fetch/merge/检查待推/hook/push，结束git status保留用户改动。
+
+## 2026-10-30 04:35 UTC 实施前Recall：通用提交与持久执行
+
+继续十题/严格rubric/单层独立审查/两系统两好升级，cheap-first，无用户总token/墙钟额度。5e4107e83已push，最新读取Git/AGENTS/相关Recall/benchmark-debug-template；本任务范围clean，用户新overlay/架构/索引/测试等改动保留不运行。所有L02旧120和L06原候选/评估均终态，不再启动它们，六旧昂贵任务不恢复。当前仍1/10冻结、候选小时0/10。
+
+### 问题深度、搜索与影响面
+
+已读当前run_l02_study、StudySource/pool、selector/metric和public任务。全仓搜索run_numeric/l02_study/execution-manifest/resume-study，仅本case三处预测/选择调用与本casesummary依赖，产品Task/Mission/普通Session/occurrence、恢复/重试/多项目入口无导入。现入口硬编码五个Pythonworker/四个selector文件和Python解释器，不支持任意候选提交；cell结果只在目录/JSON，没有排他运行者与原CID恢复，所以不能把它当通用candidate执行器。尤其当前参考失败分类会相信封存作者程序自报run_invalid，不能移给不可信候选使用。
+
+本轮限benchmark数值执行合同/数据完整性/持久化与报告产物，不新增LLM路由、工具白名单、隐藏消息、队列或教模型流程的gate。通用argv/真实容器和ledger用于数值程序，不控制LLM选工具。替换现Docker执行函数为单一executor，不保留旧硬编码入口/fallback；旧120及其版本源码作为不可改历史证据保留。新运行格式是首次声明的candidate执行baseline1，不将旧作者资格目录当可恢复活跃数据或清空重建。新SQLite将显式user_version=1，后续交付版本演进须保数据迁移，未知版本具名拒绝。
+
+### 事前合同与实施决定
+
+1. 候选提交submission.json声明predict/select/report三个真实程序，各有相对files清单和argv数组；pool是候选自带冻结方法池。argv原样传容器entrypoint，不拼shell、不强制Python/Node或特定算法；依赖镜像由评估者预备并解析固定ID，不由候选传mount/特权/网络参数。文件路径须普通文件且解析仍在提交目录内，拒绝路径/符号链接越界。配置池角色涵盖baseline/extension/ablation，selection>=2、outer包含全部必交和选择项，不因预测相同强迫翻转。
+2. 首次运行把原提交/方法池、评估侧原材料/合同/环境注册为不可变ZIP对象，各程序只提取自己声明文件到readonly /project；输入readonly /input，只有新/output及/tmp可写，1CPU/netnone。private raw/评估器/参考权重不挂predict/select；report只在所有请求inner/outer完整验收后获已封存结果/真值/指标。它可生成论文/图表，但不能改之前programme/结果，解决全链报告需要外层数字而不能回流调参的问题。新数值报告程序仍不是LLM消息或新服务路由。
+3. runs.sqlite3是唯一cell状态来源，记录不可变cell身份/声明argv、准备输入、精确container_name/CID及phase；原始CLI/inspect/log/output在每cell事实文件和accepted ZIP中，不能自报PASS评分。整个运行持有真实跨平台OS文件锁，第二执行者具名run_busy，崩溃由OS释放；不靠PID标题或时间猜owner、不杀用户进程。SQLite每步短事务提交，不能在长计算中把CID留在未提交事务。
+4. 必须先持久化唯一container name+run/cell标签再create，记录CID后才start。恢复created复用原CID；running只wait原进程，不能重复start；terminal先记录inspect/log/exit、真实checker验收并封存source/input/output，再事务标verified，最后精确清理。崩溃在create回执前时凭已注册名称/标签与真实配置核身份，名称唯一性防双创建；已有CID丢失且尚未验收则run_invalid待查，不能重跑/给候选0。已verified的原container已清理按accepted ZIP为准。
+5. 同一run恢复只读原封存注册，不接受新提交/参数重绑；校验实际物化source/input与原ZIP的对象身份，不用可变源码摘要作质量门。accepted产物读自封存ZIP而非可被外部改写的working文件；原工作文件仍留证。failed cell不自动再试，partial cells/未评状态保留，不首错后把剩余标通过；源码修正是新提交/新root。候选退出2即使stdout说run_invalid仍是记录的程序失败；只有host观察到的依赖/设施/输入矛盾才能给设施无分。
+6. 新CLI必须明确fresh(out+submission+raw+contract+study+image)或resume(runroot)，不能混参；未知/旧运行格式具名拒绝，不覆盖历史目录。新研究summary读此唯一ledger/accepted对象；旧资格summary只随历史封存源码复现，不在当前代码保留双协议读路径。full_assignment与数值execution_complete、研究完成/质量/正式总分分开，diagnostic单outer不当完整12。
+
+### 必要真实资格与成本
+
+先一个注册outer的真实提交全链（6inner预测+selector+3outer预测+report）；中途用评估侧可见observer在已create/持久CID但未start处握手，第二owner真实run_busy，再只让自有测试进程以os._exit中断，恢复同CID。再在已验收首cell处显式诊断checkpoint，最终resume只补未完成单元并从accepted对象读取，原已验收不重执行。这些停止是故障资格，不是用户预算/候选最低时长或隐藏LLM消息，不计有效小时。每个真实container自然终态后封存/精确cleanup。
+
+用第二语言的实际原CSV预测/选择/报告提交验证argv自由和方法池ID自由；优先现有依赖镜像，必要只准备一个成熟官方runtime，1CPU/netnone执行，不并发长组。另单cell真实退出自报run_invalid的坏程序应candidate_execution_failed，路径/重绑/未知格式等输入给具名错误。仅必要新行为，不重跑旧120/旧54或恢复GPU。所有原失败/修后/源码/真实命令保留，单层review禁止再委托；完整质量线、低质量对照、原子rubric、人评校准/冻结与候选小时仍待。依据Docker create/bind mounts和CPython os/锁语义官方合同，不把文档当运行证明。
+
+实施中追加影响分析：任意method ID与聚合别名selected冲突已在首次完整预测前发现并改成per_method/selected两层，主方和独立审查均识别；不是把ID当保留词。后将driver/summary重复的同分母聚合提取为唯一scoring函数，最终源只重算已有accepted对象，不再预测。独立原BadZipFile实证显示设施归档错误会漏成traceback，已统一reader具名化；其后独立用真实损坏DEFLATE发现zlib.error仍漏，须在同一reader处理并回放原坏压缩，保留两版原件。此处是封存对象设施失败，不能转为候选0。
+
+同时横审任意数值程序stdout/stderr的实际Docker调用：当前command把全部输出按严格UTF8解码，合法数值程序若输出非UTF8诊断会在docker logs收集阶段触发UnicodeDecodeError；其输出/原容器仍可能有效，不应混成设施无效或重启程序。将先用一个真实自有程序形成同CID已exited/ledger terminal的原失败，再只修唯一Docker收据解码与原字节封存、恢复同CID验收。候选输出JSON/Markdown仍各自按明确UTF8合同验证。这里不改LLM/Provider、Task/Mission/Session入口，不设任务总量上限、不重复原11/120组；只是数值控制面证据边界，原候选程序字节/输入/真实StartedAt保持同一。
+
+上段日志故障假设被真实实验否证，不能当已确认根因：唯一binary程序实际exit0、result有效、ledger已verified并正常cleanup。失败是主方探针把accepted stdout强行等于程序写入的0xff/0xfe，而本机Docker json-file链路已交付两个UTF8 replacement字符，严格Python解码没有报错。原程序、原Docker logs收据、accepted字节efbfbd/efbfbd/0a、真实退出与探针AssertionError全部保留；转换发生在Python解码前，daemon/CLI具体层未知，不猜。故不再启动该容器、不把它当候选失败或编造UnicodeDecodeError、不做未经证实的日志修补。当前只保证实际Docker返回文本和数值文件原件，未认证原程序任意二进制stdout逐字节穿透；后续如需该能力须独立合同/证据。
+
+## 最新接续Recall：通用执行/原CID恢复已局部独立资格
+
+唯一当前数值入口已换成submission.json声明predict/select/report files/argv/冻结pool，不再硬编码作者Python文件或保留旧双格式summary。公开EXECUTION-CONTRACT.draft、SQLite schema baseline1/Windows内核锁、先存唯一name/CID再start、实际created/running/exited判定、先封存/验收后verified/精确cleanup已实现。只有真实物理状态允许start，不能凭ledger标签重启同CID；failed不自动重试，后续未执行单元不造通过，任意候选stdout不能自免设施错误。
+
+同一真实record容器跨五个自有owner os._exit窗口恢复，原CID dcda2a778fb387412c01a482ccd18c9d04dfb2b09e90b429c0ddd38740c1917b，只有一次create/start/rm、唯一StartedAt/FinishedAt和count1。实际第二owner Windows进程run_busy；仅进程崩溃/Windows资格，不当硬件掉电/POSIX锁实跑。Python原CSV完整私有单outer11进程，首verified中断18.469s，后resume84.683s；外部改原submission/working预测仍按sealed对象续接。Node原CSV/BigInt selector/report11进程65.943s，实际v22.23.4，方法ID含../、空格、Unicode和selected。两方精确summary及最终driver重用原对象同值，最终resume25.811/25.905s没有新数值程序。不是新完整12outer或候选小时。
+
+原selected方法别名冲突已先于完整链修成per_method/selected，固定分母聚合只有l02_scoring.aggregate_study_metrics。真实exit2假报设施、真实Linux链接输出、缺格/参数重绑/旧格式/未知schema/坏SQLite/坏ZIP及DEFLATE的具名错误均保原失败和修后。binary probe是主方自身预期错误，不是执行器失败；原数值程序exit0/verified，未改日志或重启。Windows链接对象is_symlink=false，原reparse元数据与补录脚本漏ValueError错误保留，不跟随目标、不假说该字段true。
+
+单层benchmark_review已完成最终独立报告：恢复19项、两语言原件/原CSV+SQL/Fraction290项、最终边界11项分别通过，未再委托或新启Docker/预测/solver/Provider/GPU/UI。主方及其均实际view新6panel PNG。熟悉参考/非盲AI，不是职业人类或统计成熟。source-initial/current/loop/boundaries/final及各实际执行绑定全部封存，最后仅zlib捕获增量，不伪称旧全链逐字节执行最后边界。
+
+证据在cases/L02/evaluator/qualification/generic-execution（主报告/机器事实/原件/独立报告），外部l02-generic-execution-qualification-20261030与l02-generic-execution-review-20261030。正式入口默认全部12outer，只有author-diagnostic显式缩小私有工具资格，诊断不得向可重提候选反馈。report源码/池在预测前冻结，只有完整正式数值验收后才得外层标签；resume只原run，不重绑/扩展。当前没有活跃新数值任务，所有本轮自有计算自然终态/封存/精确清理；六旧昂贵容器再次真实inspect均Paused，不恢复。
+
+下一步直接构建科学/运营决策成品、合理事前质量目标与真正低质量对照、原子rubric/人评锚点/全固定分母critical聚合并独立冻结，不能再反复两语言/五窗口/旧120/54/toy凑量。full formal12新通用入口实跑仍未有，本轮不能补造；可复用旧真实预测作作者分析材料，candidate须冻结后真实新执行。L06/0.3完整业务及其余九题均未完成，套件冻结1/10、候选有效小时0/10，目标未达，心跳ACTIVE。无总token/墙钟额度、cheap-first继续。正常范围commit/fetch/merge/待推审查/hook/push，保留用户版本/overlay/视频删除/索引改动。

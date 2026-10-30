@@ -1,0 +1,487 @@
+{
+  "status": "limited_generic_execution_independently_qualified",
+  "candidate_score": null,
+  "L02_frozen": false,
+  "suite_frozen": 1,
+  "suite_effective_candidate_hours_qualified": 0,
+  "same_container_recovery": {
+    "container": "dcda2a778fb387412c01a482ccd18c9d04dfb2b09e90b429c0ddd38740c1917b",
+    "windows": [
+      "create_returned",
+      "start_returned",
+      "terminal_sealed",
+      "accepted_sealed",
+      "verified",
+      "complete"
+    ],
+    "owner_os": "Windows",
+    "process_crash_only": true
+  },
+  "python": {
+    "status": "one_outer_generic_execution_verified",
+    "checkpoint": {
+      "id": 1,
+      "identity": "{\"kind\": \"predict\", \"level\": \"inner\", \"method_id\": \"seasonal-weekday\", \"origin_id\": \"outer-20250115-i1\", \"outer_id\": \"outer-20250115\"}",
+      "name": "oc-l02-cell-5e6b641aeb5f4e93b1f9e56c4ef7504f",
+      "phase": "verified",
+      "cid": "db747aaa483da28e9e2cd3d30f06a3316263a48d36bb027345efda4228bd343c",
+      "exitcode": 0,
+      "failure": null
+    },
+    "result": {
+      "status": "requested_execution_complete",
+      "complete_assignment": false,
+      "requested_outer_ids": [
+        "outer-20250115"
+      ],
+      "aggregate_exact": {
+        "per_method": {
+          "seasonal-weekday": {
+            "scaled_mse": "54371510067460289243450418693167606174058883410221606249374371723293677889250691303284551783/8462433976289341551043420928924772751265882339967911892345205616232192000000000000000000000000",
+            "scaled_mae": "1063980971012884681780025281020182556135540743/13907805805201083182765036496419846400000000000",
+            "scaled_wis": "25839562586329917921946484337915408023/474074771794680400664686461443180851200"
+          },
+          "ridge-weather-operations": {
+            "scaled_mse": "55761321539251542859663170770132205834025853453532974060710063639649166088147143089087116073/67699471810314732408347367431398182010127058719743295138761644929857536000000000000000000000000",
+            "scaled_mae": "1985469747928016784414955515224957934483201109/84656209249050071547265439543425152000000000000",
+            "scaled_wis": "242022903075744376301948451109653149435639885323/19470928127281516455871051094987784960000000000000"
+          },
+          "ridge-no-weather": {
+            "scaled_mse": "3213995547672566369929596685111197663034088849536026913378807879131903996418380567884373851/6769947181031473240834736743139818201012705871974329513876164492985753600000000000000000000000",
+            "scaled_mae": "631901243718085662199995900952494498065416699/34769514513002707956912591241049616000000000000",
+            "scaled_wis": "277717537340889755587491455667580429045081880499/30288110420215692264688301703314332160000000000000"
+          }
+        },
+        "selected": {
+          "scaled_mse": "55761321539251542859663170770132205834025853453532974060710063639649166088147143089087116073/67699471810314732408347367431398182010127058719743295138761644929857536000000000000000000000000",
+          "scaled_mae": "1985469747928016784414955515224957934483201109/84656209249050071547265439543425152000000000000",
+          "scaled_wis": "242022903075744376301948451109653149435639885323/19470928127281516455871051094987784960000000000000"
+        }
+      },
+      "verified_cells": 11,
+      "study_complete": null,
+      "quality_success": null,
+      "candidate_score": null,
+      "scope": "sealed numerical execution/report transport; full scientific/operational review and frozen rubric pending"
+    },
+    "summary": {
+      "status": "sealed_requested_matrix_recomputed",
+      "outer_ids": [
+        "outer-20250115"
+      ],
+      "complete_assignment": false,
+      "forecast_cells": 9,
+      "verified_cells": 11,
+      "selected_methods": {
+        "outer-20250115": "ridge-weather-operations"
+      },
+      "aggregate_exact": {
+        "per_method": {
+          "seasonal-weekday": {
+            "scaled_mse": "54371510067460289243450418693167606174058883410221606249374371723293677889250691303284551783/8462433976289341551043420928924772751265882339967911892345205616232192000000000000000000000000",
+            "scaled_mae": "1063980971012884681780025281020182556135540743/13907805805201083182765036496419846400000000000",
+            "scaled_wis": "25839562586329917921946484337915408023/474074771794680400664686461443180851200"
+          },
+          "ridge-weather-operations": {
+            "scaled_mse": "55761321539251542859663170770132205834025853453532974060710063639649166088147143089087116073/67699471810314732408347367431398182010127058719743295138761644929857536000000000000000000000000",
+            "scaled_mae": "1985469747928016784414955515224957934483201109/84656209249050071547265439543425152000000000000",
+            "scaled_wis": "242022903075744376301948451109653149435639885323/19470928127281516455871051094987784960000000000000"
+          },
+          "ridge-no-weather": {
+            "scaled_mse": "3213995547672566369929596685111197663034088849536026913378807879131903996418380567884373851/6769947181031473240834736743139818201012705871974329513876164492985753600000000000000000000000",
+            "scaled_mae": "631901243718085662199995900952494498065416699/34769514513002707956912591241049616000000000000",
+            "scaled_wis": "277717537340889755587491455667580429045081880499/30288110420215692264688301703314332160000000000000"
+          }
+        },
+        "selected": {
+          "scaled_mse": "55761321539251542859663170770132205834025853453532974060710063639649166088147143089087116073/67699471810314732408347367431398182010127058719743295138761644929857536000000000000000000000000",
+          "scaled_mae": "1985469747928016784414955515224957934483201109/84656209249050071547265439543425152000000000000",
+          "scaled_wis": "242022903075744376301948451109653149435639885323/19470928127281516455871051094987784960000000000000"
+        }
+      },
+      "study_complete": null,
+      "quality_success": null,
+      "candidate_score": null
+    },
+    "scope": "private author diagnostic; no candidate quality/freeze/hours"
+  },
+  "node": {
+    "status": "node_original_csv_programs_verified",
+    "result": {
+      "status": "requested_execution_complete",
+      "complete_assignment": false,
+      "requested_outer_ids": [
+        "outer-20250115"
+      ],
+      "aggregate_exact": {
+        "per_method": {
+          "../../baseline / 零": {
+            "scaled_mse": "21402902134076074824775025929135952132142146183762892452218960160189/33849735905157366204173683715699091005063529359871647569380822464928768",
+            "scaled_mae": "5303277161238087517426266004198165/243386601591018955698388138687347312",
+            "scaled_wis": "81795276217865388023840477978058041/2129632763921415862360896213514288980"
+          },
+          "selected": {
+            "scaled_mse": "22728596446306774785630262351432929355771765023018779619153955131919/33849735905157366204173683715699091005063529359871647569380822464928768",
+            "scaled_mae": "1389527989640780200139724144425669/60846650397754738924597034671836828",
+            "scaled_wis": "72941722621705140439494965211855803/1893006901263480766543018856457145760"
+          },
+          "ablation:mean": {
+            "scaled_mse": "970013841641614809498754355019875783745709116834041837306534296031/66112765439760480867526726007224787119264705780999311658946918876814",
+            "scaled_mae": "84466713410588656690576566066790271/973546406364075822793552554749389248",
+            "scaled_wis": "3521096788620506299244363362376089/61728485910765677169881049667080840"
+          }
+        },
+        "selected": {
+          "scaled_mse": "22728596446306774785630262351432929355771765023018779619153955131919/33849735905157366204173683715699091005063529359871647569380822464928768",
+          "scaled_mae": "1389527989640780200139724144425669/60846650397754738924597034671836828",
+          "scaled_wis": "72941722621705140439494965211855803/1893006901263480766543018856457145760"
+        }
+      },
+      "verified_cells": 11,
+      "study_complete": null,
+      "quality_success": null,
+      "candidate_score": null,
+      "scope": "sealed numerical execution/report transport; full scientific/operational review and frozen rubric pending"
+    },
+    "summary": {
+      "status": "sealed_requested_matrix_recomputed",
+      "outer_ids": [
+        "outer-20250115"
+      ],
+      "complete_assignment": false,
+      "forecast_cells": 9,
+      "verified_cells": 11,
+      "selected_methods": {
+        "outer-20250115": "selected"
+      },
+      "aggregate_exact": {
+        "per_method": {
+          "../../baseline / 零": {
+            "scaled_mse": "21402902134076074824775025929135952132142146183762892452218960160189/33849735905157366204173683715699091005063529359871647569380822464928768",
+            "scaled_mae": "5303277161238087517426266004198165/243386601591018955698388138687347312",
+            "scaled_wis": "81795276217865388023840477978058041/2129632763921415862360896213514288980"
+          },
+          "selected": {
+            "scaled_mse": "22728596446306774785630262351432929355771765023018779619153955131919/33849735905157366204173683715699091005063529359871647569380822464928768",
+            "scaled_mae": "1389527989640780200139724144425669/60846650397754738924597034671836828",
+            "scaled_wis": "72941722621705140439494965211855803/1893006901263480766543018856457145760"
+          },
+          "ablation:mean": {
+            "scaled_mse": "970013841641614809498754355019875783745709116834041837306534296031/66112765439760480867526726007224787119264705780999311658946918876814",
+            "scaled_mae": "84466713410588656690576566066790271/973546406364075822793552554749389248",
+            "scaled_wis": "3521096788620506299244363362376089/61728485910765677169881049667080840"
+          }
+        },
+        "selected": {
+          "scaled_mse": "22728596446306774785630262351432929355771765023018779619153955131919/33849735905157366204173683715699091005063529359871647569380822464928768",
+          "scaled_mae": "1389527989640780200139724144425669/60846650397754738924597034671836828",
+          "scaled_wis": "72941722621705140439494965211855803/1893006901263480766543018856457145760"
+        }
+      },
+      "study_complete": null,
+      "quality_success": null,
+      "candidate_score": null
+    },
+    "scope": "generic ABI/private author diagnostic; not forecast quality or candidate hours"
+  },
+  "focused_boundaries": {
+    "status": "focused_boundaries_verified",
+    "checks": [
+      {
+        "name": "exact_decimal_packet_roundtrip",
+        "value": "1.2345678901234567890123456789"
+      },
+      {
+        "name": "unselected_method_named_selected_keeps_own_metric",
+        "result": {
+          "per_method": {
+            "selected": {
+              "scaled_mse": "8",
+              "scaled_mae": "8",
+              "scaled_wis": "8"
+            },
+            "other": {
+              "scaled_mse": "2",
+              "scaled_mae": "2",
+              "scaled_wis": "2"
+            }
+          },
+          "selected": {
+            "scaled_mse": "2",
+            "scaled_mae": "2",
+            "scaled_wis": "2"
+          }
+        }
+      },
+      {
+        "name": "fixed_denominator_missing_cell",
+        "error": "facility_aggregate_invalid",
+        "detail": "facility_aggregate_invalid:every method/origin contributes to the fixed denominator"
+      },
+      {
+        "name": "broken_zip",
+        "error": "facility_archive_invalid",
+        "detail": "facility_archive_invalid:File is not a zip file"
+      },
+      {
+        "name": "zip_member_escape",
+        "error": "facility_archive_invalid",
+        "detail": "facility_archive_invalid:facility_archive_invalid:invalid member path"
+      },
+      {
+        "name": "submitted_file_escape",
+        "error": "submission_path_invalid",
+        "detail": "submission_path_invalid:../node_program.mjs"
+      },
+      {
+        "name": "accepted_corruption_keeps_facility_classification",
+        "error": "facility_archive_invalid",
+        "detail": "facility_archive_invalid:File is not a zip file"
+      },
+      {
+        "name": "real_output_symlink",
+        "error": "candidate_output_invalid",
+        "detail": "candidate_output_invalid:link.txt"
+      },
+      {
+        "name": "output_link_terminal_sealed_and_failed",
+        "wall_seconds": 3.803268300369382
+      }
+    ],
+    "commands": [
+      {
+        "name": "resume_rebinding",
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\l02-generic-execution-qualification-20261030\\source-boundaries\\run_l02_study.py",
+          "--resume",
+          "D:\\opencorvus-benchmark-runs\\l02-generic-execution-qualification-20261030\\python-loop",
+          "--image",
+          "arbitrary"
+        ],
+        "exitcode": 3,
+        "stdout": "{\"status\": \"run_invalid\", \"error\": \"resume_arguments_invalid\", \"detail\": \"resume_arguments_invalid:resume accepts only its original run root\", \"candidate_score\": null}\n",
+        "stderr": ""
+      },
+      {
+        "name": "old_directory_format",
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\l02-generic-execution-qualification-20261030\\source-boundaries\\run_l02_study.py",
+          "--resume",
+          "D:\\opencorvus-benchmark-runs\\l02-generic-execution-qualification-20261030\\old-format"
+        ],
+        "exitcode": 3,
+        "stdout": "{\"status\": \"run_invalid\", \"error\": \"run_format_invalid\", \"detail\": \"run_format_invalid:version-one SQLite ledger required\", \"candidate_score\": null}\n",
+        "stderr": ""
+      },
+      {
+        "name": "unknown_schema",
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\l02-generic-execution-qualification-20261030\\source-boundaries\\run_l02_study.py",
+          "--resume",
+          "D:\\opencorvus-benchmark-runs\\l02-generic-execution-qualification-20261030\\unknown-version"
+        ],
+        "exitcode": 3,
+        "stdout": "{\"status\": \"run_invalid\", \"error\": \"run_format_invalid\", \"detail\": \"run_format_invalid:unknown ledger schema\", \"candidate_score\": null}\n",
+        "stderr": ""
+      },
+      {
+        "name": "python-final-summary",
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\l02-generic-execution-qualification-20261030\\source-boundaries\\summarize_l02_study.py",
+          "--run",
+          "D:\\opencorvus-benchmark-runs\\l02-generic-execution-qualification-20261030\\python-loop",
+          "--out",
+          "D:\\opencorvus-benchmark-runs\\l02-generic-execution-qualification-20261030\\python-summary-final"
+        ],
+        "exitcode": 0,
+        "stdout": "{\"status\": \"sealed_requested_matrix_recomputed\", \"outer_ids\": [\"outer-20250115\"], \"complete_assignment\": false, \"forecast_cells\": 9, \"verified_cells\": 11, \"selected_methods\": {\"outer-20250115\": \"ridge-weather-operations\"}, \"aggregate_exact\": {\"per_method\": {\"seasonal-weekday\": {\"scaled_mse\": \"54371510067460289243450418693167606174058883410221606249374371723293677889250691303284551783/8462433976289341551043420928924772751265882339967911892345205616232192000000000000000000000000\", \"scaled_mae\": \"1063980971012884681780025281020182556135540743/13907805805201083182765036496419846400000000000\", \"scaled_wis\": \"25839562586329917921946484337915408023/474074771794680400664686461443180851200\"}, \"ridge-weather-operations\": {\"scaled_mse\": \"55761321539251542859663170770132205834025853453532974060710063639649166088147143089087116073/67699471810314732408347367431398182010127058719743295138761644929857536000000000000000000000000\", \"scaled_mae\": \"1985469747928016784414955515224957934483201109/84656209249050071547265439543425152000000000000\", \"scaled_wis\": \"242022903075744376301948451109653149435639885323/19470928127281516455871051094987784960000000000000\"}, \"ridge-no-weather\": {\"scaled_mse\": \"3213995547672566369929596685111197663034088849536026913378807879131903996418380567884373851/6769947181031473240834736743139818201012705871974329513876164492985753600000000000000000000000\", \"scaled_mae\": \"631901243718085662199995900952494498065416699/34769514513002707956912591241049616000000000000\", \"scaled_wis\": \"277717537340889755587491455667580429045081880499/30288110420215692264688301703314332160000000000000\"}}, \"selected\": {\"scaled_mse\": \"55761321539251542859663170770132205834025853453532974060710063639649166088147143089087116073/67699471810314732408347367431398182010127058719743295138761644929857536000000000000000000000000\", \"scaled_mae\": \"1985469747928016784414955515224957934483201109/84656209249050071547265439543425152000000000000\", \"scaled_wis\": \"242022903075744376301948451109653149435639885323/19470928127281516455871051094987784960000000000000\"}}, \"study_complete\": null, \"quality_success\": null, \"candidate_score\": null}\n",
+        "stderr": ""
+      },
+      {
+        "name": "node-final-summary",
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\l02-generic-execution-qualification-20261030\\source-boundaries\\summarize_l02_study.py",
+          "--run",
+          "D:\\opencorvus-benchmark-runs\\l02-generic-execution-qualification-20261030\\node-loop",
+          "--out",
+          "D:\\opencorvus-benchmark-runs\\l02-generic-execution-qualification-20261030\\node-summary-final"
+        ],
+        "exitcode": 0,
+        "stdout": "{\"status\": \"sealed_requested_matrix_recomputed\", \"outer_ids\": [\"outer-20250115\"], \"complete_assignment\": false, \"forecast_cells\": 9, \"verified_cells\": 11, \"selected_methods\": {\"outer-20250115\": \"selected\"}, \"aggregate_exact\": {\"per_method\": {\"../../baseline / \\u96f6\": {\"scaled_mse\": \"21402902134076074824775025929135952132142146183762892452218960160189/33849735905157366204173683715699091005063529359871647569380822464928768\", \"scaled_mae\": \"5303277161238087517426266004198165/243386601591018955698388138687347312\", \"scaled_wis\": \"81795276217865388023840477978058041/2129632763921415862360896213514288980\"}, \"selected\": {\"scaled_mse\": \"22728596446306774785630262351432929355771765023018779619153955131919/33849735905157366204173683715699091005063529359871647569380822464928768\", \"scaled_mae\": \"1389527989640780200139724144425669/60846650397754738924597034671836828\", \"scaled_wis\": \"72941722621705140439494965211855803/1893006901263480766543018856457145760\"}, \"ablation:mean\": {\"scaled_mse\": \"970013841641614809498754355019875783745709116834041837306534296031/66112765439760480867526726007224787119264705780999311658946918876814\", \"scaled_mae\": \"84466713410588656690576566066790271/973546406364075822793552554749389248\", \"scaled_wis\": \"3521096788620506299244363362376089/61728485910765677169881049667080840\"}}, \"selected\": {\"scaled_mse\": \"22728596446306774785630262351432929355771765023018779619153955131919/33849735905157366204173683715699091005063529359871647569380822464928768\", \"scaled_mae\": \"1389527989640780200139724144425669/60846650397754738924597034671836828\", \"scaled_wis\": \"72941722621705140439494965211855803/1893006901263480766543018856457145760\"}}, \"study_complete\": null, \"quality_success\": null, \"candidate_score\": null}\n",
+        "stderr": ""
+      }
+    ],
+    "scope": "actual sealed replay, one real symlink-output process and typed protocol inputs; no full forecast replay"
+  },
+  "final_errors": {
+    "compression": {
+      "status": "original_compression_error_typed",
+      "error": "facility_archive_invalid",
+      "detail": "facility_archive_invalid:Error -3 while decompressing data: invalid block type"
+    },
+    "malformed_sqlite": {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l02-generic-execution-qualification-20261030\\source-final\\run_l02_study.py",
+        "--resume",
+        "D:\\opencorvus-benchmark-runs\\l02-generic-execution-qualification-20261030\\malformed-sqlite"
+      ],
+      "exitcode": 3,
+      "stdout": "{\"status\": \"run_invalid\", \"error\": \"facility_storage_invalid\", \"detail\": \"file is not a database\", \"candidate_score\": null}\n",
+      "stderr": ""
+    }
+  },
+  "final_driver_recovery": {
+    "status": "original_objects_recovered_by_final_driver",
+    "commands": [
+      {
+        "name": "python",
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\l02-generic-execution-qualification-20261030\\source-final\\run_l02_study.py",
+          "--resume",
+          "D:\\opencorvus-benchmark-runs\\l02-generic-execution-qualification-20261030\\python-loop"
+        ],
+        "exitcode": 0,
+        "stdout": "{\"status\": \"requested_execution_complete\", \"complete_assignment\": false, \"requested_outer_ids\": [\"outer-20250115\"], \"aggregate_exact\": {\"per_method\": {\"seasonal-weekday\": {\"scaled_mse\": \"54371510067460289243450418693167606174058883410221606249374371723293677889250691303284551783/8462433976289341551043420928924772751265882339967911892345205616232192000000000000000000000000\", \"scaled_mae\": \"1063980971012884681780025281020182556135540743/13907805805201083182765036496419846400000000000\", \"scaled_wis\": \"25839562586329917921946484337915408023/474074771794680400664686461443180851200\"}, \"ridge-weather-operations\": {\"scaled_mse\": \"55761321539251542859663170770132205834025853453532974060710063639649166088147143089087116073/67699471810314732408347367431398182010127058719743295138761644929857536000000000000000000000000\", \"scaled_mae\": \"1985469747928016784414955515224957934483201109/84656209249050071547265439543425152000000000000\", \"scaled_wis\": \"242022903075744376301948451109653149435639885323/19470928127281516455871051094987784960000000000000\"}, \"ridge-no-weather\": {\"scaled_mse\": \"3213995547672566369929596685111197663034088849536026913378807879131903996418380567884373851/6769947181031473240834736743139818201012705871974329513876164492985753600000000000000000000000\", \"scaled_mae\": \"631901243718085662199995900952494498065416699/34769514513002707956912591241049616000000000000\", \"scaled_wis\": \"277717537340889755587491455667580429045081880499/30288110420215692264688301703314332160000000000000\"}}, \"selected\": {\"scaled_mse\": \"55761321539251542859663170770132205834025853453532974060710063639649166088147143089087116073/67699471810314732408347367431398182010127058719743295138761644929857536000000000000000000000000\", \"scaled_mae\": \"1985469747928016784414955515224957934483201109/84656209249050071547265439543425152000000000000\", \"scaled_wis\": \"242022903075744376301948451109653149435639885323/19470928127281516455871051094987784960000000000000\"}}, \"verified_cells\": 11, \"study_complete\": null, \"quality_success\": null, \"candidate_score\": null, \"scope\": \"sealed numerical execution/report transport; full scientific/operational review and frozen rubric pending\"}\n",
+        "stderr": "",
+        "wall_seconds": 25.811320300213993
+      },
+      {
+        "name": "node",
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\l02-generic-execution-qualification-20261030\\source-final\\run_l02_study.py",
+          "--resume",
+          "D:\\opencorvus-benchmark-runs\\l02-generic-execution-qualification-20261030\\node-loop"
+        ],
+        "exitcode": 0,
+        "stdout": "{\"status\": \"requested_execution_complete\", \"complete_assignment\": false, \"requested_outer_ids\": [\"outer-20250115\"], \"aggregate_exact\": {\"per_method\": {\"../../baseline / 零\": {\"scaled_mse\": \"21402902134076074824775025929135952132142146183762892452218960160189/33849735905157366204173683715699091005063529359871647569380822464928768\", \"scaled_mae\": \"5303277161238087517426266004198165/243386601591018955698388138687347312\", \"scaled_wis\": \"81795276217865388023840477978058041/2129632763921415862360896213514288980\"}, \"selected\": {\"scaled_mse\": \"22728596446306774785630262351432929355771765023018779619153955131919/33849735905157366204173683715699091005063529359871647569380822464928768\", \"scaled_mae\": \"1389527989640780200139724144425669/60846650397754738924597034671836828\", \"scaled_wis\": \"72941722621705140439494965211855803/1893006901263480766543018856457145760\"}, \"ablation:mean\": {\"scaled_mse\": \"970013841641614809498754355019875783745709116834041837306534296031/66112765439760480867526726007224787119264705780999311658946918876814\", \"scaled_mae\": \"84466713410588656690576566066790271/973546406364075822793552554749389248\", \"scaled_wis\": \"3521096788620506299244363362376089/61728485910765677169881049667080840\"}}, \"selected\": {\"scaled_mse\": \"22728596446306774785630262351432929355771765023018779619153955131919/33849735905157366204173683715699091005063529359871647569380822464928768\", \"scaled_mae\": \"1389527989640780200139724144425669/60846650397754738924597034671836828\", \"scaled_wis\": \"72941722621705140439494965211855803/1893006901263480766543018856457145760\"}}, \"verified_cells\": 11, \"study_complete\": null, \"quality_success\": null, \"candidate_score\": null, \"scope\": \"sealed numerical execution/report transport; full scientific/operational review and frozen rubric pending\"}\n",
+        "stderr": "",
+        "wall_seconds": 25.904932899866253
+      }
+    ],
+    "scope": "original accepted objects; no new forecast/selector/report programs"
+  },
+  "binary_probe_correction": {
+    "status": "original_probe_expectation_disconfirmed",
+    "probe_exit": 1,
+    "cause": "asserted original non-UTF8 program bytes; Docker returned UTF8 replacement text before Python decoded",
+    "actual_docker_stdout_bytes": [
+      239,
+      191,
+      189,
+      239,
+      191,
+      189,
+      10
+    ],
+    "actual_program_exit": 0,
+    "numerical_output": "valid result",
+    "scope": "no lossless arbitrary program binary stdout qualification; no rerun and no log-code change"
+  },
+  "independent_final": {
+    "status": "limited_generic_execution_components_qualified",
+    "reviewer": "/root/benchmark_review",
+    "review_conditions": "one-level nonblind AI development review, familiar reference; no redelegation",
+    "blocking_findings_current_scope": [],
+    "source_versions_kept_distinct": [
+      "source-initial failure",
+      "source-current record windows",
+      "source-loop two language executions",
+      "source-boundaries typed reader and sealed summary",
+      "source-final zlib catch only"
+    ],
+    "independent_audits": {
+      "record_windows": {
+        "checks": 19,
+        "all_passed": true,
+        "seconds": 0.40571939991787076,
+        "actual_create": 1,
+        "actual_start": 1,
+        "actual_remove": 1,
+        "effect_count": 1
+      },
+      "two_language_existing_runs": {
+        "checks": 290,
+        "all_passed": true,
+        "seconds": 7.343696000054479,
+        "actual_processes_read": 22,
+        "forecasts_independently_scored": 18,
+        "rows_each": 84
+      },
+      "final_boundary_increment": {
+        "checks": 11,
+        "all_passed": true
+      }
+    },
+    "fixed_findings": [
+      "selected method ID namespace collision",
+      "BadZipFile error classification",
+      "DEFLATE zlib.error error classification"
+    ],
+    "actually_viewed": "implementation-final-boundaries/actually-viewed-python-forecast.png",
+    "binary_probe": "author assertion failure, actual native exit0/verified; replacement stdout preserved; no lossless arbitrary binary stdout qualification",
+    "new_Docker_model_forecast_solver_Provider_GPU_UI_calls_by_reviewer": 0,
+    "repo_changed_by_reviewer": false,
+    "evidence": [
+      "implementation-stage1/assessment.json",
+      "implementation-loops/assessment.json",
+      "implementation-final-boundaries/assessment.json",
+      "implementation-final-boundaries/final-source.diff",
+      "implementation-final-boundaries/archive-reader-replay.json",
+      "implementation-final-boundaries/aggregate-hand-control.json",
+      "implementation-final-boundaries/binary-facts.json"
+    ],
+    "actual_command_receipts": [
+      "recovery-audit-repaired-command.json",
+      "generic-loops-audit-command.json",
+      "final-generic-audit-command.json"
+    ],
+    "old_or_failed_receipts_preserved": true,
+    "formal_full12_generic_matrix_executed": false,
+    "full_scientific_or_operational_review": "unassessed",
+    "full_L02_rubric_grader_qualified": false,
+    "L02_frozen": false,
+    "quality_floor": null,
+    "candidate_score": null,
+    "hours_qualified": false,
+    "ten_cases_complete": false
+  },
+  "limitations": [
+    "private single-outer diagnostics, not formal candidates",
+    "not full L02 quality/rubric/freeze",
+    "AI nonblind review",
+    "no hardware power-loss or POSIX-host lock qualification",
+    "no effective-hour proof"
+  ]
+}

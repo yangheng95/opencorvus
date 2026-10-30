@@ -78,7 +78,10 @@ class StudySource:
 
 
 def load_pool(path):
-    pool=read_json(path)
+    return validate_pool(read_json(path))
+
+
+def validate_pool(pool):
     if type(pool) is not dict or pool.get('format')!='l02-method-pool/1' or type(pool.get('methods')) is not list:raise InputError('method_pool_invalid')
     methods={}
     for method in pool['methods']:

@@ -140,6 +140,21 @@ def score(forecast,context,labels,method_id,study):
         "rows":len(rows),"scope":"marginal mean/WIS metrics, not a full task grade or joint-distribution validation","candidate_score":None}
 
 
+def aggregate_study_metrics(metrics, choices, method_ids):
+    """Fixed requested-origin denominator; method IDs have no reserved alias."""
+    fields = ('scaled_mse', 'scaled_mae', 'scaled_wis')
+    if not choices or not method_ids or len(set(method_ids)) != len(method_ids) or any(selected not in method_ids for selected in choices.values()):
+        raise ProtocolError('facility_aggregate_invalid', 'complete assigned choices and method IDs required')
+    if set(metrics) != {(origin, method) for origin in choices for method in method_ids}:
+        raise ProtocolError('facility_aggregate_invalid', 'every method/origin contributes to the fixed denominator')
+    def mean_metrics(method=None):
+        try:
+            return {field: str(sum(Fraction(metrics[origin, choices[origin] if method is None else method][field]) for origin in choices) / len(choices)) for field in fields}
+        except (ValueError, KeyError, TypeError, ZeroDivisionError) as e:
+            raise ProtocolError('facility_aggregate_invalid', 'exact complete metric values required') from e
+    return {'per_method': {method: mean_metrics(method) for method in method_ids}, 'selected': mean_metrics()}
+
+
 if __name__=="__main__":
     p=argparse.ArgumentParser()
     for name in ["study","forecast","context","labels","out"]:p.add_argument("--"+name,type=Path,required=True)
