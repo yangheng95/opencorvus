@@ -1,0 +1,316 @@
+{
+  "format": "l06-run/1",
+  "input_path": "/raw",
+  "command": [
+    "/opt/cpsat/bin/python",
+    "reproduce.py",
+    "--input",
+    "/raw",
+    "--output",
+    "/results/base"
+  ],
+  "started_utc": "2026-10-30T01:26:52.146390+00:00",
+  "dependencies": {
+    "python": "3.11.13",
+    "numpy": "2.4.6",
+    "scipy": "1.15.3",
+    "ortools": "9.15.6755",
+    "matplotlib": "3.10.3",
+    "highspy": "1.8.0"
+  },
+  "resources": {
+    "visible_logical_cpus": 12,
+    "native_threads": {
+      "CP-SAT initialization": 8,
+      "HiGHS": 1
+    },
+    "child_agents_spawned": 0,
+    "candidate_role": "independent Codex execution candidate",
+    "external_models_or_accounts_used": false
+  },
+  "timing": {
+    "method": "sequential wall clock via time.monotonic; no phase overlap",
+    "total_seconds": 885.6997489947826
+  },
+  "parameters": {
+    "time_limit": 300,
+    "mip_rel_gap": 0.001,
+    "presolve": "on",
+    "threads": 1,
+    "random_seed": 20261030,
+    "log_to_console": false,
+    "log_file": "/results/base/primary-solver.log"
+  },
+  "native_solver": {
+    "name": "HiGHS",
+    "version": "1.8.0",
+    "status": "Time limit reached",
+    "return_code": "HighsStatus.kWarning",
+    "objective_minor": 47616.7,
+    "best_bound_minor": 47388.7,
+    "objective_numerator": 476167,
+    "best_bound_numerator": 473887.0,
+    "native_mip_gap": 0.00478823606003776,
+    "node_count": 16513,
+    "measured_solve_seconds": 300.03445274801925
+  },
+  "initialization": null,
+  "algorithm": {
+    "name": "fresh joint CP-SAT seed; conditional scenario neighborhoods; unrestricted joint HiGHS search",
+    "termination_kind": "resource_limit",
+    "termination_detail": "Time limit reached"
+  },
+  "feasibility": "feasible",
+  "exact_integer_optimum": false,
+  "restrictions": {
+    "just_in_time": false,
+    "reserve": null
+  },
+  "maximum_action_rounding": 0,
+  "phases": {
+    "initial": {
+      "parameters": {
+        "max_time_in_seconds": 600,
+        "relative_gap_limit": 0.001,
+        "num_search_workers": 8,
+        "random_seed": 20261030,
+        "log_search_progress": true,
+        "log_to_stdout": false,
+        "stop_after_first_solution": true
+      },
+      "native_solver": {
+        "name": "OR-Tools CP-SAT",
+        "version": "9.15.6755",
+        "status": "FEASIBLE",
+        "objective_minor": 49818.2,
+        "best_bound_minor": 47230.0,
+        "objective_numerator": 498182,
+        "best_bound_numerator": 472300.0,
+        "wall_time_seconds": 43.041288727,
+        "measured_solve_seconds": 43.06439040089026,
+        "response_stats": "CpSolverResponse summary:\nstatus: FEASIBLE\nobjective: 498182\nbest_bound: 472300\nintegers: 1152\nbooleans: 924\nconflicts: 3314\nbranches: 30013\npropagations: 47869\ninteger_propagations: 255008\nrestarts: 18\nlp_iterations: 190861\nwalltime: 43.0413\nusertime: 43.0413\ndeterministic_time: 129.921\ngap_integral: 1472.61\nsolution_fingerprint: 0xc04ba8358696d3e\n"
+      },
+      "algorithm": {
+        "name": "joint scenario integer CP-SAT",
+        "termination_kind": "completed",
+        "termination_detail": "requested first feasible integer incumbent found; this is initialization, not an optimum claim"
+      },
+      "feasibility": "feasible",
+      "exact_integer_optimum": false,
+      "restrictions": {
+        "just_in_time": false,
+        "reserve": null
+      }
+    },
+    "conditional_neighborhoods": {
+      "base": {
+        "parameters": {
+          "time_limit": 180,
+          "mip_rel_gap": 0.001,
+          "presolve": "on",
+          "threads": 1,
+          "random_seed": 20261030,
+          "log_to_console": false,
+          "log_file": "/results/base/conditional-base-solver.log"
+        },
+        "native_solver": {
+          "name": "HiGHS",
+          "version": "1.8.0",
+          "status": "Time limit reached",
+          "return_code": "HighsStatus.kWarning",
+          "objective_minor": 47037.9999999996,
+          "best_bound_minor": 46874.0,
+          "objective_numerator": 47038,
+          "best_bound_numerator": 46874.0,
+          "native_mip_gap": 0.0034865427951783923,
+          "node_count": 12215,
+          "measured_solve_seconds": 180.02070517512038
+        },
+        "initialization": null,
+        "algorithm": {
+          "name": "fresh CP-SAT primal initialization then HiGHS linear branch-and-cut on one joint model",
+          "termination_kind": "resource_limit",
+          "termination_detail": "Time limit reached"
+        },
+        "feasibility": "feasible",
+        "exact_integer_optimum": false,
+        "restrictions": {
+          "just_in_time": false,
+          "reserve": null
+        },
+        "maximum_action_rounding": 1.056719156622421e-10,
+        "bound_scope": "conditional on freshly computed common prefix; not a global joint bound"
+      },
+      "supplier_disruption": {
+        "parameters": {
+          "time_limit": 180,
+          "mip_rel_gap": 0.001,
+          "presolve": "on",
+          "threads": 1,
+          "random_seed": 20261030,
+          "log_to_console": false,
+          "log_file": "/results/base/conditional-supplier_disruption-solver.log"
+        },
+        "native_solver": {
+          "name": "HiGHS",
+          "version": "1.8.0",
+          "status": "Time limit reached",
+          "return_code": "HighsStatus.kWarning",
+          "objective_minor": 47989.00000083017,
+          "best_bound_minor": 47902.0,
+          "objective_numerator": 47989,
+          "best_bound_numerator": 47902.0,
+          "native_mip_gap": 0.001812915477060726,
+          "node_count": 25643,
+          "measured_solve_seconds": 180.0232067112811
+        },
+        "initialization": null,
+        "algorithm": {
+          "name": "fresh CP-SAT primal initialization then HiGHS linear branch-and-cut on one joint model",
+          "termination_kind": "resource_limit",
+          "termination_detail": "Time limit reached"
+        },
+        "feasibility": "feasible",
+        "exact_integer_optimum": false,
+        "restrictions": {
+          "just_in_time": false,
+          "reserve": null
+        },
+        "maximum_action_rounding": 5.04068751183695e-08,
+        "bound_scope": "conditional on freshly computed common prefix; not a global joint bound"
+      },
+      "demand_shift": {
+        "parameters": {
+          "time_limit": 180,
+          "mip_rel_gap": 0.001,
+          "presolve": "on",
+          "threads": 1,
+          "random_seed": 20261030,
+          "log_to_console": false,
+          "log_file": "/results/base/conditional-demand_shift-solver.log"
+        },
+        "native_solver": {
+          "name": "HiGHS",
+          "version": "1.8.0",
+          "status": "Time limit reached",
+          "return_code": "HighsStatus.kWarning",
+          "objective_minor": 48504.99999995501,
+          "best_bound_minor": 48382.0,
+          "objective_numerator": 48505,
+          "best_bound_numerator": 48382.0,
+          "native_mip_gap": 0.0025358210484512284,
+          "node_count": 22877,
+          "measured_solve_seconds": 180.0169039540924
+        },
+        "initialization": null,
+        "algorithm": {
+          "name": "fresh CP-SAT primal initialization then HiGHS linear branch-and-cut on one joint model",
+          "termination_kind": "resource_limit",
+          "termination_detail": "Time limit reached"
+        },
+        "feasibility": "feasible",
+        "exact_integer_optimum": false,
+        "restrictions": {
+          "just_in_time": false,
+          "reserve": null
+        },
+        "maximum_action_rounding": 1.7570167543112802e-08,
+        "bound_scope": "conditional on freshly computed common prefix; not a global joint bound"
+      }
+    }
+  },
+  "comparison_runs": {
+    "baseline": {
+      "parameters": {
+        "time_limit": 30,
+        "mip_rel_gap": 0.001,
+        "presolve": "on",
+        "threads": 1,
+        "random_seed": 20261030,
+        "log_to_console": false,
+        "log_file": "/results/base/baseline-solver.log"
+      },
+      "native_solver": {
+        "name": "HiGHS",
+        "version": "1.8.0",
+        "status": "Infeasible",
+        "return_code": "HighsStatus.kOk",
+        "objective_minor": null,
+        "best_bound_minor": null,
+        "objective_numerator": null,
+        "best_bound_numerator": null,
+        "native_mip_gap": null,
+        "node_count": 0,
+        "measured_solve_seconds": 0.0030177850276231766
+      },
+      "initialization": null,
+      "algorithm": {
+        "name": "fresh CP-SAT primal initialization then HiGHS linear branch-and-cut on one joint model",
+        "termination_kind": "completed",
+        "termination_detail": "Infeasible"
+      },
+      "feasibility": "infeasible",
+      "exact_integer_optimum": false,
+      "restrictions": {
+        "just_in_time": true,
+        "reserve": null
+      }
+    },
+    "alternative": {
+      "algorithm": {
+        "name": "enumerated same-arrival spot substitution with exact full-policy checking",
+        "termination_kind": "completed",
+        "termination_detail": "one verified substitution found for every scenario"
+      },
+      "native_solver": null,
+      "feasibility": "feasible",
+      "parameters": {
+        "priority": [
+          "latest arrival",
+          "longest payment deferral",
+          "lowest quoted premium"
+        ],
+        "changes_per_scenario": 1,
+        "candidates_checked": 3
+      },
+      "moves": [
+        {
+          "scenario": "base",
+          "original_supplier": "B",
+          "original_order_week": 13,
+          "raw_id": "R0",
+          "units": 10,
+          "destination_supplier": "C",
+          "new_order_week": 15,
+          "arrival_week": 15,
+          "payment_deferral_weeks": 2
+        },
+        {
+          "scenario": "supplier_disruption",
+          "original_supplier": "B",
+          "original_order_week": 13,
+          "raw_id": "R0",
+          "units": 10,
+          "destination_supplier": "C",
+          "new_order_week": 15,
+          "arrival_week": 15,
+          "payment_deferral_weeks": 2
+        },
+        {
+          "scenario": "demand_shift",
+          "original_supplier": "A",
+          "original_order_week": 14,
+          "raw_id": "R2",
+          "units": 5,
+          "destination_supplier": "C",
+          "new_order_week": 15,
+          "arrival_week": 15,
+          "payment_deferral_weeks": 1
+        }
+      ],
+      "optimality": "constructive feasible policy; no cost optimum claim"
+    }
+  },
+  "delivery_complete": true,
+  "finished_utc": "2026-10-30T01:41:37.809910+00:00"
+}

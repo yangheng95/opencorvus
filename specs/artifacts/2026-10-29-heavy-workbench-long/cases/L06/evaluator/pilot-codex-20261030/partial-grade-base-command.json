@@ -1,0 +1,33 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\qualification\\current-source\\l06_grade.py",
+    "--case-root",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06",
+    "--submission-id",
+    "codex-L06-eef74425dcd9-phase1",
+    "--delivery-root",
+    "D:\\opencorvus-benchmark-runs\\L06-paired-20261029-be2a55d1\\codex\\completed\\submission\\validation\\source-only-reordered\\result",
+    "--review",
+    "D:\\opencorvus-benchmark-runs\\l06-codex-independent-assessment-20261030\\independent-review-base-addendum.json",
+    "--evidence-root",
+    "D:\\opencorvus-benchmark-runs\\l06-codex-independent-assessment-20261030",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\L06-paired-20261029-be2a55d1\\codex\\evaluation\\partial-assessment-base.json",
+    "--input",
+    "D:\\opencorvus-benchmark-runs\\L06-paired-20261029-be2a55d1\\codex\\completed\\submission\\inputs",
+    "--normalized",
+    "D:\\opencorvus-benchmark-runs\\L06-paired-20261029-be2a55d1\\codex\\completed\\submission\\validation\\source-only-reordered\\result\\normalized.json",
+    "--plan",
+    "D:\\opencorvus-benchmark-runs\\L06-paired-20261029-be2a55d1\\codex\\completed\\submission\\validation\\source-only-reordered\\result\\plan.json",
+    "--summary",
+    "D:\\opencorvus-benchmark-runs\\L06-paired-20261029-be2a55d1\\codex\\completed\\submission\\validation\\source-only-reordered\\result\\summary.json",
+    "--ledger",
+    "D:\\opencorvus-benchmark-runs\\L06-paired-20261029-be2a55d1\\codex\\completed\\submission\\validation\\source-only-reordered\\result\\ledger.json"
+  ],
+  "exitcode": 4,
+  "stdout": "{\"format\": \"l06-complete-assessment/1\", \"submission_id\": \"codex-L06-eef74425dcd9-phase1\", \"total_score\": null, \"business_success\": null, \"good\": null, \"status\": \"assessment_incomplete\", \"fixed_denominator\": 100, \"publication_blockers\": [\"unassessed:D02\"], \"known_critical_failures\": [], \"unassessed\": [\"D02\"], \"counts\": {\"verified_pass\": 46, \"verified_partial\": 0, \"verified_fail\": 0, \"candidate_incomplete\": 0, \"blocked_candidate\": 0, \"unassessed\": 1}, \"review_trust\": \"Private evaluator ratings; structural validation does not independently prove the judgement. Candidate files never supply ratings.\"}\n",
+  "stderr": ""
+}

@@ -394,3 +394,12 @@ L02已新增完整原创合成UTC多系列材料/注册合同/精确decoder，�
 当前唯一评估侧长计算oc-l06-codex-eval-source-20261030-base/CIDb8af7d5f558d6c64923b19b4fd344df99cd6261e4795b3467c4b507cfcd80dbb，01:26:50Z启动；同sealed12源码/README依赖+冻结raw，只读/new results/networknone/8CPU/原默认CP-SAT初始化→HiGHS条件→全局阶段；不是用户总额度。locator active_evaluation=codex_base_source_cold。终态后先封存inspect/log/all新输出再真实30numeric和实际看图，再顺序两注册控制，不能重复开solver。原OC API早退休；其正式100保持。现有单层reviewer已转Codex封存版本阶段审查，不准另开solver，需先将未实际冷执行/私有控制的叶保留unassessed，之后真正完整聚合；两good才另升新版本。
 
 其余九题/完整十题/有效小时要求仍未完成，冻结1/10、小时资格0/10。六旧昂贵容器继续Paused，不恢复/重启，cheap-first与无用户总token/墙钟额度持续，心跳ACTIVE。
+
+
+## 最新活跃表（Codex base终态后）
+
+Codex base已01:41:38.140Z自然exit0/30numeric全过/C47616.7，新3PNG主/独立实际view_image，独立28项及真实baseline进程来源补齐；先封存所有原件再精确rm b8af7d5f，不能重启。实际完整grader现在46pass/仅D02未评、exit4/assessment_incomplete，总分/business/good仍null；原OC100不改，当前未触发升级。
+
+唯一活跃是01:44:58Z启动的注册报价控制oc-l06-codex-eval-source-20261030-quote/CID67ae66c71bc5c3da02d46c77cf06eea9b95e0cad746a46f2d73b414ae695c433，pair/codex/evaluation/quote-cold，复用12sealed源码/README默认阶段参数/只读C-R0 45→46 raw/new results/networknone8CPU。行序准备好但尚未运行，locator codex_pending_evaluation_controls中只余row。先真实末态再封存/数值/实际新图/独立追加，再顺序row；不并发、重跑、取消正常计算，不拿评估侧887秒计候选小时。
+
+L02 UTC材料资格本轮已按独立计划/全数据审查/真实错误修复推进并范围提交；完整研究执行/选模/点区间/质量线/rubric仍待。其余九题、十题与小时仍未完成，心跳ACTIVE。Git交付以当前upstream为准，所有失败和中间版本保留。

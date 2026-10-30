@@ -294,3 +294,10 @@ D02尚有真实执行缺口：同一冻结源码未从变价raw新生成全交�
 候选HEAD eef74425dcd9b9d6e161c9aa303b38c90f400e25、工作区clean，无remote/upstream；554文件/原Git/全部工作区封存pair/codex/completed/completed-project.zip，18public与冻结资源直接同一。01:25:16Z为观察封存时间，不能伪造接口未暴露的native精确终态/model/usage。最终路径validation/source-only-reordered/result，非early delivery-v1/v2。主方冻结raw真实30numeric全部过/C47641.5，total/business/good仍null。候选自己两完整验收994.810/942.912秒并行，不能相加冒充工作墙钟。主方已实际view_image交付cash/procurement/warehouse三图，不用它们替代新冷输出图。
 
 01:26:50Z才启动唯一评估侧oc-l06-codex-eval-source-20261030-base/CIDb8af7d5f558d6c64923b19b4fd344df99cd6261e4795b3467c4b507cfcd80dbb，同封存12源码/声明依赖/冻结raw、readonly source/raw、新results/networknone8CPU，保持原README默认阶段求解参数；没有旧plan/model/评估器/参考/凭据。先读动态locator及真实inspect/results，未终态不假判hang，不重启或机械取消。主方派现有单层reviewer只读同47叶阶段审查，不许另开solver，未实际base/私有控制的叶先unassessed。之后base终态封存/数值/实际新图，顺序注册报价和行序，同一冻结独立rating/真实l06_grade后如也good才升级新版本；当前未触发。安全原件cases/L06/evaluator/pilot-codex-20261030，原OC100/合同只读/所有比较限制不变。
+
+
+## Codex基例完成与注册报价控制接续
+
+唯一基例01:41:38.140Z自然exit0，C47616.7/固定L gap2367/473800约0.499578%，主30numeric过；完整inspect/log/source/raw/all结果先封存后精确rm b8af7d5f。主方和独立都view_image3新图。独立28项、全主/替代账/summary、原生global Time limit reached/primal476167/bound473887、baseline真实Infeasible/null及约.003s流程来源均核实；887.775秒是评估侧墙钟，不能计候选小时。原报告/人物评价绑定原交付，新的执行事实只关闭对应待证项；新策略无需匹配旧策略。
+
+真实l06_grade用independent-review-base-addendum.json聚合exit4/assessment_incomplete，46verified_pass、仅D02未评，总分/business/good都null，无关键候选失败。17独立叶16full，不能手算96分冒充正式总分。报价和行序输入12文件已从同已注册控制复制并按唯一decoder/reference预检，未给candidate旧答案。01:44:58Z才启动唯一oc-l06-codex-eval-source-20261030-quote/CID67ae66c71bc5c3da02d46c77cf06eea9b95e0cad746a46f2d73b414ae695c433，同12sealed源/只读C/R0 45→46 raw/new results/netnone8CPU/原默认阶段限值；行序控制仍pending。locator active=codex_quote_plus1_source_cold，不能恢复已清理base或重复开解。quote终态先封存/数值/新图/独立必要核算，再顺序row；两者关闭D02和实际最终l06_grade后才决定两good升级。

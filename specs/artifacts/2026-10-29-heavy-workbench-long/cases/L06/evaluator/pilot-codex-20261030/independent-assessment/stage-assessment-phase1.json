@@ -1,0 +1,71 @@
+{
+  "format": "independent-stage-assessment/1",
+  "case": "L06/0.2.0",
+  "stage": "Codex sealed final delivery phase1",
+  "submission_id": "codex-L06-eef74425dcd9-phase1",
+  "candidate_head": "eef74425dcd9b9d6e161c9aa303b38c90f400e25",
+  "review_counts": {
+    "unassessed": 7,
+    "full": 10
+  },
+  "numeric_counts": {
+    "verified_pass": 30,
+    "unassessed": 17
+  },
+  "unassessed_review_leaves": [
+    "D01",
+    "D02",
+    "D08",
+    "D09",
+    "D10",
+    "E01",
+    "F05"
+  ],
+  "candidate_business_defects_found": [],
+  "phase_evidence_gaps": [
+    "Independent source-only base terminal/native/source/argv authentication",
+    "Registered quote and row controls",
+    "E01 actual evaluator baseline receipt"
+  ],
+  "exact_primary_cost": "95283/2",
+  "fixed_reference_L": 47380,
+  "quality_gap_exact": "523/94760",
+  "quality_gap_percent": 0.5519206416209371,
+  "exact_alternative_cost": "95839/2",
+  "alternative_cost_increment": 278,
+  "actual_independent_work": {
+    "original_checks": 20,
+    "original_checks_true": 19,
+    "reviewer_count_assumption_false": 1,
+    "additional_targeted_checks": 12,
+    "additional_targeted_checks_true": 12,
+    "current_independent_assertions_true": 31,
+    "operator_rows": 960,
+    "complete_weekly_rows": 48,
+    "full_policies_recomputed": 2,
+    "rendered_figures_actually_viewed": 3,
+    "numeric_cli_seconds": 0.18165550008416176
+  },
+  "initial_false_retained": "checks.json/arithmetic-assessment.json/audit_phase1.py retain len(diffs)==9; actual8 due to previously active demand_shift C/week15 truck. handoff-checks explains and validates all actual moves. No candidate penalty.",
+  "accounting_timing_scope": "Original audit .7961186s includes snapshot, raw/accounting and numeric; extra handoff receipt records actual argv/exit but no independently recorded elapsed time. Do not invent duration or call this candidate runtime.",
+  "independent_review_file": "independent-review-phase1.json",
+  "total_score": null,
+  "business_success": null,
+  "good": null,
+  "model_identity": null,
+  "model_usage": null,
+  "comparable": false,
+  "reviewer_limit": "Nonblind AI agent with prior reference/OpenCorvus familiarity; no professional-human or statistical certification.",
+  "forbidden_actions_performed": {
+    "new_solver": 0,
+    "candidate_program": 0,
+    "Provider": 0,
+    "Docker": 0,
+    "GPU": 0,
+    "UI_automation": 0,
+    "delegation": 0,
+    "user_process_operations": 0,
+    "repository_edits": 0
+  },
+  "completed_utc": "2026-10-30T01:44:13.296478+00:00"
+}

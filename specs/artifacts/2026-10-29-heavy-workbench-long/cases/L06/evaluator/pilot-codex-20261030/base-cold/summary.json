@@ -1,0 +1,39 @@
+{
+  "format": "l06-summary/1",
+  "scenarios": {
+    "base": {
+      "probability": {
+        "numerator": 1,
+        "denominator": 2
+      },
+      "total_cost_minor": 47038,
+      "minimum_cash_minor": -5369,
+      "final_cash_minor": 32312,
+      "final_receivable_minor": 24150
+    },
+    "supplier_disruption": {
+      "probability": {
+        "numerator": 3,
+        "denominator": 10
+      },
+      "total_cost_minor": 47989,
+      "minimum_cash_minor": -5369,
+      "final_cash_minor": 31361,
+      "final_receivable_minor": 24150
+    },
+    "demand_shift": {
+      "probability": {
+        "numerator": 1,
+        "denominator": 5
+      },
+      "total_cost_minor": 48505,
+      "minimum_cash_minor": -5369,
+      "final_cash_minor": 33005,
+      "final_receivable_minor": 25230
+    }
+  },
+  "expected_cost_minor": {
+    "numerator": 476167,
+    "denominator": 10
+  }
+}

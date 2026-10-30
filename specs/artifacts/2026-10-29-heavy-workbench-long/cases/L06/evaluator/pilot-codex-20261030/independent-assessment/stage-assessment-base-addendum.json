@@ -1,0 +1,48 @@
+{
+  "case": "L06/0.2.0",
+  "submission_id": "codex-L06-eef74425dcd9-phase1",
+  "updated_leaves": [
+    "D01",
+    "D08",
+    "D09",
+    "D10",
+    "E01",
+    "F05"
+  ],
+  "review_counts": {
+    "full": 16,
+    "unassessed": 1
+  },
+  "D02": "unassessed",
+  "real_root_numeric": {
+    "verified_pass": 30,
+    "unassessed": 17
+  },
+  "independent_base_checks": {
+    "checks": 28,
+    "all_passed": true,
+    "failed": [],
+    "C": "476167/10",
+    "fixed_L": "47380",
+    "gap_exact": "2367/473800",
+    "gap_percent": 0.4995778809624314,
+    "alternate_C": "478807/10",
+    "alternate_premium": "264",
+    "container_wall_seconds": 887.775386,
+    "candidate_main_seconds": 885.6997489947826,
+    "reviewer_audit_seconds": 0.47234780015423894,
+    "native_global_bound": 47388.7,
+    "native_bound_is_rational_certificate": false,
+    "total_score": null,
+    "business_success": null,
+    "good": null,
+    "new_solver_Docker_Provider_candidate_program_calls": 0
+  },
+  "basis": "Same source successful reconstruction and full independent arithmetic, no forced reference policy or exact solver trajectory. Original five artifact bindings unchanged.",
+  "total_score": null,
+  "business_success": null,
+  "good": null,
+  "candidate_defects_found": [],
+  "new_solver_Docker_Provider_candidate_program_calls": 0,
+  "completed_utc": "2026-10-30T01:49:22.268108+00:00"
+}

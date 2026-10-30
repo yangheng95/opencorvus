@@ -7,3 +7,6 @@
 [唯一评估侧源码冷执行](base-cold-launch.json)已01:26:50Z启动，只挂12声明源码/依赖及冻结raw，新results/networknone/8CPU，[初始挂载](base-cold-initial-inspect.json)保留；保持原README默认CP-SAT初始化/条件HiGHS/联合HiGHS阶段参数，无总用户预算。运行正常时不取消/重复，stdout会缓冲；终态封存后实际数值/新图，再顺序注册报价+行序控制和同冻结独立17叶，真正l06_grade后才能判断good，两good才升级。原始OC100及其运行时干扰保留，冻结阈值不改。
 
 完整候选ZIP和原日志只在外部pair/codex/completed，安全元数据不含凭据。主方已实际打开交付的cash/procurement/warehouse三PNG；评估侧新执行图仍须另外查看。整套十题/小时级证明未完成。
+
+
+[评估侧基例](base-cold/README.md)已自然exit0/C47616.7/30numeric过，独立28项/3新图/实际baseline来源闭合，[16叶补审](independent-assessment/BASE-COLD-ADDENDUM.md)已full。[实际完整聚合](partial-grade-base-command.json)为46pass/仅D02未评，total/business/good仍null；不能发布假总分。基例先封存再精确cleanup，01:44:58Z才顺序启动唯一注册C/R0 45→46报价控制67ae66c7...，行序仍待，不并发完整求解。后续以外部动态locator和真实终态为准，两good条件尚未满足。
