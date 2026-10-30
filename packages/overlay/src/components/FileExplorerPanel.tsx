@@ -12,6 +12,7 @@ import {
   type Accessor,
 } from "solid-js"
 import { ContextMenu } from "./ui/ContextMenu"
+import { DropdownMenu } from "./ui/DropdownMenu"
 import { Virtualizer, type CustomContainerComponentProps, type CustomItemComponentProps } from "virtua/solid"
 import { ApiError, apiJson, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { boardStore } from "../store/board"
@@ -2023,14 +2024,48 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
         variant="panel"
         data-ui="file-explorer-toolbar"
         actions={
-          <SearchField
-            clearable
-            class="file-explorer-search"
-            value={query()}
-            placeholder={t("explorer.search_placeholder")}
-            onValueChange={setQuery}
-            clearDataUI="file-explorer-search-clear"
-          />
+          <>
+            <SearchField
+              clearable
+              class="file-explorer-search"
+              value={query()}
+              placeholder={t("explorer.search_placeholder")}
+              onValueChange={setQuery}
+              clearDataUI="file-explorer-search-clear"
+            />
+            <DropdownMenu.Root placement="bottom-end" fitViewport>
+              <DropdownMenu.Trigger
+                as={Button}
+                type="button"
+                variant="outline"
+                size="sm"
+                tone="neutral"
+                class="file-explorer-new"
+                disabled={!directory() || commandBusy()}
+                title={t("explorer.create_in", {
+                  target: explorerDirectoryDisplayPath(contextTargetDirectory(selectedItemList()[0] ?? null)),
+                })}
+                aria-label={t("explorer.new_item")}
+              >
+                <Icon name="plus" size="compact" />
+                {t("explorer.new_item")}
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Portal>
+                <DropdownMenu.Content>
+                  <DropdownMenu.Item as="button" type="button" disabled={commandBusy()}
+                    onSelect={() => void createEntry("file")}>
+                    <Icon name="file-document" size="compact" />
+                    {t("explorer.new_file")}
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item as="button" type="button" disabled={commandBusy()}
+                    onSelect={() => void createEntry("directory")}>
+                    <Icon name="folder" size="compact" />
+                    {t("explorer.new_folder")}
+                  </DropdownMenu.Item>
+                </DropdownMenu.Content>
+              </DropdownMenu.Portal>
+            </DropdownMenu.Root>
+          </>
         }
       />
       <Show when={uploading() || uploadFeedback() || mutationFeedback() || expandedDirectoryFailures().length > 0}>

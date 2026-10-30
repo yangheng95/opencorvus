@@ -1,0 +1,172 @@
+{
+  "at": "2026-10-30T15:19:12.427Z",
+  "schema": 9,
+  "tables": 92,
+  "startingRows": 208637,
+  "finalRows": 208731,
+  "allStartingValuesPreserved": true,
+  "attachments": 75,
+  "oldProjects": 8,
+  "trackedFiles": 28,
+  "originalReportFiles": 4,
+  "previousOperatorFileBytes": 137,
+  "originalReportAndGoalPreserved": true,
+  "oldHTTPHistories": {
+    "task": 68,
+    "mission": 80,
+    "chat": 3,
+    "completedWork": 8
+  },
+  "readonlySource": {
+    "messages": 4,
+    "originalFilename": "README.md",
+    "bytes": 176,
+    "before": {
+      "file": "README.md",
+      "phase": "before",
+      "messages": 4,
+      "bytes": 176,
+      "downloadEqualsOriginalSource": true,
+      "originalSourceBytesPreserved": true
+    },
+    "postReview": {
+      "file": "README.md",
+      "phase": "post-review",
+      "messages": 4,
+      "bytes": 176,
+      "downloadEqualsOriginalSource": true,
+      "originalSourceBytesPreserved": true
+    },
+    "fullOriginalHTTPPreserved": true
+  },
+  "createdFile": {
+    "at": "2026-10-30T15:04:54.990Z",
+    "directory": "notes-815",
+    "file": "notes-815/workspace-note-815.md",
+    "bytes": 86,
+    "operatorText": "# 可见新建入口验证815\n\n本文件通过可见新建菜单创建于 notes-815。",
+    "createdThroughVisibleMenu": true,
+    "downloadEqualsDiskAndInput": true
+  },
+  "fileMutationEvidence": {
+    "events": [
+      {
+        "occurrenceID": "bus-occurrence:787257ce-7a14-4aa6-af70-cb2d98219178",
+        "type": "file.edited",
+        "file": "notes-815",
+        "at": 1793372333849,
+        "phases": [
+          "exact",
+          "global",
+          "wildcard"
+        ]
+      },
+      {
+        "occurrenceID": "bus-occurrence:e734ad2d-355f-486f-b81b-07bbfecef8fc",
+        "type": "file.edited",
+        "file": "notes-815/workspace-note-815.md",
+        "at": 1793372430678,
+        "phases": [
+          "wildcard",
+          "exact",
+          "global"
+        ]
+      },
+      {
+        "occurrenceID": "bus-occurrence:2c4ff392-bfc7-4e53-8a1e-b74a61fa4ead",
+        "type": "file.edited",
+        "file": "notes-815/workspace-note-815.md",
+        "at": 1793372496913,
+        "phases": [
+          "exact",
+          "global",
+          "wildcard"
+        ]
+      }
+    ],
+    "project": "support-report",
+    "occurrences": 3,
+    "owners": 3,
+    "phaseReceipts": 9,
+    "deliveries": 18,
+    "deliveryReceipts": 18,
+    "busDeliveryLeases": 18,
+    "runtimeProcessLeases": 1,
+    "leaseGrants": 19,
+    "addedRows": 92,
+    "allOriginalValuesRetained": true,
+    "fileMutationRequests": [
+      {
+        "id": 241,
+        "at": "2026-10-30T14:58:53.843Z",
+        "method": "POST",
+        "path": "/file/item"
+      },
+      {
+        "id": 279,
+        "at": "2026-10-30T15:00:30.670Z",
+        "method": "POST",
+        "path": "/file/item"
+      },
+      {
+        "id": 315,
+        "at": "2026-10-30T15:01:36.892Z",
+        "method": "PATCH",
+        "path": "/file/content"
+      }
+    ]
+  },
+  "deliveryReceiptEvidence": {
+    "at": "2026-10-30T15:18:47.913Z",
+    "deliveries": 18,
+    "eachHasOneCanonicalTerminalReceipt": true,
+    "outcomes": {
+      "succeeded": 18
+    }
+  },
+  "screenshots": 13,
+  "newModelRequests": 0,
+  "cumulativeModelRequests": 1096,
+  "scopes": [
+    {
+      "phase": "before",
+      "requests": 0,
+      "exhausted": false,
+      "publicShutdown": 200,
+      "reserveMs": 2658084,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "pairedCopiesRetired": true,
+      "originalRows": 208637,
+      "currentRows": 208639,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "phase": "after",
+      "requests": 0,
+      "exhausted": false,
+      "publicShutdown": 200,
+      "reserveMs": 772523,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "pairedCopiesRetired": true,
+      "originalRows": 208639,
+      "currentRows": 208731,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    }
+  ]
+}

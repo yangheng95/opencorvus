@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Sources与文件创建入口](2026-10-30-source-and-file-actions/README.md)：只读文件、创建操作与真实回执。
+
 - [Markdown文件工作台预览](2026-10-30-markdown-file-preview/README.md)：实际预览、草稿与下载回执。
 
 - [已完成报告的文件阅读](2026-10-30-report-file-reading/README.md)：实际页面原图与数据保留回执。

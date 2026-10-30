@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Sources与文件创建入口](records/2026-10/2026-10-30-source-and-file-actions.md)：只读附件阅读与现有创建能力的可见入口。
+
 - [Markdown文件工作台预览](records/2026-10/2026-10-30-markdown-file-preview.md)：同一草稿的格式阅读与源码编辑。
 
 - [已完成报告的文件阅读](records/2026-10/2026-10-30-report-file-reading.md)：真实报告阅读、文件工作台与交付入口核对。

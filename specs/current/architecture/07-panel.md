@@ -688,6 +688,14 @@ nonshrinking horizontal metadata in the three existing shared consumers.
 
 ## File editor language support
 
+Explorer exposes its existing file/folder creation commands through a visible
+New menu beside search. It uses the same current selection and project-scoped
+createEntry operation as directory/background context menus. The trigger describes
+the target directory and the existing naming dialog confirms it before writing:
+a selected directory, a selected file's parent, or the project root. Busy and
+navigation-reservation boundaries, mutation feedback, refresh and post-create
+editor admission remain owned by that existing operation.
+
 Markdown text files offer Source and Preview views of the same current draft.
 Source is the default for each newly selected resource. The existing editor stays
 mounted while hidden, retaining its selection and undo history; Preview uses the

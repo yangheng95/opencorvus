@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Sources与文件创建入口](2026-10-30-source-and-file-actions.md)：真实来源核对、创建流程与实页验收。
+
 - [Markdown文件工作台预览](2026-10-30-markdown-file-preview.md)：渲染复用、编辑连续性与实页验收。
 
 - [已完成报告的文件阅读](2026-10-30-report-file-reading.md)：阅读路径根因调查与实页验收。

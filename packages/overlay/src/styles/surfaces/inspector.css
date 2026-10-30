@@ -706,6 +706,10 @@
   min-width: 0;
 }
 
+.file-explorer-new {
+  flex: 0 0 auto;
+}
+
 .file-explorer-upload-input {
   --px-exact: 1px;
   position: fixed;
