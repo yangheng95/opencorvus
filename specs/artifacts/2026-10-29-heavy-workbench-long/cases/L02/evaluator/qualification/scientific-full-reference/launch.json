@@ -1,0 +1,64 @@
+{
+  "source_commit": "5b445d92b8a3162cb7884a4bc5fbc78143d7a999",
+  "prepared_at": "2026-10-30T10:05:14.213911+00:00",
+  "checks": [
+    {
+      "file": "asof_input.py",
+      "same_committed_programme_object": true
+    },
+    {
+      "file": "daily_data.py",
+      "same_committed_programme_object": true
+    },
+    {
+      "file": "decode_materials.py",
+      "same_committed_programme_object": true
+    },
+    {
+      "file": "l02_daily_reference.py",
+      "same_committed_programme_object": true
+    },
+    {
+      "file": "l02_scoring.py",
+      "same_committed_programme_object": true
+    },
+    {
+      "file": "l02_selection.py",
+      "same_committed_programme_object": true
+    },
+    {
+      "file": "material_contract.py",
+      "same_committed_programme_object": true
+    },
+    {
+      "file": "reference-data.md",
+      "same_committed_programme_object": true
+    },
+    {
+      "file": "reference-reproduce.md",
+      "same_committed_programme_object": true
+    },
+    {
+      "file": "reference-sources.md",
+      "same_committed_programme_object": true
+    },
+    {
+      "file": "report_diagnostics.py",
+      "same_committed_programme_object": true
+    },
+    {
+      "file": "report_l02_reference.py",
+      "same_committed_programme_object": true
+    }
+  ],
+  "assignment": "formal_full_assignment",
+  "subject_role": "reference_qualification",
+  "run_root": "D:\\opencorvus-benchmark-runs\\l02-scientific-reference-20261030\\formal-run",
+  "expected_forecasts": 108,
+  "expected_selectors": 12,
+  "expected_reports": 1,
+  "image": "sha256:23ff8bfbf8055caa0b9fa5745ddb27cceea2f31d7d15b7a900c81112cdfe8ddf",
+  "scope": "new source-only raw-to-report author qualification; no old forecasts, fitted models or private quality reference in any programme",
+  "total_time_cap": null,
+  "candidate_hour_evidence": false
+}

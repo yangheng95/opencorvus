@@ -1,6 +1,6 @@
 # L02 每日研究执行与局部资格
 
-当前作者report新增[纯派生诊断](current-source/report_diagnostics.py)：完整50/80/95中央区间覆盖/宽度、固定q动作与原exported mean的同成本对照，真实消融与局部失败从本次结果计算。方法/数据/复建静态资产在report.files显式声明并由report实际复制/引用；不是让report读私有quality registry。标准库手算和旧单outer纯派生预检已通过，仍须这套programme一起首预测前封存的一次新完整formal研究、实际图/38实质独评及多质量校准，不能用旧数值矩阵或report-only资格代替。
+当前作者report新增[纯派生诊断](current-source/report_diagnostics.py)：完整50/80/95中央区间覆盖/宽度、固定q动作与原exported mean的同成本对照，真实消融与局部失败从本次结果计算。方法/数据/复建静态资产在report.files显式声明并由report实际复制/引用；不是让report读私有quality registry。标准库手算、旧单outer纯派生及限定独立预审通过后，[唯一新formal研究已启动](qualification/scientific-full-reference/README.md)，尚未完成。实际图/38实质独评及多质量校准仍待，不能用旧数值矩阵或report-only资格代替。
 
 `current-source/asof_input.py`是唯一发布时间投影；`check_projection.py`共享格式校验、独立SQL重建许可集合，绑定评估侧origin/horizon。`decode_materials.read_fact_tables`是全档案与每日原始packet共用的唯一UTC/单位/缺测解析。完整原始vintages和终审只在评估侧，不能挂给预测进程。
 
