@@ -1,0 +1,68 @@
+{
+  "case": "L09/0.2.0-dev",
+  "schema": 1,
+  "currency": "USD",
+  "minor_per_unit": 100,
+  "week_sources": {
+    "1": "week1.csv",
+    "2": null,
+    "3": "week3.csv",
+    "4": "week4.csv",
+    "5": null,
+    "6": "week6.csv"
+  },
+  "as_of": {
+    "1": "2026-01-10T00:00:00Z",
+    "2": "2026-01-10T00:00:00Z",
+    "3": "2026-01-10T00:00:00Z",
+    "4": "2026-01-10T00:00:00Z",
+    "5": "2026-01-10T00:00:00Z",
+    "6": "2026-01-20T00:00:00Z"
+  },
+  "principals": {
+    "north_reader": {
+      "role": "tenant",
+      "tenant": "North"
+    },
+    "south_reader": {
+      "role": "tenant",
+      "tenant": "South"
+    },
+    "teacher": {
+      "role": "admin"
+    }
+  },
+  "queries": [
+    {
+      "id": "own",
+      "principal": "north_reader",
+      "tenant": "North"
+    },
+    {
+      "id": "cross",
+      "principal": "north_reader",
+      "tenant": "South"
+    },
+    {
+      "id": "unknown",
+      "principal": "unknown",
+      "tenant": "East"
+    },
+    {
+      "id": "admin",
+      "principal": "teacher",
+      "tenant": "*"
+    }
+  ],
+  "hours_per_week": 5,
+  "weeks": 6,
+  "learner_role": "original fictional diagnostic/operator records; no human research",
+  "grading_domains": [
+    "D",
+    "S",
+    "R",
+    "A"
+  ],
+  "item_points": 1,
+  "items_per_domain": 5
+}

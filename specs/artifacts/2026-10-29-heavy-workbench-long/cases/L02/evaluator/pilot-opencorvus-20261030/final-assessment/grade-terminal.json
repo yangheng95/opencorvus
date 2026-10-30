@@ -1,0 +1,23 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\evaluator-source\\l02_grade.py",
+    "grade",
+    "--assignment",
+    "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\evaluation-assignment\\assignment.zip",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\formal-run",
+    "--review",
+    "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\original-independent-review",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\final-assessment"
+  ],
+  "pid": 30240,
+  "started_at": "2026-10-30T15:44:27.265621+00:00",
+  "finished_at": "2026-10-30T15:59:58.425449+00:00",
+  "exit_code": 0,
+  "wall_seconds": 931.1477758996189
+}

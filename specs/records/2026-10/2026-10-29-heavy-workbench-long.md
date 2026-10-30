@@ -529,3 +529,20 @@ L02唯一原Task tsk_g00VZXAOwk00L22TkNKL在13:55:38Z真实API仍active，orches
 原缺现金CSV被整assess异常误扣M01–14，独审实证后一次集中修：按原输出依赖逐叶判，缺CSV仅M14fail，原native/历史/付款继续真pass；缺plans仅源叶fail、真实下游blocked，不假造未读结果。原主/错误native不重跑，只必要CLI13项加M14聚合合同复验；原反例/旧源/初判全部保留。初checker tuple比较键写JSON TypeError是工具错误，改证据投影并重原CLI；外部启动引号错误亦留trace，不当候选错。最初供应28的素材口算漏A08→A09→A14造成shock同40，原材料留construction-initial，冻结前/任何候选前将原创供应事实设24，保完整依赖，使三个机制各活跃；不是按候选结果松线。
 
 14:57:46Z独立整题允许仅metadata开发pilot冻结，L08/0.2.0-dev/原源/权重/90保留。最终FREEZE已落，作者参考角色明确。现在完整开发合同5/10（旧L06/L02/L03/L07/L08）、有效候选小时0/10；L06旧两100触发0.3未完，其余L01/L04/L05/L09/L10仍有完整缺口，职业真人/统计成熟未认证。下一直接补L09/L10及现题缺口，不重旧资格。L02原Task已自然完成/全版本封存/56591正常退休，唯一私有候选121评价活动中，按最新locator/原SQL/owner真实终态接续，别重开Task/旧121；之后同冻结独评再fresh Codex。心跳ACTIVE，只有全目标实际达成才停用。
+
+
+## 最新成品Recall：L09完整课程与实际陌生作业评分已交（本地Oct31）
+
+原始四批订单/发布/撤回缺失/冲突/原24虚构诊断与坏教案→六周固定能力/两真实SQL路线→六相依实际命令/SQLite真实commit后原进程退出73/同键续接/独立W3种子W4→陌生程序逐项评分→完整教材/教师源/原料/全部证据/真实worked SQL/前后测/实际图/替代教师已成品。主根l09-full-case-20261030，唯一closed-submission/closed-run/closed-weak-run，原main/final/review-repaired等历史不覆盖。3源输入（base/金额和行序/newtenant+late）、2路线的48个参考lab命令全正常0/计划73/restore0；它们不重复。陌生正确join和window SQL均20，valid-first13、sum-revisions11、auth-leak17、global-order10、reset-on-retry11，四域部分分保留；原输入/状态/课程源/命令/native/全部失败在原件ZIP。
+
+一次集中独审独立原CSV/SQLite/精确分重建全部业务及3×7作业20点，不调用作者current/evaluate作oracle；原9个自有native（8冷链+单独W4）均先封存后精确清理，并读真实73对象的SQLite/WAL证明已commit，图真实view。初H01/H02/H05不通过的3缺口全部保留：B01引用原证据和W4全账未随包，B02评分泛化，B03泛化手册/缺glossary/worked/SQL分解/packet命令。已集中补自包含原evidence/source/raw/六packet、实际执行worked/packet helper、六周不同具体步骤/案例/教师逐源全账。原21个分不动，只改过的grader/report必要执行，不把重用原native说成新执行。
+
+修后R4仍有九份0分却null解释：判分读snapshot+checkpoint，解释漏snapshot。已去掉predicate/context平行定义，单一原对象/字段/observed/expected比较表同时生分和反例；原21 actual-work逐叶只读同分，五单字段派生局部合同正向通过，非新真人/native。只重受影响九grader及报告；grader内部陌生程序按自身算法自然运行，未重原48参考lab/73/restore矩阵，也不当独立样本或凑小时。原全给20教师M09拒，歧视合法window教师M09/M10拒，真实缓存旧lab程序变更不重算M03–M08/M12拒；这些控制只有实际机器关键失败/人评未全，不给伪总分。
+
+16:20:54Z同一独审最终无实质阻断，仅允许metadata开发冻结；真正最终check_l09接五评级，主exit0/作者参考100/18pass/allcritical，真实完整数值/课程/图但末尾捏造24真人精确30%统计学习增益的弱programme exit2/95/H04criticalfail/goodfalse。固定18叶100/good90+allcritical/原资料不动，FREEZE L09/0.2.0-dev已写。全套当前6/10完整开发合同（旧L06/L02/L03/L07/L08/L09），仍缺L01/L04/L05/L10完整成品、新版义务与成熟实证；30学时、脚本和检查数非agent小时，AI非盲不代签专业/心理测量成熟。
+
+L02真实OpenCorvus已15:59:58Z同冻结实际grade100/66pass/study_complete/quality_success/goodtrue；之后才spawn新codex_l02_fresh（同16public/无override/禁再委托）。Codex已自然交付ee1ab32，全944文件/794722562原字节ZIP封存，精确native模型/用量/起止未知/comparablefalse。薄封存脚本在已归档并封programme后记录parsed Decimal元数据TypeError，原异常/脚本保留；改引用唯一原submission JSON，不强转数值、不重新归档或重开候选，从原目录接续。16:24:40.203Z唯一Codex私有121启动（launcher64636/driver78116）；同OC evaluator快照/冻结study/raw/1CPU/netnone，无总截断/author诊断。唯一post-terminal helper96992等原自有owner自然终态后封原SQL/cells/report并同grader prepare，脚本prepare-l02-codex-assessment-20261031.py；禁止重复启动。自然末态以L02-current-pair locator及实际owner/prepare receipts为准，不按旧表重跑；之后真独评/grade，再判两good是否触发新版。
+
+当前没有新增L09活跃native；六旧昂贵任务不恢复。下一直接补L10完整物理/因果信息/账单/恢复题，再现L04/L05/L01/L06缺口，不继续磨已交题的组件资格。全目标未达、有效候选小时仍未资格，心跳ACTIVE；提交/正常fetch merge/审全部待推/hook/push保护用户改动。
+
+原实际初版完整产品另用同一冻结rubric和原initial-review进入真实checker，得到83分/H01、H02、H05失败/goodfalse；见initial-product-frozen-rubric-control.json及historical-control-provenance.json。它保留真实缺交/泛化反馈/交接缺口，是历史开发低质量对照，不是新候选或回写旧评级；没有重跑课程实验。

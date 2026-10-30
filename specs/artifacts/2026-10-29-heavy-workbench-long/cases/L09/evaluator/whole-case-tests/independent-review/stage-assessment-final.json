@@ -1,0 +1,61 @@
+{
+  "case": "L09/0.2.0-dev",
+  "review_stage": "concentrated whole-case repair closed",
+  "run_root": "D:\\opencorvus-benchmark-runs\\l09-full-case-20261030\\closed-run",
+  "weak_run_root": "D:\\opencorvus-benchmark-runs\\l09-full-case-20261030\\closed-weak-run",
+  "development_pilot_contract_freeze_permitted": true,
+  "remaining_substantive_blockers": [],
+  "resolved": [
+    {
+      "id": "B01",
+      "original": "Missing teacher actual evidence/W4 comparator/complete packet chain",
+      "closed": "New real reporter includes source-archive, all packets, full original guided/challenge lab/SQL/checkpoint/native objects and full source/assets/submission. Source/raw/result binding actually read."
+    },
+    {
+      "id": "B02",
+      "original": "Generic20point evidence, then R4 score/context mismatch hiding true snapshot error",
+      "closed": "Single comparison table now generates score and first_counterexample. Nine necessary real grader reruns expose the actual restored-snapshot error;12 already-correct original grader objects retain their original version/path. All independent points unchanged."
+    },
+    {
+      "id": "B03",
+      "original": "Promised glossary, worked example and SQL scaffold absent",
+      "closed": "Concrete six-week guides and teacher tables; actual child packet/worked execution artifacts, exact cents and max/join/window/incorrect valid-first results independently verified."
+    }
+  ],
+  "allowed_closure": "Only development freeze metadata/README status; keep L09/0.2.0-dev, raw facts/business semantics,18 rubric leaves/100 weights/critical flags/good90 and all original actual objects. No retroactive score/data/threshold edits.",
+  "content_ratings": {
+    "main": {
+      "H01": "pass",
+      "H02": "pass",
+      "H03": "pass",
+      "H04": "pass",
+      "H05": "pass"
+    },
+    "weak": {
+      "H01": "pass",
+      "H02": "pass",
+      "H03": "pass",
+      "H04": "fail",
+      "H05": "pass"
+    }
+  },
+  "new_execution_by_reviewer_this_repair": 0,
+  "prior_authorized_reviewer_execution": "Exactly one8native guided baseline+separate original-W3-seed W4; already sealed/cleaned, no repeat.",
+  "prior_independent_raw_key": "independent-business.json reconstructs3raw inputs×2actualroutes and3×7unfamiliar original20point behavior grids without importing author current/evaluate as oracle.",
+  "score": null,
+  "actual_grader_required": true,
+  "initial_documents_retained": [
+    "REVIEW.md",
+    "REVIEW-INITIAL.md",
+    "initial-review.json",
+    "stage-initial.json",
+    "repaired-feedback-residual.json"
+  ],
+  "limits": [
+    "Fictional diagnostics and controlled programmes, not human learning participants",
+    "Nonblind AI reviewer, not professional or psychometric/statistical certification",
+    "No effective-hour or fresh LLM candidate evidence from this course reference",
+    "One development case, not ten mature completed heavy cases"
+  ],
+  "finalized_at": "2026-10-30T16:20:54.815387+00:00"
+}

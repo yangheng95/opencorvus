@@ -1,0 +1,13 @@
+row_id,tenant,event_id,order_id,revision,released_at,status,amount,currency
+North-C1,North,C1,O1,2,2026-01-03T00:00:00Z,active,8.75,USD
+North-C2,North,C2,O2,2,2026-01-03T00:00:00Z,cancelled,0,USD
+North-C3,North,C3,O3,2,2026-01-03T00:00:00Z,missing,,USD
+South-C1,South,C1,O1,2,2026-01-03T00:00:00Z,active,108.75,USD
+South-C2,South,C2,O2,2,2026-01-03T00:00:00Z,cancelled,0,USD
+South-C3,South,C3,O3,2,2026-01-03T00:00:00Z,missing,,USD
+East-C1,East,C1,O1,2,2026-01-03T00:00:00Z,active,208.75,USD
+East-C2,East,C2,O2,2,2026-01-03T00:00:00Z,cancelled,0,USD
+East-C3,East,C3,O3,2,2026-01-03T00:00:00Z,missing,,USD
+North-E1,North,E1,O1,1,2026-01-01T00:00:00Z,active,11.25,USD
+South-E1,South,E1,O1,1,2026-01-01T00:00:00Z,active,111.25,USD
+North-C1,North,C1,O1,2,2026-01-03T00:00:00Z,active,8.75,USD

@@ -1,0 +1,30 @@
+{
+  "admitted": [
+    {
+      "row_id": "A1",
+      "tenant": "Example-A",
+      "event_id": "E1",
+      "order_id": "shared",
+      "released_at": "2026-01-01T00:00:00Z",
+      "status": "active",
+      "revision": 1,
+      "amount_minor": 1250
+    },
+    {
+      "row_id": "B1",
+      "tenant": "Example-B",
+      "event_id": "E1",
+      "order_id": "shared",
+      "released_at": "2026-01-01T00:00:00Z",
+      "status": "active",
+      "revision": 1,
+      "amount_minor": 2075
+    }
+  ],
+  "invalid_grid": {
+    "row_id": "bad",
+    "amount": "1.005",
+    "error": "amount_grid"
+  },
+  "explanation": "Same order/event spelling in different tenants is distinct; exact cents1250/2075, not rounding1.005."
+}

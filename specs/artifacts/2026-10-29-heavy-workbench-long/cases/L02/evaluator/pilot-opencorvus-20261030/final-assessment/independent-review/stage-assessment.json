@@ -1,0 +1,34 @@
+{
+  "case": "L02/0.2.0",
+  "assignment_id": "bc342de1a5a84da99f45b928856428d2",
+  "submission_id": "OpenCorvus-L02-0b93788d6c56-20261030",
+  "run_id": "b7ee82d7881946f8bfb0483e3c886af9",
+  "stage": "candidate original38 substantive independent review completed",
+  "manual_findings": {
+    "verified_pass": 38
+  },
+  "substantive_manual_failures": [],
+  "candidate_total": null,
+  "Q26": "not computed here; root actual source-bound grader required",
+  "automatic_C01_C02": "not manually scored",
+  "original_initial_seal": "initial-review-seal.json",
+  "review_source": "actual candidate own immutable bundle and original source/native/report; no author rating reuse",
+  "actual_visuals": [
+    "origin-losses.png",
+    "coverage.png",
+    "worst-local.png"
+  ],
+  "no_candidate_or_reader_rerun": true,
+  "scope_limits": {
+    "kind": "ai-agent",
+    "blinded": false,
+    "familiarity": "Independent reviewer familiar with original author reference/design and earlier development calibration; current candidate was read from its own actual immutable assignment, not replaced by old author ratings.",
+    "limitations": "AI-agent, nonblind, not professional human or statistical maturity certification. No coefficients were independently refitted in full; legal complete training/data/source/actual execution and all report metrics/accounts were independently checked. No candidate/native/reader/forecast/report rerun. Q26 and total deliberately left for actual grader."
+  },
+  "component_audits": {
+    "raw_fit_native_metric_audit": true,
+    "raw_truth_report_provenance_coverage_actions_audit": true
+  },
+  "no_hours_or_maturity_certification": true,
+  "completed_at": "2026-10-30T15:45:05.052295+00:00"
+}

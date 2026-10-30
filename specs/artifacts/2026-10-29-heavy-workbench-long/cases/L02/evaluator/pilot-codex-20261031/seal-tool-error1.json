@@ -1,0 +1,9 @@
+{
+  "stage": "post-seal programme metadata only",
+  "error": "TypeError: Decimal is not JSON serializable in manifest.pool.methods[].configuration.ridge",
+  "candidate_failure": false,
+  "archive_and_programme_bytes_were_already_complete": true,
+  "repair": "reference original submission.json bytes; same validator and same intended owner launch tail",
+  "old_script": "D:/opencorvus-benchmark-runs/seal-launch-l02-codex-20261031-initial.py",
+  "no_task_or_native_rerun": true
+}

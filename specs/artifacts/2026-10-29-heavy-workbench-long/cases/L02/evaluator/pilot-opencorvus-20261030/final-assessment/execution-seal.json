@@ -1,0 +1,1695 @@
+{
+  "sealed_at": "2026-10-30T15:08:35.695828+00:00",
+  "role": "candidate_evaluation",
+  "owner_terminal": {
+    "started_at": "2026-10-30T14:43:06.865748+00:00",
+    "finished_at": "2026-10-30T15:08:20.674192+00:00",
+    "pid": 79496,
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\evaluator-source\\run_l02_study.py",
+      "--submission",
+      "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\completed\\submission",
+      "--raw",
+      "D:/opencorvus-benchmark-runs/l02-daily-loop-qualification-20261030/main/raw",
+      "--material-contract",
+      "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\material-contract.json",
+      "--study",
+      "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\study-contract.json",
+      "--image",
+      "sha256:23ff8bfbf8055caa0b9fa5745ddb27cceea2f31d7d15b7a900c81112cdfe8ddf",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\formal-run"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 1513.808457000181,
+    "scope": "native evaluation owner terminal; scientific and quality scores pending"
+  },
+  "counts": {
+    "predict": 108,
+    "select": 12,
+    "report": 1
+  },
+  "native_verified": [
+    {
+      "id": 1,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250115-i1",
+        "outer_id": "outer-20250115"
+      },
+      "cid": "fc9f23ea5476ad16dfe278fc3ddbe70b5cfde57304abcc2d9521d0e49e5e304f",
+      "started_at": "2026-10-30T14:43:17.334678317Z",
+      "finished_at": "2026-10-30T14:43:18.771558315Z",
+      "exit_code": 0
+    },
+    {
+      "id": 2,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250115-i1",
+        "outer_id": "outer-20250115"
+      },
+      "cid": "e54a06ffdcf00b7f728eb01574d2e48cb105b5e6930a6ba5366c091c829b3891",
+      "started_at": "2026-10-30T14:43:26.783075929Z",
+      "finished_at": "2026-10-30T14:43:28.304629202Z",
+      "exit_code": 0
+    },
+    {
+      "id": 3,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250115-i2",
+        "outer_id": "outer-20250115"
+      },
+      "cid": "e8339fc329fcb99906de6ee727b8153d5929fae14c732d4412162f8dad537471",
+      "started_at": "2026-10-30T14:43:36.572507947Z",
+      "finished_at": "2026-10-30T14:43:39.701264539Z",
+      "exit_code": 0
+    },
+    {
+      "id": 4,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250115-i2",
+        "outer_id": "outer-20250115"
+      },
+      "cid": "800470abd9490fcd25cdba954d7f561d8ba7788f0aec5c42c61ba6ba681efe1c",
+      "started_at": "2026-10-30T14:43:53.688569183Z",
+      "finished_at": "2026-10-30T14:43:56.821967558Z",
+      "exit_code": 0
+    },
+    {
+      "id": 5,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250115-i3",
+        "outer_id": "outer-20250115"
+      },
+      "cid": "4bafcfb65b63a78801c7b3d29b2616d147185dda1c1ca91fc975979f895501da",
+      "started_at": "2026-10-30T14:44:11.275127926Z",
+      "finished_at": "2026-10-30T14:44:13.633634659Z",
+      "exit_code": 0
+    },
+    {
+      "id": 6,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250115-i3",
+        "outer_id": "outer-20250115"
+      },
+      "cid": "e77919a424821726c6de0ab64473c4ec4b8fcda005c187b55dd6055f4f152c66",
+      "started_at": "2026-10-30T14:44:28.301262216Z",
+      "finished_at": "2026-10-30T14:44:31.036550935Z",
+      "exit_code": 0
+    },
+    {
+      "id": 7,
+      "identity": {
+        "kind": "select",
+        "outer_id": "outer-20250115"
+      },
+      "cid": "cc2fc7caadfbce01446af3a77d31cb46f2d34dff253b4e5957a6d23f269b7ae1",
+      "started_at": "2026-10-30T14:44:39.373865602Z",
+      "finished_at": "2026-10-30T14:44:39.696258977Z",
+      "exit_code": 0
+    },
+    {
+      "id": 8,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weekday",
+        "origin_id": "outer-20250115",
+        "outer_id": "outer-20250115"
+      },
+      "cid": "6d67f322344048883b06677f178a0eae51f12fbe30488256c79a209eba98a1d9",
+      "started_at": "2026-10-30T14:44:44.866607426Z",
+      "finished_at": "2026-10-30T14:44:46.407896947Z",
+      "exit_code": 0
+    },
+    {
+      "id": 9,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250115",
+        "outer_id": "outer-20250115"
+      },
+      "cid": "ae698254f86244e285f82bdc63882da7fbe78e1eb8acb47853558a30135d8f84",
+      "started_at": "2026-10-30T14:44:59.870470444Z",
+      "finished_at": "2026-10-30T14:45:04.067216423Z",
+      "exit_code": 0
+    },
+    {
+      "id": 10,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "no-weather",
+        "origin_id": "outer-20250115",
+        "outer_id": "outer-20250115"
+      },
+      "cid": "0c7c2d2e29b89df2ef0fa6b5c68b310529dbee770c3d7837d24f6e5ee5d8d768",
+      "started_at": "2026-10-30T14:45:15.846910323Z",
+      "finished_at": "2026-10-30T14:45:17.396793966Z",
+      "exit_code": 0
+    },
+    {
+      "id": 11,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250215-i1",
+        "outer_id": "outer-20250215"
+      },
+      "cid": "a64c814e9a8c4e05be2fade19c3777a9d8773fb0d097755c2cf841a2b52d8cc7",
+      "started_at": "2026-10-30T14:45:26.097511625Z",
+      "finished_at": "2026-10-30T14:45:27.489837728Z",
+      "exit_code": 0
+    },
+    {
+      "id": 12,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250215-i1",
+        "outer_id": "outer-20250215"
+      },
+      "cid": "3648665017aaadf7dc1aa9551d1d9aab5bca430ab9790c7a80e7ea318fd4e0a2",
+      "started_at": "2026-10-30T14:45:36.340573523Z",
+      "finished_at": "2026-10-30T14:45:38.21050584Z",
+      "exit_code": 0
+    },
+    {
+      "id": 13,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250215-i2",
+        "outer_id": "outer-20250215"
+      },
+      "cid": "a61072b18fb8ef0da19bed7c912d1f7958172caa458c54b0943503153ed3851a",
+      "started_at": "2026-10-30T14:45:47.374010312Z",
+      "finished_at": "2026-10-30T14:45:48.788872557Z",
+      "exit_code": 0
+    },
+    {
+      "id": 14,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250215-i2",
+        "outer_id": "outer-20250215"
+      },
+      "cid": "98eb2a1599be1e83416e5602fdd5c3e4092fcda42ea3ebcee5d7044397fc9d85",
+      "started_at": "2026-10-30T14:45:57.268831333Z",
+      "finished_at": "2026-10-30T14:45:58.781480552Z",
+      "exit_code": 0
+    },
+    {
+      "id": 15,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250215-i3",
+        "outer_id": "outer-20250215"
+      },
+      "cid": "8a97fd57bce3ea1403f2f834cb0a2e3ecfb65b5a507662bf3433bbff258ff110",
+      "started_at": "2026-10-30T14:46:07.217799839Z",
+      "finished_at": "2026-10-30T14:46:08.670183111Z",
+      "exit_code": 0
+    },
+    {
+      "id": 16,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250215-i3",
+        "outer_id": "outer-20250215"
+      },
+      "cid": "f7bf33708e2f236b34a0927730b9a7f24c16e186645805b0815e2d2ce247616e",
+      "started_at": "2026-10-30T14:46:17.289890401Z",
+      "finished_at": "2026-10-30T14:46:18.843498762Z",
+      "exit_code": 0
+    },
+    {
+      "id": 17,
+      "identity": {
+        "kind": "select",
+        "outer_id": "outer-20250215"
+      },
+      "cid": "f36dd4e79cd5a7f7f9217e7837f3a0f7f634362eb4042bda1a222a839e8a2dc7",
+      "started_at": "2026-10-30T14:46:25.24159816Z",
+      "finished_at": "2026-10-30T14:46:25.571237312Z",
+      "exit_code": 0
+    },
+    {
+      "id": 18,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weekday",
+        "origin_id": "outer-20250215",
+        "outer_id": "outer-20250215"
+      },
+      "cid": "b59ad54508c40a78a602cb4771625f6cab4ba44d353743d88a3f1b3f48880a95",
+      "started_at": "2026-10-30T14:46:30.51774976Z",
+      "finished_at": "2026-10-30T14:46:32.056884329Z",
+      "exit_code": 0
+    },
+    {
+      "id": 19,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250215",
+        "outer_id": "outer-20250215"
+      },
+      "cid": "e6e7a1512f96e9b62cabf550e70368da4d761a65d94cbd72ee5bcf34ff525da6",
+      "started_at": "2026-10-30T14:46:41.021146896Z",
+      "finished_at": "2026-10-30T14:46:42.619450818Z",
+      "exit_code": 0
+    },
+    {
+      "id": 20,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "no-weather",
+        "origin_id": "outer-20250215",
+        "outer_id": "outer-20250215"
+      },
+      "cid": "488d39b4b578133f788c63962ac49af661784e0395079ea9b5247b30978678a4",
+      "started_at": "2026-10-30T14:46:52.192453101Z",
+      "finished_at": "2026-10-30T14:46:53.905317748Z",
+      "exit_code": 0
+    },
+    {
+      "id": 21,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250315-i1",
+        "outer_id": "outer-20250315"
+      },
+      "cid": "94329cbcbb1540c22ba5beb247464d9c7672e9be945548eead9c816b8daed344",
+      "started_at": "2026-10-30T14:47:03.132234419Z",
+      "finished_at": "2026-10-30T14:47:04.542002607Z",
+      "exit_code": 0
+    },
+    {
+      "id": 22,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250315-i1",
+        "outer_id": "outer-20250315"
+      },
+      "cid": "145d78a096a58c0e1c1d52ffe6df5a72edc48f1339b83e5782d9f725cca235af",
+      "started_at": "2026-10-30T14:47:12.973206348Z",
+      "finished_at": "2026-10-30T14:47:14.436318467Z",
+      "exit_code": 0
+    },
+    {
+      "id": 23,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250315-i2",
+        "outer_id": "outer-20250315"
+      },
+      "cid": "7be974ff7a0e122cb7f232dbe2b5ac9f730b962cd5049b8f36799e44429508e4",
+      "started_at": "2026-10-30T14:47:22.870876742Z",
+      "finished_at": "2026-10-30T14:47:24.304280266Z",
+      "exit_code": 0
+    },
+    {
+      "id": 24,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250315-i2",
+        "outer_id": "outer-20250315"
+      },
+      "cid": "c703202e042c811a4ac685996655037443fe6939079efa1771453e0470661e09",
+      "started_at": "2026-10-30T14:47:32.810130164Z",
+      "finished_at": "2026-10-30T14:47:34.351611041Z",
+      "exit_code": 0
+    },
+    {
+      "id": 25,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250315-i3",
+        "outer_id": "outer-20250315"
+      },
+      "cid": "be213a0158c8ef3282defff83bd5d3aea4135b4b8c0ca2db2ef8d26c08a68717",
+      "started_at": "2026-10-30T14:47:45.720538691Z",
+      "finished_at": "2026-10-30T14:47:49.710711012Z",
+      "exit_code": 0
+    },
+    {
+      "id": 26,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250315-i3",
+        "outer_id": "outer-20250315"
+      },
+      "cid": "ebd4c9566d40a7b857dc882ba3b4f007fa6ac894d57e17b19dea8169cea16045",
+      "started_at": "2026-10-30T14:48:03.98514884Z",
+      "finished_at": "2026-10-30T14:48:05.874867022Z",
+      "exit_code": 0
+    },
+    {
+      "id": 27,
+      "identity": {
+        "kind": "select",
+        "outer_id": "outer-20250315"
+      },
+      "cid": "1f704bed8f1424c8a82c911e819d1c1b5db18b8429689b4d96f16edc09e09af4",
+      "started_at": "2026-10-30T14:48:13.377070577Z",
+      "finished_at": "2026-10-30T14:48:13.687598075Z",
+      "exit_code": 0
+    },
+    {
+      "id": 28,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weekday",
+        "origin_id": "outer-20250315",
+        "outer_id": "outer-20250315"
+      },
+      "cid": "525422fbc409a25f7e1c88a90f0158e6ab1c02367a79806f5fd8d5ea22e7941e",
+      "started_at": "2026-10-30T14:48:19.415666639Z",
+      "finished_at": "2026-10-30T14:48:21.091659369Z",
+      "exit_code": 0
+    },
+    {
+      "id": 29,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250315",
+        "outer_id": "outer-20250315"
+      },
+      "cid": "e690ab89543b007b255de0bbc1200dc66cd5109ee249590ac10ec66c092b898a",
+      "started_at": "2026-10-30T14:48:30.924383365Z",
+      "finished_at": "2026-10-30T14:48:32.645968972Z",
+      "exit_code": 0
+    },
+    {
+      "id": 30,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "no-weather",
+        "origin_id": "outer-20250315",
+        "outer_id": "outer-20250315"
+      },
+      "cid": "a385f4a8583fef374e886b77187000d60b733ddc0b616bae6a79f366a5f02786",
+      "started_at": "2026-10-30T14:48:43.128897486Z",
+      "finished_at": "2026-10-30T14:48:46.696683961Z",
+      "exit_code": 0
+    },
+    {
+      "id": 31,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250415-i1",
+        "outer_id": "outer-20250415"
+      },
+      "cid": "baae733497d250b07c26c4adebeea8acabfe25d02b33d6348cc07aef82788e56",
+      "started_at": "2026-10-30T14:49:00.945855629Z",
+      "finished_at": "2026-10-30T14:49:02.425258533Z",
+      "exit_code": 0
+    },
+    {
+      "id": 32,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250415-i1",
+        "outer_id": "outer-20250415"
+      },
+      "cid": "35463cd0540304e146223938a8b5ec43da8e60996ae5e866bce846d75a634f07",
+      "started_at": "2026-10-30T14:49:12.165879515Z",
+      "finished_at": "2026-10-30T14:49:14.492441475Z",
+      "exit_code": 0
+    },
+    {
+      "id": 33,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250415-i2",
+        "outer_id": "outer-20250415"
+      },
+      "cid": "daca3c5ba766813a49f8af68a565333fb2b9dd4d9c6d492942eaf9d632abc4c6",
+      "started_at": "2026-10-30T14:49:23.812666774Z",
+      "finished_at": "2026-10-30T14:49:25.558437009Z",
+      "exit_code": 0
+    },
+    {
+      "id": 34,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250415-i2",
+        "outer_id": "outer-20250415"
+      },
+      "cid": "2d8bbd3982dd935cb3b9af0d82fc4f7a2ac8982644ac24adf50de9aaf3a0001f",
+      "started_at": "2026-10-30T14:49:34.449300528Z",
+      "finished_at": "2026-10-30T14:49:36.00443121Z",
+      "exit_code": 0
+    },
+    {
+      "id": 35,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250415-i3",
+        "outer_id": "outer-20250415"
+      },
+      "cid": "d57575bd2ebc11d9603c9e15941ae36aaadf6bfde76e5b2ecdd16edf61b9a7b9",
+      "started_at": "2026-10-30T14:49:44.865398893Z",
+      "finished_at": "2026-10-30T14:49:46.398885346Z",
+      "exit_code": 0
+    },
+    {
+      "id": 36,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250415-i3",
+        "outer_id": "outer-20250415"
+      },
+      "cid": "0862253a352030253a93d04ad9278ddf6b63d992b0b2d1386f1decf5a1659823",
+      "started_at": "2026-10-30T14:49:55.344546531Z",
+      "finished_at": "2026-10-30T14:49:56.948269319Z",
+      "exit_code": 0
+    },
+    {
+      "id": 37,
+      "identity": {
+        "kind": "select",
+        "outer_id": "outer-20250415"
+      },
+      "cid": "2908b3b824faa37f399964f0e2026575c24fa30a620145b6630b0474f72bf412",
+      "started_at": "2026-10-30T14:50:03.851554623Z",
+      "finished_at": "2026-10-30T14:50:04.134709698Z",
+      "exit_code": 0
+    },
+    {
+      "id": 38,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weekday",
+        "origin_id": "outer-20250415",
+        "outer_id": "outer-20250415"
+      },
+      "cid": "cc58547abb8c0d22b15d86fafe771a09e0c313eb7d3bbe8f2199a7ed4d6f5f68",
+      "started_at": "2026-10-30T14:50:09.416524289Z",
+      "finished_at": "2026-10-30T14:50:10.970800155Z",
+      "exit_code": 0
+    },
+    {
+      "id": 39,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250415",
+        "outer_id": "outer-20250415"
+      },
+      "cid": "8d6c8a5b25872520a15feb9941d3086f725d8efdbd6e5c86445d31644603ac9f",
+      "started_at": "2026-10-30T14:50:20.257308102Z",
+      "finished_at": "2026-10-30T14:50:21.913444123Z",
+      "exit_code": 0
+    },
+    {
+      "id": 40,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "no-weather",
+        "origin_id": "outer-20250415",
+        "outer_id": "outer-20250415"
+      },
+      "cid": "9c34196c0417f3a269832641eea321a2b860d9b37a422959280d8e612d7769b8",
+      "started_at": "2026-10-30T14:50:31.764788438Z",
+      "finished_at": "2026-10-30T14:50:33.626084235Z",
+      "exit_code": 0
+    },
+    {
+      "id": 41,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250515-i1",
+        "outer_id": "outer-20250515"
+      },
+      "cid": "d5ee61767084db6a7c217206919156129d029b169def311cf61efce4f2e8acca",
+      "started_at": "2026-10-30T14:50:44.111646244Z",
+      "finished_at": "2026-10-30T14:50:45.776266949Z",
+      "exit_code": 0
+    },
+    {
+      "id": 42,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250515-i1",
+        "outer_id": "outer-20250515"
+      },
+      "cid": "6534050476d783b93ea2e678a570fdec570a49ea03a3f8f8d894991c82239fa6",
+      "started_at": "2026-10-30T14:50:55.432950469Z",
+      "finished_at": "2026-10-30T14:50:57.152840868Z",
+      "exit_code": 0
+    },
+    {
+      "id": 43,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250515-i2",
+        "outer_id": "outer-20250515"
+      },
+      "cid": "7fd99b41c5e64ec0a69323baf303b9546e05b51af39060eb123e233ffd2185df",
+      "started_at": "2026-10-30T14:51:07.893540542Z",
+      "finished_at": "2026-10-30T14:51:10.108088633Z",
+      "exit_code": 0
+    },
+    {
+      "id": 44,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250515-i2",
+        "outer_id": "outer-20250515"
+      },
+      "cid": "dfdf90e20bd53da8d5ed88e49b114cfb36dfb95ff3c56f87dbbe8e01d8c9a2b9",
+      "started_at": "2026-10-30T14:51:23.831297043Z",
+      "finished_at": "2026-10-30T14:51:25.526310687Z",
+      "exit_code": 0
+    },
+    {
+      "id": 45,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250515-i3",
+        "outer_id": "outer-20250515"
+      },
+      "cid": "874c73ad2b5a3beb89b3457f91cf0c341c12f553925c7dd9043d97c08a1fcdf4",
+      "started_at": "2026-10-30T14:51:35.634685224Z",
+      "finished_at": "2026-10-30T14:51:37.286955867Z",
+      "exit_code": 0
+    },
+    {
+      "id": 46,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250515-i3",
+        "outer_id": "outer-20250515"
+      },
+      "cid": "b14d5fd166e11dd93da378a1b73ea19c0f55bba47bdb26a879df0c4f1d736cec",
+      "started_at": "2026-10-30T14:51:47.429234588Z",
+      "finished_at": "2026-10-30T14:51:49.496921645Z",
+      "exit_code": 0
+    },
+    {
+      "id": 47,
+      "identity": {
+        "kind": "select",
+        "outer_id": "outer-20250515"
+      },
+      "cid": "5a941d5fe7c21c7d7049bb891eeff63aac7a68af881d053739bdabb0fa35436d",
+      "started_at": "2026-10-30T14:51:57.867223638Z",
+      "finished_at": "2026-10-30T14:51:58.173595124Z",
+      "exit_code": 0
+    },
+    {
+      "id": 48,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weekday",
+        "origin_id": "outer-20250515",
+        "outer_id": "outer-20250515"
+      },
+      "cid": "394efa6884b2e212268d9eb5efd6eecc0da9f7bb003c5bef71b3eb2e83b9d279",
+      "started_at": "2026-10-30T14:52:06.523245342Z",
+      "finished_at": "2026-10-30T14:52:11.98456077Z",
+      "exit_code": 0
+    },
+    {
+      "id": 49,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250515",
+        "outer_id": "outer-20250515"
+      },
+      "cid": "8fb9834beaf23782f198bb29ada523a1411b08c55cec7da6b6a0a8ebc4dd0707",
+      "started_at": "2026-10-30T14:52:27.482308034Z",
+      "finished_at": "2026-10-30T14:52:29.519885179Z",
+      "exit_code": 0
+    },
+    {
+      "id": 50,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "no-weather",
+        "origin_id": "outer-20250515",
+        "outer_id": "outer-20250515"
+      },
+      "cid": "242b7fcccccaf6d4ba3de2bf81bfbe9df22831a9ab7cccb0bdb25aa2425780b8",
+      "started_at": "2026-10-30T14:52:40.075857469Z",
+      "finished_at": "2026-10-30T14:52:41.992919897Z",
+      "exit_code": 0
+    },
+    {
+      "id": 51,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250620-i1",
+        "outer_id": "outer-20250620"
+      },
+      "cid": "d900a1388009ed4e8bf090cddac15b0826f9c280f412bdc407e6243737f041d0",
+      "started_at": "2026-10-30T14:52:55.058316853Z",
+      "finished_at": "2026-10-30T14:52:56.621059048Z",
+      "exit_code": 0
+    },
+    {
+      "id": 52,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250620-i1",
+        "outer_id": "outer-20250620"
+      },
+      "cid": "1a5fba222ddcaac3d17bf78353a6513e508085e3b8b84be0f3f87aef6b241df6",
+      "started_at": "2026-10-30T14:53:05.882576912Z",
+      "finished_at": "2026-10-30T14:53:07.483602091Z",
+      "exit_code": 0
+    },
+    {
+      "id": 53,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250620-i2",
+        "outer_id": "outer-20250620"
+      },
+      "cid": "2b4d8d06e8456753aef794edfb7870672ce0ddd980f7a9012e26e1f94603ebc5",
+      "started_at": "2026-10-30T14:53:16.901344008Z",
+      "finished_at": "2026-10-30T14:53:18.698517456Z",
+      "exit_code": 0
+    },
+    {
+      "id": 54,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250620-i2",
+        "outer_id": "outer-20250620"
+      },
+      "cid": "63424f67b0539343ae80ed0c870cbd8bfd6d5e8d140db02196a005fbb13ac437",
+      "started_at": "2026-10-30T14:53:28.180910625Z",
+      "finished_at": "2026-10-30T14:53:29.833977849Z",
+      "exit_code": 0
+    },
+    {
+      "id": 55,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250620-i3",
+        "outer_id": "outer-20250620"
+      },
+      "cid": "4230876c33e962b8d8bd21953fb2b2b40cab413fa4cac9d71b2758cce32bf09d",
+      "started_at": "2026-10-30T14:53:39.337185429Z",
+      "finished_at": "2026-10-30T14:53:40.972019152Z",
+      "exit_code": 0
+    },
+    {
+      "id": 56,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250620-i3",
+        "outer_id": "outer-20250620"
+      },
+      "cid": "473bc373b49a428a22c99684a27f0e3f0a1220ca698ff45a3d074bf1228f2e91",
+      "started_at": "2026-10-30T14:53:50.468582915Z",
+      "finished_at": "2026-10-30T14:53:52.180523661Z",
+      "exit_code": 0
+    },
+    {
+      "id": 57,
+      "identity": {
+        "kind": "select",
+        "outer_id": "outer-20250620"
+      },
+      "cid": "36cc855051dc2ee6ad548e0c7de4bfae2566647e6ca1f6daa9d4e3243f185dac",
+      "started_at": "2026-10-30T14:54:00.081051667Z",
+      "finished_at": "2026-10-30T14:54:00.563648805Z",
+      "exit_code": 0
+    },
+    {
+      "id": 58,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weekday",
+        "origin_id": "outer-20250620",
+        "outer_id": "outer-20250620"
+      },
+      "cid": "cfb0154e956824bc46af05c1c98436a5b1554112f00c5136dba4aed1943a2c71",
+      "started_at": "2026-10-30T14:54:06.738351558Z",
+      "finished_at": "2026-10-30T14:54:08.442394732Z",
+      "exit_code": 0
+    },
+    {
+      "id": 59,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250620",
+        "outer_id": "outer-20250620"
+      },
+      "cid": "a725d4c1f6cf5a53b6fc0748f61af74e8353142cfad539a8c6b7cacc3c212863",
+      "started_at": "2026-10-30T14:54:18.617761352Z",
+      "finished_at": "2026-10-30T14:54:20.400527688Z",
+      "exit_code": 0
+    },
+    {
+      "id": 60,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "no-weather",
+        "origin_id": "outer-20250620",
+        "outer_id": "outer-20250620"
+      },
+      "cid": "f88b1872ae91d07e33f98f4f618086f67a7e2d8f9986f41df60532a39e0a1381",
+      "started_at": "2026-10-30T14:54:30.582773867Z",
+      "finished_at": "2026-10-30T14:54:32.328028082Z",
+      "exit_code": 0
+    },
+    {
+      "id": 61,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250715-i1",
+        "outer_id": "outer-20250715"
+      },
+      "cid": "80482725d3952dec657956da15359e620ede462e955d1deaf71636be9b8e5194",
+      "started_at": "2026-10-30T14:54:42.165702516Z",
+      "finished_at": "2026-10-30T14:54:43.762057609Z",
+      "exit_code": 0
+    },
+    {
+      "id": 62,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250715-i1",
+        "outer_id": "outer-20250715"
+      },
+      "cid": "aed64aa26cfacdf502cb361924bb9cd707616399cefa9f237fb24711ba463a1f",
+      "started_at": "2026-10-30T14:54:53.022796937Z",
+      "finished_at": "2026-10-30T14:54:54.887203539Z",
+      "exit_code": 0
+    },
+    {
+      "id": 63,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250715-i2",
+        "outer_id": "outer-20250715"
+      },
+      "cid": "c2df70581caa1870b1d49991595ef639a4e01b5a82966e857823b3c66832e42b",
+      "started_at": "2026-10-30T14:55:04.544732979Z",
+      "finished_at": "2026-10-30T14:55:06.1450929Z",
+      "exit_code": 0
+    },
+    {
+      "id": 64,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250715-i2",
+        "outer_id": "outer-20250715"
+      },
+      "cid": "31d7c18a6a88d250d00b81c5950572512868a4c65efcfe5ac7dec0f37f36e0c3",
+      "started_at": "2026-10-30T14:55:15.745869482Z",
+      "finished_at": "2026-10-30T14:55:17.409359047Z",
+      "exit_code": 0
+    },
+    {
+      "id": 65,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250715-i3",
+        "outer_id": "outer-20250715"
+      },
+      "cid": "14107fee99c0593209480a94f6e730b4b5a5b1df919bf07cc4ff535de9b0230d",
+      "started_at": "2026-10-30T14:55:27.12406643Z",
+      "finished_at": "2026-10-30T14:55:28.836564994Z",
+      "exit_code": 0
+    },
+    {
+      "id": 66,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250715-i3",
+        "outer_id": "outer-20250715"
+      },
+      "cid": "34c2313297cde55137ed337d57841c9021a92a20c8cd627465a07d5c1d2ed38a",
+      "started_at": "2026-10-30T14:55:38.655772277Z",
+      "finished_at": "2026-10-30T14:55:40.574480798Z",
+      "exit_code": 0
+    },
+    {
+      "id": 67,
+      "identity": {
+        "kind": "select",
+        "outer_id": "outer-20250715"
+      },
+      "cid": "a3325173d2ec7fba565b3542fc29516ea1a365c3c9c598c69f925c15aa613251",
+      "started_at": "2026-10-30T14:55:47.719728949Z",
+      "finished_at": "2026-10-30T14:55:48.004690821Z",
+      "exit_code": 0
+    },
+    {
+      "id": 68,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weekday",
+        "origin_id": "outer-20250715",
+        "outer_id": "outer-20250715"
+      },
+      "cid": "738cc33a06613f03a493adaecf73a4e13d182ccafca3a4ea4928a9e1a0dd048d",
+      "started_at": "2026-10-30T14:55:53.457479971Z",
+      "finished_at": "2026-10-30T14:55:55.176238114Z",
+      "exit_code": 0
+    },
+    {
+      "id": 69,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250715",
+        "outer_id": "outer-20250715"
+      },
+      "cid": "20e8984c4c06032cbfce113d32810b81e25a294e9b29b54ebf6a50a39b757136",
+      "started_at": "2026-10-30T14:56:05.367769103Z",
+      "finished_at": "2026-10-30T14:56:07.150740312Z",
+      "exit_code": 0
+    },
+    {
+      "id": 70,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "no-weather",
+        "origin_id": "outer-20250715",
+        "outer_id": "outer-20250715"
+      },
+      "cid": "fe0c75ea4cfa12483a228b47f2192880531c427736ff7c7a69714937005d6d72",
+      "started_at": "2026-10-30T14:56:17.492281247Z",
+      "finished_at": "2026-10-30T14:56:19.256408371Z",
+      "exit_code": 0
+    },
+    {
+      "id": 71,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250815-i1",
+        "outer_id": "outer-20250815"
+      },
+      "cid": "3cfd0f905b8cd5197862d238eee3b0bd71a41cb57228fd15119d5d53ab0dac1e",
+      "started_at": "2026-10-30T14:56:29.168828778Z",
+      "finished_at": "2026-10-30T14:56:30.760965629Z",
+      "exit_code": 0
+    },
+    {
+      "id": 72,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250815-i1",
+        "outer_id": "outer-20250815"
+      },
+      "cid": "59910192ce7934bdd9d17b9dc9508f277cd3d760cd7d8d803385a1d38f5c7dea",
+      "started_at": "2026-10-30T14:56:40.428049394Z",
+      "finished_at": "2026-10-30T14:56:42.102461287Z",
+      "exit_code": 0
+    },
+    {
+      "id": 73,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250815-i2",
+        "outer_id": "outer-20250815"
+      },
+      "cid": "b886336e4ee92d42b26d5f6121bfa3ddd19d51571c65cd9fb2d67343b7426680",
+      "started_at": "2026-10-30T14:56:51.854731229Z",
+      "finished_at": "2026-10-30T14:56:53.504400545Z",
+      "exit_code": 0
+    },
+    {
+      "id": 74,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250815-i2",
+        "outer_id": "outer-20250815"
+      },
+      "cid": "45f2b5b0778c782379d100ec4e1a4f8991e360d4edc57b499ecde0d18aec4e98",
+      "started_at": "2026-10-30T14:57:03.295838665Z",
+      "finished_at": "2026-10-30T14:57:05.027532015Z",
+      "exit_code": 0
+    },
+    {
+      "id": 75,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250815-i3",
+        "outer_id": "outer-20250815"
+      },
+      "cid": "2baab0fd0009bb38025c0029215cb41e0dc197b43e0a798e15473e3aa9aed1a8",
+      "started_at": "2026-10-30T14:57:14.870493153Z",
+      "finished_at": "2026-10-30T14:57:16.572751708Z",
+      "exit_code": 0
+    },
+    {
+      "id": 76,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250815-i3",
+        "outer_id": "outer-20250815"
+      },
+      "cid": "96aa8a2351e329dde93cfd90a68d5697c0d24dacb15babdabfa176a5559d5b32",
+      "started_at": "2026-10-30T14:57:26.669328417Z",
+      "finished_at": "2026-10-30T14:57:29.017807209Z",
+      "exit_code": 0
+    },
+    {
+      "id": 77,
+      "identity": {
+        "kind": "select",
+        "outer_id": "outer-20250815"
+      },
+      "cid": "f15899eb8f5aebd4ffc60da0a8d0069b22461d7293a1de86ce3a2cd3fa0bc0bb",
+      "started_at": "2026-10-30T14:57:36.301076986Z",
+      "finished_at": "2026-10-30T14:57:36.598445763Z",
+      "exit_code": 0
+    },
+    {
+      "id": 78,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weekday",
+        "origin_id": "outer-20250815",
+        "outer_id": "outer-20250815"
+      },
+      "cid": "ba4e342f962df7bcb28d280add9f1c224db304cd35adae9adf05bc9440d717a0",
+      "started_at": "2026-10-30T14:57:42.027346913Z",
+      "finished_at": "2026-10-30T14:57:43.850516674Z",
+      "exit_code": 0
+    },
+    {
+      "id": 79,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250815",
+        "outer_id": "outer-20250815"
+      },
+      "cid": "a0f76b06d019d586180aa0bd55a60e940f8480c8e028b2a82e5c2ab50494c216",
+      "started_at": "2026-10-30T14:57:57.050376544Z",
+      "finished_at": "2026-10-30T14:57:58.904764844Z",
+      "exit_code": 0
+    },
+    {
+      "id": 80,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "no-weather",
+        "origin_id": "outer-20250815",
+        "outer_id": "outer-20250815"
+      },
+      "cid": "dfcc95019f72978112d2c474fc4a6e4005d267cf79b9d35bf50ecb0d6e2bfabe",
+      "started_at": "2026-10-30T14:58:09.421170294Z",
+      "finished_at": "2026-10-30T14:58:11.234430254Z",
+      "exit_code": 0
+    },
+    {
+      "id": 81,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250915-i1",
+        "outer_id": "outer-20250915"
+      },
+      "cid": "582e29a27ca786d2d553778841cf8e43599f804c60837f55b57fb8647c666b98",
+      "started_at": "2026-10-30T14:58:21.625318131Z",
+      "finished_at": "2026-10-30T14:58:23.274023914Z",
+      "exit_code": 0
+    },
+    {
+      "id": 82,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250915-i1",
+        "outer_id": "outer-20250915"
+      },
+      "cid": "54f2e3c1b0b34c6941983cf542f300d5dee57f907d1d7404b0cd998f7867f31a",
+      "started_at": "2026-10-30T14:58:33.141408729Z",
+      "finished_at": "2026-10-30T14:58:34.896543196Z",
+      "exit_code": 0
+    },
+    {
+      "id": 83,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250915-i2",
+        "outer_id": "outer-20250915"
+      },
+      "cid": "03b0a70bbe39bcc3e494fc58618b555966a01125201a54986f3aeca1389d022f",
+      "started_at": "2026-10-30T14:58:44.730256571Z",
+      "finished_at": "2026-10-30T14:58:46.450684072Z",
+      "exit_code": 0
+    },
+    {
+      "id": 84,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250915-i2",
+        "outer_id": "outer-20250915"
+      },
+      "cid": "dbf8ebd3ef1225e34572950c2f5612007f57e07979a2e7b41219fd392409e75c",
+      "started_at": "2026-10-30T14:58:56.475118305Z",
+      "finished_at": "2026-10-30T14:58:58.269970655Z",
+      "exit_code": 0
+    },
+    {
+      "id": 85,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20250915-i3",
+        "outer_id": "outer-20250915"
+      },
+      "cid": "f4a786e7159e968c1f41de7814a3572f9c966c55d8df9490fc16c524b7d651f9",
+      "started_at": "2026-10-30T14:59:11.536147283Z",
+      "finished_at": "2026-10-30T14:59:13.285295983Z",
+      "exit_code": 0
+    },
+    {
+      "id": 86,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250915-i3",
+        "outer_id": "outer-20250915"
+      },
+      "cid": "41213df8bfd9504d4e181a8e05e1f8980939e7026adf33c1f11972a7853bdfd4",
+      "started_at": "2026-10-30T14:59:23.628778265Z",
+      "finished_at": "2026-10-30T14:59:25.484188781Z",
+      "exit_code": 0
+    },
+    {
+      "id": 87,
+      "identity": {
+        "kind": "select",
+        "outer_id": "outer-20250915"
+      },
+      "cid": "4a31262e07d2a05b10d9646feff4e4394e33c2afbc8cef9545c3f1122e17fd87",
+      "started_at": "2026-10-30T14:59:32.968620754Z",
+      "finished_at": "2026-10-30T14:59:33.257745462Z",
+      "exit_code": 0
+    },
+    {
+      "id": 88,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weekday",
+        "origin_id": "outer-20250915",
+        "outer_id": "outer-20250915"
+      },
+      "cid": "48d853aaa986f2e01099ff7bf42f71a10ff7a828b5d8337d41227a3523497a80",
+      "started_at": "2026-10-30T14:59:38.815941369Z",
+      "finished_at": "2026-10-30T14:59:40.605778128Z",
+      "exit_code": 0
+    },
+    {
+      "id": 89,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20250915",
+        "outer_id": "outer-20250915"
+      },
+      "cid": "419fb9add7d19227496827b0074f6cfadbd7c9a5abb53ac979cbd1f40baa37e0",
+      "started_at": "2026-10-30T14:59:51.163756399Z",
+      "finished_at": "2026-10-30T14:59:53.010325877Z",
+      "exit_code": 0
+    },
+    {
+      "id": 90,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "no-weather",
+        "origin_id": "outer-20250915",
+        "outer_id": "outer-20250915"
+      },
+      "cid": "ab05cc3557b434f9387b076b47613944de4b46bd2fb10c9adb4eb969d4f84570",
+      "started_at": "2026-10-30T15:00:04.709617971Z",
+      "finished_at": "2026-10-30T15:00:07.703100263Z",
+      "exit_code": 0
+    },
+    {
+      "id": 91,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20251015-i1",
+        "outer_id": "outer-20251015"
+      },
+      "cid": "4fae4cefa718ec3cc17fbb2aee76fc1932b117c1dd9e2d6878cc5e1736ac069a",
+      "started_at": "2026-10-30T15:00:21.182926821Z",
+      "finished_at": "2026-10-30T15:00:22.890453973Z",
+      "exit_code": 0
+    },
+    {
+      "id": 92,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20251015-i1",
+        "outer_id": "outer-20251015"
+      },
+      "cid": "07292d20217a14e6476fef263180253710acb8c895d20ab486c5c03d403100a0",
+      "started_at": "2026-10-30T15:00:37.512152149Z",
+      "finished_at": "2026-10-30T15:00:39.297885359Z",
+      "exit_code": 0
+    },
+    {
+      "id": 93,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20251015-i2",
+        "outer_id": "outer-20251015"
+      },
+      "cid": "f20ffb46c1a658792fccbaebd3258e7451a860890d704a7173b8364dd9b6d790",
+      "started_at": "2026-10-30T15:00:52.499104955Z",
+      "finished_at": "2026-10-30T15:00:54.647927144Z",
+      "exit_code": 0
+    },
+    {
+      "id": 94,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20251015-i2",
+        "outer_id": "outer-20251015"
+      },
+      "cid": "f1ab129b0f6eb426723100c3a51b329132df379b8e378ca8d2ba2d72d6de4994",
+      "started_at": "2026-10-30T15:01:11.62702085Z",
+      "finished_at": "2026-10-30T15:01:14.116345515Z",
+      "exit_code": 0
+    },
+    {
+      "id": 95,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20251015-i3",
+        "outer_id": "outer-20251015"
+      },
+      "cid": "e737d733428aa649f409009da56a06d9c5ab08256cb6eccf495fe53578b87e66",
+      "started_at": "2026-10-30T15:01:30.627714011Z",
+      "finished_at": "2026-10-30T15:01:32.566753605Z",
+      "exit_code": 0
+    },
+    {
+      "id": 96,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20251015-i3",
+        "outer_id": "outer-20251015"
+      },
+      "cid": "2f9efc1138339b1b91e55d75004f4c152f96e0699e7f106c907188b63551fd3d",
+      "started_at": "2026-10-30T15:01:44.468406217Z",
+      "finished_at": "2026-10-30T15:01:46.769868312Z",
+      "exit_code": 0
+    },
+    {
+      "id": 97,
+      "identity": {
+        "kind": "select",
+        "outer_id": "outer-20251015"
+      },
+      "cid": "e8edeccc358479f46d5687df2f26920f944baa30200f411b5839331d14ef71fb",
+      "started_at": "2026-10-30T15:02:00.070109962Z",
+      "finished_at": "2026-10-30T15:02:00.687340681Z",
+      "exit_code": 0
+    },
+    {
+      "id": 98,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weekday",
+        "origin_id": "outer-20251015",
+        "outer_id": "outer-20251015"
+      },
+      "cid": "f2f109bd6046b18829749bf6b50473860cc2aaa3deadf5482de7df3537b1c9b4",
+      "started_at": "2026-10-30T15:02:09.306864193Z",
+      "finished_at": "2026-10-30T15:02:12.176655067Z",
+      "exit_code": 0
+    },
+    {
+      "id": 99,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20251015",
+        "outer_id": "outer-20251015"
+      },
+      "cid": "dc6afd04df033af4bc5a878e33dd8bb0df7dcd491ceed9428d9e283d8d2fa1e5",
+      "started_at": "2026-10-30T15:02:24.927033567Z",
+      "finished_at": "2026-10-30T15:02:28.236026528Z",
+      "exit_code": 0
+    },
+    {
+      "id": 100,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "no-weather",
+        "origin_id": "outer-20251015",
+        "outer_id": "outer-20251015"
+      },
+      "cid": "b5ff1f001fd81db40009b5b09c4a376d7f44663fcd3e0d771ee4faf4b16258cf",
+      "started_at": "2026-10-30T15:02:45.387324718Z",
+      "finished_at": "2026-10-30T15:02:47.256395568Z",
+      "exit_code": 0
+    },
+    {
+      "id": 101,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20251115-i1",
+        "outer_id": "outer-20251115"
+      },
+      "cid": "8ff2702dabdc13db119a8127f1bc28028480c350da7927c8469b623c7c16970f",
+      "started_at": "2026-10-30T15:02:58.283189957Z",
+      "finished_at": "2026-10-30T15:03:01.40255399Z",
+      "exit_code": 0
+    },
+    {
+      "id": 102,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20251115-i1",
+        "outer_id": "outer-20251115"
+      },
+      "cid": "b89a808e3260d9dc7def293dbf9e58edf892abe400dd36a7d8d8ea29af858fda",
+      "started_at": "2026-10-30T15:03:15.772026104Z",
+      "finished_at": "2026-10-30T15:03:18.311734901Z",
+      "exit_code": 0
+    },
+    {
+      "id": 103,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20251115-i2",
+        "outer_id": "outer-20251115"
+      },
+      "cid": "f93eae4cb773242fbf6a7bdc63a4d246c23bbeacf6249b18fb7d2f672566701b",
+      "started_at": "2026-10-30T15:03:34.699160805Z",
+      "finished_at": "2026-10-30T15:03:36.672934272Z",
+      "exit_code": 0
+    },
+    {
+      "id": 104,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20251115-i2",
+        "outer_id": "outer-20251115"
+      },
+      "cid": "47fbf034545d9e8d6e1f20c7feb79c1135a819acb39c53d3aa472d80f9f2837f",
+      "started_at": "2026-10-30T15:03:53.067233443Z",
+      "finished_at": "2026-10-30T15:03:56.870870674Z",
+      "exit_code": 0
+    },
+    {
+      "id": 105,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20251115-i3",
+        "outer_id": "outer-20251115"
+      },
+      "cid": "f83a7ac30d83c3b30b5bed0360f554cc20b93bd08e4e439b203abe15856c3412",
+      "started_at": "2026-10-30T15:04:10.69254263Z",
+      "finished_at": "2026-10-30T15:04:12.902594242Z",
+      "exit_code": 0
+    },
+    {
+      "id": 106,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20251115-i3",
+        "outer_id": "outer-20251115"
+      },
+      "cid": "3c683ecd18b2dbc9ac1d84adb2164cde26ce8b2fd5fe1bd27e2b285b1de20058",
+      "started_at": "2026-10-30T15:04:30.650549842Z",
+      "finished_at": "2026-10-30T15:04:34.128582224Z",
+      "exit_code": 0
+    },
+    {
+      "id": 107,
+      "identity": {
+        "kind": "select",
+        "outer_id": "outer-20251115"
+      },
+      "cid": "01a9b48e7c8ac4b6a9ea8f01cd7fac8e745e0a794beed9fc52fed8c68cfa52d9",
+      "started_at": "2026-10-30T15:04:45.087498389Z",
+      "finished_at": "2026-10-30T15:04:45.374042384Z",
+      "exit_code": 0
+    },
+    {
+      "id": 108,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weekday",
+        "origin_id": "outer-20251115",
+        "outer_id": "outer-20251115"
+      },
+      "cid": "ae58e5f6dd5a858ff6b03376adbb3121a8e24508b68206c3bfef525f583ac648",
+      "started_at": "2026-10-30T15:04:51.388994535Z",
+      "finished_at": "2026-10-30T15:04:53.574395157Z",
+      "exit_code": 0
+    },
+    {
+      "id": 109,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20251115",
+        "outer_id": "outer-20251115"
+      },
+      "cid": "e950d462cb3863c62317247bcd1022c477e4fa9a4efe2c5c62efff050d151623",
+      "started_at": "2026-10-30T15:05:06.230701082Z",
+      "finished_at": "2026-10-30T15:05:08.352734463Z",
+      "exit_code": 0
+    },
+    {
+      "id": 110,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "no-weather",
+        "origin_id": "outer-20251115",
+        "outer_id": "outer-20251115"
+      },
+      "cid": "4de5501592163c275d8c70880d7ece8edf462295cfa88096f19084026a1995f0",
+      "started_at": "2026-10-30T15:05:20.154694964Z",
+      "finished_at": "2026-10-30T15:05:22.273472447Z",
+      "exit_code": 0
+    },
+    {
+      "id": 111,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20251215-i1",
+        "outer_id": "outer-20251215"
+      },
+      "cid": "f1a4c75998a452f68b7df23db2c0010571962aa56d1337a2fdde923a67a794ee",
+      "started_at": "2026-10-30T15:05:35.595892021Z",
+      "finished_at": "2026-10-30T15:05:38.75917443Z",
+      "exit_code": 0
+    },
+    {
+      "id": 112,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20251215-i1",
+        "outer_id": "outer-20251215"
+      },
+      "cid": "6f6178d431d1058498657c6926ae7094024097c07f992944f5b19d4a0fc8be6a",
+      "started_at": "2026-10-30T15:05:49.548032482Z",
+      "finished_at": "2026-10-30T15:05:51.50324766Z",
+      "exit_code": 0
+    },
+    {
+      "id": 113,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20251215-i2",
+        "outer_id": "outer-20251215"
+      },
+      "cid": "afc2b4a2877ffd8a2ffc5b6fe398730ab8c1df1f8d43ccbc4ff665a28ddf7ba4",
+      "started_at": "2026-10-30T15:06:02.570872819Z",
+      "finished_at": "2026-10-30T15:06:04.406950955Z",
+      "exit_code": 0
+    },
+    {
+      "id": 114,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20251215-i2",
+        "outer_id": "outer-20251215"
+      },
+      "cid": "500698d06dd0a45af820e6c66c03d6ff55136b07b867d4532a0ac6d2783c69b7",
+      "started_at": "2026-10-30T15:06:15.290094069Z",
+      "finished_at": "2026-10-30T15:06:17.201278774Z",
+      "exit_code": 0
+    },
+    {
+      "id": 115,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weekday",
+        "origin_id": "outer-20251215-i3",
+        "outer_id": "outer-20251215"
+      },
+      "cid": "aab073c2e695b61498e3bf4dd49a4ec0ad6b06d8e5169f8bc9658c8d374083d5",
+      "started_at": "2026-10-30T15:06:28.346470528Z",
+      "finished_at": "2026-10-30T15:06:31.300074075Z",
+      "exit_code": 0
+    },
+    {
+      "id": 116,
+      "identity": {
+        "kind": "predict",
+        "level": "inner",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20251215-i3",
+        "outer_id": "outer-20251215"
+      },
+      "cid": "6fb418511660e29bbf7afda6ac91c7a66887ac254cbf5d8c2f235453b778c34f",
+      "started_at": "2026-10-30T15:06:44.147479084Z",
+      "finished_at": "2026-10-30T15:06:46.045657812Z",
+      "exit_code": 0
+    },
+    {
+      "id": 117,
+      "identity": {
+        "kind": "select",
+        "outer_id": "outer-20251215"
+      },
+      "cid": "41d19d78afe3a150d8116139d82e034addde6b3ec080f91b56f33e3be1ae9e1a",
+      "started_at": "2026-10-30T15:06:53.975767484Z",
+      "finished_at": "2026-10-30T15:06:54.272325712Z",
+      "exit_code": 0
+    },
+    {
+      "id": 118,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weekday",
+        "origin_id": "outer-20251215",
+        "outer_id": "outer-20251215"
+      },
+      "cid": "81904053a891c7ebbee23ef7b6cece77c6bc3147037d1540c6ff5147be32e787",
+      "started_at": "2026-10-30T15:07:00.07544358Z",
+      "finished_at": "2026-10-30T15:07:02.291206521Z",
+      "exit_code": 0
+    },
+    {
+      "id": 119,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "weather-ridge",
+        "origin_id": "outer-20251215",
+        "outer_id": "outer-20251215"
+      },
+      "cid": "4a1d550c1e4b8016b3a406c3d961323536d5c136e29d8bb96e8c4b1072ec6c8f",
+      "started_at": "2026-10-30T15:07:16.438510661Z",
+      "finished_at": "2026-10-30T15:07:18.368253155Z",
+      "exit_code": 0
+    },
+    {
+      "id": 120,
+      "identity": {
+        "kind": "predict",
+        "level": "outer",
+        "method_id": "no-weather",
+        "origin_id": "outer-20251215",
+        "outer_id": "outer-20251215"
+      },
+      "cid": "0097ca858839e6e88f1ef95b80c240dead9984cb50cbdfd112698780fbd32746",
+      "started_at": "2026-10-30T15:07:29.740676392Z",
+      "finished_at": "2026-10-30T15:07:31.697881536Z",
+      "exit_code": 0
+    },
+    {
+      "id": 121,
+      "identity": {
+        "kind": "report"
+      },
+      "cid": "6c5e2d046c97de66da51f9c26d9e7c32bf14e0e7fb65900dab2d305522f3c87b",
+      "started_at": "2026-10-30T15:07:47.65284991Z",
+      "finished_at": "2026-10-30T15:08:13.803697131Z",
+      "exit_code": 0
+    }
+  ],
+  "archive_bytes": 159078809,
+  "report": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\completed\\report",
+  "scope": "complete original registration/SQL/cells/native/source/output; mutable work duplicates omitted; no candidate score or effective-hour claim"
+}

@@ -1,0 +1,69 @@
+{
+  "forms": [
+    {
+      "id": "pre",
+      "items": [
+        {
+          "domain": "D",
+          "prompt": "['P-N', 'P-S']: same order name across two tenants; amounts 1250/100 USD and1.005 USD. Give joint identity and exact-cent admissibility.",
+          "answer": "tenant/order are joint; first amount has exact cents,1.005 fails amount_grid; no rounding to force admission."
+        },
+        {
+          "domain": "S",
+          "prompt": "['P-N', 'P-S']: revision1 active 1250; revision2 missing. Another order revision2 cancelled0. What is current and why?",
+          "answer": "Select revision first: missing/null held vs cancelled/0 known; neither resurrects revision1."
+        },
+        {
+          "domain": "R",
+          "prompt": "['P-N', 'P-S']: W3 committed journal and receipt before process exit; sender saw no ACK. Which request/state is retried?",
+          "answer": "Keep original state and request ID; durable original receipt and idempotent rows survive; no delete or new key."
+        },
+        {
+          "domain": "A",
+          "prompt": "An own-tenant reader requests the other ['P-N', 'P-S'] tenant; unknown principal requests all. State results and audit requirement.",
+          "answer": "Both denied/permission_denied with empty data; retain principal/request/decision audit; admin separate."
+        }
+      ],
+      "anchors": {
+        "2": "Correct mechanism and complete boundary applied to the changed example with evidence.",
+        "1": "Correct principal result but incomplete mechanism or one required boundary.",
+        "0": "Wrong key/state/transaction/authority, missing response or unsupported guarantee."
+      },
+      "limits": "Same construct/structure and changed surface identities/amount; no empirical difficulty equating or learning-effect evidence."
+    },
+    {
+      "id": "post",
+      "items": [
+        {
+          "domain": "D",
+          "prompt": "['Q-E', 'Q-W']: same order name across two tenants; amounts 2375/100 USD and1.005 USD. Give joint identity and exact-cent admissibility.",
+          "answer": "tenant/order are joint; first amount has exact cents,1.005 fails amount_grid; no rounding to force admission."
+        },
+        {
+          "domain": "S",
+          "prompt": "['Q-E', 'Q-W']: revision1 active 2375; revision2 missing. Another order revision2 cancelled0. What is current and why?",
+          "answer": "Select revision first: missing/null held vs cancelled/0 known; neither resurrects revision1."
+        },
+        {
+          "domain": "R",
+          "prompt": "['Q-E', 'Q-W']: W3 committed journal and receipt before process exit; sender saw no ACK. Which request/state is retried?",
+          "answer": "Keep original state and request ID; durable original receipt and idempotent rows survive; no delete or new key."
+        },
+        {
+          "domain": "A",
+          "prompt": "An own-tenant reader requests the other ['Q-E', 'Q-W'] tenant; unknown principal requests all. State results and audit requirement.",
+          "answer": "Both denied/permission_denied with empty data; retain principal/request/decision audit; admin separate."
+        }
+      ],
+      "anchors": {
+        "2": "Correct mechanism and complete boundary applied to the changed example with evidence.",
+        "1": "Correct principal result but incomplete mechanism or one required boundary.",
+        "0": "Wrong key/state/transaction/authority, missing response or unsupported guarantee."
+      },
+      "limits": "Same construct/structure and changed surface identities/amount; no empirical difficulty equating or learning-effect evidence."
+    }
+  ],
+  "concept_points": 8,
+  "functional_points": 20,
+  "separation": "Functional behavior is not a proxy for conceptual explanation or human learning."
+}

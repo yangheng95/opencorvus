@@ -1,0 +1,16 @@
+{
+  "case": "L09/0.2.0-dev",
+  "frozen_at": "2026-10-30T16:28:56.131378+00:00",
+  "status": "frozen_development_pilot",
+  "public_inputs": "public/",
+  "rubric": "rubric.json",
+  "functional_key": "evaluator/registered-functional-key.json",
+  "review": "evaluator/whole-case-tests/independent-review/REVIEW-FINAL.md",
+  "invariants": "same raw/business semantics;18 leaves/100 points/critical flags;good90 plus allcritical; fixed20 behavior items and private unfamiliar assignments. Later difficulty upgrades create a new version.",
+  "qualification_scope": "3source inputs,2actualSQL routes,six dependent labs with real committed-write exit73/replay/restore; actual unfamiliar code grading; real teacher product and equivalent-correct/incorrect controls; one concentrated whole review and only necessary repairs.",
+  "limits": [
+    "Constructed programmes/24 fictional diagnostics are not human learning evidence.",
+    "AI review is nonblind/familiar; no professional/psychometric/statistical certification.",
+    "No fresh LLM candidate or effective-hour evidence for L09 from this author qualification."
+  ]
+}

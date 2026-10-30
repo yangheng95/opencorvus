@@ -1,0 +1,9 @@
+# L09 / 0.2.0-dev — a transferable six-experiment course
+
+Build a complete six-week/30-learner-hour course for the original24 fictional diagnostic profiles. The fixed capstone and source archive test exact data/identity(D), SQL current-state reasoning(S), durable incremental engineering(R), scoped access/audit(A). Do not substitute six easy unrelated demos or infer learner psychology from a single score.
+
+Deliver runnable answers for all six dependent experiments, actual differentiated guided/challenge routes, student handouts and teacher answers, comparable pre/post forms with evidence-based partial-credit anchors, a behavioral coursework grader, actual constructed rehearsal/revision evidence, generated figures and a replacement-teacher handover. The teacher must be able to restore a genuine intermediate checkpoint and run a later lesson alone. Methods/languages and correct alternative SQL are free.
+
+Evaluation independently runs your frozen lab commands in actual processes, including a committed-write exit73 and same-key replay, tests changed raw amounts and a new tenant/late event, and executes your grader on unfamiliar functional student programmes. Criteria in GRADING.md are public; hidden answer maps/labels are not supplied. Test source and ledger behavior, not student filenames, code style or self-reported scores. Conceptual feedback and operational results are separate.
+
+Everything is an original synthetic teaching archive. No actual student participation, learning improvement, empirical test equivalence, psychometric validity or production security certification is supported. Scripted learners/operators prove only operability and behavior.30h is curriculum allocation, not agent wall time; fast correct work is allowed. No Provider keys, external messages or real people are needed.

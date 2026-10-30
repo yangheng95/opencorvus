@@ -1,0 +1,291 @@
+{
+  "items": {
+    "D1": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "D1",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab1/checkpoint.json#/journal"
+        ],
+        "first_counterexample": null,
+        "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+      }
+    },
+    "D2": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "D2",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab1/lab.json#/rejected"
+        ],
+        "first_counterexample": null,
+        "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+      }
+    },
+    "D3": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "D3",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab2/lab.json#/snapshot/future_rows",
+          "actual-work/lab4/lab.json#/snapshot/future_rows",
+          "actual-work/lab6/lab.json#/snapshot/future_rows"
+        ],
+        "first_counterexample": null,
+        "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+      }
+    },
+    "D4": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "D4",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab1/lab.json#/receipt",
+          "actual-work/lab3/lab.json#/receipt"
+        ],
+        "first_counterexample": null,
+        "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+      }
+    },
+    "D5": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "D5",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab2/lab.json#/snapshot/states joint identities",
+          "actual-work/lab4/lab.json#/snapshot/states joint identities",
+          "actual-work/lab6/lab.json#/snapshot/states joint identities"
+        ],
+        "first_counterexample": null,
+        "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+      }
+    },
+    "S1": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "S1",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab3/lab.json#/snapshot/states order_id=O3",
+          "actual-work/lab6/lab.json#/snapshot/states order_id=O3"
+        ],
+        "first_counterexample": null,
+        "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+      }
+    },
+    "S2": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "S2",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab3/lab.json#/snapshot/states order_id=O2",
+          "actual-work/lab6/lab.json#/snapshot/states order_id=O2"
+        ],
+        "first_counterexample": null,
+        "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+      }
+    },
+    "S3": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "S3",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab4/lab.json#/snapshot/states order_id=O4,O8",
+          "actual-work/lab6/lab.json#/snapshot/states order_id=O4,O8"
+        ],
+        "first_counterexample": null,
+        "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+      }
+    },
+    "S4": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "S4",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab2/lab.json#/snapshot/totals_minor",
+          "actual-work/lab3/lab.json#/snapshot/totals_minor",
+          "actual-work/lab4/lab.json#/snapshot/totals_minor",
+          "actual-work/lab6/lab.json#/snapshot/totals_minor"
+        ],
+        "first_counterexample": null,
+        "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+      }
+    },
+    "S5": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "S5",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab4/lab.json#/snapshot/states selected source_ids",
+          "actual-work/lab6/lab.json#/snapshot/states selected source_ids"
+        ],
+        "first_counterexample": null,
+        "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+      }
+    },
+    "R1": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "R1",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/collection.json#/native_codes/crash",
+          "actual-work/lab3-commit-exit/checkpoint.json"
+        ],
+        "first_counterexample": null,
+        "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+      }
+    },
+    "R2": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "R2",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab3/lab.json#/replayed",
+          "actual-work/lab3/checkpoint.json"
+        ],
+        "first_counterexample": null,
+        "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+      }
+    },
+    "R3": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "R3",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab4/lab.json#/snapshot/states order_id=O5",
+          "actual-work/lab4/checkpoint.json#/journal"
+        ],
+        "first_counterexample": null,
+        "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+      }
+    },
+    "R4": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "R4",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/collection.json#/native_codes/restore",
+          "actual-work/restored-lab4/checkpoint.json"
+        ],
+        "first_counterexample": null,
+        "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+      }
+    },
+    "R5": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "R5",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/collection.json#/native_codes normal labs",
+          "actual-work/lab*/lab.json#/lab"
+        ],
+        "first_counterexample": null,
+        "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+      }
+    },
+    "A1": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "A1",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab5/lab.json#/access[id=own]"
+        ],
+        "first_counterexample": null,
+        "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+      }
+    },
+    "A2": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "A2",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab5/lab.json#/access[id=cross]"
+        ],
+        "first_counterexample": null,
+        "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+      }
+    },
+    "A3": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "A3",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab5/lab.json#/access[id=unknown]"
+        ],
+        "first_counterexample": null,
+        "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+      }
+    },
+    "A4": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "A4",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab5/lab.json#/access[id=admin]"
+        ],
+        "first_counterexample": null,
+        "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+      }
+    },
+    "A5": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "A5",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab5/lab.json#/audit",
+          "actual-work/lab5/checkpoint.json#/audit"
+        ],
+        "first_counterexample": null,
+        "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+      }
+    }
+  },
+  "domains": {
+    "D": 5,
+    "S": 5,
+    "R": 5,
+    "A": 5
+  },
+  "total": 20,
+  "maximum": 20,
+  "scope": "functional coursework behaviors only; conceptual feedback and human learning outcomes are not inferred"
+}

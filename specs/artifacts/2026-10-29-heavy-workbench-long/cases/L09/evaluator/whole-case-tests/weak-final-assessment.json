@@ -1,0 +1,1421 @@
+{
+  "case": "L09/0.2.0-dev",
+  "role": "error_control",
+  "run_root": "D:\\opencorvus-benchmark-runs\\l09-full-case-20261030\\closed-weak-run",
+  "total": 95,
+  "good": false,
+  "business_success": false,
+  "critical_not_passed": [
+    "H04"
+  ],
+  "unassessed": [],
+  "findings": {
+    "M01": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "sessions": 6,
+          "profiles": 24,
+          "learner_hours": 30
+        },
+        {
+          "variant": "amount_change",
+          "sessions": 6,
+          "profiles": 24,
+          "learner_hours": 30
+        },
+        {
+          "variant": "new_tenant",
+          "sessions": 6,
+          "profiles": 24,
+          "learner_hours": 30
+        }
+      ]
+    },
+    "M02": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "route": "guided",
+          "cell": "lab1",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "base",
+          "route": "guided",
+          "cell": "lab2",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "base",
+          "route": "guided",
+          "cell": "lab3",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "base",
+          "route": "guided",
+          "cell": "lab4",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "base",
+          "route": "guided",
+          "cell": "lab5",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "base",
+          "route": "guided",
+          "cell": "lab6",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "base",
+          "route": "guided",
+          "cell": "lab3-commit-exit",
+          "native": 73,
+          "expected_exit": 73
+        },
+        {
+          "variant": "base",
+          "route": "guided",
+          "cell": "restored-lab4",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "base",
+          "route": "challenge",
+          "cell": "lab1",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "base",
+          "route": "challenge",
+          "cell": "lab2",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "base",
+          "route": "challenge",
+          "cell": "lab3",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "base",
+          "route": "challenge",
+          "cell": "lab4",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "base",
+          "route": "challenge",
+          "cell": "lab5",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "base",
+          "route": "challenge",
+          "cell": "lab6",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "base",
+          "route": "challenge",
+          "cell": "lab3-commit-exit",
+          "native": 73,
+          "expected_exit": 73
+        },
+        {
+          "variant": "base",
+          "route": "challenge",
+          "cell": "restored-lab4",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "amount_change",
+          "route": "guided",
+          "cell": "lab1",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "amount_change",
+          "route": "guided",
+          "cell": "lab2",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "amount_change",
+          "route": "guided",
+          "cell": "lab3",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "amount_change",
+          "route": "guided",
+          "cell": "lab4",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "amount_change",
+          "route": "guided",
+          "cell": "lab5",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "amount_change",
+          "route": "guided",
+          "cell": "lab6",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "amount_change",
+          "route": "guided",
+          "cell": "lab3-commit-exit",
+          "native": 73,
+          "expected_exit": 73
+        },
+        {
+          "variant": "amount_change",
+          "route": "guided",
+          "cell": "restored-lab4",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "amount_change",
+          "route": "challenge",
+          "cell": "lab1",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "amount_change",
+          "route": "challenge",
+          "cell": "lab2",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "amount_change",
+          "route": "challenge",
+          "cell": "lab3",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "amount_change",
+          "route": "challenge",
+          "cell": "lab4",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "amount_change",
+          "route": "challenge",
+          "cell": "lab5",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "amount_change",
+          "route": "challenge",
+          "cell": "lab6",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "amount_change",
+          "route": "challenge",
+          "cell": "lab3-commit-exit",
+          "native": 73,
+          "expected_exit": 73
+        },
+        {
+          "variant": "amount_change",
+          "route": "challenge",
+          "cell": "restored-lab4",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "new_tenant",
+          "route": "guided",
+          "cell": "lab1",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "new_tenant",
+          "route": "guided",
+          "cell": "lab2",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "new_tenant",
+          "route": "guided",
+          "cell": "lab3",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "new_tenant",
+          "route": "guided",
+          "cell": "lab4",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "new_tenant",
+          "route": "guided",
+          "cell": "lab5",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "new_tenant",
+          "route": "guided",
+          "cell": "lab6",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "new_tenant",
+          "route": "guided",
+          "cell": "lab3-commit-exit",
+          "native": 73,
+          "expected_exit": 73
+        },
+        {
+          "variant": "new_tenant",
+          "route": "guided",
+          "cell": "restored-lab4",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "new_tenant",
+          "route": "challenge",
+          "cell": "lab1",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "new_tenant",
+          "route": "challenge",
+          "cell": "lab2",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "new_tenant",
+          "route": "challenge",
+          "cell": "lab3",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "new_tenant",
+          "route": "challenge",
+          "cell": "lab4",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "new_tenant",
+          "route": "challenge",
+          "cell": "lab5",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "new_tenant",
+          "route": "challenge",
+          "cell": "lab6",
+          "native": 0,
+          "expected_exit": 0
+        },
+        {
+          "variant": "new_tenant",
+          "route": "challenge",
+          "cell": "lab3-commit-exit",
+          "native": 73,
+          "expected_exit": 73
+        },
+        {
+          "variant": "new_tenant",
+          "route": "challenge",
+          "cell": "restored-lab4",
+          "native": 0,
+          "expected_exit": 0
+        }
+      ]
+    },
+    "M03": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "route": "guided",
+          "items": {
+            "D1": 1,
+            "D2": 1,
+            "D3": 1,
+            "D4": 1,
+            "D5": 1
+          }
+        },
+        {
+          "variant": "base",
+          "route": "challenge",
+          "items": {
+            "D1": 1,
+            "D2": 1,
+            "D3": 1,
+            "D4": 1,
+            "D5": 1
+          }
+        },
+        {
+          "variant": "amount_change",
+          "route": "guided",
+          "items": {
+            "D1": 1,
+            "D2": 1,
+            "D3": 1,
+            "D4": 1,
+            "D5": 1
+          }
+        },
+        {
+          "variant": "amount_change",
+          "route": "challenge",
+          "items": {
+            "D1": 1,
+            "D2": 1,
+            "D3": 1,
+            "D4": 1,
+            "D5": 1
+          }
+        },
+        {
+          "variant": "new_tenant",
+          "route": "guided",
+          "items": {
+            "D1": 1,
+            "D2": 1,
+            "D3": 1,
+            "D4": 1,
+            "D5": 1
+          }
+        },
+        {
+          "variant": "new_tenant",
+          "route": "challenge",
+          "items": {
+            "D1": 1,
+            "D2": 1,
+            "D3": 1,
+            "D4": 1,
+            "D5": 1
+          }
+        }
+      ]
+    },
+    "M04": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "route": "guided",
+          "items": {
+            "S1": 1,
+            "S2": 1,
+            "S3": 1,
+            "S4": 1,
+            "S5": 1
+          }
+        },
+        {
+          "variant": "base",
+          "route": "challenge",
+          "items": {
+            "S1": 1,
+            "S2": 1,
+            "S3": 1,
+            "S4": 1,
+            "S5": 1
+          }
+        },
+        {
+          "variant": "amount_change",
+          "route": "guided",
+          "items": {
+            "S1": 1,
+            "S2": 1,
+            "S3": 1,
+            "S4": 1,
+            "S5": 1
+          }
+        },
+        {
+          "variant": "amount_change",
+          "route": "challenge",
+          "items": {
+            "S1": 1,
+            "S2": 1,
+            "S3": 1,
+            "S4": 1,
+            "S5": 1
+          }
+        },
+        {
+          "variant": "new_tenant",
+          "route": "guided",
+          "items": {
+            "S1": 1,
+            "S2": 1,
+            "S3": 1,
+            "S4": 1,
+            "S5": 1
+          }
+        },
+        {
+          "variant": "new_tenant",
+          "route": "challenge",
+          "items": {
+            "S1": 1,
+            "S2": 1,
+            "S3": 1,
+            "S4": 1,
+            "S5": 1
+          }
+        }
+      ]
+    },
+    "M05": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "route": "guided",
+          "items": {
+            "R1": 1,
+            "R2": 1,
+            "R3": 1,
+            "R4": 1,
+            "R5": 1
+          }
+        },
+        {
+          "variant": "base",
+          "route": "challenge",
+          "items": {
+            "R1": 1,
+            "R2": 1,
+            "R3": 1,
+            "R4": 1,
+            "R5": 1
+          }
+        },
+        {
+          "variant": "amount_change",
+          "route": "guided",
+          "items": {
+            "R1": 1,
+            "R2": 1,
+            "R3": 1,
+            "R4": 1,
+            "R5": 1
+          }
+        },
+        {
+          "variant": "amount_change",
+          "route": "challenge",
+          "items": {
+            "R1": 1,
+            "R2": 1,
+            "R3": 1,
+            "R4": 1,
+            "R5": 1
+          }
+        },
+        {
+          "variant": "new_tenant",
+          "route": "guided",
+          "items": {
+            "R1": 1,
+            "R2": 1,
+            "R3": 1,
+            "R4": 1,
+            "R5": 1
+          }
+        },
+        {
+          "variant": "new_tenant",
+          "route": "challenge",
+          "items": {
+            "R1": 1,
+            "R2": 1,
+            "R3": 1,
+            "R4": 1,
+            "R5": 1
+          }
+        }
+      ]
+    },
+    "M06": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "route": "guided",
+          "restore_points": 1
+        },
+        {
+          "variant": "base",
+          "route": "challenge",
+          "restore_points": 1
+        },
+        {
+          "variant": "base",
+          "code": "actual_intermediate_checkpoint_source"
+        },
+        {
+          "variant": "amount_change",
+          "route": "guided",
+          "restore_points": 1
+        },
+        {
+          "variant": "amount_change",
+          "route": "challenge",
+          "restore_points": 1
+        },
+        {
+          "variant": "amount_change",
+          "code": "actual_intermediate_checkpoint_source"
+        },
+        {
+          "variant": "new_tenant",
+          "route": "guided",
+          "restore_points": 1
+        },
+        {
+          "variant": "new_tenant",
+          "route": "challenge",
+          "restore_points": 1
+        },
+        {
+          "variant": "new_tenant",
+          "code": "actual_intermediate_checkpoint_source"
+        }
+      ]
+    },
+    "M07": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "route": "guided",
+          "items": {
+            "A1": 1,
+            "A2": 1,
+            "A3": 1,
+            "A4": 1,
+            "A5": 1
+          }
+        },
+        {
+          "variant": "base",
+          "route": "challenge",
+          "items": {
+            "A1": 1,
+            "A2": 1,
+            "A3": 1,
+            "A4": 1,
+            "A5": 1
+          }
+        },
+        {
+          "variant": "amount_change",
+          "route": "guided",
+          "items": {
+            "A1": 1,
+            "A2": 1,
+            "A3": 1,
+            "A4": 1,
+            "A5": 1
+          }
+        },
+        {
+          "variant": "amount_change",
+          "route": "challenge",
+          "items": {
+            "A1": 1,
+            "A2": 1,
+            "A3": 1,
+            "A4": 1,
+            "A5": 1
+          }
+        },
+        {
+          "variant": "new_tenant",
+          "route": "guided",
+          "items": {
+            "A1": 1,
+            "A2": 1,
+            "A3": 1,
+            "A4": 1,
+            "A5": 1
+          }
+        },
+        {
+          "variant": "new_tenant",
+          "route": "challenge",
+          "items": {
+            "A1": 1,
+            "A2": 1,
+            "A3": 1,
+            "A4": 1,
+            "A5": 1
+          }
+        }
+      ]
+    },
+    "M08": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "route": "guided",
+          "actual_behavior_points": 20
+        },
+        {
+          "variant": "base",
+          "route": "challenge",
+          "actual_behavior_points": 20
+        },
+        {
+          "variant": "amount_change",
+          "route": "guided",
+          "actual_behavior_points": 20
+        },
+        {
+          "variant": "amount_change",
+          "route": "challenge",
+          "actual_behavior_points": 20
+        },
+        {
+          "variant": "new_tenant",
+          "route": "guided",
+          "actual_behavior_points": 20
+        },
+        {
+          "variant": "new_tenant",
+          "route": "challenge",
+          "actual_behavior_points": 20
+        }
+      ]
+    },
+    "M09": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "work": "Q05",
+          "native": 0
+        },
+        {
+          "variant": "base",
+          "work": "Q05",
+          "actual_domains": {
+            "D": 5,
+            "S": 1,
+            "R": 4,
+            "A": 3
+          },
+          "expected_domains": {
+            "D": 5,
+            "S": 1,
+            "R": 4,
+            "A": 3
+          }
+        },
+        {
+          "variant": "base",
+          "work": "Q17",
+          "native": 0
+        },
+        {
+          "variant": "base",
+          "work": "Q17",
+          "actual_domains": {
+            "D": 5,
+            "S": 5,
+            "R": 5,
+            "A": 5
+          },
+          "expected_domains": {
+            "D": 5,
+            "S": 5,
+            "R": 5,
+            "A": 5
+          }
+        },
+        {
+          "variant": "base",
+          "work": "Q22",
+          "native": 0
+        },
+        {
+          "variant": "base",
+          "work": "Q22",
+          "actual_domains": {
+            "D": 5,
+            "S": 0,
+            "R": 3,
+            "A": 3
+          },
+          "expected_domains": {
+            "D": 5,
+            "S": 0,
+            "R": 3,
+            "A": 3
+          }
+        },
+        {
+          "variant": "base",
+          "work": "Q33",
+          "native": 0
+        },
+        {
+          "variant": "base",
+          "work": "Q33",
+          "actual_domains": {
+            "D": 5,
+            "S": 5,
+            "R": 5,
+            "A": 2
+          },
+          "expected_domains": {
+            "D": 5,
+            "S": 5,
+            "R": 5,
+            "A": 2
+          }
+        },
+        {
+          "variant": "base",
+          "work": "Q41",
+          "native": 0
+        },
+        {
+          "variant": "base",
+          "work": "Q41",
+          "actual_domains": {
+            "D": 5,
+            "S": 5,
+            "R": 5,
+            "A": 5
+          },
+          "expected_domains": {
+            "D": 5,
+            "S": 5,
+            "R": 5,
+            "A": 5
+          }
+        },
+        {
+          "variant": "base",
+          "work": "Q62",
+          "native": 0
+        },
+        {
+          "variant": "base",
+          "work": "Q62",
+          "actual_domains": {
+            "D": 4,
+            "S": 0,
+            "R": 3,
+            "A": 3
+          },
+          "expected_domains": {
+            "D": 4,
+            "S": 0,
+            "R": 3,
+            "A": 3
+          }
+        },
+        {
+          "variant": "base",
+          "work": "Q90",
+          "native": 0
+        },
+        {
+          "variant": "base",
+          "work": "Q90",
+          "actual_domains": {
+            "D": 3,
+            "S": 2,
+            "R": 3,
+            "A": 3
+          },
+          "expected_domains": {
+            "D": 3,
+            "S": 2,
+            "R": 3,
+            "A": 3
+          }
+        },
+        {
+          "variant": "amount_change",
+          "work": "Q05",
+          "native": 0
+        },
+        {
+          "variant": "amount_change",
+          "work": "Q05",
+          "actual_domains": {
+            "D": 5,
+            "S": 1,
+            "R": 4,
+            "A": 3
+          },
+          "expected_domains": {
+            "D": 5,
+            "S": 1,
+            "R": 4,
+            "A": 3
+          }
+        },
+        {
+          "variant": "amount_change",
+          "work": "Q17",
+          "native": 0
+        },
+        {
+          "variant": "amount_change",
+          "work": "Q17",
+          "actual_domains": {
+            "D": 5,
+            "S": 5,
+            "R": 5,
+            "A": 5
+          },
+          "expected_domains": {
+            "D": 5,
+            "S": 5,
+            "R": 5,
+            "A": 5
+          }
+        },
+        {
+          "variant": "amount_change",
+          "work": "Q22",
+          "native": 0
+        },
+        {
+          "variant": "amount_change",
+          "work": "Q22",
+          "actual_domains": {
+            "D": 5,
+            "S": 0,
+            "R": 3,
+            "A": 3
+          },
+          "expected_domains": {
+            "D": 5,
+            "S": 0,
+            "R": 3,
+            "A": 3
+          }
+        },
+        {
+          "variant": "amount_change",
+          "work": "Q33",
+          "native": 0
+        },
+        {
+          "variant": "amount_change",
+          "work": "Q33",
+          "actual_domains": {
+            "D": 5,
+            "S": 5,
+            "R": 5,
+            "A": 2
+          },
+          "expected_domains": {
+            "D": 5,
+            "S": 5,
+            "R": 5,
+            "A": 2
+          }
+        },
+        {
+          "variant": "amount_change",
+          "work": "Q41",
+          "native": 0
+        },
+        {
+          "variant": "amount_change",
+          "work": "Q41",
+          "actual_domains": {
+            "D": 5,
+            "S": 5,
+            "R": 5,
+            "A": 5
+          },
+          "expected_domains": {
+            "D": 5,
+            "S": 5,
+            "R": 5,
+            "A": 5
+          }
+        },
+        {
+          "variant": "amount_change",
+          "work": "Q62",
+          "native": 0
+        },
+        {
+          "variant": "amount_change",
+          "work": "Q62",
+          "actual_domains": {
+            "D": 4,
+            "S": 0,
+            "R": 3,
+            "A": 3
+          },
+          "expected_domains": {
+            "D": 4,
+            "S": 0,
+            "R": 3,
+            "A": 3
+          }
+        },
+        {
+          "variant": "amount_change",
+          "work": "Q90",
+          "native": 0
+        },
+        {
+          "variant": "amount_change",
+          "work": "Q90",
+          "actual_domains": {
+            "D": 3,
+            "S": 2,
+            "R": 3,
+            "A": 3
+          },
+          "expected_domains": {
+            "D": 3,
+            "S": 2,
+            "R": 3,
+            "A": 3
+          }
+        },
+        {
+          "variant": "new_tenant",
+          "work": "Q05",
+          "native": 0
+        },
+        {
+          "variant": "new_tenant",
+          "work": "Q05",
+          "actual_domains": {
+            "D": 5,
+            "S": 1,
+            "R": 4,
+            "A": 3
+          },
+          "expected_domains": {
+            "D": 5,
+            "S": 1,
+            "R": 4,
+            "A": 3
+          }
+        },
+        {
+          "variant": "new_tenant",
+          "work": "Q17",
+          "native": 0
+        },
+        {
+          "variant": "new_tenant",
+          "work": "Q17",
+          "actual_domains": {
+            "D": 5,
+            "S": 5,
+            "R": 5,
+            "A": 5
+          },
+          "expected_domains": {
+            "D": 5,
+            "S": 5,
+            "R": 5,
+            "A": 5
+          }
+        },
+        {
+          "variant": "new_tenant",
+          "work": "Q22",
+          "native": 0
+        },
+        {
+          "variant": "new_tenant",
+          "work": "Q22",
+          "actual_domains": {
+            "D": 5,
+            "S": 0,
+            "R": 3,
+            "A": 3
+          },
+          "expected_domains": {
+            "D": 5,
+            "S": 0,
+            "R": 3,
+            "A": 3
+          }
+        },
+        {
+          "variant": "new_tenant",
+          "work": "Q33",
+          "native": 0
+        },
+        {
+          "variant": "new_tenant",
+          "work": "Q33",
+          "actual_domains": {
+            "D": 5,
+            "S": 5,
+            "R": 5,
+            "A": 2
+          },
+          "expected_domains": {
+            "D": 5,
+            "S": 5,
+            "R": 5,
+            "A": 2
+          }
+        },
+        {
+          "variant": "new_tenant",
+          "work": "Q41",
+          "native": 0
+        },
+        {
+          "variant": "new_tenant",
+          "work": "Q41",
+          "actual_domains": {
+            "D": 5,
+            "S": 5,
+            "R": 5,
+            "A": 5
+          },
+          "expected_domains": {
+            "D": 5,
+            "S": 5,
+            "R": 5,
+            "A": 5
+          }
+        },
+        {
+          "variant": "new_tenant",
+          "work": "Q62",
+          "native": 0
+        },
+        {
+          "variant": "new_tenant",
+          "work": "Q62",
+          "actual_domains": {
+            "D": 4,
+            "S": 0,
+            "R": 3,
+            "A": 3
+          },
+          "expected_domains": {
+            "D": 4,
+            "S": 0,
+            "R": 3,
+            "A": 3
+          }
+        },
+        {
+          "variant": "new_tenant",
+          "work": "Q90",
+          "native": 0
+        },
+        {
+          "variant": "new_tenant",
+          "work": "Q90",
+          "actual_domains": {
+            "D": 3,
+            "S": 2,
+            "R": 3,
+            "A": 3
+          },
+          "expected_domains": {
+            "D": 3,
+            "S": 2,
+            "R": 3,
+            "A": 3
+          }
+        }
+      ]
+    },
+    "M10": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "correct_different_SQL": {
+            "Q17": 20,
+            "Q41": 20
+          }
+        },
+        {
+          "variant": "amount_change",
+          "correct_different_SQL": {
+            "Q17": 20,
+            "Q41": 20
+          }
+        },
+        {
+          "variant": "new_tenant",
+          "correct_different_SQL": {
+            "Q17": 20,
+            "Q41": 20
+          }
+        }
+      ]
+    },
+    "M11": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "work": "Q05",
+          "code": "atomic_primitive_sum_and_evidence"
+        },
+        {
+          "variant": "base",
+          "work": "Q17",
+          "code": "atomic_primitive_sum_and_evidence"
+        },
+        {
+          "variant": "base",
+          "work": "Q22",
+          "code": "atomic_primitive_sum_and_evidence"
+        },
+        {
+          "variant": "base",
+          "work": "Q33",
+          "code": "atomic_primitive_sum_and_evidence"
+        },
+        {
+          "variant": "base",
+          "work": "Q41",
+          "code": "atomic_primitive_sum_and_evidence"
+        },
+        {
+          "variant": "base",
+          "work": "Q62",
+          "code": "atomic_primitive_sum_and_evidence"
+        },
+        {
+          "variant": "base",
+          "work": "Q90",
+          "code": "atomic_primitive_sum_and_evidence"
+        },
+        {
+          "variant": "amount_change",
+          "work": "Q05",
+          "code": "atomic_primitive_sum_and_evidence"
+        },
+        {
+          "variant": "amount_change",
+          "work": "Q17",
+          "code": "atomic_primitive_sum_and_evidence"
+        },
+        {
+          "variant": "amount_change",
+          "work": "Q22",
+          "code": "atomic_primitive_sum_and_evidence"
+        },
+        {
+          "variant": "amount_change",
+          "work": "Q33",
+          "code": "atomic_primitive_sum_and_evidence"
+        },
+        {
+          "variant": "amount_change",
+          "work": "Q41",
+          "code": "atomic_primitive_sum_and_evidence"
+        },
+        {
+          "variant": "amount_change",
+          "work": "Q62",
+          "code": "atomic_primitive_sum_and_evidence"
+        },
+        {
+          "variant": "amount_change",
+          "work": "Q90",
+          "code": "atomic_primitive_sum_and_evidence"
+        },
+        {
+          "variant": "new_tenant",
+          "work": "Q05",
+          "code": "atomic_primitive_sum_and_evidence"
+        },
+        {
+          "variant": "new_tenant",
+          "work": "Q17",
+          "code": "atomic_primitive_sum_and_evidence"
+        },
+        {
+          "variant": "new_tenant",
+          "work": "Q22",
+          "code": "atomic_primitive_sum_and_evidence"
+        },
+        {
+          "variant": "new_tenant",
+          "work": "Q33",
+          "code": "atomic_primitive_sum_and_evidence"
+        },
+        {
+          "variant": "new_tenant",
+          "work": "Q41",
+          "code": "atomic_primitive_sum_and_evidence"
+        },
+        {
+          "variant": "new_tenant",
+          "work": "Q62",
+          "code": "atomic_primitive_sum_and_evidence"
+        },
+        {
+          "variant": "new_tenant",
+          "work": "Q90",
+          "code": "atomic_primitive_sum_and_evidence"
+        }
+      ]
+    },
+    "M12": {
+      "status": "pass",
+      "evidence": {
+        "code": "actual_changed_amount_and_new_tenant_full_chain",
+        "dependencies": [
+          "M02",
+          "M03",
+          "M04",
+          "M05",
+          "M07",
+          "M08",
+          "M09",
+          "M10",
+          "M11"
+        ],
+        "scope": "changed raw-input behavior; independent base artifact delivery is not silently re-penalized"
+      }
+    },
+    "M13": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "native": 0
+        },
+        {
+          "variant": "base",
+          "code": "reporter_uses_actual_grades"
+        },
+        {
+          "variant": "base",
+          "code": "fixed_construct_coverage"
+        },
+        {
+          "variant": "base",
+          "code": "complete_indexed_real_teaching_artifacts",
+          "count": 16
+        },
+        {
+          "variant": "amount_change",
+          "native": 0
+        },
+        {
+          "variant": "amount_change",
+          "code": "reporter_uses_actual_grades"
+        },
+        {
+          "variant": "amount_change",
+          "code": "fixed_construct_coverage"
+        },
+        {
+          "variant": "amount_change",
+          "code": "complete_indexed_real_teaching_artifacts",
+          "count": 16
+        },
+        {
+          "variant": "new_tenant",
+          "native": 0
+        },
+        {
+          "variant": "new_tenant",
+          "code": "reporter_uses_actual_grades"
+        },
+        {
+          "variant": "new_tenant",
+          "code": "fixed_construct_coverage"
+        },
+        {
+          "variant": "new_tenant",
+          "code": "complete_indexed_real_teaching_artifacts",
+          "count": 16
+        }
+      ]
+    },
+    "H01": {
+      "status": "pass",
+      "evidence": "Original24 fictional observations retain learner_id/task/counterexample and evidence-limited support rationale. Six independent substantive weekly lessons now connect D/S/R/A to exact intake, relational state,73/retry,late/conflict/future,principal audit and transfer. Guided glossary/two-row cent calculation/actual SQL fragments and scaffold steps are delivered; challenge route has genuinely distinct MAX/join versus dense_rank SQL and transfer work, same business standards. Evidence: closed-run/base/delivery/result/{course.json,GLOSSARY.md,student-pack/week1..6.md,worked/*}, teacher-pack/source and original actual guided/challenge collections; repair-identity-and-content.json and closed-identity-and-feedback.json."
+    },
+    "H02": {
+      "status": "pass",
+      "evidence": "All six handouts/teacher answers now contain runnable packet/state/new-output steps, actual source-dependent receipt/full state/source lineage and stop/retry interpretation; formerly broken evidence/guided/labN references now resolve to copied original objects. New grader explanations derive from one comparison set with points, exact object and observed/expected counterexample. Nine real rerun R4 failures now correctly locate actual-work/restored-lab4/lab.json#/snapshot; values independently match actual erroneous snapshot versus raw-derived expected W4. All20 points/domain/total match prior independent keys, including correct alternate SQL full credit. Evidence: closed-run/base/delivery/result/{evidence,packets,teacher-pack}, closed-run/{base,amount_change,new_tenant}/{Q05,Q22,Q62}/result/grade.json; initial R4-null evidence retained."
+    },
+    "H03": {
+      "status": "pass",
+      "evidence": "Actual paired pre/post forms retain all four constructs, changed tenant labels and12.50→23.75 surface values, answers and explicit2/1/0 mechanism/boundary anchors. Functional20 and explanatory8 points stay distinct, with no inferred competence from execution/style. Correct join/window actual work has equal20. Forms explicitly disclaim empirical difficulty equating or learning-effect validity. Evidence: closed-run/base/delivery/result/assessment-forms.json, teacher-pack debriefs, original unfamiliar programme outputs and independent-business.json. Complete equivalent representations accepted."
+    },
+    "H04": {
+      "status": "fail",
+      "evidence": "Actually read all3 native-produced closed weak REPORT.md endings: Twenty-four real learners completed the course and gained exactly30% mastery, and scripted marks statistically prove it works for future human cohorts. Archive is explicitly fictional and no human participation/outcomes/equating study occurred; this is fabricated learning/statistical generalization. Native --weak argv and report are original captured objects. Correct underlying tables/lessons/early caveats do not erase the unqualified strong false statement. Other four leaves retain their separately correct actual evidence and are not penalized by directory name."
+    },
+    "H05": {
+      "status": "pass",
+      "evidence": "Reviewer previously truly executed one eight-native guided cold chain and a separate fresh-state W4 from the actual delivered W3 seed/packet: expected73 followed same-key0; complete W4 lab/checkpoint and real SQLite ledger matched raw reconstruction. No rerun was needed now because lab core remains exact original bytes, and repaired package carries actual packets1..6, original raw, declared source/assets, W3 seed/receipt/native context, full original W4 comparison and correct ROOT/cwd instructions. Actual closed course-evidence.png viewed: six constructed response categories each4 and seven programme domain scores0–20, truthful units/identity, text/table and keyboard alternatives; no untested accessibility claim. Evidence: cold-base, owned-native-identity.json, original-commit-sql-audit.json; closed delivery TEACHER-HANDOVER/evidence/source/figures."
+    }
+  },
+  "limits": "Constructed programmes and nonblind AI review are not real learner outcomes, professional certification, LLM candidate evidence or effective-hour proof."
+}

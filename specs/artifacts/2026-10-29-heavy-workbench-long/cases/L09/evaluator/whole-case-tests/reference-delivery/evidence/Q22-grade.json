@@ -1,0 +1,2266 @@
+{
+  "items": {
+    "D1": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "D1",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab1/checkpoint.json#/journal"
+        ],
+        "first_counterexample": null,
+        "note": "Score and explanation derive from this single original-object comparison set."
+      }
+    },
+    "D2": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "D2",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab1/lab.json#/rejected"
+        ],
+        "first_counterexample": null,
+        "note": "Score and explanation derive from this single original-object comparison set."
+      }
+    },
+    "D3": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "D3",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab2/lab.json#/snapshot/future_rows",
+          "actual-work/lab4/lab.json#/snapshot/future_rows",
+          "actual-work/lab6/lab.json#/snapshot/future_rows"
+        ],
+        "first_counterexample": null,
+        "note": "Score and explanation derive from this single original-object comparison set."
+      }
+    },
+    "D4": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "D4",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab1/lab.json#/receipt",
+          "actual-work/lab3/lab.json#/receipt"
+        ],
+        "first_counterexample": null,
+        "note": "Score and explanation derive from this single original-object comparison set."
+      }
+    },
+    "D5": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "D5",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab2/lab.json#/snapshot/states joint identities",
+          "actual-work/lab4/lab.json#/snapshot/states joint identities",
+          "actual-work/lab6/lab.json#/snapshot/states joint identities"
+        ],
+        "first_counterexample": null,
+        "note": "Score and explanation derive from this single original-object comparison set."
+      }
+    },
+    "S1": {
+      "points": 0,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "S1",
+        "status": "behavior_mismatch",
+        "objects": [
+          "actual-work/lab3/lab.json#/snapshot/states order_id=O3",
+          "actual-work/lab6/lab.json#/snapshot/states order_id=O3"
+        ],
+        "first_counterexample": {
+          "object": "actual-work/lab3/lab.json#/snapshot/states order_id=O3",
+          "observed": [
+            {
+              "tenant": "East",
+              "order_id": "O3",
+              "revision": 2,
+              "status": "ready",
+              "amount_minor": 21325,
+              "source_ids": [
+                "East-C3",
+                "East-E3"
+              ]
+            },
+            {
+              "tenant": "North",
+              "order_id": "O3",
+              "revision": 2,
+              "status": "ready",
+              "amount_minor": 1325,
+              "source_ids": [
+                "North-C3",
+                "North-E3"
+              ]
+            },
+            {
+              "tenant": "South",
+              "order_id": "O3",
+              "revision": 2,
+              "status": "ready",
+              "amount_minor": 11325,
+              "source_ids": [
+                "South-C3",
+                "South-E3"
+              ]
+            }
+          ],
+          "expected": [
+            {
+              "tenant": "East",
+              "order_id": "O3",
+              "revision": 2,
+              "status": "missing",
+              "amount_minor": null,
+              "source_ids": [
+                "East-C3"
+              ]
+            },
+            {
+              "tenant": "North",
+              "order_id": "O3",
+              "revision": 2,
+              "status": "missing",
+              "amount_minor": null,
+              "source_ids": [
+                "North-C3"
+              ]
+            },
+            {
+              "tenant": "South",
+              "order_id": "O3",
+              "revision": 2,
+              "status": "missing",
+              "amount_minor": null,
+              "source_ids": [
+                "South-C3"
+              ]
+            }
+          ]
+        },
+        "note": "Score and explanation derive from this single original-object comparison set."
+      }
+    },
+    "S2": {
+      "points": 0,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "S2",
+        "status": "behavior_mismatch",
+        "objects": [
+          "actual-work/lab3/lab.json#/snapshot/states order_id=O2",
+          "actual-work/lab6/lab.json#/snapshot/states order_id=O2"
+        ],
+        "first_counterexample": {
+          "object": "actual-work/lab3/lab.json#/snapshot/states order_id=O2",
+          "observed": [
+            {
+              "tenant": "East",
+              "order_id": "O2",
+              "revision": 2,
+              "status": "ready",
+              "amount_minor": 21225,
+              "source_ids": [
+                "East-C2",
+                "East-E2"
+              ]
+            },
+            {
+              "tenant": "North",
+              "order_id": "O2",
+              "revision": 2,
+              "status": "ready",
+              "amount_minor": 1225,
+              "source_ids": [
+                "North-C2",
+                "North-E2"
+              ]
+            },
+            {
+              "tenant": "South",
+              "order_id": "O2",
+              "revision": 2,
+              "status": "ready",
+              "amount_minor": 11225,
+              "source_ids": [
+                "South-C2",
+                "South-E2"
+              ]
+            }
+          ],
+          "expected": [
+            {
+              "tenant": "East",
+              "order_id": "O2",
+              "revision": 2,
+              "status": "cancelled",
+              "amount_minor": 0,
+              "source_ids": [
+                "East-C2"
+              ]
+            },
+            {
+              "tenant": "North",
+              "order_id": "O2",
+              "revision": 2,
+              "status": "cancelled",
+              "amount_minor": 0,
+              "source_ids": [
+                "North-C2"
+              ]
+            },
+            {
+              "tenant": "South",
+              "order_id": "O2",
+              "revision": 2,
+              "status": "cancelled",
+              "amount_minor": 0,
+              "source_ids": [
+                "South-C2"
+              ]
+            }
+          ]
+        },
+        "note": "Score and explanation derive from this single original-object comparison set."
+      }
+    },
+    "S3": {
+      "points": 0,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "S3",
+        "status": "behavior_mismatch",
+        "objects": [
+          "actual-work/lab4/lab.json#/snapshot/states order_id=O4,O8",
+          "actual-work/lab6/lab.json#/snapshot/states order_id=O4,O8"
+        ],
+        "first_counterexample": {
+          "object": "actual-work/lab4/lab.json#/snapshot/states order_id=O4,O8",
+          "observed": [
+            {
+              "tenant": "East",
+              "order_id": "O4",
+              "revision": 2,
+              "status": "ready",
+              "amount_minor": 65725,
+              "source_ids": [
+                "East-E4",
+                "East-X4a",
+                "East-X4b"
+              ]
+            },
+            {
+              "tenant": "East",
+              "order_id": "O8",
+              "revision": 2,
+              "status": "wire_conflict",
+              "amount_minor": null,
+              "source_ids": [
+                "wire-A",
+                "wire-B"
+              ]
+            },
+            {
+              "tenant": "North",
+              "order_id": "O4",
+              "revision": 2,
+              "status": "ready",
+              "amount_minor": 5725,
+              "source_ids": [
+                "North-E4",
+                "North-X4a",
+                "North-X4b"
+              ]
+            },
+            {
+              "tenant": "North",
+              "order_id": "O8",
+              "revision": 1,
+              "status": "ready",
+              "amount_minor": 1825,
+              "source_ids": [
+                "North-E8"
+              ]
+            },
+            {
+              "tenant": "South",
+              "order_id": "O4",
+              "revision": 2,
+              "status": "ready",
+              "amount_minor": 35725,
+              "source_ids": [
+                "South-E4",
+                "South-X4a",
+                "South-X4b"
+              ]
+            },
+            {
+              "tenant": "South",
+              "order_id": "O8",
+              "revision": 1,
+              "status": "ready",
+              "amount_minor": 11825,
+              "source_ids": [
+                "South-E8"
+              ]
+            }
+          ],
+          "expected": [
+            {
+              "tenant": "East",
+              "order_id": "O4",
+              "revision": 2,
+              "status": "conflict",
+              "amount_minor": null,
+              "source_ids": [
+                "East-X4a",
+                "East-X4b"
+              ]
+            },
+            {
+              "tenant": "East",
+              "order_id": "O8",
+              "revision": 2,
+              "status": "wire_conflict",
+              "amount_minor": null,
+              "source_ids": [
+                "wire-A",
+                "wire-B"
+              ]
+            },
+            {
+              "tenant": "North",
+              "order_id": "O4",
+              "revision": 2,
+              "status": "conflict",
+              "amount_minor": null,
+              "source_ids": [
+                "North-X4a",
+                "North-X4b"
+              ]
+            },
+            {
+              "tenant": "North",
+              "order_id": "O8",
+              "revision": 1,
+              "status": "ready",
+              "amount_minor": 1825,
+              "source_ids": [
+                "North-E8"
+              ]
+            },
+            {
+              "tenant": "South",
+              "order_id": "O4",
+              "revision": 2,
+              "status": "conflict",
+              "amount_minor": null,
+              "source_ids": [
+                "South-X4a",
+                "South-X4b"
+              ]
+            },
+            {
+              "tenant": "South",
+              "order_id": "O8",
+              "revision": 1,
+              "status": "ready",
+              "amount_minor": 11825,
+              "source_ids": [
+                "South-E8"
+              ]
+            }
+          ]
+        },
+        "note": "Score and explanation derive from this single original-object comparison set."
+      }
+    },
+    "S4": {
+      "points": 0,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "S4",
+        "status": "behavior_mismatch",
+        "objects": [
+          "actual-work/lab2/lab.json#/snapshot/totals_minor",
+          "actual-work/lab3/lab.json#/snapshot/totals_minor",
+          "actual-work/lab4/lab.json#/snapshot/totals_minor",
+          "actual-work/lab6/lab.json#/snapshot/totals_minor"
+        ],
+        "first_counterexample": {
+          "object": "actual-work/lab3/lab.json#/snapshot/totals_minor",
+          "observed": {
+            "East": 192675,
+            "North": 12675,
+            "South": 102675
+          },
+          "expected": {
+            "East": 129000,
+            "North": 9000,
+            "South": 69000
+          }
+        },
+        "note": "Score and explanation derive from this single original-object comparison set."
+      }
+    },
+    "S5": {
+      "points": 0,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "S5",
+        "status": "behavior_mismatch",
+        "objects": [
+          "actual-work/lab4/lab.json#/snapshot/states selected source_ids",
+          "actual-work/lab6/lab.json#/snapshot/states selected source_ids"
+        ],
+        "first_counterexample": {
+          "object": "actual-work/lab4/lab.json#/snapshot/states selected source_ids",
+          "observed": [
+            [
+              "East",
+              "O1",
+              [
+                "East-C1",
+                "East-E1"
+              ]
+            ],
+            [
+              "East",
+              "O2",
+              [
+                "East-C2",
+                "East-E2"
+              ]
+            ],
+            [
+              "East",
+              "O3",
+              [
+                "East-C3",
+                "East-E3"
+              ]
+            ],
+            [
+              "East",
+              "O4",
+              [
+                "East-E4",
+                "East-X4a",
+                "East-X4b"
+              ]
+            ],
+            [
+              "East",
+              "O5",
+              [
+                "East-E5",
+                "East-L5"
+              ]
+            ],
+            [
+              "East",
+              "O6",
+              [
+                "East-E6"
+              ]
+            ],
+            [
+              "East",
+              "O7",
+              [
+                "East-E7"
+              ]
+            ],
+            [
+              "East",
+              "O8",
+              [
+                "wire-A",
+                "wire-B"
+              ]
+            ],
+            [
+              "North",
+              "O1",
+              [
+                "North-C1",
+                "North-E1"
+              ]
+            ],
+            [
+              "North",
+              "O2",
+              [
+                "North-C2",
+                "North-E2"
+              ]
+            ],
+            [
+              "North",
+              "O3",
+              [
+                "North-C3",
+                "North-E3"
+              ]
+            ],
+            [
+              "North",
+              "O4",
+              [
+                "North-E4",
+                "North-X4a",
+                "North-X4b"
+              ]
+            ],
+            [
+              "North",
+              "O5",
+              [
+                "North-E5",
+                "North-L5"
+              ]
+            ],
+            [
+              "North",
+              "O6",
+              [
+                "North-E6"
+              ]
+            ],
+            [
+              "North",
+              "O7",
+              [
+                "North-E7"
+              ]
+            ],
+            [
+              "North",
+              "O8",
+              [
+                "North-E8"
+              ]
+            ],
+            [
+              "South",
+              "O1",
+              [
+                "South-C1",
+                "South-E1"
+              ]
+            ],
+            [
+              "South",
+              "O2",
+              [
+                "South-C2",
+                "South-E2"
+              ]
+            ],
+            [
+              "South",
+              "O3",
+              [
+                "South-C3",
+                "South-E3"
+              ]
+            ],
+            [
+              "South",
+              "O4",
+              [
+                "South-E4",
+                "South-X4a",
+                "South-X4b"
+              ]
+            ],
+            [
+              "South",
+              "O5",
+              [
+                "South-E5",
+                "South-L5"
+              ]
+            ],
+            [
+              "South",
+              "O6",
+              [
+                "South-E6"
+              ]
+            ],
+            [
+              "South",
+              "O7",
+              [
+                "South-E7"
+              ]
+            ],
+            [
+              "South",
+              "O8",
+              [
+                "South-E8"
+              ]
+            ]
+          ],
+          "expected": [
+            [
+              "East",
+              "O1",
+              [
+                "East-C1"
+              ]
+            ],
+            [
+              "East",
+              "O2",
+              [
+                "East-C2"
+              ]
+            ],
+            [
+              "East",
+              "O3",
+              [
+                "East-C3"
+              ]
+            ],
+            [
+              "East",
+              "O4",
+              [
+                "East-X4a",
+                "East-X4b"
+              ]
+            ],
+            [
+              "East",
+              "O5",
+              [
+                "East-E5"
+              ]
+            ],
+            [
+              "East",
+              "O6",
+              [
+                "East-E6"
+              ]
+            ],
+            [
+              "East",
+              "O7",
+              [
+                "East-E7"
+              ]
+            ],
+            [
+              "East",
+              "O8",
+              [
+                "wire-A",
+                "wire-B"
+              ]
+            ],
+            [
+              "North",
+              "O1",
+              [
+                "North-C1"
+              ]
+            ],
+            [
+              "North",
+              "O2",
+              [
+                "North-C2"
+              ]
+            ],
+            [
+              "North",
+              "O3",
+              [
+                "North-C3"
+              ]
+            ],
+            [
+              "North",
+              "O4",
+              [
+                "North-X4a",
+                "North-X4b"
+              ]
+            ],
+            [
+              "North",
+              "O5",
+              [
+                "North-E5"
+              ]
+            ],
+            [
+              "North",
+              "O6",
+              [
+                "North-E6"
+              ]
+            ],
+            [
+              "North",
+              "O7",
+              [
+                "North-E7"
+              ]
+            ],
+            [
+              "North",
+              "O8",
+              [
+                "North-E8"
+              ]
+            ],
+            [
+              "South",
+              "O1",
+              [
+                "South-C1"
+              ]
+            ],
+            [
+              "South",
+              "O2",
+              [
+                "South-C2"
+              ]
+            ],
+            [
+              "South",
+              "O3",
+              [
+                "South-C3"
+              ]
+            ],
+            [
+              "South",
+              "O4",
+              [
+                "South-X4a",
+                "South-X4b"
+              ]
+            ],
+            [
+              "South",
+              "O5",
+              [
+                "South-E5"
+              ]
+            ],
+            [
+              "South",
+              "O6",
+              [
+                "South-E6"
+              ]
+            ],
+            [
+              "South",
+              "O7",
+              [
+                "South-E7"
+              ]
+            ],
+            [
+              "South",
+              "O8",
+              [
+                "South-E8"
+              ]
+            ]
+          ]
+        },
+        "note": "Score and explanation derive from this single original-object comparison set."
+      }
+    },
+    "R1": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "R1",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/collection.json#/native_codes/crash",
+          "actual-work/lab3-commit-exit/checkpoint.json#/journal",
+          "actual-work/lab3-commit-exit/checkpoint.json#/receipts/W3"
+        ],
+        "first_counterexample": null,
+        "note": "Score and explanation derive from this single original-object comparison set."
+      }
+    },
+    "R2": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "R2",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab3/lab.json#/replayed",
+          "actual-work/lab3/checkpoint.json",
+          "actual-work/lab3/lab.json#/receipt"
+        ],
+        "first_counterexample": null,
+        "note": "Score and explanation derive from this single original-object comparison set."
+      }
+    },
+    "R3": {
+      "points": 0,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "R3",
+        "status": "behavior_mismatch",
+        "objects": [
+          "actual-work/lab4/lab.json#/snapshot/states order_id=O5",
+          "actual-work/lab4/checkpoint.json#/journal"
+        ],
+        "first_counterexample": {
+          "object": "actual-work/lab4/lab.json#/snapshot/states order_id=O5",
+          "observed": [
+            {
+              "tenant": "East",
+              "order_id": "O5",
+              "revision": 1,
+              "status": "ready",
+              "amount_minor": 91525,
+              "source_ids": [
+                "East-E5",
+                "East-L5"
+              ]
+            },
+            {
+              "tenant": "North",
+              "order_id": "O5",
+              "revision": 1,
+              "status": "ready",
+              "amount_minor": 51525,
+              "source_ids": [
+                "North-E5",
+                "North-L5"
+              ]
+            },
+            {
+              "tenant": "South",
+              "order_id": "O5",
+              "revision": 1,
+              "status": "ready",
+              "amount_minor": 71525,
+              "source_ids": [
+                "South-E5",
+                "South-L5"
+              ]
+            }
+          ],
+          "expected": [
+            {
+              "tenant": "East",
+              "order_id": "O5",
+              "revision": 1,
+              "status": "ready",
+              "amount_minor": 21525,
+              "source_ids": [
+                "East-E5"
+              ]
+            },
+            {
+              "tenant": "North",
+              "order_id": "O5",
+              "revision": 1,
+              "status": "ready",
+              "amount_minor": 1525,
+              "source_ids": [
+                "North-E5"
+              ]
+            },
+            {
+              "tenant": "South",
+              "order_id": "O5",
+              "revision": 1,
+              "status": "ready",
+              "amount_minor": 11525,
+              "source_ids": [
+                "South-E5"
+              ]
+            }
+          ]
+        },
+        "note": "Score and explanation derive from this single original-object comparison set."
+      }
+    },
+    "R4": {
+      "points": 0,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "R4",
+        "status": "behavior_mismatch",
+        "objects": [
+          "actual-work/collection.json#/native_codes/restore",
+          "actual-work/restored-lab4/lab.json#/snapshot",
+          "actual-work/restored-lab4/checkpoint.json"
+        ],
+        "first_counterexample": {
+          "object": "actual-work/restored-lab4/lab.json#/snapshot",
+          "observed": {
+            "states": [
+              {
+                "tenant": "East",
+                "order_id": "O1",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 42000,
+                "source_ids": [
+                  "East-C1",
+                  "East-E1"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O2",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 21225,
+                "source_ids": [
+                  "East-C2",
+                  "East-E2"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O3",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 21325,
+                "source_ids": [
+                  "East-C3",
+                  "East-E3"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O4",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 65725,
+                "source_ids": [
+                  "East-E4",
+                  "East-X4a",
+                  "East-X4b"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O5",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 91525,
+                "source_ids": [
+                  "East-E5",
+                  "East-L5"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O6",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 21625,
+                "source_ids": [
+                  "East-E6"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O7",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 21725,
+                "source_ids": [
+                  "East-E7"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O8",
+                "revision": 2,
+                "status": "wire_conflict",
+                "amount_minor": null,
+                "source_ids": [
+                  "wire-A",
+                  "wire-B"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O1",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 2000,
+                "source_ids": [
+                  "North-C1",
+                  "North-E1"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O2",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 1225,
+                "source_ids": [
+                  "North-C2",
+                  "North-E2"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O3",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 1325,
+                "source_ids": [
+                  "North-C3",
+                  "North-E3"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O4",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 5725,
+                "source_ids": [
+                  "North-E4",
+                  "North-X4a",
+                  "North-X4b"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O5",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 51525,
+                "source_ids": [
+                  "North-E5",
+                  "North-L5"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O6",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 1625,
+                "source_ids": [
+                  "North-E6"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O7",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 1725,
+                "source_ids": [
+                  "North-E7"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O8",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 1825,
+                "source_ids": [
+                  "North-E8"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O1",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 22000,
+                "source_ids": [
+                  "South-C1",
+                  "South-E1"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O2",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 11225,
+                "source_ids": [
+                  "South-C2",
+                  "South-E2"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O3",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 11325,
+                "source_ids": [
+                  "South-C3",
+                  "South-E3"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O4",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 35725,
+                "source_ids": [
+                  "South-E4",
+                  "South-X4a",
+                  "South-X4b"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O5",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 71525,
+                "source_ids": [
+                  "South-E5",
+                  "South-L5"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O6",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 11625,
+                "source_ids": [
+                  "South-E6"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O7",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 11725,
+                "source_ids": [
+                  "South-E7"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O8",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 11825,
+                "source_ids": [
+                  "South-E8"
+                ]
+              }
+            ],
+            "totals_minor": {
+              "East": 285150,
+              "North": 66975,
+              "South": 186975
+            },
+            "future_rows": [
+              "East-F6",
+              "North-F6",
+              "South-F6"
+            ]
+          },
+          "expected": {
+            "states": [
+              {
+                "tenant": "East",
+                "order_id": "O1",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 20875,
+                "source_ids": [
+                  "East-C1"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O2",
+                "revision": 2,
+                "status": "cancelled",
+                "amount_minor": 0,
+                "source_ids": [
+                  "East-C2"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O3",
+                "revision": 2,
+                "status": "missing",
+                "amount_minor": null,
+                "source_ids": [
+                  "East-C3"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O4",
+                "revision": 2,
+                "status": "conflict",
+                "amount_minor": null,
+                "source_ids": [
+                  "East-X4a",
+                  "East-X4b"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O5",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 21525,
+                "source_ids": [
+                  "East-E5"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O6",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 21625,
+                "source_ids": [
+                  "East-E6"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O7",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 21725,
+                "source_ids": [
+                  "East-E7"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O8",
+                "revision": 2,
+                "status": "wire_conflict",
+                "amount_minor": null,
+                "source_ids": [
+                  "wire-A",
+                  "wire-B"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O1",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 875,
+                "source_ids": [
+                  "North-C1"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O2",
+                "revision": 2,
+                "status": "cancelled",
+                "amount_minor": 0,
+                "source_ids": [
+                  "North-C2"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O3",
+                "revision": 2,
+                "status": "missing",
+                "amount_minor": null,
+                "source_ids": [
+                  "North-C3"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O4",
+                "revision": 2,
+                "status": "conflict",
+                "amount_minor": null,
+                "source_ids": [
+                  "North-X4a",
+                  "North-X4b"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O5",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 1525,
+                "source_ids": [
+                  "North-E5"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O6",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 1625,
+                "source_ids": [
+                  "North-E6"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O7",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 1725,
+                "source_ids": [
+                  "North-E7"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O8",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 1825,
+                "source_ids": [
+                  "North-E8"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O1",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 10875,
+                "source_ids": [
+                  "South-C1"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O2",
+                "revision": 2,
+                "status": "cancelled",
+                "amount_minor": 0,
+                "source_ids": [
+                  "South-C2"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O3",
+                "revision": 2,
+                "status": "missing",
+                "amount_minor": null,
+                "source_ids": [
+                  "South-C3"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O4",
+                "revision": 2,
+                "status": "conflict",
+                "amount_minor": null,
+                "source_ids": [
+                  "South-X4a",
+                  "South-X4b"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O5",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 11525,
+                "source_ids": [
+                  "South-E5"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O6",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 11625,
+                "source_ids": [
+                  "South-E6"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O7",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 11725,
+                "source_ids": [
+                  "South-E7"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O8",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 11825,
+                "source_ids": [
+                  "South-E8"
+                ]
+              }
+            ],
+            "totals_minor": {
+              "East": 85750,
+              "North": 7575,
+              "South": 57575
+            },
+            "future_rows": [
+              "East-F6",
+              "North-F6",
+              "South-F6"
+            ]
+          }
+        },
+        "note": "Score and explanation derive from this single original-object comparison set."
+      }
+    },
+    "R5": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "R5",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/collection.json#/native_codes normal labs",
+          "actual-work/lab*/lab.json#/lab assigned identity"
+        ],
+        "first_counterexample": null,
+        "note": "Score and explanation derive from this single original-object comparison set."
+      }
+    },
+    "A1": {
+      "points": 0,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "A1",
+        "status": "behavior_mismatch",
+        "objects": [
+          "actual-work/lab5/lab.json#/access complete query identities",
+          "actual-work/lab5/lab.json#/access[id=own]"
+        ],
+        "first_counterexample": {
+          "object": "actual-work/lab5/lab.json#/access[id=own]",
+          "observed": {
+            "id": "own",
+            "status": "allowed",
+            "states": [
+              {
+                "tenant": "North",
+                "order_id": "O1",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 2000,
+                "source_ids": [
+                  "North-C1",
+                  "North-E1"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O2",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 1225,
+                "source_ids": [
+                  "North-C2",
+                  "North-E2"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O3",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 1325,
+                "source_ids": [
+                  "North-C3",
+                  "North-E3"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O4",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 5725,
+                "source_ids": [
+                  "North-E4",
+                  "North-X4a",
+                  "North-X4b"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O5",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 51525,
+                "source_ids": [
+                  "North-E5",
+                  "North-L5"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O6",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 1625,
+                "source_ids": [
+                  "North-E6"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O7",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 1725,
+                "source_ids": [
+                  "North-E7"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O8",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 1825,
+                "source_ids": [
+                  "North-E8"
+                ]
+              }
+            ],
+            "totals_minor": {
+              "North": 66975
+            }
+          },
+          "expected": {
+            "id": "own",
+            "status": "allowed",
+            "states": [
+              {
+                "tenant": "North",
+                "order_id": "O1",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 875,
+                "source_ids": [
+                  "North-C1"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O2",
+                "revision": 2,
+                "status": "cancelled",
+                "amount_minor": 0,
+                "source_ids": [
+                  "North-C2"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O3",
+                "revision": 2,
+                "status": "missing",
+                "amount_minor": null,
+                "source_ids": [
+                  "North-C3"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O4",
+                "revision": 2,
+                "status": "conflict",
+                "amount_minor": null,
+                "source_ids": [
+                  "North-X4a",
+                  "North-X4b"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O5",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 1525,
+                "source_ids": [
+                  "North-E5"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O6",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 1625,
+                "source_ids": [
+                  "North-E6"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O7",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 1725,
+                "source_ids": [
+                  "North-E7"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O8",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 1825,
+                "source_ids": [
+                  "North-E8"
+                ]
+              }
+            ],
+            "totals_minor": {
+              "North": 7575
+            }
+          }
+        },
+        "note": "Score and explanation derive from this single original-object comparison set."
+      }
+    },
+    "A2": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "A2",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab5/lab.json#/access complete query identities",
+          "actual-work/lab5/lab.json#/access[id=cross]"
+        ],
+        "first_counterexample": null,
+        "note": "Score and explanation derive from this single original-object comparison set."
+      }
+    },
+    "A3": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "A3",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab5/lab.json#/access complete query identities",
+          "actual-work/lab5/lab.json#/access[id=unknown]"
+        ],
+        "first_counterexample": null,
+        "note": "Score and explanation derive from this single original-object comparison set."
+      }
+    },
+    "A4": {
+      "points": 0,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "A4",
+        "status": "behavior_mismatch",
+        "objects": [
+          "actual-work/lab5/lab.json#/access complete query identities",
+          "actual-work/lab5/lab.json#/access[id=admin]"
+        ],
+        "first_counterexample": {
+          "object": "actual-work/lab5/lab.json#/access[id=admin]",
+          "observed": {
+            "id": "admin",
+            "status": "allowed",
+            "states": [
+              {
+                "tenant": "East",
+                "order_id": "O1",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 42000,
+                "source_ids": [
+                  "East-C1",
+                  "East-E1"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O2",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 21225,
+                "source_ids": [
+                  "East-C2",
+                  "East-E2"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O3",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 21325,
+                "source_ids": [
+                  "East-C3",
+                  "East-E3"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O4",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 65725,
+                "source_ids": [
+                  "East-E4",
+                  "East-X4a",
+                  "East-X4b"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O5",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 91525,
+                "source_ids": [
+                  "East-E5",
+                  "East-L5"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O6",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 21625,
+                "source_ids": [
+                  "East-E6"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O7",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 21725,
+                "source_ids": [
+                  "East-E7"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O8",
+                "revision": 2,
+                "status": "wire_conflict",
+                "amount_minor": null,
+                "source_ids": [
+                  "wire-A",
+                  "wire-B"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O1",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 2000,
+                "source_ids": [
+                  "North-C1",
+                  "North-E1"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O2",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 1225,
+                "source_ids": [
+                  "North-C2",
+                  "North-E2"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O3",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 1325,
+                "source_ids": [
+                  "North-C3",
+                  "North-E3"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O4",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 5725,
+                "source_ids": [
+                  "North-E4",
+                  "North-X4a",
+                  "North-X4b"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O5",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 51525,
+                "source_ids": [
+                  "North-E5",
+                  "North-L5"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O6",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 1625,
+                "source_ids": [
+                  "North-E6"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O7",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 1725,
+                "source_ids": [
+                  "North-E7"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O8",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 1825,
+                "source_ids": [
+                  "North-E8"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O1",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 22000,
+                "source_ids": [
+                  "South-C1",
+                  "South-E1"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O2",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 11225,
+                "source_ids": [
+                  "South-C2",
+                  "South-E2"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O3",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 11325,
+                "source_ids": [
+                  "South-C3",
+                  "South-E3"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O4",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 35725,
+                "source_ids": [
+                  "South-E4",
+                  "South-X4a",
+                  "South-X4b"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O5",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 71525,
+                "source_ids": [
+                  "South-E5",
+                  "South-L5"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O6",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 11625,
+                "source_ids": [
+                  "South-E6"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O7",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 11725,
+                "source_ids": [
+                  "South-E7"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O8",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 11825,
+                "source_ids": [
+                  "South-E8"
+                ]
+              }
+            ],
+            "totals_minor": {
+              "East": 285150,
+              "North": 66975,
+              "South": 186975
+            }
+          },
+          "expected": {
+            "id": "admin",
+            "status": "allowed",
+            "states": [
+              {
+                "tenant": "East",
+                "order_id": "O1",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 20875,
+                "source_ids": [
+                  "East-C1"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O2",
+                "revision": 2,
+                "status": "cancelled",
+                "amount_minor": 0,
+                "source_ids": [
+                  "East-C2"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O3",
+                "revision": 2,
+                "status": "missing",
+                "amount_minor": null,
+                "source_ids": [
+                  "East-C3"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O4",
+                "revision": 2,
+                "status": "conflict",
+                "amount_minor": null,
+                "source_ids": [
+                  "East-X4a",
+                  "East-X4b"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O5",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 21525,
+                "source_ids": [
+                  "East-E5"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O6",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 21625,
+                "source_ids": [
+                  "East-E6"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O7",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 21725,
+                "source_ids": [
+                  "East-E7"
+                ]
+              },
+              {
+                "tenant": "East",
+                "order_id": "O8",
+                "revision": 2,
+                "status": "wire_conflict",
+                "amount_minor": null,
+                "source_ids": [
+                  "wire-A",
+                  "wire-B"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O1",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 875,
+                "source_ids": [
+                  "North-C1"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O2",
+                "revision": 2,
+                "status": "cancelled",
+                "amount_minor": 0,
+                "source_ids": [
+                  "North-C2"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O3",
+                "revision": 2,
+                "status": "missing",
+                "amount_minor": null,
+                "source_ids": [
+                  "North-C3"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O4",
+                "revision": 2,
+                "status": "conflict",
+                "amount_minor": null,
+                "source_ids": [
+                  "North-X4a",
+                  "North-X4b"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O5",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 1525,
+                "source_ids": [
+                  "North-E5"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O6",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 1625,
+                "source_ids": [
+                  "North-E6"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O7",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 1725,
+                "source_ids": [
+                  "North-E7"
+                ]
+              },
+              {
+                "tenant": "North",
+                "order_id": "O8",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 1825,
+                "source_ids": [
+                  "North-E8"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O1",
+                "revision": 2,
+                "status": "ready",
+                "amount_minor": 10875,
+                "source_ids": [
+                  "South-C1"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O2",
+                "revision": 2,
+                "status": "cancelled",
+                "amount_minor": 0,
+                "source_ids": [
+                  "South-C2"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O3",
+                "revision": 2,
+                "status": "missing",
+                "amount_minor": null,
+                "source_ids": [
+                  "South-C3"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O4",
+                "revision": 2,
+                "status": "conflict",
+                "amount_minor": null,
+                "source_ids": [
+                  "South-X4a",
+                  "South-X4b"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O5",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 11525,
+                "source_ids": [
+                  "South-E5"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O6",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 11625,
+                "source_ids": [
+                  "South-E6"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O7",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 11725,
+                "source_ids": [
+                  "South-E7"
+                ]
+              },
+              {
+                "tenant": "South",
+                "order_id": "O8",
+                "revision": 1,
+                "status": "ready",
+                "amount_minor": 11825,
+                "source_ids": [
+                  "South-E8"
+                ]
+              }
+            ],
+            "totals_minor": {
+              "East": 85750,
+              "North": 7575,
+              "South": 57575
+            }
+          }
+        },
+        "note": "Score and explanation derive from this single original-object comparison set."
+      }
+    },
+    "A5": {
+      "points": 1,
+      "maximum": 1,
+      "evidence": {
+        "criterion": "A5",
+        "status": "contract_matched",
+        "objects": [
+          "actual-work/lab5/lab.json#/audit",
+          "actual-work/lab5/checkpoint.json#/audit"
+        ],
+        "first_counterexample": null,
+        "note": "Score and explanation derive from this single original-object comparison set."
+      }
+    }
+  },
+  "domains": {
+    "D": 5,
+    "S": 0,
+    "R": 3,
+    "A": 3
+  },
+  "total": 11,
+  "maximum": 20,
+  "scope": "functional coursework behaviors only; conceptual feedback and human learning outcomes are not inferred"
+}

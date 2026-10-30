@@ -1,0 +1,532 @@
+{
+  "schema": 1,
+  "journal": [
+    {
+      "amount_minor": 0,
+      "event_id": "C2",
+      "order_id": "O2",
+      "released_at": "2026-01-03T00:00:00Z",
+      "revision": 2,
+      "row_id": "East-C2",
+      "status": "cancelled",
+      "tenant": "East"
+    },
+    {
+      "amount_minor": 0,
+      "event_id": "C2",
+      "order_id": "O2",
+      "released_at": "2026-01-03T00:00:00Z",
+      "revision": 2,
+      "row_id": "North-C2",
+      "status": "cancelled",
+      "tenant": "North"
+    },
+    {
+      "amount_minor": 0,
+      "event_id": "C2",
+      "order_id": "O2",
+      "released_at": "2026-01-03T00:00:00Z",
+      "revision": 2,
+      "row_id": "South-C2",
+      "status": "cancelled",
+      "tenant": "South"
+    },
+    {
+      "amount_minor": 10875,
+      "event_id": "C1",
+      "order_id": "O1",
+      "released_at": "2026-01-03T00:00:00Z",
+      "revision": 2,
+      "row_id": "South-C1",
+      "status": "active",
+      "tenant": "South"
+    },
+    {
+      "amount_minor": 11125,
+      "event_id": "E1",
+      "order_id": "O1",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "South-E1",
+      "status": "active",
+      "tenant": "South"
+    },
+    {
+      "amount_minor": 11225,
+      "event_id": "E2",
+      "order_id": "O2",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "South-E2",
+      "status": "active",
+      "tenant": "South"
+    },
+    {
+      "amount_minor": 1125,
+      "event_id": "E1",
+      "order_id": "O1",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "North-E1",
+      "status": "active",
+      "tenant": "North"
+    },
+    {
+      "amount_minor": 11325,
+      "event_id": "E3",
+      "order_id": "O3",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "South-E3",
+      "status": "active",
+      "tenant": "South"
+    },
+    {
+      "amount_minor": 11425,
+      "event_id": "E4",
+      "order_id": "O4",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "South-E4",
+      "status": "active",
+      "tenant": "South"
+    },
+    {
+      "amount_minor": 11525,
+      "event_id": "E5",
+      "order_id": "O5",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "South-E5",
+      "status": "active",
+      "tenant": "South"
+    },
+    {
+      "amount_minor": 11625,
+      "event_id": "E6",
+      "order_id": "O6",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "South-E6",
+      "status": "active",
+      "tenant": "South"
+    },
+    {
+      "amount_minor": 11725,
+      "event_id": "E7",
+      "order_id": "O7",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "South-E7",
+      "status": "active",
+      "tenant": "South"
+    },
+    {
+      "amount_minor": 11825,
+      "event_id": "E8",
+      "order_id": "O8",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "South-E8",
+      "status": "active",
+      "tenant": "South"
+    },
+    {
+      "amount_minor": 12100,
+      "event_id": "X4a",
+      "order_id": "O4",
+      "released_at": "2026-01-05T00:00:00Z",
+      "revision": 2,
+      "row_id": "South-X4a",
+      "status": "active",
+      "tenant": "South"
+    },
+    {
+      "amount_minor": 12200,
+      "event_id": "X4b",
+      "order_id": "O4",
+      "released_at": "2026-01-05T00:00:00Z",
+      "revision": 2,
+      "row_id": "South-X4b",
+      "status": "active",
+      "tenant": "South"
+    },
+    {
+      "amount_minor": 1225,
+      "event_id": "E2",
+      "order_id": "O2",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "North-E2",
+      "status": "active",
+      "tenant": "North"
+    },
+    {
+      "amount_minor": 1325,
+      "event_id": "E3",
+      "order_id": "O3",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "North-E3",
+      "status": "active",
+      "tenant": "North"
+    },
+    {
+      "amount_minor": 1425,
+      "event_id": "E4",
+      "order_id": "O4",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "North-E4",
+      "status": "active",
+      "tenant": "North"
+    },
+    {
+      "amount_minor": 14450,
+      "event_id": "F6",
+      "order_id": "O6",
+      "released_at": "2026-01-15T00:00:00Z",
+      "revision": 2,
+      "row_id": "South-F6",
+      "status": "active",
+      "tenant": "South"
+    },
+    {
+      "amount_minor": 1525,
+      "event_id": "E5",
+      "order_id": "O5",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "North-E5",
+      "status": "active",
+      "tenant": "North"
+    },
+    {
+      "amount_minor": 1625,
+      "event_id": "E6",
+      "order_id": "O6",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "North-E6",
+      "status": "active",
+      "tenant": "North"
+    },
+    {
+      "amount_minor": 1725,
+      "event_id": "E7",
+      "order_id": "O7",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "North-E7",
+      "status": "active",
+      "tenant": "North"
+    },
+    {
+      "amount_minor": 1825,
+      "event_id": "E8",
+      "order_id": "O8",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "North-E8",
+      "status": "active",
+      "tenant": "North"
+    },
+    {
+      "amount_minor": 20875,
+      "event_id": "C1",
+      "order_id": "O1",
+      "released_at": "2026-01-03T00:00:00Z",
+      "revision": 2,
+      "row_id": "East-C1",
+      "status": "active",
+      "tenant": "East"
+    },
+    {
+      "amount_minor": 2100,
+      "event_id": "X4a",
+      "order_id": "O4",
+      "released_at": "2026-01-05T00:00:00Z",
+      "revision": 2,
+      "row_id": "North-X4a",
+      "status": "active",
+      "tenant": "North"
+    },
+    {
+      "amount_minor": 21125,
+      "event_id": "E1",
+      "order_id": "O1",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "East-E1",
+      "status": "active",
+      "tenant": "East"
+    },
+    {
+      "amount_minor": 21225,
+      "event_id": "E2",
+      "order_id": "O2",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "East-E2",
+      "status": "active",
+      "tenant": "East"
+    },
+    {
+      "amount_minor": 21325,
+      "event_id": "E3",
+      "order_id": "O3",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "East-E3",
+      "status": "active",
+      "tenant": "East"
+    },
+    {
+      "amount_minor": 21425,
+      "event_id": "E4",
+      "order_id": "O4",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "East-E4",
+      "status": "active",
+      "tenant": "East"
+    },
+    {
+      "amount_minor": 21525,
+      "event_id": "E5",
+      "order_id": "O5",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "East-E5",
+      "status": "active",
+      "tenant": "East"
+    },
+    {
+      "amount_minor": 21625,
+      "event_id": "E6",
+      "order_id": "O6",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "East-E6",
+      "status": "active",
+      "tenant": "East"
+    },
+    {
+      "amount_minor": 21725,
+      "event_id": "E7",
+      "order_id": "O7",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "East-E7",
+      "status": "active",
+      "tenant": "East"
+    },
+    {
+      "amount_minor": 21825,
+      "event_id": "E8",
+      "order_id": "O8",
+      "released_at": "2026-01-01T00:00:00Z",
+      "revision": 1,
+      "row_id": "East-E8",
+      "status": "active",
+      "tenant": "East"
+    },
+    {
+      "amount_minor": 2200,
+      "event_id": "X4b",
+      "order_id": "O4",
+      "released_at": "2026-01-05T00:00:00Z",
+      "revision": 2,
+      "row_id": "North-X4b",
+      "status": "active",
+      "tenant": "North"
+    },
+    {
+      "amount_minor": 22100,
+      "event_id": "X4a",
+      "order_id": "O4",
+      "released_at": "2026-01-05T00:00:00Z",
+      "revision": 2,
+      "row_id": "East-X4a",
+      "status": "active",
+      "tenant": "East"
+    },
+    {
+      "amount_minor": 22200,
+      "event_id": "X4b",
+      "order_id": "O4",
+      "released_at": "2026-01-05T00:00:00Z",
+      "revision": 2,
+      "row_id": "East-X4b",
+      "status": "active",
+      "tenant": "East"
+    },
+    {
+      "amount_minor": 24450,
+      "event_id": "F6",
+      "order_id": "O6",
+      "released_at": "2026-01-15T00:00:00Z",
+      "revision": 2,
+      "row_id": "East-F6",
+      "status": "active",
+      "tenant": "East"
+    },
+    {
+      "amount_minor": 4450,
+      "event_id": "F6",
+      "order_id": "O6",
+      "released_at": "2026-01-15T00:00:00Z",
+      "revision": 2,
+      "row_id": "North-F6",
+      "status": "active",
+      "tenant": "North"
+    },
+    {
+      "amount_minor": 50000,
+      "event_id": "L5",
+      "order_id": "O5",
+      "released_at": "2025-12-31T00:00:00Z",
+      "revision": 0,
+      "row_id": "North-L5",
+      "status": "active",
+      "tenant": "North"
+    },
+    {
+      "amount_minor": 60000,
+      "event_id": "L5",
+      "order_id": "O5",
+      "released_at": "2025-12-31T00:00:00Z",
+      "revision": 0,
+      "row_id": "South-L5",
+      "status": "active",
+      "tenant": "South"
+    },
+    {
+      "amount_minor": 70000,
+      "event_id": "L5",
+      "order_id": "O5",
+      "released_at": "2025-12-31T00:00:00Z",
+      "revision": 0,
+      "row_id": "East-L5",
+      "status": "active",
+      "tenant": "East"
+    },
+    {
+      "amount_minor": 875,
+      "event_id": "C1",
+      "order_id": "O1",
+      "released_at": "2026-01-03T00:00:00Z",
+      "revision": 2,
+      "row_id": "North-C1",
+      "status": "active",
+      "tenant": "North"
+    },
+    {
+      "amount_minor": 8800,
+      "event_id": "WIRE",
+      "order_id": "O8",
+      "released_at": "2026-01-05T00:00:00Z",
+      "revision": 2,
+      "row_id": "wire-A",
+      "status": "active",
+      "tenant": "East"
+    },
+    {
+      "amount_minor": 8900,
+      "event_id": "WIRE",
+      "order_id": "O8",
+      "released_at": "2026-01-05T00:00:00Z",
+      "revision": 2,
+      "row_id": "wire-B",
+      "status": "active",
+      "tenant": "East"
+    },
+    {
+      "amount_minor": null,
+      "event_id": "C3",
+      "order_id": "O3",
+      "released_at": "2026-01-03T00:00:00Z",
+      "revision": 2,
+      "row_id": "East-C3",
+      "status": "missing",
+      "tenant": "East"
+    },
+    {
+      "amount_minor": null,
+      "event_id": "C3",
+      "order_id": "O3",
+      "released_at": "2026-01-03T00:00:00Z",
+      "revision": 2,
+      "row_id": "North-C3",
+      "status": "missing",
+      "tenant": "North"
+    },
+    {
+      "amount_minor": null,
+      "event_id": "C3",
+      "order_id": "O3",
+      "released_at": "2026-01-03T00:00:00Z",
+      "revision": 2,
+      "row_id": "South-C3",
+      "status": "missing",
+      "tenant": "South"
+    }
+  ],
+  "receipts": {
+    "W1": {
+      "equivalent_repeats": 0,
+      "new_records": 24,
+      "received": 28,
+      "rejected": 4,
+      "request_id": "W1"
+    },
+    "W2": {
+      "equivalent_repeats": 0,
+      "new_records": 0,
+      "received": 0,
+      "rejected": 0,
+      "request_id": "W2"
+    },
+    "W3": {
+      "equivalent_repeats": 3,
+      "new_records": 9,
+      "received": 12,
+      "rejected": 0,
+      "request_id": "W3"
+    },
+    "W4": {
+      "equivalent_repeats": 0,
+      "new_records": 14,
+      "received": 14,
+      "rejected": 0,
+      "request_id": "W4"
+    }
+  },
+  "rejected": [
+    {
+      "code": "amount_grid",
+      "request_id": "W1",
+      "row_id": "North-bad-grid",
+      "row_index": 24
+    },
+    {
+      "code": "currency",
+      "request_id": "W1",
+      "row_id": "South-bad-unit",
+      "row_index": 25
+    },
+    {
+      "code": "identity",
+      "request_id": "W1",
+      "row_id": "-orphan",
+      "row_index": 26
+    },
+    {
+      "code": "clock",
+      "request_id": "W1",
+      "row_id": "East-bad-clock",
+      "row_index": 27
+    }
+  ],
+  "audit": []
+}

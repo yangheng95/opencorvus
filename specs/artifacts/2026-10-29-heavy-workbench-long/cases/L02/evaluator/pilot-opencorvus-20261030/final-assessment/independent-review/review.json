@@ -1,0 +1,909 @@
+{
+  "format": "l02-independent-review/1",
+  "assignment_id": "bc342de1a5a84da99f45b928856428d2",
+  "submission_id": "OpenCorvus-L02-0b93788d6c56-20261030",
+  "reviewer_id": "/root/benchmark_review",
+  "anchor_version": "L02-research-anchors/1",
+  "disclosure": {
+    "kind": "ai-agent",
+    "blinded": false,
+    "familiarity": "Independent reviewer familiar with original author reference/design and earlier development calibration; current candidate was read from its own actual immutable assignment, not replaced by old author ratings.",
+    "limitations": "AI-agent, nonblind, not professional human or statistical maturity certification. No coefficients were independently refitted in full; legal complete training/data/source/actual execution and all report metrics/accounts were independently checked. No candidate/native/reader/forecast/report rerun. Q26 and total deliberately left for actual grader."
+  },
+  "findings": [
+    {
+      "id": "A01",
+      "status": "verified_pass",
+      "basis": "原packet每行按其unit而非日期猜测系数；候选Fraction精确换算后要求整数L。独立对所有实际packet原值/单位与封存raw逐业务键核同，对实际使用值按L/m3系数重算；终审/2023scale另独立raw重建相符。",
+      "sources": [
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/l02_common.py",
+          "locator": "Archive value decoding before any floating-point fit"
+        },
+        {
+          "object": "execution/cells/9/prepared.zip",
+          "member": "input/packet/observations.csv",
+          "locator": "actual original values, unit and revisions"
+        },
+        {
+          "object": "execution/cells/9/prepared.zip",
+          "member": "input/packet/packet.json",
+          "locator": "unit multipliers L1/m3 1000"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "A02",
+      "status": "verified_pass",
+      "basis": "全部108实际predict的raw packet与完整原始archive许可集合一致；release<=assigned origin，observed event_end<origin。逐fit重新用真实cutoff核最高已发布引用，历史特征用target_end−39h；校准标签另用当前origin。未发现伪时点读取晚发布事实。",
+      "sources": [
+        {
+          "object": "execution/cells/9/prepared.zip",
+          "member": "input/packet/packet.json",
+          "locator": "assigned origin and original authorization metadata"
+        },
+        {
+          "object": "execution/cells/9/accepted.zip",
+          "member": "output/result/fit-audit.json",
+          "locator": "fits.training / prediction_features / calibration release references"
+        },
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/l02_common.py",
+          "locator": "Archive.get observed and release filters"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "A03",
+      "status": "verified_pass",
+      "basis": "实际Archive.get先按可发布revision取max，missing不先滤除；训练才排除missing，校准任一leaf最高missing整组排除。独立全部fit/校准引用重建最高版本且纳入missing，发现38组明确排除，不以旧valid回填。",
+      "sources": [
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/l02_common.py",
+          "locator": "Archive.get max revision before validity"
+        },
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/l02_predict.py",
+          "locator": "history eligibility and calibration excluded_latest_missing_or_absent"
+        },
+        {
+          "object": "execution/cells/59/accepted.zip",
+          "member": "output/result/fit-audit.json",
+          "locator": "actual released-revision source facts and calibration inclusion"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "A04",
+      "status": "verified_pass",
+      "basis": "独立核108 forecast均84格=6节点×14完整未来UTC日；首target_end为floor(origin/24)*24+48，后续每24h，无从09UTC开始的滚动窗口。原mean/quantiles目标身份与report逐行对应。",
+      "sources": [
+        {
+          "object": "execution/cells/9/prepared.zip",
+          "member": "input/packet/packet.json",
+          "locator": "target_ticks and clock interval"
+        },
+        {
+          "object": "execution/cells/9/accepted.zip",
+          "member": "output/result/forecast.json",
+          "locator": "84 actual node/day rows"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/predictions.csv",
+          "locator": "all3024 outer method/node/day original predictions"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "A05",
+      "status": "verified_pass",
+      "basis": "四leaf A1/A2/B1/B2与ZA/ZB身份、权重均正确。独立全108 forecast核parent mean=对应leaf sum在注册相对容差内；代码先逐配对样本相加再取mean/各边际quantile，不强加quantile相加。",
+      "sources": [
+        {
+          "object": "execution/cells/9/prepared.zip",
+          "member": "input/packet/packet.json",
+          "locator": "series_catalogue and hierarchy"
+        },
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/l02_predict.py",
+          "locator": "bottom-up sample aggregation"
+        },
+        {
+          "object": "execution/cells/9/accepted.zip",
+          "member": "output/result/forecast.json",
+          "locator": "actual means and marginal quantiles"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "A06",
+      "status": "verified_pass",
+      "basis": "报告通过original-results、原forecast/fit副本、provenance.csv、predictions和节点/成本表闭合来源。独立228原numeric产物与report窄来源包原字节相符；fit.sources给原packet行全文，可再经业务键定位注册raw，并非仅“来自附件”。",
+      "sources": [
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/provenance.csv",
+          "locator": "cell identity, actual argv/time/native and preserved_copy"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/predictions.csv",
+          "locator": "origin/method/node/tick explicit source keys"
+        },
+        {
+          "object": "execution/cells/9/accepted.zip",
+          "member": "output/result/fit-audit.json",
+          "locator": "sources original CSV line content"
+        },
+        {
+          "object": "execution/registration.zip",
+          "member": "raw/observations.csv",
+          "locator": "authoritative original business-key rows"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "B01",
+      "status": "verified_pass",
+      "basis": "weekday为至多8同weekday经验平均；weather-ridge为含季节/趋势/日历/运营/天气的ridge10线性均值；真实原源码和method配置分别生效，不是改ID。使用相同残差家族不抹去基础估计机制差别。",
+      "sources": [
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/submission.json",
+          "locator": "frozen distinct model configurations"
+        },
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/l02_predict.py",
+          "locator": "Model.base weekday versus ridge code paths"
+        },
+        {
+          "object": "execution/cells/9/prepared.zip",
+          "member": "input/method.json",
+          "locator": "actual weather-ridge parameters"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "B02",
+      "status": "verified_pass",
+      "basis": "no-weather configuration.weather=false在主fit、所有伪origin训练与目标features均删温度及missing indicator；校准重新用此base方法，无隐藏天气校准。全部实际消融fit refs独立检查无temperature特征；报告真实承认消融更好，并不以退化为要求。",
+      "sources": [
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/l02_predict.py",
+          "locator": "features optional weather and base reuse in calibration"
+        },
+        {
+          "object": "execution/cells/60/prepared.zip",
+          "member": "input/method.json",
+          "locator": "actual no-weather configuration"
+        },
+        {
+          "object": "execution/cells/60/accepted.zip",
+          "member": "output/result/fit-audit.json",
+          "locator": "actual all four fits remove weather feature refs"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "B03",
+      "status": "verified_pass",
+      "basis": "原registration创建14:43:10.762Z早于首private native14:43:17.334Z。全121 prepared和accepted的predict/select/report源码/静态资产逐原字节等于同一registration封存对象，method pool亦同；记者源与资产也在首预测前封存，非事后新记者替换。",
+      "sources": [
+        {
+          "object": "execution/registration.zip",
+          "member": "registration.json",
+          "locator": "original registration creation and full assignment"
+        },
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/submission.json",
+          "locator": "full source and static asset closures"
+        },
+        {
+          "object": "execution/cells/1/accepted.zip",
+          "member": "terminal-inspect.json",
+          "locator": "first real private native start"
+        },
+        {
+          "object": "execution/cells/121/prepared.zip",
+          "member": "project/l02_report.py",
+          "locator": "pre-execution report source same sealed registration"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "B04",
+      "status": "verified_pass",
+      "basis": "对全部fit训练窗独立按各origin从packet重建有效历史：ridge完整365日内released最高valid样本，weekday最近至多8同weekday。实际training refs/rows与该集合一致；所有原source bytes、执行argv也绑定。未逐一独立重解全部ridge系数，但实际冻结执行路径确实用这些X/y作np.linalg.solve，不以training_rows自报替代。",
+      "sources": [
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/l02_predict.py",
+          "locator": "Model.base historical selection and actual solve"
+        },
+        {
+          "object": "execution/cells/9/accepted.zip",
+          "member": "output/result/fit-audit.json",
+          "locator": "complete real training labels, feature cutoffs, parameters"
+        },
+        {
+          "object": "execution/cells/9/prepared.zip",
+          "member": "input/packet/observations.csv",
+          "locator": "actual legal historical archive"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "B05",
+      "status": "verified_pass",
+      "basis": "此候选真实采用经验校准：origin前28/56/84天各独立base fit，非递归校准。独立核每个伪origin训练/预测特征按其cutoff选发布版本；历史feature_cutoff=t−39。与参考的56/84/112不同是合法方法自由，未因此扣分。",
+      "sources": [
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/METHODS.md",
+          "locator": "pseudo-origin uncertainty timing disclosure"
+        },
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/l02_predict.py",
+          "locator": "base(pseudo,ends) and feature lookups"
+        },
+        {
+          "object": "execution/cells/9/accepted.zip",
+          "member": "output/result/fit-audit.json",
+          "locator": "three pseudo-origin feature references"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "B06",
+      "status": "verified_pass",
+      "basis": "校准truth明确取当前origin已发布最高版本，非伪origin当时label或终审未来。四leaf齐全才成组，共41–42组；38组最高missing/缺失排除，未删除评分目标。所有校准label refs按当前cutoff独立核同。冻结参数/paired empirical residual语义和实际来源闭合。",
+      "sources": [
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/METHODS.md",
+          "locator": "calibration label time and minimum14pair assumptions"
+        },
+        {
+          "object": "execution/cells/9/accepted.zip",
+          "member": "output/result/fit-audit.json",
+          "locator": "calibration label_cutoff, sources and residual groups"
+        },
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/l02_predict.py",
+          "locator": "actual residual construction and paired draw use"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "B07",
+      "status": "verified_pass",
+      "basis": "全部实际packet末日两zone均无当前issue天气预报；实际特征取15°C中心值（centered值0）并missing flag1，不读取晚issue/actual。no-weather完全删除两天气列。报告明确末日不是都有预报，可执行说明与源码相符。",
+      "sources": [
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/l02_predict.py",
+          "locator": "features missing temp branch"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/report.md",
+          "locator": "负结果与限制：末日天气缺测15°C/missing indicator"
+        },
+        {
+          "object": "execution/cells/9/prepared.zip",
+          "member": "input/packet/covariate-vintages.csv",
+          "locator": "eligible forecast issue horizon"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "B08",
+      "status": "verified_pass",
+      "basis": "mean是非负截断成组经验预测分布的算术平均；median是独立q0.5，不混同。报告MSE公式明确评价条件均值，经验分布作为模型估计而非声称真条件分布。数值合同和独立score重算一致。",
+      "sources": [
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/l02_predict.py",
+          "locator": "np.mean(draws) versus np.quantile"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/METHODS.md",
+          "locator": "conditional empirical distribution and MSE semantics"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/report.md",
+          "locator": "评价与选择"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "B09",
+      "status": "verified_pass",
+      "basis": "原报告将七分位/50/80/95带明确作为边际预测，承认有限残差及漂移、无分布无关或联合路径保证；原覆盖图/表仅描述实际覆宽。未将单次欠覆盖当数学反证或反向声称保证。",
+      "sources": [
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/report.md",
+          "locator": "误差、反证与区间；负结果与限制"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/coverage-width.csv",
+          "locator": "actual marginal hit and width per target"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/coverage.png",
+          "locator": "nominal versus empirical per-node coverage"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "C03",
+      "status": "verified_pass",
+      "basis": "全outer实际池/源码/argv/readonly packet与原注册一致；每次新增合法晚origin已发布事实可用，未复用最早预测或私有outer labels。全部predict输入仅method+packet3文件；selector仅inner/study。",
+      "sources": [
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/submission.json",
+          "locator": "one frozen pool and programme closures"
+        },
+        {
+          "object": "execution/cells/119/prepared.zip",
+          "member": "input/method.json",
+          "locator": "late actual extension method remains frozen"
+        },
+        {
+          "object": "execution/cells/119/accepted.zip",
+          "member": "terminal-inspect.json",
+          "locator": "readonly input/project, fresh output, networknone1CPU"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "C04",
+      "status": "verified_pass",
+      "basis": "独立读取全108 forecast，逐格finite/domain、七quantile顺序、84格与层级mean核过；不局限所选方法。36outer各方法原输出再与报告NUM和3024行预测表对应，精确MSE/MAE/WIS独立重算一致。",
+      "sources": [
+        {
+          "object": "execution/ledger-snapshot.json",
+          "member": null,
+          "locator": "all108predict actual verified identities"
+        },
+        {
+          "object": "execution/cells/9/accepted.zip",
+          "member": "output/result/forecast.json",
+          "locator": "original strict numerical forecast"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/predictions.csv",
+          "locator": "all methods and targets, no report rewrite"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "C05",
+      "status": "verified_pass",
+      "basis": "声明为Python+NumPy/Matplotlib，实际image为环境公开固定科学镜像，实际Path/Args逐121等于声明，无其他语言/算法强制。所有实际project文件闭包对应原封存；未以候选自述版本替代原生环境身份。",
+      "sources": [
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/submission.json",
+          "locator": "actual declared argv/files"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/USAGE.md",
+          "locator": "dependencies and input/output ABI"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "terminal-inspect.json",
+          "locator": "actual image, command, mounts and native status"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "C06",
+      "status": "verified_pass",
+      "basis": "本次原ledger121全verified/exit0，与原terminal Name/CID/native状态逐一一致，report窄sidecar120numeric时间/退出码亦同；无失败单元被删除或伪改。没有观察到故障，不为本叶额外注入故障。",
+      "sources": [
+        {
+          "object": "execution/ledger-snapshot.json",
+          "member": null,
+          "locator": "original full cell/phase/native outcomes"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "input/provenance/manifest.json",
+          "locator": "actual120numeric provenance and narrow terminal facts"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "terminal-inspect.json",
+          "locator": "natural terminal report0"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "D01",
+      "status": "verified_pass",
+      "basis": "全部12outer/6node/14格的weekday、weather-ridge、no-weather与选择策略点误差保留；逐origin/node表、paired difference和精确宏表闭合。独立逐方法完整同格score一致，选择策略未事后换成更好扩展。",
+      "sources": [
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/node-origin-metrics.csv",
+          "locator": "all paired node/origin MSE/MAE"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/paired-differences.csv",
+          "locator": "actual extension-baseline and extension-ablation differences"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/recomputed-aggregate.json",
+          "locator": "per-method and selection-policy exact macro"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "D02",
+      "status": "verified_pass",
+      "basis": "所有方法同格WIS完整保留，独立逐节点/宏WIS按median+50/80/95、分母3.5及固定scale重算相符；原report中的选择策略WIS0.0444096579591与真实所选forecast对应。",
+      "sources": [
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/origin-metrics.csv",
+          "locator": "all3methods WIS per cut"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/node-origin-metrics.csv",
+          "locator": "complete node WIS"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/predictions.csv",
+          "locator": "all original marginal quantiles"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "D03",
+      "status": "verified_pass",
+      "basis": "报告指出最差July15/A2/weekday scaledMSE0.67265784并实际画出baseline高估对truth0；提供全部节点/切点表及4/12与7/12退化清单。选择策略最大行动暴露June20/A1也定位，不只给好看的宏平均。",
+      "sources": [
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/report.md",
+          "locator": "误差、反证与区间；本次数据具体比较"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/worst-local.png",
+          "locator": "actual July A2 baseline miss"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/node-origin-metrics.csv",
+          "locator": "full failure distribution"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "D04",
+      "status": "verified_pass",
+      "basis": "独立全coverage-width每格由原预测quantile和原truth计算hits/width；50/80/95各node168分母及summary精确比例/均宽一致。报告区分欠/过覆盖，不把95%与80%混淆，未删失败格。",
+      "sources": [
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/coverage-width.csv",
+          "locator": "all per-target level/hit/width records"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/coverage-summary.csv",
+          "locator": "168 rows per method/node/level"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/coverage.png",
+          "locator": "actual rendered empirical versus nominal coverage"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "D05",
+      "status": "verified_pass",
+      "basis": "108原fit diagnostics分别来自实际accepted产物且report provenance字节相同，四fit来源/配置、41–42成组样本和38排除与原packet重建相符；并不以文件存在或报告自报1289522use数当训练证明。未重新求解全部系数的范围明确。",
+      "sources": [
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/fit-diagnostics.csv",
+          "locator": "actual cell/model/count summaries"
+        },
+        {
+          "object": "execution/cells/9/accepted.zip",
+          "member": "output/result/fit-audit.json",
+          "locator": "original training/parameter/calibration records"
+        },
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/l02_predict.py",
+          "locator": "actual fit algorithm consumes those records"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "D06",
+      "status": "verified_pass",
+      "basis": "天气差异解释依固定池配对消融，报告明确macro差是描述性，不识别天气/公告因果量效；扩展含日历/运营等与baseline也不同，没有把全部改善归天气。7/12消融更好及宏扩展更差6.6177e−5被如实呈现。",
+      "sources": [
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/METHODS.md",
+          "locator": "scientific mechanisms and lack of transfer identification"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/paired-differences.csv",
+          "locator": "actual experiment support"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/report.md",
+          "locator": "范围与结论；本次数据具体比较"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "D07",
+      "status": "verified_pass",
+      "basis": "实际负结果未被隐藏：扩展4/12切点MSE高于baseline，7/12高于消融，完整覆盖不足与最差局部图、selected若干mean行动劣势均写明。未将真实负结果改作所有点改善或私有质量通过。",
+      "sources": [
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/report.md",
+          "locator": "具体比较/覆盖/行动劣势段"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/paired-differences.csv",
+          "locator": "negative direction identifiable"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/worst-local.png",
+          "locator": "baseline real failure retained"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "D08",
+      "status": "verified_pass",
+      "basis": "已发布A2.open=0结构置零与A1.transfer_in量效分开；代码真实用合法公告，但A1系数只从合法历史学，缺变化时不识别；报告不把后见转移量当预先已知或臆造未公布规则。",
+      "sources": [
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/l02_predict.py",
+          "locator": "announced closure branch versus learned transfer feature"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/METHODS.md",
+          "locator": "operational announcement versus unknown effect"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/report.md",
+          "locator": "负结果与限制"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "D09",
+      "status": "verified_pass",
+      "basis": "统计叙述仅固定完整格描述；明确同日leaf/aggregate、相邻窗依赖，没有把节点/12origin/多成本当独立重复样本做p值或因果推断。无须强造显著性测试。",
+      "sources": [
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/report.md",
+          "locator": "误差、反证与区间及行动限制"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/node-origin-metrics.csv",
+          "locator": "shared hierarchy/cutpoint evidence"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "E01",
+      "status": "verified_pass",
+      "basis": "报告源码与METHODS在首private预测前封存，预先规定under1/3/9、over1→q.5/.75/.9；实际行action取相应原forecast分位而非看truth再择优。mean-diagnostic单列，即使更好也不混入正式quantile策略。",
+      "sources": [
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/l02_report.py",
+          "locator": "fixed cost-to-quantile loop before labels used for loss"
+        },
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/METHODS.md",
+          "locator": "fixed action mapping"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/actions.csv",
+          "locator": "original action source and policy labels"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "E02",
+      "status": "verified_pass",
+      "basis": "独立12096行动行=三方法×12outer×14日×4leaf×三成本×quantile/mean双账重算全部量/成本，相符。selected=True正式quantile子集恰2016格，原truth最高rev2与canonical单位另从raw重建。完整表/公式等价交付，无需重复2016数字。",
+      "sources": [
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/actions.csv",
+          "locator": "all original q/mean/action/truth/shortage/surplus/cost fields"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/predictions.csv",
+          "locator": "underlying original chosen or unchosen forecast values"
+        },
+        {
+          "object": "execution/registration.zip",
+          "member": "raw/observations.csv",
+          "locator": "terminal rev2 truths and per-version units"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "E03",
+      "status": "verified_pass",
+      "basis": "全部mean-diagnostic与quantile策略共用truth、cost和grid；独立每行按mean重算under/over，均与账一致，保持显式policy标签。报告明确A2/B1 under1有限样本mean更好但不替换正式行动。",
+      "sources": [
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/actions.csv",
+          "locator": "separate mean-diagnostic rows"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/action-summary.csv",
+          "locator": "same168 denominator node/cost/policy"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/report.md",
+          "locator": "selected quantile versus mean concrete directions"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "E04",
+      "status": "verified_pass",
+      "basis": "三成本按站点/方法完整量化，报告给出selected最重June20/A1/under9暴露41785.9及2组mean较好/10组较差的实际方向，建议按站点成本审视，不承诺所有时段可靠。表/公式及loss分量均闭合；未要求另一指定建议。",
+      "sources": [
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/action-summary.csv",
+          "locator": "complete node/cost method comparison"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/actions.csv",
+          "locator": "exact shortage/excess and costs"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/report.md",
+          "locator": "固定行动损失与建议；具体比较"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "E05",
+      "status": "verified_pass",
+      "basis": "明确单期、连续L、边际模型，不声称库存/容量/跨站调拨/联合尾风险或真实机构验证；WIS与分位行动共享成分不算独立重复证据。未将所选成本平均改善外推为服务保证。",
+      "sources": [
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/report.md",
+          "locator": "固定行动损失与建议/适用范围"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/METHODS.md",
+          "locator": "marginal empirical predictive distribution assumptions"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "F01",
+      "status": "verified_pass",
+      "basis": "本次为同一候选原先封存代码在fresh正式完整assignment实际108predict+12select+1report，全部native0/verified。read-only原packet、单CPU/netnone/newoutputs，report是该事前冻结记者真实运行产物；不是旧作者ZIP或新adapter补报告。必要业务/表/许可已独立核算，无需再跑同一候选。",
+      "sources": [
+        {
+          "object": "execution/registration.zip",
+          "member": "registration.json",
+          "locator": "formal_full_assignment and freeze time"
+        },
+        {
+          "object": "execution/ledger-snapshot.json",
+          "member": null,
+          "locator": "121 original verified cells"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "terminal-inspect.json",
+          "locator": "actual natural report execution"
+        },
+        {
+          "object": "execution/cells/121/prepared.zip",
+          "member": "project/l02_report.py",
+          "locator": "sealed actual reporter source"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "F02",
+      "status": "verified_pass",
+      "basis": "原registration/每cell prepared+accepted+native、report provenance/原产物副本可逐身份连接；独立核120numeric时间/exit与228原产物字节，不要求报告泄露host env/credentials。来源证明与科学判断分开。",
+      "sources": [
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "input/provenance/manifest.json",
+          "locator": "all narrow original native/source/artifact binding"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/provenance.csv",
+          "locator": "operator artifact mapping"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/original-results.json",
+          "locator": "received original numerical object retained"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "F03",
+      "status": "verified_pass",
+      "basis": "已真正打开origin-losses/coverage/worst-local三PNG：12切点MSE/WIS无量纲轴与三方法标识可读；coverage50/80/95 nominal/empirical轴及各node点清楚；JulyA2图L轴/UTC日、truth0、baseline95%band和两个corrected mean清楚，与独立核算原表一致。图形不是仅存在或自动像素检查。",
+      "sources": [
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/origin-losses.png",
+          "locator": "actual viewed full method/origin macro error"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/coverage.png",
+          "locator": "actual viewed marginal coverage"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/worst-local.png",
+          "locator": "actual viewed July A2 real truth and bands"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "F04",
+      "status": "verified_pass",
+      "basis": "实际核保存的Gneiting原PDF（pdftotext第18/21页均值平方损失/非对称quantile段）及Bracher原WIS HTML第2节和correction DOI1010592；支持相应评分/功能量主张，不声称为其ridge或联合保证背书。合成数据原创来源/非真实机构如实披露，失败captcha未冒充引用依据。",
+      "sources": [
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/references/claims.json",
+          "locator": "actual source locations/implementation mappings"
+        },
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/references/gneiting.pdf",
+          "locator": "sections3.1/3.3 original source"
+        },
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/references/wis.html",
+          "locator": "section2.2 WIS construction"
+        },
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/references/wis-correction.html",
+          "locator": "actual published correction DOI1010592"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/report.md",
+          "locator": "synthetic data provenance"
+        }
+      ],
+      "dependency_roots": []
+    },
+    {
+      "id": "F05",
+      "status": "verified_pass",
+      "basis": "USAGE/METHODS/submission声明实际依赖、字面argv、完整项目文件闭包、readonly/input-output ABI与复建条件；实际正式执行已经证明在声明环境从原packet到报告可复建。公开开发伪inner/后验scale及历史report-repair说明被诚实限定为开发，不冒充私有正式执行。",
+      "sources": [
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/USAGE.md",
+          "locator": "environment, argv, fresh output, limitations and development boundaries"
+        },
+        {
+          "object": "execution/registration.zip",
+          "member": "submission/submission.json",
+          "locator": "complete per-programme files and executable argv"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "output/result/METHODS.md",
+          "locator": "scientific/time/operational limits"
+        },
+        {
+          "object": "execution/cells/121/accepted.zip",
+          "member": "terminal-inspect.json",
+          "locator": "actual compatible declared environment execution"
+        }
+      ],
+      "dependency_roots": []
+    }
+  ]
+}

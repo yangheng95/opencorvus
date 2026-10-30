@@ -1,0 +1,26 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\evaluator-source\\run_l02_study.py",
+    "--submission",
+    "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\completed\\submission",
+    "--raw",
+    "D:/opencorvus-benchmark-runs/l02-daily-loop-qualification-20261030/main/raw",
+    "--material-contract",
+    "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\material-contract.json",
+    "--study",
+    "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\study-contract.json",
+    "--image",
+    "sha256:23ff8bfbf8055caa0b9fa5745ddb27cceea2f31d7d15b7a900c81112cdfe8ddf",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\formal-run"
+  ],
+  "pid": 78116,
+  "started_at": "2026-10-30T16:24:40.203429+00:00",
+  "subject_role": "candidate",
+  "system": "fresh Codex",
+  "scope": "formal same-contract108forecast12select1report; no author diagnostic or total cap; evaluation time is not candidate work"
+}

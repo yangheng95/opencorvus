@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "/opt/cpsat/bin/python",
+    "-B",
+    "l09_lab.py",
+    "--data",
+    "/packet",
+    "--state",
+    "/state",
+    "--out",
+    "/results/result",
+    "--route",
+    "guided"
+  ],
+  "exit_code": 0,
+  "wall_seconds": 1.6913081002421677,
+  "scope": "sanitized actual native receipt projection; original immutable inspect/argv is evaluator side"
+}

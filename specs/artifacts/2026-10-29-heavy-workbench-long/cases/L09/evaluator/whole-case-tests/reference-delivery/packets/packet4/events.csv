@@ -1,0 +1,15 @@
+row_id,tenant,event_id,order_id,revision,released_at,status,amount,currency
+North-X4a,North,X4a,O4,2,2026-01-05T00:00:00Z,active,21,USD
+North-X4b,North,X4b,O4,2,2026-01-05T00:00:00Z,active,22,USD
+North-L5,North,L5,O5,0,2025-12-31T00:00:00Z,active,500,USD
+North-F6,North,F6,O6,2,2026-01-15T00:00:00Z,active,44.50,USD
+South-X4a,South,X4a,O4,2,2026-01-05T00:00:00Z,active,121,USD
+South-X4b,South,X4b,O4,2,2026-01-05T00:00:00Z,active,122,USD
+South-L5,South,L5,O5,0,2025-12-31T00:00:00Z,active,600,USD
+South-F6,South,F6,O6,2,2026-01-15T00:00:00Z,active,144.50,USD
+East-X4a,East,X4a,O4,2,2026-01-05T00:00:00Z,active,221,USD
+East-X4b,East,X4b,O4,2,2026-01-05T00:00:00Z,active,222,USD
+East-L5,East,L5,O5,0,2025-12-31T00:00:00Z,active,700,USD
+East-F6,East,F6,O6,2,2026-01-15T00:00:00Z,active,244.50,USD
+wire-A,East,WIRE,O8,2,2026-01-05T00:00:00Z,active,88,USD
+wire-B,East,WIRE,O8,2,2026-01-05T00:00:00Z,active,89,USD

@@ -1,0 +1,34 @@
+{
+  "course": "course.json",
+  "report": "REPORT.md",
+  "forms": "assessment-forms.json",
+  "handover_checkpoint": "handover/checkpoint.json",
+  "handover_packet": "handover/packet4",
+  "handover_instructions": "TEACHER-HANDOVER.md",
+  "student_pack": [
+    "student-pack/week1.md",
+    "student-pack/week2.md",
+    "student-pack/week3.md",
+    "student-pack/week4.md",
+    "student-pack/week5.md",
+    "student-pack/week6.md"
+  ],
+  "teacher_pack": [
+    "teacher-pack/week1-answers.md",
+    "teacher-pack/week2-answers.md",
+    "teacher-pack/week3-answers.md",
+    "teacher-pack/week4-answers.md",
+    "teacher-pack/week5-answers.md",
+    "teacher-pack/week6-answers.md"
+  ],
+  "functional_grades": "functional-work.json",
+  "figures": [
+    "course-evidence.png"
+  ],
+  "figure_data": [
+    "functional-work.csv"
+  ],
+  "answer_programme": "teacher-pack/source/submission.json",
+  "source_archive": "source-archive",
+  "evidence": "evidence"
+}

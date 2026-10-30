@@ -1,0 +1,137 @@
+[
+  {
+    "variant": "base",
+    "work": "Q05",
+    "criterion": "R4",
+    "evidence": {
+      "criterion": "R4",
+      "status": "behavior_mismatch",
+      "objects": [
+        "actual-work/collection.json#/native_codes/restore",
+        "actual-work/restored-lab4/checkpoint.json"
+      ],
+      "first_counterexample": null,
+      "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+    }
+  },
+  {
+    "variant": "base",
+    "work": "Q22",
+    "criterion": "R4",
+    "evidence": {
+      "criterion": "R4",
+      "status": "behavior_mismatch",
+      "objects": [
+        "actual-work/collection.json#/native_codes/restore",
+        "actual-work/restored-lab4/checkpoint.json"
+      ],
+      "first_counterexample": null,
+      "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+    }
+  },
+  {
+    "variant": "base",
+    "work": "Q62",
+    "criterion": "R4",
+    "evidence": {
+      "criterion": "R4",
+      "status": "behavior_mismatch",
+      "objects": [
+        "actual-work/collection.json#/native_codes/restore",
+        "actual-work/restored-lab4/checkpoint.json"
+      ],
+      "first_counterexample": null,
+      "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+    }
+  },
+  {
+    "variant": "amount_change",
+    "work": "Q05",
+    "criterion": "R4",
+    "evidence": {
+      "criterion": "R4",
+      "status": "behavior_mismatch",
+      "objects": [
+        "actual-work/collection.json#/native_codes/restore",
+        "actual-work/restored-lab4/checkpoint.json"
+      ],
+      "first_counterexample": null,
+      "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+    }
+  },
+  {
+    "variant": "amount_change",
+    "work": "Q22",
+    "criterion": "R4",
+    "evidence": {
+      "criterion": "R4",
+      "status": "behavior_mismatch",
+      "objects": [
+        "actual-work/collection.json#/native_codes/restore",
+        "actual-work/restored-lab4/checkpoint.json"
+      ],
+      "first_counterexample": null,
+      "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+    }
+  },
+  {
+    "variant": "amount_change",
+    "work": "Q62",
+    "criterion": "R4",
+    "evidence": {
+      "criterion": "R4",
+      "status": "behavior_mismatch",
+      "objects": [
+        "actual-work/collection.json#/native_codes/restore",
+        "actual-work/restored-lab4/checkpoint.json"
+      ],
+      "first_counterexample": null,
+      "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+    }
+  },
+  {
+    "variant": "new_tenant",
+    "work": "Q05",
+    "criterion": "R4",
+    "evidence": {
+      "criterion": "R4",
+      "status": "behavior_mismatch",
+      "objects": [
+        "actual-work/collection.json#/native_codes/restore",
+        "actual-work/restored-lab4/checkpoint.json"
+      ],
+      "first_counterexample": null,
+      "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+    }
+  },
+  {
+    "variant": "new_tenant",
+    "work": "Q22",
+    "criterion": "R4",
+    "evidence": {
+      "criterion": "R4",
+      "status": "behavior_mismatch",
+      "objects": [
+        "actual-work/collection.json#/native_codes/restore",
+        "actual-work/restored-lab4/checkpoint.json"
+      ],
+      "first_counterexample": null,
+      "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+    }
+  },
+  {
+    "variant": "new_tenant",
+    "work": "Q62",
+    "criterion": "R4",
+    "evidence": {
+      "criterion": "R4",
+      "status": "behavior_mismatch",
+      "objects": [
+        "actual-work/collection.json#/native_codes/restore",
+        "actual-work/restored-lab4/checkpoint.json"
+      ],
+      "first_counterexample": null,
+      "note": "Specific actual evidence and source-bound expectation; matching counterparts omitted only to keep feedback concise."
+    }
+  }
+]

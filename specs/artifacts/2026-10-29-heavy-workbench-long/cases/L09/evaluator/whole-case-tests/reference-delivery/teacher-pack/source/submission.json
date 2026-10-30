@@ -1,0 +1,31 @@
+{
+  "files": [
+    "l09_lab.py",
+    "l09_protocol.py",
+    "l09_grade_reference.py",
+    "l09_deliver.py",
+    "l09_lessons.py",
+    "l09_packets.py",
+    "l09_worked.py",
+    "assets/TASK.md",
+    "assets/BUSINESS.md",
+    "assets/EXECUTION.md",
+    "assets/GRADING.md",
+    "assets/OUTPUTS.md"
+  ],
+  "lab_argv": [
+    "/opt/cpsat/bin/python",
+    "-B",
+    "l09_lab.py"
+  ],
+  "grade_argv": [
+    "/opt/cpsat/bin/python",
+    "-B",
+    "l09_grade_reference.py"
+  ],
+  "deliver_argv": [
+    "/opt/cpsat/bin/python",
+    "-B",
+    "l09_deliver.py"
+  ]
+}

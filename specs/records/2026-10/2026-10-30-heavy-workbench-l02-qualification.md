@@ -502,3 +502,14 @@ L06/0.3完整权威业务/信息/承诺/物理现金续接和其余L01/L04/L05/L
 原Task真实12:07:30.490→14:09:01.817Z自然completed，原Inspect14:09:51自然exit0；14:32真实API/running0和只读Docker绑定核均已终态。14:39:38完整13315文件/4043939087原字节（含Git/全部未跟踪开发失败与交付）封存1255561939字节ZIP，HEAD0b93788d6c569efc88eadb7532261271129e097f。唯一validate_submission从实际根submission.json封存11个programme/资产/声明，没取deliveryZIP作fallback。14:39:39原stop正常dispose listener，成对暂存auth/models移除、源凭据不改；旧56591接口退休，不再请求/重开。安全收据cases/L02/evaluator/pilot-opencorvus-20261030，完整敏感原trace和capsule仅外部。
 
 14:43:06.866Z唯一真正候选私有整题执行已启动：pair/opencorvus/evaluation，launcher95380/driver79496，封存候选原11文件、冻结material/study、原raw、108forecast+12selector+report，1CPU/netnone/readonlysource/raw/newoutputs，无author-diagnostic/总截断。唯一动态locator L02-current-pair-20261030.json已更新active_evaluation；任务与评估侧耗时分开，原7291.327秒未按真实活动完整归因，不认证有效小时。当前owner仍活动、native未全部完成，候选score/study/quality/good均null；等真实终态再原对象封存/新图/同66叶独评与l02_grade，不用旧publication投影。之后才fresh Codex。自有观察SQL最初误写cells及PowerShell引号SyntaxError原tool trace保留，修读取cell后得真实进度，不当候选或产品失败。
+
+
+## 最新真实成对接续：OC完整100，fresh Codex已交付并正式私有评价
+
+原OC私有121于15:08:20.674Z自然exit0/1513.808秒，原SQL/cells/native/report封evaluation/completed；prepare15:22:43Z exit0/847.536秒，独立38于15:35:10.681Z初评先封全verified_pass，三图真实view，原raw许可/最高missing/训练来源/精确选模/全部指标/12096行动账独算。原实际grade15:44:27→15:59:58Z exit0/931.148秒，role=candidate/statusgraded/66pass/总100/study_complete/quality_success/goodtrue，未用作者publication投影。真实grade/独评/实际报告图表安全产物在pilot-opencorvus-20261030/final-assessment，完整敏感capsule仅外部；旧阶段null不回写。
+
+之后新codex_l02_fresh fork none/无modeloverride/禁再委托，派同Git441aa82c9原16public（派发前直接Git对象字节核同，仅immutable输入身份，不作功能哈希门）。它已自然交付ee1ab32a681914f63afcff723236d0635ecc776b；完整944文件/794722562原字节，ZIP132996665字节，含Git/未跟踪/原失败/全部验证。候选actualmodel/fullusage/精确native起止未暴露=unknown，不能从名字或模型自述补造；comparablefalse。根submission.json由同一validate_submission原字节封闭包，无旧输出/评估器/权重/参照/凭据进入worker。
+
+原薄helper已归档和封programme后在metadata json.dump(parsed manifest)遇Decimal TypeError，未启动formal；这是真实协调工具错误，不是候选失败。原script/异常在completed/seal-tool-error1及initial副本保留，改以唯一原submission.json作元数据引用，不转换Decimal、不重新封或重跑同候选。原目录continuation后16:24:40.203Z正式Codex私有108forecast12select1report启动，launcher64636/driver78116，复用同OC evaluator快照/冻结material-study/原raw/newoutputs，1CPU/netnone，无总截断/缩小诊断。post-terminal helper96992正常OS等待精确自有64636，如其先结束就接续原终态；之后只封实际SQL/accepted/报告，再同原grader prepare，不新模型/forecast/native重算。动态L02-current-pair.json当前active_evaluation在codex/evaluation，别重开原Task/API/另一矩阵。
+
+Codex自然终态的新图/同66叶独评/真正grade尚待；只有两方真实good才另升L02版本。原规则/私有reference/权重不改，OpenCorvus实际gpt-6.1-sol/code/base与Codex未知配置仅描述，各自生命周期及评估时间不认证有效小时或同模型速度费用排名。

@@ -1,0 +1,263 @@
+{
+  "sessions": [
+    {
+      "id": "W1",
+      "hours": 5,
+      "lab_id": 1,
+      "objectives": [
+        "Observe raw identity, UTC and exact cents; distinguish a transport receipt from business value."
+      ],
+      "prerequisites": [],
+      "domains": [
+        "D"
+      ]
+    },
+    {
+      "id": "W2",
+      "hours": 5,
+      "lab_id": 2,
+      "objectives": [
+        "Execute a joint-key MAX/join or DENSE_RANK SQL query; prove latest-state rather than latest-valid reasoning."
+      ],
+      "prerequisites": [
+        "W1"
+      ],
+      "domains": [
+        "S"
+      ]
+    },
+    {
+      "id": "W3",
+      "hours": 5,
+      "lab_id": 3,
+      "objectives": [
+        "Keep original journal and same request receipt through real committed-write exit73; inspect the database before retry."
+      ],
+      "prerequisites": [
+        "W2"
+      ],
+      "domains": [
+        "R"
+      ]
+    },
+    {
+      "id": "W4",
+      "hours": 5,
+      "lab_id": 4,
+      "objectives": [
+        "Retain late older arrivals, quarantine source conflicts, interpret future eligibility and later unique corrections."
+      ],
+      "prerequisites": [
+        "W3"
+      ],
+      "domains": [
+        "D",
+        "S",
+        "R"
+      ]
+    },
+    {
+      "id": "W5",
+      "hours": 5,
+      "lab_id": 5,
+      "objectives": [
+        "Query own tenant, cross tenant, unknown identity and admin; log decisions from the principal policy."
+      ],
+      "prerequisites": [
+        "W4"
+      ],
+      "domains": [
+        "A"
+      ]
+    },
+    {
+      "id": "W6",
+      "hours": 5,
+      "lab_id": 6,
+      "objectives": [
+        "Run the complete corrected chain and restore a later lesson from original intermediate evidence; grade behavior and separate human outcomes."
+      ],
+      "prerequisites": [
+        "W5"
+      ],
+      "domains": [
+        "D",
+        "S",
+        "R",
+        "A"
+      ]
+    }
+  ],
+  "diagnostics": [
+    {
+      "learner_id": "F01",
+      "observed_task": "wire",
+      "observed_counterexample": "A repeated North E1 was counted again; use the same wire request twice and inspect journal/state separately.",
+      "route_recommendation": "guided worked-example plus evidence retrieval",
+      "rationale": "Constructed response SELECT SUM(amount) FROM every_delivery is the local evidence; honor keyboard-only instructions. It does not establish a stable deficit or learning gain."
+    },
+    {
+      "learner_id": "F02",
+      "observed_task": "identity",
+      "observed_counterexample": "North/South O1 share the business name but have distinct tenant identities.",
+      "route_recommendation": "guided worked-example plus evidence retrieval",
+      "rationale": "Constructed response GROUP BY order_id is the local evidence; honor plain-language glossary. It does not establish a stable deficit or learning gain."
+    },
+    {
+      "learner_id": "F03",
+      "observed_task": "revision",
+      "observed_counterexample": "O3 latest missing means unknown; a lower active revision is not a current truth.",
+      "route_recommendation": "guided worked-example plus evidence retrieval",
+      "rationale": "Constructed response WHERE status=active BEFORE MAX(revision) is the local evidence; honor tabular alternative to color plot. It does not establish a stable deficit or learning gain."
+    },
+    {
+      "learner_id": "F04",
+      "observed_task": "commit",
+      "observed_counterexample": "The process can exit after commit; inspect durable receipt and reuse the same request.",
+      "route_recommendation": "guided worked-example plus evidence retrieval",
+      "rationale": "Constructed response commit(); print(ack); retry INSERT all rows is the local evidence; honor self-paced worked example. It does not establish a stable deficit or learning gain."
+    },
+    {
+      "learner_id": "F05",
+      "observed_task": "permission",
+      "observed_counterexample": "Principal membership determines scope; a requested tenant is only an untrusted target.",
+      "route_recommendation": "guided worked-example plus evidence retrieval",
+      "rationale": "Constructed response tenant=request[tenant] is the local evidence; honor keyboard-only instructions. It does not establish a stable deficit or learning gain."
+    },
+    {
+      "learner_id": "F06",
+      "observed_task": "evidence",
+      "observed_counterexample": "A constructed rehearsal shows operability; no observed human outcomes establish gain.",
+      "route_recommendation": "guided worked-example plus evidence retrieval",
+      "rationale": "Constructed response The rehearsal passed so learning rose 30%. is the local evidence; honor plain-language glossary. It does not establish a stable deficit or learning gain."
+    },
+    {
+      "learner_id": "F07",
+      "observed_task": "wire",
+      "observed_counterexample": "A repeated North E1 was counted again; use the same wire request twice and inspect journal/state separately.",
+      "route_recommendation": "guided worked-example plus evidence retrieval",
+      "rationale": "Constructed response SELECT SUM(amount) FROM every_delivery is the local evidence; honor tabular alternative to color plot. It does not establish a stable deficit or learning gain."
+    },
+    {
+      "learner_id": "F08",
+      "observed_task": "identity",
+      "observed_counterexample": "North/South O1 share the business name but have distinct tenant identities.",
+      "route_recommendation": "guided worked-example plus evidence retrieval",
+      "rationale": "Constructed response GROUP BY order_id is the local evidence; honor self-paced worked example. It does not establish a stable deficit or learning gain."
+    },
+    {
+      "learner_id": "F09",
+      "observed_task": "revision",
+      "observed_counterexample": "O3 latest missing means unknown; a lower active revision is not a current truth.",
+      "route_recommendation": "guided worked-example plus evidence retrieval",
+      "rationale": "Constructed response WHERE status=active BEFORE MAX(revision) is the local evidence; honor keyboard-only instructions. It does not establish a stable deficit or learning gain."
+    },
+    {
+      "learner_id": "F10",
+      "observed_task": "commit",
+      "observed_counterexample": "The process can exit after commit; inspect durable receipt and reuse the same request.",
+      "route_recommendation": "guided worked-example plus evidence retrieval",
+      "rationale": "Constructed response commit(); print(ack); retry INSERT all rows is the local evidence; honor plain-language glossary. It does not establish a stable deficit or learning gain."
+    },
+    {
+      "learner_id": "F11",
+      "observed_task": "permission",
+      "observed_counterexample": "Principal membership determines scope; a requested tenant is only an untrusted target.",
+      "route_recommendation": "guided worked-example plus evidence retrieval",
+      "rationale": "Constructed response tenant=request[tenant] is the local evidence; honor tabular alternative to color plot. It does not establish a stable deficit or learning gain."
+    },
+    {
+      "learner_id": "F12",
+      "observed_task": "evidence",
+      "observed_counterexample": "A constructed rehearsal shows operability; no observed human outcomes establish gain.",
+      "route_recommendation": "guided worked-example plus evidence retrieval",
+      "rationale": "Constructed response The rehearsal passed so learning rose 30%. is the local evidence; honor self-paced worked example. It does not establish a stable deficit or learning gain."
+    },
+    {
+      "learner_id": "F13",
+      "observed_task": "wire",
+      "observed_counterexample": "A repeated North E1 was counted again; use the same wire request twice and inspect journal/state separately.",
+      "route_recommendation": "challenge SQL/transaction audit with same core objective",
+      "rationale": "Constructed response SELECT SUM(amount) FROM every_delivery is the local evidence; honor keyboard-only instructions. It does not establish a stable deficit or learning gain."
+    },
+    {
+      "learner_id": "F14",
+      "observed_task": "identity",
+      "observed_counterexample": "North/South O1 share the business name but have distinct tenant identities.",
+      "route_recommendation": "challenge SQL/transaction audit with same core objective",
+      "rationale": "Constructed response GROUP BY order_id is the local evidence; honor plain-language glossary. It does not establish a stable deficit or learning gain."
+    },
+    {
+      "learner_id": "F15",
+      "observed_task": "revision",
+      "observed_counterexample": "O3 latest missing means unknown; a lower active revision is not a current truth.",
+      "route_recommendation": "challenge SQL/transaction audit with same core objective",
+      "rationale": "Constructed response WHERE status=active BEFORE MAX(revision) is the local evidence; honor tabular alternative to color plot. It does not establish a stable deficit or learning gain."
+    },
+    {
+      "learner_id": "F16",
+      "observed_task": "commit",
+      "observed_counterexample": "The process can exit after commit; inspect durable receipt and reuse the same request.",
+      "route_recommendation": "challenge SQL/transaction audit with same core objective",
+      "rationale": "Constructed response commit(); print(ack); retry INSERT all rows is the local evidence; honor self-paced worked example. It does not establish a stable deficit or learning gain."
+    },
+    {
+      "learner_id": "F17",
+      "observed_task": "permission",
+      "observed_counterexample": "Principal membership determines scope; a requested tenant is only an untrusted target.",
+      "route_recommendation": "challenge SQL/transaction audit with same core objective",
+      "rationale": "Constructed response tenant=request[tenant] is the local evidence; honor keyboard-only instructions. It does not establish a stable deficit or learning gain."
+    },
+    {
+      "learner_id": "F18",
+      "observed_task": "evidence",
+      "observed_counterexample": "A constructed rehearsal shows operability; no observed human outcomes establish gain.",
+      "route_recommendation": "challenge SQL/transaction audit with same core objective",
+      "rationale": "Constructed response The rehearsal passed so learning rose 30%. is the local evidence; honor plain-language glossary. It does not establish a stable deficit or learning gain."
+    },
+    {
+      "learner_id": "F19",
+      "observed_task": "wire",
+      "observed_counterexample": "A repeated North E1 was counted again; use the same wire request twice and inspect journal/state separately.",
+      "route_recommendation": "challenge SQL/transaction audit with same core objective",
+      "rationale": "Constructed response SELECT SUM(amount) FROM every_delivery is the local evidence; honor tabular alternative to color plot. It does not establish a stable deficit or learning gain."
+    },
+    {
+      "learner_id": "F20",
+      "observed_task": "identity",
+      "observed_counterexample": "North/South O1 share the business name but have distinct tenant identities.",
+      "route_recommendation": "challenge SQL/transaction audit with same core objective",
+      "rationale": "Constructed response GROUP BY order_id is the local evidence; honor self-paced worked example. It does not establish a stable deficit or learning gain."
+    },
+    {
+      "learner_id": "F21",
+      "observed_task": "revision",
+      "observed_counterexample": "O3 latest missing means unknown; a lower active revision is not a current truth.",
+      "route_recommendation": "challenge SQL/transaction audit with same core objective",
+      "rationale": "Constructed response WHERE status=active BEFORE MAX(revision) is the local evidence; honor keyboard-only instructions. It does not establish a stable deficit or learning gain."
+    },
+    {
+      "learner_id": "F22",
+      "observed_task": "commit",
+      "observed_counterexample": "The process can exit after commit; inspect durable receipt and reuse the same request.",
+      "route_recommendation": "challenge SQL/transaction audit with same core objective",
+      "rationale": "Constructed response commit(); print(ack); retry INSERT all rows is the local evidence; honor plain-language glossary. It does not establish a stable deficit or learning gain."
+    },
+    {
+      "learner_id": "F23",
+      "observed_task": "permission",
+      "observed_counterexample": "Principal membership determines scope; a requested tenant is only an untrusted target.",
+      "route_recommendation": "challenge SQL/transaction audit with same core objective",
+      "rationale": "Constructed response tenant=request[tenant] is the local evidence; honor tabular alternative to color plot. It does not establish a stable deficit or learning gain."
+    },
+    {
+      "learner_id": "F24",
+      "observed_task": "evidence",
+      "observed_counterexample": "A constructed rehearsal shows operability; no observed human outcomes establish gain.",
+      "route_recommendation": "challenge SQL/transaction audit with same core objective",
+      "rationale": "Constructed response The rehearsal passed so learning rose 30%. is the local evidence; honor self-paced worked example. It does not establish a stable deficit or learning gain."
+    }
+  ],
+  "source_scope": "24 original fictional records; no real human outcomes",
+  "total_learner_hours": 30
+}

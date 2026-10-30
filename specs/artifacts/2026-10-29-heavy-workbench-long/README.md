@@ -1,81 +1,32 @@
-# HeavyWorkBench-Long · 0.2.0-dev
+# HeavyWorkBench 长程任务建设与真实验收
 
-**状态：套件开发中，旧L06、L02、L03与新L07共四个开发pilot合同（4/10），L06真实OpenCorvus与fresh Codex同合同各100/100，已触发另升L06/0.3建设；L02真实试跑活动中、尚无新成绩；L03/L07完整题/真实整链测试与独审完成，有效小时仍未证明。** 这是独立派生研究任务，不是官方PaperBench或完整原论文复现分数。[Recall与未满足项](../../records/2026-10/2026-10-29-heavy-workbench-long.md)是当前工作记录。旧H05两方100点与难度天花板见[横向证据](../2026-10-29-heavy-workbench-cross-system/README.md)。
+当前有 **6/10个完整开发版合同**：L02、L03、L07、L08、L09，以及已触发升级的旧L06/0.2。不是十题完成，也没有认证任何一题的有效候选小时。任务目标仍是十个完整全链案例、可执行原子rubric、真实正确/错误程序、单层独审，以及OpenCorvus/fresh Codex横比；两方good须另升版本，快而正确允许。
 
-用户纠偏后改为优先交完整题包和真实测试。[十题成品矩阵](cases/README.md)明确实际缺口。[新L03](cases/L03/README.md)已完成原材料→重述账→管理报告/图→同源码四种输入整链执行和错误程序实测；独审发现五项后集中修复，完整原账独立核算/一次冷跑一致，真实checker给参考100。这个分数不是模型成绩，不再以组件资格替代成品。L02原公开输入真实Task继续有效运行；其余缺题没有因历史检查数而变成完成。
+[当前十题矩阵](cases/README.md)列出每题实际成品和剩余缺口；[最新持续Recall](../../records/2026-10/2026-10-29-heavy-workbench-long.md)保留全部阶段/原失败/当前活跃定位。此前本页的组件资格历史已在月度Recall及Git中保留，本页只写当前可核对状态，不用旧active表启动重复任务。
 
-[新L07](cases/L07/README.md)已补完整原报告族→组提取/依赖→主敏感性/留一/更正→实质报告/真实图→同源数据变化重算，整题独审另算一致。真实参考100；数值/图正确却作无依据现实保证的实际弱程序90且关键失败，不能用高分补偿。两者是作者控制，不是SOTA模型比较或小时证明。
+| Case | 当前完整产物与真实测试 | 当前界限 |
+|---|---|---|
+| [L01论文复现](public/TASK.md) | 部分数值/恢复与真实训练资格 | 三方程解质量/完整可达/冻结尚未完成，方法分不能补偿解质量失败 |
+| [L02发布时间预测研究](cases/L02/README.md) | 冻结66叶；完整科学参考/私有执行/独评；真实OpenCorvus候选100/66pass | fresh Codex已交付封存，原私有121评价运行，尚无其分数 |
+| [L03多源结账](cases/L03/README.md) | 原材料→全账/决策/实际图；四输入与真实错误程序/整审已交 | 作者参考资格，不是fresh模型难度证明 |
+| [L04版本与恢复](cases/L04/README.md) | 旧库迁移/恢复局部实证 | 完整应用现场/交付/评分/冻结未完成 |
+| [L05事故与外部副作用](cases/L05/README.md) | 真实HTTP两库事故/补偿与受控在途/EOF局部实证 | 完整并发/恢复/监测/交付/冻结未完成 |
+| [L06耦合经营控制](cases/L06/README.md) | 旧0.2真实两系统同grader各100，已触发0.3 | 新完整信息历史/承诺/物理状态续接与质量界未完成，旧线不改 |
+| [L07研究合成](cases/L07/README.md) | 原HTML族/依赖/六分析/更正/图；三输入/计算错/缓存/弱声明/整审 | 弱声明90仍关键失败；无fresh小时结论 |
+| [L08项目恢复](cases/L08/README.md) | 真实组件验收/原付款/资源现金/最小延期/移交；三输入/七错误弱程序/整审 | 弱声明98仍关键失败；模拟工作日非agent墙钟 |
+| [L09课程与陌生评分](cases/L09/README.md) | 六真实相依实验/commit后退出与恢复/陌生作业/完整教材及教师移交/图；三输入/两SQL路线/整审 | 弱学习声明95仍关键失败；30学时非agent小时，虚构试跑非真人成效 |
+| L10因果能源控制 | 已有完整升级审查 | 下一直接建设完整物理/账单/恢复参考和测试 |
 
-L01针对Rathore等ICML2024论文《Challenges in Training PINNs: A Loss Landscape Perspective》，包括独立实现、三方程比较、配对实验、优化器数值验证、真实训练、恢复、谱诊断、图表与可清洁复训的论文。工作量来自实际科学问题和依赖链，不设最少运行时长，不用sleep或空转达标；总模型token/总墙钟不设截止。
+## 已发生的模型候选结果
 
-拟公开合同见[public/TASK.md](public/TASK.md)，尚须根据真实收敛资格和独立审查收敛后冻结。L01仍未冻结；L06/0.2.0现有已冻结的开发可执行合同，尚无新版候选小时级实证。S06是另立身份的微型管线测试，不计十题。不能把旧题、资格或整个套件宣称为已完成小时级升级。
+[L02真实OpenCorvus完整评分](cases/L02/evaluator/pilot-opencorvus-20261030/final-assessment/README.md)：原Task12:07:30→14:09:01UTC自然completed；mode=code、builtin/base2026.10.14.1、gpt-6.1-sol全流式、orchestrator+developer+tester。完整工作区封存后才真正私有121运行/38独评/Q26/同冻结grader，16:00前实际100/66pass/study_complete/quality_success/good。不是Inspect完成分或作者publication投影。
 
-[public/profile.json](public/profile.json)列出19基础配置、5续训分支及有效父状态选择规则；[rubric.draft.json](rubric.draft.json)含189个二元原子叶、100分组权重，**其中9分结果锚点待校准，禁止发布总成绩**。原子数量不是难度证据。公开论文、数据与各自许可在`public/`，评估侧原官方rubric、真实资格源码/导出/回执在[evaluator/](evaluator/README.md)，不进入候选项目。
+全新Codex（fork none/无模型override/同16公开对象）已自然交付ee1ab32，全944文件/794.7MB原字节完整封存。16:24:40UTC开始真正同合同私有121，当前唯一动态定位D:/opencorvus-benchmark-runs/L02-current-pair-20261030.json；不重开旧Task/API。Codex实际model/usage和精确native起止未暴露，comparable=false，不能作同模型资源速度/费用因果排名；它也good才触发新L02版本。
 
-## L01局部数值资格（历史过程，非候选成绩）
+[L06旧成对实际结果](cases/L06/evaluator/pilot-codex-20261030/paired-comparison.json)两100已经触发0.3，旧public/rubric/FREEZE/成绩保留。作者参考分、任务生命周期、准备/故障/评估侧计算、缓存token、多核CPU均不代替候选有效小时；不能用材料行数或叶数冒充难度。
 
-使用本地隔离Docker GPU容器，基础镜像固定为`pytorch/pytorch@sha256:c16f4c749e2d9e96878875cdf6cc45cddda1d1a36fddd371dd6f2360f1b6e2a2`，PyTorch2.7.1/CUDA12.8，RTX5090。科学依赖镜像仅作本地准备，未发布。实际全批10,000残差点、width100、float64训练/二阶导数/Hessian-vector product及真实closure路径通过。NumPy独立读取权重重算三个方程全网格结果；与GPU自动微分的一/二阶导数最大绝对差5.33e-15，损失/L2RE在1e-9相对、1e-10绝对容差内吻合。资格训练264 Adam+16 L-BFGS步，**不证明论文结论、完整矩阵或小时级难度**。
+## 执行与边界
 
-真实稳态Adam每步convection0.01722秒、reaction0.01751秒、wave0.04664秒；L-BFGS16步分别1.093/0.863/2.211秒，33–36次closure。已知正定线性系统PCG显式残差7.62e-10；实际PINN高阻尼资格PCG显式残差7.24e-10。高阻尼1e4只是设备/导数/线性代数路径资格，不冒充论文小阻尼NNCG成功。
+每题的public是候选输入，evaluator/参考/权重/私有作业及旧答案不能进入候选。新题从原料、真实执行、可复核输出和正确/错误程序进入同一checker，再一次集中整审；只修实质阻断、仅必要复验。当前只由熟悉资料的非盲AI进行开发审查，未作职业真人/统计成熟认证。更多真实区分度、小时与可靠性证据仍须实际取得。
 
-独立审查发现并关闭评分数据控制漏洞：正式数值CLI自行生成权威网格，不能读取候选提供的点文件。常数模型在完整权威网格上有明确非零误差。数值primitive不证明训练真实发生，仍需源码、实际完整执行和清洁复训证据。
-
-最新[独立阶段审查](evaluator/independent-review/REVIEW.md)及[机器可读结论](evaluator/independent-review/stage-assessment.json)实际另起环境重跑15项NumPy、3项Torch测试及边界见证，核对9组真实GPU收据；认可已关闭上述点控制、native零步、分量零导数与合同冲突，**未批准正式冻结**。其自有源码副本、精确命令/输出与历史/新复跑身份都保存在该目录。仍缺晚期NNCG、R9锚点、完整候选长跑和清洁复训，不能把工具资格通过写成成熟benchmark已完成。
-
-后续[晚期资格](evaluator/late-qualification/README.md)已取得真实60分钟代表训练、非正曲率失败与21步低秩刷新路径。原小阻尼两分支失败保留，新增μ=1为冻结前派生阻尼敏感性；μ=10仅为资格探索。21步与单一代表配置不能证明完整200步、选优父配置或整个19-run研究已通过。R9及正式候选长跑继续待完成。
-
-最新[完整续训和恢复资格](evaluator/full-continuation-and-restore/README.md)已取得μ1×200实际接受、10刷新与Adam/L-BFGS真实新进程恢复，后者逐参数最大差0。[R9独立设计审查](evaluator/r9-design-review/REVIEW.md)同时指出原非关键9分的加权通过漏洞；当前待校准PDE质量叶均为关键项，公开区分研究完成与解复现成功。阈值及完整选择合同的可达性继续待证据，不能由91分方法成绩代替物理解质量。
-
-[最终注册工具审查](evaluator/registration-review-uncapped/REVIEW.md)实际通过4项元数据合同测试与定向类型/格式检查。当前薄启动只接受显式null token政策，已删除原总量阈值取消路径；真实模型/Provider/Task端到端仍待冻结后的pilot。科学资格、注册检查和候选成绩分别记录。
-
-本轮补充[OUTPUTS.md机器交付合同](public/OUTPUTS.md)：24配置覆盖、逐阶段计数/路径、初始化及续训父配对、实际执行证据与每PDE同一final的训练loss选优。评估侧`pinn_submission_check.py`是薄只读结构/权重端点检查，训练来源、日志内容与科学状态仍待实际完整复训和审查，不能用合成记录通过冒充科学验收。
-
-[新增质量指标独立复核](evaluator/quality-metrics-review/REVIEW.md)实际重跑18项测试、三份真实导出CLI与独立CPU自动微分；完整评价网格残差和逐条件族指标匹配，低质量网络/解析诊断分开保留。没有填写R9阈值或批准freeze。三代表资格及另两注册convection学习率的历史记录保留，六旧昂贵任务目前Paused，尚无新候选成绩。
-
-[机器交付独立审查](evaluator/manifest-review/REVIEW.md)实际找出并复核修复了项目/输出根混淆、未开始记录的非null引用、plateau/stalled声明计数矛盾；最终15项manifest测试与独立端点/两种tie探针通过。当前工具全范围[36项实跑](evaluator/artifact-contract-validation/README.md)仅证明数值与结构合同。R9已拆为14个pending关键质量叶、共9分，阈值仍null，完整选择可达性仍待终态证据。
-
-用户最新要求[便宜实验优先](evaluator/cheap-first/README.md)：六个自有昂贵容器已可逆暂停；先做必要条件/枚举/短程，而非同时完整训练。[九题独立审查](evaluator/nine-case-review/REVIEW.md)实跑28次旧checker并明确升级缺口。[L06](cases/L06/README.md)低成本审查发现并修正了期末/阶段仓容、输入维度/概率和严格JSON问题，仍未证明成本最优或小时级。[S06](cases/L06/smoke/README.md)真实原生完成、数学最优及两方清洁源码复跑均通过微型合同；它不计入十题，不证明重型难度。
-
-便宜接续新增[L06严格下界](cases/L06/evaluator/independent-relaxation/REVIEW.md)：完整LP .047秒，独立从输入重建1488变量/1096行并精确核算下界约46220.2662；与51263上界仍不能认证1%。[L04合成旧库迁移能力](cases/L04/README.md)已实际独立冷跑，修复共享NULL身份漏洞，4升级+2按合同中止/原库保留通过当前局部协议；两者均非冻结重型题、候选分或小时级成绩。
-
-历史[L06完整公开合同与rubric稿](cases/L06/README.md)含11CSV/设施原材料、5CLI事实映射及47叶100分草案，当时质量/逐叶grader/完整参考/变体尚未就绪；当前冻结与真实两100以本页末节及L06当前记录为准。[不同整数搜索](cases/L06/evaluator/qualification/v2/integer-search/README.md)与独立业务复核取得新可行上界49032.9，仍未认证1%。只新增一个CPU参考界资格，真实活跃路径以长程Recall末节为准；六旧昂贵容器仍Paused。局部资格/草案不构成十题、候选分或小时级证明。
-
-该单个CPU参考任务已自然结束，独立核验成本47808/native界47380，基例1%比例约0.9033%，[终态/独立范围/基例预注册](cases/L06/README.md)单列；完整参考交付与冻结仍pending。独立完整合同审查认可设计/10叶primitive，本轮具体漏洞已修，未批准其余37叶/职业参考/变体/小时级。当前不留新增活跃长计算，不重复求解凑时长。
-
-最新[L06数值与源码交付资格](cases/L06/README.md)：30数值叶独立复核关闭输入漂移/负gap漏洞；主方真正raw-source全链约7分钟、成本47746.2，仍不发布候选总分。唯一完整独立复跑使用同源/全部CSV反转，末态以Recall为准；17执行/审查叶、变体/聚合/校准及十题长程验证仍待完成。
-
-L06现有[完整独立基例复建与证据聚合](cases/L06/README.md)：固定L下不同正确计划47737.6通过，唯一报价控制无需再求界即可证明1%可达；新聚合器不以94/96高分补偿关键输入失败。报价source实际执行、多质量校准/冻结和fresh双系统仍待完成，整套十题新版小时级仍0/10。
-
-L06现已完成[最终独立合同审查并冻结0.2.0](cases/L06/README.md)，真实参考完整评价98仅为资格锚点。冻结Git树2e6ffc7ce的18个public已用于预注册双系统顺序试跑，OpenCorvus真实Task tsk_g00VZTFvzf0073YLIAGl已自然完成，OpenCorvus实际清洁完整评价100，fresh Codex已顺序启动；[Recall](../../records/2026-10/2026-10-29-heavy-workbench-long.md)及外部定位保存实况。开发合同冻结1/10、候选小时资格0/10，不能以单题代替十题。后续[逐题矩阵](cases/README.md)区分局部资格与未实施项；L05的真实现场/在途/EOF局部资格及L02发布时间隔离原语均不当完整题冻结。
-
-
-最新[真实OpenCorvus试跑收据](cases/L06/evaluator/pilot-opencorvus-20261029/README.md)：原Task自然完成、完整版本封存/正常cleanup，30数值叶通过；真正基例源码冷执行与同冻结独立评价正在进行，尚无总分或小时认证。L05新增[顺序事故现场](cases/L05/README.md)经独立真实反例修复后取得限定范围资格，完整题与其余九题仍需继续建设。
-
-
-## 当前双系统结案与新版本建设
-
-[L06/0.2.0真实成对结果](cases/L06/evaluator/pilot-codex-20261030/paired-comparison.json)：两方各100/47pass/28critical通过，均经评估侧源码基例、注册报价和行序控制以及同冻结单层独立17叶审查，再由真实grader聚合。不是参考分或Inspect完成分；旧public/rubric/FREEZE与两结果保留。非盲AI审查/模型未知和资源隔离限制仍在，不作同模型速度/费用因果排名。
-
-两good已触发[新L06/0.3计划与机制](cases/L06/evaluator/upgrade-v0.3/PLAN.md)：分阶段信息/历史承诺/执行政策。闭式9/2合法与7/2提前知叶的枚举只证明机制活跃，不是新题冻结或数小时难度。[L02](cases/L02/README.md)已隔离全部inner并完成每日数值参考与真实选择；完整科学/运营交付、质量线/rubric与冻结仍未实现。当前套件冻结1/10、候选有效小时资格0/10，十题目标未完成。
-
-
-[L02完整每日数值参考](cases/L02/evaluator/qualification/daily-full-reference/README.md)已真实完成12outer/36inner、108预测/12选择及单层独立核验，原CSV/只读1CPU/netnone权限、逐格指标/拟合来源和真实图均有原件。去天气消融更优、A1/ZA转移边界四天区间失效如实保留；研究质量线/通用候选grader/rubric与冻结仍待。不是新候选成绩，套件仍冻结1/10、有效小时0/10。
-
-[L02通用数值执行资格](cases/L02/evaluator/qualification/generic-execution/README.md)补齐候选自带files/argv/池、两语言原CSV全链、Windows锁与原CID五窗口恢复、封存产物重算及冻结report的数据释放；它不等同完整科学/运营grader。旧120组不重跑，所有新单outer均私有作者诊断，正式质量/冻结与有效小时仍待。
-
-[L02相对质量/研究稿](cases/L02/evaluator/qualification/quality-study/README.md)以事前固定外部参照政策只读重算旧真实预测：原inner选择通过26条件，基线自身、零预测、极宽区间和单叶退化对照被拒。66原子rubric及固定100聚合保持关键项非补偿，真实科学审查40项仍未评；新图保留June缺量，作者分析不冒充新正式清洁研究或职业参考。完整grader/报告来源接口/评审锚点/冻结仍待，套件1/10、有效小时0/10不变。
-
-
-L02新增[报告实际来源与原输入恢复](cases/L02/evaluator/qualification/report-provenance/README.md)：prepare-once保持原schema1数据、捕获packet/inner与原native绑定、唯一sealed reader和真实诊断报告组件。旧report未获得来源的事实不补造；本轮没有新预测或完整12outer研究，完整grader/职业审查/冻结仍待。
-
-
-L02新增[partial归因与私有grader/stage绑定](cases/L02/evaluator/qualification/grade-protocol/README.md)，独立真实反例关闭host误归因、原因/native矛盾及旧stage套评；40具体研究锚点已落，完整成功/38科学校准/新formal参考仍未通过。下一步转真实研究成品，不以接口或协议控制凑成熟；套件仍1/10旧开发冻结、0/10候选有效小时。
-
-
-## 最新成品与真实候选终态（以本节优先）
-
-[L08整题](cases/L08/README.md)已从原创原档/真实旧组件到修复验收、资源日历/全部历史付款/四情景逐日现金/预算/最小延期/F01决策、完整源交付/报告/真实图，完成同源三输入和真实错误programme实跑及一次集中整题独审。真实checker参考100；数值图正确却假审批/全平台通过/回款保证的弱programme98仍H02critical失败。缺CSV误扣其它已验事实的真实评分错误已集中修/必要CLI复验，原件保留，未扩通用框架。
-
-[L02真实OpenCorvus终态](cases/L02/evaluator/pilot-opencorvus-20261030/README.md)：原Task14:09:01.817Z自然completed，完整13315文件/4.04GB封存，原listener及暂存auth/models正常清理。已14:43:06.866Z启动封存programme的真正私有121格评价；原Task生命周期7291.327秒不是业务分/有效小时。不可重开原Task或退休API。候选正式分/独评尚待，之后才顺序fresh Codex。
-
-当前开发合同5/10（旧L06、L02、L03、L07、L08），有效候选小时资格0/10；十题与成熟实证仍未完成。下一直接补L09/L10，再现L04/L05/L01/L06缺口，不重复已有题的组件资格或旧矩阵。
+六旧昂贵资格容器仍Paused，cheap-first，不恢复旧GPU/solver或重复已结束矩阵凑量。下一补L10，然后L04/L05/L01与已触发的新版本缺口；全目标未达，心跳继续。

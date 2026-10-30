@@ -1,0 +1,27 @@
+{
+  "started_at": "2026-10-30T14:43:06.865748+00:00",
+  "finished_at": "2026-10-30T15:08:20.674192+00:00",
+  "pid": 79496,
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\evaluator-source\\run_l02_study.py",
+    "--submission",
+    "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\completed\\submission",
+    "--raw",
+    "D:/opencorvus-benchmark-runs/l02-daily-loop-qualification-20261030/main/raw",
+    "--material-contract",
+    "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\material-contract.json",
+    "--study",
+    "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\study-contract.json",
+    "--image",
+    "sha256:23ff8bfbf8055caa0b9fa5745ddb27cceea2f31d7d15b7a900c81112cdfe8ddf",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\formal-run"
+  ],
+  "exit_code": 0,
+  "wall_seconds": 1513.808457000181,
+  "scope": "native evaluation owner terminal; scientific and quality scores pending"
+}

@@ -1,0 +1,19 @@
+{
+  "lab": 3,
+  "request_id": "W3",
+  "as_of": "2026-01-10T00:00:00Z",
+  "principals": {
+    "north_reader": {
+      "role": "tenant",
+      "tenant": "North"
+    },
+    "south_reader": {
+      "role": "tenant",
+      "tenant": "South"
+    },
+    "teacher": {
+      "role": "admin"
+    }
+  },
+  "queries": []
+}
