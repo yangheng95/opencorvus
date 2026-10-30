@@ -54,7 +54,9 @@ inside that Message. Main and member readers share the mounted source resolver;
 derived group metadata points at the same disclosure state, without duplicating
 source records or introducing another scroll owner. Saved web/document excerpts
 open through their existing Source identity. File excerpts retain their current
-Tooltip and original-file navigation. Location formatting and identity are shared
+Tooltip and original-file navigation, with an explicit saved-excerpt dialog that
+reads the same Source snippet and uses its existing clipboard owner. Closing the
+controlled dialog returns focus through the shared Dialog contract. Location formatting and identity are shared
 by source presentation, copy and search; no fresh file or web fetch builds search.
 The member navigation owner retains its first landing Promise until settlement;
 subsequent transcript revisions update the displayed content while that same

@@ -1257,7 +1257,8 @@ button.msg-source-chip .msg-source-chip__filename {
   flex: 0 1 auto;
 }
 
-.msg-source-copy.oc-button {
+.msg-source-copy.oc-button,
+.msg-source-excerpt-open.oc-button {
   --oc-button-height: var(--oc-density-chip-height);
   flex: none;
   color: var(--text-muted);
@@ -1286,7 +1287,8 @@ button.msg-source-chip .msg-source-chip__filename {
   font-size: var(--ui-font-caption);
 }
 
-.msg-source-excerpt__body {
+.msg-source-excerpt__body,
+.msg-source-excerpt__snapshot {
   max-height: 40vh;
   min-width: 0;
   padding: var(--ui-gap-sm) var(--ui-gap-md);
@@ -1302,9 +1304,21 @@ button.msg-source-chip .msg-source-chip__filename {
   overscroll-behavior: contain;
 }
 
-.msg-source-excerpt__body:focus-visible {
+.msg-source-excerpt__body:focus-visible,
+.msg-source-excerpt__snapshot:focus-visible {
   outline: var(--oc-border-width) solid var(--accent);
   outline-offset: var(--ui-gap-3xs);
+}
+
+.msg-source-excerpt__snapshot {
+  margin: 0;
+  font-family: var(--mono);
+}
+
+.msg-source-excerpt__location {
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+  overflow-wrap: anywhere;
 }
 
 .msg-source-tooltip {

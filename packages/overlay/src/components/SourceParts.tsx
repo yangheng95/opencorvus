@@ -1,5 +1,5 @@
 import { Key } from "@solid-primitives/keyed"
-import { Match, Show, Switch, onCleanup, onMount, untrack } from "solid-js"
+import { Match, Show, Switch, createSignal, onCleanup, onMount, untrack } from "solid-js"
 import { boardStore, selectedTaskDirectory } from "../store/board"
 import { openFileReference, openSourceFileEditor } from "../services/file-workbench"
 import { shortRelativePath } from "../utils/tool"
@@ -9,6 +9,7 @@ import { Icon, type IconName } from "./ui/Icon"
 import { Tooltip } from "./ui/Tooltip"
 import { Disclosure } from "./ui/Disclosure"
 import { Button } from "./ui/Button"
+import { Dialog } from "./ui/Dialog"
 import { Feedback } from "./ui/Feedback"
 import { createClipboardCopy } from "./ui/clipboard-copy"
 import {
@@ -386,6 +387,7 @@ function SourceExcerptBody(props: { source: ConversationSourcePart }) {
 }
 
 function SourceEntry(props: { source: ConversationSourcePart; index: number; showIndex: boolean; omitDirectoryCaption: boolean }) {
+  const [fileExcerptOpen, setFileExcerptOpen] = createSignal(false)
   const expandableExcerpt = () => props.source.type !== "source-file" && Boolean(props.source.snippet)
   const excerptKey = () => conversationSourceExcerptKey(props.source)
   const expanded = () => cardExpanded(excerptKey(), false)
@@ -408,6 +410,27 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
     }),
     diagnosticID: "source-location",
   })
+  const ExcerptCopyButton = () => (
+    <Button
+      type="button"
+      variant="ghost"
+      size="mini"
+      tone="neutral"
+      aria-label={excerptClipboard.label()}
+      aria-disabled={excerptClipboard.pending() || undefined}
+      aria-busy={excerptClipboard.pending() || undefined}
+      onClick={(event) => {
+        event.stopPropagation()
+        pauseAutoScrollForReading(event.currentTarget)
+        void excerptClipboard.copy()
+      }}
+    >
+      <Icon name={excerptClipboard.copied() ? "check" : "copy"} size="compact" />
+      {excerptClipboard.copied()
+        ? t("clipboard.copy_confirmed", { action: t("chat.source_copy_excerpt") })
+        : t("chat.source_copy_excerpt")}
+    </Button>
+  )
 
   return (
     <div class="msg-source-entry" data-has-excerpt={expandableExcerpt() ? "true" : undefined}>
@@ -418,6 +441,46 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
         data-source-message-id={props.source.messageID}
       >
         <SourceChip source={props.source} index={props.index} showIndex={props.showIndex} omitDirectoryCaption={props.omitDirectoryCaption} />
+        <Show when={props.source.type === "source-file" && props.source.snippet}>
+          <Button
+            type="button"
+            class="msg-source-excerpt-open"
+            variant="ghost"
+            size="icon"
+            tone="neutral"
+            title={t("chat.source_open_excerpt", { source: sourceLabel(props.source) })}
+            aria-label={t("chat.source_open_excerpt", { source: sourceLabel(props.source) })}
+            onClick={(event) => {
+              event.stopPropagation()
+              pauseAutoScrollForReading(event.currentTarget)
+              setFileExcerptOpen(true)
+            }}
+          >
+            <Icon name="quotation" size="compact" />
+          </Button>
+          <Dialog
+            open={fileExcerptOpen()}
+            onClose={() => setFileExcerptOpen(false)}
+            title={t("chat.source_saved_excerpt_title", { source: sourceLabel(props.source) })}
+            footer={
+              <>
+                <ExcerptCopyButton />
+                <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => setFileExcerptOpen(false)}>
+                  {t("common.close")}
+                </Button>
+              </>
+            }
+          >
+            <p>{t("chat.source_saved_excerpt_hint")}</p>
+            <p class="msg-source-excerpt__location">{location()}</p>
+            <pre class="msg-source-excerpt__snapshot" role="region" aria-label={excerptLabel()} tabIndex={0}>
+              {props.source.snippet}
+            </pre>
+            <Show when={excerptClipboard.failure()}>
+              {(failure) => <Feedback tone="error" title={t("clipboard.copy_failed")} details={failure().details}>{failure().message}</Feedback>}
+            </Show>
+          </Dialog>
+        </Show>
         <Show when={location()}>
           <Button
             type="button"
@@ -460,25 +523,7 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
           </Disclosure.Trigger>
           <Show when={expanded()}>
             <div class="msg-sources__actions">
-              <Button
-                type="button"
-                variant="ghost"
-                size="mini"
-                tone="neutral"
-                aria-label={excerptClipboard.label()}
-                aria-disabled={excerptClipboard.pending() || undefined}
-                aria-busy={excerptClipboard.pending() || undefined}
-                onClick={(event) => {
-                  event.stopPropagation()
-                  pauseAutoScrollForReading(event.currentTarget)
-                  void excerptClipboard.copy()
-                }}
-              >
-                <Icon name={excerptClipboard.copied() ? "check" : "copy"} size="compact" />
-                {excerptClipboard.copied()
-                  ? t("clipboard.copy_confirmed", { action: t("chat.source_copy_excerpt") })
-                  : t("chat.source_copy_excerpt")}
-              </Button>
+              <ExcerptCopyButton />
             </div>
             <Show when={excerptClipboard.failure()}>
               {(failure) => <Feedback tone="error" title={t("clipboard.copy_failed")} details={failure().details}>{failure().message}</Feedback>}

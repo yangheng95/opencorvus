@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [文件来源保存摘要](2026-10-31-file-source-excerpt.md)：文件来源原摘要、紧凑分组与显式阅读。
+
 - [来源查找阅读上下文](2026-10-31-source-search-context.md)：实际命中片段与原来源身份。
 
 - [文件冲突恢复](2026-10-31-file-conflict-recovery.md)：草稿、比较与显式保存的真实闭环。

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件来源保存摘要](2026-10-31-file-source-excerpt/README.md)：真实交互截图和原数据保留资格。
+
 - [来源查找阅读上下文](2026-10-31-source-search-context/README.md)：实际页面截图及数据保留回执。
 
 - [文件冲突恢复](2026-10-31-file-conflict-recovery/README.md)：双页面实际冲突及恢复证据。

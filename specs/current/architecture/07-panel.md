@@ -1505,6 +1505,11 @@ before its scrollable body. It copies that current Source's exact snippet throug
 the shared host clipboard action and value-owned pending, confirmation and error
 feedback. It does not copy only the visible viewport or substitute the location;
 the existing location action and native disclosure semantics remain independent.
+File sources with a saved snippet expose a compact View saved excerpt action.
+The shared Dialog reads that exact Source snippet and full source location,
+reusing the same value-owned Copy excerpt action. It preserves whitespace and
+distinguishes the saved excerpt from opening the current file. File leaves retain
+their compact group layout; the dialog adds only transient presentation state.
 The label alone carries the link underline. Hover strengthens that label's
 decoration while metadata remains visually secondary; the complete entry keeps
 its existing activation area and visible keyboard focus.
@@ -1739,8 +1744,8 @@ the user's cursor. An out-of-range historical line is not a loading signal.
 Full source locations include a supplied column; compact badges show columns beyond one.
 File tooltips expose this preview on pointer hover or keyboard focus, with a
 localized excerpt label and four-line visual limit. Exact file/range activation
-provides the full original content. This preview keeps the compact citation row;
-it does not add a separate excerpt action to every file match.
+opens the current file content. The preview keeps the compact citation row;
+sources with a saved snippet also provide the explicit saved-excerpt dialog.
 Web source snippets belong to a separate native disclosure within each source
 entry. Its normal page reading region retains the complete text and
 supports native keyboard and pointer scrolling.
