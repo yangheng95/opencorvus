@@ -10,6 +10,7 @@
 
 #### 新增
 
+- Task 和 Mission 支持查找并定位真实参与者的原始消息，包含原需求、成员原文和结构化停止原因；查找保留来源身份与已有阅读上下文。
 - 从归档库直接打开原 Chat、Work、Task 和 Mission，保留真实标题、历史消息、来源文件、完成事实及归档状态；明确恢复后才恢复原操作入口。
 - 在消息中折叠查看已发送的文本、代码和 JSON 附件，按需打开共享只读阅读器并下载原件。待发送长文本使用可用阅读高度，保留完整文档和关闭入口。
 - 全局搜索支持按名称、标识或目录打开已有项目，显示完整路径并支持键盘选择。记忆与上下文可直接选择只有 Chat 的项目，阅读真实 MEMORY.MD、版本及更新时间。
@@ -46,6 +47,7 @@
 
 #### Added
 
+- Find and locate original Messages from real Task and Mission participants, including initial requirements, member text and structured stop reasons, while retaining source identity and reading context.
 - Open original Chat, Work, Task and Mission history directly from Archive, retaining real titles, Messages, source files, completion facts and archive state. Restore explicitly to regain the original controls.
 - Inspect sent text, code and JSON attachments through compact message disclosures, loading the shared read-only viewer on demand with original downloads. Pending long text uses the available reading height while retaining the full document and Close action.
 - Find existing Projects by name, identifier or directory with full paths and keyboard selection. Memory & Context includes Chat-only Projects and displays their actual MEMORY.MD, revision and update time.
