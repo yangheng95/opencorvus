@@ -377,6 +377,11 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
   const expanded = () => cardExpanded(excerptKey(), false)
   const excerptLabel = () => `${t("chat.source_excerpt")}: ${sourceLabel(props.source)}`
   const location = () => sourceLocation(props.source)
+  const excerptClipboard = createClipboardCopy({
+    text: () => props.source.snippet || "",
+    label: () => t("chat.source_copy_excerpt_label", { source: sourceLabel(props.source) }),
+    diagnosticID: "source-excerpt",
+  })
   const clipboard = createClipboardCopy({
     text: location,
     label: () => t("chat.source_copy_location", {
@@ -440,6 +445,30 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
             {t("chat.source_excerpt")}
           </Disclosure.Trigger>
           <Show when={expanded()}>
+            <div class="msg-sources__actions">
+              <Button
+                type="button"
+                variant="ghost"
+                size="mini"
+                tone="neutral"
+                aria-label={excerptClipboard.label()}
+                aria-disabled={excerptClipboard.pending() || undefined}
+                aria-busy={excerptClipboard.pending() || undefined}
+                onClick={(event) => {
+                  event.stopPropagation()
+                  pauseAutoScrollForReading(event.currentTarget)
+                  void excerptClipboard.copy()
+                }}
+              >
+                <Icon name={excerptClipboard.copied() ? "check" : "copy"} size="compact" />
+                {excerptClipboard.copied()
+                  ? t("clipboard.copy_confirmed", { action: t("chat.source_copy_excerpt") })
+                  : t("chat.source_copy_excerpt")}
+              </Button>
+            </div>
+            <Show when={excerptClipboard.failure()}>
+              {(failure) => <Feedback tone="error" title={t("clipboard.copy_failed")} details={failure().details}>{failure().message}</Feedback>}
+            </Show>
             <SourceExcerptBody source={props.source} />
           </Show>
         </Disclosure.Root>

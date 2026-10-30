@@ -1490,6 +1490,11 @@ operator expansion state and exact source links remain available. Both portions
 use the same identity-keyed source entry renderer. Individual
 excerpt disclosure remains scoped to the real source. Citation identity uses body
 typography; site and index metadata retain caption.
+An expanded non-file source excerpt has an explicit localized Copy excerpt action
+before its scrollable body. It copies that current Source's exact snippet through
+the shared host clipboard action and value-owned pending, confirmation and error
+feedback. It does not copy only the visible viewport or substitute the location;
+the existing location action and native disclosure semantics remain independent.
 The label alone carries the link underline. Hover strengthens that label's
 decoration while metadata remains visually secondary; the complete entry keeps
 its existing activation area and visible keyboard focus.

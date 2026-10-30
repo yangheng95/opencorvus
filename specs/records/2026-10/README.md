@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [网页来源摘录阅读](2026-10-31-source-excerpt-reading.md)：原网页和多文件来源的实页验证。
+
 - [首页持续目标入口](2026-10-31-home-goal-entry.md)：默认页、草稿与原入口的实页核对。
 
 - [Markdown本地图片](2026-10-31-markdown-local-images.md)：资源归属、图片展示与实页证据。
