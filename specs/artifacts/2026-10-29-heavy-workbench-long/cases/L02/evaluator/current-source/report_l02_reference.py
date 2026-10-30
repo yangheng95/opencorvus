@@ -8,9 +8,7 @@ from fractions import Fraction as F
 import json
 from pathlib import Path
 import shutil
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
+from report_diagnostics import derive, discussion
 
 
 def read(path):
@@ -32,6 +30,9 @@ def wis(y, q):
 
 
 def main():
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
     data = read(Path('/input/results.json'))
     provenance = read(Path('/input/provenance/manifest.json'))
     if provenance['format'] != 'l02-report-provenance/1':
@@ -71,10 +72,9 @@ def main():
     # Native facts remain distinct from self-reported fitting details.
     (out/'execution-index.json').write_text(json.dumps(provenance,indent=2,default=str),encoding='utf-8')
     (out/'fit-records.json').write_text(json.dumps(sources,indent=2,default=str),encoding='utf-8')
-    node_rows, origin_rows, actions = [], [], []
+    node_rows, origin_rows = [], []
     for row in data['outer_results']:
         context=row['context'];truth={(r['series_id'],r['target_tick']):F(r['value']) for r in row['labels']}
-        kinds={n['series_id']:n['kind'] for n in context['series_catalogue']}
         for method in data['pool']['outer_ids']:
             values=row['metrics'][method]['metrics_exact']
             origin_rows.append({'outer_id':row['outer_id'],'method_id':method,
@@ -84,20 +84,20 @@ def main():
                 scale=F(context['scales_litres'][name]);n=len(rows)
                 mse=sum(((F(r['mean'])-truth[name,r['target_tick']])/scale)**2 for r in rows)/n
                 interval=sum(wis(truth[name,r['target_tick']],r['quantiles'])/scale for r in rows)/n
-                covered=sum(F(r['quantiles']['0.1'])<=truth[name,r['target_tick']]<=F(r['quantiles']['0.9']) for r in rows)
                 node_rows.append({'outer_id':row['outer_id'],'method_id':method,'series_id':name,
-                    'scaled_mse':str(mse),'scaled_wis':str(interval),'central80_hits':covered,'assigned_days':n})
-        forecast=row['forecasts'][row['selected_method_id']]
-        for r in forecast['forecasts']:
-            name,tick=r['series_id'],r['target_tick']
-            if kinds[name]!='leaf':continue
-            for shortage,q in [(1,'0.5'),(3,'0.75'),(9,'0.9')]:
-                action=F(r['quantiles'][q]);y=truth[name,tick];under=max(y-action,F(0));over=max(action-y,F(0))
-                actions.append({'outer_id':row['outer_id'],'series_id':name,'target_tick':tick,
-                    'method_id':row['selected_method_id'],'overage_cost_unit_per_L':1,'shortage_cost_unit_per_L':shortage,
-                    'frozen_quantile':q,'action_L':str(action),'truth_L':str(y),
-                    'shortage_L':str(under),'overage_L':str(over),'loss_cost_units':str(shortage*under+over)})
-    write_table(out/'origin-losses.csv',origin_rows);write_table(out/'node-losses.csv',node_rows);write_table(out/'operating-ledger.csv',actions)
+                    'scaled_mse':str(mse),'scaled_wis':str(interval),'assigned_days':n})
+    write_table(out/'origin-losses.csv',origin_rows);write_table(out/'node-losses.csv',node_rows)
+    tables = derive(data)
+    for name,rows in tables.items():write_table(out/(name+'.csv'),rows)
+    shutil.copyfile(Path('/input/results.json'),out/'numerical-results.json')
+    for name,value in [('method-pool',data['pool']),
+                       ('selection-trace',[{k:r[k] for k in ('outer_id','selected_method_id','inner_selection')} for r in data['outer_results']])]:
+        (out/(name+'.json')).write_text(json.dumps(value,indent=2,default=str),encoding='utf-8')
+    project = Path(__file__).resolve().parent
+    for name in ['reference-data.md','reference-sources.md','reference-reproduce.md']:
+        shutil.copyfile(project/name,out/name)
+    reproduction=out/'reproduction';reproduction.mkdir()
+    for path in sorted(project.glob('*.py')):shutil.copyfile(path,reproduction/path.name)
     # Pick a diagnostic slice by registered time, never by its observed performance.
     row=next((r for r in data['outer_results'] if r['outer_id']=='outer-20250620'),data['outer_results'][0])
     method=row['selected_method_id'];truth={(r['series_id'],r['target_tick']):r['value'] for r in row['labels']}
@@ -126,13 +126,14 @@ def main():
         '## Out-of-sample results','', '| Method | Scaled MSE | Scaled WIS |','|---|---:|---:|']
     for method,values in [*data['aggregate_exact']['per_method'].items(),('Inner-selected policy',data['aggregate_exact']['selected'])]:
         lines.append('| '+method+' | '+format(float(F(values['scaled_mse'])),'.10g')+' | '+format(float(F(values['scaled_wis'])),'.10g')+' |')
-    lines+=['','[Per-origin metrics](origin-losses.csv) and [all node losses and 80% coverage counts](node-losses.csv) preserve every declared origin and method. The no-weather outer ablation remains a diagnostic; seeing its outer results cannot change the frozen selection pool. A good aggregate loss does not establish local calibration or correct response to a new operating regime.','',
+    lines+=['','[Per-origin metrics](origin-losses.csv) and [all node losses](node-losses.csv) preserve every declared origin and method. Coverage and width are in [the complete interval table](intervals.csv). The no-weather outer ablation remains a diagnostic; seeing its outer results cannot change the frozen selection pool. A good aggregate loss does not establish local calibration or correct response to a new operating regime.','',
         '![Actual selected forecasts and terminal observations](forecast.png)','',
         '## Single-period operating decisions','',
         'The [operating ledger](operating-ledger.csv) fixes overage cost 1 and shortage costs 1, 3, 9 cost-unit/L before truth, using q=.5, .75, .9 respectively. Actions are continuous litres. Each row records action, later truth, shortage, overage and realized cost. These are separate single-period decisions, not a capacity, inventory, joint-risk or field supply simulation.','',
         '## Reproduction and evidence limitations','',
         '[Source index](source-index.csv) links actual numeric cell IDs, origin/method, narrowed argv, native start/finish/exit and delivered copies of each original output. [Execution index](execution-index.json) preserves the allowed native facts. Candidate fit statements require source and independent execution audit; a file or timestamp alone does not prove how training occurred. Exact rational tables retain evaluation precision; figure coordinates are plotting floats.','',
         'This report is a reproducible research component. Study completion, quality success and benchmark score remain unassessed until the full frozen case and independent rubric review.']
+    lines += ['', *discussion(data,tables,sources,row)]
     (out/'report.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')
     (out/'report.json').write_text(json.dumps({'format':'l02-report-receipt/1','outer_ids':data['outer_ids']}),encoding='utf-8')
 

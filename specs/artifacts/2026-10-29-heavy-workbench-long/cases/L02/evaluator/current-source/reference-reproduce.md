@@ -1,0 +1,19 @@
+# Reproducing the sealed author study
+
+The enclosing original submission contains `submission.json`, its immutable method pool and explicitly declared predict/select/report files. `method-pool.json` in this report is an exact report-side projection of that original pool, not a replacement authority. `reproduction/` supplies the actual declared Python programme copies. Python3 with NumPy2.4.6 and Matplotlib is required; the author run records the actual image/native dependencies separately. This report cannot infer an image ID or a full host command from narrowed argv.
+
+Literal programme argument vectors, in the prepared container working directory `/project`:
+
+```text
+/opt/cpsat/bin/python l02_daily_reference.py --input /input/packet --config /input/method.json --output /output/result
+/opt/cpsat/bin/python l02_selection.py --input /input/inner.json --study /input/study.json --output /output/result
+/opt/cpsat/bin/python report_l02_reference.py
+```
+
+The evaluation-side generic driver `run_l02_study.py` receives the original raw archive/material contract/study contract and a new sealed submission directory. A fresh full invocation supplies `--submission`, `--raw`, `--material-contract`, `--study`, `--image` and a **new** `--out`; these are named input locations, not invented historical command values. Omitting the private author-diagnostic option requests all12 registered outer origins. The driver projects one original raw CSV packet per forecast, runs1CPU/network-none with readonly source/input and new output, and releases only permitted inner facts to the selector. It gives this reporter the full accepted numerical results and allowed original-output/native provenance last. Never mount the full canonical archive into a forecast process. The original driver's actual argv/registration/native receipts are evaluator-side evidence accompanying the study.
+
+After an owner-process interruption use only `run_l02_study.py --resume <original-run-root>`. The schema1 ledger and prepared/terminal/accepted original objects identify work already created, started, finished, accepted or verified. Resume consumes their original source/input and exact native container, rather than binding an edited working submission or recomputing completed predictions. An owner lock serializes a run root. Terminal objects are sealed before acceptance and cleanup. A candidate protocol/native failure is retained; a facility error cannot be declared successful or erased by retries. Independent unexecuted cells remain unassessed; only actual data dependencies are blocked by a known candidate failure. Windows process-crash recovery is the qualified host case; no power-loss or POSIX-host-lock qualification is claimed.
+
+`source-index.csv` and `execution-index.json` locate original numeric cell IDs, method/origin, permitted argv positions, start/finish/exit and copies under `sources/`. `fit-records.json` contains candidate-program diagnostic claims and pseudo-origin fits. They need independent verification against original programme/packet/capsules; existence is not proof of training. `numerical-results.json`, rational CSV tables and `selection-trace.json` allow report arithmetic and selections to be reconstructed without refitting. `forecast.png` is actually rendered from those same predictions and labels. The report transport receipt establishes only delivery of the requested origin IDs, not scientific quality.
+
+All programme files, source documents and configurations must be sealed before the new formal prediction run. This fact is established by original registration and native evidence, not by this handoff text or the reporter's timestamp. To reproduce the study use the original registration/source rather than post-hoc prose, private grading data, old predictions or prefilled model weights. Numerical execution, scientific completion and forecast-quality success remain separate judgments.

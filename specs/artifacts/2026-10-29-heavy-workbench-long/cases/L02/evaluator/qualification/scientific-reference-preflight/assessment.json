@@ -1,0 +1,733 @@
+{
+  "status": "pure_derived_precheck_passed",
+  "checks": [
+    {
+      "name": "analytic_interval_widths_hits",
+      "passed": true
+    },
+    {
+      "name": "analytic_scaled_mse",
+      "passed": true
+    },
+    {
+      "name": "analytic_wis",
+      "passed": true
+    },
+    {
+      "name": "analytic_scaled_wis",
+      "passed": true
+    },
+    {
+      "name": "quantile_action_expected",
+      "passed": true
+    },
+    {
+      "name": "exported_mean_expected",
+      "passed": true
+    },
+    {
+      "name": "original_one_outer_context",
+      "passed": true
+    },
+    {
+      "name": "all_methods_nodes_levels_retained",
+      "passed": true
+    },
+    {
+      "name": "fixed_14_day_denominators",
+      "passed": true
+    },
+    {
+      "name": "all_station_cost_actions",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26688:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26688:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26688:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26688:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26688:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26688:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26688:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26688:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26688:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26688:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26688:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26688:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26712:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26712:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26712:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26712:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26712:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26712:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26712:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26712:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26712:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26712:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26712:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26712:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26736:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26736:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26736:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26736:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26736:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26736:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26736:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26736:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26736:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26736:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26736:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26736:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26760:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26760:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26760:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26760:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26760:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26760:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26760:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26760:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26760:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26760:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26760:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26760:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26784:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26784:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26784:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26784:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26784:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26784:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26784:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26784:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26784:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26784:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26784:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26784:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26808:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26808:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26808:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26808:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26808:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26808:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26808:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26808:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26808:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26808:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26808:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26808:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26832:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26832:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26832:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26832:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26832:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26832:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26832:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26832:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26832:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26832:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26832:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26832:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26856:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26856:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26856:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26856:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26856:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26856:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26856:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26856:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26856:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26856:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26856:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26856:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26880:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26880:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26880:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26880:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26880:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26880:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26880:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26880:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26880:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26880:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26880:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26880:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26904:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26904:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26904:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26904:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26904:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26904:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26904:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26904:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26904:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26904:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26904:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26904:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26928:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26928:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26928:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26928:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26928:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26928:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26928:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26928:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26928:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26928:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26928:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26928:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26952:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26952:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26952:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26952:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26952:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26952:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26952:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26952:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26952:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26952:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26952:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26952:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26976:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26976:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:26976:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26976:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26976:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:26976:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26976:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26976:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:26976:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26976:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26976:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:26976:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:27000:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:27000:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A1:27000:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:27000:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:27000:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:A2:27000:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:27000:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:27000:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B1:27000:9",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:27000:1",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:27000:3",
+      "passed": true
+    },
+    {
+      "name": "ledger_components:B2:27000:9",
+      "passed": true
+    },
+    {
+      "name": "actual_selector_binding",
+      "passed": true
+    },
+    {
+      "name": "complete_cost_summary",
+      "passed": true
+    },
+    {
+      "name": "actual_report_static_assets",
+      "passed": true
+    }
+  ],
+  "new_forecast_processes": 0,
+  "new_report_processes": 0,
+  "scope": "hand-calculation plus existing one-outer output derivation and package validation; no formal execution or scientific grade",
+  "tooling_initial_failure": "apply_patch rejected a combined delete/add on one path before writes; retried as scoped updates"
+}

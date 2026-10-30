@@ -408,3 +408,15 @@ L06/0.3完整权威业务/信息/承诺/物理现金续接和其余L01/L04/L05/L
 
 
 本阶段最后只补输出可追溯性：C02/Q26的blocked根由中间selector归一为原实际failed inner，并定位terminal/ledger，grade附同一完整inspection，保所有原状态/总分null。一次真实CLI精确4/原1fail27blocked38未评，独立只读6事实追加核同原包；原旧报告保持其原源码时间版本，未重77/54或native。public锚点介绍仅补JSON/CSV缩写解释，40规则/权重不变。下一科学成品设计已完成并归档evaluator/scientific-reference-plan-review，只是计划：不改predict/池/Q26；先补报告实际派生与静态资产/来源、手算预检，再唯一新正式121（108forecast+12selector+1report）及38真评/多质量受影响叶校准。不以此计划或输出metadata当全成功、冻结或小时。
+## 科学/运营成品实施前Recall（当前grader资格之后）
+
+当前1444e8019状态/原对象/stage绑定已提交，正常push hook进行中；完整科学参考设计审查已完成，不是正在运行。下一改动只限report_l02_reference派生表/论证、package显式提供其实际读取的静态方法来源/复建文档。已搜索report定义、package files、report receipt与来源消费者；唯一report_inputs、Executor、sealed reader、grade、预测算法/配置池/质量政策/权重均不改变。问题是原report只有80%覆盖计数/未拆成本/泛化文字，文献准备未进入实际programme，并非新执行平台缺陷。旧report不改写、不声称曾消费新内容。
+
+采用已审PLAN：50/80/95覆盖与宽度固定分母；selected通过原selector连接，method ID自由；逐格保原q=.5/.75/.9动作、exported mean诊断与缺/余量/两项成本，完整168格/leaf/cost；从新真实表生成方法/消融/局部失败/单期建议，保负结果与依赖限制。原fit/窄native索引只作定位，诊断不证明训练。新增预封来源与交接静态资产进入report.files并在report实际复制/引用，全部programme在唯一新formal12首预测前一并封存。先标准库Fraction手算及旧数值只派生预检，零重预测；实际图只在随后必要新完整121进程参考中呈现。不得用新运行耗时或作者参考冒充候选小时/全题冻结。
+
+影响排除：不改产品UI、LLM路由/消息/队列/Task/Mission/Session、数据库schema/phase、report输入协议、候选任意语言方法自由、当前grader/冻结0.2L06。新reference完成后仍须38真实独立研究判断、受控多质量/等价格式校准与完整case冻结；此实施计划不是这些验收。
+### 科学成品预审已结束，下一唯一新完整参考
+
+1444e8019已正常fetch/merge、唯一待推审查、完整hook/secret0并push；本阶段仅report派生/论证及package静态资产改动。主标准库181项通过，其中168逐格成本分解，不是新实验；真实手算与旧单outer派生，零新native。独立9/10计算/资产观察，唯一false是主方文案/重复central80整理后旧包身份滞后，原收据保留；新submission-ready12声明文件与最终源同一，追加身份核验而未重派生。两最新建议已落：最高released含missing后valid；各成本按真实station-days加权实际缺余量/成本解释。已删除旧node-losses重复80计数，完整区间由唯一derive产生。独立最终blocking=[]仅可进入唯一正式参考，不是38真评/图/冻结。
+
+原件和源身份在l02-scientific-reference-20261030、独立preflight-review，repo qualification/scientific-reference-preflight归档。此刻尚未正式执行。下一从本阶段最终commit导出完整current-source/合同/原池，另封submission和新run；正式不带author-diagnostic，原依赖镜像1CPU/netnone，108forecast+12selector+1report一次自然运行，无总墙钟截断。发生真实设施/候选失败按原native保留/修根因，不重整矩阵或调池/阈值掩盖。自然终态必须真实新图、38研究叶及Q26/原对象stage绑定、多质量校准，再独立冻结。套件1/10、有效小时0/10，用户全目标仍未达。
