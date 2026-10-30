@@ -1,0 +1,266 @@
+{
+  "at": "2026-10-30T20:41:23.987Z",
+  "schema": 9,
+  "tables": 92,
+  "startingRows": 209344,
+  "finalRows": 212537,
+  "allOriginalBusinessRowsPreserved": true,
+  "mutableCapacitySlots": [
+    {
+      "slot": 0,
+      "changedFields": [
+        "expires_at",
+        "lease_id",
+        "owner_id",
+        "time_acquired"
+      ],
+      "priorExpiredAtAcquisition": true,
+      "currentRuntimeOwner": true,
+      "releasedBeforeInitialTTL": true
+    },
+    {
+      "slot": 1,
+      "changedFields": [
+        "expires_at",
+        "lease_id",
+        "owner_id",
+        "time_acquired"
+      ],
+      "priorExpiredAtAcquisition": true,
+      "currentRuntimeOwner": true,
+      "releasedBeforeInitialTTL": true
+    }
+  ],
+  "tableChanges": [
+    {
+      "table": "bus_publication_delivery",
+      "old": 40808,
+      "now": 41453,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "bus_publication_delivery_receipt",
+      "old": 40808,
+      "now": 41453,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "bus_publication_outbox",
+      "old": 5350,
+      "now": 5427,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "bus_publication_owner",
+      "old": 5350,
+      "now": 5427,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "bus_publication_phase_receipt",
+      "old": 16050,
+      "now": 16281,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "engine_control_activation_lease",
+      "old": 42926,
+      "now": 43575,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "engine_control_activation_lease_grant",
+      "old": 42984,
+      "now": 43633,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "event_occurrence",
+      "old": 5152,
+      "now": 5229,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "memory_chunk",
+      "old": 40,
+      "now": 42,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "memory_file",
+      "old": 40,
+      "now": 42,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "message",
+      "old": 685,
+      "now": 696,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "part",
+      "old": 1980,
+      "now": 2006,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "permission_execution_result",
+      "old": 169,
+      "now": 172,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "permission_ledger",
+      "old": 861,
+      "now": 876,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "permission_policy",
+      "old": 34,
+      "now": 35,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "project",
+      "old": 40,
+      "now": 42,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "protocol_event",
+      "old": 2097,
+      "now": 2128,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "provider_activity_outcome",
+      "old": 708,
+      "now": 717,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "provider_activity_request",
+      "old": 708,
+      "now": 717,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "provider_usage_event",
+      "old": 711,
+      "now": 721,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "runtime_execution_capacity_lease",
+      "old": 3,
+      "now": 3,
+      "originalRowsChanged": 2
+    },
+    {
+      "table": "session",
+      "old": 84,
+      "now": 86,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "session_control_event",
+      "old": 64,
+      "now": 65,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "session_control_record",
+      "old": 63,
+      "now": 64,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "tool_part_outcome",
+      "old": 580,
+      "now": 587,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "tool_part_progress",
+      "old": 70,
+      "now": 72,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "tool_part_request",
+      "old": 580,
+      "now": 587,
+      "originalRowsChanged": 0
+    }
+  ],
+  "attachments": 75,
+  "oldProjects": 8,
+  "trackedFiles": 28,
+  "protectedWorkspaceFiles": 13,
+  "originalFullHTTPAndGoalPreserved": true,
+  "oldHTTPHistories": {
+    "task": 68,
+    "mission": 80,
+    "chat": 3,
+    "completedWork": 8
+  },
+  "readonlySourceMessages": 4,
+  "readonlySourceBytes": 176,
+  "webSourceMessages": 4,
+  "webSources": 2,
+  "fileSourceMessages": 3,
+  "fileSources": 8,
+  "newOwnedProjects": 2,
+  "preflightMessages": 2,
+  "goalMessages": 9,
+  "goalStatus": "complete",
+  "goalTokensUsed": 242063,
+  "positiveOutputContracts": 6,
+  "screenshots": 16,
+  "visualQualification": "Real page interactions and personally viewed screenshots; these are not UI automated tests.",
+  "newModelRequests": 10,
+  "cumulativeModelRequests": 1106,
+  "originalDeadlineAt": 1793395008435,
+  "scopes": [
+    {
+      "phase": "before",
+      "requests": 0,
+      "cumulativeRequests": 1096,
+      "unusedAllowanceRetired": 0,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": true,
+      "reserveMs": 3517325,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "phase": "after",
+      "requests": 10,
+      "cumulativeRequests": 1106,
+      "unusedAllowanceRetired": 6,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": true,
+      "reserveMs": 2537079,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    }
+  ]
+}

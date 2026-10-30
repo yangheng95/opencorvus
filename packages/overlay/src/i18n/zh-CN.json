@@ -2681,7 +2681,7 @@
   "continuous_goal.budget_summary": "令牌：{{tokens}} · 自动轮次：{{turns}}",
   "continuous_goal.create_budget_hint": "预算留空则不设上限。达到预算后停止自动续跑；已开始的工作会继续完成，实际用量可能超出上限。",
   "continuous_goal.guide.start.title": "选好模型，再创建目标",
-  "continuous_goal.guide.start.body": "在输入框下方的模型菜单选择已连接模型，也可继承已配置的默认模型。列表为空时，先点击同一菜单内的“配置 Provider…”。输入 /goal，可在其后填写目标，再提交；也可从“+”菜单选择“{{createLabel}}”。两种方式均打开当前表单。首页确认后才创建新会话；已有会话的目标归属于当前对话。",
+  "continuous_goal.guide.start.body": "在输入框下方的模型菜单选择已连接模型，也可继承已配置的默认模型。列表为空时，先点击同一菜单内的“配置 Provider…”。在首页点击介绍旁的“{{createLabel}}”。也可从“+”菜单选择“{{createLabel}}”，或输入 /goal（其后可填写目标）再提交。这些入口打开同一表单。首页确认后才创建新会话；已有会话的目标归属于当前对话。",
   "continuous_goal.guide.define.title": "写清完成标准",
   "continuous_goal.guide.define.body": "在目标表单中填写成果与验收标准，按需设置令牌或自动轮次预算，再点击“{{submitLabel}}”。",
   "continuous_goal.guide.manage.title": "查看进度，随时暂停",

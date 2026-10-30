@@ -1,0 +1,37 @@
+{
+  "unittestExit": 0,
+  "unittestStdout": "",
+  "unittestStderr": "test_hours_and_minutes (test_duration.NormalizeDurationTests.test_hours_and_minutes) ... ok\ntest_minute_out_of_range (test_duration.NormalizeDurationTests.test_minute_out_of_range) ... ok\ntest_minutes (test_duration.NormalizeDurationTests.test_minutes) ... ok\ntest_negative_duration (test_duration.NormalizeDurationTests.test_negative_duration) ... ok\ntest_whitespace_and_leading_zero (test_duration.NormalizeDurationTests.test_whitespace_and_leading_zero) ... ok\ntest_zero (test_duration.NormalizeDurationTests.test_zero) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.001s\n\nOK\n",
+  "contracts": [
+    {
+      "input": "1:30",
+      "type": "int",
+      "result": 90
+    },
+    {
+      "input": " 02:05 ",
+      "type": "int",
+      "result": 125
+    },
+    {
+      "input": "0",
+      "type": "int",
+      "result": 0
+    },
+    {
+      "input": "45",
+      "type": "int",
+      "result": 45
+    },
+    {
+      "input": "2:75",
+      "type": "ValueError",
+      "message": "MINUTE_OUT_OF_RANGE"
+    },
+    {
+      "input": "-1",
+      "type": "ValueError",
+      "message": "INVALID_DURATION"
+    }
+  ]
+}

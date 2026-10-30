@@ -1,0 +1,43 @@
+{
+  "preflight": {
+    "at": "2026-10-30T20:23:13.008Z",
+    "sessionID": "ses_-zUQQp0NdzzE3L8u7Ps2",
+    "directoryIsOwned": true,
+    "messages": 2,
+    "reply": "PREFLIGHT_823_OK",
+    "model": "openai/gpt-6.1-sol",
+    "requests": 2,
+    "allStreaming": true,
+    "allHTTP200": true,
+    "allEOF": true
+  },
+  "goal": {
+    "id": "pev_g0VZZBe0900BW3F0iniv",
+    "sessionID": "ses_-zUQQoMM4zz2OmWzwfcN",
+    "status": "complete",
+    "tokensUsed": 242063,
+    "turnsAccepted": 1,
+    "linkedUsageEvents": 7,
+    "afterCompletionReplyTokens": 35990,
+    "acceptedBudget": {
+      "tokens": 20000,
+      "automaticTurns": 1
+    },
+    "tools": [
+      "read",
+      "apply_patch",
+      "bash",
+      "read",
+      "read",
+      "get_continuous_goal",
+      "update_continuous_goal"
+    ]
+  },
+  "model": "openai/gpt-6.1-sol",
+  "scopeMaximumRequests": 16,
+  "requests": 10,
+  "cumulativeRequests": 1106,
+  "allStreaming": true,
+  "allHTTP200": true,
+  "allEOF": true
+}

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [首页目标代码交付](records/2026-10/2026-10-31-home-goal-delivery.md)：全局首页持续目标的真实模型交付与产物验收。
+
 - [文件来源保存摘要](records/2026-10/2026-10-31-file-source-excerpt.md)：原来源摘要的阅读与取用体验。
 
 - [来源查找阅读上下文](records/2026-10/2026-10-31-source-search-context.md)：原网页和文件来源的查找结果与定位体验。

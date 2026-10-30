@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [首页目标代码交付](2026-10-31-home-goal-delivery/README.md)：真实页面与模型、产物和原数据证据。
+
 - [文件来源保存摘要](2026-10-31-file-source-excerpt/README.md)：真实交互截图和原数据保留资格。
 
 - [来源查找阅读上下文](2026-10-31-source-search-context/README.md)：实际页面截图及数据保留回执。

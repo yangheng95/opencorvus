@@ -249,6 +249,9 @@ use the current interface language and the actual localized Resume label.
 Its first step identifies the model menu below the Home message input and that
 menu's Configure Provider action for an empty connected-model list. Configured
 defaults may still be inherited; this guidance adds no model-selection policy.
+The same first step names the visible Home goal button beside the introduction,
+then the Composer + action and /goal command. Each opens the existing form;
+Home confirmation remains the point that creates its new conversation.
 The form opens only after an explicit Home button, menu or input-command request. That request waits for the
 initial owner projection before choosing creation or existing-goal details, and
 does not carry a goal value or mutation authority across a selection.

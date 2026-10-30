@@ -2682,7 +2682,7 @@
   "continuous_goal.budget_summary": "Tokens: {{tokens}} · Automatic turns: {{turns}}",
   "continuous_goal.create_budget_hint": "Leave budgets blank for no limit. Limits stop new automatic turns; work already underway can finish above the limit.",
   "continuous_goal.guide.start.title": "Choose a model, then create",
-  "continuous_goal.guide.start.body": "Choose a connected model from the menu below the message input, or inherit a configured default. If the list is empty, choose Configure Provider… in that menu first. Type /goal followed by an optional objective and submit, or choose {{createLabel}} from the + menu. Both open this form. On Home, confirmation creates a new conversation; in an existing conversation, the goal belongs to that conversation.",
+  "continuous_goal.guide.start.body": "Choose a connected model from the menu below the message input, or inherit a configured default. If the list is empty, choose Configure Provider… in that menu first. On Home, choose {{createLabel}} beside the introduction. You can also choose {{createLabel}} from the + menu, or type /goal followed by an optional objective and submit. These entries open the same form. On Home, confirmation creates a new conversation; in an existing conversation, the goal belongs to that conversation.",
   "continuous_goal.guide.define.title": "Define success",
   "continuous_goal.guide.define.body": "Fill in the outcome and acceptance criteria. Optionally set token or automatic turn budgets, then choose {{submitLabel}}.",
   "continuous_goal.guide.manage.title": "Track progress and pause",
