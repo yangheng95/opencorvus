@@ -546,3 +546,33 @@ L02真实OpenCorvus已15:59:58Z同冻结实际grade100/66pass/study_complete/qua
 当前没有新增L09活跃native；六旧昂贵任务不恢复。下一直接补L10完整物理/因果信息/账单/恢复题，再现L04/L05/L01/L06缺口，不继续磨已交题的组件资格。全目标未达、有效候选小时仍未资格，心跳ACTIVE；提交/正常fetch merge/审全部待推/hook/push保护用户改动。
 
 原实际初版完整产品另用同一冻结rubric和原initial-review进入真实checker，得到83分/H01、H02、H05失败/goodfalse；见initial-product-frozen-rubric-control.json及historical-control-provenance.json。它保留真实缺交/泛化反馈/交接缺口，是历史开发低质量对照，不是新候选或回写旧评级；没有重跑课程实验。
+
+
+## L10整题建设/真实主链完成Recall（尚待集中独审）
+
+已落cases/L10/evaluator/BUILD-PLAN，按用户纠偏直接完整两站原计量/原峰发票/报价与效率/年化商业原文→prepare→隔离实际controller逐步授权forecast/当前遥测→物理与账→SQLite commit后73/原receipt/SOC/跨月峰恢复→独立重算报告/NPV/图/操作交付，未改共享产品运行时。私有完整future/路径名不入controller argv/env/mount；仅programme/公开model，host独立authority与SQLite持真。原main18episode正常完成，但初report只读host bill；原源/原产物保，final-submission在正式三输入前重封，当前report仅telemetry+actualactions，自行重建物理/账并交reconciliation/原发票。
+
+D:/opencorvus-benchmark-runs/l10-full-case-20261031：final-base/price/quote-run各18episode真实约74/72/76秒自然0，含每组唯一nominal/CLINIC/S8 step45 commit73后原DB续接。基例SOC1.263015/Janpeak6.3/Febpeak2.01047142857被同key确认保留。诊所基例S8NPV807.43，价变995.90，报价提高转S4NPV670.95；办公室全部ZERO，不能人为扣零容量。主方实际view四panel图。三输入真正check_l10 machine14pass/五H未评/totalgood仍null；原正在执行的精确数值Fraction版只读grade完成，不假称后来直接数值比较已在旧PID热改。
+
+真实错误/低质量programme尚在同唯一顺序batch.py owner97104及接续error-batch.py90360：单位错误/试图读future具名native失败；可行idle/错误强认证报告三输入、错效率/错receipt/假清峰/漏资本等各有不同业务假设，不把这组作者测试当模型统计样本或有效小时。原未评不伪填人评，全部错误CLI齐后一次同benchmark_review整题审查，不另拆组件资格。源码/SQL/native/模型/数据/交付/首失败全部留在主根；current reference final-submission，不重复旧L02/旧GPU资格。
+
+L02原Codex完整157（3内层合法选模方法）于17:01:15.096639Z自然0，不是作者121。原外部封存helper固定121自然ValueError，原错误不覆。唯一continuation35416调用原numeric_assignment从同registration逐身份核157verified，封原对象后同原grader prepare64192于17:01:54Z真实启动；无新的forecast/native/模型或候选改动。当前locator已更新原157/prepare，不再按旧active owner64636重启。prepare终态后再交同冻结38独评及真grade；OC已实际100，Codex分未出/两good尚未触发L02升级。
+
+套件仍完整开发6/10，L10当前未冻结/无完整人评总分。所有小时资格/十题/成熟目标未达，其他L04/L05/L01与已触发L06新版仍缺。后续结束前本任务全部修改范围commit/正常fetch merge审全待推/hook/push，保护外部任务删图/排序/overlay/Bun。
+
+
+## 最新整题成品Recall：L10开发冻结、L02原真实两100触发升级
+
+L10一次集中整题审查已18:03:16Z闭合，完整原CSV/Fraction/SQL独算全部三输入与唯一88.959秒base冷跑均一致，最大差3.73e-12，主/weak/idle图实际view。main五H真pass；weak仅H04fail（无依据现实全供/认证/保证收益）；idle仅H01fail（源码0动作与正文LP不符），其它内容按原事实真评。初评级逐字节保留，未因poor quality连坐其它人评。
+
+三真实工具问题全部保原source/native/trace：主方原bad_shape native0/cash=True使TypeError，集中修候选财务边界后只M07 candidate_financial_shape_invalid；独审B01人工包覆盖M07伪100，改为唯一rubric assessment权限、完整五H/状态/evidence和原run绑定，原反例现facility_independent_review_leaf_set_invalid且不扣候选；B02候选CSV缺step误facility，现唯一CSV出口解析归M13 candidate_export_columns_invalid，其余已证事实继续。副本mount定位告警仅协议控制，不冒充新candidate；原反例/原100错误通过/初评都保，不重任何业务矩阵。
+
+固定真实原checker+原实际评级CLI：作者参考100/19pass/allcritical/exit0；weak96/H04criticalfail/goodfalse/exit2；idle85/M11,M12,H01criticalfail/goodfalse/exit2。不是模型分/手写投影；未内容整评的其它错误programme总分仍null。根l10-full-case-20261031、final-submission/final-base/price/quote-run和独审l10-whole-case-independent-review-20261031为实际原件。FREEZE L10/0.2.0-dev于18:06:02Z只改发布metadata，原数据/19叶100/critical/90/阈值不变；reference quality为同信息可达参照，不授全信息最优证书。
+
+Git的whole-case-tests保完整产品源/机读账/图/全部plain和54主参考SQLite约18.6MB originalZIP、约5.2MB final追加修复/独审；完整外部1.35GB原字节/3104成员execution-originals.zip约59MB含所有控制DB，排除项receipt列明，不能声称全capsule进Git。术语/文件名不是功能哈希门；源版本比较只绑定原不可变提交跨输入控制的身份。
+
+L02 fresh Codex原144predict+12select+report157已17:01:15Z自然0，原prepare17:21:33Z exit0，38实际独评17:44:47Z先封全verified_pass。原根grade97640/owner79028于17:48:00.011→18:11:03.067Z自然exit0/1383.001秒，subject_role=candidate/statusgraded/66verified_pass/无失败未评/100/study_complete/quality_success/goodtrue。与OpenCorvus原真实100同一冻结rubric/quality/reference原对象；源码池3合法不同导致157非121，原协调器假设错误已修且零预测重执行。新安全成对原件cases/L02/evaluator/pilot-codex-20261031/final-assessment，paired-comparison.json明确两good实际触发另升新版本，旧public/rubric/FREEZE/标准/两分数只读。唯一L02-current-pair locator已active=null/paired_completed_upgrade_required；不要再启动旧Task/API/矩阵/prepare/grade。
+
+L02当前版本对这两个系统未拉开区分度，不能拿两100说难度足够。升级必须另版本并增加真实内在科学/运营难点，不能补字数/文件/慢算法或按新结果改旧线；尤其旧June条件失效不能用宏平均或事后宽阈值掩盖，新要求要先有同信息可达/不可识别性论证。先交完L04/L05/L01完整成品，再落实L02/L06已触发新版本义务，不能回到工具/组件磨蹭。当前开发完整7/10、有效候选小时0/10、真人专业/统计成熟未获，全部目标未完成，心跳ACTIVE。
+
+所有新CPU工作/独审已自然终态；不把作者/evaluator耗时或OC7291秒生命周期/unknown Codex观察窗/cache/多核CPU当有效小时。仅已授权一层review和fresh候选，未再委托。结束前范围commit/正常fetch merge审全部待推/必要check/push，保用户删除/overlay/索引排序/Bun。

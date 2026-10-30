@@ -1,0 +1,21 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l10-whole-case-independent-review-20261031\\cold-evaluator\\run_l10.py",
+    "--submission",
+    "D:\\opencorvus-benchmark-runs\\l10-whole-case-independent-review-20261031\\cold-program",
+    "--raw",
+    "D:\\opencorvus-benchmark-runs\\l10-whole-case-independent-review-20261031\\cold-input\\raw",
+    "--cases",
+    "D:\\opencorvus-benchmark-runs\\l10-whole-case-independent-review-20261031\\cold-input\\cases",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l10-whole-case-independent-review-20261031\\cold-run"
+  ],
+  "exit_code": 0,
+  "seconds": 88.95933169964701,
+  "started_at": "2026-10-30T17:50:27.287832+00:00",
+  "finished_at": "2026-10-30T17:51:56.250909+00:00"
+}

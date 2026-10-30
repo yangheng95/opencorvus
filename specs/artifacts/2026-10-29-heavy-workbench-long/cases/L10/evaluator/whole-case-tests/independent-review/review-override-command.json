@@ -1,0 +1,26 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l10-whole-case-independent-review-20261031\\checker-initial\\check_l10.py",
+    "grade",
+    "--runs",
+    "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\bad_shape-runs.json",
+    "--keys",
+    "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\bad_shape-keys.json",
+    "--rubric",
+    "D:\\opencorvus-benchmark-runs\\l10-whole-case-independent-review-20261031\\checker-initial\\rubric.json",
+    "--review",
+    "D:\\opencorvus-benchmark-runs\\l10-whole-case-independent-review-20261031\\review-override-protocol-fixture.json",
+    "--role",
+    "error_control",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l10-whole-case-independent-review-20261031\\review-override-actual-assessment.json"
+  ],
+  "exit_code": 0,
+  "seconds": 5.949146900326014,
+  "stdout": "",
+  "stderr": ""
+}

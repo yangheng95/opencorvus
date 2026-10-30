@@ -1,0 +1,225 @@
+{
+  "case": "L10/0.2.0-dev",
+  "role": "error_control",
+  "total": null,
+  "good": null,
+  "critical_not_passed": [
+    "M02",
+    "M03",
+    "M04",
+    "M05",
+    "M06",
+    "M07",
+    "M08",
+    "M09",
+    "M10",
+    "M11",
+    "M12",
+    "M13",
+    "H01",
+    "H02",
+    "H04",
+    "H05"
+  ],
+  "unassessed": [
+    "H01",
+    "H02",
+    "H03",
+    "H04",
+    "H05"
+  ],
+  "findings": {
+    "M01": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M02": {
+      "status": "fail",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [
+            {
+              "code": "actual_programme_execution_incomplete",
+              "status": {
+                "execution_complete": false,
+                "failed": {
+                  "scenario": "cloud",
+                  "probability": 0.25,
+                  "site": "CLINIC",
+                  "device": "S4",
+                  "root": "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\dt_error-base-run\\episodes\\cloud\\CLINIC\\S4",
+                  "exit_code": 1,
+                  "fault": false
+                }
+              }
+            },
+            "full assigned episodes required",
+            {
+              "episode": [
+                "cloud",
+                "CLINIC",
+                "S4"
+              ],
+              "native_exit": 1
+            }
+          ],
+          "actual_episode_proof": []
+        }
+      ]
+    },
+    "M03": {
+      "status": "fail",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [
+            {
+              "episode": [
+                "cloud",
+                "CLINIC",
+                "S4"
+              ],
+              "actual_native_failure": {
+                "error": "ValueError",
+                "detail": "battery_power_limit"
+              }
+            }
+          ],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M04": {
+      "status": "blocked_candidate",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M05": {
+      "status": "blocked_candidate",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M06": {
+      "status": "blocked_candidate",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M07": {
+      "status": "blocked_candidate",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M08": {
+      "status": "blocked_candidate",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M09": {
+      "status": "blocked_candidate",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M10": {
+      "status": "blocked_candidate",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M11": {
+      "status": "blocked_candidate",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M12": {
+      "status": "blocked_candidate",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M13": {
+      "status": "blocked_candidate",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M14": {
+      "status": "pass",
+      "evidence": "Same original declared programme actually executed for the supplied input controls; immutable submission identity, not functional hash matching."
+    },
+    "H01": {
+      "status": "unassessed",
+      "evidence": "actual assessment pending"
+    },
+    "H02": {
+      "status": "unassessed",
+      "evidence": "actual assessment pending"
+    },
+    "H03": {
+      "status": "unassessed",
+      "evidence": "actual assessment pending"
+    },
+    "H04": {
+      "status": "unassessed",
+      "evidence": "actual assessment pending"
+    },
+    "H05": {
+      "status": "unassessed",
+      "evidence": "actual assessment pending"
+    }
+  },
+  "limits": "Author simulation and nonblind AI review are not field certification, real service probabilities, fresh LLM scores or effective-hour evidence."
+}

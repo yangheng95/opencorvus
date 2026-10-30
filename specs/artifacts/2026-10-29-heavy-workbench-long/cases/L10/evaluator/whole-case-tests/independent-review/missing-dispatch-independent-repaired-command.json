@@ -1,0 +1,25 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l10-whole-case-independent-review-20261031\\checker-repaired\\check_l10.py",
+    "grade",
+    "--runs",
+    "D:\\opencorvus-benchmark-runs\\l10-whole-case-independent-review-20261031\\missing-dispatch-runs.json",
+    "--keys",
+    "D:\\opencorvus-benchmark-runs\\l10-whole-case-independent-review-20261031\\missing-dispatch-keys.json",
+    "--rubric",
+    "D:\\opencorvus-benchmark-runs\\l10-whole-case-independent-review-20261031\\checker-repaired\\rubric.json",
+    "--role",
+    "error_control",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l10-whole-case-independent-review-20261031\\missing-dispatch-independent-repaired-assessment.json"
+  ],
+  "exit_code": 4,
+  "seconds": 11.280003800056875,
+  "stdout": "",
+  "stderr": "",
+  "scope": "Same preserved output/protocol controls; no simulation, actor, solver or new native launched."
+}

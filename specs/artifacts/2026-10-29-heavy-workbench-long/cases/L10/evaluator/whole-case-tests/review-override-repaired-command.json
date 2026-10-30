@@ -1,0 +1,27 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\concentrated-repairs-source\\check_l10.py",
+    "grade",
+    "--runs",
+    "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\bad_shape-runs.json",
+    "--keys",
+    "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\bad_shape-keys.json",
+    "--rubric",
+    "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\concentrated-repairs-source\\rubric.json",
+    "--review",
+    "D:\\opencorvus-benchmark-runs\\l10-whole-case-independent-review-20261031\\review-override-protocol-fixture.json",
+    "--role",
+    "error_control",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\review-override-repaired-assessment.json"
+  ],
+  "exit_code": 3,
+  "seconds": 0.3850736003369093,
+  "stdout": "",
+  "stderr": "",
+  "scope": "original independent protocol control, zero new simulation/native; moved-copy mount warnings not candidate evidence"
+}

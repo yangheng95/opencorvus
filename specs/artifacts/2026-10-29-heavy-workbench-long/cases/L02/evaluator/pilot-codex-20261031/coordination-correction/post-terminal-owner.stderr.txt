@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "D:\opencorvus-benchmark-runs\prepare-l02-codex-assessment-20261031.py", line 16, in <module>
+    if terminal['exit_code']==0 and (len(cells)!=121 or any(x['phase']!='verified' for x in cells)):raise ValueError('success_receipt_disagrees_with_original_SQL')
+                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: success_receipt_disagrees_with_original_SQL

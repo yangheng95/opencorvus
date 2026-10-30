@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L10\\evaluator\\check_l10.py",
+    "grade",
+    "--runs",
+    "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\bad_shape-runs.json",
+    "--keys",
+    "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\bad_shape-keys.json",
+    "--rubric",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L10\\rubric.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\bad_shape-repaired-assessment.json",
+    "--role",
+    "error_control"
+  ],
+  "exit_code": 4,
+  "stdout": "",
+  "stderr": "",
+  "scope": "same original native0 malformed financial object; zero new simulation/model/native"
+}

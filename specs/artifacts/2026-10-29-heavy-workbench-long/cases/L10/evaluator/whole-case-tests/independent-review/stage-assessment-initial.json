@@ -1,0 +1,17 @@
+{
+  "case": "L10/0.2.0-dev",
+  "assessment": "complete_development_case_reachable_with_checker_blockers",
+  "development_pilot_freeze_allowed": false,
+  "blockers": [
+    "B01_review_overrides_machine_leaf",
+    "B02_candidate_csv_misclassified_facility"
+  ],
+  "disclosure": "Independent one-level AI-agent review; nonblind, familiar with author reference and prior benchmark reviews. Original synthetic study, not professional electrical/finance certification, statistical validation, fresh model ranking or effective agent-hours evidence.",
+  "not_claimed": [
+    "effective_hours",
+    "professional_human_certification",
+    "statistical_maturity",
+    "ten_cases_complete",
+    "global_optimality"
+  ]
+}

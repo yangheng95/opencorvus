@@ -1,0 +1,93 @@
+{
+  "jobs": [
+    {
+      "method": "wrong_efficiency",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L10\\evaluator\\run_l10.py",
+        "--submission",
+        "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\wrong_efficiency-submission",
+        "--raw",
+        "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\raw\\base",
+        "--cases",
+        "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\cases\\base",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\wrong_efficiency-base-run"
+      ],
+      "started_at": "2026-10-30T17:16:38.572869+00:00",
+      "finished_at": "2026-10-30T17:16:42.495405+00:00",
+      "exit_code": 2,
+      "seconds": 3.9223242001608014
+    },
+    {
+      "method": "wrong_resume",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L10\\evaluator\\run_l10.py",
+        "--submission",
+        "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\wrong_resume-submission",
+        "--raw",
+        "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\raw\\base",
+        "--cases",
+        "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\cases\\base",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\wrong_resume-base-run"
+      ],
+      "started_at": "2026-10-30T17:16:42.496035+00:00",
+      "finished_at": "2026-10-30T17:17:12.930747+00:00",
+      "exit_code": 2,
+      "seconds": 30.43310429994017
+    },
+    {
+      "method": "bad_peak",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L10\\evaluator\\run_l10.py",
+        "--submission",
+        "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\bad_peak-submission",
+        "--raw",
+        "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\raw\\base",
+        "--cases",
+        "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\cases\\base",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\bad_peak-base-run"
+      ],
+      "started_at": "2026-10-30T17:17:12.931312+00:00",
+      "finished_at": "2026-10-30T17:18:24.414525+00:00",
+      "exit_code": 0,
+      "seconds": 71.47944269981235
+    },
+    {
+      "method": "bad_cash",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L10\\evaluator\\run_l10.py",
+        "--submission",
+        "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\bad_cash-submission",
+        "--raw",
+        "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\raw\\base",
+        "--cases",
+        "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\cases\\base",
+        "--out",
+        "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\bad_cash-base-run"
+      ],
+      "started_at": "2026-10-30T17:18:24.415209+00:00",
+      "finished_at": "2026-10-30T17:19:35.106591+00:00",
+      "exit_code": 0,
+      "seconds": 70.68793370015919
+    }
+  ],
+  "scope": "one real programme per distinct business error; not candidate trials or effective hours"
+}

@@ -1,0 +1,350 @@
+{
+  "case": "L10/0.2.0-dev",
+  "role": "error_control",
+  "total": null,
+  "good": null,
+  "critical_not_passed": [
+    "M07",
+    "M08",
+    "H01",
+    "H02",
+    "H04",
+    "H05"
+  ],
+  "unassessed": [
+    "H01",
+    "H02",
+    "H03",
+    "H04",
+    "H05"
+  ],
+  "findings": {
+    "M01": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M02": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": [
+            {
+              "episode": [
+                "cloud",
+                "CLINIC",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "cloud",
+                "CLINIC",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "cloud",
+                "CLINIC",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "cloud",
+                "OFFICE",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "cloud",
+                "OFFICE",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "cloud",
+                "OFFICE",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "CLINIC",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "CLINIC",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "CLINIC",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "OFFICE",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "OFFICE",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "OFFICE",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "CLINIC",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "CLINIC",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "CLINIC",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "OFFICE",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "OFFICE",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "OFFICE",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            }
+          ]
+        }
+      ]
+    },
+    "M03": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M04": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M05": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M06": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M07": {
+      "status": "fail",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [
+            "summaries actual full financial components",
+            "cash actual full financial components"
+          ],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M08": {
+      "status": "fail",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [
+            {
+              "site": "CLINIC",
+              "selected": "S8",
+              "npv": 807.430106693472
+            }
+          ],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M09": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M10": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M11": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M12": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M13": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M14": {
+      "status": "pass",
+      "evidence": "Same original declared programme actually executed for the supplied input controls; immutable submission identity, not functional hash matching."
+    },
+    "H01": {
+      "status": "unassessed",
+      "evidence": "actual assessment pending"
+    },
+    "H02": {
+      "status": "unassessed",
+      "evidence": "actual assessment pending"
+    },
+    "H03": {
+      "status": "unassessed",
+      "evidence": "actual assessment pending"
+    },
+    "H04": {
+      "status": "unassessed",
+      "evidence": "actual assessment pending"
+    },
+    "H05": {
+      "status": "unassessed",
+      "evidence": "actual assessment pending"
+    }
+  },
+  "limits": "Author simulation and nonblind AI review are not field certification, real service probabilities, fresh LLM scores or effective-hour evidence."
+}

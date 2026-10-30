@@ -1,0 +1,13 @@
+{
+  "observed_at": "2026-10-30T16:58:28.090159+00:00",
+  "pid": 35416,
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\continue-l02-codex-original-matrix-seal-20261031.py"
+  ],
+  "root_cause": "author-coordinator assumed reference pool2; immutable candidate legally has pool3; actual original evaluator uses dynamic matrix",
+  "scope": "wait original helper natural failure, preserve original error, seal same original run via existing assignment primitive, then same grader prepare; no Task/candidate/native recompute"
+}

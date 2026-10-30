@@ -1,0 +1,44 @@
+{
+  "case": "L02/0.2.0",
+  "assignment_id": "2b857108932140b2bf0b79d5bb9501ac",
+  "submission_id": "Codex-L02-ee1ab32a6819-20261031",
+  "run_id": "a6a98cfe716044bcb2d7b72eecbf0e27",
+  "stage": "original38 candidate substantive review completed and sealed",
+  "manual_findings": {
+    "verified_pass": 38
+  },
+  "actual_full_grid": {
+    "predict": 144,
+    "select": 12,
+    "report": 1
+  },
+  "ordinary_research_selected_metrics": {
+    "scaled_mse": 0.003072003802494062,
+    "scaled_mae": 0.02936333776048259,
+    "scaled_wis": 0.02142329291787726
+  },
+  "Q26": "not scored here; actual independent fixed-reference grader required",
+  "candidate_total": null,
+  "no_handwritten_score": true,
+  "coordinator121_fault": "external wrapper assumption, actual157 objects verified without rerun; not candidate failure",
+  "initial_review": "initial-review.json",
+  "initial_seal": "initial-review-seal.json",
+  "original_received_bundle": "assignment.zip",
+  "visuals": [
+    "metrics.png",
+    "worst-origin.png",
+    "decisions.png"
+  ],
+  "no_new_native_or_full_reader": true,
+  "disclosure": {
+    "kind": "ai-agent",
+    "blinded": false,
+    "familiarity": "Familiar with author reference/design/development calibration and earlier OpenCorvus results. This independent judgement uses this Codex own original157-cell assignment and source/report, not previous ratings.",
+    "limitations": "Nonblind AI, not professional-human/statistical maturity certification. Actual Codex model/usage unknown; no same-model causal ranking. Existing parameters checked by equations/arithmetic without refitting or new forecast/native/report/Docker/reader. Q26 and total left to actual grader."
+  },
+  "audits": {
+    "raw_model_and_native": true,
+    "report_truth_coverage_action_provenance": true
+  },
+  "completed_at": "2026-10-30T17:46:15.105402+00:00"
+}

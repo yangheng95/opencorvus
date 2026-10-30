@@ -1,0 +1,75 @@
+{
+  "case": "L10/0.2.0-dev",
+  "reviewer": "/root/benchmark_review",
+  "at": "2026-10-30T18:03:16.665206+00:00",
+  "stage": "whole_case_development_pilot_contract_review",
+  "complete_development_case": true,
+  "development_pilot_freeze_allowed": true,
+  "remaining_substantive_blockers": [],
+  "resolved": [
+    {
+      "id": "B01",
+      "issue": "manual namespace overwrote machine financial failure",
+      "actual_original": "review-override-actual-assessment.json",
+      "actual_repaired": "review-override-independent-repaired-assessment.json",
+      "resolution": "Only rubric-assigned complete five H leaves accepted; bad review is facility, not candidate failure"
+    },
+    {
+      "id": "B02",
+      "issue": "candidate export key missing became facility",
+      "actual_original": "missing-dispatch-assessment.json",
+      "actual_repaired": "missing-dispatch-independent-repaired-assessment.json",
+      "resolution": "Unique typed candidate CSV boundary; original missing step becomes M13 candidate_export_columns_invalid"
+    }
+  ],
+  "allowed_changes": [
+    "Only development-frozen metadata/README/profile/rubric publication status, preserving case L10/0.2.0-dev identity, original inputs, 19 leaf identities, weights, critical flags, numeric tolerances, reference quality allowances and >=90 rule"
+  ],
+  "initial_ratings_preserved": true,
+  "final_review_same_original": {
+    "review.json": true,
+    "review-weak.json": true,
+    "review-idle.json": true
+  },
+  "main_manual": {
+    "H01": "pass",
+    "H02": "pass",
+    "H03": "pass",
+    "H04": "pass",
+    "H05": "pass"
+  },
+  "weak_manual": {
+    "H01": "pass",
+    "H02": "pass",
+    "H03": "pass",
+    "H04": "fail",
+    "H05": "pass"
+  },
+  "idle_manual": {
+    "H01": "fail",
+    "H02": "pass",
+    "H03": "pass",
+    "H04": "pass",
+    "H05": "pass"
+  },
+  "actual_aggregate_source": "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\main-reviewed-command.json",
+  "actual_aggregate_native_exit": 0,
+  "aggregate_written_by_reviewer": false,
+  "cold": {
+    "count": 1,
+    "exit_code": 0,
+    "seconds": 88.95933169964701,
+    "source_only": true,
+    "one_cpu": true,
+    "network": "none",
+    "originals": "own-cold-originals.zip"
+  },
+  "limits": [
+    "nonblind AI reviewer familiar with reference; not professional human certification",
+    "synthetic study and conditional causal-reference reachability, not global-optimum or real investment guarantee",
+    "no fresh LLM candidate or model-controlled ranking in this review",
+    "author cold execution time is not agent effective work time; no several-hour difficulty established",
+    "no claim that ten mature heavy cases are complete",
+    "one controlled committed-write recovery; not arbitrary crash or adversarial OS side-channel certification"
+  ]
+}

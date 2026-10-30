@@ -1,0 +1,1811 @@
+{
+  "commission": {
+    "study": "Fictional commissioning study; no real electrical service",
+    "history_cutoff": "2026-01-31T11:00:00Z",
+    "wear_per_ac_kwh": 0.02,
+    "critical_penalty": 1000.0,
+    "flex_penalty": 10.0,
+    "campaigns_per_year": 6,
+    "years": 5,
+    "replacement_year": 3,
+    "discount": 0.08,
+    "annual_escalation": 1.02,
+    "quality_cost_relative_allowance": 0.02,
+    "quality_critical_kwh_allowance": 0.0001
+  },
+  "sites": {
+    "CLINIC": {
+      "import_limit_kw": 7.0,
+      "demand_per_kw": 6.0,
+      "timezone": "UTC",
+      "critical_description": "fictional cold chain"
+    },
+    "OFFICE": {
+      "import_limit_kw": 6.0,
+      "demand_per_kw": 0.0,
+      "timezone": "UTC",
+      "critical_description": "fictional office administration"
+    }
+  },
+  "devices": {
+    "ZERO": {
+      "id": "ZERO",
+      "capacity_kwh": 0.0,
+      "power_kw": 0.0,
+      "eta_c": 0.9,
+      "eta_d": 0.9,
+      "capital": 0.0,
+      "annual_om": 0.0,
+      "replacement": 0.0,
+      "residual": 0.0
+    },
+    "S4": {
+      "id": "S4",
+      "capacity_kwh": 4.0,
+      "power_kw": 2.0,
+      "eta_c": 0.9,
+      "eta_d": 0.9,
+      "capital": 150.0,
+      "annual_om": 8.0,
+      "replacement": 45.0,
+      "residual": 15.0
+    },
+    "S8": {
+      "id": "S8",
+      "capacity_kwh": 8.0,
+      "power_kw": 4.0,
+      "eta_c": 0.9,
+      "eta_d": 0.9,
+      "capital": 320.0,
+      "annual_om": 12.0,
+      "replacement": 96.0,
+      "residual": 32.0
+    }
+  },
+  "history": [
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T00:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T00:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T00:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T01:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T01:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T01:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T01:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T02:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T02:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T02:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T02:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T03:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T03:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T03:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T03:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T04:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T04:00:00Z",
+      "revision": 2,
+      "status": "missing",
+      "power_kw": null,
+      "released_at": "2026-01-31T10:00:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T04:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T05:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T05:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T05:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T05:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T06:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T06:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T06:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T06:30:00Z",
+      "revision": 2,
+      "status": "valid",
+      "power_kw": 1.75,
+      "released_at": "2026-01-31T10:00:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T07:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T07:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T07:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T08:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T08:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T08:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T08:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T09:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T09:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T09:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T09:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T10:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T10:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T10:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T10:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T11:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T11:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T11:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T11:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T12:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T12:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T12:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T12:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T13:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T13:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T13:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T13:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T14:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T14:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T14:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T14:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T15:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T15:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T15:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T15:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T16:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T16:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T16:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T16:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T17:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T17:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T17:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T17:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T18:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T18:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T18:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T18:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T19:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T19:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T19:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T19:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T20:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T20:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T20:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T20:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T21:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T21:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T21:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T21:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T22:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T22:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T22:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T22:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T23:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T23:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T23:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "load",
+      "interval_start": "2026-01-30T23:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-31T00:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T00:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T00:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T00:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T01:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T01:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T01:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T01:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T02:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T02:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T02:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T02:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T03:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T03:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T03:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T03:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T04:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T04:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T04:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T04:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T05:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T05:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T05:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T05:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T06:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T06:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T06:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T06:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T07:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T07:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 1.03527618,
+      "released_at": "2026-01-30T07:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T07:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 1.03527618,
+      "released_at": "2026-01-30T08:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T08:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T08:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T08:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T09:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T09:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.82842712,
+      "released_at": "2026-01-30T09:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T09:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.82842712475,
+      "released_at": "2026-01-30T10:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T10:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 3.46410162,
+      "released_at": "2026-01-30T10:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T10:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 3.46410162,
+      "released_at": "2026-01-30T11:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T11:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 3.86370330516,
+      "released_at": "2026-01-30T11:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T11:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 3.8637033,
+      "released_at": "2026-01-30T12:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T12:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T12:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T12:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T13:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T13:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 3.8637033,
+      "released_at": "2026-01-30T13:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T13:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 3.86370331,
+      "released_at": "2026-01-30T14:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T14:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 3.4641016151399997,
+      "released_at": "2026-01-30T14:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T14:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 3.46410162,
+      "released_at": "2026-01-30T15:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T15:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.82842712,
+      "released_at": "2026-01-30T15:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T15:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.82842712475,
+      "released_at": "2026-01-30T16:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T16:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T16:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T16:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T17:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T17:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 1.0352761804100001,
+      "released_at": "2026-01-30T17:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T17:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 1.03527618,
+      "released_at": "2026-01-30T18:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T18:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T18:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T18:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T19:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T19:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T19:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T19:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T20:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T20:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T20:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T20:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T21:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T21:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T21:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T21:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T22:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T22:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T22:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T22:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T23:05:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T23:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T23:35:00Z"
+    },
+    {
+      "site": "CLINIC",
+      "series": "pv",
+      "interval_start": "2026-01-30T23:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-31T00:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T00:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T00:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T00:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T01:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T01:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T01:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T01:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T02:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T02:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T02:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T02:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T03:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T03:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T03:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T03:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T04:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T04:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T04:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T04:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T05:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T05:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T05:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T05:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T06:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T06:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T06:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T06:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T07:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T07:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T07:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T07:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T08:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T08:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T08:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T08:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T09:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T09:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T09:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T09:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T10:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T10:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T10:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T10:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T11:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T11:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T11:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T11:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T12:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T12:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T12:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T12:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T13:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T13:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T13:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T13:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T14:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T14:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T14:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T14:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T15:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T15:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T15:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T15:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T16:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T16:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T16:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T16:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T17:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T17:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T17:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T17:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T18:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T18:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T18:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T18:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T19:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T19:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T19:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T19:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T20:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T20:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T20:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T20:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T21:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T21:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T21:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T21:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T22:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T22:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T22:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T22:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T23:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T23:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T23:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "load",
+      "interval_start": "2026-01-30T23:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-31T00:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T00:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T00:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T00:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T01:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T01:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T01:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T01:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T02:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T02:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T02:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T02:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T03:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T03:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T03:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T03:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T04:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T04:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T04:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T04:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T05:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T05:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T05:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T05:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T06:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T06:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T06:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T06:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T07:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T07:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 1.03527618,
+      "released_at": "2026-01-30T07:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T07:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 1.03527618,
+      "released_at": "2026-01-30T08:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T08:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T08:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T08:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T09:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T09:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.82842712,
+      "released_at": "2026-01-30T09:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T09:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.82842712475,
+      "released_at": "2026-01-30T10:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T10:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 3.46410162,
+      "released_at": "2026-01-30T10:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T10:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 3.46410162,
+      "released_at": "2026-01-30T11:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T11:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 3.86370330516,
+      "released_at": "2026-01-30T11:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T11:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 3.8637033,
+      "released_at": "2026-01-30T12:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T12:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T12:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T12:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 4.0,
+      "released_at": "2026-01-30T13:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T13:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 3.8637033,
+      "released_at": "2026-01-30T13:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T13:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 3.86370331,
+      "released_at": "2026-01-30T14:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T14:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 3.4641016151399997,
+      "released_at": "2026-01-30T14:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T14:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 3.46410162,
+      "released_at": "2026-01-30T15:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T15:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.82842712,
+      "released_at": "2026-01-30T15:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T15:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.82842712475,
+      "released_at": "2026-01-30T16:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T16:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T16:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T16:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 2.0,
+      "released_at": "2026-01-30T17:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T17:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 1.0352761804100001,
+      "released_at": "2026-01-30T17:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T17:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 1.03527618,
+      "released_at": "2026-01-30T18:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T18:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T18:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T18:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T19:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T19:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T19:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T19:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T20:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T20:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T20:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T20:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T21:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T21:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T21:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T21:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T22:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T22:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T22:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T22:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T23:05:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T23:00:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-30T23:35:00Z"
+    },
+    {
+      "site": "OFFICE",
+      "series": "pv",
+      "interval_start": "2026-01-30T23:30:00Z",
+      "revision": 1,
+      "status": "valid",
+      "power_kw": 0.0,
+      "released_at": "2026-01-31T00:05:00Z"
+    }
+  ],
+  "prior": {
+    "CLINIC": {
+      "peak_kw": {
+        "2026-01": 6.3
+      },
+      "prior_energy_usd": 15.5,
+      "period": "2026-01; partial bill, observed peak is irrevocable"
+    },
+    "OFFICE": {
+      "peak_kw": {
+        "2026-01": 4.2
+      },
+      "prior_energy_usd": 8.75,
+      "period": "2026-01; zero demand rate does not erase the measured peak"
+    }
+  }
+}

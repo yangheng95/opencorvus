@@ -1,0 +1,41 @@
+{
+  "format": "l02-report-receipt/1",
+  "outer_ids": [
+    "outer-20250115",
+    "outer-20250215",
+    "outer-20250315",
+    "outer-20250415",
+    "outer-20250515",
+    "outer-20250620",
+    "outer-20250715",
+    "outer-20250815",
+    "outer-20250915",
+    "outer-20251015",
+    "outer-20251115",
+    "outer-20251215"
+  ],
+  "report_scope": "Post-seal formal research results supplied by the evaluator; ordinary losses are reconstructed here. Completion and quality remain subject to independent checking.",
+  "candidate_score": null,
+  "artifact_tables": [
+    "action-summary.csv",
+    "actions.csv",
+    "calibration-summary.csv",
+    "execution.csv",
+    "fit-summary.csv",
+    "forecasts.csv",
+    "node-origin-metrics.csv",
+    "node-summary.csv",
+    "origin-metrics.csv",
+    "paired-differences.csv",
+    "selection-trace.csv",
+    "source-index.csv",
+    "summary.csv",
+    "target-feature-summary.csv",
+    "weather-bias-summary.csv"
+  ],
+  "figures": [
+    "metrics.png",
+    "worst-origin.png",
+    "decisions.png"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "meter": "original-source/meter-history.csv; site/series/start and highest released revision",
+  "sunk_peak": "original-source/prior-bills.json",
+  "tariff": "original-source/tariff-circular.md and actual packet price",
+  "capacity_cash": "original-source/equipment-quotes.csv",
+  "annualisation": "original-source/portfolio-notes.md plus commission.json",
+  "actual_actions": "dispatch.csv from actual confirmed plant ledger",
+  "probabilities": "each actual replay result, original portfolio-notes.md",
+  "no_oracle_claim": "forecasts are released vintages; unseen truth is not a policy input"
+}

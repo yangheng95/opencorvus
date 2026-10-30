@@ -1,0 +1,25 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l10-whole-case-independent-review-20261031\\checker-initial\\check_l10.py",
+    "grade",
+    "--runs",
+    "D:\\opencorvus-benchmark-runs\\l10-whole-case-independent-review-20261031\\missing-dispatch-runs.json",
+    "--keys",
+    "D:\\opencorvus-benchmark-runs\\l10-whole-case-independent-review-20261031\\missing-dispatch-keys.json",
+    "--rubric",
+    "D:\\opencorvus-benchmark-runs\\l10-whole-case-independent-review-20261031\\checker-initial\\rubric.json",
+    "--role",
+    "error_control",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l10-whole-case-independent-review-20261031\\missing-dispatch-assessment.json"
+  ],
+  "exit_code": 3,
+  "seconds": 5.984797399491072,
+  "stdout": "",
+  "stderr": "",
+  "scope": "Private output-only protocol mutation of cold-run delivery. Original recorded episode/source paths remain original, so moved-copy mount-binding warnings are not candidate evidence. No new native."
+}

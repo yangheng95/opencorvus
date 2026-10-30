@@ -513,3 +513,19 @@ L06/0.3完整权威业务/信息/承诺/物理现金续接和其余L01/L04/L05/L
 原薄helper已归档和封programme后在metadata json.dump(parsed manifest)遇Decimal TypeError，未启动formal；这是真实协调工具错误，不是候选失败。原script/异常在completed/seal-tool-error1及initial副本保留，改以唯一原submission.json作元数据引用，不转换Decimal、不重新封或重跑同候选。原目录continuation后16:24:40.203Z正式Codex私有108forecast12select1report启动，launcher64636/driver78116，复用同OC evaluator快照/冻结material-study/原raw/newoutputs，1CPU/netnone，无总截断/缩小诊断。post-terminal helper96992正常OS等待精确自有64636，如其先结束就接续原终态；之后只封实际SQL/accepted/报告，再同原grader prepare，不新模型/forecast/native重算。动态L02-current-pair.json当前active_evaluation在codex/evaluation，别重开原Task/API/另一矩阵。
 
 Codex自然终态的新图/同66叶独评/真正grade尚待；只有两方真实good才另升L02版本。原规则/私有reference/权重不改，OpenCorvus实际gpt-6.1-sol/code/base与Codex未知配置仅描述，各自生命周期及评估时间不认证有效小时或同模型速度费用排名。
+
+
+## 原矩阵计数纠偏Recall
+
+Codex原submission的selection_ids含seasonal-8/weather-operations/without-weather三个合法ID，公开合同允许至少二且不禁ablation加入；原numeric_assignment自然执行157格，不是作者二池121。真实SQL143verified/仍活动，未见产品调度/恢复异常。问题是外部薄post-terminal封存脚本从作者参考复制了固定121检查，与原programme契约矛盾；原执行器/registration/primitive未修改，全部生产Task/Mission/Session不在此脚本调用链，无共享产品修复需求。
+
+原active helper96992不热改/不取消，先自然等待原owner和保其固定数错误；新唯一continuation等待它真退出，仅在尚未建completed/prepare时，用同一原registration.zip的pool/origins/outer_ids调用现有numeric_assignment逐身份核原SQL，再封同一已执行对象并原grader prepare。没有第二Task/预测矩阵、原source/pool/阈值或已交报告改动。原helper/异常、修后source/等待/命令/terminal全保。实际matrix-continuation-owner-started.json给新精确PID；若原末态与预期矛盾先查原件，不覆盖/猜成功。
+
+
+## 最终同冻结真实成对结案Recall
+
+Codex原完整157于17:01:15Z自然0；原helper121假设自然失败，新continuation按原numeric_assignment逐身份核157后封同一SQL/源/native，零新预测。prepare64192于17:01:54→17:21:33Z真实0/1178.903秒；assignment2b857108932140b2bf0b79d5bb9501ac，38原初评17:44:47Z先封，独审读取候选自己原source/packet/as-of/最高missing/拟合正规方程/伪origin残差/选择/全指标/8064双行动账，原报告三图主/独立实际view。原workspace README从完整ZIP读，programme闭包只摘声明运行依赖，不能把提取差异当缺交。无新reader/forecast/训练或Docker，非盲熟悉参考AI限制明确。
+
+真正l02_grade97640/owner79028于17:48:00.011→18:11:03.067Z自然exit0，原immutable assignment/run/38review+固定外部Q26聚合：subject_role=candidate/66pass/100/study_complete/quality_success/goodtrue，非作者publication projection或Inspect分。两侧rubric/quality-policy/reference.zip/reference-method原对象直接一致，实际候选池大小可异且符合公开合同。旧OpenCorvus100保留，L02当前两good已真实触发新版本，不事后改旧line。安全原件pilot-codex-20261031/final-assessment含实际报告表图、完整programme、原metadata和成对判定；完整Git/失败/私有evaluator原执行仅外部capsule。
+
+L02-current-pair.json当前paired_completed_upgrade_required/active_evaluation=null。所有旧API56591/L0659471退休；候选/评估/grade全部自然终态，不重开任何旧Task/控制/准备或评分。actual Codexmodel/usage/精确native lifecycle不暴露=unknown、comparablefalse，不能由名称/自述补造，同模型速度/费用因果排名和有效小时未资格。L10已完整开发冻，全套7/10；当前重心直接补L04/L05/L01，再新L02/L06的内在升级，不扩评估基础设施。

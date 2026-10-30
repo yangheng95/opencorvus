@@ -1,0 +1,477 @@
+{
+  "expected_costs": {
+    "CLINIC": {
+      "S4": 179.53326331883898,
+      "S8": 165.3982222755555,
+      "ZERO": 214.8698666249998
+    },
+    "OFFICE": {
+      "S4": 21.600000000000005,
+      "S8": 21.600000000000005,
+      "ZERO": 21.600000000000005
+    }
+  },
+  "choices": [
+    {
+      "site": "CLINIC",
+      "selected": "S8",
+      "npv": 807.4301066934713,
+      "selection_rule": "largest expected NPV, lexical ID tie; ZERO eligible"
+    },
+    {
+      "site": "OFFICE",
+      "selected": "ZERO",
+      "npv": 0.0,
+      "selection_rule": "largest expected NPV, lexical ID tie; ZERO eligible"
+    }
+  ],
+  "summaries": [
+    {
+      "site": "CLINIC",
+      "device": "S4",
+      "expected_campaign_cost": 179.53326331883898,
+      "expected_critical_unserved_kwh": 0.0,
+      "npv": 670.945990859322,
+      "annual_initial_saving": 212.01961983696486
+    },
+    {
+      "site": "CLINIC",
+      "device": "S8",
+      "expected_campaign_cost": 165.3982222755555,
+      "expected_critical_unserved_kwh": 0.0,
+      "npv": 807.4301066934713,
+      "annual_initial_saving": 296.82986609666574
+    },
+    {
+      "site": "CLINIC",
+      "device": "ZERO",
+      "expected_campaign_cost": 214.8698666249998,
+      "expected_critical_unserved_kwh": 0.017647499999999972,
+      "npv": 0.0,
+      "annual_initial_saving": 0.0
+    },
+    {
+      "site": "OFFICE",
+      "device": "S4",
+      "expected_campaign_cost": 21.600000000000005,
+      "expected_critical_unserved_kwh": 0.0,
+      "npv": -207.45538318702606,
+      "annual_initial_saving": 0.0
+    },
+    {
+      "site": "OFFICE",
+      "device": "S8",
+      "expected_campaign_cost": 21.600000000000005,
+      "expected_critical_unserved_kwh": 0.0,
+      "npv": -422.3417532777932,
+      "annual_initial_saving": 0.0
+    },
+    {
+      "site": "OFFICE",
+      "device": "ZERO",
+      "expected_campaign_cost": 21.600000000000005,
+      "expected_critical_unserved_kwh": 0.0,
+      "npv": 0.0,
+      "annual_initial_saving": 0.0
+    }
+  ],
+  "cash": [
+    {
+      "site": "CLINIC",
+      "device": "S4",
+      "year": 0,
+      "saving": 0.0,
+      "om": 0.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": -150.0,
+      "discounted": -150.0
+    },
+    {
+      "site": "CLINIC",
+      "device": "S4",
+      "year": 1,
+      "saving": 212.01961983696486,
+      "om": 8.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": 204.01961983696486,
+      "discounted": 188.9070554045971
+    },
+    {
+      "site": "CLINIC",
+      "device": "S4",
+      "year": 2,
+      "saving": 216.26001223370417,
+      "om": 8.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": 208.26001223370417,
+      "discounted": 178.54939320447886
+    },
+    {
+      "site": "CLINIC",
+      "device": "S4",
+      "year": 3,
+      "saving": 220.58521247837825,
+      "om": 8.0,
+      "replacement": 45.0,
+      "residual": 0.0,
+      "net": 167.58521247837825,
+      "discounted": 133.0345447835523
+    },
+    {
+      "site": "CLINIC",
+      "device": "S4",
+      "year": 4,
+      "saving": 224.99691672794583,
+      "om": 8.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": 216.99691672794583,
+      "discounted": 159.49921175982624
+    },
+    {
+      "site": "CLINIC",
+      "device": "S4",
+      "year": 5,
+      "saving": 229.49685506250472,
+      "om": 8.0,
+      "replacement": 0.0,
+      "residual": 15.0,
+      "net": 236.49685506250472,
+      "discounted": 160.95578570686754
+    },
+    {
+      "site": "CLINIC",
+      "device": "S8",
+      "year": 0,
+      "saving": 0.0,
+      "om": 0.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": -320.0,
+      "discounted": -320.0
+    },
+    {
+      "site": "CLINIC",
+      "device": "S8",
+      "year": 1,
+      "saving": 296.82986609666574,
+      "om": 12.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": 284.82986609666574,
+      "discounted": 263.7313574969127
+    },
+    {
+      "site": "CLINIC",
+      "device": "S8",
+      "year": 2,
+      "saving": 302.7664634185991,
+      "om": 12.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": 290.7664634185991,
+      "discounted": 249.2853767306233
+    },
+    {
+      "site": "CLINIC",
+      "device": "S8",
+      "year": 3,
+      "saving": 308.82179268697104,
+      "om": 12.0,
+      "replacement": 96.0,
+      "residual": 0.0,
+      "net": 200.82179268697104,
+      "discounted": 159.41881373438613
+    },
+    {
+      "site": "CLINIC",
+      "device": "S8",
+      "year": 4,
+      "saving": 314.9982285407105,
+      "om": 12.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": 302.9982285407105,
+      "discounted": 222.71274332186454
+    },
+    {
+      "site": "CLINIC",
+      "device": "S8",
+      "year": 5,
+      "saving": 321.29819311152465,
+      "om": 12.0,
+      "replacement": 0.0,
+      "residual": 32.0,
+      "net": 341.29819311152465,
+      "discounted": 232.28181540968464
+    },
+    {
+      "site": "CLINIC",
+      "device": "ZERO",
+      "year": 0,
+      "saving": 0.0,
+      "om": 0.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": -0.0,
+      "discounted": -0.0
+    },
+    {
+      "site": "CLINIC",
+      "device": "ZERO",
+      "year": 1,
+      "saving": 0.0,
+      "om": 0.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": 0.0,
+      "discounted": 0.0
+    },
+    {
+      "site": "CLINIC",
+      "device": "ZERO",
+      "year": 2,
+      "saving": 0.0,
+      "om": 0.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": 0.0,
+      "discounted": 0.0
+    },
+    {
+      "site": "CLINIC",
+      "device": "ZERO",
+      "year": 3,
+      "saving": 0.0,
+      "om": 0.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": 0.0,
+      "discounted": 0.0
+    },
+    {
+      "site": "CLINIC",
+      "device": "ZERO",
+      "year": 4,
+      "saving": 0.0,
+      "om": 0.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": 0.0,
+      "discounted": 0.0
+    },
+    {
+      "site": "CLINIC",
+      "device": "ZERO",
+      "year": 5,
+      "saving": 0.0,
+      "om": 0.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": 0.0,
+      "discounted": 0.0
+    },
+    {
+      "site": "OFFICE",
+      "device": "S4",
+      "year": 0,
+      "saving": 0.0,
+      "om": 0.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": -150.0,
+      "discounted": -150.0
+    },
+    {
+      "site": "OFFICE",
+      "device": "S4",
+      "year": 1,
+      "saving": 0.0,
+      "om": 8.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": -8.0,
+      "discounted": -7.4074074074074066
+    },
+    {
+      "site": "OFFICE",
+      "device": "S4",
+      "year": 2,
+      "saving": 0.0,
+      "om": 8.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": -8.0,
+      "discounted": -6.858710562414266
+    },
+    {
+      "site": "OFFICE",
+      "device": "S4",
+      "year": 3,
+      "saving": 0.0,
+      "om": 8.0,
+      "replacement": 45.0,
+      "residual": 0.0,
+      "net": -53.0,
+      "discounted": -42.07310877406899
+    },
+    {
+      "site": "OFFICE",
+      "device": "S4",
+      "year": 4,
+      "saving": 0.0,
+      "om": 8.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": -8.0,
+      "discounted": -5.880238822371626
+    },
+    {
+      "site": "OFFICE",
+      "device": "S4",
+      "year": 5,
+      "saving": 0.0,
+      "om": 8.0,
+      "replacement": 0.0,
+      "residual": 15.0,
+      "net": 7.0,
+      "discounted": 4.76408237923627
+    },
+    {
+      "site": "OFFICE",
+      "device": "S8",
+      "year": 0,
+      "saving": 0.0,
+      "om": 0.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": -320.0,
+      "discounted": -320.0
+    },
+    {
+      "site": "OFFICE",
+      "device": "S8",
+      "year": 1,
+      "saving": 0.0,
+      "om": 12.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": -12.0,
+      "discounted": -11.11111111111111
+    },
+    {
+      "site": "OFFICE",
+      "device": "S8",
+      "year": 2,
+      "saving": 0.0,
+      "om": 12.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": -12.0,
+      "discounted": -10.288065843621398
+    },
+    {
+      "site": "OFFICE",
+      "device": "S8",
+      "year": 3,
+      "saving": 0.0,
+      "om": 12.0,
+      "replacement": 96.0,
+      "residual": 0.0,
+      "net": -108.0,
+      "discounted": -85.73388203017832
+    },
+    {
+      "site": "OFFICE",
+      "device": "S8",
+      "year": 4,
+      "saving": 0.0,
+      "om": 12.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": -12.0,
+      "discounted": -8.820358233557439
+    },
+    {
+      "site": "OFFICE",
+      "device": "S8",
+      "year": 5,
+      "saving": 0.0,
+      "om": 12.0,
+      "replacement": 0.0,
+      "residual": 32.0,
+      "net": 20.0,
+      "discounted": 13.611663940675058
+    },
+    {
+      "site": "OFFICE",
+      "device": "ZERO",
+      "year": 0,
+      "saving": 0.0,
+      "om": 0.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": -0.0,
+      "discounted": -0.0
+    },
+    {
+      "site": "OFFICE",
+      "device": "ZERO",
+      "year": 1,
+      "saving": 0.0,
+      "om": 0.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": 0.0,
+      "discounted": 0.0
+    },
+    {
+      "site": "OFFICE",
+      "device": "ZERO",
+      "year": 2,
+      "saving": 0.0,
+      "om": 0.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": 0.0,
+      "discounted": 0.0
+    },
+    {
+      "site": "OFFICE",
+      "device": "ZERO",
+      "year": 3,
+      "saving": 0.0,
+      "om": 0.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": 0.0,
+      "discounted": 0.0
+    },
+    {
+      "site": "OFFICE",
+      "device": "ZERO",
+      "year": 4,
+      "saving": 0.0,
+      "om": 0.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": 0.0,
+      "discounted": 0.0
+    },
+    {
+      "site": "OFFICE",
+      "device": "ZERO",
+      "year": 5,
+      "saving": 0.0,
+      "om": 0.0,
+      "replacement": 0.0,
+      "residual": 0.0,
+      "net": 0.0,
+      "discounted": 0.0
+    }
+  ],
+  "scope": "synthetic study after completed causal replay; not ex-ante real investment or field engineering approval"
+}

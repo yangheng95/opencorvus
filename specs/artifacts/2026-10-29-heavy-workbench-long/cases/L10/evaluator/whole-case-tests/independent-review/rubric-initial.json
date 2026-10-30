@@ -1,0 +1,156 @@
+{
+  "case": "L10/0.2.0-dev",
+  "status": "construction_not_frozen",
+  "total": 100,
+  "good_rule": ">=90 and every critical pass",
+  "leaves": [
+    {
+      "id": "M01",
+      "weight": 6,
+      "critical": true,
+      "title": "原最高版本/单位/历史峰/设备与成本复原",
+      "scoring": "binary fixed denominator; pass only actual necessary evidence complete; candidate dependency blocked is not assessed pass"
+    },
+    {
+      "id": "M02",
+      "weight": 5,
+      "critical": true,
+      "title": "所有实际native与完整指派矩阵",
+      "scoring": "binary fixed denominator; pass only actual necessary evidence complete; candidate dependency blocked is not assessed pass"
+    },
+    {
+      "id": "M03",
+      "weight": 8,
+      "critical": true,
+      "title": "逐步真实SOC/功率/dt/末状态",
+      "scoring": "binary fixed denominator; pass only actual necessary evidence complete; candidate dependency blocked is not assessed pass"
+    },
+    {
+      "id": "M04",
+      "weight": 6,
+      "critical": true,
+      "title": "电网/PV/分级未供的物理平衡",
+      "scoring": "binary fixed denominator; pass only actual necessary evidence complete; candidate dependency blocked is not assessed pass"
+    },
+    {
+      "id": "M05",
+      "weight": 6,
+      "critical": true,
+      "title": "跨月及重启不清零的实际峰值",
+      "scoring": "binary fixed denominator; pass only actual necessary evidence complete; candidate dependency blocked is not assessed pass"
+    },
+    {
+      "id": "M06",
+      "weight": 5,
+      "critical": true,
+      "title": "能量/需量/磨损/各类未供账",
+      "scoring": "binary fixed denominator; pass only actual necessary evidence complete; candidate dependency blocked is not assessed pass"
+    },
+    {
+      "id": "M07",
+      "weight": 8,
+      "critical": true,
+      "title": "真实概率成本和完整现金流/NPV",
+      "scoring": "binary fixed denominator; pass only actual necessary evidence complete; candidate dependency blocked is not assessed pass"
+    },
+    {
+      "id": "M08",
+      "weight": 4,
+      "critical": true,
+      "title": "各site真实全报价选择，ZERO合法",
+      "scoring": "binary fixed denominator; pass only actual necessary evidence complete; candidate dependency blocked is not assessed pass"
+    },
+    {
+      "id": "M09",
+      "weight": 7,
+      "critical": true,
+      "title": "实际授权packet/隔离/完整相同信息前缀",
+      "scoring": "binary fixed denominator; pass only actual necessary evidence complete; candidate dependency blocked is not assessed pass"
+    },
+    {
+      "id": "M10",
+      "weight": 5,
+      "critical": true,
+      "title": "实际commit73与原receipt/SOC/峰续接",
+      "scoring": "binary fixed denominator; pass only actual necessary evidence complete; candidate dependency blocked is not assessed pass"
+    },
+    {
+      "id": "M11",
+      "weight": 5,
+      "critical": true,
+      "title": "同信息预注册成本质量",
+      "scoring": "binary fixed denominator; pass only actual necessary evidence complete; candidate dependency blocked is not assessed pass"
+    },
+    {
+      "id": "M12",
+      "weight": 5,
+      "critical": true,
+      "title": "预注册关键未供质量",
+      "scoring": "binary fixed denominator; pass only actual necessary evidence complete; candidate dependency blocked is not assessed pass"
+    },
+    {
+      "id": "M13",
+      "weight": 3,
+      "critical": true,
+      "title": "完整实际机器导出与独立账重建",
+      "scoring": "binary fixed denominator; pass only actual necessary evidence complete; candidate dependency blocked is not assessed pass"
+    },
+    {
+      "id": "M14",
+      "weight": 4,
+      "critical": true,
+      "title": "实际输入控制共享原始提交版本",
+      "scoring": "binary fixed denominator; pass only actual necessary evidence complete; candidate dependency blocked is not assessed pass"
+    },
+    {
+      "id": "H01",
+      "weight": 5,
+      "critical": true,
+      "title": "原始信息/方法和设计选择论证",
+      "scoring": "binary fixed denominator; pass only actual necessary evidence complete; candidate dependency blocked is not assessed pass",
+      "pass_anchor": "解释最高missing/单位/forecast时点和三quote比较；实际科学方法/选择与源码/结果相符，不以引用标题替代原事实",
+      "fail_anchor": "缺关键来源/错误声称未来可知/只给选择无方法",
+      "equivalent_formats": "Full clear JSON/table/formula/source-index accepted, no prose duplication or CSV-specific human penalty."
+    },
+    {
+      "id": "H02",
+      "weight": 5,
+      "critical": true,
+      "title": "物理/计费/经济一致性和敏感性",
+      "scoring": "binary fixed denominator; pass only actual necessary evidence complete; candidate dependency blocked is not assessed pass",
+      "pass_anchor": "独立从已揭示telemetry和实际actions重建SOC/能量/需量/未供/现金各项；有限敏感性明示作用范围，真实解释officeZERO和clinic选择及非最优限度",
+      "fail_anchor": "正确底表不能洗掉正文漏投资/重启清峰/将卸载说服务完成或把折现敏感性当重跑物理",
+      "equivalent_formats": "Full clear JSON/table/formula/source-index accepted, no prose duplication or CSV-specific human penalty."
+    },
+    {
+      "id": "H03",
+      "weight": 5,
+      "critical": false,
+      "title": "可读实际图/伴随表与可定位来源",
+      "scoring": "binary fixed denominator; pass only actual necessary evidence complete; candidate dependency blocked is not assessed pass",
+      "pass_anchor": "实际PNG能读明确量纲/站点/曲线/失败暴露，完整CSV或等价可定位机器对象支持图和结论",
+      "fail_anchor": "空图/错单位/图与真ledger不符/故意隐藏未供",
+      "equivalent_formats": "Full clear JSON/table/formula/source-index accepted, no prose duplication or CSV-specific human penalty."
+    },
+    {
+      "id": "H04",
+      "weight": 4,
+      "critical": true,
+      "title": "风险/不可识别性和真实认证边界",
+      "scoring": "binary fixed denominator; pass only actual necessary evidence complete; candidate dependency blocked is not assessed pass",
+      "pass_anchor": "明示原创模拟、常效率/当前已知/外推/概率和年化限制；不能虚构现实服务保证/电气认证/保证回报",
+      "fail_anchor": "任何无依据现实工程/全负载供电/有限样本概率/保证回报声明失败，正确数表不补偿",
+      "equivalent_formats": "Full clear JSON/table/formula/source-index accepted, no prose duplication or CSV-specific human penalty."
+    },
+    {
+      "id": "H05",
+      "weight": 4,
+      "critical": true,
+      "title": "替代操作者恢复与完整复建",
+      "scoring": "binary fixed denominator; pass only actual necessary evidence complete; candidate dependency blocked is not assessed pass",
+      "pass_anchor": "交接明确原DB/step/receipt/故障73/同原身份和program恢复；实际已测片段可由另一操作者复现，不要求特定文件形式",
+      "fail_anchor": "仅声称可恢复，无原事实/源/依赖/可运行步骤或教人重置峰/SOC",
+      "equivalent_formats": "Full clear JSON/table/formula/source-index accepted, no prose duplication or CSV-specific human penalty."
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "case": "L02/0.2.0",
+  "frozen_public_git": "441aa82c9f6afeb3bd97e7ef024a164e8a01a5e2",
+  "same_frozen_rubric_quality_reference": true,
+  "author_preregistered_good_rule": ">=90 and all critical verified pass",
+  "opencorvus": {
+    "subject_role": "candidate",
+    "total_score": 100,
+    "good": true,
+    "verified_pass": 66,
+    "candidate_head": "0b93788d6c569efc88eadb7532261271129e097f",
+    "actual_model": "gpt-6.1-sol",
+    "mode": "code",
+    "package": "builtin/base2026.10.14.1",
+    "actors": [
+      "orchestrator",
+      "base-developer",
+      "base-tester"
+    ],
+    "native_cells": 121
+  },
+  "fresh_codex": {
+    "subject_role": "candidate",
+    "total_score": 100,
+    "good": true,
+    "verified_pass": 66,
+    "candidate_head": "ee1ab32a681914f63afcff723236d0635ecc776b",
+    "actual_model": "unknown",
+    "full_usage": "unknown",
+    "native_precise_lifecycle": "unknown",
+    "native_cells": 157,
+    "legitimate_pool_difference": "3 selection methods instead of2; same public contract permits this"
+  },
+  "upgrade_required": true,
+  "current_version_invariants": "Keep old public/rubric/FREEZE/reference/grades unchanged; new intrinsic difficulty requires a separate version",
+  "comparable": false,
+  "limits": [
+    "Native OS/resources and actual Codex model/usage uncontrolled or unexposed; no same-model speed/cost causal ranking",
+    "Reviewer nonblind/familiar AI; not professional-human or statistical maturity certification",
+    "OC7291s lifecycle and Codex dispatch/archive observations, parallel tools, evaluation CPU and tokens are not qualified candidate effective hours",
+    "Both100 establish insufficient discrimination for these development pilots, not that the benchmark is mature"
+  ]
+}

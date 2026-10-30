@@ -1,0 +1,16 @@
+{
+  "CLINIC": {
+    "peak_kw": {
+      "2026-01": 6.3
+    },
+    "prior_energy_usd": 15.5,
+    "period": "2026-01; partial bill, observed peak is irrevocable"
+  },
+  "OFFICE": {
+    "peak_kw": {
+      "2026-01": 4.2
+    },
+    "prior_energy_usd": 8.75,
+    "period": "2026-01; zero demand rate does not erase the measured peak"
+  }
+}

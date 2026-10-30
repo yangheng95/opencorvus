@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l02-codex-candidate-independent-review-20261031\\audit_candidate.py"
+  ],
+  "native_exit_code": 0,
+  "seconds": 241.28262950014323,
+  "stdout": "{\r\n  \"all_pass\": true,\r\n  \"counts\": {\r\n    \"native\": {\r\n      \"predict\": 144,\r\n      \"select\": 12,\r\n      \"report\": 1\r\n    },\r\n    \"calibration_vectors_range\": [\r\n      42,\r\n      42\r\n    ],\r\n    \"excluded_complete_vectors\": 0,\r\n    \"weather_bias_pairs\": 1822080,\r\n    \"maximum_relative_normal_equation_residual\": 1.089494687500319e-15,\r\n    \"limits\": \"Independent arithmetic on already generated parameters/raw samples and predictions, not new fitting/forecast/reader execution.\"\r\n  },\r\n  \"selection\": {\r\n    \"outer-20250115\": \"weather-operations\",\r\n    \"outer-20250215\": \"without-weather\",\r\n    \"outer-20250315\": \"without-weather\",\r\n    \"outer-20250415\": \"without-weather\",\r\n    \"outer-20250515\": \"without-weather\",\r\n    \"outer-20250620\": \"weather-operations\",\r\n    \"outer-20250715\": \"weather-operations\",\r\n    \"outer-20250815\": \"weather-operations\",\r\n    \"outer-20250915\": \"without-weather\",\r\n    \"outer-20251015\": \"without-weather\",\r\n    \"outer-20251115\": \"without-weather\",\r\n    \"outer-20251215\": \"without-weather\"\r\n  },\r\n  \"metrics\": {\r\n    \"seasonal-8\": {\r\n      \"scaled_mse\": 0.025510781897847452,\r\n      \"scaled_mae\": 0.1016434448592001,\r\n      \"scaled_wis\": 0.07161608986811789\r\n    },\r\n    \"weather-operations\": {\r\n      \"scaled_mse\": 0.0031640800631382716,\r\n      \"scaled_mae\": 0.030880891753934228,\r\n      \"scaled_wis\": 0.021661555336679225\r\n    },\r\n    \"without-weather\": {\r\n      \"scaled_mse\": 0.003066811619882535,\r\n      \"scaled_mae\": 0.029126234272705102,\r\n      \"scaled_wis\": 0.021286516941870757\r\n    },\r\n    \"selected\": {\r\n      \"scaled_mse\": 0.003072003802494062,\r\n      \"scaled_mae\": 0.02936333776048259,\r\n      \"scaled_wis\": 0.02142329291787726\r\n    }\r\n  }\r\n}\r\n",
+  "stderr": "",
+  "initial_error_scope": "Reviewer misspelled Python encoding alias utf8-sig; correct is utf-8-sig. No candidate/evaluator failure."
+}

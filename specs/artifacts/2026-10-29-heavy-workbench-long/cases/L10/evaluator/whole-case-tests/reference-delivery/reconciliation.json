@@ -1,0 +1,362 @@
+[
+  {
+    "scenario": "cloud",
+    "site": "CLINIC",
+    "device": "S4",
+    "max_physics_difference": 0.0,
+    "recomputed_bill": {
+      "energy": 114.81490027777767,
+      "demand": 67.37068500000001,
+      "wear": 0.6274666666666663,
+      "critical_penalty": 0.0,
+      "flex_penalty": 0.0,
+      "total": 182.81305194444434,
+      "critical_unserved_kwh": 0.0,
+      "flex_unserved_kwh": 0.0,
+      "peaks": {
+        "2026-01": 6.3,
+        "2026-02": 4.928447500000001
+      }
+    }
+  },
+  {
+    "scenario": "cloud",
+    "site": "CLINIC",
+    "device": "S8",
+    "max_physics_difference": 0.0,
+    "recomputed_bill": {
+      "energy": 106.80665361111099,
+      "demand": 63.77068500000002,
+      "wear": 1.2617711111111103,
+      "critical_penalty": 0.0,
+      "flex_penalty": 0.0,
+      "total": 171.8391097222221,
+      "critical_unserved_kwh": 0.0,
+      "flex_unserved_kwh": 0.0,
+      "peaks": {
+        "2026-01": 6.3,
+        "2026-02": 4.328447500000003
+      }
+    }
+  },
+  {
+    "scenario": "cloud",
+    "site": "CLINIC",
+    "device": "ZERO",
+    "max_physics_difference": 0.0,
+    "recomputed_bill": {
+      "energy": 125.47661249999987,
+      "demand": 71.39999999999999,
+      "wear": 0.0,
+      "critical_penalty": 0.0,
+      "flex_penalty": 0.0,
+      "total": 196.87661249999985,
+      "critical_unserved_kwh": 0.0,
+      "flex_unserved_kwh": 0.0,
+      "peaks": {
+        "2026-01": 6.3,
+        "2026-02": 5.6
+      }
+    }
+  },
+  {
+    "scenario": "cloud",
+    "site": "OFFICE",
+    "device": "S4",
+    "max_physics_difference": 0.0,
+    "recomputed_bill": {
+      "energy": 21.600000000000005,
+      "demand": 0.0,
+      "wear": 0.0,
+      "critical_penalty": 0.0,
+      "flex_penalty": 0.0,
+      "total": 21.600000000000005,
+      "critical_unserved_kwh": 0.0,
+      "flex_unserved_kwh": 0.0,
+      "peaks": {
+        "2026-01": 4.2,
+        "2026-02": 2.0
+      }
+    }
+  },
+  {
+    "scenario": "cloud",
+    "site": "OFFICE",
+    "device": "S8",
+    "max_physics_difference": 0.0,
+    "recomputed_bill": {
+      "energy": 21.600000000000005,
+      "demand": 0.0,
+      "wear": 0.0,
+      "critical_penalty": 0.0,
+      "flex_penalty": 0.0,
+      "total": 21.600000000000005,
+      "critical_unserved_kwh": 0.0,
+      "flex_unserved_kwh": 0.0,
+      "peaks": {
+        "2026-01": 4.2,
+        "2026-02": 2.0
+      }
+    }
+  },
+  {
+    "scenario": "cloud",
+    "site": "OFFICE",
+    "device": "ZERO",
+    "max_physics_difference": 0.0,
+    "recomputed_bill": {
+      "energy": 21.600000000000005,
+      "demand": 0.0,
+      "wear": 0.0,
+      "critical_penalty": 0.0,
+      "flex_penalty": 0.0,
+      "total": 21.600000000000005,
+      "critical_unserved_kwh": 0.0,
+      "flex_unserved_kwh": 0.0,
+      "peaks": {
+        "2026-01": 4.2,
+        "2026-02": 2.0
+      }
+    }
+  },
+  {
+    "scenario": "nominal",
+    "site": "CLINIC",
+    "device": "S4",
+    "max_physics_difference": 0.0,
+    "recomputed_bill": {
+      "energy": 107.22356888888878,
+      "demand": 66.2084,
+      "wear": 0.6274666666666662,
+      "critical_penalty": 0.0,
+      "flex_penalty": 0.0,
+      "total": 174.05943555555544,
+      "critical_unserved_kwh": 0.0,
+      "flex_unserved_kwh": 0.0,
+      "peaks": {
+        "2026-01": 6.3,
+        "2026-02": 4.734733333333334
+      }
+    }
+  },
+  {
+    "scenario": "nominal",
+    "site": "CLINIC",
+    "device": "S8",
+    "max_physics_difference": 0.0,
+    "recomputed_bill": {
+      "energy": 98.87718313888882,
+      "demand": 61.70874000000002,
+      "wear": 1.305546463888888,
+      "critical_penalty": 0.0,
+      "flex_penalty": 0.0,
+      "total": 161.89146960277776,
+      "critical_unserved_kwh": 0.0,
+      "flex_unserved_kwh": 0.0,
+      "peaks": {
+        "2026-01": 6.3,
+        "2026-02": 3.984790000000003
+      }
+    }
+  },
+  {
+    "scenario": "nominal",
+    "site": "CLINIC",
+    "device": "ZERO",
+    "max_physics_difference": 0.0,
+    "recomputed_bill": {
+      "energy": 118.77416999999986,
+      "demand": 71.39999999999999,
+      "wear": 0.0,
+      "critical_penalty": 0.0,
+      "flex_penalty": 0.0,
+      "total": 190.17416999999983,
+      "critical_unserved_kwh": 0.0,
+      "flex_unserved_kwh": 0.0,
+      "peaks": {
+        "2026-01": 6.3,
+        "2026-02": 5.6
+      }
+    }
+  },
+  {
+    "scenario": "nominal",
+    "site": "OFFICE",
+    "device": "S4",
+    "max_physics_difference": 0.0,
+    "recomputed_bill": {
+      "energy": 21.600000000000005,
+      "demand": 0.0,
+      "wear": 0.0,
+      "critical_penalty": 0.0,
+      "flex_penalty": 0.0,
+      "total": 21.600000000000005,
+      "critical_unserved_kwh": 0.0,
+      "flex_unserved_kwh": 0.0,
+      "peaks": {
+        "2026-01": 4.2,
+        "2026-02": 2.0
+      }
+    }
+  },
+  {
+    "scenario": "nominal",
+    "site": "OFFICE",
+    "device": "S8",
+    "max_physics_difference": 0.0,
+    "recomputed_bill": {
+      "energy": 21.600000000000005,
+      "demand": 0.0,
+      "wear": 0.0,
+      "critical_penalty": 0.0,
+      "flex_penalty": 0.0,
+      "total": 21.600000000000005,
+      "critical_unserved_kwh": 0.0,
+      "flex_unserved_kwh": 0.0,
+      "peaks": {
+        "2026-01": 4.2,
+        "2026-02": 2.0
+      }
+    }
+  },
+  {
+    "scenario": "nominal",
+    "site": "OFFICE",
+    "device": "ZERO",
+    "max_physics_difference": 0.0,
+    "recomputed_bill": {
+      "energy": 21.600000000000005,
+      "demand": 0.0,
+      "wear": 0.0,
+      "critical_penalty": 0.0,
+      "flex_penalty": 0.0,
+      "total": 21.600000000000005,
+      "critical_unserved_kwh": 0.0,
+      "flex_unserved_kwh": 0.0,
+      "peaks": {
+        "2026-01": 4.2,
+        "2026-02": 2.0
+      }
+    }
+  },
+  {
+    "scenario": "outage",
+    "site": "CLINIC",
+    "device": "S4",
+    "max_physics_difference": 0.0,
+    "recomputed_bill": {
+      "energy": 104.86909168117029,
+      "demand": 68.89662156640182,
+      "wear": 0.630546748391979,
+      "critical_penalty": 0.0,
+      "flex_penalty": 21.565999999999995,
+      "total": 195.9622599959641,
+      "critical_unserved_kwh": 0.0,
+      "flex_unserved_kwh": 2.1565999999999996,
+      "peaks": {
+        "2026-01": 6.3,
+        "2026-02": 5.18277026106697
+      }
+    }
+  },
+  {
+    "scenario": "outage",
+    "site": "CLINIC",
+    "device": "S8",
+    "max_physics_difference": 0.0,
+    "recomputed_bill": {
+      "energy": 98.59181611111104,
+      "demand": 66.66033333333334,
+      "wear": 1.2617711111111112,
+      "critical_penalty": 0.0,
+      "flex_penalty": 2.176499999999999,
+      "total": 168.6904205555555,
+      "critical_unserved_kwh": 0.0,
+      "flex_unserved_kwh": 0.2176499999999999,
+      "peaks": {
+        "2026-01": 6.3,
+        "2026-02": 4.810055555555557
+      }
+    }
+  },
+  {
+    "scenario": "outage",
+    "site": "CLINIC",
+    "device": "ZERO",
+    "max_physics_difference": 0.0,
+    "recomputed_bill": {
+      "energy": 114.20190999999986,
+      "demand": 71.39999999999999,
+      "wear": 0.0,
+      "critical_penalty": 117.6499999999998,
+      "flex_penalty": 40.3895,
+      "total": 343.64140999999967,
+      "critical_unserved_kwh": 0.11764999999999981,
+      "flex_unserved_kwh": 4.03895,
+      "peaks": {
+        "2026-01": 6.3,
+        "2026-02": 5.6
+      }
+    }
+  },
+  {
+    "scenario": "outage",
+    "site": "OFFICE",
+    "device": "S4",
+    "max_physics_difference": 0.0,
+    "recomputed_bill": {
+      "energy": 21.600000000000005,
+      "demand": 0.0,
+      "wear": 0.0,
+      "critical_penalty": 0.0,
+      "flex_penalty": 0.0,
+      "total": 21.600000000000005,
+      "critical_unserved_kwh": 0.0,
+      "flex_unserved_kwh": 0.0,
+      "peaks": {
+        "2026-01": 4.2,
+        "2026-02": 2.0
+      }
+    }
+  },
+  {
+    "scenario": "outage",
+    "site": "OFFICE",
+    "device": "S8",
+    "max_physics_difference": 0.0,
+    "recomputed_bill": {
+      "energy": 21.600000000000005,
+      "demand": 0.0,
+      "wear": 0.0,
+      "critical_penalty": 0.0,
+      "flex_penalty": 0.0,
+      "total": 21.600000000000005,
+      "critical_unserved_kwh": 0.0,
+      "flex_unserved_kwh": 0.0,
+      "peaks": {
+        "2026-01": 4.2,
+        "2026-02": 2.0
+      }
+    }
+  },
+  {
+    "scenario": "outage",
+    "site": "OFFICE",
+    "device": "ZERO",
+    "max_physics_difference": 0.0,
+    "recomputed_bill": {
+      "energy": 21.600000000000005,
+      "demand": 0.0,
+      "wear": 0.0,
+      "critical_penalty": 0.0,
+      "flex_penalty": 0.0,
+      "total": 21.600000000000005,
+      "critical_unserved_kwh": 0.0,
+      "flex_unserved_kwh": 0.0,
+      "peaks": {
+        "2026-01": 4.2,
+        "2026-02": 2.0
+      }
+    }
+  }
+]

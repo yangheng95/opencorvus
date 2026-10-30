@@ -1,0 +1,14 @@
+{
+  "CLINIC": {
+    "import_limit_kw": 7.0,
+    "demand_per_kw": 6.0,
+    "timezone": "UTC",
+    "critical_description": "fictional cold chain"
+  },
+  "OFFICE": {
+    "import_limit_kw": 6.0,
+    "demand_per_kw": 0.0,
+    "timezone": "UTC",
+    "critical_description": "fictional office administration"
+  }
+}

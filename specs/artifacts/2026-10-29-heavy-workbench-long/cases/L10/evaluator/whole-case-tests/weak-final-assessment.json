@@ -1,0 +1,786 @@
+{
+  "case": "L10/0.2.0-dev",
+  "role": "error_control",
+  "total": 96,
+  "good": false,
+  "critical_not_passed": [
+    "H04"
+  ],
+  "unassessed": [],
+  "findings": {
+    "M01": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "price",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "quote",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M02": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": [
+            {
+              "episode": [
+                "cloud",
+                "CLINIC",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "cloud",
+                "CLINIC",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "cloud",
+                "CLINIC",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "cloud",
+                "OFFICE",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "cloud",
+                "OFFICE",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "cloud",
+                "OFFICE",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "CLINIC",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "CLINIC",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "CLINIC",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "OFFICE",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "OFFICE",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "OFFICE",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "CLINIC",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "CLINIC",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "CLINIC",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "OFFICE",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "OFFICE",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "OFFICE",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            }
+          ]
+        },
+        {
+          "variant": "price",
+          "errors": [],
+          "actual_episode_proof": [
+            {
+              "episode": [
+                "cloud",
+                "CLINIC",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "cloud",
+                "CLINIC",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "cloud",
+                "CLINIC",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "cloud",
+                "OFFICE",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "cloud",
+                "OFFICE",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "cloud",
+                "OFFICE",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "CLINIC",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "CLINIC",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "CLINIC",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "OFFICE",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "OFFICE",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "OFFICE",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "CLINIC",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "CLINIC",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "CLINIC",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "OFFICE",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "OFFICE",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "OFFICE",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            }
+          ]
+        },
+        {
+          "variant": "quote",
+          "errors": [],
+          "actual_episode_proof": [
+            {
+              "episode": [
+                "cloud",
+                "CLINIC",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "cloud",
+                "CLINIC",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "cloud",
+                "CLINIC",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "cloud",
+                "OFFICE",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "cloud",
+                "OFFICE",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "cloud",
+                "OFFICE",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "CLINIC",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "CLINIC",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "CLINIC",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "OFFICE",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "OFFICE",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "nominal",
+                "OFFICE",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "CLINIC",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "CLINIC",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "CLINIC",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "OFFICE",
+                "S4"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "OFFICE",
+                "S8"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            },
+            {
+              "episode": [
+                "outage",
+                "OFFICE",
+                "ZERO"
+              ],
+              "actual_steps": 144,
+              "native": 0
+            }
+          ]
+        }
+      ]
+    },
+    "M03": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "price",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "quote",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M04": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "price",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "quote",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M05": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "price",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "quote",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M06": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "price",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "quote",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M07": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "price",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "quote",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M08": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "price",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "quote",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M09": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "price",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "quote",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M10": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "price",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "quote",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M11": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "price",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "quote",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M12": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "price",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "quote",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M13": {
+      "status": "pass",
+      "evidence": [
+        {
+          "variant": "base",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "price",
+          "errors": [],
+          "actual_episode_proof": null
+        },
+        {
+          "variant": "quote",
+          "errors": [],
+          "actual_episode_proof": null
+        }
+      ]
+    },
+    "M14": {
+      "status": "pass",
+      "evidence": "Same original declared programme actually executed for the supplied input controls; immutable submission identity, not functional hash matching."
+    },
+    "H01": {
+      "status": "pass",
+      "evidence": "Read original meter-history.csv, source letters, final sealed l10_reference.py and all three actual REPORTs. Independently selected highest released revision including missing and converted W/kWh with actual duration. Actual controller implements 16-step causal LP with both efficiencies and explicit reserve objective; allowed packet and source/method agree. All three quotes including ZERO are compared. Sources: final-submission/l10_reference.py; final-{base,price,quote}-run/prepare/model/audit.json; each delivery/result/REPORT.md; reviewer business-audit.json and object-audit.json."
+    },
+    "H02": {
+      "status": "pass",
+      "evidence": "Independent standard-library Fraction recurrence over all 54 original SQLite episodes (7,776 decisions), without importing author core/transition/check, reconstructs SOC/import/PV curtail/critical-flex shedding, variable dt, Jan/Feb peaks, all bill terms, probabilities, 36 cash rows per input and discount sensitivity. Maximum absolute roundoff 3.73e-12. Base clinic S8 NPV807.430107; price S8 NPV995.904852; quote S4 NPV670.945991; office ZERO all inputs. Report explicitly limits discount-only sensitivity and makes no global-optimum claim. Sources: raw/{base,price,quote}; cases/*; final-*-run/episodes/*/*/*/plant.sqlite3; delivery/result/{study.json,cashflows.csv,reconciliation.json,sensitivity.json}; business-audit.json."
+    },
+    "H03": {
+      "status": "pass",
+      "evidence": "Actually opened final-base-run/delivery/result/commissioning.png with view_image. Four readable panels: site NPVs with zero line and synthetic USD, actual outage SOC kWh/import kW/critical unmet kW on variable-duration interval axis, all-device campaign costs. Full dispatch/campaign/cash CSVs and machine objects provide the data. Mixed units are explicitly identified in legend; no elapsed-clock interpretation is implied. Independently reconstructed values match underlying tables. Sources: actual PNG; dispatch.csv; campaigns.csv; cashflows.csv; business-audit.json."
+    },
+    "H04": {
+      "status": "fail",
+      "evidence": "Read the actual weak-{base,price,quote}-run/delivery/result/REPORT.md final paragraph: it claims all real clinic loads will be served without interruption, electrical certification and guaranteed five-year returns. None follows from this synthetic finite causal study. Correct numerical objects do not compensate. Actual weak numerical objects equal main (object-audit.json); the other four content leaves retain their substantive evidence. Actual weak-base commissioning.png was opened with view_image."
+    },
+    "H05": {
+      "status": "pass",
+      "evidence": "Read actual operator handover, declared manifest and frozen programme closure. Per-input original nominal/CLINIC/S8 owner actually exits73 after committing step45; original receipt CLINIC:S8:45, SOC and Jan/Feb peaks persist; resumed actor acknowledges that receipt and continues at46 to144 unique SQL keys. Independently cold-rebuilt same source/base once, native0 in88.9593317s, including the real73/replay/restart, then independently rechecked the resulting full ledger. This validates the described controlled fragment, not arbitrary crash recovery. Sources: each final-*-run/episodes/nominal/CLINIC/S8/{owner-initial.json,committed-before-exit.json,resume/replay.json,owner-resume.json,plant.sqlite3}; delivery/result/TEACHER-OPERATOR-HANDOVER.md; own cold-command.json, cold-business-audit.json, own-cold-originals.zip."
+    }
+  },
+  "limits": "Author simulation and nonblind AI review are not field certification, real service probabilities, fresh LLM scores or effective-hour evidence."
+}

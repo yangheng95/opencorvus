@@ -1,0 +1,6 @@
+{
+  "scope": "direct strict numerical identity primitive; not new native case",
+  "valid_numeric_equivalence": true,
+  "bool_input_maps_to_registered_identity_error": true,
+  "finite_represented_value_change_maps_to_registered_identity_error": true
+}

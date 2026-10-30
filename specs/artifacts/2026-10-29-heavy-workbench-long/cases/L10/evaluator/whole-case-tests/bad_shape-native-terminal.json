@@ -1,0 +1,21 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L10\\evaluator\\run_l10.py",
+    "--submission",
+    "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\bad_shape-submission",
+    "--raw",
+    "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\raw\\base",
+    "--cases",
+    "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\cases\\base",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\bad_shape-base-run"
+  ],
+  "exit_code": 0,
+  "started_at": "2026-10-30T17:38:13.003443+00:00",
+  "finished_at": "2026-10-30T17:39:31.992768+00:00",
+  "seconds": 78.98598870076239
+}

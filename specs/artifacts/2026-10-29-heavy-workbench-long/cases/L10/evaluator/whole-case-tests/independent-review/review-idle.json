@@ -1,0 +1,31 @@
+{
+  "run_roots": {
+    "base": "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\idle-base-run",
+    "price": "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\idle-price-run",
+    "quote": "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\idle-quote-run"
+  },
+  "ratings": {
+    "H01": {
+      "status": "fail",
+      "evidence": "Actual idle programme manifest passes --mode idle and l10_reference.decide immediately returns power_kw0 without LP. All actual SQLite action powers are0, yet all three original reports claim a causal16-step LP with reserve objective. This is a source/method false statement, not a penalty for selecting ZERO or for the directory name. Sources: idle-*/sealed-program/{submission.json,l10_reference.py}; actual SQL actions; REPORT.md Original information and methods; object-audit.json."
+    },
+    "H02": {
+      "status": "pass",
+      "evidence": "The actual idle ledger correctly reports all-quote operating cost equal to ZERO (base clinic214.869867, office21.6), positive quote capital/OM/replacement/residual and hence ZERO largest NPV. It exposes critical shortfall rather than counting shedding as supplied load; discount-only sensitivity and limits are explicit. Poor causal operating quality belongs to M11/M12, and the false LP description is H01; it does not make these financial calculations incorrect. Sources: actual idle reports/study/cash/reconciliation; all-zero original SQL actions verified in object-audit.json; independently audited ZERO physical bills in business-audit.json."
+    },
+    "H03": {
+      "status": "pass",
+      "evidence": "Actually opened idle-base-run/delivery/result/commissioning.png with view_image. It shows negative investment NPVs for S4/S8, zero SOC, real import and the small critical-unmet spike, and equal campaign costs across all quotes; units and synthetic USD are explicit. Complete CSVs support the graphic. This is a low-quality policy shown accurately, not a hidden failure."
+    },
+    "H04": {
+      "status": "pass",
+      "evidence": "Actual REPORTs expressly disclose fictional sites/quotes/weights, perfect current-interval synthetic telemetry, constant efficiencies/no thermal/protection/ageing model, unannounced outage, separate unmet-load penalties, stipulated six-campaign annual scaling and no real service probability, certification or guaranteed returns. They do not turn causal-reference quality into full-information optimality. Sources: each final-*-run/delivery/result/REPORT.md sections Risk, Model and limits; public/source/equipment-letter.md, portfolio-notes.md."
+    },
+    "H05": {
+      "status": "pass",
+      "evidence": "The original idle nominal/CLINIC/S8 actual exit73/replay/resume is retained, with144 unique SQL steps and the same receipt/state rather than a reset. Same manifest/source/model closure and handover instructions apply. This review did not rerun idle or any error matrix; its new cold rebuild was the main programme only. Sources: idle-*/episodes/nominal/CLINIC/S8/{owner-initial.json,owner-resume.json,committed-before-exit.json,resume/replay.json,plant.sqlite3}; original handover and object-audit.json."
+    }
+  },
+  "reviewer": "/root/benchmark_review",
+  "disclosure": "Independent one-level AI-agent review; nonblind, familiar with author reference and prior benchmark reviews. Original synthetic study, not professional electrical/finance certification, statistical validation, fresh model ranking or effective agent-hours evidence."
+}

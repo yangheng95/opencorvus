@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L10\\evaluator\\check_l10.py",
+    "grade",
+    "--runs",
+    "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\bad_shape-runs.json",
+    "--keys",
+    "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\bad_shape-keys.json",
+    "--rubric",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L10\\rubric.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\bad_shape-initial-assessment.json",
+    "--role",
+    "error_control"
+  ],
+  "exit_code": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L10\\evaluator\\check_l10.py\", line 175, in <module>\n    else:raise SystemExit(grade(read(a.runs),read(a.keys),a.rubric,a.review,a.out,a.role))\n                          ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L10\\evaluator\\check_l10.py\", line 144, in grade\n    try:f=assess(Path(run),Path(keys[name]))\n          ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L10\\evaluator\\check_l10.py\", line 133, in assess\n    f=facts(run);k=read(key)\n  File \"D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L10\\evaluator\\check_l10.py\", line 91, in facts\n    rr=study[field];gotmap=indexed(rr,keys);exmap=indexed(ex,keys)\n                           ~~~~~~~^^^^^^^^^\n  File \"D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L10\\evaluator\\check_l10.py\", line 89, in <lambda>\n    indexed=lambda rr,fields:{tuple(r[k] for k in fields):r for r in rr}\n                                                                     ^^\nTypeError: 'bool' object is not iterable\n",
+  "scope": "original real programme native output boundary, not a fabricated candidate result"
+}

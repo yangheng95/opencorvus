@@ -1,0 +1,405 @@
+{
+  "seconds": 4.820481600239873,
+  "source": "independent standard-library scalar Fraction arithmetic; no author imports",
+  "checks": {
+    "path_probabilities": 1,
+    "object_fields": 23681,
+    "identity": 11428,
+    "numeric": 108180,
+    "list_length": 1,
+    "assigned_matrix": 1,
+    "144_SQL_cells": 18,
+    "UTC_contiguous": 2592,
+    "packet_current_and_identity": 2592,
+    "packet_original_terms": 2592,
+    "confirmed_prefix": 2592,
+    "highest_released_forecast": 2592,
+    "power_SOC": 2592,
+    "bus_balance_and_noexport": 2592,
+    "72h_terminal_SOC": 18,
+    "complete_original_ledger": 18,
+    "actor_OS_isolation": 19,
+    "actor_no_path_label_argv": 19,
+    "real_73_and_original_resume": 1,
+    "full_visible_prefix_same_action": 1695,
+    "financial_business_keys": 3,
+    "registered_quality": 6,
+    "sensitivity_choice": 6,
+    "report_input_no_bill": 1,
+    "sealed_source_identity": 1
+  },
+  "failures": [],
+  "max_absolute_roundoff": 3.727327138963612e-12,
+  "results": {
+    "base": {
+      "episodes": [
+        {
+          "path": "cloud",
+          "site": "CLINIC",
+          "device": "S4",
+          "steps": 144,
+          "total": 182.81305194444445,
+          "critical": 0.0,
+          "terminal_soc": -1.301111111111111e-16
+        },
+        {
+          "path": "cloud",
+          "site": "CLINIC",
+          "device": "S8",
+          "steps": 144,
+          "total": 171.83910972222225,
+          "critical": 0.0,
+          "terminal_soc": -6.293888888888889e-16
+        },
+        {
+          "path": "cloud",
+          "site": "CLINIC",
+          "device": "ZERO",
+          "steps": 144,
+          "total": 196.8766125,
+          "critical": 0.0,
+          "terminal_soc": 0.0
+        },
+        {
+          "path": "cloud",
+          "site": "OFFICE",
+          "device": "S4",
+          "steps": 144,
+          "total": 21.6,
+          "critical": 0.0,
+          "terminal_soc": 0.0
+        },
+        {
+          "path": "cloud",
+          "site": "OFFICE",
+          "device": "S8",
+          "steps": 144,
+          "total": 21.6,
+          "critical": 0.0,
+          "terminal_soc": 0.0
+        },
+        {
+          "path": "cloud",
+          "site": "OFFICE",
+          "device": "ZERO",
+          "steps": 144,
+          "total": 21.6,
+          "critical": 0.0,
+          "terminal_soc": 0.0
+        },
+        {
+          "path": "nominal",
+          "site": "CLINIC",
+          "device": "S4",
+          "steps": 144,
+          "total": 174.05943555555555,
+          "critical": 0.0,
+          "terminal_soc": 7.452222222222223e-16
+        },
+        {
+          "path": "nominal",
+          "site": "CLINIC",
+          "device": "S8",
+          "steps": 144,
+          "total": 161.8914696027778,
+          "critical": 0.0,
+          "terminal_soc": -1.7421735069994914e-15
+        },
+        {
+          "path": "nominal",
+          "site": "CLINIC",
+          "device": "ZERO",
+          "steps": 144,
+          "total": 190.17417,
+          "critical": 0.0,
+          "terminal_soc": 0.0
+        },
+        {
+          "path": "nominal",
+          "site": "OFFICE",
+          "device": "S4",
+          "steps": 144,
+          "total": 21.6,
+          "critical": 0.0,
+          "terminal_soc": 0.0
+        },
+        {
+          "path": "nominal",
+          "site": "OFFICE",
+          "device": "S8",
+          "steps": 144,
+          "total": 21.6,
+          "critical": 0.0,
+          "terminal_soc": 0.0
+        },
+        {
+          "path": "nominal",
+          "site": "OFFICE",
+          "device": "ZERO",
+          "steps": 144,
+          "total": 21.6,
+          "critical": 0.0,
+          "terminal_soc": 0.0
+        },
+        {
+          "path": "outage",
+          "site": "CLINIC",
+          "device": "S4",
+          "steps": 144,
+          "total": 195.9622599959642,
+          "critical": 0.0,
+          "terminal_soc": -3.8827777777777777e-16
+        },
+        {
+          "path": "outage",
+          "site": "CLINIC",
+          "device": "S8",
+          "steps": 144,
+          "total": 168.69042055555556,
+          "critical": 0.0,
+          "terminal_soc": -2.182888888888889e-15
+        },
+        {
+          "path": "outage",
+          "site": "CLINIC",
+          "device": "ZERO",
+          "steps": 144,
+          "total": 343.64141,
+          "critical": 0.11765,
+          "terminal_soc": 0.0
+        },
+        {
+          "path": "outage",
+          "site": "OFFICE",
+          "device": "S4",
+          "steps": 144,
+          "total": 21.6,
+          "critical": 0.0,
+          "terminal_soc": 0.0
+        },
+        {
+          "path": "outage",
+          "site": "OFFICE",
+          "device": "S8",
+          "steps": 144,
+          "total": 21.6,
+          "critical": 0.0,
+          "terminal_soc": 0.0
+        },
+        {
+          "path": "outage",
+          "site": "OFFICE",
+          "device": "ZERO",
+          "steps": 144,
+          "total": 21.6,
+          "critical": 0.0,
+          "terminal_soc": 0.0
+        }
+      ],
+      "expected_costs": {
+        "CLINIC": {
+          "ZERO": {
+            "num": 214869866625000000013,
+            "den": 1000000000000000000,
+            "decimal": 214.869866625
+          },
+          "S4": {
+            "num": 1795332633188390797623,
+            "den": 10000000000000000000,
+            "decimal": 179.5332633188391
+          },
+          "S8": {
+            "num": 10337388892222223691101216365522703,
+            "den": 62500000000000000000000000000000,
+            "decimal": 165.39822227555558
+          }
+        },
+        "OFFICE": {
+          "ZERO": {
+            "num": 108,
+            "den": 5,
+            "decimal": 21.6
+          },
+          "S4": {
+            "num": 108,
+            "den": 5,
+            "decimal": 21.6
+          },
+          "S8": {
+            "num": 108,
+            "den": 5,
+            "decimal": 21.6
+          }
+        }
+      },
+      "summaries": [
+        {
+          "site": "CLINIC",
+          "device": "ZERO",
+          "expected_campaign_cost": {
+            "num": 214869866625000000013,
+            "den": 1000000000000000000,
+            "decimal": 214.869866625
+          },
+          "expected_critical_unserved_kwh": {
+            "num": 7059,
+            "den": 400000,
+            "decimal": 0.0176475
+          },
+          "npv": {
+            "num": 0,
+            "den": 1,
+            "decimal": 0.0
+          },
+          "annual_initial_saving": {
+            "num": 0,
+            "den": 1,
+            "decimal": 0.0
+          }
+        },
+        {
+          "site": "CLINIC",
+          "device": "S4",
+          "expected_campaign_cost": {
+            "num": 1795332633188390797623,
+            "den": 10000000000000000000,
+            "decimal": 179.5332633188391
+          },
+          "expected_critical_unserved_kwh": {
+            "num": 0,
+            "den": 1,
+            "decimal": 0.0
+          },
+          "npv": {
+            "num": 30807493199562569388860010911,
+            "den": 45916502400000000000000000,
+            "decimal": 670.9459908593249
+          },
+          "annual_initial_saving": {
+            "num": 1060098099184827607521,
+            "den": 5000000000000000000,
+            "decimal": 212.01961983696552
+          }
+        },
+        {
+          "site": "CLINIC",
+          "device": "S8",
+          "expected_campaign_cost": {
+            "num": 10337388892222223691101216365522703,
+            "den": 62500000000000000000000000000000,
+            "decimal": 165.39822227555558
+          },
+          "expected_critical_unserved_kwh": {
+            "num": 0,
+            "den": 1,
+            "decimal": 0.0
+          },
+          "npv": {
+            "num": 231714790198894930247723609577853653233581,
+            "den": 286978140000000000000000000000000000000,
+            "decimal": 807.4301066934747
+          },
+          "annual_initial_saving": {
+            "num": 9275933315520828929133850903431891,
+            "den": 31250000000000000000000000000000,
+            "decimal": 296.82986609666654
+          }
+        },
+        {
+          "site": "OFFICE",
+          "device": "ZERO",
+          "expected_campaign_cost": {
+            "num": 108,
+            "den": 5,
+            "decimal": 21.6
+          },
+          "expected_critical_unserved_kwh": {
+            "num": 0,
+            "den": 1,
+            "decimal": 0.0
+          },
+          "npv": {
+            "num": 0,
+            "den": 1,
+            "decimal": 0.0
+          },
+          "annual_initial_saving": {
+            "num": 0,
+            "den": 1,
+            "decimal": 0.0
+          }
+        },
+        {
+          "site": "OFFICE",
+          "device": "S4",
+          "expected_campaign_cost": {
+            "num": 108,
+            "den": 5,
+            "decimal": 21.6
+          },
+          "expected_critical_unserved_kwh": {
+            "num": 0,
+            "den": 1,
+            "decimal": 0.0
+          },
+          "npv": {
+            "num": -2976758000,
+            "den": 14348907,
+            "decimal": -207.45538318702603
+          },
+          "annual_initial_saving": {
+            "num": 0,
+            "den": 1,
+            "decimal": 0.0
+          }
+        },
+        {
+          "site": "OFFICE",
+          "device": "S8",
+          "expected_campaign_cost": {
+            "num": 108,
+            "den": 5,
+            "decimal": 21.6
+          },
+          "expected_critical_unserved_kwh": {
+            "num": 0,
+            "den": 1,
+            "decimal": 0.0
+          },
+          "npv": {
+            "num": -6060142540,
+            "den": 14348907,
+            "decimal": -422.3417532777932
+          },
+          "annual_initial_saving": {
+            "num": 0,
+            "den": 1,
+            "decimal": 0.0
+          }
+        }
+      ],
+      "choices": [
+        {
+          "site": "CLINIC",
+          "selected": "S8",
+          "npv": {
+            "num": 231714790198894930247723609577853653233581,
+            "den": 286978140000000000000000000000000000000,
+            "decimal": 807.4301066934747
+          }
+        },
+        {
+          "site": "OFFICE",
+          "selected": "ZERO",
+          "npv": {
+            "num": 0,
+            "den": 1,
+            "decimal": 0.0
+          }
+        }
+      ],
+      "history_rows": 192,
+      "history_missing": 1
+    }
+  }
+}

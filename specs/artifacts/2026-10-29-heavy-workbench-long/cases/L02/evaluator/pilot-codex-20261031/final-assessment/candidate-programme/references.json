@@ -1,0 +1,12 @@
+{
+  "format":"candidate-primary-reference-notes/1",
+  "accessed_utc_date":"2026-10-31",
+  "references":[
+    {"title":"Gneiting, Making and Evaluating Point Forecasts","url":"https://arxiv.org/pdf/0912.0902","verified_support":"Full primary PDF checked: consistent scoring targets require matching the statistical functional; this study uses mean with squared error and fixed quantiles for asymmetric piecewise-linear action costs. No statistical maturity follows from matching the target."},
+    {"title":"Bracher et al., Evaluating epidemic forecasts in an interval format","url":"https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618","verified_support":"Section2.2 distinguishes interval width, underprediction and overprediction penalties and builds WIS from median plus weighted interval scores; section2.3 supports averaging scores over targets. Here the exact three-interval weights and layer denominator are the L02 contract's."},
+    {"title":"Bracher et al., 2022 correction","url":"https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1010592","verified_support":"The formal correction was read along with the primary article. This candidate uses explicitly coded interval penalties and contract weights rather than inferring scoring direction from illustrative figures."},
+    {"title":"Hyndman and Athanasopoulos, FPP3: time series cross-validation","url":"https://otexts.com/fpp3/toolbox.html#time-series-cross-validation","verified_support":"Section5.10 uses successively earlier-only training sets and permits multi-step forecast errors. This study strengthens event-time ordering to the actual release-time/revision permission rule for each pseudo-origin."},
+    {"title":"Hyndman and Athanasopoulos, FPP3: hierarchical forecasting","url":"https://otexts.com/fpp3/hierarchical-forecasting.html","verified_support":"The hierarchy chapter defines coherent forecasts as adding up according to the aggregation structure. This study constructs aggregate samples and means bottom-up; marginal quantiles need not add."},
+    {"title":"NumPy quantile documentation","url":"https://numpy.org/doc/stable/reference/generated/numpy.quantile.html","verified_support":"The linear interpolation method uses fractional index(q*(n-1)); the code explicitly selects method=linear. The runtime NumPy version is independently recorded by the development execution."}
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\evaluator-source\\l02_grade.py",
+    "grade",
+    "--assignment",
+    "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\evaluation-assignment\\assignment.zip",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\formal-run",
+    "--review",
+    "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\original-independent-review",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\final-assessment"
+  ],
+  "pid": 97640,
+  "started_at": "2026-10-30T17:48:00.011836+00:00",
+  "subject_role": "candidate",
+  "scope": "actual frozen l02_grade with original38 independent ratings plus real quality26; no new native/model calls"
+}

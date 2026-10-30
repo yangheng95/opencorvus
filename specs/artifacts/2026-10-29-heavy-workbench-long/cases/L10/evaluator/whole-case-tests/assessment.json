@@ -1,0 +1,222 @@
+{
+  "role": "author_whole_case_qualification_pending_independent_content_review",
+  "reference": {
+    "runs": {
+      "base": "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\final-base-run",
+      "price": "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\final-price-run",
+      "quote": "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\final-quote-run"
+    },
+    "machine": "14pass,5actual H pending, no total/good"
+  },
+  "error_programmes": {
+    "idle": {
+      "actual_cli_total": null,
+      "unassessed": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H05"
+      ],
+      "machine_states": {
+        "M01": "pass",
+        "M02": "pass",
+        "M03": "pass",
+        "M04": "pass",
+        "M05": "pass",
+        "M06": "pass",
+        "M07": "pass",
+        "M08": "pass",
+        "M09": "pass",
+        "M10": "pass",
+        "M11": "fail",
+        "M12": "fail",
+        "M13": "pass",
+        "M14": "pass"
+      }
+    },
+    "weak": {
+      "actual_cli_total": null,
+      "unassessed": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H05"
+      ],
+      "machine_states": {
+        "M01": "pass",
+        "M02": "pass",
+        "M03": "pass",
+        "M04": "pass",
+        "M05": "pass",
+        "M06": "pass",
+        "M07": "pass",
+        "M08": "pass",
+        "M09": "pass",
+        "M10": "pass",
+        "M11": "pass",
+        "M12": "pass",
+        "M13": "pass",
+        "M14": "pass"
+      }
+    },
+    "dt_error": {
+      "actual_cli_total": null,
+      "unassessed": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H05"
+      ],
+      "machine_states": {
+        "M01": "pass",
+        "M02": "fail",
+        "M03": "fail",
+        "M04": "blocked_candidate",
+        "M05": "blocked_candidate",
+        "M06": "blocked_candidate",
+        "M07": "blocked_candidate",
+        "M08": "blocked_candidate",
+        "M09": "blocked_candidate",
+        "M10": "blocked_candidate",
+        "M11": "blocked_candidate",
+        "M12": "blocked_candidate",
+        "M13": "blocked_candidate",
+        "M14": "pass"
+      }
+    },
+    "future_file": {
+      "actual_cli_total": null,
+      "unassessed": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H05"
+      ],
+      "machine_states": {
+        "M01": "pass",
+        "M02": "fail",
+        "M03": "blocked_candidate",
+        "M04": "blocked_candidate",
+        "M05": "blocked_candidate",
+        "M06": "blocked_candidate",
+        "M07": "blocked_candidate",
+        "M08": "blocked_candidate",
+        "M09": "blocked_candidate",
+        "M10": "blocked_candidate",
+        "M11": "blocked_candidate",
+        "M12": "blocked_candidate",
+        "M13": "blocked_candidate",
+        "M14": "pass"
+      }
+    },
+    "wrong_efficiency": {
+      "actual_cli_total": null,
+      "unassessed": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H05"
+      ],
+      "machine_states": {
+        "M01": "pass",
+        "M02": "fail",
+        "M03": "fail",
+        "M04": "blocked_candidate",
+        "M05": "blocked_candidate",
+        "M06": "blocked_candidate",
+        "M07": "blocked_candidate",
+        "M08": "blocked_candidate",
+        "M09": "blocked_candidate",
+        "M10": "blocked_candidate",
+        "M11": "blocked_candidate",
+        "M12": "blocked_candidate",
+        "M13": "blocked_candidate",
+        "M14": "pass"
+      }
+    },
+    "wrong_resume": {
+      "actual_cli_total": null,
+      "unassessed": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H05"
+      ],
+      "machine_states": {
+        "M01": "pass",
+        "M02": "fail",
+        "M03": "blocked_candidate",
+        "M04": "blocked_candidate",
+        "M05": "blocked_candidate",
+        "M06": "blocked_candidate",
+        "M07": "blocked_candidate",
+        "M08": "blocked_candidate",
+        "M09": "blocked_candidate",
+        "M10": "fail",
+        "M11": "blocked_candidate",
+        "M12": "blocked_candidate",
+        "M13": "blocked_candidate",
+        "M14": "pass"
+      }
+    },
+    "bad_peak": {
+      "actual_cli_total": null,
+      "unassessed": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H05"
+      ],
+      "machine_states": {
+        "M01": "pass",
+        "M02": "pass",
+        "M03": "pass",
+        "M04": "pass",
+        "M05": "pass",
+        "M06": "pass",
+        "M07": "fail",
+        "M08": "fail",
+        "M09": "pass",
+        "M10": "pass",
+        "M11": "pass",
+        "M12": "pass",
+        "M13": "fail",
+        "M14": "pass"
+      }
+    },
+    "bad_cash": {
+      "actual_cli_total": null,
+      "unassessed": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H05"
+      ],
+      "machine_states": {
+        "M01": "pass",
+        "M02": "pass",
+        "M03": "pass",
+        "M04": "pass",
+        "M05": "pass",
+        "M06": "pass",
+        "M07": "fail",
+        "M08": "fail",
+        "M09": "pass",
+        "M10": "pass",
+        "M11": "pass",
+        "M12": "pass",
+        "M13": "pass",
+        "M14": "pass"
+      }
+    }
+  },
+  "limits": "No independent trials/LLM scores/effective hours inferred from checks or real native counts. idle also retains its actual generic LP-description defect; no fake all-other-H-pass claim."
+}

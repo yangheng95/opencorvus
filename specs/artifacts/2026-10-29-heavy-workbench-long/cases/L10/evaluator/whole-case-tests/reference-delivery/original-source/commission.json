@@ -1,0 +1,14 @@
+{
+  "study": "Fictional commissioning study; no real electrical service",
+  "history_cutoff": "2026-01-31T11:00:00Z",
+  "wear_per_ac_kwh": 0.02,
+  "critical_penalty": 1000.0,
+  "flex_penalty": 10.0,
+  "campaigns_per_year": 6,
+  "years": 5,
+  "replacement_year": 3,
+  "discount": 0.08,
+  "annual_escalation": 1.02,
+  "quality_cost_relative_allowance": 0.02,
+  "quality_critical_kwh_allowance": 0.0001
+}

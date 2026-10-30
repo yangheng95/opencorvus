@@ -1,0 +1,3 @@
+# Fictional tariff circular T-26
+UTC monthly demand cost = rate times max(prior confirmed peak, all current-month interval-average imports). An ordinary software restart is not a new billing month. A new calendar month starts with zero measured peak unless an original prior-bill row exists. Energy is import kW times actual interval hours times price; exports are disallowed and unused PV may be curtailed.
+Clinic: 16:00 inclusive to22:00 exclusive price1.10 USD/kWh; all other hours.20. Office: flat.15 USD/kWh, demand rate0. Every current and released future packet includes its applicable price; source control PRICE increases clinic peak price by.30. Demand rates in site-terms.json are USD/kW/month. No tax or sell-back credit.

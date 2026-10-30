@@ -1,0 +1,56 @@
+[
+  {
+    "variant": "base",
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L10\\evaluator\\check_l10.py",
+      "register",
+      "--run",
+      "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\final-base-run",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\reference-base-final.json"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "variant": "price",
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L10\\evaluator\\check_l10.py",
+      "register",
+      "--run",
+      "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\final-price-run",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\reference-price-final.json"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "variant": "quote",
+    "argv": [
+      "C:\\Python314\\python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L10\\evaluator\\check_l10.py",
+      "register",
+      "--run",
+      "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\final-quote-run",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\reference-quote-final.json"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

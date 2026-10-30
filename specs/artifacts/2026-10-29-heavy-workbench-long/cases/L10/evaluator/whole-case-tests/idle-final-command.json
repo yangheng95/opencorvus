@@ -1,0 +1,26 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\concentrated-repairs-source\\check_l10.py",
+    "grade",
+    "--runs",
+    "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\idle-runs.json",
+    "--keys",
+    "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\idle-keys.json",
+    "--rubric",
+    "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\concentrated-repairs-source\\rubric.json",
+    "--review",
+    "D:\\opencorvus-benchmark-runs\\l10-whole-case-independent-review-20261031\\original-review-idle.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\idle-reviewed-assessment.json",
+    "--role",
+    "error_control"
+  ],
+  "exit_code": 2,
+  "seconds": 23.25302590057254,
+  "stdout": "",
+  "stderr": ""
+}

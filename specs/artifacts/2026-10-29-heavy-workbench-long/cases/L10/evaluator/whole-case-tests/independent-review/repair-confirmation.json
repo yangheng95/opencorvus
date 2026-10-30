@@ -1,0 +1,17 @@
+{
+  "checks": {
+    "canonical_source_same": true,
+    "only_rubric_assessment_added": true,
+    "review_namespace_rejected": true,
+    "candidate_csv_error": true,
+    "root_real_complete_grade": true,
+    "root_used_exact_original_review": true
+  },
+  "source_identity": {
+    "check_l10.py": true,
+    "l10_core.py": true,
+    "rubric.json": true
+  },
+  "root_grade_receipt": "D:\\opencorvus-benchmark-runs\\l10-full-case-20261031\\main-reviewed-command.json",
+  "scope": "Root actual aggregate is cited, never hand-authored; human original ratings unchanged. Moved-copy mount warnings remain outside candidate claims."
+}

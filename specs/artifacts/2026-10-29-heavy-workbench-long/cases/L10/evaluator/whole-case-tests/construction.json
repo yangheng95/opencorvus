@@ -1,0 +1,20 @@
+{
+  "sites": [
+    "CLINIC",
+    "OFFICE"
+  ],
+  "paths": [
+    "nominal",
+    "cloud",
+    "outage"
+  ],
+  "steps": 144,
+  "base_intervals": ".5 with .25/.75 pair",
+  "initial_input_variants": [
+    "base",
+    "price",
+    "quote"
+  ],
+  "quality_policy": "causal registered operating costs<=1.02 reference; critical-unserved<=reference+.0001kWh; physics/NPV and recommendation mandatory",
+  "status": "constructed not executed or frozen"
+}

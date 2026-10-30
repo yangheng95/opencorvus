@@ -1,0 +1,18 @@
+{
+  "format": "l02-numerical-submission/1",
+  "pool": {
+    "format": "l02-method-pool/1",
+    "methods": [
+      {"method_id":"seasonal-8", "role":"baseline", "configuration":{"model":"seasonal", "window_days":365, "weekday_count":8, "calibration_lags_days":[56,84,112], "center_residuals":false}},
+      {"method_id":"weather-operations", "role":"extension", "configuration":{"model":"regression", "weather":true, "weather_bias_prior_days":14, "window_days":365, "half_life_days":90, "ridge":0.5, "local_days":28, "local_prior_days":14, "calibration_lags_days":[56,84,112], "center_residuals":true}},
+      {"method_id":"without-weather", "role":"ablation", "configuration":{"model":"regression", "weather":false, "window_days":365, "half_life_days":90, "ridge":0.5, "local_days":28, "local_prior_days":14, "calibration_lags_days":[56,84,112], "center_residuals":true}}
+    ],
+    "selection_ids":["seasonal-8","weather-operations","without-weather"],
+    "outer_ids":["seasonal-8","weather-operations","without-weather"]
+  },
+  "programs": {
+    "predict":{"files":["src/common.py","src/predict.py"],"argv":["/opt/cpsat/bin/python","-B","src/predict.py"]},
+    "select":{"files":["src/common.py","src/selector.py"],"argv":["/opt/cpsat/bin/python","-B","src/selector.py"]},
+    "report":{"files":["src/common.py","src/report.py","METHODS.md","references.json"],"argv":["/opt/cpsat/bin/python","-B","src/report.py"]}
+  }
+}

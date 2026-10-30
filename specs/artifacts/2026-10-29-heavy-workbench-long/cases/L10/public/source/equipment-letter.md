@@ -1,0 +1,2 @@
+# Supplier clarification E-26
+Quoted capacity is usable stored DC kWh; quoted power is AC kW. Charge efficiency eta_c and discharge efficiency eta_d are separate. Thus round-trip efficiency is their product (.81 at base), not.9. There is no self-discharge, thermal model or real safety certification in this commission. SOC initially0, finally0 for every path and quote; reboots preserve it. Replacement at endyear3 and residual at endyear5 are explicit quoted cash amounts; there is no unquoted battery-life model.

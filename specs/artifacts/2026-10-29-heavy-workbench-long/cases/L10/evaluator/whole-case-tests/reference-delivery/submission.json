@@ -1,0 +1,20 @@
+{
+  "format": "L10-programme/1",
+  "prepare_argv": [
+    "/opt/cpsat/bin/python",
+    "-B",
+    "l10_reference.py",
+    "prepare"
+  ],
+  "control_argv": [
+    "/opt/cpsat/bin/python",
+    "-B",
+    "l10_reference.py",
+    "actor"
+  ],
+  "report_argv": [
+    "/opt/cpsat/bin/python",
+    "-B",
+    "l10_report.py"
+  ]
+}
