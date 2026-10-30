@@ -112,6 +112,8 @@ test("Task baseline and result checkpoints preserve terminal link blobs and curr
   await Instance.provide({
     directory: project.path,
     fn: async () => {
+      const originalIndex = await hostGit(["ls-files", "--stage", "-z"], { cwd: project.path })
+      expect(originalIndex.exitCode).toBe(0)
       const taskID = await createEngineGitCheckpointTask({
         projectPath: project.path,
         title: "Terminal link checkpoint",
@@ -155,19 +157,7 @@ test("Task baseline and result checkpoints preserve terminal link blobs and curr
         bytes: Buffer.from("checkpoint result\n"),
       })
       const index = await hostGit(["ls-files", "--stage", "-z"], { cwd: project.path })
-      expect(index.exitCode).toBe(0)
-      expect(
-        index.stdout
-          .toString()
-          .split("\0")
-          .filter(Boolean)
-          .map((entry) => ({ mode: entry.slice(0, 6), file: entry.split("\t")[1] })),
-      ).toEqual([
-        { mode: "100644", file: ".opencorvus-test-project-identity" },
-        { mode: "120000", file: "aliases/root-back" },
-        { mode: "100644", file: "data/note.txt" },
-        { mode: "120000", file: "root-link" },
-      ])
+      expect({ code: index.exitCode, bytes: index.stdout }).toEqual({ code: 0, bytes: originalIndex.stdout })
     },
   })
 }, 120_000)

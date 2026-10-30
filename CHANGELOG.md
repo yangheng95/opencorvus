@@ -22,6 +22,7 @@
 
 #### 修复
 
+- 更新 Hono Node 适配器、Seroval 和 Vite 的同主版本安全补丁，修复实际锁定依赖审计发现的静态路径绕过、序列化注入及拒绝服务问题。
 - 修复目录元数据补充后原 Task 续跑误报用户原文损坏；依据同一真实工具请求和结果核对身份、作者、范围及原文，保留既有消息和数据。
 - 已完成的业务错误结算原调度唤醒并保留可见失败；未完成或进程中断仍按原执行轮次恢复，避免同一投递持续产生失败回复。
 - 执行者改动文件后请求协调时保留真实差异，Review 续跑可读取原执行轮次的变化；必需观测失败保留明确的部分完成结果。
@@ -57,6 +58,7 @@
 
 #### Fixed
 
+- Apply same-major security patches to the Hono Node adapter, Seroval and Vite, addressing static-path bypass, serialization injection and denial-of-service issues found by the actual locked-dependency audit.
 - Resume original Tasks after catalog metadata is attached without false retained-text integrity errors. Validate identity, author, range and verbatim text against the same original Tool request and result, preserving existing Messages and data.
 - Settle scheduler wakes after completed business errors while preserving visible failures. Unfinished and process-interrupted replies retain occurrence-bound recovery, preventing repeated failed replies for the same delivery.
 - Preserve file changes when a Build worker requests coordination after editing. Review retains the original physical-turn diff across continuation; required observation failures keep their explicit partial outcome.

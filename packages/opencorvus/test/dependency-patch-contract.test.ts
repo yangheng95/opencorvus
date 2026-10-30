@@ -100,7 +100,7 @@ test("Solid parent serializers preserve tiny typed views and report the bounded 
     })
     expect({
       outer: error instanceof serializer.SerovalDeserializationError,
-      cause: error?.cause instanceof serializer.SerovalMalformedNodeError,
+      cause: error?.cause instanceof RangeError,
     }).toEqual({ outer: true, cause: true })
   }
 })
@@ -184,3 +184,12 @@ test("the SDK Express proxy owner returns exact ordinary and mapped client ident
     ]).toEqual(["9.9.9.9", "9.9.9.9", "127.0.0.1", "::ffff:8.8.8.8"])
   }
 })
+
+test("the installed SDK Node adapter serves exact static bytes through its middleware", async () => {
+  const result = await promisify(execFile)(
+    "node",
+    [fileURLToPath(new URL("./fixture/dependency-node-adapter-contract.mjs", import.meta.url))],
+    { timeout: 15_000 },
+  )
+  expect(JSON.parse(result.stdout)).toEqual({ status: 200, middleware: "guarded", body: "adapter:中文\n" })
+}, 20_000)

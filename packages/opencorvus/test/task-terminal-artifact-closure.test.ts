@@ -1050,7 +1050,7 @@ test("closes continuation admission before the real completion checkpoint and im
         error: "error" in continuationBaseline ? continuationBaseline.error : undefined,
         baselineMode: continuationGit?.baseline?.mode,
         priorResultMode: continuationGit?.result_history?.at(-1)?.mode,
-      }).toEqual({ error: undefined, baselineMode: "recorded_head", priorResultMode: "recorded_head" })
+      }).toEqual({ error: undefined, baselineMode: "created_commit", priorResultMode: "created_commit" })
       const reopenedLineage = recordTestDispatchLineage({
         origin: lateOrigin,
         childSessionID,

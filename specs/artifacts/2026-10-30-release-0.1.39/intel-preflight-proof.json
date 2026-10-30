@@ -1,0 +1,19 @@
+{
+  "runID": "41004280047",
+  "source": "5e4107e8361b13a6a5bea51467f736bbccf0c4b1",
+  "conclusion": "success",
+  "proof": [
+    "overlay (darwin-x64) / compile (darwin-x64)\tUNKNOWN STEP\t2026-10-30T04:44:45.7827070Z     v0-rust-build-Darwin-x64-825c9b43-e83e704d",
+    "overlay (darwin-x64) / compile (darwin-x64)\tUNKNOWN STEP\t2026-10-30T04:48:25.1674980Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "overlay (darwin-x64) / compile (darwin-x64)\tUNKNOWN STEP\t2026-10-30T04:58:47.2996580Z \u001b[1m\u001b[92m    Finished\u001b[0m `release` profile [optimized] target(s) in 9m 54s",
+    "overlay (darwin-x64) / compile (darwin-x64)\tUNKNOWN STEP\t2026-10-30T04:59:53.6948790Z     v0-rust-build-Darwin-x64-825c9b43-e83e704d",
+    "overlay (darwin-x64) / compile (darwin-x64)\tUNKNOWN STEP\t2026-10-30T05:00:55.3394270Z ... Saving cache ..."
+  ],
+  "cache": {
+    "id": 9739814437,
+    "key": "v0-rust-build-Darwin-x64-825c9b43-e83e704d",
+    "size_in_bytes": 479194911,
+    "created_at": "2026-10-30T05:01:32.578907Z"
+  },
+  "scope": "Dependency qualification only; release39 rebuilds every installer from its final source"
+}
