@@ -284,6 +284,11 @@ fence 与 Project generation、维护 operation 和拥有它的 PID/进程启动
 fence 只能由同一 operation/generation 的 durable publication occurrence 收敛并释放，通用死亡
 owner sweep 不得释放它。任何 fence 都不得升级为 database path 或 data root 的排他 owner。
 
+已提交的匿名 Project promotion receipt 同时是历史文件来源的当前物理位置权威：
+读取按当前 Project id/generation/worktree 匹配 committed occurrence，并保留完整相对后缀。
+Source、Message、Tool 的原观察路径与身份不改写；旧地址的文件存在性不参与位置选择。
+未提交/回滚、其他 Project/代或不同目标不能提供位置权威，重复匹配明确报错。
+
 匿名 Project promotion 的唯一 Ready 决策是 durable publication terminal receipt。完整的
 Project/Session before-snapshot 和 source digest 先写入 immutable occurrence；随后一个 SQLite
 write transaction 重读并核对完整 snapshot、取得 promotion fence，首个 filesystem rename 只能

@@ -1968,6 +1968,8 @@
   "project.promote_anonymous_menu_label": "转换为实名项目",
   "project.promote_anonymous_title": "转换匿名项目",
   "project.promote_anonymous_message": "先输入项目名称，再选择要移动到的父目录。",
+  "project.promote_anonymous_parent_title": "选择父目录",
+  "project.promote_anonymous_parent_message": "项目将移入此父目录下名为“{{name}}”的新文件夹。",
   "project.promote_anonymous_missing_directory": "转换匿名项目需要项目目录。",
   "project.promote_anonymous_success_title": "项目已转换",
   "project.promote_anonymous_success": "项目已移动到 {{directory}}。",

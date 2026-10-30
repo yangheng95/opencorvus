@@ -183,7 +183,7 @@ import {
   openPathInSelectedEditor,
   openProjectFile,
   ownsWorkspaceSelection,
-  pickDirectory,
+  chooseWorkspaceDirectory,
   promoteAnonymousProject,
   renameProjectRecord,
 } from "./services/workspace"
@@ -1070,7 +1070,12 @@ async function promoteWorkLedgerAnonymousProject(directory: string, presentation
   if (!nameDialog.confirmed) return
   const name = String(nameDialog.value || "").trim()
   if (!name) throw new Error(t("project.rename_name_required"))
-  const destinationParent = await pickDirectory()
+  const destinationParent = await chooseWorkspaceDirectory({
+    title: t("project.promote_anonymous_parent_title"),
+    message: t("project.promote_anonymous_parent_message", { name }),
+    okLabel: t("common.continue"),
+    presentation,
+  })
   if (!destinationParent) return
   assertApiAuthorityCurrent(authority)
   const admission = await requestWorkspaceSelection()

@@ -13,6 +13,7 @@ import { observeRelocationTree, verifyRelocationTargets, type RelocationTree } f
 import { Instance } from "../project/instance"
 import { createInstanceState } from "../project/instance-state"
 import { Project } from "../project/project"
+import { PromotionJournal } from "../project/promotion-journal"
 import { Ripgrep } from "./ripgrep"
 import fuzzysort from "fuzzysort"
 import { Global } from "../global"
@@ -998,7 +999,13 @@ export namespace File {
     if (!path.isAbsolute(file)) {
       throw fileInvalidPath({ path: file, message: `Source file path must be absolute: ${file}` })
     }
-    return readResolvedContent(file, path.resolve(file))
+    const full = await PromotionJournal.resolveSourcePath({
+      projectID: Instance.project.id,
+      projectGeneration: Instance.projectGeneration,
+      worktree: Instance.worktree,
+      file: path.resolve(file),
+    })
+    return readResolvedContent(file, full)
   }
 
   async function readGitFileBaseline(file: string, full: string): Promise<string | undefined> {

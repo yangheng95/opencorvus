@@ -1,0 +1,31 @@
+{
+  "at": "2026-10-30T21:18:24.912Z",
+  "schema": 9,
+  "tables": 92,
+  "originals": 212539,
+  "current": 212541,
+  "changes": [
+    {
+      "table": "engine_control_activation_lease",
+      "old": 43576,
+      "now": 43577
+    },
+    {
+      "table": "engine_control_activation_lease_grant",
+      "old": 43634,
+      "now": 43635
+    }
+  ],
+  "attachments": 75,
+  "projects": 10,
+  "trackedFiles": 28,
+  "reportFiles": 4,
+  "requests": 0,
+  "cumulativeRequests": 1106,
+  "reserveMs": 2723972,
+  "source": {
+    "catalogSameBytes": true,
+    "catalogSameMetadata": true,
+    "authSameMetadata": true
+  }
+}

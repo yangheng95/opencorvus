@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [匿名项目整理](records/2026-10/2026-10-31-project-organization.md)：目录选择、项目命名与来源连续性。
+
 - [首页目标代码交付](records/2026-10/2026-10-31-home-goal-delivery.md)：全局首页持续目标的真实模型交付与产物验收。
 
 - [文件来源保存摘要](records/2026-10/2026-10-31-file-source-excerpt.md)：原来源摘要的阅读与取用体验。

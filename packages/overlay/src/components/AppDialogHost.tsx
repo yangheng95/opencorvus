@@ -1,4 +1,4 @@
-import { Show, createEffect, createSignal } from "solid-js"
+import { Show, createEffect, createSignal, on } from "solid-js"
 import { dialogStore, setDialogStore } from "../store/dialog"
 import { dismissAppDialog, settleAppDialog } from "../services/app-dialog"
 import { t } from "../utils/i18n"
@@ -25,6 +25,32 @@ export function AppDialogHost() {
 
   let inputRef: HTMLInputElement | undefined
   let selectRef: HTMLButtonElement | undefined
+  let cancelRef: HTMLButtonElement | undefined
+  let confirmRef: HTMLButtonElement | undefined
+  let dialogRef: HTMLElement | undefined
+
+  const initialFocusTarget = () => dialogStore.app.input ? inputRef
+    : dialogStore.app.select ? selectRef
+      : dialogStore.app.cancel ? cancelRef : confirmRef
+  const focusInitialChoice = () => {
+    const target = initialFocusTarget()
+    if (!target?.isConnected || target.disabled || !target.getClientRects().length) return false
+    target.focus()
+    if (target instanceof HTMLInputElement) target.select()
+    return true
+  }
+  createEffect(on(() => dialogStore.app.epoch, (epoch) => {
+    const active = document.activeElement
+    if (!dialogStore.app.open || !dialogRef?.isConnected || (active !== document.body && !dialogRef.contains(active))) return
+    queueMicrotask(() => {
+      if (
+        !dialogStore.app.open || dialogStore.app.epoch !== epoch || !dialogRef?.isConnected ||
+        document.activeElement !== active || (active !== document.body && !dialogRef.contains(active)) ||
+        initialFocusTarget() === active
+      ) return
+      focusInitialChoice()
+    })
+  }))
 
   const selectOptions = () => (dialogStore.app.selectOptions || []) as AppDialogSelectOption[]
   const selectedOption = () => selectOptions().find((item) => item.value === dialogStore.app.selectValue) ?? null
@@ -44,6 +70,7 @@ export function AppDialogHost() {
   return (
     <Dialog
       id="appDialog"
+      ref={(element) => { dialogRef = element }}
       open={dialogStore.app.open}
       data-dialog-epoch={String(dialogStore.app.epoch)}
       title={<span id="appDialogTitle">{dialogStore.app.title || t("dialog.notice")}</span>}
@@ -53,17 +80,7 @@ export function AppDialogHost() {
       aria-busy={dialogStore.app.submitting}
       returnFocusTarget={dialogStore.app.returnFocusTarget}
       onOpenAutoFocus={(event) => {
-        if (dialogStore.app.input && inputRef) {
-          event.preventDefault()
-          inputRef.focus()
-          inputRef.select()
-          return
-        }
-        if (dialogStore.app.select && selectRef) {
-          event.preventDefault()
-          selectRef.focus()
-          return
-        }
+        if (focusInitialChoice()) event.preventDefault()
       }}
       onClose={(dialog) => {
         void dismissAppDialog(dialog)
@@ -100,6 +117,7 @@ export function AppDialogHost() {
             <Button
               type="button"
               id="btnAppDialogCancel"
+              ref={(element) => { cancelRef = element }}
               variant="ghost"
               size="md"
               tone="neutral"
@@ -114,6 +132,7 @@ export function AppDialogHost() {
           <Button
             type="button"
             id="btnAppDialogOk"
+            ref={(element) => { confirmRef = element }}
             variant="solid"
             size="md"
             tone={dialogStore.app.okTone || "accent"}

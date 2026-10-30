@@ -346,7 +346,12 @@ before another read. Header tooltips retain the actual path for same-name
 attachments. Missing canonical metadata is a FileNotFoundError with a metadata
 diagnostic; it is not replaced by a storage-name label. Ordinary copies and
 metadata sidecars retain their file-path labels. Absolute source-content remains
-an independent read-only byte reader.
+an independent read-only byte reader. Historical absolute file observations in a
+promoted Project resolve through that Project generation's committed promotion
+receipt when its destination is the current worktree. The full relative suffix
+selects the published file; current disk existence at the old address does not
+select a resource. Original citation paths, semantic IDs and Tool evidence stay
+unchanged. External paths retain their exact absolute-file contract.
 Canonical attachment HTTP responses read the same verified reference and bytes,
 and retain its filename through RFC 5987 UTF-8 Content-Disposition. Office source
 types come from the qualified profile registry; PDF and other safe preview types
@@ -2773,6 +2778,11 @@ item with an explanation; supported desktop hosts use the native picker. File
 selection continues through the ordinary HTML file input in both hosts. The
 menu and handler share that capability declaration; no recursive browser folder
 upload or alternative directory reference protocol is introduced.
+Workspace opening and anonymous Project conversion share one directory-selection
+UI action. It selects the existing manualWorkspacePathEntry path dialog on
+browser hosts and the native picker on supported desktop hosts. Conversion names
+the destination parent separately from the new project folder; each dialog keeps
+the initiating project action's existing opening guard and return-focus target.
 Model readiness
 comes from the canonical composer model projection even when the popover is
 closed. Per-project explicit launch intent restores from Overlay preferences;

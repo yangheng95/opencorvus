@@ -1969,6 +1969,8 @@
   "project.promote_anonymous_menu_label": "Convert to named project",
   "project.promote_anonymous_title": "Convert anonymous project",
   "project.promote_anonymous_message": "Name the project, then choose the parent folder where it should be moved.",
+  "project.promote_anonymous_parent_title": "Choose the parent folder",
+  "project.promote_anonymous_parent_message": "The project will be moved into a new folder named “{{name}}” inside this parent folder.",
   "project.promote_anonymous_missing_directory": "Converting an anonymous project requires its directory.",
   "project.promote_anonymous_success_title": "Project converted",
   "project.promote_anonymous_success": "Moved the project to {{directory}}.",

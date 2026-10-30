@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [匿名项目整理](2026-10-31-project-organization/README.md)：真实交互、文件、来源与数据证据。
+
 - [首页目标代码交付](2026-10-31-home-goal-delivery/README.md)：真实页面与模型、产物和原数据证据。
 
 - [文件来源保存摘要](2026-10-31-file-source-excerpt/README.md)：真实交互截图和原数据保留资格。

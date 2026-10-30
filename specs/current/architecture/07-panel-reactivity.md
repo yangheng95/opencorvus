@@ -61,6 +61,12 @@ by source presentation, copy and search; no fresh file or web fetch builds searc
 The member navigation owner retains its first landing Promise until settlement;
 subsequent transcript revisions update the displayed content while that same
 operation completes. Rejection settles the original request under its owner.
+AppDialog initial focus follows its current epoch: text input, selection, Cancel,
+then OK. Replacing visible content reapplies that choice only while the same
+epoch remains open and the captured focus still belongs to that dialog or body;
+an external focus owner and an already focused target are preserved. The existing
+return-focus target remains responsible for closing the dialog.
+
 Dialog lifetime, selection epoch, authority and source/directory ownership retire
 stale reads and navigation. The conversation
 shortcut respects other dialogs and editor-handled keyboard events.
@@ -118,9 +124,10 @@ or detached openers do not cause a search for another target or delayed retries.
 Asynchronous menu actions supply their current UI owner's explicit return target
 through AppDialog's presentation options. That callback checks the same record,
 selection and connection lifetime, and returns null when retired. It is not
-persisted or used to choose a business operation. Non-input AppDialogs retain
-Kobalte's default mount focus lifecycle; input and choice dialogs retain their
-existing explicit initial selection. The canonical Kobalte patch respects a
+persisted or used to choose a business operation. AppDialogs select their current
+input or choice control first, then Cancel when available or OK. Their current
+epoch also initializes replacement content without taking an external focus.
+The canonical Kobalte patch respects a
 prevented dropdown close-autofocus event instead of refocusing its old trigger.
 
 Project actions use their current API authority, directory and generation for

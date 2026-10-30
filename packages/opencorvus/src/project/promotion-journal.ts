@@ -6,6 +6,7 @@ import {
   type DurablePublicationOccurrence,
 } from "@opencorvus-ai/util/durable-publication"
 import { Global } from "../global"
+import { Filesystem } from "../util/filesystem"
 
 const KIND = "project-promotion"
 
@@ -116,6 +117,28 @@ export namespace PromotionJournal {
 
   export async function all(): Promise<Entry[]> {
     return (await store().list(KIND)).map(fromOccurrence)
+  }
+
+  /** Resolve a historical file observation through its exact committed move.
+   * The citation stays immutable; the publication receipt owns physical location. */
+  export async function resolveSourcePath(input: {
+    projectID: string
+    projectGeneration: string
+    worktree: string
+    file: string
+  }): Promise<string> {
+    const entries = (await store().list(KIND, (intent) => intent.subject === subject(input.projectID)))
+      .map(fromOccurrence)
+      .filter((entry) =>
+        entry.projectID === input.projectID &&
+        entry.projectGeneration === input.projectGeneration &&
+        entry.terminal === "committed" &&
+        path.relative(entry.destination, input.worktree) === "" &&
+        Filesystem.contains(entry.source, input.file),
+      )
+    if (entries.length > 1) throw new Error(`Project ${input.projectID} has ambiguous committed source relocations`)
+    const entry = entries[0]
+    return entry ? path.join(entry.destination, path.relative(entry.source, input.file)) : input.file
   }
 
   export async function read(operationID: string): Promise<Entry> {

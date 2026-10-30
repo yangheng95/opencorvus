@@ -47,7 +47,7 @@ import {
 } from "./api"
 import { getHostTransport } from "./host-transport-runtime"
 import type { ProjectEditorID } from "./host-transport"
-import { nativeMessage, showAppDialog } from "./app-dialog"
+import { nativeMessage, showAppDialog, type AppDialogOpenOptions } from "./app-dialog"
 import { nativeOpen } from "../utils/native"
 import { checkConnection } from "./connection"
 import { reloadProjectScope } from "./config"
@@ -766,6 +766,31 @@ export async function pickDirectory(start?: string): Promise<string> {
   return selected
 }
 
+/** Choose a server-side directory through this host's declared UI capability. */
+export async function chooseWorkspaceDirectory(options: {
+  title: string
+  message: string
+  start?: string
+  okLabel?: string
+  presentation?: Pick<AppDialogOpenOptions, "openingGuard" | "returnFocusTarget">
+}): Promise<string> {
+  if (!getHostTransport().capabilities.ui.manualWorkspacePathEntry) return pickDirectory(options.start)
+  const result = await showAppDialog({
+    ...options.presentation,
+    title: options.title,
+    message: options.message,
+    input: true,
+    inputLabel: t("cwd.path_label"),
+    inputPlaceholder: t("cwd.path_placeholder"),
+    inputValue: options.start,
+    inputRequired: true,
+    inputRequiredMessage: t("cwd.path_required"),
+    cancel: true,
+    okLabel: options.okLabel,
+  })
+  return result.confirmed ? String(result.value || "").trim() : ""
+}
+
 /** Open a native multi-file picker. Returns the array of selected paths. */
 export async function pickFiles(start?: string): Promise<string[]> {
   const result = await getHostTransport().native({
@@ -1130,21 +1155,12 @@ export async function setActiveDirectory(
 export async function browseDirectory(): Promise<void> {
   const authority = captureApiAuthority()
   try {
-    const host = getHostTransport()
-    const selected = host.capabilities.ui.manualWorkspacePathEntry
-      ? await showAppDialog({
-          title: t("cwd.title"),
-          message: t("work_ledger.tooltip.create.existing_folder"),
-          input: true,
-          inputLabel: t("cwd.path_label"),
-          inputPlaceholder: t("cwd.path_placeholder"),
-          inputValue: activeDirectory(),
-          inputRequired: true,
-          inputRequiredMessage: t("cwd.path_required"),
-          cancel: true,
-          okLabel: t("cwd.choose_level"),
-        }).then((result) => (result.confirmed ? String(result.value || "").trim() : ""))
-      : await pickDirectory(activeDirectory())
+    const selected = await chooseWorkspaceDirectory({
+      title: t("cwd.title"),
+      message: t("work_ledger.tooltip.create.existing_folder"),
+      start: activeDirectory(),
+      okLabel: t("cwd.choose_level"),
+    })
     if (!selected) return
     assertApiAuthorityCurrent(authority)
     await setDirectory(selected, { authority })

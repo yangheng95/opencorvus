@@ -1,0 +1,136 @@
+{
+  "batch": 824,
+  "deadlineAt": 1793397820654,
+  "batchMaximumRequests": 10,
+  "requestsSpent": 6,
+  "cumulativeRequests": 1112,
+  "scopes": [
+    {
+      "phase": "before",
+      "requests": 0,
+      "cumulativeRequests": 1106,
+      "model": "gpt-6.1-sol",
+      "requestOutcomes": [],
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "publicShutdown": 200,
+      "reserveMs": 3302207,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true
+    },
+    {
+      "phase": "after",
+      "requests": 0,
+      "cumulativeRequests": 1106,
+      "model": "gpt-6.1-sol",
+      "requestOutcomes": [],
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "publicShutdown": 200,
+      "reserveMs": 2723972,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true
+    },
+    {
+      "phase": "final",
+      "requests": 6,
+      "cumulativeRequests": 1112,
+      "model": "gpt-6.1-sol",
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "publicShutdown": 200,
+      "reserveMs": 1233897,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true
+    },
+    {
+      "phase": "verified",
+      "requests": 0,
+      "cumulativeRequests": 1112,
+      "model": "gpt-6.1-sol",
+      "requestOutcomes": [],
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "publicShutdown": 200,
+      "reserveMs": 886716,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true
+    }
+  ]
+}
