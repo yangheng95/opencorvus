@@ -704,7 +704,11 @@ the bridge. Both pin the actual item through the existing virtualizer keepMounte
 ownership for reading restoration. It does not start index or DOM alignment for
 that request: an outstanding index alignment can otherwise overwrite the saved
 Message offset on later item measurement. Explicit card jumps still align through
-the same bridge; restoration retires its temporary pin on completion, reader
+the same bridge. After mounting an index, its precise Message/Source DOM landing
+is adopted through that virtualizer's offset scroll API, replacing the pending
+index alignment before subsequent measurements. Native block/inline alignment,
+scroll margins and the composer's scroll padding retain their existing semantics.
+Restoration retires its temporary pin on completion, reader
 movement or source retirement.
 During that restoration the same scroll controller resolves the actual rendered
 block or source-row offset on each correction frame and includes that resolved target in its

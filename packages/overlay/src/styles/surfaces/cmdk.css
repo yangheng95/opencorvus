@@ -23,6 +23,28 @@
   font-size: var(--ui-font-caption);
 }
 
+.conversation-search-hit__source {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-gap-xs);
+  min-width: 0;
+}
+
+.conversation-search-hit__source-title {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ui-gap-sm);
+}
+
+.conversation-search-hit__source-title > .oc-icon {
+  flex-shrink: 0;
+}
+
+.conversation-search-hit__source-location {
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+}
+
 .conversation-search-footer {
   display: flex;
   align-items: center;

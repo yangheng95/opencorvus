@@ -58,7 +58,7 @@ function sourceFileTitle(source: ConversationSourcePart): string | undefined {
   return title && !pathWithForwardSeparators(title, syntax).includes("/") ? title : filename
 }
 
-function sourceLabel(source: ConversationSourcePart): string {
+export function sourceLabel(source: ConversationSourcePart): string {
   if (source.type === "source-file") {
     const title = sourceFileTitle(source)
     if (title) return fileSourceLocation(title, source.range)
@@ -135,6 +135,20 @@ function repeatsFileDirectory(source: ConversationSourcePart, previous: Conversa
 
 function sourceIcon(source: ConversationSourcePart): IconName {
   return source.type === "source-url" ? "web-search" : source.type === "source-file" ? "file-document" : "channel-link"
+}
+
+export function SourceSearchContext(props: { source: ConversationSourcePart }) {
+  return (
+    <span class="conversation-search-hit__source">
+      <span class="conversation-search-hit__source-title">
+        <Icon name={sourceIcon(props.source)} size="compact" />
+        <strong>{sourceLabel(props.source)}</strong>
+      </span>
+      <Show when={sourceDetail(props.source) && sourceDetail(props.source) !== sourceLabel(props.source)}>
+        <span class="conversation-search-hit__source-location">{sourceDetail(props.source)}</span>
+      </Show>
+    </span>
+  )
 }
 
 async function openSourceFile(source: ConversationSourcePart): Promise<void> {

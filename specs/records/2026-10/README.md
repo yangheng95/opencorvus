@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [来源查找阅读上下文](2026-10-31-source-search-context.md)：实际命中片段与原来源身份。
+
 - [文件冲突恢复](2026-10-31-file-conflict-recovery.md)：草稿、比较与显式保存的真实闭环。
 
 - [网页来源摘录阅读](2026-10-31-source-excerpt-reading.md)：原网页和多文件来源的实页验证。

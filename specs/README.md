@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [来源查找阅读上下文](records/2026-10/2026-10-31-source-search-context.md)：原网页和文件来源的查找结果与定位体验。
+
 - [文件冲突恢复](records/2026-10/2026-10-31-file-conflict-recovery.md)：双页面编辑与有修订保护的恢复。
 
 - [网页来源摘录阅读](records/2026-10/2026-10-31-source-excerpt-reading.md)：真实来源的长摘录和现有阅读动作。

@@ -2331,6 +2331,14 @@ Actual source removal, owner changes and disclosure collapse retire that control
 through the shared keyed primitive; no focus restoration or shadow source store
 owns the interaction.
 
+Conversation find results resolve a source hit by its existing Message/sourceId
+in the same validated snapshot. The Source presenter supplies its same title,
+location/range and icon beside the matched excerpt; option text also retains that
+source label. These are read-only parts of the existing option, without nested
+links or another query, identity cache or label policy. Ordinary message previews,
+one result per Message, matching order and the original source-location action
+remain owned by the existing search and navigation paths.
+
 ## Shared visual primitives
 
 Settings boolean switches use the existing Kobalte default Root, Control, Input,

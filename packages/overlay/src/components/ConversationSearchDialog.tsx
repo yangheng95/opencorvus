@@ -3,6 +3,7 @@ import { Dialog } from "./ui/Dialog"
 import { ComboboxControl } from "./ui/ComboboxControl"
 import { Button } from "./ui/Button"
 import { Feedback } from "./ui/Feedback"
+import { SourceSearchContext, sourceLabel } from "./SourceParts"
 import { apiJson, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { directoryScopedPath, taskScopedPath } from "../services/task-path"
 import { readConversationSnapshot, readTaskConversationSnapshot, type ConversationSearchSnapshot } from "../services/conversation-snapshot"
@@ -35,6 +36,16 @@ export function ConversationSearchDialog(props: {
   let ownsSnapshot: (() => boolean) | undefined
   const hits = createMemo(() => snapshot() ? findConversationMessages(snapshot()!, query()) : [])
   const date = createMemo(() => new Intl.DateTimeFormat(getLocale(), { dateStyle: "medium", timeStyle: "short" }))
+  const hitSource = (hit: ConversationSearchHit) => {
+    if (!hit.sourceId) return undefined
+    const part = snapshot()?.messages.find(message => message.id === hit.id)?.parts.find(part =>
+      isConversationSourcePart(part) && part.sourceId === hit.sourceId)
+    return isConversationSourcePart(part) ? part : undefined
+  }
+  const hitLabel = (hit: ConversationSearchHit) => {
+    const source = hitSource(hit)
+    return source ? `${sourceLabel(source)} · ${hit.preview}` : hit.preview
+  }
 
   async function load(): Promise<void> {
     const target = props.target()
@@ -135,7 +146,7 @@ export function ConversationSearchDialog(props: {
     <ComboboxControl<ConversationSearchHit> class="cmdk-combobox" controlClass="cmdk-control" inputClass="cmdk-input"
       listboxClass="cmdk-list" optionClass="cmdk-item" optionLabelClass="cmdk-item-label"
       inputID="conversationSearchInput" listboxID="conversationSearchListbox" inputRef={(element) => { input = element }}
-      options={hits()} optionValue="id" optionTextValue="preview" optionLabel="preview" value={null}
+      options={hits()} optionValue="id" optionTextValue={hitLabel} optionLabel={hitLabel} value={null}
       open={props.open} onInputChange={setQuery} defaultFilter={() => true} allowsEmptyCollection closeOnSelection={false}
       noResetInputOnBlur
       onInputKeyDown={(event) => {
@@ -147,6 +158,7 @@ export function ConversationSearchDialog(props: {
       onChange={(hit) => void locate(hit)} ariaLabel={t("chat.search_placeholder")} placeholder={t("chat.search_placeholder")}
       renderOptionLabel={(hit) => <span class="conversation-search-hit">
         <span class="conversation-search-hit__meta"><strong>{hit.author}</strong><time>{date().format(hit.created)}</time></span>
+        <Show when={hitSource(hit)}>{(source) => <SourceSearchContext source={source()} />}</Show>
         <span>{hit.preview}</span>
       </span>}
       optionData={(hit) => ({ "data-message-id": hit.id })}
