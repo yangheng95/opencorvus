@@ -1,0 +1,94 @@
+{
+  "publications": [
+    {
+      "eventType": "session.updated",
+      "targetID": "ses_-zUQZxfS4zzCqp9pVfVD",
+      "archived": null,
+      "summary": null
+    },
+    {
+      "eventType": "task.updated",
+      "targetID": "tsk_g00VZT7V7400TdQ2J6Sj",
+      "archived": null,
+      "summary": "Task restored"
+    },
+    {
+      "eventType": "session.updated",
+      "targetID": "ses_-zUQZxfS4zzCqp9pVfVD",
+      "archived": 1793322104053,
+      "summary": null
+    },
+    {
+      "eventType": "session.updated",
+      "targetID": "ses_-zUQhR9QqzzzMZkMj093",
+      "archived": null,
+      "summary": null
+    },
+    {
+      "eventType": "task.updated",
+      "targetID": "tsk_g00VZT7V7400TdQ2J6Sj",
+      "archived": null,
+      "summary": "Task archived"
+    },
+    {
+      "eventType": "session.updated",
+      "targetID": "ses_-zUQi8aC3zzDyYDXPxXm",
+      "archived": 1793322104139,
+      "summary": null
+    },
+    {
+      "eventType": "session.updated",
+      "targetID": "ses_-zUQhR9QqzzzMZkMj093",
+      "archived": 1793322104084,
+      "summary": null
+    },
+    {
+      "eventType": "session.updated",
+      "targetID": "ses_-zUQi8aC3zzDyYDXPxXm",
+      "archived": null,
+      "summary": null
+    }
+  ],
+  "deliveries": 32,
+  "succeeded": 32,
+  "phaseReceipts": 24,
+  "eventOccurrences": [
+    {
+      "occurrenceID": "bus-occurrence:3f2e3903-089a-4eab-9404-b56026e0a62f",
+      "outboxID": "bus-occurrence:3f2e3903-089a-4eab-9404-b56026e0a62f",
+      "eventType": "session.updated",
+      "targetID": "ses_-zUQZxfS4zzCqp9pVfVD",
+      "operation": "restore",
+      "acceptance": "EventService immutable Bus-input acceptance; original downstream semantic rows retain exact counts and values"
+    },
+    {
+      "occurrenceID": "bus-occurrence:7c3788c0-4811-41f3-832d-8d3a2d7eaace",
+      "outboxID": "bus-occurrence:7c3788c0-4811-41f3-832d-8d3a2d7eaace",
+      "eventType": "task.updated",
+      "targetID": "tsk_g00VZT7V7400TdQ2J6Sj",
+      "operation": "restore",
+      "acceptance": "EventService immutable Bus-input acceptance; original downstream semantic rows retain exact counts and values"
+    },
+    {
+      "occurrenceID": "bus-occurrence:95a3bba6-430a-477e-87ad-e149c1be173b",
+      "outboxID": "bus-occurrence:95a3bba6-430a-477e-87ad-e149c1be173b",
+      "eventType": "session.updated",
+      "targetID": "ses_-zUQhR9QqzzzMZkMj093",
+      "operation": "restore",
+      "acceptance": "EventService immutable Bus-input acceptance; original downstream semantic rows retain exact counts and values"
+    },
+    {
+      "occurrenceID": "bus-occurrence:fd69451b-38dd-408d-9ea5-38c95d5881d0",
+      "outboxID": "bus-occurrence:fd69451b-38dd-408d-9ea5-38c95d5881d0",
+      "eventType": "session.updated",
+      "targetID": "ses_-zUQi8aC3zzDyYDXPxXm",
+      "operation": "restore",
+      "acceptance": "EventService immutable Bus-input acceptance; original downstream semantic rows retain exact counts and values"
+    }
+  ],
+  "leases": {
+    "runtimeProcess": 2,
+    "busDelivery": 32
+  },
+  "runtimeProcessOwners": "Runtime UUID matches authority-ready; PID and OS birth match retired supervisor chain. Supervisor observation UUID belongs to a separate identity domain."
+}

@@ -389,6 +389,7 @@ export interface AppProps {
   onRenameConversationItem: (row: WorkLedgerItemRow) => void | Promise<void>
   onArchiveConversationItem: (row: WorkLedgerItemRow) => void | Promise<void>
   onOpenAutomationSession: (session: AutomationRunSession) => Promise<void>
+  onOpenArchivedItem: (row: WorkLedgerItemRow) => Promise<void>
 }
 
 export function App(props: AppProps) {
@@ -830,7 +831,10 @@ export function App(props: AppProps) {
                 </aside>
               </div>
             </div>
-            <ConfigDialogHost onOpenAutomationSession={props.onOpenAutomationSession} />
+            <ConfigDialogHost
+              onOpenAutomationSession={props.onOpenAutomationSession}
+              onOpenArchivedItem={props.onOpenArchivedItem}
+            />
           </div>
         </div>
       </main>

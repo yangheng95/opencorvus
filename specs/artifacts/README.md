@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-30-archive-library-reading](2026-10-30-archive-library-reading/README.md)：归档库直接打开原Chat/Work/Task/Mission，15张实页、中英文/键盘/同对象重开及完整数据保全。
+
 - [2026-10-30-archived-goal-owner-controls](2026-10-30-archived-goal-owner-controls/README.md)：已有Goal/Mission真实归档与恢复、归档Task原链接双根因修复，23张实页及完整数据保全。
 
 - [2026-10-30-archived-conversation-reading](2026-10-30-archived-conversation-reading/README.md)：归档会话准确标题、只读阅读、真实Sources原件和明确恢复，14张实页与数据保全。

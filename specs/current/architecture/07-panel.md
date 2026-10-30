@@ -3910,6 +3910,14 @@ has finished saving. It does not synthesize messages or invoke a model.
 
 ## Archive queries
 
+Settings Archive opens retained Chat/Work, Task and Mission rows through the same
+typed navigation callbacks as the active Work Ledger. The explicit localized Open
+action reads original identity and history while preserving archive metadata; it
+does not restore or admit execution. It follows ordinary authority, selection
+epoch and unsaved-file navigation admission. Reopening the current ready identity
+also closes Settings and reveals its conversation under the same authority/epoch.
+Restore and permanent deletion remain separate existing actions.
+
 The Chat/Work, Task and Mission archive/restore endpoints use the existing
 Project identity context independently of execution-model initialization.
 Their original ownership, cancellation, physical settlement, closure and

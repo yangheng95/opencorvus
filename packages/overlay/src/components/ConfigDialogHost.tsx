@@ -59,6 +59,7 @@ import {
   nextConfigSidebarKeyboardWidth,
 } from "../utils/config-sidebar-resizer"
 import type { AutomationRunSession } from "../services/automations"
+import type { WorkLedgerItemRow } from "../services/work-ledger"
 
 interface ConfigTabDef {
   id: ConfigDialogTab
@@ -273,6 +274,7 @@ function useResizable(opts: ResizableOptions) {
 
 export interface ConfigDialogHostProps {
   onOpenAutomationSession: (session: AutomationRunSession) => void | Promise<void>
+  onOpenArchivedItem: (row: WorkLedgerItemRow) => Promise<void>
 }
 
 export function ConfigDialogHost(props: ConfigDialogHostProps) {
@@ -424,7 +426,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
       case "scheduled":
         return <ScheduledAutomationsPanel onOpenSession={props.onOpenAutomationSession} />
       case "archive":
-        return <ArchivePanel />
+        return <ArchivePanel onOpenItem={props.onOpenArchivedItem} />
       case "changelog":
         return <ReleaseNotesPanel />
       case "about":

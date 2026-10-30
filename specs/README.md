@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [归档列表阅读入口](records/2026-10/2026-10-30-archive-library-reading.md)：从归档库直接打开原Chat、Work、Task和Mission，保留归档与原执行状态。
+
 - [已有Goal与终态所属对象归档](records/2026-10/2026-10-30-archived-goal-owner-controls.md)：真实暂停/完成目标及Task/Mission归档、只读详情和明确恢复体验。
 
 - [归档会话阅读与恢复](records/2026-10/2026-10-30-archived-conversation-reading.md)：精确选中投影、归档只读阅读与明确恢复，实页和数据保全验证。

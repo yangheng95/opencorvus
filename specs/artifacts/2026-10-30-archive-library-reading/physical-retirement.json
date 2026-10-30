@@ -1,0 +1,88 @@
+[
+  {
+    "phase": "before",
+    "semanticRows": {
+      "protocol_event": 2056,
+      "message": 671,
+      "part": 1944
+    },
+    "runtimeOwner": {
+      "pid": 71096,
+      "processInstanceID": "win32:639289188269957946",
+      "occurrenceID": "0f81e2d5-e489-469a-b38c-86ed2c6f28ec"
+    },
+    "providerRequests": 0,
+    "cumulativeRequests": 1083,
+    "credentialCopyRetired": true,
+    "modelCatalogCopyRetired": true,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "publicShutdown": 200,
+    "reserveMs": 3339747,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "chain": [
+      {
+        "pid": 98040,
+        "processInstanceID": "win32:639289188260580029",
+        "occurrenceID": "4e3a0df5-69f0-4f84-86d9-620a24a67e83",
+        "state": "dead_or_reused"
+      },
+      {
+        "pid": 71096,
+        "processInstanceID": "win32:639289188269957946",
+        "occurrenceID": "bc1d0642-34f0-41a4-b911-caaa32e8c0f1",
+        "state": "dead_or_reused"
+      }
+    ]
+  },
+  {
+    "phase": "after",
+    "semanticRows": {
+      "protocol_event": 2056,
+      "message": 671,
+      "part": 1944
+    },
+    "runtimeOwner": {
+      "pid": 94932,
+      "processInstanceID": "win32:639289192161577684",
+      "occurrenceID": "9b6880ee-8dfe-4bdc-aa71-cef77a5c822e"
+    },
+    "providerRequests": 0,
+    "cumulativeRequests": 1083,
+    "credentialCopyRetired": true,
+    "modelCatalogCopyRetired": true,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "publicShutdown": 200,
+    "reserveMs": 2669818,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "chain": [
+      {
+        "pid": 90152,
+        "processInstanceID": "win32:639289192153095014",
+        "occurrenceID": "139c9e15-6ad9-4121-acf3-be887fd16a07",
+        "state": "dead_or_reused"
+      },
+      {
+        "pid": 94932,
+        "processInstanceID": "win32:639289192161577684",
+        "occurrenceID": "b301ab20-b775-444f-a3f4-51ac4b2a9662",
+        "state": "dead_or_reused"
+      }
+    ]
+  }
+]

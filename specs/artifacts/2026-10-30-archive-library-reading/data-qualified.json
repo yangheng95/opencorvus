@@ -1,0 +1,179 @@
+{
+  "at": "2026-10-30T01:16:37.397Z",
+  "database": [
+    {
+      "phase": "source",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 204673,
+      "rows": 204673,
+      "originalValues": "exact native SQLite EXCEPT, including TEXT/BLOB",
+      "allowedTargetFields": {},
+      "additions": []
+    },
+    {
+      "phase": "before",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 204673,
+      "rows": 204703,
+      "originalValues": "exact native SQLite EXCEPT, including TEXT/BLOB",
+      "allowedTargetFields": {
+        "session": [
+          "time_archived",
+          "time_updated"
+        ],
+        "engine_task": [
+          "time_archived"
+        ]
+      },
+      "additions": [
+        {
+          "table": "bus_publication_delivery",
+          "rows": 2
+        },
+        {
+          "table": "bus_publication_delivery_receipt",
+          "rows": 2
+        },
+        {
+          "table": "bus_publication_outbox",
+          "rows": 4
+        },
+        {
+          "table": "bus_publication_owner",
+          "rows": 4
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "rows": 12
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "rows": 3
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "rows": 3
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 204673,
+      "rows": 204849,
+      "originalValues": "exact native SQLite EXCEPT, including TEXT/BLOB",
+      "allowedTargetFields": {
+        "session": [
+          "time_archived",
+          "time_updated"
+        ],
+        "engine_task": [
+          "time_archived"
+        ]
+      },
+      "additions": [
+        {
+          "table": "bus_publication_delivery",
+          "rows": 32
+        },
+        {
+          "table": "bus_publication_delivery_receipt",
+          "rows": 32
+        },
+        {
+          "table": "bus_publication_outbox",
+          "rows": 8
+        },
+        {
+          "table": "bus_publication_owner",
+          "rows": 8
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "rows": 24
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "rows": 34
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "rows": 34
+        },
+        {
+          "table": "event_occurrence",
+          "rows": 4
+        }
+      ]
+    }
+  ],
+  "attachments": [
+    {
+      "phase": "before",
+      "files": 17,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "before",
+      "files": 10,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "before",
+      "files": 16,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "before",
+      "files": 24,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "before",
+      "files": 6,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "before",
+      "files": 2,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 17,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 10,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 16,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 24,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 6,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 2,
+      "sourceAndCopyBytes": "exact"
+    }
+  ],
+  "projects": 5,
+  "trackedProjectFiles": 12,
+  "gitAndFileBytes": "exact command code/stdout/stderr and original tracked bytes; unborn HEAD preserved",
+  "providerRequests": 0
+}

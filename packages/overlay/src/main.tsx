@@ -589,7 +589,11 @@ function assertUserNavigationCurrent(selectionEpoch: number): void {
   if (!ownsWorkspaceSelection(selectionEpoch)) throw new DOMException("Workspace navigation superseded", "AbortError")
 }
 
-function revealCurrentConversationFromBoard(): void {
+async function revealCurrentConversationFromBoard(authority: ApiAuthority): Promise<void> {
+  const selectionEpoch = boardStore.selectEpoch
+  await closeConfigDialog()
+  assertApiAuthorityCurrent(authority)
+  assertUserNavigationCurrent(selectionEpoch)
   if (primaryWorkspaceSurface() === "mission-board") setPrimaryWorkspaceSurface("conversation")
 }
 
@@ -598,7 +602,7 @@ async function selectTaskWithUILifecycle(taskID: string, directory: string): Pro
   const admission = await requestWorkspaceSelection({ kind: "task", id: taskID, directory })
   assertApiAuthorityCurrent(authority)
   if (admission.kind === "unchanged") {
-    revealCurrentConversationFromBoard()
+    await revealCurrentConversationFromBoard(authority)
     return
   }
   await closeConfigDialog()
@@ -629,7 +633,7 @@ async function selectConversationWithUILifecycle(
   })
   assertApiAuthorityCurrent(authority)
   if (admission.kind === "unchanged") {
-    revealCurrentConversationFromBoard()
+    await revealCurrentConversationFromBoard(authority)
     return
   }
   await closeConfigDialog()
@@ -1580,7 +1584,7 @@ async function openMissionWithUILifecycle(
   })
   assertApiAuthorityCurrent(authority)
   if (admission.kind === "unchanged") {
-    revealCurrentConversationFromBoard()
+    await revealCurrentConversationFromBoard(authority)
     return
   }
   await closeConfigDialog()
@@ -2626,6 +2630,11 @@ function OverlayRoot() {
         archiveActiveWorkLedgerItem(row)
       }
       onOpenAutomationSession={openAutomationSession}
+      onOpenArchivedItem={(row) => runUserNavigation("archive.open", async () => {
+        if (row.kind === "task") await selectWorkLedgerTask(row)
+        else if (row.kind === "mission") await openWorkLedgerMission(row)
+        else await openWorkLedgerChat(row)
+      })}
       sidebarToggle={
         <Button
           variant="ghost"
