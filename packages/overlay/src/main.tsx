@@ -116,13 +116,7 @@ import {
   FILE_REFERENCE_PATH_ATTRIBUTE,
   PROJECT_FILE_REFERENCE_PATH_ATTRIBUTE,
 } from "./utils/file-reference"
-import {
-  isAbsoluteServerPath,
-  isWindowsPath,
-  normalizeProjectFilePath,
-  normalizeServerPath,
-  pathWithForwardSeparators,
-} from "./utils/server-path"
+import { resolveDocumentFilePath } from "./utils/server-path"
 import { applyTheme, applyZoom, handleZoomHotkey, installSystemThemeListener, toggleDevtools } from "./services/theme"
 import { bumpWorkspaceEpoch, settingsStore, setSettingsStore, saveSettings } from "./store/settings"
 import {
@@ -1950,15 +1944,7 @@ document.addEventListener(
     if (!projectFile) return
     ev.preventDefault()
     const documentTarget = projectFileLink.closest(".file-editor-markdown-preview") ? selectedFileTarget() : null
-    let documentPath = projectFile.path
-    if (documentTarget && !isAbsoluteServerPath(documentPath)) {
-      const source = documentTarget.sourceAbsolutePath ?? documentTarget.path
-      const file = pathWithForwardSeparators(source, documentTarget.sourceAbsolutePath ?? documentTarget.directory)
-      const relative = file.slice(0, file.lastIndexOf("/") + 1) + documentPath
-      documentPath = documentTarget.sourceAbsolutePath
-        ? normalizeServerPath(relative, isWindowsPath(source))
-        : normalizeProjectFilePath(relative, documentTarget.directory)
-    }
+    const documentPath = documentTarget ? resolveDocumentFilePath(projectFile.path, documentTarget) : projectFile.path
     runMainAsync("workspace.open-project-file", () =>
       openRenderedFileLink(projectFileLink, async () => {
         if (documentTarget) {

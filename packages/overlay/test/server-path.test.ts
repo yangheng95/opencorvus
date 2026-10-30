@@ -1,6 +1,26 @@
 import { expect, test } from "bun:test"
-import { normalizeProjectFilePath, pathWithForwardSeparators } from "../src/utils/server-path"
+import { normalizeProjectFilePath, pathWithForwardSeparators, resolveDocumentFilePath } from "../src/utils/server-path"
 import { projectDirectoryKey } from "../src/utils/project-directory"
+
+test.each([
+  ["C:/repo", "notes/guide.md", "photo.png", "notes/photo.png"],
+  ["C:/repo", "notes/guide.md", "../report.md", "report.md"],
+  ["/repo", "notes/guide.md", "./photo.png", "notes/photo.png"],
+  ["/repo", "notes/guide.md", "../notes/photo.png", "notes/photo.png"],
+  ["/repo", "notes/guide.md", "file\\name.png", "notes/file\\name.png"],
+  ["C:/repo", "guide.md", "C:/Other/Photo.png", "C:/Other/Photo.png"],
+])("document resources resolve %s / %s / %s", (directory, path, reference, expected) => {
+  expect(resolveDocumentFilePath(reference, { directory, path })).toBe(expected)
+})
+
+test("absolute source documents retain the server parent and filename identity", () => {
+  expect(resolveDocumentFilePath("../Photo.PNG", {
+    directory: "C:/repo", path: "C:\\sources\\docs\\guide.md", sourceAbsolutePath: "C:\\sources\\docs\\guide.md",
+  })).toBe("C:/sources/Photo.PNG")
+  expect(resolveDocumentFilePath("image\\name.png", {
+    directory: "/repo", path: "/sources/guide.md", sourceAbsolutePath: "/sources/guide.md",
+  })).toBe("/sources/image\\name.png")
+})
 
 test.each([
   ["C:/repo", "folder\\ name.md", "folder/ name.md"],

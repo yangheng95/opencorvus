@@ -15,7 +15,8 @@ import { downloadBlob } from "../services/file-download"
 import { t } from "../utils/i18n"
 import { formatErrorDetails } from "../utils/error-details"
 import { restoreRightDockFocus } from "../utils/right-dock-focus"
-import { pathWithForwardSeparators } from "../utils/server-path"
+import { pathWithForwardSeparators, resolveDocumentFilePath } from "../utils/server-path"
+import type { MarkdownImageReader } from "./MarkdownDocumentImages"
 import { bytesToArrayBuffer } from "../utils/binary"
 import { extToLang } from "../utils/markdown"
 import { StaticTextPart } from "./TextPart"
@@ -166,6 +167,26 @@ export function FileEditorPane() {
   const textContent = createMemo(() => canEdit(content()))
   const markdownFile = () => textContent() && extToLang(path()) === "markdown"
   const previewVisible = () => markdownFile() && textView() === "preview"
+  const previewImages = createMemo<MarkdownImageReader | undefined>(() => {
+    const document = contentTarget()
+    const loaded = content()
+    const authority = captureApiAuthority()
+    if (!document || !loaded) return
+    return {
+      read: async (reference, signal) => {
+        const path = resolveDocumentFilePath(decodeURI(reference), document)
+        const image = await readFileContent({
+          directory: document.directory,
+          path,
+          ...(document.sourceAbsolutePath ? { sourceAbsolutePath: path } : {}),
+        }, authority, signal)
+        if (image?.encoding === "base64" && image.mimeType?.startsWith("image/")) {
+          return `data:${image.mimeType};base64,${image.content}`
+        }
+        throw new Error(t("file.load_failed", { name: reference }))
+      },
+    }
+  })
   createEffect(() => {
     fileEditorRevealRevision()
     if (target()?.range) setTextView("source")
@@ -677,7 +698,7 @@ export function FileEditorPane() {
                       tabIndex={0}
                       aria-label={`${fileTitle()} · ${t("file_editor.view_preview")}`}
                     >
-                      <StaticTextPart text={draft()} />
+                      <StaticTextPart text={draft()} images={previewImages()} />
                     </section>
                   </Show>
                 </Match>

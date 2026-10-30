@@ -344,6 +344,19 @@ code .file-link:focus-visible {
   margin: 0;
 }
 
+.md-document-image-slot,
+.md-document-image {
+  display: inline-block;
+  max-width: 100%;
+}
+
+.md-document-image-loading {
+  display: inline-flex;
+  align-items: center;
+  min-height: 64px;
+  color: var(--text-soft);
+}
+
 .file-editor-load-feedback {
   margin: var(--ui-gap-lg);
   min-width: 0;

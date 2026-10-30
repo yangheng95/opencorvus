@@ -2,6 +2,7 @@
 import { For, Show, type JSX } from "solid-js"
 import { t } from "../utils/i18n"
 import { createStreamingTextPartModel } from "./text-part-model"
+import { MarkdownBlock, type MarkdownImageReader } from "./MarkdownDocumentImages"
 
 function isStandaloneSourceFileMarkup(html: string): boolean {
   return /^&lt;source-file\b[\s\S]*\/&gt;$/.test(html.trim())
@@ -19,6 +20,7 @@ export function StreamingMarkdownPart(props: {
   streaming?: boolean
   className?: string
   trailing?: JSX.Element
+  images?: MarkdownImageReader
 }) {
   const { frozenHtml, pending, error } = createStreamingTextPartModel(props)
 
@@ -26,11 +28,12 @@ export function StreamingMarkdownPart(props: {
     <div class={props.className || "msg-text"} data-markdown-rendering={pending() ? "true" : undefined}>
       <For each={frozenHtml()}>
         {(html) => (
-          <div
+          <MarkdownBlock
             class={
               isStandaloneSourceFileMarkup(html) ? "md-frozen-block md-frozen-block--source-file" : "md-frozen-block"
             }
-            innerHTML={html}
+            html={html}
+            images={props.images}
           />
         )}
       </For>
@@ -50,6 +53,6 @@ export function StreamingMarkdownPart(props: {
 }
 
 /** Static documents share the same asynchronous renderer as streamed prose. */
-export function StaticTextPart(props: { text: string }) {
-  return <StreamingMarkdownPart text={props.text} />
+export function StaticTextPart(props: { text: string; images?: MarkdownImageReader }) {
+  return <StreamingMarkdownPart text={props.text} images={props.images} />
 }

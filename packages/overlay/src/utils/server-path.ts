@@ -57,3 +57,17 @@ export function normalizeProjectFilePath(path: string, directory: string): strin
   }
   return [...Array(baseSegments.length - common).fill(".."), ...fullSegments.slice(common)].join("/")
 }
+
+/** Explicit document resources use the document's parent under the server's syntax. */
+export function resolveDocumentFilePath(
+  reference: string,
+  document: { directory: string; path: string; sourceAbsolutePath?: string },
+): string {
+  if (isAbsoluteServerPath(reference)) return reference
+  const source = document.sourceAbsolutePath ?? document.path
+  const file = pathWithForwardSeparators(source, document.sourceAbsolutePath ?? document.directory)
+  const relative = file.slice(0, file.lastIndexOf("/") + 1) + reference
+  return document.sourceAbsolutePath
+    ? normalizeServerPath(relative, isWindowsPath(source))
+    : normalizeProjectFilePath(relative, document.directory)
+}

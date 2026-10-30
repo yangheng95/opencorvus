@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Markdown本地图片](records/2026-10/2026-10-31-markdown-local-images.md)：文档图片读取及真实视觉验收。
+
 - [Markdown相对导航](records/2026-10/2026-10-30-markdown-relative-navigation.md)：嵌套文档的真实链接与文件身份。
 
 - [Sources与文件创建入口](records/2026-10/2026-10-30-source-and-file-actions.md)：只读附件阅读与现有创建能力的可见入口。

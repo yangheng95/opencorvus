@@ -1,0 +1,139 @@
+{
+  "at": "2026-10-30T16:27:58.752Z",
+  "schema": 9,
+  "tables": 92,
+  "startingRows": 208795,
+  "finalRows": 208919,
+  "allStartingValuesPreserved": true,
+  "attachments": 75,
+  "oldProjects": 8,
+  "trackedFiles": 28,
+  "originalReportFiles": 4,
+  "originalOperatorFileBytes": [
+    137,
+    86,
+    163
+  ],
+  "originalFullHTTPAndGoalPreserved": true,
+  "oldHTTPHistories": {
+    "task": 68,
+    "mission": 80,
+    "chat": 3,
+    "completedWork": 8
+  },
+  "readonlySourceMessages": 4,
+  "inputs": {
+    "file": "notes-815/image-guide-817.md",
+    "operatorText": "# 本地图片阅读验证817\n\n![项目图标](64x64.png)\n\n[打开原图](64x64.png)\n\n![上级目录往返](../notes-815/64x64.png)",
+    "guideBytes": 131,
+    "image": "notes-815/64x64.png",
+    "imageBytes": 4821,
+    "uploadedAndDownloadedOriginalBytes": true
+  },
+  "images": [
+    {
+      "path": "notes-815/64x64.png",
+      "bytes": 4821,
+      "equalsOriginalAsset": true
+    },
+    {
+      "path": "notes-815/32x32.png",
+      "bytes": 1957,
+      "equalsOriginalAsset": true
+    }
+  ],
+  "guideDownloadEqualsOriginal": true,
+  "pathContracts": {
+    "passed": 53,
+    "assertions": 55
+  },
+  "screenshots": 8,
+  "newModelRequests": 0,
+  "cumulativeModelRequests": 1096,
+  "scopes": [
+    {
+      "phase": "before",
+      "originalRows": 208795,
+      "currentRows": 208887,
+      "events": [
+        {
+          "type": "file.edited",
+          "file": "notes-815\\64x64.png",
+          "at": 1793376602165
+        },
+        {
+          "type": "file.edited",
+          "file": "notes-815/image-guide-817.md",
+          "at": 1793376630085
+        },
+        {
+          "type": "file.edited",
+          "file": "notes-815/image-guide-817.md",
+          "at": 1793376631699
+        }
+      ],
+      "deliveries": 18,
+      "succeededReceipts": 18,
+      "fileMutationRequests": [
+        {
+          "method": "POST",
+          "path": "/file/upload"
+        },
+        {
+          "method": "POST",
+          "path": "/file/item"
+        },
+        {
+          "method": "PATCH",
+          "path": "/file/content"
+        }
+      ],
+      "publicShutdown": 200,
+      "reserveMs": 3460438,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "phase": "after",
+      "originalRows": 208887,
+      "currentRows": 208919,
+      "events": [
+        {
+          "type": "file.edited",
+          "file": "notes-815\\32x32.png",
+          "at": 1793377315686
+        }
+      ],
+      "deliveries": 6,
+      "succeededReceipts": 6,
+      "fileMutationRequests": [
+        {
+          "method": "POST",
+          "path": "/file/upload"
+        }
+      ],
+      "publicShutdown": 200,
+      "reserveMs": 2563855,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Markdown本地图片](2026-10-31-markdown-local-images.md)：资源归属、图片展示与实页证据。
+
 - [Markdown相对导航](2026-10-30-markdown-relative-navigation.md)：文档目录、定位与既有导航合同。
 
 - [Sources与文件创建入口](2026-10-30-source-and-file-actions.md)：真实来源核对、创建流程与实页验收。

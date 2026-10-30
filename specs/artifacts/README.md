@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Markdown本地图片](2026-10-31-markdown-local-images/README.md)：本地图片、原图阅读及实际回执。
+
 - [Markdown相对导航](2026-10-30-markdown-relative-navigation/README.md)：真实嵌套文档链接、截图与回执。
 
 - [Sources与文件创建入口](2026-10-30-source-and-file-actions/README.md)：只读文件、创建操作与真实回执。
