@@ -301,3 +301,12 @@ D02尚有真实执行缺口：同一冻结源码未从变价raw新生成全交�
 唯一基例01:41:38.140Z自然exit0，C47616.7/固定L gap2367/473800约0.499578%，主30numeric过；完整inspect/log/source/raw/all结果先封存后精确rm b8af7d5f。主方和独立都view_image3新图。独立28项、全主/替代账/summary、原生global Time limit reached/primal476167/bound473887、baseline真实Infeasible/null及约.003s流程来源均核实；887.775秒是评估侧墙钟，不能计候选小时。原报告/人物评价绑定原交付，新的执行事实只关闭对应待证项；新策略无需匹配旧策略。
 
 真实l06_grade用independent-review-base-addendum.json聚合exit4/assessment_incomplete，46verified_pass、仅D02未评，总分/business/good都null，无关键候选失败。17独立叶16full，不能手算96分冒充正式总分。报价和行序输入12文件已从同已注册控制复制并按唯一decoder/reference预检，未给candidate旧答案。01:44:58Z才启动唯一oc-l06-codex-eval-source-20261030-quote/CID67ae66c71bc5c3da02d46c77cf06eea9b95e0cad746a46f2d73b414ae695c433，同12sealed源/只读C/R0 45→46 raw/new results/netnone8CPU/原默认阶段限值；行序控制仍pending。locator active=codex_quote_plus1_source_cold，不能恢复已清理base或重复开解。quote终态先封存/数值/新图/独立必要核算，再顺序row；两者关闭D02和实际最终l06_grade后才决定两good升级。
+
+
+## 最新接续Recall：成对两100，已触发另升新版本
+
+Codex注册quote/row已先后自然exit0，C47646.7/47658.4，各30numeric过，完整原件先封存后精确清理CID67ae/7fcb，不重跑。主方和单层reviewer均实际看新三图；独立quote25、row23必要核验通过。review-final.json的17叶full绑定原sealed五路径及codex-L06-eef74425dcd9-phase1；主方实际l06_grade exit0，正式100/100/47pass/全部28critical通过/business_success及good=true，原阶段46pass/D02未评仍留。外部pair/codex/evaluation/final-assessment、final-grade-command；安全归档cases/L06/evaluator/pilot-codex-20261030。原OC100不变，两good真实触发升级。
+
+唯一动态locator active_evaluation=null、fresh_codex.business_grade已写真实输出、upgrade_required=true。所有本轮候选和评估侧完整solver均终态，不再请求退休OC API/重启listener/重跑dataset或旧容器。六旧昂贵任务保持Paused。模型/usage未知、comparable=false及非盲AI审查限制保留；57分钟候选观察窗/并行自验/评估计算不当数小时有效工作。
+
+新L06/0.3建设计划在evaluator/upgrade-v0.3/PLAN.md，旧冻结public/rubric/FREEZE只读。新信息历史primitive+闭式枚举0.052秒证明合法9/2、提前知叶7/2且被具名nonanticipativity_violation拒绝；125完整政策/3125放宽政策不是难度或时长样本数。独立逆推亦9/2；首脚本在写metadata时复用了value变量而用了字面兜底，虽前置逆推assert真实通过，已保存qualify-initial/assessment-initial并改为直接引用真实backward映射，不能用常量冒充计算输出。本例只因果机制资格；完整新材料/参考/业务执行/报告/质量线/原子rubric/独立冻结及fresh候选区分度仍待。整套冻结1/10、小时资格0/10，其余九题继续，心跳ACTIVE。

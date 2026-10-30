@@ -67,3 +67,12 @@ L06最新正式OpenCorvus成绩100/100、47pass/全部critical过；fresh /root/
 Codex完整554文件/原Git/所有产物封存，HEAD eef74425dcd9b9d6e161c9aa303b38c90f400e25，原18public完整同一，01:25:16Z是观察封存收据。最终输出validation/source-only-reordered/result，独立30numeric全过/C47641.5，不据此提前给47叶总分或good。实际模型/usage仍unknown、comparablefalse；57分钟左右的候选观察窗口及并行验收耗时不当内在小时证明。
 
 01:26:50Z仅一组评估侧Codex source-only base启动b8af7d5f...，12封存源码/声明依赖/冻结raw/new results/networknone8CPU，保持原README阶段参数。单层reviewer只读阶段评价，private两控制及执行相关叶须实际冷执行后补；原OC100不改。完整同冻结l06_grade且Codex也good后才触发新版本，当前未触发。动态定位/未满足项见长程及L06/L02最新Recall。
+
+
+## 最新接续Recall：成对两100，已触发另升新版本
+
+Codex注册quote/row已先后自然exit0，C47646.7/47658.4，各30numeric过，完整原件先封存后精确清理CID67ae/7fcb，不重跑。主方和单层reviewer均实际看新三图；独立quote25、row23必要核验通过。review-final.json的17叶full绑定原sealed五路径及codex-L06-eef74425dcd9-phase1；主方实际l06_grade exit0，正式100/100/47pass/全部28critical通过/business_success及good=true，原阶段46pass/D02未评仍留。外部pair/codex/evaluation/final-assessment、final-grade-command；安全归档cases/L06/evaluator/pilot-codex-20261030。原OC100不变，两good真实触发升级。
+
+唯一动态locator active_evaluation=null、fresh_codex.business_grade已写真实输出、upgrade_required=true。所有本轮候选和评估侧完整solver均终态，不再请求退休OC API/重启listener/重跑dataset或旧容器。六旧昂贵任务保持Paused。模型/usage未知、comparable=false及非盲AI审查限制保留；57分钟候选观察窗/并行自验/评估计算不当数小时有效工作。
+
+新L06/0.3建设计划在evaluator/upgrade-v0.3/PLAN.md，旧冻结public/rubric/FREEZE只读。新信息历史primitive+闭式枚举0.052秒证明合法9/2、提前知叶7/2且被具名nonanticipativity_violation拒绝；125完整政策/3125放宽政策不是难度或时长样本数。独立逆推亦9/2；首脚本在写metadata时复用了value变量而用了字面兜底，虽前置逆推assert真实通过，已保存qualify-initial/assessment-initial并改为直接引用真实backward映射，不能用常量冒充计算输出。本例只因果机制资格；完整新材料/参考/业务执行/报告/质量线/原子rubric/独立冻结及fresh候选区分度仍待。整套冻结1/10、小时资格0/10，其余九题继续，心跳ACTIVE。

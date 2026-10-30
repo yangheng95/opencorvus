@@ -1,0 +1,88 @@
+{
+  "status": "local_metric_qualified",
+  "checks": [
+    {
+      "name": "single-node-WIS-6/7",
+      "passed": true
+    },
+    {
+      "name": "zero-point-mass-WIS-absolute-error-10",
+      "passed": true
+    },
+    {
+      "name": "hierarchy-unit-scale:contract",
+      "passed": true
+    },
+    {
+      "name": "hierarchy-unit-scale:hand_calculated_metrics",
+      "passed": true
+    },
+    {
+      "name": "hierarchy-nonunit-scale:contract",
+      "passed": true
+    },
+    {
+      "name": "hierarchy-nonunit-scale:hand_calculated_metrics",
+      "passed": true
+    },
+    {
+      "name": "reordered:contract",
+      "passed": true
+    },
+    {
+      "name": "reordered:hand_calculated_metrics",
+      "passed": true
+    },
+    {
+      "name": "exact-decimal-JSON:contract",
+      "passed": true
+    },
+    {
+      "name": "exact-decimal-JSON:hand_calculated_metrics",
+      "passed": true
+    },
+    {
+      "name": "boolean-prediction:contract",
+      "passed": true
+    },
+    {
+      "name": "reversed-quantiles:contract",
+      "passed": true
+    },
+    {
+      "name": "incoherent-mean:contract",
+      "passed": true
+    },
+    {
+      "name": "missing-node:contract",
+      "passed": true
+    },
+    {
+      "name": "duplicate-JSON:contract",
+      "passed": true
+    },
+    {
+      "name": "malformed-JSON:contract",
+      "passed": true
+    },
+    {
+      "name": "extreme-exponent:contract",
+      "passed": true
+    },
+    {
+      "name": "facility-bool-tick:contract",
+      "passed": true
+    },
+    {
+      "name": "facility-bool-truth:contract",
+      "passed": true
+    },
+    {
+      "name": "facility-incoherent-truth:contract",
+      "passed": true
+    }
+  ],
+  "wall_seconds": 2.073216200340539,
+  "at": "2026-10-30T02:30:44.280336+00:00",
+  "scope": "closed-form metrics and real metric CLI; no daily worker, selector, full study, candidate score or hours"
+}

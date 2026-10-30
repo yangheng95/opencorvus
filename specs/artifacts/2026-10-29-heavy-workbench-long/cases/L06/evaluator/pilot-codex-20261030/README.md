@@ -1,4 +1,4 @@
-# fresh Codex L06/0.2.0：封存与待评
+# fresh Codex L06/0.2.0：完整真实评价100/100
 
 新agent /root/codex_l06_fresh使用fork none、同冻结18public、禁止再委托，不给OC答案/私有grader/控制/凭据；自然交付后已[完整封存](seal-receipt.json)554文件/原Git/全部工作区，HEAD eef74425dcd9b9d6e161c9aa303b38c90f400e25。01:25:16Z是观察封存收据，native接口没有精确终态时间/model/usage，不臆测。comparable=false，非同模型速度费用因果排名。
 
@@ -10,3 +10,12 @@
 
 
 [评估侧基例](base-cold/README.md)已自然exit0/C47616.7/30numeric过，独立28项/3新图/实际baseline来源闭合，[16叶补审](independent-assessment/BASE-COLD-ADDENDUM.md)已full。[实际完整聚合](partial-grade-base-command.json)为46pass/仅D02未评，total/business/good仍null；不能发布假总分。基例先封存再精确cleanup，01:44:58Z才顺序启动唯一注册C/R0 45→46报价控制67ae66c7...，行序仍待，不并发完整求解。后续以外部动态locator和真实终态为准，两good条件尚未满足。
+
+
+## 正式终态
+
+quote 01:44:57.763→01:59:42.077Z自然exit0/C47646.7；row 02:02:00.442→02:18:33.172Z自然exit0/C47658.4。两项都由同12封存源码、readonly注册输入、新results/netnone8CPU和原README阶段参数生成；各30numeric通过，所有inspect/log/source/raw/results先封存再精确cleanup，主方及独立agent都实际查看三新PNG，不重跑已终态容器。
+
+独立最终17叶均full，绑定原sealed五路径与固定ID；[真实最终grader](final-grade-command.json)exit0，[完整结果](final-assessment.json)100/100、47pass/28critical全过、business_success/good=true。原46pass/D02未评的阶段原件保持，不改成假终态。
+
+[成对裁决](paired-comparison.json)与OC100共同触发另升L06/0.3，旧线保留。不能将Codex57分钟观察窗、两个并行自验相加或评估侧计算算成内在小时。审查非盲AI且熟悉参考和OC结果，非职业人类/统计成熟或同模型因果排行榜。

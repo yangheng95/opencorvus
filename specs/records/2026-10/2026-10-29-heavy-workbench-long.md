@@ -403,3 +403,16 @@ Codex base已01:41:38.140Z自然exit0/30numeric全过/C47616.7，新3PNG主/独�
 唯一活跃是01:44:58Z启动的注册报价控制oc-l06-codex-eval-source-20261030-quote/CID67ae66c71bc5c3da02d46c77cf06eea9b95e0cad746a46f2d73b414ae695c433，pair/codex/evaluation/quote-cold，复用12sealed源码/README默认阶段参数/只读C-R0 45→46 raw/new results/networknone8CPU。行序准备好但尚未运行，locator codex_pending_evaluation_controls中只余row。先真实末态再封存/数值/实际新图/独立追加，再顺序row；不并发、重跑、取消正常计算，不拿评估侧887秒计候选小时。
 
 L02 UTC材料资格本轮已按独立计划/全数据审查/真实错误修复推进并范围提交；完整研究执行/选模/点区间/质量线/rubric仍待。其余九题、十题与小时仍未完成，心跳ACTIVE。Git交付以当前upstream为准，所有失败和中间版本保留。
+
+
+## 最新接续Recall：成对两100，已触发另升新版本
+
+Codex注册quote/row已先后自然exit0，C47646.7/47658.4，各30numeric过，完整原件先封存后精确清理CID67ae/7fcb，不重跑。主方和单层reviewer均实际看新三图；独立quote25、row23必要核验通过。review-final.json的17叶full绑定原sealed五路径及codex-L06-eef74425dcd9-phase1；主方实际l06_grade exit0，正式100/100/47pass/全部28critical通过/business_success及good=true，原阶段46pass/D02未评仍留。外部pair/codex/evaluation/final-assessment、final-grade-command；安全归档cases/L06/evaluator/pilot-codex-20261030。原OC100不变，两good真实触发升级。
+
+唯一动态locator active_evaluation=null、fresh_codex.business_grade已写真实输出、upgrade_required=true。所有本轮候选和评估侧完整solver均终态，不再请求退休OC API/重启listener/重跑dataset或旧容器。六旧昂贵任务保持Paused。模型/usage未知、comparable=false及非盲AI审查限制保留；57分钟候选观察窗/并行自验/评估计算不当数小时有效工作。
+
+新L06/0.3建设计划在evaluator/upgrade-v0.3/PLAN.md，旧冻结public/rubric/FREEZE只读。新信息历史primitive+闭式枚举0.052秒证明合法9/2、提前知叶7/2且被具名nonanticipativity_violation拒绝；125完整政策/3125放宽政策不是难度或时长样本数。独立逆推亦9/2；首脚本在写metadata时复用了value变量而用了字面兜底，虽前置逆推assert真实通过，已保存qualify-initial/assessment-initial并改为直接引用真实backward映射，不能用常量冒充计算输出。本例只因果机制资格；完整新材料/参考/业务执行/报告/质量线/原子rubric/独立冻结及fresh候选区分度仍待。整套冻结1/10、小时资格0/10，其余九题继续，心跳ACTIVE。
+
+L02按独立已审方案前移公开截止2024Aug1、探索2023Jun–Nov；新开发6823obs/21934cov，全部36inner后于截止。新build/两role解码和6探索projection/SQL已过，full数值事实/48内外grid同一；旧素材/失败留档。主首delta脚本误迭代aggregate为有观测leaf，assert原件保留，随后只补catalogue四leaf+层级核算/6增量，没有重生成/原54重跑。MSE/WIS精确指标初20断言、巨大指数构造异常及独立声明P2修复/非unit锚点均有原件。下一最便宜实质闭环是一个registered outer及三个inner、两个有效科学配置真实隔离预测→实际selector→outer，随后完整参考矩阵；不是再重复toy/生成或仅写更多叶。完整L02及其余研究/决策/教学题仍未冻结。
+
+最终增量独立L02材料35项2.079秒通过，仅6新开发origin的core/SQL，未新build/decode/旧48矩阵/forecast；8个public ZIP成员与实际开发一致、9个当前源/尺度/发布事实核同。首validator assert只有主方当时工具输出，未捕获原生terminal文件，后补observer收据明示来源，独立审查不称已读该原生文件。L06/0.3计划和17项小机制也无当前数学阻断，完整新业务/冻结/小时仍未批准。全部候选/本轮评估完整求解已终态，六旧昂贵容器刚实际再次inspect均Paused。

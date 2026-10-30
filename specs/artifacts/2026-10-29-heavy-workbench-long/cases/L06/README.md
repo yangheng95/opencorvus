@@ -1,6 +1,6 @@
 # L06/0.2.0 · 可执行情景运营方案
 
-**开发合同已冻结；真实OpenCorvus同合同100/100，fresh Codex已封存待完整评价，有效小时尚未取得。** 整套十题仍在建设，当前是可执行合同冻结1/10、候选小时资格0/10；不宣称职业专家/统计成熟或同模型排行榜。原始要求、全部分析/失败和后续运行见[持续记录](../../../../records/2026-10/2026-10-29-heavy-workbench-l06-qualification.md)。
+**开发合同已冻结；真实OpenCorvus与fresh Codex同合同各100/100，已触发另升新版本，有效小时尚未取得。** 整套十题仍在建设，当前是可执行合同冻结1/10、候选小时资格0/10；不宣称职业专家/统计成熟或同模型排行榜。原始要求、全部分析/失败和后续运行见[持续记录](../../../../records/2026-10/2026-10-29-heavy-workbench-l06-qualification.md)。
 
 候选仅获得[public任务](public/TASK.md)、[数据字典](public/DATA.md)、[输出合同](public/OUTPUTS.md)、环境/来源/profile及11CSV+facility，共18文件。16周、4原料/4产品、3供应商/2产线、3情景，耦合提前期/包装/共享容量、固定运费、BOM、周内仓容、回款/信用和共同承诺。资料为原创合成；允许任何正确算法/语言，没有最低时长/字数或总token/墙钟截止。
 
@@ -17,3 +17,10 @@
 [真实OpenCorvus试跑](evaluator/pilot-opencorvus-20261029/README.md)已自然完成并封存，真正源码基例/两输入控制及17叶独立审查后，实际聚合100/100、47pass和全部critical通过。fresh Codex只得同18public，现已自然交付并完整封存，30数值叶通过；评估侧源码冷复建与同合同17叶评价在执行，再决定是否升级和核实有效活动时长。其余九题继续升级，不能以本题代替整套。六旧昂贵容器保持Paused，新的三次参考运行均自然终态，已清理者不重启。
 
 [历史资格](evaluator/qualification/README.md)保存仓容共同漏项、不可行、工具/身份故障和修复原件；旧v1最小信用5369不当v2最优界，51263/52201只是旧可行成本。[严格LP](evaluator/independent-relaxation/REVIEW.md)格点46220.3与native界分开。[S06微型管线](smoke/README.md)不计十题或小时级。
+
+
+## 最新结论
+
+[正式成对结果](evaluator/pilot-codex-20261030/paired-comparison.json)两方均100/100、47pass、全部28critical过。fresh Codex同源码基例/报价/行序已自然完成并各30numeric通过；[完整17叶审查](evaluator/pilot-codex-20261030/independent-assessment/review-final.json)后，[真实grader](evaluator/pilot-codex-20261030/final-grade-command.json)exit0。原上文“待评价”为历史进度，当前以此结论为准。熟悉参考的非盲AI审查、Codex actual model/usage未知、comparable=false均保留。
+
+按候选前规则必须升级，现建设[独立L06/0.3](evaluator/upgrade-v0.3/PLAN.md)，旧冻结public/rubric/FREEZE与成绩不变。新信息机制已取得秒级可枚举见证，完整新业务/参考/逐叶grader/冻结和候选区分度仍待；没有数小时有效工作资格，不能靠本次评估复跑计时达标。

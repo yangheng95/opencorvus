@@ -14,7 +14,7 @@
 
 - [2026-10-30-approved-code-workflow.md](2026-10-30-approved-code-workflow.md)：独立QA的真实审批后提交全流程，保留旧793失败历史。
 
-- [2026-10-30-heavy-workbench-l02-qualification.md](2026-10-30-heavy-workbench-l02-qualification.md)：UTC多系列原材料/注册合同/精确解码及独立发布资格，原漏洞保留，完整研究仍待。
+- [2026-10-30-heavy-workbench-l02-qualification.md](2026-10-30-heavy-workbench-l02-qualification.md)：L02公开截止隔离inner、每日指标/尺度权限及独立局部资格，完整研究未冻结。
 - [2026-10-30-heavy-workbench-l05-qualification.md](2026-10-30-heavy-workbench-l05-qualification.md)：真实旧现场/补偿/在途HTTP、不同正确图与错误对照；checker及EOF收尾缺口修后独立资格通过。
 
 - [2026-10-30-mission-selection-journey.md](2026-10-30-mission-selection-journey.md)：创建表单专家团搜索与选择的实际体验。
@@ -35,7 +35,7 @@
 
 - [2026-10-29-task-terminal-checkpoint-recovery.md](2026-10-29-task-terminal-checkpoint-recovery.md)：原Task Git终态、55条预算失败与续跑原文身份错误的共享机制后续方案。
 
-- [2026-10-29-heavy-workbench-l06-qualification.md](2026-10-29-heavy-workbench-l06-qualification.md)：基例/控制/47叶与格式公平性审查、独立批准L06合同冻结，实际新双系统/小时实证待完成。
+- [2026-10-29-heavy-workbench-l06-qualification.md](2026-10-29-heavy-workbench-l06-qualification.md)：L06同冻结双系统各100/关键项全过，触发另升版本，分阶段信息机制及真实证据。
 
 - [2026-10-29-memory-context-journey.md](2026-10-29-memory-context-journey.md)：项目MEMORY.MD可达性、语义检索与16张实页复核。
 

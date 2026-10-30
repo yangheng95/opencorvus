@@ -1,0 +1,9 @@
+# Read-only timing/observation clarification addendum
+
+The later PLAN paragraph resolves the construction ambiguity identified in the initial review. It explicitly makes historical receipts/arrivals, published current price/capacity/status/demand, full earlier observations and committed actions available before new decisions; unannounced future facts remain hidden. Lead0 purchases arrive after the new order. Same visible history must imply the same authoritative predecision state; different already-visible state cannot be forced together merely by L/H. The evaluator must prove this fact mapping in the forthcoming decoder/replay.
+
+A fixed runtime input path and exclusion of the actually selected future leaf from argv/environment/mount/source/packet are now explicit, while offline public finite support and any lawful implementation/table policy remain allowed. Correct recovery concerns immutable business commitments, not optimizer internal state or a mandatory reoptimization count. These are fair causal definitions and do not add a reference algorithm requirement.
+
+The unchanged information_policy.py has exactly the bytes actually used in the17 tests. PLAN is an additive later clarification; the old executed-review snapshot is retained and no old test is falsely relabelled as executing a document. No new enumeration was performed. New independent full-case material, graph/state binding, business/cash/peak and runtime proof still do not exist or receive approval here. In the formal full contract retain the explicit old peak meanings: raw after all arrivals before production, FG after production before dispatch; the prose's list of phases is not a replacement for those measurement definitions.
+
+No mathematical blocker remains for this clarified plan to proceed to the next cheap construction. This remains only a plan/information primitive, not complete0.3/freeze/hours or changed0.2 scores.

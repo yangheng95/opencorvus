@@ -1,0 +1,20 @@
+{
+  "status": "local_reader_repair_qualified",
+  "checks": [
+    {
+      "name": "oversized-exponent-repaired",
+      "passed": true
+    },
+    {
+      "name": "legitimate-decimal-repaired",
+      "passed": true
+    },
+    {
+      "name": "actual-decoder-default-reader-corrected-path",
+      "passed": true
+    }
+  ],
+  "decoder_wall_seconds": 2.1221316000446677,
+  "initial_bad_input_path_receipt_retained": true,
+  "scope": "delta only; original failure retained"
+}

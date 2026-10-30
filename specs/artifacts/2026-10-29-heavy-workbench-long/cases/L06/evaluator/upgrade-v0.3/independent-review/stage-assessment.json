@@ -1,0 +1,37 @@
+{
+  "stage": "L06/0.3 information plan and finite anchor only",
+  "blocking_in_micro_information_scope": [],
+  "legal_domain_policies": 125,
+  "legal_optimum": "9/2",
+  "relaxed_t1_policies": 3125,
+  "relaxed_optimum": "7/2",
+  "information_cost_exact": "1",
+  "actual_checks": 17,
+  "all_checks_passed": true,
+  "primitive_scope": "Complete declared action vectors grouped by full assigned observed history; not graph authority or actual business/state execution.",
+  "necessary_full_contract_decisions": [
+    "Within-period observations/action timing and complete visible state",
+    "Authoritative graph/probability/input binding and complete action schema",
+    "Evaluator-held immutable commitment/state reconstruction and actual execution isolation",
+    "Explicit admissible changed-state/abort/recovery scope",
+    "New registered quality bound and information-only counterfactual comparison"
+  ],
+  "full_L06_0_3_approved": false,
+  "full_rubric_or_freeze_approved": false,
+  "hours_or_maturity_approved": false,
+  "old_scores_or_contract_changed": false,
+  "candidate_score": null,
+  "new_solver_Docker_Provider_candidate_calls": 0,
+  "source_identity": [
+    {
+      "name": "PLAN.md",
+      "same_current_bytes": true
+    },
+    {
+      "name": "information_policy.py",
+      "same_current_bytes": true
+    }
+  ],
+  "primary_source": "https://mpi-sppy.readthedocs.io/en/latest/scenario_creator.html",
+  "completed_utc": "2026-10-30T02:48:54.250170+00:00"
+}

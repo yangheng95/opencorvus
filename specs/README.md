@@ -14,7 +14,7 @@
 
 - [批准后的代码提交验收](records/2026-10/2026-10-30-approved-code-workflow.md)：完整真实改码、测试、批准和范围Git提交的当前版本验收。
 
-- [L02发布时间输入资格](records/2026-10/2026-10-30-heavy-workbench-l02-qualification.md)：UTC多系列材料、注册截止/精确单位及发布许可独立资格，完整研究题未冻结。
+- [L02发布时间输入资格](records/2026-10/2026-10-30-heavy-workbench-l02-qualification.md)：L02公开截止隔离inner、MSE/WIS精确指标与独立局部资格；完整研究题未冻结。
 - [L05跨系统副作用资格](records/2026-10/2026-10-30-heavy-workbench-l05-qualification.md)：真实事故现场/逐来源补偿及一次在途HTTP交错；checker与EOF收尾实质漏洞修后独立通过，完整题未冻结。
 
 - [Mission 创建选择旅程](records/2026-10/2026-10-30-mission-selection-journey.md)：真实搜索、保留选择、类型切换及取消状态调查。
@@ -35,7 +35,7 @@
 
 - [终态检查点与协调恢复](records/2026-10/2026-10-29-task-terminal-checkpoint-recovery.md)：真实验收暴露的失败自动提交、重复失败唤醒和压缩来源身份调查，未宣称完整流程通过。
 
-- [L06冻结合同与真实试跑准备](records/2026-10/2026-10-29-heavy-workbench-l06-qualification.md)：完整参考/输入控制/47叶、格式公平性裁决与最终独立批准；新双系统和小时实证仍待完成。
+- [L06冻结合同与真实试跑准备](records/2026-10/2026-10-29-heavy-workbench-l06-qualification.md)：L06真实双系统各100、关键项全过，触发独立新版建设；完整小时仍待。
 
 - [项目记忆与检索体验](records/2026-10/2026-10-29-memory-context-journey.md)：修复Task必选错位，真实项目上下文、双语与原对话独立选择。
 

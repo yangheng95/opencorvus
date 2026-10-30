@@ -1,0 +1,73 @@
+{
+  "status": "new_public_information_boundary_qualified",
+  "checks": [
+    {
+      "name": "actual-completed:build",
+      "passed": true
+    },
+    {
+      "name": "actual-completed:decode-archive",
+      "passed": true
+    },
+    {
+      "name": "actual-completed:decode-development",
+      "passed": true
+    },
+    {
+      "name": "unchanged-full-source-data:observations.csv",
+      "passed": true
+    },
+    {
+      "name": "unchanged-full-source-data:covariate-vintages.csv",
+      "passed": true
+    },
+    {
+      "name": "unchanged-full-source-data:series.csv",
+      "passed": true
+    },
+    {
+      "name": "unchanged-full-source-data:hierarchy.csv",
+      "passed": true
+    },
+    {
+      "name": "unchanged-full-source-data:availability.json",
+      "passed": true
+    },
+    {
+      "name": "unchanged-full-source-data:units.json",
+      "passed": true
+    },
+    {
+      "name": "same-complete-numerical-facts",
+      "passed": true
+    },
+    {
+      "name": "48-inner-outer-grids-retained",
+      "passed": true
+    },
+    {
+      "name": "all-inner-after-public-cutoff-and-every-public-release-authorized",
+      "passed": true
+    },
+    {
+      "name": "1460-leaf-scale-terminals-with-aggregate-from-registered-sum",
+      "passed": true
+    }
+  ],
+  "new_development_origins": 6,
+  "inherited_inner_outer_grids": 48,
+  "development_observations": 6823,
+  "development_covariates": 21934,
+  "scales_litres": {
+    "A1": "591123/73",
+    "A2": "2413062/365",
+    "B1": "530477/73",
+    "B2": "2280079/365",
+    "ZA": "5368677/365",
+    "ZB": "67568/5"
+  },
+  "scale_visibility": "evaluator/2024+selector only; not earlier 2023 forecast workers",
+  "delta_wall_seconds": 3.8572544995695353,
+  "first_qualification_script_error": "initial validator iterated raw six-node registry as though aggregate observations existed; four leaf sources plus registered sum are authoritative",
+  "scope": "new public cutoff/grid/material projection only; not predictor, selector, full L02, candidate grade or hours"
+}

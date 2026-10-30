@@ -1,10 +1,11 @@
 """Assigned evaluator material contract, separate from input declarations."""
 import json
 from datetime import date, datetime, time, timedelta, timezone
+from decimal import Decimal, InvalidOperation
 from asof_input import InputError
 
 
-def read_json(path):
+def read_json(path,*,decimal_numbers=False):
     def pairs(rows):
         result={}
         for key,value in rows:
@@ -12,7 +13,11 @@ def read_json(path):
             result[key]=value
         return result
     def constant(value):raise InputError("nonfinite_json")
-    return json.loads(path.read_text(encoding="utf-8"),object_pairs_hook=pairs,parse_constant=constant)
+    def precise(value):
+        try:return Decimal(value)
+        except InvalidOperation as e:raise InputError("numeric_json") from e
+    return json.loads(path.read_text(encoding="utf-8"),object_pairs_hook=pairs,parse_constant=constant,
+                      parse_float=precise if decimal_numbers else float)
 
 
 def load_contract(path):

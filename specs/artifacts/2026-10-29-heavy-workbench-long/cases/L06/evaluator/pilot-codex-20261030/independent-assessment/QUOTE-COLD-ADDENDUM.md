@@ -1,0 +1,23 @@
+# Codex L06 registered quote control addendum
+
+The exact registered quote component passes independent verification. D02 overall remains unassessed until the registered row control is actually completed and checked; no total, business-success or good verdict is produced. `independent-review-quote-addendum.json` is a valid17-leaf additive review with16full/1unassessed, the same stable submission ID and original five sealed-delivery bindings. Phase1/base files remain unchanged.
+
+## Input, source and reference
+
+Actual archived raw differs from frozen baseline in exactly one CSV field: supplier_quotes.csv C/R0 unit price45→46; all normalized facts otherwise equal. The full variant matches captured normalized.json from the sole registered price-control ZIP and its declared transformation. All12 archived executed source/docs/dependency/test files directly match both sealed eef74425dcd9 and the base-cold source. No cached normalized data is accepted: fresh normalized includes46, and both complete new ledgers are independently reconstructed from that raw and actual actions.
+
+The unchanged L47380 remains applicable under the registered native-bound trust policy. For any nonnegative action policy, the quote increase adds1 per purchased C/R0 unit, never lowers spending, and subtracts its cumulative amount from every subsequent cash balance. Physical/information conditions are unchanged. Thus a quote-feasible policy is base-feasible and has no lower cost than its base-price counterpart, including terminal cash. Consequently the base L also lower-bounds the quote problem; no new MIP or tighter bound is claimed. This inherits the original trusted numerical solver bound, not a new rational search proof. Historical pending wording inside the immutable proof artifact is preserved; registration separately records the reviewed variant.
+
+## Actual terminal and new accounting
+
+Root-owned CID67ae66c71bc5c3da02d46c77cf06eea9b95e0cad746a46f2d73b414ae695c433 naturally exited0:01:44:57.762997342Z→01:59:42.076927847Z, wall884.313930s, main883.059282s. Actual argv is `/opt/cpsat/bin/python reproduce.py --input /raw --output /results/quote` in /project. Source/raw readonly, fresh results writable, netnone8CPU and dependency image unchanged; real defaults and declared versions match base. Fresh in-invocation hints are computed from this raw, and old result directories are not mounted. Archived source/raw are read from executed-source/ and executed-raw/, not guessed from result prefixes. All33 new result ZIP members match the actual output files. Cleanup references only the naturally completed own CID after sealing.
+
+`audit_quote_addendum.py` actual stdlib-only run took.450362s;25 checks pass. No candidate program, solver, Docker, Provider or GPU ran in this review. Full main and alternate physical/information/cash/terminal checks and every ledger/summary field match independent arithmetic. Main C476467/10=47646.7; fixed-L gap2667/473800≈0.56289574%. Alternate479367/10=47936.7, premium290, is a distinct complete feasible policy. In each branch it moves10 R2 units from B/week13 to C/week15 and delays payment2weeks, preserving arrival/production/inventory.
+
+As a separate controlled calculation, evaluating these exact same plans at old prices gives47631.1 and47921.1 respectively; both expected increases are78/5=15.6. For each scenario/week, quote cash equals the same-policy old-price cash minus cumulative changed units. This confirms actual price/cash/cost semantics. The difference between separate base search47616.7 and quote search47646.7 is not asserted to be the exact quote marginal effect because policies differ. Correct actions need not flip.
+
+True root numeric CLI is bound to this registered input and new output, exit0/30pass/17unassessed. Actual HiGHS global native Time limit reached, primal476467 and bound474627 (denominator10), resource_limit/no exact-optimum declaration, agrees with new stdout/run/native log. Numerical bound47462.7 is not substituted for fixed47380 or presented as a rational certificate.
+
+All three new cash/procurement/warehouse PNGs were actually opened with view_image. Labels, units, scenarios/legends and new ledger-consistent values are readable; observations are in quote-addendum/actual-visual-review.json. No candidate report/figure/data contradiction was found in this scope.
+
+The only remaining review leaf is D02's row component. This review does not touch its active container, launch another solver, repeat old main facts, grant a final grade, or claim professional-human/statistical maturity, comparable model cost or effective hours. Nonblind AI familiarity and unknown actual Codex model/usage remain explicit.

@@ -1,0 +1,41 @@
+{
+  "case": "L06/0.2.0",
+  "submission_id": "codex-L06-eef74425dcd9-phase1",
+  "registered_quote_component": "verified",
+  "registered_row_component": "pending evaluator completion, no active-container inspection or interference",
+  "D02_overall": "unassessed",
+  "review_counts": {
+    "full": 16,
+    "unassessed": 1
+  },
+  "actual_quote_audit": {
+    "stage": "Codex registered quote component only",
+    "checks": 25,
+    "all_passed": true,
+    "failed": [],
+    "C": "476467/10",
+    "alternative_C": "479367/10",
+    "fixed_L": "47380",
+    "gap_exact": "2667/473800",
+    "gap_percent": 0.5628957365977205,
+    "container_wall_seconds": 884.31393,
+    "candidate_main_seconds": 883.0592819936574,
+    "reviewer_seconds": 0.45036210026592016,
+    "D02_quote_component": "verified",
+    "D02_overall": "unassessed",
+    "total_score": null,
+    "business_success": null,
+    "good": null,
+    "new_solver_Docker_Provider_candidate_program_calls": 0
+  },
+  "candidate_business_defects_found": [],
+  "total_score": null,
+  "business_success": null,
+  "good": null,
+  "new_solver_Docker_Provider_candidate_program_calls": 0,
+  "original_phase1_and_base_preserved": true,
+  "nonblind_AI_reference_and_prior_OC_familiarity": true,
+  "actual_model_or_usage_known": false,
+  "comparable": false,
+  "completed_utc": "2026-10-30T02:06:24.995840+00:00"
+}

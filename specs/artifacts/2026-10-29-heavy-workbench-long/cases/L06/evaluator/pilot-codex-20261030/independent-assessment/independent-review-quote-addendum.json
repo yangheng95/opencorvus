@@ -1,0 +1,486 @@
+{
+  "format": "l06-review-evidence/1",
+  "case": "L06",
+  "submission_id": "codex-L06-eef74425dcd9-phase1",
+  "rater": {
+    "id": "independent-agent-/root/benchmark_review",
+    "role": "independent_evaluator",
+    "assignment": "Parent-authorized one-level independent Codex eef74425dcd9 actual sealed-delivery phase-one evaluation. Nonblind AI agent familiar with reference, development calibration and prior OpenCorvus outcome. No delegation. No professional-human/statistical/hours certification. Base terminal addendum: only six findings supported by newly authenticated independent source-only base are updated; original phase1 file retained. D02 registered controls remain unassessed. Quote addendum: exact registered quote component accepted; overall D02 kept unassessed until actual row control. Original phase1/base findings preserved."
+  },
+  "artifact_bindings": {
+    "input": "D:\\opencorvus-benchmark-runs\\L06-paired-20261029-be2a55d1\\codex\\completed\\submission\\inputs",
+    "normalized": "D:\\opencorvus-benchmark-runs\\L06-paired-20261029-be2a55d1\\codex\\completed\\submission\\validation\\source-only-reordered\\result\\normalized.json",
+    "plan": "D:\\opencorvus-benchmark-runs\\L06-paired-20261029-be2a55d1\\codex\\completed\\submission\\validation\\source-only-reordered\\result\\plan.json",
+    "summary": "D:\\opencorvus-benchmark-runs\\L06-paired-20261029-be2a55d1\\codex\\completed\\submission\\validation\\source-only-reordered\\result\\summary.json",
+    "ledger": "D:\\opencorvus-benchmark-runs\\L06-paired-20261029-be2a55d1\\codex\\completed\\submission\\validation\\source-only-reordered\\result\\ledger.json"
+  },
+  "findings": [
+    {
+      "id": "D01",
+      "judgement": "full",
+      "observation": "Actual independent evaluator source-only base succeeded from only12 sealed source/docs/dependency/test files and the frozen raw packet; project/raw readonly, new results writable, networknone8CPU. Natural exit0 and complete new outputs are archived. Independently recomputed primary47616.7 and full alternative47880.7 are feasible with exact ledgers/summaries; different actions from sealed delivery are accepted. No old results/model/hint/reference was mounted.",
+      "evidence": [
+        {
+          "path": "base-addendum/snapshot/terminal-inspect.json",
+          "kind": "process_receipt",
+          "locator": "Id/State/Config/Mounts/HostConfig",
+          "observation": "Actual root-owned independent evaluator base naturally exited0; readonly source/raw, fresh writable results, networknone8CPU; new output archive and stdout are independently read."
+        },
+        {
+          "path": "base-addendum/snapshot/launch.json",
+          "kind": "process_receipt",
+          "locator": "command/source_files/exitcode/stdout",
+          "observation": "Exact CID and real source-only argv bind the run; sole12 source/docs/dependency/test files match sealed source bytes."
+        },
+        {
+          "path": "SOURCE-AUDIT.md",
+          "kind": "source_audit",
+          "locator": "reproduce/model/export/accounting/report entry",
+          "observation": "Previously inspected same sealed source creates fresh raw-derived model and fresh same-invocation incumbents, not old result reads."
+        },
+        {
+          "path": "base-addendum/arithmetic-and-process-assessment.json",
+          "kind": "business_oracle",
+          "locator": "all28 checks / costs / fixed gap / native vs exact distinctions",
+          "observation": "Full independent new primary and alternative raw/action ledger/summary recurrence passed; real numeric CLI source/input/output association checked."
+        },
+        {
+          "path": "base-addendum/checks.json",
+          "kind": "source_audit",
+          "locator": "all12mounted_source_files_match_actual_sealed; raw/command/dependencies/native/baseline/archive checks",
+          "observation": "Actual cold source/data/output/process artifacts inspected;57 archive member bytes and12 source files match declared objects without correctness-by-checksum."
+        }
+      ]
+    },
+    {
+      "id": "D02",
+      "judgement": "unassessed",
+      "observation": "The exact registered C/R0 unit-price45→46 control is now actually completed by the independent evaluator using the same sealed source/default command. Natural exit0, readonly raw/source, fresh results, netnone8CPU, source bytes and input identity are verified. All30 numeric leaves and independent full primary/alternative business/ledger/summary recurrence pass; primary47646.7 uses unchanged registeredL47380. Registered row reversal is not yet completed/accepted here, so D02 remains unassessed overall, not candidate0.",
+      "evidence": [
+        {
+          "path": "quote-addendum/snapshot/terminal-inspect.json",
+          "kind": "process_receipt",
+          "locator": "Id/State/Config/Mounts/HostConfig",
+          "observation": "Actual registered quote run naturally exited0 using same readonly source and only registered quote input with new output."
+        },
+        {
+          "path": "quote-addendum/stage-assessment.json",
+          "kind": "business_oracle",
+          "locator": "25checks, exactC/alternate/L/gap, quote component and overall status",
+          "observation": "Exact independent full new policies/ledger/summary, sole quote change, valid reference, process/native/archive and numeric checks pass; row still pending."
+        },
+        {
+          "path": "quote-addendum/checks.json",
+          "kind": "source_audit",
+          "locator": "same12archived_executed_source_files; single registered raw difference",
+          "observation": "Archived source is byte-identical to sealed submission and base; raw full semantic equality to registered variant excludes cached normalized state."
+        }
+      ]
+    },
+    {
+      "id": "D07",
+      "judgement": "full",
+      "observation": "All four fact groups have accurate raw-file identities, explicit index/join rules and unit mapping: raw/product/plant catalogues; supplier terms/quotes; BOM/routes; scenarios/demand/capacity/facility. Source mapping, DATA and normalized facts close the trace; independent raw projection confirms all actual values.",
+      "evidence": [
+        {
+          "path": "snapshot/delivery/source_mapping.json",
+          "kind": "candidate_artifact",
+          "locator": "all twelve raw file keys plus identity entry",
+          "observation": "Mappings agree with exact independent frozen raw projection."
+        },
+        {
+          "path": "snapshot/source/DATA.md",
+          "kind": "candidate_artifact",
+          "locator": "catalogue, business identity, quantity/currency/index definitions",
+          "observation": "Public source identities and units read with candidate map."
+        },
+        {
+          "path": "arithmetic-assessment-current.json",
+          "kind": "business_oracle",
+          "locator": "C/gap/alternate; see primary-independent.json, alternative-independent.json and checks.json",
+          "observation": "Exact independent cumulative raw/action accounting for full primary and alternate, complete ledgers and summaries."
+        }
+      ]
+    },
+    {
+      "id": "D08",
+      "judgement": "full",
+      "observation": "Actual independent primary native HiGHS1.8 log says Time limit reached, feasible objective476167/10 and native bound473887/10. run algorithm resource_limit, no exact optimum, console and log agree; conditional scenario bounds remain labelled conditional. Baseline Infeasible/completed and constructive alternate completed/null native solver are also tied to this terminal run.",
+      "evidence": [
+        {
+          "path": "base-addendum/snapshot/terminal-inspect.json",
+          "kind": "process_receipt",
+          "locator": "Id/State/Config/Mounts/HostConfig",
+          "observation": "Actual root-owned independent evaluator base naturally exited0; readonly source/raw, fresh writable results, networknone8CPU; new output archive and stdout are independently read."
+        },
+        {
+          "path": "base-addendum/snapshot/results/base/run.json",
+          "kind": "process_receipt",
+          "locator": "command/dependencies/parameters/phases/native_solver/comparison_runs/timing",
+          "observation": "This JSON is now bound to the actual independent base process and its stdout/native logs, not treated as self-authenticating metadata."
+        },
+        {
+          "path": "base-addendum/arithmetic-and-process-assessment.json",
+          "kind": "business_oracle",
+          "locator": "all28 checks / costs / fixed gap / native vs exact distinctions",
+          "observation": "Full independent new primary and alternative raw/action ledger/summary recurrence passed; real numeric CLI source/input/output association checked."
+        },
+        {
+          "path": "base-addendum/snapshot/results/base/primary-solver.log",
+          "kind": "process_receipt",
+          "locator": "final Solving report",
+          "observation": "True status Time limit reached, primal476167, dual473887, integer/row violations0,16513 nodes; raw native numerical result, not exact rational certificate."
+        }
+      ]
+    },
+    {
+      "id": "D09",
+      "judgement": "full",
+      "observation": "The actual primary obtained a feasible policy and native numerical bound and reports both honestly with no exact optimum. Actual JIT baseline is Infeasible and its objective/bound are null, not fabricated numbers. The alternate is a complete constructive feasible policy without optimum claim. No additional artificial failing branch is required. Exact fixed47380 quality remains independent of the native47388.7 bound.",
+      "evidence": [
+        {
+          "path": "base-addendum/snapshot/terminal-inspect.json",
+          "kind": "process_receipt",
+          "locator": "Id/State/Config/Mounts/HostConfig",
+          "observation": "Actual root-owned independent evaluator base naturally exited0; readonly source/raw, fresh writable results, networknone8CPU; new output archive and stdout are independently read."
+        },
+        {
+          "path": "base-addendum/snapshot/results/base/run.json",
+          "kind": "process_receipt",
+          "locator": "command/dependencies/parameters/phases/native_solver/comparison_runs/timing",
+          "observation": "This JSON is now bound to the actual independent base process and its stdout/native logs, not treated as self-authenticating metadata."
+        },
+        {
+          "path": "base-addendum/arithmetic-and-process-assessment.json",
+          "kind": "business_oracle",
+          "locator": "all28 checks / costs / fixed gap / native vs exact distinctions",
+          "observation": "Full independent new primary and alternative raw/action ledger/summary recurrence passed; real numeric CLI source/input/output association checked."
+        },
+        {
+          "path": "base-addendum/snapshot/results/base/baseline.json",
+          "kind": "process_receipt",
+          "locator": "native_solver status/objective/bound; algorithm",
+          "observation": "Actually executed baseline infeasible with honest null primal/bound, not an asserted baseline cost."
+        }
+      ]
+    },
+    {
+      "id": "D10",
+      "judgement": "full",
+      "observation": "Actual working directory /project, executable /opt/cpsat/bin/python, raw /raw and new /results/base match run/manifest. Dependencies match Python3.11.13,NumPy2.4.6,SciPy1.15.3,ORtools9.15.6755,Matplotlib3.10.3,HiGHS1.8.0. Real default stages were600s8worker initial-first-feasible,3x180s1thread conditional,300s1thread unrestricted, gap.001 and seed20261030; these are candidate solver parameters, not user total budgets.",
+      "evidence": [
+        {
+          "path": "base-addendum/snapshot/terminal-inspect.json",
+          "kind": "process_receipt",
+          "locator": "Id/State/Config/Mounts/HostConfig",
+          "observation": "Actual root-owned independent evaluator base naturally exited0; readonly source/raw, fresh writable results, networknone8CPU; new output archive and stdout are independently read."
+        },
+        {
+          "path": "base-addendum/snapshot/launch.json",
+          "kind": "process_receipt",
+          "locator": "command/source_files/exitcode/stdout",
+          "observation": "Exact CID and real source-only argv bind the run; sole12 source/docs/dependency/test files match sealed source bytes."
+        },
+        {
+          "path": "base-addendum/snapshot/results/base/run.json",
+          "kind": "process_receipt",
+          "locator": "command/dependencies/parameters/phases/native_solver/comparison_runs/timing",
+          "observation": "This JSON is now bound to the actual independent base process and its stdout/native logs, not treated as self-authenticating metadata."
+        },
+        {
+          "path": "base-addendum/checks.json",
+          "kind": "source_audit",
+          "locator": "all12mounted_source_files_match_actual_sealed; raw/command/dependencies/native/baseline/archive checks",
+          "observation": "Actual cold source/data/output/process artifacts inspected;57 archive member bytes and12 source files match declared objects without correctness-by-checksum."
+        }
+      ]
+    },
+    {
+      "id": "E01",
+      "judgement": "full",
+      "observation": "The previously mathematically verified executable JIT baseline is now actually reached within the independently completed raw/source reproduction: same full joint model plus zero end-FG every week. Fresh baseline.json and native baseline-solver.log record presolve Infeasible in.0030178s and null cost/bound. Week6 P0 has positive10/10/11 demand but its sole qualified F0 has0hours and JIT prevents prior stock, independently proving the same infeasibility. Correctly no feasible baseline cost is invented.",
+      "evidence": [
+        {
+          "path": "base-addendum/snapshot/terminal-inspect.json",
+          "kind": "process_receipt",
+          "locator": "Id/State/Config/Mounts/HostConfig",
+          "observation": "Actual root-owned independent evaluator base naturally exited0; readonly source/raw, fresh writable results, networknone8CPU; new output archive and stdout are independently read."
+        },
+        {
+          "path": "SOURCE-AUDIT.md",
+          "kind": "source_audit",
+          "locator": "reproduce/model/export/accounting/report entry",
+          "observation": "Previously inspected same sealed source creates fresh raw-derived model and fresh same-invocation incumbents, not old result reads."
+        },
+        {
+          "path": "base-addendum/arithmetic-and-process-assessment.json",
+          "kind": "business_oracle",
+          "locator": "all28 checks / costs / fixed gap / native vs exact distinctions",
+          "observation": "Full independent new primary and alternative raw/action ledger/summary recurrence passed; real numeric CLI source/input/output association checked."
+        },
+        {
+          "path": "base-addendum/snapshot/results/base/baseline-solver.log",
+          "kind": "process_receipt",
+          "locator": "Presolve Infeasible / final Solving report",
+          "observation": "Fresh native baseline file is a member of the sealed output of the actual completed independent execution."
+        }
+      ]
+    },
+    {
+      "id": "E02",
+      "judgement": "full",
+      "observation": "Report correctly identifies P0/F0 week6, same-week capacity0 and required prior stock10/10/11. It also explains P3/F1 week9 upper3 (10h/3h), giving required excess through the demand table and formula. Actual prior inventory2/1/2 may exceed necessary1/1/2; it is not mislabelled a unique minimum. Independent raw/ledger arithmetic confirms both bottlenecks.",
+      "evidence": [
+        {
+          "path": "snapshot/delivery/report.md",
+          "kind": "candidate_artifact",
+          "locator": "named report sections and full numeric tables",
+          "observation": "Actual final report read with all delivered materials; no candidate PASS or file presence used as scoring proof."
+        },
+        {
+          "path": "arithmetic-assessment-current.json",
+          "kind": "business_oracle",
+          "locator": "C/gap/alternate; see primary-independent.json, alternative-independent.json and checks.json",
+          "observation": "Exact independent cumulative raw/action accounting for full primary and alternate, complete ledgers and summaries."
+        }
+      ]
+    },
+    {
+      "id": "E03",
+      "judgement": "full",
+      "observation": "A disruption capacity15 is below MOQ20 in orderweeks6-8, excluding its arrivalsweeks7-9; B has lead2 and discrete max70, C is contemporaneous expensive capacity30. Report and DELIVERY explain prebuy/buffer plus C use, distinguish order and arrival windows, avoid sole-cause trajectory claims, and give a complete verified alternative. Independent interruption check finds demand raw-equivalent367, new-arrival upper300 and required prior buffer67; actual87.",
+      "evidence": [
+        {
+          "path": "snapshot/delivery/report.md",
+          "kind": "candidate_artifact",
+          "locator": "named report sections and full numeric tables",
+          "observation": "Actual final report read with all delivered materials; no candidate PASS or file presence used as scoring proof."
+        },
+        {
+          "path": "snapshot/source/DELIVERY.md",
+          "kind": "candidate_artifact",
+          "locator": "immediate execution/interruption operating instructions",
+          "observation": "Complete actionable explanation includes raw-equivalent67 minimum buffer and observed87."
+        },
+        {
+          "path": "arithmetic-assessment-current.json",
+          "kind": "business_oracle",
+          "locator": "C/gap/alternate; see primary-independent.json, alternative-independent.json and checks.json",
+          "observation": "Exact independent cumulative raw/action accounting for full primary and alternate, complete ledgers and summaries."
+        }
+      ]
+    },
+    {
+      "id": "E04",
+      "judgement": "full",
+      "observation": "All three scenarios minimum cash -5369 at week3, credit slack0, are correctly located. Report gives exact delayed-receipt/cost recursion, explains no receipts in first4weeks, locates ledger/weekly fields and distinguishes AR from spendable cash. Independently recomputed final cash32307/31352/32907 and AR24150/24150/25230 agree. Closed explanation does not require copying every ledger value.",
+      "evidence": [
+        {
+          "path": "snapshot/delivery/report.md",
+          "kind": "candidate_artifact",
+          "locator": "named report sections and full numeric tables",
+          "observation": "Actual final report read with all delivered materials; no candidate PASS or file presence used as scoring proof."
+        },
+        {
+          "path": "arithmetic-assessment-current.json",
+          "kind": "business_oracle",
+          "locator": "C/gap/alternate; see primary-independent.json, alternative-independent.json and checks.json",
+          "observation": "Exact independent cumulative raw/action accounting for full primary and alternate, complete ledgers and summaries."
+        },
+        {
+          "path": "handoff-checks.json",
+          "kind": "business_oracle",
+          "locator": "all960_operator_rows_exact; all48_whole_weekly_rows_exact; printed_common_week_0..3",
+          "observation": "All actionable instructions and whole-week tables reconstructed from raw and plan; repeated supplier truck switch is not summed per raw."
+        }
+      ]
+    },
+    {
+      "id": "E05",
+      "judgement": "full",
+      "observation": "Largest expected component is purchase180742/5=36148.4, share361484/476415≈75.88% of47641.5. Other components5286,29004/5,4063/10 close exactly. Actions/units/package and source map trace purchase cost to full supplier orders; explanation includes whole-package, freight, lead-time and holding tradeoffs.",
+      "evidence": [
+        {
+          "path": "snapshot/delivery/report.md",
+          "kind": "candidate_artifact",
+          "locator": "named report sections and full numeric tables",
+          "observation": "Actual final report read with all delivered materials; no candidate PASS or file presence used as scoring proof."
+        },
+        {
+          "path": "arithmetic-assessment-current.json",
+          "kind": "business_oracle",
+          "locator": "C/gap/alternate; see primary-independent.json, alternative-independent.json and checks.json",
+          "observation": "Exact independent cumulative raw/action accounting for full primary and alternate, complete ledgers and summaries."
+        },
+        {
+          "path": "handoff-checks.json",
+          "kind": "business_oracle",
+          "locator": "all960_operator_rows_exact; all48_whole_weekly_rows_exact; printed_common_week_0..3",
+          "observation": "All actionable instructions and whole-week tables reconstructed from raw and plan; repeated supplier truck switch is not summed per raw."
+        }
+      ]
+    },
+    {
+      "id": "E06",
+      "judgement": "full",
+      "observation": "A distinct full policy is independently feasible and costs95839/2=47919.5. It moves one10-unit R0 package per scenario from B/week13 to C/week15; receipts/production/inventory remain equal, payment/commitment moves2weeks later. Premiums290/290/230 and expected278 match whole-policy calculation. demand_shift already had that C truck, so no extra freight there; late flexibility does not improve week3 liquidity.",
+      "evidence": [
+        {
+          "path": "snapshot/delivery/report.md",
+          "kind": "candidate_artifact",
+          "locator": "named report sections and full numeric tables",
+          "observation": "Actual final report read with all delivered materials; no candidate PASS or file presence used as scoring proof."
+        },
+        {
+          "path": "arithmetic-assessment-current.json",
+          "kind": "business_oracle",
+          "locator": "C/gap/alternate; see primary-independent.json, alternative-independent.json and checks.json",
+          "observation": "Exact independent cumulative raw/action accounting for full primary and alternate, complete ledgers and summaries."
+        },
+        {
+          "path": "handoff-checks.json",
+          "kind": "business_oracle",
+          "locator": "exact_reported_spot_move_*; all_three_cost_premiums_and_expected278",
+          "observation": "All actual alternative controls and costs checked, not a prose-only strategy."
+        }
+      ]
+    },
+    {
+      "id": "F01",
+      "judgement": "full",
+      "observation": "All common weeks0-3 procurement packages, shared truck switches and qualified per-plant production are accurately locatable in report, complete plan and operator table. Catalogue IDs/indices, units, zero-based weeks and common information set are explicit; four printed rows and all operator rows match the actual plan. Repeated truck switch per raw is explicitly one supplier-week instruction.",
+      "evidence": [
+        {
+          "path": "snapshot/delivery/report.md",
+          "kind": "candidate_artifact",
+          "locator": "named report sections and full numeric tables",
+          "observation": "Actual final report read with all delivered materials; no candidate PASS or file presence used as scoring proof."
+        },
+        {
+          "path": "handoff-checks.json",
+          "kind": "business_oracle",
+          "locator": "all960_operator_rows_exact; all48_whole_weekly_rows_exact; printed_common_week_0..3",
+          "observation": "All actionable instructions and whole-week tables reconstructed from raw and plan; repeated supplier truck switch is not summed per raw."
+        },
+        {
+          "path": "snapshot/source/README.md",
+          "kind": "candidate_artifact",
+          "locator": "Execution; method; operator contract; declared staged defaults",
+          "observation": "Readable cold-run instructions and algorithm/resource disclosure exist; successful independent execution is not yet authenticated."
+        }
+      ]
+    },
+    {
+      "id": "F02",
+      "judgement": "full",
+      "observation": "At the start of week4 choose actual scenario ID and execute its complete remaining policy; orders already placed keep their lead-time arrivals. All three post-reveal branches have complete action rows and plan tensors with correct units/identities and information-set flags. Both policies preserve the common prefix, and text says select one complete policy, not splice them.",
+      "evidence": [
+        {
+          "path": "snapshot/delivery/report.md",
+          "kind": "candidate_artifact",
+          "locator": "named report sections and full numeric tables",
+          "observation": "Actual final report read with all delivered materials; no candidate PASS or file presence used as scoring proof."
+        },
+        {
+          "path": "handoff-checks.json",
+          "kind": "business_oracle",
+          "locator": "all960_operator_rows_exact; all48_whole_weekly_rows_exact; printed_common_week_0..3",
+          "observation": "All actionable instructions and whole-week tables reconstructed from raw and plan; repeated supplier truck switch is not summed per raw."
+        },
+        {
+          "path": "snapshot/source/README.md",
+          "kind": "candidate_artifact",
+          "locator": "Execution; method; operator contract; declared staged defaults",
+          "observation": "Readable cold-run instructions and algorithm/resource disclosure exist; successful independent execution is not yet authenticated."
+        }
+      ]
+    },
+    {
+      "id": "F03",
+      "judgement": "full",
+      "observation": "Report/README/DELIVERY honestly separate feasible time-limited incumbent, conditional versus global numerical bounds, and lack of rational or exact-optimal proof; external score/reference unknown. It correctly separates AR and cash, failed earlier policies, finite self-control scope and tradeoff limits, and warns self-run intervals overlap rather than summing them. Numerical native gap is not substituted for evaluator fixed47380 quality.",
+      "evidence": [
+        {
+          "path": "snapshot/delivery/report.md",
+          "kind": "candidate_artifact",
+          "locator": "named report sections and full numeric tables",
+          "observation": "Actual final report read with all delivered materials; no candidate PASS or file presence used as scoring proof."
+        },
+        {
+          "path": "snapshot/source/README.md",
+          "kind": "candidate_artifact",
+          "locator": "Execution; method; operator contract; declared staged defaults",
+          "observation": "Readable cold-run instructions and algorithm/resource disclosure exist; successful independent execution is not yet authenticated."
+        },
+        {
+          "path": "snapshot/delivery/run.json",
+          "kind": "candidate_artifact",
+          "locator": "native_solver,algorithm,phases,parameters,command,timing",
+          "observation": "Sealed self-delivered process metadata internally matches logs and source; not an independently closed evaluator execution."
+        },
+        {
+          "path": "arithmetic-assessment-current.json",
+          "kind": "business_oracle",
+          "locator": "C/gap/alternate; see primary-independent.json, alternative-independent.json and checks.json",
+          "observation": "Exact independent cumulative raw/action accounting for full primary and alternate, complete ledgers and summaries."
+        }
+      ]
+    },
+    {
+      "id": "F04",
+      "judgement": "full",
+      "observation": "Actual tools.view_image display of all three final PNGs shows readable scenario labels, axes/units and legends for cash/AR, supplier order volumes, stage peaks/end inventory/caps. Curves/bars agree with exact source ledger and inspected report; input/figure data are not accepted by filename alone.",
+      "evidence": [
+        {
+          "path": "manual-visual-review.json",
+          "kind": "rendered_figure",
+          "locator": "all three actual_viewed records",
+          "observation": "Actual rendered pixels viewed; independent ledger reconstruction and source figure mapping confirm the data."
+        },
+        {
+          "path": "arithmetic-assessment-current.json",
+          "kind": "business_oracle",
+          "locator": "C/gap/alternate; see primary-independent.json, alternative-independent.json and checks.json",
+          "observation": "Exact independent cumulative raw/action accounting for full primary and alternate, complete ledgers and summaries."
+        }
+      ]
+    },
+    {
+      "id": "F05",
+      "judgement": "full",
+      "observation": "Another executor actually followed the README default raw/source command with its declared dependency image and a new output directory. No dependency/command amendment was needed. The evaluator mounted only source/raw, completed naturally and produced normalized/plan/ledger/summary/run/manifest/report/three actual PNGs plus executable baseline and full alternative, independently verified. Reconstruction need not reproduce identical optimizer decisions.",
+      "evidence": [
+        {
+          "path": "base-addendum/snapshot/terminal-inspect.json",
+          "kind": "process_receipt",
+          "locator": "Id/State/Config/Mounts/HostConfig",
+          "observation": "Actual root-owned independent evaluator base naturally exited0; readonly source/raw, fresh writable results, networknone8CPU; new output archive and stdout are independently read."
+        },
+        {
+          "path": "base-addendum/snapshot/launch.json",
+          "kind": "process_receipt",
+          "locator": "command/source_files/exitcode/stdout",
+          "observation": "Exact CID and real source-only argv bind the run; sole12 source/docs/dependency/test files match sealed source bytes."
+        },
+        {
+          "path": "SOURCE-AUDIT.md",
+          "kind": "source_audit",
+          "locator": "reproduce/model/export/accounting/report entry",
+          "observation": "Previously inspected same sealed source creates fresh raw-derived model and fresh same-invocation incumbents, not old result reads."
+        },
+        {
+          "path": "base-addendum/arithmetic-and-process-assessment.json",
+          "kind": "business_oracle",
+          "locator": "all28 checks / costs / fixed gap / native vs exact distinctions",
+          "observation": "Full independent new primary and alternative raw/action ledger/summary recurrence passed; real numeric CLI source/input/output association checked."
+        },
+        {
+          "path": "snapshot/source/README.md",
+          "kind": "candidate_artifact",
+          "locator": "Execution + staged default method",
+          "observation": "Exact instructions used by the actual independent executor, rather than a proposed or active launch."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "stage": "L02 study protocol plan plus local metric primitive after declaration repair",
+  "blocking_current_reviewed_scope": [],
+  "resolved_design_ambiguities": [
+    {
+      "id": "scale_visibility",
+      "resolution": "Evaluator scoring/eligible2024+selector only; no2023 forecast worker use of later-published2023 scale"
+    },
+    {
+      "id": "metric_scaling",
+      "resolution": "MSE=((mean-y)/s)^2; WIS_scaled=WIS/s, positive fixed historical scales"
+    },
+    {
+      "id": "failure_denominator",
+      "resolution": "Fixed complete grids; no dropping failed inner cells; eligibility/obligations must be explicit before runner execution"
+    }
+  ],
+  "actual_P2_found_and_repaired": {
+    "id": "ignored_interval_metric_declaration",
+    "initial": "raw_wis declaration actually scored as scaled_wis/exit0",
+    "repaired": "same original input ->facility_study_invalid/exit3; necessary correct nonunit passes"
+  },
+  "actual_hand_math": {
+    "checks": 21,
+    "all_passed": true,
+    "earliest_inner": "2024-09-25T09:00:00Z",
+    "min_inner_terminal_margin_hours": 483,
+    "actual2023_scale_row_count": 1460
+  },
+  "actual_initial_metric_CLIs": 6,
+  "initial_metric_seconds": 1.3233369998633862,
+  "actual_repaired_CLIs": 2,
+  "repair_all_passed": true,
+  "repair_seconds": 0.3062645001336932,
+  "repaired_source_matches_current": true,
+  "new_cutoff_export_executed": false,
+  "new_forecast_workers": 0,
+  "selector_executed": false,
+  "full_matrix_executed": false,
+  "quality_floor": null,
+  "full_case_rubric_or_freeze_approved": false,
+  "candidate_score": null,
+  "hours_or_statistical_maturity_claim": false,
+  "new_solver_Docker_Provider_GPU_UI_or_user_process_calls": 0,
+  "delegations": 0,
+  "repository_edits": 0,
+  "completed_utc": "2026-10-30T02:41:48.776003+00:00"
+}

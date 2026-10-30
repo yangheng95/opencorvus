@@ -1,0 +1,53 @@
+{
+  "case": "L06/0.2.0",
+  "frozen_public_commit": "2e6ffc7cef7ed33a3b60d6e2d17ca2e530e165c6",
+  "pre_registered_good": ">=90 and all28critical verified_pass; independent source-only base plus registered quote and row controls",
+  "opencorvus": {
+    "total_score": 100,
+    "business_success": true,
+    "good": true,
+    "counts": {
+      "verified_pass": 47,
+      "verified_partial": 0,
+      "verified_fail": 0,
+      "candidate_incomplete": 0,
+      "blocked_candidate": 0,
+      "unassessed": 0
+    }
+  },
+  "codex": {
+    "total_score": 100,
+    "business_success": true,
+    "good": true,
+    "counts": {
+      "verified_pass": 47,
+      "verified_partial": 0,
+      "verified_fail": 0,
+      "candidate_incomplete": 0,
+      "blocked_candidate": 0,
+      "unassessed": 0
+    }
+  },
+  "actual_OpenCorvus": {
+    "mode": "Task/code/builtin/base2026.10.14.1",
+    "model": "gpt-6.1-sol",
+    "actors": [
+      "orchestrator",
+      "base-developer",
+      "base-tester"
+    ],
+    "streaming": true
+  },
+  "actual_Codex_model": null,
+  "actual_Codex_usage": null,
+  "comparable": false,
+  "comparison_limit": "native resource/OS isolation unqualified; Codex actual model/usage unknown; nonblind AI reviewer familiar with reference and OC result",
+  "upgrade_required": true,
+  "upgrade_target": "separate L06/0.3 construction; old public/rubric/FREEZE and grades preserved",
+  "effective_hours_qualified": false,
+  "suite_frozen_cases": 1,
+  "suite_total_cases": 10,
+  "suite_effective_hour_cases": 0,
+  "timing_limit": "OC guard/Provider interference retained; candidate observed windows and evaluator/parallel CPU time do not prove intrinsic several hours",
+  "recorded_utc": "2026-10-30T02:45:39.942883+00:00"
+}
