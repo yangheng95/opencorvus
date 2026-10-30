@@ -1,0 +1,89 @@
+{
+  "at": "2026-10-30T11:15:56.198Z",
+  "checks": {
+    "tests-verified": {
+      "label": "tests-verified",
+      "startedAt": 1793358324344,
+      "closedAt": 1793358331745,
+      "code": 0,
+      "signal": null,
+      "childPID": 19940
+    },
+    "types-verified": {
+      "label": "types-verified",
+      "startedAt": 1793358324344,
+      "closedAt": 1793358353123,
+      "code": 0,
+      "signal": null,
+      "childPID": 95072
+    },
+    "build-verified": {
+      "label": "build-verified",
+      "startedAt": 1793358324320,
+      "closedAt": 1793358395011,
+      "code": 0,
+      "signal": null,
+      "childPID": 37624
+    },
+    "i18n-after": {
+      "label": "i18n-after",
+      "startedAt": 1793357512503,
+      "closedAt": 1793357514322,
+      "code": 0,
+      "signal": null,
+      "childPID": 97436
+    },
+    "source-verified": {
+      "label": "source-verified",
+      "startedAt": 1793358518355,
+      "closedAt": 1793358519939,
+      "code": 0,
+      "signal": null,
+      "childPID": 99304
+    },
+    "tests-final": {
+      "label": "tests-final",
+      "startedAt": 1793359029122,
+      "closedAt": 1793359033403,
+      "code": 0,
+      "signal": null,
+      "childPID": 80764
+    },
+    "docs-final": {
+      "label": "docs-final",
+      "startedAt": 1793358956357,
+      "closedAt": 1793358964602,
+      "code": 0,
+      "signal": null,
+      "childPID": 76408
+    }
+  },
+  "focusedTests": {
+    "pass": 22,
+    "fail": 0,
+    "assertions": 47,
+    "files": 3
+  },
+  "i18n": {
+    "locales": 2,
+    "keys": 2638
+  },
+  "frozenUI": "main-B72V-3pp.js",
+  "visualReview": {
+    "method": "actual isolated native /ui interactions and personally viewed screenshots",
+    "screenshots": 17,
+    "failedCandidateScreenshot": 9,
+    "finalScreenshots": [
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17
+    ]
+  },
+  "providerRequests": 0,
+  "finalSourceReview": "Import declaration moved to module header and EOF whitespace repaired after visual verification; focused pure tests rerun successfully."
+}

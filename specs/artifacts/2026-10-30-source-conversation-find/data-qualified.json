@@ -1,0 +1,224 @@
+{
+  "at": "2026-10-30T11:13:47.383Z",
+  "database": [
+    {
+      "phase": "source",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 204873,
+      "rows": 204873,
+      "allOriginalValues": "exact native SQLite EXCEPT including TEXT/BLOB",
+      "additions": []
+    },
+    {
+      "phase": "before",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 204873,
+      "rows": 204875,
+      "allOriginalValues": "exact native SQLite EXCEPT including TEXT/BLOB",
+      "additions": [
+        {
+          "table": "engine_control_activation_lease",
+          "rows": 1
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "rows": 1
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 204873,
+      "rows": 204877,
+      "allOriginalValues": "exact native SQLite EXCEPT including TEXT/BLOB",
+      "additions": [
+        {
+          "table": "engine_control_activation_lease",
+          "rows": 2
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "rows": 2
+        }
+      ]
+    },
+    {
+      "phase": "verified",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 204873,
+      "rows": 204879,
+      "allOriginalValues": "exact native SQLite EXCEPT including TEXT/BLOB",
+      "additions": [
+        {
+          "table": "engine_control_activation_lease",
+          "rows": 3
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "rows": 3
+        }
+      ]
+    }
+  ],
+  "attachments": [
+    {
+      "phase": "before",
+      "files": 17,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "before",
+      "files": 10,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "before",
+      "files": 16,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "before",
+      "files": 24,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "before",
+      "files": 6,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "before",
+      "files": 2,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 17,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 10,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 16,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 24,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 6,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "after",
+      "files": 2,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "verified",
+      "files": 17,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "verified",
+      "files": 10,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "verified",
+      "files": 16,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "verified",
+      "files": 24,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "verified",
+      "files": 6,
+      "sourceAndCopyBytes": "exact"
+    },
+    {
+      "phase": "verified",
+      "files": 2,
+      "sourceAndCopyBytes": "exact"
+    }
+  ],
+  "physical": [
+    {
+      "phase": "before",
+      "providerRequests": 0,
+      "cumulativeRequests": 1083,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "reserveMs": 3161162,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0
+    },
+    {
+      "phase": "after",
+      "providerRequests": 0,
+      "cumulativeRequests": 1083,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "reserveMs": 2969968,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0
+    },
+    {
+      "phase": "verified",
+      "providerRequests": 0,
+      "cumulativeRequests": 1083,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "publicShutdown": 200,
+      "reserveMs": 2513510,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0
+    }
+  ],
+  "projects": 8,
+  "trackedProjectFiles": 28,
+  "gitAndFileBytes": "exact command code/stdout/stderr and original tracked bytes; unborn HEAD preserved",
+  "actualFullHTTP": "before and post-UI selection/transcript/hydration/Goal exact for all four sources",
+  "providerRequests": 0
+}

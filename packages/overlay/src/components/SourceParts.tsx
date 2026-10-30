@@ -1,5 +1,4 @@
 import { Key } from "@solid-primitives/keyed"
-import type { SourceFilePart } from "@opencorvus-ai/sdk"
 import { Match, Show, Switch, onCleanup, onMount, untrack } from "solid-js"
 import { boardStore, selectedTaskDirectory } from "../store/board"
 import { openFileReference, openSourceFileEditor } from "../services/file-workbench"
@@ -23,48 +22,17 @@ import { AppLog } from "../utils/log"
 import { pauseAutoScrollForReading } from "../utils/dom-utils"
 import { createAnimationFrameScheduler } from "../utils/animation-frame"
 import { captureTextReadingAnchor, resolveTextReadingTop } from "../utils/conversation-reading-anchor"
-
-export type ConversationSourcePart = {
-  type: "source-url" | "source-document" | "source-file"
-  sourceId: string
-  sessionID?: string
-  messageID?: string
-  title?: string
-  provider?: string
-  snippet?: string
-  author?: string
-  publishedAt?: string
-  url?: string
-  path?: string
-  mediaType?: string
-  filename?: string
-  origin?: SourceFilePart["origin"]
-  range?: SourceFilePart["range"]
-}
-
-export function isConversationSourcePart(part: any): part is ConversationSourcePart {
-  return part?.type === "source-url" || part?.type === "source-document" || part?.type === "source-file"
-}
-
-function sourceIdentity(source: ConversationSourcePart): string {
-  return JSON.stringify([source.type, source.sessionID ?? null, source.messageID ?? null, source.sourceId])
-}
+import {
+  type ConversationSourcePart,
+  conversationSourceIdentity as sourceIdentity,
+  conversationSourceExcerptKey,
+  conversationSourceLocation as sourceLocation,
+  fileSourceLocation,
+} from "../utils/conversation-source"
 
 function sourceDirectory(): string {
   const source = boardStore.selectedSource
   return source?.directory?.trim() || selectedTaskDirectory().trim()
-}
-
-function fileSourceLocation(label: string, range: ConversationSourcePart["range"]): string {
-  if (!range) return label
-  const lines = range.startLine === range.endLine ? `${range.startLine}` : `${range.startLine}-${range.endLine}`
-  return `${label}:${lines}${range.startColumn === undefined ? "" : `:${range.startColumn}`}`
-}
-
-function sourceLocation(source: ConversationSourcePart): string {
-  if (source.type === "source-url") return source.url || ""
-  if (source.type === "source-file" && source.path) return fileSourceLocation(source.path, source.range)
-  return ""
 }
 
 /** Decode visible international URL text without changing encoded ASCII structure. */
@@ -405,7 +373,7 @@ function SourceExcerptBody(props: { source: ConversationSourcePart }) {
 
 function SourceEntry(props: { source: ConversationSourcePart; index: number; showIndex: boolean; omitDirectoryCaption: boolean }) {
   const expandableExcerpt = () => props.source.type !== "source-file" && Boolean(props.source.snippet)
-  const excerptKey = () => `source-excerpt:${sourceIdentity(props.source)}`
+  const excerptKey = () => conversationSourceExcerptKey(props.source)
   const expanded = () => cardExpanded(excerptKey(), false)
   const excerptLabel = () => `${t("chat.source_excerpt")}: ${sourceLabel(props.source)}`
   const location = () => sourceLocation(props.source)
@@ -426,6 +394,7 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
     <div class="msg-source-entry" data-has-excerpt={expandableExcerpt() ? "true" : undefined}>
       <div
         class="msg-source-entry__row"
+        data-source-id={props.source.sourceId}
         data-source-identity={sourceIdentity(props.source)}
         data-source-message-id={props.source.messageID}
       >
@@ -501,7 +470,8 @@ export function SourceParts(props: { sources: ConversationSourcePart[] }) {
     return t(label, { count: props.sources.length - 1 })
   }
   return (
-    <div ref={group} class="msg-sources" role="group" aria-label={t("chat.sources")} data-ui="message-sources">
+    <div ref={group} class="msg-sources" role="group" aria-label={t("chat.sources")} data-ui="message-sources"
+      data-source-group-key={key()} data-source-ids={JSON.stringify(props.sources.map(source => source.sourceId))}>
       <Key each={props.sources.slice(0, 1)} by={sourceIdentity}>
         {(source) => <SourceEntry source={source()} index={0} showIndex={props.sources.length > 1} omitDirectoryCaption={false} />}
       </Key>

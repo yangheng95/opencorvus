@@ -1,3 +1,5 @@
+import { isConversationSourcePart } from "../utils/conversation-source"
+
 export class ConversationExportError extends Error {
   constructor(readonly code: "INVALID_CONVERSATION_EXPORT" | "CONVERSATION_EXPORT_IDENTITY_MISMATCH", readonly field: string) {
     super(`Conversation export ${code}: ${field}`)
@@ -63,6 +65,23 @@ function readSnapshotMessages(value: unknown, sessionID: string | null) {
       const part = record(value, `${field}.parts[${partIndex}]`)
       text(part.type, `${field}.parts[${partIndex}].type`)
       if (part.type === "text" && typeof part.text !== "string") return invalid(`${field}.parts[${partIndex}].text`)
+      if (isConversationSourcePart(part)) {
+        const sourceField = `${field}.parts[${partIndex}]`
+        text(part.sourceId, `${sourceField}.sourceId`)
+        if (part.type === "source-url") text(part.url, `${sourceField}.url`)
+        if (part.type === "source-file") text(part.path, `${sourceField}.path`)
+        for (const key of ["title", "filename", "snippet", "author", "provider", "publishedAt", "mediaType"]) {
+          if (part[key] !== undefined && typeof part[key] !== "string") return invalid(`${sourceField}.${key}`)
+        }
+        if (part.range !== undefined) {
+          const range = record(part.range, `${sourceField}.range`)
+          for (const key of ["startLine", "endLine", ...(range.startColumn === undefined ? [] : ["startColumn"])]) {
+            if (!Number.isSafeInteger(range[key]) || Number(range[key]) < 1) return invalid(`${sourceField}.range.${key}`)
+          }
+          if (Number(range.endLine) < Number(range.startLine)) return invalid(`${sourceField}.range.endLine`)
+          if (range.startColumn !== undefined && range.startLine !== range.endLine) return invalid(`${sourceField}.range.startColumn`)
+        }
+      }
       return part
     })
     return { original, info, id, author, created, parts }

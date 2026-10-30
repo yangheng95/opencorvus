@@ -43,6 +43,7 @@ import {
 import { SubagentProgressGrid } from "./SubagentProgressGrid"
 import { ConversationCard } from "./ConversationCard"
 import { ConversationArtifactSummary } from "./ConversationArtifactSummary"
+import { revealConversationSource } from "../utils/conversation-source-navigation"
 import type { ComposerIntent } from "@opencorvus-ai/transport-protocol"
 
 const ESTIMATED_CARD_HEIGHT = 320
@@ -275,6 +276,8 @@ function VirtualizedConversationCards(props: {
 
   const scrollCardIntoView = async (request: ConversationCardScrollRequest): Promise<boolean> => {
     if (!virtualizer) return false
+    const authority = captureApiAuthority(), epoch = boardStore.selectEpoch
+    const owns = () => boardStore.selectEpoch === epoch && isApiAuthorityCurrent(authority)
     const target = scrollTarget(request.cardID)
     if (!target) return false
     const index = order().indexOf(target.itemID)
@@ -285,20 +288,31 @@ function VirtualizedConversationCards(props: {
     props.onCardScrollRequest(request)
     // Restoring a message offset needs the real target mounted, without an
     // outstanding index alignment that can overwrite the reader on resize.
-    if (request.readingRestore) return !!await waitForScrollTargetElement(target.cardID)
+    if (request.readingRestore) return !!await waitForScrollTargetElement(target.cardID) && owns()
     virtualizer.scrollToIndex(index, {
       align: request.block ?? "start",
       smooth: false,
     })
     const cardElement = await waitForScrollTargetElement(target.cardID)
-    if (!cardElement) return false
+    if (!cardElement || !owns()) return false
     if (request.messageID && target.sessionID) {
       return requestConversationCardScroll({ ...request, surface: "subagent", sessionID: target.sessionID })
     }
-    const element = request.messageID
+    let element = request.messageID
       ? cardElement.querySelector<HTMLElement>(`[data-message-id="${CSS.escape(request.messageID)}"]`)
       : cardElement
     if (!element) return false
+    if (request.sourceId) {
+      const sourceElement = revealConversationSource(element, request.sourceId)
+      if (!sourceElement) return false
+      element = sourceElement()
+      for (let frame = 0; !element && frame < CARD_SCROLL_TARGET_MAX_FRAMES; frame++) {
+        await waitForAnimationFrame()
+        if (!owns()) return false
+        element = sourceElement()
+      }
+    }
+    if (!element?.isConnected || !owns()) return false
     element.scrollIntoView({
       block: request.block ?? "start",
       inline: "nearest",

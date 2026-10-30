@@ -34,8 +34,12 @@ Session snapshot; Task reads its existing complete project-scoped transcript
 with every participant's original Session identity. One message-array validator
 preserves original records and producer order, with strict single-Session
 ownership retained for Session snapshots and downloads.
-Search matches original message text and structured error reasons, in producer
-order, independently of mounted cards. Refresh obtains a current snapshot.
+Search matches original message text, saved Source titles, locations and excerpts,
+and structured error reasons in producer Part order, independently of mounted
+cards. Source identity, address, optional text and line-range validation belongs
+to that same snapshot reader. A hit retains its original Message and, when the
+match starts in a Source, that Source ID. Source previews use only that saved
+Source's context. Refresh obtains a current snapshot.
 Navigation resolves the actual writer-owned message/card target, joins any
 same-source/authority older-page read, then uses the existing expansion and
 virtualized scroll mechanism. A message request expands its delegated context
@@ -43,6 +47,13 @@ and locates the original message run. Participant messages pass that same reques
 to the selected subagent transcript reader, which waits for its owned resource,
 releases follow and locates the actual message instead of accepting its summary
 card as completion. Source changes and failed reads retire that navigation.
+Source hits reveal their existing adjacent disclosure and locate the actual row
+inside that Message. Main and member readers share the mounted source resolver;
+derived group metadata points at the same disclosure state, without duplicating
+source records or introducing another scroll owner. Saved web/document excerpts
+open through their existing Source identity. File excerpts retain their current
+Tooltip and original-file navigation. Location formatting and identity are shared
+by source presentation, copy and search; no fresh file or web fetch builds search.
 The member navigation owner retains its first landing Promise until settlement;
 subsequent transcript revisions update the displayed content while that same
 operation completes. Rejection settles the original request under its owner.

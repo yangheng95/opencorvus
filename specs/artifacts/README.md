@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [对话原来源查找实页证据](2026-10-30-source-conversation-find/README.md)：原来源检索、预览边界、实际定位、中英界面与数据保全。
+
 - [首页与目标预算实页复核](2026-10-30-home-goal-form-review/README.md)：首页、草稿、预算校验及中英额度摘要。
 
 - [原消息定位请求归属验收](2026-10-30-conversation-navigation-lifetime/README.md)：原会话和参与者定位、关闭/重开及数据保全。

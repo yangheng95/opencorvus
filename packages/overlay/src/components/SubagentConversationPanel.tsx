@@ -34,6 +34,7 @@ import { listenConversationCardScroll, type ConversationCardScrollRequest } from
 import { captureConversationReadingAnchor, resolveConversationReadingTop } from "../utils/conversation-reading-anchor"
 import type { ConversationReadingPosition } from "../store/conversation-ui"
 import { createAnimationFrameScheduler } from "../utils/animation-frame"
+import { revealConversationSource } from "../utils/conversation-source-navigation"
 import { t } from "../utils/i18n"
 import {
   isSubagentActivityRecord,
@@ -106,15 +107,20 @@ function SubagentConversationScroll(props: {
   }
 
   const [navigationRevision, setNavigationRevision] = createSignal(0)
-  let requestedNavigation: { request: ConversationCardScrollRequest; resolve: (found: boolean) => void } | undefined
+  let requestedNavigation: {
+    request: ConversationCardScrollRequest; resolve: (found: boolean) => void; element: () => HTMLElement | null
+  } | undefined
 
   props.registerNavigation((request) => {
     if (!props.active() || !scrollElement || !request.messageID || props.conversation().sessionID !== request.sessionID) return Promise.resolve(false)
     const element = scrollElement.querySelector<HTMLElement>(`[data-message-id="${CSS.escape(request.messageID)}"]`)
     if (!element || element.getBoundingClientRect().height <= 0) return Promise.resolve(false)
+    const target = request.sourceId ? revealConversationSource(element, request.sourceId)
+      : () => scrollElement?.querySelector<HTMLElement>(`[data-message-id="${CSS.escape(request.messageID!)}"]`) ?? null
+    if (!target) return Promise.resolve(false)
     requestedNavigation?.resolve(false)
     return new Promise<boolean>((resolve) => {
-      requestedNavigation = { request, resolve }
+      requestedNavigation = { request, resolve, element: target }
       setNavigationRevision(value => value + 1)
     })
   })
@@ -128,7 +134,7 @@ function SubagentConversationScroll(props: {
       if (!layoutRoot) throw new Error("Sub-agent conversation requires its right dock layout owner")
       const navigation = requestedNavigation
       requestedNavigation = undefined
-      const messageElement = () => navigation && scrollElement?.querySelector<HTMLElement>(`[data-message-id="${CSS.escape(navigation.request.messageID!)}"]`)
+      const messageElement = () => navigation?.element()
       const messageTop = () => {
         const element = messageElement()
         return element && scrollElement && element.getBoundingClientRect().height > 0

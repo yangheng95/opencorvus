@@ -17,6 +17,7 @@ import { setCardExpanded, setConversationDisclosureExpanded } from "../store/con
 import { parentIDChainForCard } from "../utils/card-tree"
 import { getLocale, t } from "../utils/i18n"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
+import { conversationSourceExcerptKey, isConversationSourcePart } from "../utils/conversation-source"
 
 export function ConversationSearchDialog(props: {
   open: boolean
@@ -109,7 +110,11 @@ export function ConversationSearchDialog(props: {
       if (!target) throw new Error("Original message has no rendered target")
       for (const id of [...parentIDChainForCard(target.renderedCardID), target.renderedCardID]) setCardExpanded(id, true)
       setConversationDisclosureExpanded(`delegated-context:message:${hit.id}`, true)
-      const found = await requestConversationCardScroll({ cardID: target.renderedCardID, messageID: hit.id, sessionID: target.sessionID, block: "start", highlight: true })
+      const sourcePart = message.parts.find(part => isConversationSourcePart(part) && part.sourceId === hit.sourceId)
+      if (sourcePart && isConversationSourcePart(sourcePart) && sourcePart.type !== "source-file" && sourcePart.snippet) {
+        setCardExpanded(conversationSourceExcerptKey(sourcePart), true)
+      }
+      const found = await requestConversationCardScroll({ cardID: target.renderedCardID, messageID: hit.id, sourceId: hit.sourceId, sessionID: target.sessionID, block: "start", highlight: true })
       if (!owns()) return
       if (!found) throw new Error("Original message could not be located")
       props.onClose()
