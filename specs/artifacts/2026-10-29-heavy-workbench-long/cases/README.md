@@ -19,3 +19,6 @@
 
 
 L02当前[报告来源组件](L02/evaluator/qualification/report-provenance/README.md)接通原数值输出/收窄native事实与实际图表、原prepared恢复及只读同矩阵重建。它不替代正式新12outer研究、全grader/多质量审查/冻结；套件仍冻结1/10、有效小时0/10。
+
+
+L02[状态/评估原对象与stage绑定](L02/evaluator/qualification/grade-protocol/README.md)已有限定实测，初反例保留。40研究锚点含38独立内容与C01/C02机器，Q26不变；完整科学参考/校准及新正式全12仍待，不能把partial接口通过当case冻结。

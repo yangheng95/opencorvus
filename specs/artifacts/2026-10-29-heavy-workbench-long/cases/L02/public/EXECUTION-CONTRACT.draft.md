@@ -36,6 +36,10 @@
 
 输入在prepared原子发布时固定，只有原prepared尚未存在才调用唯一输入factory。已有原prepared，即使数据库仍为planned，也继续其原输入，不按新版host代码重造或追加sidecar。恢复仍核原程序/source与实际物化输入；forecast实际捕获的packet按独立许可集合与assignment核验，selector捕获的已发布inner事实/预测与原数值对象核验。当前只是任意输入文件map新增文件，表结构、phase、registration和results格式均未演进，故保留schema1；历史原report只得到results.json的事实如实记为`report_provenance.status=not_delivered`，不补造新材料、不给推测分数。
 
-成功和失败均先封存真实终态/输出。验收通过的accepted对象原子落盘后才提交verified，随后精确清理原容器；恢复从accepted对象读取，不用后来被编辑的working文件。退出非零或坏输出是候选执行失败，即使stdout自称`run_invalid`也不能免除。未执行的依赖单元保持未评，不按首错判整组通过或伪造它们已失败。归档/设施损坏具名`facility_*`，无候选分；失败单元不自动换程序或重试。
+成功和失败均先封存真实终态/输出。验收通过的accepted对象原子落盘后才提交verified，随后精确清理原容器；恢复从accepted对象读取，不用后来被编辑的working文件。已认证的程序非零退出或明确坏输出可归候选，即使stdout自称`run_invalid`也不能免除。未知host validator异常、损坏/漂移对象、OOM或外部终止原因未明保持设施调查/无分；不能将未知异常默认归候选。
+
+原native生命周期未执行就仍是未执行，不伪造failed。评估叶只有真实必要候选依赖缺交才可blocked_candidate并列原根因；例如selector所需inner预测已证失败，report所需numeric未交。各预测不因其它方法或selector失败自动失败，独立未调度仍unassessed。固定分母不等于把首错之后所有格置零。候选缺交、依赖阻断、评估未完成及设施无效分开记录。归档/设施错误具名`facility_*`，失败单元不自动换程序或重跑。
 
 数值`requested_execution_complete`只表示请求矩阵和报告传输已验收；`complete_assignment`只表示网格覆盖，`formal_full_assignment`另核权威日程和正式注册身份，私有诊断即使覆盖全网格也不当正式候选。唯一只读sealed reader从原SQLite/registration/prepared/accepted重建同一数值矩阵及实际report来源覆盖，不从working或外部新索引补造。`study_complete`、`quality_success`、`candidate_score`仍须完整冻结rubric与科学/业务审查，当前为null。没有最低时长或用户总墙钟/token截断；进程崩溃资格不冒充掉电耐久、跨平台实跑、研究质量或有效小时认证。
+
+[逐叶研究锚点](REVIEW-ANCHORS.draft.md)公开二元实质边界、等价格式和真实依赖。它不把程序exit0或一个合格来源schema当作全部科学结论通过；当前仍未冻结，不能借建设稿发布候选成绩。

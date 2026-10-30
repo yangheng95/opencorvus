@@ -22,3 +22,10 @@ python current-source/summarize_l02_study.py --run <原运行目录> --out <全�
 [质量/研究交付资格](qualification/quality-study/README.md)只读复用原真实数值：事前固定外部baseline政策、单期成本/分位策略、真实26条件和坏对照、原registry身份/同义行序与设施优先级。`l02_quality.py`是唯一loss/质量primitive，`l02_rubric.py`仅聚合可信评估状态，不接受candidate自评或代替完整grader。`quality-policy.draft.json`和`../rubric.draft.json`仍未冻结；实际研究分析、精确表和新图不是新正式清洁pipeline或候选分数。
 
 [报告来源与原输入恢复](qualification/report-provenance/README.md)新增prepare-once、原captured packet/inner绑定和`l02_report`最小来源包；`l02_pipeline`是执行/审计共用的唯一矩阵组装，`l02_sealed.read_completed`供只读summary及后续正式grader使用。原schema1对象保留原输入，历史report未见新来源包不会被补造为已见。新作者reporter消费原fit/诊断、产生逐节点/运营表和可定位来源；组件cold只复用原数值，无新预测。它不是完整新12outer研究、全grader或case冻结。
+
+当前[归因/partial状态](qualification/grader-state/README.md)和[私有grader绑定](qualification/grade-protocol/README.md)已取得限定增量资格：未知host异常、真实候选错误、必要依赖/独立未调度分开；同一原对象和逻辑stage绑定防止旧评审套新状态。`l02_sealed.inspect_run`为唯一完整/partial入口，read_completed为同一结果的完整断言。`l02_grade.py`只收集私有评估包并纯读grade，不运行候选。38科学叶及完整成功路径仍未资格，readiness false/分数null。
+
+完整约束见[私有评估协议](EVALUATION-PROTOCOL.draft.md)和[公开40叶锚点](../public/REVIEW-ANCHORS.draft.md)。[研究文献准备](REFERENCE-LITERATURE.draft.md)已核原文，只支持后续解释，不能代替实际研究。下一步直接完成科学/运营参考、真实多质量校准与一次必要新正式清洁管线，不再重这些协议控制凑量。
+
+
+下一[科学/运营成品实施方案](scientific-reference-plan-review/PLAN-REVIEW.md)已独立读审：只补完整coverage/width、mean-action与成本分解、实际负结果/引用/交接资产，随后一次必要新正式121进程及真实38内容判断；不改原模型/池/质量线，不再扩sidecar或用旧adapter充新执行。计划尚未实施。

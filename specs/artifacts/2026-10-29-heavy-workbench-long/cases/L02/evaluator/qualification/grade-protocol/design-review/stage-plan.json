@@ -1,0 +1,84 @@
+{
+  "format": "independent-design-stage/1",
+  "case": "L02",
+  "reviewer": "/root/benchmark_review",
+  "review_mode": "non-blind AI-agent design review, familiar with author reference and earlier component stages",
+  "scope": "full-grader design on the one canonical sealed reader and assembler; no implementation",
+  "time_ordered_addendum": {
+    "report": "ATTRIBUTION-REPAIR-ADDENDUM.md",
+    "parent_observed_originals": "parent-attribution-observation/observation.json",
+    "P1_02_unknown_host_error_current_state": "parent repaired and genuine original facts read-only checked; not still claimed unfixed",
+    "P1_02_remaining": "canonical partial reader must distinguish success identity from failed native outcome and detect original host-misattributed failed records",
+    "original_plan_and_source_snapshot_retained": true,
+    "reviewer_reexecuted_parent_probe": false
+  },
+  "plan_status": "concrete route proposed; current implementation gaps remain",
+  "construction_blockers": [
+    {
+      "id": "P1-01",
+      "finding": "Current complete-only reader cannot assign partial, candidate-failed, dependency and not-scheduled outcomes fairly.",
+      "source": ["l02_sealed.py:read_completed", "l02_report.py:numeric_records", "l02_pipeline.py:assemble"],
+      "required": "one expected-assignment outcome inventory; same assembler; no exception-to-zero conversion or second reader"
+    },
+    {
+      "id": "P1-02",
+      "finding": "Terminal identity currently requires success, and unknown validator exceptions can be classified candidate_output_invalid.",
+      "source": ["l02_execution.py:validate_terminal", "l02_execution.py:Executor.invoke"],
+      "observation_basis": "source inspection only; no new runtime counterexample executed in this scope",
+      "required": "same terminal identity primitive followed by explicit native and typed checker classification; unknown host errors remain facilities"
+    },
+    {
+      "id": "P1-03",
+      "finding": "Arithmetic findings primitive is not a source-bound candidate grader.",
+      "source": ["l02_rubric.py:aggregate", "l02_quality.py:load_registered_reference"],
+      "required": "bind original run/submission/selected forecasts/report and externally assigned reference/review/rubric-anchor objects"
+    },
+    {
+      "id": "P1-04",
+      "finding": "Forty generic research anchors remain insufficiently operational.",
+      "source": ["rubric.draft.json"],
+      "required": "public per-leaf binary pass/fail/omission/dependency/equivalent-format boundaries before any candidate"
+    }
+  ],
+  "preserve": {
+    "research_leaves": 40,
+    "quality_leaves": 26,
+    "research_weight": 85,
+    "quality_weight": 15,
+    "fixed_denominator": 100,
+    "quality_policy": "original registered seasonal8 reference and exact 26 non-compensatory relations; no post-result widening",
+    "current_binary_scoring": true,
+    "good_threshold": 90,
+    "old_source_component_final_review": "unchanged"
+  },
+  "key_fairness_decisions": [
+    "missing row after fail-fast is not proof of candidate omission",
+    "unexecuted independent units remain unassessed; genuine candidate dependencies carry explicit roots",
+    "facility and reference integrity precede candidate scoring",
+    "quality uses original actual selector-selected outer forecast, not reported or hindsight selections",
+    "all supplied formats may close the evidence; no author-specific method ID, fit.json or report layout requirement",
+    "schema-valid assigned review is not proof the judgement is true",
+    "a full numeric reference with two selection methods and three outer methods has 120 numeric cells plus one report; derive counts from each frozen pool"
+  ],
+  "minimal_next_steps": [
+    "implement one canonical partial inspection and typed native/source outcomes",
+    "bind quality and private assigned review then aggregate every declared leaf",
+    "execute only focused new status/object-boundary controls, preserving originals",
+    "perform label-masked multi-quality and equivalent-format anchor calibration",
+    "freeze all reference programs before one new full formal generic source-only execution, render and independently review actual figures",
+    "request final independent case freeze review after these implementation qualifications"
+  ],
+  "implementation_changed": false,
+  "new_experiments": 0,
+  "Docker_or_prediction_or_solver_or_Provider_or_GPU_or_UI_calls": 0,
+  "delegations": 0,
+  "source_inventory": "source-inventory.json",
+  "operational_leaf_proposal": "PLAN-REVIEW.md section 4",
+  "formal_full_generic_reference_complete": false,
+  "full_grader_qualified": false,
+  "L02_frozen": false,
+  "candidate_score": null,
+  "hours_level_qualified": false,
+  "professional_or_statistical_maturity_certified": false,
+  "ten_heavy_cases_complete": false
+}

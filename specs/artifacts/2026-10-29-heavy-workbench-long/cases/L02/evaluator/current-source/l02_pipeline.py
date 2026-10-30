@@ -3,10 +3,18 @@ from pathlib import Path
 import tempfile
 
 from asof_input import InputError
-from l02_execution import ExecutionError, archived_json, json_bytes, regular_bytes
-from l02_scoring import aggregate_study_metrics, score
+from l02_execution import ExecutionError, archived_json, json_bytes, regular_bytes, candidate_json, candidate_text
+from l02_scoring import ProtocolError, aggregate_study_metrics, score
 from l02_selection import assess_selection
 from material_contract import same_json_value
+
+
+def candidate_assessment(check):
+    """Map the scoring library's declared protocol errors at the output boundary."""
+    try:
+        return check()
+    except ProtocolError as e:
+        raise ExecutionError(e.code, e.detail, candidate=not e.code.startswith('facility_')) from e
 
 
 def forecast_inputs(data, origin_id, method):
@@ -18,7 +26,7 @@ def forecast_inputs(data, origin_id, method):
     return inputs
 
 
-def assess_forecast(files, data, origin_id, method, study):
+def verify_forecast_inputs(files, data, origin_id, method):
     expected = {k: method[k] for k in ('method_id', 'configuration')}
     try:
         if not same_json_value(archived_json(files, 'input/method.json', True), expected):
@@ -33,52 +41,64 @@ def assess_forecast(files, data, origin_id, method, study):
             receipt = data.verify_packet(origin_id, root)
     except (InputError, KeyError, ValueError, TypeError) as e:
         raise ExecutionError('facility_forecast_packet_invalid', str(e)) from e
+    return receipt
+
+
+def assess_forecast(files, data, origin_id, method, study):
+    receipt = verify_forecast_inputs(files, data, origin_id, method)
     context, labels, _ = data.context_and_labels(origin_id)
-    return {'metric': score(archived_json(files, 'output/result/forecast.json', True), context, labels, method['method_id'], study),
+    return {'metric': candidate_assessment(lambda: score(candidate_json(files, 'output/result/forecast.json', True), context, labels, method['method_id'], study)),
             'packet_verification': receipt}
 
 
-def assess_selector(files, expected, study):
+def verify_selector_inputs(files, expected, study):
     try:
         if {n for n in files if n.startswith('input/')} != {'input/inner.json', 'input/study.json'} or not same_json_value(archived_json(files, 'input/inner.json', True), expected) or not same_json_value(archived_json(files, 'input/study.json', True), study):
             raise ExecutionError('facility_selection_binding_invalid', 'captured packet differs from assigned published inner facts/predictions')
     except (InputError, KeyError, ValueError, TypeError) as e:
         raise ExecutionError('facility_selection_binding_invalid', str(e)) from e
-    return assess_selection(archived_json(files, 'output/result/selection.json'), expected, study)
+
+
+def assess_selector(files, expected, study):
+    verify_selector_inputs(files, expected, study)
+    return candidate_assessment(lambda: assess_selection(candidate_json(files, 'output/result/selection.json'), expected, study))
+
+
+def selection_packet(data, outer_id, pool, forecast):
+    outer = data.origins[outer_id]
+    inner = [g for g in data.grid['origins'] if g['role'] == 'inner' and g['outer_id'] == outer_id]
+    if len(inner) != len(data.contract['schedule']['inner_days_before']) or outer['origin_tick'] < data.scale_release_tick:
+        raise ExecutionError('facility_inner_registration_invalid', outer_id)
+    frames = []
+    for origin in inner:
+        context, labels, released = data.context_and_labels(origin['origin_id'])
+        if released > outer['origin_tick']:
+            raise ExecutionError('facility_inner_label_unpublished', origin['origin_id'])
+        forecasts = {method: forecast(origin['origin_id'], method) for method in pool['selection_ids']}
+        frames.append({'origin_id': origin['origin_id'], 'context': context, 'labels': labels,
+                       'labels_released_at': released, 'forecasts': forecasts})
+    return {'format': 'l02-inner-selection-packet/1', 'outer_origin_tick': outer['origin_tick'],
+            'inner_ids': [g['origin_id'] for g in inner], 'selection_ids': pool['selection_ids'], 'frames': frames}
 
 
 def assemble(data, registration, pool, methods, study, predict, select):
     """Callbacks execute or read the same assigned immutable numerical objects."""
     completed = []
     for outer_id in registration['outer_ids']:
-        outer = data.origins[outer_id]
-        inner = [g for g in data.grid['origins'] if g['role'] == 'inner' and g['outer_id'] == outer_id]
-        if len(inner) != len(data.contract['schedule']['inner_days_before']) or outer['origin_tick'] < data.scale_release_tick:
-            raise ExecutionError('facility_inner_registration_invalid', outer_id)
-        frames = []
-
         def prediction(origin_id, method_id, level):
             identity = {'kind': 'predict', 'outer_id': outer_id, 'origin_id': origin_id, 'method_id': method_id, 'level': level}
             files = predict(identity, methods[method_id])
             assessed = assess_forecast(files, data, origin_id, methods[method_id], study)
             if not same_json_value(assessed, archived_json(files, 'assessment.json')):
                 raise ExecutionError('facility_metric_assessment_invalid', str(identity))
-            return archived_json(files, 'output/result/forecast.json', True), assessed['metric']
+            return candidate_json(files, 'output/result/forecast.json', True), assessed['metric']
 
-        for origin in inner:
-            context, labels, released = data.context_and_labels(origin['origin_id'])
-            if released > outer['origin_tick']:
-                raise ExecutionError('facility_inner_label_unpublished', origin['origin_id'])
-            forecasts = {method: prediction(origin['origin_id'], method, 'inner')[0] for method in pool['selection_ids']}
-            frames.append({'origin_id': origin['origin_id'], 'context': context, 'labels': labels,
-                           'labels_released_at': released, 'forecasts': forecasts})
-        payload = {'format': 'l02-inner-selection-packet/1', 'outer_origin_tick': outer['origin_tick'],
-                   'inner_ids': [g['origin_id'] for g in inner], 'selection_ids': pool['selection_ids'], 'frames': frames}
+        payload = selection_packet(data, outer_id, pool, lambda origin, method: prediction(origin, method, 'inner')[0])
         selected = select({'kind': 'select', 'outer_id': outer_id}, payload)
         selection_assessment = assess_selector(selected, payload, study)
         if not same_json_value(selection_assessment, archived_json(selected, 'assessment.json')):
             raise ExecutionError('facility_selection_assessment_invalid', outer_id)
-        selection = archived_json(selected, 'output/result/selection.json')
+        selection = candidate_json(selected, 'output/result/selection.json')
         metrics, forecasts = {}, {}
         for method in pool['outer_ids']:
             forecasts[method], metrics[method] = prediction(outer_id, method, 'outer')
@@ -96,8 +116,8 @@ def assemble(data, registration, pool, methods, study, predict, select):
 
 
 def assess_report(files, outer_ids):
-    receipt = archived_json(files, 'output/result/report.json')
-    report = files['output/result/report.md'].decode('utf-8')
+    receipt = candidate_json(files, 'output/result/report.json')
+    report = candidate_text(files, 'output/result/report.md')
     if type(receipt) is not dict or receipt.get('format') != 'l02-report-receipt/1' or not same_json_value(receipt.get('outer_ids'), outer_ids) or not report.strip():
         raise ExecutionError('report_delivery_invalid', 'nonempty report and exact requested-origin receipt required', candidate=True)
     return {'status': 'report_protocol_verified', 'scientific_review': 'unassessed', 'candidate_score': None}

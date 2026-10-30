@@ -336,3 +336,75 @@ l02_pipeline统一数值组装/执行与审计；l02_sealed.read_completed是唯
 下一步直接按前节完整grader边界实施：同一reader的partial/native失败/依赖状态、正式全12与外部reference/可信独立证据版本绑定、40研究叶可操作锚点与等价格式/多质量校准，再必要的一次新完整reference程序首预测前冻结→清洁研究→实际新图/独立冻结。不能拿此report adapter或旧120/事后研究稿当新完整参考；不重复旧26/335/120/54/11+11/五窗口/本report与32/20边界凑量。完整study/quality/score仍null，L02未冻，套件冻结1/10/有效候选小时0/10。
 
 L06/0.3完整权威图/可见状态/不可撤承诺/现金物理续接与L01/L04/L05、L03/L07-L10仍须推进；旧L06两100/旧合同只读，旧Task/API/solver不重启。用户无总token/墙钟额度，cheap-first/真实流式LLM/仅公开候选输入/单层review/noUI/保护其他任务仍硬约束；整个目标未达，heartbeat ACTIVE。
+
+
+## 2026-10-30 07:44 UTC 实施前Recall：完整grader状态与验证器归因
+
+当前1d5386d95已正常push，本任务范围clean；用户视频/图片删除、三共享索引重排及Bun目录保留。用户十题/重型有效小时/单层review/双系统两好升级、cheap-first、无总token墙钟额度仍为约束。当前1/10冻结、0/10有效小时。重读当前AGENTS、L02/long/L06/L05/L04/runtime/cross Recall及02-data；全部既有计算终态，不重跑原120/54/11+11/335/75或报告窗口，六旧任务不恢复。
+
+同一reviewer正在l02-full-grader-plan-review写设计，尚未完成实现/冻结。已指出read_completed只接受全部verified、validate_terminal只接受exit0，完整grader必须先读全部expected身份/原native而非信失败字符串，并区分缺cell/独立未运行与真实依赖blocked。另静态发现Executor捕获validate(sealed)任意Exception，未知code默认为candidate_output_invalid并self.fail；现阶段是代码风险，尚无真实事故复现。此风险先做一组秒级必要资格再修，再推进完整reader/grader。
+
+### 现象、根因、影响面与修复决定
+
+直接触发是host validator抛未知RuntimeError或未映射异常；原代码按字符串code是否facility_判归因，默认将未知host错误持久化failed，native即使exit0也误扣候选。旧成功用例未覆盖host validator故障，也不能由其75pass排除此分支。定义在l02_execution唯一Executor；全仓当前调用只有driver predict/select/report及只读同库工具，未被生产Task/Mission/Session/occurrence/队列/唤醒/LLM/多项目控制导入。故横审本库三个入口、prepare/terminal/verified/failed、重启/串行/独立run；产品共享机制无Python调用，不改其入口/调度/消息/UI。
+
+修复以typed错误来源代替code猜测：唯一candidate JSON/text解析器只解析明确候选output；已知评分ProtocolError在pipeline候选检查边界映射typed candidate错误，设施ProtocolError保持设施。通用Executor只把明确candidate=True的ExecutionError持久化候选failed；未知host异常变facility_validator_failed，保原terminal与CID待修，不重启实际exit0进程。程序非零native与链接/坏输出已有明确物理证据仍属候选；candidate stdout自报facility不能覆盖native。该改动不新增schema/phase/registration格式或覆盖旧failed原件，错误归因通过新真实运行验证。既有旧误记failed若真实输出可通过，完整reader须判设施矛盾调查，不静默改判为候选或重跑。
+
+最低真实验收：修改前同源码/新目录运行一个正确record程序，host validator故意RuntimeError，保原native0/terminal/failed归因；修改后新目录同record出现同host错误应保持terminal/设施，修好validator后恢复原自然exited CID并封存accepted/cleanup，只create/start一次。另一组明确候选JSON/数值协议错误应具名candidate失败、原terminal可供reader独立重判。不得mock Docker/手写native来冒充；所有own终态精确cleanup。旧全套不重跑，仅必要typed解析/设施优先/当前正确结果正向契约。
+
+完整grader设计最终到位后在同一sealed reader/assembler扩展partial和已执行失败，不复制第二parser；再绑定正式12outer/固定reference/外部可信review、40研究叶锚点/依赖/等价格式/多质量校准，最后必要一次新完整研究和独立冻结。当前这段只是已授权实施前方案，未获新case或成熟认证。
+
+
+### 已读最终独立设计与partial reader落地决定（实施前）
+
+已核读l02-full-grader-plan-review的PLAN-REVIEW、stage-plan和归因修复addendum。40二元锚点/85+15权重/26质量/90作者比较规则不改；一套原对象reader，不引入执行调度器或数据库新phase。P1-02原未知validator分支已受控真实注入证实：red正确record native0却candidate_output_invalid/failed，修后facility_validator_failed/terminal，修正validator后原CID7cd5195续验收为verified/原值7并cleanup，未重启。原red不覆盖，局部不是实际客户事故或完整grader。
+
+partial实现：既有OS owner锁仅短暂捕获原SQLite一致快照与canonical capsule原字节，再释放给只读评审；busy是评估未完成，不扣候选。完整权威expected identities由注册pool/日程推导，不硬编码120；原作者形态为120numeric+1report。未知/重复身份、坏原件或input/source/native漂移设施无分。
+
+每格先核原prepared/terminal/accepted身份；终态primitive共用身份与sandbox检查，新增显式require_success参数，失败读取核真实exit与ledger一致，accepted仍要求0。verified用同一captured输入/checker重判并核原assessment；failed native非零及明确typed输出错误可candidate_failed，旧failed而当前原输出合法为facility_failed_outcome_contradiction，保旧SQL/原件不静默改写。OOM/启动或外部终止原因未明属设施；terminal尚未验收、created/running/planned保持未评，不从容器名猜已完成或重启。
+
+真实依赖仅selector所需完整inner、report所需所有numeric。预测程序本身不依赖其它方法或selector，runner早停后的独立outer无row为unassessed；selector因原inner已证候选失败而blocked_candidate，带原根因链；不从执行顺序杜撰数据依赖。选择包构建从现assembler提取为同一函数，partial与完整重建共用。所有numeric闭合后才构造全期selected指标；report仍按原实际input/output审，不补跑或补造。summary调用同一inspection，read_completed只是要求完整的薄入口。坏设施保无分；任何未评不合成总分。
+
+最低新增真实原件：用首预测前实际注册的正式12outer坏predict提交，首native0坏JSON及另一native2自报run_invalid都进入真实driver；全矩阵只运行首个必要单元即自然停，其余原无row保未评，用于测试partial依赖分界，不运行完整新参考。已封存正确旧请求纯只读重建只用于当前新接口必要回归，不重预测。必要对象漂移/typed错误用原真实capsule副本进入真实CLI，不手写native。完整grader/reference/review绑定与40锚点校准随后再接，不把本状态组件当已冻结。
+
+
+### 完整评估包/逐叶grader的实施前具体合同
+
+独立partial审查已真实发现一项评估端ledger mutation假归因：原badJSON/native0，仅把failure.code改成candidate_program_failed时仍被候选失败接纳。原控制保留，唯一failed路径已补native0/非零原因矛盾与实际typed checker原因一致性；当前原控制重验为设施矛盾/无分，不重原预测。正常missing-output由独立唯一新native0控制确认candidate_output_missing/candidate_incomplete，121格1失败/2真依赖blocked/118未评。独立其余增量与最终结论仍待，不把初12项11过冒称全过。
+
+完整grader新产物用唯一私有evaluation assignment ZIP，非第二运行登记/无SQLite变化。评估者输入非空submission ID、subject_role（candidate/reference_qualification/protocol_control）、指定单层reviewer、原run、候选目录、当前唯一rubric/anchor版本、原quality policy/固定外部reference及独立指定的reference method。先用同一inspection捕获实际不可变registration/prepared/terminal/accepted原字节与run_id；外部reference按既有loader/权威日程单位尺度metric预检。所有assignment/review路径须在候选目录和原run之外；固定参照/私有权重不交候选。路径/ID只定位，不认证真伪。
+
+评估包保存原对象、rubric/policy/reference/method与assignment头；reviewer在独立私有目录持有其实际收到的assignment.zip完整原对象副本，再写同assignment ID/reviewer ID/anchor version的逐叶独立判断、具体原member/locator、观察和真实依赖根因。grader核副本与已分配不可变原包一致、每个所引原member确实属于该包、当前run实际原对象与所分配对象闭合；不使用可变源码hash或同路径字符串当身份。schema合格不证明判断真实，实际独立审查与多质量校准仍必需，明确非盲AI局限。
+
+40研究锚点从已审具体表落唯一rubric及公开规则，不改权重/critical或26质量政策。C01完整数值执行、C02完整inner最小选择两叶直接由同一真实inspection认证；其余38研究叶仍由assigned独立审查，全部40保逐叶可操作二元边界/等价格式/真实依赖。不能用总的verified替38科学叶pass，也不因报告transport失败而自动宣称其所有表/科学内容都错误。缺review保未评；候选自评/换run/换原对象/错anchor/非法依赖是设施错误。
+
+26质量只取原实际selector选中ID的原outer forecast；不从报告selected或outer hindsight选法。完整所选策略即使某未选消融失败仍可计算质量，不能把不相关故障伪成质量依赖；缺必要selector/所选forecast则按实际root为blocked_candidate或unassessed，不删origin/改分母。先验证外部reference，即使候选也坏仍设施优先；不能替换成候选弱baseline。最后唯一l02_rubric.aggregate保固定100/critical/未评null，draft/readiness继续阻止正式分数。
+
+新CLI只有prepare_evaluation（收集评估者的原对象）与grade（纯读原运行/固定参照/外部独立review，不启动程序）。不造LLM消息、隐队列、调度或替代runner。正式新全12reference/源报告首预测前一起封存、实际新图/独立科学审查及锚点多质量校准在随后资格，当前均未完成，不提前freeze或重跑旧矩阵。
+
+
+独立新grader审查又发现真实旧stage绑定遗漏：初新assignment仅收ZIP，未收DB逻辑stage；评估端副本仅failed→terminal/failure=None、ZIP/CID/run_id不变，原grader把已知fail淡化为未评。原mutation/命令保留，属于新未交付grader草稿的实质阻断，不是候选动DB。修复在既有短owner锁内一并捕获原SQLite run/cell/event逻辑snapshot，作为immutable evaluation object，绝不写第二DB或原run新phase。stage变化须新assignment，不能套旧review；此snapshot是一次性评估证据，非活状态副本/可变DB hash。
+
+本轮新评估格式尚未交付/冻结，原proto实验包不改写；原包缺stage信息须facility_evaluation_stage_unbound保留并重新收集当前stage，不能根据当前DB补造过去stage。已交付schema1的表/phase/registration/capsule格式均未变，无需数据迁移；未来真正已交付格式若演进仍须版本化保数据方案。当前原10CLI通过只证明当时已覆盖对象边界，不关闭新发现stage遗漏，修后增量另列，不重复77秒全组。
+
+
+## 最新接续Recall：状态归因与原对象/stage绑定通过限定独立增量；转向完整研究成品
+
+本轮状态原件D:/opencorvus-benchmark-runs/l02-grader-state-qualification-20261030与独立l02-grader-state-independent-review-20261030；新grader原件l02-source-bound-grade-qualification-20261030与独立l02-source-bound-grade-independent-review-20261030。repo qualification/grader-state与grade-protocol保全部已留源/原件/初失败/修后及最终报告，design-review另存实施前方案。当前没有新长数值任务，所有本轮自有容器自然终态后精确cleanup，六旧任务不恢复。
+
+1）原host RuntimeError受控注入：旧正确record/native0被误写failed，修后facility_validator_failed/terminal，修validator后同CID7cd5195验收原值7/cleanup，未重启。候选JSON/text和已知ProtocolError才typed归候选，未知host错误不猜标签。2）主badJSON/native2自报设施、独立missing各是真实driver正式12注册，只运行首个故意坏微程序，分别给明确候选错误；121 expected各1候选fail/2真实依赖blocked/118独立未调度未评，全期数值/总分null。3）独立初12观察11过1失败，评估端改副本failure原因使native0被声称非零；修唯一failed分支，原typed原因/native/实际checker闭合，旧合法输出误标failed也设施矛盾。独立修后准确CLI3/4四检查通过；原反例不覆盖。旧完整请求仅其只读一次54.456秒/11verified/formalfalse/not_delivered，零重预测。本轮真实OOM/signal因果仍未实跑，保守设施规则非硬件资格。
+
+l02_grade.py prepare/grade已接唯一inspection、私有immutable原对象、固定外部quality registry及独立指定method、外部review版本、原selector真实选中预测及固定分母aggregate。C01/C02由真实execution认证，38其余研究叶assigned独评，26Q机器；40研究具体二元规则/等价格式已落rubric与公开REVIEW-ANCHORS，85/15/100、原critical/Q/作者比较90不改。readiness全false，正式总分/研究/质量/good仍null，不是候选成绩。
+
+主初10CLI77.015秒核私有pending review/错ID/anchor/member/对象/候选目录/坏reference+坏candidate/原run对象漂移，零新native；只资格已行使边界。独立新ledger-only mutation发现旧stage绑定遗漏，原ZIP/CID/runid相同、phase/failure变更却淡化已知fail。已修同短owner锁捕获原run完整{id,created}/cell/event逻辑snapshot为一次immutable证据，不写新DB/phase，不含capture时间或row.objects；assignment与当前同snapshot闭合。旧未交付prototype缺stage具名stage_unbound，保原包不回填历史，合法进展也须新assignment/review。独立仅必要4CLI+计数共5项过（准确3/0/3/4），原初失败保留，四核心源与source-stage-repaired实跑快照一致。38全未评review是明确协议夹具，不能算科学评审。初fixture有复用，以实际harness/逐CLI输出为据，不补造没保存的早期host输入版本。
+
+两个独立最终blocking=[]均仅限已行使的状态/partial/绑定与锚点结构；没认证完整成功、新formal12 reference、38实质科学评级、多质量校准/冻结/小时/十题。来源schema/合法locator不认证判断真，不能用全pass JSON凑成熟。尚未实际完整策略时不伪造Q数字，不从报告selected或outer最优取策略，不因未选消融失败制造质量依赖。完整运行成功路径仍要真实执行和独立核数。
+
+下一优先工作直接完成作者科学/运营reference成品，避免继续扩成通用平台：补全部区间coverage/width、mean-action成本对照与逐成本建议、实际负结果/时间依赖/缺测/未识别量效、准确方法/数据引用与依赖复建说明。主方已查Gneiting原论文、Bracher等WIS原文和2022更正、官方FPP滚动验证，参考准备落REFERENCE-LITERATURE.draft；未声称当前report消费新文献。不能看outer改变原池/26质量、倒填宽阈值或强求未知未来精确预测。
+
+方法/报告/原子锚点和依赖定稿后做必要的一次新正式12outer generic清洁reference：所有predict/select/report首私有预测前一起封存、只原授权数据/new output、实际新图/源码→运营账→报告、原真实selected对固定参照及38独立内容判断/多质量校准。旧120/旧事后稿/report adapter不当该新执行；不重本轮10/77、54、75、335、旧五窗口/11+11/原120等凑量。冻结后才fresh公开输入OC/Codex，双好另升，源/模型/资源比较限制仍披露。当前case版本L02/0.2.0-dev未冻、全套开发冻结1/10、有效候选小时0/10，heartbeat ACTIVE。
+
+L06/0.3完整权威业务/信息/承诺/物理现金续接和其余L01/L04/L05/L03/L07-L10也要推进，不把单题/接口通过当十题。旧L06两100/原public/rubric/FREEZE及已退休API只读，不重旧Task/solver。所有本任务改动范围commit、正常fetch/merge、完整待推集合审查/验证后push，用户视频删除/索引重排保留；真实收据以Git及本轮外部publish-delivery为准。
+
+
+本阶段最后只补输出可追溯性：C02/Q26的blocked根由中间selector归一为原实际failed inner，并定位terminal/ledger，grade附同一完整inspection，保所有原状态/总分null。一次真实CLI精确4/原1fail27blocked38未评，独立只读6事实追加核同原包；原旧报告保持其原源码时间版本，未重77/54或native。public锚点介绍仅补JSON/CSV缩写解释，40规则/权重不变。下一科学成品设计已完成并归档evaluator/scientific-reference-plan-review，只是计划：不改predict/池/Q26；先补报告实际派生与静态资产/来源、手算预检，再唯一新正式121（108forecast+12selector+1report）及38真评/多质量受影响叶校准。不以此计划或输出metadata当全成功、冻结或小时。

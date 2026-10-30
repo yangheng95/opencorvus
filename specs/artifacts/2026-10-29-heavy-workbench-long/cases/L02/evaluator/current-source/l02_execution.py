@@ -121,6 +121,23 @@ def archived_json(files, name, precise=False):
     return parse_json(files[name].decode('utf-8'), decimal_numbers=precise)
 
 
+def candidate_text(files, name):
+    """Only this declared candidate-output boundary assigns parse errors to it."""
+    try:
+        return files[name].decode('utf-8')
+    except KeyError as e:
+        raise ExecutionError('candidate_output_missing', 'required output: ' + name, candidate=True) from e
+    except UnicodeError as e:
+        raise ExecutionError('candidate_output_invalid', 'required UTF-8 output: ' + name, candidate=True) from e
+
+
+def candidate_json(files, name, precise=False):
+    try:
+        return parse_json(candidate_text(files, name), decimal_numbers=precise)
+    except ValueError as e:
+        raise ExecutionError('candidate_output_invalid', 'invalid JSON output: ' + name, candidate=True) from e
+
+
 @contextmanager
 def run_lock(root):
     """An OS lock, released by the kernel on abrupt evaluator termination."""
@@ -248,19 +265,67 @@ def sandbox_valid(native):
         return False
 
 
-def validate_terminal(native, cell, program, image, run_id):
+def validate_terminal(native, cell, program, image, run_id, *, require_success=True):
     try:
         labels = native['Config'].get('Labels') or {}
         checks = [native['Id'] == cell['cid'], native['Name'] == '/' + cell['name'], native['Image'] == image,
                   native['Path'] == program['argv'][0], native['Args'] == program['argv'][1:],
                   labels.get('oc.l02.run') == run_id, labels.get('oc.l02.cell') == str(cell['id']),
                   native['State']['Status'] == 'exited', type(native['State']['ExitCode']) is int,
-                  native['State']['ExitCode'] == 0, type(cell['exitcode']) is int,
-                  cell['exitcode'] == 0, sandbox_valid(native)]
+                  type(cell['exitcode']) is int, native['State']['ExitCode'] == cell['exitcode'],
+                  sandbox_valid(native)]
+        if require_success:
+            checks.append(native['State']['ExitCode'] == 0)
         if not all(checks):
             raise ExecutionError('facility_terminal_identity_changed', str(cell['id']))
     except (KeyError, ValueError, TypeError) as e:
         raise ExecutionError('facility_terminal_identity_changed', str(e)) from e
+
+
+def validate_native_termination(native):
+    state = native['State']
+    if state.get('OOMKilled') is not False or state.get('Error'):
+        raise ExecutionError('facility_native_termination_unresolved', 'OOM or runtime error requires facility investigation')
+    if state['ExitCode'] >= 128:
+        raise ExecutionError('facility_native_termination_unresolved', 'possible signal-style exit lacks qualified termination provenance')
+
+
+def bound_execution(row, identity, declaration, source, image, run_id):
+    objects = row['objects'];prepared = objects.get('prepared')
+    if row['phase'] != 'failed' and row['failure'] is not None:
+        raise ExecutionError('facility_cell_state_invalid', 'failure record disagrees with lifecycle')
+    if row['phase'] in ('planned','prepared') and (row['cid'] is not None or row['exitcode'] is not None):
+        raise ExecutionError('facility_cell_state_invalid', 'uncreated cell carries a terminal identity')
+    if row['phase'] in ('created','running','terminal','verified','failed') and (type(row['cid']) is not str or not row['cid']):
+        raise ExecutionError('facility_cell_state_invalid', 'created cell requires its original CID')
+    if prepared is None:
+        if row['phase'] != 'planned' or objects:
+            raise ExecutionError('facility_archive_unavailable', 'original prepared cell '+str(row['id']))
+        return None
+    validate_capsule(prepared, declaration, source)
+    if prepared_members(prepared) != prepared:
+        raise ExecutionError('facility_prepared_identity_changed', str(row['id']))
+    for name in ('terminal','accepted'):
+        if name in objects:
+            validate_capsule(objects[name], declaration, source)
+            if prepared_members(objects[name]) != prepared:
+                raise ExecutionError('facility_accepted_identity_changed', str(row['id'])+':'+name)
+    terminal = objects.get('terminal');accepted = objects.get('accepted')
+    if accepted is not None and (terminal is None or {k:v for k,v in accepted.items() if k!='assessment.json'} != terminal):
+        raise ExecutionError('facility_accepted_identity_changed', 'accepted does not close its original terminal')
+    if row['phase'] in ('verified','failed') and terminal is None:
+        raise ExecutionError('facility_archive_unavailable', 'original terminal cell '+str(row['id']))
+    if row['phase']=='verified' and accepted is None or row['phase']=='failed' and accepted is not None:
+        raise ExecutionError('facility_cell_state_invalid', 'final phase disagrees with accepted object')
+    if terminal is None:
+        return None
+    if row['phase'] not in ('terminal','verified','failed'):
+        raise ExecutionError('facility_cell_state_invalid', 'terminal object disagrees with original lifecycle')
+    native = archived_json(terminal,'terminal-inspect.json')
+    validate_terminal(native,row,declaration,image,run_id,require_success=row['phase']=='verified')
+    validate_native_termination(native)
+    return {'cell':row, 'identity':identity, 'program':declaration, 'native':native,
+            'terminal':terminal, 'accepted':accepted}
 
 
 class Executor:
@@ -392,16 +457,19 @@ class Executor:
         sealed = read_archive(terminal)
         if 'invalid-output.json' in sealed:
             self.fail(cell, 'candidate_output_invalid', archived_json(sealed, 'invalid-output.json')['detail'])
+        validate_native_termination(archived_json(sealed, 'terminal-inspect.json'))
         if cell['exitcode'] != 0:
             self.fail(cell, 'candidate_program_failed', 'native exit ' + str(cell['exitcode']) + '; self-reported status is not facility evidence')
         try:
             assessment = validate(sealed)
+        except ExecutionError as e:
+            if e.candidate:
+                self.fail(cell, e.code, e.detail)
+            raise
         except Exception as e:
-            # Validators receive evaluator-owned contexts; facilities remain distinguishable.
-            code = getattr(e, 'code', 'candidate_output_invalid')
-            if code.startswith('facility_'):
-                raise
-            self.fail(cell, code, str(e))
+            # Unknown host failures retain the original terminal object for repair.
+            # A candidate's stdout/status never supplies this classification.
+            raise ExecutionError('facility_validator_failed', type(e).__name__ + ': ' + str(e)) from e
         accepted = {**sealed, 'assessment.json': json_bytes(assessment)}
         if (job / 'accepted.zip').exists():
             if read_archive(job / 'accepted.zip') != accepted:

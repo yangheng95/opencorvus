@@ -1,0 +1,9 @@
+# 自动叶原始失败根与来源：只读追加
+
+此次仅审查主方新 `l02_evaluation.py` 的输出证据元数据增量及其已经实际完成的一次CLI；未重跑grader、旧77/54/10组或任何native。原REVIEW、source-repaired和最后identity观察保留为当时事实，不能将它们冒称执行了本次新源码。
+
+源码增量在 `explicit-root-addendum/source.diff`：新增original_failure_roots沿同一inspection中blocked依赖追到真正candidate_failed并去重，failure_sources定位该原terminal及ledger-snapshot；自动执行/quality叶的dependency_roots由中间selector归一到实际失败inner。C01 observed_outcomes保留原dependencies，assessment附同一execution_inspection。私有输入协议、状态、权重、质量规则和基础reader没有在此处另起实现。
+
+我只读主方 `explicit-root-evidence-command.json`、实际完整assessment及其原immutable assignment。Python subprocess原CLI精确exit4；仍是C01一项failed、C02+Q26共27blocked、38研究未评、total null。对C02和Q.macro.scaled_mse分别核：root是同inspection真实candidate_failed的首个inner predict，而非只是blocked selector；terminal与ledger两个object都实际在原assignment中。另核C01每个观察含dependencies。六项只读事实核验全过，原源/CLI/结果副本及observation在explicit-root-addendum目录。
+
+未发现这项已行使输出追踪增量的实质阻断。本次是两个自动叶实例及正常partial元数据的核对，没有认证38项人工判断、全部任意依赖拓扑、完整成功路径、新正式研究、冻结或小时。schema与真实root定位仍不认证科学论证真。

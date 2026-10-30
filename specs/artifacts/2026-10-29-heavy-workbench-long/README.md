@@ -63,3 +63,6 @@ L06现已完成[最终独立合同审查并冻结0.2.0](cases/L06/README.md)，�
 
 
 L02新增[报告实际来源与原输入恢复](cases/L02/evaluator/qualification/report-provenance/README.md)：prepare-once保持原schema1数据、捕获packet/inner与原native绑定、唯一sealed reader和真实诊断报告组件。旧report未获得来源的事实不补造；本轮没有新预测或完整12outer研究，完整grader/职业审查/冻结仍待。
+
+
+L02新增[partial归因与私有grader/stage绑定](cases/L02/evaluator/qualification/grade-protocol/README.md)，独立真实反例关闭host误归因、原因/native矛盾及旧stage套评；40具体研究锚点已落，完整成功/38科学校准/新formal参考仍未通过。下一步转真实研究成品，不以接口或协议控制凑成熟；套件仍1/10旧开发冻结、0/10候选有效小时。

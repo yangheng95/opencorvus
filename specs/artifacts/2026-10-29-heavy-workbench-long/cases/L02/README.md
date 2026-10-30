@@ -11,3 +11,5 @@
 [相对质量政策与研究稿](evaluator/qualification/quality-study/README.md)新增事前固定的外部参照/单期损失条件，原真实选择26/26通过，基线自身、零预测、极宽区间与一致性联动单叶退化均被拒。新[66原子rubric稿](rubric.draft.json)和可信评估聚合明确关键项不能被高分补偿；作者研究分析保留June实际缺量，仍是事后分析稿。
 
 [报告来源与原输入恢复](evaluator/qualification/report-provenance/README.md)已经接通最小来源sidecar、实际诊断报告及唯一sealed reader的局部链；原历史report仍如实记未获得来源。当前认可数值参考/通用执行和质量局部证据；完整正式清洁assignment、职业科学/运营参考、全grader绑定、人评锚点/独立冻结仍待。study中正式quality_floor仍null，建设期政策另立draft；候选成绩与小时证据不存在。整套合同冻结仍1/10、有效小时资格0/10。
+
+新[状态归因](evaluator/qualification/grader-state/README.md)与[grader原对象/阶段绑定](evaluator/qualification/grade-protocol/README.md)已关闭受控host误归因、失败原因矛盾和旧stage套评三个实质问题，初失败全部保留。40研究叶具体锚点已落，C01/C02机器认证、38独立研究叶；完整成功、新正式12outer科学参考与多质量实际评审仍待，不因接口或绑定组件通过就冻结。

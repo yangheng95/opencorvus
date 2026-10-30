@@ -1,0 +1,316 @@
+{
+  "status": "qualified_within_exercised_component_scope",
+  "stage": "grade-protocol",
+  "independent": {
+    "format": "independent-component-stage/1",
+    "case": "L02",
+    "reviewer": "/root/benchmark_review",
+    "review_mode": "non-blind AI-agent familiar with author reference; no redelegation",
+    "status": "qualified_within_exercised_partial_binding_scope",
+    "blocking": [],
+    "resolved": [
+      {
+        "id": "B01",
+        "finding": "initial assignment captured capsule ZIPs but omitted logical DB stage; phase/failure-only mutation silently changed C01",
+        "initial_evidence": "FINDING-INITIAL.md; state-mutation-command.json and state-mutation-observation.json",
+        "repair": "same short-lock capture includes immutable logical run/cell/event snapshot; assignment requires and binds it",
+        "actual_repair": "repair/assessment.json five passed checks, native CLI exits3/0/3/4 recorded",
+        "originals_retained": true
+      }
+    ],
+    "source_initial": "source-initial",
+    "source_repaired": "source-repaired",
+    "source_changes": [
+      "l02_sealed.py",
+      "l02_evaluation.py"
+    ],
+    "final_core_matches_parent_frozen_snapshot": "repair-vs-parent-final-identity.json; four exact byte matches",
+    "static_rule_checks": {
+      "passed": 8,
+      "total": 8
+    },
+    "new_initial_mutation_CLI": 1,
+    "necessary_repair_CLI": 4,
+    "new_native_programmes": 0,
+    "new_scientific_forecasts": 0,
+    "old_complete_reader_repeated": false,
+    "private_review_status": "all38unassessed protocol fixture only; zero scientific judgement",
+    "current_partial_result": "C01failed, C02+Q26 blocked27, independent_review38 unassessed, all publication values null",
+    "full_success_grader_path_qualified": false,
+    "full_formal_reference_qualified": false,
+    "38_scientific_review_or_calibration_complete": false,
+    "L02_frozen": false,
+    "candidate_score": null,
+    "hours_level_qualified": false,
+    "professional_or_statistical_maturity_certified": false,
+    "ten_heavy_cases_complete": false
+  },
+  "full_success_path_qualified": false,
+  "case_frozen": false,
+  "candidate_score": null,
+  "suite_frozen_cases": 1,
+  "candidate_effective_hour_cases": 0,
+  "initial_protocol_observation": {
+    "status": "source_bound_grade_protocol_qualified",
+    "wall_seconds": 77.01530859991908,
+    "controls": [
+      {
+        "name": "prepare-original",
+        "status": "passed",
+        "exitcode": 0,
+        "response": {
+          "status": "evaluation_assigned",
+          "assignment_id": "8b2f95ac56914bcdbdd11222dfffc38b",
+          "subject_role": "protocol_control",
+          "candidate_score": null
+        }
+      },
+      {
+        "name": "no-review",
+        "status": "passed",
+        "exitcode": 4,
+        "response": {
+          "status": "assessment_incomplete",
+          "submission_id": "state-control-real-bad-json",
+          "subject_role": "protocol_control",
+          "total_score": null,
+          "study_complete": null,
+          "quality_success": null,
+          "good": null,
+          "counts": {
+            "blocked_candidate": 27,
+            "candidate_incomplete": 0,
+            "unassessed": 38,
+            "verified_fail": 1,
+            "verified_pass": 0
+          },
+          "known_critical_failures": [
+            "C01",
+            "C02",
+            "Q.macro.scaled_mse",
+            "Q.macro.scaled_wis",
+            "Q.node.A1.scaled_mse",
+            "Q.node.A1.scaled_wis",
+            "Q.node.A2.scaled_mse",
+            "Q.node.A2.scaled_wis",
+            "Q.node.B1.scaled_mse",
+            "Q.node.B1.scaled_wis",
+            "Q.node.B2.scaled_mse",
+            "Q.node.B2.scaled_wis",
+            "Q.node.ZA.scaled_mse",
+            "Q.node.ZA.scaled_wis",
+            "Q.node.ZB.scaled_mse",
+            "Q.node.ZB.scaled_wis",
+            "Q.decision.A1.underage_1",
+            "Q.decision.A1.underage_3",
+            "Q.decision.A1.underage_9",
+            "Q.decision.A2.underage_1",
+            "Q.decision.A2.underage_3",
+            "Q.decision.A2.underage_9",
+            "Q.decision.B1.underage_1",
+            "Q.decision.B1.underage_3",
+            "Q.decision.B1.underage_9",
+            "Q.decision.B2.underage_1",
+            "Q.decision.B2.underage_3",
+            "Q.decision.B2.underage_9"
+          ]
+        }
+      },
+      {
+        "name": "bound-pending-review",
+        "status": "passed",
+        "exitcode": 4,
+        "response": {
+          "status": "assessment_incomplete",
+          "submission_id": "state-control-real-bad-json",
+          "subject_role": "protocol_control",
+          "total_score": null,
+          "study_complete": null,
+          "quality_success": null,
+          "good": null,
+          "counts": {
+            "blocked_candidate": 27,
+            "candidate_incomplete": 0,
+            "unassessed": 38,
+            "verified_fail": 1,
+            "verified_pass": 0
+          },
+          "known_critical_failures": [
+            "C01",
+            "C02",
+            "Q.macro.scaled_mse",
+            "Q.macro.scaled_wis",
+            "Q.node.A1.scaled_mse",
+            "Q.node.A1.scaled_wis",
+            "Q.node.A2.scaled_mse",
+            "Q.node.A2.scaled_wis",
+            "Q.node.B1.scaled_mse",
+            "Q.node.B1.scaled_wis",
+            "Q.node.B2.scaled_mse",
+            "Q.node.B2.scaled_wis",
+            "Q.node.ZA.scaled_mse",
+            "Q.node.ZA.scaled_wis",
+            "Q.node.ZB.scaled_mse",
+            "Q.node.ZB.scaled_wis",
+            "Q.decision.A1.underage_1",
+            "Q.decision.A1.underage_3",
+            "Q.decision.A1.underage_9",
+            "Q.decision.A2.underage_1",
+            "Q.decision.A2.underage_3",
+            "Q.decision.A2.underage_9",
+            "Q.decision.B1.underage_1",
+            "Q.decision.B1.underage_3",
+            "Q.decision.B1.underage_9",
+            "Q.decision.B2.underage_1",
+            "Q.decision.B2.underage_3",
+            "Q.decision.B2.underage_9"
+          ]
+        }
+      },
+      {
+        "name": "wrong-submission",
+        "status": "passed",
+        "exitcode": 3,
+        "response": {
+          "status": "run_invalid",
+          "error": "facility_review_binding_invalid",
+          "detail": "facility_review_binding_invalid:assigned reviewer/submission/anchor identity differs",
+          "candidate_score": null
+        }
+      },
+      {
+        "name": "wrong-anchor",
+        "status": "passed",
+        "exitcode": 3,
+        "response": {
+          "status": "run_invalid",
+          "error": "facility_review_binding_invalid",
+          "detail": "facility_review_binding_invalid:assigned reviewer/submission/anchor identity differs",
+          "candidate_score": null
+        }
+      },
+      {
+        "name": "wrong-member",
+        "status": "passed",
+        "exitcode": 3,
+        "response": {
+          "status": "run_invalid",
+          "error": "facility_review_source_invalid",
+          "detail": "facility_review_source_invalid:referenced original member differs or is missing",
+          "candidate_score": null
+        }
+      },
+      {
+        "name": "different-received-object",
+        "status": "passed",
+        "exitcode": 3,
+        "response": {
+          "status": "run_invalid",
+          "error": "facility_review_binding_invalid",
+          "detail": "facility_review_binding_invalid:reviewer received a different immutable assignment/object bundle",
+          "candidate_score": null
+        }
+      },
+      {
+        "name": "candidate-review-location",
+        "status": "passed",
+        "exitcode": 3,
+        "response": {
+          "status": "run_invalid",
+          "error": "facility_evaluation_location_invalid",
+          "detail": "facility_evaluation_location_invalid:evaluation/review must be outside candidate and execution roots",
+          "candidate_score": null
+        }
+      },
+      {
+        "name": "bad-reference-and-candidate",
+        "status": "passed",
+        "exitcode": 3,
+        "response": {
+          "status": "run_invalid",
+          "error": "facility_quality_binding_invalid",
+          "detail": "facility_quality_binding_invalid:reference registered for different facts, grid, units, scales, metric or policy",
+          "candidate_score": null
+        }
+      },
+      {
+        "name": "different-run-object",
+        "status": "passed",
+        "exitcode": 3,
+        "response": {
+          "status": "run_invalid",
+          "error": "facility_evaluation_binding_invalid",
+          "detail": "facility_evaluation_binding_invalid:current canonical execution objects differ from the collected immutable originals",
+          "candidate_score": null
+        }
+      }
+    ],
+    "new_candidate_processes": 0,
+    "scientific_review_performed": false,
+    "formal_successful_reference_run": false,
+    "candidate_score": null,
+    "scope": "real failed execution inventory and private object/review/reference binding; not full success-path or case freeze qualification"
+  },
+  "explicit_root_evidence": {
+    "status": "qualified_explicit_dependency_evidence",
+    "checks": [
+      {
+        "leaf": "C02",
+        "root": {
+          "kind": "predict",
+          "outer_id": "outer-20250115",
+          "origin_id": "outer-20250115-i1",
+          "method_id": "seasonal-weekday",
+          "level": "inner"
+        },
+        "status": "passed"
+      },
+      {
+        "leaf": "Q.macro.scaled_mse",
+        "root": {
+          "kind": "predict",
+          "outer_id": "outer-20250115",
+          "origin_id": "outer-20250115-i1",
+          "method_id": "seasonal-weekday",
+          "level": "inner"
+        },
+        "status": "passed"
+      }
+    ],
+    "scope": "output traceability on existing actual partial run; no new candidate or scientific judgement"
+  },
+  "explicit_root_independent": {
+    "kind": "readonly observation of already executed parent delta",
+    "checks": [
+      {
+        "name": "C02_roots_are_actual_failed_inner",
+        "passed": true
+      },
+      {
+        "name": "C02_original_terminal_and_stage_objects",
+        "passed": true
+      },
+      {
+        "name": "Q.macro.scaled_mse_roots_are_actual_failed_inner",
+        "passed": true
+      },
+      {
+        "name": "Q.macro.scaled_mse_original_terminal_and_stage_objects",
+        "passed": true
+      },
+      {
+        "name": "same_original_partial_counts_and_nulls",
+        "passed": true
+      },
+      {
+        "name": "C01_observations_include_actual_dependencies",
+        "passed": true
+      }
+    ],
+    "all_passed": true,
+    "reviewer_new_CLI_or_native_runs": 0,
+    "old_reports_and_identity_observations_retained": true,
+    "source_boundary": "new output evidence metadata version; earlier exact-source reports remain facts at their earlier snapshot, not reattributed to this delta",
+    "scope": "two automatic dependency examples and unchanged partial state; no manual science, full-success path or new freeze"
+  }
+}

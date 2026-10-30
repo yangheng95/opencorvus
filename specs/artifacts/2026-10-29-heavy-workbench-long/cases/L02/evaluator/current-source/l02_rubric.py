@@ -12,6 +12,8 @@ def load_rubric(path):
     if type(value) is not dict or value.get('format') != 'l02-rubric/1' or value.get('case') != 'L02' or value.get('status') not in ('draft', 'frozen'):
         raise ProtocolError('facility_rubric_invalid', 'explicit L02 rubric/version/status required')
     try:
+        if any(type(value.get(key)) is not str or not value[key].strip() for key in ('version', 'anchor_version')):
+            raise ValueError('explicit case and operational anchor versions required')
         criteria = [row for group in value['groups'] for row in group['criteria']]
         ids = [row['id'] for row in criteria]
         if any(type(i) is not str or not i.strip() for i in ids) or len(set(ids)) != len(ids) or len(ids) != value['criterion_count']:
@@ -21,6 +23,10 @@ def load_rubric(path):
                 raise ValueError('typed criterion flags and positive rational weights required')
             if row['quality'] and not row['critical']:
                 raise ValueError('quality cannot be compensated by method points')
+            if row['method'] not in ('independent_evaluator_review', 'registered_quality_checker', 'registered_execution_checker'):
+                raise ValueError('one declared conclusion source required')
+            if row['method'] == 'registered_execution_checker' and row.get('source_rule') not in ('full_numeric', 'full_selection'):
+                raise ValueError('explicit original-execution rule required')
         if Fraction(value['total_weight']) != 100 or sum(Fraction(row['weight']) for row in criteria) != 100:
             raise ValueError('fixed denominator must be exactly 100')
         publication = value['publication']

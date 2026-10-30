@@ -3,7 +3,7 @@ import json
 from pathlib import PurePosixPath
 
 from l02_execution import (ExecutionError, archived_json, json_bytes, prepared_members,
-    read_archive, safe_relative, validate_capsule, validate_terminal)
+    read_archive, safe_relative, bound_execution)
 from material_contract import parse_json, same_json_value
 
 
@@ -46,14 +46,9 @@ def numeric_records(root, rows, run_id, image, manifest, submitted_source, expec
         declaration = manifest['programs'][identity['kind']]
         source = {name: submitted_source[name] for name in declaration['files']}
         job = root / 'cells' / str(cell['id'])
-        prepared = read_archive(job / 'prepared.zip');accepted = read_archive(job / 'accepted.zip')
-        validate_capsule(prepared, declaration, source);validate_capsule(accepted, declaration, source)
-        if prepared_members(prepared) != prepared or prepared_members(accepted) != prepared:
-            raise ExecutionError('facility_accepted_identity_changed', str(cell['id']))
-        native = archived_json(accepted, 'terminal-inspect.json')
-        validate_terminal(native, cell, declaration, image, run_id)
-        selected.append({'cell': dict(cell), 'identity': identity, 'program': declaration,
-                         'accepted': accepted, 'native': native})
+        objects = {name: read_archive(job / (name + '.zip')) for name in ('prepared', 'terminal', 'accepted')}
+        record = bound_execution({**cell, 'objects': objects}, identity, declaration, source, image, run_id)
+        selected.append(record)
     if keys != expected_keys:
         raise ExecutionError('facility_report_sources_incomplete', 'all assigned numeric objects required')
     return selected
