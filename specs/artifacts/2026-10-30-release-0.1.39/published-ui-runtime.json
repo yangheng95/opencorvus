@@ -1,0 +1,20 @@
+{
+  "version": "0.1.39",
+  "source": "23dc97f2f83f8fbe614d61015a20652235ec0377",
+  "executable": "D:\\myhexin-local\\opencorvus\\.scratch\\release-0.1.39\\published-cli\\extracted\\opencorvus.exe",
+  "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-release39-2Z4SHy",
+  "url": "http://127.0.0.1:52633",
+  "startedAt": "2026-10-30T05:51:49.01Z",
+  "deadlineAt": "2026-10-30T05:56:49.01Z",
+  "credentialsTransferred": false,
+  "manualReview": "Bundled settings changelog only; no model conversation initiated; Provider request transport was not instrumented",
+  "ownedTemporaryRootRetired": true,
+  "shutdownMechanism": "existing SDK owned-tree close",
+  "sdkCloseReturned": true,
+  "helperExitCode": 1,
+  "cleanupRecovery": "SDK close returned before rm raised EBUSY on the helper current working directory. After the helper exited, the verified empty ordinary directory was removed non-recursively from the workspace. No scope restart or deadline extension.",
+  "observedClosedAt": "2026-10-30T05:57:56.5222709Z",
+  "processAndPipesSettled": true,
+  "exactPublishedExecutableProcesses": 0,
+  "loopbackListeners": 0
+}

@@ -1,0 +1,14 @@
+{
+  "version": "0.1.39",
+  "source": "23dc97f2f83f8fbe614d61015a20652235ec0377",
+  "runID": "41007306793",
+  "jobID": 123905026370,
+  "checker": "bun test ./script/install-ubuntu-packages.test.ts",
+  "realLog": [
+    "2026-10-30T05:15:58.3128461Z (pass) the real GitHub Linux sudo caller exposes the effective IPv4 APT policy [33.61ms]",
+    "2026-10-30T05:15:58.3287659Z  13 pass",
+    "2026-10-30T05:15:58.3287833Z  0 fail",
+    "2026-10-30T05:15:58.3288006Z  13 expect() calls"
+  ],
+  "scope": "Actual GitHub Linux sudo/helper/apt-config contract executed before source and draft ownership claim"
+}

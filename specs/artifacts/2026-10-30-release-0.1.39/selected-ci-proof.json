@@ -1,0 +1,37 @@
+{
+  "runID": "41007309932",
+  "source": "23dc97f2f83f8fbe614d61015a20652235ec0377",
+  "conclusion": "success",
+  "createdAt": "2026-10-30T05:14:27Z",
+  "updatedAt": "2026-10-30T05:27:30Z",
+  "platforms": [
+    {
+      "platform": "linux",
+      "jobID": "123906652014",
+      "fileCompletionLog": [
+        "2026-10-30T05:23:11.4681112Z opencorvus:test: [1/3] DONE test/git-source-consumers.test.ts exit=0 duration=4.65s",
+        "2026-10-30T05:23:33.1945743Z opencorvus:test: [2/3] DONE test/task-terminal-artifact-closure.test.ts exit=0 duration=21.73s",
+        "2026-10-30T05:23:37.8751367Z opencorvus:test: [3/3] DONE test/dependency-patch-contract.test.ts exit=0 duration=4.68s"
+      ]
+    },
+    {
+      "platform": "macos",
+      "jobID": "123906651987",
+      "fileCompletionLog": [
+        "2026-10-30T05:24:42.6167480Z opencorvus:test: [1/3] DONE test/git-source-consumers.test.ts exit=0 duration=7.99s",
+        "2026-10-30T05:25:18.5469470Z opencorvus:test: [2/3] DONE test/task-terminal-artifact-closure.test.ts exit=0 duration=35.93s",
+        "2026-10-30T05:25:22.9970940Z opencorvus:test: [3/3] DONE test/dependency-patch-contract.test.ts exit=0 duration=4.43s"
+      ]
+    },
+    {
+      "platform": "windows",
+      "jobID": "123906652129",
+      "fileCompletionLog": [
+        "2026-10-30T05:25:52.7818047Z opencorvus:test: [1/3] DONE test/git-source-consumers.test.ts exit=0 duration=25.54s",
+        "2026-10-30T05:27:16.2682716Z opencorvus:test: [2/3] DONE test/task-terminal-artifact-closure.test.ts exit=0 duration=83.49s",
+        "2026-10-30T05:27:20.5004383Z opencorvus:test: [3/3] DONE test/dependency-patch-contract.test.ts exit=0 duration=4.23s"
+      ]
+    }
+  ],
+  "scope": "Three selected backend files through the unchanged original checker, including its utility prerequisites; not a claim that all 788 backend files completed"
+}
