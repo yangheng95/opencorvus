@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [2026-10-31-release-0.1.40](2026-10-31-release-0.1.40/README.md)：原生及官网发布、依赖和配置合同修复、失败候选与公网回读。
+
 - [匿名项目整理](2026-10-31-project-organization/README.md)：真实交互、文件、来源与数据证据。
 
 - [首页目标代码交付](2026-10-31-home-goal-delivery/README.md)：真实页面与模型、产物和原数据证据。

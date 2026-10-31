@@ -10,6 +10,15 @@ import { Glob } from "../src/util/glob"
 
 const require = createRequire(import.meta.url)
 
+test("installed archive, retirement and redirect parents preserve their actual outputs", async () => {
+  const result = await promisify(execFile)("node", [fileURLToPath(new URL("./fixture/dependency-glob-redirect-contract.mjs", import.meta.url))], { timeout: 15_000 })
+  expect(JSON.parse(result.stdout)).toEqual({
+    archive: { files: ["nested/note.txt"], text: "archive:中文\n" },
+    redirect: { status: 201, header: "owned", body: "first:second" },
+    retired: true,
+  })
+}, 20_000)
+
 test("patched glob dependencies enumerate exact nested brace selections", async () => {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "dependency-glob-"))
   try {
@@ -22,6 +31,13 @@ test("patched glob dependencies enumerate exact nested brace selections", async 
       path.join("src", "two.js"),
     ])
     expect(Glob.match("src/{one,{two,three}}.ts", "src/three.ts")).toBe(true)
+    expect(Glob.scanSync("src/{one,two}.{ts,js}", { cwd: directory }).sort()).toEqual([
+      path.join("src", "one.ts"),
+      path.join("src", "two.js"),
+    ])
+    const { glob } = require("glob")
+    const cancellation = new Error("Owned glob cancellation")
+    await expect(glob("**/*", { cwd: directory, signal: AbortSignal.abort(cancellation) })).rejects.toBe(cancellation)
   } finally {
     await fs.rm(directory, { recursive: true, force: true })
   }

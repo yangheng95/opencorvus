@@ -40,7 +40,7 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
-async function cold(directory: string, config: Config.Info, route = "/project/current") {
+async function cold(directory: string, config: Config.Info, route = "/agent") {
   const project = await Instance.provideProjectIdentity({ directory, fn: () => ({ ...Instance.project }) })
   const file = ConfigPaths.projectFile(directory)
   await fs.mkdir(path.dirname(file), { recursive: true })
@@ -72,6 +72,18 @@ async function collision(directory: string) {
   )
 }
 const collisionMessage = 'External expert squad package id "base" collides with a built-in expert squad id.'
+
+test("cold project metadata returns its actual identity with an unavailable execution model", async () => {
+  await using project = await memoryProject("candidate-metadata")
+  const config = await configFor(project.path)
+  const expected = await Instance.provideProjectIdentity({ directory: project.path, fn: () => ({ ...Instance.project }) })
+  const result = await cold(project.path, { ...config, model: "missing96/model" }, "/project/current")
+  expect({ status: result.status, id: result.body.id, worktree: result.body.worktree }).toEqual({
+    status: 200,
+    id: expected.id,
+    worktree: expected.worktree,
+  })
+})
 
 test("cold builtin collision returns canonical candidate validation 400", async () => {
   await using project = await memoryProject("candidate96-collision")

@@ -4,6 +4,62 @@
 
 ## 未发布
 
+## 0.1.40 - 2026-10-31
+
+### zh-CN
+
+#### 新增
+
+- 文件工作台支持 Markdown 源码与预览切换，保留未保存草稿；文档内相对链接和图片按原文档目录读取，保持项目访问边界。
+- 资源管理器工具栏提供新建文件入口。查看磁盘冲突后可返回原编辑器继续处理，保留草稿和实际文件身份。
+- Sources 支持查找已保存来源、揭示原位置、阅读和复制真实文件摘要；保留同名来源各自的身份及目录上下文。
+- 首页直接提供持续目标入口，目标与可选预算可在提交前复核；已有完成详情和新建目标入口保持清晰。
+
+#### 调整
+
+- Review 可直接打开当前文件，保留审阅状态与来源上下文；来源查找和原消息定位沿同一阅读操作保存落点。
+- 持续目标预算和校验反馈更清楚，指南与当前首页入口一致；归档暂停与完成状态分别说明。
+
+#### 修复
+
+- 修复匿名项目转换为命名项目后，历史来源文件和摘要失去访问的问题；以已提交的迁移回执保持原来源授权与实际新目录。
+- 修复 Unicode 大小写折叠使来源查找位置偏移的问题，保留原字符串位置；从消息查找返回后保持实际来源与精确落点。
+- 修复文档预览的相对资源解析目录和图片显示，阅读 Markdown 时保留编辑草稿、当前文件及原始资源路径。
+- 更新 follow-redirects、glob 和 minimatch，处理新依赖通告中的重定向凭据、取消后遍历及模式扩增风险；在真实依赖消费者中验证重定向、文件匹配、归档和清理。
+- 更新冷启动配置检查的验收入口，分别验证执行路由的明确配置错误与项目元数据的独立可读性，保持原生产路由权限。
+
+#### 升级影响与已知限制
+
+- 延续数据库9的版本化自动迁移，保留用户数据，无需清空数据库。只纳入已提交改动；独立基准研究结果不代表全部产品或所有使用场景均已验收。
+- macOS 仍为临时签名（ad hoc），未包含 Apple 公证。失败的未公开发布候选会清理草稿、标签和对应发布运行，历史更新日志及成功版本保留。
+
+### en-US
+
+#### Added
+
+- Switch Markdown files between source and preview while retaining unsaved drafts. Resolve document-relative links and images from the original document directory within existing Project access boundaries.
+- Create files from the Explorer toolbar. Return from a disk-conflict comparison to the original editor with its draft and actual file identity preserved.
+- Find saved Sources, reveal original locations, and read or copy actual file excerpts while retaining distinct identities and directory context for similarly named entries.
+- Start a continuous goal directly from Home and review its objective and optional budgets before submission, with clear completed-goal details and next-goal entry points.
+
+#### Changed
+
+- Open current files directly from Review while retaining review state and source context. Source searches and original-Message navigation retain their landing through the same reading operation.
+- Clarify continuous-goal budgets and validation feedback, align the guide with the current Home entry, and distinguish archive pauses from completion.
+
+#### Fixed
+
+- Preserve access to historical source files and excerpts after promoting an anonymous Project, using its committed promotion receipt to retain source authority and the actual destination directory.
+- Preserve original string offsets when Unicode case folding changes search length. Retain the actual source and precise landing when returning from Message search.
+- Resolve relative resources and display images correctly in document previews while retaining editor drafts, current files and original resource paths.
+- Update follow-redirects, glob and minimatch for newly reported credential-redirect, cancelled-traversal and pattern-amplification issues. Verify redirects, file matching, archives and cleanup through real installed consumers.
+- Exercise cold configuration validation through execution routes while independently verifying readable Project metadata, preserving the existing production route authorities.
+
+#### Upgrade impact and known limitations
+
+- Retain versioned automatic migration to database version 9 without resetting user data. Include committed changes only; separate benchmark research results do not establish acceptance for every product feature or scenario.
+- macOS remains ad hoc signed without Apple notarization. Unpublished failed candidates have their drafts, tags and associated publication runs removed; historical changelogs and successful versions remain.
+
 ## 0.1.39 - 2026-10-30
 
 ### zh-CN

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [0.1.40发布](records/2026-10/2026-10-31-release-0.1.40.md)：已提交增量的原生、自动更新与官网交付及失败候选清退。
+
 - [匿名项目整理](records/2026-10/2026-10-31-project-organization.md)：目录选择、项目命名与来源连续性。
 
 - [首页目标代码交付](records/2026-10/2026-10-31-home-goal-delivery.md)：全局首页持续目标的真实模型交付与产物验收。
