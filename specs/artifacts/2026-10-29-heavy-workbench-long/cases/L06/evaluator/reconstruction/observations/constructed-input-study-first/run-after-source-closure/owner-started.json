@@ -1,0 +1,27 @@
+{
+  "at": "2026-10-31T13:11:22.239089+00:00",
+  "actual_python_pid": 4532,
+  "argv": [
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\source-closure-repair\\run_constructed_input_study.py",
+    "--original-raw",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\original-group2-inputs\\Group2_data_format_only_files.zip",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\run-after-source-closure"
+  ],
+  "registered_cases": [
+    [
+      "LR1_DR02_VC05_V8a",
+      "native_rate_validation_vc05",
+      20261031
+    ],
+    [
+      "LR1_DR03_VC03_V16a",
+      "native_rate_validation_vc03",
+      20261032
+    ]
+  ],
+  "periods": 120,
+  "cold_solver_seconds": 60,
+  "method_nominal_wall_seconds": 120,
+  "scope": "Synthetic construction validation, not official instances, a new score, private heldout or human-hours evidence"
+}

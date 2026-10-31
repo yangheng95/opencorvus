@@ -1,0 +1,65 @@
+[
+  {
+    "argv": [
+      "C:/Python314/python.exe",
+      "-u",
+      "-X",
+      "utf8",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\raw-construction-first\\audit-source\\verify_model_construction.py",
+      "--published",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\LR1_DR02_VC01_V6a\\LR1_DR02_VC01_V6a_t120.mps",
+      "--constructed",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\raw-construction-first\\LR1_DR02_VC01_V6a\\LR1_DR02_VC01_V6a_t120.mps",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\raw-construction-first\\LR1_DR02_VC01_V6a.equivalence.json"
+    ],
+    "started_at": "2026-10-31T13:07:30.340682+00:00",
+    "finished_at": "2026-10-31T13:07:30.508208+00:00",
+    "native_exit": 0,
+    "stdout": "{\"mathematically_equivalent\": true, \"free_variables\": 1873, \"constraints\": 1080, \"numeric_values_compared\": 10595, \"max_absolute_numeric_difference\": 4.547473508864641e-13}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:/Python314/python.exe",
+      "-u",
+      "-X",
+      "utf8",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\raw-construction-first\\audit-source\\verify_model_construction.py",
+      "--published",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\LR1_DR02_VC05_V8a\\LR1_DR02_VC05_V8a_t120.mps",
+      "--constructed",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\raw-construction-first\\LR1_DR02_VC05_V8a\\LR1_DR02_VC05_V8a_t120.mps",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\raw-construction-first\\LR1_DR02_VC05_V8a.equivalence.json"
+    ],
+    "started_at": "2026-10-31T13:07:31.168387+00:00",
+    "finished_at": "2026-10-31T13:07:31.431121+00:00",
+    "native_exit": 0,
+    "stdout": "{\"mathematically_equivalent\": true, \"free_variables\": 6465, \"constraints\": 2520, \"numeric_values_compared\": 38443, \"max_absolute_numeric_difference\": 5.115907697472721e-13}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:/Python314/python.exe",
+      "-u",
+      "-X",
+      "utf8",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\raw-construction-first\\audit-source\\verify_model_construction.py",
+      "--published",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\LR1_DR03_VC03_V16a\\LR1_DR03_VC03_V16a_t120.mps",
+      "--constructed",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\raw-construction-first\\LR1_DR03_VC03_V16a\\LR1_DR03_VC03_V16a_t120.mps",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\raw-construction-first\\LR1_DR03_VC03_V16a.equivalence.json"
+    ],
+    "started_at": "2026-10-31T13:07:32.024899+00:00",
+    "finished_at": "2026-10-31T13:07:32.260302+00:00",
+    "native_exit": 0,
+    "stdout": "{\"mathematically_equivalent\": true, \"free_variables\": 5574, \"constraints\": 2400, \"numeric_values_compared\": 32799, \"max_absolute_numeric_difference\": 4.547473508864641e-12}\n",
+    "stderr": ""
+  }
+]

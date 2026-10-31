@@ -90,7 +90,7 @@ python -B plot_quality_axis.py --run D:/new-own-mirplib-run/group2-quality --out
 
 原初始source弧要支付目的港费，原人工sink退出弧也参与本港装卸/泊位和终点调整；三例实际费用分解及匿名路径图没有把它们省略或伪造现实未来航程。同类流的一种路径分解不等于原船名的唯一未来分配。raw元数据360期与原MPS120期边界明确。
 
-这些核对支持已列字段与原模型/当前计划一致，尚未独立重建raw到MPS的完整生成器和全部允许弧集合；没有将未核生成规则作为另一份隐藏评分标准。
+该阶段核对只支持已列字段与当时计划一致；后续本轮三个完整原模型的raw构造与全部允许弧/约束比较见下文，历史交付本身未因此被改写。
 
 首导出器source费用误设0、第二例原多类航时文件误读两项设施失败及原源/全部命令保[原件范围](observations/operational/scope.json)。港费修后首例成功，单一格式解析修后仅执行第二/第三例，未重已成功首例或任何solver；两个成功源版本据实记录，不冒同一源码的全新cold或独立整审。全部运营CSV/完整原向量保外部，仓库交付报告/图/源/原检查与范围清单。
 
@@ -118,3 +118,46 @@ python -B export_operational_plan.py --original-mps <original.mps> --values <act
 ```
 
 类对pass使用`--computation-scope conditional_pass`且不传原全局界；真正没有目标声明时省略该声明，一致性保持null。原数学reader仍唯一，不重算期望自比。四臂原生→原向量/真实声明→运营账→实际报告/图的本轮全链有记录，但没有冒同一源码的新cold或整题独审。
+
+
+## 原料构造与新输入全链已实际执行
+
+[新输入完整报告和实际图](constructed-input-study/README.md)将本轮结果、失败、来源与限制放在一起。[构造程序](build_group2_model.py)仅从原raw解析船队/初始可用注入、港口、航时、容量、泊位、生产消费、费用与终点调整，不读取已发表MPS或解；[数学等价检查](verify_model_construction.py)随后与三份独立发布的完整MPS比较。
+
+| 原实例 | 替换固定变量后的自由变量 / 约束 | 比较数值数 | 最大绝对差 |
+| --- | --- | --- | --- |
+| LR1_DR02_VC01_V6a | 1873 / 1080 | 10595 | 4.55e-13 |
+| LR1_DR02_VC05_V8a | 6465 / 2520 | 38443 | 5.12e-13 |
+| LR1_DR03_VC03_V16a | 5574 / 2400 | 32799 | 4.55e-12 |
+
+三例全部变量域/整数性、约束函数/方向/右端和目标函数/常数相等；只省原固定零source候选和零dummy，不省真实多船注入及其费用。原始初始固定变量先代入再比较，序列化行名不当数学语义。[实际构造与比较收据](observations/raw-construction-first/equivalence-commands.json)对应三份完整数学对象，未重新求解旧模型或做源码摘要验收。当前reader在同一实现中支持实际SCIP导出的MIN/单一RHS与bound集合、LO/BV/PL；原公开格式和实际新模型均进入同一数值检查。三例等价不是对所有可能Group2输入的普遍证明。
+
+新原料在首生成前固定两个label/seed（20261031、20261032），只用已登记的8%循环需求扰动、逐期总生产=总需求；几何、船队数量、容量、价格、泊位、航时保持来源值，不扩大规模。这些是明确披露的**合成构造验证输入**，不是官网原实例、现实数据或以后可再声称未知的private测试集。没有据求解结果筛seed。
+
+[真实source-only执行](observations/constructed-input-study-first/source-closure-native-terminal.json)13:11:21→13:16:35Z原生0。每份新raw→新MPS→一次成熟冷求解→从其实际可行计划执行原整类对方法→两份运营交付完整闭合：
+
+| 新构造验证输入 | 冷求解正确计划成本 | 整类对续接正确计划成本 | 方法实际wall秒 |
+| --- | --- | --- | --- |
+| native_rate_validation_vc05 | 161747.706104694 | 51776.886727669065 | 71.2805249 |
+| native_rate_validation_vc03 | 300629.6129055649 | 161633.73254488615 | 120.7743717 |
+
+原登记冷求解60秒、后续方法名义120秒为本次研究数值投入，非候选总任务时限；五类10段条件optimal后自然提前结束，三类3段time-limit。续接有额外计算，不据此宣称同资源优于全局法；对应同资源对照已有上一轮独立成对研究，本轮不重跑。所有新实际改进向量/终值按各完整生成MPS重算，四份运营交付共48条匿名类路径、1680港期账、最大库存残差5.684341886080802e-14。类对的局部界/optimal不作全模型证书，也不拿原父实例网页成本给改变后的问题打分。
+
+首source胶囊因CLI配置依赖在库模块顶层导入而exit1，发生在owner启动/原料生成/任何求解之前；[原错误](observations/constructed-input-study-first/native.stderr.txt)和首源保留。唯一修复将CLI专用import移入main，完整封依赖后才执行两个原登记新输入，未重复已完成计算。报告实际渲染并查看，不重求解或重画旧图。[范围清单](observations/constructed-input-study-first/scope.json)列每份当前投影/外部原件；完整rawZIP/MPS/全部中间与最终向量、固定变量映射和16运营CSV继续保外部。仓库不能宣称已包含全部第三方字节。
+
+当前数学对象仍允许有代价的alpha松弛。可行但未最优的计划可以含不必要松弛，不能把所有alpha都解释为物理必然损失，或私加“仅满仓/空仓时才准松弛”的隐藏硬约束。报告必须区分模型允许、经济上可改进与现实可执行保证。
+
+这补上三个原模型的完整raw构造核对和两个新数据完整执行实例；**正式质量校准、整题同checker错误programme、一次集中整题独审、后来合法fresh和有效小时证据仍缺**。当前不新建candidate、0.5、组件资格或审查；已有原矩阵/成对对照不再执行。
+
+### 新目录的原生重现入口
+
+下列命令是当前依赖/数据/输出合同，供以后新自有目录重现，不应再次执行本轮已闭合对象：
+
+```powershell
+python -B build_group2_model.py --raw-archive <declared-raw.zip> --instance <name> --periods 120 --out <new-model-dir>
+python -B verify_model_construction.py --published <published.mps> --constructed <constructed.mps> --out <new-comparison.json>
+python -B run_constructed_input_study.py --original-raw <Group2_data_format_only_files.zip> --out <new-owned-study-dir>
+python -B report_constructed_input_study.py --run <closed-new-owned-study-dir> --out <new-report-dir>
+```
+
+规划/求解依赖见requirements.txt，绘图环境见plot-requirements.txt。第三方原数据从原站获取，实际两个新输入配方/seed封在首源码中。运行器本次入口只承担这两个已登记构造研究，未冒通用新候选评分接口。未知输入任务与正式质量标尺仍须完整建设。

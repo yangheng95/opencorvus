@@ -1,0 +1,16 @@
+{
+  "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+  "feasible": true,
+  "objective_consistent": true,
+  "variables_recomputed": 5594,
+  "integer_variables_recomputed": 4630,
+  "constraints_recomputed": 2400,
+  "max_row_violation": 5.684341886080802e-14,
+  "max_bound_violation": 2.2737367544323206e-13,
+  "max_integrality_violation": 6.661338147750939e-16,
+  "reported_objective": 181312.2723084018,
+  "independent_objective": 181312.27230840185,
+  "objective_absolute_error": 5.820766091346741e-11,
+  "violations": [],
+  "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+}

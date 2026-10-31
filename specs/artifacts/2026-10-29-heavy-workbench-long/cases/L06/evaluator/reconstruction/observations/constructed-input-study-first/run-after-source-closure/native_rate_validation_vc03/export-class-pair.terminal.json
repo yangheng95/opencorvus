@@ -1,0 +1,30 @@
+{
+  "started_at": "2026-10-31T13:16:35.481636+00:00",
+  "argv": [
+    "D:\\opencorvus-benchmark-runs\\native-operations-reconstruction-20261031\\Scripts\\python.exe",
+    "-u",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\source-closure-repair\\export_operational_plan.py",
+    "--original-mps",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\run-after-source-closure\\native_rate_validation_vc03\\model\\native_rate_validation_vc03_t120.mps",
+    "--values",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\run-after-source-closure\\native_rate_validation_vc03\\class-pair\\final-values.json",
+    "--reported-objective",
+    "161633.73254488572",
+    "--computation-status",
+    "class_pair_pass_complete",
+    "--computation-scope",
+    "conditional_pass",
+    "--raw-archive",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\run-after-source-closure\\native_rate_validation_vc03\\input\\native_rate_validation_vc03.raw.zip",
+    "--instance",
+    "native_rate_validation_vc03",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\run-after-source-closure\\native_rate_validation_vc03\\operations-class-pair"
+  ],
+  "launcher_pid": 16556,
+  "finished_at": "2026-10-31T13:16:35.757500+00:00",
+  "native_exit": 0
+}

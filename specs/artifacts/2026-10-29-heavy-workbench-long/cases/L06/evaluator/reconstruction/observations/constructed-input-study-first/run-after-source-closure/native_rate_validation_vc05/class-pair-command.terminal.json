@@ -1,0 +1,22 @@
+{
+  "started_at": "2026-10-31T13:12:22.091006+00:00",
+  "argv": [
+    "D:\\opencorvus-benchmark-runs\\native-operations-reconstruction-20261031\\Scripts\\python.exe",
+    "-u",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\source-closure-repair\\run_class_pair_study.py",
+    "--closed-plan",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\run-after-source-closure\\native_rate_validation_vc05\\cold\\native_rate_validation_vc05",
+    "--strategy",
+    "class-pairs",
+    "--method-wall-seconds",
+    "120",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\run-after-source-closure\\native_rate_validation_vc05\\class-pair"
+  ],
+  "launcher_pid": 17868,
+  "finished_at": "2026-10-31T13:13:33.823617+00:00",
+  "native_exit": 0
+}

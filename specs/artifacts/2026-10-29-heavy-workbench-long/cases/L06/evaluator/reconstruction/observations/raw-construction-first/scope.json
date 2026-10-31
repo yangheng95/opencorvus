@@ -1,0 +1,124 @@
+{
+  "at": "2026-10-31T13:18:52.870918+00:00",
+  "external_root": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\raw-construction-first",
+  "repository_projection": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\reconstruction\\observations\\raw-construction-first",
+  "included_files": [
+    {
+      "path": "audit-and-format-source.zip",
+      "bytes": 112972
+    },
+    {
+      "path": "equivalence-commands.json",
+      "bytes": 3421
+    },
+    {
+      "path": "LR1_DR02_VC01_V6a/construction.json",
+      "bytes": 1368
+    },
+    {
+      "path": "LR1_DR02_VC01_V6a.equivalence.json",
+      "bytes": 932
+    },
+    {
+      "path": "LR1_DR02_VC05_V8a/construction.json",
+      "bytes": 1530
+    },
+    {
+      "path": "LR1_DR02_VC05_V8a.construction.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "LR1_DR02_VC05_V8a.construction.stdout.txt",
+      "bytes": 1084
+    },
+    {
+      "path": "LR1_DR02_VC05_V8a.equivalence.json",
+      "bytes": 933
+    },
+    {
+      "path": "LR1_DR03_VC03_V16a/construction.json",
+      "bytes": 1948
+    },
+    {
+      "path": "LR1_DR03_VC03_V16a.construction.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "LR1_DR03_VC03_V16a.construction.stdout.txt",
+      "bytes": 1192
+    },
+    {
+      "path": "LR1_DR03_VC03_V16a.equivalence.json",
+      "bytes": 937
+    },
+    {
+      "path": "native-command.json",
+      "bytes": 800
+    },
+    {
+      "path": "native.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "native.stdout.txt",
+      "bytes": 1022
+    },
+    {
+      "path": "pre-execution-source.zip",
+      "bytes": 111042
+    }
+  ],
+  "retained_externally": [
+    {
+      "path": "audit-source/build_group2_model.py",
+      "bytes": 7433
+    },
+    {
+      "path": "audit-source/export_operational_plan.py",
+      "bytes": 18016
+    },
+    {
+      "path": "audit-source/implementation-before-audit-recall.md",
+      "bytes": 226992
+    },
+    {
+      "path": "audit-source/verify_model_construction.py",
+      "bytes": 4398
+    },
+    {
+      "path": "audit-source/verify_original_mps.py",
+      "bytes": 7234
+    },
+    {
+      "path": "LR1_DR02_VC01_V6a/LR1_DR02_VC01_V6a_t120.mps",
+      "bytes": 684395
+    },
+    {
+      "path": "LR1_DR02_VC05_V8a/LR1_DR02_VC05_V8a_t120.mps",
+      "bytes": 2452593
+    },
+    {
+      "path": "LR1_DR03_VC03_V16a/LR1_DR03_VC03_V16a_t120.mps",
+      "bytes": 2099179
+    },
+    {
+      "path": "source/build_group2_model.py",
+      "bytes": 7433
+    },
+    {
+      "path": "source/export_operational_plan.py",
+      "bytes": 18016
+    },
+    {
+      "path": "source/implementation-before-execution-recall.md",
+      "bytes": 226992
+    },
+    {
+      "path": "source/verify_original_mps.py",
+      "bytes": 6173
+    }
+  ],
+  "scope": "Actual source capsules, commands, native logs, events, checks and terminal facts. Full input archives/MPS/variables/fixed maps/operating CSVs stay external. Extracted source copies and report are located by separate sources/report links, not falsely claimed absent.",
+  "benchmark_frozen": false,
+  "score": null
+}

@@ -1,0 +1,27 @@
+{
+  "at": "2026-10-31T13:16:35.345226+00:00",
+  "actual_python_pid": 30600,
+  "argv": [
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\source-closure-repair\\export_operational_plan.py",
+    "--original-mps",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\run-after-source-closure\\native_rate_validation_vc03\\model\\native_rate_validation_vc03_t120.mps",
+    "--values",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\run-after-source-closure\\native_rate_validation_vc03\\cold\\native_rate_validation_vc03\\final-values.json",
+    "--reported-objective",
+    "300629.6129055675",
+    "--computation-status",
+    "timelimit",
+    "--computation-scope",
+    "original_model",
+    "--raw-archive",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\run-after-source-closure\\native_rate_validation_vc03\\input\\native_rate_validation_vc03.raw.zip",
+    "--instance",
+    "native_rate_validation_vc03",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\run-after-source-closure\\native_rate_validation_vc03\\operations-cold",
+    "--original-model-bound",
+    "71766.78580123791"
+  ],
+  "source": "closed original solver plan and unmodified original raw/MPS",
+  "optimization": false
+}

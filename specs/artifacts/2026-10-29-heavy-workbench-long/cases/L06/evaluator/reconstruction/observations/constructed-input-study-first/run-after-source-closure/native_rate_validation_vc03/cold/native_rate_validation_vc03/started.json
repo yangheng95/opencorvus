@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-31T13:13:34.803510+00:00",
+  "actual_python_pid": 4532,
+  "original_member": "native_rate_validation_vc03_t120.mps",
+  "parameters": {
+    "parallel/maxnthreads": 1,
+    "limits/time": 60.0,
+    "randomization/randomseedshift": 0,
+    "numerics/feastol": 1e-08
+  },
+  "original_variables": 5594,
+  "original_constraints": 2400,
+  "scope": "whole original problem observation; no task score or original-competition reproduction claim"
+}

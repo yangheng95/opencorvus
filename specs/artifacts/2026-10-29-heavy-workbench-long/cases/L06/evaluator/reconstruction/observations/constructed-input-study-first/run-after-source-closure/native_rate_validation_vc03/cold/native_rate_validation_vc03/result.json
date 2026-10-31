@@ -1,0 +1,31 @@
+{
+  "instance": "native_rate_validation_vc03",
+  "original_member": "native_rate_validation_vc03_t120.mps",
+  "finished_at": "2026-10-31T13:14:34.003406+00:00",
+  "status": "timelimit",
+  "solver_seconds": 60.0,
+  "whole_read_and_solve_wall_seconds": 59.242553700001736,
+  "solutions_reported": 2,
+  "incumbent_events_saved": 1,
+  "primal_bound": 300629.6129055675,
+  "dual_bound": 71766.78580123791,
+  "relative_gap_reported": 3.1889797564318663,
+  "nodes": 134,
+  "parameters": {
+    "parallel/maxnthreads": 1,
+    "limits/time": 60.0,
+    "randomization/randomseedshift": 0,
+    "numerics/feastol": 1e-08
+  },
+  "independent_validation": {
+    "feasible": true,
+    "objective_consistent": true,
+    "independent_objective": 300629.6129055649,
+    "constraints_recomputed": 2400,
+    "variables_recomputed": 5594,
+    "max_row_violation": 0.0,
+    "max_integrality_violation": 0.0
+  },
+  "score": null,
+  "benchmark_qualification": "not_established"
+}

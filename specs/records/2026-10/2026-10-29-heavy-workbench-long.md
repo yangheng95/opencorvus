@@ -943,3 +943,34 @@ Recall：用户要完整重型任务的实质质量，不再接受工程文件�
 12:47:09→12:47:11Z真实报告/新质量曲线原生0，主方view_image实核两面板/原log成本/真实wall/供给初始点（不是新发现）/提前完成pass。新报告列实际损产缺货与运输费用，支持方法通过改调度降低原代价，仍有明显公开成本差距：41950.61 vs原站舍入36659、159303.84 vs82837；未设新评分线或给100。方法是从原文两船邻域迁移为类流pass，不假称原论文复现/单船身份；真实资源超额0.2398056/0.7171169秒等如实列，L01并行范围不掩盖。
 
 本轮补的是已登记的实质研究方法与完整对照/新运营计划报告，方法/原件/图保method-study及observations/class-pair-study-first。仍缺未知新输入语义闭合/泛化证据、合理可达的正式事前质量标尺、完整新题真正错误programme/一次集中整审/fresh/候选有效小时。没有新candidate或独审，也不机械0.5；原L01及旧public/rubric/分数全部不变。
+
+
+### 原料→模型与新输入完整执行链：实施前Recall（2026-10-31）
+
+用户要实质完整任务/质量，不再新candidate、同型0.5或重复旧资格/solver。现ownscope clean、HEAD8e440436，181foreign保留；L01原owner23296/训练18416存活，wave纯L-BFGS12:56:12Z39000/loss.019538285694，native无终态/新error、stderr0。原矩阵继续后台不热改/重格。本轮只建设L06原料构造语义和新的构造验证输入，不改任何旧public/rubric/分数/生产/DB/UI，不引入Docker或并行agent。
+
+根因/缺口：三个公开原实例及已知解可获取，方法对照虽真改善，不能独立支撑未知输入测量。当前raw字段与可行计划核对尚未证明raw→完整MPS的生成语义和所有允许弧。直接换名称/沿用公开计划不解决此问题，旧合成DP换参数更未解决重型上限。本轮构造验证输入只支持该完整链，不能冒未来保密测试集/数小时/统计难度；不按结果挑seed/拉阈值。全仓已检索raw_data、read_original_model、run_instance及原生writer/导出消费，当前无独立模型构造器，单一原数值reader保留，不建另一隐藏评分模型。
+
+已读取原Group2模型/三个MPS全部变量/行/界类型及真实raw结构、PySCIPOpt6.3.0官方writeProblem文档。采用成熟SCIP建模/writeProblem(trans=False,genericnames=False)，不自写第二求解器。构造器只读raw ZIP/显式实例/期数，不能读原MPS/原解/网站目标来补系数。原source+sink负节点编号可由港口数确定，source时间−1，sink为T；真实船队按class/初始港/firstTimeAvailable的多重集固定注入，不把论文简写的单单位源式生搬为每类只有一船。
+
+原模型结构已核：跨港仅Loading↔Discharge且到达时间为给定原航时、必须在0..T−1内，整数上限1；等待t→t+1与任意期退出的上限为该类实际船数。库存S(j,0)固定raw初始，S(j,1..T−1)/endingS(j,T)在0..容量；alpha非负无上界。全原流平衡、库存平衡和泊位行，服务含跨港与sink退出；费用分别source目的港费、满载几何航费+目的港费、空返折扣航费+目的港费、alpha原几何罚价、sink原提前结束调整，所有规则公开明确。旧data-only360期只取所选原MPS120期前缀。metadata类别/船数/港口身份/角色、原数组覆盖必须真核，未建模raw字段不私加成硬约束。
+
+等价验证不是源码hash/自算期望：对原发表完整MPS与独立raw构造的MPS，唯一标准库reader解析全部数值；分别将固定变量代入行RHS/目标常数后比较全部自由变量域/整数性/行感向/系数/RHS/原目标。原多余固定零source弧和两个零dummy可消去，不能漏实际非零初始船流或目标费用。现三原source候选每港0..59、包括大量固定0；canonical只建真实非零source注入。原约束/变量命名可追溯，目标行名称仅序列化标签不算数学差异。native writer若产生标准MPS命名/界字段，先记录实际格式，再在唯一reader按正式数值语义支持，不双reader/fallback，不改原对象遮错。等价失败先保原件/根因，不能通过放宽业务目标补过。
+
+第一次新输入前登记两份构造验证输入，原两多类基础分别VC05和VC03，尺寸/船队/坐标/容量/价格/航时保持，不放大问题。随机种子20261031和20261032在结果前固定。各消费港按原前缀率乘1+0.08*sin(2π(t+phase)/period)，period从19/23/29取、phase均匀整数，四舍五入成非负整数；唯一生产港每期供给改为同期间消费之和，保持逐期总量平衡。原recipe、抽样事实和全部结果保留；不重抽到“更难/更好”。这是合法时变需求/生产数组、非新隐藏规则，更不因微扰就宣称新任务更重；此两验证输入后会公开，不能冒以后fresh的私有heldout。
+
+每份从新raw→canonical MPS→一次成熟默认60秒原生冷baseline→一次120秒名义方法wall整类对pass→原数学重算/真实运营账/实际报告图；两个新实例顺序，四个新执行不是重旧冷/4臂对照，也不新跑全局热对照。新baseline复用唯一run_instance，仅去掉原ZIP读入耦合，读显式模型bytes；方法仍同8e版本算法，不换排序/预算。正常提前完成不等待。每个accepted向量与final进入同一MPS数值checker，生成器等价与原生/运营验收分开，不能凭行数或等价就算整题成功。SCIP/CPU仍单线程、seed0、feastol1e-8，L01同时运行不作速度/有效小时归因。首源/原输入事前封，失败保原源和原件、只必要修同对象，不用旧解/重算期望/新grader造成功。完整新题的正式质量标尺/真错误programme/一次整审/fresh和有效小时仍待。
+
+
+首次新输入管线设施失败：pre-execution-source.zip缺fetch_originals.py，而复用run_instance时模块顶层仍导入仅原CLI选择profile用的fetch配置，导入阶段ModuleNotFoundError/native1。owner尚未启动、两recipe/构造/私有优化全未执行，不是算法无解/候选或生产异常。保原ZIP/原stdin argv/真实stderr与terminal；修正唯一baseline将CLI profile导入放回main，核心run_instance不依赖不使用的下载配置；修后源包也封完整fetch CLI依赖。源版本明确为dependency-closure修订，新run目录接同登记两对象/同seed/同预算，不能覆盖原错误或称原首源已正常执行。没有重任何已完成原solver。
+
+### 原料构造与两新输入完整执行：实际结果（2026-10-31）
+
+- 实施前上述Recall固定当前模型语义、三个原完整模型核对和两新配方/seed；没有新candidate/独审/0.5。`raw-construction-first`三次原生构造只读raw、无优化，按原独立发布完整MPS代入全部固定变量后比较自由域/整数性、全部行/目标常数与函数。三个自由变量/约束1873/1080、6465/2520、5574/2400，10595/38443/32799数值全相等，最大差4.547e-13/5.116e-13/4.547e-12；不是源码hash或自行合成期望。零source候选/dummy省略与真实多船注入/费用严格分开。当前唯一reader已覆盖实际native写出的MIN、单一具名RHS/bound、LO/BV/PL，两个新完整生成模型和三原等价验收真实经过它；未重旧solver/组件资格。
+- 首完整新输入胶囊真实exit1，原因库模块顶层导入了仅CLI使用的fetch profile依赖，owner/生成/求解均未发生。先保原源/命令/错误，再只把该依赖移main、封完整当前源；`source-closure-repair.zip`是本次两个新输入的真实执行源。没有重已完成格、掩失败或加预算换seed。
+- `constructed-input-study-first/source-closure-native-terminal.json`实际13:11:21.941→13:16:35.822Z/native0；父owner完整收尾，两个新raw/MPS都真正冷求解并进入原class-pair一次pass。五类新seed20261031正确冷成本161747.706104694→51776.886727669065，方法71.2805249秒/10段条件optimal后早完；三类seed20261032成本300629.6129055649→161633.73254488615，120.7743717秒/3段time-limit。冷各60秒研究solver投入、后方法名义120秒不是用户时限/有效小时；额外续接不当同资源算法优越比较。所有事件及四终值完整生成MPS行/界/整数/目标真核；cold界36255.90902407677/71766.78580123791仅原求解器报告，类对界不能作原全局界或最优。
+- 四份实际原生运营导出48匿名路径/1680港期账、16完整CSV，最大库存残差5.684341886080802e-14，原真实reported objective进入当前显式exporter；没有填合成native声明或拿原父实例网页最优冒新题答案。原初始source费/退出服务/多船数/全部新rate数组、容量泊位航时/成本重算闭合。
+- 原生报告`constructed-input-study-first/report`已实际生成且主方view_image：两新输入完整120期曲线、实际冷/方法成本轨迹/阶段界可读。图横轴分别模型period与两个实测优化阶段wall之和，不当候选工作时间；没有重旧图/solver。第一次未用CLI依赖的失败和修后成功都保原，不当产品调度/候选异常。
+- `cases/L06/evaluator/reconstruction/observations/raw-construction-first`和`constructed-input-study-first`保存首源/修源/原命令/原日志/原数学比较/各实际末态/运营closures与范围；完整原/新rawZIP、MPS、全部向量/固定映射/16CSV外部保。原数据再分发未核；这两份是披露的合成构造验证，不是官方新例、公司日志、未来private heldout或题目资格。构造器对三完整原例等价不是全语法/任意输入普遍证明。
+- alpha在原数学定义中是允许的有价松弛，非最优合法解可以有非必要损失；不能私加零缺货/只满仓可损产等新硬规则或把模型可行说成现实全保证。源/数学truth单一，不再造隐藏平行模型。
+- 未满足：事前正式经济/科学质量标尺、完整公平未知输入任务、同checker真错误programme、唯一集中整题审查和以后合法fresh/有效小时仍待。当前score=null/未冻结/wholebenchmark=false；十题重型与小时目标ACTIVE且未达。保原100和所有失败，不新candidate/组件资格/机械0.5，不以两输入/文件/图数当完成。

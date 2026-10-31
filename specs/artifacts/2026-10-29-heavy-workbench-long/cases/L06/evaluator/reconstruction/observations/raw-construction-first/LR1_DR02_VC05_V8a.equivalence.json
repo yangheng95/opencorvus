@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-31T13:07:31.418867+00:00",
+  "published_model": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\LR1_DR02_VC05_V8a\\LR1_DR02_VC05_V8a_t120.mps",
+  "constructed_model": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\raw-construction-first\\LR1_DR02_VC05_V8a\\LR1_DR02_VC05_V8a_t120.mps",
+  "mathematically_equivalent": true,
+  "free_variables": 6465,
+  "constraints": 2520,
+  "numeric_values_compared": 38443,
+  "max_absolute_numeric_difference": 5.115907697472721e-13,
+  "published_fixed_variables_substituted": 905,
+  "constructed_fixed_variables_substituted": 11,
+  "errors": [],
+  "scope": "Full linear-function/domain comparison against an independent published model, not source hashes or a re-computed synthetic expected answer",
+  "benchmark_qualification": "not established",
+  "optimization_executed": false
+}

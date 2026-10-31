@@ -13,7 +13,6 @@ import traceback
 import zipfile
 
 from pyscipopt import Model, SCIP_EVENTTYPE
-from fetch_originals import INSTANCE_NAMES, GROUP2_PROFILE
 from verify_original_mps import verify
 
 
@@ -29,11 +28,11 @@ def finite_bound(value):
     return float(value) if math.isfinite(value) and abs(value) < 1e19 else None
 
 
-def run_instance(archive, instance, root, original_member):
+def run_instance(model_bytes, instance, root, original_member):
     target = root / instance
     target.mkdir()
     mps = target / Path(original_member).name
-    mps.write_bytes(archive.read(original_member))
+    mps.write_bytes(model_bytes)
     wall = time.perf_counter()
     model = Model(instance)
     model.setLogfile(str(target / "solver-native.log"))
@@ -114,6 +113,8 @@ def run_instance(archive, instance, root, original_member):
 
 
 def main():
+    from fetch_originals import INSTANCE_NAMES, GROUP2_PROFILE
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--original-inputs", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
@@ -137,7 +138,7 @@ def main():
         with zipfile.ZipFile(args.original_inputs / f"Group{args.group}_MPS_files.zip") as archive:
             for instance in instances:
                 member = f"Group{args.group}_MPS_files/{instance}_t{periods}.mps"
-                result = run_instance(archive, instance, root, member)
+                result = run_instance(archive.read(member), instance, root, member)
                 results.append(result)
                 write(root / "results.partial.json", results)
                 print(json.dumps(result, allow_nan=False), flush=True)

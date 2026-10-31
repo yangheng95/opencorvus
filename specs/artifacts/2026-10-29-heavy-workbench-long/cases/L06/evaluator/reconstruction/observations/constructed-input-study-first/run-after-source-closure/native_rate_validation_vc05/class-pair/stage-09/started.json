@@ -1,0 +1,31 @@
+{
+  "at": "2026-10-31T13:13:27.014001+00:00",
+  "actual_python_pid": 31488,
+  "free_classes": [
+    1,
+    2
+  ],
+  "fixed_integer_arc_count": 3451,
+  "free_integer_arc_count": 2302,
+  "supplied_incumbent_stored": true,
+  "supplied_original_objective": 52182.01198339461,
+  "original_initial_check": {
+    "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+    "feasible": true,
+    "objective_consistent": true,
+    "variables_recomputed": 6476,
+    "integer_variables_recomputed": 5753,
+    "constraints_recomputed": 2520,
+    "max_row_violation": 2.842170943040401e-14,
+    "max_bound_violation": 5.684341886080802e-14,
+    "max_integrality_violation": 9.992007221626409e-15,
+    "reported_objective": 52182.01198339461,
+    "independent_objective": 52182.01198339462,
+    "objective_absolute_error": 1.4551915228366852e-11,
+    "violations": [],
+    "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+  },
+  "wall_allowance_remaining_after_setup": 55.348719800000254,
+  "arm_wall_at_native_start": 64.6512986999951,
+  "scope": "Unchanged original rows/objective; only declared other-class integer bounds fixed"
+}

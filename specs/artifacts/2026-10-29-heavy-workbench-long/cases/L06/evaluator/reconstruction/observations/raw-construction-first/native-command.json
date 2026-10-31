@@ -1,0 +1,21 @@
+{
+  "argv": [
+    "D:/opencorvus-benchmark-runs/native-operations-reconstruction-20261031/Scripts/python.exe",
+    "-u",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\raw-construction-first\\source\\build_group2_model.py",
+    "--raw-archive",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\original-group2-inputs\\Group2_data_format_only_files.zip",
+    "--instance",
+    "LR1_DR02_VC01_V6a",
+    "--periods",
+    "120",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\raw-construction-first\\LR1_DR02_VC01_V6a"
+  ],
+  "started_at": "2026-10-31T13:06:14.158191+00:00",
+  "finished_at": "2026-10-31T13:06:14.626130+00:00",
+  "native_exit": 0
+}

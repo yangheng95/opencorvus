@@ -1,0 +1,1160 @@
+{
+  "at": "2026-10-31T13:18:52.870918+00:00",
+  "external_root": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first",
+  "repository_projection": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\reconstruction\\observations\\constructed-input-study-first",
+  "included_files": [
+    {
+      "path": "native-started.json",
+      "bytes": 678
+    },
+    {
+      "path": "native-terminal.json",
+      "bytes": 735
+    },
+    {
+      "path": "native.stderr.txt",
+      "bytes": 540
+    },
+    {
+      "path": "native.stdout.txt",
+      "bytes": 0
+    },
+    {
+      "path": "pre-execution-source.zip",
+      "bytes": 122382
+    },
+    {
+      "path": "report-native-command.json",
+      "bytes": 735
+    },
+    {
+      "path": "report-native.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "report-native.stdout.txt",
+      "bytes": 79
+    },
+    {
+      "path": "report-source.zip",
+      "bytes": 113108
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/execution-started.json",
+      "bytes": 1180
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/execution-terminal.json",
+      "bytes": 5184
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/independent-original-model-check.json",
+      "bytes": 664
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/initial-original-model-check.json",
+      "bytes": 662
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-00/actual-best-events.jsonl",
+      "bytes": 1218
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-00/independent-original-model-check.json",
+      "bytes": 683
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-00/result.json",
+      "bytes": 1315
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-00/solver-native.log",
+      "bytes": 11539
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-00/started.json",
+      "bytes": 1198
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-01/actual-best-events.jsonl",
+      "bytes": 442
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-01/independent-original-model-check.json",
+      "bytes": 717
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-01/result.json",
+      "bytes": 1352
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-01/solver-native.log",
+      "bytes": 17952
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-01/started.json",
+      "bytes": 1237
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-02/actual-best-events.jsonl",
+      "bytes": 1663
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-02/independent-original-model-check.json",
+      "bytes": 664
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-02/result.json",
+      "bytes": 1299
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-02/solver-native.log",
+      "bytes": 12082
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-02/started.json",
+      "bytes": 1270
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stages.partial.json",
+      "bytes": 4184
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair-command.started.json",
+      "bytes": 901
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair-command.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair-command.stdout.txt",
+      "bytes": 41462
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair-command.terminal.json",
+      "bytes": 976
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/cold/native_rate_validation_vc03/incumbent-events.jsonl",
+      "bytes": 467
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/cold/native_rate_validation_vc03/independent-original-model-check.json",
+      "bytes": 662
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/cold/native_rate_validation_vc03/result.json",
+      "bytes": 986
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/cold/native_rate_validation_vc03/solver-native.log",
+      "bytes": 6363
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/cold/native_rate_validation_vc03/started.json",
+      "bytes": 469
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/export-class-pair.started.json",
+      "bytes": 1516
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/export-class-pair.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/export-class-pair.stdout.txt",
+      "bytes": 130
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/export-class-pair.terminal.json",
+      "bytes": 1591
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/export-cold.started.json",
+      "bytes": 1572
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/export-cold.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/export-cold.stdout.txt",
+      "bytes": 129
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/export-cold.terminal.json",
+      "bytes": 1647
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/input/recipe.json",
+      "bytes": 6548
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/model/construction.json",
+      "bytes": 2086
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/operations-class-pair/execution-started.json",
+      "bytes": 1466
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/operations-class-pair/execution-terminal.json",
+      "bytes": 245
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/operations-class-pair/independent-original-model-check.json",
+      "bytes": 664
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/operations-class-pair/operational-closure.json",
+      "bytes": 2898
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/operations-cold/execution-started.json",
+      "bytes": 1523
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/operations-cold/execution-terminal.json",
+      "bytes": 244
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/operations-cold/independent-original-model-check.json",
+      "bytes": 662
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/operations-cold/operational-closure.json",
+      "bytes": 2890
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/execution-started.json",
+      "bytes": 1180
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/execution-terminal.json",
+      "bytes": 15591
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/independent-original-model-check.json",
+      "bytes": 718
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/initial-original-model-check.json",
+      "bytes": 680
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-00/actual-best-events.jsonl",
+      "bytes": 1770
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-00/independent-original-model-check.json",
+      "bytes": 717
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-00/result.json",
+      "bytes": 1347
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-00/solver-native.log",
+      "bytes": 9534
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-00/started.json",
+      "bytes": 1215
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-01/actual-best-events.jsonl",
+      "bytes": 2644
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-01/independent-original-model-check.json",
+      "bytes": 716
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-01/result.json",
+      "bytes": 1345
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-01/solver-native.log",
+      "bytes": 18287
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-01/started.json",
+      "bytes": 1272
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-02/actual-best-events.jsonl",
+      "bytes": 3407
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-02/independent-original-model-check.json",
+      "bytes": 716
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-02/result.json",
+      "bytes": 1346
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-02/solver-native.log",
+      "bytes": 39401
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-02/started.json",
+      "bytes": 1270
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-03/actual-best-events.jsonl",
+      "bytes": 2199
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-03/independent-original-model-check.json",
+      "bytes": 714
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-03/result.json",
+      "bytes": 1342
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-03/solver-native.log",
+      "bytes": 33022
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-03/started.json",
+      "bytes": 1269
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-04/actual-best-events.jsonl",
+      "bytes": 1287
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-04/independent-original-model-check.json",
+      "bytes": 717
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-04/result.json",
+      "bytes": 1347
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-04/solver-native.log",
+      "bytes": 21566
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-04/started.json",
+      "bytes": 1268
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-05/actual-best-events.jsonl",
+      "bytes": 2150
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-05/independent-original-model-check.json",
+      "bytes": 698
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-05/result.json",
+      "bytes": 1328
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-05/solver-native.log",
+      "bytes": 38632
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-05/started.json",
+      "bytes": 1272
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-06/actual-best-events.jsonl",
+      "bytes": 2976
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-06/independent-original-model-check.json",
+      "bytes": 678
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-06/result.json",
+      "bytes": 1308
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-06/solver-native.log",
+      "bytes": 14711
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-06/started.json",
+      "bytes": 1254
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-07/actual-best-events.jsonl",
+      "bytes": 881
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-07/independent-original-model-check.json",
+      "bytes": 714
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-07/result.json",
+      "bytes": 1344
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-07/solver-native.log",
+      "bytes": 17224
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-07/started.json",
+      "bytes": 1235
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-08/actual-best-events.jsonl",
+      "bytes": 442
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-08/independent-original-model-check.json",
+      "bytes": 716
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-08/result.json",
+      "bytes": 1348
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-08/solver-native.log",
+      "bytes": 17952
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-08/started.json",
+      "bytes": 1270
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-09/actual-best-events.jsonl",
+      "bytes": 3524
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-09/independent-original-model-check.json",
+      "bytes": 718
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-09/result.json",
+      "bytes": 1349
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-09/solver-native.log",
+      "bytes": 33947
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-09/started.json",
+      "bytes": 1269
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stages.partial.json",
+      "bytes": 14119
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair-command.started.json",
+      "bytes": 902
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair-command.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair-command.stdout.txt",
+      "bytes": 242496
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair-command.terminal.json",
+      "bytes": 977
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/cold/native_rate_validation_vc05/incumbent-events.jsonl",
+      "bytes": 1461
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/cold/native_rate_validation_vc05/independent-original-model-check.json",
+      "bytes": 680
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/cold/native_rate_validation_vc05/result.json",
+      "bytes": 984
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/cold/native_rate_validation_vc05/solver-native.log",
+      "bytes": 6006
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/cold/native_rate_validation_vc05/started.json",
+      "bytes": 469
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/export-class-pair.started.json",
+      "bytes": 1514
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/export-class-pair.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/export-class-pair.stdout.txt",
+      "bytes": 129
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/export-class-pair.terminal.json",
+      "bytes": 1589
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/export-cold.started.json",
+      "bytes": 1572
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/export-cold.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/export-cold.stdout.txt",
+      "bytes": 127
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/export-cold.terminal.json",
+      "bytes": 1647
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/input/recipe.json",
+      "bytes": 5036
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/model/construction.json",
+      "bytes": 1671
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/operations-class-pair/execution-started.json",
+      "bytes": 1466
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/operations-class-pair/execution-terminal.json",
+      "bytes": 245
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/operations-class-pair/independent-original-model-check.json",
+      "bytes": 718
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/operations-class-pair/operational-closure.json",
+      "bytes": 2967
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/operations-cold/execution-started.json",
+      "bytes": 1523
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/operations-cold/execution-terminal.json",
+      "bytes": 243
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/operations-cold/independent-original-model-check.json",
+      "bytes": 680
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/operations-cold/operational-closure.json",
+      "bytes": 2923
+    },
+    {
+      "path": "run-after-source-closure/owner-started.json",
+      "bytes": 1014
+    },
+    {
+      "path": "run-after-source-closure/owner-terminal.json",
+      "bytes": 33890
+    },
+    {
+      "path": "run-after-source-closure/results.partial.json",
+      "bytes": 32056
+    },
+    {
+      "path": "source-closure-native-started.json",
+      "bytes": 714
+    },
+    {
+      "path": "source-closure-native-terminal.json",
+      "bytes": 771
+    },
+    {
+      "path": "source-closure-native.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "source-closure-native.stdout.txt",
+      "bytes": 12602
+    },
+    {
+      "path": "source-closure-repair.zip",
+      "bytes": 124343
+    },
+    {
+      "path": "actual-operating-deliveries.json",
+      "bytes": 18828
+    },
+    {
+      "path": "visual-review.json",
+      "bytes": 467
+    }
+  ],
+  "retained_externally": [
+    {
+      "path": "report/actual-constructed-inputs.png",
+      "bytes": 217385
+    },
+    {
+      "path": "report/mpl-config/fontlist-v3.11.0.json",
+      "bytes": 150115
+    },
+    {
+      "path": "report/README.md",
+      "bytes": 4423
+    },
+    {
+      "path": "report/report-data.json",
+      "bytes": 67668
+    },
+    {
+      "path": "report-source/export_operational_plan.py",
+      "bytes": 18016
+    },
+    {
+      "path": "report-source/report_constructed_input_study.py",
+      "bytes": 10142
+    },
+    {
+      "path": "report-source/verify_original_mps.py",
+      "bytes": 7234
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/final-values.json",
+      "bytes": 190817
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/original-class-structure.json",
+      "bytes": 161406
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-00/final-values.json",
+      "bytes": 190917
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-00/fixed-original-integer-values.json",
+      "bytes": 50543
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-00/incumbent-0000.json.gz",
+      "bytes": 40100
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-00/incumbent-0001.json.gz",
+      "bytes": 40143
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-00/incumbent-0002.json.gz",
+      "bytes": 40364
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-01/final-values.json",
+      "bytes": 191847
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-01/fixed-original-integer-values.json",
+      "bytes": 50545
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-01/incumbent-0000.json.gz",
+      "bytes": 40153
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-02/final-values.json",
+      "bytes": 190817
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-02/fixed-original-integer-values.json",
+      "bytes": 50575
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-02/incumbent-0000.json.gz",
+      "bytes": 39894
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-02/incumbent-0001.json.gz",
+      "bytes": 39926
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-02/incumbent-0002.json.gz",
+      "bytes": 39868
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/class-pair/stage-02/incumbent-0003.json.gz",
+      "bytes": 39809
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/cold/native_rate_validation_vc03/final-values.json",
+      "bytes": 191412
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/cold/native_rate_validation_vc03/incumbent-0000.json.gz",
+      "bytes": 40100
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/cold/native_rate_validation_vc03/native_rate_validation_vc03_t120.mps",
+      "bytes": 2099197
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/input/native_rate_validation_vc03.raw.zip",
+      "bytes": 3566
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/model/native_rate_validation_vc03_t120.mps",
+      "bytes": 2099197
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/operations-class-pair/anonymous-vessel-paths.csv",
+      "bytes": 16359
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/operations-class-pair/class-arc-plan.csv",
+      "bytes": 20156
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/operations-class-pair/economic-components.csv",
+      "bytes": 263
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/operations-class-pair/port-period-ledger.csv",
+      "bytes": 50511
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/operations-cold/anonymous-vessel-paths.csv",
+      "bytes": 24591
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/operations-cold/class-arc-plan.csv",
+      "bytes": 28271
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/operations-cold/economic-components.csv",
+      "bytes": 262
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc03/operations-cold/port-period-ledger.csv",
+      "bytes": 52202
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/final-values.json",
+      "bytes": 230444
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/original-class-structure.json",
+      "bytes": 200833
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-00/final-values.json",
+      "bytes": 225914
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-00/fixed-original-integer-values.json",
+      "bytes": 113141
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-00/incumbent-0000.json.gz",
+      "bytes": 47412
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-00/incumbent-0001.json.gz",
+      "bytes": 47295
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-00/incumbent-0002.json.gz",
+      "bytes": 46848
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-00/incumbent-0003.json.gz",
+      "bytes": 47311
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-01/final-values.json",
+      "bytes": 227641
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-01/fixed-original-integer-values.json",
+      "bytes": 113109
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-01/incumbent-0000.json.gz",
+      "bytes": 46925
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-01/incumbent-0001.json.gz",
+      "bytes": 46924
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-01/incumbent-0002.json.gz",
+      "bytes": 46720
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-01/incumbent-0003.json.gz",
+      "bytes": 46704
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-01/incumbent-0004.json.gz",
+      "bytes": 46708
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-01/incumbent-0005.json.gz",
+      "bytes": 47430
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-02/final-values.json",
+      "bytes": 224575
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-02/fixed-original-integer-values.json",
+      "bytes": 113109
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-02/incumbent-0000.json.gz",
+      "bytes": 47191
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-02/incumbent-0001.json.gz",
+      "bytes": 47211
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-02/incumbent-0002.json.gz",
+      "bytes": 47103
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-02/incumbent-0003.json.gz",
+      "bytes": 46303
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-02/incumbent-0004.json.gz",
+      "bytes": 46303
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-02/incumbent-0005.json.gz",
+      "bytes": 47228
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-02/incumbent-0006.json.gz",
+      "bytes": 46303
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-02/incumbent-0007.json.gz",
+      "bytes": 47082
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-03/final-values.json",
+      "bytes": 227936
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-03/fixed-original-integer-values.json",
+      "bytes": 113109
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-03/incumbent-0000.json.gz",
+      "bytes": 47012
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-03/incumbent-0001.json.gz",
+      "bytes": 47022
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-03/incumbent-0002.json.gz",
+      "bytes": 47022
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-03/incumbent-0003.json.gz",
+      "bytes": 48699
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-03/incumbent-0004.json.gz",
+      "bytes": 48699
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-04/final-values.json",
+      "bytes": 228862
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-04/fixed-original-integer-values.json",
+      "bytes": 113109
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-04/incumbent-0000.json.gz",
+      "bytes": 47584
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-04/incumbent-0001.json.gz",
+      "bytes": 47595
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-04/incumbent-0002.json.gz",
+      "bytes": 48392
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-05/final-values.json",
+      "bytes": 222611
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-05/fixed-original-integer-values.json",
+      "bytes": 113109
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-05/incumbent-0000.json.gz",
+      "bytes": 47666
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-05/incumbent-0001.json.gz",
+      "bytes": 47662
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-05/incumbent-0002.json.gz",
+      "bytes": 46303
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-05/incumbent-0003.json.gz",
+      "bytes": 46460
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-05/incumbent-0004.json.gz",
+      "bytes": 46428
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-06/final-values.json",
+      "bytes": 222701
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-06/fixed-original-integer-values.json",
+      "bytes": 113109
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-06/incumbent-0000.json.gz",
+      "bytes": 46428
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-06/incumbent-0001.json.gz",
+      "bytes": 46431
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-06/incumbent-0002.json.gz",
+      "bytes": 47300
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-06/incumbent-0003.json.gz",
+      "bytes": 46924
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-06/incumbent-0004.json.gz",
+      "bytes": 46512
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-06/incumbent-0005.json.gz",
+      "bytes": 46356
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-06/incumbent-0006.json.gz",
+      "bytes": 46390
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-07/final-values.json",
+      "bytes": 226064
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-07/fixed-original-integer-values.json",
+      "bytes": 113077
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-07/incumbent-0000.json.gz",
+      "bytes": 46650
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-07/incumbent-0001.json.gz",
+      "bytes": 47487
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-08/final-values.json",
+      "bytes": 225659
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-08/fixed-original-integer-values.json",
+      "bytes": 113077
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-08/incumbent-0000.json.gz",
+      "bytes": 46807
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-09/final-values.json",
+      "bytes": 230444
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-09/fixed-original-integer-values.json",
+      "bytes": 113077
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-09/incumbent-0000.json.gz",
+      "bytes": 46331
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-09/incumbent-0001.json.gz",
+      "bytes": 46325
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-09/incumbent-0002.json.gz",
+      "bytes": 46325
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-09/incumbent-0003.json.gz",
+      "bytes": 48622
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-09/incumbent-0004.json.gz",
+      "bytes": 48677
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-09/incumbent-0005.json.gz",
+      "bytes": 47696
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-09/incumbent-0006.json.gz",
+      "bytes": 47718
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/class-pair/stage-09/incumbent-0007.json.gz",
+      "bytes": 49894
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/cold/native_rate_validation_vc05/final-values.json",
+      "bytes": 222414
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/cold/native_rate_validation_vc05/incumbent-0000.json.gz",
+      "bytes": 46724
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/cold/native_rate_validation_vc05/incumbent-0001.json.gz",
+      "bytes": 46331
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/cold/native_rate_validation_vc05/incumbent-0002.json.gz",
+      "bytes": 46227
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/cold/native_rate_validation_vc05/native_rate_validation_vc05_t120.mps",
+      "bytes": 2452613
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/input/native_rate_validation_vc05.raw.zip",
+      "bytes": 3409
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/model/native_rate_validation_vc05_t120.mps",
+      "bytes": 2452613
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/operations-class-pair/anonymous-vessel-paths.csv",
+      "bytes": 9833
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/operations-class-pair/class-arc-plan.csv",
+      "bytes": 12806
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/operations-class-pair/economic-components.csv",
+      "bytes": 261
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/operations-class-pair/port-period-ledger.csv",
+      "bytes": 48741
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/operations-cold/anonymous-vessel-paths.csv",
+      "bytes": 10222
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/operations-cold/class-arc-plan.csv",
+      "bytes": 12891
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/operations-cold/economic-components.csv",
+      "bytes": 260
+    },
+    {
+      "path": "run-after-source-closure/native_rate_validation_vc05/operations-cold/port-period-ledger.csv",
+      "bytes": 37986
+    },
+    {
+      "path": "source/build_group2_model.py",
+      "bytes": 7433
+    },
+    {
+      "path": "source/export_operational_plan.py",
+      "bytes": 18016
+    },
+    {
+      "path": "source/implementation-before-execution-recall.md",
+      "bytes": 226992
+    },
+    {
+      "path": "source/make_rate_validation_input.py",
+      "bytes": 4727
+    },
+    {
+      "path": "source/run_class_pair_study.py",
+      "bytes": 13739
+    },
+    {
+      "path": "source/run_constructed_input_study.py",
+      "bytes": 5895
+    },
+    {
+      "path": "source/run_original_baseline.py",
+      "bytes": 7351
+    },
+    {
+      "path": "source/verify_original_mps.py",
+      "bytes": 7234
+    },
+    {
+      "path": "source-closure-repair/build_group2_model.py",
+      "bytes": 7433
+    },
+    {
+      "path": "source-closure-repair/export_operational_plan.py",
+      "bytes": 18016
+    },
+    {
+      "path": "source-closure-repair/fetch_originals.py",
+      "bytes": 4161
+    },
+    {
+      "path": "source-closure-repair/implementation-before-repair-recall.md",
+      "bytes": 227706
+    },
+    {
+      "path": "source-closure-repair/make_rate_validation_input.py",
+      "bytes": 4727
+    },
+    {
+      "path": "source-closure-repair/run_class_pair_study.py",
+      "bytes": 13739
+    },
+    {
+      "path": "source-closure-repair/run_constructed_input_study.py",
+      "bytes": 5895
+    },
+    {
+      "path": "source-closure-repair/run_original_baseline.py",
+      "bytes": 7356
+    },
+    {
+      "path": "source-closure-repair/verify_original_mps.py",
+      "bytes": 7234
+    }
+  ],
+  "scope": "Actual source capsules, commands, native logs, events, checks and terminal facts. Full input archives/MPS/variables/fixed maps/operating CSVs stay external. Extracted source copies and report are located by separate sources/report links, not falsely claimed absent.",
+  "benchmark_frozen": false,
+  "score": null
+}

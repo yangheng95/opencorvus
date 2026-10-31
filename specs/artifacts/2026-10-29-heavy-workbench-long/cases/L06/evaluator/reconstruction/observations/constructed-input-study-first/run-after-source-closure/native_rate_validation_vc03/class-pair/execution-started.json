@@ -1,0 +1,23 @@
+{
+  "at": "2026-10-31T13:14:34.340315+00:00",
+  "actual_python_pid": 31448,
+  "argv": [
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\source-closure-repair\\run_class_pair_study.py",
+    "--closed-plan",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\run-after-source-closure\\native_rate_validation_vc03\\cold\\native_rate_validation_vc03",
+    "--strategy",
+    "class-pairs",
+    "--method-wall-seconds",
+    "120",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\run-after-source-closure\\native_rate_validation_vc03\\class-pair"
+  ],
+  "executable": "D:\\opencorvus-benchmark-runs\\native-operations-reconstruction-20261031\\Scripts\\python.exe",
+  "python": "3.14.2 (tags/v3.14.2:df79316, Dec  5 2025, 17:18:21) [MSC v.1944 64 bit (AMD64)]",
+  "packages": {
+    "pyscipopt": "6.3.0",
+    "numpy": "2.5.4"
+  },
+  "method_wall_seconds": 120.0,
+  "scope": "One pre-registered warm-start research arm, not a cold run, resume of solver state or model score"
+}

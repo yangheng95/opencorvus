@@ -1,0 +1,127 @@
+{
+  "at": "2026-10-31T13:07:31.968148+00:00",
+  "instance": "LR1_DR03_VC03_V16a",
+  "periods": 120,
+  "raw_metadata_periods": 360,
+  "raw_archive": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\original-group2-inputs\\Group2_data_format_only_files.zip",
+  "model": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\raw-construction-first\\LR1_DR03_VC03_V16a\\LR1_DR03_VC03_V16a_t120.mps",
+  "model_variables": 5594,
+  "model_constraints": 2400,
+  "arc_counts": {
+    "source": 16,
+    "exit": 1440,
+    "wait": 1428,
+    "travel": 1746
+  },
+  "initial_class_fleet": {
+    "0": 6,
+    "1": 5,
+    "2": 5
+  },
+  "initial_sources": [
+    [
+      0,
+      0,
+      4,
+      1
+    ],
+    [
+      0,
+      1,
+      2,
+      1
+    ],
+    [
+      0,
+      2,
+      4,
+      1
+    ],
+    [
+      0,
+      2,
+      16,
+      1
+    ],
+    [
+      0,
+      3,
+      0,
+      1
+    ],
+    [
+      0,
+      3,
+      10,
+      1
+    ],
+    [
+      1,
+      0,
+      1,
+      1
+    ],
+    [
+      1,
+      0,
+      8,
+      1
+    ],
+    [
+      1,
+      0,
+      11,
+      1
+    ],
+    [
+      1,
+      2,
+      0,
+      1
+    ],
+    [
+      1,
+      3,
+      24,
+      1
+    ],
+    [
+      2,
+      0,
+      0,
+      1
+    ],
+    [
+      2,
+      0,
+      14,
+      1
+    ],
+    [
+      2,
+      0,
+      16,
+      1
+    ],
+    [
+      2,
+      2,
+      18,
+      1
+    ],
+    [
+      2,
+      3,
+      26,
+      1
+    ]
+  ],
+  "packages": {
+    "pyscipopt": "6.3.0",
+    "numpy": "2.5.4"
+  },
+  "omitted_original_redundancies": "Zero dummy variables and fixed-zero possible source arcs; actual fleet source arcs are retained",
+  "inputs_read": "Operating raw data only; no original MPS, known solution or known objective",
+  "optimization_executed": false,
+  "benchmark_score": null
+}
