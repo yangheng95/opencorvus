@@ -356,6 +356,16 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
     () => new Set([...visibleConfigTabs().map((tab) => tab.id), activeConfigTab()]),
   )
   const activeConfigTitle = createMemo(() => t(CONFIG_TAB_BY_ID.get(activeConfigTab())!.labelKey))
+  let pageTitle: HTMLHeadingElement | undefined
+  const openReleaseNotes = () => {
+    const origin = document.activeElement
+    switchConfigTab("changelog")
+    queueMicrotask(() => {
+      if (!dialogStore.config.open || activeConfigTab() !== "changelog" || !pageTitle?.isConnected) return
+      if (document.activeElement !== origin && document.activeElement !== document.body) return
+      pageTitle.focus()
+    })
+  }
   const closeSettings = closeConfigDialog
   let page: HTMLElement | undefined
   useHotkey({
@@ -505,7 +515,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
                 title={t("releases.title")}
                 desc={t("releases.about_description")}
                 actions={
-                  <Button variant="outline" size="sm" tone="neutral" onClick={() => switchConfigTab("changelog")}>
+                  <Button variant="outline" size="sm" tone="neutral" onClick={openReleaseNotes}>
                     {t("releases.read")}
                   </Button>
                 }
@@ -675,7 +685,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
             onKeyDown={handleResizeKeyDown}
           />
           <div class="config-content" id="configContent">
-            <h1 class="config-page-title">{activeConfigTitle()}</h1>
+            <h1 ref={pageTitle} tabIndex={-1} class="config-page-title">{activeConfigTitle()}</h1>
             <Show when={activeConfigTab()}>
               {(active) => (
                 <TabPanel

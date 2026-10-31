@@ -29,9 +29,25 @@ export default function ReleaseNotesPanel() {
     )
   })
   let panel: HTMLDivElement | undefined
+  let versionHeading: HTMLHeadingElement | undefined
+  let historySearchInput: HTMLInputElement | undefined
+  let focusGeneration = 0
   const select = (entry: ChangelogEntry | null) => {
+    const previous = selected()
+    const origin = document.activeElement
+    const generation = ++focusGeneration
     setSelected(entry)
-    panel?.closest(".config-content")?.scrollTo({ top: 0 })
+    if (entry) panel?.closest(".config-content")?.scrollTo({ top: 0 })
+    queueMicrotask(() => {
+      if (generation !== focusGeneration || selected() !== entry || !panel?.isConnected) return
+      if (document.activeElement !== origin && document.activeElement !== document.body) return
+      let target: HTMLElement | undefined
+      if (entry) target = versionHeading
+      else if (previous && filteredHistory().some((item) => item.version === previous.version)) {
+        target = panel.querySelector<HTMLElement>(`[data-release-version="${CSS.escape(previous.version)}"]`) ?? undefined
+      } else target = historySearchInput
+      if (target?.isConnected) target.focus()
+    })
   }
   const summary = (entry: ChangelogEntry) =>
     markdown(entry)
@@ -49,6 +65,7 @@ export default function ReleaseNotesPanel() {
             <div class="release-notes-toolbar">
               <SearchField
                 clearable
+                inputRef={(element) => (historySearchInput = element)}
                 value={query()}
                 placeholder={t("releases.search")}
                 onValueChange={setQuery}
@@ -66,6 +83,7 @@ export default function ReleaseNotesPanel() {
                     as="button"
                     interactive
                     class="release-notes-row"
+                    data-release-version={entry.version}
                     title={
                       <span class="release-notes-version">
                         v{entry.displayVersion}
@@ -112,7 +130,7 @@ export default function ReleaseNotesPanel() {
             <article class="release-notes-detail" lang={locale()}>
               <header class="release-notes-heading">
                 <div class="release-notes-version">
-                  <h2>v{entry().displayVersion}</h2>
+                  <h2 ref={versionHeading} tabIndex={-1}>v{entry().displayVersion}</h2>
                   <Show when={entry().version === installed.version}>
                     <Badge size="sm">{t("releases.installed")}</Badge>
                   </Show>

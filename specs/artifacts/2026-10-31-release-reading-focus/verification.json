@@ -1,0 +1,214 @@
+{
+  "at": "2026-10-31T08:29:25.627Z",
+  "batch": 832,
+  "singleAgent": true,
+  "scope": "Release reading focus and return to the actual version row",
+  "productionFiles": [
+    "packages/overlay/src/components/settings/ReleaseNotesPanel.tsx",
+    "packages/overlay/src/components/ConfigDialogHost.tsx"
+  ],
+  "manualScreenshots": 19,
+  "desktop": [
+    1280,
+    720
+  ],
+  "baselineCases": [
+    "About internal reading action left BODY active",
+    "History/detail actions left BODY active",
+    "Returning from v0.1.25 reset long history scroll to zero",
+    "Narrow search was retained correctly; next Tab reached search, so app-navigation jump was not reproduced"
+  ],
+  "candidateCases": [
+    "About reading action -> translated H1",
+    "Keyboard Enter opens old version -> actual H2",
+    "Keyboard return -> original version row in view",
+    "Narrow filter excludes installed version -> preserved search input",
+    "Zero matches -> installed entry -> return to same search",
+    "Escape clears query without closing history",
+    "Same selected v0.1.25 survives locale switch; body/date/website path update",
+    "Chinese keyboard return -> same version row",
+    "Chinese narrow-filter return -> same search",
+    "Ordinary Settings entry -> existing search focus; final close -> original opener"
+  ],
+  "manualFocusObservations": {
+    "before-focus-observation": {
+      "activeID": "",
+      "activeTag": "BODY",
+      "at": "2026-10-31T08:20:19.546Z",
+      "historySearch": "0.1.25",
+      "scrollTop": 0
+    },
+    "after-detail-focus-observation": {
+      "activeTag": "H2",
+      "activeText": "v0.1.25",
+      "at": "2026-10-31T08:23:29.767Z",
+      "scrollTop": 0
+    },
+    "after-return-focus-observation": {
+      "activeTag": "BUTTON",
+      "at": "2026-10-31T08:23:30.311Z",
+      "scrollTop": 1615,
+      "version": "0.1.25"
+    },
+    "after-search-focus-observation": {
+      "activeTag": "INPUT",
+      "at": "2026-10-31T08:24:11.743Z",
+      "scrollTop": 0,
+      "search": "0.1.25"
+    },
+    "after-zh-row-focus-observation": {
+      "activeTag": "BUTTON",
+      "at": "2026-10-31T08:25:56.144Z",
+      "scrollTop": 1342,
+      "version": "0.1.25"
+    },
+    "after-zh-search-focus-observation": {
+      "activeTag": "INPUT",
+      "at": "2026-10-31T08:26:05.163Z",
+      "scrollTop": 0,
+      "search": "0.1.25"
+    },
+    "after-zh-entry-focus-observation": {
+      "activeTag": "H1",
+      "activeText": "更新日志",
+      "at": "2026-10-31T08:26:11.868Z",
+      "scrollTop": 0
+    }
+  },
+  "checks": {
+    "typesReviewed": 0,
+    "uiBuildReviewed": 0,
+    "publicHistoryAndSourcesReadbacks": 0,
+    "originalPausedAutomations": 2,
+    "isolatedConfigBytesPreserved": true
+  },
+  "scopes": [
+    {
+      "phase": "before",
+      "data": {
+        "at": "2026-10-31T08:20:36.518Z",
+        "phase": "before",
+        "schema": 9,
+        "tables": 92,
+        "originals": 216601,
+        "current": 216603,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease",
+            "old": 44404,
+            "now": 44405
+          },
+          {
+            "table": "engine_control_activation_lease_grant",
+            "old": 44462,
+            "now": 44463
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "attachments": 75,
+        "protectedProjects": 13,
+        "trackedFiles": 28,
+        "workspaceFiles": 13,
+        "additionalProtectedFiles": 39,
+        "requests": 0,
+        "cumulativeRequests": 1118,
+        "reserveMs": 3300680,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-C9RR4r9v.js"
+      },
+      "ledger": {
+        "calls": 733,
+        "tokens": 36428624
+      },
+      "retirement": {
+        "publicShutdown": 200,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "osBirthIdentitySettled": true,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "reserveMs": 3300680,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        }
+      }
+    },
+    {
+      "phase": "after",
+      "data": {
+        "at": "2026-10-31T08:27:45.892Z",
+        "phase": "after",
+        "schema": 9,
+        "tables": 92,
+        "originals": 216603,
+        "current": 216605,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease",
+            "old": 44405,
+            "now": 44406
+          },
+          {
+            "table": "engine_control_activation_lease_grant",
+            "old": 44463,
+            "now": 44464
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "attachments": 75,
+        "protectedProjects": 13,
+        "trackedFiles": 28,
+        "workspaceFiles": 13,
+        "additionalProtectedFiles": 39,
+        "requests": 0,
+        "cumulativeRequests": 1118,
+        "reserveMs": 2871300,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-BeU9pWqt.js"
+      },
+      "ledger": {
+        "calls": 733,
+        "tokens": 36428624
+      },
+      "retirement": {
+        "publicShutdown": 200,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "osBirthIdentitySettled": true,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "reserveMs": 2871300,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        }
+      }
+    }
+  ],
+  "requests": 0,
+  "cumulativeRequests": 1118,
+  "uncovered": [
+    "Screen-reader software narration",
+    "All historical versions individually",
+    "Native Tauri",
+    "Mobile/tablet",
+    "Adversarial focus timing beyond manual interactions"
+  ]
+}

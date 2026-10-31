@@ -3956,6 +3956,17 @@ searchable descending history and selected details use the same single-column
 list-to-detail pattern. Website and GitHub links supplement the offline reading
 surface rather than providing another content/cache authority.
 
+Explicit history/detail transitions hand focus to the newly rendered version
+heading or the actual previous version row. Returning to that row restores its
+place in the visible history instead of resetting the list to the top. When
+the retained search does not show that version, focus goes to the history
+search input. These targets derive from the same selected entry and current
+filtered history, without another selection or saved scroll state. Deferred
+focus retires when the panel disconnects, a newer selection takes ownership,
+or the user has moved focus elsewhere. About's Read release notes action gives
+focus to the translated settings page heading; ordinary settings entry points
+retain their existing search and Tabs focus behavior.
+
 Every dated entry in that source contains explicit zh-CN and en-US bodies.
 The shared parser requires both authored languages. Details, summaries, search
 content, language attributes, dates and website links follow the current UI

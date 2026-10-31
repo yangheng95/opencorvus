@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [版本日志阅读与返回焦点](2026-10-31-release-reading-focus.md)：关于、版本历史与阅读焦点的当前体验。
+
 - [设置项名称的页面发现](2026-10-31-settings-control-discovery.md)：双语页面发现、命令面板和编辑保留调查。
 
 - [用量周期真实账本对照](2026-10-31-usage-ledger-reconciliation.md)：733条原请求、自然区间与当前呈现调查。

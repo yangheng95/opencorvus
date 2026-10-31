@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [版本日志阅读与返回焦点](records/2026-10/2026-10-31-release-reading-focus.md)：日志历史/详情键盘阅读、筛选及返回位置实页调查。
+
 - [设置项名称的页面发现](records/2026-10/2026-10-31-settings-control-discovery.md)：实际控件名、统一设置检索与显式导航实页验收。
 
 - [用量周期真实账本对照](records/2026-10/2026-10-31-usage-ledger-reconciliation.md)：当前四周期、分组与桶的实际账本和实页复核。
