@@ -1,0 +1,21 @@
+{
+  "at": "2026-10-31T15:04:49.195990+00:00",
+  "agent_name": "/root/codex_l06_maritime_fresh",
+  "fork_turns": "none",
+  "model_override": null,
+  "reasoning_override": null,
+  "instruction_file": "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\candidate-instruction.txt",
+  "public_commit": "ec6f500cb0bf367450834b37b3697a5015e53bef",
+  "public_preparation": "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\public-preparation.json",
+  "private_pool_registered": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\fresh-pair-registered-inputs\\registration.json",
+  "scope": "one necessary fresh after complete same whole review closed; no prior completed agent reuse",
+  "actual_model": "unknown",
+  "usage": "unknown",
+  "candidate_grade": null,
+  "spawn_tool_return_observed_at": "2026-10-31T15:05:10.921875+00:00",
+  "canonical_agent": "/root/codex_l06_maritime_fresh",
+  "spawn_tool_result": {
+    "task_name": "/root/codex_l06_maritime_fresh"
+  },
+  "state": "started_not_scored"
+}

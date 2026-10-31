@@ -1,0 +1,34 @@
+{
+  "format": "maritime-paired-input-registration/1",
+  "at": "2026-10-31T15:02:45.449610+00:00",
+  "public_commit": "ec6f500cb0bf367450834b37b3697a5015e53bef",
+  "status": "registered_before_generation_before_first_candidate_no_quality_results",
+  "inputs": [
+    {
+      "parent": "LR1_DR02_VC05_V8a",
+      "label": "maritime-eval-vc05",
+      "seed": 2026110301
+    },
+    {
+      "parent": "LR1_DR03_VC03_V16a",
+      "label": "maritime-eval-vc03",
+      "seed": 2026110302
+    }
+  ],
+  "periods": 120,
+  "recipe": "same public8percent cyclic demand, floor(x+0.5), one production port equals aggregate demand, fixed before result",
+  "unchanged": "fleet, geometry, capacity, berths, prices, travel times, model rules",
+  "source_archive": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\fresh-pair-registered-inputs\\pre-generation-source.zip",
+  "provenance_annotation": "Generator reused from construction-validation, but these are brand new registered evaluation inputs. Before any execution, the nonnumeric VALIDATION-ORIGIN.txt inside each raw package will be replaced with truthful evaluation origin text; original freshly generated archive retained separately. No physical fields or recipe changed.",
+  "profile": {
+    "optimization_seconds_nominal": 180,
+    "solver_threads": 1,
+    "agent_total_limit": null,
+    "minimum_agent_duration": null,
+    "setup_validation": "measured separately",
+    "indivisible_overrun": "record actual allocation and overrun; mismatch explicitly marked not quietly called equal"
+  },
+  "candidate_protocol": "same public package/declared dependencies; preserve natural source delivery first; same immutable assigned raw+MPS to both programmes source-only; private pool/material/results not provided during candidate authoring; no seed selection or tuning after result",
+  "quality": "per-input actual valid full economic P, no100 saturation or post-result target; report unavailable outcomes and scientific review separately",
+  "heavy_benchmark_qualified": false
+}

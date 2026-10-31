@@ -1040,3 +1040,13 @@ Recall：用户要完整重型任务的实质质量，不再接受工程文件�
 - B01限定supplied问题事实+generic方法/文档/成熟solver，源URL不授权额外incumbent/旧实例向量/参考/私有数据，自己开发结果可用于研究设计但assigned执行重新计算。B02公开所有types/enums/空值/键/覆盖/tol/cwd/static与out命名空间；路径step任意整数起点连续唯一，合法零费用省/显式0；整数ID按值接受不强打印形式。共享numerical_tolerance消除同库存行跨路径尺度不一致；trusted model/raw/reference设施错误native3，交付声明/表错4，P/总分不伪填。
 - 原真实same vector/MPS/raw/nativeP只step+1并省waiting/constant两个exact0费用项，一次equivalent-command实际修后CLI/native0；完整数值质量及P/L/U与原相同，未重任何优化/LP/cert生成/参考/图。复核者只读该原件和修后源、独立确认仅这些表示改变；没有再跑counter或重评S。冷源保持v1，当前consumer/public另封v2，不冒修后新cold。
 - PILOT-FREEZE仅批准完整可评问题用于下一次fresh Codex/OC；不是数小时/专家/统计成熟、不是第十题合格或新100。只有实际同public/同未知输入/同数值profile先登记后开跑；当前private pool尚未生成，无新candidate。后续只推进这一实际对照，不追加作者研究/检查器/组件来代替模型结果。此前not-ready静态表是历史，最新final/locator优先，不重开旧审查。
+
+### 用户要求的实际新Codex/OC对照已启动（2026-10-31）
+
+- 首整审两组集中阻断闭合后，完整public/首原生参考/真实正错/唯一整审134文件正常范围commit ec6f500cb0bf367450834b37b3697a5015e53bef，15:02:05.002→15:04:28.674Z正常push main9693→ec6/native0，8typecheck7cache1fresh/API/docs352-26/lease/架构/包/release/module/secret0全过；原日志diffcheck2保，维护0。真实complete-case-integration-first/publish-delivery.json和全输出保。不重旧push/参考/审查。
+- 生成与候选首更新前，fresh-pair-registered-inputs/registration.json固定两原多类parent、全新seed2026110301/2026110302、label maritime-eval-vc05/vc03、120期/同8%公开recipe、180名义数值/单solver线程。只生成raw+全MPS，没有求解/观察结果筛选；validation函数非数值来源注释在分配前明确改为新evaluation来源，原新生成ZIP另保，物理规则不改。此前披露输入不冒private。当前两新例没有作者或模型路线结果。
+- 真正新/root/codex_l06_maritime_fresh已fork none/无override启动，只Git ec6五public合同+三原完整MPS/raw/PDF十公料和声明runtime，submission独有写scope，没给私有grader/参考/旧答案/权重/本Recall/凭据；不复用completed旧候选。自然首消息确认读公料并准备真实方法比较，底层model/usage未知。这是实际start，不是成绩。
+- OC唯一新Task tsk_g00VZdjsOw00YvSSZoT3实际created_ms1793459163210，既有Inspect/nativeTask/code/base/全流式，server27956/API60414，Inspect23672只是venv启动器。auth/models成对/usable/projected/actual gpt-6.1-sol streaming原source-reader真实核，settled全HTTP200、inflight状态unknown分列，own SQLite实际budget=null。observer曾把未结HTTP空状态当必须200而assert失败，14completed200/1inflight原事实保，修观察分类而未动Task/模型/策略，不当产品异常。只支持GET/task/{id}/status查该ID，一次原status running。凭据不入prompt/spec/log/commit，active暂存auth/models/stop不动，退休接口不请求，无新LLM路由。
+- 实际pair phase=fresh_codex_and_opencorvus_running_no_business_results，active_evaluation=null，P/科学结果null。同十public字节/后来同两全输入/同数值profile，不作同模型费用速度因果排名。后续只自然交付和全部自有子进程终态→先封全workspace/失败/Git/deps/原源→实际source-only两输入执行→实际图与一次内容独评→报告真实成本/失败差异；停止作者算法/证明/曲线/组件活动代替此次结果。
+- L01仅一次15:06:35Z只读：owner23296/训练18416活，stage无execution/owner终态/新error、stderr0；wave-hybrid最新15:04:19Z28000接受/loss.0017796142927746774。rawloss不替解/初边值1%，不重开/热改原矩阵，旧root54408错误仍历史。下次心跳接后台，不持续监听。
+- actual-pair-native-20261031是启动与注册投影，完整公料/新输入/环境/真实audit外部保。无新grade，十题/数小时/统计成熟未达，ACTIVE；此真实start不冒比较结论。

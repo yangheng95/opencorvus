@@ -1,0 +1,7 @@
+{
+  "at": "2026-10-31T15:08:04.084792+00:00",
+  "original": "recording helper asserted all audit requests HTTP200 while one still had statusnull",
+  "observed": "14 completed200,1inflight null; all actual model gpt-6.1-sol streamingtrue",
+  "resolution": "record settled statuses and inflight unknown separately; did not touch Task/solver/runtime",
+  "scope": "observer assertion only, not candidate or shared production anomaly"
+}

@@ -1,0 +1,96 @@
+{
+  "at": "2026-10-31T15:06:35.326906+00:00",
+  "scope": "one read-only original matrix end observation after actual fresh model pair launch, no source change or restart",
+  "processes": [
+    {
+      "ProcessId": 23296,
+      "ParentProcessId": 14828,
+      "CreationDate": "/Date(1793423205364)/",
+      "ExecutablePath": "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe"
+    },
+    {
+      "ProcessId": 18416,
+      "ParentProcessId": 16256,
+      "CreationDate": "/Date(1793423206977)/",
+      "ExecutablePath": "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe"
+    }
+  ],
+  "active": {
+    "at": "2026-10-31T05:06:46.942899+00:00",
+    "stage": "native-remaining-registered-cells",
+    "pid": 16256,
+    "owner_pid": 23296,
+    "argv": [
+      "D:\\opencorvus-benchmark-runs\\native-science-l01-20261031\\Scripts\\python.exe",
+      "-u",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\run_study.py",
+      "--inputs",
+      "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\inputs",
+      "--output",
+      "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results",
+      "--device",
+      "cuda",
+      "--continue-study"
+    ],
+    "evidence_root": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-study\\native-remaining-registered-cells",
+    "scope": "native user-authorized continuation; no prior cell rerun"
+  },
+  "native_terminal_present": false,
+  "native_owner_terminal_present": false,
+  "native_error_present": false,
+  "native_stderr_bytes": 0,
+  "latest_progress_path": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results\\runs\\wave-hybrid-s345-lr1e-03\\lbfgs\\progress.json",
+  "latest_progress": {
+    "phase": "lbfgs",
+    "attempt": 28000,
+    "accepted_before": 27999,
+    "loss_before": 0.0017796175619885356,
+    "gradient_inf_before": 0.0005590964078906007,
+    "at": "2026-10-31T15:04:19.627680+00:00",
+    "native_iterations": 28000,
+    "native_t": 1.0,
+    "native_directional_derivative": -4.50253737706507e-09,
+    "closures": [
+      {
+        "trial": 0,
+        "loss": 0.0017796175619885356,
+        "alpha": 0.0,
+        "delta_inf": 0.0,
+        "gradient_dot_direction": -4.50253737706507e-09,
+        "direction_consistency_inf": 0.0
+      },
+      {
+        "trial": 1,
+        "loss": 0.0017796142927746774,
+        "alpha": 0.9999999999997405,
+        "delta_inf": 2.158276653685398e-05,
+        "gradient_dot_direction": -2.0357196889720822e-09,
+        "direction_consistency_inf": 1.9268813703909177e-16
+      }
+    ],
+    "gradient_inf_after": 0.0005511111088491441,
+    "accepted_after": 28000,
+    "loss_after": 0.0017796142927746774,
+    "step_inf": 2.158276653685398e-05,
+    "plateau": 0,
+    "status": "max_updates",
+    "costs_total": {
+      "closure_calls": 57685,
+      "gradient_calls": 124685,
+      "hvp_calls": 0,
+      "lbfgs_native_iterations": 28000,
+      "loss_calls": 163685
+    },
+    "costs_increment": {
+      "closure_calls": 2,
+      "gradient_calls": 4,
+      "hvp_calls": 0,
+      "lbfgs_native_iterations": 1,
+      "loss_calls": 5
+    },
+    "elapsed_seconds": 7192.363888800006
+  },
+  "scientific_quality": "raw loss not solution/condition quality; study still incomplete until original natural terminal",
+  "retained_root_error": "2026-10-30T22:30:31Z/old54408 artifact-publication only, not current native failure"
+}

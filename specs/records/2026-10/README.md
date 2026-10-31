@@ -90,7 +90,7 @@
 
 - [2026-10-30-approved-code-workflow.md](2026-10-30-approved-code-workflow.md)：独立QA的真实审批后提交全流程，保留旧793失败历史。
 
-- [2026-10-30-heavy-workbench-l02-qualification.md](2026-10-30-heavy-workbench-l02-qualification.md)：[持续Recall](2026-10-29-heavy-workbench-long.md)保旧验收与纠偏、原问题质量/运营交付及首次整类方法对照；未知输入/正式质量/重型资格仍待，L01原训练不重开。；L06三原完整raw构造等价与两预登记新输入全链已实测，质量标尺/整题审查/有效小时未成立；L06真实有理经济界/完整数字正错交付已核，科学整审与重型资格仍待；[实际Codex对照结果](../../artifacts/2026-10-29-heavy-workbench-long/CODEX-COMPARISON-RESULTS.md)单列原成绩和成本差异，未完成有效重型比较；L06实质完整case收敛及首次整审进行中，尚未启动新模型对照；L06实质完整case首整审集中闭合，待登记同pool/profile后进行必要fresh实际对照，非重型资格
+- [2026-10-30-heavy-workbench-l02-qualification.md](2026-10-30-heavy-workbench-l02-qualification.md)：[持续Recall](2026-10-29-heavy-workbench-long.md)保旧验收与纠偏、原问题质量/运营交付及首次整类方法对照；未知输入/正式质量/重型资格仍待，L01原训练不重开。；L06三原完整raw构造等价与两预登记新输入全链已实测，质量标尺/整题审查/有效小时未成立；L06真实有理经济界/完整数字正错交付已核，科学整审与重型资格仍待；[实际Codex对照结果](../../artifacts/2026-10-29-heavy-workbench-long/CODEX-COMPARISON-RESULTS.md)单列原成绩和成本差异，未完成有效重型比较；L06实质完整case收敛及首次整审进行中，尚未启动新模型对照；L06实质完整case首整审集中闭合，待登记同pool/profile后进行必要fresh实际对照，非重型资格 新完整海运题整审闭合后实际fresh Codex/OC已各启动，业务结果仍null。
 - [2026-10-30-heavy-workbench-l05-qualification.md](2026-10-30-heavy-workbench-l05-qualification.md)：完整两库事故/真实在途/持久恢复/双sender/监测交付及三输入/正错程序/整审开发冻，参考100、伪保证94关键失败。
 
 - [2026-10-30-mission-selection-journey.md](2026-10-30-mission-selection-journey.md)：创建表单专家团搜索与选择的实际体验。

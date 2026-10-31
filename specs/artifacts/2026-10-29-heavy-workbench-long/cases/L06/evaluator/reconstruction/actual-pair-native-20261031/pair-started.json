@@ -1,0 +1,35 @@
+{
+  "at": "2026-10-31T15:06:10.258727+00:00",
+  "case": "L06/maritime-research-pilot",
+  "phase": "fresh_codex_and_opencorvus_running_no_business_results",
+  "active_candidate": [
+    "/root/codex_l06_maritime_fresh",
+    "tsk_g00VZdjsOw00YvSSZoT3"
+  ],
+  "active_evaluation": null,
+  "public_commit": "ec6f500cb0bf367450834b37b3697a5015e53bef",
+  "codex_root": "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031",
+  "opencorvus_root": "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031",
+  "private_pool_registration": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\fresh-pair-registered-inputs\\registration.json",
+  "assigned_input_identities": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\fresh-pair-registered-inputs\\assigned-input-identities.json",
+  "public_same_bytes": true,
+  "profile": {
+    "optimization_seconds_nominal": 180,
+    "solver_threads": 1,
+    "agent_total_budget": null,
+    "minimum_duration": null
+  },
+  "grade": null,
+  "heavy_benchmark_qualified": false,
+  "automatic_next_version_launch_allowed": false,
+  "codex_actual_model": "unknown",
+  "codex_usage": "unknown",
+  "comparable_same_model": false,
+  "codex_agent": "/root/codex_l06_maritime_fresh",
+  "codex_started": "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\candidate-started.json",
+  "opencorvus_task_id": "tsk_g00VZdjsOw00YvSSZoT3",
+  "opencorvus_server_pid": 27956,
+  "opencorvus_url": "http://127.0.0.1:60414/",
+  "opencorvus_actual_model": "gpt-6.1-sol",
+  "opencorvus_started": "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\inspect-launch.json"
+}

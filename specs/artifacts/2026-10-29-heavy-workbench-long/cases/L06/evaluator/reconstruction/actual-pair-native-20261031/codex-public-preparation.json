@@ -1,0 +1,65 @@
+{
+  "at": "2026-10-31T15:03:31.010867+00:00",
+  "public_commit": "ec6f500cb0bf367450834b37b3697a5015e53bef",
+  "documents_source": "git show frozen public only",
+  "material_source": "same selected official development raw/MPS/PDF bytes as reviewed public package",
+  "members": [
+    {
+      "path": "inputs/development-raw.zip",
+      "bytes": 8428,
+      "sha256": "ed564049d91d838a2bb45c86fdc2544c22fa97f9bf6e78218a7c40edcaee65a9"
+    },
+    {
+      "path": "inputs/Group2_MIP_Model.pdf",
+      "bytes": 204421,
+      "sha256": "ab76d1e314b5c164d742f91225b2ea9a68a24a522261623cc525805fdb03456c"
+    },
+    {
+      "path": "inputs/LR1_DR02_VC01_V6a_t120.mps",
+      "bytes": 463301,
+      "sha256": "b3414087e8f86dcb1149ba78e56a08a9a7533cc64a19fbc9e905ca09c1c4a46a"
+    },
+    {
+      "path": "inputs/LR1_DR02_VC05_V8a_t120.mps",
+      "bytes": 1762645,
+      "sha256": "e957fc6b314cd88b70bb6dc1486d9caa46f5659607958dda5835e421404b2669"
+    },
+    {
+      "path": "inputs/LR1_DR03_VC03_V16a_t120.mps",
+      "bytes": 1488687,
+      "sha256": "dfa64707a69e0fb8a3d26360e83af89a61d446ba9eb88b2aa2e74561dd9fc0a0"
+    },
+    {
+      "path": "MODEL.md",
+      "bytes": 2282,
+      "sha256": "47005597fa7a8f1c91a43d9ea0361db999d148d0e9f5aa1ee96f18d0d5e39423"
+    },
+    {
+      "path": "OUTPUTS.md",
+      "bytes": 6907,
+      "sha256": "aee55796e3e637889ae541ce8d5e9455bfb7de467d0c6bf45fc9b21f4690cc8a"
+    },
+    {
+      "path": "outputs.schema.json",
+      "bytes": 4697,
+      "sha256": "98416dbec736d35985b8b804086acefe5ced945bdd571a9ca78f243c86be1c0a"
+    },
+    {
+      "path": "RUNTIME.md",
+      "bytes": 1607,
+      "sha256": "053f930e9954bb6d03a58e27f02dc83e72700acf50eb0e74ec3a342469167639"
+    },
+    {
+      "path": "TASK.md",
+      "bytes": 5108,
+      "sha256": "641768f017b792d54eb0104485fd09744430ed26273fbcf9c8e66d39ede09262"
+    }
+  ],
+  "scope": "public immutable; submission only candidate write scope",
+  "private_evaluator_reference_old_candidates": "not supplied",
+  "resource_boundary": "public Task generic method and declared dependencies only",
+  "actual_model": "unknown",
+  "actual_usage": "unknown",
+  "comparable_same_model": false,
+  "git": "candidate has no Git repository or upstream initially"
+}

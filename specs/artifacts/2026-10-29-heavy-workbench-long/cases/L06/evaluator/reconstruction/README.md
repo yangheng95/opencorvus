@@ -188,3 +188,5 @@ current exporter只把既有运营计算提取为单一evaluate，原CLI仍负�
 [完整case索引与首全链参考](COMPLETE-CASE.md)已把public原料/任务/运行输出合同、原科学研究、same-checker真实错误、实际source-only集成/图与handoff收敛在一起。新输入参数化入口首native0，未新建作者算法或重复旧实验；原授权benchmark_review正在做本实质新问题的第一次集中整题审查，目前未批准fresh。公开资源边界和CSV等价表示初报有阻断，待集中修；原100和旧case只读，尚无新Codex结果或重型资格。
 
 首完整整审已最终结案：[原两阻断与同assignment集中闭合](whole-case-review/REVIEW-FINAL.md)，当前[完整pilot合同](PILOT-FREEZE.json)允许在预先登记同输入/数值配置后做原授权必要fresh对照。原source-only冷源v1与修后consumer/public分开，原等价格式误拒保留，仅一次受影响正向复验0；未重优化/LP/cold。此前“正在审/尚未批准”是历史阶段，不据此重开审查。尚无新候选成绩，重型/小时/统计资格仍未成立。
+
+实际模型对照启动见[actual-pair-native-20261031](actual-pair-native-20261031/README.md)；两新系统运行、无新业务结果，本目录参考不替候选。

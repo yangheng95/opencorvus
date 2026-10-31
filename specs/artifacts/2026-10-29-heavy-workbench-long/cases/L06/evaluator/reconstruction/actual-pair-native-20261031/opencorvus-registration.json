@@ -1,0 +1,13 @@
+{
+  "benchmark": "HeavyWorkBench-Maritime/1.0.0-pilot",
+  "case": "L06",
+  "caseVersion": "L06/maritime-research-pilot",
+  "model": "openai/gpt-6.1-sol",
+  "inactivitySeconds": 3600,
+  "tokenBudgetScope": "task-session-lineage",
+  "budget": {
+    "total_model_tokens": null
+  },
+  "runRoot": "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031",
+  "project": "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\project"
+}

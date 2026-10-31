@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-31T15:06:10.249555+00:00",
+  "url": "http://127.0.0.1:60414/task/tsk_g00VZdjsOw00YvSSZoT3/status",
+  "http_status": 200,
+  "task_id": "tsk_g00VZdjsOw00YvSSZoT3",
+  "preflight": {
+    "sessionID": "ses_hxbKk5L0D4amZpXN8fz5",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "actual_task_budget": null,
+  "actual_first_task_created": 1793459163210,
+  "server_pid": 27956,
+  "scope": "read-only own Task/status, no business grade or useful-hour certification"
+}

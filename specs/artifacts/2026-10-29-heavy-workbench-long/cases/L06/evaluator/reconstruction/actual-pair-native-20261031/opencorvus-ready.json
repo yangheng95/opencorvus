@@ -1,0 +1,24 @@
+{
+  "url": "http://127.0.0.1:60414/",
+  "pid": 27956,
+  "registration": {
+    "benchmark": "HeavyWorkBench-Maritime/1.0.0-pilot",
+    "case": "L06",
+    "model": "openai/gpt-6.1-sol",
+    "inactivitySeconds": 3600,
+    "tokenBudgetScope": "task-session-lineage",
+    "budget": {
+      "total_model_tokens": null
+    },
+    "runRoot": "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031",
+    "project": "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\project",
+    "caseVersion": "L06/maritime-research-pilot"
+  },
+  "preflight": {
+    "sessionID": "ses_hxbKk5L0D4amZpXN8fz5",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  }
+}

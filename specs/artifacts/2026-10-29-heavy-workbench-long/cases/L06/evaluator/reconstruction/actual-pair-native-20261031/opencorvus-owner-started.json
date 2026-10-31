@@ -1,0 +1,17 @@
+{
+  "pid": 27956,
+  "argv": [
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "run",
+    "D:/myhexin-local/opencorvus/script/benchmark/serve_heavy_workbench.ts",
+    "--registration",
+    "D:/opencorvus-benchmark-runs/l06-maritime-opencorvus-native-20261031/registration.json",
+    "--auth-source",
+    "C:/Users/hengu/AppData/Local/opencorvus/data/auth.json"
+  ],
+  "window": "hidden",
+  "credential_contents_logged": false,
+  "at": "2026-10-31T15:05:11.9195871Z",
+  "source_public_commit": "ec6f500cb0bf367450834b37b3697a5015e53bef",
+  "scope": "owned isolated server and paired auth/models preflight only; no candidate Task before usable/projected/actual streaming model verified"
+}
