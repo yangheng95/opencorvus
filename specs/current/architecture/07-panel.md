@@ -2880,6 +2880,10 @@ Named and dated anonymous Projects both render through the same canonical
 Chat, Work, Mission, and Task hierarchy. Anonymous directory identity affects
 only its display label and existing promotion action; it does not create a
 second `Chats` section, wrapper, renderer identity, or one-list exclusion.
+The sidebar and command-palette Project results use the same ledger display-name
+formatter: dated anonymous directories show their localized short label and the
+existing directory suffix. Original names, IDs, directory hints and search data
+remain canonical; generic homepage names retain their own display contract.
 Explicitly pinned named Projects remain complete groups in the separate `Pinned`
 section and are omitted from Projects exactly once.
 

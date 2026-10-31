@@ -58,11 +58,10 @@ import {
   conversationExperienceLabel,
 } from "../services/conversation-experience"
 import {
-  implicitProjectSuffix,
   isImplicitProjectDirectory,
   projectDirectoryKey,
   projectDirectoryLabel,
-  projectDisplayName as resolveProjectDisplayName,
+  projectLedgerDisplayName,
 } from "../utils/project-directory"
 import { Icon, type IconName } from "./ui/Icon"
 import { Badge } from "./ui/Badge"
@@ -154,13 +153,11 @@ function rowDirectory(row: WorkLedgerRow): string {
 }
 
 function projectDisplayName(group: WorkLedgerGroup): string {
-  if (isImplicitProjectDirectory(group.directory)) {
-    return `${t("work_ledger.implicit_project_row")} ${implicitProjectSuffix(group.directory)}`
-  }
-  return resolveProjectDisplayName({
+  return projectLedgerDisplayName({
     directory: group.directory,
     customName: group.project?.title,
     unknownName: t("task.project.unknown"),
+    implicitProjectName: t("work_ledger.implicit_project_row"),
   })
 }
 

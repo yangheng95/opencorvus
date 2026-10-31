@@ -1,0 +1,418 @@
+{
+  "at": "2026-10-31T12:57:54.049Z",
+  "scope": "Shared project labels in ledger and command search",
+  "manualUI": {
+    "screenshots": 9,
+    "personallyReviewed": true,
+    "uiAutomatedTests": 0,
+    "languages": [
+      "en-US",
+      "zh-CN"
+    ],
+    "anonymousLabels": [
+      "cf37a3",
+      "26d6bb"
+    ],
+    "namedProjectOriginalTitle": "Idle stop review 836",
+    "genericHomepageNamePreserved": true
+  },
+  "checks": [
+    {
+      "label": "project-label-tests",
+      "code": 0
+    },
+    {
+      "label": "types-final",
+      "code": 0
+    },
+    {
+      "label": "ui-build-final",
+      "code": 0
+    }
+  ],
+  "pureUnitTests": {
+    "passed": 6,
+    "assertions": 6,
+    "scope": "Project name string outputs; no UI rendering"
+  },
+  "rawWorkLedgerQuery": {
+    "unchanged": true,
+    "rows": [
+      {
+        "kind": "project",
+        "id": "prj_hhyIm52QLB6PyYgs5KCP",
+        "title": ""
+      },
+      {
+        "kind": "project",
+        "id": "prj_hcpvIoGCeEqNBSIisr17",
+        "title": ""
+      }
+    ],
+    "nextCursor": null
+  },
+  "actualBrowserSelections": [
+    {
+      "projectID": "prj_hhyIm52QLB6PyYgs5KCP",
+      "title": "",
+      "scopedRequests": 12,
+      "paths": [
+        "/expert-squad/catalog",
+        "/expert-squad/search",
+        "/mission-skill/catalog",
+        "/chat/capability",
+        "/config",
+        "/channel",
+        "/skill/mounts",
+        "/mcp",
+        "/path",
+        "/vcs",
+        "/expert-squad/inspect",
+        "/experimental/project-memory"
+      ]
+    },
+    {
+      "projectID": "prj_hcpvIoGCeEqNBSIisr17",
+      "title": "",
+      "scopedRequests": 12,
+      "paths": [
+        "/expert-squad/catalog",
+        "/expert-squad/search",
+        "/mission-skill/catalog",
+        "/chat/capability",
+        "/config",
+        "/channel",
+        "/skill/mounts",
+        "/mcp",
+        "/path",
+        "/vcs",
+        "/expert-squad/inspect",
+        "/experimental/project-memory"
+      ]
+    },
+    {
+      "projectID": "prj_hhyIm52QLB6PyYgs5KCP",
+      "title": "",
+      "scopedRequests": 12,
+      "paths": [
+        "/expert-squad/catalog",
+        "/expert-squad/search",
+        "/mission-skill/catalog",
+        "/chat/capability",
+        "/config",
+        "/channel",
+        "/skill/mounts",
+        "/path",
+        "/vcs",
+        "/mcp",
+        "/expert-squad/inspect",
+        "/experimental/project-memory"
+      ]
+    },
+    {
+      "projectID": "prj_h1LNzctnkMfyYf3ccSFP",
+      "title": "Idle stop review 836",
+      "scopedRequests": 12,
+      "paths": [
+        "/expert-squad/catalog",
+        "/expert-squad/search",
+        "/mission-skill/catalog",
+        "/chat/capability",
+        "/config",
+        "/channel",
+        "/skill/mounts",
+        "/mcp",
+        "/path",
+        "/vcs",
+        "/expert-squad/inspect",
+        "/experimental/project-memory"
+      ]
+    }
+  ],
+  "qualifications": [
+    {
+      "at": "2026-10-31T12:44:26.683Z",
+      "phase": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 223432,
+      "current": 223434,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease",
+          "old": 45778,
+          "now": 45779
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "old": 45836,
+          "now": 45837
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "capacity": [],
+      "attachments": 109,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "requests": 0,
+      "cumulativeRequests": 1142,
+      "reserveMs": 3437177,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-B83RQA9C.js"
+    },
+    {
+      "at": "2026-10-31T12:55:28.391Z",
+      "phase": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 223434,
+      "current": 223436,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease",
+          "old": 45779,
+          "now": 45780
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "old": 45837,
+          "now": 45838
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "capacity": [],
+      "attachments": 109,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "requests": 0,
+      "cumulativeRequests": 1142,
+      "reserveMs": 2775295,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-Rn-pJKfx.js"
+    }
+  ],
+  "originalRetention": {
+    "at": "2026-10-31T12:54:21.837Z",
+    "originalDraftGroups": [
+      {
+        "phase": "before",
+        "originals": [
+          {
+            "filename": "qa839-06.txt",
+            "bytes": 32,
+            "originalSourceBytesMatched": true
+          },
+          {
+            "filename": "qa839-08.txt",
+            "bytes": 32,
+            "originalSourceBytesMatched": true
+          },
+          {
+            "filename": "qa839-04.txt",
+            "bytes": 32,
+            "originalSourceBytesMatched": true
+          },
+          {
+            "filename": "qa839-10.txt",
+            "bytes": 32,
+            "originalSourceBytesMatched": true
+          },
+          {
+            "filename": "qa839-02.txt",
+            "bytes": 32,
+            "originalSourceBytesMatched": true
+          },
+          {
+            "filename": "qa839-07.txt",
+            "bytes": 32,
+            "originalSourceBytesMatched": true
+          },
+          {
+            "filename": "qa839-05.txt",
+            "bytes": 32,
+            "originalSourceBytesMatched": true
+          },
+          {
+            "filename": "qa839-09.txt",
+            "bytes": 32,
+            "originalSourceBytesMatched": true
+          },
+          {
+            "filename": "qa839-03.txt",
+            "bytes": 32,
+            "originalSourceBytesMatched": true
+          },
+          {
+            "filename": "qa839-01.txt",
+            "bytes": 32,
+            "originalSourceBytesMatched": true
+          }
+        ]
+      },
+      {
+        "phase": "after",
+        "originals": [
+          {
+            "filename": "qa839-06.txt",
+            "bytes": 32,
+            "originalSourceBytesMatched": true
+          },
+          {
+            "filename": "qa839-08.txt",
+            "bytes": 32,
+            "originalSourceBytesMatched": true
+          },
+          {
+            "filename": "qa839-04.txt",
+            "bytes": 32,
+            "originalSourceBytesMatched": true
+          },
+          {
+            "filename": "qa839-10.txt",
+            "bytes": 32,
+            "originalSourceBytesMatched": true
+          },
+          {
+            "filename": "qa839-02.txt",
+            "bytes": 32,
+            "originalSourceBytesMatched": true
+          },
+          {
+            "filename": "qa839-07.txt",
+            "bytes": 32,
+            "originalSourceBytesMatched": true
+          },
+          {
+            "filename": "qa839-05.txt",
+            "bytes": 32,
+            "originalSourceBytesMatched": true
+          },
+          {
+            "filename": "qa839-09.txt",
+            "bytes": 32,
+            "originalSourceBytesMatched": true
+          },
+          {
+            "filename": "qa839-11.txt",
+            "bytes": 32,
+            "originalSourceBytesMatched": true
+          },
+          {
+            "filename": "qa839-03.txt",
+            "bytes": 32,
+            "originalSourceBytesMatched": true
+          },
+          {
+            "filename": "qa839-01.txt",
+            "bytes": 32,
+            "originalSourceBytesMatched": true
+          }
+        ]
+      }
+    ],
+    "sourceOriginalCount": 21,
+    "publishedHistoryMessages": 6,
+    "publishedOriginals": [
+      {
+        "filename": "capture.png",
+        "mime": "image/png",
+        "bytes": 86030,
+        "canonical200": true,
+        "originalMatched": true
+      },
+      {
+        "filename": "clip.mp4",
+        "mime": "video/mp4",
+        "bytes": 2257,
+        "canonical200": true,
+        "originalMatched": true
+      },
+      {
+        "filename": "clip.wav",
+        "mime": "audio/wav",
+        "bytes": 88278,
+        "canonical200": true,
+        "originalMatched": true
+      },
+      {
+        "filename": "clip.wav",
+        "mime": "audio/wav",
+        "bytes": 88278,
+        "canonical200": true,
+        "originalMatched": true
+      },
+      {
+        "filename": "clip.mp4",
+        "mime": "video/mp4",
+        "bytes": 2257,
+        "canonical200": true,
+        "originalMatched": true
+      },
+      {
+        "filename": "capture.png",
+        "mime": "image/png",
+        "bytes": 84429,
+        "canonical200": true,
+        "originalMatched": true
+      }
+    ],
+    "modelRequests": 0,
+    "volatileCopyDisposition": "Before scope project-open sweep deleted 10 and 11 unreferenced draft copies after the documented 60-second grace; source originals remain exact. Candidate copied those empty volatile namespaces. No durable message references were created."
+  },
+  "volatileGC": {
+    "firstRecheckStatus": 404,
+    "graceMilliseconds": 60000,
+    "projects": [
+      {
+        "projectID": "prj_hcpvIoGCeEqNBSIisr17",
+        "sessions": 0,
+        "tasks": 0
+      },
+      {
+        "projectID": "prj_hhyIm52QLB6PyYgs5KCP",
+        "sessions": 0,
+        "tasks": 0
+      }
+    ],
+    "baselineSweeps": [
+      {
+        "at": "2026-10-31T12:42:56.309Z",
+        "projectID": "prj_hhyIm52QLB6PyYgs5KCP",
+        "deleted": 11,
+        "bytesFreed": 352,
+        "skippedYoung": 0,
+        "kept": 0,
+        "retries": [],
+        "failures": []
+      },
+      {
+        "at": "2026-10-31T12:43:10.023Z",
+        "projectID": "prj_hcpvIoGCeEqNBSIisr17",
+        "deleted": 10,
+        "bytesFreed": 320,
+        "skippedYoung": 0,
+        "kept": 0,
+        "retries": [],
+        "failures": []
+      }
+    ],
+    "disposition": "Unpublished copies followed the existing durable-reference GC contract; originals stayed intact. No fabricated messages, reupload or GC changes."
+  },
+  "limitations": [
+    "No model message, Goal, Task execution or existing Task/Mission cancellation was started.",
+    "Windows desktop pages were manually exercised; POSIX path formatting has pure data tests only.",
+    "Search input continues to match canonical names, IDs, directories and technical kinds; localized generic-label aliases are not introduced."
+  ]
+}

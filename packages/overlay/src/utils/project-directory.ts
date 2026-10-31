@@ -56,3 +56,10 @@ export function projectDisplayName(input: ProjectDisplayNameInput): string {
   const customName = String(input.customName || "").trim()
   return customName || projectDirectoryLabel(input.directory, input.unknownName, input.implicitProjectName).name
 }
+
+export function projectLedgerDisplayName(input: ProjectDisplayNameInput & { implicitProjectName: string }): string {
+  if (isImplicitProjectDirectory(input.directory)) {
+    return `${input.implicitProjectName} ${implicitProjectSuffix(input.directory)}`
+  }
+  return projectDisplayName(input)
+}

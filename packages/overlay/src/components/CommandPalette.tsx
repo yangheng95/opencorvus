@@ -44,7 +44,7 @@ import { ComboboxControl } from "./ui/ComboboxControl"
 import { Icon, type IconName } from "./ui/Icon"
 import { Button } from "./ui/Button"
 import { Feedback } from "./ui/Feedback"
-import { projectDisplayName } from "../utils/project-directory"
+import { projectLedgerDisplayName } from "../utils/project-directory"
 
 interface Command {
   id: string
@@ -140,11 +140,11 @@ export function CommandPalette(props: {
       cmds.push({
         id: `ledger:${row.kind}:${row.id}`,
         kind: row.kind,
-        label: row.kind === "project" ? projectDisplayName({
+        label: row.kind === "project" ? projectLedgerDisplayName({
           directory: row.directory,
           customName: row.title,
           unknownName: t("task.project.unknown"),
-          implicitProjectName: t("work_ledger.implicit_project"),
+          implicitProjectName: t("work_ledger.implicit_project_row"),
         }) : row.title || row.id,
         hint: rowCommandHint(row),
         group: t("cmdk.group.work"),

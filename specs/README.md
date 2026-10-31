@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [匿名项目搜索辨识](records/2026-10/2026-10-31-project-search-identification.md)：侧栏与命令检索共用短名、原目录尾号及真实选择。
+
 - [批量附件上限反馈](records/2026-10/2026-10-31-attachment-limit-feedback.md)：同步接纳反馈、旧上传与新草稿归属及实际容量恢复。
 
 - [音视频附件入口与辨识](records/2026-10/2026-10-31-media-attachment-identification.md)：真实六附件选择、同名播放器可见名与原件下载。

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [匿名项目搜索辨识](2026-10-31-project-search-identification/README.md)：九张实图、实际目录请求和原件/数据保全结果。
+
 - [批量附件上限反馈](2026-10-31-attachment-limit-feedback/README.md)：十七张实图、真实上传和零模型数据保全回执。
 
 - [音视频附件入口与辨识](2026-10-31-media-attachment-identification/README.md)：二十六张实图与六下载、数据保护和物理结清回执。
