@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [模型原文来源链接导航](2026-10-31-source-citation-navigation.md)：复用自然消息、跨项目同名原件及新标签生命周期。
+
 - [项目配置事件权威](2026-10-31-project-config-event-authority.md)：实际协议红灯、58正向用例、SDK生成及十次真实流式请求。
 
 - [匿名项目搜索辨识](2026-10-31-project-search-identification.md)：双语结果、命名项目导航与六纯函数正向合同。

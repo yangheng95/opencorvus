@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [模型原文来源链接导航](2026-10-31-source-citation-navigation/README.md)：真实点击、原文新标签与来源只读体验。
+
 - [项目配置事件权威](2026-10-31-project-config-event-authority/README.md)：十三实图、真实事件校验与原件/数据保全回执。
 
 - [匿名项目搜索辨识](2026-10-31-project-search-identification/README.md)：九张实图、实际目录请求和原件/数据保全结果。

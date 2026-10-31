@@ -1,0 +1,174 @@
+{
+  "purpose": "Actual authored canonical citations and structured Sources; zero new model requests",
+  "productionChanges": 0,
+  "uiEntry": "main-Rn-pJKfx.js",
+  "actualCitationActivations": [
+    {
+      "case": "case-841-before-private.json",
+      "url": "/attachment/prj_hwH4r6IW4X8F2cuEEBBe/52ab93c1cc713ef48bd124143fe14b9ee26ad0059780ab142c28899326d5af8c.txt",
+      "status": 200,
+      "bytes": 54,
+      "mime": "text/plain",
+      "filename": "staged-note.txt",
+      "exactOriginalBytes": true,
+      "headers": {
+        "contentType": "text/plain; charset=utf-8",
+        "contentDisposition": "inline; filename*=UTF-8''staged-note.txt",
+        "contentLength": "54"
+      },
+      "actualPopupTab": 42,
+      "manuallyViewedAndClosed": true
+    },
+    {
+      "case": "case-841-after-private.json",
+      "url": "/attachment/prj_hm3AG07ZoLDLvimiVLb0/52ab93c1cc713ef48bd124143fe14b9ee26ad0059780ab142c28899326d5af8c.txt",
+      "status": 200,
+      "bytes": 54,
+      "mime": "text/plain",
+      "filename": "staged-note.txt",
+      "exactOriginalBytes": true,
+      "headers": {
+        "contentType": "text/plain; charset=utf-8",
+        "contentDisposition": "inline; filename*=UTF-8''staged-note.txt",
+        "contentLength": "54"
+      },
+      "actualPopupTab": 41,
+      "manuallyViewedAndClosed": true
+    },
+    {
+      "case": "after2-case-final-private.json",
+      "url": "/attachment/prj_hv7jT60kThz2sLEx4rlg/f5b9c70492c392c17dbea544185db43d257e1436396c7f60424d29cf4bb9a4c0.png",
+      "status": 200,
+      "bytes": 86030,
+      "mime": "image/png",
+      "filename": "capture.png",
+      "exactOriginalBytes": true,
+      "headers": {
+        "contentType": "image/png",
+        "contentDisposition": "inline; filename*=UTF-8''capture.png",
+        "contentLength": "86030"
+      },
+      "actualPopupTab": 43,
+      "manuallyViewedAndClosed": true
+    },
+    {
+      "case": "after2-case-final-private.json",
+      "url": "/attachment/prj_hv7jT60kThz2sLEx4rlg/6e67d3a09ee829408f0b60173d82f4ada9e97d29325e88fa215c3786136fa66f.png",
+      "status": 200,
+      "bytes": 84429,
+      "mime": "image/png",
+      "filename": "capture.png",
+      "exactOriginalBytes": true,
+      "headers": {
+        "contentType": "image/png",
+        "contentDisposition": "inline; filename*=UTF-8''capture.png",
+        "contentLength": "84429"
+      },
+      "actualPopupTab": 44,
+      "manuallyViewedAndClosed": true
+    }
+  ],
+  "parentTab": {
+    "id": 40,
+    "closed": true,
+    "originalConversationAndUnsentDraftRetained": true,
+    "localeChecks": [
+      "en-US",
+      "zh-CN"
+    ],
+    "desktopViewport": {
+      "width": 1280,
+      "height": 720,
+      "pixelRatio": 1
+    },
+    "temporaryViewportOverrideReset": true
+  },
+  "screenshots": {
+    "count": 11,
+    "format": "JPEG",
+    "manuallyViewed": true,
+    "files": [
+      "01-current-natural-citation.jpg",
+      "02-current-citation-raw-original.jpg",
+      "03-current-source-and-unsent-draft.jpg",
+      "04-current-desktop-source-and-draft.jpg",
+      "05-other-project-natural-citation.jpg",
+      "06-other-project-raw-original.jpg",
+      "07-image-natural-citation.jpg",
+      "08-first-image-raw-original.jpg",
+      "09-second-image-raw-original.jpg",
+      "10-chinese-second-image-source.jpg",
+      "11-returned-chinese-source-and-draft.jpg"
+    ]
+  },
+  "browserWarningsAndErrors": 0,
+  "existingMessages": {
+    "before841": 5,
+    "after841": 5,
+    "sessions": 99,
+    "tasks": 8,
+    "providerUsage": 767,
+    "originalSnapshotsAndSelectionsPreserved": true
+  },
+  "data": {
+    "at": "2026-10-31T14:17:18.230Z",
+    "phase": "before",
+    "schema": 9,
+    "tables": 92,
+    "originals": 226303,
+    "current": 226305,
+    "changes": [
+      {
+        "table": "engine_control_activation_lease",
+        "old": 46360,
+        "now": 46361
+      },
+      {
+        "table": "engine_control_activation_lease_grant",
+        "old": 46418,
+        "now": 46419
+      }
+    ],
+    "allOriginalBusinessRowsPreserved": true,
+    "capacity": [],
+    "attachments": 121,
+    "protectedProjects": 13,
+    "trackedFiles": 28,
+    "workspaceFiles": 13,
+    "additionalProtectedFiles": 39,
+    "requests": 0,
+    "cumulativeRequests": 1152,
+    "reserveMs": 2905770,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "uiEntry": "main-Rn-pJKfx.js"
+  },
+  "newRuntimeProcessReceipt": {
+    "target": "runtime_process",
+    "ownerPID": 28884,
+    "physicalBirthMatchesNativeReady": true,
+    "lifetimeRepresentation": "Number.MAX_SAFE_INTEGER is an immutable physical identity receipt, not a death deadline; engine/process-liveness.ts",
+    "nativePhysicalFinishVerified": true
+  },
+  "retirement": {
+    "requests": 0,
+    "cumulativeRequests": 1152,
+    "publicShutdown": 200,
+    "credentialCopyRetired": true,
+    "modelCatalogCopyRetired": true,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "reserveMs": 2905770
+  },
+  "docsCheck": {
+    "exitCode": 0,
+    "operations": 352,
+    "groups": 26
+  }
+}
