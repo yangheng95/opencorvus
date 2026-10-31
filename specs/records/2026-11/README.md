@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [当前工作表导出文件身份](2026-11-01-live-spreadsheet-export-identity.md)：真实电子表格产物、当前编辑状态与下载身份。
+
 - [交付承诺与验证范围](2026-11-01-delivery-verification-scope.md)：共享验证原则、完成判断和独立消费者真实验收。
 
 - [产物导出同名文件身份](2026-11-01-artifact-export-filename-identity.md)：同名图片的真实发布、下载及引用映射。

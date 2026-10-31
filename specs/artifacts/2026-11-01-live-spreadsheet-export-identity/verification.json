@@ -1,0 +1,340 @@
+{
+  "purpose": "Repair first render of a mounted Spreadsheet and preserve current workbook download identities",
+  "actualModel": {
+    "provider": "openai",
+    "model": "gpt-6.1-sol",
+    "requests": 5,
+    "maximumRequests": 8,
+    "unusedRetired": 3,
+    "allStreamed200EOF": true,
+    "cumulativeRequests": 1180
+  },
+  "publication": {
+    "tool": "publish_interactive_artifact",
+    "completedCalls": 1,
+    "messages": 5,
+    "artifactID": "art_g0VZeTZeV0053FekTFiJ"
+  },
+  "baseline": {
+    "actualPage": "Spreadsheet failed to load before mount",
+    "csvMenuReachable": false,
+    "codeCause": "ArtifactFrame eagerly called the mounted export supplier to derive its copy label"
+  },
+  "actualCSV": {
+    "at": "2026-10-31T18:26:02.255Z",
+    "actualBrowserDownloads": true,
+    "currentWorkbookValues": true,
+    "files": [
+      {
+        "filename": "Spreadsheet850 - Data_raw.csv",
+        "bytes": 37,
+        "rows": [
+          [
+            "Alpha850 edited",
+            "11"
+          ],
+          [
+            "保存",
+            "12"
+          ]
+        ]
+      },
+      {
+        "filename": "Spreadsheet850 - Data_raw (2).csv",
+        "bytes": 30,
+        "rows": [
+          [
+            "Bravo850",
+            "29"
+          ],
+          [
+            "保存",
+            "30"
+          ]
+        ]
+      }
+    ]
+  },
+  "manualUI": {
+    "sameOriginalArtifactMounted": true,
+    "editedA1": "Alpha850 edited",
+    "otherSheetA1": "Bravo850",
+    "copyButtonNativePasteVerified": true,
+    "unsentDraftCleared": true,
+    "chineseLocalePreservedCurrentEdits": true,
+    "chineseDownloadsEqualEnglish": true,
+    "originalMediaDownloadsEqual849": true,
+    "screenshots": 12,
+    "personallyViewed": true
+  },
+  "persistent": {
+    "originalA1": "Alpha850",
+    "originalArtifactPreserved": true,
+    "originalSnapshotAndSelectionPreserved": true,
+    "resources": [
+      {
+        "mime": "application/json",
+        "filename": "capability-catalog.json",
+        "bytes": 91915,
+        "status": 200
+      }
+    ],
+    "afterRequests": 0
+  },
+  "officeCoverage": {
+    "at": "2026-10-31T18:35:22.629Z",
+    "artifacts": 13,
+    "filePreviews": 0,
+    "nativeOfficeProjectionOutcomes": 0,
+    "qualification": "Current copied dataset has no original Office delivery card for visual replay; do not claim Office visual coverage"
+  },
+  "preservation": {
+    "before": {
+      "at": "2026-10-31T18:20:30.826Z",
+      "phase": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 232901,
+      "current": 234297,
+      "changes": [
+        {
+          "table": "bus_publication_delivery",
+          "old": 45514,
+          "now": 45794
+        },
+        {
+          "table": "bus_publication_delivery_receipt",
+          "old": 45514,
+          "now": 45794
+        },
+        {
+          "table": "bus_publication_outbox",
+          "old": 5977,
+          "now": 6014
+        },
+        {
+          "table": "bus_publication_owner",
+          "old": 5977,
+          "now": 6014
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "old": 17931,
+          "now": 18042
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "old": 47697,
+          "now": 47979
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "old": 47755,
+          "now": 48037
+        },
+        {
+          "table": "event_occurrence",
+          "old": 5779,
+          "now": 5816
+        },
+        {
+          "table": "interactive_artifact",
+          "old": 12,
+          "now": 13
+        },
+        {
+          "table": "memory_chunk",
+          "old": 61,
+          "now": 62
+        },
+        {
+          "table": "memory_file",
+          "old": 61,
+          "now": 62
+        },
+        {
+          "table": "message",
+          "old": 765,
+          "now": 770
+        },
+        {
+          "table": "part",
+          "old": 2175,
+          "now": 2186
+        },
+        {
+          "table": "permission_execution_result",
+          "old": 182,
+          "now": 183
+        },
+        {
+          "table": "permission_ledger",
+          "old": 926,
+          "now": 931
+        },
+        {
+          "table": "permission_policy",
+          "old": 41,
+          "now": 42
+        },
+        {
+          "table": "project",
+          "old": 61,
+          "now": 62
+        },
+        {
+          "table": "protocol_event",
+          "old": 2254,
+          "now": 2263
+        },
+        {
+          "table": "provider_activity_outcome",
+          "old": 759,
+          "now": 762
+        },
+        {
+          "table": "provider_activity_request",
+          "old": 759,
+          "now": 762
+        },
+        {
+          "table": "provider_usage_event",
+          "old": 790,
+          "now": 795
+        },
+        {
+          "table": "session",
+          "old": 103,
+          "now": 104
+        },
+        {
+          "table": "tool_part_outcome",
+          "old": 602,
+          "now": 603
+        },
+        {
+          "table": "tool_part_request",
+          "old": 602,
+          "now": 603
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "capacity": [
+        {
+          "slot": 0,
+          "fields": [
+            "expires_at",
+            "lease_id",
+            "owner_id",
+            "time_acquired"
+          ],
+          "currentRuntimeOwner": true,
+          "releasedByPhysicalFinish": true
+        },
+        {
+          "slot": 1,
+          "fields": [
+            "expires_at",
+            "lease_id",
+            "owner_id",
+            "time_acquired"
+          ],
+          "currentRuntimeOwner": true,
+          "releasedByPhysicalFinish": true
+        }
+      ],
+      "attachments": 138,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "requests": 5,
+      "cumulativeRequests": 1180,
+      "reserveMs": 2798890,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-CryNnb8b.js"
+    },
+    "after": {
+      "at": "2026-10-31T18:38:37.160Z",
+      "phase": "after2",
+      "schema": 9,
+      "tables": 92,
+      "originals": 234297,
+      "current": 234299,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease",
+          "old": 47979,
+          "now": 47980
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "old": 48037,
+          "now": 48038
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "capacity": [],
+      "attachments": 140,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "requests": 0,
+      "cumulativeRequests": 1180,
+      "reserveMs": 1741438,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-VnTgbJSr.js"
+    }
+  },
+  "native": {
+    "before": {
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "reserveMs": 2798890
+    },
+    "after2": {
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "reserveMs": 1741438
+    },
+    "pairedCopiesRetired": 4,
+    "sourceBefore": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "sourceAfter": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    }
+  },
+  "tests": {
+    "runner": "packages/overlay/script/run-unit-tests.ts",
+    "file": "test/artifact-export.test.ts",
+    "passed": 24,
+    "failed": 0,
+    "kind": "positive file data and explicit export error contracts"
+  },
+  "checks": {
+    "ae-final": 0,
+    "types-final": 0,
+    "i18n-final": 0,
+    "ui-build-final": 0,
+    "docs-final": 0
+  },
+  "uiAutomationTests": 0,
+  "delegation": "single agent",
+  "goalStatus": "active"
+}

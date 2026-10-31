@@ -1,8 +1,46 @@
 import { expect, test } from "bun:test"
-import { artifactCSV, artifactExports, artifactFilename, plainTerminalOutput } from "../src/services/artifact-export"
+import {
+  artifactCSV,
+  artifactExports,
+  artifactExportFilenames,
+  artifactFilename,
+  plainTerminalOutput,
+} from "../src/services/artifact-export"
 import type { InteractiveArtifactPayload } from "../src/services/interactive-artifact"
 
 const base = { schemaVersion: "1" as const, title: "Acceptance" }
+
+test("Current workbook filename collections use the shared allocation", () => {
+  expect(artifactExportFilenames(["Book - Data<raw.csv", "Book - Data>raw.csv", "Book - Data_raw (2).csv"])).toEqual([
+    "Book - Data_raw.csv",
+    "Book - Data_raw (3).csv",
+    "Book - Data_raw (2).csv",
+  ])
+})
+
+test("A workbook exceeding the CSV cell limit returns its explicit export error", () => {
+  expect(() =>
+    artifactExports({
+      ...base,
+      renderer: "spreadsheet@1",
+      editable: true,
+      sheets: [
+        {
+          id: "limit",
+          name: "Limit",
+          rowCount: 2100,
+          columnCount: 1000,
+          frozenRows: 0,
+          frozenColumns: 0,
+          cells: [
+            { address: "A1", value: "First" },
+            { address: "ALL2100", value: "Last" },
+          ],
+        },
+      ],
+    }),
+  ).toThrow(new Error("CSV export exceeds 2,000,000 cells. Reduce the used sheet range before exporting."))
+})
 
 const mediaSource = {
   sha: "ad8d51e8c73773e89c4cfd92de5ac53ea04604410d4a2bae3173c9ede7a87d25",

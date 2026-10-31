@@ -4,7 +4,6 @@ import "reveal.js/theme/serif.css"
 import "./PresentationArtifact.css"
 import { For, Show, onCleanup, onMount } from "solid-js"
 import type { InteractiveArtifact, InteractiveArtifactPayload } from "../../services/interactive-artifact"
-import { artifactExports } from "../../services/artifact-export"
 import { FilePart } from "../FilePart"
 import { StaticTextPart } from "../TextPart"
 import { ArtifactFrame } from "./ArtifactFrame"
@@ -77,12 +76,7 @@ export function PresentationArtifact(props: {
   })
 
   return (
-    <ArtifactFrame
-      payload={props.payload}
-      title={props.payload.title}
-      kind="Presentation"
-      exportFiles={() => artifactExports(props.payload, props.downloads)}
-    >
+    <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Presentation" downloads={props.downloads}>
       <div
         class="reveal msg-artifact-presentation"
         data-aspect-ratio={props.payload.aspectRatio}

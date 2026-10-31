@@ -11,6 +11,34 @@ export function artifactFilename(name: string): string {
   return (name.split(/[\\/]/).at(-1)?.trim() || "artifact").replace(/[<>:"|?*\u0000-\u001f]/g, "_")
 }
 
+export function artifactExportFilenames(input: readonly string[]): string[] {
+  const names = input.map(artifactFilename)
+  const reserved = new Set(names.map((name) => name.toLowerCase()))
+  const used = new Set<string>()
+  return names.map((name) => {
+    let filename = name
+    if (used.has(filename.toLowerCase())) {
+      const dot = filename.lastIndexOf(".")
+      const stem = dot > 0 ? filename.slice(0, dot) : filename
+      const extension = dot > 0 ? filename.slice(dot) : ""
+      let suffix = 2
+      do filename = `${stem} (${suffix++})${extension}`
+      while (used.has(filename.toLowerCase()) || reserved.has(filename.toLowerCase()))
+    }
+    used.add(filename.toLowerCase())
+    return filename
+  })
+}
+
+/** Read declared export metadata without invoking a mounted editor's export action. */
+export function artifactCopiesFilename(
+  payload: InteractiveArtifactPayload,
+  downloads: NonNullable<InteractiveArtifact["downloads"]> = [],
+): boolean {
+  const first = downloads[0] ?? rendererExports(payload)[0]
+  return Boolean(first && "url" in first && !first.mime.startsWith("text/") && first.mime !== "application/json")
+}
+
 function markdownMediaReference(label: string, filename: string): string {
   const text = label
     .replace(/[\u0021-\u002f\u003a-\u0040\u005b-\u0060\u007b-\u007e]/g, "\\$&")
@@ -57,29 +85,16 @@ export function artifactExports(
   const plans = [
     ...downloads.map((file) => ({ ...file, filename: file.filename || file.url })),
     ...rendererExports(payload),
-  ]
-    .filter((file) => {
-      if (!("url" in file)) return true
-      if (seen.has(file.url)) return false
-      seen.add(file.url)
-      return true
-    })
-    .map((file) => ({ ...file, filename: artifactFilename(file.filename) }))
-  // Generated suffixes must leave every explicitly declared name available.
-  const reserved = new Set(plans.map((file) => file.filename.toLowerCase()))
-  const used = new Set<string>()
+  ].filter((file) => {
+    if (!("url" in file)) return true
+    if (seen.has(file.url)) return false
+    seen.add(file.url)
+    return true
+  })
+  const filenames = artifactExportFilenames(plans.map((file) => file.filename))
   const resources = new Map<string, string>()
-  const named = plans.map((file) => {
-    let filename = file.filename
-    if (used.has(filename.toLowerCase())) {
-      const dot = filename.lastIndexOf(".")
-      const stem = dot > 0 ? filename.slice(0, dot) : filename
-      const extension = dot > 0 ? filename.slice(dot) : ""
-      let suffix = 2
-      do filename = `${stem} (${suffix++})${extension}`
-      while (used.has(filename.toLowerCase()) || reserved.has(filename.toLowerCase()))
-    }
-    used.add(filename.toLowerCase())
+  const named = plans.map((file, index) => {
+    const filename = filenames[index]!
     if ("url" in file) resources.set(file.url, filename)
     return { ...file, filename }
   })
@@ -97,8 +112,8 @@ function rendererExports(payload: InteractiveArtifactPayload): ArtifactExportPla
     { filename: `${name}.${extension}`, mime, text: content },
   ]
   const json = (value: unknown, extension = "json") =>
-    text(extension, JSON.stringify(value, null, 2), "application/json")
-  const csv = (rows: unknown[][]) => text("csv", artifactCSV(rows), "text/csv;charset=utf-8")
+    text(extension, () => JSON.stringify(value, null, 2), "application/json")
+  const csv = (rows: unknown[][]) => text("csv", () => artifactCSV(rows), "text/csv;charset=utf-8")
   switch (payload.renderer) {
     case "document@1":
       return text("md", payload.markdown, "text/markdown")
@@ -231,24 +246,26 @@ function rendererExports(payload: InteractiveArtifactPayload): ArtifactExportPla
       ]
     case "spreadsheet@1":
       return payload.sheets.map((sheet) => {
-        const cells = sheet.cells.map((cell) => {
-          const letters = cell.address.match(/^[A-Z]+/)![0]
-          return {
-            row: Number(cell.address.slice(letters.length)) - 1,
-            column: [...letters].reduce((n, letter) => n * 26 + letter.charCodeAt(0) - 64, 0) - 1,
-            value: cell.computed ?? cell.value ?? cell.formula,
-          }
-        })
-        const lastRow = Math.max(-1, ...cells.map((cell) => cell.row))
-        const lastColumn = Math.max(-1, ...cells.map((cell) => cell.column))
-        if ((lastRow + 1) * (lastColumn + 1) > 2_000_000)
-          throw new Error("CSV export exceeds 2,000,000 cells. Reduce the used sheet range before exporting.")
-        const rows: unknown[][] = Array.from({ length: lastRow + 1 }, () => Array(lastColumn + 1).fill(""))
-        for (const cell of cells) rows[cell.row][cell.column] = cell.value
         return {
           filename: `${name} - ${artifactFilename(sheet.name)}.csv`,
           mime: "text/csv;charset=utf-8",
-          text: artifactCSV(rows),
+          text: () => {
+            const cells = sheet.cells.map((cell) => {
+              const letters = cell.address.match(/^[A-Z]+/)![0]
+              return {
+                row: Number(cell.address.slice(letters.length)) - 1,
+                column: [...letters].reduce((n, letter) => n * 26 + letter.charCodeAt(0) - 64, 0) - 1,
+                value: cell.computed ?? cell.value ?? cell.formula,
+              }
+            })
+            const lastRow = Math.max(-1, ...cells.map((cell) => cell.row))
+            const lastColumn = Math.max(-1, ...cells.map((cell) => cell.column))
+            if ((lastRow + 1) * (lastColumn + 1) > 2_000_000)
+              throw new Error("CSV export exceeds 2,000,000 cells. Reduce the used sheet range before exporting.")
+            const rows: unknown[][] = Array.from({ length: lastRow + 1 }, () => Array(lastColumn + 1).fill(""))
+            for (const cell of cells) rows[cell.row][cell.column] = cell.value
+            return artifactCSV(rows)
+          },
         }
       })
     case "timeline@1":

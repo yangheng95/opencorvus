@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "1",
+  "title": "Spreadsheet850",
+  "renderer": "spreadsheet@1",
+  "editable": true,
+  "sheets": [
+    {
+      "id": "alpha850",
+      "name": "Data<raw",
+      "rowCount": 5,
+      "columnCount": 3,
+      "frozenRows": 0,
+      "frozenColumns": 0,
+      "cells": [
+        {
+          "address": "A1",
+          "value": "Alpha850"
+        },
+        {
+          "address": "B1",
+          "value": 11
+        },
+        {
+          "address": "A2",
+          "value": "保存"
+        },
+        {
+          "address": "B2",
+          "value": 12
+        }
+      ]
+    },
+    {
+      "id": "bravo850",
+      "name": "Data>raw",
+      "rowCount": 5,
+      "columnCount": 3,
+      "frozenRows": 0,
+      "frozenColumns": 0,
+      "cells": [
+        {
+          "address": "A1",
+          "value": "Bravo850"
+        },
+        {
+          "address": "B1",
+          "value": 29
+        },
+        {
+          "address": "A2",
+          "value": "保存"
+        },
+        {
+          "address": "B2",
+          "value": 30
+        }
+      ]
+    }
+  ]
+}

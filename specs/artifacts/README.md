@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [当前工作表导出文件身份](2026-11-01-live-spreadsheet-export-identity/README.md)：原加载失败、真实单元格编辑、两CSV、十二张实图与媒体回看。
+
 - [交付承诺与验证范围](2026-11-01-delivery-verification-scope/README.md)：相同两题前后真实执行、80次流式请求、13项独立消费者检查和完成判断原件。
 
 - [产物导出同名文件身份](2026-11-01-artifact-export-filename-identity/README.md)：两份同名原图、八张实图、原下载及修复后不同名称的字节映射。

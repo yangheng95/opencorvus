@@ -2015,6 +2015,11 @@ read the mounted editor state. MCP App actions read the current real Tool
 result; returned resources use the existing Host download protocol and App
 requests retain confirmation. Opening keeps the same mounted renderer and MCP
 authority. A source/data export does not replace a requested PDF or Word file.
+Export control labels read declared file metadata without invoking a mounted
+editor's export supplier during render. Workbook cell materialization and CSV
+limits belong to actual copy/download actions; current workbook filenames use
+the same collection allocator as payload exports. Frames carry original
+downloads through both metadata and data projections in their declared order.
 Notebook media links and Presentation image references preserve plain-text
 labels through CommonMark escaping. Their companion filenames use one URI
 component encoding inside angle-bracket destinations, including literal `%`,

@@ -1,6 +1,6 @@
 import { createSignal, onCleanup, onMount, Show, type JSX } from "solid-js"
-import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
-import { artifactExports, type ArtifactExport } from "../../services/artifact-export"
+import type { InteractiveArtifact, InteractiveArtifactPayload } from "../../services/interactive-artifact"
+import { artifactCopiesFilename, artifactExports, type ArtifactExport } from "../../services/artifact-export"
 import { reportError } from "../../services/diagnostics"
 import { t } from "../../utils/i18n"
 import { requestNativeFullscreen } from "../../utils/fullscreen"
@@ -12,6 +12,7 @@ export function ArtifactFrame(props: {
   title: string
   kind: string
   payload?: InteractiveArtifactPayload
+  downloads?: InteractiveArtifact["downloads"]
   exportFiles?: () => ArtifactExport[]
   copyText?: () => string | Promise<string>
   class?: string
@@ -24,13 +25,9 @@ export function ArtifactFrame(props: {
   let frame: HTMLElement | undefined
   const [immersive, setImmersive] = createSignal(false)
   const expandable = () => props.expandable !== false
-  const files = () => (props.exportFiles ? props.exportFiles() : artifactExports(props.payload!))
-  const copiesFilename = () => {
-    const first = files()[0]
-    return (
-      !props.copyText && first && "url" in first && !first.mime.startsWith("text/") && first.mime !== "application/json"
-    )
-  }
+  const files = () => (props.exportFiles ? props.exportFiles() : artifactExports(props.payload!, props.downloads))
+  const copiesFilename = () =>
+    !props.copyText && props.payload && artifactCopiesFilename(props.payload, props.downloads)
 
   const syncFullscreen = () => setImmersive(document.fullscreenElement === frame)
   const immersiveLabel = () =>

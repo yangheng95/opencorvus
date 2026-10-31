@@ -4,7 +4,7 @@ import enUS from "@univerjs/preset-sheets-core/locales/en-US"
 import zhCN from "@univerjs/preset-sheets-core/locales/zh-CN"
 import "@univerjs/preset-sheets-core/lib/index.css"
 import { createUniver } from "@univerjs/presets"
-import { artifactCSV, artifactFilename } from "../../services/artifact-export"
+import { artifactCSV, artifactExportFilenames, artifactFilename } from "../../services/artifact-export"
 
 function cellCoordinates(address) {
   const letters = address.match(/^[A-Z]+/)?.[0] ?? "A"
@@ -121,7 +121,7 @@ export function mountUniverSpreadsheet(host, payload, language, darkMode) {
     setLocale: (language) => univerAPI.setLocale(spreadsheetLocale(language)),
     exportFiles: () => {
       const snapshot = workbook.save()
-      return snapshot.sheetOrder.map((id) => {
+      const files = snapshot.sheetOrder.map((id) => {
         const sheet = snapshot.sheets[id]
         const cells = sheet.cellData || {}
         const lastRow = Math.max(-1, ...Object.keys(cells).map(Number))
@@ -140,6 +140,8 @@ export function mountUniverSpreadsheet(host, payload, language, darkMode) {
           text: artifactCSV(rows),
         }
       })
+      const filenames = artifactExportFilenames(files.map((file) => file.filename))
+      return files.map((file, index) => ({ ...file, filename: filenames[index] }))
     },
   }
 }

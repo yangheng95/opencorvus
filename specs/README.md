@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [当前工作表导出文件身份](records/2026-11/2026-11-01-live-spreadsheet-export-identity.md)：当前编辑内容的真实CSV出口与共享命名收敛。
+
 - [交付承诺与验证范围](records/2026-11/2026-11-01-delivery-verification-scope.md)：共享验证选择、完成判断及跨格式真实程序验收。
 
 - [产物导出同名文件身份](records/2026-11/2026-11-01-artifact-export-filename-identity.md)：同名资源、下载集合与派生链接的真实身份。

@@ -1,6 +1,5 @@
 import { Match, Switch } from "solid-js"
 import type { InteractiveArtifact, InteractiveArtifactPayload } from "../../services/interactive-artifact"
-import { artifactExports } from "../../services/artifact-export"
 import { PdfPreview } from "../PdfPreview"
 import { ResourceTextPreview } from "../ResourceTextPreview"
 import { ArtifactFrame } from "./ArtifactFrame"
@@ -12,12 +11,7 @@ export function FilePreviewArtifact(props: {
   downloads?: InteractiveArtifact["downloads"]
 }) {
   return (
-    <ArtifactFrame
-      payload={props.payload}
-      title={props.payload.title}
-      kind="File"
-      exportFiles={() => artifactExports(props.payload, props.downloads)}
-    >
+    <ArtifactFrame payload={props.payload} title={props.payload.title} kind="File" downloads={props.downloads}>
       <Switch>
         <Match when={props.payload.kind === "pdf"}>
           <PdfPreview url={props.payload.source.url} label={props.payload.title} />
