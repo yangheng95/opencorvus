@@ -1,0 +1,95 @@
+{
+  "at": "2026-10-31T05:00:53.001Z",
+  "projectID": "prj_hv9yeLtFqfum0wy5GM3A",
+  "sessionID": "ses_-zUQOl0aXzzkhjbfWmI5",
+  "initialMessages": 2,
+  "continuedMessages": 4,
+  "initialLifecycle": [
+    {
+      "inputMessageID": "msg_0eb48c46-7a3c-4ebc-91f7-29f6d2d784d0",
+      "status": {
+        "type": "streaming"
+      }
+    },
+    {
+      "inputMessageID": "msg_0eb48c46-7a3c-4ebc-91f7-29f6d2d784d0",
+      "status": {
+        "type": "streaming"
+      }
+    },
+    {
+      "inputMessageID": "msg_0eb48c46-7a3c-4ebc-91f7-29f6d2d784d0",
+      "status": {
+        "type": "idle"
+      }
+    }
+  ],
+  "cancel": {
+    "exactOwnerPreserved": true,
+    "exactSnapshotPreserved": true
+  },
+  "confirmedStop": {
+    "originalMessagePartsPreserved": true,
+    "physicalOwnerReleased": true,
+    "inputLifecycleRetainsIdle": true
+  },
+  "conversion": {
+    "projectGenerationPreserved": true,
+    "sessionIdentityPreserved": true,
+    "originalMessagesPreserved": true,
+    "originalFilesPreserved": 6,
+    "gitStatePreserved": true
+  },
+  "continued": {
+    "sameSession": true,
+    "newPromptGeneration": true,
+    "reply": "PREFLIGHT_825_RESUME_OK",
+    "complete": true
+  },
+  "secondStop": {
+    "allFourMessagesPreserved": true,
+    "physicalOwnerReleased": true
+  },
+  "currentCaseFiles": 8,
+  "addedFiles": {
+    "count": 2,
+    "kind": "capability catalog occurrence JSON snapshot and attachment metadata from the existing catalog-binding writer"
+  },
+  "uiActions": [
+    {
+      "at": "2026-10-31T04:51:43.499Z",
+      "path": "/project/current/promote-anonymous",
+      "method": "POST",
+      "origin": "http://localhost:38438",
+      "diagnostic": false
+    },
+    {
+      "at": "2026-10-31T04:52:24.740Z",
+      "path": "/project/current/promote-anonymous",
+      "method": "POST",
+      "origin": "http://localhost:38438",
+      "diagnostic": false
+    },
+    {
+      "at": "2026-10-31T04:52:51.086Z",
+      "path": "/coding/chat/session/ses_-zUQOl0aXzzkhjbfWmI5/abort",
+      "method": "POST",
+      "origin": "http://localhost:38438",
+      "diagnostic": false
+    },
+    {
+      "at": "2026-10-31T04:53:25.755Z",
+      "path": "/project/current/promote-anonymous",
+      "method": "POST",
+      "origin": "http://localhost:38438",
+      "diagnostic": false
+    },
+    {
+      "at": "2026-10-31T04:54:59.672Z",
+      "path": "/coding/chat/session/ses_-zUQOl0aXzzkhjbfWmI5/abort",
+      "method": "POST",
+      "origin": "http://localhost:38438",
+      "diagnostic": false
+    }
+  ]
+}

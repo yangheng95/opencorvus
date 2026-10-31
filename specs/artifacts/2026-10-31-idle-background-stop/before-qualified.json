@@ -1,0 +1,163 @@
+{
+  "at": "2026-10-31T04:20:42.575Z",
+  "phase": "before",
+  "schema": 9,
+  "tables": 92,
+  "originals": 214198,
+  "current": 214790,
+  "changes": [
+    {
+      "table": "bus_publication_delivery",
+      "old": 41787,
+      "now": 41906,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "bus_publication_delivery_receipt",
+      "old": 41787,
+      "now": 41906,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "bus_publication_outbox",
+      "old": 5471,
+      "now": 5487,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "bus_publication_owner",
+      "old": 5471,
+      "now": 5487,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "bus_publication_phase_receipt",
+      "old": 16413,
+      "now": 16461,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "engine_control_activation_lease",
+      "old": 43913,
+      "now": 44033,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "engine_control_activation_lease_grant",
+      "old": 43971,
+      "now": 44091,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "event_occurrence",
+      "old": 5273,
+      "now": 5289,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "memory_chunk",
+      "old": 43,
+      "now": 44,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "memory_file",
+      "old": 43,
+      "now": 44,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "message",
+      "old": 702,
+      "now": 704,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "part",
+      "old": 2020,
+      "now": 2024,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "project",
+      "old": 43,
+      "now": 44,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "protocol_event",
+      "old": 2139,
+      "now": 2143,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "provider_activity_outcome",
+      "old": 721,
+      "now": 722,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "provider_activity_request",
+      "old": 721,
+      "now": 722,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "provider_usage_event",
+      "old": 727,
+      "now": 729,
+      "originalRowsChanged": 0
+    },
+    {
+      "table": "runtime_execution_capacity_lease",
+      "old": 3,
+      "now": 3,
+      "originalRowsChanged": 2
+    },
+    {
+      "table": "session",
+      "old": 87,
+      "now": 88,
+      "originalRowsChanged": 0
+    }
+  ],
+  "allOriginalBusinessRowsPreserved": true,
+  "mutableCapacitySlots": [
+    {
+      "slot": 0,
+      "changedFields": [
+        "expires_at",
+        "lease_id",
+        "owner_id",
+        "time_acquired"
+      ],
+      "currentRuntimeOwner": true,
+      "releasedBeforeInitialTTL": true
+    },
+    {
+      "slot": 1,
+      "changedFields": [
+        "expires_at",
+        "lease_id",
+        "owner_id",
+        "time_acquired"
+      ],
+      "currentRuntimeOwner": true,
+      "releasedBeforeInitialTTL": true
+    }
+  ],
+  "attachments": 75,
+  "oldProjects": 11,
+  "trackedFiles": 28,
+  "protectedWorkspaceFiles": 13,
+  "additionalProtectedFiles": 25,
+  "newCaseFiles": 6,
+  "requests": 2,
+  "cumulativeRequests": 1114,
+  "reserveMs": 3203381,
+  "source": {
+    "catalogSameBytes": true,
+    "catalogSameMetadata": true,
+    "authSameMetadata": true
+  }
+}

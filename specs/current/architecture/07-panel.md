@@ -2048,6 +2048,17 @@ projection or open the queued result dialog; successor and same-directory ABA
 selections retain their own state. Physical prompt ownership includes legitimate
 standby and is independent of the visible idle status.
 
+Unarchived independent Chat/Work rows offer an explicit stop action for both
+active generation and idle background activity. Idle does not assert physical
+ownership; its action calls the same public Session abort after confirmation,
+preserving messages and allowing a later user message to continue. Confirmation
+and return focus belong to the captured API authority, Session kind, ID and
+directory. Task/Mission and terminal rows retain their domain stop rules.
+An anonymous-conversion `OwnedPromptControllersError` has a localized explanation
+directing the operator to stop related conversations from their row menus before
+retrying. Technical details remain available. Conversion does not stop work
+implicitly and retains its physical-ownership guard.
+
 > Current sources: `packages/opencorvus/src/engine/model.ts`,
 > `packages/opencorvus/src/workbench/board.ts`,
 > `packages/overlay/src/store/board.ts`,

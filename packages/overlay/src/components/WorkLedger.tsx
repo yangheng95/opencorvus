@@ -380,7 +380,7 @@ function WorkLedgerRowView(props: {
     const current = row()
     if (current.kind === "mission") return current.interruptible && !missionHasVisibleStoppableTask(current)
     if (current.kind === "task") return taskCanStop(current)
-    return current.status === "active"
+    return !current.archived && (current.status === "active" || current.status === "idle")
   }
   const canDownload = () => row().kind !== "chat" && !!row().directory
   const showDownloadActions = getHostTransport().kind !== "tauri"
@@ -431,8 +431,10 @@ function WorkLedgerRowView(props: {
   }
 
   function stopLabel() {
-    if (row().kind === "mission") return t("mission.ledger.abort_title")
-    if (row().kind === "chat") return t("coding_assistant.ledger.stop_title")
+    const current = row()
+    if (current.kind === "mission") return t("mission.ledger.abort_title")
+    if (current.kind === "chat") return t(current.status === "idle"
+      ? "coding_assistant.ledger.stop_background_title" : "coding_assistant.ledger.stop_title")
     if (cancellationPending()) return t("task.cancelling_button_title")
     return t("task.cancel_button_title")
   }
@@ -450,18 +452,23 @@ function WorkLedgerRowView(props: {
   async function confirmAndStopCurrentRow(): Promise<void> {
     const current = row()
     const authority = captureApiAuthority()
+    const background = current.kind === "chat" && current.status === "idle"
+    const ownsTarget = () => isApiAuthorityCurrent(authority) && row().id === current.id &&
+      row().kind === current.kind && row().directory === current.directory
     const confirmation = await showAppDialog({
-      title: t("work_ledger.stop_confirm.title", { kind: stopKindLabel(current) }),
-      message: t("work_ledger.stop_confirm.message", { title: current.title || current.id }),
+      title: background ? t("coding_assistant.background_stop_confirm.title")
+        : t("work_ledger.stop_confirm.title", { kind: stopKindLabel(current) }),
+      message: t(background ? "coding_assistant.background_stop_confirm.message"
+        : "work_ledger.stop_confirm.message", { title: current.title || current.id }),
       cancel: true,
-      okLabel: t("work_ledger.stop_confirm.action"),
+      okLabel: t(background ? "coding_assistant.background_stop_confirm.action" : "work_ledger.stop_confirm.action"),
       okTone: "danger",
+      openingGuard: () => ownsTarget() && canStop(),
+      returnFocusTarget: () => ownsTarget() ? rowActions.getMainButton() ?? null : null,
     })
     if (
-      !isApiAuthorityCurrent(authority) ||
+      !ownsTarget() ||
       !confirmation.confirmed ||
-      row().id !== current.id ||
-      row().kind !== current.kind ||
       !canStop()
     )
       return

@@ -2,7 +2,7 @@ import { DropdownMenu } from "./ui/DropdownMenu"
 import { createEffect, createSignal, onCleanup, Show, type JSX } from "solid-js"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { showAppDialog, type AppDialogOpenOptions } from "../services/app-dialog"
-import { ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
+import { ApiAuthorityChangedError, ApiError, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { t } from "../utils/i18n"
 import { projectDirectoryKey, projectDirectoryLabel, projectDisplayName } from "../utils/project-directory"
 import { workLedgerSummaryAnchorRect } from "../utils/work-ledger-summary-anchor"
@@ -93,16 +93,21 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
       await action(presentation)
     } catch (error) {
       if (!ownsAction() || error instanceof ApiAuthorityChangedError || (error instanceof DOMException && error.name === "AbortError")) return
+      const ownedPrompt = owner === `promote:${directory}` && error instanceof ApiError && error.status === 409 &&
+        error.body !== null && typeof error.body === "object" && !Array.isArray(error.body) &&
+        (error.body as { name?: unknown }).name === "OwnedPromptControllersError"
+      const errorTitle = t(ownedPrompt ? "project.promote_anonymous_busy_title" : "work_ledger.action_failed_title")
+      const errorMessage = t(ownedPrompt ? "project.promote_anonymous_busy_message" : "work_ledger.action_failed_message", { title })
       reportError({
         id: `project-ledger:${owner}`,
-        title: t("common.error"),
-        message: error instanceof Error ? error.message : String(error),
+        title: ownedPrompt ? errorTitle : t("common.error"),
+        message: ownedPrompt ? errorMessage : error instanceof Error ? error.message : String(error),
         details: formatErrorDetails(error),
       })
       await showAppDialog({
         ...presentation,
-        title: t("work_ledger.action_failed_title"),
-        message: t("work_ledger.action_failed_message", { title }),
+        title: errorTitle,
+        message: errorMessage,
         details: formatErrorDetails(error),
         kind: "error",
       }).catch((cause) => reportError({ title: t("common.error"), details: formatErrorDetails(cause) }))

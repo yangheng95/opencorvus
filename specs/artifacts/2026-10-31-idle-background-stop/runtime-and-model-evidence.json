@@ -1,0 +1,103 @@
+{
+  "batch": 825,
+  "totalMaximumRequests": 6,
+  "spent": 6,
+  "cumulativeRequests": 1118,
+  "originalBaselineWindow": {
+    "deadlineAt": 1793401846919,
+    "startedAt": 1793398246917
+  },
+  "candidateVerificationWindow": {
+    "startedAt": 1793422204785,
+    "deadlineAt": 1793425804787
+  },
+  "scopeWindowsSplitAfterUserContinuation": true,
+  "scopes": [
+    {
+      "phase": "before",
+      "requests": 2,
+      "cumulativeRequests": 1114,
+      "model": "gpt-6.1-sol",
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "publicShutdown": 200,
+      "reserveMs": 3203381,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true
+    },
+    {
+      "phase": "after",
+      "requests": 4,
+      "cumulativeRequests": 1118,
+      "model": "gpt-6.1-sol",
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "publicShutdown": 200,
+      "reserveMs": 3141739,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true
+    }
+  ]
+}
