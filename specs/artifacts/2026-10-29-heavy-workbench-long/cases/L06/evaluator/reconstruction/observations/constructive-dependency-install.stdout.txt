@@ -1,0 +1,34 @@
+Collecting ortools==9.15.6755
+  Downloading ortools-9.15.6755-cp314-cp314-win_amd64.whl.metadata (3.4 kB)
+Requirement already satisfied: numpy==2.5.4 in d:\opencorvus-benchmark-runs\native-operations-reconstruction-20261031\lib\site-packages (2.5.4)
+Requirement already satisfied: pyscipopt==6.3.0 in d:\opencorvus-benchmark-runs\native-operations-reconstruction-20261031\lib\site-packages (6.3.0)
+Collecting absl-py>=2.0.0 (from ortools==9.15.6755)
+  Downloading absl_py-2.5.1-py3-none-any.whl.metadata (3.3 kB)
+Collecting pandas>=2.0.0 (from ortools==9.15.6755)
+  Downloading pandas-3.1.0-cp314-cp314-win_amd64.whl.metadata (18 kB)
+Collecting protobuf<6.34,>=6.33.1 (from ortools==9.15.6755)
+  Downloading protobuf-6.33.6-cp310-abi3-win_amd64.whl.metadata (593 bytes)
+Collecting typing-extensions>=4.12 (from ortools==9.15.6755)
+  Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting immutabledict>=3.0.0 (from ortools==9.15.6755)
+  Downloading immutabledict-4.3.1-py3-none-any.whl.metadata (3.5 kB)
+Collecting python-dateutil>=2.9.0 (from pandas>=2.0.0->ortools==9.15.6755)
+  Downloading python_dateutil-3.0.0-py2.py3-none-any.whl.metadata (8.2 kB)
+Collecting tzdata (from pandas>=2.0.0->ortools==9.15.6755)
+  Downloading tzdata-2026.6-py2.py3-none-any.whl.metadata (1.4 kB)
+Collecting six>=1.6 (from python-dateutil>=2.9.0->pandas>=2.0.0->ortools==9.15.6755)
+  Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+Downloading ortools-9.15.6755-cp314-cp314-win_amd64.whl (24.7 MB)
+   ---------------------------------------- 24.7/24.7 MB 9.4 MB/s  0:00:02
+Downloading protobuf-6.33.6-cp310-abi3-win_amd64.whl (437 kB)
+Downloading absl_py-2.5.1-py3-none-any.whl (137 kB)
+Downloading immutabledict-4.3.1-py3-none-any.whl (5.0 kB)
+Downloading pandas-3.1.0-cp314-cp314-win_amd64.whl (10.9 MB)
+   ---------------------------------------- 10.9/10.9 MB 10.2 MB/s  0:00:01
+Downloading python_dateutil-3.0.0-py2.py3-none-any.whl (94 kB)
+Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+Downloading tzdata-2026.6-py2.py3-none-any.whl (348 kB)
+Installing collected packages: tzdata, typing-extensions, six, protobuf, immutabledict, absl-py, python-dateutil, pandas, ortools
+
+Successfully installed absl-py-2.5.1 immutabledict-4.3.1 ortools-9.15.6755 pandas-3.1.0 protobuf-6.33.6 python-dateutil-3.0.0 six-1.17.0 typing-extensions-4.16.0 tzdata-2026.6

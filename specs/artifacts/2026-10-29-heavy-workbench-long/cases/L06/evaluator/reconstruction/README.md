@@ -6,7 +6,7 @@
 
 原问题资料来自[MIRPLIB](https://mirplib.scl.gatech.edu/instances)，相关成熟评价依据为[ML4CO组织者论文](https://proceedings.mlr.press/v176/gasse22a/gasse22a.pdf)。第三方数据许可尚未核清，原始下载保外部本地缓存；这里不对原资料改许可证。
 
-当前未完成完整新题、公平可达的质量评价、完整参考/错误programme/实际图/一次整审及fresh实测，不能计作完成题数或有效小时。
+当前已有原问题实测与实际质量图，仍未完成完整新题、公平可达的质量评价、完整参考/错误programme/一次整审及fresh实测，不能计作完成题数或有效小时。
 
 ## 原问题首轮实测
 
@@ -31,8 +31,8 @@
 ```powershell
 python -m venv D:/new-own-mirplib-env
 D:/new-own-mirplib-env/Scripts/python.exe -m pip install -r requirements.txt
-D:/new-own-mirplib-env/Scripts/python.exe -B fetch_originals.py --out D:/new-own-mirplib-run/original-inputs
-D:/new-own-mirplib-env/Scripts/python.exe -B run_original_baseline.py --original-inputs D:/new-own-mirplib-run/original-inputs --out D:/new-own-mirplib-run/native-first
+D:/new-own-mirplib-env/Scripts/python.exe -B fetch_originals.py --group 1 --out D:/new-own-mirplib-run/original-inputs
+D:/new-own-mirplib-env/Scripts/python.exe -B run_original_baseline.py --group 1 --original-inputs D:/new-own-mirplib-run/original-inputs --out D:/new-own-mirplib-run/native-first
 D:/new-own-mirplib-env/Scripts/python.exe -B complete_published_routes.py --original-inputs D:/new-own-mirplib-run/original-inputs --out D:/new-own-mirplib-run/published-route-completion
 ```
 
@@ -45,3 +45,41 @@ D:/new-own-mirplib-env/Scripts/python.exe -B complete_published_routes.py --orig
 [真实原生运行](observations/native-temporal-first.terminal.json)11:16:33→11:17:19Z自然exit0，内部44.9243957秒。三例均在首个15前沿没有找到条件可行解，25/35/45从未执行，全部`solution_produced=false`、原可行目标null；[完整研究末态](observations/native-temporal-first/execution-terminal.json)保实际分支与计数。没有加时、调窗口重跑或加载已发表路线补成功。
 
 这是自主方法的真实失败记录，尚不是可复现完整参考、资格通过或模型得分。提交决定、后续前沿与完整算法成功路径尚无本次执行证据；原已发表路线控制不替代它。接下来需实质算法与完整任务工作，不能循环改变窗口或换题编号冒进展。
+
+## 成熟整数构造试验也未找到路线
+
+[构造程序](run_constructive_routes.py)按事前登记把原连续数量暂限制为整数，以CP-SAT找首解，再拟由[原模型优化阶段](refine_constructed_plan.py)处理实际经济目标；没有读取MST/控制解。第一轮三例CP均UNKNOWN、无向量，后SCIP阶段全部未执行，原成本和分数null。[原native末态](observations/native-constructive-first.terminal.json)11:38:05→11:39:40Z实际exit0，研究内部92.1663761秒。不能拿CP无目标响应中的0作经济成本，不能将原不可行与未知混同；优化阶段没有本轮执行成功证据。
+
+目标声明新合同有一次必要局部正向重算：[未声明/真实声明原目标](observations/nullable-claim-original-model-check.json)使用同一已闭合真实原模型和完整向量，前者一致性null，后者true。这不是重跑原LP，也不把此局部信息合同算新构造方法成功或整题资格。
+
+## 已取得正确计划之间的真实经济质量差异
+
+Group1侧重找到任意可行解，连续短冷启动不能建立所需质量层次。按[Group2原模型](https://mirplib.scl.gatech.edu/sites/default/files/Group2_MIP_Model.pdf)的不同结构，在首次本机结果前登记三个原120期实例：船类聚合、每区一个港、整载运输，损产/缺货以显式代价进入目标。没有把Group1数据放大或将其原失败换成新成功。
+
+首次Group2完整源执行11:49:55→11:52:56Z原生exit0、内部180.022284秒。下表中的首解和终解都满足同一原问题，**不是一份错答案和一份对答案**；全部实际BESTSOLFOUND向量均由原MPS独立重算约束、界、整数性与原经济目标。此处没有作者100、候选成绩或新评分线。
+
+| 原实例（t120） | 首个实际可行成本（约） | 终值原可行成本 | 求解器终态下界 |
+| --- | --- | --- | --- |
+| LR1_DR02_VC01_V6a | 1389364.23 | 55730.689596818054 | 32031.272148783784 |
+| LR1_DR02_VC05_V8a | 1313142.66 | 162058.53609443826 | 35918.905468874844 |
+| LR1_DR03_VC03_V16a | 1837581.53 | 201932.05230586205 | 71454.3854662436 |
+
+均为time-limit，未证最优；下界是求解器报告，未冒独立精确最优证明。具体首值/事件/数值误差以[完整原质量研究](observations/native-group2-quality-first/execution-terminal.json)、原事件及[作图数据](figures/plot-data.json)为准。原问题允许有代价的损产/缺货，不能把它偷偷变成另一个“必须零缺货”的隐藏硬约束。
+
+![实际经济质量轨迹](figures/actual-quality-trajectories.png)
+
+![实际库存与损产缺货量](figures/actual-inventories-and-shortfall.png)
+
+两图实际呈现并查看；首版和补显式Alpha图例后的原图/源/命令均保。时间是每例BESTSOLFOUND的实际观察wall时间，含读入、搜索及记录开销，原始求解器时间另外保留；终态下界只画在终态时点。不据此作速度排名/有效小时结论。真实可行质量跨度支持继续建设评价，**不等于该来源已经成为合格重型benchmark**。
+
+复建只对新的自有目录执行；当前已完成研究不得重复求解：
+
+```powershell
+python -m pip install -r requirements.txt
+python -m pip install -r plot-requirements.txt
+python -B fetch_originals.py --group 2 --out D:/new-own-mirplib-run/original-group2-inputs
+python -B run_original_baseline.py --group 2 --original-inputs D:/new-own-mirplib-run/original-group2-inputs --out D:/new-own-mirplib-run/group2-quality
+python -B plot_quality_axis.py --run D:/new-own-mirplib-run/group2-quality --out D:/new-own-mirplib-run/figures
+```
+
+原始输入ZIP/全部原矩阵和解向量继续保外部；本目录只保自写源、原生日志/质量事件及重算/图，范围见[本轮原件清单](observations/constructive-and-quality-scope.json)。缺少的仍是完整新任务/公开质量合同、强弱正确方法锚点、全链科学研究与移交、同checker错误programme、一次集中整题独审及后来合法fresh实测；禁止机械0.5和当前启动candidate。

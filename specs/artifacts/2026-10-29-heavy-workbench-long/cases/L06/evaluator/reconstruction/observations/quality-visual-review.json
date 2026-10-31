@@ -1,0 +1,11 @@
+{
+  "at": "2026-10-31T12:05:01.315687+00:00",
+  "reviewer": "root, actual view_image inspection",
+  "files": [
+    "figures/actual-quality-trajectories.png",
+    "figures/actual-inventories-and-shortfall.png"
+  ],
+  "observed": "Three readable panels, correctly separated log economic-cost curves and terminal bound markers; port inventory and explicit alpha bars right-axis legend, honest allowed loss/shortfall and unproven optimum labels. First-render source/images retained. Final reviewed images actually opened after explicit legend repair.",
+  "method": "human visual inspection, no UI automation, image assertion, solver rerun or independent whole-case review",
+  "qualification": "not established"
+}

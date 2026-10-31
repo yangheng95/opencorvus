@@ -20,23 +20,29 @@ INSTANCE_NAMES = [
     "LR1_2_DR1_3_VC3_V8a",
     "LR2_22_DR2_22_VC3_V10a",
 ]
+GROUP2_PROFILE = {
+    "sources": {
+        "Group2_data_format_only_files.zip": "https://mirplib.scl.gatech.edu/sites/default/files/Group2_data_format_only_files.zip",
+        "Group2_MPS_files.zip": "https://mirplib.scl.gatech.edu/sites/default/files/Group2_MPS_files.zip",
+        "Group2_MIP_Model.pdf": "https://mirplib.scl.gatech.edu/sites/default/files/Group2_MIP_Model.pdf",
+    },
+    "instances": ["LR1_DR02_VC01_V6a", "LR1_DR02_VC05_V8a", "LR1_DR03_VC03_V16a"],
+    "periods": 120,
+}
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--out", type=Path, required=True)
-    args = parser.parse_args()
-    root = args.out.resolve()
+def acquire(root: Path, sources: dict, instance_names: list, periods: int):
+    root = root.resolve()
     root.mkdir(parents=True, exist_ok=True)
     receipt = {
         "started_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "scope": "original third-party input acquisition, not solver or benchmark acceptance",
         "redistribution": "not established; originals retained only in external local research cache",
-        "registered_original_instances": INSTANCE_NAMES,
-        "original_periods": 45,
+        "registered_original_instances": instance_names,
+        "original_periods": periods,
         "downloads": [],
     }
-    for name, url in SOURCES.items():
+    for name, url in sources.items():
         target = root / name
         if target.exists():
             raise FileExistsError(f"Preserve prior download and its receipt: {target}")
@@ -55,13 +61,24 @@ def main():
                 record["original_instance_members"] = {
                     instance: [x.filename for x in archive.infolist()
                                if instance.lower() in x.filename.lower()]
-                    for instance in INSTANCE_NAMES
+                    for instance in instance_names
                 }
         receipt["downloads"].append(record)
         (root / "acquisition.partial.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
         print(json.dumps({k: record[k] for k in ["url", "path", "status", "bytes"]}), flush=True)
     receipt["finished_at"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
     (root / "acquisition.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--group", choices=["1", "2"], required=True)
+    args = parser.parse_args()
+    if args.group == "1":
+        acquire(args.out, SOURCES, INSTANCE_NAMES, 45)
+    else:
+        acquire(args.out, GROUP2_PROFILE["sources"], GROUP2_PROFILE["instances"], GROUP2_PROFILE["periods"])
 
 
 if __name__ == "__main__":

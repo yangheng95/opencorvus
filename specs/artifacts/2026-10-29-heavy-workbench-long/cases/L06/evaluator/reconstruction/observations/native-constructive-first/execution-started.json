@@ -1,0 +1,12 @@
+{
+  "at": "2026-10-31T11:38:08.328359+00:00",
+  "actual_python_pid": 31404,
+  "packages": {
+    "ortools": "9.15.6755",
+    "numpy": "2.5.4",
+    "pyscipopt": "6.3.0"
+  },
+  "original_inputs_read": "Group1_MPS_files.zip only; no MST or published controls",
+  "method": "CP integer construction followed by original MILP quality refinement",
+  "candidate_score": null
+}

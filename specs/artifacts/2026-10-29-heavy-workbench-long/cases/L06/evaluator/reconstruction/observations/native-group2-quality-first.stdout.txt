@@ -1,0 +1,231 @@
+original problem has 2058 variables (616 bin, 717 int, 725 cont) and 1080 constraints
+presolving:
+(round 1, fast)       568 del vars, 46 del conss, 0 add conss, 811 chg bounds, 0 chg sides, 0 chg coeffs, 0 upgd conss, 3 impls, 341 clqs, 0 implints
+(round 2, fast)       569 del vars, 47 del conss, 0 add conss, 814 chg bounds, 357 chg sides, 0 chg coeffs, 0 upgd conss, 3 impls, 341 clqs, 0 implints
+(round 3, fast)       574 del vars, 51 del conss, 0 add conss, 817 chg bounds, 357 chg sides, 0 chg coeffs, 0 upgd conss, 3 impls, 341 clqs, 0 implints
+(round 4, fast)       576 del vars, 51 del conss, 0 add conss, 820 chg bounds, 357 chg sides, 0 chg coeffs, 0 upgd conss, 3 impls, 341 clqs, 0 implints
+(round 5, exhaustive) 576 del vars, 51 del conss, 0 add conss, 826 chg bounds, 357 chg sides, 0 chg coeffs, 344 upgd conss, 3 impls, 341 clqs, 0 implints
+(round 6, medium)     588 del vars, 63 del conss, 0 add conss, 826 chg bounds, 357 chg sides, 0 chg coeffs, 344 upgd conss, 3 impls, 334 clqs, 0 implints
+(round 7, medium)     591 del vars, 66 del conss, 0 add conss, 826 chg bounds, 357 chg sides, 0 chg coeffs, 344 upgd conss, 3 impls, 333 clqs, 0 implints
+(round 8, exhaustive) 591 del vars, 84 del conss, 0 add conss, 826 chg bounds, 357 chg sides, 0 chg coeffs, 344 upgd conss, 3 impls, 335 clqs, 0 implints
+   (0.0s) probing cycle finished: starting next cycle
+(round 9, exhaustive) 591 del vars, 84 del conss, 0 add conss, 897 chg bounds, 357 chg sides, 0 chg coeffs, 344 upgd conss, 10144 impls, 4446 clqs, 0 implints
+   (0.0s) probing: 293/790 (37.1%) - 0 fixings, 0 aggregations, 14194 implications, 83 bound changes
+   (0.0s) probing aborted: 1000/1000 successive useless probings
+(round 10, exhaustive) 591 del vars, 84 del conss, 0 add conss, 909 chg bounds, 357 chg sides, 0 chg coeffs, 344 upgd conss, 10225 impls, 4449 clqs, 0 implints
+   (0.0s) probing: 393/790 (49.7%) - 0 fixings, 0 aggregations, 14224 implications, 84 bound changes
+   (0.0s) probing aborted: 1000/1000 successive useless probings
+   (0.0s) symmetry computation started: requiring (bin +, int +, cont +), (fixed: bin -, int -, cont -)
+   (0.0s) no symmetry present (symcode time: 0.00)
+presolving (11 rounds: 11 fast, 7 medium, 5 exhaustive):
+ 591 deleted vars, 84 deleted constraints, 0 added constraints, 910 tightened bounds, 0 added holes, 357 changed sides, 0 changed coefficients
+ 10248 implications, 4449 cliques, 0 implied integral variables (0 bin, 0 int, 0 cont)
+presolved problem has 1468 variables (792 bin, 323 int, 353 cont) and 996 constraints
+    311 constraints of type <setppc>
+    685 constraints of type <linear>
+Presolving Time: 0.00
+
+ time | node  | left  |LP iter|LP it/n|mem/heur|mdpt |vars |cons |rows |cuts |sepa|confs|strbr|  dualbound   | primalbound  |  gap   | compl. 
+p 0.0s|     1 |     0 |    60 |     - |shiftand|   0 |1468 | 999 | 996 |   0 |  0 |   2 |   0 |-2.026626e+07 | 1.389364e+06 |    Inf | unknown
+  0.0s|     1 |     0 |  4960 |     - |    19M |   0 |1468 | 999 | 996 |   0 |  0 |   2 |   0 | 3.203118e+04 | 1.389364e+06 |4237.54%| unknown
+  0.0s|     1 |     0 |  6093 |     - |    20M |   0 |1468 | 999 |1061 |  65 |  1 |   2 |   0 | 3.203119e+04 | 1.389364e+06 |4237.54%| unknown
+  0.0s|     1 |     0 |  6373 |     - |    22M |   0 |1468 | 999 |1123 | 127 |  2 |   2 |   0 | 3.203120e+04 | 1.389364e+06 |4237.53%| unknown
+  0.0s|     1 |     0 |  6840 |     - |    22M |   0 |1468 |1000 |1165 | 169 |  3 |   3 |   0 | 3.203120e+04 | 1.389364e+06 |4237.53%| unknown
+  0.0s|     1 |     0 |  7183 |     - |    23M |   0 |1468 |1000 |1202 | 206 |  4 |   3 |   0 | 3.203121e+04 | 1.389364e+06 |4237.53%| unknown
+  0.0s|     1 |     0 |  7488 |     - |    23M |   0 |1468 |1000 |1244 | 248 |  5 |   3 |   0 | 3.203122e+04 | 1.389364e+06 |4237.53%| unknown
+  0.0s|     1 |     0 |  7844 |     - |    24M |   0 |1468 |1000 |1295 | 299 |  6 |   3 |   0 | 3.203123e+04 | 1.389364e+06 |4237.53%| unknown
+  0.0s|     1 |     0 |  7915 |     - |    24M |   0 |1468 |1000 |1327 | 331 |  7 |   3 |   0 | 3.203124e+04 | 1.389364e+06 |4237.53%| unknown
+  0.0s|     1 |     0 |  7998 |     - |    24M |   0 |1468 |1000 |1341 | 345 |  8 |   3 |   0 | 3.203124e+04 | 1.389364e+06 |4237.53%| unknown
+  1.0s|     1 |     0 |  8133 |     - |    24M |   0 |1468 |1000 |1360 | 364 |  9 |   3 |   0 | 3.203124e+04 | 1.389364e+06 |4237.53%| unknown
+  1.0s|     1 |     0 |  8169 |     - |    25M |   0 |1468 |1000 |1380 | 384 | 10 |   3 |   0 | 3.203124e+04 | 1.389364e+06 |4237.53%| unknown
+  1.0s|     1 |     0 |  8232 |     - |    25M |   0 |1468 |1000 |1396 | 400 | 11 |   3 |   0 | 3.203124e+04 | 1.389364e+06 |4237.53%| unknown
+d 1.0s|     1 |     0 | 15050 |     - |farkasdi|   0 |1468 |1014 |1396 |   0 | 11 |  17 |   0 | 3.203124e+04 | 3.692547e+05 |1052.80%| unknown
+  1.0s|     1 |     0 | 20132 |     - |    26M |   0 |1468 |1014 |1396 | 400 | 11 |  17 |   0 | 3.203124e+04 | 3.692547e+05 |1052.80%| unknown
+ time | node  | left  |LP iter|LP it/n|mem/heur|mdpt |vars |cons |rows |cuts |sepa|confs|strbr|  dualbound   | primalbound  |  gap   | compl. 
+  1.0s|     1 |     0 | 20179 |     - |    26M |   0 |1468 |1014 |1408 | 412 | 12 |  17 |   0 | 3.203124e+04 | 3.692547e+05 |1052.80%| unknown
+  1.0s|     1 |     0 | 20207 |     - |    26M |   0 |1468 |1014 |1417 | 421 | 13 |  17 |   0 | 3.203124e+04 | 3.692547e+05 |1052.80%| unknown
+  2.0s|     1 |     2 | 20208 |     - |    26M |   0 |1468 |1014 |1417 | 421 | 13 |  17 |  35 | 3.203124e+04 | 3.692547e+05 |1052.80%| unknown
+L 9.0s|    39 |    40 | 25229 | 446.9 |    alns|  20 |1468 |1024 |1116 | 694 |  4 |  28 |1234 | 3.203124e+04 | 3.541806e+05 |1005.73%| unknown
+L 9.0s|    39 |    40 | 25229 | 446.9 |    alns|  20 |1468 |1024 |1116 | 694 |  4 |  28 |1234 | 3.203124e+04 | 3.469891e+05 | 983.28%| unknown
+L 9.0s|    39 |    40 | 25229 | 446.9 |    alns|  20 |1468 |1024 |1116 | 694 |  4 |  28 |1234 | 3.203124e+04 | 3.469891e+05 | 983.28%| unknown
+d10.0s|    54 |    55 | 29245 | 396.2 |adaptive|  21 |1468 |1032 |1079 |   0 |  1 |  36 |1401 | 3.203124e+04 | 2.419216e+05 | 655.27%| unknown
+ 10.0s|   100 |    99 | 34940 | 269.6 |    32M |  28 |1468 |1036 |1074 | 968 |  1 |  40 |1434 | 3.203124e+04 | 2.419216e+05 | 655.27%| unknown
+ 12.0s|   200 |   193 | 49291 | 206.3 |    35M |  32 |1468 |1044 |1151 |1654 |  2 |  49 |1506 | 3.203124e+04 | 2.419216e+05 | 655.27%| unknown
+L13.0s|   254 |   204 | 55187 | 185.5 |    rins|  32 |1468 |1055 |1077 |1887 |  2 |  60 |1541 | 3.203124e+04 | 1.544800e+05 | 382.28%| unknown
+ 14.0s|   300 |   246 | 63326 | 184.2 |    36M |  32 |1468 |1055 |1136 |2516 |  0 |  60 |1588 | 3.203124e+04 | 1.544800e+05 | 382.28%| unknown
+ 15.0s|   400 |   336 | 80446 | 180.9 |    37M |  33 |1468 |1062 |1091 |3127 |  1 |  68 |1653 | 3.203124e+04 | 1.544800e+05 | 382.28%| unknown
+L17.0s|   481 |   397 | 93571 | 177.8 |    rins|  33 |1468 |1065 |1078 |3695 |  1 |  78 |1709 | 3.203124e+04 | 1.357425e+05 | 323.78%| unknown
+ 17.0s|   500 |   412 | 95990 | 175.8 |    38M |  33 |1468 |1065 |1107 |3801 |  2 |  78 |1723 | 3.203124e+04 | 1.357425e+05 | 323.78%| unknown
+L19.0s|   581 |   474 |121757 | 195.7 |    gins|  33 |1468 |1066 |1087 |4379 |  1 |  80 |1805 | 3.203124e+04 | 1.316061e+05 | 310.87%| unknown
+ time | node  | left  |LP iter|LP it/n|mem/heur|mdpt |vars |cons |rows |cuts |sepa|confs|strbr|  dualbound   | primalbound  |  gap   | compl. 
+ 20.0s|   600 |   491 |134708 | 211.1 |    41M |  33 |1468 |1065 |1078 |5106 |  2 |  80 |1823 | 3.203124e+04 | 1.316061e+05 | 310.87%| unknown
+ 23.0s|   700 |   581 |174885 | 238.4 |    48M |  33 |1468 |1086 |1106 |7048 |  1 | 102 |1912 | 3.203124e+04 | 1.316061e+05 | 310.87%|   0.72%
+ 26.0s|   800 |   679 |221459 | 266.8 |    50M |  33 |1468 |1092 |1078 |8067 |  1 | 112 |1937 | 3.203125e+04 | 1.316061e+05 | 310.87%|   1.05%
+ 28.0s|   900 |   767 |242140 | 260.2 |    51M |  33 |1468 |1094 |1090 |8897 |  1 | 114 |1965 | 3.203125e+04 | 1.316061e+05 | 310.87%|   1.19%
+ 29.0s|  1000 |   857 |267293 | 259.3 |    52M |  33 |1468 |1097 |1079 |9493 |  2 | 117 |1976 | 3.203125e+04 | 1.316061e+05 | 310.87%|   1.45%
+ 33.0s|  1100 |   949 |295099 | 261.0 |    55M |  33 |1468 |1099 |1144 |  10k|  5 | 119 |2067 | 3.203125e+04 | 1.316061e+05 | 310.87%|   1.57%
+ 36.0s|  1200 |  1041 |320122 | 260.1 |    55M |  33 |1468 |1111 |1096 |  11k|  1 | 131 |2131 | 3.203125e+04 | 1.316061e+05 | 310.87%|   1.59%
+ 41.0s|  1300 |  1133 |351679 | 264.4 |    57M |  33 |1468 |1116 |1146 |  13k|  2 | 137 |2211 | 3.203125e+04 | 1.316061e+05 | 310.87%|   1.79%
+ 43.0s|  1400 |  1229 |372939 | 260.7 |    58M |  33 |1468 |1115 |1106 |  14k|  1 | 137 |2281 | 3.203125e+04 | 1.316061e+05 | 310.87%|   1.81%
+L44.0s|  1481 |  1281 |388809 | 257.1 |    gins|  33 |1468 |1114 |1088 |  14k|  2 | 137 |2339 | 3.203126e+04 | 1.267526e+05 | 295.72%|   1.87%
+L44.0s|  1481 |  1271 |388809 | 257.1 |    gins|  33 |1468 |1114 |1088 |  14k|  2 | 137 |2339 | 3.203126e+04 | 1.232351e+05 | 284.73%|   1.92%
+ 45.0s|  1500 |  1288 |397186 | 259.5 |    59M |  33 |1468 |1113 |1089 |  15k|  1 | 137 |2362 | 3.203126e+04 | 1.232351e+05 | 284.73%|   1.93%
+ 46.0s|  1600 |  1382 |417496 | 255.9 |    60M |  33 |1468 |1115 |1085 |  15k|  1 | 139 |2425 | 3.203126e+04 | 1.232351e+05 | 284.73%|   1.96%
+ 48.0s|  1700 |  1468 |440028 | 254.1 |    61M |  33 |1468 |1139 |1084 |  17k|  1 | 163 |2483 | 3.203126e+04 | 1.232351e+05 | 284.73%|   2.07%
+ 50.0s|  1800 |  1550 |462478 | 252.5 |    62M |  33 |1468 |1143 |1087 |  18k|  1 | 167 |2505 | 3.203126e+04 | 1.232351e+05 | 284.73%|   2.16%
+ time | node  | left  |LP iter|LP it/n|mem/heur|mdpt |vars |cons |rows |cuts |sepa|confs|strbr|  dualbound   | primalbound  |  gap   | compl. 
+ 51.0s|  1900 |  1638 |479335 | 248.1 |    62M |  33 |1468 |1147 |1119 |  18k|  1 | 171 |2527 | 3.203126e+04 | 1.232351e+05 | 284.73%|   2.25%
+ 52.0s|  2000 |  1724 |488260 | 240.1 |    63M |  44 |1468 |1150 |1130 |  19k|  1 | 174 |2539 | 3.203126e+04 | 1.232351e+05 | 284.73%|   2.29%
+L53.0s|  2078 |  1642 |499123 | 236.3 |crossove|  51 |1468 |1156 |1268 |  20k|  5 | 180 |2542 | 3.203126e+04 | 1.009159e+05 | 215.05%|   3.61%
+ 53.0s|  2100 |  1658 |502833 | 235.6 |    68M |  51 |1468 |1156 |1138 |  20k|  0 | 180 |2542 | 3.203127e+04 | 1.009159e+05 | 215.05%|   3.66%
+*54.0s|  2142 |  1571 |511551 | 235.1 |    LP  |  51 |1468 |1157 |1151 |  20k|  1 | 181 |2544 | 3.203127e+04 | 9.166921e+04 | 186.19%|   6.52%
+ 54.0s|  2200 |  1593 |517071 | 231.4 |    73M |  51 |1468 |1158 |1121 |  20k|  1 | 182 |2545 | 3.203127e+04 | 9.166921e+04 | 186.19%|   6.66%
+ 55.0s|  2300 |  1675 |525409 | 225.0 |    82M |  51 |1468 |1158 |1130 |  21k|  1 | 182 |2552 | 3.203127e+04 | 9.166921e+04 | 186.19%|   6.75%
+r56.0s|  2332 |  1652 |530212 | 223.9 |shifting|  51 |1468 |1158 |1185 |  21k|  6 | 182 |2558 | 3.203127e+04 | 8.942393e+04 | 179.18%|   7.90%
+*56.0s|  2335 |  1392 |530256 | 223.7 |    LP  |  51 |1468 |1158 |1142 |  21k|  1 | 182 |2560 | 3.203127e+04 | 7.053600e+04 | 120.21%|  12.79%
+ 56.0s|  2400 |  1425 |534444 | 219.3 |    83M |  51 |1468 |1159 |1124 |  21k|  1 | 184 |2566 | 3.203127e+04 | 7.053600e+04 | 120.21%|  12.93%
+*56.0s|  2401 |  1252 |534453 | 219.3 |    LP  |  51 |1468 |1153 |1124 |  21k|  1 | 184 |2566 | 3.203127e+04 | 6.444056e+04 | 101.18%|  13.06%
+*56.0s|  2419 |  1258 |534785 | 217.8 |    LP  |  51 |1468 |1153 |1145 |  21k|  4 | 184 |2568 | 3.203127e+04 | 6.441339e+04 | 101.10%|  13.10%
+*56.0s|  2432 |  1248 |534927 | 216.7 |    LP  |  51 |1468 |1153 |1127 |  21k|  3 | 184 |2568 | 3.203127e+04 | 6.333734e+04 |  97.74%|  13.17%
+ 57.0s|  2500 |  1284 |536975 | 211.6 |    84M |  51 |1468 |1158 |1160 |  21k|  2 | 190 |2571 | 3.203127e+04 | 6.333734e+04 |  97.74%|  13.18%
+ 58.0s|  2600 |  1306 |548526 | 207.9 |    84M |  51 |1468 |1160 |1091 |  22k|  1 | 192 |2574 | 3.203127e+04 | 6.333734e+04 |  97.74%|  13.30%
+ time | node  | left  |LP iter|LP it/n|mem/heur|mdpt |vars |cons |rows |cuts |sepa|confs|strbr|  dualbound   | primalbound  |  gap   | compl. 
+*58.0s|  2632 |  1103 |550574 | 206.1 |    LP  |  51 |1468 |1160 |1147 |  22k|  4 | 192 |2574 | 3.203127e+04 | 5.604799e+04 |  74.98%|  15.90%
+*58.0s|  2642 |  1099 |550655 | 205.4 |    LP  |  51 |1468 |1137 |1138 |  22k|  1 | 198 |2574 | 3.203127e+04 | 5.573069e+04 |  73.99%|  15.90%
+ 58.0s|  2700 |  1103 |550910 | 201.1 |    84M |  51 |1468 |1138 |1138 |  22k|  1 | 199 |2575 | 3.203127e+04 | 5.573069e+04 |  73.99%|  15.90%
+ 59.0s|  2800 |  1129 |564871 | 198.9 |    84M |  51 |1468 |1139 |1135 |  22k|  1 | 200 |2576 | 3.203127e+04 | 5.573069e+04 |  73.99%|  15.98%
+
+SCIP Status        : solving was interrupted [time limit reached]
+Solving Time (sec) : 60.00
+Solving Nodes      : 2842
+Primal Bound       : +5.57306895968174e+04 (41 solutions)
+Dual Bound         : +3.20312721487838e+04
+Gap                : 73.99 %
+{"instance": "LR1_DR02_VC01_V6a", "original_member": "Group2_MPS_files/LR1_DR02_VC01_V6a_t120.mps", "finished_at": "2026-10-31T11:50:56.004538+00:00", "status": "timelimit", "solver_seconds": 60.0, "whole_read_and_solve_wall_seconds": 59.93959320000067, "solutions_reported": 41, "incumbent_events_saved": 20, "primal_bound": 55730.68959681736, "dual_bound": 32031.272148783784, "relative_gap_reported": 0.7398837404256339, "nodes": 2842, "parameters": {"parallel/maxnthreads": 1, "limits/time": 60.0, "randomization/randomseedshift": 0, "numerics/feastol": 1e-08}, "independent_validation": {"feasible": true, "objective_consistent": true, "independent_objective": 55730.689596818054, "constraints_recomputed": 1080, "variables_recomputed": 2058, "max_row_violation": 2.842170943040401e-14, "max_integrality_violation": 1.1155520951433574e-13}, "score": null, "benchmark_qualification": "not_established"}
+original problem has 7370 variables (4494 bin, 2151 int, 725 cont) and 2520 constraints
+presolving:
+(round 1, fast)       1915 del vars, 209 del conss, 0 add conss, 2019 chg bounds, 0 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 1327 clqs, 0 implints
+(round 2, fast)       1917 del vars, 211 del conss, 0 add conss, 2030 chg bounds, 358 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 1329 clqs, 0 implints
+(round 3, fast)       1924 del vars, 218 del conss, 0 add conss, 2030 chg bounds, 358 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 1329 clqs, 0 implints
+(round 4, exhaustive) 1926 del vars, 218 del conss, 0 add conss, 2031 chg bounds, 358 chg sides, 0 chg coeffs, 451 upgd conss, 0 impls, 1329 clqs, 0 implints
+(round 5, medium)     1970 del vars, 280 del conss, 0 add conss, 2031 chg bounds, 358 chg sides, 0 chg coeffs, 451 upgd conss, 0 impls, 1332 clqs, 0 implints
+(round 6, exhaustive) 1971 del vars, 290 del conss, 0 add conss, 2031 chg bounds, 358 chg sides, 0 chg coeffs, 451 upgd conss, 0 impls, 1359 clqs, 0 implints
+(round 7, exhaustive) 1971 del vars, 290 del conss, 0 add conss, 2031 chg bounds, 358 chg sides, 0 chg coeffs, 469 upgd conss, 0 impls, 1359 clqs, 0 implints
+(round 8, medium)     1985 del vars, 312 del conss, 0 add conss, 2031 chg bounds, 358 chg sides, 0 chg coeffs, 469 upgd conss, 0 impls, 1357 clqs, 0 implints
+(round 9, medium)     1988 del vars, 315 del conss, 0 add conss, 2031 chg bounds, 358 chg sides, 0 chg coeffs, 469 upgd conss, 0 impls, 1368 clqs, 0 implints
+(round 10, exhaustive) 1988 del vars, 316 del conss, 0 add conss, 2031 chg bounds, 358 chg sides, 0 chg coeffs, 477 upgd conss, 0 impls, 1370 clqs, 0 implints
+(round 11, medium)     1993 del vars, 324 del conss, 0 add conss, 2031 chg bounds, 358 chg sides, 0 chg coeffs, 477 upgd conss, 0 impls, 1371 clqs, 0 implints
+(round 12, exhaustive) 1993 del vars, 324 del conss, 0 add conss, 2031 chg bounds, 358 chg sides, 0 chg coeffs, 480 upgd conss, 0 impls, 1375 clqs, 0 implints
+(round 13, medium)     1996 del vars, 327 del conss, 0 add conss, 2031 chg bounds, 358 chg sides, 0 chg coeffs, 480 upgd conss, 0 impls, 1376 clqs, 0 implints
+   (0.0s) probing: 1000/4112 (24.3%) - 0 fixings, 0 aggregations, 27385 implications, 12 bound changes
+   (0.0s) probing: 1001/4112 (24.3%) - 0 fixings, 0 aggregations, 27391 implications, 12 bound changes
+   (0.0s) probing aborted: 1000/1000 successive useless probings
+   (0.0s) symmetry computation started: requiring (bin +, int +, cont +), (fixed: bin -, int -, cont -)
+   (0.0s) no symmetry present (symcode time: 0.00)
+presolving (14 rounds: 14 fast, 11 medium, 6 exhaustive):
+ 1996 deleted vars, 327 deleted constraints, 0 added constraints, 2043 tightened bounds, 0 added holes, 358 changed sides, 0 changed coefficients
+ 5442 implications, 16302 cliques, 0 implied integral variables (0 bin, 0 int, 0 cont)
+presolved problem has 5376 variables (4124 bin, 901 int, 351 cont) and 2222 constraints
+    371 constraints of type <setppc>
+   1851 constraints of type <linear>
+Presolving Time: 0.00
+
+ time | node  | left  |LP iter|LP it/n|mem/heur|mdpt |vars |cons |rows |cuts |sepa|confs|strbr|  dualbound   | primalbound  |  gap   | compl. 
+p 0.0s|     1 |     0 |     1 |     - |shiftand|   0 |5376 |2251 |2222 |   0 |  0 |  28 |   0 |-7.062541e+07 | 1.313143e+06 |    Inf | unknown
+  1.0s|     1 |     0 | 14954 |     - |    53M |   0 |5376 |2251 |2222 |   0 |  0 |  28 |   0 | 3.573475e+04 | 1.313143e+06 |3574.69%| unknown
+  1.0s|     1 |     0 | 15389 |     - |    60M |   0 |5376 |2251 |2269 |  47 |  1 |  28 |   0 | 3.580080e+04 | 1.313143e+06 |3567.91%| unknown
+  1.0s|     1 |     0 | 15851 |     - |    60M |   0 |5376 |2251 |2302 |  80 |  2 |  28 |   0 | 3.582482e+04 | 1.313143e+06 |3565.45%| unknown
+  2.0s|     1 |     0 | 16303 |     - |    61M |   0 |5376 |2252 |2329 | 107 |  3 |  29 |   0 | 3.584323e+04 | 1.313143e+06 |3563.57%| unknown
+  2.0s|     1 |     0 | 16856 |     - |    62M |   0 |5376 |2252 |2356 | 134 |  4 |  29 |   0 | 3.586996e+04 | 1.313143e+06 |3560.84%| unknown
+  2.0s|     1 |     0 | 17217 |     - |    62M |   0 |5376 |2252 |2383 | 161 |  5 |  29 |   0 | 3.588138e+04 | 1.313143e+06 |3559.68%| unknown
+  2.0s|     1 |     0 | 17706 |     - |    62M |   0 |5376 |2252 |2407 | 185 |  6 |  29 |   0 | 3.589481e+04 | 1.313143e+06 |3558.31%| unknown
+  2.0s|     1 |     0 | 18049 |     - |    64M |   0 |5376 |2252 |2424 | 202 |  7 |  29 |   0 | 3.590290e+04 | 1.313143e+06 |3557.48%| unknown
+  2.0s|     1 |     0 | 18243 |     - |    64M |   0 |5376 |2252 |2446 | 224 |  8 |  29 |   0 | 3.590386e+04 | 1.313143e+06 |3557.39%| unknown
+  3.0s|     1 |     0 | 18632 |     - |    64M |   0 |5376 |2252 |2470 | 248 |  9 |  29 |   0 | 3.590609e+04 | 1.313143e+06 |3557.16%| unknown
+  3.0s|     1 |     0 | 18812 |     - |    65M |   0 |5376 |2252 |2491 | 269 | 10 |  29 |   0 | 3.590832e+04 | 1.313143e+06 |3556.93%| unknown
+  3.0s|     1 |     0 | 19198 |     - |    65M |   0 |5376 |2253 |2508 | 286 | 11 |  30 |   0 | 3.590981e+04 | 1.313143e+06 |3556.78%| unknown
+  3.0s|     1 |     0 | 19698 |     - |    66M |   0 |5376 |2253 |2520 | 298 | 12 |  30 |   0 | 3.591117e+04 | 1.313143e+06 |3556.64%| unknown
+  3.0s|     1 |     0 | 20053 |     - |    66M |   0 |5376 |2253 |2538 | 316 | 13 |  30 |   0 | 3.591199e+04 | 1.313143e+06 |3556.56%| unknown
+ time | node  | left  |LP iter|LP it/n|mem/heur|mdpt |vars |cons |rows |cuts |sepa|confs|strbr|  dualbound   | primalbound  |  gap   | compl. 
+d 5.0s|     1 |     0 | 29007 |     - |farkasdi|   0 |5376 |2265 |2538 |   0 | 13 |  42 |   0 | 3.591199e+04 | 2.098360e+05 | 484.31%| unknown
+L 6.0s|     1 |     0 | 38967 |     - |    alns|   0 |5376 |2267 |2538 | 316 | 13 |  44 |   0 | 3.591199e+04 | 2.064500e+05 | 474.88%| unknown
+  6.0s|     1 |     0 | 38967 |     - |    68M |   0 |5376 |2267 |2538 | 316 | 13 |  44 |   0 | 3.591199e+04 | 2.064500e+05 | 474.88%| unknown
+  6.0s|     1 |     0 | 39277 |     - |    69M |   0 |5376 |2267 |2554 | 332 | 14 |  44 |   0 | 3.591319e+04 | 2.064500e+05 | 474.86%| unknown
+  6.0s|     1 |     0 | 39559 |     - |    69M |   0 |5376 |2267 |2451 | 345 | 15 |  44 |   0 | 3.591430e+04 | 2.064500e+05 | 474.84%| unknown
+  8.0s|     1 |     2 | 39560 |     - |    69M |   0 |5376 |2267 |2451 | 345 | 15 |  44 |  22 | 3.591891e+04 | 2.064500e+05 | 474.77%| unknown
+ 37.0s|   100 |    99 |104014 | 842.1 |    77M |  21 |5376 |2284 |2298 | 567 |  1 |  62 | 352 | 3.591891e+04 | 2.064500e+05 | 474.77%| unknown
+L37.0s|   103 |   102 |106109 | 837.9 |    alns|  21 |5376 |2284 |2318 | 587 |  3 |  62 | 352 | 3.591891e+04 | 1.882857e+05 | 424.20%| unknown
+L37.0s|   103 |   102 |106109 | 837.9 |    alns|  21 |5376 |2284 |2318 | 587 |  3 |  62 | 352 | 3.591891e+04 | 1.716308e+05 | 377.83%| unknown
+L37.0s|   103 |   102 |106109 | 837.9 |    alns|  21 |5376 |2284 |2318 | 587 |  3 |  62 | 352 | 3.591891e+04 | 1.639299e+05 | 356.39%| unknown
+d41.0s|   134 |   133 |128388 | 810.1 |adaptive|  33 |5376 |2293 |2287 |   0 |  1 |  72 | 365 | 3.591891e+04 | 1.620585e+05 | 351.18%| unknown
+ 54.0s|   200 |   199 |196823 | 885.3 |    83M |  33 |5376 |2311 |2289 | 888 |  1 |  91 | 416 | 3.591891e+04 | 1.620585e+05 | 351.18%| unknown
+
+SCIP Status        : solving was interrupted [time limit reached]
+Solving Time (sec) : 60.00
+Solving Nodes      : 222
+Primal Bound       : +1.62058536094440e+05 (10 solutions)
+Dual Bound         : +3.59189054688748e+04
+Gap                : 351.18 %
+{"instance": "LR1_DR02_VC05_V8a", "original_member": "Group2_MPS_files/LR1_DR02_VC05_V8a_t120.mps", "finished_at": "2026-10-31T11:51:56.007155+00:00", "status": "timelimit", "solver_seconds": 60.0, "whole_read_and_solve_wall_seconds": 59.96562079999785, "solutions_reported": 10, "incumbent_events_saved": 7, "primal_bound": 162058.53609443968, "dual_bound": 35918.905468874844, "relative_gap_reported": 3.511789376067426, "nodes": 222, "parameters": {"parallel/maxnthreads": 1, "limits/time": 60.0, "randomization/randomseedshift": 0, "numerics/feastol": 1e-08}, "independent_validation": {"feasible": true, "objective_consistent": true, "independent_objective": 162058.53609443826, "constraints_recomputed": 2520, "variables_recomputed": 7370, "max_row_violation": 5.684341886080802e-14, "max_integrality_violation": 0.0}, "score": null, "benchmark_qualification": "not_established"}
+original problem has 6300 variables (2466 bin, 2868 int, 966 cont) and 2400 constraints
+presolving:
+(round 1, fast)       1504 del vars, 99 del conss, 0 add conss, 2946 chg bounds, 0 chg sides, 0 chg coeffs, 0 upgd conss, 2 impls, 997 clqs, 0 implints
+(round 2, fast)       1504 del vars, 99 del conss, 0 add conss, 2958 chg bounds, 479 chg sides, 0 chg coeffs, 0 upgd conss, 2 impls, 1204 clqs, 0 implints
+(round 3, exhaustive) 1505 del vars, 100 del conss, 0 add conss, 2982 chg bounds, 479 chg sides, 0 chg coeffs, 607 upgd conss, 2 impls, 1204 clqs, 0 implints
+(round 4, medium)     1592 del vars, 195 del conss, 0 add conss, 2994 chg bounds, 479 chg sides, 0 chg coeffs, 607 upgd conss, 2 impls, 1197 clqs, 0 implints
+(round 5, medium)     1601 del vars, 204 del conss, 0 add conss, 2998 chg bounds, 479 chg sides, 0 chg coeffs, 607 upgd conss, 2 impls, 1220 clqs, 0 implints
+(round 6, exhaustive) 1601 del vars, 225 del conss, 0 add conss, 2998 chg bounds, 479 chg sides, 0 chg coeffs, 607 upgd conss, 2 impls, 1228 clqs, 0 implints
+(round 7, exhaustive) 1601 del vars, 225 del conss, 0 add conss, 2998 chg bounds, 479 chg sides, 0 chg coeffs, 616 upgd conss, 2 impls, 1228 clqs, 0 implints
+(round 8, medium)     1608 del vars, 232 del conss, 0 add conss, 2998 chg bounds, 479 chg sides, 0 chg coeffs, 616 upgd conss, 2 impls, 1229 clqs, 0 implints
+(round 9, medium)     1611 del vars, 235 del conss, 0 add conss, 2998 chg bounds, 479 chg sides, 0 chg coeffs, 616 upgd conss, 2 impls, 1233 clqs, 0 implints
+   (0.0s) probing: 1000/3008 (33.2%) - 0 fixings, 0 aggregations, 36074 implications, 95 bound changes
+   (0.0s) probing: 1001/3008 (33.3%) - 0 fixings, 0 aggregations, 36087 implications, 95 bound changes
+   (0.0s) probing aborted: 1000/1000 successive useless probings
+(round 10, exhaustive) 1611 del vars, 235 del conss, 0 add conss, 3093 chg bounds, 479 chg sides, 0 chg coeffs, 616 upgd conss, 17639 impls, 14631 clqs, 0 implints
+   (0.0s) probing: 1101/3008 (36.6%) - 0 fixings, 0 aggregations, 39200 implications, 98 bound changes
+   (0.0s) probing aborted: 1000/1000 successive useless probings
+   (0.0s) symmetry computation started: requiring (bin +, int +, cont +), (fixed: bin -, int -, cont -)
+   (0.0s) no symmetry present (symcode time: 0.00)
+presolving (11 rounds: 11 fast, 9 medium, 5 exhaustive):
+ 1611 deleted vars, 235 deleted constraints, 0 added constraints, 3096 tightened bounds, 0 added holes, 479 changed sides, 0 changed coefficients
+ 19279 implications, 14631 cliques, 0 implied integral variables (0 bin, 0 int, 0 cont)
+presolved problem has 4689 variables (3020 bin, 1191 int, 478 cont) and 2174 constraints
+    481 constraints of type <setppc>
+   1693 constraints of type <linear>
+Presolving Time: 0.00
+
+ time | node  | left  |LP iter|LP it/n|mem/heur|mdpt |vars |cons |rows |cuts |sepa|confs|strbr|  dualbound   | primalbound  |  gap   | compl. 
+p 0.0s|     1 |     0 |     1 |     - |shiftand|   0 |4689 |2195 |2174 |   0 |  0 |  21 |   0 |-6.691275e+07 | 1.837582e+06 |    Inf | unknown
+  2.0s|     1 |     0 | 18623 |     - |    50M |   0 |4689 |2195 |2174 |   0 |  0 |  21 |   0 | 7.037926e+04 | 1.837582e+06 |2510.97%| unknown
+  2.0s|     1 |     0 | 21282 |     - |    57M |   0 |4689 |2205 |2302 | 128 |  1 |  31 |   0 | 7.072802e+04 | 1.837582e+06 |2498.10%| unknown
+  3.0s|     1 |     0 | 23490 |     - |    59M |   0 |4689 |2205 |2399 | 225 |  2 |  31 |   0 | 7.090083e+04 | 1.837582e+06 |2491.76%| unknown
+  3.0s|     1 |     0 | 25374 |     - |    60M |   0 |4689 |2205 |2474 | 300 |  3 |  31 |   0 | 7.103455e+04 | 1.837582e+06 |2486.88%| unknown
+  3.0s|     1 |     0 | 26647 |     - |    62M |   0 |4689 |2205 |2542 | 368 |  4 |  31 |   0 | 7.113189e+04 | 1.837582e+06 |2483.34%| unknown
+  4.0s|     1 |     0 | 28637 |     - |    63M |   0 |4689 |2215 |2600 | 426 |  5 |  41 |   0 | 7.120410e+04 | 1.837582e+06 |2480.72%| unknown
+  4.0s|     1 |     0 | 29918 |     - |    64M |   0 |4689 |2215 |2645 | 471 |  6 |  41 |   0 | 7.124787e+04 | 1.837582e+06 |2479.14%| unknown
+  5.0s|     1 |     0 | 32370 |     - |    65M |   0 |4689 |2216 |2683 | 509 |  7 |  42 |   0 | 7.127638e+04 | 1.837582e+06 |2478.11%| unknown
+  5.0s|     1 |     0 | 34171 |     - |    66M |   0 |4689 |2216 |2723 | 549 |  8 |  42 |   0 | 7.131456e+04 | 1.837582e+06 |2476.73%| unknown
+  5.0s|     1 |     0 | 35954 |     - |    67M |   0 |4689 |2216 |2767 | 593 |  9 |  42 |   0 | 7.135119e+04 | 1.837582e+06 |2475.40%| unknown
+  6.0s|     1 |     0 | 37808 |     - |    68M |   0 |4689 |2218 |2804 | 630 | 10 |  44 |   0 | 7.137956e+04 | 1.837582e+06 |2474.38%| unknown
+  6.0s|     1 |     0 | 38939 |     - |    68M |   0 |4689 |2220 |2838 | 664 | 11 |  46 |   0 | 7.142870e+04 | 1.837582e+06 |2472.61%| unknown
+d10.0s|     1 |     0 | 67103 |     - |farkasdi|   0 |4689 |2341 |2838 |   0 | 11 | 167 |   0 | 7.142870e+04 | 3.388922e+05 | 374.45%| unknown
+ 13.0s|     1 |     0 | 88995 |     - |    70M |   0 |4689 |2343 |2838 | 664 | 11 | 169 |   0 | 7.142870e+04 | 3.388922e+05 | 374.45%| unknown
+ time | node  | left  |LP iter|LP it/n|mem/heur|mdpt |vars |cons |rows |cuts |sepa|confs|strbr|  dualbound   | primalbound  |  gap   | compl. 
+ 13.0s|     1 |     0 | 89814 |     - |    72M |   0 |4689 |2344 |2876 | 702 | 12 | 170 |   0 | 7.143443e+04 | 3.388922e+05 | 374.41%| unknown
+ 13.0s|     1 |     0 | 90485 |     - |    72M |   0 |4689 |2344 |2710 | 725 | 13 | 170 |   0 | 7.144025e+04 | 3.388922e+05 | 374.37%| unknown
+ 14.0s|     1 |     0 | 90486 |     - |    72M |   0 |4689 |2344 |2710 | 725 | 13 | 170 |   6 | 7.144034e+04 | 3.388922e+05 | 374.37%| unknown
+ 14.0s|     1 |     0 | 91475 |     - |    72M |   0 |4689 |2344 |2741 | 756 | 14 | 170 |   6 | 7.144575e+04 | 3.388922e+05 | 374.33%| unknown
+ 14.0s|     1 |     0 | 92226 |     - |    72M |   0 |4689 |2344 |2761 | 776 | 15 | 170 |   6 | 7.145053e+04 | 3.388922e+05 | 374.30%| unknown
+ 17.0s|     1 |     2 | 92227 |     - |    72M |   0 |4689 |2343 |2761 | 776 | 15 | 170 |  30 | 7.145439e+04 | 3.388922e+05 | 374.28%| unknown
+L41.0s|    32 |    33 |111537 |2237.7 |    alns|  20 |4689 |2343 |2356 | 916 |  4 | 170 | 382 | 7.145439e+04 | 2.653682e+05 | 271.38%| unknown
+L41.0s|    32 |    33 |111537 |2237.7 |    alns|  20 |4689 |2343 |2356 | 916 |  4 | 170 | 382 | 7.145439e+04 | 2.068831e+05 | 189.53%| unknown
+L41.0s|    32 |    33 |111537 |2237.7 |    alns|  20 |4689 |2343 |2356 | 916 |  4 | 170 | 382 | 7.145439e+04 | 2.019321e+05 | 182.60%| unknown
+ 54.0s|   100 |   101 |177964 |1371.7 |    79M |  23 |4689 |2348 |2332 |1408 |  1 | 175 | 431 | 7.145439e+04 | 2.019321e+05 | 182.60%| unknown
+
+SCIP Status        : solving was interrupted [time limit reached]
+Solving Time (sec) : 60.00
+Solving Nodes      : 125
+Primal Bound       : +2.01932052305864e+05 (6 solutions)
+Dual Bound         : +7.14543854662436e+04
+Gap                : 182.60 %
+{"instance": "LR1_DR03_VC03_V16a", "original_member": "Group2_MPS_files/LR1_DR03_VC03_V16a_t120.mps", "finished_at": "2026-10-31T11:52:56.002398+00:00", "status": "timelimit", "solver_seconds": 60.0, "whole_read_and_solve_wall_seconds": 59.90750350000235, "solutions_reported": 6, "incumbent_events_saved": 5, "primal_bound": 201932.0523058637, "dual_bound": 71454.3854662436, "relative_gap_reported": 1.8260274157876595, "nodes": 125, "parameters": {"parallel/maxnthreads": 1, "limits/time": 60.0, "randomization/randomseedshift": 0, "numerics/feastol": 1e-08}, "independent_validation": {"feasible": true, "objective_consistent": true, "independent_objective": 201932.05230586205, "constraints_recomputed": 2400, "variables_recomputed": 6300, "max_row_violation": 2.842170943040401e-14, "max_integrality_violation": 0.0}, "score": null, "benchmark_qualification": "not_established"}

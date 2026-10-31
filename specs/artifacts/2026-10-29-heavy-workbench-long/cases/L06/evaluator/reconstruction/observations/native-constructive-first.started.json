@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-31T11:38:05.606682+00:00",
+  "launcher_pid": 28096,
+  "argv": [
+    "D:/opencorvus-benchmark-runs/native-operations-reconstruction-20261031/Scripts/python.exe",
+    "-u",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\reconstruction\\run_constructive_routes.py",
+    "--original-inputs",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\original-inputs",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-constructive-first"
+  ],
+  "source_archive": "constructive-first-source.zip"
+}

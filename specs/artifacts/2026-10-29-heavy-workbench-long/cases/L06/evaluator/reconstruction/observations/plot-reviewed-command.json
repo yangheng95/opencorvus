@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "D:/opencorvus-benchmark-runs/l06-v04-full-case-20261031/report-environment/venv/Scripts/python.exe",
+    "-u",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\reconstruction\\plot_quality_axis.py",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\group2-quality-figures-reviewed"
+  ],
+  "started_at": "2026-10-31T11:59:21.765830+00:00",
+  "finished_at": "2026-10-31T11:59:24.484840+00:00",
+  "native_exit": 0,
+  "scope": "only explicit alpha legend visual repair, no source/model/solver-data change"
+}

@@ -1,4 +1,4 @@
-"""Independently recompute this MIRPLIB Group1 archive's linear model and objective."""
+"""Independently recompute the original MIRPLIB archive's linear model and objective."""
 import json
 import math
 from pathlib import Path
@@ -65,12 +65,16 @@ def read_original_model(path: Path):
     return row_types, coefficients, rhs, bounds, integers, objective
 
 
-def verify(path: Path, values: dict, reported_objective: float):
+def verify(path: Path, values: dict, reported_objective: float | None):
     row_types, coefficients, rhs, bounds, integers, objective = read_original_model(path)
     if set(values) != set(bounds):
         raise ValueError("solution_original_variable_identity")
     if any(type(x) not in {int, float} or not math.isfinite(x) for x in values.values()):
         raise ValueError("solution_finite_real_values")
+    if reported_objective is not None and (
+        type(reported_objective) not in {int, float} or not math.isfinite(reported_objective)
+    ):
+        raise ValueError("claimed_objective_finite_real_or_null")
     violations = []
     max_row_violation = max_bound_violation = max_integer_violation = 0.0
     row_count = 0
@@ -100,8 +104,8 @@ def verify(path: Path, values: dict, reported_objective: float):
             violations.append({"kind": "row", "row": row, "type": kind,
                                "activity": activity, "rhs": target, "violation": violation})
     independently_computed = math.fsum(values[v] * a for v, a in coefficients.get(objective, [])) - rhs.get(objective, 0.0)
-    objective_error = abs(independently_computed - reported_objective)
-    objective_pass = objective_error <= 1e-6 + 1e-9 * abs(independently_computed)
+    objective_error = None if reported_objective is None else abs(independently_computed - reported_objective)
+    objective_pass = None if objective_error is None else objective_error <= 1e-6 + 1e-9 * abs(independently_computed)
     return {
         "object": "original linear model, not a re-created or relaxed planning model",
         "feasible": not violations,

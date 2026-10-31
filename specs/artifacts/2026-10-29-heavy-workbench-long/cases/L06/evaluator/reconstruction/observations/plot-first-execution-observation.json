@@ -1,0 +1,12 @@
+{
+  "finished_at_from_actual_plot_data": "2026-10-31T11:57:50.909717+00:00",
+  "native_exit": 0,
+  "source": "plot-quality-first-source.py",
+  "out": "group2-quality-figures",
+  "packages": {
+    "matplotlib": "3.11.2",
+    "numpy": "2.5.4"
+  },
+  "visual_review": "both actual PNG viewed; add explicit alpha-bar legend for clarity; preserve first images and source",
+  "scope": "render only, no solver rerun"
+}

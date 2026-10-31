@@ -1,0 +1,344 @@
+{
+  "at": "2026-10-31T12:05:01.316051+00:00",
+  "phase": "original research, not a new benchmark or candidate score",
+  "copied_originals": [
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructive-dependency-install-report.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/constructive-dependency-install-report.json",
+      "bytes": 52983
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructive-dependency-install.stderr.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/constructive-dependency-install.stderr.txt",
+      "bytes": 207
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructive-dependency-install.stdout.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/constructive-dependency-install.stdout.txt",
+      "bytes": 2481
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructive-dependency-install.terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/constructive-dependency-install.terminal.json",
+      "bytes": 173
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructive-first-source.zip",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/constructive-first-source.zip",
+      "bytes": 106015
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\group2-quality-first-source.zip",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/group2-quality-first-source.zip",
+      "bytes": 108083
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\nullable-claim-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/nullable-claim-original-model-check.json",
+      "bytes": 1770
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\integer-lattice-source-observation.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/integer-lattice-source-observation.json",
+      "bytes": 796
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\plot-first-execution-observation.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/plot-first-execution-observation.json",
+      "bytes": 424
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\plot-quality-first-source.py",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/plot-quality-first-source.py",
+      "bytes": 6675
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\plot-quality-reviewed-source.py",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/plot-quality-reviewed-source.py",
+      "bytes": 6899
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\plot-reviewed-command.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/plot-reviewed-command.json",
+      "bytes": 794
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\plot-reviewed.stderr.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/plot-reviewed.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\plot-reviewed.stdout.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/plot-reviewed.stdout.txt",
+      "bytes": 243
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-constructive-first.started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-constructive-first.started.json",
+      "bytes": 690
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-constructive-first.terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-constructive-first.terminal.json",
+      "bytes": 764
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-constructive-first.stdout.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-constructive-first.stdout.txt",
+      "bytes": 378
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-constructive-first.stderr.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-constructive-first.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-constructive-first\\execution-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-constructive-first/execution-started.json",
+      "bytes": 381
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-constructive-first\\execution-terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-constructive-first/execution-terminal.json",
+      "bytes": 1662
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-constructive-first\\results.partial.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-constructive-first/results.partial.json",
+      "bytes": 1289
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-constructive-first\\LR1_1_DR1_3_VC1_V7a\\cp-native-response.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-constructive-first/LR1_1_DR1_3_VC1_V7a/cp-native-response.txt",
+      "bytes": 320
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-constructive-first\\LR1_1_DR1_3_VC1_V7a\\cp-native.log",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-constructive-first/LR1_1_DR1_3_VC1_V7a/cp-native.log",
+      "bytes": 16656
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-constructive-first\\LR1_1_DR1_3_VC1_V7a\\cp-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-constructive-first/LR1_1_DR1_3_VC1_V7a/cp-started.json",
+      "bytes": 486
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-constructive-first\\LR1_1_DR1_3_VC1_V7a\\result.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-constructive-first/LR1_1_DR1_3_VC1_V7a/result.json",
+      "bytes": 407
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-constructive-first\\LR1_2_DR1_3_VC3_V8a\\cp-native-response.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-constructive-first/LR1_2_DR1_3_VC3_V8a/cp-native-response.txt",
+      "bytes": 321
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-constructive-first\\LR1_2_DR1_3_VC3_V8a\\cp-native.log",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-constructive-first/LR1_2_DR1_3_VC3_V8a/cp-native.log",
+      "bytes": 17169
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-constructive-first\\LR1_2_DR1_3_VC3_V8a\\cp-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-constructive-first/LR1_2_DR1_3_VC3_V8a/cp-started.json",
+      "bytes": 488
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-constructive-first\\LR1_2_DR1_3_VC3_V8a\\result.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-constructive-first/LR1_2_DR1_3_VC3_V8a/result.json",
+      "bytes": 407
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-constructive-first\\LR2_22_DR2_22_VC3_V10a\\cp-native-response.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-constructive-first/LR2_22_DR2_22_VC3_V10a/cp-native-response.txt",
+      "bytes": 317
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-constructive-first\\LR2_22_DR2_22_VC3_V10a\\cp-native.log",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-constructive-first/LR2_22_DR2_22_VC3_V10a/cp-native.log",
+      "bytes": 17536
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-constructive-first\\LR2_22_DR2_22_VC3_V10a\\cp-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-constructive-first/LR2_22_DR2_22_VC3_V10a/cp-started.json",
+      "bytes": 489
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-constructive-first\\LR2_22_DR2_22_VC3_V10a\\result.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-constructive-first/LR2_22_DR2_22_VC3_V10a/result.json",
+      "bytes": 401
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first.started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-group2-quality-first.started.json",
+      "bytes": 725
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first.terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-group2-quality-first.terminal.json",
+      "bytes": 827
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first.stdout.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-group2-quality-first.stdout.txt",
+      "bytes": 29755
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first.stderr.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-group2-quality-first.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\execution-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-group2-quality-first/execution-started.json",
+      "bytes": 1134
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\execution-terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-group2-quality-first/execution-terminal.json",
+      "bytes": 3725
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\results.partial.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-group2-quality-first/results.partial.json",
+      "bytes": 3223
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\LR1_DR02_VC01_V6a\\incumbent-events.jsonl",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-group2-quality-first/LR1_DR02_VC01_V6a/incumbent-events.jsonl",
+      "bytes": 9650
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\LR1_DR02_VC01_V6a\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-group2-quality-first/LR1_DR02_VC01_V6a/independent-original-model-check.json",
+      "bytes": 698
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\LR1_DR02_VC01_V6a\\result.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-group2-quality-first/LR1_DR02_VC01_V6a/result.json",
+      "bytes": 1024
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\LR1_DR02_VC01_V6a\\solver-native.log",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-group2-quality-first/LR1_DR02_VC01_V6a/solver-native.log",
+      "bytes": 12870
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\LR1_DR02_VC01_V6a\\started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-group2-quality-first/LR1_DR02_VC01_V6a/started.json",
+      "bytes": 476
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\LR1_DR02_VC05_V8a\\incumbent-events.jsonl",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-group2-quality-first/LR1_DR02_VC05_V8a/incumbent-events.jsonl",
+      "bytes": 3335
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\LR1_DR02_VC05_V8a\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-group2-quality-first/LR1_DR02_VC05_V8a/independent-original-model-check.json",
+      "bytes": 680
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\LR1_DR02_VC05_V8a\\result.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-group2-quality-first/LR1_DR02_VC05_V8a/result.json",
+      "bytes": 1003
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\LR1_DR02_VC05_V8a\\solver-native.log",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-group2-quality-first/LR1_DR02_VC05_V8a/solver-native.log",
+      "bytes": 7513
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\LR1_DR02_VC05_V8a\\started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-group2-quality-first/LR1_DR02_VC05_V8a/started.json",
+      "bytes": 476
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\LR1_DR03_VC03_V16a\\incumbent-events.jsonl",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-group2-quality-first/LR1_DR03_VC03_V16a/incumbent-events.jsonl",
+      "bytes": 2354
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\LR1_DR03_VC03_V16a\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-group2-quality-first/LR1_DR03_VC03_V16a/independent-original-model-check.json",
+      "bytes": 679
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\LR1_DR03_VC03_V16a\\result.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-group2-quality-first/LR1_DR03_VC03_V16a/result.json",
+      "bytes": 1002
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\LR1_DR03_VC03_V16a\\solver-native.log",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-group2-quality-first/LR1_DR03_VC03_V16a/solver-native.log",
+      "bytes": 6919
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\LR1_DR03_VC03_V16a\\started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/native-group2-quality-first/LR1_DR03_VC03_V16a/started.json",
+      "bytes": 477
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\original-group2-inputs\\acquisition.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/group2-acquisition.json",
+      "bytes": 47535
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\group2-quality-figures-reviewed\\actual-quality-trajectories.png",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/figures/actual-quality-trajectories.png",
+      "bytes": 97828
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\group2-quality-figures-reviewed\\actual-inventories-and-shortfall.png",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/figures/actual-inventories-and-shortfall.png",
+      "bytes": 193436
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\group2-quality-figures-reviewed\\plot-data.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/figures/plot-data.json",
+      "bytes": 42849
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\group2-quality-figures\\actual-quality-trajectories.png",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/first-render/actual-quality-trajectories.png",
+      "bytes": 97828
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\group2-quality-figures\\actual-inventories-and-shortfall.png",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/first-render/actual-inventories-and-shortfall.png",
+      "bytes": 185600
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\group2-quality-figures\\plot-data.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/first-render/plot-data.json",
+      "bytes": 42849
+    }
+  ],
+  "repository_scope": "Self-authored source, pre-execution source snapshots, actual native logs/parameters/status, provenance metadata and independently recomputed summaries/events, two reviewed figures and retained first-render images.",
+  "external_retained": {
+    "root": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031",
+    "items": [
+      "All downloaded original ZIP/MPS/PDF/data-only resources",
+      "Full original and intermediate incumbent value vectors, final value vectors",
+      "All previous Group1 baseline/published-route/temporal originals unchanged",
+      "Third-party environments/wheels/pip and Matplotlib caches"
+    ]
+  },
+  "source_archive_scope": "Sources and implementation-before-execution Recall only; not entire third-party environments or complete native vectors",
+  "license": "Third-party dataset redistribution not established; repository does not relicense inputs or full solution vectors",
+  "outcomes": {
+    "group1_constructive": "three UNKNOWN, no constructed plan, economic refinement never executed",
+    "group2": "20/7/5 actual valid incumbent events, all full vectors independently checked, terminal cost/bound without proof of optimality"
+  },
+  "unmet": [
+    "Complete new task and prospective quality contract",
+    "Stronger/weaker correct method anchors and full operational scientific delivery/handoff",
+    "Actual erroneous programme through same final checker",
+    "One concentrated whole-case independent review",
+    "Later authorized fresh discrimination evidence and genuine effective-hours evidence"
+  ],
+  "automatic_next_version_launch_allowed": false,
+  "active_native": null,
+  "active_candidate": null,
+  "active_review": null,
+  "model_score": null
+}

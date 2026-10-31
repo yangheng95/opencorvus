@@ -13,7 +13,7 @@ import traceback
 import zipfile
 
 from pyscipopt import Model, SCIP_EVENTTYPE
-from fetch_originals import INSTANCE_NAMES
+from fetch_originals import INSTANCE_NAMES, GROUP2_PROFILE
 from verify_original_mps import verify
 
 
@@ -29,11 +29,10 @@ def finite_bound(value):
     return float(value) if math.isfinite(value) and abs(value) < 1e19 else None
 
 
-def run_instance(archive, instance, root):
+def run_instance(archive, instance, root, original_member):
     target = root / instance
     target.mkdir()
-    original_member = f"Group1_MPS_files/{instance}_t45.mps"
-    mps = target / f"{instance}_t45.mps"
+    mps = target / Path(original_member).name
     mps.write_bytes(archive.read(original_member))
     wall = time.perf_counter()
     model = Model(instance)
@@ -63,7 +62,15 @@ def run_instance(archive, instance, root):
             "solution": f"incumbent-{len(events):04d}.json.gz",
         }
         values = {variable.name: current.getSolVal(solution, variable) for variable in variables}
-        with gzip.open(target / record["solution"], "wt", encoding="utf-8") as output:
+        checked = verify(mps, values, record["objective"])
+        record["independent_original_check"] = {k: checked[k] for k in [
+            "feasible", "objective_consistent", "independent_objective", "max_row_violation",
+            "max_integrality_violation", "objective_absolute_error",
+        ]}
+        if not checked["feasible"] or not checked["objective_consistent"]:
+            write(target / "incumbent-original-model-error.json", checked)
+            raise ValueError("actual_best_solution_fails_original_model")
+        with gzip.open(target / record["solution"], "wt", encoding="utf-8", compresslevel=1) as output:
             json.dump(values, output, allow_nan=False)
         with (target / "incumbent-events.jsonl").open("a", encoding="utf-8") as output:
             output.write(json.dumps(record, allow_nan=False) + "\n")
@@ -110,23 +117,27 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--original-inputs", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--group", choices=["1", "2"], required=True)
     args = parser.parse_args()
+    instances = INSTANCE_NAMES if args.group == "1" else GROUP2_PROFILE["instances"]
+    periods = 45 if args.group == "1" else GROUP2_PROFILE["periods"]
     root = args.out.resolve()
     root.mkdir(parents=True, exist_ok=False)
     write(root / "execution-started.json", {
         "at": now(), "actual_python_pid": os.getpid(), "argv": sys.argv,
         "python": sys.version, "executable": sys.executable,
         "packages": {k: importlib.metadata.version(k) for k in ["PySCIPOpt", "numpy"]},
-        "instances": INSTANCE_NAMES, "periods": 45, "per_problem_solver_seconds": 60,
+        "group": args.group, "instances": instances, "periods": periods, "per_problem_solver_seconds": 60,
         "candidate_runtime_budget": None,
         "scope": "first complete original problem baseline; no old L06 controls, candidate or qualification test",
     })
     wall = time.perf_counter()
     results = []
     try:
-        with zipfile.ZipFile(args.original_inputs / "Group1_MPS_files.zip") as archive:
-            for instance in INSTANCE_NAMES:
-                result = run_instance(archive, instance, root)
+        with zipfile.ZipFile(args.original_inputs / f"Group{args.group}_MPS_files.zip") as archive:
+            for instance in instances:
+                member = f"Group{args.group}_MPS_files/{instance}_t{periods}.mps"
+                result = run_instance(archive, instance, root, member)
                 results.append(result)
                 write(root / "results.partial.json", results)
                 print(json.dumps(result, allow_nan=False), flush=True)

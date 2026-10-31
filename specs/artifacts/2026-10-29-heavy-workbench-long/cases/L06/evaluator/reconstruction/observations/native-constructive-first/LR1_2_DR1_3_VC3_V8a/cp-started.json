@@ -1,0 +1,12 @@
+{
+  "at": "2026-10-31T11:38:38.920515+00:00",
+  "actual_python_pid": 31404,
+  "original_variables": 12745,
+  "original_integer_variables": 9893,
+  "original_constraints": 12325,
+  "cp_quantities": "all original variables restricted to integer units; no constraint coefficient rounding",
+  "objective": null,
+  "cp_solver_seconds_limit": 30,
+  "num_search_workers": 1,
+  "scope": "feasibility construction only; CP OPTIMAL does not mean economic or original-MILP optimality"
+}

@@ -1,0 +1,31 @@
+{
+  "instance": "LR1_DR02_VC05_V8a",
+  "original_member": "Group2_MPS_files/LR1_DR02_VC05_V8a_t120.mps",
+  "finished_at": "2026-10-31T11:51:56.007155+00:00",
+  "status": "timelimit",
+  "solver_seconds": 60.0,
+  "whole_read_and_solve_wall_seconds": 59.96562079999785,
+  "solutions_reported": 10,
+  "incumbent_events_saved": 7,
+  "primal_bound": 162058.53609443968,
+  "dual_bound": 35918.905468874844,
+  "relative_gap_reported": 3.511789376067426,
+  "nodes": 222,
+  "parameters": {
+    "parallel/maxnthreads": 1,
+    "limits/time": 60.0,
+    "randomization/randomseedshift": 0,
+    "numerics/feastol": 1e-08
+  },
+  "independent_validation": {
+    "feasible": true,
+    "objective_consistent": true,
+    "independent_objective": 162058.53609443826,
+    "constraints_recomputed": 2520,
+    "variables_recomputed": 7370,
+    "max_row_violation": 5.684341886080802e-14,
+    "max_integrality_violation": 0.0
+  },
+  "score": null,
+  "benchmark_qualification": "not_established"
+}

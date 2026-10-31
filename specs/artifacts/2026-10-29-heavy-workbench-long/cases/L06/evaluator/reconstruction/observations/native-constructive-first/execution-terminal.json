@@ -1,0 +1,43 @@
+{
+  "at": "2026-10-31T11:39:40.500484+00:00",
+  "native_code": 0,
+  "wall_seconds": 92.16637609999816,
+  "results": [
+    {
+      "instance": "LR1_1_DR1_3_VC1_V7a",
+      "cp_status": "UNKNOWN",
+      "cp_seconds": 30.046116400000002,
+      "solution_produced": false,
+      "original_problem_objective": null,
+      "score": null,
+      "scope": "integer-restricted construction, not a global optimum proof for original continuous MILP",
+      "outcome": "no_original_feasible_plan_produced_by_integer_restriction",
+      "refinement_executed": false
+    },
+    {
+      "instance": "LR1_2_DR1_3_VC3_V8a",
+      "cp_status": "UNKNOWN",
+      "cp_seconds": 30.010923100000003,
+      "solution_produced": false,
+      "original_problem_objective": null,
+      "score": null,
+      "scope": "integer-restricted construction, not a global optimum proof for original continuous MILP",
+      "outcome": "no_original_feasible_plan_produced_by_integer_restriction",
+      "refinement_executed": false
+    },
+    {
+      "instance": "LR2_22_DR2_22_VC3_V10a",
+      "cp_status": "UNKNOWN",
+      "cp_seconds": 30.144479,
+      "solution_produced": false,
+      "original_problem_objective": null,
+      "score": null,
+      "scope": "integer-restricted construction, not a global optimum proof for original continuous MILP",
+      "outcome": "no_original_feasible_plan_produced_by_integer_restriction",
+      "refinement_executed": false
+    }
+  ],
+  "study_finished": true,
+  "all_problems_have_verified_plan": false,
+  "scope": "first constructive method study; original-MILP optimality and complete benchmark unestablished"
+}
